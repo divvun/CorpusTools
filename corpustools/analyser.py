@@ -40,6 +40,8 @@ class Analyser(object):
         self.xp.set_outfile(StringIO.StringIO())
 
     def exit_on_error(self, filename):
+        '''Exit the process if filename does not exist
+        '''
         error = False
 
         if filename is None:
@@ -58,6 +60,8 @@ class Analyser(object):
                          disambiguation_analysis_file=None,
                          function_analysis_file=None,
                          dependency_analysis_file=None):
+        '''Set the files needed by preprocess, lookup and vislcg3
+        '''
         if self.lang in ['sma', 'sme', 'smj']:
             self.exit_on_error(abbr_file)
         self.exit_on_error(fst_file)
@@ -72,6 +76,8 @@ class Analyser(object):
         self.dependency_analysis_file = dependency_analysis_file
 
     def set_corr_file(self, corr_file):
+        '''Set the correct file used by preprocess
+        '''
         self.exit_on_error(corr_file)
         self.corr_file = corr_file
 
@@ -140,8 +146,7 @@ class Analyser(object):
         self.dependency_analysis_name = xml_file.replace(u'/converted/', u'/analysed')
 
     def ccat(self):
-        u"""Runs ccat on the input file
-        Returns the output of ccat
+        u"""Turn an xml formatted file to clean text
         """
         self.xp.process_file(self.xml_file)
 
@@ -183,7 +188,7 @@ class Analyser(object):
 
 
     def lookup2cg(self):
-        u"""Runs the lookup on the lookup output
+        u"""Runs lookup2cg on the lookup output
         Returns the output of lookup2cg
         """
         lookup2cg_command = [u'lookup2cg']
@@ -191,9 +196,9 @@ class Analyser(object):
         return self.run_external_command(lookup2cg_command, self.lookup())
 
     def disambiguation_analysis(self):
-        u"""Runs vislcg3 on the lookup2cg output, which produces a disambiguation
-        analysis
-        The output is stored in a .dis file
+        u"""Runs vislcg3 on the lookup2cg output
+
+        Produces a disambiguation analysis
         """
         dis_analysis_command = \
             [u'vislcg3', u'-g', self.disambiguation_analysis_file]
@@ -202,7 +207,8 @@ class Analyser(object):
             self.run_external_command(dis_analysis_command, self.lookup2cg())
 
     def function_analysis(self):
-        u"""Runs vislcg3 on the dis file
+        u"""Runs vislcg3 on the disambiguation analysis
+
         Return the output of this process
         """
         self.disambiguation_analysis()
@@ -213,8 +219,9 @@ class Analyser(object):
         return self.run_external_command(function_analysis_command, self.get_disambiguation())
 
     def dependency_analysis(self):
-        u"""Runs vislcg3 on the .dis file.
-        Produces output in a .dep file
+        u"""Runs vislcg3 on the functions analysis output
+
+        Produces a dependency analysis
         """
         dep_analysis_command = \
             [u'vislcg3', u'-g', self.dependency_analysis_file]
@@ -223,12 +230,19 @@ class Analyser(object):
             self.run_external_command(dep_analysis_command, self.function_analysis())
 
     def get_disambiguation(self):
+        '''Get the disambiguation analysis
+        '''
         return self.disambiguation
 
     def get_dependency(self):
+        '''Get the dependency analysis
+        '''
         return self.dependency
 
     def get_analysis_xml(self):
+        '''Replace the body of the converted document with disambiguation
+        and dependency analysis
+        '''
         body = etree.Element(u'body')
 
         disambiguation = etree.Element(u'disambiguation')
@@ -245,6 +259,8 @@ class Analyser(object):
         return self.etree
 
     def check_error(self, command, error):
+        '''Print errors
+        '''
         if error is not None and len(error) > 0:
             print >>sys.stderr, self.xml_file
             print >>sys.stderr, command
@@ -267,6 +283,8 @@ class Analyser(object):
                 xml_declaration=True)
 
     def analyse_in_parallel(self):
+        '''Analyse file in parallel
+        '''
         pool_size = multiprocessing.cpu_count() * 2
         pool = multiprocessing.Pool(processes=pool_size,)
         pool_outputs = pool.map(
@@ -276,6 +294,8 @@ class Analyser(object):
         pool.join()  # wrap up current tasks
 
     def analyse_serially(self):
+        '''Analyse files one by one
+        '''
         for xml_file in self.xml_files:
             print >>sys.stderr, u'Analysing', xml_file
             self.analyse(xml_file)
@@ -364,6 +384,8 @@ def which(name):
             return True
 
 def parse_options():
+    '''Parse the given options
+    '''
     parser = argparse.ArgumentParser(
         description = u'Analyse files found in the given directories \
         for the given language using multiple parallel processes.')
@@ -381,8 +403,10 @@ def parse_options():
     return args
 
 def main():
-    args = parse_options()
+    '''Analyse files in the given directories
+    '''
     sanity_check()
+    args = parse_options()
 
     ana = Analyser(args.lang)
     ana.set_analysis_files(
