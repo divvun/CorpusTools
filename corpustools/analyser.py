@@ -157,11 +157,9 @@ class Analyser(object):
                                                          u'/analysed')
 
     def ccat(self):
-        u"""Turn an xml formatted file to clean text
+        u"""Turn an xml formatted file into clean text
         """
-        self.xml_printer.process_file(self.xml_file)
-
-        return self.xml_printer.outfile.getvalue()
+        return self.xml_printer.process_file(self.xml_file).getvalue()
 
     def run_external_command(self, command, input):
         '''Run the command with input using subprocess
