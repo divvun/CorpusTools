@@ -313,7 +313,8 @@ class AnalysisConcatenator(object):
 
     def concatenate_analysed_files(self):
         u"""
-        @brief Concatenates analysed files according to origlang, translated_from_lang and genre
+        @brief Concatenates analysed files according to origlang,
+        translated_from_lang and genre
         """
         for xml_file in self.basenames:
             self.concatenate_analysed_file(xml_file[1].replace(u".xml", u".dis"))
@@ -337,7 +338,8 @@ class AnalysisConcatenator(object):
 
     def get_to_file(self, prefix, filename):
         u"""
-        @brief Gets the prefix of the filename. Opens a file object with the files prefix.
+        @brief Gets the prefix of the filename. Opens a file object with the
+        files prefix.
 
         :returns: File object belonging to the prefix of the filename
         """
@@ -394,12 +396,22 @@ def which(name):
             return True
 
 def parse_options():
-    parser = argparse.ArgumentParser(description = u'Analyse files found in the given directories for the given language using multiple parallel processes.')
-    parser.add_argument(u'-l', u'--lang', help = u"lang which should be analysed")
-    #parser.add_argument('-a', '--analysisdir', help='directory where the analysed files are placed')
-    parser.add_argument(u'-o', u'--old', help=u'When using this sme texts are analysed using the old disambiguation grammars', action=u"store_true")
-    parser.add_argument(u'--debug', help=u"use this for debugging the analysis process. When this argument is used files will be analysed one by one.", action=u"store_true")
-    parser.add_argument(u'converted_dirs', nargs=u'+', help = u"director(y|ies) where the converted files exist")
+    parser = argparse.ArgumentParser(
+        description = u'Analyse files found in the given directories \
+        for the given language using multiple parallel processes.')
+    parser.add_argument(u'-l', u'--lang',
+                        help = u"lang which should be analysed")
+    parser.add_argument(u'-o', u'--old',
+                        help=u'When using this sme texts are analysed \
+                        using the old disambiguation grammars',
+                        action=u"store_true")
+    parser.add_argument(u'--debug',
+                        help=u"use this for debugging the analysis \
+                        process. When this argument is used files will \
+                        be analysed one by one.",
+                        action=u"store_true")
+    parser.add_argument(u'converted_dirs', nargs=u'+',
+                        help = u"director(y|ies) where the converted files exist")
 
     args = parser.parse_args()
     return args
