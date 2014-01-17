@@ -26,6 +26,7 @@ def lineno():
     return inspect.currentframe().f_back.f_lineno
 
 from lxml import etree
+import StringIO
 import os
 import sys
 import argparse
@@ -185,7 +186,7 @@ class XMLPrinter:
 
         self.get_tail(element, textlist, parentlang)
 
-    def collect_text(self, element, parentlang):
+    def collect_text(self, element, parentlang, buffer):
         """Collect text from element, and print the contents to outfile
         """
         textlist = []
@@ -194,11 +195,11 @@ class XMLPrinter:
 
         if len(textlist) > 0:
             if not self.one_word_per_line:
-                self.outfile.write(' '.join(textlist).encode('utf8'))
-                self.outfile.write(' ¶\n')
+                buffer.write(' '.join(textlist).encode('utf8'))
+                buffer.write(' ¶\n')
             else:
-                self.outfile.write('\n'.join(textlist).encode('utf8'))
-                self.outfile.write('\n')
+                buffer.write('\n'.join(textlist).encode('utf8'))
+                buffer.write('\n')
 
     def get_text(self, element, textlist, parentlang):
         '''Get the text part of an lxml element
@@ -314,9 +315,12 @@ class XMLPrinter:
             self.etree = etree.parse(filename)
         self.filename = filename
 
+        buffer = StringIO.StringIO()
         for paragraph in self.etree.findall('.//p'):
             if self.visit_this_node(paragraph):
-                self.collect_text(paragraph, self.get_lang())
+                self.collect_text(paragraph, self.get_lang(), buffer)
+
+        return buffer
 
 def parse_options():
     """Parse the options given to the program
@@ -421,6 +425,7 @@ def parse_options():
 def main():
     """Set up the XMLPrinter class with the given command line options and
     process the given files and directories
+    Print the output to stdout
     """
     args = parse_options()
 
@@ -448,7 +453,8 @@ def main():
         elif os.path.isdir(target):
             for root, dirs, files in os.walk(target):
                 for xml_file in files:
-                    xml_printer.process_file(os.path.join(root, xml_file))
+                    buffer = xml_printer.process_file(os.path.join(root, xml_file))
+                    sys.write(buffer.getvalue())
 
 if __name__ == '__main__':
     main()
