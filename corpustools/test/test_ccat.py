@@ -8,483 +8,1046 @@ import cStringIO
 import os
 
 class TestCcat(unittest.TestCase):
-    def testSingleErrorInline(self):
-        x = ccat.XMLPrinter()
-        inputError = etree.fromstring('<errorortreal correct="fiskeleting" errtype="nosplit" pos="noun">fiske leting</errorortreal>')
+    def test_single_erroe_inline(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter()
+        input_error = etree.fromstring('''
+<errorortreal correct="fiskeleting" errtype="nosplit" pos="noun">
+    fiske leting
+</errorortreal>''')
 
         textlist = []
-        x.collectInlineErrors(inputError, textlist, 'nob')
+        xml_printer.collect_inline_errors(input_error, textlist, 'nob')
 
         self.assertEqual('\n'.join(textlist), 'fiskeleting')
 
-    def testSingleErrorNotInline(self):
-        x = ccat.XMLPrinter()
-        inputError = etree.fromstring('<errorortreal correct="fiskeleting" errtype="nosplit" pos="noun">fiske leting</errorortreal>')
+    def test_single_error_not_inline(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter()
+        input_error = etree.fromstring('''
+<errorortreal correct="fiskeleting" errtype="nosplit" pos="noun">
+    fiske leting
+</errorortreal>''')
 
         textlist = []
-        x.collectNotInlineErrors(inputError, textlist)
+        xml_printer.collect_not_inline_errors(input_error, textlist)
 
-        self.assertEqual('\n'.join(textlist), 'fiske leting\tfiskeleting\t#errtype=nosplit,pos=noun')
+        self.assertEqual('\n'.join(textlist),
+                         'fiske leting\tfiskeleting\t#errtype=nosplit,pos=noun')
 
-    def testSingleErrorNotInlineWithFilename(self):
-        x = ccat.XMLPrinter(printFilename=True)
-        inputError = etree.fromstring('<errorortreal correct="fiskeleting" errtype="nosplit" pos="noun">fiske leting</errorortreal>')
+    def test_single_error_not_inline_with_filename(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(print_filename=True)
+        input_error = etree.fromstring('''
+<errorortreal correct="fiskeleting" errtype="nosplit" pos="noun">
+    fiske leting
+</errorortreal>''')
 
-        x.filename = 'p.xml'
-
-        textlist = []
-        x.collectNotInlineErrors(inputError, textlist)
-
-        self.assertEqual('\n'.join(textlist), 'fiske leting\tfiskeleting\t#errtype=nosplit,pos=noun, file: p.xml')
-
-    def testSingleErrorNotInlineWithFilenameWithoutAttributes(self):
-        x = ccat.XMLPrinter(printFilename=True)
-        inputError = etree.fromstring('<errorortreal correct="fiskeleting">fiske leting</errorortreal>')
-
-        x.filename = 'p.xml'
+        xml_printer.filename = 'p.xml'
 
         textlist = []
-        x.collectNotInlineErrors(inputError, textlist)
+        xml_printer.collect_not_inline_errors(input_error, textlist)
 
-        self.assertEqual('\n'.join(textlist), 'fiske leting\tfiskeleting\t#file: p.xml')
+        self.assertEqual('\n'.join(textlist),
+                         'fiske leting\tfiskeleting\t\
+#errtype=nosplit,pos=noun, file: p.xml')
 
-    def testMultiErrorInLine(self):
-        x = ccat.XMLPrinter(printFilename=True)
+    def test_single_error_not_inline_with_filename_without_attributes(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(print_filename=True)
+        input_error = etree.fromstring('''
+<errorortreal correct="fiskeleting">fiske leting</errorortreal>
+''')
 
-        inputError = etree.fromstring('<errormorphsyn cat="x" const="spred" correct="skoledagene er så vanskelige" errtype="agr" orig="x" pos="adj">skoledagene er så<errorort correct="vanskelig" errtype="nosilent" pos="adj">vanskerlig</errorort></errormorphsyn>')
+        xml_printer.filename = 'p.xml'
+
         textlist = []
-        x.collectInlineErrors(inputError, textlist, 'nob')
+        xml_printer.collect_not_inline_errors(input_error, textlist)
+
+        self.assertEqual('\n'.join(textlist),
+                         'fiske leting\tfiskeleting\t#file: p.xml')
+
+    def test_multi_error_in_line(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(print_filename=True)
+
+        input_error = etree.fromstring('''
+<errormorphsyn cat="x" const="spred" correct="skoledagene er så vanskelige"
+errtype="agr" orig="x" pos="adj">
+    skoledagene er så
+    <errorort correct="vanskelig" errtype="nosilent" pos="adj">
+        vanskerlig
+    </errorort>
+</errormorphsyn>
+''')
+        textlist = []
+        xml_printer.collect_inline_errors(input_error, textlist, 'nob')
 
         self.assertEqual('\n'.join(textlist),
                          u'skoledagene er så vanskelige')
 
-    def testMultiErrormorphsynNotInlineWithFilename(self):
-        inputError = etree.fromstring('<errormorphsyn cat="x" const="spred" correct="skoledagene er så vanskelige" errtype="agr" orig="x" pos="adj">skoledagene er så<errorort correct="vanskelig" errtype="nosilent" pos="adj">vanskerlig</errorort></errormorphsyn>')
+    def test_multi_errormorphsyn_not_inline_with_filename(self):
+        '''
+        '''
+        input_error = etree.fromstring('''
+<errormorphsyn cat="x" const="spred" correct="skoledagene er så vanskelige"
+errtype="agr" orig="x" pos="adj">
+    skoledagene er så
+    <errorort correct="vanskelig" errtype="nosilent" pos="adj">
+        vanskerlig
+    </errorort>
+</errormorphsyn>
+''')
 
-        x = ccat.XMLPrinter(oneWordPerLine=True, printFilename=True)
-        x.filename = 'p.xml'
+        xml_printer = ccat.XMLPrinter(one_word_per_line=True,
+                                      print_filename=True)
+        xml_printer.filename = 'p.xml'
 
         textlist = []
-        x.collectNotInlineErrors(inputError, textlist)
+        xml_printer.collect_not_inline_errors(input_error, textlist)
 
-        self.assertEqual('\n'.join(textlist), u'skoledagene er så vanskelig\tskoledagene er så vanskelige\t#cat=x,const=spred,errtype=agr,orig=x,pos=adj, file: p.xml\nvanskerlig\tvanskelig\t#errtype=nosilent,pos=adj, file: p.xml')
+        self.assertEqual('\n'.join(textlist),
+                         u'skoledagene er så vanskelig\t\
+skoledagene er så vanskelige\t\
+#cat=x,const=spred,errtype=agr,orig=x,pos=adj, file: p.xml\n\
+vanskerlig\tvanskelig\t#errtype=nosilent,pos=adj, file: p.xml')
 
-    def testMultiErrorlexNotInline(self):
-        inputError = etree.fromstring('<errorlex correct="man soga"><errorort correct="makkár" errtype="á" pos="interr">makkar</errorort> soga</errorlex>')
+    def test_multi_errorlex_not_inline(self):
+        '''
+        '''
+        input_error = etree.fromstring('''
+<errorlex correct="man soga"><errorort correct="makkár" errtype="á" pos="interr">makkar</errorort> soga</errorlex>
+''')
         textlist = []
 
-        x = ccat.XMLPrinter(typos=True)
-        x.collectNotInlineErrors(inputError, textlist)
+        xml_printer = ccat.XMLPrinter(typos=True)
+        xml_printer.collect_not_inline_errors(input_error, textlist)
 
-        self.assertEqual('\n'.join(textlist), u'makkár soga\tman soga\nmakkar\tmakkár\t#errtype=á,pos=interr')
+        self.assertEqual('\n'.join(textlist),
+                         u'''makkár soga\tman soga
+makkar\tmakkár\t#errtype=á,pos=interr''')
 
-    def testP(self):
-        x = ccat.XMLPrinter()
-        x.setOutfile(cStringIO.StringIO())
-        inputP = etree.fromstring('<p>Et stykke av Norge som er lite kjent - Litt om Norge i mellomkrigstiden</p>')
+    def test_p(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter()
+        xml_printer.set_outfile(cStringIO.StringIO())
+        input_p = etree.fromstring('''
+<p>Et stykke av Norge som er lite kjent - Litt om Norge i mellomkrigstiden</p>
+''')
 
-        x.collectPlainP(inputP, 'nob')
-        self.assertEqual(x.outfile.getvalue(), 'Et stykke av Norge som er lite kjent - Litt om Norge i mellomkrigstiden ¶\n')
+        xml_printer.collect_text(input_p, 'nob')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         'Et stykke av Norge som er lite kjent - \
+Litt om Norge i mellomkrigstiden ¶\n')
 
-    def testPWithSpan(self):
-        x = ccat.XMLPrinter()
-        x.setOutfile(cStringIO.StringIO())
+    def test_p_with_span(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter()
+        xml_printer.set_outfile(cStringIO.StringIO())
 
-        inputP = etree.fromstring('<p>I 1864 ga han ut boka <span type="quote" xml:lang="dan">"Fornuftigt Madstel"</span>.</p>')
+        input_p = etree.fromstring('''
+<p>I 1864 ga han ut boka <span type="quote" xml:lang="dan">"Fornuftigt Madstel"</span>.</p>
+''')
 
-        x.collectPlainP(inputP, 'nob')
-        self.assertEqual(x.outfile.getvalue(), 'I 1864 ga han ut boka "Fornuftigt Madstel" . ¶\n')
+        xml_printer.collect_text(input_p, 'nob')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         'I 1864 ga han ut boka "Fornuftigt Madstel" . ¶\n')
 
-    def testPWithError(self):
-        x = ccat.XMLPrinter()
-        x.setOutfile(cStringIO.StringIO())
+    def test_p_with_error(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter()
+        xml_printer.set_outfile(cStringIO.StringIO())
 
-        inputP = etree.fromstring('<p><errormorphsyn cat="pl3prs" const="fin" correct="Bearpmehat sirrejit" errtype="agr" orig="sg3prs" pos="verb"><errorort correct="Bearpmehat" errtype="svow" pos="noun">Bearpmahat</errorort> <errorlex correct="sirre" errtype="w" origpos="v" pos="verb">earuha</errorlex></errormorphsyn> uskki ja loaiddu.</p>')
+        input_p = etree.fromstring('''
+<p><errormorphsyn cat="pl3prs" const="fin" correct="Bearpmehat sirrejit" errtype="agr" orig="sg3prs" pos="verb"><errorort correct="Bearpmehat" errtype="svow" pos="noun">Bearpmahat</errorort> <errorlex correct="sirre" errtype="w" origpos="v" pos="verb">earuha</errorlex></errormorphsyn> uskki ja loaiddu.</p>
+''')
 
-        x.collectPlainP(inputP, 'sme')
-        self.assertEqual(x.outfile.getvalue(), "Bearpmahat earuha uskki ja loaiddu. ¶\n")
+        xml_printer.collect_text(input_p, 'sme')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         "Bearpmahat earuha uskki ja loaiddu. ¶\n")
 
-    def testPOneWordPerLine(self):
-        inputP = etree.fromstring('<p>Et stykke av Norge som er lite kjent - Litt om Norge i mellomkrigstiden</p>')
+    def test_p_one_word_per_line(self):
+        '''
+        '''
+        input_p = etree.fromstring('''
+<p>Et stykke av Norge som er lite kjent - Litt om Norge i mellomkrigstiden</p>
+''')
 
-        x = ccat.XMLPrinter(oneWordPerLine=True)
+        xml_printer = ccat.XMLPrinter(one_word_per_line=True)
 
-        x.setOutfile(cStringIO.StringIO())
+        xml_printer.set_outfile(cStringIO.StringIO())
 
-        x.collectPlainP(inputP, 'nob')
-        self.assertEqual(x.outfile.getvalue(), 'Et\nstykke\nav\nNorge\nsom\ner\nlite\nkjent\n-\nLitt\nom\nNorge\ni\nmellomkrigstiden\n')
+        xml_printer.collect_text(input_p, 'nob')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         '''Et
+stykke
+av
+Norge
+som
+er
+lite
+kjent
+-
+Litt
+om
+Norge
+i
+mellomkrigstiden
+''')
 
-    def testPWithSpanOneWordPerLine(self):
-        inputP = etree.fromstring('<p>I 1864 ga han ut boka <span type="quote" xml:lang="dan">"Fornuftigt Madstel"</span>.</p>')
+    def test_p_with_span_one_word_per_line(self):
+        '''
+        '''
+        input_p = etree.fromstring('''
+<p>I 1864 ga han ut boka <span type="quote" xml:lang="dan">"Fornuftigt Madstel"</span>.</p>
+''')
 
-        x = ccat.XMLPrinter(oneWordPerLine=True)
-        x.setOutfile(cStringIO.StringIO())
+        xml_printer = ccat.XMLPrinter(one_word_per_line=True)
+        xml_printer.set_outfile(cStringIO.StringIO())
 
-        x.collectPlainP(inputP, 'nob')
-        self.assertEqual(x.outfile.getvalue(), 'I\n1864\nga\nhan\nut\nboka\n\"Fornuftigt\nMadstel\"\n.\n')
+        xml_printer.collect_text(input_p, 'nob')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         '''I
+1864
+ga
+han
+ut
+boka
+\"Fornuftigt
+Madstel\"
+.
+''')
 
-    def testPWithErrorOneWordPerLine(self):
-        inputP = etree.fromstring('<p>livččii <errorort correct="makkárge" errtype="á" pos="adv">makkarge</errorort> politihkka, muhto rahpasit baicca muitalivčče <errorlex correct="man soga"><errorort correct="makkár" errtype="á" pos="interr">makkar</errorort> soga</errorlex>sii</p>')
+    def test_p_with_error_one_word_per_line(self):
+        '''
+        '''
+        input_p = etree.fromstring('''
+<p>livččii
+    <errorort correct="makkárge" errtype="á" pos="adv">
+        makkarge
+    </errorort>
+    politihkka, muhto rahpasit baicca muitalivčče
+    <errorlex correct="man soga">
+        <errorort correct="makkár" errtype="á" pos="interr">
+            makkar
+        </errorort>
+        soga
+    </errorlex>
+    sii
+</p>
+''')
 
-        x = ccat.XMLPrinter(oneWordPerLine=True)
+        xml_printer = ccat.XMLPrinter(one_word_per_line=True)
 
-        x.setOutfile(cStringIO.StringIO())
-        x.collectPlainP(inputP, 'sme')
-        self.assertEqual(x.outfile.getvalue(), "livččii\nmakkarge\tmakkárge\t#errtype=á,pos=adv\npolitihkka,\nmuhto\nrahpasit\nbaicca\nmuitalivčče\nmakkár soga\tman soga\nmakkar\tmakkár\t#errtype=á,pos=interr\nsoga\nsii\n")
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.collect_text(input_p, 'sme')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         '''livččii
+makkarge\tmakkárge\t#errtype=á,pos=adv
+politihkka,
+muhto
+rahpasit
+baicca
+muitalivčče
+makkár soga\tman soga
+makkar\tmakkár\t#errtype=á,pos=interr
+soga
+sii
+''')
 
-    def testPWithErrorCorrection(self):
-        inputP = etree.fromstring('<p>livččii <errorort correct="makkárge" errtype="á" pos="adv">makkarge</errorort> politihkka, muhto rahpasit baicca muitalivčče <errorlex correct="man soga"><errorort correct="makkár" errtype="á" pos="interr">makkar</errorort> soga</errorlex>sii</p>')
+    def test_p_with_error_correction(self):
+        '''
+        '''
+        input_p = etree.fromstring('''
+<p>livččii
+    <errorort correct="makkárge" errtype="á" pos="adv">
+        makkarge
+    </errorort>
+    politihkka, muhto rahpasit baicca muitalivčče
+    <errorlex correct="man soga">
+        <errorort correct="makkár" errtype="á" pos="interr">
+            makkar
+        </errorort>
+        soga
+    </errorlex>
+    sii
+</p>
+''')
 
-        x = ccat.XMLPrinter(correction=True)
+        xml_printer = ccat.XMLPrinter(correction=True)
 
-        x.setOutfile(cStringIO.StringIO())
-        x.collectPlainP(inputP, 'sme')
-        self.assertEqual(x.outfile.getvalue(), "livččii makkárge politihkka, muhto rahpasit baicca muitalivčče man soga sii ¶\n")
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.collect_text(input_p, 'sme')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         "livččii makkárge politihkka, muhto rahpasit baicca \
+muitalivčče man soga sii ¶\n")
 
-    def testPWithErrorfilteringErrorlex(self):
-        inputP = etree.fromstring('<p>livččii <errorort correct="makkárge" errtype="á" pos="adv">makkarge</errorort> politihkka, muhto rahpasit baicca muitalivčče <errorlex correct="man soga"><errorort correct="makkár" errtype="á" pos="interr">makkar</errorort> soga</errorlex>sii</p>')
+    def test_p_with_error_filtering_errorlex(self):
+        '''
+        '''
+        input_p = etree.fromstring('''
+<p>livččii
+    <errorort correct="makkárge" errtype="á" pos="adv">
+        makkarge
+    </errorort>
+    politihkka, muhto rahpasit baicca muitalivčče
+    <errorlex correct="man soga">
+        <errorort correct="makkár" errtype="á" pos="interr">
+            makkar
+        </errorort>
+        soga
+    </errorlex>
+    sii
+</p>
+''')
 
-        x = ccat.XMLPrinter(errorlex=True)
+        xml_printer = ccat.XMLPrinter(errorlex=True)
 
-        x.setOutfile(cStringIO.StringIO())
-        x.collectPlainP(inputP, 'sme')
-        self.assertEqual(x.outfile.getvalue(), "livččii makkarge politihkka, muhto rahpasit baicca muitalivčče man soga sii ¶\n")
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.collect_text(input_p, 'sme')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         "livččii makkarge politihkka, muhto rahpasit baicca \
+muitalivčče man soga sii ¶\n")
 
-    def testPWithErrorfilteringErrormorphsyn(self):
-        inputP = etree.fromstring('<p>livččii <errorort correct="makkárge" errtype="á" pos="adv">makkarge</errorort> politihkka, muhto rahpasit baicca muitalivčče <errorlex correct="man soga"><errorort correct="makkár" errtype="á" pos="interr">makkar</errorort> soga</errorlex>sii</p>')
+    def test_p_with_error_filtering_errormorphsyn(self):
+        '''
+        '''
+        input_p = etree.fromstring('''
+<p>livččii
+    <errorort correct="makkárge" errtype="á" pos="adv">
+        makkarge
+    </errorort>
+    politihkka, muhto rahpasit baicca muitalivčče
+    <errorlex correct="man soga">
+        <errorort correct="makkár" errtype="á" pos="interr">
+            makkar
+        </errorort>
+        soga
+    </errorlex>
+    sii
+</p>
+''')
 
-        x = ccat.XMLPrinter(errormorphsyn=True)
+        xml_printer = ccat.XMLPrinter(errormorphsyn=True)
 
-        x.setOutfile(cStringIO.StringIO())
-        x.collectPlainP(inputP, 'sme')
-        self.assertEqual(x.outfile.getvalue(), "livččii makkarge politihkka, muhto rahpasit baicca muitalivčče makkar soga sii ¶\n")
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.collect_text(input_p, 'sme')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         "livččii makkarge politihkka, muhto rahpasit baicca \
+muitalivčče makkar soga sii ¶\n")
 
-    def testPWithErrorfilteringErrorort(self):
-        x = ccat.XMLPrinter(errorort=True)
+    def test_p_with_error_filtering_errorort(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(errorort=True)
 
-        inputP = etree.fromstring('<p>livččii <errorort correct="makkárge" errtype="á" pos="adv">makkarge</errorort> politihkka, muhto rahpasit baicca muitalivčče <errorlex correct="man soga"><errorort correct="makkár" errtype="á" pos="interr">makkar</errorort> soga</errorlex>sii</p>')
+        input_p = etree.fromstring('''
+<p>livččii
+    <errorort correct="makkárge" errtype="á" pos="adv">
+        makkarge
+    </errorort>
+    politihkka, muhto rahpasit baicca muitalivčče
+    <errorlex correct="man soga">
+        <errorort correct="makkár" errtype="á" pos="interr">
+            makkar
+        </errorort>
+        soga
+    </errorlex>
+    sii
+</p>
+''')
 
 
-        x.setOutfile(cStringIO.StringIO())
-        x.collectPlainP(inputP, 'sme')
-        self.assertEqual(x.outfile.getvalue(), "livččii makkárge politihkka, muhto rahpasit baicca muitalivčče makkár soga sii ¶\n")
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.collect_text(input_p, 'sme')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         "livččii makkárge politihkka, muhto rahpasit baicca \
+muitalivčče makkár soga sii ¶\n")
 
-    def testPWithErrorfilteringErrorortreal(self):
-        x = ccat.XMLPrinter(errorortreal=True)
+    def test_p_with_error_filtering_errorortreal(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(errorortreal=True)
 
-        inputP = etree.fromstring('<p>livččii <errorort correct="makkárge" errtype="á" pos="adv">makkarge</errorort> politihkka, muhto rahpasit baicca muitalivčče <errorlex correct="man soga"><errorort correct="makkár" errtype="á" pos="interr">makkar</errorort> soga</errorlex>sii</p>')
+        input_p = etree.fromstring('''
+<p>livččii
+    <errorort correct="makkárge" errtype="á" pos="adv">
+        makkarge
+    </errorort>
+    politihkka, muhto rahpasit baicca muitalivčče
+    <errorlex correct="man soga">
+        <errorort correct="makkár" errtype="á" pos="interr">
+            makkar
+        </errorort>
+        soga
+    </errorlex>
+    sii
+</p>
+''')
 
-        x.setOutfile(cStringIO.StringIO())
-        x.collectPlainP(inputP, 'sme')
-        self.assertEqual(x.outfile.getvalue(), "livččii makkarge politihkka, muhto rahpasit baicca muitalivčče makkar soga sii ¶\n")
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.collect_text(input_p, 'sme')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         "livččii makkarge politihkka, muhto rahpasit baicca \
+muitalivčče makkar soga sii ¶\n")
 
-    def testVisitThisPDefault(self):
-        x = ccat.XMLPrinter()
+    def test_visit_this_p_default(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter()
 
         for types in [' type="title"',
                       ' type="listitem"',
                       ' type="tablecell"']:
-            inputXML = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
-            self.assertFalse(x.visitThisNode(inputXML))
+            input_xml = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
+            self.assertFalse(xml_printer.visit_this_node(input_xml))
 
         for types in ['',
                       ' type="text"']:
-            inputXML = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
-            self.assertTrue(x.visitThisNode(inputXML))
+            input_xml = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
+            self.assertTrue(xml_printer.visit_this_node(input_xml))
 
-    def testVisitThisPTitleSet(self):
-        x = ccat.XMLPrinter(title=True)
+    def test_visit_this_p_title_set(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(title=True)
 
         for types in ['',
                       ' type="text"',
                       ' type="listitem"',
                       ' type="tablecell"']:
-            inputXML = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
-            self.assertFalse(x.visitThisNode(inputXML))
+            input_xml = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
+            self.assertFalse(xml_printer.visit_this_node(input_xml))
 
         for types in [' type="title"']:
-            inputXML = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
-            self.assertTrue(x.visitThisNode(inputXML))
+            input_xml = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
+            self.assertTrue(xml_printer.visit_this_node(input_xml))
 
-    def testVisitThisPListitemSet(self):
-        x = ccat.XMLPrinter(listitem=True)
+    def test_visit_this_p_listitem_set(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(listitem=True)
 
         for types in ['',
                       ' type="text"',
                       ' type="title"',
                       ' type="tablecell"']:
-            inputXML = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
-            self.assertFalse(x.visitThisNode(inputXML))
+            input_xml = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
+            self.assertFalse(xml_printer.visit_this_node(input_xml))
 
         for types in [' type="listitem"']:
-            inputXML = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
-            self.assertTrue(x.visitThisNode(inputXML))
+            input_xml = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
+            self.assertTrue(xml_printer.visit_this_node(input_xml))
 
-    def testVisitThisPTablecellSet(self):
-        x = ccat.XMLPrinter(table=True)
+    def test_visit_this_p_tablecell_set(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(table=True)
 
         for types in ['',
                       ' type="text"',
                       ' type="title"',
                       ' type="listitem"']:
-            inputXML = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
-            self.assertFalse(x.visitThisNode(inputXML))
+            input_xml = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
+            self.assertFalse(xml_printer.visit_this_node(input_xml))
 
         for types in [' type="tablecell"']:
-            inputXML = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
-            self.assertTrue(x.visitThisNode(inputXML))
+            input_xml = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
+            self.assertTrue(xml_printer.visit_this_node(input_xml))
 
-    def testVisitThisPAllpSet(self):
-        x = ccat.XMLPrinter(allP=True)
+    def test_visit_this_p_allp_set(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(all_paragraphs=True)
 
         for types in ['',
                       ' type="text"',
                       ' type="title"',
                       ' type="listitem"',
                       ' type="tablecell"']:
-            inputXML = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
-            self.assertTrue(x.visitThisNode(inputXML))
+            input_xml = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
+            self.assertTrue(xml_printer.visit_this_node(input_xml))
 
-    def testProcessFileDefault(self):
-        x = ccat.XMLPrinter()
+    def test_process_file_default(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter()
 
         for types in [' type="title"',
                       ' type="listitem"',
                       ' type="tablecell"']:
-            x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="sme"><body><p' + types + '>ášŧŋđžčøåæ</p></body></document>'))
-            x.setOutfile(cStringIO.StringIO())
+            xml_printer.etree = etree.parse(io.BytesIO(
+                '''<document id="no_id" xml:lang="sme"><body><p''' +
+                types +
+                '''>ášŧŋđžčøåæ</p></body></document>'''))
+            xml_printer.set_outfile(cStringIO.StringIO())
 
-            x.processFile('barabbas/p.xml')
-            self.assertEqual(x.outfile.getvalue(), '')
+            xml_printer.process_file('barabbas/p.xml')
+            self.assertEqual(xml_printer.outfile.getvalue(), '')
 
         for types in ['',
                       ' type="text"']:
-            x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="sme"><body><p' + types + '>ášŧŋđžčøåæ</p></body></document>'))
-            x.setOutfile(cStringIO.StringIO())
+            xml_printer.etree = etree.parse(io.BytesIO(
+                '''<document id="no_id" xml:lang="sme"><body><p''' +
+                types +
+                '''>ášŧŋđžčøåæ</p></body></document>'''))
+            xml_printer.set_outfile(cStringIO.StringIO())
 
-            x.processFile('barabbas/p.xml')
-            self.assertEqual(x.outfile.getvalue(), 'ášŧŋđžčøåæ ¶\n')
+            xml_printer.process_file('barabbas/p.xml')
+            self.assertEqual(xml_printer.outfile.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
-    def testProcessFileTitleSet(self):
-        x = ccat.XMLPrinter(title=True)
+    def test_process_file_title_set(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(title=True)
 
         for types in ['',
                       ' type="text"',
                       ' type="listitem"',
                       ' type="tablecell"']:
-            x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="sme"><body><p' + types + '>ášŧŋđžčøåæ</p></body></document>'))
-            x.setOutfile(cStringIO.StringIO())
+            xml_printer.etree = etree.parse(io.BytesIO(
+                '''<document id="no_id" xml:lang="sme"><body><p''' +
+                types +
+                '''>ášŧŋđžčøåæ</p></body></document>'''))
+            xml_printer.set_outfile(cStringIO.StringIO())
 
-            x.processFile('barabbas/p.xml')
-            self.assertEqual(x.outfile.getvalue(), '')
+            xml_printer.process_file('barabbas/p.xml')
+            self.assertEqual(xml_printer.outfile.getvalue(), '')
 
         for types in [' type="title"']:
-            x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="sme"><body><p' + types + '>ášŧŋđžčøåæ</p></body></document>'))
-            x.setOutfile(cStringIO.StringIO())
-            x.processFile('barabbas/p.xml')
-            self.assertEqual(x.outfile.getvalue(), 'ášŧŋđžčøåæ ¶\n')
+            xml_printer.etree = etree.parse(io.BytesIO(
+                '''<document id="no_id" xml:lang="sme"><body><p''' +
+                types +
+                '''>ášŧŋđžčøåæ</p></body></document>'''))
+            xml_printer.set_outfile(cStringIO.StringIO())
+            xml_printer.process_file('barabbas/p.xml')
+            self.assertEqual(xml_printer.outfile.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
-    def testProcessFileListitemSet(self):
-        x = ccat.XMLPrinter(listitem=True)
+    def test_process_file_listitem_set(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(listitem=True)
 
         for types in ['',
                       ' type="text"',
                       ' type="title"',
                       ' type="tablecell"']:
-            x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="sme"><body><p' + types + '>ášŧŋđžčøåæ</p></body></document>'))
-            x.setOutfile(cStringIO.StringIO())
-            x.processFile('barabbas/p.xml')
-            self.assertEqual(x.outfile.getvalue(), '')
+            xml_printer.etree = etree.parse(io.BytesIO(
+                '''<document id="no_id" xml:lang="sme"><body><p''' +
+                types +
+                '''>ášŧŋđžčøåæ</p></body></document>'''))
+            xml_printer.set_outfile(cStringIO.StringIO())
+            xml_printer.process_file('barabbas/p.xml')
+            self.assertEqual(xml_printer.outfile.getvalue(), '')
 
         for types in [' type="listitem"']:
-            x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="sme"><body><p' + types + '>ášŧŋđžčøåæ</p></body></document>'))
-            x.setOutfile(cStringIO.StringIO())
-            x.processFile('barabbas/p.xml')
-            self.assertEqual(x.outfile.getvalue(), 'ášŧŋđžčøåæ ¶\n')
+            xml_printer.etree = etree.parse(io.BytesIO(
+                '''<document id="no_id" xml:lang="sme"><body><p''' +
+                types +
+                '''>ášŧŋđžčøåæ</p></body></document>'''))
+            xml_printer.set_outfile(cStringIO.StringIO())
+            xml_printer.process_file('barabbas/p.xml')
+            self.assertEqual(xml_printer.outfile.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
-    def testProcessFileTablecellSet(self):
-        x = ccat.XMLPrinter(table=True)
+    def test_process_file_tablecell_set(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(table=True)
 
         for types in ['',
                       ' type="text"',
                       ' type="title"',
                       ' type="listitem"']:
-            x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="sme"><body><p' + types + '>ášŧŋđžčøåæ</p></body></document>'))
-            x.setOutfile(cStringIO.StringIO())
-            x.processFile('barabbas/p.xml')
-            self.assertEqual(x.outfile.getvalue(), '')
+            xml_printer.etree = etree.parse(io.BytesIO(
+                '''<document id="no_id" xml:lang="sme"><body><p''' +
+                types +
+                '''>ášŧŋđžčøåæ</p></body></document>'''))
+            xml_printer.set_outfile(cStringIO.StringIO())
+            xml_printer.process_file('barabbas/p.xml')
+            self.assertEqual(xml_printer.outfile.getvalue(), '')
 
         for types in [' type="tablecell"']:
-            x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="sme"><body><p' + types + '>ášŧŋđžčøåæ</p></body></document>'))
-            x.setOutfile(cStringIO.StringIO())
-            x.processFile('barabbas/p.xml')
-            self.assertEqual(x.outfile.getvalue(), 'ášŧŋđžčøåæ ¶\n')
+            xml_printer.etree = etree.parse(io.BytesIO(
+                '''<document id="no_id" xml:lang="sme"><body><p''' +
+                types +
+                '''>ášŧŋđžčøåæ</p></body></document>'''))
+            xml_printer.set_outfile(cStringIO.StringIO())
+            xml_printer.process_file('barabbas/p.xml')
+            self.assertEqual(xml_printer.outfile.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
-    def testProcessFileAllpSet(self):
-        x = ccat.XMLPrinter(allP=True)
+    def test_process_file_allp_set(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(all_paragraphs=True)
 
         for types in ['',
                       ' type="text"',
                       ' type="title"',
                       ' type="listitem"',
                       ' type="tablecell"']:
-            x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="sme"><body><p' + types + '>ášŧŋđžčøåæ</p></body></document>'))
-            x.setOutfile(cStringIO.StringIO())
-            x.processFile('barabbas/p.xml')
-            self.assertEqual(x.outfile.getvalue(), 'ášŧŋđžčøåæ ¶\n')
+            xml_printer.etree = etree.parse(io.BytesIO(
+                '''<document id="no_id" xml:lang="sme"><body><p''' +
+                types +
+                '''>ášŧŋđžčøåæ</p></body></document>'''))
+            xml_printer.set_outfile(cStringIO.StringIO())
+            xml_printer.process_file('barabbas/p.xml')
+            self.assertEqual(xml_printer.outfile.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
-    def testProcessFileOneWordPerLineErrorlex(self):
-        x = ccat.XMLPrinter(     oneWordPerLine=True,
+    def test_process_file_one_word_per_line_errorlex(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(one_word_per_line=True,
                             errorlex=True)
 
-        x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="sme"><body><p>livččii <errorort correct="makkárge" errtype="á" pos="adv">makkarge</errorort> politihkka, muhto rahpasit baicca muitalivčče <errorlex correct="man soga"><errorort correct="makkár" errtype="á" pos="interr">makkar</errorort>soga</errorlex>sii</p></body></document>'))
+        xml_printer.etree = etree.parse(io.BytesIO('''
+<document id="no_id" xml:lang="sme">
+    <body>
+        <p>
+            livččii
+            <errorort correct="makkárge" errtype="á" pos="adv">
+                makkarge
+            </errorort>
+            politihkka, muhto rahpasit baicca muitalivčče
+            <errorlex correct="man soga">
+                <errorort correct="makkár" errtype="á" pos="interr">
+                    makkar
+                </errorort>
+                soga
+            </errorlex>
+            sii
+        </p>
+    </body>
+</document>'''))
 
-        x.setOutfile(cStringIO.StringIO())
-        x.processFile('barabbas/p.xml')
-        self.assertEqual(x.outfile.getvalue(), 'livččii\nmakkarge\npolitihkka,\nmuhto\nrahpasit\nbaicca\nmuitalivčče\nmakkár soga\tman soga\nsii\n')
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.process_file('barabbas/p.xml')
+        self.assertEqual(xml_printer.outfile.getvalue(), '''livččii
+makkarge
+politihkka,
+muhto
+rahpasit
+baicca
+muitalivčče
+makkár soga\tman soga
+sii
+''')
 
-    def testProcessFileOneWordPerLineErrorort(self):
-        x = ccat.XMLPrinter(     oneWordPerLine=True,
+    def test_process_file_one_word_per_line_errorort(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(one_word_per_line=True,
                             errorort=True)
 
-        x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="sme"><body><p>livččii <errorort correct="makkárge" errtype="á" pos="adv">makkarge</errorort> politihkka, muhto rahpasit baicca muitalivčče <errorlex correct="man soga"><errorort correct="makkár" errtype="á" pos="interr">makkar</errorort>soga</errorlex>sii</p></body></document>'))
+        xml_printer.etree = etree.parse(io.BytesIO('''
+<document id="no_id" xml:lang="sme">
+    <body>
+        <p>
+            livččii
+            <errorort correct="makkárge" errtype="á" pos="adv">
+                makkarge
+            </errorort>
+            politihkka, muhto rahpasit baicca muitalivčče
+            <errorlex correct="man soga">
+                <errorort correct="makkár" errtype="á" pos="interr">
+                    makkar
+                </errorort>
+                soga
+            </errorlex>
+            sii
+        </p>
+    </body>
+</document>'''))
 
-        x.setOutfile(cStringIO.StringIO())
-        x.processFile('barabbas/p.xml')
-        self.assertEqual(x.outfile.getvalue(), 'livččii\nmakkarge\tmakkárge\t#errtype=á,pos=adv\npolitihkka,\nmuhto\nrahpasit\nbaicca\nmuitalivčče\nmakkar\tmakkár\t#errtype=á,pos=interr\nsoga\nsii\n')
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.process_file('barabbas/p.xml')
+        self.assertEqual(xml_printer.outfile.getvalue(), '''livččii
+makkarge\tmakkárge\t#errtype=á,pos=adv
+politihkka,
+muhto
+rahpasit
+baicca
+muitalivčče
+makkar\tmakkár\t#errtype=á,pos=interr
+soga
+sii
+''')
 
-    def testProcessFileTypos(self):
-        x = ccat.XMLPrinter(typos=True)
+    def test_process_file_typos(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(typos=True)
 
-        x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="sme"><body><p>livččii <errorort correct="makkárge" errtype="á" pos="adv">makkarge</errorort> politihkka, muhto rahpasit baicca muitalivčče <errorlex correct="man soga"><errorort correct="makkár" errtype="á" pos="interr">makkar</errorort>soga</errorlex>sii</p></body></document>'))
+        xml_printer.etree = etree.parse(io.BytesIO('''
+<document id="no_id" xml:lang="sme">
+    <body>
+        <p>
+            livččii
+            <errorort correct="makkárge" errtype="á" pos="adv">
+                makkarge
+            </errorort>
+            politihkka, muhto rahpasit baicca muitalivčče
+            <errorlex correct="man soga">
+                <errorort correct="makkár" errtype="á" pos="interr">
+                    makkar
+                </errorort>
+                soga
+            </errorlex>
+            sii
+        </p>
+    </body>
+</document>'''))
 
-        x.setOutfile(cStringIO.StringIO())
-        x.processFile('barabbas/p.xml')
-        self.assertEqual(x.outfile.getvalue(), 'makkarge\tmakkárge\t#errtype=á,pos=adv\nmakkár soga\tman soga\nmakkar\tmakkár\t#errtype=á,pos=interr\n')
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.process_file('barabbas/p.xml')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         '''makkarge\tmakkárge\t#errtype=á,pos=adv
+makkár soga\tman soga
+makkar\tmakkár\t#errtype=á,pos=interr
+''')
 
-    def testProcessFileTyposErrorlex(self):
-        x = ccat.XMLPrinter(     typos=True,
+    def test_process_file_typos_errorlex(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(     typos=True,
                             errorlex=True)
 
-        x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="sme"><body><p>livččii <errorort correct="makkárge" errtype="á" pos="adv">makkarge</errorort> politihkka, muhto rahpasit baicca muitalivčče <errorlex correct="man soga"><errorort correct="makkár" errtype="á" pos="interr">makkar</errorort>soga</errorlex>sii</p></body></document>'))
+        xml_printer.etree = etree.parse(io.BytesIO('''
+<document id="no_id" xml:lang="sme">
+    <body>
+        <p>
+            livččii
+            <errorort correct="makkárge" errtype="á" pos="adv">
+                makkarge
+            </errorort>
+            politihkka, muhto rahpasit baicca muitalivčče
+            <errorlex correct="man soga">
+                <errorort correct="makkár" errtype="á" pos="interr">
+                    makkar
+                </errorort>
+                soga
+            </errorlex>
+            sii
+        </p>
+    </body>
+</document>'''))
 
-        x.setOutfile(cStringIO.StringIO())
-        x.processFile('barabbas/p.xml')
-        self.assertEqual(x.outfile.getvalue(), 'makkár soga\tman soga\n')
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.process_file('barabbas/p.xml')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         'makkár soga\tman soga\n')
 
-    def testProcessFileTyposErrorort(self):
-        x = ccat.XMLPrinter(     typos=True,
-                            oneWordPerLine=True,
+    def test_process_file_typos_errorort(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(     typos=True,
+                            one_word_per_line=True,
                             errorort=True)
 
-        x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="sme"><body><p>livččii <errorort correct="makkárge" errtype="á" pos="adv">makkarge</errorort> politihkka, muhto rahpasit baicca muitalivčče <errorlex correct="man soga"><errorort correct="makkár" errtype="á" pos="interr">makkar</errorort>soga</errorlex>sii</p></body></document>'))
-        x.setOutfile(cStringIO.StringIO())
+        xml_printer.etree = etree.parse(io.BytesIO('''
+<document id="no_id" xml:lang="sme">
+    <body>
+        <p>
+            livččii
+            <errorort correct="makkárge" errtype="á" pos="adv">
+                makkarge
+            </errorort>
+            politihkka, muhto rahpasit baicca muitalivčče
+            <errorlex correct="man soga">
+                <errorort correct="makkár" errtype="á" pos="interr">
+                    makkar
+                </errorort>
+                soga
+            </errorlex>
+            sii
+        </p>
+    </body>
+</document>'''))
+        xml_printer.set_outfile(cStringIO.StringIO())
 
-        x.processFile('barabbas/p.xml')
-        self.assertEqual(x.outfile.getvalue(), 'makkarge\tmakkárge\t#errtype=á,pos=adv\nmakkar\tmakkár\t#errtype=á,pos=interr\n')
+        xml_printer.process_file('barabbas/p.xml')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         '''makkarge\tmakkárge\t#errtype=á,pos=adv
+makkar\tmakkár\t#errtype=á,pos=interr
+''')
 
-    def testGetLang(self):
-        x = ccat.XMLPrinter()
-        x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="sme"/>'))
+    def test_get_lang(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter()
+        xml_printer.etree = etree.parse(io.BytesIO(
+            '''<document id="no_id" xml:lang="sme"/>'''))
 
-        self.assertEqual(x.getLang(),  'sme')
+        self.assertEqual(xml_printer.get_lang(),  'sme')
 
-    def testGetElementLanguageSameAsParent(self):
-        x = ccat.XMLPrinter()
+    def test_get_element_language_same_as_parent(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter()
 
         element = etree.fromstring('<p/>')
-        self.assertEqual(x.getElementLanguage(element, 'sme'), 'sme')
+        self.assertEqual(xml_printer.get_element_language(element, 'sme'),
+                         'sme')
 
-    def testGetElementLanguageDifferentFromParent(self):
-        x = ccat.XMLPrinter()
+    def test_get_element_language_different_from_parent(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter()
 
         element = etree.fromstring('<p xml:lang="nob"/>')
-        self.assertEqual(x.getElementLanguage(element, 'sme'), 'nob')
+        self.assertEqual(xml_printer.get_element_language(element, 'sme'),
+                         'nob')
 
-    def testProcessFileLanguageNob(self):
-        x = ccat.XMLPrinter(lang='nob')
-        x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="nob"><body><p>nob1 <span type="quote" xml:lang="dan">dan1</span>nob2</p></body></document>'))
+    def test_process_file_language_nob(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(lang='nob')
+        xml_printer.etree = etree.parse(io.BytesIO('''
+<document id="no_id" xml:lang="nob">
+    <body>
+        <p>
+            nob1
+            <span type="quote" xml:lang="dan">
+                dan1
+            </span>
+            nob2
+        </p>
+    </body>
+</document>'''))
 
-        x.setOutfile(cStringIO.StringIO())
-        x.processFile('barabbas/p.xml')
-        self.assertEqual(x.outfile.getvalue(), 'nob1 nob2 ¶\n')
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.process_file('barabbas/p.xml')
+        self.assertEqual(xml_printer.outfile.getvalue(), 'nob1 nob2 ¶\n')
 
-    def testProcessFileLanguageDan(self):
-        x = ccat.XMLPrinter(lang='dan')
-        x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="nob"><body><p>nob1 <span type="quote" xml:lang="dan">dan1</span>nob2</p></body></document>'))
+    def test_process_file_language_dan(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(lang='dan')
+        xml_printer.etree = etree.parse(io.BytesIO('''
+<document id="no_id" xml:lang="nob">
+    <body>
+        <p>
+            nob1
+            <span type="quote" xml:lang="dan">
+                dan1
+            </span>
+            nob2
+        </p>
+    </body>
+</document>'''))
 
-        x.setOutfile(cStringIO.StringIO())
-        x.processFile('barabbas/p.xml')
-        self.assertEqual(x.outfile.getvalue(), 'dan1 ¶\n')
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.process_file('barabbas/p.xml')
+        self.assertEqual(xml_printer.outfile.getvalue(), 'dan1 ¶\n')
 
-    def testProcessTwoParagraphs(self):
-        x = ccat.XMLPrinter()
-        x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="nob"><body><p>nob1</p><p>nob2</p></body></document>'))
+    def test_process_two_paragraphs(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter()
+        xml_printer.etree = etree.parse(io.BytesIO('''
+<document id="no_id" xml:lang="nob">
+    <body>
+        <p>
+            nob1
+        </p>
+        <p>
+            nob2
+        </p>
+    </body>
+</document>'''))
 
-        x.setOutfile(cStringIO.StringIO())
-        x.processFile('barabbas/p.xml')
-        self.assertEqual(x.outfile.getvalue(), 'nob1 ¶\nnob2 ¶\n')
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.process_file('barabbas/p.xml')
+        self.assertEqual(xml_printer.outfile.getvalue(), 'nob1 ¶\nnob2 ¶\n')
 
-    def testProcessMinusLSme(self):
-        x = ccat.XMLPrinter(lang='sme')
-        x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="nob"><body><p type="text">men <errormorphsyn cat="x" const="spred" correct="skoledagene er så vanskelige" errtype="agr" orig="x" pos="adj">skoledagene er så<errorort correct="vanskelig" errtype="nosilent" pos="adj">vanskerlig</errorort></errormorphsyn>å komme igjennom,</p></body></document>'))
-        x.setOutfile(cStringIO.StringIO())
-        x.processFile('barabbas/p.xml')
+    def test_process_minus_l_sme(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(lang='sme')
+        xml_printer.etree = etree.parse(io.BytesIO('''
+<document id="no_id" xml:lang="nob">
+    <body>
+        <p type="text">
+            men
+            <errormorphsyn cat="x" const="spred"
+            correct="skoledagene er så vanskelige" errtype="agr" orig="x"
+            pos="adj">
+                skoledagene er så
+                <errorort correct="vanskelig" errtype="nosilent" pos="adj">
+                    vanskerlig
+                </errorort>
+            </errormorphsyn>
+            å komme igjennom,
+        </p>
+    </body>
+</document>'''))
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.process_file('barabbas/p.xml')
 
-        self.assertEqual(x.outfile.getvalue(), '')
+        self.assertEqual(xml_printer.outfile.getvalue(), '')
 
-    def testForeign(self):
-        x = ccat.XMLPrinter(errorlang=True)
-        x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="nob"><body><p>Vijmak bierjjedak!<errorlang correct="nor">Pjuh</errorlang>vijmak de bierjjedak<errorort correct="sjattaj" errorinfo="vowlat,á-a">sjattáj</errorort>.</p></body></document>'))
-        x.setOutfile(cStringIO.StringIO())
-        x.processFile('barabbas/p.xml')
+    def test_foreign(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(errorlang=True)
+        xml_printer.etree = etree.parse(io.BytesIO('''
+<document id="no_id" xml:lang="nob">
+    <body>
+        <p>
+            Vijmak bierjjedak!
+            <errorlang correct="nor">
+                Pjuh
+            </errorlang>
+            vijmak de bierjjedak
+            <errorort correct="sjattaj" errorinfo="vowlat,á-a">
+                sjattáj
+            </errorort>
+            .
+        </p>
+    </body>
+</document>'''))
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.process_file('barabbas/p.xml')
 
-        self.assertEqual(x.outfile.getvalue(), 'Vijmak bierjjedak! nor vijmak de bierjjedak sjattáj . ¶\n')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         'Vijmak bierjjedak! nor vijmak de bierjjedak sjattáj \
+. ¶\n')
 
-    def testNoForeign(self):
-        x = ccat.XMLPrinter(noforeign=True)
-        x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="nob"><body><p>Vijmak bierjjedak!<errorlang correct="nor">Pjuh</errorlang>vijmak de bierjjedak<errorort correct="sjattaj" errorinfo="vowlat,á-a">sjattáj</errorort>.</p></body></document>'))
-        x.setOutfile(cStringIO.StringIO())
-        x.processFile('barabbas/p.xml')
+    def test_no_foreign(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(noforeign=True)
+        xml_printer.etree = etree.parse(io.BytesIO('''
+<document id="no_id" xml:lang="nob">
+    <body>
+        <p>
+            Vijmak bierjjedak!
+            <errorlang correct="nor">
+                Pjuh
+            </errorlang>
+            vijmak de bierjjedak
+            <errorort correct="sjattaj" errorinfo="vowlat,á-a">
+                sjattáj
+            </errorort>
+            .
+        </p>
+    </body>
+</document>'''))
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.process_file('barabbas/p.xml')
 
-        self.assertEqual(x.outfile.getvalue(), 'Vijmak bierjjedak! vijmak de bierjjedak sjattáj . ¶\n')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         'Vijmak bierjjedak! vijmak de bierjjedak sjattáj . \
+¶\n')
 
-    def testNoForeignTypos(self):
-        x = ccat.XMLPrinter(noforeign=True, typos=True)
-        x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="nob"><body><p>Vijmak bierjjedak!<errorlang correct="nor">Pjuh</errorlang>vijmak de bierjjedak<errorort correct="sjattaj" errorinfo="vowlat,á-a">sjattáj</errorort>.</p></body></document>'))
-        x.setOutfile(cStringIO.StringIO())
-        x.processFile('barabbas/p.xml')
+    def test_no_foreign_typos(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(noforeign=True, typos=True)
+        xml_printer.etree = etree.parse(io.BytesIO('''
+<document id="no_id" xml:lang="nob">
+    <body>
+        <p>
+            Vijmak bierjjedak!
+            <errorlang correct="nor">
+                Pjuh
+            </errorlang>
+            vijmak de bierjjedak
+            <errorort correct="sjattaj" errorinfo="vowlat,á-a">
+                sjattáj
+            </errorort>.
+        </p>
+    </body>
+</document>'''))
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.process_file('barabbas/p.xml')
 
-        self.assertEqual(x.outfile.getvalue(), '')
+        self.assertEqual(xml_printer.outfile.getvalue(), '')
 
-    def testTyposErrordepth3(self):
-        x = ccat.XMLPrinter(typos=True)
-        x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="nob"><body><p><errormorphsyn cat="genpl" const="obj" correct="čoggen ollu joŋaid ja sarridiid" errtype="case" orig="nompl" pos="noun"><errormorphsyn cat="genpl" const="obj" correct="čoggen ollu joŋaid" errtype="case" orig="nompl" pos="noun"><errorort correct="čoggen" errtype="mono" pos="verb">čoaggen</errorort> ollu jokŋat</errormorphsyn>ja sarridat</errormorphsyn></p></body></document>'))
-        x.setOutfile(cStringIO.StringIO())
-        x.processFile('barabbas/p.xml')
+    def test_typos_errordepth3(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(typos=True)
+        xml_printer.etree = etree.parse(io.BytesIO('''
+<document id="no_id" xml:lang="nob">
+    <body>
+        <p>
+            <errormorphsyn cat="genpl" const="obj"
+            correct="čoggen ollu joŋaid ja sarridiid" errtype="case"
+            orig="nompl" pos="noun">
+                <errormorphsyn cat="genpl" const="obj"
+                correct="čoggen ollu joŋaid" errtype="case"
+                orig="nompl" pos="noun">
+                    <errorort correct="čoggen" errtype="mono" pos="verb">
+                        čoaggen
+                    </errorort>
+                    ollu jokŋat
+                </errormorphsyn>
+                ja sarridat
+            </errormorphsyn>
+        </p>
+    </body>
+</document>'''))
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.process_file('barabbas/p.xml')
 
-        self.assertEqual(x.outfile.getvalue(), 'čoggen ollu joŋaid ja sarridat\tčoggen ollu joŋaid ja sarridiid\t#cat=genpl,const=obj,errtype=case,orig=nompl,pos=noun\nčoggen ollu jokŋat\tčoggen ollu joŋaid\t#cat=genpl,const=obj,errtype=case,orig=nompl,pos=noun\nčoaggen\tčoggen\t#errtype=mono,pos=verb\n')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+                         'čoggen ollu joŋaid ja sarridat\t\
+čoggen ollu joŋaid ja sarridiid\t\
+#cat=genpl,const=obj,errtype=case,orig=nompl,pos=noun\n\
+čoggen ollu jokŋat\tčoggen ollu joŋaid\t\
+#cat=genpl,const=obj,errtype=case,orig=nompl,pos=noun\n\
+čoaggen\tčoggen\t#errtype=mono,pos=verb\n')
 
-    def testTyposErrormorphsynTwice(self):
-        x = ccat.XMLPrinter(typos=True, errormorphsyn=True)
-        x.eTree = etree.parse(io.BytesIO('<document id="no_id" xml:lang="nob"><body><p><errormorphsyn cat="sg3prs" const="v" correct="lea okta mánná" errtype="agr" orig="pl3prs" pos="v">leat <errormorphsyn cat="nomsg" const="spred" correct="okta mánná" errtype="case" orig="gensg" pos="n">okta máná</errormorphsyn></errormorphsyn></p></body></document>'))
-        x.setOutfile(cStringIO.StringIO())
-        x.processFile('barabbas/p.xml')
+    def test_typos_errormorphsyn_twice(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter(typos=True, errormorphsyn=True)
+        xml_printer.etree = etree.parse(io.BytesIO('''
+<document id="no_id" xml:lang="nob">
+    <body>
+        <p>
+            <errormorphsyn cat="sg3prs" const="v" correct="lea okta mánná"
+            errtype="agr" orig="pl3prs" pos="v">
+                leat
+                <errormorphsyn cat="nomsg" const="spred" correct="okta mánná"
+                errtype="case" orig="gensg" pos="n">
+                    okta máná
+                </errormorphsyn>
+            </errormorphsyn>
+        </p>
+    </body>
+</document>'''))
+        xml_printer.set_outfile(cStringIO.StringIO())
+        xml_printer.process_file('barabbas/p.xml')
 
-        self.assertEqual(x.outfile.getvalue(), 'leat okta mánná\tlea okta mánná\t#cat=sg3prs,const=v,errtype=agr,orig=pl3prs,pos=v\nokta máná\tokta mánná\t#cat=nomsg,const=spred,errtype=case,orig=gensg,pos=n\n')
+        self.assertEqual(xml_printer.outfile.getvalue(),
+'''leat okta mánná\tlea okta mánná\t\
+#cat=sg3prs,const=v,errtype=agr,orig=pl3prs,pos=v
+okta máná\tokta mánná\t#cat=nomsg,const=spred,errtype=case,orig=gensg,pos=n
+''')
 
-    def testSetOutfileString(self):
-        x = ccat.XMLPrinter()
-        x.setOutfile('abc.xml')
+    def test_set_outfile_string(self):
+        '''
+        '''
+        xml_printer = ccat.XMLPrinter()
+        xml_printer.set_outfile('abc.xml')
 
         self.assertTrue(os.path.exists('abc.xml'))
         os.remove('abc.xml')
 
-def suite():
+def this_suite():
     loader = unittest.TestLoader()
     suite = unittest.TestSuite()
-    suite.addTest(loader.loadTestsFromTestCase(HelloworldTestCase))
+    suite.addTest(loader.loadTestsFromTestCase(TestCcat))
     return suite
 
 if __name__ == '__main__':
-    unittest.TextTestRunner(verbosity=2).run(suite())
+    unittest.TextTestRunner(verbosity=2).run(this_suite())
