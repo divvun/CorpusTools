@@ -93,7 +93,6 @@ class XMLPrinter:
             self.one_word_per_line = one_word_per_line
 
         self.lang = lang
-        self.outfile = sys.stdout
 
     def get_lang(self):
         """
@@ -187,7 +186,7 @@ class XMLPrinter:
         self.get_tail(element, textlist, parentlang)
 
     def collect_text(self, element, parentlang, buffer):
-        """Collect text from element, and print the contents to outfile
+        """Collect text from element, and write the contents to buffer
         """
         textlist = []
 
@@ -297,19 +296,10 @@ class XMLPrinter:
                 (element.tag == 'errorlang' and self.noforeign)
             )
 
-    def set_outfile(self, outfile):
-        '''outfile must either be a string containing the path to the file
-        where the result should be written, or an object that supports the
-        write method
-        '''
-        if type(outfile) != file:
-            if isinstance(outfile, (str, unicode)):
-                self.outfile = open(outfile, 'w')
-            else:
-                self.outfile = outfile
-
     def process_file(self, filename):
-        """Process the given file
+        """Process the given file, adding the text into buffer
+
+        Returns the buffer
         """
         if os.path.exists(filename):
             self.etree = etree.parse(filename)

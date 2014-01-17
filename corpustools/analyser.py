@@ -40,7 +40,6 @@ class Analyser(object):
     def __init__(self, lang):
         self.lang = lang
         self.xml_printer = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
-        self.xml_printer.set_outfile(StringIO.StringIO())
 
     def exit_on_error(self, filename):
         '''Exit the process if filename does not exist

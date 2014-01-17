@@ -1032,12 +1032,3 @@ makkar\tmakkár\t#errtype=á,pos=interr
 #cat=sg3prs,const=v,errtype=agr,orig=pl3prs,pos=v
 okta máná\tokta mánná\t#cat=nomsg,const=spred,errtype=case,orig=gensg,pos=n
 ''')
-
-    def test_set_outfile_string(self):
-        '''
-        '''
-        xml_printer = ccat.XMLPrinter()
-        xml_printer.set_outfile('abc.xml')
-
-        self.assertTrue(os.path.exists('abc.xml'))
-        os.remove('abc.xml')
