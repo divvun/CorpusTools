@@ -225,17 +225,6 @@ class Analyser(object):
     def get_disambiguation(self):
         return self.disambiguation
 
-    def get_disambiguation_xml(self):
-        disambiguation = etree.Element(u'disambiguation')
-        disambiguation.text = self.disambiguation_analysis().decode(u'utf8')
-        body = etree.Element(u'body')
-        body.append(disambiguation)
-
-        oldbody = self.etree.find(u'.//body')
-        oldbody.getparent().replace(oldbody, body)
-
-        return self.etree
-
     def get_dependency(self):
         return self.dependency
 
