@@ -41,7 +41,7 @@ class Analyser(object):
         self.xp = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
         self.xp.set_outfile(StringIO.StringIO())
 
-    def exitOnError(self, filename):
+    def exit_on_error(self, filename):
         error = False
 
         if filename is None:
@@ -54,102 +54,102 @@ class Analyser(object):
         if error:
             sys.exit(4)
 
-    def setAnalysisFiles(self,
-                         abbrFile=None,
-                         fstFile=None,
-                         disambiguationAnalysisFile=None,
-                         functionAnalysisFile=None,
-                         dependencyAnalysisFile=None):
+    def set_analysis_files(self,
+                         abbr_file=None,
+                         fst_file=None,
+                         disambiguation_analysis_file=None,
+                         function_analysis_file=None,
+                         dependency_analysis_file=None):
         if self.lang in ['sma', 'sme', 'smj']:
-            self.exitOnError(abbrFile)
-        self.exitOnError(fstFile)
-        self.exitOnError(disambiguationAnalysisFile)
-        self.exitOnError(functionAnalysisFile)
-        self.exitOnError(dependencyAnalysisFile)
+            self.exit_on_error(abbr_file)
+        self.exit_on_error(fst_file)
+        self.exit_on_error(disambiguation_analysis_file)
+        self.exit_on_error(function_analysis_file)
+        self.exit_on_error(dependency_analysis_file)
 
-        self.abbrFile = abbrFile
-        self.fstFile = fstFile
-        self.disambiguationAnalysisFile = disambiguationAnalysisFile
-        self.functionAnalysisFile = functionAnalysisFile
-        self.dependencyAnalysisFile = dependencyAnalysisFile
+        self.abbr_file = abbr_file
+        self.fst_file = fst_file
+        self.disambiguation_analysis_file = disambiguation_analysis_file
+        self.function_analysis_file = function_analysis_file
+        self.dependency_analysis_file = dependency_analysis_file
 
-    def setCorrFile(self, corrFile):
-        self.exitOnError(corrFile)
-        self.corrFile = corrFile
+    def set_corr_file(self, corr_file):
+        self.exit_on_error(corr_file)
+        self.corr_file = corr_file
 
-    def collectFiles(self, convertedDirs):
-        '''convertedDirs is a list of directories containing converted xml files
+    def collect_files(self, converted_dirs):
+        '''converted_dirs is a list of directories containing converted xml files
         '''
-        self.xmlFiles = []
-        for cdir in convertedDirs:
+        self.xml_files = []
+        for cdir in converted_dirs:
             for root, dirs, files in os.walk(cdir): # Walk directory tree
                 for f in files:
                     if self.lang in root and f.endswith(u'.xml'):
-                        self.xmlFiles.append(os.path.join(root, f))
+                        self.xml_files.append(os.path.join(root, f))
 
     def makedirs(self):
         u"""Make the analysed directory
         """
         try:
-            os.makedirs(os.path.dirname(self.analysisXmlFile))
+            os.makedirs(os.path.dirname(self.analysis_xml_file))
         except OSError:
             pass
 
-    def getLang(self):
+    def get_lang(self):
         u"""
         @brief Get the mainlang from the xml file
 
         :returns: the language as set in the xml file
         """
-        if self.eTree.getroot().attrib[u'{http://www.w3.org/XML/1998/namespace}lang'] is not None:
-            return self.eTree.getroot().attrib[u'{http://www.w3.org/XML/1998/namespace}lang']
+        if self.etree.getroot().attrib[u'{http://www.w3.org/XML/1998/namespace}lang'] is not None:
+            return self.etree.getroot().attrib[u'{http://www.w3.org/XML/1998/namespace}lang']
         else:
             return u'none'
 
-    def getGenre(self):
+    def get_genre(self):
         u"""
         @brief Get the genre from the xml file
 
         :returns: the genre as set in the xml file
         """
-        if self.eTree.getroot().find(u".//genre") is not None:
-            return self.eTree.getroot().find(u".//genre").attrib[u"code"]
+        if self.etree.getroot().find(u".//genre") is not None:
+            return self.etree.getroot().find(u".//genre").attrib[u"code"]
         else:
             return u'none'
 
-    def getOcr(self):
+    def get_ocr(self):
         u"""
         @brief Check if the ocr element exists
 
         :returns: the ocr element or None
         """
-        return self.eTree.getroot().find(u".//ocr")
+        return self.etree.getroot().find(u".//ocr")
 
-    def getTranslatedfrom(self):
+    def get_translatedfrom(self):
         u"""
         @brief Get the translated_from value from the xml file
 
         :returns: the value of translated_from as set in the xml file
         """
-        if self.eTree.getroot().find(u".//translated_from") is not None:
-            return self.eTree.getroot().find(u".//translated_from").attrib[u"{http://www.w3.org/XML/1998/namespace}lang"]
+        if self.etree.getroot().find(u".//translated_from") is not None:
+            return self.etree.getroot().find(u".//translated_from").attrib[u"{http://www.w3.org/XML/1998/namespace}lang"]
         else:
             return u'none'
 
-    def calculateFilenames(self, xmlFile):
+    def calculate_filenames(self, xml_file):
         u"""Set the names of the analysis files
         """
-        self.dependencyAnalysisName = xmlFile.replace(u'/converted/', u'/analysed')
+        self.dependency_analysis_name = xml_file.replace(u'/converted/', u'/analysed')
 
     def ccat(self):
         u"""Runs ccat on the input file
         Returns the output of ccat
         """
-        self.xp.process_file(self.xmlFile)
+        self.xp.process_file(self.xml_file)
 
         return self.xp.outfile.getvalue()
 
-    def runExternalCommand(self, command, input):
+    def run_external_command(self, command, input):
         '''Run the command with input using subprocess
         '''
         subp = subprocess.Popen(command,
@@ -157,7 +157,7 @@ class Analyser(object):
                                 stdout = subprocess.PIPE,
                                 stderr = subprocess.PIPE)
         (output, error) = subp.communicate(input)
-        self.checkError(command, error)
+        self.check_error(command, error)
 
         return output
 
@@ -165,218 +165,218 @@ class Analyser(object):
         u"""Runs preprocess on the ccat output.
         Returns the output of preprocess
         """
-        preProcessCommand = [u'preprocess']
+        pre_process_command = [u'preprocess']
 
-        if self.abbrFile is not None:
-            preProcessCommand.append(u'--abbr=' + self.abbrFile)
+        if self.abbr_file is not None:
+            pre_process_command.append(u'--abbr=' + self.abbr_file)
 
-        if self.lang == 'sme' and self.corrFile is not None:
-            preProcessCommand.append(u'--corr=' + self.corrFile)
+        if self.lang == 'sme' and self.corr_file is not None:
+            pre_process_command.append(u'--corr=' + self.corr_file)
 
-        return self.runExternalCommand(preProcessCommand, self.ccat())
+        return self.run_external_command(pre_process_command, self.ccat())
 
     def lookup(self):
         u"""Runs lookup on the preprocess output
         Returns the output of preprocess
         """
-        lookupCommand = [u'lookup', u'-q', u'-flags', u'mbTT', self.fstFile]
+        lookup_command = [u'lookup', u'-q', u'-flags', u'mbTT', self.fst_file]
 
-        return self.runExternalCommand(lookupCommand, self.preprocess())
+        return self.run_external_command(lookup_command, self.preprocess())
 
 
     def lookup2cg(self):
         u"""Runs the lookup on the lookup output
         Returns the output of lookup2cg
         """
-        lookup2cgCommand = [u'lookup2cg']
+        lookup2cg_command = [u'lookup2cg']
 
-        return self.runExternalCommand(lookup2cgCommand, self.lookup())
+        return self.run_external_command(lookup2cg_command, self.lookup())
 
-    def disambiguationAnalysis(self):
+    def disambiguation_analysis(self):
         u"""Runs vislcg3 on the lookup2cg output, which produces a disambiguation
         analysis
         The output is stored in a .dis file
         """
-        disAnalysisCommand = \
-            [u'vislcg3', u'-g', self.disambiguationAnalysisFile]
+        dis_analysis_command = \
+            [u'vislcg3', u'-g', self.disambiguation_analysis_file]
 
         self.disambiguation = \
-            self.runExternalCommand(disAnalysisCommand, self.lookup2cg())
+            self.run_external_command(dis_analysis_command, self.lookup2cg())
 
-    def functionAnalysis(self):
+    def function_analysis(self):
         u"""Runs vislcg3 on the dis file
         Return the output of this process
         """
-        self.disambiguationAnalysis()
+        self.disambiguation_analysis()
 
-        functionAnalysisCommand = \
-            [u'vislcg3', u'-g', self.functionAnalysisFile]
+        function_analysis_command = \
+            [u'vislcg3', u'-g', self.function_analysis_file]
 
-        return self.runExternalCommand(functionAnalysisCommand, self.getDisambiguation())
+        return self.run_external_command(function_analysis_command, self.get_disambiguation())
 
-    def dependencyAnalysis(self):
+    def dependency_analysis(self):
         u"""Runs vislcg3 on the .dis file.
         Produces output in a .dep file
         """
-        depAnalysisCommand = \
-            [u'vislcg3', u'-g', self.dependencyAnalysisFile]
+        dep_analysis_command = \
+            [u'vislcg3', u'-g', self.dependency_analysis_file]
 
         self.dependency = \
-            self.runExternalCommand(depAnalysisCommand, self.functionAnalysis())
+            self.run_external_command(dep_analysis_command, self.function_analysis())
 
-    def getDisambiguation(self):
+    def get_disambiguation(self):
         return self.disambiguation
 
-    def getDisambiguationXml(self):
+    def get_disambiguation_xml(self):
         disambiguation = etree.Element(u'disambiguation')
-        disambiguation.text = self.disambiguationAnalysis().decode(u'utf8')
+        disambiguation.text = self.disambiguation_analysis().decode(u'utf8')
         body = etree.Element(u'body')
         body.append(disambiguation)
 
-        oldbody = self.eTree.find(u'.//body')
+        oldbody = self.etree.find(u'.//body')
         oldbody.getparent().replace(oldbody, body)
 
-        return self.eTree
+        return self.etree
 
-    def getDependency(self):
+    def get_dependency(self):
         return self.dependency
 
-    def getAnalysisXml(self):
+    def get_analysis_xml(self):
         body = etree.Element(u'body')
 
         disambiguation = etree.Element(u'disambiguation')
-        disambiguation.text = self.getDisambiguation().decode(u'utf8')
+        disambiguation.text = self.get_disambiguation().decode(u'utf8')
         body.append(disambiguation)
 
         dependency = etree.Element(u'dependency')
-        dependency.text = self.getDependency().decode(u'utf8')
+        dependency.text = self.get_dependency().decode(u'utf8')
         body.append(dependency)
 
-        oldbody = self.eTree.find(u'.//body')
+        oldbody = self.etree.find(u'.//body')
         oldbody.getparent().replace(oldbody, body)
 
-        return self.eTree
+        return self.etree
 
-    def checkError(self, command, error):
+    def check_error(self, command, error):
         if error is not None and len(error) > 0:
-            print >>sys.stderr, self.xmlFile
+            print >>sys.stderr, self.xml_file
             print >>sys.stderr, command
             print >>sys.stderr, error
 
-    def analyse(self, xmlFile):
+    def analyse(self, xml_file):
         u'''Analyse a file if it is not ocr'ed
         '''
-        self.xmlFile = xmlFile
-        self.analysisXmlFile = self.xmlFile.replace(u'converted/', u'analysed/')
-        self.eTree = etree.parse(xmlFile)
-        self.calculateFilenames(xmlFile)
+        self.xml_file = xml_file
+        self.analysis_xml_file = self.xml_file.replace(u'converted/', u'analysed/')
+        self.etree = etree.parse(xml_file)
+        self.calculate_filenames(xml_file)
 
-        if self.getOcr() is None:
-            self.dependencyAnalysis()
+        if self.get_ocr() is None:
+            self.dependency_analysis()
             self.makedirs()
-            self.getAnalysisXml().write(
-                self.analysisXmlFile,
+            self.get_analysis_xml().write(
+                self.analysis_xml_file,
                 encoding=u'utf8',
                 xml_declaration=True)
 
-    def analyseInParallel(self):
-        poolSize = multiprocessing.cpu_count() * 2
-        pool = multiprocessing.Pool(processes=poolSize,)
-        poolOutputs = pool.map(
+    def analyse_in_parallel(self):
+        pool_size = multiprocessing.cpu_count() * 2
+        pool = multiprocessing.Pool(processes=pool_size,)
+        pool_outputs = pool.map(
             unwrap_self_analyse,
-            zip([self]*len(self.xmlFiles), self.xmlFiles))
+            zip([self]*len(self.xml_files), self.xml_files))
         pool.close() # no more tasks
         pool.join()  # wrap up current tasks
 
-    def analyseSerially(self):
-        for xmlFile in self.xmlFiles:
-            print >>sys.stderr, u'Analysing', xmlFile
-            self.analyse(xmlFile)
+    def analyse_serially(self):
+        for xml_file in self.xml_files:
+            print >>sys.stderr, u'Analysing', xml_file
+            self.analyse(xml_file)
 
 
 class AnalysisConcatenator(object):
-    def __init__(self, goalDir, xmlFiles, old=False):
+    def __init__(self, goal_dir, xml_files, old=False):
         u"""
         @brief Receives a list of filenames that has been analysed
         """
-        self.basenames = xmlFiles
+        self.basenames = xml_files
         self.old = old
         if old:
-            self.disoldFiles = {}
-            self.depoldFiles = {}
-        self.disFiles = {}
-        self.depFiles = {}
-        self.goalDir = os.path.join(goalDir, datetime.date.today().isoformat())
+            self.disold_files = {}
+            self.depold_files = {}
+        self.dis_files = {}
+        self.dep_files = {}
+        self.goal_dir = os.path.join(goal_dir, datetime.date.today().isoformat())
         try:
-            os.makedirs(self.goalDir)
+            os.makedirs(self.goal_dir)
         except OSError:
             pass
 
-    def concatenateAnalysedFiles(self):
+    def concatenate_analysed_files(self):
         u"""
         @brief Concatenates analysed files according to origlang, translated_from_lang and genre
         """
-        for xmlFile in self.basenames:
-            self.concatenateAnalysedFile(xmlFile[1].replace(u".xml", u".dis"))
-            self.concatenateAnalysedFile(xmlFile[1].replace(u".xml", u".dep"))
+        for xml_file in self.basenames:
+            self.concatenate_analysed_file(xml_file[1].replace(u".xml", u".dis"))
+            self.concatenate_analysed_file(xml_file[1].replace(u".xml", u".dep"))
             if self.old:
-                self.concatenateAnalysedFile(xmlFile[1].replace(u".xml", u".disold"))
-                self.concatenateAnalysedFile(xmlFile[1].replace(u".xml", u".depold"))
+                self.concatenate_analysed_file(xml_file[1].replace(u".xml", u".disold"))
+                self.concatenate_analysed_file(xml_file[1].replace(u".xml", u".depold"))
 
 
-    def concatenateAnalysedFile(self, filename):
+    def concatenate_analysed_file(self, filename):
         u"""
         @brief Adds the content of the given file to file it belongs to
 
         :returns: ...
         """
         if os.path.isfile(filename):
-            fromFile = open(filename)
-            self.getToFile(fromFile.readline(), filename).write(fromFile.read())
-            fromFile.close()
+            from_file = open(filename)
+            self.get_to_file(from_file.readline(), filename).write(from_file.read())
+            from_file.close()
             os.unlink(filename)
 
-    def getToFile(self, prefix, filename):
+    def get_to_file(self, prefix, filename):
         u"""
         @brief Gets the prefix of the filename. Opens a file object with the files prefix.
 
         :returns: File object belonging to the prefix of the filename
         """
 
-        prefix = os.path.join(self.goalDir, prefix.strip())
+        prefix = os.path.join(self.goal_dir, prefix.strip())
         if filename[-4:] == u".dis":
             try:
-                self.disFiles[prefix]
+                self.dis_files[prefix]
             except KeyError:
-                self.disFiles[prefix] = open(prefix + u".dis", u"w")
+                self.dis_files[prefix] = open(prefix + u".dis", u"w")
 
-            return self.disFiles[prefix]
+            return self.dis_files[prefix]
 
         elif filename[-4:] == u".dep":
             try:
-                self.depFiles[prefix]
+                self.dep_files[prefix]
             except KeyError:
-                self.depFiles[prefix] = open(prefix + u".dep", u"w")
+                self.dep_files[prefix] = open(prefix + u".dep", u"w")
 
-            return self.depFiles[prefix]
+            return self.dep_files[prefix]
 
         if filename[-7:] == u".disold":
             try:
-                self.disoldFiles[prefix]
+                self.disold_files[prefix]
             except KeyError:
-                self.disoldFiles[prefix] = open(prefix + u".disold", u"w")
+                self.disold_files[prefix] = open(prefix + u".disold", u"w")
 
-            return self.disoldFiles[prefix]
+            return self.disold_files[prefix]
 
         elif filename[-7:] == u".depold":
             try:
-                self.depoldFiles[prefix]
+                self.depold_files[prefix]
             except KeyError:
-                self.depoldFiles[prefix] = open(prefix + u".depold", u"w")
+                self.depold_files[prefix] = open(prefix + u".depold", u"w")
 
-            return self.depoldFiles[prefix]
+            return self.depold_files[prefix]
 
-def sanityCheck():
+def sanity_check():
     u"""Look for programs and files that are needed to do the analysis.
     If they don't exist, quit the program
     """
@@ -407,44 +407,44 @@ def parse_options():
 
 def main():
     args = parse_options()
-    sanityCheck()
+    sanity_check()
 
     ana = Analyser(args.lang, args.old)
-    ana.setAnalysisFiles(
-        abbrFile=\
+    ana.set_analysis_files(
+        abbr_file=\
             os.path.join(os.getenv(u'GTHOME'),
                           u'langs/' +
                           args.lang +
                           '/src/syntax/abbr.txt'),
-        fstFile=\
+        fst_file=\
             os.path.join(os.getenv(u'GTHOME'),
                          u'langs/' +
                          args.lang +
                          u'/src/analyser-gt-desc.xfst'),
-        disambiguationAnalysisFile=\
+        disambiguation_analysis_file=\
             os.path.join(os.getenv(u'GTHOME'),
                          u'langs/' +
                          args.lang +
                          u'/src/syntax/disambiguation.cg3'),
-        functionAnalysisFile=\
+        function_analysis_file=\
             os.path.join(os.getenv(u'GTHOME'),
                          u'gtcore/gtdshared/smi/src/syntax/functions.cg3'),
-        dependencyAnalysisFile=\
+        dependency_analysis_file=\
             os.path.join(
                 os.getenv(u'GTHOME'),
                 u'gtcore/gtdshared/smi/src/syntax/dependency.cg3'))
 
     if args.lang == u'sme':
-        ana.setCorrFile(os.path.join(os.getenv(u'GTHOME'),
+        ana.set_corr_file(os.path.join(os.getenv(u'GTHOME'),
                                      u'langs/' +
                                      args.lang +
                                      '/src/syntax/corr.txt'))
 
-    ana.collectFiles(args.converted_dirs)
+    ana.collect_files(args.converted_dirs)
     if args.debug is False:
-        ana.analyseInParallel()
+        ana.analyse_in_parallel()
     else:
-        ana.analyseSerially()
+        ana.analyse_serially()
 
 if __name__ == u'__main__':
     main()

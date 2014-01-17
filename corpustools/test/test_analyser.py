@@ -31,14 +31,14 @@ from corpustools import analyser
 class TestAnalyser(unittest.TestCase):
     def setUp(self):
         self.a = analyser.Analyser(u'sme')
-        self.a.xmlFile = u'smefile.xml'
-        self.a.setAnalysisFiles(
-            abbrFile='abbr.txt',
-            fstFile='analyser.xfst',
-            disambiguationAnalysisFile='disambiguation.cg3',
-            functionAnalysisFile='functions.cg3',
-            dependencyAnalysisFile='dependency.cg3')
-        self.a.setCorrFile(corrFile='corr.txt')
+        self.a.xml_file = u'smefile.xml'
+        self.a.set_analysis_files(
+            abbr_file='abbr.txt',
+            fst_file='analyser.xfst',
+            disambiguation_analysis_file='disambiguation.cg3',
+            function_analysis_file='functions.cg3',
+            dependency_analysis_file='dependency.cg3')
+        self.a.set_corr_file(corr_file='corr.txt')
 
     def assertXmlEqual(self, got, want):
         u"""Check if two stringified xml snippets are equal
@@ -48,7 +48,7 @@ class TestAnalyser(unittest.TestCase):
             message = checker.output_difference(doctest.Example(u"", want), got, 0).encode(u'utf-8')
             raise AssertionError(message)
 
-    def testSmeCcatOutput(self):
+    def test_sme_ccat_output(self):
         u"""Test if the ccat output is what we expect it to be
         """
         got = self.a.ccat()
@@ -56,7 +56,7 @@ class TestAnalyser(unittest.TestCase):
 
         self.assertEqual(got, want.encode(u'utf8'))
 
-    def testSmePreprocessOutput(self):
+    def test_sme_preprocess_output(self):
         u"""Test if the preprocess output is what we expect it to be
         """
         got = self.a.preprocess()
@@ -64,30 +64,30 @@ class TestAnalyser(unittest.TestCase):
 
         self.assertEqual(got, want.encode(u'utf8'))
 
-    def testSmeDisambiguationOutput(self):
+    def test_sme_disambiguation_output(self):
         u"""Check if disambiguation analysis gives the expected output
         """
-        self.a.disambiguationAnalysis()
-        got = self.a.getDisambiguation()
+        self.a.disambiguation_analysis()
+        got = self.a.get_disambiguation()
         want = u'"<Muhto>"\n\t"muhto" CC <sme> @CVP \n"<gaskkohagaid>"\n\t"gaskkohagaid" Adv <sme> \n"<,>"\n\t"," CLB \n"<ja>"\n\t"ja" CC <sme> @CNP \n"<erenoamážit>"\n\t"erenoamážit" Adv <sme> \n"<dalle_go>"\n\t"dalle_go" MWE CS <sme> @CVP \n"<lei>"\n\t"leat" V <sme> IV Ind Prt Sg3 @+FMAINV \n"<buolaš>"\n\t"buolaš" Sem/Wthr N <sme> Sg Nom \n"<,>"\n\t"," CLB \n"<de>"\n\t"de" Adv <sme> \n"<aggregáhta>"\n\t"aggregáhta" N <sme> Sg Nom \n"<billánii>"\n\t"billánit" V <sme> IV Ind Prt Sg3 @+FMAINV \n"<.>"\n\t"." CLB \n\n"<¶>"\n\t"¶" CLB \n\n'
 
         self.assertEqual(got, want.encode(u'utf8'))
 
-    def testSmeDependencyOutput(self):
+    def test_sme_dependency_output(self):
         u"""Check if disambiguation analysis gives the expected output
         """
-        self.a.dependencyAnalysis()
-        got = self.a.getDependency()
+        self.a.dependency_analysis()
+        got = self.a.get_dependency()
         want = u'"<Muhto>"\n\t"muhto" CC @CVP #1->1 \n"<gaskkohagaid>"\n\t"gaskkohagaid" Adv @ADVL> #2->12 \n"<,>"\n\t"," CLB #3->4 \n"<ja>"\n\t"ja" CC @CNP #4->2 \n"<erenoamážit>"\n\t"erenoamážit" Adv @ADVL> #5->12 \n"<dalle_go>"\n\t"dalle_go" CS @CVP #6->7 \n"<lei>"\n\t"leat" V IV Ind Prt Sg3 @FS-ADVL> #7->12 \n"<buolaš>"\n\t"buolaš" N Sg Nom @<SPRED #8->7 \n"<,>"\n\t"," CLB #9->6 \n"<de>"\n\t"de" Adv @ADVL> #10->12 \n"<aggregáhta>"\n\t"aggregáhta" N Sg Nom @SUBJ> #11->12 \n"<billánii>"\n\t"billánit" V IV Ind Prt Sg3 @FS-ADVL> #12->0 \n"<.>"\n\t"." CLB #13->12 \n\n"<¶>"\n\t"¶" CLB #1->1 \n\n'
 
         self.assertEqual(got, want.encode(u'utf8'))
 
-    def testAnalysisXml(self):
+    def test_analysisXml(self):
         u"""Check if the xml is what it is supposed to be
         """
-        self.a.eTree = etree.parse(self.a.xmlFile)
-        self.a.dependencyAnalysis()
-        got = self.a.getAnalysisXml()
+        self.a.etree = etree.parse(self.a.xml_file)
+        self.a.dependency_analysis()
+        got = self.a.get_analysis_xml()
         want = u'''<document xml:lang="sme" id="no_id">
   <header>
     <title>Internáhtta sosiálalaš giliguovddážin</title>
