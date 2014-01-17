@@ -11,6 +11,7 @@ import cStringIO
 from lxml import etree
 import os
 import sys
+import argparse
 
 class XMLPrinter:
     def __init__(self,
@@ -266,3 +267,64 @@ class XMLPrinter:
         for p in self.eTree.findall('.//p'):
             if self.visitThisNode(p):
                 self.collectPlainP(p, self.getLang())
+
+def parse_options():
+    parser = argparse.ArgumentParser(description = 'Print the contents of a corpus in XML format\nThe default is to print paragraphs with no type (=text type).\n')
+
+    parser.add_argument('-l', dest='lang', help='Print only elements in language LANG. Default is all langs.')
+    parser.add_argument('-T', dest='title', action='store_true', help='Print paragraphs with title type', )
+    parser.add_argument('-L', dest='list', action='store_true', help='Print paragraphs with list type')
+    parser.add_argument('-t', dest='table', action='store_true', help='Print paragraphs with table type')
+    parser.add_argument('-a', dest='allP', action='store_true', help='Print all text elements')
+
+    parser.add_argument('-c', dest='corrections', action='store_true', help='Print corrected text instead of the original typos & errors')
+    parser.add_argument('-C', dest='error', action='store_true', help='Only print unclassified (§/<error..>) corrections')
+    parser.add_argument('-ort', dest='errorort', action='store_true', help='Only print ortoghraphic, non-word ($/<errorort..>) corrections')
+    parser.add_argument('-ortreal', dest='errorortreal', action='store_true', help='Only print ortoghraphic, real-word (¢/<errorortreal..>) corrections')
+    parser.add_argument('-morphsyn', dest='errormorphsyn', action='store_true', help='Only print morphosyntactic (£/<errormorphsyn..>) corrections')
+    parser.add_argument('-syn', dest='errorsyn', action='store_true', help='Only print syntactic (¥/<errorsyn..>) corrections')
+    parser.add_argument('-lex', dest='errorlex', action='store_true', help='Only print lexical (€/<errorlex..>) corrections')
+    parser.add_argument('-foreign', dest='errorlang', action='store_true', help='Only print foreign (∞/<errorlang..>) corrections')
+    parser.add_argument('-noforeign', dest='noforeign', action='store_true', help='Do not print anything from foreign (∞/<errorlang..>) corrections')
+
+    parser.add_argument('-typos', dest='typos', action='store_true', help='Print only the errors/typos in the text, with corrections tab-separated')
+    parser.add_argument('-f', dest='printFilename', action='store_true', help='Add the source filename as a comment after each error word.')
+    parser.add_argument('-S', help='Print the whole text one word per line; typos have tab separated corrections', dest='oneWordPerLine', action='store_true')
+
+    parser.add_argument('-r', dest='recursive', action='store_true', help='Recursively process directory and subdirs encountered')
+    parser.add_argument('targets', help='Name of the files or directories to process', nargs='+')
+
+    args = parser.parse_args()
+    return args
+
+def main():
+    args = parse_options()
+
+    c = XMLPrinter(lang=args.lang,
+                        allP=args.allP,
+                        title=args.title,
+                        listitem=args.list,
+                        table=args.table,
+                        correction=args.corrections,
+                        error=args.error,
+                        errorort=args.errorort,
+                        errorortreal=args.errorortreal,
+                        errormorphsyn=args.errormorphsyn,
+                        errorsyn=args.errorsyn,
+                        errorlex=args.errorlex,
+                        errorlang=args.errorlang,
+                        noforeign=args.noforeign,
+                        typos=args.typos,
+                        printFilename=args.printFilename,
+                        oneWordPerLine=args.oneWordPerLine)
+
+    for target in args.targets:
+        if os.path.isfile(target):
+            c.processFile(target)
+        elif os.path.isdir(target):
+            for root, dirs, files in os.walk(target):
+                for f in files:
+                    c.processFile(os.path.join(root,f))
+
+if __name__ == '__main__':
+    main()
