@@ -33,7 +33,7 @@ import argparse
 class XMLPrinter:
     def __init__(self,
                  lang=None,
-                 allP=False,
+                 all_paragraphs=False,
                  title=False,
                  listitem=False,
                  table=False,
@@ -47,14 +47,14 @@ class XMLPrinter:
                  errorlang=False,
                  noforeign=False,
                  typos=False,
-                 printFilename=False,
-                 oneWordPerLine=False):
+                 print_filename=False,
+                 one_word_per_line=False):
 
-        self.p = True
-        self.allP = allP
+        self.paragraph = True
+        self.all_paragraphs = all_paragraphs
 
         if title or listitem or table:
-            self.p = False
+            self.paragraph = False
 
         self.title = title
         self.listitem = listitem
@@ -78,51 +78,55 @@ class XMLPrinter:
             errorlex or
             errorlang or
             noforeign):
-            self.errorFiltering = True
+            self.error_filtering = True
         else:
-            self.errorFiltering = False
+            self.error_filtering = False
 
         self.typos = typos
-        self.printFilename = printFilename
+        self.print_filename = print_filename
         if self.typos:
-            self.oneWordPerLine = True
+            self.one_word_per_line = True
         else:
-            self.oneWordPerLine = oneWordPerLine
+            self.one_word_per_line = one_word_per_line
 
         self.lang = lang
         self.outfile = sys.stdout
 
-    def getLang(self):
+    def get_lang(self):
         """
         Get the lang of the file
         """
-        return self.eTree.getroot().attrib['{http://www.w3.org/XML/1998/namespace}lang']
+        return self.etree.getroot().attrib['{http://www.w3.org/XML/1998/namespace}lang']
 
-    def getElementLanguage(self, element, parentlang):
+    def get_element_language(self, element, parentlang):
+        """Get the language of element.
+
+        Elements inherit the parents language if not explicitely set
+        """
         if element.get('{http://www.w3.org/XML/1998/namespace}lang') is None:
             return parentlang
         else:
             return element.get('{http://www.w3.org/XML/1998/namespace}lang')
 
-    def collectNotInlineErrors(self, element, textlist):
+    def collect_not_inline_errors(self, element, textlist):
         '''Add the formatted errors as strings to the textlist list
         '''
-        errorString = self.errorNotInline(element)
-        if errorString != '':
-            textlist.append(errorString)
+        error_string = self.error_not_inline(element)
+        if error_string != '':
+            textlist.append(error_string)
 
         for child in element:
-            if self.visitErrorNotInline(child):
-                self.collectNotInlineErrors(child, textlist)
+            if self.visit_error_not_inline(child):
+                self.collect_not_inline_errors(child, textlist)
 
         if not self.typos:
             if element.tail != None and element.tail.strip() != '':
-                if not self.oneWordPerLine:
+                if not self.one_word_per_line:
                     textlist.append(element.tail.strip())
                 else:
                     textlist.append('\n'.join(element.tail.strip().split()))
 
-    def errorNotInline(self, element):
+    def error_not_inline(self, element):
         '''Collect and format element.text, element.tail and
         the attributes into the string text
 
@@ -134,7 +138,7 @@ class XMLPrinter:
             if element.text is not None and element.text.strip() != '':
                 text = element.text.strip()
 
-            if not self.errorFiltering or self.includeThisError(element):
+            if not self.error_filtering or self.include_this_error(element):
                 for child in element:
                     if text != '':
                         text += ' '
@@ -142,11 +146,11 @@ class XMLPrinter:
                     if  child.tail is not None and child.tail.strip() != '':
                         text += ' ' + child.tail.strip()
 
-            text += self.getErrorAttributes(dict(element.attrib))
+            text += self.get_error_attributes(dict(element.attrib))
 
         return text
 
-    def getErrorAttributes(self, attributes):
+    def get_error_attributes(self, attributes):
         '''Collect and format the attributes + the filename
         into the string text.
         '''
@@ -162,76 +166,82 @@ class XMLPrinter:
             text += '\t#'
             text += ','.join(attr)
 
-            if self.printFilename:
+            if self.print_filename:
                 text += ', file: ' + os.path.basename(self.filename)
 
-        elif self.printFilename:
+        elif self.print_filename:
             text += '\t#file: ' + os.path.basename(self.filename)
 
         return text
 
-    def collectInlineErrors(self, element, textlist, parentlang):
+    def collect_inline_errors(self, element, textlist, parentlang):
         '''Add the "correct" element to the list textlist
         '''
         if element.get('correct') != None and not self.noforeign:
             textlist.append(element.get('correct'))
 
-        self.getTail(element, textlist, parentlang)
+        self.get_tail(element, textlist, parentlang)
 
-    def collectPlainP(self, element, parentlang):
+    def collect_text(self, element, parentlang):
+        """Collect text from element, and print the contents to outfile
+        """
         textlist = []
 
-        self.plainP(element, textlist, parentlang)
+        self.visit_nonerror_element(element, textlist, parentlang)
 
         if len(textlist) > 0:
-            if not self.oneWordPerLine:
+            if not self.one_word_per_line:
                 self.outfile.write(' '.join(textlist).encode('utf8'))
                 self.outfile.write(' ¶\n')
             else:
                 self.outfile.write('\n'.join(textlist).encode('utf8'))
                 self.outfile.write('\n')
 
-    def getText(self, element, textlist, parentlang):
+    def get_text(self, element, textlist, parentlang):
         '''Get the text part of an lxml element
         '''
-        if element.text != None and element.text.strip() != '' and (self.lang == None or self.getElementLanguage(element, parentlang) == self.lang):
-            if not self.oneWordPerLine:
+        if element.text != None and element.text.strip() != '' and (self.lang == None or self.get_element_language(element, parentlang) == self.lang):
+            if not self.one_word_per_line:
                 textlist.append(element.text.strip())
             else:
                 textlist.append('\n'.join(element.text.strip().split()))
 
-    def getTail(self, element, textlist, parentlang):
+    def get_tail(self, element, textlist, parentlang):
         '''Get the tail part of an lxml element
         '''
         if element.tail != None and element.tail.strip() != '' and (self.lang == None or parentlang == self.lang):
-            if not self.oneWordPerLine:
+            if not self.one_word_per_line:
                 textlist.append(element.tail.strip())
             else:
                 textlist.append('\n'.join(element.tail.strip().split()))
 
-    def visitChildren(self, element, textlist, parentlang):
+    def visit_children(self, element, textlist, parentlang):
+        """Visit the children of element, adding their content to textlist
+        """
         for child in element:
-            if self.visitErrorInline(child):
-                self.collectInlineErrors(child, textlist, self.getElementLanguage(child, parentlang))
-            elif self.visitErrorNotInline(child):
-                self.collectNotInlineErrors(child, textlist)
+            if self.visit_error_inline(child):
+                self.collect_inline_errors(child, textlist, self.get_element_language(child, parentlang))
+            elif self.visit_error_not_inline(child):
+                self.collect_not_inline_errors(child, textlist)
             else:
-                self.plainP(child, textlist, self.getElementLanguage(element, parentlang))
+                self.visit_nonerror_element(child, textlist, self.get_element_language(element, parentlang))
 
-    def plainP(self, element, textlist, parentlang):
+    def visit_nonerror_element(self, element, textlist, parentlang):
+        """Visit and extract text from non error element
+        """
         if not self.typos:
-            self.getText(element, textlist, parentlang)
-        self.visitChildren(element, textlist, parentlang)
+            self.get_text(element, textlist, parentlang)
+        self.visit_children(element, textlist, parentlang)
         if not self.typos:
-            self.getTail(element, textlist, parentlang)
+            self.get_tail(element, textlist, parentlang)
 
-    def visitThisNode(self, element):
+    def visit_this_node(self, element):
         '''Return True if the element should be visited
         '''
         return (
-            self.allP or
+            self.all_paragraphs or
             (
-                self.p is True and (element.get('type') is None or element.get('type') == 'text')
+                self.paragraph is True and (element.get('type') is None or element.get('type') == 'text')
             ) or (
                 self.title is True and element.get('type') == 'title'
             ) or (
@@ -241,20 +251,26 @@ class XMLPrinter:
             )
         )
 
-    def visitErrorNotInline(self, element):
+    def visit_error_not_inline(self, element):
+        """Determine whether element should be visited
+        """
         return (
-            element.tag.startswith('error') and self.oneWordPerLine and not self.errorFiltering or
-            self.includeThisError(element)
+            element.tag.startswith('error') and self.one_word_per_line and not self.error_filtering or
+            self.include_this_error(element)
             )
 
-    def visitErrorInline(self, element):
+    def visit_error_inline(self, element):
+        """Determine whether element should be visited
+        """
         return (
-                element.tag.startswith('error') and not self.oneWordPerLine and
-                (self.correction or self.includeThisError(element))
+                element.tag.startswith('error') and not self.one_word_per_line and
+                (self.correction or self.include_this_error(element))
             )
 
-    def includeThisError(self, element):
-        return self.errorFiltering and (
+    def include_this_error(self, element):
+        """Determine whether element should be visited
+        """
+        return self.error_filtering and (
                 (element.tag == 'error' and self.error) or \
                 (element.tag == 'errorort' and self.errorort) or \
                 (element.tag == 'errorortreal' and self.errorortreal) or \
@@ -265,7 +281,7 @@ class XMLPrinter:
                 (element.tag == 'errorlang' and self.noforeign)
             )
 
-    def setOutfile(self, outfile):
+    def set_outfile(self, outfile):
         '''outfile must either be a string containing the path to the file
         where the result should be written, or an object that supports the
         write method
@@ -276,23 +292,27 @@ class XMLPrinter:
             else:
                 self.outfile = outfile
 
-    def processFile(self, filename):
+    def process_file(self, filename):
+        """Process the given file
+        """
         if os.path.exists(filename):
-            self.eTree = etree.parse(filename)
+            self.etree = etree.parse(filename)
         self.filename = filename
 
-        for p in self.eTree.findall('.//p'):
-            if self.visitThisNode(p):
-                self.collectPlainP(p, self.getLang())
+        for p in self.etree.findall('.//p'):
+            if self.visit_this_node(p):
+                self.collect_text(p, self.get_lang())
 
 def parse_options():
+    """Parse the options given to the program
+    """
     parser = argparse.ArgumentParser(description = 'Print the contents of a corpus in XML format\nThe default is to print paragraphs with no type (=text type).\n')
 
     parser.add_argument('-l', dest='lang', help='Print only elements in language LANG. Default is all langs.')
     parser.add_argument('-T', dest='title', action='store_true', help='Print paragraphs with title type', )
     parser.add_argument('-L', dest='list', action='store_true', help='Print paragraphs with list type')
     parser.add_argument('-t', dest='table', action='store_true', help='Print paragraphs with table type')
-    parser.add_argument('-a', dest='allP', action='store_true', help='Print all text elements')
+    parser.add_argument('-a', dest='all_paragraphs', action='store_true', help='Print all text elements')
 
     parser.add_argument('-c', dest='corrections', action='store_true', help='Print corrected text instead of the original typos & errors')
     parser.add_argument('-C', dest='error', action='store_true', help='Only print unclassified (§/<error..>) corrections')
@@ -305,11 +325,11 @@ def parse_options():
     parser.add_argument('-noforeign', dest='noforeign', action='store_true', help='Do not print anything from foreign (∞/<errorlang..>) corrections')
 
     parser.add_argument('-typos', dest='typos', action='store_true', help='Print only the errors/typos in the text, with corrections tab-separated')
-    parser.add_argument('-f', dest='printFilename', action='store_true', help='Add the source filename as a comment after each error word.')
-    parser.add_argument('-S', help='Print the whole text one word per line; typos have tab separated corrections', dest='oneWordPerLine', action='store_true')
+    parser.add_argument('-f', dest='print_filename', action='store_true', help='Add the source filename as a comment after each error word.')
+    parser.add_argument('-S', help='Print the whole text one word per line; typos have tab separated corrections', dest='one_word_per_line', action='store_true')
 
     parser.add_argument('-r', dest='recursive', action='store_true', help='Recursively process directory and subdirs encountered')
-    parser.add_argument('targets', help='Name of the files or directories to process', nargs='+')
+    parser.add_argument('targets', help='Name of the files or directories to process')
 
     args = parser.parse_args()
     return args
@@ -317,8 +337,8 @@ def parse_options():
 def main():
     args = parse_options()
 
-    c = XMLPrinter(lang=args.lang,
-                        allP=args.allP,
+    xml_printer = XMLPrinter(lang=args.lang,
+                        all_paragraphs=args.all_paragraphs,
                         title=args.title,
                         listitem=args.list,
                         table=args.table,
@@ -332,16 +352,16 @@ def main():
                         errorlang=args.errorlang,
                         noforeign=args.noforeign,
                         typos=args.typos,
-                        printFilename=args.printFilename,
-                        oneWordPerLine=args.oneWordPerLine)
+                        print_filename=args.print_filename,
+                        one_word_per_line=args.one_word_per_line)
 
     for target in args.targets:
         if os.path.isfile(target):
-            c.processFile(target)
+            xml_printer.process_file(target)
         elif os.path.isdir(target):
             for root, dirs, files in os.walk(target):
-                for f in files:
-                    c.processFile(os.path.join(root,f))
+                for xml_file in files:
+                    xml_printer.process_file(os.path.join(root, xml_file))
 
 if __name__ == '__main__':
     main()
