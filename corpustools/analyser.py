@@ -383,13 +383,13 @@ def sanity_check():
             sys.exit(2)
 
 def which(name):
-        u"""Get the output of the unix command which.
-        Return false if empty, true if non-empty
-        """
-        if subprocess.check_output([u'which', name]) == u'':
-            return False
-        else:
-            return True
+    u"""Get the output of the unix command which.
+    Return false if empty, true if non-empty
+    """
+    if subprocess.check_output([u'which', name]) == u'':
+        return False
+    else:
+        return True
 
 def parse_options():
     '''Parse the given options
