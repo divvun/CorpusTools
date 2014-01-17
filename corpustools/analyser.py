@@ -90,10 +90,13 @@ class Analyser(object):
         '''
         self.xml_files = []
         for cdir in converted_dirs:
-            for root, dirs, files in os.walk(cdir): # Walk directory tree
-                for xml_file in files:
-                    if self.lang in root and xml_file.endswith(u'.xml'):
-                        self.xml_files.append(os.path.join(root, xml_file))
+            if os.path.isfile(cdir):
+                self.xml_files.append(cdir)
+            else:
+                for root, dirs, files in os.walk(cdir): # Walk directory tree
+                    for xml_file in files:
+                        if self.lang in root and xml_file.endswith(u'.xml'):
+                            self.xml_files.append(os.path.join(root, xml_file))
 
     def makedirs(self):
         u"""Make the analysed directory
@@ -425,7 +428,7 @@ def main():
             os.path.join(os.getenv(u'GTHOME'),
                           u'langs/' +
                           args.lang +
-                          '/src/syntax/abbr.txt'),
+                          '/tools/preprocess/abbr.txt'),
         fst_file=\
             os.path.join(os.getenv(u'GTHOME'),
                          u'langs/' +
