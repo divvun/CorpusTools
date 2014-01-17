@@ -31,6 +31,8 @@ import sys
 import argparse
 
 class XMLPrinter:
+    """This is a class to convert giellatekno xml formatted files to plain text
+    """
     def __init__(self,
                  lang=None,
                  all_paragraphs=False,
@@ -96,7 +98,8 @@ class XMLPrinter:
         """
         Get the lang of the file
         """
-        return self.etree.getroot().attrib['{http://www.w3.org/XML/1998/namespace}lang']
+        return self.etree.getroot().\
+            attrib['{http://www.w3.org/XML/1998/namespace}lang']
 
     def get_element_language(self, element, parentlang):
         """Get the language of element.
@@ -200,7 +203,9 @@ class XMLPrinter:
     def get_text(self, element, textlist, parentlang):
         '''Get the text part of an lxml element
         '''
-        if element.text != None and element.text.strip() != '' and (self.lang == None or self.get_element_language(element, parentlang) == self.lang):
+        if (element.text != None and element.text.strip() != '' and
+            (self.lang == None or
+             self.get_element_language(element, parentlang) == self.lang)):
             if not self.one_word_per_line:
                 textlist.append(element.text.strip())
             else:
@@ -209,7 +214,8 @@ class XMLPrinter:
     def get_tail(self, element, textlist, parentlang):
         '''Get the tail part of an lxml element
         '''
-        if element.tail != None and element.tail.strip() != '' and (self.lang == None or parentlang == self.lang):
+        if (element.tail != None and element.tail.strip() != '' and
+            (self.lang == None or parentlang == self.lang)):
             if not self.one_word_per_line:
                 textlist.append(element.tail.strip())
             else:
@@ -220,11 +226,17 @@ class XMLPrinter:
         """
         for child in element:
             if self.visit_error_inline(child):
-                self.collect_inline_errors(child, textlist, self.get_element_language(child, parentlang))
+                self.collect_inline_errors(child,
+                                           textlist,
+                                           self.get_element_language(child,
+                                                                     parentlang))
             elif self.visit_error_not_inline(child):
                 self.collect_not_inline_errors(child, textlist)
             else:
-                self.visit_nonerror_element(child, textlist, self.get_element_language(element, parentlang))
+                self.visit_nonerror_element(child,
+                                            textlist,
+                                            self.get_element_language(element,
+                                                                      parentlang))
 
     def visit_nonerror_element(self, element, textlist, parentlang):
         """Visit and extract text from non error element
@@ -241,7 +253,8 @@ class XMLPrinter:
         return (
             self.all_paragraphs or
             (
-                self.paragraph is True and (element.get('type') is None or element.get('type') == 'text')
+                self.paragraph is True and (element.get('type') is None or
+                                            element.get('type') == 'text')
             ) or (
                 self.title is True and element.get('type') == 'title'
             ) or (
@@ -255,7 +268,8 @@ class XMLPrinter:
         """Determine whether element should be visited
         """
         return (
-            element.tag.startswith('error') and self.one_word_per_line and not self.error_filtering or
+            element.tag.startswith('error') and self.one_word_per_line and not
+            self.error_filtering or
             self.include_this_error(element)
             )
 
@@ -263,7 +277,8 @@ class XMLPrinter:
         """Determine whether element should be visited
         """
         return (
-                element.tag.startswith('error') and not self.one_word_per_line and
+                element.tag.startswith('error') and not
+                self.one_word_per_line and
                 (self.correction or self.include_this_error(element))
             )
 
@@ -299,9 +314,9 @@ class XMLPrinter:
             self.etree = etree.parse(filename)
         self.filename = filename
 
-        for p in self.etree.findall('.//p'):
-            if self.visit_this_node(p):
-                self.collect_text(p, self.get_lang())
+        for paragraph in self.etree.findall('.//p'):
+            if self.visit_this_node(paragraph):
+                self.collect_text(paragraph, self.get_lang())
 
 def parse_options():
     """Parse the options given to the program
@@ -404,6 +419,9 @@ def parse_options():
     return args
 
 def main():
+    """Set up the XMLPrinter class with the given command line options and
+    process the given files and directories
+    """
     args = parse_options()
 
     xml_printer = XMLPrinter(lang=args.lang,
