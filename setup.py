@@ -12,7 +12,7 @@ setup(
     license='GPL v3.0',
     long_description=open('README.txt').read(),
     entry_points = {
-        'console_scripts': ['ccat = consoletools.ccat:main']
+        'console_scripts': ['ccat = corpustools.ccat:main']
     },
     install_requires=[
         "pyth",
