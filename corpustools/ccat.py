@@ -306,30 +306,99 @@ class XMLPrinter:
 def parse_options():
     """Parse the options given to the program
     """
-    parser = argparse.ArgumentParser(description = 'Print the contents of a corpus in XML format\nThe default is to print paragraphs with no type (=text type).\n')
+    parser = argparse.ArgumentParser(
+        description = 'Print the contents of a corpus in XML format\n\
+        The default is to print paragraphs with no type (=text type).')
 
-    parser.add_argument('-l', dest='lang', help='Print only elements in language LANG. Default is all langs.')
-    parser.add_argument('-T', dest='title', action='store_true', help='Print paragraphs with title type', )
-    parser.add_argument('-L', dest='list', action='store_true', help='Print paragraphs with list type')
-    parser.add_argument('-t', dest='table', action='store_true', help='Print paragraphs with table type')
-    parser.add_argument('-a', dest='all_paragraphs', action='store_true', help='Print all text elements')
+    parser.add_argument('-l',
+                        dest='lang',
+                        help='Print only elements in language LANG. Default \
+                        is all langs.')
+    parser.add_argument('-T',
+                        dest='title',
+                        action='store_true',
+                        help='Print paragraphs with title type', )
+    parser.add_argument('-L',
+                        dest='list',
+                        action='store_true',
+                        help='Print paragraphs with list type')
+    parser.add_argument('-t',
+                        dest='table',
+                        action='store_true',
+                        help='Print paragraphs with table type')
+    parser.add_argument('-a',
+                        dest='all_paragraphs',
+                        action='store_true',
+                        help='Print all text elements')
 
-    parser.add_argument('-c', dest='corrections', action='store_true', help='Print corrected text instead of the original typos & errors')
-    parser.add_argument('-C', dest='error', action='store_true', help='Only print unclassified (§/<error..>) corrections')
-    parser.add_argument('-ort', dest='errorort', action='store_true', help='Only print ortoghraphic, non-word ($/<errorort..>) corrections')
-    parser.add_argument('-ortreal', dest='errorortreal', action='store_true', help='Only print ortoghraphic, real-word (¢/<errorortreal..>) corrections')
-    parser.add_argument('-morphsyn', dest='errormorphsyn', action='store_true', help='Only print morphosyntactic (£/<errormorphsyn..>) corrections')
-    parser.add_argument('-syn', dest='errorsyn', action='store_true', help='Only print syntactic (¥/<errorsyn..>) corrections')
-    parser.add_argument('-lex', dest='errorlex', action='store_true', help='Only print lexical (€/<errorlex..>) corrections')
-    parser.add_argument('-foreign', dest='errorlang', action='store_true', help='Only print foreign (∞/<errorlang..>) corrections')
-    parser.add_argument('-noforeign', dest='noforeign', action='store_true', help='Do not print anything from foreign (∞/<errorlang..>) corrections')
+    parser.add_argument('-c',
+                        dest='corrections',
+                        action='store_true',
+                        help='Print corrected text instead of the original \
+                        typos & errors')
+    parser.add_argument('-C',
+                        dest='error',
+                        action='store_true',
+                        help='Only print unclassified (§/<error..>) \
+                        corrections')
+    parser.add_argument('-ort',
+                        dest='errorort',
+                        action='store_true',
+                        help='Only print ortoghraphic, non-word \
+                        ($/<errorort..>) corrections')
+    parser.add_argument('-ortreal',
+                        dest='errorortreal',
+                        action='store_true',
+                        help='Only print ortoghraphic, real-word \
+                        (¢/<errorortreal..>) corrections')
+    parser.add_argument('-morphsyn',
+                        dest='errormorphsyn',
+                        action='store_true',
+                        help='Only print morphosyntactic (£/<errormorphsyn..>) \
+                        corrections')
+    parser.add_argument('-syn',
+                        dest='errorsyn',
+                        action='store_true',
+                        help='Only print syntactic (¥/<errorsyn..>) \
+                        corrections')
+    parser.add_argument('-lex',
+                        dest='errorlex',
+                        action='store_true',
+                        help='Only print lexical (€/<errorlex..>) \
+                        corrections')
+    parser.add_argument('-foreign',
+                        dest='errorlang',
+                        action='store_true',
+                        help='Only print foreign (∞/<errorlang..>) \
+                        corrections')
+    parser.add_argument('-noforeign',
+                        dest='noforeign',
+                        action='store_true',
+                        help='Do not print anything from foreign (∞/<errorlang..>) \
+                        corrections')
+    parser.add_argument('-typos',
+                        dest='typos',
+                        action='store_true',
+                        help='Print only the errors/typos in the text, with \
+                        corrections tab-separated')
+    parser.add_argument('-f',
+                        dest='print_filename',
+                        action='store_true',
+                        help='Add the source filename as a comment after each \
+                        error word.')
+    parser.add_argument('-S',
+                        dest='one_word_per_line',
+                        action='store_true',
+                        help='Print the whole text one word per line; \
+                        typos have tab separated corrections')
 
-    parser.add_argument('-typos', dest='typos', action='store_true', help='Print only the errors/typos in the text, with corrections tab-separated')
-    parser.add_argument('-f', dest='print_filename', action='store_true', help='Add the source filename as a comment after each error word.')
-    parser.add_argument('-S', help='Print the whole text one word per line; typos have tab separated corrections', dest='one_word_per_line', action='store_true')
-
-    parser.add_argument('-r', dest='recursive', action='store_true', help='Recursively process directory and subdirs encountered')
-    parser.add_argument('targets', help='Name of the files or directories to process')
+    parser.add_argument('-r',
+                        dest='recursive',
+                        action='store_true',
+                        help='Recursively process directory and \
+                        subdirs encountered')
+    parser.add_argument('targets',
+                        help='Name of the files or directories to process')
 
     args = parser.parse_args()
     return args
