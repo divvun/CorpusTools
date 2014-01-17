@@ -34,10 +34,13 @@ def unwrap_self_analyse(arg, **kwarg):
     return Analyser.analyse(*arg, **kwarg)
 
 class Analyser(object):
+    '''A class which can analyse giellatekno xml formatted documents
+    using preprocess, lookup, lookup2cg and vislcg3
+    '''
     def __init__(self, lang):
         self.lang = lang
-        self.xp = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
-        self.xp.set_outfile(StringIO.StringIO())
+        self.xml_printer = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
+        self.xml_printer.set_outfile(StringIO.StringIO())
 
     def exit_on_error(self, filename):
         '''Exit the process if filename does not exist
@@ -88,9 +91,9 @@ class Analyser(object):
         self.xml_files = []
         for cdir in converted_dirs:
             for root, dirs, files in os.walk(cdir): # Walk directory tree
-                for f in files:
-                    if self.lang in root and f.endswith(u'.xml'):
-                        self.xml_files.append(os.path.join(root, f))
+                for xml_file in files:
+                    if self.lang in root and xml_file.endswith(u'.xml'):
+                        self.xml_files.append(os.path.join(root, xml_file))
 
     def makedirs(self):
         u"""Make the analysed directory
@@ -153,9 +156,9 @@ class Analyser(object):
     def ccat(self):
         u"""Turn an xml formatted file to clean text
         """
-        self.xp.process_file(self.xml_file)
+        self.xml_printer.process_file(self.xml_file)
 
-        return self.xp.outfile.getvalue()
+        return self.xml_printer.outfile.getvalue()
 
     def run_external_command(self, command, input):
         '''Run the command with input using subprocess
