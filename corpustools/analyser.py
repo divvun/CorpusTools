@@ -23,12 +23,11 @@ import os
 import sys
 import subprocess
 import multiprocessing
-import re
 import datetime
 import lxml.etree as etree
 from io import open
 import StringIO
-import ccat
+from corpustools import ccat
 import argparse
 
 def unwrap_self_analyse(arg, **kwarg):
