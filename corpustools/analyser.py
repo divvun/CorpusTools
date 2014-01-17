@@ -29,6 +29,7 @@ import lxml.etree as etree
 from io import open
 import StringIO
 import ccat
+import argparse
 
 def unwrap_self_analyse(arg, **kwarg):
     return Analyser.analyse(*arg, **kwarg)
@@ -37,8 +38,8 @@ class Analyser(object):
     def __init__(self, lang, old=False):
         self.lang = lang
         self.old = old
-        self.xp = ccat.XMLPrinter(lang=lang, allP=True)
-        self.xp.setOutfile(StringIO.StringIO())
+        self.xp = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
+        self.xp.set_outfile(StringIO.StringIO())
 
     def exitOnError(self, filename):
         error = False
@@ -144,7 +145,7 @@ class Analyser(object):
         u"""Runs ccat on the input file
         Returns the output of ccat
         """
-        self.xp.processFile(self.xmlFile)
+        self.xp.process_file(self.xmlFile)
 
         return self.xp.outfile.getvalue()
 
@@ -374,3 +375,76 @@ class AnalysisConcatenator(object):
                 self.depoldFiles[prefix] = open(prefix + u".depold", u"w")
 
             return self.depoldFiles[prefix]
+
+def sanityCheck():
+    u"""Look for programs and files that are needed to do the analysis.
+    If they don't exist, quit the program
+    """
+    for program in [u'preprocess', u'lookup2cg', u'lookup', u'vislcg3']:
+        if which(program) is False:
+            sys.stderr.write(program, u" isn't found in path\n")
+            sys.exit(2)
+
+def which(name):
+        u"""Get the output of the unix command which.
+        Return false if empty, true if non-empty
+        """
+        if subprocess.check_output([u'which', name]) == u'':
+            return False
+        else:
+            return True
+
+def parse_options():
+    parser = argparse.ArgumentParser(description = u'Analyse files found in the given directories for the given language using multiple parallel processes.')
+    parser.add_argument(u'-l', u'--lang', help = u"lang which should be analysed")
+    #parser.add_argument('-a', '--analysisdir', help='directory where the analysed files are placed')
+    parser.add_argument(u'-o', u'--old', help=u'When using this sme texts are analysed using the old disambiguation grammars', action=u"store_true")
+    parser.add_argument(u'--debug', help=u"use this for debugging the analysis process. When this argument is used files will be analysed one by one.", action=u"store_true")
+    parser.add_argument(u'converted_dirs', nargs=u'+', help = u"director(y|ies) where the converted files exist")
+
+    args = parser.parse_args()
+    return args
+
+def main():
+    args = parse_options()
+    sanityCheck()
+
+    ana = Analyser(args.lang, args.old)
+    ana.setAnalysisFiles(
+        abbrFile=\
+            os.path.join(os.getenv(u'GTHOME'),
+                          u'langs/' +
+                          args.lang +
+                          '/src/syntax/abbr.txt'),
+        fstFile=\
+            os.path.join(os.getenv(u'GTHOME'),
+                         u'langs/' +
+                         args.lang +
+                         u'/src/analyser-gt-desc.xfst'),
+        disambiguationAnalysisFile=\
+            os.path.join(os.getenv(u'GTHOME'),
+                         u'langs/' +
+                         args.lang +
+                         u'/src/syntax/disambiguation.cg3'),
+        functionAnalysisFile=\
+            os.path.join(os.getenv(u'GTHOME'),
+                         u'gtcore/gtdshared/smi/src/syntax/functions.cg3'),
+        dependencyAnalysisFile=\
+            os.path.join(
+                os.getenv(u'GTHOME'),
+                u'gtcore/gtdshared/smi/src/syntax/dependency.cg3'))
+
+    if args.lang == u'sme':
+        ana.setCorrFile(os.path.join(os.getenv(u'GTHOME'),
+                                     u'langs/' +
+                                     args.lang +
+                                     '/src/syntax/corr.txt'))
+
+    ana.collectFiles(args.converted_dirs)
+    if args.debug is False:
+        ana.analyseInParallel()
+    else:
+        ana.analyseSerially()
+
+if __name__ == u'__main__':
+    main()
