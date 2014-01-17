@@ -2,7 +2,22 @@
 Corpus Tools
 ============
 
-Corpus Tools is used for manipulating a corpus
+Corpus Tools are tools to manipulate a corpus in different ways.
+
+Installation
+============
+
+Install the tools for all users on a machine by writing
+
+``sudo python setup.py install``
+
+The scripts ccat and analyse_corpus will then be found in /usr/local/bin
+
+Install the tools for the current user by writing
+
+``sudo python setup.py install --user``
+
+The scripts ccat and analyse_corpus will then be found in ~/.local/bin
 
 ccat
 ====
@@ -21,35 +36,4 @@ It depends on these external programs:
 * ``lookup`` (from xfst)
 
 * ``vislcg3``
-
-convert2xml
-==========
-
-Convert original files in the corpus to corpus format xml.
-
-It converts the following formats to the corpus xml format:
-
-* Microsoft Word .doc files
-
-* .pdf files
-
-* .rtf files
-
-* .html files
-
-* .xml from the sámi newspaper Ávvir
-
-* .svg files
-
-* .bible.xml files
-
-It depends on these external programs:
-
-* ``antiword`` (convert MS Word format files)
-
-* ``pdftotext`` (convert PDF files)
-
-* ``biblexml2xml.pl`` (convert bible xml format files)
-
-* ``lookup`` (from xfst)
 
