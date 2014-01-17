@@ -1042,12 +1042,3 @@ okta máná\tokta mánná\t#cat=nomsg,const=spred,errtype=case,orig=gensg,pos=n
 
         self.assertTrue(os.path.exists('abc.xml'))
         os.remove('abc.xml')
-
-def this_suite():
-    loader = unittest.TestLoader()
-    suite = unittest.TestSuite()
-    suite.addTest(loader.loadTestsFromTestCase(TestCcat))
-    return suite
-
-if __name__ == '__main__':
-    unittest.TextTestRunner(verbosity=2).run(this_suite())
