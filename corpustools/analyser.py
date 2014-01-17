@@ -416,8 +416,8 @@ def parse_options():
 def main():
     '''Analyse files in the given directories
     '''
-    sanity_check()
     args = parse_options()
+    sanity_check()
 
     ana = Analyser(args.lang)
     ana.set_analysis_files(
