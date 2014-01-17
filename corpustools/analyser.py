@@ -82,7 +82,8 @@ class Analyser(object):
         self.corr_file = corr_file
 
     def collect_files(self, converted_dirs):
-        '''converted_dirs is a list of directories containing converted xml files
+        '''converted_dirs is a list of directories containing converted
+        xml files
         '''
         self.xml_files = []
         for cdir in converted_dirs:
@@ -105,8 +106,10 @@ class Analyser(object):
 
         :returns: the language as set in the xml file
         """
-        if self.etree.getroot().attrib[u'{http://www.w3.org/XML/1998/namespace}lang'] is not None:
-            return self.etree.getroot().attrib[u'{http://www.w3.org/XML/1998/namespace}lang']
+        if self.etree.getroot().\
+            attrib[u'{http://www.w3.org/XML/1998/namespace}lang'] is not None:
+            return self.etree.getroot().\
+                attrib[u'{http://www.w3.org/XML/1998/namespace}lang']
         else:
             return u'none'
 
@@ -136,14 +139,16 @@ class Analyser(object):
         :returns: the value of translated_from as set in the xml file
         """
         if self.etree.getroot().find(u".//translated_from") is not None:
-            return self.etree.getroot().find(u".//translated_from").attrib[u"{http://www.w3.org/XML/1998/namespace}lang"]
+            return self.etree.getroot().find(u".//translated_from").\
+                attrib[u"{http://www.w3.org/XML/1998/namespace}lang"]
         else:
             return u'none'
 
     def calculate_filenames(self, xml_file):
         u"""Set the names of the analysis files
         """
-        self.dependency_analysis_name = xml_file.replace(u'/converted/', u'/analysed')
+        self.dependency_analysis_name = xml_file.replace(u'/converted/',
+                                                         u'/analysed')
 
     def ccat(self):
         u"""Turn an xml formatted file to clean text
@@ -216,7 +221,8 @@ class Analyser(object):
         function_analysis_command = \
             [u'vislcg3', u'-g', self.function_analysis_file]
 
-        return self.run_external_command(function_analysis_command, self.get_disambiguation())
+        return self.run_external_command(function_analysis_command,
+                                         self.get_disambiguation())
 
     def dependency_analysis(self):
         u"""Runs vislcg3 on the functions analysis output
@@ -227,7 +233,8 @@ class Analyser(object):
             [u'vislcg3', u'-g', self.dependency_analysis_file]
 
         self.dependency = \
-            self.run_external_command(dep_analysis_command, self.function_analysis())
+            self.run_external_command(dep_analysis_command,
+                                      self.function_analysis())
 
     def get_disambiguation(self):
         '''Get the disambiguation analysis
@@ -270,7 +277,8 @@ class Analyser(object):
         u'''Analyse a file if it is not ocr'ed
         '''
         self.xml_file = xml_file
-        self.analysis_xml_file = self.xml_file.replace(u'converted/', u'analysed/')
+        self.analysis_xml_file = self.xml_file.replace(u'converted/',
+                                                       u'analysed/')
         self.etree = etree.parse(xml_file)
         self.calculate_filenames(xml_file)
 
@@ -309,7 +317,8 @@ class AnalysisConcatenator(object):
         self.basenames = xml_files
         self.dis_files = {}
         self.dep_files = {}
-        self.goal_dir = os.path.join(goal_dir, datetime.date.today().isoformat())
+        self.goal_dir = os.path.join(goal_dir,
+                                     datetime.date.today().isoformat())
         try:
             os.makedirs(self.goal_dir)
         except OSError:
@@ -321,12 +330,10 @@ class AnalysisConcatenator(object):
         translated_from_lang and genre
         """
         for xml_file in self.basenames:
-            self.concatenate_analysed_file(xml_file[1].replace(u".xml", u".dis"))
-            self.concatenate_analysed_file(xml_file[1].replace(u".xml", u".dep"))
-            if self.old:
-                self.concatenate_analysed_file(xml_file[1].replace(u".xml", u".disold"))
-                self.concatenate_analysed_file(xml_file[1].replace(u".xml", u".depold"))
-
+            self.concatenate_analysed_file(xml_file[1].replace(u".xml",
+                                                               u".dis"))
+            self.concatenate_analysed_file(xml_file[1].replace(u".xml",
+                                                               u".dep"))
 
     def concatenate_analysed_file(self, filename):
         u"""
@@ -336,7 +343,8 @@ class AnalysisConcatenator(object):
         """
         if os.path.isfile(filename):
             from_file = open(filename)
-            self.get_to_file(from_file.readline(), filename).write(from_file.read())
+            self.get_to_file(from_file.readline(),
+                             filename).write(from_file.read())
             from_file.close()
             os.unlink(filename)
 
