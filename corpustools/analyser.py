@@ -161,9 +161,9 @@ class Analyser(object):
         '''Run the command with input using subprocess
         '''
         subp = subprocess.Popen(command,
-                                stdin = subprocess.PIPE,
-                                stdout = subprocess.PIPE,
-                                stderr = subprocess.PIPE)
+                                stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
         (output, error) = subp.communicate(input)
         self.check_error(command, error)
 
@@ -395,17 +395,17 @@ def parse_options():
     '''Parse the given options
     '''
     parser = argparse.ArgumentParser(
-        description = u'Analyse files found in the given directories \
+        description=u'Analyse files found in the given directories \
         for the given language using multiple parallel processes.')
     parser.add_argument(u'-l', u'--lang',
-                        help = u"lang which should be analysed")
+                        help=u"lang which should be analysed")
     parser.add_argument(u'--debug',
                         help=u"use this for debugging the analysis \
                         process. When this argument is used files will \
                         be analysed one by one.",
                         action=u"store_true")
     parser.add_argument(u'converted_dirs', nargs=u'+',
-                        help = u"director(y|ies) where the converted files exist")
+                        help=u"director(y|ies) where the converted files exist")
 
     args = parser.parse_args()
     return args
