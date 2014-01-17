@@ -26,7 +26,7 @@ from lxml import etree
 from lxml import doctestcompare
 import os
 
-import analyser
+from corpustools import analyser
 
 class TestAnalyser(unittest.TestCase):
     def setUp(self):
