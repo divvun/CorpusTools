@@ -400,7 +400,7 @@ def parse_options():
     parser = argparse.ArgumentParser(
         description=u'Analyse files found in the given directories \
         for the given language using multiple parallel processes.')
-    parser.add_argument(u'-l', u'--lang',
+    parser.add_argument(u'lang',
                         help=u"lang which should be analysed")
     parser.add_argument(u'--debug',
                         help=u"use this for debugging the analysis \
