@@ -34,9 +34,8 @@ def unwrap_self_analyse(arg, **kwarg):
     return Analyser.analyse(*arg, **kwarg)
 
 class Analyser(object):
-    def __init__(self, lang, old=False):
+    def __init__(self, lang):
         self.lang = lang
-        self.old = old
         self.xp = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
         self.xp.set_outfile(StringIO.StringIO())
 
@@ -294,15 +293,11 @@ class Analyser(object):
 
 
 class AnalysisConcatenator(object):
-    def __init__(self, goal_dir, xml_files, old=False):
+    def __init__(self, goal_dir, xml_files):
         u"""
         @brief Receives a list of filenames that has been analysed
         """
         self.basenames = xml_files
-        self.old = old
-        if old:
-            self.disold_files = {}
-            self.depold_files = {}
         self.dis_files = {}
         self.dep_files = {}
         self.goal_dir = os.path.join(goal_dir, datetime.date.today().isoformat())
@@ -361,22 +356,6 @@ class AnalysisConcatenator(object):
 
             return self.dep_files[prefix]
 
-        if filename[-7:] == u".disold":
-            try:
-                self.disold_files[prefix]
-            except KeyError:
-                self.disold_files[prefix] = open(prefix + u".disold", u"w")
-
-            return self.disold_files[prefix]
-
-        elif filename[-7:] == u".depold":
-            try:
-                self.depold_files[prefix]
-            except KeyError:
-                self.depold_files[prefix] = open(prefix + u".depold", u"w")
-
-            return self.depold_files[prefix]
-
 def sanity_check():
     u"""Look for programs and files that are needed to do the analysis.
     If they don't exist, quit the program
@@ -401,10 +380,6 @@ def parse_options():
         for the given language using multiple parallel processes.')
     parser.add_argument(u'-l', u'--lang',
                         help = u"lang which should be analysed")
-    parser.add_argument(u'-o', u'--old',
-                        help=u'When using this sme texts are analysed \
-                        using the old disambiguation grammars',
-                        action=u"store_true")
     parser.add_argument(u'--debug',
                         help=u"use this for debugging the analysis \
                         process. When this argument is used files will \
@@ -420,7 +395,7 @@ def main():
     args = parse_options()
     sanity_check()
 
-    ana = Analyser(args.lang, args.old)
+    ana = Analyser(args.lang)
     ana.set_analysis_files(
         abbr_file=\
             os.path.join(os.getenv(u'GTHOME'),
