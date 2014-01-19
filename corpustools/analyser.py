@@ -94,7 +94,7 @@ class Analyser(object):
             else:
                 for root, dirs, files in os.walk(cdir): # Walk directory tree
                     for xml_file in files:
-                        if self.lang in root and xml_file.endswith(u'.xml'):
+                        if self.lang in root and xml_file.endswith('.xml'):
                             self.xml_files.append(os.path.join(root, xml_file))
 
     def makedirs(self):
