@@ -407,6 +407,7 @@ def parse_options():
                         help='Recursively process directory and \
                         subdirs encountered')
     parser.add_argument('targets',
+                        nargs='+',
                         help='Name of the files or directories to process')
 
     args = parser.parse_args()
@@ -439,12 +440,13 @@ def main():
 
     for target in args.targets:
         if os.path.isfile(target):
-            xml_printer.process_file(target)
+            buffer = xml_printer.process_file(target)
+            sys.stdout.write(buffer.getvalue())
         elif os.path.isdir(target):
             for root, dirs, files in os.walk(target):
                 for xml_file in files:
                     buffer = xml_printer.process_file(os.path.join(root, xml_file))
-                    sys.write(buffer.getvalue())
+                    sys.stdout.write(buffer.getvalue())
 
 if __name__ == '__main__':
     main()
