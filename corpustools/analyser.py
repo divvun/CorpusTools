@@ -90,12 +90,17 @@ class Analyser(object):
         self.xml_files = []
         for cdir in converted_dirs:
             if os.path.isfile(cdir):
-                self.xml_files.append(cdir)
+                self.xml_files.append(unicode(cdir,
+                                              sys.getfilesystemencoding()))
             else:
                 for root, dirs, files in os.walk(cdir): # Walk directory tree
                     for xml_file in files:
                         if self.lang in root and xml_file.endswith('.xml'):
-                            self.xml_files.append(os.path.join(root, xml_file))
+                            self.xml_files.append(
+                                os.path.join(root,
+                                             unicode(xml_file,
+                                                     sys.getfilesystemencoding()
+                                                     )))
 
     def makedirs(self):
         u"""Make the analysed directory
