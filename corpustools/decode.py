@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys
 import re
-import unittest
 import sys
 
 ctypes = [
@@ -199,58 +197,6 @@ ctypes = [
 
 limits = { 0: 1, 1: 1, 2: 3, 3: 3, 4: 3, 5: 3, 6: 1, 7: 1, 8: 3}
 
-
-class TestEncodingGuesser(unittest.TestCase):
-    def testEncodingGuesser(self):
-        eg = EncodingGuesser()
-        for i in range(0, len(ctypes)):
-            self.assertEqual(eg.guessFileEncoding('parallelize_data/decode-' + str(i) + '.txt'), i)
-
-    def roundTripX(self, x):
-        eg = EncodingGuesser()
-
-        f = open('parallelize_data/decode-utf8.txt')
-        utf8_content = f.read()
-        f.close()
-
-        f = open('parallelize_data/decode-' + str(x) + '.txt')
-        content = f.read()
-        f.close()
-
-        test_content = eg.decodePara(x, content)
-
-        self.assertEqual(utf8_content, test_content)
-
-    def testRoundTripping0(self):
-        self.roundTripX(0)
-
-    def testRoundTripping1(self):
-        self.roundTripX(1)
-
-    def testRoundTripping2(self):
-        self.roundTripX(2)
-
-    def testRoundTripping3(self):
-        self.roundTripX(3)
-
-    def testRoundTripping4(self):
-        self.roundTripX(4)
-
-    def testRoundTripping5(self):
-        self.roundTripX(5)
-
-    def testRoundTripping6(self):
-        self.roundTripX(6)
-
-    def testRoundTripping7(self):
-        self.roundTripX(7)
-
-    def testRoundTripping8(self):
-        self.roundTripX(8)
-
-    def testRoundTrippingFalsePositive(self):
-        eg = EncodingGuesser()
-        self.assertEqual(eg.guessFileEncoding('parallelize_data/decode-falsepositive.txt'), -1)
 
 class EncodingGuesser:
     """Try to find out if some text or a file has faultily encoded (northern)
