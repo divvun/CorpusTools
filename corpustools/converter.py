@@ -39,6 +39,7 @@ import tidylib
 import codecs
 import multiprocessing
 import argparse
+import shutil
 
 import decode
 import ngram
@@ -1336,9 +1337,20 @@ def worker(xsl_file):
 def main():
     args = parse_options()
     jobs = []
-    for root, dirs, files in os.walk(args.orig_dir): # Walk directory tree
-        for f in files:
-            if f.endswith('.xsl'):
-                p = multiprocessing.Process(target=worker, args=(os.path.join(root, f),))
-                jobs.append(p)
-                p.start()
+    if os.path.isdir(args.orig_dir):
+        for root, dirs, files in os.walk(args.orig_dir): # Walk directory tree
+            for f in files:
+                if f.endswith('.xsl'):
+                    p = multiprocessing.Process(target=worker, args=(os.path.join(root, f),))
+                    jobs.append(p)
+                    p.start()
+    elif os.path.isfile(args.orig_dir):
+        xsl_file = args.orig_dir + '.xsl'
+        if os.path.isfile(xsl_file):
+            conv = Converter(args.orig_dir)
+            conv.writeComplete()
+        else:
+            shutil.copy(os.path.join(os.getenv('GTHOME'), 'gt/script/corpus/XSL-template.xsl'), xsl_file)
+            print "Fill in meta info in", xsl_file, ', then run this command again'
+            sys.exit(1)
+
