@@ -37,3 +37,15 @@ It depends on these external programs:
 
 * ``vislcg3``
 
+convert2xml
+===========
+
+Convert original files in a corpus to giellatekno xml format.
+
+It depends on these external programs:
+
+* ``pdftotext``
+
+* ``antiword``
+
+* ``bible2xml.pl``
