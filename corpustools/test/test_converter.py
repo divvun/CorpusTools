@@ -96,7 +96,7 @@ class TestConverter(unittest.TestCase):
 
 class TestAvvirConverter(unittest.TestCase):
     def setUp(self):
-        self.avvir = converter.AvvirConverter('fakecorpus/orig/sme/news/Avvir_xml-filer/Avvir_2008_xml-filer/02nr028av.article.xml')
+        self.avvir = converter.AvvirConverter('converter_data/fakecorpus/orig/sme/news/Avvir_xml-filer/Avvir_2008_xml-filer/02nr028av.article.xml')
 
     def assertXmlEqual(self, got, want):
         """Check if two stringified xml snippets are equal
