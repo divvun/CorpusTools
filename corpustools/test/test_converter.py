@@ -25,7 +25,7 @@ class TestConverter(unittest.TestCase):
 
         self.assertEqual(self.converterOutsideOrig.getOrig(), \
         os.path.join(os.getenv('GTHOME'), \
-        'gt/script/langTools/parallelize_data/samediggi-article-48.html'))
+        'tools/CorpusTools/corpustools/test/converter_data/samediggi-article-48.html'))
 
         self.assertEqual(self.converterInsideFreecorpus.getOrig(), \
         os.path.join(os.getenv('GTFREE'), \
@@ -38,7 +38,7 @@ class TestConverter(unittest.TestCase):
 
         self.assertEqual(self.converterOutsideOrig.getXsl(), \
         os.path.join(os.getenv('GTHOME'), \
-        'gt/script/langTools/parallelize_data/samediggi-article-48.html.xsl'))
+        'tools/CorpusTools/corpustools/test/converter_data/samediggi-article-48.html.xsl'))
 
         self.assertEqual(self.converterInsideFreecorpus.getXsl(), \
         os.path.join(os.getenv('GTFREE'), \
@@ -58,7 +58,7 @@ class TestConverter(unittest.TestCase):
 
         self.assertEqual(self.converterOutsideOrig.getTmpdir(), \
             os.path.join(os.getenv('GTHOME'), \
-            'gt/script/langTools/tmp'))
+            'tools/CorpusTools/corpustools/test/tmp'))
 
         self.assertEqual(self.converterInsideFreecorpus.getTmpdir(), \
             os.path.join(os.getenv('GTFREE'), 'tmp'))
@@ -70,7 +70,7 @@ class TestConverter(unittest.TestCase):
 
         self.assertEqual(self.converterOutsideOrig.getCorpusdir(), \
             os.path.join(os.getenv('GTHOME'), \
-            'gt/script/langTools'))
+            'tools/CorpusTools/corpustools/test'))
 
         self.assertEqual(self.converterInsideFreecorpus.getCorpusdir(), \
             os.getenv('GTFREE'))
@@ -83,7 +83,7 @@ class TestConverter(unittest.TestCase):
     def testGetConvertedNameOutsideOrig(self):
         self.assertEqual(self.converterOutsideOrig.getConvertedName(), \
             os.path.join(os.getenv('GTHOME'), \
-            'gt/script/langTools/converted/samediggi-article-48.html.xml'))
+            'tools/CorpusTools/corpustools/test/converted/samediggi-article-48.html.xml'))
 
     def testGetConvertedInsideFreecorpus(self):
         self.assertEqual(self.converterInsideFreecorpus.getConvertedName(), \
