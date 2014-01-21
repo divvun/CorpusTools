@@ -13,7 +13,7 @@ from corpustools import converter
 class TestConverter(unittest.TestCase):
     def setUp(self):
         self.converterInsideOrig = \
-        converter.Converter('fakecorpus/orig/nob/samediggi-article-16.html', True)
+        converter.Converter('converter_data/fakecorpus/orig/nob/samediggi-article-16.html', True)
 
         self.converterOutsideOrig = \
         converter.Converter('converter_data/samediggi-article-48.html', False)
@@ -25,7 +25,7 @@ class TestConverter(unittest.TestCase):
     def testGetOrig(self):
         self.assertEqual(self.converterInsideOrig.getOrig(), \
         os.path.join(os.getenv('GTHOME'),\
-        'gt/script/langTools/fakecorpus/orig/nob/samediggi-article-16.html'))
+        'tools/CorpusTools/corpustools/test/converter_data/fakecorpus/orig/nob/samediggi-article-16.html'))
 
         self.assertEqual(self.converterOutsideOrig.getOrig(), \
         os.path.join(os.getenv('GTHOME'), \
@@ -38,7 +38,7 @@ class TestConverter(unittest.TestCase):
     def testGetXsl(self):
         self.assertEqual(self.converterInsideOrig.getXsl(), \
         os.path.join(os.getenv('GTHOME'),\
-        'gt/script/langTools/fakecorpus/orig/nob/samediggi-article-16.html.xsl'))
+        'tools/CorpusTools/corpustools/test/converter_data/fakecorpus/orig/nob/samediggi-article-16.html.xsl'))
 
         self.assertEqual(self.converterOutsideOrig.getXsl(), \
         os.path.join(os.getenv('GTHOME'), \
@@ -58,7 +58,7 @@ class TestConverter(unittest.TestCase):
     def testGetTmpdir(self):
         self.assertEqual(self.converterInsideOrig.getTmpdir(), \
             os.path.join(os.getenv('GTHOME'), \
-            'gt/script/langTools/fakecorpus/tmp'))
+            'tools/CorpusTools/corpustools/test/converter_data/fakecorpus/tmp'))
 
         self.assertEqual(self.converterOutsideOrig.getTmpdir(), \
             os.path.join(os.getenv('GTHOME'), \
@@ -70,7 +70,7 @@ class TestConverter(unittest.TestCase):
     def testGetCorpusdir(self):
         self.assertEqual(self.converterInsideOrig.getCorpusdir(), \
             os.path.join(os.getenv('GTHOME'), \
-            'gt/script/langTools/fakecorpus'))
+            'tools/CorpusTools/corpustools/test/converter_data/fakecorpus'))
 
         self.assertEqual(self.converterOutsideOrig.getCorpusdir(), \
             os.path.join(os.getenv('GTHOME'), \
@@ -82,7 +82,7 @@ class TestConverter(unittest.TestCase):
     def testGetConvertedNameInsideOrig(self):
         self.assertEqual(self.converterInsideOrig.getConvertedName(),
             os.path.join(os.getenv('GTHOME'), \
-            'gt/script/langTools/fakecorpus/converted/nob/samediggi-article-16.html.xml'))
+            'tools/CorpusTools/corpustools/test/converter_data/fakecorpus/converted/nob/samediggi-article-16.html.xml'))
 
     def testGetConvertedNameOutsideOrig(self):
         self.assertEqual(self.converterOutsideOrig.getConvertedName(), \
