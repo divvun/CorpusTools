@@ -17,7 +17,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2012-2013 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2012-2014 Børre Gaup <borre.gaup@uit.no>
 #
 
 import os
@@ -36,6 +36,9 @@ from pyth.plugins.xhtml.writer import XHTMLWriter
 from copy import deepcopy
 import distutils.dep_util
 import tidylib
+import codecs
+import multiprocessing
+import argparse
 
 import decode
 import ngram
@@ -1318,3 +1321,24 @@ class DocumentTester:
             plist.append(etree.tostring(paragraph, method = 'text', encoding = 'utf8'))
 
         return ' '.join(plist)
+
+def parse_options():
+    parser = argparse.ArgumentParser(description = 'Convert original files to giellatekno xml, using dependency checking.')
+    parser.add_argument('orig_dir', help = "directory where the original files exist")
+
+    args = parser.parse_args()
+    return args
+
+def worker(xsl_file):
+    conv = Converter(xsl_file[:-4])
+    conv.writeComplete()
+
+def main():
+    args = parse_options()
+    jobs = []
+    for root, dirs, files in os.walk(args.orig_dir): # Walk directory tree
+        for f in files:
+            if f.endswith('.xsl'):
+                p = multiprocessing.Process(target=worker, args=(os.path.join(root, f),))
+                jobs.append(p)
+                p.start()
