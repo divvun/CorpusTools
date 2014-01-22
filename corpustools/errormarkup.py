@@ -28,9 +28,15 @@ class ErrorMarkup:
     '''
     def __init__(self, filename):
         self._filename = filename
-        self.types = { u"$": u"errorort", u"¢": "errorortreal", u"€": "errorlex", u"£": "errormorphsyn", u"¥": "errorsyn", u"§": "error", u"∞": "errorlang"}
-        self.errorRegex = re.compile(u'(?P<error>\([^\(]*\)$|\w+$|\w+[-\':\]]\w+$|\w+[-\'\]\./]$|\d+’\w+$|\d+%:\w+$|”\w+”$)',re.UNICODE)
-        self.correctionRegex = re.compile(u'(?P<correction>[$€£¥§¢∞]\([^\)]*\)|[$€£¥§¢∞]\S+)(?P<tail>.*)',re.UNICODE)
+        self.types = {u"$": u"errorort",
+                      u"¢": "errorortreal",
+                      u"€": "errorlex",
+                      u"£": "errormorphsyn",
+                      u"¥": "errorsyn",
+                      u"§": "error",
+                      u"∞": "errorlang"}
+        self.errorRegex = re.compile(u'(?P<error>\([^\(]*\)$|\w+$|\w+[-\':\]]\w+$|\w+[-\'\]\./]$|\d+’\w+$|\d+%:\w+$|”\w+”$)', re.UNICODE)
+        self.correctionRegex = re.compile(u'(?P<correction>[$€£¥§¢∞]\([^\)]*\)|[$€£¥§¢∞]\S+)(?P<tail>.*)', re.UNICODE)
         pass
 
     def addErrorMarkup(self, element):
@@ -88,15 +94,16 @@ class ErrorMarkup:
 
     def errorParser(self, text):
         '''
-        Parse errormarkup found in text. If any markup is found, return a list of elements in elements
+        Parse errormarkup found in text. If any markup is found, return
+        a list of elements in elements
 
         result -- contains a list of non-correction/correction parts
 
         The algorithm for parsing the error is:
         Find a correction in the result list.
 
-        If the preceding element in result contains a simple error and is not a correction
-        make an errorElement, append it to elements
+        If the preceding element in result contains a simple error and is not a
+        correction make an errorElement, append it to elements
 
         If the preceding element in result is not a simple error, it is part of
         nested markup.
@@ -117,13 +124,18 @@ class ErrorMarkup:
 
                 for x in range(0, len(result)):
                     if self.isCorrection(result[x]):
-                        if not self.isCorrection(result[x-1]) and self.isError(result[x-1]):
+                        if (not self.isCorrection(result[x-1]) and
+                            self.isError(result[x-1])):
 
-                            self.addSimpleError(elements, result[x-1], result[x])
+                            self.addSimpleError(elements,
+                                                result[x-1],
+                                                result[x])
 
                         else:
 
-                            self.addNestedError(elements, result[x-1], result[x])
+                            self.addNestedError(elements,
+                                                result[x-1],
+                                                result[x])
 
                 if not self.isCorrection(result[-1]):
                     elements[-1].tail = result[-1]
@@ -221,10 +233,14 @@ class ErrorMarkup:
                     except TypeError as e:
                         print '\n', self._filename
                         print str(e)
-                        print u"The program expected an error element, but found a string:\n«" + innerElement + u"»"
-                        print u"There is either an error in errormarkup close to this sentence"
-                        print u"or the program cannot evaluate a correct errormarkup."
-                        print u"If the errormarkup is correct, please report about the error to borre.gaup@uit.no"
+                        print u"The program expected an error element, but \
+                        found a string:\n«" + innerElement + u"»"
+                        print u"There is either an error in errormarkup close \
+                        to this sentence"
+                        print u"or the program cannot evaluate a correct \
+                        errormarkup."
+                        print u"If the errormarkup is correct, please report \
+                        about the error to borre.gaup@uit.no"
 
 
     def getText(self, element):
@@ -278,11 +294,15 @@ class ErrorMarkup:
         correction -- is a correctionstring
 
         '''
-        (fixedCorrection, extAtt, attList) = self.lookForExtendedAttributes(correction[1:].replace('(', '').replace(')', ''))
+        (fixedCorrection, extAtt, attList) = self.lookForExtendedAttributes(
+            correction[1:].replace('(', '').replace(')', ''))
 
         elementName = self.getElementName(correction[0])
 
-        errorElement = self.makeErrorElement(error, fixedCorrection, elementName, attList)
+        errorElement = self.makeErrorElement(error,
+                                             fixedCorrection,
+                                             elementName,
+                                             attList)
 
         return errorElement
 
@@ -298,9 +318,12 @@ class ErrorMarkup:
             except ValueError as e:
                 print '\n', self._filename
                 print str(e)
-                print u"too many | characters inside the correction. «" + correction + u"»"
-                print u"Have you remembered to encase the error inside parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?"
-                print u"If the errormarkup is correct, send a report about this error to borre.gaup@uit.no"
+                print u"too many | characters inside the correction. «" +\
+                    correction + u"»"
+                print u"Have you remembered to encase the error inside \
+                parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?"
+                print u"If the errormarkup is correct, send a report about \
+                this error to borre.gaup@uit.no"
 
         return (correction, extAtt, attList)
 
