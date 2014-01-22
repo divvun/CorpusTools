@@ -122,20 +122,20 @@ class ErrorMarkup:
                 # Start with the two first elements
                 # The first contains an error, the second one is a correction
 
-                for x in range(0, len(result)):
-                    if self.is_correction(result[x]):
-                        if (not self.is_correction(result[x-1]) and
-                            self.is_error(result[x-1])):
+                for index in range(0, len(result)):
+                    if self.is_correction(result[index]):
+                        if (not self.is_correction(result[index-1]) and
+                            self.is_error(result[index-1])):
 
-                            self.addSimple_error(elements,
-                                                result[x-1],
-                                                result[x])
+                            self.add_simple_error(elements,
+                                                result[index-1],
+                                                result[index])
 
                         else:
 
                             self.add_nested_error(elements,
-                                                result[x-1],
-                                                result[x])
+                                                result[index-1],
+                                                result[index])
 
                 if not self.is_correction(result[-1]):
                     elements[-1].tail = result[-1]
@@ -144,7 +144,7 @@ class ErrorMarkup:
 
         pass
 
-    def addSimple_error(self, elements, errorstring, correctionstring):
+    def add_simple_error(self, elements, errorstring, correctionstring):
         '''Make an error element, append it to elements
 
         elements -- a list of error_elements
@@ -193,7 +193,7 @@ class ErrorMarkup:
         #print u'«' + errorstring + u'»', u'«' + correctionstring + u'»'
         try:
             inner_element = elements[-1]
-        except Index_error:
+        except IndexError:
             print '\n', self._filename
             print "Cannot handle:\n"
             print errorstring + correctionstring
@@ -214,15 +214,15 @@ class ErrorMarkup:
             while not parenthesis_found:
                 text = self.get_text(elements[-1])
 
-                x = text.rfind('(')
-                if x > -1:
+                index = text.rfind('(')
+                if index > -1:
                     parenthesis_found = True
 
-                    error_element.text = text[x+1:]
+                    error_element.text = text[index+1:]
                     if isinstance(elements[-1], etree._Element):
-                        elements[-1].tail = text[:x]
+                        elements[-1].tail = text[:index]
                     else:
-                        elements[-1] = text[:x]
+                        elements[-1] = text[:index]
                     elements.append(error_element)
 
                 else:
@@ -261,15 +261,15 @@ class ErrorMarkup:
         '''
         result = []
 
-        m = self.correction_regex.search(text)
-        while m:
+        matches = self.correction_regex.search(text)
+        while matches:
             head = self.correction_regex.sub('', text)
             if not (head != '' and head[-1] == " "):
                 if head != '':
                     result.append(head)
-                result.append(m.group('correction'))
-            text = m.group('tail')
-            m = self.correction_regex.search(text)
+                result.append(matches.group('correction'))
+            text = matches.group('tail')
+            matches = self.correction_regex.search(text)
 
         if text != '':
             result.append(text)
@@ -279,10 +279,10 @@ class ErrorMarkup:
     def processHead(self, text):
         '''Divide text into text/error parts
         '''
-        m = self.error_regex.search(text)
+        matches = self.error_regex.search(text)
         text = self.error_regex.sub('', text)
 
-        return (text, m.group('error'))
+        return (text, matches.group('error'))
 
     def is_error(self, text):
         return self.error_regex.search(text)
