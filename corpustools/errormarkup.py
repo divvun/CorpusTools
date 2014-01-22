@@ -148,7 +148,7 @@ class ErrorMarkup:
         correctionstring -- a string containing an errormarkup correction
 
         '''
-        (head, error) = self.processHead(errorstring)
+        (head, error) = self.process_head(errorstring)
         if len(elements) == 0:
             if head != '':
                 elements.append(head)
@@ -271,7 +271,7 @@ class ErrorMarkup:
 
         return result
 
-    def processHead(self, text):
+    def process_head(self, text):
         '''Divide text into text/error parts
         '''
         matches = self.error_regex.search(text)
