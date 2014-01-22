@@ -35,64 +35,64 @@ class ErrorMarkup:
                       u"¥": "errorsyn",
                       u"§": "error",
                       u"∞": "errorlang"}
-        self.errorRegex = re.compile(u'(?P<error>\([^\(]*\)$|\w+$|\w+[-\':\]]\w+$|\w+[-\'\]\./]$|\d+’\w+$|\d+%:\w+$|”\w+”$)', re.UNICODE)
-        self.correctionRegex = re.compile(u'(?P<correction>[$€£¥§¢∞]\([^\)]*\)|[$€£¥§¢∞]\S+)(?P<tail>.*)', re.UNICODE)
+        self.error_regex = re.compile(u'(?P<error>\([^\(]*\)$|\w+$|\w+[-\':\]]\w+$|\w+[-\'\]\./]$|\d+’\w+$|\d+%:\w+$|”\w+”$)', re.UNICODE)
+        self.correction_regex = re.compile(u'(?P<correction>[$€£¥§¢∞]\([^\)]*\)|[$€£¥§¢∞]\S+)(?P<tail>.*)', re.UNICODE)
         pass
 
-    def addErrorMarkup(self, element):
-        self.reallyAddErrorMarkup(element)
+    def add_error_markup(self, element):
+        self.really_add_error_markup(element)
         for elt in element:
-            self.addErrorMarkup(elt)
+            self.add_error_markup(elt)
 
-    def reallyAddErrorMarkup(self, element):
+    def really_add_error_markup(self, element):
         '''
         Search for errormarkup in the text and tail of an etree.Element
         If found, replace errormarkuped text with xml
 
-        To see examples of what newContent consists of, have a look at the
-        testErrorParser* methods
+        To see examples of what new_content consists of, have a look at the
+        test_error_parser* methods
 
         '''
-        self.fixText(element)
-        self.fixTail(element)
+        self.fix_text(element)
+        self.fix_tail(element)
 
         pass
 
-    def fixText(self, element):
+    def fix_text(self, element):
         '''Replace the text of an element with errormarkup if possible
         '''
-        newContent = self.errorParser(element.text)
+        new_content = self.error_parser(element.text)
 
-        if newContent:
+        if new_content:
             element.text = None
 
-            if isinstance(newContent[0], basestring):
-                element.text = newContent[0]
-                newContent = newContent[1:]
+            if isinstance(new_content[0], basestring):
+                element.text = new_content[0]
+                new_content = new_content[1:]
 
-            newPos = 0
-            for part in newContent:
-                element.insert(newPos, part)
-                newPos += 1
+            new_pos = 0
+            for part in new_content:
+                element.insert(new_pos, part)
+                new_pos += 1
 
-    def fixTail(self, element):
+    def fix_tail(self, element):
         '''Replace the tail of an element with errormarkup if possible
         '''
-        newContent = self.errorParser(element.tail)
+        new_content = self.error_parser(element.tail)
 
-        if newContent:
+        if new_content:
             element.tail = None
 
-            if isinstance(newContent[0], basestring):
-                element.tail = newContent[0]
-                newContent = newContent[1:]
+            if isinstance(new_content[0], basestring):
+                element.tail = new_content[0]
+                new_content = new_content[1:]
 
-            newPos = element.getparent().index(element) + 1
-            for part in newContent:
-                element.getparent().insert(newPos, part)
-                newPos += 1
+            new_pos = element.getparent().index(element) + 1
+            for part in new_content:
+                element.getparent().insert(new_pos, part)
+                new_pos += 1
 
-    def errorParser(self, text):
+    def error_parser(self, text):
         '''
         Parse errormarkup found in text. If any markup is found, return
         a list of elements in elements
@@ -103,7 +103,7 @@ class ErrorMarkup:
         Find a correction in the result list.
 
         If the preceding element in result contains a simple error and is not a
-        correction make an errorElement, append it to elements
+        correction make an error_element, append it to elements
 
         If the preceding element in result is not a simple error, it is part of
         nested markup.
@@ -112,7 +112,7 @@ class ErrorMarkup:
 
         if text:
             text = text.replace('\n', ' ')
-            result = self.processText(text)
+            result = self.process_text(text)
 
             if len(result) > 1:
                 #print text
@@ -123,31 +123,31 @@ class ErrorMarkup:
                 # The first contains an error, the second one is a correction
 
                 for x in range(0, len(result)):
-                    if self.isCorrection(result[x]):
-                        if (not self.isCorrection(result[x-1]) and
-                            self.isError(result[x-1])):
+                    if self.is_correction(result[x]):
+                        if (not self.is_correction(result[x-1]) and
+                            self.is_error(result[x-1])):
 
-                            self.addSimpleError(elements,
+                            self.addSimple_error(elements,
                                                 result[x-1],
                                                 result[x])
 
                         else:
 
-                            self.addNestedError(elements,
+                            self.add_nested_error(elements,
                                                 result[x-1],
                                                 result[x])
 
-                if not self.isCorrection(result[-1]):
+                if not self.is_correction(result[-1]):
                     elements[-1].tail = result[-1]
 
                 return elements
 
         pass
 
-    def addSimpleError(self, elements, errorstring, correctionstring):
+    def addSimple_error(self, elements, errorstring, correctionstring):
         '''Make an error element, append it to elements
 
-        elements -- a list of errorElements
+        elements -- a list of error_elements
         errorstring -- a string containing a text part and an errormarkup
         error
         correctionstring -- a string containing an errormarkup correction
@@ -160,40 +160,40 @@ class ErrorMarkup:
         else:
             elements[-1].tail = head
 
-        errorElement = self.getError(error, correctionstring)
+        error_element = self.get_error(error, correctionstring)
 
-        elements.append(errorElement)
+        elements.append(error_element)
 
-    def addNestedError(self, elements, errorstring, correctionstring):
-        '''Make errorElement, append it to elements
+    def add_nested_error(self, elements, errorstring, correctionstring):
+        '''Make error_element, append it to elements
 
-        elements -- a list of errorElements
+        elements -- a list of error_elements
         errorstring -- contains either a correction or string ending with
         a right parenthesis )
         correctionstring -- a string containing an errormarkup correction
 
         The algorithm:
-        At least the last element in elements will be engulfed in errorElement
-        and replaced by errorElement in elements
+        At least the last element in elements will be engulfed in error_element
+        and replaced by error_element in elements
 
-        Remove the last element, use it as the innerElement when making
-        errorElement
+        Remove the last element, use it as the inner_element when making
+        error_element
 
         If the errorstring is not a correction, then it ends in a ).
 
         Extract the string from the last element of elements.
         If a ( is found, set the part before ( to be the tail of the last
-        element of elements. Set the part after ( to be the text of errorElement,
-        append errorElement to elements.
+        element of elements. Set the part after ( to be the text of error_element,
+        append error_element to elements.
 
         If a ( is not found, insert the last element of elements as first child
-        of errorElement, continue searching
+        of error_element, continue searching
 
         '''
         #print u'«' + errorstring + u'»', u'«' + correctionstring + u'»'
         try:
-            innerElement = elements[-1]
-        except IndexError:
+            inner_element = elements[-1]
+        except Index_error:
             print '\n', self._filename
             print "Cannot handle:\n"
             print errorstring + correctionstring
@@ -201,40 +201,40 @@ class ErrorMarkup:
             print "If the markup is correct, send a report about this error to borre.gaup@uit.no"
 
         elements.remove(elements[-1])
-        if not self.isCorrection(errorstring):
-            innerElement.tail = errorstring[:-1]
-        errorElement = self.getError(innerElement, correctionstring)
+        if not self.is_correction(errorstring):
+            inner_element.tail = errorstring[:-1]
+        error_element = self.get_error(inner_element, correctionstring)
 
 
-        if self.isCorrection(errorstring):
-            elements.append(errorElement)
+        if self.is_correction(errorstring):
+            elements.append(error_element)
         else:
-            parenthesisFound = False
+            parenthesis_found = False
 
-            while not parenthesisFound:
-                text = self.getText(elements[-1])
+            while not parenthesis_found:
+                text = self.get_text(elements[-1])
 
                 x = text.rfind('(')
                 if x > -1:
-                    parenthesisFound = True
+                    parenthesis_found = True
 
-                    errorElement.text = text[x+1:]
+                    error_element.text = text[x+1:]
                     if isinstance(elements[-1], etree._Element):
                         elements[-1].tail = text[:x]
                     else:
                         elements[-1] = text[:x]
-                    elements.append(errorElement)
+                    elements.append(error_element)
 
                 else:
-                    innerElement = elements[-1]
+                    inner_element = elements[-1]
                     elements.remove(elements[-1])
                     try:
-                        errorElement.insert(0, innerElement)
+                        error_element.insert(0, inner_element)
                     except TypeError as e:
                         print '\n', self._filename
                         print str(e)
                         print u"The program expected an error element, but \
-                        found a string:\n«" + innerElement + u"»"
+                        found a string:\n«" + inner_element + u"»"
                         print u"There is either an error in errormarkup close \
                         to this sentence"
                         print u"or the program cannot evaluate a correct \
@@ -243,7 +243,7 @@ class ErrorMarkup:
                         about the error to borre.gaup@uit.no"
 
 
-    def getText(self, element):
+    def get_text(self, element):
         text = None
         if isinstance(element, etree._Element):
             text = element.tail
@@ -252,24 +252,24 @@ class ErrorMarkup:
 
         return text
 
-    def isCorrection(self, expression):
-        return self.correctionRegex.search(expression)
+    def is_correction(self, expression):
+        return self.correction_regex.search(expression)
 
-    def processText(self, text):
+    def process_text(self, text):
         '''Divide the text in to a list consisting of alternate
         non-correctionstring/correctionstrings
         '''
         result = []
 
-        m = self.correctionRegex.search(text)
+        m = self.correction_regex.search(text)
         while m:
-            head = self.correctionRegex.sub('', text)
+            head = self.correction_regex.sub('', text)
             if not (head != '' and head[-1] == " "):
                 if head != '':
                     result.append(head)
                 result.append(m.group('correction'))
             text = m.group('tail')
-            m = self.correctionRegex.search(text)
+            m = self.correction_regex.search(text)
 
         if text != '':
             result.append(text)
@@ -279,42 +279,42 @@ class ErrorMarkup:
     def processHead(self, text):
         '''Divide text into text/error parts
         '''
-        m = self.errorRegex.search(text)
-        text = self.errorRegex.sub('', text)
+        m = self.error_regex.search(text)
+        text = self.error_regex.sub('', text)
 
         return (text, m.group('error'))
 
-    def isError(self, text):
-        return self.errorRegex.search(text)
+    def is_error(self, text):
+        return self.error_regex.search(text)
 
-    def getError(self, error, correction):
-        '''Make an errorElement
+    def get_error(self, error, correction):
+        '''Make an error_element
 
         error -- is either a string or an etree.Element
         correction -- is a correctionstring
 
         '''
-        (fixedCorrection, extAtt, attList) = self.lookForExtendedAttributes(
+        (fixed_correction, ext_att, att_list) = self.look_for_extended_attributes(
             correction[1:].replace('(', '').replace(')', ''))
 
-        elementName = self.getElementName(correction[0])
+        element_name = self.get_element_name(correction[0])
 
-        errorElement = self.makeErrorElement(error,
-                                             fixedCorrection,
-                                             elementName,
-                                             attList)
+        error_element = self.make_error_element(error,
+                                             fixed_correction,
+                                             element_name,
+                                             att_list)
 
-        return errorElement
+        return error_element
 
-    def lookForExtendedAttributes(self, correction):
+    def look_for_extended_attributes(self, correction):
         '''Extract attributes and correction from a correctionstring
         '''
-        extAtt = False
-        attList = None
+        ext_att = False
+        att_list = None
         if '|' in correction:
-            extAtt = True
+            ext_att = True
             try:
-                (attList, correction) = correction.split('|')
+                (att_list, correction) = correction.split('|')
             except ValueError as e:
                 print '\n', self._filename
                 print str(e)
@@ -325,21 +325,21 @@ class ErrorMarkup:
                 print u"If the errormarkup is correct, send a report about \
                 this error to borre.gaup@uit.no"
 
-        return (correction, extAtt, attList)
+        return (correction, ext_att, att_list)
 
-    def getElementName(self, separator):
+    def get_element_name(self, separator):
         return self.types[separator]
 
-    def makeErrorElement(self, error, fixedCorrection, elementName, attList):
-        errorElement = etree.Element(elementName)
+    def make_error_element(self, error, fixed_correction, element_name, att_list):
+        error_element = etree.Element(element_name)
         if isinstance(error, etree._Element):
-            errorElement.append(error)
+            error_element.append(error)
         else:
-            errorElement.text = error.replace('(', '').replace(')', '')
+            error_element.text = error.replace('(', '').replace(')', '')
 
-        errorElement.set('correct', fixedCorrection)
+        error_element.set('correct', fixed_correction)
 
-        if attList != None:
-            errorElement.set('errorinfo', attList)
+        if att_list != None:
+            error_element.set('errorinfo', att_list)
 
-        return errorElement
+        return error_element
