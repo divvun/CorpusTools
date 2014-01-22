@@ -5,53 +5,55 @@ import unittest
 from corpustools import decode
 
 class TestEncodingGuesser(unittest.TestCase):
-    def testEncodingGuesser(self):
+    def test_encoding_guesser(self):
+        guesser = decode.EncodingGuesser()
+        for i in range(0, len(decode.CTYPES)):
+            self.assertEqual(guesser.guess_file_encoding(
+                'decode_data/decode-' +
+                str(i) + '.txt'), i)
+
+    def round_trip_x(self, index):
         eg = decode.EncodingGuesser()
-        for i in range(0, len(decode.ctypes)):
-            self.assertEqual(eg.guessFileEncoding('decode_data/decode-' + str(i) + '.txt'), i)
 
-    def roundTripX(self, x):
-        eg = decode.EncodingGuesser()
+        utf8 = open('decode_data/decode-utf8.txt')
+        utf8_content = utf8.read()
+        utf8.close()
 
-        f = open('decode_data/decode-utf8.txt')
-        utf8_content = f.read()
-        f.close()
+        eight_bit = open('decode_data/decode-' + str(index) + '.txt')
+        content = eight_bit.read()
+        eight_bit.close()
 
-        f = open('decode_data/decode-' + str(x) + '.txt')
-        content = f.read()
-        f.close()
-
-        test_content = eg.decodePara(x, content)
+        test_content = eg.decode_para(index, content)
 
         self.assertEqual(utf8_content, test_content)
 
-    def testRoundTripping0(self):
-        self.roundTripX(0)
+    def test_round_tripping0(self):
+        self.round_trip_x(0)
 
-    def testRoundTripping1(self):
-        self.roundTripX(1)
+    def test_round_tripping1(self):
+        self.round_trip_x(1)
 
-    def testRoundTripping2(self):
-        self.roundTripX(2)
+    def test_round_tripping2(self):
+        self.round_trip_x(2)
 
-    def testRoundTripping3(self):
-        self.roundTripX(3)
+    def test_round_tripping3(self):
+        self.round_trip_x(3)
 
-    def testRoundTripping4(self):
-        self.roundTripX(4)
+    def test_round_tripping4(self):
+        self.round_trip_x(4)
 
-    def testRoundTripping5(self):
-        self.roundTripX(5)
+    def test_round_tripping5(self):
+        self.round_trip_x(5)
 
-    def testRoundTripping6(self):
-        self.roundTripX(6)
+    def test_round_tripping6(self):
+        self.round_trip_x(6)
 
-    def testRoundTripping7(self):
-        self.roundTripX(7)
+    def test_round_tripping7(self):
+        self.round_trip_x(7)
 
-    def testRoundTripping8(self):
-        self.roundTripX(8)
+    def test_round_tripping8(self):
+        self.round_trip_x(8)
 
-    def testRoundTrippingFalsePositive(self):
-        eg = decode.EncodingGuesser()
-        self.assertEqual(eg.guessFileEncoding('decode_data/decode-falsepositive.txt'), -1)
+    def test_round_tripping_false_positive(self):
+        guesser = decode.EncodingGuesser()
+        self.assertEqual(guesser.guess_file_encoding('decode_data/decode-falsepositive.txt'), -1)

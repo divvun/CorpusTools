@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
+'''(Northern) sami character eight bit encodings have been semi or
+non official standards and have been converted to the various systems' 
+internal encodings. This module have functions that revert the damage
+done.
+'''
 import re
-import sys
 
-ctypes = [
+CTYPES = [
 
     # mac-sami converted as iconv -f mac -t utf8
     # mac-sami á appears at the same place as latin1 á
@@ -142,7 +146,8 @@ ctypes = [
     },
 
     # found in boundcorpus/goldstandard/orig/sme/facta/GIEHTAGIRJI.correct.doc
-    # and boundcorpus/goldstandard/orig/sme/facta/learerhefte_-_vaatmarksfugler.doc
+    # and
+    # boundcorpus/goldstandard/orig/sme/facta/learerhefte_-_vaatmarksfugler.doc
     # á, æ, å, ø, ö, ä appear as themselves
     # 6
     {
@@ -195,100 +200,104 @@ ctypes = [
     }
 ]
 
-limits = { 0: 1, 1: 1, 2: 3, 3: 3, 4: 3, 5: 3, 6: 1, 7: 1, 8: 3}
+LIMITS = {0: 1, 1: 1, 2: 3, 3: 3, 4: 3, 5: 3, 6: 1, 7: 1, 8: 3}
 
 
-class EncodingGuesser:
+class EncodingGuesser(object):
     """Try to find out if some text or a file has faultily encoded (northern)
     sami letters
     """
 
-    def guessFileEncoding(self, filename):
+    def guess_file_encoding(self, filename):
         """ @brief Guess the encoding of a file
 
         @param filename name of an utf-8 encoded file
-        @return winner is an int, pointing to a position in ctypes, or -1
+        @return winner is an int, pointing to a position in CTYPES, or -1
         """
 
-        f = open(filename)
-        content = f.read()
-        f.close()
-        winner = self.guessBodyEncoding(content)
+        infile = open(filename)
+        content = infile.read()
+        infile.close()
+        winner = self.guess_body_encoding(content)
 
         return winner
 
-    def getSamiLetterFrequency(self, content):
+    def get_sami_letter_frequency(self, content):
         """@brief Get the frequency of real "sami" letters in content
 
         @param content is a unicode text (not utf8 str)
-        #return samiLetterFrequency is a dict of letters and their frequencies
+        #return sami_letter_frequency is a dict of letters and their frequencies
         """
-        samiLetterFrequency = {}
+        sami_letter_frequency = {}
 
-        for sami_letter in [u'á', u'š', u'ŧ', u'ŋ', u'đ', u'ž', u'č', u'æ', u'ø', u'å', u'ä', u'ö' ]:
-            samiLetterFrequency[sami_letter] = len(re.compile(sami_letter).findall(content.lower()))
+        for sami_letter in [u'á', u'š', u'ŧ', u'ŋ', u'đ', u'ž', u'č', u'æ',
+                            u'ø', u'å', u'ä', u'ö']:
+            sami_letter_frequency[sami_letter] = \
+                len(re.compile(sami_letter).findall(content.lower()))
 
         #print len(content)
         #for (key, value) in sami_letter_frequency.items():
             #print key + ":", value
 
-        return samiLetterFrequency
+        return sami_letter_frequency
 
-    def getEncodingFrequency(self, content, position):
-        """@ brief Get the frequency of the letters found at position "position" in ctypes
+    def get_encoding_frequency(self, content, position):
+        """@ brief Get the frequency of the letters found at position
+        "position" in CTYPES
 
         @param content is a unicode text (not utf8 str)
-        @param position is the position in ctypes
-        @return encodingFrequency is a dict of letters from ctypes[position]
+        @param position is the position in CTYPES
+        @return encoding_frequency is a dict of letters from CTYPES[position]
         and their frequencies
         """
 
-        encodingFrequency = {}
+        encoding_frequency = {}
 
-        for key in ctypes[position].viewkeys():
+        for key in CTYPES[position].viewkeys():
 
             if len(re.compile(key).findall(content)) > 0:
-                encodingFrequency[key] = len(re.compile(key).findall(content))
-                #print key + ":", ctypes[position][key], len(re.compile(key).findall(content))
+                encoding_frequency[key] = len(re.compile(key).findall(content))
+                #print key + ":", CTYPES[position][key], \
+                    #len(re.compile(key).findall(content))
 
-        return encodingFrequency
+        return encoding_frequency
 
-    def guessBodyEncoding(self, content):
+    def guess_body_encoding(self, content):
         """@brief guess the encoding of the string content
 
         First get the frequencies of the "sami letters"
-        Then get the frequencies of the letters in the encodings in ctypes
+        Then get the frequencies of the letters in the encodings in CTYPES
 
         If "sami letters" that the encoding tries to fix exist in "content",
         disregard the encoding
 
         @param content a utf-8 encoded string
-        @return winner is an int pointing to a position in ctypes or -1
+        @return winner is an int pointing to a position in CTYPES or -1
         to tell that no known encoding is found
         """
         content = content.decode('utf8')
-        samiLetterFrequency = self.getSamiLetterFrequency(content)
+        sami_letter_frequency = self.get_sami_letter_frequency(content)
 
         maxhits = 0
         winner = -1
-        for position in range(0, len(ctypes)):
-            encodingFrequency = self.getEncodingFrequency(content, position)
+        for position in range(0, len(CTYPES)):
+            encoding_frequency = self.get_encoding_frequency(content, position)
 
-            num = len(encodingFrequency)
+            num = len(encoding_frequency)
             hits = 0
             hitter = False
-            for key in encodingFrequency.keys():
+            for key in encoding_frequency.keys():
                 try:
-                    if not samiLetterFrequency[ctypes[position][key].lower()]:
+                    if not sami_letter_frequency[CTYPES[position][key].lower()]:
                         hitter = True
                 except KeyError:
                     pass
-                hits += encodingFrequency[key]
+                hits += encoding_frequency[key]
 
             #if hits > 0:
                 #print "position", position, "hits", hits, "num", num
 
-            if hits > maxhits and limits[position] < num and hitter:
+            if hits > maxhits and LIMITS[position] < num and hitter:
                 winner = position
                 maxhits = hits
                 #print "winner", winner, "maxhits", maxhits
@@ -297,27 +306,28 @@ class EncodingGuesser:
 
         return winner
 
-    def guessPersonEncoding(self, person):
+    def guess_person_encoding(self, person):
         """@brief guess the encoding of the string person
 
-        This is a little simplified version of guessBodyEncoding because the person string is short
+        This is a little simplified version of guess_body_encoding because the
+        person string is short
 
         @param content a utf-8 encoded string
-        @return winner is an int pointing to a position in ctypes or -1
+        @return winner is an int pointing to a position in CTYPES or -1
         to tell that no known encoding is found
         """
 
-        f = open(filename)
-        content = f.read()
+        infile = open(filename)
+        content = infile.read()
         content = content.decode('utf8')
         content = content.lower()
-        f.close()
+        infile.close()
 
         maxhits = 0
-        for position in range(0, len(ctypes)):
+        for position in range(0, len(CTYPES)):
             hits = 0
             num = 0
-            for key in ctypes[position].viewkeys():
+            for key in CTYPES[position].viewkeys():
 
                 #print len(re.compile(key).findall(content)), key
                 if len(re.compile(key).findall(content)) > 0:
@@ -340,15 +350,16 @@ class EncodingGuesser:
         #print "the winner is", winner
         return winner
 
-    def decodePara(self, position, text):
-        """@brief Replace letters in text with the ones from the dict at position position in ctypes
+    def decode_para(self, position, text):
+        """@brief Replace letters in text with the ones from the dict at
+        position position in CTYPES
 
-        @param position which place the encoding has in the ctypes list
+        @param position which place the encoding has in the CTYPES list
         @param text utf8 encoded str
         @return utf8 encoded str
         """
         text = text.decode('utf8')
-        encoding = ctypes[position]
+        encoding = CTYPES[position]
 
         for key, value in encoding.items():
             text = text.replace(key, value)
@@ -358,7 +369,3 @@ class EncodingGuesser:
             text = text.replace(u"È", u"»")
 
         return text.encode('utf8')
-
-if __name__ == '__main__':
-    eg = EncodingGuesser()
-    print eg.guessFileEncoding(sys.argv[1])
