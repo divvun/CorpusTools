@@ -37,7 +37,6 @@ class ErrorMarkup:
                       u"∞": "errorlang"}
         self.error_regex = re.compile(u'(?P<error>\([^\(]*\)$|\w+$|\w+[-\':\]]\w+$|\w+[-\'\]\./]$|\d+’\w+$|\d+%:\w+$|”\w+”$)', re.UNICODE)
         self.correction_regex = re.compile(u'(?P<correction>[$€£¥§¢∞]\([^\)]*\)|[$€£¥§¢∞]\S+)(?P<tail>.*)', re.UNICODE)
-        pass
 
     def add_error_markup(self, element):
         self.really_add_error_markup(element)
@@ -55,8 +54,6 @@ class ErrorMarkup:
         '''
         self.fix_text(element)
         self.fix_tail(element)
-
-        pass
 
     def fix_text(self, element):
         '''Replace the text of an element with errormarkup if possible
@@ -141,8 +138,6 @@ class ErrorMarkup:
                     elements[-1].tail = result[-1]
 
                 return elements
-
-        pass
 
     def add_simple_error(self, elements, errorstring, correctionstring):
         '''Make an error element, append it to elements
