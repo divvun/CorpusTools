@@ -144,9 +144,9 @@ class TestPlaintextConverter(unittest.TestCase):
         got  = plaintext.toUnicode()
 
         # Ensure that the data in want is unicode
-        f = codecs.open('converter_data/winsami2-test-utf8.txt', encoding = 'utf8')
-        want = f.read()
-        f.close()
+        file_ = codecs.open('converter_data/winsami2-test-utf8.txt', encoding = 'utf8')
+        want = file_.read()
+        file_.close()
 
         self.assertEqual(got, want)
 
@@ -497,8 +497,8 @@ class TestDocumentFixer(unittest.TestCase):
     def test_fix__body_encoding(self):
         newstext = converter.PlaintextConverter('converter_data/assu97-mac-sami.txt')
 
-        eg = converter.DocumentFixer(newstext.convert2intermediate())
-        got = eg.fixBodyEncoding()
+        document_fixer = converter.DocumentFixer(newstext.convert2intermediate())
+        got = document_fixer.fixBodyEncoding()
 
         want = etree.parse('converter_data/assu97-fixedutf8.xml')
 
@@ -506,8 +506,8 @@ class TestDocumentFixer(unittest.TestCase):
 
     def test_replace_ligatures(self):
         svgtext = converter.SVGConverter('converter_data/Riddu_Riddu_avis_TXT.200923.svg')
-        eg = converter.DocumentFixer(etree.fromstring(etree.tostring(svgtext.convert2intermediate())))
-        got = eg.fixBodyEncoding()
+        document_fixer = converter.DocumentFixer(etree.fromstring(etree.tostring(svgtext.convert2intermediate())))
+        got = document_fixer.fixBodyEncoding()
 
         want = etree.parse('converter_data/Riddu_Riddu_avis_TXT.200923.xml')
 
@@ -517,8 +517,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p>bla bla "bla bla" bla bla </p>'
         expected_paragraph = '<p>bla bla <span type="quote">"bla bla"</span> bla bla</p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -526,8 +526,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p>bla bla “bla bla” bla bla</p>'
         expected_paragraph = '<p>bla bla <span type="quote">“bla bla”</span> bla bla</p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -535,8 +535,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p>bla bla «bla bla» bla bla</p>'
         expected_paragraph = '<p>bla bla <span type="quote">«bla bla»</span> bla bla</p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -544,8 +544,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p type="title">Sámegiel čálamearkkat Windows XP várás.</p>'
         expected_paragraph = '<p type="title">Sámegiel čálamearkkat Windows XP várás.</p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -553,8 +553,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p>bla bla «bla bla» bla bla «bla bla» bla bla</p>'
         expected_paragraph = '<p>bla bla <span type="quote">«bla bla»</span> bla bla <span type="quote">«bla bla»</span> bla bla</p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -562,8 +562,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p>bla bla «bla bla» <em>bla bla</em></p>'
         expected_paragraph = '<p>bla bla <span type="quote">«bla bla»</span> <em>bla bla</em></p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -571,8 +571,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p>bla bla <em>bla bla</em> «bla bla»</p>'
         expected_paragraph = '<p>bla bla <em>bla bla</em> <span type="quote">«bla bla»</span></p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -580,8 +580,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p>bla bla <em>bla bla «bla bla»</em></p>'
         expected_paragraph = '<p>bla bla <em>bla bla <span type="quote">«bla bla»</span></em></p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -590,10 +590,10 @@ class TestDocumentFixer(unittest.TestCase):
 
         expected_doc = '<document xml:lang="sma" id="no_id"><header><title/><genre/><author><unknown/></author><wordcount>20</wordcount><availability><free/></availability><multilingual/></header><body><p>Bïevnesh naasjovnalen pryövoej bïjre</p><p>2008</p><p>Bïevnesh eejhtegidie, tjidtjieh aehtjieh bielide naasjovnalen pryövoej bïjre giej leah maanah 5. jïh 8. tsiehkine</p></body></document>'
 
-        df = converter.DocumentFixer(orig_doc)
-        df.setWordCount()
+        document_fixer = converter.DocumentFixer(orig_doc)
+        document_fixer.setWordCount()
 
-        self.assertXmlEqual(etree.tostring(df.etree), expected_doc)
+        self.assertXmlEqual(etree.tostring(document_fixer.etree), expected_doc)
 
 class TestXslMaker(unittest.TestCase):
     def assertXmlEqual(self, got, want):
@@ -629,15 +629,15 @@ class TestLanguageDetector(unittest.TestCase):
 
     def test_get_main_lang(self):
         test_main_lang = 'sme'
-        ld = converter.LanguageDetector(self.document)
-        self.assertEqual(test_main_lang, ld.getMainlang())
+        language_detector = converter.LanguageDetector(self.document)
+        self.assertEqual(test_main_lang, language_detector.getMainlang())
 
     def test_set_paragraph_language_mainlanguage(self):
         orig_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat ja bidjat dihtorii. Boađus lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat ráhkadan.</p>'
         expected_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat ja bidjat dihtorii. Boađus lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat ráhkadan.</p>'
 
-        ld = converter.LanguageDetector(self.document)
-        got_paragraph = ld.setParagraphLanguage(etree.fromstring(orig_paragraph))
+        language_detector = converter.LanguageDetector(self.document)
+        got_paragraph = language_detector.setParagraphLanguage(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -645,8 +645,8 @@ class TestLanguageDetector(unittest.TestCase):
         orig_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. <span type="quote">«Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat ja bidjat dihtorii»</span>. Boađus lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat ráhkadan.</p>'
         expected_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. <span type="quote">«Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat ja bidjat dihtorii»</span>. Boađus lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat ráhkadan.</p>'
 
-        ld = converter.LanguageDetector(self.document)
-        got_paragraph = ld.setParagraphLanguage(etree.fromstring(orig_paragraph))
+        language_detector = converter.LanguageDetector(self.document)
+        got_paragraph = language_detector.setParagraphLanguage(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -654,8 +654,8 @@ class TestLanguageDetector(unittest.TestCase):
         orig_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. <span type="quote">«Alt finnes i den foreliggende Service Pack 2 fra selskapet, som må lastes ned og installeres på din datamaskin. Konsekvensen er at all framtidig programvare fra Microsoft vil inneholde støtte for samisk»</span>. Boađus lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat ráhkadan.</p>'
         expected_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. <span type="quote" xml:lang="nob">«Alt finnes i den foreliggende Service Pack 2 fra selskapet, som må lastes ned og installeres på din datamaskin. Konsekvensen er at all framtidig programvare fra Microsoft vil inneholde støtte for samisk»</span>. Boađus lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat ráhkadan.</p>'
 
-        ld = converter.LanguageDetector(self.document)
-        got_paragraph = ld.setParagraphLanguage(etree.fromstring(orig_paragraph))
+        language_detector = converter.LanguageDetector(self.document)
+        got_paragraph = language_detector.setParagraphLanguage(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -663,8 +663,8 @@ class TestLanguageDetector(unittest.TestCase):
         orig_paragraph = '<p>Samisk er fra høsten 2004 et standard språkvalg Microsofts operativsystem Windows XP. I praksis betyr det at samiske bokstaver og formater kan velges i alle programmer. Alt finnes i den foreliggende Service Pack 2 fra selskapet, som må lastes ned og installeres på din datamaskin. Konsekvensen er at all framtidig programvare fra Microsoft vil inneholde støtte for samisk. Du vil imidlertid fremdeles kunne oppleve problemer med å skrive samisk i Outlook-kalenderen eller i tittel-feltet i e-post, og med å skrive samisk i programmer levert av andre enn Microsoft.</p>'
         expected_paragraph = '<p xml:lang="nob">Samisk er fra høsten 2004 et standard språkvalg Microsofts operativsystem Windows XP. I praksis betyr det at samiske bokstaver og formater kan velges i alle programmer. Alt finnes i den foreliggende Service Pack 2 fra selskapet, som må lastes ned og installeres på din datamaskin. Konsekvensen er at all framtidig programvare fra Microsoft vil inneholde støtte for samisk. Du vil imidlertid fremdeles kunne oppleve problemer med å skrive samisk i Outlook-kalenderen eller i tittel-feltet i e-post, og med å skrive samisk i programmer levert av andre enn Microsoft.</p>'
 
-        ld = converter.LanguageDetector(self.document)
-        got_paragraph = ld.setParagraphLanguage(etree.fromstring(orig_paragraph))
+        language_detector = converter.LanguageDetector(self.document)
+        got_paragraph = language_detector.setParagraphLanguage(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -672,24 +672,24 @@ class TestLanguageDetector(unittest.TestCase):
         orig_paragraph = '<p>bla bla <span type="quote">bla1 bla</span> ble ble <span type="quote">bla2 bla</span> <b>bli</b> bli <span type="quote">bla3 bla</span> blo blo</p>'
         expected_paragraph = 'bla bla  ble ble  bli bli  blo blo'
 
-        ld = converter.LanguageDetector(self.document)
-        got_paragraph = ld.removeQuote(etree.fromstring(orig_paragraph))
+        language_detector = converter.LanguageDetector(self.document)
+        got_paragraph = language_detector.removeQuote(etree.fromstring(orig_paragraph))
 
         self.assertEqual(got_paragraph, expected_paragraph)
 
     def test_detect_language_with_multilingualtag(self):
-        ld = converter.LanguageDetector(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        ld.detectLanguage()
-        got_document = ld.getDocument()
+        language_detector = converter.LanguageDetector(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        language_detector.detectLanguage()
+        got_document = language_detector.getDocument()
 
         expected_document = etree.parse('converter_data/samediggi-article-48s-after-lang-detection-with-multilingual-tag.xml')
 
         self.assertXmlEqual(etree.tostring(got_document), etree.tostring(expected_document))
 
     def test_detect_language_without_multilingualtag(self):
-        ld = converter.LanguageDetector(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-without-multilingual-tag.xml'))
-        ld.detectLanguage()
-        got_document = ld.getDocument()
+        language_detector = converter.LanguageDetector(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-without-multilingual-tag.xml'))
+        language_detector.detectLanguage()
+        got_document = language_detector.getDocument()
 
         expected_document = etree.parse('converter_data/samediggi-article-48s-after-lang-detection-without-multilingual-tag.xml')
 
@@ -713,54 +713,54 @@ class TestDocumentTester(unittest.TestCase):
 
         expected_doc = '<document xml:lang="sma" id="no_id"><header><title/><genre/><author><unknown/></author><availability><free/></availability><multilingual/></header><body><p>Bïevnesh naasjovnalen</p></body></document>'
 
-        dt = converter.DocumentTester(orig_doc)
-        dt.removeForeignLanguage()
+        document_tester = converter.DocumentTester(orig_doc)
+        document_tester.removeForeignLanguage()
 
-        self.assertXmlEqual(etree.tostring(dt.document), expected_doc)
+        self.assertXmlEqual(etree.tostring(document_tester.document), expected_doc)
 
     def test_remove_foreign_language2(self):
         orig_doc = etree.parse(io.BytesIO('<document xml:lang="sma" id="no_id"><header><title/><genre/><author><unknown/></author><availability><free/></availability><multilingual/></header><body><p xml:lang="nob">Nasjonale prøver</p></body></document>'))
 
         expected_doc = '<document xml:lang="sma" id="no_id"><header><title/><genre/><author><unknown/></author><availability><free/></availability><multilingual/></header><body></body></document>'
 
-        dt = converter.DocumentTester(orig_doc)
-        dt.removeForeignLanguage()
+        document_tester = converter.DocumentTester(orig_doc)
+        document_tester.removeForeignLanguage()
 
-        self.assertXmlEqual(etree.tostring(dt.document), expected_doc)
+        self.assertXmlEqual(etree.tostring(document_tester.document), expected_doc)
 
     def test_remove_foreign_language3(self):
         orig_doc = etree.parse(io.BytesIO('<document xml:lang="sma" id="no_id"><header><title/><genre/><author><unknown/></author><availability><free/></availability><multilingual/></header><body><p xml:lang="nob">Nasjonale prøver<span type="quote">Bïevnesh naasjovnalen </span></p></body></document>'))
 
         expected_doc = '<document xml:lang="sma" id="no_id"><header><title/><genre/><author><unknown/></author><availability><free/></availability><multilingual/></header><body><p>Bïevnesh naasjovnalen </p></body></document>'
 
-        dt = converter.DocumentTester(orig_doc)
-        dt.removeForeignLanguage()
+        document_tester = converter.DocumentTester(orig_doc)
+        document_tester.removeForeignLanguage()
 
-        self.assertXmlEqual(etree.tostring(dt.document), expected_doc)
+        self.assertXmlEqual(etree.tostring(document_tester.document), expected_doc)
 
     def test_remove_foreign_language4(self):
         orig_doc = etree.parse(io.BytesIO('<document xml:lang="sma" id="no_id"><header><title/><genre/><author><unknown/></author><availability><free/></availability><multilingual/></header><body><p>Bïevnesh naasjovnalen <span type="quote" xml:lang="nob">Nasjonale prøver</span></p></body></document>'))
 
         expected_doc = '<document xml:lang="sma" id="no_id"><header><title/><genre/><author><unknown/></author><availability><free/></availability><multilingual/></header><body><p>Bïevnesh naasjovnalen <span type="quote" xml:lang="nob"></span></p></body></document>'
 
-        dt = converter.DocumentTester(orig_doc)
-        dt.removeForeignLanguage()
+        document_tester = converter.DocumentTester(orig_doc)
+        document_tester.removeForeignLanguage()
 
-        self.assertXmlEqual(etree.tostring(dt.document), expected_doc)
+        self.assertXmlEqual(etree.tostring(document_tester.document), expected_doc)
 
     def test_get_main_lang_ratio(self):
         orig_doc = etree.parse(io.BytesIO('<document xml:lang="sma" id="no_id"><header><title/><genre/><author><unknown/></author><wordcount>12</wordcount><availability><free/></availability><multilingual/></header><body><p>Bïevnesh naasjovnalen</p><p xml:lang="nob">Nasjonale prøver</p><p xml:lang="nob">Nasjonale prøver <span type="quote">Bïevnesh naasjovnalen </span></p><p>Bïevnesh naasjovnalen <span type="quote" xml:lang="nob">Nasjonale prøver</span></p></body></document>'))
 
-        dt = converter.DocumentTester(orig_doc)
+        document_tester = converter.DocumentTester(orig_doc)
 
-        self.assertEqual(dt.getMainlangRatio(), 0.50)
+        self.assertEqual(document_tester.getMainlangRatio(), 0.50)
 
     def test_get_unknown_words_ratio(self):
         orig_doc = etree.parse(io.BytesIO('<document xml:lang="sme" id="no_id"><header><title/><genre/><author><unknown/></author><wordcount>86</wordcount><availability><free/></availability><multilingual/></header><body><p>Sámegiellaqw leaqw 2004 čavččaqw rájesqw standárdaqw giellaválgaqw Microsoftaqw qwoperatiivavuogádagas qwWindows qwXP. qwDat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. <span type="quote" xml:lang="nob">«Alt finnes i den foreliggende Service Pack 2 fra selskapet, som må lastes ned og installeres på din datamaskin. Konsekvensen er at all framtidig programvare fra Microsoft vil inneholde støtte for samisk»</span>. Boađus lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat ráhkadan.</p></body></document>'))
 
-        dt = converter.DocumentTester(orig_doc)
+        document_tester = converter.DocumentTester(orig_doc)
 
-        self.assertEqual(decimal.Decimal(dt.getUnknownWordsRatio()).quantize(decimal.Decimal('.1'), rounding=decimal.ROUND_DOWN) , decimal.Decimal('0.2').quantize(decimal.Decimal('.1'), rounding=decimal.ROUND_DOWN))
+        self.assertEqual(decimal.Decimal(document_tester.getUnknownWordsRatio()).quantize(decimal.Decimal('.1'), rounding=decimal.ROUND_DOWN) , decimal.Decimal('0.2').quantize(decimal.Decimal('.1'), rounding=decimal.ROUND_DOWN))
 
 class TestDocumentFixer(unittest.TestCase):
     def assertXmlEqual(self, got, want):
@@ -774,8 +774,8 @@ class TestDocumentFixer(unittest.TestCase):
     def test_fix__body_encoding(self):
         newstext = converter.PlaintextConverter('converter_data/assu97-mac-sami.txt')
 
-        eg = converter.DocumentFixer(newstext.convert2intermediate())
-        got = eg.fixBodyEncoding()
+        document_fixer = converter.DocumentFixer(newstext.convert2intermediate())
+        got = document_fixer.fixBodyEncoding()
 
         want = etree.parse('converter_data/assu97-fixedutf8.xml')
 
@@ -783,8 +783,8 @@ class TestDocumentFixer(unittest.TestCase):
 
     def test_replace_ligatures(self):
         svgtext = converter.SVGConverter('converter_data/Riddu_Riddu_avis_TXT.200923.svg')
-        eg = converter.DocumentFixer(etree.fromstring(etree.tostring(svgtext.convert2intermediate())))
-        got = eg.fixBodyEncoding()
+        document_fixer = converter.DocumentFixer(etree.fromstring(etree.tostring(svgtext.convert2intermediate())))
+        got = document_fixer.fixBodyEncoding()
 
         want = etree.parse('converter_data/Riddu_Riddu_avis_TXT.200923.xml')
 
@@ -794,8 +794,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p>bla bla "bla bla" bla bla </p>'
         expected_paragraph = '<p>bla bla <span type="quote">"bla bla"</span> bla bla</p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -803,8 +803,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p>bla bla “bla bla” bla bla</p>'
         expected_paragraph = '<p>bla bla <span type="quote">“bla bla”</span> bla bla</p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -812,8 +812,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p>bla bla «bla bla» bla bla</p>'
         expected_paragraph = '<p>bla bla <span type="quote">«bla bla»</span> bla bla</p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -821,8 +821,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p type="title">Sámegiel čálamearkkat Windows XP várás.</p>'
         expected_paragraph = '<p type="title">Sámegiel čálamearkkat Windows XP várás.</p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -830,8 +830,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p>bla bla «bla bla» bla bla «bla bla» bla bla</p>'
         expected_paragraph = '<p>bla bla <span type="quote">«bla bla»</span> bla bla <span type="quote">«bla bla»</span> bla bla</p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -839,8 +839,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p>bla bla «bla bla» <em>bla bla</em></p>'
         expected_paragraph = '<p>bla bla <span type="quote">«bla bla»</span> <em>bla bla</em></p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -848,8 +848,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p>bla bla <em>bla bla</em> «bla bla»</p>'
         expected_paragraph = '<p>bla bla <em>bla bla</em> <span type="quote">«bla bla»</span></p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -857,8 +857,8 @@ class TestDocumentFixer(unittest.TestCase):
         orig_paragraph = '<p>bla bla <em>bla bla «bla bla»</em></p>'
         expected_paragraph = '<p>bla bla <em>bla bla <span type="quote">«bla bla»</span></em></p>'
 
-        df = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = df.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
@@ -867,8 +867,8 @@ class TestDocumentFixer(unittest.TestCase):
 
         expected_doc = '<document xml:lang="sma" id="no_id"><header><title/><genre/><author><unknown/></author><wordcount>20</wordcount><availability><free/></availability><multilingual/></header><body><p>Bïevnesh naasjovnalen pryövoej bïjre</p><p>2008</p><p>Bïevnesh eejhtegidie, tjidtjieh aehtjieh bielide naasjovnalen pryövoej bïjre giej leah maanah 5. jïh 8. tsiehkine</p></body></document>'
 
-        df = converter.DocumentFixer(orig_doc)
-        df.setWordCount()
+        document_fixer = converter.DocumentFixer(orig_doc)
+        document_fixer.setWordCount()
 
-        self.assertXmlEqual(etree.tostring(df.etree), expected_doc)
+        self.assertXmlEqual(etree.tostring(document_fixer.etree), expected_doc)
 
