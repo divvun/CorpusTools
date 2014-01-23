@@ -126,10 +126,10 @@ class TestSVGConverter(XMLTester):
 class TestPlaintextConverter(XMLTester):
     def test_to_unicode(self):
         plaintext = converter.PlaintextConverter('converter_data/winsami2-test-ws2.txt')
-        got  = plaintext.toUnicode()
+        got = plaintext.toUnicode()
 
         # Ensure that the data in want is unicode
-        file_ = codecs.open('converter_data/winsami2-test-utf8.txt', encoding = 'utf8')
+        file_ = codecs.open('converter_data/winsami2-test-utf8.txt', encoding='utf8')
         want = file_.read()
         file_.close()
 
@@ -662,7 +662,7 @@ class TestDocumentTester(XMLTester):
 
         document_tester = converter.DocumentTester(orig_doc)
 
-        self.assertEqual(decimal.Decimal(document_tester.getUnknownWordsRatio()).quantize(decimal.Decimal('.1'), rounding=decimal.ROUND_DOWN) , decimal.Decimal('0.2').quantize(decimal.Decimal('.1'), rounding=decimal.ROUND_DOWN))
+        self.assertEqual(decimal.Decimal(document_tester.getUnknownWordsRatio()).quantize(decimal.Decimal('.1'), rounding=decimal.ROUND_DOWN), decimal.Decimal('0.2').quantize(decimal.Decimal('.1'), rounding=decimal.ROUND_DOWN))
 
 class TestDocumentFixer(XMLTester):
     def test_fix__body_encoding(self):
