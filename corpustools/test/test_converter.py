@@ -12,85 +12,85 @@ from corpustools import converter
 
 class TestConverter(unittest.TestCase):
     def setUp(self):
-        self.converterInsideOrig = \
+        self.converter_inside_orig = \
         converter.Converter('converter_data/fakecorpus/orig/nob/samediggi-article-16.html', True)
 
-        self.converterOutsideOrig = \
+        self.converter_outside_orig = \
         converter.Converter('converter_data/samediggi-article-48.html', False)
 
-        self.converterInsideFreecorpus = \
+        self.converter_inside_freecorpus = \
         converter.Converter(os.path.join(os.getenv('GTFREE'), \
         'orig/sme/admin/sd/samediggi.no/samediggi-article-48.html'), False)
 
     def test_get_orig(self):
-        self.assertEqual(self.converterInsideOrig.getOrig(), \
+        self.assertEqual(self.converter_inside_orig.getOrig(), \
         os.path.join(os.getenv('GTHOME'),\
         'tools/CorpusTools/corpustools/test/converter_data/fakecorpus/orig/nob/samediggi-article-16.html'))
 
-        self.assertEqual(self.converterOutsideOrig.getOrig(), \
+        self.assertEqual(self.converter_outside_orig.getOrig(), \
         os.path.join(os.getenv('GTHOME'), \
         'tools/CorpusTools/corpustools/test/converter_data/samediggi-article-48.html'))
 
-        self.assertEqual(self.converterInsideFreecorpus.getOrig(), \
+        self.assertEqual(self.converter_inside_freecorpus.getOrig(), \
         os.path.join(os.getenv('GTFREE'), \
         'orig/sme/admin/sd/samediggi.no/samediggi-article-48.html'))
 
     def test_get_xsl(self):
-        self.assertEqual(self.converterInsideOrig.getXsl(), \
+        self.assertEqual(self.converter_inside_orig.getXsl(), \
         os.path.join(os.getenv('GTHOME'),\
         'tools/CorpusTools/corpustools/test/converter_data/fakecorpus/orig/nob/samediggi-article-16.html.xsl'))
 
-        self.assertEqual(self.converterOutsideOrig.getXsl(), \
+        self.assertEqual(self.converter_outside_orig.getXsl(), \
         os.path.join(os.getenv('GTHOME'), \
         'tools/CorpusTools/corpustools/test/converter_data/samediggi-article-48.html.xsl'))
 
-        self.assertEqual(self.converterInsideFreecorpus.getXsl(), \
+        self.assertEqual(self.converter_inside_freecorpus.getXsl(), \
         os.path.join(os.getenv('GTFREE'), \
         'orig/sme/admin/sd/samediggi.no/samediggi-article-48.html.xsl'))
 
     def test_get_test(self):
-        self.assertEqual(self.converterInsideOrig.getTest(), True)
+        self.assertEqual(self.converter_inside_orig.getTest(), True)
 
-        self.assertEqual(self.converterOutsideOrig.getTest(), False)
+        self.assertEqual(self.converter_outside_orig.getTest(), False)
 
-        self.assertEqual(self.converterInsideFreecorpus.getTest(), False)
+        self.assertEqual(self.converter_inside_freecorpus.getTest(), False)
 
     def test_get_tmpdir(self):
-        self.assertEqual(self.converterInsideOrig.getTmpdir(), \
+        self.assertEqual(self.converter_inside_orig.getTmpdir(), \
             os.path.join(os.getenv('GTHOME'), \
             'tools/CorpusTools/corpustools/test/converter_data/fakecorpus/tmp'))
 
-        self.assertEqual(self.converterOutsideOrig.getTmpdir(), \
+        self.assertEqual(self.converter_outside_orig.getTmpdir(), \
             os.path.join(os.getenv('GTHOME'), \
             'tools/CorpusTools/corpustools/test/tmp'))
 
-        self.assertEqual(self.converterInsideFreecorpus.getTmpdir(), \
+        self.assertEqual(self.converter_inside_freecorpus.getTmpdir(), \
             os.path.join(os.getenv('GTFREE'), 'tmp'))
 
     def test_get_corpusdir(self):
-        self.assertEqual(self.converterInsideOrig.getCorpusdir(), \
+        self.assertEqual(self.converter_inside_orig.getCorpusdir(), \
             os.path.join(os.getenv('GTHOME'), \
             'tools/CorpusTools/corpustools/test/converter_data/fakecorpus'))
 
-        self.assertEqual(self.converterOutsideOrig.getCorpusdir(), \
+        self.assertEqual(self.converter_outside_orig.getCorpusdir(), \
             os.path.join(os.getenv('GTHOME'), \
             'tools/CorpusTools/corpustools/test'))
 
-        self.assertEqual(self.converterInsideFreecorpus.getCorpusdir(), \
+        self.assertEqual(self.converter_inside_freecorpus.getCorpusdir(), \
             os.getenv('GTFREE'))
 
     def test_get_converted_name_inside_orig(self):
-        self.assertEqual(self.converterInsideOrig.getConvertedName(),
+        self.assertEqual(self.converter_inside_orig.getConvertedName(),
             os.path.join(os.getenv('GTHOME'), \
             'tools/CorpusTools/corpustools/test/converter_data/fakecorpus/converted/nob/samediggi-article-16.html.xml'))
 
     def test_get_converted_name_outside_orig(self):
-        self.assertEqual(self.converterOutsideOrig.getConvertedName(), \
+        self.assertEqual(self.converter_outside_orig.getConvertedName(), \
             os.path.join(os.getenv('GTHOME'), \
             'tools/CorpusTools/corpustools/test/converted/samediggi-article-48.html.xml'))
 
     def test_get_converted_inside_freecorpus(self):
-        self.assertEqual(self.converterInsideFreecorpus.getConvertedName(), \
+        self.assertEqual(self.converter_inside_freecorpus.getConvertedName(), \
             os.path.join(os.getenv('GTFREE'), \
             'converted/sme/admin/sd/samediggi.no/samediggi-article-48.html.xml'))
 
