@@ -2,7 +2,6 @@
 import unittest
 import codecs
 import io
-import decimal
 import os
 import lxml.etree as etree
 import lxml.doctestcompare as doctestcompare
@@ -13,40 +12,61 @@ from corpustools import converter
 
 class TestConverter(unittest.TestCase):
     def setUp(self):
-        self.converter_inside_orig = converter.Converter('converter_data/fakecorpus/orig/nob/samediggi-article-16.html', True)
+        self.converter_inside_orig = converter.Converter(
+            'converter_data/fakecorpus/orig/nob/samediggi-article-16.html',
+            True)
 
-        self.converter_outside_orig = \
-        converter.Converter('converter_data/samediggi-article-48.html', False)
+        self.converter_outside_orig = converter.Converter(
+            'converter_data/samediggi-article-48.html', False)
 
-        self.converter_inside_freecorpus = \
-        converter.Converter(os.path.join(os.getenv('GTFREE'), \
-        'orig/sme/admin/sd/samediggi.no/samediggi-article-48.html'), False)
+        self.converter_inside_freecorpus = converter.Converter(
+            os.path.join(
+                os.getenv('GTFREE'),
+                'orig/sme/admin/sd/samediggi.no/samediggi-article-48.html'),
+            False)
 
     def test_get_orig(self):
-        self.assertEqual(self.converter_inside_orig.getOrig(), \
-        os.path.join(os.getenv('GTHOME'),\
-        'tools/CorpusTools/corpustools/test/converter_data/fakecorpus/orig/nob/samediggi-article-16.html'))
+        self.assertEqual(
+            self.converter_inside_orig.getOrig(),
+            os.path.join(
+                os.getenv('GTHOME'),
+                'tools/CorpusTools/corpustools/test/converter_data/\
+fakecorpus/orig/nob/samediggi-article-16.html'))
 
-        self.assertEqual(self.converter_outside_orig.getOrig(), \
-        os.path.join(os.getenv('GTHOME'), \
-        'tools/CorpusTools/corpustools/test/converter_data/samediggi-article-48.html'))
+        self.assertEqual(
+            self.converter_outside_orig.getOrig(),
+            os.path.join(
+                os.getenv('GTHOME'),
+                'tools/CorpusTools/corpustools/test/converter_data/\
+samediggi-article-48.html'))
 
-        self.assertEqual(self.converter_inside_freecorpus.getOrig(), \
-        os.path.join(os.getenv('GTFREE'), \
-        'orig/sme/admin/sd/samediggi.no/samediggi-article-48.html'))
+        self.assertEqual(
+            self.converter_inside_freecorpus.getOrig(),
+            os.path.join(
+                os.getenv('GTFREE'),
+                'orig/sme/admin/sd/samediggi.no/samediggi-article-48.html'))
 
     def test_get_xsl(self):
-        self.assertEqual(self.converter_inside_orig.getXsl(), \
-        os.path.join(os.getenv('GTHOME'),\
-        'tools/CorpusTools/corpustools/test/converter_data/fakecorpus/orig/nob/samediggi-article-16.html.xsl'))
+        self.assertEqual(
+            self.converter_inside_orig.getXsl(),
+            os.path.join(
+                os.getenv('GTHOME'),
+                'tools/CorpusTools/corpustools/test/converter_data/fakecorpus/\
+orig/nob/samediggi-article-16.html.xsl'))
 
-        self.assertEqual(self.converter_outside_orig.getXsl(), \
-        os.path.join(os.getenv('GTHOME'), \
-        'tools/CorpusTools/corpustools/test/converter_data/samediggi-article-48.html.xsl'))
+        self.assertEqual(
+            self.converter_outside_orig.getXsl(),
+            os.path.join(
+                os.getenv('GTHOME'),
+                'tools/CorpusTools/corpustools/test/converter_data/\
+samediggi-article-48.html.xsl'))
 
-        self.assertEqual(self.converter_inside_freecorpus.getXsl(), \
-        os.path.join(os.getenv('GTFREE'), \
-        'orig/sme/admin/sd/samediggi.no/samediggi-article-48.html.xsl'))
+        self.assertEqual(
+            self.converter_inside_freecorpus.getXsl(),
+            os.path.join(
+                os.getenv('GTFREE'),
+                'orig/sme/admin/sd/samediggi.no/\
+samediggi-article-48.html.xsl'))
 
     def test_get_test(self):
         self.assertEqual(self.converter_inside_orig.getTest(), True)
@@ -56,43 +76,65 @@ class TestConverter(unittest.TestCase):
         self.assertEqual(self.converter_inside_freecorpus.getTest(), False)
 
     def test_get_tmpdir(self):
-        self.assertEqual(self.converter_inside_orig.getTmpdir(), \
-            os.path.join(os.getenv('GTHOME'), \
-            'tools/CorpusTools/corpustools/test/converter_data/fakecorpus/tmp'))
+        self.assertEqual(
+            self.converter_inside_orig.getTmpdir(),
+            os.path.join(
+                os.getenv('GTHOME'),
+                'tools/CorpusTools/corpustools/test/converter_data/\
+fakecorpus/tmp'))
 
-        self.assertEqual(self.converter_outside_orig.getTmpdir(), \
-            os.path.join(os.getenv('GTHOME'), \
-            'tools/CorpusTools/corpustools/test/tmp'))
+        self.assertEqual(
+            self.converter_outside_orig.getTmpdir(),
+            os.path.join(
+                os.getenv('GTHOME'),
+                'tools/CorpusTools/corpustools/test/tmp'))
 
-        self.assertEqual(self.converter_inside_freecorpus.getTmpdir(), \
+        self.assertEqual(
+            self.converter_inside_freecorpus.getTmpdir(),
             os.path.join(os.getenv('GTFREE'), 'tmp'))
 
     def test_get_corpusdir(self):
-        self.assertEqual(self.converter_inside_orig.getCorpusdir(), \
-            os.path.join(os.getenv('GTHOME'), \
-            'tools/CorpusTools/corpustools/test/converter_data/fakecorpus'))
+        self.assertEqual(
+            self.converter_inside_orig.getCorpusdir(),
+            os.path.join(
+                os.getenv('GTHOME'),
+                'tools/CorpusTools/corpustools/test/converter_data/\
+fakecorpus'))
 
-        self.assertEqual(self.converter_outside_orig.getCorpusdir(), \
-            os.path.join(os.getenv('GTHOME'), \
-            'tools/CorpusTools/corpustools/test'))
+        self.assertEqual(
+            self.converter_outside_orig.getCorpusdir(),
+            os.path.join(
+                os.getenv('GTHOME'),
+                'tools/CorpusTools/corpustools/test'))
 
-        self.assertEqual(self.converter_inside_freecorpus.getCorpusdir(), \
+        self.assertEqual(
+            self.converter_inside_freecorpus.getCorpusdir(),
             os.getenv('GTFREE'))
 
     def test_get_converted_name_inside_orig(self):
-        self.assertEqual(self.converter_inside_orig.getConvertedName(),
-            os.path.join(os.getenv('GTHOME'), \
-            'tools/CorpusTools/corpustools/test/converter_data/fakecorpus/converted/nob/samediggi-article-16.html.xml'))
+        self.assertEqual(
+            self.converter_inside_orig.getConvertedName(),
+            os.path.join(
+                os.getenv('GTHOME'),
+                'tools/CorpusTools/corpustools/test/converter_data/\
+fakecorpus/converted/nob/samediggi-article-16.html.xml'))
 
     def test_get_converted_name_outside_orig(self):
-        self.assertEqual(self.converter_outside_orig.getConvertedName(), \
-            os.path.join(os.getenv('GTHOME'), \
-            'tools/CorpusTools/corpustools/test/converted/samediggi-article-48.html.xml'))
+        self.assertEqual(
+            self.converter_outside_orig.getConvertedName(),
+            os.path.join(
+                os.getenv('GTHOME'),
+                'tools/CorpusTools/corpustools/test/converted/\
+samediggi-article-48.html.xml'))
 
     def test_get_converted_inside_freecorpus(self):
-        self.assertEqual(self.converter_inside_freecorpus.getConvertedName(), \
-            os.path.join(os.getenv('GTFREE'), \
-            'converted/sme/admin/sd/samediggi.no/samediggi-article-48.html.xml'))
+        self.assertEqual(
+            self.converter_inside_freecorpus.getConvertedName(),
+            os.path.join(
+                os.getenv('GTFREE'),
+                'converted/sme/admin/sd/samediggi.no/\
+samediggi-article-48.html.xml'))
+
 
 class XMLTester(unittest.TestCase):
     def assertXmlEqual(self, got, want):
@@ -100,12 +142,16 @@ class XMLTester(unittest.TestCase):
         """
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
+            message = checker.output_difference(
+                doctest.Example("", want), got, 0).encode('utf-8')
             raise AssertionError(message)
+
 
 class TestAvvirConverter(XMLTester):
     def setUp(self):
-        self.avvir = converter.AvvirConverter('converter_data/fakecorpus/orig/sme/news/Avvir_xml-filer/Avvir_2008_xml-filer/02nr028av.article.xml')
+        self.avvir = converter.AvvirConverter(
+            'converter_data/fakecorpus/orig/sme/news/Avvir_xml-filer/\
+Avvir_2008_xml-filer/02nr028av.article.xml')
 
     def test_convert2intermediate(self):
         got = self.avvir.convert2intermediate()
@@ -113,30 +159,37 @@ class TestAvvirConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+
 class TestSVGConverter(XMLTester):
     def setUp(self):
-        self.svg = converter.SVGConverter('converter_data/Riddu_Riddu_avis_TXT.200923.svg')
+        self.svg = converter.SVGConverter(
+            'converter_data/Riddu_Riddu_avis_TXT.200923.svg')
 
     def test_convert2intermediate(self):
         got = self.svg.convert2intermediate()
-        want = etree.parse('converter_data/Riddu_Riddu_avis_TXT.200923.svg.xml')
+        want = etree.parse(
+            'converter_data/Riddu_Riddu_avis_TXT.200923.svg.xml')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+
 class TestPlaintextConverter(XMLTester):
     def test_to_unicode(self):
-        plaintext = converter.PlaintextConverter('converter_data/winsami2-test-ws2.txt')
+        plaintext = converter.PlaintextConverter(
+            'converter_data/winsami2-test-ws2.txt')
         got = plaintext.toUnicode()
 
         # Ensure that the data in want is unicode
-        file_ = codecs.open('converter_data/winsami2-test-utf8.txt', encoding='utf8')
+        file_ = codecs.open(
+            'converter_data/winsami2-test-utf8.txt', encoding='utf8')
         want = file_.read()
         file_.close()
 
         self.assertEqual(got, want)
 
     def test_plaintext(self):
-        plaintext = converter.PlaintextConverter('converter_data/plaintext.txt')
+        plaintext = converter.PlaintextConverter(
+            'converter_data/plaintext.txt')
         got = plaintext.convert2intermediate()
         want = etree.parse('converter_data/plaintext.xml')
 
@@ -275,6 +328,7 @@ class TestPlaintextConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+
 class TestPDFConverter(XMLTester):
     def test_pdf_converter(self):
         pdfdocument = converter.PDFConverter('converter_data/pdf-test.pdf')
@@ -282,6 +336,7 @@ class TestPDFConverter(XMLTester):
         want = etree.parse('converter_data/pdf-test.xml')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
 
 class TestDocConverter(XMLTester):
     def setUp(self):
@@ -293,9 +348,11 @@ class TestDocConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+
 class TestBiblexmlConverter(XMLTester):
     def setUp(self):
-        self.testdoc = converter.BiblexmlConverter('converter_data/bible-test.xml')
+        self.testdoc = converter.BiblexmlConverter(
+            'converter_data/bible-test.xml')
 
     def test_convert2intermediate(self):
         got = self.testdoc.convert2intermediate()
@@ -303,9 +360,11 @@ class TestBiblexmlConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+
 class TestHTMLConverter(XMLTester):
     def setUp(self):
-        self.testhtml = converter.HTMLConverter('converter_data/samediggi-article-48s.html')
+        self.testhtml = converter.HTMLConverter(
+            'converter_data/samediggi-article-48s.html')
 
     def test_convert2intermediate(self):
         got = self.testhtml.convert2intermediate()
@@ -313,104 +372,246 @@ class TestHTMLConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+
 class TestHTMLContentConverter(XMLTester):
     def test_remove_op(self):
-        got = converter.HTMLContentConverter('with-o:p.html', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, sj&#248;mat og marknad - regjeringen.no</title></head><body onload="javascript:Operatest();"><o:p><font face="Times New Roman" size="3">&nbsp;</font></o:p></body></html>').tidy()
+        got = converter.HTMLContentConverter(
+            'with-o:p.html',
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" \
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" \
+            lang="nn"><head><title>regjeringen.no</title></head>\
+            <body onload="javascript:Operatest();">\
+            <o:p></o:p></body></html>').tidy()
 
-        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, sj&#248;mat og marknad - regjeringen.no</title></head><body onload="javascript:Operatest();"></body></html>'
+        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"\
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html \
+        xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head>\
+        <title>regjeringen.no</title></head>\
+        <body onload="javascript:Operatest();"></body></html>'
 
         self.assertXmlEqual(got, want)
 
     def test_remove_fblike(self):
-        got = converter.HTMLContentConverter('with-fb:like.html', '<html xmlns="http://www.w3.org/1999/xhtml"><body><fb:like send="true" show_faces="false" action="recommend"></fb:like></body></html>').tidy()
+        got = converter.HTMLContentConverter(
+            'with-fb:like.html',
+            '<html xmlns="http://www.w3.org/1999/xhtml"><body><fb:like \
+            send="true" show_faces="false" action="recommend">\
+            </fb:like></body></html>').tidy()
 
-        want = '<html xmlns="http://www.w3.org/1999/xhtml"><head><title/></head><body></body></html>'
+        want = '<html xmlns="http://www.w3.org/1999/xhtml"><head><title/>\
+        </head><body></body></html>'
 
         self.assertXmlEqual(got, want)
 
     def test_remove_fbcomments(self):
-        got = converter.HTMLContentConverter('with-fb:comments.html', '<html xmlns="http://www.w3.org/1999/xhtml"><body><fb:comments href="http://www.nord-salten.no/no/nyheter/samisk/hellmocuhppa.4032" num_posts="2" width="750"></fb:comments></body></html>').tidy()
+        got = converter.HTMLContentConverter(
+            'with-fb:comments.html',
+            '<html xmlns="http://www.w3.org/1999/xhtml"><body><fb:comments \
+            href="http://www.nord-salten.no/" num_posts="2" width="750">\
+            </fb:comments></body></html>').tidy()
 
-        want = '<html xmlns="http://www.w3.org/1999/xhtml"><head><title/></head><body></body></html>'
+        want = '<html xmlns="http://www.w3.org/1999/xhtml"><head><title/>\
+        </head><body></body></html>'
 
         self.assertXmlEqual(got, want)
 
     def test_remove_gplusone(self):
-        got = converter.HTMLContentConverter('with-g:plusone.html', '<html xmlns="http://www.w3.org/1999/xhtml"><body><g:plusone size="standard" count="true"></g:plusone></body></html>').tidy()
+        got = converter.HTMLContentConverter(
+            'with-g:plusone.html',
+            '<html xmlns="http://www.w3.org/1999/xhtml"><body>\
+            <g:plusone size="standard" count="true"></g:plusone>\
+            </body></html>').tidy()
 
-        want = '<html xmlns="http://www.w3.org/1999/xhtml"><head><title/></head><body></body></html>'
+        want = '<html xmlns="http://www.w3.org/1999/xhtml"><head><title/>\
+        </head><body></body></html>'
 
         self.assertXmlEqual(got, want)
 
     def test_remove_st1_country_region(self):
-        got = converter.HTMLContentConverter('with-o:p.html', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, sj&#248;mat og marknad - regjeringen.no</title></head><body onload="javascript:Operatest();"><st1:country-region w:st="on"><st1:place w:st="on">Norway</st1:place></st1:country-region></body></html>').tidy()
+        got = converter.HTMLContentConverter(
+            'with-o:p.html',
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"\
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" \
+            lang="nn"><head><title>regjeringen.no</title></head>\
+            <body onload="javascript:Operatest();">\
+            <st1:country-region w:st="on"></st1:country-region>\
+            </body></html>').tidy()
 
-        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, sj&#248;mat og marknad - regjeringen.no</title></head><body onload="javascript:Operatest();"></body></html>'
+        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"\
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
+        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" \
+        lang="nn"><head><title>regjeringen.no</title></head>\
+        <body onload="javascript:Operatest();"></body></html>'
 
         self.assertXmlEqual(got, want)
 
     def test_remove_st1_metric_converter(self):
-        got = converter.HTMLContentConverter('with-o:p.html', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, sj&#248;mat og marknad - regjeringen.no</title></head><body onload="javascript:Operatest();"><st1:metricconverter productid="1,85 G"><span lang="I-SAMI-NO" style="mso-ansi-language: I-SAMI-NO">1,85 G</span></st1:metricconverter></body></html>').tidy()
+        got = converter.HTMLContentConverter(
+            'with-o:p.html',
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" \
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" \
+            lang="nn"><head><title>regjeringen.no</title></head>\
+            <body onload="javascript:Operatest();">\
+            <st1:metricconverter productid="1,85 G">\
+            </st1:metricconverter></body></html>').tidy()
 
-        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, sj&#248;mat og marknad - regjeringen.no</title></head><body onload="javascript:Operatest();"></body></html>'
+        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"\
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
+        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" \
+        lang="nn"><head><title>regjeringen.no</title></head>\
+        <body onload="javascript:Operatest();"></body></html>'
 
         self.assertXmlEqual(got, want)
 
     def test_remove_v_shape_type(self):
-        got = converter.HTMLContentConverter('with-o:p.html', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, sj&#248;mat og marknad - regjeringen.no</title></head><body onload="javascript:Operatest();"><v:shapetype id="_x0000_t75" path="m@4@5l@4@11@9@11@9@5xe" stroked="f" filled="f" o:preferrelative="t" o:spt="75" coordsize="21600,21600"> <v:stroke joinstyle="miter"></v:stroke><v:formulas><v:f eqn="if lineDrawn pixelLineWidth 0"></v:f><v:f eqn="sum @0 1 0"></v:f><v:f eqn="sum 0 0 @1"></v:f><v:f eqn="prod @2 1 2"></v:f><v:f eqn="prod @3 21600 pixelWidth"></v:f><v:f eqn="prod @3 21600 pixelHeight"></v:f><v:f eqn="sum @0 0 1"></v:f><v:f eqn="prod @6 1 2"></v:f><v:f eqn="prod @7 21600 pixelWidth"></v:f><v:f eqn="sum @8 21600 0"></v:f><v:f eqn="prod @7 21600 pixelHeight"></v:f><v:f eqn="sum @10 21600 0"></v:f></v:formulas><v:path o:connecttype="rect" gradientshapeok="t" o:extrusionok="f"></v:path><?xml:namespace prefix = o ns = "urn:schemas-microsoft-com:office:office"/?><o:lock aspectratio="t" v:ext="edit"></o:lock></v:shapetype></body></html>').tidy()
+        got = converter.HTMLContentConverter(
+            'with-o:p.html',
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" \
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" \
+            lang="nn"><head><title>regjeringen.no</title></head>\
+            <body onload="javascript:Operatest();">\
+            <v:shapetype></v:shapetype></body></html>').tidy()
 
-        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, sj&#248;mat og marknad - regjeringen.no</title></head><body onload="javascript:Operatest();"></body></html>'
+        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"\
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
+        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn">\
+        <head><title>regjeringen.no</title></head>\
+        <body onload="javascript:Operatest();"></body></html>'
 
         self.assertXmlEqual(got, want)
 
     def test_remove_v_shape(self):
-        got = converter.HTMLContentConverter(r'''with-o:p.html''', r'''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, sj&#248;mat og marknad - regjeringen.no</title></head><body onload="javascript:Operatest();"><v:shape style="WIDTH: 405pt; HEIGHT: 202.5pt" id="_x0000_i1025" type="#_x0000_t75" alt="Jens Stoltenberg, Dmitrij Medvedjev og Jonas Gahr Støre. Foto: Statsministerens kontor"><v:imagedata src="file:///C:\DOCUME~1\oeoe\LOCALS~1\Temp\msohtml1\01\clip_image001.jpg" o:href="http://www.regjeringen.no/upload/SMK/Nyhetsbilder/2010/Stoltenberg-og-Medvedjev_samtaler1_540x270.jpg"></v:imagedata></v:shape></body></html>''').tidy()
+        got = converter.HTMLContentConverter(
+            'with-o:p.html',
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" \
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" \
+            lang="nn"><head><title>regjeringen.no</title></head>\
+            <body onload="javascript:Operatest();"><v:shape></v:shape>\
+            </body></html>').tidy()
 
-        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, sj&#248;mat og marknad - regjeringen.no</title></head><body onload="javascript:Operatest();"></body></html>'
+        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 \
+        Transitional//EN" \
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
+        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn">\
+        <head><title>regjeringen.no</title></head>\
+        <body onload="javascript:Operatest();"></body></html>'
 
         self.assertXmlEqual(got, want)
 
     def test_remove_area(self):
-        got = converter.HTMLContentConverter('with-o:p.html', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, sj&#248;mat og marknad - regjeringen.no</title></head><body onload="javascript:Operatest();"><area title="Suodjalusministtar" href="/fd/sami/p30007057/p30007075/bn.html" shape="rect" alt="Suodjalusministtar" coords="230,10,374,24" /></body></html>').tidy()
+        got = converter.HTMLContentConverter(
+            'with-o:p.html',
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" \
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
+            <html xmlns="http://www.w3.org/1999/xhtml" \
+            xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, \
+            sj&#248;mat og marknad - regjeringen.no</title></head>\
+            <body onload="javascript:Operatest();">\
+            <area title="Suodjalusministtar" \
+            href="/fd/sami/p30007057/p30007075/bn.html" shape="rect" \
+            alt="Suodjalusministtar" coords="230,10,374,24" />\
+            </body></html>').tidy()
 
-        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, sj&#248;mat og marknad - regjeringen.no</title></head><body onload="javascript:Operatest();"></body></html>'
+        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 \
+        Transitional//EN" \
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
+        <html xmlns="http://www.w3.org/1999/xhtml" \
+        xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, \
+        sj&#248;mat og marknad - regjeringen.no</title></head>\
+        <body onload="javascript:Operatest();"></body></html>'
 
         self.assertXmlEqual(got, want)
 
     def test_remove_object(self):
-        got = converter.HTMLContentConverter('with-o:p.html', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, sj&#248;mat og marknad - regjeringen.no</title></head><body onload="javascript:Operatest();"><object width="640" height="385"><param name="movie" value="http://www.youtube.com/v/1HH5pmM4SAs&amp;hl=nb_NO&amp;fs=1&amp;rel=0" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed src="http://www.youtube.com/v/1HH5pmM4SAs&amp;hl=nb_NO&amp;fs=1&amp;rel=0" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="640" height="385"></embed></object></body></html>').tidy()
+        got = converter.HTMLContentConverter(
+            'with-o:p.html',
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" \
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
+            <html xmlns="http://www.w3.org/1999/xhtml" \
+            xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, \
+            sj&#248;mat og marknad - regjeringen.no</title></head>\
+            <body onload="javascript:Operatest();">\
+            <object width="640" height="385"><embed></embed></object>\
+            </body></html>').tidy()
 
-        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, sj&#248;mat og marknad - regjeringen.no</title></head><body onload="javascript:Operatest();"></body></html>'
+        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 \
+        Transitional//EN" \
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
+        <html xmlns="http://www.w3.org/1999/xhtml" \
+        xml:lang="nn" lang="nn"><head>\
+        <title>Avdeling for havbruk, sj&#248;mat og marknad - \
+        regjeringen.no</title></head>\
+        <body onload="javascript:Operatest();"></body></html>'
 
         self.assertXmlEqual(got, want)
 
     def test_remove_comment(self):
-        got = converter.HTMLContentConverter('with-o:p.html', '<html><body><b><!--Hey, buddy. Want to buy a used parser?--></b></body></html>').tidy()
+        got = converter.HTMLContentConverter(
+            'with-o:p.html',
+            '<html><body><b><!--Hey, buddy. --></b></body></html>').tidy()
 
-        want = '<html xmlns="http://www.w3.org/1999/xhtml"><head><title/></head><body></body></html>'
+        want = '<html xmlns="http://www.w3.org/1999/xhtml">\
+        <head><title/></head><body></body></html>'
 
         self.assertXmlEqual(got, want)
 
     def test_remove_style(self):
-        got = converter.HTMLContentConverter('with-o:p.html', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"> <head>  <style id="page-skin-1" type="text/css">   <!--------------------------------------------------->  </style> </head> <body> </body></html>').tidy()
+        got = converter.HTMLContentConverter(
+            'with-o:p.html',
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" \
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\
+            <html xmlns="http://www.w3.org/1999/xhtml"> <head>  \
+            <style id="page-skin-1" type="text/css"></style> </head> \
+            <body> </body></html>').tidy()
 
-        want = '<html xmlns="http://www.w3.org/1999/xhtml"><head><title/></head><body/></html>'
+        want = '<html xmlns="http://www.w3.org/1999/xhtml">\
+        <head><title/></head><body/></html>'
 
         self.assertXmlEqual(got, want)
 
     def test_remove_script(self):
-        got = converter.HTMLContentConverter('with-o:p.html', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"> <head><script type="text/javascript">(function() { var a=window;function e(b){this.t={};this.tick=function(c,h,d){d=d?d:(new Date).getTime();this.t[c]=[d,h]};this.tick("start",null,b)}var f=new e;a.jstiming={Timer:e,load:f};try{a.jstiming.pt=a.gtbExternal&&a.gtbExternal.pageT()||a.external&&a.external.pageT}catch(g){};a.tickAboveFold=function(b){b=b;var c=0;if(b.offsetParent){do c+=b.offsetTop;while(b=b.offsetParent)}b=c;b<=750&&a.jstiming.load.tick("aft")};var i=false;function j(){if(!i){i=true;a.jstiming.load.tick("firstScrollTime")}}a.addEventListener?a.addEventListener("scroll",j,false):a.attachEvent("onscroll",j); })();</script></head> <body> </body></html>').tidy()
+        got = converter.HTMLContentConverter(
+            'with-o:p.html',
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 \
+            Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\
+            <html xmlns="http://www.w3.org/1999/xhtml"> <head>\
+            <script type="text/javascript">()();</script></head> \
+            <body> </body></html>').tidy()
 
-        want = '<html xmlns="http://www.w3.org/1999/xhtml"><head><title/></head><body/></html>'
+        want = '<html xmlns="http://www.w3.org/1999/xhtml">\
+        <head><title/></head><body/></html>'
 
         self.assertXmlEqual(got, want)
 
     def test_add_p_around_text(self):
-        got = converter.HTMLContentConverter('withoutp.html', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html><head><meta http-equiv="Content-type" content="text/html; charset=utf-8"><title>– Den utdøende stammes frykt</title><link rel="stylesheet" type="text/css" href="ssh1.css" /></head><body><h3>VI</h3>... Stockfleth<a href=#[1]>[1]</a> saa<p>Dette høres<h3>VII</h3>... Finnerne<p>Der</body></html>').tidy()
+        got = converter.HTMLContentConverter(
+            'withoutp.html',
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
+            <html><head><meta http-equiv="Content-type" \
+            content="text/html; charset=utf-8">\
+            <title>– Den utdøende stammes frykt</title>\
+            <link rel="stylesheet" type="text/css" href="ssh1.css" />\
+            </head><body><h3>VI</h3>... Stockfleth<a href=#[1]>\
+            [1]</a> saa<p>Dette høres<h3>VII</h3>... Finnerne<p>Der</body>\
+            </html>').tidy()
 
-        want = '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>– Den utdøende stammes frykt</title>  <link rel="stylesheet" type="text/css" href="ssh1.css" /></head><body>  <h3>VI</h3>  <p>... Stockfleth<a href="#[1]">[1]</a> saa</p>  <p>Dette høres</p>  <h3>VII</h3>  <p>... Finnerne</p>  <p>Der</p></body></html>'
+        want = '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD \
+        XHTML 1.0 Strict//EN"    \
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\
+        <html xmlns="http://www.w3.org/1999/xhtml"><head><title>\
+        – Den utdøende stammes frykt</title>  \
+        <link rel="stylesheet" type="text/css" href="ssh1.css" />\
+        </head><body>  <h3>VI</h3>  <p>... Stockfleth<a href="#[1]">[1]</a>\
+        saa</p>  <p>Dette høres</p>  <h3>VII</h3>  <p>... Finnerne</p>\
+        <p>Der</p></body></html>'
 
         self.assertXmlEqual(got, want)
+
 
 class TestRTFConverter(XMLTester):
     def setUp(self):
@@ -422,11 +623,14 @@ class TestRTFConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+
 class TestDocumentFixer(XMLTester):
     def test_fix__body_encoding(self):
-        newstext = converter.PlaintextConverter('converter_data/assu97-mac-sami.txt')
+        newstext = converter.PlaintextConverter(
+            'converter_data/assu97-mac-sami.txt')
 
-        document_fixer = converter.DocumentFixer(newstext.convert2intermediate())
+        document_fixer = converter.DocumentFixer(
+            newstext.convert2intermediate())
         got = document_fixer.fixBodyEncoding()
 
         want = etree.parse('converter_data/assu97-fixedutf8.xml')
@@ -434,8 +638,10 @@ class TestDocumentFixer(XMLTester):
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_replace_ligatures(self):
-        svgtext = converter.SVGConverter('converter_data/Riddu_Riddu_avis_TXT.200923.svg')
-        document_fixer = converter.DocumentFixer(etree.fromstring(etree.tostring(svgtext.convert2intermediate())))
+        svgtext = converter.SVGConverter(
+            'converter_data/Riddu_Riddu_avis_TXT.200923.svg')
+        document_fixer = converter.DocumentFixer(
+            etree.fromstring(etree.tostring(svgtext.convert2intermediate())))
         got = document_fixer.fixBodyEncoding()
 
         want = etree.parse('converter_data/Riddu_Riddu_avis_TXT.200923.xml')
@@ -444,101 +650,159 @@ class TestDocumentFixer(XMLTester):
 
     def test_simple_detect_quote1(self):
         orig_paragraph = '<p>bla bla "bla bla" bla bla </p>'
-        expected_paragraph = '<p>bla bla <span type="quote">"bla bla"</span> bla bla</p>'
+        expected_paragraph = '<p>bla bla <span type="quote">"bla bla"\
+        </span> bla bla</p>'
 
-        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(
+            etree.parse(
+                'converter_data/samediggi-article-48s-before-lang-detection-\
+with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(
+            etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_simple_detect_quote2(self):
         orig_paragraph = '<p>bla bla “bla bla” bla bla</p>'
-        expected_paragraph = '<p>bla bla <span type="quote">“bla bla”</span> bla bla</p>'
+        expected_paragraph = '<p>bla bla <span type="quote">“bla bla”\
+        </span> bla bla</p>'
 
-        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(
+            etree.parse(
+                'converter_data/samediggi-article-48s-before-lang-detection-\
+with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(
+            etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_simple_detect_quote3(self):
         orig_paragraph = '<p>bla bla «bla bla» bla bla</p>'
-        expected_paragraph = '<p>bla bla <span type="quote">«bla bla»</span> bla bla</p>'
+        expected_paragraph = '<p>bla bla <span type="quote">«bla bla»\
+        </span> bla bla</p>'
 
-        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(
+            etree.parse(
+                'converter_data/samediggi-article-48s-before-lang-detection-\
+with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(
+            etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_simple_detect_quote4(self):
-        orig_paragraph = '<p type="title">Sámegiel čálamearkkat Windows XP várás.</p>'
-        expected_paragraph = '<p type="title">Sámegiel čálamearkkat Windows XP várás.</p>'
+        orig_paragraph = '<p type="title">Sámegiel čálamearkkat Windows \
+        XP várás.</p>'
+        expected_paragraph = '<p type="title">Sámegiel čálamearkkat Windows \
+        XP várás.</p>'
 
-        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(
+            etree.parse(
+                'converter_data/samediggi-article-48s-before-lang-detection-\
+with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(
+            etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_simple_detect_quote2_quotes(self):
         orig_paragraph = '<p>bla bla «bla bla» bla bla «bla bla» bla bla</p>'
-        expected_paragraph = '<p>bla bla <span type="quote">«bla bla»</span> bla bla <span type="quote">«bla bla»</span> bla bla</p>'
+        expected_paragraph = '<p>bla bla <span type="quote">«bla bla»\
+        </span> bla bla <span type="quote">«bla bla»</span> bla bla</p>'
 
-        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(
+            etree.parse(
+                'converter_data/samediggi-article-48s-before-lang-detection-\
+with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(
+            etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_detect_quote_with_following_tag(self):
         orig_paragraph = '<p>bla bla «bla bla» <em>bla bla</em></p>'
-        expected_paragraph = '<p>bla bla <span type="quote">«bla bla»</span> <em>bla bla</em></p>'
+        expected_paragraph = '<p>bla bla <span type="quote">«bla bla»\
+        </span> <em>bla bla</em></p>'
 
-        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(
+            etree.parse(
+                'converter_data/samediggi-article-48s-before-lang-detection-\
+with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(
+            etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_detect_quote_with_tag_infront(self):
         orig_paragraph = '<p>bla bla <em>bla bla</em> «bla bla»</p>'
-        expected_paragraph = '<p>bla bla <em>bla bla</em> <span type="quote">«bla bla»</span></p>'
+        expected_paragraph = '<p>bla bla <em>bla bla</em> \
+        <span type="quote">«bla bla»</span></p>'
 
-        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(
+            etree.parse(
+                'converter_data/samediggi-article-48s-before-lang-detection-\
+with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(
+            etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_detect_quote_within_tag(self):
         orig_paragraph = '<p>bla bla <em>bla bla «bla bla»</em></p>'
-        expected_paragraph = '<p>bla bla <em>bla bla <span type="quote">«bla bla»</span></em></p>'
+        expected_paragraph = '<p>bla bla <em>bla bla <span type="quote">\
+        «bla bla»</span></em></p>'
 
-        document_fixer = converter.DocumentFixer(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(etree.fromstring(orig_paragraph))
+        document_fixer = converter.DocumentFixer(
+            etree.parse(
+                'converter_data/samediggi-article-48s-before-lang-detection-\
+with-multilingual-tag.xml'))
+        got_paragraph = document_fixer.detectQuote(
+            etree.fromstring(orig_paragraph))
 
-        self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
+        self.assertXmlEqual(etree.tostring(got_paragraph),
+                            expected_paragraph)
 
     def test_word_count(self):
-        orig_doc = etree.parse(io.BytesIO('<document xml:lang="sma" id="no_id"><header><title/><genre/><author><unknown/></author><availability><free/></availability><multilingual/></header><body><p>Bïevnesh naasjovnalen pryövoej bïjre</p><p>2008</p><p>Bïevnesh eejhtegidie, tjidtjieh aehtjieh bielide naasjovnalen pryövoej bïjre giej leah maanah 5. jïh 8. tsiehkine</p></body></document>'))
+        orig_doc = etree.parse(
+            io.BytesIO('<document xml:lang="sma" id="no_id"><header><title/>\
+                <genre/><author><unknown/></author><availability><free/>\
+                </availability><multilingual/></header><body><p>Bïevnesh \
+                naasjovnalen pryövoej bïjre</p><p>2008</p><p>Bïevnesh \
+                eejhtegidie, tjidtjieh aehtjieh bielide naasjovnalen \
+                pryövoej bïjre giej leah maanah 5. jïh 8. tsiehkine</p>\
+                </body></document>'))
 
-        expected_doc = '<document xml:lang="sma" id="no_id"><header><title/><genre/><author><unknown/></author><wordcount>20</wordcount><availability><free/></availability><multilingual/></header><body><p>Bïevnesh naasjovnalen pryövoej bïjre</p><p>2008</p><p>Bïevnesh eejhtegidie, tjidtjieh aehtjieh bielide naasjovnalen pryövoej bïjre giej leah maanah 5. jïh 8. tsiehkine</p></body></document>'
+        expected_doc = '<document xml:lang="sma" id="no_id"><header>\
+        <title/><genre/><author><unknown/></author><wordcount>20</wordcount>\
+        <availability><free/></availability><multilingual/></header><body>\
+        <p>Bïevnesh naasjovnalen pryövoej bïjre</p><p>2008</p><p>Bïevnesh \
+        eejhtegidie, tjidtjieh aehtjieh bielide naasjovnalen pryövoej bïjre \
+        giej leah maanah 5. jïh 8. tsiehkine</p></body></document>'
 
         document_fixer = converter.DocumentFixer(orig_doc)
         document_fixer.setWordCount()
 
         self.assertXmlEqual(etree.tostring(document_fixer.etree), expected_doc)
 
+
 class TestXslMaker(XMLTester):
     def test_get_xsl(self):
-        xslmaker = converter.XslMaker('converter_data/samediggi-article-48.html.xsl')
+        xslmaker = converter.XslMaker('converter_data/samediggi-article-48.\
+html.xsl')
         got = xslmaker.getXsl()
 
         want = etree.parse('converter_data/test.xsl')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+
 class TestLanguageDetector(XMLTester):
     """
     Test the functionality of LanguageDetector
     """
     def setUp(self):
-        self.document = etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml')
+        self.document = etree.parse('converter_data/samediggi-article-48s-\
+before-lang-detection-with-multilingual-tag.xml')
 
     def test_get_main_lang(self):
         test_main_lang = 'sme'
@@ -546,64 +810,148 @@ class TestLanguageDetector(XMLTester):
         self.assertEqual(test_main_lang, language_detector.getMainlang())
 
     def test_set_paragraph_language_mainlanguage(self):
-        orig_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat ja bidjat dihtorii. Boađus lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat ráhkadan.</p>'
-        expected_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat ja bidjat dihtorii. Boađus lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat ráhkadan.</p>'
+        orig_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda \
+        giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša \
+        ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. \
+        Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat \
+        ja bidjat dihtorii. Boađus lea ahte buot boahttevaš Microsoft \
+        prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat \
+        go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, \
+        ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat \
+        ráhkadan.</p>'
+        expected_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda \
+        giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša \
+        ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. \
+        Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat \
+        ja bidjat dihtorii. Boađus lea ahte buot boahttevaš Microsoft \
+        prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat \
+        go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, \
+        ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat \
+        ráhkadan.</p>'
 
         language_detector = converter.LanguageDetector(self.document)
-        got_paragraph = language_detector.setParagraphLanguage(etree.fromstring(orig_paragraph))
+        got_paragraph = language_detector.setParagraphLanguage(
+            etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_set_paragraph_language_mainlanguage_quote_mainlang(self):
-        orig_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. <span type="quote">«Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat ja bidjat dihtorii»</span>. Boađus lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat ráhkadan.</p>'
-        expected_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. <span type="quote">«Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat ja bidjat dihtorii»</span>. Boađus lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat ráhkadan.</p>'
+        orig_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda \
+        giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša \
+        ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. \
+        <span type="quote">«Buot leat dás dán fitnodaga Service Pack \
+        2-páhkas, maid ferte viežžat ja bidjat dihtorii»</span>. Boađus lea \
+        ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge \
+        sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris \
+        dahje e-poastta namahussajis, ja go čálát sámegillii dakkár \
+        prográmmain, maid Microsoft ii leat ráhkadan.</p>'
+        expected_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda \
+        giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša \
+        ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. \
+        <span type="quote">«Buot leat dás dán fitnodaga Service Pack \
+        2-páhkas, maid ferte viežžat ja bidjat dihtorii»</span>. Boađus lea\
+        ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge \
+        sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris \
+        dahje e-poastta namahussajis, ja go čálát sámegillii dakkár \
+        prográmmain, maid Microsoft ii leat ráhkadan.</p>'
 
         language_detector = converter.LanguageDetector(self.document)
-        got_paragraph = language_detector.setParagraphLanguage(etree.fromstring(orig_paragraph))
+        got_paragraph = language_detector.setParagraphLanguage(
+            etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_set_paragraph_language_mainlanguage_quote_not_mainlang(self):
-        orig_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. <span type="quote">«Alt finnes i den foreliggende Service Pack 2 fra selskapet, som må lastes ned og installeres på din datamaskin. Konsekvensen er at all framtidig programvare fra Microsoft vil inneholde støtte for samisk»</span>. Boađus lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat ráhkadan.</p>'
-        expected_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. <span type="quote" xml:lang="nob">«Alt finnes i den foreliggende Service Pack 2 fra selskapet, som må lastes ned og installeres på din datamaskin. Konsekvensen er at all framtidig programvare fra Microsoft vil inneholde støtte for samisk»</span>. Boađus lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat ráhkadan.</p>'
+        orig_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda \
+        giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša \
+        ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. \
+        <span type="quote">«Alt finnes i den foreliggende Service Pack 2 fra \
+        selskapet, som må lastes ned og installeres på din datamaskin. \
+        Konsekvensen er at all framtidig programvare fra Microsoft vil \
+        inneholde støtte for samisk»</span>. Boađus lea ahte buot boahttevaš \
+        Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet deaividit \
+        váttisvuođat go čálát sámegiela Outlook-kaleandaris dahje e-poastta \
+        namahussajis, ja go čálát sámegillii dakkár prográmmain, maid \
+        Microsoft ii leat ráhkadan.</p>'
+        expected_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda \
+        giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša \
+        ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. \
+        <span type="quote" xml:lang="nob">«Alt finnes i den foreliggende \
+        Service Pack 2 fra selskapet, som må lastes ned og installeres på din \
+        datamaskin. Konsekvensen er at all framtidig programvare fra \
+        Microsoft vil inneholde støtte for samisk»</span>. Boađus lea ahte \
+        buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge \
+        sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris \
+        dahje e-poastta namahussajis, ja go čálát sámegillii dakkár \
+        prográmmain, maid Microsoft ii leat ráhkadan.</p>'
 
         language_detector = converter.LanguageDetector(self.document)
-        got_paragraph = language_detector.setParagraphLanguage(etree.fromstring(orig_paragraph))
+        got_paragraph = language_detector.setParagraphLanguage(
+            etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_set_paragraph_language_not_mainlanguage(self):
-        orig_paragraph = '<p>Samisk er fra høsten 2004 et standard språkvalg Microsofts operativsystem Windows XP. I praksis betyr det at samiske bokstaver og formater kan velges i alle programmer. Alt finnes i den foreliggende Service Pack 2 fra selskapet, som må lastes ned og installeres på din datamaskin. Konsekvensen er at all framtidig programvare fra Microsoft vil inneholde støtte for samisk. Du vil imidlertid fremdeles kunne oppleve problemer med å skrive samisk i Outlook-kalenderen eller i tittel-feltet i e-post, og med å skrive samisk i programmer levert av andre enn Microsoft.</p>'
-        expected_paragraph = '<p xml:lang="nob">Samisk er fra høsten 2004 et standard språkvalg Microsofts operativsystem Windows XP. I praksis betyr det at samiske bokstaver og formater kan velges i alle programmer. Alt finnes i den foreliggende Service Pack 2 fra selskapet, som må lastes ned og installeres på din datamaskin. Konsekvensen er at all framtidig programvare fra Microsoft vil inneholde støtte for samisk. Du vil imidlertid fremdeles kunne oppleve problemer med å skrive samisk i Outlook-kalenderen eller i tittel-feltet i e-post, og med å skrive samisk i programmer levert av andre enn Microsoft.</p>'
+        orig_paragraph = '<p>Samisk er fra høsten 2004 et standard språkvalg \
+        Microsofts operativsystem Windows XP. I praksis betyr det at samiske \
+        bokstaver og formater kan velges i alle programmer. Alt finnes i den \
+        foreliggende Service Pack 2 fra selskapet, som må lastes ned og \
+        installeres på din datamaskin. Konsekvensen er at all framtidig \
+        programvare fra Microsoft vil inneholde støtte for samisk. Du vil \
+        imidlertid fremdeles kunne oppleve problemer med å skrive samisk i \
+        Outlook-kalenderen eller i tittel-feltet i e-post, og med å skrive \
+        samisk i programmer levert av andre enn Microsoft.</p>'
+        expected_paragraph = '<p xml:lang="nob">Samisk er fra høsten 2004 et \
+        standard språkvalg Microsofts operativsystem Windows XP. I praksis \
+        betyr det at samiske bokstaver og formater kan velges i alle \
+        programmer. Alt finnes i den foreliggende Service Pack 2 fra \
+        selskapet, som må lastes ned og installeres på din datamaskin. \
+        Konsekvensen er at all framtidig programvare fra Microsoft vil \
+        inneholde støtte for samisk. Du vil imidlertid fremdeles kunne \
+        oppleve problemer med å skrive samisk i Outlook-kalenderen eller \
+        i tittel-feltet i e-post, og med å skrive samisk i programmer \
+        levert av andre enn Microsoft.</p>'
 
         language_detector = converter.LanguageDetector(self.document)
-        got_paragraph = language_detector.setParagraphLanguage(etree.fromstring(orig_paragraph))
+        got_paragraph = language_detector.setParagraphLanguage(
+            etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_remove_quote(self):
-        orig_paragraph = '<p>bla bla <span type="quote">bla1 bla</span> ble ble <span type="quote">bla2 bla</span> <b>bli</b> bli <span type="quote">bla3 bla</span> blo blo</p>'
+        orig_paragraph = '<p>bla bla <span type="quote">bla1 bla</span> \
+ble ble <span type="quote">bla2 bla</span> <b>bli</b> bli \
+<span type="quote">bla3 bla</span> blo blo</p>'
         expected_paragraph = 'bla bla  ble ble  bli bli  blo blo'
 
         language_detector = converter.LanguageDetector(self.document)
-        got_paragraph = language_detector.removeQuote(etree.fromstring(orig_paragraph))
+        got_paragraph = language_detector.removeQuote(
+            etree.fromstring(orig_paragraph))
 
         self.assertEqual(got_paragraph, expected_paragraph)
 
     def test_detect_language_with_multilingualtag(self):
-        language_detector = converter.LanguageDetector(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml'))
+        language_detector = converter.LanguageDetector(
+            etree.parse('converter_data/samediggi-article-48s-before-\
+lang-detection-with-multilingual-tag.xml'))
         language_detector.detectLanguage()
         got_document = language_detector.getDocument()
 
-        expected_document = etree.parse('converter_data/samediggi-article-48s-after-lang-detection-with-multilingual-tag.xml')
+        expected_document = etree.parse('converter_data/\
+samediggi-article-48s-after-lang-detection-with-multilingual-tag.xml')
 
-        self.assertXmlEqual(etree.tostring(got_document), etree.tostring(expected_document))
+        self.assertXmlEqual(etree.tostring(got_document),
+                            etree.tostring(expected_document))
 
     def test_detect_language_without_multilingualtag(self):
-        language_detector = converter.LanguageDetector(etree.parse('converter_data/samediggi-article-48s-before-lang-detection-without-multilingual-tag.xml'))
+        language_detector = converter.LanguageDetector(etree.parse(
+            'converter_data/samediggi-article-48s-before-lang-detection-\
+without-multilingual-tag.xml'))
         language_detector.detectLanguage()
         got_document = language_detector.getDocument()
 
-        expected_document = etree.parse('converter_data/samediggi-article-48s-after-lang-detection-without-multilingual-tag.xml')
+        expected_document = etree.parse('converter_data/samediggi-article\
+-48s-after-lang-detection-without-multilingual-tag.xml')
 
-        self.assertXmlEqual(etree.tostring(got_document), etree.tostring(expected_document))
+        self.assertXmlEqual(etree.tostring(got_document),
+                            etree.tostring(expected_document))
