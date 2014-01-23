@@ -94,10 +94,7 @@ class TestConverter(unittest.TestCase):
             os.path.join(os.getenv('GTFREE'), \
             'converted/sme/admin/sd/samediggi.no/samediggi-article-48.html.xml'))
 
-class TestAvvirConverter(unittest.TestCase):
-    def setUp(self):
-        self.avvir = converter.AvvirConverter('converter_data/fakecorpus/orig/sme/news/Avvir_xml-filer/Avvir_2008_xml-filer/02nr028av.article.xml')
-
+class XMLTester(unittest.TestCase):
     def assertXmlEqual(self, got, want):
         """Check if two stringified xml snippets are equal
         """
@@ -105,6 +102,10 @@ class TestAvvirConverter(unittest.TestCase):
         if not checker.check_output(want, got, 0):
             message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
             raise AssertionError(message)
+
+class TestAvvirConverter(XMLTester):
+    def setUp(self):
+        self.avvir = converter.AvvirConverter('converter_data/fakecorpus/orig/sme/news/Avvir_xml-filer/Avvir_2008_xml-filer/02nr028av.article.xml')
 
     def test_convert2intermediate(self):
         got = self.avvir.convert2intermediate()
@@ -112,17 +113,9 @@ class TestAvvirConverter(unittest.TestCase):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-class TestSVGConverter(unittest.TestCase):
+class TestSVGConverter(XMLTester):
     def setUp(self):
         self.svg = converter.SVGConverter('converter_data/Riddu_Riddu_avis_TXT.200923.svg')
-
-    def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
-        checker = doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
-            raise AssertionError(message)
 
     def test_convert2intermediate(self):
         got = self.svg.convert2intermediate()
@@ -130,15 +123,7 @@ class TestSVGConverter(unittest.TestCase):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-class TestPlaintextConverter(unittest.TestCase):
-    def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
-        checker = doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
-            raise AssertionError(message)
-
+class TestPlaintextConverter(XMLTester):
     def test_to_unicode(self):
         plaintext = converter.PlaintextConverter('converter_data/winsami2-test-ws2.txt')
         got  = plaintext.toUnicode()
@@ -290,15 +275,7 @@ class TestPlaintextConverter(unittest.TestCase):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-class TestPDFConverter(unittest.TestCase):
-    def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
-        checker = doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
-            raise AssertionError(message)
-
+class TestPDFConverter(XMLTester):
     def test_pdf_converter(self):
         pdfdocument = converter.PDFConverter('converter_data/pdf-test.pdf')
         got = pdfdocument.convert2intermediate()
@@ -306,17 +283,9 @@ class TestPDFConverter(unittest.TestCase):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-class TestDocConverter(unittest.TestCase):
+class TestDocConverter(XMLTester):
     def setUp(self):
         self.testdoc = converter.DocConverter('converter_data/doc-test.doc')
-
-    def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
-        checker = doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
-            raise AssertionError(message)
 
     def test_convert2intermediate(self):
         got = self.testdoc.convert2intermediate()
@@ -324,17 +293,9 @@ class TestDocConverter(unittest.TestCase):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-class TestBiblexmlConverter(unittest.TestCase):
+class TestBiblexmlConverter(XMLTester):
     def setUp(self):
         self.testdoc = converter.BiblexmlConverter('converter_data/bible-test.xml')
-
-    def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
-        checker = doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
-            raise AssertionError(message)
 
     def test_convert2intermediate(self):
         got = self.testdoc.convert2intermediate()
@@ -342,17 +303,9 @@ class TestBiblexmlConverter(unittest.TestCase):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-class TestHTMLConverter(unittest.TestCase):
+class TestHTMLConverter(XMLTester):
     def setUp(self):
         self.testhtml = converter.HTMLConverter('converter_data/samediggi-article-48s.html')
-
-    def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
-        checker = doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
-            raise AssertionError(message)
 
     def test_convert2intermediate(self):
         got = self.testhtml.convert2intermediate()
@@ -360,15 +313,7 @@ class TestHTMLConverter(unittest.TestCase):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-class TestHTMLContentConverter(unittest.TestCase):
-    def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
-        checker = doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
-            raise AssertionError(message)
-
+class TestHTMLContentConverter(XMLTester):
     def test_remove_op(self):
         got = converter.HTMLContentConverter('with-o:p.html', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, sj&#248;mat og marknad - regjeringen.no</title></head><body onload="javascript:Operatest();"><o:p><font face="Times New Roman" size="3">&nbsp;</font></o:p></body></html>').tidy()
 
@@ -467,17 +412,9 @@ class TestHTMLContentConverter(unittest.TestCase):
 
         self.assertXmlEqual(got, want)
 
-class TestRTFConverter(unittest.TestCase):
+class TestRTFConverter(XMLTester):
     def setUp(self):
         self.testrtf = converter.RTFConverter('converter_data/Folkemøte.rtf')
-
-    def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
-        checker = doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
-            raise AssertionError(message)
 
     def test_convert2intermediate(self):
         got = self.testrtf.convert2intermediate()
@@ -485,15 +422,7 @@ class TestRTFConverter(unittest.TestCase):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-class TestDocumentFixer(unittest.TestCase):
-    def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
-        checker = doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
-            raise AssertionError(message)
-
+class TestDocumentFixer(XMLTester):
     def test_fix__body_encoding(self):
         newstext = converter.PlaintextConverter('converter_data/assu97-mac-sami.txt')
 
@@ -595,15 +524,7 @@ class TestDocumentFixer(unittest.TestCase):
 
         self.assertXmlEqual(etree.tostring(document_fixer.etree), expected_doc)
 
-class TestXslMaker(unittest.TestCase):
-    def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
-        checker = doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
-            raise AssertionError(message)
-
+class TestXslMaker(XMLTester):
     def test_get_xsl(self):
         xslmaker = converter.XslMaker('converter_data/samediggi-article-48.html.xsl')
         got = xslmaker.getXsl()
@@ -612,20 +533,12 @@ class TestXslMaker(unittest.TestCase):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-class TestLanguageDetector(unittest.TestCase):
+class TestLanguageDetector(XMLTester):
     """
     Test the functionality of LanguageDetector
     """
     def setUp(self):
         self.document = etree.parse('converter_data/samediggi-article-48s-before-lang-detection-with-multilingual-tag.xml')
-
-    def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
-        checker = doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
-            raise AssertionError(message)
 
     def test_get_main_lang(self):
         test_main_lang = 'sme'
@@ -695,18 +608,7 @@ class TestLanguageDetector(unittest.TestCase):
 
         self.assertXmlEqual(etree.tostring(got_document), etree.tostring(expected_document))
 
-class TestDocumentTester(unittest.TestCase):
-    def setUp(self):
-        pass
-
-    def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
-        checker = doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
-            raise AssertionError(message)
-
+class TestDocumentTester(XMLTester):
 
     def test_remove_foreign_language1(self):
         orig_doc = etree.parse(io.BytesIO('<document xml:lang="sma" id="no_id"><header><title/><genre/><author><unknown/></author><availability><free/></availability><multilingual/></header><body><p>Bïevnesh naasjovnalen</p></body></document>'))
@@ -762,15 +664,7 @@ class TestDocumentTester(unittest.TestCase):
 
         self.assertEqual(decimal.Decimal(document_tester.getUnknownWordsRatio()).quantize(decimal.Decimal('.1'), rounding=decimal.ROUND_DOWN) , decimal.Decimal('0.2').quantize(decimal.Decimal('.1'), rounding=decimal.ROUND_DOWN))
 
-class TestDocumentFixer(unittest.TestCase):
-    def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
-        checker = doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
-            raise AssertionError(message)
-
+class TestDocumentFixer(XMLTester):
     def test_fix__body_encoding(self):
         newstext = converter.PlaintextConverter('converter_data/assu97-mac-sami.txt')
 
