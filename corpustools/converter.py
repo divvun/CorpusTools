@@ -916,9 +916,9 @@ class DocumentFixer:
         body.getparent().remove(body)
 
         eg = decode.EncodingGuesser()
-        encoding = eg.guessBodyEncoding(bodyString)
+        encoding = eg.guess_body_encoding(bodyString)
 
-        body = etree.fromstring(eg.decodePara(encoding, bodyString))
+        body = etree.fromstring(eg.decode_para(encoding, bodyString))
         self.etree.append(body)
 
         self.detectQuotes()
