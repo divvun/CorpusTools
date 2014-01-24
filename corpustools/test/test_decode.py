@@ -56,4 +56,4 @@ class TestEncodingGuesser(unittest.TestCase):
         guesser = decode.EncodingGuesser()
         self.assertEqual(
             guesser.guess_file_encoding(
-                'decode_data/decode-falsepositive.txt'), -1)
+                'decode_data/decode-falsepositive.txt'), None)

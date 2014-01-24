@@ -261,7 +261,7 @@ class EncodingGuesser(object):
         sami_letter_frequency = self.get_sami_letter_frequency(content)
 
         maxhits = 0
-        winner = -1
+        winner = None
         for position in range(0, len(CTYPES)):
             encoding_frequency = self.get_encoding_frequency(content, position)
 
@@ -341,14 +341,16 @@ class EncodingGuesser(object):
         @return utf8 encoded str
         """
         text = text.decode('utf8')
-        encoding = CTYPES[position]
 
-        for key, value in encoding.items():
-            text = text.replace(key, value)
+        if position is not None:
+            encoding = CTYPES[position]
 
-        if position == 5:
-            text = text.replace(u"Ç", u"«")
-            text = text.replace(u"È", u"»")
+            for key, value in encoding.items():
+                text = text.replace(key, value)
+
+            if position == 5:
+                text = text.replace(u"Ç", u"«")
+                text = text.replace(u"È", u"»")
 
         return text.encode('utf8')
 
