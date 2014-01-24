@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 #
@@ -24,9 +23,9 @@ import unittest
 import doctest
 from lxml import etree
 from lxml import doctestcompare
-import os
 
 from corpustools import analyser
+
 
 class TestAnalyser(unittest.TestCase):
     def setUp(self):
@@ -45,7 +44,8 @@ class TestAnalyser(unittest.TestCase):
         """
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example(u"", want), got, 0).encode(u'utf-8')
+            message = checker.output_difference(
+                doctest.Example(u"", want), got, 0).encode(u'utf-8')
             raise AssertionError(message)
 
     def test_sme_ccat_output(self):
@@ -122,9 +122,3 @@ class TestAnalyser(unittest.TestCase):
   <body><disambiguation>"&lt;Muhto&gt;"\n\t"muhto" CC &lt;sme&gt; @CVP \n"&lt;gaskkohagaid&gt;"\n\t"gaskkohagaid" Adv &lt;sme&gt; \n"&lt;,&gt;"\n\t"," CLB \n"&lt;ja&gt;"\n\t"ja" CC &lt;sme&gt; @CNP \n"&lt;erenoamážit&gt;"\n\t"erenoamážit" Adv &lt;sme&gt; \n"&lt;dalle_go&gt;"\n\t"dalle_go" MWE CS &lt;sme&gt; @CVP \n"&lt;lei&gt;"\n\t"leat" V &lt;sme&gt; IV Ind Prt Sg3 @+FMAINV \n"&lt;buolaš&gt;"\n\t"buolaš" Sem/Wthr N &lt;sme&gt; Sg Nom \n"&lt;,&gt;"\n\t"," CLB \n"&lt;de&gt;"\n\t"de" Adv &lt;sme&gt; \n"&lt;aggregáhta&gt;"\n\t"aggregáhta" N &lt;sme&gt; Sg Nom \n"&lt;billánii&gt;"\n\t"billánit" V &lt;sme&gt; IV Ind Prt Sg3 @+FMAINV \n"&lt;.&gt;"\n\t"." CLB \n\n"&lt;¶&gt;"\n\t"¶" CLB \n\n</disambiguation><dependency>"&lt;Muhto&gt;"\n\t"muhto" CC @CVP #1-&gt;1 \n"&lt;gaskkohagaid&gt;"\n\t"gaskkohagaid" Adv @ADVL&gt; #2-&gt;12 \n"&lt;,&gt;"\n\t"," CLB #3-&gt;4 \n"&lt;ja&gt;"\n\t"ja" CC @CNP #4-&gt;2 \n"&lt;erenoamážit&gt;"\n\t"erenoamážit" Adv @ADVL&gt; #5-&gt;12 \n"&lt;dalle_go&gt;"\n\t"dalle_go" CS @CVP #6-&gt;7 \n"&lt;lei&gt;"\n\t"leat" V IV Ind Prt Sg3 @FS-ADVL&gt; #7-&gt;12 \n"&lt;buolaš&gt;"\n\t"buolaš" N Sg Nom @&lt;SPRED #8-&gt;7 \n"&lt;,&gt;"\n\t"," CLB #9-&gt;6 \n"&lt;de&gt;"\n\t"de" Adv @ADVL&gt; #10-&gt;12 \n"&lt;aggregáhta&gt;"\n\t"aggregáhta" N Sg Nom @SUBJ&gt; #11-&gt;12 \n"&lt;billánii&gt;"\n\t"billánit" V IV Ind Prt Sg3 @FS-ADVL&gt; #12-&gt;0 \n"&lt;.&gt;"\n\t"." CLB #13-&gt;12 \n\n"&lt;¶&gt;"\n\t"¶" CLB #1-&gt;1 \n\n</dependency></body></document>'''
         self.maxDiff = None
         self.assertEqual(etree.tostring(got, encoding=u'unicode'), want)
-
-def main():
-    unittest.main()
-
-if __name__ == u'__main__':
-    main()
