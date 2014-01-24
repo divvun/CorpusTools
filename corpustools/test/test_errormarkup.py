@@ -7,6 +7,7 @@ import lxml.doctestcompare as doctestcompare
 
 from corpustools import errormarkup
 
+
 class TestErrorMarkup(unittest.TestCase):
     def setUp(self):
         self.em = errormarkup.ErrorMarkup('testfilename')
@@ -38,7 +39,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertEqual(len(got), 1)
         self.assertXmlEqual(etree.tostring(got[0]), want)
 
-    def test_error_parser_errorlang_infinity_with_newLines(self):
+    def test_error_parser_errorlang_infinity_with_new_lines(self):
         in_elem = u'\n\n\n\n(molekylærbiologimi)∞(kal,bio)\n\n\n\n'
         want = u'<errorlang correct="kal,bio">molekylærbiologimi</errorlang>'
 
@@ -46,7 +47,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertEqual(len(got), 2)
         self.assertXmlEqual(etree.tostring(got[1]), want)
 
-    def testQuote_char(self):
+    def test_quote_char(self):
         in_elem = u'”sjievnnijis”$(conc,vnn-vnnj|sjievnnjis)'
         want = u'<errorort errorinfo="conc,vnn-vnnj" \
         correct="sjievnnjis">”sjievnnijis”</errorort>'
@@ -164,7 +165,8 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_error_correct9(self):
         in_elem = etree.fromstring('<p>Nordkjosbotn\'ii§Nordkjosbotnii</p>')
-        want = '<p><error correct="Nordkjosbotnii">Nordkjosbotn\'ii</error></p>'
+        want = '<p><error correct="Nordkjosbotnii">Nordkjosbotn\'ii</error>\
+        </p>'
 
         self.em.add_error_markup(in_elem)
         got = etree.tostring(in_elem, encoding='utf8')
@@ -228,9 +230,10 @@ correct="dábálaččat">dábálaš</errorlex></p>'
         self.assertXmlEqual(got, want)
 
     def test_error_ortreal1(self):
-        in_elem = etree.fromstring('<p>ráhččamušaid¢(noun,mix|rahčamušaid)</p>')
+        in_elem = \
+            etree.fromstring('<p>ráhččamušaid¢(noun,mix|rahčamušaid)</p>')
         want = '<p><errorortreal errorinfo="noun,mix" \
-correct="rahčamušaid">ráhččamušaid</errorortreal></p>'
+        correct="rahčamušaid">ráhččamušaid</errorortreal></p>'
 
         self.em.add_error_markup(in_elem)
         got = etree.tostring(in_elem, encoding='utf8')
@@ -261,7 +264,6 @@ correct="Nordkjosbotnii">Nordkjosbotn\'ii</errorort> (mii lea ge ')
 correct="Nordkjosbotn">nordkjosbotn</errorort> sámegillii? Muhtin, veahket \
 mu!) gos')
 
-
     def test_error_morphsyn2(self):
         in_elem = etree.fromstring('<p>Čáppa muohtaskulptuvrraid ráhkadeapmi \
 VSM olggobealde lei maiddái ovttasbargu gaskal (skuvla ohppiid)£\
@@ -276,8 +278,8 @@ skuvla ohppiid</errormorphsyn> ja VSM.</p>'
         self.assertXmlEqual(got, want)
 
     def test_errorort4(self):
-        in_elem = etree.fromstring('<p>- ruksesruonáčalmmehisvuohta lea sullii \
-8%:as$(acr,suf|8%:s)</p>')
+        in_elem = etree.fromstring('<p>- ruksesruonáčalmmehisvuohta lea \
+sullii 8%:as$(acr,suf|8%:s)</p>')
         want = '<p>- ruksesruonáčalmmehisvuohta lea sullii <errorort \
 correct="8%:s" errorinfo="acr,suf">8%:as</errorort></p>'
 
@@ -380,7 +382,6 @@ errorinfo="prop,typo">Asbjørsen</errorort> døde 5. januar 1885, nesten \
         got = etree.tostring(in_elem, encoding='utf8')
         self.assertEqual(got, want)
 
-
     def test_place_error_element_before_and_after_old_element(self):
         '''The input:
         buvttadeaddji Anstein Mikkelsens$(typo|Mikkelsen) lea ráhkadan.
@@ -465,8 +466,8 @@ ganddat</error></errormorphsyn></p>'
         self.assertXmlEqual(got, want)
 
     def test_nested_markup3(self):
-        in_elem = etree.fromstring('<p>(Nieiddat leat nourra$(adj,meta|nuorra))\
-£(adj,spred,nompl,nomsg,agr|Nieiddat leat nuorat)</p>')
+        in_elem = etree.fromstring('<p>(Nieiddat leat nourra$(adj,meta|\
+nuorra))£(adj,spred,nompl,nomsg,agr|Nieiddat leat nuorat)</p>')
         want = '<p><errormorphsyn errorinfo="adj,spred,nompl,nomsg,agr" \
 correct="Nieiddat leat nuorat">Nieiddat leat <errorort errorinfo="adj,meta" \
 correct="nuorra">nourra</errorort></errormorphsyn></p>'
@@ -693,12 +694,11 @@ nordkjosbotn$Nordkjosbotn sámegillii? Muhtin, veahket mu!) gos"
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text19(self):
-        text = u"Čáppa muohtaskulptuvrraid ráhkadeapmi VSM olggobealde lei \
-maiddái ovttasbargu gaskal (skuvla ohppiid)£(noun,attr,gensg,nomsg,case|\
+        text = u"gaskal (skuvla ohppiid)£(noun,attr,gensg,nomsg,case|\
 skuvlla ohppiid) ja VSM."
-        want = [u"Čáppa muohtaskulptuvrraid ráhkadeapmi VSM olggobealde lei \
-maiddái ovttasbargu gaskal (skuvla ohppiid)",
-u"£(noun,attr,gensg,nomsg,case|skuvlla ohppiid)", u" ja VSM."]
+        want = [u"gaskal (skuvla ohppiid)",
+                u"£(noun,attr,gensg,nomsg,case|skuvlla ohppiid)",
+                u" ja VSM."]
 
         self.assertEqual(self.em.process_text(text), want)
 
