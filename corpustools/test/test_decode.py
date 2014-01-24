@@ -4,6 +4,7 @@ import unittest
 
 from corpustools import decode
 
+
 class TestEncodingGuesser(unittest.TestCase):
     def test_encoding_guesser(self):
         guesser = decode.EncodingGuesser()
@@ -56,4 +57,6 @@ class TestEncodingGuesser(unittest.TestCase):
 
     def test_round_tripping_false_positive(self):
         guesser = decode.EncodingGuesser()
-        self.assertEqual(guesser.guess_file_encoding('decode_data/decode-falsepositive.txt'), -1)
+        self.assertEqual(
+            guesser.guess_file_encoding(
+                'decode_data/decode-falsepositive.txt'), -1)
