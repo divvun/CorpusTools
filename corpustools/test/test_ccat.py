@@ -5,7 +5,7 @@ import unittest
 from lxml import etree
 import io
 import cStringIO
-import os
+
 
 class TestCcat(unittest.TestCase):
     def test_single_error_inline(self):
@@ -26,25 +26,24 @@ class TestCcat(unittest.TestCase):
         '''
         '''
         xml_printer = ccat.XMLPrinter()
-        input_error = etree.fromstring('''
-<errorortreal correct="fiskeleting" errtype="nosplit" pos="noun">
-    fiske leting
-</errorortreal>''')
+        input_error = etree.fromstring('''<errorortreal \
+            correct="fiskeleting" errtype="nosplit" pos="noun">\
+            fiske leting</errorortreal>''')
 
         textlist = []
         xml_printer.collect_not_inline_errors(input_error, textlist)
 
         self.assertEqual('\n'.join(textlist),
-                         'fiske leting\tfiskeleting\t#errtype=nosplit,pos=noun')
+                         'fiske leting\tfiskeleting\t\
+#errtype=nosplit,pos=noun')
 
     def test_single_error_not_inline_with_filename(self):
         '''
         '''
         xml_printer = ccat.XMLPrinter(print_filename=True)
-        input_error = etree.fromstring('''
-<errorortreal correct="fiskeleting" errtype="nosplit" pos="noun">
-    fiske leting
-</errorortreal>''')
+        input_error = etree.fromstring('''<errorortreal \
+            correct="fiskeleting" errtype="nosplit" pos="noun">\
+            fiske leting</errorortreal>''')
 
         xml_printer.filename = 'p.xml'
 
@@ -59,9 +58,8 @@ class TestCcat(unittest.TestCase):
         '''
         '''
         xml_printer = ccat.XMLPrinter(print_filename=True)
-        input_error = etree.fromstring('''
-<errorortreal correct="fiskeleting">fiske leting</errorortreal>
-''')
+        input_error = etree.fromstring('''<errorortreal correct="fiskeleting">\
+            fiske leting</errorortreal>''')
 
         xml_printer.filename = 'p.xml'
 
@@ -76,15 +74,11 @@ class TestCcat(unittest.TestCase):
         '''
         xml_printer = ccat.XMLPrinter(print_filename=True)
 
-        input_error = etree.fromstring('''
-<errormorphsyn cat="x" const="spred" correct="skoledagene er så vanskelige"
-errtype="agr" orig="x" pos="adj">
-    skoledagene er så
-    <errorort correct="vanskelig" errtype="nosilent" pos="adj">
-        vanskerlig
-    </errorort>
-</errormorphsyn>
-''')
+        input_error = etree.fromstring('''<errormorphsyn cat="x" \
+            const="spred" correct="skoledagene er så vanskelige" \
+            errtype="agr" orig="x" pos="adj">skoledagene er så\
+            <errorort correct="vanskelig" errtype="nosilent" \
+            pos="adj">vanskerlig</errorort></errormorphsyn>''')
         textlist = []
         xml_printer.collect_inline_errors(input_error, textlist, 'nob')
 
@@ -120,9 +114,9 @@ vanskerlig\tvanskelig\t#errtype=nosilent,pos=adj, file: p.xml')
     def test_multi_errorlex_not_inline(self):
         '''
         '''
-        input_error = etree.fromstring('''
-<errorlex correct="man soga"><errorort correct="makkár" errtype="á" pos="interr">makkar</errorort> soga</errorlex>
-''')
+        input_error = etree.fromstring('''<errorlex correct="man soga">\
+            <errorort correct="makkár" errtype="á" pos="interr">makkar\
+            </errorort> soga</errorlex>''')
         textlist = []
 
         xml_printer = ccat.XMLPrinter(typos=True)
@@ -152,9 +146,9 @@ Litt om Norge i mellomkrigstiden ¶\n')
         xml_printer = ccat.XMLPrinter()
         buffer = cStringIO.StringIO()
 
-        input_p = etree.fromstring('''
-<p>I 1864 ga han ut boka <span type="quote" xml:lang="dan">"Fornuftigt Madstel"</span>.</p>
-''')
+        input_p = etree.fromstring('''<p>I 1864 ga han ut boka \
+            <span type="quote" xml:lang="dan">"Fornuftigt Madstel"</span>.\
+            </p>''')
 
         xml_printer.collect_text(input_p, 'nob', buffer)
         self.assertEqual(buffer.getvalue(),
@@ -166,9 +160,11 @@ Litt om Norge i mellomkrigstiden ¶\n')
         xml_printer = ccat.XMLPrinter()
         buffer = cStringIO.StringIO()
 
-        input_p = etree.fromstring('''
-<p><errormorphsyn cat="pl3prs" const="fin" correct="Bearpmehat sirrejit" errtype="agr" orig="sg3prs" pos="verb"><errorort correct="Bearpmehat" errtype="svow" pos="noun">Bearpmahat</errorort> <errorlex correct="sirre" errtype="w" origpos="v" pos="verb">earuha</errorlex></errormorphsyn> uskki ja loaiddu.</p>
-''')
+        input_p = etree.fromstring('''<p><errormorphsyn cat="pl3prs" \
+const="fin" correct="Bearpmehat sirrejit" errtype="agr" orig="sg3prs" \
+pos="verb"><errorort correct="Bearpmehat" errtype="svow" pos="noun">\
+Bearpmahat</errorort> <errorlex correct="sirre" errtype="w" origpos="v" \
+pos="verb">earuha</errorlex></errormorphsyn> uskki ja loaiddu.</p>''')
 
         xml_printer.collect_text(input_p, 'sme', buffer)
         self.assertEqual(buffer.getvalue(),
@@ -206,9 +202,9 @@ mellomkrigstiden
     def test_p_with_span_one_word_per_line(self):
         '''
         '''
-        input_p = etree.fromstring('''
-<p>I 1864 ga han ut boka <span type="quote" xml:lang="dan">"Fornuftigt Madstel"</span>.</p>
-''')
+        input_p = etree.fromstring('''<p>I 1864 ga han ut boka \
+            <span type="quote" xml:lang="dan">"Fornuftigt Madstel"</span>.\
+            </p>''')
 
         xml_printer = ccat.XMLPrinter(one_word_per_line=True)
         buffer = cStringIO.StringIO()
@@ -365,7 +361,6 @@ muitalivčče makkar soga sii ¶\n")
 </p>
 ''')
 
-
         buffer = cStringIO.StringIO()
         xml_printer.collect_text(input_p, 'sme', buffer)
         self.assertEqual(buffer.getvalue(),
@@ -499,7 +494,6 @@ muitalivčče makkar soga sii ¶\n")
                 types +
                 '''>ášŧŋđžčøåæ</p></body></document>'''))
 
-
             buffer = xml_printer.process_file('barabbas/p.xml')
             self.assertEqual(buffer.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
@@ -516,7 +510,6 @@ muitalivčče makkar soga sii ¶\n")
                 '''<document id="no_id" xml:lang="sme"><body><p''' +
                 types +
                 '''>ášŧŋđžčøåæ</p></body></document>'''))
-
 
             buffer = xml_printer.process_file('barabbas/p.xml')
             self.assertEqual(buffer.getvalue(), '')
@@ -604,7 +597,7 @@ muitalivčče makkar soga sii ¶\n")
         '''
         '''
         xml_printer = ccat.XMLPrinter(one_word_per_line=True,
-                            errorlex=True)
+                                      errorlex=True)
 
         xml_printer.etree = etree.parse(io.BytesIO('''
 <document id="no_id" xml:lang="sme">
@@ -625,7 +618,6 @@ muitalivčče makkar soga sii ¶\n")
         </p>
     </body>
 </document>'''))
-
 
         buffer = xml_printer.process_file('barabbas/p.xml')
         self.assertEqual(buffer.getvalue(), '''livččii
@@ -643,7 +635,7 @@ sii
         '''
         '''
         xml_printer = ccat.XMLPrinter(one_word_per_line=True,
-                            errorort=True)
+                                      errorort=True)
 
         xml_printer.etree = etree.parse(io.BytesIO('''
 <document id="no_id" xml:lang="sme">
@@ -664,7 +656,6 @@ sii
         </p>
     </body>
 </document>'''))
-
 
         buffer = xml_printer.process_file('barabbas/p.xml')
         self.assertEqual(buffer.getvalue(), '''livččii
@@ -704,7 +695,6 @@ sii
     </body>
 </document>'''))
 
-
         buffer = xml_printer.process_file('barabbas/p.xml')
         self.assertEqual(buffer.getvalue(),
                          '''makkarge\tmakkárge\t#errtype=á,pos=adv
@@ -715,8 +705,7 @@ makkar\tmakkár\t#errtype=á,pos=interr
     def test_process_file_typos_errorlex(self):
         '''
         '''
-        xml_printer = ccat.XMLPrinter(     typos=True,
-                            errorlex=True)
+        xml_printer = ccat.XMLPrinter(typos=True, errorlex=True)
 
         xml_printer.etree = etree.parse(io.BytesIO('''
 <document id="no_id" xml:lang="sme">
@@ -737,7 +726,6 @@ makkar\tmakkár\t#errtype=á,pos=interr
         </p>
     </body>
 </document>'''))
-
 
         buffer = xml_printer.process_file('barabbas/p.xml')
         self.assertEqual(buffer.getvalue(),
@@ -746,9 +734,9 @@ makkar\tmakkár\t#errtype=á,pos=interr
     def test_process_file_typos_errorort(self):
         '''
         '''
-        xml_printer = ccat.XMLPrinter(     typos=True,
-                            one_word_per_line=True,
-                            errorort=True)
+        xml_printer = ccat.XMLPrinter(typos=True,
+                                      one_word_per_line=True,
+                                      errorort=True)
 
         xml_printer.etree = etree.parse(io.BytesIO('''
 <document id="no_id" xml:lang="sme">
@@ -769,7 +757,6 @@ makkar\tmakkár\t#errtype=á,pos=interr
         </p>
     </body>
 </document>'''))
-
 
         buffer = xml_printer.process_file('barabbas/p.xml')
         self.assertEqual(buffer.getvalue(),
@@ -821,7 +808,6 @@ makkar\tmakkár\t#errtype=á,pos=interr
     </body>
 </document>'''))
 
-
         buffer = xml_printer.process_file('barabbas/p.xml')
         self.assertEqual(buffer.getvalue(), 'nob1 nob2 ¶\n')
 
@@ -842,7 +828,6 @@ makkar\tmakkár\t#errtype=á,pos=interr
     </body>
 </document>'''))
 
-
         buffer = xml_printer.process_file('barabbas/p.xml')
         self.assertEqual(buffer.getvalue(), 'dan1 ¶\n')
 
@@ -861,7 +846,6 @@ makkar\tmakkár\t#errtype=á,pos=interr
         </p>
     </body>
 </document>'''))
-
 
         buffer = xml_printer.process_file('barabbas/p.xml')
         self.assertEqual(buffer.getvalue(), 'nob1 ¶\nnob2 ¶\n')
@@ -1028,7 +1012,7 @@ makkar\tmakkár\t#errtype=á,pos=interr
         buffer = xml_printer.process_file('barabbas/p.xml')
 
         self.assertEqual(buffer.getvalue(),
-'''leat okta mánná\tlea okta mánná\t\
+                         '''leat okta mánná\tlea okta mánná\t\
 #cat=sg3prs,const=v,errtype=agr,orig=pl3prs,pos=v
 okta máná\tokta mánná\t#cat=nomsg,const=spred,errtype=case,orig=gensg,pos=n
 ''')
