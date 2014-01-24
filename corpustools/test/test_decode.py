@@ -52,9 +52,6 @@ class TestEncodingGuesser(unittest.TestCase):
     def test_round_tripping7(self):
         self.round_trip_x(7)
 
-    def test_round_tripping8(self):
-        self.round_trip_x(8)
-
     def test_round_tripping_false_positive(self):
         guesser = decode.EncodingGuesser()
         self.assertEqual(

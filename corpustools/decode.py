@@ -180,28 +180,9 @@ CTYPES = [
         u"˜": u"đ",
         #"¿": u"ž",
     },
-
-    # á, æ, å, ø, ö, ä appear as themselves
-    # 8
-    {
-        u"t1": u"ŧ",
-        u"T1": u"Ŧ",
-        u"s1": u"š",
-        u"S1": u"Š",
-        u"n1": u"ŋ",
-        u"N1": u"Ŋ",
-        u"d1": u"đ",
-        u"D1": u"Đ",
-        u"z1": u"ž",
-        u"Z1": u"Ž",
-        u"c1": u"č",
-        u"C1": u"Č",
-        u"ï¾«": u"«",
-        u"ï¾»": u"»",
-    }
 ]
 
-LIMITS = {0: 1, 1: 1, 2: 3, 3: 3, 4: 3, 5: 3, 6: 1, 7: 1, 8: 3}
+LIMITS = {0: 1, 1: 1, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1, 7: 1}
 
 
 class EncodingGuesser(object):
@@ -298,7 +279,7 @@ class EncodingGuesser(object):
             #if hits > 0:
                 #print "position", position, "hits", hits, "num", num
 
-            if hits > maxhits and LIMITS[position] < num and hitter:
+            if hits > maxhits and LIMITS[position] <= num and hitter:
                 winner = position
                 maxhits = hits
                 #print "winner", winner, "maxhits", maxhits
