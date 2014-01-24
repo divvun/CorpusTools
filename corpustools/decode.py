@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 '''(Northern) sami character eight bit encodings have been semi or
-non official standards and have been converted to the various systems' 
+non official standards and have been converted to the various systems'
 internal encodings. This module have functions that revert the damage
 done.
 '''
 import re
+import sys
 
 CTYPES = [
 
@@ -369,3 +370,7 @@ class EncodingGuesser(object):
             text = text.replace(u"È", u"»")
 
         return text.encode('utf8')
+
+if __name__ == '__main__':
+    eg = EncodingGuesser()
+    print eg.guess_file_encoding(sys.argv[1])
