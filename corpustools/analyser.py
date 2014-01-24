@@ -26,12 +26,14 @@ import multiprocessing
 import datetime
 import lxml.etree as etree
 from io import open
-import StringIO
-from corpustools import ccat
 import argparse
+
+from corpustools import ccat
+
 
 def unwrap_self_analyse(arg, **kwarg):
     return Analyser.analyse(*arg, **kwarg)
+
 
 class Analyser(object):
     '''A class which can analyse giellatekno xml formatted documents
@@ -57,11 +59,11 @@ class Analyser(object):
             sys.exit(4)
 
     def set_analysis_files(self,
-                         abbr_file=None,
-                         fst_file=None,
-                         disambiguation_analysis_file=None,
-                         function_analysis_file=None,
-                         dependency_analysis_file=None):
+                           abbr_file=None,
+                           fst_file=None,
+                           disambiguation_analysis_file=None,
+                           function_analysis_file=None,
+                           dependency_analysis_file=None):
         '''Set the files needed by preprocess, lookup and vislcg3
         '''
         if self.lang in ['sma', 'sme', 'smj']:
@@ -90,23 +92,20 @@ class Analyser(object):
         self.xml_files = []
         for cdir in converted_dirs:
             if os.path.isfile(cdir):
-                try:
-                    self.xml_files.append(unicode(cdir,
-                                                sys.getfilesystemencoding()))
-                except UnicodeDecodeError:
-                    print >>sys.stderr, ccat.lineno(), xml_file
+                self.append_file(cdir)
             else:
-                for root, dirs, files in os.walk(cdir): # Walk directory tree
+                for root, dirs, files in os.walk(cdir):
                     for xml_file in files:
                         if self.lang in root and xml_file.endswith('.xml'):
-                            try:
-                                self.xml_files.append(
-                                    os.path.join(root,
-                                                unicode(xml_file,
-                                                        sys.getfilesystemencoding()
-                                                        )))
-                            except UnicodeDecodeError:
-                                print >>sys.stderr, ccat.lineno(), xml_file
+                            self.append_file(xml_file)
+
+    def append_file(self, xml_file):
+        '''Append xml_file to the xml_files list'''
+        try:
+            self.xml_files.append(
+                unicode(xml_file, sys.getfilesystemencoding()))
+        except UnicodeDecodeError:
+                print >>sys.stderr, ccat.lineno(), xml_file
 
     def makedirs(self):
         u"""Make the analysed directory
@@ -122,10 +121,10 @@ class Analyser(object):
 
         :returns: the language as set in the xml file
         """
-        if self.etree.getroot().\
-            attrib[u'{http://www.w3.org/XML/1998/namespace}lang'] is not None:
+        lang = u'{http://www.w3.org/XML/1998/namespace}lang'
+        if self.etree.getroot().attrib[lang] is not None:
             return self.etree.getroot().\
-                attrib[u'{http://www.w3.org/XML/1998/namespace}lang']
+                attrib[lang]
         else:
             return u'none'
 
@@ -204,7 +203,6 @@ class Analyser(object):
         lookup_command = [u'lookup', u'-q', u'-flags', u'mbTT', self.fst_file]
 
         return self.run_external_command(lookup_command, self.preprocess())
-
 
     def lookup2cg(self):
         u"""Runs lookup2cg on the lookup output
@@ -309,11 +307,11 @@ class Analyser(object):
         '''
         pool_size = multiprocessing.cpu_count() * 2
         pool = multiprocessing.Pool(processes=pool_size,)
-        pool_outputs = pool.map(
+        pool.map(
             unwrap_self_analyse,
             zip([self]*len(self.xml_files), self.xml_files))
-        pool.close() # no more tasks
-        pool.join()  # wrap up current tasks
+        pool.close()  # no more tasks
+        pool.join()   # wrap up current tasks
 
     def analyse_serially(self):
         '''Analyse files one by one
@@ -387,6 +385,7 @@ class AnalysisConcatenator(object):
 
             return self.dep_files[prefix]
 
+
 def sanity_check():
     u"""Look for programs and files that are needed to do the analysis.
     If they don't exist, quit the program
@@ -396,6 +395,7 @@ def sanity_check():
             sys.stderr.write(program, u" isn't found in path\n")
             sys.exit(2)
 
+
 def which(name):
     u"""Get the output of the unix command which.
     Return false if empty, true if non-empty
@@ -404,6 +404,7 @@ def which(name):
         return False
     else:
         return True
+
 
 def parse_options():
     '''Parse the given options
@@ -424,6 +425,7 @@ def parse_options():
     args = parser.parse_args()
     return args
 
+
 def main():
     '''Analyse files in the given directories
     '''
@@ -432,34 +434,34 @@ def main():
 
     ana = Analyser(args.lang)
     ana.set_analysis_files(
-        abbr_file=\
-            os.path.join(os.getenv(u'GTHOME'),
-                          u'langs/' +
-                          args.lang +
-                          '/tools/preprocess/abbr.txt'),
-        fst_file=\
-            os.path.join(os.getenv(u'GTHOME'),
-                         u'langs/' +
-                         args.lang +
-                         u'/src/analyser-gt-desc.xfst'),
-        disambiguation_analysis_file=\
-            os.path.join(os.getenv(u'GTHOME'),
-                         u'langs/' +
-                         args.lang +
-                         u'/src/syntax/disambiguation.cg3'),
-        function_analysis_file=\
-            os.path.join(os.getenv(u'GTHOME'),
-                         u'gtcore/gtdshared/smi/src/syntax/functions.cg3'),
-        dependency_analysis_file=\
-            os.path.join(
-                os.getenv(u'GTHOME'),
-                u'gtcore/gtdshared/smi/src/syntax/dependency.cg3'))
+        abbr_file=os.path.join(
+            os.getenv(u'GTHOME'),
+            u'langs/' +
+            args.lang +
+            '/tools/preprocess/abbr.txt'),
+        fst_file=os.path.join(
+            os.getenv(u'GTHOME'),
+            u'langs/' +
+            args.lang +
+            u'/src/analyser-gt-desc.xfst'),
+        disambiguation_analysis_file=os.path.join(
+            os.getenv(u'GTHOME'),
+            u'langs/' +
+            args.lang +
+            u'/src/syntax/disambiguation.cg3'),
+        function_analysis_file=os.path.join(
+            os.getenv(u'GTHOME'),
+            u'gtcore/gtdshared/smi/src/syntax/functions.cg3'),
+        dependency_analysis_file=os.path.join(
+            os.getenv(u'GTHOME'),
+            u'gtcore/gtdshared/smi/src/syntax/dependency.cg3'))
 
     if args.lang == u'sme':
-        ana.set_corr_file(os.path.join(os.getenv(u'GTHOME'),
-                                     u'langs/' +
-                                     args.lang +
-                                     '/src/syntax/corr.txt'))
+        ana.set_corr_file(
+            os.path.join(os.getenv(u'GTHOME'),
+                         u'langs/' +
+                         args.lang +
+                         '/src/syntax/corr.txt'))
 
     ana.collect_files(args.converted_dirs)
     if args.debug is False:

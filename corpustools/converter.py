@@ -22,12 +22,9 @@
 
 import os
 import sys
-import inspect
 import lxml.etree as etree
 import re
-import codecs
 import io
-import cStringIO
 import subprocess
 import bs4
 import HTMLParser
@@ -45,17 +42,20 @@ import decode
 import ngram
 import errormarkup
 
+
 class ConversionException(Exception):
     def __init__(self, value):
         self.parameter = value
+
     def __str__(self):
         return repr(self.parameter)
+
 
 class Converter:
     """
     Class to take care of data common to all Converter classes
     """
-    def __init__(self, filename, test = False):
+    def __init__(self, filename, test=False):
         self.orig = os.path.abspath(filename)
         self.setCorpusdir()
         self.setConvertedName()
@@ -146,10 +146,14 @@ class Converter:
                 logfile.write(str(entry))
                 logfile.write('\n')
 
-            logfile.write(etree.tostring(complete, encoding = 'utf8', pretty_print = 'True'))
+            logfile.write(etree.tostring(complete,
+                                         encoding='utf8',
+                                         pretty_print=True))
             logfile.close()
 
-            raise ConversionException("Not valid XML. More info in the log file: " + self.getOrig() + u".log")
+            raise ConversionException(
+                "Not valid XML. More info in the log file: " +
+                self.getOrig() + u".log")
 
         if 'correct.' in self.orig:
             try:
@@ -164,12 +168,18 @@ class Converter:
                 logfile.write(str(e))
                 logfile.write("\n\n")
                 logfile.write("This is the xml tree:\n")
-                logfile.write(etree.tostring(complete, encoding = 'utf8', pretty_print = 'True'))
+                logfile.write(etree.tostring(complete,
+                                             encoding='utf8',
+                                             pretty_print=True))
                 logfile.write('\n')
                 logfile.close()
-                raise ConversionException(u"Markup error. More info in the log file: " + self.getOrig() + u".log")
+                raise ConversionException(
+                    u"Markup error. More info in the log file: " +
+                    self.getOrig() + u".log")
 
-        if complete.getroot().attrib['{http://www.w3.org/XML/1998/namespace}lang'] in ['sma', 'sme']:
+        if (complete.getroot().
+            attrib['{http://www.w3.org/XML/1998/namespace}lang'] in
+                ['sma', 'sme']):
             ef = DocumentFixer(etree.fromstring(etree.tostring(complete)))
             complete = ef.fixBodyEncoding()
 
@@ -179,15 +189,18 @@ class Converter:
         return complete
 
     def writeComplete(self):
-        if distutils.dep_util.newer_group(self.dependencies, self.getConvertedName()):
+        if distutils.dep_util.newer_group(
+                self.dependencies, self.getConvertedName()):
             self.makedirs()
 
-            if ('goldstandard' in self.orig and '.correct.' in self.orig) \
-            or 'goldstandard' not in self.orig:
+            if (('goldstandard' in self.orig and '.correct.' in self.orig) or
+                    'goldstandard' not in self.orig):
                 complete = self.makeComplete()
 
                 converted = open(self.getConvertedName(), 'w')
-                converted.write(etree.tostring(complete, encoding = 'utf8', pretty_print = 'True'))
+                converted.write(etree.tostring(complete,
+                                               encoding='utf8',
+                                               pretty_print='True'))
                 converted.close()
 
     def makedirs(self):
@@ -224,6 +237,9 @@ class Converter:
         """Set the mainlang and genre variables in the xsl file, if possible
         """
         try:
+            transform = u'{http://www.w3.org/1999/XSL/Transform}'
+            mainlang = u'variable[@name="mainlang"]'
+            genre = 'variable[@name="genre"]'
             xsltree = etree.parse(self.getXsl())
 
             root = xsltree.getroot()
@@ -231,20 +247,27 @@ class Converter:
             if origname.startswith('/orig'):
                 parts = origname[1:].split('/')
 
-                lang = root.find("{http://www.w3.org/1999/XSL/Transform}variable[@name='mainlang']").attrib['select'].replace("'", "")
+                lang = root.find(transform +
+                                 mainlang).attrib['select'].replace("'", "")
 
                 if lang == "":
                     lang = parts[1]
-                    root.find("{http://www.w3.org/1999/XSL/Transform}variable[@name='mainlang']").attrib['select'] = "'" + lang + "'"
+                    root.find(transform +
+                              mainlang).attrib['select'] = "'" + lang + "'"
 
-                genre = root.find("{http://www.w3.org/1999/XSL/Transform}variable[@name='genre']").attrib['select'].replace("'", "")
+                genre = root.find(transform +
+                                  genre).attrib['select'].replace("'", "")
 
-                if genre == "" or genre not in ['admin', 'bible', 'facta', 'ficti', 'news']:
-                    if parts[2] in ['admin', 'bible', 'facta', 'ficti', 'news']:
+                if genre == "" or genre not in ['admin', 'bible', 'facta',
+                                                'ficti', 'news']:
+                    if parts[2] in ['admin', 'bible', 'facta', 'ficti',
+                                    'news']:
                         genre = parts[parts.index('orig') + 2]
-                        root.find("{http://www.w3.org/1999/XSL/Transform}variable[@name='genre']").attrib['select'] = "'" + genre + "'"
+                        root.find(transform +
+                                  genre).attrib['select'] = "'" + genre + "'"
 
-                xsltree.write(self.getXsl(), encoding="utf-8", xml_declaration = True)
+                xsltree.write(
+                    self.getXsl(), encoding="utf-8", xml_declaration=True)
         except etree.XMLSyntaxError as e:
             logfile = open(self.orig + '.log', 'w')
 
@@ -274,10 +297,12 @@ class Converter:
         else:
             origname = os.path.basename(origname)
 
-        self._convertedName = os.path.join(convertedBasename, origname) + '.xml'
+        self._convertedName = os.path.join(convertedBasename,
+                                           origname) + '.xml'
 
     def getConvertedName(self):
         return self._convertedName
+
 
 class AvvirConverter:
     """
@@ -286,8 +311,8 @@ class AvvirConverter:
 
     def __init__(self, filename):
         self.orig = filename
-        self.converterXsl = \
-        os.path.join(os.getenv('GTHOME'), 'gt/script/corpus/avvir2corpus.xsl')
+        self.converterXsl = os.path.join(
+            os.getenv('GTHOME'), 'gt/script/corpus/avvir2corpus.xsl')
 
     def convert2intermediate(self):
         """
@@ -302,6 +327,7 @@ class AvvirConverter:
 
         return intermediate
 
+
 class SVGConverter:
     """
     Class to convert SVG files to the giellatekno xml format
@@ -309,8 +335,8 @@ class SVGConverter:
 
     def __init__(self, filename):
         self.orig = filename
-        self.converterXsl = \
-        os.path.join(os.getenv('GTHOME'), 'gt/script/corpus/svg2corpus.xsl')
+        self.converterXsl = os.path.join(
+            os.getenv('GTHOME'), 'gt/script/corpus/svg2corpus.xsl')
 
     def convert2intermediate(self):
         """
@@ -324,6 +350,7 @@ class SVGConverter:
         intermediate = transform(doc)
 
         return intermediate
+
 
 class PlaintextConverter:
     """
@@ -344,9 +371,9 @@ class PlaintextConverter:
         Return a unicode string
         """
         try:
-            content = codecs.open(self.orig, encoding = 'utf8').read()
+            content = codecs.open(self.orig, encoding='utf8').read()
         except:
-            content = codecs.open(self.orig, encoding = 'latin1').read()
+            content = codecs.open(self.orig, encoding='latin1').read()
 
         content = content.replace(u'ÊÊ', '\n\n')
         content = content.replace(u'<\!q>', u' ')
@@ -359,20 +386,16 @@ class PlaintextConverter:
         return content
 
     def strip_chars(self, content, extra=u''):
-        remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F%s]'
-                            % extra)
-        stripped = 0
+        remove_re = re.compile(
+            u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F%s]' % extra)
         content, count = remove_re.subn('', content)
-        if count > 0:
-            plur = ((count > 1) and u's') or u''
-            #sys.stderr.write('Removed %s character%s.\n'
-                            #% (count, plur))
 
         return content
 
-    def makeElement(self, eName, text, attributes = {}):
+    def makeElement(self, eName, text, attributes={}):
         """
-        @brief Makes an xml element containing the given name, text and attributes. Adds a hyph element if necessary.
+        @brief Makes an xml element containing the given name, text and
+        attributes. Adds a hyph element if necessary.
 
         :param eName: Name of the xml element
         :type el: string
@@ -436,7 +459,6 @@ class PlaintextConverter:
             elif headertitletags.match(line):
                 line = headertitletags.sub('', line).strip()
                 if header.find("title") is None:
-                    title = etree.Element('title')
                     header.append(self.makeElement('title', line))
                 else:
                     body.append(self.makeElement('p', line, {'type': 'title'}))
@@ -464,7 +486,9 @@ class PlaintextConverter:
                         body.append(self.makeElement('p', ptext.strip()))
                         ptext = ''
                     except ValueError:
-                        raise ConversionException("Invalid utf8 «" + ptext.strip().encode('utf-8') + "»")
+                        raise ConversionException(
+                            "Invalid utf8 «" +
+                            ptext.strip().encode('utf-8') + "»")
 
                 ptext = ''
             else:
@@ -479,11 +503,13 @@ class PlaintextConverter:
         return document
 
 #from pdfminer.pdfparser import PDFDocument, PDFParser
-#from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter, process_pdf
+#from pdfminer.pdfinterp import PDFResourceManager, \
+    #PDFPageInterpreter, process_pdf
 #from pdfminer.pdfdevice import PDFDevice, TagExtractor
 #from pdfminer.converter import TextConverter
 #from pdfminer.cmapdb import CMapDB
 #from pdfminer.layout import LAParams
+
 
 class PDFConverter:
     def __init__(self, filename):
@@ -506,8 +532,8 @@ class PDFConverter:
             u"[Ccaron]": u"Č",
             u"[eng": u"ŋ",
             " ]": "",
-            u"Ď": u"đ", # cough
-            u"ď": u"đ", # cough
+            u"Ď": u"đ",  # cough
+            u"ď": u"đ",  # cough
             u"ﬁ": "fi",
             u"ﬂ": "fl",
             u"ﬀ": "ff",
@@ -526,7 +552,11 @@ class PDFConverter:
         Extract the text from the pdf file using pdftotext
         output contains string from the program and is a utf-8 string
         """
-        subp = subprocess.Popen(['pdftotext', '-enc', 'UTF-8', '-nopgbrk', '-eol', 'unix', self.orig, '-'], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+        subp = subprocess.Popen(
+            ['pdftotext', '-enc', 'UTF-8', '-nopgbrk', '-eol',
+             'unix', self.orig, '-'],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
@@ -538,21 +568,16 @@ class PDFConverter:
             logfile.write(error)
             logfile.write('\n')
             logfile.close()
-            raise ConversionException("Could not extract text from pdf. More info in the log file: " + self.orig + u".log")
+            raise ConversionException("Could not extract text from pdf. \
+                More info in the log file: " + self.orig + u".log")
 
         self.text = unicode(output, encoding='utf8')
         self.replaceLigatures()
         return self.strip_chars(self.text)
 
     def strip_chars(self, content, extra=u''):
-        remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F%s]'
-                            % extra)
-        stripped = 0
+        remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F%s]' % extra)
         content, count = remove_re.subn('', content)
-        if count > 0:
-            plur = ((count > 1) and u's') or u''
-            #sys.stderr.write('Removed %s character%s.\n'
-                            #% (count, plur))
 
         return content
 
@@ -619,22 +644,25 @@ class PDFConverter:
 
         return document
 
+
 class DocConverter:
     """
     Class to convert Microsoft Word documents to the giellatekno xml format
     """
     def __init__(self, filename):
         self.orig = filename
-        self.converterXsl = \
-        os.path.join(os.getenv('GTHOME'), 'gt/script/corpus/docbook2corpus2.xsl')
+        self.converterXsl = os.path.join(
+            os.getenv('GTHOME'), 'gt/script/corpus/docbook2corpus2.xsl')
 
     def extractText(self):
-        """
-        Extract the text from the doc file using antiword
+        """Extract the text from the doc file using antiword
         output contains the docbook xml output by antiword,
         and is a utf-8 string
         """
-        subp = subprocess.Popen(['antiword', '-x', 'db', self.orig], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+        subp = subprocess.Popen(
+            ['antiword', '-x', 'db', self.orig],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
@@ -646,9 +674,8 @@ class DocConverter:
         return output
 
     def convert2intermediate(self):
-        """
-        Convert the original document to the giellatekno xml format, with no
-        metadata
+        """Convert the original document to the giellatekno xml format,
+        with no metadata
         The resulting xml is stored in intermediate
         """
         docbookXsltRoot = etree.parse(self.converterXsl)
@@ -657,6 +684,7 @@ class DocConverter:
         intermediate = transform(doc)
 
         return intermediate
+
 
 class BiblexmlConverter:
     """
@@ -669,7 +697,10 @@ class BiblexmlConverter:
         """
         Convert the bible xml to giellatekno xml format using bible2xml.pl
         """
-        subp = subprocess.Popen(['bible2xml.pl', '-out', 'kluff.xml', self.orig], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+        subp = subprocess.Popen(
+            ['bible2xml.pl', '-out', 'kluff.xml', self.orig],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
@@ -680,6 +711,7 @@ class BiblexmlConverter:
 
         return etree.parse('kluff.xml')
 
+
 class HTMLContentConverter:
     """
     Class to convert html documents to the giellatekno xml format
@@ -688,8 +720,8 @@ class HTMLContentConverter:
         self.orig = filename
         self.content = content
 
-        self.converterXsl = \
-        os.path.join(os.getenv('GTHOME'), 'gt/script/corpus/xhtml2corpus.xsl')
+        self.converterXsl = os.path.join(
+            os.getenv('GTHOME'), 'gt/script/corpus/xhtml2corpus.xsl')
 
     def tidy(self):
         """
@@ -700,13 +732,19 @@ class HTMLContentConverter:
         except HTMLParser.HTMLParseError:
             raise ConversionException("BeautifulSoup couldn't parse the html")
 
-        comments = soup.findAll(text=lambda text:isinstance(text, bs4.Comment))
+        comments = soup.findAll(
+            text=lambda text: isinstance(text, bs4.Comment))
         [comment.extract() for comment in comments]
 
-        [item.extract() for item in soup.findAll(text = lambda text:isinstance(text, bs4.ProcessingInstruction ))]
-        [item.extract() for item in soup.findAll(text = lambda text:isinstance(text, bs4.Declaration ))]
+        [item.extract() for item in soup.findAll(
+            text=lambda text: isinstance(text, bs4.ProcessingInstruction))]
+        [item.extract() for item in soup.findAll(
+            text=lambda text: isinstance(text, bs4.Declaration))]
 
-        remove_tags = ['script', 'style', 'o:p', 'st1:country-region', 'v:shapetype', 'v:shape', 'st1:metricconverter', 'area', 'object', 'meta', 'fb:like', 'fb:comments', 'g:plusone']
+        remove_tags = ['script', 'style', 'o:p', 'st1:country-region',
+                       'v:shapetype', 'v:shape', 'st1:metricconverter',
+                       'area', 'object', 'meta', 'fb:like', 'fb:comments',
+                       'g:plusone']
 
         for remove_tag in remove_tags:
             removes = soup.findAll(remove_tag)
@@ -716,7 +754,13 @@ class HTMLContentConverter:
         if not ("xmlns", "http://www.w3.org/1999/xhtml") in soup.html.attrs:
             soup.html["xmlns"] = "http://www.w3.org/1999/xhtml"
 
-        soup = soup.prettify().replace('&shy;', u'­').replace('&nbsp;', ' ').replace('&aelig;', u'æ').replace('&eacute;', u'é')
+        soup = soup.prettify()
+        replacements = {'&shy;': u'­',
+                        '&nbsp;': ' ',
+                        '&aelig;': u'æ',
+                        '&eacute;': u'é'}
+        for key, value in replacements.iteritems():
+            soup = soup.replace(key, value)
 
         tidyOption = {"indent": "auto",
                       "indent-spaces": 2,
@@ -736,8 +780,12 @@ class HTMLContentConverter:
                       "char-encoding": "utf8",
                       "enclose-block-text": "yes",
                       "new-empty-tags": "ms,mb,nf,mu",
-                      "new-inline-tags": "dato,note,idiv,o:p,pb,v:shapetype,v:stroke,v:formulas,v:f,v:path,v:shape,v:imagedata,o:lock,st1:country-region,st1:place,st1:metricconverter,g:plusone,fb:like,fb:comments",
-                      "new-blocklevel-tags": "label,nav,article,header,figcaption,time,aside,figure,footer",
+                      "new-inline-tags": "dato,note,idiv,o:p,pb,v:shapetype,\
+                          v:stroke,v:formulas,v:f,v:path,v:shape,v:imagedata,\
+                          o:lock,st1:country-region,st1:place,\
+                          st1:metricconverter,g:plusone,fb:like,fb:comments",
+                      "new-blocklevel-tags": "label,nav,article,header,\
+                          figcaption,time,aside,figure,footer",
                       "clean": "true",
                       "drop-proprietary-attributes": "true",
                       "drop-empty-paras": "true"
@@ -784,8 +832,8 @@ class HTMLContentConverter:
             # html is unicode, encode it as utf8 before writing it
             logfile.write(html.encode('utf8'))
             logfile.close()
-            raise ConversionException("Invalid html, log is found in " + self.orig + '.log')
-
+            raise ConversionException(
+                "Invalid html, log is found in " + self.orig + '.log')
 
         if len(transform.error_log) > 0:
 
@@ -807,15 +855,18 @@ class HTMLContentConverter:
 
             logfile.write(html.encode('utf8'))
             logfile.close()
-            raise ConversionException('transformation failed' + self.orig + '.log')
+            raise ConversionException(
+                'transformation failed' + self.orig + '.log')
 
         return intermediate
+
 
 class HTMLConverter(HTMLContentConverter):
     def __init__(self, filename):
         f = open(filename)
         HTMLContentConverter.__init__(self, filename, f.read())
         f.close()
+
 
 class RTFConverter(HTMLContentConverter):
     """
@@ -833,13 +884,15 @@ class RTFConverter(HTMLContentConverter):
         """
         doc = open(self.orig, "rb")
         content = doc.read()
-        doc = Rtf15Reader.read(io.BytesIO(content.replace('fcharset256', 'fcharset255')))
+        doc = Rtf15Reader.read(
+            io.BytesIO(content.replace('fcharset256', 'fcharset255')))
         html = XHTMLWriter.write(doc, pretty=True).read()
         xml = etree.fromstring(html)
         xml.tag = 'body'
         htmlElement = etree.Element('html')
         htmlElement.append(xml)
         return etree.tostring(htmlElement)
+
 
 class DocumentFixer:
     """
@@ -867,8 +920,8 @@ class DocumentFixer:
             u"[Ccaron]": u"Č",
             u"[eng": u"ŋ",
             " ]": "",
-            u"Ď": u"đ", # cough
-            u"ď": u"đ", # cough
+            u"Ď": u"đ",  # cough
+            u"ď": u"đ",  # cough
             "\x03": "",
             "\x04": "",
             "\x07": "",
@@ -935,7 +988,9 @@ class DocumentFixer:
             child.getparent().remove(child)
 
         quoteList = []
-        quoteRegexes = [re.compile('".+?"'), re.compile(u'«.+?»'), re.compile(u'“.+?”')]
+        quoteRegexes = [re.compile('".+?"'),
+                        re.compile(u'«.+?»'),
+                        re.compile(u'“.+?”')]
 
         text = newelement.text
         if text:
@@ -997,13 +1052,16 @@ class DocumentFixer:
         """
         plist = []
         for paragraph in self.etree.iter('p'):
-            plist.append(etree.tostring(paragraph, method = 'text', encoding = 'utf8'))
+            plist.append(etree.tostring(paragraph,
+                                        method='text',
+                                        encoding='utf8'))
 
         words = len(re.findall(r'\S+', ' '.join(plist)))
 
         wordcount = self.etree.find('header/wordcount')
         if wordcount is None:
-            tags = ['collection', 'publChannel', 'place', 'year', 'translated_from', 'translator', 'author']
+            tags = ['collection', 'publChannel', 'place', 'year',
+                    'translated_from', 'translator', 'author']
             for tag in tags:
                 found = self.etree.find('header/' + tag)
                 if found is not None:
@@ -1014,6 +1072,7 @@ class DocumentFixer:
 
         wordcount.text = str(words)
 
+
 class XslMaker:
     """
     To convert the intermediate xml to a fullfledged  giellatekno document
@@ -1022,8 +1081,9 @@ class XslMaker:
     """
 
     def __init__(self, xslfile):
-        preprocessXsl = etree.parse(os.path.join(os.getenv('GTHOME'), \
-            'gt/script/corpus/preprocxsl.xsl'))
+        preprocessXsl = etree.parse(
+            os.path.join(os.getenv('GTHOME'),
+                         'gt/script/corpus/preprocxsl.xsl'))
         preprocessXslTransformer = etree.XSLT(preprocessXsl)
 
         self.filename = xslfile
@@ -1039,11 +1099,16 @@ class XslMaker:
             logfile.close()
             raise ConversionException("Syntax error in " + self.filename)
 
-        self.finalXsl = preprocessXslTransformer(filexsl, commonxsl = etree.XSLT.strparam('file://' + os.path.join(os.getenv('GTHOME'), \
-            'gt/script/corpus/common.xsl')))
+        self.finalXsl = preprocessXslTransformer(
+            filexsl,
+            commonxsl=
+            etree.XSLT.strparam('file://' +
+                                os.path.join(os.getenv('GTHOME'),
+                                             'gt/script/corpus/common.xsl')))
 
     def getXsl(self):
         return self.finalXsl
+
 
 class LanguageDetector:
     """
@@ -1053,18 +1118,22 @@ class LanguageDetector:
     """
     def __init__(self, document):
         self.document = document
-        self.mainlang = self.document.getroot().attrib['{http://www.w3.org/XML/1998/namespace}lang']
+        self.mainlang = self.document.getroot().\
+            attrib['{http://www.w3.org/XML/1998/namespace}lang']
 
         inlangs = []
         for language in self.document.findall('header/multilingual/language'):
-            inlangs.append(language.get('{http://www.w3.org/XML/1998/namespace}lang'))
+            inlangs.append(
+                language.get('{http://www.w3.org/XML/1998/namespace}lang'))
         if len(inlangs) != 0:
             if self.mainlang != '':
                 inlangs.append(self.mainlang)
             else:
                 raise ConversionException('mainlang not set')
 
-        self.languageGuesser = ngram.NGram(os.path.join(os.getenv('GTHOME'), 'tools/lang-guesser/LM/'), langs = inlangs )
+        self.languageGuesser = ngram.NGram(
+            os.path.join(os.getenv('GTHOME'), 'tools/lang-guesser/LM/'),
+            langs=inlangs)
 
     def getDocument(self):
         return self.document
@@ -1076,20 +1145,23 @@ class LanguageDetector:
         return self.mainlang
 
     def setParagraphLanguage(self, paragraph):
-        """Extract the text outside the quotes, use this text to set language of
-        the paragraph.
+        """Extract the text outside the quotes, use this text to set
+        language of the paragraph.
         Set the language of the quotes in the paragraph
         """
         paragraphText = self.removeQuote(paragraph)
-        lang = self.languageGuesser.classify(paragraphText.encode("ascii", "ignore"))
+        lang = self.languageGuesser.classify(
+            paragraphText.encode("ascii", "ignore"))
         if lang != self.getMainlang():
             paragraph.set('{http://www.w3.org/XML/1998/namespace}lang', lang)
 
         for element in paragraph.iter("span"):
             if element.get("type") == "quote":
-                lang = self.languageGuesser.classify(element.text.encode("ascii", "ignore"))
+                lang = self.languageGuesser.classify(
+                    element.text.encode("ascii", "ignore"))
                 if lang != self.getMainlang():
-                    element.set('{http://www.w3.org/XML/1998/namespace}lang', lang)
+                    element.set(
+                        '{http://www.w3.org/XML/1998/namespace}lang', lang)
 
         return paragraph
 
@@ -1097,12 +1169,14 @@ class LanguageDetector:
         """Extract all text except the one inside <span type='quote'>"""
         text = ''
         for element in paragraph.iter():
-            if element.tag == 'span' and element.get('type') == 'quote' and element.tail != None:
+            if (element.tag == 'span' and
+                    element.get('type') == 'quote' and
+                    element.tail is not None):
                 text = text + element.tail
             else:
-                if element.text != None:
+                if element.text is not None:
                     text = text + element.text
-                if element.tail != None:
+                if element.tail is not None:
                     text = text + element.tail
 
         return text
@@ -1114,10 +1188,12 @@ class LanguageDetector:
             for paragraph in self.document.iter('p'):
                 paragraph = self.setParagraphLanguage(paragraph)
 
+
 class DocumentTester:
     def __init__(self, document):
         self.document = document
-        self.mainlang = self.document.getroot().attrib['{http://www.w3.org/XML/1998/namespace}lang']
+        self.mainlang = self.document.getroot().\
+            attrib['{http://www.w3.org/XML/1998/namespace}lang']
         self.removeForeignLanguage()
 
     def getMainlang(self):
@@ -1133,7 +1209,8 @@ class DocumentTester:
         return 1.0 * self.getUnknownWordcount() / self.getMainlangWordcount()
 
     def getMainlangRatio(self):
-        return 1.0 * self.getMainlangWordcount() / float(self.document.find('header/wordcount').text)
+        return 1.0 * self.getMainlangWordcount() / float(
+            self.document.find('header/wordcount').text)
 
     def removeForeignLanguage(self):
         """Remove text mark as not belonging to mainlang
@@ -1160,16 +1237,29 @@ class DocumentTester:
             if not hit:
                 paragraph.getparent().remove(paragraph)
             else:
-                del paragraph.attrib['{http://www.w3.org/XML/1998/namespace}lang']
+                del paragraph.\
+                    attrib['{http://www.w3.org/XML/1998/namespace}lang']
 
     def getUnknownWordcount(self):
         lookupCommand = ['lookup', '-flags', 'mbTT']
         if self.getMainlang() == 'sme':
-            lookupCommand.append(os.getenv('GTHOME') + '/gt/' + self.getMainlang() + '/bin/' + self.getMainlang() + '.fst')
+            lookupCommand.append(os.getenv('GTHOME') +
+                                 '/gt/' +
+                                 self.getMainlang() +
+                                 '/bin/' +
+                                 self.getMainlang() +
+                                 '.fst')
         else:
-            lookupCommand.append(os.getenv('GTHOME') + '/langs/' + self.getMainlang() + '/src/analyser-gt-desc.xfst')
+            lookupCommand.append(
+                os.getenv('GTHOME') +
+                '/langs/' +
+                self.getMainlang() +
+                '/src/analyser-gt-desc.xfst')
 
-        subp = subprocess.Popen(lookupCommand, stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+        subp = subprocess.Popen(lookupCommand,
+                                stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
         (output, error) = subp.communicate(self.getPreprocessedMainlangWords())
 
         if subp.returncode != 0:
@@ -1190,14 +1280,21 @@ class DocumentTester:
         """
         preprocessCommand = []
         if self.getMainlang() == 'sme':
-            abbrFile = os.path.join(os.environ['GTHOME'], 'gt/sme/bin/abbr.txt')
-            corrFile = os.path.join(os.environ['GTHOME'], 'gt/sme/bin/corr.txt')
-            preprocessCommand = ['preprocess', '--abbr=' + abbrFile, '--corr=' + corrFile]
+            abbrFile = os.path.join(
+                os.environ['GTHOME'], 'gt/sme/bin/abbr.txt')
+            corrFile = os.path.join(
+                os.environ['GTHOME'], 'gt/sme/bin/corr.txt')
+            preprocessCommand = ['preprocess',
+                                 '--abbr=' + abbrFile, '--corr=' + corrFile]
         else:
             preprocessCommand = ['preprocess']
 
-        subp = subprocess.Popen(preprocessCommand, stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-        (output, error) = subp.communicate(self.getMainlangWords().replace('\n', ' '))
+        subp = subprocess.Popen(preprocessCommand,
+                                stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+        (output, error) = subp.communicate(
+            self.getMainlangWords().replace('\n', ' '))
 
         if subp.returncode != 0:
             print >>sys.stderr, output
@@ -1209,29 +1306,37 @@ class DocumentTester:
     def getMainlangWords(self):
         plist = []
         for paragraph in self.document.iter('p'):
-            plist.append(etree.tostring(paragraph, method = 'text', encoding = 'utf8'))
+            plist.append(
+                etree.tostring(paragraph, method='text', encoding='utf8'))
 
         return ' '.join(plist)
 
+
 def parse_options():
-    parser = argparse.ArgumentParser(description = 'Convert original files to giellatekno xml, using dependency checking.')
-    parser.add_argument('orig_dir', help = "directory where the original files exist")
+    parser = argparse.ArgumentParser(
+        description='Convert original files to giellatekno xml, using \
+        dependency checking.')
+    parser.add_argument('orig_dir',
+                        help="directory where the original files exist")
 
     args = parser.parse_args()
     return args
+
 
 def worker(xsl_file):
     conv = Converter(xsl_file[:-4])
     conv.writeComplete()
 
+
 def main():
     args = parse_options()
     jobs = []
     if os.path.isdir(args.orig_dir):
-        for root, dirs, files in os.walk(args.orig_dir): # Walk directory tree
+        for root, dirs, files in os.walk(args.orig_dir):
             for f in files:
                 if f.endswith('.xsl'):
-                    p = multiprocessing.Process(target=worker, args=(os.path.join(root, f),))
+                    p = multiprocessing.Process(
+                        target=worker, args=(os.path.join(root, f),))
                     jobs.append(p)
                     p.start()
     elif os.path.isfile(args.orig_dir):
@@ -1240,7 +1345,10 @@ def main():
             conv = Converter(args.orig_dir)
             conv.writeComplete()
         else:
-            shutil.copy(os.path.join(os.getenv('GTHOME'), 'gt/script/corpus/XSL-template.xsl'), xsl_file)
-            print "Fill in meta info in", xsl_file, ', then run this command again'
+            shutil.copy(
+                os.path.join(os.getenv('GTHOME'),
+                             'gt/script/corpus/XSL-template.xsl'),
+                xsl_file)
+            print "Fill in meta info in", xsl_file, \
+                ', then run this command again'
             sys.exit(1)
-
