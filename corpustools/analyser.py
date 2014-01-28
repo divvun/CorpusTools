@@ -415,10 +415,10 @@ def parse_options():
     parser.add_argument(u'lang',
                         help=u"lang which should be analysed")
     parser.add_argument(u'--debug',
+                        action=u"store_true",
                         help=u"use this for debugging the analysis \
                         process. When this argument is used files will \
-                        be analysed one by one.",
-                        action=u"store_true")
+                        be analysed one by one.")
     parser.add_argument(u'converted_dirs', nargs=u'+',
                         help=u"director(y|ies) where the converted files exist")
 
@@ -464,10 +464,10 @@ def main():
                          '/src/syntax/corr.txt'))
 
     ana.collect_files(args.converted_dirs)
-    if args.debug is False:
-        ana.analyse_in_parallel()
-    else:
+    if args.debug:
         ana.analyse_serially()
+    else:
+        ana.analyse_in_parallel()
 
 if __name__ == u'__main__':
     main()
