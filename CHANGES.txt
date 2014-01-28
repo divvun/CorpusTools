@@ -3,3 +3,4 @@ v<0.1.1>, <20140119> -- Treat filenames as byte streams, not unicode in analyser
 v<0.1.2>, <20140120> -- Process files given on the commandline correctly in ccat
 v<0.2.0>, <20140121> -- Add the corpus conversion tools to the package
 v<0.2.1>, <20140124> -- Fix a bug in the conversion tools decoding,  lots of changes to confirm better with PEP8
+v<0.2.2>, <20140124> -- Make convert2xml use multiprocess the same way that analyse_corpus does. Update installation instructions.

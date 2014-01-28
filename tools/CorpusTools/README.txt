@@ -9,25 +9,22 @@ Installation
 
 Install the tools for all users on a machine by writing
 
-``sudo python setup.py install``
+``sudo python setup.py install --install-scripts=/usr/local/bin``
 
-The scripts ccat, convert2xml and analyse_corpus will then be found in
-
-* /usr/local/bin on Linux
-
-* /Library/Frameworks/Python.framework/Versions/2.7/bin on OS X with default Python setup
-
-* /opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin on OS X with MacPorts enabled python
+The scripts ccat, convert2xml and analyse_corpus will then be found in /usr/local/bin
 
 Install the tools for the current user by writing
 
-``python setup.py install --user``
+``python setup.py install --install-scripts=$HOME/bin``
 
-The scripts ccat, convert2xml and analyse_corpus will then be found in
+The scripts ccat, convert2xml and analyse_corpus will then be found in ~/bin on Linux
 
-* ~/.local/bin on Linux
+Uninstalling
+============
 
-* ~/Library/Python/2.7/bin on OS X
+``sudo pip(-2.7) uninstall`` will uninstall the scripts from /usr/local/bin and the python system path.
+
+``pip(-2.7) uninstall`` will uninstall the scripts from $HOME/bin and the users python path.
 
 ccat
 ====
