@@ -1316,6 +1316,11 @@ def parse_options():
     parser = argparse.ArgumentParser(
         description='Convert original files to giellatekno xml, using \
         dependency checking.')
+    parser.add_argument(u'--debug',
+                        action=u"store_true",
+                        help=u"use this for debugging the conversion \
+                        process. When this argument is used files will \
+                        be converted one by one.")
     parser.add_argument('orig_dir',
                         help="directory where the original files exist")
 
@@ -1325,25 +1330,37 @@ def parse_options():
 
 def worker(xsl_file):
     conv = Converter(xsl_file[:-4])
-    conv.writeComplete()
 
+    # The clause below made because of this bug in python 2.7
+    # http://www.gossamer-threads.com/lists/python/bugs/1025933
+    try:
+        conv.writeComplete()
+    except Exception as e:
+        raise RuntimeError
+
+def convert_in_parallel(xsl_files):
+    pool_size = multiprocessing.cpu_count() * 2
+    pool = multiprocessing.Pool(processes=pool_size,)
+    pool.map(worker, xsl_files)
+    pool.close()
+    pool.join()
+
+def convert_serially(xsl_files):
+    for xsl_file in xsl_files:
+        conv = Converter(xsl_file[:-4])
+        try:
+            conv.writeComplete()
+        except ConversionException:
+            print >>sys.stderr, 'Could not convert', xsl_file[:-4]
 
 def main():
     args = parse_options()
-    jobs = []
-    if os.path.isdir(args.orig_dir):
-        for root, dirs, files in os.walk(args.orig_dir):
-            for f in files:
-                if f.endswith('.xsl'):
-                    p = multiprocessing.Process(
-                        target=worker, args=(os.path.join(root, f),))
-                    jobs.append(p)
-                    p.start()
-    elif os.path.isfile(args.orig_dir):
+    xsl_files = []
+
+    if os.path.isfile(args.orig_dir):
         xsl_file = args.orig_dir + '.xsl'
         if os.path.isfile(xsl_file):
-            conv = Converter(args.orig_dir)
-            conv.writeComplete()
+            worker(args.orig_dir)
         else:
             shutil.copy(
                 os.path.join(os.getenv('GTHOME'),
@@ -1352,3 +1369,16 @@ def main():
             print "Fill in meta info in", xsl_file, \
                 ', then run this command again'
             sys.exit(1)
+    elif os.path.isdir(args.orig_dir):
+        for root, dirs, files in os.walk(args.orig_dir):
+            for f in files:
+                if f.endswith('.xsl'):
+                    xsl_files.append(os.path.join(root, f))
+
+        if args.debug:
+            convert_serially(xsl_files)
+        else:
+            try:
+                convert_in_parallel(xsl_files)
+            except RuntimeError as e:
+                pass
