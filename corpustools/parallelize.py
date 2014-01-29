@@ -1131,7 +1131,3 @@ def main():
                     raise
             print "Generating the tmx file", tmx.getOutfileName()
             tmx.writeTmxFile(tmx.getOutfileName())
-
-
-if __name__ == "__main__":
-    main()
