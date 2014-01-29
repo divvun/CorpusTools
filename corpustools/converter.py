@@ -239,7 +239,7 @@ class Converter:
         try:
             transform = u'{http://www.w3.org/1999/XSL/Transform}'
             mainlang = u'variable[@name="mainlang"]'
-            genre = 'variable[@name="genre"]'
+            xslgenre = 'variable[@name="genre"]'
             xsltree = etree.parse(self.getXsl())
 
             root = xsltree.getroot()
@@ -256,7 +256,7 @@ class Converter:
                               mainlang).attrib['select'] = "'" + lang + "'"
 
                 genre = root.find(transform +
-                                  genre).attrib['select'].replace("'", "")
+                                  xslgenre).attrib['select'].replace("'", "")
 
                 if genre == "" or genre not in ['admin', 'bible', 'facta',
                                                 'ficti', 'news']:
@@ -264,7 +264,7 @@ class Converter:
                                     'news']:
                         genre = parts[parts.index('orig') + 2]
                         root.find(transform +
-                                  genre).attrib['select'] = "'" + genre + "'"
+                                  xslgenre).attrib['select'] = "'" + genre + "'"
 
                 xsltree.write(
                     self.getXsl(), encoding="utf-8", xml_declaration=True)
@@ -1360,7 +1360,7 @@ def main():
     if os.path.isfile(args.orig_dir):
         xsl_file = args.orig_dir + '.xsl'
         if os.path.isfile(xsl_file):
-            worker(args.orig_dir)
+            worker(xsl_file)
         else:
             shutil.copy(
                 os.path.join(os.getenv('GTHOME'),
