@@ -311,6 +311,10 @@ class XMLPrinter:
             if self.visit_this_node(paragraph):
                 self.collect_text(paragraph, self.get_lang(), buffer)
 
+        dependency = self.etree.find('.//dependency')
+        if dependency is not None:
+            buffer.write(dependency.text.encode('utf8'))
+
         return buffer
 
     def print_file(self, file_):
