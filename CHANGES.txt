@@ -5,3 +5,4 @@ v<0.2.0>, <20140121> -- Add the corpus conversion tools to the package
 v<0.2.1>, <20140124> -- Fix a bug in the conversion tools decoding,  lots of changes to confirm better with PEP8
 v<0.2.2>, <20140128> -- Make convert2xml use multiprocess the same way that analyse_corpus does. Update installation instructions.
 v<0.2.3>, <20140129> -- ccat now understands how to turn analysed files into clean text.
+v<0.3.0>, <20140129> -- Moved corpus-parallel.py to CorpusTools

@@ -11,20 +11,20 @@ Install the tools for all users on a machine by writing
 
 ``sudo python setup.py install --install-scripts=/usr/local/bin``
 
-The scripts ccat, convert2xml and analyse_corpus will then be found in /usr/local/bin
+The scripts ccat, convert2xml, analyse_corpus and parallelize will then be found in /usr/local/bin
 
 Install the tools for the current user by writing
 
-``python setup.py install --install-scripts=$HOME/bin``
+``python setup.py install --user --install-scripts=$HOME/bin``
 
-The scripts ccat, convert2xml and analyse_corpus will then be found in ~/bin on Linux
+The scripts ccat, convert2xml, analyse_corpus and parallelize will then be found in ~/bin
 
 Uninstalling
 ============
 
 ``sudo pip(-2.7) uninstall`` will uninstall the scripts from /usr/local/bin and the python system path.
 
-``pip(-2.7) uninstall`` will uninstall the scripts from $HOME/bin and the users python path.
+``pip(-2.7) uninstall --user`` will uninstall the scripts from $HOME/bin and the users python path.
 
 ccat
 ====
@@ -56,3 +56,8 @@ It depends on these external programs:
 * ``antiword``
 
 * ``bible2xml.pl``
+
+parallelize
+===========
+
+Parallelize two parallel corpus files, write the result to a .tmx file.

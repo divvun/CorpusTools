@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='CorpusTools',
-    version='0.2.3',
+    version='0.3.0',
     author='Børre Gaup',
     author_email='borre.gaup@uit.no',
     packages=find_packages(),
@@ -14,7 +14,8 @@ setup(
     entry_points = {
         'console_scripts': ['ccat = corpustools.ccat:main',
                             'analyse_corpus = corpustools.analyser:main',
-                            'convert2xml = corpustools.converter:main']
+                            'convert2xml = corpustools.converter:main',
+                            'parallelize = corpustools.parallelize.main']
     },
     install_requires=[
         "pyth",
