@@ -15,7 +15,7 @@ setup(
         'console_scripts': ['ccat = corpustools.ccat:main',
                             'analyse_corpus = corpustools.analyser:main',
                             'convert2xml = corpustools.converter:main',
-                            'parallelize = corpustools.parallelize.main']
+                            'parallelize = corpustools.parallelize:main']
     },
     install_requires=[
         "pyth",
