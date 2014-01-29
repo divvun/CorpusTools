@@ -307,13 +307,14 @@ class XMLPrinter:
         self.filename = filename
 
         buffer = StringIO.StringIO()
-        for paragraph in self.etree.findall('.//p'):
-            if self.visit_this_node(paragraph):
-                self.collect_text(paragraph, self.get_lang(), buffer)
-
+        
         dependency = self.etree.find('.//dependency')
         if dependency is not None:
             buffer.write(dependency.text.encode('utf8'))
+        else:
+            for paragraph in self.etree.findall('.//p'):
+                if self.visit_this_node(paragraph):
+                    self.collect_text(paragraph, self.get_lang(), buffer)
 
         return buffer
 
