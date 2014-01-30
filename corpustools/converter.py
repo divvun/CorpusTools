@@ -264,7 +264,8 @@ class Converter:
                                     'news']:
                         genre = parts[parts.index('orig') + 2]
                         root.find(transform +
-                                  xslgenre).attrib['select'] = "'" + genre + "'"
+                                  xslgenre).attrib['select'] = \
+                                      "'" + genre + "'"
 
                 xsltree.write(
                     self.getXsl(), encoding="utf-8", xml_declaration=True)

@@ -57,7 +57,8 @@ class Typoline:
         return result
 
 class Typos:
-    """A class that reads typos and corrections from a .typos files and stores them in a dict
+    """A class that reads typos and corrections from a .typos files and
+    stores them in a dict
     """
     def __init__(self, typosfile):
         """Read typos from typosfile. If a correction exists, insert the typos

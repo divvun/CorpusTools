@@ -90,21 +90,25 @@ class NGram:
                 for line in file.readlines():
                     parts = line.strip().split('\t ')
                     if len(parts) != 2:
-                        raise ValueError("invalid language file %s line : %s" % (fname,parts))
+                        raise ValueError("invalid language file %s line : %s"
+                            % (fname,parts))
                     try:
                         ngrams[parts[0]] = int(parts[1])
                     except KeyboardInterrupt:
                         raise
                     except:
                         traceback.print_exc()
-                        raise ValueError("invalid language file %s line : %s" % (fname,parts))
+                        raise ValueError("invalid language file %s line : %s"
+                            % (fname,parts))
 
                 if len(ngrams.keys()):
                     self.ngrams[lang] = _NGram(ngrams)
 
                 file.close()
             except IOError:
-                sys.stderr.write("Unknown language: " + os.path.basename(fname)[:-len(ext)] + ' (Language recognition)\n')
+                sys.stderr.write("Unknown language: " +
+                                 os.path.basename(fname)[:-len(ext)] +
+                                 ' (Language recognition)\n')
 
 
         if not count:

@@ -349,7 +349,8 @@ def parse_options():
                         process. When this argument is used files will \
                         be analysed one by one.")
     parser.add_argument(u'converted_dirs', nargs=u'+',
-                        help=u"director(y|ies) where the converted files exist")
+                        help=u"director(y|ies) where the converted files \
+                        exist")
 
     args = parser.parse_args()
     return args

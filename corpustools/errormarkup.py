@@ -178,8 +178,8 @@ class ErrorMarkup:
 
         Extract the string from the last element of elements.
         If a ( is found, set the part before ( to be the tail of the last
-        element of elements. Set the part after ( to be the text of error_element,
-        append error_element to elements.
+        element of elements. Set the part after ( to be the text of
+        error_element, append error_element to elements.
 
         If a ( is not found, insert the last element of elements as first child
         of error_element, continue searching
@@ -192,8 +192,10 @@ class ErrorMarkup:
             print '\n', self._filename
             print "Cannot handle:\n"
             print errorstring + correctionstring
-            print "This is either an error in the markup or an error in the errormarkup conversion code"
-            print "If the markup is correct, send a report about this error to borre.gaup@uit.no"
+            print "This is either an error in the markup or an error in the \
+            errormarkup conversion code"
+            print "If the markup is correct, send a report about this error \
+            to borre.gaup@uit.no"
 
         elements.remove(elements[-1])
         if not self.is_correction(errorstring):
@@ -289,7 +291,8 @@ class ErrorMarkup:
         correction -- is a correctionstring
 
         '''
-        (fixed_correction, ext_att, att_list) = self.look_for_extended_attributes(
+        (fixed_correction, ext_att, att_list) = \
+            self.look_for_extended_attributes(
             correction[1:].replace('(', '').replace(')', ''))
 
         element_name = self.get_element_name(correction[0])
@@ -325,7 +328,11 @@ class ErrorMarkup:
     def get_element_name(self, separator):
         return self.types[separator]
 
-    def make_error_element(self, error, fixed_correction, element_name, att_list):
+    def make_error_element(self,
+                           error,
+                           fixed_correction,
+                           element_name,
+                           att_list):
         error_element = etree.Element(element_name)
         if isinstance(error, etree._Element):
             error_element.append(error)

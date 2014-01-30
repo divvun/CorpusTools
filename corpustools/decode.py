@@ -208,7 +208,8 @@ class EncodingGuesser(object):
         """@brief Get the frequency of real "sami" letters in content
 
         @param content is a unicode text (not utf8 str)
-        #return sami_letter_frequency is a dict of letters and their frequencies
+        #return sami_letter_frequency is a dict of letters and their
+        frequencies
         """
         sami_letter_frequency = {}
 
@@ -270,7 +271,8 @@ class EncodingGuesser(object):
             hitter = False
             for key in encoding_frequency.keys():
                 try:
-                    if not sami_letter_frequency[CTYPES[position][key].lower()]:
+                    if (not sami_letter_frequency[CTYPES[position][key].\
+                            lower()]):
                         hitter = True
                 except KeyError:
                     pass
