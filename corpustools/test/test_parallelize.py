@@ -31,24 +31,32 @@ class TestCorpusXMLFile(unittest.TestCase):
     A test class for the CorpusXMLFile class
     """
     def setUp(self):
-        self.pfile = parallelize.CorpusXMLFile(os.environ['GTFREE'] + "/prestable/converted/sme/facta/skuvlahistorja2/aarseth2-s.htm.xml", "nob")
+        self.pfile = parallelize.CorpusXMLFile(
+            os.environ['GTFREE'] +
+            "/prestable/converted/sme/facta/skuvlahistorja2/aarseth2-s.htm.xml", "nob")
 
     def assertXmlEqual(self, got, want):
         """Check if two stringified xml snippets are equal
         """
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(want, got, 0):
-            message = checker.output_difference(doctest.Example("", want), got, 0).encode('utf-8')
+            message = checker.output_difference(
+                doctest.Example("", want), got, 0).encode('utf-8')
             raise AssertionError(message)
 
     def testBasename(self):
         self.assertEqual(self.pfile.getBasename(), "aarseth2-s.htm.xml")
 
     def testDirname(self):
-        self.assertEqual(self.pfile.getDirname(), os.path.join(os.environ['GTFREE'] + "/prestable/converted/sme/facta/skuvlahistorja2"))
+        self.assertEqual(self.pfile.getDirname(), os.path.join(
+            os.environ['GTFREE'] +
+            "/prestable/converted/sme/facta/skuvlahistorja2"))
 
     def testName(self):
-        self.assertEqual(self.pfile.getName(), os.environ['GTFREE'] + "/prestable/converted/sme/facta/skuvlahistorja2/aarseth2-s.htm.xml")
+        self.assertEqual(
+            self.pfile.getName(),
+            os.environ['GTFREE'] +
+            "/prestable/converted/sme/facta/skuvlahistorja2/aarseth2-s.htm.xml")
 
     def testLang(self):
         self.assertEqual(self.pfile.getLang(), "sme")
@@ -57,21 +65,29 @@ class TestCorpusXMLFile(unittest.TestCase):
         self.assertEqual(self.pfile.getParallelBasename(), "aarseth2-n.htm")
 
     def testGetParallelFilename(self):
-        self.assertEqual(self.pfile.getParallelFilename(), os.environ['GTFREE'] + "/prestable/converted/nob/facta/skuvlahistorja2/aarseth2-n.htm.xml")
+        self.assertEqual(
+            self.pfile.getParallelFilename(),
+            os.environ['GTFREE'] +
+            "/prestable/converted/nob/facta/skuvlahistorja2/aarseth2-n.htm.xml")
 
     def testGetOriginalFilename(self):
-        self.assertEqual(self.pfile.getOriginalFilename(), os.environ['GTFREE'] + "/orig/sme/facta/skuvlahistorja2/aarseth2-s.htm")
+        self.assertEqual(self.pfile.getOriginalFilename(),
+                         os.environ['GTFREE'] +
+                         "/orig/sme/facta/skuvlahistorja2/aarseth2-s.htm")
 
     def testGetTranslatedFrom(self):
         self.assertEqual(self.pfile.getTranslatedFrom(), "nob")
 
     def testGetWordCount(self):
-        corpusfile = parallelize.CorpusXMLFile('parallelize_data/aarseth2-n-with-version.htm.xml', 'sme')
+        corpusfile = parallelize.CorpusXMLFile(
+            'parallelize_data/aarseth2-n-with-version.htm.xml', 'sme')
         self.assertEqual(corpusfile.getWordCount(), "4009")
 
     def testRemoveVersion(self):
-        fileWithVersion = parallelize.CorpusXMLFile('parallelize_data/aarseth2-n-with-version.htm.xml', 'sme')
-        fileWithoutVersion = parallelize.CorpusXMLFile('parallelize_data/aarseth2-n-without-version.htm.xml', 'sme')
+        fileWithVersion = parallelize.CorpusXMLFile(
+            'parallelize_data/aarseth2-n-with-version.htm.xml', 'sme')
+        fileWithoutVersion = parallelize.CorpusXMLFile(
+            'parallelize_data/aarseth2-n-without-version.htm.xml', 'sme')
 
         fileWithVersion.removeVersion()
 
@@ -81,8 +97,10 @@ class TestCorpusXMLFile(unittest.TestCase):
         self.assertXmlEqual(got, want)
 
     def testRemoveSkip(self):
-        fileWithSkip = parallelize.CorpusXMLFile('parallelize_data/aarseth2-s-with-skip.htm.xml', 'sme')
-        fileWithoutSkip = parallelize.CorpusXMLFile('parallelize_data/aarseth2-s-without-skip.htm.xml', 'sme')
+        fileWithSkip = parallelize.CorpusXMLFile(
+            'parallelize_data/aarseth2-s-with-skip.htm.xml', 'sme')
+        fileWithoutSkip = parallelize.CorpusXMLFile(
+            'parallelize_data/aarseth2-s-without-skip.htm.xml', 'sme')
 
         fileWithSkip.removeSkip()
 
@@ -92,8 +110,10 @@ class TestCorpusXMLFile(unittest.TestCase):
         self.assertXmlEqual(got, want)
 
     def testMoveLater(self):
-        fileWithLater = parallelize.CorpusXMLFile('parallelize_data/aarseth2-s-with-later.htm.xml', 'sme')
-        fileWithMovedLater = parallelize.CorpusXMLFile('parallelize_data/aarseth2-s-with-moved-later.htm.xml', 'sme')
+        fileWithLater = parallelize.CorpusXMLFile(
+            'parallelize_data/aarseth2-s-with-later.htm.xml', 'sme')
+        fileWithMovedLater = parallelize.CorpusXMLFile(
+            'parallelize_data/aarseth2-s-with-moved-later.htm.xml', 'sme')
 
         fileWithLater.moveLater()
         got = etree.tostring(fileWithMovedLater.geteTree())
@@ -104,7 +124,8 @@ class TestSentenceDivider(unittest.TestCase):
     """A test class for the SentenceDivider class
     """
     def setUp(self):
-        self.sentenceDivider = parallelize.SentenceDivider("parallelize_data/finnmarkkulahka_web_lettere.pdf.xml", "nob")
+        self.sentenceDivider = parallelize.SentenceDivider(
+            "parallelize_data/finnmarkkulahka_web_lettere.pdf.xml", "nob")
 
     def assertXmlEqual(self, got, want):
         """
@@ -115,7 +136,9 @@ class TestSentenceDivider(unittest.TestCase):
 
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(string_want, string_got, 0):
-            message = checker.output_difference(doctest.Example("", string_want), string_got, 0).encode('utf-8')
+            message = checker.output_difference(
+                doctest.Example("", string_want),
+                string_got, 0).encode('utf-8')
             raise AssertionError(message)
 
     def testConstructor(self):
@@ -123,13 +146,15 @@ class TestSentenceDivider(unittest.TestCase):
         """
         self.assertEqual(self.sentenceDivider.sentenceCounter, 0)
         self.assertEqual(self.sentenceDivider.docLang, 'sme')
-        self.assertEqual(self.sentenceDivider.inputEtree.__class__.__name__, '_ElementTree')
+        self.assertEqual(self.sentenceDivider.inputEtree.__class__.__name__,
+                         '_ElementTree')
 
     def testProcessAllParagraphs(self):
         self.sentenceDivider.processAllParagraphs()
         got = self.sentenceDivider.document
 
-        want = etree.parse('parallelize_data/finnmarkkulahka_web_lettere.pdfsme_sent.xml.test')
+        want = etree.parse(
+            'parallelize_data/finnmarkkulahka_web_lettere.pdfsme_sent.xml.test')
 
         self.assertXmlEqual(got, want)
 
@@ -137,48 +162,90 @@ class TestSentenceDivider(unittest.TestCase):
         """Check the output of processOneParagraph
         """
         self.sentenceDivider.docLang = 'sme'
-        p = etree.XML('<p>Jápmá go sámi kultuvra veahážiid mielde go nuorat ovdal guldalit Britney Spears go Áilluhačča? máksá Finnmárkkuopmodat. § 10 Áššit meahcceeatnamiid</p>')
+        p = etree.XML('<p>Jápmá go sámi kultuvra veahážiid mielde go \
+            nuorat ovdal guldalit Britney Spears go Áilluhačča? máksá \
+            Finnmárkkuopmodat. § 10 Áššit meahcceeatnamiid</p>')
         got = self.sentenceDivider.processOneParagraph(p)
-        want = etree.XML('<p><s id="0">Jápmá go sámi kultuvra veahážiid mielde go nuorat ovdal guldalit Britney Spears go Áilluhačča ?</s><s id="1">máksá Finnmárkkuopmodat .</s><s id="2">§ 10 Áššit meahcceeatnamiid </s></p>')
+        want = etree.XML('<p><s id="0">Jápmá go sámi kultuvra veahážiid \
+            mielde go nuorat ovdal guldalit Britney Spears go \
+            Áilluhačča ?</s><s id="1">máksá Finnmárkkuopmodat .</s>\
+            <s id="2">§ 10 Áššit meahcceeatnamiid </s></p>')
         self.assertXmlEqual(got, want)
 
-        p = etree.XML('<p>Stuora oassi Romssa universitehta doaimmain lea juohkit dieđuid sámi, norgga ja riikkaidgaskasaš dutkanbirrasiidda, sámi ja norgga eiseválddiide, ja sámi servodagaide (geahča mielddus A <em type="italic"><span type="quote">“Romssa universitehta ja guoskevaš institušuvnnaid sámi dutkan ja oahpahus”</span></em>  álggahusa ).</p>')
+        p = etree.XML('<p>Stuora oassi Romssa universitehta doaimmain \
+            lea juohkit dieđuid sámi, norgga ja riikkaidgaskasaš \
+            dutkanbirrasiidda, sámi ja norgga eiseválddiide, ja sámi \
+            servodagaide (geahča mielddus A <em type="italic">\
+            <span type="quote">“Romssa universitehta ja guoskevaš \
+            institušuvnnaid sámi dutkan ja oahpahus”</span></em>  \
+            álggahusa ).</p>')
         got = self.sentenceDivider.processOneParagraph(p)
-        want = etree.XML('<p><s id="3">Stuora oassi Romssa universitehta doaimmain lea juohkit dieđuid sámi , norgga ja riikkaidgaskasaš dutkanbirrasiidda , sámi ja norgga eiseválddiide , ja sámi servodagaide ( geahča mielddus A “ Romssa universitehta ja guoskevaš institušuvnnaid sámi dutkan ja oahpahus ” álggahusa ) .</s></p>')
+        want = etree.XML('<p><s id="3">Stuora oassi Romssa universitehta \
+            doaimmain lea juohkit dieđuid sámi , norgga ja \
+            riikkaidgaskasaš dutkanbirrasiidda , sámi ja norgga \
+            eiseválddiide , ja sámi servodagaide ( geahča mielddus A \
+            “ Romssa universitehta ja guoskevaš institušuvnnaid sámi \
+            dutkan ja oahpahus ” álggahusa ) .</s></p>')
         self.assertXmlEqual(got, want)
 
 
 
         self.sentenceDivider.docLang = 'nob'
-        p = etree.XML('<p>Artikkel i boka Samisk skolehistorie 2 . Davvi Girji 2007.</p>')
+        p = etree.XML('<p>Artikkel i boka Samisk skolehistorie 2 . \
+            Davvi Girji 2007.</p>')
         got = self.sentenceDivider.processOneParagraph(p)
-        want = etree.XML('<p><s id="4">Artikkel i boka Samisk skolehistorie 2 .</s><s id="5">Davvi Girji 2007 .</s></p>')
+        want = etree.XML('<p><s id="4">Artikkel i boka Samisk \
+            skolehistorie 2 .</s><s id="5">Davvi Girji 2007 .</s></p>')
         self.assertXmlEqual(got, want)
 
-        p = etree.XML('<p><em type="bold">Bjørn Aarseth med elever på skitur - på 1950-tallet.</em> (Foto: Trygve Madsen)</p>')
+        p = etree.XML('<p><em type="bold">Bjørn Aarseth med elever på \
+            skitur - på 1950-tallet.</em> (Foto: Trygve Madsen)</p>')
         got = self.sentenceDivider.processOneParagraph(p)
-        want = etree.XML('<p><s id="6">Bjørn Aarseth med elever på skitur - på 1950-tallet .</s><s id="7">( Foto : Trygve Madsen )</s></p>')
+        want = etree.XML('<p><s id="6">Bjørn Aarseth med elever på \
+            skitur - på 1950-tallet .</s><s id="7">( Foto : Trygve \
+            Madsen )</s></p>')
         self.assertXmlEqual(got, want)
 
-        p = etree.XML('<p>finne rom for etablering av en fast tilskuddsordning til allerede etablerte språksentra..</p>')
+        p = etree.XML('<p>finne rom for etablering av en fast \
+            tilskuddsordning til allerede etablerte språksentra..</p>')
         got = self.sentenceDivider.processOneParagraph(p)
-        want = etree.XML('<p><s id="8">finne rom for etablering av en fast tilskuddsordning til allerede etablerte språksentra . .</s></p>')
+        want = etree.XML('<p><s id="8">finne rom for etablering av en fast \
+            tilskuddsordning til allerede etablerte språksentra . .</s></p>')
         self.assertXmlEqual(got, want)
 
         p = etree.XML('<p>elevene skal få!  Sametingsrådet mener målet</p>')
         got = self.sentenceDivider.processOneParagraph(p)
-        want = etree.XML('<p><s id="9">elevene skal få !</s><s id="10">Sametingsrådet mener målet</s></p>')
+        want = etree.XML('<p><s id="9">elevene skal få !</s>\
+            <s id="10">Sametingsrådet mener målet</s></p>')
         self.assertXmlEqual(got, want)
 
-        p = etree.XML('<p>Sametinget.............................................................................................................................. 2 Utdannings- og forskningsdepartementet............................................................................... 3 Kultur- og kirkedepartementet ............................................................................................... 7 Kommunal- og regionaldepartementet................................................................................... 9</p>')
+        p = etree.XML('<p>Sametinget..................................\
+            ..........................................................\
+            .................................. 2 Utdannings- og \
+            forskningsdepartementet...................................\
+            ............................................ 3 Kultur- og \
+            kirkedepartementet .......................................\
+            ........................................................ 7\
+            Kommunal- og regionaldepartementet........................\
+            ........................................................... 9</p>')
         got = self.sentenceDivider.processOneParagraph(p)
-        want = etree.XML('<p><s id="11">Sametinget ... 2 Utdannings- og forskningsdepartementet ... 3 Kultur- og kirkedepartementet ... 7 Kommunal- og regionaldepartementet ... 9</s></p>')
+        want = etree.XML('<p><s id="11">Sametinget ... 2 Utdannings- \
+            og forskningsdepartementet ... 3 Kultur- og \
+            kirkedepartementet ... 7 Kommunal- og \
+            regionaldepartementet ... 9</s></p>')
         self.assertXmlEqual(got, want)
 
         self.sentenceDivider.docLang = 'sme'
-        p = etree.XML('<p>Allaskuvllas lea maiddái ovddasvástádus julevsámegielas ja máttasámegielas. (... ). Berre leat vejolaš váldit oahpaheaddjeoahpu, mas erenoamáš deaddu lea davvi-, julev-, máttasámegielas ja kultuvrras.</p>')
+        p = etree.XML('<p>Allaskuvllas lea maiddái ovddasvástádus \
+            julevsámegielas ja máttasámegielas. (... ). Berre leat \
+            vejolaš váldit oahpaheaddjeoahpu, mas erenoamáš deaddu \
+            lea davvi-, julev-, máttasámegielas ja kultuvrras.</p>')
         got = self.sentenceDivider.processOneParagraph(p)
-        want = etree.XML('<p><s id="12">Allaskuvllas lea maiddái ovddasvástádus julevsámegielas ja máttasámegielas .</s><s id="13">Berre leat vejolaš váldit oahpaheaddjeoahpu , mas erenoamáš deaddu lea davvi- , julev- , máttasámegielas ja kultuvrras .</s></p>')
+        want = etree.XML('<p><s id="12">Allaskuvllas lea maiddái \
+            ovddasvástádus julevsámegielas ja máttasámegielas .</s>\
+            <s id="13">Berre leat vejolaš váldit oahpaheaddjeoahpu , \
+            mas erenoamáš deaddu lea davvi- , julev- , máttasámegielas \
+            ja kultuvrras .</s></p>')
         self.assertXmlEqual(got, want)
 
     def testDotFollowedByDot(self):
@@ -187,25 +254,60 @@ class TestSentenceDivider(unittest.TestCase):
         tca2 doesn't accept sentences without real letters, so we have to make
         sure the ... doesn't end up alone inside a s tag"""
         self.sentenceDivider.docLang = 'nob'
-        p = etree.XML('<p>Alt det som har med norsk å gjøre, har jeg gruet meg for og hatet hele mitt liv - og kommer kanskje til å fortsette med det. ...</p>')
+        p = etree.XML('<p>Alt det som har med norsk å gjøre, har jeg \
+            gruet meg for og hatet hele mitt liv - og kommer kanskje \
+            til å fortsette med det. ...</p>')
         got = self.sentenceDivider.processOneParagraph(p)
-        want = etree.XML('<p><s id="0">Alt det som har med norsk å gjøre , har jeg gruet meg for og hatet hele mitt liv - og kommer kanskje til å fortsette med det . ...</s></p>')
+        want = etree.XML('<p><s id="0">Alt det som har med norsk å \
+            gjøre , har jeg gruet meg for og hatet hele mitt liv - \
+            og kommer kanskje til å fortsette med det . ...</s></p>')
         self.assertXmlEqual(got, want)
 
     def testQuotemarks(self):
         """Test how SentenceDivider handles quotemarks
         """
         self.sentenceDivider.docLang = 'nob'
-        p = etree.XML('<p>Forsøksrådet for skoleverket godkjente det praktiske opplegget for kurset i brev av 18/8 1959 og uttalte da bl.a.: «Selve innholdet i kurset virker gjennomtenkt og underbygd og ser ut til å konsentrere seg om vesentlige emner som vil få stor betydning for elevene i deres yrkesarbeid. Med flyttsame-kunnskapen som bakgrunn er det grunn til å vente seg mye av dette kursopplegget.» Med denne tillitserklæring i ryggen har vi så fra år til år søkt å forbedre kursoppleggene til vi foran 1963-kursene står med planer som vi anser tilfredsstillende , men ikke endelige .)</p>')
+        p = etree.XML('<p>Forsøksrådet for skoleverket godkjente det \
+            praktiske opplegget for kurset i brev av 18/8 1959 og \
+            uttalte da bl.a.: «Selve innholdet i kurset virker \
+            gjennomtenkt og underbygd og ser ut til å konsentrere seg \
+            om vesentlige emner som vil få stor betydning for elevene \
+            i deres yrkesarbeid. Med flyttsame-kunnskapen som bakgrunn \
+            er det grunn til å vente seg mye av dette kursopplegget.» \
+            Med denne tillitserklæring i ryggen har vi så fra år til \
+            år søkt å forbedre kursoppleggene til vi foran 1963-kursene \
+            står med planer som vi anser tilfredsstillende , men \
+            ikke endelige .)</p>')
         got = self.sentenceDivider.processOneParagraph(p)
-        want = etree.XML('<p><s id="0">Forsøksrådet for skoleverket godkjente det praktiske opplegget for kurset i brev av 18/8 1959 og uttalte da bl.a. : « Selve innholdet i kurset virker gjennomtenkt og underbygd og ser ut til å konsentrere seg om vesentlige emner som vil få stor betydning for elevene i deres yrkesarbeid .</s><s id="1"> Med flyttsame-kunnskapen som bakgrunn er det grunn til å vente seg mye av dette kursopplegget . »</s><s id="2">Med denne tillitserklæring i ryggen har vi så fra år til år søkt å forbedre kursoppleggene til vi foran 1963-kursene står med planer som vi anser tilfredsstillende , men ikke endelige . )</s></p>')
+        want = etree.XML('<p><s id="0">Forsøksrådet for skoleverket \
+            godkjente det praktiske opplegget for kurset i brev av 18/8 \
+            1959 og uttalte da bl.a. : « Selve innholdet i kurset \
+            virker gjennomtenkt og underbygd og ser ut til å \
+            konsentrere seg om vesentlige emner som vil få stor \
+            betydning for elevene i deres yrkesarbeid .</s><s id="1"> \
+            Med flyttsame-kunnskapen som bakgrunn er det grunn til å \
+            vente seg mye av dette kursopplegget . »</s><s id="2">Med \
+            denne tillitserklæring i ryggen har vi så fra år til år \
+            søkt å forbedre kursoppleggene til vi foran 1963-kursene \
+            står med planer som vi anser tilfredsstillende , men ikke \
+            endelige . )</s></p>')
         self.assertXmlEqual(got, want)
 
     def testSpuriousComma(self):
         self.sentenceDivider.docLang = 'nob'
-        p = etree.XML('<p>Etter Sametingets oppfatning vil forslagene til ny § 1 Lovens formål og § 2 Kulturminner og kulturmiljØer - definisjoner; gjøre at det blir en større grad av overensstemmelse mellom lovens begreper og det begrepsapparatet som er nyttet innenfor samisk kulturminnevern. , </p>')
+        p = etree.XML('<p>Etter Sametingets oppfatning vil forslagene \
+            til ny § 1 Lovens formål og § 2 Kulturminner og \
+            kulturmiljØer - definisjoner; gjøre at det blir en større \
+            grad av overensstemmelse mellom lovens begreper og det \
+            begrepsapparatet som er nyttet innenfor samisk \
+            kulturminnevern. , </p>')
         got = self.sentenceDivider.processOneParagraph(p)
-        want = etree.XML('<p><s id="0">Etter Sametingets oppfatning vil forslagene til ny § 1 Lovens formål og § 2 Kulturminner og kulturmiljØer - definisjoner ; gjøre at det blir en større grad av overensstemmelse mellom lovens begreper og det begrepsapparatet som er nyttet innenfor samisk kulturminnevern .</s></p>')
+        want = etree.XML('<p><s id="0">Etter Sametingets oppfatning vil \
+            forslagene til ny § 1 Lovens formål og § 2 Kulturminner og \
+            kulturmiljØer - definisjoner ; gjøre at det blir en større \
+            grad av overensstemmelse mellom lovens begreper og det \
+            begrepsapparatet som er nyttet innenfor samisk \
+            kulturminnevern .</s></p>')
         self.assertXmlEqual(got, want)
 
         self.sentenceDivider.docLang = 'nob'
@@ -237,29 +339,43 @@ class TestSentenceDivider(unittest.TestCase):
 
     def testSpanInP(self):
         self.sentenceDivider.docLang = 'nob'
-        p = etree.XML('<p>( Styrke institusjonssamarbeidet (Urfolksnettverket og <span type="quote">“Forum for urfolksspørsmål i bistanden”</span>)</p>')
+        p = etree.XML('<p>( Styrke institusjonssamarbeidet \
+            (Urfolksnettverket og <span type="quote">“Forum for \
+            urfolksspørsmål i bistanden”</span>)</p>')
         got = self.sentenceDivider.processOneParagraph(p)
-        want = etree.XML('<p><s id="0">( Styrke institusjonssamarbeidet ( Urfolksnettverket og “ Forum for urfolksspørsmål i bistanden ” )</s></p>')
+        want = etree.XML('<p><s id="0">( Styrke institusjonssamarbeidet \
+            ( Urfolksnettverket og “ Forum for urfolksspørsmål i \
+            bistanden ” )</s></p>')
         self.assertXmlEqual(got, want)
 
     def testMakeSentence(self):
-        s = self.sentenceDivider.makeSentence([u'Sámerievtti ', u'ovdáneapmi', u'lea', u'dahkan', u'vuđđosa', u'Finnmárkkuláhkii'])
+        s = self.sentenceDivider.makeSentence([u'Sámerievtti ',
+                                               u'ovdáneapmi', u'lea',
+                                               u'dahkan', u'vuđđosa',
+                                               u'Finnmárkkuláhkii'])
 
         self.assertEqual(s.attrib["id"], '0')
-        self.assertEqual(s.text, u'Sámerievtti ovdáneapmi lea dahkan vuđđosa Finnmárkkuláhkii')
+        self.assertEqual(
+            s.text,
+            u'Sámerievtti ovdáneapmi lea dahkan vuđđosa Finnmárkkuláhkii')
 
 class TestParallelize(unittest.TestCase):
     """
     A test class for the Parallelize class
     """
     def setUp(self):
-        self.parallelize = parallelize.Parallelize(os.environ['GTFREE'] + "/prestable/converted/sme/facta/skuvlahistorja2/aarseth2-s.htm.xml", "nob")
+        self.parallelize = parallelize.Parallelize(
+            os.environ['GTFREE'] +
+            "/prestable/converted/sme/facta/skuvlahistorja2/aarseth2-s.htm.xml", "nob")
 
     def testOrigPath(self):
         self.assertEqual(self.parallelize.getOrigfile1(), os.environ['GTFREE'] + "/prestable/converted/nob/facta/skuvlahistorja2/aarseth2-n.htm.xml")
 
     def testParallelPath(self):
-        self.assertEqual(self.parallelize.getOrigfile2(), os.environ['GTFREE'] + "/prestable/converted/sme/facta/skuvlahistorja2/aarseth2-s.htm.xml")
+        self.assertEqual(
+            self.parallelize.getOrigfile2(),
+            os.environ['GTFREE'] +
+            "/prestable/converted/sme/facta/skuvlahistorja2/aarseth2-s.htm.xml")
 
     def testLang1(self):
         self.assertEqual(self.parallelize.getLang1(), "nob")
@@ -268,7 +384,10 @@ class TestParallelize(unittest.TestCase):
         self.assertEqual(self.parallelize.getLang2(), "sme")
 
     def testGetSentFilename(self):
-        self.assertEqual(self.parallelize.getSentFilename(self.parallelize.getFilelist()[0]), os.environ['GTFREE'] + "/tmp/aarseth2-n.htmnob_sent.xml")
+        self.assertEqual(
+            self.parallelize.getSentFilename(
+                self.parallelize.getFilelist()[0]),
+            os.environ['GTFREE'] + "/tmp/aarseth2-n.htmnob_sent.xml")
 
     def testDividePIntoSentences(self):
         self.assertEqual(self.parallelize.dividePIntoSentences(), 0)
@@ -277,14 +396,17 @@ class TestParallelize(unittest.TestCase):
         self.assertEqual(self.parallelize.parallelizeFiles(), 0)
 
     def testGenerateAnchorFile(self):
-        self.assertEqual(self.parallelize.generateAnchorFile(), os.path.join(os.environ['GTFREE'], 'anchor-nobsme.txt'))
+        self.assertEqual(self.parallelize.generateAnchorFile(),
+                         os.path.join(os.environ['GTFREE'],
+                                      'anchor-nobsme.txt'))
 
 class TestTmx(unittest.TestCase):
     """
     A test class for the Tmx class
     """
     def setUp(self):
-        self.tmx = parallelize.Tmx(etree.parse('parallelize_data/aarseth2-n.htm.toktmx'))
+        self.tmx = parallelize.Tmx(etree.parse(
+            'parallelize_data/aarseth2-n.htm.toktmx'))
 
     def assertXmlEqual(self, got, want):
         """
@@ -295,7 +417,9 @@ class TestTmx(unittest.TestCase):
 
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(string_want, string_got, 0):
-            message = checker.output_difference(doctest.Example("", string_want), string_got, 0).encode('utf-8')
+            message = checker.output_difference(
+                doctest.Example("", string_want),
+                string_got, 0).encode('utf-8')
             raise AssertionError(message)
 
 
@@ -305,7 +429,9 @@ class TestTmx(unittest.TestCase):
         self.assertEqual(self.tmx.getSrcLang(), "nob")
 
     def testTuToString(self):
-        tu = etree.XML('<tu><tuv xml:lang="sme"><seg>Sámegiella</seg></tuv><tuv xml:lang="nob"><seg>Samisk</seg></tuv></tu>')
+        tu = etree.XML(
+            '<tu><tuv xml:lang="sme"><seg>Sámegiella</seg></tuv>\
+            <tuv xml:lang="nob"><seg>Samisk</seg></tuv></tu>')
 
         self.assertEqual(self.tmx.tuToString(tu), "Sámegiella\tSamisk\n")
 
@@ -336,32 +462,54 @@ class TestTmx(unittest.TestCase):
         self.assertEqual(self.tmx.tmxToStringlist(), wantList)
 
     def testPrettifySegs(self):
-        wantXml = etree.XML('<tu><tuv xml:lang="nob"><seg>ubba gubba. ibba gibba.</seg></tuv><tuv xml:lang="sme"><seg>abba gabba. ebba gebba.</seg></tuv></tu>')
-        gotXml = etree.XML('<tu><tuv xml:lang="nob"><seg>ubba gubba. ibba gibba.\n</seg></tuv><tuv xml:lang="sme"><seg>abba gabba. ebba gebba.\n</seg></tuv></tu>')
+        wantXml = etree.XML(
+            '<tu><tuv xml:lang="nob"><seg>ubba gubba. ibba gibba.</seg>\
+            </tuv><tuv xml:lang="sme"><seg>abba gabba. ebba gebba.</seg>\
+            </tuv></tu>')
+        gotXml = etree.XML(
+            '<tu><tuv xml:lang="nob"><seg>ubba gubba. ibba gibba.\n</seg>\
+            </tuv><tuv xml:lang="sme"><seg>abba gabba. ebba gebba.\n</seg>\
+            </tuv></tu>')
         self.assertXmlEqual(self.tmx.prettifySegs(gotXml), wantXml)
 
     def testCheckIfEmtpySeg(self):
-        empty1 = etree.XML('<tu><tuv xml:lang="nob"><seg>ubba gubba. ibba gibba.</seg></tuv><tuv xml:lang="sme"><seg></seg></tuv></tu>')
+        empty1 = etree.XML(
+            '<tu><tuv xml:lang="nob"><seg>ubba gubba. ibba gibba.</seg>\
+            </tuv><tuv xml:lang="sme"><seg></seg></tuv></tu>')
         self.assertRaises(AttributeError, self.tmx.checkIfEmtpySeg, empty1)
 
-        empty2 = etree.XML('<tu><tuv xml:lang="nob"><seg></seg></tuv><tuv xml:lang="sme"><seg>abba gabba. ebba gebba.</seg></tuv></tu>')
+        empty2 = etree.XML(
+            '<tu><tuv xml:lang="nob"><seg></seg></tuv>\
+            <tuv xml:lang="sme"><seg>abba gabba. ebba gebba.</seg>\
+            </tuv></tu>')
         self.assertRaises(AttributeError, self.tmx.checkIfEmtpySeg, empty2)
 
     def testRemoveUnwantedSpaceFromSegs(self):
-        wantXml = etree.XML('<tu><tuv xml:lang="nob"><seg>[30] (juli) «skoleturer».</seg></tuv><tuv xml:lang="sme"><seg>[30] (suoidnemánnu) «skuvlatuvrrat».</seg></tuv></tu>')
-        gotXml = etree.XML('<tu><tuv xml:lang="nob"><seg>[ 30 ] ( juli ) « skoleturer » .\n</seg></tuv><tuv xml:lang="sme"><seg>[ 30 ] ( suoidnemánnu ) « skuvlatuvrrat » .\n</seg></tuv></tu>')
-        self.assertXmlEqual(self.tmx.removeUnwantedSpaceFromSegs(gotXml), wantXml)
+        wantXml = etree.XML('<tu><tuv xml:lang="nob"><seg>[30] (juli)\
+            «skoleturer».</seg></tuv><tuv xml:lang="sme"><seg>[30] \
+            (suoidnemánnu) «skuvlatuvrrat».</seg></tuv></tu>')
+        gotXml = etree.XML('<tu><tuv xml:lang="nob"><seg>[ 30 ] ( juli ) \
+            « skoleturer » .\n</seg></tuv><tuv xml:lang="sme"><seg>[ 30 ] \
+            ( suoidnemánnu ) « skuvlatuvrrat » .\n</seg></tuv></tu>')
+        self.assertXmlEqual(self.tmx.removeUnwantedSpaceFromSegs(gotXml),
+                            wantXml)
 
     def testRemoveUnwantedSpaceFromString(self):
-        got = self.tmx.removeUnwantedSpaceFromString(u'sámesearvvi ; [ 31 ] ( suoidnemánnu ) « skuvlatuvrrat » bargu lea :  okta , guokte .')
-        want = u'sámesearvvi; [31] (suoidnemánnu) «skuvlatuvrrat» bargu lea: okta, guokte.'
+        got = self.tmx.removeUnwantedSpaceFromString(
+            u'sámesearvvi ; [ 31 ] ( suoidnemánnu ) « skuvlatuvrrat » \
+            bargu lea :  okta , guokte .')
+        want = u'sámesearvvi; [31] (suoidnemánnu) «skuvlatuvrrat» \
+bargu lea: okta, guokte.'
         self.assertEqual(got, want)
 
     def testRemoveTuWithEmptySeg(self):
-        gotTmx = parallelize.Tmx(etree.parse('parallelize_data/aarseth2-n.htm.toktmx'))
+        gotTmx = parallelize.Tmx(etree.parse(
+            'parallelize_data/aarseth2-n.htm.toktmx'))
         gotTmx.removeTuWithEmptySeg()
 
-        wantTmx = parallelize.Tmx(etree.parse('parallelize_data/aarseth2-n-without-empty-seg.htm.toktmx'))
+        wantTmx = parallelize.Tmx(
+            etree.parse(
+                'parallelize_data/aarseth2-n-without-empty-seg.htm.toktmx'))
 
         self.assertXmlEqual(gotTmx.getTmx(), wantTmx.getTmx())
 
@@ -375,11 +523,20 @@ class TestTmx(unittest.TestCase):
         #self.assertXmlEqual(gotTmx.getTmx(), wantTmx.getTmx())
 
     def testCheckLanguage(self):
-        tuWithSme = etree.XML('<tu><tuv xml:lang="sme"><seg>Bargo- ja searvadahttindepartemeanta (BSD) nanne sámiid árbedieđu čohkkema, systematiserema ja gaskkusteami Norggas oktiibuot 1,6 milj. ruvnnuin.</seg></tuv><tuv xml:lang="nob"><seg>Samisk</seg></tuv></tu>')
+        tuWithSme = etree.XML('<tu><tuv xml:lang="sme"><seg>Bargo- ja \
+            searvadahttindepartemeanta (BSD) nanne sámiid árbedieđu \
+            čohkkema, systematiserema ja gaskkusteami Norggas oktiibuot \
+            1,6 milj. ruvnnuin.</seg></tuv>\
+            <tuv xml:lang="nob"><seg>Samisk</seg></tuv></tu>')
 
         self.assertTrue(self.tmx.checkLanguage(tuWithSme, 'sme'))
 
-        tuWithSma = etree.XML('<tu><tuv xml:lang="sme"><seg>Barkoe- jïh ektiedimmiedepartemente (AID) galka nænnoestidh dovne tjöönghkeme- jïh öörnemebarkoem , jïh aaj bæjkoehtimmiem saemien aerpiemaahtoen muhteste Nöörjesne, abpe 1,6 millijovnh kråvnajgujmie.</seg></tuv><tuv xml:lang="nob"><seg>Samisk</seg></tuv></tu>')
+        tuWithSma = etree.XML('<tu><tuv xml:lang="sme"><seg>Barkoe- jïh \
+            ektiedimmiedepartemente (AID) galka nænnoestidh dovne \
+            tjöönghkeme- jïh öörnemebarkoem , jïh aaj bæjkoehtimmiem \
+            saemien aerpiemaahtoen muhteste Nöörjesne, abpe 1,6 \
+            millijovnh kråvnajgujmie.</seg></tuv><tuv xml:lang="nob">\
+            <seg>Samisk</seg></tuv></tu>')
 
         self.assertFalse(self.tmx.checkLanguage(tuWithSma, 'sme'))
 
@@ -391,7 +548,10 @@ class TestTca2ToTmx(unittest.TestCase):
         """
         Hand the data from the Parallelize class to the tmx class
         """
-        para = parallelize.Parallelize(os.environ['GTFREE'] + "/prestable/converted/sme/facta/skuvlahistorja2/aarseth2-s.htm.xml", "nob")
+        para = parallelize.Parallelize(
+            os.environ['GTFREE'] +
+            "/prestable/converted/sme/facta/skuvlahistorja2/aarseth2-s.htm.xml",
+            "nob")
 
         self.tmx = parallelize.Tca2ToTmx(para.getFilelist())
 
@@ -404,7 +564,9 @@ class TestTca2ToTmx(unittest.TestCase):
 
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(string_want, string_got, 0):
-            message = checker.output_difference(doctest.Example("", string_want), string_got, 0).encode('utf-8')
+            message = checker.output_difference(
+                doctest.Example("", string_want),
+                string_got, 0).encode('utf-8')
             raise AssertionError(message)
 
 
@@ -414,7 +576,10 @@ class TestTca2ToTmx(unittest.TestCase):
 
         gotTu = self.tmx.makeTu(line1, line2)
 
-        wantTu = etree.XML('<tu><tuv xml:lang="nob"><seg>ubba gubba. ibba gibba.</seg></tuv><tuv xml:lang="sme"><seg>abba gabba. ebba gebba.</seg></tuv></tu>')
+        wantTu = etree.XML('<tu>\
+            <tuv xml:lang="nob"><seg>ubba gubba. ibba gibba.</seg></tuv>\
+            <tuv xml:lang="sme"><seg>abba gabba. ebba gebba.</seg></tuv>\
+            </tu>')
 
         self.assertXmlEqual(gotTu, wantTu)
 
@@ -423,7 +588,8 @@ class TestTca2ToTmx(unittest.TestCase):
         lang = 'smi'
         gotTuv = self.tmx.makeTuv(line, lang)
 
-        wantTuv = etree.XML('<tuv xml:lang="smi"><seg>ubba gubba. ibba gibba.</seg></tuv>')
+        wantTuv = etree.XML('<tuv xml:lang="smi">\
+            <seg>ubba gubba. ibba gibba.</seg></tuv>')
 
         self.assertXmlEqual(gotTuv, wantTuv)
 
@@ -431,18 +597,24 @@ class TestTca2ToTmx(unittest.TestCase):
         lang = 'smi'
         gotTuv = self.tmx.makeTmxHeader(lang)
 
-        wantTuv = etree.XML('<header segtype="sentence" o-tmf="OmegaT TMX" adminlang="en-US" srclang="smi" datatype="plaintext"/>')
+        wantTuv = etree.XML('<header segtype="sentence" o-tmf="OmegaT TMX" \
+            adminlang="en-US" srclang="smi" datatype="plaintext"/>')
 
         self.assertXmlEqual(gotTuv, wantTuv)
 
     def testRemoveSTag(self):
-        got = self.tmx.removeSTag('<s id="1">ubba gubba.</s> <s id="2">ibba gibba.</s>')
+        got = self.tmx.removeSTag(
+            '<s id="1">ubba gubba.</s> <s id="2">ibba gibba.</s>')
         want =  'ubba gubba. ibba gibba.'
 
         self.assertEqual(got, want)
 
     def testGetOutfileName(self):
-        self.assertEqual(self.tmx.getOutfileName(), os.path.join(os.environ['GTFREE'], 'prestable/toktmx/nob2sme/facta/skuvlahistorja2/aarseth2-n.htm.toktmx'))
+        self.assertEqual(
+            self.tmx.getOutfileName(),
+            os.path.join(
+                os.environ['GTFREE'],
+                'prestable/toktmx/nob2sme/facta/skuvlahistorja2/aarseth2-n.htm.toktmx'))
 
     #def testWriteTmxFile(self):
         #want = etree.parse('parallelize_data/aarseth2-n.htm.toktmx')
@@ -456,7 +628,11 @@ class TestTmxComparator(unittest.TestCase):
     A test class for the TmxComparator class
     """
     def testEqualTmxes(self):
-        comp = parallelize.TmxComparator(parallelize.Tmx(etree.parse('parallelize_data/aarseth2-n.htm.toktmx')), parallelize.Tmx(etree.parse('parallelize_data/aarseth2-n.htm.toktmx')))
+        comp = parallelize.TmxComparator(
+            parallelize.Tmx(etree.parse(
+                'parallelize_data/aarseth2-n.htm.toktmx')),
+            parallelize.Tmx(etree.parse(
+                'parallelize_data/aarseth2-n.htm.toktmx')))
 
         self.assertEqual(comp.getNumberOfDifferingLines(), -1)
         self.assertEqual(comp.getLinesInWantedfile(), 274)
