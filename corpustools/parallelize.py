@@ -207,9 +207,9 @@ class SentenceDivider:
         f = open(outfile, 'w')
         et = etree.ElementTree(self.document)
         et.write(f,
-                 pretty_print = True,
-                 encoding = "utf-8",
-                 xml_declaration = True)
+                 pretty_print=True,
+                 encoding="utf-8",
+                 xml_declaration=True)
         f.close()
 
     def getPreprocessOutput(self, preprocessInput):
@@ -231,9 +231,9 @@ class SentenceDivider:
                                  '--corr=' + corrFile]
 
         subp = subprocess.Popen(preprocessCommand,
-                                stdin = subprocess.PIPE,
-                                stdout = subprocess.PIPE,
-                                stderr = subprocess.PIPE)
+                                stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
         (output, error) = subp.communicate(
             preprocessInput.encode('utf-8').replace('\n', ' '))
 
@@ -398,7 +398,7 @@ class Parallelize:
         infile2 = os.path.join(os.environ['GTHOME'],
                                'gt/common/src/anchor-admin.txt')
 
-        subp = subprocess.Popen(['generate-anchor-list.pl', '--lang1=' + self.getLang1(), '--lang2' + self.getLang2(), '--outdir=' + os.environ['GTFREE'], infile1, infile2], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+        subp = subprocess.Popen(['generate-anchor-list.pl', '--lang1=' + self.getLang1(), '--lang2' + self.getLang2(), '--outdir=' + os.environ['GTFREE'], infile1, infile2], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
@@ -447,7 +447,7 @@ class Parallelize:
         subp = subprocess.Popen(['tca2.sh', anchorName,
                                  self.getSentFilename(self.getFilelist()[0]),
                                  self.getSentFilename(self.getFilelist()[1])],
-        stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
@@ -650,9 +650,9 @@ class Tmx:
             f = open(outFilename, "w")
 
             string = etree.tostring(self.getTmx(),
-                                    pretty_print = True,
-                                    encoding = "utf-8",
-                                    xml_declaration = True)
+                                    pretty_print=True,
+                                    encoding="utf-8",
+                                    xml_declaration=True)
             f.write(string)
             f.close()
         except IOError, error:
@@ -849,7 +849,7 @@ class TmxComparator:
         numDiffLines = -1
         for line in difflib.unified_diff(
                 self.wantTmx.tmxToStringlist(),
-                self.gotTmx.tmxToStringlist(), n = 0):
+                self.gotTmx.tmxToStringlist(), n=0):
             if line[:1] == '-':
                 numDiffLines += 1
 
@@ -862,7 +862,7 @@ class TmxComparator:
         diff = []
         for line in difflib.unified_diff(
             self.wantTmx.tmxToStringlist(),
-            self.gotTmx.tmxToStringlist(), n = 0):
+            self.gotTmx.tmxToStringlist(), n=0):
             diff.append(line)
 
         return diff
@@ -874,7 +874,7 @@ class TmxComparator:
         diff = []
         for line in difflib.unified_diff(
                 self.wantTmx.langToStringlist(lang),
-                self.gotTmx.langToStringlist(lang), n = 0):
+                self.gotTmx.langToStringlist(lang), n=0):
             diff.append(line + '\n')
 
         return diff
@@ -949,7 +949,7 @@ class TmxGoldstandardTester:
     """
     A class to test the alignment pipeline against the tmx goldstandard
     """
-    def __init__(self, testresult_filename, dateformat_addition = None):
+    def __init__(self, testresult_filename, dateformat_addition=None):
         """
         Set the name where the testresults should be written
         Find all goldstandard tmx files
@@ -1087,8 +1087,8 @@ class TmxGoldstandardTester:
         subp = subprocess.Popen(
             ['find', os.path.join(os.environ['GTFREE'],
                                   'prestable/toktmx/goldstandard'),
-            '-name', '*.toktmx', '-print' ], stdout = subprocess.PIPE,
-            stderr = subprocess.PIPE)
+            '-name', '*.toktmx', '-print' ], stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
@@ -1156,7 +1156,7 @@ class Toktmx2Tmx:
         """
         subp = subprocess.Popen(['find', os.path.join(os.environ['GTFREE'], \
             'prestable/toktmx/' + dirname), '-name', '*.toktmx', '-print' ], \
-                stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
@@ -1177,7 +1177,7 @@ def parse_options():
                         dest='parallel_language',
                         help="The language to parallelize the input \
                         document with",
-                        required = True)
+                        required=True)
 
     args = parser.parse_args()
     return args
