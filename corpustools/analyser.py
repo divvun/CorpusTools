@@ -95,7 +95,7 @@ class Analyser(object):
                 for root, dirs, files in os.walk(cdir):
                     for xml_file in files:
                         if self.lang in root and xml_file.endswith('.xml'):
-                            self.append_file(xml_file)
+                            self.append_file(os.path.join(root, xml_file))
 
     def append_file(self, xml_file):
         '''Append xml_file to the xml_files list'''
@@ -103,7 +103,7 @@ class Analyser(object):
             self.xml_files.append(
                 unicode(xml_file, sys.getfilesystemencoding()))
         except UnicodeDecodeError:
-                print >>sys.stderr, ccat.lineno(), xml_file
+                print >>sys.stderr, 'Could not handle the file name', xml_file
 
     def makedirs(self):
         u"""Make the analysed directory
