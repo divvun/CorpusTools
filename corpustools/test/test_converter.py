@@ -27,93 +27,93 @@ class TestConverter(unittest.TestCase):
 
     def test_get_orig(self):
         self.assertEqual(
-            self.converter_inside_orig.getOrig(),
+            self.converter_inside_orig.get_orig(),
             os.path.join(
                 os.getenv('GTHOME'),
                 'tools/CorpusTools/corpustools/test/converter_data/\
 fakecorpus/orig/nob/samediggi-article-16.html'))
 
         self.assertEqual(
-            self.converter_outside_orig.getOrig(),
+            self.converter_outside_orig.get_orig(),
             os.path.join(
                 os.getenv('GTHOME'),
                 'tools/CorpusTools/corpustools/test/converter_data/\
 samediggi-article-48.html'))
 
         self.assertEqual(
-            self.converter_inside_freecorpus.getOrig(),
+            self.converter_inside_freecorpus.get_orig(),
             os.path.join(
                 os.getenv('GTFREE'),
                 'orig/sme/admin/sd/samediggi.no/samediggi-article-48.html'))
 
     def test_get_xsl(self):
         self.assertEqual(
-            self.converter_inside_orig.getXsl(),
+            self.converter_inside_orig.get_xsl(),
             os.path.join(
                 os.getenv('GTHOME'),
                 'tools/CorpusTools/corpustools/test/converter_data/fakecorpus/\
 orig/nob/samediggi-article-16.html.xsl'))
 
         self.assertEqual(
-            self.converter_outside_orig.getXsl(),
+            self.converter_outside_orig.get_xsl(),
             os.path.join(
                 os.getenv('GTHOME'),
                 'tools/CorpusTools/corpustools/test/converter_data/\
 samediggi-article-48.html.xsl'))
 
         self.assertEqual(
-            self.converter_inside_freecorpus.getXsl(),
+            self.converter_inside_freecorpus.get_xsl(),
             os.path.join(
                 os.getenv('GTFREE'),
                 'orig/sme/admin/sd/samediggi.no/\
 samediggi-article-48.html.xsl'))
 
     def test_get_test(self):
-        self.assertEqual(self.converter_inside_orig.getTest(), True)
+        self.assertEqual(self.converter_inside_orig.get_test(), True)
 
-        self.assertEqual(self.converter_outside_orig.getTest(), False)
+        self.assertEqual(self.converter_outside_orig.get_test(), False)
 
-        self.assertEqual(self.converter_inside_freecorpus.getTest(), False)
+        self.assertEqual(self.converter_inside_freecorpus.get_test(), False)
 
     def test_get_tmpdir(self):
         self.assertEqual(
-            self.converter_inside_orig.getTmpdir(),
+            self.converter_inside_orig.get_tmpdir(),
             os.path.join(
                 os.getenv('GTHOME'),
                 'tools/CorpusTools/corpustools/test/converter_data/\
 fakecorpus/tmp'))
 
         self.assertEqual(
-            self.converter_outside_orig.getTmpdir(),
+            self.converter_outside_orig.get_tmpdir(),
             os.path.join(
                 os.getenv('GTHOME'),
                 'tools/CorpusTools/corpustools/test/tmp'))
 
         self.assertEqual(
-            self.converter_inside_freecorpus.getTmpdir(),
+            self.converter_inside_freecorpus.get_tmpdir(),
             os.path.join(os.getenv('GTFREE'), 'tmp'))
 
     def test_get_corpusdir(self):
         self.assertEqual(
-            self.converter_inside_orig.getCorpusdir(),
+            self.converter_inside_orig.get_corpusdir(),
             os.path.join(
                 os.getenv('GTHOME'),
                 'tools/CorpusTools/corpustools/test/converter_data/\
 fakecorpus'))
 
         self.assertEqual(
-            self.converter_outside_orig.getCorpusdir(),
+            self.converter_outside_orig.get_corpusdir(),
             os.path.join(
                 os.getenv('GTHOME'),
                 'tools/CorpusTools/corpustools/test'))
 
         self.assertEqual(
-            self.converter_inside_freecorpus.getCorpusdir(),
+            self.converter_inside_freecorpus.get_corpusdir(),
             os.getenv('GTFREE'))
 
     def test_get_converted_name_inside_orig(self):
         self.assertEqual(
-            self.converter_inside_orig.getConvertedName(),
+            self.converter_inside_orig.get_converted_name(),
             os.path.join(
                 os.getenv('GTHOME'),
                 'tools/CorpusTools/corpustools/test/converter_data/\
@@ -121,7 +121,7 @@ fakecorpus/converted/nob/samediggi-article-16.html.xml'))
 
     def test_get_converted_name_outside_orig(self):
         self.assertEqual(
-            self.converter_outside_orig.getConvertedName(),
+            self.converter_outside_orig.get_converted_name(),
             os.path.join(
                 os.getenv('GTHOME'),
                 'tools/CorpusTools/corpustools/test/converted/\
@@ -129,7 +129,7 @@ samediggi-article-48.html.xml'))
 
     def test_get_converted_inside_freecorpus(self):
         self.assertEqual(
-            self.converter_inside_freecorpus.getConvertedName(),
+            self.converter_inside_freecorpus.get_converted_name(),
             os.path.join(
                 os.getenv('GTFREE'),
                 'converted/sme/admin/sd/samediggi.no/\
@@ -177,7 +177,7 @@ class TestPlaintextConverter(XMLTester):
     def test_to_unicode(self):
         plaintext = converter.PlaintextConverter(
             'converter_data/winsami2-test-ws2.txt')
-        got = plaintext.toUnicode()
+        got = plaintext.to_unicode()
 
         # Ensure that the data in want is unicode
         file_ = codecs.open(
@@ -631,7 +631,7 @@ class TestDocumentFixer(XMLTester):
 
         document_fixer = converter.DocumentFixer(
             newstext.convert2intermediate())
-        got = document_fixer.fixBodyEncoding()
+        got = document_fixer.fix_body_encoding()
 
         want = etree.parse('converter_data/assu97-fixedutf8.xml')
 
@@ -642,7 +642,7 @@ class TestDocumentFixer(XMLTester):
             'converter_data/Riddu_Riddu_avis_TXT.200923.svg')
         document_fixer = converter.DocumentFixer(
             etree.fromstring(etree.tostring(svgtext.convert2intermediate())))
-        got = document_fixer.fixBodyEncoding()
+        got = document_fixer.fix_body_encoding()
 
         want = etree.parse('converter_data/Riddu_Riddu_avis_TXT.200923.xml')
 
@@ -657,7 +657,7 @@ class TestDocumentFixer(XMLTester):
             etree.parse(
                 'converter_data/samediggi-article-48s-before-lang-detection-\
 with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(
+        got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
@@ -671,7 +671,7 @@ with-multilingual-tag.xml'))
             etree.parse(
                 'converter_data/samediggi-article-48s-before-lang-detection-\
 with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(
+        got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
@@ -685,7 +685,7 @@ with-multilingual-tag.xml'))
             etree.parse(
                 'converter_data/samediggi-article-48s-before-lang-detection-\
 with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(
+        got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
@@ -700,7 +700,7 @@ with-multilingual-tag.xml'))
             etree.parse(
                 'converter_data/samediggi-article-48s-before-lang-detection-\
 with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(
+        got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
@@ -714,7 +714,7 @@ with-multilingual-tag.xml'))
             etree.parse(
                 'converter_data/samediggi-article-48s-before-lang-detection-\
 with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(
+        got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
@@ -728,7 +728,7 @@ with-multilingual-tag.xml'))
             etree.parse(
                 'converter_data/samediggi-article-48s-before-lang-detection-\
 with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(
+        got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
@@ -742,7 +742,7 @@ with-multilingual-tag.xml'))
             etree.parse(
                 'converter_data/samediggi-article-48s-before-lang-detection-\
 with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(
+        got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
@@ -756,7 +756,7 @@ with-multilingual-tag.xml'))
             etree.parse(
                 'converter_data/samediggi-article-48s-before-lang-detection-\
 with-multilingual-tag.xml'))
-        got_paragraph = document_fixer.detectQuote(
+        got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph),
@@ -780,7 +780,7 @@ with-multilingual-tag.xml'))
         giej leah maanah 5. jïh 8. tsiehkine</p></body></document>'
 
         document_fixer = converter.DocumentFixer(orig_doc)
-        document_fixer.setWordCount()
+        document_fixer.set_word_count()
 
         self.assertXmlEqual(etree.tostring(document_fixer.etree), expected_doc)
 
@@ -789,7 +789,7 @@ class TestXslMaker(XMLTester):
     def test_get_xsl(self):
         xslmaker = converter.XslMaker('converter_data/samediggi-article-48.\
 html.xsl')
-        got = xslmaker.getXsl()
+        got = xslmaker.get_xsl()
 
         want = etree.parse('converter_data/test.xsl')
 
@@ -807,7 +807,7 @@ before-lang-detection-with-multilingual-tag.xml')
     def test_get_main_lang(self):
         test_main_lang = 'sme'
         language_detector = converter.LanguageDetector(self.document)
-        self.assertEqual(test_main_lang, language_detector.getMainlang())
+        self.assertEqual(test_main_lang, language_detector.get_mainlang())
 
     def test_set_paragraph_language_mainlanguage(self):
         orig_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda \
@@ -830,7 +830,7 @@ before-lang-detection-with-multilingual-tag.xml')
         ráhkadan.</p>'
 
         language_detector = converter.LanguageDetector(self.document)
-        got_paragraph = language_detector.setParagraphLanguage(
+        got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
@@ -856,7 +856,7 @@ before-lang-detection-with-multilingual-tag.xml')
         prográmmain, maid Microsoft ii leat ráhkadan.</p>'
 
         language_detector = converter.LanguageDetector(self.document)
-        got_paragraph = language_detector.setParagraphLanguage(
+        got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
@@ -886,7 +886,7 @@ before-lang-detection-with-multilingual-tag.xml')
         prográmmain, maid Microsoft ii leat ráhkadan.</p>'
 
         language_detector = converter.LanguageDetector(self.document)
-        got_paragraph = language_detector.setParagraphLanguage(
+        got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
@@ -913,7 +913,7 @@ before-lang-detection-with-multilingual-tag.xml')
         levert av andre enn Microsoft.</p>'
 
         language_detector = converter.LanguageDetector(self.document)
-        got_paragraph = language_detector.setParagraphLanguage(
+        got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
@@ -925,7 +925,7 @@ ble ble <span type="quote">bla2 bla</span> <b>bli</b> bli \
         expected_paragraph = 'bla bla  ble ble  bli bli  blo blo'
 
         language_detector = converter.LanguageDetector(self.document)
-        got_paragraph = language_detector.removeQuote(
+        got_paragraph = language_detector.remove_quote(
             etree.fromstring(orig_paragraph))
 
         self.assertEqual(got_paragraph, expected_paragraph)
@@ -934,8 +934,8 @@ ble ble <span type="quote">bla2 bla</span> <b>bli</b> bli \
         language_detector = converter.LanguageDetector(
             etree.parse('converter_data/samediggi-article-48s-before-\
 lang-detection-with-multilingual-tag.xml'))
-        language_detector.detectLanguage()
-        got_document = language_detector.getDocument()
+        language_detector.detect_language()
+        got_document = language_detector.get_document()
 
         expected_document = etree.parse('converter_data/\
 samediggi-article-48s-after-lang-detection-with-multilingual-tag.xml')
@@ -947,8 +947,8 @@ samediggi-article-48s-after-lang-detection-with-multilingual-tag.xml')
         language_detector = converter.LanguageDetector(etree.parse(
             'converter_data/samediggi-article-48s-before-lang-detection-\
 without-multilingual-tag.xml'))
-        language_detector.detectLanguage()
-        got_document = language_detector.getDocument()
+        language_detector.detect_language()
+        got_document = language_detector.get_document()
 
         expected_document = etree.parse('converter_data/samediggi-article\
 -48s-after-lang-detection-without-multilingual-tag.xml')
