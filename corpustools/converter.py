@@ -1332,12 +1332,10 @@ def parse_options():
 def worker(xsl_file):
     conv = Converter(xsl_file[:-4])
 
-    # The clause below made because of this bug in python 2.7
-    # http://www.gossamer-threads.com/lists/python/bugs/1025933
     try:
         conv.write_complete()
-    except Exception:
-        raise RuntimeError
+    except ConversionException:
+        print >>sys.stderr, 'Could not convert', xsl_file[:-4]
 
 
 def convert_in_parallel(xsl_files):
@@ -1350,11 +1348,7 @@ def convert_in_parallel(xsl_files):
 
 def convert_serially(xsl_files):
     for xsl_file in xsl_files:
-        conv = Converter(xsl_file[:-4])
-        try:
-            conv.write_complete()
-        except ConversionException:
-            print >>sys.stderr, 'Could not convert', xsl_file[:-4]
+        worker(xsl_file)
 
 
 def main():
@@ -1382,7 +1376,4 @@ def main():
         if args.debug:
             convert_serially(xsl_files)
         else:
-            try:
-                convert_in_parallel(xsl_files)
-            except RuntimeError:
-                pass
+            convert_in_parallel(xsl_files)
