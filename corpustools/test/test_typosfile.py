@@ -23,6 +23,7 @@ import unittest
 
 from corpustools import typosfile
 
+
 class TestTypoline(unittest.TestCase):
     """Class to test the typos synchroniser
     """
@@ -54,4 +55,3 @@ class TestTypoline(unittest.TestCase):
         tl = typosfile.Typoline('deatalaš\tdeaŧalaš')
         tl.setCorrection('ditalaš')
         self.assertEqual(tl.getCorrection(), 'ditalaš')
-

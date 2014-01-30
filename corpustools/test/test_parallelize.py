@@ -120,6 +120,7 @@ class TestCorpusXMLFile(unittest.TestCase):
         want = etree.tostring(fileWithLater.geteTree())
         self.assertXmlEqual(got, want)
 
+
 class TestSentenceDivider(unittest.TestCase):
     """A test class for the SentenceDivider class
     """
@@ -131,8 +132,8 @@ class TestSentenceDivider(unittest.TestCase):
         """
         Check if two xml snippets are equal
         """
-        string_got = etree.tostring(got, pretty_print = True)
-        string_want = etree.tostring(want, pretty_print = True)
+        string_got = etree.tostring(got, pretty_print=True)
+        string_want = etree.tostring(want, pretty_print=True)
 
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(string_want, string_got, 0):
@@ -187,8 +188,6 @@ class TestSentenceDivider(unittest.TestCase):
             “ Romssa universitehta ja guoskevaš institušuvnnaid sámi \
             dutkan ja oahpahus ” álggahusa ) .</s></p>')
         self.assertXmlEqual(got, want)
-
-
 
         self.sentenceDivider.docLang = 'nob'
         p = etree.XML('<p>Artikkel i boka Samisk skolehistorie 2 . \
@@ -359,6 +358,7 @@ class TestSentenceDivider(unittest.TestCase):
             s.text,
             u'Sámerievtti ovdáneapmi lea dahkan vuđđosa Finnmárkkuláhkii')
 
+
 class TestParallelize(unittest.TestCase):
     """
     A test class for the Parallelize class
@@ -400,6 +400,7 @@ class TestParallelize(unittest.TestCase):
                          os.path.join(os.environ['GTFREE'],
                                       'anchor-nobsme.txt'))
 
+
 class TestTmx(unittest.TestCase):
     """
     A test class for the Tmx class
@@ -412,8 +413,8 @@ class TestTmx(unittest.TestCase):
         """
         Check if two xml snippets are equal
         """
-        string_got = etree.tostring(got, pretty_print = True)
-        string_want = etree.tostring(want, pretty_print = True)
+        string_got = etree.tostring(got, pretty_print=True)
+        string_want = etree.tostring(want, pretty_print=True)
 
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(string_want, string_got, 0):
@@ -421,7 +422,6 @@ class TestTmx(unittest.TestCase):
                 doctest.Example("", string_want),
                 string_got, 0).encode('utf-8')
             raise AssertionError(message)
-
 
     def testGetSrcLang(self):
         """Test the getSrcLang routine
@@ -540,6 +540,7 @@ bargu lea: okta, guokte.'
 
         self.assertFalse(self.tmx.checkLanguage(tuWithSma, 'sme'))
 
+
 class TestTca2ToTmx(unittest.TestCase):
     """
     A test class for the Tca2ToTmx class
@@ -559,8 +560,8 @@ class TestTca2ToTmx(unittest.TestCase):
         """
         Check if two xml snippets are equal
         """
-        string_got = etree.tostring(got, pretty_print = True)
-        string_want = etree.tostring(want, pretty_print = True)
+        string_got = etree.tostring(got, pretty_print=True)
+        string_want = etree.tostring(want, pretty_print=True)
 
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(string_want, string_got, 0):
@@ -568,7 +569,6 @@ class TestTca2ToTmx(unittest.TestCase):
                 doctest.Example("", string_want),
                 string_got, 0).encode('utf-8')
             raise AssertionError(message)
-
 
     def testMakeTu(self):
         line1 = '<s id="1">ubba gubba.</s> <s id="2">ibba gibba.</s>'
@@ -584,7 +584,7 @@ class TestTca2ToTmx(unittest.TestCase):
         self.assertXmlEqual(gotTu, wantTu)
 
     def testMakeTuv(self):
-        line =  '<s id="1">ubba gubba.</s> <s id="2">ibba gibba.</s>'
+        line = '<s id="1">ubba gubba.</s> <s id="2">ibba gibba.</s>'
         lang = 'smi'
         gotTuv = self.tmx.makeTuv(line, lang)
 
@@ -605,7 +605,7 @@ class TestTca2ToTmx(unittest.TestCase):
     def testRemoveSTag(self):
         got = self.tmx.removeSTag(
             '<s id="1">ubba gubba.</s> <s id="2">ibba gibba.</s>')
-        want =  'ubba gubba. ibba gibba.'
+        want = 'ubba gubba. ibba gibba.'
 
         self.assertEqual(got, want)
 
@@ -622,6 +622,7 @@ class TestTca2ToTmx(unittest.TestCase):
         #got = etree.parse(self.tmx.getOutfileName())
 
         #self.assertXmlEqual(got, want)
+
 
 class TestTmxComparator(unittest.TestCase):
     """
@@ -670,8 +671,8 @@ class TestTmxComparator(unittest.TestCase):
         #"""
         #Check if two xml snippets are equal
         #"""
-        #string_got = etree.tostring(got, pretty_print = True)
-        #string_want = etree.tostring(want, pretty_print = True)
+        #string_got = etree.tostring(got, pretty_print=True)
+        #string_want = etree.tostring(want, pretty_print=True)
 
         #checker = doctestcompare.LXMLOutputChecker()
         #if not checker.check_output(string_want, string_got, 0):
@@ -738,4 +739,3 @@ class TestTmxComparator(unittest.TestCase):
         #got = etree.parse(self.writer.filename)
 
         #self.assertXmlEqual(got, want)
-
