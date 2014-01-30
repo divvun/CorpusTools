@@ -23,6 +23,7 @@
 import re
 from lxml import etree
 
+
 class ErrorMarkup:
     '''This is a class to convert errormarkuped text to xml
     '''
@@ -122,17 +123,16 @@ class ErrorMarkup:
                 for index in range(0, len(result)):
                     if self.is_correction(result[index]):
                         if (not self.is_correction(result[index-1]) and
-                            self.is_error(result[index-1])):
-
+                                self.is_error(result[index-1])):
                             self.add_simple_error(elements,
-                                                result[index-1],
-                                                result[index])
+                                                  result[index-1],
+                                                  result[index])
 
                         else:
 
                             self.add_nested_error(elements,
-                                                result[index-1],
-                                                result[index])
+                                                  result[index-1],
+                                                  result[index])
 
                 if not self.is_correction(result[-1]):
                     elements[-1].tail = result[-1]
@@ -202,7 +202,6 @@ class ErrorMarkup:
             inner_element.tail = errorstring[:-1]
         error_element = self.get_error(inner_element, correctionstring)
 
-
         if self.is_correction(errorstring):
             elements.append(error_element)
         else:
@@ -238,7 +237,6 @@ class ErrorMarkup:
                         errormarkup."
                         print u"If the errormarkup is correct, please report \
                         about the error to borre.gaup@uit.no"
-
 
     def get_text(self, element):
         text = None
@@ -293,14 +291,14 @@ class ErrorMarkup:
         '''
         (fixed_correction, ext_att, att_list) = \
             self.look_for_extended_attributes(
-            correction[1:].replace('(', '').replace(')', ''))
+                correction[1:].replace('(', '').replace(')', ''))
 
         element_name = self.get_element_name(correction[0])
 
         error_element = self.make_error_element(error,
-                                             fixed_correction,
-                                             element_name,
-                                             att_list)
+                                                fixed_correction,
+                                                element_name,
+                                                att_list)
 
         return error_element
 
@@ -341,7 +339,7 @@ class ErrorMarkup:
 
         error_element.set('correct', fixed_correction)
 
-        if att_list != None:
+        if att_list is not None:
             error_element.set('errorinfo', att_list)
 
         return error_element

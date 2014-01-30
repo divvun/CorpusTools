@@ -307,7 +307,7 @@ class XMLPrinter:
         self.filename = filename
 
         buffer = StringIO.StringIO()
-        
+
         dependency = self.etree.find('.//dependency')
         if dependency is not None:
             buffer.write(dependency.text.encode('utf8'))

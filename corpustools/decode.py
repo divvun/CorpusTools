@@ -271,8 +271,8 @@ class EncodingGuesser(object):
             hitter = False
             for key in encoding_frequency.keys():
                 try:
-                    if (not sami_letter_frequency[CTYPES[position][key].\
-                            lower()]):
+                    if (not sami_letter_frequency[
+                            CTYPES[position][key].lower()]):
                         hitter = True
                 except KeyError:
                     pass
@@ -296,16 +296,13 @@ class EncodingGuesser(object):
         This is a little simplified version of guess_body_encoding because the
         person string is short
 
-        @param content a utf-8 encoded string
+        @param person a utf-8 encoded string
         @return winner is an int pointing to a position in CTYPES or -1
         to tell that no known encoding is found
         """
 
-        infile = open(filename)
-        content = infile.read()
-        content = content.decode('utf8')
-        content = content.lower()
-        infile.close()
+        person = person.decode('utf8')
+        person = person.lower()
 
         maxhits = 0
         for position in range(0, len(CTYPES)):
@@ -314,13 +311,12 @@ class EncodingGuesser(object):
             for key in CTYPES[position].viewkeys():
 
                 #print len(re.compile(key).findall(content)), key
-                if len(re.compile(key).findall(content)) > 0:
+                if len(re.compile(key).findall(person)) > 0:
                     num = num + 1
 
-                hits = hits + len(re.compile(key).findall(content))
+                hits = hits + len(re.compile(key).findall(person))
 
             #print "position", position, "hits", hits, "num", num
-
 
             if hits > maxhits:
                 winner = position

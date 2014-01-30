@@ -265,7 +265,7 @@ class Converter:
                         genre = parts[parts.index('orig') + 2]
                         root.find(transform +
                                   xslgenre).attrib['select'] = \
-                                      "'" + genre + "'"
+                            "'" + genre + "'"
 
                 xsltree.write(
                     self.getXsl(), encoding="utf-8", xml_declaration=True)
@@ -1336,8 +1336,9 @@ def worker(xsl_file):
     # http://www.gossamer-threads.com/lists/python/bugs/1025933
     try:
         conv.writeComplete()
-    except Exception as e:
+    except Exception:
         raise RuntimeError
+
 
 def convert_in_parallel(xsl_files):
     pool_size = multiprocessing.cpu_count() * 2
@@ -1346,6 +1347,7 @@ def convert_in_parallel(xsl_files):
     pool.close()
     pool.join()
 
+
 def convert_serially(xsl_files):
     for xsl_file in xsl_files:
         conv = Converter(xsl_file[:-4])
@@ -1353,6 +1355,7 @@ def convert_serially(xsl_files):
             conv.writeComplete()
         except ConversionException:
             print >>sys.stderr, 'Could not convert', xsl_file[:-4]
+
 
 def main():
     args = parse_options()
@@ -1381,5 +1384,5 @@ def main():
         else:
             try:
                 convert_in_parallel(xsl_files)
-            except RuntimeError as e:
+            except RuntimeError:
                 pass

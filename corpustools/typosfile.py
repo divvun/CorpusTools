@@ -56,6 +56,7 @@ class Typoline:
 
         return result
 
+
 class Typos:
     """A class that reads typos and corrections from a .typos files and
     stores them in a dict

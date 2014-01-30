@@ -34,6 +34,7 @@ import argparse
 import typosfile
 import ngram
 
+
 class CorpusXMLFile:
     """
     A class that contains the info on a file to be parallellized, name
@@ -153,6 +154,7 @@ class CorpusXMLFile:
         for laterElement in laterList:
             body.append(laterElement)
 
+
 class SentenceDivider:
     """A class that takes a giellatekno xml document as input.
     It spits out an xml document that has divided the text inside the p tags
@@ -259,8 +261,7 @@ class SentenceDivider:
         if (preprocessInput):
             output = self.getPreprocessOutput(preprocessInput)
             sentence = []
-            insideQuote = False
-            incompleteSentences = ['.', '?', '!', ')', ']', '...', '…','"',
+            incompleteSentences = ['.', '?', '!', ')', ']', '...', '…', '"',
                                    '»', '”', '°', '', ':']
             words = output.split('\n')
             i = 0
@@ -273,7 +274,8 @@ class SentenceDivider:
 
                 sentence.append(word.decode('utf-8'))
                 if (word == '.' or word == '?' or word == '!'):
-                    while i + 1 < len(words) and words[i + 1].strip() in incompleteSentences:
+                    while (i + 1 < len(words) and
+                           words[i + 1].strip() in incompleteSentences):
                         if words[i + 1] != '':
                             sentence.append(
                                 words[i + 1].decode('utf-8').strip())
@@ -313,6 +315,7 @@ class SentenceDivider:
         self.sentenceCounter += 1
 
         return s
+
 
 class Parallelize:
     """
@@ -382,8 +385,8 @@ class Parallelize:
         translated_from = root.find(".//translated_from")
         if translated_from is not None:
             if (translated_from.attrib[
-                '{http://www.w3.org/XML/1998/namespace}lang'] ==
-            self.getLang2()):
+                    '{http://www.w3.org/XML/1998/namespace}lang'] ==
+                    self.getLang2()):
                 result = True
 
         return result
@@ -398,18 +401,23 @@ class Parallelize:
         infile2 = os.path.join(os.environ['GTHOME'],
                                'gt/common/src/anchor-admin.txt')
 
-        subp = subprocess.Popen(['generate-anchor-list.pl', '--lang1=' + self.getLang1(), '--lang2' + self.getLang2(), '--outdir=' + os.environ['GTFREE'], infile1, infile2], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subp = subprocess.Popen(['generate-anchor-list.pl',
+                                 '--lang1=' + self.getLang1(),
+                                 '--lang2' + self.getLang2(),
+                                 '--outdir=' + os.environ['GTFREE'],
+                                 infile1, infile2],
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
+        outFilename = 'anchor-' + self.getLang1() + self.getLang2() + '.txt'
 
         if subp.returncode != 0:
-            print >>sys.stderr, 'Could not generate ', pfile.getName(), \
-                ' into sentences'
+            print >>sys.stderr, outFilename
             print >>sys.stderr, output
             print >>sys.stderr, error
             return subp.returncode
 
         # Return the absolute path of the resulting file
-        outFilename = 'anchor-' + self.getLang1() + self.getLang2() + '.txt'
         return os.path.join(os.environ['GTFREE'], outFilename)
 
     def dividePIntoSentences(self):
@@ -447,18 +455,20 @@ class Parallelize:
         subp = subprocess.Popen(['tca2.sh', anchorName,
                                  self.getSentFilename(self.getFilelist()[0]),
                                  self.getSentFilename(self.getFilelist()[1])],
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
             print >>sys.stderr, 'Could not parallelize', \
                 self.getSentFilename(self.getFilelist()[0]), 'and', \
-                    self.getSentFilename(self.getFilelist()[1]), \
-                        ' into sentences'
+                self.getSentFilename(self.getFilelist()[1]), \
+                ' into sentences'
             print >>sys.stderr, output
             print >>sys.stderr, error
 
         return subp.returncode
+
 
 class Tmx:
     """
@@ -524,8 +534,9 @@ class Tmx:
         Get all the strings in the tmx in language lang, insert them
         into the list strings
         """
-        all_tuv = self.getTmx().xpath('.//tuv[@xml:lang="' + lang + '"]',
-            namespaces={'xml':'http://www.w3.org/XML/1998/namespace'})
+        all_tuv = self.getTmx().\
+            xpath('.//tuv[@xml:lang="' + lang + '"]',
+                  namespaces={'xml': 'http://www.w3.org/XML/1998/namespace'})
 
         strings = []
         for tuv in all_tuv:
@@ -629,12 +640,12 @@ class Tmx:
         # for every match in the result string, replace the match
         # (space+punctuation) with the punctuation part
         result = spacePunctuation.sub(lambda match:
-                                          match.group('punctuation'), result)
+                                      match.group('punctuation'), result)
 
         # regex to find punctuation followed by space
         punctuationSpace = re.compile("(?P<punctuation>[\[\(«])(?P<space>\s)+")
         result = punctuationSpace.sub(lambda match:
-                                          match.group('punctuation'), result)
+                                      match.group('punctuation'), result)
 
         # regex which matches multiple spaces
         multipleSpace = re.compile("\s+")
@@ -655,7 +666,7 @@ class Tmx:
                                     xml_declaration=True)
             f.write(string)
             f.close()
-        except IOError, error:
+        except IOError:
             print "I/O error({0}): {1}".format(errno, strerror), ":", \
                 outFilename
             sys.exit(1)
@@ -701,6 +712,7 @@ class Tmx:
                     return False
 
         return True
+
 
 class Tca2ToTmx(Tmx):
     """
@@ -755,7 +767,7 @@ class Tca2ToTmx(Tmx):
         """
         Remove the s tags that tca2 has added
         """
-        line = line.replace('</s>','')
+        line = line.replace('</s>', '')
         sregex = re.compile('<s id="[^ ]*">')
         line = sregex.sub('', line)
 
@@ -807,12 +819,11 @@ class Tca2ToTmx(Tmx):
             f = open(pfileName, "r")
             text = f.readlines()
             f.close()
-        except IOError, error:
+        except IOError:
             print "I/O error({0}): {1}".format(errno, strerror)
             sys.exit(1)
 
         return text
-
 
     def getSentFilename(self, pfile):
         """
@@ -823,6 +834,7 @@ class Tca2ToTmx(Tmx):
         return (os.environ['GTFREE'] + '/tmp/' + origfilename +
                 pfile.getLang() + '_sent.xml')
 
+
 class TmxComparator:
     """
     A class to compare two tmx-files
@@ -831,13 +843,11 @@ class TmxComparator:
         self.wantTmx = wantTmx
         self.gotTmx = gotTmx
 
-
     def getLinesInWantedfile(self):
         """
         Return the number of lines in the reference doc
         """
         return len(self.wantTmx.tmxToStringlist())
-
 
     def getNumberOfDifferingLines(self):
         """
@@ -861,8 +871,8 @@ class TmxComparator:
         """
         diff = []
         for line in difflib.unified_diff(
-            self.wantTmx.tmxToStringlist(),
-            self.gotTmx.tmxToStringlist(), n=0):
+                self.wantTmx.tmxToStringlist(),
+                self.gotTmx.tmxToStringlist(), n=0):
             diff.append(line)
 
         return diff
@@ -878,6 +888,7 @@ class TmxComparator:
             diff.append(line + '\n')
 
         return diff
+
 
 class TmxTestDataWriter():
     """
@@ -941,9 +952,10 @@ class TmxTestDataWriter():
             et.write(f, pretty_print=True, encoding="utf-8",
                      xml_declaration=True)
             f.close()
-        except IOError, error:
+        except IOError:
             print "I/O error({0}): {1}".format(errno, strerror)
             sys.exit(1)
+
 
 class TmxGoldstandardTester:
     """
@@ -1066,7 +1078,7 @@ class TmxGoldstandardTester:
 
         try:
             f = open(os.path.join(dirname, filename), "w")
-        except IOError, error:
+        except IOError:
             print "I/O error({0}): {1}".format(errno, strerror)
             sys.exit(1)
 
@@ -1087,7 +1099,8 @@ class TmxGoldstandardTester:
         subp = subprocess.Popen(
             ['find', os.path.join(os.environ['GTFREE'],
                                   'prestable/toktmx/goldstandard'),
-            '-name', '*.toktmx', '-print' ], stdout=subprocess.PIPE,
+                '-name', '*.toktmx', '-print'],
+            stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
 
@@ -1098,6 +1111,7 @@ class TmxGoldstandardTester:
         else:
             files = output.split('\n')
             return files[:-1]
+
 
 class TmxFixer:
     """
@@ -1114,6 +1128,7 @@ class TmxFixer:
         """
         pass
 
+
 class Toktmx2Tmx:
     """A class to make a tidied up version of toktmx files.
     Removes unwanted spaces around punctuation, parentheses and so on.
@@ -1125,11 +1140,10 @@ class Toktmx2Tmx:
         self.tmx = Tmx(etree.parse(toktmxFile))
         self.addFilenameID()
 
-
     def addFilenameID(self):
         """Add the tmx filename as an prop element in the header
         """
-        prop =  etree.Element('prop')
+        prop = etree.Element('prop')
         prop.attrib['type'] = 'x-filename'
         prop.text = os.path.basename(self.tmxfileName).decode('utf-8')
 
@@ -1154,9 +1168,11 @@ class Toktmx2Tmx:
         """
         Find the toktmx files in dirname, return them as a list
         """
-        subp = subprocess.Popen(['find', os.path.join(os.environ['GTFREE'], \
-            'prestable/toktmx/' + dirname), '-name', '*.toktmx', '-print' ], \
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subp = subprocess.Popen(
+            ['find', os.path.join(os.environ['GTFREE'],
+                                  'prestable/toktmx/' + dirname),
+                '-name', '*.toktmx', '-print'],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
