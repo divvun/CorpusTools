@@ -1,4 +1,4 @@
-import re,traceback
+import traceback
 from exceptions import KeyboardInterrupt
 
 nb_ngrams = 400

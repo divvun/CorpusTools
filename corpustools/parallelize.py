@@ -20,7 +20,8 @@
 #   Copyright 2011-2014 Børre Gaup <borre.gaup@uit.no>
 #
 
-import os, errno
+import os
+import errno
 import re
 import sys
 import subprocess

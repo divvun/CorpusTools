@@ -23,9 +23,7 @@ import os
 import sys
 import subprocess
 import multiprocessing
-import datetime
 import lxml.etree as etree
-from io import open
 import argparse
 
 from corpustools import ccat

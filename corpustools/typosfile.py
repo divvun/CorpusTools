@@ -20,7 +20,6 @@
 #   Copyright 2012-2014 Børre Gaup <borre.gaup@uit.no>
 #
 
-import re
 
 class Typoline:
     """Class to parse a line of a .typos file
