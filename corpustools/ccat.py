@@ -309,7 +309,7 @@ class XMLPrinter:
         buffer = StringIO.StringIO()
 
         dependency = self.etree.find('.//dependency')
-        if dependency is not None:
+        if dependency is not None and dependency.text is not None:
             buffer.write(dependency.text.encode('utf8'))
         else:
             for paragraph in self.etree.findall('.//p'):
