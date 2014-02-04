@@ -6,3 +6,4 @@ v<0.2.1>, <20140124> -- Fix a bug in the conversion tools decoding,  lots of cha
 v<0.2.2>, <20140128> -- Make convert2xml use multiprocess the same way that analyse_corpus does. Update installation instructions.
 v<0.2.3>, <20140129> -- ccat now understands how to turn analysed files into clean text.
 v<0.3.0>, <20140129> -- Moved corpus-parallel.py to CorpusTools
+v<0.3.1>, <20140204> -- Changed the way multiprocessing is done in convert2xml, readd the disambiguation tag to the analysed docs
