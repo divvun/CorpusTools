@@ -262,6 +262,10 @@ class Analyser(object):
         '''
         body = etree.Element(u'body')
 
+        disambiguation = etree.Element(u'disambiguation')
+        disambiguation.text = self.get_disambiguation().decode(u'utf8')
+        body.append(disambiguation)
+
         dependency = etree.Element(u'dependency')
         dependency.text = self.get_dependency().decode(u'utf8')
         body.append(dependency)
