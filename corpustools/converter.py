@@ -1317,11 +1317,6 @@ def parse_options():
     parser = argparse.ArgumentParser(
         description='Convert original files to giellatekno xml, using \
         dependency checking.')
-    parser.add_argument(u'--debug',
-                        action=u"store_true",
-                        help=u"use this for debugging the conversion \
-                        process. When this argument is used files will \
-                        be converted one by one.")
     parser.add_argument('orig_dir',
                         help="directory where the original files exist")
 
@@ -1353,27 +1348,25 @@ def convert_serially(xsl_files):
 
 def main():
     args = parse_options()
-    xsl_files = []
-
-    if os.path.isfile(args.orig_dir):
-        xsl_file = args.orig_dir + '.xsl'
-        if os.path.isfile(xsl_file):
-            worker(xsl_file)
-        else:
-            shutil.copy(
-                os.path.join(os.getenv('GTHOME'),
-                             'gt/script/corpus/XSL-template.xsl'),
-                xsl_file)
-            print "Fill in meta info in", xsl_file, \
-                ', then run this command again'
-            sys.exit(1)
-    elif os.path.isdir(args.orig_dir):
+    jobs = []
+    if os.path.isdir(args.orig_dir):
         for root, dirs, files in os.walk(args.orig_dir):
             for f in files:
                 if f.endswith('.xsl'):
-                    xsl_files.append(os.path.join(root, f))
-
-        if args.debug:
-            convert_serially(xsl_files)
-        else:
-            convert_in_parallel(xsl_files)
+                    p = multiprocessing.Process(
+                        target=worker, args=(os.path.join(root, f),))
+                    jobs.append(p)
+                    p.start()
+    elif os.path.isfile(args.orig_dir):
+         xsl_file = args.orig_dir + '.xsl'
+         if os.path.isfile(xsl_file):
+            conv = Converter(args.orig_dir)
+            conv.writeComplete()
+         else:
+             shutil.copy(
+                 os.path.join(os.getenv('GTHOME'),
+                              'gt/script/corpus/XSL-template.xsl'),
+                 xsl_file)
+             print "Fill in meta info in", xsl_file, \
+                 ', then run this command again'
+             sys.exit(1)
