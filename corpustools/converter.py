@@ -1315,10 +1315,10 @@ class DocumentTester:
 
 def parse_options():
     parser = argparse.ArgumentParser(
-        description='Convert original files to giellatekno xml, using \
-        dependency checking.')
-    parser.add_argument('orig_dir',
-                        help="directory where the original files exist")
+        description='Convert original files to giellatekno xml.')
+    parser.add_argument('source',
+                        help="either a file to be converted, or a directory \
+                        containing files to be converted")
 
     args = parser.parse_args()
     return args
