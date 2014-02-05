@@ -1348,20 +1348,17 @@ def convert_serially(xsl_files):
 
 def main():
     args = parse_options()
-    jobs = []
+    xsl_files = []
     if os.path.isdir(args.source):
         for root, dirs, files in os.walk(args.source):
             for f in files:
                 if f.endswith('.xsl'):
-                    p = multiprocessing.Process(
-                        target=worker, args=(os.path.join(root, f),))
-                    jobs.append(p)
-                    p.start()
+                    xsl_files.append(os.path.join(root, f))
+        convert_in_parallel(xsl_files)
     elif os.path.isfile(args.source):
          xsl_file = args.source + '.xsl'
          if os.path.isfile(xsl_file):
-            conv = Converter(args.source)
-            conv.writeComplete()
+            worker(xsl_file)
          else:
              shutil.copy(
                  os.path.join(os.getenv('GTHOME'),
@@ -1369,4 +1366,3 @@ def main():
                  xsl_file)
              print "Fill in meta info in", xsl_file, \
                  ', then run this command again'
-             sys.exit(1)
