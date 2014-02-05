@@ -1324,21 +1324,51 @@ def parse_options():
     return args
 
 
-def worker(xsl_file):
-    conv = Converter(xsl_file[:-4])
+def worker(unprocessed_files, processed_files, lock):
+    while not unprocessed_files.empty():
+        xsl_file = unprocessed_files.get()
+        conv = Converter(xsl_file[:-4])
 
-    try:
-        conv.write_complete()
-    except ConversionException:
-        print >>sys.stderr, 'Could not convert', xsl_file[:-4]
+        try:
+            conv.write_complete()
+            with lock:
+                processed_files.put(xsl_file)
+        except ConversionException:
+            with lock:
+                print 'Could not convert', xsl_file[:-4]
+                processed_files.put(xsl_file)
 
 
 def convert_in_parallel(xsl_files):
-    pool_size = multiprocessing.cpu_count() * 2
-    pool = multiprocessing.Pool(processes=pool_size,)
-    pool.map(worker, xsl_files)
-    pool.close()
-    pool.join()
+
+    unprocessed_files = multiprocessing.Queue()
+    processed_files = multiprocessing.Queue()
+    nprocs = multiprocessing.cpu_count() * 2
+    lock = multiprocessing.Lock()
+    procs = []
+
+    add_to_unprocessed_files(xsl_files, unprocessed_files)
+    while xsl_files:
+        for i in range(nprocs):
+            p = multiprocessing.Process(
+                target=worker,
+                args=(unprocessed_files, processed_files, lock,))
+            procs.append(p)
+            p.start()
+
+        for p in procs:
+            p.join()
+
+        while not processed_files.empty():
+            xsl_files.remove(processed_files.get())
+
+        add_to_unprocessed_files(xsl_files, unprocessed_files)
+
+
+def add_to_unprocessed_files(xsl_files, unprocessed_files):
+    for xsl_file in xsl_files:
+        unprocessed_files.put(xsl_file)
+
 
 
 def convert_serially(xsl_files):
@@ -1346,15 +1376,23 @@ def convert_serially(xsl_files):
         worker(xsl_file)
 
 
+def collect_files(source_dir):
+    xsl_files = []
+
+    for root, dirs, files in os.walk(source_dir):
+        for f in files:
+            if f.endswith('.xsl'):
+                xsl_files.append(os.path.join(root, f))
+
+    return xsl_files
+
+
 def main():
     args = parse_options()
     xsl_files = []
     if os.path.isdir(args.source):
-        for root, dirs, files in os.walk(args.source):
-            for f in files:
-                if f.endswith('.xsl'):
-                    xsl_files.append(os.path.join(root, f))
-        convert_in_parallel(xsl_files)
+        convert_in_parallel(collect_files(args.source))
+
     elif os.path.isfile(args.source):
          xsl_file = args.source + '.xsl'
          if os.path.isfile(xsl_file):
