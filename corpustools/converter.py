@@ -1349,18 +1349,18 @@ def convert_serially(xsl_files):
 def main():
     args = parse_options()
     jobs = []
-    if os.path.isdir(args.orig_dir):
-        for root, dirs, files in os.walk(args.orig_dir):
+    if os.path.isdir(args.source):
+        for root, dirs, files in os.walk(args.source):
             for f in files:
                 if f.endswith('.xsl'):
                     p = multiprocessing.Process(
                         target=worker, args=(os.path.join(root, f),))
                     jobs.append(p)
                     p.start()
-    elif os.path.isfile(args.orig_dir):
-         xsl_file = args.orig_dir + '.xsl'
+    elif os.path.isfile(args.source):
+         xsl_file = args.source + '.xsl'
          if os.path.isfile(xsl_file):
-            conv = Converter(args.orig_dir)
+            conv = Converter(args.source)
             conv.writeComplete()
          else:
              shutil.copy(
