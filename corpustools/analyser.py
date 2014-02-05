@@ -367,35 +367,57 @@ def main():
     sanity_check()
 
     ana = Analyser(args.lang)
-    ana.set_analysis_files(
-        abbr_file=os.path.join(
-            os.getenv(u'GTHOME'),
-            u'langs/' +
-            args.lang +
-            '/tools/preprocess/abbr.txt'),
-        fst_file=os.path.join(
-            os.getenv(u'GTHOME'),
-            u'langs/' +
-            args.lang +
-            u'/src/analyser-gt-desc.xfst'),
-        disambiguation_analysis_file=os.path.join(
-            os.getenv(u'GTHOME'),
-            u'langs/' +
-            args.lang +
-            u'/src/syntax/disambiguation.cg3'),
-        function_analysis_file=os.path.join(
-            os.getenv(u'GTHOME'),
-            u'gtcore/gtdshared/smi/src/syntax/functions.cg3'),
-        dependency_analysis_file=os.path.join(
-            os.getenv(u'GTHOME'),
-            u'gtcore/gtdshared/smi/src/syntax/dependency.cg3'))
-
-    if args.lang == u'sme':
+    if args.lang == 'sme':
+        ana.set_analysis_files(
+            abbr_file=os.path.join(
+                os.getenv(u'GTHOME'),
+                u'gt/' +
+                args.lang +
+                '/bin/abbr.txt'),
+            fst_file=os.path.join(
+                os.getenv(u'GTHOME'),
+                u'gt/' +
+                args.lang +
+                u'/bin/sme.fst'),
+            disambiguation_analysis_file=os.path.join(
+                os.getenv(u'GTHOME'),
+                u'langs/' +
+                args.lang +
+                u'/src/syntax/disambiguation.cg3'),
+            function_analysis_file=os.path.join(
+                os.getenv(u'GTHOME'),
+                u'gtcore/gtdshared/smi/src/syntax/functions.cg3'),
+            dependency_analysis_file=os.path.join(
+                os.getenv(u'GTHOME'),
+                u'gtcore/gtdshared/smi/src/syntax/dependency.cg3'))
         ana.set_corr_file(
             os.path.join(os.getenv(u'GTHOME'),
-                         u'langs/' +
+                         u'gt/' +
                          args.lang +
-                         '/src/syntax/corr.txt'))
+                         '/bin/corr.txt'))
+    else:
+        ana.set_analysis_files(
+            abbr_file=os.path.join(
+                os.getenv(u'GTHOME'),
+                u'langs/' +
+                args.lang +
+                '/tools/preprocess/abbr.txt'),
+            fst_file=os.path.join(
+                os.getenv(u'GTHOME'),
+                u'langs/' +
+                args.lang +
+                u'/src/analyser-gt-desc.xfst'),
+            disambiguation_analysis_file=os.path.join(
+                os.getenv(u'GTHOME'),
+                u'langs/' +
+                args.lang +
+                u'/src/syntax/disambiguation.cg3'),
+            function_analysis_file=os.path.join(
+                os.getenv(u'GTHOME'),
+                u'gtcore/gtdshared/smi/src/syntax/functions.cg3'),
+            dependency_analysis_file=os.path.join(
+                os.getenv(u'GTHOME'),
+                u'gtcore/gtdshared/smi/src/syntax/dependency.cg3'))
 
     ana.collect_files(args.converted_dirs)
     if args.debug:
