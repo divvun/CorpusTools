@@ -37,6 +37,7 @@ import codecs
 import multiprocessing
 import argparse
 import shutil
+import math
 
 import decode
 import ngram
@@ -1356,26 +1357,7 @@ def convert_parallelly(xsl_files):
     This goes on untill the list xsl_files is empty
     """
 
-    unprocessed_files = multiprocessing.Queue()
-    processed_files = multiprocessing.Queue()
-    nprocs = multiprocessing.cpu_count() * 2
-    lock = multiprocessing.Lock()
-    procs = []
 
-    add_to_unprocessed_files(xsl_files, unprocessed_files)
-    while xsl_files:
-        for i in range(nprocs):
-            p = multiprocessing.Process(
-                target=worker,
-                args=(unprocessed_files, processed_files, lock,))
-            procs.append(p)
-            p.start()
-
-        for p in procs:
-            p.join()
-
-        remove_processed_files(xsl_files, processed_files)
-        add_to_unprocessed_files(xsl_files, unprocessed_files)
 
 
 def remove_processed_files(xsl_files, processed_files):
@@ -1420,7 +1402,31 @@ def main():
     args = parse_options()
     xsl_files = []
     if os.path.isdir(args.source):
-        convert_parallelly(collect_files(args.source))
+        xsl_files = collect_files(args.source)
+
+        unprocessed_files = multiprocessing.Queue()
+        processed_files = multiprocessing.Queue()
+        nprocs = multiprocessing.cpu_count() * 2
+        lock = multiprocessing.Lock()
+        procs = []
+
+        chunksize = int(math.ceil(len(xsl_files) / float(nprocs)))
+
+        while xsl_files:
+            for i in range(nprocs):
+
+                print "opq", i, len(xsl_files)
+                add_to_unprocessed_files(xsl_files[chunksize * i:chunksize * (i + 1)], unprocessed_files)
+                p = multiprocessing.Process(
+                    target=worker,
+                    args=(unprocessed_files, processed_files, lock,))
+                procs.append(p)
+                p.start()
+
+                remove_processed_files(xsl_files, processed_files)
+                print "rst", i, len(xsl_files)
+                for p in procs:
+                    p.join(10)
 
     elif os.path.isfile(args.source):
          xsl_file = args.source + '.xsl'
