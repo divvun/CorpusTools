@@ -37,7 +37,6 @@ import codecs
 import multiprocessing
 import argparse
 import shutil
-import math
 
 import decode
 import ngram
@@ -1316,65 +1315,35 @@ class DocumentTester:
 
 def parse_options():
     parser = argparse.ArgumentParser(
-        description='Convert original files to giellatekno xml.')
+        description='Convert original files to giellatekno xml, using \
+        dependency checking.')
+    parser.add_argument(u'--debug',
+                        action=u"store_true",
+                        help=u"use this for debugging the conversion \
+                        process. When this argument is used files will \
+                        be converted one by one.")
     parser.add_argument('source',
-                        help="either a file to be converted, or a directory \
-                        containing files to be converted")
+                        help="directory where the original files exist")
 
     args = parser.parse_args()
     return args
 
 
-def worker(unprocessed_files, processed_files, lock):
-    """Loop through the queue unprocessed_files.
+def worker(xsl_file):
+    conv = Converter(xsl_file[:-4])
 
-    Record which files have been processed, successfully or not
-    in the queue processed_files.
-    """
-    while not unprocessed_files.empty():
-        xsl_file = unprocessed_files.get()
-        conv = Converter(xsl_file[:-4])
-
-        try:
-            conv.write_complete()
-        except ConversionException:
-            pass
-            with lock:
-                print 'Could not convert', xsl_file[:-4]
-        finally:
-            with lock:
-                processed_files.put(xsl_file)
+    try:
+        conv.write_complete()
+    except ConversionException:
+        print >>sys.stderr, 'Could not convert', xsl_file[:-4]
 
 
-def convert_parallelly(xsl_files):
-    """Convert the files in the list xsl_files in parallel
-
-    Set up two queues, unprocessed_files and processed_files. The queue
-    unprocessed_files is filled from the list xsl_files. The worker
-    function records which files have been visited. After that the
-    processed files are removed from the list xsl_files.
-
-    This goes on untill the list xsl_files is empty
-    """
-
-
-
-
-def remove_processed_files(xsl_files, processed_files):
-    """Remove the processed files (both converted and
-    unconverted files) from the list xsl_files
-    """
-    while not processed_files.empty():
-        xsl_files.remove(processed_files.get())
-
-
-def add_to_unprocessed_files(xsl_files, unprocessed_files):
-    """Add all the files in the list xsl_files to the
-    queue unprocessed_files
-    """
-    for xsl_file in xsl_files:
-        unprocessed_files.put(xsl_file)
-
+def convert_in_parallel(xsl_files):
+    pool_size = multiprocessing.cpu_count() * 2
+    pool = multiprocessing.Pool(processes=pool_size,)
+    pool.map(worker, xsl_files)
+    pool.close()
+    pool.join()
 
 
 def convert_serially(xsl_files):
@@ -1383,13 +1352,7 @@ def convert_serially(xsl_files):
 
 
 def collect_files(source_dir):
-    """Collect all .xsl the files in source_dir
-
-    Return a list of xsl_files
-    """
-
     xsl_files = []
-
     for root, dirs, files in os.walk(source_dir):
         for f in files:
             if f.endswith('.xsl'):
@@ -1400,42 +1363,21 @@ def collect_files(source_dir):
 
 def main():
     args = parse_options()
-    xsl_files = []
-    if os.path.isdir(args.source):
-        xsl_files = collect_files(args.source)
 
-        unprocessed_files = multiprocessing.Queue()
-        processed_files = multiprocessing.Queue()
-        nprocs = multiprocessing.cpu_count() * 2
-        lock = multiprocessing.Lock()
-        procs = []
-
-        chunksize = int(math.ceil(len(xsl_files) / float(nprocs)))
-
-        while xsl_files:
-            for i in range(nprocs):
-
-                print "opq", i, len(xsl_files)
-                add_to_unprocessed_files(xsl_files[chunksize * i:chunksize * (i + 1)], unprocessed_files)
-                p = multiprocessing.Process(
-                    target=worker,
-                    args=(unprocessed_files, processed_files, lock,))
-                procs.append(p)
-                p.start()
-
-                remove_processed_files(xsl_files, processed_files)
-                print "rst", i, len(xsl_files)
-                for p in procs:
-                    p.join(10)
-
-    elif os.path.isfile(args.source):
-         xsl_file = args.source + '.xsl'
-         if os.path.isfile(xsl_file):
+    if os.path.isfile(args.source):
+        xsl_file = args.source + '.xsl'
+        if os.path.isfile(xsl_file):
             worker(xsl_file)
-         else:
-             shutil.copy(
-                 os.path.join(os.getenv('GTHOME'),
-                              'gt/script/corpus/XSL-template.xsl'),
-                 xsl_file)
-             print "Fill in meta info in", xsl_file, \
-                 ', then run this command again'
+        else:
+            shutil.copy(
+                os.path.join(os.getenv('GTHOME'),
+                             'gt/script/corpus/XSL-template.xsl'),
+                xsl_file)
+            print "Fill in meta info in", xsl_file, \
+                ', then run this command again'
+            sys.exit(1)
+    elif os.path.isdir(args.source):
+        if args.debug:
+            convert_serially(collect_files(args.source))
+        else:
+            convert_in_parallel(collect_files(args.source))
