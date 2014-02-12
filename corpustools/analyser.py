@@ -166,7 +166,9 @@ class Analyser(object):
     def ccat(self):
         u"""Turn an xml formatted file into clean text
         """
-        return self.xml_printer.process_file(self.xml_file).getvalue()
+        text = self.xml_printer.process_file(self.xml_file).getvalue()
+        if len(text) > 0:
+            return text
 
     def run_external_command(self, command, input):
         '''Run the command with input using subprocess
@@ -192,7 +194,9 @@ class Analyser(object):
         if self.lang == 'sme' and self.corr_file is not None:
             pre_process_command.append(u'--corr=' + self.corr_file)
 
-        return self.run_external_command(pre_process_command, self.ccat())
+        text = self.ccat()
+        if text is not None:
+            return self.run_external_command(pre_process_command, text)
 
     def lookup(self):
         u"""Runs lookup on the preprocess output
@@ -200,7 +204,9 @@ class Analyser(object):
         """
         lookup_command = [u'lookup', u'-q', u'-flags', u'mbTT', self.fst_file]
 
-        return self.run_external_command(lookup_command, self.preprocess())
+        preprocess = self.preprocess()
+        if preprocess is not None:
+            return self.run_external_command(lookup_command, preprocess)
 
     def lookup2cg(self):
         u"""Runs lookup2cg on the lookup output
@@ -208,7 +214,9 @@ class Analyser(object):
         """
         lookup2cg_command = [u'lookup2cg']
 
-        return self.run_external_command(lookup2cg_command, self.lookup())
+        lookup = self.lookup()
+        if lookup is not None:
+            return self.run_external_command(lookup2cg_command, lookup)
 
     def disambiguation_analysis(self):
         u"""Runs vislcg3 on the lookup2cg output
@@ -218,8 +226,12 @@ class Analyser(object):
         dis_analysis_command = \
             [u'vislcg3', u'-g', self.disambiguation_analysis_file]
 
-        self.disambiguation = \
-            self.run_external_command(dis_analysis_command, self.lookup2cg())
+        lookup2cg = self.lookup2cg()
+        if lookup2cg is not None:
+            self.disambiguation = \
+                self.run_external_command(dis_analysis_command, lookup2cg)
+        else:
+            self.disambiguation = None
 
     def function_analysis(self):
         u"""Runs vislcg3 on the disambiguation analysis
@@ -228,23 +240,28 @@ class Analyser(object):
         """
         self.disambiguation_analysis()
 
+
         function_analysis_command = \
             [u'vislcg3', u'-g', self.function_analysis_file]
 
-        return self.run_external_command(function_analysis_command,
-                                         self.get_disambiguation())
+        if self.get_disambiguation() is not None:
+            return self.run_external_command(function_analysis_command,
+                                            self.get_disambiguation())
 
     def dependency_analysis(self):
         u"""Runs vislcg3 on the functions analysis output
 
         Produces a dependency analysis
         """
-        dep_analysis_command = \
-            [u'vislcg3', u'-g', self.dependency_analysis_file]
+        function_analysis = self.function_analysis()
 
-        self.dependency = \
-            self.run_external_command(dep_analysis_command,
-                                      self.function_analysis())
+        if function_analysis is not None:
+            dep_analysis_command = \
+                [u'vislcg3', u'-g', self.dependency_analysis_file]
+
+            self.dependency = \
+                self.run_external_command(dep_analysis_command,
+                                        self.function_analysis())
 
     def get_disambiguation(self):
         '''Get the disambiguation analysis
@@ -294,11 +311,12 @@ class Analyser(object):
 
         if self.get_ocr() is None:
             self.dependency_analysis()
-            self.makedirs()
-            self.get_analysis_xml().write(
-                self.analysis_xml_file,
-                encoding=u'utf8',
-                xml_declaration=True)
+            if self.get_disambiguation() is not None:
+                self.makedirs()
+                self.get_analysis_xml().write(
+                    self.analysis_xml_file,
+                    encoding=u'utf8',
+                    xml_declaration=True)
 
     def analyse_in_parallel(self):
         '''Analyse file in parallel
