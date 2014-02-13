@@ -192,9 +192,6 @@ class Analyser(object):
         if self.abbr_file is not None:
             pre_process_command.append(u'--abbr=' + self.abbr_file)
 
-        if self.lang == 'sme' and self.corr_file is not None:
-            pre_process_command.append(u'--corr=' + self.corr_file)
-
         text = self.ccat()
         if text is not None:
             return self.run_external_command(pre_process_command, text)
