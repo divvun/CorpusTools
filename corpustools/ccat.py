@@ -327,7 +327,8 @@ class XMLPrinter:
 
     def parse_file(self, filename):
         self.filename = filename
-        self.etree = etree.parse(filename)
+        p = etree.XMLParser(huge_tree=True)
+        self.etree = etree.parse(filename, p)
 
     def process_file(self):
         """Process the given file, adding the text into buffer
