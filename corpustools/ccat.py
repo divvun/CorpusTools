@@ -53,7 +53,9 @@ class XMLPrinter:
                  noforeign=False,
                  typos=False,
                  print_filename=False,
-                 one_word_per_line=False):
+                 one_word_per_line=False,
+                 disambiguation=False,
+                 dependency=False):
 
         self.paragraph = True
         self.all_paragraphs = all_paragraphs
@@ -95,6 +97,9 @@ class XMLPrinter:
             self.one_word_per_line = one_word_per_line
 
         self.lang = lang
+
+        self.disambiguation = disambiguation
+        self.dependency = dependency
 
     def get_lang(self):
         """
@@ -308,13 +313,20 @@ class XMLPrinter:
 
         buffer = StringIO.StringIO()
 
-        dependency = self.etree.find('.//dependency')
-        if dependency is not None and dependency.text is not None:
-            buffer.write(dependency.text.encode('utf8'))
+        if self.dependency:
+            self.print_element(self.etree.find('.//dependency'), buffer)
+        elif self.disambiguation:
+            self.print_element(self.etree.find('.//disambiguation'), buffer)
         else:
             for paragraph in self.etree.findall('.//p'):
                 if self.visit_this_node(paragraph):
                     self.collect_text(paragraph, self.get_lang(), buffer)
+
+        return buffer
+
+    def print_element(self, element, buffer):
+        if element is not None and element.text is not None:
+            buffer.write(element.text.encode('utf8'))
 
         return buffer
 
@@ -412,6 +424,14 @@ def parse_options():
                         action='store_true',
                         help='Print the whole text one word per line; \
                         typos have tab separated corrections')
+    parser.add_argument('-dis',
+                        dest='disambiguation',
+                        action='store_true',
+                        help='Print the disambiguation element')
+    parser.add_argument('-dep',
+                        dest='dependency',
+                        action='store_true',
+                        help='Print the dependency element')
 
     parser.add_argument('-r',
                         dest='recursive',
@@ -449,7 +469,9 @@ def main():
                              noforeign=args.noforeign,
                              typos=args.typos,
                              print_filename=args.print_filename,
-                             one_word_per_line=args.one_word_per_line)
+                             one_word_per_line=args.one_word_per_line,
+                             dependency=args.dependency,
+                             disambiguation=args.disambiguation)
 
     for target in args.targets:
         if os.path.isfile(target):

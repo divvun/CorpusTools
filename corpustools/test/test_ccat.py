@@ -1017,10 +1017,25 @@ makkar\tmakkár\t#errtype=á,pos=interr
 okta máná\tokta mánná\t#cat=nomsg,const=spred,errtype=case,orig=gensg,pos=n
 ''')
 
-    def test_process_file(self):
+
+    def test_process_file1(self):
         '''Test process_file with a disambiguation element as input
         '''
-        xml_printer = ccat.XMLPrinter()
+        xml_printer = ccat.XMLPrinter(disambiguation=True)
+        xml_printer.etree = etree.parse(io.BytesIO('''
+<document id="no_id" xml:lang="nob">
+    <body>
+        <disambiguation>"&lt;Muhto&gt;"\n\t"muhto" CC &lt;sme&gt; @CVP\n"&lt;gaskkohagaid&gt;"\n\t"gaskkohagaid" Adv &lt;sme&gt;\n"&lt;,&gt;"\n\t"," CLB\n"&lt;ja&gt;"\n\t"ja" CC &lt;sme&gt; @CNP\n"&lt;erenoamážit&gt;"\n\t"erenoamážit" Adv &lt;sme&gt;\n"&lt;dalle_go&gt;"\n\t"dalle_go" MWE CS &lt;sme&gt; @CVP\n"&lt;lei&gt;"\n\t"leat" V &lt;sme&gt; IV Ind Prt Sg3 @+FMAINV\n"&lt;buolaš&gt;"\n\t"buolaš" Sem/Wthr N &lt;sme&gt; Sg Nom\n"&lt;,&gt;"\n\t"," CLB\n"&lt;de&gt;"\n\t"de" Adv &lt;sme&gt;\n"&lt;aggregáhta&gt;"\n\t"aggregáhta" N &lt;sme&gt; Sg Nom\n"&lt;billánii&gt;"\n\t"billánit" V &lt;sme&gt; IV Ind Prt Sg3 @+FMAINV\n"&lt;.&gt;"\n\t"." CLB\n\n"&lt;¶&gt;"\n\t"¶" CLB\n\n</disambiguation></body></document>'''))
+
+        buffer = xml_printer.process_file('barabbas/p.xml')
+
+        self.assertEqual(buffer.getvalue(),
+                         '"<Muhto>"\n\t"muhto" CC <sme> @CVP\n"<gaskkohagaid>"\n\t"gaskkohagaid" Adv <sme>\n"<,>"\n\t"," CLB\n"<ja>"\n\t"ja" CC <sme> @CNP\n"<erenoamážit>"\n\t"erenoamážit" Adv <sme>\n"<dalle_go>"\n\t"dalle_go" MWE CS <sme> @CVP\n"<lei>"\n\t"leat" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<buolaš>"\n\t"buolaš" Sem/Wthr N <sme> Sg Nom\n"<,>"\n\t"," CLB\n"<de>"\n\t"de" Adv <sme>\n"<aggregáhta>"\n\t"aggregáhta" N <sme> Sg Nom\n"<billánii>"\n\t"billánit" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<.>"\n\t"." CLB\n\n"<¶>"\n\t"¶" CLB\n\n')
+
+    def test_process_file2(self):
+        '''Test process_file with a dependency element as input
+        '''
+        xml_printer = ccat.XMLPrinter(dependency=True)
         xml_printer.etree = etree.parse(io.BytesIO('''
 <document id="no_id" xml:lang="nob">
     <body>
