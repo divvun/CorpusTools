@@ -8,3 +8,4 @@ v<0.2.3>, <20140129> -- ccat now understands how to turn analysed files into cle
 v<0.3.0>, <20140129> -- Moved corpus-parallel.py to CorpusTools
 v<0.3.1>, <20140204> -- Changed the way multiprocessing is done in convert2xml, readd the disambiguation tag to the analysed docs
 v<0.3.2>, <20140205> -- Use the old infra for sme.fst, abbr.txt and corr.txt
+v<0.3.3>, <20140213> -- Don't write empty analysis files
