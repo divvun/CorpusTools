@@ -166,7 +166,8 @@ class Analyser(object):
     def ccat(self):
         u"""Turn an xml formatted file into clean text
         """
-        text = self.xml_printer.process_file(self.xml_file).getvalue()
+        self.xml_printer.parse_file(self.xml_file)
+        text = self.xml_printer.process_file().getvalue()
         if len(text) > 0:
             return text
 
