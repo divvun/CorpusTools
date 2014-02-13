@@ -108,6 +108,29 @@ class XMLPrinter:
         return self.etree.getroot().\
             attrib['{http://www.w3.org/XML/1998/namespace}lang']
 
+    def get_genre(self):
+        u"""
+        @brief Get the genre from the xml file
+
+        :returns: the genre as set in the xml file
+        """
+        if self.etree.getroot().find(u".//genre") is not None:
+            return self.etree.getroot().find(u".//genre").attrib[u"code"]
+        else:
+            return u'none'
+
+    def get_translatedfrom(self):
+        u"""
+        @brief Get the translated_from value from the xml file
+
+        :returns: the value of translated_from as set in the xml file
+        """
+        if self.etree.getroot().find(u".//translated_from") is not None:
+            return self.etree.getroot().find(u".//translated_from").\
+                attrib[u"{http://www.w3.org/XML/1998/namespace}lang"]
+        else:
+            return u'none'
+
     def get_element_language(self, element, parentlang):
         """Get the language of element.
 
@@ -302,15 +325,15 @@ class XMLPrinter:
             (element.tag == 'errorlang' and self.noforeign)
             )
 
-    def process_file(self, filename):
+    def parse_file(self, filename):
+        self.filename = filename
+        self.etree = etree.parse(filename)
+
+    def process_file(self):
         """Process the given file, adding the text into buffer
 
         Returns the buffer
         """
-        if os.path.exists(filename):
-            self.etree = etree.parse(filename)
-        self.filename = filename
-
         buffer = StringIO.StringIO()
 
         if self.dependency:
@@ -328,12 +351,10 @@ class XMLPrinter:
         if element is not None and element.text is not None:
             buffer.write(element.text.encode('utf8'))
 
-        return buffer
-
     def print_file(self, file_):
         '''Print a xml file to stdout'''
-        buffer = self.process_file(file_)
-        sys.stdout.write(buffer.getvalue())
+        self.parse_file(file_)
+        sys.stdout.write(self.process_file().getvalue())
 
 
 def parse_options():

@@ -484,7 +484,7 @@ muitalivčče makkar soga sii ¶\n")
                 types +
                 '''>ášŧŋđžčøåæ</p></body></document>'''))
 
-            buffer = xml_printer.process_file('barabbas/p.xml')
+            buffer = xml_printer.process_file()
             self.assertEqual(buffer.getvalue(), '')
 
         for types in ['',
@@ -494,7 +494,7 @@ muitalivčče makkar soga sii ¶\n")
                 types +
                 '''>ášŧŋđžčøåæ</p></body></document>'''))
 
-            buffer = xml_printer.process_file('barabbas/p.xml')
+            buffer = xml_printer.process_file()
             self.assertEqual(buffer.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
     def test_process_file_title_set(self):
@@ -511,7 +511,7 @@ muitalivčče makkar soga sii ¶\n")
                 types +
                 '''>ášŧŋđžčøåæ</p></body></document>'''))
 
-            buffer = xml_printer.process_file('barabbas/p.xml')
+            buffer = xml_printer.process_file()
             self.assertEqual(buffer.getvalue(), '')
 
         for types in [' type="title"']:
@@ -520,7 +520,7 @@ muitalivčče makkar soga sii ¶\n")
                 types +
                 '''>ášŧŋđžčøåæ</p></body></document>'''))
 
-            buffer = xml_printer.process_file('barabbas/p.xml')
+            buffer = xml_printer.process_file()
             self.assertEqual(buffer.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
     def test_process_file_listitem_set(self):
@@ -537,7 +537,7 @@ muitalivčče makkar soga sii ¶\n")
                 types +
                 '''>ášŧŋđžčøåæ</p></body></document>'''))
 
-            buffer = xml_printer.process_file('barabbas/p.xml')
+            buffer = xml_printer.process_file()
             self.assertEqual(buffer.getvalue(), '')
 
         for types in [' type="listitem"']:
@@ -546,7 +546,7 @@ muitalivčče makkar soga sii ¶\n")
                 types +
                 '''>ášŧŋđžčøåæ</p></body></document>'''))
 
-            buffer = xml_printer.process_file('barabbas/p.xml')
+            buffer = xml_printer.process_file()
             self.assertEqual(buffer.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
     def test_process_file_tablecell_set(self):
@@ -563,7 +563,7 @@ muitalivčče makkar soga sii ¶\n")
                 types +
                 '''>ášŧŋđžčøåæ</p></body></document>'''))
 
-            buffer = xml_printer.process_file('barabbas/p.xml')
+            buffer = xml_printer.process_file()
             self.assertEqual(buffer.getvalue(), '')
 
         for types in [' type="tablecell"']:
@@ -572,7 +572,7 @@ muitalivčče makkar soga sii ¶\n")
                 types +
                 '''>ášŧŋđžčøåæ</p></body></document>'''))
 
-            buffer = xml_printer.process_file('barabbas/p.xml')
+            buffer = xml_printer.process_file()
             self.assertEqual(buffer.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
     def test_process_file_allp_set(self):
@@ -590,7 +590,7 @@ muitalivčče makkar soga sii ¶\n")
                 types +
                 '''>ášŧŋđžčøåæ</p></body></document>'''))
 
-            buffer = xml_printer.process_file('barabbas/p.xml')
+            buffer = xml_printer.process_file()
             self.assertEqual(buffer.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
     def test_process_file_one_word_per_line_errorlex(self):
@@ -619,7 +619,7 @@ muitalivčče makkar soga sii ¶\n")
     </body>
 </document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), '''livččii
 makkarge
 politihkka,
@@ -657,7 +657,7 @@ sii
     </body>
 </document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), '''livččii
 makkarge\tmakkárge\t#errtype=á,pos=adv
 politihkka,
@@ -695,7 +695,7 @@ sii
     </body>
 </document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(),
                          '''makkarge\tmakkárge\t#errtype=á,pos=adv
 makkár soga\tman soga
@@ -727,7 +727,7 @@ makkar\tmakkár\t#errtype=á,pos=interr
     </body>
 </document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(),
                          'makkár soga\tman soga\n')
 
@@ -758,7 +758,7 @@ makkar\tmakkár\t#errtype=á,pos=interr
     </body>
 </document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(),
                          '''makkarge\tmakkárge\t#errtype=á,pos=adv
 makkar\tmakkár\t#errtype=á,pos=interr
@@ -808,7 +808,7 @@ makkar\tmakkár\t#errtype=á,pos=interr
     </body>
 </document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), 'nob1 nob2 ¶\n')
 
     def test_process_file_language_dan(self):
@@ -828,7 +828,7 @@ makkar\tmakkár\t#errtype=á,pos=interr
     </body>
 </document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), 'dan1 ¶\n')
 
     def test_process_two_paragraphs(self):
@@ -847,7 +847,7 @@ makkar\tmakkár\t#errtype=á,pos=interr
     </body>
 </document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), 'nob1 ¶\nnob2 ¶\n')
 
     def test_process_minus_l_sme(self):
@@ -872,7 +872,7 @@ makkar\tmakkár\t#errtype=á,pos=interr
     </body>
 </document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
 
         self.assertEqual(buffer.getvalue(), '')
 
@@ -897,7 +897,7 @@ makkar\tmakkár\t#errtype=á,pos=interr
     </body>
 </document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
 
         self.assertEqual(buffer.getvalue(),
                          'Vijmak bierjjedak! nor vijmak de bierjjedak sjattáj \
@@ -924,7 +924,7 @@ makkar\tmakkár\t#errtype=á,pos=interr
     </body>
 </document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
 
         self.assertEqual(buffer.getvalue(),
                          'Vijmak bierjjedak! vijmak de bierjjedak sjattáj . \
@@ -950,7 +950,7 @@ makkar\tmakkár\t#errtype=á,pos=interr
     </body>
 </document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
 
         self.assertEqual(buffer.getvalue(), '')
 
@@ -979,7 +979,7 @@ makkar\tmakkár\t#errtype=á,pos=interr
     </body>
 </document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
 
         self.assertEqual(buffer.getvalue(),
                          'čoggen ollu joŋaid ja sarridat\t\
@@ -1009,7 +1009,7 @@ makkar\tmakkár\t#errtype=á,pos=interr
     </body>
 </document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
 
         self.assertEqual(buffer.getvalue(),
                          '''leat okta mánná\tlea okta mánná\t\
@@ -1027,7 +1027,7 @@ okta máná\tokta mánná\t#cat=nomsg,const=spred,errtype=case,orig=gensg,pos=n
     <body>
         <disambiguation>"&lt;Muhto&gt;"\n\t"muhto" CC &lt;sme&gt; @CVP\n"&lt;gaskkohagaid&gt;"\n\t"gaskkohagaid" Adv &lt;sme&gt;\n"&lt;,&gt;"\n\t"," CLB\n"&lt;ja&gt;"\n\t"ja" CC &lt;sme&gt; @CNP\n"&lt;erenoamážit&gt;"\n\t"erenoamážit" Adv &lt;sme&gt;\n"&lt;dalle_go&gt;"\n\t"dalle_go" MWE CS &lt;sme&gt; @CVP\n"&lt;lei&gt;"\n\t"leat" V &lt;sme&gt; IV Ind Prt Sg3 @+FMAINV\n"&lt;buolaš&gt;"\n\t"buolaš" Sem/Wthr N &lt;sme&gt; Sg Nom\n"&lt;,&gt;"\n\t"," CLB\n"&lt;de&gt;"\n\t"de" Adv &lt;sme&gt;\n"&lt;aggregáhta&gt;"\n\t"aggregáhta" N &lt;sme&gt; Sg Nom\n"&lt;billánii&gt;"\n\t"billánit" V &lt;sme&gt; IV Ind Prt Sg3 @+FMAINV\n"&lt;.&gt;"\n\t"." CLB\n\n"&lt;¶&gt;"\n\t"¶" CLB\n\n</disambiguation></body></document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
 
         self.assertEqual(buffer.getvalue(),
                          '"<Muhto>"\n\t"muhto" CC <sme> @CVP\n"<gaskkohagaid>"\n\t"gaskkohagaid" Adv <sme>\n"<,>"\n\t"," CLB\n"<ja>"\n\t"ja" CC <sme> @CNP\n"<erenoamážit>"\n\t"erenoamážit" Adv <sme>\n"<dalle_go>"\n\t"dalle_go" MWE CS <sme> @CVP\n"<lei>"\n\t"leat" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<buolaš>"\n\t"buolaš" Sem/Wthr N <sme> Sg Nom\n"<,>"\n\t"," CLB\n"<de>"\n\t"de" Adv <sme>\n"<aggregáhta>"\n\t"aggregáhta" N <sme> Sg Nom\n"<billánii>"\n\t"billánit" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<.>"\n\t"." CLB\n\n"<¶>"\n\t"¶" CLB\n\n')
@@ -1043,7 +1043,7 @@ okta máná\tokta mánná\t#cat=nomsg,const=spred,errtype=case,orig=gensg,pos=n
     </body>
 </document>'''))
 
-        buffer = xml_printer.process_file('barabbas/p.xml')
+        buffer = xml_printer.process_file()
 
         self.assertEqual(buffer.getvalue(),
                          '"<Muhto>"\n\t"muhto" CC @CVP #1->1 \n"<gaskkohagaid>"\n\t"gaskkohagaid" Adv @ADVL> #2->12 \n"<,>"\n\t"," CLB #3->4 \n"<ja>"\n\t"ja" CC @CNP #4->2 \n"<erenoamážit>"\n\t"erenoamážit" Adv @ADVL> #5->12 \n"<dalle_go>"\n\t"dalle_go" CS @CVP #6->7 \n"<lei>"\n\t"leat" V IV Ind Prt Sg3 @FS-ADVL> #7->12 \n"<buolaš>"\n\t"buolaš" N Sg Nom @<SPRED #8->7 \n"<,>"\n\t"," CLB #9->6 \n"<de>"\n\t"de" Adv @ADVL> #10->12 \n"<aggregáhta>"\n\t"aggregáhta" N Sg Nom @SUBJ> #11->12 \n"<billánii>"\n\t"billánit" V IV Ind Prt Sg3 @FS-ADVL> #12->0 \n"<.>"\n\t"." CLB #13->12 \n\n"<¶>"\n\t"¶" CLB #1->1 \n\n')
