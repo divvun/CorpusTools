@@ -41,6 +41,7 @@ import shutil
 import decode
 import ngram
 import errormarkup
+from corpustools import ccat
 
 
 class ConversionException(Exception):
@@ -197,11 +198,18 @@ class Converter:
                     'goldstandard' not in self.orig):
                 complete = self.make_complete()
 
-                converted = open(self.get_converted_name(), 'w')
-                converted.write(etree.tostring(complete,
-                                               encoding='utf8',
-                                               pretty_print='True'))
-                converted.close()
+                xml_printer = ccat.XMLPrinter(all_paragraphs=True)
+                xml_printer.etree = complete
+                text = xml_printer.process_file().getvalue()
+
+                if len(text) > 0:
+                    converted = open(self.get_converted_name(), 'w')
+                    converted.write(etree.tostring(complete,
+                                                encoding='utf8',
+                                                pretty_print='True'))
+                    converted.close()
+                else:
+                    print >>sys.stderr, self.orig, "has no text"
 
     def makedirs(self):
         """Make the converted directory
