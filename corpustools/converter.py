@@ -161,7 +161,7 @@ class Converter:
                 em = errormarkup.ErrorMarkup(self.get_orig())
 
                 for element in complete.find('body'):
-                    em.addErrorMarkup(element)
+                    em.add_error_markup(element)
             except IndexError as e:
                 logfile = open(self.get_orig() + '.log', 'w')
                 logfile.write("There is a markup error\n")
