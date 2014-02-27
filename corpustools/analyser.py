@@ -29,10 +29,6 @@ import argparse
 from corpustools import ccat
 
 
-def unwrap_self_analyse(arg, **kwarg):
-    return Analyser.analyse(*arg, **kwarg)
-
-
 class Analyser(object):
     '''A class which can analyse giellatekno xml formatted documents
     using preprocess, lookup, lookup2cg and vislcg3
@@ -335,6 +331,10 @@ class Analyser(object):
             self.analyse(xml_file)
 
 
+def unwrap_self_analyse(arg, **kwarg):
+    return Analyser.analyse(*arg, **kwarg)
+
+
 def sanity_check():
     u"""Look for programs and files that are needed to do the analysis.
     If they don't exist, quit the program
@@ -406,11 +406,6 @@ def main():
             dependency_analysis_file=os.path.join(
                 os.getenv(u'GTHOME'),
                 u'gtcore/gtdshared/smi/src/syntax/dependency.cg3'))
-        ana.set_corr_file(
-            os.path.join(os.getenv(u'GTHOME'),
-                         u'gt/' +
-                         args.lang +
-                         '/bin/corr.txt'))
     else:
         ana.set_analysis_files(
             abbr_file=os.path.join(
