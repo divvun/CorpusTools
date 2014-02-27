@@ -68,22 +68,22 @@ CTYPES = [
         u"º": u"Č",    #
     },
 
-    # winsami2 converted as iconv -f latin1 -t utf8
-    # á, æ, å, ø, ö, ä appear as themselves
+    # winsami2 converted as iconv -f cp1252 -t utf8
+    # á, æ, å, ø, ö, ä, š appear as themselves
+    # found in freecorpus/orig/sme/admin/sd/other_files/dc_00_1.doc
+    # and freecorpus/orig/sme/admin/guovda/KS_02.12.99.doc
     # 3
     {
-        u"": u"š",
-        u"": u"Š",
         u"¼": u"ŧ",
         u"º": u"Ŧ",
         u"¹": u"ŋ",
         u"¸": u"Ŋ",
-        u"": u"đ",
-        u"": u"Đ",
+        u"˜": u"đ",
+        u"‰": u"Đ",
         u"¿": u"ž",
         u"¾": u"Ž",
-        u"": u"č",
-        u"": u"Č",
+        u"„": u"č",
+        u"‚": u"Č",
     },
 
     # iso-ir-197 converted as iconv -f latin1 -t utf8
@@ -142,6 +142,10 @@ CTYPES = [
         u"ªÓ": u"™”",
         u"Ã": u"√",
         u"Ð": u"–",
+        u"": u"",
+        u"¥": u"•",
+        u"": u"ü",
+        u"": u"í"
         #"Ç": u"«",
         #"È": u"»",
     },
@@ -153,36 +157,58 @@ CTYPES = [
     # 6
     {
         u"ð": u"đ",
+        u"£": u"Đ",
         u"Ç": u"Č",
         u"ç": u"č",
         u"ó": u"š",
+        u"Ó": u"Š",
         u"ý": u"ŧ",
         u"þ": u"ž",
     },
 
-    # found in freecorpus/orig/sme/admin/sd/other_files/dc_00_1.doc
-    # and freecorpus/orig/sme/admin/guovda/KS_02.12.99.doc
     # found in boundcorpus/orig/sme/bible/other_files/vitkan.pdf
-    # latin4 as latin1
+    # latin4 as cp1252
     # á, æ, å, ø, ö, ä appear as themselves
     # 7
     {
         u"ð": u"đ",
+        u"Ð": u"Đ", # U+00D0 to U+0110
         u"È": u"Č",
         u"è": u"č",
         u"¹": u"š",
         u"¿": u"ŋ",
+        u"½": u"Ŋ",
+        u"¹": u"š",
+        u"©": u"Š",
         u"¾": u"ž",
         u"¼": u"ŧ",
-        u"‚": u"Č",
-        u"„": u"č",
-        #"¹": u"ŋ",
-        u"˜": u"đ",
-        #"¿": u"ž",
+        u"¬": u"Ŧ",
+        u"¾": u"ž",
+        u"®": u"Ž",
     },
+
+    # 8
+    {
+        u"": u"á",
+        u"ç": u"Á",
+        u"_": u"š",
+        u"ã": u"č",
+        u"÷": u"đ",
+        u" ": u"ž",
+    },
+    # 9
+    {
+        u"¤": u"đ",
+        u"£": u"Đ",
+        u"ç": u"č",
+        u"Ç": u"Č",
+        u"ó": u"š",
+        u"Ó": u"Š",
+        u"º": u"ž",
+    }
 ]
 
-LIMITS = {0: 1, 1: 1, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1, 7: 1}
+LIMITS = {0: 1, 1: 1, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1, 7: 1, 8:2, 9:1}
 
 
 class EncodingGuesser(object):
@@ -258,11 +284,12 @@ class EncodingGuesser(object):
         @return winner is an int pointing to a position in CTYPES or -1
         to tell that no known encoding is found
         """
+        winner = None
+        maxhits = 0
+
         content = content.decode('utf8')
         sami_letter_frequency = self.get_sami_letter_frequency(content)
 
-        maxhits = 0
-        winner = None
         for position in range(0, len(CTYPES)):
             encoding_frequency = self.get_encoding_frequency(content, position)
 
