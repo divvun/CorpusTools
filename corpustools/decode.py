@@ -13,38 +13,40 @@ CTYPES = [
     # mac-sami á appears at the same place as latin1 á
     # 0
     {
+        u"á": u"á",
         u"ª": u"š",
-        u"¥": u"Š",
-        u"º": u"ŧ",
-        u"µ": u"Ŧ",
+        u"∏": u"č",
+        u"π": u"đ",
+        u"Ω": u"ž",
         u"∫": u"ŋ",
+        u"Á": u"Á",
+        u"¢": u"Č",
+        u"º": u"ŧ",
+        u"¥": u"Š",
+        u"∞": u"Đ",
         u"±": u"Ŋ",
         u"¸": u"Ŋ",
-        u"π": u"đ",
-        u"∞": u"Đ",
-        u"Ω": u"ž",
         u"∑": u"Ž",
-        u"∏": u"č",
-        u"¢": u"Č"
+        u"µ": u"Ŧ",
     },
 
     # iso-ir-197 converted as iconv -f mac -t utf8
     # 1
     {
         u"·": u"á",
-        u"¡": u"Á",
         u"≥": u"š",
-        u"≤": u"Š",
-        u"∏": u"ŧ",
-        u"µ": u"Ŧ",
-        u"±": u"ŋ",
-        u"Ø": u"Ŋ",
-        u"§": u"đ",
-        u"£": u"Đ",
-        u"∫": u"ž",
-        u"π": u"Ž",
         u"¢": u"č",
+        u"§": u"đ",
+        u"∫": u"ž",
+        u"±": u"ŋ",
+        u"¡": u"Á",
         u"°": u"Č",
+        u"∏": u"ŧ",
+        u"≤": u"Š",
+        u"£": u"Đ",
+        u"Ø": u"Ŋ",
+        u"π": u"Ž",
+        u"µ": u"Ŧ",
         u"Ê": u"æ",
         u"Δ": u"Æ",
         u"¯": u"ø",
@@ -57,71 +59,64 @@ CTYPES = [
         u"÷": u"Ö",
     },
 
-    # á, æ, å, ø, ö, ä appear as themselves
-    # 2
-    {
-        u"ƒ": u"š",    #
-        u"√": u"ŋ",    #
-        u"∂": u"đ",    #
-        u"π": u"ž",    #
-        u"ª": u"č",    #
-        u"º": u"Č",    #
-    },
-
     # winsami2 converted as iconv -f cp1252 -t utf8
     # á, æ, å, ø, ö, ä, š appear as themselves
     # found in freecorpus/orig/sme/admin/sd/other_files/dc_00_1.doc
     # and freecorpus/orig/sme/admin/guovda/KS_02.12.99.doc
-    # 3
+    # 2
     {
-        u"¼": u"ŧ",
-        u"º": u"Ŧ",
-        u"¹": u"ŋ",
-        u"¸": u"Ŋ",
-        u"˜": u"đ",
-        u"‰": u"Đ",
-        u"¿": u"ž",
-        u"¾": u"Ž",
+        u"á": u"á",
         u"„": u"č",
+        u"˜": u"đ",
+        u"¹": u"ŋ",
+        u"¿": u"ž",
+        u"Á": u"Á",
         u"‚": u"Č",
+        u"¼": u"ŧ",
+        u"‰": u"Đ",
+        u"¸": u"Ŋ",
+        u"¾": u"Ž",
+        u"º": u"Ŧ",
     },
 
-    # iso-ir-197 converted as iconv -f latin1 -t utf8
+    # iso-ir-197 converted as iconv -f latin1/cp1252 -t utf8
     # á, æ, å, ø, ö, ä appear as themselves
-    # 4
+    # 3
     {
+        u"á": u"á",
         u"³": u"š",
-        u"²": u"Š",
-        u"¸": u"ŧ",
-        u"µ": u"Ŧ",
-        u"±": u"ŋ",
-        u"¯": u"Ŋ",
-        u"¤": u"đ",
-        u"£": u"Đ",
-        u"º": u"ž",
-        u"¹": u"Ž",
         u"¢": u"č",
+        u"¤": u"đ",
+        u"º": u"ž",
+        u"±": u"ŋ",
+        u"Á": u"Á",
         u"¡": u"Č",
+        u"¸": u"ŧ",
+        u"²": u"Š",
+        u"¥": u"Đ",
+        u"¯": u"Ŋ",
+        u"¹": u"Ž",
+        u"µ": u"Ŧ",
     },
 
     # mac-sami to latin1
-    # 5
+    # 4
     {
         u"": u"á",
-        u"‡": u"á",
-        u"ç": u"Á",
         u"»": u"š",
-        u"´": u"Š",
-        u"¼": u"ŧ",
-        u"µ": u"Ŧ",
-        u"º": u"ŋ",
-        u"±": u"Ŋ",
-        u"¹": u"đ",
-        u"°": u"Đ",
-        u"½": u"ž",
-        u"·": u"Ž",
         u"¸": u"č",
+        u"¹": u"đ",
+        u"½": u"ž",
+        u"º": u"ŋ",
+        u"ç": u"Á",
         u"¢": u"Č",
+        u"¼": u"ŧ",
+        u"´": u"Š",
+        u"°": u"Đ",
+        u"±": u"Ŋ",
+        u"·": u"Ž",
+        u"µ": u"Ŧ",
+
         u"¾": u"æ",
         u"®": u"Æ",
         u"¿": u"ø",
@@ -150,65 +145,71 @@ CTYPES = [
         #"È": u"»",
     },
 
-    # found in boundcorpus/goldstandard/orig/sme/facta/GIEHTAGIRJI.correct.doc
-    # and
-    # boundcorpus/goldstandard/orig/sme/facta/learerhefte_-_vaatmarksfugler.doc
+    # 5 winsam as cp1252
+    {
+        u"á": u"á",
+        u"ó": u"š",
+        u"ç": u"č",
+        u"ð": u"đ",
+        u"þ": u"ž",
+        u"ñ": u"ŋ",
+        u"Á": u"Á",
+        u"Ç": u"Č",
+        u"ý": u"ŧ",
+        u"Ó": u"Š",
+        u"Ð": u"Đ", # U+00D0 to U+0110
+        u"Ñ": u"Ŋ",
+        u"Þ": u"Ž",
+        u"Ý": u"Ŧ",
+    },
+
+    # latin4 as cp1252/latin1
     # á, æ, å, ø, ö, ä appear as themselves
     # 6
     {
+        u"á": u"á",
+        u"¹": u"š",
+        u"è": u"č",
         u"ð": u"đ",
-        u"£": u"Đ",
-        u"Ç": u"Č",
-        u"ç": u"č",
-        u"ó": u"š",
-        u"Ó": u"Š",
-        u"ý": u"ŧ",
-        u"þ": u"ž",
+        u"¾": u"ž",
+        u"¿": u"ŋ",
+        u"Á": u"Á",
+        u"È": u"Č",
+        u"¼": u"ŧ",
+        u"©": u"Š",
+        u"Ð": u"Đ", # U+00D0 to U+0110
+        u"½": u"Ŋ",
+        u"®": u"Ž",
+        u"¬": u"Ŧ",
     },
 
-    # found in boundcorpus/orig/sme/bible/other_files/vitkan.pdf
-    # latin4 as cp1252
-    # á, æ, å, ø, ö, ä appear as themselves
     # 7
     {
-        u"ð": u"đ",
-        u"Ð": u"Đ", # U+00D0 to U+0110
-        u"È": u"Č",
-        u"è": u"č",
-        u"¹": u"š",
-        u"¿": u"ŋ",
-        u"½": u"Ŋ",
-        u"¹": u"š",
-        u"©": u"Š",
-        u"¾": u"ž",
-        u"¼": u"ŧ",
-        u"¬": u"Ŧ",
-        u"¾": u"ž",
-        u"®": u"Ž",
-    },
-
-    # 8
-    {
         u"": u"á",
-        u"ç": u"Á",
         u"_": u"š",
         u"ã": u"č",
         u"÷": u"đ",
-        u" ": u"ž",
+        u"À": u"ž",
+        u"ç": u"Á",
+        u"â": u"Č",
+        u"¿": u"ø"
     },
-    # 9
+    # 8
     {
-        u"¤": u"đ",
-        u"£": u"Đ",
-        u"ç": u"č",
-        u"Ç": u"Č",
+        u"á": u"á",
         u"ó": u"š",
-        u"Ó": u"Š",
+        u"ç": u"č",
+        u"¤": u"đ",
         u"º": u"ž",
+        u"Á": u"Á",
+        u"Ç": u"Č",
+        u"Ó": u"Š",
+        u"£": u"Đ",
     }
+    ,
 ]
 
-LIMITS = {0: 1, 1: 1, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1, 7: 1, 8:2, 9:1}
+LIMITS = {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8:2}
 
 
 class EncodingGuesser(object):
