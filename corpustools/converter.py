@@ -68,7 +68,7 @@ class Converter:
         """Convert the input file from the original format to a basic
         giellatekno xml document
         """
-        if 'Avvir' in self.orig:
+        if 'Avvir_xml' in self.orig:
             intermediate = AvvirConverter(self.orig)
 
         elif self.orig.endswith('.txt'):
