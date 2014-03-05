@@ -234,7 +234,7 @@ class EncodingGuesser(object):
             winner = 0
         elif u'ó' in content and u'ç' in content and u'ð' in content:
             winner = 4
-        elif u'¹' in content and u'è' in content and u'ð' in content:
+        elif u'á' in content and u'è' in content and u'ð' in content:
             winner = 5
         elif u'ó' in content and u'ç' in content and u'¤' in content:
             winner = 7
