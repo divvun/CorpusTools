@@ -180,7 +180,7 @@ class Converter:
 
         if (complete.getroot().
             attrib['{http://www.w3.org/XML/1998/namespace}lang'] in
-                ['sma', 'sme']):
+                ['sma', 'sme', 'smje', 'nob', 'fin']):
             ef = DocumentFixer(etree.fromstring(etree.tostring(complete)))
             complete = ef.fix_body_encoding()
 
@@ -982,6 +982,29 @@ class DocumentFixer:
 
         body = etree.fromstring(eg.decode_para(encoding, bodyString))
         self.etree.append(body)
+
+        if encoding == 'mac-sami_to_latin1':
+            title = self.etree.find('.//title')
+            if title is not None and title.text is not None:
+                text = title.text.encode('utf-8')
+                title.text = eg.decode_para(encoding, text).decode('utf-8')
+
+            persons = self.etree.findall('.//person')
+            for person in persons:
+                if person is not None:
+                    lastname = person.get('lastname')
+                    person.set(
+                        'lastname',
+                        eg.decode_para(
+                            encoding,
+                            lastname.encode('utf-8')).decode('utf-8'))
+                    firstname = person.get('firstname')
+                    person.set(
+                        'firstname',
+                        eg.decode_para(
+                            encoding,
+                            firstname.encode('utf-8')).decode('utf-8'))
+
 
         self.detect_quotes()
 
