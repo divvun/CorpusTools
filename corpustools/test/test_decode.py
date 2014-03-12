@@ -4,16 +4,24 @@ import unittest
 
 from corpustools import decode
 
-   #"á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ",
+       #"á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ",
 test_input = {
-    u"mac-sami_to_mac": "á ª ∏ π Ω ∫ Á ¢ º ¥ ∞ ± ∑ µ ø Ø å Å æ Æ",
-    u"winsami2_to_cp1252": "á š „ ˜ ¿ ¹ Á ‚ ¼ Š ‰ ¸ ¾ º ø Ø å Å æ Æ",
-    u"iso-ir-197_to_cp1252": "á ³ ¢ ¤ º ± Á ¡ ¸ ² £ ¯ ¹ µ ø Ø å Å æ Æ",
-    u"mac-sami_to_latin1": " » ¸ ¹ ½ º ç ¢ ¼ ´ ° ± · µ ¿ ¯ Œ  ¾ ®",
-    u"winsam_to_cp1252": "á ó ç ð þ ñ Á Ç ý Ó Ð Ñ Þ Ý ø Ø å Å æ Æ",
-    u"latin4_to_cp1252": "á ¹ è ð ¾ ¿ Á È ¼ © Ð ½ ® ¬ ø Ø å Å æ Æ",
-    u"mix-of-latin4-and-iso-ir-197_to_cp1252": "á ó ç ¤ º ŋ Á Ç ŧ Ó £ Ŋ Ž Ŧ ø Ø å Å æ Æ",
-    u"mix-mac-sami-and-some-unknown-encoding": " _ ã ÷ À ŋ ç â ¼ Š Đ Ŋ Ž Ŧ ¿ Ø å Å æ Æ",
+    u"mac-sami_to_latin1":
+        " » ¸ ¹ ½ º ç ¢ ¼ ´ ° ± · µ ¿ ¯   ¾ ®",
+    u"mac-sami_to_mac":
+        "á ª ∏ π Ω ∫ Á ¢ º ¥ ∞ ± ∑ µ ø Ø å Å æ Æ",
+    u"winsami2_to_cp1252":
+        "á š „ ˜ ¿ ¹ Á ‚ ¼ Š ‰ ¸ ¾ º ø Ø å Å æ Æ",
+    u"mix-mac-sami-and-some-unknown-encoding":
+        " _ ã ÷ À ŋ ç â ¼ Š Đ Ŋ Ž Ŧ ¿ Ø å Å æ Æ",
+    u"latin4_to_cp1252":
+        "á ¹ è ð ¾ ¿ Á È ¼ © Ð ½ ® ¬ ø Ø å Å æ Æ",
+    u"winsam_to_cp1252":
+        "á ó ç ð þ ñ Á Ç ý Ó Ð Ñ Þ Ý ø Ø å Å æ Æ",
+    u"iso-ir-197_to_cp1252":
+        "á ³ ¢ ¤ º ± Á ¡ ¸ ² £ ¯ ¹ µ ø Ø å Å æ Æ",
+    u"mix-of-latin4-and-iso-ir-197_to_cp1252":
+        "á ó ç ¤ º ŋ Á Ç ŧ Ó £ Ŋ Ž Ŧ ø Ø å Å æ Æ",
 }
 
 

@@ -9,71 +9,7 @@ import sys
 
 CTYPES = {
 
-    # mac-sami converted as iconv -f mac -t utf8
-    # mac-sami á appears at the same place as latin1 á
-    # 0
-    u"mac-sami_to_mac": {
-        u"á": u"á",
-        u"ª": u"š",
-        u"∏": u"č",
-        u"π": u"đ",
-        u"Ω": u"ž",
-        u"∫": u"ŋ",
-        u"Á": u"Á",
-        u"¢": u"Č",
-        u"º": u"ŧ",
-        u"¥": u"Š",
-        u"∞": u"Đ",
-        u"±": u"Ŋ",
-        u"¸": u"Ŋ",
-        u"∑": u"Ž",
-        u"µ": u"Ŧ",
-    },
-
-    # winsami2 converted as iconv -f cp1252 -t utf8
-    # á, æ, å, ø, ö, ä, š appear as themselves
-    # found in freecorpus/orig/sme/admin/sd/other_files/dc_00_1.doc
-    # and freecorpus/orig/sme/admin/guovda/KS_02.12.99.doc
-    # 1
-    u"winsami2_to_cp1252": {
-        u"á": u"á",
-        u"š": u"š",
-        u"„": u"č",
-        u"˜": u"đ",
-        u"¹": u"ŋ",
-        u"¿": u"ž",
-        u"Á": u"Á",
-        u"‚": u"Č",
-        u"¼": u"ŧ",
-        u"Š": u"Š",
-        u"‰": u"Đ",
-        u"¸": u"Ŋ",
-        u"¾": u"Ž",
-        u"º": u"Ŧ",
-    },
-
-    # iso-ir-197 converted as iconv -f latin1/cp1252 -t utf8
-    # á, æ, å, ø, ö, ä appear as themselves
-    # 2
-    u"iso-ir-197_to_cp1252": {
-        u"á": u"á",
-        u"³": u"š",
-        u"¢": u"č",
-        u"¤": u"đ",
-        u"º": u"ž",
-        u"±": u"ŋ",
-        u"Á": u"Á",
-        u"¡": u"Č",
-        u"¸": u"ŧ",
-        u"²": u"Š",
-        u"£": u"Đ",
-        u"¯": u"Ŋ",
-        u"¹": u"Ž",
-        u"µ": u"Ŧ",
-    },
-
     # mac-sami to latin1
-    # 3
     u"mac-sami_to_latin1": {
         u"": u"á",
         u"»": u"š",
@@ -96,7 +32,6 @@ CTYPES = {
         u"¯": u"Ø",
         u"": u"å",
         u"": u"é",
-        u"Œ": u"å",
         u"": u"Å",
         u"": u"ä",
         u"": u"Ä",
@@ -120,31 +55,66 @@ CTYPES = {
         u"¬": u"¨",
         u"": u"õ",
         u"": u"â",
+        u"÷": u"ʒ",
         #"Ç": u"«",
         #"È": u"»",
     },
 
-    # 4 winsam as cp1252
-    u"winsam_to_cp1252": {
+    # mac-sami converted as iconv -f mac -t utf8
+    # mac-sami á appears at the same place as latin1 á
+    u"mac-sami_to_mac": {
         u"á": u"á",
-        u"ó": u"š",
-        u"ç": u"č",
-        u"ð": u"đ",
-        u"þ": u"ž",
-        u"ñ": u"ŋ",
+        u"ª": u"š",
+        u"∏": u"č",
+        u"π": u"đ",
+        u"Ω": u"ž",
+        u"∫": u"ŋ",
         u"Á": u"Á",
-        u"Ç": u"Č",
-        u"ý": u"ŧ",
-        u"Ó": u"Š",
-        u"Ð": u"Đ", # U+00D0 to U+0110
-        u"Ñ": u"Ŋ",
-        u"Þ": u"Ž",
-        u"Ý": u"Ŧ",
+        u"¢": u"Č",
+        u"º": u"ŧ",
+        u"¥": u"Š",
+        u"∞": u"Đ",
+        u"±": u"Ŋ",
+        u"¸": u"Ŋ",
+        u"∑": u"Ž",
+        u"µ": u"Ŧ",
+    },
+
+    # winsami2 converted as iconv -f cp1252 -t utf8
+    # á, æ, å, ø, ö, ä, š appear as themselves
+    # found in freecorpus/orig/sme/admin/sd/other_files/dc_00_1.doc
+    # and freecorpus/orig/sme/admin/guovda/KS_02.12.99.doc
+    u"winsami2_to_cp1252": {
+        u"á": u"á",
+        u"š": u"š",
+        u"„": u"č",
+        u"˜": u"đ",
+        u"¹": u"ŋ",
+        u"¿": u"ž",
+        u"Á": u"Á",
+        u"‚": u"Č",
+        u"¼": u"ŧ",
+        u"Š": u"Š",
+        u"‰": u"Đ",
+        u"¸": u"Ŋ",
+        u"¾": u"Ž",
+        u"º": u"Ŧ",
+    },
+
+    u"mix-mac-sami-and-some-unknown-encoding": {
+        u"": u"á",
+        u"_": u"š",
+        u"ã": u"č",
+        u"÷": u"đ",
+        u"À": u"ž",
+        u"ç": u"Á",
+        u"â": u"Č",
+        u"¼": u"ŧ",
+        u"¿": u"ø",
     },
 
     # latin4 as cp1252/latin1
     # á, æ, å, ø, ö, ä appear as themselves
-    # 5
     u"latin4_to_cp1252": {
         u"á": u"á",
         u"¹": u"š",
@@ -162,20 +132,43 @@ CTYPES = {
         u"¬": u"Ŧ",
     },
 
-    # 6
-    u"mix-mac-sami-and-some-unknown-encoding": {
-        u"": u"á",
-        u"_": u"š",
-        u"ã": u"č",
-        u"÷": u"đ",
-        u"À": u"ž",
-        u"ç": u"Á",
-        u"â": u"Č",
-        u"¼": u"ŧ",
-        u"¿": u"ø",
+    # winsam as cp1252
+    u"winsam_to_cp1252": {
+        u"á": u"á",
+        u"ó": u"š",
+        u"ç": u"č",
+        u"ð": u"đ",
+        u"þ": u"ž",
+        u"ñ": u"ŋ",
+        u"Á": u"Á",
+        u"Ç": u"Č",
+        u"ý": u"ŧ",
+        u"Ó": u"Š",
+        u"Ð": u"Đ", # U+00D0 to U+0110
+        u"Ñ": u"Ŋ",
+        u"Þ": u"Ž",
+        u"Ý": u"Ŧ",
     },
 
-    # 7
+    # iso-ir-197 converted as iconv -f latin1/cp1252 -t utf8
+    # á, æ, å, ø, ö, ä appear as themselves
+    u"iso-ir-197_to_cp1252": {
+        u"á": u"á",
+        u"³": u"š",
+        u"¢": u"č",
+        u"¤": u"đ",
+        u"º": u"ž",
+        u"±": u"ŋ",
+        u"Á": u"Á",
+        u"¡": u"Č",
+        u"¸": u"ŧ",
+        u"²": u"Š",
+        u"£": u"Đ",
+        u"¯": u"Ŋ",
+        u"¹": u"Ž",
+        u"µ": u"Ŧ",
+    },
+
     u"mix-of-latin4-and-iso-ir-197_to_cp1252": {
         u"á": u"á",
         u"ó": u"š",
@@ -224,7 +217,10 @@ class EncodingGuesser(object):
         winner = None
 
         content = content.decode('utf8')
-        if ((u'' in content and not u'ã' in content) or (u"" in content)):
+        if (
+            (u'' in content and not u'ã' in content) or
+            (u'' in content) or
+            (u'¯' in content and not u'Ø' in content)):
             winner = u"mac-sami_to_latin1"
         elif u'' in content and u'ã':
             winner = u"mix-mac-sami-and-some-unknown-encoding"
@@ -299,7 +295,7 @@ class EncodingGuesser(object):
             for key, value in encoding.items():
                 text = text.replace(key, value)
 
-            if position == 3:
+            if position == u'mac-sami_to_latin1':
                 text = text.replace(u"Ç", u"«")
                 text = text.replace(u"È", u"»")
 
