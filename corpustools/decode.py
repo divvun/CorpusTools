@@ -7,12 +7,12 @@ done.
 import re
 import sys
 
-CTYPES = [
+CTYPES = {
 
     # mac-sami converted as iconv -f mac -t utf8
     # mac-sami á appears at the same place as latin1 á
     # 0
-    {
+    u"mac-sami_to_mac": {
         u"á": u"á",
         u"ª": u"š",
         u"∏": u"č",
@@ -35,7 +35,7 @@ CTYPES = [
     # found in freecorpus/orig/sme/admin/sd/other_files/dc_00_1.doc
     # and freecorpus/orig/sme/admin/guovda/KS_02.12.99.doc
     # 1
-    {
+    u"winsami2_to_cp1252": {
         u"á": u"á",
         u"š": u"š",
         u"„": u"č",
@@ -55,7 +55,7 @@ CTYPES = [
     # iso-ir-197 converted as iconv -f latin1/cp1252 -t utf8
     # á, æ, å, ø, ö, ä appear as themselves
     # 2
-    {
+    u"iso-ir-197_to_cp1252": {
         u"á": u"á",
         u"³": u"š",
         u"¢": u"č",
@@ -74,7 +74,7 @@ CTYPES = [
 
     # mac-sami to latin1
     # 3
-    {
+    u"mac-sami_to_latin1": {
         u"": u"á",
         u"»": u"š",
         u"¸": u"č",
@@ -125,7 +125,7 @@ CTYPES = [
     },
 
     # 4 winsam as cp1252
-    {
+    u"winsam_to_cp1252": {
         u"á": u"á",
         u"ó": u"š",
         u"ç": u"č",
@@ -145,7 +145,7 @@ CTYPES = [
     # latin4 as cp1252/latin1
     # á, æ, å, ø, ö, ä appear as themselves
     # 5
-    {
+    u"latin4_to_cp1252": {
         u"á": u"á",
         u"¹": u"š",
         u"è": u"č",
@@ -163,7 +163,7 @@ CTYPES = [
     },
 
     # 6
-    {
+    u"mix-mac-sami-and-some-unknown-encoding": {
         u"": u"á",
         u"_": u"š",
         u"ã": u"č",
@@ -171,12 +171,12 @@ CTYPES = [
         u"À": u"ž",
         u"ç": u"Á",
         u"â": u"Č",
-        u"¿": u"ø",
         u"¼": u"ŧ",
+        u"¿": u"ø",
     },
 
     # 7
-    {
+    u"mix-of-latin4-and-iso-ir-197_to_cp1252": {
         u"á": u"á",
         u"ó": u"š",
         u"ç": u"č",
@@ -187,7 +187,7 @@ CTYPES = [
         u"Ó": u"Š",
         u"£": u"Đ",
     }
-]
+}
 
 class EncodingGuesser(object):
     """Try to find out if some text or a file has faultily encoded (northern)
@@ -225,21 +225,21 @@ class EncodingGuesser(object):
 
         content = content.decode('utf8')
         if ((u'' in content and not u'ã' in content) or (u"" in content)):
-            winner = 3
+            winner = u"mac-sami_to_latin1"
         elif u'' in content and u'ã':
-            winner = 6
+            winner = u"mix-mac-sami-and-some-unknown-encoding"
         elif u'³' in content and u'¢' in content and u'¤' in content:
-            winner = 2
+            winner = u"iso-ir-197_to_cp1252"
         elif u'á' in content and u'ª' in content:
-            winner = 0
+            winner = u"mac-sami_to_mac"
         elif u'ó' in content and u'ç' in content and u'ð' in content:
-            winner = 4
+            winner = u"winsam_to_cp1252"
         elif u'á' in content and u'è' in content and u'ð' in content:
-            winner = 5
+            winner = u"latin4_to_cp1252"
         elif u'ó' in content and u'ç' in content and u'¤' in content:
-            winner = 7
-        elif u'„' in content and u'˜' in content and u'¿' in content:
-            winner = 1
+            winner = u"mix-of-latin4-and-iso-ir-197_to_cp1252"
+        elif u'„' in content and u'˜' in content:
+            winner = u"winsami2_to_cp1252"
 
         return winner
 
