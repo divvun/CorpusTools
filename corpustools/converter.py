@@ -983,32 +983,53 @@ class DocumentFixer:
         body = etree.fromstring(eg.decode_para(encoding, bodyString))
         self.etree.append(body)
 
-        if encoding == 'mac-sami_to_latin1':
-            title = self.etree.find('.//title')
-            if title is not None and title.text is not None:
-                text = title.text.encode('utf-8')
-                title.text = eg.decode_para(encoding, text).decode('utf-8')
-
-            persons = self.etree.findall('.//person')
-            for person in persons:
-                if person is not None:
-                    lastname = person.get('lastname')
-                    person.set(
-                        'lastname',
-                        eg.decode_para(
-                            encoding,
-                            lastname.encode('utf-8')).decode('utf-8'))
-                    firstname = person.get('firstname')
-                    person.set(
-                        'firstname',
-                        eg.decode_para(
-                            encoding,
-                            firstname.encode('utf-8')).decode('utf-8'))
-
+        self.fix_title_person('double-utf8')
+        self.fix_title_person('mac-sami_to_latin1')
 
         self.detect_quotes()
 
         return etree.parse(io.BytesIO(etree.tostring(self.etree)))
+
+    def fix_title_person(self, encoding):
+        eg = decode.EncodingGuesser()
+
+        title = self.etree.find('.//title')
+        if title is not None and title.text is not None:
+            text = title.text
+
+            if encoding == 'mac-sami_to_latin1':
+                text = text.replace(u'‡', u'á')
+                text = text.replace(u'Œ', u'å')
+
+            text = text.encode('utf8')
+            title.text = eg.decode_para(encoding, text).decode('utf-8')
+
+        persons = self.etree.findall('.//person')
+        for person in persons:
+            if person is not None:
+                lastname = person.get('lastname')
+
+                if encoding == 'mac-sami_to_latin1':
+                    lastname = lastname.replace(u'‡', u'á')
+                    lastname = lastname.replace(u'Œ', u'å')
+
+                person.set(
+                    'lastname',
+                    eg.decode_para(
+                        encoding,
+                        lastname.encode('utf-8')).decode('utf-8'))
+
+                firstname = person.get('firstname')
+
+                if encoding == 'mac-sami_to_latin1':
+                    firstname = firstname.replace(u'‡', u'á')
+                    firstname = firstname.replace(u'Œ', u'å')
+
+                person.set(
+                    'firstname',
+                    eg.decode_para(
+                        encoding,
+                        firstname.encode('utf-8')).decode('utf-8'))
 
     def detect_quote(self, element):
         """Detect quotes in an etree element.
