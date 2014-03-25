@@ -272,6 +272,8 @@ class EncodingGuesser(object):
             winner = u"mix-of-latin4-and-iso-ir-197_to_cp1252"
         elif u'„' in content and u'˜' in content:
             winner = u"winsami2_to_cp1252"
+        elif u'Ã¡' in content:
+            winner = u"double-utf8"
 
         return winner
 
