@@ -727,49 +727,93 @@ class HTMLContentConverter:
     """
     def __init__(self, filename, content):
         self.orig = filename
-        self.content = content
+
+        try:
+            self.soup = bs4.BeautifulSoup(content, 'lxml')
+        except HTMLParser.HTMLParseError:
+            raise ConversionException("BeautifulSoup couldn't parse the html")
 
         self.converter_xsl = os.path.join(
             os.getenv('GTHOME'), 'gt/script/corpus/xhtml2corpus.xsl')
+
+    def remove_elements(self):
+        '''Remove unwanted tags from a html document
+        '''
+
+        for instance in [
+                bs4.Comment, bs4.ProcessingInstruction, bs4.Declaration]:
+            [unwanted.extract() for unwanted in self.soup.find_all(
+                text=lambda text: isinstance(text, instance))]
+
+        remove_tags = [
+            'script', 'style', 'o:p', 'st1:country-region', 'v:shapetype',
+            'v:shape', 'st1:metricconverter', 'area', 'object', 'meta',
+            'fb:like', 'fb:comments', 'g:plusone', 'hr', 'nf', 'mb', 'ms',
+            'img', 'cite', 'embed', 'footer', 'figcaption', 'aside', 'time',
+            'figure', 'nav', 'select', 'noscript', 'iframe', 'map', 'img']
+
+        for remove_tag in remove_tags:
+            [remove.decompose() for remove in self.soup.find_all(remove_tag)]
+
+        unwanted_classes_ids = {
+            'div': {
+                'class': [
+                    'QuickNav', 'tabbedmenu', 'printContact', 'documentPaging',
+                    'breadcrumbs', 'post-footer', 'documentInfoEm',
+                    'article-column', 'nrk-globalfooter', 'article-related',
+                    'outer-column', 'article-ad', 'article-bottom-element',
+                    'banner-element', 'nrk-globalnavigation', 'sharing', 'ad',
+                    'meta', 'authors', 'articleImageRig',  'btm_menu',
+                    'expandable'],
+                'id': [
+                    'searchBox',
+                    'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
+                    'ctl00_FullRegion_CenterAndRightRegion_HitsControl_searchHitSummary',
+                    'AreaTopSiteNav', 'SamiDisclaimer', 'AreaTopRight',
+                    'AreaLeft', 'AreaRight', 'ShareArticle', 'tipafriend',
+                    'AreaLeftNav', 'PageFooter', 'blog-pager',
+                    'NAVheaderContainer', 'NAVbreadcrumbContainer',
+                    'NAVsubmenuContainer', 'NAVrelevantContentContainer',
+                    'NAVfooterContainer', 'sidebar-wrapper', 'footer-wrapper',
+                    'share-article', 'topUserMenu', 'rightAds', 'menu', 'aa',
+                    'sidebar', 'footer', 'chatBox', 'sendReminder',
+                    'ctl00_MidtSone_ucArtikkel_ctl00_divNavigasjon',
+                    'ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl01_divRessurser'],
+                },
+            'p': {
+                'class': ['WebPartReadMoreParagraph', 'breadcrumbs'],
+                },
+            'ul': {
+                'id': ['AreaTopPrintMeny', 'AreaTopLanguageNav',],
+                'class': ['QuickNav', 'article-tools', 'byline']
+                },
+            'span': {
+                'id': ['skiplinks'],
+                'class': ['K-NOTE-FOTNOTE']
+                },
+            }
+
+        for tag, attribs in unwanted_classes_ids.items():
+            for key, values in attribs.items():
+                for value in values:
+                    [remove.decompose() for remove in self.soup.find_all(tag, {key: value})]
 
     def tidy(self):
         """
         Run html through tidy
         """
-        try:
-            soup = bs4.BeautifulSoup(self.content)
-        except HTMLParser.HTMLParseError:
-            raise ConversionException("BeautifulSoup couldn't parse the html")
+        self.remove_elements()
 
-        comments = soup.findAll(
-            text=lambda text: isinstance(text, bs4.Comment))
-        [comment.extract() for comment in comments]
+        if not ("xmlns", "http://www.w3.org/1999/xhtml") in self.soup.html.attrs:
+            self.soup.html["xmlns"] = "http://www.w3.org/1999/xhtml"
 
-        [item.extract() for item in soup.findAll(
-            text=lambda text: isinstance(text, bs4.ProcessingInstruction))]
-        [item.extract() for item in soup.findAll(
-            text=lambda text: isinstance(text, bs4.Declaration))]
-
-        remove_tags = ['script', 'style', 'o:p', 'st1:country-region',
-                       'v:shapetype', 'v:shape', 'st1:metricconverter',
-                       'area', 'object', 'meta', 'fb:like', 'fb:comments',
-                       'g:plusone']
-
-        for remove_tag in remove_tags:
-            removes = soup.findAll(remove_tag)
-            for remove in removes:
-                remove.extract()
-
-        if not ("xmlns", "http://www.w3.org/1999/xhtml") in soup.html.attrs:
-            soup.html["xmlns"] = "http://www.w3.org/1999/xhtml"
-
-        soup = soup.prettify()
+        self.soup = self.soup.prettify()
         replacements = {'&shy;': u'­',
                         '&nbsp;': ' ',
                         '&aelig;': u'æ',
                         '&eacute;': u'é'}
         for key, value in replacements.iteritems():
-            soup = soup.replace(key, value)
+            self.soup = self.soup.replace(key, value)
 
         tidyOption = {"indent": "auto",
                       "indent-spaces": 2,
@@ -800,7 +844,7 @@ class HTMLContentConverter:
                       "drop-empty-paras": "true"
                       }
 
-        tidiedHtml, errors = tidylib.tidy_document(soup, tidyOption)
+        tidiedHtml, errors = tidylib.tidy_document(self.soup, tidyOption)
 
         #sys.stderr.write(str(lineno()) + ' ' +  soup.prettify())
         return tidiedHtml

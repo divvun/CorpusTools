@@ -374,181 +374,82 @@ class TestHTMLConverter(XMLTester):
 
 
 class TestHTMLContentConverter(XMLTester):
-    def test_remove_op(self):
-        got = converter.HTMLContentConverter(
-            'with-o:p.html',
-            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" \
-            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
-            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" \
-            lang="nn"><head><title>regjeringen.no</title></head>\
-            <body onload="javascript:Operatest();">\
-            <o:p></o:p></body></html>').tidy()
 
-        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"\
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html \
-        xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn"><head>\
-        <title>regjeringen.no</title></head>\
-        <body onload="javascript:Operatest();"></body></html>'
+    def test_remove_unwanted_classes_and_ids(self):
+        unwanted_classes_ids = {
+            'div': {
+                'class': [
+                    'QuickNav', 'tabbedmenu', 'printContact', 'documentPaging',
+                    'breadcrumbs', 'post-footer', 'documentInfoEm',
+                    'article-column', 'nrk-globalfooter', 'article-related',
+                    'outer-column', 'article-ad', 'article-bottom-element',
+                    'banner-element', 'nrk-globalnavigation', 'sharing', 'ad',
+                    'meta', 'authors', 'articleImageRig',  'btm_menu',
+                    'expandable'],
+                'id': [
+                    'searchBox',
+                    'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
+                    'ctl00_FullRegion_CenterAndRightRegion_HitsControl_searchHitSummary',
+                    'AreaTopSiteNav', 'SamiDisclaimer', 'AreaTopRight',
+                    'AreaLeft', 'AreaRight', 'ShareArticle', 'tipafriend',
+                    'AreaLeftNav', 'PageFooter', 'blog-pager',
+                    'NAVheaderContainer', 'NAVbreadcrumbContainer',
+                    'NAVsubmenuContainer', 'NAVrelevantContentContainer',
+                    'NAVfooterContainer', 'sidebar-wrapper', 'footer-wrapper',
+                    'share-article', 'topUserMenu', 'rightAds', 'menu', 'aa',
+                    'sidebar', 'footer', 'chatBox', 'sendReminder',
+                    'ctl00_MidtSone_ucArtikkel_ctl00_divNavigasjon',
+                    'ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl01_divRessurser'],
+                },
+            'p': {
+                'class': ['WebPartReadMoreParagraph', 'breadcrumbs'],
+                },
+            'ul': {
+                'id': ['AreaTopPrintMeny', 'AreaTopLanguageNav',],
+                'class': ['QuickNav', 'article-tools', 'byline']
+                },
+            'span': {
+                'id': ['skiplinks'],
+                'class': ['K-NOTE-FOTNOTE']
+                },
+            }
 
-        self.assertXmlEqual(got, want)
+        for tag, attribs in unwanted_classes_ids.items():
+            for key, values in attribs.items():
+                for value in values:
+                    hc = converter.HTMLContentConverter(tag + key + value + '.html',
+                                                 '<html>\
+                                                 <body>\
+                                                 <' + tag + " " + key + '="' + value + '">content:' + tag + key + value + \
+                                                     '</' + tag + '>\
+                                                 <div class="ada"/></body>\
+                                                 </html>')
+                    hc.remove_elements()
 
-    def test_remove_fblike(self):
-        got = converter.HTMLContentConverter(
-            'with-fb:like.html',
-            '<html xmlns="http://www.w3.org/1999/xhtml"><body><fb:like \
-            send="true" show_faces="false" action="recommend">\
-            </fb:like></body></html>').tidy()
+                    want = '<html><body><div class="ada"/></body></html>'
 
-        want = '<html xmlns="http://www.w3.org/1999/xhtml"><head><title/>\
-        </head><body></body></html>'
+                    self.assertXmlEqual(hc.soup.prettify(), want)
 
-        self.assertXmlEqual(got, want)
+    def test_remove_unwanted_tags(self):
+        unwanted_tags = [
+            'script', 'style', 'o:p', 'st1:country-region', 'v:shapetype',
+            'v:shape', 'st1:metricconverter', 'area', 'object', 'meta',
+            'fb:like', 'fb:comments', 'g:plusone', 'hr', 'nf', 'mb', 'ms',
+            'img', 'cite', 'embed', 'footer', 'figcaption', 'aside', 'time',
+            'figure', 'nav', 'select', 'noscript', 'iframe', 'map', 'img']
+        for unwanted_tag in unwanted_tags:
+            got = converter.HTMLContentConverter(unwanted_tag + '.html',
+                                                 '<html>\
+                                                 <body>\
+                                                 <p>p1</p>\
+                                                 <' + unwanted_tag + '/>\
+                                                 <p>p2</p2></body>\
+                                                 </html>').tidy()
+            want = '<html xmlns="http://www.w3.org/1999/xhtml">\
+            <head><title/></head><body>\
+            <p>p1</p><p>p2</p></body></html>'
 
-    def test_remove_fbcomments(self):
-        got = converter.HTMLContentConverter(
-            'with-fb:comments.html',
-            '<html xmlns="http://www.w3.org/1999/xhtml"><body><fb:comments \
-            href="http://www.nord-salten.no/" num_posts="2" width="750">\
-            </fb:comments></body></html>').tidy()
-
-        want = '<html xmlns="http://www.w3.org/1999/xhtml"><head><title/>\
-        </head><body></body></html>'
-
-        self.assertXmlEqual(got, want)
-
-    def test_remove_gplusone(self):
-        got = converter.HTMLContentConverter(
-            'with-g:plusone.html',
-            '<html xmlns="http://www.w3.org/1999/xhtml"><body>\
-            <g:plusone size="standard" count="true"></g:plusone>\
-            </body></html>').tidy()
-
-        want = '<html xmlns="http://www.w3.org/1999/xhtml"><head><title/>\
-        </head><body></body></html>'
-
-        self.assertXmlEqual(got, want)
-
-    def test_remove_st1_country_region(self):
-        got = converter.HTMLContentConverter(
-            'with-o:p.html',
-            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"\
-            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
-            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" \
-            lang="nn"><head><title>regjeringen.no</title></head>\
-            <body onload="javascript:Operatest();">\
-            <st1:country-region w:st="on"></st1:country-region>\
-            </body></html>').tidy()
-
-        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"\
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
-        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" \
-        lang="nn"><head><title>regjeringen.no</title></head>\
-        <body onload="javascript:Operatest();"></body></html>'
-
-        self.assertXmlEqual(got, want)
-
-    def test_remove_st1_metric_converter(self):
-        got = converter.HTMLContentConverter(
-            'with-o:p.html',
-            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" \
-            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
-            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" \
-            lang="nn"><head><title>regjeringen.no</title></head>\
-            <body onload="javascript:Operatest();">\
-            <st1:metricconverter productid="1,85 G">\
-            </st1:metricconverter></body></html>').tidy()
-
-        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"\
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
-        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" \
-        lang="nn"><head><title>regjeringen.no</title></head>\
-        <body onload="javascript:Operatest();"></body></html>'
-
-        self.assertXmlEqual(got, want)
-
-    def test_remove_v_shape_type(self):
-        got = converter.HTMLContentConverter(
-            'with-o:p.html',
-            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" \
-            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
-            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" \
-            lang="nn"><head><title>regjeringen.no</title></head>\
-            <body onload="javascript:Operatest();">\
-            <v:shapetype></v:shapetype></body></html>').tidy()
-
-        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"\
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
-        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn">\
-        <head><title>regjeringen.no</title></head>\
-        <body onload="javascript:Operatest();"></body></html>'
-
-        self.assertXmlEqual(got, want)
-
-    def test_remove_v_shape(self):
-        got = converter.HTMLContentConverter(
-            'with-o:p.html',
-            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" \
-            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
-            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" \
-            lang="nn"><head><title>regjeringen.no</title></head>\
-            <body onload="javascript:Operatest();"><v:shape></v:shape>\
-            </body></html>').tidy()
-
-        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 \
-        Transitional//EN" \
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
-        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nn" lang="nn">\
-        <head><title>regjeringen.no</title></head>\
-        <body onload="javascript:Operatest();"></body></html>'
-
-        self.assertXmlEqual(got, want)
-
-    def test_remove_area(self):
-        got = converter.HTMLContentConverter(
-            'with-o:p.html',
-            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" \
-            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
-            <html xmlns="http://www.w3.org/1999/xhtml" \
-            xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, \
-            sj&#248;mat og marknad - regjeringen.no</title></head>\
-            <body onload="javascript:Operatest();">\
-            <area title="Suodjalusministtar" \
-            href="/fd/sami/p30007057/p30007075/bn.html" shape="rect" \
-            alt="Suodjalusministtar" coords="230,10,374,24" />\
-            </body></html>').tidy()
-
-        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 \
-        Transitional//EN" \
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
-        <html xmlns="http://www.w3.org/1999/xhtml" \
-        xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, \
-        sj&#248;mat og marknad - regjeringen.no</title></head>\
-        <body onload="javascript:Operatest();"></body></html>'
-
-        self.assertXmlEqual(got, want)
-
-    def test_remove_object(self):
-        got = converter.HTMLContentConverter(
-            'with-o:p.html',
-            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" \
-            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
-            <html xmlns="http://www.w3.org/1999/xhtml" \
-            xml:lang="nn" lang="nn"><head><title>Avdeling for havbruk, \
-            sj&#248;mat og marknad - regjeringen.no</title></head>\
-            <body onload="javascript:Operatest();">\
-            <object width="640" height="385"><embed></embed></object>\
-            </body></html>').tidy()
-
-        want = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 \
-        Transitional//EN" \
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\
-        <html xmlns="http://www.w3.org/1999/xhtml" \
-        xml:lang="nn" lang="nn"><head>\
-        <title>Avdeling for havbruk, sj&#248;mat og marknad - \
-        regjeringen.no</title></head>\
-        <body onload="javascript:Operatest();"></body></html>'
-
-        self.assertXmlEqual(got, want)
+            self.assertXmlEqual(got, want)
 
     def test_remove_comment(self):
         got = converter.HTMLContentConverter(
@@ -557,34 +458,6 @@ class TestHTMLContentConverter(XMLTester):
 
         want = '<html xmlns="http://www.w3.org/1999/xhtml">\
         <head><title/></head><body></body></html>'
-
-        self.assertXmlEqual(got, want)
-
-    def test_remove_style(self):
-        got = converter.HTMLContentConverter(
-            'with-o:p.html',
-            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" \
-            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\
-            <html xmlns="http://www.w3.org/1999/xhtml"> <head>  \
-            <style id="page-skin-1" type="text/css"></style> </head> \
-            <body> </body></html>').tidy()
-
-        want = '<html xmlns="http://www.w3.org/1999/xhtml">\
-        <head><title/></head><body/></html>'
-
-        self.assertXmlEqual(got, want)
-
-    def test_remove_script(self):
-        got = converter.HTMLContentConverter(
-            'with-o:p.html',
-            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 \
-            Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\
-            <html xmlns="http://www.w3.org/1999/xhtml"> <head>\
-            <script type="text/javascript">()();</script></head> \
-            <body> </body></html>').tidy()
-
-        want = '<html xmlns="http://www.w3.org/1999/xhtml">\
-        <head><title/></head><body/></html>'
 
         self.assertXmlEqual(got, want)
 
