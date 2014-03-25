@@ -738,6 +738,9 @@ class HTMLContentConverter:
 
     def remove_elements(self):
         '''Remove unwanted tags from a html document
+
+        The point with this exercise is to remove all but the main content of
+        the document.
         '''
 
         for instance in [
