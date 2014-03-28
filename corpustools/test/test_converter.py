@@ -657,6 +657,39 @@ with-multilingual-tag.xml'))
 
         self.assertXmlEqual(etree.tostring(document_fixer.etree), expected_doc)
 
+    def test_replace_shy1(self):
+        orig_doc = etree.parse(
+            io.BytesIO('<document xml:lang="sma" id="no_id"><header><title/>\
+                <genre/><author><unknown/></author><availability><free/>\
+                </availability><multilingual/></header><body><p>a­b­c<span>d­e</span>f­g</p>\
+                </body></document>'))
+
+        expected_doc = '<document xml:lang="sma" id="no_id"><header>\
+        <title/><genre/><author><unknown/></author>\
+        <availability><free/></availability><multilingual/></header><body>\
+        <p>a<hyph/>b<hyph/>c<span>d<hyph/>e</span>f<hyph/>g</p></body></document>'
+
+        document_fixer = converter.DocumentFixer(orig_doc)
+        document_fixer.soft_hyphen_to_hyph_tag()
+
+        self.assertXmlEqual(etree.tostring(document_fixer.etree), expected_doc)
+
+    def test_replace_shy2(self):
+        orig_doc = etree.parse(
+            io.BytesIO('<document xml:lang="sma" id="no_id"><header><title/>\
+                <genre/><author><unknown/></author><availability><free/>\
+                </availability><multilingual/></header><body><p>a­b­c<span>d­e</span></p>\
+                </body></document>'))
+
+        expected_doc = '<document xml:lang="sma" id="no_id"><header>\
+        <title/><genre/><author><unknown/></author>\
+        <availability><free/></availability><multilingual/></header><body>\
+        <p>a<hyph/>b<hyph/>c<span>d<hyph/>e</span></p></body></document>'
+
+        document_fixer = converter.DocumentFixer(orig_doc)
+        document_fixer.soft_hyphen_to_hyph_tag()
+
+        self.assertXmlEqual(etree.tostring(document_fixer.etree), expected_doc)
 
 class TestXslMaker(XMLTester):
     def test_get_xsl(self):

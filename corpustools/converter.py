@@ -959,6 +959,41 @@ class DocumentFixer:
     def __init__(self, document):
         self.etree = document
 
+    def soft_hyphen_to_hyph_tag(self):
+        """Replace soft hyphens in text by the hyph tag
+        """
+        for element in self.etree.iter('p'):
+            self.replace_shy(element)
+
+    def replace_shy(self, element):
+        """Split text and tail on shy. Insert hyph tags
+        between the parts.
+        """
+        for child in element:
+            self.replace_shy(child)
+
+        text = element.text
+        if text is not None:
+            parts = text.split(u'­')
+            if len(parts) > 1:
+                element.text = parts[0]
+                x = 0
+                for part in parts[1:]:
+                    hyph = etree.Element('hyph')
+                    hyph.tail = part
+                    element.insert(x, hyph)
+                    x += 1
+
+        text = element.tail
+        if text is not None:
+            parts = text.split(u'­')
+            if len(parts) > 1:
+                element.tail = parts[0]
+                for part in parts[1:]:
+                    hyph = etree.Element('hyph')
+                    hyph.tail = part
+                    element.getparent().append(hyph)
+
     def replace_ligatures(self):
         """
         document is a stringified xml document
@@ -1034,6 +1069,7 @@ class DocumentFixer:
         self.fix_title_person('mac-sami_to_latin1')
 
         self.detect_quotes()
+        self.soft_hyphen_to_hyph_tag()
 
         return etree.parse(io.BytesIO(etree.tostring(self.etree)))
 
