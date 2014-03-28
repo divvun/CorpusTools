@@ -55,7 +55,8 @@ class XMLPrinter:
                  print_filename=False,
                  one_word_per_line=False,
                  disambiguation=False,
-                 dependency=False):
+                 dependency=False,
+                 hyph_replacement=''):
 
         self.paragraph = True
         self.all_paragraphs = all_paragraphs
@@ -100,6 +101,11 @@ class XMLPrinter:
 
         self.disambiguation = disambiguation
         self.dependency = dependency
+
+        if hyph_replacement == 'xml':
+            self.hyph_replacement = '<hyph/>'
+        else:
+            self.hyph_replacement = hyph_replacement
 
     def get_lang(self):
         """
@@ -337,6 +343,7 @@ class XMLPrinter:
         """
         buffer = StringIO.StringIO()
 
+        self.handle_hyph()
         if self.dependency:
             self.print_element(self.etree.find('.//dependency'), buffer)
         elif self.disambiguation:
@@ -347,6 +354,22 @@ class XMLPrinter:
                     self.collect_text(paragraph, self.get_lang(), buffer)
 
         return buffer
+
+    def handle_hyph(self):
+        """Replace hyph tags
+        """
+        hyph_tails = []
+        for hyph in self.etree.findall('.//hyph'):
+            hyph_tails.append(hyph.tail)
+
+            if hyph.getnext() is None:
+                if hyph.getparent().text is not None:
+                    hyph_tails.insert(0, hyph.getparent().text)
+                hyph.getparent().text = self.hyph_replacement.join(hyph_tails)
+                hyph_tails[:] = []
+
+            hyph.getparent().remove(hyph)
+
 
     def print_element(self, element, buffer):
         if element is not None and element.text is not None:
@@ -454,6 +477,10 @@ def parse_options():
                         dest='dependency',
                         action='store_true',
                         help='Print the dependency element')
+    parser.add_argument('-hyph',
+                        dest='hyph_replacement',
+                        default='',
+                        help='Replace hyph tags with the given argument')
 
     parser.add_argument('-r',
                         dest='recursive',
@@ -493,7 +520,8 @@ def main():
                              print_filename=args.print_filename,
                              one_word_per_line=args.one_word_per_line,
                              dependency=args.dependency,
-                             disambiguation=args.disambiguation)
+                             disambiguation=args.disambiguation,
+                             hyph_replacement=args.hyph_replacement)
 
     for target in args.targets:
         if os.path.isfile(target):

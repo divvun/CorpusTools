@@ -8,6 +8,71 @@ import cStringIO
 
 
 class TestCcat(unittest.TestCase):
+    def test_hyph1(self):
+        '''Test the default treatment of hyph tags
+        '''
+        xml_printer = ccat.XMLPrinter()
+        buffer = cStringIO.StringIO()
+        input_p = etree.fromstring('''
+<document xml:lang="nob">
+<body>
+<p>mellom<hyph/>krigs<hyph/>tiden</p>
+</body>
+</document>
+''')
+
+        xml_printer.etree = etree.parse(io.BytesIO(
+'''<document id="no_id" xml:lang="nob"><body>
+<p>mellom<hyph/>krigs<hyph/>tiden</p>
+</body></document>'''))
+
+        buffer = xml_printer.process_file()
+        self.assertEqual(buffer.getvalue(), 'mellomkrigstiden ¶\n')
+
+    def test_hyph2(self):
+        '''Test the treatment of hyph tags when hyph_replacement is
+        set to "xml"
+        '''
+        xml_printer = ccat.XMLPrinter(hyph_replacement='xml')
+        buffer = cStringIO.StringIO()
+        input_p = etree.fromstring('''
+<document xml:lang="nob">
+<body>
+<p>mellom<hyph/>krigs<hyph/>tiden</p>
+</body>
+</document>
+''')
+
+        xml_printer.etree = etree.parse(io.BytesIO(
+'''<document id="no_id" xml:lang="nob"><body>
+<p>mellom<hyph/>krigs<hyph/>tiden</p>
+</body></document>'''))
+
+        buffer = xml_printer.process_file()
+        self.assertEqual(buffer.getvalue(), 'mellom<hyph/>krigs<hyph/>tiden ¶\n')
+
+    def test_hyph3(self):
+        '''Test the treatment of hyph tags when hyph_replacement is
+        set to "xml"
+        '''
+        xml_printer = ccat.XMLPrinter(hyph_replacement='-')
+        buffer = cStringIO.StringIO()
+        input_p = etree.fromstring('''
+<document xml:lang="nob">
+<body>
+<p>mellom<hyph/>krigs<hyph/>tiden</p>
+</body>
+</document>
+''')
+
+        xml_printer.etree = etree.parse(io.BytesIO(
+'''<document id="no_id" xml:lang="nob"><body>
+<p>mellom<hyph/>krigs<hyph/>tiden</p>
+</body></document>'''))
+
+        buffer = xml_printer.process_file()
+        self.assertEqual(buffer.getvalue(), 'mellom-krigs-tiden ¶\n')
+
     def test_single_error_inline(self):
         '''
         '''
