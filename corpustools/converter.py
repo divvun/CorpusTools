@@ -1249,19 +1249,21 @@ class LanguageDetector:
         language of the paragraph.
         Set the language of the quotes in the paragraph
         """
-        paragraph_text = self.remove_quote(paragraph)
-        lang = self.languageGuesser.classify(
-            paragraph_text.encode("ascii", "ignore"))
-        if lang != self.get_mainlang():
-            paragraph.set('{http://www.w3.org/XML/1998/namespace}lang', lang)
 
-        for element in paragraph.iter("span"):
-            if element.get("type") == "quote":
-                lang = self.languageGuesser.classify(
-                    element.text.encode("ascii", "ignore"))
-                if lang != self.get_mainlang():
-                    element.set(
-                        '{http://www.w3.org/XML/1998/namespace}lang', lang)
+        if paragraph.get('{http://www.w3.org/XML/1998/namespace}lang') is None:
+            paragraph_text = self.remove_quote(paragraph)
+            lang = self.languageGuesser.classify(
+                paragraph_text.encode("ascii", "ignore"))
+            if lang != self.get_mainlang():
+                paragraph.set('{http://www.w3.org/XML/1998/namespace}lang', lang)
+
+            for element in paragraph.iter("span"):
+                if element.get("type") == "quote":
+                    lang = self.languageGuesser.classify(
+                        element.text.encode("ascii", "ignore"))
+                    if lang != self.get_mainlang():
+                        element.set(
+                            '{http://www.w3.org/XML/1998/namespace}lang', lang)
 
         return paragraph
 

@@ -682,6 +682,16 @@ before-lang-detection-with-multilingual-tag.xml')
         language_detector = converter.LanguageDetector(self.document)
         self.assertEqual(test_main_lang, language_detector.get_mainlang())
 
+    def test_set_paragraph_language_preset_language(self):
+        orig_paragraph = '<p xml:lang="sme">I Orohagat</p>'
+        expected_paragraph = '<p xml:lang="sme">I Orohagat</p>'
+
+        language_detector = converter.LanguageDetector(self.document)
+        got_paragraph = language_detector.set_paragraph_language(
+            etree.fromstring(orig_paragraph))
+
+        self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
+
     def test_set_paragraph_language_mainlanguage(self):
         orig_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda \
         giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša \
