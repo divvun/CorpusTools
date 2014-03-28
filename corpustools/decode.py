@@ -277,46 +277,6 @@ class EncodingGuesser(object):
 
         return winner
 
-    def guess_person_encoding(self, person):
-        """@brief guess the encoding of the string person
-
-        This is a little simplified version of guess_body_encoding because the
-        person string is short
-
-        @param person a utf-8 encoded string
-        @return winner is an int pointing to a position in CTYPES or -1
-        to tell that no known encoding is found
-        """
-
-        person = person.decode('utf8')
-        person = person.lower()
-
-        maxhits = 0
-        for position in range(0, len(CTYPES)):
-            hits = 0
-            num = 0
-            for key in CTYPES[position].viewkeys():
-
-                #print len(re.compile(key).findall(content)), key
-                if len(re.compile(key).findall(person)) > 0:
-                    num = num + 1
-
-                hits = hits + len(re.compile(key).findall(person))
-
-            #print "position", position, "hits", hits, "num", num
-
-            if hits > maxhits:
-                winner = position
-                maxhits = hits
-                #print "winner", winner, "maxhits", maxhits
-
-            # 8 always wins over 5 as long as there are any hits for 8
-            if winner == 5 and num > 1:
-                winner = 8
-
-        #print "the winner is", winner
-        return winner
-
     def decode_para(self, position, text):
         """@brief Replace letters in text with the ones from the dict at
         position position in CTYPES
