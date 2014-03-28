@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='CorpusTools',
-    version='0.3.5',
+    version='0.3.6',
     author='Børre Gaup',
     author_email='borre.gaup@uit.no',
     packages=find_packages(),

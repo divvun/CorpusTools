@@ -11,3 +11,4 @@ v<0.3.2>, <20140205> -- Use the old infra for sme.fst, abbr.txt and corr.txt
 v<0.3.3>, <20140213> -- Don't write empty analysis files
 v<0.3.4>, <20140218> -- Don't write empty converted files
 v<0.3.5>, <20140305> -- New scheme for encoding guessing
+v<0.3.6>, <20140329> -- Handle hyph tags
