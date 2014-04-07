@@ -360,7 +360,8 @@ class XMLPrinter:
         """
         hyph_tails = []
         for hyph in self.etree.findall('.//hyph'):
-            hyph_tails.append(hyph.tail)
+            if hyph.tail is not None:
+                hyph_tails.append(hyph.tail)
 
             if hyph.getnext() is None:
                 if hyph.getparent().text is not None:

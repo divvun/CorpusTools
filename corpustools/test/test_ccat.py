@@ -13,14 +13,6 @@ class TestCcat(unittest.TestCase):
         '''
         xml_printer = ccat.XMLPrinter()
         buffer = cStringIO.StringIO()
-        input_p = etree.fromstring('''
-<document xml:lang="nob">
-<body>
-<p>mellom<hyph/>krigs<hyph/>tiden</p>
-</body>
-</document>
-''')
-
         xml_printer.etree = etree.parse(io.BytesIO(
 '''<document id="no_id" xml:lang="nob"><body>
 <p>mellom<hyph/>krigs<hyph/>tiden</p>
@@ -35,14 +27,6 @@ class TestCcat(unittest.TestCase):
         '''
         xml_printer = ccat.XMLPrinter(hyph_replacement='xml')
         buffer = cStringIO.StringIO()
-        input_p = etree.fromstring('''
-<document xml:lang="nob">
-<body>
-<p>mellom<hyph/>krigs<hyph/>tiden</p>
-</body>
-</document>
-''')
-
         xml_printer.etree = etree.parse(io.BytesIO(
 '''<document id="no_id" xml:lang="nob"><body>
 <p>mellom<hyph/>krigs<hyph/>tiden</p>
@@ -57,14 +41,6 @@ class TestCcat(unittest.TestCase):
         '''
         xml_printer = ccat.XMLPrinter(hyph_replacement='-')
         buffer = cStringIO.StringIO()
-        input_p = etree.fromstring('''
-<document xml:lang="nob">
-<body>
-<p>mellom<hyph/>krigs<hyph/>tiden</p>
-</body>
-</document>
-''')
-
         xml_printer.etree = etree.parse(io.BytesIO(
 '''<document id="no_id" xml:lang="nob"><body>
 <p>mellom<hyph/>krigs<hyph/>tiden</p>
@@ -72,6 +48,20 @@ class TestCcat(unittest.TestCase):
 
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), 'mellom-krigs-tiden ¶\n')
+
+    def test_hyph4(self):
+        '''Test the treatment of two hyph tags in a row"
+        '''
+        xml_printer = ccat.XMLPrinter(hyph_replacement='-')
+        buffer = cStringIO.StringIO()
+
+        xml_printer.etree = etree.parse(io.BytesIO(
+'''<document id="no_id" xml:lang="nob"><body>
+<p>mellom<hyph/><hyph/>tiden</p>
+</body></document>'''))
+
+        buffer = xml_printer.process_file()
+        self.assertEqual(buffer.getvalue(), 'mellom-tiden ¶\n')
 
     def test_single_error_inline(self):
         '''
