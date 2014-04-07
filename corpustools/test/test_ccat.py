@@ -63,6 +63,20 @@ class TestCcat(unittest.TestCase):
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), 'mellom-tiden ¶\n')
 
+    def test_hyph5(self):
+        '''Test the treatment of hyph tags when hyph_replacement is
+        set to None
+        '''
+        xml_printer = ccat.XMLPrinter(hyph_replacement=None)
+        buffer = cStringIO.StringIO()
+        xml_printer.etree = etree.parse(io.BytesIO(
+'''<document id="no_id" xml:lang="nob"><body>
+<p>mellom<hyph/>krigs<hyph/>tiden</p>
+</body></document>'''))
+
+        buffer = xml_printer.process_file()
+        self.assertEqual(buffer.getvalue(), 'mellom krigs tiden ¶\n')
+
     def test_single_error_inline(self):
         '''
         '''

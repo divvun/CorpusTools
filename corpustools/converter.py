@@ -198,7 +198,7 @@ class Converter:
                     'goldstandard' not in self.orig):
                 complete = self.make_complete()
 
-                xml_printer = ccat.XMLPrinter(all_paragraphs=True)
+                xml_printer = ccat.XMLPrinter(all_paragraphs=True, hyph_replacement=None)
                 xml_printer.etree = complete
                 text = xml_printer.process_file().getvalue()
 
