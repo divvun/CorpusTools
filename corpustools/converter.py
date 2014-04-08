@@ -187,7 +187,7 @@ class Converter:
 
         fixer.soft_hyphen_to_hyph_tag()
         fixer.set_word_count()
-        
+
         complete = fixer.get_etree()
 
         ld = LanguageDetector(complete)
@@ -966,7 +966,7 @@ class DocumentFixer:
         self.etree = document
 
     def get_etree(self):
-        return self.etree
+        return etree.parse(io.BytesIO(etree.tostring(self.etree)))
 
     def soft_hyphen_to_hyph_tag(self):
         """Replace soft hyphens in text by the hyph tag
