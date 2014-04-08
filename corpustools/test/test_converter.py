@@ -504,7 +504,8 @@ class TestDocumentFixer(XMLTester):
 
         document_fixer = converter.DocumentFixer(
             newstext.convert2intermediate())
-        got = document_fixer.fix_body_encoding()
+        document_fixer.fix_body_encoding()
+        got = document_fixer.get_etree()
 
         want = etree.parse('converter_data/assu97-fixedutf8.xml')
 
@@ -515,7 +516,8 @@ class TestDocumentFixer(XMLTester):
             'converter_data/Riddu_Riddu_avis_TXT.200923.svg')
         document_fixer = converter.DocumentFixer(
             etree.fromstring(etree.tostring(svgtext.convert2intermediate())))
-        got = document_fixer.fix_body_encoding()
+        document_fixer.fix_body_encoding()
+        got = document_fixer.get_etree()
 
         want = etree.parse('converter_data/Riddu_Riddu_avis_TXT.200923.xml')
 

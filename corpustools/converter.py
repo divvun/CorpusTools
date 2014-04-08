@@ -178,11 +178,17 @@ class Converter:
                     u"Markup error. More info in the log file: " +
                     self.get_orig() + u".log")
 
+        fixer = DocumentFixer(etree.fromstring(etree.tostring(complete)))
+
         if (complete.getroot().
             attrib['{http://www.w3.org/XML/1998/namespace}lang'] in
-                ['sma', 'sme', 'smje', 'nob', 'fin']):
-            ef = DocumentFixer(etree.fromstring(etree.tostring(complete)))
-            complete = ef.fix_body_encoding()
+                ['sma', 'sme', 'smj', 'nob', 'fin']):
+            fixer.fix_body_encoding()
+
+        fixer.soft_hyphen_to_hyph_tag()
+        fixer.set_word_count()
+        
+        complete = fixer.get_etree()
 
         ld = LanguageDetector(complete)
         ld.detect_language()
@@ -959,6 +965,9 @@ class DocumentFixer:
     def __init__(self, document):
         self.etree = document
 
+    def get_etree(self):
+        return self.etree
+
     def soft_hyphen_to_hyph_tag(self):
         """Replace soft hyphens in text by the hyph tag
         """
@@ -1069,9 +1078,6 @@ class DocumentFixer:
         self.fix_title_person('mac-sami_to_latin1')
 
         self.detect_quotes()
-        self.soft_hyphen_to_hyph_tag()
-
-        return etree.parse(io.BytesIO(etree.tostring(self.etree)))
 
     def fix_title_person(self, encoding):
         eg = decode.EncodingGuesser()
