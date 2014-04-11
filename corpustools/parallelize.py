@@ -1170,7 +1170,7 @@ class Toktmx2Tmx:
         Find the toktmx files in dirname, return them as a list
         """
         subp = subprocess.Popen(
-            ['find', os.path.join(os.environ['GTFREE'], dirname),
+            ['find', dirname,
                 '-name', '*.toktmx', '-print'],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
