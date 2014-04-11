@@ -657,19 +657,21 @@ class Tmx:
         """
         Write a tmx file given a tmx etree element and a filename
         """
+        #try:
         try:
-            f = open(out_filename, "w")
+            os.makedirs(os.path.dirname(out_filename))
+        except OSError:
+            pass
 
-            string = etree.tostring(self.get_tmx(),
-                                    pretty_print=True,
-                                    encoding="utf-8",
-                                    xml_declaration=True)
-            f.write(string)
-            f.close()
-        except IOError:
-            print "I/O error({0}): {1}".format(errno, strerror), ":", \
-                out_filename
-            sys.exit(1)
+        f = open(out_filename, "w")
+
+        string = etree.tostring(self.get_tmx(),
+                                pretty_print=True,
+                                encoding="utf-8",
+                                xml_declaration=True)
+        f.write(string)
+        f.close()
+        print "Wrote", out_filename
 
     def remove_tu_with_empty_seg(self):
         """Remove tu elements that contain empty seg element
@@ -1155,7 +1157,6 @@ class Toktmx2Tmx:
     def write_cleanedup_tmx(self):
         """Write the cleanup tmx
         """
-        print ".",
         self.tmx.write_tmx_file(self.tmxfile_name)
 
     def clean_toktmx(self):
@@ -1169,8 +1170,7 @@ class Toktmx2Tmx:
         Find the toktmx files in dirname, return them as a list
         """
         subp = subprocess.Popen(
-            ['find', os.path.join(os.environ['GTFREE'],
-                                  'prestable/toktmx/' + dirname),
+            ['find', os.path.join(os.environ['GTFREE'], dirname),
                 '-name', '*.toktmx', '-print'],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
