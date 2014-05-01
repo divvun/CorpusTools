@@ -333,17 +333,56 @@ class AvvirConverter:
         metadata
         The resulting xml is stored in intermediate
         """
-
+        self.intermediate = etree.fromstring(open(self.orig).read())
         self.convert_p()
+        self.convert_story()
+        self.convert_article()
 
-        return intermediate
+        return self.intermediate.getroottree()
 
     def convert_p(self):
-        for br in self.intermediate.findall('.//br'):
-            new_p = etree.Element('p')
-            new_p.text = br.tail
-            br.getparent().getparent().append(new_p)
-            br.getparent().remove(br)
+        for p in self.intermediate.findall('.//p'):
+            if p.get("class") is not None:
+                del p.attrib["class"]
+            for br in p.findall('.//br'):
+                new_p = etree.Element('p')
+                new_p.text = br.tail
+                br.getparent().getparent().append(new_p)
+                br.getparent().remove(br)
+
+    def convert_story(self):
+        for title in self.intermediate.findall('.//story[@class="Tittel"]'):
+            for p in title.findall('./p'):
+                p.set('type', 'title')
+
+            del title.attrib['class']
+            del title.attrib['id']
+
+            title.tag = 'section'
+
+        for title in self.intermediate.findall('.//story[@class="Undertittel"]'):
+            for p in title.findall('./p'):
+                p.set('type', 'title')
+
+            del title.attrib['class']
+            del title.attrib['id']
+
+            title.tag = 'section'
+
+        for story in self.intermediate.findall('./story'):
+            parent = story.getparent()
+            i = 1
+            for p in story.findall('./p'):
+                parent.insert(parent.index(story) + i, p)
+                i += 1
+
+            parent.remove(story)
+
+    def convert_article(self):
+        self.intermediate.tag = 'body'
+        document = etree.Element('document')
+        document.append(self.intermediate)
+        self.intermediate = document
 
 
 class SVGConverter:

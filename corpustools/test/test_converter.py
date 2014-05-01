@@ -150,33 +150,33 @@ class XMLTester(unittest.TestCase):
 class TestAvvirConverter(XMLTester):
     def setUp(self):
         self.avvir = converter.AvvirConverter('fakename')
-
-    def test_convert2intermediate(self):
         self.avvir.intermediate = etree.fromstring(r'''<article>
-    <story class="Tittel">
+    <story id="a" class="Tittel">
         <p>a</p>
     </story>
-    <story class="Undertittel">
+    <story id="b" class="Undertittel">
         <p>b</p>
     </story>
-    <story class="ingress">
+    <story id="c" class="ingress">
         <p>c</p>
     </story>
-    <story class="body">
-        <p>d<br/>e</p>
+    <story id="d" class="body">
+        <p class="tekst">d<br/>e</p>
     </story>
 </article>''')
+
+    def test_convert_p(self):
         want = etree.fromstring(r'''<article>
-    <story class="Tittel">
+    <story class="Tittel" id="a">
         <p>a</p>
     </story>
-    <story class="Undertittel">
+    <story class="Undertittel" id="b">
         <p>b</p>
     </story>
-    <story class="ingress">
+    <story class="ingress" id="c">
         <p>c</p>
     </story>
-    <story class="body">
+    <story class="body" id="d">
         <p>d</p>
         <p>e</p>
     </story>
@@ -185,6 +185,42 @@ class TestAvvirConverter(XMLTester):
         self.avvir.convert_p()
         self.assertXmlEqual(etree.tostring(self.avvir.intermediate), etree.tostring(want))
 
+    def test_convert_story(self):
+        want = etree.fromstring('''<article>
+    <section>
+        <p type="title">a</p>
+    </section>
+    <section>
+        <p type="title">b</p>
+    </section>
+    <p>c</p>
+    <p>d</p>
+    <p>e</p>
+</article>''')
+
+        self.avvir.convert_p()
+        self.avvir.convert_story()
+        self.assertXmlEqual(etree.tostring(self.avvir.intermediate), etree.tostring(want))
+
+    def test_convert_article(self):
+        want = etree.fromstring('''<document>
+    <body>
+        <section>
+            <p type="title">a</p>
+        </section>
+        <section>
+            <p type="title">b</p>
+        </section>
+        <p>c</p>
+        <p>d</p>
+        <p>e</p>
+    </body>
+</document>''')
+
+        self.avvir.convert_p()
+        self.avvir.convert_story()
+        self.avvir.convert_article()
+        self.assertXmlEqual(etree.tostring(self.avvir.intermediate), etree.tostring(want))
 
 class TestSVGConverter(XMLTester):
     def setUp(self):
