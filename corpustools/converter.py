@@ -326,8 +326,6 @@ class AvvirConverter:
 
     def __init__(self, filename):
         self.orig = filename
-        self.converter_xsl = os.path.join(
-            os.getenv('GTHOME'), 'gt/script/corpus/avvir2corpus.xsl')
 
     def convert2intermediate(self):
         """
@@ -335,12 +333,17 @@ class AvvirConverter:
         metadata
         The resulting xml is stored in intermediate
         """
-        avvirXsltRoot = etree.parse(self.converter_xsl)
-        transform = etree.XSLT(avvirXsltRoot)
-        doc = etree.parse(self.orig)
-        intermediate = transform(doc)
+
+        self.convert_p()
 
         return intermediate
+
+    def convert_p(self):
+        for br in self.intermediate.findall('.//br'):
+            new_p = etree.Element('p')
+            new_p.text = br.tail
+            br.getparent().getparent().append(new_p)
+            br.getparent().remove(br)
 
 
 class SVGConverter:

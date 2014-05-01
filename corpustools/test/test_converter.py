@@ -149,15 +149,41 @@ class XMLTester(unittest.TestCase):
 
 class TestAvvirConverter(XMLTester):
     def setUp(self):
-        self.avvir = converter.AvvirConverter(
-            'converter_data/fakecorpus/orig/sme/news/Avvir_xml-filer/\
-Avvir_2008_xml-filer/02nr028av.article.xml')
+        self.avvir = converter.AvvirConverter('fakename')
 
     def test_convert2intermediate(self):
-        got = self.avvir.convert2intermediate()
-        want = etree.parse('converter_data/gt-02nr028av.article.xml')
+        self.avvir.intermediate = etree.fromstring(r'''<article>
+    <story class="Tittel">
+        <p>a</p>
+    </story>
+    <story class="Undertittel">
+        <p>b</p>
+    </story>
+    <story class="ingress">
+        <p>c</p>
+    </story>
+    <story class="body">
+        <p>d<br/>e</p>
+    </story>
+</article>''')
+        want = etree.fromstring(r'''<article>
+    <story class="Tittel">
+        <p>a</p>
+    </story>
+    <story class="Undertittel">
+        <p>b</p>
+    </story>
+    <story class="ingress">
+        <p>c</p>
+    </story>
+    <story class="body">
+        <p>d</p>
+        <p>e</p>
+    </story>
+</article>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.avvir.convert_p()
+        self.assertXmlEqual(etree.tostring(self.avvir.intermediate), etree.tostring(want))
 
 
 class TestSVGConverter(XMLTester):
