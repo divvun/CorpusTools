@@ -311,6 +311,8 @@ class Analyser(object):
                     self.analysis_xml_file,
                     encoding=u'utf8',
                     xml_declaration=True)
+        else:
+            print >>sys.stderr, xml_file, 'is an OCR file and will not be analysed'
 
     def analyse_in_parallel(self):
         '''Analyse file in parallel
