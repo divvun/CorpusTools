@@ -702,47 +702,6 @@ class PDFConverter:
         return document
 
 
-class DocConverter:
-    """
-    Class to convert Microsoft Word documents to the giellatekno xml format
-    """
-    def __init__(self, filename):
-        self.orig = filename
-        self.converter_xsl = os.path.join(
-            os.getenv('GTHOME'), 'gt/script/corpus/docbook2corpus2.xsl')
-
-    def extract_text(self):
-        """Extract the text from the doc file using antiword
-        output contains the docbook xml output by antiword,
-        and is a utf-8 string
-        """
-        subp = subprocess.Popen(
-            ['antiword', '-x', 'db', self.orig],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        (output, error) = subp.communicate()
-
-        if subp.returncode != 0:
-            print >>sys.stderr, 'Could not process', self.orig
-            print >>sys.stderr, output
-            print >>sys.stderr, error
-            return subp.returncode
-
-        return output
-
-    def convert2intermediate(self):
-        """Convert the original document to the giellatekno xml format,
-        with no metadata
-        The resulting xml is stored in intermediate
-        """
-        docbook_xslt_root = etree.parse(self.converter_xsl)
-        transform = etree.XSLT(docbook_xslt_root)
-        doc = etree.fromstring(self.extract_text())
-        intermediate = transform(doc)
-
-        return intermediate
-
-
 class BiblexmlConverter:
     """
     Class to convert bible xml files to the giellatekno xml format
@@ -996,6 +955,43 @@ class RTFConverter(HTMLContentConverter):
         htmlElement = etree.Element('html')
         htmlElement.append(xml)
         return etree.tostring(htmlElement)
+
+
+class DocConverter(HTMLContentConverter):
+    """
+    Class to convert Microsoft Word documents to the giellatekno xml format
+    """
+    def __init__(self, filename):
+        self.orig = filename
+        HTMLContentConverter.__init__(self, filename, self.docbook2html())
+
+    def doc2docbook(self):
+        """Convert the doc file using antiword to a docbook xml file
+        Return the output as an etree
+        """
+        subp = subprocess.Popen(
+            ['antiword', '-x', 'db', self.orig],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        (output, error) = subp.communicate()
+
+        if subp.returncode != 0:
+            print >>sys.stderr, 'Could not process', self.orig
+            print >>sys.stderr, output
+            print >>sys.stderr, error
+            return subp.returncode
+
+        return etree.fromstring(output)
+
+    def docbook2html(self):
+        """Convert the docbook output to html using docbook-xsl
+        Return the html as a string
+        """
+        docbook_transformer = etree.XSLT(etree.parse('http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl'))
+        html = docbook_transformer(self.doc2docbook())
+
+        return etree.tostring(html)
+
 
 
 class DocumentFixer:
@@ -1546,7 +1542,18 @@ def collect_files(source_dir):
     return xsl_files
 
 
+def setup_xml_catalog():
+    """Setup xml catalog to try to access docbook xsl stylesheets
+    without hitting the network
+    """
+    if os.path.exists('/etc/xml/catalog'):
+        os.environ['XML_CATALOG_FILES'] = '/etc/xml/catalog'
+    elif os.path.exists('/opt/local/etc/xml/catalog'):
+        os.environ['XML_CATALOG_FILES'] = '/opt/local/etc/xml/catalog'
+
+
 def main():
+    setup_xml_catalog()
     args = parse_options()
 
     if os.path.isfile(args.source):
