@@ -37,6 +37,7 @@ import codecs
 import multiprocessing
 import argparse
 import shutil
+from pkg_resources import resource_string, resource_filename
 
 import decode
 import ngram
@@ -392,8 +393,7 @@ class SVGConverter(object):
 
     def __init__(self, filename):
         self.orig = filename
-        self.converter_xsl = os.path.join(
-            os.getenv('GTHOME'), 'gt/script/corpus/svg2corpus.xsl')
+        self.converter_xsl = resource_string(__name__, 'xslt/svg2corpus.xsl')
 
     def convert2intermediate(self):
         """
@@ -401,7 +401,7 @@ class SVGConverter(object):
         metadata
         The resulting xml is stored in intermediate
         """
-        svgXsltRoot = etree.parse(self.converter_xsl)
+        svgXsltRoot = etree.fromstring(self.converter_xsl)
         transform = etree.XSLT(svgXsltRoot)
         doc = etree.parse(self.orig)
         intermediate = transform(doc)
@@ -740,8 +740,7 @@ class HTMLContentConverter(object):
         except HTMLParser.HTMLParseError:
             raise ConversionException("BeautifulSoup couldn't parse the html")
 
-        self.converter_xsl = os.path.join(
-            os.getenv('GTHOME'), 'gt/script/corpus/xhtml2corpus.xsl')
+        self.converter_xsl = resource_string(__name__, 'xslt/xhtml2corpus.xsl')
 
     def remove_elements(self):
         '''Remove unwanted tags from a html document
@@ -865,8 +864,7 @@ class HTMLContentConverter(object):
         metadata
         The resulting xml is stored in intermediate
         """
-        #print docbook
-        html_xslt_root = etree.parse(self.converter_xsl)
+        html_xslt_root = etree.fromstring(self.converter_xsl)
         transform = etree.XSLT(html_xslt_root)
 
         intermediate = ''
@@ -1260,9 +1258,8 @@ class XslMaker(object):
     """
 
     def __init__(self, xslfile):
-        preprocessXsl = etree.parse(
-            os.path.join(os.getenv('GTHOME'),
-                         'gt/script/corpus/preprocxsl.xsl'))
+        preprocessXsl = etree.fromstring(
+            resource_string(__name__, 'xslt/preprocxsl.xsl'))
         preprocessXslTransformer = etree.XSLT(preprocessXsl)
 
         self.filename = xslfile
@@ -1282,8 +1279,7 @@ class XslMaker(object):
             filexsl,
             commonxsl=
             etree.XSLT.strparam('file://' +
-                                os.path.join(os.getenv('GTHOME'),
-                                             'gt/script/corpus/common.xsl')))
+                                resource_filename(__name__, 'xslt/common.xsl')))
 
     def get_xsl(self):
         return self.finalXsl
@@ -1560,10 +1556,10 @@ def main():
         if os.path.isfile(xsl_file):
             worker(xsl_file)
         else:
-            shutil.copy(
-                os.path.join(os.getenv('GTHOME'),
-                             'gt/script/corpus/XSL-template.xsl'),
-                xsl_file)
+            xsl_stream = open(xsl_file, 'w')
+            xsl_stream.write(
+                resource_string(__name__, 'xslt/XSL-template.xsl'))
+            xsl_stream.close()
             print "Fill in meta info in", xsl_file, \
                 ', then run this command again'
             sys.exit(1)
