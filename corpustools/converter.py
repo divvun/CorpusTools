@@ -52,7 +52,7 @@ class ConversionException(Exception):
         return repr(self.parameter)
 
 
-class Converter:
+class Converter(object):
     """
     Class to take care of data common to all Converter classes
     """
@@ -319,7 +319,7 @@ class Converter:
         return self._convertedName
 
 
-class AvvirConverter:
+class AvvirConverter(object):
     """
     Class to convert Ávvir xml files to the giellatekno xml format
     """
@@ -385,7 +385,7 @@ class AvvirConverter:
         self.intermediate = document
 
 
-class SVGConverter:
+class SVGConverter(object):
     """
     Class to convert SVG files to the giellatekno xml format
     """
@@ -409,7 +409,7 @@ class SVGConverter:
         return intermediate
 
 
-class PlaintextConverter:
+class PlaintextConverter(object):
     """
     A class to convert plain text files containing "news" tags to the
     giellatekno xml format
@@ -568,7 +568,7 @@ class PlaintextConverter:
 #from pdfminer.layout import LAParams
 
 
-class PDFConverter:
+class PDFConverter(object):
     def __init__(self, filename):
         self.orig = filename
 
@@ -702,7 +702,7 @@ class PDFConverter:
         return document
 
 
-class BiblexmlConverter:
+class BiblexmlConverter(object):
     """
     Class to convert bible xml files to the giellatekno xml format
     """
@@ -728,7 +728,7 @@ class BiblexmlConverter:
         return etree.parse('kluff.xml')
 
 
-class HTMLContentConverter:
+class HTMLContentConverter(object):
     """
     Class to convert html documents to the giellatekno xml format
     """
@@ -993,7 +993,7 @@ class DocConverter(HTMLContentConverter):
         return etree.tostring(html)
 
 
-class DocumentFixer:
+class DocumentFixer(object):
     """
     Receive a stringified etree from one of the raw converters,
     replace ligatures, fix the encoding and return an etree with correct
@@ -1252,7 +1252,7 @@ class DocumentFixer:
         wordcount.text = str(words)
 
 
-class XslMaker:
+class XslMaker(object):
     """
     To convert the intermediate xml to a fullfledged  giellatekno document
     a combination of three xsl files + the intermediate files is needed
@@ -1289,7 +1289,7 @@ class XslMaker:
         return self.finalXsl
 
 
-class LanguageDetector:
+class LanguageDetector(object):
     """
     Receive an etree.
     Detect the languages of quotes.
@@ -1370,7 +1370,7 @@ class LanguageDetector:
                 paragraph = self.set_paragraph_language(paragraph)
 
 
-class DocumentTester:
+class DocumentTester(object):
     def __init__(self, document):
         self.document = document
         self.mainlang = self.document.getroot().\
