@@ -774,7 +774,7 @@ class HTMLContentConverter:
                     'outer-column', 'article-ad', 'article-bottom-element',
                     'banner-element', 'nrk-globalnavigation', 'sharing', 'ad',
                     'meta', 'authors', 'articleImageRig',  'btm_menu',
-                    'expandable'],
+                    'expandable', 'toc', 'titlepage'],
                 'id': [
                     'searchBox',
                     'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
@@ -991,7 +991,6 @@ class DocConverter(HTMLContentConverter):
         html = docbook_transformer(self.doc2docbook())
 
         return etree.tostring(html)
-
 
 
 class DocumentFixer:
