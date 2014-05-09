@@ -349,20 +349,42 @@ class AvvirConverter(object):
     def convert_br(self, p):
         i = 1
         for br in p.findall('.//br'):
+            parent = br.getparent()
             if br.tail is not None:
                 new_p = etree.Element('p')
                 new_p.text = br.tail
-                parent = br.getparent()
                 grandparent = br.getparent().getparent()
                 grandparent.insert(grandparent.index(parent) + i, new_p)
                 i += 1
             parent.remove(br)
+
+    def convert_span(self, p):
+        i = 1
+        for span in p.findall('.//span'):
+            parent = span.getparent()
+
+            if span.text is not None:
+                new_p = etree.Element('p')
+                new_p.text = span.text
+                grandparent = span.getparent().getparent()
+                grandparent.insert(grandparent.index(parent) + i, new_p)
+                i += 1
+
+            if span.tail is not None:
+                new_p = etree.Element('p')
+                new_p.text = span.tail
+                grandparent = span.getparent().getparent()
+                grandparent.insert(grandparent.index(parent) + i, new_p)
+                i += 1
+
+            parent.remove(span)
 
     def convert_p(self):
         for p in self.intermediate.findall('.//p'):
             if p.get("class") is not None:
                 del p.attrib["class"]
             self.convert_br(p)
+            self.convert_span(p)
 
     def convert_story(self):
         for title in self.intermediate.findall('.//story[@class="Tittel"]'):
