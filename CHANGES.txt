@@ -13,3 +13,4 @@ v<0.3.4>, <20140218> -- Don't write empty converted files
 v<0.3.5>, <20140305> -- New scheme for encoding guessing
 v<0.3.6>, <20140329> -- Handle hyph tags
 v<0.4.0>, <20140507> -- Convert .doc by using docbook-xsl-ns -> html -> our xml
+v<0.5.0>, <20140507> -- Change the way Avvir xml files are converted
