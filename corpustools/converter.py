@@ -346,45 +346,28 @@ class AvvirConverter(object):
 
         return self.intermediate.getroottree()
 
-    def convert_br(self, p):
+    def convert_subelement(self, p, subname):
         i = 1
-        for br in p.findall('.//br'):
-            parent = br.getparent()
-            if br.tail is not None:
-                new_p = etree.Element('p')
-                new_p.text = br.tail
-                grandparent = br.getparent().getparent()
-                grandparent.insert(grandparent.index(parent) + i, new_p)
-                i += 1
-            parent.remove(br)
+        for subelement in p.findall('.//' + subname):
+            parent = subelement.getparent()
 
-    def convert_span(self, p):
-        i = 1
-        for span in p.findall('.//span'):
-            parent = span.getparent()
+            for text in [subelement.text, subelement.tail]:
+                if text is not None:
+                    new_p = etree.Element('p')
+                    new_p.text = text
+                    grandparent = subelement.getparent().getparent()
+                    grandparent.insert(grandparent.index(parent) + i, new_p)
+                    i += 1
 
-            if span.text is not None:
-                new_p = etree.Element('p')
-                new_p.text = span.text
-                grandparent = span.getparent().getparent()
-                grandparent.insert(grandparent.index(parent) + i, new_p)
-                i += 1
-
-            if span.tail is not None:
-                new_p = etree.Element('p')
-                new_p.text = span.tail
-                grandparent = span.getparent().getparent()
-                grandparent.insert(grandparent.index(parent) + i, new_p)
-                i += 1
-
-            parent.remove(span)
+            parent.remove(subelement)
 
     def convert_p(self):
         for p in self.intermediate.findall('.//p'):
             if p.get("class") is not None:
                 del p.attrib["class"]
-            self.convert_br(p)
-            self.convert_span(p)
+
+            for subname in ['br', 'span']:
+                self.convert_subelement(p, subname)
 
     def convert_story(self):
         for title in self.intermediate.findall('.//story[@class="Tittel"]'):
