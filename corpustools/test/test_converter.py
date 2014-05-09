@@ -161,7 +161,7 @@ class TestAvvirConverter(XMLTester):
         <p>c</p>
     </story>
     <story id="d" class="body">
-        <p class="tekst">d<br/>e</p>
+        <p class="tekst">d<br/>e<br/></p>
         <p>f</p>
     </story>
 </article>''')

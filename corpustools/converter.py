@@ -353,12 +353,13 @@ class AvvirConverter(object):
 
             i = 1
             for br in p.findall('.//br'):
-                new_p = etree.Element('p')
-                new_p.text = br.tail
-                parent = br.getparent()
-                grandparent = br.getparent().getparent()
-                grandparent.insert(grandparent.index(parent) + i, new_p)
-                i += 1
+                if br.tail is not None:
+                    new_p = etree.Element('p')
+                    new_p.text = br.tail
+                    parent = br.getparent()
+                    grandparent = br.getparent().getparent()
+                    grandparent.insert(grandparent.index(parent) + i, new_p)
+                    i += 1
                 parent.remove(br)
 
     def convert_story(self):
