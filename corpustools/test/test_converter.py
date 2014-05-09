@@ -167,6 +167,16 @@ class TestAvvirConverter(XMLTester):
     <story id="g" class="body">
         <p class="tekst">h<span>i</span>j</p>
     </story>
+    <story id="k" class="body">
+        <p>l
+            <span>
+                m
+                <br/>
+                n
+            </span>
+            o
+        </p>
+    </story>
 </article>''')
 
     def test_convert_p(self):
@@ -190,6 +200,12 @@ class TestAvvirConverter(XMLTester):
         <p>i</p>
         <p>j</p>
     </story>
+    <story class="body" id="k">
+        <p>l</p>
+        <p>m</p>
+        <p>n</p>
+        <p>o</p>
+    </story>
 </article>''')
 
         self.avvir.convert_p()
@@ -210,6 +226,10 @@ class TestAvvirConverter(XMLTester):
     <p>h</p>
     <p>i</p>
     <p>j</p>
+    <p>l</p>
+    <p>m</p>
+    <p>n</p>
+    <p>o</p>
 </article>''')
 
         self.avvir.convert_p()
@@ -232,6 +252,10 @@ class TestAvvirConverter(XMLTester):
         <p>h</p>
         <p>i</p>
         <p>j</p>
+        <p>l</p>
+        <p>m</p>
+        <p>n</p>
+        <p>o</p>
     </body>
 </document>''')
 

@@ -288,6 +288,7 @@ class Converter(object):
 
                 xsltree.write(
                     self.get_xsl(), encoding="utf-8", xml_declaration=True)
+
         except etree.XMLSyntaxError as e:
             logfile = open(self.orig + '.log', 'w')
 
@@ -346,28 +347,35 @@ class AvvirConverter(object):
 
         return self.intermediate.getroottree()
 
-    def convert_subelement(self, p, subname):
+    def insert_element(self, p, text, i):
+        if text is not None:
+            new_p = etree.Element('p')
+            new_p.text = text
+            grandparent = p.getparent()
+            grandparent.insert(grandparent.index(p) + i, new_p)
+            i += 1
+
+        return i
+
+    def convert_subelement(self, p):
         i = 1
-        for subelement in p.findall('.//' + subname):
-            parent = subelement.getparent()
+        for subelement in p:
+            i = self.insert_element(p, subelement.text, i)
 
-            for text in [subelement.text, subelement.tail]:
-                if text is not None:
-                    new_p = etree.Element('p')
-                    new_p.text = text
-                    grandparent = subelement.getparent().getparent()
-                    grandparent.insert(grandparent.index(parent) + i, new_p)
-                    i += 1
+            for subsubelement in subelement:
+                for text in [subsubelement.text, subsubelement.tail]:
+                    i = self.insert_element(p, text, i)
 
-            parent.remove(subelement)
+            i = self.insert_element(p, subelement.tail, i)
+
+            p.remove(subelement)
 
     def convert_p(self):
         for p in self.intermediate.findall('.//p'):
             if p.get("class") is not None:
                 del p.attrib["class"]
 
-            for subname in ['br', 'span']:
-                self.convert_subelement(p, subname)
+            self.convert_subelement(p)
 
     def convert_story(self):
         for title in self.intermediate.findall('.//story[@class="Tittel"]'):
