@@ -116,6 +116,7 @@ class Converter(object):
         except etree.XSLTParseError as (e):
             logfile = open(self.orig + '.log', 'w')
 
+            logfile.write('Error at: ' + str(ccat.lineno()))
             for entry in e.error_log:
                 logfile.write(str(entry))
                 logfile.write('\n')
@@ -130,6 +131,7 @@ class Converter(object):
         except etree.XSLTApplyError as (e):
             logfile = open(self.orig + '.log', 'w')
 
+            logfile.write('Error at: ' + str(ccat.lineno()))
             for entry in e.error_log:
                 logfile.write(str(entry))
                 logfile.write('\n')
@@ -143,6 +145,7 @@ class Converter(object):
             #print etree.tostring(complete)
             logfile = open(self.get_orig() + '.log', 'w')
 
+            logfile.write('Error at: ' + str(ccat.lineno()))
             for entry in dtd.error_log:
                 logfile.write('\n')
                 logfile.write(str(entry))
@@ -165,6 +168,7 @@ class Converter(object):
                     em.add_error_markup(element)
             except IndexError as e:
                 logfile = open(self.get_orig() + '.log', 'w')
+                logfile.write('Error at: ' + str(ccat.lineno()))
                 logfile.write("There is a markup error\n")
                 logfile.write("The error message: ")
                 logfile.write(str(e))
@@ -287,6 +291,7 @@ class Converter(object):
         except etree.XMLSyntaxError as e:
             logfile = open(self.orig + '.log', 'w')
 
+            logfile.write('Error at: ' + str(ccat.lineno()))
             for entry in e.error_log:
                 logfile.write('\n')
                 logfile.write(str(entry.line))
@@ -618,6 +623,7 @@ class PDFConverter(object):
 
         if subp.returncode != 0:
             logfile = open(self.orig + '.log', 'w')
+            logfile.write('Error at: ' + str(ccat.lineno()))
             logfile.write('stdout\n')
             logfile.write(output)
             logfile.write('\n')
@@ -731,6 +737,8 @@ class BiblexmlConverter(object):
 class HTMLContentConverter(object):
     """
     Class to convert html documents to the giellatekno xml format
+
+    content is a string
     """
     def __init__(self, filename, content):
         self.orig = filename
@@ -742,13 +750,20 @@ class HTMLContentConverter(object):
 
         self.converter_xsl = resource_string(__name__, 'xslt/xhtml2corpus.xsl')
 
+    def remove_empty_class(self):
+        """Some documents have empty class attributes.
+        Delete these attributes.
+        """
+        for tag in self.soup.find_all(True):
+            if tag.has_attr('class') and tag['class'] == ['']:
+                del tag['class']
+
     def remove_elements(self):
         '''Remove unwanted tags from a html document
 
         The point with this exercise is to remove all but the main content of
         the document.
         '''
-
         for instance in [
                 bs4.Comment, bs4.ProcessingInstruction, bs4.Declaration]:
             [unwanted.extract() for unwanted in self.soup.find_all(
@@ -812,6 +827,7 @@ class HTMLContentConverter(object):
         """
         Run html through tidy
         """
+        self.remove_empty_class()
         self.remove_elements()
 
         if not ("xmlns", "http://www.w3.org/1999/xhtml") in self.soup.html.attrs:
@@ -877,6 +893,7 @@ class HTMLContentConverter(object):
         except etree.XMLSyntaxError as e:
             logfile = open(self.orig + '.log', 'w')
 
+            logfile.write('Error at: ' + str(ccat.lineno()))
             for entry in e.error_log:
                 logfile.write('\n')
                 logfile.write(str(entry.line))
@@ -901,6 +918,7 @@ class HTMLContentConverter(object):
 
             logfile = open(self.orig + '.log', 'w')
 
+            logfile.write('Error at: ' + str(ccat.lineno()))
             for entry in transform.error_log:
                 logfile.write('\n')
                 logfile.write(str(entry.line))
@@ -1269,6 +1287,7 @@ class XslMaker(object):
         except etree.XMLSyntaxError as e:
             logfile = open(self.filename + '.log', 'w')
 
+            logfile.write('Error at: ' + str(ccat.lineno()))
             for entry in e.error_log:
                 logfile.write(str(entry))
                 logfile.write('\n')

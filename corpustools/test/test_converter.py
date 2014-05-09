@@ -436,6 +436,15 @@ class TestHTMLConverter(XMLTester):
 
 
 class TestHTMLContentConverter(XMLTester):
+    def test_remove_empty_class(self):
+        got = converter.HTMLContentConverter(
+            'with-o:p.html',
+            '<html><body><div class=""/><div class="a"><span class="">b</span></div></html>').tidy()
+
+        want = '<html xmlns="http://www.w3.org/1999/xhtml">\
+        <head><title/></head><body><div class="a"><span>b</span></div></body></html>'
+
+        self.assertXmlEqual(got, want)
 
     def test_remove_unwanted_classes_and_ids(self):
         unwanted_classes_ids = {
@@ -498,7 +507,7 @@ class TestHTMLContentConverter(XMLTester):
             'v:shape', 'st1:metricconverter', 'area', 'object', 'meta',
             'fb:like', 'fb:comments', 'g:plusone', 'hr', 'nf', 'mb', 'ms',
             'img', 'cite', 'embed', 'footer', 'figcaption', 'aside', 'time',
-            'figure', 'nav', 'select', 'noscript', 'iframe', 'map', 'img']
+            'figure', 'nav', 'select', 'noscript', 'iframe', 'map', 'img', 'colgroup']
         for unwanted_tag in unwanted_tags:
             got = converter.HTMLContentConverter(unwanted_tag + '.html',
                                                  '<html>\
