@@ -350,11 +350,16 @@ class AvvirConverter(object):
         for p in self.intermediate.findall('.//p'):
             if p.get("class") is not None:
                 del p.attrib["class"]
+
+            i = 1
             for br in p.findall('.//br'):
                 new_p = etree.Element('p')
                 new_p.text = br.tail
-                br.getparent().getparent().append(new_p)
-                br.getparent().remove(br)
+                parent = br.getparent()
+                grandparent = br.getparent().getparent()
+                grandparent.insert(grandparent.index(parent) + i, new_p)
+                i += 1
+                parent.remove(br)
 
     def convert_story(self):
         for title in self.intermediate.findall('.//story[@class="Tittel"]'):
