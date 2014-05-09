@@ -346,21 +346,23 @@ class AvvirConverter(object):
 
         return self.intermediate.getroottree()
 
+    def convert_br(self, p):
+        i = 1
+        for br in p.findall('.//br'):
+            if br.tail is not None:
+                new_p = etree.Element('p')
+                new_p.text = br.tail
+                parent = br.getparent()
+                grandparent = br.getparent().getparent()
+                grandparent.insert(grandparent.index(parent) + i, new_p)
+                i += 1
+            parent.remove(br)
+
     def convert_p(self):
         for p in self.intermediate.findall('.//p'):
             if p.get("class") is not None:
                 del p.attrib["class"]
-
-            i = 1
-            for br in p.findall('.//br'):
-                if br.tail is not None:
-                    new_p = etree.Element('p')
-                    new_p.text = br.tail
-                    parent = br.getparent()
-                    grandparent = br.getparent().getparent()
-                    grandparent.insert(grandparent.index(parent) + i, new_p)
-                    i += 1
-                parent.remove(br)
+            self.convert_br(p)
 
     def convert_story(self):
         for title in self.intermediate.findall('.//story[@class="Tittel"]'):
