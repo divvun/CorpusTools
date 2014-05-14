@@ -1026,7 +1026,18 @@ class DocConverter(HTMLContentConverter):
         Return the html as a string
         """
         docbook_transformer = etree.XSLT(etree.parse('http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl'))
-        html = docbook_transformer(self.doc2docbook())
+        try:
+            html = docbook_transformer(self.doc2docbook())
+        except etree.XSLTApplyError as (e):
+            logfile = open(self.orig + '.log', 'w')
+
+            logfile.write('Error at: ' + str(ccat.lineno()))
+            for entry in e.error_log:
+                logfile.write(str(entry))
+                logfile.write('\n')
+
+            logfile.close()
+            raise ConversionException('Could not convert docbook ' + self.orig)
 
         return etree.tostring(html)
 
