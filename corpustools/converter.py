@@ -1550,8 +1550,9 @@ def parse_options():
                         help=u"use this for debugging the conversion \
                         process. When this argument is used files will \
                         be converted one by one.")
-    parser.add_argument('source',
-                        help="directory where the original files exist")
+    parser.add_argument('sources',
+                        nargs='+',
+                        help="directory/ies where the original files exist")
 
     args = parser.parse_args()
     return args
@@ -1603,20 +1604,21 @@ def main():
     setup_xml_catalog()
     args = parse_options()
 
-    if os.path.isfile(args.source):
-        xsl_file = args.source + '.xsl'
-        if os.path.isfile(xsl_file):
-            worker(xsl_file)
-        else:
-            xsl_stream = open(xsl_file, 'w')
-            xsl_stream.write(
-                resource_string(__name__, 'xslt/XSL-template.xsl'))
-            xsl_stream.close()
-            print "Fill in meta info in", xsl_file, \
-                ', then run this command again'
-            sys.exit(1)
-    elif os.path.isdir(args.source):
-        if args.debug:
-            convert_serially(collect_files(args.source))
-        else:
-            convert_in_parallel(collect_files(args.source))
+    for source in args.sources:
+        if os.path.isfile(source):
+            xsl_file = source + '.xsl'
+            if os.path.isfile(xsl_file):
+                worker(xsl_file)
+            else:
+                xsl_stream = open(xsl_file, 'w')
+                xsl_stream.write(
+                    resource_string(__name__, 'xslt/XSL-template.xsl'))
+                xsl_stream.close()
+                print "Fill in meta info in", xsl_file, \
+                    ', then run this command again'
+                sys.exit(1)
+        elif os.path.isdir(source):
+            if args.debug:
+                convert_serially(collect_files(source))
+            else:
+                convert_in_parallel(collect_files(source))
