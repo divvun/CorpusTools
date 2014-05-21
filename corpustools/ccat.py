@@ -181,7 +181,18 @@ class XMLPrinter:
                 for child in element:
                     if text != '':
                         text += ' '
-                    text += child.get('correct')
+                    if child.tag == 'span' and element.tag == 'errorsyn':
+                        text += child.text
+                    else:
+                        try:
+                            text += child.get('correct')
+                        except TypeError:
+                            print >>sys.stderr, 'Unexpected error element'
+                            print >>sys.stderr, etree.tostring(child, encoding='utf8')
+                            print >>sys.stderr, 'To fix this error you must fix the errormarkup in the original document:'
+                            print >>sys.stderr, self.filename
+                            sys.exit(77)
+
                     if child.tail is not None and child.tail.strip() != '':
                         text += ' ' + child.tail.strip()
 
@@ -379,8 +390,9 @@ class XMLPrinter:
 
     def print_file(self, file_):
         '''Print a xml file to stdout'''
-        self.parse_file(file_)
-        sys.stdout.write(self.process_file().getvalue())
+        if file_.endswith('.xml'):
+            self.parse_file(file_)
+            sys.stdout.write(self.process_file().getvalue())
 
 
 def parse_options():
@@ -526,12 +538,15 @@ def main():
                              hyph_replacement=args.hyph_replacement)
 
     for target in args.targets:
-        if os.path.isfile(target):
-            xml_printer.print_file(target)
-        elif os.path.isdir(target):
-            for root, dirs, files in os.walk(target):
-                for xml_file in files:
-                    xml_printer.print_file(os.path.join(root, xml_file))
+        if os.path.exists(target):
+            if os.path.isfile(target):
+                xml_printer.print_file(target)
+            elif os.path.isdir(target):
+                for root, dirs, files in os.walk(target):
+                    for xml_file in files:
+                        xml_printer.print_file(os.path.join(root, xml_file))
+        else:
+            print >>sys.stderr, target, 'does not exist'
 
 if __name__ == '__main__':
     main()
