@@ -601,11 +601,11 @@ class TestHTMLContentConverter(XMLTester):
 
 class TestRTFConverter(XMLTester):
     def setUp(self):
-        self.testrtf = converter.RTFConverter('converter_data/Folkemøte.rtf')
+        self.testrtf = converter.RTFConverter('converter_data/folkemote.rtf')
 
     def test_convert2intermediate(self):
         got = self.testrtf.convert2intermediate()
-        want = etree.parse('converter_data/Folkemøte.xml')
+        want = etree.parse('converter_data/folkemote.xml')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
