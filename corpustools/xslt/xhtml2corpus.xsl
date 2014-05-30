@@ -360,7 +360,7 @@ If it is a container it has one or more of the these tags:
     <xsl:choose>
         <xsl:when test="text()">
             <xsl:choose>
-                <xsl:when test="ancestor::html:p|ancestor::html:b|ancestor::html:i|ancestor::html:u|ancestor::html:a|ancestor::html:font">
+                <xsl:when test="ancestor::html:p|ancestor::html:b|ancestor::html:i|ancestor::html:u|ancestor::html:a|ancestor::html:font|ancestor::html:li">
                     <xsl:apply-templates select="text()"/>
                 </xsl:when>
                 <xsl:otherwise>
