@@ -515,7 +515,7 @@ class PlaintextConverter(object):
         body = etree.Element('body')
         ptext = ''
 
-        newstags = re.compile(r'(@*logo:|@*ingres+:|.*@*bilde(\s\d)*:|(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@bildetitt:)', re.IGNORECASE)
+        newstags = re.compile(r'(@*logo:|@*ingres+:|.*@*.*bilde\s*\d*:|(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@bildetitt:)', re.IGNORECASE)
         titletags = re.compile(r'@m.titt:@ingress:|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:', re.IGNORECASE)
         headertitletags = re.compile(r'@tittel:|@titt:|TITT:|Tittel:|@LEDtitt:')
 
