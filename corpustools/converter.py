@@ -37,6 +37,7 @@ import codecs
 import multiprocessing
 import argparse
 import shutil
+import tempfile
 from pkg_resources import resource_string, resource_filename
 
 import decode
@@ -740,8 +741,10 @@ class BiblexmlConverter(object):
         """
         Convert the bible xml to giellatekno xml format using bible2xml.pl
         """
+        (tmpfile, tmpname) = tempfile.mkstemp()
+        print tmpfile, tmpname
         subp = subprocess.Popen(
-            ['bible2xml.pl', '-out', 'kluff.xml', self.orig],
+            ['bible2xml.pl', '-out', tmpname, self.orig],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
@@ -752,7 +755,7 @@ class BiblexmlConverter(object):
             print >>sys.stderr, error
             return subp.returncode
 
-        return etree.parse('kluff.xml')
+        return etree.parse(tmpname)
 
 
 class HTMLContentConverter(object):
