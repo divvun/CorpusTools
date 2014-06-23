@@ -747,7 +747,6 @@ class BiblexmlConverter(object):
         Convert the bible xml to giellatekno xml format using bible2xml.pl
         """
         (tmpfile, tmpname) = tempfile.mkstemp()
-        print tmpfile, tmpname
         subp = subprocess.Popen(
             ['bible2xml.pl', '-out', tmpname, self.orig],
             stdout=subprocess.PIPE,
