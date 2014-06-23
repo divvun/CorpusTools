@@ -307,6 +307,11 @@ class Converter(object):
                     logfile.write(entry.message.encode('latin1'))
 
                 logfile.write('\n')
+                logfile.close()
+                raise ConversionException(
+                    u"XML syntax error. More info in the log file: " +
+                    self.get_orig() + u".log")
+
 
     def set_converted_name(self):
         """Set the name of the converted file
