@@ -103,42 +103,9 @@ class Converter(object):
 
         return document
 
-    def make_complete(self):
-        """Combine the intermediate giellatekno xml file and the metadata into
-        a complete giellatekno xml file.
-        Fix the character encoding
-        Detect the languages in the xml file
+    def validate_complete(self, complete):
+        """Validate the complete document
         """
-        xm = XslMaker(self.get_xsl())
-        xsltRoot = xm.get_xsl()
-        try:
-            transform = etree.XSLT(xsltRoot)
-        except etree.XSLTParseError as (e):
-            logfile = open(self.orig + '.log', 'w')
-
-            logfile.write('Error at: ' + str(ccat.lineno()))
-            for entry in e.error_log:
-                logfile.write(str(entry))
-                logfile.write('\n')
-
-            logfile.close()
-            raise ConversionException("Invalid XML in " + self.get_xsl())
-
-        intermediate = self.make_intermediate()
-
-        try:
-            complete = transform(intermediate)
-        except etree.XSLTApplyError as (e):
-            logfile = open(self.orig + '.log', 'w')
-
-            logfile.write('Error at: ' + str(ccat.lineno()))
-            for entry in e.error_log:
-                logfile.write(str(entry))
-                logfile.write('\n')
-
-            logfile.close()
-            raise ConversionException("Check the syntax in: " + self.get_xsl())
-
         dtd = etree.DTD(os.path.join(os.getenv('GTHOME'), 'gt/dtd/corpus.dtd'))
 
         if not dtd.validate(complete):
@@ -160,6 +127,25 @@ class Converter(object):
                 "Not valid XML. More info in the log file: " +
                 self.get_orig() + u".log")
 
+    def transform_to_complete(self):
+        xm = XslMaker(self.get_xsl())
+        intermediate = self.make_intermediate()
+
+        try:
+            complete = xm.get_transformer()(intermediate)
+            return complete
+        except etree.XSLTApplyError as (e):
+            logfile = open(self.orig + '.log', 'w')
+
+            logfile.write('Error at: ' + str(ccat.lineno()))
+            for entry in e.error_log:
+                logfile.write(str(entry))
+                logfile.write('\n')
+
+            logfile.close()
+            raise ConversionException("Check the syntax in: " + self.get_xsl())
+
+    def convert_errormarkup(self, complete):
         if 'correct.' in self.orig:
             try:
                 em = errormarkup.ErrorMarkup(self.get_orig())
@@ -183,6 +169,7 @@ class Converter(object):
                     u"Markup error. More info in the log file: " +
                     self.get_orig() + u".log")
 
+    def fix_document(self, complete):
         fixer = DocumentFixer(etree.fromstring(etree.tostring(complete)))
 
         if (complete.getroot().
@@ -193,8 +180,19 @@ class Converter(object):
         fixer.soft_hyphen_to_hyph_tag()
         fixer.set_word_count()
 
-        complete = fixer.get_etree()
+        return fixer.get_etree()
 
+
+    def make_complete(self):
+        """Combine the intermediate giellatekno xml file and the metadata into
+        a complete giellatekno xml file.
+        Fix the character encoding
+        Detect the languages in the xml file
+        """
+        complete = self.transform_to_complete()
+        self.validate_complete(complete)
+        self.convert_errormarkup(complete)
+        complete = self.fix_document(complete)
         ld = LanguageDetector(complete)
         ld.detect_language()
 
@@ -1339,6 +1337,21 @@ class XslMaker(object):
     def get_xsl(self):
         return self.finalXsl
 
+    def get_transformer(self):
+        xsltRoot = self.get_xsl()
+        try:
+            transform = etree.XSLT(xsltRoot)
+            return transform
+        except etree.XSLTParseError as (e):
+            logfile = open(self.orig + '.log', 'w')
+
+            logfile.write('Error at: ' + str(ccat.lineno()))
+            for entry in e.error_log:
+                logfile.write(str(entry))
+                logfile.write('\n')
+
+            logfile.close()
+            raise ConversionException("Invalid XML in " + self.get_xsl())
 
 class LanguageDetector(object):
     """
