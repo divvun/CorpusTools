@@ -284,51 +284,93 @@ class TestPlaintextConverter(XMLTester):
 
         self.assertEqual(got, want)
 
-    def test_plaintext(self):
-
+    def test_kursiv(self):
         plaintext = converter.PlaintextConverter(
             'tullball.txt')
-        got = plaintext.content2xml(io.StringIO(u'''Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP.
+        got = plaintext.content2xml(io.StringIO(u'''@kursiv:(Gáldu)
+'''))
 
-Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain.
+        want = etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p><em type="italic">(Gáldu)</em></p>
+    </body>
+</document>''')
 
-Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat ja bidjat dihtorii.
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-@kursiv:(Gáldu: J. Qvigstad - Lappiske eventyr og sagn fra Lyngen I. Oslo. 1929.)
+    def test_ledtekst(self):
+        plaintext = converter.PlaintextConverter(
+            'tullball.txt')
+        got = plaintext.content2xml(io.StringIO(u'''@LEDtekst:Dat mearkkaša'''))
 
-@LEDtekst:Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain.
+        want = etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>Dat mearkkaša</p>
+    </body>
+</document>''')
 
-@logo:Finnmark jordskifterett
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-@fotobyline:Finnmark jordskifterett
+    def test_logo(self):
+        plaintext = converter.PlaintextConverter(
+            'tullball.txt')
+        got = plaintext.content2xml(io.StringIO(u'''@logo:Finnmark jordskifterett'''))
 
-@bildetitt:Finnmark jordskifterett'''))
+        want = etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>Finnmark jordskifterett</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_fotobyline(self):
+        plaintext = converter.PlaintextConverter(
+            'tullball.txt')
+        got = plaintext.content2xml(io.StringIO(u'''@fotobyline:Finnmark jordskifterett'''))
+
+        want = etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>Finnmark jordskifterett</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_bildetitt(self):
+        plaintext = converter.PlaintextConverter(
+            'tullball.txt')
+        got = plaintext.content2xml(io.StringIO(u'''@bildetitt:Finnmark jordskifterett'''))
+
+        want = etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>Finnmark jordskifterett</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_plaintext(self):
+        plaintext = converter.PlaintextConverter(
+            'tullball.txt')
+        got = plaintext.content2xml(io.StringIO(u'''Sámegiella.
+
+Buot leat.'''))
 
         want = etree.fromstring(r'''<document>
     <header/>
     <body>
         <p>
-            Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP.
+            Sámegiella.
         </p>
         <p>
-            Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain.
-        </p>
-        <p>
-           Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat ja bidjat dihtorii.
+           Buot leat.
        </p>
-       <p><em type="italic">(Gáldu: J. Qvigstad - Lappiske eventyr og sagn fra Lyngen I. Oslo. 1929.)</em></p>
-        <p>
-            Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain.
-        </p>
-        <p>
-            Finnmark jordskifterett
-        </p>
-        <p>
-            Finnmark jordskifterett
-        </p>
-        <p>
-            Finnmark jordskifterett
-        </p>
     </body>
 </document>''')
 
