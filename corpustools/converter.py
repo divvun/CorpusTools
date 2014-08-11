@@ -452,6 +452,7 @@ class PlaintextConverter(object):
         self.newstags = re.compile(r'(@*logo:|@*ingres+:|.*@*.*bilde\s*\d*:|(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@bildetitt:)', re.IGNORECASE)
         self.titletags = re.compile(r'@m.titt:@ingress:|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:', re.IGNORECASE)
         self.headertitletags = re.compile(r'@tittel:|@titt:|TITT:|Tittel:|@LEDtitt:')
+        self.content = io.StringIO(self.to_unicode())
 
     def to_unicode(self):
         """
@@ -520,12 +521,11 @@ class PlaintextConverter(object):
     def convert2intermediate(self):
         document = etree.Element('document')
 
-        content = io.StringIO(self.to_unicode())
         header = etree.Element('header')
         body = etree.Element('body')
         ptext = ''
 
-        for line in content:
+        for line in self.content:
             if self.newstags.match(line):
                 line = self.newstags.sub('', line).strip()
                 body.append(self.make_element('p', line))
