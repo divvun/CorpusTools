@@ -466,6 +466,7 @@ class PlaintextConverter(object):
 
         content = content.replace(u'ÊÊ', '\n\n')
         content = content.replace(u'<\!q>', u' ')
+        # Convert CR (carriage return) to LF (line feed)
         content = content.replace('\x0d', '\x0a')
         content = content.replace('<*B>', '')
         content = content.replace('<*P>', '')
