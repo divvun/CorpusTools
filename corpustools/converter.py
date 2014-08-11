@@ -449,6 +449,9 @@ class PlaintextConverter(object):
 
     def __init__(self, filename):
         self.orig = filename
+        self.newstags = re.compile(r'(@*logo:|@*ingres+:|.*@*.*bilde\s*\d*:|(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@bildetitt:)', re.IGNORECASE)
+        self.titletags = re.compile(r'@m.titt:@ingress:|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:', re.IGNORECASE)
+        self.headertitletags = re.compile(r'@tittel:|@titt:|TITT:|Tittel:|@LEDtitt:')
 
     def to_unicode(self):
         """
@@ -488,7 +491,7 @@ class PlaintextConverter(object):
         attributes. Adds a hyph element if necessary.
 
         :param eName: Name of the xml element
-        :type el: string
+        :type eName: string
 
         :param text: The text the xml should contain
         :type text: string
@@ -522,13 +525,9 @@ class PlaintextConverter(object):
         body = etree.Element('body')
         ptext = ''
 
-        newstags = re.compile(r'(@*logo:|@*ingres+:|.*@*.*bilde\s*\d*:|(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@bildetitt:)', re.IGNORECASE)
-        titletags = re.compile(r'@m.titt:@ingress:|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:', re.IGNORECASE)
-        headertitletags = re.compile(r'@tittel:|@titt:|TITT:|Tittel:|@LEDtitt:')
-
         for line in content:
-            if newstags.match(line):
-                line = newstags.sub('', line).strip()
+            if self.newstags.match(line):
+                line = self.newstags.sub('', line).strip()
                 body.append(self.make_element('p', line))
                 ptext = ''
             elif line.startswith('@bold:'):
@@ -546,15 +545,15 @@ class PlaintextConverter(object):
             elif line.startswith(u'  '):
                 body.append(self.make_element('p', line.strip()))
                 ptext = ''
-            elif headertitletags.match(line):
-                line = headertitletags.sub('', line).strip()
+            elif self.headertitletags.match(line):
+                line = self.headertitletags.sub('', line).strip()
                 if header.find("title") is None:
                     header.append(self.make_element('title', line))
                 else:
                     body.append(self.make_element('p', line, {'type': 'title'}))
                 ptext = ''
-            elif titletags.match(line):
-                line = titletags.sub('', line).strip()
+            elif self.titletags.match(line):
+                line = self.titletags.sub('', line).strip()
                 body.append(self.make_element('p', line, {'type': 'title'}))
                 ptext = ''
             elif line.startswith('@byline:') or line.startswith('Byline:'):
