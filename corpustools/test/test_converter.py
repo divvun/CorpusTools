@@ -285,10 +285,52 @@ class TestPlaintextConverter(XMLTester):
         self.assertEqual(got, want)
 
     def test_plaintext(self):
+
         plaintext = converter.PlaintextConverter(
-            'converter_data/plaintext.txt')
-        got = plaintext.convert2intermediate()
-        want = etree.parse('converter_data/plaintext.xml')
+            'tullball.txt')
+        got = plaintext.content2xml(io.StringIO(u'''Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP.
+
+Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain.
+
+Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat ja bidjat dihtorii.
+
+@kursiv:(Gáldu: J. Qvigstad - Lappiske eventyr og sagn fra Lyngen I. Oslo. 1929.)
+
+@LEDtekst:Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain.
+
+@logo:Finnmark jordskifterett
+
+@fotobyline:Finnmark jordskifterett
+
+@bildetitt:Finnmark jordskifterett'''))
+
+        want = etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>
+            Sámegiella lea 2004 čavčča rájes standárda giellaválga Microsofta operatiivavuogádagas Windows XP.
+        </p>
+        <p>
+            Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain.
+        </p>
+        <p>
+           Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat ja bidjat dihtorii.
+       </p>
+       <p><em type="italic">(Gáldu: J. Qvigstad - Lappiske eventyr og sagn fra Lyngen I. Oslo. 1929.)</em></p>
+        <p>
+            Dat mearkkaša ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain.
+        </p>
+        <p>
+            Finnmark jordskifterett
+        </p>
+        <p>
+            Finnmark jordskifterett
+        </p>
+        <p>
+            Finnmark jordskifterett
+        </p>
+    </body>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
@@ -307,30 +349,70 @@ class TestPlaintextConverter(XMLTester):
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_bilde(self):
-        newstext = converter.PlaintextConverter('converter_data/bilde.txt')
-        got = newstext.convert2intermediate()
-        want = etree.parse('converter_data/bilde.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''@bilde:NSR PRESIDEANTAEVTTOHAS? Berit Ranveig Nilssen
+B 13  @bilde:DEANU-LEAGIS: Nils Porsanger.
+B8  @bilde:SOHPPARIS: Bajit-Sohpparis Nils Andersen.
+@bilde :E
+BILDE 3:oahppat'''))
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>NSR PRESIDEANTAEVTTOHAS? Berit Ranveig Nilssen</p>
+        <p>DEANU-LEAGIS: Nils Porsanger.</p>
+        <p>SOHPPARIS: Bajit-Sohpparis Nils Andersen.</p>
+        <p>E</p>
+        <p>oahppat</p>
+    </body>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_ingress(self):
-        newstext = converter.PlaintextConverter('converter_data/ingress.txt')
-        got = newstext.convert2intermediate()
-        want = etree.parse('converter_data/ingress.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''@ingress:Ragnhild Nystad, Aili Keskitalo.
+@ingres:Guovdageainnu lagasradio
+'''))
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>Ragnhild Nystad, Aili Keskitalo.</p>
+        <p>Guovdageainnu lagasradio</p>
+    </body>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_mtitt(self):
-        newstext = converter.PlaintextConverter('converter_data/mtitt.txt')
-        got = newstext.convert2intermediate()
-        want = etree.parse('converter_data/mtitt.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''@m.titt:Juovllat
+m.titt:Guolli
+@mtitt:Juovllat
+@m.titt:@ingress:Romssa OG'''))
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Juovllat</p>
+        <p type="title">Guolli</p>
+        <p type="title">Juovllat</p>
+        <p type="title">Romssa OG</p>
+    </body>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_tekst(self):
-        newstext = converter.PlaintextConverter('converter_data/tekst.txt')
-        got = newstext.convert2intermediate()
-        want = etree.parse('converter_data/tekst.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''@tekst:veadjá šaddat.
+tekst:NSR ii áiggo.'''))
+
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>veadjá šaddat.</p>
+        <p>NSR ii áiggo.</p>
+    </body>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
@@ -342,86 +424,168 @@ class TestPlaintextConverter(XMLTester):
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_tittel(self):
-        newstext = converter.PlaintextConverter('converter_data/tittel.txt')
-        got = newstext.convert2intermediate()
-        want = etree.parse('converter_data/tittel.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''@tittel:Gii boahtá Nystø maŋis?
+@LEDtitt:Gii boahtá Keskitalo maŋis?
+@tittel:Gii boahtá Olli maŋis?
+'''))
+        want = etree.fromstring(u'''<document>
+    <header>
+        <title>Gii boahtá Nystø maŋis?</title>
+    </header>
+    <body>
+        <p type="title">Gii boahtá Keskitalo maŋis?</p>
+        <p type="title">Gii boahtá Olli maŋis?</p>
+    </body>
+</document>
+''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-    def test__byline(self):
-        newstext = converter.PlaintextConverter('converter_data/byline.txt')
-        got = newstext.convert2intermediate()
-        want = etree.parse('converter_data/byline.xml')
+    def test_byline(self):
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''@byline:Elle Merete Utsi'''))
+        want = etree.fromstring(u'''<document>
+    <header>
+        <author>
+            <person firstname="Elle Merete" lastname="Utsi"/>
+        </author>
+    </header>
+    <body/>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_stikktitt(self):
-        newstext = converter.PlaintextConverter('converter_data/stikktitt.txt')
-        got = newstext.convert2intermediate()
-        want = etree.parse('converter_data/stikktitt.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''@stikktitt:Dološ sámegiel máinnas Várjjagis'''))
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_utitt(self):
-        newstext = converter.PlaintextConverter('converter_data/utitt.txt')
-        got = newstext.convert2intermediate()
-        want = etree.parse('converter_data/utitt.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''@utitt:Dološ sámegiel máinnas Várjjagis'''))
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_udot_titt(self):
-        newstext = converter.PlaintextConverter('converter_data/udottitt.txt')
-        got = newstext.convert2intermediate()
-        want = etree.parse('converter_data/udottitt.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''@u.titt:Dološ sámegiel máinnas Várjjagis'''))
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_undertitt(self):
-        newstext = converter.PlaintextConverter('converter_data/undertitt.txt')
-        got = newstext.convert2intermediate()
-        want = etree.parse('converter_data/undertitt.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''@undertitt:Dološ sámegiel máinnas Várjjagis
+undertitt:Dološ sámegiel máinnas Várjjagis
+'''))
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_ttitt(self):
-        newstext = converter.PlaintextConverter('converter_data/ttitt.txt')
-        got = newstext.convert2intermediate()
-        want = etree.parse('converter_data/ttitt.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''@ttitt:Dološ sámegiel máinnas Várjjagis'''))
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_titt(self):
-        newstext = converter.PlaintextConverter('converter_data/titt.txt')
-        got = newstext.convert2intermediate()
-        want = etree.parse('converter_data/titt.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''@Titt:Guolli
+titt:Ruovttusuodjaleaddjit
+'''))
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Guolli</p>
+        <p type="title">Ruovttusuodjaleaddjit</p>
+    </body>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_ttt(self):
-        newstext = converter.PlaintextConverter('converter_data/ttt.txt')
-        got = newstext.convert2intermediate()
-        want = etree.parse('converter_data/ttt.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''@ttt:Dološ sámegiel máinnas Várjjagis
+'''))
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_tit(self):
-        newstext = converter.PlaintextConverter('converter_data/tit.txt')
-        got = newstext.convert2intermediate()
-        want = etree.parse('converter_data/tit.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''@tit:Dološ sámegiel máinnas Várjjagis
+'''))
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_two_lines(self):
-        two_lines = converter.PlaintextConverter('converter_data/twolines.txt')
-        got = two_lines.convert2intermediate()
-        want = etree.parse('converter_data/twolines.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''Guovssahasa nieida.
+Filbma lea.
+'''))
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>Guovssahasa nieida. Filbma lea.</p>
+    </body>
+</document>
+''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_hyph(self):
-        two_lines = converter.PlaintextConverter('converter_data/hyph.txt')
-        got = two_lines.convert2intermediate()
-        want = etree.parse('converter_data/hyph.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''Guovssa<hyph/>hasa
+'''))
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>Guovssa<hyph/>hasa</p>
+    </body>
+</document>
+''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
