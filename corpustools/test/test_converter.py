@@ -313,7 +313,7 @@ class TestPlaintextConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-    def test__bilde(self):
+    def test_bilde(self):
         newstext = converter.PlaintextConverter('converter_data/bilde.txt')
         got = newstext.convert2intermediate()
         want = etree.parse('converter_data/bilde.xml')
