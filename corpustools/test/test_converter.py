@@ -68,13 +68,6 @@ samediggi-article-48.html.xsl'))
                 'orig/sme/admin/sd/samediggi.no/\
 samediggi-article-48.html.xsl'))
 
-    def test_get_test(self):
-        self.assertEqual(self.converter_inside_orig.get_test(), True)
-
-        self.assertEqual(self.converter_outside_orig.get_test(), False)
-
-        self.assertEqual(self.converter_inside_freecorpus.get_test(), False)
-
     def test_get_tmpdir(self):
         self.assertEqual(
             self.converter_inside_orig.get_tmpdir(),

@@ -63,7 +63,6 @@ class Converter(object):
         self.set_corpusdir()
         self.set_converted_name()
         self.dependencies = [self.get_orig(), self.get_xsl()]
-        self.test = test
         self.fix_lang_genre_xsl()
 
     def make_intermediate(self):
@@ -236,9 +235,6 @@ class Converter(object):
 
     def get_xsl(self):
         return self.orig + '.xsl'
-
-    def get_test(self):
-        return self.test
 
     def get_tmpdir(self):
         return os.path.join(self.get_corpusdir(), 'tmp')
