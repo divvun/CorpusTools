@@ -459,9 +459,14 @@ tekst:NSR ii áiggo.'''))
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_nbsp(self):
-        newstext = converter.PlaintextConverter('converter_data/nbsp.txt')
-        got = newstext.convert2intermediate()
-        want = etree.parse('converter_data/nbsp.xml')
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''  Son lea'''))
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>Son lea</p>
+    </body>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 

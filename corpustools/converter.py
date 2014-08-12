@@ -470,7 +470,7 @@ class PlaintextConverter(object):
         content = content.replace('<*B>', '')
         content = content.replace('<*P>', '')
         content = content.replace('<*I>', '')
-        
+
         remove_re = re.compile(
             u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F%s]' % extra)
         content, count = remove_re.subn('', content)
