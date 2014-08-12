@@ -513,7 +513,7 @@ class PlaintextConverter(object):
         return self.content2xml(io.StringIO(self.to_unicode()))
 
     def content2xml(self, content):
-        newstags = re.compile(r'(@*logo:|@*ingres+:|.*@*.*bilde\s*\d*:|(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@bildetitt:)', re.IGNORECASE)
+        newstags = re.compile(r'(@*logo:|(\s*)@*ingres+:|.*@*.*bilde\s*\d*:|(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@bildetitt:)', re.IGNORECASE)
         titletags = re.compile(r'@m.titt:@ingress:|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:', re.IGNORECASE)
         headertitletags = re.compile(r'@tittel:|@titt:|TITT:|Tittel:|@LEDtitt:')
 

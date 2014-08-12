@@ -421,12 +421,13 @@ BILDE 3:oahppat'''))
         newstext = converter.PlaintextConverter('tullball.txt')
         got = newstext.content2xml(io.StringIO(u'''@ingress:Ragnhild Nystad, Aili Keskitalo.
 @ingres:Guovdageainnu lagasradio
-'''))
+ @ingress: Eallu'''))
         want = etree.fromstring(u'''<document>
     <header/>
     <body>
         <p>Ragnhild Nystad, Aili Keskitalo.</p>
         <p>Guovdageainnu lagasradio</p>
+        <p>Eallu</p>
     </body>
 </document>''')
 
