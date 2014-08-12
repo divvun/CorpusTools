@@ -458,6 +458,11 @@ class PlaintextConverter(object):
         except:
             content = codecs.open(self.orig, encoding='latin1').read()
 
+        content = self.strip_chars(content)
+
+        return content
+
+    def strip_chars(self, content, extra=u''):
         content = content.replace(u'ÊÊ', '\n\n')
         content = content.replace(u'<\!q>', u' ')
         # Convert CR (carriage return) to LF (line feed)
@@ -465,11 +470,7 @@ class PlaintextConverter(object):
         content = content.replace('<*B>', '')
         content = content.replace('<*P>', '')
         content = content.replace('<*I>', '')
-        content = self.strip_chars(content)
-
-        return content
-
-    def strip_chars(self, content, extra=u''):
+        
         remove_re = re.compile(
             u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F%s]' % extra)
         content, count = remove_re.subn('', content)
