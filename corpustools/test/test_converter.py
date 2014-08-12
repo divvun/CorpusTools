@@ -284,6 +284,21 @@ class TestPlaintextConverter(XMLTester):
 
         self.assertEqual(got, want)
 
+    def test_strip_chars(self):
+        plaintext = converter.PlaintextConverter(
+            'tullball.txt')
+        got = plaintext.strip_chars(u'''ÊÊ
+<\!q>
+\x0d
+<*B>
+<*P>
+<*I>
+<ASCII-MAC>
+<vsn:3.000000>''')
+        want = u'''\n\n\n \n\n\n\n\n\n\n'''
+
+        self.assertEqual(got, want)
+
     def test_bold(self):
         plaintext = converter.PlaintextConverter(
             'tullball.txt')
@@ -403,7 +418,8 @@ Buot leat.'''))
 B 13  @bilde:DEANU-LEAGIS: Nils Porsanger.
 B8  @bilde:SOHPPARIS: Bajit-Sohpparis Nils Andersen.
 @bilde :E
-BILDE 3:oahppat'''))
+BILDE 3:oahppat
+<pstyle:bilde>Ii'''))
         want = etree.fromstring(u'''<document>
     <header/>
     <body>
@@ -412,6 +428,7 @@ BILDE 3:oahppat'''))
         <p>SOHPPARIS: Bajit-Sohpparis Nils Andersen.</p>
         <p>E</p>
         <p>oahppat</p>
+        <p>Ii</p>
     </body>
 </document>''')
 
@@ -421,13 +438,21 @@ BILDE 3:oahppat'''))
         newstext = converter.PlaintextConverter('tullball.txt')
         got = newstext.content2xml(io.StringIO(u'''@ingress:Ragnhild Nystad, Aili Keskitalo.
 @ingres:Guovdageainnu lagasradio
- @ingress: Eallu'''))
+ @ingress: Eallu
+@ingress. duottar
+'@ingress:Golbma
+@ingress Odne
+<pstyle:ingress>Buot'''))
         want = etree.fromstring(u'''<document>
     <header/>
     <body>
         <p>Ragnhild Nystad, Aili Keskitalo.</p>
         <p>Guovdageainnu lagasradio</p>
         <p>Eallu</p>
+        <p>duottar</p>
+        <p>Golbma</p>
+        <p>Odne</p>
+        <p>Buot</p>
     </body>
 </document>''')
 
@@ -439,7 +464,9 @@ BILDE 3:oahppat'''))
 m.titt:Guolli
 @mtitt:Juovllat
 @m.titt:@ingress:Romssa OG
-M:TITT:Lea go dus meahccebiila?'''))
+M:TITT:Lea go dus meahccebiila?
+@m.titt. Maŋemus gártemat
+<pstyle:m.titt>Divvot'''))
         want = etree.fromstring(u'''<document>
     <header/>
     <body>
@@ -448,6 +475,8 @@ M:TITT:Lea go dus meahccebiila?'''))
         <p type="title">Juovllat</p>
         <p type="title">Romssa OG</p>
         <p type="title">Lea go dus meahccebiila?</p>
+        <p type="title">Maŋemus gártemat</p>
+        <p type="title">Divvot</p>
     </body>
 </document>''')
 
@@ -457,7 +486,8 @@ M:TITT:Lea go dus meahccebiila?'''))
         newstext = converter.PlaintextConverter('tullball.txt')
         got = newstext.content2xml(io.StringIO(u'''@tekst:veadjá šaddat.
 tekst:NSR ii áiggo.
-TEKST:ÐMii lea suohttaseamos geassebargu dus?'''))
+TEKST:ÐMii lea suohttaseamos geassebargu dus?
+<pstyle:tekst>Sámi'''))
 
         want = etree.fromstring(u'''<document>
     <header/>
@@ -465,6 +495,7 @@ TEKST:ÐMii lea suohttaseamos geassebargu dus?'''))
         <p>veadjá šaddat.</p>
         <p>NSR ii áiggo.</p>
         <p>ÐMii lea suohttaseamos geassebargu dus?</p>
+        <p>Sámi</p>
     </body>
 </document>''')
 
@@ -487,7 +518,8 @@ TEKST:ÐMii lea suohttaseamos geassebargu dus?'''))
         got = newstext.content2xml(io.StringIO(u'''@tittel:Gii boahtá Nystø maŋis?
 @LEDtitt:Gii boahtá Keskitalo maŋis?
 @tittel:Gii boahtá Olli maŋis?
-TITT:njeallje suorpma boaris.'''))
+TITT:njeallje suorpma boaris.
+<pstyle:tittel>Ii'''))
         want = etree.fromstring(u'''<document>
     <header>
         <title>Gii boahtá Nystø maŋis?</title>
@@ -496,6 +528,7 @@ TITT:njeallje suorpma boaris.'''))
         <p type="title">Gii boahtá Keskitalo maŋis?</p>
         <p type="title">Gii boahtá Olli maŋis?</p>
         <p type="title">njeallje suorpma boaris.</p>
+        <p type="title">Ii</p>
     </body>
 </document>
 ''')

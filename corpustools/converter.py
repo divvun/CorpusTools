@@ -470,6 +470,8 @@ class PlaintextConverter(object):
         content = content.replace('<*B>', '')
         content = content.replace('<*P>', '')
         content = content.replace('<*I>', '')
+        content = content.replace('<ASCII-MAC>', '')
+        content = content.replace('<vsn:3.000000>', '')
 
         remove_re = re.compile(
             u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F%s]' % extra)
@@ -513,9 +515,9 @@ class PlaintextConverter(object):
         return self.content2xml(io.StringIO(self.to_unicode()))
 
     def content2xml(self, content):
-        newstags = re.compile(r'(@*logo:|(\s*)@*ingres+:|.*@*.*bilde\s*\d*:|(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@bildetitt:)', re.IGNORECASE)
-        titletags = re.compile(r'@m.titt:@ingress:|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:', re.IGNORECASE)
-        headertitletags = re.compile(r'@tittel:|@titt:|TITT:|Tittel:|@LEDtitt:')
+        newstags = re.compile(r'(@*logo:|[\s+\']*@*ingres+[\.:]*|.*@*.*bilde\s*\d*:|(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@bildetitt:|<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>)', re.IGNORECASE)
+        titletags = re.compile(r'@m.titt:@ingress:|@m.titt[\.:]|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:|<pstyle:m.titt>', re.IGNORECASE)
+        headertitletags = re.compile(r'(@tittel:|@titt:|TITT:|Tittel:|@LEDtitt:|<pstyle:tittel>)')
 
         document = etree.Element('document')
 
