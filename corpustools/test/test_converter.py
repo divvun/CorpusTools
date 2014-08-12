@@ -284,7 +284,7 @@ class TestPlaintextConverter(XMLTester):
 
         self.assertEqual(got, want)
 
-    def test_strip_chars(self):
+    def test_strip_chars1(self):
         plaintext = converter.PlaintextConverter(
             'tullball.txt')
         got = plaintext.strip_chars(u'''ÊÊ
@@ -296,6 +296,14 @@ class TestPlaintextConverter(XMLTester):
 <ASCII-MAC>
 <vsn:3.000000>''')
         want = u'''\n\n\n \n\n\n\n\n\n\n'''
+
+        self.assertEqual(got, want)
+
+    def test_strip_chars2(self):
+        plaintext = converter.PlaintextConverter(
+            'tullball.txt')
+        got = plaintext.strip_chars(u'''<0x010C><0x010D><0x0110><0x0111><0x014A><0x014B><0x0160><0x0161><0x0166><0x0167><0x017D><0x017E><0x2003>''')
+        want = u'''ČčĐđŊŋŠšŦŧŽž '''
 
         self.assertEqual(got, want)
 
@@ -535,13 +543,27 @@ TITT:njeallje suorpma boaris.
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-    def test_byline(self):
+    def test_byline1(self):
         newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''@byline:Elle Merete Utsi'''))
+        got = newstext.content2xml(io.StringIO(u'''@byline: Kárášjohka: Elle Merete Utsi'''))
         want = etree.fromstring(u'''<document>
     <header>
         <author>
-            <person firstname="Elle Merete" lastname="Utsi"/>
+            <person firstname="" lastname="Elle Merete Utsi"/>
+        </author>
+    </header>
+    <body/>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_byline2(self):
+        newstext = converter.PlaintextConverter('tullball.txt')
+        got = newstext.content2xml(io.StringIO(u'''<pstyle:byline>NORGA: Åse Pulk'''))
+        want = etree.fromstring(u'''<document>
+    <header>
+        <author>
+            <person firstname="" lastname="Åse Pulk"/>
         </author>
     </header>
     <body/>

@@ -467,11 +467,25 @@ class PlaintextConverter(object):
         content = content.replace(u'<\!q>', u' ')
         # Convert CR (carriage return) to LF (line feed)
         content = content.replace('\x0d', '\x0a')
-        content = content.replace('<*B>', '')
-        content = content.replace('<*P>', '')
-        content = content.replace('<*I>', '')
-        content = content.replace('<ASCII-MAC>', '')
-        content = content.replace('<vsn:3.000000>', '')
+        content = content.replace(u'<*B>', u'')
+        content = content.replace(u'<*P>', u'')
+        content = content.replace(u'<*I>', u'')
+        content = content.replace(u'<ASCII-MAC>', '')
+        # Some plain text files have some chars marked up this way …
+        content = content.replace(u'<0x010C>', u'Č')
+        content = content.replace(u'<0x010D>', u'č')
+        content = content.replace(u'<0x0110>', u'Đ')
+        content = content.replace(u'<0x0111>', u'đ')
+        content = content.replace(u'<0x014A>', u'Ŋ')
+        content = content.replace(u'<0x014B>', u'ŋ')
+        content = content.replace(u'<0x0160>', u'Š')
+        content = content.replace(u'<0x0161>', u'š')
+        content = content.replace(u'<0x0166>', u'Ŧ')
+        content = content.replace(u'<0x0167>', u'ŧ')
+        content = content.replace(u'<0x017D>', u'Ž')
+        content = content.replace(u'<0x017E>', u'ž')
+        content = content.replace(u'<0x2003>', u' ')
+        content = content.replace(u'<vsn:3.000000>', u'')
 
         remove_re = re.compile(
             u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F%s]' % extra)
@@ -518,6 +532,7 @@ class PlaintextConverter(object):
         newstags = re.compile(r'(@*logo:|[\s+\']*@*ingres+[\.:]*|.*@*.*bilde\s*\d*:|(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@bildetitt:|<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>)', re.IGNORECASE)
         titletags = re.compile(r'@m.titt:@ingress:|@m.titt[\.:]|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:|<pstyle:m.titt>', re.IGNORECASE)
         headertitletags = re.compile(r'(@tittel:|@titt:|TITT:|Tittel:|@LEDtitt:|<pstyle:tittel>)')
+        bylinetags = re.compile(u'(<pstyle:|@*)[Bb]yline[:>]*\s*\w+:', re.UNICODE)
 
         document = etree.Element('document')
 
@@ -529,6 +544,17 @@ class PlaintextConverter(object):
             if newstags.match(line):
                 line = newstags.sub('', line).strip()
                 body.append(self.make_element('p', line))
+                ptext = ''
+            elif bylinetags.match(line):
+                line = bylinetags.sub('', line).strip()
+
+                person = etree.Element('person')
+                person.set('lastname', line)
+                person.set('firstname', '')
+
+                author = etree.Element('author')
+                author.append(person)
+                header.append(author)
                 ptext = ''
             elif line.startswith('@bold:'):
                 line = line.replace('@bold:', '').strip()
@@ -555,19 +581,6 @@ class PlaintextConverter(object):
             elif titletags.match(line):
                 line = titletags.sub('', line).strip()
                 body.append(self.make_element('p', line, {'type': 'title'}))
-                ptext = ''
-            elif line.startswith('@byline:') or line.startswith('Byline:'):
-                person = etree.Element('person')
-
-                line = line.replace('@byline:', '').strip()
-                line = line.replace('Byline:', '').strip()
-                names = line.strip().split(' ')
-                person.set('lastname', names[-1])
-                person.set('firstname', ' '.join(names[:-1]))
-
-                author = etree.Element('author')
-                author.append(person)
-                header.append(author)
                 ptext = ''
             elif line == '\n' and ptext != '':
                 if ptext.strip() != '':
