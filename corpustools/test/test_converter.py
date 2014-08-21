@@ -779,7 +779,8 @@ B 13  @bilde:DEANU-LEAGIS: Nils Porsanger.
 B8  @bilde:SOHPPARIS: Bajit-Sohpparis Nils Andersen.
 @bilde :E
 BILDE 3:oahppat
-&lt;pstyle:bilde&gt;Ii</p>
+&lt;pstyle:bilde&gt;Ii
+Billedtekst: 3</p>
     </body>
 </document>'''))
         document_fixer.fix_newstags()
@@ -794,6 +795,7 @@ BILDE 3:oahppat
         <p>E</p>
         <p>oahppat</p>
         <p>Ii</p>
+        <p>3</p>
     </body>
 </document>''')
 
