@@ -172,14 +172,15 @@ class Converter(object):
     def fix_document(self, complete):
         fixer = DocumentFixer(etree.fromstring(etree.tostring(complete)))
 
+        fixer.fix_newstags()
+        fixer.soft_hyphen_to_hyph_tag()
+        fixer.set_word_count()
+        fixer.detect_quotes()
+
         if (complete.getroot().
             attrib['{http://www.w3.org/XML/1998/namespace}lang'] in
                 ['sma', 'sme', 'smj', 'nob', 'fin']):
             fixer.fix_body_encoding()
-
-        fixer.soft_hyphen_to_hyph_tag()
-        fixer.set_word_count()
-        fixer.fix_newstags()
 
         return fixer.get_etree()
 
@@ -1130,8 +1131,6 @@ class DocumentFixer(object):
         self.fix_title_person('double-utf8')
         self.fix_title_person('mac-sami_to_latin1')
 
-        self.detect_quotes()
-
     def fix_title_person(self, encoding):
         eg = decode.EncodingGuesser()
 
@@ -1286,76 +1285,78 @@ class DocumentFixer(object):
         """Convert newstags found in text to xml elements
         """
         newstags = re.compile(r'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@bildetitt:|<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|@*Samleingress:*|tekst/ingress:)', re.IGNORECASE)
-        titletags = re.compile(r'@m.titt:@ingress:|@m.titt[\.:]|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:|<pstyle:m.titt>', re.IGNORECASE)
+        titletags = re.compile(r'@m.titt:@ingress:|@m.titt[\.:]|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:|<pstyle:m.titt>|undertittel:', re.IGNORECASE)
         headertitletags = re.compile(r'(\s*@tittel:|@titt:|TITT:|Tittel:|@LEDtitt:|<pstyle:tittel>|HOVEDTITTEL:|TITTEL:)')
         bylinetags = re.compile(u'(<pstyle:|@*)[Bb]yline[:>]*\s*\w+:', re.UNICODE)
+        boldtags = re.compile(u'@bold\s*:')
 
         header = self.etree.find('.//header')
 
         for paragraph in self.etree.iter('p'):
-            index = paragraph.getparent().index(paragraph)
-            lines = []
+            if len(paragraph) == 0:
+                index = paragraph.getparent().index(paragraph)
+                lines = []
 
-            for line in paragraph.text.split('\n'):
-                if newstags.match(line):
-                    if len(lines) > 0:
+                for line in paragraph.text.split('\n'):
+                    if newstags.match(line):
+                        if len(lines) > 0:
+                            index += 1
+                            paragraph.getparent().insert(
+                                index, self.make_element('p', ' '.join(lines)))
+                        lines = []
+
+                        lines.append(newstags.sub('', line))
+                    elif bylinetags.match(line):
+                        line = bylinetags.sub('', line).strip()
+
+                        person = etree.Element('person')
+                        person.set('lastname', line)
+                        person.set('firstname', '')
+
+                        author = etree.Element('author')
+                        author.append(person)
+                        header.append(author)
+                        lines = []
+                    elif boldtags.match(line):
+                        line = boldtags.sub('', line).strip()
+                        lines = []
                         index += 1
-                        paragraph.getparent().insert(
-                            index, self.make_element('p', ' '.join(lines)))
-                    lines = []
-
-                    lines.append(newstags.sub('', line))
-                elif bylinetags.match(line):
-                    line = bylinetags.sub('', line).strip()
-
-                    person = etree.Element('person')
-                    person.set('lastname', line)
-                    person.set('firstname', '')
-
-                    author = etree.Element('author')
-                    author.append(person)
-                    header.append(author)
-                    lines = []
-                elif line.startswith('@bold:'):
-                    line = line.replace('@bold:', '')
-                    lines = []
-                    index += 1
-                    p = etree.Element('p')
-                    p.append(self.make_element('em', line, {'type': 'bold'}))
-                    paragraph.getparent().insert(index, p)
-                elif line.startswith('@kursiv:'):
-                    line = line.replace('@kursiv:', '')
-                    lines = []
-                    index += 1
-                    p = etree.Element('p')
-                    p.append(self.make_element('em', line, {'type': 'italic'}))
-                    paragraph.getparent().insert(index, p)
-                elif headertitletags.match(line):
-                    line = headertitletags.sub('', line)
-                    lines = []
-                    index += 1
-                    if header.find('./title') is None:
-                        header.append(self.make_element('title', line))
-                    paragraph.getparent().insert(index, self.make_element('p', line, {'type': 'title'}))
-                elif titletags.match(line):
-                    line = titletags.sub('', line)
-                    lines = []
-                    index += 1
-                    paragraph.getparent().insert(index, self.make_element('p', line, {'type': 'title'}))
-                elif line == '' and len(lines) > 0:
-                    if len(lines) > 0:
+                        p = etree.Element('p')
+                        p.append(self.make_element('em', line, {'type': 'bold'}))
+                        paragraph.getparent().insert(index, p)
+                    elif line.startswith('@kursiv:'):
+                        line = line.replace('@kursiv:', '')
+                        lines = []
                         index += 1
-                        paragraph.getparent().insert(
-                            index, self.make_element('p', ' '.join(lines)))
-                    lines = []
-                else:
-                    lines.append(line)
+                        p = etree.Element('p')
+                        p.append(self.make_element('em', line, {'type': 'italic'}))
+                        paragraph.getparent().insert(index, p)
+                    elif headertitletags.match(line):
+                        line = headertitletags.sub('', line)
+                        lines = []
+                        index += 1
+                        if header.find('./title') is None:
+                            header.append(self.make_element('title', line))
+                        paragraph.getparent().insert(index, self.make_element('p', line, {'type': 'title'}))
+                    elif titletags.match(line):
+                        line = titletags.sub('', line)
+                        lines = []
+                        index += 1
+                        paragraph.getparent().insert(index, self.make_element('p', line, {'type': 'title'}))
+                    elif line == '' and len(lines) > 0:
+                        if len(lines) > 0:
+                            index += 1
+                            paragraph.getparent().insert(
+                                index, self.make_element('p', ' '.join(lines)))
+                        lines = []
+                    else:
+                        lines.append(line)
 
-            if len(lines) > 0:
-                index += 1
-                paragraph.getparent().insert(index, self.make_element('p', ' '.join(lines)))
+                if len(lines) > 0:
+                    index += 1
+                    paragraph.getparent().insert(index, self.make_element('p', ' '.join(lines)))
 
-            paragraph.getparent().remove(paragraph)
+                paragraph.getparent().remove(paragraph)
 
 class XslMaker(object):
     """
