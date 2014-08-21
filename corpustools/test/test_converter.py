@@ -675,6 +675,27 @@ TITTEL: 3</p>
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+    def test_byline3(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@byline:KçRç´JOHKA:Elle Merete Utsi</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(u'''<document>
+    <header>
+        <author>
+            <person firstname="" lastname="Elle Merete Utsi"/>
+        </author>
+    </header>
+    <body/>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
     def test_kursiv(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
     <header/>
