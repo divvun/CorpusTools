@@ -287,15 +287,11 @@ class TestPlaintextConverter(XMLTester):
     def test_strip_chars1(self):
         plaintext = converter.PlaintextConverter(
             'tullball.txt')
-        got = plaintext.strip_chars(u'''ÊÊ
-<\!q>
+        got = plaintext.strip_chars(u'''
 \x0d
-<*B>
-<*P>
-<*I>
 <ASCII-MAC>
 <vsn:3.000000>''')
-        want = u'''\n\n\n \n\n\n\n\n\n\n'''
+        want = u'''\n\n\n\n'''
 
         self.assertEqual(got, want)
 
@@ -306,91 +302,6 @@ class TestPlaintextConverter(XMLTester):
         want = u'''ČčĐđŊŋŠšŦŧŽž '''
 
         self.assertEqual(got, want)
-
-    def test_bold(self):
-        plaintext = converter.PlaintextConverter(
-            'tullball.txt')
-        got = plaintext.content2xml(io.StringIO(u'''@bold:Suohkana beara»sodagaid juohkin'''))
-
-        want = etree.fromstring(r'''<document>
-    <header/>
-    <body>
-        <p><em type="bold">Suohkana beara»sodagaid juohkin</em></p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_kursiv(self):
-        plaintext = converter.PlaintextConverter(
-            'tullball.txt')
-        got = plaintext.content2xml(io.StringIO(u'''@kursiv:(Gáldu)
-'''))
-
-        want = etree.fromstring(r'''<document>
-    <header/>
-    <body>
-        <p><em type="italic">(Gáldu)</em></p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_ledtekst(self):
-        plaintext = converter.PlaintextConverter(
-            'tullball.txt')
-        got = plaintext.content2xml(io.StringIO(u'''@LEDtekst:Dat mearkkaša'''))
-
-        want = etree.fromstring(r'''<document>
-    <header/>
-    <body>
-        <p>Dat mearkkaša</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_logo(self):
-        plaintext = converter.PlaintextConverter(
-            'tullball.txt')
-        got = plaintext.content2xml(io.StringIO(u'''@logo:Finnmark jordskifterett'''))
-
-        want = etree.fromstring(r'''<document>
-    <header/>
-    <body>
-        <p>Finnmark jordskifterett</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_fotobyline(self):
-        plaintext = converter.PlaintextConverter(
-            'tullball.txt')
-        got = plaintext.content2xml(io.StringIO(u'''@fotobyline:Finnmark jordskifterett'''))
-
-        want = etree.fromstring(r'''<document>
-    <header/>
-    <body>
-        <p>Finnmark jordskifterett</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_bildetitt(self):
-        plaintext = converter.PlaintextConverter(
-            'tullball.txt')
-        got = plaintext.content2xml(io.StringIO(u'''@bildetitt:Finnmark jordskifterett'''))
-
-        want = etree.fromstring(r'''<document>
-    <header/>
-    <body>
-        <p>Finnmark jordskifterett</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_plaintext(self):
         plaintext = converter.PlaintextConverter(
@@ -413,284 +324,6 @@ Buot leat.'''))
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-    #def test_newstext(self):
-        #newstext = converter.PlaintextConverter('converter_data/newstext.txt')
-        #got = newstext.convert2intermediate()
-        #want = etree.parse('converter_data/newstext.xml')
-
-        #self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_bilde(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''@bilde:NSR PRESIDEANTAEVTTOHAS? Berit Ranveig Nilssen
-B 13  @bilde:DEANU-LEAGIS: Nils Porsanger.
-B8  @bilde:SOHPPARIS: Bajit-Sohpparis Nils Andersen.
-@bilde :E
-BILDE 3:oahppat
-<pstyle:bilde>Ii'''))
-        want = etree.fromstring(u'''<document>
-    <header/>
-    <body>
-        <p>NSR PRESIDEANTAEVTTOHAS? Berit Ranveig Nilssen</p>
-        <p>DEANU-LEAGIS: Nils Porsanger.</p>
-        <p>SOHPPARIS: Bajit-Sohpparis Nils Andersen.</p>
-        <p>E</p>
-        <p>oahppat</p>
-        <p>Ii</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_ingress(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''@ingress:Ragnhild Nystad, Aili Keskitalo.
-@ingres:Guovdageainnu lagasradio
- @ingress: Eallu
-@ingress. duottar
-'@ingress:Golbma
-@ingress Odne
-Samleingress 1
-Samleingress: 2
-@Samleingress: 3
-<pstyle:ingress>Buot
-TEKST/INGRESS: 5
-@ Ingress: 6'''))
-        want = etree.fromstring(u'''<document>
-    <header/>
-    <body>
-        <p>Ragnhild Nystad, Aili Keskitalo.</p>
-        <p>Guovdageainnu lagasradio</p>
-        <p>Eallu</p>
-        <p>duottar</p>
-        <p>Golbma</p>
-        <p>Odne</p>
-        <p>1</p>
-        <p>2</p>
-        <p>3</p>
-        <p>Buot</p>
-        <p>5</p>
-        <p>6</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_mtitt(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''@m.titt:Juovllat
-m.titt:Guolli
-@mtitt:Juovllat
-@m.titt:@ingress:Romssa OG
-M:TITT:Lea go dus meahccebiila?
-@m.titt. Maŋemus gártemat
-<pstyle:m.titt>Divvot'''))
-        want = etree.fromstring(u'''<document>
-    <header/>
-    <body>
-        <p type="title">Juovllat</p>
-        <p type="title">Guolli</p>
-        <p type="title">Juovllat</p>
-        <p type="title">Romssa OG</p>
-        <p type="title">Lea go dus meahccebiila?</p>
-        <p type="title">Maŋemus gártemat</p>
-        <p type="title">Divvot</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_tekst(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''@tekst:veadjá šaddat.
-tekst:NSR ii áiggo.
-TEKST:ÐMii lea suohttaseamos geassebargu dus?
-<pstyle:tekst>Sámi'''))
-
-        want = etree.fromstring(u'''<document>
-    <header/>
-    <body>
-        <p>veadjá šaddat.</p>
-        <p>NSR ii áiggo.</p>
-        <p>ÐMii lea suohttaseamos geassebargu dus?</p>
-        <p>Sámi</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_nbsp(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''  Son lea'''))
-        want = etree.fromstring(u'''<document>
-    <header/>
-    <body>
-        <p>Son lea</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_tittel(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''@tittel:Gii boahtá Nystø maŋis?
-@LEDtitt:Gii boahtá Keskitalo maŋis?
-@tittel:Gii boahtá Olli maŋis?
-TITT:njeallje suorpma boaris.
-<pstyle:tittel>Ii
- @tittel: 1
-HOVEDTITTEL: 2
-TITTEL: 3'''))
-        want = etree.fromstring(u'''<document>
-    <header>
-        <title>Gii boahtá Nystø maŋis?</title>
-    </header>
-    <body>
-        <p type="title">Gii boahtá Keskitalo maŋis?</p>
-        <p type="title">Gii boahtá Olli maŋis?</p>
-        <p type="title">njeallje suorpma boaris.</p>
-        <p type="title">Ii</p>
-        <p type="title">1</p>
-        <p type="title">2</p>
-        <p type="title">3</p>
-    </body>
-</document>
-''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_byline1(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''@byline: Kárášjohka: Elle Merete Utsi'''))
-        want = etree.fromstring(u'''<document>
-    <header>
-        <author>
-            <person firstname="" lastname="Elle Merete Utsi"/>
-        </author>
-    </header>
-    <body/>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_byline2(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''<pstyle:byline>NORGA: Åse Pulk'''))
-        want = etree.fromstring(u'''<document>
-    <header>
-        <author>
-            <person firstname="" lastname="Åse Pulk"/>
-        </author>
-    </header>
-    <body/>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_stikktitt(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''@stikktitt:Dološ sámegiel máinnas Várjjagis'''))
-        want = etree.fromstring(u'''<document>
-    <header/>
-    <body>
-        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_utitt(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''@utitt:Dološ sámegiel máinnas Várjjagis'''))
-        want = etree.fromstring(u'''<document>
-    <header/>
-    <body>
-        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_udot_titt(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''@u.titt:Dološ sámegiel máinnas Várjjagis'''))
-        want = etree.fromstring(u'''<document>
-    <header/>
-    <body>
-        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_undertitt(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''@undertitt:Dološ sámegiel máinnas Várjjagis
-undertitt:Dološ sámegiel máinnas Várjjagis
-'''))
-        want = etree.fromstring(u'''<document>
-    <header/>
-    <body>
-        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
-        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_ttitt(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''@ttitt:Dološ sámegiel máinnas Várjjagis'''))
-        want = etree.fromstring(u'''<document>
-    <header/>
-    <body>
-        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_titt(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''@Titt:Guolli
-titt:Ruovttusuodjaleaddjit
-'''))
-        want = etree.fromstring(u'''<document>
-    <header/>
-    <body>
-        <p type="title">Guolli</p>
-        <p type="title">Ruovttusuodjaleaddjit</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_ttt(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''@ttt:Dološ sámegiel máinnas Várjjagis
-'''))
-        want = etree.fromstring(u'''<document>
-    <header/>
-    <body>
-        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_tit(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''@tit:Dološ sámegiel máinnas Várjjagis
-'''))
-        want = etree.fromstring(u'''<document>
-    <header/>
-    <body>
-        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
-    </body>
-</document>''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
     def test_two_lines(self):
         newstext = converter.PlaintextConverter('tullball.txt')
         got = newstext.content2xml(io.StringIO(u'''Guovssahasa nieida.
@@ -699,7 +332,8 @@ Filbma lea.
         want = etree.fromstring(u'''<document>
     <header/>
     <body>
-        <p>Guovssahasa nieida. Filbma lea.</p>
+        <p>Guovssahasa nieida.
+Filbma lea.</p>
     </body>
 </document>
 ''')
@@ -899,16 +533,572 @@ class TestRTFConverter(XMLTester):
 
 
 class TestDocumentFixer(XMLTester):
+    def test_fix_newstags_bold_1(self):
+        '''Test conversion of the @bold: newstag
+        '''
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@bold:buoidi
+seaggi</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p><em type="bold">buoidi</em></p>
+        <p>seaggi</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_fix_newstags_bold_2(self):
+        '''Test conversion of the @bold: newstag
+        '''
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@bold:buoidi
+@tekst:seaggi</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p><em type="bold">buoidi</em></p>
+        <p>seaggi</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_tittel(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@tittel:Gii boahtá Nystø maŋis?
+@LEDtitt:Gii boahtá Keskitalo maŋis?
+@tittel:Gii boahtá Olli maŋis?
+TITT:njeallje suorpma boaris.
+&lt;pstyle:tittel&gt;Ii
+ @tittel: 1
+HOVEDTITTEL: 2
+TITTEL: 3</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(u'''<document>
+    <header>
+        <title>Gii boahtá Nystø maŋis?</title>
+    </header>
+    <body>
+        <p type="title">Gii boahtá Nystø maŋis?</p>
+        <p type="title">Gii boahtá Keskitalo maŋis?</p>
+        <p type="title">Gii boahtá Olli maŋis?</p>
+        <p type="title">njeallje suorpma boaris.</p>
+        <p type="title">Ii</p>
+        <p type="title">1</p>
+        <p type="title">2</p>
+        <p type="title">3</p>
+    </body>
+</document>
+''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_byline1(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@byline: Kárášjohka: Elle Merete Utsi</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(u'''<document>
+    <header>
+        <author>
+            <person firstname="" lastname="Elle Merete Utsi"/>
+        </author>
+    </header>
+    <body/>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_byline2(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>&lt;pstyle:byline&gt;NORGA: Åse Pulk</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(u'''<document>
+    <header>
+        <author>
+            <person firstname="" lastname="Åse Pulk"/>
+        </author>
+    </header>
+    <body/>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_kursiv(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@kursiv:(Gáldu)</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p><em type="italic">(Gáldu)</em></p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_ledtekst(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@LEDtekst:Dat mearkkaša</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>Dat mearkkaša</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_logo(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@logo:Finnmark jordskifterett</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>Finnmark jordskifterett</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_fotobyline(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@fotobyline:Finnmark jordskifterett</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>Finnmark jordskifterett</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_bildetitt(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@bildetitt:Finnmark jordskifterett</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>Finnmark jordskifterett</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_bilde(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@bilde:NSR PRESIDEANTAEVTTOHAS? Berit Ranveig Nilssen
+B 13  @bilde:DEANU-LEAGIS: Nils Porsanger.
+B8  @bilde:SOHPPARIS: Bajit-Sohpparis Nils Andersen.
+@bilde :E
+BILDE 3:oahppat
+&lt;pstyle:bilde&gt;Ii</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>NSR PRESIDEANTAEVTTOHAS? Berit Ranveig Nilssen</p>
+        <p>DEANU-LEAGIS: Nils Porsanger.</p>
+        <p>SOHPPARIS: Bajit-Sohpparis Nils Andersen.</p>
+        <p>E</p>
+        <p>oahppat</p>
+        <p>Ii</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_ingress(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@ingress:Ragnhild Nystad, Aili Keskitalo.
+@ingres:Guovdageainnu lagasradio
+ @ingress: Eallu
+@ingress. duottar
+'@ingress:Golbma
+@ingress Odne
+Samleingress 1
+Samleingress: 2
+@Samleingress: 3
+&lt;pstyle:ingress&gt;Buot
+TEKST/INGRESS: 5
+@ Ingress: 6</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>Ragnhild Nystad, Aili Keskitalo.</p>
+        <p>Guovdageainnu lagasradio</p>
+        <p>Eallu</p>
+        <p>duottar</p>
+        <p>Golbma</p>
+        <p>Odne</p>
+        <p>1</p>
+        <p>2</p>
+        <p>3</p>
+        <p>Buot</p>
+        <p>5</p>
+        <p>6</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_mtitt(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@m.titt:Juovllat
+m.titt:Guolli
+@mtitt:Juovllat
+@m.titt:@ingress:Romssa OG
+M:TITT:Lea go dus meahccebiila?
+@m.titt. Maŋemus gártemat
+&lt;pstyle:m.titt&gt;Divvot</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Juovllat</p>
+        <p type="title">Guolli</p>
+        <p type="title">Juovllat</p>
+        <p type="title">Romssa OG</p>
+        <p type="title">Lea go dus meahccebiila?</p>
+        <p type="title">Maŋemus gártemat</p>
+        <p type="title">Divvot</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_tekst_1(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>@tekst:veadjá šaddat.
+tekst:NSR ii áiggo.
+TEKST:ÐMii lea suohttaseamos geassebargu dus?
+&lt;pstyle:tekst&gt;Sámi</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>veadjá šaddat.</p>
+        <p>NSR ii áiggo.</p>
+        <p>ÐMii lea suohttaseamos geassebargu dus?</p>
+        <p>Sámi</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_tekst_2(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>@tekst:veadjá šaddat.
+NSR ii áiggo.</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>veadjá šaddat. NSR ii áiggo.</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_tekst_3(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>@tekst:veadjá šaddat.
+@tekst:NSR ii áiggo.</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>veadjá šaddat.</p>
+        <p>NSR ii áiggo.</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_stikktitt(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@stikktitt:Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_utitt(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@utitt:Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_udot_titt(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@u.titt:Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_undertitt(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@undertitt:Dološ sámegiel máinnas Várjjagis
+undertitt:Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_ttitt(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@ttitt:Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_titt(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@Titt:Guolli
+titt:Ruovttusuodjaleaddjit</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Guolli</p>
+        <p type="title">Ruovttusuodjaleaddjit</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_ttt(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@ttt:Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_newstags_tit(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@tit:Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
     def test_fix__body_encoding(self):
         newstext = converter.PlaintextConverter(
-            'converter_data/assu97-mac-sami.txt')
+            'tullball.txt')
+        text = newstext.content2xml(io.StringIO(u'''ÐMun lean njeallje jagi boaris.
 
-        document_fixer = converter.DocumentFixer(
-            newstext.convert2intermediate())
+Nu beaivvdat.
+
+TITT:njeallje suorpma boaris.
+
+TEKST:Olggobealde ç»»u
+
+M:TITT:Lea go dus meahccebiila ?
+
+TEKST:ÐMii lea suohttaseamos geassebargu dus ?
+
+@bold:Suohkana beara»sodagaid juohkin
+
+LOGO: Smi kulturfestivala 1998
+'''))
+
+        document_fixer = converter.DocumentFixer(text)
         document_fixer.fix_body_encoding()
         got = document_fixer.get_etree()
 
-        want = etree.parse('converter_data/assu97-fixedutf8.xml')
+        want = etree.fromstring(u'''<document>
+    <header></header>
+        <body>
+            <p>–Mun lean njeallje jagi boaris.</p>
+            <p>Nu beaivvádat.</p>
+            <p>TITT:njeallje suorpma boaris.</p>
+            <p>TEKST:Olggobealde Áššu</p>
+            <p>M:TITT:Lea go dus meahccebiila ?</p>
+            <p>TEKST:–Mii lea suohttaseamos geassebargu dus ?</p>
+            <p>@bold:Suohkana bearašásodagaid juohkin</p>
+            <p>LOGO: Sámi kulturfestivala 1998</p>
+        </body>
+</document>''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 

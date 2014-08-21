@@ -179,6 +179,7 @@ class Converter(object):
 
         fixer.soft_hyphen_to_hyph_tag()
         fixer.set_word_count()
+        fixer.fix_newstags()
 
         return fixer.get_etree()
 
@@ -463,14 +464,15 @@ class PlaintextConverter(object):
         return content
 
     def strip_chars(self, content, extra=u''):
-        content = content.replace(u'ÊÊ', '\n\n')
-        content = content.replace(u'<\!q>', u' ')
+        #content = content.replace(u'ÊÊ', '\n\n')
+        #content = content.replace(u'<\!q>', u' ')
         # Convert CR (carriage return) to LF (line feed)
+        #content = content.replace(u'<*B>', u'')
+        #content = content.replace(u'<*P>', u'')
+        #content = content.replace(u'<*I>', u'')
         content = content.replace('\x0d', '\x0a')
-        content = content.replace(u'<*B>', u'')
-        content = content.replace(u'<*P>', u'')
-        content = content.replace(u'<*I>', u'')
         content = content.replace(u'<ASCII-MAC>', '')
+        content = content.replace(u'<vsn:3.000000>', u'')
         # Some plain text files have some chars marked up this way …
         content = content.replace(u'<0x010C>', u'Č')
         content = content.replace(u'<0x010D>', u'č')
@@ -485,7 +487,6 @@ class PlaintextConverter(object):
         content = content.replace(u'<0x017D>', u'Ž')
         content = content.replace(u'<0x017E>', u'ž')
         content = content.replace(u'<0x2003>', u' ')
-        content = content.replace(u'<vsn:3.000000>', u'')
 
         remove_re = re.compile(
             u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F%s]' % extra)
@@ -493,7 +494,7 @@ class PlaintextConverter(object):
 
         return content
 
-    def make_element(self, eName, text, attributes={}):
+    def make_element(self, eName, text):
         """
         @brief Makes an xml element containing the given name, text and
         attributes. Adds a hyph element if necessary.
@@ -510,8 +511,6 @@ class PlaintextConverter(object):
         :returns: lxml.etree.Element
         """
         el = etree.Element(eName)
-        for key in attributes:
-            el.set(key, attributes[key])
 
         hyph_parts = text.split('<hyph/>')
         if len(hyph_parts) > 1:
@@ -529,75 +528,22 @@ class PlaintextConverter(object):
         return self.content2xml(io.StringIO(self.to_unicode()))
 
     def content2xml(self, content):
-        newstags = re.compile(r'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@bildetitt:|<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|@*Samleingress:*|tekst/ingress:)', re.IGNORECASE)
-        titletags = re.compile(r'@m.titt:@ingress:|@m.titt[\.:]|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:|<pstyle:m.titt>', re.IGNORECASE)
-        headertitletags = re.compile(r'(\s*@tittel:|@titt:|TITT:|Tittel:|@LEDtitt:|<pstyle:tittel>|HOVEDTITTEL:|TITTEL:)')
-        bylinetags = re.compile(u'(<pstyle:|@*)[Bb]yline[:>]*\s*\w+:', re.UNICODE)
-
         document = etree.Element('document')
-
         header = etree.Element('header')
         body = etree.Element('body')
+
         ptext = ''
 
         for line in content:
-            if newstags.match(line):
-                line = newstags.sub('', line).strip()
-                body.append(self.make_element('p', line))
-                ptext = ''
-            elif bylinetags.match(line):
-                line = bylinetags.sub('', line).strip()
-
-                person = etree.Element('person')
-                person.set('lastname', line)
-                person.set('firstname', '')
-
-                author = etree.Element('author')
-                author.append(person)
-                header.append(author)
-                ptext = ''
-            elif line.startswith('@bold:'):
-                line = line.replace('@bold:', '').strip()
-                p = etree.Element('p')
-                p.append(self.make_element('em', line, {'type': 'bold'}))
-                body.append(p)
-                ptext = ''
-            elif line.startswith('@kursiv:'):
-                line = line.replace('@kursiv:', '').strip()
-                p = etree.Element('p')
-                p.append(self.make_element('em', line, {'type': 'italic'}))
-                body.append(p)
-                ptext = ''
-            elif line.startswith(u'  '):
-                body.append(self.make_element('p', line.strip()))
-                ptext = ''
-            elif headertitletags.match(line):
-                line = headertitletags.sub('', line).strip()
-                if header.find("title") is None:
-                    header.append(self.make_element('title', line))
-                else:
-                    body.append(self.make_element('p', line, {'type': 'title'}))
-                ptext = ''
-            elif titletags.match(line):
-                line = titletags.sub('', line).strip()
-                body.append(self.make_element('p', line, {'type': 'title'}))
-                ptext = ''
-            elif line == '\n' and ptext != '':
+            if line.strip() == '':
                 if ptext.strip() != '':
-                    try:
-                        body.append(self.make_element('p', ptext.strip()))
-                        ptext = ''
-                    except ValueError:
-                        raise ConversionException(
-                            "Invalid utf8 «" +
-                            ptext.strip().encode('utf-8') + "»")
-
+                    body.append(self.make_element('p', ptext))
                 ptext = ''
             else:
-                ptext = ptext + line.replace('\n', ' ')
+                ptext = ptext + line
 
         if ptext != '':
-            body.append(self.make_element('p', ptext.strip()))
+            body.append(self.make_element('p', ptext))
 
         document.append(header)
         document.append(body)
@@ -730,7 +676,7 @@ class PDFConverter(object):
         ptext = ''
 
         for line in content:
-            if line == '\n':
+            if line.strip() == '':
                 p = etree.Element('p')
                 p.text = ptext
                 body.append(p)
@@ -1321,6 +1267,95 @@ class DocumentFixer(object):
 
         wordcount.text = str(words)
 
+    def make_element(self, eName, text, attributes={}):
+        """
+        @brief Makes an xml element containing the given name, text and
+        attributes. Adds a hyph element if necessary.
+
+        :returns: lxml.etree.Element
+        """
+        el = etree.Element(eName)
+        for key in attributes:
+            el.set(key, attributes[key])
+
+        el.text = text
+
+        return el
+
+    def fix_newstags(self):
+        """Convert newstags found in text to xml elements
+        """
+        newstags = re.compile(r'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@bildetitt:|<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|@*Samleingress:*|tekst/ingress:)', re.IGNORECASE)
+        titletags = re.compile(r'@m.titt:@ingress:|@m.titt[\.:]|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:|<pstyle:m.titt>', re.IGNORECASE)
+        headertitletags = re.compile(r'(\s*@tittel:|@titt:|TITT:|Tittel:|@LEDtitt:|<pstyle:tittel>|HOVEDTITTEL:|TITTEL:)')
+        bylinetags = re.compile(u'(<pstyle:|@*)[Bb]yline[:>]*\s*\w+:', re.UNICODE)
+
+        header = self.etree.find('.//header')
+
+        for paragraph in self.etree.iter('p'):
+            index = paragraph.getparent().index(paragraph)
+            lines = []
+
+            for line in paragraph.text.split('\n'):
+                if newstags.match(line):
+                    if len(lines) > 0:
+                        index += 1
+                        paragraph.getparent().insert(
+                            index, self.make_element('p', ' '.join(lines)))
+                    lines = []
+
+                    lines.append(newstags.sub('', line))
+                elif bylinetags.match(line):
+                    line = bylinetags.sub('', line).strip()
+
+                    person = etree.Element('person')
+                    person.set('lastname', line)
+                    person.set('firstname', '')
+
+                    author = etree.Element('author')
+                    author.append(person)
+                    header.append(author)
+                    lines = []
+                elif line.startswith('@bold:'):
+                    line = line.replace('@bold:', '')
+                    lines = []
+                    index += 1
+                    p = etree.Element('p')
+                    p.append(self.make_element('em', line, {'type': 'bold'}))
+                    paragraph.getparent().insert(index, p)
+                elif line.startswith('@kursiv:'):
+                    line = line.replace('@kursiv:', '')
+                    lines = []
+                    index += 1
+                    p = etree.Element('p')
+                    p.append(self.make_element('em', line, {'type': 'italic'}))
+                    paragraph.getparent().insert(index, p)
+                elif headertitletags.match(line):
+                    line = headertitletags.sub('', line)
+                    lines = []
+                    index += 1
+                    if header.find('./title') is None:
+                        header.append(self.make_element('title', line))
+                    paragraph.getparent().insert(index, self.make_element('p', line, {'type': 'title'}))
+                elif titletags.match(line):
+                    line = titletags.sub('', line)
+                    lines = []
+                    index += 1
+                    paragraph.getparent().insert(index, self.make_element('p', line, {'type': 'title'}))
+                elif line == '' and len(lines) > 0:
+                    if len(lines) > 0:
+                        index += 1
+                        paragraph.getparent().insert(
+                            index, self.make_element('p', ' '.join(lines)))
+                    lines = []
+                else:
+                    lines.append(line)
+
+            if len(lines) > 0:
+                index += 1
+                paragraph.getparent().insert(index, self.make_element('p', ' '.join(lines)))
+
+            paragraph.getparent().remove(paragraph)
 
 class XslMaker(object):
     """
