@@ -450,7 +450,12 @@ BILDE 3:oahppat
 @ingress. duottar
 '@ingress:Golbma
 @ingress Odne
-<pstyle:ingress>Buot'''))
+Samleingress 1
+Samleingress: 2
+@Samleingress: 3
+<pstyle:ingress>Buot
+TEKST/INGRESS: 5
+@ Ingress: 6'''))
         want = etree.fromstring(u'''<document>
     <header/>
     <body>
@@ -460,7 +465,12 @@ BILDE 3:oahppat
         <p>duottar</p>
         <p>Golbma</p>
         <p>Odne</p>
+        <p>1</p>
+        <p>2</p>
+        <p>3</p>
         <p>Buot</p>
+        <p>5</p>
+        <p>6</p>
     </body>
 </document>''')
 
