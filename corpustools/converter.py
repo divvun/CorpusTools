@@ -531,7 +531,7 @@ class PlaintextConverter(object):
     def content2xml(self, content):
         newstags = re.compile(r'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@bildetitt:|<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|@*Samleingress:*|tekst/ingress:)', re.IGNORECASE)
         titletags = re.compile(r'@m.titt:@ingress:|@m.titt[\.:]|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:|<pstyle:m.titt>', re.IGNORECASE)
-        headertitletags = re.compile(r'(@tittel:|@titt:|TITT:|Tittel:|@LEDtitt:|<pstyle:tittel>)')
+        headertitletags = re.compile(r'(\s*@tittel:|@titt:|TITT:|Tittel:|@LEDtitt:|<pstyle:tittel>|HOVEDTITTEL:|TITTEL:)')
         bylinetags = re.compile(u'(<pstyle:|@*)[Bb]yline[:>]*\s*\w+:', re.UNICODE)
 
         document = etree.Element('document')

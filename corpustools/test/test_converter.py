@@ -537,7 +537,10 @@ TEKST:ÐMii lea suohttaseamos geassebargu dus?
 @LEDtitt:Gii boahtá Keskitalo maŋis?
 @tittel:Gii boahtá Olli maŋis?
 TITT:njeallje suorpma boaris.
-<pstyle:tittel>Ii'''))
+<pstyle:tittel>Ii
+ @tittel: 1
+HOVEDTITTEL: 2
+TITTEL: 3'''))
         want = etree.fromstring(u'''<document>
     <header>
         <title>Gii boahtá Nystø maŋis?</title>
@@ -547,6 +550,9 @@ TITT:njeallje suorpma boaris.
         <p type="title">Gii boahtá Olli maŋis?</p>
         <p type="title">njeallje suorpma boaris.</p>
         <p type="title">Ii</p>
+        <p type="title">1</p>
+        <p type="title">2</p>
+        <p type="title">3</p>
     </body>
 </document>
 ''')
