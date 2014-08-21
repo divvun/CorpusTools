@@ -993,6 +993,24 @@ NSR ii áiggo.</p>
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+    def test_tekst_6(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>Ê@tekst:ii</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p>ii</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
     def test_stikktitt(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
     <header/>
