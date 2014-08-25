@@ -1285,8 +1285,8 @@ class DocumentFixer(object):
         """Convert newstags found in text to xml elements
         """
         newstags = re.compile(r'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@*bildetitt:|<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|@*Samleingress:*|tekst/ingress:|billedtekst:)', re.IGNORECASE)
-        titletags = re.compile(r'@m.titt:@ingress:|\s*@m.titt[\.:]|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:|<pstyle:m.titt>|undertittel:', re.IGNORECASE)
-        headertitletags = re.compile(r'(\s*@*(led)*tittel:|\s*@*titt:|@LEDtitt:|<pstyle:tittel>|HOVEDTITTEL:)', re.IGNORECASE)
+        titletags = re.compile(r'@m.titt:@ingress:|\s*@m.titt[\.:]|Mellomtittel:|@*(stikk\.*|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:|<pstyle:m.titt>|undertittel:', re.IGNORECASE)
+        headertitletags = re.compile(r'(\s*@*(led)*tittel:|\s*@*()titt:|@LEDtitt:|<pstyle:tittel>|HOVEDTITT(EL)*:)', re.IGNORECASE)
         bylinetags = re.compile(u'(<pstyle:|@*)[Bb]yline[:>]*\s*(\S+:)*', re.UNICODE)
         boldtags = re.compile(u'@bold\s*:')
 
@@ -1307,6 +1307,10 @@ class DocumentFixer(object):
 
                         lines.append(newstags.sub('', line))
                     elif bylinetags.match(line):
+                        if len(lines) > 0:
+                            index += 1
+                            paragraph.getparent().insert(
+                                index, self.make_element('p', ' '.join(lines)))
                         line = bylinetags.sub('', line).strip()
 
                         person = etree.Element('person')
@@ -1318,6 +1322,10 @@ class DocumentFixer(object):
                         header.append(author)
                         lines = []
                     elif boldtags.match(line):
+                        if len(lines) > 0:
+                            index += 1
+                            paragraph.getparent().insert(
+                                index, self.make_element('p', ' '.join(lines)))
                         line = boldtags.sub('', line).strip()
                         lines = []
                         index += 1
@@ -1325,6 +1333,10 @@ class DocumentFixer(object):
                         p.append(self.make_element('em', line, {'type': 'bold'}))
                         paragraph.getparent().insert(index, p)
                     elif line.startswith('@kursiv:'):
+                        if len(lines) > 0:
+                            index += 1
+                            paragraph.getparent().insert(
+                                index, self.make_element('p', ' '.join(lines)))
                         line = line.replace('@kursiv:', '')
                         lines = []
                         index += 1
@@ -1332,6 +1344,10 @@ class DocumentFixer(object):
                         p.append(self.make_element('em', line, {'type': 'italic'}))
                         paragraph.getparent().insert(index, p)
                     elif headertitletags.match(line):
+                        if len(lines) > 0:
+                            index += 1
+                            paragraph.getparent().insert(
+                                index, self.make_element('p', ' '.join(lines)))
                         line = headertitletags.sub('', line)
                         lines = []
                         index += 1
@@ -1339,6 +1355,10 @@ class DocumentFixer(object):
                             header.append(self.make_element('title', line))
                         paragraph.getparent().insert(index, self.make_element('p', line, {'type': 'title'}))
                     elif titletags.match(line):
+                        if len(lines) > 0:
+                            index += 1
+                            paragraph.getparent().insert(
+                                index, self.make_element('p', ' '.join(lines)))
                         line = titletags.sub('', line)
                         lines = []
                         index += 1
