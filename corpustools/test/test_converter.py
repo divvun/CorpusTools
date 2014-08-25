@@ -798,6 +798,7 @@ TITTEL: 3</p>
     <header/>
     <body>
         <p>@bildetitt:Finnmark jordskifterett</p>
+        <p>Bildetitt:Finnmark jordskifterett</p>
     </body>
 </document>'''))
         document_fixer.fix_newstags()
@@ -806,6 +807,7 @@ TITTEL: 3</p>
         want = etree.fromstring(r'''<document>
     <header/>
     <body>
+        <p>Finnmark jordskifterett</p>
         <p>Finnmark jordskifterett</p>
     </body>
 </document>''')
