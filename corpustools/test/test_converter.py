@@ -1144,21 +1144,225 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-    def test_titt(self):
+    def test_headertitletags_1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
     <header/>
     <body>
-        <p>@Titt:Guolli
-titt:Ruovttusuodjaleaddjit</p>
+        <p>@tittel:Eanebuidda</p>
     </body>
 </document>'''))
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(u'''<document>
+    <header>
+        <title>Eanebuidda</title>
+    </header>
+    <body>
+        <p type="title">Eanebuidda</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_headertitletags_2(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
     <header/>
+    <body>
+        <p> @tittel:Eanebuidda</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header>
+        <title>Eanebuidda</title>
+    </header>
+    <body>
+        <p type="title">Eanebuidda</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_headertitletags_3(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@titt:Eanebuidda</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header>
+        <title>Eanebuidda</title>
+    </header>
+    <body>
+        <p type="title">Eanebuidda</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_headertitletags_4(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p> @titt:Eanebuidda</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header>
+        <title>Eanebuidda</title>
+    </header>
+    <body>
+        <p type="title">Eanebuidda</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_headertitletags_5(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>TITT:Eanebuidda</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header>
+        <title>Eanebuidda</title>
+    </header>
+    <body>
+        <p type="title">Eanebuidda</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_headertitletags_6(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>Tittel:Eanebuidda</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header>
+        <title>Eanebuidda</title>
+    </header>
+    <body>
+        <p type="title">Eanebuidda</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_headertitletags_7(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@LEDtitt:Eanebuidda</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header>
+        <title>Eanebuidda</title>
+    </header>
+    <body>
+        <p type="title">Eanebuidda</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_headertitletags_8(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>&lt;pstyle:tittel&gt;Eanebuidda</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header>
+        <title>Eanebuidda</title>
+    </header>
+    <body>
+        <p type="title">Eanebuidda</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_headertitletags_9(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>HOVEDTITTEL:Eanebuidda</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header>
+        <title>Eanebuidda</title>
+    </header>
+    <body>
+        <p type="title">Eanebuidda</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_headertitletags_10(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>TITTEL:Eanebuidda</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header>
+        <title>Eanebuidda</title>
+    </header>
+    <body>
+        <p type="title">Eanebuidda</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_headertitletags_11(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@Titt:Guolli
+titt:Ruovttusuodjaleaddjit
+ @titt:Eanebuidda</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header>
+        <title>Guolli</title>
+    </header>
     <body>
         <p type="title">Guolli</p>
         <p type="title">Ruovttusuodjaleaddjit</p>
+        <p type="title">Eanebuidda</p>
     </body>
 </document>''')
 
