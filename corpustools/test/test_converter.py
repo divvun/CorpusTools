@@ -1074,6 +1074,26 @@ NSR ii áiggo.</p>
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+    def test_utitt(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@utitt:Dološ sámegiel máinnas Várjjagis</p>
+        <p> @utitt:Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
     def test_udot_titt(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
     <header/>
