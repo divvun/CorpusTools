@@ -843,7 +843,7 @@ Billedtekst: 3</p>
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-    def test_ingress(self):
+    def test_ingress_1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
     <header/>
     <body>
@@ -894,7 +894,8 @@ m.titt:Guolli
 @m.titt:@ingress:Romssa OG
 M:TITT:Lea go dus meahccebiila?
 @m.titt. Maŋemus gártemat
-&lt;pstyle:m.titt&gt;Divvot</p>
+&lt;pstyle:m.titt&gt;Divvot
+ @m.titt:Eai</p>
     </body>
 </document>'''))
         document_fixer.fix_newstags()
@@ -910,6 +911,7 @@ M:TITT:Lea go dus meahccebiila?
         <p type="title">Lea go dus meahccebiila?</p>
         <p type="title">Maŋemus gártemat</p>
         <p type="title">Divvot</p>
+        <p type="title">Eai</p>
     </body>
 </document>''')
 

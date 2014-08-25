@@ -1285,7 +1285,7 @@ class DocumentFixer(object):
         """Convert newstags found in text to xml elements
         """
         newstags = re.compile(r'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|LED)*tekst:|@*stikk:|@foto:|@fotobyline:|@bildetitt:|<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|@*Samleingress:*|tekst/ingress:|billedtekst:)', re.IGNORECASE)
-        titletags = re.compile(r'@m.titt:@ingress:|@m.titt[\.:]|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:|<pstyle:m.titt>|undertittel:', re.IGNORECASE)
+        titletags = re.compile(r'@m.titt:@ingress:|\s*@m.titt[\.:]|Mellomtittel:|@*(stikk|under)titt:|@ttt:|@*[utm]*[:\.]*tit+:|<pstyle:m.titt>|undertittel:', re.IGNORECASE)
         headertitletags = re.compile(r'(\s*@tittel:|@titt:|TITT:|Tittel:|@LEDtitt:|<pstyle:tittel>|HOVEDTITTEL:|TITTEL:)')
         bylinetags = re.compile(u'(<pstyle:|@*)[Bb]yline[:>]*\s*(\S+:)*', re.UNICODE)
         boldtags = re.compile(u'@bold\s*:')
@@ -1293,7 +1293,7 @@ class DocumentFixer(object):
         header = self.etree.find('.//header')
 
         for paragraph in self.etree.iter('p'):
-            if len(paragraph) == 0:
+            if len(paragraph) == 0 and paragraph.text is not None:
                 index = paragraph.getparent().index(paragraph)
                 lines = []
 
