@@ -893,7 +893,6 @@ TEKST/INGRESS: 5
         <p>@m.titt:Juovllat
 m.titt:Guolli
 @mtitt:Juovllat
-@m.titt:@ingress:Romssa OG
 M:TITT:Lea go dus meahccebiila?
 @m.titt. Maŋemus gártemat
 &lt;pstyle:m.titt&gt;Divvot
@@ -909,7 +908,6 @@ M:TITT:Lea go dus meahccebiila?
         <p type="title">Juovllat</p>
         <p type="title">Guolli</p>
         <p type="title">Juovllat</p>
-        <p type="title">Romssa OG</p>
         <p type="title">Lea go dus meahccebiila?</p>
         <p type="title">Maŋemus gártemat</p>
         <p type="title">Divvot</p>
