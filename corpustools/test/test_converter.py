@@ -755,6 +755,25 @@ TITTEL: 3</p>
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+    def test_bildetekst(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>Bildetekst:Dat mearkkaša</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>Dat mearkkaša</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
     def test_logo(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
     <header/>
@@ -1415,6 +1434,26 @@ titt:Ruovttusuodjaleaddjit
     <header/>
     <body>
         <p>@hovedtitt:Eanebuidda</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header>
+        <title>Eanebuidda</title>
+    </header>
+    <body>
+        <p type="title">Eanebuidda</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_headertitletags_14(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@titt 2:Eanebuidda</p>
     </body>
 </document>'''))
         document_fixer.fix_newstags()
