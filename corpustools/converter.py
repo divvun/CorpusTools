@@ -1635,16 +1635,16 @@ class DocumentTester(object):
 
 def parse_options():
     parser = argparse.ArgumentParser(
-        description='Convert original files to giellatekno xml, using \
-        dependency checking.')
-    parser.add_argument(u'--debug',
+        description='Convert original files to giellatekno xml.')
+    parser.add_argument(u'--serial',
                         action=u"store_true",
                         help=u"use this for debugging the conversion \
                         process. When this argument is used files will \
                         be converted one by one.")
     parser.add_argument('sources',
                         nargs='+',
-                        help="directory/ies where the original files exist")
+                        help="The original file(s) or \
+                        directory/ies where the original files exist")
 
     args = parser.parse_args()
     return args
@@ -1710,7 +1710,7 @@ def main():
                     ', then run this command again'
                 sys.exit(1)
         elif os.path.isdir(source):
-            if args.debug:
+            if args.serial:
                 convert_serially(collect_files(source))
             else:
                 convert_in_parallel(collect_files(source))
