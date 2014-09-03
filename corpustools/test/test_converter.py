@@ -597,42 +597,6 @@ seaggi</p>
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-    def test_tittel(self):
-        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
-    <body>
-        <p>@tittel:Gii boahtá Nystø maŋis?
-@LEDtitt:Gii boahtá Keskitalo maŋis?
-@tittel:Gii boahtá Olli maŋis?
-TITT:njeallje suorpma boaris.
-&lt;pstyle:tittel&gt;Ii
- @tittel: 1
-HOVEDTITTEL: 2
-TITTEL: 3</p>
-    </body>
-</document>'''))
-        document_fixer.fix_newstags()
-        got = document_fixer.get_etree()
-
-        want = etree.fromstring(u'''<document>
-    <header>
-        <title>Gii boahtá Nystø maŋis?</title>
-    </header>
-    <body>
-        <p type="title">Gii boahtá Nystø maŋis?</p>
-        <p type="title">Gii boahtá Keskitalo maŋis?</p>
-        <p type="title">Gii boahtá Olli maŋis?</p>
-        <p type="title">njeallje suorpma boaris.</p>
-        <p type="title">Ii</p>
-        <p type="title">1</p>
-        <p type="title">2</p>
-        <p type="title">3</p>
-    </body>
-</document>
-''')
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
     def test_byline1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
     <header/>
@@ -1189,7 +1153,9 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
 
     def test_headertitletags_1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p>@tittel:Eanebuidda</p>
     </body>
@@ -1209,7 +1175,9 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
 
     def test_headertitletags_2(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p> @tittel:Eanebuidda</p>
     </body>
@@ -1229,7 +1197,9 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
 
     def test_headertitletags_3(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p>@titt:Eanebuidda</p>
     </body>
@@ -1249,7 +1219,9 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
 
     def test_headertitletags_4(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p> @titt:Eanebuidda</p>
     </body>
@@ -1269,7 +1241,9 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
 
     def test_headertitletags_5(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p>TITT:Eanebuidda</p>
     </body>
@@ -1289,7 +1263,9 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
 
     def test_headertitletags_6(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p>Tittel:Eanebuidda</p>
     </body>
@@ -1309,7 +1285,9 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
 
     def test_headertitletags_7(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p>@LEDtitt:Eanebuidda</p>
     </body>
@@ -1329,7 +1307,9 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
 
     def test_headertitletags_8(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p>&lt;pstyle:tittel&gt;Eanebuidda</p>
     </body>
@@ -1349,7 +1329,9 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
 
     def test_headertitletags_9(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p>HOVEDTITTEL:Eanebuidda</p>
     </body>
@@ -1369,7 +1351,9 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
 
     def test_headertitletags_10(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p>TITTEL:Eanebuidda</p>
     </body>
@@ -1389,7 +1373,9 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
 
     def test_headertitletags_11(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p>@Titt:Guolli
 titt:Ruovttusuodjaleaddjit
@@ -1413,7 +1399,9 @@ titt:Ruovttusuodjaleaddjit
 
     def test_headertitletags_12(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p>Hovedtitt:Eanebuidda</p>
     </body>
@@ -1433,7 +1421,9 @@ titt:Ruovttusuodjaleaddjit
 
     def test_headertitletags_13(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p>@hovedtitt:Eanebuidda</p>
     </body>
@@ -1453,7 +1443,9 @@ titt:Ruovttusuodjaleaddjit
 
     def test_headertitletags_14(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p>@titt 2:Eanebuidda</p>
     </body>
@@ -1473,7 +1465,9 @@ titt:Ruovttusuodjaleaddjit
 
     def test_headertitletags_15(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p>OVERTITTEL:Eanebuidda</p>
     </body>
@@ -1488,6 +1482,44 @@ titt:Ruovttusuodjaleaddjit
         <p type="title">Eanebuidda</p>
     </body>
 </document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_headertitletags_16(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header>
+        <title/>
+    </header>
+    <body>
+        <p>@tittel:Gii boahtá Nystø maŋis?
+@LEDtitt:Gii boahtá Keskitalo maŋis?
+@tittel:Gii boahtá Olli maŋis?
+TITT:njeallje suorpma boaris.
+&lt;pstyle:tittel&gt;Ii
+ @tittel: 1
+HOVEDTITTEL: 2
+TITTEL: 3</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(u'''<document>
+    <header>
+        <title>Gii boahtá Nystø maŋis?</title>
+    </header>
+    <body>
+        <p type="title">Gii boahtá Nystø maŋis?</p>
+        <p type="title">Gii boahtá Keskitalo maŋis?</p>
+        <p type="title">Gii boahtá Olli maŋis?</p>
+        <p type="title">njeallje suorpma boaris.</p>
+        <p type="title">Ii</p>
+        <p type="title">1</p>
+        <p type="title">2</p>
+        <p type="title">3</p>
+    </body>
+</document>
+''')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
@@ -1549,7 +1581,9 @@ titt:Ruovttusuodjaleaddjit
 
     def test_newstags_text_before_headtitletags(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <title/>
+    </header>
     <body>
         <p>@tekst: text
 @tittel: title</p>

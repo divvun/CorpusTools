@@ -1302,7 +1302,7 @@ class DocumentFixer(object):
                         if len(lines) > 0:
                             index += 1
                             paragraph.getparent().insert(
-                                index, self.make_element('p', ' '.join(lines)))
+                                index, self.make_element('p', ' '.join(lines).strip()))
                         lines = []
 
                         lines.append(newstags.sub('', line))
@@ -1310,7 +1310,7 @@ class DocumentFixer(object):
                         if len(lines) > 0:
                             index += 1
                             paragraph.getparent().insert(
-                                index, self.make_element('p', ' '.join(lines)))
+                                index, self.make_element('p', ' '.join(lines).strip()))
                         line = bylinetags.sub('', line).strip()
 
                         person = etree.Element('person')
@@ -1325,56 +1325,57 @@ class DocumentFixer(object):
                         if len(lines) > 0:
                             index += 1
                             paragraph.getparent().insert(
-                                index, self.make_element('p', ' '.join(lines)))
+                                index, self.make_element('p', ' '.join(lines).strip()))
                         line = boldtags.sub('', line).strip()
                         lines = []
                         index += 1
                         p = etree.Element('p')
-                        p.append(self.make_element('em', line, {'type': 'bold'}))
+                        p.append(self.make_element('em', line.strip(), {'type': 'bold'}))
                         paragraph.getparent().insert(index, p)
                     elif line.startswith('@kursiv:'):
                         if len(lines) > 0:
                             index += 1
                             paragraph.getparent().insert(
-                                index, self.make_element('p', ' '.join(lines)))
+                                index, self.make_element('p', ' '.join(lines).strip()))
                         line = line.replace('@kursiv:', '')
                         lines = []
                         index += 1
                         p = etree.Element('p')
-                        p.append(self.make_element('em', line, {'type': 'italic'}))
+                        p.append(self.make_element('em', line.strip(), {'type': 'italic'}))
                         paragraph.getparent().insert(index, p)
                     elif headertitletags.match(line):
                         if len(lines) > 0:
                             index += 1
                             paragraph.getparent().insert(
-                                index, self.make_element('p', ' '.join(lines)))
+                                index, self.make_element('p', ' '.join(lines).strip()))
                         line = headertitletags.sub('', line)
                         lines = []
                         index += 1
-                        if header.find('./title') is None:
-                            header.append(self.make_element('title', line))
-                        paragraph.getparent().insert(index, self.make_element('p', line, {'type': 'title'}))
+                        title = header.find('./title')
+                        if title.text is None:
+                            title.text = line.strip()
+                        paragraph.getparent().insert(index, self.make_element('p', line.strip(), {'type': 'title'}))
                     elif titletags.match(line):
                         if len(lines) > 0:
                             index += 1
                             paragraph.getparent().insert(
-                                index, self.make_element('p', ' '.join(lines)))
+                                index, self.make_element('p', ' '.join(lines).strip()))
                         line = titletags.sub('', line)
                         lines = []
                         index += 1
-                        paragraph.getparent().insert(index, self.make_element('p', line, {'type': 'title'}))
+                        paragraph.getparent().insert(index, self.make_element('p', line.strip(), {'type': 'title'}))
                     elif line == '' and len(lines) > 0:
                         if len(lines) > 0:
                             index += 1
                             paragraph.getparent().insert(
-                                index, self.make_element('p', ' '.join(lines)))
+                                index, self.make_element('p', ' '.join(lines).strip()))
                         lines = []
                     else:
                         lines.append(line)
 
                 if len(lines) > 0:
                     index += 1
-                    paragraph.getparent().insert(index, self.make_element('p', ' '.join(lines)))
+                    paragraph.getparent().insert(index, self.make_element('p', ' '.join(lines).strip()))
 
                 paragraph.getparent().remove(paragraph)
 
