@@ -465,12 +465,12 @@ class PlaintextConverter(object):
         return content
 
     def strip_chars(self, content, extra=u''):
-        #content = content.replace(u'ÊÊ', '\n\n')
-        #content = content.replace(u'<\!q>', u' ')
+        content = content.replace(u'ÊÊ', '\n')
+        content = content.replace(u'<\!q>', u' ')
+        content = content.replace(u'<*B>', u'')
+        content = content.replace(u'<*P>', u'')
+        content = content.replace(u'<*I>', u'')
         # Convert CR (carriage return) to LF (line feed)
-        #content = content.replace(u'<*B>', u'')
-        #content = content.replace(u'<*P>', u'')
-        #content = content.replace(u'<*I>', u'')
         content = content.replace('\x0d', '\x0a')
         content = content.replace(u'<ASCII-MAC>', '')
         content = content.replace(u'<vsn:3.000000>', u'')
@@ -1291,6 +1291,7 @@ class DocumentFixer(object):
         boldtags = re.compile(u'@bold\s*:')
 
         header = self.etree.find('.//header')
+        unknown = self.etree.find('.//unknown')
 
         for paragraph in self.etree.iter('p'):
             if len(paragraph) == 0 and paragraph.text is not None:
@@ -1313,13 +1314,13 @@ class DocumentFixer(object):
                                 index, self.make_element('p', ' '.join(lines).strip()))
                         line = bylinetags.sub('', line).strip()
 
-                        person = etree.Element('person')
-                        person.set('lastname', line)
-                        person.set('firstname', '')
+                        if unknown is not None:
+                            person = etree.Element('person')
+                            person.set('lastname', line)
+                            person.set('firstname', '')
 
-                        author = etree.Element('author')
-                        author.append(person)
-                        header.append(author)
+                            unknown.getparent().replace(unknown, person)
+
                         lines = []
                     elif boldtags.match(line):
                         if len(lines) > 0:

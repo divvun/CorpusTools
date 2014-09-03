@@ -599,7 +599,11 @@ seaggi</p>
 
     def test_byline1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <author>
+            <unknown/>
+        </author>
+    </header>
     <body>
         <p>@byline: Kárášjohka: Elle Merete Utsi</p>
     </body>
@@ -620,7 +624,11 @@ seaggi</p>
 
     def test_byline2(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <author>
+            <unknown/>
+        </author>
+    </header>
     <body>
         <p>&lt;pstyle:byline&gt;NORGA: Åse Pulk</p>
     </body>
@@ -641,7 +649,11 @@ seaggi</p>
 
     def test_byline3(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <author>
+            <unknown/>
+        </author>
+    </header>
     <body>
         <p>@byline:KçRç´JOHKA:Elle Merete Utsi</p>
     </body>
@@ -662,7 +674,11 @@ seaggi</p>
 
     def test_byline4(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <author>
+            <unknown/>
+        </author>
+    </header>
     <body>
         <p>@byline:Elle Merete Utsi</p>
     </body>
@@ -683,7 +699,11 @@ seaggi</p>
 
     def test_byline5(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <author>
+            <unknown/>
+        </author>
+    </header>
     <body>
         <p> @byline:Elle Merete Utsi</p>
     </body>
@@ -695,6 +715,31 @@ seaggi</p>
     <header>
         <author>
             <person firstname="" lastname="Elle Merete Utsi"/>
+        </author>
+    </header>
+    <body/>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_byline6(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header>
+        <author>
+            <person firstname="" lastname="Juvven"/>
+        </author>
+    </header>
+    <body>
+        <p> @byline:Elle Merete Utsi</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(u'''<document>
+    <header>
+        <author>
+            <person firstname="" lastname="Juvven"/>
         </author>
     </header>
     <body/>
@@ -1626,7 +1671,11 @@ TITTEL: 3</p>
 
     def test_newstags_text_before_bylinetags(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
-    <header/>
+    <header>
+        <author>
+            <unknown/>
+        </author>
+    </header>
     <body>
         <p>@tekst: text
 @byline: title</p>
