@@ -1115,6 +1115,7 @@ NSR ii áiggo.</p>
         <p>@stikktitt:Dološ sámegiel máinnas Várjjagis</p>
         <p>@stikk.titt:Dološ sámegiel máinnas Várjjagis</p>
         <p>@stikktittel:Dološ sámegiel máinnas Várjjagis</p>
+        <p> @stikk:Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>'''))
         document_fixer.fix_newstags()
@@ -1122,6 +1123,7 @@ NSR ii áiggo.</p>
         want = etree.fromstring(u'''<document>
     <header/>
     <body>
+        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
