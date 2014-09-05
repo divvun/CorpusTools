@@ -1022,6 +1022,30 @@ class DocumentFixer(object):
     def get_etree(self):
         return etree.parse(io.BytesIO(etree.tostring(self.etree)))
 
+
+    def compact_ems(self):
+        """Replace consecutive em elements divided by white space into
+        a single element.
+        """
+        word = re.compile(u'\w+', re.UNICODE)
+        for element in self.etree.iter('p'):
+            if len(element.xpath('.//em')) > 1:
+                lines = []
+                for em in element.iter('em'):
+                    next = em.getnext()
+                    if next is not None and next.tag == 'em' and (em.tail is None or not word.search(em.tail)):
+                        if em.text is not None:
+                            lines.append(em.text.strip())
+                        em.getparent().remove(em)
+                    else:
+                        if em.text is not None:
+                            lines.append(em.text.strip())
+                        em.text = ' '.join(lines)
+                        if em.tail is not None:
+                            em.tail = ' ' + em.tail
+                        lines = []
+
+
     def soft_hyphen_to_hyph_tag(self):
         """Replace soft hyphens in text by the hyph tag
         """
@@ -1509,7 +1533,7 @@ class LanguageDetector(object):
         """
         if self.document.find('header/multilingual') is not None:
             for paragraph in self.document.iter('p'):
-                paragraph = self.set_paragraph_language(paragraph)
+                self.set_paragraph_language(paragraph)
 
 
 class DocumentTester(object):

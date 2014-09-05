@@ -1985,6 +1985,97 @@ with-multilingual-tag.xml'))
 
         self.assertXmlEqual(etree.tostring(document_fixer.etree), expected_doc)
 
+    def test_compact_em1(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p><em>1</em> <em>2</em></p>
+    </body>
+</document>'''))
+        document_fixer.compact_ems()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p><em>1 2</em></p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_compact_em2(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p><em>1</em> <em>2</em> 3</p>
+    </body>
+</document>'''))
+        document_fixer.compact_ems()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p><em>1 2</em> 3</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_compact_em3(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p><em>1</em> <em>2</em> <span/> <em>3</em> <em>4</em></p>
+    </body>
+</document>'''))
+        document_fixer.compact_ems()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p><em>1 2</em> <span/> <em>3 4</em></p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_compact_em4(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p><em>1</em> <em>2</em> 5<span/> <em>3</em> <em>4</em> 6</p>
+    </body>
+</document>'''))
+        document_fixer.compact_ems()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p><em>1 2</em> 5<span/> <em>3 4</em> 6</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_compact_em5(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p><em></em> <em>2</em> 5<span/> <em>3</em> <em></em> 6</p>
+    </body>
+</document>'''))
+        document_fixer.compact_ems()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p><em>2</em> 5<span/> <em>3</em> 6</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+
 class TestXslMaker(XMLTester):
     def test_get_xsl(self):
         xslmaker = converter.XslMaker('converter_data/samediggi-article-48.\
