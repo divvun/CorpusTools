@@ -772,6 +772,31 @@ seaggi</p>
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+    def test_byline8(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header>
+        <author>
+            <unknown/>
+        </author>
+    </header>
+    <body>
+        <p><em>@BYLINE:Elle Merete Utsi </em> </p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(u'''<document>
+    <header>
+        <author>
+            <person firstname="" lastname="Elle Merete Utsi"/>
+        </author>
+    </header>
+    <body/>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
     def test_kursiv(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
     <header/>
@@ -862,6 +887,27 @@ seaggi</p>
     <header/>
     <body>
         <p>Finnmark jordskifterett</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_fotobyline(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>@foto: govva1</p>
+        <p><em>foto: govva2</em></p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p>govva1</p>
+        <p><em>govva2</em></p>
     </body>
 </document>''')
 
@@ -960,7 +1006,26 @@ TEKST/INGRESS: 5
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-    def test_mtitt(self):
+    def test_ingress_2(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p><em>@ingress: Gos?</em></p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p><em>Gos?</em></p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_mtitt1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
     <header/>
     <body>
@@ -986,6 +1051,25 @@ M:TITT:Lea go dus meahccebiila?
         <p type="title">Maŋemus gártemat</p>
         <p type="title">Divvot</p>
         <p type="title">Eai</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_mtitt2(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p><em>@m.titt: Maid?</em></p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title"><em>Maid?</em></p>
     </body>
 </document>''')
 

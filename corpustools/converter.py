@@ -1308,7 +1308,7 @@ class DocumentFixer(object):
     def fix_newstags(self):
         """Convert newstags found in text to xml elements
         """
-        newstags = re.compile(r'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|LED|bilde)*tekst:|@foto:|@fotobyline:|@*bildetitt:|<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|@*Samleingress:*|tekst/ingress:|billedtekst:)', re.IGNORECASE)
+        newstags = re.compile(r'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|LED|bilde)*tekst:|@*foto:|@fotobyline:|@*bildetitt:|<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|@*Samleingress:*|tekst/ingress:|billedtekst:)', re.IGNORECASE)
         titletags = re.compile(r'\s*@m.titt[\.:]|\s*@*stikk:|Mellomtittel:|@*(stikk\.*|under)titt(el)*:|@ttt:|\s*@*[utm]*[:\.]*tit+:|<pstyle:m.titt>|undertittel:', re.IGNORECASE)
         headertitletags = re.compile(r'(\s*@*(led)*tittel:|\s*@*titt(\s\d)*:|@LEDtitt:|<pstyle:tittel>|@*(hoved|over)titt(el)*:)', re.IGNORECASE)
         bylinetags = re.compile(u'(<pstyle:|\s*@*)[Bb]yline[:>]*\s*(\S+:)*', re.UNICODE|re.IGNORECASE)
@@ -1316,6 +1316,24 @@ class DocumentFixer(object):
 
         header = self.etree.find('.//header')
         unknown = self.etree.find('.//unknown')
+
+        for em in self.etree.iter('em'):
+            paragraph = em.getparent()
+            if len(em) == 0 and em.text is not None:
+
+                if bylinetags.match(em.text):
+                    line = bylinetags.sub('', em.text).strip()
+                    if unknown is not None:
+                        person = etree.Element('person')
+                        person.set('lastname', line)
+                        person.set('firstname', '')
+                        unknown.getparent().replace(unknown, person)
+                        paragraph.getparent().remove(paragraph)
+                elif titletags.match(em.text):
+                    em.text = titletags.sub('', em.text).strip()
+                    paragraph.set('type', 'title')
+                elif newstags.match(em.text):
+                    em.text = newstags.sub('', em.text).strip()
 
         for paragraph in self.etree.iter('p'):
             if len(paragraph) == 0 and paragraph.text is not None:
