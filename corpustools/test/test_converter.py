@@ -577,7 +577,7 @@ seaggi</p>
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-    def test_fix_newstags_bold_2(self):
+    def test_fix_newstags_bold_3(self):
         '''Test conversion of the @bold: newstag
         '''
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -892,7 +892,7 @@ seaggi</p>
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-    def test_fotobyline(self):
+    def test_foto(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
     <header/>
     <body>
@@ -1216,7 +1216,7 @@ NSR ii áiggo.</p>
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-    def test_utitt(self):
+    def test_utitt1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
     <header/>
     <body>
@@ -1234,11 +1234,10 @@ NSR ii áiggo.</p>
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-    def test_utitt(self):
+    def test_utitt2(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
     <header/>
     <body>
-        <p>@utitt:Dološ sámegiel máinnas Várjjagis</p>
         <p> @utitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>'''))
@@ -1247,7 +1246,6 @@ NSR ii áiggo.</p>
         want = etree.fromstring(u'''<document>
     <header/>
     <body>
-        <p type="title">Dološ sámegiel máinnas Várjjagis</p>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>''')
