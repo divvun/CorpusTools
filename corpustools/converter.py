@@ -1362,6 +1362,7 @@ class DocumentFixer(object):
                             person.set('firstname', '')
 
                             unknown.getparent().replace(unknown, person)
+                            unknown = None
 
                         lines = []
                     elif boldtags.match(line):
