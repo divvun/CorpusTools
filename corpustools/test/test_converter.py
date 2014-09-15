@@ -290,8 +290,10 @@ class TestPlaintextConverter(XMLTester):
         got = plaintext.strip_chars(u'''
 \x0d
 <ASCII-MAC>
-<vsn:3.000000>''')
-        want = u'''\n\n\n\n'''
+<vsn:3.000000>
+<\!q>
+<\!h>''')
+        want = u'''\n\n\n\n\n\n'''
 
         self.assertEqual(got, want)
 
