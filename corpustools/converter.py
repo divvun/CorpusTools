@@ -466,7 +466,8 @@ class PlaintextConverter(object):
 
     def strip_chars(self, content, extra=u''):
         content = content.replace(u'ÊÊ', '\n')
-        content = content.replace(u'<\!q>', u' ')
+        content = content.replace(u'<\!q>', u'')
+        content = content.replace(u'<\!h>', u'')
         content = content.replace(u'<*B>', u'')
         content = content.replace(u'<*P>', u'')
         content = content.replace(u'<*I>', u'')
