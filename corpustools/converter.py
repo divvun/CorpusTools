@@ -261,12 +261,14 @@ class Converter(object):
             root = xsltree.getroot()
             origname = self.get_orig().replace(self.get_corpusdir(), '')
             if origname.startswith('/orig'):
+                to_write = False
                 parts = origname[1:].split('/')
 
                 lang = root.find(transform +
                                  mainlang).attrib['select'].replace("'", "")
 
                 if lang == "":
+                    to_write = True
                     lang = parts[1]
                     root.find(transform +
                               mainlang).attrib['select'] = "'" + lang + "'"
@@ -276,15 +278,16 @@ class Converter(object):
 
                 if genre == "" or genre not in ['admin', 'bible', 'facta',
                                                 'ficti', 'news']:
+                    to_write = True
                     if parts[2] in ['admin', 'bible', 'facta', 'ficti',
                                     'news']:
                         genre = parts[parts.index('orig') + 2]
                         root.find(transform +
                                   xslgenre).attrib['select'] = \
                             "'" + genre + "'"
-
-                xsltree.write(
-                    self.get_xsl(), encoding="utf-8", xml_declaration=True)
+                if to_write:
+                    xsltree.write(
+                        self.get_xsl(), encoding="utf-8", xml_declaration=True)
 
         except etree.XMLSyntaxError as e:
             logfile = open(self.orig + '.log', 'w')
