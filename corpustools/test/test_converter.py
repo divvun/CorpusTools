@@ -546,7 +546,8 @@ class TestDocumentFixer(XMLTester):
              u'govva:á': u'govva: á',
              u'GOVVA:Á': u'GOVVA: Á',
              u'GOVVEJEADDJI:Á': u'GOVVEJEADDJI: Á',
-             u'Govva:': u'Govva:'}
+             u'Govva:': u'Govva:',
+             u'<em>Govven:Á</em>': u'<em>Govven: Á</em>',}
         for key, value in a.items():
             document_fixer = converter.DocumentFixer(etree.fromstring(u'''<document>
         <header/>
