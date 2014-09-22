@@ -1026,7 +1026,6 @@ class DocumentFixer(object):
     def get_etree(self):
         return etree.parse(io.BytesIO(etree.tostring(self.etree)))
 
-
     def compact_ems(self):
         """Replace consecutive em elements divided by white space into
         a single element.
@@ -1056,6 +1055,7 @@ class DocumentFixer(object):
         for element in self.etree.iter('p'):
             self.replace_shy(element)
 
+
     def replace_shy(self, element):
         """Split text and tail on shy. Insert hyph tags
         between the parts.
@@ -1084,6 +1084,22 @@ class DocumentFixer(object):
                     hyph = etree.Element('hyph')
                     hyph.tail = part
                     element.getparent().append(hyph)
+
+    def insert_spaces_after_semicolon(self):
+        """Insert space after semicolon where needed
+        """
+        irritating_words_regex = re.compile(u'(govv(a|en|ejeaddji):)([^ ])',
+                                            re.UNICODE|re.IGNORECASE)
+        for child in self.etree.find('.//body'):
+            self.insert_space_after_semicolon(child, irritating_words_regex)
+
+    def insert_space_after_semicolon(self, element, irritating_words_regex):
+        if element.text is not None:
+            element.text = irritating_words_regex.sub(r'\1 \3', element.text)
+        for child in element:
+            self.insert_space_after_semicolon(child, irritating_words_regex)
+        if element.tail is not None:
+            element.tail = irritating_words_regex.sub(r'\1 \3', element.tail)
 
     def replace_ligatures(self):
         """

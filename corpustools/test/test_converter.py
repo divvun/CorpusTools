@@ -535,6 +535,36 @@ class TestRTFConverter(XMLTester):
 
 
 class TestDocumentFixer(XMLTester):
+    def test_insert_spaces_after_semicolon(self):
+        '''Check if irritating words followed by semi colon are
+        handled correctly
+        '''
+        a = {u'Govven:Á': u'Govven: Á',
+             u'govven:á': u'govven: á',
+             u'GOVVEN:Á': u'GOVVEN: Á',
+             u'Govva:Á': u'Govva: Á',
+             u'govva:á': u'govva: á',
+             u'GOVVA:Á': u'GOVVA: Á',
+             u'GOVVEJEADDJI:Á': u'GOVVEJEADDJI: Á',
+             u'Govva:': u'Govva:'}
+        for key, value in a.items():
+            document_fixer = converter.DocumentFixer(etree.fromstring(u'''<document>
+        <header/>
+        <body>
+            <p>''' + key + u'''</p>
+        </body>
+    </document>'''))
+            document_fixer.insert_spaces_after_semicolon()
+            got = document_fixer.get_etree()
+            want = etree.fromstring(u'''<document>
+        <header/>
+        <body>
+            <p>''' + value + u'''</p>
+        </body>
+    </document>''')
+
+            self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
     def test_fix_newstags_bold_1(self):
         '''Test conversion of the @bold: newstag
         '''
