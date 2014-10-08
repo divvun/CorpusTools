@@ -28,7 +28,7 @@ import platform
 import lxml.etree as etree
 
 
-class NameChanger:
+class NameChanger(object):
     """Class to change names of corpus files.
     Will also take care of changing info in meta data of parallel files.
     """
@@ -40,16 +40,16 @@ class NameChanger:
         with some characters replaced.
         """
         self.oldname = oldname
+        self.newname = self.change_to_ascii()
 
-        self.newname = self.change_to_ascii(self.oldname)
-
-    def change_to_ascii(self, oldname):
-        """Downcase all chars in oldname, replace some chars
-        oldname is a unicode string
+    def change_to_ascii(self):
+        """Downcase all chars in self.oldname, replace some chars
         """
-        chars = {u'+':'_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_', u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_'}
+        chars = {u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
+                 u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_'}
 
-        newname = unicode(unidecode.unidecode(oldname)).lower()
+        newname = unicode(unidecode.unidecode(
+            self.oldname)).lower()
 
         for key, value in chars.items():
             if key in newname:
@@ -59,12 +59,12 @@ class NameChanger:
 
         return newname
 
-    def move_file(self, fromname, toname):
+    def move_file(self, oldname, newname):
         """Change name of file from fromname to toname"""
-        if not os.path.exists(os.path.dirname(nc.newname)):
-            os.makedirs(os.path.dirname(nc.newname))
-        if nc.newname != nc.oldname:
-            subprocess.call(['git', 'mv', nc.oldname, nc.newname])
+        if not os.path.exists(os.path.dirname(newname)):
+            os.makedirs(os.path.dirname(newname))
+        if newname != oldname:
+            subprocess.call(['git', 'mv', oldname, newname])
 
     def change_name(self):
         """Change the name of the original file and it's metadata file
@@ -79,8 +79,6 @@ class NameChanger:
             self.move_prestable_toktmx()
             self.move_prestable_tmx()
 
-        pass
-
     def move_origfile(self):
         """Change the name of the original file
         using the routines of a given repository tool
@@ -90,8 +88,6 @@ class NameChanger:
 
         self.move_file(fromname, toname)
 
-        pass
-
     def move_xslfile(self):
         """Change the name of an xsl file using the
         routines of a given repository tool
@@ -100,8 +96,6 @@ class NameChanger:
         toname = os.path.join(self.dirname, self.newname + '.xsl')
 
         self.move_file(fromname, toname)
-
-        pass
 
     def open_xslfile(self, xslfile):
         """Open xslfile, return the tree"""
@@ -122,14 +116,14 @@ class NameChanger:
             paratree = self.open_xslfile()
             pararoot = paratree.getroot()
 
-            pararoot.find(".//*[@name='para_" + mainlang + "']").set('select', "'" + self.newname + "'")
+            pararoot.find(".//*[@name='para_" + mainlang + "']").set(
+                'select', "'" + self.newname + "'")
 
-            paratree.write(parafile, encoding = 'utf8', xml_declaration = True)
-
-        pass
+            paratree.write(parafile, encoding='utf8', xml_declaration=True)
 
     def update_name_in_parallel_files(self):
-        """Open the .xsl file belonging to the file we are changing names of. Look for parallel files.
+        """Open the .xsl file belonging to the file we are changing names of.
+        Look for parallel files.
         Open the xsl files of these parallel files and change the name of this
         parallel from the old to the new one
         """
@@ -138,15 +132,18 @@ class NameChanger:
             xsltree = self.open_xslfile(xslfile)
             xslroot = xsltree.getroot()
 
-            mainlang = xslroot.find(".//*[@name='mainlang']").get('select').replace("'", "")
+            mainlang = xslroot.find(".//*[@name='mainlang']").get(
+                'select').replace("'", "")
 
             if mainlang != "":
                 for element in xslroot.iter():
-                    if element.attrib.get('name') and \
-                    'para_' in element.attrib.get('name') and \
-                    element.attrib.get('select') != "''":
-                        paralang = element.attrib.get('name').replace('para_', '')
-                        paraname = element.attrib.get('select').replace("'", "")
+                    if (element.attrib.get('name') and
+                            'para_' in element.attrib.get('name') and
+                            element.attrib.get('select') != "''"):
+                        paralang = element.attrib.get('name').replace(
+                            'para_', '')
+                        paraname = element.attrib.get('select').replace(
+                            "'", "")
                         self.set_newname(mainlang, paralang, paraname)
 
     def move_prestable_converted(self):
@@ -161,7 +158,8 @@ class NameChanger:
     def move_prestable_toktmx(self):
         """Move the file in prestable/toktmx from the old to the new name
         """
-        for suggestion in ['/prestable/toktmx/sme2nob/', '/prestable/toktmx/nob2sme/']:
+        for suggestion in ['/prestable/toktmx/sme2nob/',
+                           '/prestable/toktmx/nob2sme/']:
             dirname = self.dirname.replace('/orig/', suggestion)
             fromname = os.path.join(dirname, self.oldname + '.toktmx')
             if os.path.exists(fromname):
@@ -171,19 +169,28 @@ class NameChanger:
     def move_prestable_tmx(self):
         """Move the file in prestable/tmx from the old to the new name
         """
-        for suggestion in ['/prestable/tmx/sme2nob/', '/prestable/tmx/nob2sme/']:
+        for suggestion in ['/prestable/tmx/sme2nob/',
+                           '/prestable/tmx/nob2sme/']:
             dirname = self.dirname.replace('/orig/', suggestion)
             fromname = os.path.join(dirname, self.oldname + '.tmx')
             if os.path.exists(fromname):
                 toname = os.path.join(dirname, self.newname + '.tmx')
                 self.move_file(fromname, toname)
 
+
+def name_to_unicode(filename):
+    if platform.system() == 'Windows':
+        return filename
+    else:
+        return filename('utf-8')
+
+
+def parse_args():
+    pass
+
+
 def main():
     for root, dirs, files in os.walk(sys.argv[1]):
         for file_ in files:
-            if platform.system != 'Windows':
-                nc = NameChanger(os.path.join(root, file_))
-            else:
-                nc = NameChanger(os.path.join(root, file_).decode('utf-8'))
-
-            nc.move_file(nc.oldname, nc.newname)
+            nc = NameChanger(name_to_unicode(os.path.join(root, file_)))
+            nc.change_name()

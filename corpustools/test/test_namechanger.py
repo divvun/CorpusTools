@@ -26,58 +26,50 @@ from corpustools import namechanger
 
 class TestNameChanger(unittest.TestCase):
     def test_none_ascii_lower(self):
-        want = u'astngdzcaoaeoai_'
-
         name = u'ášŧŋđžčåøæöäï+'
         nc = namechanger.NameChanger(name)
+        want = u'astngdzcaoaeoai_'
 
         self.assertEqual(nc.newname, want)
 
     def test_none_ascii_upper(self):
-        want = u'astngdzcaoaeoai_'
-
         name = u'ÁŠŦŊĐŽČÅØÆÖÄÏ+'
         nc = namechanger.NameChanger(name)
+        want = u'astngdzcaoaeoai_'
 
         self.assertEqual(nc.newname, want)
 
     def test_none_ascii_blabla(self):
-        want = u'astngdzcaoaeoai_'
-
         name = u'ášŧŋđŽČÅØÆÖÄï+'
         nc = namechanger.NameChanger(name)
+        want = u'astngdzcaoaeoai_'
 
         self.assertEqual(nc.newname, want)
 
     def test_own_name_with_only_ascii(self):
-        want = u'youllneverwalkalone'
-
         oldname = u'YoullNeverWalkAlone'
         nc = namechanger.NameChanger(oldname)
+        want = u'youllneverwalkalone'
 
         self.assertEqual(nc.newname, want)
 
     def test_own_name_with_only_ascii_and_space(self):
-        want = u'youll_never_walk_alone'
-
         oldname = u'Youll Never Walk Alone'
         nc = namechanger.NameChanger(oldname)
+        want = u'youll_never_walk_alone'
 
         self.assertEqual(nc.newname, want)
 
     def test_own_name_with_ascii_and_space_and_apostrophe(self):
-        want = u'you_ll_never_walk_alone'
-
         oldname = u"You'll Never Walk Alone"
         nc = namechanger.NameChanger(oldname)
+        want = u'you_ll_never_walk_alone'
 
         self.assertEqual(nc.newname, want)
 
     def test_own_name_with_non_ascii(self):
-        want = u'saddago_beaivi_vai_idja/saddago_beaivi_vai_idja'
-
         oldname = u'Šaddágo beaivi vai idja/Šaddágo beaivi vai idja'
-        klass = oldname
-        nc = namechanger.NameChanger(klass)
+        nc = namechanger.NameChanger(oldname)
+        want = u'saddago_beaivi_vai_idja/saddago_beaivi_vai_idja'
 
         self.assertEqual(nc.newname, want)
