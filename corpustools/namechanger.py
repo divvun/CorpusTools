@@ -249,15 +249,17 @@ def adder_main():
         description='Add files to a corpus')
 
     parser.add_argument('corpusdir',
-                        help='The corpus dir')
+                        help='The corpus dir (freecorpus or boundcorpus)')
     parser.add_argument('mainlang',
-                        help='The language of the files that will \
-                        be added')
-    parser.add_argument('genre',
-                        help='The genre of the files that will \
-                        be added')
+                        help='The language of the files that will be added \
+                        (sma, sme, ...)')
+    parser.add_argument('path',
+                        help='The genre directory where the files will be \
+                        added. This may also be a path, e.g. \
+                        admin/facta/skuvlahistorja1')
     parser.add_argument('origdir',
-                        help='The directory where the original files reside')
+                        help='The directory where the original files reside \
+                        (not in svn)')
 
     args = parser.parse_args()
 
@@ -267,6 +269,6 @@ def adder_main():
                 name_to_unicode(os.path.join(root, f)),
                 args.corpusdir,
                 args.mainlang,
-                args.genre)
+                args.path)
             adder.copy_orig_to_corpus()
             adder.make_metadata_file()
