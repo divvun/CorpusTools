@@ -21,14 +21,19 @@
 
 import os
 import sys
-import unidecode
 import subprocess
 import platform
+import argparse
+import shutil
 
 import lxml.etree as etree
+import unidecode
+
+import converter
+import xslsetter
 
 
-class NameChanger(object):
+class NameChangerBase(object):
     """Class to change names of corpus files.
     Will also take care of changing info in meta data of parallel files.
     """
@@ -39,8 +44,10 @@ class NameChanger(object):
         self.newname is the basename of oldname, in lowercase and
         with some characters replaced.
         """
-        self.oldname = oldname
-        self.newname = self.change_to_ascii()
+        self.old_filename = os.path.basename(oldname)
+        self.old_dirname = os.path.dirname(oldname)
+
+        self.new_filename = self.change_to_ascii()
 
     def change_to_ascii(self):
         """Downcase all chars in self.oldname, replace some chars
@@ -49,7 +56,7 @@ class NameChanger(object):
                  u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_'}
 
         newname = unicode(unidecode.unidecode(
-            self.oldname)).lower()
+            self.old_filename)).lower()
 
         for key, value in chars.items():
             if key in newname:
@@ -59,19 +66,54 @@ class NameChanger(object):
 
         return newname
 
-    def move_file(self, oldname, newname):
-        """Change name of file from fromname to toname"""
-        if not os.path.exists(os.path.dirname(newname)):
-            os.makedirs(os.path.dirname(newname))
-        if newname != oldname:
-            subprocess.call(['git', 'mv', oldname, newname])
+
+class AddFileToCorpus(NameChangerBase):
+    '''Add a given file to a given corpus
+    '''
+    def __init__(self, oldname, corpusdir, mainlang, genre):
+        super(AddFileToCorpus, self).__init__(oldname)
+        self.mainlang = mainlang
+        self.genre = genre
+        self.new_dirname = '/'.join([corpusdir, 'orig', mainlang, genre])
+
+    def makedirs(self):
+        try:
+            os.makedirs(self.new_dirname)
+        except OSError:
+            pass
+
+    def copy_orig_to_corpus(self):
+        '''Copy the original file to the correct place in the given corpus
+        '''
+        fromname = os.path.join(self.old_dirname, self.old_filename)
+        toname = os.path.join(self.new_dirname, self.new_filename)
+        self.makedirs()
+
+        print 'Copying', fromname, 'to', toname
+        shutil.copy(fromname, toname)
+
+    def make_metadata_file(self):
+        metadata_file = xslsetter.MetadataHandler(
+            os.path.join(self.new_dirname,
+                         self.new_filename + '.xsl'))
+        metadata_file.set_variable('filename', self.old_filename)
+        metadata_file.set_variable('genre', self.genre)
+        metadata_file.set_variable('mainlang', self.mainlang)
+
+        print 'Making metadata file', metadata_file.filename
+        metadata_file.write_file()
+
+
+class CorpusNameFixer(NameChangerBase):
+    def __init__(self, oldname):
+        super(NameChangerBase, self).__init__(oldname)
 
     def change_name(self):
         """Change the name of the original file and it's metadata file
         Update the name in parallel files
         Also move the other files that's connected to the original file
         """
-        if self.oldname != self.newname:
+        if self.old_filename != self.new_filename:
             self.move_origfile()
             self.move_xslfile()
             self.update_name_in_parallel_files()
@@ -79,12 +121,19 @@ class NameChanger(object):
             self.move_prestable_toktmx()
             self.move_prestable_tmx()
 
+    def move_file(self, oldname, newname):
+        """Change name of file from fromname to toname"""
+        if not os.path.exists(os.path.dirname(newname)):
+            os.makedirs(os.path.dirname(newname))
+        if newname != oldname:
+            subprocess.call(['git', 'mv', oldname, newname])
+
     def move_origfile(self):
         """Change the name of the original file
         using the routines of a given repository tool
         """
-        fromname = os.path.join(self.dirname, self.oldname)
-        toname = os.path.join(self.dirname, self.newname)
+        fromname = os.path.join(self.old_dirname, self.old_filename)
+        toname = os.path.join(self.old_dirname, self.new_filename)
 
         self.move_file(fromname, toname)
 
@@ -92,8 +141,8 @@ class NameChanger(object):
         """Change the name of an xsl file using the
         routines of a given repository tool
         """
-        fromname = os.path.join(self.dirname, self.oldname + '.xsl')
-        toname = os.path.join(self.dirname, self.newname + '.xsl')
+        fromname = os.path.join(self.old_dirname, self.old_filename + '.xsl')
+        toname = os.path.join(self.old_dirname, self.new_filename + '.xsl')
 
         self.move_file(fromname, toname)
 
@@ -117,7 +166,7 @@ class NameChanger(object):
             pararoot = paratree.getroot()
 
             pararoot.find(".//*[@name='para_" + mainlang + "']").set(
-                'select', "'" + self.newname + "'")
+                'select', "'" + self.new_filename + "'")
 
             paratree.write(parafile, encoding='utf8', xml_declaration=True)
 
@@ -127,7 +176,7 @@ class NameChanger(object):
         Open the xsl files of these parallel files and change the name of this
         parallel from the old to the new one
         """
-        xslfile = os.path.join(self.dirname, self.newname + '.xsl')
+        xslfile = os.path.join(self.old_dirname, self.new_filename + '.xsl')
         if os.path.exists(xslfile):
             xsltree = self.open_xslfile(xslfile)
             xslroot = xsltree.getroot()
@@ -149,9 +198,9 @@ class NameChanger(object):
     def move_prestable_converted(self):
         """Move the file in prestable/converted from the old to the new name
         """
-        dirname = self.dirname.replace('/orig/', '/prestable/converted/')
-        fromname = os.path.join(dirname, self.oldname + '.xml')
-        toname = os.path.join(dirname, self.newname + '.xml')
+        dirname = self.old_dirname.replace('/orig/', '/prestable/converted/')
+        fromname = os.path.join(dirname, self.old_filename + '.xml')
+        toname = os.path.join(dirname, self.new_filename + '.xml')
 
         self.move_file(fromname, toname)
 
@@ -160,10 +209,10 @@ class NameChanger(object):
         """
         for suggestion in ['/prestable/toktmx/sme2nob/',
                            '/prestable/toktmx/nob2sme/']:
-            dirname = self.dirname.replace('/orig/', suggestion)
-            fromname = os.path.join(dirname, self.oldname + '.toktmx')
+            dirname = self.old_dirname.replace('/orig/', suggestion)
+            fromname = os.path.join(dirname, self.old_filename + '.toktmx')
             if os.path.exists(fromname):
-                toname = os.path.join(dirname, self.newname + '.toktmx')
+                toname = os.path.join(dirname, self.new_filename + '.toktmx')
                 self.move_file(fromname, toname)
 
     def move_prestable_tmx(self):
@@ -171,10 +220,10 @@ class NameChanger(object):
         """
         for suggestion in ['/prestable/tmx/sme2nob/',
                            '/prestable/tmx/nob2sme/']:
-            dirname = self.dirname.replace('/orig/', suggestion)
-            fromname = os.path.join(dirname, self.oldname + '.tmx')
+            dirname = self.old_dirname.replace('/orig/', suggestion)
+            fromname = os.path.join(dirname, self.old_filename + '.tmx')
             if os.path.exists(fromname):
-                toname = os.path.join(dirname, self.newname + '.tmx')
+                toname = os.path.join(dirname, self.new_filename + '.tmx')
                 self.move_file(fromname, toname)
 
 
@@ -192,5 +241,32 @@ def parse_args():
 def main():
     for root, dirs, files in os.walk(sys.argv[1]):
         for file_ in files:
-            nc = NameChanger(name_to_unicode(os.path.join(root, file_)))
+            nc = CorpusNameFixer(name_to_unicode(os.path.join(root, file_)))
             nc.change_name()
+
+def adder_main():
+    parser = argparse.ArgumentParser(
+        description='Add files to a corpus')
+
+    parser.add_argument('corpusdir',
+                        help='The corpus dir')
+    parser.add_argument('mainlang',
+                        help='The language of the files that will \
+                        be added')
+    parser.add_argument('genre',
+                        help='The genre of the files that will \
+                        be added')
+    parser.add_argument('origdir',
+                        help='The directory where the original files reside')
+
+    args = parser.parse_args()
+
+    for root, dirs, files in os.walk(args.origdir):
+        for f in files:
+            adder = AddFileToCorpus(
+                name_to_unicode(os.path.join(root, f)),
+                args.corpusdir,
+                args.mainlang,
+                args.genre)
+            adder.copy_orig_to_corpus()
+            adder.make_metadata_file()

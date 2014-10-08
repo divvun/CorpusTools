@@ -24,52 +24,52 @@ import unittest
 from corpustools import namechanger
 
 
-class TestNameChanger(unittest.TestCase):
+class TestNameChangerBase(unittest.TestCase):
     def test_none_ascii_lower(self):
         name = u'ášŧŋđžčåøæöäï+'
-        nc = namechanger.NameChanger(name)
+        nc = namechanger.NameChangerBase(name)
         want = u'astngdzcaoaeoai_'
 
-        self.assertEqual(nc.newname, want)
+        self.assertEqual(nc.new_filename, want)
 
     def test_none_ascii_upper(self):
         name = u'ÁŠŦŊĐŽČÅØÆÖÄÏ+'
-        nc = namechanger.NameChanger(name)
+        nc = namechanger.NameChangerBase(name)
         want = u'astngdzcaoaeoai_'
 
-        self.assertEqual(nc.newname, want)
+        self.assertEqual(nc.new_filename, want)
 
     def test_none_ascii_blabla(self):
         name = u'ášŧŋđŽČÅØÆÖÄï+'
-        nc = namechanger.NameChanger(name)
+        nc = namechanger.NameChangerBase(name)
         want = u'astngdzcaoaeoai_'
 
-        self.assertEqual(nc.newname, want)
+        self.assertEqual(nc.new_filename, want)
 
     def test_own_name_with_only_ascii(self):
         oldname = u'YoullNeverWalkAlone'
-        nc = namechanger.NameChanger(oldname)
+        nc = namechanger.NameChangerBase(oldname)
         want = u'youllneverwalkalone'
 
-        self.assertEqual(nc.newname, want)
+        self.assertEqual(nc.new_filename, want)
 
     def test_own_name_with_only_ascii_and_space(self):
         oldname = u'Youll Never Walk Alone'
-        nc = namechanger.NameChanger(oldname)
+        nc = namechanger.NameChangerBase(oldname)
         want = u'youll_never_walk_alone'
 
-        self.assertEqual(nc.newname, want)
+        self.assertEqual(nc.new_filename, want)
 
     def test_own_name_with_ascii_and_space_and_apostrophe(self):
         oldname = u"You'll Never Walk Alone"
-        nc = namechanger.NameChanger(oldname)
+        nc = namechanger.NameChangerBase(oldname)
         want = u'you_ll_never_walk_alone'
 
-        self.assertEqual(nc.newname, want)
+        self.assertEqual(nc.new_filename, want)
 
     def test_own_name_with_non_ascii(self):
         oldname = u'Šaddágo beaivi vai idja/Šaddágo beaivi vai idja'
-        nc = namechanger.NameChanger(oldname)
-        want = u'saddago_beaivi_vai_idja/saddago_beaivi_vai_idja'
+        nc = namechanger.NameChangerBase(oldname)
+        want = u'saddago_beaivi_vai_idja'
 
-        self.assertEqual(nc.newname, want)
+        self.assertEqual(nc.new_filename, want)

@@ -2,7 +2,7 @@
 import os
 
 import lxml.etree as etree
-from pkg_resources import resource_string, resource_filename
+from pkg_resources import resource_filename
 import ccat
 
 class MetadataHandler(object):
@@ -10,12 +10,22 @@ class MetadataHandler(object):
     '''
 
     def __init__(self, filename):
+        self.filename = filename
+
         if not os.path.exists(filename):
-            self.tree = etree.parse(
+            preprocessXsl = etree.parse(
+                resource_filename(__name__, 'xslt/preprocxsl.xsl'))
+            preprocessXslTransformer = etree.XSLT(preprocessXsl)
+            filexsl = etree.parse(
                 resource_filename(__name__, 'xslt/XSL-template.xsl'))
+            self.tree = preprocessXslTransformer(
+                filexsl,
+                commonxsl=etree.XSLT.strparam(
+                    'file://' + resource_filename(__name__,
+                                                  'xslt/common.xsl')))
         else:
             self.tree = etree.parse(filename)
-        self.filename = filename
+
 
     def set_variable(self, key, value):
         self.tree.getroot().find(
@@ -31,5 +41,5 @@ class MetadataHandler(object):
         try:
             self.tree.write(self.filename, encoding="utf-8", xml_declaration=True)
         except IOError:
-            print 'cannot write', xsl_filename
+            print 'cannot write', self.filename
             sys.exit(254)
