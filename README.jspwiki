@@ -243,19 +243,22 @@ svn st | grep ? | cut -f8 -d" " | xargs svn add
 svn ci
 }}}
 
-The complete help text from the program:
+The complete help text from the program is as follows:
+
 {{{
-usage: add_files_to_corpus [-h] corpusdir mainlang genre origdir
+usage: add_files_to_corpus [-h] corpusdir mainlang genredir origdir
 
 Add files to a corpus
 
 positional arguments:
   corpusdir   The corpus dir (freecorpus or boundcorpus)
   mainlang    The language of the files that will be added (sma, sme, ...)
-  genre       The genre directory where the files will be added
+  genredir       The genre directory where the files will be added
               This may also be a path, e.g. admin/facta/skuvlahistorja1
   origdir     The directory where the original files reside (not in svn)
 
+  Note that you must state the (absolute or relative) path to the directories.
+  
 optional arguments:
   -h, --help  show this help message and exit
 }}}
