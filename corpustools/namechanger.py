@@ -16,12 +16,11 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2013 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2013-2014 Børre Gaup <borre.gaup@uit.no>
 #
 
 import os
 import sys
-import unittest
 import unicodedata
 import subprocess
 import inspect
@@ -30,65 +29,6 @@ import lxml.etree as etree
 def lineno():
     """Returns the current line number in our program."""
     return inspect.currentframe().f_back.f_lineno
-
-
-class TestNameChanger(unittest.TestCase):
-    def testNoneAsciiLower(self):
-        want = 'astndzcaoaoai_'
-
-        name = u'ášŧŋđžčåøæöäï+'
-        nc = NameChanger(name)
-
-        self.assertEqual(nc.newname, want)
-
-    def testNoneAsciiUpper(self):
-        want = 'astndzcaoaoai_'
-
-        name = u'ÁŠŦŊĐŽČÅØÆÖÄÏ+'
-        nc = NameChanger(name)
-
-        self.assertEqual(nc.newname, want)
-
-    def testNoneAsciiBlabla(self):
-        want = 'astndzcaoaoai_'
-
-        name = u'ášŧŋđŽČÅØÆÖÄï+'
-        nc = NameChanger(name)
-
-        self.assertEqual(nc.newname, want)
-
-    def testOwnNameWithOnlyAscii(self):
-        want = 'youllneverwalkalone'
-
-        oldname = 'YoullNeverWalkAlone'
-        nc = NameChanger(oldname)
-
-        self.assertEqual(nc.newname, want)
-
-    def testOwnNameWithOnlyAsciiAndSpace(self):
-        want = 'youll_never_walk_alone'
-
-        oldname = 'Youll Never Walk Alone'
-        nc = NameChanger(oldname)
-
-        self.assertEqual(nc.newname, want)
-
-    def testOwnNameWithAsciiAndSpaceAndApostrophe(self):
-        want = 'you_ll_never_walk_alone'
-
-        oldname = "You'll Never Walk Alone"
-        nc = NameChanger(oldname)
-
-        self.assertEqual(nc.newname, want)
-
-    def testOwnNameWithNonAscii(self):
-        want = 'saddago_beaivi_vai_idja/saddago_beaivi_vai_idja'
-
-        oldname = u'Šaddágo beaivi vai idja/Šaddágo beaivi vai idja'
-        klass = oldname
-        nc = NameChanger(klass)
-
-        self.assertEqual(nc.newname, want)
 
 
 class NameChanger:
