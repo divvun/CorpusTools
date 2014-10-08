@@ -1,0 +1,259 @@
+!!!Corpus Tools
+
+Corpus Tools contains tools to manipulate a corpus in different ways.
+These scripts will be installed
+* [ccat|CorpusTools.html#ccat]
+* [convert2xml|CorpusTools.html#convert2xml]
+* [analyse_corpus|CorpusTools.html#analyse_corpus]
+* [add_files_to_corpus|CorpusTools.html#add_files_to_corpus]
+* [parallelize|CorpusTools.html#parallelize]
+
+!!Installation
+
+!System wide
+Install the tools for all users on a machine by writing
+
+{{{sudo python setup.py install --install-scripts=/usr/local/bin}}}
+
+The scripts will then be found in /usr/local/bin
+
+!To own home directory
+Install the tools for the current user by writing
+
+{{{python setup.py install --user --install-scripts=$HOME/bin}}}
+
+The scripts will then be found in ~/bin
+
+!!Uninstalling
+
+!System wide
+{{sudo pip(-2.7) uninstall}}
+
+will uninstall the scripts from /usr/local/bin and the python system path.
+
+
+!Remove from own home directory
+{{{pip(-2.7) uninstall --user}}}
+
+will uninstall the scripts from $HOME/bin and the users python path.
+
+!!ccat
+
+Convert corpus format xml to clean text
+
+The basic function of ccat is to print paragraphs that have text type
+(empty type in our xml-files), that is the default. In addition to text paragraphs, it is possible to print titles, lists and tables.
+
+Typical usage is:
+
+{{{ccat -a -l sme $GTFREE/converted/sme/admin}}}
+
+This command will print all text marked in the language sme found the directory $GTFREE/converted/sme/admin and its subdirectories.
+
+The complete help text from the program:
+
+{{{
+usage: ccat [-h] [-l LANG] [-T] [-L] [-t] [-a] [-c] [-C] [-ort] [-ortreal]
+            [-morphsyn] [-syn] [-lex] [-foreign] [-noforeign] [-typos] [-f]
+            [-S] [-dis] [-dep] [-hyph HYPH_REPLACEMENT]
+            targets [targets ...]
+
+Print the contents of a corpus in XML format The default is to print
+paragraphs with no type (=text type).
+
+positional arguments:
+  targets               Name of the files or directories to process. If a
+                        directory is given, all files in this directory and
+                        its subdirectories will be listed.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -l LANG               Print only elements in language LANG. Default is all
+                        langs.
+  -T                    Print paragraphs with title type
+  -L                    Print paragraphs with list type
+  -t                    Print paragraphs with table type
+  -a                    Print all text elements
+  -c                    Print corrected text instead of the original typos &
+                        errors
+  -C                    Only print unclassified (§/<error..>) corrections
+  -ort                  Only print ortoghraphic, non-word ($/<errorort..>)
+                        corrections
+  -ortreal              Only print ortoghraphic, real-word
+                        (¢/<errorortreal..>) corrections
+  -morphsyn             Only print morphosyntactic (£/<errormorphsyn..>)
+                        corrections
+  -syn                  Only print syntactic (¥/<errorsyn..>) corrections
+  -lex                  Only print lexical (€/<errorlex..>) corrections
+  -foreign              Only print foreign (∞/<errorlang..>) corrections
+  -noforeign            Do not print anything from foreign (∞/<errorlang..>)
+                        corrections
+  -typos                Print only the errors/typos in the text, with
+                        corrections tab-separated
+  -f                    Add the source filename as a comment after each error
+                        word.
+  -S                    Print the whole text one word per line; typos have tab
+                        separated corrections
+  -dis                  Print the disambiguation element
+  -dep                  Print the dependency element
+  -hyph HYPH_REPLACEMENT
+                        Replace hyph tags with the given argument
+}}}
+
+!!convert2xml
+
+Convert original files in a corpus to giellatekno/divvun xml format.
+
+convert2xml depends on these external programs:
+
+* bible2xml.pl (found in the Divvun/Giellatekno svn)
+* pdftotext
+* antiword
+
+
+!Usage
+
+Convert all files in the directory $GTFREE/orig/sme and its
+subdirectories.
+
+{{{convert2xml $GTFREE/orig/sme}}}
+
+The converted files are placed in $GTFREE/converted/sme
+with the same directory structure as that in $GTFREE/orig/sme.
+
+Convert only one file:
+
+{{{convert2xml $GTFREE/orig/sme/admin/sd/file1.html}}}
+
+The converted file is found in $GTFREE/orig/sme/admin/sd/file1.htm.xml
+
+Convert all sme files in directories ending with corpus
+
+{{{convert2xml *corpus/orig/sme}}}
+
+If convert2xml is not able to convert a file these kinds of message will appear:
+
+{{{/home/boerre/Dokumenter/corpus/freecorpus/orig/eng/admin/depts/regjeringen.no/calendar-for-the-ministry-of-children-an.html_id=308}}}
+
+A log file will be found in
+
+{{{/home/boerre/Dokumenter/corpus/freecorpus/orig/eng/admin/depts/regjeringen.no/calendar-for-the-ministry-of-children-an.html_id=308.log}}}
+
+explaining what went wrong.
+
+The complete help text from the program:
+{{{
+usage: convert2xml [-h] [--serial] sources [sources ...]
+
+Convert original files to giellatekno/divvun xml.
+
+positional arguments:
+  sources     The original file(s) or directory/ies where the original files
+              exist
+
+optional arguments:
+  -h, --help  show this help message and exit
+  --serial    use this for debugging the conversion process. When this
+              argument is used files will be converted one by one.
+}}}
+
+!!analyse_corpus
+
+Analyse converted corpus files. So far it only supports analysing sma, sme and
+smj files.
+Only these three languages have the necessary vislcg3 support.
+
+analyse_corpus depends on these external programs:
+
+* preprocess (found in the Divvun/Giellatekno svn)
+* lookup2cg (found in the Divvun/Giellatekno svn)
+* lookup (from xfst)
+* vislcg3
+
+!Usage
+
+To be able to use this program you must build the fsts for the supported
+languages:
+
+* sma
+** {{cd $GTHOME/langs/sma}}
+** make
+* sme
+** {{cd $GTHOME/gt/}}
+** {{make GTLANG=sme}}
+* smj
+** {{cd $GTHOME/langs/smj}}
+** make
+
+Then you must convert the corpus files as explained in the [convert2xml|CorpusTools.html#convert2xml] section.
+
+When this is done you can analyse all files in the directory
+$GTFREE/converted/sme and its subdirectories by issuing this command:
+{{{analyse_corpus sme $GTFREE/converted/sme}}}
+
+The analysed file will be found in {{$GTFREE/analysed/sme}}
+
+To analyse only one file, issue this command:
+
+{{{analyse_corpus --serial sme $GTFREE/converted/sme/file.html.xml}}}
+
+The complete help text from the program:
+{{{
+usage: analyse_corpus [-h] [--serial] lang converted_dirs [converted_dirs ...]
+
+Analyse files found in the given directories for the given language using
+multiple parallel processes.
+
+positional arguments:
+  lang            lang which should be analysed
+  converted_dirs  director(y|ies) where the converted files exist
+
+optional arguments:
+  -h, --help      show this help message and exit
+  --serial        When this argument is used files will be analysed one by
+                  one.
+}}}
+
+!!add_files_to_corpus
+
+This script adds files found on a local machine to a working copy of
+a corpus.
+
+It copies files from a directory to the corpusdir. In the process
+it will change the name of the file so that the filename only consists
+of ascii characters. A metadata file containing the original name,
+main language and genre will be made, too.
+
+Typical usage is:
+add_files_to_corpus $GTFREE sme admin dir_where_files_are
+
+This will copy the files found in the directory {{dir_where_files_are}}
+to {{$GTFREE/orig/sme/admin}}.
+
+After this is done, you will have to add and commit the files to
+the working copy, like this:
+
+{{{
+cd $GTFREE/orig/sme/admin
+svn st | grep ? | cut -f8 -d" " | xargs svn add
+svn ci
+}}}
+
+The complete help text from the program:
+{{{
+usage: add_files_to_corpus [-h] corpusdir mainlang genre origdir
+
+Add files to a corpus
+
+positional arguments:
+  corpusdir   The corpus dir
+  mainlang    The language of the files that will be added
+  genre       The genre of the files that will be added
+  origdir     The directory where the original files reside
+
+optional arguments:
+  -h, --help  show this help message and exit
+}}}
+!!parallelize
+
+Parallelize two parallel corpus files, write the result to a .tmx file.
