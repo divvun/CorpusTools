@@ -250,10 +250,11 @@ usage: add_files_to_corpus [-h] corpusdir mainlang genre origdir
 Add files to a corpus
 
 positional arguments:
-  corpusdir   The corpus dir
-  mainlang    The language of the files that will be added
-  genre       The genre of the files that will be added
-  origdir     The directory where the original files reside
+  corpusdir   The corpus dir (freecorpus or boundcorpus)
+  mainlang    The language of the files that will be added (sma, sme, ...)
+  genre       The genre directory where the files will be added
+              This may also be a path, e.g. admin/facta/skuvlahistorja1
+  origdir     The directory where the original files reside (not in svn)
 
 optional arguments:
   -h, --help  show this help message and exit
