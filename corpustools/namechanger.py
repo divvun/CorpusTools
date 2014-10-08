@@ -231,7 +231,7 @@ def name_to_unicode(filename):
     if platform.system() == 'Windows':
         return filename
     else:
-        return filename('utf-8')
+        return filename.decode('utf-8')
 
 
 def parse_args():
