@@ -21,14 +21,11 @@
 
 import os
 import sys
-import unicodedata
+import unidecode
 import subprocess
-import inspect
-import lxml.etree as etree
+import platform
 
-def lineno():
-    """Returns the current line number in our program."""
-    return inspect.currentframe().f_back.f_lineno
+import lxml.etree as etree
 
 
 class NameChanger:
@@ -44,70 +41,69 @@ class NameChanger:
         """
         self.oldname = oldname
 
-        self.newname = self.changeToAscii(self.oldname)
+        self.newname = self.change_to_ascii(self.oldname)
 
-    def changeToAscii(self, oldname):
+    def change_to_ascii(self, oldname):
         """Downcase all chars in oldname, replace some chars
+        oldname is a unicode string
         """
-        chars = {u'á':u'a', u'š':u's', u'ŧ':u't', u'ŋ':u'n', u'đ':u'd', u'ž':u'z', u'č':u'c', u'å':u'a', u'ø':u'o', u'æ':u'a', u'ö':u'o', u'ä':u'a', u'ï':u'i', u'+':'_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_', u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_'}
+        chars = {u'+':'_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_', u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_'}
 
-        newname = oldname.lower()
+        newname = unicode(unidecode.unidecode(oldname)).lower()
 
         for key, value in chars.items():
-            utf8keys = [unicodedata.normalize('NFD', key), unicodedata.normalize('NFC', key)]
-            for utf8key in utf8keys:
-                if utf8key in newname:
-                    newname = newname.replace(utf8key, value)
-                while '__' in newname:
-                    newname = newname.replace('__', '_')
+            if key in newname:
+                newname = newname.replace(key, value)
+        while '__' in newname:
+            newname = newname.replace('__', '_')
 
         return newname
 
-    def moveFile(self, fromname, toname):
+    def move_file(self, fromname, toname):
         """Change name of file from fromname to toname"""
         if not os.path.exists(os.path.dirname(nc.newname)):
-                os.makedirs(os.path.dirname(nc.newname))
+            os.makedirs(os.path.dirname(nc.newname))
         if nc.newname != nc.oldname:
             subprocess.call(['git', 'mv', nc.oldname, nc.newname])
 
-    def changeName(self):
+    def change_name(self):
         """Change the name of the original file and it's metadata file
         Update the name in parallel files
         Also move the other files that's connected to the original file
         """
         if self.oldname != self.newname:
-            self.moveOrigfile()
-            self.moveXslfile()
-            self.updateNameInParallelFiles()
-            self.movePrestableConverted()
-            self.movePrestableToktmx()
-            self.movePrestableTmx()
+            self.move_origfile()
+            self.move_xslfile()
+            self.update_name_in_parallel_files()
+            self.move_prestable_converted()
+            self.move_prestable_toktmx()
+            self.move_prestable_tmx()
 
         pass
 
-    def moveOrigfile(self):
+    def move_origfile(self):
         """Change the name of the original file
         using the routines of a given repository tool
         """
         fromname = os.path.join(self.dirname, self.oldname)
         toname = os.path.join(self.dirname, self.newname)
 
-        self.moveFile(fromname, toname)
+        self.move_file(fromname, toname)
 
         pass
 
-    def moveXslfile(self):
+    def move_xslfile(self):
         """Change the name of an xsl file using the
         routines of a given repository tool
         """
         fromname = os.path.join(self.dirname, self.oldname + '.xsl')
         toname = os.path.join(self.dirname, self.newname + '.xsl')
 
-        self.moveFile(fromname, toname)
+        self.move_file(fromname, toname)
 
         pass
 
-    def openXslfile(self, xslfile):
+    def open_xslfile(self, xslfile):
         """Open xslfile, return the tree"""
         try:
             tree = etree.parse(xslfile)
@@ -117,13 +113,13 @@ class NameChanger:
 
         return tree
 
-    def setNewname(self, mainlang, paralang, paraname):
+    def set_newname(self, mainlang, paralang, paraname):
         """
         """
         paradir = self.dirname.replace(mainlang, paralang)
         parafile = os.path.join(paradir, paraname + '.xsl')
         if os.path.exists(parafile):
-            paratree = self.openXslfile()
+            paratree = self.open_xslfile()
             pararoot = paratree.getroot()
 
             pararoot.find(".//*[@name='para_" + mainlang + "']").set('select', "'" + self.newname + "'")
@@ -132,14 +128,14 @@ class NameChanger:
 
         pass
 
-    def updateNameInParallelFiles(self):
+    def update_name_in_parallel_files(self):
         """Open the .xsl file belonging to the file we are changing names of. Look for parallel files.
         Open the xsl files of these parallel files and change the name of this
         parallel from the old to the new one
         """
         xslfile = os.path.join(self.dirname, self.newname + '.xsl')
         if os.path.exists(xslfile):
-            xsltree = self.openXslfile(xslfile)
+            xsltree = self.open_xslfile(xslfile)
             xslroot = xsltree.getroot()
 
             mainlang = xslroot.find(".//*[@name='mainlang']").get('select').replace("'", "")
@@ -151,22 +147,18 @@ class NameChanger:
                     element.attrib.get('select') != "''":
                         paralang = element.attrib.get('name').replace('para_', '')
                         paraname = element.attrib.get('select').replace("'", "")
-                        self.setNewname(mainlang, paralang, paraname)
+                        self.set_newname(mainlang, paralang, paraname)
 
-        pass
-
-    def movePrestableConverted(self):
+    def move_prestable_converted(self):
         """Move the file in prestable/converted from the old to the new name
         """
         dirname = self.dirname.replace('/orig/', '/prestable/converted/')
         fromname = os.path.join(dirname, self.oldname + '.xml')
         toname = os.path.join(dirname, self.newname + '.xml')
 
-        self.moveFile(fromname, toname)
+        self.move_file(fromname, toname)
 
-        pass
-
-    def movePrestableToktmx(self):
+    def move_prestable_toktmx(self):
         """Move the file in prestable/toktmx from the old to the new name
         """
         for suggestion in ['/prestable/toktmx/sme2nob/', '/prestable/toktmx/nob2sme/']:
@@ -174,11 +166,9 @@ class NameChanger:
             fromname = os.path.join(dirname, self.oldname + '.toktmx')
             if os.path.exists(fromname):
                 toname = os.path.join(dirname, self.newname + '.toktmx')
-                self.moveFile(fromname, toname)
+                self.move_file(fromname, toname)
 
-        pass
-
-    def movePrestableTmx(self):
+    def move_prestable_tmx(self):
         """Move the file in prestable/tmx from the old to the new name
         """
         for suggestion in ['/prestable/tmx/sme2nob/', '/prestable/tmx/nob2sme/']:
@@ -186,12 +176,14 @@ class NameChanger:
             fromname = os.path.join(dirname, self.oldname + '.tmx')
             if os.path.exists(fromname):
                 toname = os.path.join(dirname, self.newname + '.tmx')
-                self.moveFile(fromname, toname)
+                self.move_file(fromname, toname)
 
-        pass
-
-if __name__ == "__main__":
+def main():
     for root, dirs, files in os.walk(sys.argv[1]):
         for file_ in files:
-            nc = NameChanger(os.path.join(root, file_).decode('utf8'))
-            nc.MoveFile(nc.oldname, nc.newname)
+            if platform.system != 'Windows':
+                nc = NameChanger(os.path.join(root, file_))
+            else:
+                nc = NameChanger(os.path.join(root, file_).decode('utf-8'))
+
+            nc.move_file(nc.oldname, nc.newname)

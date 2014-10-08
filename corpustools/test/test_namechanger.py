@@ -25,56 +25,56 @@ from corpustools import namechanger
 
 
 class TestNameChanger(unittest.TestCase):
-    def testNoneAsciiLower(self):
-        want = 'astndzcaoaoai_'
+    def test_none_ascii_lower(self):
+        want = u'astngdzcaoaeoai_'
 
         name = u'ášŧŋđžčåøæöäï+'
         nc = namechanger.NameChanger(name)
 
         self.assertEqual(nc.newname, want)
 
-    def testNoneAsciiUpper(self):
-        want = 'astndzcaoaoai_'
+    def test_none_ascii_upper(self):
+        want = u'astngdzcaoaeoai_'
 
         name = u'ÁŠŦŊĐŽČÅØÆÖÄÏ+'
         nc = namechanger.NameChanger(name)
 
         self.assertEqual(nc.newname, want)
 
-    def testNoneAsciiBlabla(self):
-        want = 'astndzcaoaoai_'
+    def test_none_ascii_blabla(self):
+        want = u'astngdzcaoaeoai_'
 
         name = u'ášŧŋđŽČÅØÆÖÄï+'
         nc = namechanger.NameChanger(name)
 
         self.assertEqual(nc.newname, want)
 
-    def testOwnNameWithOnlyAscii(self):
-        want = 'youllneverwalkalone'
+    def test_own_name_with_only_ascii(self):
+        want = u'youllneverwalkalone'
 
-        oldname = 'YoullNeverWalkAlone'
+        oldname = u'YoullNeverWalkAlone'
         nc = namechanger.NameChanger(oldname)
 
         self.assertEqual(nc.newname, want)
 
-    def testOwnNameWithOnlyAsciiAndSpace(self):
-        want = 'youll_never_walk_alone'
+    def test_own_name_with_only_ascii_and_space(self):
+        want = u'youll_never_walk_alone'
 
-        oldname = 'Youll Never Walk Alone'
+        oldname = u'Youll Never Walk Alone'
         nc = namechanger.NameChanger(oldname)
 
         self.assertEqual(nc.newname, want)
 
-    def testOwnNameWithAsciiAndSpaceAndApostrophe(self):
-        want = 'you_ll_never_walk_alone'
+    def test_own_name_with_ascii_and_space_and_apostrophe(self):
+        want = u'you_ll_never_walk_alone'
 
-        oldname = "You'll Never Walk Alone"
+        oldname = u"You'll Never Walk Alone"
         nc = namechanger.NameChanger(oldname)
 
         self.assertEqual(nc.newname, want)
 
-    def testOwnNameWithNonAscii(self):
-        want = 'saddago_beaivi_vai_idja/saddago_beaivi_vai_idja'
+    def test_own_name_with_non_ascii(self):
+        want = u'saddago_beaivi_vai_idja/saddago_beaivi_vai_idja'
 
         oldname = u'Šaddágo beaivi vai idja/Šaddágo beaivi vai idja'
         klass = oldname
