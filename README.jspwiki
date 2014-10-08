@@ -13,27 +13,31 @@ These scripts will be installed
 !System wide
 Install the tools for all users on a machine by writing
 
-{{{sudo python setup.py install --install-scripts=/usr/local/bin}}}
+{{{
+cd $GTHOME/tools/CorpusTools
+sudo python setup.py install --install-scripts=/usr/local/bin}}}
 
 The scripts will then be found in /usr/local/bin
 
 !To own home directory
 Install the tools for the current user by writing
 
-{{{python setup.py install --user --install-scripts=$HOME/bin}}}
+{{{
+cd $GTHOME/tools/CorpusTools
+python setup.py install --user --install-scripts=$HOME/bin}}}
 
 The scripts will then be found in ~/bin
 
 !!Uninstalling
 
 !System wide
-{{sudo pip(-2.7) uninstall}}
+{{sudo pip(-2.7) uninstall CorpusTools}}
 
 will uninstall the scripts from /usr/local/bin and the python system path.
 
 
 !Remove from own home directory
-{{{pip(-2.7) uninstall --user}}}
+{{{pip(-2.7) uninstall --user CorpusTools}}}
 
 will uninstall the scripts from $HOME/bin and the users python path.
 
