@@ -365,10 +365,9 @@ def parse_options():
         for the given language using multiple parallel processes.')
     parser.add_argument(u'lang',
                         help=u"lang which should be analysed")
-    parser.add_argument(u'--debug',
+    parser.add_argument(u'--serial',
                         action=u"store_true",
-                        help=u"use this for debugging the analysis \
-                        process. When this argument is used files will \
+                        help=u"When this argument is used files will \
                         be analysed one by one.")
     parser.add_argument(u'converted_dirs', nargs=u'+',
                         help=u"director(y|ies) where the converted files \
@@ -433,7 +432,7 @@ def main():
                 u'gtcore/gtdshared/smi/src/syntax/dependency.cg3'))
 
     ana.collect_files(args.converted_dirs)
-    if args.debug:
+    if args.serial:
         ana.analyse_serially()
     else:
         ana.analyse_in_parallel()

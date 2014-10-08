@@ -496,14 +496,11 @@ def parse_options():
                         default='',
                         help='Replace hyph tags with the given argument')
 
-    parser.add_argument('-r',
-                        dest='recursive',
-                        action='store_true',
-                        help='Recursively process directory and \
-                        subdirs encountered')
     parser.add_argument('targets',
                         nargs='+',
-                        help='Name of the files or directories to process')
+                        help='Name of the files or directories to process. \
+                        If a directory is given, all files in this directory \
+                        and its subdirectories will be listed.')
 
     args = parser.parse_args()
     return args
