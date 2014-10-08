@@ -10,7 +10,7 @@ setup(
     packages=find_packages(),
     url='http://divvun.no',
     license='GPL v3.0',
-    long_description=open('README.txt').read(),
+    long_description=open('README.jspwiki').read(),
     entry_points = {
         'console_scripts': ['ccat = corpustools.ccat:main',
                             'analyse_corpus = corpustools.analyser:main',
