@@ -44,6 +44,7 @@ import decode
 import ngram
 import errormarkup
 from corpustools import ccat
+import analyser
 
 
 class ConversionException(Exception):
@@ -983,6 +984,7 @@ class DocConverter(HTMLContentConverter):
             ['antiword', '-x', 'db', self.orig],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
+
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
@@ -990,6 +992,7 @@ class DocConverter(HTMLContentConverter):
             print >>sys.stderr, output
             print >>sys.stderr, error
             return subp.returncode
+
 
         return etree.fromstring(output)
 
@@ -1758,6 +1761,7 @@ def setup_xml_catalog():
 
 
 def main():
+    analyser.sanity_check([u'antiword', u'pdftotext'])
     setup_xml_catalog()
     args = parse_options()
 
