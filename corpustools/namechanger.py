@@ -29,7 +29,6 @@ import shutil
 import lxml.etree as etree
 import unidecode
 
-import converter
 import xslsetter
 
 
