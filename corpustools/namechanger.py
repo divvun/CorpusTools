@@ -100,7 +100,7 @@ class AddFileToCorpus(NameChangerBase):
             os.path.join(self.new_dirname,
                          self.new_filename + '.xsl'))
         metadata_file.set_variable('filename', self.old_filename)
-        metadata_file.set_variable('genre', self.genre)
+        metadata_file.set_variable('genre', self.genre.split('/')[0])
         metadata_file.set_variable('mainlang', self.mainlang)
 
         print 'Making metadata file', metadata_file.filename
