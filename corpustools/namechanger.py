@@ -29,6 +29,7 @@ import shutil
 import lxml.etree as etree
 import unidecode
 
+import versioncontrol
 import xslsetter
 
 
@@ -74,6 +75,8 @@ class AddFileToCorpus(NameChangerBase):
         self.mainlang = mainlang
         self.genre = genre
         self.new_dirname = '/'.join([corpusdir, 'orig', mainlang, genre])
+        vcsfactory = versioncontrol.VersionControlFactory()
+        self.vcs = vcsfactory.vcs(corpusdir)
 
     def makedirs(self):
         try:
@@ -90,6 +93,7 @@ class AddFileToCorpus(NameChangerBase):
 
         print 'Copying', fromname, 'to', toname
         shutil.copy(fromname, toname)
+        self.vcs.add(toname)
 
     def make_metadata_file(self):
         metadata_file = xslsetter.MetadataHandler(
@@ -101,6 +105,7 @@ class AddFileToCorpus(NameChangerBase):
 
         print 'Making metadata file', metadata_file.filename
         metadata_file.write_file()
+        self.vcs.add(metadata_file.filename)
 
 
 class CorpusNameFixer(NameChangerBase):
@@ -273,7 +278,8 @@ def parse_options():
     parser = argparse.ArgumentParser(
         description='Copy files to a corpus directory. The filenames are \
         converted to ascii only names. Metadata files containing the \
-        original name, the main language and the genre are also made.')
+        original name, the main language and the genre are also made. The \
+        files are added to the working copy.')
 
     parser.add_argument('corpusdir',
                         help='The corpus dir (freecorpus or boundcorpus)')
@@ -296,7 +302,10 @@ def adder_main():
     args = parse_options()
 
     if os.path.isdir(args.corpusdir):
-        add_files(args)
+        try:
+            add_files(args)
+        except UserWarning:
+            pass
     else:
         print >>sys.stderr, 'The given corpus directory,',
         print >>sys.stderr, args.corpusdir,
