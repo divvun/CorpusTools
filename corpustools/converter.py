@@ -958,8 +958,12 @@ class RTFConverter(HTMLContentConverter):
         """
         doc = open(self.orig, "rb")
         content = doc.read()
-        doc = Rtf15Reader.read(
-            io.BytesIO(content.replace('fcharset256', 'fcharset255')))
+        try:
+            doc = Rtf15Reader.read(
+                io.BytesIO(content.replace('fcharset256', 'fcharset255')))
+        except UnicodeDecodeError:
+            raise ConversionException('Unicode problems in ' + self.orig)
+
         html = XHTMLWriter.write(doc, pretty=True).read()
         xml = etree.fromstring(html)
         xml.tag = 'body'
