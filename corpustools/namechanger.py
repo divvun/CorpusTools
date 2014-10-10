@@ -70,11 +70,11 @@ class NameChangerBase(object):
 class AddFileToCorpus(NameChangerBase):
     '''Add a given file to a given corpus
     '''
-    def __init__(self, oldname, corpusdir, mainlang, genre):
+    def __init__(self, oldname, corpusdir, mainlang, path):
         super(AddFileToCorpus, self).__init__(oldname)
         self.mainlang = mainlang
-        self.genre = genre
-        self.new_dirname = '/'.join([corpusdir, 'orig', mainlang, genre])
+        self.path = path
+        self.new_dirname = '/'.join([corpusdir, 'orig', mainlang, path])
         vcsfactory = versioncontrol.VersionControlFactory()
         self.vcs = vcsfactory.vcs(corpusdir)
 
@@ -100,7 +100,7 @@ class AddFileToCorpus(NameChangerBase):
             os.path.join(self.new_dirname,
                          self.new_filename + '.xsl'))
         metadata_file.set_variable('filename', self.old_filename)
-        metadata_file.set_variable('genre', self.genre.split('/')[0])
+        metadata_file.set_variable('genre', self.path.split('/')[0])
         metadata_file.set_variable('mainlang', self.mainlang)
 
         print 'Making metadata file', metadata_file.filename
