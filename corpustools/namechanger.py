@@ -244,6 +244,21 @@ def main():
             nc = CorpusNameFixer(name_to_unicode(os.path.join(root, file_)))
             nc.change_name()
 
+
+def gather_files(origs):
+    file_list = []
+
+    for orig in origs:
+        if os.path.isdir(orig):
+            for root, dirs, files in os.walk(orig):
+                for f in files:
+                    file_list.append(name_to_unicode(os.path.join(root, f)))
+        elif os.path.isfile(orig):
+            file_list.append(name_to_unicode(orig))
+
+    return file_list
+
+
 def adder_main():
     parser = argparse.ArgumentParser(
         description='Add files to a corpus')
@@ -265,16 +280,7 @@ def adder_main():
     args = parser.parse_args()
 
     if os.path.isdir(args.corpusdir):
-        file_list = []
-        for orig in args.origs:
-            if os.path.isdir(orig):
-                for root, dirs, files in os.walk(orig):
-                    for f in files:
-                        file_list.append(name_to_unicode(os.path.join(root, f)))
-            elif os.path.isfile(orig):
-                file_list.append(name_to_unicode(orig))
-
-        for file_ in file_list:
+        for file_ in gather_files(args.origs):
             adder = AddFileToCorpus(
                 file_,
                 args.corpusdir,
