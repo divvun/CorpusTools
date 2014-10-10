@@ -85,7 +85,7 @@ class Converter(object):
         elif '.htm' in self.orig or '.php' in self.orig:
             intermediate = HTMLConverter(self.orig)
 
-        elif '.doc' in self.orig or '.DOC' in self.orig:
+        elif self.orig.endswith('.doc') or self.orig.endswith('.DOC'):
             intermediate = DocConverter(self.orig)
 
         elif '.rtf' in self.orig:
