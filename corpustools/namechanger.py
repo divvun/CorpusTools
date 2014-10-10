@@ -257,18 +257,27 @@ def adder_main():
                         help='The genre directory where the files will be \
                         added. This may also be a path, e.g. \
                         admin/facta/skuvlahistorja1')
-    parser.add_argument('origdir',
-                        help='The directory where the original files reside \
-                        (not in svn)')
+    parser.add_argument('origs',
+                        nargs='+',
+                        help='The original files or directories where the \
+                        original files reside (not in svn)')
 
     args = parser.parse_args()
 
-    for root, dirs, files in os.walk(args.origdir):
-        for f in files:
-            adder = AddFileToCorpus(
-                name_to_unicode(os.path.join(root, f)),
-                args.corpusdir,
-                args.mainlang,
-                args.path)
-            adder.copy_orig_to_corpus()
-            adder.make_metadata_file()
+    file_list = []
+    for orig in args.origs:
+        if os.path.isdir(orig):
+            for root, dirs, files in os.walk(orig):
+                for f in files:
+                    file_list.append(name_to_unicode(os.path.join(root, f)))
+        elif os.path.isfile(orig):
+            file_list.append(name_to_unicode(orig))
+
+    for file_ in file_list:
+        adder = AddFileToCorpus(
+            file_,
+            args.corpusdir,
+            args.mainlang,
+            args.path)
+        adder.copy_orig_to_corpus()
+        adder.make_metadata_file()
