@@ -264,20 +264,25 @@ def adder_main():
 
     args = parser.parse_args()
 
-    file_list = []
-    for orig in args.origs:
-        if os.path.isdir(orig):
-            for root, dirs, files in os.walk(orig):
-                for f in files:
-                    file_list.append(name_to_unicode(os.path.join(root, f)))
-        elif os.path.isfile(orig):
-            file_list.append(name_to_unicode(orig))
+    if os.path.isdir(args.corpusdir):
+        file_list = []
+        for orig in args.origs:
+            if os.path.isdir(orig):
+                for root, dirs, files in os.walk(orig):
+                    for f in files:
+                        file_list.append(name_to_unicode(os.path.join(root, f)))
+            elif os.path.isfile(orig):
+                file_list.append(name_to_unicode(orig))
 
-    for file_ in file_list:
-        adder = AddFileToCorpus(
-            file_,
-            args.corpusdir,
-            args.mainlang,
-            args.path)
-        adder.copy_orig_to_corpus()
-        adder.make_metadata_file()
+        for file_ in file_list:
+            adder = AddFileToCorpus(
+                file_,
+                args.corpusdir,
+                args.mainlang,
+                args.path)
+            adder.copy_orig_to_corpus()
+            adder.make_metadata_file()
+    else:
+        print >>sys.stderr, 'The given corpus directory,',
+        print >>sys.stderr, args.corpusdir,
+        print >>sys.stderr, 'does not exist'
