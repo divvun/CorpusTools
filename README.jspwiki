@@ -226,7 +226,8 @@ a corpus.
 It copies files from a directory to the corpusdir. In the process
 it will change the name of the file so that the filename only consists
 of ascii characters. A metadata file containing the original name,
-main language and genre will be made, too.
+main language and genre will be made, too. The files are added to the working
+copy, as well.
 
 Typical usage is:
 add_files_to_corpus $GTFREE sme admin dir_where_files_are
@@ -234,34 +235,35 @@ add_files_to_corpus $GTFREE sme admin dir_where_files_are
 This will copy the files found in the directory {{dir_where_files_are}}
 to {{$GTFREE/orig/sme/admin}}.
 
-After this is done, you will have to add and commit the files to
+After this is done, you will have to commit the files to
 the working copy, like this:
 
 {{{
 cd $GTFREE/orig/sme/admin
-svn st | grep ? | cut -f8 -d" " | xargs svn add
 svn ci
 }}}
 
 The complete help text from the program is as follows:
 
 {{{
-usage: add_files_to_corpus [-h] corpusdir mainlang genredir origdir
+usage: add_files_to_corpus [-h] corpusdir mainlang path origs [origs ...]
 
-Add files to a corpus
+Copy files to a corpus directory. The filenames are converted to ascii only
+names. Metadata files containing the original name, the main language and the
+genre are also made. The files are added to the working copy.
 
 positional arguments:
   corpusdir   The corpus dir (freecorpus or boundcorpus)
   mainlang    The language of the files that will be added (sma, sme, ...)
-  genredir       The genre directory where the files will be added
-              This may also be a path, e.g. admin/facta/skuvlahistorja1
-  origdir     The directory where the original files reside (not in svn)
+  path        The genre directory where the files will be added. This may also
+              be a path, e.g. admin/facta/skuvlahistorja1
+  origs       The original files or directories where the original files
+              reside (not in svn)
 
-  Note that you must state the (absolute or relative) path to the directories.
-  
 optional arguments:
   -h, --help  show this help message and exit
 }}}
+
 !!parallelize
 
 Parallelize two parallel corpus files, write the result to a .tmx file.
