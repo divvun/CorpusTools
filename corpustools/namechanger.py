@@ -271,7 +271,9 @@ def add_files(args):
 
 def parse_options():
     parser = argparse.ArgumentParser(
-        description='Add files to a corpus')
+        description='Copy files to a corpus directory. The filenames are \
+        converted to ascii only names. Metadata files containing the \
+        original name, the main language and the genre are also made.')
 
     parser.add_argument('corpusdir',
                         help='The corpus dir (freecorpus or boundcorpus)')
