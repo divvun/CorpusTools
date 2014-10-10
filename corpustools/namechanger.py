@@ -259,7 +259,18 @@ def gather_files(origs):
     return file_list
 
 
-def adder_main():
+def add_files(args):
+    for file_ in gather_files(args.origs):
+        adder = AddFileToCorpus(
+            file_,
+            args.corpusdir,
+            args.mainlang,
+            args.path)
+        adder.copy_orig_to_corpus()
+        adder.make_metadata_file()
+
+
+def parse_options():
     parser = argparse.ArgumentParser(
         description='Add files to a corpus')
 
@@ -277,17 +288,14 @@ def adder_main():
                         help='The original files or directories where the \
                         original files reside (not in svn)')
 
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+def adder_main():
+    args = parse_options()
 
     if os.path.isdir(args.corpusdir):
-        for file_ in gather_files(args.origs):
-            adder = AddFileToCorpus(
-                file_,
-                args.corpusdir,
-                args.mainlang,
-                args.path)
-            adder.copy_orig_to_corpus()
-            adder.make_metadata_file()
+        add_files(args)
     else:
         print >>sys.stderr, 'The given corpus directory,',
         print >>sys.stderr, args.corpusdir,
