@@ -51,6 +51,7 @@ class SVN(VersionController):
             self.add_directory(os.path.dirname(directory))
             self.client.add(os.path.dirname(directory))
 
+
 class GIT(VersionController):
     def __init__(self, gitrepo):
         self.gitrepo = gitrepo
