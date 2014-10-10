@@ -337,13 +337,15 @@ def unwrap_self_analyse(arg, **kwarg):
     return Analyser.analyse(*arg, **kwarg)
 
 
-def sanity_check():
+def sanity_check(program_list):
     u"""Look for programs and files that are needed to do the analysis.
     If they don't exist, quit the program
     """
-    for program in [u'preprocess', u'lookup2cg', u'lookup', u'vislcg3']:
+    for program in program_list:
         if which(program) is False:
-            sys.stderr.write(program, u" isn't found in path\n")
+            sys.stderr.write(program)
+            sys.stderr.write(u" isn't found in path\n")
+            sys.stderr.write(u'You must install it.\n')
             sys.exit(2)
 
 
@@ -351,10 +353,11 @@ def which(name):
     u"""Get the output of the unix command which.
     Return false if empty, true if non-empty
     """
-    if subprocess.check_output([u'which', name]) == u'':
-        return False
-    else:
+    try:
+        subprocess.check_output([u'which', name])
         return True
+    except subprocess.CalledProcessError:
+        return False
 
 
 def parse_options():
@@ -381,7 +384,7 @@ def main():
     '''Analyse files in the given directories
     '''
     args = parse_options()
-    sanity_check()
+    sanity_check([u'preprocess', u'lookup2cg', u'lookup', u'vislcg3'])
 
     ana = Analyser(args.lang)
     if args.lang == 'sme':
