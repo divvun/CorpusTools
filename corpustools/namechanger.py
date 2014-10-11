@@ -74,7 +74,7 @@ class AddFileToCorpus(NameChangerBase):
         super(AddFileToCorpus, self).__init__(oldname)
         self.mainlang = mainlang
         self.path = path
-        self.new_dirname = '/'.join([corpusdir, 'orig', mainlang, path])
+        self.new_dirname = os.path.join(corpusdir, 'orig', mainlang, path)
         vcsfactory = versioncontrol.VersionControlFactory()
         self.vcs = vcsfactory.vcs(corpusdir)
 
