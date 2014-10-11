@@ -22,28 +22,28 @@
 
 import os
 import sys
-import lxml.etree as etree
 import re
 import io
 import subprocess
-import bs4
 import HTMLParser
-from pyth.plugins.rtf15.reader import Rtf15Reader
-from pyth.plugins.xhtml.writer import XHTMLWriter
 from copy import deepcopy
 import distutils.dep_util
-import tidylib
 import codecs
 import multiprocessing
 import argparse
-import shutil
 import tempfile
 from pkg_resources import resource_string, resource_filename
+
+import bs4
+import lxml.etree as etree
+import tidylib
+from pyth.plugins.rtf15.reader import Rtf15Reader
+from pyth.plugins.xhtml.writer import XHTMLWriter
 
 import decode
 import ngram
 import errormarkup
-from corpustools import ccat
+import ccat
 import analyser
 
 
@@ -185,7 +185,6 @@ class Converter(object):
 
         return fixer.get_etree()
 
-
     def make_complete(self):
         """Combine the intermediate giellatekno xml file and the metadata into
         a complete giellatekno xml file.
@@ -210,15 +209,16 @@ class Converter(object):
                     'goldstandard' not in self.orig):
                 complete = self.make_complete()
 
-                xml_printer = ccat.XMLPrinter(all_paragraphs=True, hyph_replacement=None)
+                xml_printer = ccat.XMLPrinter(all_paragraphs=True,
+                                              hyph_replacement=None)
                 xml_printer.etree = complete
                 text = xml_printer.process_file().getvalue()
 
                 if len(text) > 0:
                     converted = open(self.get_converted_name(), 'w')
                     converted.write(etree.tostring(complete,
-                                                encoding='utf8',
-                                                pretty_print='True'))
+                                                   encoding='utf8',
+                                                   pretty_print='True'))
                     converted.close()
                 else:
                     print >>sys.stderr, self.orig, "has no text"
@@ -312,7 +312,6 @@ class Converter(object):
                     u"XML syntax error. More info in the log file: " +
                     self.get_orig() + u".log")
 
-
     def set_converted_name(self):
         """Set the name of the converted file
         """
@@ -393,7 +392,8 @@ class AvvirConverter(object):
 
             title.tag = 'section'
 
-        for title in self.intermediate.findall('.//story[@class="Undertittel"]'):
+        for title in self.intermediate.findall(
+                './/story[@class="Undertittel"]'):
             for p in title.findall('./p'):
                 p.set('type', 'title')
 
@@ -803,7 +803,7 @@ class HTMLContentConverter(object):
                 'class': ['WebPartReadMoreParagraph', 'breadcrumbs'],
                 },
             'ul': {
-                'id': ['AreaTopPrintMeny', 'AreaTopLanguageNav',],
+                'id': ['AreaTopPrintMeny', 'AreaTopLanguageNav'],
                 'class': ['QuickNav', 'article-tools', 'byline']
                 },
             'span': {
@@ -815,7 +815,8 @@ class HTMLContentConverter(object):
         for tag, attribs in unwanted_classes_ids.items():
             for key, values in attribs.items():
                 for value in values:
-                    [remove.decompose() for remove in self.soup.find_all(tag, {key: value})]
+                    [remove.decompose()
+                     for remove in self.soup.find_all(tag, {key: value})]
 
     def tidy(self):
         """
@@ -824,7 +825,8 @@ class HTMLContentConverter(object):
         self.remove_empty_class()
         self.remove_elements()
 
-        if not ("xmlns", "http://www.w3.org/1999/xhtml") in self.soup.html.attrs:
+        if (not ("xmlns", "http://www.w3.org/1999/xhtml") in
+                self.soup.html.attrs):
             self.soup.html["xmlns"] = "http://www.w3.org/1999/xhtml"
 
         self.soup = self.soup.prettify()
@@ -997,14 +999,15 @@ class DocConverter(HTMLContentConverter):
             print >>sys.stderr, error
             return subp.returncode
 
-
         return etree.fromstring(output)
 
     def docbook2html(self):
         """Convert the docbook output to html using docbook-xsl
         Return the html as a string
         """
-        docbook_transformer = etree.XSLT(etree.parse('http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl'))
+        docbook_transformer = etree.XSLT(
+            etree.parse(
+                'http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl'))
         try:
             html = docbook_transformer(self.doc2docbook())
         except etree.XSLTApplyError as (e):
@@ -1043,7 +1046,8 @@ class DocumentFixer(object):
                 lines = []
                 for em in element.iter('em'):
                     next = em.getnext()
-                    if next is not None and next.tag == 'em' and (em.tail is None or not word.search(em.tail)):
+                    if (next is not None and next.tag == 'em' and
+                            (em.tail is None or not word.search(em.tail))):
                         if em.text is not None:
                             lines.append(em.text.strip())
                         em.getparent().remove(em)
@@ -1055,13 +1059,11 @@ class DocumentFixer(object):
                             em.tail = ' ' + em.tail
                         lines = []
 
-
     def soft_hyphen_to_hyph_tag(self):
         """Replace soft hyphens in text by the hyph tag
         """
         for element in self.etree.iter('p'):
             self.replace_shy(element)
-
 
     def replace_shy(self, element):
         """Split text and tail on shy. Insert hyph tags
@@ -1096,7 +1098,7 @@ class DocumentFixer(object):
         """Insert space after semicolon where needed
         """
         irritating_words_regex = re.compile(u'(govv(a|en|ejeaddji):)([^ ])',
-                                            re.UNICODE|re.IGNORECASE)
+                                            re.UNICODE | re.IGNORECASE)
         for child in self.etree.find('.//body'):
             self.insert_space_after_semicolon(child, irritating_words_regex)
 
@@ -1234,8 +1236,8 @@ class DocumentFixer(object):
 
         quote_list = []
         quote_regexes = [re.compile('".+?"'),
-                        re.compile(u'«.+?»'),
-                        re.compile(u'“.+?”')]
+                         re.compile(u'«.+?»'),
+                         re.compile(u'“.+?”')]
 
         text = newelement.text
         if text:
@@ -1338,7 +1340,8 @@ class DocumentFixer(object):
         newstags = re.compile(r'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|LED|bilde)*tekst:|@*foto:|@fotobyline:|@*bildetitt:|<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|@*Samleingress:*|tekst/ingress:|billedtekst:)', re.IGNORECASE)
         titletags = re.compile(r'\s*@m.titt[\.:]|\s*@*stikk:|Mellomtittel:|@*(stikk\.*|under)titt(el)*:|@ttt:|\s*@*[utm]*[:\.]*tit+:|<pstyle:m.titt>|undertittel:', re.IGNORECASE)
         headertitletags = re.compile(r'(\s*@*(led)*tittel:|\s*@*titt(\s\d)*:|@LEDtitt:|<pstyle:tittel>|@*(hoved|over)titt(el)*:)', re.IGNORECASE)
-        bylinetags = re.compile(u'(<pstyle:|\s*@*)[Bb]yline[:>]*\s*(\S+:)*', re.UNICODE|re.IGNORECASE)
+        bylinetags = re.compile(u'(<pstyle:|\s*@*)[Bb]yline[:>]*\s*(\S+:)*',
+                                re.UNICODE | re.IGNORECASE)
         boldtags = re.compile(u'@bold\s*:')
 
         header = self.etree.find('.//header')
@@ -1372,7 +1375,9 @@ class DocumentFixer(object):
                         if len(lines) > 0:
                             index += 1
                             paragraph.getparent().insert(
-                                index, self.make_element('p', ' '.join(lines).strip()))
+                                index,
+                                self.make_element('p',
+                                                  ' '.join(lines).strip()))
                         lines = []
 
                         lines.append(newstags.sub('', line))
@@ -1380,7 +1385,9 @@ class DocumentFixer(object):
                         if len(lines) > 0:
                             index += 1
                             paragraph.getparent().insert(
-                                index, self.make_element('p', ' '.join(lines).strip()))
+                                index,
+                                self.make_element('p',
+                                                  ' '.join(lines).strip()))
                         line = bylinetags.sub('', line).strip()
 
                         if unknown is not None:
@@ -1396,59 +1403,80 @@ class DocumentFixer(object):
                         if len(lines) > 0:
                             index += 1
                             paragraph.getparent().insert(
-                                index, self.make_element('p', ' '.join(lines).strip()))
+                                index,
+                                self.make_element('p',
+                                                  ' '.join(lines).strip()))
                         line = boldtags.sub('', line).strip()
                         lines = []
                         index += 1
                         p = etree.Element('p')
-                        p.append(self.make_element('em', line.strip(), {'type': 'bold'}))
+                        p.append(self.make_element('em', line.strip(),
+                                                   {'type': 'bold'}))
                         paragraph.getparent().insert(index, p)
                     elif line.startswith('@kursiv:'):
                         if len(lines) > 0:
                             index += 1
                             paragraph.getparent().insert(
-                                index, self.make_element('p', ' '.join(lines).strip()))
+                                index,
+                                self.make_element('p',
+                                                  ' '.join(lines).strip()))
                         line = line.replace('@kursiv:', '')
                         lines = []
                         index += 1
                         p = etree.Element('p')
-                        p.append(self.make_element('em', line.strip(), {'type': 'italic'}))
+                        p.append(self.make_element('em', line.strip(),
+                                                   {'type': 'italic'}))
                         paragraph.getparent().insert(index, p)
                     elif headertitletags.match(line):
                         if len(lines) > 0:
                             index += 1
                             paragraph.getparent().insert(
-                                index, self.make_element('p', ' '.join(lines).strip()))
+                                index,
+                                self.make_element('p',
+                                                  ' '.join(lines).strip()))
                         line = headertitletags.sub('', line)
                         lines = []
                         index += 1
                         title = header.find('./title')
                         if title.text is None:
                             title.text = line.strip()
-                        paragraph.getparent().insert(index, self.make_element('p', line.strip(), {'type': 'title'}))
+                        paragraph.getparent().insert(
+                            index,
+                            self.make_element('p', line.strip(),
+                                              {'type': 'title'}))
                     elif titletags.match(line):
                         if len(lines) > 0:
                             index += 1
                             paragraph.getparent().insert(
-                                index, self.make_element('p', ' '.join(lines).strip()))
+                                index,
+                                self.make_element('p',
+                                                  ' '.join(lines).strip()))
                         line = titletags.sub('', line)
                         lines = []
                         index += 1
-                        paragraph.getparent().insert(index, self.make_element('p', line.strip(), {'type': 'title'}))
+                        paragraph.getparent().insert(
+                            index,
+                            self.make_element(
+                                'p', line.strip(), {'type': 'title'}))
                     elif line == '' and len(lines) > 0:
                         if len(lines) > 0:
                             index += 1
                             paragraph.getparent().insert(
-                                index, self.make_element('p', ' '.join(lines).strip()))
+                                index,
+                                self.make_element('p',
+                                                  ' '.join(lines).strip()))
                         lines = []
                     else:
                         lines.append(line)
 
                 if len(lines) > 0:
                     index += 1
-                    paragraph.getparent().insert(index, self.make_element('p', ' '.join(lines).strip()))
+                    paragraph.getparent().insert(
+                        index, self.make_element('p',
+                                                 ' '.join(lines).strip()))
 
                 paragraph.getparent().remove(paragraph)
+
 
 class XslMaker(object):
     """
@@ -1480,7 +1508,8 @@ class XslMaker(object):
             filexsl,
             commonxsl=
             etree.XSLT.strparam('file://' +
-                                resource_filename(__name__, 'xslt/common.xsl')))
+                                resource_filename(__name__,
+                                                  'xslt/common.xsl')))
 
     def get_xsl(self):
         return self.finalXsl
@@ -1500,6 +1529,7 @@ class XslMaker(object):
 
             logfile.close()
             raise ConversionException("Invalid XML in " + self.get_xsl())
+
 
 class LanguageDetector(object):
     """
@@ -1546,7 +1576,8 @@ class LanguageDetector(object):
             lang = self.languageGuesser.classify(
                 paragraph_text.encode("ascii", "ignore"))
             if lang != self.get_mainlang():
-                paragraph.set('{http://www.w3.org/XML/1998/namespace}lang', lang)
+                paragraph.set('{http://www.w3.org/XML/1998/namespace}lang',
+                              lang)
 
             for element in paragraph.iter("span"):
                 if element.get("type") == "quote":
@@ -1599,7 +1630,8 @@ class DocumentTester(object):
         return len(re.findall(r'\S+', self.get_mainlang_words()))
 
     def get_unknown_words_ratio(self):
-        return 1.0 * self.get_unknown_wordcount() / self.get_mainlang_wordcount()
+        return (1.0 * self.get_unknown_wordcount() /
+                self.get_mainlang_wordcount())
 
     def get_mainlang_ratio(self):
         return 1.0 * self.get_mainlang_wordcount() / float(
@@ -1637,11 +1669,11 @@ class DocumentTester(object):
         lookup_command = ['lookup', '-flags', 'mbTT']
         if self.get_mainlang() == 'sme':
             lookup_command.append(os.getenv('GTHOME') +
-                                 '/gt/' +
-                                 self.get_mainlang() +
-                                 '/bin/' +
-                                 self.get_mainlang() +
-                                 '.fst')
+                                  '/gt/' +
+                                  self.get_mainlang() +
+                                  '/bin/' +
+                                  self.get_mainlang() +
+                                  '.fst')
         else:
             lookup_command.append(
                 os.getenv('GTHOME') +
@@ -1653,7 +1685,8 @@ class DocumentTester(object):
                                 stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
-        (output, error) = subp.communicate(self.get_preprocessed_mainlang_words())
+        (output, error) = subp.communicate(
+            self.get_preprocessed_mainlang_words())
 
         if subp.returncode != 0:
             print >>sys.stderr, 'Could not lookup text'
@@ -1678,7 +1711,7 @@ class DocumentTester(object):
             corrFile = os.path.join(
                 os.environ['GTHOME'], 'gt/sme/bin/corr.txt')
             preprocess_command = ['preprocess',
-                                 '--abbr=' + abbrFile, '--corr=' + corrFile]
+                                  '--abbr=' + abbrFile, '--corr=' + corrFile]
         else:
             preprocess_command = ['preprocess']
 

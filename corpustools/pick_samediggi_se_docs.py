@@ -7,10 +7,10 @@
 
 import os
 import sys
-import bs4
-import lxml.etree as etree
 import inspect
 import shutil
+
+import lxml.etree as etree
 
 import xslsetter
 
@@ -58,7 +58,8 @@ class DocumentPicker(object):
         if os.path.exists(self.get_parallel_name(file_, a)):
             self.parallel_dict[file_].append(self.get_parallel_name(file_, a))
         else:
-            print >>sys.stderr, lineno(), self.get_parallel_name(file_, a), 'does not exist', a.get('title'),  file_
+            print >>sys.stderr, lineno(), self.get_parallel_name(file_, a), \
+                'does not exist', a.get('title'),  file_
 
     def get_parallels(self, a, file_):
         self.parallel_dict.setdefault(file_, [])
@@ -88,16 +89,20 @@ class DocumentPicker(object):
         self.file_dict['none'].append(file_)
 
         for img in html.iter('img'):
-            if img.get('src') is not None and 'icon_flag_sme_dim.gif' in img.get('src'):
+            if (img.get('src') is not None and
+                    'icon_flag_sme_dim.gif' in img.get('src')):
                 self.append_file('sme', file_)
                 self.get_parallels(img.getparent(), file_)
-            elif img.get('src') is not None and 'icon_flag_smj_dim.gif' in img.get('src'):
+            elif (img.get('src') is not None and
+                  'icon_flag_smj_dim.gif' in img.get('src')):
                 self.append_file('smj', file_)
                 self.get_parallels(img.getparent(), file_)
-            elif img.get('src') is not None and 'icon_flag_sma_dim.gif' in img.get('src'):
+            elif (img.get('src') is not None and
+                  'icon_flag_sma_dim.gif' in img.get('src')):
                 self.append_file('sma', file_)
                 self.get_parallels(img.getparent(), file_)
-            elif img.get('src') is not None and 'icon_flag_swe_dim.gif' in img.get('src'):
+            elif (img.get('src') is not None and
+                  'icon_flag_swe_dim.gif' in img.get('src')):
                 self.append_file('swe', file_)
                 self.get_parallels(img.getparent(), file_)
 
@@ -105,10 +110,9 @@ class DocumentPicker(object):
         total = 0
         for key, value in self.file_dict.items():
             total += len(self.file_dict[key])
-            print key, len(self.file_dict[key]) #, self.file_dict[key]
+            print key, len(self.file_dict[key])
             print
         print total, self.total_file
-
 
     def check_consistency(self):
         '''Check if all files that claim to have parallels actually exist
@@ -126,12 +130,14 @@ class DocumentPicker(object):
 
     def get_goal_name(self, file_, lang):
         filename = os.path.basename(file_)
-        goalfile = '/'.join([self.freecorpus, 'orig', lang, 'admin', 'sd', 'www.samediggi.se', filename])
+        goalfile = os.path.join(self.freecorpus, 'orig', lang, 'admin',
+                                'sd', 'www.samediggi.se', filename)
 
         return goalfile
 
     def set_metadata(self, file_, lang):
-        mh = xslsetter.MetadataHandler(self.get_goal_name(file_, lang) + '.xsl')
+        mh = xslsetter.MetadataHandler(
+            self.get_goal_name(file_, lang) + '.xsl')
         for key, value in self.set_variables(file_, lang).items():
             mh.set_variable(key, value)
         mh.write_file()
@@ -167,12 +173,12 @@ class DocumentPicker(object):
                 self.set_metadata(candidate, 'swe')
 
     def move_files_set_metadata(self):
-        freecorpus = os.getenv('GTFREE')
         for lang in ['sma', 'smj', 'sme']:
             for file_ in self.file_dict[lang]:
                 shutil.copy(file_, self.get_goal_name(file_, lang))
                 self.move_swe_file(file_)
                 self.set_metadata(file_, lang)
+
 
 def main():
     dp = DocumentPicker(sys.argv[1])

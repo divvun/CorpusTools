@@ -162,8 +162,8 @@ class SentenceDivider:
     Each sentence is encased in an s tag, and has an id number
     """
     def __init__(self, input_xmlfile, parallel_lang):
-        """Parse the input_xmlfile, set doc_lang to lang and read typos from the
-        corresponding .typos file if it exists
+        """Parse the input_xmlfile, set doc_lang to lang and read typos from
+        the corresponding .typos file if it exists
         """
         self.set_up_input_file(input_xmlfile, parallel_lang)
         self.sentence_counter = 0
@@ -215,7 +215,8 @@ class SentenceDivider:
         f.close()
 
     def get_preprocess_output(self, preprocess_input):
-        """Send the text in preprocess_input into preprocess, return the result.
+        """Send the text in preprocess_input into preprocess, return the
+        result.
         If the process fails, exit the program
         """
         preprocess_command = []
@@ -225,12 +226,12 @@ class SentenceDivider:
             preprocess_command = ['preprocess', '--abbr=' + abbr_file]
         else:
             abbr_file = os.path.join(os.environ['GTHOME'],
-                                    'gt/sme/bin/abbr.txt')
+                                     'gt/sme/bin/abbr.txt')
             corr_file = os.path.join(os.environ['GTHOME'],
-                                    'gt/sme/bin/corr.txt')
+                                     'gt/sme/bin/corr.txt')
             preprocess_command = ['preprocess',
-                                 '--abbr=' + abbr_file,
-                                 '--corr=' + corr_file]
+                                  '--abbr=' + abbr_file,
+                                  '--corr=' + corr_file]
 
         subp = subprocess.Popen(preprocess_command,
                                 stdin=subprocess.PIPE,
@@ -262,7 +263,7 @@ class SentenceDivider:
             output = self.get_preprocess_output(preprocess_input)
             sentence = []
             incomplete_sentences = ['.', '?', '!', ')', ']', '...', '…', '"',
-                                   '»', '”', '°', '', ':']
+                                    '»', '”', '°', '', ':']
             words = output.split('\n')
             i = 0
             while i < len(words):
@@ -453,8 +454,10 @@ class Parallelize:
         anchor_name = self.generate_anchor_file()
 
         subp = subprocess.Popen(['tca2.sh', anchor_name,
-                                 self.get_sent_filename(self.get_filelist()[0]),
-                                 self.get_sent_filename(self.get_filelist()[1])],
+                                 self.get_sent_filename(
+                                     self.get_filelist()[0]),
+                                 self.get_sent_filename(
+                                     self.get_filelist()[1])],
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
@@ -639,13 +642,13 @@ class Tmx:
         space_punctuation = re.compile("(?P<space>\s)(?P<punctuation>[\)\]\.»:;,])")
         # for every match in the result string, replace the match
         # (space+punctuation) with the punctuation part
-        result = space_punctuation.sub(lambda match:
-                                      match.group('punctuation'), result)
+        result = space_punctuation.sub(lambda match: match.group(
+            'punctuation'), result)
 
         # regex to find punctuation followed by space
         punctuation_space = re.compile("(?P<punctuation>[\[\(«])(?P<space>\s)+")
-        result = punctuation_space.sub(lambda match:
-                                      match.group('punctuation'), result)
+        result = punctuation_space.sub(lambda match: match.group(
+            'punctuation'), result)
 
         # regex which matches multiple spaces
         multiple_space = re.compile("\s+")
@@ -785,10 +788,11 @@ class Tca2ToTmx(Tmx):
         replace_path_part = '/toktmx/' + self.filelist[0].get_lang() + '2' \
             + self.filelist[1].get_lang() + '/'
         # Then set the outdir
-        out_dirname = self.filelist[0].get_dirname().replace(orig_path_part,
-                                                           replace_path_part)
+        out_dirname = self.filelist[0].get_dirname().replace(
+            orig_path_part, replace_path_part)
         # Replace xml with tmx in the filename
-        out_filename = self.filelist[0].get_basename().replace('.xml', '.toktmx')
+        out_filename = self.filelist[0].get_basename().replace('.xml',
+                                                               '.toktmx')
 
         return os.path.join(out_dirname, out_filename)
 
@@ -821,8 +825,8 @@ class Tca2ToTmx(Tmx):
             f = open(pfile_name, "r")
             text = f.readlines()
             f.close()
-        except IOError:
-            print "I/O error({0}): {1}".format(errno, strerror)
+        except IOError as e:
+            print "I/O error({0}): {1}".format(e.errno, e.strerror)
             sys.exit(1)
 
         return text
@@ -954,8 +958,8 @@ class TmxTestDataWriter():
             et.write(f, pretty_print=True, encoding="utf-8",
                      xml_declaration=True)
             f.close()
-        except IOError:
-            print "I/O error({0}): {1}".format(errno, strerror)
+        except IOError as e:
+            print "I/O error({0}): {1}".format(e.errno, e.strerror)
             sys.exit(1)
 
 
@@ -1034,7 +1038,7 @@ class TmxGoldstandardTester:
 
                 # The result of the alignment is a tmx element
                 filelist = parallelizer.get_filelist()
-                got_tmx = Tca2To_tmx(filelist)
+                got_tmx = Tca2ToTmx(filelist)
 
                 # This is the tmx element fetched from the goldstandard file
                 want_tmx = Tmx(etree.parse(want_tmx_file))
@@ -1055,7 +1059,7 @@ class TmxGoldstandardTester:
                 testrun.append(file_element)
 
                 self.write_diff_files(comparator, parallelizer,
-                                    filelist[0].get_basename())
+                                      filelist[0].get_basename())
 
     def compute_xmlfilename(self, want_tmx_file):
         """
@@ -1080,17 +1084,19 @@ class TmxGoldstandardTester:
 
         try:
             f = open(os.path.join(dirname, filename), "w")
-        except IOError:
-            print "I/O error({0}): {1}".format(errno, strerror)
+        except IOError as e:
+            print "I/O error({0}): {1}".format(e.errno, e.strerror)
             sys.exit(1)
 
         f.write('!!!' + filename + '\n')
         f.write("!!TMX diff\n{{{\n")
         f.writelines(comparator.get_diff_as_text())
         f.write("\n}}}\n!!" + parallelizer.get_lang1() + " diff\n{{{\n")
-        f.writelines(comparator.get_lang_diff_as_text(parallelizer.get_lang1()))
+        f.writelines(comparator.get_lang_diff_as_text(
+            parallelizer.get_lang1()))
         f.write("\n}}}\n!!" + parallelizer.get_lang2() + " diff\n{{{\n")
-        f.writelines(comparator.get_lang_diff_as_text(parallelizer.get_lang2()))
+        f.writelines(comparator.get_lang_diff_as_text(
+            parallelizer.get_lang2()))
         f.write("\n}}}\n")
         f.close()
 

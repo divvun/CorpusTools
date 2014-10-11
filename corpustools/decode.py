@@ -4,7 +4,6 @@ non official standards and have been converted to the various systems'
 internal encodings. This module have functions that revert the damage
 done.
 '''
-import re
 import sys
 
 CTYPES = {
@@ -126,7 +125,7 @@ CTYPES = {
         u"È": u"Č",
         u"¼": u"ŧ",
         u"©": u"Š",
-        u"Ð": u"Đ", # U+00D0 to U+0110
+        u"Ð": u"Đ",  # U+00D0 to U+0110
         u"½": u"Ŋ",
         u"®": u"Ž",
         u"¬": u"Ŧ",
@@ -144,7 +143,7 @@ CTYPES = {
         u"Ç": u"Č",
         u"ý": u"ŧ",
         u"Ó": u"Š",
-        u"Ð": u"Đ", # U+00D0 to U+0110
+        u"Ð": u"Đ",  # U+00D0 to U+0110
         u"Ñ": u"Ŋ",
         u"Þ": u"Ž",
         u"Ý": u"Ŧ",
@@ -218,6 +217,7 @@ CTYPES = {
     },
 }
 
+
 class EncodingGuesser(object):
     """Try to find out if some text or a file has faultily encoded (northern)
     sami letters
@@ -254,9 +254,9 @@ class EncodingGuesser(object):
 
         content = content.decode('utf8')
         if (
-            (u'' in content and not u'ã' in content) or
-            (u'' in content) or
-            (u'¯' in content and not u'Ø' in content)):
+                (u'' in content and not u'ã' in content) or
+                (u'' in content) or
+                (u'¯' in content and not u'Ø' in content)):
             winner = u"mac-sami_to_latin1"
         elif u'' in content and u'ã':
             winner = u"mix-mac-sami-and-some-unknown-encoding"

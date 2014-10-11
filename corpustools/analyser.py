@@ -234,13 +234,12 @@ class Analyser(object):
         """
         self.disambiguation_analysis()
 
-
         function_analysis_command = \
             [u'vislcg3', u'-g', self.function_analysis_file]
 
         if self.get_disambiguation() is not None:
             return self.run_external_command(function_analysis_command,
-                                            self.get_disambiguation())
+                                             self.get_disambiguation())
 
     def dependency_analysis(self):
         u"""Runs vislcg3 on the functions analysis output
@@ -255,7 +254,7 @@ class Analyser(object):
 
             self.dependency = \
                 self.run_external_command(dep_analysis_command,
-                                        self.function_analysis())
+                                          self.function_analysis())
 
     def get_disambiguation(self):
         '''Get the disambiguation analysis
@@ -312,7 +311,8 @@ class Analyser(object):
                     encoding=u'utf8',
                     xml_declaration=True)
         else:
-            print >>sys.stderr, xml_file, 'is an OCR file and will not be analysed'
+            print >>sys.stderr, xml_file, 'is an OCR file and will not be \
+            analysed'
 
     def analyse_in_parallel(self):
         '''Analyse file in parallel

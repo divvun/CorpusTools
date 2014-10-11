@@ -1,9 +1,10 @@
 # -*- coding:utf-8 -*-
 import os
+import sys
 
 import lxml.etree as etree
 from pkg_resources import resource_filename
-import ccat
+
 
 class MetadataHandler(object):
     '''Class to handle metadata in .xsl files
@@ -26,20 +27,20 @@ class MetadataHandler(object):
         else:
             self.tree = etree.parse(filename)
 
-
     def set_variable(self, key, value):
         self.tree.getroot().find(
-            "{http://www.w3.org/1999/XSL/Transform}variable[@name='" \
-                + key + "']").attrib['select'] = "'" + value + "'"
+            "{http://www.w3.org/1999/XSL/Transform}variable[@name='" +
+            key + "']").attrib['select'] = "'" + value + "'"
 
     def get_variable(self, key):
         return self.tree.getroot().find(
-            "{http://www.w3.org/1999/XSL/Transform}variable[@name='" \
-                + key + "']").attrib['select'].replace("'", "")
+            "{http://www.w3.org/1999/XSL/Transform}variable[@name='" +
+            key + "']").attrib['select'].replace("'", "")
 
     def write_file(self):
         try:
-            self.tree.write(self.filename, encoding="utf-8", xml_declaration=True)
+            self.tree.write(self.filename, encoding="utf-8",
+                            xml_declaration=True)
         except IOError:
             print 'cannot write', self.filename
             sys.exit(254)

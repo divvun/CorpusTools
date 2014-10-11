@@ -188,8 +188,10 @@ class XMLPrinter:
                             text += child.get('correct')
                         except TypeError:
                             print >>sys.stderr, 'Unexpected error element'
-                            print >>sys.stderr, etree.tostring(child, encoding='utf8')
-                            print >>sys.stderr, 'To fix this error you must fix the errormarkup in the original document:'
+                            print >>sys.stderr, etree.tostring(child,
+                                                               encoding='utf8')
+                            print >>sys.stderr, 'To fix this error you must \
+                            fix the errormarkup in the original document:'
                             print >>sys.stderr, self.filename
                             sys.exit(77)
 
@@ -382,7 +384,6 @@ class XMLPrinter:
                 hyph_tails[:] = []
 
             hyph.getparent().remove(hyph)
-
 
     def print_element(self, element, buffer):
         if element is not None and element.text is not None:
