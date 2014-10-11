@@ -110,7 +110,7 @@ class AddFileToCorpus(NameChangerBase):
 
 class CorpusNameFixer(NameChangerBase):
     def __init__(self, oldname):
-        super(NameChangerBase, self).__init__(oldname)
+        super(CorpusNameFixer, self).__init__(oldname)
 
     def change_name(self):
         """Change the name of the original file and it's metadata file
@@ -148,7 +148,8 @@ class CorpusNameFixer(NameChangerBase):
         fromname = os.path.join(self.old_dirname, self.old_filename + '.xsl')
         toname = os.path.join(self.old_dirname, self.new_filename + '.xsl')
 
-        self.move_file(fromname, toname)
+        if os.path.exists(fromname):
+            self.move_file(fromname, toname)
 
     def open_xslfile(self, xslfile):
         """Open xslfile, return the tree"""
@@ -163,10 +164,10 @@ class CorpusNameFixer(NameChangerBase):
     def set_newname(self, mainlang, paralang, paraname):
         """
         """
-        paradir = self.dirname.replace(mainlang, paralang)
+        paradir = self.old_dirname.replace(mainlang, paralang)
         parafile = os.path.join(paradir, paraname + '.xsl')
         if os.path.exists(parafile):
-            paratree = self.open_xslfile()
+            paratree = self.open_xslfile(parafile)
             pararoot = paratree.getroot()
 
             pararoot.find(".//*[@name='para_" + mainlang + "']").set(
@@ -206,7 +207,8 @@ class CorpusNameFixer(NameChangerBase):
         fromname = os.path.join(dirname, self.old_filename + '.xml')
         toname = os.path.join(dirname, self.new_filename + '.xml')
 
-        self.move_file(fromname, toname)
+        if os.path.exists(fromname):
+            self.move_file(fromname, toname)
 
     def move_prestable_toktmx(self):
         """Move the file in prestable/toktmx from the old to the new name
@@ -245,8 +247,10 @@ def parse_args():
 def main():
     for root, dirs, files in os.walk(sys.argv[1]):
         for file_ in files:
-            nc = CorpusNameFixer(name_to_unicode(os.path.join(root, file_)))
-            nc.change_name()
+            if not file_.endswith('.xsl'):
+                nc = CorpusNameFixer(
+                    name_to_unicode(os.path.join(root, file_)))
+                nc.change_name()
 
 
 def gather_files(origs):

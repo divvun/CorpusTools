@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='CorpusTools',
-    version='0.7.2',
+    version='0.7.3',
     author='Børre Gaup',
     author_email='borre.gaup@uit.no',
     packages=find_packages(),
@@ -17,7 +17,8 @@ setup(
                             'convert2xml = corpustools.converter:main',
                             'parallelize = corpustools.parallelize:main',
                             'pick_sd_se = corpustools.pick_samediggi_se_docs:main',
-                            'add_files_to_corpus = corpustools.namechanger:adder_main']
+                            'add_files_to_corpus = corpustools.namechanger:adder_main',
+                            'change_corpus_names = corpustools.namechanger:main']
     },
     install_requires=[
         "pyth",

@@ -18,3 +18,4 @@ v<0.5.1>, <20140821> -- Change the way newstags are handled
 v<0.7.0>, <20141008> -- Add add_files_to_corpus script, a script to add files in a given directory to a given corpus
 v<0.7.1>, <20141008> -- Change the --debug option to --serial in analyse_corpus and remove -r option in ccat
 v<0.7.2>, <20141010> -- The file adder is able to add both files and files inside directories. The files are also added to corpus by the file adder.
+v<0.7.2>, <20141011> -- Add the script change_corpus_names, update the CorpusNameFixer to use the NameChangerBase as base class
