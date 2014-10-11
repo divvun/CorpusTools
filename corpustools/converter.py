@@ -1741,6 +1741,7 @@ def convert_in_parallel(xsl_files):
 
 def convert_serially(xsl_files):
     for xsl_file in xsl_files:
+        print 'converting', xsl_file[:-4]
         worker(xsl_file)
 
 
