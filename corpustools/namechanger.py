@@ -53,7 +53,7 @@ class NameChangerBase(object):
         """Downcase all chars in self.oldname, replace some chars
         """
         chars = {u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
-                 u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_'}
+                 u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_'}
 
         newname = unicode(unidecode.unidecode(
             self.old_filename)).lower()
