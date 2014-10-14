@@ -1832,3 +1832,6 @@ def main():
                 convert_serially(collect_files(source))
             else:
                 convert_in_parallel(collect_files(source))
+        else:
+            print >>sys.stderr, 'Can not process', source
+            print >>sys.stderr, 'This is neither a file nor a directory.'
