@@ -18,7 +18,14 @@
 #
 #   Copyright 2013 Børre Gaup <borre.gaup@uit.no>
 #
+'''This class makes a dependency analysis of sma, sme and smj files
 
+The pipeline is:
+ccat <file> | preprocess (with optionally abbr file) |
+lookup <lang dependent files> | lookup2cg |
+vislcg3 <disambiguation files> | vislcg3 <function files |
+vislcg3 <dependency files>
+'''
 import os
 import sys
 import subprocess
