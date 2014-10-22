@@ -393,16 +393,17 @@ def main():
     args = parse_options()
     sanity_check([u'preprocess', u'lookup2cg', u'lookup', u'vislcg3'])
 
+    ana = Analyser(args.lang)
     ana.set_analysis_files(
         abbr_file=os.path.join(
-            os.getenv(u'GTHOME'), u'langs/',
-            args.lang, '/tools/preprocess/abbr.txt'),
+            os.getenv(u'GTHOME'), u'langs',
+            args.lang, 'tools/preprocess/abbr.txt'),
         fst_file=os.path.join(
-            os.getenv(u'GTHOME'), u'langs/',
-            args.lang, u'/src/analyser-gt-desc.xfst'),
+            os.getenv(u'GTHOME'), u'langs',
+            args.lang, u'src/analyser-disamb-gt-desc.xfst'),
         disambiguation_analysis_file=os.path.join(
-            os.getenv(u'GTHOME'), u'langs/',
-            args.lang, u'/src/syntax/disambiguation.cg3'),
+            os.getenv(u'GTHOME'), u'langs',
+            args.lang, u'src/syntax/disambiguation.cg3'),
         function_analysis_file=os.path.join(
             os.getenv(u'GTHOME'),
             u'gtcore/gtdshared/smi/src/syntax/korp.cg3'),
