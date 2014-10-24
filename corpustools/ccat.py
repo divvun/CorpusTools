@@ -222,7 +222,7 @@ class XMLPrinter:
                 text += ', file: ' + os.path.basename(self.filename)
 
         elif self.print_filename:
-            text += '\t#file: ' + os.path.basename(self.filename)
+            text += '\t#file: ' + os.path.basename(self.filename).decode('utf8')
 
         return text
 
