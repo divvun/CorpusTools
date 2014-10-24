@@ -50,6 +50,7 @@ class XMLPrinter:
                  errorsyn=False,
                  errorlex=False,
                  errorlang=False,
+                 foreign=False,
                  noforeign=False,
                  typos=False,
                  print_filename=False,
@@ -173,32 +174,31 @@ class XMLPrinter:
         if the element is filtered
         '''
         text = ''
-        if not self.noforeign:
-            if element.text is not None and element.text.strip() != '':
-                text = element.text.strip()
+        if element.text is not None and element.text.strip() != '':
+            text = element.text.strip()
 
-            if not self.error_filtering or self.include_this_error(element):
-                for child in element:
-                    if text != '':
-                        text += ' '
-                    if child.tag == 'span' and element.tag == 'errorsyn':
-                        text += child.text
-                    else:
-                        try:
-                            text += child.get('correct')
-                        except TypeError:
-                            print >>sys.stderr, 'Unexpected error element'
-                            print >>sys.stderr, etree.tostring(child,
-                                                               encoding='utf8')
-                            print >>sys.stderr, 'To fix this error you must \
-                            fix the errormarkup in the original document:'
-                            print >>sys.stderr, self.filename
-                            sys.exit(77)
+        if not self.error_filtering or self.include_this_error(element):
+            for child in element:
+                if text != '':
+                    text += ' '
+                if child.tag == 'span' and element.tag == 'errorsyn':
+                    text += child.text
+                else:
+                    try:
+                        text += child.get('correct')
+                    except TypeError:
+                        print >>sys.stderr, 'Unexpected error element'
+                        print >>sys.stderr, etree.tostring(child,
+                                                           encoding='utf8')
+                        print >>sys.stderr, 'To fix this error you must \
+                        fix the errormarkup in the original document:'
+                        print >>sys.stderr, self.filename
+                        sys.exit(77)
 
-                    if child.tail is not None and child.tail.strip() != '':
-                        text += ' ' + child.tail.strip()
+                if child.tail is not None and child.tail.strip() != '':
+                    text += ' ' + child.tail.strip()
 
-            text += self.get_error_attributes(dict(element.attrib))
+        text += self.get_error_attributes(dict(element.attrib))
 
         return text
 
