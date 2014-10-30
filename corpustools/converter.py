@@ -783,7 +783,8 @@ class HTMLContentConverter(object):
                     'outer-column', 'article-ad', 'article-bottom-element',
                     'banner-element', 'nrk-globalnavigation', 'sharing', 'ad',
                     'meta', 'authors', 'articleImageRig',  'btm_menu',
-                    'expandable', 'toc', 'titlepage'],
+                    'expandable', 'toc', 'titlepage',
+                    'container_full',],
                 'id': [
                     'searchBox',
                     'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
@@ -797,7 +798,13 @@ class HTMLContentConverter(object):
                     'share-article', 'topUserMenu', 'rightAds', 'menu', 'aa',
                     'sidebar', 'footer', 'chatBox', 'sendReminder',
                     'ctl00_MidtSone_ucArtikkel_ctl00_divNavigasjon',
-                    'ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl01_divRessurser'],
+                    'ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl01_divRessurser',
+                    'leftPanel',
+                    'leftMenu',
+                    'topMenu',
+                    'article_footer',
+                    'rightCol',
+                    'PrintDocHead',],
                 },
             'p': {
                 'class': ['WebPartReadMoreParagraph', 'breadcrumbs'],
@@ -809,6 +816,9 @@ class HTMLContentConverter(object):
             'span': {
                 'id': ['skiplinks'],
                 'class': ['K-NOTE-FOTNOTE']
+                },
+            'a': {
+                'id': ['leftPanelTab',]
                 },
             }
 
