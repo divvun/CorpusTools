@@ -1002,7 +1002,7 @@ makkar\tmakkár\t#errtype=á,pos=interr
     def test_no_foreign_typos(self):
         '''
         '''
-        xml_printer = ccat.XMLPrinter(noforeign=True, typos=True)
+        xml_printer = ccat.XMLPrinter(typos=True, noforeign=True)
         xml_printer.etree = etree.parse(io.BytesIO('''
 <document id="no_id" xml:lang="nob">
     <body>
@@ -1021,7 +1021,7 @@ makkar\tmakkár\t#errtype=á,pos=interr
 
         buffer = xml_printer.process_file()
 
-        self.assertEqual(buffer.getvalue(), '')
+        self.assertEqual(buffer.getvalue(), 'sjattáj\tsjattaj\t#errorinfo=vowlat,á-a\n')
 
     def test_typos_errordepth3(self):
         '''

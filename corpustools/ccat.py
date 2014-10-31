@@ -85,8 +85,7 @@ class XMLPrinter:
                 errormorphsyn or
                 errorsyn or
                 errorlex or
-                errorlang or
-                noforeign):
+                errorlang):
             self.error_filtering = True
         else:
             self.error_filtering = False
@@ -273,7 +272,11 @@ class XMLPrinter:
         """Visit the children of element, adding their content to textlist
         """
         for child in element:
-            if self.visit_error_inline(child):
+            if child.tag == 'errorlang' and self.noforeign and self.typos:
+                pass
+            elif child.tag == 'errorlang' and self.noforeign:
+                self.get_tail(child, textlist, parentlang)
+            elif self.visit_error_inline(child):
                 self.collect_inline_errors(
                     child,
                     textlist,
