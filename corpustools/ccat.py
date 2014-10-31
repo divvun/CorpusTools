@@ -193,7 +193,6 @@ class XMLPrinter:
                         print >>sys.stderr, 'To fix this error you must \
                         fix the errormarkup in the original document:'
                         print >>sys.stderr, self.filename
-                        sys.exit(77)
 
                 if child.tail is not None and child.tail.strip() != '':
                     text += ' ' + child.tail.strip()
