@@ -1777,7 +1777,7 @@ def parse_options():
 
 
 def worker(xsl_file):
-    if os.path.exists(xsl_file[:-4])
+    if os.path.exists(xsl_file[:-4]):
         conv = Converter(xsl_file[:-4])
 
         try:
