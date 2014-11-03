@@ -1777,12 +1777,15 @@ def parse_options():
 
 
 def worker(xsl_file):
-    conv = Converter(xsl_file[:-4])
+    if os.path.exists(xsl_file[:-4])
+        conv = Converter(xsl_file[:-4])
 
-    try:
-        conv.write_complete()
-    except ConversionException:
-        print >>sys.stderr, 'Could not convert', xsl_file[:-4]
+        try:
+            conv.write_complete()
+        except ConversionException:
+            print >>sys.stderr, 'Could not convert', xsl_file[:-4]
+    else:
+        print >>sys.stderr, xsl_file[:-4], 'does not exist'
 
 
 def convert_in_parallel(xsl_files):
