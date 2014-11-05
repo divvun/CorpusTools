@@ -58,6 +58,27 @@ class XMLPrinter:
                  disambiguation=False,
                  dependency=False,
                  hyph_replacement=''):
+        '''The handling of error* elements are governed by the error*,
+        noforeign, typos and one_word_per_line arguments.
+
+        If one_word_per_line and typos are False, the content of the correct
+        attribute should be printed instead of the .text part of the error
+        element.
+
+        If one_word_per_line or typos are True, the .text part, the correct
+        attribute and the other attributes of the error* element should be
+        printed out on one line.
+
+        If typos is True and some of the error* options are True, only the
+        elements that are True should be output
+
+        If one_word_per_line is True and some of the error* options are True,
+        only the elements that are True should get the error treatment, the
+        other ones get treated as plain elements.
+
+        If noforeign is True, neither the errorlang.text part nor the correct
+        attribute should be printed.
+        '''
 
         self.paragraph = True
         self.all_paragraphs = all_paragraphs
