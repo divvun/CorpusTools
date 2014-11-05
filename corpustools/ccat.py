@@ -28,6 +28,13 @@ import sys
 import argparse
 
 
+here = os.path.dirname(__file__)
+version = os.path.join(here, '_version.py')
+scope = {}
+exec(open(version).read(), scope)
+version = scope['VERSION']
+
+
 def lineno():
     """Returns the current line number in our program."""
     return inspect.currentframe().f_back.f_lineno
@@ -535,6 +542,10 @@ def main():
     process the given files and directories
     Print the output to stdout
     """
+    if sys.argv[1] == '-v':
+        print version
+        sys.exit(1)
+        
     args = parse_options()
 
     xml_printer = XMLPrinter(lang=args.lang,

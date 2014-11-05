@@ -36,6 +36,13 @@ import argparse
 from corpustools import ccat
 
 
+here = os.path.dirname(__file__)
+version = os.path.join(here, '_version.py')
+scope = {}
+exec(open(version).read(), scope)
+version = scope['VERSION']
+
+
 class Analyser(object):
     '''A class which can analyse giellatekno xml formatted documents
     using preprocess, lookup, lookup2cg and vislcg3
@@ -390,6 +397,10 @@ def parse_options():
 def main():
     '''Analyse files in the given directories
     '''
+    if sys.argv[1] == '-v':
+        print version
+        sys.exit(1)
+
     args = parse_options()
     sanity_check([u'preprocess', u'lookup2cg', u'lookup', u'vislcg3'])
 

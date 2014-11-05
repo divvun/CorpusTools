@@ -35,6 +35,13 @@ import typosfile
 import ngram
 
 
+here = os.path.dirname(__file__)
+version = os.path.join(here, '_version.py')
+scope = {}
+exec(open(version).read(), scope)
+version = scope['VERSION']
+
+
 class CorpusXMLFile:
     """
     A class that contains the info on a file to be parallellized, name
@@ -1206,6 +1213,10 @@ def parse_options():
 
 
 def main():
+    if sys.argv[1] == '-v':
+        print version
+        sys.exit(1)
+
     args = parse_options()
 
     try:

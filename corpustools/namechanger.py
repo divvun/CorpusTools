@@ -33,6 +33,13 @@ import versioncontrol
 import xslsetter
 
 
+here = os.path.dirname(__file__)
+version = os.path.join(here, '_version.py')
+scope = {}
+exec(open(version).read(), scope)
+version = scope['VERSION']
+
+
 class NameChangerBase(object):
     """Class to change names of corpus files.
     Will also take care of changing info in meta data of parallel files.
@@ -245,6 +252,10 @@ def parse_args():
 
 
 def main():
+    if sys.argv[1] == '-v':
+        print version
+        sys.exit(1)
+
     for root, dirs, files in os.walk(sys.argv[1]):
         for file_ in files:
             if not file_.endswith('.xsl'):
@@ -303,6 +314,10 @@ def parse_options():
 
 
 def adder_main():
+    if sys.argv[1] == '-v':
+        print version
+        sys.exit(1)
+
     args = parse_options()
 
     if os.path.isdir(args.corpusdir):

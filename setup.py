@@ -1,10 +1,19 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup, find_packages
+import os
+
+
+here = os.path.dirname(__file__)
+version = os.path.join(here, 'corpustools', '_version.py')
+scope = {}
+exec(open(version).read(), scope)
+version = scope['VERSION']
+
 
 setup(
     name='CorpusTools',
-    version='0.7.4',
+    version=version,
     author='Børre Gaup',
     author_email='borre.gaup@uit.no',
     packages=find_packages(),

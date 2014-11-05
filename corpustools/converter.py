@@ -47,6 +47,13 @@ import ccat
 import analyser
 
 
+here = os.path.dirname(__file__)
+version = os.path.join(here, '_version.py')
+scope = {}
+exec(open(version).read(), scope)
+version = scope['VERSION']
+
+
 class ConversionException(Exception):
     def __init__(self, value):
         self.parameter = value
@@ -1823,6 +1830,10 @@ def setup_xml_catalog():
 
 
 def main():
+    if sys.argv[1] == '-v':
+        print version
+        sys.exit(1)
+
     analyser.sanity_check([u'antiword', u'pdftotext'])
     setup_xml_catalog()
     args = parse_options()
