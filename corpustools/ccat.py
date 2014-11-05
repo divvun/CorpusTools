@@ -59,11 +59,11 @@ class XMLPrinter:
                  dependency=False,
                  hyph_replacement=''):
         '''The handling of error* elements are governed by the error*,
-        noforeign, typos and one_word_per_line arguments.
+        noforeign, correction, typos and one_word_per_line arguments.
 
-        If one_word_per_line and typos are False, the content of the correct
-        attribute should be printed instead of the .text part of the error
-        element.
+        If one_word_per_line and typos are False and correction is True, the
+        content of the correct attribute should be printed instead of the
+        .text part of the error element.
 
         If one_word_per_line or typos are True, the .text part, the correct
         attribute and the other attributes of the error* element should be
