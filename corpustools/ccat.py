@@ -245,10 +245,10 @@ class XMLPrinter:
             text += ','.join(attr)
 
             if self.print_filename:
-                text += ', file: ' + os.path.basename(self.filename)
+                text += u', file: ' + os.path.basename(self.filename).decode('utf8')
 
         elif self.print_filename:
-            text += '\t#file: ' + os.path.basename(self.filename).decode('utf8')
+            text += u'\t#file: ' + os.path.basename(self.filename).decode('utf8')
 
         return text
 
@@ -545,7 +545,7 @@ def main():
     if sys.argv[1] == '-v':
         print version
         sys.exit(1)
-        
+
     args = parse_options()
 
     xml_printer = XMLPrinter(lang=args.lang,
