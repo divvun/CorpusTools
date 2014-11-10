@@ -1,2 +1,2 @@
 # The current CorpusTools version
-VERSION = '0.7.7'
+VERSION = '0.7.8'

@@ -27,12 +27,7 @@ import os
 import sys
 import argparse
 
-
-here = os.path.dirname(__file__)
-version = os.path.join(here, '_version.py')
-scope = {}
-exec(open(version).read(), scope)
-version = scope['VERSION']
+import argparse_version
 
 
 def lineno():
@@ -430,9 +425,9 @@ def parse_options():
     """Parse the options given to the program
     """
     parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
         description='Print the contents of a corpus in XML format\n\
-        The default is to print paragraphs with no type (=text type).',
-        version=version)
+        The default is to print paragraphs with no type (=text type).')
 
     parser.add_argument('-l',
                         dest='lang',

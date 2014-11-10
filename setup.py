@@ -3,17 +3,12 @@
 from setuptools import setup, find_packages
 import os
 
-
-here = os.path.dirname(__file__)
-version = os.path.join(here, 'corpustools', '_version.py')
-scope = {}
-exec(open(version).read(), scope)
-version = scope['VERSION']
+import corpustools.argparse_version
 
 
 setup(
     name='CorpusTools',
-    version=version,
+    version=corpustools.argparse_version.version,
     author='Børre Gaup',
     author_email='borre.gaup@uit.no',
     packages=find_packages(),

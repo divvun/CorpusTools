@@ -33,13 +33,7 @@ import argparse
 
 import typosfile
 import ngram
-
-
-here = os.path.dirname(__file__)
-version = os.path.join(here, '_version.py')
-scope = {}
-exec(open(version).read(), scope)
-version = scope['VERSION']
+import argparse_version
 
 
 class CorpusXMLFile:
@@ -1199,9 +1193,10 @@ class Toktmx2Tmx:
 
 def parse_options():
     parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
         description='Sentence align two files. Input is the document \
-        containing the main language, and language to parallelize it with.',
-        version=version)
+        containing the main language, and language to parallelize it with.')
+    
     parser.add_argument('input_file', help="The input file")
     parser.add_argument('-p', '--parallel_language',
                         dest='parallel_language',

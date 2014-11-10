@@ -29,15 +29,9 @@ import shutil
 import lxml.etree as etree
 import unidecode
 
+import argparse_version
 import versioncontrol
 import xslsetter
-
-
-here = os.path.dirname(__file__)
-version = os.path.join(here, '_version.py')
-scope = {}
-exec(open(version).read(), scope)
-version = scope['VERSION']
 
 
 class NameChangerBase(object):
@@ -59,16 +53,17 @@ class NameChangerBase(object):
     def change_to_ascii(self):
         """Downcase all chars in self.oldname, replace some chars
         """
-        chars = {u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
+        unwanted_chars = {u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
                  u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_',
                  u'<': u'_', u'>': u'_', u'"': u'_'}
 
         newname = unicode(unidecode.unidecode(
             self.old_filename)).lower()
 
-        for key, value in chars.items():
+        for key, value in unwanted_chars.items():
             if key in newname:
                 newname = newname.replace(key, value)
+
         while '__' in newname:
             newname = newname.replace('__', '_')
 
@@ -254,10 +249,10 @@ def name_to_unicode(filename):
 
 def parse_args():
     parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
         description='Program to automatically rename corpus files in the \
         given directory. It downcases the filenames and removes unwanted \
-        characters.',
-        version=version)
+        characters.')
 
     parser.add_argument('directory',
                         help='The directory where filenames should be \
@@ -303,11 +298,11 @@ def add_files(args):
 
 def parse_options():
     parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
         description='Copy files to a corpus directory. The filenames are \
         converted to ascii only names. Metadata files containing the \
         original name, the main language and the genre are also made. The \
-        files are added to the working copy.',
-        version=version)
+        files are added to the working copy.')
 
     parser.add_argument('corpusdir',
                         help='The corpus dir (freecorpus or boundcorpus)')

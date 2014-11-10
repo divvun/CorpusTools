@@ -45,13 +45,7 @@ import ngram
 import errormarkup
 import ccat
 import analyser
-
-
-here = os.path.dirname(__file__)
-version = os.path.join(here, '_version.py')
-scope = {}
-exec(open(version).read(), scope)
-version = scope['VERSION']
+import argparse_version
 
 
 class ConversionException(Exception):
@@ -1768,8 +1762,9 @@ class DocumentTester(object):
 
 def parse_options():
     parser = argparse.ArgumentParser(
-        description='Convert original files to giellatekno xml.',
-        version=version)
+        parents=[argparse_version.parser],
+        description='Convert original files to giellatekno xml.')
+
     parser.add_argument(u'--serial',
                         action=u"store_true",
                         help=u"use this for debugging the conversion \

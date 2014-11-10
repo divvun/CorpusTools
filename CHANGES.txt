@@ -23,3 +23,4 @@ v<0.7.4>, <20141011> -- When using --serial in convert2xml, tell which file is b
 v<0.7.5>, <20141105> -- Add -v to print the version from all scripts
 v<0.7.6>, <20141106> -- Convert filenames to unicode strings in ccat
 v<0.7.7>, <20141110> -- Add -v/--version options in the proper way using argparse
+v<0.7.8>, <20141110> -- Using the DRY-principle for the version info

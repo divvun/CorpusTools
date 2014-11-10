@@ -34,13 +34,7 @@ import lxml.etree as etree
 import argparse
 
 from corpustools import ccat
-
-
-here = os.path.dirname(__file__)
-version = os.path.join(here, '_version.py')
-scope = {}
-exec(open(version).read(), scope)
-version = scope['VERSION']
+import argparse_version
 
 
 class Analyser(object):
@@ -378,9 +372,10 @@ def parse_options():
     '''Parse the given options
     '''
     parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
         description=u'Analyse files found in the given directories \
-        for the given language using multiple parallel processes.',
-        version=version)
+        for the given language using multiple parallel processes.')
+    
     parser.add_argument(u'lang',
                         help=u"lang which should be analysed")
     parser.add_argument(u'--serial',
