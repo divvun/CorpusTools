@@ -73,3 +73,24 @@ class TestNameChangerBase(unittest.TestCase):
         want = u'saddago_beaivi_vai_idja'
 
         self.assertEqual(nc.new_filename, want)
+
+    def test_own_name_with_quote(self):
+        oldname = u'aba".txt'
+        nc = namechanger.NameChangerBase(oldname)
+        want = u'aba_.txt'
+
+        self.assertEqual(nc.new_filename, want)
+
+    def test_own_name_with_lt(self):
+        oldname = u'aba<.txt'
+        nc = namechanger.NameChangerBase(oldname)
+        want = u'aba_.txt'
+
+        self.assertEqual(nc.new_filename, want)
+
+    def test_own_name_with_gt(self):
+        oldname = u'aba>.txt'
+        nc = namechanger.NameChangerBase(oldname)
+        want = u'aba_.txt'
+
+        self.assertEqual(nc.new_filename, want)

@@ -31,6 +31,7 @@ import unidecode
 
 import versioncontrol
 import xslsetter
+import ccat
 
 
 here = os.path.dirname(__file__)
@@ -60,7 +61,8 @@ class NameChangerBase(object):
         """Downcase all chars in self.oldname, replace some chars
         """
         chars = {u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
-                 u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_'}
+                 u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_',
+                 u'<': u'_', u'>': u'_', u'"': u'_'}
 
         newname = unicode(unidecode.unidecode(
             self.old_filename)).lower()
@@ -72,7 +74,6 @@ class NameChangerBase(object):
             newname = newname.replace('__', '_')
 
         return newname
-
 
 class AddFileToCorpus(NameChangerBase):
     '''Add a given file to a given corpus
@@ -125,12 +126,16 @@ class CorpusNameFixer(NameChangerBase):
         Also move the other files that's connected to the original file
         """
         if self.old_filename != self.new_filename:
-            self.move_origfile()
-            self.move_xslfile()
-            self.update_name_in_parallel_files()
-            self.move_prestable_converted()
-            self.move_prestable_toktmx()
-            self.move_prestable_tmx()
+            fullname = os.path.join(self.old_dirname, self.new_filename)
+            if not os.path.exists(fullname):
+                self.move_origfile()
+                self.move_xslfile()
+                self.update_name_in_parallel_files()
+                self.move_prestable_converted()
+                self.move_prestable_toktmx()
+                self.move_prestable_tmx()
+            else:
+                print >>sys.stderr, ccat.lineno(), fullname, 'exists'
 
     def move_file(self, oldname, newname):
         """Change name of file from fromname to toname"""
@@ -248,15 +253,22 @@ def name_to_unicode(filename):
 
 
 def parse_args():
-    pass
+    parser = argparse.ArgumentParser(
+        description='Program to automatically rename corpus files in the \
+        given directory. It downcases the filenames and removes unwanted \
+        characters.',
+        version=version)
 
+    parser.add_argument('directory',
+                        help='The directory where filenames should be \
+                        renamed')
+
+    return parser.parse_args()
 
 def main():
-    if sys.argv[1] == '-v':
-        print version
-        sys.exit(1)
+    args = parse_args()
 
-    for root, dirs, files in os.walk(sys.argv[1]):
+    for root, dirs, files in os.walk(args.directory):
         for file_ in files:
             if not file_.endswith('.xsl'):
                 nc = CorpusNameFixer(
