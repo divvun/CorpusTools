@@ -294,7 +294,8 @@ def parse_options():
         description='Copy files to a corpus directory. The filenames are \
         converted to ascii only names. Metadata files containing the \
         original name, the main language and the genre are also made. The \
-        files are added to the working copy.')
+        files are added to the working copy.',
+        version=version)
 
     parser.add_argument('corpusdir',
                         help='The corpus dir (freecorpus or boundcorpus)')
@@ -314,10 +315,6 @@ def parse_options():
 
 
 def adder_main():
-    if sys.argv[1] == '-v':
-        print version
-        sys.exit(1)
-
     args = parse_options()
 
     if os.path.isdir(args.corpusdir):

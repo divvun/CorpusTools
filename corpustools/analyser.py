@@ -379,7 +379,8 @@ def parse_options():
     '''
     parser = argparse.ArgumentParser(
         description=u'Analyse files found in the given directories \
-        for the given language using multiple parallel processes.')
+        for the given language using multiple parallel processes.',
+        version=version)
     parser.add_argument(u'lang',
                         help=u"lang which should be analysed")
     parser.add_argument(u'--serial',
@@ -397,10 +398,6 @@ def parse_options():
 def main():
     '''Analyse files in the given directories
     '''
-    if sys.argv[1] == '-v':
-        print version
-        sys.exit(1)
-
     args = parse_options()
     sanity_check([u'preprocess', u'lookup2cg', u'lookup', u'vislcg3'])
 

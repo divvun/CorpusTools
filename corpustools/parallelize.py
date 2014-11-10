@@ -1200,7 +1200,8 @@ class Toktmx2Tmx:
 def parse_options():
     parser = argparse.ArgumentParser(
         description='Sentence align two files. Input is the document \
-        containing the main language, and language to parallelize it with.')
+        containing the main language, and language to parallelize it with.',
+        version=version)
     parser.add_argument('input_file', help="The input file")
     parser.add_argument('-p', '--parallel_language',
                         dest='parallel_language',
@@ -1213,10 +1214,6 @@ def parse_options():
 
 
 def main():
-    if sys.argv[1] == '-v':
-        print version
-        sys.exit(1)
-
     args = parse_options()
 
     try:

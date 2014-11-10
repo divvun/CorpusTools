@@ -1768,7 +1768,8 @@ class DocumentTester(object):
 
 def parse_options():
     parser = argparse.ArgumentParser(
-        description='Convert original files to giellatekno xml.')
+        description='Convert original files to giellatekno xml.',
+        version=version)
     parser.add_argument(u'--serial',
                         action=u"store_true",
                         help=u"use this for debugging the conversion \
@@ -1830,10 +1831,6 @@ def setup_xml_catalog():
 
 
 def main():
-    if sys.argv[1] == '-v':
-        print version
-        sys.exit(1)
-
     analyser.sanity_check([u'antiword', u'pdftotext'])
     setup_xml_catalog()
     args = parse_options()

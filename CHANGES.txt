@@ -21,3 +21,5 @@ v<0.7.2>, <20141010> -- The file adder is able to add both files and files insid
 v<0.7.3>, <20141011> -- Add the script change_corpus_names, update the CorpusNameFixer to use the NameChangerBase as base class
 v<0.7.4>, <20141011> -- When using --serial in convert2xml, tell which file is being converted
 v<0.7.5>, <20141105> -- Add -v to print the version from all scripts
+v<0.7.6>, <20141106> -- Convert filenames to unicode strings in ccat
+v<0.7.7>, <20141110> -- Add -v/--version options in the proper way using argparse

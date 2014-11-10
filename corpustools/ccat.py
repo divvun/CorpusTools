@@ -431,7 +431,8 @@ def parse_options():
     """
     parser = argparse.ArgumentParser(
         description='Print the contents of a corpus in XML format\n\
-        The default is to print paragraphs with no type (=text type).')
+        The default is to print paragraphs with no type (=text type).',
+        version=version)
 
     parser.add_argument('-l',
                         dest='lang',
@@ -542,10 +543,6 @@ def main():
     process the given files and directories
     Print the output to stdout
     """
-    if sys.argv[1] == '-v':
-        print version
-        sys.exit(1)
-
     args = parse_options()
 
     xml_printer = XMLPrinter(lang=args.lang,
