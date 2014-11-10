@@ -31,7 +31,6 @@ import unidecode
 
 import versioncontrol
 import xslsetter
-import ccat
 
 
 here = os.path.dirname(__file__)
@@ -135,7 +134,8 @@ class CorpusNameFixer(NameChangerBase):
                 self.move_prestable_toktmx()
                 self.move_prestable_tmx()
             else:
-                print >>sys.stderr, ccat.lineno(), fullname, 'exists'
+                print >>sys.stderr, 'Error renaming', os.path.join(self.old_dirname, self.old_filename)
+                print >>sys.stderr, fullname, 'exists'
 
     def move_file(self, oldname, newname):
         """Change name of file from fromname to toname"""
