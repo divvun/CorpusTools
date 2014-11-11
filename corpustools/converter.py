@@ -709,15 +709,21 @@ class PDF2XMLConverter(object):
         '''Extract text from a single <text> element
         '''
         if (int(textelement.get('width')) > 0):
-            if len(textelement) == 0:
+            if textelement.text is not None:
                 return textelement.text
-            elif len(textelement) == 1:
+            else:
                 em = etree.Element('em')
-                em.text = textelement[0].text
-                if textelement[0].tag == 'i':
-                    em.set('type', 'italic')
-                elif textelement[0].tag == 'b':
+
+                if (textelement.find('./i/b') is not None):
+                    em.text = textelement.find('./i/b').text
                     em.set('type', 'bold')
+                elif len(textelement) == 1:
+                    em.text = textelement[0].text
+                    if textelement[0].tag == 'i':
+                        em.set('type', 'italic')
+                    elif textelement[0].tag == 'b':
+                        em.set('type', 'bold')
+
                 return em
 
 

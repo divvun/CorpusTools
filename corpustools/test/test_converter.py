@@ -2407,7 +2407,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<em type="italic">Ei </em>')
 
     def test_extract_textelement_containing_b(self):
-        '''Extract text from a pdf2xml text that contains an <b> element
+        '''Extract text from a pdf2xml text that contains a <b> element
         '''
         p2x = converter.PDF2XMLConverter()
 
@@ -2417,3 +2417,16 @@ class TestPDF2XMLConverter(XMLTester):
             etree.tostring(
                 p2x.extract_textelement(input), encoding='utf-8'),
             '<em type="bold">Ei </em>')
+
+    def test_extract_textelement_containing_i_and_b(self):
+        '''Extract text from a pdf2xml text that contains a <b> element
+        inside the <i> element
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        input = etree.fromstring(u'<text top="829" left="545" width="275" height="14" font="29"><i><b>Eiš </b></i></text>')
+
+        self.assertXmlEqual(
+            etree.tostring(
+                p2x.extract_textelement(input), encoding='utf-8'),
+            '<em type="bold">Eiš </em>')
