@@ -712,11 +712,13 @@ class PDF2XMLConverter(object):
             if len(textelement) == 0:
                 return textelement.text
             elif len(textelement) == 1:
+                em = etree.Element('em')
+                em.text = textelement[0].text
                 if textelement[0].tag == 'i':
-                    em = etree.Element('em')
-                    em.text = textelement[0].text
                     em.set('type', 'italic')
-                    return em
+                elif textelement[0].tag == 'b':
+                    em.set('type', 'bold')
+                return em
 
 
 class BiblexmlConverter(object):
