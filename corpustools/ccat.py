@@ -137,29 +137,6 @@ class XMLPrinter:
         return self.etree.getroot().\
             attrib['{http://www.w3.org/XML/1998/namespace}lang']
 
-    def get_genre(self):
-        u"""
-        @brief Get the genre from the xml file
-
-        :returns: the genre as set in the xml file
-        """
-        if self.etree.getroot().find(u".//genre") is not None:
-            return self.etree.getroot().find(u".//genre").attrib[u"code"]
-        else:
-            return u'none'
-
-    def get_translatedfrom(self):
-        u"""
-        @brief Get the translated_from value from the xml file
-
-        :returns: the value of translated_from as set in the xml file
-        """
-        if self.etree.getroot().find(u".//translated_from") is not None:
-            return self.etree.getroot().find(u".//translated_from").\
-                attrib[u"{http://www.w3.org/XML/1998/namespace}lang"]
-        else:
-            return u'none'
-
     def get_element_language(self, element, parentlang):
         """Get the language of element.
 
