@@ -2393,3 +2393,15 @@ class TestPDF2XMLConverter(XMLTester):
         input = etree.fromstring(u'<text top="649" left="545" width="0" height="14" font="20">berret bargat. </text>')
 
         self.assertEqual(p2x.extract_textelement(input), None)
+
+    def test_extract_textelement_containing_i(self):
+        '''Extract text from a pdf2xml text that contains an <i> element
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        input = etree.fromstring(u'<text top="829" left="545" width="275" height="14" font="29"><i>Ei </i></text>')
+
+        self.assertXmlEqual(
+            etree.tostring(
+                p2x.extract_textelement(input), encoding='utf-8'),
+            '<em type="italic">Ei </em>')

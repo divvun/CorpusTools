@@ -709,7 +709,14 @@ class PDF2XMLConverter(object):
         '''Extract text from a single <text> element
         '''
         if (int(textelement.get('width')) > 0):
-            return textelement.text
+            if len(textelement) == 0:
+                return textelement.text
+            elif len(textelement) == 1:
+                if textelement[0].tag == 'i':
+                    em = etree.Element('em')
+                    em.text = textelement[0].text
+                    em.set('type', 'italic')
+                    return em
 
 
 class BiblexmlConverter(object):
