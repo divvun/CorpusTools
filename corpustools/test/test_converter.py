@@ -2371,3 +2371,25 @@ without-multilingual-tag.xml'))
 
         self.assertXmlEqual(etree.tostring(got_document),
                             etree.tostring(expected_document))
+
+
+class TestPDF2XMLConverter(XMLTester):
+    '''Test the class that converts from pdf2xml to giellatekno/divvun xml
+    '''
+    def test_extract_textelement_plain(self):
+        '''Extract text from a plain pdf2xml text element
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        input = etree.fromstring(u'<text top="649" left="545" width="269" height="14" font="20">berret bargat. </text>')
+
+        self.assertEqual(p2x.extract_textelement(input), u'berret bargat. ')
+
+    def test_extract_textelement_witdh_less_than_1(self):
+        '''Extract text from a pdf2xml text element with width less than 1
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        input = etree.fromstring(u'<text top="649" left="545" width="0" height="14" font="20">berret bargat. </text>')
+
+        self.assertEqual(p2x.extract_textelement(input), None)

@@ -702,6 +702,16 @@ class PDFConverter(object):
         return document
 
 
+class PDF2XMLConverter(object):
+    '''Class to convert pdf2xml
+    '''
+    def extract_textelement(self, textelement):
+        '''Extract text from a single <text> element
+        '''
+        if (int(textelement.get('width')) > 0):
+            return textelement.text
+
+
 class BiblexmlConverter(object):
     """
     Class to convert bible xml files to the giellatekno xml format
