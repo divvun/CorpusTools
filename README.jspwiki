@@ -220,29 +220,6 @@ optional arguments:
 
 !!add_files_to_corpus
 
-This script adds files found on a local machine to a working copy of
-a corpus.
-
-It copies files from a directory to the corpusdir. In the process
-it will change the name of the file so that the filename only consists
-of ascii characters. A metadata file containing the original name,
-main language and genre will be made, too. The files are added to the working
-copy, as well.
-
-Typical usage is:
-add_files_to_corpus $GTFREE sme admin dir_where_files_are
-
-This will copy the files found in the directory {{dir_where_files_are}}
-to {{$GTFREE/orig/sme/admin}}.
-
-After this is done, you will have to commit the files to
-the working copy, like this:
-
-{{{
-cd $GTFREE/orig/sme/admin
-svn ci
-}}}
-
 The complete help text from the program is as follows:
 
 {{{
@@ -262,6 +239,29 @@ positional arguments:
 
 optional arguments:
   -h, --help  show this help message and exit
+}}}
+
+This script adds files found on a local machine to a working copy of
+a corpus.
+
+It copies files from a directory to the corpusdir. In the process
+it will 
+* change the name of the file so that the filename only consists of ascii characters.
+* add a metadata file containing the original name, main language and genre 
+* add the renamed files and the metadata files to the working copy
+
+Typical usage is:
+add_files_to_corpus $GTFREE sme admin/sd dir_where_files_are
+
+This will copy the files found in the directory {{dir_where_files_are}}
+to {{$GTFREE/orig/sme/admin/sd}}.
+
+After this is done, you will have to commit the files to
+the working copy, like this:
+
+{{{
+cd $GTFREE/orig/sme/admin
+svn ci
 }}}
 
 !!parallelize
