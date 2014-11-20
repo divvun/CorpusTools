@@ -29,7 +29,9 @@ setup(
         "pytidylib",
         "beautifulsoup4",
         "unidecode",
-        "lxml"
+        "lxml",
+        "pysvn",
+        "git",
     ],
     test_suite = 'nose.collector',
     include_package_data=True,
