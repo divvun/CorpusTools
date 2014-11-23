@@ -1038,7 +1038,8 @@ class DocConverter(HTMLContentConverter):
         try:
             return etree.fromstring(output)
         except etree.XMLSyntaxError as e:
-            logfile = open(self.filename + '.log', 'w')
+            #logfile = open(self.filename + '.log', 'w')
+            logfile = open(self.orig + '.log', 'w')
 
             logfile.write('Error at: ' + str(ccat.lineno()))
             for entry in e.error_log:
@@ -1046,7 +1047,8 @@ class DocConverter(HTMLContentConverter):
                 logfile.write('\n')
 
             logfile.close()
-            raise ConversionException("Syntax error when trying convert to docbook " + self.filename)
+            #raise ConversionException("Syntax error when trying convert to docbook " + self.filename)
+            raise ConversionException("Syntax error when trying convert to docbook " + self.orig)
 
     def docbook2html(self):
         """Convert the docbook output to html using docbook-xsl
