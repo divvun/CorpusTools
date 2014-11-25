@@ -2516,3 +2516,33 @@ class TestPDF2XMLConverter(XMLTester):
         t2 = etree.fromstring('<text top="126" height="20"/>')
 
         self.assertFalse(p2x.is_same_paragraph(t1, t2))
+
+    def test_parse_page_1(self):
+        '''Page with one paragraph, three <text> elements
+        '''
+        page_element = etree.fromstring(u'<page><text top="106" width="100" \
+            height="19">1 </text><text top="126" width="100" height="19">\
+            2 </text><text top="145" width="100" height="19">3.</text></page>')
+
+        p2x = converter.PDF2XMLConverter()
+        self.assertXmlEqual(etree.tostring(p2x.parse_page(page_element), encoding='unicode'), u'<body><p>1 2 3.</p></body>')
+
+    def test_parse_page_2(self):
+        '''Page with two paragraphs, four <text> elements
+        '''
+        page_element = etree.fromstring(u'<page><text top="106" width="100" \
+            height="19">1 </text><text top="126" width="100" height="19">2.\
+            </text><text top="166" width="100" height="19">3 </text>\
+            <text top="186" width="100" height="19">4.</text></page>')
+
+        p2x = converter.PDF2XMLConverter()
+        self.assertXmlEqual(etree.tostring(p2x.parse_page(page_element), encoding='unicode'), u'<body><p>1 2.</p><p>3 4.</p></body>')
+
+    def test_parse_page_3(self):
+        '''Page with one paragraph, one <text> elements
+        '''
+        page_element = etree.fromstring(u'<page><text top="145" width="100" height="19">3.</text></page>')
+
+        p2x = converter.PDF2XMLConverter()
+        self.assertXmlEqual(etree.tostring(p2x.parse_page(page_element), encoding='unicode'), u'<body><p>3.</p></body>')
+

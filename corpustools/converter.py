@@ -718,7 +718,7 @@ class PDF2XMLConverter(object):
         '''
 
         parts = []
-        if (int(textelement.get('width')) > 0):
+        if (textelement is not None and int(textelement.get('width')) > 0):
             if textelement.text is not None:
                 parts.append(textelement.text)
 
@@ -767,6 +767,38 @@ class PDF2XMLConverter(object):
 
         return result
 
+    def parse_page(self, page):
+        '''Parse a page element
+        '''
+        body_element = etree.Element('body')
+
+        prev_t = None
+        parts = []
+        for t in page:
+            parts += self.extract_textelement(prev_t)
+            if prev_t is not None:
+                if not self.is_same_paragraph(prev_t, t):
+                    body_element.append(self.make_paragraph(parts))
+                    parts = []
+            prev_t = t
+
+        parts += self.extract_textelement(prev_t)
+        body_element.append(self.make_paragraph(parts))
+
+        return body_element
+
+    def make_paragraph(self, parts):
+        p = etree.Element('p')
+        p.text = ''
+        x = 0
+        while x < len(parts):
+            if type(parts[x]) is str:
+                p.text += parts[x]
+            else:
+                p.append(parts[x])
+            x += 1
+
+        return p
 
 class BiblexmlConverter(object):
     """
