@@ -708,24 +708,38 @@ class PDF2XMLConverter(object):
     def extract_textelement(self, textelement):
         '''Extract text from a single <text> element
         '''
+
+        parts = []
         if (int(textelement.get('width')) > 0):
             if textelement.text is not None:
-                return textelement.text
-            else:
+                parts.append(textelement.text)
+
+            for child in textelement:
                 em = etree.Element('em')
 
-                if (textelement.find('./i/b') is not None):
-                    em.text = textelement.find('./i/b').text
+                if child.text is not None:
+                    em.text = child.text
+                else:
+                    em.text = ''
+
+                if len(child) > 0:
                     em.set('type', 'bold')
-                elif len(textelement) == 1:
-                    em.text = textelement[0].text
-                    if textelement[0].tag == 'i':
-                        em.set('type', 'italic')
-                    elif textelement[0].tag == 'b':
-                        em.set('type', 'bold')
+                    for grandchild in child:
+                        if grandchild.text is not None:
+                            em.text += grandchild.text
+                        if grandchild.tail is not None:
+                            em.text += grandchild.tail
 
-                return em
+                if child.tag == 'i':
+                    em.set('type', 'italic')
+                elif child.tag == 'b':
+                    em.set('type', 'bold')
 
+                em.tail = child.tail
+
+                parts.append(em)
+
+        return parts
 
 class BiblexmlConverter(object):
     """

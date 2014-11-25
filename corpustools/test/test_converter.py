@@ -2383,7 +2383,7 @@ class TestPDF2XMLConverter(XMLTester):
 
         input = etree.fromstring(u'<text top="649" left="545" width="269" height="14" font="20">berret bargat. </text>')
 
-        self.assertEqual(p2x.extract_textelement(input), u'berret bargat. ')
+        self.assertEqual(p2x.extract_textelement(input), [u'berret bargat. '])
 
     def test_extract_textelement_witdh_less_than_1(self):
         '''Extract text from a pdf2xml text element with width less than 1
@@ -2392,7 +2392,7 @@ class TestPDF2XMLConverter(XMLTester):
 
         input = etree.fromstring(u'<text top="649" left="545" width="0" height="14" font="20">berret bargat. </text>')
 
-        self.assertEqual(p2x.extract_textelement(input), None)
+        self.assertEqual(p2x.extract_textelement(input), [])
 
     def test_extract_textelement_containing_i(self):
         '''Extract text from a pdf2xml text that contains an <i> element
@@ -2401,10 +2401,9 @@ class TestPDF2XMLConverter(XMLTester):
 
         input = etree.fromstring(u'<text top="829" left="545" width="275" height="14" font="29"><i>Ei </i></text>')
 
-        self.assertXmlEqual(
-            etree.tostring(
-                p2x.extract_textelement(input), encoding='utf-8'),
-            '<em type="italic">Ei </em>')
+        self.assertEqual(
+            etree.tostring(p2x.extract_textelement(input)[0], encoding='unicode'),
+            u'<em type="italic">Ei </em>')
 
     def test_extract_textelement_containing_b(self):
         '''Extract text from a pdf2xml text that contains a <b> element
@@ -2413,10 +2412,9 @@ class TestPDF2XMLConverter(XMLTester):
 
         input = etree.fromstring(u'<text top="829" left="545" width="275" height="14" font="29"><b>Ei </b></text>')
 
-        self.assertXmlEqual(
-            etree.tostring(
-                p2x.extract_textelement(input), encoding='utf-8'),
-            '<em type="bold">Ei </em>')
+        self.assertEqual(
+            etree.tostring(p2x.extract_textelement(input)[0], encoding='unicode'),
+            u'<em type="bold">Ei </em>')
 
     def test_extract_textelement_containing_i_and_b(self):
         '''Extract text from a pdf2xml text that contains a <b> element
@@ -2426,7 +2424,60 @@ class TestPDF2XMLConverter(XMLTester):
 
         input = etree.fromstring(u'<text top="829" left="545" width="275" height="14" font="29"><i><b>Eiš </b></i></text>')
 
-        self.assertXmlEqual(
-            etree.tostring(
-                p2x.extract_textelement(input), encoding='utf-8'),
-            '<em type="bold">Eiš </em>')
+        self.assertEqual(
+            etree.tostring(p2x.extract_textelement(input)[0], encoding='unicode'),
+            u'<em type="italic">Eiš </em>')
+
+    def test_extract_textelement_containing_b_with_tail(self):
+        '''Extract text from a pdf2xml text that contains a <b> element
+        including a tail
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        input = etree.fromstring(u'<text top="829" left="545" width="275" height="14" font="29"><b>E</b> a</text>')
+
+        self.assertEqual(
+            etree.tostring(p2x.extract_textelement(input)[0], encoding='unicode'),
+            u'<em type="bold">E</em> a')
+
+    def test_extract_textelement_containing_two_i_elements(self):
+        '''Extract text from a pdf2xml text that contains two <i> elements
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        input = etree.fromstring(u'<text top="829" left="545" width="275" height="14" font="29"><i>E</i> a <i>b</i></text>')
+        got = p2x.extract_textelement(input)
+
+        self.assertEqual(len(got), 2)
+        self.assertEqual(
+            etree.tostring(got[0], encoding='unicode'),
+            u'<em type="italic">E</em> a ')
+        self.assertEqual(
+            etree.tostring(got[1], encoding='unicode'),
+            u'<em type="italic">b</em>')
+
+    def test_extract_textelement_containing_i_with_b_elements(self):
+        '''Extract text from a pdf2xml text that contains one <i> element
+        with several <b> elements
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        input = etree.fromstring(u'<text top="837" left="57" width="603" height="11" font="7"><i><b>Å.</b> B <b>F.</b> A </i></text>')
+        got = p2x.extract_textelement(input)
+
+        self.assertEqual(
+            etree.tostring(got[0], encoding='unicode'),
+            u'<em type="italic">Å. B F. A </em>')
+
+    def test_extract_textelement_containing_b_with_i_elements(self):
+        '''Extract text from a pdf2xml text that contains one <b> element
+        with several <i> elements
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        input = etree.fromstring(u'<text top="837" left="57" width="603" height="11" font="7"><b><i>Å.</i> B <i>F.</i> A </b></text>')
+        got = p2x.extract_textelement(input)
+
+        self.assertEqual(
+            etree.tostring(got[0], encoding='unicode'),
+            u'<em type="bold">Å. B F. A </em>')
