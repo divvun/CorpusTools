@@ -801,12 +801,13 @@ class PDF2XMLConverter(object):
         p = etree.Element('p')
         x = 0
 
-        while x < len(parts) and type(parts[x]) is str:
+        while x < len(parts) and (type(parts[x]) is str or type(parts[x]) is unicode):
             x += 1
 
         p.text = ''.join(parts[:x])
 
         for part in parts[x:]:
+            print >>sys.stderr, ccat.lineno(), type(part)
             p.append(part)
 
         return p
