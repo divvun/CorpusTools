@@ -714,7 +714,7 @@ class PDF2XMLConverter(object):
     def get_body(self):
         return self.body
 
-    def extract_textelement(self, textelement):
+    def extract_textelement(self, textelement, parts):
         '''Convert one <text> element to an array of text and etree Elements.
 
         A <text> element can contain <i> and <b> elements.
@@ -726,10 +726,33 @@ class PDF2XMLConverter(object):
         elements become the text parts of <i> and <b> elements.
         '''
 
-        parts = []
+        print ccat.lineno(), etree.tostring(textelement)
         if (textelement is not None and int(textelement.get('width')) > 0):
             if textelement.text is not None:
-                parts.append(textelement.text)
+                if len(parts) > 0:
+                    if isinstance(parts[-1], etree._Element):
+                        if parts[-1].tail is not None:
+                            if parts[-1].tail[-1] == '-':
+                                parts[-1].tail = parts[-1].tail[:-1]
+                                hyph = etree.Element('hyph')
+                                hyph.tail = textelement.text
+                                parts.append(hyph)
+                            else:
+                                parts[-1].tail += ' ' + textelement.text
+                        else:
+                            parts[-1].tail = textelement.text
+                    else:
+                        print ccat.lineno(), type(parts[-1])
+                        if parts[-1][-1] == '-':
+                            parts[-1] = parts[-1][:-1]
+                            print ccat.lineno(), parts[-1]
+                            hyph = etree.Element('hyph')
+                            hyph.tail = textelement.text
+                            parts.append(hyph)
+                        else:
+                            parts[-1] += ' ' + textelement.text
+                else:
+                    parts.append(textelement.text)
 
             for child in textelement:
                 em = etree.Element('em')
@@ -755,8 +778,7 @@ class PDF2XMLConverter(object):
                 em.tail = child.tail
 
                 parts.append(em)
-
-        return parts
+        print ccat.lineno(), parts
 
     def is_same_paragraph(self, text1, text2):
         '''Define the incoming text elements text1 and text2 to belong to
@@ -780,17 +802,19 @@ class PDF2XMLConverter(object):
         '''Parse a page element
         '''
 
-        prev_t = None
         parts = []
+        prev_t = None
         for t in page.iter('text'):
-            parts += self.extract_textelement(prev_t)
             if prev_t is not None:
+                print ccat.lineno(), etree.tostring(prev_t), etree.tostring(t)
                 if not self.is_same_paragraph(prev_t, t):
                     self.append_to_body(self.make_paragraph(parts))
                     parts = []
+            self.extract_textelement(t, parts)
+            print ccat.lineno(), parts
             prev_t = t
 
-        parts += self.extract_textelement(prev_t)
+
         self.append_to_body(self.make_paragraph(parts))
 
     def parse_pages(self, root_element):
@@ -798,19 +822,19 @@ class PDF2XMLConverter(object):
             self.parse_page(page)
 
     def make_paragraph(self, parts):
-        p = etree.Element('p')
-        x = 0
+        if len(parts) > 0:
+            p = etree.Element('p')
+            print ccat.lineno(), parts[0], parts, type(parts[0])
+            if isinstance(parts[0], etree._Element):
+                for part in parts:
+                    print ccat.lineno(), part, parts, type(part)
+                    p.append(part)
+            else:
+                p.text = parts[0]
+                for part in parts[1:]:
+                    p.append(part)
 
-        while x < len(parts) and (type(parts[x]) is str or type(parts[x]) is unicode):
-            x += 1
-
-        p.text = ''.join(parts[:x])
-
-        for part in parts[x:]:
-            print >>sys.stderr, ccat.lineno(), type(part)
-            p.append(part)
-
-        return p
+            return p
 
 class BiblexmlConverter(object):
     """
