@@ -2515,4 +2515,4 @@ class TestPDF2XMLConverter(XMLTester):
         t1 = etree.fromstring('<text top="106" height="19"/>')
         t2 = etree.fromstring('<text top="126" height="20"/>')
 
-        self.assertTrue(p2x.is_same_paragraph(t1, t2))
+        self.assertFalse(p2x.is_same_paragraph(t1, t2))
