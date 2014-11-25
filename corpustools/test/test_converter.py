@@ -2592,7 +2592,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Test how a parsing a simplistic pdf2xml document works
         '''
         pdf2xml = etree.fromstring('<pdf2xml>\
-            <page><text top="145" width="100" height="19">1.</text></page>\
+            <page><fontspec/><text top="145" width="100" height="19">1.</text></page>\
             <page><text top="145" width="100" height="19">2.</text></page>\
             <page><text top="145" width="100" height="19">3.</text></page>\
             </pdf2xml>')

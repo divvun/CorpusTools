@@ -779,10 +779,10 @@ class PDF2XMLConverter(object):
     def parse_page(self, page):
         '''Parse a page element
         '''
-        
+
         prev_t = None
         parts = []
-        for t in page:
+        for t in page.iter('text'):
             parts += self.extract_textelement(prev_t)
             if prev_t is not None:
                 if not self.is_same_paragraph(prev_t, t):
