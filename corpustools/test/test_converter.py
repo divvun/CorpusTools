@@ -2481,3 +2481,38 @@ class TestPDF2XMLConverter(XMLTester):
         self.assertEqual(
             etree.tostring(got[0], encoding='unicode'),
             u'<em type="bold">Å. B F. A </em>')
+
+    def test_is_same_paragraph_1(self):
+        '''Test if two text elements belong to the same paragraph
+        when the x distance between the two elements is less than
+        1.5 times the height of them both.
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        t1 = etree.fromstring('<text top="106" height="19"/>')
+        t2 = etree.fromstring('<text top="126" height="19"/>')
+
+        self.assertTrue(p2x.is_same_paragraph(t1, t2))
+
+    def test_is_same_paragraph_2(self):
+        '''Test if two text elements belong to the same paragraph
+        when the x distance between the two elements is larger than
+        1.5 times the height of them both.
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        t1 = etree.fromstring('<text top="106" height="19"/>')
+        t2 = etree.fromstring('<text top="140" height="19"/>')
+
+        self.assertFalse(p2x.is_same_paragraph(t1, t2))
+
+    def test_is_same_paragraph_3(self):
+        '''Test if two text elements belong to the same paragraph
+        when they have different heights
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        t1 = etree.fromstring('<text top="106" height="19"/>')
+        t2 = etree.fromstring('<text top="126" height="20"/>')
+
+        self.assertTrue(p2x.is_same_paragraph(t1, t2))
