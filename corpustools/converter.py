@@ -705,6 +705,15 @@ class PDFConverter(object):
 class PDF2XMLConverter(object):
     '''Class to convert pdf2xml
     '''
+    def __init__(self):
+        self.body = etree.Element('body')
+
+    def append_to_body(self, element):
+        self.body.append(element)
+
+    def get_body(self):
+        return self.body
+
     def extract_textelement(self, textelement):
         '''Convert one <text> element to an array of text and etree Elements.
 
@@ -770,33 +779,35 @@ class PDF2XMLConverter(object):
     def parse_page(self, page):
         '''Parse a page element
         '''
-        body_element = etree.Element('body')
-
+        
         prev_t = None
         parts = []
         for t in page:
             parts += self.extract_textelement(prev_t)
             if prev_t is not None:
                 if not self.is_same_paragraph(prev_t, t):
-                    body_element.append(self.make_paragraph(parts))
+                    self.append_to_body(self.make_paragraph(parts))
                     parts = []
             prev_t = t
 
         parts += self.extract_textelement(prev_t)
-        body_element.append(self.make_paragraph(parts))
+        self.append_to_body(self.make_paragraph(parts))
 
-        return body_element
+    def parse_pages(self, root_element):
+        for page in root_element.iter('page'):
+            self.parse_page(page)
 
     def make_paragraph(self, parts):
         p = etree.Element('p')
-        p.text = ''
         x = 0
-        while x < len(parts):
-            if type(parts[x]) is str:
-                p.text += parts[x]
-            else:
-                p.append(parts[x])
+
+        while x < len(parts) and type(parts[x]) is str:
             x += 1
+
+        p.text = ''.join(parts[:x])
+
+        for part in parts[x:]:
+            p.append(part)
 
         return p
 

@@ -2525,7 +2525,8 @@ class TestPDF2XMLConverter(XMLTester):
             2 </text><text top="145" width="100" height="19">3.</text></page>')
 
         p2x = converter.PDF2XMLConverter()
-        self.assertXmlEqual(etree.tostring(p2x.parse_page(page_element), encoding='unicode'), u'<body><p>1 2 3.</p></body>')
+        p2x.parse_page(page_element)
+        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>1 2 3.</p></body>')
 
     def test_parse_page_2(self):
         '''Page with two paragraphs, four <text> elements
@@ -2536,7 +2537,8 @@ class TestPDF2XMLConverter(XMLTester):
             <text top="186" width="100" height="19">4.</text></page>')
 
         p2x = converter.PDF2XMLConverter()
-        self.assertXmlEqual(etree.tostring(p2x.parse_page(page_element), encoding='unicode'), u'<body><p>1 2.</p><p>3 4.</p></body>')
+        p2x.parse_page(page_element)
+        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>1 2.</p><p>3 4.</p></body>')
 
     def test_parse_page_3(self):
         '''Page with one paragraph, one <text> elements
@@ -2544,5 +2546,59 @@ class TestPDF2XMLConverter(XMLTester):
         page_element = etree.fromstring(u'<page><text top="145" width="100" height="19">3.</text></page>')
 
         p2x = converter.PDF2XMLConverter()
-        self.assertXmlEqual(etree.tostring(p2x.parse_page(page_element), encoding='unicode'), u'<body><p>3.</p></body>')
+        p2x.parse_page(page_element)
+        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>3.</p></body>')
 
+    def test_get_body(self):
+        '''Test the initial values when the class is initiated
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        self.assertXmlEqual(etree.tostring(p2x.get_body()), u'<body/>')
+
+    def test_append_to_body(self):
+        '''Check if an etree element really is appended to the body element
+        '''
+        p2x = converter.PDF2XMLConverter()
+        p2x.append_to_body(etree.Element('uptown'))
+
+        self.assertXmlEqual(etree.tostring(p2x.get_body()), u'<body><uptown/></body>')
+
+    def test_make_paragraph_1(self):
+        '''Pass a parts list consisting of only strings
+        '''
+        parts = ['a ', 'b ', 'c ']
+        p2x = converter.PDF2XMLConverter()
+
+        self.assertXmlEqual(etree.tostring(p2x.make_paragraph(parts)), '<p>a b c </p>')
+
+    def test_make_paragraph_2(self):
+        '''Pass a parts list consisting of some strings and some etree.Elements
+        '''
+        parts = ['a ', 'b', etree.Element('em'), etree.Element('em')]
+        p2x = converter.PDF2XMLConverter()
+
+        self.assertXmlEqual(etree.tostring(p2x.make_paragraph(parts)), '<p>a b<em/><em/></p>')
+
+    def test_make_paragraph_3(self):
+        '''Pass an invalid parts list consisting of one strings, one etree.Element and a string
+        '''
+        parts = ['a ', etree.Element('em'), ' c']
+        p2x = converter.PDF2XMLConverter()
+
+        self.assertRaises(TypeError, p2x.make_paragraph, parts)
+
+    def test_parse_pdf2xmldoc(self):
+        '''Test how a parsing a simplistic pdf2xml document works
+        '''
+        pdf2xml = etree.fromstring('<pdf2xml>\
+            <page><text top="145" width="100" height="19">1.</text></page>\
+            <page><text top="145" width="100" height="19">2.</text></page>\
+            <page><text top="145" width="100" height="19">3.</text></page>\
+            </pdf2xml>')
+        want = u'<body><p>1.</p><p>2.</p><p>3.</p></body>'
+
+        p2x = converter.PDF2XMLConverter()
+        p2x.parse_pages(pdf2xml)
+
+        self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
