@@ -2551,7 +2551,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_parse_page_4(self):
         '''One text element with a ascii letter, the other one with a non-ascii
-        
+
         This makes two parts lists. The first list contains one element that is
         of type str, the second list contains one element that is unicode.
         '''
@@ -2560,6 +2560,16 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter()
         p2x.parse_page(page_element)
         self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>R</p><p>Ø</p></body>')
+
+    def test_parse_page_5(self):
+        '''One text element with containing a <b>, the other one with a non-ascii string.
+        '''
+        page_element = etree.fromstring(u'<page><text top="215" width="51" height="14"><b>R</b></text><text top="235" width="39" height="14">Ø</text></page>')
+
+        p2x = converter.PDF2XMLConverter()
+        p2x.parse_page(page_element)
+        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>R</p><p>Ø</p></body>')
+
 
     def test_get_body(self):
         '''Test the initial values when the class is initiated
