@@ -706,7 +706,15 @@ class PDF2XMLConverter(object):
     '''Class to convert pdf2xml
     '''
     def extract_textelement(self, textelement):
-        '''Extract text from a single <text> element
+        '''Convert one <text> element to an array of text and etree Elements.
+
+        A <text> element can contain <i> and <b> elements.
+
+        <i> elements can contain <b> and <a> elements.
+        <b> elements can contain <i> and <a> elements.
+
+        The text and tail parts of the elements contained in the <i> and <b>
+        elements become the text parts of <i> and <b> elements.
         '''
 
         parts = []
@@ -740,6 +748,25 @@ class PDF2XMLConverter(object):
                 parts.append(em)
 
         return parts
+
+    def is_same_paragraph(self, text1, text2):
+        '''Define the incoming text elements text1 and text2 to belong to
+        the same paragraph if they have the same height and if the difference
+        between the top attributes is less than ratio times the height of
+        the text elements.
+        '''
+        result = False
+
+        h1 = float(text1.get("height"))
+        h2 = float(text2.get("height"))
+        delta = float(text2.get("top")) - float(text1.get("top"))
+        ratio = 1.5
+
+        if ( h1 == h2 and delta < ratio * h1):
+            result = True
+
+        return result
+
 
 class BiblexmlConverter(object):
     """
