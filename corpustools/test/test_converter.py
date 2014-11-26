@@ -2376,7 +2376,7 @@ without-multilingual-tag.xml'))
 class TestPDF2XMLConverter(XMLTester):
     '''Test the class that converts from pdf2xml to giellatekno/divvun xml
     '''
-    def test_extract_textelement_plain(self):
+    def test_extract_textelement1(self):
         '''Extract text from a plain pdf2xml text element
         '''
         p2x = converter.PDF2XMLConverter()
@@ -2386,7 +2386,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.extract_textelement(input, parts)
         self.assertEqual(parts, [u'berret bargat. '])
 
-    def test_extract_textelement_witdh_less_than_1(self):
+    def test_extract_textelement2(self):
         '''Extract text from a pdf2xml text element with width less than 1
         '''
         p2x = converter.PDF2XMLConverter()
@@ -2396,7 +2396,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.extract_textelement(input, parts)
         self.assertEqual(parts, [])
 
-    def test_extract_textelement_containing_i(self):
+    def test_extract_textelement3(self):
         '''Extract text from a pdf2xml text that contains an <i> element
         '''
         p2x = converter.PDF2XMLConverter()
@@ -2408,7 +2408,7 @@ class TestPDF2XMLConverter(XMLTester):
             etree.tostring(parts[0], encoding='unicode'),
             u'<em type="italic">Ei </em>')
 
-    def test_extract_textelement_containing_b(self):
+    def test_extract_textelement4(self):
         '''Extract text from a pdf2xml text that contains a <b> element
         '''
         p2x = converter.PDF2XMLConverter()
@@ -2420,7 +2420,7 @@ class TestPDF2XMLConverter(XMLTester):
             etree.tostring(parts[0], encoding='unicode'),
             u'<em type="bold">Ei </em>')
 
-    def test_extract_textelement_containing_i_and_b(self):
+    def test_extract_textelement5(self):
         '''Extract text from a pdf2xml text that contains a <b> element
         inside the <i> element
         '''
@@ -2434,7 +2434,7 @@ class TestPDF2XMLConverter(XMLTester):
             etree.tostring(parts[0], encoding='unicode'),
             u'<em type="italic">Eiš </em>')
 
-    def test_extract_textelement_containing_b_with_tail(self):
+    def test_extract_textelement6(self):
         '''Extract text from a pdf2xml text that contains a <b> element
         including a tail
         '''
@@ -2447,7 +2447,7 @@ class TestPDF2XMLConverter(XMLTester):
             etree.tostring(parts[0], encoding='unicode'),
             u'<em type="bold">E</em> a')
 
-    def test_extract_textelement_containing_two_i_elements(self):
+    def test_extract_textelement7(self):
         '''Extract text from a pdf2xml text that contains two <i> elements
         '''
         p2x = converter.PDF2XMLConverter()
@@ -2464,7 +2464,7 @@ class TestPDF2XMLConverter(XMLTester):
             etree.tostring(parts[1], encoding='unicode'),
             u'<em type="italic">b</em>')
 
-    def test_extract_textelement_containing_i_with_b_elements(self):
+    def test_extract_textelement8(self):
         '''Extract text from a pdf2xml text that contains one <i> element
         with several <b> elements
         '''
@@ -2478,7 +2478,7 @@ class TestPDF2XMLConverter(XMLTester):
             etree.tostring(parts[0], encoding='unicode'),
             u'<em type="italic">Å. B F. A </em>')
 
-    def test_extract_textelement_containing_b_with_i_elements(self):
+    def test_extract_textelement9(self):
         '''Extract text from a pdf2xml text that contains one <b> element
         with several <i> elements
         '''
@@ -2491,6 +2491,120 @@ class TestPDF2XMLConverter(XMLTester):
         self.assertEqual(
             etree.tostring(parts[0], encoding='unicode'),
             u'<em type="bold">Å. B F. A </em>')
+
+    def test_extract_textelement10(self):
+        '''Extract text from a pdf2xml text that contains a string with a hyphen at the end.
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        input = etree.fromstring(u'<text top="215" width="51" height="14">R-</text>')
+        parts = []
+        p2x.extract_textelement(input, parts)
+
+        self.assertEqual(parts[0], u'R')
+        self.assertXmlEqual(etree.tostring(parts[1]), u'<hyph/>')
+
+    def test_extract_textelement11(self):
+        '''Extract text from a pdf2xml text that contains a string with a hyphen at the end contained in a <b> element.
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        input = etree.fromstring(u'<text top="215" width="51" height="14"><b>R-</b></text>')
+        parts = []
+        p2x.extract_textelement(input, parts)
+
+        self.assertXmlEqual(etree.tostring(parts[0]), u'<em type="bold">R<hyph/></em>')
+
+    def test_extract_textelement12(self):
+        '''Extract text from a pdf2xml text that contains a string with a hyphen at the end contained in a <i> element.
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        input = etree.fromstring(u'<text top="215" width="51" height="14"><i>R-</i></text>')
+        parts = []
+        p2x.extract_textelement(input, parts)
+
+        self.assertXmlEqual(etree.tostring(parts[0]), u'<em type="italic">R<hyph/></em>')
+
+    def test_extract_textelement13(self):
+        '''Extract text from a pdf2xml text that contains a string with a hyphen at the end contained in a <i> contained in a <b> element.
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        input = etree.fromstring(u'<text top="215" width="51" height="14"><i><b>R-</b></i></text>')
+        parts = []
+        p2x.extract_textelement(input, parts)
+
+        self.assertXmlEqual(etree.tostring(parts[0]), u'<em type="italic">R<hyph/></em>')
+
+    def test_extract_textelement14(self):
+        '''Extract text from a pdf2xml text that contains a string with a hyphen at the end contained in a <b> contained in a <i> element.
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        input = etree.fromstring(u'<text top="215" width="51" height="14"><b><i>R-</i></b></text>')
+        parts = []
+        p2x.extract_textelement(input, parts)
+
+        self.assertXmlEqual(etree.tostring(parts[0]), u'<em type="bold">R<hyph/></em>')
+
+    def test_make_paragraph_1(self):
+        '''Pass a parts list consisting of only strings
+        '''
+        parts = ['a b c ']
+        p2x = converter.PDF2XMLConverter()
+
+        self.assertXmlEqual(etree.tostring(p2x.make_paragraph(parts)), '<p>a b c </p>')
+
+    def test_make_paragraph_2(self):
+        '''Pass a parts list consisting of some strings and some etree.Elements
+        '''
+        parts = ['a b', etree.Element('em'), etree.Element('em')]
+        p2x = converter.PDF2XMLConverter()
+
+        self.assertXmlEqual(etree.tostring(p2x.make_paragraph(parts)), '<p>a b<em/><em/></p>')
+
+    def test_make_paragraph_3(self):
+        '''Pass a parts list consisting of a string, a hyph element and another string.
+        '''
+        parts = ['a ', etree.Element('hyph'), ' c']
+        p2x = converter.PDF2XMLConverter()
+
+        self.assertXmlEqual(etree.tostring(p2x.make_paragraph(parts)), '<p>a<hyph/>c</p>')
+
+    def test_make_paragraph_4(self):
+        '''Test if two "equal" em elements are joined when the first ends with a hyph element
+        '''
+        em1 = etree.Element('em')
+        em1.set('type', 'bold')
+        em1.text = 'a'
+        em1.append(etree.Element('hyph'))
+
+        em2 = etree.Element('em')
+        em2.set('type', 'bold')
+        em2.text = 'b'
+
+        parts = [em1, em2]
+        p2x = converter.PDF2XMLConverter()
+
+        self.assertXmlEqual(etree.tostring(p2x.make_paragraph(parts)), '<p><em type="bold">a<hyph/>b</em></p>')
+
+    def test_make_paragraph_5(self):
+        '''Test if two "unequal" em elements are joined when the first ends with a hyph element
+        '''
+        em1 = etree.Element('em')
+        em1.set('type', 'italic')
+        em1.text = 'a'
+        em1.append(etree.Element('hyph'))
+
+        em2 = etree.Element('em')
+        em2.set('type', 'bold')
+        em2.text = 'b'
+
+        parts = [em1, em2]
+        p2x = converter.PDF2XMLConverter()
+
+        self.assertXmlEqual(etree.tostring(p2x.make_paragraph(parts)), '<p><em type="italic">a<hyph/></em><em type="bold">b</em></p>')
 
     def test_is_same_paragraph_1(self):
         '''Test if two text elements belong to the same paragraph
@@ -2527,120 +2641,117 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertFalse(p2x.is_same_paragraph(t1, t2))
 
-    def test_parse_page_1(self):
-        '''Page with one paragraph, three <text> elements
-        '''
-        page_element = etree.fromstring(u'<page><text top="106" width="100" \
-            height="19">1 </text><text top="126" width="100" \
-            height="19">2 </text><text top="145" width="100" \
-            height="19">3.</text></page>')
+    #def test_parse_page_1(self):
+        #'''Page with one paragraph, three <text> elements
+        #'''
+        #page_element = etree.fromstring(u'<page><text top="106" width="100" \
+            #height="19">1 </text><text top="126" width="100" \
+            #height="19">2 </text><text top="145" width="100" \
+            #height="19">3.</text></page>')
 
-        p2x = converter.PDF2XMLConverter()
-        p2x.parse_page(page_element)
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>1 2 3.</p></body>')
+        #p2x = converter.PDF2XMLConverter()
+        #p2x.parse_page(page_element)
+        #self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>1 2 3.</p></body>')
 
-    def test_parse_page_2(self):
-        '''Page with two paragraphs, four <text> elements
-        '''
-        page_element = etree.fromstring(u'<page><text top="106" width="100" \
-            height="19">1 </text><text top="126" width="100" height="19">2.\
-            </text><text top="166" width="100" height="19">3 </text>\
-            <text top="186" width="100" height="19">4.</text></page>')
+    #def test_parse_page_2(self):
+        #'''Page with two paragraphs, four <text> elements
+        #'''
+        #page_element = etree.fromstring(u'<page><text top="106" width="100" \
+            #height="19">1 </text><text top="126" width="100" height="19">2.\
+            #</text><text top="166" width="100" height="19">3 </text>\
+            #<text top="186" width="100" height="19">4.</text></page>')
 
-        p2x = converter.PDF2XMLConverter()
-        p2x.parse_page(page_element)
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>1 2.</p><p>3 4.</p></body>')
+        #p2x = converter.PDF2XMLConverter()
+        #p2x.parse_page(page_element)
+        #self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>1 2.</p><p>3 4.</p></body>')
 
-    def test_parse_page_3(self):
-        '''Page with one paragraph, one <text> elements
-        '''
-        page_element = etree.fromstring(u'<page><text top="145" width="100" height="19">3.</text></page>')
+    #def test_parse_page_3(self):
+        #'''Page with one paragraph, one <text> elements
+        #'''
+        #page_element = etree.fromstring(u'<page><text top="145" width="100" height="19">3.</text></page>')
 
-        p2x = converter.PDF2XMLConverter()
-        p2x.parse_page(page_element)
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>3.</p></body>')
+        #p2x = converter.PDF2XMLConverter()
+        #p2x.parse_page(page_element)
+        #self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>3.</p></body>')
 
-    def test_parse_page_4(self):
-        '''One text element with a ascii letter, the other one with a non-ascii
+    #def test_parse_page_4(self):
+        #'''One text element with a ascii letter, the other one with a non-ascii
 
-        This makes two parts lists. The first list contains one element that is
-        of type str, the second list contains one element that is unicode.
-        '''
-        page_element = etree.fromstring(u'<page><text top="215" width="51" height="14">R</text><text top="245" width="39" height="14">Ø</text></page>')
+        #This makes two parts lists. The first list contains one element that is
+        #of type str, the second list contains one element that is unicode.
+        #'''
+        #page_element = etree.fromstring(u'<page><text top="215" width="51" height="14">R</text><text top="245" width="39" height="14">Ø</text></page>')
 
-        p2x = converter.PDF2XMLConverter()
-        p2x.parse_page(page_element)
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>R</p><p>Ø</p></body>')
+        #p2x = converter.PDF2XMLConverter()
+        #p2x.parse_page(page_element)
+        #self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>R</p><p>Ø</p></body>')
 
-    def test_parse_page_5(self):
-        '''One text element with containing a <b>, the other one with a non-ascii string. Both belong to the same paragraph.
-        '''
-        page_element = etree.fromstring(u'<page><text top="215" width="51" height="14"><b>R</b></text><text top="235" width="39" height="14">Ø</text></page>')
+    #def test_parse_page_5(self):
+        #'''One text element with containing a <b>, the other one with a non-ascii string. Both belong to the same paragraph.
+        #'''
+        #page_element = etree.fromstring(u'<page><text top="215" width="51" height="14"><b>R</b></text><text top="235" width="39" height="14">Ø</text></page>')
 
-        p2x = converter.PDF2XMLConverter()
-        p2x.parse_page(page_element)
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p><em type="bold">R</em>Ø</p></body>')
+        #p2x = converter.PDF2XMLConverter()
+        #p2x.parse_page(page_element)
+        #self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p><em type="bold">R</em>Ø</p></body>')
 
 
-    def test_parse_page_6(self):
-        '''One text element ending with a hyphen.
-        '''
-        page_element = etree.fromstring(u'<page><text top="215" width="51" height="14">R-</text><text top="235" width="39" height="14">Ø</text></page>')
+    #def test_parse_page_6(self):
+        #'''One text element ending with a hyphen.
+        #'''
+        #page_element = etree.fromstring(u'<page><text top="215" width="51" height="14">R-</text><text top="235" width="39" height="14">Ø</text></page>')
 
-        p2x = converter.PDF2XMLConverter()
-        p2x.parse_page(page_element)
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>R<hyph/>Ø</p></body>')
+        #p2x = converter.PDF2XMLConverter()
+        #p2x.parse_page(page_element)
+        #import sys
+        #print >>sys.stderr, etree.tostring(p2x.get_body(), encoding='unicode')
+        #self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>R<hyph/>Ø</p></body>')
 
-    def test_get_body(self):
-        '''Test the initial values when the class is initiated
-        '''
-        p2x = converter.PDF2XMLConverter()
+    #def test_parse_page_7(self):
+        #'''One text element ending with a hyphen.
+        #'''
+        #page_element = etree.fromstring(u'<page><text top="215" width="51" height="14">R -</text><text top="235" width="39" height="14">Ø</text></page>')
 
-        self.assertXmlEqual(etree.tostring(p2x.get_body()), u'<body/>')
+        #p2x = converter.PDF2XMLConverter()
+        #p2x.parse_page(page_element)
+        #self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>R - Ø</p></body>')
 
-    def test_append_to_body(self):
-        '''Check if an etree element really is appended to the body element
-        '''
-        p2x = converter.PDF2XMLConverter()
-        p2x.append_to_body(etree.Element('uptown'))
+    ##def test_parse_page_8(self):
+        ##'''One text element ending with a hyphen.
+        ##'''
+        ##page_element = etree.fromstring(u'<page><text top="196" left="142" width="69" height="21" font="15"><b>JULE-</b></text><text top="223" left="118" width="123" height="21" font="15"><b>HANDEL</b></text></page>')
 
-        self.assertXmlEqual(etree.tostring(p2x.get_body()), u'<body><uptown/></body>')
+        ##p2x = converter.PDF2XMLConverter()
+        ##p2x.parse_page(page_element)
+        ##self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p><em type="bold">JULE</hyph>HANDEL</em></p></body>')
 
-    def test_make_paragraph_1(self):
-        '''Pass a parts list consisting of only strings
-        '''
-        parts = ['a b c ']
-        p2x = converter.PDF2XMLConverter()
 
-        self.assertXmlEqual(etree.tostring(p2x.make_paragraph(parts)), '<p>a b c </p>')
+    #def test_get_body(self):
+        #'''Test the initial values when the class is initiated
+        #'''
+        #p2x = converter.PDF2XMLConverter()
 
-    def test_make_paragraph_2(self):
-        '''Pass a parts list consisting of some strings and some etree.Elements
-        '''
-        parts = ['a b', etree.Element('em'), etree.Element('em')]
-        p2x = converter.PDF2XMLConverter()
+        #self.assertXmlEqual(etree.tostring(p2x.get_body()), u'<body/>')
 
-        self.assertXmlEqual(etree.tostring(p2x.make_paragraph(parts)), '<p>a b<em/><em/></p>')
+    #def test_append_to_body(self):
+        #'''Check if an etree element really is appended to the body element
+        #'''
+        #p2x = converter.PDF2XMLConverter()
+        #p2x.append_to_body(etree.Element('uptown'))
 
-    def test_make_paragraph_3(self):
-        '''Pass an invalid parts list consisting of one strings, one etree.Element and a string
-        '''
-        parts = ['a ', etree.Element('em'), ' c']
-        p2x = converter.PDF2XMLConverter()
+        #self.assertXmlEqual(etree.tostring(p2x.get_body()), u'<body><uptown/></body>')
 
-        self.assertRaises(TypeError, p2x.make_paragraph, parts)
+    #def test_parse_pdf2xmldoc(self):
+        #'''Test how a parsing a simplistic pdf2xml document works
+        #'''
+        #pdf2xml = etree.fromstring('<pdf2xml>\
+            #<page><fontspec/><text top="145" width="100" height="19">1.</text></page>\
+            #<page><text top="145" width="100" height="19">2.</text></page>\
+            #<page><text top="145" width="100" height="19">3.</text></page>\
+            #</pdf2xml>')
+        #want = u'<body><p>1.</p><p>2.</p><p>3.</p></body>'
 
-    def test_parse_pdf2xmldoc(self):
-        '''Test how a parsing a simplistic pdf2xml document works
-        '''
-        pdf2xml = etree.fromstring('<pdf2xml>\
-            <page><fontspec/><text top="145" width="100" height="19">1.</text></page>\
-            <page><text top="145" width="100" height="19">2.</text></page>\
-            <page><text top="145" width="100" height="19">3.</text></page>\
-            </pdf2xml>')
-        want = u'<body><p>1.</p><p>2.</p><p>3.</p></body>'
+        #p2x = converter.PDF2XMLConverter()
+        #p2x.parse_pages(pdf2xml)
 
-        p2x = converter.PDF2XMLConverter()
-        p2x.parse_pages(pdf2xml)
-
-        self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
+        #self.assertXmlEqual(etree.tostring(p2x.get_body()), want)

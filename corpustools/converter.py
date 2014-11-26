@@ -732,41 +732,42 @@ class PDF2XMLConverter(object):
                 if len(parts) > 0:
                     if isinstance(parts[-1], etree._Element):
                         if parts[-1].tail is not None:
-                            if parts[-1].tail[-1] == '-':
-                                parts[-1].tail = parts[-1].tail[:-1]
-                                hyph = etree.Element('hyph')
-                                hyph.tail = textelement.text
-                                parts.append(hyph)
-                            else:
-                                parts[-1].tail += ' ' + textelement.text
+                            parts[-1].tail += ' ' + textelement.text
                         else:
                             parts[-1].tail = textelement.text
                     else:
-                        print ccat.lineno(), type(parts[-1])
-                        if parts[-1][-1] == '-':
-                            parts[-1] = parts[-1][:-1]
-                            print ccat.lineno(), parts[-1]
-                            hyph = etree.Element('hyph')
-                            hyph.tail = textelement.text
-                            parts.append(hyph)
-                        else:
-                            parts[-1] += ' ' + textelement.text
+                        parts[-1] += ' ' + textelement.text
                 else:
-                    parts.append(textelement.text)
+                    m = re.search('\w-$', textelement.text, re.UNICODE)
+                    if m:
+                        parts.append(textelement.text[:-1])
+                        parts.append(etree.Element('hyph'))
+                    else:
+                        parts.append(textelement.text)
+
 
             for child in textelement:
                 em = etree.Element('em')
 
                 if child.text is not None:
-                    em.text = child.text
+                    m = re.search('\w-$', child.text, re.UNICODE)
+                    if m:
+                        em.text = child.text[:-1]
+                        em.append(etree.Element('hyph'))
+                    else:
+                        em.text = child.text
                 else:
                     em.text = ''
 
                 if len(child) > 0:
-                    em.set('type', 'bold')
                     for grandchild in child:
                         if grandchild.text is not None:
-                            em.text += grandchild.text
+                            m = re.search('\w-$', grandchild.text, re.UNICODE)
+                            if m:
+                                em.text += grandchild.text[:-1]
+                                em.append(etree.Element('hyph'))
+                            else:
+                                em.text += grandchild.text
                         if grandchild.tail is not None:
                             em.text += grandchild.tail
 
@@ -822,17 +823,34 @@ class PDF2XMLConverter(object):
             self.parse_page(page)
 
     def make_paragraph(self, parts):
+        '''parts is a list of strings and etree.Elements that belong to the
+        same paragraph
+
+        The parts list is converted to a p element.
+        '''
         if len(parts) > 0:
             p = etree.Element('p')
             print ccat.lineno(), parts[0], parts, type(parts[0])
-            if isinstance(parts[0], etree._Element):
-                for part in parts:
-                    print ccat.lineno(), part, parts, type(part)
-                    p.append(part)
-            else:
+            if (isinstance(parts[0], str) or isinstance(parts[0], unicode)):
                 p.text = parts[0]
-                for part in parts[1:]:
-                    p.append(part)
+            else:
+                p.append(parts[0])
+
+            for part in parts[1:]:
+                if isinstance(part, etree._Element):
+                    if len(p) > 0 and len(p[-1]) > 0 and p[-1][-1].tag == 'hyph':
+                        if p[-1].tag == part.tag and p[-1].get('type') == part.get('type'):
+                            p[-1][-1].tail = part.text
+                            p[-1].tail = part.tail
+                        else:
+                            p.append(part)
+                    else:
+                        p.append(part)
+                else:
+                    if p[-1].tail is None:
+                        p[-1].tail = part
+                    else:
+                        p[-1].tail = ' ' + part
 
             return p
 
