@@ -804,7 +804,7 @@ class PDF2XMLConverter(object):
         '''
         rm = int(self.rm * int(page.get('width')))
         lm = int(page.get('width')) - int(self.lm * int(page.get('width')))
-        tm = self.tm * int(page.get('height'))
+        tm = int(self.tm * int(page.get('height')))
         bm = int(page.get('height')) - int(self.bm * int(page.get('height')))
 
         parts = []
