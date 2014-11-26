@@ -802,6 +802,10 @@ class PDF2XMLConverter(object):
     def parse_page(self, page):
         '''Parse a page element
         '''
+        rm = int(self.rm * int(page.get('width')))
+        lm = int(page.get('width')) - int(self.lm * int(page.get('width')))
+        tm = self.tm * int(page.get('height'))
+        bm = int(page.get('height')) - int(self.bm * int(page.get('height')))
 
         parts = []
         prev_t = None
@@ -811,16 +815,30 @@ class PDF2XMLConverter(object):
                 if not self.is_same_paragraph(prev_t, t):
                     self.append_to_body(self.make_paragraph(parts))
                     parts = []
-            self.extract_textelement(t, parts)
-            print ccat.lineno(), parts
-            prev_t = t
+            if self.is_inside_margins(t, rm, lm, tm, bm):
+                self.extract_textelement(t, parts)
+                print ccat.lineno(), parts
+                prev_t = t
 
 
         self.append_to_body(self.make_paragraph(parts))
 
+    def is_inside_margins(self, t, rm, lm, tm, bm):
+        '''Check if t is inside the given margins
+
+        t is a text element
+        rm is right margin
+        lm is left margin
+        tm is top margin
+        bm is bottom margin
+        '''
+        return (int(t.get('top')) > tm and int(t.get('top')) < bm and
+                int(t.get('left')) > rm and int(t.get('left')) < lm)
+
     def parse_pages(self, root_element):
         for page in root_element.iter('page'):
-            self.parse_page(page)
+            if page.get('number') not in self.skip_pages:
+                self.parse_page(page)
 
     def make_paragraph(self, parts):
         '''parts is a list of strings and etree.Elements that belong to the
