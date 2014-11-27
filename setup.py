@@ -30,7 +30,6 @@ setup(
         "beautifulsoup4",
         "unidecode",
         "lxml",
-        "svn",
         "gitdb",
         "pydocx",
     ],
