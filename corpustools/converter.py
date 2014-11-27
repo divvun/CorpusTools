@@ -707,14 +707,17 @@ class PDF2XMLConverter(object):
     '''
     def __init__(self):
         self.body = etree.Element('body')
+        self.parts = []
+        self.skip_pages = []
 
     def append_to_body(self, element):
         self.body.append(element)
+        self.parts = []
 
     def get_body(self):
         return self.body
 
-    def extract_textelement(self, textelement, parts):
+    def extract_textelement(self, textelement):
         '''Convert one <text> element to an array of text and etree Elements.
 
         A <text> element can contain <i> and <b> elements.
@@ -729,21 +732,21 @@ class PDF2XMLConverter(object):
         print ccat.lineno(), etree.tostring(textelement)
         if (textelement is not None and int(textelement.get('width')) > 0):
             if textelement.text is not None:
-                if len(parts) > 0:
-                    if isinstance(parts[-1], etree._Element):
-                        if parts[-1].tail is not None:
-                            parts[-1].tail += ' ' + textelement.text
+                if len(self.parts) > 0:
+                    if isinstance(self.parts[-1], etree._Element):
+                        if self.parts[-1].tail is not None:
+                            self.parts[-1].tail += ' ' + textelement.text
                         else:
-                            parts[-1].tail = textelement.text
+                            self.parts[-1].tail = textelement.text
                     else:
-                        parts[-1] += ' ' + textelement.text
+                        self.parts[-1] += ' ' + textelement.text
                 else:
                     m = re.search('\w-$', textelement.text, re.UNICODE)
                     if m:
-                        parts.append(textelement.text[:-1])
-                        parts.append(etree.Element('hyph'))
+                        self.parts.append(textelement.text[:-1])
+                        self.parts.append(etree.Element('hyph'))
                     else:
-                        parts.append(textelement.text)
+                        self.parts.append(textelement.text)
 
 
             for child in textelement:
@@ -778,8 +781,8 @@ class PDF2XMLConverter(object):
 
                 em.tail = child.tail
 
-                parts.append(em)
-        print ccat.lineno(), parts
+                self.parts.append(em)
+        print ccat.lineno(), self.parts
 
     def is_same_paragraph(self, text1, text2):
         '''Define the incoming text elements text1 and text2 to belong to
@@ -807,21 +810,18 @@ class PDF2XMLConverter(object):
         tm = int(self.tm * int(page.get('height')))
         bm = int(page.get('height')) - int(self.bm * int(page.get('height')))
 
-        parts = []
         prev_t = None
         for t in page.iter('text'):
             if prev_t is not None:
                 print ccat.lineno(), etree.tostring(prev_t), etree.tostring(t)
                 if not self.is_same_paragraph(prev_t, t):
-                    self.append_to_body(self.make_paragraph(parts))
-                    parts = []
+                    self.append_to_body(self.make_paragraph())
             if self.is_inside_margins(t, rm, lm, tm, bm):
-                self.extract_textelement(t, parts)
-                print ccat.lineno(), parts
+                self.extract_textelement(t)
+                print ccat.lineno(), self.parts
                 prev_t = t
 
-
-        self.append_to_body(self.make_paragraph(parts))
+        self.append_to_body(self.make_paragraph())
 
     def is_inside_margins(self, t, rm, lm, tm, bm):
         '''Check if t is inside the given margins
@@ -840,21 +840,21 @@ class PDF2XMLConverter(object):
             if page.get('number') not in self.skip_pages:
                 self.parse_page(page)
 
-    def make_paragraph(self, parts):
+    def make_paragraph(self):
         '''parts is a list of strings and etree.Elements that belong to the
         same paragraph
 
         The parts list is converted to a p element.
         '''
-        if len(parts) > 0:
+        if len(self.parts) > 0:
             p = etree.Element('p')
-            print ccat.lineno(), parts[0], parts, type(parts[0])
-            if (isinstance(parts[0], str) or isinstance(parts[0], unicode)):
-                p.text = parts[0]
+            print ccat.lineno(), self.parts[0], self.parts, type(self.parts[0])
+            if (isinstance(self.parts[0], str) or isinstance(self.parts[0], unicode)):
+                p.text = self.parts[0]
             else:
-                p.append(parts[0])
+                p.append(self.parts[0])
 
-            for part in parts[1:]:
+            for part in self.parts[1:]:
                 if isinstance(part, etree._Element):
                     if len(p) > 0 and len(p[-1]) > 0 and p[-1][-1].tag == 'hyph':
                         if p[-1].tag == part.tag and p[-1].get('type') == part.get('type'):
