@@ -112,7 +112,7 @@ convert2xml depends on these external programs:
 
 * bible2xml.pl (found in the Divvun/Giellatekno svn)
 * pdftotext
-* antiword
+* wvHtml
 
 
 !Usage
@@ -245,9 +245,9 @@ This script adds files found on a local machine to a working copy of
 a corpus.
 
 It copies files from a directory to the corpusdir. In the process
-it will 
+it will
 * change the name of the file so that the filename only consists of ascii characters.
-* add a metadata file containing the original name, main language and genre 
+* add a metadata file containing the original name, main language and genre
 * add the renamed files and the metadata files to the working copy
 
 Typical usage is:

@@ -1237,14 +1237,14 @@ class DocConverter(HTMLContentConverter):
     """
     def __init__(self, filename):
         self.orig = filename
-        HTMLContentConverter.__init__(self, filename, self.docbook2html())
+        HTMLContentConverter.__init__(self, filename, self.doc2html())
 
-    def doc2docbook(self):
-        """Convert the doc file using antiword to a docbook xml file
-        Return the output as an etree
+    def doc2html(self):
+        """Convert the doc file using wvHtml.
+        Return the output of the wvHtml
         """
         subp = subprocess.Popen(
-            ['antiword', '-x', 'db', self.orig],
+            ['wvHtml', self.orig, '-'],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
 
@@ -1256,42 +1256,7 @@ class DocConverter(HTMLContentConverter):
             print >>sys.stderr, error
             return subp.returncode
 
-        try:
-            return etree.fromstring(output)
-        except etree.XMLSyntaxError as e:
-            #logfile = open(self.filename + '.log', 'w')
-            logfile = open(self.orig + '.log', 'w')
-
-            logfile.write('Error at: ' + str(ccat.lineno()))
-            for entry in e.error_log:
-                logfile.write(str(entry))
-                logfile.write('\n')
-
-            logfile.close()
-            #raise ConversionException("Syntax error when trying convert to docbook " + self.filename)
-            raise ConversionException("Syntax error when trying convert to docbook " + self.orig)
-
-    def docbook2html(self):
-        """Convert the docbook output to html using docbook-xsl
-        Return the html as a string
-        """
-        docbook_transformer = etree.XSLT(
-            etree.parse(
-                'http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl'))
-        try:
-            html = docbook_transformer(self.doc2docbook())
-        except etree.XSLTApplyError as (e):
-            logfile = open(self.orig + '.log', 'w')
-
-            logfile.write('Error at: ' + str(ccat.lineno()))
-            for entry in e.error_log:
-                logfile.write(str(entry))
-                logfile.write('\n')
-
-            logfile.close()
-            raise ConversionException('Could not convert docbook ' + self.orig)
-
-        return etree.tostring(html)
+        return output
 
 
 class DocumentFixer(object):
@@ -2063,19 +2028,9 @@ def collect_files(source_dir):
     return xsl_files
 
 
-def setup_xml_catalog():
-    """Setup xml catalog to try to access docbook xsl stylesheets
-    without hitting the network
-    """
-    if os.path.exists('/etc/xml/catalog'):
-        os.environ['XML_CATALOG_FILES'] = '/etc/xml/catalog'
-    elif os.path.exists('/opt/local/etc/xml/catalog'):
-        os.environ['XML_CATALOG_FILES'] = '/opt/local/etc/xml/catalog'
-
-
 def main():
-    analyser.sanity_check([u'antiword', u'pdftotext'])
-    setup_xml_catalog()
+    analyser.sanity_check([u'wvHtml', u'pdftotext'])
+
     args = parse_options()
 
     for source in args.sources:
