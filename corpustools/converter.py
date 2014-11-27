@@ -807,10 +807,7 @@ class PDF2XMLConverter(object):
     def parse_page(self, page):
         '''Parse a page element
         '''
-        rm = int(self.rm * int(page.get('width')))
-        lm = int(page.get('width')) - int(self.lm * int(page.get('width')))
-        tm = int(self.tm * int(page.get('height')))
-        bm = int(page.get('height')) - int(self.bm * int(page.get('height')))
+        margins = self.compute_margins(page)
 
         prev_t = None
         for t in page.iter('text'):
@@ -818,29 +815,37 @@ class PDF2XMLConverter(object):
                 print ccat.lineno(), etree.tostring(prev_t), etree.tostring(t)
                 if not self.is_same_paragraph(prev_t, t):
                     self.append_to_body(self.make_paragraph())
-            if self.is_inside_margins(t, rm, lm, tm, bm):
+            if self.is_inside_margins(t, margins):
                 self.extract_textelement(t)
                 print ccat.lineno(), self.parts
                 prev_t = t
 
         self.append_to_body(self.make_paragraph())
 
-    def is_inside_margins(self, t, rm, lm, tm, bm):
+    def is_inside_margins(self, t, margins):
         '''Check if t is inside the given margins
 
         t is a text element
-        rm is right margin
-        lm is left margin
-        tm is top margin
-        bm is bottom margin
         '''
-        return (int(t.get('top')) > tm and int(t.get('top')) < bm and
-                int(t.get('left')) > rm and int(t.get('left')) < lm)
+        return (int(t.get('top')) > margins['tm'] and int(t.get('top')) < margins['bm'] and
+                int(t.get('left')) > margins['rm'] and int(t.get('left')) < margins['lm'])
 
     def parse_pages(self, root_element):
         for page in root_element.iter('page'):
             if page.get('number') not in self.skip_pages:
                 self.parse_page(page)
+
+    def compute_margins(self, page):
+        '''page is a page element
+        '''
+        margins = {}
+
+        margins['rm'] = int(self.rm * int(page.get('width')))
+        margins['lm'] = int(page.get('width')) - int(self.lm * int(page.get('width')))
+        margins['tm'] = int(self.tm * int(page.get('height')))
+        margins['bm'] = int(page.get('height')) - int(self.bm * int(page.get('height')))
+
+        return margins
 
     def make_paragraph(self):
         '''parts is a list of strings and etree.Elements that belong to the
