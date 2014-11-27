@@ -2883,3 +2883,114 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
+
+    def test_compute_margin(self):
+        '''Test if the default margins are set
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        self.assertEqual(p2x.compute_margin('rm', 1263, 862), 60)
+        self.assertEqual(p2x.compute_margin('lm', 1263, 862), 801)
+        self.assertEqual(p2x.compute_margin('tm', 1263, 862), 88)
+        self.assertEqual(p2x.compute_margin('bm', 1263, 862), 1174)
+
+    def test_set_margin(self):
+        '''Test if the margin is set correctly
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        self.assertEqual(p2x.set_margin('odd=230; even = 540 ; 8 = 340'), {'odd': 230, 'even': 540, '8': 340})
+
+    def test_set_margins(self):
+        '''Test set_margins
+        '''
+        p2x = converter.PDF2XMLConverter()
+        p2x.set_margins({'rm': 'odd=40;even=80;3=60',
+                         'lm': '7=70',
+                         'tm': '8=80',
+                         'bm': '9=200'})
+
+        self.assertEqual(p2x.margins, {'rm': {'odd': 40, 'even': 80, '3': 60},
+                                       'lm': {'7': 70},
+                                       'tm': {'8': 80},
+                                       'bm': {'9': 200}})
+
+    def test_compute_margins1(self):
+        '''Test set_margins
+        '''
+        p2x = converter.PDF2XMLConverter()
+        p2x.set_margins({'rm': 'odd=40;even=80;3=60',
+                         'lm': '7=70',
+                         'tm': '8=80',
+                         'bm': '9=200'})
+
+        page1 = etree.fromstring('<page number="1" height="1263" width="862"/>')
+        self.assertEqual(p2x.compute_margins(page1), {'rm': 40,
+                                                      'lm': 801,
+                                                      'tm': 88,
+                                                      'bm': 1174})
+        page2 = etree.fromstring('<page number="2" height="1263" width="862"/>')
+        self.assertEqual(p2x.compute_margins(page2), {'rm': 80,
+                                                      'lm': 801,
+                                                      'tm': 88,
+                                                      'bm': 1174})
+        page3 = etree.fromstring('<page number="3" height="1263" width="862"/>')
+        self.assertEqual(p2x.compute_margins(page3), {'rm': 60,
+                                                      'lm': 801,
+                                                      'tm': 88,
+                                                      'bm': 1174})
+        page7 = etree.fromstring('<page number="7" height="1263" width="862"/>')
+        self.assertEqual(p2x.compute_margins(page7), {'rm': 40,
+                                                      'lm': 70,
+                                                      'tm': 88,
+                                                      'bm': 1174})
+        page8 = etree.fromstring('<page number="8" height="1263" width="862"/>')
+        self.assertEqual(p2x.compute_margins(page8), {'rm': 80,
+                                                      'lm': 801,
+                                                      'tm': 80,
+                                                      'bm': 1174})
+        page9 = etree.fromstring('<page number="9" height="1263" width="862"/>')
+        self.assertEqual(p2x.compute_margins(page9), {'rm': 40,
+                                                      'lm': 801,
+                                                      'tm': 88,
+                                                      'bm': 200})
+
+    def test_compute_margins2(self):
+        '''Test set_margins
+        '''
+        p2x = converter.PDF2XMLConverter()
+        p2x.set_margins({'rm': 'odd=40;even=80;3=60',
+                         'lm': 'all=70',
+                         'tm': '8=80',
+                         'bm': '9=200'})
+
+        page1 = etree.fromstring('<page number="1" height="1263" width="862"/>')
+        self.assertEqual(p2x.compute_margins(page1), {'rm': 40,
+                                                      'lm': 70,
+                                                      'tm': 88,
+                                                      'bm': 1174})
+        page2 = etree.fromstring('<page number="2" height="1263" width="862"/>')
+        self.assertEqual(p2x.compute_margins(page2), {'rm': 80,
+                                                      'lm': 70,
+                                                      'tm': 88,
+                                                      'bm': 1174})
+        page3 = etree.fromstring('<page number="3" height="1263" width="862"/>')
+        self.assertEqual(p2x.compute_margins(page3), {'rm': 60,
+                                                      'lm': 70,
+                                                      'tm': 88,
+                                                      'bm': 1174})
+        page7 = etree.fromstring('<page number="7" height="1263" width="862"/>')
+        self.assertEqual(p2x.compute_margins(page7), {'rm': 40,
+                                                      'lm': 70,
+                                                      'tm': 88,
+                                                      'bm': 1174})
+        page8 = etree.fromstring('<page number="8" height="1263" width="862"/>')
+        self.assertEqual(p2x.compute_margins(page8), {'rm': 80,
+                                                      'lm': 70,
+                                                      'tm': 80,
+                                                      'bm': 1174})
+        page9 = etree.fromstring('<page number="9" height="1263" width="862"/>')
+        self.assertEqual(p2x.compute_margins(page9), {'rm': 40,
+                                                      'lm': 70,
+                                                      'tm': 88,
+                                                      'bm': 200})

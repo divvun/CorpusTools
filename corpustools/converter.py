@@ -716,20 +716,61 @@ class PDF2XMLConverter(object):
         the original file. Before it is passed here, the validity of them
         are checked.
         '''
-        for key, value in margin_lines.iter():
-            self.set_margin(key, value)
+        for key, value in margin_lines.items():
+            self.margins[key] = self.set_margin(value)
 
-    def set_margin(self, key, value):
-        '''Key is one of rm, lm, tm, bm
+    def set_margin(self, value):
+        '''
         '''
         m = {}
         parts = value.split(';')
         for part in parts:
-            page = part.split('=')[0]
-            margin = float(part.split('=')[1])
+            page = part.split('=')[0].strip()
+            margin = int(part.split('=')[1])
             m[page] = margin
 
-        self.margins[key] = m
+        return m
+
+    def compute_margins(self, page):
+        '''page is a page element
+        '''
+        margins = {}
+        page_number = page.get('number')
+        page_width = int(page.get('width'))
+        page_height = int(page.get('height'))
+
+        for margin in ['rm', 'lm', 'tm', 'bm']:
+            if margin in self.margins.keys():
+                m = self.margins[margin]
+                if m.get(page_number) is not None:
+                    margins[margin] = m[page_number.strip()]
+                elif m.get('all') is not None:
+                    margins[margin] = m['all']
+                elif int(page_number) % 2 == 0 and m.get('even') is not None:
+                    margins[margin] = m['even']
+                elif int(page_number) % 2 == 1 and m.get('odd') is not None:
+                    margins[margin] = m['odd']
+                else:
+                    margins[margin] = self.compute_margin(margin, page_height, page_width)
+            else:
+                margins[margin] = self.compute_margin(margin, page_height, page_width)
+
+        return margins
+
+    def compute_margin(self, margin, page_height, page_width):
+        '''Compute the margins if they are not explicitely set
+        '''
+        default = 0.07
+        if margin == 'rm':
+            return int(default * page_width)
+        if margin == 'lm':
+            return int(page_width - default * page_width)
+        if margin == 'tm':
+            return int(default * page_height)
+        if margin == 'bm':
+            return int(page_height - default * page_height)
+
+        return margins
 
     def append_to_body(self, element):
         self.body.append(element)
@@ -855,20 +896,6 @@ class PDF2XMLConverter(object):
         for page in root_element.iter('page'):
             if page.get('number') not in self.skip_pages:
                 self.parse_page(page)
-
-    def compute_margins(self, page):
-        '''page is a page element
-        '''
-        margins = {}
-        default = 0.07
-
-        if len(self.margins) == 0:
-            margins['rm'] = int(default * int(page.get('width')))
-            margins['lm'] = int(page.get('width')) - int(default * int(page.get('width')))
-            margins['tm'] = int(default * int(page.get('height')))
-            margins['bm'] = int(page.get('height')) - int(default * int(page.get('height')))
-
-        return margins
 
     def make_paragraph(self):
         '''parts is a list of strings and etree.Elements that belong to the
