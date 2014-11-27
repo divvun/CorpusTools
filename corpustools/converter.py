@@ -39,6 +39,7 @@ import lxml.etree as etree
 import tidylib
 from pyth.plugins.rtf15.reader import Rtf15Reader
 from pyth.plugins.xhtml.writer import XHTMLWriter
+from pydocx.parsers import Docx2Html
 
 import decode
 import ngram
@@ -88,6 +89,9 @@ class Converter(object):
 
         elif self.orig.endswith('.doc') or self.orig.endswith('.DOC'):
             intermediate = DocConverter(self.orig)
+
+        elif self.orig.endswith('.docx'):
+            intermediate = DocxConverter(self.orig)
 
         elif '.rtf' in self.orig:
             intermediate = RTFConverter(self.orig)
@@ -1210,6 +1214,21 @@ class RTFConverter(HTMLContentConverter):
         htmlElement = etree.Element('html')
         htmlElement.append(xml)
         return etree.tostring(htmlElement)
+
+
+class DocxConverter(HTMLContentConverter):
+    '''Class to convert docx documents to the giellatekno xml format
+    '''
+    def __init__(self, filename):
+        self.orig = filename
+        HTMLContentConverter.__init__(self, filename, self.docx2html())
+
+    def docx2html(self):
+        '''Convert docx to html, return the converted html
+        '''
+        parser = Docx2Html(path=self.orig)
+
+        return parser.parsed
 
 
 class DocConverter(HTMLContentConverter):
