@@ -709,6 +709,27 @@ class PDF2XMLConverter(object):
         self.body = etree.Element('body')
         self.parts = []
         self.skip_pages = []
+        self.margins = {}
+
+    def set_margins(self, margin_lines={}):
+        '''margins_lines will be fetched from the metadata file belonging to
+        the original file. Before it is passed here, the validity of them
+        are checked.
+        '''
+        for key, value in margin_lines.iter():
+            self.set_margin(key, value)
+
+    def set_margin(self, key, value):
+        '''Key is one of rm, lm, tm, bm
+        '''
+        m = {}
+        parts = value.split(';')
+        for part in parts:
+            page = part.split('=')[0]
+            margin = float(part.split('=')[1])
+            m[page] = margin
+
+        self.margins[key] = m
 
     def append_to_body(self, element):
         self.body.append(element)
@@ -839,11 +860,13 @@ class PDF2XMLConverter(object):
         '''page is a page element
         '''
         margins = {}
+        default = 0.07
 
-        margins['rm'] = int(self.rm * int(page.get('width')))
-        margins['lm'] = int(page.get('width')) - int(self.lm * int(page.get('width')))
-        margins['tm'] = int(self.tm * int(page.get('height')))
-        margins['bm'] = int(page.get('height')) - int(self.bm * int(page.get('height')))
+        if len(self.margins) == 0:
+            margins['rm'] = int(default * int(page.get('width')))
+            margins['lm'] = int(page.get('width')) - int(default * int(page.get('width')))
+            margins['tm'] = int(default * int(page.get('height')))
+            margins['bm'] = int(page.get('height')) - int(default * int(page.get('height')))
 
         return margins
 
