@@ -2717,10 +2717,6 @@ class TestPDF2XMLConverter(XMLTester):
             height="19">3.</text></page>')
 
         p2x = converter.PDF2XMLConverter()
-        p2x.rm = 0.07
-        p2x.lm = 0.07
-        p2x.tm = 0.07
-        p2x.bm = 0.07
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>1 2 3.</p></body>')
@@ -2734,10 +2730,6 @@ class TestPDF2XMLConverter(XMLTester):
             <text top="186" left="100" width="100" height="19">4.</text></page>')
 
         p2x = converter.PDF2XMLConverter()
-        p2x.rm = 0.07
-        p2x.lm = 0.07
-        p2x.tm = 0.07
-        p2x.bm = 0.07
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>1 2.</p><p>3 4.</p></body>')
@@ -2748,10 +2740,6 @@ class TestPDF2XMLConverter(XMLTester):
         page_element = etree.fromstring(u'<page height="1263" width="862"><text top="145" left="100" width="100" height="19">3.</text></page>')
 
         p2x = converter.PDF2XMLConverter()
-        p2x.rm = 0.07
-        p2x.lm = 0.07
-        p2x.tm = 0.07
-        p2x.bm = 0.07
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>3.</p></body>')
@@ -2765,10 +2753,6 @@ class TestPDF2XMLConverter(XMLTester):
         page_element = etree.fromstring(u'<page height="1263" width="862"><text top="215" left="100" width="51" height="14">R</text><text top="245" left="100" width="39" height="14">Ø</text></page>')
 
         p2x = converter.PDF2XMLConverter()
-        p2x.rm = 0.07
-        p2x.lm = 0.07
-        p2x.tm = 0.07
-        p2x.bm = 0.07
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>R</p><p>Ø</p></body>')
@@ -2779,10 +2763,6 @@ class TestPDF2XMLConverter(XMLTester):
         page_element = etree.fromstring(u'<page height="1263" width="862"><text top="215" left="100" width="51" height="14"><b>R</b></text><text top="235" left="100" width="39" height="14">Ø</text></page>')
 
         p2x = converter.PDF2XMLConverter()
-        p2x.rm = 0.07
-        p2x.lm = 0.07
-        p2x.tm = 0.07
-        p2x.bm = 0.07
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p><em type="bold">R</em>Ø</p></body>')
@@ -2793,10 +2773,6 @@ class TestPDF2XMLConverter(XMLTester):
         page_element = etree.fromstring(u'<page height="1263" width="862"><text top="215" left="100" width="51" height="14">R-</text><text top="235" left="100" width="39" height="14">Ø</text></page>')
 
         p2x = converter.PDF2XMLConverter()
-        p2x.rm = 0.07
-        p2x.lm = 0.07
-        p2x.tm = 0.07
-        p2x.bm = 0.07
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>R<hyph/>Ø</p></body>')
@@ -2807,10 +2783,6 @@ class TestPDF2XMLConverter(XMLTester):
         page_element = etree.fromstring(u'<page height="1263" width="862"><text top="215" left="100" width="51" height="14">R -</text><text top="235" left="100" width="39" height="14">Ø</text></page>')
 
         p2x = converter.PDF2XMLConverter()
-        p2x.rm = 0.07
-        p2x.lm = 0.07
-        p2x.tm = 0.07
-        p2x.bm = 0.07
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>R - Ø</p></body>')
@@ -2821,10 +2793,6 @@ class TestPDF2XMLConverter(XMLTester):
         page_element = etree.fromstring(u'<page height="1263" width="862"><text top="196" left="142" width="69" height="21" font="15"><b>JULE-</b></text><text top="223" left="118" width="123" height="21" font="15"><b>HANDEL</b></text></page>')
 
         p2x = converter.PDF2XMLConverter()
-        p2x.rm = 0.07
-        p2x.lm = 0.07
-        p2x.tm = 0.07
-        p2x.bm = 0.07
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p><em type="bold">JULE<hyph/>HANDEL</em></p></body>')
@@ -2835,10 +2803,6 @@ class TestPDF2XMLConverter(XMLTester):
         page_element = etree.fromstring(u'<page height="1263" width="862"><text top="70" left="100" width="100" height="19">Page 1</text><text top="145" left="100" width="100" height="19">3.</text></page>')
 
         p2x = converter.PDF2XMLConverter()
-        p2x.rm = 0.07
-        p2x.lm = 0.07
-        p2x.tm = 0.07
-        p2x.bm = 0.07
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>3.</p></body>')
@@ -2849,10 +2813,6 @@ class TestPDF2XMLConverter(XMLTester):
         page_element = etree.fromstring(u'<page height="1263" width="862"><text top="1200" left="100" width="100" height="19">Page 1</text><text top="145" left="100" width="100" height="19">3.</text></page>')
 
         p2x = converter.PDF2XMLConverter()
-        p2x.rm = 0.07
-        p2x.lm = 0.07
-        p2x.tm = 0.07
-        p2x.bm = 0.07
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>3.</p></body>')
@@ -2863,10 +2823,6 @@ class TestPDF2XMLConverter(XMLTester):
         page_element = etree.fromstring(u'<page height="1263" width="862"><text top="500" left="50" width="100" height="19">Page 1</text><text top="145" left="100" width="100" height="19">3.</text></page>')
 
         p2x = converter.PDF2XMLConverter()
-        p2x.rm = 0.07
-        p2x.lm = 0.07
-        p2x.tm = 0.07
-        p2x.bm = 0.07
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>3.</p></body>')
@@ -2877,10 +2833,6 @@ class TestPDF2XMLConverter(XMLTester):
         page_element = etree.fromstring(u'<page height="1263" width="862"><text top="500" left="850" width="100" height="19">Page 1</text><text top="145" left="100" width="100" height="19">3.</text></page>')
 
         p2x = converter.PDF2XMLConverter()
-        p2x.rm = 0.07
-        p2x.lm = 0.07
-        p2x.tm = 0.07
-        p2x.bm = 0.07
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>3.</p></body>')
@@ -2911,10 +2863,6 @@ class TestPDF2XMLConverter(XMLTester):
         want = u'<body><p>1.</p><p>2.</p><p>3.</p></body>'
 
         p2x = converter.PDF2XMLConverter()
-        p2x.rm = 0.07
-        p2x.lm = 0.07
-        p2x.tm = 0.07
-        p2x.bm = 0.07
         p2x.skip_pages = []
         p2x.parse_pages(pdf2xml)
 
@@ -2931,10 +2879,6 @@ class TestPDF2XMLConverter(XMLTester):
         want = u'<body><p>1.</p><p>3.</p></body>'
 
         p2x = converter.PDF2XMLConverter()
-        p2x.rm = 0.07
-        p2x.lm = 0.07
-        p2x.tm = 0.07
-        p2x.bm = 0.07
         p2x.skip_pages = ["2"]
         p2x.parse_pages(pdf2xml)
 
