@@ -281,11 +281,11 @@ class Analyser(object):
         body = etree.Element(u'body')
 
         disambiguation = etree.Element(u'disambiguation')
-        disambiguation.text = self.get_disambiguation().decode(u'utf8')
+        disambiguation.text = etree.CDATA(self.get_disambiguation().decode(u'utf8'))
         body.append(disambiguation)
 
         dependency = etree.Element(u'dependency')
-        dependency.text = self.get_dependency().decode(u'utf8')
+        dependency.text = etree.CDATA(self.get_dependency().decode(u'utf8'))
         body.append(dependency)
 
         oldbody = self.etree.find(u'.//body')
@@ -375,7 +375,7 @@ def parse_options():
         parents=[argparse_version.parser],
         description=u'Analyse files found in the given directories \
         for the given language using multiple parallel processes.')
-    
+
     parser.add_argument(u'lang',
                         help=u"lang which should be analysed")
     parser.add_argument(u'--serial',
