@@ -792,12 +792,14 @@ class PDF2XMLConverter(object):
         '''
         result = False
 
-        h1 = float(text1.get("height"))
-        h2 = float(text2.get("height"))
-        delta = float(text2.get("top")) - float(text1.get("top"))
+        h1 = float(text1.get('height'))
+        h2 = float(text2.get('height'))
+        f1 = text1.get('font')
+        f2 = text2.get('font')
+        delta = float(text2.get('top')) - float(text1.get('top'))
         ratio = 1.5
 
-        if ( h1 == h2 and delta < ratio * h1):
+        if ( f1 == f2 and h1 == h2 and delta < ratio * h1):
             result = True
 
         return result

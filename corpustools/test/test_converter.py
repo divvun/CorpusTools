@@ -2599,8 +2599,8 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter()
 
-        t1 = etree.fromstring('<text top="106" height="19"/>')
-        t2 = etree.fromstring('<text top="126" height="19"/>')
+        t1 = etree.fromstring('<text top="106" height="19" font="2"/>')
+        t2 = etree.fromstring('<text top="126" height="19" font="2"/>')
 
         self.assertTrue(p2x.is_same_paragraph(t1, t2))
 
@@ -2611,8 +2611,8 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter()
 
-        t1 = etree.fromstring('<text top="106" height="19"/>')
-        t2 = etree.fromstring('<text top="140" height="19"/>')
+        t1 = etree.fromstring('<text top="106" height="19" font="2"/>')
+        t2 = etree.fromstring('<text top="140" height="19" font="2"/>')
 
         self.assertFalse(p2x.is_same_paragraph(t1, t2))
 
@@ -2622,8 +2622,19 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter()
 
-        t1 = etree.fromstring('<text top="106" height="19"/>')
-        t2 = etree.fromstring('<text top="126" height="20"/>')
+        t1 = etree.fromstring('<text top="106" height="19" font="2"/>')
+        t2 = etree.fromstring('<text top="126" height="20" font="2"/>')
+
+        self.assertFalse(p2x.is_same_paragraph(t1, t2))
+
+    def test_is_same_paragraph_4(self):
+        '''Test if two text elements belong to the same paragraph
+        when they have different fonts
+        '''
+        p2x = converter.PDF2XMLConverter()
+
+        t1 = etree.fromstring('<text top="106" height="19" font="1"/>')
+        t2 = etree.fromstring('<text top="126" height="19" font="2"/>')
 
         self.assertFalse(p2x.is_same_paragraph(t1, t2))
 
