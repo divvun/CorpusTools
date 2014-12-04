@@ -1110,6 +1110,10 @@ class HTMLContentConverter(object):
 
         tidiedHtml, errors = tidylib.tidy_document(self.soup, tidyOption)
 
+        if tidiedHtml.strip() == "":
+            raise ConversionException(
+                "Empty html after tidy, log is found in " + self.orig + '.log')
+
         #sys.stderr.write(str(lineno()) + ' ' +  soup.prettify())
         return tidiedHtml
 
@@ -1993,15 +1997,17 @@ def parse_options():
 
 
 def worker(xsl_file):
-    if os.path.exists(xsl_file[:-4]):
-        conv = Converter(xsl_file[:-4])
+    orig_file = xsl_file[:-4]
+    if os.path.exists(orig_file):
+        conv = Converter(orig_file)
 
         try:
             conv.write_complete()
-        except ConversionException:
-            print >>sys.stderr, 'Could not convert', xsl_file[:-4]
+        except ConversionException as e:
+            print >>sys.stderr, 'Could not convert', orig_file
+            print >>sys.stderr, e.parameter
     else:
-        print >>sys.stderr, xsl_file[:-4], 'does not exist'
+        print >>sys.stderr, orig_file, 'does not exist'
 
 
 def convert_in_parallel(xsl_files):
