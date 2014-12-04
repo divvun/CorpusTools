@@ -1112,7 +1112,7 @@ class HTMLContentConverter(object):
 
         if tidiedHtml.strip() == "":
             raise ConversionException(
-                "Empty html after tidy, log is found in " + self.orig + '.log')
+                "Empty html after tidy")
 
         #sys.stderr.write(str(lineno()) + ' ' +  soup.prettify())
         return tidiedHtml
