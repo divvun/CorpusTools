@@ -1735,7 +1735,7 @@ class XslMaker(object):
         except etree.XMLSyntaxError as e:
             logfile = open(self.filename + '.log', 'w')
 
-            logfile.write('Error at: ' + str(ccat.lineno()))
+            logfile.write('Error at: ' + str(ccat.lineno()) + '\n')
             for entry in e.error_log:
                 logfile.write(str(entry))
                 logfile.write('\n')
@@ -1761,13 +1761,14 @@ class XslMaker(object):
         except etree.XSLTParseError as (e):
             logfile = open(self.filename.replace('.xsl', '') + '.log', 'w')
 
-            logfile.write('Error at: ' + str(ccat.lineno()))
+            logfile.write('Error at: ' + str(ccat.lineno()) + '\n')
+            logfile.write('Invalid XML in ' + self.filename + '\n')
             for entry in e.error_log:
                 logfile.write(str(entry))
                 logfile.write('\n')
 
             logfile.close()
-            raise ConversionException("Invalid XML in " + self.filename())
+            raise ConversionException("Invalid XML in " + self.filename)
 
 
 class LanguageDetector(object):
