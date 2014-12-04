@@ -8,6 +8,15 @@ These scripts will be installed
 * [add_files_to_corpus|CorpusTools.html#add_files_to_corpus]
 * [parallelize|CorpusTools.html#parallelize]
 
+!!Requirements
+
+* python2
+* pysvn
+* pip
+
+You also need to have the $GTHOME variable set to where you checked
+out https://victorio.uit.no/langtech/trunk/ 
+
 !!Installation
 
 !System wide
@@ -37,9 +46,14 @@ will uninstall the scripts from /usr/local/bin and the python system path.
 
 
 !Remove from own home directory
-{{{pip(-2.7) uninstall --user CorpusTools}}}
+{{{pip(-2.7) uninstall CorpusTools}}}
 
-will uninstall the scripts from $HOME/bin and the users python path.
+will uninstall the scripts from $HOME/bin and the users python path
+(pip will complain if you give it --user here; it tends to find the
+right thing to remove without it)
+
+If any dependencies were installed when you did "setup.py install",
+you'll have to "pip uninstall" them individually.
 
 !!ccat
 

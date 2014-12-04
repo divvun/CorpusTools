@@ -32,6 +32,7 @@ setup(
         "lxml",
         "gitdb",
         "pydocx",
+        "gitpython",
     ],
     test_suite = 'nose.collector',
     include_package_data=True,
