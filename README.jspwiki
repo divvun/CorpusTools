@@ -12,7 +12,22 @@ These scripts will be installed
 
 * python2
 * pysvn
-* pip
+* pip for python2
+* tidyhtml
+* wvHtml
+
+On Debian/Ubuntu, do:
+
+{{{
+sudo apt-get install python-svn python-pip libtidy-0.99-0 wv
+}}}
+
+On Arch Linux, do:
+
+{{{
+sudo pacman -S python2-pip tidyhtml wv
+yaourt -S python2-pysvn
+}}}
 
 You also need to have the $GTHOME variable set to where you checked
 out https://victorio.uit.no/langtech/trunk/ 
