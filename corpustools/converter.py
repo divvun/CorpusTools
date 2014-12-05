@@ -1079,7 +1079,10 @@ class HTMLContentConverter(object):
         for key, value in replacements.iteritems():
             self.soup = self.soup.replace(key, value)
 
-        tidyOption = {"indent": "auto",
+        tidyOption = {# "indent": "auto", # gives empty output in docs
+                      # with minor encoding errors on newer
+                      # (py)tidylib versions; and later steps indent
+                      # it nicely anyway
                       "indent-spaces": 2,
                       "wrap": 72,
                       "markup": "yes",
