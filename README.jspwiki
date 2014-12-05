@@ -16,6 +16,12 @@ These scripts will be installed
 * tidyhtml
 * wvHtml
 
+On Mac, do:
+
+{{{
+sudo port install py-pysvn py-pip tidy wv
+}}}
+
 On Debian/Ubuntu, do:
 
 {{{
