@@ -45,18 +45,21 @@ Install the tools for all users on a machine by writing
 
 {{{
 cd $GTHOME/tools/CorpusTools
-sudo python setup.py install --install-scripts=/usr/local/bin}}}
+sudo pip-2.7 install -U --install-option="--install-scripts=/usr/local/bin" .
+}}}
 
-The scripts will then be found in /usr/local/bin
+(Note the dot at the end.) The scripts will then be found in /usr/local/bin
 
 !To own home directory
 Install the tools for the current user by writing
 
 {{{
 cd $GTHOME/tools/CorpusTools
-python setup.py install --user --install-scripts=$HOME/bin}}}
+pip-2.7 install -U --user --install-option="--install-scripts=$HOME/bin" .
+}}}
 
-The scripts will then be found in ~/bin
+(Note the dot at the end.) The scripts will then be found in ~/bin
+
 
 !!Uninstalling
 
