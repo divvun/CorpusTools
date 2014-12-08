@@ -111,10 +111,14 @@ class Converter(object):
 
         return document
 
+    @staticmethod
+    def get_dtd_location():
+        return os.path.join(os.getenv('GTHOME'), 'gt/dtd/corpus.dtd')
+
     def validate_complete(self, complete):
         """Validate the complete document
         """
-        dtd = etree.DTD(os.path.join(os.getenv('GTHOME'), 'gt/dtd/corpus.dtd'))
+        dtd = etree.DTD(Converter.get_dtd_location())
 
         if not dtd.validate(complete):
             #print etree.tostring(complete)
@@ -2057,9 +2061,23 @@ def collect_files(source_dir):
     return xsl_files
 
 
-def main():
-    analyser.sanity_check([u'wvHtml', u'pdftotext'])
+class SetupException(Exception):
+    pass
 
+def sanity_check():
+    analyser.sanity_check([u'wvHtml', u'pdftotext'])
+    if not 'GTHOME' in os.environ:
+        raise SetupException("You have to set the environment variable GTHOME to "
+                             "your checkout of langtech/trunk!")
+    if not os.path.isfile(Converter.get_dtd_location()):
+        raise SetupException("Couldn't find %s\n"
+                             "Check that GTHOME points at the right directory (currently: %s)."
+                             % (Converter.get_dtd_location(), 
+                                os.environ['GTHOME']))
+        
+
+def main():
+    sanity_check()
     args = parse_options()
 
     for source in args.sources:
