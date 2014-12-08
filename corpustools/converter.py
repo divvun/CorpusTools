@@ -47,6 +47,7 @@ import errormarkup
 import ccat
 import analyser
 import argparse_version
+import functools
 
 
 class ConversionException(Exception):
@@ -61,12 +62,13 @@ class Converter(object):
     """
     Class to take care of data common to all Converter classes
     """
-    def __init__(self, filename, test=False):
+    def __init__(self, filename, write_intermediate=False, test=False):
         self.orig = os.path.abspath(filename)
         self.set_corpusdir()
         self.set_converted_name()
         self.dependencies = [self.get_orig(), self.get_xsl()]
         self.fix_lang_genre_xsl()
+        self._write_intermediate = write_intermediate
 
     def make_intermediate(self):
         """Convert the input file from the original format to a basic
@@ -133,9 +135,20 @@ class Converter(object):
                 "Not valid XML. More info in the log file: " +
                 self.get_orig() + u".log")
 
+    def maybe_write_intermediate(self, intermediate):
+        if not self._write_intermediate:
+            return
+        assert(self.get_converted_name().endswith('.xml'))
+        im_name = self.get_converted_name()[:-4] + '.im.xml'
+        with open(im_name, 'w') as im_file:
+            im_file.write(etree.tostring(intermediate,
+                                         encoding='utf8',
+                                         pretty_print='True'))
+
     def transform_to_complete(self):
         xm = XslMaker(self.get_xsl())
         intermediate = self.make_intermediate()
+        self.maybe_write_intermediate(intermediate)
 
         try:
             complete = xm.get_transformer()(intermediate)
@@ -1991,6 +2004,11 @@ def parse_options():
                         help=u"use this for debugging the conversion \
                         process. When this argument is used files will \
                         be converted one by one.")
+    parser.add_argument(u'--write-intermediate',
+                        action=u"store_true",
+                        help=u"Write the intermediate XML representation \
+                        to files ending in .im.xml, for debugging the XSLT.\
+                        (Has no effect if the converted file already exists.)")
     parser.add_argument('sources',
                         nargs='+',
                         help="The original file(s) or \
@@ -2000,10 +2018,10 @@ def parse_options():
     return args
 
 
-def worker(xsl_file):
+def worker(args, xsl_file):
     orig_file = xsl_file[:-4]
     if os.path.exists(orig_file):
-        conv = Converter(orig_file)
+        conv = Converter(orig_file, args.write_intermediate)
 
         try:
             conv.write_complete()
@@ -2014,18 +2032,19 @@ def worker(xsl_file):
         print >>sys.stderr, orig_file, 'does not exist'
 
 
-def convert_in_parallel(xsl_files):
+def convert_in_parallel(args, xsl_files):
     pool_size = multiprocessing.cpu_count() * 2
     pool = multiprocessing.Pool(processes=pool_size,)
-    pool.map(worker, xsl_files)
+    pool.map(functools.partial(worker, args), 
+             xsl_files)
     pool.close()
     pool.join()
 
 
-def convert_serially(xsl_files):
+def convert_serially(args, xsl_files):
     for xsl_file in xsl_files:
         print 'converting', xsl_file[:-4]
-        worker(xsl_file)
+        worker(args, xsl_file)
 
 
 def collect_files(source_dir):
@@ -2047,7 +2066,7 @@ def main():
         if os.path.isfile(source):
             xsl_file = source + '.xsl'
             if os.path.isfile(xsl_file):
-                worker(xsl_file)
+                worker(args, xsl_file)
             else:
                 xsl_stream = open(xsl_file, 'w')
                 xsl_stream.write(
@@ -2058,9 +2077,9 @@ def main():
                 sys.exit(1)
         elif os.path.isdir(source):
             if args.serial:
-                convert_serially(collect_files(source))
+                convert_serially(args, collect_files(source))
             else:
-                convert_in_parallel(collect_files(source))
+                convert_in_parallel(args, collect_files(source))
         else:
             print >>sys.stderr, 'Can not process', source
             print >>sys.stderr, 'This is neither a file nor a directory.'
