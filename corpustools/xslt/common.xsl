@@ -537,7 +537,7 @@
 			      <xsl:if test="$mlang_dan">
 			        <xsl:element name="language">
 			          <xsl:attribute name="xml:lang">
-				    <text>dan</text>
+				    <xsl:value-of select="$danlang"/>
 			          </xsl:attribute>
 			        </xsl:element>
 			      </xsl:if>
@@ -551,21 +551,21 @@
 			      <xsl:if test="$mlang_kal">
 			        <xsl:element name="language">
 			          <xsl:attribute name="xml:lang">
-				    <text>kal</text>
+				    <xsl:value-of select="$kallang"/>
 			          </xsl:attribute>
 			        </xsl:element>
 			      </xsl:if>
 			      <xsl:if test="$mlang_isl">
 			        <xsl:element name="language">
 			          <xsl:attribute name="xml:lang">
-				    <text>isl</text>
+				    <xsl:value-of select="$isllang"/>
 			          </xsl:attribute>
 			        </xsl:element>
 			      </xsl:if>
 			      <xsl:if test="$mlang_fkv">
 			        <xsl:element name="language">
 			          <xsl:attribute name="xml:lang">
-				    <text>fkv</text>
+				    <xsl:value-of select="$fkvlang"/>
 			          </xsl:attribute>
 			        </xsl:element>
 			      </xsl:if>
