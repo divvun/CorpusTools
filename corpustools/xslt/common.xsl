@@ -474,108 +474,103 @@
 			</xsl:if>
 
 			<xsl:choose>
-			<xsl:when test="$monolingual">
-			</xsl:when>
-			<xsl:when test="$multilingual">
-				<xsl:element name="multilingual">
-				<xsl:if test="$mlang_sme">
-					<xsl:element name="language">
-						<xsl:attribute name="xml:lang">
-							<xsl:value-of select="$smelang"/>
-						</xsl:attribute>
-					</xsl:element>
-				</xsl:if>
-				<xsl:if test="$mlang_smj">
-					<xsl:element name="language">
-						<xsl:attribute name="xml:lang">
-							<xsl:value-of select="$smjlang"/>
-						</xsl:attribute>
-					</xsl:element>
-				</xsl:if>
-				<xsl:if test="$mlang_sma">
-					<xsl:element name="language">
-						<xsl:attribute name="xml:lang">
-							<xsl:value-of select="$smalang"/>
-						</xsl:attribute>
-					</xsl:element>
-				</xsl:if>
-				<xsl:if test="$mlang_nno">
-					<xsl:element name="language">
-						<xsl:attribute name="xml:lang">
-							<xsl:value-of select="$nnolang"/>
-						</xsl:attribute>
-					</xsl:element>
-				</xsl:if>
-				<xsl:if test="$mlang_nob">
-					<xsl:element name="language">
-						<xsl:attribute name="xml:lang">
-							<xsl:value-of select="$noblang"/>
-						</xsl:attribute>
-					</xsl:element>
-				</xsl:if>
-				<xsl:if test="$mlang_fin">
-					<xsl:element name="language">
-						<xsl:attribute name="xml:lang">
-							<xsl:value-of select="$finlang"/>
-						</xsl:attribute>
-					</xsl:element>
-				</xsl:if>
-				<xsl:if test="$mlang_swe">
-					<xsl:element name="language">
-						<xsl:attribute name="xml:lang">
-							<xsl:value-of select="$swelang"/>
-						</xsl:attribute>
-					</xsl:element>
-				</xsl:if>
-				<xsl:if test="$mlang_eng">
-					<xsl:element name="language">
-						<xsl:attribute name="xml:lang">
-							<xsl:value-of select="$englang"/>
-						</xsl:attribute>
-					</xsl:element>
-				</xsl:if>
-				<xsl:if test="$mlang_dan">
-					<xsl:element name="language">
-						<xsl:attribute name="xml:lang">
-							<text>dan</text>
-						</xsl:attribute>
-					</xsl:element>
-				</xsl:if>
-				<xsl:if test="$mlang_ger">
-					<xsl:element name="language">
-						<xsl:attribute name="xml:lang">
-							<xsl:value-of select="$gerlang"/>
-						</xsl:attribute>
-					</xsl:element>
-				</xsl:if>
-				<xsl:if test="$mlang_kal">
-					<xsl:element name="language">
-						<xsl:attribute name="xml:lang">
-							<text>kal</text>
-						</xsl:attribute>
-					</xsl:element>
-				</xsl:if>
-				<xsl:if test="$mlang_isl">
-					<xsl:element name="language">
-						<xsl:attribute name="xml:lang">
-							<text>isl</text>
-						</xsl:attribute>
-					</xsl:element>
-				</xsl:if>
-				<xsl:if test="$mlang_fkv">
-					<xsl:element name="language">
-						<xsl:attribute name="xml:lang">
-							<text>fkv</text>
-						</xsl:attribute>
-					</xsl:element>
-				</xsl:if>
-				</xsl:element>
-			</xsl:when>
-
-			<xsl:otherwise>
-				<xsl:element name="multilingual">
-				</xsl:element>
-			</xsl:otherwise>
+			  <xsl:when test="$monolingual">
+			  </xsl:when>
+			  <xsl:otherwise>
+			    <xsl:element name="multilingual">
+			      <xsl:if test="$mlang_sme">
+			        <xsl:element name="language">
+			          <xsl:attribute name="xml:lang">
+				    <xsl:value-of select="$smelang"/>
+			          </xsl:attribute>
+			        </xsl:element>
+			      </xsl:if>
+			      <xsl:if test="$mlang_smj">
+			        <xsl:element name="language">
+			          <xsl:attribute name="xml:lang">
+				    <xsl:value-of select="$smjlang"/>
+			          </xsl:attribute>
+			        </xsl:element>
+			      </xsl:if>
+			      <xsl:if test="$mlang_sma">
+			        <xsl:element name="language">
+			          <xsl:attribute name="xml:lang">
+				    <xsl:value-of select="$smalang"/>
+			          </xsl:attribute>
+			        </xsl:element>
+			      </xsl:if>
+			      <xsl:if test="$mlang_nno">
+			        <xsl:element name="language">
+			          <xsl:attribute name="xml:lang">
+				    <xsl:value-of select="$nnolang"/>
+			          </xsl:attribute>
+			        </xsl:element>
+			      </xsl:if>
+			      <xsl:if test="$mlang_nob">
+			        <xsl:element name="language">
+			          <xsl:attribute name="xml:lang">
+				    <xsl:value-of select="$noblang"/>
+			          </xsl:attribute>
+			        </xsl:element>
+			      </xsl:if>
+			      <xsl:if test="$mlang_fin">
+			        <xsl:element name="language">
+			          <xsl:attribute name="xml:lang">
+				    <xsl:value-of select="$finlang"/>
+			          </xsl:attribute>
+			        </xsl:element>
+			      </xsl:if>
+			      <xsl:if test="$mlang_swe">
+			        <xsl:element name="language">
+			          <xsl:attribute name="xml:lang">
+				    <xsl:value-of select="$swelang"/>
+			          </xsl:attribute>
+			        </xsl:element>
+			      </xsl:if>
+			      <xsl:if test="$mlang_eng">
+			        <xsl:element name="language">
+			          <xsl:attribute name="xml:lang">
+				    <xsl:value-of select="$englang"/>
+			          </xsl:attribute>
+			        </xsl:element>
+			      </xsl:if>
+			      <xsl:if test="$mlang_dan">
+			        <xsl:element name="language">
+			          <xsl:attribute name="xml:lang">
+				    <text>dan</text>
+			          </xsl:attribute>
+			        </xsl:element>
+			      </xsl:if>
+			      <xsl:if test="$mlang_ger">
+			        <xsl:element name="language">
+			          <xsl:attribute name="xml:lang">
+				    <xsl:value-of select="$gerlang"/>
+			          </xsl:attribute>
+			        </xsl:element>
+			      </xsl:if>
+			      <xsl:if test="$mlang_kal">
+			        <xsl:element name="language">
+			          <xsl:attribute name="xml:lang">
+				    <text>kal</text>
+			          </xsl:attribute>
+			        </xsl:element>
+			      </xsl:if>
+			      <xsl:if test="$mlang_isl">
+			        <xsl:element name="language">
+			          <xsl:attribute name="xml:lang">
+				    <text>isl</text>
+			          </xsl:attribute>
+			        </xsl:element>
+			      </xsl:if>
+			      <xsl:if test="$mlang_fkv">
+			        <xsl:element name="language">
+			          <xsl:attribute name="xml:lang">
+				    <text>fkv</text>
+			          </xsl:attribute>
+			        </xsl:element>
+			      </xsl:if>
+			    </xsl:element>
+			  </xsl:otherwise>
 			</xsl:choose>
 
 			<xsl:if test="$filename">

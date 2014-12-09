@@ -70,14 +70,17 @@
 <!-- The main language of the document -->
 <xsl:variable name="mainlang" select="''"/>
 
-<!-- Other languages, in case of multilingual document. -->
-<!-- Select "1" for the variable multilingual -->
+<!-- In the case of a multilingual document, we may want to check for
+     other languages. Set the variable monolingual to '1' to turn off
+     language recognition (treating everything as mainlang) -->
 <xsl:variable name="monolingual" select="''"/> <!--lg rec is off!-->
+<!-- If the document is multilingual, set the variable multilingual to
+     '1' (and possibly change mlangs below). -->
 <xsl:variable name="multilingual" select="'1'"/> <!--this is default-->
 
 <!-- Select the potential langugages by adding the number "1" in the -->
 <!-- selection frame. If no languages are selected, the document is -->
-<!-- checked for all the languages below. -->
+<!-- checked for all supported languages. -->
 <xsl:variable name="mlang_dan" select="''"/>
 <xsl:variable name="mlang_eng" select="''"/>
 <xsl:variable name="mlang_fin" select="''"/>
