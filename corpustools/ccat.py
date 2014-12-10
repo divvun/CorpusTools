@@ -120,7 +120,12 @@ class XMLPrinter:
         else:
             self.one_word_per_line = one_word_per_line
 
-        self.lang = lang
+        if lang.startswith('!'):
+            self.lang = lang[1:]
+            self.invert_lang = True
+        else:
+            self.lang = lang
+            self.invert_lang = False
 
         self.disambiguation = disambiguation
         self.dependency = dependency
@@ -247,26 +252,30 @@ class XMLPrinter:
                 buffer.write('\n'.join(textlist).encode('utf8'))
                 buffer.write('\n')
 
+    def get_contents(self, elt_contents, textlist, elt_lang):
+        if elt_contents is not None:
+            text = elt_contents.strip()
+            if text != '' and (self.lang is None
+                               or (not self.invert_lang and elt_lang == self.lang)
+                               or (self.invert_lang and elt_lang != self.lang)):
+                if not self.one_word_per_line:
+                    textlist.append(text)
+                else:
+                    textlist.append('\n'.join(text.split()))
+
     def get_text(self, element, textlist, parentlang):
         '''Get the text part of an lxml element
         '''
-        if (element.text is not None and element.text.strip() != '' and
-            (self.lang is None or
-             self.get_element_language(element, parentlang) == self.lang)):
-            if not self.one_word_per_line:
-                textlist.append(element.text.strip())
-            else:
-                textlist.append('\n'.join(element.text.strip().split()))
+        self.get_contents(element.text,
+                          textlist,
+                          self.get_element_language(element, parentlang))
 
     def get_tail(self, element, textlist, parentlang):
         '''Get the tail part of an lxml element
         '''
-        if (element.tail is not None and element.tail.strip() != '' and
-                (self.lang is None or parentlang == self.lang)):
-            if not self.one_word_per_line:
-                textlist.append(element.tail.strip())
-            else:
-                textlist.append('\n'.join(element.tail.strip().split()))
+        self.get_contents(element.tail,
+                          textlist,
+                          parentlang)
 
     def visit_children(self, element, textlist, parentlang):
         """Visit the children of element, adding their content to textlist
