@@ -120,7 +120,7 @@ class XMLPrinter:
         else:
             self.one_word_per_line = one_word_per_line
 
-        if lang.startswith('!'):
+        if lang and lang.startswith('!'):
             self.lang = lang[1:]
             self.invert_lang = True
         else:
