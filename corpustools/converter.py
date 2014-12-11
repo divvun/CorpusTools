@@ -142,8 +142,7 @@ class Converter(object):
     def maybe_write_intermediate(self, intermediate):
         if not self._write_intermediate:
             return
-        assert(self.get_converted_name().endswith('.xml'))
-        im_name = self.get_converted_name()[:-4] + '.im.xml'
+        im_name = self.orig + '.im.xml'
         with open(im_name, 'w') as im_file:
             im_file.write(etree.tostring(intermediate,
                                          encoding='utf8',
@@ -2011,7 +2010,7 @@ def parse_options():
     parser.add_argument(u'--write-intermediate',
                         action=u"store_true",
                         help=u"Write the intermediate XML representation \
-                        to files ending in .im.xml, for debugging the XSLT.\
+                        to ORIGFILE.im.xml, for debugging the XSLT.\
                         (Has no effect if the converted file already exists.)")
     parser.add_argument('sources',
                         nargs='+',
