@@ -70,7 +70,7 @@ class Converter(object):
         self.fix_lang_genre_xsl()
         self._write_intermediate = write_intermediate
 
-    def make_intermediate(self):
+    def make_intermediate(self, encoding_from_xsl):
         """Convert the input file from the original format to a basic
         giellatekno xml document
         """
@@ -87,7 +87,7 @@ class Converter(object):
             intermediate = SVGConverter(self.orig)
 
         elif '.htm' in self.orig or '.php' in self.orig:
-            intermediate = HTMLConverter(self.orig)
+            intermediate = HTMLConverter(self.orig, encoding_from_xsl)
 
         elif self.orig.endswith('.doc') or self.orig.endswith('.DOC'):
             intermediate = DocConverter(self.orig)
@@ -148,9 +148,17 @@ class Converter(object):
                                          encoding='utf8',
                                          pretty_print='True'))
 
+    def encoding_from_xsl(self, xsl):
+        encoding_elt = xsl.find('//xsl:variable[@name="text_encoding"]', 
+                                namespaces={'xsl':'http://www.w3.org/1999/XSL/Transform'})
+        if encoding_elt is not None:
+            return encoding_elt.attrib.get("select","''").strip("'")
+        else:
+            return None
+
     def transform_to_complete(self):
         xm = XslMaker(self.get_xsl())
-        intermediate = self.make_intermediate()
+        intermediate = self.make_intermediate(self.encoding_from_xsl(xm.finalXsl))
         self.maybe_write_intermediate(intermediate)
 
         try:
@@ -982,11 +990,11 @@ class HTMLContentConverter(object):
 
     content is a string
     """
-    def __init__(self, filename, content):
+    def __init__(self, filename, content, encoding_from_xsl):
         self.orig = filename
 
         try:
-            self.soup = bs4.BeautifulSoup(content, 'lxml')
+            self.soup = bs4.BeautifulSoup(content, 'lxml', from_encoding=encoding_from_xsl)
         except HTMLParser.HTMLParseError:
             raise ConversionException("BeautifulSoup couldn't parse the html")
 
@@ -1203,9 +1211,9 @@ class HTMLContentConverter(object):
 
 
 class HTMLConverter(HTMLContentConverter):
-    def __init__(self, filename):
+    def __init__(self, filename, encoding_from_xsl):
         f = open(filename)
-        HTMLContentConverter.__init__(self, filename, f.read())
+        HTMLContentConverter.__init__(self, filename, f.read(), encoding_from_xsl)
         f.close()
 
 
