@@ -27,7 +27,7 @@ import io
 import subprocess
 import HTMLParser
 from copy import deepcopy
-import distutils.dep_util
+import distutils.dep_util, distutils.spawn
 import codecs
 import multiprocessing
 import argparse
@@ -969,8 +969,12 @@ class BiblexmlConverter(object):
         Convert the bible xml to giellatekno xml format using bible2xml.pl
         """
         (tmpfile, tmpname) = tempfile.mkstemp()
+        bible2xmlpl = 'bible2xml.pl'
+        if distutils.spawn.find_executable(bible2xmlpl) is None:
+            raise ConversionException("Could not find %s in $PATH" %(bible2xmlpl,))
+        return None
         subp = subprocess.Popen(
-            ['bible2xml.pl', '-out', tmpname, self.orig],
+            [bible2xmlpl, '-out', tmpname, self.orig],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
@@ -990,7 +994,7 @@ class HTMLContentConverter(object):
 
     content is a string
     """
-    def __init__(self, filename, content, encoding_from_xsl):
+    def __init__(self, filename, content, encoding_from_xsl=None):
         self.orig = filename
 
         try:
@@ -1211,7 +1215,7 @@ class HTMLContentConverter(object):
 
 
 class HTMLConverter(HTMLContentConverter):
-    def __init__(self, filename, encoding_from_xsl):
+    def __init__(self, filename, encoding_from_xsl=None):
         f = open(filename)
         HTMLContentConverter.__init__(self, filename, f.read(), encoding_from_xsl)
         f.close()
