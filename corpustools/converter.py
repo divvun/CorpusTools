@@ -102,7 +102,7 @@ class Converter(object):
             intermediate = BiblexmlConverter(self.orig)
 
         else:
-            raise ConversionException("Not able to convert " + self.orig)
+            raise ConversionException("Unknown file extension, not able to convert " + self.orig + "\nHint: you may just have to rename the file")
 
         document = intermediate.convert2intermediate()
 
