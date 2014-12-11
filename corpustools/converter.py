@@ -1108,7 +1108,7 @@ class HTMLContentConverter(object):
                       # (py)tidylib versions; and later steps indent
                       # it nicely anyway
                       "indent-spaces": 2,
-                      "wrap": 72,
+                      "wrap": 0, # 72 here fails on older (py)tidylib
                       "markup": "yes",
                       "output-xml": "yes",
                       "add-xml-decl": "yes",
