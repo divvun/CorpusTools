@@ -1,0 +1,2 @@
+# Until https://github.com/countergram/pytidylib/pull/7 gets merged
+git+git://github.com/unhammer/pytidylib.git@giellatekno
