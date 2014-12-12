@@ -45,7 +45,8 @@ Install the tools for all users on a machine by writing
 
 {{{
 cd $GTHOME/tools/CorpusTools
-sudo pip-2.7 install -U --install-option="--install-scripts=/usr/local/bin" .
+sudo pip-2.7 install -r requirements.txt -e .
+sudo pip-2.7 install -I --no-deps --install-option="--install-scripts=$HOME/bin" .
 }}}
 
 (Note the dot at the end.) The scripts will then be found in /usr/local/bin
@@ -55,7 +56,8 @@ Install the tools for the current user by writing
 
 {{{
 cd $GTHOME/tools/CorpusTools
-pip-2.7 install -U --user --install-option="--install-scripts=$HOME/bin" .
+pip-2.7 install -r requirements.txt --user -e .
+pip-2.7 install -I --no-deps --user --install-option="--install-scripts=$HOME/bin" .
 }}}
 
 (Note the dot at the end.) The scripts will then be found in ~/bin
@@ -76,7 +78,7 @@ will uninstall the scripts from $HOME/bin and the users python path
 (pip will complain if you give it --user here; it tends to find the
 right thing to remove without it)
 
-If any dependencies were installed when you did "setup.py install",
+If any dependencies were installed when you did "install",
 you'll have to "pip uninstall" them individually.
 
 !!ccat
