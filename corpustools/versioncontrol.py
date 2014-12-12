@@ -33,6 +33,11 @@ class VersionController(object):
     def add(self, filename):
         pass
 
+    def user_name(self):
+        return ""
+
+    def user_email(self):
+        return ""
 
 class SVN(VersionController):
     def __init__(self, svnclient):
@@ -55,9 +60,22 @@ class SVN(VersionController):
 class GIT(VersionController):
     def __init__(self, gitrepo):
         self.gitrepo = gitrepo
+        self.config = self.gitrepo.config_reader()
 
     def add(self, filename):
         self.gitrepo.git.add(filename)
+
+    def user_name(self):
+        if self.config.has_option("user", "name"):
+            return self.config.get("user", "name")
+        else:
+            self.super(GIT, self).user_name()
+
+    def user_email(self):
+        if self.config.has_option("user", "email"):
+            return self.config.get("user", "email")
+        else:
+            self.super(GIT, self).user_email()
 
 
 class VersionControlFactory(object):
