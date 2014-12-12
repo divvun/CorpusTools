@@ -45,34 +45,42 @@ Install the tools for all users on a machine by writing
 
 {{{
 cd $GTHOME/tools/CorpusTools
-sudo pip-2.7 install -r requirements.txt -e .
-sudo pip-2.7 install -I --no-deps --install-option="--install-scripts=$HOME/bin" .
+sudo pip-2.7 install -U -r requirements.txt -e .
+sudo pip-2.7 uninstall -y corpustools
+sudo python2.7 setup.py install --install-scripts=$HOME/bin
 }}}
 
-(Note the dot at the end.) The scripts will then be found in /usr/local/bin
+Note the dot at the end of the second line. The scripts will then be
+found in /usr/local/bin
 
 !To own home directory
 Install the tools for the current user by writing
 
 {{{
 cd $GTHOME/tools/CorpusTools
-pip-2.7 install -r requirements.txt --user -e .
-pip-2.7 install -I --no-deps --user --install-option="--install-scripts=$HOME/bin" .
+pip-2.7 install -U --user -r requirements.txt -e .
+pip-2.7 uninstall -y corpustools
+python2.7 setup.py install --user --install-scripts=$HOME/bin
 }}}
 
-(Note the dot at the end.) The scripts will then be found in ~/bin
+Note the dot at the end of the second line. The scripts will then be
+found in ~/bin
 
+(It may look a bit odd that we first install and then uninstall. The
+"setup.py" command isn't able to install all requirements, while the
+"pip" command isn't able to correctly install newer versions of
+CorpusTools without recompiling all dependencies as well.)
 
 !!Uninstalling
 
 !System wide
-{{sudo pip(-2.7) uninstall CorpusTools}}
+{{sudo pip(-2.7) uninstall corpustools}}
 
 will uninstall the scripts from /usr/local/bin and the python system path.
 
 
 !Remove from own home directory
-{{{pip(-2.7) uninstall CorpusTools}}}
+{{{pip(-2.7) uninstall corpustools}}}
 
 will uninstall the scripts from $HOME/bin and the users python path
 (pip will complain if you give it --user here; it tends to find the
