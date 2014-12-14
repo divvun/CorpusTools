@@ -82,7 +82,7 @@ class VersionControlFactory(object):
     def vcs(self, directory):
         try:
             s = pysvn.Client()
-            s.status(directory)
+            s.info(directory)
             return SVN(s)
         except pysvn.ClientError:
             try:
