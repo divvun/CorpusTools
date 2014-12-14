@@ -24,23 +24,35 @@ import sys
 
 import pysvn
 import git
-
+import pwd, getpass
 
 class VersionController(object):
     def __init__(self):
-        pass
+        # non-repo config to get at global values
+        self.config = git.GitConfigParser([os.path.normpath(os.path.expanduser("~/.gitconfig"))], read_only=True)
 
     def add(self, filename):
         pass
 
     def user_name(self):
-        return ""
+        if self.config.has_option("user", "name"):
+            return self.config.get("user", "name")
+        else:
+            pwnam = pwd.getpwnam(getpass.getuser()).pw_gecos
+            if pwnam is not None:
+                return pwnam
+            else:
+                return ""
 
     def user_email(self):
-        return ""
+        if self.config.has_option("user", "email"):
+            return self.config.get("user", "email")
+        else:
+            return ""
 
 class SVN(VersionController):
     def __init__(self, svnclient):
+        super(SVN, self).__init__()
         self.client = svnclient
 
     def add(self, filename):
@@ -59,23 +71,12 @@ class SVN(VersionController):
 
 class GIT(VersionController):
     def __init__(self, gitrepo):
+        super(GIT, self).__init__()
         self.gitrepo = gitrepo
         self.config = self.gitrepo.config_reader()
 
     def add(self, filename):
         self.gitrepo.git.add(filename)
-
-    def user_name(self):
-        if self.config.has_option("user", "name"):
-            return self.config.get("user", "name")
-        else:
-            return super(GIT, self).user_name()
-
-    def user_email(self):
-        if self.config.has_option("user", "email"):
-            return self.config.get("user", "email")
-        else:
-            return super(GIT, self).user_email()
 
 
 class VersionControlFactory(object):
