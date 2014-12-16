@@ -415,6 +415,7 @@ def main():
             u'gtcore/gtdshared/smi/src/syntax/dependency.cg3')
         )
 
+    ana.collect_files(args.converted_dirs)
     if len(ana.xml_files) > 0:
         if args.serial:
             ana.analyse_serially()
