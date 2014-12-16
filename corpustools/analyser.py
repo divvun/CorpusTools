@@ -415,11 +415,13 @@ def main():
             u'gtcore/gtdshared/smi/src/syntax/dependency.cg3')
         )
 
-    ana.collect_files(args.converted_dirs)
-    if args.serial:
-        ana.analyse_serially()
+    if len(ana.xml_files) > 0:
+        if args.serial:
+            ana.analyse_serially()
+        else:
+            ana.analyse_in_parallel()
     else:
-        ana.analyse_in_parallel()
+        print >>sys.stderr, "Did not find any files in", args.converted_dirs
 
 if __name__ == u'__main__':
     main()
