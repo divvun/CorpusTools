@@ -1202,7 +1202,7 @@ class HTMLContentConverter(object):
                 try:
                     logfile.write(entry.message)
                 except ValueError:
-                    logfile.write(entry.message.encode('latin1'))
+                    logfile.write(entry.message.encode('ascii', 'ignore'))
 
                 logfile.write('\n')
 
@@ -1286,10 +1286,14 @@ class DocConverter(HTMLContentConverter):
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
-            print >>sys.stderr, 'Could not process', self.orig
-            print >>sys.stderr, output
-            print >>sys.stderr, error
-            return subp.returncode
+            logfile = open(self.orig + '.log', 'w')
+            logfile.write('output\n')
+            logfile.write(output)
+            logfile.write('\n')
+            logfile.write('error\n')
+            logfile.write(error)
+            logfile.write('\n')
+            raise ConversionException('Could not process' + self.orig)
 
         return output
 
