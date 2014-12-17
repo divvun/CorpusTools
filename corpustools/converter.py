@@ -1852,11 +1852,12 @@ class LanguageDetector(object):
 
             for element in paragraph.iter("span"):
                 if element.get("type") == "quote":
-                    lang = self.languageGuesser.classify(
-                        element.text.encode("ascii", "ignore"))
-                    if lang != self.get_mainlang():
-                        element.set(
-                            '{http://www.w3.org/XML/1998/namespace}lang', lang)
+                    if element.text is not None:
+                        lang = self.languageGuesser.classify(
+                            element.text.encode("ascii", "ignore"))
+                        if lang != self.get_mainlang():
+                            element.set(
+                                '{http://www.w3.org/XML/1998/namespace}lang', lang)
 
         return paragraph
 
