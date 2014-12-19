@@ -54,12 +54,16 @@ class VersionController(object):
 
 class SVN(VersionController):
     def __init__(self, svnclient):
+        '''svnclient is a pysvn.Client
+        '''
         super(SVN, self).__init__()
         self.client = svnclient
 
     def add(self, filename):
         try:
             self.client.add(filename)
+            if filename.endswith('.xsl'):
+                self.client.propset('svn:mime-type', 'text/plain', filename)
         except pysvn.ClientError:
             self.add_directory(os.path.dirname(filename))
 
