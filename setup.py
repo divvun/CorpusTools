@@ -33,6 +33,7 @@ setup(
         "gitdb",
         "pydocx",
         "gitpython",
+        "requests",
     ],
     test_suite = 'nose.collector',
     include_package_data=True,
