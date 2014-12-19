@@ -24,7 +24,9 @@ import sys
 
 import pysvn
 import git
-import pwd, getpass
+import pwd
+import getpass
+
 
 class VersionController(object):
     def __init__(self):
