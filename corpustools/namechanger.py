@@ -88,17 +88,31 @@ class AddFileToCorpus(NameChangerBase):
         except OSError:
             pass
 
+    def add_url_extension(self, content_type):
+        content_type_extension = {
+            'text/html': '.html',
+            'application/msword': '.doc',
+            'application/pdf': '.pdf',
+            'text/plain': '.txt',
+        }
+
+        for ct, extension in content_type_extension.items():
+            if ct in content_type and not self.new_filename.endswith(extension):
+                self.new_filename += extension
+
+    def toname(self):
+        return os.path.join(self.new_dirname, self.new_filename)
+
     def copy_orig_to_corpus(self):
         '''Copy the original file to the correct place in the given corpus
         '''
         fromname = os.path.join(self.old_dirname, self.old_filename)
-        toname = os.path.join(self.new_dirname, self.new_filename)
-        self.makedirs()
 
         if fromname.startswith('http'):
             r = requests.get(fromname)
             if r.status_code == requests.codes.ok:
-                with open(toname, 'wb') as new_corpus_file:
+                self.add_url_extension(r.headers['content-type'])
+                with open(self.toname(), 'wb') as new_corpus_file:
                     new_corpus_file.write(r.content)
             else:
                 print >>sys.stderr
@@ -106,10 +120,11 @@ class AddFileToCorpus(NameChangerBase):
                 print >>sys.stderr
                 raise UserWarning
         else:
-            shutil.copy(fromname, toname)
+            shutil.copy(fromname, self.toname())
 
-        print 'Copying', fromname, 'to', toname
-        self.vcs.add(toname)
+        print 'Copying', fromname, 'to', self.toname()
+        self.makedirs()
+        self.vcs.add(self.toname())
 
     def make_metadata_file(self):
         metadata_file = xslsetter.MetadataHandler(
