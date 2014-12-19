@@ -108,3 +108,10 @@ class TestNameChangerBase(unittest.TestCase):
         want = u'aba_.txt'
 
         self.assertEqual(nc.new_filename, want)
+
+    def test_dirname_with_url(self):
+        oldname = u'http://j/a/b/c/aba>.txt'
+        nc = namechanger.NameChangerBase(oldname)
+        want = u'http://j/a/b/c'
+
+        self.assertEqual(nc.old_dirname, want)
