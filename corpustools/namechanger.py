@@ -85,6 +85,7 @@ class AddFileToCorpus(NameChangerBase):
     def makedirs(self):
         try:
             os.makedirs(self.new_dirname)
+            self.vcs.add(self.new_dirname)
         except OSError:
             pass
 
