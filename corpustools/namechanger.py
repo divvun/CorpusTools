@@ -107,6 +107,7 @@ class AddFileToCorpus(NameChangerBase):
         '''Copy the original file to the correct place in the given corpus
         '''
         fromname = os.path.join(self.old_dirname, self.old_filename)
+        self.makedirs()
 
         if fromname.startswith('http'):
             r = requests.get(fromname)
@@ -123,7 +124,6 @@ class AddFileToCorpus(NameChangerBase):
             shutil.copy(fromname, self.toname())
 
         print 'Copying', fromname, 'to', self.toname()
-        self.makedirs()
         self.vcs.add(self.toname())
 
     def make_metadata_file(self):
