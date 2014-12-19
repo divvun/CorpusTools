@@ -55,7 +55,7 @@ class NameChangerBase(object):
         """
         unwanted_chars = {u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
                  u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_',
-                 u'<': u'_', u'>': u'_', u'"': u'_'}
+                 u'<': u'_', u'>': u'_', u'"': u'_', u'&': u'_'}
 
         newname = unicode(unidecode.unidecode(
             self.old_filename)).lower()
