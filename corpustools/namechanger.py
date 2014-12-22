@@ -124,7 +124,7 @@ class AddFileToCorpus(NameChangerBase):
         else:
             shutil.copy(fromname, self.toname())
 
-        print 'Copying', fromname, 'to', self.toname()
+        print self.toname()
         self.vcs.add(self.toname())
 
     def make_metadata_file(self, extra_values):
@@ -148,7 +148,7 @@ class AddFileToCorpus(NameChangerBase):
         for key, value in extra_values.items():
             metadata_file.set_variable(key, value)
 
-        print 'Making metadata file', metadata_file.filename
+        print metadata_file.filename
         metadata_file.write_file()
         self.vcs.add(metadata_file.filename)
 
