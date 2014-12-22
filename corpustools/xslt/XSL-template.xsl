@@ -116,6 +116,8 @@
 <xsl:variable name="para_swe" select="''"/>
 <xsl:variable name="para_kpv" select="''"/>
 <xsl:variable name="para_rus" select="''"/>
+<xsl:variable name="para_sms" select="''"/>
+<xsl:variable name="para_smn" select="''"/>
 
 
 <!-- Tag the specified elements with the specified language: -->
