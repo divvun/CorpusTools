@@ -127,7 +127,10 @@ class AddFileToCorpus(NameChangerBase):
         print 'Copying', fromname, 'to', self.toname()
         self.vcs.add(self.toname())
 
-    def make_metadata_file(self):
+    def make_metadata_file(self, extra_values):
+        '''extra_values is a dict that contains data for the metadata file
+        that is not possible to infer from the data given in the constructor.
+        '''
         metadata_file = xslsetter.MetadataHandler(
             os.path.join(self.new_dirname,
                          self.new_filename + '.xsl'))
@@ -141,6 +144,9 @@ class AddFileToCorpus(NameChangerBase):
         metadata_file.set_variable('sub_name',
                                    self.vcs.user_name().decode('utf-8'))
         metadata_file.set_variable('sub_email', self.vcs.user_email())
+
+        for key, value in extra_values.items():
+            metadata_file.set_variable(key, value)
 
         print 'Making metadata file', metadata_file.filename
         metadata_file.write_file()
@@ -339,7 +345,7 @@ def add_files(args):
             args.mainlang,
             args.path)
         adder.copy_orig_to_corpus()
-        adder.make_metadata_file()
+        adder.make_metadata_file({})
 
 
 def parse_options():
