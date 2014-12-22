@@ -111,21 +111,28 @@ class AddFileToCorpus(NameChangerBase):
         self.makedirs()
 
         if fromname.startswith('http'):
-            r = requests.get(fromname)
-            if r.status_code == requests.codes.ok:
-                self.add_url_extension(r.headers['content-type'])
-                with open(self.toname(), 'wb') as new_corpus_file:
-                    new_corpus_file.write(r.content)
-            else:
-                print >>sys.stderr
-                print >>sys.stderr, 'ERROR:', fromname, 'does not exist'
-                print >>sys.stderr
-                raise UserWarning
+            try:
+                r = requests.get(fromname)
+                if r.status_code == requests.codes.ok:
+                    self.add_url_extension(r.headers['content-type'])
+                    with open(self.toname(), 'wb') as new_corpus_file:
+                        new_corpus_file.write(r.content)
+                    print self.toname()
+                    self.vcs.add(self.toname())
+                else:
+                    print >>sys.stderr
+                    print >>sys.stderr, 'ERROR:', fromname, 'does not exist'
+                    print >>sys.stderr
+                    raise UserWarning
+            except requests.exceptions.MissingSchema:
+                print >>sys.stderr, 'Error: wrong schema'
+                pass
+
         else:
             shutil.copy(fromname, self.toname())
+            print self.toname()
+            self.vcs.add(self.toname())
 
-        print self.toname()
-        self.vcs.add(self.toname())
 
     def make_metadata_file(self, extra_values):
         '''extra_values is a dict that contains data for the metadata file
