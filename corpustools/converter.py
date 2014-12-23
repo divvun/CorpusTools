@@ -48,6 +48,7 @@ import ccat
 import analyser
 import argparse_version
 import functools
+import util
 
 
 class ConversionException(Exception):
