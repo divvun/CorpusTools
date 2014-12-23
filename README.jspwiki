@@ -158,10 +158,15 @@ Convert original files in a corpus to giellatekno/divvun xml format.
 
 convert2xml depends on these external programs:
 
-* bible2xml.pl (found in the Divvun/Giellatekno svn)
 * pdftotext
 * wvHtml
 
+as well as various files from the Divvun/Giellatekno SVN, at least the
+following files/directories need to exist under $GTHOME:
+
+* gt/script/corpus/bible2xml.pl
+* gt/dtd
+* gt/tools/lang-guesser
 
 !Usage
 
@@ -321,3 +326,29 @@ svn ci
 !!parallelize
 
 Parallelize two parallel corpus files, write the result to a .tmx file.
+
+parallelize depends on various files from the Divvun/Giellatekno SVN,
+at least the following directories need to exist in $GTHOME:
+
+* st/nob/bin
+* gt/sme/bin
+* gt/common
+* gt/scripts
+* gt/tools/lang-guesser
+
+The complete help text from the program is as follows:
+{{{
+usage: parallelize [-h] [-v] -p PARALLEL_LANGUAGE input_file
+
+Sentence align two files. Input is the document containing the main language,
+and language to parallelize it with.
+
+positional arguments:
+  input_file            The input file
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  -p PARALLEL_LANGUAGE, --parallel_language PARALLEL_LANGUAGE
+                        The language to parallelize the input document with
+}}}
