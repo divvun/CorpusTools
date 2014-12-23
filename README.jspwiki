@@ -330,11 +330,16 @@ Parallelize two parallel corpus files, write the result to a .tmx file.
 parallelize depends on various files from the Divvun/Giellatekno SVN,
 at least the following directories need to exist in $GTHOME:
 
-* st/nob/bin
-* gt/sme/bin
+* st/nob/bin (with compiled abbr.txt)
+* gt/sme/bin (with compiled abbr.txt and corr.txt)
 * gt/common
-* gt/scripts
 * gt/tools/lang-guesser
+* gt/tools/alignment-tools/tca2 (must be compiled)
+
+Before running, you need to compile st/nob and gt/sme (or at least
+pilfer the abbr/corr files off someone else), and tca2 (just type "ant"
+in $GTHOME/gt/tools/alignment-tools/tca2).
+
 
 The complete help text from the program is as follows:
 {{{
