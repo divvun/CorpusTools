@@ -28,9 +28,13 @@ class MetadataHandler(object):
             self.tree = etree.parse(filename)
 
     def set_variable(self, key, value):
-        self.tree.getroot().find(
-            "{http://www.w3.org/1999/XSL/Transform}variable[@name='" +
-            key + "']").attrib['select'] = "'" + value + "'"
+        try:
+            self.tree.getroot().find(
+                "{http://www.w3.org/1999/XSL/Transform}variable[@name='" +
+                key + "']").attrib['select'] = "'" + value + "'"
+        except AttributeError as e:
+            print >>sys.stderr, 'tried to update', key, 'with value', value
+            raise UserWarning
 
     def get_variable(self, key):
         return self.tree.getroot().find(
