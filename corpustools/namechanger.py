@@ -56,7 +56,8 @@ class NameChangerBase(object):
         """
         unwanted_chars = {u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
                  u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_',
-                 u'<': u'_', u'>': u'_', u'"': u'_', u'&': u'_', u';': u'_'}
+                 u'<': u'_', u'>': u'_', u'"': u'_', u'&': u'_', u';': u'_',
+                 u'&': u'_'}
 
         # unidecode.unidecode makes ascii only
         newname = unicode(unidecode.unidecode(
