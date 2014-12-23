@@ -150,7 +150,7 @@ class Converter(object):
                                          pretty_print='True'))
 
     def encoding_from_xsl(self, xsl):
-        encoding_elt = xsl.find('//xsl:variable[@name="text_encoding"]', 
+        encoding_elt = xsl.find('//xsl:variable[@name="text_encoding"]',
                                 namespaces={'xsl':'http://www.w3.org/1999/XSL/Transform'})
         if encoding_elt is not None:
             return encoding_elt.attrib.get("select","''").strip("'")
@@ -1045,7 +1045,8 @@ class HTMLContentConverter(object):
                     'banner-element', 'nrk-globalnavigation', 'sharing', 'ad',
                     'meta', 'authors', 'articleImageRig',  'btm_menu',
                     'expandable', 'toc', 'titlepage',
-                    'container_full',],
+                    'container_full', 'moduletable_oikopolut',
+                    "latestnews_uutisarkisto", 'back_button'],
                 'id': [
                     'searchBox',
                     'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
@@ -1079,7 +1080,15 @@ class HTMLContentConverter(object):
                 'class': ['K-NOTE-FOTNOTE']
                 },
             'a': {
-                'id': ['leftPanelTab',]
+                'id': ['leftPanelTab',],
+                'class': ['mainlevel'],
+                },
+            'td': {
+                'id': ["paavalikko_linkit", "hakulomake", 'sg_oikea'],
+                'class': ["modifydate"],
+                },
+            'tr': {
+                'id': ["sg_ylaosa1", "sg_ylaosa2"]
                 },
             }
 
@@ -2056,7 +2065,7 @@ def worker(args, xsl_file):
 def convert_in_parallel(args, xsl_files):
     pool_size = multiprocessing.cpu_count() * 2
     pool = multiprocessing.Pool(processes=pool_size,)
-    pool.map(functools.partial(worker, args), 
+    pool.map(functools.partial(worker, args),
              xsl_files)
     pool.close()
     pool.join()
@@ -2084,9 +2093,9 @@ def sanity_check():
         raise util.SetupException(
             "Couldn't find %s\n"
             "Check that GTHOME points at the right directory (currently: %s)."
-            % (Converter.get_dtd_location(), 
+            % (Converter.get_dtd_location(),
                os.environ['GTHOME']))
-        
+
 
 def main():
     sanity_check()
