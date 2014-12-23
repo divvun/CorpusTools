@@ -84,6 +84,10 @@ class SamediggiFiCrawler(object):
         while len(self.unvisited_links) > 0:
             link = self.unvisited_links.pop()
             if link not in self.visited_links:
+
+                print >>sys.stderr
+                print >>sys.stderr, 'unvisited_links', len(self.unvisited_links)
+
                 try:
                     pages = []
                     for lang in self.langs.keys():
@@ -96,13 +100,9 @@ class SamediggiFiCrawler(object):
                         if ('www.samediggi.fi' in r.url and
                                 r.status_code == requests.codes.ok and
                                 not self.invalid_content(r.content)):
-                            print >>sys.stderr
-                            print >>sys.stderr, 'unvisited_links', len(self.unvisited_links)
                             self.harvest_links(r.content)
-                            print >>sys.stderr, 'unvisited_links', len(self.unvisited_links)
-                            print >>sys.stderr
                             pages.append(namechanger.AddFileToCorpus(
-                                link + '&lang=' + lang,
+                                r.url,
                                 os.getenv('GTFREE'),
                                 self.langs[lang],
                                 'admin/sd/www.samediggi.fi'))
@@ -116,6 +116,9 @@ class SamediggiFiCrawler(object):
                     self.save_pages(pages)
                 except UserWarning:
                     print >>sys.stderr, link, 'does not exist'
+
+                print >>sys.stderr, 'unvisited_links', len(self.unvisited_links)
+                print >>sys.stderr
 
             self.visited_links.add(link)
             print >>sys.stderr, 'visited_links', len(self.visited_links)
