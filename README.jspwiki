@@ -195,18 +195,24 @@ explaining what went wrong.
 
 The complete help text from the program:
 {{{
-usage: convert2xml [-h] [--serial] sources [sources ...]
+usage: convert2xml [-h] [-v] [--serial] [--write-intermediate]
+                   sources [sources ...]
 
-Convert original files to giellatekno/divvun xml.
+Convert original files to giellatekno xml.
 
 positional arguments:
-  sources     The original file(s) or directory/ies where the original files
-              exist
+  sources               The original file(s) or directory/ies where the
+                        original files exist
 
 optional arguments:
-  -h, --help  show this help message and exit
-  --serial    use this for debugging the conversion process. When this
-              argument is used files will be converted one by one.
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  --serial              use this for debugging the conversion process. When
+                        this argument is used files will be converted one by
+                        one.
+  --write-intermediate  Write the intermediate XML representation to
+                        ORIGFILE.im.xml, for debugging the XSLT. (Has no
+                        effect if the converted file already exists.)
 }}}
 
 !!analyse_corpus
