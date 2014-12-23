@@ -126,8 +126,11 @@ class AddFileToCorpus(NameChangerBase):
                     raise UserWarning
             except requests.exceptions.MissingSchema:
                 print >>sys.stderr, 'Error: wrong schema'
-                pass
-
+                raise UserWarning
+            except requests.exceptions.ConnectionError as e:
+                print >>sys.stderr, 'Could not connect'
+                print >>sys.stderr, str(e)
+                raise UserWarning
         else:
             shutil.copy(fromname, self.toname())
             print self.toname()
