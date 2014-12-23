@@ -2077,19 +2077,14 @@ def collect_files(source_dir):
     return xsl_files
 
 
-class SetupException(Exception):
-    pass
-
 def sanity_check():
-    analyser.sanity_check([u'wvHtml', u'pdftotext'])
-    if not 'GTHOME' in os.environ:
-        raise SetupException("You have to set the environment variable GTHOME to "
-                             "your checkout of langtech/trunk!")
+    util.sanity_check([u'wvHtml', u'pdftotext'])
     if not os.path.isfile(Converter.get_dtd_location()):
-        raise SetupException("Couldn't find %s\n"
-                             "Check that GTHOME points at the right directory (currently: %s)."
-                             % (Converter.get_dtd_location(), 
-                                os.environ['GTHOME']))
+        raise util.SetupException(
+            "Couldn't find %s\n"
+            "Check that GTHOME points at the right directory (currently: %s)."
+            % (Converter.get_dtd_location(), 
+               os.environ['GTHOME']))
         
 
 def main():

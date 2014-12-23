@@ -34,15 +34,7 @@ import argparse
 import typosfile
 import ngram
 import argparse_version
-
-class ExecutableMissingException(Exception):
-    pass
-
-def assert_executable(path):
-    if not (os.path.isfile(path) and os.access(path, os.X_OK)):
-        raise ExecutableMissingException(
-            "Couldn't find %s or it is not executable" % (
-                path.encode('utf-8'),))
+import util
 
 class ArgumentError(Exception):
     pass
@@ -241,7 +233,7 @@ class SentenceDivider:
         """
         preprocess_script = os.path.join(os.environ['GTHOME'],
                                          'gt/script/preprocess')
-        assert_executable(preprocess_script)
+        util.sanity_check([preprocess_script])
 
         preprocess_command = []
         if (self.doc_lang == 'nob'):
@@ -423,7 +415,7 @@ class Parallelize:
         """
         generate_script = os.path.join(os.environ['GTHOME'],
                                        'gt/script/corpus/generate-anchor-list.pl')
-        assert_executable(generate_script)
+        util.sanity_check([generate_script])
 
         infile1 = os.path.join(os.environ['GTHOME'],
                                'gt/common/src/anchor.txt')
@@ -481,7 +473,7 @@ class Parallelize:
         """
         tca2_script = os.path.join(os.environ['GTHOME'],
                                    'gt/script/corpus/tca2.sh')
-        assert_executable(tca2_script)
+        util.sanity_check([tca2_script])
 
         anchor_name = self.generate_anchor_file()
 
