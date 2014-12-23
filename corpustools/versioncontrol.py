@@ -82,7 +82,11 @@ class GIT(VersionController):
         self.config = self.gitrepo.config_reader()
 
     def add(self, filename):
-        self.gitrepo.git.add(filename)
+        if os.path.exists(filename):
+            self.gitrepo.git.add(filename)
+        else:
+            print >>sys.stderr, 'File does not exist', filename
+            raise UserWarning
 
 
 class VersionControlFactory(object):
