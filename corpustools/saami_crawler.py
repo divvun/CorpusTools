@@ -19,6 +19,7 @@
 #   Copyright 2013-2014 Børre Gaup <borre.gaup@uit.no>
 #
 import os
+import sys
 import re
 
 import requests
@@ -68,9 +69,9 @@ class SamediggiFiCrawler(object):
     Same procedure with links here
     '''
     def __init__(self):
-        self.unvisited_links = Queue.Queue()
-        self.unvisited_links.put(
-            'http://www.samediggi.fi/index.php?option=com_frontpage&Itemid=39')
+        self.unvisited_links = set()
+        self.unvisited_links.add(
+            'http://www.samediggi.fi/')
         self.visited_links = set()
         self.download_links = set()
         self.langs = {u'finnish': u'fin',
@@ -80,27 +81,44 @@ class SamediggiFiCrawler(object):
                       u'english': u'eng'}
 
     def download_pages(self):
-        while not self.unvisited_links.empty():
-            link = self.unvisited_links.get()
+        while len(self.unvisited_links) > 0:
+            link = self.unvisited_links.pop()
             if link not in self.visited_links:
                 try:
                     pages = []
                     for lang in self.langs.keys():
                         r = requests.get(link, params={'lang': lang})
-                        if (r.status_code == requests.codes.ok and
+                        if len(r.history) > 0:
+                            print 'history', r.history
+                        if not 'samediggi.fi' in r.url:
+                            print 'url', r.url
+
+                        if ('www.samediggi.fi' in r.url and
+                                r.status_code == requests.codes.ok and
                                 not self.invalid_content(r.content)):
+                            print >>sys.stderr
+                            print >>sys.stderr, 'unvisited_links', len(self.unvisited_links)
                             self.harvest_links(r.content)
+                            print >>sys.stderr, 'unvisited_links', len(self.unvisited_links)
+                            print >>sys.stderr
                             pages.append(namechanger.AddFileToCorpus(
                                 link + '&lang=' + lang,
                                 os.getenv('GTFREE'),
                                 self.langs[lang],
                                 'admin/sd/www.samediggi.fi'))
+                        else:
+                            if not 'samediggi.fi' in r.url:
+                                print >>sys.stderr
+                                print >>sys.stderr, 'Not fetching', r.url
+                                print >>sys.stderr, 'which was', link
+                                print >>sys.stderr
 
                     self.save_pages(pages)
                 except UserWarning:
-                    print link, 'does not exist'
+                    print >>sys.stderr, link, 'does not exist'
 
-                self.visited_links.add(link)
+            self.visited_links.add(link)
+            print >>sys.stderr, 'visited_links', len(self.visited_links)
 
     def invalid_content(self, content):
         '''Return true if the page does not contain the strings
@@ -140,8 +158,8 @@ class SamediggiFiCrawler(object):
                 if not href.startswith('http'):
                     href = os.path.join('http://www.samediggi.fi', href)
 
-                if not re.search('klemetti.blogspot|/nuorat|/#|com_events|com_search|haettavana|do_pdf|pop=1|com_docman', href) and href.startswith('http://www.samediggi.fi'):
-                    self.unvisited_links.put(href)
+                if href not in self.visited_links and not re.search('klemetti.blogspot|/nuorat|/#|com_events|com_search|haettavana|do_pdf|pop=1|com_docman|/images|com_weblink', href) and href.startswith('http://www.samediggi.fi'):
+                    self.unvisited_links.add(href)
 
     def save_pages(self, pages):
         '''Write pages to disk
