@@ -35,9 +35,17 @@ import typosfile
 import ngram
 import argparse_version
 
+class ExecutableMissingException(Exception):
+    pass
+
+def assert_executable(path):
+    if not (os.path.isfile(path) and os.access(path, os.X_OK)):
+        raise ExecutableMissingException(
+            "Couldn't find %s or it is not executable" % (
+                path.encode('utf-8'),))
+
 class ArgumentError(Exception):
-    def __init__( self, msg ):
-        Exception.__init__(self, msg)
+    pass
 
 class CorpusXMLFile:
     """
@@ -57,7 +65,7 @@ class CorpusXMLFile:
                 "Expected Corpus XML file (output of convert2xml) with <document> as "
                 "the root tag, got %s -- did you pass the wrong file?" % (
                     self.etree.getroot().tag,))
-        
+
     def get_etree(self):
         return self.etree
 
@@ -231,17 +239,21 @@ class SentenceDivider:
         result.
         If the process fails, exit the program
         """
+        preprocess_script = os.path.join(os.environ['GTHOME'],
+                                         'gt/script/preprocess')
+        assert_executable(preprocess_script)
+
         preprocess_command = []
         if (self.doc_lang == 'nob'):
             abbr_file = os.path.join(
                 os.environ['GTHOME'], 'st/nob/bin/abbr.txt')
-            preprocess_command = ['preprocess', '--abbr=' + abbr_file]
+            preprocess_command = [preprocess_script, '--abbr=' + abbr_file]
         else:
             abbr_file = os.path.join(os.environ['GTHOME'],
                                      'gt/sme/bin/abbr.txt')
             corr_file = os.path.join(os.environ['GTHOME'],
                                      'gt/sme/bin/corr.txt')
-            preprocess_command = ['preprocess',
+            preprocess_command = [preprocess_script,
                                   '--abbr=' + abbr_file,
                                   '--corr=' + corr_file]
 
@@ -409,12 +421,16 @@ class Parallelize:
         Generate an anchor file with lang1 and lang2. Return the path
         to the anchor file
         """
+        generate_script = os.path.join(os.environ['GTHOME'],
+                                       'gt/script/corpus/generate-anchor-list.pl')
+        assert_executable(generate_script)
+
         infile1 = os.path.join(os.environ['GTHOME'],
                                'gt/common/src/anchor.txt')
         infile2 = os.path.join(os.environ['GTHOME'],
                                'gt/common/src/anchor-admin.txt')
 
-        subp = subprocess.Popen(['generate-anchor-list.pl',
+        subp = subprocess.Popen([generate_script,
                                  '--lang1=' + self.get_lang1(),
                                  '--lang2' + self.get_lang2(),
                                  '--outdir=' + os.environ['GTFREE'],
@@ -463,9 +479,14 @@ class Parallelize:
         """
         Parallelize two files using tca2
         """
+        tca2_script = os.path.join(os.environ['GTHOME'],
+                                   'gt/script/corpus/tca2.sh')
+        assert_executable(tca2_script)
+
         anchor_name = self.generate_anchor_file()
 
-        subp = subprocess.Popen(['tca2.sh', anchor_name,
+        subp = subprocess.Popen([tca2_script,
+                                 anchor_name,
                                  self.get_sent_filename(
                                      self.get_filelist()[0]),
                                  self.get_sent_filename(
@@ -1207,7 +1228,7 @@ def parse_options():
         parents=[argparse_version.parser],
         description='Sentence align two files. Input is the document \
         containing the main language, and language to parallelize it with.')
-    
+
     parser.add_argument('input_file', help="The input file")
     parser.add_argument('-p', '--parallel_language',
                         dest='parallel_language',
