@@ -90,6 +90,7 @@ class SamediggiFiCrawler(object):
 
                 try:
                     pages = []
+                    found_saami = False
                     for lang in self.langs.keys():
                         r = requests.get(link, params={'lang': lang})
                         if len(r.history) > 0:
@@ -100,6 +101,8 @@ class SamediggiFiCrawler(object):
                         if ('www.samediggi.fi' in r.url and
                                 r.status_code == requests.codes.ok and
                                 not self.invalid_content(r.content)):
+                            if lang in ['davvi', 'anaras', 'nuortta']:
+                                found_saami = True
                             self.harvest_links(r.content)
                             pages.append(namechanger.AddFileToCorpus(
                                 r.url,
@@ -113,7 +116,8 @@ class SamediggiFiCrawler(object):
                                 print >>sys.stderr, 'which was', link
                                 print >>sys.stderr
 
-                    self.save_pages(pages)
+                    if found_saami:
+                        self.save_pages(pages)
                 except UserWarning:
                     print >>sys.stderr, link, 'does not exist'
 
