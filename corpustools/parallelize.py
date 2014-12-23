@@ -35,6 +35,9 @@ import typosfile
 import ngram
 import argparse_version
 
+class ArgumentError(Exception):
+    def __init__( self, msg ):
+        Exception.__init__(self, msg)
 
 class CorpusXMLFile:
     """
@@ -46,7 +49,15 @@ class CorpusXMLFile:
         self.name = name
         self.paralang = paralang
         self.etree = etree.parse(name)
+        self.sanity_check()
 
+    def sanity_check(self):
+        if self.etree.getroot().tag != u"document":
+            raise ArgumentError(
+                "Expected Corpus XML file (output of convert2xml) with <document> as "
+                "the root tag, got %s -- did you pass the wrong file?" % (
+                    self.etree.getroot().tag,))
+        
     def get_etree(self):
         return self.etree
 
