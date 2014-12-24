@@ -86,7 +86,7 @@ class SamediggiFiCrawler(object):
             if link not in self.visited_links:
 
                 print >>sys.stderr
-                print >>sys.stderr, 'unvisited_links', len(self.unvisited_links)
+                print >>sys.stderr, 'Before: unvisited_links', len(self.unvisited_links)
 
                 try:
                     pages = []
@@ -121,7 +121,7 @@ class SamediggiFiCrawler(object):
                 except UserWarning:
                     print >>sys.stderr, link, 'does not exist'
 
-                print >>sys.stderr, 'unvisited_links', len(self.unvisited_links)
+                print >>sys.stderr, 'After: unvisited_links', len(self.unvisited_links)
                 print >>sys.stderr
 
             self.visited_links.add(link)
