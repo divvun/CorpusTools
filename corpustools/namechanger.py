@@ -116,10 +116,13 @@ class AddFileToCorpus(NameChangerBase):
                 r = requests.get(fromname)
                 if r.status_code == requests.codes.ok:
                     self.add_url_extension(r.headers['content-type'])
-                    with open(self.toname(), 'wb') as new_corpus_file:
-                        new_corpus_file.write(r.content)
-                    print self.toname()
-                    self.vcs.add(self.toname())
+                    if not os.path.exists(self.toname()):
+                        with open(self.toname(), 'wb') as new_corpus_file:
+                            new_corpus_file.write(r.content)
+                        print self.toname()
+                        self.vcs.add(self.toname())
+                    else:
+                        print >>sys.stderr, self.toname(), 'already exists'
                 else:
                     print >>sys.stderr
                     print >>sys.stderr, 'ERROR:', fromname, 'does not exist'
@@ -142,26 +145,28 @@ class AddFileToCorpus(NameChangerBase):
         '''extra_values is a dict that contains data for the metadata file
         that is not possible to infer from the data given in the constructor.
         '''
-        metadata_file = xslsetter.MetadataHandler(
-            os.path.join(self.new_dirname,
-                         self.new_filename + '.xsl'))
-        if self.old_dirname.startswith('http'):
-            metadata_file.set_variable('filename', os.path.join(
-                self.old_dirname, self.old_filename))
+        metafile_name = self.toname() + '.xsl'
+        if not os.path.exists(metafile_name):
+            metadata_file = xslsetter.MetadataHandler(metafile_name)
+            if self.old_dirname.startswith('http'):
+                metadata_file.set_variable('filename', os.path.join(
+                    self.old_dirname, self.old_filename))
+            else:
+                metadata_file.set_variable('filename', self.old_filename)
+            metadata_file.set_variable('genre', self.path.split('/')[0])
+            metadata_file.set_variable('mainlang', self.mainlang)
+            metadata_file.set_variable('sub_name',
+                                    self.vcs.user_name().decode('utf-8'))
+            metadata_file.set_variable('sub_email', self.vcs.user_email())
+
+            for key, value in extra_values.items():
+                metadata_file.set_variable(key, value)
+
+            print metadata_file.filename
+            metadata_file.write_file()
+            self.vcs.add(metadata_file.filename)
         else:
-            metadata_file.set_variable('filename', self.old_filename)
-        metadata_file.set_variable('genre', self.path.split('/')[0])
-        metadata_file.set_variable('mainlang', self.mainlang)
-        metadata_file.set_variable('sub_name',
-                                   self.vcs.user_name().decode('utf-8'))
-        metadata_file.set_variable('sub_email', self.vcs.user_email())
-
-        for key, value in extra_values.items():
-            metadata_file.set_variable(key, value)
-
-        print metadata_file.filename
-        metadata_file.write_file()
-        self.vcs.add(metadata_file.filename)
+            print >>sys.stderr, metafile_name, 'already exists'
 
 
 class CorpusNameFixer(NameChangerBase):
