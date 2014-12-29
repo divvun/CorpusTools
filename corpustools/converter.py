@@ -973,7 +973,7 @@ class BiblexmlConverter(object):
         bible2xmlpl = 'bible2xml.pl'
         if distutils.spawn.find_executable(bible2xmlpl) is None:
             raise ConversionException("Could not find %s in $PATH" %(bible2xmlpl,))
-        return None
+
         subp = subprocess.Popen(
             [bible2xmlpl, '-out', tmpname, self.orig],
             stdout=subprocess.PIPE,
@@ -2050,7 +2050,7 @@ def parse_options():
 
 def worker(args, xsl_file):
     orig_file = xsl_file[:-4]
-    if os.path.exists(orig_file):
+    if os.path.exists(orig_file) and not orig_file.endswith('.xsl'):
         conv = Converter(orig_file, args.write_intermediate)
 
         try:
