@@ -1036,7 +1036,7 @@ class HTMLContentConverter(object):
             'fb:like', 'fb:comments', 'g:plusone', 'hr', 'nf', 'mb', 'ms',
             'img', 'cite', 'embed', 'footer', 'figcaption', 'aside', 'time',
             'figure', 'nav', 'select', 'noscript', 'iframe', 'map', 'img',
-            'colgroup']
+            'colgroup', 'link']
 
         for remove_tag in remove_tags:
             [remove.decompose() for remove in self.soup.find_all(remove_tag)]
