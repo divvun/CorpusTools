@@ -36,7 +36,7 @@ yaourt -S python2-pysvn
 }}}
 
 You also need to have the $GTHOME variable set to where you checked
-out https://victorio.uit.no/langtech/trunk/ 
+out https://victorio.uit.no/langtech/trunk/
 
 !!Installation
 
@@ -47,7 +47,7 @@ Install the tools for all users on a machine by writing
 cd $GTHOME/tools/CorpusTools
 sudo pip-2.7 install -U -r requirements.txt -e .
 sudo pip-2.7 uninstall -y corpustools
-sudo python2.7 setup.py install --install-scripts=$HOME/bin
+sudo python2.7 setup.py install --install-scripts=/usr/local/bin
 }}}
 
 Note the dot at the end of the second line. The scripts will then be
