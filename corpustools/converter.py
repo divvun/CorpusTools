@@ -981,10 +981,16 @@ class BiblexmlConverter(object):
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
-            print >>sys.stderr, 'Could not process', self.orig
-            print >>sys.stderr, output
-            print >>sys.stderr, error
-            return subp.returncode
+            logfile = open(self.get_orig() + '.log', 'w')
+
+            logfile.write('Error at: ' + str(ccat.lineno()))
+            logfile.write('bible2xml.pl exit status was not 0\n')
+            logfile.write('stdout: \n')
+            logfile.write(output)
+            logfile.write('stderr: \n')
+            logfile.write(error)
+            logfile.close()
+            raise ConversionException('bible2xml.pl returned non zero status. More info in ' + self.orig + '.log')
 
         return etree.parse(tmpname)
 
