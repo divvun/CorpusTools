@@ -978,8 +978,6 @@ class HTMLContentConverter(object):
             content.decode(self.set_charset(content, encoding_from_xsl)))
 
         self.soup = html5parser.document_fromstring(superclean)
-        with open('HTMLContentConverter.xml', 'w') as huff:
-            huff.write(etree.tostring(self.soup, encoding='utf-8'))
 
         self.converter_xsl = resource_string(__name__, 'xslt/xhtml2corpus.xsl')
 
