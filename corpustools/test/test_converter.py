@@ -551,6 +551,114 @@ class TestHTMLContentConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(hcc.soup), want)
 
+    def test_set_charset_1(self):
+        '''Check that default charset is set, 1
+        encoding_from_xsl = None, no charset in html header
+        '''
+        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
+            <html><body></body>\
+            </html>'
+        encoding_from_xsl = None
+
+        hcc = converter.HTMLContentConverter(
+            'ugga.html',
+            content, encoding_from_xsl)
+
+        got = hcc.set_charset(content, encoding_from_xsl)
+
+        self.assertEqual(got, 'utf-8')
+
+    def test_set_charset_2(self):
+        '''Check that default charset is set, 2
+        encoding_from_xsl = '', no charset in html header
+        '''
+        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
+            <html><body></body>\
+            </html>'
+        encoding_from_xsl = ''
+
+        hcc = converter.HTMLContentConverter(
+            'ugga.html',
+            content, encoding_from_xsl)
+
+        got = hcc.set_charset(content, encoding_from_xsl)
+
+        self.assertEqual(got, 'utf-8')
+
+    def test_set_charset_3(self):
+        '''encoding_from_xsl = 'iso-8859-1', no charset in html header
+        '''
+        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
+            <html><body></body>\
+            </html>'
+        encoding_from_xsl = 'iso-8859-1'
+
+        hcc = converter.HTMLContentConverter(
+            'ugga.html',
+            content, encoding_from_xsl)
+
+        got = hcc.set_charset(content, encoding_from_xsl)
+
+        self.assertEqual(got, 'iso-8859-1')
+
+    def test_set_charset_4(self):
+        '''Check that encoding_from_xsl overrides meta charset
+        encoding_from_xsl = 'iso-8859-1', charset in html header = utf-8
+        '''
+        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
+            <html><head><meta http-equiv="Content-type" \
+            content="text/html; charset=utf-8">\
+            </head><body></body>\
+            </html>'
+
+        encoding_from_xsl = 'iso-8859-1'
+
+        hcc = converter.HTMLContentConverter(
+            'ugga.html',
+            content, encoding_from_xsl)
+
+        got = hcc.set_charset(content, encoding_from_xsl)
+
+        self.assertEqual(got, 'iso-8859-1')
+
+    def test_set_charset_5(self):
+        '''encoding_from_xsl = None, charset in html header = iso-8859-1
+        '''
+        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
+            <html><head><meta http-equiv="Content-type" \
+            content="text/html; charset=iso-8859-1">\
+            </head><body></body>\
+            </html>'
+
+        encoding_from_xsl = None
+
+        hcc = converter.HTMLContentConverter(
+            'ugga.html',
+            content, encoding_from_xsl)
+
+        got = hcc.set_charset(content, encoding_from_xsl)
+
+        self.assertEqual(got, 'iso-8859-1')
+
+    def test_set_charset_6(self):
+        '''encoding_from_xsl = '', charset in html header = iso-8859-1
+        '''
+        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
+            <html><head><meta http-equiv="Content-type" \
+            content="text/html; charset=iso-8859-1">\
+            </head><body></body>\
+            </html>'
+
+        encoding_from_xsl = ''
+
+        hcc = converter.HTMLContentConverter(
+            'ugga.html',
+            content, encoding_from_xsl)
+
+        got = hcc.set_charset(content, encoding_from_xsl)
+
+        self.assertEqual(got, 'iso-8859-1')
+
 
 class TestRTFConverter(XMLTester):
     def setUp(self):
