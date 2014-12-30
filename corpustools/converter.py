@@ -1024,6 +1024,7 @@ class HTMLContentConverter(object):
                     "latestnews_uutisarkisto", 'back_button'],
                 'id': [
                     'searchBox',
+                    'murupolku',
                     'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
                     'ctl00_FullRegion_CenterAndRightRegion_HitsControl_searchHitSummary',
                     'AreaTopSiteNav', 'SamiDisclaimer', 'AreaTopRight',
