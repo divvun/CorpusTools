@@ -975,7 +975,7 @@ class HTMLContentConverter(object):
                          'aside', 'time', 'figure', 'nav', 'noscript', 'map',])
 
         superclean = cleaner.clean_html(
-            content.decode(self.set_charset(encoding_from_xsl, content)))
+            content.decode(self.set_charset(content, encoding_from_xsl)))
 
         self.soup = html5parser.document_fromstring(superclean)
         with open('HTMLContentConverter.xml', 'w') as huff:
@@ -983,7 +983,7 @@ class HTMLContentConverter(object):
 
         self.converter_xsl = resource_string(__name__, 'xslt/xhtml2corpus.xsl')
 
-    def set_charset(self, encoding_from_xsl, content):
+    def set_charset(self, content, encoding_from_xsl):
         charset = 'utf-8'
 
         if encoding_from_xsl == '' or encoding_from_xsl is None:
