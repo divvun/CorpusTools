@@ -24,7 +24,6 @@ import re
 
 import requests
 import lxml.html
-import Queue
 
 import namechanger
 
@@ -86,7 +85,8 @@ class SamediggiFiCrawler(object):
             if link not in self.visited_links:
 
                 print >>sys.stderr
-                print >>sys.stderr, 'Before: unvisited_links', len(self.unvisited_links)
+                print >>sys.stderr, 'Before: unvisited_links',
+                print >>sys.stderr, len(self.unvisited_links)
 
                 try:
                     pages = []
@@ -95,7 +95,7 @@ class SamediggiFiCrawler(object):
                         r = requests.get(link, params={'lang': lang})
                         if len(r.history) > 0:
                             print 'history', r.history
-                        if not 'samediggi.fi' in r.url:
+                        if 'samediggi.fi' not in r.url:
                             print 'url', r.url
 
                         if ('www.samediggi.fi' in r.url and
@@ -110,7 +110,7 @@ class SamediggiFiCrawler(object):
                                 self.langs[lang],
                                 'admin/sd/www.samediggi.fi'))
                         else:
-                            if not 'samediggi.fi' in r.url:
+                            if 'samediggi.fi' not in r.url:
                                 print >>sys.stderr
                                 print >>sys.stderr, 'Not fetching', r.url
                                 print >>sys.stderr, 'which was', link
@@ -121,7 +121,8 @@ class SamediggiFiCrawler(object):
                 except UserWarning:
                     print >>sys.stderr, link, 'does not exist'
 
-                print >>sys.stderr, 'After: unvisited_links', len(self.unvisited_links)
+                print >>sys.stderr, 'After: unvisited_links',
+                print >>sys.stderr, len(self.unvisited_links)
                 print >>sys.stderr
 
             self.visited_links.add(link)
