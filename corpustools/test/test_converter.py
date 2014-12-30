@@ -5,6 +5,7 @@ import io
 import os
 import lxml.etree as etree
 import lxml.doctestcompare as doctestcompare
+from lxml.html import html5parser
 import doctest
 
 from corpustools import converter
@@ -405,12 +406,11 @@ class TestHTMLContentConverter(XMLTester):
     def test_remove_empty_class(self):
         got = converter.HTMLContentConverter(
             'with-o:p.html',
-            '<html><body><div class=""/><div class="a"><span class="">b</span></div></html>').tidy()
+            '<html><body><div class="">a</div><div class="a"><span class="">b</span></div></html>').tidy()
 
-        want = '<html xmlns="http://www.w3.org/1999/xhtml">\
-        <head><title/></head><body><div class="a"><span>b</span></div></body></html>'
+        want = html5parser.document_fromstring('<html><head/><body><div>a</div><div class="a"><span>b</span></div></body></html>')
 
-        self.assertXmlEqual(got, want)
+        self.assertEqual(got, etree.tostring(want))
 
     def test_remove_unwanted_classes_and_ids(self):
         unwanted_classes_ids = {
@@ -454,49 +454,47 @@ class TestHTMLContentConverter(XMLTester):
         for tag, attribs in unwanted_classes_ids.items():
             for key, values in attribs.items():
                 for value in values:
-                    hc = converter.HTMLContentConverter(tag + key + value + '.html',
-                                                 '<html>\
-                                                 <body>\
-                                                 <' + tag + " " + key + '="' + value + '">content:' + tag + key + value + \
-                                                     '</' + tag + '>\
-                                                 <div class="ada"/></body>\
-                                                 </html>')
+                    hc = converter.HTMLContentConverter(
+                        tag + key + value + '.html',
+                        '<html><body><' + tag + " " + key + '="' + value + '">content:' + tag + key + value + '</' + tag + '><div class="ada"/></body></html>')
                     hc.remove_elements()
 
-                    want = '<html><body><div class="ada"/></body></html>'
+                    want = html5parser.document_fromstring('<html><body><div class="ada"/></body></html>')
 
-                    self.assertXmlEqual(hc.soup.prettify(), want)
+                    self.assertEqual(etree.tostring(hc.soup), etree.tostring(want))
 
     def test_remove_unwanted_tags(self):
+        from lxml.html.diff import htmldiff
         unwanted_tags = [
-            'script', 'style', 'o:p', 'st1:country-region', 'v:shapetype',
-            'v:shape', 'st1:metricconverter', 'area', 'object', 'meta',
-            'fb:like', 'fb:comments', 'g:plusone', 'hr', 'nf', 'mb', 'ms',
+            'script', 'style', 'area', 'object', 'meta',
+            'hr', 'nf', 'mb', 'ms',
             'img', 'cite', 'embed', 'footer', 'figcaption', 'aside', 'time',
-            'figure', 'nav', 'select', 'noscript', 'iframe', 'map', 'img', 'colgroup']
+            'figure', 'nav', 'select', 'noscript', 'iframe', 'map', 'colgroup', 'st1:country-region', 'v:shapetype', 'v:shape', 'st1:metricconverter', 'fb:comments', 'g:plusone', 'fb:like',]
+
         for unwanted_tag in unwanted_tags:
             got = converter.HTMLContentConverter(unwanted_tag + '.html',
-                                                 '<html>\
-                                                 <body>\
-                                                 <p>p1</p>\
-                                                 <' + unwanted_tag + '/>\
-                                                 <p>p2</p2></body>\
-                                                 </html>').tidy()
-            want = '<html xmlns="http://www.w3.org/1999/xhtml">\
-            <head><title/></head><body>\
-            <p>p1</p><p>p2</p></body></html>'
+                                                 '<html><body><p>p1</p><' + unwanted_tag + '/><p>p2</p2></body></html>').tidy()
+            want = '<html:html xmlns:html="http://www.w3.org/1999/xhtml"><html:head/><html:body><html:p>p1</html:p><html:p>p2</html:p></html:body></html:html>'
 
-            self.assertXmlEqual(got, want)
+            self.assertEqual(got, want)
 
     def test_remove_comment(self):
         got = converter.HTMLContentConverter(
             'with-o:p.html',
             '<html><body><b><!--Hey, buddy. --></b></body></html>').tidy()
 
-        want = '<html xmlns="http://www.w3.org/1999/xhtml">\
-        <head><title/></head><body></body></html>'
+        want = '<html:html xmlns:html="http://www.w3.org/1999/xhtml"><html:head/><html:body><html:b/></html:body></html:html>'
 
-        self.assertXmlEqual(got, want)
+        self.assertEqual(got, want)
+
+    def test_remove_processinginstruction(self):
+        got = converter.HTMLContentConverter(
+            'with-o:p.html',
+            '<html><body><b><?ProcessingInstruction?></b></body></html>').tidy()
+
+        want = '<html:html xmlns:html="http://www.w3.org/1999/xhtml"><html:head/><html:body><html:b/></html:body></html:html>'
+
+        self.assertEqual(got, want)
 
     def test_add_p_around_text(self):
         got = converter.HTMLContentConverter(

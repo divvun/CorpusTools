@@ -34,9 +34,9 @@ import argparse
 import tempfile
 from pkg_resources import resource_string, resource_filename
 
-import bs4
 import lxml.etree as etree
-import tidylib
+import lxml.html.clean as clean
+from lxml.html import html5parser
 from pyth.plugins.rtf15.reader import Rtf15Reader
 from pyth.plugins.xhtml.writer import XHTMLWriter
 from pydocx.parsers import Docx2Html
@@ -1001,13 +1001,24 @@ class HTMLContentConverter(object):
 
     content is a string
     """
-    def __init__(self, filename, content, encoding_from_xsl=None):
+    def __init__(self, filename, content):
+        '''Clean up content, then convert it to xhtml using html5parser
+        '''
         self.orig = filename
 
-        try:
-            self.soup = bs4.BeautifulSoup(content, 'lxml', from_encoding=encoding_from_xsl)
-        except HTMLParser.HTMLParseError:
-            raise ConversionException("BeautifulSoup couldn't parse the html")
+        cleaner = clean.Cleaner(
+            page_structure=False,
+            scripts=True,
+            javascript=True,
+            comments=True,
+            style=True,
+            processing_instructions=True,
+            remove_unknown_tags=True,
+            embedded=True,
+            remove_tags=['img', 'area', 'hr', 'cite', 'footer', 'figcaption',
+                         'aside', 'time', 'figure', 'nav', 'noscript', 'map',])
+
+        self.soup = html5parser.document_fromstring(cleaner.clean_html(content))
 
         self.converter_xsl = resource_string(__name__, 'xslt/xhtml2corpus.xsl')
 
@@ -1015,9 +1026,8 @@ class HTMLContentConverter(object):
         """Some documents have empty class attributes.
         Delete these attributes.
         """
-        for tag in self.soup.find_all(True):
-            if tag.has_attr('class') and tag['class'] == ['']:
-                del tag['class']
+        for element in self.soup.xpath('.//*[@class=""]'):
+            del element.attrib['class']
 
     def remove_elements(self):
         '''Remove unwanted tags from a html document
@@ -1025,22 +1035,6 @@ class HTMLContentConverter(object):
         The point with this exercise is to remove all but the main content of
         the document.
         '''
-        for instance in [
-                bs4.Comment, bs4.ProcessingInstruction, bs4.Declaration]:
-            [unwanted.extract() for unwanted in self.soup.find_all(
-                text=lambda text: isinstance(text, instance))]
-
-        remove_tags = [
-            'script', 'style', 'o:p', 'st1:country-region', 'v:shapetype',
-            'v:shape', 'st1:metricconverter', 'area', 'object', 'meta',
-            'fb:like', 'fb:comments', 'g:plusone', 'hr', 'nf', 'mb', 'ms',
-            'img', 'cite', 'embed', 'footer', 'figcaption', 'aside', 'time',
-            'figure', 'nav', 'select', 'noscript', 'iframe', 'map', 'img',
-            'colgroup', 'link']
-
-        for remove_tag in remove_tags:
-            [remove.decompose() for remove in self.soup.find_all(remove_tag)]
-
         unwanted_classes_ids = {
             'div': {
                 'class': [
@@ -1098,71 +1092,22 @@ class HTMLContentConverter(object):
                 },
             }
 
+        ns = {'html': 'http://www.w3.org/1999/xhtml'}
         for tag, attribs in unwanted_classes_ids.items():
             for key, values in attribs.items():
                 for value in values:
-                    [remove.decompose()
-                     for remove in self.soup.find_all(tag, {key: value})]
+                    search = './/html:' + tag + '[@' + key + '="' + value + '"]'
+                    for unwanted in self.soup.xpath(search, namespaces=ns):
+                        unwanted.getparent().remove(unwanted)
 
     def tidy(self):
         """
-        Run html through tidy
+        Clean up the html document
         """
         self.remove_empty_class()
         self.remove_elements()
 
-        if (not ("xmlns", "http://www.w3.org/1999/xhtml") in
-                self.soup.html.attrs):
-            self.soup.html["xmlns"] = "http://www.w3.org/1999/xhtml"
-
-        self.soup = self.soup.prettify()
-        replacements = {'&shy;': u'­',
-                        '&nbsp;': ' ',
-                        '&aelig;': u'æ',
-                        '&eacute;': u'é'}
-        for key, value in replacements.iteritems():
-            self.soup = self.soup.replace(key, value)
-
-        tidyOption = {# "indent": "auto", # gives empty output in docs
-                      # with minor encoding errors on newer
-                      # (py)tidylib versions; and later steps indent
-                      # it nicely anyway
-                      "indent-spaces": 2,
-                      "wrap": 0, # 72 here fails on older (py)tidylib
-                      "markup": "yes",
-                      "output-xml": "yes",
-                      "add-xml-decl": "yes",
-                      "input-xml": "no",
-                      "show-warnings": "no",
-                      "numeric-entities": "yes",
-                      "quote-marks": "yes",
-                      "quote-nbsp": "yes",
-                      "quote-ampersand": "yes",
-                      "break-before-br": "no",
-                      "uppercase-tags": "no",
-                      "uppercase-attributes": "no",
-                      "char-encoding": "utf8",
-                      "enclose-block-text": "yes",
-                      "new-empty-tags": "ms,mb,nf,mu",
-                      "new-inline-tags": "dato,note,idiv,o:p,pb,v:shapetype,\
-                          v:stroke,v:formulas,v:f,v:path,v:shape,v:imagedata,\
-                          o:lock,st1:country-region,st1:place,\
-                          st1:metricconverter,g:plusone,fb:like,fb:comments",
-                      "new-blocklevel-tags": "label,nav,article,header,\
-                          figcaption,time,aside,figure,footer",
-                      "clean": "true",
-                      "drop-proprietary-attributes": "true",
-                      "drop-empty-paras": "true"
-                      }
-
-        tidiedHtml, errors = tidylib.tidy_document(self.soup, tidyOption)
-
-        if tidiedHtml.strip() == "":
-            raise ConversionException(
-                "Empty html after tidy")
-
-        #sys.stderr.write(str(lineno()) + ' ' +  soup.prettify())
-        return tidiedHtml
+        return etree.tostring(self.soup)
 
     def convert2intermediate(self):
         """
