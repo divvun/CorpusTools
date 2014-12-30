@@ -52,6 +52,7 @@ class _NGram:
         return self
 
     def addValues(self, key, value):
+        # TODO: unused, remove?
         self.ngrams[key] = value
         return self
 
@@ -112,18 +113,19 @@ class NGram:
         if not count:
             raise ValueError("no language files found")
 
+    def classify_full(self, text):
+        if len(self.ngrams) == 0:
+            return [('guess', 0)]
+        else:
+            ingram = _NGram(text)
+            return sorted(
+                [(l, self.ngrams[l].compare(ingram))
+                 for l in self.ngrams],
+                key=lambda x:x[1]
+            )
+
     def classify(self, text):
-        ngram = _NGram(text)
-        r = 'guess'
-        langs = self.ngrams.keys()
-        r = langs.pop()
-        min = self.ngrams[r].compare(ngram)
-        for lang in langs:
-            d = self.ngrams[lang].compare(ngram)
-            if d < min:
-                min = d
-                r = lang
-        return r
+        return self.classify_full(text)[0][0]
 
 
 class Generate:
