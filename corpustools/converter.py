@@ -164,6 +164,7 @@ class Converter(object):
 
         try:
             complete = xm.get_transformer()(intermediate)
+
             return complete
         except etree.XSLTApplyError as (e):
             logfile = open(self.orig + '.log', 'w')
@@ -974,10 +975,14 @@ class HTMLContentConverter(object):
                          'aside', 'time', 'figure', 'nav', 'noscript', 'map',])
 
         charset = 'utf-8'
-        if content.find('charset=iso-8859-15') > 0:
-            charset = 'iso-8859-15'
+        cg = content.find('charset=')
+        if cg > 0:
+            f = cg + content[cg:].find('"')
+            charset = content[cg + len('charset='):f]
+            print ccat.lineno(), self.orig, cg, f, content[cg + len('charset='):f]
 
         superclean = cleaner.clean_html(content.decode(charset))
+
         self.soup = html5parser.document_fromstring(superclean)
         with open('HTMLContentConverter.xml', 'w') as huff:
             huff.write(etree.tostring(self.soup, encoding='utf-8'))
@@ -1141,12 +1146,7 @@ class HTMLContentConverter(object):
                 logfile.write(':')
                 logfile.write(str(entry.column))
                 logfile.write(" ")
-
-                try:
-                    logfile.write(entry.message)
-                except ValueError:
-                    logfile.write(entry.message.encode('ascii', 'ignore'))
-
+                logfile.write(entry.message.encode('utf8'))
                 logfile.write('\n')
 
             logfile.write(html.encode('utf8'))
