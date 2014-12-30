@@ -21,12 +21,13 @@
 import os
 import sys
 import re
+import argparse
 
 import requests
 import lxml.html
 
+import argparse_version
 import namechanger
-
 
 class SamediggiFiCrawler(object):
     '''Notes about samediggi.fi
@@ -186,9 +187,29 @@ class SamediggiFiCrawler(object):
         print
 
 
+def parse_options():
+    parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
+        description='Crawl saami sites (for now, only www.samediggi.fi).')
+
+    parser.add_argument('sites',
+                        nargs='+',
+                        help="The sites to crawl")
+
+    args = parser.parse_args()
+    return args
+
+
 def main():
-    sc = SamediggiFiCrawler()
-    sc.download_pages()
+    args = parse_options()
+
+    for site in args.sites:
+        if site == 'www.samediggi.fi':
+            print 'Will crawl samediggi.fi'
+            sc = SamediggiFiCrawler()
+            sc.download_pages()
+        else:
+            print 'Can not crawl', site, 'yet'
 
 
 if __name__ == "__main__":
