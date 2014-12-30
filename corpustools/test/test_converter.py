@@ -404,6 +404,10 @@ class TestHTMLConverter(XMLTester):
         got = self.testhtml.convert2intermediate()
         want = etree.parse('converter_data/samediggi-article-48s.xml')
 
+        with open('got.xml', 'w') as f1:
+            f1.write(etree.tostring(got, pretty_print=True, encoding='utf-8'))
+        with open('want.xml', 'w') as f2:
+            f2.write(etree.tostring(want, pretty_print=True, encoding='utf-8'))
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
 
@@ -501,29 +505,51 @@ class TestHTMLContentConverter(XMLTester):
 
         self.assertEqual(got, want)
 
-    def test_add_p_around_text(self):
-        got = converter.HTMLContentConverter(
+    def test_add_p_around_text1(self):
+        '''Only text before next significant element
+        '''
+        hcc = converter.HTMLContentConverter(
             'withoutp.html',
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
             <html><head><meta http-equiv="Content-type" \
             content="text/html; charset=utf-8">\
             <title>– Den utdøende stammes frykt</title>\
-            <link rel="stylesheet" type="text/css" href="ssh1.css" />\
-            </head><body><h3>VI</h3>... Stockfleth<a href=#[1]>\
-            [1]</a> saa<p>Dette høres<h3>VII</h3>... Finnerne<p>Der</body>\
-            </html>').tidy()
+            </head><body><h3>VI</h3>... Finnerne<p>Der</body>\
+            </html>')
+        hcc.add_p_around_text()
 
         want = '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD \
         XHTML 1.0 Strict//EN"    \
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\
         <html xmlns="http://www.w3.org/1999/xhtml"><head><title>\
         – Den utdøende stammes frykt</title>  \
-        <link rel="stylesheet" type="text/css" href="ssh1.css" />\
-        </head><body>  <h3>VI</h3>  <p>... Stockfleth<a href="#[1]">[1]</a>\
-        saa</p>  <p>Dette høres</p>  <h3>VII</h3>  <p>... Finnerne</p>\
+        </head><body>  <h3>VI</h3>  <p>... Finnerne</p>\
         <p>Der</p></body></html>'
 
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(etree.tostring(hcc.soup), want)
+
+    def test_add_p_around_text2(self):
+        '''Text and i element before next significant element
+        '''
+        hcc = converter.HTMLContentConverter(
+            'withoutp.html',
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
+            <html><head><meta http-equiv="Content-type" \
+            content="text/html; charset=utf-8">\
+            <title>– Den utdøende stammes frykt</title>\
+            </head><body><h3>VI</h3>... Finnerne<i>Der</body>\
+            </html>')
+        hcc.add_p_around_text()
+
+        want = '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD \
+        XHTML 1.0 Strict//EN"    \
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\
+        <html xmlns="http://www.w3.org/1999/xhtml"><head><title>\
+        – Den utdøende stammes frykt</title>  \
+        </head><body>  <h3>VI</h3>  <p>... Finnerne<i>Der</i></p>\
+        </body></html>'
+
+        self.assertXmlEqual(etree.tostring(hcc.soup), want)
 
 
 class TestRTFConverter(XMLTester):

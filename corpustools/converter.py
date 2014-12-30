@@ -339,7 +339,7 @@ class Converter(object):
                 logfile.write('\n')
                 logfile.close()
                 raise ConversionException(
-                    u"XML syntax error. More info in the log file: " +
+                    u"XSL syntax error. More info in the log file: " +
                     self.get_orig() + u".log")
 
     def set_converted_name(self):
@@ -973,7 +973,14 @@ class HTMLContentConverter(object):
             remove_tags=['img', 'area', 'hr', 'cite', 'footer', 'figcaption',
                          'aside', 'time', 'figure', 'nav', 'noscript', 'map',])
 
-        self.soup = html5parser.document_fromstring(cleaner.clean_html(content))
+        charset = 'utf-8'
+        if content.find('charset=iso-8859-15') > 0:
+            charset = 'iso-8859-15'
+
+        superclean = cleaner.clean_html(content.decode(charset))
+        self.soup = html5parser.document_fromstring(superclean)
+        with open('HTMLContentConverter.xml', 'w') as huff:
+            huff.write(etree.tostring(self.soup, encoding='utf-8'))
 
         self.converter_xsl = resource_string(__name__, 'xslt/xhtml2corpus.xsl')
 
@@ -1055,12 +1062,32 @@ class HTMLContentConverter(object):
                     for unwanted in self.soup.xpath(search, namespaces=ns):
                         unwanted.getparent().remove(unwanted)
 
+    def add_p_around_text(self):
+        '''Add p around text after an hX element
+        '''
+        for h_tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
+            for h in self.soup.xpath('.//html:' + h_tag, namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
+                if h.tail is not None and h.tail.strip() != '':
+                    p = etree.Element('{http://www.w3.org/1999/xhtml}p')
+                    p.text = h.tail
+                    h.tail = None
+                    n = h.getnext()
+                    while n is not None:
+                        if (n.tag == '{http://www.w3.org/1999/xhtml}p' or n.tag == '{http://www.w3.org/1999/xhtml}h3' or n.tag == '{http://www.w3.org/1999/xhtml}div'):
+                            break
+                        p.append(n)
+                        n = n.getnext()
+
+                    h_parent = h.getparent()
+                    h_parent.insert(h_parent.index(h) + 1, p)
+
     def tidy(self):
         """
         Clean up the html document
         """
         self.remove_empty_class()
         self.remove_elements()
+        self.add_p_around_text()
 
         return etree.tostring(self.soup)
 
