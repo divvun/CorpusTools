@@ -659,6 +659,15 @@ class TestHTMLContentConverter(XMLTester):
 
         self.assertEqual(got, 'windows-1252')
 
+    def test_center2div(self):
+        got = converter.HTMLContentConverter(
+            'center.html',
+            '<html><body><center><span class="">b</span></center></html>', None).tidy()
+
+        want = html5parser.document_fromstring('<html><head/><body><div class="c1"><span>b</span></div></body></html>')
+
+        self.assertEqual(got, etree.tostring(want))
+
 
 class TestRTFConverter(XMLTester):
     def setUp(self):

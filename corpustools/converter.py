@@ -1094,6 +1094,13 @@ class HTMLContentConverter(object):
                     h_parent = h.getparent()
                     h_parent.insert(h_parent.index(h) + 1, p)
 
+    def center2div(self):
+        '''Convert center to div in tidy style
+        '''
+        for center in self.soup.xpath('.//html:center', namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
+            center.tag = '{http://www.w3.org/1999/xhtml}div'
+            center.set('class', 'c1')
+
     def tidy(self):
         """
         Clean up the html document
@@ -1101,6 +1108,7 @@ class HTMLContentConverter(object):
         self.remove_empty_class()
         self.remove_elements()
         self.add_p_around_text()
+        self.center2div()
 
         return etree.tostring(self.soup)
 
