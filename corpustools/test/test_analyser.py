@@ -19,6 +19,7 @@
 #   Copyright 2013-2014 Børre Gaup <borre.gaup@uit.no>
 #
 
+import os
 import unittest
 import doctest
 from lxml import etree
@@ -27,17 +28,20 @@ from lxml import doctestcompare
 from corpustools import analyser
 
 
+here = os.path.dirname(__file__)
+
+
 class TestAnalyser(unittest.TestCase):
     def setUp(self):
         self.a = analyser.Analyser(u'sme')
-        self.a.xml_file = u'smefile.xml'
+        self.a.xml_file = os.path.join(here, 'smefile.xml')
         self.a.set_analysis_files(
-            abbr_file='abbr.txt',
-            fst_file='analyser.xfst',
-            disambiguation_analysis_file='disambiguation.cg3',
-            function_analysis_file='functions.cg3',
-            dependency_analysis_file='dependency.cg3')
-        self.a.set_corr_file(corr_file='corr.txt')
+            abbr_file=os.path.join(here, 'abbr.txt'),
+            fst_file=os.path.join(here, 'analyser.xfst'),
+            disambiguation_analysis_file=os.path.join(here, 'disambiguation.cg3'),
+            function_analysis_file=os.path.join(here, 'functions.cg3'),
+            dependency_analysis_file=os.path.join(here, 'dependency.cg3'))
+        self.a.set_corr_file(corr_file=os.path.join(here, 'corr.txt'))
 
     def assertXmlEqual(self, got, want):
         u"""Check if two stringified xml snippets are equal
