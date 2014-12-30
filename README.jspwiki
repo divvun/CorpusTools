@@ -7,6 +7,7 @@ These scripts will be installed
 * [analyse_corpus|CorpusTools.html#analyse_corpus]
 * [add_files_to_corpus|CorpusTools.html#add_files_to_corpus]
 * [parallelize|CorpusTools.html#parallelize]
+* [saami_crawler|CorpusTools.html#saami_crawler]
 
 !!Requirements
 
@@ -357,3 +358,30 @@ optional arguments:
   -p PARALLEL_LANGUAGE, --parallel_language PARALLEL_LANGUAGE
                         The language to parallelize the input document with
 }}}
+
+!!saami_crawler
+
+Add files to freecorpus from a given site.
+
+Only able to crawl www.samediggi.fi now, will collect html files only for now.
+
+Run it like this:
+{{
+saami_crawler www.samediggi.fi
+}}
+
+The complete help text from the program is as follows:
+{{{
+usage: saami_crawler [-h] [-v] sites [sites ...]
+
+Crawl saami sites (for now, only www.samediggi.fi).
+
+positional arguments:
+  sites          The sites to crawl
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -v, --version  show program's version number and exit
+}}}
+
+
