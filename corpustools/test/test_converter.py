@@ -415,7 +415,7 @@ class TestHTMLContentConverter(XMLTester):
     def test_remove_empty_class(self):
         got = converter.HTMLContentConverter(
             'with-o:p.html',
-            '<html><body><div class="">a</div><div class="a"><span class="">b</span></div></html>').tidy()
+            '<html><body><div class="">a</div><div class="a"><span class="">b</span></div></html>', None).tidy()
 
         want = html5parser.document_fromstring('<html><head/><body><div>a</div><div class="a"><span>b</span></div></body></html>')
 
@@ -465,7 +465,7 @@ class TestHTMLContentConverter(XMLTester):
                 for value in values:
                     hc = converter.HTMLContentConverter(
                         tag + key + value + '.html',
-                        '<html><body><' + tag + " " + key + '="' + value + '">content:' + tag + key + value + '</' + tag + '><div class="ada"/></body></html>')
+                        '<html><body><' + tag + " " + key + '="' + value + '">content:' + tag + key + value + '</' + tag + '><div class="ada"/></body></html>', None)
                     hc.remove_elements()
 
                     want = html5parser.document_fromstring('<html><body><div class="ada"/></body></html>')
@@ -482,7 +482,7 @@ class TestHTMLContentConverter(XMLTester):
 
         for unwanted_tag in unwanted_tags:
             got = converter.HTMLContentConverter(unwanted_tag + '.html',
-                                                 '<html><body><p>p1</p><' + unwanted_tag + '/><p>p2</p2></body></html>').tidy()
+                                                 '<html><body><p>p1</p><' + unwanted_tag + '/><p>p2</p2></body></html>', None).tidy()
             want = '<html:html xmlns:html="http://www.w3.org/1999/xhtml"><html:head/><html:body><html:p>p1</html:p><html:p>p2</html:p></html:body></html:html>'
 
             self.assertEqual(got, want)
@@ -490,7 +490,7 @@ class TestHTMLContentConverter(XMLTester):
     def test_remove_comment(self):
         got = converter.HTMLContentConverter(
             'with-o:p.html',
-            '<html><body><b><!--Hey, buddy. --></b></body></html>').tidy()
+            '<html><body><b><!--Hey, buddy. --></b></body></html>', None).tidy()
 
         want = '<html:html xmlns:html="http://www.w3.org/1999/xhtml"><html:head/><html:body><html:b/></html:body></html:html>'
 
@@ -499,7 +499,7 @@ class TestHTMLContentConverter(XMLTester):
     def test_remove_processinginstruction(self):
         got = converter.HTMLContentConverter(
             'with-o:p.html',
-            '<html><body><b><?ProcessingInstruction?></b></body></html>').tidy()
+            '<html><body><b><?ProcessingInstruction?></b></body></html>', None).tidy()
 
         want = '<html:html xmlns:html="http://www.w3.org/1999/xhtml"><html:head/><html:body><html:b/></html:body></html:html>'
 
@@ -515,7 +515,7 @@ class TestHTMLContentConverter(XMLTester):
             content="text/html; charset=utf-8">\
             <title>– Den utdøende stammes frykt</title>\
             </head><body><h3>VI</h3>... Finnerne<p>Der</body>\
-            </html>')
+            </html>', None)
         hcc.add_p_around_text()
 
         want = '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD \
@@ -538,7 +538,7 @@ class TestHTMLContentConverter(XMLTester):
             content="text/html; charset=utf-8">\
             <title>– Den utdøende stammes frykt</title>\
             </head><body><h3>VI</h3>... Finnerne<i>Der</body>\
-            </html>')
+            </html>', None)
         hcc.add_p_around_text()
 
         want = '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD \

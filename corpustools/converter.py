@@ -957,7 +957,7 @@ class HTMLContentConverter(object):
 
     content is a string
     """
-    def __init__(self, filename, content):
+    def __init__(self, filename, content, encoding_from_xsl):
         '''Clean up content, then convert it to xhtml using html5parser
         '''
         self.orig = filename
@@ -1168,9 +1168,9 @@ class RTFConverter(HTMLContentConverter):
     """
     Class to convert html documents to the giellatekno xml format
     """
-    def __init__(self, filename):
+    def __init__(self, filename, encoding_from_xsl=None):
         self.orig = filename
-        HTMLContentConverter.__init__(self, filename, self.rtf2html())
+        HTMLContentConverter.__init__(self, filename, self.rtf2html(), encoding_from_xsl)
 
     def rtf2html(self):
         """Open the rtf document
@@ -1197,9 +1197,9 @@ class RTFConverter(HTMLContentConverter):
 class DocxConverter(HTMLContentConverter):
     '''Class to convert docx documents to the giellatekno xml format
     '''
-    def __init__(self, filename):
+    def __init__(self, filename, encoding_from_xsl=None):
         self.orig = filename
-        HTMLContentConverter.__init__(self, filename, self.docx2html())
+        HTMLContentConverter.__init__(self, filename, self.docx2html(), encoding_from_xsl)
 
     def docx2html(self):
         '''Convert docx to html, return the converted html
@@ -1213,9 +1213,9 @@ class DocConverter(HTMLContentConverter):
     """
     Class to convert Microsoft Word documents to the giellatekno xml format
     """
-    def __init__(self, filename):
+    def __init__(self, filename, encoding_from_xsl=None):
         self.orig = filename
-        HTMLContentConverter.__init__(self, filename, self.doc2html())
+        HTMLContentConverter.__init__(self, filename, self.doc2html(), encoding_from_xsl)
 
     def doc2html(self):
         """Convert the doc file using wvHtml.
