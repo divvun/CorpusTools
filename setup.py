@@ -27,7 +27,6 @@ setup(
     },
     install_requires=[
         "pyth",
-        "beautifulsoup4",
         "unidecode",
         "lxml",
         "gitdb",
