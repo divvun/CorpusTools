@@ -974,8 +974,25 @@ class HTMLContentConverter(object):
             remove_tags=['img', 'area', 'hr', 'cite', 'footer', 'figcaption',
                          'aside', 'time', 'figure', 'nav', 'noscript', 'map',])
 
-        superclean = cleaner.clean_html(
-            content.decode(self.set_charset(content, encoding_from_xsl)))
+        try:
+            enc = self.set_charset(content, encoding_from_xsl)
+            c = unicode(content, encoding=enc)
+            superclean = cleaner.clean_html(c)
+        except UnicodeDecodeError as e:
+            logfile = open(self.orig + '.log', 'w')
+            print >>logfile, ccat.lineno(), str(e), self.orig
+            logfile.close()
+            raise ConversionException(self.orig + ', ny encoding tull1')
+        except TypeError as e:
+            logfile = open(self.orig + '.log', 'w')
+            print >>logfile, ccat.lineno(), str(e), self.orig
+            logfile.close()
+            raise ConversionException(self.orig + ', ny encoding tull2')
+        except ValueError as e:
+            logfile = open(self.orig + '.log', 'w')
+            print >>logfile, ccat.lineno(), str(e), self.orig
+            logfile.close()
+            raise ConversionException(self.orig + ', ny encoding tull3')
 
         self.soup = html5parser.document_fromstring(superclean)
 
@@ -987,12 +1004,18 @@ class HTMLContentConverter(object):
         if encoding_from_xsl == '' or encoding_from_xsl is None:
             cg = content.find('charset=')
             if cg > 0:
-                f = cg + content[cg:].find('"')
-                charset = content[cg + len('charset='):f].lower()
+                f1 = cg + content[cg:].find('"')
+                f2 = cg + content[cg:].find("'")
+                #print >>sys.stderr, ccat.lineno(), cg, f1, f2
+                if f1 < f2 and f1 > cg:
+                    charset = content[cg + len('charset='):f1].lower()
+                elif f2 < f1 and f2 > cg:
+                    charset = content[cg + len('charset='):f2].lower()
         else:
             charset = encoding_from_xsl.lower()
 
-        if charset == 'iso-8859-1':
+        #print >>sys.stderr, ccat.lineno(), charset
+        if charset == 'iso-8859-1' or charset == 'ascii':
             return 'windows-1252'
         else:
             return charset
