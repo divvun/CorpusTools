@@ -988,12 +988,14 @@ class HTMLContentConverter(object):
             cg = content.find('charset=')
             if cg > 0:
                 f = cg + content[cg:].find('"')
-                charset = content[cg + len('charset='):f]
-                print ccat.lineno(), self.orig, cg, f, content[cg + len('charset='):f]
+                charset = content[cg + len('charset='):f].lower()
         else:
-            charset = encoding_from_xsl
+            charset = encoding_from_xsl.lower()
 
-        return charset
+        if charset == 'iso-8859-1':
+            return 'windows-1252'
+        else:
+            return charset
 
     def remove_empty_class(self):
         """Some documents have empty class attributes.

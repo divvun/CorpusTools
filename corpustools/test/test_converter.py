@@ -599,7 +599,7 @@ class TestHTMLContentConverter(XMLTester):
 
         got = hcc.set_charset(content, encoding_from_xsl)
 
-        self.assertEqual(got, 'iso-8859-1')
+        self.assertEqual(got, 'windows-1252')
 
     def test_set_charset_4(self):
         '''Check that encoding_from_xsl overrides meta charset
@@ -619,7 +619,7 @@ class TestHTMLContentConverter(XMLTester):
 
         got = hcc.set_charset(content, encoding_from_xsl)
 
-        self.assertEqual(got, 'iso-8859-1')
+        self.assertEqual(got, 'windows-1252')
 
     def test_set_charset_5(self):
         '''encoding_from_xsl = None, charset in html header = iso-8859-1
@@ -638,7 +638,7 @@ class TestHTMLContentConverter(XMLTester):
 
         got = hcc.set_charset(content, encoding_from_xsl)
 
-        self.assertEqual(got, 'iso-8859-1')
+        self.assertEqual(got, 'windows-1252')
 
     def test_set_charset_6(self):
         '''encoding_from_xsl = '', charset in html header = iso-8859-1
@@ -657,7 +657,7 @@ class TestHTMLContentConverter(XMLTester):
 
         got = hcc.set_charset(content, encoding_from_xsl)
 
-        self.assertEqual(got, 'iso-8859-1')
+        self.assertEqual(got, 'windows-1252')
 
 
 class TestRTFConverter(XMLTester):
