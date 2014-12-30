@@ -660,6 +660,68 @@ class TestHTMLContentConverter(XMLTester):
 
         self.assertEqual(got, 'windows-1252')
 
+    def test_set_charset_7(self):
+        '''Test if set_charset works with ' as quote mark around charset
+        encoding_from_xsl = '', charset in html header = iso-8859-1
+        '''
+        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
+            <html><head><meta http-equiv="Content-type" \
+            content=\'text/html; charset=iso-8859-1\'>\
+            </head><body></body>\
+            </html>'
+
+        encoding_from_xsl = ''
+
+        hcc = converter.HTMLContentConverter(
+            'ugga.html',
+            content, encoding_from_xsl)
+
+        got = hcc.set_charset(content, encoding_from_xsl)
+
+        self.assertEqual(got, 'windows-1252')
+
+    def test_set_charset_8(self):
+        '''Test if set_charset works with ' as quote mark around charset when " is found later
+        encoding_from_xsl = '', charset in html header = iso-8859-1
+        '''
+        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
+            <html><head><meta http-equiv="Content-type" \
+            content=\'text/html; charset=iso-8859-1\'>\
+            <link rel="index.html">\
+            </head><body></body>\
+            </html>'
+
+        encoding_from_xsl = ''
+
+        hcc = converter.HTMLContentConverter(
+            'ugga.html',
+            content, encoding_from_xsl)
+
+        got = hcc.set_charset(content, encoding_from_xsl)
+
+        self.assertEqual(got, 'windows-1252')
+
+    def test_set_charset_9(self):
+        '''Test if set_charset works with " as quote mark around charset when ' is found later
+        encoding_from_xsl = '', charset in html header = iso-8859-1
+        '''
+        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
+            <html><head><meta http-equiv="Content-type" \
+            content="text/html; charset=iso-8859-1">\
+            <link rel=\'index.html\'>\
+            </head><body></body>\
+            </html>'
+
+        encoding_from_xsl = ''
+
+        hcc = converter.HTMLContentConverter(
+            'ugga.html',
+            content, encoding_from_xsl)
+
+        got = hcc.set_charset(content, encoding_from_xsl)
+
+        self.assertEqual(got, 'windows-1252')
+
     def test_center2div(self):
         got = converter.HTMLContentConverter(
             'center.html',

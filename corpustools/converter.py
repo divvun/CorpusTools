@@ -1006,15 +1006,19 @@ class HTMLContentConverter(object):
             if cg > 0:
                 f1 = cg + content[cg:].find('"')
                 f2 = cg + content[cg:].find("'")
-                #print >>sys.stderr, ccat.lineno(), cg, f1, f2
-                if f1 < f2 and f1 > cg:
-                    charset = content[cg + len('charset='):f1].lower()
-                elif f2 < f1 and f2 > cg:
+
+                if f1 < cg and f2 > cg:
                     charset = content[cg + len('charset='):f2].lower()
+                elif f2 < cg and f1 > cg:
+                    charset = content[cg + len('charset='):f1].lower()
+                elif f1 > cg and f2 > cg:
+                    if f1 < f2:
+                        charset = content[cg + len('charset='):f1].lower()
+                    else:
+                        charset = content[cg + len('charset='):f2].lower()
         else:
             charset = encoding_from_xsl.lower()
 
-        #print >>sys.stderr, ccat.lineno(), charset
         if charset == 'iso-8859-1' or charset == 'ascii':
             return 'windows-1252'
         else:
