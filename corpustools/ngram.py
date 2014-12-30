@@ -17,8 +17,7 @@ class _NGram:
             self.ngrams = arg
             self.normalise()
         else:
-            self.ngrams = dict()
-            self.ngramskeyset = set()
+            raise TypeError("arg should be either a text or a (possibly empty) ngram-dict")
 
     def addText(self, text):
         ngrams = dict()
