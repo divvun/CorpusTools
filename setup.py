@@ -27,7 +27,6 @@ setup(
     },
     install_requires=[
         "pyth",
-        #"pytidylib", # in requirements.txt for now
         "beautifulsoup4",
         "unidecode",
         "lxml",

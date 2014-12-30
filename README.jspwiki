@@ -46,7 +46,7 @@ Install the tools for all users on a machine by writing
 
 {{{
 cd $GTHOME/tools/CorpusTools
-sudo pip-2.7 install -U -r requirements.txt -e .
+sudo pip-2.7 install -U -e .
 sudo pip-2.7 uninstall -y corpustools
 sudo python2.7 setup.py install --install-scripts=/usr/local/bin
 }}}
@@ -59,7 +59,7 @@ Install the tools for the current user by writing
 
 {{{
 cd $GTHOME/tools/CorpusTools
-pip-2.7 install -U --user -r requirements.txt -e .
+pip-2.7 install -U --user -e .
 pip-2.7 uninstall -y corpustools
 python2.7 setup.py install --user --install-scripts=$HOME/bin
 }}}
