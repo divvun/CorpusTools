@@ -27,3 +27,4 @@ v<0.7.8>, <20141110> -- Using the DRY-principle for the version info
 v<0.7.9>, <20141125> -- Set the correct requirements
 v<0.8.0>, <20141127> -- Support for docx conversion
 v<0.8.1>, <20141127> -- Depend on wvHtml for doc conversion
+v<0.8.2>, <20141230> -- Countless improvements by Kevin Unhammer, added saami_crawler script
