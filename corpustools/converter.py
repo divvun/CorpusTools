@@ -1203,13 +1203,11 @@ class DocConverter(HTMLContentConverter):
 
         if subp.returncode != 0:
             logfile = open(self.orig + '.log', 'w')
-            logfile.write('output\n')
-            logfile.write(output)
-            logfile.write('\n')
-            logfile.write('error\n')
-            logfile.write(error)
-            logfile.write('\n')
-            raise ConversionException('Could not process' + self.orig)
+            logfile.write('Error at: ' + str(ccat.lineno()) + '\n')
+            logfile.write('Could not process' + self.orig + '\n')
+            logfile.write('Stdout from wvHtml: ' + output + '\n\n')
+            logfile.write('Stderr from wvHtml: ' + error + '\n')
+            raise ConversionException("Conversion from .doc to .html failed. More info in " + self.orig + '.log')
 
         return output
 

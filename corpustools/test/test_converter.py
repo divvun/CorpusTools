@@ -377,6 +377,11 @@ class TestDocConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+    def test_doc2html1(self):
+        '''doc2html should raise an exception when wvHtml fails
+        '''
+        self.assertRaises(converter.ConversionException, converter.DocConverter, filename='bogus.doc')
+
 
 class TestBiblexmlConverter(XMLTester):
     def setUp(self):
