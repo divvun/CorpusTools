@@ -974,20 +974,28 @@ class HTMLContentConverter(object):
             remove_tags=['img', 'area', 'hr', 'cite', 'footer', 'figcaption',
                          'aside', 'time', 'figure', 'nav', 'noscript', 'map',])
 
-        charset = 'utf-8'
-        cg = content.find('charset=')
-        if cg > 0:
-            f = cg + content[cg:].find('"')
-            charset = content[cg + len('charset='):f]
-            print ccat.lineno(), self.orig, cg, f, content[cg + len('charset='):f]
-
-        superclean = cleaner.clean_html(content.decode(charset))
+        superclean = cleaner.clean_html(
+            content.decode(self.set_charset(encoding_from_xsl, content)))
 
         self.soup = html5parser.document_fromstring(superclean)
         with open('HTMLContentConverter.xml', 'w') as huff:
             huff.write(etree.tostring(self.soup, encoding='utf-8'))
 
         self.converter_xsl = resource_string(__name__, 'xslt/xhtml2corpus.xsl')
+
+    def set_charset(self, encoding_from_xsl, content):
+        charset = 'utf-8'
+
+        if encoding_from_xsl == '' or encoding_from_xsl is None:
+            cg = content.find('charset=')
+            if cg > 0:
+                f = cg + content[cg:].find('"')
+                charset = content[cg + len('charset='):f]
+                print ccat.lineno(), self.orig, cg, f, content[cg + len('charset='):f]
+        else:
+            charset = encoding_from_xsl
+
+        return charset
 
     def remove_empty_class(self):
         """Some documents have empty class attributes.
