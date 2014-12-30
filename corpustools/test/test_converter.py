@@ -11,14 +11,17 @@ import doctest
 from corpustools import converter
 
 
+here = os.path.dirname(__file__)
+
+
 class TestConverter(unittest.TestCase):
     def setUp(self):
         self.converter_inside_orig = converter.Converter(
-            'converter_data/fakecorpus/orig/nob/samediggi-article-16.html',
+            os.path.join(here, 'converter_data/fakecorpus/orig/nob/samediggi-article-16.html'),
             True)
 
         self.converter_outside_orig = converter.Converter(
-            'converter_data/samediggi-article-48.html', False)
+            os.path.join(here, 'converter_data/samediggi-article-48.html'), False)
 
         self.converter_inside_freecorpus = converter.Converter(
             os.path.join(
@@ -261,12 +264,14 @@ class TestAvvirConverter(XMLTester):
 class TestSVGConverter(XMLTester):
     def setUp(self):
         self.svg = converter.SVGConverter(
-            'converter_data/Riddu_Riddu_avis_TXT.200923.svg')
+            os.path.join(here,
+                         'converter_data/Riddu_Riddu_avis_TXT.200923.svg'))
 
     def test_convert2intermediate(self):
         got = self.svg.convert2intermediate()
         want = etree.parse(
-            'converter_data/Riddu_Riddu_avis_TXT.200923.svg.xml')
+            os.path.join(here,
+                         'converter_data/Riddu_Riddu_avis_TXT.200923.svg.xml'))
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
@@ -274,12 +279,15 @@ class TestSVGConverter(XMLTester):
 class TestPlaintextConverter(XMLTester):
     def test_to_unicode(self):
         plaintext = converter.PlaintextConverter(
-            'converter_data/winsami2-test-ws2.txt')
+            os.path.join(here,
+                         'converter_data/winsami2-test-ws2.txt'))
         got = plaintext.to_unicode()
 
         # Ensure that the data in want is unicode
         file_ = codecs.open(
-            'converter_data/winsami2-test-utf8.txt', encoding='utf8')
+            os.path.join(here,
+                         'converter_data/winsami2-test-utf8.txt'),
+            encoding='utf8')
         want = file_.read()
         file_.close()
 
@@ -360,20 +368,24 @@ Filbma lea.</p>
 
 class TestPDFConverter(XMLTester):
     def test_pdf_converter(self):
-        pdfdocument = converter.PDFConverter('converter_data/pdf-test.pdf')
+        pdfdocument = converter.PDFConverter(
+            os.path.join(here, 'converter_data/pdf-test.pdf'))
         got = pdfdocument.convert2intermediate()
-        want = etree.parse('converter_data/pdf-test.xml')
+        want = etree.parse(
+            os.path.join(here, 'converter_data/pdf-test.xml'))
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
 
 class TestDocConverter(XMLTester):
     def setUp(self):
-        self.testdoc = converter.DocConverter('converter_data/doc-test.doc')
+        self.testdoc = converter.DocConverter(os.path.join(here,
+            'converter_data/doc-test.doc'))
 
     def test_convert2intermediate(self):
         got = self.testdoc.convert2intermediate()
-        want = etree.parse('converter_data/doc-test.xml')
+        want = etree.parse(os.path.join(here,
+            'converter_data/doc-test.xml'))
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
@@ -385,24 +397,26 @@ class TestDocConverter(XMLTester):
 
 class TestBiblexmlConverter(XMLTester):
     def setUp(self):
-        self.testdoc = converter.BiblexmlConverter(
-            'converter_data/bible-test.xml')
+        self.testdoc = converter.BiblexmlConverter(os.path.join(here,
+            'converter_data/bible-test.xml'))
 
     def test_convert2intermediate(self):
         got = self.testdoc.convert2intermediate()
-        want = etree.parse('converter_data/bible-test.xml.xml')
+        want = etree.parse(os.path.join(here,
+            'converter_data/bible-test.xml.xml'))
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
 
 class TestHTMLConverter(XMLTester):
     def setUp(self):
-        self.testhtml = converter.HTMLConverter(
-            'converter_data/samediggi-article-48s.html')
+        self.testhtml = converter.HTMLConverter(os.path.join(here,
+            'converter_data/samediggi-article-48s.html'))
 
     def test_convert2intermediate(self):
         got = self.testhtml.convert2intermediate()
-        want = etree.parse('converter_data/samediggi-article-48s.xml')
+        want = etree.parse(os.path.join(here,
+            'converter_data/samediggi-article-48s.xml'))
 
         with open('got.xml', 'w') as f1:
             f1.write(etree.tostring(got, pretty_print=True, encoding='utf-8'))
@@ -734,11 +748,13 @@ class TestHTMLContentConverter(XMLTester):
 
 class TestRTFConverter(XMLTester):
     def setUp(self):
-        self.testrtf = converter.RTFConverter('converter_data/folkemote.rtf')
+        self.testrtf = converter.RTFConverter(
+            os.path.join(here, 'converter_data/folkemote.rtf'))
 
     def test_convert2intermediate(self):
         got = self.testrtf.convert2intermediate()
-        want = etree.parse('converter_data/folkemote.xml')
+        want = etree.parse(
+            os.path.join(here, 'converter_data/folkemote.xml'))
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
@@ -2128,14 +2144,15 @@ LOGO: Smi kulturfestivala 1998
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_replace_ligatures(self):
-        svgtext = converter.SVGConverter(
-            'converter_data/Riddu_Riddu_avis_TXT.200923.svg')
+        svgtext = converter.SVGConverter(os.path.join(here,
+            'converter_data/Riddu_Riddu_avis_TXT.200923.svg'))
         document_fixer = converter.DocumentFixer(
             etree.fromstring(etree.tostring(svgtext.convert2intermediate())))
         document_fixer.fix_body_encoding()
         got = document_fixer.get_etree()
 
-        want = etree.parse('converter_data/Riddu_Riddu_avis_TXT.200923.xml')
+        want = etree.parse(os.path.join(here,
+            'converter_data/Riddu_Riddu_avis_TXT.200923.xml'))
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
@@ -2145,9 +2162,9 @@ LOGO: Smi kulturfestivala 1998
         </span> bla bla</p>'
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(
+            etree.parse(os.path.join(here,
                 'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml'))
+with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
@@ -2159,9 +2176,9 @@ with-multilingual-tag.xml'))
         </span> bla bla</p>'
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(
+            etree.parse(os.path.join(here,
                 'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml'))
+with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
@@ -2173,9 +2190,9 @@ with-multilingual-tag.xml'))
         </span> bla bla</p>'
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(
+            etree.parse(os.path.join(here,
                 'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml'))
+with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
@@ -2188,9 +2205,9 @@ with-multilingual-tag.xml'))
         XP várás.</p>'
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(
+            etree.parse(os.path.join(here,
                 'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml'))
+with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
@@ -2202,9 +2219,9 @@ with-multilingual-tag.xml'))
         </span> bla bla <span type="quote">«bla bla»</span> bla bla</p>'
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(
+            etree.parse(os.path.join(here,
                 'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml'))
+with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
@@ -2216,9 +2233,9 @@ with-multilingual-tag.xml'))
         </span> <em>bla bla</em></p>'
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(
+            etree.parse(os.path.join(here,
                 'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml'))
+with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
@@ -2230,9 +2247,9 @@ with-multilingual-tag.xml'))
         <span type="quote">«bla bla»</span></p>'
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(
+            etree.parse(os.path.join(here,
                 'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml'))
+with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
@@ -2244,9 +2261,9 @@ with-multilingual-tag.xml'))
         «bla bla»</span></em></p>'
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(
+            etree.parse(os.path.join(here,
                 'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml'))
+with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
@@ -2402,8 +2419,8 @@ with-multilingual-tag.xml'))
 
 class TestXslMaker(XMLTester):
     def test_get_xsl(self):
-        xslmaker = converter.XslMaker('converter_data/samediggi-article-48.\
-html.xsl')
+        xslmaker = converter.XslMaker(os.path.join(here, 'converter_data/samediggi-article-48.\
+html.xsl'))
         got = xslmaker.get_xsl()
 
         # The import href is different for each user testing, so just check that it looks OK:
@@ -2414,7 +2431,7 @@ html.xsl')
         # ... and set it to the hardcoded path in test.xsl:
         import_elt.attrib["href"]="file:///home/boerre/langtech/trunk/tools/CorpusTools/corpustools/xslt/common.xsl"
 
-        want = etree.parse('converter_data/test.xsl')
+        want = etree.parse(os.path.join(here, 'converter_data/test.xsl'))
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
 
@@ -2423,8 +2440,9 @@ class TestLanguageDetector(XMLTester):
     Test the functionality of LanguageDetector
     """
     def setUp(self):
-        self.document = etree.parse('converter_data/samediggi-article-48s-\
-before-lang-detection-with-multilingual-tag.xml')
+        self.document = etree.parse(
+            os.path.join(here, 'converter_data/samediggi-article-48s-\
+before-lang-detection-with-multilingual-tag.xml'))
 
     def test_get_main_lang(self):
         test_main_lang = 'sme'
@@ -2564,26 +2582,31 @@ ble ble <span type="quote">bla2 bla</span> <b>bli</b> bli \
 
     def test_detect_language_with_multilingualtag(self):
         language_detector = converter.LanguageDetector(
-            etree.parse('converter_data/samediggi-article-48s-before-\
-lang-detection-with-multilingual-tag.xml'))
+            etree.parse(os.path.join(here,
+                'converter_data/samediggi-article-48s-before-\
+lang-detection-with-multilingual-tag.xml')))
         language_detector.detect_language()
         got_document = language_detector.get_document()
 
-        expected_document = etree.parse('converter_data/\
-samediggi-article-48s-after-lang-detection-with-multilingual-tag.xml')
+        expected_document = etree.parse(os.path.join(here,
+            'converter_data/\
+samediggi-article-48s-after-lang-detection-with-multilingual-tag.xml'))
 
         self.assertXmlEqual(etree.tostring(got_document),
                             etree.tostring(expected_document))
 
     def test_detect_language_without_multilingualtag(self):
         language_detector = converter.LanguageDetector(etree.parse(
-            'converter_data/samediggi-article-48s-before-lang-detection-\
-without-multilingual-tag.xml'))
+            os.path.join(here,
+                         'converter_data/samediggi-article-48s-before-lang-\
+detection-without-multilingual-tag.xml')))
         language_detector.detect_language()
         got_document = language_detector.get_document()
 
-        expected_document = etree.parse('converter_data/samediggi-article\
--48s-after-lang-detection-without-multilingual-tag.xml')
+        expected_document = etree.parse(
+            os.path.join(here,
+            'converter_data/samediggi-article\
+-48s-after-lang-detection-without-multilingual-tag.xml'))
 
         self.assertXmlEqual(etree.tostring(got_document),
                             etree.tostring(expected_document))
