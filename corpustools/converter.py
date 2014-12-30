@@ -1278,6 +1278,118 @@ class DocConverter(HTMLContentConverter):
 
         return output
 
+    def fix_wv_output(self):
+        '''Examples of headings
+        h1:
+        <html:ul>
+            <html:li value="2">
+                <html:p/>
+                <html:div align="left" name="Overskrift 1">
+                    <html:p>
+                        <html:b>
+                            <html:span>
+                                OVTTASKASOLBMOT
+                            </html:span>
+                        </html:b>
+                    </html:p>
+                </html:div>
+            </html:li>
+        </html:ul>
+
+        h2:
+        <html:ol type="1">
+            <html:li value="1">
+                <html:p/>
+                <html:div align="left" name="Overskrift 2">
+                    <html:p>
+                        <html:b>
+                            <html:span>
+                                čoahkkáigeassu
+                            </html:span>
+                        </html:b>
+                    </html:p>
+                </html:div>
+            </html:li>
+        </html:ol>
+
+        <html:ol type="1">
+            <html:ol type="1">
+                <html:li value="2">
+                    <html:p/>
+                    <html:div align="left" name="Overskrift 2">
+                        <html:p>
+                            <html:b>
+                                <html:span>
+                                    Ulbmil ja váldooasit
+                                </html:span>
+                            </html:b>
+                        </html:p>
+                    </html:div>
+                </html:li>
+            </html:ol>
+        </html:ol>
+
+        h3:
+        <html:ol type="1">
+            <html:ol type="1">
+                <html:ol type="1">
+                    <html:li value="1">
+                        <html:p>
+                        </html:p>
+                        <html:div align="left" name="Overskrift 3">
+                            <html:p>
+                                <html:b>
+                                    <html:span>
+                                        Geaográfalaš
+                                    </html:span>
+                                </html:b>
+                                <html:b>
+                                    <html:span>
+                                        ráddjen
+                                    </html:span>
+                                </html:b>
+
+                            </html:p>
+                        </html:div>
+                    </html:li>
+
+                </html:ol>
+            </html:ol>
+        </html:ol>
+
+        <html:ol type="1">
+            <html:ol type="1">
+                <html:ol type="1">
+                    <html:li value="1">
+                        <html:p>
+                        </html:p>
+                        <html:div align="left" name="Overskrift 3">
+                            <html:p>
+                                <html:b><html:span>Iskanjoavku ja sámegielaga definišuvdn</html:span></html:b>
+                                <html:b><html:span>a</html:span></html:b>
+                            </html:p>
+                        </html:div>
+                    </html:li>
+
+                </html:ol>
+            </html:ol>
+        </html:ol>
+
+        h4:
+        <html:div align="left" name="Overskrift 4">
+            <html:p>
+                <html:b>
+                    <html:i>
+                        <html:span>
+                            Mildosat:
+                        </html:span>
+                    </html:i>
+                </html:b>
+            </html:p>
+        </html:div>
+
+        '''
+        pass
 
 class DocumentFixer(object):
     """
