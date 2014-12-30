@@ -26,6 +26,9 @@ import doctest
 from corpustools import parallelize
 
 
+here = os.path.dirname(__file__)
+
+
 class TestCorpusXMLFile(unittest.TestCase):
     """
     A test class for the CorpusXMLFile class
@@ -79,15 +82,15 @@ class TestCorpusXMLFile(unittest.TestCase):
         self.assertEqual(self.pfile.get_translated_from(), "nob")
 
     def test_get_word_count(self):
-        corpusfile = parallelize.CorpusXMLFile(
-            'parallelize_data/aarseth2-n-with-version.htm.xml', 'sme')
+        corpusfile = parallelize.CorpusXMLFile(os.path.join(here,
+            'parallelize_data/aarseth2-n-with-version.htm.xml'), 'sme')
         self.assertEqual(corpusfile.get_word_count(), "4009")
 
     def test_remove_version(self):
-        file_with_version = parallelize.CorpusXMLFile(
-            'parallelize_data/aarseth2-n-with-version.htm.xml', 'sme')
-        file_without_version = parallelize.CorpusXMLFile(
-            'parallelize_data/aarseth2-n-without-version.htm.xml', 'sme')
+        file_with_version = parallelize.CorpusXMLFile(os.path.join(here,
+            'parallelize_data/aarseth2-n-with-version.htm.xml'), 'sme')
+        file_without_version = parallelize.CorpusXMLFile(os.path.join(here,
+            'parallelize_data/aarseth2-n-without-version.htm.xml'), 'sme')
 
         file_with_version.remove_version()
 
@@ -97,10 +100,10 @@ class TestCorpusXMLFile(unittest.TestCase):
         self.assertXmlEqual(got, want)
 
     def test_remove_skip(self):
-        file_with_skip = parallelize.CorpusXMLFile(
-            'parallelize_data/aarseth2-s-with-skip.htm.xml', 'sme')
-        file_without_skip = parallelize.CorpusXMLFile(
-            'parallelize_data/aarseth2-s-without-skip.htm.xml', 'sme')
+        file_with_skip = parallelize.CorpusXMLFile(os.path.join(here,
+            'parallelize_data/aarseth2-s-with-skip.htm.xml'), 'sme')
+        file_without_skip = parallelize.CorpusXMLFile(os.path.join(here,
+            'parallelize_data/aarseth2-s-without-skip.htm.xml'), 'sme')
 
         file_with_skip.remove_skip()
 
@@ -110,10 +113,10 @@ class TestCorpusXMLFile(unittest.TestCase):
         self.assertXmlEqual(got, want)
 
     def test_move_later(self):
-        file_with_later = parallelize.CorpusXMLFile(
-            'parallelize_data/aarseth2-s-with-later.htm.xml', 'sme')
-        file_with_moved_later = parallelize.CorpusXMLFile(
-            'parallelize_data/aarseth2-s-with-moved-later.htm.xml', 'sme')
+        file_with_later = parallelize.CorpusXMLFile(os.path.join(here,
+            'parallelize_data/aarseth2-s-with-later.htm.xml'), 'sme')
+        file_with_moved_later = parallelize.CorpusXMLFile(os.path.join(here,
+            'parallelize_data/aarseth2-s-with-moved-later.htm.xml'), 'sme')
 
         file_with_later.move_later()
         got = etree.tostring(file_with_moved_later.get_etree())
@@ -126,7 +129,8 @@ class TestSentenceDivider(unittest.TestCase):
     """
     def setUp(self):
         self.sentence_divider = parallelize.SentenceDivider(
-            "parallelize_data/finnmarkkulahka_web_lettere.pdf.xml", "nob")
+            os.path.join(here,
+            "parallelize_data/finnmarkkulahka_web_lettere.pdf.xml"), "nob")
 
     def assertXmlEqual(self, got, want):
         """
@@ -155,7 +159,8 @@ class TestSentenceDivider(unittest.TestCase):
         got = self.sentence_divider.document
 
         want = etree.parse(
-            'parallelize_data/finnmarkkulahka_web_lettere.pdfsme_sent.xml.test')
+            os.path.join(here,
+            'parallelize_data/finnmarkkulahka_web_lettere.pdfsme_sent.xml.test'))
 
         self.assertXmlEqual(got, want)
 
@@ -407,7 +412,8 @@ class TestTmx(unittest.TestCase):
     """
     def setUp(self):
         self.tmx = parallelize.Tmx(etree.parse(
-            'parallelize_data/aarseth2-n.htm.toktmx'))
+            os.path.join(here,
+            'parallelize_data/aarseth2-n.htm.toktmx')))
 
     def assertXmlEqual(self, got, want):
         """
@@ -441,7 +447,9 @@ class TestTmx(unittest.TestCase):
         self.assertEqual(self.tmx.tuv_to_string(tuv), "Sámegiella")
 
     def test_lang_to_string_list(self):
-        f = open('parallelize_data/aarseth2-n.htm.toktmx.as.txt', 'r')
+        f = open(
+            os.path.join(here,
+            'parallelize_data/aarseth2-n.htm.toktmx.as.txt'), 'r')
         string_list = f.readlines()
 
         nob_list = []
@@ -455,7 +463,9 @@ class TestTmx(unittest.TestCase):
         self.assertEqual(self.tmx.lang_to_stringlist('sme'), sme_list)
 
     def test_tmx_to_stringlist(self):
-        f = open('parallelize_data/aarseth2-n.htm.toktmx.as.txt', 'r')
+        f = open(
+            os.path.join(here,
+            'parallelize_data/aarseth2-n.htm.toktmx.as.txt'), 'r')
         want_list = f.readlines()
         f.close()
         #self.maxDiff = None
@@ -504,12 +514,14 @@ bargu lea: okta, guokte.'
 
     def test_remove_tu_with_empty_seg(self):
         got_tmx = parallelize.Tmx(etree.parse(
-            'parallelize_data/aarseth2-n.htm.toktmx'))
+            os.path.join(here,
+            'parallelize_data/aarseth2-n.htm.toktmx')))
         got_tmx.remove_tu_with_empty_seg()
 
         want_tmx = parallelize.Tmx(
             etree.parse(
-                'parallelize_data/aarseth2-n-without-empty-seg.htm.toktmx'))
+                os.path.join(here,
+                'parallelize_data/aarseth2-n-without-empty-seg.htm.toktmx')))
 
         self.assertXmlEqual(got_tmx.get_tmx(), want_tmx.get_tmx())
 
@@ -631,9 +643,11 @@ class TestTmxComparator(unittest.TestCase):
     def test_equal_tmxes(self):
         comp = parallelize.TmxComparator(
             parallelize.Tmx(etree.parse(
-                'parallelize_data/aarseth2-n.htm.toktmx')),
+                os.path.join(here,
+                'parallelize_data/aarseth2-n.htm.toktmx'))),
             parallelize.Tmx(etree.parse(
-                'parallelize_data/aarseth2-n.htm.toktmx')))
+                os.path.join(here,
+                'parallelize_data/aarseth2-n.htm.toktmx'))))
 
         self.assertEqual(comp.get_number_of_differing_lines(), -1)
         self.assertEqual(comp.get_lines_in_wantedfile(), 274)
