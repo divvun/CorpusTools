@@ -338,10 +338,10 @@ class Converter(object):
                     logfile.write(entry.message.encode('latin1'))
 
                 logfile.write('\n')
-                logfile.close()
-                raise ConversionException(
-                    u"XSL syntax error. More info in the log file: " +
-                    self.get_orig() + u".log")
+            logfile.close()
+            raise ConversionException(
+                u"XSL syntax error. More info in the log file: " +
+                self.orig + u".log")
 
     def set_converted_name(self):
         """Set the name of the converted file
@@ -1875,12 +1875,12 @@ class XslMaker(object):
             logfile.close()
             raise ConversionException("Syntax error in " + self.filename)
 
+        common_xsl_path = resource_filename(
+            __name__, 'xslt/common.xsl').replace(' ', '%20')
         self.finalXsl = preprocessXslTransformer(
             filexsl,
             commonxsl=
-            etree.XSLT.strparam('file://' +
-                                resource_filename(__name__,
-                                                  'xslt/common.xsl')))
+            etree.XSLT.strparam('file://' + common_xsl_path))
 
     def get_xsl(self):
         return self.finalXsl
