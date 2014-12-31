@@ -33,15 +33,15 @@ class TestConverter(unittest.TestCase):
         self.assertEqual(
             self.converter_inside_orig.get_orig(),
             os.path.join(
-                os.getenv('GTHOME'),
-                'tools/CorpusTools/corpustools/test/converter_data/\
+                here,
+                'converter_data/\
 fakecorpus/orig/nob/samediggi-article-16.html'))
 
         self.assertEqual(
             self.converter_outside_orig.get_orig(),
             os.path.join(
-                os.getenv('GTHOME'),
-                'tools/CorpusTools/corpustools/test/converter_data/\
+                here,
+                'converter_data/\
 samediggi-article-48.html'))
 
         self.assertEqual(
@@ -54,15 +54,15 @@ samediggi-article-48.html'))
         self.assertEqual(
             self.converter_inside_orig.get_xsl(),
             os.path.join(
-                os.getenv('GTHOME'),
-                'tools/CorpusTools/corpustools/test/converter_data/fakecorpus/\
+                here,
+                'converter_data/fakecorpus/\
 orig/nob/samediggi-article-16.html.xsl'))
 
         self.assertEqual(
             self.converter_outside_orig.get_xsl(),
             os.path.join(
-                os.getenv('GTHOME'),
-                'tools/CorpusTools/corpustools/test/converter_data/\
+                here,
+                'converter_data/\
 samediggi-article-48.html.xsl'))
 
         self.assertEqual(
@@ -76,15 +76,14 @@ samediggi-article-48.html.xsl'))
         self.assertEqual(
             self.converter_inside_orig.get_tmpdir(),
             os.path.join(
-                os.getenv('GTHOME'),
-                'tools/CorpusTools/corpustools/test/converter_data/\
-fakecorpus/tmp'))
+                here,
+                'converter_data/fakecorpus/tmp'))
 
         self.assertEqual(
             self.converter_outside_orig.get_tmpdir(),
             os.path.join(
-                os.getenv('GTHOME'),
-                'tools/CorpusTools/corpustools/test/tmp'))
+                here,
+                'tmp'))
 
         self.assertEqual(
             self.converter_inside_freecorpus.get_tmpdir(),
@@ -94,15 +93,13 @@ fakecorpus/tmp'))
         self.assertEqual(
             self.converter_inside_orig.get_corpusdir(),
             os.path.join(
-                os.getenv('GTHOME'),
-                'tools/CorpusTools/corpustools/test/converter_data/\
+                here,
+                'converter_data/\
 fakecorpus'))
 
         self.assertEqual(
             self.converter_outside_orig.get_corpusdir(),
-            os.path.join(
-                os.getenv('GTHOME'),
-                'tools/CorpusTools/corpustools/test'))
+            here)
 
         self.assertEqual(
             self.converter_inside_freecorpus.get_corpusdir(),
@@ -112,16 +109,16 @@ fakecorpus'))
         self.assertEqual(
             self.converter_inside_orig.get_converted_name(),
             os.path.join(
-                os.getenv('GTHOME'),
-                'tools/CorpusTools/corpustools/test/converter_data/\
+                here,
+                'converter_data/\
 fakecorpus/converted/nob/samediggi-article-16.html.xml'))
 
     def test_get_converted_name_outside_orig(self):
         self.assertEqual(
             self.converter_outside_orig.get_converted_name(),
             os.path.join(
-                os.getenv('GTHOME'),
-                'tools/CorpusTools/corpustools/test/converted/\
+                here,
+                'converted/\
 samediggi-article-48.html.xml'))
 
     def test_get_converted_inside_freecorpus(self):
@@ -2427,7 +2424,7 @@ html.xsl'))
         import_elt = got.find('/xsl:import', namespaces={'xsl':'http://www.w3.org/1999/XSL/Transform'})
         self.assertTrue(import_elt.attrib["href"].startswith("file:///"))
         self.assertTrue(import_elt.attrib["href"].endswith("common.xsl"))
-        self.assertGreater(len(open(import_elt.attrib["href"][7:], 'r').read()), 0)
+        self.assertGreater(len(open(import_elt.attrib["href"][7:].replace('%20', ' '), 'r').read()), 0)
         # ... and set it to the hardcoded path in test.xsl:
         import_elt.attrib["href"]="file:///home/boerre/langtech/trunk/tools/CorpusTools/corpustools/xslt/common.xsl"
 
