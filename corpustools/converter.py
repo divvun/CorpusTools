@@ -1148,19 +1148,11 @@ class HTMLContentConverter(object):
             center.tag = '{http://www.w3.org/1999/xhtml}div'
             center.set('class', 'c1')
 
-    def body_font(self):
-        '''Convert font elements that are direct ancestors of body to p
-        '''
-        for bf in self.soup.xpath(
-                './/html:body/html:font',
-                namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
-            bf.tag = '{http://www.w3.org/1999/xhtml}p'
-
     def body_i(self):
         '''Embed em elements that are direct ancestors of body inside a p
         element
         '''
-        for tag in ['a', 'i', 'em']:
+        for tag in ['a', 'i', 'em', 'font']:
             for bi in self.soup.xpath(
                     './/html:body/html:' + tag,
                     namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
@@ -1177,7 +1169,6 @@ class HTMLContentConverter(object):
         self.remove_elements()
         self.add_p_around_text()
         self.center2div()
-        self.body_font()
         self.body_i()
 
         return etree.tostring(self.soup)

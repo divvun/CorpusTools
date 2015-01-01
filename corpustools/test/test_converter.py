@@ -742,15 +742,6 @@ class TestHTMLContentConverter(XMLTester):
 
         self.assertEqual(got, etree.tostring(want))
 
-    def test_body_font(self):
-        got = converter.HTMLContentConverter(
-            'font.html',
-            '<html><body><font>b</font></body></html>', None).tidy()
-
-        want = html5parser.document_fromstring('<html><head/><body><p>b</p></body></html>')
-
-        self.assertEqual(got, etree.tostring(want))
-
     def test_body_i(self):
         got = converter.HTMLContentConverter(
             'i.html',
@@ -771,10 +762,19 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_em(self):
         got = converter.HTMLContentConverter(
-            'a.html',
+            'em.html',
             '<html><body><em>b</em></body></html>', None).tidy()
 
         want = html5parser.document_fromstring('<html><head/><body><p><em>b</em></p></body></html>')
+
+        self.assertEqual(got, etree.tostring(want))
+
+    def test_body_font(self):
+        got = converter.HTMLContentConverter(
+            'font.html',
+            '<html><body><font>b</font></body></html>', None).tidy()
+
+        want = html5parser.document_fromstring('<html><head/><body><p><font>b</font></p></body></html>')
 
         self.assertEqual(got, etree.tostring(want))
 
