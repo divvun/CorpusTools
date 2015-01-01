@@ -1160,7 +1160,7 @@ class HTMLContentConverter(object):
         '''Embed em elements that are direct ancestors of body inside a p
         element
         '''
-        for tag in ['a', 'i']:
+        for tag in ['a', 'i', 'em']:
             for bi in self.soup.xpath(
                     './/html:body/html:' + tag,
                     namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
