@@ -68,11 +68,9 @@ xsltproc xhtml2corpus.xsl - > file.xml
                 <span><xsl:apply-templates/></span>
             </xsl:when>
             <xsl:otherwise>
-                <section>
-                    <p type="title">
-                        <xsl:value-of select="."/>
-                    </p>
-                </section>
+                <p type="title">
+                    <xsl:value-of select="."/>
+                </p>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
