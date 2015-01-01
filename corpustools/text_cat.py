@@ -203,38 +203,6 @@ class Classifier(object):
                 self.wmodels[lang] = WordModel(lang).of_freq({})
 
 
-    def parse_file(self, fname, gram_column, freq_column):
-        freq = {}
-        with open(fname, 'r') as f:
-            for nl, strline in enumerate(f.readlines()):
-                line = strline.decode('utf-8').strip()
-                if line == "":
-                    continue
-                parts = line.strip().split()
-                if len(parts) != 2:
-                    raise ValueError("invalid language file %s line %d split to %s"
-                                     % (fname, nl, parts))
-                g = unicode(parts[gram_column])
-                f = int(parts[freq_column])
-                freq[g] = f
-        return freq
-
-    def parse_wfile(self, fname):
-        # The difference from cfile is just the order :-/
-        freq = {}
-        with open(fname, 'r') as f:
-            for nl, strline in enumerate(f.readlines()):
-                line = strline.decode('utf-8').strip()
-                if line == "":
-                    continue
-                parts = line.split()
-                if len(parts) != 2:
-                    raise ValueError("invalid language file %s line %d split to %s"
-                                     % (fname, nl, parts))
-                freq[parts[1]] = int(parts[0])
-        return freq
-
-
     def classify_full(self, intext):
         if len(self.cmodels) == 0:
             return [('guess', 0)]
