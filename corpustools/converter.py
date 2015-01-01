@@ -1152,6 +1152,18 @@ class HTMLContentConverter(object):
                 namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
             bf.tag = '{http://www.w3.org/1999/xhtml}p'
 
+    def body_em(self):
+        '''Embed em elements that are direct ancestors of body inside a p
+        element
+        '''
+        for bem in self.soup.xpath(
+                './/html:body/html:em',
+                namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
+            p = etree.Element('{http://www.w3.org/1999/xhtml}p')
+            bem_parent = bem.getparent()
+            bem_parent.insert(bem_parent.index(bem), p)
+            p.append(bem)
+
     def tidy(self):
         """
         Clean up the html document
@@ -1161,6 +1173,7 @@ class HTMLContentConverter(object):
         self.add_p_around_text()
         self.center2div()
         self.body_font()
+        self.body_em()
 
         return etree.tostring(self.soup)
 
