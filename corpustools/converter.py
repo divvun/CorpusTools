@@ -1048,8 +1048,16 @@ class HTMLContentConverter(object):
                     'meta', 'authors', 'articleImageRig',  'btm_menu',
                     'expandable', 'toc', 'titlepage',
                     'container_full', 'moduletable_oikopolut',
-                    "latestnews_uutisarkisto", 'back_button'],
+                    "latestnews_uutisarkisto", 'back_button',
+                    'breadcrums span-12', #svenskakyrkan.se
+                    'tipsarad mt6 selfClear', #svenskakyrkan.se
+                    ],
                 'id': [
+                    'pageFooter', #svenskakyrkan.se
+                    'headerBar', #svenskakyrkan.se
+                    'leftmenu', #svenskakyrkan.se
+                    'rightside', #svenskakyrkan.se
+                    'readspeaker_button1', #svenskakyrkan.se
                     'searchBox',
                     'murupolku',
                     'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
@@ -1080,11 +1088,16 @@ class HTMLContentConverter(object):
                 },
             'span': {
                 'id': ['skiplinks'],
-                'class': ['K-NOTE-FOTNOTE']
+                'class': [
+                    'K-NOTE-FOTNOTE',
+                    'graytext', #svenskakyrkan.se
+                    ],
                 },
             'a': {
                 'id': ['leftPanelTab',],
-                'class': ['mainlevel'],
+                'class': [
+                    'mainlevel',
+                    ],
                 },
             'td': {
                 'id': ["paavalikko_linkit", "hakulomake", 'sg_oikea'],
