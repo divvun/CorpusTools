@@ -412,6 +412,10 @@ If it is a container it has one or more of the these tags:
     <xsl:apply-templates/>
 </xsl:template>
 
+<xsl:template match="html:ol/html:i">
+    <xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template match="html:div/html:font|html:td/html:font">
     <p>
         <xsl:apply-templates/>
