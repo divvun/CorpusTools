@@ -563,6 +563,29 @@ class TestHTMLContentConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(hcc.soup), want)
 
+    def test_add_p_around_text3(self):
+        '''h2 as a stop element
+        '''
+        hcc = converter.HTMLContentConverter(
+            'withoutp.html',
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
+            <html><head><meta http-equiv="Content-type" \
+            content="text/html; charset=utf-8">\
+            <title>– Den utdøende stammes frykt</title>\
+            </head><body><h3>VI</h3>... Finnerne<a/><h2>Der</h2></body>\
+            </html>', None)
+        hcc.add_p_around_text()
+
+        want = '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD \
+        XHTML 1.0 Strict//EN"    \
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\
+        <html xmlns="http://www.w3.org/1999/xhtml"><head><title>\
+        – Den utdøende stammes frykt</title>  \
+        </head><body>  <h3>VI</h3>  <p>... Finnerne<a/></p><h2>Der</h2>\
+        </body></html>'
+
+        self.assertXmlEqual(etree.tostring(hcc.soup), want)
+
     def test_set_charset_1(self):
         '''Check that default charset is set, 1
         encoding_from_xsl = None, no charset in html header
