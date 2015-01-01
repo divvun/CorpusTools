@@ -43,10 +43,10 @@ class NGramModel(object):
                 line = strline.decode('utf-8').strip()
                 if line == "":
                     continue
-                parts = line.strip().split()
+                parts = line.split()
                 if len(parts) != 2:
-                    raise ValueError("invalid language file %s line %d split to %s"
-                                     % (fname, nl, parts))
+                    raise ValueError("%s:%d invalid line, was split to %s"
+                                     % (fname, nl+1, parts))
                 g = unicode(parts[gram_column])
                 f = int(parts[freq_column])
                 freq[g] = f
@@ -107,7 +107,7 @@ class CharModel(NGramModel):
     def freq_of_text(self, text, freq):
         words = ( w for w
                   in re.split(self.SPLITCHARS, text)
-                  if w != '' )
+                  if w.strip() != '' )
         for word in words:
             _word_ = '_'+word+'_'
             size = len(_word_)
@@ -137,7 +137,7 @@ class WordModel(NGramModel):
     def freq_of_text(self, text, freq):
         words = ( w for w
                   in re.split(self.SPLITCHARS, text)
-                  if w != '' )
+                  if w.strip() != '' )
         for word in words:
             freq[word] = freq.get(word, 0) + 1
         return freq
