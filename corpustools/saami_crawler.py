@@ -167,7 +167,7 @@ class SamediggiFiCrawler(object):
                 if not href.startswith('http'):
                     href = os.path.join('http://www.samediggi.fi', href)
 
-                if href not in self.visited_links and not re.search('klemetti.blogspot|/nuorat|/#|com_events|com_search|haettavana|do_pdf|pop=1|com_docman|/images|com_weblink', href) and href.startswith('http://www.samediggi.fi'):
+                if href not in self.visited_links and not re.search('klemetti.blogspot|/nuorat|/#|com_events|com_search|haettavana|do_pdf|pop=1|com_docman|/images|com_weblink|task=vcard', href) and href.startswith('http://www.samediggi.fi'):
                     self.unvisited_links.add(href)
 
     def save_pages(self, pages):
