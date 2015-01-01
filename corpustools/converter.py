@@ -964,6 +964,7 @@ class HTMLContentConverter(object):
 
         # remove cruft from svenskakyrkan.se documents
         content = content.replace('//<script', '<script')
+        content = content.replace('&nbsp;', ' ')
 
         cleaner = clean.Cleaner(
             page_structure=False,
