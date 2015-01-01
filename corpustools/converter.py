@@ -1129,7 +1129,11 @@ class HTMLContentConverter(object):
                 h.tail = None
                 n = h.getnext()
                 while n is not None:
-                    if (n.tag == '{http://www.w3.org/1999/xhtml}p' or n.tag == '{http://www.w3.org/1999/xhtml}h3' or n.tag == '{http://www.w3.org/1999/xhtml}div'):
+                    if (n.tag == '{http://www.w3.org/1999/xhtml}p' or
+                        n.tag == '{http://www.w3.org/1999/xhtml}h3' or
+                        n.tag == '{http://www.w3.org/1999/xhtml}h2' or
+                        n.tag == '{http://www.w3.org/1999/xhtml}div' or
+                        n.tag == '{http://www.w3.org/1999/xhtml}table'):
                         break
                     p.append(n)
                     n = n.getnext()
