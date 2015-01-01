@@ -1122,21 +1122,20 @@ class HTMLContentConverter(object):
     def add_p_around_text(self):
         '''Add p around text after an hX element
         '''
-        for h_tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
-            for h in self.soup.xpath('.//html:' + h_tag, namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
-                if h.tail is not None and h.tail.strip() != '':
-                    p = etree.Element('{http://www.w3.org/1999/xhtml}p')
-                    p.text = h.tail
-                    h.tail = None
-                    n = h.getnext()
-                    while n is not None:
-                        if (n.tag == '{http://www.w3.org/1999/xhtml}p' or n.tag == '{http://www.w3.org/1999/xhtml}h3' or n.tag == '{http://www.w3.org/1999/xhtml}div'):
-                            break
-                        p.append(n)
-                        n = n.getnext()
+        for h in self.soup.xpath('.//html:body/*', namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
+            if h.tail is not None and h.tail.strip() != '':
+                p = etree.Element('{http://www.w3.org/1999/xhtml}p')
+                p.text = h.tail
+                h.tail = None
+                n = h.getnext()
+                while n is not None:
+                    if (n.tag == '{http://www.w3.org/1999/xhtml}p' or n.tag == '{http://www.w3.org/1999/xhtml}h3' or n.tag == '{http://www.w3.org/1999/xhtml}div'):
+                        break
+                    p.append(n)
+                    n = n.getnext()
 
-                    h_parent = h.getparent()
-                    h_parent.insert(h_parent.index(h) + 1, p)
+                h_parent = h.getparent()
+                h_parent.insert(h_parent.index(h) + 1, p)
 
     def center2div(self):
         '''Convert center to div in tidy style
