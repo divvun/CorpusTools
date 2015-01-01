@@ -1152,6 +1152,10 @@ class HTMLContentConverter(object):
         intermediate = ''
 
         html = self.tidy()
+
+        with open(self.orig + '.huff.xml', 'wb') as huff:
+            util.print_element(etree.fromstring(html), 0, 2, huff)
+
         try:
             doc = etree.fromstring(html)
             intermediate = transform(doc)
