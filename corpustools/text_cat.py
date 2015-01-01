@@ -9,7 +9,7 @@ import re
 from util import basename_noext
 from util import sort_by_value
 
-    
+
 class NGramModel(object):
     SPLITCHARS = re.compile(r"[][}{)( \n\t:!.?_,¶§%–\"`'·•@~\\/”«»0-9_-]")
     NB_NGRAMS = 400
@@ -35,7 +35,7 @@ class NGramModel(object):
 
     def of_model_file(self, fname):
         raise NotImplementedError("You have to subclass and override of_model_file")
-                    
+
     def freq_of_model_file(self, fname, gram_column, freq_column):
         freq = {}
         with open(fname, 'r') as f:
@@ -52,9 +52,19 @@ class NGramModel(object):
                 freq[g] = f
         return freq
 
+    def tokenise(self, text):
+        """Since use split() when loading the model file, we also use split()
+        on the input text; this includes whitespace (like byte order
+        marks) that might not all be in SPLITCHARS
+
+        """
+        tokens = ( re.split(self.SPLITCHARS, t)
+                   for t in text.split() )
+        return sum(tokens, [])  # flatten
+
     def freq_of_text(self, text, freq):
         raise NotImplementedError("You have to subclass and override freq_of_text")
-        
+
     def to_model_file(self, fname):
         raise NotImplementedError("You have to subclass and override to_model_file")
 
@@ -95,7 +105,7 @@ class CharModel(NGramModel):
     def of_model_file(self, fname):
         self.finish(self.freq_of_model_file(fname, gram_column=0, freq_column=1))
         return self
-        
+
     def to_model_file(self, fname):
         lines = "".join([ "%s\t%d\n" % (g, f)
                           for g, f
@@ -103,11 +113,9 @@ class CharModel(NGramModel):
                           if g != '' ])
         with open(fname, 'w') as f:
             f.write(lines.encode('utf-8'))
-        
+
     def freq_of_text(self, text, freq):
-        words = ( w for w
-                  in re.split(self.SPLITCHARS, text)
-                  if w.strip() != '' )
+        words = self.tokenise(text)
         for word in words:
             _word_ = '_'+word+'_'
             size = len(_word_)
@@ -125,7 +133,7 @@ class WordModel(NGramModel):
     def of_model_file(self, fname):
         self.finish(self.freq_of_model_file(fname, gram_column=1, freq_column=0))
         return self
-        
+
     def to_model_file(self, fname):
         lines = "".join([ "%d\t%s\n" % (f, g)
                           for g, f
@@ -133,11 +141,9 @@ class WordModel(NGramModel):
                           if g != '' ])
         with open(fname, 'w') as f:
             f.write(lines.encode('utf-8'))
-            
+
     def freq_of_text(self, text, freq):
-        words = ( w for w
-                  in re.split(self.SPLITCHARS, text)
-                  if w.strip() != '' )
+        words = self.tokenise(text)
         for word in words:
             freq[word] = freq.get(word, 0) + 1
         return freq
@@ -149,7 +155,7 @@ class WordModel(NGramModel):
             gram:( n_words - rank )
             for gram,rank in self.ngrams.iteritems()
         }
-        
+
     def compare_tc(self, unknown_text, normaliser):
         # Implements line 442 of text_cat.pl, where
         # normaliser is results[language] from CharModel
@@ -160,7 +166,7 @@ class WordModel(NGramModel):
             return (
                 sum(
                     self.invrank[word]**2 * unknown_freq[word] * 100 / normaliser
-                    
+
                     for word in unknown_freq.keys()
                     if word in self.ngrams
                 )
@@ -266,6 +272,3 @@ if __name__ == "__main__":
     # TODO: real argparser, check if outdir exists first so we don't process a bunch and then die :>
     Trainer(sys.argv[1], Model=CharModel, verbose=True).save(sys.argv[2], ext='.lm', verbose=True)
     Trainer(sys.argv[1], Model=WordModel, verbose=True).save(sys.argv[2], ext='.wm', verbose=True)
-
-# ng_new = Classifier(os.path.join(os.getenv('GTHOME'), '/tmp/lms-full/'), langs=["sme", "smj"], verbose=True)
-# print ng_new.classify("Várrelahttu")
