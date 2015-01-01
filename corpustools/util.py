@@ -1,5 +1,14 @@
 import os
+import operator
 
+
+def basename_noext(fname, ext):
+    return os.path.basename(fname)[:-len(ext)]
+
+def sort_by_value(table, **args):
+    return sorted(table.iteritems(),
+                  key=operator.itemgetter(1),
+                  **args)
 
 class SetupException(Exception):
     pass
