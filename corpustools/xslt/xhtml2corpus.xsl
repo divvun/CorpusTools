@@ -249,6 +249,13 @@ xsltproc xhtml2corpus.xsl - > file.xml
     </p>
 </xsl:template>
 
+<!--  Covers these test cases
+* td-a-div
+-->
+<xsl:template match="html:td/html:a/html:div">
+    <xsl:value-of select="text()"/>
+</xsl:template>
+
 <xsl:template match="html:div/html:u|html:td/html:u|html:div/html:strong|html:td/html:strong">
     <p>
         <em type="bold">
