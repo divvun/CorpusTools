@@ -1055,6 +1055,7 @@ class HTMLContentConverter(object):
                     "latestnews_uutisarkisto", 'back_button',
                     'breadcrums span-12', #svenskakyrkan.se
                     'tipsarad mt6 selfClear', #svenskakyrkan.se
+                    'imagecontainer', #regjeringen.no
                     ],
                 'id': [
                     'pageFooter', #svenskakyrkan.se
@@ -1063,7 +1064,8 @@ class HTMLContentConverter(object):
                     'rightside', #svenskakyrkan.se
                     'readspeaker_button1', #svenskakyrkan.se
                     'searchBox',
-                    'murupolku',
+                    'murupolku', #www.samediggi.fi
+                    'main_navi_main', #www.samediggi.fi
                     'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
                     'ctl00_FullRegion_CenterAndRightRegion_HitsControl_searchHitSummary',
                     'AreaTopSiteNav', 'SamiDisclaimer', 'AreaTopRight',
