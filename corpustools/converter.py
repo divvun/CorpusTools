@@ -962,6 +962,9 @@ class HTMLContentConverter(object):
         '''
         self.orig = filename
 
+        # remove cruft from svenskakyrkan.se documents
+        content = content.replace('//<script', '<script')
+
         cleaner = clean.Cleaner(
             page_structure=False,
             scripts=True,
