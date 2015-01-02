@@ -29,30 +29,29 @@ class NGramModel(object):
         self.finish(freq)
         return self
 
-    def of_text_file(self, f):
-        self.finish(self.freq_of_text_file(f))
+    def of_text_file(self, fil):
+        self.finish(self.freq_of_text_file(fil))
         return self
 
-    def of_model_file(self, fname):
+    def of_model_file(self, fil, fname):
         raise NotImplementedError("You have to subclass and override of_model_file")
 
-    def freq_of_model_file(self, fname, gram_column, freq_column):
+    def freq_of_model_file(self, fil, fname, gram_column, freq_column):
         freq = {}
-        with open(fname, 'r') as f:
-            for nl, strline in enumerate(f.readlines()):
-                line = strline.decode('utf-8').strip()
-                if line == "":
-                    continue
-                parts = line.split()
-                if len(parts) != 2:
-                    raise ValueError("%s:%d invalid line, was split to %s"
-                                     % (fname, nl+1, parts))
-                try:
-                    g = unicode(parts[gram_column])
-                    f = int(parts[freq_column])
-                    freq[g] = f
-                except ValueError, e:
-                    raise ValueError("%s:%d %s"%(fname,nl+1,e))
+        for nl, strline in enumerate(fil.readlines()):
+            line = strline.decode('utf-8').strip()
+            if line == "":
+                continue
+            parts = line.split()
+            if len(parts) != 2:
+                raise ValueError("%s:%d invalid line, was split to %s"
+                                 % (fname, nl+1, parts))
+            try:
+                g = unicode(parts[gram_column])
+                f = int(parts[freq_column])
+                freq[g] = f
+            except ValueError, e:
+                raise ValueError("%s:%d %s"%(fname,nl+1,e))
         return freq
 
     def tokenise(self, text):
@@ -68,12 +67,12 @@ class NGramModel(object):
     def freq_of_text(self, text, freq):
         raise NotImplementedError("You have to subclass and override freq_of_text")
 
-    def to_model_file(self, fname):
+    def to_model_file(self, fil, fname):
         raise NotImplementedError("You have to subclass and override to_model_file")
 
-    def freq_of_text_file(self, f):
+    def freq_of_text_file(self, fil):
         freq = {}
-        for strline in f.readlines():
+        for strline in fil.readlines():
             freq = self.freq_of_text(strline.decode('utf-8'),
                                      freq)
         return freq
@@ -105,17 +104,16 @@ class NGramModel(object):
         return d_missing + d_found
 
 class CharModel(NGramModel):
-    def of_model_file(self, fname):
-        self.finish(self.freq_of_model_file(fname, gram_column=0, freq_column=1))
+    def of_model_file(self, fil, fname):
+        self.finish(self.freq_of_model_file(fil, fname, gram_column=0, freq_column=1))
         return self
 
-    def to_model_file(self, fname):
+    def to_model_file(self, fil):
         lines = "".join([ "%s\t%d\n" % (g, f)
                           for g, f
                           in sort_by_value(self.freq, reverse=True)
                           if g != '' ])
-        with open(fname, 'w') as f:
-            f.write(lines.encode('utf-8'))
+        fil.write(lines.encode('utf-8'))
 
     def freq_of_text(self, text, freq):
         words = self.tokenise(text)
@@ -133,17 +131,16 @@ class CharModel(NGramModel):
 
 class WordModel(NGramModel):
     NB_NGRAMS = 30000
-    def of_model_file(self, fname):
-        self.finish(self.freq_of_model_file(fname, gram_column=1, freq_column=0))
+    def of_model_file(self, fil, fname):
+        self.finish(self.freq_of_model_file(fil, fname, gram_column=1, freq_column=0))
         return self
 
-    def to_model_file(self, fname):
+    def to_model_file(self, fil):
         lines = "".join([ "%d\t%s\n" % (f, g)
                           for g, f
                           in sort_by_value(self.freq, reverse=True)
                           if g != '' ])
-        with open(fname, 'w') as f:
-            f.write(lines.encode('utf-8'))
+        fil.write(lines.encode('utf-8'))
 
     def freq_of_text(self, text, freq):
         words = self.tokenise(text)
@@ -207,13 +204,14 @@ class Classifier(object):
 
         for fname in fnames:
             lang = basename_noext(fname, ext)
-            self.cmodels[lang] = CharModel(lang).of_model_file(fname)
+            self.cmodels[lang] = CharModel(lang).of_model_file(open(fname, 'r'), fname)
             if verbose:
                 print "Loaded %s" % (fname,)
 
             fname_wm = os.path.join(folder, lang+'.wm')
+            fname_wmgz = os.path.join(folder, lang+'.wm.gz')
             if os.path.exists(fname_wm):
-                self.wmodels[lang] = WordModel(lang).of_model_file(fname_wm)
+                self.wmodels[lang] = WordModel(lang).of_model_file(open(fname_wm, 'r'), fname_wm)
                 if verbose:
                     print "Loaded %s" % (fname_wm,)
             else:
@@ -273,7 +271,7 @@ class Trainer(object):
     def save(self, folder, ext='.lm', verbose=False):
         for lang, model in self.models.iteritems():
             fname = os.path.join(folder, lang+ext)
-            model.to_model_file(fname)
+            model.to_model_file(open(fname, 'w'))
         if verbose and len(self.models) != 0:
             print ("Wrote {%s}%s" % (",".join(self.models.keys()),ext)).encode('utf-8')
 
