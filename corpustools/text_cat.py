@@ -6,6 +6,8 @@ import os
 import glob
 import sys
 import re
+import argparse
+import argparse_version
 from util import basename_noext
 from util import sort_by_value
 
@@ -251,7 +253,7 @@ class Classifier(object):
         return self.classify_full(text)[0][0]
 
 
-class Trainer(object):
+class FolderTrainer(object):
     def __init__(self, folder, ext='.txt', Model=CharModel, verbose=False):
         self.models = {}
         folder_glob = os.path.join(folder, '*'+ext)
@@ -276,8 +278,68 @@ class Trainer(object):
             print ("Wrote {%s}%s" % (",".join(self.models.keys()),ext)).encode('utf-8')
 
 
+class FileTrainer(object):
+    def __init__(self, fil, Model=CharModel, verbose=False):
+        self.model = Model().of_text_file(fil)
+
+    def save(self, fil, verbose=False):
+        self.model.to_model_file(fil)
+
+
+def proc(args):
+    c = Classifier(args.model_dir)
+    if args.s:
+        for line in sys.stdin:
+            print c.classify(line.decode('utf-8'))
+    else:
+        print c.classify(sys.stdin.read().decode('utf-8'))
+
+def file_comp(args):
+    if args.mtype=='lm':
+        FileTrainer(sys.stdin, Model=CharModel, verbose=True).save(sys.stdout, verbose=True)
+    elif args.mtype=='wm':
+        FileTrainer(sys.stdin, Model=WordModel, verbose=True).save(sys.stdout, verbose=True)
+    else:
+        raise ArgumentError("this shouldn't happen; mtype should be lm or wm")
+
+def folder_comp(args):
+    FolderTrainer(args.corp_dir, Model=CharModel, verbose=True).save(args.model_dir, ext='.lm', verbose=True)
+    FolderTrainer(args.corp_dir, Model=WordModel, verbose=True).save(args.model_dir, ext='.wm', verbose=True)
+
+def parse_options():
+    parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
+        description='Create or use n-gram models for language classification.')
+
+    subparsers = parser.add_subparsers(help="(try e.g. 'proc -h' for help with that subcommand)")
+
+    proc_parser = subparsers.add_parser('proc', help='Language classification')
+    proc_parser.add_argument('model_dir', help='Language model directory')
+    proc_parser.add_argument('-u', help="Drop ratio (defaults to 1.1) -- when "
+                             "the character model of a language is this much "
+                             "worse than the best guess, we don't include it "
+                             "in the word model comparison.")
+    proc_parser.add_argument('-s', help="Classify on a line-by-line basis "
+                             "(rather than the whole input as one text).",
+                             action="store_true")
+    proc_parser.set_defaults(func=proc)
+
+    complm_parser = subparsers.add_parser('complm', help='Compile character model from stdin to stdout.')
+    complm_parser.set_defaults(func=file_comp)
+    complm_parser.set_defaults(mtype='lm')
+
+    compwm_parser = subparsers.add_parser('compwm', help='Compile word model from stdin to stdout.')
+    compwm_parser.set_defaults(func=file_comp)
+    compwm_parser.set_defaults(mtype='wm')
+
+    compdir_parser = subparsers.add_parser('compdir', help='Compile language from directory.')
+    compdir_parser.add_argument('corp_dir', help='Directory to read corpora (*.txt) from.')
+    compdir_parser.add_argument('model_dir', help='Directory to write LM and WM files in.')
+    compdir_parser.set_defaults(func=folder_comp)
+
+    return parser.parse_args()
+
 
 if __name__ == "__main__":
-    # TODO: real argparser, check if outdir exists first so we don't process a bunch and then die :>
-    Trainer(sys.argv[1], Model=CharModel, verbose=True).save(sys.argv[2], ext='.lm', verbose=True)
-    Trainer(sys.argv[1], Model=WordModel, verbose=True).save(sys.argv[2], ext='.wm', verbose=True)
+    args = parse_options()
+    args.func(args)
