@@ -11,7 +11,7 @@ from util import sort_by_value
 
 
 class NGramModel(object):
-    SPLITCHARS = re.compile(r"[][}{)( \n\t:!.?_,¶§%–\"`'·•@~\\/”«»0-9_-]")
+    SPLITCHARS = re.compile(r"[][}{)(>< \n\t:;!.?_,¶§%&£€$¹°½¼¾©←→▪➢√|#–‒…·•@~\\/”“«»\"`'0-9_=*+‑-]")
     NB_NGRAMS = 400
     MISSING_VALUE = 400
 
