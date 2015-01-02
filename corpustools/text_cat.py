@@ -47,9 +47,12 @@ class NGramModel(object):
                 if len(parts) != 2:
                     raise ValueError("%s:%d invalid line, was split to %s"
                                      % (fname, nl+1, parts))
-                g = unicode(parts[gram_column])
-                f = int(parts[freq_column])
-                freq[g] = f
+                try:
+                    g = unicode(parts[gram_column])
+                    f = int(parts[freq_column])
+                    freq[g] = f
+                except ValueError, e:
+                    raise ValueError("%s:%d %s"%(fname,nl+1,e))
         return freq
 
     def tokenise(self, text):
