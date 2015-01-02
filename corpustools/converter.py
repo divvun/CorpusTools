@@ -42,7 +42,7 @@ from pyth.plugins.xhtml.writer import XHTMLWriter
 from pydocx.parsers import Docx2Html
 
 import decode
-import ngram
+import text_cat
 import errormarkup
 import ccat
 import analyser
@@ -1964,7 +1964,7 @@ class LanguageDetector(object):
             else:
                 raise ConversionException('mainlang not set')
 
-        self.languageGuesser = ngram.NGram(
+        self.languageGuesser = text_cat.Classifier(
             os.path.join(os.getenv('GTHOME'), 'tools/lang-guesser/LM/'),
             langs=inlangs)
 
@@ -1985,8 +1985,7 @@ class LanguageDetector(object):
 
         if paragraph.get('{http://www.w3.org/XML/1998/namespace}lang') is None:
             paragraph_text = self.remove_quote(paragraph)
-            lang = self.languageGuesser.classify(
-                paragraph_text.encode("ascii", "ignore"))
+            lang = self.languageGuesser.classify(paragraph_text)
             if lang != self.get_mainlang():
                 paragraph.set('{http://www.w3.org/XML/1998/namespace}lang',
                               lang)
@@ -1994,8 +1993,7 @@ class LanguageDetector(object):
             for element in paragraph.iter("span"):
                 if element.get("type") == "quote":
                     if element.text is not None:
-                        lang = self.languageGuesser.classify(
-                            element.text.encode("ascii", "ignore"))
+                        lang = self.languageGuesser.classify(element.text)
                         if lang != self.get_mainlang():
                             element.set(
                                 '{http://www.w3.org/XML/1998/namespace}lang', lang)
