@@ -28,6 +28,7 @@ setup(
     install_requires=[
         "pyth",
         "unidecode",
+        "six",
         "html5lib",
         "lxml",
         "gitdb",
