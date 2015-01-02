@@ -153,15 +153,23 @@ class WordModel(NGramModel):
 
     def finish(self, freq):
         super(WordModel, self).finish(freq)
+        # See text_cat.pl line 642ff; we invert and normalise the
+        # ranking to make it possible to use compare_tc where one wm
+        # is shorter than the other, e.g. if there is only a small
+        # corpus for one language, or if we manually deleted some
+        # words:
         n_words = len(self.ngrams)
+        normaliser = float(n_words) / float(self.NB_NGRAMS)
         self.invrank = {
-            gram:( n_words - rank )
+            gram:( ( n_words - rank ) / normaliser )
             for gram,rank in self.ngrams.iteritems()
         }
 
     def compare_tc(self, unknown_text, normaliser):
-        # Implements line 442 of text_cat.pl, where
-        # normaliser is results[language] from CharModel
+        """Implements line 442 of text_cat.pl, where `normaliser` is
+        results[language] from CharModel
+
+        """
         if normaliser <= 0:
             return normaliser
         else:
