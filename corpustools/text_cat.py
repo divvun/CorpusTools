@@ -132,7 +132,7 @@ class CharModel(NGramModel):
 
 
 class WordModel(NGramModel):
-    NB_NGRAMS = 10000
+    NB_NGRAMS = 30000
     def of_model_file(self, fname):
         self.finish(self.freq_of_model_file(fname, gram_column=1, freq_column=0))
         return self
