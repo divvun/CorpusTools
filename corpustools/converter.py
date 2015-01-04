@@ -120,7 +120,8 @@ class Converter(object):
         else:
             raise ConversionException(
                 "Unknown file extension, not able to convert {} "
-                "\nHint: you may just have to rename the file".format(self.orig))
+                "\nHint: you may just have to rename the file".format(
+                    self.orig))
 
         document = intermediate.convert2intermediate()
 
@@ -195,7 +196,8 @@ class Converter(object):
                 logfile.write('\n')
 
             logfile.close()
-            raise ConversionException("Check the syntax in: {}".format(self.get_xsl()))
+            raise ConversionException("Check the syntax in: {}".format(
+                self.get_xsl()))
 
     def convert_errormarkup(self, complete):
         if 'correct.' in self.orig:
@@ -657,7 +659,8 @@ class PDFConverter(object):
         return self.strip_chars(self.text)
 
     def strip_chars(self, content, extra=u''):
-        remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]'.format(extra))
+        remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]'.format(
+            extra))
         content, count = remove_re.subn('', content)
 
         return content
@@ -787,7 +790,8 @@ class PDF2XMLConverter(object):
                 if len(self.parts) > 0:
                     if isinstance(self.parts[-1], etree._Element):
                         if self.parts[-1].tail is not None:
-                            self.parts[-1].tail += ' {}'.format(textelement.text)
+                            self.parts[-1].tail += ' {}'.format(
+                                textelement.text)
                         else:
                             self.parts[-1].tail = textelement.text
                     else:
@@ -984,17 +988,20 @@ class HTMLContentConverter(object):
             logfile = open('{}.log'.format(self.orig), 'w')
             print >>logfile, ccat.lineno(), str(e), self.orig
             logfile.close()
-            raise ConversionException('{}, ny encoding tull1'.format(self.orig))
+            raise ConversionException('{}, ny encoding tull1'.format(
+                self.orig))
         except TypeError as e:
             logfile = open('{}.log'.format(self.orig), 'w')
             print >>logfile, ccat.lineno(), str(e), self.orig
             logfile.close()
-            raise ConversionException('{}, ny encoding tull2'.format(self.orig))
+            raise ConversionException('{}, ny encoding tull2'.format(
+                self.orig))
         except ValueError as e:
             logfile = open('{}.log'.format(self.orig), 'w')
             print >>logfile, ccat.lineno(), str(e), self.orig
             logfile.close()
-            raise ConversionException('{}, ny encoding tull3'.format(self.orig))
+            raise ConversionException('{}, ny encoding tull3'.format(
+                self.orig))
 
         self.soup = html5parser.document_fromstring(superclean)
 
@@ -1266,7 +1273,8 @@ class RTFConverter(HTMLContentConverter):
             doc = Rtf15Reader.read(
                 io.BytesIO(content.replace('fcharset256', 'fcharset255')))
         except UnicodeDecodeError:
-            raise ConversionException('Unicode problems in {}'.format(self.orig))
+            raise ConversionException('Unicode problems in {}'.format(
+                self.orig))
 
         html = XHTMLWriter.write(doc, pretty=True).read()
         xml = etree.fromstring(html)
@@ -1903,7 +1911,8 @@ class XslMaker(object):
                 logfile.write('{}\n'.format(str(entry)))
 
             logfile.close()
-            raise ConversionException("Syntax error in {}".format(self.filename))
+            raise ConversionException("Syntax error in {}".format(
+                self.filename))
 
         common_xsl_path = resource_filename(
             __name__, 'xslt/common.xsl').replace(' ', '%20')
@@ -1928,7 +1937,8 @@ class XslMaker(object):
                 logfile.write('{}\n'.format(str(entry)))
 
             logfile.close()
-            raise ConversionException("Invalid XML in {}".format(self.filename))
+            raise ConversionException("Invalid XML in {}".format(
+                self.filename))
 
 
 class LanguageDetector(object):
@@ -2190,8 +2200,9 @@ def sanity_check():
     if not os.path.isfile(Converter.get_dtd_location()):
         raise util.SetupException(
             "Couldn't find {}\n"
-            "Check that GTHOME points at the right directory (currently: {}).".format(Converter.get_dtd_location(),
-               os.environ['GTHOME']))
+            "Check that GTHOME points at the right directory "
+            "(currently: {}).".format(Converter.get_dtd_location(),
+                                      os.environ['GTHOME']))
 
 
 def main():

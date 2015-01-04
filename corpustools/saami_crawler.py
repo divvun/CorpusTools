@@ -114,17 +114,20 @@ class SamediggiFiCrawler(object):
                         else:
                             if 'samediggi.fi' not in r.url:
                                 print >>sys.stderr, (
-                                    '\nNot fetching {} which was {}\n'.format(r.url, link))
+                                    '\nNot fetching {} which was {}\n'.format(
+                                        r.url, link))
 
                     if found_saami:
                         self.save_pages(pages)
                 except UserWarning:
                     print >>sys.stderr, '{} does not exist'.format(link)
 
-                print >>sys.stderr, ('After: unvisited_links {}\n'.format(self.unvisited_links))
+                print >>sys.stderr, ('After: unvisited_links {}\n'.format(
+                    self.unvisited_links))
 
             self.visited_links.add(link)
-            print >>sys.stderr, 'visited_links {}'.format(len(self.visited_links))
+            print >>sys.stderr, 'visited_links {}'.format(
+                len(self.visited_links))
 
     def invalid_content(self, content):
         '''Return true if the page does not contain the strings

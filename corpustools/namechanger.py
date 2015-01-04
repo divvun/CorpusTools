@@ -216,8 +216,10 @@ class CorpusNameFixer(NameChangerBase):
         """Change the name of an xsl file using the
         routines of a given repository tool
         """
-        fromname = os.path.join(self.old_dirname, '{}.xsl'.format(self.old_filename))
-        toname = os.path.join(self.old_dirname, '{}.xsl'.format(self.new_filename))
+        fromname = os.path.join(self.old_dirname,
+                                '{}.xsl'.format(self.old_filename))
+        toname = os.path.join(self.old_dirname,
+                              '{}.xsl'.format(self.new_filename))
 
         if os.path.exists(fromname):
             self.move_file(fromname, toname)
@@ -252,7 +254,8 @@ class CorpusNameFixer(NameChangerBase):
         Open the xsl files of these parallel files and change the name of this
         parallel from the old to the new one
         """
-        xslfile = os.path.join(self.old_dirname, '{}.xsl'.format(self.new_filename))
+        xslfile = os.path.join(self.old_dirname,
+                               '{}.xsl'.format(self.new_filename))
         if os.path.exists(xslfile):
             xsltree = self.open_xslfile(xslfile)
             xslroot = xsltree.getroot()
@@ -287,9 +290,11 @@ class CorpusNameFixer(NameChangerBase):
         for suggestion in ['/prestable/toktmx/sme2nob/',
                            '/prestable/toktmx/nob2sme/']:
             dirname = self.old_dirname.replace('/orig/', suggestion)
-            fromname = os.path.join(dirname, '{}.toktmx'.format(self.old_filename))
+            fromname = os.path.join(dirname, '{}.toktmx'.format(
+                self.old_filename))
             if os.path.exists(fromname):
-                toname = os.path.join(dirname, '{}.toktmx'.format(self.new_filename))
+                toname = os.path.join(dirname, '{}.toktmx'.format(
+                    self.new_filename))
                 self.move_file(fromname, toname)
 
     def move_prestable_tmx(self):
@@ -298,9 +303,11 @@ class CorpusNameFixer(NameChangerBase):
         for suggestion in ['/prestable/tmx/sme2nob/',
                            '/prestable/tmx/nob2sme/']:
             dirname = self.old_dirname.replace('/orig/', suggestion)
-            fromname = os.path.join(dirname, '{}.tmx'.format(self.old_filename))
+            fromname = os.path.join(dirname, '{}.tmx'.format(
+                self.old_filename))
             if os.path.exists(fromname):
-                toname = os.path.join(dirname, '{}.tmx'.format(self.new_filename))
+                toname = os.path.join(dirname, '{}.tmx'.format(
+                    self.new_filename))
                 self.move_file(fromname, toname)
 
 

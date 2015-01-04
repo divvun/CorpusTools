@@ -242,7 +242,8 @@ class SentenceDivider:
         if (self.doc_lang == 'nob'):
             abbr_file = os.path.join(
                 os.environ['GTHOME'], 'st/nob/bin/abbr.txt')
-            preprocess_command = [preprocess_script, '--abbr={}'.format(abbr_file)]
+            preprocess_command = [preprocess_script, '--abbr={}'.format(
+                abbr_file)]
         else:
             abbr_file = os.path.join(os.environ['GTHOME'],
                                      'gt/sme/bin/abbr.txt')
@@ -434,7 +435,8 @@ class Parallelize:
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
-        out_filename = 'anchor-{}{}.txt'.format(self.get_lang1(), self.get_lang2())
+        out_filename = 'anchor-{}{}.txt'.format(
+            self.get_lang1(), self.get_lang2())
 
         if subp.returncode != 0:
             print >>sys.stderr, out_filename
@@ -804,8 +806,9 @@ class Tca2ToTmx(Tmx):
 
         orig_path_part = '/converted/{}/'.format(self.filelist[0].get_lang())
         # First compute the part that shall replace /orig/ in the path
-        replace_path_part = '/toktmx/{}2{}/'.format(self.filelist[0].get_lang(),
-                                                self.filelist[1].get_lang())
+        replace_path_part = '/toktmx/{}2{}/'.format(
+            self.filelist[0].get_lang(),
+            self.filelist[1].get_lang())
         # Then set the outdir
         out_dirname = self.filelist[0].get_dirname().replace(
             orig_path_part, replace_path_part)
