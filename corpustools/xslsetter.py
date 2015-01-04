@@ -30,18 +30,15 @@ class MetadataHandler(object):
     def set_variable(self, key, value):
         try:
             self.tree.getroot().find(
-                "{http://www.w3.org/1999/XSL/Transform}variable[@name='%s']" %
-                key).attrib['select'] = "'%s'" % value
+                "{http://www.w3.org/1999/XSL/Transform}variable[@name='{}']".format(key)).attrib['select'] = "'{}'".format(value)
         except AttributeError as e:
-            print >>sys.stderr, ('Tried to update %s with value %s\n'
-                                 'Error was %s' %
-                                 (key, value, str(e)))
+            print >>sys.stderr, ('Tried to update {} with value {}\n'
+                                 'Error was {}'.format(key, value, str(e)))
             raise UserWarning
 
     def get_variable(self, key):
         return self.tree.getroot().find(
-            "{http://www.w3.org/1999/XSL/Transform}variable[@name='%s']" %
-            key).attrib['select'].replace("'", "")
+            "{http://www.w3.org/1999/XSL/Transform}variable[@name='{}']".format(key)).attrib['select'].replace("'", "")
 
     def write_file(self):
         try:

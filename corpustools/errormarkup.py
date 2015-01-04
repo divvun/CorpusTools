@@ -191,8 +191,8 @@ class ErrorMarkup:
         try:
             inner_element = elements[-1]
         except IndexError:
-            print '\n%s' % self._filename
-            print "Cannot handle:\n%s %s" % (errorstring, correctionstring)
+            print '\n{}'.format(self._filename)
+            print "Cannot handle:\n{} {}".format(errorstring, correctionstring)
             print "This is either an error in the markup or an error in the \
             errormarkup conversion code"
             print "If the markup is correct, send a report about this error \
@@ -228,10 +228,10 @@ class ErrorMarkup:
                     try:
                         error_element.insert(0, inner_element)
                     except TypeError as e:
-                        print '\n%s' % self._filename
+                        print '\n{}'.format(self._filename)
                         print str(e)
                         print u"The program expected an error element, but \
-                        found a string:\n«%s»" % inner_element
+                        found a string:\n«{}»".format(inner_element)
                         print u"There is either an error in errormarkup close \
                         to this sentence"
                         print u"or the program cannot evaluate a correct \
@@ -314,13 +314,13 @@ class ErrorMarkup:
                 (att_list, correction) = correction.split('|')
             except ValueError as e:
                 print >>sys.stderr, (
-                    u"\n%s\n"
-                    u"%s\n"
-                    u"Too many | characters inside the correction. «%s»"
+                    u"\n{}\n"
+                    u"{}\n"
+                    u"Too many | characters inside the correction. «{}»"
                     u"Have you remembered to encase the error inside "
                     u"parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?"
                     u"If the errormarkup is correct, send a report about "
-                    u"this error to borre.gaup@uit.no" % (
+                    u"this error to borre.gaup@uit.no".format(
                         self._filename, str(e), correction))
 
         return (correction, ext_att, att_list)

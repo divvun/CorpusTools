@@ -52,10 +52,10 @@ class Analyser(object):
         error = False
 
         if filename is None:
-            print >>sys.stderr, '%s is not defined', filename
+            print >>sys.stderr, '{} is not defined'.format(filename)
             error = True
         elif not os.path.exists(filename):
-            print >>sys.stderr, '%s does not exist', filename
+            print >>sys.stderr, '{} does not exist'.format(filename)
             error = True
 
         if error:
@@ -108,8 +108,8 @@ class Analyser(object):
             self.xml_files.append(
                 unicode(xml_file, sys.getfilesystemencoding()))
         except UnicodeDecodeError:
-                print >>sys.stderr, 'Could not handle the file name %s' % (
-                    xml_file)
+                print >>sys.stderr, (
+                    'Could not handle the file name {}'.format(xml_file))
 
     def makedirs(self):
         u"""Make the analysed directory
@@ -127,8 +127,7 @@ class Analyser(object):
         """
         lang = u'{http://www.w3.org/XML/1998/namespace}lang'
         if self.etree.getroot().attrib[lang] is not None:
-            return self.etree.getroot().\
-                attrib[lang]
+            return self.etree.getroot().attrib[lang]
         else:
             return u'none'
 
@@ -196,7 +195,7 @@ class Analyser(object):
         pre_process_command = [u'preprocess']
 
         if self.abbr_file is not None:
-            pre_process_command.append(u'--abbr=%s' % self.abbr_file)
+            pre_process_command.append(u'--abbr={}'.format(self.abbr_file))
 
         text = self.ccat()
         if text is not None:

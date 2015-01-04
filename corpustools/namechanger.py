@@ -191,8 +191,8 @@ class CorpusNameFixer(NameChangerBase):
                 self.move_prestable_tmx()
             else:
                 print >>sys.stderr, (
-                    '\nError renaming %s'
-                    '\n%s exists\n' % (
+                    '\nError renaming {}'
+                    '\n{} exists\n'.format(
                         os.path.join(self.old_dirname, self.old_filename),
                         fullname))
 
@@ -216,8 +216,8 @@ class CorpusNameFixer(NameChangerBase):
         """Change the name of an xsl file using the
         routines of a given repository tool
         """
-        fromname = os.path.join(self.old_dirname, '%s.xsl' % self.old_filename)
-        toname = os.path.join(self.old_dirname, '%s.xsl' % self.new_filename)
+        fromname = os.path.join(self.old_dirname, '{}.xsl'.format(self.old_filename))
+        toname = os.path.join(self.old_dirname, '{}.xsl'.format(self.new_filename))
 
         if os.path.exists(fromname):
             self.move_file(fromname, toname)
@@ -227,7 +227,7 @@ class CorpusNameFixer(NameChangerBase):
         try:
             tree = etree.parse(xslfile)
         except Exception, inst:
-            print "Unexpected error opening %s: %s" % (xslfile, inst)
+            print "Unexpected error opening {}: {}".format(xslfile, inst)
             sys.exit(254)
 
         return tree
@@ -236,13 +236,13 @@ class CorpusNameFixer(NameChangerBase):
         """
         """
         paradir = self.old_dirname.replace(mainlang, paralang)
-        parafile = os.path.join(paradir, '%s.xsl' % paraname)
+        parafile = os.path.join(paradir, '{}.xsl'.format(paraname))
         if os.path.exists(parafile):
             paratree = self.open_xslfile(parafile)
             pararoot = paratree.getroot()
 
-            pararoot.find(".//*[@name='para_%s']" % mainlang).set(
-                'select', "'%s'" % self.new_filename)
+            pararoot.find(".//*[@name='para_{}']".format(mainlang)).set(
+                'select', "'{}'".format(self.new_filename))
 
             paratree.write(parafile, encoding='utf8', xml_declaration=True)
 
@@ -252,7 +252,7 @@ class CorpusNameFixer(NameChangerBase):
         Open the xsl files of these parallel files and change the name of this
         parallel from the old to the new one
         """
-        xslfile = os.path.join(self.old_dirname, '%s.xsl' % self.new_filename)
+        xslfile = os.path.join(self.old_dirname, '{}.xsl'.format(self.new_filename))
         if os.path.exists(xslfile):
             xsltree = self.open_xslfile(xslfile)
             xslroot = xsltree.getroot()
@@ -275,8 +275,8 @@ class CorpusNameFixer(NameChangerBase):
         """Move the file in prestable/converted from the old to the new name
         """
         dirname = self.old_dirname.replace('/orig/', '/prestable/converted/')
-        fromname = os.path.join(dirname, '%s.xml' % self.old_filename)
-        toname = os.path.join(dirname, '%s.xml' % self.new_filename)
+        fromname = os.path.join(dirname, '{}.xml'.format(self.old_filename))
+        toname = os.path.join(dirname, '{}.xml'.format(self.new_filename))
 
         if os.path.exists(fromname):
             self.move_file(fromname, toname)
@@ -287,9 +287,9 @@ class CorpusNameFixer(NameChangerBase):
         for suggestion in ['/prestable/toktmx/sme2nob/',
                            '/prestable/toktmx/nob2sme/']:
             dirname = self.old_dirname.replace('/orig/', suggestion)
-            fromname = os.path.join(dirname, '%s.toktmx' % self.old_filename)
+            fromname = os.path.join(dirname, '{}.toktmx'.format(self.old_filename))
             if os.path.exists(fromname):
-                toname = os.path.join(dirname, '%s.toktmx' % self.new_filename)
+                toname = os.path.join(dirname, '{}.toktmx'.format(self.new_filename))
                 self.move_file(fromname, toname)
 
     def move_prestable_tmx(self):
@@ -298,9 +298,9 @@ class CorpusNameFixer(NameChangerBase):
         for suggestion in ['/prestable/tmx/sme2nob/',
                            '/prestable/tmx/nob2sme/']:
             dirname = self.old_dirname.replace('/orig/', suggestion)
-            fromname = os.path.join(dirname, '%s.tmx' % self.old_filename)
+            fromname = os.path.join(dirname, '{}.tmx'.format(self.old_filename))
             if os.path.exists(fromname):
-                toname = os.path.join(dirname, '%s.tmx' % self.new_filename)
+                toname = os.path.join(dirname, '{}.tmx'.format(self.new_filename))
                 self.move_file(fromname, toname)
 
 
@@ -350,8 +350,8 @@ def gather_files(origs):
             file_list.append(name_to_unicode(orig))
         else:
             print >>sys.stderr, (
-                'ERROR: %s is neither a directory, nor a file nor a '
-                'http-url\n' % (orig))
+                'ERROR: {} is neither a directory, nor a file nor a '
+                'http-url\n'.format(orig))
             raise UserWarning
 
     return file_list

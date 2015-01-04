@@ -52,7 +52,7 @@ class Typoline:
         """
         result = self.typo
         if self.correction and self.correction != self.typo:
-            result = '%s\t%s' % (result, self.correction)
+            result = '{}\t{}'.format(result, self.correction)
 
         return result
 

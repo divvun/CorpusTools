@@ -199,7 +199,7 @@ class XMLPrinter:
                         print >>sys.stderr, self.filename
 
                 if child.tail is not None and child.tail.strip() != '':
-                    text += ' %s' % child.tail.strip()
+                    text += u' {}'.format(child.tail.strip())
 
         text += self.get_error_attributes(dict(element.attrib))
 
@@ -215,18 +215,19 @@ class XMLPrinter:
 
         attr = []
         for key in sorted(attributes):
-            attr.append('%s=%s' % (key, attributes[key]))
+            attr.append(u'{}={}'.format(key,
+                                        unicode(attributes[key])))
 
         if len(attr) > 0:
             text += '\t#'
             text += ','.join(attr)
 
             if self.print_filename:
-                text += u', file: %s' % (
+                text += u', file: {}'.format(
                     os.path.basename(self.filename).decode('utf8'))
 
         elif self.print_filename:
-            text += u'\t#file: %s' % (
+            text += u'\t#file: {}'.format(
                 os.path.basename(self.filename).decode('utf8'))
 
         return text
@@ -559,7 +560,7 @@ def main():
                     for xml_file in files:
                         xml_printer.print_file(os.path.join(root, xml_file))
         else:
-            print >>sys.stderr, '%s does not exist' % target
+            print >>sys.stderr, '{} does not exist'.format(target)
 
 if __name__ == '__main__':
     main()
