@@ -7,9 +7,9 @@ import glob
 import sys
 import re
 import argparse
+
 import argparse_version
-from util import basename_noext
-from util import sort_by_value
+import util
 
 
 class NGramModel(object):
@@ -36,7 +36,8 @@ class NGramModel(object):
         return self
 
     def of_model_file(self, fil, fname):
-        raise NotImplementedError("You have to subclass and override of_model_file")
+        raise NotImplementedError(
+            "You have to subclass and override of_model_file")
 
     def freq_of_model_file(self, fil, fname, gram_column, freq_column):
         freq = {}
@@ -53,7 +54,7 @@ class NGramModel(object):
                 f = int(parts[freq_column])
                 freq[g] = f
             except ValueError, e:
-                raise ValueError("%s:%d %s"%(fname,nl+1,e))
+                raise ValueError("%s: %d %s" % (fname, nl+1, e))
         return freq
 
     def tokenise(self, text):
@@ -62,15 +63,17 @@ class NGramModel(object):
         marks) that might not all be in SPLITCHARS
 
         """
-        tokens = ( re.split(self.SPLITCHARS, t)
-                   for t in text.split() )
+        tokens = (re.split(self.SPLITCHARS, t)
+                  for t in text.split())
         return sum(tokens, [])  # flatten
 
     def freq_of_text(self, text, freq):
-        raise NotImplementedError("You have to subclass and override freq_of_text")
+        raise NotImplementedError(
+            "You have to subclass and override freq_of_text")
 
     def to_model_file(self, fil, fname):
-        raise NotImplementedError("You have to subclass and override to_model_file")
+        raise NotImplementedError(
+            "You have to subclass and override to_model_file")
 
     def freq_of_text_file(self, fil):
         freq = {}
@@ -81,16 +84,16 @@ class NGramModel(object):
 
     def finish(self, freq):
         self.ngrams = {
-            gram:rank
+            gram: rank
             for rank, (gram, freq)
             in enumerate(
-                sort_by_value(freq, reverse=True)[:self.NB_NGRAMS]
+                util.sort_by_value(freq, reverse=True)[:self.NB_NGRAMS]
             )
             if gram != ""
         }
         # Only store the top NB_NGRAMS with frequency:
         self.freq = {
-            gram:freq[gram]
+            gram: freq[gram]
             for gram in self.ngrams
         }
         self.ngramskeyset = set(self.ngrams.keys())
@@ -100,21 +103,23 @@ class NGramModel(object):
         d_missing = self.MISSING_VALUE * missing_count
         d_found = sum(
             abs(rank - self.ngrams[gram])
-            for gram,rank
+            for gram, rank
             in unknown.ngrams.iteritems() if gram in self.ngrams
         )
         return d_missing + d_found
 
+
 class CharModel(NGramModel):
     def of_model_file(self, fil, fname):
-        self.finish(self.freq_of_model_file(fil, fname, gram_column=0, freq_column=1))
+        self.finish(self.freq_of_model_file(
+            fil, fname, gram_column=0, freq_column=1))
         return self
 
     def to_model_file(self, fil):
-        lines = "".join([ "%s\t%d\n" % (g, f)
-                          for g, f
-                          in sort_by_value(self.freq, reverse=True)
-                          if g != '' ])
+        lines = "".join(["%s\t%d\n" % (g, f)
+                         for g, f
+                         in util.sort_by_value(self.freq, reverse=True)
+                         if g != ''])
         fil.write(lines.encode('utf-8'))
 
     def freq_of_text(self, text, freq):
@@ -133,15 +138,17 @@ class CharModel(NGramModel):
 
 class WordModel(NGramModel):
     NB_NGRAMS = 30000
+
     def of_model_file(self, fil, fname):
-        self.finish(self.freq_of_model_file(fil, fname, gram_column=1, freq_column=0))
+        self.finish(self.freq_of_model_file(
+            fil, fname, gram_column=1, freq_column=0))
         return self
 
     def to_model_file(self, fil):
-        lines = "".join([ "%d\t%s\n" % (f, g)
-                          for g, f
-                          in sort_by_value(self.freq, reverse=True)
-                          if g != '' ])
+        lines = "".join(["%d\t%s\n" % (f, g)
+                         for g, f
+                         in util.sort_by_value(self.freq, reverse=True)
+                         if g != ''])
         fil.write(lines.encode('utf-8'))
 
     def freq_of_text(self, text, freq):
@@ -160,8 +167,8 @@ class WordModel(NGramModel):
         n_words = len(self.ngrams)
         normaliser = float(n_words) / float(self.NB_NGRAMS)
         self.invrank = {
-            gram:( ( n_words - rank ) / normaliser )
-            for gram,rank in self.ngrams.iteritems()
+            gram: ((n_words - rank) / normaliser)
+            for gram, rank in self.ngrams.iteritems()
         }
 
     def compare_tc(self, unknown_text, normaliser):
@@ -181,6 +188,7 @@ class WordModel(NGramModel):
                     if word in self.ngrams
                 )
             )
+
 
 class Classifier(object):
     DROP_RATIO = 1.10
@@ -202,23 +210,25 @@ class Classifier(object):
             fnames = [os.path.join(folder, lang+ext) for lang in langs]
             not_found = set(fnames) - set(found_fnames)
             if len(not_found) != 0:
-                raise ValueError("Unknown language(s): " + ", ".join(not_found))
+                raise ValueError(
+                    "Unknown language(s): " + ", ".join(not_found))
 
         for fname in fnames:
-            lang = basename_noext(fname, ext)
-            self.cmodels[lang] = CharModel(lang).of_model_file(open(fname, 'r'), fname)
+            lang = util.basename_noext(fname, ext)
+            self.cmodels[lang] = CharModel(lang).of_model_file(
+                open(fname, 'r'), fname)
             if verbose:
                 print "Loaded %s" % (fname,)
 
             fname_wm = os.path.join(folder, lang+'.wm')
-            fname_wmgz = os.path.join(folder, lang+'.wm.gz')
+            # fname_wmgz = os.path.join(folder, lang+'.wm.gz')
             if os.path.exists(fname_wm):
-                self.wmodels[lang] = WordModel(lang).of_model_file(open(fname_wm, 'r'), fname_wm)
+                self.wmodels[lang] = WordModel(lang).of_model_file(
+                    open(fname_wm, 'r'), fname_wm)
                 if verbose:
                     print "Loaded %s" % (fname_wm,)
             else:
                 self.wmodels[lang] = WordModel(lang).of_freq({})
-
 
     def classify_full(self, intext):
         if len(self.cmodels) == 0:
@@ -230,24 +240,23 @@ class Classifier(object):
                 text = intext
             ingram = CharModel().of_text(text)
 
-            cscored = { l:model.compare(ingram)
-                        for l,model in self.cmodels.iteritems() }
-            cranked = sort_by_value(cscored)
+            cscored = {l: model.compare(ingram)
+                       for l, model in self.cmodels.iteritems()}
+            cranked = util.sort_by_value(cscored)
             cbest = cranked[0]
-            cfiltered = [ (l,d) for l,d in cranked
-                         if d <= cbest[1] * self.DROP_RATIO ]
+            cfiltered = [(l, d) for l, d in cranked
+                         if d <= cbest[1] * self.DROP_RATIO]
             if len(cfiltered) <= 1:
                 return cfiltered
             else:
                 # Along with compare_tc, implements text_cat.pl line
                 # 442 and on:
-                wscored = { l:model.compare_tc(text, cscored[l])
-                            for l,model in self.wmodels.iteritems() }
-                cwcombined = { l:( cscored[l] - wscore )
-                             for l,wscore in wscored.iteritems() }
-                cwranked = sort_by_value( cwcombined )
+                wscored = {l: model.compare_tc(text, cscored[l])
+                           for l, model in self.wmodels.iteritems()}
+                cwcombined = {l: (cscored[l] - wscore)
+                              for l, wscore in wscored.iteritems()}
+                cwranked = util.sort_by_value(cwcombined)
                 return cwranked
-
 
     def classify(self, text):
         return self.classify_full(text)[0][0]
@@ -265,17 +274,19 @@ class FolderTrainer(object):
                     msg += " (this may take a while)"
                 print msg.encode('utf-8')
                 sys.stdout.flush()
-            lang = basename_noext(fname, ext)
+            lang = util.basename_noext(fname, ext)
             self.models[lang] = Model(lang).of_text_file(open(fname, 'r'))
         if len(self.models) == 0:
-            raise Exception("No suitable files found matching %s!" % (folder_glob,))
+            raise Exception("No suitable files found matching {}!".format(
+                folder_glob))
 
     def save(self, folder, ext='.lm', verbose=False):
         for lang, model in self.models.iteritems():
             fname = os.path.join(folder, lang+ext)
             model.to_model_file(open(fname, 'w'))
         if verbose and len(self.models) != 0:
-            print ("Wrote {%s}%s" % (",".join(self.models.keys()),ext)).encode('utf-8')
+            print ("Wrote {%s}%s" %
+                   (",".join(self.models.keys()), ext)).encode('utf-8')
 
 
 class FileTrainer(object):
@@ -294,24 +305,33 @@ def proc(args):
     else:
         print c.classify(sys.stdin.read().decode('utf-8'))
 
+
 def file_comp(args):
-    if args.mtype=='lm':
-        FileTrainer(sys.stdin, Model=CharModel, verbose=True).save(sys.stdout, verbose=True)
-    elif args.mtype=='wm':
-        FileTrainer(sys.stdin, Model=WordModel, verbose=True).save(sys.stdout, verbose=True)
+    if args.mtype == 'lm':
+        FileTrainer(sys.stdin, Model=CharModel, verbose=True).save(
+            sys.stdout, verbose=True)
+    elif args.mtype == 'wm':
+        FileTrainer(sys.stdin, Model=WordModel, verbose=True).save(
+            sys.stdout, verbose=True)
     else:
-        raise ArgumentError("this shouldn't happen; mtype should be lm or wm")
+        raise util.ArgumentError(
+            "this shouldn't happen; mtype should be lm or wm")
+
 
 def folder_comp(args):
-    FolderTrainer(args.corp_dir, Model=CharModel, verbose=True).save(args.model_dir, ext='.lm', verbose=True)
-    FolderTrainer(args.corp_dir, Model=WordModel, verbose=True).save(args.model_dir, ext='.wm', verbose=True)
+    FolderTrainer(args.corp_dir, Model=CharModel, verbose=True).save(
+        args.model_dir, ext='.lm', verbose=True)
+    FolderTrainer(args.corp_dir, Model=WordModel, verbose=True).save(
+        args.model_dir, ext='.wm', verbose=True)
+
 
 def parse_options():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
         description='Create or use n-gram models for language classification.')
 
-    subparsers = parser.add_subparsers(help="(try e.g. 'proc -h' for help with that subcommand)")
+    subparsers = parser.add_subparsers(
+        help="(try e.g. 'proc -h' for help with that subcommand)")
 
     proc_parser = subparsers.add_parser('proc', help='Language classification')
     proc_parser.add_argument('model_dir', help='Language model directory')
@@ -324,17 +344,25 @@ def parse_options():
                              action="store_true")
     proc_parser.set_defaults(func=proc)
 
-    complm_parser = subparsers.add_parser('complm', help='Compile character model from stdin to stdout.')
+    complm_parser = subparsers.add_parser(
+        'complm',
+        help='Compile character model from stdin to stdout.')
     complm_parser.set_defaults(func=file_comp)
     complm_parser.set_defaults(mtype='lm')
 
-    compwm_parser = subparsers.add_parser('compwm', help='Compile word model from stdin to stdout.')
+    compwm_parser = subparsers.add_parser(
+        'compwm',
+        help='Compile word model from stdin to stdout.')
     compwm_parser.set_defaults(func=file_comp)
     compwm_parser.set_defaults(mtype='wm')
 
-    compdir_parser = subparsers.add_parser('compdir', help='Compile language from directory.')
-    compdir_parser.add_argument('corp_dir', help='Directory to read corpora (*.txt) from.')
-    compdir_parser.add_argument('model_dir', help='Directory to write LM and WM files in.')
+    compdir_parser = subparsers.add_parser(
+        'compdir',
+        help='Compile language from directory.')
+    compdir_parser.add_argument('corp_dir',
+                                help='Directory to read corpora (*.txt) from.')
+    compdir_parser.add_argument('model_dir',
+                                help='Directory to write LM and WM files in.')
     compdir_parser.set_defaults(func=folder_comp)
 
     return parser.parse_args()
