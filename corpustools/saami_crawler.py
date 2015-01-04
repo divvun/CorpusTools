@@ -113,21 +113,19 @@ class SamediggiFiCrawler(object):
                         else:
                             if 'samediggi.fi' not in r.url:
                                 print >>sys.stderr
-                                print >>sys.stderr, 'Not fetching', r.url
-                                print >>sys.stderr, 'which was', link
+                                print >>sys.stderr, 'Not fetching %s which was %s' % (r.url, link)
                                 print >>sys.stderr
 
                     if found_saami:
                         self.save_pages(pages)
                 except UserWarning:
-                    print >>sys.stderr, link, 'does not exist'
+                    print >>sys.stderr, '%s does not exist' % link
 
-                print >>sys.stderr, 'After: unvisited_links',
-                print >>sys.stderr, len(self.unvisited_links)
+                print >>sys.stderr, 'After: unvisited_links % ' % (self.unvisited_links)
                 print >>sys.stderr
 
             self.visited_links.add(link)
-            print >>sys.stderr, 'visited_links', len(self.visited_links)
+            print >>sys.stderr, 'visited_links %s' % len(self.visited_links)
 
     def invalid_content(self, content):
         '''Return true if the page does not contain the strings
@@ -181,7 +179,7 @@ class SamediggiFiCrawler(object):
             for langer in pages:
                 if langer != adder:
                     other_langs[u'parallel_texts'] = u'1'
-                    other_langs[u'para_' + langer.mainlang] = unicode(
+                    other_langs[u'para_%s' % langer.mainlang] = unicode(
                         langer.new_filename)
             adder.make_metadata_file(other_langs)
         print
@@ -209,7 +207,7 @@ def main():
             sc = SamediggiFiCrawler()
             sc.download_pages()
         else:
-            print 'Can not crawl', site, 'yet'
+            print 'Can not crawl %s yet' % site
 
 
 if __name__ == "__main__":

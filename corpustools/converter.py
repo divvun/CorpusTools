@@ -2169,10 +2169,10 @@ def worker(args, xsl_file):
         try:
             conv.write_complete()
         except ConversionException as e:
-            print >>sys.stderr, 'Could not convert', orig_file
+            print >>sys.stderr, 'Could not convert %s' % orig_file
             print >>sys.stderr, e.parameter
     else:
-        print >>sys.stderr, orig_file, 'does not exist'
+        print >>sys.stderr, '%s does not exist' % orig_file
 
 
 def convert_in_parallel(args, xsl_files):
@@ -2216,7 +2216,7 @@ def main():
 
     for source in args.sources:
         if os.path.isfile(source):
-            xsl_file = source + '.xsl'
+            xsl_file = '%s.xsl' % source
             if os.path.isfile(xsl_file):
                 worker(args, xsl_file)
             else:
@@ -2233,5 +2233,5 @@ def main():
             else:
                 convert_in_parallel(args, collect_files(source))
         else:
-            print >>sys.stderr, 'Can not process', source
+            print >>sys.stderr, 'Can not process %s' % source
             print >>sys.stderr, 'This is neither a file nor a directory.'

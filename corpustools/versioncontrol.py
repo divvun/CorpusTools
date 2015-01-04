@@ -85,7 +85,7 @@ class GIT(VersionController):
         if os.path.exists(filename):
             self.gitrepo.git.add(filename)
         else:
-            print >>sys.stderr, 'File does not exist', filename
+            print >>sys.stderr, 'File does not exist %s' % filename
             raise UserWarning
 
 
@@ -100,7 +100,7 @@ class VersionControlFactory(object):
                 r = git.Repo(directory)
                 return GIT(r)
             except git.exc.InvalidGitRepositoryError:
-                print >>sys.stderr, directory, 'is not a SVN working \
+                print >>sys.stderr, ' %s is not a SVN working \
 repository or a Git repo. Files can only be added to a \
-version controlled directory.'
+version controlled directory.' % directory
                 raise UserWarning

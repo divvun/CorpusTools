@@ -66,37 +66,29 @@ def print_element(element, level, indent, out):
     be indented
     out is a file like buffer, e.g. an opened file
     '''
+    tag = element.tag.replace('{http://www.w3.org/1999/xhtml}', 'html:')
+
     for i in range(0, level * indent):
         out.write(' ')
-    out.write('<')
-    out.write(element.tag.replace('{http://www.w3.org/1999/xhtml}', 'html:'))
+    out.write('<%s' % tag)
 
     for k, v in element.attrib.items():
-        out.write(' ')
-        out.write(k.encode('utf8'))
-        out.write('="')
-        out.write(v.encode('utf8'))
-        out.write('"')
-
+        out.write(' %s="%s"' % (k.encode('utf8'), v.encode('utf8')))
     out.write('>\n')
 
     if element.text is not None and element.text.strip() != '':
         for i in range(0, (level + 1) * indent):
             out.write(' ')
-        out.write(element.text.strip().encode('utf8'))
-        out.write('\n')
+        out.write('%s\n' % element.text.strip().encode('utf8'))
 
     for child in element:
         print_element(child, level + 1, indent, out)
 
     for i in range(0, level * indent):
         out.write(' ')
-    out.write('</')
-    out.write(element.tag.replace('{http://www.w3.org/1999/xhtml}', 'html:'))
-    out.write('>\n')
+    out.write('</%s>\n' % tag)
 
     if level > 0 and element.tail is not None and element.tail.strip() != '':
         for i in range(0, (level - 1) * indent):
             out.write(' ')
-        out.write(element.tail.strip().encode('utf8'))
-        out.write('\n')
+        out.write('%s\n' % element.tail.strip().encode('utf8'))

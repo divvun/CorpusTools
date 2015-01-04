@@ -111,7 +111,7 @@ class CorpusXMLFile:
         parallel_dirname = self.get_dirname().replace(
             self.get_lang(), self.paralang)
         if self.get_parallel_basename() is not None:
-            parallel_basename = self.get_parallel_basename() + '.xml'
+            parallel_basename = '%s.xml' % self.get_parallel_basename()
 
             return os.path.join(parallel_dirname, parallel_basename)
 
@@ -239,15 +239,15 @@ class SentenceDivider:
         if (self.doc_lang == 'nob'):
             abbr_file = os.path.join(
                 os.environ['GTHOME'], 'st/nob/bin/abbr.txt')
-            preprocess_command = [preprocess_script, '--abbr=' + abbr_file]
+            preprocess_command = [preprocess_script, '--abbr=%s' % abbr_file]
         else:
             abbr_file = os.path.join(os.environ['GTHOME'],
                                      'gt/sme/bin/abbr.txt')
             corr_file = os.path.join(os.environ['GTHOME'],
                                      'gt/sme/bin/corr.txt')
             preprocess_command = [preprocess_script,
-                                  '--abbr=' + abbr_file,
-                                  '--corr=' + corr_file]
+                                  '--abbr=%s' % abbr_file,
+                                  '--corr=%s' % corr_file]
 
         subp = subprocess.Popen(preprocess_command,
                                 stdin=subprocess.PIPE,
@@ -360,8 +360,8 @@ class Parallelize:
                 self.origfiles[0].get_lang())
             self.origfiles.append(tmpfile)
         else:
-            raise IOError(origfile1 + " doesn't have a parallel file in " +
-                          lang2)
+            raise IOError("%s doesn't have a parallel file in %s" %
+                          (origfile1, lang2))
 
         if self.is_translated_from_lang2():
             self.reshuffle_files()
@@ -423,14 +423,14 @@ class Parallelize:
                                'gt/common/src/anchor-admin.txt')
 
         subp = subprocess.Popen([generate_script,
-                                 '--lang1=' + self.get_lang1(),
-                                 '--lang2' + self.get_lang2(),
-                                 '--outdir=' + os.environ['GTFREE'],
+                                 '--lang1=%s' % self.get_lang1(),
+                                 '--lang2%s' % self.get_lang2(),
+                                 '--outdir=%s' % os.environ['GTFREE'],
                                  infile1, infile2],
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
-        out_filename = 'anchor-' + self.get_lang1() + self.get_lang2() + '.txt'
+        out_filename = 'anchor-%s%s.txt' % (self.get_lang1(), self.get_lang2())
 
         if subp.returncode != 0:
             print >>sys.stderr, out_filename
@@ -453,7 +453,7 @@ class Parallelize:
                 divider.process_all_paragraphs()
                 divider.write_result(outfile)
             else:
-                print >>sys.stderr, infile, "doesn't exist"
+                print >>sys.stderr, "%s doesn't exist" % infile
                 return 2
 
         return 0
@@ -464,8 +464,9 @@ class Parallelize:
         Input is a CorpusXMLFile
         """
         origfilename = pfile.get_basename().replace('.xml', '')
-        return os.environ['GTFREE'] + '/tmp/' + origfilename + \
-            pfile.get_lang() + '_sent.xml'
+        return os.path.join(os.environ['GTFREE'], 'tmp',
+                            '%s%s_sent.xml' % (
+                                origfilename, pfile.get_lang()))
 
     def parallelize_files(self):
         """
@@ -488,10 +489,8 @@ class Parallelize:
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
-            print >>sys.stderr, 'Could not parallelize', \
-                self.get_sent_filename(self.get_filelist()[0]), 'and', \
-                self.get_sent_filename(self.get_filelist()[1]), \
-                ' into sentences'
+            print >>sys.stderr, 'Could not parallelize %s and %s into \
+sentences' % (self.get_sent_filename(self.get_filelist()[0]), self.get_sent_filename(self.get_filelist()[1]))
             print >>sys.stderr, output
             print >>sys.stderr, error
 
@@ -510,8 +509,8 @@ class Tmx:
         """
         self.tmx = tmx
 
-        gthome = os.getenv('GTHOME')
-        self.language_guesser = ngram.NGram(gthome + '/tools/lang-guesser/LM/')
+        self.language_guesser = ngram.NGram(
+            os.path.join(os.getenv('GTHOME'), 'tools/lang-guesser/LM'))
 
     def get_src_lang(self):
         """
@@ -699,7 +698,7 @@ class Tmx:
                                 xml_declaration=True)
         f.write(string)
         f.close()
-        print "Wrote", out_filename
+        print "Wrote %s" % out_filename
 
     def remove_tu_with_empty_seg(self):
         """Remove tu elements that contain empty seg element
@@ -808,10 +807,10 @@ class Tca2ToTmx(Tmx):
         Compute the name of the tmx file
         """
 
-        orig_path_part = '/converted/' + self.filelist[0].get_lang() + '/'
+        orig_path_part = '/converted/%s/' % self.filelist[0].get_lang()
         # First compute the part that shall replace /orig/ in the path
-        replace_path_part = '/toktmx/' + self.filelist[0].get_lang() + '2' \
-            + self.filelist[1].get_lang() + '/'
+        replace_path_part = '/toktmx/%s2%s/' % (self.filelist[0].get_lang(),
+                                                self.filelist[1].get_lang())
         # Then set the outdir
         out_dirname = self.filelist[0].get_dirname().replace(
             orig_path_part, replace_path_part)
@@ -862,8 +861,9 @@ class Tca2ToTmx(Tmx):
         Input is a CorpusXMLFile
         """
         origfilename = pfile.get_basename().replace('.xml', '')
-        return (os.environ['GTFREE'] + '/tmp/' + origfilename +
-                pfile.get_lang() + '_sent.xml')
+        return (os.path.join(
+            os.environ['GTFREE'], 'tmp',
+            '%s%s_sent.xml' % (origfilename, pfile.get_lang())))
 
 
 class TmxComparator:
@@ -1028,7 +1028,7 @@ class TmxGoldstandardTester:
         paralang = ""
         # Go through each tmx goldstandard file
         for want_tmx_file in self.find_goldstandard_tmx_files():
-            print "testing", want_tmx_file, "..."
+            print "testing %s …" % want_tmx_file
 
             # Calculate the parallel lang, to be used in parallelization
             if want_tmx_file.find('nob2sme') > -1:
@@ -1101,8 +1101,8 @@ class TmxGoldstandardTester:
         """
         Write diffs to a jspwiki file
         """
-        print "write_diff_files", filename
-        filename = filename + '_' + self.date + '.jspwiki'
+        print "write_diff_files %s" % filename
+        filename = '%s_%s.jspwiki' % (filename, self.date)
         dirname = os.path.join(
             os.path.dirname(self.testresult_writer.get_filename()),
             'tca2testing')
@@ -1113,13 +1113,13 @@ class TmxGoldstandardTester:
             print "I/O error({0}): {1}".format(e.errno, e.strerror)
             sys.exit(1)
 
-        f.write('!!!' + filename + '\n')
+        f.write('!!!%s\n' % filename)
         f.write("!!TMX diff\n{{{\n")
         f.writelines(comparator.get_diff_as_text())
-        f.write("\n}}}\n!!" + parallelizer.get_lang1() + " diff\n{{{\n")
+        f.write("\n}}}\n!! diff\n{{{\n" % parallelizer.get_lang1())
         f.writelines(comparator.get_lang_diff_as_text(
             parallelizer.get_lang1()))
-        f.write("\n}}}\n!!" + parallelizer.get_lang2() + " diff\n{{{\n")
+        f.write("\n}}}\n!!%s diff\n{{{\n" % parallelizer.get_lang2())
         f.writelines(comparator.get_lang_diff_as_text(
             parallelizer.get_lang2()))
         f.write("\n}}}\n")
@@ -1241,10 +1241,10 @@ def main():
         print e.message
         sys.exit(1)
 
-    print "Aligning", args.input_file, "and its parallel file"
-    print "Adding sentence structure that tca2 needs ..."
+    print "Aligning %s and its parallel file" % args.input_file
+    print "Adding sentence structure that tca2 needs …"
     if parallelizer.divide_p_into_sentences() == 0:
-        print "Aligning files ..."
+        print "Aligning files …"
         if parallelizer.parallelize_files() == 0:
             tmx = Tca2ToTmx(parallelizer.get_filelist())
 
@@ -1255,5 +1255,5 @@ def main():
             except OSError, e:
                 if e.errno != errno.EEXIST:
                     raise
-            print "Generating the tmx file", tmx.get_outfile_name()
+            print "Generating the tmx file %s" % tmx.get_outfile_name()
             tmx.write_tmx_file(tmx.get_outfile_name())

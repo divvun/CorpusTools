@@ -189,9 +189,8 @@ class ErrorMarkup:
         try:
             inner_element = elements[-1]
         except IndexError:
-            print '\n', self._filename
-            print "Cannot handle:\n"
-            print errorstring + correctionstring
+            print '\n%s' % self._filename
+            print "Cannot handle:\n%s %s" % (errorstring, correctionstring)
             print "This is either an error in the markup or an error in the \
             errormarkup conversion code"
             print "If the markup is correct, send a report about this error \
@@ -227,10 +226,10 @@ class ErrorMarkup:
                     try:
                         error_element.insert(0, inner_element)
                     except TypeError as e:
-                        print '\n', self._filename
+                        print '\n%s' % self._filename
                         print str(e)
                         print u"The program expected an error element, but \
-                        found a string:\n«" + inner_element + u"»"
+                        found a string:\n«%s»" % inner_element
                         print u"There is either an error in errormarkup close \
                         to this sentence"
                         print u"or the program cannot evaluate a correct \
@@ -314,8 +313,7 @@ class ErrorMarkup:
             except ValueError as e:
                 print '\n', self._filename
                 print str(e)
-                print u"too many | characters inside the correction. «" +\
-                    correction + u"»"
+                print u"too many | characters inside the correction. «%s»" % correction
                 print u"Have you remembered to encase the error inside \
                 parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?"
                 print u"If the errormarkup is correct, send a report about \
