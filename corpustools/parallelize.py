@@ -36,8 +36,10 @@ import ngram
 import argparse_version
 import util
 
+
 class ArgumentError(Exception):
     pass
+
 
 class CorpusXMLFile:
     """
@@ -54,8 +56,9 @@ class CorpusXMLFile:
     def sanity_check(self):
         if self.etree.getroot().tag != u"document":
             raise ArgumentError(
-                "Expected Corpus XML file (output of convert2xml) with <document> as "
-                "the root tag, got %s -- did you pass the wrong file?" % (
+                "Expected Corpus XML file (output of convert2xml) with "
+                "<document> as the root tag, got %s -- did you pass the "
+                "wrong file?" % (
                     self.etree.getroot().tag,))
 
     def get_etree(self):
@@ -413,8 +416,9 @@ class Parallelize:
         Generate an anchor file with lang1 and lang2. Return the path
         to the anchor file
         """
-        generate_script = os.path.join(os.environ['GTHOME'],
-                                       'gt/script/corpus/generate-anchor-list.pl')
+        generate_script = os.path.join(
+            os.environ['GTHOME'],
+            'gt/script/corpus/generate-anchor-list.pl')
         util.sanity_check([generate_script])
 
         infile1 = os.path.join(os.environ['GTHOME'],
@@ -427,8 +431,8 @@ class Parallelize:
                                  '--lang2%s' % self.get_lang2(),
                                  '--outdir=%s' % os.environ['GTFREE'],
                                  infile1, infile2],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
         out_filename = 'anchor-%s%s.txt' % (self.get_lang1(), self.get_lang2())
 
@@ -489,10 +493,13 @@ class Parallelize:
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
-            print >>sys.stderr, 'Could not parallelize %s and %s into \
-sentences' % (self.get_sent_filename(self.get_filelist()[0]), self.get_sent_filename(self.get_filelist()[1]))
-            print >>sys.stderr, output
-            print >>sys.stderr, error
+            print >>sys.stderr, (
+                'Could not parallelize %s and %s into sentences'
+                '\n%s\n'
+                '\n%s\n' % (
+                    self.get_sent_filename(self.get_filelist()[0]),
+                    self.get_sent_filename(self.get_filelist()[1]),
+                    output, error))
 
         return subp.returncode
 
@@ -684,7 +691,6 @@ class Tmx:
         """
         Write a tmx file given a tmx etree element and a filename
         """
-        #try:
         try:
             os.makedirs(os.path.dirname(out_filename))
         except OSError:
@@ -716,17 +722,6 @@ class Tmx:
         """
         string = tu[0][0].text.strip()
         string = tu[1][0].text.strip()
-
-    # Commented out this code because language detection doesn't work well
-    # enough
-    #def remove_tu_with_wrong_lang(self, lang):
-        #"""Remove tu elements that have the wrong lang according to the
-        #language guesser
-        #"""
-        #root = self.get_tmx().getroot()
-        #for tu in root.iter("tu"):
-            #if self.check_language(tu, lang) == False:
-                #tu.getparent().remove(tu)
 
     def check_language(self, tu, lang):
         """Get the text of the tuv element with the given lang

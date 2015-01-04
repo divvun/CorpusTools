@@ -55,8 +55,8 @@ CTYPES = {
         u"": u"õ",
         u"": u"â",
         u"÷": u"ʒ",
-        #"Ç": u"«",
-        #"È": u"»",
+        # "Ç": u"«",
+        # "È": u"»",
     },
 
     # mac-sami converted as iconv -f mac -t utf8
@@ -254,9 +254,9 @@ class EncodingGuesser(object):
 
         content = content.decode('utf8')
         if (
-                (u'' in content and not u'ã' in content) or
+                (u'' in content and u'ã' not in content) or
                 (u'' in content) or
-                (u'¯' in content and not u'Ø' in content)):
+                (u'¯' in content and u'Ø' not in content)):
             winner = u"mac-sami_to_latin1"
         elif u'' in content and u'ã':
             winner = u"mix-mac-sami-and-some-unknown-encoding"

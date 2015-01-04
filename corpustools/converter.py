@@ -25,9 +25,9 @@ import sys
 import re
 import io
 import subprocess
-import HTMLParser
 from copy import deepcopy
-import distutils.dep_util, distutils.spawn
+import distutils.dep_util
+import distutils.spawn
 import codecs
 import multiprocessing
 import argparse
@@ -45,7 +45,6 @@ import decode
 import text_cat
 import errormarkup
 import ccat
-import analyser
 import argparse_version
 import functools
 import util
@@ -54,9 +53,9 @@ import util
 here = os.path.dirname(__file__)
 
 
-
 class ConversionException(Exception):
     pass
+
 
 def run_process(command, orig, to_stdin=None):
     subp = subprocess.Popen(command,
@@ -119,7 +118,9 @@ class Converter(object):
             intermediate = BiblexmlConverter(self.orig)
 
         else:
-            raise ConversionException("Unknown file extension, not able to convert " + self.orig + "\nHint: you may just have to rename the file")
+            raise ConversionException(
+                "Unknown file extension, not able to convert %s "
+                "\nHint: you may just have to rename the file" % self.orig)
 
         document = intermediate.convert2intermediate()
 
@@ -138,7 +139,7 @@ class Converter(object):
         dtd = etree.DTD(Converter.get_dtd_location())
 
         if not dtd.validate(complete):
-            #print etree.tostring(complete)
+            # print etree.tostring(complete)
             logfile = open('%s.log' % self.get_orig(), 'w')
 
             logfile.write('Error at: %s' % str(ccat.lineno()))
@@ -166,16 +167,19 @@ class Converter(object):
                                          pretty_print='True'))
 
     def encoding_from_xsl(self, xsl):
-        encoding_elt = xsl.find('//xsl:variable[@name="text_encoding"]',
-                                namespaces={'xsl':'http://www.w3.org/1999/XSL/Transform'})
+        encoding_elt = xsl.find(
+            '//xsl:variable[@name="text_encoding"]',
+            namespaces={'xsl': 'http://www.w3.org/1999/XSL/Transform'})
+
         if encoding_elt is not None:
-            return encoding_elt.attrib.get("select","''").strip("'")
+            return encoding_elt.attrib.get("select", "''").strip("'")
         else:
             return None
 
     def transform_to_complete(self):
         xm = XslMaker(self.get_xsl())
-        intermediate = self.make_intermediate(self.encoding_from_xsl(xm.finalXsl))
+        intermediate = self.make_intermediate(
+            self.encoding_from_xsl(xm.finalXsl))
         self.maybe_write_intermediate(intermediate)
 
         try:
@@ -637,7 +641,6 @@ class PDFConverter(object):
         }
 
         for key, value in replacements.items():
-            #print '583', key, value
             self.text = self.text.replace(key + ' ', value)
             self.text = self.text.replace(key, value)
 
@@ -737,9 +740,11 @@ class PDF2XMLConverter(object):
                 elif int(page_number) % 2 == 1 and m.get('odd') is not None:
                     margins[margin] = m['odd']
                 else:
-                    margins[margin] = self.compute_margin(margin, page_height, page_width)
+                    margins[margin] = self.compute_margin(margin, page_height,
+                                                          page_width)
             else:
-                margins[margin] = self.compute_margin(margin, page_height, page_width)
+                margins[margin] = self.compute_margin(margin, page_height,
+                                                      page_width)
 
         return margins
 
@@ -756,7 +761,7 @@ class PDF2XMLConverter(object):
         if margin == 'bm':
             return int(page_height - default * page_height)
 
-        return margins
+        return margin
 
     def append_to_body(self, element):
         self.body.append(element)
@@ -795,7 +800,6 @@ class PDF2XMLConverter(object):
                         self.parts.append(etree.Element('hyph'))
                     else:
                         self.parts.append(textelement.text)
-
 
             for child in textelement:
                 em = etree.Element('em')
@@ -847,7 +851,7 @@ class PDF2XMLConverter(object):
         delta = float(text2.get('top')) - float(text1.get('top'))
         ratio = 1.5
 
-        if ( f1 == f2 and h1 == h2 and delta < ratio * h1):
+        if (f1 == f2 and h1 == h2 and delta < ratio * h1):
             result = True
 
         return result
@@ -875,8 +879,10 @@ class PDF2XMLConverter(object):
 
         t is a text element
         '''
-        return (int(t.get('top')) > margins['tm'] and int(t.get('top')) < margins['bm'] and
-                int(t.get('left')) > margins['rm'] and int(t.get('left')) < margins['lm'])
+        return (int(t.get('top')) > margins['tm'] and
+                int(t.get('top')) < margins['bm'] and
+                int(t.get('left')) > margins['rm'] and
+                int(t.get('left')) < margins['lm'])
 
     def parse_pages(self, root_element):
         for page in root_element.iter('page'):
@@ -892,15 +898,18 @@ class PDF2XMLConverter(object):
         if len(self.parts) > 0:
             p = etree.Element('p')
             print ccat.lineno(), self.parts[0], self.parts, type(self.parts[0])
-            if (isinstance(self.parts[0], str) or isinstance(self.parts[0], unicode)):
+            if (isinstance(self.parts[0], str) or
+                    isinstance(self.parts[0], unicode)):
                 p.text = self.parts[0]
             else:
                 p.append(self.parts[0])
 
             for part in self.parts[1:]:
                 if isinstance(part, etree._Element):
-                    if len(p) > 0 and len(p[-1]) > 0 and p[-1][-1].tag == 'hyph':
-                        if p[-1].tag == part.tag and p[-1].get('type') == part.get('type'):
+                    if (len(p) > 0 and len(p[-1]) > 0 and
+                            p[-1][-1].tag == 'hyph'):
+                        if (p[-1].tag == part.tag and
+                                p[-1].get('type') == part.get('type')):
                             p[-1][-1].tail = part.text
                             p[-1].tail = part.tail
                         else:
@@ -914,6 +923,7 @@ class PDF2XMLConverter(object):
                         p[-1].tail = ' %s' % part
 
             return p
+
 
 class BiblexmlConverter(object):
     """
@@ -929,7 +939,8 @@ class BiblexmlConverter(object):
         (tmpfile, tmpname) = tempfile.mkstemp()
         bible2xmlpl = 'bible2xml.pl'
         if distutils.spawn.find_executable(bible2xmlpl) is None:
-            raise ConversionException("Could not find %s in $PATH" %(bible2xmlpl,))
+            raise ConversionException("Could not find %s in $PATH" %
+                                      (bible2xmlpl))
 
         command = [bible2xmlpl, '-out', tmpname, self.orig]
         run_process(command, self.orig)
@@ -962,7 +973,8 @@ class HTMLContentConverter(object):
             remove_unknown_tags=True,
             embedded=True,
             remove_tags=['img', 'area', 'hr', 'cite', 'footer', 'figcaption',
-                         'aside', 'time', 'figure', 'nav', 'noscript', 'map',])
+                         'aside', 'time', 'figure', 'nav', 'noscript', 'map',
+                         ])
 
         try:
             enc = self.set_charset(content, encoding_from_xsl)
@@ -1039,21 +1051,22 @@ class HTMLContentConverter(object):
                     'expandable', 'toc', 'titlepage',
                     'container_full', 'moduletable_oikopolut',
                     "latestnews_uutisarkisto", 'back_button',
-                    'breadcrums span-12', #svenskakyrkan.se
-                    'tipsarad mt6 selfClear', #svenskakyrkan.se
-                    'imagecontainer', #regjeringen.no
+                    'breadcrums span-12',       # svenskakyrkan.se
+                    'tipsarad mt6 selfClear',   # svenskakyrkan.se
+                    'imagecontainer',           # regjeringen.no
                     ],
                 'id': [
-                    'pageFooter', #svenskakyrkan.se
-                    'headerBar', #svenskakyrkan.se
-                    'leftmenu', #svenskakyrkan.se
-                    'rightside', #svenskakyrkan.se
-                    'readspeaker_button1', #svenskakyrkan.se
+                    'pageFooter',               # svenskakyrkan.se
+                    'headerBar',                # svenskakyrkan.se
+                    'leftmenu',                 # svenskakyrkan.se
+                    'rightside',                # svenskakyrkan.se
+                    'readspeaker_button1',      # svenskakyrkan.se
                     'searchBox',
-                    'murupolku', #www.samediggi.fi
-                    'main_navi_main', #www.samediggi.fi
+                    'murupolku',                # www.samediggi.fi
+                    'main_navi_main',           # www.samediggi.fi
                     'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
-                    'ctl00_FullRegion_CenterAndRightRegion_HitsControl_searchHitSummary',
+                    'ctl00_FullRegion_CenterAndRightRegion_HitsControl_\
+searchHitSummary',
                     'AreaTopSiteNav', 'SamiDisclaimer', 'AreaTopRight',
                     'AreaLeft', 'AreaRight', 'ShareArticle', 'tipafriend',
                     'AreaLeftNav', 'PageFooter', 'blog-pager',
@@ -1069,7 +1082,8 @@ class HTMLContentConverter(object):
                     'topMenu',
                     'article_footer',
                     'rightCol',
-                    'PrintDocHead',],
+                    'PrintDocHead',
+                    ],
                 },
             'p': {
                 'class': ['WebPartReadMoreParagraph', 'breadcrumbs'],
@@ -1082,11 +1096,11 @@ class HTMLContentConverter(object):
                 'id': ['skiplinks'],
                 'class': [
                     'K-NOTE-FOTNOTE',
-                    'graytext', #svenskakyrkan.se
+                    'graytext',     # svenskakyrkan.se
                     ],
                 },
             'a': {
-                'id': ['leftPanelTab',],
+                'id': ['leftPanelTab', ],
                 'class': [
                     'mainlevel',
                     ],
@@ -1111,7 +1125,9 @@ class HTMLContentConverter(object):
     def add_p_around_text(self):
         '''Add p around text after an hX element
         '''
-        for h in self.soup.xpath('.//html:body/*', namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
+        for h in self.soup.xpath(
+                './/html:body/*',
+                namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
             if h.tail is not None and h.tail.strip() != '':
                 p = etree.Element('{http://www.w3.org/1999/xhtml}p')
                 p.text = h.tail
@@ -1119,10 +1135,10 @@ class HTMLContentConverter(object):
                 n = h.getnext()
                 while n is not None:
                     if (n.tag == '{http://www.w3.org/1999/xhtml}p' or
-                        n.tag == '{http://www.w3.org/1999/xhtml}h3' or
-                        n.tag == '{http://www.w3.org/1999/xhtml}h2' or
-                        n.tag == '{http://www.w3.org/1999/xhtml}div' or
-                        n.tag == '{http://www.w3.org/1999/xhtml}table'):
+                            n.tag == '{http://www.w3.org/1999/xhtml}h3' or
+                            n.tag == '{http://www.w3.org/1999/xhtml}h2' or
+                            n.tag == '{http://www.w3.org/1999/xhtml}div' or
+                            n.tag == '{http://www.w3.org/1999/xhtml}table'):
                         break
                     p.append(n)
                     n = n.getnext()
@@ -1133,7 +1149,9 @@ class HTMLContentConverter(object):
     def center2div(self):
         '''Convert center to div in tidy style
         '''
-        for center in self.soup.xpath('.//html:center', namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
+        for center in self.soup.xpath(
+                './/html:center',
+                namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
             center.tag = '{http://www.w3.org/1999/xhtml}div'
             center.set('class', 'c1')
 
@@ -1222,7 +1240,8 @@ class HTMLContentConverter(object):
 class HTMLConverter(HTMLContentConverter):
     def __init__(self, filename, encoding_from_xsl=None):
         f = open(filename)
-        HTMLContentConverter.__init__(self, filename, f.read(), encoding_from_xsl)
+        HTMLContentConverter.__init__(self, filename, f.read(),
+                                      encoding_from_xsl)
         f.close()
 
 
@@ -1232,7 +1251,8 @@ class RTFConverter(HTMLContentConverter):
     """
     def __init__(self, filename, encoding_from_xsl=None):
         self.orig = filename
-        HTMLContentConverter.__init__(self, filename, self.rtf2html(), encoding_from_xsl)
+        HTMLContentConverter.__init__(self, filename, self.rtf2html(),
+                                      encoding_from_xsl)
 
     def rtf2html(self):
         """Open the rtf document
@@ -1261,7 +1281,8 @@ class DocxConverter(HTMLContentConverter):
     '''
     def __init__(self, filename, encoding_from_xsl=None):
         self.orig = filename
-        HTMLContentConverter.__init__(self, filename, self.docx2html(), encoding_from_xsl)
+        HTMLContentConverter.__init__(self, filename, self.docx2html(),
+                                      encoding_from_xsl)
 
     def docx2html(self):
         '''Convert docx to html, return the converted html
@@ -1277,7 +1298,8 @@ class DocConverter(HTMLContentConverter):
     """
     def __init__(self, filename, encoding_from_xsl=None):
         self.orig = filename
-        HTMLContentConverter.__init__(self, filename, self.doc2html(), encoding_from_xsl)
+        HTMLContentConverter.__init__(self, filename, self.doc2html(),
+                                      encoding_from_xsl)
 
     def doc2html(self):
         """Convert the doc file using wvHtml.
@@ -1375,7 +1397,9 @@ class DocConverter(HTMLContentConverter):
                         </html:p>
                         <html:div align="left" name="Overskrift 3">
                             <html:p>
-                                <html:b><html:span>Iskanjoavku ja sámegielaga definišuvdn</html:span></html:b>
+                                <html:b>
+                                <html:span>Iskanjoavku ja sámegielaga
+                                definišuvdn</html:span></html:b>
                                 <html:b><html:span>a</html:span></html:b>
                             </html:p>
                         </html:div>
@@ -1400,6 +1424,7 @@ class DocConverter(HTMLContentConverter):
 
         '''
         pass
+
 
 class DocumentFixer(object):
     """
@@ -1884,8 +1909,7 @@ class XslMaker(object):
             __name__, 'xslt/common.xsl').replace(' ', '%20')
         self.finalXsl = preprocessXslTransformer(
             filexsl,
-            commonxsl=
-            etree.XSLT.strparam('file://%s' % common_xsl_path))
+            commonxsl=etree.XSLT.strparam('file://%s' % common_xsl_path))
 
     def get_xsl(self):
         return self.finalXsl
@@ -1960,7 +1984,8 @@ class LanguageDetector(object):
                         lang = self.languageGuesser.classify(element.text)
                         if lang != self.get_mainlang():
                             element.set(
-                                '{http://www.w3.org/XML/1998/namespace}lang', lang)
+                                '{http://www.w3.org/XML/1998/namespace}lang',
+                                lang)
 
         return paragraph
 

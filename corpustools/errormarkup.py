@@ -21,6 +21,8 @@
 #
 
 import re
+import sys
+
 from lxml import etree
 
 
@@ -113,8 +115,8 @@ class ErrorMarkup:
             result = self.process_text(text)
 
             if len(result) > 1:
-                #print text
-                #print result
+                # print text
+                # print result
                 elements = []
                 # This means that we are inside an error markup
                 # Start with the two first elements
@@ -185,7 +187,7 @@ class ErrorMarkup:
         of error_element, continue searching
 
         '''
-        #print u'«' + errorstring + u'»', u'«' + correctionstring + u'»'
+        # print u'«' + errorstring + u'»', u'«' + correctionstring + u'»'
         try:
             inner_element = elements[-1]
         except IndexError:
@@ -311,13 +313,15 @@ class ErrorMarkup:
             try:
                 (att_list, correction) = correction.split('|')
             except ValueError as e:
-                print '\n', self._filename
-                print str(e)
-                print u"too many | characters inside the correction. «%s»" % correction
-                print u"Have you remembered to encase the error inside \
-                parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?"
-                print u"If the errormarkup is correct, send a report about \
-                this error to borre.gaup@uit.no"
+                print >>sys.stderr, (
+                    u"\n%s\n"
+                    u"%s\n"
+                    u"Too many | characters inside the correction. «%s»"
+                    u"Have you remembered to encase the error inside "
+                    u"parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?"
+                    u"If the errormarkup is correct, send a report about "
+                    u"this error to borre.gaup@uit.no" % (
+                        self._filename, str(e), correction))
 
         return (correction, ext_att, att_list)
 

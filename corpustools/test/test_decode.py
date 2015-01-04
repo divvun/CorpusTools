@@ -4,7 +4,7 @@ import unittest
 
 from corpustools import decode
 
-       #"á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ",
+#       "á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ",
 test_input = {
     u"mac-sami_to_latin1":
         " » ¸ ¹ ½ º ç ¢ ¼ ´ ° ± · µ ¿ ¯   ¾ ®",
@@ -25,7 +25,6 @@ test_input = {
     u"double-utf8":
         "Ã¡ Å¡ Ä? Ä‘ Âº Å‹ Ã? ÄŒ Å§ Å  Đ ÅŠ Å½ Ŧ Ã¸ Ã˜ Ã¥ Ã… Ã¦ Æ",
 }
-
 
 
 class TestEncodingGuesser(unittest.TestCase):

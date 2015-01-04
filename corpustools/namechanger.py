@@ -54,10 +54,11 @@ class NameChangerBase(object):
     def change_to_ascii(self):
         """Downcase all chars in self.oldname, replace some chars
         """
-        unwanted_chars = {u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
-                 u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_',
-                 u'<': u'_', u'>': u'_', u'"': u'_', u'&': u'_', u';': u'_',
-                 u'&': u'_'}
+        unwanted_chars = {
+            u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
+            u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_',
+            u'<': u'_', u'>': u'_', u'"': u'_', u'&': u'_', u';': u'_',
+            u'&': u'_'}
 
         # unidecode.unidecode makes ascii only
         newname = unicode(unidecode.unidecode(
@@ -71,6 +72,7 @@ class NameChangerBase(object):
             newname = newname.replace('__', '_')
 
         return newname
+
 
 class AddFileToCorpus(NameChangerBase):
     '''Add a given file to a given corpus
@@ -99,7 +101,8 @@ class AddFileToCorpus(NameChangerBase):
         }
 
         for ct, extension in content_type_extension.items():
-            if ct in content_type and not self.new_filename.endswith(extension):
+            if (ct in content_type and not
+                    self.new_filename.endswith(extension)):
                 self.new_filename += extension
 
     def toname(self):
@@ -140,7 +143,6 @@ class AddFileToCorpus(NameChangerBase):
             print self.toname()
             self.vcs.add(self.toname())
 
-
     def make_metadata_file(self, extra_values):
         '''extra_values is a dict that contains data for the metadata file
         that is not possible to infer from the data given in the constructor.
@@ -156,7 +158,7 @@ class AddFileToCorpus(NameChangerBase):
             metadata_file.set_variable('genre', self.path.split('/')[0])
             metadata_file.set_variable('mainlang', self.mainlang)
             metadata_file.set_variable('sub_name',
-                                    self.vcs.user_name().decode('utf-8'))
+                                       self.vcs.user_name().decode('utf-8'))
             metadata_file.set_variable('sub_email', self.vcs.user_email())
 
             for key, value in extra_values.items():
@@ -188,10 +190,11 @@ class CorpusNameFixer(NameChangerBase):
                 self.move_prestable_toktmx()
                 self.move_prestable_tmx()
             else:
-                print >>sys.stderr
-                print >>sys.stderr, 'Error renaming', os.path.join(self.old_dirname, self.old_filename)
-                print >>sys.stderr, fullname, 'exists'
-                print >>sys.stderr
+                print >>sys.stderr, (
+                    '\nError renaming %s'
+                    '\n%s exists\n' % (
+                        os.path.join(self.old_dirname, self.old_filename),
+                        fullname))
 
     def move_file(self, oldname, newname):
         """Change name of file from fromname to toname"""
@@ -238,7 +241,7 @@ class CorpusNameFixer(NameChangerBase):
             paratree = self.open_xslfile(parafile)
             pararoot = paratree.getroot()
 
-            pararoot.find(".//*[@name='para_%s']" % mainlang ).set(
+            pararoot.find(".//*[@name='para_%s']" % mainlang).set(
                 'select', "'%s'" % self.new_filename)
 
             paratree.write(parafile, encoding='utf8', xml_declaration=True)
@@ -284,7 +287,7 @@ class CorpusNameFixer(NameChangerBase):
         for suggestion in ['/prestable/toktmx/sme2nob/',
                            '/prestable/toktmx/nob2sme/']:
             dirname = self.old_dirname.replace('/orig/', suggestion)
-            fromname = os.path.join(dirname, '%s.toktmx' %self.old_filename)
+            fromname = os.path.join(dirname, '%s.toktmx' % self.old_filename)
             if os.path.exists(fromname):
                 toname = os.path.join(dirname, '%s.toktmx' % self.new_filename)
                 self.move_file(fromname, toname)
@@ -321,6 +324,7 @@ def parse_args():
 
     return parser.parse_args()
 
+
 def main():
     args = parse_args()
 
@@ -345,9 +349,9 @@ def gather_files(origs):
         elif orig.startswith('http'):
             file_list.append(name_to_unicode(orig))
         else:
-            print >>sys.stderr
-            print >>sys.stderr, 'ERROR:', orig, ' is neither a directory, nor a file nor a http-url'
-            print >>sys.stderr
+            print >>sys.stderr, (
+                'ERROR: %s is neither a directory, nor a file nor a '
+                'http-url\n' % (orig))
             raise UserWarning
 
     return file_list

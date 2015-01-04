@@ -38,7 +38,8 @@ class TestAnalyser(unittest.TestCase):
         self.a.set_analysis_files(
             abbr_file=os.path.join(here, 'abbr.txt'),
             fst_file=os.path.join(here, 'analyser.xfst'),
-            disambiguation_analysis_file=os.path.join(here, 'disambiguation.cg3'),
+            disambiguation_analysis_file=os.path.join(here,
+                                                      'disambiguation.cg3'),
             function_analysis_file=os.path.join(here, 'functions.cg3'),
             dependency_analysis_file=os.path.join(here, 'dependency.cg3'))
         self.a.set_corr_file(corr_file=os.path.join(here, 'corr.txt'))
@@ -56,7 +57,9 @@ class TestAnalyser(unittest.TestCase):
         u"""Test if the ccat output is what we expect it to be
         """
         got = self.a.ccat()
-        want = u'''Muhto gaskkohagaid, ja erenoamážit dalle go lei buolaš, de aggregáhta billánii. ¶\n'''
+        want = (
+            u'Muhto gaskkohagaid, ja erenoamážit dalle go lei buolaš, '
+            u'de aggregáhta billánii. ¶\n')
 
         self.assertEqual(got, want.encode(u'utf8'))
 
@@ -64,7 +67,9 @@ class TestAnalyser(unittest.TestCase):
         u"""Test if the preprocess output is what we expect it to be
         """
         got = self.a.preprocess()
-        want = u'''Muhto\ngaskkohagaid\n,\nja\nerenoamážit\ndalle go\nlei\nbuolaš\n,\nde\naggregáhta\nbillánii\n.\n¶\n'''
+        want = (
+            u'Muhto\ngaskkohagaid\n,\nja\nerenoamážit\ndalle go\nlei\n'
+            u'buolaš\n,\nde\naggregáhta\nbillánii\n.\n¶\n')
 
         self.assertEqual(got, want.encode(u'utf8'))
 
@@ -73,7 +78,18 @@ class TestAnalyser(unittest.TestCase):
         """
         self.a.disambiguation_analysis()
         got = self.a.get_disambiguation()
-        want = u'"<Muhto>"\n\t"muhto" CC <sme> @CVP\n"<gaskkohagaid>"\n\t"gaskkohagaid" Adv <sme>\n"<,>"\n\t"," CLB\n"<ja>"\n\t"ja" CC <sme> @CNP\n"<erenoamážit>"\n\t"erenoamážit" Adv <sme>\n"<dalle_go>"\n\t"dalle_go" MWE CS <sme> @CVP\n"<lei>"\n\t"leat" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<buolaš>"\n\t"buolaš" Sem/Wthr N <sme> Sg Nom\n"<,>"\n\t"," CLB\n"<de>"\n\t"de" Adv <sme>\n"<aggregáhta>"\n\t"aggregáhta" N <sme> Sg Nom\n"<billánii>"\n\t"billánit" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<.>"\n\t"." CLB\n\n"<¶>"\n\t"¶" CLB\n\n'
+        want = (
+            u'"<Muhto>"\n\t"muhto" CC <sme> @CVP\n"<gaskkohagaid>"\n'
+            u'\t"gaskkohagaid" Adv <sme>\n"<,>"\n\t"," CLB\n"<ja>"\n'
+            u'\t"ja" CC <sme> @CNP\n"<erenoamážit>"\n'
+            u'\t"erenoamážit" Adv <sme>\n"<dalle_go>"\n'
+            u'\t"dalle_go" MWE CS <sme> @CVP\n"<lei>"\n'
+            u'\t"leat" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<buolaš>"\n'
+            u'\t"buolaš" Sem/Wthr N <sme> Sg Nom\n"<,>"\n'
+            u'\t"," CLB\n"<de>"\n\t"de" Adv <sme>\n"<aggregáhta>"\n'
+            u'\t"aggregáhta" N <sme> Sg Nom\n"<billánii>"\n'
+            u'\t"billánit" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<.>"\n'
+            u'\t"." CLB\n\n"<¶>"\n\t"¶" CLB\n\n')
 
         self.assertEqual(got, want.encode(u'utf8'))
 
@@ -82,7 +98,19 @@ class TestAnalyser(unittest.TestCase):
         """
         self.a.dependency_analysis()
         got = self.a.get_dependency()
-        want = u'"<Muhto>"\n\t"muhto" CC @CVP #1->1\n"<gaskkohagaid>"\n\t"gaskkohagaid" Adv @ADVL> #2->12\n"<,>"\n\t"," CLB #3->4\n"<ja>"\n\t"ja" CC @CNP #4->2\n"<erenoamážit>"\n\t"erenoamážit" Adv @ADVL> #5->12\n"<dalle_go>"\n\t"dalle_go" CS @CVP #6->7\n"<lei>"\n\t"leat" V IV Ind Prt Sg3 @FS-ADVL> #7->12\n"<buolaš>"\n\t"buolaš" N Sg Nom @<SPRED #8->7\n"<,>"\n\t"," CLB #9->6\n"<de>"\n\t"de" Adv @ADVL> #10->12\n"<aggregáhta>"\n\t"aggregáhta" N Sg Nom @SUBJ> #11->12\n"<billánii>"\n\t"billánit" V IV Ind Prt Sg3 @FS-ADVL> #12->0\n"<.>"\n\t"." CLB #13->12\n\n"<¶>"\n\t"¶" CLB #1->1\n\n'
+        want = (
+            u'"<Muhto>"\n\t"muhto" CC @CVP #1->1\n"<gaskkohagaid>"\n'
+            u'\t"gaskkohagaid" Adv @ADVL> #2->12\n"<,>"\n'
+            u'\t"," CLB #3->4\n"<ja>"\n\t"ja" CC @CNP #4->2\n"<erenoamážit>"\n'
+            u'\t"erenoamážit" Adv @ADVL> #5->12\n"<dalle_go>"\n'
+            u'\t"dalle_go" CS @CVP #6->7\n"<lei>"\n'
+            u'\t"leat" V IV Ind Prt Sg3 @FS-ADVL> #7->12\n"<buolaš>"\n'
+            u'\t"buolaš" N Sg Nom @<SPRED #8->7\n"<,>"\n'
+            u'\t"," CLB #9->6\n"<de>"\n'
+            u'\t"de" Adv @ADVL> #10->12\n"<aggregáhta>"\n'
+            u'\t"aggregáhta" N Sg Nom @SUBJ> #11->12\n"<billánii>"\n'
+            u'\t"billánit" V IV Ind Prt Sg3 @FS-ADVL> #12->0\n"<.>"\n'
+            u'\t"." CLB #13->12\n\n"<¶>"\n\t"¶" CLB #1->1\n\n')
 
         self.assertEqual(got, want.encode(u'utf8'))
 
@@ -92,37 +120,67 @@ class TestAnalyser(unittest.TestCase):
         self.a.etree = etree.parse(self.a.xml_file)
         self.a.dependency_analysis()
         got = self.a.get_analysis_xml()
-        want = u'''<document xml:lang="sme" id="no_id">
-  <header>
-    <title>Internáhtta sosiálalaš giliguovddážin</title>
-    <genre code="facta"/>
-    <author>
-      <person firstname="Abba" lastname="Abbamar" sex="m" born="1900" nationality="nor"/>
-    </author>
-    <translator>
-      <person firstname="Ibba" lastname="Ibbamar" sex="unknown" born="" nationality=""/>
-    </translator>
-    <translated_from xml:lang="nob"/>
-    <year>2005</year>
-    <publChannel>
-      <publication>
-        <publisher>Almmuheaddji OS</publisher>
-      </publication>
-    </publChannel>
-    <wordcount>10</wordcount>
-    <availability>
-      <free/>
-    </availability>
-    <submitter name="Børre Gaup" email="boerre.gaup@samediggi.no"/>
-    <multilingual>
-      <language xml:lang="nob"/>
-    </multilingual>
-    <origFileName>aarseth_s.htm</origFileName>
-    <metadata>
-      <uncomplete/>
-    </metadata>
-    <version>XSLtemplate  1.9 ; file-specific xsl  $Revision: 1.3 $; common.xsl  $Revision$; </version>
-  </header>
-  <body><disambiguation><![CDATA["<Muhto>"\n\t"muhto" CC <sme> @CVP\n"<gaskkohagaid>"\n\t"gaskkohagaid" Adv <sme>\n"<,>"\n\t"," CLB\n"<ja>"\n\t"ja" CC <sme> @CNP\n"<erenoamážit>"\n\t"erenoamážit" Adv <sme>\n"<dalle_go>"\n\t"dalle_go" MWE CS <sme> @CVP\n"<lei>"\n\t"leat" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<buolaš>"\n\t"buolaš" Sem/Wthr N <sme> Sg Nom\n"<,>"\n\t"," CLB\n"<de>"\n\t"de" Adv <sme>\n"<aggregáhta>"\n\t"aggregáhta" N <sme> Sg Nom\n"<billánii>"\n\t"billánit" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<.>"\n\t"." CLB\n\n"<¶>"\n\t"¶" CLB\n\n]]></disambiguation><dependency><![CDATA["<Muhto>"\n\t"muhto" CC @CVP #1->1\n"<gaskkohagaid>"\n\t"gaskkohagaid" Adv @ADVL> #2->12\n"<,>"\n\t"," CLB #3->4\n"<ja>"\n\t"ja" CC @CNP #4->2\n"<erenoamážit>"\n\t"erenoamážit" Adv @ADVL> #5->12\n"<dalle_go>"\n\t"dalle_go" CS @CVP #6->7\n"<lei>"\n\t"leat" V IV Ind Prt Sg3 @FS-ADVL> #7->12\n"<buolaš>"\n\t"buolaš" N Sg Nom @<SPRED #8->7\n"<,>"\n\t"," CLB #9->6\n"<de>"\n\t"de" Adv @ADVL> #10->12\n"<aggregáhta>"\n\t"aggregáhta" N Sg Nom @SUBJ> #11->12\n"<billánii>"\n\t"billánit" V IV Ind Prt Sg3 @FS-ADVL> #12->0\n"<.>"\n\t"." CLB #13->12\n\n"<¶>"\n\t"¶" CLB #1->1\n\n]]></dependency></body></document>'''
+        want = (
+            u'<document xml:lang="sme" id="no_id">\n'
+            u'  <header>\n'
+            u'    <title>Internáhtta sosiálalaš giliguovddážin</title>\n'
+            u'    <genre code="facta"/>\n'
+            u'    <author>\n'
+            u'      <person firstname="Abba" lastname="Abbamar" sex="m" '
+            u'born="1900" nationality="nor"/>\n'
+            u'    </author>\n'
+            u'    <translator>\n'
+            u'      <person firstname="Ibba" lastname="Ibbamar" sex="unknown" '
+            u'born="" nationality=""/>\n'
+            u'    </translator>\n'
+            u'    <translated_from xml:lang="nob"/>\n'
+            u'    <year>2005</year>\n'
+            u'    <publChannel>\n'
+            u'      <publication>\n'
+            u'        <publisher>Almmuheaddji OS</publisher>\n'
+            u'      </publication>\n'
+            u'    </publChannel>\n'
+            u'    <wordcount>10</wordcount>\n'
+            u'    <availability>\n'
+            u'      <free/>\n'
+            u'    </availability>\n'
+            u'    <submitter name="Børre Gaup" '
+            u'email="boerre.gaup@samediggi.no"/>\n'
+            u'    <multilingual>\n'
+            u'      <language xml:lang="nob"/>\n'
+            u'    </multilingual>\n'
+            u'    <origFileName>aarseth_s.htm</origFileName>\n'
+            u'    <metadata>\n'
+            u'      <uncomplete/>\n'
+            u'    </metadata>\n'
+            u'    <version>XSLtemplate  1.9 ; file-specific xsl  '
+            u'$Revision: 1.3 $; common.xsl  $Revision$; </version>\n'
+            u'  </header>\n'
+            u'  <body><disambiguation><![CDATA["<Muhto>"\n'
+            u'\t"muhto" CC <sme> @CVP\n"<gaskkohagaid>"\n'
+            u'\t"gaskkohagaid" Adv <sme>\n"<,>"\n\t"," CLB\n"<ja>"\n'
+            u'\t"ja" CC <sme> @CNP\n"<erenoamážit>"\n'
+            u'\t"erenoamážit" Adv <sme>\n"<dalle_go>"\n'
+            u'\t"dalle_go" MWE CS <sme> @CVP\n"<lei>"\n'
+            u'\t"leat" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<buolaš>"\n'
+            u'\t"buolaš" Sem/Wthr N <sme> Sg Nom\n"<,>"\n'
+            u'\t"," CLB\n"<de>"\n\t"de" Adv <sme>\n"<aggregáhta>"\n'
+            u'\t"aggregáhta" N <sme> Sg Nom\n"<billánii>"\n'
+            u'\t"billánit" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<.>"\n'
+            u'\t"." CLB\n\n"<¶>"\n\t"¶" CLB\n\n]]></disambiguation>'
+            u'<dependency><![CDATA["<Muhto>"\n'
+            u'\t"muhto" CC @CVP #1->1\n"<gaskkohagaid>"\n'
+            u'\t"gaskkohagaid" Adv @ADVL> #2->12\n"<,>"\n'
+            u'\t"," CLB #3->4\n"<ja>"\n\t"ja" CC @CNP #4->2\n"<erenoamážit>"\n'
+            u'\t"erenoamážit" Adv @ADVL> #5->12\n"<dalle_go>"\n'
+            u'\t"dalle_go" CS @CVP #6->7\n"<lei>"\n'
+            u'\t"leat" V IV Ind Prt Sg3 @FS-ADVL> #7->12\n"<buolaš>"\n'
+            u'\t"buolaš" N Sg Nom @<SPRED #8->7\n"<,>"\n'
+            u'\t"," CLB #9->6\n"<de>"\n'
+            u'\t"de" Adv @ADVL> #10->12\n"<aggregáhta>"\n'
+            u'\t"aggregáhta" N Sg Nom @SUBJ> #11->12\n"<billánii>"\n'
+            u'\t"billánit" V IV Ind Prt Sg3 @FS-ADVL> #12->0\n"<.>"\n'
+            u'\t"." CLB #13->12\n\n"<¶>"\n'
+            u'\t"¶" CLB #1->1\n\n]]></dependency></body></document>')
         self.maxDiff = None
         self.assertEqual(etree.tostring(got, encoding=u'unicode'), want)

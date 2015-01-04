@@ -29,6 +29,7 @@ import lxml.html
 import argparse_version
 import namechanger
 
+
 class SamediggiFiCrawler(object):
     '''Notes about samediggi.fi
 
@@ -112,17 +113,17 @@ class SamediggiFiCrawler(object):
                                 'admin/sd/www.samediggi.fi'))
                         else:
                             if 'samediggi.fi' not in r.url:
-                                print >>sys.stderr
-                                print >>sys.stderr, 'Not fetching %s which was %s' % (r.url, link)
-                                print >>sys.stderr
+                                print >>sys.stderr, (
+                                    '\nNot fetching %s which was %s\n' %
+                                    (r.url, link))
 
                     if found_saami:
                         self.save_pages(pages)
                 except UserWarning:
                     print >>sys.stderr, '%s does not exist' % link
 
-                print >>sys.stderr, 'After: unvisited_links % ' % (self.unvisited_links)
-                print >>sys.stderr
+                print >>sys.stderr, ('After: unvisited_links %s\n' %
+                                     (self.unvisited_links))
 
             self.visited_links.add(link)
             print >>sys.stderr, 'visited_links %s' % len(self.visited_links)
@@ -165,7 +166,9 @@ class SamediggiFiCrawler(object):
                 if not href.startswith('http'):
                     href = os.path.join('http://www.samediggi.fi', href)
 
-                if href not in self.visited_links and not re.search('klemetti.blogspot|/nuorat|/#|com_events|com_search|haettavana|do_pdf|pop=1|com_docman|/images|com_weblink|task=vcard', href) and href.startswith('http://www.samediggi.fi'):
+                if (href not in self.visited_links and not
+                        re.search('klemetti.blogspot|/nuorat|/#|com_events|com_search|haettavana|do_pdf|pop=1|com_docman|/images|com_weblink|task=vcard', href) and
+                        href.startswith('http://www.samediggi.fi')):
                     self.unvisited_links.add(href)
 
     def save_pages(self, pages):

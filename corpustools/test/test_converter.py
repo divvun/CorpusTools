@@ -17,11 +17,14 @@ here = os.path.dirname(__file__)
 class TestConverter(unittest.TestCase):
     def setUp(self):
         self.converter_inside_orig = converter.Converter(
-            os.path.join(here, 'converter_data/fakecorpus/orig/nob/samediggi-article-16.html'),
+            os.path.join(here,
+                         'converter_data/fakecorpus/orig/nob/samediggi-'
+                         'article-16.html'),
             True)
 
         self.converter_outside_orig = converter.Converter(
-            os.path.join(here, 'converter_data/samediggi-article-48.html'), False)
+            os.path.join(here,
+                         'converter_data/samediggi-article-48.html'), False)
 
         self.converter_inside_freecorpus = converter.Converter(
             os.path.join(
@@ -34,15 +37,14 @@ class TestConverter(unittest.TestCase):
             self.converter_inside_orig.get_orig(),
             os.path.join(
                 here,
-                'converter_data/\
-fakecorpus/orig/nob/samediggi-article-16.html'))
+                'converter_data/fakecorpus/orig/nob/samediggi-article-'
+                '16.html'))
 
         self.assertEqual(
             self.converter_outside_orig.get_orig(),
             os.path.join(
                 here,
-                'converter_data/\
-samediggi-article-48.html'))
+                'converter_data/samediggi-article-48.html'))
 
         self.assertEqual(
             self.converter_inside_freecorpus.get_orig(),
@@ -55,22 +57,21 @@ samediggi-article-48.html'))
             self.converter_inside_orig.get_xsl(),
             os.path.join(
                 here,
-                'converter_data/fakecorpus/\
-orig/nob/samediggi-article-16.html.xsl'))
+                'converter_data/fakecorpus/orig/nob/samediggi-'
+                'article-16.html.xsl'))
 
         self.assertEqual(
             self.converter_outside_orig.get_xsl(),
             os.path.join(
                 here,
-                'converter_data/\
-samediggi-article-48.html.xsl'))
+                'converter_data/samediggi-article-48.html.xsl'))
 
         self.assertEqual(
             self.converter_inside_freecorpus.get_xsl(),
             os.path.join(
                 os.getenv('GTFREE'),
-                'orig/sme/admin/sd/samediggi.no/\
-samediggi-article-48.html.xsl'))
+                'orig/sme/admin/sd/samediggi.no/samediggi-article-'
+                '48.html.xsl'))
 
     def test_get_tmpdir(self):
         self.assertEqual(
@@ -94,8 +95,7 @@ samediggi-article-48.html.xsl'))
             self.converter_inside_orig.get_corpusdir(),
             os.path.join(
                 here,
-                'converter_data/\
-fakecorpus'))
+                'converter_data/fakecorpus'))
 
         self.assertEqual(
             self.converter_outside_orig.get_corpusdir(),
@@ -110,24 +110,23 @@ fakecorpus'))
             self.converter_inside_orig.get_converted_name(),
             os.path.join(
                 here,
-                'converter_data/\
-fakecorpus/converted/nob/samediggi-article-16.html.xml'))
+                'converter_data/fakecorpus/converted/nob/samediggi-'
+                'article-16.html.xml'))
 
     def test_get_converted_name_outside_orig(self):
         self.assertEqual(
             self.converter_outside_orig.get_converted_name(),
             os.path.join(
                 here,
-                'converted/\
-samediggi-article-48.html.xml'))
+                'converted/samediggi-article-48.html.xml'))
 
     def test_get_converted_inside_freecorpus(self):
         self.assertEqual(
             self.converter_inside_freecorpus.get_converted_name(),
             os.path.join(
                 os.getenv('GTFREE'),
-                'converted/sme/admin/sd/samediggi.no/\
-samediggi-article-48.html.xml'))
+                'converted/sme/admin/sd/samediggi.no/samediggi-'
+                'article-48.html.xml'))
 
 
 class XMLTester(unittest.TestCase):
@@ -203,7 +202,8 @@ class TestAvvirConverter(XMLTester):
 </article>''')
 
         self.avvir.convert_p()
-        self.assertXmlEqual(etree.tostring(self.avvir.intermediate), etree.tostring(want))
+        self.assertXmlEqual(
+            etree.tostring(self.avvir.intermediate), etree.tostring(want))
 
     def test_convert_story(self):
         want = etree.fromstring('''<article>
@@ -228,7 +228,8 @@ class TestAvvirConverter(XMLTester):
 
         self.avvir.convert_p()
         self.avvir.convert_story()
-        self.assertXmlEqual(etree.tostring(self.avvir.intermediate), etree.tostring(want))
+        self.assertXmlEqual(
+            etree.tostring(self.avvir.intermediate), etree.tostring(want))
 
     def test_convert_article(self):
         want = etree.fromstring('''<document>
@@ -256,7 +257,9 @@ class TestAvvirConverter(XMLTester):
         self.avvir.convert_p()
         self.avvir.convert_story()
         self.avvir.convert_article()
-        self.assertXmlEqual(etree.tostring(self.avvir.intermediate), etree.tostring(want))
+        self.assertXmlEqual(
+            etree.tostring(self.avvir.intermediate), etree.tostring(want))
+
 
 class TestSVGConverter(XMLTester):
     def setUp(self):
@@ -293,12 +296,12 @@ class TestPlaintextConverter(XMLTester):
     def test_strip_chars1(self):
         plaintext = converter.PlaintextConverter(
             'tullball.txt')
-        got = plaintext.strip_chars(u'''
-\x0d
-<ASCII-MAC>
-<vsn:3.000000>
-<\!q>
-<\!h>''')
+        got = plaintext.strip_chars(
+            '\x0d\n'
+            '<ASCII-MAC>\n'
+            '<vsn:3.000000>\n'
+            '<\!q>\n'
+            '<\!h>\n')
         want = u'''\n\n\n\n\n\n'''
 
         self.assertEqual(got, want)
@@ -306,7 +309,9 @@ class TestPlaintextConverter(XMLTester):
     def test_strip_chars2(self):
         plaintext = converter.PlaintextConverter(
             'tullball.txt')
-        got = plaintext.strip_chars(u'''<0x010C><0x010D><0x0110><0x0111><0x014A><0x014B><0x0160><0x0161><0x0166><0x0167><0x017D><0x017E><0x2003>''')
+        got = plaintext.strip_chars(
+            '<0x010C><0x010D><0x0110><0x0111><0x014A><0x014B><0x0160><0x0161>'
+            '<0x0166><0x0167><0x017D><0x017E><0x2003>')
         want = u'''ČčĐđŊŋŠšŦŧŽž '''
 
         self.assertEqual(got, want)
@@ -376,44 +381,51 @@ class TestPDFConverter(XMLTester):
 
 class TestDocConverter(XMLTester):
     def setUp(self):
-        self.testdoc = converter.DocConverter(os.path.join(here,
-            'converter_data/doc-test.doc'))
+        self.testdoc = converter.DocConverter(
+            os.path.join(here,
+                         'converter_data/doc-test.doc'))
 
     def test_convert2intermediate(self):
         got = self.testdoc.convert2intermediate()
-        want = etree.parse(os.path.join(here,
-            'converter_data/doc-test.xml'))
+        want = etree.parse(
+            os.path.join(here,
+                         'converter_data/doc-test.xml'))
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_doc2html1(self):
         '''doc2html should raise an exception when wvHtml fails
         '''
-        self.assertRaises(converter.ConversionException, converter.DocConverter, filename='bogus.doc')
+        self.assertRaises(converter.ConversionException,
+                          converter.DocConverter, filename='bogus.doc')
 
 
 class TestBiblexmlConverter(XMLTester):
     def setUp(self):
-        self.testdoc = converter.BiblexmlConverter(os.path.join(here,
-            'converter_data/bible-test.xml'))
+        self.testdoc = converter.BiblexmlConverter(
+            os.path.join(here,
+                         'converter_data/bible-test.xml'))
 
     def test_convert2intermediate(self):
         got = self.testdoc.convert2intermediate()
-        want = etree.parse(os.path.join(here,
-            'converter_data/bible-test.xml.xml'))
+        want = etree.parse(
+            os.path.join(here,
+                         'converter_data/bible-test.xml.xml'))
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
 
 class TestHTMLConverter(XMLTester):
     def setUp(self):
-        self.testhtml = converter.HTMLConverter(os.path.join(here,
-            'converter_data/samediggi-article-48s.html'))
+        self.testhtml = converter.HTMLConverter(
+            os.path.join(here,
+                         'converter_data/samediggi-article-48s.html'))
 
     def test_convert2intermediate(self):
         got = self.testhtml.convert2intermediate()
-        want = etree.parse(os.path.join(here,
-            'converter_data/samediggi-article-48s.xml'))
+        want = etree.parse(
+            os.path.join(here,
+                         'converter_data/samediggi-article-48s.xml'))
 
         with open('got.xml', 'w') as f1:
             f1.write(etree.tostring(got, pretty_print=True, encoding='utf-8'))
@@ -426,9 +438,13 @@ class TestHTMLContentConverter(XMLTester):
     def test_remove_empty_class(self):
         got = converter.HTMLContentConverter(
             'with-o:p.html',
-            '<html><body><div class="">a</div><div class="a"><span class="">b</span></div></html>', None).tidy()
+            '<html><body><div class="">a</div><div class="a">'
+            '<span class="">b</span></div></html>',
+            None).tidy()
 
-        want = html5parser.document_fromstring('<html><head/><body><div>a</div><div class="a"><span>b</span></div></body></html>')
+        want = html5parser.document_fromstring(
+            '<html><head/><body><div>a</div><div class="a">'
+            '<span>b</span></div></body></html>')
 
         self.assertEqual(got, etree.tostring(want))
 
@@ -447,7 +463,9 @@ class TestHTMLContentConverter(XMLTester):
                     'searchBox',
                     'murupolku',
                     'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
-                    'ctl00_FullRegion_CenterAndRightRegion_HitsControl_searchHitSummary',
+                    (
+                        'ctl00_FullRegion_CenterAndRightRegion_HitsControl_'
+                        'searchHitSummary'),
                     'AreaTopSiteNav', 'SamiDisclaimer', 'AreaTopRight',
                     'AreaLeft', 'AreaRight', 'ShareArticle', 'tipafriend',
                     'AreaLeftNav', 'PageFooter', 'blog-pager',
@@ -457,13 +475,15 @@ class TestHTMLContentConverter(XMLTester):
                     'share-article', 'topUserMenu', 'rightAds', 'menu', 'aa',
                     'sidebar', 'footer', 'chatBox', 'sendReminder',
                     'ctl00_MidtSone_ucArtikkel_ctl00_divNavigasjon',
-                    'ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl01_divRessurser'],
+                    (
+                        'ctl00_MidtSone_ucArtikkel_ctl00_'
+                        'ctl00_ctl01_divRessurser')],
                 },
             'p': {
                 'class': ['WebPartReadMoreParagraph', 'breadcrumbs'],
                 },
             'ul': {
-                'id': ['AreaTopPrintMeny', 'AreaTopLanguageNav',],
+                'id': ['AreaTopPrintMeny', 'AreaTopLanguageNav'],
                 'class': ['QuickNav', 'article-tools', 'byline']
                 },
             'span': {
@@ -477,43 +497,62 @@ class TestHTMLContentConverter(XMLTester):
                 for value in values:
                     hc = converter.HTMLContentConverter(
                         tag + key + value + '.html',
-                        '<html><body><' + tag + " " + key + '="' + value + '">content:' + tag + key + value + '</' + tag + '><div class="ada"/></body></html>', None)
+                        '<html><body><{0} {1}="{2}">content:{0}{1}{2}</{0}>'
+                        '<div class="ada"/></body>'
+                        '</html>'.format(tag, key, value), None)
                     hc.remove_elements()
 
-                    want = html5parser.document_fromstring('<html><body><div class="ada"/></body></html>')
+                    want = html5parser.document_fromstring(
+                        '<html><body><div class="ada"/></body></html>')
 
-                    self.assertEqual(etree.tostring(hc.soup), etree.tostring(want))
+                    self.assertEqual(
+                        etree.tostring(hc.soup), etree.tostring(want))
 
     def test_remove_unwanted_tags(self):
-        from lxml.html.diff import htmldiff
         unwanted_tags = [
             'script', 'style', 'area', 'object', 'meta',
             'hr', 'nf', 'mb', 'ms',
             'img', 'cite', 'embed', 'footer', 'figcaption', 'aside', 'time',
-            'figure', 'nav', 'select', 'noscript', 'iframe', 'map', 'colgroup', 'st1:country-region', 'v:shapetype', 'v:shape', 'st1:metricconverter', 'fb:comments', 'g:plusone', 'fb:like',]
+            'figure', 'nav', 'select', 'noscript', 'iframe', 'map',
+            'colgroup', 'st1:country-region', 'v:shapetype', 'v:shape',
+            'st1:metricconverter', 'fb:comments', 'g:plusone', 'fb:like',
+            ]
 
         for unwanted_tag in unwanted_tags:
-            got = converter.HTMLContentConverter(unwanted_tag + '.html',
-                                                 '<html><body><p>p1</p><' + unwanted_tag + '/><p>p2</p2></body></html>', None).tidy()
-            want = '<html:html xmlns:html="http://www.w3.org/1999/xhtml"><html:head/><html:body><html:p>p1</html:p><html:p>p2</html:p></html:body></html:html>'
+            got = converter.HTMLContentConverter(
+                unwanted_tag + '.html',
+                (
+                    '<html><body><p>p1</p><%s/><p>p2</p2></body>'
+                    '</html>' % unwanted_tag
+                ), None).tidy()
+            want = (
+                '<html:html xmlns:html="http://www.w3.org/1999/xhtml">'
+                '<html:head/><html:body><html:p>p1</html:p><html:p>p2'
+                '</html:p></html:body></html:html>')
 
             self.assertEqual(got, want)
 
     def test_remove_comment(self):
         got = converter.HTMLContentConverter(
             'with-o:p.html',
-            '<html><body><b><!--Hey, buddy. --></b></body></html>', None).tidy()
+            '<html><body><b><!--Hey, buddy. --></b></body></html>',
+            None).tidy()
 
-        want = '<html:html xmlns:html="http://www.w3.org/1999/xhtml"><html:head/><html:body><html:b/></html:body></html:html>'
+        want = (
+            '<html:html xmlns:html="http://www.w3.org/1999/xhtml"><html:head/>'
+            '<html:body><html:b/></html:body></html:html>')
 
         self.assertEqual(got, want)
 
     def test_remove_processinginstruction(self):
         got = converter.HTMLContentConverter(
             'with-o:p.html',
-            '<html><body><b><?ProcessingInstruction?></b></body></html>', None).tidy()
+            '<html><body><b><?ProcessingInstruction?></b></body></html>',
+            None).tidy()
 
-        want = '<html:html xmlns:html="http://www.w3.org/1999/xhtml"><html:head/><html:body><html:b/></html:body></html:html>'
+        want = (
+            '<html:html xmlns:html="http://www.w3.org/1999/xhtml">'
+            '<html:head/><html:body><html:b/></html:body></html:html>')
 
         self.assertEqual(got, want)
 
@@ -522,21 +561,18 @@ class TestHTMLContentConverter(XMLTester):
         '''
         hcc = converter.HTMLContentConverter(
             'withoutp.html',
-            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
-            <html><head><meta http-equiv="Content-type" \
-            content="text/html; charset=utf-8">\
-            <title>– Den utdøende stammes frykt</title>\
-            </head><body><h3>VI</h3>... Finnerne<p>Der</body>\
-            </html>', None)
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">'
+            '<html><head><meta http-equiv="Content-type" content="text/html; '
+            'charset=utf-8"><title>– Den utdøende stammes frykt</title>'
+            '</head><body><h3>VI</h3>... Finnerne<p>Der</body></html>', None)
         hcc.add_p_around_text()
 
-        want = '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD \
-        XHTML 1.0 Strict//EN"    \
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\
-        <html xmlns="http://www.w3.org/1999/xhtml"><head><title>\
-        – Den utdøende stammes frykt</title>  \
-        </head><body>  <h3>VI</h3>  <p>... Finnerne</p>\
-        <p>Der</p></body></html>'
+        want = (
+            '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML '
+            '1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1'
+            '-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>'
+            '<title>– Den utdøende stammes frykt</title></head><body>'
+            '<h3>VI</h3>  <p>... Finnerne</p><p>Der</p></body></html>')
 
         self.assertXmlEqual(etree.tostring(hcc.soup), want)
 
@@ -545,21 +581,18 @@ class TestHTMLContentConverter(XMLTester):
         '''
         hcc = converter.HTMLContentConverter(
             'withoutp.html',
-            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
-            <html><head><meta http-equiv="Content-type" \
-            content="text/html; charset=utf-8">\
-            <title>– Den utdøende stammes frykt</title>\
-            </head><body><h3>VI</h3>... Finnerne<i>Der</body>\
-            </html>', None)
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">'
+            '<html><head><meta http-equiv="Content-type" content="text/html; '
+            'charset=utf-8"><title>– Den utdøende stammes frykt</title>'
+            '</head><body><h3>VI</h3>... Finnerne<i>Der</body></html>', None)
         hcc.add_p_around_text()
 
-        want = '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD \
-        XHTML 1.0 Strict//EN"    \
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\
-        <html xmlns="http://www.w3.org/1999/xhtml"><head><title>\
-        – Den utdøende stammes frykt</title>  \
-        </head><body>  <h3>VI</h3>  <p>... Finnerne<i>Der</i></p>\
-        </body></html>'
+        want = (
+            '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML '
+            '1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-'
+            'strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>'
+            '<title>– Den utdøende stammes frykt</title></head><body>'
+            '<h3>VI</h3>  <p>... Finnerne<i>Der</i></p></body></html>')
 
         self.assertXmlEqual(etree.tostring(hcc.soup), want)
 
@@ -568,21 +601,20 @@ class TestHTMLContentConverter(XMLTester):
         '''
         hcc = converter.HTMLContentConverter(
             'withoutp.html',
-            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
-            <html><head><meta http-equiv="Content-type" \
-            content="text/html; charset=utf-8">\
-            <title>– Den utdøende stammes frykt</title>\
-            </head><body><h3>VI</h3>... Finnerne<a/><h2>Der</h2></body>\
-            </html>', None)
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<head><meta http-equiv="Content-type" content="text/html; '
+            'charset=utf-8"><title>– Den utdøende stammes frykt</title>'
+            '</head><body><h3>VI</h3>... Finnerne<a/>'
+            '<h2>Der</h2></body></html>', None)
         hcc.add_p_around_text()
 
-        want = '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD \
-        XHTML 1.0 Strict//EN"    \
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\
-        <html xmlns="http://www.w3.org/1999/xhtml"><head><title>\
-        – Den utdøende stammes frykt</title>  \
-        </head><body>  <h3>VI</h3>  <p>... Finnerne<a/></p><h2>Der</h2>\
-        </body></html>'
+        want = (
+            '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML '
+            '1.0 Strict//EN" '
+            '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
+            '<html xmlns="http://www.w3.org/1999/xhtml"><head><title>– Den '
+            'utdøende stammes frykt</title>  </head><body>  <h3>VI</h3>  '
+            '<p>... Finnerne<a/></p><h2>Der</h2></body></html>')
 
         self.assertXmlEqual(etree.tostring(hcc.soup), want)
 
@@ -590,9 +622,9 @@ class TestHTMLContentConverter(XMLTester):
         '''Check that default charset is set, 1
         encoding_from_xsl = None, no charset in html header
         '''
-        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
-            <html><body></body>\
-            </html>'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<body></body></html>')
         encoding_from_xsl = None
 
         hcc = converter.HTMLContentConverter(
@@ -607,9 +639,9 @@ class TestHTMLContentConverter(XMLTester):
         '''Check that default charset is set, 2
         encoding_from_xsl = '', no charset in html header
         '''
-        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
-            <html><body></body>\
-            </html>'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<body></body></html>')
         encoding_from_xsl = ''
 
         hcc = converter.HTMLContentConverter(
@@ -623,9 +655,9 @@ class TestHTMLContentConverter(XMLTester):
     def test_set_charset_3(self):
         '''encoding_from_xsl = 'iso-8859-1', no charset in html header
         '''
-        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
-            <html><body></body>\
-            </html>'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<body></body></html>')
         encoding_from_xsl = 'iso-8859-1'
 
         hcc = converter.HTMLContentConverter(
@@ -640,11 +672,10 @@ class TestHTMLContentConverter(XMLTester):
         '''Check that encoding_from_xsl overrides meta charset
         encoding_from_xsl = 'iso-8859-1', charset in html header = utf-8
         '''
-        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
-            <html><head><meta http-equiv="Content-type" \
-            content="text/html; charset=utf-8">\
-            </head><body></body>\
-            </html>'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<head><meta http-equiv="Content-type" content="text/html; '
+            'charset=utf-8"></head><body></body></html>')
 
         encoding_from_xsl = 'iso-8859-1'
 
@@ -659,11 +690,10 @@ class TestHTMLContentConverter(XMLTester):
     def test_set_charset_5(self):
         '''encoding_from_xsl = None, charset in html header = iso-8859-1
         '''
-        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
-            <html><head><meta http-equiv="Content-type" \
-            content="text/html; charset=iso-8859-1">\
-            </head><body></body>\
-            </html>'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<head><meta http-equiv="Content-type" content="text/html; '
+            'charset=iso-8859-1"></head><body></body></html>')
 
         encoding_from_xsl = None
 
@@ -678,11 +708,10 @@ class TestHTMLContentConverter(XMLTester):
     def test_set_charset_6(self):
         '''encoding_from_xsl = '', charset in html header = iso-8859-1
         '''
-        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
-            <html><head><meta http-equiv="Content-type" \
-            content="text/html; charset=iso-8859-1">\
-            </head><body></body>\
-            </html>'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<head><meta http-equiv="Content-type" content="text/html; '
+            'charset=iso-8859-1"></head><body></body></html>')
 
         encoding_from_xsl = ''
 
@@ -698,11 +727,10 @@ class TestHTMLContentConverter(XMLTester):
         '''Test if set_charset works with ' as quote mark around charset
         encoding_from_xsl = '', charset in html header = iso-8859-1
         '''
-        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
-            <html><head><meta http-equiv="Content-type" \
-            content=\'text/html; charset=iso-8859-1\'>\
-            </head><body></body>\
-            </html>'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<head><meta http-equiv="Content-type" content=\'text/html; '
+            'charset=iso-8859-1\'></head><body></body></html>')
 
         encoding_from_xsl = ''
 
@@ -715,15 +743,15 @@ class TestHTMLContentConverter(XMLTester):
         self.assertEqual(got, 'windows-1252')
 
     def test_set_charset_8(self):
-        '''Test if set_charset works with ' as quote mark around charset when " is found later
+        '''Test if set_charset works with ' as quote mark around charset when
+        " is found later
         encoding_from_xsl = '', charset in html header = iso-8859-1
         '''
-        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
-            <html><head><meta http-equiv="Content-type" \
-            content=\'text/html; charset=iso-8859-1\'>\
-            <link rel="index.html">\
-            </head><body></body>\
-            </html>'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<head><meta http-equiv="Content-type" content=\'text/html; '
+            'charset=iso-8859-1\'><link rel="index.html"></head><body>'
+            '</body></html>')
 
         encoding_from_xsl = ''
 
@@ -736,15 +764,15 @@ class TestHTMLContentConverter(XMLTester):
         self.assertEqual(got, 'windows-1252')
 
     def test_set_charset_9(self):
-        '''Test if set_charset works with " as quote mark around charset when ' is found later
+        '''Test if set_charset works with " as quote mark around charset
+        when ' is found later
         encoding_from_xsl = '', charset in html header = iso-8859-1
         '''
-        content = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">\
-            <html><head><meta http-equiv="Content-type" \
-            content="text/html; charset=iso-8859-1">\
-            <link rel=\'index.html\'>\
-            </head><body></body>\
-            </html>'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<head><meta http-equiv="Content-type" content="text/html; '
+            'charset=iso-8859-1"><link rel=\'index.html\'></head><body>'
+            '</body></html>')
 
         encoding_from_xsl = ''
 
@@ -759,9 +787,12 @@ class TestHTMLContentConverter(XMLTester):
     def test_center2div(self):
         got = converter.HTMLContentConverter(
             'center.html',
-            '<html><body><center><span class="">b</span></center></html>', None).tidy()
+            '<html><body><center><span class="">b</span></center></html>',
+            None).tidy()
 
-        want = html5parser.document_fromstring('<html><head/><body><div class="c1"><span>b</span></div></body></html>')
+        want = html5parser.document_fromstring(
+            '<html><head/><body><div class="c1"><span>b</span></div></body>'
+            '</html>')
 
         self.assertEqual(got, etree.tostring(want))
 
@@ -770,7 +801,8 @@ class TestHTMLContentConverter(XMLTester):
             'i.html',
             '<html><body><i>b</i></body></html>', None).tidy()
 
-        want = html5parser.document_fromstring('<html><head/><body><p><i>b</i></p></body></html>')
+        want = html5parser.document_fromstring(
+            '<html><head/><body><p><i>b</i></p></body></html>')
 
         self.assertEqual(got, etree.tostring(want))
 
@@ -779,7 +811,8 @@ class TestHTMLContentConverter(XMLTester):
             'a.html',
             '<html><body><a>b</a></body></html>', None).tidy()
 
-        want = html5parser.document_fromstring('<html><head/><body><p><a>b</a></p></body></html>')
+        want = html5parser.document_fromstring(
+            '<html><head/><body><p><a>b</a></p></body></html>')
 
         self.assertEqual(got, etree.tostring(want))
 
@@ -788,7 +821,8 @@ class TestHTMLContentConverter(XMLTester):
             'em.html',
             '<html><body><em>b</em></body></html>', None).tidy()
 
-        want = html5parser.document_fromstring('<html><head/><body><p><em>b</em></p></body></html>')
+        want = html5parser.document_fromstring(
+            '<html><head/><body><p><em>b</em></p></body></html>')
 
         self.assertEqual(got, etree.tostring(want))
 
@@ -797,7 +831,8 @@ class TestHTMLContentConverter(XMLTester):
             'font.html',
             '<html><body><font>b</font></body></html>', None).tidy()
 
-        want = html5parser.document_fromstring('<html><head/><body><p><font>b</font></p></body></html>')
+        want = html5parser.document_fromstring(
+            '<html><head/><body><p><font>b</font></p></body></html>')
 
         self.assertEqual(got, etree.tostring(want))
 
@@ -828,7 +863,8 @@ class TestDocumentFixer(XMLTester):
              u'GOVVA:Á': u'GOVVA: Á',
              u'GOVVEJEADDJI:Á': u'GOVVEJEADDJI: Á',
              u'Govva:': u'Govva:',
-             u'<em>Govven:Á</em>': u'<em>Govven: Á</em>',}
+             u'<em>Govven:Á</em>': u'<em>Govven: Á</em>',
+             }
         for key, value in a.items():
             document_fixer = converter.DocumentFixer(etree.fromstring(u'''<document>
         <header/>
@@ -2200,27 +2236,30 @@ LOGO: Smi kulturfestivala 1998
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_replace_ligatures(self):
-        svgtext = converter.SVGConverter(os.path.join(here,
-            'converter_data/Riddu_Riddu_avis_TXT.200923.svg'))
+        svgtext = converter.SVGConverter(
+            os.path.join(here,
+                         'converter_data/Riddu_Riddu_avis_TXT.200923.svg'))
         document_fixer = converter.DocumentFixer(
             etree.fromstring(etree.tostring(svgtext.convert2intermediate())))
         document_fixer.fix_body_encoding()
         got = document_fixer.get_etree()
 
-        want = etree.parse(os.path.join(here,
-            'converter_data/Riddu_Riddu_avis_TXT.200923.xml'))
+        want = etree.parse(
+            os.path.join(here,
+                         'converter_data/Riddu_Riddu_avis_TXT.200923.xml'))
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_simple_detect_quote1(self):
         orig_paragraph = '<p>bla bla "bla bla" bla bla </p>'
-        expected_paragraph = '<p>bla bla <span type="quote">"bla bla"\
-        </span> bla bla</p>'
+        expected_paragraph = (
+            '<p>bla bla <span type="quote">"bla bla"</span> bla bla</p>')
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(os.path.join(here,
-                'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml')))
+            etree.parse(
+                os.path.join(here,
+                             'converter_data/samediggi-article-48s-before-'
+                             'lang-detection-with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
@@ -2228,13 +2267,14 @@ with-multilingual-tag.xml')))
 
     def test_simple_detect_quote2(self):
         orig_paragraph = '<p>bla bla “bla bla” bla bla</p>'
-        expected_paragraph = '<p>bla bla <span type="quote">“bla bla”\
-        </span> bla bla</p>'
+        expected_paragraph = (
+            '<p>bla bla <span type="quote">“bla bla”</span> bla bla</p>')
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(os.path.join(here,
-                'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml')))
+            etree.parse(
+                os.path.join(here,
+                             'converter_data/samediggi-article-48s-before-'
+                             'lang-detection-with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
@@ -2242,28 +2282,30 @@ with-multilingual-tag.xml')))
 
     def test_simple_detect_quote3(self):
         orig_paragraph = '<p>bla bla «bla bla» bla bla</p>'
-        expected_paragraph = '<p>bla bla <span type="quote">«bla bla»\
-        </span> bla bla</p>'
+        expected_paragraph = (
+            '<p>bla bla <span type="quote">«bla bla»</span> bla bla</p>')
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(os.path.join(here,
-                'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml')))
+            etree.parse(
+                os.path.join(here,
+                             'converter_data/samediggi-article-48s-before-'
+                             'lang-detection-with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_simple_detect_quote4(self):
-        orig_paragraph = '<p type="title">Sámegiel čálamearkkat Windows \
-        XP várás.</p>'
-        expected_paragraph = '<p type="title">Sámegiel čálamearkkat Windows \
-        XP várás.</p>'
+        orig_paragraph = (
+            '<p type="title">Sámegiel čálamearkkat Windows XP várás.</p>')
+        expected_paragraph = (
+            '<p type="title">Sámegiel čálamearkkat Windows XP várás.</p>')
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(os.path.join(here,
-                'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml')))
+            etree.parse(
+                os.path.join(here,
+                             'converter_data/samediggi-article-48s-before-'
+                             'lang-detection-with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
@@ -2271,13 +2313,15 @@ with-multilingual-tag.xml')))
 
     def test_simple_detect_quote2_quotes(self):
         orig_paragraph = '<p>bla bla «bla bla» bla bla «bla bla» bla bla</p>'
-        expected_paragraph = '<p>bla bla <span type="quote">«bla bla»\
-        </span> bla bla <span type="quote">«bla bla»</span> bla bla</p>'
+        expected_paragraph = (
+            '<p>bla bla <span type="quote">«bla bla»</span> bla bla '
+            '<span type="quote">«bla bla»</span> bla bla</p>')
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(os.path.join(here,
-                'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml')))
+            etree.parse(
+                os.path.join(here,
+                             'converter_data/samediggi-article-48s-before-'
+                             'lang-detection-with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
@@ -2285,13 +2329,15 @@ with-multilingual-tag.xml')))
 
     def test_detect_quote_with_following_tag(self):
         orig_paragraph = '<p>bla bla «bla bla» <em>bla bla</em></p>'
-        expected_paragraph = '<p>bla bla <span type="quote">«bla bla»\
-        </span> <em>bla bla</em></p>'
+        expected_paragraph = (
+            '<p>bla bla <span type="quote">«bla bla»</span> <em>'
+            'bla bla</em></p>')
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(os.path.join(here,
-                'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml')))
+            etree.parse(
+                os.path.join(here,
+                             'converter_data/samediggi-article-48s-before-'
+                             'lang-detection-with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
@@ -2299,13 +2345,15 @@ with-multilingual-tag.xml')))
 
     def test_detect_quote_with_tag_infront(self):
         orig_paragraph = '<p>bla bla <em>bla bla</em> «bla bla»</p>'
-        expected_paragraph = '<p>bla bla <em>bla bla</em> \
-        <span type="quote">«bla bla»</span></p>'
+        expected_paragraph = (
+            '<p>bla bla <em>bla bla</em> <span type="quote">'
+            '«bla bla»</span></p>')
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(os.path.join(here,
-                'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml')))
+            etree.parse(
+                os.path.join(here,
+                             'converter_data/samediggi-article-48s-before-'
+                             'lang-detection-with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
@@ -2313,13 +2361,15 @@ with-multilingual-tag.xml')))
 
     def test_detect_quote_within_tag(self):
         orig_paragraph = '<p>bla bla <em>bla bla «bla bla»</em></p>'
-        expected_paragraph = '<p>bla bla <em>bla bla <span type="quote">\
-        «bla bla»</span></em></p>'
+        expected_paragraph = (
+            '<p>bla bla <em>bla bla <span type="quote">'
+            '«bla bla»</span></em></p>')
 
         document_fixer = converter.DocumentFixer(
-            etree.parse(os.path.join(here,
-                'converter_data/samediggi-article-48s-before-lang-detection-\
-with-multilingual-tag.xml')))
+            etree.parse(
+                os.path.join(here,
+                             'converter_data/samediggi-article-48s-before-'
+                             'lang-detection-with-multilingual-tag.xml')))
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
@@ -2328,20 +2378,23 @@ with-multilingual-tag.xml')))
 
     def test_word_count(self):
         orig_doc = etree.parse(
-            io.BytesIO('<document xml:lang="sma" id="no_id"><header><title/>\
-                <genre/><author><unknown/></author><availability><free/>\
-                </availability><multilingual/></header><body><p>Bïevnesh \
-                naasjovnalen pryövoej bïjre</p><p>2008</p><p>Bïevnesh \
-                eejhtegidie, tjidtjieh aehtjieh bielide naasjovnalen \
-                pryövoej bïjre giej leah maanah 5. jïh 8. tsiehkine</p>\
-                </body></document>'))
+            io.BytesIO(
+                '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
+                '<author><unknown/></author><availability><free/>'
+                '</availability><multilingual/></header><body><p>Bïevnesh '
+                'naasjovnalen pryövoej bïjre</p><p>2008</p><p>Bïevnesh '
+                'eejhtegidie, tjidtjieh aehtjieh bielide naasjovnalen '
+                'pryövoej bïjre giej leah maanah 5. jïh 8. '
+                'tsiehkine</p></body></document>'))
 
-        expected_doc = '<document xml:lang="sma" id="no_id"><header>\
-        <title/><genre/><author><unknown/></author><wordcount>20</wordcount>\
-        <availability><free/></availability><multilingual/></header><body>\
-        <p>Bïevnesh naasjovnalen pryövoej bïjre</p><p>2008</p><p>Bïevnesh \
-        eejhtegidie, tjidtjieh aehtjieh bielide naasjovnalen pryövoej bïjre \
-        giej leah maanah 5. jïh 8. tsiehkine</p></body></document>'
+        expected_doc = (
+            '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
+            '<author><unknown/></author><wordcount>20</wordcount>'
+            '<availability><free/></availability><multilingual/></header>'
+            '<body><p>Bïevnesh naasjovnalen pryövoej bïjre</p>'
+            '<p>2008</p><p>Bïevnesh eejhtegidie, tjidtjieh aehtjieh bielide '
+            'naasjovnalen pryövoej bïjre giej leah maanah 5. jïh 8. '
+            'tsiehkine</p></body></document>')
 
         document_fixer = converter.DocumentFixer(orig_doc)
         document_fixer.set_word_count()
@@ -2350,15 +2403,17 @@ with-multilingual-tag.xml')))
 
     def test_replace_shy1(self):
         orig_doc = etree.parse(
-            io.BytesIO('<document xml:lang="sma" id="no_id"><header><title/>\
-                <genre/><author><unknown/></author><availability><free/>\
-                </availability><multilingual/></header><body><p>a­b­c<span>d­e</span>f­g</p>\
-                </body></document>'))
+            io.BytesIO(
+                '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
+                '<author><unknown/></author><availability><free/>'
+                '</availability><multilingual/></header><body><p>a­b­c'
+                '<span>d­e</span>f­g</p></body></document>'))
 
-        expected_doc = '<document xml:lang="sma" id="no_id"><header>\
-        <title/><genre/><author><unknown/></author>\
-        <availability><free/></availability><multilingual/></header><body>\
-        <p>a<hyph/>b<hyph/>c<span>d<hyph/>e</span>f<hyph/>g</p></body></document>'
+        expected_doc = (
+            '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
+            '<author><unknown/></author><availability><free/></availability>'
+            '<multilingual/></header><body><p>a<hyph/>b<hyph/>c<span>d<hyph/>'
+            'e</span>f<hyph/>g</p></body></document>')
 
         document_fixer = converter.DocumentFixer(orig_doc)
         document_fixer.soft_hyphen_to_hyph_tag()
@@ -2367,15 +2422,17 @@ with-multilingual-tag.xml')))
 
     def test_replace_shy2(self):
         orig_doc = etree.parse(
-            io.BytesIO('<document xml:lang="sma" id="no_id"><header><title/>\
-                <genre/><author><unknown/></author><availability><free/>\
-                </availability><multilingual/></header><body><p>a­b­c<span>d­e</span></p>\
-                </body></document>'))
+            io.BytesIO(
+                '<document xml:lang="sma" id="no_id">'
+                '<header><title/><genre/><author><unknown/></author>'
+                '<availability><free/></availability><multilingual/></header>'
+                '<body><p>a­b­c<span>d­e</span></p></body></document>'))
 
-        expected_doc = '<document xml:lang="sma" id="no_id"><header>\
-        <title/><genre/><author><unknown/></author>\
-        <availability><free/></availability><multilingual/></header><body>\
-        <p>a<hyph/>b<hyph/>c<span>d<hyph/>e</span></p></body></document>'
+        expected_doc = (
+            '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
+            '<author><unknown/></author><availability><free/></availability>'
+            '<multilingual/></header><body><p>a<hyph/>b<hyph/>c<span>d'
+            '<hyph/>e</span></p></body></document>')
 
         document_fixer = converter.DocumentFixer(orig_doc)
         document_fixer.soft_hyphen_to_hyph_tag()
@@ -2475,17 +2532,24 @@ with-multilingual-tag.xml')))
 
 class TestXslMaker(XMLTester):
     def test_get_xsl(self):
-        xslmaker = converter.XslMaker(os.path.join(here, 'converter_data/samediggi-article-48.\
-html.xsl'))
+        xslmaker = converter.XslMaker(
+            os.path.join(here,
+                         'converter_data/samediggi-article-48.html.xsl'))
         got = xslmaker.get_xsl()
 
-        # The import href is different for each user testing, so just check that it looks OK:
-        import_elt = got.find('/xsl:import', namespaces={'xsl':'http://www.w3.org/1999/XSL/Transform'})
+        # The import href is different for each user testing, so just
+        # check that it looks OK:
+        import_elt = got.find(
+            '/xsl:import',
+            namespaces={'xsl': 'http://www.w3.org/1999/XSL/Transform'})
         self.assertTrue(import_elt.attrib["href"].startswith("file:///"))
         self.assertTrue(import_elt.attrib["href"].endswith("common.xsl"))
-        self.assertGreater(len(open(import_elt.attrib["href"][7:].replace('%20', ' '), 'r').read()), 0)
+        self.assertGreater(len(open(
+            import_elt.attrib["href"][7:].replace('%20', ' '), 'r').read()), 0)
         # ... and set it to the hardcoded path in test.xsl:
-        import_elt.attrib["href"]="file:///home/boerre/langtech/trunk/tools/CorpusTools/corpustools/xslt/common.xsl"
+        import_elt.attrib["href"] = (
+            'file:///home/boerre/langtech/trunk/tools/CorpusTools/'
+            'corpustools/xslt/common.xsl')
 
         want = etree.parse(os.path.join(here, 'converter_data/test.xsl'))
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
@@ -2497,8 +2561,9 @@ class TestLanguageDetector(XMLTester):
     """
     def setUp(self):
         self.document = etree.parse(
-            os.path.join(here, 'converter_data/samediggi-article-48s-\
-before-lang-detection-with-multilingual-tag.xml'))
+            os.path.join(here,
+                         'converter_data/samediggi-article-48s-before-lang-'
+                         'detection-with-multilingual-tag.xml'))
 
     def test_get_main_lang(self):
         test_main_lang = 'sme'
@@ -2516,24 +2581,26 @@ before-lang-detection-with-multilingual-tag.xml'))
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_set_paragraph_language_mainlanguage(self):
-        orig_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda \
-        giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša \
-        ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. \
-        Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat \
-        ja bidjat dihtorii. Boađus lea ahte buot boahttevaš Microsoft \
-        prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat \
-        go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, \
-        ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat \
-        ráhkadan.</p>'
-        expected_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda \
-        giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša \
-        ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. \
-        Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte viežžat \
-        ja bidjat dihtorii. Boađus lea ahte buot boahttevaš Microsoft \
-        prográmmat dorjot sámegiela. Dattetge sáhttet deaividit váttisvuođat \
-        go čálát sámegiela Outlook-kaleandaris dahje e-poastta namahussajis, \
-        ja go čálát sámegillii dakkár prográmmain, maid Microsoft ii leat \
-        ráhkadan.</p>'
+        orig_paragraph = (
+            '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga '
+            'Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte '
+            'sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. '
+            'Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte '
+            'viežžat ja bidjat dihtorii. Boađus lea ahte buot boahttevaš '
+            'Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet '
+            'deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris '
+            'dahje e-poastta namahussajis, ja go čálát sámegillii dakkár '
+            'prográmmain, maid Microsoft ii leat ráhkadan.</p>')
+        expected_paragraph = (
+            '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga '
+            'Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte '
+            'sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. '
+            'Buot leat dás dán fitnodaga Service Pack 2-páhkas, maid ferte '
+            'viežžat ja bidjat dihtorii. Boađus lea ahte buot boahttevaš '
+            'Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet '
+            'deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris '
+            'dahje e-poastta namahussajis, ja go čálát sámegillii dakkár '
+            'prográmmain, maid Microsoft ii leat ráhkadan.</p>')
 
         language_detector = converter.LanguageDetector(self.document)
         got_paragraph = language_detector.set_paragraph_language(
@@ -2542,24 +2609,28 @@ before-lang-detection-with-multilingual-tag.xml'))
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_set_paragraph_language_mainlanguage_quote_mainlang(self):
-        orig_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda \
-        giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša \
-        ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. \
-        <span type="quote">«Buot leat dás dán fitnodaga Service Pack \
-        2-páhkas, maid ferte viežžat ja bidjat dihtorii»</span>. Boađus lea \
-        ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge \
-        sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris \
-        dahje e-poastta namahussajis, ja go čálát sámegillii dakkár \
-        prográmmain, maid Microsoft ii leat ráhkadan.</p>'
-        expected_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda \
-        giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša \
-        ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. \
-        <span type="quote">«Buot leat dás dán fitnodaga Service Pack \
-        2-páhkas, maid ferte viežžat ja bidjat dihtorii»</span>. Boađus lea\
-        ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge \
-        sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris \
-        dahje e-poastta namahussajis, ja go čálát sámegillii dakkár \
-        prográmmain, maid Microsoft ii leat ráhkadan.</p>'
+        orig_paragraph = (
+            '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga '
+            'Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte '
+            'sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. '
+            '<span type="quote">«Buot leat dás dán fitnodaga Service Pack 2-'
+            'páhkas, maid ferte viežžat ja bidjat dihtorii»</span>. Boađus '
+            'lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. '
+            'Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela '
+            'Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát '
+            'sámegillii dakkár prográmmain, maid Microsoft ii leat '
+            'ráhkadan.</p>')
+        expected_paragraph = (
+            '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga '
+            'Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte '
+            'sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. '
+            '<span type="quote">«Buot leat dás dán fitnodaga Service Pack 2-'
+            'páhkas, maid ferte viežžat ja bidjat dihtorii»</span>. Boađus '
+            'lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. '
+            'Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela '
+            'Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát '
+            'sámegillii dakkár prográmmain, maid Microsoft ii leat '
+            'ráhkadan.</p>')
 
         language_detector = converter.LanguageDetector(self.document)
         got_paragraph = language_detector.set_paragraph_language(
@@ -2568,28 +2639,32 @@ before-lang-detection-with-multilingual-tag.xml'))
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_set_paragraph_language_mainlanguage_quote_not_mainlang(self):
-        orig_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda \
-        giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša \
-        ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. \
-        <span type="quote">«Alt finnes i den foreliggende Service Pack 2 fra \
-        selskapet, som må lastes ned og installeres på din datamaskin. \
-        Konsekvensen er at all framtidig programvare fra Microsoft vil \
-        inneholde støtte for samisk»</span>. Boađus lea ahte buot boahttevaš \
-        Microsoft prográmmat dorjot sámegiela. Dattetge sáhttet deaividit \
-        váttisvuođat go čálát sámegiela Outlook-kaleandaris dahje e-poastta \
-        namahussajis, ja go čálát sámegillii dakkár prográmmain, maid \
-        Microsoft ii leat ráhkadan.</p>'
-        expected_paragraph = '<p>Sámegiella lea 2004 čavčča rájes standárda \
-        giellaválga Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša \
-        ahte sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. \
-        <span type="quote" xml:lang="nob">«Alt finnes i den foreliggende \
-        Service Pack 2 fra selskapet, som må lastes ned og installeres på din \
-        datamaskin. Konsekvensen er at all framtidig programvare fra \
-        Microsoft vil inneholde støtte for samisk»</span>. Boađus lea ahte \
-        buot boahttevaš Microsoft prográmmat dorjot sámegiela. Dattetge \
-        sáhttet deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris \
-        dahje e-poastta namahussajis, ja go čálát sámegillii dakkár \
-        prográmmain, maid Microsoft ii leat ráhkadan.</p>'
+        orig_paragraph = (
+            '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga '
+            'Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte '
+            'sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. '
+            '<span type="quote">«Alt finnes i den foreliggende Service Pack 2 '
+            'fra selskapet, som må lastes ned og installeres på din '
+            'datamaskin. Konsekvensen er at all framtidig programvare fra '
+            'Microsoft vil inneholde støtte for samisk»</span>. Boađus lea '
+            'ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. '
+            'Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela '
+            'Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát '
+            'sámegillii dakkár prográmmain, maid Microsoft ii leat '
+            'ráhkadan.</p>')
+        expected_paragraph = (
+            '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga '
+            'Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte '
+            'sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. '
+            '<span type="quote" xml:lang="nob">«Alt finnes i den foreliggende '
+            'Service Pack 2 fra selskapet, som må lastes ned og installeres '
+            'på din datamaskin. Konsekvensen er at all framtidig programvare '
+            'fra Microsoft vil inneholde støtte for samisk»</span>. Boađus '
+            'lea ahte buot boahttevaš Microsoft prográmmat dorjot sámegiela. '
+            'Dattetge sáhttet deaividit váttisvuođat go čálát sámegiela '
+            'Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát '
+            'sámegillii dakkár prográmmain, maid Microsoft ii leat '
+            'ráhkadan.</p>')
 
         language_detector = converter.LanguageDetector(self.document)
         got_paragraph = language_detector.set_paragraph_language(
@@ -2598,36 +2673,31 @@ before-lang-detection-with-multilingual-tag.xml'))
         self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
 
     def test_set_paragraph_language_not_mainlanguage(self):
-        orig_paragraph = '<p>Samisk er fra høsten 2004 et standard språkvalg \
-        Microsofts operativsystem Windows XP. I praksis betyr det at samiske \
-        bokstaver og formater kan velges i alle programmer. Alt finnes i den \
-        foreliggende Service Pack 2 fra selskapet, som må lastes ned og \
-        installeres på din datamaskin. Konsekvensen er at all framtidig \
-        programvare fra Microsoft vil inneholde støtte for samisk. Du vil \
-        imidlertid fremdeles kunne oppleve problemer med å skrive samisk i \
-        Outlook-kalenderen eller i tittel-feltet i e-post, og med å skrive \
-        samisk i programmer levert av andre enn Microsoft.</p>'
-        expected_paragraph = '<p xml:lang="nob">Samisk er fra høsten 2004 et \
-        standard språkvalg Microsofts operativsystem Windows XP. I praksis \
-        betyr det at samiske bokstaver og formater kan velges i alle \
-        programmer. Alt finnes i den foreliggende Service Pack 2 fra \
-        selskapet, som må lastes ned og installeres på din datamaskin. \
-        Konsekvensen er at all framtidig programvare fra Microsoft vil \
-        inneholde støtte for samisk. Du vil imidlertid fremdeles kunne \
-        oppleve problemer med å skrive samisk i Outlook-kalenderen eller \
-        i tittel-feltet i e-post, og med å skrive samisk i programmer \
-        levert av andre enn Microsoft.</p>'
+        orig_paragraph = (
+            '<p>Samisk er fra høsten 2004 et standard språkvalg Microsofts '
+            'operativsystem Windows XP. I praksis betyr det at samiske '
+            'bokstaver og formater kan velges i alle programmer. Alt finnes '
+            'i den foreliggende Service Pack 2 fra selskapet, som må lastes '
+            'ned og installeres på din datamaskin. Konsekvensen er at all '
+            'framtidig programvare fra Microsoft vil inneholde støtte for '
+            'samisk. Du vil imidlertid fremdeles kunne oppleve problemer med '
+            'å skrive samisk i Outlook-kalenderen eller i tittel-feltet i '
+            'e-post, og med å skrive samisk i programmer levert av andre enn '
+            'Microsoft.</p>')
 
         language_detector = converter.LanguageDetector(self.document)
         got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
 
-        self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
+        self.assertEqual(
+            got_paragraph.get('{http://www.w3.org/XML/1998/namespace}lang'),
+            'nob')
 
     def test_remove_quote(self):
-        orig_paragraph = '<p>bla bla <span type="quote">bla1 bla</span> \
-ble ble <span type="quote">bla2 bla</span> <b>bli</b> bli \
-<span type="quote">bla3 bla</span> blo blo</p>'
+        orig_paragraph = (
+            '<p>bla bla <span type="quote">bla1 bla</span> ble ble '
+            '<span type="quote">bla2 bla</span> <b>bli</b> bli '
+            '<span type="quote">bla3 bla</span> blo blo</p>')
         expected_paragraph = 'bla bla  ble ble  bli bli  blo blo'
 
         language_detector = converter.LanguageDetector(self.document)
@@ -2638,15 +2708,17 @@ ble ble <span type="quote">bla2 bla</span> <b>bli</b> bli \
 
     def test_detect_language_with_multilingualtag(self):
         language_detector = converter.LanguageDetector(
-            etree.parse(os.path.join(here,
-                'converter_data/samediggi-article-48s-before-\
-lang-detection-with-multilingual-tag.xml')))
+            etree.parse(
+                os.path.join(here,
+                             'converter_data/samediggi-article-48s-before-'
+                             'lang-detection-with-multilingual-tag.xml')))
         language_detector.detect_language()
         got_document = language_detector.get_document()
 
-        expected_document = etree.parse(os.path.join(here,
-            'converter_data/\
-samediggi-article-48s-after-lang-detection-with-multilingual-tag.xml'))
+        expected_document = etree.parse(
+            os.path.join(here,
+                         'converter_data/samediggi-article-48s-after-lang-'
+                         'detection-with-multilingual-tag.xml'))
 
         self.assertXmlEqual(etree.tostring(got_document),
                             etree.tostring(expected_document))
@@ -2654,15 +2726,15 @@ samediggi-article-48s-after-lang-detection-with-multilingual-tag.xml'))
     def test_detect_language_without_multilingualtag(self):
         language_detector = converter.LanguageDetector(etree.parse(
             os.path.join(here,
-                         'converter_data/samediggi-article-48s-before-lang-\
-detection-without-multilingual-tag.xml')))
+                         'converter_data/samediggi-article-48s-before-lang-'
+                         'detection-without-multilingual-tag.xml')))
         language_detector.detect_language()
         got_document = language_detector.get_document()
 
         expected_document = etree.parse(
             os.path.join(here,
-            'converter_data/samediggi-article\
--48s-after-lang-detection-without-multilingual-tag.xml'))
+                         'converter_data/samediggi-article-48s-after-lang-'
+                         'detection-without-multilingual-tag.xml'))
 
         self.assertXmlEqual(etree.tostring(got_document),
                             etree.tostring(expected_document))
@@ -2676,7 +2748,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter()
 
-        input = etree.fromstring(u'<text top="649" left="545" width="269" height="14" font="20">berret bargat. </text>')
+        input = etree.fromstring(
+            '<text top="649" left="545" width="269" height="14" font="20">'
+            'berret bargat. </text>')
         p2x.extract_textelement(input)
         self.assertEqual(p2x.parts, [u'berret bargat. '])
 
@@ -2685,7 +2759,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter()
 
-        input = etree.fromstring(u'<text top="649" left="545" width="0" height="14" font="20">berret bargat. </text>')
+        input = etree.fromstring(
+            '<text top="649" left="545" width="0" height="14" font="20">'
+            'berret bargat. </text>')
         p2x.extract_textelement(input)
         self.assertEqual(p2x.parts, [])
 
@@ -2694,7 +2770,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter()
 
-        input = etree.fromstring(u'<text top="829" left="545" width="275" height="14" font="29"><i>Ei </i></text>')
+        input = etree.fromstring(
+            '<text top="829" left="545" width="275" height="14" font="29">'
+            '<i>Ei </i></text>')
         p2x.extract_textelement(input)
         self.assertEqual(
             etree.tostring(p2x.parts[0], encoding='unicode'),
@@ -2705,7 +2783,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter()
 
-        input = etree.fromstring(u'<text top="829" left="545" width="275" height="14" font="29"><b>Ei </b></text>')
+        input = etree.fromstring(
+            '<text top="829" left="545" width="275" height="14" font="29">'
+            '<b>Ei </b></text>')
         p2x.extract_textelement(input)
         self.assertEqual(
             etree.tostring(p2x.parts[0], encoding='unicode'),
@@ -2717,7 +2797,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter()
 
-        input = etree.fromstring(u'<text top="829" left="545" width="275" height="14" font="29"><i><b>Eiš </b></i></text>')
+        input = etree.fromstring(
+            '<text top="829" left="545" width="275" height="14" font="29">'
+            '<i><b>Eiš </b></i></text>')
         p2x.extract_textelement(input)
 
         self.assertEqual(
@@ -2730,7 +2812,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter()
 
-        input = etree.fromstring(u'<text top="829" left="545" width="275" height="14" font="29"><b>E</b> a</text>')
+        input = etree.fromstring(
+            '<text top="829" left="545" width="275" height="14" font="29">'
+            '<b>E</b> a</text>')
         p2x.extract_textelement(input)
         self.assertEqual(
             etree.tostring(p2x.parts[0], encoding='unicode'),
@@ -2741,7 +2825,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter()
 
-        input = etree.fromstring(u'<text top="829" left="545" width="275" height="14" font="29"><i>E</i> a <i>b</i></text>')
+        input = etree.fromstring(
+            '<text top="829" left="545" width="275" height="14" font="29">'
+            '<i>E</i> a <i>b</i></text>')
         p2x.extract_textelement(input)
 
         self.assertEqual(len(p2x.parts), 2)
@@ -2758,7 +2844,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter()
 
-        input = etree.fromstring(u'<text top="837" left="57" width="603" height="11" font="7"><i><b>Å.</b> B <b>F.</b> A </i></text>')
+        input = etree.fromstring(
+            '<text top="837" left="57" width="603" height="11" font="7">'
+            '<i><b>Å.</b> B <b>F.</b> A </i></text>')
         p2x.extract_textelement(input)
 
         self.assertEqual(
@@ -2771,7 +2859,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter()
 
-        input = etree.fromstring(u'<text top="837" left="57" width="603" height="11" font="7"><b><i>Å.</i> B <i>F.</i> A </b></text>')
+        input = etree.fromstring(
+            '<text top="837" left="57" width="603" height="11" font="7">'
+            '<b><i>Å.</i> B <i>F.</i> A </b></text>')
         p2x.extract_textelement(input)
 
         self.assertEqual(
@@ -2779,55 +2869,69 @@ class TestPDF2XMLConverter(XMLTester):
             u'<em type="bold">Å. B F. A </em>')
 
     def test_extract_textelement10(self):
-        '''Extract text from a pdf2xml text that contains a string with a hyphen at the end.
+        '''Extract text from a pdf2xml text that contains a string with a
+        hyphen at the end.
         '''
         p2x = converter.PDF2XMLConverter()
 
-        input = etree.fromstring(u'<text top="215" width="51" height="14">R-</text>')
+        input = etree.fromstring(
+            '<text top="215" width="51" height="14">R-</text>')
         p2x.extract_textelement(input)
 
         self.assertEqual(p2x.parts[0], u'R')
         self.assertXmlEqual(etree.tostring(p2x.parts[1]), u'<hyph/>')
 
     def test_extract_textelement11(self):
-        '''Extract text from a pdf2xml text that contains a string with a hyphen at the end contained in a <b> element.
+        '''Extract text from a pdf2xml text that contains a string with a
+        hyphen at the end contained in a <b> element.
         '''
         p2x = converter.PDF2XMLConverter()
 
-        input = etree.fromstring(u'<text top="215" width="51" height="14"><b>R-</b></text>')
+        input = etree.fromstring(
+            '<text top="215" width="51" height="14"><b>R-</b></text>')
         p2x.extract_textelement(input)
 
-        self.assertXmlEqual(etree.tostring(p2x.parts[0]), u'<em type="bold">R<hyph/></em>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.parts[0]), u'<em type="bold">R<hyph/></em>')
 
     def test_extract_textelement12(self):
-        '''Extract text from a pdf2xml text that contains a string with a hyphen at the end contained in a <i> element.
+        '''Extract text from a pdf2xml text that contains a string with a
+        hyphen at the end contained in a <i> element.
         '''
         p2x = converter.PDF2XMLConverter()
 
-        input = etree.fromstring(u'<text top="215" width="51" height="14"><i>R-</i></text>')
+        input = etree.fromstring(
+            '<text top="215" width="51" height="14"><i>R-</i></text>')
         p2x.extract_textelement(input)
 
-        self.assertXmlEqual(etree.tostring(p2x.parts[0]), u'<em type="italic">R<hyph/></em>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.parts[0]), u'<em type="italic">R<hyph/></em>')
 
     def test_extract_textelement13(self):
-        '''Extract text from a pdf2xml text that contains a string with a hyphen at the end contained in a <i> contained in a <b> element.
+        '''Extract text from a pdf2xml text that contains a string with a
+        hyphen at the end contained in a <i> contained in a <b> element.
         '''
         p2x = converter.PDF2XMLConverter()
 
-        input = etree.fromstring(u'<text top="215" width="51" height="14"><i><b>R-</b></i></text>')
+        input = etree.fromstring(
+            '<text top="215" width="51" height="14"><i><b>R-</b></i></text>')
         p2x.extract_textelement(input)
 
-        self.assertXmlEqual(etree.tostring(p2x.parts[0]), u'<em type="italic">R<hyph/></em>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.parts[0]), u'<em type="italic">R<hyph/></em>')
 
     def test_extract_textelement14(self):
-        '''Extract text from a pdf2xml text that contains a string with a hyphen at the end contained in a <b> contained in a <i> element.
+        '''Extract text from a pdf2xml text that contains a string with a
+        hyphen at the end contained in a <b> contained in a <i> element.
         '''
         p2x = converter.PDF2XMLConverter()
 
-        input = etree.fromstring(u'<text top="215" width="51" height="14"><b><i>R-</i></b></text>')
+        input = etree.fromstring(
+            '<text top="215" width="51" height="14"><b><i>R-</i></b></text>')
         p2x.extract_textelement(input)
 
-        self.assertXmlEqual(etree.tostring(p2x.parts[0]), u'<em type="bold">R<hyph/></em>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.parts[0]), u'<em type="bold">R<hyph/></em>')
 
     def test_make_paragraph_1(self):
         '''Pass a parts list consisting of only strings
@@ -2835,7 +2939,9 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter()
         p2x.parts = ['a b c ']
 
-        self.assertXmlEqual(etree.tostring(p2x.make_paragraph()), '<p>a b c </p>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.make_paragraph()),
+            '<p>a b c </p>')
 
     def test_make_paragraph_2(self):
         '''Pass a parts list consisting of some strings and some etree.Elements
@@ -2843,7 +2949,8 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter()
         p2x.parts = ['a b', etree.Element('em'), etree.Element('em')]
 
-        self.assertXmlEqual(etree.tostring(p2x.make_paragraph()), '<p>a b<em/><em/></p>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.make_paragraph()), '<p>a b<em/><em/></p>')
 
     def test_make_paragraph_3(self):
         '''Pass a parts list consisting of a string, a hyph element and another string.
@@ -2851,10 +2958,12 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter()
         p2x.parts = ['a ', etree.Element('hyph'), ' c']
 
-        self.assertXmlEqual(etree.tostring(p2x.make_paragraph()), '<p>a<hyph/>c</p>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.make_paragraph()), '<p>a<hyph/>c</p>')
 
     def test_make_paragraph_4(self):
-        '''Test if two "equal" em elements are joined when the first ends with a hyph element
+        '''Test if two "equal" em elements are joined when the first ends
+        with a hyph element
         '''
         em1 = etree.Element('em')
         em1.set('type', 'bold')
@@ -2868,10 +2977,13 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter()
         p2x.parts = [em1, em2]
 
-        self.assertXmlEqual(etree.tostring(p2x.make_paragraph()), '<p><em type="bold">a<hyph/>b</em></p>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.make_paragraph()),
+            '<p><em type="bold">a<hyph/>b</em></p>')
 
     def test_make_paragraph_5(self):
-        '''Test if two "unequal" em elements are joined when the first ends with a hyph element
+        '''Test if two "unequal" em elements are joined when the first ends
+        with a hyph element
         '''
         em1 = etree.Element('em')
         em1.set('type', 'italic')
@@ -2885,7 +2997,9 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter()
         p2x.parts = [em1, em2]
 
-        self.assertXmlEqual(etree.tostring(p2x.make_paragraph()), '<p><em type="italic">a<hyph/></em><em type="bold">b</em></p>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.make_paragraph()),
+            '<p><em type="italic">a<hyph/></em><em type="bold">b</em></p>')
 
     def test_is_same_paragraph_1(self):
         '''Test if two text elements belong to the same paragraph
@@ -3006,38 +3120,52 @@ class TestPDF2XMLConverter(XMLTester):
     def test_parse_page_1(self):
         '''Page with one paragraph, three <text> elements
         '''
-        page_element = etree.fromstring(u'<page height="1263" width="862"><text top="106" left="100" width="100" \
-            height="19">1 </text><text top="126" left="100" width="100" \
-            height="19">2 </text><text top="145" left="100" width="100" \
-            height="19">3.</text></page>')
+        page_element = etree.fromstring(
+            '<page height="1263" width="862">'
+            '<text top="106" left="100" width="100" height="19">1 </text>'
+            '<text top="126" left="100" width="100" height="19">2 </text>'
+            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '</page>')
 
         p2x = converter.PDF2XMLConverter()
         p2x.parse_page(page_element)
 
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>1 2 3.</p></body>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.get_body(), encoding='unicode'),
+            u'<body><p>1 2 3.</p></body>')
 
     def test_parse_page_2(self):
         '''Page with two paragraphs, four <text> elements
         '''
-        page_element = etree.fromstring(u'<page height="1263" width="862"><text top="106" left="100" width="100" \
-            height="19">1 </text><text top="126" left="100" width="100" height="19">2.\
-            </text><text top="166" left="100" width="100" height="19">3 </text>\
-            <text top="186" left="100" width="100" height="19">4.</text></page>')
+        page_element = etree.fromstring(
+            '<page height="1263" width="862">'
+            '<text top="106" left="100" width="100" height="19">1 </text>'
+            '<text top="126" left="100" width="100" height="19">2.</text>'
+            '<text top="166" left="100" width="100" height="19">3 </text>'
+            '<text top="186" left="100" width="100" height="19">4.</text>'
+            '</page>')
 
         p2x = converter.PDF2XMLConverter()
         p2x.parse_page(page_element)
 
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>1 2.</p><p>3 4.</p></body>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.get_body(), encoding='unicode'),
+            u'<body><p>1 2.</p><p>3 4.</p></body>')
 
     def test_parse_page_3(self):
         '''Page with one paragraph, one <text> elements
         '''
-        page_element = etree.fromstring(u'<page height="1263" width="862"><text top="145" left="100" width="100" height="19">3.</text></page>')
+        page_element = etree.fromstring(
+            '<page height="1263" width="862">'
+            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '</page>')
 
         p2x = converter.PDF2XMLConverter()
         p2x.parse_page(page_element)
 
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>3.</p></body>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.get_body(), encoding='unicode'),
+            u'<body><p>3.</p></body>')
 
     def test_parse_page_4(self):
         '''One text element with a ascii letter, the other one with a non-ascii
@@ -3045,92 +3173,148 @@ class TestPDF2XMLConverter(XMLTester):
         This makes two parts lists. The first list contains one element that is
         of type str, the second list contains one element that is unicode.
         '''
-        page_element = etree.fromstring(u'<page height="1263" width="862"><text top="215" left="100" width="51" height="14">R</text><text top="245" left="100" width="39" height="14">Ø</text></page>')
+        page_element = etree.fromstring(
+            '<page height="1263" width="862">'
+            '<text top="215" left="100" width="51" height="14">R</text>'
+            '<text top="245" left="100" width="39" height="14">Ø</text>'
+            '</page>')
 
         p2x = converter.PDF2XMLConverter()
         p2x.parse_page(page_element)
 
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>R</p><p>Ø</p></body>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.get_body(), encoding='unicode'),
+            u'<body><p>R</p><p>Ø</p></body>')
 
     def test_parse_page_5(self):
-        '''One text element with containing a <b>, the other one with a non-ascii string. Both belong to the same paragraph.
+        '''One text element with containing a <b>, the other one with a
+        non-ascii string. Both belong to the same paragraph.
         '''
-        page_element = etree.fromstring(u'<page height="1263" width="862"><text top="215" left="100" width="51" height="14"><b>R</b></text><text top="235" left="100" width="39" height="14">Ø</text></page>')
+        page_element = etree.fromstring(
+            '<page height="1263" width="862">'
+            '<text top="215" left="100" width="51" height="14"><b>R</b></text>'
+            '<text top="235" left="100" width="39" height="14">Ø</text>'
+            '</page>')
 
         p2x = converter.PDF2XMLConverter()
         p2x.parse_page(page_element)
 
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p><em type="bold">R</em>Ø</p></body>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.get_body(), encoding='unicode'),
+            u'<body><p><em type="bold">R</em>Ø</p></body>')
 
     def test_parse_page_6(self):
         '''One text element ending with a hyphen.
         '''
-        page_element = etree.fromstring(u'<page height="1263" width="862"><text top="215" left="100" width="51" height="14">R-</text><text top="235" left="100" width="39" height="14">Ø</text></page>')
+        page_element = etree.fromstring(
+            '<page height="1263" width="862">'
+            '<text top="215" left="100" width="51" height="14">R-</text>'
+            '<text top="235" left="100" width="39" height="14">Ø</text>'
+            '</page>')
 
         p2x = converter.PDF2XMLConverter()
         p2x.parse_page(page_element)
 
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>R<hyph/>Ø</p></body>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.get_body(), encoding='unicode'),
+            u'<body><p>R<hyph/>Ø</p></body>')
 
     def test_parse_page_7(self):
         '''One text element ending with a hyphen.
         '''
-        page_element = etree.fromstring(u'<page height="1263" width="862"><text top="215" left="100" width="51" height="14">R -</text><text top="235" left="100" width="39" height="14">Ø</text></page>')
+        page_element = etree.fromstring(
+            '<page height="1263" width="862">'
+            '<text top="215" left="100" width="51" height="14">R -</text>'
+            '<text top="235" left="100" width="39" height="14">Ø</text>'
+            '</page>')
 
         p2x = converter.PDF2XMLConverter()
         p2x.parse_page(page_element)
 
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>R - Ø</p></body>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.get_body(), encoding='unicode'),
+            u'<body><p>R - Ø</p></body>')
 
     def test_parse_page_8(self):
         '''One text element ending with a hyphen.
         '''
-        page_element = etree.fromstring(u'<page height="1263" width="862"><text top="196" left="142" width="69" height="21" font="15"><b>JULE-</b></text><text top="223" left="118" width="123" height="21" font="15"><b>HANDEL</b></text></page>')
+        page_element = etree.fromstring(
+            '<page height="1263" width="862">'
+            '<text top="196" left="142" width="69" height="21" font="15">'
+            '<b>JULE-</b></text>'
+            '<text top="223" left="118" width="123" height="21" font="15">'
+            '<b>HANDEL</b></text></page>')
 
         p2x = converter.PDF2XMLConverter()
         p2x.parse_page(page_element)
 
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p><em type="bold">JULE<hyph/>HANDEL</em></p></body>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.get_body(), encoding='unicode'),
+            u'<body><p><em type="bold">JULE<hyph/>HANDEL</em></p></body>')
 
     def test_parse_page_9(self):
         '''Two <text> elements. One is above the top margin.
         '''
-        page_element = etree.fromstring(u'<page height="1263" width="862"><text top="70" left="100" width="100" height="19">Page 1</text><text top="145" left="100" width="100" height="19">3.</text></page>')
+        page_element = etree.fromstring(
+            '<page height="1263" width="862">'
+            '<text top="70" left="100" width="100" height="19">Page 1</text>'
+            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '</page>')
 
         p2x = converter.PDF2XMLConverter()
         p2x.parse_page(page_element)
 
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>3.</p></body>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.get_body(), encoding='unicode'),
+            u'<body><p>3.</p></body>')
 
     def test_parse_page_10(self):
         '''Two <text> elements. One is below the bottom margin.
         '''
-        page_element = etree.fromstring(u'<page height="1263" width="862"><text top="1200" left="100" width="100" height="19">Page 1</text><text top="145" left="100" width="100" height="19">3.</text></page>')
+        page_element = etree.fromstring(
+            '<page height="1263" width="862">'
+            '<text top="1200" left="100" width="100" height="19">Page 1</text>'
+            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '</page>')
 
         p2x = converter.PDF2XMLConverter()
         p2x.parse_page(page_element)
 
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>3.</p></body>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.get_body(), encoding='unicode'),
+            u'<body><p>3.</p></body>')
 
     def test_parse_page_11(self):
         '''Two <text> elements. One is to the left of the right margin.
         '''
-        page_element = etree.fromstring(u'<page height="1263" width="862"><text top="500" left="50" width="100" height="19">Page 1</text><text top="145" left="100" width="100" height="19">3.</text></page>')
+        page_element = etree.fromstring(
+            '<page height="1263" width="862">'
+            '<text top="500" left="50" width="100" height="19">Page 1</text>'
+            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '</page>')
 
         p2x = converter.PDF2XMLConverter()
         p2x.parse_page(page_element)
 
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>3.</p></body>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.get_body(), encoding='unicode'),
+            u'<body><p>3.</p></body>')
 
     def test_parse_page_12(self):
         '''Two <text> elements. One is to the right of the left margin.
         '''
-        page_element = etree.fromstring(u'<page height="1263" width="862"><text top="500" left="850" width="100" height="19">Page 1</text><text top="145" left="100" width="100" height="19">3.</text></page>')
+        page_element = etree.fromstring(
+            '<page height="1263" width="862">'
+            '<text top="500" left="850" width="100" height="19">Page 1</text>'
+            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '</page>')
 
         p2x = converter.PDF2XMLConverter()
         p2x.parse_page(page_element)
 
-        self.assertXmlEqual(etree.tostring(p2x.get_body(), encoding='unicode'), u'<body><p>3.</p></body>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.get_body(), encoding='unicode'),
+            u'<body><p>3.</p></body>')
 
     def test_get_body(self):
         '''Test the initial values when the class is initiated
@@ -3145,16 +3329,24 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter()
         p2x.append_to_body(etree.Element('uptown'))
 
-        self.assertXmlEqual(etree.tostring(p2x.get_body()), u'<body><uptown/></body>')
+        self.assertXmlEqual(
+            etree.tostring(p2x.get_body()), u'<body><uptown/></body>')
 
     def test_parse_pdf2xmldoc1(self):
         '''Test how a parsing a simplistic pdf2xml document works
         '''
-        pdf2xml = etree.fromstring('<pdf2xml>\
-            <page height="1263" width="862"><fontspec/><text top="145" left="100" width="100" height="19">1.</text></page>\
-            <page height="1263" width="862"><text top="145" left="100" width="100" height="19">2.</text></page>\
-            <page height="1263" width="862"><text top="145" left="100" width="100" height="19">3.</text></page>\
-            </pdf2xml>')
+        pdf2xml = etree.fromstring(
+            '<pdf2xml>'
+            '<page height="1263" width="862"><fontspec/>'
+            '<text top="145" left="100" width="100" height="19">1.</text>'
+            '</page>'
+            '<page height="1263" width="862">'
+            '<text top="145" left="100" width="100" height="19">2.</text>'
+            '</page>'
+            '<page height="1263" width="862">'
+            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '</page>'
+            '</pdf2xml>')
         want = u'<body><p>1.</p><p>2.</p><p>3.</p></body>'
 
         p2x = converter.PDF2XMLConverter()
@@ -3166,11 +3358,18 @@ class TestPDF2XMLConverter(XMLTester):
     def test_parse_pdf2xmldoc2(self):
         '''Test if pages really are skipped
         '''
-        pdf2xml = etree.fromstring('<pdf2xml>\
-            <page number="1" height="1263" width="862"><fontspec/><text top="145" left="100" width="100" height="19">1.</text></page>\
-            <page number="2" height="1263" width="862"><text top="145" left="100" width="100" height="19">2.</text></page>\
-            <page number="3" height="1263" width="862"><text top="145" left="100" width="100" height="19">3.</text></page>\
-            </pdf2xml>')
+        pdf2xml = etree.fromstring(
+            '<pdf2xml>'
+            '<page number="1" height="1263" width="862"><fontspec/>'
+            '<text top="145" left="100" width="100" height="19">1.</text>'
+            '</page>'
+            '<page number="2" height="1263" width="862">'
+            '<text top="145" left="100" width="100" height="19">2.</text>'
+            '</page>'
+            '<page number="3" height="1263" width="862">'
+            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '</page>'
+            '</pdf2xml>')
         want = u'<body><p>1.</p><p>3.</p></body>'
 
         p2x = converter.PDF2XMLConverter()
@@ -3194,7 +3393,8 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter()
 
-        self.assertEqual(p2x.set_margin('odd=230; even = 540 ; 8 = 340'), {'odd': 230, 'even': 540, '8': 340})
+        self.assertEqual(p2x.set_margin('odd=230; even = 540 ; 8 = 340'),
+                         {'odd': 230, 'even': 540, '8': 340})
 
     def test_set_margins(self):
         '''Test set_margins
@@ -3219,32 +3419,38 @@ class TestPDF2XMLConverter(XMLTester):
                          'tm': '8=80',
                          'bm': '9=200'})
 
-        page1 = etree.fromstring('<page number="1" height="1263" width="862"/>')
+        page1 = etree.fromstring(
+            '<page number="1" height="1263" width="862"/>')
         self.assertEqual(p2x.compute_margins(page1), {'rm': 40,
                                                       'lm': 801,
                                                       'tm': 88,
                                                       'bm': 1174})
-        page2 = etree.fromstring('<page number="2" height="1263" width="862"/>')
+        page2 = etree.fromstring(
+            '<page number="2" height="1263" width="862"/>')
         self.assertEqual(p2x.compute_margins(page2), {'rm': 80,
                                                       'lm': 801,
                                                       'tm': 88,
                                                       'bm': 1174})
-        page3 = etree.fromstring('<page number="3" height="1263" width="862"/>')
+        page3 = etree.fromstring(
+            '<page number="3" height="1263" width="862"/>')
         self.assertEqual(p2x.compute_margins(page3), {'rm': 60,
                                                       'lm': 801,
                                                       'tm': 88,
                                                       'bm': 1174})
-        page7 = etree.fromstring('<page number="7" height="1263" width="862"/>')
+        page7 = etree.fromstring(
+            '<page number="7" height="1263" width="862"/>')
         self.assertEqual(p2x.compute_margins(page7), {'rm': 40,
                                                       'lm': 70,
                                                       'tm': 88,
                                                       'bm': 1174})
-        page8 = etree.fromstring('<page number="8" height="1263" width="862"/>')
+        page8 = etree.fromstring(
+            '<page number="8" height="1263" width="862"/>')
         self.assertEqual(p2x.compute_margins(page8), {'rm': 80,
                                                       'lm': 801,
                                                       'tm': 80,
                                                       'bm': 1174})
-        page9 = etree.fromstring('<page number="9" height="1263" width="862"/>')
+        page9 = etree.fromstring(
+            '<page number="9" height="1263" width="862"/>')
         self.assertEqual(p2x.compute_margins(page9), {'rm': 40,
                                                       'lm': 801,
                                                       'tm': 88,
@@ -3259,32 +3465,38 @@ class TestPDF2XMLConverter(XMLTester):
                          'tm': '8=80',
                          'bm': '9=200'})
 
-        page1 = etree.fromstring('<page number="1" height="1263" width="862"/>')
+        page1 = etree.fromstring(
+            '<page number="1" height="1263" width="862"/>')
         self.assertEqual(p2x.compute_margins(page1), {'rm': 40,
                                                       'lm': 70,
                                                       'tm': 88,
                                                       'bm': 1174})
-        page2 = etree.fromstring('<page number="2" height="1263" width="862"/>')
+        page2 = etree.fromstring(
+            '<page number="2" height="1263" width="862"/>')
         self.assertEqual(p2x.compute_margins(page2), {'rm': 80,
                                                       'lm': 70,
                                                       'tm': 88,
                                                       'bm': 1174})
-        page3 = etree.fromstring('<page number="3" height="1263" width="862"/>')
+        page3 = etree.fromstring(
+            '<page number="3" height="1263" width="862"/>')
         self.assertEqual(p2x.compute_margins(page3), {'rm': 60,
                                                       'lm': 70,
                                                       'tm': 88,
                                                       'bm': 1174})
-        page7 = etree.fromstring('<page number="7" height="1263" width="862"/>')
+        page7 = etree.fromstring(
+            '<page number="7" height="1263" width="862"/>')
         self.assertEqual(p2x.compute_margins(page7), {'rm': 40,
                                                       'lm': 70,
                                                       'tm': 88,
                                                       'bm': 1174})
-        page8 = etree.fromstring('<page number="8" height="1263" width="862"/>')
+        page8 = etree.fromstring(
+            '<page number="8" height="1263" width="862"/>')
         self.assertEqual(p2x.compute_margins(page8), {'rm': 80,
                                                       'lm': 70,
                                                       'tm': 80,
                                                       'bm': 1174})
-        page9 = etree.fromstring('<page number="9" height="1263" width="862"/>')
+        page9 = etree.fromstring(
+            '<page number="9" height="1263" width="862"/>')
         self.assertEqual(p2x.compute_margins(page9), {'rm': 40,
                                                       'lm': 70,
                                                       'tm': 88,

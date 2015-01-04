@@ -222,10 +222,12 @@ class XMLPrinter:
             text += ','.join(attr)
 
             if self.print_filename:
-                text += u', file: %s' % os.path.basename(self.filename).decode('utf8')
+                text += u', file: %s' % (
+                    os.path.basename(self.filename).decode('utf8'))
 
         elif self.print_filename:
-            text += u'\t#file: %s' % os.path.basename(self.filename).decode('utf8')
+            text += u'\t#file: %s' % (
+                os.path.basename(self.filename).decode('utf8'))
 
         return text
 
@@ -255,9 +257,10 @@ class XMLPrinter:
     def get_contents(self, elt_contents, textlist, elt_lang):
         if elt_contents is not None:
             text = elt_contents.strip()
-            if text != '' and (self.lang is None
-                               or (not self.invert_lang and elt_lang == self.lang)
-                               or (self.invert_lang and elt_lang != self.lang)):
+            if text != '' and (
+                    self.lang is None or
+                    (not self.invert_lang and elt_lang == self.lang) or
+                    (self.invert_lang and elt_lang != self.lang)):
                 if not self.one_word_per_line:
                     textlist.append(text)
                 else:

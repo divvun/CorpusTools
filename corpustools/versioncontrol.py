@@ -31,7 +31,9 @@ import getpass
 class VersionController(object):
     def __init__(self):
         # non-repo config to get at global values
-        self.config = git.GitConfigParser([os.path.normpath(os.path.expanduser("~/.gitconfig"))], read_only=True)
+        self.config = git.GitConfigParser(
+            [os.path.normpath(os.path.expanduser("~/.gitconfig"))],
+            read_only=True)
 
     def add(self, filename):
         pass
@@ -51,6 +53,7 @@ class VersionController(object):
             return self.config.get("user", "email")
         else:
             return ""
+
 
 class SVN(VersionController):
     def __init__(self, svnclient):

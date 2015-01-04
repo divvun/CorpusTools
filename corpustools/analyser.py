@@ -37,6 +37,7 @@ from corpustools import ccat
 import argparse_version
 import util
 
+
 class Analyser(object):
     '''A class which can analyse giellatekno xml formatted documents
     using preprocess, lookup, lookup2cg and vislcg3
@@ -107,7 +108,8 @@ class Analyser(object):
             self.xml_files.append(
                 unicode(xml_file, sys.getfilesystemencoding()))
         except UnicodeDecodeError:
-                print >>sys.stderr, 'Could not handle the file name %s' % xml_file
+                print >>sys.stderr, 'Could not handle the file name %s' % (
+                    xml_file)
 
     def makedirs(self):
         u"""Make the analysed directory
@@ -281,7 +283,8 @@ class Analyser(object):
         body = etree.Element(u'body')
 
         disambiguation = etree.Element(u'disambiguation')
-        disambiguation.text = etree.CDATA(self.get_disambiguation().decode(u'utf8'))
+        disambiguation.text = \
+            etree.CDATA(self.get_disambiguation().decode(u'utf8'))
         body.append(disambiguation)
 
         dependency = etree.Element(u'dependency')
