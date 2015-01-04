@@ -54,12 +54,25 @@ import util
 here = os.path.dirname(__file__)
 
 
-class ConversionException(Exception):
-    def __init__(self, value):
-        self.parameter = value
 
-    def __str__(self):
-        return repr(self.parameter)
+class ConversionException(Exception):
+    pass
+
+def run_process(command, orig, to_stdin=None):
+    subp = subprocess.Popen(command,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE)
+    (output, error) = subp.communicate(to_stdin)
+
+    if subp.returncode != 0:
+        logfile = open('%s.log' % orig, 'w')
+        print >>logfile, 'stdout\n%s\n' % output
+        print >>logfile, 'stderr\n%s\n' % error
+        logfile.close()
+        raise ConversionException("%s failed. \
+            More info in the log file: %s.log" % (command[0], orig))
+    else:
+        return output
 
 
 class Converter(object):
@@ -633,21 +646,9 @@ class PDFConverter(object):
         Extract the text from the pdf file using pdftotext
         output contains string from the program and is a utf-8 string
         """
-        subp = subprocess.Popen(
-            ['pdftotext', '-enc', 'UTF-8', '-nopgbrk', '-eol',
-             'unix', self.orig, '-'],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        (output, error) = subp.communicate()
-
-        if subp.returncode != 0:
-            logfile = open('%s.log' % self.orig, 'w')
-            logfile.write('Error at: %s' % str(ccat.lineno()))
-            logfile.write('stdout\n%s\n') % output
-            logfile.write('stderr\n%s\n') % error
-            logfile.close()
-            raise ConversionException("Could not extract text from pdf. \
-                More info in the log file: %s.log" % self.orig)
+        command = ['pdftotext', '-enc', 'UTF-8', '-nopgbrk', '-eol',
+                   'unix', self.orig, '-']
+        output = run_process(command, self.orig)
 
         self.text = unicode(output, encoding='utf8')
         self.replace_ligatures()
@@ -930,21 +931,8 @@ class BiblexmlConverter(object):
         if distutils.spawn.find_executable(bible2xmlpl) is None:
             raise ConversionException("Could not find %s in $PATH" %(bible2xmlpl,))
 
-        subp = subprocess.Popen(
-            [bible2xmlpl, '-out', tmpname, self.orig],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        (output, error) = subp.communicate()
-
-        if subp.returncode != 0:
-            logfile = open('%s.log' % self.get_orig(), 'w')
-
-            logfile.write('Error at: %s' % str(ccat.lineno()))
-            logfile.write('bible2xml.pl exit status was not 0\n')
-            logfile.write('stdout: %s\n' % output)
-            logfile.write('stderr: %s\n' % error)
-            logfile.close()
-            raise ConversionException('bible2xml.pl returned non zero status. More info in %s.log' % self.orig)
+        command = [bible2xmlpl, '-out', tmpname, self.orig]
+        run_process(command, self.orig)
 
         return etree.parse(tmpname)
 
@@ -1295,20 +1283,8 @@ class DocConverter(HTMLContentConverter):
         """Convert the doc file using wvHtml.
         Return the output of the wvHtml
         """
-        subp = subprocess.Popen(
-            ['wvHtml', self.orig, '-'],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-
-        (output, error) = subp.communicate()
-
-        if subp.returncode != 0:
-            logfile = open('%s.log' % self.orig, 'w')
-            logfile.write('Error at: %s\n' % str(ccat.lineno()))
-            logfile.write('Could not process %s\n' % self.orig)
-            logfile.write('Stdout from wvHtml: %s\n\n' % output)
-            logfile.write('Stderr from wvHtml: %s\n' % error)
-            raise ConversionException("Conversion from .doc to .html failed. More info in %s.log" % self.orig)
+        command = ['wvHtml', self.orig, '-']
+        output = run_process(command, self.orig)
 
         return output
 
@@ -2014,6 +1990,8 @@ class LanguageDetector(object):
 
 class DocumentTester(object):
     def __init__(self, document):
+        '''Document is an etree
+        '''
         self.document = document
         self.mainlang = self.document.getroot().\
             attrib['{http://www.w3.org/XML/1998/namespace}lang']
@@ -2080,22 +2058,14 @@ class DocumentTester(object):
                 self.get_mainlang() +
                 '/src/analyser-gt-desc.xfst')
 
-        subp = subprocess.Popen(lookup_command,
-                                stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
-        (output, error) = subp.communicate(
-            self.get_preprocessed_mainlang_words())
+        output = run_process(
+            lookup_command, 'nada',
+            to_stdin=self.get_preprocessed_mainlang_words())
 
-        if subp.returncode != 0:
-            print >>sys.stderr, 'Could not lookup text'
-            print >>sys.stderr, output
-            raise ConversionException(error)
-        else:
-            count = 0
-            for line in output.split():
-                if '+?' in line:
-                    count += 1
+        count = 0
+        for line in output.split():
+            if '+?' in line:
+                count += 1
 
             return count
 
@@ -2114,19 +2084,9 @@ class DocumentTester(object):
         else:
             preprocess_command = ['preprocess']
 
-        subp = subprocess.Popen(preprocess_command,
-                                stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
-        (output, error) = subp.communicate(
-            self.get_mainlang_words().replace('\n', ' '))
-
-        if subp.returncode != 0:
-            print >>sys.stderr, output
-            print >>sys.stderr, error
-            raise ConversionException('Could not preprocess text')
-        else:
-            return output
+        return run_process(
+            preprocess_command, 'nada',
+            to_stdin=self.get_mainlang_words())
 
     def get_mainlang_words(self):
         plist = []
