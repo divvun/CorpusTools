@@ -155,8 +155,7 @@ class Converter(object):
             logfile.close()
 
             raise ConversionException(
-                "Not valid XML. More info in the log file: {}.log" %
-                self.get_orig())
+                "Not valid XML. More info in the log file: {}.log".format(self.get_orig()))
 
     def maybe_write_intermediate(self, intermediate):
         if not self._write_intermediate:
@@ -1232,9 +1231,9 @@ searchHitSummary',
 
             logfile.write('Error at: {}'.format(str(ccat.lineno())))
             for entry in transform.error_log:
-                logfile.write('\n{}: {} {}\n' %
-                              (str(entry.line), str(entry.column),
-                               entry.message.encode('utf8')))
+                logfile.write('\n{}: {} {}\n'.format(
+                    str(entry.line), str(entry.column),
+                    entry.message.encode('utf8')))
 
             logfile.write(html.encode('utf8'))
             logfile.close()
@@ -1962,9 +1961,13 @@ class LanguageDetector(object):
             else:
                 raise ConversionException('mainlang not set')
 
-        self.languageGuesser = text_cat.Classifier(
-            os.path.join(os.getenv('GTHOME'), 'tools/lang-guesser/LM/'),
-            langs=inlangs)
+        try:
+            self.languageGuesser = text_cat.Classifier(
+                os.path.join(os.getenv('GTHOME'), 'tools/lang-guesser/LM/'),
+                langs=inlangs)
+        except ValueError as e:
+            self.languageGuesser = None
+            print >>sys.stderr, str(e)
 
     def get_document(self):
         return self.document
@@ -1983,19 +1986,20 @@ class LanguageDetector(object):
 
         if paragraph.get('{http://www.w3.org/XML/1998/namespace}lang') is None:
             paragraph_text = self.remove_quote(paragraph)
-            lang = self.languageGuesser.classify(paragraph_text)
-            if lang != self.get_mainlang():
-                paragraph.set('{http://www.w3.org/XML/1998/namespace}lang',
-                              lang)
-
-            for element in paragraph.iter("span"):
-                if element.get("type") == "quote":
-                    if element.text is not None:
-                        lang = self.languageGuesser.classify(element.text)
-                        if lang != self.get_mainlang():
-                            element.set(
-                                '{http://www.w3.org/XML/1998/namespace}lang',
+            if self.languageGuesser is not None:
+                lang = self.languageGuesser.classify(paragraph_text)
+                if lang != self.get_mainlang():
+                    paragraph.set('{http://www.w3.org/XML/1998/namespace}lang',
                                 lang)
+
+                for element in paragraph.iter("span"):
+                    if element.get("type") == "quote":
+                        if element.text is not None:
+                            lang = self.languageGuesser.classify(element.text)
+                            if lang != self.get_mainlang():
+                                element.set(
+                                    '{http://www.w3.org/XML/1998/namespace}lang',
+                                    lang)
 
         return paragraph
 
@@ -2165,7 +2169,7 @@ def worker(args, xsl_file):
             conv.write_complete()
         except ConversionException as e:
             print >>sys.stderr, 'Could not convert {}'.format(orig_file)
-            print >>sys.stderr, e.parameter
+            print >>sys.stderr, str(e)
     else:
         print >>sys.stderr, '{} does not exist'.format(orig_file)
 
