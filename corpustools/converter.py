@@ -51,6 +51,9 @@ import functools
 import util
 
 
+here = os.path.dirname(__file__)
+
+
 class ConversionException(Exception):
     def __init__(self, value):
         self.parameter = value
@@ -123,9 +126,9 @@ class Converter(object):
 
         if not dtd.validate(complete):
             #print etree.tostring(complete)
-            logfile = open(self.get_orig() + '.log', 'w')
+            logfile = open('%s.log' % self.get_orig(), 'w')
 
-            logfile.write('Error at: ' + str(ccat.lineno()))
+            logfile.write('Error at: %s' % str(ccat.lineno()))
             for entry in dtd.error_log:
                 logfile.write('\n')
                 logfile.write(str(entry))
@@ -137,8 +140,8 @@ class Converter(object):
             logfile.close()
 
             raise ConversionException(
-                "Not valid XML. More info in the log file: " +
-                self.get_orig() + u".log")
+                "Not valid XML. More info in the log file: %s.log" %
+                self.get_orig())
 
     def maybe_write_intermediate(self, intermediate):
         if not self._write_intermediate:
@@ -167,15 +170,16 @@ class Converter(object):
 
             return complete
         except etree.XSLTApplyError as (e):
-            logfile = open(self.orig + '.log', 'w')
+            logfile = open('%s.log' % self.orig, 'w')
 
-            logfile.write('Error at: ' + str(ccat.lineno()))
+            logfile.write('Error at: %s' % str(ccat.lineno()))
             for entry in e.error_log:
                 logfile.write(str(entry))
                 logfile.write('\n')
 
             logfile.close()
-            raise ConversionException("Check the syntax in: " + self.get_xsl())
+            raise ConversionException("Check the syntax in: %s" %
+                                      self.get_xsl())
 
     def convert_errormarkup(self, complete):
         if 'correct.' in self.orig:
@@ -185,8 +189,8 @@ class Converter(object):
                 for element in complete.find('body'):
                     em.add_error_markup(element)
             except IndexError as e:
-                logfile = open(self.get_orig() + '.log', 'w')
-                logfile.write('Error at: ' + str(ccat.lineno()))
+                logfile = open('%s.log' % self.get_orig(), 'w')
+                logfile.write('Error at: %s' % str(ccat.lineno()))
                 logfile.write("There is a markup error\n")
                 logfile.write("The error message: ")
                 logfile.write(str(e))
@@ -322,9 +326,9 @@ class Converter(object):
                         self.get_xsl(), encoding="utf-8", xml_declaration=True)
 
         except etree.XMLSyntaxError as e:
-            logfile = open(self.orig + '.log', 'w')
+            logfile = open('%s.log' % self.orig, 'w')
 
-            logfile.write('Error at: ' + str(ccat.lineno()))
+            logfile.write('Error at: %s' % str(ccat.lineno()))
             for entry in e.error_log:
                 logfile.write('\n')
                 logfile.write(str(entry.line))
@@ -637,17 +641,13 @@ class PDFConverter(object):
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
-            logfile = open(self.orig + '.log', 'w')
-            logfile.write('Error at: ' + str(ccat.lineno()))
-            logfile.write('stdout\n')
-            logfile.write(output)
-            logfile.write('\n')
-            logfile.write('stderr\n')
-            logfile.write(error)
-            logfile.write('\n')
+            logfile = open('%s.log' % self.orig, 'w')
+            logfile.write('Error at: %s' % str(ccat.lineno()))
+            logfile.write('stdout\n%s\n') % output
+            logfile.write('stderr\n%s\n') % error
             logfile.close()
             raise ConversionException("Could not extract text from pdf. \
-                More info in the log file: " + self.orig + u".log")
+                More info in the log file: %s.log" % self.orig)
 
         self.text = unicode(output, encoding='utf8')
         self.replace_ligatures()
@@ -782,11 +782,11 @@ class PDF2XMLConverter(object):
                 if len(self.parts) > 0:
                     if isinstance(self.parts[-1], etree._Element):
                         if self.parts[-1].tail is not None:
-                            self.parts[-1].tail += ' ' + textelement.text
+                            self.parts[-1].tail += ' %s' % textelement.text
                         else:
                             self.parts[-1].tail = textelement.text
                     else:
-                        self.parts[-1] += ' ' + textelement.text
+                        self.parts[-1] += ' %s' % textelement.text
                 else:
                     m = re.search('\w-$', textelement.text, re.UNICODE)
                     if m:
@@ -910,7 +910,7 @@ class PDF2XMLConverter(object):
                     if p[-1].tail is None:
                         p[-1].tail = part
                     else:
-                        p[-1].tail = ' ' + part
+                        p[-1].tail = ' %s' % part
 
             return p
 
@@ -937,16 +937,14 @@ class BiblexmlConverter(object):
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
-            logfile = open(self.get_orig() + '.log', 'w')
+            logfile = open('%s.log' % self.get_orig(), 'w')
 
-            logfile.write('Error at: ' + str(ccat.lineno()))
+            logfile.write('Error at: %s' % str(ccat.lineno()))
             logfile.write('bible2xml.pl exit status was not 0\n')
-            logfile.write('stdout: \n')
-            logfile.write(output)
-            logfile.write('stderr: \n')
-            logfile.write(error)
+            logfile.write('stdout: %s\n' % output)
+            logfile.write('stderr: %s\n' % error)
             logfile.close()
-            raise ConversionException('bible2xml.pl returned non zero status. More info in ' + self.orig + '.log')
+            raise ConversionException('bible2xml.pl returned non zero status. More info in %s.log' % self.orig)
 
         return etree.parse(tmpname)
 
@@ -983,20 +981,20 @@ class HTMLContentConverter(object):
             c = unicode(content, encoding=enc)
             superclean = cleaner.clean_html(c)
         except UnicodeDecodeError as e:
-            logfile = open(self.orig + '.log', 'w')
+            logfile = open('%s.log' % self.orig, 'w')
             print >>logfile, ccat.lineno(), str(e), self.orig
             logfile.close()
-            raise ConversionException(self.orig + ', ny encoding tull1')
+            raise ConversionException('%s, ny encoding tull1' % self.orig)
         except TypeError as e:
-            logfile = open(self.orig + '.log', 'w')
+            logfile = open('%s.log' % self.orig, 'w')
             print >>logfile, ccat.lineno(), str(e), self.orig
             logfile.close()
-            raise ConversionException(self.orig + ', ny encoding tull2')
+            raise ConversionException('%s, ny encoding tull2' % self.orig)
         except ValueError as e:
-            logfile = open(self.orig + '.log', 'w')
+            logfile = open('%s.log' % self.orig, 'w')
             print >>logfile, ccat.lineno(), str(e), self.orig
             logfile.close()
-            raise ConversionException(self.orig + ', ny encoding tull3')
+            raise ConversionException('%s, ny encoding tull3' % self.orig)
 
         self.soup = html5parser.document_fromstring(superclean)
 
@@ -1118,7 +1116,7 @@ class HTMLContentConverter(object):
         for tag, attribs in unwanted_classes_ids.items():
             for key, values in attribs.items():
                 for value in values:
-                    search = './/html:' + tag + '[@' + key + '="' + value + '"]'
+                    search = ('.//html:%s[@%s="%s"]' % (tag, key, value))
                     for unwanted in self.soup.xpath(search, namespaces=ns):
                         unwanted.getparent().remove(unwanted)
 
@@ -1157,7 +1155,7 @@ class HTMLContentConverter(object):
         '''
         for tag in ['a', 'i', 'em', 'font']:
             for bi in self.soup.xpath(
-                    './/html:body/html:' + tag,
+                    './/html:body/html:%s' % tag,
                     namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
                 p = etree.Element('{http://www.w3.org/1999/xhtml}p')
                 bi_parent = bi.getparent()
@@ -1189,23 +1187,19 @@ class HTMLContentConverter(object):
 
         html = self.tidy()
 
-        with open(self.orig + '.huff.xml', 'wb') as huff:
+        with open('%s.huff.xml' % self.orig, 'wb') as huff:
             util.print_element(etree.fromstring(html), 0, 2, huff)
 
         try:
             doc = etree.fromstring(html)
             intermediate = transform(doc)
         except etree.XMLSyntaxError as e:
-            logfile = open(self.orig + '.log', 'w')
+            logfile = open('%s.log' % self.orig, 'w')
 
-            logfile.write('Error at: ' + str(ccat.lineno()))
+            logfile.write('Error at: %s' % str(ccat.lineno()))
             for entry in e.error_log:
-                logfile.write('\n')
-                logfile.write(str(entry.line))
-                logfile.write(':')
-                logfile.write(str(entry.column))
-                logfile.write(" ")
-
+                logfile.write('\n%s: %s ' %
+                              (str(entry.line), str(entry.column)))
                 try:
                     logfile.write(entry.message)
                 except ValueError:
@@ -1217,26 +1211,22 @@ class HTMLContentConverter(object):
             logfile.write(html.encode('utf8'))
             logfile.close()
             raise ConversionException(
-                "Invalid html, log is found in " + self.orig + '.log')
+                "Invalid html, log is found in %s.log" % self.orig)
 
         if len(transform.error_log) > 0:
 
-            logfile = open(self.orig + '.log', 'w')
+            logfile = open('%s.log' % self.orig, 'w')
 
-            logfile.write('Error at: ' + str(ccat.lineno()))
+            logfile.write('Error at: %s' % str(ccat.lineno()))
             for entry in transform.error_log:
-                logfile.write('\n')
-                logfile.write(str(entry.line))
-                logfile.write(':')
-                logfile.write(str(entry.column))
-                logfile.write(" ")
-                logfile.write(entry.message.encode('utf8'))
-                logfile.write('\n')
+                logfile.write('\n%s: %s %s\n' %
+                              (str(entry.line), str(entry.column),
+                               entry.message.encode('utf8')))
 
             logfile.write(html.encode('utf8'))
             logfile.close()
             raise ConversionException(
-                'transformation failed' + self.orig + '.log')
+                'transformation failed %s.log' % self.orig)
 
         return intermediate
 
@@ -1268,7 +1258,7 @@ class RTFConverter(HTMLContentConverter):
             doc = Rtf15Reader.read(
                 io.BytesIO(content.replace('fcharset256', 'fcharset255')))
         except UnicodeDecodeError:
-            raise ConversionException('Unicode problems in ' + self.orig)
+            raise ConversionException('Unicode problems in %s' % self.orig)
 
         html = XHTMLWriter.write(doc, pretty=True).read()
         xml = etree.fromstring(html)
@@ -1313,12 +1303,12 @@ class DocConverter(HTMLContentConverter):
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
-            logfile = open(self.orig + '.log', 'w')
-            logfile.write('Error at: ' + str(ccat.lineno()) + '\n')
-            logfile.write('Could not process' + self.orig + '\n')
-            logfile.write('Stdout from wvHtml: ' + output + '\n\n')
-            logfile.write('Stderr from wvHtml: ' + error + '\n')
-            raise ConversionException("Conversion from .doc to .html failed. More info in " + self.orig + '.log')
+            logfile = open('%s.log' % self.orig, 'w')
+            logfile.write('Error at: %s\n' % str(ccat.lineno()))
+            logfile.write('Could not process %s\n' % self.orig)
+            logfile.write('Stdout from wvHtml: %s\n\n' % output)
+            logfile.write('Stderr from wvHtml: %s\n' % error)
+            raise ConversionException("Conversion from .doc to .html failed. More info in %s.log" % self.orig)
 
         return output
 
@@ -1467,7 +1457,7 @@ class DocumentFixer(object):
                             lines.append(em.text.strip())
                         em.text = ' '.join(lines)
                         if em.tail is not None:
-                            em.tail = ' ' + em.tail
+                            em.tail = ' %s' % em.tail
                         lines = []
 
     def soft_hyphen_to_hyph_tag(self):
@@ -1905,22 +1895,21 @@ class XslMaker(object):
         try:
             filexsl = etree.parse(xslfile)
         except etree.XMLSyntaxError as e:
-            logfile = open(self.filename + '.log', 'w')
+            logfile = open('%s.log' % self.filename, 'w')
 
-            logfile.write('Error at: ' + str(ccat.lineno()) + '\n')
+            logfile.write('Error at: %s' % str(ccat.lineno()))
             for entry in e.error_log:
-                logfile.write(str(entry))
-                logfile.write('\n')
+                logfile.write('%s\n' % str(entry))
 
             logfile.close()
-            raise ConversionException("Syntax error in " + self.filename)
+            raise ConversionException("Syntax error in %s" % self.filename)
 
         common_xsl_path = resource_filename(
             __name__, 'xslt/common.xsl').replace(' ', '%20')
         self.finalXsl = preprocessXslTransformer(
             filexsl,
             commonxsl=
-            etree.XSLT.strparam('file://' + common_xsl_path))
+            etree.XSLT.strparam('file://%s' % common_xsl_path))
 
     def get_xsl(self):
         return self.finalXsl
@@ -1933,14 +1922,13 @@ class XslMaker(object):
         except etree.XSLTParseError as (e):
             logfile = open(self.filename.replace('.xsl', '') + '.log', 'w')
 
-            logfile.write('Error at: ' + str(ccat.lineno()) + '\n')
-            logfile.write('Invalid XML in ' + self.filename + '\n')
+            logfile.write('Error at: %s\n' % str(ccat.lineno()))
+            logfile.write('Invalid XML in %s\n' % self.filename)
             for entry in e.error_log:
-                logfile.write(str(entry))
-                logfile.write('\n')
+                logfile.write('%s\n' % str(entry))
 
             logfile.close()
-            raise ConversionException("Invalid XML in " + self.filename)
+            raise ConversionException("Invalid XML in %s" % self.filename)
 
 
 class LanguageDetector(object):

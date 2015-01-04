@@ -213,8 +213,8 @@ class CorpusNameFixer(NameChangerBase):
         """Change the name of an xsl file using the
         routines of a given repository tool
         """
-        fromname = os.path.join(self.old_dirname, self.old_filename + '.xsl')
-        toname = os.path.join(self.old_dirname, self.new_filename + '.xsl')
+        fromname = os.path.join(self.old_dirname, '%s.xsl' % self.old_filename)
+        toname = os.path.join(self.old_dirname, '%s.xsl' % self.new_filename)
 
         if os.path.exists(fromname):
             self.move_file(fromname, toname)
@@ -233,13 +233,13 @@ class CorpusNameFixer(NameChangerBase):
         """
         """
         paradir = self.old_dirname.replace(mainlang, paralang)
-        parafile = os.path.join(paradir, paraname + '.xsl')
+        parafile = os.path.join(paradir, '%s.xsl' % paraname)
         if os.path.exists(parafile):
             paratree = self.open_xslfile(parafile)
             pararoot = paratree.getroot()
 
-            pararoot.find(".//*[@name='para_" + mainlang + "']").set(
-                'select', "'" + self.new_filename + "'")
+            pararoot.find(".//*[@name='para_%s']" % mainlang ).set(
+                'select', "'%s'" % self.new_filename)
 
             paratree.write(parafile, encoding='utf8', xml_declaration=True)
 
@@ -249,7 +249,7 @@ class CorpusNameFixer(NameChangerBase):
         Open the xsl files of these parallel files and change the name of this
         parallel from the old to the new one
         """
-        xslfile = os.path.join(self.old_dirname, self.new_filename + '.xsl')
+        xslfile = os.path.join(self.old_dirname, '%s.xsl' % self.new_filename)
         if os.path.exists(xslfile):
             xsltree = self.open_xslfile(xslfile)
             xslroot = xsltree.getroot()
@@ -272,8 +272,8 @@ class CorpusNameFixer(NameChangerBase):
         """Move the file in prestable/converted from the old to the new name
         """
         dirname = self.old_dirname.replace('/orig/', '/prestable/converted/')
-        fromname = os.path.join(dirname, self.old_filename + '.xml')
-        toname = os.path.join(dirname, self.new_filename + '.xml')
+        fromname = os.path.join(dirname, '%s.xml' % self.old_filename)
+        toname = os.path.join(dirname, '%s.xml' % self.new_filename)
 
         if os.path.exists(fromname):
             self.move_file(fromname, toname)
@@ -284,9 +284,9 @@ class CorpusNameFixer(NameChangerBase):
         for suggestion in ['/prestable/toktmx/sme2nob/',
                            '/prestable/toktmx/nob2sme/']:
             dirname = self.old_dirname.replace('/orig/', suggestion)
-            fromname = os.path.join(dirname, self.old_filename + '.toktmx')
+            fromname = os.path.join(dirname, '%s.toktmx' %self.old_filename)
             if os.path.exists(fromname):
-                toname = os.path.join(dirname, self.new_filename + '.toktmx')
+                toname = os.path.join(dirname, '%s.toktmx' % self.new_filename)
                 self.move_file(fromname, toname)
 
     def move_prestable_tmx(self):
@@ -295,9 +295,9 @@ class CorpusNameFixer(NameChangerBase):
         for suggestion in ['/prestable/tmx/sme2nob/',
                            '/prestable/tmx/nob2sme/']:
             dirname = self.old_dirname.replace('/orig/', suggestion)
-            fromname = os.path.join(dirname, self.old_filename + '.tmx')
+            fromname = os.path.join(dirname, '%s.tmx' % self.old_filename)
             if os.path.exists(fromname):
-                toname = os.path.join(dirname, self.new_filename + '.tmx')
+                toname = os.path.join(dirname, '%s.tmx' % self.new_filename)
                 self.move_file(fromname, toname)
 
 
