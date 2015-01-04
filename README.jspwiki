@@ -2,6 +2,7 @@
 
 Corpus Tools contains tools to manipulate a corpus in different ways.
 These scripts will be installed
+
 * [ccat|CorpusTools.html#ccat]
 * [convert2xml|CorpusTools.html#convert2xml]
 * [analyse_corpus|CorpusTools.html#analyse_corpus]
@@ -55,6 +56,7 @@ Note the dot at the end of the second line. The scripts will then be
 found in /usr/local/bin
 
 !To own home directory
+
 Install the tools for the current user by writing
 
 {{{
@@ -75,13 +77,17 @@ CorpusTools without recompiling all dependencies as well.)
 !!Uninstalling
 
 !System wide
+
 {{sudo pip(-2.7) uninstall corpustools}}
 
 will uninstall the scripts from /usr/local/bin and the python system path.
 
 
 !Remove from own home directory
-{{{pip(-2.7) uninstall corpustools}}}
+
+{{{
+pip(-2.7) uninstall corpustools
+}}}
 
 will uninstall the scripts from $HOME/bin and the users python path
 (pip will complain if you give it --user here; it tends to find the
@@ -99,9 +105,12 @@ The basic function of ccat is to print paragraphs that have text type
 
 Typical usage is:
 
-{{{ccat -a -l sme $GTFREE/converted/sme/admin}}}
+{{{
+ccat -a -l sme $GTFREE/converted/sme/admin
+}}}
 
-This command will print all text marked in the language sme found the directory $GTFREE/converted/sme/admin and its subdirectories.
+This command will print all text marked in the language sme found the 
+directory $GTFREE/converted/sme/admin and its subdirectories.
 
 The complete help text from the program:
 
@@ -174,32 +183,43 @@ following files/directories need to exist under $GTHOME:
 Convert all files in the directory $GTFREE/orig/sme and its
 subdirectories.
 
-{{{convert2xml $GTFREE/orig/sme}}}
+{{{
+convert2xml $GTFREE/orig/sme
+}}}
 
 The converted files are placed in $GTFREE/converted/sme
 with the same directory structure as that in $GTFREE/orig/sme.
 
 Convert only one file:
 
-{{{convert2xml $GTFREE/orig/sme/admin/sd/file1.html}}}
+{{{
+convert2xml $GTFREE/orig/sme/admin/sd/file1.html
+}}}
 
 The converted file is found in $GTFREE/orig/sme/admin/sd/file1.htm.xml
 
 Convert all sme files in directories ending with corpus
 
-{{{convert2xml *corpus/orig/sme}}}
+{{{
+convert2xml *corpus/orig/sme
+}}}
 
 If convert2xml is not able to convert a file these kinds of message will appear:
 
-{{{/home/boerre/Dokumenter/corpus/freecorpus/orig/eng/admin/depts/regjeringen.no/calendar-for-the-ministry-of-children-an.html_id=308}}}
+{{{
+/home/boerre/Dokumenter/corpus/freecorpus/orig/eng/admin/depts/regjeringen.no/calendar-for-the-ministry-of-children-an.html_id=308
+}}}
 
 A log file will be found in
 
-{{{/home/boerre/Dokumenter/corpus/freecorpus/orig/eng/admin/depts/regjeringen.no/calendar-for-the-ministry-of-children-an.html_id=308.log}}}
+{{{
+/home/boerre/Dokumenter/corpus/freecorpus/orig/eng/admin/depts/regjeringen.no/calendar-for-the-ministry-of-children-an.html_id=308.log
+}}}
 
 explaining what went wrong.
 
 The complete help text from the program:
+
 {{{
 usage: convert2xml [-h] [-v] [--serial] [--write-intermediate]
                    sources [sources ...]
@@ -237,29 +257,29 @@ analyse_corpus depends on these external programs:
 !Usage
 
 To be able to use this program you must build the fsts for the supported
-languages:
+languages (exchange "sma" with "sme, smj" ad lib):
 
-* sma
-** {{cd $GTHOME/langs/sma}}
-** make
-* sme
-** {{cd $GTHOME/gt/}}
-** {{make GTLANG=sme}}
-* smj
-** {{cd $GTHOME/langs/smj}}
-** make
+{{{
+cd $GTHOME/langs/sma
+make
+}}}
 
 Then you must convert the corpus files as explained in the [convert2xml|CorpusTools.html#convert2xml] section.
 
 When this is done you can analyse all files in the directory
-$GTFREE/converted/sme and its subdirectories by issuing this command:
-{{{analyse_corpus sme $GTFREE/converted/sme}}}
+$GTFREE/converted/sme (and sma, smj) and its subdirectories by issuing this command:
+
+{{{
+analyse_corpus sme $GTFREE/converted/sme
+}}}
 
 The analysed file will be found in {{$GTFREE/analysed/sme}}
 
 To analyse only one file, issue this command:
 
-{{{analyse_corpus --serial sme $GTFREE/converted/sme/file.html.xml}}}
+{{{
+analyse_corpus --serial sme $GTFREE/converted/sme/file.html.xml
+}}}
 
 The complete help text from the program:
 {{{
@@ -366,11 +386,13 @@ Add files to freecorpus from a given site.
 Only able to crawl www.samediggi.fi now, will collect html files only for now.
 
 Run it like this:
-{{
+
+{{{
 saami_crawler www.samediggi.fi
-}}
+}}}
 
 The complete help text from the program is as follows:
+
 {{{
 usage: saami_crawler [-h] [-v] sites [sites ...]
 
