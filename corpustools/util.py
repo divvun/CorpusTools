@@ -10,6 +10,10 @@ class ExecutableMissingException(Exception):
     pass
 
 
+class ArgumentError(Exception):
+    pass
+
+
 def basename_noext(fname, ext):
     return os.path.basename(fname)[:-len(ext)]
 

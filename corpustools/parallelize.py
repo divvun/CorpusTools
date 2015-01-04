@@ -37,10 +37,6 @@ import argparse_version
 import util
 
 
-class ArgumentError(Exception):
-    pass
-
-
 class CorpusXMLFile:
     """
     A class that contains the info on a file to be parallellized, name
@@ -55,7 +51,7 @@ class CorpusXMLFile:
 
     def sanity_check(self):
         if self.etree.getroot().tag != u"document":
-            raise ArgumentError(
+            raise util.ArgumentError(
                 "Expected Corpus XML file (output of convert2xml) with "
                 "<document> as the root tag, got {} -- did you pass the "
                 "wrong file?".format(
