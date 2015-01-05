@@ -14,7 +14,7 @@ import gzip
 
 
 class NGramModel(object):
-    SPLITCHARS = re.compile(r"[][}{)(>< \n\t:;!.?_,¶§%&£€$¹°½¼¾©←→▪➢√|#–‒…·•@~\\/”“«»\"`'0-9=*+‑-]")
+    SPLITCHARS = re.compile(r"[][}{)(>< \n\t:;!.?_,¶§%&£€$¹°½¼¾©←→▪➢√|#–‒…·•@~\\/”“«»\"0-9=*+‑-]")
     NB_NGRAMS = 400
     MISSING_VALUE = 400
 
