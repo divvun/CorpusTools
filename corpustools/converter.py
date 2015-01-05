@@ -1288,7 +1288,13 @@ class RTFConverter(HTMLContentConverter):
                 self.orig))
 
         html = XHTMLWriter.write(doc, pretty=True).read()
-        xml = etree.fromstring(html)
+        try:
+            xml = etree.fromstring(html)
+        except etree.XMLSyntaxError as e:
+            raise ConversionException(
+                'Invalid HTML was created during rtf->html conversion\n'
+                'The error message is: {}'.format(str(e))
+                )
         xml.tag = 'body'
         htmlElement = etree.Element('html')
         htmlElement.append(xml)
