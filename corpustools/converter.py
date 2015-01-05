@@ -1963,7 +1963,7 @@ class LanguageDetector(object):
 
         try:
             self.languageGuesser = text_cat.Classifier(
-                os.path.join(os.getenv('GTHOME'), 'tools/lang-guesser/LM/'),
+                resource_filename(__name__, 'lm/'),
                 langs=inlangs)
         except ValueError as e:
             self.languageGuesser = None
