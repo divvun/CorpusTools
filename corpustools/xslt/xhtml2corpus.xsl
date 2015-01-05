@@ -247,10 +247,7 @@ xsltproc xhtml2corpus.xsl - > file.xml
     </p>
 </xsl:template>
 
-<!--  Covers these test cases
-* td-a-div
--->
-<xsl:template match="html:td/html:a/html:div">
+<xsl:template match="html:p/html:a/html:div">
     <xsl:value-of select="text()"/>
 </xsl:template>
 
