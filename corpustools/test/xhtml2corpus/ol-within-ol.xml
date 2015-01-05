@@ -1,4 +1,7 @@
 <document>
+    <header>
+        <title/>
+    </header>
 	<body>
 		<list>
 			<p type="listitem">1</p>
