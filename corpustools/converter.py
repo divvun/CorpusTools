@@ -1165,7 +1165,7 @@ searchHitSummary',
         '''Embed em elements that are direct ancestors of body inside a p
         element
         '''
-        for tag in ['a', 'i', 'em', 'font', 'u', 'strong']:
+        for tag in ['a', 'i', 'em', 'font', 'u', 'strong', 'span']:
             for bi in self.soup.xpath(
                     './/html:body/html:{}'.format(tag),
                     namespaces={'html': 'http://www.w3.org/1999/xhtml'}):

@@ -856,6 +856,16 @@ class TestHTMLContentConverter(XMLTester):
 
         self.assertEqual(got, etree.tostring(want))
 
+    def test_body_span(self):
+        got = converter.HTMLContentConverter(
+            'span.html',
+            '<html><body><span>b</span></body></html>', None).tidy()
+
+        want = html5parser.document_fromstring(
+            '<html><head/><body><p><span>b</span></p></body></html>')
+
+        self.assertEqual(got, etree.tostring(want))
+
     def test_body_text(self):
         got = converter.HTMLContentConverter(
             'text.html',
