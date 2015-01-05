@@ -91,6 +91,9 @@ class GIT(VersionController):
             print >>sys.stderr, 'File does not exist %s' % filename
             raise UserWarning
 
+    def add_directory(self, directory):
+        """Git doesn't need to add directories before adding contents."""
+        pass
 
 class VersionControlFactory(object):
     def vcs(self, directory):
