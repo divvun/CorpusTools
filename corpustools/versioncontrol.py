@@ -36,7 +36,12 @@ class VersionController(object):
             read_only=True)
 
     def add(self, filename):
-        pass
+        raise NotImplementedError(
+            "You have to subclass and override add")
+
+    def add_directory(self, directory):
+        raise NotImplementedError(
+            "You have to subclass and override add_directory")
 
     def user_name(self):
         if self.config.has_option("user", "name"):
