@@ -1,0 +1,32 @@
+<document>
+	<body>
+		<list>
+			<p type="listitem">1</p>
+			<p type="listitem">
+			2
+				<list>
+					<p type="listitem">2.1</p>
+					<p type="listitem">2.2</p>
+					<p type="listitem">2.3</p>
+				</list>
+			</p>
+			<p type="listitem">3</p>
+			<p type="listitem">4</p>
+			<p type="listitem">5</p>
+		</list>
+		<list>
+			<p type="listitem">1</p>
+			<p type="listitem">
+			2
+				<list>
+					<p type="listitem">2.1</p>
+					<p type="listitem">2.2</p>
+					<p type="listitem">2.3</p>
+				</list>
+			</p>
+			<p type="listitem">3</p>
+			<p type="listitem">4</p>
+			<p type="listitem">5</p>
+		</list>
+	</body>
+</document>
