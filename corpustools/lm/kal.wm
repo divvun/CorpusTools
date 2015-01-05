@@ -7,15 +7,15 @@
 366	naanissaanut
 365	sinnerupput
 351	ilassuteqarpat
-349	it
+344	it
 341	illoqarfik
 336	ukioq
 332	Ullut
 315	aamma
-143	mi
-133	imi
+142	mi
 131	tassa
 129	t
+120	imi
 110	illoqarfiit
 105	pingaarnersaat
 87	nuna
@@ -39,12 +39,12 @@
 49	qalipaavoq
 49	toqusoq
 49	Nunaanni
-48	ip
-46	inik
 46	ullumikkut
 45	oqaatsit
 45	Mittarfik
+44	inik
 43	Europami
+43	ip
 43	tassaapput
 39	de
 39	miss
@@ -52,31 +52,30 @@
 37	nunaqarfiuvoq
 37	ilaasoq
 35	qanoq
-33	Island
 33	taanna
 32	Septemberi
 32	il
+32	Island
 31	inuit
 31	inuttunersaq
-31	imik
 31	ssit
 31	kiisalu
 31	inuup
 30	Septamberi
 30	Immikkoortoq
 30	Kinaluunniit
-29	mut
 29	imalt
 29	Nunavut
 28	ilaatigut
 28	New
 27	Vietnamimiusut
-27	p
 27	hebraimiutut
-27	imut
-26	Asia
+27	p
+27	mut
 26	akornanni
 26	Kujallermi
+26	imik
+26	Asia
 25	Vietnammi
 25	Kinami
 25	inulik
@@ -95,7 +94,7 @@
 22	mio
 21	inissisimavoq
 21	ilisimatusarneq
-21	imit
+21	imut
 20	Amerikami
 20	Amerika
 20	inoqarpoq
@@ -106,9 +105,9 @@
 19	Kujalleq
 19	Inuit
 19	Urdumiutut
-19	Nunaata
 19	Aamma
 19	taavalu
+19	Nunaata
 19	atasoq
 19	pisinnaatitaavoq
 19	matuma
@@ -155,6 +154,7 @@
 15	Frankrigimi
 15	tamanut
 15	tarnip
+15	imit
 15	Vietnam
 14	missaanni
 14	Mexikomi
@@ -177,7 +177,6 @@
 13	assigiinngitsut
 13	tamanna
 13	taamaalilluni
-13	mit
 13	ingammik
 13	Thailandimiutut
 13	arlalinnik
@@ -199,7 +198,6 @@
 12	tuluttut
 12	illoqarfiup
 12	Al
-12	ikkunni
 12	Canadap
 12	Indonesiamiutut
 12	annerusumik
@@ -220,10 +218,9 @@
 11	inuttut
 11	frankrigimioq
 11	ataatsimik
-11	imilu
+11	ikkunni
 11	atorlugu
 11	taamani
-11	ilu
 11	bay
 11	m
 11	avannaani
@@ -249,7 +246,6 @@
 10	The
 10	silarsuarmi
 10	Pashtomiutut
-10	illoqarfimmi
 10	Kommunia
 10	marlunnik
 10	immikkut
@@ -258,11 +254,11 @@
 10	rock
 10	den
 10	Bengalimiutut
+10	illoqarfimmi
 10	FN
 10	la
 10	Victoria
 10	Nuummi
-10	SAS
 10	misissuineq
 10	Avannaani
 10	siulleq
@@ -291,6 +287,7 @@
 9	Maniitsup
 9	Københavnimi
 9	Eurasia
+9	imilu
 9	allallu
 9	inunnit
 9	Uummannaq
@@ -310,11 +307,9 @@
 9	qeqertaq
 9	Upernavik
 9	lu
-9	mik
 9	Taakku
 9	Polenimi
 9	killilersugaanngitsumik
-9	Greenland
 9	manna
 8	namminersornerullutik
 8	Qaqortup
@@ -326,7 +321,6 @@
 8	Taamaattumik
 8	Iraqimi
 8	Illoqarfik
-8	ini
 8	kalaallisut
 8	Eqaluk
 8	Illoqarfinni
@@ -338,16 +332,17 @@
 8	Gia
 8	killilersugaanngitsumillu
 8	Egyptimi
-8	kkut
 8	pisortatigoortumik
 8	Qeqqata
 8	Tarnip
 8	Ittoqqortoormiit
+8	ilu
 8	in
 8	atorneqartarpoq
 8	sisamat
 8	eqqarsaatigalugu
 8	Status
+8	mik
 8	ullua
 8	oqaasii
 8	metal
@@ -356,7 +351,6 @@
 8	tuluit
 8	Quo
 8	silap
-8	itut
 8	United
 8	Pleiku
 8	Yukon
@@ -381,9 +375,11 @@
 7	ukioqarluni
 7	tunngasut
 7	Ilulissat
+7	ini
 7	Hindimiutut
 7	Zealand
 7	persiskisut
+7	mit
 7	naalagaaffiit
 7	puisit
 7	nutaat
@@ -393,7 +389,6 @@
 7	pingasut
 7	siornatigut
 7	Korea
-7	a
 7	pillugu
 7	Naalagaaffiit
 7	N
@@ -401,10 +396,10 @@
 7	kisitsisai
 7	Kisianni
 7	inungasunik
+7	kkut
 7	Rach
 7	Syriami
 7	Da
-7	Sverige
 7	London
 7	Qeqertarsuarmi
 7	Tuluttut
@@ -424,6 +419,7 @@
 7	ni
 7	nissaat
 7	isumaqartoq
+7	itut
 7	of
 7	Tamanna
 7	Thuot
@@ -432,6 +428,7 @@
 7	på
 7	hollandskimioq
 7	innermik
+7	Greenland
 7	NORA
 7	Sverigemi
 6	pingaarnertut
@@ -493,6 +490,7 @@
 6	shi
 6	Savalimmiut
 6	una
+6	'imi
 6	Prince
 6	naalakkersuinikkut
 6	sinnilaarlugit
@@ -510,7 +508,6 @@
 6	inuutissarsiutini
 6	tamalaat
 6	nipilersortartut
-6	S
 6	Can
 6	tassalu
 6	pingaarnerit
@@ -521,6 +518,7 @@
 6	FNip
 6	naligiimmik
 6	ullorissat
+6	SAS
 6	Katuaq
 6	Nunarput
 6	imiit
@@ -561,7 +559,6 @@
 5	isiginnaartitsisartoq
 5	oqaatigineqarsinnaavoq
 5	I
-5	Daniel
 5	at
 5	Oqaluffik
 5	nipilersoqatigiit
@@ -609,7 +606,6 @@
 5	Aasaanerani
 5	Narsaq
 5	Narsap
-5	Madeleine
 5	Te
 5	tamakkiisumik
 5	ammut
@@ -628,7 +624,6 @@
 5	naapertorlugit
 5	amia
 5	inissinneqarpoq
-5	paasissutissanik
 5	tamani
 5	paasisat
 5	Taamatut
@@ -647,6 +642,7 @@
 5	qeqertat
 5	tunngavigalugit
 5	kisitsisit
+5	S
 5	Hoa
 5	ullup
 5	inatsisitigut
@@ -673,6 +669,7 @@
 5	amaroq
 5	Libyami
 5	Frederik
+5	paasissutissanik
 5	Turner
 5	guutiat
 5	Cam
@@ -695,7 +692,6 @@
 4	atalerpoq
 4	ilisimaneqartut
 4	Harris
-4	Gustav
 4	Inuk
 4	ukiumut
 4	Ilagiit
@@ -729,7 +725,6 @@
 4	Nang
 4	piffissap
 4	anginerpaaq
-4	iuvoq
 4	periarfissat
 4	arlaannut
 4	Nunarsuup
@@ -747,11 +742,11 @@
 4	Julie
 4	sulilu
 4	alapernaarsukkat
+4	Di'Anno
 4	timikkut
 4	pissusaa
 4	Quoc
 4	Emiratesimi
-4	Anno
 4	nassaassaapput
 4	siullerpaamik
 4	Siissisoq
@@ -765,7 +760,6 @@
 4	juuni
 4	assigiinngittut
 4	Lien
-4	Tasiilap
 4	Jan
 4	Umimmak
 4	Delhi
@@ -783,6 +777,7 @@
 4	Con
 4	nutaanik
 4	Inganermi
+4	a
 4	kisiat
 4	ukuusut
 4	taaneqartartoq
@@ -799,6 +794,7 @@
 4	Nipilersorneq
 4	siiliki
 4	Islandimi
+4	Sverige'mit
 4	kommunia
 4	piffissami
 4	Luis
@@ -843,9 +839,9 @@
 4	Australia
 4	pissutsit
 4	allanik
-4	Di
 4	teqeqqulinnut
 4	assinik
+4	Tasiilap
 4	amarua
 4	Georges
 4	naak
@@ -858,7 +854,6 @@
 4	pilersinneqarmat
 4	dec
 4	Issittup
-4	Reykjavík
 4	qalipaataa
 4	Kalaallisut
 4	Nuussuaq
@@ -867,11 +862,9 @@
 4	kr
 4	Tyrkia
 4	akunn
-4	Stockholm
 4	eqqarsaatigalugit
 4	atortarpaat
 4	taamatut
-4	O
 4	Enoksen
 4	feb
 4	sulisartut
@@ -956,7 +949,6 @@
 3	Fraintche
 3	ikannerit
 3	ullumikkullu
-3	ikuallatat
 3	Petersen
 3	Manitoba
 3	Kisiannili
@@ -998,7 +990,6 @@
 3	ved
 3	taakkulu
 3	Tan
-3	Silvia
 3	Kulusuk
 3	Cruz
 3	Colombia
@@ -1026,11 +1017,11 @@
 3	Ullutsinni
 3	upperisarsiornermi
 3	pingaarnersaapput
-3	s
 3	ilisimasassarsiornermi
 3	Nagoya
 3	Sierra
 3	eqqunneqarsimavoq
+3	Daniel
 3	annerpaaq
 3	tunua
 3	taasarpaat
@@ -1066,7 +1057,9 @@
 3	annersaat
 3	Son
 3	tungaatigut
+3	Nhat
 3	Bekasi
+3	iuvoq
 3	Of
 3	OL
 3	aaqqissuulluakkamik
@@ -1086,30 +1079,29 @@
 3	Q
 3	ateqarpoq
 3	taamatuttaaq
+3	'
 3	Palembang
 3	Beatles
 3	Vilhelm
 3	Bogotá
 3	Ulloriarsiorneq
-3	millu
 3	piorsarsimasut
 3	kujammullu
 3	Tasiilaq
-3	Aalborg
 3	River
 3	Paulo
 3	Sermersuup
 3	inuiattut
 3	kommuneani
 3	Guinea
-3	pissutaavoq
+3	cd
 3	Nunalerineq
 3	Nannup
 3	Sapporo
 3	apriili
 3	assingusut
 3	ataasiakkaani
-3	isut
+3	oqartussat
 3	Kujataani
 3	naliginnaasoq
 3	latinerisut
@@ -1159,7 +1151,6 @@
 3	pisunik
 3	Tre
 3	Bangladesh
-3	Nhat
 3	Gran
 3	Humaniora
 3	Puisi
@@ -1171,6 +1162,7 @@
 3	Kuummiut
 3	arfanniarneq
 3	amerlanerit
+3	'it
 3	qisummik
 3	sivisuumik
 3	oqaluttuassartaa
@@ -1194,7 +1186,7 @@
 3	allamut
 3	arnat
 3	arfinillit
-3	cd
+3	pissutaavoq
 3	inuutissarsiutit
 3	qaqqaq
 3	dronning
@@ -1240,6 +1232,7 @@
 3	Iceland
 3	inganeq
 3	skal
+3	Madeleine
 3	aningaasarsiornikkut
 3	Naalagaaffeqatigiit
 3	Murray
@@ -1312,7 +1305,7 @@
 3	mill
 3	kuultimik
 3	tamatumani
-3	iani
+3	silaannarmik
 3	kujalleq
 3	Haarlemimi
 3	immiussat
@@ -1335,6 +1328,7 @@
 3	kujataata
 3	wiki
 3	august
+3	Sverige
 3	Salvador
 3	Auckland
 3	kangimut
@@ -1345,11 +1339,11 @@
 3	Eddie
 3	sunaanersoq
 3	Toluca
-3	Vilnius
 3	Italien
 3	inissisimalluni
 3	Wien
 3	Attu
+3	Reykjavík
 3	nunatsinnut
 3	Ukraine
 3	assigiinngisitsinertaqanngitsumik
@@ -1365,6 +1359,7 @@
 3	ingerlanerini
 3	erinaq
 3	Tórshavn
+3	Stockholm
 3	Igaliku
 3	nunavimmut
 3	Yokohama
@@ -1391,7 +1386,6 @@
 3	erinarsortartorlu
 3	Avannarliit
 3	Najaf
-3	silaannarmik
 3	Paa
 3	Klaipėda
 3	Santa
@@ -1436,7 +1430,6 @@
 3	Ho
 3	saqqummersikkamiuk
 3	Bleu
-3	oqartussat
 3	nuunneqarpoq
 3	Tunu
 3	Uruguay
@@ -1473,7 +1466,6 @@
 3	om
 3	Ankara
 3	immiussaminni
-3	imillu
 3	Susan
 3	seqernup
 3	pingasuni
@@ -1550,6 +1542,7 @@
 2	Christine
 2	kuultip
 2	eqqaanni
+2	ikuallatat
 2	iliorsinnaatitaaffinnik
 2	seqernullu
 2	kangerluani
@@ -1568,6 +1561,7 @@
 2	Anersaaq
 2	Sølvili
 2	Rauma
+2	Gustav
 2	kommuni
 2	ataatsikkut
 2	Gauguin
@@ -1616,7 +1610,6 @@
 2	inoqarfinni
 2	nunamik
 2	Nizjnij
-2	o
 2	Kunngissani
 2	Jekaterinburg
 2	sukkulluunniit
@@ -1637,6 +1630,7 @@
 2	Kullorsuaq
 2	Palmerston
 2	Samara
+2	O'Hare
 2	atuarpoq
 2	taariaaseq
 2	isiginnaartitsinerillu
@@ -1649,7 +1643,6 @@
 2	teqiqqullip
 2	Parfitt
 2	Oceaniami
-2	EuroBonus
 2	Roxette
 2	Qaqortullu
 2	Mo
@@ -1699,12 +1692,15 @@
 2	پښتو
 2	eqqangisaa
 2	leksikon
+2	s
 2	inuusut
 2	nunaqarfiup
 2	kalattoorneq
+2	SAS'imit
 2	aningaasaqarniarnikkut
 2	pissutsini
 2	forloversimapput
+2	Namp'o
 2	Savalimmiutut
 2	Mar
 2	Pori
@@ -1730,7 +1726,6 @@
 2	katersugaasiviat
 2	pivoq
 2	kulturimut
-2	Wilcock
 2	Bator
 2	nassaarineqarsimapput
 2	erinarsortuat
@@ -1813,6 +1808,7 @@
 2	Clyde
 2	Persiskisut
 2	tunngasunik
+2	'ianni
 2	Tyskit
 2	Nablus
 2	Tczew
@@ -1896,7 +1892,7 @@
 2	ordbogi
 2	Pigazzano
 2	Järvenpää
-2	upput
+2	Aalborg
 2	Antananarivo
 2	atsigisumik
 2	Afghanistan
@@ -1954,7 +1950,6 @@
 2	Labrador
 2	Agguaqatigiissillugu
 2	Star
-2	init
 2	akeqanngitsumik
 2	aatsitassanik
 2	Nam
@@ -1967,6 +1962,7 @@
 2	sanaanik
 2	Nammineq
 2	Zahrtmann
+2	isut
 2	Rawalpindi
 2	upperisani
 2	alapernaalluni
@@ -1988,15 +1984,19 @@
 2	sannaalu
 2	savaateqarneq
 2	akoorutissat
+2	'imik
 2	niuernerup
 2	anitsisartoq
 2	da
 2	Poznań
 2	qanittumi
+2	'inik
 2	Edgar
 2	ilusilersornera
 2	Kirkuk
+2	Xi'an
 2	tons
+2	Greenland'ip
 2	Taoisme
 2	Uranusi
 2	atilimmik
@@ -2061,6 +2061,7 @@
 2	qarasaasiat
 2	pingaaruteqartuuvoq
 2	Alytus
+2	Franche
 2	Lahti
 2	Amman
 2	Agguiviit
@@ -2070,7 +2071,6 @@
 2	Telugmiutut
 2	Kujammut
 2	aggusti
-2	imullu
 2	Bolivia
 2	Nukissat
 2	Kaechon
@@ -2095,7 +2095,6 @@
 2	Soto
 2	Teletårnet
 2	Syria
-2	Hollywood
 2	Europamilu
 2	Pythagoras
 2	Kiisalu
@@ -2148,6 +2147,7 @@
 2	Petah
 2	siuani
 2	qaqqat
+2	Sana'a
 2	affarmik
 2	ilaagit
 2	Leonardo
@@ -2225,14 +2225,13 @@
 2	sananera
 2	Norris
 2	ilinniarnerit
+2	Ta'izz
 2	Greco
 2	Novgorod
 2	kunngissanngorsimavoq
 2	Druskininkai
 2	Atuagagdliutit
 2	sukkasuumik
-2	Sana
-2	Hare
 2	Hutt
 2	aqqani
 2	Narsami
@@ -2281,7 +2280,6 @@
 2	Edward
 2	manniup
 2	pingaarnersaata
-2	Ta
 2	Changchun
 2	e
 2	sanaajusarput
@@ -2326,7 +2324,6 @@
 2	Birger
 2	Jørgensen
 2	Haifa
-2	ianni
 2	taallanik
 2	Hangzhou
 2	pingajuattut
@@ -2374,7 +2371,6 @@
 2	matumani
 2	Coral
 2	ikkunnut
-2	Aarluk
 2	inissisimallutik
 2	Bnei
 2	imartaani
@@ -2501,13 +2497,16 @@
 2	aappaani
 2	qivernerit
 2	piffiit
+2	Storkyrkan'imi
 2	Slovakia
+2	qaasuitsup
 2	Wolfgang
 2	Guangzhou
 2	Juutit
 2	ulluinnarni
 2	septemberip
 2	Kangaatsiami
+2	iani
 2	naalisagaq
 2	Awards
 2	eqqaassanngikkaanni
@@ -2530,6 +2529,7 @@
 2	tamanullu
 2	Dhaka
 2	politikki
+2	Gustav'mit
 2	arsarneq
 2	Omsk
 2	tusaamasaavoq
@@ -2546,14 +2546,12 @@
 2	Jaipur
 2	DC
 2	sananeq
-2	Namp
 2	Aritmetik
 2	eqqaallugu
 2	pallillugit
 2	Kleist
 2	pingasunillu
 2	ikittuinnaapput
-2	Alliance
 2	naalagaaffimmi
 2	aterisinnaasarpaat
 2	Mittarfia
@@ -2576,7 +2574,6 @@
 2	Sariwon
 2	avatangiisiminut
 2	Sharif
-2	Franche
 2	Nanisivik
 2	Edvard
 2	upperisamik
@@ -2600,6 +2597,7 @@
 2	Atlantikoq
 2	qulit
 2	jannuaari
+2	Vilnius
 2	ajortunut
 2	najugaqarput
 2	Georg
@@ -2639,12 +2637,10 @@
 2	Bosnia
 2	panigineqarpoq
 2	akissarsiaqartitaanissamut
-2	qaasuitsup
 2	kiilunik
 2	ataavartumik
 2	inuunerup
 2	Faisalabad
-2	Xi
 2	Zahlé
 2	iliuuseqarsinnaatitaaffittut
 2	Egypt
@@ -2665,7 +2661,6 @@
 2	Disney
 2	inuuneq
 2	ilaasortaasut
-2	inut
 2	siutai
 2	meterimik
 2	Ramallah
@@ -2677,9 +2672,9 @@
 2	Makedonia
 2	siusinnerusukkut
 2	Commons
-2	Storkyrkan
 2	Seoul
 2	oqaasiinik
+2	O
 2	naaneralu
 2	Letlandimiutut
 2	maaji
@@ -2687,7 +2682,6 @@
 2	prinsesse
 2	Ursidae
 2	Come
-2	an
 2	Qallunaaq
 2	tullertut
 2	Want
@@ -2724,6 +2718,7 @@
 2	Scotia
 2	Flugfélag
 2	Nunarsualerineq
+2	Wilcock
 2	Dickinson
 2	Upperisarsiorneq
 2	Kuultip
@@ -2733,6 +2728,7 @@
 2	neqinik
 2	timmisartuussisarnerit
 2	naanerani
+2	Silvia'millu
 2	Thiet
 2	Paz
 2	nui
@@ -2742,9 +2738,9 @@
 2	suliffeqarfinni
 2	sisamaat
 2	York
-2	Puławy
 2	Manama
 2	ujaqqanik
+2	SAS'ip
 2	Inlet
 2	Buraidah
 2	minnerpaamik
@@ -2753,6 +2749,7 @@
 2	ruumamiut
 2	ilanngunneqarput
 2	Qingdao
+2	Madeleine'ilu
 2	sinnera
 2	Airport
 2	pineqarput
@@ -2774,7 +2771,6 @@
 2	inganermi
 2	Malgrat
 2	amiinik
-2	Västergötland
 2	Kuanneq
 2	kalaallisuua
 2	Tabriz
@@ -2852,11 +2848,12 @@
 2	Aappariit
 2	inuisa
 2	kujasinnerpaaq
-2	Qassiarsuk
 2	impennis
 2	Qeqertarsuarmit
+2	najugaqartuni
 2	Picasso
 2	atugaat
+2	Qassiarsuk
 2	ajoqersuiartortitat
 2	Naalakkersueriaaseq
 2	illuni
@@ -2882,7 +2879,6 @@
 2	ilagivai
 2	Palæstina
 2	ilagivaa
-2	Said
 2	Émile
 2	uunnaanermi
 2	orsuanik
@@ -2923,7 +2919,6 @@
 2	KNR
 2	Kangia
 2	Bangalore
-2	Aleut
 2	Wrocław
 2	toqqammaviusunik
 2	avammullu
@@ -2936,6 +2931,7 @@
 2	qaani
 2	kilo
 2	Ukiuunerani
+2	Daniel'imut
 2	Khulna
 2	sanariaatsimik
 2	aviisi
@@ -2965,6 +2961,7 @@
 2	Ilaasa
 2	amerlanerpaallutik
 2	ilaasuunermik
+2	imillu
 2	sur
 2	pissusissamisoortumik
 2	Eyck
@@ -2987,13 +2984,14 @@
 2	islam
 2	Nouveau
 2	العربية
-2	izz
 2	Kharkiv
 2	oktoberi
 2	Airlines
 2	Hugo
+2	Aarluk
 2	Qarasaasialerinermik
 2	Tuttorpak
+2	Västergötland'imut
 2	Odessa
 2	peqqutigalugu
 2	Siunnersuisoqatigiiffiat
@@ -3022,7 +3020,7 @@
 2	inunngorpoq
 2	miittoq
 2	imaappoq
-2	T
+2	Said
 2	Ain
 2	Yemen
 2	ilisarnaaqqutaat
@@ -3034,7 +3032,7 @@
 2	Karachi
 2	Festival
 2	inuuffianni
-2	Icelandair
+2	Singapore
 2	Galaxy
 2	kingulliit
 2	Swahilimiutut
@@ -3058,6 +3056,7 @@
 2	Daejeon
 2	qeqertarsuup
 2	nalunaaquttap
+2	Puławy
 2	Beirut
 2	ingerlaarnerata
 2	juutit
@@ -3082,7 +3081,6 @@
 2	Kiss
 2	Johansen
 2	Rāmallāh
-2	najugaqartuni
 2	simapput
 2	High
 2	atugassaqartitaanissamut
@@ -3115,7 +3113,6 @@
 2	pisinnaatitaapput
 2	Nationalparki
 2	aatsitassallu
-2	Singapore
 2	takornariaqarneq
 2	Afrodite
 2	katillugu
@@ -3141,6 +3138,7 @@
 1	القاهرة
 1	ippernaasannerummat
 1	Western
+1	'Uqṣur
 1	Baṣrah
 1	inuiaassutsikkut
 1	takorluukkanik
@@ -3269,7 +3267,7 @@
 1	ikuallanneq
 1	kuutseqartoq
 1	aalatittarlugit
-1	danskit
+1	ingasalertoqarsimanersoq
 1	utoqqalinikkaarujussuusut
 1	বরিশাল
 1	sunngiffimminni
@@ -3288,6 +3286,7 @@
 1	ukiulinnik
 1	Christiansen
 1	inuttussuseq
+1	Norlandair'ilu
 1	timersortarfeerartaarneratigut
 1	Львів
 1	erisaat
@@ -3349,7 +3348,6 @@
 1	supoortumiluunnnit
 1	pingaarutilittut
 1	arfanniartitsinerullu
-1	Hälsingland
 1	angisuunik
 1	太原
 1	piginneqataasunit
@@ -3515,7 +3513,7 @@
 1	atuarfiini
 1	Amelie
 1	Budapest
-1	Tapes
+1	Jǐ'nán
 1	ilaasalu
 1	tunu
 1	Angeles
@@ -3571,6 +3569,7 @@
 1	issoraangami
 1	suliarineqarsimallutik
 1	Takornariaqartitsineq
+1	서울
 1	Itissutsimi
 1	Ilinniaqqaatissanik
 1	ineriartortinneqarluariarpat
@@ -3669,6 +3668,8 @@
 1	Taj
 1	taallugit
 1	pisoqaanerpaaq
+1	EuroBonus
+1	Silvia
 1	qaangiunnerani
 1	eqqumiittuliornertaa
 1	erseqqissaqutillugu
@@ -3791,6 +3792,7 @@
 1	Tabūk
 1	Tuapannguit
 1	erinarsortalernialerluni
+1	Award'imik
 1	naqitsimmata
 1	qalasersuaq
 1	saffiugassaq
@@ -3897,7 +3899,7 @@
 1	iigartartut
 1	inooqataanerannik
 1	Hairspray
-1	ullorissanik
+1	tamakkuninnga
 1	atugaqarnissaat
 1	nukarlersaavoq
 1	ilerinerlu
@@ -3952,7 +3954,6 @@
 1	ingerlaarnerani
 1	katersuiffittut
 1	suliassaralugit
-1	killeraa
 1	taakkunaniillu
 1	suliffissamik
 1	killermut
@@ -4111,6 +4112,7 @@
 1	quligiliuanut
 1	tallimariarluni
 1	avannarlerlu
+1	a'
 1	íslenska
 1	aqutsineq
 1	ilusilinnik
@@ -4173,6 +4175,7 @@
 1	annertunertaa
 1	Arbī
 1	Canadallu
+1	Alliance'mut
 1	uniffiginagit
 1	원산
 1	nuannarineqartuullunilumi
@@ -4401,6 +4404,7 @@
 1	arlaqaraluartut
 1	pingaaruteqarsinnaasunik
 1	sikuusanngitsumi
+1	Tamassuma
 1	sialummik
 1	Kingdom
 1	avannarlerni
@@ -4446,6 +4450,7 @@
 1	uumasoqarluarlunilu
 1	tunisaammata
 1	Ilinniartitaanerup
+1	'upput
 1	ilaannilu
 1	puisinniarneq
 1	pingasulluunniit
@@ -4463,7 +4468,6 @@
 1	Nalunaarutikkut
 1	哈尔滨
 1	atortarlugulu
-1	Samarbejdsråd
 1	asissuinerillu
 1	siaruaassimasut
 1	kangerlunni
@@ -4501,7 +4505,7 @@
 1	illugiiliusoq
 1	Annertussutsinik
 1	isummiutiinnakkanik
-1	kiffaanngissuseqartut
+1	træ
 1	tunngaviussaaq
 1	quppeqqasumillu
 1	qimussersinnavutit
@@ -4540,7 +4544,6 @@
 1	timerpasissumilu
 1	tusaamassutigilersimavaa
 1	qaavanut
-1	nán
 1	allataasoq
 1	akikinnerulluni
 1	Uani
@@ -4573,7 +4576,6 @@
 1	killillutik
 1	imminneq
 1	개성시
-1	Nordurflug
 1	Sermersuumiittoq
 1	unillatsiarneranni
 1	naamasinaavoq
@@ -4705,7 +4707,7 @@
 1	isigikkajunneqartarput
 1	sanaarsui
 1	Erfalasorput
-1	træ
+1	kiffaanngissuseqartut
 1	timmisartuutiminik
 1	pingaaruteqarluinnartoq
 1	qjuliornermi
@@ -4875,6 +4877,7 @@
 1	ilinniaqqaatissanik
 1	Naatsiat
 1	isigineqartuaannarluni
+1	millu
 1	trommertuat
 1	tunniussaqartarput
 1	qaqortaqatigiiaat
@@ -4922,6 +4925,7 @@
 1	qaqinneqartarluni
 1	Starla
 1	qapuit
+1	upput
 1	kippasissortaalu
 1	Innermik
 1	Timian
@@ -4958,7 +4962,6 @@
 1	naalisillugu
 1	kkaarlugit
 1	qaamini
-1	Diderik
 1	piumassuseqartoqarpoq
 1	ineriartorsinnaatitaaneq
 1	malersugaanermut
@@ -5012,7 +5015,7 @@
 1	syvende
 1	teknikkimut
 1	va
-1	Ukiup
+1	Burayda
 1	uunnallungit
 1	vi
 1	Oktoberip
@@ -5118,7 +5121,7 @@
 1	Algeriami
 1	atugarisuunngilaat
 1	puisinik
-1	南昌
+1	atisassiatut
 1	Petersenimiillu
 1	sulisinnaajunnaarnermi
 1	immamik
@@ -5188,7 +5191,6 @@
 1	alianaattorsuaq
 1	avissimasutut
 1	arfeq
-1	Bombardier
 1	atugarisat
 1	qeqqaniikkami
 1	arfanniartitaat
@@ -5202,6 +5204,7 @@
 1	MAA
 1	حیدرآباد
 1	tapiisarnerat
+1	Faaborgmi
 1	ajutoornikut
 1	pingaarnersarisimavaat
 1	inatsiseqarnikkut
@@ -5237,6 +5240,7 @@
 1	Søndrestrømfjord
 1	Tiniteqilaaq
 1	Odensellu
+1	taaneqartarsinnaalluni
 1	siuarsarsimavaat
 1	ایران
 1	Nunaannilu
@@ -5327,6 +5331,7 @@
 1	atorneqartorujussuuvoq
 1	mangler
 1	ulluni
+1	Tapes
 1	Doghouse
 1	mysticetus
 1	akissanik
@@ -5414,6 +5419,7 @@
 1	Pinngorsorineqarpoq
 1	ussatigineqartalerpoq
 1	sikuunera
+1	matumuuna
 1	najugaqarfigineqarpoq
 1	kajungerisumik
 1	צְפַת
@@ -5422,6 +5428,7 @@
 1	Kitsissuarsuillu
 1	Kābəl
 1	pineqarnerusarput
+1	'imit
 1	نابلس‎
 1	nakorsaqanngillat
 1	Japanimiuvoq
@@ -5457,11 +5464,11 @@
 1	Ullumikkutut
 1	Islandimiit
 1	Italienmi
+1	'init
 1	ilisimatusaataavoq
 1	velsignet
 1	ataqqineqarnerup
 1	iluanaarniutigalugu
-1	ingerlaarmata
 1	Kisitsisinik
 1	atsigisoq
 1	akiliinnarpai
@@ -5524,7 +5531,6 @@
 1	ikaliartornerili
 1	eqqissisimatinneqartoq
 1	pingaartunik
-1	bonuspoint
 1	musical
 1	allanngortinneqarluni
 1	isumaqartut
@@ -5548,7 +5554,6 @@
 1	nalunaarummut
 1	allaanerulluinnarpoq
 1	namminersorlutik
-1	Helgason
 1	kialaarnissamulli
 1	qaammaassaqarfiunerulersimapput
 1	arlariit
@@ -5574,6 +5579,7 @@
 1	Trì
 1	nipilersoriaasiat
 1	Kisitsilerineq
+1	Hā'ěrbīn
 1	Волгоград
 1	iugaluartoq
 1	Norgemit
@@ -5662,7 +5668,8 @@
 1	nukarlerpaavoq
 1	qujanarlu
 1	division
-1	nngorlunilu
+1	'kkut
+1	'imillu
 1	innartarpoq
 1	miittumi
 1	sunnigaavoq
@@ -5747,6 +5754,7 @@
 1	Qimussimut
 1	Но́вгород
 1	ruujoriligaavoq
+1	'ip
 1	ammaannartumi
 1	Barcelonap
 1	Prix
@@ -5759,7 +5767,6 @@
 1	Nord
 1	atuaqqissaartalernerit
 1	misilissimavarput
-1	서울
 1	Tungujortoq
 1	marloqiusanngorsinnaasarpoq
 1	Sisamat
@@ -5767,6 +5774,7 @@
 1	Kannadamiutut
 1	taamaatimmat
 1	attaveqalerneq
+1	Aalborg'imi
 1	saqqummerneralu
 1	Ikerasamminngaanneersuuvoq
 1	amaruvik
@@ -5784,7 +5792,9 @@
 1	naallugulu
 1	nalilimmik
 1	druesaft
+1	'ini
 1	qeqertannguami
+1	imullu
 1	inatsisartunilu
 1	Erinarsuut
 1	angusaqarluartarnikuulluni
@@ -5806,7 +5816,7 @@
 1	horribilis
 1	niaqqumi
 1	tunngavilerneqaraluarpoq
-1	ilaatinneqarneq
+1	T'hó'
 1	eqqaaneqanngitsoorsinnaanngilaq
 1	ˈal
 1	aallartereernerani
@@ -5838,7 +5848,7 @@
 1	nunasiaataanerata
 1	annertussusilimmik
 1	partiia
-1	Danmarkimit
+1	nuannarineqaatigilerpaat
 1	fonden
 1	suminngaanneerpa
 1	Kisitsisilerineq
@@ -5849,12 +5859,13 @@
 1	أُورشَلِيم
 1	oqaasileriffia
 1	Aappalaartoq
-1	ingasalertoqarsimanersoq
+1	danskit
 1	sivisunerpaaffia
 1	inigisaminiit
 1	erinarsoqqittalerami
 1	Danforth
 1	oqaatsineersuupput
+1	Hollywood
 1	zau
 1	Eur
 1	sorsunnersuaqaqqinnginnissaa
@@ -5998,6 +6009,7 @@
 1	kuisisarneq
 1	carey
 1	ingerlatiinnarnissaa
+1	함흥시
 1	nutsuisartorlusooq
 1	innersuutigineqartarpoq
 1	periaaseqarnissaq
@@ -6027,6 +6039,7 @@
 1	Domènec
 1	najugaat
 1	siuttuuvoq
+1	Breslau
 1	siunertaannut
 1	erneqarput
 1	kangiatalu
@@ -6045,6 +6058,7 @@
 1	ingerlaffingalugit
 1	Nuannarineqaatigilerpaat
 1	qaller
+1	Icelandair'imit
 1	akaareqatigiinnissamut
 1	fredspris
 1	ineriartortinneqarnissaa
@@ -6145,7 +6159,7 @@
 1	maannamullu
 1	nillertuuvoq
 1	pappiaqqamik
-1	Norlandair
+1	nalunaarummi
 1	nuannarineqalerpoq
 1	atuiumasinnaavoq
 1	atisatigut
@@ -6247,7 +6261,6 @@
 1	taarsiiffigineqarnissaallu
 1	Pangniqtuuq
 1	kkunnik
-1	Lithauen
 1	naammattunik
 1	taalliortutut
 1	qitiusoq
@@ -6284,7 +6297,6 @@
 1	qaaralugu
 1	få
 1	Ingaaq
-1	Sa
 1	atseqaqqaarsimallutik
 1	hardware
 1	timmisartuutai
@@ -6342,6 +6354,7 @@
 1	avannaaginnaa
 1	scandinaviami
 1	kommunalbestyrelsit
+1	Group'imik
 1	القدس
 1	nuutsinneqareernerisa
 1	pisariaqarsimavoq
@@ -6423,6 +6436,7 @@
 1	tuttorpaannit
 1	Kujataaniit
 1	erinarsoqatigiinnikkut
+1	'mik
 1	Sananeqaatiaraqatigiinnik
 1	Douglas
 1	tuukkartalimmik
@@ -6435,7 +6449,6 @@
 1	isumallualersitseqaluni
 1	malitassat
 1	Sumiorpalussutsit
-1	Burayda
 1	saaffigisartagassamik
 1	qulimiguulinnillu
 1	Niuertoqarfimmik
@@ -6471,6 +6484,7 @@
 1	pinnersaasiorneq
 1	tigusarineqassanngliq
 1	Maajimiluunniit
+1	Helgason'imit
 1	eqqumiitsuliat
 1	saanissaq
 1	pisassalluni
@@ -6488,7 +6502,7 @@
 1	Mama
 1	Utrechtmi
 1	eqqaasakka
-1	Parc
+1	atungarisat
 1	Qerneretuarsuit
 1	anaanaa
 1	ilisimatusarnertut
@@ -6523,6 +6537,7 @@
 1	akuiaanikkut
 1	Orsugiassioqatigiinnillu
 1	tuluttuujullutik
+1	Vilnius'imi
 1	청진시
 1	namminersorsinnaassusiiagaassanngilaq
 1	aaqqissuuteqqinneqarnerata
@@ -6586,7 +6601,6 @@
 1	saqqummersissimavaa
 1	Ulluq
 1	nammagassaa
-1	함흥시
 1	pilersinneqaqqaarpoq
 1	Maannalu
 1	pitsaavalaannginnera
@@ -6637,6 +6651,7 @@
 1	naqitsineranit
 1	oqimaaqatigissitsisoqartillugu
 1	ikinnerussuteqartumik
+1	killeraa
 1	Naalakkap
 1	Uumasuaqqat
 1	ungalusiatut
@@ -6662,6 +6677,7 @@
 1	Ilaatigut
 1	ilisimaneqanngilaq
 1	iluarinartumillu
+1	Hollywood's
 1	isumaqartartut
 1	ukioqalerluni
 1	angutivissallu
@@ -6719,13 +6735,10 @@
 1	ilinniangartuussuseq
 1	Nok
 1	aappalaartunik
-1	taamma
-1	Award
 1	takulerpakka
 1	siatsipiloornermi
 1	piariigaat
 1	ajugaammat
-1	الشارقة
 1	aaqqissuussivigineqarnissaannik
 1	octo
 1	Taamaalillutik
@@ -6780,7 +6793,7 @@
 1	arlalippassuarnik
 1	arnaaneq
 1	sulisutut
-1	pisariaqartinneqartutut
+1	guldtiinik
 1	Waihōpai
 1	annertooq
 1	aalajangersimavoq
@@ -6854,6 +6867,7 @@
 1	ersarippoq
 1	tunngasumik
 1	Nunartik
+1	taamma
 1	nassuiarneri
 1	sande
 1	suulluunnit
@@ -6927,14 +6941,15 @@
 1	ajornerpaajunngikkaluarpoq
 1	borgmester
 1	atorneqarluartartut
+1	Ukiup
 1	silaannalersornermigut
 1	kingullertut
-1	atisassiatut
+1	南昌
 1	naligiissitaalluinnarnikkut
 1	aallaaganni
 1	kingullertulli
 1	inuutissarsiutaavoq
-1	atungarisat
+1	Parc
 1	milliuunit
 1	oqaluttuarineqartarpoq
 1	tusarnaartitsinermi
@@ -6955,6 +6970,7 @@
 1	anneraamininnguaavoq
 1	ᓴᓪᓕᖅ
 1	pissutiagalugit
+1	Helsingborgimi
 1	atorneqarnissamut
 1	Baġdād
 1	issoqqangaatsiaraluartoq
@@ -7017,7 +7033,7 @@
 1	silulipput
 1	assigiinngitsigisinnaavoq
 1	Whitney
-1	inuiaqatigiinnut
+1	'Urdun
 1	aallaammik
 1	nunanilu
 1	periutsit
@@ -7031,7 +7047,7 @@
 1	Château
 1	nunatamigut
 1	اسلام
-1	sanariaaserlu
+1	Danmarkimit
 1	countrynillu
 1	بريدة
 1	ilinniartunut
@@ -7056,6 +7072,7 @@
 1	naatitsivissatut
 1	sianissutsikkut
 1	ilisarnaatigai
+1	'mi
 1	kattuffianni
 1	philo
 1	amerlatiginersut
@@ -7187,7 +7204,7 @@
 1	mittarfeqarfiulluni
 1	Hyvinge
 1	asuleertunik
-1	ilivit
+1	piumassuseqarnerat
 1	najortiminit
 1	punneq
 1	qularutigilerpaa
@@ -7326,6 +7343,7 @@
 1	sanariikkat
 1	Vatikani
 1	Savalimmiunilu
+1	Stockholm'imi
 1	Madagaskar
 1	annertunerulersinnissaa
 1	agguaqatigiissinnerat
@@ -7346,6 +7364,7 @@
 1	Nuummiut
 1	tamakkunanilu
 1	sivitsoriartortillugu
+1	'ikkunni
 1	ataqatigiissaarisarlutik
 1	assigiissaarnerat
 1	phocoena
@@ -7363,7 +7382,7 @@
 1	Oqaluttuarisaanermut
 1	paateqartuaannarluni
 1	qaangissanagit
-1	Faaborgmi
+1	airline'iuvoq
 1	najorlugit
 1	sulisuisa
 1	eqqissisaasut
@@ -7439,7 +7458,6 @@
 1	nungujartorneq
 1	Monfa
 1	inuusuttunillu
-1	ān
 1	tulleriiaarlugit
 1	saqqummermat
 1	pinngitsuunngivilluni
@@ -7490,7 +7508,6 @@
 1	naqisimaneqanngitsup
 1	Napparsimmavik
 1	qanillugu
-1	iliuuserisassaqareertumik
 1	Holstein
 1	Centralafrikanske
 1	kinaassusaat
@@ -7564,7 +7581,6 @@
 1	Schweiz
 1	suliariuminassusai
 1	ingerlatsinermut
-1	Sumiiffik
 1	lluinnarnik
 1	kisitsineq
 1	oqaaserineqarnikuusut
@@ -7620,6 +7636,7 @@
 1	inisseqqavoq
 1	Agguaqatigiillugu
 1	Quang
+1	'ilivit
 1	nunagisami
 1	piareersaanermi
 1	aqqa
@@ -7636,7 +7653,6 @@
 1	peqarusukkaluarsimagamik
 1	पुणे
 1	saqqummersinnikuuaat
-1	Group
 1	Periarfissaqarsimanngilanga
 1	Naluvara
 1	ulimaa
@@ -7933,6 +7949,7 @@
 1	tupinnaannavissumik
 1	iluatsitsivallaarnani
 1	ulloriarsiornerup
+1	'imilu
 1	tunuarpoq
 1	qeqertaanni
 1	Uummaterujussua
@@ -7965,7 +7982,7 @@
 1	naleqquttumik
 1	annikillisinneqaqqippoq
 1	qilaliarnera
-1	tamakkuninnga
+1	ullorissanik
 1	nikerartoq
 1	saamimmik
 1	qimusserneq
@@ -8050,8 +8067,10 @@
 1	ikannerni
 1	Estados
 1	ilisimaneqarluarpoq
+1	iliuuserisassaqareertumik
+1	S'itut
 1	Kretamiut
-1	tunngaveqarput
+1	annikitsumillu
 1	inuuniarneranni
 1	taalliorneq
 1	atuuffia
@@ -8233,7 +8252,6 @@
 1	katimmat
 1	quperlummiik
 1	Latinnerisut
-1	airline
 1	atortorinnerpaalluni
 1	ammaqquviit
 1	saqqaa
@@ -8324,6 +8342,7 @@
 1	upperisaqaqatigiiaallu
 1	Inatsisit
 1	Carmago
+1	Gästrikland'imullu
 1	kingusittukkulli
 1	nuannarilluarneqalerput
 1	Ukiullu
@@ -8333,7 +8352,7 @@
 1	pingaaruteqarpoq
 1	eqqarsaatitik
 1	ingerlassimallugu
-1	Tamassuma
+1	Xī'ān
 1	iliuuserisimasaq
 1	Nunarsuarmioqatitsinnik
 1	allattoqarfiit
@@ -8430,7 +8449,6 @@
 1	eqqarsartarput
 1	atareersoq
 1	Texas
-1	Xī
 1	ilaminnit
 1	ikerasak
 1	Nunavittakkaani
@@ -8449,6 +8467,7 @@
 1	decem
 1	Bình
 1	حیدر
+1	'inut
 1	unammillerttiukkajuttoq
 1	Phoca
 1	pisussaaffimmik
@@ -8461,6 +8480,7 @@
 1	qaavi
 1	ilinniarsimasut
 1	suliffissuarni
+1	Greenlandi'mut
 1	sissuernermi
 1	piluttat
 1	atorlutik
@@ -8535,6 +8555,7 @@
 1	Orsoq
 1	umiatsiakkut
 1	pisinnaatitaaffimminut
+1	naatsorsuussaanngilaq
 1	suliami
 1	ilaqassanngitsoq
 1	Lahtis
@@ -8544,7 +8565,7 @@
 1	peerpat
 1	aaqqissuisuuninngorpoq
 1	eskimo
-1	aninilu
+1	naalagaaffeqatigiinnerup
 1	burgundiske
 1	atoqqaarneqarpoq
 1	Japanimut
@@ -8565,7 +8586,6 @@
 1	arlaleriartumik
 1	tunnga
 1	nunaviup
-1	Urdun
 1	nunaqarfimmut
 1	Pingaaruteqarluinnarmat
 1	ingerlappaa
@@ -8644,6 +8664,7 @@
 1	qimussernermut
 1	inuusunnersaavoq
 1	islandimiusut
+1	Yisra'elit
 1	inuiaqatigiittullu
 1	اصفهان
 1	nuannarineqartut
@@ -8663,6 +8684,7 @@
 1	sulilerluni
 1	sunngiffimmi
 1	akulerunnerat
+1	inut
 1	Dinh
 1	Makassar
 1	isumakkeerfiginnissalluni
@@ -8761,7 +8783,7 @@
 1	tunngassuteqartut
 1	Mouginsimi
 1	takunikuugaluarlunga
-1	guldtiinik
+1	pisariaqartinneqartutut
 1	issusianit
 1	ilinniarfiat
 1	kæˈɾædʒ
@@ -8872,7 +8894,7 @@
 1	Ilaatigullu
 1	nujuartorujussuupput
 1	ungasissusilimmik
-1	matumuuna
+1	Sumiiffik
 1	Tasermiup
 1	uninngatinneqartarluni
 1	Cagnesimi
@@ -8991,6 +9013,7 @@
 1	inunnguuserineqartuusoq
 1	nuunneqarput
 1	nunaqarfiusimasoq
+1	saqqummersitaaluunniit
 1	Ornigassat
 1	uppernarsaatigineqartarput
 1	naleqqussakkamik
@@ -9049,6 +9072,7 @@
 1	akikinnersaavoq
 1	saannginik
 1	tingui
+1	Rifa`
 1	umimmannik
 1	kiterivai
 1	tingua
@@ -9078,7 +9102,6 @@
 1	iliuuseqarsimasutut
 1	her
 1	allnik
-1	Helsingborgimi
 1	finaleni
 1	ataaniit
 1	Nunatta
@@ -9183,12 +9206,13 @@
 1	atuarnissani
 1	nunalissunneqartaraluarput
 1	pilluarnerullu
+1	ingerlaarmata
 1	الريان
 1	Uumasunik
 1	Bengalur
 1	pisaasoq
 1	assigiinngissutaalli
-1	nuannarineqaatigilerpaat
+1	Hälsingland'imut
 1	meersumik
 1	שֶׁבַע
 1	landsrådilu
@@ -9285,12 +9309,10 @@
 1	siuaasaatalu
 1	atornissaa
 1	naluaat
-1	saqqummersitaaluunniit
 1	atorneqarlutik
 1	nassaassallunga
 1	인천
 1	unammisitsinermi
-1	Greenlandi
 1	atortussat
 1	sulissutigissallugu
 1	hektopascal
@@ -9322,6 +9344,7 @@
 1	Suliassaralugit
 1	Takussutissatut
 1	amerlaqisunik
+1	Bombardier'imit
 1	mittarfittaarneratigut
 1	amiakkui
 1	pissittaartartoq
@@ -9421,7 +9444,6 @@
 1	paniata
 1	suleqatigiiffimmut
 1	naapittarfiusoq
-1	ěrbīn
 1	paasissavaat
 1	kinguliinik
 1	atuuttuupput
@@ -9435,6 +9457,7 @@
 1	April
 1	qinersisinnaatitaanikkut
 1	Mallorcami
+1	ikuallatat'
 1	Amboisemi
 1	paasisanut
 1	agguarneqarsimapput
@@ -9487,7 +9510,6 @@
 1	Saqqaqkulturemeersuupput
 1	siullerni
 1	issusaanik
-1	nalunaarummi
 1	suliffeqarfinnilu
 1	ikiaroortullu
 1	ilusiligaat
@@ -9548,6 +9570,7 @@
 1	biilertilluni
 1	nallerpat
 1	nukeqartut
+1	Romamiut
 1	ilitsersuutit
 1	iliorfigeqatigiittariaqaraluarput
 1	taalliornerusarpaat
@@ -9592,7 +9615,6 @@
 1	nittartakkatta
 1	anguartuutikkuminartuupput
 1	oqimaassusaa
-1	īd
 1	Aasiaallu
 1	青岛
 1	sioraasaannaat
@@ -9631,7 +9653,6 @@
 1	peqqinnissaannut
 1	Takornariaqartitsinerli
 1	iluata
-1	Rifa
 1	Dimashq
 1	silarsuarmioqatigiinnut
 1	akisussaaffeqartoq
@@ -9678,6 +9699,7 @@
 1	nukissanik
 1	akuttusuunillu
 1	sanavoq
+1	Nordurflug'isut
 1	qaavagut
 1	Suwais
 1	misissueqqisaarluni
@@ -9697,6 +9719,7 @@
 1	silaannarmit
 1	sianigalugit
 1	naatitsineq
+1	sanariaaserlu
 1	Nuugatsiarlu
 1	qamutini
 1	pisattanik
@@ -9743,9 +9766,9 @@
 1	ateqarnera
 1	kiatsigilersinnaasarpoq
 1	illorsuaq
+1	'imut
 1	allaaserisaqarpoq
 1	ullu
-1	Uqṣur
 1	sialuup
 1	Pinguinus
 1	sunniutaasinnaasut
@@ -9860,6 +9883,7 @@
 1	tulleriiaaqqissaat
 1	سرگودھا
 1	oqaluttut
+1	Samarbejdsråd'
 1	tamangajammi
 1	Alemana
 1	Avannarpasinnerpaani
@@ -9874,7 +9898,6 @@
 1	gave
 1	seqummanilluunniit
 1	taaguutigilersimavaa
-1	Gästrikland
 1	aammattaarlu
 1	misissueqqissaarnermi
 1	Siem
@@ -9988,6 +10011,7 @@
 1	Ahuriri
 1	Arsaannermi
 1	Best
+1	Diderik
 1	Lodovico
 1	assigiinngissuteqartarput
 1	María
@@ -10047,7 +10071,6 @@
 1	klimami
 1	apeqqusiisarami
 1	qatanngutigiittut
-1	Hā
 1	inuussutissarsiornikkut
 1	kinguneranik
 1	suliaqarnissaq
@@ -10273,9 +10296,10 @@
 1	Hángzhōu
 1	pingasoriarluni
 1	Senegal
+1	Sa'īd
 1	ataavartuartinneqarnissaa
 1	piumasaqaatit
-1	Yisra
+1	الشارقة
 1	pituttorneqanngitsumik
 1	kuisimasoq
 1	Nunanaanni
@@ -10403,6 +10427,7 @@
 1	kronprinsesse
 1	atorfilik
 1	amuneqaqqaarpoq
+1	unnerluutigineqarnermini
 1	siunnersuisarneq
 1	Ikerasammiunngikkaluaq
 1	Privat
@@ -10627,6 +10652,7 @@
 1	akigivai
 1	amerliartuinnavissimallutik
 1	atuartitaanissamut
+1	inuiaqatigiinnut
 1	namminersornissamut
 1	saviliaralugu
 1	arfiviit
@@ -10663,7 +10689,7 @@
 1	immiullugulu
 1	ingerlatiinnarneqarpoq
 1	soqqaat
-1	taaneqartarsinnaalluni
+1	init
 1	program
 1	missaaniittut
 1	orpiit
@@ -10700,8 +10726,6 @@
 1	peqataaffigisaannik
 1	ujaasineqartarpoq
 1	uunnakkaangamik
-1	sut
-1	piumassuseqarnerat
 1	pilersissimasaminut
 1	aallunneqartaqaluni
 1	strålende
@@ -10774,6 +10798,7 @@
 1	Nepal
 1	Kenyameersuupput
 1	eqqunneqarsimasoq
+1	nngorlunilu
 1	inuussutissarsiutaanerupput
 1	Isertumi
 1	Saanilorujussuit
@@ -10804,6 +10829,7 @@
 1	Teletårni
 1	Marquis
 1	sermeqarfiusuni
+1	Alliance
 1	affaannaanik
 1	Ukiivimmi
 1	nakkartarpoq
@@ -10894,6 +10920,7 @@
 1	atuutilernerat
 1	ukiulluunniit
 1	ʿḤamāh
+1	EuroBonus'imik
 1	arfanniartitsiffiit
 1	Uffe
 1	siornatigullu
@@ -10913,7 +10940,6 @@
 1	nimeruaartoq
 1	Giraffa
 1	fotografo
-1	Romamiut
 1	naalakkersuisooqatigilerpai
 1	sanaanillu
 1	Malik
@@ -10962,7 +10988,7 @@
 1	iliorsinnaanissamut
 1	Sheffield
 1	Højskole
-1	Breslau
+1	'iani
 1	eqqartuussivik
 1	marlorialu
 1	aningaasaqarnermikkut
@@ -11088,7 +11114,6 @@
 1	kiassusillit
 1	rit
 1	savaateqarfittut
-1	Jǐ
 1	peqqiluisaarneq
 1	qiterpasinnerusumiittut
 1	pilersitsisalerput
@@ -11102,9 +11127,11 @@
 1	ilinniangassani
 1	naliginnaavoq
 1	pajuttartunik
+1	Island'imi
 1	pitsaasunut
 1	ingerlagaanni
 1	Leksikoni
+1	'sut
 1	Gardermoen
 1	الجيزة‎
 1	oqaluffitoqaq
@@ -11126,6 +11153,7 @@
 1	Jensenilu
 1	eqqissisimasumik
 1	ilungersuutigereeqqaarsimallugu
+1	T
 1	eqqarsaatinik
 1	napaniutaa
 1	avannaa
@@ -11154,7 +11182,6 @@
 1	Asiamut
 1	Naanerani
 1	kiffartuussissalluni
-1	naatsorsuussaanngilaq
 1	sajunnera
 1	pinerata
 1	nuussualioqataaqqaarpoq
@@ -11183,6 +11210,7 @@
 1	Kangerlummit
 1	eqqaamaneqaatissaminnut
 1	ˈDawlat
+1	Aleut'it
 1	ᓴᓪᓗᐃᑦ
 1	ingoraralugu
 1	takussaasimapput
@@ -11224,7 +11252,6 @@
 1	Shànghǎi
 1	qaanut
 1	kkullu
-1	naalagaaffeqatigiinnerup
 1	atungaajartulersimavoq
 1	illoqarfiisa
 1	Nuadh
@@ -11234,7 +11261,7 @@
 1	ilaneqarput
 1	Europamit
 1	Маріуполь
-1	annikitsumillu
+1	tunngaveqarput
 1	aasami
 1	mingutsitsisoqarnera
 1	misissorlugillu
@@ -11266,6 +11293,7 @@
 1	sananeqarpoq
 1	aalasuusilertitsineq
 1	svenskit
+1	Icelandair
 1	nioqqutissiortarmat
 1	natsersuarniarneq
 1	Livgarde
@@ -11372,6 +11400,7 @@
 1	peqatigiinnikkut
 1	Kommunerådit
 1	성남
+1	bonuspoint'it
 1	paasineqarsimalluni
 1	хэл
 1	oqaasilerisutut
@@ -11460,7 +11489,6 @@
 1	pisoqaraangami
 1	WikiWiki
 1	Makkah
-1	elit
 1	passinnissaanik
 1	takuneqarajuttarput
 1	Ittoqqortoormiunit
@@ -11582,6 +11610,7 @@
 1	inuuffigineqarsorineqarluni
 1	qillerunnaartarpoq
 1	nunaqartunut
+1	aninilu
 1	qarattap
 1	qaleralik
 1	umasutut
@@ -11658,7 +11687,7 @@
 1	pilersitsisarpoq
 1	tassaammat
 1	sunniuteqartumik
-1	unnerluutigineqarnermini
+1	Aleut
 1	toqoraavik
 1	piuinnarnikut
 1	toqqitinneratigut
@@ -11798,6 +11827,7 @@
 1	innuttaasui
 1	ajornartorsiutaasinnaasuni
 1	Mauretanien
+1	ilaatinneqarneq
 1	pingaaruteqartut
 1	erinarsortortaarlutik
 1	Sun
@@ -11812,8 +11842,9 @@
 1	immuillu
 1	niuffagiutinit
 1	erinaannarnik
+1	Lithauen'imilu
+1	Reykjavík'imi
 1	Nicemi
-1	hó
 1	nalunarsinnaagami
 1	itissutsimiittoq
 1	assersuuserlugu

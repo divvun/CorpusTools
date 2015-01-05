@@ -13,7 +13,7 @@
 588	le´be
 577	âlgg
 576	lebe
-528	sää´mǩiõl
+524	sää´mǩiõl
 522	soi´ttjee´l
 519	minut
 500	tän
@@ -22,12 +22,12 @@
 456	Sää´mte´ǧǧ
 447	Lää´ddjânnam
 430	peei´v
-427	lää´jj
 425	sää´mtee´ǧǧ
 424	kåå´tt
 406	ij
 400	vuäitt
 395	sää´m
+377	lää´jj
 353	Lää´ddjânnmest
 349	Sää´mtee´ǧǧ
 346	operaattor
@@ -41,11 +41,10 @@
 279	koon
 277	se´st
 274	Aanar
-271	ǩiõll
 271	kook
 266	ođđ
-250	ǩiõl
 247	kulttuur
+246	ǩiõl
 237	ceälkkum
 235	lee´d
 233	ââ´nnem
@@ -61,8 +60,8 @@
 205	ââ´nned
 202	saaǥǥjåå´đteei
 201	Sää´mtee´ǧǧi
-200	tuâjj
 200	mähss
+198	tuâjj
 198	momenttist
 194	åårrai
 192	sä´mmlai
@@ -97,10 +96,8 @@
 173	nââmrid
 173	sträŋggte´lfoonâst
 172	vääras
-170	tõõzz
 169	leäkku
 167	te´l
-165	lää´jjest
 165	räjja
 163	lââ´ssen
 161	vuäǯǯ
@@ -116,11 +113,14 @@
 149	leäi
 148	Meä´cchalltõõzz
 148	sää´mlää´jj
+147	lää´jjest
 147	Sajos
 146	Saa´mi
+146	ǩiõll
 145	jurddum
 143	jii´jjes
 143	sääʹm
+143	tõõzz
 142	st
 142	tuâi
 142	jõs
@@ -148,7 +148,6 @@
 125	sij
 124	suåvtõõzz
 124	Tän
-124	šiõtt
 124	ooudâs
 123	Lââ´ssen
 122	pirr
@@ -159,7 +158,6 @@
 121	aartikla
 121	vuõssnaroodi
 120	õhtt
-120	lääin
 120	Taarr
 120	Ruõcc
 120	Sää´mǩiõl
@@ -169,6 +167,7 @@
 119	õhttsaž
 118	tuejjeed
 117	päärna
+116	lääin
 116	Sää´mjânnam
 115	ooudâsviikkâd
 115	Tät
@@ -231,13 +230,11 @@
 90	i
 90	Jânnampäi´ǩǩjie´llemvue´ǩǩkruug
 90	kålggmannu
-89	sää´mǩiõll
 89	älgg
 87	puk
 87	Sää´mnuõri
 87	teâđaid
 87	eeʹjj
-86	lää´ǩǩ
 86	aa´ššin
 86	mie´rruum
 85	asetõõzz
@@ -262,17 +259,16 @@
 80	parlamentaarlaž
 80	õhttsažtuâjast
 80	www
-80	Halltõs
-80	ǩiõtt
 80	kõõskõs
 80	ikkna
 80	vaaldšem
+80	Halltõs
 80	ävvan
 80	riâššâm
 79	tuejjuum
 79	Sajoozz
 78	kulttur
-78	škooul
+78	lää´ǩǩ
 78	Seminaar
 78	Kon
 78	vuäǯǯam
@@ -280,21 +276,22 @@
 77	halltõõzz
 77	täävtõssân
 77	puätt
-77	tu´mmstõõǥǥ
 77	pijjum
 77	håiddâkksai
 77	mätt’tem
 76	nuõri
 76	jiânnai
 76	tâ´vv
+76	škooul
 76	ni
 76	Taarrâst
 76	vuõiggâdvuõđi
 76	Vääʹrrvuässla
 76	tõi
 76	tõk
-75	äi´ǧǧen
 75	sää´mkulttuur
+75	äi´ǧǧen
+75	tu´mmstõõǥǥ
 75	halltõs
 75	tâ´vvsäämas
 74	juõ´ǩǩ
@@ -341,14 +338,13 @@
 64	kõõskõõzz
 64	jânnampäi´ǩǩjie´llemvue´ǩǩkruug
 64	lååkk
+64	aa´ššid
 64	staattuuzz
 64	Enontekiö
-64	aa´ššid
 63	ǩiõlltuâjj
 63	ää´ljee´l
 63	jeänmõsân
 63	Hâ´dd
-63	mannu
 63	f
 63	Inga
 62	oocci
@@ -361,19 +357,20 @@
 62	Meä´cchalltõs
 62	ko´lle
 62	a
+61	sää´mǩiõll
 61	õõutsââ´jest
 61	ääi´j
 61	võboršee´ǩǩ
 61	mõõnee´st
 61	kuâskk
 61	saa´mid
+61	mannu
 61	Sää´mvuu´d
 60	vää´rrsaaǥǥjåå´đteei
 60	proseent
 60	mie´lddsa
 60	tuõjju
 60	materiaal
-60	teet
 59	peäggtum
 59	čõõđtum
 59	meersaž
@@ -390,6 +387,7 @@
 58	mättjem
 58	kuä´cǩǩmi
 58	Takai
+58	šiõtt'teet
 58	pâ´jjel
 57	tiu´ddepiijjmõš
 57	Interreg
@@ -414,6 +412,7 @@
 54	nalla
 54	tiõrvâsvuõtt
 54	tä´lvvmannu
+54	ǩiõtt
 54	Tâ´vvjânnmlaž
 54	Tõt
 54	tuåimmjem
@@ -449,7 +448,6 @@
 51	õhttvuõđâst
 51	tuâjain
 51	va´stteei
-51	laž
 51	resursskõõskõõzz
 51	tuåimted
 51	Vars
@@ -477,7 +475,6 @@
 48	alttõõzz
 48	momentt
 48	Škoou´l’jumuš
-48	õõut
 48	Heikki
 48	Ko´rvvõõzz
 48	obb
@@ -508,13 +505,14 @@
 46	sää´mvuu´d
 46	ââ´net
 46	kå´dd
-46	ja
 46	Sää´mkulttuurkõõskõs
+46	õõut
 46	čõõđtet
 46	ââʹnned
 46	mätt’tõs
 46	vitt
 46	saaǥǥjååʹđteei
+46	ǩiõll'laž
 46	naroodlaž
 46	âânnmõõžžâst
 46	muttâz
@@ -570,6 +568,7 @@
 42	vuârast
 42	seža
 42	åå´n
+42	ja
 42	õõlǥtõõzzid
 42	ǩeârddõõzzin
 42	äiʹǧǧen
@@ -580,7 +579,6 @@
 42	kulttuures
 42	tue´jjääm
 42	vuu´d
-42	Sää´mǩiõll
 41	saaǥǥstõõllâm
 41	vuu´dest
 41	tuärjjõs
@@ -602,24 +600,21 @@
 40	Vuõssnaroodi
 40	ko´rvvemest
 40	hååid
-40	läkka
 40	SPS
 40	sää´mǩiõllsa
 40	Vaal
-40	veä´ǩǩvuõtt
 40	saaʹmi
 40	teäggtõõzz
 40	čeä´ppvuõđpeei´v
-40	mätt
 40	sääʹmnuõri
 40	ve´rǧǧnee´ǩǩ
 40	i´lmmted
 40	Riikk
 40	Jee´res
+40	Sää´mǩiõll
 40	II
 39	e´tǩǩõõzz
 39	Lääʹddjânnmest
-39	vuõss
 39	sää´mǩiõli
 39	Mätt’temaaunâstuâjj
 39	valmštõõllâm
@@ -649,11 +644,11 @@
 37	vee´rj
 37	peštt
 37	meer
+37	vuõss
 37	koozz
 37	tuâjjla
 37	si´jjid
 37	peejj
-37	ka
 37	Anna
 37	nellj
 37	nu´bb
@@ -708,6 +703,7 @@
 34	le´čči
 34	taarbid
 34	nuõrisuåvtõõzz
+34	veä´ǩǩvuõtt
 34	tuejjeet
 34	pie´ǩǩnes
 34	vuâđđeel
@@ -752,6 +748,7 @@
 32	såbbrid
 32	tõi´d
 32	Alggmeerain
+32	läkka
 32	tu´mmji
 32	škoouli
 32	čõõđted
@@ -767,13 +764,11 @@
 32	läänhalltõs
 32	kõõččmest
 32	Minna
-32	skamm
 32	koolm
 32	tuåim
 32	vä´lddem
 31	alttõõzzid
 31	Gsm
-31	tuåimm
 31	Erkki
 31	neelljad
 31	ââ´nnmest
@@ -787,7 +782,6 @@
 31	meä´rreet
 31	puärrsituâi
 31	Borg
-31	sääˊmǩiõl
 31	mähtt
 31	õhttõõzz
 31	mij
@@ -809,6 +803,7 @@
 30	Giellagáldu
 30	ämmatlaž
 30	läinn
+30	sääˊmǩiõl
 30	vuâđđeeja
 30	mõõk
 30	teâđai
@@ -878,6 +873,7 @@
 28	pue´ttmest
 28	miõttât
 28	siidâst
+28	ka
 28	Juuso
 28	vuõssnaroodân
 28	lååǥǥ
@@ -945,7 +941,6 @@
 26	vue´ss
 26	Kõõskõõzz
 26	vuässââtt
-26	luʹvddkåʹdd
 26	valmštõõllâd
 26	le´ddi
 26	jie´llem
@@ -988,7 +983,6 @@
 25	jeeˊres
 25	šiõttuum
 25	laa´jjin
-25	I
 25	ooccmõõžžâst
 25	täk
 25	Škooultõõzz
@@ -1024,6 +1018,7 @@
 24	korkk
 24	vuâđast
 24	õudltõõzz
+24	luʹvddkåʹdd
 24	Ee´jj
 24	pââibužškooul
 24	jäärnâǩstrooite´llää´jj
@@ -1055,6 +1050,7 @@
 24	jie´nnǩiõl
 24	tuâjai
 24	ILO
+24	skamm
 24	vuässõõttâm
 24	raajjmõ´šše
 24	staaneed
@@ -1065,6 +1061,7 @@
 24	Lää´ǩǩ
 23	pue´tti
 23	tuåimmjemplaan
+23	tuåimm
 23	seârvvna
 23	Tää´rǩab
 23	Sä´mmlaž
@@ -1109,6 +1106,7 @@
 22	tuåimmjam
 22	kuuli
 22	vää´ldee´l
+22	ǩiõll'lää´jj
 22	Biodiversiteetsuåppmõõžž
 22	Tiõrv
 22	mätt’tõõzzâst
@@ -1143,15 +1141,14 @@
 22	oudldem
 22	meä´rrõõzz
 22	jåå´đat
+22	sää´mǩiõll'lää´jj
 22	kookkas
-22	tõsministeria
 22	teä´ǧǧmeä´r
 22	suåvvtumuužž
 22	mätt’temaaunâsluʹvddkåʹdd
 22	mä´hssmest
 22	säʹmmlaid
 22	sää´msuåvtõõzz
-22	Ǩiõll
 22	Tapiola
 21	ǥa
 21	ǥu
@@ -1224,13 +1221,12 @@
 20	mu´tted
 20	õõudâsviikkâd
 20	ǩiõll’laž
-20	tõõzzid
 20	silttõs
 20	håmm’mušše
 20	sääʹmvuuʹd
 20	håmmõšše
 20	b
-20	la
+20	šiõtt'tõõzzid
 20	ceälkkmuužž
 20	suåvtõõzzâst
 20	loǥstõõǥǥ
@@ -1298,6 +1294,7 @@
 19	ââ´ntemõõlǥtõssân
 19	ouddčiõ´lǧǧeemha´ŋǩǩõs
 19	Leäm
+19	I
 19	piârri
 19	ǩeâđđa
 19	takaisåbbra
@@ -1305,6 +1302,7 @@
 19	tuärjjeet
 19	suåvvtumuužžâst
 19	piijjâm
+19	lää´jjin
 19	alggmeeraid
 19	aunnsid
 19	kultturministeria
@@ -1330,12 +1328,13 @@
 19	Sääʹmteeʹǧǧi
 19	kõõččmõõžžid
 19	šõddâd
-19	lää´jjin
 19	suåppum
 19	tõst
+19	Ǩiõll
 19	stooidâmprograamm
 19	Outi
 18	seiddmie´rr
+18	ǩiõll'la
 18	šõddmest
 18	sääʹmteeʹǧǧin
 18	koo´ddid
@@ -1359,6 +1358,7 @@
 18	ooccmõš
 18	lää´ddǩiõl
 18	ǩiõllkõõskõõzz
+18	mätt'tõsministeria
 18	määŋgnallšem
 18	laauǥ
 18	ve´rǧǧnee´ǩǩi
@@ -1442,7 +1442,6 @@
 17	mieˊldd
 17	se´rdded
 17	ri´jttjeei
-17	mätt’temǩee´rj
 17	raajjmõš
 17	oođumuužž
 17	sizz
@@ -1488,6 +1487,7 @@
 17	ci´sttjed
 17	ta´rjjad
 17	fâst
+17	mätt’temǩee´rj
 17	teä´ǧǧââ´nnemkuulin
 17	mu´zei
 17	pääi´ǩest
@@ -1576,6 +1576,7 @@
 16	sääˊmteeˊǧǧ
 16	ä´ššǩee´rj
 16	Såbbra
+16	šiõtt'tõõzz
 16	õõl
 16	Sääʹmǩiõllsa
 16	šeâttmõõžž
@@ -1606,7 +1607,6 @@
 16	riikki
 16	ve´rǧǧ
 16	piizarkådda
-16	mannust
 16	piiji
 16	mie´rrtie´ǧǧ
 16	Čeä´ppvuõđpeei´v
@@ -1622,7 +1622,6 @@
 16	peei´vest
 16	kõõččmõõžžin
 16	ääi´jben
-16	muužž
 16	hååidast
 15	čõõđte
 15	e´tǩǩad
@@ -1634,7 +1633,6 @@
 15	cisttlu´vddkå´dd
 15	saaǥǥstõõllâd
 15	e
-15	snimmum
 15	Plaaneei
 15	Tâʹvv
 15	Sää´mmusiikk’kõõskõs
@@ -1691,6 +1689,7 @@
 15	raavâs
 15	ve´rǧǧnee´ǩǩest
 15	riâššmõõžžâst
+15	snimmum
 15	teäggad
 15	luâtt
 15	x
@@ -1783,7 +1782,6 @@
 14	päärnaikultturkõõskõs
 14	V
 14	jiõnstemliipp
-14	tuum
 14	Leena
 14	pi´štti
 14	tiu´ddepiijjmõõžžâst
@@ -1872,6 +1870,7 @@
 14	Aanâr
 14	plaanmõõžžâst
 14	õudeltõõzz
+14	šiõtt'tuum
 14	Jomppanen
 14	Suåvtõs
 13	nåårr
@@ -2312,9 +2311,9 @@
 11	Tukholmast
 11	tåˊlǩ
 11	Nilla
-11	see´st
 11	ouʹdde
 11	alttumuš
+11	see´st
 11	päi´ǩǩ
 11	kulttuuʹre
 11	õõutveäkka
@@ -2529,7 +2528,6 @@
 10	riikklääinain
 10	Mätt’tõs
 10	vueʹǩǩ
-10	tuåimmkå´dd
 10	raajj´ja
 10	jåå´đtemkå´dd
 10	peä´lestvälddmõõžžid
@@ -2556,6 +2554,7 @@
 10	ceerkav
 10	Pekka
 10	vueiʹtlvažvuõtt
+10	šiõtt'teed
 10	čõõđad
 10	laauǥmättʼtõõzz
 10	lauggi
@@ -2594,7 +2593,6 @@
 10	vä´sttmä´hssemääi´j
 10	vuässâʹtte
 10	ton
-10	teed
 10	ǩiõččâm
 10	raajjmužže
 10	teäggtem
@@ -2626,7 +2624,6 @@
 10	škoou´l’jumuužž
 10	oođđ
 10	parlamentarlaž
-10	pie´ss
 10	tuejjummuš
 10	Jeeʹres
 10	meä´rrad
@@ -2642,6 +2639,7 @@
 10	šõddmõõžž
 10	J
 10	Alddon
+10	mannust
 10	jiiʹjjesvaaldšemvuõđ
 10	vuâđđlääʹjj
 10	Ely
@@ -2688,6 +2686,7 @@
 10	live
 10	vuârrvaikktõʹsse
 10	õhttõõzzâst
+10	muužž
 10	Ǩiõlltuâjjla
 9	Rio
 9	jii´jjesnallšemvuõđ
@@ -2718,6 +2717,7 @@
 9	puäʒʒhåidd
 9	puõlvvõõǥǥi
 9	Mee´st
+9	keha'ka
 9	obbžurr
 9	http
 9	´st
@@ -2744,7 +2744,6 @@
 9	jällste
 9	ǩiõllpie´zz
 9	veeideed
-9	sââi
 9	jeärrzid
 9	ooccja
 9	liâdggsânji
@@ -2799,7 +2798,6 @@
 9	ǩiõtt’tõõli
 9	seämmaäiggsânji
 9	tobddji
-9	čeäppõs
 9	Solju
 9	ta´rǩǩeem
 9	jieʹnnǩiõl
@@ -2825,10 +2823,8 @@
 9	Tanttu
 9	čõõđteš
 9	CBD
-9	keha
 9	vuõssmõõzz
 9	mätt’tõõttâm
-9	Mätt
 9	Diversity
 9	sajos
 9	Yrjö
@@ -2856,7 +2852,6 @@
 9	vuäittam
 9	artiik
 9	ee´ǩǩ
-9	õhttsažtuâjjan
 9	Jos
 9	Päärnaž
 9	Škoou´l’jem
@@ -2873,7 +2868,6 @@
 9	saaǥǥ
 9	ceâlklmid
 9	puuttâm
-9	puäʒʒtääll
 9	oođeeš
 9	seillmõš
 9	ravvsânji
@@ -2904,6 +2898,7 @@
 9	čiõlgged
 9	Peâtt
 9	sääʹn
+9	õhttsažtuâjjan
 9	čuä´jtõs
 9	Eeʹjj
 9	kolle
@@ -3012,7 +3007,6 @@
 8	čõõđtõõzz
 8	staarjõõđât
 8	šâddšlaa´ji
-8	håmm
 8	mättʼtõõttâd
 8	tuåimmjemõõutilååǥǥast
 8	Kaupphââ´dd
@@ -3033,6 +3027,7 @@
 8	Škoouʹl’jem
 8	čõõnnâd
 8	Liŋkk
+8	ǩiõll'läkka
 8	striiʹmjet
 8	seʹst
 8	kõõski
@@ -3087,7 +3082,6 @@
 8	Kokkonen
 8	tiu´ddepiijjmõ´šše
 8	ääiǥas
-8	luvddkådda
 8	jää´ǩǩtee´l
 8	jânnampäi´ǩǩjie´llemvue´ǩǩkruugâst
 8	ǩiõttõõllâd
@@ -3166,6 +3160,7 @@
 8	parlameentest
 8	põõššinallšem
 8	jiõnstumuužžâst
+8	čeäppõs
 8	vuä´sslaid
 8	kue´llšee´llemsaaǥǥstõõllâmkå´dd
 8	õhttvuõđid
@@ -3240,6 +3235,7 @@
 8	tue´rjj
 8	ärvtõõllmõ´šše
 8	lee´ddi
+8	ǩiõll'luvddkådda
 8	luâđjie´llemvue´ǩǩ
 8	Antti
 8	musikkpooddâst
@@ -3295,10 +3291,10 @@
 8	õõutin
 8	ä´šštobddijoukk
 8	tiõrvâsvuõttvuu´d
+8	mieʹrreed
 8	meärruum
 8	ǩiõllvuuʹd
 8	na´zvaanaž
-8	mieʹrreed
 8	Mäkinen
 8	Maja
 8	riâžžee´l
@@ -3349,6 +3345,7 @@
 8	mini´sttertuâjj
 8	Sää´mǩiõllkoontâr
 8	saaǥǥstõõllâmvä´ldduumkå´dd
+8	ǩiõll'lää´jjest
 8	Õhttõõzz
 8	på´rddǩee´rj
 8	VII
@@ -3441,9 +3438,7 @@
 8	u´ccpõrggmuužž
 8	ǩiõtt’tõõllâd
 8	äʹrbbvuõđi
-8	vuä´zzest
 8	tu´tǩǩeemkõõskõõzz
-7	raajj
 7	vuʹvddkooʹddi
 7	fin
 7	Pukid
@@ -3531,6 +3526,7 @@
 7	ååʹn
 7	Taarrjânnam
 7	Kieliteko
+7	sââi
 7	saa´m
 7	vuõiggâdvuõttstaattuuzz
 7	vuässõõttmõõžž
@@ -3614,7 +3610,6 @@
 7	kaaup
 7	taarbb
 7	mie´rrääi´jest
-7	sääˊmǩiõll
 7	suejj
 7	ooccanj
 7	ǩee´rjin
@@ -3720,6 +3715,7 @@
 7	Alanen
 7	vuä´zz
 7	oođeed
+7	puäʒʒtääll
 7	Čuäjtõõllâm
 7	Vuäʹzzest
 7	puäʹtte
@@ -3946,6 +3942,7 @@
 6	Vuâđđmättjumuužž
 6	täävvtõzzân
 6	Saa´miõõutilååǥǥ
+6	veä´ǩǩvuõtt'tuåimmkå´dd
 6	Ooccmõõžžid
 6	Radio
 6	mätt’tõshalltõõzz
@@ -3985,6 +3982,7 @@
 6	ǩiđđprää´znǩen
 6	tuõddri
 6	sää
+6	tu´mmstõ´ǩǩe
 6	tätt
 6	vie´lju´vddi
 6	vuâđđee´l
@@ -4016,7 +4014,6 @@
 6	lää´ddǩiõ´lle
 6	õõlǥtem
 6	vueiʹnnemnallaåårramääiʹjest
-6	tõõllâm
 6	õhtsiʹžže
 6	sääldatviõǥǥministeria
 6	ä´ššǩii´rjid
@@ -4221,7 +4218,6 @@
 6	mätt’tõshalltõõzzin
 6	tõs´t
 6	Sää´mte´ǧǧasetõõzz
-6	llep
 6	tääzz
 6	kue´llšee´llemlää´jj
 6	Palojärvi
@@ -4230,6 +4226,7 @@
 6	puäʒʒhåiddlää´jjest
 6	vue´leed
 6	riâššmõõžži
+6	ǩiõtt'tõõllâm
 6	ouddnumuužž
 6	jiiˊjjes
 6	mieʹrǩǩeed
@@ -4248,7 +4245,6 @@
 6	Lintula
 6	hiâlǥeet
 6	tueʹrjjeed
-6	Tuåimtõsjåå´đteei
 6	õudeltõõzzid
 6	Nuõrttsaaʹmi
 6	ouddum
@@ -4275,6 +4271,7 @@
 6	saaǥǥjåå´đtee´ji
 6	ââ´nnemõhttvuõđ
 6	tâ´lsi
+6	skamm'mannust
 6	kåččam
 6	Ǩiõllsuåvtõõzz
 6	prosess
@@ -4287,6 +4284,7 @@
 6	Ruõkkâmneä´vv
 6	veäǩǩad
 6	ciâlkâst
+6	sääˊmǩiõll
 6	jânnampäi´ǩǩjie´llemvue´jji
 6	kaaunak
 6	vuä´pstemä´rttel
@@ -4322,7 +4320,6 @@
 6	Olavi
 6	Tuåimtam
 6	Konseerttest
-6	aaunâstuâjai
 6	mie´rrääi´j
 6	vuâđđeemhaʹŋǩǩõõzz
 6	šuu´rab
@@ -4353,7 +4350,6 @@
 6	määustemmes
 6	teaʹtter
 6	Pirrõs
-6	čuäi´jted
 6	Ǩiõlkaʹlddi
 6	tuʹmmstõõǥǥ
 6	mätt’temtuâi
@@ -4407,6 +4403,7 @@
 6	uuʹccbõs
 6	Sääʹmčeäʹppvuõđpeeiʹvi
 6	jäkktõõllâd
+6	ǩiõll'lää´ǩǩ
 6	kopia
 6	ha´ŋǩǩeed
 6	notta
@@ -4419,6 +4416,7 @@
 6	ǩiõlljuâǥǥtõõzz
 6	pâ´sttam
 6	pei´vvdomm
+6	I'llep
 6	vä´lddtuåimmpääi´ǩest
 6	paneelsä´vsǩi
 6	škoou´l’jemkõõskõõzzâst
@@ -4452,6 +4450,7 @@
 6	Mieʹrren
 6	čieʹppid
 6	käunn’je
+6	čuäi´jted
 6	lâʹssan
 6	võboršeˊǩǩen
 6	cõõggkani
@@ -4619,7 +4618,6 @@
 6	piisren
 6	Mäddtääl
 6	kaa´vin
-6	tu´mmstõ´ǩǩe
 6	ooudald
 6	mõõntõõllmest
 6	Marie
@@ -4636,6 +4634,7 @@
 6	tuåimmvä´lddsa
 6	kiõlltuâjj
 6	ääi´jbeä´lnn
+6	aaunâstuâjai
 6	Sääʹmmaainâs
 6	õin
 6	ATR
@@ -4666,6 +4665,7 @@
 6	tuärjjõʹsse
 6	ehdtõõzz
 6	muuttâzzast
+6	pie´ss
 6	ikknid
 6	gåårdin
 6	ehdtõõzzid
@@ -4749,6 +4749,7 @@
 6	rä´tǩǩad
 6	Pââibužškooul
 6	čuõvted
+6	Tuåimtõsjåå´đteei
 6	Tâʹvvsääʹmǩiõllsa
 6	Martti
 6	tuõttääʹššest
@@ -4821,6 +4822,7 @@
 6	ekumeenlaž
 6	räukk
 6	Tõʹnt
+6	sää´mǩiõll'lää´jjest
 6	kõõččmõš
 6	ǩiõlooudâsviikkmõš
 6	tiõrv
@@ -4838,6 +4840,7 @@
 6	DVD
 6	koorkines
 6	modeern
+6	vuä´zzest
 6	škoou´l’jumuužžid
 6	nõmmõskääzzkõs
 6	vuäzzlõžân
@@ -4859,7 +4862,6 @@
 5	jii´jjesnalla
 5	mätt’temprogra´mme
 5	lää´jjšiõttõõzzâst
-5	jid
 5	ǩiõtt´tõõllmõ´šše
 5	vä´lddklass
 5	ʹmteʹǧǧ
@@ -5426,7 +5428,6 @@
 5	Tuâǥǥaž
 5	ää´veem
 5	neäʹvvaid
-5	mie
 5	puee´r
 5	nuõrttsääˊm
 5	ǩiõllpie´zzid
@@ -5841,7 +5842,6 @@
 4	vuõsspeâmmamtuâi
 4	parlamee´nt
 4	lââ´zztõõzz
-4	õõ´nn
 4	uuʹlectaaʹns
 4	ärvvtõõllmõ´šše
 4	juurd
@@ -5850,6 +5850,7 @@
 4	âppšeei
 4	ve´rgnee´ǩǩid
 4	ooumažvuõiggâdvuõttsuåvtõõzzâst
+4	raajj'jid
 4	ǩiõččlõõđât
 4	håiddmõ´šše
 4	haa´leemvuõđ
@@ -5905,6 +5906,7 @@
 4	läänhalltõõzz
 4	nuõrttsaa´min
 4	viõkksânji
+4	sää´mǩiõl'lää´jj
 4	õõlmâsceäkkmõš
 4	vuâđđä´šštuâi
 4	ceälkkmuužžin
@@ -5930,6 +5932,8 @@
 4	jåårǥlâttmõ´šše
 4	tuõ´đi
 4	šooradvuõtt
+4	serddšiõtt'tõõzz
+4	mätt'tõsǩiõllân
 4	saaǥǥjåå´đtejja
 4	koo´ǩǩummuš
 4	pääiklažvaaldšem
@@ -5974,6 +5978,7 @@
 4	sää´mmätt´tõõzz
 4	Wimme
 4	jått’tem
+4	ođđnallšem
 4	tuåimm’muužž
 4	tuõttân
 4	tuõttâm
@@ -6150,7 +6155,6 @@
 4	vuâđđõõvi
 4	Ecuadoor
 4	vä´ldduus
-4	mum
 4	Ante
 4	investointin
 4	čeäppõstuåimmkå´dd
@@ -6184,6 +6188,7 @@
 4	Pie´llkuei´mi
 4	Väʹlddveârlaž
 4	vahssmuš
+4	tuåimm'muužž
 4	eʹtǩǩet
 4	ooʒʒi
 4	tuõttmõõžž
@@ -6202,6 +6207,7 @@
 4	peâmmplaann
 4	vaˊlljeet
 4	Sonkkila
+4	primm'mum
 4	Evaŋǧe´lisluterlaž
 4	raajlmi
 4	saaǥǥstõõllâmkodda
@@ -6226,6 +6232,7 @@
 4	Tu´tǩǩeemškoou´l’jumuužžâst
 4	läinnmääinai
 4	kaaupšum
+4	ǩiõtt'tõõllmest
 4	ŠEÂTTMÕÕŽŽ
 4	kultturmie´rrtie´ǧǧest
 4	jie´llemvue´ǩǩkõskksest
@@ -6455,7 +6462,6 @@
 4	Koo´ǩǩummuužž
 4	Lappilaž
 4	jiõččkartt
-4	ldd
 4	tuärjjõõzzid
 4	vuâsttsânji
 4	sää´mvaldduummkå´dd
@@ -6478,7 +6484,7 @@
 4	saaǥǥstõllum
 4	tä´njuhččmään
 4	tuõ´llje
-4	ođđnallšem
+4	håmm
 4	uu´cces
 4	Vilho
 4	valdiavuässõõzz
@@ -6588,7 +6594,6 @@
 4	sâjjsaž
 4	õõlmâsceäkkmõ´šše
 4	Sanoma
-4	ra´vveed
 4	peârri
 4	šiõtt´teet
 4	mieʹrrpäikka
@@ -6620,7 +6625,6 @@
 4	pirrõõzzšaž
 4	ǩee´rjtemtuâjaid
 4	õõnnji
-4	ââ´nnemkapital
 4	riʹjttjeei
 4	hääitnallšem
 4	täʹst
@@ -6635,6 +6639,7 @@
 4	oudldemmalla
 4	kaaunââtt
 4	Oudd
+4	Mätt'tõsministeria
 4	Kåččap
 4	Vaalin
 4	äitt
@@ -6672,6 +6677,7 @@
 4	Ooccmõ´šše
 4	šeeǩǩ
 4	piâssâm
+4	sää´mtee´ǧǧivui´m
 4	Saujjsää´m
 4	äʹššoummu
 4	kultturveä´ǩǩvuõđi
@@ -6681,6 +6687,7 @@
 4	kue´sttemnalla
 4	tu´tǩǩeemtaarbid
 4	konfeârtast
+4	tuåimmkå´dd
 4	jeälstam
 4	čårstumuužž
 4	Leivo
@@ -6725,7 +6732,6 @@
 4	Õuddooumaž
 4	Materialbaŋkk
 4	ciâlklmid
-4	tõsǩiõllân
 4	ta´rbbes
 4	õhttsažkå´ddčõnnõõttmõõžž
 4	ǩii´rjin
@@ -6757,7 +6763,6 @@
 4	mää´tǩ
 4	ǩiõllvuu´dest
 4	Tuâjjä´rttlest
-4	tõõllmest
 4	mahssupii´jjmest
 4	Toimmjumuužž
 4	korkines
@@ -6809,7 +6814,6 @@
 4	škooulmätt’tõs
 4	jie´llemvue´ǩǩtu´tǩǩumuužž
 4	mie´ccstummuš
-4	lääˊjjest
 4	saaǥǥjåå´đteeikå´dd
 4	va´ll’jii
 4	på´rddǩee´rjid
@@ -6904,7 +6908,6 @@
 4	õhttmiõllsažvuõtt
 4	luõvâscie´lǩǩemkorkk
 4	jåårǥlâ´tted
-4	mušše‚
 4	puäʒʒtuâjj
 4	SopS
 4	joortõõzzid
@@ -6913,7 +6916,7 @@
 4	eʹtǩǩuum
 4	puärrsivui´m
 4	vääžnaivuõđ
-4	sää´mǩioll
+4	ra´vveed
 4	Ǩeâšttõõttmõ´šše
 4	Risten
 4	vaaldšemlää´jjest
@@ -6956,9 +6959,9 @@
 4	ta´rǩǩummuužž
 4	tuä´rjjeemtaa´zzin
 4	sämmlast
-4	Ve´rǧǧluõvâsvuõtt
 4	ođđsumuš
 4	vuõiggân
+4	ǩiõtt'tâ´lle
 4	kõõjjõõzz
 4	ää´ššlažõhttsažtuåimmkå´dd
 4	täällad
@@ -7111,7 +7114,6 @@
 4	teâđat
 4	pââ´sspaai´ǩin
 4	päärnaipeeiʹv
-4	tâ´lle
 4	raaveet
 4	hääidaid
 4	saaǥǥstõõlât
@@ -7146,7 +7148,6 @@
 4	joo´tti
 4	Ǩiõllkõõskõs
 4	peittam
-4	sää´mtee´ǧǧivui´m
 4	ââ´nnemvuõiggâdvuõtt
 4	õ´httesuåvtõõllâm
 4	ää´veet
@@ -7168,7 +7169,6 @@
 4	ǩiõllpie´zzi
 4	iʹlla
 4	årjââtt
-4	serddšiõtt
 4	iʹlmstõõvvâm
 4	se´rddemšeâttmõõžž
 4	Čuoikkaid
@@ -7224,6 +7224,7 @@
 4	meä´rre
 4	muttõõzz
 4	ougglestmättʼtõʹšše
+4	sää´mǩioll'lää´jjest
 4	vue´ll
 4	jåå´đtemnäältobddmõõžž
 4	ee´vdtõs
@@ -7306,6 +7307,7 @@
 4	vaaldšmest
 4	tu´mmjemvää´ld
 4	SVSK
+4	ǩiõl'laž
 4	šeâttõõzzi
 4	pooddi
 4	čuõǥǥasraajjmušše
@@ -7357,7 +7359,6 @@
 4	saaǥǥjååʹđteeʹjen
 4	primmeš
 4	lääʹǩǩpiizar
-4	primm
 4	mätt’temmaterialkonttrest
 4	jåå´đtemjoukk
 4	Parlameent
@@ -7461,7 +7462,7 @@
 4	õhttõõzzid
 4	Vaaldšemšuu´rmõs
 4	ââ´lji
-4	Allianss
+4	kuati
 4	Puõccui
 4	jie´llemvue´jjin
 4	Lå´nstum
@@ -7705,7 +7706,6 @@
 4	jä´ǩǩted
 4	žžen
 4	Pâjj
-4	Jânnampäi´ǩǩpravlee´nn
 4	FiBLUL
 4	ooccâmäiʹǧǧ
 4	vaiggtõõzzâst
@@ -7727,6 +7727,7 @@
 4	meäcctäällministeeria
 4	vää´rsaaǥǥjåå´đteei
 4	raajjmõõžžplaaʹne
+4	Allianss
 4	va´lljumuužžes
 4	mättʹtõsmateriaal
 4	meä´rin
@@ -7740,7 +7741,6 @@
 4	arkkteht
 4	L
 4	jää´ǩǩtum
-4	kuati
 4	SÄ´MMLA
 4	jälstempõõrt
 4	õ´nnu
@@ -7791,6 +7791,7 @@
 3	pååđprojeeʹkti
 3	iʹlmmtõs
 3	dno
+3	raajj
 3	jiõnstemvuõiggâdvuõttneeʹǩǩid
 3	piâzzi
 3	TIÕRV
@@ -7879,7 +7880,6 @@
 3	Vyevdist
 3	vaaltuåimtõõzz
 3	juõˊǩǩ
-3	tõsministeriast
 3	seksuaaluuccʹbõõzzi
 3	tueʹǩǩen
 3	veä´ǩǩtie´ǧǧi
@@ -7918,6 +7918,7 @@
 3	Lookkjiškooul
 3	Čeäʹppvuõđpeivva
 3	đuum
+3	mätt'tõõttâd
 3	õõutmiõllsânji
 3	jiõnstemsâjja
 3	Sääˊmnuõri
@@ -8044,6 +8045,7 @@
 3	meeran
 3	materiaalkoontâr
 3	TV
+3	sátnegirji
 3	dvd
 3	Vuokko
 3	Alajärvi
@@ -8069,7 +8071,6 @@
 3	kååitad
 3	peäggtet
 3	jooukid
-3	ââ´lmveeiđâs
 3	TEKSTIILPLAANMÕÕŽŽ
 3	Lyeme
 3	vaalpââʹjest
@@ -8249,7 +8250,6 @@
 3	maainâzärbbvuõtt
 3	õõutmiõllsa
 3	Lää´ddjânhnam
-3	sátnegirji
 3	vaalââʹnnteeivuõđ
 3	vuʹvddvaaldšem
 3	tiuʹddepiijjmõʹšše
@@ -8286,6 +8286,7 @@
 3	moderaattren
 3	Tõõi
 3	jå´ttee
+3	Võboršeeʹǩǩ
 3	keäpper
 3	Veijola
 3	puäǯǯsäʹmmlai
@@ -8298,7 +8299,6 @@
 3	puäʒʒooumsaž
 3	ceâlkâlm
 3	pââimõsškooulin
-3	škoou´l
 3	ǩiiččee´jid
 3	jee´resnallšemvuõđi
 3	sääʹmvuuʹdest
@@ -8417,7 +8417,6 @@
 3	viõlggâdvuâđlaž
 3	vää´rrooumaž
 3	pueʹttiäigga
-3	ǩǩid
 3	Tueʹjjõsǩeʹrjj
 3	auʹǯǯjam
 3	mõ´nt
@@ -8444,6 +8443,7 @@
 3	tue´rjjad
 3	cd
 3	nuõripodd
+3	Mätt'tõsministeriast
 3	uˊčteeˊl
 3	kontakt
 3	ääiʹjben
@@ -8503,7 +8503,6 @@
 3	riâššja
 3	õhttâstuâjjan
 3	kuâđđje
-3	lääˊjj
 3	Peâmmai
 3	Unna
 3	tuˊtǩǩeem
@@ -8575,7 +8574,6 @@
 3	ââldmõssân
 3	ääiʹjest
 3	čooddlaulljid
-3	Võboršeeʹǩǩ
 3	peerstumuužž
 3	sää´mvuõđ
 3	čuõvvubun
@@ -8782,7 +8780,6 @@
 3	mätt’tad
 3	vaaʹldi
 3	Baa
-3	pohttmõõžžid
 3	oo
 3	ärvvõs
 3	Villit
@@ -8794,7 +8791,6 @@
 3	priinsâž
 3	priinsâš
 3	lå´nstemhâdd
-3	škooulnee
 3	tiâddõõzz
 3	mohawkeja
 3	ooʒʒâʹtte
@@ -8816,7 +8812,6 @@
 3	Resuurss
 3	mäddkåå´dd
 3	streaming
-3	jeerenallšem
 3	Biodome
 3	jälltum
 3	vuäǯǯjest
@@ -9064,7 +9059,6 @@
 3	reâuggamveä´ǩǩteä´ǧǧen
 3	õõccmõ´šše
 3	Päärnaivui´m
-3	jast
 3	riikkveä´ǩǩvuõtt
 3	perste
 3	Nuõrttsääʹmkulttuur
@@ -9120,6 +9114,7 @@
 3	Nu´bben
 3	mad
 3	puäʒʒhoiʹddjeeʹjivuʹm
+3	tuâ´jast
 3	Koutoǩeäinast
 3	ooudâsviikkâmpeei´vid
 3	kuʹlleš
@@ -9186,6 +9181,7 @@
 3	jueʹjji
 3	luâđviõlggâd
 3	mieʹrǩǩad
+3	mie
 3	Eteläesplanadi
 3	piijjmõõžž
 3	õõudâsviikkmõʹšše
@@ -9195,7 +9191,6 @@
 3	Kalttopää
 3	Kahnawakest
 3	sä´mmlažvuõđ
-3	staarjõõzzi
 3	pessijâšmarkkâneh
 3	võboršeeʹǩǩest
 3	rää´nes
@@ -9259,6 +9254,7 @@
 3	bliin
 3	va´lljumuš
 3	vaaldšemvuâlaž
+3	škooulnee'ǩǩid
 3	Patton
 3	meä´rrâ´tte
 3	dommvu´vdest
@@ -9299,6 +9295,7 @@
 3	Iinnteʹmes
 3	kultturmie´rrtie´ǧǧ
 3	musikkčuä´jtõõzz
+3	ââ´lmveeiđâs
 3	ǩiõtt’tõlleš
 3	B
 3	ålggjânnmi
@@ -9383,7 +9380,6 @@
 3	voddõõđi
 3	budjeʹtteeʹjj
 3	arkivstroi´ttlin
-3	tuâ´jast
 3	Väʹlddtäävtõssân
 3	muʹšttad
 3	plaanumu´šše
@@ -9566,7 +9562,6 @@
 3	lå´nsted
 3	mainsteeʹl
 3	teâttõõzzin
-3	tõõllmuužž
 3	joorglâttam
 3	musiikksilttumuužž
 3	programmstõs
@@ -9661,12 +9656,14 @@
 3	instituutteez
 3	čä´ppâdviõlggâdpriintin
 3	tu´mmjam
+3	pohttmõõžžid
 3	suåvtõõllâd
 3	Tâˊvvjânnmlaž
 3	strässai
 3	ǩiõllciistin
 3	Sven
 3	pooddin
+3	jeerenallšem
 3	eeʹǩǩ
 3	teâdstumuužž
 3	puhttum
@@ -9705,7 +9702,6 @@
 3	ouddsiooudasviikkâmha´ŋǩǩõs
 3	ämmatnõõm
 3	Ǩeârkknjaarǥ
-3	SÄÄ´MǨIÕLL
 3	sää´mkulttuurkõõskõs
 3	piâzz
 3	plaameenǩeäšttõõttmõõžž
@@ -9758,7 +9754,6 @@
 3	Cisttum
 3	Guovdageaidnu
 3	suõ´jj
-3	tõõttâd
 3	nuõrttsaaʹmi
 3	Konfeârte
 3	o´dinakaivuõđ
@@ -9767,8 +9762,6 @@
 3	šõddmuš
 3	lansman
 3	valdiasåbbra
-3	puu´t
-3	tõs
 3	škoou´l´jumuužž
 3	Ooccâm
 3	õuddmätt´tõõzz
@@ -9895,7 +9888,6 @@
 2	nuõrituâj
 2	ämmatsääʹn
 2	tuâkkõscõõnnõõtmuužž
-2	lâž
 2	jiâllum
 2	mätt´tõõttâmǩe´rjj
 2	kõʹllʼjed
@@ -9975,6 +9967,7 @@
 2	suejjumm’muš
 2	tuåimmprograamm
 2	Čuâǥǥâsraajjmušše‚
+2	ǩiõtt'tõõlât
 2	sijddsabbra
 2	preeddanviõr
 2	koorkâst
@@ -10022,6 +10015,7 @@
 2	tiiudi
 2	jiijjâsteä´ǧǧvuässõõzz
 2	kõõskõst
+2	šiõ´tt'teet
 2	tuejjin
 2	Serddmuužž
 2	Liikkumuš
@@ -10071,6 +10065,7 @@
 2	ǩiõdeez
 2	oođeet
 2	spesialprojee´kti
+2	õõut'tää´ssvuõtt
 2	pââimõsškooullehtor
 2	Leville
 2	arvvstõõllâd
@@ -10097,7 +10092,6 @@
 2	jee´reå´rnn
 2	särnnamvue´jj
 2	tuåimmamõudltõõzzid
-2	čää´ʒʒhåmm
 2	skoottid
 2	pååđloo´vid
 2	tuõddârkue´stelm
@@ -10150,6 +10144,7 @@
 2	li´nnj
 2	valdiain
 2	kuullvuässadvuõđi
+2	mätt'tõsministeriain
 2	Doaivut
 2	jii´jjestuåimmsa
 2	pââibeälla
@@ -10159,6 +10154,7 @@
 2	särnnmõõžžin
 2	jää´ǩǩtep
 2	ma´nnjeem
+2	puu´t'tem
 2	mieʹrrtieʹǧǧ
 2	suejjummuš
 2	veä´lǧǧǩii´rjid
@@ -10275,7 +10271,6 @@
 2	Eliasson
 2	VUÄ´PPAST
 2	raajjâmlää´jj
-2	sää´nnharjjtõõzz
 2	rää´jtõzzid
 2	lehtor
 2	Lemmenjooǥǥâst
@@ -10292,11 +10287,12 @@
 2	ǩee´rjtemǩeâštõõttmõõžž
 2	Re´ttlâ´sttep
 2	energiipolitiikkâst
+2	mie'ldd
+2	spesialšiõtt'tõõzz
 2	äärvid
 2	kõ´ll´jumuužžâst
 2	brm
 2	ve´rǧǧne´ǩ
-2	muužžin
 2	vuâđđlaž
 2	raannâm
 2	tuõđštum
@@ -10313,7 +10309,6 @@
 2	Njeä´llemnee´ǩǩi
 2	seävvmuš
 2	riõssâmvääldla
-2	pravlee´n
 2	škooulkõõskõõõzz
 2	tää´ssärvvsen
 2	võboršee´ǩǩi
@@ -10341,7 +10336,6 @@
 2	stnäätnai
 2	kå´ddemprosentt
 2	mähssemnalla
-2	tää´ssvuõtt
 2	korvvummuš
 2	jiõnnâânnmõš
 2	stipendeentid
@@ -10360,6 +10354,7 @@
 2	Ǩee´rjtemǩeâštõõttmõ´šše
 2	Šõõǥǥtõspuõccui
 2	jäu´rrkue´stee´lm
+2	liikkee'es
 2	viõ´ǩke
 2	pue´ttemen
 2	mie´rruummuužžâst
@@ -10536,7 +10531,6 @@
 2	jueˊǩǩmest
 2	u´vddemtarbb
 2	saneerammužžâst
-2	teä´ǧǧplaan
 2	pââ´zztum
 2	ve´rǧǧlõõnnji
 2	šiõttõõlmuužž
@@ -10593,7 +10587,6 @@
 2	vueiʹnet
 2	lââ´ššen
 2	lååkkmeä´r
-2	teemehdtõõzz
 2	stroi´ttel
 2	spesialplaanraajj’ji
 2	komissiaa´je
@@ -10622,6 +10615,7 @@
 2	ǩeâittamnallšem
 2	ratifiâstt
 2	ooudâsviikkâmkuånstid
+2	tuåimm'muužžin
 2	Nuõrisuåvtõʹsse
 2	cuâkksen
 2	meä´cctäällâânmõžžâst
@@ -10694,6 +10688,7 @@
 2	Rosamaria
 2	vuåkrjumuš
 2	määu´s
+2	ee´jjaai´jid
 2	tuejj’jâtt
 2	lâssan
 2	Aalmlaž
@@ -10732,6 +10727,7 @@
 2	Karigasniemi
 2	Kuruvuei´v
 2	gárddis
+2	Jânnampäi´ǩǩpravlee´nn'jast
 2	Ve´rǧǧsâjjõsvuõđ
 2	lešâ
 2	pi´rǧǧeemvuõđ
@@ -10764,7 +10760,7 @@
 2	Kirsti
 2	Kirste
 2	âânnemoudldõõzzid
-2	sää´nnsiõr
+2	tuâjjpõõrtivuiʹm
 2	piiđvuâla
 2	venezuela
 2	juâkklää´jj
@@ -10879,7 +10875,6 @@
 2	Teʹl
 2	Vuõssmõš
 2	´llkueim
-2	tõõllâd
 2	saǥstõõllmuužžin
 2	vaalpââ´j
 2	kaibbjummuš
@@ -10990,6 +10985,7 @@
 2	ouddmõš
 2	veä´lǧgen
 2	mättʹtõsministeria
+2	Jânnampäi´ǩǩpravlee´nn'ja
 2	saaǥǥstõõllâmplaanâst
 2	raajâst
 2	symboolid
@@ -11049,6 +11045,7 @@
 2	Tuåimmjemveäʹǩǩvuõtt
 2	pe´šttlânji
 2	taarblõššân
+2	Jânnampäi´ǩǩjie´llemvue´ǩǩpravlee´nn'ja
 2	veä´ǩken
 2	veä´lǧǧšiõttõõllâmooccmušše
 2	vääldčep
@@ -11077,6 +11074,7 @@
 2	tuejjeeˊl
 2	määdddaid
 2	vuei´ttmõš
+2	tuâjj'joukknee´ǩǩid
 2	vie´lju´vddivuei´m
 2	ä´štõõzzin
 2	Meä´cchalltõsläkka
@@ -11100,6 +11098,7 @@
 2	šiõǧǧ
 2	järjstee´l
 2	luâttjie´llikartt
+2	SÄÄ´MǨIÕLL'LÄKKA
 2	se´lvvtet
 2	eeʹttkâʹsttam
 2	pohttmõ´šše
@@ -11209,7 +11208,6 @@
 2	Stubb
 2	Ee´ttiǩkåå´dd
 2	tuejjlaid
-2	luʹvddkå´dd
 2	õlmmeemšõddmõš
 2	hiâlpp
 2	ǩiõllkoontâr
@@ -11346,6 +11344,7 @@
 2	Kue´llstumuš
 2	ǩe´rjjlažvuõ´tte
 2	kõõskâs
+2	ǩeâšt'temlää´jjšiõtt’teemnallšem
 2	jazz
 2	oddâl
 2	vaaldšemkomitea
@@ -11414,6 +11413,7 @@
 2	Meä´ccjânnamvahssmuš
 2	Saaǥstõõllâmkå´dd
 2	nõõmtõõzzid
+2	šiõtt'tõõzzi
 2	i´lmmtõõttâmäi´ǧǧ
 2	Nje´ǯǯjââu´r
 2	ââ´nnemvuõiggâdvuõttsuåppmõõžžin
@@ -11442,12 +11442,14 @@
 2	vaalve´rǧǧne´ǩ
 2	muttʼtumuužž
 2	tuärjjat
+2	ââ´nnemkapital'lääin
 2	tuärjjam
 2	spraavtõõttâm
 2	haa´lee´ld
 2	Beatriz
 2	Politiikkla
 2	stipeʹnddooccmõõžž
+2	skamm'mannu
 2	kåškknjõõzz
 2	Sijddsåbbar
 2	saǥstõõllâm
@@ -11470,6 +11472,7 @@
 2	Vuõrâsooumaž
 2	sosialhuõll
 2	kõskkân
+2	ǩiõll'luʹvddkå´dd
 2	mää´r³
 2	vaikktemvuõđi
 2	Nõõmtummuš
@@ -11504,6 +11507,7 @@
 2	čujuhusain
 2	miõttlaž
 2	kuei´tpeivvsaž
+2	Ooudâsviikkmõš
 2	kaupphâ´ddvuäǯmuužži
 2	vää´raihååid
 2	Siijdsååbbar
@@ -11541,7 +11545,6 @@
 2	ǩee´rjtemǩeâštõõttmõ´šše
 2	maausatmä´hssd
 2	kreevsõs
-2	lestvä
 2	Puäʒʒtääl
 2	ceâlklmõõžži
 2	ååsklaž
@@ -11627,8 +11630,8 @@
 2	vuä´ssen
 2	vue´rbin
 2	Aanarneǩ
+2	Jeä´ǩǩää
 2	´rrvuäzzla
-2	temministeria
 2	ä´šštobddâmvuõđ
 2	teâddad
 2	alttiuum
@@ -11684,6 +11687,7 @@
 2	õõlǥtumum
 2	vue´jjes
 2	tulkkaus
+2	leežž
 2	ratifâ´sttmõš
 2	kultturjiõččvaaldšem
 2	mä´hssemluõvâsvuõđ
@@ -11846,6 +11850,7 @@
 2	ouddjiõnstempääiˊǩin
 2	jie´llemvue´jjtuejjumu´šše
 2	sie´brkå´dd
+2	håmm'mušše
 2	vuäinnmuužž
 2	la´s³³eet
 2	čõõđtemest
@@ -11891,6 +11896,7 @@
 2	tuåimmepiijjmõ´šše
 2	vuâstlaž
 2	ânnʼjõžtaaʹns
+2	ǩiõll'lu´vddkoo´ddin
 2	Peäld
 2	parlamentaarla
 2	Mediali´nnj
@@ -11989,7 +11995,6 @@
 2	Petteʹtǩǩõõzz
 2	valmmšted
 2	Hannes
-2	LÄKKA
 2	saaǥǥtuõʹllˈjeei
 2	rååst
 2	vuäzzlõžžen
@@ -12046,6 +12051,7 @@
 2	Sää´mparlamenttân
 2	huânn’ned
 2	Pyhälä
+2	ââ´nnemkapitaalest
 2	tää´ssärvvlu´vddkå´dd
 2	vuõiggâdvuõttä´ššååum
 2	suomenkielinen
@@ -12054,7 +12060,6 @@
 2	vuađâlt
 2	vuässõõzi
 2	ratifiâsttemproseess
-2	Serddšiõtt
 2	vuäʒʒat
 2	veä´ǩǩvuõttmääin
 2	hââ´ddteet
@@ -12169,6 +12174,7 @@
 2	parlamentariism
 2	veä´lǧǧšiõtt’õõlmušše
 2	sää´mǩiõllsåbrrin
+2	lääˊjj
 2	kännteejen
 2	ä´ššǩe´rjjkää´vv
 2	vaiddsânji
@@ -12185,14 +12191,13 @@
 2	veeidasvuõtt
 2	Veijo
 2	sääˊmsuåppmõõžžâst
-2	sâjjsânji
 2	ââlda
 2	ei
 2	tuåimmkå´ddnee´ǩǩid
 2	Maaddârä´ǩǩ
 2	europarlamentne´ǩǩen
-2	es
 2	PERSONKÅ´DD
+2	mätt'tõõttmest
 2	vuä´mšsteeja
 2	ärbbvuõtt
 2	tiivtǩee´rjtemǩeâšttõõttmõ´šše
@@ -12245,7 +12250,7 @@
 2	plaanne´vdõõzzâst
 2	tee´ksti
 2	Me´äcchalltõs
-2	Ââ´nnemkapital
+2	sää´nnharjjtõõzz
 2	vei´kkjem
 2	Tuä´rrjjõõzz
 2	vaa´ldi
@@ -12277,6 +12282,7 @@
 2	kultturmieʹrrteäʹǧǧ
 2	fa
 2	Rää´jtõs
+2	puäʒʒtääll'lää´jj
 2	ää´vääm
 2	määu´sin
 2	puõllši
@@ -12357,6 +12363,7 @@
 2	Lars
 2	Sämmlõ´žže
 2	čõõđtee´jen
+2	vuei´vv'vuä´zzest
 2	vuâđjâ´vve
 2	mätt’teed
 2	sámepolitihkas
@@ -12422,7 +12429,6 @@
 2	nää´llen
 2	vuä´nkab
 2	va´lljummuš
-2	tââll
 2	piijjum
 2	ääiʹjpodd
 2	kõskkraajâst
@@ -12455,13 +12461,14 @@
 2	ooudâsviikkâmtuåimmjumu´šše
 2	täjjaCuõ´lmmvää´r
 2	teäggtumuužž
+2	vuõss'sâjjsânji
 2	mieʹlddõõzzivuiʹm
 2	nuu´bbin
 2	täävtõõllâmvuõtt
 2	läittmõõžžes
 2	vaa´ldšummuštuâjai
 2	klemetti
-2	Ooudâsviikkmõš
+2	ǩiõtt'tõõllâd
 2	raajam
 2	luovtemmääinain
 2	kâddmõõžžâst
@@ -12582,7 +12589,6 @@
 2	tiuddekksaž
 2	järran
 2	joukkpiârpei´vvpäi´ǩǩ
-2	tõõllmuužžâst
 2	OOCCÂMI´LMMTÕS
 2	Lampela
 2	mähssmääinaivuei´m
@@ -12592,6 +12598,7 @@
 2	vee´rjhååid
 2	vä´sttmä´hssemäigga
 2	heelǥii
+2	håmm'mušše‚
 2	õskmõš
 2	Teâđtempodd
 2	Ää´brvuâlaž
@@ -12614,7 +12621,6 @@
 2	ǩeähnab
 2	uˊvdded
 2	siõlttâd
-2	jain
 2	jaid
 2	õõlmtumu´šše
 2	konstruktio
@@ -12762,6 +12768,7 @@
 2	Vaaldšemšuurmõs
 2	õõlmâsceäkkmõššân
 2	pa´nttjed
+2	šiõtt'teemehdtõõzz
 2	Marry
 2	riâššâmvääldlaž
 2	sträššjed
@@ -12796,7 +12803,6 @@
 2	Täst
 2	halltõozzâst
 2	Sää´mmjânnam
-2	peä
 2	tuåimteeja
 2	tuåimivuei´m
 2	ekksažprää´zneǩee´jj
@@ -12805,6 +12811,7 @@
 2	tuejast
 2	ǩeâštõõttâmšeâttmõõžžin
 2	energii
+2	ǩiõll'lâž
 2	tuåimmtuâjjprogramm
 2	lääu´ǩ
 2	teevvmõš
@@ -12812,6 +12819,7 @@
 2	Ool
 2	čõõđviikkâmplaaʹne
 2	nõmmii
+2	ââ´nnemkapital
 2	staanmuužž
 2	jeeˊresnallšem
 2	saa´msuåvtõõzz
@@ -12844,7 +12852,6 @@
 2	valmmštõõlči
 2	mätt’temaaunâspiizar
 2	juâkkõssân
-2	ǩeâšt
 2	veä´ǩǩvuõttväärai
 2	ver´ǧgnee´kk
 2	eekkas
@@ -12869,6 +12876,7 @@
 2	vä´lddtuâi
 2	SÄÄ´MǨIÕLLKONTTÂR
 2	ânnˈjõõžžâst
+2	Serddšiõtt'tõõzz
 2	prää´zneǩsluu´žvin
 2	internetta
 2	Čõõđtum
@@ -12876,6 +12884,7 @@
 2	seurujarvi
 2	ärvvstõõllmušoodd
 2	powerdancers
+2	minoritetåskkooumaž
 2	räʹjje
 2	teaddum
 2	låå´voocci
@@ -13000,7 +13009,6 @@
 2	dommkå´ddlää´jjest
 2	ååumpäärna
 2	veäʹǩǩte
-2	temlää´jjšiõtt’teemnallšem
 2	pårggmanu
 2	vuässõ´sse
 2	Elin
@@ -13048,6 +13056,7 @@
 2	pe´rjjed
 2	teäggeema
 2	luõvâsceälkkmuužž
+2	õõ´nn'jiläittemlu´vddkå´dd
 2	Pää�cced
 2	siõtt’teet
 2	luõ´vtemmest
@@ -13074,6 +13083,7 @@
 2	alggõhttsažkåʹdden
 2	duuhhsuei´nid
 2	po´tte
+2	Ve´rǧǧluõvâsvuõtt'tu´mmstõõǥǥ
 2	Vuä´ppõs
 2	Raajjlmin
 2	Senaattǩiddõõzzin
@@ -13157,7 +13167,6 @@
 2	vuäʹsspeäʹl
 2	jäärnâǩstrooitla
 2	õ´httešt
-2	tem
 2	jieʹđeesvuiʹm
 2	moštebe
 2	kooumǩiõllsaž
@@ -13196,7 +13205,6 @@
 2	vuâđjjõõvvâm
 2	suei´mkrâst
 2	Malin
-2	lu´vddkoo´ddin
 2	siõtt’tõõzz
 2	ta´rbbeš
 2	tieu´d
@@ -13351,7 +13359,6 @@
 2	väʹlddem
 2	ǩiõrggne´či
 2	tuõddârsue´jji
-2	lddmõõžžid
 2	mä´rǩked
 2	jeänmõs
 2	ko´rvveete´mes
@@ -13375,6 +13382,7 @@
 2	jä´rjstõõllmuužžin
 2	vaaldšummuštuâijaid
 2	suurlähettiläs
+2	fooru´mme
 2	tuäimivuei´m
 2	jâ´sǩǩe
 2	kääzzkõstää´ss
@@ -13389,6 +13397,7 @@
 2	Sää´mkultturkõõskõõzzâst
 2	veä´ǩǩvuõttmääi´n
 2	I´lmmtõõttmõš
+2	õõ´nn'jiä´ššååum
 2	puåđraajjin
 2	raajjâmpääi´ǩest
 2	mähssäi´ǧǧpooddâst
@@ -13475,7 +13484,6 @@
 2	budjetteʹtǩǩõõzzâst
 2	loŋŋnam
 2	malmmooccâmlåå´v
-2	šiõ´tt
 2	luovâsluâšttmuužž
 2	Sarita
 2	juõi´kkčie´ppid
@@ -13493,6 +13501,7 @@
 2	viikkmõõžž
 2	vaalpââi´jin
 2	suåppmuš
+2	lääˊjjest
 2	ǩiõttǩee´rjtemtuâj
 2	u´ccparlamentta
 2	mieʹrrai
@@ -13528,6 +13537,7 @@
 2	theeman
 2	meä´rrääij
 2	Gárri
+2	Sää´mǩiõll'lää´ǩǩ
 2	instituut
 2	Kiddjemrekistra
 2	lõõmmâd
@@ -13590,6 +13600,7 @@
 2	kuäbba
 2	ânn´jõžvuâkka
 2	Ǩiõlljåå´rǥlõõ´tti
+2	spesialnalla
 2	nannuum
 2	Camilla
 2	kuullvuässadvuõđ
@@ -13647,7 +13658,6 @@
 2	vuâđđrä´tǩǩõs
 2	parlamentaarnee´ǩǩi
 2	jee
-2	jem
 2	jåå´đtemkåå´ddest
 2	Luõvâsceälkkum
 2	ǩeʹrjjlažvuõđ
@@ -13661,6 +13671,7 @@
 2	škoouʹlʼjempiisar
 2	vaajtumuš
 2	Koutukinsuõllu
+2	škoou´l'jem
 2	Mõõnnalla
 2	vaʹsttad
 2	ânn’jõšlää´jj
@@ -13691,7 +13702,6 @@
 2	riikkpeei´vi
 2	ä´lǧǧep
 2	Lââ´zztõõz
-2	leežž
 2	Õhttsažtuâjjorgaan
 2	jie´llemtuâi
 2	šiõtt’tuumnalla
@@ -13723,7 +13733,6 @@
 2	i´lmmstââvv
 2	säärneeʹl
 2	kauppa
-2	muužžes
 2	jäärnâǩstrooitle´st
 2	läinnmääinain
 2	ääjtõõli
@@ -13749,7 +13758,6 @@
 2	õhttkaan
 2	läaa´jji
 2	mäddvää´rkõsvuõđid
-2	priimm
 2	jii´jjez
 2	arkktehtsaž
 2	jânnampäi´ǩǩjie´llemkruug
@@ -13898,7 +13906,6 @@
 2	strooi´tli
 2	kanslia
 2	ǩiđđlookkâmpõõ´ji
-2	kõjldõspiijjmõõžžid
 2	ve´rggoolâsvä´lddmest
 2	sääi´mivui´m
 2	lââ´zztem
@@ -13998,7 +14005,6 @@
 2	påå´štaddrõ´sse
 2	läänhalltõõzzâst
 2	čuäi´jtem
-2	jumuužž
 2	mainnstum
 2	kruu´ǧe
 2	jiõččân
@@ -14009,6 +14015,7 @@
 2	čuâǥǥasvaaldšemma
 2	veeidâsvuõtt
 2	lopptuʹmmstõõǥǥid
+2	Ve´rǧǧluõvâsvuõtt
 2	Vie´ljva´lddi
 2	teevkani
 2	kõskkeed
@@ -14252,6 +14259,7 @@
 2	määŋdkulttuursaž
 2	mu´vrješ
 2	tie´ǧǧivui´m
+2	ǩiõll'luʹvddkåʹdd
 2	luõvtem
 2	jiõččtuåimmlaž
 2	jeänmõsmeäraid
@@ -14294,7 +14302,6 @@
 2	Vä´lddveârlaž
 2	Markknâ´sttemtuåimmen
 2	ǩe´rjtet
-2	tõõttmest
 2	nuõrituåimmjumuš
 2	seu´rrjummuš
 2	resttrantt
@@ -14313,6 +14320,7 @@
 2	Kilpisjärvi
 2	luõvtummušše
 2	hie´rvi
+2	vuõi´ggâdvuõđ
 2	kookkadvuõtt
 2	sää´mǩiõllsaikääzzkõõzzi
 2	peälnn
@@ -14348,6 +14356,7 @@
 2	kue´đđem
 2	sääʹmparlamenttneeʹǩǩi
 2	Granqvist
+2	tuåimm'muužžes
 2	kuullmõõžžâst
 2	va´lljeeǩâni
 2	viõkksõs
@@ -14360,6 +14369,7 @@
 2	jânnâpäi´ǩǩjie´llevue´ǩǩlää´jj
 2	ri´jtte
 2	õhttan
+2	tiuddeemškoou´l´jumu´ššân
 2	raajjmu´šše
 2	tuâite´mesvuõđ
 2	mââinast
@@ -14411,7 +14421,6 @@
 2	saaǧǧstõõllmõõžž
 2	unõõttâmpääi´ǩ
 2	teä´ddeed
-2	liikkee
 2	pâ´jjsâjja
 2	koolmin
 2	sää´mjie´llemvue´jj
@@ -14445,11 +14454,9 @@
 2	luovtõõzz
 2	karttǩe´rjj
 2	riikklääini
-2	õõlǥtummnallšem
 2	teuddepiijjmušše
 2	riâššâmplaanid
 2	Tuˊst
-2	tõõzzi
 2	kaupphâa´ddest
 2	Hää´lääm
 2	Lååkk
@@ -14554,7 +14561,7 @@
 2	ärvvsõs
 2	e´mmeel
 2	hoiʹddjumuš
-2	šiõtteem
+2	peä'lestvä'lddmõõžžid
 2	pää´ǩǩest
 2	Valdiateäʹǧǧministeria
 2	Kåččmõõžžâst
@@ -14568,6 +14575,7 @@
 2	puäʒʒtääll’läkkada
 2	sää´mtääll
 2	sää´mtääli
+2	pie´ss'sõõ´jid
 2	Lääintõs
 2	pie´ǩǩest
 2	âânnmmuužž
@@ -14590,6 +14598,7 @@
 2	Trium
 2	spesialplaanraajji
 2	vuäzzlõžen
+2	nuõrttpeä´l
 2	piellkuie´m
 2	sää´nn
 2	puuttâd
@@ -14606,7 +14615,7 @@
 2	mä´hssemõõlǥtõs
 2	Lookkâm
 2	Eettiǩkå´dd
-2	spesialnalla
+2	ldd
 2	ä´ššǩe´rjj’joortõõzzid
 2	digitaalteädldõkkân
 2	pläänn
@@ -14647,6 +14656,7 @@
 2	såbbred
 2	o´ddjõõđee´l
 2	õhtsešše
+2	mätt'tõsaunnsen
 2	sue´jjad
 2	ǩiddõsrekisterõõ´nja
 2	Viveca
@@ -14683,6 +14693,7 @@
 2	obbpuåttji
 2	JIEʹLLIKARTTKÕÕSKÕ´ŠŠE
 2	jått’temee´jjest
+2	priimm'muužž
 2	vuä´pstet
 2	minoritetǩiõl
 2	šuåppipeä´lid
@@ -14722,6 +14733,7 @@
 2	õõudjab
 2	Villasat
 2	lä´znpeei´vneä´ttlest
+2	staarjõõzzi
 2	tueʹjjäiʹǧǧ
 2	čõõđtemtuåimmjumuužžineez
 2	halltõssân
@@ -14888,6 +14900,7 @@
 2	mähssemplaa´ne
 2	juä´tkkjemvuõđ
 2	cuäi´jtum
+2	papp'pravlee´n'jain
 2	Kooˊddi
 2	õhttsažtuâjjõõlǥtõõzz
 2	raajj’jid
@@ -14973,7 +14986,6 @@
 2	âˊlǧǧe
 2	pääi´ǩnõõmi
 2	meersažarkiiv
-2	tõõzzâst
 2	mähssemvalmšvuõđ
 2	ko´rvvmummuš
 2	Nora
@@ -15045,7 +15057,6 @@
 2	kaupphâa´dd
 2	perustelut
 2	slävvjee´l
-2	ee´jjaai´jid
 2	sǩeâpparvuõđin
 2	snimldõõǥǥineez
 2	luõvtõõzz
@@ -15093,7 +15104,6 @@
 2	maainstumužžân
 2	nõõmtumuš
 2	kâdde
-2	minoritetåskkooumaž
 2	paaʒʒtõõzzi
 2	sää´mjuõiǥai
 2	Vue´lǧǧep
@@ -15113,6 +15123,7 @@
 2	vää´ldkani
 2	Kontio
 2	Puõccipoo´mhest
+2	mätt'tõs
 2	serddmužže
 2	fe´sttvaa´le
 2	kõõččmõõžži
@@ -15122,7 +15133,6 @@
 2	käärtsääʹnnǩeʹrjj
 2	vuõss’sâââ´jest
 2	nääu´di
-2	joukknee´ǩǩid
 2	LÄÄ´DDJÂNNMEST
 2	Paalǥâssuõllja
 2	vuõigâdvuõđid
@@ -15148,6 +15158,7 @@
 2	Pâ´jj
 2	vääʹrain
 2	tuåimm’muužžâst
+2	Ǩiõll'la
 2	sääʹmkulttuurast
 2	teâttsue´jjåskkooumaž
 2	čiõlggumuužž
@@ -15178,6 +15189,7 @@
 2	nõõrõõttâmpõrtt
 2	tieʹttep
 2	ǩiirâs
+2	mätt'tõõzzâst
 2	vaaijtaav
 2	jee´reld
 2	määddââ´nnemplaan
@@ -15195,7 +15207,6 @@
 2	celkkmuužžid
 2	veʹrǧǧkõskkvuõʹtte
 2	Adjágasin
-2	tõsaunnsen
 2	Ooccmuužžâst
 2	ooudâsviikkâmvuäittmõõžžin
 2	Vergga
@@ -15281,7 +15292,6 @@
 2	Siv
 2	nuõriõhttsažtuõjju
 2	obboođumuužžâst
-2	jiä´ššååum
 2	Vaa´ll’l´vddkåå´dd
 2	Raajjmušše
 2	ofelažvuiʹm
@@ -15322,13 +15332,11 @@
 2	linnjjeed
 2	Säämteʹǧǧ
 2	OOCCÂMBLAAŊK
-2	tõõllmõõžž
 2	mainstâʹttemvueʹjjest
 2	meârkkmuužžâst
 2	veä´ǩǩvuõttââ´ntemvuõđin
 2	ooudâsviikkâmkuâsttmõõžžid
 2	jäärnaǩtuåimmjumuužžâst
-2	vuõi´ggâdvuõđ
 2	kåččmõõžžin
 2	kuei´meez
 2	occneʹče
@@ -15352,6 +15360,7 @@
 2	norrõõzzi
 2	õhttlõvvõttum
 2	ijat
+2	õõlǥtummnallšem
 2	Sååbbarprograamm
 2	mä´hssǩeä´ppõõzz
 2	Kultturfoondâst
@@ -15381,7 +15390,8 @@
 2	ruä´vnjarggneǩ
 2	Etelärinne
 2	Ebba
-2	nuõrttpeä´l
+2	škooul'jumuužž
+2	Ââ´nnemkapital'lääin
 2	Peäggtõõzz
 2	haʹŋǩǩumuužž
 2	korvvõõzz
@@ -15406,7 +15416,7 @@
 2	cuäi´jted
 2	luõvtõshâ´dd
 2	voddõõttâm
-2	tuâjjpõõrtivuiʹm
+2	sää´nnsiõr
 2	vuäǯǯmõ´šše
 2	Õhttsažkå´ddčõnnõõttmõõžž
 2	jee´reabnallšem
@@ -15551,6 +15561,7 @@
 2	takaiveä´ǩǩvuõttân
 2	täälin
 2	sporttministeer
+2	šiõtt'tõsnorldõõǥǥâst
 2	dommkååˊdd
 2	tuåimmpââi´jest
 2	duojár
@@ -15638,13 +15649,11 @@
 2	Pauliina
 2	šuur
 2	ministeerji
-2	sõõ´jid
 2	Brannkärr
 2	teâttkääzzkõskõõskõs
 2	seidd
 2	piârrjin
 2	vâkksaž
-2	tõsministeriain
 2	näkamnalla
 2	pe´rjjemkuuli
 2	suõnnân
@@ -15670,7 +15679,7 @@
 2	ouddnem
 2	ouddned
 2	ciâlklma
-2	tõsnorldõõǥǥâst
+2	kõjldõspiijjmõõžžid
 2	ouˊdde
 2	vaalpõõʹji
 2	Ääi´jben
@@ -15874,7 +15883,8 @@
 2	luâđsuejjeemvuu´did
 2	suåppmušmääinaid
 2	veinnmuš
-2	Jânnampäi´ǩǩjie´llemvue´ǩǩpravlee´nn
+2	ǩiõtt'tõõllmuužž
+2	teä´ǧǧplaan
 2	ciistâst
 2	Mätt’temǩerjja
 2	Teäggtumuš
@@ -16049,7 +16059,6 @@
 2	teâđtep
 2	ku´lle
 2	vuältteet
-2	tõõttmõõžž
 2	miârkktõ´sse
 2	Meerlažpeei´v
 2	ååsktõõzzid
@@ -16076,7 +16085,6 @@
 2	šiõtt’tummuužžâst
 2	tobddsaž
 2	vaaldšummuužžâst
-2	Jeä´ǩǩää
 2	prää´zneǩkonsertt
 2	ouddmiâsttmõʹšše
 2	Rights
@@ -16094,7 +16102,6 @@
 2	riõuggu
 2	ciâlkâlmmõõntõõllmõõžživui´m
 2	ee´ttkâ´sttmõš
-2	spesialšiõtt
 2	jåårǥlâ´tmõõžž
 2	u´vddet
 2	logistiikk
@@ -16106,9 +16113,7 @@
 2	tiuddekksa
 2	laiddu
 2	Ooudâsviikkâmpeei´vi
-2	ââ´nnemkapitaalest
 2	tuʹmmješ
-2	vuei´vv
 2	meärkkmuš
 2	säkkkoorki
 2	Suåppmuužž
@@ -16299,6 +16304,7 @@
 2	spesialmäddtäälast
 2	Kumpulainen
 2	čaa´ʒʒid
+2	audiavisualiʹžže
 2	čaa´ʒʒin
 2	nuõriorgan
 2	valmštõõllâmtuâjast
@@ -16334,7 +16340,6 @@
 2	Pleässjemjooukin
 2	raajõõzzid
 2	raajõõzzin
-2	mušše
 2	dasää´mǩiõllsai
 2	vuä´nkânji
 2	Ooumažvuõiggâdvuõttåskkooumaž
@@ -16361,7 +16366,6 @@
 2	vaall’lu´vddkå´dd
 2	vuõiǥâmmõõžžâst
 2	plaane´vddõõzz
-2	audiavisualiʹžže
 2	miõttâmnalla
 2	duõmmišttid
 2	suåvvte´či
@@ -16429,7 +16433,6 @@
 2	kuultõõzzid
 2	jõuddâd
 2	Teä´ǧǧtummust
-2	papp
 2	ââʹntemõõlǥtõssân
 2	Sieppi
 2	se´rddji
@@ -16453,6 +16456,7 @@
 2	uʹčteeʹli
 2	mâ´htt
 2	ǩee´rjteš
+2	mätt'tõõttmõõžž
 2	Tiõrvtõõzzes
 2	jie´llemnää´l
 2	čõõnââtt
@@ -16528,7 +16532,6 @@
 2	nuõrituåimmjumu´šše
 2	äärdaid
 2	valmštâʼlle
-2	tõõlât
 2	Jälstummust
 2	meä´cchalltõõz
 2	kä´nntemvuõttrekknõs
@@ -16537,6 +16540,7 @@
 2	teädldõõǥǥ
 2	Sää´mtee´ǧǧâst
 2	vuessmannust
+2	Mätt'temministeria
 2	Jie´nnǩiõll
 2	Holmbeerg
 2	hää´sǩeld
@@ -16553,7 +16557,7 @@
 2	låågg
 2	Stipeeʹnd
 2	Indikaattor
-2	tiuddeemškoou´l´jumu´ššân
+2	pie´ss'sââi
 2	luâđjie´llemvue´jji
 2	lââ´ssmääddai
 2	vueˊlnn
@@ -16696,6 +16700,7 @@
 2	Uvddum
 2	lää´jjčuârvam
 2	kue´rncest
+2	mätt'tõõzz
 2	vaaldšemää´ššest
 2	Ka´rjjel
 2	tuâjjvälljkoo´ddin
@@ -16748,10 +16753,12 @@
 2	oʹhjjei
 2	šââddai
 2	tee´kstin
+2	šiõtteem
 2	uusâst
 2	nister
 2	koodd
 2	mošttan
+2	ǩiõtt'tââll
 2	vää´nes
 2	Pååđai
 2	miârkšââʹvv
@@ -16846,6 +16853,7 @@
 2	ouddsid
 2	Korvvõs
 2	tiu´ddi
+2	ǩiõtt'tõõllmõõžž
 2	vie´lttemes
 2	suu´vdemstuu´l
 2	´llai
@@ -16861,12 +16869,14 @@
 2	Vaall´lu´vddkå´dd
 2	niâvvaid
 2	tuâjjtobddâmlââʹzz
+2	ǩiõtt'tõõllmuužžâst
 2	orgaanin
 2	ooccmuužžâst
 2	mä´hssemheâlptõõzz
 2	šooradvuõttân
 2	čeä´ppid
 2	Sammeli
+2	čää´ʒʒhåmm'mušše‚
 2	kai´bbjummuužž
 2	puäđ
 2	Tähti
@@ -16897,7 +16907,6 @@
 2	čeäʹpvuõtt
 2	vuâđđemmest
 2	jiõččalttee´l
-2	fooru´mme
 2	Intim
 2	čokkleemkaggõõttâmprää´zneǩ
 2	väˊlddõsneeˊǩǩid
@@ -16928,7 +16937,6 @@
 2	kåččmõõžžâst
 2	teeʹmm
 2	siiskâž
-2	jiläittemlu´vddkå´dd
 2	aa´ššees
 2	aa´ššeez
 2	ebe
@@ -17100,6 +17108,7 @@
 1	vä´lddnoormi
 1	Pää´kktem
 1	psykoloog
+1	jid
 1	vuäʹssliʹžžen
 1	rue´ššes
 1	ä´šštobddâmvie´ǩǩ
@@ -17451,7 +17460,6 @@
 1	čiõlggumuužžâšt
 1	sõõddeš
 1	kuäđaid
-1	muttsin
 1	äävad
 1	jeältõõ¥¥âd
 1	jåʹttlõs
@@ -17763,7 +17771,6 @@
 1	čårsteʹm
 1	juukkmõõžži
 1	Oopâ
-1	tiâđ
 1	tuåimjee´es
 1	Halltõssaaǥǥstõõlli
 1	jännmest
@@ -17829,6 +17836,7 @@
 1	oo´vdče
 1	arvvlõõžž
 1	håiddvue´jjest
+1	siiskâžpuu´t'tõõzz
 1	valmstõõllâm
 1	alggmeernallšem
 1	tuâjjäˊrttel
@@ -18371,7 +18379,7 @@
 1	šlaantt
 1	juä´tkkje
 1	kulttuurministeeriast
-1	sue´jes
+1	vuâsttavalddum
 1	veeidâlt
 1	luterlaž
 1	teađlaž
@@ -18426,7 +18434,6 @@
 1	roolsiõr
 1	Mää�rj
 1	vue´rdet
-1	temtekniikk
 1	Päärn
 1	ko´lljumuužž
 1	jeäʹrdõõzzi
@@ -18493,7 +18500,6 @@
 1	Anton
 1	liˊjmmjak
 1	paaiǩi
-1	sääˊmǩioll
 1	kultturtäätt
 1	kaallšõs
 1	oumma
@@ -18589,7 +18595,7 @@
 1	kaaunâ´tte
 1	sâjjdõttum
 1	lekkpuäʒʒ
-1	meerkådda
+1	re´ppsiõrid
 1	õi´dde
 1	ǩiõllaa´ššipiizar
 1	håiddtarbb
@@ -18621,6 +18627,7 @@
 1	Lehtinen
 1	nuõrttsää´mkultturkõõskõõzzâst
 1	nue´ttsiõrid
+1	Riikka
 1	mätt’tjem
 1	ǩiõtt’tõõllmõõžžâst
 1	sää´mas
@@ -18642,7 +18649,6 @@
 1	Köngäs
 1	tue´pp’pooddi
 1	reeidaid
-1	ukkõõzzid
 1	Mänty
 1	teä´ǧǧvuõtt
 1	joortõõll
@@ -18773,7 +18779,6 @@
 1	eallit
 1	preeddantuõˊjjeejai
 1	vääˊldet
-1	lääǩǩ
 1	kultturpreeddneez
 1	Boazu
 1	ǩiõččlõddâmha´ŋǩǩõ´sse
@@ -18833,7 +18838,7 @@
 1	märkka
 1	piiutâsplaanumuužž
 1	tu´mmstõõ¥¥in
-1	mõõntumuužž
+1	Baare´ncc
 1	liântt
 1	ttam
 1	sääˊmorganisaatiaivuiˊm
@@ -19042,6 +19047,7 @@
 1	sää´mpuäʒʒhåiddkulttuur
 1	Nuorilu´vddkå´dd
 1	jieˊllmest
+1	sääˊmǩiõl'lääˊjj
 1	âlddhoiddjeeisǩoouljumuužž
 1	kääzzkâsttemnää´li
 1	Siõrr
@@ -19065,9 +19071,8 @@
 1	šeâttâtte
 1	sääˊmvuuˊđ
 1	takaisåbbrin
-1	tiivtivui´m
 1	sooǥǥbeä´l
-1	vuâsttavalddum
+1	sue´jes
 1	vaarrvue´lnn
 1	juõʹǩǩåʹrnn
 1	jeä´kklid
@@ -19167,6 +19172,7 @@
 1	lu´nn
 1	Ima
 1	pueˊrr
+1	škoou´l'jemprograammâst
 1	vuõsspeei´vkonfeârtid
 1	peâmmtuâ´j
 1	mee´rpihttzid
@@ -19400,7 +19406,7 @@
 1	suåvad
 1	identiteet
 1	Aassâmpõrttminister
-1	Baare´ncc
+1	mõõntumuužž
 1	norre
 1	uuʹccmõstääʹzz
 1	Äi´ǧǧtaull
@@ -19420,6 +19426,7 @@
 1	ä´ššpõmmâi
 1	ie
 1	id
+1	cisttjumuužž
 1	Aikioniemi
 1	âânnemneä´vv
 1	Puäʒʒhåiddmuužžâst
@@ -19635,13 +19642,13 @@
 1	tuåimmpââjest
 1	tie´ddtet
 1	Pulkkinen
+1	´Kå´llǩiõll`
 1	ta´nssjee´ji
 1	´sse
 1	arvstõõllmuužž
 1	Mätt’temaaunâsmieˊrrteäˊǧǧ
 1	Täu´jja
 1	tuˊtǩǩeempuˊhttem
-1	mätt’tõˊsse
 1	va´sttii
 1	sääˊmǩiõli
 1	lääˊjjšeâttmõõžžes
@@ -19728,7 +19735,6 @@
 1	mätt’teeji
 1	adoptoida
 1	poˊdde
-1	äššakuulli
 1	vaalpeeiˊv
 1	ânškue´tted
 1	vuastta
@@ -19817,7 +19823,6 @@
 1	vuõssˊsâjjsânji
 1	alggmee´rân
 1	dommjiõnstem
-1	mu´tteem³e´rdd
 1	veiddan
 1	maaimõs
 1	veäǩǩtam
@@ -19830,6 +19835,7 @@
 1	ooudâsviikkmõõžžeez
 1	äʹššǩeʹrjj
 1	suåppât
+1	muttsin
 1	päi�ǩǩ
 1	ä´rbbvuõđi
 1	äˊrttel
@@ -19925,6 +19931,7 @@
 1	pe´ssrin
 1	ää´ššmie´lddsaž
 1	siõrrmõš
+1	åsklvaž
 1	riâžžâ´ttem
 1	kulttuurtuåimmjumuužž
 1	pää´nnhåidd
@@ -20098,6 +20105,7 @@
 1	tu´mmstõǥǥi
 1	prää´zneǩpeei´vid
 1	õhttsažvuõ´tte
+1	puu´t'temtekniikk
 1	šõddâmvuee´jj
 1	Ǩee´rjtumuš
 1	kaaggči
@@ -20259,6 +20267,7 @@
 1	proggramme
 1	ruåđihoi´ddjeei
 1	Pue´r
+1	mätt’tõˊsse
 1	Emma
 1	jå�ttlõnji
 1	konfeârtta
@@ -20375,6 +20384,7 @@
 1	očndõõtti
 1	stipee´ndivui´m
 1	biodiversiteˊtte
+1	ǩiõll'lääǩǩ
 1	roodnairuåđi
 1	Mätt’
 1	aai´jin
@@ -20390,7 +20400,6 @@
 1	taarbšeest
 1	tuâtte
 1	Smiõtt
-1	re´ppsiõrid
 1	ǩiččlõõđim
 1	läullam
 1	jueˊǩǩemvuâđ
@@ -20439,6 +20448,7 @@
 1	vuõssnaroodpolitiikk
 1	puhttmest
 1	Tääi
+1	ukkõõzzid
 1	soovšeʹči
 1	Luâđaunnsid
 1	Nivavaara
@@ -20655,7 +20665,6 @@
 1	eurohââ´dla¿
 1	teâđtemneävv
 1	seilljem
-1	jemprograammâst
 1	pueʹrrjieʹllem
 1	Ânn’jõž
 1	mâm
@@ -20908,6 +20917,7 @@
 1	tääzzest
 1	kõõjjeed
 1	ǩeäittam
+1	jast
 1	vuä´sttmuužžâst
 1	jää´đtemkåå´ddest
 1	šiõttõõzz
@@ -20956,6 +20966,7 @@
 1	seillmužže
 1	vasu
 1	kaartt
+1	sääˊmǩiõll'lääˊjjest
 1	åummaid
 1	päärnaikulttuurkõskkõõzz
 1	ǩiõllpie´zztuåimmjumuuzz
@@ -21202,7 +21213,6 @@
 1	puõ´lvvõõǥǥid
 1	seilltak
 1	Jeä´naš
-1	Taarrjânnma
 1	puõccutue´ljâst
 1	ääid
 1	jääʹǩǩte
@@ -21285,6 +21295,7 @@
 1	Paa´l³i
 1	cuõppum
 1	lââ´zzte´čči
+1	mu´tteem³e´rdd
 1	piârrjesvui´m
 1	Vuu´vdisiisǩež
 1	mätt’ted
@@ -21480,7 +21491,6 @@
 1	positiiivlaž
 1	geenivääˊrai
 1	tuåimjemjuâkkaz
-1	´Kå´llǩiõll
 1	nallšem
 1	tääkkmõš
 1	rääuh
@@ -21577,6 +21587,7 @@
 1	siõri
 1	tuõđštõõzz
 1	ǩiđđprää´zneǩ
+1	mätt
 1	čõõđtõõzzi
 1	tillâʹvve
 1	peä´lšštemlii´jvv
@@ -21741,6 +21752,7 @@
 1	tuåimmpaai´ǩi
 1	Lääʹjj
 1	jåårǥǥlââdd
+1	äššakuulli
 1	jeä´nnteä´¡¡
 1	jeä´llam
 1	Lájádâshuolâtteijee
@@ -21812,6 +21824,7 @@
 1	ta´rjjeem
 1	ǩiõlâânnemvueittemvuõđi
 1	zumbafitness
+1	tiâđ
 1	puknallšem
 1	hiâlptââvv
 1	pie�lin
@@ -22013,7 +22026,6 @@
 1	tääzzärvv
 1	universitetthospitaali
 1	jie´ttvue´ǩǩ
-1	siiskâžpuu´t
 1	tääʹzzin
 1	ǩeâštõõttmõ´šše
 1	mâiˊd
@@ -22231,6 +22243,7 @@
 1	vuä´pstempääi´ǩ
 1	tä´lvva
 1	sää´mpolitiikâst
+1	Kadrealsiõrr
 1	ruõkku
 1	biodiversiteett
 1	mainstumuužžâst
@@ -22445,6 +22458,7 @@
 1	paartõõzznallšem
 1	JUÂǤǤTÕS
 1	personkå´ddha´ŋǩǩumuužžâst
+1	čeäppõs'staarjõõzzi
 1	čõhččǩie´ss
 1	Tiõrvâsvuõttkõõskõ´sse
 1	juä´tkksaaǥǥstõõllmõõžžin
@@ -22591,6 +22605,7 @@
 1	tueˊǩǩen
 1	Rämmsallaž
 1	Õhttu
+1	tõõllmuužž
 1	jiõnnee´l
 1	jättmõõžž
 1	ǩe´rjjpõõrtâst
@@ -22660,6 +22675,7 @@
 1	Pää´l³
 1	veeǩǩad
 1	Čeä´pptuâ´jain
+1	meerkådda
 1	testameett
 1	koontârtuâjain
 1	tuõjjstõõllmuužžin
@@ -22689,7 +22705,7 @@
 1	ä´mmlai
 1	konfeâ´rtte
 1	neeu´res
-1	Riikka
+1	Ǩiõll'laž
 1	palvâlusâin
 1	teˊlfon
 1	Tääuˊjmõsân
@@ -22801,7 +22817,6 @@
 1	Ǩeâlbbklaassi
 1	prää´zneǩpooddâst
 1	puä��oummid
-1	Kadrealsiõrr
 1	heâlpben
 1	õhttsažtuâjjorgaanen
 1	raajjad
@@ -22811,7 +22826,6 @@
 1	Nevala
 1	rämmsest
 1	Setälä
-1	cisttjumuužž
 1	pää´lǩte´mes
 1	čõõudid
 1	vaaldšemvuõđ
@@ -22910,7 +22924,6 @@
 1	jäʹǩǩted
 1	ǩiõttǩeeˊrjtõs
 1	våurrjälstempõõrt
-1	åsklvaž
 1	atomaparaattid
 1	äppalčiõǥǥin
 1	tääiˊben
@@ -22925,6 +22938,7 @@
 1	Svea
 1	Tanssǩeâštast
 1	poddpõrtt
+1	sääˊmǩioll'lääˊjjest
 1	äimmsaaǥǥstõõllmõõžžâst
 1	tiõrvâsvuõttlu´vddkå
 1	ooumâžvuõiggâdvuõđi
@@ -23065,6 +23079,7 @@
 1	Tuåimmpääiˊǩ
 1	ǩiõlvuâđlaž
 1	luâttmateriaalin
+1	SÄÄ´MǨIÕLL
 1	päärnaiǩeerjj
 1	taarbeez
 1	påå´štmiârkkad
@@ -23312,6 +23327,7 @@
 1	identitetta
 1	Presidenttvõboršee´ǩǩi
 1	Backman
+1	tõs
 1	roodi
 1	tää´ssärvvjuâkkaz
 1	puʹhtte
@@ -23379,6 +23395,7 @@
 1	lââ´sstu´tǩǩumuužž
 1	åårramlåå´pp
 1	õlmmumuužž
+1	Taarrjânnma
 1	turiist
 1	õõutmie´lddsânji
 1	cõõđtumužže
@@ -23573,6 +23590,7 @@
 1	Vancouver
 1	arggjie´llem
 1	kuällsa
+1	tiivtivui´m
 1	Luâđastvuejjamaautin
 1	puäʒʒhåiddämmatsaˊnnõs
 1	vuudid

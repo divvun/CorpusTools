@@ -5,7 +5,7 @@
 7789	av
 6968	som
 6965	på
-6069	er
+6068	er
 5961	det
 5680	å
 5448	med
@@ -101,7 +101,7 @@
 474	før
 471	seier
 454	post
-454	to
+453	to
 452	språk
 450	Oslo
 448	sin
@@ -386,11 +386,11 @@
 139	endring
 138	fiskeri
 138	blitt
-138	S
 137	politisk
 137	kvart
 137	boka
 137	eitt
+137	S
 136	budsjett
 136	annet
 136	starta
@@ -528,7 +528,6 @@
 109	Alle
 109	offentleg
 109	samband
-109	se
 109	fekk
 109	kontor
 109	vekst
@@ -540,6 +539,7 @@
 108	HVO
 107	utlandet
 107	Agder
+107	se
 107	Som
 107	bygd
 106	Type
@@ -547,12 +547,12 @@
 106	eigen
 106	seks
 106	lenge
-106	mi
 106	byrja
 106	undervisninga
 105	særleg
 105	sektor
 105	gong
+105	mi
 105	sidan
 104	NOU
 104	høring
@@ -854,7 +854,6 @@
 69	lært
 69	navn
 69	kysten
-68	s
 68	vanskelig
 68	rolle
 68	studiekompetanse
@@ -870,6 +869,7 @@
 68	ting
 68	Mange
 67	Arbeids
+67	s
 67	deira
 67	brev
 67	avtale
@@ -899,7 +899,6 @@
 66	samisktalande
 66	adopsjon
 65	dømes
-65	NS
 65	styrkje
 65	elles
 65	søkje
@@ -919,12 +918,12 @@
 65	CO
 65	høgare
 64	politidepartementet
+64	NS
 64	Olje
 64	spesielt
 64	Meir
 64	fall
 64	tema
-64	ti
 64	temaet
 64	Studiet
 64	føresegner
@@ -936,6 +935,7 @@
 63	videre
 63	delvis
 63	data
+63	ti
 63	tilsyn
 63	Nasjonal
 63	kort
@@ -1443,12 +1443,12 @@
 41	annen
 41	kommunesektoren
 41	Magnhild
-41	lappisk
 41	Inger
 41	fornyingsminister
 41	aller
 41	enda
 41	bidrag
+41	lappisk
 41	Priv
 41	Styremedlem
 41	tilpassa
@@ -1483,12 +1483,12 @@
 40	folket
 40	samordning
 40	vedtaket
-40	inneheld
 40	aktuelle
 40	fjerde
 40	Svalbard
 40	faste
 40	søknader
+40	inneheld
 40	marine
 40	liv
 40	resten
@@ -2406,7 +2406,6 @@
 23	fornorskingspolitikken
 23	af
 23	brosjyrar
-23	set
 23	lærlingen
 23	Ingrid
 23	slo
@@ -2495,6 +2494,7 @@
 22	fleirtal
 22	studentar
 22	ynskjer
+22	set
 22	evakuerte
 22	snarvei
 22	kronar
@@ -2708,6 +2708,7 @@
 20	motstand
 20	Tore
 20	administrativ
+20	Dep
 20	grunnskulen
 20	Arbeid
 20	omsett
@@ -2752,7 +2753,6 @@
 20	organisasjonen
 20	Ruth
 20	erstatning
-20	Dep
 20	tildeling
 20	Kristine
 20	dro
@@ -3636,6 +3636,7 @@
 14	presse
 14	Gaup
 14	Europeiske
+14	Rektor
 14	Karl
 14	Statsministeren
 14	blanda
@@ -3814,7 +3815,6 @@
 14	Kirsten
 14	Reglane
 14	Oskal
-14	Rektor
 14	hovudmål
 14	reinsdrift
 14	retningsliner
@@ -4123,7 +4123,6 @@
 12	informasjonen
 12	årsskiftet
 12	fylkesskole
-12	O
 12	vedrørende
 12	Skien
 12	barndommen
@@ -4432,6 +4431,7 @@
 12	svangerskapspengar
 12	proposisjonar
 11	Elev
+11	O
 11	alderen
 11	Evenes
 11	Postadresse
@@ -4645,7 +4645,6 @@
 11	kjøtt
 11	Man
 11	oppvekstsenter
-11	OSSE
 11	mil
 11	Ofoten
 11	parter
@@ -5030,6 +5029,7 @@
 10	fattige
 10	dekka
 10	vant
+10	OSSE
 10	restauranter
 10	vidareutvikling
 10	oppgavene
@@ -5363,6 +5363,7 @@
 9	Logistikk
 9	finanstalen
 9	mellomtida
+9	fjernsynsdrama
 9	SFO
 9	fulle
 9	Ungane
@@ -5450,7 +5451,6 @@
 9	omsorgsbustadar
 9	grensene
 9	spreidde
-9	fjernsynsdrama
 9	etterspurnad
 9	sentralskole
 9	total
@@ -6043,6 +6043,7 @@
 8	narkotika
 8	Ellers
 8	høgast
+8	eventyr
 8	uka
 8	postadresse
 8	spesialisering
@@ -6099,7 +6100,6 @@
 8	Folket
 8	styrkja
 8	Politikk
-8	eventyr
 8	Sjømat
 8	part
 8	Øyvind
@@ -7479,7 +7479,6 @@
 6	teaterkommunikasjon
 6	svaret
 6	Verkeområdet
-6	bus
 6	Des
 6	Anvendt
 6	Naturforvaltning
@@ -7619,6 +7618,7 @@
 6	Yrkesfaglærerutdanning
 6	undervisa
 6	fotograferte
+6	utanrikspolitiske
 6	Automatiseringsteknikk
 6	annleis
 6	Elevråd
@@ -8058,7 +8058,6 @@
 6	RICA
 6	læreboka
 6	samarbeidsavtale
-6	utanrikspolitiske
 6	oversiktstabell
 6	rike
 6	Eplefest
@@ -13039,7 +13038,6 @@
 3	arrangementer
 3	meldingane
 3	tsaren
-3	Krigen
 3	bustadar
 3	skrivet
 3	skyssa
@@ -13179,7 +13177,6 @@
 3	Juuso
 3	Kom
 3	mm
-3	mu
 3	halden
 3	kritiserte
 3	gjeldsrådgivning
@@ -13765,6 +13762,7 @@
 3	mekanikarar
 3	kybernetikk
 3	avgiftsopplegga
+3	Krigen
 3	førsteklassingar
 3	Enten
 3	Minde
@@ -14195,7 +14193,6 @@
 3	Bevilgningen
 3	illusjonar
 3	avgjørande
-3	OSCE
 3	statsrådens
 3	Berømmer
 3	desentraliserte
@@ -15421,7 +15418,6 @@
 2	kvinneguder
 2	gravlegging
 2	senker
-2	Friends
 2	skulepliktig
 2	lånemidla
 2	næringsøkonomiske
@@ -15879,7 +15875,6 @@
 2	omorganisering
 2	kornproduserende
 2	opptrer
-2	Opptaksprøver
 2	konjunkturutviklinga
 2	dynamisk
 2	Utfyllande
@@ -15907,7 +15902,6 @@
 2	Skoleinspektøren
 2	forskotsskatt
 2	uncultivated
-2	kreds
 2	Østfoldbanen
 2	Um
 2	kvalifikasjonar
@@ -16584,7 +16578,6 @@
 2	rutinane
 2	materiel
 2	vegstandard
-2	naturlige
 2	stensilere
 2	trofaste
 2	kulturbærarar
@@ -16929,6 +16922,7 @@
 2	Komsa
 2	Bech
 2	barnekonvensjon
+2	langtidsplanperiode
 2	byggingen
 2	statssekretærer
 2	kundane
@@ -17093,6 +17087,7 @@
 2	matforsyning
 2	morsomt
 2	high
+2	bus'se
 2	nevnt
 2	statsrådseksjonen
 2	lusesituasjonen
@@ -17292,6 +17287,7 @@
 2	konsentrasjonene
 2	PCB
 2	målrettet
+2	naturlige
 2	innvandrerbakgrunn
 2	adressen
 2	trafikksikringsgevinsten
@@ -18115,6 +18111,7 @@
 2	Østmo
 2	akutte
 2	Giellaj
+2	mu
 2	kunnskapssektor
 2	ansvarsfordeling
 2	kontaktpunkt
@@ -18594,7 +18591,6 @@
 2	fiskeriforskingsmidlane
 2	redegjørelse
 2	Refusjon
-2	rr
 2	kunnskapsutvikling
 2	framstillinga
 2	påtalemakt
@@ -18692,10 +18688,10 @@
 2	høgdepunkt
 2	Energieffektivisering
 2	Helserettsavdelingen
+2	Opptaksprøver
 2	utvinning
 2	låglønnsprofil
 2	skoleklassar
-2	langtidsplanperiode
 2	kontaktdepartement
 2	attraktivt
 2	arbeidstilsynet
@@ -20147,6 +20143,7 @@
 2	sektoravgifta
 2	samtykkje
 2	mediebedrift
+2	OSCE
 2	Fyrtårnprisen
 2	RESPEKT
 2	Jernbaneføremål
@@ -22050,7 +22047,7 @@
 1	dokke
 1	fortie
 1	fortia
-1	dagat
+1	Eichholz
 1	Velges
 1	lågproduktive
 1	massivtresatsingen
@@ -22263,7 +22260,6 @@
 1	Hovedbegrunnelsen
 1	Rossavik
 1	nynorskutgåve
-1	rvesjäu
 1	Claussen
 1	utskrifter
 1	Rådets
@@ -22313,7 +22309,6 @@
 1	kultursektor
 1	semesterstudium
 1	publikasjonen
-1	Nuōrttsaa
 1	innebera
 1	forretningsplan
 1	Landbrukspolitikk
@@ -22443,6 +22438,7 @@
 1	spenningsfelt
 1	kjempepluss
 1	næringsfondmidlar
+1	Nuõʹttjäu'rr
 1	Kildal
 1	more
 1	testes
@@ -22743,6 +22739,7 @@
 1	kontraster
 1	vekslar
 1	intelligens
+1	Friends
 1	tryggleiksinvesteringar
 1	festning
 1	Homlagarden
@@ -22967,7 +22964,6 @@
 1	bibel
 1	dregne
 1	investeringsramma
-1	tanás
 1	Heid
 1	underskrift
 1	Likelønn
@@ -23108,6 +23104,7 @@
 1	innkallingar
 1	PAA
 1	studiedagar
+1	abc'er
 1	Vinnarar
 1	Påskjøningsordninga
 1	undervises
@@ -23166,7 +23163,6 @@
 1	lærarjobbar
 1	sivilforsvaret
 1	formuegrunnlag
-1	Eichholz
 1	Husflid
 1	tidsavgrensede
 1	Masfjorden
@@ -23308,6 +23304,7 @@
 1	tannpleiar
 1	flerbrukshallene
 1	Skogfoss
+1	bus'sái
 1	stila
 1	Innvandrarar
 1	Brukervalg
@@ -23555,7 +23552,6 @@
 1	Finer
 1	bussá
 1	Hovedinngangen
-1	Connor
 1	forkynnande
 1	Rogstad
 1	pensjonsprodukt
@@ -23686,7 +23682,6 @@
 1	Materialane
 1	hovudstyre
 1	femårsperioden
-1	Nuõʹttjäu
 1	fornnyingsminister
 1	politistudiet
 1	nedbrytende
@@ -23806,6 +23801,7 @@
 1	TI
 1	smiler
 1	livsnødvendighet
+1	al'bmut
 1	Hydrologi
 1	reinbeiter
 1	klyppast
@@ -24046,6 +24042,7 @@
 1	såfrø
 1	fanns
 1	flyttende
+1	kreds
 1	linjefag
 1	temaside
 1	sameflagget
@@ -24183,7 +24180,6 @@
 1	språkforskarar
 1	forretningsmodeller
 1	Dokumentfalsk
-1	Jår
 1	banesektoren
 1	duger
 1	ungdomsprosjekter
@@ -24426,6 +24422,7 @@
 1	interessenter
 1	elevrepresentantane
 1	Bendix
+1	Duov'dagat
 1	klimainitiativet
 1	undertrykkjing
 1	tvangsfullbyrding
@@ -24463,7 +24460,6 @@
 1	lansering
 1	kulturinstitusjonene
 1	bulappar
-1	galæd
 1	konkretiserast
 1	Lokalbåten
 1	oversettingar
@@ -24853,6 +24849,7 @@
 1	Generalinspektøren
 1	Abonnere
 1	lærerskoleutdanna
+1	bus'set
 1	arbeidsmåtane
 1	kodar
 1	Kjækan
@@ -25988,10 +25985,8 @@
 1	Horsbøl
 1	Turisme
 1	protokolltjenesten
-1	Mue
 1	trådtrekkere
 1	Mun
-1	Mui
 1	fordjupinga
 1	Nella
 1	lavde
@@ -26360,7 +26355,6 @@
 1	helsedepartementets
 1	skjær
 1	rekneskapsførarar
-1	sái
 1	klartenking
 1	Overføringsavtalen
 1	sørligste
@@ -26598,7 +26592,6 @@
 1	tilbringerreiser
 1	helsestasjon
 1	dsu
-1	Sââ
 1	smi
 1	utgreiingskapasitet
 1	sentrumsområde
@@ -26760,6 +26753,7 @@
 1	elevtal
 1	deltagelse
 1	opplæringsprosjektet
+1	forankre
 1	beredskapsførebuingar
 1	Kommunikasjonssystemer
 1	kommunikasjonsvirksomheten
@@ -27044,7 +27038,6 @@
 1	fysioterapeut
 1	ad
 1	Clemet
-1	al
 1	kjola
 1	bedste
 1	gårdsbruket
@@ -27546,6 +27539,7 @@
 1	brukket
 1	stabile
 1	ynskte
+1	O'Connor
 1	mestringsforventning
 1	Jaså
 1	nedsettande
@@ -27615,6 +27609,7 @@
 1	Laposodnji
 1	Welt
 1	Landsskogtakseringen
+1	åv'danæbmi
 1	veger
 1	trygghet
 1	ruser
@@ -27712,7 +27707,6 @@
 1	Domstolrelaterte
 1	trafikktryggleiken
 1	Lovtekst
-1	zei
 1	Samansetninga
 1	fylkesvegane
 1	ungdomskolen
@@ -28202,7 +28196,6 @@
 1	flyreiser
 1	undertiden
 1	statskirkeordningen
-1	trikkar
 1	bjelle
 1	parlamentarikerkomiteen
 1	oljepengebruken
@@ -28577,6 +28570,7 @@
 1	uttryk
 1	tidligsortene
 1	Orkester
+1	bus'sáskuolfi
 1	oppfattar
 1	Mindre
 1	parteres
@@ -28808,6 +28802,7 @@
 1	Industrial
 1	buplassene
 1	konfesjonslaus
+1	bus'sá
 1	Lynum
 1	reindriftsterminologien
 1	arbeidsprøve
@@ -28860,6 +28855,9 @@
 1	Offshore
 1	returdirektiv
 1	Samlivstiltak
+1	Johanna
+1	Sørli
+1	oppdrettsanlegg
 1	styggjest
 1	avsetjast
 1	Military
@@ -29032,7 +29030,6 @@
 1	rettinger
 1	constitutes
 1	utdanningsråds
-1	dji
 1	grendeskoler
 1	Kolomoen
 1	grendeskolen
@@ -29140,6 +29137,7 @@
 1	Interne
 1	antar
 1	Formell
+1	trikkar
 1	vanskeligere
 1	handlingsplaner
 1	site
@@ -29152,7 +29150,7 @@
 1	undervisningsinstitusjonar
 1	hybelen
 1	humanistisk
-1	talus
+1	fornorskningspolitikken
 1	Fritaka
 1	Forhåndsstemmegivning
 1	lune
@@ -29381,6 +29379,7 @@
 1	Avlegging
 1	koselig
 1	Losvesenet
+1	Jår'galæd'dji
 1	skolekrinsar
 1	rene
 1	Skriftkulturs
@@ -29510,7 +29509,6 @@
 1	slakter
 1	lengter
 1	korreksjonssignal
-1	skuv
 1	Pope
 1	iflg
 1	byskoleplanen
@@ -29626,6 +29624,7 @@
 1	Arbeidstjeneste
 1	NSI
 1	øyvt
+1	NS'
 1	inspeksjonar
 1	næringsmåte
 1	kunnskapene
@@ -29693,7 +29692,6 @@
 1	muhto
 1	understreking
 1	arbeidsgivarpolitikken
-1	fornorskningspolitikken
 1	luftfartøysløsøre
 1	somt
 1	Arbeidstjenesten
@@ -29719,6 +29717,7 @@
 1	yrkesdeltakelse
 1	splitta
 1	engasjere
+1	radiobingospel
 1	dobbeltstemme
 1	bygningsbransjen
 1	Personalfag
@@ -29940,6 +29939,7 @@
 1	fientlig
 1	fak
 1	klassestyraren
+1	Friends'
 1	lønstrinn
 1	bygden
 1	Siljan

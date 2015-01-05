@@ -686,6 +686,7 @@
 53	iemie
 53	reaktide
 53	dijpieh
+52	ldh
 52	åvtehke
 52	mïerhkedh
 52	eará
@@ -699,7 +700,6 @@
 52	eejhtegidie
 52	eensi
 52	Goh
-52	ldh
 52	mierie
 52	vadteme
 52	politihke
@@ -745,6 +745,7 @@
 50	åådtjeme
 50	daajroem
 49	giele
+49	onne
 49	åejjie
 49	joe
 49	tjaetsie
@@ -753,7 +754,6 @@
 49	laavenjostoem
 49	stoere
 49	gænnah
-49	onne
 49	ste
 49	S
 49	skuvlem
@@ -912,6 +912,7 @@
 40	raeresne
 40	Maanah
 39	Bijbelisnie
+39	'
 39	siebriedahkesne
 39	Men
 39	damtedh
@@ -962,7 +963,6 @@
 37	aamhtesem
 37	krööhkestieh
 37	luhkieh
-37	en
 37	aktegs
 37	PassL
 37	krööhkie
@@ -1014,7 +1014,6 @@
 35	illedh
 35	fïereguhte
 35	kristeles
-35	aelhkies
 35	laavenjasse
 35	aejkie
 35	Nov
@@ -1023,6 +1022,7 @@
 35	raeriestidh
 35	Saemieh
 35	ehte
+35	aelhkies
 35	Hijven
 35	den
 35	jiehtieh
@@ -1174,6 +1174,7 @@
 29	jeatjabidie
 29	tjaelije
 29	politihkeles
+29	en
 29	tjåenghkies
 29	kr
 29	haarjanidh
@@ -1391,7 +1392,6 @@
 24	jeatjahtovvedh
 24	Learohke
 24	gïeje
-24	aajja
 24	álggahit
 24	bæjkodh
 24	riikkaidgaskasaš
@@ -1445,6 +1445,7 @@
 23	ovrehte
 23	vuestie
 23	gïehtelidh
+23	aajja
 23	vïjhte
 23	laavenjostosne
 23	maanajgujmie
@@ -1483,8 +1484,6 @@
 22	dovddastit
 22	St
 22	idtjimh
-22	esne
-22	aahka
 22	vaeltie
 22	alma
 22	raejie
@@ -1534,6 +1533,7 @@
 21	vuekiej
 21	åelieh
 21	raereste
+21	aahka
 21	nulledh
 21	båatsoejielemen
 21	jaepide
@@ -1663,6 +1663,7 @@
 19	lihtsegh
 19	govhte
 19	påaste
+19	esne
 19	unnemesstandarde
 19	åssjele
 19	Nordland
@@ -2015,7 +2016,6 @@
 16	gihtjie
 16	aejkieh
 16	olles
-16	NTFT
 16	vaarjoeh
 16	ööhpehtimmien
 16	jalllh
@@ -2222,7 +2222,6 @@
 14	vaarjelieh
 14	ussjedh
 14	Strategijh
-14	ine
 14	haestedh
 14	orrestehtedh
 14	jaehkebe
@@ -2340,6 +2339,7 @@
 13	som
 13	laavkomen
 13	noeri
+13	ine
 13	daen
 13	båvride
 13	minngemosth
@@ -2980,8 +2980,8 @@
 10	maanijste
 10	deejri
 10	Båatsoeburrie
+10	NTFT
 10	faageles
-10	pdf
 10	teekstine
 10	toelhkestien
 10	drïekte
@@ -3154,7 +3154,6 @@
 9	dijjem
 9	Luvlie
 9	Tellefovne
-9	ese
 9	eannan
 9	Norrbotten
 9	gærhkoejielemem
@@ -3251,6 +3250,7 @@
 9	buorredili
 9	gærhkoem
 9	vik
+9	pdf
 9	ollašuhttima
 9	aelkieh
 9	lååvke
@@ -3628,7 +3628,6 @@
 7	nynnehkåbpoe
 7	koordineremem
 7	reerie
-7	NAV
 7	noerij
 7	darhkelidh
 7	dååjrehtimmie
@@ -3798,6 +3797,7 @@
 7	gïelepolitihkem
 7	feerhmieh
 7	Voestegh
+7	ese
 7	klååkemeåårgane
 7	iehkeden
 7	sjeakodh
@@ -4023,6 +4023,7 @@
 6	gärhkoen
 6	koordinatese
 6	gaavnedieh
+6	NAV
 6	jeenje
 6	jaevrieh
 6	staatijste
@@ -5190,7 +5191,6 @@
 5	ekologijen
 5	arrangemangistie
 5	guovdu
-5	tjidtj
 5	vaajmafrijjesvoete
 5	Gaskem
 5	asth
@@ -6000,7 +6000,6 @@
 4	positijve
 4	Kuvsjh
 4	FSC
-4	RUA
 4	byjjesfaamojde
 4	seksuála
 4	lahtut
@@ -6887,6 +6886,7 @@
 3	Nesseby
 3	moerigujmie
 3	University
+3	RUA'en
 3	soejkesjen
 3	tjierte
 3	nyjsenæjjide
@@ -6919,7 +6919,6 @@
 3	Politije
 3	såvnnå
 3	Maanide
-3	eastadit
 3	vaeriedajvide
 3	vuartasjæjjide
 3	daamtesreaktah
@@ -7599,6 +7598,7 @@
 3	Originale
 3	mïerhkeme
 3	Provgramme
+3	tjidtj
 3	båajhtodåbpoe
 3	Skæhkere
 3	lohkehti
@@ -7629,6 +7629,7 @@
 3	tjieltine
 3	Kåfjord
 3	baeniestarnem
+3	eastadit
 3	vyörtegsvoetine
 3	juste
 3	smaareh
@@ -8366,13 +8367,13 @@
 2	Åvla
 2	Maanagïerte
 2	gåatoemasse
-2	isnie
 2	stååkedimmie
 2	sjiehtedh
 2	bijbelenjarkoestæmman
 2	tjoeverimen
 2	neavrosne
 2	barkigan
+2	NTFT'en
 2	Elliesvoete
 2	Kontraterrorisme
 2	aarhskuvle
@@ -9296,6 +9297,7 @@
 2	Dybenåga
 2	gaatoelin
 2	aalkoetsiehkie
+2	luomusvuohta
 2	njuvtedh
 2	bihkedimmiem
 2	vaajmosne
@@ -10434,14 +10436,13 @@
 2	medijidie
 2	govlesadtemem
 2	Kahtovaara
-2	luomusvuohta
 2	Gåalmede
+2	NTFT'ese
 2	Maaksoe
 2	byjreskedajvesne
 2	baakojne
 2	Iktegisth
 2	gohtjesovvi
-2	dtja
 2	VUEJNEDH
 2	learoevierhtijste
 2	dieđut
@@ -10731,6 +10732,7 @@
 2	Resurgence
 2	domtimh
 2	gárggiideami
+2	NTFT'esne
 2	Langbukt
 2	gïelejarngese
 2	tjöövken
@@ -10802,7 +10804,6 @@
 2	dåarjoste
 2	eeki
 2	eekh
-2	Flickr
 2	tjiehpieslidteratuvreste
 2	daalhkesigujmie
 2	Dijakonh
@@ -12049,7 +12050,7 @@
 1	såjhtoedïenesjiemmieh
 1	iktemierien
 1	gärhkoem
-1	STE
+1	dåastove
 1	aalkoealmetjhstandardh
 1	dåastovh
 1	sjïdtimh
@@ -12459,6 +12460,7 @@
 1	sygkeldidh
 1	kultuvreraerien
 1	jeatjine
+1	isnie
 1	konsultasjovnedïedtem
 1	Minngiejielemem
 1	aarti
@@ -12484,7 +12486,6 @@
 1	Guvvine
 1	musihkejolleskuvlesne
 1	siebredahkensuerkide
-1	maŋimusat
 1	čoahkkananfriddjavuhtii
 1	Teknologeles
 1	njååhtjedimmieåårgane
@@ -12838,7 +12839,6 @@
 1	ásahuvvojit
 1	implementereme
 1	gïeledajvidde
-1	juvnehtimmiej
 1	juehtiemasse
 1	griensen
 1	maadthskuvleste
@@ -13523,7 +13523,6 @@
 1	faamoejarngh
 1	medijan
 1	Maahtaldahkeulmieh
-1	dåastove
 1	oasi
 1	jihtseles
 1	stigen
@@ -13884,7 +13883,6 @@
 1	DVD’esne
 1	Laadtege
 1	økonomien
-1	ENTREPRENØRSKAP
 1	båatijen
 1	gæstoem
 1	fealadibie
@@ -14958,6 +14956,7 @@
 1	raeffiedåehkie
 1	tjijremide
 1	bïhkesgærjam
+1	Flickr'isnie
 1	Gïelefaageles
 1	Oltoken
 1	instistusjovnh
@@ -15085,7 +15084,7 @@
 1	gåabpatjahkine
 1	alhkie
 1	eejhtegiraeresne
-1	válljen
+1	pdf'
 1	válljet
 1	veajhtoe
 1	Saemedigkie
@@ -15957,6 +15956,7 @@
 1	kodicillese
 1	gielenjoelkedassh
 1	konstultasjovnh
+1	maŋimusat
 1	bieljielimmie
 1	dotkememaahtoem
 1	giertie
@@ -16497,7 +16497,6 @@
 1	gaavnojde
 1	Tjura
 1	öökedh
-1	SNE
 1	Harstadesne
 1	gïelenjoelkedassesne
 1	daaltji
@@ -16720,6 +16719,7 @@
 1	væjkoej
 1	boelhketjisnie
 1	byjresigujmie
+1	válljen
 1	Åvteprosjekte
 1	buolvvaj
 1	jiehtegem
@@ -16810,7 +16810,7 @@
 1	tjelmide
 1	evtiedimmieprosjekte
 1	vierhkiedajve
-1	ööhpehtimmiefaalenasse
+1	'en
 1	njyöjkedh
 1	Sjïerereektije
 1	jeananimmie
@@ -17289,6 +17289,7 @@
 1	geatskanamme
 1	kreajnoehtidh¥
 1	saejriej
+1	'dtja
 1	juerie
 1	saejrieb
 1	åvtekuvsjesne
@@ -17725,6 +17726,7 @@
 1	Njoelkedassen
 1	vyøki
 1	åårginale
+1	Linux'ine
 1	tjamke
 1	minimála
 1	siida
@@ -18699,7 +18701,7 @@
 1	bïenjigyjmie
 1	Agderen
 1	raeriem
-1	raeriej
+1	sertiestimmieaarvoem
 1	incitamentem
 1	reivve
 1	riejriesvoeteministere
@@ -19511,6 +19513,7 @@
 1	ovremellersta
 1	aajhtoe
 1	EKONOMIJESOEJKESJINIE
+1	NAV'esne
 1	digijtaale
 1	Raentserasse
 1	Hæhtjoste
@@ -19733,6 +19736,7 @@
 1	byråen
 1	Reektehtimmie
 1	fïerhtenjaepien
+1	ENTREPRENØRSKAP'STE
 1	daguide
 1	mårhka
 1	Ikesjaure
@@ -19816,9 +19820,9 @@
 1	gærhkoejaepien
 1	Saemienskovle
 1	faamojde
+1	RUA
 1	sïebredakesne
 1	Goerpemaaksoeh
-1	RUP
 1	luvhte
 1	aalkoetsiehkeste
 1	starnebarkojne
@@ -20004,7 +20008,6 @@
 1	aktöri
 1	gaskefaagem
 1	leekedimsgåatetjh
-1	BOSTAD
 1	öödtijmh
 1	darjoejgujmie
 1	Maadteraahkan
@@ -20062,6 +20065,7 @@
 1	Biejjine
 1	digkiedimh
 1	vuolideami
+1	tjidtj`aahka
 1	faalenasi
 1	åehpiedehteme
 1	telegiehtjedämman
@@ -20442,6 +20446,7 @@
 1	nasjovnalebudsjedtesne
 1	syrab
 1	goeven
+1	RUP'en
 1	syran
 1	hïejmi
 1	Åadtjoejimh
@@ -20939,6 +20944,7 @@
 1	Dalarnan
 1	gøølemejaevrie
 1	dahkoesijjiem
+1	BOSTAD'SNE
 1	pruvresne
 1	darjoemen
 1	gejt
@@ -21126,6 +21132,7 @@
 1	vaarjojne
 1	nedtesæjrosne
 1	Nasaretesne
+1	Sijthth
 1	markasae
 1	baahkeste
 1	Dajveraastem
@@ -21168,6 +21175,7 @@
 1	giehtjedieh
 1	faktorh
 1	čuoččáldahttit
+1	dtja
 1	tjieltese
 1	saemiengielese
 1	kvalitatijven
@@ -21415,6 +21423,7 @@
 1	gïeleevtiedimmiebarkoem
 1	nuelieulmiejgujmie
 1	vihtesjamme
+1	TibePR'en
 1	ollislažžan
 1	Govdajohka
 1	ustitvuođa
@@ -21515,7 +21524,6 @@
 1	Gånkan
 1	Ruonasvaggen
 1	Kan
-1	Sijthth
 1	Kar
 1	dïenesjimmiej
 1	Kjerringelva
@@ -21602,7 +21610,6 @@
 1	TVgoerehtimmiejgujmie
 1	guorahallat
 1	minngelens
-1	TibePR
 1	faamoesijjesne
 1	skïemtjegåetiegærhkose
 1	revidereme
@@ -22778,6 +22785,7 @@
 1	politiken
 1	gaskeviermiesæjrosne
 1	aalkoealmetjeriekteles
+1	Flickr
 1	jorkesieh
 1	given
 1	Ástavuona
@@ -23155,7 +23163,7 @@
 1	Nuhteles
 1	Jiehtedh
 1	prosjektijste
-1	sertiestimmieaarvoem
+1	raeriej
 1	Utnijegoerehtimmie
 1	Reektesinie
 1	såevmiengïelesne
@@ -23963,6 +23971,7 @@
 1	væjkelåboe
 1	BREIDE
 1	vuekieevtiedimmiem
+1	tjidtj`aajja
 1	vuesiehtimmievuekine
 1	vid
 1	tjiehpieslidteratuvre
@@ -24155,7 +24164,7 @@
 1	kultuvrebarkidie
 1	seammavyørtegsvoete
 1	riejriesvoetem
-1	Stoere
+1	leekedæmman
 1	jiehtegi
 1	Gävleborgen
 1	Faahtjere
@@ -24223,7 +24232,7 @@
 1	båvrijste
 1	Ööhpehtimmieinstitusjovnh
 1	máhtu
-1	leekedæmman
+1	Stoere
 1	soejkesjeprosessine
 1	Vuasahtalleme
 1	gaskkalduhttima
@@ -24792,7 +24801,6 @@
 1	Valkeaää
 1	sjïdtemisnie
 1	SAAHT
-1	Linux
 1	skiebtjiejin
 1	råajvarimmebielesne
 1	åårganese
@@ -24948,6 +24956,7 @@
 1	vaekniehexportem
 1	åarjelsaemiendajvesne
 1	roestegåeide
+1	juvnehtimmiej
 1	juvnehtimmieh
 1	ektese
 1	lingvistihkesne
@@ -26334,6 +26343,7 @@
 1	lagrer
 1	regionalh
 1	Ljusnedal
+1	ööhpehtimmiefaalenasse
 1	juelevsaemiengïelesne
 1	UNGT
 1	Halse

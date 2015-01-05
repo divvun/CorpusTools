@@ -5,9 +5,9 @@
 26708	ko
 22060	et
 17864	láá
-17767	ij
+17765	ij
 15736	tot
-13363	te
+13362	te
 13325	sun
 11326	nuuvt
 10554	mut
@@ -54,7 +54,7 @@
 3719	tâi
 3714	meid
 3690	Na
-3684	tääl
+3683	tääl
 3651	stuorrâ
 3623	jiem
 3518	Säämi
@@ -206,8 +206,8 @@
 1196	šoodâi
 1190	puáris
 1184	vaarâ
-1179	eennâm
 1176	pyeri
+1167	eennâm
 1161	láin
 1160	paijeel
 1160	äšši
@@ -226,12 +226,12 @@
 1095	kuhháá
 1093	iänááš
 1093	Nuuvt
-1091	almai
 1091	kulmâ
 1089	ákku
 1079	Anarist
-1067	s
+1071	almai
 1064	táválávt
+1058	s
 1058	Mattus
 1058	finnim
 1057	moonnâm
@@ -269,8 +269,8 @@
 930	maŋeláá
 924	Juhháán
 922	pirrâ
-917	Näkkäläjärvi
-913	távjá
+915	Näkkäläjärvi
+911	távjá
 911	párnááh
 911	peri
 910	oroi
@@ -344,9 +344,9 @@
 757	čoođâ
 757	mist
 753	jienâ
-749	enâmist
 747	pyehtih
 746	pyevti
+745	enâmist
 745	uáinám
 741	ulmuid
 741	love
@@ -392,10 +392,10 @@
 676	kiinii
 676	oho
 675	kandâ
-674	enâmân
 672	tehálâš
 672	tuođâi
 671	Maati
+670	enâmân
 670	tiätu
 669	tyehin
 668	maailm
@@ -419,12 +419,12 @@
 648	sämikielâlâš
 648	váháš
 647	mijjân
-647	párnái
 647	máhđulâš
 647	vuod
-645	miinii
+645	párnái
 643	kuolijd
 643	pottii
+643	miinii
 639	áinoo
 638	kuleh
 636	Avveel
@@ -449,9 +449,9 @@
 607	uážžu
 607	ovdediđ
 605	puávtáččij
-599	Tun
 599	Ive
 597	lovo
+597	Tun
 597	tunjin
 596	Te
 595	anarâš
@@ -480,8 +480,8 @@
 568	čuákkim
 564	mätki
 563	forgâ
-563	auto
 562	tave
+561	auto
 559	oovdâst
 558	m
 556	tagareh
@@ -495,12 +495,12 @@
 550	sämmiliih
 550	sämmilâš
 549	www
-548	iijâ
 548	maggaar
-546	on
 546	Lam
 545	ohtii
 545	servi
+544	iijâ
+544	on
 544	eehid
 542	luándu
 540	olssis
@@ -532,7 +532,6 @@
 519	čohčuv
 519	ovdilgo
 518	Ucjuv
-518	riidon
 518	staatâ
 515	kullee
 515	D
@@ -549,6 +548,7 @@
 509	esken
 508	peivi
 506	maajeeld
+506	riidon
 506	eromâš
 505	uccáá
 505	tile
@@ -647,7 +647,6 @@
 445	tai
 442	Kove
 442	Liisá
-441	almaa
 441	Eres
 440	lunne
 440	älkkee
@@ -661,6 +660,7 @@
 434	aašijn
 434	uáiná
 433	maaŋgâ
+433	almaa
 433	kuhás
 433	Kaabi
 432	uásild
@@ -738,7 +738,6 @@
 393	ääšist
 393	adelij
 393	nissoon
-393	Ele
 393	Uccâ
 392	lieggâ
 392	Suvi
@@ -749,6 +748,7 @@
 392	meridij
 392	lamaškin
 390	lovvoost
+390	Ele
 390	viežžâđ
 389	Motomin
 389	uápis
@@ -889,7 +889,6 @@
 334	Ruošâ
 334	kulttuurkuávdáš
 333	tábáhtus
-332	almaah
 332	Sarre
 332	saanijd
 331	uástiđ
@@ -919,15 +918,16 @@
 324	ruopsis
 324	Luhhoost
 323	Äijih
+322	almaah
 320	ulmen
 320	purrâmuš
-320	Oulu
 320	Kaari
 320	Itkonen
 319	ivveest
 319	eellih
 319	tien
 319	tooimâi
+319	Oulu
 318	šoddâđ
 318	F
 318	tuubdâi
@@ -956,7 +956,6 @@
 311	tuostâm
 311	piejâi
 311	päivitetty
-311	ruánáá
 311	Viimeksi
 310	šiljoost
 310	porá
@@ -964,6 +963,7 @@
 310	Maaŋgah
 310	vijđes
 310	juurdâ
+309	ruánáá
 309	Kielâ
 309	siämmáánáál
 309	Moh
@@ -1134,7 +1134,6 @@
 265	Lah
 265	kavnum
 264	uáđđiđ
-264	pyehtiđ
 264	Taam
 264	eemeed
 264	viermi
@@ -1143,6 +1142,7 @@
 263	fakkist
 263	käähvi
 263	siäilum
+262	pyehtiđ
 262	jurgâlâm
 262	pargojuávhu
 261	raavâd
@@ -1195,7 +1195,6 @@
 252	koskâsâš
 252	muorâid
 252	kuttâ
-252	Hiärrá
 252	maašin
 252	uáivilin
 252	tiettim
@@ -1228,6 +1227,7 @@
 246	Taid
 246	moonnim
 246	šaddoid
+246	Hiärrá
 246	this
 246	pargeeh
 245	soojijn
@@ -1284,14 +1284,12 @@
 236	Om
 236	sevŋâd
 236	tuálá
-236	n
 236	—
 236	ijjâ
 236	jottáám
 236	puáđi
 236	muái
 236	saatij
-236	uáivist
 235	juávkun
 235	e
 235	šiiljon
@@ -1303,6 +1301,7 @@
 234	kaartâi
 234	sämmiláid
 234	Ohtii
+234	uáivist
 234	nuorah
 233	skippáár
 233	Lasetiäđuh
@@ -1320,6 +1319,7 @@
 231	ivne
 231	älgiđ
 231	mondiet
+230	n
 230	ovdán
 230	vaazij
 229	määti
@@ -1345,7 +1345,6 @@
 227	uáinoo
 227	čuávvuđ
 227	mainâšum
-227	rido
 227	siämmáálágán
 226	aaigij
 226	laavij
@@ -1392,6 +1391,7 @@
 221	piäiváš
 221	Onne
 221	čuávvoo
+221	rido
 220	čuorvij
 220	tupán
 220	Á
@@ -1616,7 +1616,6 @@
 189	čielgâ
 189	lavluu
 189	Aslak
-189	t
 189	Pargo
 189	Njuámmil
 188	sämisopâmuš
@@ -1660,6 +1659,7 @@
 184	čuávji
 184	olssân
 184	sijđoh
+184	t
 184	kooveest
 184	hárjánâm
 184	njäälmist
@@ -2189,7 +2189,6 @@
 141	pääččiđ
 141	nisoneh
 141	Keesi
-140	juuhâ
 140	ráhtá
 140	koveráiđu
 140	juttii
@@ -2199,7 +2198,6 @@
 140	Taggaar
 140	puhe
 140	tutkâm
-140	Šiev
 140	pessejeh
 140	India
 140	suttâm
@@ -2214,6 +2212,7 @@
 139	poostâ
 139	tuáimih
 139	luámánijd
+138	juuhâ
 138	toppiđ
 138	staatâi
 138	vorrâ
@@ -2264,6 +2263,7 @@
 136	kirhoost
 136	Nieidâ
 136	muštâlâm
+136	Šiev
 136	kirdee
 136	Sam
 136	Mattijn
@@ -2444,7 +2444,6 @@
 125	Suái
 125	paje
 125	huámmáš
-125	Kivs
 125	hirmos
 125	milj
 124	Laura
@@ -2508,6 +2507,7 @@
 122	tagarin
 122	vuáimán
 122	tuáppee
+122	Kivs
 122	raahtij
 122	taa
 122	lasaneh
@@ -2744,9 +2744,7 @@
 111	kirjerááju
 111	euro
 111	skammâmáánu
-111	riddoin
 111	jesânij
-111	uhkevuálásâš
 111	tärhibeht
 111	Nuorttâ
 111	mättih
@@ -2797,6 +2795,8 @@
 109	syeji
 109	pargojuávkku
 109	jienah
+109	riddoin
+109	uhkevuálásâš
 109	kenski
 109	teejâ
 109	kuávluh
@@ -3132,7 +3132,6 @@
 97	L
 97	Euroopâst
 96	Jäävri
-96	almast
 96	kuárŋuđ
 96	laasâst
 96	Kaninen
@@ -3220,7 +3219,6 @@
 94	Hetta
 94	šodâččij
 94	Tovlááh
-94	säpligeh
 94	maŋaluvâi
 94	išedeh
 94	leggistij
@@ -3242,7 +3240,6 @@
 94	siis
 94	viežâi
 94	Sämitiigán
-94	paldluvâi
 94	urruu
 94	almolâš
 94	aalgijm
@@ -3285,6 +3282,7 @@
 93	lai
 93	Ores
 93	Suoma
+92	almast
 92	puáđistij
 92	Aaron
 92	halijdii
@@ -3321,6 +3319,7 @@
 92	vuoitij
 92	išedij
 92	auton
+92	paldluvâi
 92	muuštij
 92	álgáččij
 92	palvâlusâid
@@ -3443,6 +3442,7 @@
 88	Rantamäki
 88	uágguđ
 88	váruttiđ
+88	säpligeh
 88	korâidis
 88	káránâs
 88	jpg
@@ -3727,6 +3727,7 @@
 81	kieldâin
 81	tovlááh
 81	pyevtittem
+81	Tuomo
 81	luándulávt
 81	nuorttâsämmilij
 81	algâttem
@@ -3738,7 +3739,6 @@
 81	Manen
 81	Itten
 81	Janne
-81	Tuomo
 81	nuárju
 81	puáđu
 81	toimâttâm
@@ -3800,7 +3800,6 @@
 80	Veiko
 80	jiänusân
 80	kievkkânist
-80	kulluđ
 79	Helander
 79	luvâttuvâst
 79	koozah
@@ -3885,6 +3884,7 @@
 78	hyeni
 78	miäruštâllâđ
 78	Eeva
+78	kulluđ
 78	tarbâšiččii
 77	VÁSTÁDÂS
 77	kuávdášlâš
@@ -4754,7 +4754,6 @@
 63	ivnásiih
 63	juurdâštijn
 63	West
-63	kammuuh
 63	puáránâm
 63	väldi
 63	sarnuu
@@ -4879,6 +4878,7 @@
 61	kyelipivdo
 61	Neeta
 61	Ijâttis
+61	kammuuh
 61	lovettáá
 61	iäruh
 61	läänihaldâttâs
@@ -4942,7 +4942,6 @@
 60	uccást
 60	Per
 60	táássáš
-60	kerris
 60	viättá
 60	tehálâžžân
 60	ubbâ
@@ -5105,7 +5104,6 @@
 58	valmâš
 58	immâšijd
 58	läävhi
-58	Post
 58	jaska
 58	Alda
 58	cuáŋui
@@ -5115,6 +5113,7 @@
 58	Čiivgah
 58	vázzá
 58	evakkon
+58	kerris
 58	algâkeesist
 58	jiegâ
 58	totkin
@@ -5244,7 +5243,6 @@
 56	Elias
 56	kiergâniđ
 56	staatâst
-56	keeji
 56	markkânij
 56	kirdeleh
 56	tallegis
@@ -5327,7 +5325,6 @@
 56	luoppâđ
 56	häävdi
 56	ruottâseh
-56	loddááš
 56	tiättojeh
 56	čallust
 56	Sammlii
@@ -5407,6 +5404,7 @@
 54	nisonist
 54	šoddâmist
 54	Kulâ
+54	keeji
 54	täähi
 54	tiervâsvuođâhuolâttâs
 54	Orom
@@ -5467,7 +5465,6 @@
 54	Oovtâst
 54	aiccâm
 54	Cieh
-54	ooleest
 54	mieđâi
 54	häärvih
 54	Tuárgis
@@ -5493,6 +5490,7 @@
 54	kuávlulâš
 54	njuškee
 54	jolgâ
+54	loddááš
 54	čappâdeh
 54	nurheest
 54	kolgâi
@@ -5643,6 +5641,7 @@
 52	lemnuid
 52	algâkeesi
 52	nuvâhánnáá
+52	ooleest
 52	värrejii
 52	Ruánáá
 52	Sämmilâšvuotâ
@@ -5926,7 +5925,6 @@
 49	Kárvudât
 49	vuohâsávt
 49	adelim
-49	it
 49	uálgispeln
 49	saavâjođetteijei
 49	Saje
@@ -6037,6 +6035,7 @@
 48	vuárkán
 48	pihtsijd
 48	tovláid
+48	it
 48	määđhis
 48	ruotâstij
 48	Katri
@@ -6206,6 +6205,7 @@
 46	Máret
 46	luptim
 46	tálvástâl
+46	vuáittám
 46	Leibi
 46	kavnuuččij
 46	káálgu
@@ -6232,7 +6232,6 @@
 46	nyeti
 46	čokijdâm
 46	lohomeeri
-46	vuáittám
 46	vuođâlovvoost
 46	Agaricus
 46	pajek
@@ -6347,7 +6346,6 @@
 46	SámiSoster
 46	nuorâirááđán
 46	lamgin
-46	almajin
 46	Lâš
 46	teivâsâm
 46	tehelâš
@@ -6579,6 +6577,7 @@
 44	Sveitsi
 44	puustaveh
 44	peljijdis
+44	almajin
 44	kuin
 44	toimâttuvâst
 44	máttááttuvvoo
@@ -6594,7 +6593,6 @@
 44	vaijaas
 43	nievris
 43	vietij
-43	kulo
 43	pyevtittáim
 43	Täid
 43	lippu
@@ -6906,6 +6904,7 @@
 41	nuollâđ
 41	iveh
 41	vuossâmustáá
+41	kulo
 41	sárgá
 41	Raavâdviäsu
 41	čielgiittâsâst
@@ -7297,7 +7296,6 @@
 39	kelijdeijee
 39	Aanaarjävri
 39	kuha
-39	iännám
 39	Turi
 39	tááláást
 39	vyelgee
@@ -7323,7 +7321,6 @@
 38	laavhâid
 38	jurdâččum
 38	uámikkâs
-38	Kuullim
 38	almottâttâđ
 38	kikse
 38	iäljárávt
@@ -7349,6 +7346,7 @@
 38	juuvâid
 38	tuostâi
 38	Čivtjuuvâst
+38	Kuullim
 38	syelimâs
 38	roovâi
 38	Jáákuš
@@ -7426,7 +7424,6 @@
 38	naabur
 38	mijhân
 38	AVV
-38	ruonâs
 38	stuárráábijd
 38	tuššâm
 38	Ranttila
@@ -7584,6 +7581,7 @@
 37	Kijttoseh
 37	Pirkko
 37	Veijo
+37	en
 37	kyevdi
 37	piälláin
 37	Káránâs
@@ -7623,7 +7621,6 @@
 37	oovtâstpaargon
 37	Lake
 37	peelijd
-37	täsivávt
 37	org
 37	ekumeenlâš
 37	tuárjuh
@@ -7645,6 +7642,7 @@
 37	täähid
 37	pyehteen
 37	čuáppá
+37	iännám
 37	kenigâsvuođah
 37	Inger
 37	liiškán
@@ -7656,7 +7654,6 @@
 37	ráávhun
 37	avžuuttâsah
 37	Kuttoor
-37	en
 36	muoldâg
 36	tarbâšâmgin
 36	šoŋŋâduv
@@ -7762,6 +7759,7 @@
 36	keerdijd
 36	Rauni
 36	Šreva
+36	Post
 36	aasâim
 36	vuáđudempeivi
 36	Lostâ
@@ -7834,6 +7832,7 @@
 36	pasâttâsâid
 36	álttár
 36	viđâlov
+36	täsivávt
 36	nuhâmin
 36	selvâttiđ
 36	suovsâ
@@ -7992,7 +7991,6 @@
 35	koskâvuođâ
 35	čokkáán
 35	njargâ
-35	jâ
 35	luándukevttim
 35	kandii
 35	pargein
@@ -8166,7 +8164,6 @@
 34	tarbâšim
 34	Säminuorah
 34	Väriovdâsteijee
-34	Kaab
 34	šaddokäärdist
 34	puállám
 34	nuolâi
@@ -8213,6 +8210,7 @@
 34	puovtijm
 34	huolâttij
 34	nuorttâlâškielân
+34	ruonâs
 34	haatâ
 34	Henriksson
 34	njomâtteijeid
@@ -8400,6 +8398,7 @@
 33	Apt
 33	luáttámuš
 33	Mieldi
+33	jâ
 33	kähvi
 33	vuoigâdvuođâsajattuv
 33	ratifisistmist
@@ -9071,6 +9070,7 @@
 30	ijâstâllâm
 30	ČOOVDÂNOMMÂDÂH
 30	Kođojuuvâ
+30	tyelli
 30	vähtee
 30	ucâluvá
 30	riggee
@@ -9093,6 +9093,7 @@
 30	Lemeha
 30	eehi
 30	pyeráiguin
+30	Kaab
 30	tallan
 30	jurdeđ
 30	tiervâpuáttim
@@ -9292,7 +9293,6 @@
 30	Cantharellus
 30	näähkist
 30	ruánáásiähá
-30	tyelli
 30	kijttosijd
 30	lostâidis
 30	värisaavâjođetteijen
@@ -10020,7 +10020,6 @@
 27	kiävttusis
 27	Sämikirjerááju
 27	riijkâi
-27	post
 27	laavâi
 27	kiđđâluuhâmpaje
 27	luokai
@@ -10173,7 +10172,6 @@
 26	čuásis
 26	Peccikko
 26	puurah
-26	čääsivuálááš
 26	paloisiähá
 26	kessui
 26	väridiđ
@@ -10515,9 +10513,9 @@
 26	čuákkimeh
 26	Sisčääsih
 26	sisčaasij
+26	kyelišlaajah
 26	kevttimáin
 26	išedii
-26	pootân
 26	čácáduvâi
 26	kavnuumist
 26	lovettes
@@ -10541,7 +10539,6 @@
 26	kuáhtájim
 26	ivnijguin
 26	vuástásâš
-26	irge
 26	Jotelávt
 26	MECCI
 26	markkânsaje
@@ -10590,7 +10587,6 @@
 26	kuábáškin
 26	poccuupiärgu
 26	Tessuin
-26	kyelišlaajah
 26	rääsi
 26	buusist
 26	pennust
@@ -10777,6 +10773,7 @@
 25	heeitug
 25	inarinsaamen
 25	jieštobdo
+25	irge
 25	festivaal
 25	info
 25	Bigga
@@ -10916,6 +10913,7 @@
 24	kerivijn
 24	uánihuboh
 24	puolâšin
+24	čääsivuálááš
 24	suáppoo
 24	porgâhánnáá
 24	movtijditeh
@@ -11088,14 +11086,12 @@
 24	suojâlemmittomerij
 24	Ukraina
 24	fiskâdeh
-24	ka
 24	čoođâuáinojeijee
 24	kuldâlim
 24	jeggiriidon
 24	váimulávt
 24	väldiv
 24	sudoidân
-24	Kangas
 24	Kukken
 24	täässiv
 24	nanodâm
@@ -11313,6 +11309,7 @@
 24	Elma
 24	jieŋŋâlvuođâst
 24	išedis
+24	pootân
 24	kavnâččii
 24	Zulfija
 24	paahud
@@ -11518,6 +11515,7 @@
 23	tevdih
 23	tohâmân
 23	torvo
+23	Kangas
 23	pargopáájáh
 23	kiirjij
 23	viettii
@@ -11751,7 +11749,6 @@
 22	vistijd
 22	Liisást
 22	njurgoi
-22	Koss
 22	iskâstiđ
 22	piäivááloddáid
 22	nuávdit
@@ -12240,7 +12237,6 @@
 22	Syeini
 22	Juuvâi
 22	Leirâ
-22	robdâ
 22	Cuábui
 22	Muorâkäärdi
 22	čeevđist
@@ -12363,7 +12359,6 @@
 21	Jyväskylä
 21	Biologia
 21	iävtuittáá
-21	eennâmlijn
 21	Reykjavik
 21	poostij
 21	jurdust
@@ -12465,6 +12460,7 @@
 21	almottuvvoo
 21	Ii
 21	sierâin
+21	robdâ
 21	haamijd
 21	anni
 21	Tavveen
@@ -13290,7 +13286,6 @@
 20	huámmášiđ
 20	meriáigásávt
 20	iänui
-20	jävr
 20	nohádistâm
 20	orásist
 20	aaicah
@@ -13459,6 +13454,7 @@
 19	njuneh
 19	Kuácceevyevdi
 19	kulttuurmeriruuđâst
+19	eennâmlijn
 19	Pirita
 19	täärhih
 19	album
@@ -13505,7 +13501,6 @@
 19	huáputtâm
 19	Aanaarsämikielâ
 19	tullâsaje
-19	Peoples
 19	teivâm
 19	taiđuu
 19	muttá
@@ -14264,7 +14259,6 @@
 18	ridoh
 18	Edvard
 18	ruošâkielân
-18	oovt
 18	časkâdij
 18	sáátáh
 18	ucâluđ
@@ -14750,7 +14744,6 @@
 17	pargopáájái
 17	heŋgâstâm
 17	vaaljâpaajeest
-17	mi
 17	Vaarjâgist
 17	rukkoosviste
 17	sämimáttááttâsân
@@ -14822,7 +14815,6 @@
 17	kuldâleijee
 17	västidává
 17	pyerebin
-17	don
 17	čuosâttum
 17	spáálváš
 17	smietâdim
@@ -14856,6 +14848,7 @@
 17	čuákánkiäsu
 17	pargopitá
 17	tooimânpieijâm
+17	Peoples
 17	haajâid
 17	Tiervâsvuođâtipšoo
 17	Kuopio
@@ -15821,6 +15814,7 @@
 16	Collybia
 16	pajereešmi
 16	juuvdáliih
+16	oovt
 16	oppii
 16	Ellaast
 16	ilodii
@@ -15875,7 +15869,6 @@
 16	tiivoodmin
 16	kansaškoovlân
 16	virdeest
-16	kiäčân
 16	pargoviehân
 16	Salmi
 16	tuávvášjuávkku
@@ -16505,7 +16498,6 @@
 15	parlamentsali
 15	almottem
 15	Suogârdâl
-15	man
 15	jurdá
 15	äššitobdeid
 15	halijdeen
@@ -16909,7 +16901,6 @@
 14	ohtnubálov
 14	mainâstum
 14	enâdâh
-14	iännásân
 14	unohávt
 14	Maaŋgâid
 14	sotamies
@@ -17133,7 +17124,6 @@
 14	iäruttij
 14	sahâjođetteijee
 14	tijmepeeli
-14	Keppâ
 14	paččeeđ
 14	kašmârdeijeid
 14	riddošadoh
@@ -17243,6 +17233,7 @@
 14	Issues
 14	ááiruin
 14	uđâsmiteh
+14	iännásân
 14	taveoosijn
 14	iskoseh
 14	sude
@@ -17377,6 +17368,7 @@
 14	njuámmilijd
 14	njeejâi
 14	Käävci
+14	mi
 14	persiljá
 14	riissijn
 14	AUSTRALIA
@@ -17805,6 +17797,7 @@
 14	vitá
 14	peljij
 14	Sivnedeijee
+14	kiäčân
 14	kárgái
 14	aldanâm
 14	ruttâpitá
@@ -17838,6 +17831,7 @@
 14	rovvim
 14	čuovviis
 14	Pyehtiđ
+14	Keppâ
 14	monâttij
 14	Luxemburg
 14	keejah
@@ -18351,6 +18345,7 @@
 13	falâldâh
 13	vivvâ
 13	RAP
+13	keha'ka
 13	rievdâdeh
 13	maaŋgâtoimâvisteh
 13	kielâohtsâšpargoost
@@ -18400,7 +18395,6 @@
 13	oovdedmin
 13	jurgâlmân
 13	moon
-13	keha
 13	táálhudmân
 13	helikopter
 13	čiŋŋân
@@ -18467,7 +18461,6 @@
 13	MOVES
 13	laavâid
 13	tarvaniđ
-13	pää
 13	niälguđ
 13	tämän
 13	konserteh
@@ -18625,6 +18618,7 @@
 13	táálááš
 13	koččâmâšâid
 13	anarâškieláin
+13	man
 13	pargomarkkâneh
 13	Lahja
 13	ennen
@@ -19114,6 +19108,7 @@
 12	mieskâđ
 12	čuággám
 12	Vuojâdijn
+12	Paargon
 12	pessimpuáđus
 12	Maidgis
 12	skáppoo
@@ -20192,7 +20187,6 @@
 12	vuojâččâm
 12	adlij
 12	piergâsijdis
-12	Jyevdilâsluovtâ
 12	uuccâmäigi
 12	puollâšeh
 12	meinikááhu
@@ -20237,6 +20231,7 @@
 12	čokkâđ
 12	nävli
 12	vuáttá
+12	don
 12	koijâdáin
 12	paijeentuálá
 12	Saariselkä
@@ -20375,12 +20370,14 @@
 12	kaperist
 12	Jordan
 12	šlanttâ
+12	`
 12	illâttâs
 12	Volkswagen
 12	vorrânjammeeh
 12	čuopâškuođij
 12	puáráničij
 12	jávrááh
+12	Jyevdilâsluovtâ
 12	linnáht
 12	Eskân
 12	laiđijm
@@ -20746,7 +20743,6 @@
 12	viäpsáh
 12	poostân
 12	ravâdijd
-12	Paargon
 12	lakana
 12	possoođ
 12	Nuárjui
@@ -20789,6 +20785,7 @@
 12	Aaigij
 12	Hävdieennâmsuollust
 12	kyellin
+12	Koss'eennâm
 12	kietluvâi
 12	pessimsoojijn
 12	šišneest
@@ -20995,6 +20992,7 @@
 12	kyeđimin
 12	čuovjiscissááš
 12	tuoid
+12	jävr'riidon
 12	jeessânvuođâ
 12	Piälduh
 12	kuáđáččim
@@ -21278,6 +21276,7 @@
 11	puáránem
 11	vuástálisteh
 11	avalii
+11	ka
 11	čaittâlem
 11	Ovtâskâs
 11	speelah
@@ -21764,6 +21763,7 @@
 10	collinitus
 10	Juullâmjäävrist
 10	nuáđe
+10	'
 10	čuávumušah
 10	lokkekovveen
 10	povvâstškuát
@@ -22003,6 +22003,7 @@
 10	kievrah
 10	máccum
 10	sehâinis
+10	post'almai
 10	loddečasij
 10	kyedin
 10	pivdovyehi
@@ -22605,7 +22606,6 @@
 10	káđuttâsân
 10	irâtteh
 10	Pieksämäki
-10	kyevt
 10	torjust
 10	ráámmât
 10	rievtislágán
@@ -22770,7 +22770,6 @@
 10	njaabij
 10	merikoskâsâš
 10	seminaaráid
-10	Reisvuon
 10	rade
 10	ollâopâttuvâin
 10	je
@@ -23162,6 +23161,7 @@
 10	Vuolgâ
 10	Nahkijâš
 10	puolâšijd
+10	Post'almai
 10	niehi
 10	umástij
 10	purrâmušâi
@@ -23199,7 +23199,6 @@
 10	uáđđájim
 10	tekkijd
 10	šoddâp
-10	pald
 10	Nyetti
 10	torruu
 10	juovlâkoortah
@@ -23335,7 +23334,6 @@
 10	Eenist
 10	Čáállám
 10	sirdep
-10	Piäld
 10	Alfred
 10	ibles
 10	vástádâsân
@@ -23417,6 +23415,7 @@
 10	julgáštusâi
 10	vuogâid
 10	lisäksi
+10	Šadolâšvuotâ
 10	njuuvdos
 10	päštih
 10	oopsij
@@ -23659,7 +23658,6 @@
 10	kárgám
 10	tuššâdmist
 10	kyeligin
-10	Šadolâšvuotâ
 10	čokánává
 10	Nánnáás
 10	cimccâh
@@ -24640,7 +24638,6 @@
 9	toimâd
 9	vuáđuškoovlâin
 9	vuolgâtmist
-9	ddeh
 9	osaa
 9	sijđoin
 9	instituutâst
@@ -24652,7 +24649,6 @@
 9	áhuinis
 9	haldâšij
 9	hilgum
-9	saame
 9	imâštutij
 9	Kilbisjävri
 9	kirhoi
@@ -25041,7 +25037,6 @@
 9	eláá
 9	Stipendij
 9	ovdánemtohálâš
-9	tt
 9	aldapuátteevuođâst
 9	Knut
 9	nuorâipeivijn
@@ -25350,6 +25345,7 @@
 9	sijvuuh
 9	siärvuslâšvuođâ
 9	puttâlân
+9	pää
 9	arkeoloog
 9	anarâškielâlijd
 9	riijkâin
@@ -26382,7 +26378,6 @@
 8	telkkar
 8	sujâlâšvuođâ
 8	raapâst
-8	rrpähtt
 8	Tansanian
 8	šlijvelágán
 8	Praha
@@ -26703,7 +26698,6 @@
 8	Horgâ
 8	Trulli
 8	njuškodiđ
-8	jämmee
 8	peivipittá
 8	olmooškin
 8	pistel
@@ -26793,6 +26787,7 @@
 8	Piejâim
 8	Suáluijävri
 8	Sevžjävri
+8	Ââlgažjäu'rrpähtt
 8	kontrol
 8	aalmugliih
 8	miäcástemseervist
@@ -26837,6 +26832,7 @@
 8	merâriddoid
 8	vajedum
 8	čuddus
+8	Rissekäskein
 8	historjálii
 8	sivnedeijei
 8	uccâkuálái
@@ -27017,7 +27013,6 @@
 8	aulan
 8	juhlesaavâ
 8	tuárbuđ
-8	Margareta
 8	taanáigáá
 8	tulemast
 8	riisij
@@ -27072,6 +27067,7 @@
 8	ollágen
 8	jurdâččijm
 8	ravvimpargo
+8	kyevt
 8	Nisonijn
 8	Nahânde
 8	kilkki
@@ -27303,7 +27299,6 @@
 8	poolisijd
 8	rosvoid
 8	tuo˜âi
-8	kokemus
 8	čiälgáliih
 8	jiänáttellee
 8	tubdâv
@@ -27432,7 +27427,6 @@
 8	tuulâpaštust
 8	nevttii
 8	nevttih
-8	sukujuuret
 8	njuolgim
 8	juovlâkáálvuid
 8	faaninijd
@@ -28074,6 +28068,7 @@
 8	uálgitekki
 8	pajastolâmân
 8	kuácceevuovdijn
+8	pald
 8	kuáivustij
 8	KYEHTI
 8	Nordkapp
@@ -28558,6 +28553,7 @@
 8	Keeđgih
 8	jieŋŋâlvuođâin
 8	laaddâh
+8	škovlimpolitiik
 8	variicolor
 8	sehhij
 8	kaarijd
@@ -28909,7 +28905,6 @@
 8	kartoŋg
 8	korâstâlâi
 8	vuoteen
-8	Rissekäskein
 8	reimar
 8	enâmistpuájui
 8	lasâpuurkin
@@ -29145,10 +29140,13 @@
 8	Calocera
 8	čannojii
 8	Mathis
+8	mavâstân
 8	ruáváást
 8	kuátásis
+8	Saiga
 8	tááluviehâ
 8	Pinus
+8	nurdâd
 8	Viekkii
 8	čiđđâkaanij
 8	kyehtin
@@ -29273,7 +29271,6 @@
 8	luávhust
 8	Tomba
 8	čäcipellâst
-8	eennâmliih
 8	Ähtärist
 8	infula
 8	itteem
@@ -29412,7 +29409,6 @@
 8	Ruttii
 8	vandârdeijee
 8	Oskal
-8	Ââlgažjäu
 8	kulluuttâssáin
 8	paaneellasâlijne
 8	čohe
@@ -29897,7 +29893,10 @@
 8	tohonhân
 8	Poođâš
 8	pargostân
+8	kielâkevttim
+8	pyevtittâsâin
 8	handuk
+8	hiäjusmuđ
 8	Ehidistpeeivi
 8	ulloläigi
 8	mánuppajeh
@@ -29989,6 +29988,7 @@
 8	mita
 8	Koskâmuu
 8	päikkivyevdi
+8	Margareta
 8	aari
 8	Čielgitávtáliih
 8	suájáčaskosijguin

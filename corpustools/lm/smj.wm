@@ -3,7 +3,7 @@
 2686	sáme
 2571	li
 2405	gå
-2055	aj
+2054	aj
 1823	la
 1605	de
 1499	mij
@@ -123,18 +123,18 @@
 231	bájkálasj
 226	ájn
 224	stuorra
-221	Jubmel
 218	akta
 216	almulasj
 216	Kristuskránssa
 214	Mijá
 213	sierraláhkáj
+213	Jubmel
 213	Mikkelsen
 212	sámij
 212	ájggu
 211	sihtá
-210	a
 209	man
+208	a
 201	åvddåla
 201	vaddá
 201	ælla
@@ -267,19 +267,19 @@
 135	álu
 135	JAHKKO
 134	VK
-134	av
 134	iv
 134	siegen
 134	máhttet
 134	agev
 134	lim
-133	s
 133	duodden
 133	bargov
 133	ittjij
 133	åhpadiddje
 132	guovlojn
+132	s
 132	sjattaj
+132	av
 132	gitta
 132	danna
 131	lev
@@ -953,8 +953,8 @@
 46	rijka
 46	mierret
 46	álgij
+46	dákkár
 46	dássta
-46	an
 46	iellemin
 46	Sámelága
 46	julevsámegielan
@@ -962,7 +962,6 @@
 46	ássjev
 46	vuosedi
 46	åhpadit
-46	dákkár
 46	aneduvvi
 46	nuorttasámegiellaj
 46	jalik
@@ -994,6 +993,7 @@
 44	ålgus
 44	nammadum
 44	ájgge
+44	an
 44	fábmo
 44	Åhpadiddje
 44	sijda
@@ -1610,7 +1610,6 @@
 26	måttijt
 26	dávk
 26	didjij
-26	IKT
 26	tjáleduvvam
 26	tjavtjan
 26	så
@@ -1735,6 +1734,7 @@
 24	åhpadusán
 24	Julevsámegiella
 24	iehtjádijt
+24	IKT
 24	buolvajda
 24	mánájn
 24	madin
@@ -2884,7 +2884,6 @@
 14	sin
 14	vatte
 14	guolijt
-14	pdf
 14	bælláj
 14	lussta
 14	nammadit
@@ -3055,6 +3054,7 @@
 13	blir
 13	njamádit
 13	oattjov
+13	pdf
 13	gähttjat
 13	biednigijt
 13	John
@@ -4582,6 +4582,7 @@
 8	rádnajt
 8	Dutkamráde
 8	birrasijn
+8	Jubmel'
 8	æjgádijn
 8	oajvvaduvvá
 8	Gålmmå
@@ -5531,7 +5532,6 @@
 6	Ålos
 6	Tromsø
 6	juohkkalágásj
-6	gájk
 6	jubmeldievnno
 6	oadtjobihtit
 6	Neerland
@@ -6393,6 +6393,7 @@
 5	tjoaskes
 5	Paivi
 5	Vg
+5	gájk
 5	Luojte
 5	rájadum
 5	máhtudahkaj
@@ -7472,7 +7473,6 @@
 4	manon
 4	kultuvralattjat
 4	Røyrvik
-4	PC
 4	ådåsmahttet
 4	ájan
 4	válljimsiedilav
@@ -12498,6 +12498,7 @@
 2	Radion
 2	learohki
 2	Ph
+2	PC
 2	råggåma
 2	ålediddje
 2	Gállasjguojmitja
@@ -13237,6 +13238,7 @@
 2	dåjmadi
 2	Nárvijka
 2	gulluvasjvuodav
+2	allaskåvllååhpadiddje
 2	åvddånahttemprosjækta
 2	giellaplánimin
 2	rijkarahte
@@ -13910,6 +13912,7 @@
 2	suohkanstivratjåhkanime
 2	gilppusijt
 2	Tuvvuj
+2	bajássjaddamdilev
 2	diakonajn
 2	rijddali
 2	loeves
@@ -14380,6 +14383,7 @@
 2	hæhkkajábmemij
 2	Sollaug
 2	Goadeboanndi
+2	PC'av
 2	bedre
 2	dæhkko
 2	rahtesuorráj
@@ -16048,7 +16052,6 @@
 2	guhkak
 2	duolmmoma
 2	låvssijin
-2	bajássjaddamdilev
 2	skihppijsijddaj
 2	forrige
 2	ságajda
@@ -16311,7 +16314,6 @@
 2	ällosujttima
 2	budán
 2	Haralda
-2	SNPN
 2	Rijkkasiebrre
 2	goasskem
 2	samit
@@ -17107,7 +17109,6 @@
 2	aktisasjrádij
 2	åvddånahtte
 2	barggovaddij
-2	allaskåvllååhpadiddje
 2	álggijda
 2	skåvllådåben
 2	Sámeriektájuogos
@@ -18300,7 +18301,6 @@
 2	åvdåsvássteda
 2	tjehpudahka
 2	dådjalij
-2	GSN
 2	tærmmajuogos
 2	Hagbard
 2	stuormánájåssudagán
@@ -20517,6 +20517,7 @@
 1	duoddistam
 1	gållådam
 1	tjanástagájn
+1	'
 1	jåhtulakminisstar
 1	storstavalt
 1	Schnitlera
@@ -24657,6 +24658,7 @@
 1	duvdaduvvat
 1	Mánájs
 1	almasjvuogijt
+1	pdf'
 1	juojgge
 1	jámiguttjaj
 1	Libyan
@@ -24843,7 +24845,7 @@
 1	ruoddiduváj
 1	bágojn
 1	datter
-1	AS’a
+1	baarhkaldahkine
 1	dåttot
 1	Åhpadusfálaldagán
 1	Tjiektjamsaljov
@@ -25320,7 +25322,6 @@
 1	kvantitatijvak
 1	doagátjij
 1	oadtjin
-1	ruopsudisj
 1	oarbbenis
 1	miediajt
 1	äjgádav
@@ -25363,6 +25364,7 @@
 1	Äjgátloaben
 1	triksajt
 1	ållessjattukåhpadimárená
+1	gájk'
 1	vidnudak
 1	tjálálvisájn
 1	oarjjelsámegielajn
@@ -26191,6 +26193,7 @@
 1	Blåsjöälven
 1	ådåsmuhtedum
 1	årromloabe
+1	FoU'aj
 1	varresvuodadievnastusájs
 1	bæsstal
 1	Nabdedibme
@@ -26371,7 +26374,6 @@
 1	guovlloåsijt
 1	nabdedum
 1	atomafábmohåhkkånimes
-1	FoU
 1	gähttjaluvvat
 1	Grundlov
 1	tijmmabálkkáv
@@ -28249,7 +28251,6 @@
 1	árvvoháhkuhime
 1	tjuottjudusás
 1	Sundquist
-1	baarhkaldahkine
 1	ieneplågåjs
 1	Javllamusá
 1	ásadimájggomus
@@ -28349,11 +28350,7 @@
 1	doalvvomis
 1	Bihtámädno
 1	HÆRRÁ
-1	tallen
-1	VGan
-1	násjunalpárkka
-1	Nuorttakalohtas
-1	giellagáhttimav
+1	AS’a
 1	Nuorttakalohtan
 1	historie
 1	årromguovlon
@@ -28432,7 +28429,6 @@
 1	dáhtámasjijnajt
 1	mannagoahtám
 1	kanskje
-1	språklige
 1	ådåjakmános
 1	Namá
 1	gurbbasa
@@ -28766,6 +28762,7 @@
 1	Tjuohtejagák
 1	interessante
 1	Hurtigruvton
+1	ruopsudisj
 1	viesojt
 1	boahttsutjoarvve
 1	aktisasjmiehttse
@@ -29114,6 +29111,7 @@
 1	ållusav
 1	fylkkamánnáj
 1	teáhtara
+1	`
 1	eksohtalasj
 1	juojggamárbbedábev
 1	Dåhkkidum
@@ -29223,6 +29221,7 @@
 1	álgáv
 1	addnedáfojn
 1	Svierigabielen
+1	Hievedit
 1	bahtaj
 1	gådåtjit
 1	muossádibmehábbmim
@@ -29503,6 +29502,7 @@
 1	jådedimfábmo
 1	dåjmalasjvuodajn
 1	Bygdebok
+1	SNPN'an
 1	guojmmeinstitusjåvnåjda
 1	doahkogáptijt
 1	guovtegielakrudájt

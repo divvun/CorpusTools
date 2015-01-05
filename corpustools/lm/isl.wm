@@ -1,16 +1,16 @@
 208601	og
-169423	í
-122972	að
-108228	er
+169402	í
+122971	að
+108225	er
 106391	á
 100259	sem
 76947	var
 58540	til
-46043	en
-40147	við
+46041	en
+40146	við
 38835	af
 37760	um
-32720	með
+32717	með
 31216	hann
 29936	eru
 26291	fyrir
@@ -19,8 +19,8 @@
 20752	því
 20113	það
 19527	eða
-18637	árið
-18326	ekki
+18636	árið
+18325	ekki
 17706	voru
 17633	eftir
 15461	Hann
@@ -28,13 +28,13 @@
 14007	verið
 13568	þá
 13037	hans
-12587	Í
+12586	Í
 12336	hafa
 12249	þess
 11865	úr
 11665	út
 10781	hún
-10119	upp
+10118	upp
 9947	þegar
 9720	einnig
 9645	sér
@@ -71,11 +71,11 @@
 4477	Íslandi
 4433	öld
 4404	mjög
-4317	Íslands
+4316	Íslands
 4303	tíma
 4239	síðar
 4139	sínum
-4092	saman
+4091	saman
 4077	sé
 4046	fór
 4033	ára
@@ -86,11 +86,11 @@
 3807	oft
 3801	fyrsta
 3734	má
-3725	f
+3719	f
 3567	annars
 3567	sinn
 3541	Þegar
-3487	einn
+3486	einn
 3437	fékk
 3385	nú
 3333	sína
@@ -108,20 +108,20 @@
 3037	átti
 3031	ásamt
 3029	fyrstu
-3003	e
-2996	d
+2999	e
 2979	sinni
 2964	getur
-2955	a
+2935	a
 2916	mikið
 2908	bæði
 2895	þetta
 2889	enn
+2872	d
 2829	eitt
 2828	hluti
-2804	m
 2790	öðrum
 2787	höfðu
+2781	m
 2768	þann
 2756	hluta
 2698	stað
@@ -146,16 +146,15 @@
 2421	þannig
 2407	notað
 2391	fyrr
-2385	s
 2377	hægt
 2374	hins
 2359	janúar
 2344	ef
 2337	júní
-2326	t
 2312	segir
 2311	líka
 2265	innan
+2230	t
 2227	vel
 2210	sá
 2183	aldar
@@ -209,12 +208,12 @@
 1722	Einnig
 1713	tvö
 1712	þ
-1704	Til
+1703	Til
 1697	nota
 1694	konungur
 1687	tekið
 1679	manna
-1679	Við
+1678	Við
 1675	árinu
 1666	önnur
 1661	segja
@@ -254,15 +253,16 @@
 1540	gegnum
 1538	bjó
 1536	verða
+1534	s
 1531	gekk
-1531	A
 1528	seinna
 1527	sagði
 1526	gerð
+1523	A
 1517	lög
 1516	dó
 1516	Þau
-1513	þúsund
+1512	þúsund
 1507	hefði
 1505	deild
 1503	stendur
@@ -278,7 +278,7 @@
 1458	talið
 1454	New
 1452	Þessi
-1446	sínu
+1445	sínu
 1442	eina
 1442	öll
 1431	Suður
@@ -311,22 +311,22 @@
 1319	maður
 1318	mörgum
 1303	aldrei
-1297	de
 1297	leyti
 1296	einu
 1292	tóku
 1278	íslenskur
+1262	de
 1259	borgarinnar
 1258	nema
 1245	börn
-1244	John
 1244	borgina
+1241	John
 1240	áttu
 1240	hinn
 1230	þessa
 1227	Bandaríkjanna
-1224	Að
 1224	eldri
+1224	Að
 1221	haldið
 1220	metra
 1215	yfirleitt
@@ -340,8 +340,8 @@
 1196	búa
 1196	þekkt
 1187	fyrsti
-1174	C
-1169	York
+1168	York
+1168	C
 1160	formula
 1159	mikla
 1159	nefna
@@ -371,8 +371,8 @@
 1098	ný
 1097	svæði
 1097	eigin
-1092	London
 1091	borgin
+1091	London
 1088	jafnvel
 1086	fræðiheiti
 1082	þeirri
@@ -396,8 +396,8 @@
 1037	nafni
 1035	ríki
 1034	konar
-1028	einungis
 1027	byggð
+1027	einungis
 1026	ríkisins
 1025	hætti
 1024	sérstaklega
@@ -406,7 +406,6 @@
 1018	Ísland
 1015	faðir
 1010	allra
-1008	B
 1006	mestu
 1006	mörg
 1005	íslenska
@@ -417,6 +416,7 @@
 999	stofnuð
 999	sínar
 999	milljónir
+995	B
 993	landið
 990	landinu
 988	fjölda
@@ -436,7 +436,7 @@
 964	verk
 963	þótti
 961	miklu
-960	talinn
+959	talinn
 959	Ólafur
 957	talin
 956	síðari
@@ -445,14 +445,13 @@
 953	lengi
 952	aðrar
 947	nefnd
-944	biskup
 943	síns
+943	biskup
 941	þýska
 941	Englandi
 941	lagði
 938	flutti
 937	tekur
-933	I
 931	þriðja
 930	stofnun
 929	Ef
@@ -477,6 +476,7 @@
 909	raun
 907	jafnframt
 904	enska
+903	I
 902	háskóla
 901	alls
 899	Noregi
@@ -490,7 +490,7 @@
 877	Ekki
 876	Fyrir
 875	stór
-872	minni
+871	minni
 871	þýðir
 871	höfuðborg
 867	ljós
@@ -598,21 +598,21 @@
 720	fjallar
 720	reist
 719	Kaupmannahöfn
-718	daga
 718	nefnt
 718	kjölfarið
 717	lagið
+716	daga
 712	Tenglar
 710	Alþingi
 710	notaður
 710	rannsóknir
 708	sýna
-708	yngri
 708	gat
-707	J
-706	orð
+706	yngri
 706	uppruna
 705	Jóns
+704	orð
+704	J
 703	leik
 702	inniheldur
 701	dögum
@@ -626,7 +626,7 @@
 696	sumarið
 694	stofnaður
 694	stofnaði
-694	H
+693	H
 692	gegndi
 691	þessari
 691	bjuggu
@@ -647,8 +647,8 @@
 672	betur
 671	Þannig
 671	skipti
-670	ákveðið
 669	haustið
+669	ákveðið
 669	KR
 668	merkir
 666	annar
@@ -662,9 +662,9 @@
 653	Þrátt
 653	hljómsveit
 653	reyna
-653	II
 652	setja
 652	uppi
+652	II
 651	Noregs
 649	rekja
 649	snemma
@@ -710,9 +710,9 @@
 615	mönnum
 614	forsætisráðherra
 612	Platan
-611	ég
 611	þriggja
 610	vatn
+610	ég
 609	þrjár
 608	leiddi
 605	austan
@@ -747,7 +747,6 @@
 588	Englands
 587	þurfti
 586	starfa
-585	James
 584	tíð
 584	tegund
 584	keisari
@@ -756,6 +755,7 @@
 583	fjögur
 583	afar
 582	finnst
+582	James
 582	snúninga
 580	samdi
 579	svæðinu
@@ -796,9 +796,9 @@
 547	megin
 546	leika
 546	skrifað
-545	o
 545	nánast
 544	Kanada
+543	o
 543	bandarísk
 543	fylki
 540	íslenskra
@@ -809,8 +809,8 @@
 537	lifa
 537	gamall
 537	sigraði
-536	G
 535	sviði
+535	G
 535	spila
 535	dagur
 535	vorið
@@ -825,28 +825,28 @@
 530	bænum
 530	umferð
 527	dauðadags
-527	F
 527	reyndi
 526	sendi
 526	erfitt
+525	F
 525	athygli
 522	Árni
 522	byggja
 520	veg
 520	vatni
 519	lýst
-519	b
 518	Danmerkur
 516	fyrrverandi
 515	mætti
 515	ýmist
+515	b
 515	flestum
 514	Sviss
 514	samt
-514	Margir
 513	eigu
 513	fólki
 513	verkum
+513	Margir
 512	miðja
 512	skip
 511	eigi
@@ -856,7 +856,6 @@
 511	flokksins
 510	lögð
 510	William
-509	L
 509	settur
 509	mörk
 508	notaðar
@@ -867,23 +866,23 @@
 507	skólans
 506	heimi
 505	minna
-505	in
-505	T
 504	hefðu
+504	in
 504	veitt
 504	vill
 504	geti
 504	skiptist
 503	myndir
 503	Bjarni
+503	T
 503	hófust
 501	fyrrum
 500	framan
 500	ólst
-500	S
 500	starfsemi
 499	strax
 499	annan
+499	S
 498	kirkjan
 497	sumir
 496	staðsett
@@ -893,10 +892,10 @@
 494	fluttist
 493	næst
 493	þýsku
-493	Guðmundsson
 492	verðlaun
 492	Stefán
 492	söng
+492	Guðmundsson
 491	Vilhjálmur
 491	lagi
 490	leikið
@@ -908,19 +907,17 @@
 487	ætti
 487	Helstu
 487	fjöldi
-487	M
 487	stríð
-487	George
 487	Íslendingar
 487	Gunnar
 486	sagður
 486	Mið
+486	George
 485	trú
 485	fundist
 485	Pétur
 484	nokkra
 484	lag
-484	„
 484	samanstendur
 483	starfi
 483	Sigurðsson
@@ -928,15 +925,15 @@
 482	fólks
 482	sumum
 481	París
-481	x
 480	gregoríska
 480	bar
 480	forseta
 479	danska
 479	kynna
 479	son
+479	x
 478	Japan
-478	D
+478	„
 478	Ólafsson
 477	Þór
 476	hendur
@@ -945,6 +942,7 @@
 475	ráð
 474	sigur
 474	breska
+473	M
 473	skóla
 473	samþykkt
 472	boðið
@@ -965,6 +963,7 @@
 464	orðin
 463	skrifa
 463	skipaður
+462	L
 462	hversu
 461	vinstri
 461	aðferð
@@ -982,12 +981,12 @@
 452	Leikir
 452	kirkjunni
 451	stórum
-451	Sú
 451	syni
 451	gengið
 451	frönsku
 451	Hollandi
 451	birtist
+450	Sú
 450	helsta
 450	liðið
 449	stöðum
@@ -998,8 +997,6 @@
 448	valda
 447	kvikmyndum
 447	auki
-447	Peter
-447	Paul
 447	upphaf
 447	tímabil
 447	orðinu
@@ -1010,19 +1007,22 @@
 446	mánuði
 446	Robert
 445	hljómsveitarinnar
+445	Paul
 445	níu
 444	dýr
+444	Peter
 444	University
 444	hljómsveitin
 444	bestu
 444	sjálfstæði
-444	líf
 443	þrjá
 443	Halldór
 443	annarri
+443	líf
 442	fyrirtækið
 442	breyta
 441	lærði
+441	D
 441	fremst
 440	breytingar
 440	Þorsteinn
@@ -1041,12 +1041,12 @@
 434	Michael
 434	orðinn
 434	Hljómsveitin
-433	E
 433	alveg
 433	vilja
 432	húsið
 432	upplýsingar
 432	hinna
+431	E
 430	reisa
 430	norðri
 429	stórt
@@ -1093,7 +1093,6 @@
 410	hægri
 410	stig
 409	skáld
-409	i
 408	km²
 408	útgáfa
 408	veldur
@@ -1102,7 +1101,6 @@
 407	skólann
 407	orrustunni
 407	enginn
-406	R
 406	báðir
 406	barn
 405	austri
@@ -1110,10 +1108,10 @@
 405	vestri
 405	kirkja
 405	kenningar
-405	O
-405	gerðir
+404	R
 404	Kaliforníu
 404	lönd
+404	gerðir
 403	keypti
 403	stefnu
 403	meirihluta
@@ -1127,6 +1125,7 @@
 400	þennan
 399	fylgdi
 399	gríska
+399	i
 399	barna
 398	sýnt
 398	gáfu
@@ -1137,7 +1136,7 @@
 396	ýmsu
 396	vinsæl
 396	lát
-396	to
+395	to
 394	keppni
 392	lýsa
 392	verslun
@@ -1150,11 +1149,11 @@
 390	Ólafs
 390	austur
 389	gátu
-389	Harry
 389	fylgja
 388	verkefni
 388	Loðvík
 388	unnu
+388	Harry
 388	leiðir
 387	talsins
 387	lýsir
@@ -1179,17 +1178,16 @@
 383	Sama
 383	manni
 383	stærsti
-383	X
 383	San
 382	bæinn
 382	konungi
 381	hlutverki
 381	telst
 381	sýslumaður
+381	X
 381	sjálf
 381	Svíþjóðar
 380	lengst
-380	V
 379	Skjaldarmerki
 379	vald
 379	þriðju
@@ -1205,6 +1203,7 @@
 377	lá
 376	sögunnar
 376	eyja
+376	V
 376	jafn
 375	Alþingis
 375	Hér
@@ -1214,12 +1213,12 @@
 374	gömul
 373	borið
 373	bærinn
-372	P
 372	bætt
 371	gerist
 371	þurfa
 370	öldum
 370	síst
+369	P
 369	hlið
 369	ljóst
 368	hve
@@ -1252,13 +1251,13 @@
 362	skal
 362	einkenni
 362	Hinn
-361	U
 361	nokkrir
 361	Skálholti
 361	fellur
 361	getið
 361	Thomas
 361	upprunalega
+360	U
 360	dönsku
 360	Haraldur
 359	Hefur
@@ -1282,7 +1281,6 @@
 354	bókinni
 354	syngur
 353	málið
-353	N
 353	Angeles
 353	greinar
 353	hinu
@@ -1344,7 +1342,6 @@
 337	Þórður
 336	senda
 336	einhver
-335	n
 335	störfum
 335	ána
 335	falla
@@ -1353,12 +1350,12 @@
 334	verðlaunin
 334	séra
 333	Seinna
-333	for
 333	konung
 333	fall
 333	Fáni
 333	sýndi
 332	Stundum
+332	for
 332	þáttum
 332	kallaði
 332	tvisvar
@@ -1376,6 +1373,7 @@
 328	kominn
 328	hefst
 327	heima
+327	N
 327	sameinaðist
 327	rómverska
 327	sjöunda
@@ -1439,13 +1437,14 @@
 313	Washington
 313	merkingu
 313	níunda
-312	Bob
 312	heita
 312	Árna
 312	hugmynd
 311	tilraunir
 311	Carl
 311	drepa
+311	Bob
+311	n
 311	gráðu
 311	Þess
 311	byrjar
@@ -1465,6 +1464,7 @@
 306	fé
 306	myndum
 306	lit
+305	'
 305	Charles
 305	SG
 304	stund
@@ -1482,12 +1482,10 @@
 301	Jónssonar
 301	lifir
 300	hættu
-300	u
 300	myndaðist
 300	hlutum
 300	valinn
 299	leiðtogi
-299	Mary
 299	minnst
 299	skrifuð
 298	syngja
@@ -1503,9 +1501,11 @@
 296	líta
 295	Sjálfstæðisflokksins
 295	stóran
+295	Mary
 295	vinsældum
 295	Bjarnason
 295	rannsóknum
+294	u
 294	Hollands
 293	jafnt
 293	eyjunni
@@ -1516,13 +1516,13 @@
 292	Þjóðverjar
 292	England
 291	tæplega
-291	þús
 291	nýjum
 291	áttunda
 291	ungur
 291	hegðun
 290	Jean
 290	tölur
+290	þús
 290	réðust
 290	gömlu
 290	vinnur
@@ -1537,11 +1537,12 @@
 289	is
 289	Undir
 288	sigldi
-288	City
 287	geyma
 287	Vestmannaeyjum
 287	einhverju
+287	O
 287	varðveitt
+287	City
 286	stofna
 286	Maríu
 286	núna
@@ -1572,9 +1573,9 @@
 282	lagður
 282	ritstjóri
 282	innihalda
-281	La
 281	hugtakið
 281	nýta
+280	La
 280	safn
 280	benda
 280	sjálfstætt
@@ -1609,7 +1610,6 @@
 275	veginn
 275	látinn
 275	þýskur
-275	W
 275	heild
 275	Lagið
 275	Kirkjan
@@ -1624,16 +1624,14 @@
 273	ríkja
 273	laginu
 273	læra
-273	King
 272	systir
 272	kenningu
 272	litlum
 272	Svo
 272	sjötta
 271	tilkynnti
+271	W
 271	löngu
-271	Smith
-271	K
 271	leiðinni
 271	hinni
 271	Kort
@@ -1657,6 +1655,7 @@
 269	síðasti
 269	endaði
 269	myndarinnar
+269	K
 269	skipið
 269	eiginleika
 269	þeirrar
@@ -1678,6 +1677,7 @@
 266	vinsælda
 266	góður
 265	Og
+265	Smith
 265	oftar
 265	atkvæði
 264	myndu
@@ -1722,7 +1722,6 @@
 258	efstu
 258	Breta
 258	sölu
-258	Ted
 258	leysa
 258	ætlaði
 258	leikinn
@@ -1735,17 +1734,17 @@
 256	sænska
 256	ráðinn
 256	landa
+256	Ted
 256	hendi
 256	innrás
-256	De
 256	tilgangi
 255	Jónsdóttir
 255	ævi
 255	ávallt
-255	form
 255	lands
 255	fékkst
 255	jörðina
+255	De
 254	Jóni
 254	Kristín
 254	Pálsson
@@ -1753,6 +1752,7 @@
 254	burt
 254	gríðarlega
 254	fullu
+254	form
 254	sjávar
 254	leiðandi
 253	Brasilíu
@@ -1790,7 +1790,6 @@
 250	yrðu
 250	fornu
 250	hljóðrituð
-250	Joseph
 249	skoða
 249	muni
 249	mm
@@ -1798,6 +1797,7 @@
 249	samstarfi
 249	Bæði
 249	aldamótin
+249	Joseph
 249	landsvæði
 248	stjórna
 248	nútíma
@@ -1814,7 +1814,6 @@
 247	leikir
 247	anda
 247	spilað
-247	nöfn
 247	næstum
 247	skilyrði
 247	kílómetra
@@ -1822,6 +1821,7 @@
 246	stjórnarskrá
 246	Ég
 246	löngum
+246	nöfn
 246	lifandi
 246	opinberlega
 245	áratugi
@@ -1915,17 +1915,17 @@
 236	spilar
 236	yfirráð
 236	lesa
-236	School
 235	bræður
-235	samvinnu
 235	aldarinnar
 235	vegur
 235	Friedrich
 235	van
+235	School
 234	félag
 234	blanda
 234	hærri
 234	hertogi
+234	samvinnu
 234	Ferill
 234	k
 234	enga
@@ -1935,14 +1935,13 @@
 234	hlutar
 233	skyldu
 233	Öll
-233	World
-233	West
 233	kleift
 232	tilraun
 232	Upptaka
 232	verka
 232	atriði
 232	Deng
+232	West
 232	tækifæri
 232	gagnrýni
 232	reglulega
@@ -1955,6 +1954,7 @@
 231	Söngvakeppni
 231	hraða
 231	reglur
+231	World
 231	Úr
 230	feril
 230	kvikmyndinni
@@ -1963,12 +1963,12 @@
 230	mynduðu
 230	Records
 229	Pressun
-229	Sonur
 229	þættir
 229	skoðanir
 229	hernum
 229	þingsins
 229	leggur
+229	Sonur
 229	lengri
 229	grunni
 229	fjórir
@@ -1982,7 +1982,6 @@
 228	breytist
 228	Færeyja
 228	einstaklingar
-228	Henry
 228	efnum
 227	tölu
 227	reyndist
@@ -1993,6 +1992,7 @@
 227	frumsýnd
 227	Buffy
 227	meir
+227	Henry
 227	höfuðið
 227	aðferðir
 226	Skólinn
@@ -2000,7 +2000,6 @@
 226	jafntefli
 226	flúði
 226	þáttaröðinni
-226	Disney
 226	samtals
 226	númer
 226	tiltölulega
@@ -2016,7 +2015,6 @@
 225	tilefni
 225	Bandaríkjamenn
 225	héraðsins
-225	You
 225	för
 224	hjónaband
 224	Gíslason
@@ -2045,8 +2043,8 @@
 222	ehf
 222	skólinn
 222	sjálfan
+222	Disney
 222	tímanum
-222	Martin
 222	sm
 222	lofti
 222	nokkurs
@@ -2064,6 +2062,7 @@
 221	meðaltali
 220	bókum
 220	sent
+220	Martin
 220	nákvæmlega
 220	tónlistarmaður
 220	fulltrúi
@@ -2077,7 +2076,6 @@
 219	miðstöð
 219	ákvörðun
 219	Sigríður
-218	tími
 218	framkvæmd
 218	árangri
 218	skipa
@@ -2085,6 +2083,7 @@
 218	fengin
 218	Allar
 218	vígður
+217	tími
 217	tónum
 217	mála
 217	félagi
@@ -2141,6 +2140,7 @@
 212	stefna
 212	höfuð
 212	helga
+212	King
 211	þinginu
 211	Princeton
 211	leikmaður
@@ -2165,12 +2165,12 @@
 210	þyngd
 210	strönd
 210	félaginu
+210	You
 210	Ríkisútvarpið
 210	átök
 210	fulltrúa
 210	mátti
 209	nógu
-209	Black
 209	borga
 209	ákveðin
 209	Katrín
@@ -2181,7 +2181,7 @@
 209	ráðast
 209	konum
 209	Hitler
-208	aftan
+208	Black
 208	ÍBV
 208	efnis
 208	suðurhluta
@@ -2202,7 +2202,7 @@
 207	Kópavogi
 207	vesturs
 207	virðast
-207	IV
+206	aftan
 206	orðum
 206	vígð
 206	Jesú
@@ -2211,6 +2211,7 @@
 206	tré
 206	Þorleifur
 206	tungumálum
+206	IV
 205	loftárásum
 205	frv
 205	Boston
@@ -2220,14 +2221,13 @@
 205	stúdentsprófi
 205	bresku
 205	braut
+205	Aðrar
 205	Oddur
 205	framkvæmdastjóri
 205	lengra
 205	Örn
 205	Vín
 205	munu
-205	Aðrar
-205	c
 204	leiki
 204	stjórnað
 204	persónu
@@ -2238,7 +2238,6 @@
 204	stórar
 204	fræðimenn
 204	Ekkert
-204	on
 204	mörkum
 203	hvern
 203	mæli
@@ -2255,6 +2254,7 @@
 203	þátturinn
 203	vissu
 203	Eggert
+203	on
 203	kosningunum
 203	skildi
 203	tímann
@@ -2286,6 +2286,7 @@
 201	eignir
 201	fluttur
 201	brann
+201	c
 200	Nafn
 200	tilfellum
 200	tilheyrði
@@ -2359,10 +2360,8 @@
 194	nr
 194	Portúgal
 194	stöðugt
-194	árás
 194	Þaðan
 194	hvarf
-194	Microsoft
 194	tónskáld
 194	menningar
 193	Landið
@@ -2379,14 +2378,13 @@
 193	miðjan
 193	flýja
 193	seldi
-193	Hollywood
+193	árás
 193	þessarar
 193	fundi
 192	Mikið
 192	byggðar
 192	eðlisfræði
 192	frumefni
-192	g
 192	sjálfir
 192	seldist
 192	Liverpool
@@ -2394,6 +2392,8 @@
 192	allur
 192	allri
 192	liðin
+192	Hollywood
+192	Microsoft
 192	bað
 192	málefni
 192	útgáfur
@@ -2420,6 +2420,7 @@
 189	þurftu
 189	Atlantshafi
 189	varði
+189	g
 189	opinber
 189	Guðmundar
 189	Annar
@@ -2446,7 +2447,6 @@
 187	Eyjan
 187	rekið
 187	Sigurðar
-187	kvæði
 187	búin
 187	Normandí
 187	víst
@@ -2459,6 +2459,7 @@
 186	markmið
 186	afmæli
 186	hlutinn
+186	kvæði
 186	sögðu
 186	Jones
 186	skilgreind
@@ -2479,7 +2480,6 @@
 185	skiptir
 185	svæðisins
 185	bein
-185	Potter
 185	Fe
 185	Póllandi
 184	selt
@@ -2491,6 +2491,7 @@
 184	Kópavogs
 184	kann
 184	klaustrið
+184	Potter
 183	gildir
 183	heiminn
 183	réttindi
@@ -2500,7 +2501,6 @@
 183	lyf
 183	leikjum
 183	Fjöldi
-183	Love
 182	Skotlands
 182	austurs
 182	krýndur
@@ -2523,6 +2523,7 @@
 181	sagan
 181	veitir
 181	konungsríki
+181	Love
 180	My
 180	Næsta
 180	dalnum
@@ -2611,10 +2612,8 @@
 175	Val
 175	Nokkur
 175	ingar
-175	Moskvu
 175	þrettán
 175	mannsins
-175	Al
 175	Harvard
 175	Tvær
 175	hlutir
@@ -2622,9 +2621,9 @@
 174	samstarf
 174	Meðan
 174	Sturla
-174	y
 174	færði
 174	bóka
+174	Moskvu
 174	sigra
 174	setur
 174	Tveir
@@ -2632,6 +2631,7 @@
 174	ennþá
 174	þýtt
 174	dýrum
+174	Al
 174	sundur
 173	siðfræði
 173	leikstýrði
@@ -2673,9 +2673,9 @@
 171	Lee
 171	fylgi
 171	opinbert
+171	y
 171	stærra
 171	flatarmáli
-171	Man
 171	spilaðir
 171	drap
 171	norðurs
@@ -2703,6 +2703,7 @@
 169	þétt
 169	árinnar
 169	býður
+169	Man
 169	hugmyndum
 169	falli
 169	botni
@@ -2710,7 +2711,6 @@
 169	efla
 168	leikrit
 168	jafnaði
-168	al
 168	persónur
 168	helmingur
 168	Einkenni
@@ -2723,6 +2723,7 @@
 167	lögfræði
 167	fyrirmynd
 167	Lily
+167	al
 167	úrslit
 167	smærri
 167	fylgt
@@ -2797,14 +2798,12 @@
 162	bana
 162	ræðu
 162	settir
-162	Street
 162	fyrirtækjum
 162	upplýsingum
 162	erlendum
 162	hönnuð
 162	ferkílómetrar
 161	skipum
-161	Hume
 161	hitastig
 161	Ari
 161	plötunnar
@@ -2814,11 +2813,13 @@
 161	Mac
 161	frændi
 161	línu
+161	Street
 161	kosningar
 161	bætti
 161	hvítum
 160	slíkum
 160	þáttaröðin
+160	Hume
 160	tilkynnt
 160	Snemma
 160	Grímur
@@ -2863,7 +2864,6 @@
 158	einstaka
 158	litlar
 157	kynnt
-157	Frank
 157	Svarfaðardal
 157	keppt
 157	hærra
@@ -2873,19 +2873,18 @@
 157	Strax
 157	Marilyn
 157	rituð
-157	Mike
 157	Síðari
 157	Jersey
 157	vatns
 157	leiknum
 157	Danir
-157	Santa
 157	hafið
 157	öfugt
 157	Fljótlega
 157	áratuginn
 157	Þorláksson
 157	virki
+156	Frank
 156	Mikil
 156	núll
 156	Vestfjörðum
@@ -2893,6 +2892,7 @@
 156	„The
 156	Kjartan
 156	mark
+156	Mike
 156	Egyptalands
 156	réðu
 156	fréttir
@@ -2907,7 +2907,6 @@
 156	valin
 156	kynnti
 156	Hill
-156	hvítur
 155	algjörlega
 155	sviðum
 155	send
@@ -2918,7 +2917,7 @@
 155	eyjarinnar
 155	horn
 155	skipinu
-155	h
+155	Santa
 154	tímaritið
 154	Billboard
 154	Ágúst
@@ -2927,12 +2926,11 @@
 154	hvíta
 154	ættum
 154	Friðriks
-154	Mark
 154	hollenska
 154	Sam
 154	borða
-154	Arthur
 154	Íbúafjöldi
+154	hvítur
 153	tilvikum
 153	Guð
 153	Knútur
@@ -2943,12 +2941,14 @@
 153	fanga
 153	réði
 153	Rússland
+153	Mark
 153	sambandið
 153	titil
 153	hafist
-153	Star
+153	h
 153	samskiptum
 153	góðum
+153	Arthur
 152	Me
 152	hverfi
 152	Þóra
@@ -2962,11 +2962,10 @@
 152	Yfirleitt
 152	kallaðar
 152	vísa
-152	Don
 152	ákveðinn
-152	Norðurlöndum
 152	Clausen
 152	stjórnvöld
+152	Star
 152	brjóta
 152	óþekkt
 152	svokallaða
@@ -2977,7 +2976,6 @@
 151	safnaði
 151	bónda
 151	foreldrar
-151	Joe
 151	Daniel
 151	fund
 151	Island
@@ -2990,6 +2988,7 @@
 151	Tveimur
 151	veiðar
 151	embættinu
+151	Norðurlöndum
 151	bárust
 151	National
 151	mega
@@ -3000,6 +2999,7 @@
 150	aðstöðu
 150	ættinni
 150	lýðveldið
+150	Joe
 150	byggðist
 150	nemandi
 150	langar
@@ -3095,7 +3095,6 @@
 145	Egils
 145	konan
 145	Zürich
-145	p
 145	svartur
 145	kr
 145	Hermann
@@ -3105,7 +3104,6 @@
 145	Írlands
 145	borist
 145	skjaldarmerki
-145	Andrew
 145	augu
 145	blöð
 145	Maria
@@ -3114,7 +3112,6 @@
 145	deila
 145	Bæjaralandi
 145	vini
-145	Life
 144	viðtali
 144	nauðsynlegt
 144	æviloka
@@ -3130,6 +3127,7 @@
 144	slíka
 144	fimmtán
 144	landnám
+144	Andrew
 144	Margrétar
 144	opnuð
 144	Annars
@@ -3184,7 +3182,7 @@
 142	beið
 142	götur
 142	frumkvæði
-142	Day
+142	Life
 142	undirgrein
 142	Hvíta
 142	Susan
@@ -3213,11 +3211,11 @@
 141	Spánverjar
 141	Tryggvi
 141	forstöðumaður
-141	It
 140	söguna
 140	höfði
 140	öðlast
 140	amtmaður
+140	p
 140	framkvæmdir
 140	Hollendingar
 140	hring
@@ -3259,7 +3257,6 @@
 138	nöfnum
 138	nýlega
 138	eldra
-138	Time
 138	útgáfan
 138	Royal
 138	Massachusetts
@@ -3268,7 +3265,6 @@
 138	kirkjustaður
 138	gömlum
 138	Kim
-138	Barney
 138	vissi
 138	almenna
 138	Suðaustur
@@ -3289,6 +3285,7 @@
 137	Max
 137	ástand
 137	Notkun
+137	Barney
 137	hugsun
 137	rauðum
 137	„Ég
@@ -3306,12 +3303,12 @@
 136	stýra
 136	Alaska
 136	Loðvíks
-136	Brian
 136	vart
 136	þjálfun
 136	Framarar
 136	magni
 136	Jafnframt
+136	Time
 136	kynslóð
 136	alþjóðlega
 136	Diaz
@@ -3324,9 +3321,9 @@
 136	lýðveldi
 136	meirihluti
 135	markmiði
-135	Charlie
 135	sameinast
 135	mælieining
+135	Brian
 135	Kristófer
 135	Ungverjalandi
 135	íslenskar
@@ -3386,7 +3383,6 @@
 133	ljón
 133	minningar
 133	reynd
-133	In
 132	Kristjáns
 132	ákveða
 132	eyjuna
@@ -3413,7 +3409,7 @@
 132	þorpið
 132	innblástur
 132	Kyrrahafi
-132	Jr
+132	In
 132	jörðin
 131	safnað
 131	SI
@@ -3421,7 +3417,6 @@
 131	skilgreint
 131	flokk
 131	ást
-131	Girl
 131	sungið
 131	sjálfri
 131	ráðist
@@ -3433,6 +3428,7 @@
 131	hugsa
 131	tegunda
 131	setjast
+131	Jr
 130	siðaskiptin
 130	Sökum
 130	Karli
@@ -3447,7 +3443,6 @@
 130	lýstu
 130	Svæðið
 130	kyns
-130	Alfred
 130	áætlað
 130	fætur
 130	Indlands
@@ -3478,6 +3473,7 @@
 129	heiðurs
 129	klst
 129	Höfuðstöðvar
+129	Alfred
 129	leyst
 129	orði
 129	gítarleikari
@@ -3493,16 +3489,15 @@
 129	stundað
 129	Jesús
 129	sýningu
+129	Day
 128	jafna
 128	rauð
 128	þáttanna
-128	l
 128	Johann
 128	sýningar
 128	geðklofa
 128	gr
 128	Halldórs
-128	Jane
 128	fært
 128	íbúanna
 128	uppbyggingu
@@ -3534,6 +3529,7 @@
 127	Hómer
 127	Áhrif
 127	Parísar
+127	Girl
 127	kastala
 127	fylkinu
 127	keyra
@@ -3553,7 +3549,6 @@
 127	virka
 127	burtu
 127	Íþróttir
-127	All
 127	hámarki
 127	próf
 127	stefnunnar
@@ -3570,9 +3565,9 @@
 126	mikilvægar
 126	kvennaflokki
 126	losa
+126	All
 125	virtist
 125	Steingrímur
-125	Boy
 125	list
 125	Þórarinn
 125	Péturs
@@ -3595,6 +3590,7 @@
 125	mitt
 124	Ýmsar
 124	framhaldsnám
+124	Charlie
 124	verpir
 124	aðstoðar
 124	fjöll
@@ -3607,6 +3603,7 @@
 124	Georgíu
 124	lentu
 124	House
+124	Don
 124	Tómas
 124	krónur
 124	El
@@ -3620,12 +3617,14 @@
 124	Björk
 124	Globe
 124	andlát
+124	It
 124	fundu
 124	ís
 123	vitni
 123	háskólinn
 123	Grikklands
 123	Voru
+123	Boy
 123	frásögn
 123	ástæða
 123	almenn
@@ -3638,6 +3637,7 @@
 123	Sturlu
 123	mikilvægi
 123	útskýra
+123	Jane
 123	verksins
 123	bæjarstjórnarkosningar
 123	reikna
@@ -3676,7 +3676,6 @@
 122	greifa
 122	Þjóðvegur
 122	Jónsdóttur
-122	Ryan
 122	höfð
 122	borgarréttindi
 122	Haukur
@@ -3690,7 +3689,6 @@
 121	þróaði
 121	biður
 121	mörgu
-121	at
 121	Club
 121	mynni
 121	svipuð
@@ -3701,6 +3699,7 @@
 121	Alexanders
 121	Mikill
 121	kosningarnar
+121	Ryan
 121	Yfir
 121	krúnunnar
 121	Skúla
@@ -3741,7 +3740,6 @@
 119	endalok
 119	Adams
 119	norrænna
-119	fiskur
 119	norrænum
 119	Menntun
 119	festa
@@ -3751,7 +3749,6 @@
 119	skólum
 119	Wilhelm
 119	Society
-119	mig
 119	Sikiley
 119	Metal
 119	soninn
@@ -3770,6 +3767,7 @@
 118	smá
 118	ritgerð
 118	flestra
+118	fiskur
 118	íslenskir
 118	fræga
 118	leyfa
@@ -3784,6 +3782,7 @@
 118	biðu
 118	dómkirkjunni
 118	skilgreining
+118	mig
 118	Chris
 118	áhorfendur
 118	grunninn
@@ -3799,6 +3798,7 @@
 117	grunn
 117	hálfu
 117	Nokia
+117	at
 117	Viðey
 117	Elsta
 117	Stjórn
@@ -3834,14 +3834,13 @@
 116	sameinuð
 116	ýmiss
 116	undirbúa
-116	Stóru
 116	jafnvægi
 116	fengist
 116	lífs
 116	NCIS
-116	RÚV
 116	Descartes
 116	Skarði
+116	Stóru
 116	svipuðum
 116	farinn
 116	Grænland
@@ -3860,13 +3859,13 @@
 115	bikarmeistari
 115	vörn
 115	heilsu
-115	Rock
 115	jurt
 115	Sókratesar
 115	blóði
 115	skáldsögur
 115	einkenndist
 115	auga
+115	RÚV
 115	greifi
 115	tímar
 115	hlé
@@ -3875,7 +3874,6 @@
 115	BBC
 115	netinu
 115	Eddu
-114	söngur
 114	Matthías
 114	sveitarfélög
 114	Þorsteins
@@ -3889,11 +3887,11 @@
 114	hafnarborg
 114	myndlist
 114	ferðamenn
-114	Alan
 114	reis
 114	þýsk
 114	hópar
 114	sambandsins
+114	Rock
 114	búi
 114	höfuðstaður
 114	ströndinni
@@ -3911,6 +3909,7 @@
 114	sjónvarpsþættinum
 114	Þorgils
 114	átaka
+113	söngur
 113	eintök
 113	svart
 113	auknum
@@ -3920,6 +3919,7 @@
 113	framleiddi
 113	Berlínar
 113	Odda
+113	Alan
 113	Prentun
 113	fleirum
 113	líkamans
@@ -3942,7 +3942,6 @@
 113	skotið
 113	bækurnar
 113	Roger
-113	Q
 113	Danmörk
 113	foreldrum
 113	turninn
@@ -3968,12 +3967,12 @@
 112	heimspekinga
 112	deyja
 112	uppistandari
-112	Company
 112	trúarbrögðum
 112	fjörðinn
 112	Heitið
 112	Kúbu
 112	Óðinn
+112	Q
 112	rússnesku
 112	rauður
 112	Little
@@ -3990,6 +3989,7 @@
 111	leitast
 111	þjónaði
 111	vélar
+111	Company
 111	Jóhanns
 111	„að
 111	safninu
@@ -4035,6 +4035,7 @@
 110	verpa
 110	dregin
 110	færð
+110	Samtökin
 110	Pólland
 110	lengsta
 110	brotið
@@ -4045,9 +4046,7 @@
 110	verjast
 110	Ísafirði
 110	getað
-110	Elizabeth
 110	Loks
-110	Hot
 110	stafar
 110	herbergi
 110	Evrópusambandið
@@ -4055,7 +4054,6 @@
 110	þekkja
 110	Sankti
 110	ekkja
-110	Samtökin
 110	sýnis
 110	félögum
 109	ætlar
@@ -4079,8 +4077,9 @@
 109	kröfur
 109	Tónlist
 109	mikilvægustu
+109	Elizabeth
 109	bassa
-109	Obama
+109	Hot
 109	miða
 109	plötum
 109	rödd
@@ -4120,6 +4119,7 @@
 108	fjölmörg
 108	ríkisstjóri
 108	höfuðborgarsvæðinu
+108	Obama
 108	múslima
 108	matar
 107	sjúkdóma
@@ -4213,7 +4213,6 @@
 105	jarðvegi
 105	vegi
 105	auðvelda
-105	Manhattan
 105	merkja
 105	djúpt
 105	marki
@@ -4257,6 +4256,7 @@
 104	líkjast
 104	æsku
 104	topp
+104	Manhattan
 104	ársbyrjun
 104	dvaldist
 104	Stone
@@ -4279,7 +4279,6 @@
 103	kvenkyns
 103	nutu
 103	opið
-103	Be
 103	varnar
 103	Konungsríkið
 103	miklir
@@ -4307,7 +4306,6 @@
 103	heitt
 103	Fimm
 103	Matthew
-103	System
 103	blað
 103	bankans
 103	tilteknum
@@ -4327,12 +4325,12 @@
 102	hrundi
 102	morð
 102	Sé
+102	Be
 102	þýskum
 102	lagðar
 102	þjóna
 102	japönsku
 102	helmingi
-102	Portúgals
 102	Sigrún
 102	héruð
 102	Niðurlanda
@@ -4357,12 +4355,12 @@
 102	Malaví
 102	Varð
 102	íbúarnir
+102	System
 102	leitar
 102	þekkist
 102	Heimspeki
 102	konungsríkið
 102	þúsundir
-102	an
 102	brenna
 102	Rétt
 101	erindi
@@ -4379,6 +4377,7 @@
 101	jarðir
 101	vara
 101	takast
+101	Portúgals
 101	gafst
 101	leikstýrt
 101	sveitir
@@ -4434,7 +4433,6 @@
 100	sveitina
 100	Hafstein
 100	Bruce
-100	r
 100	tímabilsins
 100	breiður
 100	upphafsmaður
@@ -4488,7 +4486,6 @@
 99	handriti
 99	boði
 99	viðbót
-99	Night
 99	svarta
 99	Eiríksson
 99	Ýmis
@@ -4511,7 +4508,6 @@
 98	framhlið
 98	Ohio
 98	bakteríur
-98	Antonio
 98	Young
 98	annarrar
 98	umsátur
@@ -4533,6 +4529,7 @@
 98	færir
 98	greint
 98	eiginleikum
+98	Night
 98	Kennedy
 98	svokallað
 98	Grikkja
@@ -4553,6 +4550,7 @@
 97	tilnefningar
 97	stytta
 97	umboðsmaður
+97	Antonio
 97	víðast
 97	vettvangi
 97	Menntaskólinn
@@ -4629,7 +4627,6 @@
 96	textum
 96	sólin
 96	Japanir
-96	Alice
 96	Vinstri
 96	sauðfé
 96	velli
@@ -4649,11 +4646,10 @@
 95	Inc
 95	Virginíu
 95	Þingeyrum
-95	Ben
 95	tilraunum
 95	pappír
-95	Academy
 95	drottningu
+95	r
 95	skapaði
 95	einhverja
 95	stjórnun
@@ -4674,6 +4670,7 @@
 95	Tilgangur
 95	Van
 95	Haag
+95	Alice
 95	nyrst
 95	búddisma
 95	stunduðu
@@ -4698,16 +4695,17 @@
 94	Norðurlanda
 94	Hallgrímur
 94	kastalann
+94	Ben
 94	iðnaðar
 94	litinn
 94	Háskólans
+94	Academy
 94	gjaldmiðill
 94	skoska
 94	Guðrúnu
 94	erlend
 94	Rose
 94	rífa
-94	Anne
 94	Lake
 94	unnt
 94	Abel
@@ -4740,7 +4738,6 @@
 93	tilnefningu
 93	skyld
 93	Wittgenstein
-93	Vegas
 93	Valgerður
 93	einkennast
 93	bjargað
@@ -4752,6 +4749,7 @@
 93	Steinn
 93	búsetu
 93	sérstakan
+93	Anne
 93	Vídalín
 93	fjölskyldunnar
 93	norrænu
@@ -4790,6 +4788,7 @@
 92	einstökum
 92	Samt
 92	kaup
+92	Vegas
 92	trúar
 92	Aachen
 92	almenning
@@ -4862,7 +4861,6 @@
 91	neituðu
 91	áhyggjur
 91	gas
-91	frönsk
 91	íþrótt
 91	Sveins
 91	kirkjum
@@ -4903,9 +4901,11 @@
 90	hreyfingar
 90	Hvað
 90	sérhæfir
+90	frönsk
 90	vakið
 90	Nýju
 90	kyn
+90	skatta
 90	sumra
 90	virðingu
 90	ám
@@ -4920,14 +4920,12 @@
 90	hindra
 90	rokkhljómsveit
 90	listamaður
-90	skatta
 90	flokkinn
 90	staðfesti
 90	Sveitarfélagið
 89	framfæri
 89	Michigan
 89	búnir
-89	Pink
 89	hæsti
 89	greitt
 89	gífurlega
@@ -4979,7 +4977,6 @@
 89	upprunalegu
 88	pólska
 88	missa
-88	Jim
 88	svipar
 88	Mjög
 88	greinina
@@ -5038,8 +5035,10 @@
 87	Vilhjálmsson
 87	tíðni
 87	víkja
+87	Jim
 87	Sveinbjörn
 87	forngrískur
+87	Pink
 87	samanstóð
 87	upptökur
 87	hiti
@@ -5091,6 +5090,7 @@
 87	bættist
 87	DV
 87	varðveita
+87	an
 87	flugvélar
 87	keppninnar
 87	Dresden
@@ -5135,14 +5135,12 @@
 86	umdeilt
 86	íslenskrar
 86	Gunnlaugsson
-86	That
 86	gæði
 86	konungsættin
 86	sækir
 86	lífverum
 86	Hvert
 86	Þorgeir
-86	Lennon
 86	Guðmund
 86	stöðinni
 86	krúnunni
@@ -5193,16 +5191,17 @@
 85	dönsk
 85	Alþýðuflokkurinn
 85	vestra
+85	hreyfing
 85	liðu
 85	Engar
 85	Arsenal
 85	kínversku
-85	Queen
 85	kíló
 85	fremstu
 85	ferðinni
 85	Reagan
 85	Marx
+85	Lennon
 85	Henrik
 85	nokkurt
 85	flota
@@ -5223,7 +5222,6 @@
 85	sólar
 85	Eina
 85	bókunum
-85	hreyfing
 85	Best
 85	dæma
 85	Bæheimi
@@ -5235,10 +5233,10 @@
 84	látist
 84	neinn
 84	Stephen
+84	Helena
 84	netið
 84	þingmanna
 84	fjölskyldunni
-84	White
 84	Suðvestur
 84	Fjórða
 84	kynni
@@ -5285,7 +5283,6 @@
 84	NBA
 84	tunglið
 84	Nóbels
-84	Helena
 84	Heinrich
 84	BA
 84	Eysteinn
@@ -5310,6 +5307,7 @@
 83	stjarna
 83	hýsir
 83	verslunar
+83	White
 83	eftirspurn
 83	nóttina
 83	atburðum
@@ -5372,7 +5370,6 @@
 82	Valdimars
 82	Þingvöllum
 82	Serbíu
-82	Medici
 82	frægð
 82	tilheyrðu
 82	Nordal
@@ -5403,7 +5400,6 @@
 82	rúst
 82	friði
 82	Hvítá
-82	Arts
 81	skemmdist
 81	ræna
 81	Hátíðin
@@ -5415,7 +5411,6 @@
 81	þekkingarfræði
 81	Þórarinsson
 81	Murphy
-81	Jennifer
 81	aðalhlutverki
 81	blús
 81	ástæðu
@@ -5459,7 +5454,6 @@
 81	félagsliða
 81	Road
 81	hafnar
-81	Land
 81	ákveðnar
 81	fiskar
 81	Hreppsnefnd
@@ -5470,6 +5464,7 @@
 81	máttu
 81	ungi
 81	spurningar
+81	Arts
 80	starfsmanna
 80	orsök
 80	sætt
@@ -5480,6 +5475,7 @@
 80	Ingibjargar
 80	brást
 80	grunnskóli
+80	Jennifer
 80	svæða
 80	Munkaþverá
 80	gagnrýnenda
@@ -5551,12 +5547,10 @@
 79	sveitarfélögum
 79	Tupac
 79	Weimar
-79	Victoria
 79	mínútu
 79	örgjörva
 79	benti
 79	ótta
-79	Miller
 79	hjónanna
 79	geymir
 79	vinstra
@@ -5576,6 +5570,7 @@
 79	kílómetrar
 79	samninga
 79	jarðfræði
+79	Queen
 79	Valdimarsson
 79	×
 79	Guðmundi
@@ -5588,6 +5583,7 @@
 79	Lundi
 79	lína
 79	algerlega
+79	Land
 79	Detroit
 79	syðst
 79	dómari
@@ -5617,9 +5613,10 @@
 78	Engu
 78	Boss
 78	Palestínu
-78	Men
 78	einstakra
 78	British
+78	Victoria
+78	Miller
 78	Fór
 78	nyrsta
 78	Sun
@@ -5681,13 +5678,12 @@
 77	hópsins
 77	ræktuð
 77	Þarna
-77	Floyd
 77	Prússlands
 77	kvöld
 77	tengdir
 77	þjóðsögur
 77	Fylkið
-77	Art
+77	Men
 77	Eneas
 77	grunnskóla
 77	rokki
@@ -5765,6 +5761,7 @@
 76	Roosevelt
 76	ánægju
 76	Þeirra
+76	Floyd
 76	víðsvegar
 76	bæjarfulltrúi
 76	hráefni
@@ -5790,7 +5787,6 @@
 76	yst
 76	Framsóknarflokkurinn
 76	sögulega
-76	norræn
 76	stjórnartíð
 76	dalinn
 76	pasta
@@ -5798,6 +5794,7 @@
 76	Seyðisfirði
 76	Höskuldur
 76	Ríkisútvarpinu
+76	That
 76	Merki
 76	mistókst
 76	nýtir
@@ -5808,7 +5805,6 @@
 76	Prince
 76	hlýtur
 76	riðli
-76	Dave
 76	Arnar
 76	fullum
 76	Bretum
@@ -5864,7 +5860,6 @@
 75	skil
 75	nemur
 75	Salvador
-75	What
 75	ferill
 75	útibú
 75	ríkt
@@ -5872,6 +5867,7 @@
 75	Snorrason
 75	karlalandsliðið
 75	fyrirlestra
+75	norræn
 75	kalda
 75	nítjándu
 75	rótum
@@ -5887,7 +5883,6 @@
 75	endurheimta
 75	minnkandi
 75	eigna
-75	Snake
 75	hagfræðingur
 75	Ísabellu
 75	yngsta
@@ -5919,6 +5914,7 @@
 74	suðvesturs
 74	baráttunni
 74	Sjáland
+74	l
 74	tilskipun
 74	Kastilíu
 74	nýtingu
@@ -5946,7 +5942,6 @@
 74	Lama
 74	frægu
 74	matur
-74	stærðfræðinnar
 74	áratugurinn
 74	Java
 74	erfingi
@@ -5967,11 +5962,12 @@
 74	suðaustur
 74	Shakespeare
 74	Yale
+74	Snake
 74	færður
 74	Cross
 74	hannaður
 74	baktería
-74	Alucard
+74	Dave
 74	Alþýðubandalagið
 74	vörum
 74	fjárfesta
@@ -6011,6 +6007,7 @@
 73	hækka
 73	Norska
 73	stríða
+73	Art
 73	tengdust
 73	korn
 73	Karlamagnús
@@ -6031,11 +6028,11 @@
 73	Framkvæmdir
 73	do
 73	talna
-73	Allen
 73	grjóti
 73	sætta
 73	gráður
 73	góði
+73	stærðfræðinnar
 73	sól
 73	Sigríði
 73	kaupmenn
@@ -6053,6 +6050,7 @@
 73	flutning
 73	Sauðárkróki
 73	bókar
+73	Alucard
 73	þykkt
 73	embættið
 73	stjörnur
@@ -6071,7 +6069,6 @@
 73	greinilega
 73	mállýskur
 73	styrkt
-73	Donald
 73	framkvæmdum
 73	eftirmaður
 73	líða
@@ -6100,6 +6097,7 @@
 72	bú
 72	by
 72	Lék
+72	Allen
 72	lögreglan
 72	Miami
 72	sandi
@@ -6130,6 +6128,7 @@
 72	árslok
 72	Arabíu
 72	Davis
+72	Donald
 72	Selfoss
 72	Ray
 72	Maður
@@ -6161,6 +6160,7 @@
 71	Billy
 71	Haarlem
 71	sjóinn
+71	Medici
 71	handan
 71	René
 71	heyrt
@@ -6189,7 +6189,6 @@
 71	hof
 71	Starfsemi
 71	Dean
-71	Sigfússon
 71	Hallgrímsson
 71	heimsstyrjöldin
 71	mánuð
@@ -6274,6 +6273,7 @@
 70	nákvæmni
 70	vopnum
 70	hreppnum
+70	Sigfússon
 70	Skúlason
 70	héruðum
 70	borgarstjórn
@@ -6297,7 +6297,6 @@
 69	Austrómverska
 69	hefðir
 69	veður
-69	Hjálmar
 69	Séra
 69	innlimað
 69	vissulega
@@ -6315,7 +6314,6 @@
 69	Hæsti
 69	stafróf
 69	jöfnum
-69	People
 69	Tjörn
 69	Íslandsmeistari
 69	bátar
@@ -6372,7 +6370,7 @@
 68	dauði
 68	hylli
 68	krónprins
-68	Open
+68	Hjálmar
 68	vef
 68	lítilli
 68	guði
@@ -6411,7 +6409,6 @@
 68	undanskildum
 68	Frjálslynda
 68	sofa
-68	Hugh
 68	Saman
 68	Pennsylvaníu
 68	bræðra
@@ -6428,7 +6425,6 @@
 68	þróunar
 68	endurreisa
 68	tilurð
-68	Il
 68	fjölskyldur
 68	létt
 68	Norðaustur
@@ -6442,7 +6438,6 @@
 67	Cyrus
 67	varnir
 67	Stanford
-67	Charlotte
 67	veðri
 67	vantaði
 67	Nelson
@@ -6451,6 +6446,7 @@
 67	Alba
 67	kastalanum
 67	eintölu
+67	Open
 67	tillögur
 67	Reyndar
 67	þjást
@@ -6494,7 +6490,6 @@
 67	hlusta
 67	virði
 67	málmi
-67	California
 67	Stewart
 67	nýrrar
 67	Hills
@@ -6537,6 +6532,7 @@
 67	brúðkaupið
 67	vöxt
 67	áhorfenda
+67	Il
 67	byggingarlist
 67	hagsmuni
 67	einir
@@ -6590,7 +6586,6 @@
 66	frægt
 66	komnar
 66	Walker
-66	Sophie
 66	þáði
 66	Porto
 66	höfundum
@@ -6610,6 +6605,7 @@
 66	jöfnu
 66	samanstanda
 66	hálfbróðir
+66	California
 66	flóknari
 66	prentað
 66	flug
@@ -6648,6 +6644,7 @@
 65	mætir
 65	Hómers
 65	Þorlákssonar
+65	Charlotte
 65	Gríms
 65	vöktu
 65	Litháen
@@ -6687,7 +6684,6 @@
 65	Nám
 65	undirlagi
 65	breskt
-65	Bad
 65	gangandi
 65	keisarar
 65	Evans
@@ -6793,6 +6789,7 @@
 64	láni
 64	gufu
 64	alheimsins
+64	Bad
 64	dómkirkjan
 64	uppruni
 64	æti
@@ -6877,6 +6874,7 @@
 63	vestanverðu
 63	Stalíns
 63	persónum
+63	Sophie
 63	ýta
 63	regla
 63	stjórnsýslu
@@ -6884,7 +6882,6 @@
 63	erfa
 63	tímapunkti
 63	norðurströnd
-63	Müller
 63	vinsæla
 63	Talað
 63	skipin
@@ -6908,14 +6905,12 @@
 63	ljósmyndir
 63	Vesturlöndum
 63	sungu
-63	Edmund
 63	flogið
 63	Skjaldarmerkið
 63	Inn
 63	stórborgarsvæðinu
 63	Air
 63	sjálfsögðu
-63	Can
 63	vin
 63	Humphrey
 63	vötn
@@ -6926,12 +6921,10 @@
 63	Garðabæ
 63	Craig
 63	Karlsson
-63	Anjou
 63	Brothers
 63	borgarstjóra
 63	hlutfallslega
 63	deildum
-63	CSI
 63	Sigur
 63	Hönnun
 63	fylgismenn
@@ -6957,13 +6950,11 @@
 62	Real
 62	Bandaríkjaþings
 62	hreppsnefndarkosningar
-62	„I
 62	málspeki
 62	East
 62	elta
 62	Dortmund
 62	Guðni
-62	ver
 62	ættbálki
 62	Björnsdóttir
 62	söfnuðu
@@ -6976,12 +6967,12 @@
 62	Halldóra
 62	markast
 62	punkta
-62	Wayne
 62	Unit
 62	Leicester
 62	kvöldi
 62	merkið
 62	flóa
+62	Müller
 62	brenndu
 62	eitthvert
 62	herþjónustu
@@ -7010,7 +7001,9 @@
 62	örn
 62	síð
 62	Leibniz
+62	Edmund
 62	Görðum
+62	Hugh
 62	stýrikerfið
 62	listar
 62	kynslóðar
@@ -7025,7 +7018,8 @@
 62	fengju
 62	Miley
 62	andstæðingar
-62	KV
+62	Anjou
+62	CSI
 62	atriðum
 62	krefst
 62	Württemberg
@@ -7062,7 +7056,9 @@
 61	nauðsynleg
 61	Kalda
 61	dala
+61	Pétri
 61	jarls
+61	ver
 61	Whitney
 61	stafsetningu
 61	Thompson
@@ -7079,9 +7075,9 @@
 61	Albrecht
 61	einkunn
 61	plantna
-61	Pétri
 61	tapað
 61	snerust
+61	What
 61	gospel
 61	Den
 61	frásagnir
@@ -7102,6 +7098,7 @@
 61	þroska
 61	lögreglunnar
 61	kalt
+61	King's
 61	ÍR
 61	sjónvarpsstöðinni
 61	stökk
@@ -7113,7 +7110,6 @@
 61	Dóttir
 61	vandamálum
 61	Seðlabanka
-61	Mother
 61	stytt
 61	Grenjaðarstað
 61	│
@@ -7132,6 +7128,7 @@
 61	fótum
 61	sjúklinga
 61	ríkisstjóra
+61	KV
 61	Rínarfljót
 61	héruðin
 61	brúðkaup
@@ -7149,7 +7146,6 @@
 60	Norðurlands
 60	Mr
 60	kosninga
-60	Neil
 60	Ísraels
 60	mátt
 60	máta
@@ -7181,6 +7177,7 @@
 60	skora
 60	ekkju
 60	Landsbankans
+60	Wayne
 60	biskupar
 60	Skagafjarðarsýslu
 60	bandarískir
@@ -7211,6 +7208,7 @@
 60	Hull
 60	pólitíska
 60	kýr
+60	Mother
 60	þriðjudegi
 60	óvænt
 60	Hamrahlíð
@@ -7239,7 +7237,6 @@
 60	Síðast
 60	Viktor
 60	svarar
-60	Rachel
 60	þróuð
 60	Go
 60	Tryggva
@@ -7287,7 +7284,6 @@
 59	Murray
 59	Haukadal
 59	efnisins
-59	DJ
 59	landsliðsins
 59	Þrjár
 59	festist
@@ -7338,7 +7334,6 @@
 59	fjár
 59	AM
 59	Holly
-59	Stanton
 59	líffæri
 59	margs
 59	hörð
@@ -7348,6 +7343,7 @@
 59	Northern
 59	stofnunum
 59	sársauka
+59	Rachel
 59	Ulm
 59	innihald
 59	afkomandi
@@ -7363,7 +7359,6 @@
 58	Frægustu
 58	Darwin
 58	Spörtu
-58	ö
 58	þjóðsögum
 58	smáskífur
 58	Rangárvallasýslu
@@ -7390,7 +7385,6 @@
 58	dýpt
 58	Evrópumeistari
 58	handteknir
-58	himins
 58	hátíðin
 58	Numb
 58	ættar
@@ -7407,6 +7401,7 @@
 58	Melavellinum
 58	Austfjörðum
 58	Einu
+58	DJ
 58	morgni
 58	vélin
 58	Fimmta
@@ -7459,6 +7454,7 @@
 58	Makedóníu
 58	Kansas
 58	skulu
+58	Stanton
 58	sjöttu
 58	Vínarborg
 58	litur
@@ -7486,13 +7482,13 @@
 57	Völlum
 57	Emil
 57	hefðbundinn
-57	Friends
 57	einhverskonar
 57	Skandinavíu
 57	Nietzsche
 57	Radio
 57	innbyrðis
 57	Melbourne
+57	ö
 57	upptökum
 57	August
 57	aðdáendur
@@ -7518,6 +7514,7 @@
 57	haustin
 57	jákvæð
 57	tókust
+57	himins
 57	gefast
 57	Seattle
 57	Jessica
@@ -7594,7 +7591,6 @@
 57	beit
 57	bílum
 57	kenndu
-57	z
 57	landstjóri
 57	forsetakosningunum
 57	Ed
@@ -7605,7 +7601,9 @@
 57	ráðuneyti
 57	risið
 56	suðaustan
+56	Neil
 56	móts
+56	Friends
 56	tilheyrandi
 56	Engir
 56	úrskurðaði
@@ -7620,7 +7618,6 @@
 56	orðnar
 56	Luke
 56	íþróttafélag
-56	Arizona
 56	sönnun
 56	tilbúið
 56	vettvang
@@ -7670,10 +7667,10 @@
 56	Sidney
 56	Hunter
 56	ástfangin
-56	no
 56	Reykjum
 56	skráður
 56	doktorsritgerð
+56	People
 56	tjóni
 56	steinn
 56	Margt
@@ -7684,18 +7681,15 @@
 56	annara
 56	ættingja
 56	framkvæmda
-56	th
 56	mótið
 56	Landslið
 56	þjónað
 56	Ásgeirsson
 56	Jakobsson
 56	Filippusi
-56	raka
 56	álit
 56	Sjálfur
 56	millibili
-56	America
 56	Efra
 56	varma
 56	hirðina
@@ -7733,9 +7727,9 @@
 56	veðurathugunarstöð
 56	Hvalfirði
 56	Stefánsdóttir
-56	líftækni
 56	Theater
 56	stundar
+56	z
 56	Háskóli
 56	laugardegi
 56	breytileg
@@ -7757,12 +7751,12 @@
 55	Santiago
 55	myndhöggvari
 55	yngra
-55	Take
 55	siður
 55	keisaradæmisins
 55	starfræktur
 55	frægir
 55	Eftirmaður
+55	Arizona
 55	Múla
 55	tengst
 55	Macintosh
@@ -7797,10 +7791,10 @@
 55	sonarsonur
 55	fundum
 55	útgáfuna
+55	no
 55	Pétursborg
 55	hrifinn
 55	Gandhi
-55	kjarni
 55	Verðlaunin
 55	selda
 55	vikna
@@ -7811,6 +7805,7 @@
 55	undirbúning
 55	Eyjafjöllum
 55	Glitnis
+55	th
 55	smáskífan
 55	ólíkra
 55	Ríkisútvarpsins
@@ -7822,6 +7817,7 @@
 55	háir
 55	líkja
 55	útsendingu
+55	raka
 55	þekkti
 55	Samhliða
 55	sjón
@@ -7863,6 +7859,7 @@
 55	Plútó
 55	alinn
 55	Knattspyrnufélagið
+55	líftækni
 55	Halle
 55	Caracalla
 55	ranglega
@@ -7893,6 +7890,7 @@
 54	nætur
 54	skortur
 54	einkarétt
+54	Take
 54	Mekka
 54	Fylkir
 54	varir
@@ -7937,9 +7935,9 @@
 54	Orkneyjum
 54	megnið
 54	eðlilegt
-54	Burton
 54	Austurstræti
 54	Leiðin
+54	kjarni
 54	föstum
 54	Cox
 54	upphæð
@@ -7975,7 +7973,6 @@
 54	smíðaður
 54	gengdi
 54	ennfremur
-54	Party
 54	búskap
 54	Warren
 54	Sandgerði
@@ -8022,7 +8019,6 @@
 53	föstudegi
 53	félagslega
 53	tækjum
-53	GNU
 53	tunglsins
 53	höfninni
 53	prósent
@@ -8063,12 +8059,12 @@
 53	skipulagt
 53	formleg
 53	Fjórtán
-53	fyrirfram
 53	forstjóra
 53	greiðslu
 53	keisarann
 53	Þjóðleikhúsinu
 53	meðgöngu
+53	Burton
 53	tilviki
 53	einhverri
 53	krossinn
@@ -8102,7 +8098,6 @@
 53	Vilhjálm
 53	Ann
 53	minn
-53	Andrea
 53	Einarssyni
 53	Stjórnarskrá
 53	framfylgja
@@ -8201,6 +8196,7 @@
 52	yfirlit
 52	Luis
 52	ASÍ
+52	fyrirfram
 52	hugsanlegt
 52	Gaukur
 52	Höfðaströnd
@@ -8237,6 +8233,7 @@
 52	mætast
 52	Suðurnesjum
 52	lausnir
+52	Andrea
 52	herför
 52	NFL
 52	Dani
@@ -8250,6 +8247,7 @@
 52	írskum
 52	heilt
 52	frjálsar
+52	Party
 52	greind
 52	kortið
 52	náttúrulegum
@@ -8258,7 +8256,6 @@
 52	endingu
 52	óendanlega
 52	titla
-52	An
 52	móðurmál
 52	orgel
 52	mestmegnis
@@ -8314,7 +8311,6 @@
 51	kóða
 51	ungan
 51	lífræn
-51	Who
 51	sönglög
 51	flatarmál
 51	OVA
@@ -8354,17 +8350,14 @@
 51	munkar
 51	Jenny
 51	norðvestri
-51	Foundation
 51	viðleitni
 51	Eris
-51	Campbell
 51	hátíðina
 51	innst
 51	tríóið
 51	einangra
 51	fljóta
 51	friðuð
-51	Grey
 51	Seifur
 51	kantónunnar
 51	stinga
@@ -8381,7 +8374,6 @@
 51	Hof
 51	grænlensku
 51	þriðjung
-51	Lloyd
 51	skiptust
 51	hafin
 51	sekur
@@ -8403,9 +8395,9 @@
 51	Würzburg
 51	lax
 51	Tower
-51	Hvernig
 51	Villa
 51	afgerandi
+51	An
 51	nýjasta
 51	Björg
 51	Stundaði
@@ -8448,7 +8440,6 @@
 50	XP
 50	Guðmundsdóttur
 50	Miðfirði
-50	Heaven
 50	þekja
 50	forritun
 50	flokkaðir
@@ -8457,7 +8448,6 @@
 50	Armeníu
 50	grasi
 50	Þriðji
-50	Carlo
 50	Þórdís
 50	byggi
 50	nyrðri
@@ -8500,7 +8490,9 @@
 50	tengsla
 50	heit
 50	borðað
+50	Foundation
 50	Kollafirði
+50	Campbell
 50	brýr
 50	Elísabetu
 50	Dale
@@ -8527,12 +8519,12 @@
 50	ad
 50	þúsunda
 50	umræða
+50	Lloyd
 50	orrusta
 50	veðurfar
 50	tilheyrt
 50	beinlínis
 50	keisaranum
-50	all
 50	sætum
 50	hlaðin
 50	Þáttaröðin
@@ -8549,8 +8541,8 @@
 50	atvik
 50	harðlega
 50	gagnrýna
-50	Burns
 50	sjálfstæða
+50	Hvernig
 50	Loftsson
 50	Lao
 50	gulur
@@ -8584,6 +8576,7 @@
 49	Venesúela
 49	vélinni
 49	menntunar
+49	GNU
 49	þáttaraðir
 49	fjölluðu
 49	Hafnarháskóla
@@ -8598,6 +8591,7 @@
 49	Voynich
 49	Trek
 49	Maine
+49	Carlo
 49	fylkjum
 49	dali
 49	Stytta
@@ -8624,16 +8618,13 @@
 49	Niðurstöður
 49	Gregoríus
 49	Heimir
-49	Bobby
 49	samfélög
-49	it
 49	setning
 49	Svavars
 49	Major
 49	keyptur
 49	forvera
 49	eiginmanns
-49	Feneyjum
 49	Platoni
 49	endurkjörinn
 49	fundur
@@ -8659,7 +8650,6 @@
 49	Joy
 49	tign
 49	kenningunni
-49	Union
 49	trúarinnar
 49	samanburði
 49	ósönn
@@ -8684,6 +8674,7 @@
 49	konunganna
 49	Óvíst
 49	Þessa
+49	all
 49	Forsaga
 49	venjulegu
 49	yfirgefið
@@ -8700,6 +8691,7 @@
 49	Wallace
 49	kaupir
 49	vestast
+49	Burns
 49	þegna
 49	umslags
 49	Phnom
@@ -8774,6 +8766,7 @@
 48	Ólympíuleikana
 48	leiknir
 48	heiðursfélagi
+48	Who
 48	óánægju
 48	Aðalsteinn
 48	mótmælendum
@@ -8794,6 +8787,7 @@
 48	Halldórssonar
 48	Gunnari
 48	söfn
+48	Bobby
 48	Colin
 48	beittu
 48	ítarlega
@@ -8803,6 +8797,7 @@
 48	leiðangri
 48	hvítar
 48	bandarískra
+48	Feneyjum
 48	blaðsíður
 48	Njarðvík
 48	Rasmus
@@ -8822,10 +8817,10 @@
 48	Samfylkingin
 48	Höfnin
 48	greinarmun
-48	Valentine
 48	Íslenskar
 48	liti
 48	sólina
+48	Union
 48	frægum
 48	CIA
 48	handbolta
@@ -8834,6 +8829,7 @@
 48	árabilinu
 48	kanslari
 48	borgríki
+48	America
 48	dómkirkja
 48	samtökum
 48	spyr
@@ -8861,7 +8857,6 @@
 48	Stofnendur
 48	starfsfólk
 48	nýttur
-48	or
 48	Stykkishólmi
 48	köflum
 48	ruglað
@@ -8971,7 +8966,6 @@
 47	íbúafjölda
 47	viðkomu
 47	raunin
-47	ið
 47	www
 47	erkibiskups
 47	Square
@@ -9036,7 +9030,6 @@
 47	Algengustu
 47	vefnum
 47	Elísabetar
-47	Carrie
 47	blómaskeið
 47	Zorglúbb
 47	Núna
@@ -9057,7 +9050,6 @@
 47	latneskum
 47	ákærður
 47	virkinu
-47	Frederick
 47	Áramótaskaup
 47	Ferguson
 47	líkan
@@ -9109,7 +9101,6 @@
 46	helgan
 46	óvenju
 46	Oddssonar
-46	Thule
 46	titillinn
 46	Cool
 46	hringrás
@@ -9117,6 +9108,7 @@
 46	General
 46	andrúmsloftið
 46	Suðurlands
+46	„I
 46	þjóðar
 46	strandaði
 46	Ibn
@@ -9153,7 +9145,7 @@
 46	einföldum
 46	öflugt
 46	lífríki
-46	Children
+46	ið
 46	síld
 46	Grettis
 46	Evrópubúa
@@ -9210,7 +9202,6 @@
 46	Stones
 46	takmarka
 46	málvísindum
-46	bræðranna
 46	tímatalið
 46	mælir
 46	amma
@@ -9219,8 +9210,10 @@
 46	höggva
 46	Eyja
 46	viðskiptaráðherra
+46	Can
 46	kaþólsk
 46	kunnáttu
+46	Carrie
 46	heimstyrjöldina
 46	húsmóðir
 46	fasti
@@ -9230,6 +9223,7 @@
 46	námið
 46	stöng
 46	vísindaleg
+46	bræðranna
 46	laug
 46	Barbarossa
 46	klæðast
@@ -9247,6 +9241,7 @@
 46	dæmdir
 46	áratuga
 46	spruttu
+46	Frederick
 46	kvikmyndahús
 46	útskýrir
 46	kvikmyndahúsum
@@ -9298,7 +9293,6 @@
 45	endurbætur
 45	ræktaðar
 45	Eiríkssonar
-45	verndari
 45	Blake
 45	framið
 45	Ontario
@@ -9309,6 +9303,7 @@
 45	Hólabiskups
 45	þjóðsöngur
 45	Leuven
+45	Thule
 45	staðan
 45	landkönnuður
 45	kanadískur
@@ -9361,6 +9356,7 @@
 45	tölunni
 45	lág
 45	hringur
+45	it
 45	kynjanna
 45	einar
 45	æxlun
@@ -9428,6 +9424,7 @@
 45	einingu
 45	háskólar
 45	árangurs
+45	or
 45	Myndir
 45	áttir
 45	Alfons
@@ -9494,6 +9491,7 @@
 44	Stöðin
 44	So
 44	skapar
+44	verndari
 44	skorts
 44	drög
 44	Back
@@ -9504,6 +9502,7 @@
 44	lyfta
 44	Víða
 44	Anders
+44	Heaven
 44	framkvæmt
 44	vikuna
 44	blár
@@ -9664,7 +9663,6 @@
 43	merkingar
 43	sameinda
 43	sannleikann
-43	útkomu
 43	yfirvalda
 43	innihaldið
 43	Stefánssonar
@@ -9851,7 +9849,6 @@
 42	slæm
 42	fangar
 42	suma
-42	About
 42	bændum
 42	Skálholtsbiskupsdæmi
 42	leikriti
@@ -9862,6 +9859,7 @@
 42	hirðstjórn
 42	barnsins
 42	Sádí
+42	útkomu
 42	Unicode
 42	tryggðu
 42	Michelle
@@ -9895,7 +9893,6 @@
 42	Bandalag
 42	gerjun
 42	Jökull
-42	Monk
 42	sunnanverðri
 42	trúir
 42	þjáðist
@@ -9969,7 +9966,6 @@
 42	Smallville
 42	venjulegri
 42	þjóðfélaginu
-42	God
 42	stöku
 42	nefndum
 42	höndunum
@@ -10014,13 +10010,11 @@
 42	ostur
 42	fjarveru
 42	klassísk
-42	fatlaðra
 42	Tryggvasonar
 42	bankahrunsins
 42	Íslandsbanka
 42	kynntust
 42	Akraness
-42	Ali
 42	einfaldar
 42	CH
 42	neitar
@@ -10058,7 +10052,7 @@
 41	tvöföld
 41	frú
 41	Miðjarðarhaf
-41	Dick
+41	About
 41	Hermanns
 41	nákvæm
 41	almennur
@@ -10073,7 +10067,6 @@
 41	Brú
 41	Brandsson
 41	Penn
-41	Cruz
 41	virtust
 41	Alþýðuflokks
 41	jólum
@@ -10113,6 +10106,7 @@
 41	Háskólabíói
 41	Ijsselmeer
 41	efnahagslega
+41	Monk
 41	Fulham
 41	sólarhring
 41	gekkst
@@ -10173,6 +10167,7 @@
 41	hundruðum
 41	Ökrum
 41	myndaður
+41	Cruz
 41	ótrúlega
 41	dökkum
 41	refsingar
@@ -10232,7 +10227,6 @@
 41	Russells
 41	Björnsdóttur
 41	blátt
-41	Network
 41	grunnt
 41	Þátttaka
 41	inná
@@ -10246,6 +10240,7 @@
 41	körlum
 41	rannsakar
 41	vegir
+41	fatlaðra
 41	Gaius
 41	Shanghai
 41	skríða
@@ -10258,7 +10253,6 @@
 41	Friðriki
 41	takti
 41	Bæjaralands
-41	Year
 41	Sýrlandi
 41	Language
 41	Skota
@@ -10285,6 +10279,7 @@
 40	Gliese
 40	úrslitin
 40	Skipting
+40	Dick
 40	gönguleið
 40	Pompeius
 40	teljist
@@ -10293,7 +10288,6 @@
 40	veggi
 40	Gyðingar
 40	hröktu
-40	Abu
 40	töflu
 40	grunnurinn
 40	framburði
@@ -10323,7 +10317,6 @@
 40	Erlingsson
 40	atvinnumaður
 40	Lárentíus
-40	Xi
 40	kristinni
 40	styttan
 40	reglunnar
@@ -10356,7 +10349,6 @@
 40	lifi
 40	litarefni
 40	hrein
-40	Beck
 40	ólíkir
 40	Sega
 40	stöðvar
@@ -10400,7 +10392,6 @@
 40	uppgötvanir
 40	margskonar
 40	Haítí
-40	Pop
 40	Rex
 40	kynjum
 40	Senegal
@@ -10423,6 +10414,7 @@
 40	flugvöllurinn
 40	stofnanda
 40	Gnúpverjahreppi
+40	Valentine
 40	kviknaði
 40	Ólafsdóttur
 40	hálsi
@@ -10444,6 +10436,7 @@
 40	Project
 40	smitast
 40	seldir
+40	God
 40	andlega
 40	Hermione
 40	farveg
@@ -10482,6 +10475,7 @@
 40	tileinkað
 40	Sagnir
 40	Lundúna
+40	Network
 40	Ljósmyndir
 40	Eggertsson
 40	kynningu
@@ -10498,8 +10492,10 @@
 40	afkastamikill
 40	nátengd
 40	ögn
+40	Ali
 40	hnignun
 40	DS
+40	Year
 40	suðvesturhluta
 40	framar
 40	Dio
@@ -10510,7 +10506,6 @@
 40	meðferðar
 40	Liège
 40	Benedikts
-40	Earth
 40	farnar
 40	hjátrú
 40	virkan
@@ -10552,7 +10547,6 @@
 39	Bamberg
 39	Bandaríkjamaðurinn
 39	notuðust
-39	Woman
 39	breiðast
 39	Sr
 39	Tal
@@ -10574,7 +10568,6 @@
 39	Svarfdæla
 39	konungsdóttir
 39	sjúkdóminn
-39	Lady
 39	reglan
 39	Suðurgötu
 39	Thames
@@ -10595,6 +10588,7 @@
 39	áhrifamikill
 39	Cornelius
 39	Kvaran
+39	Beck
 39	bakteríum
 39	Hallgerður
 39	Steinþór
@@ -10621,6 +10615,7 @@
 39	textarnir
 39	neðra
 39	afbrigðinu
+39	Children
 39	úrval
 39	Holberg
 39	öruggt
@@ -10632,7 +10627,7 @@
 39	landamæra
 39	bronsöld
 39	Íslendingur
-39	Lord
+39	Pop
 39	Jónsbók
 39	silfri
 39	spænsk
@@ -10691,7 +10686,6 @@
 39	smjör
 39	stál
 39	teiknari
-39	elska
 39	skjal
 39	vonbrigðum
 39	Underwood
@@ -10741,7 +10735,6 @@
 39	stúdentar
 39	rúmum
 39	gluggar
-39	Þú
 39	Mikael
 39	takmarkaða
 39	HK
@@ -10776,6 +10769,7 @@
 38	afkomenda
 38	yfirstjórn
 38	Upphafið
+38	Abu
 38	þjálfaði
 38	tún
 38	Norðurlönd
@@ -10796,12 +10790,14 @@
 38	ástarsamband
 38	gamalli
 38	fjölmennustu
+38	Xi
 38	leikstjóra
 38	undantekning
 38	verslunin
 38	bundnu
 38	margfalda
 38	framförum
+38	Lady
 38	iðnbyltingunni
 38	tölvuleiki
 38	samanber
@@ -10866,7 +10862,6 @@
 38	dalurinn
 38	litháíska
 38	stóðst
-38	Harper
 38	eðlilega
 38	greifanna
 38	hertogans
@@ -10932,6 +10927,7 @@
 38	neinar
 38	Bretlandseyja
 38	Minnisvarði
+38	elska
 38	Glee
 38	mannlegt
 38	teiknimyndablaðinu
@@ -10970,7 +10966,6 @@
 38	unglingsárum
 38	þung
 38	hegðunar
-38	MIT
 38	messu
 38	frestað
 38	hörku
@@ -10985,6 +10980,7 @@
 38	Portúgalar
 38	alvarlegum
 38	Heimkynni
+38	Þú
 38	Sænska
 38	hernámssvæðinu
 38	Faxaflóa
@@ -11100,7 +11096,6 @@
 37	viðurkenndur
 37	Fljótsdal
 37	Harrys
-37	Let
 37	heilann
 37	bókmenntarýni
 37	náttúruna
@@ -11131,6 +11126,7 @@
 37	stiftamtmanns
 37	Act
 37	þungt
+37	Lord
 37	brotna
 37	Hopkins
 37	jöklar
@@ -11142,7 +11138,6 @@
 37	bankanna
 37	sterkasta
 37	Hahn
-37	Python
 37	athafna
 37	Listasafns
 37	dugði
@@ -11195,7 +11190,6 @@
 37	Andrésar
 37	hugsuður
 37	flæddi
-37	Kids
 37	sinnir
 37	leystu
 37	tímabilum
@@ -11234,6 +11228,7 @@
 37	svartar
 37	níundu
 37	reiki
+37	MIT
 37	Hugsanlegt
 37	gjaldkeri
 37	karlmaður
@@ -11268,7 +11263,6 @@
 37	Benz
 37	bráðabirgða
 37	undantekningar
-37	Camp
 37	grafnir
 37	Aðferðin
 37	föðurbróður
@@ -11297,9 +11291,9 @@
 36	skorinn
 36	Parma
 36	gefi
-36	English
 36	Skip
 36	blóðið
+36	Woman
 36	yfirvofandi
 36	Service
 36	skemmdust
@@ -11383,11 +11377,12 @@
 36	elst
 36	grömm
 36	vinar
-36	Madagaskar
+36	sjúklingar
 36	rándýr
 36	gatan
 36	skort
 36	sunnarlega
+36	frábær
 36	McG
 36	samstundis
 36	Cindy
@@ -11404,8 +11399,6 @@
 36	þörungar
 36	Amanda
 36	gatnamót
-36	frábær
-36	op
 36	Edison
 36	Kelduhverfi
 36	rappari
@@ -11463,9 +11456,7 @@
 36	tímatal
 36	Þennan
 36	heilar
-36	Technology
 36	löggjafarvald
-36	rock
 36	einangrað
 36	ferðamönnum
 36	brugðið
@@ -11479,6 +11470,7 @@
 36	þak
 36	vísindalega
 36	Virgill
+36	Kids
 36	greining
 36	Reynt
 36	spennandi
@@ -11496,7 +11488,6 @@
 36	Þýsku
 36	dansk
 36	stöðunni
-36	Lyon
 36	Noel
 36	útrýmt
 36	láti
@@ -11524,7 +11515,6 @@
 36	einræðisherra
 36	listamaðurinn
 36	stafnum
-36	sjúklingar
 36	verndun
 36	endurtekið
 36	Storm
@@ -11551,10 +11541,12 @@
 36	versta
 36	Carnap
 36	Ho
+36	Earth
 36	Selárdal
 36	Eyþór
 36	kjörfurstinn
 36	setningin
+36	Camp
 36	FBI
 36	konungum
 36	síga
@@ -11589,6 +11581,7 @@
 35	frí
 35	Sveitarfélög
 35	heimalandi
+35	English
 35	Sjötta
 35	úrvinnslu
 35	olía
@@ -11617,7 +11610,6 @@
 35	kraftaverk
 35	flýr
 35	skemmtikraftur
-35	Tell
 35	Champagne
 35	grundvallaratriðum
 35	Rós
@@ -11664,6 +11656,7 @@
 35	Halldóru
 35	endurnýjun
 35	Sauðafelli
+35	Madagaskar
 35	ræktunar
 35	stéttarfélag
 35	hugðust
@@ -11681,7 +11674,6 @@
 35	krossins
 35	sannleika
 35	synina
-35	Ferrari
 35	slökkva
 35	Kristjánsdóttir
 35	sjálfstæðisbaráttu
@@ -11691,7 +11683,7 @@
 35	Árelíus
 35	Umhverfis
 35	Dóra
-35	Joshua
+35	op
 35	útfærslu
 35	Alþýðuflokkinn
 35	veidd
@@ -11739,6 +11731,7 @@
 35	öflug
 35	lækninga
 35	hálshöggvinn
+35	rock
 35	lagasetningu
 35	bæst
 35	miðaldir
@@ -11788,7 +11781,6 @@
 35	skinn
 35	gifti
 35	vopna
-35	Dante
 35	Schwyz
 35	flokkað
 35	Sýslan
@@ -11906,6 +11898,7 @@
 34	útistöðum
 34	tiltekins
 34	kennsl
+34	Tell
 34	Rósu
 34	Rússum
 34	Arnarson
@@ -11993,7 +11986,6 @@
 34	svörtu
 34	tónskáldið
 34	afnema
-34	Ultravox
 34	grátt
 34	Becker
 34	lána
@@ -12001,6 +11993,7 @@
 34	Bandamanna
 34	Order
 34	Child
+34	Ferrari
 34	grasafræði
 34	fögru
 34	þurr
@@ -12010,6 +12003,7 @@
 34	lýtur
 34	sameiginlegu
 34	Fame
+34	Joshua
 34	erlendar
 34	Pernambuco
 34	bland
@@ -12108,6 +12102,7 @@
 34	skordýrum
 34	Indriði
 34	Kyrrahafið
+34	Lyon
 34	Whitaker
 34	þjálfara
 34	dettur
@@ -12115,6 +12110,7 @@
 34	fullnægjandi
 34	Abbey
 34	prinsessu
+34	Dante
 34	líkari
 34	skreið
 34	Lang
@@ -12248,7 +12244,6 @@
 33	Gríska
 33	Kvæðið
 33	Flóa
-33	We
 33	hægja
 33	rómantíska
 33	Jakobi
@@ -12283,7 +12278,6 @@
 33	staðsettir
 33	gnæfir
 33	þorpi
-33	Federal
 33	Ráðhúsið
 33	au
 33	leysist
@@ -12318,13 +12312,11 @@
 33	Bæjarar
 33	klösum
 33	gluggum
-33	Destiny
 33	brjósti
 33	Nílar
 33	Hunt
 33	ýmiskonar
 33	Calais
-33	Brad
 33	óskilgetinn
 33	myndavél
 33	eftirsótt
@@ -12336,6 +12328,7 @@
 33	Claudíus
 33	sleit
 33	undirtegundir
+33	Ultravox
 33	Kára
 33	Virkið
 33	takmarkanir
@@ -12358,7 +12351,6 @@
 33	Vísir
 33	hlutlaus
 33	stigu
-33	Palestínumanna
 33	árásinni
 33	Hrólfur
 33	samfelld
@@ -12409,6 +12401,7 @@
 33	Putnam
 33	skáldsögum
 33	Mayer
+33	Technology
 33	Sharon
 33	palli
 33	Ruhr
@@ -12498,6 +12491,7 @@
 33	Íslandsmótsins
 33	Gissuri
 33	útvarpsstöð
+33	Palestínumanna
 33	Finns
 33	hylja
 33	plötusamning
@@ -12505,7 +12499,6 @@
 33	Hópur
 33	kynslóðir
 33	Herra
-33	far
 33	innlimuðu
 33	Critics
 33	hilluna
@@ -12545,7 +12538,6 @@
 32	erfðamengi
 32	sambærilegt
 32	turna
-32	Jam
 32	prótein
 32	Luther
 32	hljóðum
@@ -12618,6 +12610,7 @@
 32	undankeppni
 32	óbundnu
 32	Komintern
+32	Federal
 32	öflugasta
 32	Rekstur
 32	notenda
@@ -12652,6 +12645,7 @@
 32	Flensborg
 32	Ljóst
 32	skjali
+32	Brad
 32	játaði
 32	stöðug
 32	VISA
@@ -12664,6 +12658,7 @@
 32	gatnamótum
 32	fasista
 32	afmarkað
+32	Harper
 32	Vel
 32	Horror
 32	peningar
@@ -12723,7 +12718,6 @@
 32	vonast
 32	greindur
 32	hallar
-32	Women
 32	sterku
 32	styrkjum
 32	dómkirkju
@@ -12818,7 +12812,6 @@
 32	kvæðinu
 32	fallegt
 32	Einarsdóttur
-32	Elsa
 32	Engels
 32	Benín
 32	deilu
@@ -12852,6 +12845,7 @@
 32	ætlast
 32	síðir
 32	Woodsen
+32	far
 32	Things
 32	Leirá
 32	hægfara
@@ -12874,8 +12868,6 @@
 31	sprengdu
 31	meginhluti
 31	Lopez
-31	MC
-31	MK
 31	ákvörðunum
 31	greifadæmi
 31	Munch
@@ -12912,7 +12904,6 @@
 31	göngum
 31	íþróttamenn
 31	Sigga
-31	Hart
 31	strandhögg
 31	fornritum
 31	alþjóðlegri
@@ -12920,7 +12911,6 @@
 31	samþykktar
 31	auglýst
 31	söngvarar
-31	Barry
 31	Hitaveitu
 31	Alþingishúsið
 31	óformlega
@@ -13015,6 +13005,7 @@
 31	Halldóri
 31	mállýsku
 31	Phoenix
+31	O'Donnell
 31	Gloucester
 31	ákærðir
 31	hrygg
@@ -13085,7 +13076,6 @@
 31	sluppu
 31	Guðlaugsson
 31	Franski
-31	Donnell
 31	Frímann
 31	Jansson
 31	Keisarinn
@@ -13131,7 +13121,6 @@
 31	svipaðri
 31	Flying
 31	Steins
-31	afrit
 31	tæpum
 31	frumkvöðlum
 31	þema
@@ -13183,7 +13172,6 @@
 31	Antonius
 31	dóttursonur
 31	síki
-31	Brain
 31	hálfum
 31	Tómasar
 31	dýpri
@@ -13199,6 +13187,7 @@
 31	hertogadæmisins
 31	skólastjóra
 31	refsingu
+31	Elsa
 31	fordæmi
 31	Suarez
 31	stofnar
@@ -13249,12 +13238,12 @@
 31	Tíberíus
 31	Summer
 30	Fjölnir
-30	music
 30	atvinnugrein
 30	Nasistar
 30	hellum
 30	fjármál
 30	MORFÍS
+30	MK
 30	jiu
 30	seðlar
 30	sumu
@@ -13274,6 +13263,7 @@
 30	Presley
 30	Meðalskor
 30	Tumi
+30	Jam
 30	varað
 30	Áhugi
 30	HSH
@@ -13290,6 +13280,7 @@
 30	Fjórar
 30	félagslegri
 30	sæði
+30	Hart
 30	keisaradæmi
 30	Bólivíu
 30	matreiðslu
@@ -13299,6 +13290,7 @@
 30	Palestína
 30	auðlindir
 30	stykki
+30	Barry
 30	Kjartans
 30	vannst
 30	óhlutbundin
@@ -13426,6 +13418,7 @@
 30	fleirtala
 30	nöfnunum
 30	Android
+30	Python
 30	Seven
 30	hreyft
 30	Roland
@@ -13474,8 +13467,6 @@
 30	Namibíu
 30	vinnuna
 30	kringumstæðum
-30	re
-30	Levi
 30	nýöld
 30	Nauthólsvík
 30	málvísindi
@@ -13501,9 +13492,9 @@
 30	ríkjunum
 30	Ríkinu
 30	árásin
+30	afrit
 30	kjördæmaskipan
 30	stjörnurnar
-30	Fair
 30	leikhúsið
 30	lungnabólgu
 30	Vitinn
@@ -13515,7 +13506,6 @@
 30	fjöldinn
 30	óháðra
 30	Blöndu
-30	stafsetning
 30	tilrauna
 30	aldraðra
 30	göngin
@@ -13549,6 +13539,7 @@
 30	Fredrik
 30	Paulo
 30	viðnám
+30	Brain
 30	draum
 30	dýflissu
 30	níundi
@@ -13572,7 +13563,6 @@
 30	With
 30	AG
 30	Norðurá
-30	As
 30	konunni
 30	endurútgefin
 30	Garðarsson
@@ -13582,9 +13572,7 @@
 30	standast
 30	eyðilagt
 30	Halla
-30	Carey
 30	Days
-30	Files
 30	Ármenningar
 30	fánann
 30	Svalbarði
@@ -13625,6 +13613,7 @@
 30	ritröð
 30	óalgengt
 30	Dover
+29	music
 29	ávexti
 29	áformum
 29	fríborg
@@ -13714,7 +13703,6 @@
 29	Singer
 29	Steinunnar
 29	Bossa
-29	Clarkson
 29	ófær
 29	Blackburn
 29	Mersíu
@@ -13882,6 +13870,7 @@
 29	fóstri
 29	nánustu
 29	Everton
+29	Women
 29	erfiða
 29	popptónlist
 29	búfé
@@ -13894,7 +13883,6 @@
 29	Fiction
 29	Kænugarði
 29	Groningen
-29	Bean
 29	Huginn
 29	Capacent
 29	hreinlega
@@ -13934,6 +13922,7 @@
 29	austasta
 29	sjálfstæðir
 29	hrakinn
+29	Fair
 29	Fjórum
 29	Reims
 29	Stars
@@ -13944,6 +13933,7 @@
 29	straumur
 29	vinnustofu
 29	móðirin
+29	stafsetning
 29	víg
 29	minniháttar
 29	víðum
@@ -13982,7 +13972,6 @@
 29	hersveitum
 29	Sap
 29	Stjórnandi
-29	Christ
 29	oxast
 29	Medical
 29	sjúga
@@ -14003,9 +13992,9 @@
 29	flýta
 29	stafrófsins
 29	Birgis
-29	Hour
 29	útivistarsvæði
 29	tyrknesku
+29	As
 29	Opinber
 29	gjaldþrot
 29	Eigendur
@@ -14013,6 +14002,8 @@
 29	Flóka
 29	aftast
 29	hótaði
+29	Carey
+29	Files
 29	Nafni
 29	sekúndum
 29	fyrirfinnst
@@ -14053,7 +14044,6 @@
 29	tal
 29	Búið
 29	stríðsárunum
-29	Andorra
 29	ský
 28	prófessorsstöðu
 28	erfðafræði
@@ -14063,6 +14053,7 @@
 28	endurbyggja
 28	líffræðilegum
 28	Laugaveg
+28	MC
 28	mótuð
 28	barninu
 28	nauðsynlegar
@@ -14082,7 +14073,6 @@
 28	Búrma
 28	sjónarhorn
 28	Rufus
-28	Neal
 28	bensíni
 28	varalögmaður
 28	Sólin
@@ -14107,9 +14097,11 @@
 28	garðsins
 28	Klagenfurt
 28	friðarverðlaun
+28	We
 28	eitruð
 28	Pearl
 28	uppskeru
+28	Don't
 28	Atlantshafs
 28	Kaliforníuháskóli
 28	Ingimar
@@ -14120,7 +14112,6 @@
 28	Fasó
 28	Flugfélag
 28	Þuríðar
-28	Carta
 28	Guðfinna
 28	fræjum
 28	salsa
@@ -14136,6 +14127,7 @@
 28	brandajól
 28	síðastnefnda
 28	tæpa
+28	Clarkson
 28	Breski
 28	Libra
 28	efsti
@@ -14208,7 +14200,6 @@
 28	Butler
 28	Snow
 28	skilinn
-28	il
 28	aukningu
 28	Jótland
 28	Eldey
@@ -14293,6 +14284,7 @@
 28	MDMA
 28	Strong
 28	Kambódía
+28	Grey
 28	fógeta
 28	slæmar
 28	hringt
@@ -14350,7 +14342,6 @@
 28	Köngulóarmaðurinn
 28	illu
 28	Hallvarður
-28	Know
 28	Marcellus
 28	Nýlistasafnsins
 28	Styrmir
@@ -14369,7 +14360,6 @@
 28	horninu
 28	ítrekað
 28	íbúunum
-28	brjóst
 28	athæfi
 28	henti
 28	tækju
@@ -14438,6 +14428,7 @@
 28	Monica
 28	ritgerðinni
 28	skeiði
+28	Hour
 28	Meitner
 28	hráolíu
 28	heimspekideild
@@ -14483,7 +14474,6 @@
 28	mannavöldum
 28	Eiðum
 28	írsku
-28	He
 28	Eleanor
 28	Palmer
 28	Enterprise
@@ -14494,6 +14484,7 @@
 28	Kennaraháskóla
 28	veiðimenn
 28	tóbak
+28	Andorra
 28	kjörtímabilið
 28	flugvellinum
 27	möguleikann
@@ -14576,13 +14567,13 @@
 27	Riley
 27	plötuumslagi
 27	Pasteur
-27	Clara
 27	elda
 27	mælist
 27	dansinn
 27	Þorleif
 27	náttúrulegar
 27	beðinn
+27	Carta
 27	Guðnýjar
 27	Rómaborg
 27	Delí
@@ -14643,6 +14634,7 @@
 27	samræður
 27	sannfærandi
 27	utandyra
+27	Let
 27	Tiger
 27	enni
 27	hala
@@ -14676,6 +14668,7 @@
 27	Stöng
 27	duft
 27	nýttar
+27	il
 27	mílur
 27	spjót
 27	hangir
@@ -14757,7 +14750,6 @@
 27	eldstöð
 27	Magnus
 27	Solveigar
-27	Lüneburg
 27	búð
 27	Lillu
 27	Todd
@@ -14817,6 +14809,7 @@
 27	Íslandsmet
 27	Þorvaldssyni
 27	hefðarkona
+27	Levi
 27	félagsfræðingur
 27	fyrirrennari
 27	beindist
@@ -14836,6 +14829,7 @@
 27	Normannar
 27	Saturday
 27	samræma
+27	Know
 27	Þorsteinsdóttur
 27	starfræktar
 27	Héðinn
@@ -14849,6 +14843,7 @@
 27	Starr
 27	punktar
 27	Monty
+27	brjóst
 27	Parmenídes
 27	mannvirkja
 27	Rutherford
@@ -14858,7 +14853,6 @@
 27	hljóðveri
 27	UCL
 27	dauður
-27	þín
 27	Vermont
 27	uppskrift
 27	konunglegu
@@ -14892,10 +14886,10 @@
 27	Klukkan
 27	Elisabeth
 27	pour
-27	Blanche
 27	sjónvarpsþáttaröðinni
 27	möl
 27	blæs
+27	Christ
 27	Vetrarólympíuleikarnir
 27	Brokey
 27	viðbragð
@@ -14988,7 +14982,6 @@
 27	Samtökum
 27	Hegel
 27	deildarstjóri
-27	Hardy
 27	Þekkt
 27	súr
 27	Fjölbrautaskóli
@@ -15087,6 +15080,7 @@
 26	Vínarhringsins
 26	Júra
 26	Orðin
+26	Clara
 26	Miðaldir
 26	vefja
 26	Management
@@ -15143,7 +15137,6 @@
 26	þrengri
 26	Rockefeller
 26	Guðnýju
-26	Gibson
 26	verunda
 26	hryggdýra
 26	kljást
@@ -15244,7 +15237,6 @@
 26	kvið
 26	fréttist
 26	Vélin
-26	Basil
 26	Fulltrúar
 26	langi
 26	flyst
@@ -15255,6 +15247,7 @@
 26	raunverulegt
 26	Veðurfar
 26	samstarfsmaður
+26	Lüneburg
 26	stundakennari
 26	palí
 26	Mengi
@@ -15357,6 +15350,7 @@
 26	beinin
 26	líkamleg
 26	sjúkdóm
+26	þín
 26	framhaldsskólanna
 26	söngvaranum
 26	fornminjar
@@ -15432,7 +15426,6 @@
 26	tvöfaldur
 26	Reykjavíkurhöfn
 26	flugvelli
-26	Terre
 26	Sýrland
 26	Dala
 26	fyrirmyndar
@@ -15464,6 +15457,7 @@
 26	Porsche
 26	Snæfellsnessýslu
 26	málfar
+26	Hardy
 26	svartra
 26	Eiríkssyni
 26	Osnabrück
@@ -15532,7 +15526,6 @@
 25	spilun
 25	Are
 25	ofveiði
-25	Herman
 25	Hugleikur
 25	framkvæmdavald
 25	Ken
@@ -15586,7 +15579,6 @@
 25	leifum
 25	hvorugt
 25	þeira
-25	un
 25	bókaútgáfu
 25	love
 25	nafns
@@ -15603,13 +15595,13 @@
 25	KEA
 25	annarsstaðar
 25	ólíku
+25	Gibson
 25	ljósára
 25	Kata
 25	skrauts
 25	fyrirlesari
 25	Uppruna
 25	uppgröft
-25	im
 25	hertoganum
 25	Tatarstan
 25	Thorbjörn
@@ -15677,14 +15669,12 @@
 25	smjöri
 25	ml
 25	sjúkdómar
-25	Here
 25	undirtegund
 25	sæmd
 25	Nicolai
 25	sunnudaginn
 25	argentínska
 25	klúbbnum
-25	Martha
 25	lags
 25	viðurkennir
 25	Tengsl
@@ -15717,6 +15707,7 @@
 25	‘
 25	fjölmennasti
 25	Listasafni
+25	Basil
 25	vinsældarlista
 25	útg
 25	DOS
@@ -15742,7 +15733,6 @@
 25	aðstoðarprestur
 25	ritskoðun
 25	Friis
-25	ll
 25	Hofsósi
 25	deginum
 25	horf
@@ -15754,7 +15744,6 @@
 25	siglingaleið
 25	kantónur
 25	hverfin
-25	Pat
 25	Baltasar
 25	norðanverðan
 25	Sívertsen
@@ -15870,7 +15859,6 @@
 25	Nýfundnalandi
 25	Alzheimer
 25	Spears
-25	Mortimer
 25	framlengingu
 25	heri
 25	þrífst
@@ -15902,15 +15890,12 @@
 25	hugsanleg
 25	versnandi
 25	Control
-25	Englar
 25	Hoorn
 25	Slíkir
 25	fjölskyldum
 25	vísbendingu
 25	söngleik
-25	There
 25	Apríl
-25	that
 25	landnámsmanna
 25	Cherry
 25	orsaka
@@ -16032,6 +16017,7 @@
 24	Rafnsson
 24	salnum
 24	mynddiski
+24	niðrandi
 24	fagnaði
 24	sjónvarpsstöðin
 24	Herdísarvík
@@ -16087,10 +16073,10 @@
 24	höfuðstöðvum
 24	Lange
 24	forgöngu
-24	McDonald
 24	íslams
 24	markaðshlutdeild
 24	stúlkum
+24	Herman
 24	Forever
 24	Lotus
 24	Nýlistasafnið
@@ -16145,13 +16131,11 @@
 24	rauðan
 24	Gottrup
 24	vítaspyrnukeppni
-24	Neville
 24	greiðir
 24	kyssast
 24	Beautiful
 24	Sighvatssonar
 24	fornaldarsögu
-24	Veronica
 24	Sömu
 24	rétttrúnaðarkirkjunni
 24	Alberta
@@ -16161,7 +16145,6 @@
 24	hliðstæða
 24	búta
 24	ar
-24	Palin
 24	Wolf
 24	skráðu
 24	viðhorfum
@@ -16197,8 +16180,6 @@
 24	sveik
 24	Arngríms
 24	víkur
-24	niðrandi
-24	Hotel
 24	byssur
 24	Stærstur
 24	digra
@@ -16241,6 +16222,7 @@
 24	sveitarstjórnarkosningum
 24	Allur
 24	bardagi
+24	de'
 24	rafhlaða
 24	sagnarinnar
 24	Leikarnir
@@ -16259,6 +16241,7 @@
 24	frægra
 24	m³
 24	Mamma
+24	Here
 24	áfangastaður
 24	þræll
 24	aðalsöngvari
@@ -16381,6 +16364,7 @@
 24	skaðabætur
 24	landbúnaðarráðherra
 24	heimilið
+24	atvinnuvegir
 24	Víðimýri
 24	uppgröftur
 24	Aðalvík
@@ -16427,6 +16411,7 @@
 24	Hljómsveitina
 24	Þingeyri
 24	dýrsins
+24	Mortimer
 24	steinöld
 24	Christine
 24	Emerson
@@ -16459,6 +16444,7 @@
 24	andstæðingurinn
 24	Heiðmörk
 24	aldanna
+24	Englar
 24	­
 24	tölvunnar
 24	rússneskt
@@ -16519,6 +16505,7 @@
 24	Suffolk
 24	þjóðgarðinum
 24	Chucks
+24	Destiny's
 24	Core
 24	hvölum
 24	refsað
@@ -16545,7 +16532,6 @@
 24	Önundarfirði
 24	Meðfram
 24	Bítlana
-24	atvinnuvegir
 24	ameríska
 24	hreinlæti
 24	Age
@@ -16732,6 +16718,7 @@
 23	hljóðfærin
 23	Guttormssonar
 23	hjartaáfalli
+23	Neville
 23	Tökur
 23	Fjórði
 23	heimspekin
@@ -16740,6 +16727,7 @@
 23	fjárfestar
 23	Saxelfi
 23	viðkvæm
+23	Veronica
 23	fyrirbæra
 23	ósannar
 23	eftirlits
@@ -16753,6 +16741,7 @@
 23	skipst
 23	Cohn
 23	stofnsett
+23	Palin
 23	Nichols
 23	spilið
 23	kirkjuþingið
@@ -16787,6 +16776,7 @@
 23	kýrillíska
 23	Stóruborg
 23	klæddur
+23	Hotel
 23	ÍKSA
 23	kristilega
 23	Keppendur
@@ -16805,6 +16795,7 @@
 23	skagar
 23	leynilega
 23	keyrslu
+23	Grey's
 23	lónið
 23	dyrnar
 23	stefnumót
@@ -16814,14 +16805,12 @@
 23	feli
 23	þéttum
 23	ferðina
-23	She
 23	bikarkeppni
 23	vandlega
 23	skáldum
 23	bókmenntasögu
 23	dyrum
 23	andúð
-23	Devil
 23	óperu
 23	félagsmönnum
 23	kynin
@@ -16834,7 +16823,6 @@
 23	viðburði
 23	skoðuð
 23	Hussein
-23	Orwell
 23	Norðurlandaráð
 23	„Hvað
 23	sólóplötu
@@ -16963,6 +16951,7 @@
 23	Valdís
 23	merkingarfræði
 23	Woody
+23	Bean
 23	kjörfursti
 23	kjörfursta
 23	aldamót
@@ -16974,7 +16963,6 @@
 23	væntingar
 23	Stríðinu
 23	Boðið
-23	ma
 23	spítalanum
 23	Brúará
 23	fiskiskip
@@ -17020,7 +17008,6 @@
 23	Þjóðleikhúsið
 23	tvískiptur
 23	listamanninn
-23	bregða
 23	Maines
 23	styttuna
 23	Record
@@ -17119,7 +17106,6 @@
 23	Norfolk
 23	skipulagðar
 23	toppinn
-23	Beta
 23	iðka
 23	hituð
 23	Bessi
@@ -17193,6 +17179,7 @@
 23	endurbyggingu
 23	kísil
 23	HS
+23	He
 23	gagnrýnir
 23	gagnrýnin
 23	trip
@@ -17244,7 +17231,6 @@
 22	Phouma
 22	sniði
 22	seglum
-22	Magni
 22	rómantík
 22	Brendon
 22	sólarljósi
@@ -17290,14 +17276,12 @@
 22	teldi
 22	Guillaume
 22	siðaskipta
-22	Ocean
 22	týndu
 22	togara
 22	Völler
 22	hálfkæringi
 22	heimaleiki
 22	Verkalýðsfélag
-22	Cauchy
 22	trúarlega
 22	so
 22	fiskvinnslu
@@ -17310,7 +17294,6 @@
 22	hné
 22	kveikjan
 22	heimspekilegar
-22	Christie
 22	stjörnufræðingar
 22	utanum
 22	samnefndur
@@ -17403,6 +17386,7 @@
 22	Prússum
 22	Think
 22	Einstakir
+22	un
 22	fingur
 22	ráðgáta
 22	umsjónarmaður
@@ -17441,6 +17425,7 @@
 22	hreyfist
 22	konungssambandi
 22	Engilsaxa
+22	óbein
 22	vítamíni
 22	bronsverðlaun
 22	hælis
@@ -17495,7 +17480,6 @@
 22	Áfram
 22	springa
 22	heimsfrægð
-22	óbein
 22	Geysir
 22	seglið
 22	framherji
@@ -17527,6 +17511,7 @@
 22	yfirburðum
 22	andstæðinganna
 22	fjörðum
+22	Orwell
 22	útgáfufyrirtækinu
 22	Hungurleikunum
 22	Hebreska
@@ -17539,6 +17524,7 @@
 22	línulega
 22	Lúxemborgar
 22	túnum
+22	Martha
 22	Tonight
 22	post
 22	tilgreind
@@ -17628,7 +17614,6 @@
 22	þrautir
 22	Átti
 22	Vesturdal
-22	Landslag
 22	kristninnar
 22	was
 22	true
@@ -17645,7 +17630,6 @@
 22	Ellý
 22	Kafli
 22	endurvinnslu
-22	Ingimundarson
 22	Kenía
 22	vesturátt
 22	Sisters
@@ -17673,6 +17657,7 @@
 22	aðskilið
 22	Fyrrum
 22	takmarkaðar
+22	ma
 22	Marínó
 22	Loðinn
 22	Agrippina
@@ -17721,6 +17706,7 @@
 22	sjálfstjórnarhérað
 22	rómverskar
 22	pólitískri
+22	bregða
 22	þingum
 22	búning
 22	Ptólemajosi
@@ -17728,7 +17714,6 @@
 22	Søren
 22	metnað
 22	Amundsen
-22	Standard
 22	bygg
 22	Staðarhreppi
 22	Nora
@@ -17767,7 +17752,6 @@
 22	atriða
 22	Transport
 22	njóti
-22	Shepherd
 22	sérkennilegt
 22	gagnlegt
 22	vaxtar
@@ -17814,7 +17798,9 @@
 22	fornsögum
 22	nafnbót
 22	Sameining
+22	that
 22	Túrkmenistan
+22	Beta
 22	grunnnámi
 22	McCain
 22	suðurhlutanum
@@ -17943,6 +17929,7 @@
 21	Fiskurinn
 21	Helgasyni
 21	Bandaríkjum
+21	Magni
 21	umkringja
 21	svari
 21	kettir
@@ -18005,7 +17992,6 @@
 21	þjóðsöng
 21	Tilnefningar
 21	félagslegt
-21	Ra
 21	Ólympíuleikar
 21	pinyin
 21	bæjarráðs
@@ -18015,14 +18001,15 @@
 21	skurðaðgerð
 21	Rand
 21	Liao
+21	Ocean
 21	kennslubækur
 21	Novgorod
 21	Höll
-21	Eagles
 21	Guttormur
 21	andstæðing
 21	hafs
 21	stökin
+21	Cauchy
 21	kveðskapur
 21	lokun
 21	Vöxtur
@@ -18033,6 +18020,7 @@
 21	US
 21	aux
 21	stækkandi
+21	Christie
 21	med
 21	formlegu
 21	ból
@@ -18145,13 +18133,13 @@
 21	Vesturbæjar
 21	flóann
 21	Nefnd
+21	Terre'Blanche
 21	Garðabæjar
 21	vakna
 21	þrívídd
 21	Órækja
 21	heimspekingarnir
 21	Hearts
-21	Hell
 21	söguþræði
 21	Skírnir
 21	slag
@@ -18367,6 +18355,7 @@
 21	hegða
 21	fosfór
 21	Mótmælin
+21	Landslag
 21	virðing
 21	Dahómey
 21	hóll
@@ -18393,6 +18382,7 @@
 21	sterkri
 21	rótinni
 21	kunn
+21	Ingimundarson
 21	framsækið
 21	Ródesíu
 21	beitar
@@ -18534,7 +18524,6 @@
 21	hermir
 21	norskt
 21	nákvæma
-21	Colt
 21	Melum
 21	varlega
 21	skulda
@@ -18651,7 +18640,6 @@
 21	hertekið
 21	Æ
 21	sterkara
-21	sveitarstjórnarkosningar
 21	Máritíus
 21	Lydon
 21	myndaðir
@@ -18676,7 +18664,7 @@
 21	valds
 21	sameindum
 21	Hauksbók
-21	Humboldt
+21	sveitarstjórnarkosningar
 21	Gold
 21	Sölvason
 20	Öskjuhlíð
@@ -18726,7 +18714,6 @@
 20	Ríó
 20	frelsaði
 20	vindum
-20	Río
 20	lénsmaður
 20	flykktust
 20	tiltekinna
@@ -18739,11 +18726,13 @@
 20	goðorð
 20	„hann
 20	rökgreiningarheimspekinnar
+20	Neal
 20	Árbók
 20	tímarita
 20	tímariti
 20	Boyle
 20	hjónabandinu
+20	Ra
 20	stilk
 20	varan
 20	Minnismerki
@@ -18768,6 +18757,7 @@
 20	Írar
 20	bílslysi
 20	Íslenskur
+20	Eagles
 20	hagnýtt
 20	Sjöundá
 20	villtra
@@ -18869,6 +18859,7 @@
 20	Vandamálið
 20	Bolzano
 20	Mikhaíl
+20	Raspútín
 20	Palm
 20	menningarlegt
 20	Geitaskarði
@@ -18906,6 +18897,7 @@
 20	Nóvember
 20	Stjörnunni
 20	mannleg
+20	Hell
 20	ríkasti
 20	Hjónin
 20	grafar
@@ -18913,7 +18905,6 @@
 20	stórmeistari
 20	harmleiki
 20	Nansen
-20	Dourdan
 20	líffræðilega
 20	þingflokks
 20	heimta
@@ -18936,6 +18927,7 @@
 20	Gvatemala
 20	Austurland
 20	Bertrade
+20	Río
 20	Sterling
 20	Felzmann
 20	ruddist
@@ -18974,8 +18966,8 @@
 20	sveifla
 20	stjórnmálaflokkum
 20	Arctic
+20	im
 20	sáttmálann
-20	Di
 20	hlíðar
 20	Hugmynd
 20	Å
@@ -18993,6 +18985,7 @@
 20	hafinn
 20	Medea
 20	veraldlegum
+20	Devil
 20	Stacy
 20	umbóta
 20	Alpana
@@ -19063,7 +19056,6 @@
 20	ættuð
 20	upplýst
 20	hæðin
-20	Raspútín
 20	Chan
 20	matinn
 20	Abdul
@@ -19093,7 +19085,6 @@
 20	Years
 20	riðið
 20	hinsegin
-20	Brady
 20	andsnúnir
 20	Enschede
 20	Hundar
@@ -19116,7 +19107,6 @@
 20	Gotland
 20	flokkaður
 20	Edge
-20	tröppur
 20	samnefnds
 20	Zöllner
 20	skaðleg
@@ -19157,7 +19147,6 @@
 20	Lýðfræði
 20	félagsmálaráðherra
 20	verðbólga
-20	vild
 20	Bjólfskviðu
 20	Tara
 20	Opna
@@ -19230,7 +19219,6 @@
 20	kúgun
 20	hendir
 20	efnahagslífi
-20	Jörundar
 20	skorður
 20	Íþróttafélag
 20	bifreiða
@@ -19246,6 +19234,7 @@
 20	meðlim
 20	bjartsýni
 20	beinir
+20	Standard
 20	Flusser
 20	klausturhaldara
 20	Superman
@@ -19440,7 +19429,7 @@
 20	barðinu
 20	víxl
 20	Skriðu
-20	Sullivan
+20	Humboldt
 20	svöruðu
 20	sósíalistar
 20	dauðinn
@@ -19624,7 +19613,6 @@
 19	blóðflæði
 19	Gissurarsonar
 19	Listahátíð
-19	Nickelodeon
 19	starfseminni
 19	Agnesi
 19	efnasamsetningu
@@ -19798,9 +19786,11 @@
 19	meðalhita
 19	Gunnlaugsdóttir
 19	nánum
+19	McDonald's
 19	blandaðist
 19	sérhljóð
 19	Leikinn
+19	Di
 19	Jeu
 19	bókasöfn
 19	fjallendi
@@ -19919,7 +19909,6 @@
 19	bága
 19	Wyoming
 19	Zhou
-19	Sister
 19	ástum
 19	krakkar
 19	gullna
@@ -19939,6 +19928,7 @@
 19	Neptúnusar
 19	Síðara
 19	Tilkynnt
+19	Brady
 19	víðara
 19	sykrur
 19	Garofalo
@@ -19966,6 +19956,7 @@
 19	bandamaður
 19	verðmæta
 19	forskot
+19	tröppur
 19	kommúnistaflokkurinn
 19	hrá
 19	rænir
@@ -20007,7 +19998,6 @@
 19	Proppé
 19	flokkunarfræði
 19	Lena
-19	Papa
 19	kúlur
 19	Middle
 19	Greco
@@ -20094,6 +20084,7 @@
 19	Pepsi
 19	galdramenn
 19	vafi
+19	Jörundar
 19	Jómsvíkinga
 19	þegnanna
 19	flugvallarins
@@ -20161,6 +20152,7 @@
 19	Sextán
 19	Cobain
 19	Skallagrímssonar
+19	Shepherd
 19	Aldrin
 19	Eugen
 19	Eitthvað
@@ -20180,6 +20172,7 @@
 19	Eystra
 19	Hrafni
 19	Snorralaug
+19	Colt
 19	skemma
 19	grunur
 19	næstefsta
@@ -20232,7 +20225,6 @@
 19	fótur
 19	Ciceros
 19	alkóhól
-19	tunga
 19	embættismönnum
 19	Phillips
 19	nautgripi
@@ -20277,7 +20269,6 @@
 19	undirrituð
 19	Bardaginn
 19	Mercator
-19	Master
 19	Lítill
 19	tvennum
 19	lotukerfisins
@@ -20291,7 +20282,6 @@
 19	Olga
 19	landslagið
 19	spurningin
-19	Irene
 19	líkir
 19	Duncan
 19	esperanto
@@ -20341,6 +20331,7 @@
 19	Outer
 19	þáttana
 19	stödd
+19	Sullivan
 19	skyldari
 19	duglegur
 18	Western
@@ -20450,7 +20441,6 @@
 18	breiðum
 18	öflugum
 18	Palace
-18	Doctor
 18	Hersegóvínu
 18	gista
 18	mannkynssögunni
@@ -20509,6 +20499,7 @@
 18	ÍBH
 18	Heiðin
 18	nautgripum
+18	Nickelodeon
 18	hreifst
 18	Sammi
 18	Thorsteinssonar
@@ -20626,7 +20617,6 @@
 18	Tunglið
 18	dauðan
 18	Hólar
-18	Conference
 18	sveigja
 18	franskan
 18	Hofsjökli
@@ -20727,7 +20717,6 @@
 18	bakarí
 18	Breiðuvík
 18	Gátama
-18	Gödel
 18	Vasco
 18	örverufræði
 18	fullyrðingum
@@ -20752,7 +20741,6 @@
 18	hrædd
 18	spilla
 18	remote
-18	lokka
 18	fóstureyðingum
 18	refsa
 18	flekkjum
@@ -20809,7 +20797,6 @@
 18	Baruch
 18	Slow
 18	Aðildarríki
-18	Something
 18	yfirtaka
 18	Jóhannsdóttir
 18	nýstofnuðu
@@ -20916,6 +20903,7 @@
 18	Aðalknattspyrnufélag
 18	gróinn
 18	skarað
+18	Pat
 18	Ferðamennska
 18	knúinn
 18	klassískra
@@ -20954,6 +20942,7 @@
 18	smávaxinn
 18	Júlíana
 18	stýrimaður
+18	Papa
 18	flakk
 18	sjálfbæra
 18	Skáld
@@ -20963,6 +20952,7 @@
 18	lirfan
 18	ættleiddur
 18	virtustu
+18	vild
 18	Þeyr
 18	staðallinn
 18	Skíðadal
@@ -20992,7 +20982,6 @@
 18	sjónauka
 18	Township
 18	Mikilvægi
-18	Nevis
 18	Empedókles
 18	heilbrigðisráðherra
 18	Neshreppi
@@ -21182,7 +21171,6 @@
 18	tríóinu
 18	bænhús
 18	hlýrra
-18	bahá
 18	þjálfað
 18	orgelið
 18	skýrslunni
@@ -21215,6 +21203,7 @@
 18	Árvakur
 18	graníti
 18	gufar
+18	tunga
 18	aureus
 18	horfði
 18	krafturinn
@@ -21270,6 +21259,7 @@
 18	handhafa
 18	Osaka
 18	soldáninn
+18	Master
 18	varðveitti
 18	fræðileg
 18	bandaríkjanna
@@ -21289,6 +21279,7 @@
 18	útnefnd
 18	Comte
 18	Seifi
+18	Irene
 18	over
 18	Lárentíusar
 18	Scrubs
@@ -21452,6 +21443,7 @@
 17	litlaus
 17	Arkesilás
 17	Freysteinn
+17	Doctor
 17	Habsborgurum
 17	heimspekina
 17	tilnefnt
@@ -21567,6 +21559,7 @@
 17	fegurðina
 17	felldar
 17	lausafé
+17	It's
 17	forföllum
 17	Arreboe
 17	tónlistarstjóri
@@ -21591,7 +21584,6 @@
 17	kváðu
 17	Sams
 17	Hagstofu
-17	Nelly
 17	krikket
 17	útivelli
 17	gili
@@ -21627,7 +21619,6 @@
 17	Another
 17	Botnsdal
 17	Byltingin
-17	Angelo
 17	kóði
 17	tjarnir
 17	efnahagslegu
@@ -21650,6 +21641,7 @@
 17	aldamótum
 17	synt
 17	aðfangadag
+17	Conference
 17	ritara
 17	Stafangri
 17	Askar
@@ -21668,10 +21660,10 @@
 17	Sósíalistaflokkinn
 17	náttúruvísindum
 17	verðbréf
-17	McLaren
 17	skeyti
 17	Stofnað
 17	tilbiðja
+17	Dourdan
 17	rós
 17	Kaffi
 17	Ketilbjörn
@@ -21709,7 +21701,6 @@
 17	ryki
 17	Landing
 17	Avon
-17	el
 17	Markov
 17	Severin
 17	Leikhúsið
@@ -21771,6 +21762,7 @@
 17	kartöflurækt
 17	afturábak
 17	vegalengdin
+17	Gödel
 17	tindum
 17	sjúklingnum
 17	Čech
@@ -21852,6 +21844,7 @@
 17	forsætisráðherrann
 17	merkis
 17	skömm
+17	lokka
 17	tilgreina
 17	þykkan
 17	Leikkonan
@@ -21866,7 +21859,6 @@
 17	Bockholt
 17	sérgrein
 17	Hvalvatnsfirði
-17	Sciences
 17	Frede
 17	sumarbúðir
 17	sósu
@@ -21889,7 +21881,6 @@
 17	Dartmouth
 17	AND
 17	sólóferil
-17	hugarástand
 17	styrkþegi
 17	höggnir
 17	Kenny
@@ -21937,6 +21928,7 @@
 17	Hondúras
 17	lunda
 17	Nafis
+17	's
 17	Hólavallarskóla
 17	verkun
 17	Þórólfs
@@ -21983,7 +21975,6 @@
 17	frambjóðenda
 17	Arnarfjörð
 17	Gallup
-17	ve
 17	Tallinn
 17	ánum
 17	samningarnir
@@ -22069,16 +22060,18 @@
 17	hverir
 17	brögðum
 17	Berlínarmúrinn
+17	Can't
 17	Hallgrím
+17	stuttlega
 17	lausnin
 17	kringumstæður
 17	Holtavörðuheiði
 17	útflutningi
-17	Shawn
 17	Sósíalistaflokkurinn
 17	kostnaðar
 17	bólfestu
 17	rifrildi
+17	Nevis
 17	prófs
 17	njósna
 17	Miklir
@@ -22118,7 +22111,6 @@
 17	Virkjunin
 17	vökvaformi
 17	Formúla
-17	Burke
 17	mánuðurinn
 17	Paragvæ
 17	lömb
@@ -22222,6 +22214,7 @@
 17	Historie
 17	stjórnenda
 17	samningunum
+17	ánafnaði
 17	Bessastaði
 17	hópfimleikum
 17	Sartre
@@ -22293,7 +22286,6 @@
 17	ábótavant
 17	Múrinn
 17	sniðganga
-17	stuttlega
 17	Fyrrverandi
 17	Ferðaþjónusta
 17	Íslamska
@@ -22447,10 +22439,10 @@
 17	víkina
 17	Lirfan
 17	rithöfund
+17	Draumur
 17	keisaraveldi
 17	biskupsstóll
 17	Sæbraut
-17	ánafnaði
 17	vaxi
 17	listaverka
 17	leikstjórnandi
@@ -22467,7 +22459,6 @@
 17	Emilio
 17	Sirius
 17	stúkunni
-17	kanúki
 17	stríðandi
 17	sápu
 17	tónsmíðum
@@ -22482,7 +22473,6 @@
 17	styrktu
 17	eftirmenn
 17	Mongólía
-17	Draumur
 17	Firefox
 17	bleikum
 17	öðluðust
@@ -22774,6 +22764,7 @@
 16	Húsin
 16	samhangandi
 16	fundarins
+16	Nelly
 16	Indian
 16	banjó
 16	listamann
@@ -22844,7 +22835,6 @@
 16	Únst
 16	Florida
 16	útgefið
-16	Mack
 16	heimstyrjöld
 16	nágrannalöndunum
 16	konungsstól
@@ -22852,6 +22842,7 @@
 16	Eads
 16	slösuðust
 16	Inka
+16	McLaren
 16	næga
 16	Ingrid
 16	Stjórnleysis
@@ -22916,7 +22907,6 @@
 16	ræktaði
 16	sýsluvöld
 16	heilsubrests
-16	go
 16	Þorvarði
 16	þingmeirihluta
 16	aflögð
@@ -22960,7 +22950,6 @@
 16	Berba
 16	magna
 16	Útgefandi
-16	Bergey
 16	neikvæðri
 16	samtakana
 16	ættkvíslum
@@ -23030,9 +23019,11 @@
 16	starfssemi
 16	Voyager
 16	Kaspíahaf
+16	Sciences
 16	nýbýli
 16	heiltala
 16	Steingrím
+16	Something
 16	jarðgas
 16	Lónið
 16	boðuðu
@@ -23047,13 +23038,13 @@
 16	frítt
 16	vítaspyrnu
 16	áfangastaða
+16	hugarástand
 16	líklegur
 16	Apúlíu
 16	brasilískur
 16	þéttbýlið
 16	stíls
 16	steinsteypt
-16	Marvin
 16	upplifir
 16	prentfrelsi
 16	Hus
@@ -23088,7 +23079,6 @@
 16	samspili
 16	Ingólf
 16	sveitunum
-16	Bahá
 16	viðskeyti
 16	stolt
 16	skilyrðingu
@@ -23219,7 +23209,6 @@
 16	armfætlna
 16	Bjarnarhöfn
 16	þéttbýlissvæði
-16	Sing
 16	Fluttist
 16	endast
 16	Hrafninn
@@ -23256,8 +23245,8 @@
 16	vaðfugla
 16	píanóleik
 16	Látrabjarg
+16	Shawn
 16	dauð
-16	„You
 16	hugsaði
 16	viðurkenninga
 16	Laugardalnum
@@ -23292,6 +23281,7 @@
 16	Nytjar
 16	Frændi
 16	undarlega
+16	Burke
 16	Alucards
 16	Leno
 16	árþúsund
@@ -23309,6 +23299,7 @@
 16	stríðsglæpi
 16	sultu
 16	kristið
+16	Ítalski
 16	Ögmundi
 16	June
 16	Pforzheim
@@ -23415,7 +23406,6 @@
 16	sýkingar
 16	bandalags
 16	kvarka
-16	sam
 16	ítalskri
 16	Nordiska
 16	aðildarríkjum
@@ -23496,6 +23486,7 @@
 16	Dynamo
 16	austurstrandar
 16	þéttbýlisstaðir
+16	There
 16	hávaxinn
 16	Fuglar
 16	sáttur
@@ -23574,7 +23565,6 @@
 16	nyt
 16	daglegan
 16	Leslie
-16	Organisation
 16	keisaraynju
 16	styrktar
 16	Arabar
@@ -23615,7 +23605,6 @@
 16	Steen
 16	papa
 16	seðlabanka
-16	Chaplin
 16	Leiftur
 16	Motorola
 16	mæling
@@ -23653,7 +23642,6 @@
 16	endingar
 16	núðlur
 16	upptekinn
-16	Ítalski
 16	skilaboðum
 16	legsteinn
 16	reiddist
@@ -23687,6 +23675,7 @@
 16	varðveitir
 16	Þorlákssyni
 16	stríðsrekstur
+16	kanúki
 16	verslunarmaður
 16	Heath
 16	Douro
@@ -23792,7 +23781,6 @@
 15	drekkt
 15	sjálfboðaliða
 15	myndskreytt
-15	Vínland
 15	Sauðárhrepps
 15	klór
 15	sjaldgæfar
@@ -23817,7 +23805,6 @@
 15	deiginu
 15	Sigurvegarinn
 15	mengunar
-15	Italia
 15	Ljótur
 15	Efrat
 15	Leonhard
@@ -23848,7 +23835,6 @@
 15	platonisma
 15	námsefni
 15	óhugsandi
-15	Connor
 15	SC
 15	Reykjanesbær
 15	forrits
@@ -24112,6 +24098,7 @@
 15	Masters
 15	Niðarós
 15	nýlegt
+15	Mack
 15	bækistöðvar
 15	bé
 15	Pollock
@@ -24164,6 +24151,7 @@
 15	Angelus
 15	Early
 15	Skálholtsbiskupi
+15	el
 15	ex
 15	gripum
 15	sálarfræði
@@ -24202,6 +24190,7 @@
 15	minninu
 15	tilteknar
 15	Þéttleiki
+15	go
 15	Lindberg
 15	afleiðingarnar
 15	auðugustu
@@ -24245,7 +24234,6 @@
 15	handlegginn
 15	Ronnie
 15	stafrænni
-15	Shi
 15	Ingveldur
 15	Maureen
 15	punkts
@@ -24288,7 +24276,6 @@
 15	háhitasvæðum
 15	aðgerðinni
 15	passaði
-15	est
 15	félagsskapur
 15	Daenerys
 15	Guðnasonar
@@ -24359,6 +24346,7 @@
 15	Alþýðublaðinu
 15	fylkingarinnar
 15	Knattspyrnufélags
+15	Marvin
 15	Gunnsteinn
 15	Wikipediu
 15	heppnaðist
@@ -24387,7 +24375,6 @@
 15	kadmín
 15	Miklubraut
 15	Aguilera
-15	Word
 15	Sundlaug
 15	Eimskipafélag
 15	Jonee
@@ -24537,6 +24524,7 @@
 15	Skák
 15	Sesselja
 15	herdeildum
+15	Sing
 15	Celtic
 15	stundaðir
 15	lestum
@@ -24786,7 +24774,6 @@
 15	Verð
 15	verksmiðjunnar
 15	þrefaldur
-15	McGee
 15	skalli
 15	Kolkuósi
 15	nemar
@@ -24881,7 +24868,6 @@
 15	klofinn
 15	námsbraut
 15	bænahús
-15	Jackie
 15	notandanum
 15	hlutverkinu
 15	sjávardýr
@@ -24915,6 +24901,7 @@
 15	laxi
 15	Umfjöllun
 15	orðu
+15	Organisation
 15	endurheimt
 15	tileinkaður
 15	mund
@@ -24956,6 +24943,7 @@
 15	kaþólikki
 15	Takuya
 15	Allmargir
+15	Chaplin
 15	Hammond
 15	samsafn
 15	Fu
@@ -24970,7 +24958,6 @@
 15	franka
 15	orkunotkun
 15	dálki
-15	Ladies
 15	Pac
 15	breiðar
 15	flýðu
@@ -25002,7 +24989,6 @@
 15	nunnuklaustur
 15	nauðgað
 15	Verður
-15	Mickey
 15	skotmörk
 15	bleik
 15	Tímanum
@@ -25136,7 +25122,6 @@
 14	pörum
 14	sjúkdóms
 14	landsteinana
-14	austurrísk
 14	Samheiti
 14	smala
 14	sjúkrahúsum
@@ -25166,6 +25151,7 @@
 14	viðmóti
 14	helgirit
 14	afþreying
+14	Vínland
 14	póst
 14	nakinn
 14	Bolingbroke
@@ -25185,6 +25171,7 @@
 14	Günter
 14	Þjóðminjasafnsins
 14	stríðin
+14	What's
 14	Banda
 14	Vargas
 14	stjörnuþoka
@@ -25401,7 +25388,6 @@
 14	vesturenda
 14	Heckler
 14	drengja
-14	Petrucci
 14	Palazzo
 14	vefnað
 14	Hefæstos
@@ -25430,7 +25416,6 @@
 14	Mussolinis
 14	Saddam
 14	Krag
-14	Bravo
 14	Sæmundi
 14	Serbar
 14	Ölgerðin
@@ -25442,7 +25427,6 @@
 14	hjúkrunarfræðinga
 14	Brynjúlfur
 14	ágangi
-14	Logan
 14	Lovísu
 14	tæpt
 14	tæpu
@@ -25505,7 +25489,6 @@
 14	dýrategundir
 14	Handritshöfundur
 14	skráning
-14	Avignon
 14	heittempruðum
 14	Kulusuk
 14	tarfarnir
@@ -25558,7 +25541,6 @@
 14	Austurbæjarbíói
 14	vök
 14	Stórar
-14	Freddy
 14	upptækt
 14	aukana
 14	Brautarholti
@@ -25653,7 +25635,6 @@
 14	Skógrækt
 14	hlynntur
 14	Sveppaborg
-14	léttir
 14	liðurinn
 14	Information
 14	Gösta
@@ -25697,6 +25678,7 @@
 14	fallegar
 14	Tækni
 14	keisararíki
+14	Shi
 14	íbúðarhúsið
 14	Judy
 14	leiðangra
@@ -25780,7 +25762,6 @@
 14	vallar
 14	silfurhvítur
 14	Rouen
-14	Emperor
 14	Electronic
 14	nm
 14	Arngrím
@@ -25875,6 +25856,8 @@
 14	lögtekin
 14	úrgangs
 14	íbúðinni
+14	austurrísk
+14	Word
 14	Túngötu
 14	útdauða
 14	Stuðmenn
@@ -25885,6 +25868,7 @@
 14	Claudia
 14	borðspil
 14	Kítíon
+14	'N
 14	Suzanne
 14	Garðaríki
 14	mildi
@@ -25918,12 +25902,12 @@
 14	spænskt
 14	stjórnmálaleg
 14	raunvísindum
+14	She's
 14	drekinn
 14	Limited
 14	Ungarnir
 14	dökku
 14	Silent
-14	Friend
 14	ráðningu
 14	hamri
 14	Viðeyjarstofu
@@ -25971,7 +25955,6 @@
 14	vergri
 14	Aðgerðin
 14	raunveruleikaþáttur
-14	wa
 14	Ögmund
 14	hlutkesti
 14	ullar
@@ -26062,7 +26045,6 @@
 14	stjórnmálaflokk
 14	Café
 14	Helmingur
-14	Discovery
 14	vafri
 14	Drottningin
 14	Salóme
@@ -26073,6 +26055,7 @@
 14	pönnu
 14	spurður
 14	Marius
+14	„You
 14	mótaðar
 14	koltvísýrings
 14	Fíladelfíu
@@ -26089,7 +26072,6 @@
 14	Fighting
 14	Eyvindarstaðaheiði
 14	flugskeytum
-14	Weizsäcker
 14	óperan
 14	ljónanna
 14	grip
@@ -26127,7 +26109,6 @@
 14	handritunum
 14	sjálfstæðisstríði
 14	Úti
-14	Regent
 14	Stirling
 14	Gunni
 14	kaupstöðum
@@ -26140,7 +26121,6 @@
 14	Skaftafellssýsla
 14	Gekk
 14	Kýros
-14	Homer
 14	framhaldsnemar
 14	kveðja
 14	borðaðar
@@ -26226,7 +26206,6 @@
 14	mismunun
 14	eldsins
 14	einokunarverslun
-14	Krumholtz
 14	heiðin
 14	Heimdallar
 14	Webber
@@ -26297,6 +26276,7 @@
 14	styrjöldin
 14	jörðunni
 14	tyggigúmmí
+14	sam
 14	Kollur
 14	Réunion
 14	fullkomnum
@@ -26355,6 +26335,7 @@
 14	vinsældarlistanum
 14	skemmtigarður
 14	Heldur
+14	McGee
 14	fólksfækkun
 14	heiðri
 14	skammstöfunina
@@ -26391,7 +26372,6 @@
 14	Skagen
 14	Rich
 14	Cahill
-14	Adler
 14	skipherra
 14	Spin
 14	Kennaraskóla
@@ -26440,7 +26420,6 @@
 14	Brecht
 14	Tónlistarferill
 14	Ragnarssonar
-14	Sant
 14	Trínidad
 14	bezt
 14	herskyldu
@@ -26463,6 +26442,7 @@
 14	fylltur
 14	líffæra
 14	Hvítir
+14	Jackie
 14	eldað
 14	hönnuðir
 14	trommarinn
@@ -26566,8 +26546,8 @@
 14	friðaðar
 14	Salisbury
 14	Jónsbókar
-14	Guns
 14	persónunum
+14	Ladies
 14	hvaðeina
 14	orlofs
 14	plötuútgáfu
@@ -26608,7 +26588,6 @@
 14	þjálfar
 14	Locarno
 14	skjöld
-14	Monster
 14	Þorri
 14	hertogar
 14	Daa
@@ -26671,7 +26650,6 @@
 14	snípuætt
 14	kosningabandalag
 14	öreindir
-14	Herjólfsnes
 14	auðir
 14	óstöðugt
 14	breytan
@@ -26757,7 +26735,6 @@
 13	upptalningu
 13	Tæknin
 13	one
-13	Hubert
 13	niðurlægingu
 13	miðlað
 13	lifnaðarháttum
@@ -26772,6 +26749,7 @@
 13	Finley
 13	NH
 13	NT
+13	re
 13	Þrýstingur
 13	ólympíugrein
 13	Lizzie
@@ -26812,7 +26790,6 @@
 13	listfræðingur
 13	Gesta
 13	Tumasonar
-13	manntal
 13	meginlandanna
 13	athvarf
 13	byggðina
@@ -27001,7 +26978,6 @@
 13	Amtsbókasafnið
 13	virkjunum
 13	Lessing
-13	Riddle
 13	Lúsíu
 13	glæsileg
 13	Yes
@@ -27041,6 +27017,7 @@
 13	Jónsmessu
 13	þjóðstjórn
 13	Trans
+13	Petrucci
 13	loðna
 13	kjörtímabilsins
 13	tríói
@@ -27090,6 +27067,7 @@
 13	Páfaríkisins
 13	aðgerðin
 13	þingmanns
+13	Bravo
 13	Kommúnistaflokkurinn
 13	PowerPC
 13	örgjörvi
@@ -27110,6 +27088,7 @@
 13	Bloomsbury
 13	skemmtilega
 13	varanlegt
+13	Logan
 13	japanskar
 13	gróða
 13	Alfreðsson
@@ -27186,6 +27165,7 @@
 13	Edén
 13	Wilkins
 13	pest
+13	Avignon
 13	Solanum
 13	andstæðingi
 13	helminga
@@ -27217,7 +27197,6 @@
 13	stofnum
 13	Aðalleikarar
 13	sextett
-13	Macy
 13	enskan
 13	múrnum
 13	vísitölunni
@@ -27233,6 +27212,7 @@
 13	Bremerhaven
 13	jarðskorpan
 13	Grove
+13	Freddy
 13	Septimius
 13	Levin
 13	deiling
@@ -27240,11 +27220,10 @@
 13	hunsa
 13	afrennsli
 13	ryður
-13	Eden
 13	einbeitir
-13	Pratchett
 13	aðmíráll
 13	síðust
+13	manntal
 13	Demi
 13	prófessorar
 13	dregst
@@ -27268,7 +27247,6 @@
 13	varaformanns
 13	Ólympíuleika
 13	Oddsdóttur
-13	Reilly
 13	frumbyggjum
 13	skógurinn
 13	lestina
@@ -27284,7 +27262,6 @@
 13	Gimli
 13	α
 13	hald
-13	ey
 13	vinnumaður
 13	guðsmóður
 13	spreyta
@@ -27344,6 +27321,7 @@
 13	langtímaminni
 13	Söguleg
 13	byggðarinnar
+13	léttir
 13	ASP
 13	minnihlutahópar
 13	aðskilnaði
@@ -27406,7 +27384,6 @@
 13	katakana
 13	bagla
 13	Domini
-13	je
 13	fyrrnefndum
 13	samfélagsleg
 13	Drese
@@ -27416,6 +27393,7 @@
 13	aflýst
 13	Hagalín
 13	germanskt
+13	grafískri
 13	Jótlands
 13	umbúðum
 13	þægilegt
@@ -27465,6 +27443,7 @@
 13	Edinborgar
 13	Friday
 13	gagnstæð
+13	est
 13	Def
 13	Antiokkíu
 13	aðildarríkin
@@ -27478,7 +27457,6 @@
 13	Hacking
 13	einblína
 13	Maríuhöfn
-13	grafískri
 13	Hero
 13	nakin
 13	geymist
@@ -27498,6 +27476,7 @@
 13	Morning
 13	milta
 13	Taking
+13	Emperor
 13	Melkorka
 13	ESA
 13	Todmobile
@@ -27565,7 +27544,6 @@
 13	Craxton
 13	mundar
 13	forsetaembætti
-13	„What
 13	Stephanie
 13	Mohr
 13	Rauðrefir
@@ -27603,6 +27581,7 @@
 13	frankaríkinu
 13	Perth
 13	vísindalegrar
+13	Sister
 13	Byggðasafn
 13	bylgja
 13	bylgju
@@ -27719,7 +27698,7 @@
 13	beygt
 13	innanverðum
 13	we
-13	Doug
+13	wa
 13	gröfinni
 13	Bændaflokksins
 13	söfnuðir
@@ -27828,6 +27807,7 @@
 13	sauðnaut
 13	Łódź
 13	birtur
+13	Discovery
 13	mini
 13	þyrlum
 13	Geoffreys
@@ -27854,6 +27834,7 @@
 13	Services
 13	þyngsta
 13	skírskotun
+13	Weizsäcker
 13	Wundt
 13	óvinsælir
 13	einfaldleika
@@ -27874,7 +27855,6 @@
 13	Souls
 13	árlegum
 13	afstýra
-13	Alpha
 13	Pokémon
 13	Tulinius
 13	reglugerðum
@@ -27893,6 +27873,7 @@
 13	Öðru
 13	efnahagssvæðið
 13	Offspring
+13	Regent
 13	Bibliotheca
 13	hunangi
 13	lömbin
@@ -27942,7 +27923,6 @@
 13	bjöllur
 13	tóntegund
 13	þjóðþingið
-13	Eve
 13	aðildarfélög
 13	Ellesmere
 13	kápu
@@ -27980,6 +27960,7 @@
 13	Helsing
 13	Gerum
 13	rave
+13	Krumholtz
 13	Vallanesi
 13	fæli
 13	nornir
@@ -28111,7 +28092,6 @@
 13	skrifstofumaður
 13	Glass
 13	hóta
-13	Internationale
 13	Remus
 13	nautgripir
 13	Tyrki
@@ -28169,6 +28149,7 @@
 13	Sambandi
 13	Grímseyjar
 13	Stórubólu
+13	Adler
 13	lykilorð
 13	vökvinn
 13	Fátækt
@@ -28257,7 +28238,6 @@
 13	Vesturlandsvegi
 13	Ittoqqortoormiit
 13	Frammistaða
-13	Lil
 13	Arnarfjarðar
 13	Civil
 13	einfaldað
@@ -28326,9 +28306,7 @@
 13	Leto
 13	Norðmaður
 13	vanur
-13	Sharpay
 13	Skyldi
-13	Winter
 13	pakkað
 13	Picasso
 13	Odyssey
@@ -28356,7 +28334,6 @@
 13	slökkt
 13	Riemann
 13	morðunum
-13	Hitchhiker
 13	Ágústi
 13	lögmannsstörfum
 13	bruggun
@@ -28374,6 +28351,7 @@
 13	Concorde
 13	bakmengi
 13	rússneski
+13	Guns
 13	njósnir
 13	Severusar
 13	líkamsrækt
@@ -28424,6 +28402,7 @@
 13	Tarski
 13	skipaskurðinn
 13	krýndi
+13	Monster
 13	Kirkjubæjarklaustur
 13	samtíð
 13	Þorra
@@ -28496,8 +28475,8 @@
 13	gufuskip
 13	Ellisif
 13	böl
+13	Herjólfsnes
 13	Funk
-13	Hawkins
 13	Everything
 13	akademíuna
 13	Göppingen
@@ -28547,17 +28526,16 @@
 12	þjóðvegurinn
 12	Symphony
 12	glímt
-12	Webster
 12	Þingvallavatni
 12	miðstjórnarinnar
 12	internet
 12	Sjálfstæðisflokki
+12	Hubert
 12	Pepsideild
 12	lögfræðinám
 12	Lirfurnar
 12	dýrka
 12	Sýslumenn
-12	Clear
 12	Murder
 12	þorrablót
 12	Bienne
@@ -28615,7 +28593,6 @@
 12	höfunum
 12	Silvíu
 12	tollens
-12	Farrell
 12	harðkjarnapönk
 12	Kostnaður
 12	efnilegur
@@ -28671,6 +28648,7 @@
 12	Livius
 12	annarar
 12	augnablik
+12	Stafnes
 12	kjark
 12	Broadcasting
 12	fatahönnuður
@@ -28764,6 +28742,7 @@
 12	yfirtekið
 12	skelja
 12	þóknast
+12	Riddle
 12	Superstar
 12	feitletraðir
 12	vísindafélaginu
@@ -28919,7 +28898,6 @@
 12	bæti
 12	Fjörðum
 12	glataðist
-12	Monn
 12	kristalla
 12	Brandom
 12	Lilith
@@ -28967,7 +28945,9 @@
 12	handsamaðir
 12	Lindbergh
 12	Pjetur
+12	Eden
 12	ruplaði
+12	Pratchett
 12	vönduð
 12	Serra
 12	Tyrkjaveldis
@@ -29004,7 +28984,7 @@
 12	verslunarmanna
 12	Mikilvægustu
 12	FMLN
-12	ez
+12	ey
 12	sunds
 12	stökkbreytingar
 12	Inch
@@ -29035,7 +29015,6 @@
 12	Tryggvasyni
 12	skriðdýra
 12	loftþyngd
-12	Father
 12	steypu
 12	ritstjórar
 12	Verkalýðsfélags
@@ -29117,9 +29096,11 @@
 12	Only
 12	Huygens
 12	trúaðra
+12	Hjalteyri
 12	Aldo
 12	hamskipti
 12	hraunlaga
+12	bahá'í
 12	Langá
 12	Hagaskóla
 12	stjórnmálahreyfing
@@ -29208,8 +29189,10 @@
 12	Efsti
 12	Kompáss
 12	Árnesinga
+12	People's
 12	Laue
 12	úlfum
+12	O'Reilly
 12	gervitauganeta
 12	víðtækt
 12	víðtæka
@@ -29235,7 +29218,6 @@
 12	Héraðsdómi
 12	sveinar
 12	lávarð
-12	can
 12	hallaði
 12	gjörning
 12	tæka
@@ -29254,6 +29236,7 @@
 12	rúnakvæðið
 12	sprengd
 12	geimfari
+12	„What
 12	heyi
 12	föðurleifð
 12	Bókmenntafélagsins
@@ -29354,10 +29337,10 @@
 12	efaðist
 12	parta
 12	prestakall
-12	Anno
 12	skattlandi
 12	blaðamannafundi
 12	spjótum
+12	Doug
 12	hvalirnir
 12	Æti
 12	Gagnfræðaskóli
@@ -29416,7 +29399,6 @@
 12	skýrar
 12	minja
 12	poki
-12	Stafnes
 12	kommúnistaflokks
 12	aflétta
 12	Stærðin
@@ -29471,6 +29453,7 @@
 12	Hóf
 12	Tisch
 12	Galla
+12	Alpha
 12	þráður
 12	dagblaðanna
 12	Hálfdanar
@@ -29510,6 +29493,7 @@
 12	öruggur
 12	dansaði
 12	iðnaðurinn
+12	afloknum
 12	Gróa
 12	Borgarahreyfingarinnar
 12	Bastilluna
@@ -29569,10 +29553,10 @@
 12	Suomen
 12	Qaqortoq
 12	friðsamur
-12	Lana
 12	töluverðan
 12	Ghost
 12	Grímsvötn
+12	sigrinum
 12	hráefnum
 12	hegðar
 12	hárra
@@ -29739,6 +29723,7 @@
 12	Staðardagskrá
 12	NSA
 12	athafnamannsins
+12	You're
 12	jarðlögin
 12	Kollafjörður
 12	sjálfsskoðun
@@ -29777,7 +29762,6 @@
 12	rokkabillí
 12	samruni
 12	styrktist
-12	nasismans
 12	lestarstöð
 12	sorpi
 12	Foucault
@@ -29855,6 +29839,7 @@
 12	langlífur
 12	réttarstöðu
 12	umtal
+12	Sharpay
 12	Moog
 12	nútímaheimspeki
 12	brotnað
@@ -29922,13 +29907,26 @@
 12	kirkjuskipið
 12	LÍÚ
 12	Jarl
+12	Wimbledon
 12	GB
+12	MacCarthy
+12	þingforseti
+12	frumstæð
 12	Gó
+12	blaðsíðu
+12	Grundarfjörður
 12	Seltjörn
 12	Verði
+12	Mickey
+12	hægðir
+12	skammtur
+12	hljóðgervlar
+12	ráðherranefndinni
+12	„Er
 12	„En
 12	Takmark
 12	skjólgóðum
+12	tin
 12	efnisheimsins
 12	Pride
 12	dreifða
@@ -29938,7 +29936,11 @@
 12	Shue
 12	utanhúss
 12	Bótólfur
+12	menntuð
 12	Henning
+12	fræðistörf
+12	verslunarvara
+12	minnkuð
 12	hverskonar
 12	Beauty
 12	ZBZ
@@ -29972,7 +29974,6 @@
 12	bjartari
 12	striga
 12	Ríkarður
-12	Tobin
 12	Leiðólfur
 12	Vesturamti
 12	lítilsháttar
@@ -29988,7 +29989,6 @@
 12	sterkasti
 12	fuglsins
 12	Laufásveg
-12	Dawson
 12	upprunalegi
 12	vitringanna
 12	hopps
