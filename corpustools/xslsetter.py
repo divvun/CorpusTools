@@ -30,7 +30,7 @@ class MetadataHandler(object):
     def set_variable(self, key, value):
         try:
             variable = self.tree.getroot().find(
-                "{http://www.w3.org/1999/XSL/Transform}"
+                "{{http://www.w3.org/1999/XSL/Transform}}"
                 "variable[@name='{}']".format(key))
             variable.attrib['select'] = "'{}'".format(value)
         except AttributeError as e:
