@@ -10,6 +10,7 @@ import argparse
 
 import argparse_version
 import util
+import gzip
 
 
 class NGramModel(object):
@@ -263,22 +264,32 @@ class Classifier(object):
 
 
 class FolderTrainer(object):
-    def __init__(self, folder, ext='.txt', Model=CharModel, verbose=False):
+    def __init__(self, folder, exts=['.txt', '.txt.gz'], Model=CharModel,
+                 verbose=False):
         self.models = {}
-        folder_glob = os.path.join(folder, '*'+ext)
 
-        for fname in glob.glob(os.path.normcase(folder_glob)):
-            if verbose:
-                msg = "Processing %s" % (fname,)
-                if os.path.getsize(fname) > 5000000:
-                    msg += " (this may take a while)"
-                print msg.encode('utf-8')
-                sys.stdout.flush()
-            lang = util.basename_noext(fname, ext)
-            self.models[lang] = Model(lang).of_text_file(open(fname, 'r'))
+        for ext in exts:
+            files = glob.glob(os.path.normcase(os.path.join(folder, '*'+ext)))
+            for fname in files:
+                if verbose:
+                    msg = "Processing %s" % (fname,)
+                    if os.path.getsize(fname) > 5000000:
+                        msg += " (this may take a while)"
+                    print msg.encode('utf-8')
+                    sys.stdout.flush()
+                lang = util.basename_noext(fname, ext)
+                self.models[lang] = Model(lang).of_text_file(self.open_corpus(fname))
+
         if len(self.models) == 0:
-            raise Exception("No suitable files found matching {}!".format(
-                folder_glob))
+            raise Exception(
+                "No suitable files found matching {}/*.{}{}{}!".format(
+                    folder, "{", ",".join(exts), "}"))
+
+    def open_corpus(self, fname):
+        if fname.endswith('.gz'):
+            return gzip.open(fname, 'rb')
+        else:
+            return open(fname, 'r')
 
     def save(self, folder, ext='.lm', verbose=False):
         for lang, model in self.models.iteritems():
@@ -315,10 +326,15 @@ def file_comp(args):
             sys.stdout, verbose=True)
     else:
         raise util.ArgumentError(
-            "this shouldn't happen; mtype should be lm or wm")
+            "This shouldn't happen; mtype should be lm or wm")
 
 
 def folder_comp(args):
+    # Check that output dir exists *first* so we don't waste time on
+    # training and only then crash :-)
+    for d in [args.corp_dir, args.model_dir]:
+        if not os.path.isdir(d):
+            raise util.ArgumentError("{} is not a directory!".format(d))
     FolderTrainer(args.corp_dir, Model=CharModel, verbose=True).save(
         args.model_dir, ext='.lm', verbose=True)
     FolderTrainer(args.corp_dir, Model=WordModel, verbose=True).save(
