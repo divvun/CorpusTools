@@ -1165,7 +1165,7 @@ searchHitSummary',
         '''Embed em elements that are direct ancestors of body inside a p
         element
         '''
-        for tag in ['a', 'i', 'em', 'font']:
+        for tag in ['a', 'i', 'em', 'font', 'u', 'strong']:
             for bi in self.soup.xpath(
                     './/html:body/html:{}'.format(tag),
                     namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
@@ -1173,6 +1173,17 @@ searchHitSummary',
                 bi_parent = bi.getparent()
                 bi_parent.insert(bi_parent.index(bi), p)
                 p.append(bi)
+
+    def body_text(self):
+        body = self.soup.find(
+            './/html:body',
+            namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+
+        if body.text is not None:
+            p = etree.Element('{http://www.w3.org/1999/xhtml}p')
+            p.text = body.text
+            body.text = None
+            body.insert(0, p)
 
     def tidy(self):
         """
@@ -1183,6 +1194,7 @@ searchHitSummary',
         self.add_p_around_text()
         self.center2div()
         self.body_i()
+        self.body_text()
 
         return etree.tostring(self.soup)
 

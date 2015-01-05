@@ -836,6 +836,36 @@ class TestHTMLContentConverter(XMLTester):
 
         self.assertEqual(got, etree.tostring(want))
 
+    def test_body_u(self):
+        got = converter.HTMLContentConverter(
+            'u.html',
+            '<html><body><u>b</u></body></html>', None).tidy()
+
+        want = html5parser.document_fromstring(
+            '<html><head/><body><p><u>b</u></p></body></html>')
+
+        self.assertEqual(got, etree.tostring(want))
+
+    def test_body_strong(self):
+        got = converter.HTMLContentConverter(
+            'strong.html',
+            '<html><body><strong>b</strong></body></html>', None).tidy()
+
+        want = html5parser.document_fromstring(
+            '<html><head/><body><p><strong>b</strong></p></body></html>')
+
+        self.assertEqual(got, etree.tostring(want))
+
+    def test_body_text(self):
+        got = converter.HTMLContentConverter(
+            'text.html',
+            '<html><body>b</body></html>', None).tidy()
+
+        want = html5parser.document_fromstring(
+            '<html><head/><body><p>b</p></body></html>')
+
+        self.assertEqual(got, etree.tostring(want))
+
 
 class TestRTFConverter(XMLTester):
     def setUp(self):
