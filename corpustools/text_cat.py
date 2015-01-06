@@ -22,7 +22,7 @@
 #
 
 # Original article:
-# 
+#
 # Cavnar, W. B. and J. M. Trenkle, ``N-Gram-Based Text
 # Categorization'' In Proceedings of Third Annual Symposium on
 # Document Analysis and Information Retrieval, Las Vegas, NV, UNLV
@@ -49,6 +49,17 @@ def note(msg):
 def pretty_tbl(table):
     return ", ".join("{}:{}".format(k,v) for k,v in table)
 
+def ensure_unicode(text):
+    """Helper for functions that should be able to operate on either utf-8
+    encoded bytes or decoded unicode objects
+
+    """
+    if type(text) == str:
+        return text.decode('utf-8')
+    else:
+        assert(type(text)==unicode)
+        return text
+
 class NGramModel(object):
     SPLITCHARS = re.compile(r"[][}{)(>< \n\t:;!.?_,¶§%&£€$¹°½¼¾©←→▪➢√|#–‒…·•@~\\/”“«»\"0-9=*+‑-]")
     NB_NGRAMS = 400
@@ -58,10 +69,8 @@ class NGramModel(object):
         self.lang = lang        # for debugging
 
     def of_text(self, text):
-        if type(text) == unicode:
-            self.finish(self.freq_of_text(text, {}))
-        else:
-            self.finish(self.freq_of_text(text.decode('utf-8'), {}))
+        self.finish(self.freq_of_text(ensure_unicode(text),
+                                      {}))
         return self
 
     def of_freq(self, freq):
@@ -269,20 +278,34 @@ class Classifier(object):
 
         if len(self.cmodels) == 0:
             raise ValueError("No character models created!")
-
-    def classify_full(self, intext, verbose=False):
-        if type(intext) == str:
-            text = intext.decode('utf-8')
         else:
-            text = intext
+            self.langs = set(self.cmodels.keys())
+
+    def get_langs(self, langs=[]):
+        if langs == []:
+            return self.langs
+        else:
+            active_langs = self.langs.intersection(langs)
+            if len(langs) != len(active_langs):
+                note("Warning: We have no language model for {}".format(
+                    self.langs.difference(langs)))
+            return active_langs
+
+
+    def classify_full(self, intext, langs=[], verbose=False):
+        active_langs = self.get_langs(langs)
+
+        text = ensure_unicode(intext)
         ingram = CharModel().of_text(text)
 
         cscored = {l: model.compare(ingram)
-                   for l, model in self.cmodels.iteritems()}
+                   for l, model in self.cmodels.iteritems()
+                   if l in active_langs}
         cranked = util.sort_by_value(cscored)
         cbest = cranked[0]
         cfiltered = {l: d for l, d in cranked
                      if d <= cbest[1] * self.DROP_RATIO}
+
         if len(cfiltered) <= 1:
             if verbose:
                 note("lm gave: {} as only result for input: {}".format(
@@ -306,8 +329,8 @@ class Classifier(object):
                         pretty_tbl(cranked), pretty_tbl(cwranked), text))
             return cwranked
 
-    def classify(self, text, verbose=False):
-        return self.classify_full(text, verbose)[0][0]
+    def classify(self, text, langs=[], verbose=False):
+        return self.classify_full(text, langs, verbose)[0][0]
 
 
 class FolderTrainer(object):
