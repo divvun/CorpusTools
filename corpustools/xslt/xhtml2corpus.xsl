@@ -346,7 +346,7 @@ If it is a container it has one or more of the these tags:
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="html:div/text()|html:td/text()">
+<xsl:template match="html:div/text()|html:td/text()|html:div/html:abbr">
     <p>
         <xsl:value-of select="."/>
     </p>

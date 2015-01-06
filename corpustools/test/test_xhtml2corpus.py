@@ -2329,6 +2329,37 @@ tests = {
             '</document>'
            ),
         },
+    'div-div-abbr': {
+        'html': (
+            '<html>'
+            '  <body>'
+            '    <html:div>'
+            '      <html:div>'
+            '        <html:abbr>'
+            '           Kl.'
+            '        </html:abbr>'
+            '        11.00'
+            '      </html:div>'
+            '    </html:div>'
+            '  </body>'
+            '</html>'
+            ),
+        'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <p>'
+            '      Kl.'
+            '    </p>'
+            '    <p>'
+            '      11.00'
+            '    </p>'
+            '  </body>'
+            '</document>'
+            ),
+        },
     }
 
 
