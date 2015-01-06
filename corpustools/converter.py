@@ -291,7 +291,10 @@ class Converter(object):
         return self.orig + '.xsl'
 
     def get_tmpdir(self):
-        return os.path.join(self.get_corpusdir(), 'tmp')
+        if self.get_corpusdir() == os.path.dirname(self.orig):
+            return self.get_corpusdir()
+        else:
+            return os.path.join(self.get_corpusdir(), 'tmp')
 
     def get_corpusdir(self):
         return self.corpusdir
@@ -301,7 +304,7 @@ class Converter(object):
         if orig_pos != -1:
             self.corpusdir = os.path.dirname(self.orig[:orig_pos])
         else:
-            self.corpusdir = os.getcwd()
+            self.corpusdir = os.path.dirname(self.orig)
 
     def fix_lang_genre_xsl(self):
         """Set the mainlang and genre variables in the xsl file, if possible
@@ -368,17 +371,12 @@ class Converter(object):
     def set_converted_name(self):
         """Set the name of the converted file
         """
-        converted_basename = os.path.join(self.get_corpusdir(), 'converted')
-        origname = self.get_orig().replace(self.get_corpusdir(), '')
-        if origname.startswith('/'):
-            origname = origname[1:]
-        if origname.startswith('orig/'):
-            origname = origname.replace('orig/', '')
+        orig_pos = self.orig.find('orig/')
+        if orig_pos != -1:
+            self._convertedName = self.orig.replace(
+                '/orig/', '/converted/') + '.xml'
         else:
-            origname = os.path.basename(origname)
-
-        self._convertedName = os.path.join(converted_basename,
-                                           origname) + '.xml'
+            self._convertedName = self.orig + '.xml'
 
     def get_converted_name(self):
         return self._convertedName
@@ -1128,7 +1126,11 @@ class HTMLContentConverter(object):
             for key, values in attribs.items():
                 for value in values:
                     search = ('.//html:{}[@{}="{}"]'.format(tag, key, value))
+                    if key == 'class' and value == 'breadcrumbs':
+                        print 'looking for {} and {} {}'.format(key, value, search)
                     for unwanted in self.soup.xpath(search, namespaces=ns):
+                        if key == 'class' and value == 'breadcrumbs':
+                            print etree.tostring(unwanted)
                         unwanted.getparent().remove(unwanted)
 
     def add_p_around_text(self):

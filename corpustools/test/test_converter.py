@@ -83,8 +83,7 @@ class TestConverter(unittest.TestCase):
         self.assertEqual(
             self.converter_outside_orig.get_tmpdir(),
             os.path.join(
-                here,
-                'tmp'))
+                here, 'converter_data'))
 
         self.assertEqual(
             self.converter_inside_freecorpus.get_tmpdir(),
@@ -99,7 +98,7 @@ class TestConverter(unittest.TestCase):
 
         self.assertEqual(
             self.converter_outside_orig.get_corpusdir(),
-            here)
+            os.path.join(here, 'converter_data'))
 
         self.assertEqual(
             self.converter_inside_freecorpus.get_corpusdir(),
@@ -118,7 +117,7 @@ class TestConverter(unittest.TestCase):
             self.converter_outside_orig.get_converted_name(),
             os.path.join(
                 here,
-                'converted/samediggi-article-48.html.xml'))
+                'converter_data/samediggi-article-48.html.xml'))
 
     def test_get_converted_inside_freecorpus(self):
         self.assertEqual(
@@ -415,25 +414,6 @@ class TestBiblexmlConverter(XMLTester):
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
 
-class TestHTMLConverter(XMLTester):
-    def setUp(self):
-        self.testhtml = converter.HTMLConverter(
-            os.path.join(here,
-                         'converter_data/samediggi-article-48s.html'))
-
-    def test_convert2intermediate(self):
-        got = self.testhtml.convert2intermediate()
-        want = etree.parse(
-            os.path.join(here,
-                         'converter_data/samediggi-article-48s.xml'))
-
-        with open('got.xml', 'w') as f1:
-            f1.write(etree.tostring(got, pretty_print=True, encoding='utf-8'))
-        with open('want.xml', 'w') as f2:
-            f2.write(etree.tostring(want, pretty_print=True, encoding='utf-8'))
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-
 class TestHTMLContentConverter(XMLTester):
     def test_remove_empty_class(self):
         got = converter.HTMLContentConverter(
@@ -496,10 +476,10 @@ class TestHTMLContentConverter(XMLTester):
             for key, values in attribs.items():
                 for value in values:
                     hc = converter.HTMLContentConverter(
-                        tag + key + value + '.html',
-                        '<html><body><{0} {1}="{2}">content:{0}{1}{2}</{0}>'
+                        '.html'.format(tag, key, value),
+                        ('<html><body><{0} {1}="{2}">content:{0}{1}{2}</{0}>'
                         '<div class="ada"/></body>'
-                        '</html>'.format(tag, key, value), None)
+                        '</html>').format(tag, key, value), None)
                     hc.remove_elements()
 
                     want = html5parser.document_fromstring(
