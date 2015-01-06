@@ -2249,8 +2249,9 @@ def main():
             print >>sys.stderr, 'Can not process {}'.format(source)
             print >>sys.stderr, 'This is neither a file nor a directory.'
 
-        print 'Starting the conversion of {} files'.format(len(files))
-        if args.serial:
-            convert_serially(args, files)
-        else:
-            convert_in_parallel(args, files)
+
+    print 'Starting the conversion of {} files'.format(len(files))
+    if args.serial:
+        convert_serially(args, files)
+    else:
+        convert_in_parallel(args, files)
