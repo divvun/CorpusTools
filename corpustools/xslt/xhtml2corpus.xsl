@@ -76,7 +76,6 @@ xsltproc xhtml2corpus.xsl - > file.xml
     </xsl:if>
 </xsl:template>
 
-
 <xsl:template match="html:p|html:label">
     <xsl:if test="string-length(normalize-space(.)) > 1">
         <xsl:choose>
@@ -111,6 +110,12 @@ xsltproc xhtml2corpus.xsl - > file.xml
     <list>
         <xsl:apply-templates select="*"/>
     </list>
+</xsl:template>
+
+<xsl:template match="html:ul/html:strong">
+    <p>
+        <xsl:apply-templates/>
+    </p>
 </xsl:template>
 
 <xsl:template match="html:li">
@@ -263,7 +268,6 @@ xsltproc xhtml2corpus.xsl - > file.xml
     <xsl:apply-templates />
 </xsl:template>
 
-
 <xsl:template match="html:address">
     <p>
         <xsl:apply-templates/>
@@ -330,9 +334,16 @@ If it is a container it has one or more of the these tags:
 </xsl:template>
 
 <xsl:template match="html:div/html:a|html:td/html:a">
-    <p>
-        <xsl:apply-templates/>
-    </p>
+    <xsl:choose>
+        <xsl:when test="html:h2">
+            <xsl:apply-templates/>
+        </xsl:when>
+        <xsl:otherwise>
+            <p>
+                <xsl:apply-templates/>
+            </p>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="html:div/text()|html:td/text()">
