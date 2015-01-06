@@ -280,15 +280,20 @@ class Classifier(object):
             raise ValueError("No character models created!")
         else:
             self.langs = set(self.cmodels.keys())
+            self.langs_warned = set()
 
     def get_langs(self, langs=[]):
         if langs == []:
             return self.langs
         else:
-            active_langs = self.langs.intersection(langs)
+            langs = set(langs)
+            active_langs = self.langs & langs
             if len(langs) != len(active_langs):
-                note("Warning: We have no language model for {}".format(
-                    self.langs.difference(langs)))
+                missing = langs - active_langs - self.langs_warned
+                if missing:
+                    self.langs_warned.update(missing) # only warn once per lang
+                    note("WARNING: No language model for {}".format(
+                        "/".join(missing)))
             return active_langs
 
 

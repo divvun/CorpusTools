@@ -78,13 +78,14 @@ class Converter(object):
     """
     Class to take care of data common to all Converter classes
     """
-    def __init__(self, filename, write_intermediate=False, test=False):
+    def __init__(self, filename, languageGuesser, write_intermediate=False, test=False):
         self.orig = os.path.abspath(filename)
         self.set_corpusdir()
         self.set_converted_name()
         self.dependencies = [self.get_orig(), self.get_xsl()]
         self.fix_lang_genre_xsl()
         self._write_intermediate = write_intermediate
+        self.languageGuesser = languageGuesser
 
     def make_intermediate(self, encoding_from_xsl):
         """Convert the input file from the original format to a basic
@@ -247,7 +248,7 @@ class Converter(object):
         self.validate_complete(complete)
         self.convert_errormarkup(complete)
         complete = self.fix_document(complete)
-        ld = LanguageDetector(complete)
+        ld = LanguageDetector(complete, self.languageGuesser)
         ld.detect_language()
 
         return complete
@@ -1964,28 +1965,22 @@ class LanguageDetector(object):
     Detect the languages of quotes.
     Detect the languages of the paragraphs.
     """
-    def __init__(self, document):
+    def __init__(self, document, languageGuesser):
         self.document = document
         self.mainlang = self.document.getroot().\
             attrib['{http://www.w3.org/XML/1998/namespace}lang']
 
-        inlangs = []
+        self.inlangs = []
         for language in self.document.findall('header/multilingual/language'):
-            inlangs.append(
+            self.inlangs.append(
                 language.get('{http://www.w3.org/XML/1998/namespace}lang'))
-        if len(inlangs) != 0:
+        if len(self.inlangs) != 0:
             if self.mainlang != '':
-                inlangs.append(self.mainlang)
+                self.inlangs.append(self.mainlang)
             else:
                 raise ConversionException('mainlang not set')
 
-        try:
-            self.languageGuesser = text_cat.Classifier(
-                resource_filename(__name__, 'lm/'),
-                langs=inlangs)
-        except ValueError as e:
-            self.languageGuesser = None
-            print >>sys.stderr, str(e)
+        self.languageGuesser = languageGuesser
 
     def get_document(self):
         return self.document
@@ -2005,7 +2000,7 @@ class LanguageDetector(object):
         if paragraph.get('{http://www.w3.org/XML/1998/namespace}lang') is None:
             paragraph_text = self.remove_quote(paragraph)
             if self.languageGuesser is not None:
-                lang = self.languageGuesser.classify(paragraph_text)
+                lang = self.languageGuesser.classify(paragraph_text, langs=self.inlangs)
                 if lang != self.get_mainlang():
                     paragraph.set('{http://www.w3.org/XML/1998/namespace}lang',
                                 lang)
@@ -2013,7 +2008,7 @@ class LanguageDetector(object):
                 for element in paragraph.iter("span"):
                     if element.get("type") == "quote":
                         if element.text is not None:
-                            lang = self.languageGuesser.classify(element.text)
+                            lang = self.languageGuesser.classify(element.text, langs=self.inlangs)
                             if lang != self.get_mainlang():
                                 element.set(
                                     '{http://www.w3.org/XML/1998/namespace}lang',
@@ -2179,9 +2174,10 @@ def parse_options():
 
 
 def worker(args, xsl_file):
+    global LANGUAGEGUESSER
     orig_file = xsl_file[:-4]
     if os.path.exists(orig_file) and not orig_file.endswith('.xsl'):
-        conv = Converter(orig_file, args.write_intermediate)
+        conv = Converter(orig_file, LANGUAGEGUESSER, args.write_intermediate)
 
         try:
             conv.write_complete()
@@ -2223,6 +2219,7 @@ def sanity_check():
                                       os.environ['GTHOME']))
 
 
+LANGUAGEGUESSER = None          # global due to multiprocessing
 def main():
     sanity_check()
     args = parse_options()
@@ -2230,6 +2227,7 @@ def main():
     files = []
 
     print 'Collecting files to convert'
+
     for source in args.sources:
         if os.path.isfile(source):
             xsl_file = '{}.xsl'.format(source)
@@ -2250,7 +2248,12 @@ def main():
             print >>sys.stderr, 'This is neither a file nor a directory.'
 
 
+    global LANGUAGEGUESSER
+    LANGUAGEGUESSER = text_cat.Classifier(
+        resource_filename(__name__, 'lm/'))
+
     print 'Starting the conversion of {} files'.format(len(files))
+
     if args.serial:
         convert_serially(args, files)
     else:
