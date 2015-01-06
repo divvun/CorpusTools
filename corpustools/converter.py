@@ -2231,11 +2231,14 @@ def main():
     sanity_check()
     args = parse_options()
 
+    files = []
+
+    print 'Collecting files to convert'
     for source in args.sources:
         if os.path.isfile(source):
             xsl_file = '{}.xsl'.format(source)
             if os.path.isfile(xsl_file):
-                worker(args, xsl_file)
+                files.append(xsl_file)
             else:
                 xsl_stream = open(xsl_file, 'w')
                 xsl_stream.write(
@@ -2245,10 +2248,13 @@ def main():
                     ', then run this command again'
                 sys.exit(1)
         elif os.path.isdir(source):
-            if args.serial:
-                convert_serially(args, collect_files(source))
-            else:
-                convert_in_parallel(args, collect_files(source))
+            files.extend(collect_files(source))
         else:
             print >>sys.stderr, 'Can not process {}'.format(source)
             print >>sys.stderr, 'This is neither a file nor a directory.'
+
+        print 'Starting the conversion of {} files'.format(len(files))
+        if args.serial:
+            convert_serially(args, files)
+        else:
+            convert_in_parallel(args, files)
