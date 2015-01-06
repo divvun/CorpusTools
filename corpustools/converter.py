@@ -1126,11 +1126,11 @@ class HTMLContentConverter(object):
             for key, values in attribs.items():
                 for value in values:
                     search = ('.//html:{}[@{}="{}"]'.format(tag, key, value))
-                    if key == 'class' and value == 'breadcrumbs':
-                        print 'looking for {} and {} {}'.format(key, value, search)
+                    #if key == 'class' and value == 'breadcrumbs':
+                        #print 'looking for {} and {} {}'.format(key, value, search)
                     for unwanted in self.soup.xpath(search, namespaces=ns):
-                        if key == 'class' and value == 'breadcrumbs':
-                            print etree.tostring(unwanted)
+                        #if key == 'class' and value == 'breadcrumbs':
+                            #print etree.tostring(unwanted)
                         unwanted.getparent().remove(unwanted)
 
     def add_p_around_text(self):
@@ -1216,8 +1216,8 @@ class HTMLContentConverter(object):
 
         html = self.tidy()
 
-        with open('{}.huff.xml'.format(self.orig), 'wb') as huff:
-            util.print_element(etree.fromstring(html), 0, 2, huff)
+        #with open('{}.huff.xml'.format(self.orig), 'wb') as huff:
+            #util.print_element(etree.fromstring(html), 0, 2, huff)
 
         try:
             doc = etree.fromstring(html)
