@@ -2208,13 +2208,9 @@ def convert_serially(args, xsl_files):
 
 
 def collect_files(source_dir):
-    xsl_files = []
-    for root, dirs, files in os.walk(source_dir):
-        for f in files:
-            if f.endswith('.xsl'):
-                xsl_files.append(os.path.join(root, f))
-
-    return xsl_files
+    return [os.path.join(root, f)
+            for root, dirs, files in os.walk(source_dir)
+            for f in files if f.endswith('.xsl')]
 
 
 def sanity_check():
