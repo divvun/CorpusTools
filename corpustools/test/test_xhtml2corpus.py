@@ -512,3 +512,10 @@ class TestConversion(unittest.TestCase):
         want = lxml.etree.parse(os.path.join(here, "ol-i-li.xml"))
 
         self.assertXmlEqual(got, want)
+
+    def test_td_a_p(self):
+        got = converter.HTMLConverter(
+            os.path.join(here, "td-a-p.html")).convert2intermediate()
+        want = lxml.etree.parse(os.path.join(here, "td-a-p.xml"))
+
+        self.assertXmlEqual(got, want)

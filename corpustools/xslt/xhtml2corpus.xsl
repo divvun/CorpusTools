@@ -259,6 +259,11 @@ xsltproc xhtml2corpus.xsl - > file.xml
     </p>
 </xsl:template>
 
+<xsl:template match="html:td/html:a/html:p">
+    <xsl:apply-templates />
+</xsl:template>
+
+
 <xsl:template match="html:address">
     <p>
         <xsl:apply-templates/>
