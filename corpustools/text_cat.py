@@ -267,44 +267,44 @@ class Classifier(object):
             else:
                 self.wmodels[lang] = WordModel(lang).of_freq({})
 
-    def classify_full(self, intext, verbose=False):
         if len(self.cmodels) == 0:
-            return [('guess', 0)]
-        else:
-            if type(intext) == str:
-                text = intext.decode('utf-8')
-            else:
-                text = intext
-            ingram = CharModel().of_text(text)
+            raise ValueError("No character models created!")
 
-            cscored = {l: model.compare(ingram)
-                       for l, model in self.cmodels.iteritems()}
-            cranked = util.sort_by_value(cscored)
-            cbest = cranked[0]
-            cfiltered = {l: d for l, d in cranked
-                         if d <= cbest[1] * self.DROP_RATIO}
-            if len(cfiltered) <= 1:
-                if verbose:
-                    note("lm gave: {} as only result for input: {}".format(
-                        cfiltered, text))
-                return list(cfiltered.iteritems())
-            else:
-                # Along with compare_tc, implements text_cat.pl line
-                # 442 and on:
-                wscored = {l: model.compare_tc(text, cscored[l])
-                           for l, model in self.wmodels.iteritems()
-                           if l in cfiltered}
-                cwcombined = {l: (cscored[l] - wscore)
-                              for l, wscore in wscored.iteritems()}
-                cwranked = util.sort_by_value(cwcombined)
-                if verbose:
-                    if cranked[:len(cwranked)] == cwranked:
-                        note("lm gave: {}\t\twm gave no change\t\tfor input: {}".format(
-                            pretty_tbl(cranked), text))
-                    else:
-                        note("lm gave: {}\t\twm-weighted to: {}\t\tfor input: {}".format(
-                            pretty_tbl(cranked), pretty_tbl(cwranked), text))
-                return cwranked
+    def classify_full(self, intext, verbose=False):
+        if type(intext) == str:
+            text = intext.decode('utf-8')
+        else:
+            text = intext
+        ingram = CharModel().of_text(text)
+
+        cscored = {l: model.compare(ingram)
+                   for l, model in self.cmodels.iteritems()}
+        cranked = util.sort_by_value(cscored)
+        cbest = cranked[0]
+        cfiltered = {l: d for l, d in cranked
+                     if d <= cbest[1] * self.DROP_RATIO}
+        if len(cfiltered) <= 1:
+            if verbose:
+                note("lm gave: {} as only result for input: {}".format(
+                    cfiltered, text))
+            return list(cfiltered.iteritems())
+        else:
+            # Along with compare_tc, implements text_cat.pl line
+            # 442 and on:
+            wscored = {l: model.compare_tc(text, cscored[l])
+                       for l, model in self.wmodels.iteritems()
+                       if l in cfiltered}
+            cwcombined = {l: (cscored[l] - wscore)
+                          for l, wscore in wscored.iteritems()}
+            cwranked = util.sort_by_value(cwcombined)
+            if verbose:
+                if cranked[:len(cwranked)] == cwranked:
+                    note("lm gave: {}\t\twm gave no change\t\tfor input: {}".format(
+                        pretty_tbl(cranked), text))
+                else:
+                    note("lm gave: {}\t\twm-weighted to: {}\t\tfor input: {}".format(
+                        pretty_tbl(cranked), pretty_tbl(cwranked), text))
+            return cwranked
 
     def classify(self, text, verbose=False):
         return self.classify_full(text, verbose)[0][0]
