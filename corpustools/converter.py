@@ -942,8 +942,8 @@ class BiblexmlConverter(object):
         (tmpfile, tmpname) = tempfile.mkstemp()
         bible2xmlpl = 'bible2xml.pl'
         if distutils.spawn.find_executable(bible2xmlpl) is None:
-            raise ConversionException("Could not find {} in $PATH" %
-                                      (bible2xmlpl))
+            raise ConversionException(
+                "Could not find {} in $PATH".format(bible2xmlpl))
 
         command = [bible2xmlpl, '-out', tmpname, self.orig]
         run_process(command, self.orig)
@@ -1222,8 +1222,8 @@ searchHitSummary',
 
             logfile.write('Error at: {}'.format(str(ccat.lineno())))
             for entry in e.error_log:
-                logfile.write('\n{}: {} ' %
-                              (str(entry.line), str(entry.column)))
+                logfile.write('\n{}: {} '.format(
+                    str(entry.line), str(entry.column)))
                 try:
                     logfile.write(entry.message)
                 except ValueError:
