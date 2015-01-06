@@ -135,7 +135,8 @@ class SamediggiFiCrawler(object):
         * "There are no translations available"
         '''
         return ('ei ole saatavilla' in content or
-                'There are no translations available' in content)
+                'There are no translations available' in content or
+                '<div class="login-form">' in content)
 
     def harvest_links(self, content):
         '''Harvest all links, bar some restrictions
