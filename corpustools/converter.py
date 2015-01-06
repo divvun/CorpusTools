@@ -2253,8 +2253,8 @@ def main():
 
 
     global LANGUAGEGUESSER
-    LANGUAGEGUESSER = text_cat.Classifier(
-        resource_filename(__name__, 'lm/'))
+
+    LANGUAGEGUESSER = text_cat.Classifier()
 
     print 'Starting the conversion of {} files'.format(len(files))
 

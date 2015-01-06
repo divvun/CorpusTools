@@ -43,6 +43,10 @@ import argparse_version
 import util
 import gzip
 
+
+here = os.path.dirname(__file__)
+
+
 def note(msg):
     print >>sys.stderr, msg.encode('utf-8')
 
@@ -239,12 +243,14 @@ class WordModel(NGramModel):
 class Classifier(object):
     DROP_RATIO = 1.10
 
-    def __init__(self, folder, langs=[], verbose=False):
+    def __init__(self, langs=[], verbose=False):
         self.cmodels = {}
         self.wmodels = {}
 
         ext = '.lm'
         fnames = []
+
+        folder = os.path.join(here, 'lm')
         folder_glob = os.path.join(folder, '*'+ext)
         found_fnames = glob.glob(os.path.normcase(folder_glob))
         if len(found_fnames) == 0:
