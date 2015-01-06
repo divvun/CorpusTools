@@ -8,7 +8,2361 @@ import doctest
 from corpustools import converter
 
 
-here = os.path.join(os.path.dirname(__file__), 'xhtml2corpus')
+tests = {
+    'a-within-li': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <ul>'
+            '           <li>'
+            '               <a href="http://www.flickr.com/photos/statsministerenskontor/sets/72157623793378877/" target="_blank">Geahčá eambbo govaid čoahkkimiin gaskal Stoltenberga ja Medvedjeva</a>'
+            '           </li>'
+            '           <li>'
+            '               <a href="http://www.regjeringen.no/nb/dep/smk/aktuelt/nyheter/2010/Nett-TV-Statsminister-Jens-Stoltenberg-tar-i-mot-president-Dmitrij-Medvedjev.html?id=601900">Geahčá preassakonferánssa Stoltenbergain ja Medvedjevain Neahtta-TV:s</a>'
+            '           </li>'
+            '       </ul>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <list>'
+            '           <p type="listitem">'
+            '               Geahčá eambbo govaid čoahkkimiin gaskal Stoltenberga ja Medvedjeva'
+            '           </p>'
+            '           <p type="listitem">'
+            '               Geahčá preassakonferánssa Stoltenbergain ja Medvedjevain Neahtta-TV:s'
+            '           </p>'
+            '       </list>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'address': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <address>'
+            '           Sametingets plenumsmøte er <a class="InnholdLinkTekst"'
+            '           href="http://sametinget.exss.no/bruker/pages/live.aspx">direktesendt</a>'
+            '           .<br />'
+            '           Program for fredag 29. mai 08.30-12.30 (pause'
+            '           10.30-11.00<br />'
+            '           Arbeids- og inkluderingsminister Dag Terje Andersen taler'
+            '           til Sametinget<br />'
+            '           Sak 25/09 Revidering av Sametingets arbeidsorden<br />'
+            '           Sak 26/09 Reinbeitekonvensjonen Norge - Sverige<br />'
+            '       </address>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           Sametingets plenumsmøte er direktesendt'
+            '           .'
+            '           Program for fredag 29. mai 08.30-12.30 (pause'
+            '           10.30-11.00'
+            '           Arbeids- og inkluderingsminister Dag Terje Andersen taler'
+            '           til Sametinget'
+            '           Sak 25/09 Revidering av Sametingets arbeidsorden'
+            '           Sak 26/09 Reinbeitekonvensjonen Norge - Sverige'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'blockquote-p-and-text': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <blockquote>'
+            '           <p>«at like rettigheter ikke nødvendigvis trenger'
+            '           bety identiske rettigheter</p>, men rettigheter'
+            '           som svarer til individets og gruppens behov.»'
+            '       </blockquote>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <span type="quote">'
+            '               «at like rettigheter ikke nødvendigvis trenger'
+            '               bety identiske rettigheter, men rettigheter'
+            '               som svarer til individets og gruppens behov.»'
+            '           </span>'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'blockquote': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <blockquote align="left">'
+            '           <p>Rievdaduvvon lágain geassemánu 11. b. 1982 nr. 47,'
+            '           čakčamánu 25. b. 1992 nr. 107, ođđajagimánu 22. b. 1993 nr.'
+            '           26, juovlamánu 15. b. 2000 nr. 98 (fámus ođđajagimánu 1. b.'
+            '           2001 juovlamánu 15. b. 2000 nr. 1259 res. mielde).</p>'
+            '       </blockquote>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <span type="quote">'
+            '               Rievdaduvvon lágain geassemánu 11. b. 1982 nr. 47, čakčamánu 25. b. 1992 nr. 107, ođđajagimánu 22. b. 1993 nr. 26, juovlamánu 15. b. 2000 nr. 98 (fámus ođđajagimánu 1. b. 2001 juovlamánu 15. b. 2000 nr. 1259 res. mielde).'
+            '           </span>'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div-a-h2': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '    <body>'
+            '        <div>'
+            '            <a>'
+            '                <h2>'
+            '                    Pressesenter'
+            '                </h2>'
+            '            </a>'
+            '        </div>'
+            '    </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '    <body>'
+            '        <p type="title">'
+            '            Pressesenter'
+            '        </p>'
+            '    </body>'
+            '</document>'
+           ),
+        },
+    'div-a-p': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '    <body>'
+            '        <div>'
+            '            <a>'
+            '                <p>'
+            '                    Pressesenter'
+            '                </p>'
+            '            </a>'
+            '        </div>'
+            '    </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '    <body>'
+            '    <p>'
+            '      Pressesenter'
+            '    </p>'
+            '    </body>'
+            '</document>'
+           ),
+        },
+    'div-b-and-text': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <div class="InnholdTekst" style="">'
+            '           <b>'
+            '               Ohcanáigemearri:'
+            '           </b>'
+            '           <br />'
+            '           15.09.2006.'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <em type="bold">'
+            '               Ohcanáigemearri:'
+            '           </em>'
+            '       </p>'
+            '       <p>'
+            '           15.09.2006.'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div-div-a-span': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body id="ctl00_Body" style="background-color:white">'
+            '       <div id="tekst">'
+            '           <div id="ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ucBilde_pnlBilde" class='
+            '        "artikkelbilde bilde_hoyre">'
+            '               <a id="ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ucBilde_hlBilde" onclick="window.open(&#39;/bildevis.asp?BildeId=1987&amp;Vis=stor&amp;Eksakt=true&#39;,&#39;home&#39;,&#39;toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,Width=1024,Height=683&#39;);" href="javascript:void(0)" name= "ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ucBilde_hlBilde">'
+            '                   <span class="BildeTekst" style="text-decoration:none;">John-Marcus Kuhmunen</span>'
+            '               </a>'
+            '           </div>'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           John-Marcus Kuhmunen'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div-div-a': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <div class="complexDocumentBottom">'
+            '           <div class="complexDetails">'
+            '               <a href="#">Geahča buot áššebáhpáriid</a>'
+            '               <div style="clear: both"></div>'
+            '           </div>'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>Geahča buot áššebáhpáriid</p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div-font-and-i': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <div align="right">'
+            '           <font face="Times New Roman">'
+            '               <span style="font-size:11pt">'
+            '                   <font color="#5F6356">'
+            '                       maajjen minngemes biejjien galkin lstoemoenemh, daaroen:'
+            '                   </font>'
+            '               </span>'
+            '           </font>'
+            '           <i>'
+            '               <font face="Times New Roman">'
+            '                   <span style="font-size:11pt">'
+            '                       <font color="#5F6356">'
+            '                           listeforslag,'
+            '                       </font>'
+            '                   </span>'
+            '               </font>'
+            '           </i>'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           maajjen minngemes biejjien galkin lstoemoenemh, daaroen:'
+            '       </p>'
+            '       <p>'
+            '           <em type="italic">'
+            '               listeforslag,'
+            '           </em>'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div-h1-and-a': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <div class="content">'
+            '           <h1>Terje Riis-Johansen</h1>'
+            '           <a href="/nb/dep/oed/dep/olje--og-energiminister-terje-riis-johan/taler-og-artikler.html?id=518694">'
+            '               Taler og artikler'
+            '           </a>'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '        <p type="title">'
+            '            Terje Riis-Johansen'
+            '        </p>'
+            '       <p>'
+            '           Taler og artikler'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div-h1-and-text': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <div class="documentTop">'
+            '           <h1>Ledige stillingar</h1>'
+            '           No kan du søke jobb i Arbeidsdepartementet (AD) via vår elektroniske jobbportal JobbPort. På ein enkel måte kan du registrere din CV, skrive søknad, leggje ved elektroniske attestar og vitnemål og sende alt elektronisk.<br />'
+            '           &#160;<br />'
+            '           Sjekk også våre rekrutteringssider'
+            '           <a title="Jobb i AD" href="/nb/dep/ad/kampanjer/jobbiad/jobbiad.html?id=579310">'
+            '               Jobb i AD'
+            '           </a>'
+            '           <br />'
+            '           <br />'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '        <p type="title">'
+            '            Ledige stillingar'
+            '        </p>'
+            '       <p>'
+            '           No kan du søke jobb i Arbeidsdepartementet (AD) via vår elektroniske jobbportal JobbPort. På ein enkel måte kan du registrere din CV, skrive søknad, leggje ved elektroniske attestar og vitnemål og sende alt elektronisk.'
+            '       </p>'
+            '       <p>'
+            '       </p>'
+            '       <p>'
+            '           Sjekk også våre rekrutteringssider'
+            '       </p>'
+            '       <p>'
+            '           Jobb i AD'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div-hx': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body id="ctl00_Body" style="background-color:white">'
+            '       <div id="ctl00_MidtSone_ucArtikkel_ctl00_pnlArtikkel" class='
+            '       "artikkel artikkelmal_2">'
+            '           <h1 id="tittel" class="InnholdOverskrift">Sámedikki doarjja girjjálašvuođa almmuheapmái 2009</h1>'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '        <p type="title">Sámedikki doarjja girjjálašvuođa almmuheapmái 2009</p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div-p-and-font': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <div>'
+            '           <p>Rikspolitiske verv</p>'
+            '           <font face="Times New Roman">abc</font>'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>Rikspolitiske verv</p>'
+            '       <p>abc</p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div-p-and-text': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body id="ctl00_Body" style="background-color:white">'
+            '       <div>'
+            '           <p>'
+            '               <strong>'
+            '                    Poastadreassa:'
+            '               </strong>'
+            '               <br />'
+            '               Postboks 8036 Dep'
+            '               <br />'
+            '               0030 Oslo'
+            '               <br />'
+            '           </p>'
+            '           E-poasta:'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <em type="italic">'
+            '               Poastadreassa:'
+            '           </em>'
+            '           Postboks 8036 Dep'
+            '           0030 Oslo'
+            '       </p>'
+            '       <p>'
+            '           E-poasta:'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div-span': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <div>'
+            '           <span id="ctl00_FullRegion_CenterAndRightRegion_CenterRegion_listingUniversal_lstUniversal_ctl02_Label1">'
+            '               Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
+            '           </span>'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div-table': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <div>'
+            '           <table>'
+            '               <tbody>'
+            '                   <tr>'
+            '                       <td>'
+            '                           abc <a href="/jd/norsk/dok/regelverk/lover/012101-200015/dok-nu.html">Nynorsk</a> def'
+            '                       </td>'
+            ''
+            '                       <td>'
+            '                           ghi <a href="/jd/sami/bu.html">Sámegiella</a> jkl'
+            '                       </td>'
+            ''
+            '                       <td class="funcmenu">'
+            '                           mno <a href= "/jd/norsk/dok/regelverk/lover/012101-200015/dok-bn.html">Normalvisning</a> pqr'
+            '                       </td>'
+            '                   </tr>'
+            '               </tbody>'
+            '           </table>'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           abc'
+            '       </p>'
+            '       <p>'
+            '           Nynorsk'
+            '       </p>'
+            '       <p>'
+            '           def'
+            '       </p>'
+            '       <p>'
+            '           ghi'
+            '       </p>'
+            '       <p>'
+            '           Sámegiella'
+            '       </p>'
+            '       <p>'
+            '           jkl'
+            '       </p>'
+            '       <p>'
+            '           mno'
+            '       </p>'
+            '       <p>'
+            '           Normalvisning'
+            '       </p>'
+            '       <p>'
+            '           pqr'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div-text-and-div': {
+       'html': (
+            '<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <div class="post-body entry-content">'
+            '           Tällä viikolla<br />'
+            '           <br />'
+            '           SPN:n hallitus<br />'
+            '           <div style="clear: both;"></div>'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           Tällä viikolla'
+            '       </p>'
+            '       <p>'
+            '           SPN:n hallitus'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div-text-and-span': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <div>'
+            '           Laitan blogini lukijoille'
+            '           <br />'
+            '           <br />'
+            '           <span style="font-weight:bold;">'
+            '               Voimassa oleva metsäsertifiointikriteeri nr 27 vuodelta 2003:'
+            '           </span>'
+            '           <br />'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>Laitan blogini lukijoille</p>'
+            '       <p>Voimassa oleva metsäsertifiointikriteeri nr 27 vuodelta 2003:</p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div-text': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body id="ctl00_Body" style="background-color:white">'
+            '       <div class="InnholdForfatter">'
+            '           Almmuhan Kuhmunen, John-Marcus. <a id="ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl02_hlAnsvarlig" class="InnholdLink" href="mailto:" name="ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl02_hlAnsvarlig">Halloi!</a>'
+            '           Maŋumustá rievdaduvvon 26.06.2009'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           Almmuhan Kuhmunen, John-Marcus.'
+            '       </p>'
+            '       <p>'
+            '           Halloi!'
+            '       </p>'
+            '       <p>'
+            '           Maŋumustá rievdaduvvon 26.06.2009'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div-ul': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <div>'
+            '           <ul>'
+            '               <li>'
+            '                   <div align="left">'
+            '                   FoU ja konseapta ja doktriidna ovdánahttin'
+            '                   </div>'
+            '               </li>'
+            ''
+            '               <li>'
+            '                   <div align="left">'
+            '                   Investeremiidplánen'
+            '                   </div>'
+            '               </li>'
+            '           </ul>'
+            '       </div>'
+            '       <div>'
+            '           <ol>'
+            '               <li>'
+            '                   <div align="left">'
+            '                   Teknologiaovdánahttin ja DGT (IKT)'
+            '                   </div>'
+            '               </li>'
+            ''
+            '               <li>'
+            '                   <div align="left">'
+            '                   Guhkesáiggiplánen'
+            '                   </div>'
+            '               </li>'
+            '           </ol>'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <list>'
+            '           <p type="listitem">FoU ja konseapta ja doktriidna ovdánahttin</p>'
+            '           <p type="listitem">Investeremiidplánen</p>'
+            '       </list>'
+            '       <list>'
+            '           <p type="listitem">Teknologiaovdánahttin ja DGT (IKT)</p>'
+            '           <p type="listitem">Guhkesáiggiplánen</p>'
+            '       </list>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'div': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body id="ctl00_Body" style="background-color:white">'
+            '       <div>'
+            '           <h1 id="tittel" class="InnholdOverskrift">Sámedikki doarjja girjjálašvuođa almmuheapmái 2009</h1>'
+            ''
+            '           <div id="ingress">'
+            '               <div class="InnholdIngress" style="font-weight: bold;">'
+            '               <p>Sámediggi lea juolludan doarjaga 32 girjeálmmuheapmái 2009'
+            '               oktiibuot 6,724 miljon ovddas guovtti doaibmaortnega bokte:'
+            '               Girjjálášvuohta 2009 ja Sámi álbmotfoanda - Girjjálášvuohta'
+            '               2009.</p>'
+            '               </div>'
+            '           </div>'
+            ''
+            '           <div id="tekst">'
+            '               <div id="ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ucBilde_pnlBilde" class="artikkelbilde bilde_hoyre">'
+            '                   <a id="ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ucBilde_hlBilde" onclick="window.open(&#39;/bildevis.asp?BildeId=1987&amp;Vis=stor&amp;Eksakt=true&#39;,&#39;home&#39;,&#39;toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,Width=1024,Height=683&#39;);" href="javascript:void(0)" name= "ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ucBilde_hlBilde">'
+            '                       <span class="BildeTekst" style="text-decoration:none;">John-Marcus Kuhmunen</span>'
+            '                   </a>'
+            '               </div>'
+            '           </div>'
+            '       </div>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '        <p type="title">Sámedikki doarjja girjjálašvuođa almmuheapmái 2009</p>'
+            ''
+            '       <p>'
+            '           Sámediggi lea juolludan doarjaga 32 girjeálmmuheapmái 2009 oktiibuot 6,724 miljon ovddas guovtti doaibmaortnega bokte: Girjjálášvuohta 2009 ja Sámi álbmotfoanda - Girjjálášvuohta 2009.'
+            '       </p>'
+            ''
+            '       <p>'
+            '           John-Marcus Kuhmunen'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'font-span-font-sub': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <font face="Times New Roman">'
+            '           <span style="font-size:11pt">'
+            '               <font color="#72776A">'
+            '                   <sub>'
+            '                       aa'
+            '                   </sub>'
+            '               </font>'
+            '           </span>'
+            '       </font>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '        <p>'
+            '            aa'
+            '        </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'h1-6': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <h1>header1</h1>'
+            '       <h2>header2</h2>'
+            '       <h3>header3</h3>'
+            '       <h4>header4</h4>'
+            '       <h5>header5</h5>'
+            '       <h6>header6</h6>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '        <p type="title">header1</p>'
+            '        <p type="title">header2</p>'
+            '        <p type="title">header3</p>'
+            '        <p type="title">header4</p>'
+            '        <p type="title">header5</p>'
+            '        <p type="title">header6</p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'h1-b': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <h1>'
+            '           <b>Phone</b>'
+            '       </h1>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '        <p type="title">'
+            '            Phone'
+            '        </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'i-within-note': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '    <body>'
+            '        <note>Geahča Ragnhild Ravna artihkkala <i>Sámi skuvlahistorjá 2. -girjjis</i></note>'
+            '    </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '    <body>'
+            '    <p>Geahča Ragnhild Ravna artihkkala</p>'
+            '    <p>'
+            '        <em type="italic">Sámi skuvlahistorjá 2. -girjjis</em>'
+            '    </p>'
+            '    </body>'
+            '</document>'
+           ),
+        },
+    'li-a-b-font': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <li>'
+            '           <a href="http://odin.dep.no/fkd/sami/dok/njuolggadusat/lagat/047041-200045/dok-bn.html">'
+            '               <b>'
+            '                   <font color="#0000FF">'
+            '                       Deltakerloven - LÁHKA 1999-03-26 nr 15: Láhka guolástan- ja bivdinvuoigatvuođa birra (oassálastinláhka).'
+            '                   </font>'
+            '               </b>'
+            '           </a>'
+            '       </li>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p type="listitem">'
+            '           <em type="bold">'
+            '               Deltakerloven - LÁHKA 1999-03-26 nr 15: Láhka guolástan- ja bivdinvuoigatvuođa birra (oassálastinláhka).'
+            '           </em>'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'li-div': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <ul>'
+            '           <li>'
+            '               <div align="left">'
+            '               FoU ja konseapta ja doktriidna ovdánahttin'
+            '               </div>'
+            '           </li>'
+            ''
+            '           <li>'
+            '               <div align="left">'
+            '               Investeremiidplánen'
+            '               </div>'
+            '           </li>'
+            ''
+            '           <li>'
+            '               <div align="left">'
+            '               Teknologiaovdánahttin ja DGT (IKT)'
+            '               </div>'
+            '           </li>'
+            ''
+            '           <li>'
+            '               <div align="left">'
+            '               Guhkesáiggiplánen'
+            '               </div>'
+            '           </li>'
+            '       </ul>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <list>'
+            '           <p type="listitem">FoU ja konseapta ja doktriidna ovdánahttin</p>'
+            '           <p type="listitem">Investeremiidplánen</p>'
+            '           <p type="listitem">Teknologiaovdánahttin ja DGT (IKT)</p>'
+            '           <p type="listitem">Guhkesáiggiplánen</p>'
+            '       </list>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'no-div-documentinfoem': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '    <body>'
+            '        <div class="documentInfoEm">'
+            '            Dás don leat: <a href="/se/dep/md.html?id=668">Birasg&#225;httendepartemeanta</a> &lt; <a href="/se/dep/md/Dokumeanttat.html?id=270420">Dokumeanttat</a> &lt; <a href="/se/dep/md/Dokumeanttat/Johtocalus.html?id=2011">Johtoč&#225;lus</a> &lt; <span>4. Bargamušat ja v&#225;ldi pl&#225;nemis</span>'
+            '        </div>'
+            '    </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'nobr': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <nobr>'
+            '                    <a href="/nn/dep/kud/aktuelt/nyheter/2009.html?id=541952" class="linklist" title=\'Aktuelt - Nyheiter - 2009\'>'
+            '                            2009'
+            '                        </a>'
+            '                    </nobr>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>2009</p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'note-within-p': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '    <body>'
+            '        <p>'
+            '            <a name="[1]">[1] <note>Vestertana, dvs. Deanodat, har gjennom historia omfatta nedre Tana og store deler av Tanafjorden. Dette bekreftes bl.a. når Pavel Anderssen som vokste opp i Bonjákas (bygda), sa han var fra Vestertana (siida).</note>'
+            '                <br />'
+            '            </a>'
+            '            <a name="[2]">[2] <note>Fra 1918 brukte begge det norske gårdsnavnet Fokstad som etternavn i stedet for Pavelsen.</note>'
+            '                <br />'
+            '            </a>'
+            '        </p>'
+            '    </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '        <p>[1] Vestertana, dvs. Deanodat, har gjennom historia omfatta nedre Tana og store deler av Tanafjorden. Dette bekreftes bl.a. når Pavel Anderssen som vokste opp i Bonjákas (bygda), sa han var fra Vestertana (siida). [2] Fra 1918 brukte begge det norske gårdsnavnet Fokstad som etternavn i stedet for Pavelsen. </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'nrk-wbr': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '    <body>'
+            '        <wbr/>'
+            '    </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '    <body>'
+            '    </body>'
+            '</document>'
+           ),
+        },
+    'ol-i-li': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '    <body>'
+            '        <ol>'
+            '            <i>'
+            '                <li> Lærer K. Bruflodt</li>'
+            '                <li>"   K. Møgster</li>'
+            '                <li>"   A. Jox</li>'
+            '            </i>'
+            '        </ol>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '    <body>'
+            '        <list>'
+            '            <p type="listitem">Lærer K. Bruflodt </p>'
+            '            <p type="listitem">" K. Møgster </p>'
+            '            <p type="listitem">" A. Jox </p>'
+            '        </list>'
+            '    </body>'
+            '</document>'
+           ),
+        },
+    'ol-within-ol': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <ol type="1" start="1">'
+            '           <li>1</li>'
+            '           <li>2'
+            '               <ol>'
+            '                   <li>2.1</li>'
+            '                   <li>2.2</li>'
+            '                   <li>2.3</li>'
+            '               </ol>'
+            '           </li>'
+            '           <li>3</li>'
+            '           <li>4</li>'
+            '           <li>5</li>'
+            '       </ol>'
+            '       <ul type="1" start="1">'
+            '           <li>1</li>'
+            '           <li>2'
+            '               <ul>'
+            '                   <li>2.1</li>'
+            '                   <li>2.2</li>'
+            '                   <li>2.3</li>'
+            '               </ul>'
+            '           </li>'
+            '           <li>3</li>'
+            '           <li>4</li>'
+            '           <li>5</li>'
+            '       </ul>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <list>'
+            '           <p type="listitem">1</p>'
+            '           <p type="listitem">'
+            '           2'
+            '               <list>'
+            '                   <p type="listitem">2.1</p>'
+            '                   <p type="listitem">2.2</p>'
+            '                   <p type="listitem">2.3</p>'
+            '               </list>'
+            '           </p>'
+            '           <p type="listitem">3</p>'
+            '           <p type="listitem">4</p>'
+            '           <p type="listitem">5</p>'
+            '       </list>'
+            '       <list>'
+            '           <p type="listitem">1</p>'
+            '           <p type="listitem">'
+            '           2'
+            '               <list>'
+            '                   <p type="listitem">2.1</p>'
+            '                   <p type="listitem">2.2</p>'
+            '                   <p type="listitem">2.3</p>'
+            '               </list>'
+            '           </p>'
+            '           <p type="listitem">3</p>'
+            '           <p type="listitem">4</p>'
+            '           <p type="listitem">5</p>'
+            '       </list>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'p-a-b': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body id="ctl00_Body" style="background-color:white">'
+            '       <p>'
+            '           <a name="hov8.noteref1" href="/lmd/norsk/dok/andre_dok/nou/020001-020002/hov008-bn.html#hov8.note1">'
+            '               <b>'
+            '                   [1]'
+            '               </b>'
+            '           </a>'
+            '       </p>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <em type="bold">'
+            '               [1]'
+            '           </em>'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'p-b-span': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <p class="MsoNormal" style="MARGIN: 0cm 0cm 0pt">'
+            '           <b style="mso-bidi-font-weight: normal">'
+            '               <span lang="NO-BOK" style="mso-ansi-language: NO-BOK">'
+            '                   Sámi oahpponeavvojahki – Sámi máhttolokten'
+            '               </span>'
+            '           </b>'
+            '       </p>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <em type="bold">'
+            '               Sámi oahpponeavvojahki – Sámi máhttolokten'
+            '           </em>'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'p-font-font-b-span': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body onload="javascript:Operatest();">'
+            '       <p class="MsoNormal" style="MARGIN: 0cm 0cm 0pt">'
+            '           <font size="3">'
+            '               <font face="Times New Roman">'
+            '                   <b style="mso-bidi-font-weight: normal">'
+            '                       <span lang="I-SAMI-NO" style="mso-ansi-language: I-SAMI-NO" xml:lang="I-SAMI-NO">'
+            '                           Bargit'
+            '                       </span>'
+            '                   </b>'
+            '                   <span lang='
+            '                    "I-SAMI-NO" style="mso-ansi-language: I-SAMI-NO"'
+            '                    xml:lang="I-SAMI-NO">'
+            '                       fertejit dahkat čálalaš šiehtadusa bargoaddiin oasseáiggebarggu dáfus mii čájeha virgeproseantta ollesáiggebarggus maid galgá bargat ja man guhká dat bargu bistá. Bargi sávaldagat galget doahttaluvvot jus dát eai dagat mihtilmas vahágiid bargoaddái. Jus bealálaččat eai leat ovttaoaivilis, de sáhttá nággu jođihuvvot riidočoavdinlávdegoddái maid Bargobearráigeahču Direktoráhta hálddaša.'
+            '                   </span>'
+            '               </font>'
+            '           </font>'
+            '       </p>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <em type="bold">Bargit</em> fertejit dahkat čálalaš šiehtadusa bargoaddiin oasseáiggebarggu dáfus mii čájeha virgeproseantta ollesáiggebarggus maid galgá bargat ja man guhká dat bargu bistá. Bargi sávaldagat galget doahttaluvvot jus dát eai dagat mihtilmas vahágiid bargoaddái. Jus bealálaččat eai leat ovttaoaivilis, de sáhttá nággu jođihuvvot riidočoavdinlávdegoddái maid Bargobearráigeahču Direktoráhta hálddaša.'
+            '       </p>'
+            '  </body>'
+            '</document>'
+           ),
+        },
+    'p-span-b': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <p class="MsoNormal" style="MARGIN: 0cm 0cm 0pt">'
+            '           <span lang="NO-BOK" style="mso-ansi-language: NO-BOK">'
+            '               <b style="mso-bidi-font-weight: normal">'
+            '                   sámi guovddáža viidideapmi stáhtabušehttii'
+            '               </b>'
+            '           </span>'
+            '       </p>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <em type="bold">'
+            '               sámi guovddáža viidideapmi stáhtabušehttii'
+            '           </em>'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'p-to-p-listitem': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '        <p>• mearridit gielddaid ja regiovnnaid fysihkalaš, biraslaš, ekonomalaš, sosiálalaš ja kultuvrralaš ovddideami ulbmiliid, čielggadit servodatlaš dárbbuid ja bargamušaid, ja čujuhit mo bargamušaid lea vejolaš čoavdit <br />• sihkkarastit eanaresurssaid, eanadaga kvalitehtaid ja árvvolaš eanadagaid ja kulturbirrasiid suodjaleami <br />• sihkkarastit sámi kultuvrra, ealáhusdoaimmaheami ja servodateallima luondduvuđđosa <br />• láhčit vejolašvuođaid árvoháhkamii ja ealáhusovddideapmái <br />• láhčit vejolašvuođaid dasa ahte huksejuvvon birrasat, buorit ássanbirrasat ja buorit bajásšaddan- ja eallineavttut hábmejuvvojit vuohkkasit buot riikka osiin <br />• ovddidit álbmoga dearvvašvuođa ja eastadit sosiála dearvvašvuođaerohusaid, ja veahkehit eastadit rihkolašvuođa <br />• váldit dálkkádaga vuhtii energiijalágideami ja fievrrideami čovdosiiguin <br />• ovddidit servodatsihkkarvuođa nu ahte mii eastadit heaggamassima ja dearvvašvuođa- ja birasvahágiid ja vahágiid dehálaš vuođđostruktuvrii ja ávnnaslaš árvvuide jed.</p>'
+            '    </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '    <body>'
+            '        <p type="listitem">mearridit gielddaid ja regiovnnaid fysihkalaš, biraslaš, ekonomalaš, sosiálalaš ja kultuvrralaš ovddideami ulbmiliid, čielggadit servodatlaš dárbbuid ja bargamušaid, ja čujuhit mo bargamušaid lea vejolaš čoavdit </p>'
+            '        <p type="listitem">sihkkarastit eanaresurssaid, eanadaga kvalitehtaid ja árvvolaš eanadagaid ja kulturbirrasiid suodjaleami </p>'
+            '        <p type="listitem">sihkkarastit sámi kultuvrra, ealáhusdoaimmaheami ja servodateallima luondduvuđđosa </p>'
+            '        <p type="listitem">láhčit vejolašvuođaid árvoháhkamii ja ealáhusovddideapmái </p>'
+            '        <p type="listitem">láhčit vejolašvuođaid dasa ahte huksejuvvon birrasat, buorit ássanbirrasat ja buorit bajásšaddan- ja eallineavttut hábmejuvvojit vuohkkasit buot riikka osiin </p>'
+            '        <p type="listitem">ovddidit álbmoga dearvvašvuođa ja eastadit sosiála dearvvašvuođaerohusaid, ja veahkehit eastadit rihkolašvuođa </p>'
+            '        <p type="listitem">váldit dálkkádaga vuhtii energiijalágideami ja fievrrideami čovdosiiguin </p>'
+            '        <p type="listitem">ovddidit servodatsihkkarvuođa nu ahte mii eastadit heaggamassima ja dearvvašvuođa- ja birasvahágiid ja vahágiid dehálaš vuođđostruktuvrii ja ávnnaslaš árvvuide jed.</p>'
+            '    </body>'
+            '</document>'
+           ),
+        },
+    'pb': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <h3><pb>Kapittel</pb></h3>'
+            '       <p><pb><b>&#167; 1-1.</b></pb></p>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '        <p type="title">Kapittel</p>'
+            '       <p><em type="bold">&#167; 1-1.</em></p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'span-within-li': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <ul>'
+            '           <li>'
+            '               <span>'
+            '                   <a href="/no-se/dep/oed/dep/org/avdelinger/energi-_og_vannressursavdelingen_.html?id=1561">'
+            '                       <span>'
+            '                           <font>Energiija- ja čáhceresurssaossodat (EV)</font>'
+            '                       </span>'
+            '                   </a>'
+            '                   <a href="http://repi-test1.ft.no1.asap-asp.net/templates/Avdeling.aspx?id=1563&amp;epslanguage=NO">'
+            '                       <font>'
+            '                           <span>(goallostat dárogielat siidduide)</span>'
+            '                       </font>'
+            '                   </a>'
+            '               </span>'
+            '           </li>'
+            ''
+            '           <li>'
+            '               <span>'
+            '                   <a href="/no-se/dep/oed/dep/org/avdelinger/Olje-_og_gassavdelingen.html?id=1563">'
+            '                       <font>'
+            '                           <span>Oljo- ja gássassodat (OG)</span>'
+            '                           <span>(goallostat dárogielat siidduide)</span>'
+            '                       </font>'
+            '                   </a>'
+            '               </span>'
+            '           </li>'
+            ''
+            '           <li>'
+            '               <span>'
+            '                   <a href="/no-se/dep/oed/dep/org/avdelinger/avdeling_for_teknologi_og_internasjonali.html?id=1564">'
+            '                       <span>'
+            '                           <font>Teknologiija ja internašunáliserenossodat (TI)</font>'
+            '                       </span>'
+            '                   </a>'
+            '                   (goallostat dárogielat siidduide)'
+            '               </span>'
+            '           </li>'
+            ''
+            '           <li>'
+            '               <span>'
+            '                   <a href="/no-se/dep/oed/dep/org/avdelinger/okonomi-_og_administrasjonsavdelingen.html?id=1562">'
+            '                       <span>'
+            '                           <font>Ekonomiija- ja hálddahussossodat (EH)</font>'
+            '                       </span>'
+            '                   </a>'
+            '                   (goallostat dárogielat siidduide)'
+            '               </span>'
+            '           </li>'
+            ''
+            '           <li>'
+            '               <span>'
+            '                   <a href="/no-se/dep/oed/dep/org/avdelinger/enhet-for-kommunikasjon.html?id=86785">'
+            '                       <font>'
+            '                           <span>Gulahallama ovttada</span>'
+            '                           <span>t (gull.)</span>'
+            '                       </font>'
+            '                   </a>'
+            '                   <a href="http://repi-test1.ft.no1.asap-asp.net/templates/Avdeling.aspx?id=86785&amp;epslanguage=NO">'
+            '                   </a>'
+            '               </span>'
+            '               <span>(goallostat dárogielat siidduide)</span>'
+            '           </li>'
+            '       </ul>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <list>'
+            '       <p type="listitem">Energiija- ja čáhceresurssaossodat (EV) (goallostat dárogielat siidduide)</p>'
+            '       <p type="listitem">Oljo- ja gássassodat (OG) (goallostat dárogielat siidduide)</p>'
+            '       <p type="listitem">Teknologiija ja internašunáliserenossodat (TI) (goallostat dárogielat siidduide)</p>'
+            '       <p type="listitem">Ekonomiija- ja hálddahussossodat (EH) (goallostat dárogielat siidduide)</p>'
+            '       <p type="listitem">Gulahallama ovttada t (gull.) (goallostat dárogielat siidduide)</p>'
+            '       </list>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'span': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <p>'
+            '           <span>'
+            '               <a href="/no-se/dep/oed/dep/org/avdelinger/energi-_og_vannressursavdelingen_.html?id=1561">'
+            '                   <span>'
+            '                       <font>Energiija- ja čáhceresurssaossodat (EV)</font>'
+            '                   </span>'
+            '               </a>'
+            '               <a href="http://repi-test1.ft.no1.asap-asp.net/templates/Avdeling.aspx?id=1563&amp;epslanguage=NO">'
+            '                   <font>'
+            '                       <span>(goallostat dárogielat siidduide)</span>'
+            '                   </font>'
+            '               </a>'
+            '           </span>'
+            '       </p>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           Energiija- ja čáhceresurssaossodat (EV) (goallostat dárogielat siidduide)'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'sup': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '    <body>'
+            '        <ul>'
+            '            <li>km<sup>2</sup></li>'
+            '        </ul>'
+            '    </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '    <body>'
+            '        <list>'
+            '            <p type="listitem">km 2</p>'
+            '        </list>'
+            '    </body>'
+            '</document>'
+           ),
+        },
+    'td-a-b': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <td class="funcmenu">&#160;'
+            '           <a href="/lmd/norsk/dok/andre_dok/nou/020001-020002/ind-bn.html">'
+            '               <b>'
+            '                   Innholdsfortegnelse'
+            '               </b>'
+            '           </a>'
+            '           &#160;'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <em type="bold">'
+            '               Innholdsfortegnelse'
+            '           </em>'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-a-div': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '    <body>'
+            '        <td>'
+            '            <a href="#">'
+            '                <div align="left">'
+            '                    Klara'
+            '                </div>'
+            '            </a>'
+            '        </td>'
+            '    </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '    <body>'
+            '        <p>'
+            '            Klara'
+            '        </p>'
+            '    </body>'
+            '</document>'
+           ),
+        },
+    'td-a-p': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '    <body>'
+            '        <table>'
+            '            <tr>'
+            '                <td>'
+            '                    <a>'
+            '                        <p>'
+            '                            Pressesenter'
+            '                        </p>'
+            '                    </a>'
+            '                </td>'
+            '            </tr>'
+            '        </table>'
+            '    </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '    <body>'
+            '    <p>'
+            '      Pressesenter'
+            '    </p>'
+            '    </body>'
+            '</document>'
+           ),
+        },
+    'td-a': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <td>'
+            '           <a class="telephoneLink" href="tel:+4722249103">22 24 91 03</a>'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           22 24 91 03'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-b-and-text': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <td>'
+            '           <b>'
+            '               Ålkine, stoerredållen bealesne ca. 1960, Albert Jåma gårroe-bealesne.'
+            '           </b>'
+            '           <br />'
+            '           (Guvvie: Grete Austad)'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <em type="bold">'
+            '               Ålkine, stoerredållen bealesne ca. 1960, Albert Jåma gårroe-bealesne.'
+            '           </em>'
+            '       </p>'
+            '       <p>'
+            '           (Guvvie: Grete Austad)'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-b': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body id="ctl00_Body" style="background-color:white">'
+            '       <td>'
+            '           <b>'
+            '               Albert Jåma reakasovvi jaepien 1946 jih båatsoeburrie-byjrekisnie Helgelaantesne byjjesovvi.'
+            '           </b>'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <em type="bold">'
+            '               Albert Jåma reakasovvi jaepien 1946 jih båatsoeburrie-byjrekisnie Helgelaantesne byjjesovvi.'
+            '           </em>'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-div': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body vlink="#666699" link="#000066" bgcolor="#FFFFFF" style='
+            '   "margin-left: 10px; margin-right: 10px">'
+            '       <table border="0" cellpadding="0" cellspacing="0" width="100%">'
+            '           <tr>'
+            '               <td width="99%">'
+            '                   <div class="contents">'
+            '                       <a name="dok1"></a>'
+            ''
+            '                       <h1 align="left">Láhka geassemánu 19. b. 1970 almmolašvuođa birra hálddašeamis (almmolašvuođaláhka).</h1>'
+            ''
+            '                       <p align="left">Lága geassemánu 19. b. 1970 almmolašvuođa birra hálddašeamis (almmolašvuođalága) jorgalus lea ođasmahttojuvvon oktan rievdadusaiguin mat leat lága bokte mearriduvvon geassemánu 20. b. 2003 nr. 45</p>'
+            ''
+            '                       <blockquote align="left">'
+            '                           <p>Gč. lága suoidnemánu 3. b. 1992 nr. 97 6. § vuosttas lađđasa. Gč. lága guovvamánu 10. b. 1967. Namahus rievdaduvvon lágas njukčamánu 8. b. 1996 nr. 12.</p>'
+            '                       </blockquote>'
+            '                       <a name="hov0.0.1"></a>'
+            '                       <a name="hov.ing.0.1"></a>'
+            '                   </div>'
+            '               </td>'
+            '           </tr>'
+            '       </table>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p></p>'
+            '        <p type="title">Láhka geassemánu 19. b. 1970 almmolašvuođa birra hálddašeamis (almmolašvuođaláhka).</p>'
+            '       <p>Lága geassemánu 19. b. 1970 almmolašvuođa birra hálddašeamis (almmolašvuođalága) jorgalus lea ođasmahttojuvvon oktan rievdadusaiguin mat leat lága bokte mearriduvvon geassemánu 20. b. 2003 nr. 45</p>'
+            '       <p>'
+            '           <span type="quote">Gč. lága suoidnemánu 3. b. 1992 nr. 97 6. § vuosttas lađđasa. Gč. lága guovvamánu 10. b. 1967. Namahus rievdaduvvon lágas njukčamánu 8. b. 1996 nr. 12.</span>'
+            '       </p>'
+            '       <p></p>'
+            '       <p></p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-font-span-span-span': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <td class="contents" valign="top" width="473">'
+            '           <font size="1">'
+            '               <span style="FONT-SIZE: 8pt; COLOR: black; FONT-FAMILY: Verdana; mso-ansi-language: NO-BOK; mso-fareast-font-family: Batang; mso-fareast-language: NO-BOK; mso-bidi-language: AR-SA; mso-bidi-font-family: Arial">'
+            '                   <span style="FONT-SIZE: 8pt; COLOR: black; FONT-FAMILY: Verdana; mso-ansi-language: NO-BOK; mso-fareast-font-family: Batang; mso-fareast-language: NO-BOK; mso-bidi-language: AR-SA; mso-bidi-font-family: Arial">'
+            '                       <span style="FONT-SIZE: 8pt; COLOR: black; FONT-FAMILY: Verdana; mso-ansi-language: NO-BOK; mso-fareast-font-family: Batang; mso-fareast-language: NO-BOK; mso-bidi-language: AR-SA; mso-bidi-font-family: Arial">'
+            '                               Møre og Romsdal Fylkkadiggemiellahttu'
+            '                       </span>'
+            '                   </span>'
+            '               </span>'
+            '           </font>'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           Møre og Romsdal Fylkkadiggemiellahttu'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-font-span-strong': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <td class="contents" valign="top" width="113">'
+            '           <font face="ADMUI3Lg" size="1">'
+            '               <span style="FONT-SIZE: 8pt; COLOR: black; FONT-FAMILY: Verdana; mso-ansi-language: NO-BOK; mso-fareast-font-family: Batang; mso-fareast-language: NO-BOK; mso-bidi-language: AR-SA; mso-bidi-font-family: Arial">'
+            '                   <strong>Politihkalaš doaimmat</strong>'
+            '               </span>'
+            '           </font>'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '  <body>'
+            '    <p>'
+            '      <em type="italic">'
+            '        Politihkalaš doaimmat'
+            '      </em>'
+            '    </p>'
+            '  </body>'
+            '</document>'
+           ),
+        },
+    'td-font-span': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <td class="contents" valign="top" width="473">'
+            '           <font size="1">'
+            '               <span style="FONT-SIZE: 8pt; COLOR: black; FONT-FAMILY: Verdana; mso-ansi-language: NO-BOK; mso-fareast-font-family: Batang; mso-fareast-language: NO-BOK; mso-bidi-language: AR-SA; mso-bidi-font-family: Arial">'
+            '                   Stáhtačálli, Eanandoallo- ja biebmodepartemeanta'
+            '               </span>'
+            '           </font>'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           Stáhtačálli, Eanandoallo- ja biebmodepartemeanta'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-font': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <td class="contents" valign="top" width="473">'
+            '           <font size="1">Kvirrevitt</font>'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           Kvirrevitt'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-h2-and-text-and-p': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <td>'
+            '           <h2>'
+            '               Departementet ber skoledirektøren om hjelp'
+            '           </h2>'
+            ''
+            '           For å kunne forsvare seg mot angrepa fra Hans Vogt ba sentrale myndigheter om hjelp fra Skoledirektøren i Finnmark, og denne korrespondansen er bevart i Skoledirektørens arkiv, Statsarkivet i Tromsø.'
+            ''
+            '           <p>'
+            '               Kirkedepartementet har prioritert denne saka så høyt at de 7/12-1932 har sendt telegram:'
+            '           </p>'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '        <p type="title">'
+            '            Departementet ber skoledirektøren om hjelp'
+            '        </p>'
+            ''
+            '       <p>'
+            '           For å kunne forsvare seg mot angrepa fra Hans Vogt ba sentrale myndigheter om hjelp fra Skoledirektøren i Finnmark, og denne korrespondansen er bevart i Skoledirektørens arkiv, Statsarkivet i Tromsø.'
+            '       </p>'
+            ''
+            '       <p>'
+            '           Kirkedepartementet har prioritert denne saka så høyt at de 7/12-1932 har sendt telegram:'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-h3': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body id="ctl00_Body" style="background-color:white">'
+            '       <td valign="top" width="291">'
+            '           <h3 class='
+            '           "O-TIT-SEKSJON LEFT">'
+            '           <span class='
+            '           "O-text"><a class="anker"'
+            '           name="høringsinstanser"></a>'
+            '           Gulaskuddanásahusat</span></h3>'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '        <p type="title">'
+            '            Gulaskuddanásahusat'
+            '        </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-p-and-b': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <td>'
+            '           <p>'
+            '               <b>'
+            '                   er født i 1937'
+            '               </b>'
+            '           </p>'
+            ''
+            '           <b>'
+            '               arbeidd innafor mange yrke'
+            '           </b>'
+            '           <br />'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <em type="bold">'
+            '               er født i 1937'
+            '           </em>'
+            '       </p>'
+            ''
+            '       <p>'
+            '           <em type="bold">'
+            '               arbeidd innafor mange yrke'
+            '           </em>'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-p': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body id="ctl00_Body" style="background-color:white">'
+            '       <td valign="top" width="585">'
+            '           <p class="A LEFT" href="#h%C3%B8ringsinstanser">'
+            '               <span class="O-LINK">'
+            '                   <span class="O-attributter">'
+            '                       <span class="O-class">'
+            '                           link'
+            '                       </span>'
+            '                       <span class="O-type">'
+            '                           int'
+            '                       </span>'
+            '                       <span class="O-anchor">'
+            '                           høringsinstanser'
+            '                       </span>'
+            '                   </span>'
+            '                   <span class="O-text">'
+            '                       Gulaskuddanásahusat'
+            '                   </span>'
+            '               </span>'
+            '           </p>'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           link'
+            '           int'
+            '           høringsinstanser'
+            '           Gulaskuddanásahusat'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-span-and-b-and-p': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <table width="100%" height="100%" cellspacing="0" cellpadding="0"'
+            '       border="0">'
+            '           <tr>'
+            '               <td valign="top">'
+            '                   <span class="itemheader">'
+            '                       <font size= "5">Riikkačoahkkincealkámušat 2006</font>'
+            '                   </span>'
+            '                   <b>NSR 38. Riikkačoahkkin mii dollojuvvui Várjjagis mearridii riikkačoahkkincealkámušaid nu mo dáhpi leage. Loga riikkačoahkkincealkámušaid dás.</b>'
+            '                   <br />'
+            '                   <br />'
+            '                   <br />'
+            '                   <p class="MsoNormal" style="MARGIN: 0cm 0cm 0pt">'
+            '                       <span lang="NO-NYN" style="COLOR: black; mso-ansi-language: NO-NYN">'
+            '                           Norgga Sámiid Riikkasearvvi riikkačoahkkincealkámuš nr. 1/'
+            '                       </span>'
+            '                       2006'
+            '                   </p>'
+            '               </td>'
+            '           </tr>'
+            '       </table>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>Riikkačoahkkincealkámušat 2006</p>'
+            '       <p>'
+            '           <em type="bold">'
+            '               NSR 38. Riikkačoahkkin mii dollojuvvui Várjjagis mearridii riikkačoahkkincealkámušaid nu mo dáhpi leage. Loga riikkačoahkkincealkámušaid dás.'
+            '           </em>'
+            '       </p>'
+            '       <p>'
+            '           Norgga Sámiid Riikkasearvvi riikkačoahkkincealkámuš nr. 1/ 2006'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-span-font': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <td valign="top">'
+            '           <span class="itemheader">'
+            '               <font size="5">'
+            '                   Riikkačoahkkincealkámušat 2006'
+            '               </font>'
+            '           </span>'
+            '           <b>NSR 38.</b>'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           Riikkačoahkkincealkámušat 2006'
+            '       </p>'
+            '       <p>'
+            '           <em type="bold">'
+            '               NSR 38.'
+            '           </em>'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-span': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <td><span>Náitalan, 3 máná</span></td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>Náitalan, 3 máná</p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-strong': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <td>'
+            '           <strong>Gaskavahkku</strong>'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <em type="italic">Gaskavahkku</em>'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-table-tr-td': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '   <body>'
+            '       <td valign="top">'
+            '           <table width="100%" border="0" cellpadding="0" cellspacing="0">'
+            '               <tr>'
+            '                   <td bgcolor="#000066" height="14" class="globalmenu">Kvirrevitt</td>'
+            '               </tr>'
+            '           </table>'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           Kvirrevitt'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-text-and-i-and-p': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <td>'
+            '           Nuohta:'
+            '           <i>'
+            '               Jeg går og rusler på Ringerike'
+            '           </i>'
+            ''
+            '           <p>'
+            '               Mii læt dal čoagganan manga guovllos'
+            '           </p>'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           Nuohta:'
+            '       </p>'
+            '       <p>'
+            '           <em type="italic">'
+            '               Jeg går og rusler på Ringerike'
+            '           </em>'
+            '       </p>'
+            '       <p>'
+            '           Mii læt dal čoagganan manga guovllos'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'td-u': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <td>'
+            '           <u>Ášši nr. 54/60: Sámelávdegotti árvalus</u>'
+            '       </td>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <em type="italic">Ášši nr. 54/60: Sámelávdegotti árvalus</em>'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'th-b': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <th class="LEFT TOP" rowspan="1">'
+            '           <b class="K-b">Språktilbudet</b>'
+            '       </th>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <em type="bold">Språktilbudet</em>'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'th-div': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" lang="no" xml:lang="no">'
+            '   <body>'
+            '       <th scope="col">'
+            '           <div>'
+            '               Jan'
+            '           </div>'
+            '       </th>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           Jan'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'th-p': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <th class="LEFT BOTTOM">'
+            '           <p class="LEFT">Kap. Poasta</p>'
+            '       </th>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           Kap. Poasta'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'thead': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" lang="no" xml:lang="no">'
+            '   <body>'
+            '       <thead>'
+            '       </thead>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '  <body>'
+            '  </body>'
+            '</document>'
+           ),
+        },
+    'tr-td-em': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <tr>'
+            '           <td class="contents">'
+            '               <em>'
+            '                   Kapittel 1'
+            '               </em>'
+            '           </td>'
+            '       </tr>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <p>'
+            '           <em type="italic">'
+            '               Kapittel 1'
+            '           </em>'
+            '       </p>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'ul-li-div-p': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body>'
+            '       <ul>'
+            '           <li style='
+            '           "list-style: none; display: inline">'
+            '               <div class="K-DEL-LEDD">'
+            '                   <p class="K-A">'
+            '                       Friskt'
+            '                   </p>'
+            '               </div>'
+            ''
+            '               <div class="K-DEL-LEDD">'
+            '                   <p class="K-A">'
+            '                       Skogeieren'
+            '                   </p>'
+            '               </div>'
+            ''
+            '               <div class="K-DEL-LEDD">'
+            '                   <p class="K-A">'
+            '                       Så langt det'
+            '                   </p>'
+            '               </div>'
+            '           </li>'
+            '       </ul>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <list>'
+            '           <p type="listitem">'
+            '               Friskt'
+            '           </p>'
+            '           <p type="listitem">'
+            '               Skogeieren'
+            '           </p>'
+            '           <p type="listitem">'
+            '               Så langt det'
+            '           </p>'
+            '       </list>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'ul-li-p-i': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml">'
+            '   <body id="ctl00_Body" style="background-color:white">'
+            '       <ul>'
+            '           <li>'
+            '               <i>'
+            '                   4. Slik språkforholdene'
+            '               </i>'
+            ''
+            '               <p>'
+            '                   <i>'
+            '                       Som alle andre'
+            '                   </i>'
+            '               </p>'
+            ''
+            '               <p>'
+            '                   <i>'
+            '                       Vi erklærer'
+            '                   </i>'
+            '               </p>'
+            '           </li>'
+            '       </ul>'
+            '   </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '   <body>'
+            '       <list>'
+            '           <p type="listitem">'
+            '               <em>'
+            '                   4. Slik språkforholdene'
+            '               </em>'
+            '               <em>'
+            '                   Som alle andre'
+            '               </em>'
+            '               <em>'
+            '                   Vi erklærer'
+            '               </em>'
+            '           </p>'
+            '       </list>'
+            '   </body>'
+            '</document>'
+           ),
+        },
+    'ul-strong': {
+       'html': (
+            '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sa" lang="sa">'
+            '    <body>'
+            '        <html:ul>'
+            '            <html:strong>'
+            '                Pressesenter'
+            '            </html:strong>'
+            '        </html:li>'
+            '    </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '    <body>'
+            '        <list>'
+            '            <p>'
+            '                Pressesenter'
+            '            </p>'
+            '        </list>'
+            '    </body>'
+            '</document>'
+           ),
+        },
+    }
 
 
 class TestConversion(unittest.TestCase):
@@ -25,518 +2379,10 @@ class TestConversion(unittest.TestCase):
                 doctest.Example("", want), got, 0).encode('utf-8')
             raise AssertionError(message)
 
-    def test_list_within_list(self):
-
-        got = converter.HTMLConverter(
-            os.path.join(here, "ol-within-ol.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "ol-within-ol.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_h1_6(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "h1-6.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "h1-6.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_a_within_list(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "a-within-li.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "a-within-li.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_span_within_list(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "span-within-li.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "span-within-li.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_span(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "span.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "span.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_blockquote(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "blockquote.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "blockquote.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_font_span_strong(self):
-        got = converter.HTMLConverter(
-            os.path.join(here,
-                         "td-font-span-strong.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-font-span-strong.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_font_span(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-font-span.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-font-span.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_span(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-span.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-span.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_font_span_span_span(self):
-        got = converter.HTMLConverter(
-            os.path.join(here,
-                         "td-font-span-span-span.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here,
-                                             "td-font-span-span-span.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_a(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-a.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-a.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_font(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-font.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-font.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_table_tr_td(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-table-tr-td.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-table-tr-td.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_div(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-div.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-div.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_div_a_span(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-div-a-span.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-div-a-span.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_hx(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-hx.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-hx.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_text(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-text.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-text.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_table(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-table.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-table.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_li_div(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "li-div.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "li-div.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_ul(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-ul.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-ul.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_div_a(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-div-a.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-div-a.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_p_and_text(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-p-and-text.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-p-and-text.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_p(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-p.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-p.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_h3(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-h3.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-h3.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_span(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-span.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-span.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_b(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-b.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-b.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_span_font(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-span-font.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-span-font.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_b_and_text(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-b-and-text.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-b-and-text.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_span_and_b_and_p(self):
-        got = converter.HTMLConverter(
-            os.path.join(here,
-                         "td-span-and-b-and-p.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-span-and-b-and-p.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_p_b_span(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "p-b-span.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "p-b-span.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_th_div(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "th-div.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "th-div.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_thead(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "thead.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "thead.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_p_font_font_b_span(self):
-        got = converter.HTMLConverter(
-            os.path.join(here,
-                         "p-font-font-b-span.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "p-font-font-b-span.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_p_span_b(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "p-span-b.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "p-span-b.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_h2_text_p(self):
-        got = converter.HTMLConverter(
-            os.path.join(here,
-                         "td-h2-and-text-and-p.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-h2-and-text-and-p.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_p_b(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-p-and-b.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-p-and-b.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_text_i_p(self):
-        got = converter.HTMLConverter(
-            os.path.join(here,
-                         "td-text-and-i-and-p.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-text-and-i-and-p.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_b_text(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-b-and-text.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-b-and-text.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_text_and_div(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-text-and-div.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-text-and-div.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_ul_li_div_p(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "ul-li-div-p.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "ul-li-div-p.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_font_span_font_sub(self):
-        got = converter.HTMLConverter(
-            os.path.join(here,
-                         "font-span-font-sub.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "font-span-font-sub.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_li_a_b_font(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "li-a-b-font.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "li-a-b-font.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_h1_and_a(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-h1-and-a.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-h1-and-a.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_h1_and_text(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-h1-and-text.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-h1-and-text.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_p_and_font(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-p-and-font.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-p-and-font.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_text_and_span(self):
-        got = converter.HTMLConverter(
-            os.path.join(here,
-                         "div-text-and-span.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-text-and-span.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_font_and_i(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-font-and-i.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-font-and-i.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_ul_li_p_i(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "ul-li-p-i.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "ul-li-p-i.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_p_a_b(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "p-a-b.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "p-a-b.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_a_b(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-a-b.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-a-b.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_blockquote_p_and_text(self):
-        got = converter.HTMLConverter(
-            os.path.join(here,
-                         "blockquote-p-and-text.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here,
-                                             "blockquote-p-and-text.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_tr_td_em(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "tr-td-em.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "tr-td-em.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_u(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-u.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-u.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_strong(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-strong.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-strong.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_th_p(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "th-p.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "th-p.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_h1_b(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "h1-b.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "h1-b.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_th_b(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "th-b.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "th-b.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_address(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "address.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "address.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_p_to_p_listitem(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "p-to-p-listitem.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "p-to-p-listitem.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_note_within_p(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "note-within-p.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "note-within-p.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_i_within_note(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "i-within-note.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "i-within-note.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_pb(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "pb.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "pb.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_nobr(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "nobr.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "nobr.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_nrk_wbr(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "nrk-wbr.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "nrk-wbr.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_sup(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "sup.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "sup.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_a_div(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-a-div.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-a-div.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_ol_i_li(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "ol-i-li.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "ol-i-li.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_td_a_p(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "td-a-p.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "td-a-p.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_a_p(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-a-p.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-a-p.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_div_a_h2(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "div-a-h2.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "div-a-h2.xml"))
-
-        self.assertXmlEqual(got, want)
-
-    def test_ul_strong(self):
-        got = converter.HTMLConverter(
-            os.path.join(here, "ul-strong.html")).convert2intermediate()
-        want = lxml.etree.parse(os.path.join(here, "ul-strong.xml"))
-
-        self.assertXmlEqual(got, want)
+    def test_runner(self):
+        for testname, html_xml in tests.iteritems():
+            got = converter.HTMLContentConverter(
+                testname, html_xml['html'],
+                None).convert2intermediate()
+            want = lxml.etree.fromstring(html_xml['xml'])
+            self.assertXmlEqual(got, want)
