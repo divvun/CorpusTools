@@ -281,23 +281,24 @@ class Classifier(object):
                        for l, model in self.cmodels.iteritems()}
             cranked = util.sort_by_value(cscored)
             cbest = cranked[0]
-            cfiltered = [(l, d) for l, d in cranked
-                         if d <= cbest[1] * self.DROP_RATIO]
+            cfiltered = {l: d for l, d in cranked
+                         if d <= cbest[1] * self.DROP_RATIO}
             if len(cfiltered) <= 1:
                 if verbose:
                     note("lm gave: {} as only result for input: {}".format(
                         cfiltered, text))
-                return cfiltered
+                return list(cfiltered.iteritems())
             else:
                 # Along with compare_tc, implements text_cat.pl line
                 # 442 and on:
                 wscored = {l: model.compare_tc(text, cscored[l])
-                           for l, model in self.wmodels.iteritems()}
+                           for l, model in self.wmodels.iteritems()
+                           if l in cfiltered}
                 cwcombined = {l: (cscored[l] - wscore)
                               for l, wscore in wscored.iteritems()}
                 cwranked = util.sort_by_value(cwcombined)
                 if verbose:
-                    if cranked == cwranked:
+                    if cranked[:len(cwranked)] == cwranked:
                         note("lm gave: {}\t\twm gave no change\t\tfor input: {}".format(
                             pretty_tbl(cranked), text))
                     else:
@@ -404,9 +405,9 @@ def parse_options():
     proc_parser = subparsers.add_parser('proc', help='Language classification')
     proc_parser.add_argument('model_dir', help='Language model directory')
     proc_parser.add_argument('-u', help="Drop ratio (defaults to 1.1) -- when "
-                             "the second best character model guess is this much "
-                             "worse than the best guess, we don't do any word "
-                             "model comparison.",
+                             "the character model of a language is this much "
+                             "worse than the best guess, we don't include it "
+                             "in the word model comparison.",
                              type=float)
     proc_parser.add_argument('-s', help="Classify on a line-by-line basis "
                              "(rather than the whole input as one text).",
