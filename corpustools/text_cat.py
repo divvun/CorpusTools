@@ -43,6 +43,11 @@ import argparse_version
 import util
 import gzip
 
+def note(msg):
+    print >>sys.stderr, msg.encode('utf-8')
+
+def pretty_tbl(table):
+    return ", ".join("{}:{}".format(k,v) for k,v in table)
 
 class NGramModel(object):
     SPLITCHARS = re.compile(r"[][}{)(>< \n\t:;!.?_,¶§%&£€$¹°½¼¾©←→▪➢√|#–‒…·•@~\\/”“«»\"0-9=*+‑-]")
@@ -250,7 +255,7 @@ class Classifier(object):
             self.cmodels[lang] = CharModel(lang).of_model_file(
                 open(fname, 'r'), fname)
             if verbose:
-                print "Loaded %s" % (fname,)
+                note("Loaded %s" % (fname,))
 
             fname_wm = os.path.join(folder, lang+'.wm')
             # fname_wmgz = os.path.join(folder, lang+'.wm.gz')
@@ -258,11 +263,11 @@ class Classifier(object):
                 self.wmodels[lang] = WordModel(lang).of_model_file(
                     open(fname_wm, 'r'), fname_wm)
                 if verbose:
-                    print "Loaded %s" % (fname_wm,)
+                    note("Loaded %s" % (fname_wm,))
             else:
                 self.wmodels[lang] = WordModel(lang).of_freq({})
 
-    def classify_full(self, intext):
+    def classify_full(self, intext, verbose=False):
         if len(self.cmodels) == 0:
             return [('guess', 0)]
         else:
@@ -279,6 +284,9 @@ class Classifier(object):
             cfiltered = [(l, d) for l, d in cranked
                          if d <= cbest[1] * self.DROP_RATIO]
             if len(cfiltered) <= 1:
+                if verbose:
+                    note("lm gave: {} as only result for input: {}".format(
+                        cfiltered, text))
                 return cfiltered
             else:
                 # Along with compare_tc, implements text_cat.pl line
@@ -288,10 +296,17 @@ class Classifier(object):
                 cwcombined = {l: (cscored[l] - wscore)
                               for l, wscore in wscored.iteritems()}
                 cwranked = util.sort_by_value(cwcombined)
+                if verbose:
+                    if cranked == cwranked:
+                        note("lm gave: {}\t\twm gave no change\t\tfor input: {}".format(
+                            pretty_tbl(cranked), text))
+                    else:
+                        note("lm gave: {}\t\twm-weighted to: {}\t\tfor input: {}".format(
+                            pretty_tbl(cranked), pretty_tbl(cwranked), text))
                 return cwranked
 
-    def classify(self, text):
-        return self.classify_full(text)[0][0]
+    def classify(self, text, verbose=False):
+        return self.classify_full(text, verbose)[0][0]
 
 
 class FolderTrainer(object):
@@ -306,8 +321,8 @@ class FolderTrainer(object):
                     msg = "Processing %s" % (fname,)
                     if os.path.getsize(fname) > 5000000:
                         msg += " (this may take a while)"
-                    print msg.encode('utf-8')
-                    sys.stdout.flush()
+                    note(msg)
+                    sys.stderr.flush()
                 lang = util.basename_noext(fname, ext)
                 self.models[lang] = Model(lang).of_text_file(self.open_corpus(fname))
 
@@ -327,8 +342,7 @@ class FolderTrainer(object):
             fname = os.path.join(folder, lang+ext)
             model.to_model_file(open(fname, 'w'))
         if verbose and len(self.models) != 0:
-            print ("Wrote {%s}%s" %
-                   (",".join(self.models.keys()), ext)).encode('utf-8')
+            note("Wrote {%s}%s" % (",".join(self.models.keys()), ext))
 
 
 class FileTrainer(object):
@@ -341,20 +355,24 @@ class FileTrainer(object):
 
 def proc(args):
     c = Classifier(args.model_dir)
+    if args.u is not None:
+        c.DROP_RATIO = args.u
+    if args.verbose:
+        note("Drop ratio: {}".format(c.DROP_RATIO))
     if args.s:
         for line in sys.stdin:
-            print c.classify(line.decode('utf-8'))
+            print c.classify(line.decode('utf-8'), args.verbose)
     else:
-        print c.classify(sys.stdin.read().decode('utf-8'))
+        print c.classify(sys.stdin.read().decode('utf-8'), args.verbose)
 
 
 def file_comp(args):
     if args.mtype == 'lm':
-        FileTrainer(sys.stdin, Model=CharModel, verbose=True).save(
-            sys.stdout, verbose=True)
+        FileTrainer(sys.stdin, Model=CharModel, verbose=args.verbose).save(
+            sys.stdout, verbose=args.verbose)
     elif args.mtype == 'wm':
-        FileTrainer(sys.stdin, Model=WordModel, verbose=True).save(
-            sys.stdout, verbose=True)
+        FileTrainer(sys.stdin, Model=WordModel, verbose=args.verbose).save(
+            sys.stdout, verbose=args.verbose)
     else:
         raise util.ArgumentError(
             "This shouldn't happen; mtype should be lm or wm")
@@ -366,10 +384,10 @@ def folder_comp(args):
     for d in [args.corp_dir, args.model_dir]:
         if not os.path.isdir(d):
             raise util.ArgumentError("{} is not a directory!".format(d))
-    FolderTrainer(args.corp_dir, Model=CharModel, verbose=True).save(
-        args.model_dir, ext='.lm', verbose=True)
-    FolderTrainer(args.corp_dir, Model=WordModel, verbose=True).save(
-        args.model_dir, ext='.wm', verbose=True)
+    FolderTrainer(args.corp_dir, Model=CharModel, verbose=args.verbose).save(
+        args.model_dir, ext='.lm', verbose=args.verbose)
+    FolderTrainer(args.corp_dir, Model=WordModel, verbose=args.verbose).save(
+        args.model_dir, ext='.wm', verbose=args.verbose)
 
 
 def parse_options():
@@ -377,15 +395,19 @@ def parse_options():
         parents=[argparse_version.parser],
         description='Create or use n-gram models for language classification.')
 
+    parser.add_argument('-V', '--verbose', help="Print some info to stderr",
+                        action="store_true")
+
     subparsers = parser.add_subparsers(
         help="(try e.g. 'proc -h' for help with that subcommand)")
 
     proc_parser = subparsers.add_parser('proc', help='Language classification')
     proc_parser.add_argument('model_dir', help='Language model directory')
     proc_parser.add_argument('-u', help="Drop ratio (defaults to 1.1) -- when "
-                             "the character model of a language is this much "
-                             "worse than the best guess, we don't include it "
-                             "in the word model comparison.")
+                             "the second best character model guess is this much "
+                             "worse than the best guess, we don't do any word "
+                             "model comparison.",
+                             type=float)
     proc_parser.add_argument('-s', help="Classify on a line-by-line basis "
                              "(rather than the whole input as one text).",
                              action="store_true")
