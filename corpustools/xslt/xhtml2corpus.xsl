@@ -245,11 +245,18 @@ xsltproc xhtml2corpus.xsl - > file.xml
 </xsl:template>
 
 <xsl:template match="html:div/html:em|html:td/html:em">
-    <p>
-        <em>
+    <xsl:choose>
+        <xsl:when test="html:p">
             <xsl:apply-templates/>
-        </em>
-    </p>
+        </xsl:when>
+        <xsl:otherwise>
+            <p>
+                <em>
+                    <xsl:apply-templates/>
+                </em>
+            </p>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="html:p/html:a/html:div">

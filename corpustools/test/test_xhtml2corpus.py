@@ -516,6 +516,35 @@ tests = {
             '</document>'
            ),
         },
+    'div-em-p-em': {
+       'html': (
+            '<html>'
+            '  <body>'
+            '    <div>'
+            '      <em>'
+            '        <p>'
+            '          <em>'
+            '            Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
+            '          </em>'
+            '        </p>'
+            '      </em>'
+            '    </div>'
+            '  </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <p>'
+            '      Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
+            '    </p>'
+            '  </body>'
+            '</document>'
+           ),
+        },
     'div-table': {
        'html': (
             '<html>'
