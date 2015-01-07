@@ -243,14 +243,13 @@ class WordModel(NGramModel):
 class Classifier(object):
     DROP_RATIO = 1.10
 
-    def __init__(self, langs=[], verbose=False):
+    def __init__(self, folder=os.path.join(here, 'lm'), langs=[], verbose=False):
         self.cmodels = {}
         self.wmodels = {}
 
         ext = '.lm'
         fnames = []
 
-        folder = os.path.join(here, 'lm')
         folder_glob = os.path.join(folder, '*'+ext)
         found_fnames = glob.glob(os.path.normcase(folder_glob))
         if len(found_fnames) == 0:
@@ -389,7 +388,7 @@ class FileTrainer(object):
 
 
 def proc(args):
-    c = Classifier(args.model_dir)
+    c = Classifier(folder=args.model_dir)
     if args.u is not None:
         c.DROP_RATIO = args.u
     if args.verbose:
