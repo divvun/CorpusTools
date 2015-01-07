@@ -71,6 +71,7 @@ class NGramModel(object):
 
     def __init__(self, arg={}, lang='input'):
         self.lang = lang        # for debugging
+        self.unicode_warned = 0
 
     def of_text(self, text):
         self.finish(self.freq_of_text(ensure_unicode(text),
@@ -118,6 +119,7 @@ class NGramModel(object):
         return sum(tokens, [])  # flatten
 
     def freq_of_text(self, text, freq):
+        """This should update freq and return it."""
         raise NotImplementedError(
             "You have to subclass and override freq_of_text")
 
@@ -127,9 +129,17 @@ class NGramModel(object):
 
     def freq_of_text_file(self, fil):
         freq = {}
-        for strline in fil.readlines():
-            freq = self.freq_of_text(strline.decode('utf-8'),
-                                     freq)
+        for nl, strline in enumerate(fil.readlines()):
+            try:
+                line = strline.decode('utf-8')
+            except UnicodeDecodeError as e:
+                if self.unicode_warned == 0:
+                    note("WARNING: Line {} gave {}, skipping ... (not warning again)".format(nl, e))
+                self.unicode_warned += 1
+                continue
+            freq = self.freq_of_text(line, freq)
+        if self.unicode_warned != 0:
+            note("Saw {} UnicodeDecodeErrors".format(self.unicode_warned))
         return freq
 
     def finish(self, freq):
