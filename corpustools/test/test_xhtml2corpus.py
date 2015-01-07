@@ -2419,24 +2419,26 @@ tests = {
     }
 
 
-class TestConversion(unittest.TestCase):
-    """Class to test html to divvun-corpus format conversion
+def assertXmlEqual(got, want):
+    """Check if two xml snippets are equal
     """
-    def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
-        got = lxml.etree.tostring(got)
-        want = lxml.etree.tostring(want)
-        checker = lxml.doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
-            message = checker.output_difference(
-                doctest.Example("", want), got, 0).encode('utf-8')
-            raise AssertionError(message)
+    got = lxml.etree.tostring(got)
+    want = lxml.etree.tostring(want)
+    checker = lxml.doctestcompare.LXMLOutputChecker()
+    if not checker.check_output(want, got, 0):
+        message = checker.output_difference(
+            doctest.Example("", want), got, 0).encode('utf-8')
+        raise AssertionError(message)
 
-    def test_runner(self):
-        for testname, html_xml in tests.iteritems():
-            got = converter.HTMLContentConverter(
-                testname, html_xml['html'],
-                None).convert2intermediate()
-            want = lxml.etree.fromstring(html_xml['xml'])
-            self.assertXmlEqual(got, want)
+
+def test_removal():
+    for testname, html_xml in tests.iteritems():
+        yield check_removal, testname, html_xml
+
+
+def check_removal(testname, html_xml):
+    got = converter.HTMLContentConverter(
+        testname, html_xml['html'],
+        None).convert2intermediate()
+    want = lxml.etree.fromstring(html_xml['xml'])
+    assertXmlEqual(got, want)
