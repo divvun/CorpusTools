@@ -386,6 +386,11 @@ If it is a container it has one or more of the these tags:
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
+        <xsl:when test="html:a">
+            <p>
+                <xsl:apply-templates/>
+            </p>
+        </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates/>
         </xsl:otherwise>

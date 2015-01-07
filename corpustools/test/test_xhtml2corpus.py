@@ -468,11 +468,11 @@ tests = {
        'html': (
             '<html>'
             '  <body>'
-            '  <div>'
+            '    <div>'
             '      <span>'
-            '               Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
+            '        Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
             '      </span>'
-            '  </div>'
+            '    </div>'
             '  </body>'
             '</html>'
            ),
@@ -482,9 +482,36 @@ tests = {
             '    <title/>'
             '  </header>'
             '  <body>'
-            '  <p>'
-            '           Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
-            '  </p>'
+            '    <p>'
+            '      Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
+            '    </p>'
+            '  </body>'
+            '</document>'
+           ),
+        },
+    'div-small-a': {
+       'html': (
+            '<html>'
+            '  <body>'
+            '    <div>'
+            '      <small>'
+            '        <a>'
+            '          Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
+            '        </a>'
+            '      </small>'
+            '    </div>'
+            '  </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <p>'
+            '      Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
+            '    </p>'
             '  </body>'
             '</document>'
            ),
