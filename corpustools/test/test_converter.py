@@ -433,7 +433,9 @@ class TestHTMLContentConverter(XMLTester):
             'div': {
                 'class': [
                     'QuickNav', 'tabbedmenu', 'printContact', 'documentPaging',
-                    'breadcrumbs', 'post-footer', 'documentInfoEm',
+                    'breadcrumbs',
+                    'breadcrumbs ', # regjeringen.no
+                    'post-footer', 'documentInfoEm',
                     'article-column', 'nrk-globalfooter', 'article-related',
                     'outer-column', 'article-ad', 'article-bottom-element',
                     'banner-element', 'nrk-globalnavigation', 'sharing', 'ad',

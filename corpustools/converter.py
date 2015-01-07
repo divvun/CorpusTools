@@ -1049,7 +1049,9 @@ class HTMLContentConverter(object):
             'div': {
                 'class': [
                     'QuickNav', 'tabbedmenu', 'printContact', 'documentPaging',
-                    'breadcrumbs', 'post-footer', 'documentInfoEm',
+                    'breadcrumbs',
+                    'breadcrumbs ', # regjeringen.no
+                    'post-footer', 'documentInfoEm',
                     'article-column', 'nrk-globalfooter', 'article-related',
                     'outer-column', 'article-ad', 'article-bottom-element',
                     'banner-element', 'nrk-globalnavigation', 'sharing', 'ad',
@@ -1126,11 +1128,10 @@ class HTMLContentConverter(object):
             for key, values in attribs.items():
                 for value in values:
                     search = ('.//html:{}[@{}="{}"]'.format(tag, key, value))
-                    #if key == 'class' and value == 'breadcrumbs':
-                        #print 'looking for {} and {} {}'.format(key, value, search)
                     for unwanted in self.soup.xpath(search, namespaces=ns):
-                        #if key == 'class' and value == 'breadcrumbs':
-                            #print etree.tostring(unwanted)
+                        #print '---------------------------------------'
+                        #print ccat.lineno(), etree.tostring(unwanted)
+                        #print '---------------------------------------'
                         unwanted.getparent().remove(unwanted)
 
     def add_p_around_text(self):
