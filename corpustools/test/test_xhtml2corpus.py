@@ -2398,6 +2398,45 @@ tests = {
             '</document>'
             ),
         },
+    'hm': {
+        'html': (
+            '<html>'
+            '  <body>'
+            '<span>'
+            '<div>'
+            '<table>'
+            '<tbody>'
+            '    <tr>'
+            '      <td>'
+            '        <h2>'
+            '           Kl.'
+            '        </h2>'
+            '        <p>11.00</p>'
+            '      </td>'
+            '    </tr>'
+            '</tbody>'
+            '</table>'
+            '</div>'
+            '</span>'
+            '  </body>'
+            '</html>'
+            ),
+        'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <p type="title">'
+            '      Kl.'
+            '    </p>'
+            '    <p>'
+            '      11.00'
+            '    </p>'
+            '  </body>'
+            '</document>'
+            ),
+        },
     }
 
 
