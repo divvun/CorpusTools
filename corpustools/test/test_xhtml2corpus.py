@@ -545,6 +545,33 @@ tests = {
             '</document>'
            ),
         },
+    'div-a-div': {
+       'html': (
+            '<html>'
+            '  <body>'
+            '    <div>'
+            '      <a>'
+            '        <div>'
+            '          Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
+            '        </div>'
+            '      </a>'
+            '    </div>'
+            '  </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <p>'
+            '      Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
+            '    </p>'
+            '  </body>'
+            '</document>'
+           ),
+        },
     'div-table': {
        'html': (
             '<html>'
@@ -2431,12 +2458,15 @@ def assertXmlEqual(got, want):
         raise AssertionError(message)
 
 
-def test_removal():
+def test_conversion():
     for testname, html_xml in tests.iteritems():
-        yield check_removal, testname, html_xml
+        yield check_conversion, testname, html_xml
 
 
-def check_removal(testname, html_xml):
+def check_conversion(testname, html_xml):
+    '''Check that the tidied html is correctly converted
+    to corpus xml via the xhtml2corpus.xsl style sheet
+    '''
     got = converter.HTMLContentConverter(
         testname, html_xml['html'],
         None).convert2intermediate()

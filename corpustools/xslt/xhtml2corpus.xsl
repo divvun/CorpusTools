@@ -342,7 +342,7 @@ If it is a container it has one or more of the these tags:
 
 <xsl:template match="html:div/html:a|html:td/html:a">
     <xsl:choose>
-        <xsl:when test="html:h2">
+        <xsl:when test="html:h2|html:div">
             <xsl:apply-templates/>
         </xsl:when>
         <xsl:otherwise>
