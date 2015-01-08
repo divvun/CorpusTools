@@ -2129,16 +2129,7 @@ class DocumentTester(object):
         """Send the text into preprocess, return the result.
         If the process fails, exit the program
         """
-        preprocess_command = []
-        if self.get_mainlang() == 'sme':
-            abbrFile = os.path.join(
-                os.environ['GTHOME'], 'gt/sme/bin/abbr.txt')
-            corrFile = os.path.join(
-                os.environ['GTHOME'], 'gt/sme/bin/corr.txt')
-            preprocess_command = ['preprocess',
-                                  '--abbr=' + abbrFile, '--corr=' + corrFile]
-        else:
-            preprocess_command = ['preprocess']
+        preprocess_command = util.get_preprocess_command(self.mainlang())
 
         return run_process(
             preprocess_command, 'nada',

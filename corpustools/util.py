@@ -1,3 +1,24 @@
+# -*- coding: utf-8 -*-
+
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this file. If not, see <http://www.gnu.org/licenses/>.
+#
+#   Copyright 2014 Kevin Brubeck Unhammer <unhammer@fsfe.org>
+#   Copyright 2014 Børre Gaup <borre.gaup@uit.no>
+#
+
+from __future__ import unicode_literals
+
 import os
 import operator
 
@@ -46,7 +67,7 @@ def executable_in_path(program):
 
 
 def sanity_check(program_list):
-    u"""Look for programs and files that are needed to do the analysis.
+    """Look for programs and files that are needed to do the analysis.
     If they don't exist, raise an exception.
     """
     if 'GTHOME' not in os.environ:
@@ -57,6 +78,28 @@ def sanity_check(program_list):
             raise ExecutableMissingException(
                 "Couldn't find %s in $PATH or it is not executable." % (
                     program.encode('utf-8'),))
+
+
+def get_lang_resource(lang, resource, fallback=None):
+    path = os.path.join(os.environ['GTHOME'], 'langs', lang, resource)
+    if os.path.exists(path):
+        return path
+    else:
+        return fallback
+
+def get_preprocess_command(lang):
+    preprocess_script = os.path.join(os.environ['GTHOME'],
+                                     'gt/script/preprocess')
+    sanity_check([preprocess_script])
+    abbr_fb = get_lang_resource("sme", 'tools/preprocess/abbr.txt')
+    abbr = get_lang_resource(lang, 'tools/preprocess/abbr.txt', abbr_fb)
+    corr = get_lang_resource(lang, 'src/syntax/corr.txt')
+    args = [ "--{}={}".format(opt, path)
+             for opt,path in [('abbr', abbr),
+                              ('corr', corr)]
+             if path is not None ]
+    return [preprocess_script] + args
+
 
 
 def print_element(element, level, indent, out):

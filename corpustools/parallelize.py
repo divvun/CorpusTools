@@ -230,24 +230,7 @@ class SentenceDivider:
         result.
         If the process fails, exit the program
         """
-        preprocess_script = os.path.join(os.environ['GTHOME'],
-                                         'gt/script/preprocess')
-        util.sanity_check([preprocess_script])
-
-        preprocess_command = []
-        if (self.doc_lang == 'nob'):
-            abbr_file = os.path.join(
-                os.environ['GTHOME'], 'st/nob/bin/abbr.txt')
-            preprocess_command = [preprocess_script, '--abbr={}'.format(
-                abbr_file)]
-        else:
-            abbr_file = os.path.join(os.environ['GTHOME'],
-                                     'gt/sme/bin/abbr.txt')
-            corr_file = os.path.join(os.environ['GTHOME'],
-                                     'gt/sme/bin/corr.txt')
-            preprocess_command = [preprocess_script,
-                                  '--abbr={}'.format(abbr_file),
-                                  '--corr={}'.format(corr_file)]
+        preprocess_command = util.get_preprocess_command(self.doc_lang)
 
         subp = subprocess.Popen(preprocess_command,
                                 stdin=subprocess.PIPE,
