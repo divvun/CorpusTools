@@ -360,8 +360,8 @@ class Parallelize:
                 self.origfiles[0].get_lang())
             self.origfiles.append(tmpfile)
         else:
-            raise IOError("{} doesn't have a parallel file in {}" %
-                          (origfile1, lang2))
+            raise IOError("{} doesn't have a parallel file in {}".format(
+                origfile1, lang2))
 
         if self.is_translated_from_lang2():
             self.reshuffle_files()
