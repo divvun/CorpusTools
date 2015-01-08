@@ -32,7 +32,7 @@ import time
 import argparse
 
 import typosfile
-import ngram
+import text_cat
 import argparse_version
 import util
 
@@ -514,8 +514,8 @@ class Tmx:
         """
         self.tmx = tmx
 
-        self.language_guesser = ngram.NGram(
-            os.path.join(os.getenv('GTHOME'), 'tools/lang-guesser/LM'))
+        # TODO: not actually used apart from in tests, remove?
+        #self.language_guesser = text_cat.Classifier()
 
     def get_src_lang(self):
         """
@@ -728,7 +728,7 @@ class Tmx:
         """
         for tuv in tu:
             if tuv.get('{http://www.w3.org/XML/1998/namespace}lang') == lang:
-                text = tuv[0].text.encode("ascii", "ignore")
+                text = tuv[0].text
                 test_lang = self.language_guesser.classify(text)
                 if test_lang != lang:
                     return False

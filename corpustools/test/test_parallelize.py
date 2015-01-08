@@ -24,6 +24,7 @@ import os
 import doctest
 
 from corpustools import parallelize
+from corpustools import text_cat
 
 
 here = os.path.dirname(__file__)
@@ -55,7 +56,7 @@ class TestCorpusXMLFile(unittest.TestCase):
     def test_dirname(self):
         self.assertEqual(self.pfile.get_dirname(), os.path.join(
             os.environ['GTFREE'] +
-            "/prestable/converted/sme/facta/skuvlahistorja2"))
+            "prestable/converted/sme/facta/skuvlahistorja2"))
 
     def test_name(self):
         self.assertEqual(
@@ -440,7 +441,7 @@ class TestParallelize(unittest.TestCase):
         self.assertEqual(
             self.parallelize.get_sent_filename(
                 self.parallelize.get_filelist()[0]),
-            os.environ['GTFREE'] + "/tmp/aarseth2-n.htmnob_sent.xml")
+            os.environ['GTFREE'] + "tmp/aarseth2-n.htmnob_sent.xml")
 
     def test_divide_p_into_sentences(self):
         self.assertEqual(self.parallelize.divide_p_into_sentences(), 0)
@@ -582,6 +583,8 @@ class TestTmx(unittest.TestCase):
         self.assertXmlEqual(got_tmx.get_tmx(), want_tmx.get_tmx())
 
     def test_check_language(self):
+        self.tmx.language_guesser = text_cat.Classifier()
+
         tu_with_sme = etree.XML(
             '<tu><tuv xml:lang="sme"><seg>Bargo- ja '
             'searvadahttindepartemeanta (BSD) nanne sámiid árbedieđu '
