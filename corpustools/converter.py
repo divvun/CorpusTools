@@ -1073,9 +1073,8 @@ class HTMLContentConverter(object):
                     'murupolku',                # www.samediggi.fi
                     'main_navi_main',           # www.samediggi.fi
                     'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
-                    (
-                        'ctl00_FullRegion_CenterAndRightRegion_HitsControl_'
-                        'searchHitSummary'),
+                    'ctl00_FullRegion_CenterAndRightRegion_HitsControl_'
+                    'searchHitSummary',
                     'AreaTopSiteNav', 'SamiDisclaimer', 'AreaTopRight',
                     'AreaLeft', 'AreaRight', 'ShareArticle', 'tipafriend',
                     'AreaLeftNav', 'PageFooter', 'blog-pager',
