@@ -113,9 +113,16 @@ xsltproc xhtml2corpus.xsl - > file.xml
 </xsl:template>
 
 <xsl:template match="html:ul/html:strong">
-    <p>
-        <xsl:apply-templates/>
-    </p>
+    <xsl:choose>
+        <xsl:when test="text()">
+            <p>
+                <xsl:apply-templates/>
+            </p>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="html:li">

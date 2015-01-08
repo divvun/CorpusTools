@@ -954,6 +954,41 @@ tests = {
             '</document>'
            ),
         },
+    'ul-strong-li-strong-a-strong': {
+       'html': (
+            '<html>'
+            '  <body>'
+            '    <ul>'
+            '      <strong>'
+            '        <li>'
+            '          <strong>'
+            '            <a>'
+            '              <strong>'
+            '                Deltakerloven.'
+            '              </strong>'
+            '            </a>'
+            '          </strong>'
+            '        </li>'
+            '      </strong>'
+            '    </ul>'
+            '  </body>'
+            '</html>'
+           ),
+       'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <list>'
+            '      <p type="listitem">'
+            '        Deltakerloven.'
+            '      </p>'
+            '    </list>'
+            '  </body>'
+            '</document>'
+           ),
+        },
     'li-div': {
        'html': (
             '<html>'
