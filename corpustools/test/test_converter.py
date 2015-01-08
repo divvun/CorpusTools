@@ -91,18 +91,18 @@ class TestConverter(unittest.TestCase):
 
     def test_get_corpusdir(self):
         self.assertEqual(
-            self.converter_inside_orig.get_corpusdir(),
+            self.converter_inside_orig.get_corpusdir().rstrip(os.path.sep),
             os.path.join(
                 here,
                 'converter_data/fakecorpus'))
 
         self.assertEqual(
-            self.converter_outside_orig.get_corpusdir(),
+            self.converter_outside_orig.get_corpusdir().rstrip(os.path.sep),
             os.path.join(here, 'converter_data'))
 
         self.assertEqual(
-            self.converter_inside_freecorpus.get_corpusdir(),
-            os.getenv('GTFREE'))
+            self.converter_inside_freecorpus.get_corpusdir().rstrip(os.path.sep),
+            os.getenv('GTFREE').rstrip(os.path.sep))
 
     def test_get_converted_name_inside_orig(self):
         self.assertEqual(
