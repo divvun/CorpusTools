@@ -434,7 +434,7 @@ class TestHTMLContentConverter(XMLTester):
                 'class': [
                     'QuickNav', 'tabbedmenu', 'printContact', 'documentPaging',
                     'breadcrumbs',
-                    'breadcrumbs ', # regjeringen.no
+                    'breadcrumbs ',
                     'post-footer', 'documentInfoEm',
                     'article-column', 'nrk-globalfooter', 'article-related',
                     'outer-column', 'article-ad', 'article-bottom-element',
@@ -445,9 +445,8 @@ class TestHTMLContentConverter(XMLTester):
                     'searchBox',
                     'murupolku',
                     'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
-                    (
-                        'ctl00_FullRegion_CenterAndRightRegion_HitsControl_'
-                        'searchHitSummary'),
+                    'ctl00_FullRegion_CenterAndRightRegion_HitsControl_'
+                    'searchHitSummary',
                     'AreaTopSiteNav', 'SamiDisclaimer', 'AreaTopRight',
                     'AreaLeft', 'AreaRight', 'ShareArticle', 'tipafriend',
                     'AreaLeftNav', 'PageFooter', 'blog-pager',
@@ -479,9 +478,9 @@ class TestHTMLContentConverter(XMLTester):
                 for value in values:
                     hc = converter.HTMLContentConverter(
                         '.html'.format(tag, key, value),
-                        ('<html><body><{0} {1}="{2}">content:{0}{1}{2}</{0}>'
+                        '<html><body><{0} {1}="{2}">content:{0}{1}{2}</{0}>'
                         '<div class="ada"/></body>'
-                        '</html>').format(tag, key, value), None)
+                        '</html>'.format(tag, key, value), None)
                     hc.remove_elements()
 
                     want = html5parser.document_fromstring(
