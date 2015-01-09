@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import unittest
 import lxml.doctestcompare
 import lxml.etree
 import doctest
@@ -9,7 +8,7 @@ from corpustools import converter
 
 tests = {
     'ul-li-a': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <ul>'
@@ -22,8 +21,8 @@ tests = {
             '    </ul>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -39,10 +38,10 @@ tests = {
             '    </list>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'address': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <address>'
@@ -57,8 +56,8 @@ tests = {
             '  </address>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -76,10 +75,10 @@ tests = {
             '  </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'blockquote-p': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '  <blockquote>'
@@ -87,8 +86,8 @@ tests = {
             '  </blockquote>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -101,10 +100,10 @@ tests = {
             '  </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-a-h2': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -116,8 +115,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -128,10 +127,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-a-p': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -143,8 +142,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -155,10 +154,10 @@ tests = {
             '  </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-b-and-br': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '  <div>'
@@ -170,8 +169,8 @@ tests = {
             '  </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -187,10 +186,10 @@ tests = {
             '  </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-div-a-span': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '  <div>'
@@ -202,8 +201,8 @@ tests = {
             '  </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -214,10 +213,10 @@ tests = {
             '  </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-div-a-and-div': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '  <div>'
@@ -228,8 +227,8 @@ tests = {
             '  </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -238,10 +237,10 @@ tests = {
             '  <p>Geahča buot áššebáhpáriid</p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-font-span-font': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -255,8 +254,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -267,10 +266,10 @@ tests = {
             '   </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-i-font-span-font': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -286,8 +285,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -300,10 +299,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-h1-and-a': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -314,8 +313,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -329,10 +328,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-h1-and-text-and-br-and-a': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -346,8 +345,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -369,10 +368,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-hx': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -380,8 +379,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -390,10 +389,10 @@ tests = {
             '    <p type="title">Sámedikki doarjja</p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-p-and-font': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -402,8 +401,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -413,10 +412,10 @@ tests = {
             '    <p>abc</p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-p-strong-and-br-and-text': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '  <div>'
@@ -434,8 +433,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -453,10 +452,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-span': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -466,8 +465,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -478,10 +477,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-small-a': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -493,8 +492,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -505,10 +504,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-em-p-em': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -522,8 +521,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -534,10 +533,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-a-div': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -549,8 +548,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -561,10 +560,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-table': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -580,8 +579,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -598,10 +597,10 @@ tests = {
             '      </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-text-and-br-and-div': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -613,8 +612,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -628,10 +627,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-text-and-span': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -642,8 +641,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -653,10 +652,10 @@ tests = {
             '    <p>Voimassa oleva</p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-text-and-a-text': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -666,8 +665,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -684,10 +683,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-ul-li-div': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -701,8 +700,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -713,10 +712,10 @@ tests = {
             '    </list>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-ol-li-div': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -730,8 +729,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -742,10 +741,10 @@ tests = {
             '    </list>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-div-div-p': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -757,8 +756,8 @@ tests = {
             '    </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -769,10 +768,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-div-div-a': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <div>'
@@ -786,8 +785,8 @@ tests = {
             '  </div>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -798,10 +797,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'font-span-font-sub': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <font>'
@@ -815,8 +814,8 @@ tests = {
             '    </font>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -827,10 +826,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'h1-6': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '  <h1>header1</h1>'
@@ -841,8 +840,8 @@ tests = {
             '  <h6>header6</h6>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -856,10 +855,10 @@ tests = {
             '    <p type="title">header6</p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'h1-b': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <h1>'
@@ -867,8 +866,8 @@ tests = {
             '    </h1>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -879,17 +878,17 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'note-i': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <note>Geahča <i>Sámi skuvlahistorjá 2. -girjjis</i></note>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -901,10 +900,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'li-a-b-font': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <li>'
@@ -918,8 +917,8 @@ tests = {
             '    </li>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -932,10 +931,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'ul-strong-li-strong-a-strong': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <ul>'
@@ -953,8 +952,8 @@ tests = {
             '    </ul>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -967,10 +966,10 @@ tests = {
             '    </list>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'ul-li-div': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <ul>'
@@ -982,8 +981,8 @@ tests = {
             '    </ul>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -994,10 +993,10 @@ tests = {
             '    </list>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'nobr-a': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <nobr>'
@@ -1007,8 +1006,8 @@ tests = {
             '    </nobr>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1017,10 +1016,10 @@ tests = {
             '    <p>2009</p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'p-a-note': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <p>'
@@ -1029,8 +1028,8 @@ tests = {
             '    </p>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1039,17 +1038,17 @@ tests = {
             '    <p>[1] Vestertana. [2] Fra 1918. </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'wbr': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <wbr/>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1057,10 +1056,10 @@ tests = {
             '  <body>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'ol-i-li': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <ol>'
@@ -1070,8 +1069,8 @@ tests = {
             '    </ol>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1082,10 +1081,10 @@ tests = {
             '    </list>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'ol-li-ol-li': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <ol type="1" start="1">'
@@ -1103,8 +1102,8 @@ tests = {
             '    </ol>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1126,10 +1125,10 @@ tests = {
             '    </list>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'ul-li-ul-li': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <ul type="1" start="1">'
@@ -1147,8 +1146,8 @@ tests = {
             '    </ul>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1170,10 +1169,10 @@ tests = {
             '    </list>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'p-a-b': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <p>'
@@ -1185,8 +1184,8 @@ tests = {
             '    </p>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1199,10 +1198,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'p-b-span': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <p>'
@@ -1214,8 +1213,8 @@ tests = {
             '    </p>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1228,10 +1227,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'p-font-font-b-span': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <p>'
@@ -1250,8 +1249,8 @@ tests = {
             '    </p>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1262,10 +1261,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'p-span-b': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <p>'
@@ -1277,8 +1276,8 @@ tests = {
             '    </p>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1291,18 +1290,18 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'p-to-p-listitem': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <p>• mearridit gielddaid <br />'
             '• ovddidit servodatsihkkarvuođa</p>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1312,17 +1311,17 @@ tests = {
             '    <p type="listitem">ovddidit servodatsihkkarvuođa</p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'h3-pb': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <h3><pb>Kapittel</pb></h3>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1331,17 +1330,17 @@ tests = {
             '    <p type="title">Kapittel</p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'p-pb': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <p><pb><b>&#167; 1-1.</b></pb></p>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1350,10 +1349,10 @@ tests = {
             '    <p><em type="bold">&#167; 1-1.</em></p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'ul-li-span-a-span-font': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <ul>'
@@ -1374,8 +1373,8 @@ tests = {
             '    </ul>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1386,10 +1385,10 @@ tests = {
             '    </list>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'ul-li-span-a-font-span': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <ul>'
@@ -1406,8 +1405,8 @@ tests = {
             '    </ul>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1418,10 +1417,10 @@ tests = {
             '    </list>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'p-span-with-a-span-font-and-a-font-span': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <p>'
@@ -1440,8 +1439,8 @@ tests = {
             '    </p>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1452,10 +1451,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'ul-li-sup': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <ul>'
@@ -1463,8 +1462,8 @@ tests = {
             '    </ul>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1475,10 +1474,10 @@ tests = {
             '    </list>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-a-b': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>&#160;'
@@ -1490,8 +1489,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1504,10 +1503,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-a-div': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -1519,8 +1518,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1531,10 +1530,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'table-tr-td-a-p': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <table>'
@@ -1550,8 +1549,8 @@ tests = {
             '     </table>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1562,10 +1561,10 @@ tests = {
             '   </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-a': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -1573,8 +1572,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1585,10 +1584,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-b-and-text': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -1600,8 +1599,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1617,10 +1616,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-b': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -1630,8 +1629,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1644,10 +1643,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'table-tr-td-div': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <table>'
@@ -1668,8 +1667,8 @@ tests = {
             '    </table>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1685,10 +1684,10 @@ tests = {
             '    <p></p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-font-span-span-span': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -1704,8 +1703,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1716,10 +1715,10 @@ tests = {
             '  </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-font-span-strong': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -1731,8 +1730,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1745,10 +1744,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-font-span': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -1760,8 +1759,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1772,10 +1771,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-font': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -1783,8 +1782,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1795,10 +1794,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-h2-and-text-and-p': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -1812,8 +1811,8 @@ tests = {
             '  </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1830,10 +1829,10 @@ tests = {
             '   </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-h3-span': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -1845,8 +1844,8 @@ tests = {
             '     </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1857,10 +1856,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-p-and-b': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -1875,8 +1874,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1894,10 +1893,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-p-span-span-span': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -1922,8 +1921,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1937,10 +1936,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'table-tr-td-with-span-font-and-b-and-p-span': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <table>'
@@ -1961,8 +1960,8 @@ tests = {
             '    </table>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -1979,10 +1978,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-with-span-font-and-b': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -1995,8 +1994,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -2012,17 +2011,17 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-span': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td><span>Náitalan, 3 máná</span></td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -2031,10 +2030,10 @@ tests = {
             '    <p>Náitalan, 3 máná</p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-strong': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -2042,8 +2041,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -2054,10 +2053,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-table-tr-td': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -2069,8 +2068,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -2081,10 +2080,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-text-and-i-and-p': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -2098,8 +2097,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -2118,10 +2117,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'td-u': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <td>'
@@ -2129,8 +2128,8 @@ tests = {
             '    </td>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -2141,10 +2140,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'th-b': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <th>'
@@ -2152,8 +2151,8 @@ tests = {
             '    </th>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -2164,10 +2163,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'th-div': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <th>'
@@ -2177,8 +2176,8 @@ tests = {
             '    </th>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -2189,10 +2188,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'th-p': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <th>'
@@ -2200,8 +2199,8 @@ tests = {
             '    </th>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -2212,18 +2211,18 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'thead': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <thead>'
             '    </thead>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -2231,10 +2230,10 @@ tests = {
             '  <body>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'tr-td-em': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <tr>'
@@ -2246,8 +2245,8 @@ tests = {
             '    </tr>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -2260,10 +2259,10 @@ tests = {
             '    </p>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'ul-li-div-p': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <ul>'
@@ -2277,8 +2276,8 @@ tests = {
             '    </ul>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -2291,10 +2290,10 @@ tests = {
             '    </list>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'ul-li-p-i': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <ul>'
@@ -2316,8 +2315,8 @@ tests = {
             '    </ul>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -2338,10 +2337,10 @@ tests = {
             '  </list>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'ul-strong': {
-       'html': (
+        'html': (
             '<html>'
             '  <body>'
             '    <ul>'
@@ -2351,8 +2350,8 @@ tests = {
             '    </li>'
             '  </body>'
             '</html>'
-           ),
-       'xml': (
+            ),
+        'xml': (
             '<document>'
             '  <header>'
             '    <title/>'
@@ -2365,7 +2364,7 @@ tests = {
             '    </list>'
             '  </body>'
             '</document>'
-           ),
+            ),
         },
     'div-div-abbr': {
         'html': (
