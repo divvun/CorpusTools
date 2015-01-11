@@ -37,6 +37,9 @@ import argparse_version
 import util
 
 
+here = os.path.dirname(__file__)
+
+
 class CorpusXMLFile:
     """
     A class that contains the info on a file to be parallellized, name
@@ -457,9 +460,7 @@ class Parallelize:
         """
         Parallelize two files using tca2
         """
-        tca2_script = os.path.join(
-            os.environ['GTHOME'],
-            'tools/alignment-tools/tca2/dist/lib/alignment.jar')
+        tca2_jar= os.path.join(here, 'tca2/dist/lib/alignment.jar')
         #util.sanity_check([tca2_script])
 
         anchor_name = self.generate_anchor_file()
@@ -467,7 +468,7 @@ class Parallelize:
         subp = subprocess.Popen(['java',
                                  '-Xms512m', '-Xmx1024m',
                                  '-jar',
-                                 tca2_script,
+                                 tca2_jar,
                                  '-cli',
                                  '-anchor={}'.format(anchor_name),
                                  '-in1={}'.format(self.get_sent_filename(
