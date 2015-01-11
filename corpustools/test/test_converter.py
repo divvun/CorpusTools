@@ -2216,6 +2216,26 @@ TITTEL: 3</p>
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+    def test_fix_newstags_4(self):
+        '''Check that p attributes are kept
+        '''
+        document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
+    <header/>
+    <body>
+        <p type="title">title</p>
+    </body>
+</document>'''))
+        document_fixer.fix_newstags()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(u'''<document>
+    <header/>
+    <body>
+        <p type="title">title</p>
+    </body>
+</document>''')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
     def test_fix__body_encoding(self):
         newstext = converter.PlaintextConverter(
             'tullball.txt')

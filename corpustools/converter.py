@@ -938,16 +938,71 @@ class BiblexmlConverter(object):
         """
         Convert the bible xml to giellatekno xml format using bible2xml.pl
         """
-        (tmpfile, tmpname) = tempfile.mkstemp()
-        bible2xmlpl = 'bible2xml.pl'
-        if distutils.spawn.find_executable(bible2xmlpl) is None:
-            raise ConversionException(
-                "Could not find {} in $PATH".format(bible2xmlpl))
+        document = etree.Element('document')
+        document.append(self.process_bible())
 
-        command = [bible2xmlpl, '-out', tmpname, self.orig]
-        run_process(command, self.orig)
+        return document
 
-        return etree.parse(tmpname)
+    def process_verse(self, verse_element):
+        return verse_element.text
+
+    def process_section(self, section_element):
+        section = etree.Element('section')
+
+        title = etree.Element('p')
+        title.set('type', 'title')
+        title.text = section_element.get('title')
+
+        section.append(title)
+
+        verses = []
+        for verse in section_element.xpath('./verse'):
+            verses.append(self.process_verse(verse))
+
+        p = etree.Element('p')
+        p.text = '\n'.join(verses)
+
+        section.append(p)
+
+        return section
+
+    def process_chapter(self, chapter_element):
+        section = etree.Element('section')
+
+        title = etree.Element('p')
+        title.set('type', 'title')
+        title.text = chapter_element.get('title')
+
+        section.append(title)
+
+        for section_element in chapter_element.xpath('./section'):
+            section.append(self.process_section(section_element))
+
+        return section
+
+    def process_book(self, book_element):
+        section = etree.Element('section')
+
+        title = etree.Element('p')
+        title.set('type', 'title')
+        title.text = book_element.get('title')
+
+        section.append(title)
+
+        for chapter_element in book_element.xpath('./chapter'):
+            section.append(self.process_chapter(chapter_element))
+
+        return section
+
+    def process_bible(self):
+        bible = etree.parse(self.orig)
+
+        body = etree.Element('body')
+
+        for book in bible.xpath('.//book'):
+            body.append(self.process_book(book))
+
+        return body
 
 
 class HTMLContentConverter(object):
@@ -1809,7 +1864,8 @@ class DocumentFixer(object):
                             paragraph.getparent().insert(
                                 index,
                                 self.make_element('p',
-                                                  ' '.join(lines).strip()))
+                                                  ' '.join(lines).strip(),
+                                                  attributes=paragraph.attrib))
                         lines = []
 
                         lines.append(newstags.sub('', line))
@@ -1819,7 +1875,8 @@ class DocumentFixer(object):
                             paragraph.getparent().insert(
                                 index,
                                 self.make_element('p',
-                                                  ' '.join(lines).strip()))
+                                                  ' '.join(lines).strip(),
+                                                  attributes=paragraph.attrib))
                         line = bylinetags.sub('', line).strip()
 
                         if unknown is not None:
@@ -1837,7 +1894,8 @@ class DocumentFixer(object):
                             paragraph.getparent().insert(
                                 index,
                                 self.make_element('p',
-                                                  ' '.join(lines).strip()))
+                                                  ' '.join(lines).strip(),
+                                                  attributes=paragraph.attrib))
                         line = boldtags.sub('', line).strip()
                         lines = []
                         index += 1
@@ -1851,7 +1909,8 @@ class DocumentFixer(object):
                             paragraph.getparent().insert(
                                 index,
                                 self.make_element('p',
-                                                  ' '.join(lines).strip()))
+                                                  ' '.join(lines).strip(),
+                                                  attributes=paragraph.attrib))
                         line = line.replace('@kursiv:', '')
                         lines = []
                         index += 1
@@ -1865,7 +1924,8 @@ class DocumentFixer(object):
                             paragraph.getparent().insert(
                                 index,
                                 self.make_element('p',
-                                                  ' '.join(lines).strip()))
+                                                  ' '.join(lines).strip(),
+                                                  attributes=paragraph.attrib))
                         line = headertitletags.sub('', line)
                         lines = []
                         index += 1
@@ -1882,7 +1942,8 @@ class DocumentFixer(object):
                             paragraph.getparent().insert(
                                 index,
                                 self.make_element('p',
-                                                  ' '.join(lines).strip()))
+                                                  ' '.join(lines).strip(),
+                                                  attributes=paragraph.attrib))
                         line = titletags.sub('', line)
                         lines = []
                         index += 1
@@ -1896,7 +1957,8 @@ class DocumentFixer(object):
                             paragraph.getparent().insert(
                                 index,
                                 self.make_element('p',
-                                                  ' '.join(lines).strip()))
+                                                  ' '.join(lines).strip(),
+                                                  attributes=paragraph.attrib))
                         lines = []
                     else:
                         lines.append(line)
@@ -1905,7 +1967,8 @@ class DocumentFixer(object):
                     index += 1
                     paragraph.getparent().insert(
                         index, self.make_element('p',
-                                                 ' '.join(lines).strip()))
+                                                 ' '.join(lines).strip(),
+                                                  attributes=paragraph.attrib))
 
                 paragraph.getparent().remove(paragraph)
 
