@@ -1,0 +1,2 @@
+java -jar alignment.jar
+

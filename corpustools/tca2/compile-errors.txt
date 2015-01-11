@@ -1,0 +1,65 @@
+aksis/alignment/AlignmentModel.java:159: warning: [unchecked] unchecked call to addAll(java.util.Collection<? extends E>) as a member of the raw type java.util.Set
+					testElementNumbers[t].addAll(((Link)(alignments.get(numberOfFirstAlignmentToDrop))).getElementNumbers(t));
+                                                                    ^
+aksis/alignment/AlignmentModel.java:1153: generic array creation
+		elementNumbers = new TreeSet<Integer>[Alignment.NUM_FILES];
+                                 ^
+aksis/alignment/AlignmentModel.java:907: warning: [unchecked] unchecked conversion
+found   : java.util.TreeSet[]
+required: java.util.TreeSet<java.lang.Integer>[]
+        testElementNumbers= new TreeSet[Alignment.NUM_FILES];   // TreeSet is a sorted Set
+                            ^
+aksis/alignment/AnchorWordList.java:72: warning: [unchecked] unchecked call to add(E) as a member of the raw type java.util.List
+						language[t].add(phrase);
+                                                               ^
+aksis/alignment/AlignmentModel.java:1431: warning: [unchecked] unchecked call to add(E) as a member of the raw type java.util.List
+		info[t].add(elementInfo);
+                           ^
+aksis/alignment/AlignmentModel.java:1580: warning: [unchecked] unchecked conversion
+found   : java.util.ArrayList[]
+required: java.util.List<aksis.alignment.AnchorWordHit>[]
+					List<AnchorWordHit>[] hits = new ArrayList[Alignment.NUM_FILES];
+                                                                     ^
+aksis/alignment/AlignmentModel.java:1615: warning: [unchecked] unchecked conversion
+found   : aksis.alignment.AnchorWordHitComparator
+required: java.util.Comparator<? super aksis.alignment.AnchorWordHit>
+						Collections.sort(hits[t], new AnchorWordHitComparator());
+                                                                          ^
+aksis/alignment/AlignmentModel.java:1615: warning: [unchecked] unchecked method invocation: <T>sort(java.util.List<T>,java.util.Comparator<? super T>) in java.util.Collections is applied to (java.util.List<aksis.alignment.AnchorWordHit>,aksis.alignment.AnchorWordHitComparator)
+						Collections.sort(hits[t], new AnchorWordHitComparator());
+                                                                ^
+aksis/alignment/AlignmentModel.java:1834: warning: [unchecked] unchecked conversion
+found   : java.util.List
+required: java.util.Collection<? extends java.lang.String>
+					ret.addAll(anchorWordClusters.getDetails(indentLevel, includeMatchType));   // getDetails() does its own indentation and endline. ### ikke helt bra?   // 2006-04-05
+                                                                                ^
+aksis/alignment/AlignmentModel.java:2087: warning: [unchecked] unchecked conversion
+found   : java.util.List
+required: java.util.Collection<? extends java.lang.String>
+					ret.addAll(properNameClusters.getDetails(indentLevel, includeMatchType));   // getDetails() does its own indentation and endline. ### ikke helt bra?   // 2006-04-05
+                                                                                ^
+aksis/alignment/AlignmentModel.java:2099: warning: [unchecked] unchecked conversion
+found   : java.util.List
+required: java.util.Collection<? extends java.lang.String>
+					ret.addAll(diceClusters.getDetails(indentLevel, includeMatchType));   // getDetails() does its own indentation and endline. ### ikke helt bra?   // 2006-04-05
+                                                                          ^
+aksis/alignment/AlignmentModel.java:2108: warning: [unchecked] unchecked conversion
+found   : java.util.List
+required: java.util.Collection<? extends java.lang.String>
+					ret.addAll(numberClusters.getDetails(indentLevel, includeMatchType));
+                                                                            ^
+aksis/alignment/AlignmentModel.java:2219: warning: [unchecked] unchecked conversion
+found   : java.util.List
+required: java.util.Collection<? extends java.lang.String>
+					ret.addAll(scoringCharacterClusters.getDetails(indentLevel, includeMatchType));   // getDetails() does its own indentation and endline. ### ikke helt bra?   // 2006-04-05
+                                                                                      ^
+aksis/alignment/Clusters.java:356: warning: [unchecked] unchecked conversion
+found   : aksis.alignment.RefComparator
+required: java.util.Comparator<? super aksis.alignment.Ref>
+		Collections.sort(sortedCluster.refs, new RefComparator());
+                                                     ^
+aksis/alignment/Clusters.java:356: warning: [unchecked] unchecked method invocation: <T>sort(java.util.List<T>,java.util.Comparator<? super T>) in java.util.Collections is applied to (java.util.List<aksis.alignment.Ref>,aksis.alignment.RefComparator)
+		Collections.sort(sortedCluster.refs, new RefComparator());
+                                ^
+1 error
+14 warnings
