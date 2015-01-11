@@ -39,7 +39,7 @@ class TestCorpusXMLFile(unittest.TestCase):
             os.path.join(
                 os.environ['GTFREE'],
                 "prestable/converted/sme/facta/skuvlahistorja2/"
-                "aarseth2-s.htm.xml"), "nob")
+                "aarseth2-s.htm.xml"))
 
     def assertXmlEqual(self, got, want):
         """Check if two stringified xml snippets are equal
@@ -54,9 +54,10 @@ class TestCorpusXMLFile(unittest.TestCase):
         self.assertEqual(self.pfile.get_basename(), "aarseth2-s.htm.xml")
 
     def test_dirname(self):
-        self.assertEqual(self.pfile.get_dirname(), os.path.join(
-            os.environ['GTFREE'] +
-            "prestable/converted/sme/facta/skuvlahistorja2"))
+        self.assertEqual(
+            self.pfile.get_dirname(),
+            os.path.join(os.environ['GTFREE'],
+                         "prestable/converted/sme/facta/skuvlahistorja2"))
 
     def test_name(self):
         self.assertEqual(
@@ -70,11 +71,12 @@ class TestCorpusXMLFile(unittest.TestCase):
         self.assertEqual(self.pfile.get_lang(), "sme")
 
     def test_get_parallel_basename(self):
-        self.assertEqual(self.pfile.get_parallel_basename(), "aarseth2-n.htm")
+        self.assertEqual(self.pfile.get_parallel_basename('nob'),
+                         "aarseth2-n.htm")
 
     def test_get_parallel_filename(self):
         self.assertEqual(
-            self.pfile.get_parallel_filename(),
+            self.pfile.get_parallel_filename('nob'),
             os.path.join(
                 os.environ['GTFREE'],
                 "prestable/converted/nob/facta/skuvlahistorja2/"
@@ -94,18 +96,18 @@ class TestCorpusXMLFile(unittest.TestCase):
         corpusfile = parallelize.CorpusXMLFile(
             os.path.join(
                 here,
-                'parallelize_data/aarseth2-n-with-version.htm.xml'), 'sme')
+                'parallelize_data/aarseth2-n-with-version.htm.xml'))
         self.assertEqual(corpusfile.get_word_count(), "4009")
 
     def test_remove_version(self):
         file_with_version = parallelize.CorpusXMLFile(
             os.path.join(
                 here,
-                'parallelize_data/aarseth2-n-with-version.htm.xml'), 'sme')
+                'parallelize_data/aarseth2-n-with-version.htm.xml'))
         file_without_version = parallelize.CorpusXMLFile(
             os.path.join(
                 here,
-                'parallelize_data/aarseth2-n-without-version.htm.xml'), 'sme')
+                'parallelize_data/aarseth2-n-without-version.htm.xml'))
 
         file_with_version.remove_version()
 
@@ -118,11 +120,11 @@ class TestCorpusXMLFile(unittest.TestCase):
         file_with_skip = parallelize.CorpusXMLFile(
             os.path.join(
                 here,
-                'parallelize_data/aarseth2-s-with-skip.htm.xml'), 'sme')
+                'parallelize_data/aarseth2-s-with-skip.htm.xml'))
         file_without_skip = parallelize.CorpusXMLFile(
             os.path.join(
                 here,
-                'parallelize_data/aarseth2-s-without-skip.htm.xml'), 'sme')
+                'parallelize_data/aarseth2-s-without-skip.htm.xml'))
 
         file_with_skip.remove_skip()
 
@@ -135,11 +137,11 @@ class TestCorpusXMLFile(unittest.TestCase):
         file_with_later = parallelize.CorpusXMLFile(
             os.path.join(
                 here,
-                'parallelize_data/aarseth2-s-with-later.htm.xml'), 'sme')
+                'parallelize_data/aarseth2-s-with-later.htm.xml'))
         file_with_moved_later = parallelize.CorpusXMLFile(
             os.path.join(
                 here,
-                'parallelize_data/aarseth2-s-with-moved-later.htm.xml'), 'sme')
+                'parallelize_data/aarseth2-s-with-moved-later.htm.xml'))
 
         file_with_later.move_later()
         got = etree.tostring(file_with_moved_later.get_etree())
@@ -441,7 +443,8 @@ class TestParallelize(unittest.TestCase):
         self.assertEqual(
             self.parallelize.get_sent_filename(
                 self.parallelize.get_filelist()[0]),
-            os.environ['GTFREE'] + "tmp/aarseth2-n.htmnob_sent.xml")
+            os.path.join(os.environ['GTFREE'],
+                         "tmp/aarseth2-n.htmnob_sent.xml"))
 
     def test_divide_p_into_sentences(self):
         self.assertEqual(self.parallelize.divide_p_into_sentences(), 0)

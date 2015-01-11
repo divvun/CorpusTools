@@ -46,9 +46,8 @@ class CorpusXMLFile:
     and language
     """
 
-    def __init__(self, name, paralang):
+    def __init__(self, name):
         self.name = name
-        self.paralang = paralang
         self.etree = etree.parse(name)
         self.sanity_check()
 
@@ -94,7 +93,7 @@ class CorpusXMLFile:
         if word_count is not None:
             return word_count.text
 
-    def get_parallel_basename(self):
+    def get_parallel_basename(self, paralang):
         """
         Get the basename of the parallel file
         Input is the lang of the parallel file
@@ -103,17 +102,17 @@ class CorpusXMLFile:
         parallel_files = root.findall(".//parallel_text")
         for p in parallel_files:
             if (p.attrib['{http://www.w3.org/XML/1998/namespace}lang'] ==
-                    self.paralang):
+                    paralang):
                 return p.attrib['location']
 
-    def get_parallel_filename(self):
+    def get_parallel_filename(self, paralang):
         """
         Infer the absolute path of the parallel file
         """
         parallel_dirname = self.get_dirname().replace(
-            self.get_lang(), self.paralang)
-        if self.get_parallel_basename() is not None:
-            parallel_basename = '{}.xml'.format(self.get_parallel_basename())
+            self.get_lang(), paralang)
+        if self.get_parallel_basename(paralang) is not None:
+            parallel_basename = '{}.xml'.format(self.get_parallel_basename(paralang))
 
             return os.path.join(parallel_dirname, parallel_basename)
 
@@ -193,7 +192,7 @@ class SentenceDivider:
         Initialize the inputfile, skip those parts that are meant to be
         skipped, move <later> elements.
         """
-        in_file = CorpusXMLFile(input_xmlfile, parallel_lang)
+        in_file = CorpusXMLFile(input_xmlfile)
         self.doc_lang = in_file.get_lang()
 
         in_file.move_later()
@@ -337,14 +336,12 @@ class Parallelize:
         """
         self.origfiles = []
 
-        tmpfile = CorpusXMLFile(os.path.abspath(origfile1), lang2)
-        self.origfiles.append(tmpfile)
+        self.origfiles.append(CorpusXMLFile(
+            os.path.abspath(origfile1)))
 
-        if self.origfiles[0].get_parallel_filename() is not None:
-            tmpfile = CorpusXMLFile(
-                self.origfiles[0].get_parallel_filename(),
-                self.origfiles[0].get_lang())
-            self.origfiles.append(tmpfile)
+        if self.origfiles[0].get_parallel_filename(lang2) is not None:
+            self.origfiles.append(CorpusXMLFile(
+                self.origfiles[0].get_parallel_filename(lang2)))
         else:
             raise IOError("{} doesn't have a parallel file in {}".format(
                 origfile1, lang2))
@@ -382,17 +379,12 @@ class Parallelize:
         """
         Find out if the given doc is translated from lang2
         """
-        result = False
-        origfile1Tree = etree.parse(self.get_origfile1())
-        root = origfile1Tree.getroot()
-        translated_from = root.find(".//translated_from")
-        if translated_from is not None:
-            if (translated_from.attrib[
-                    '{http://www.w3.org/XML/1998/namespace}lang'] ==
-                    self.get_lang2()):
-                result = True
+        translated_from = self.origfiles[0].get_translated_from()
 
-        return result
+        if translated_from is not None:
+            return translated_from == self.get_lang2()
+        else:
+            result = False
 
     def generate_anchor_file(self):
         """
