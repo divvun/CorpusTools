@@ -35,6 +35,7 @@ import typosfile
 import text_cat
 import argparse_version
 import util
+import generate_anchor_list
 
 
 here = os.path.dirname(__file__)
@@ -391,35 +392,14 @@ class Parallelize:
         Generate an anchor file with lang1 and lang2. Return the path
         to the anchor file
         """
-        generate_script = os.path.join(
-            os.environ['GTHOME'],
-            'gt/script/corpus/generate-anchor-list.pl')
-        util.sanity_check([generate_script])
 
-        infile1 = os.path.join(os.environ['GTHOME'],
-                               'gt/common/src/anchor.txt')
-        infile2 = os.path.join(os.environ['GTHOME'],
-                               'gt/common/src/anchor-admin.txt')
-
-        subp = subprocess.Popen([generate_script,
-                                 '--lang1={}'.format(self.get_lang1()),
-                                 '--lang2{}'.format(self.get_lang2()),
-                                 '--outdir={}'.format(os.environ['GTFREE']),
-                                 infile1, infile2],
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
-        (output, error) = subp.communicate()
-        out_filename = 'anchor-{}{}.txt'.format(
-            self.get_lang1(), self.get_lang2())
-
-        if subp.returncode != 0:
-            print >>sys.stderr, out_filename
-            print >>sys.stderr, output
-            print >>sys.stderr, error
-            return subp.returncode
+        gal = generate_anchor_list.GenerateAnchorList(
+            self.get_lang1(), self.get_lang2(), os.environ['GTFREE'])
+        gal.generate_file([
+            os.path.join(os.environ['GTHOME'], 'gt/common/src/anchor.txt')])
 
         # Return the absolute path of the resulting file
-        return os.path.join(os.environ['GTFREE'], out_filename)
+        return os.path.abspath(gal.get_outfile())
 
     def divide_p_into_sentences(self):
         """

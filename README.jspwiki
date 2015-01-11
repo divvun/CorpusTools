@@ -9,6 +9,7 @@ These scripts will be installed
 * [add_files_to_corpus|CorpusTools.html#add_files_to_corpus]
 * [parallelize|CorpusTools.html#parallelize]
 * [saami_crawler|CorpusTools.html#saami_crawler]
+* [generate_anchor_list|CorpusTools.html#generate_anchor_list]
 
 !!Requirements
 
@@ -109,7 +110,7 @@ Typical usage is:
 ccat -a -l sme $GTFREE/converted/sme/admin
 }}}
 
-This command will print all text marked in the language sme found the 
+This command will print all text marked in the language sme found the
 directory $GTFREE/converted/sme/admin and its subdirectories.
 
 The complete help text from the program:
@@ -407,3 +408,24 @@ optional arguments:
 }}}
 
 
+!!generate_anchor_list
+
+{{{
+usage: generate_anchor_list.py [-h] [-v] [--lang1 LANG1] [--lang2 LANG2]
+                               [--outdir OUTDIR]
+                               input_file [input_file ...]
+
+Generate paired anchor lisit for languages lg1 and lg2. Output line format
+e.g. njukčamán* / mars. Source file is given command line, the format is
+tailored for the file gt/common/src/anchor.txt.
+
+positional arguments:
+  input_file       The input file(s)
+
+optional arguments:
+  -h, --help       show this help message and exit
+  -v, --version    show program's version number and exit
+  --lang1 LANG1    First languages in the word list
+  --lang2 LANG2    Second languages in the word list
+  --outdir OUTDIR  The output directory
+}}}
