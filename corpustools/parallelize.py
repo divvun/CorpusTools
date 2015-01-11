@@ -457,18 +457,23 @@ class Parallelize:
         """
         Parallelize two files using tca2
         """
-        tca2_script = os.path.join(os.environ['GTHOME'],
-                                   'gt/script/corpus/tca2.sh')
-        util.sanity_check([tca2_script])
+        tca2_script = os.path.join(
+            os.environ['GTHOME'],
+            'tools/alignment-tools/tca2/dist/lib/alignment.jar')
+        #util.sanity_check([tca2_script])
 
         anchor_name = self.generate_anchor_file()
 
-        subp = subprocess.Popen([tca2_script,
-                                 anchor_name,
-                                 self.get_sent_filename(
-                                     self.get_filelist()[0]),
-                                 self.get_sent_filename(
-                                     self.get_filelist()[1])],
+        subp = subprocess.Popen(['java',
+                                 '-Xms512m', '-Xmx1024m',
+                                 '-jar',
+                                 tca2_script,
+                                 '-cli',
+                                 '-anchor={}'.format(anchor_name),
+                                 '-in1={}'.format(self.get_sent_filename(
+                                     self.get_filelist()[0])),
+                                 '-in2={}'.format(self.get_sent_filename(
+                                     self.get_filelist()[1]))],
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
