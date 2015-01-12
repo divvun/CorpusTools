@@ -33,7 +33,8 @@ import multiprocessing
 import lxml.etree as etree
 import argparse
 
-from corpustools import ccat
+import ccat
+import parallelize
 import argparse_version
 import util
 
@@ -119,49 +120,6 @@ class Analyser(object):
         except OSError:
             pass
 
-    def get_lang(self):
-        u"""
-        @brief Get the mainlang from the xml file
-
-        :returns: the language as set in the xml file
-        """
-        lang = u'{http://www.w3.org/XML/1998/namespace}lang'
-        if self.etree.getroot().attrib[lang] is not None:
-            return self.etree.getroot().attrib[lang]
-        else:
-            return u'none'
-
-    def get_genre(self):
-        u"""
-        @brief Get the genre from the xml file
-
-        :returns: the genre as set in the xml file
-        """
-        if self.etree.getroot().find(u".//genre") is not None:
-            return self.etree.getroot().find(u".//genre").attrib[u"code"]
-        else:
-            return u'none'
-
-    def get_ocr(self):
-        u"""
-        @brief Check if the ocr element exists
-
-        :returns: the ocr element or None
-        """
-        return self.etree.getroot().find(u".//ocr")
-
-    def get_translatedfrom(self):
-        u"""
-        @brief Get the translated_from value from the xml file
-
-        :returns: the value of translated_from as set in the xml file
-        """
-        if self.etree.getroot().find(u".//translated_from") is not None:
-            return self.etree.getroot().find(u".//translated_from").\
-                attrib[u"{http://www.w3.org/XML/1998/namespace}lang"]
-        else:
-            return u'none'
-
     def calculate_filenames(self, xml_file):
         u"""Set the names of the analysis files
         """
@@ -171,7 +129,7 @@ class Analyser(object):
     def ccat(self):
         u"""Turn an xml formatted file into clean text
         """
-        self.xml_printer.parse_file(self.xml_file)
+        self.xml_printer.parse_file(self.xml_file.get_name())
         text = self.xml_printer.process_file().getvalue()
         if len(text) > 0:
             return text
@@ -290,36 +248,30 @@ class Analyser(object):
         dependency.text = etree.CDATA(self.get_dependency().decode(u'utf8'))
         body.append(dependency)
 
-        oldbody = self.etree.find(u'.//body')
-        oldbody.getparent().replace(oldbody, body)
-
-        return self.etree
+        self.xml_file.set_body(body)
 
     def check_error(self, command, error):
         '''Print errors
         '''
         if error is not None and len(error) > 0:
-            print >>sys.stderr, self.xml_file
+            print >>sys.stderr, self.xml_file.get_name()
             print >>sys.stderr, command
             print >>sys.stderr, error
 
     def analyse(self, xml_file):
         u'''Analyse a file if it is not ocr'ed
         '''
-        self.xml_file = xml_file
+        self.xml_file = parallelize.CorpusXMLFile(xml_file)
         self.analysis_xml_file = self.xml_file.replace(u'converted/',
                                                        u'analysed/')
-        self.etree = etree.parse(xml_file)
         self.calculate_filenames(xml_file)
 
         if self.get_ocr() is None:
             self.dependency_analysis()
             if self.get_disambiguation() is not None:
                 self.makedirs()
-                self.get_analysis_xml().write(
-                    self.analysis_xml_file,
-                    encoding=u'utf8',
-                    xml_declaration=True)
+                self.get_analysis_xml()
+                self.xml_file.write(self.analysis_xml_file)
         else:
             print >>sys.stderr, xml_file, 'is an OCR file and will not be \
             analysed'

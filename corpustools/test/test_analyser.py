@@ -26,6 +26,7 @@ from lxml import etree
 from lxml import doctestcompare
 
 from corpustools import analyser
+from corpustools import parallelize
 
 
 here = os.path.dirname(__file__)
@@ -34,7 +35,8 @@ here = os.path.dirname(__file__)
 class TestAnalyser(unittest.TestCase):
     def setUp(self):
         self.a = analyser.Analyser(u'sme')
-        self.a.xml_file = os.path.join(here, 'smefile.xml')
+        self.a.xml_file = parallelize.CorpusXMLFile(
+            os.path.join(here, 'smefile.xml'))
         self.a.set_analysis_files(
             abbr_file=os.path.join(here, 'abbr.txt'),
             fst_file=os.path.join(here, 'analyser.xfst'),
@@ -117,9 +119,9 @@ class TestAnalyser(unittest.TestCase):
     def test_analysisXml(self):
         u"""Check if the xml is what it is supposed to be
         """
-        self.a.etree = etree.parse(self.a.xml_file)
         self.a.dependency_analysis()
-        got = self.a.get_analysis_xml()
+        self.a.get_analysis_xml()
+        got = self.a.xml_file.get_etree()
         want = (
             u'<document xml:lang="sme" id="no_id">\n'
             u'  <header>\n'
