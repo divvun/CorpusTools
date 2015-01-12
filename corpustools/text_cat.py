@@ -405,9 +405,9 @@ def proc(args):
         note("Drop ratio: {}".format(c.DROP_RATIO))
     if args.s:
         for line in sys.stdin:
-            print c.classify(line.decode('utf-8'), args.verbose)
+            print c.classify(line.decode('utf-8'), verbose=args.verbose)
     else:
-        print c.classify(sys.stdin.read().decode('utf-8'), args.verbose)
+        print c.classify(sys.stdin.read().decode('utf-8'), verbose=args.verbose)
 
 
 def file_comp(args):
