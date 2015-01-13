@@ -2072,16 +2072,19 @@ class LanguageDetector(object):
                     paragraph.set('{http://www.w3.org/XML/1998/namespace}lang',
                                 lang)
 
-                for element in paragraph.iter("span"):
-                    if element.get("type") == "quote":
-                        if element.text is not None:
-                            lang = self.languageGuesser.classify(element.text, langs=self.inlangs)
-                            if lang != self.get_mainlang():
-                                element.set(
-                                    '{http://www.w3.org/XML/1998/namespace}lang',
-                                    lang)
+                self.set_span_language(paragraph)
 
         return paragraph
+
+    def set_span_language(self, paragraph):
+        for element in paragraph.iter("span"):
+            if element.get("type") == "quote":
+                if element.text is not None:
+                    lang = self.languageGuesser.classify(element.text, langs=self.inlangs)
+                    if lang != self.get_mainlang():
+                        element.set(
+                            '{http://www.w3.org/XML/1998/namespace}lang',
+                            lang)
 
     def remove_quote(self, paragraph):
         """Extract all text except the one inside <span type='quote'>"""
