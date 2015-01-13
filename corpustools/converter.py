@@ -31,7 +31,6 @@ import distutils.spawn
 import codecs
 import multiprocessing
 import argparse
-import tempfile
 from pkg_resources import resource_string, resource_filename
 
 import lxml.etree as etree
@@ -46,7 +45,6 @@ import text_cat
 import errormarkup
 import ccat
 import argparse_version
-import functools
 import util
 
 
@@ -78,7 +76,8 @@ class Converter(object):
     """
     Class to take care of data common to all Converter classes
     """
-    def __init__(self, filename, languageGuesser, write_intermediate=False, test=False):
+    def __init__(self, filename, languageGuesser, write_intermediate=False,
+                 test=False):
         self.orig = os.path.abspath(filename)
         self.set_corpusdir()
         self.set_converted_name()
@@ -156,7 +155,8 @@ class Converter(object):
             logfile.close()
 
             raise ConversionException(
-                "Not valid XML. More info in the log file: {}.log".format(self.get_orig()))
+                'Not valid XML. More info in the log file:'
+                '{}.log'.format(self.get_orig()))
 
     def maybe_write_intermediate(self, intermediate):
         if not self._write_intermediate:
@@ -1105,7 +1105,7 @@ class HTMLContentConverter(object):
                 'class': [
                     'QuickNav', 'tabbedmenu', 'printContact', 'documentPaging',
                     'breadcrumbs',
-                    'breadcrumbs ', # regjeringen.no
+                    'breadcrumbs ',  # regjeringen.no
                     'post-footer', 'documentInfoEm',
                     'article-column', 'nrk-globalfooter', 'article-related',
                     'outer-column', 'article-ad', 'article-bottom-element',
@@ -1183,9 +1183,6 @@ class HTMLContentConverter(object):
                 for value in values:
                     search = ('.//html:{}[@{}="{}"]'.format(tag, key, value))
                     for unwanted in self.soup.xpath(search, namespaces=ns):
-                        #print '---------------------------------------'
-                        #print ccat.lineno(), etree.tostring(unwanted)
-                        #print '---------------------------------------'
                         unwanted.getparent().remove(unwanted)
 
     def add_p_around_text(self):
@@ -1271,8 +1268,8 @@ class HTMLContentConverter(object):
 
         html = self.tidy()
 
-        #with open('{}.huff.xml'.format(self.orig), 'wb') as huff:
-            #util.print_element(etree.fromstring(html), 0, 2, huff)
+        #  with open('{}.huff.xml'.format(self.orig), 'wb') as huff:
+        #  util.print_element(etree.fromstring(html), 0, 2, huff)
 
         try:
             doc = etree.fromstring(html)
@@ -1824,9 +1821,18 @@ class DocumentFixer(object):
     def fix_newstags(self):
         """Convert newstags found in text to xml elements
         """
-        newstags = re.compile(r'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|LED|bilde)*tekst:|@*foto:|@fotobyline:|@*bildetitt:|<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|@*Samleingress:*|tekst/ingress:|billedtekst:)', re.IGNORECASE)
-        titletags = re.compile(r'\s*@m.titt[\.:]|\s*@*stikk:|Mellomtittel:|@*(stikk\.*|under)titt(el)*:|@ttt:|\s*@*[utm]*[:\.]*tit+:|<pstyle:m.titt>|undertittel:', re.IGNORECASE)
-        headertitletags = re.compile(r'(\s*@*(led)*tittel:|\s*@*titt(\s\d)*:|@LEDtitt:|<pstyle:tittel>|@*(hoved|over)titt(el)*:)', re.IGNORECASE)
+        newstags = re.compile(
+            r'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|'
+            r'LED|bilde)*tekst:|@*foto:|@fotobyline:|@*bildetitt:|'
+            r'<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|'
+            r'@*Samleingress:*|tekst/ingress:|billedtekst:)', re.IGNORECASE)
+        titletags = re.compile(
+            r'\s*@m.titt[\.:]|\s*@*stikk:|Mellomtittel:|@*(stikk\.*|'
+            r'under)titt(el)*:|@ttt:|\s*@*[utm]*[:\.]*tit+:|<pstyle:m.titt>|'
+            r'undertittel:', re.IGNORECASE)
+        headertitletags = re.compile(
+            r'(\s*@*(led)*tittel:|\s*@*titt(\s\d)*:|@LEDtitt:|'
+            r'<pstyle:tittel>|@*(hoved|over)titt(el)*:)', re.IGNORECASE)
         bylinetags = re.compile(u'(<pstyle:|\s*@*)[Bb]yline[:>]*\s*(\S+:)*',
                                 re.UNICODE | re.IGNORECASE)
         boldtags = re.compile(u'@bold\s*:')
@@ -1968,7 +1974,7 @@ class DocumentFixer(object):
                     paragraph.getparent().insert(
                         index, self.make_element('p',
                                                  ' '.join(lines).strip(),
-                                                  attributes=paragraph.attrib))
+                                                 attributes=paragraph.attrib))
 
                 paragraph.getparent().remove(paragraph)
 
@@ -2067,10 +2073,11 @@ class LanguageDetector(object):
         if paragraph.get('{http://www.w3.org/XML/1998/namespace}lang') is None:
             paragraph_text = self.remove_quote(paragraph)
             if self.languageGuesser is not None:
-                lang = self.languageGuesser.classify(paragraph_text, langs=self.inlangs)
+                lang = self.languageGuesser.classify(paragraph_text,
+                                                     langs=self.inlangs)
                 if lang != self.get_mainlang():
                     paragraph.set('{http://www.w3.org/XML/1998/namespace}lang',
-                                lang)
+                                  lang)
 
                 self.set_span_language(paragraph)
 
@@ -2080,7 +2087,8 @@ class LanguageDetector(object):
         for element in paragraph.iter("span"):
             if element.get("type") == "quote":
                 if element.text is not None:
-                    lang = self.languageGuesser.classify(element.text, langs=self.inlangs)
+                    lang = self.languageGuesser.classify(element.text,
+                                                         langs=self.inlangs)
                     if lang != self.get_mainlang():
                         element.set(
                             '{http://www.w3.org/XML/1998/namespace}lang',

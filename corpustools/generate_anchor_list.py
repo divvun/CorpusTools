@@ -38,7 +38,7 @@ class GenerateAnchorList(object):
 
     def get_outfile(self):
         return self.outfile
-    
+
     def generate_file(self, infiles):
         '''infiles is a list of files
         '''
@@ -55,13 +55,15 @@ class GenerateAnchorList(object):
                     for line in instream.readlines():
                         lineno += 1
                         line = line.strip()
-                        if not line.startswith('#') or not line.startswith('&'):
+                        if (not line.startswith('#') or not
+                                line.startswith('&')):
                             words = line.split('/')
                             if len(words) == len(self.LANGUAGES):
                                 word1 = words[lang1_index].strip()
                                 word2 = words[lang2_index].strip()
                                 if len(word1) > 0 and len(word2) > 0:
-                                    print >>outfile, '{} / {}'.format(word1, word2)
+                                    print >>outfile, '{} / {}'.format(word1,
+                                                                      word2)
                             else:
                                 print >>sys.stderr, (
                                     'Invalid line at {} in {}'.format(lineno,
@@ -71,7 +73,8 @@ class GenerateAnchorList(object):
 def parse_options():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description=('Generate paired anchor lisit for languages lg1 and lg2. '
+        description=(
+            'Generate paired anchor lisit for languages lg1 and lg2. '
             'Output line format e.g. njukčamán* / mars. '
             'Source file is given on the command line, the format is tailored '
             'for the file gt/common/src/anchor.txt.'))

@@ -129,7 +129,8 @@ class CorpusXMLFile:
         parallel_dirname = self.get_dirname().replace(
             self.get_lang(), paralang)
         if self.get_parallel_basename(paralang) is not None:
-            parallel_basename = '{}.xml'.format(self.get_parallel_basename(paralang))
+            parallel_basename = '{}.xml'.format(
+                self.get_parallel_basename(paralang))
 
             return os.path.join(parallel_dirname, parallel_basename)
 
@@ -192,12 +193,11 @@ class CorpusXMLFile:
         '''
         if file_name is None:
             file_name = self.get_name()
-            
+
         self.etree.write(file_name,
                          encoding=u'utf8',
                          pretty_print=True,
                          xml_declaration=True)
-
 
 
 class SentenceDivider:
@@ -416,7 +416,7 @@ class Parallelize:
         if translated_from is not None:
             return translated_from == self.get_lang2()
         else:
-            result = False
+            return False
 
     def generate_anchor_file(self):
         """
@@ -463,8 +463,8 @@ class Parallelize:
         """
         Parallelize two files using tca2
         """
-        tca2_jar= os.path.join(here, 'tca2/dist/lib/alignment.jar')
-        #util.sanity_check([tca2_script])
+        tca2_jar = os.path.join(here, 'tca2/dist/lib/alignment.jar')
+        # util.sanity_check([tca2_script])
 
         anchor_name = self.generate_anchor_file()
 
@@ -507,7 +507,7 @@ class Tmx:
         self.tmx = tmx
 
         # TODO: not actually used apart from in tests, remove?
-        #self.language_guesser = text_cat.Classifier()
+        # self.language_guesser = text_cat.Classifier()
 
     def get_src_lang(self):
         """
@@ -660,14 +660,16 @@ class Tmx:
         result = input_string
 
         # regex to find space followed by punctuation
-        space_punctuation = re.compile("(?P<space>\s)(?P<punctuation>[\)\]\.»:;,])")
+        space_punctuation = re.compile(
+            "(?P<space>\s)(?P<punctuation>[\)\]\.»:;,])")
         # for every match in the result string, replace the match
         # (space+punctuation) with the punctuation part
         result = space_punctuation.sub(lambda match: match.group(
             'punctuation'), result)
 
         # regex to find punctuation followed by space
-        punctuation_space = re.compile("(?P<punctuation>[\[\(«])(?P<space>\s)+")
+        punctuation_space = re.compile(
+            "(?P<punctuation>[\[\(«])(?P<space>\s)+")
         result = punctuation_space.sub(lambda match: match.group(
             'punctuation'), result)
 

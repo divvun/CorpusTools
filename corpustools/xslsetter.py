@@ -39,7 +39,7 @@ class MetadataHandler(object):
         except AttributeError as e:
             print >>sys.stderr, (
                 'Tried to update {} with value {}\n'
-                'Error was {}'.format(key, value, str(e)) ).encode('utf-8')
+                'Error was {}'.format(key, value, str(e))).encode('utf-8')
             raise UserWarning
 
     def get_variable(self, key):

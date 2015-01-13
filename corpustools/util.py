@@ -87,6 +87,7 @@ def get_lang_resource(lang, resource, fallback=None):
     else:
         return fallback
 
+
 def get_preprocess_command(lang):
     preprocess_script = os.path.join(os.environ['GTHOME'],
                                      'gt/script/preprocess')
@@ -94,12 +95,11 @@ def get_preprocess_command(lang):
     abbr_fb = get_lang_resource("sme", 'tools/preprocess/abbr.txt')
     abbr = get_lang_resource(lang, 'tools/preprocess/abbr.txt', abbr_fb)
     corr = get_lang_resource(lang, 'src/syntax/corr.txt')
-    args = [ "--{}={}".format(opt, path)
-             for opt,path in [('abbr', abbr),
+    args = ["--{}={}".format(opt, path)
+            for opt, path in [('abbr', abbr),
                               ('corr', corr)]
-             if path is not None ]
+            if path is not None]
     return [preprocess_script] + args
-
 
 
 def print_element(element, level, indent, out):

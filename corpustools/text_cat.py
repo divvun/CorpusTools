@@ -50,8 +50,10 @@ here = os.path.dirname(__file__)
 def note(msg):
     print >>sys.stderr, msg.encode('utf-8')
 
+
 def pretty_tbl(table):
-    return ", ".join("{}:{}".format(k,v) for k,v in table)
+    return ", ".join("{}:{}".format(k, v) for k, v in table)
+
 
 def ensure_unicode(text):
     """Helper for functions that should be able to operate on either utf-8
@@ -61,11 +63,13 @@ def ensure_unicode(text):
     if type(text) == str:
         return text.decode('utf-8')
     else:
-        assert(type(text)==unicode)
+        assert(type(text) == unicode)
         return text
 
+
 class NGramModel(object):
-    SPLITCHARS = re.compile(r"[][}{)(>< \n\t:;!.?_,¶§%&£€$¹°½¼¾©←→▪➢√|#–‒…·•@~\\/”“«»\"0-9=*+‑-]")
+    SPLITCHARS = re.compile(
+        r"[][}{)(>< \n\t:;!.?_,¶§%&£€$¹°½¼¾©←→▪➢√|#–‒…·•@~\\/”“«»\"0-9=*+‑-]")
     NB_NGRAMS = 400
     MISSING_VALUE = 400
 
@@ -134,7 +138,8 @@ class NGramModel(object):
                 line = strline.decode('utf-8')
             except UnicodeDecodeError as e:
                 if self.unicode_warned == 0:
-                    note("WARNING: Line {} gave {}, skipping ... (not warning again)".format(nl, e))
+                    note("WARNING: Line {} gave {}, skipping ... "
+                         "(not warning again)".format(nl, e))
                 self.unicode_warned += 1
                 continue
             freq = self.freq_of_text(line, freq)
@@ -253,7 +258,8 @@ class WordModel(NGramModel):
 class Classifier(object):
     DROP_RATIO = 1.10
 
-    def __init__(self, folder=os.path.join(here, 'lm'), langs=[], verbose=False):
+    def __init__(self, folder=os.path.join(here, 'lm'), langs=[],
+                 verbose=False):
         self.cmodels = {}
         self.wmodels = {}
 
@@ -311,7 +317,6 @@ class Classifier(object):
                         "/".join(missing)))
             return active_langs
 
-
     def classify_full(self, intext, langs=[], verbose=False):
         active_langs = self.get_langs(langs)
 
@@ -342,11 +347,13 @@ class Classifier(object):
             cwranked = util.sort_by_value(cwcombined)
             if verbose:
                 if cranked[:len(cwranked)] == cwranked:
-                    note("lm gave: {}\t\twm gave no change\t\tfor input: {}".format(
-                        pretty_tbl(cranked), text))
+                    note("lm gave: {}\t\twm gave no change\t\tfor"
+                         "input: {}".format(
+                             pretty_tbl(cranked), text))
                 else:
-                    note("lm gave: {}\t\twm-weighted to: {}\t\tfor input: {}".format(
-                        pretty_tbl(cranked), pretty_tbl(cwranked), text))
+                    note("lm gave: {}\t\twm-weighted to: "
+                         "{}\t\tfor input: {}".format(
+                             pretty_tbl(cranked), pretty_tbl(cwranked), text))
             return cwranked
 
     def classify(self, text, langs=[], verbose=False):
@@ -368,7 +375,8 @@ class FolderTrainer(object):
                     note(msg)
                     sys.stderr.flush()
                 lang = util.basename_noext(fname, ext)
-                self.models[lang] = Model(lang).of_text_file(self.open_corpus(fname))
+                self.models[lang] = Model(lang).of_text_file(
+                    self.open_corpus(fname))
 
         if len(self.models) == 0:
             raise Exception(
@@ -407,7 +415,8 @@ def proc(args):
         for line in sys.stdin:
             print c.classify(line.decode('utf-8'), verbose=args.verbose)
     else:
-        print c.classify(sys.stdin.read().decode('utf-8'), verbose=args.verbose)
+        print c.classify(sys.stdin.read().decode('utf-8'),
+                         verbose=args.verbose)
 
 
 def file_comp(args):

@@ -101,7 +101,8 @@ class TestConverter(unittest.TestCase):
             os.path.join(here, 'converter_data'))
 
         self.assertEqual(
-            self.converter_inside_freecorpus.get_corpusdir().rstrip(os.path.sep),
+            self.converter_inside_freecorpus.get_corpusdir().rstrip(
+                os.path.sep),
             os.getenv('GTFREE').rstrip(os.path.sep))
 
     def test_get_converted_name_inside_orig(self):
