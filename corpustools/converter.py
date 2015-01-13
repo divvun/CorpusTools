@@ -1344,18 +1344,7 @@ class RTFConverter(HTMLContentConverter):
             raise ConversionException('Unicode problems in {}'.format(
                 self.orig))
 
-        html = XHTMLWriter.write(doc, pretty=True).read()
-        try:
-            xml = etree.fromstring(html)
-        except etree.XMLSyntaxError as e:
-            raise ConversionException(
-                'Invalid HTML was created during rtf->html conversion\n'
-                'The error message is: {}'.format(str(e))
-                )
-        xml.tag = 'body'
-        htmlElement = etree.Element('html')
-        htmlElement.append(xml)
-        return etree.tostring(htmlElement)
+        return XHTMLWriter.write(doc, pretty=True).read()
 
 
 class DocxConverter(HTMLContentConverter):
