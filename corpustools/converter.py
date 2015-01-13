@@ -2207,6 +2207,76 @@ class DocumentTester(object):
         return ' '.join(plist)
 
 
+class ConverterManager(object):
+    '''Manage the conversion of original files to corpus xml
+    '''
+    LANGUAGEGUESSER = text_cat.Classifier()
+    FILES = []
+
+    def __init__(self, write_intermediate):
+        self._write_intermediate = write_intermediate
+
+    def convert(self, xsl_file):
+        orig_file = xsl_file[:-4]
+        if os.path.exists(orig_file) and not orig_file.endswith('.xsl'):
+            conv = Converter(orig_file, self.LANGUAGEGUESSER,
+                             self._write_intermediate)
+
+            try:
+                conv.write_complete()
+            except ConversionException as e:
+                print >>sys.stderr, 'Could not convert {}'.format(orig_file)
+                print >>sys.stderr, str(e)
+        else:
+            print >>sys.stderr, '{} does not exist'.format(orig_file)
+
+    def convert_in_parallel(self):
+        print 'Starting the conversion of {} files'.format(len(self.FILES))
+
+        pool_size = multiprocessing.cpu_count()
+        pool = multiprocessing.Pool(processes=pool_size,)
+        pool.map(unwrap_self_convert,
+                 zip([self]*len(self.FILES), self.FILES))
+        pool.close()
+        pool.join()
+
+    def convert_serially(self):
+        print 'Starting the conversion of {} files'.format(len(self.FILES))
+
+        for xsl_file in self.FILES:
+            print 'converting', xsl_file[:-4]
+            self.convert(xsl_file)
+
+    def collect_files(self, sources):
+        print 'Collecting files to convert'
+
+        for source in sources:
+            if os.path.isfile(source):
+                xsl_file = '{}.xsl'.format(source)
+                if os.path.isfile(xsl_file):
+                    self.FILES.append(xsl_file)
+                else:
+                    xsl_stream = open(xsl_file, 'w')
+                    xsl_stream.write(
+                        resource_string(__name__, 'xslt/XSL-template.xsl'))
+                    xsl_stream.close()
+                    print "Fill in meta info in", xsl_file, \
+                        ', then run this command again'
+                    sys.exit(1)
+            elif os.path.isdir(source):
+                self.FILES.extend(
+                    [os.path.join(root, f)
+                     for root, dirs, files in os.walk(source)
+                     for f in files if f.endswith('.xsl')])
+            else:
+                print >>sys.stderr, 'Can not process {}'.format(source)
+                print >>sys.stderr, 'This is neither a file nor a directory.'
+
+
+def unwrap_self_convert(arg, **kwarg):
+    return ConverterManager.convert(*arg, **kwarg)
+
+
 def parse_options():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
@@ -2231,42 +2301,6 @@ def parse_options():
     return args
 
 
-def worker(args, xsl_file):
-    global LANGUAGEGUESSER
-    orig_file = xsl_file[:-4]
-    if os.path.exists(orig_file) and not orig_file.endswith('.xsl'):
-        conv = Converter(orig_file, LANGUAGEGUESSER, args.write_intermediate)
-
-        try:
-            conv.write_complete()
-        except ConversionException as e:
-            print >>sys.stderr, 'Could not convert {}'.format(orig_file)
-            print >>sys.stderr, str(e)
-    else:
-        print >>sys.stderr, '{} does not exist'.format(orig_file)
-
-
-def convert_in_parallel(args, xsl_files):
-    pool_size = multiprocessing.cpu_count() * 2
-    pool = multiprocessing.Pool(processes=pool_size,)
-    pool.map(functools.partial(worker, args),
-             xsl_files)
-    pool.close()
-    pool.join()
-
-
-def convert_serially(args, xsl_files):
-    for xsl_file in xsl_files:
-        print 'converting', xsl_file[:-4]
-        worker(args, xsl_file)
-
-
-def collect_files(source_dir):
-    return [os.path.join(root, f)
-            for root, dirs, files in os.walk(source_dir)
-            for f in files if f.endswith('.xsl')]
-
-
 def sanity_check():
     util.sanity_check([u'wvHtml', u'pdftotext'])
     if not os.path.isfile(Converter.get_dtd_location()):
@@ -2277,42 +2311,15 @@ def sanity_check():
                                       os.environ['GTHOME']))
 
 
-LANGUAGEGUESSER = None          # global due to multiprocessing
 def main():
     sanity_check()
     args = parse_options()
 
-    files = []
+    cm = ConverterManager(args.write_intermediate)
 
-    print 'Collecting files to convert'
-
-    for source in args.sources:
-        if os.path.isfile(source):
-            xsl_file = '{}.xsl'.format(source)
-            if os.path.isfile(xsl_file):
-                files.append(xsl_file)
-            else:
-                xsl_stream = open(xsl_file, 'w')
-                xsl_stream.write(
-                    resource_string(__name__, 'xslt/XSL-template.xsl'))
-                xsl_stream.close()
-                print "Fill in meta info in", xsl_file, \
-                    ', then run this command again'
-                sys.exit(1)
-        elif os.path.isdir(source):
-            files.extend(collect_files(source))
-        else:
-            print >>sys.stderr, 'Can not process {}'.format(source)
-            print >>sys.stderr, 'This is neither a file nor a directory.'
-
-
-    global LANGUAGEGUESSER
-
-    LANGUAGEGUESSER = text_cat.Classifier()
-
-    print 'Starting the conversion of {} files'.format(len(files))
+    cm.collect_files(args.sources)
 
     if args.serial:
-        convert_serially(args, files)
+        cm.convert_serially()
     else:
-        convert_in_parallel(args, files)
+        cm.convert_in_parallel()
