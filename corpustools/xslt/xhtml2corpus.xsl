@@ -486,6 +486,12 @@ If it is a container it has one or more of the these tags:
     </p>
 </xsl:template>
 
+<xsl:template match="html:fieldset">
+    <p>
+        <xsl:apply-templates />
+    </p>
+</xsl:template>
+
 <xsl:template match="*">
     <xsl:message>No template for <xsl:value-of select="name()"/>
         <xsl:text>: </xsl:text><xsl:value-of select="text()"/>
