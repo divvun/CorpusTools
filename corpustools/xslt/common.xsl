@@ -30,6 +30,8 @@
 <!-- containing all languages. -->
 <xsl:variable name="ocr" select="''"/>
 <xsl:variable name="note" select="''"/>
+<xsl:variable name="mlangs">
+</xsl:variable>
 <xsl:variable name="mlang_dan" select="''"/>
 <xsl:variable name="mlang_eng" select="''"/>
 <xsl:variable name="mlang_fin" select="''"/>
@@ -478,6 +480,7 @@
 			  </xsl:when>
 			  <xsl:otherwise>
 			    <xsl:element name="multilingual">
+                              <xsl:copy-of select="$mlangs"/>
 			      <xsl:if test="$mlang_sme">
 			        <xsl:element name="language">
 			          <xsl:attribute name="xml:lang">

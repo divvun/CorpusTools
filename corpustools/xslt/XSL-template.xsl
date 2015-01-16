@@ -73,30 +73,30 @@
 <!-- In the case of a multilingual document, we may want to check for
      other languages. Set the variable monolingual to '1' to turn off
      language recognition (treating everything as mainlang) -->
-<xsl:variable name="monolingual" select="''"/> <!--lg rec is off!-->
-<!-- If the document is multilingual, set the variable multilingual to
-     '1' (and possibly change mlangs below). -->
-<xsl:variable name="multilingual" select="'1'"/> <!--this is default-->
+<xsl:variable name="monolingual" select="''"/>
 
-<!-- Select the potential langugages by adding the number "1" in the -->
-<!-- selection frame. If no languages are selected, the document is -->
-<!-- checked for all supported languages. -->
-<xsl:variable name="mlang_dan" select="''"/>
-<xsl:variable name="mlang_eng" select="''"/>
-<xsl:variable name="mlang_fin" select="''"/>
-<xsl:variable name="mlang_fkv" select="''"/>
-<xsl:variable name="mlang_ger" select="''"/>
-<xsl:variable name="mlang_isl" select="''"/>
-<xsl:variable name="mlang_kal" select="''"/>
-<xsl:variable name="mlang_kpv" select="''"/>
-<xsl:variable name="mlang_nno" select="''"/>
-<xsl:variable name="mlang_nob" select="''"/>
-<xsl:variable name="mlang_rus" select="''"/>
-<xsl:variable name="mlang_sma" select="''"/>
-<xsl:variable name="mlang_sme" select="''"/>
-<xsl:variable name="mlang_smj" select="''"/>
-<xsl:variable name="mlang_swe" select="''"/>
-<xsl:variable name="mlang_oth" select="''"/>
+<!-- If the monolingual is not set, the language is multilingual.
+     Uncomment the languages you want to check for. If no languages
+     are uncommented, the document is checked for all supported
+     languages.
+     -->
+<xsl:variable name="mlangs">
+  <!-- <language xml:lang="eng"/> -->
+  <!-- <language xml:lang="fin"/> -->
+  <!-- <language xml:lang="fkv"/> -->
+  <!-- <language xml:lang="ger"/> -->
+  <!-- <language xml:lang="isl"/> -->
+  <!-- <language xml:lang="kal"/> -->
+  <!-- <language xml:lang="kpv"/> -->
+  <!-- <language xml:lang="nno"/> -->
+  <!-- <language xml:lang="nob"/> -->
+  <!-- <language xml:lang="rus"/> -->
+  <!-- <language xml:lang="sma"/> -->
+  <!-- <language xml:lang="sme"/> -->
+  <!-- <language xml:lang="smj"/> -->
+  <!-- <language xml:lang="swe"/> -->
+  <!-- <language xml:lang="oth"/> -->
+</xsl:variable>
 
 <!-- If the document has parallel texts, select "1" for parallel_texts -->
 <!-- Add the locations of the parallel files to the variables-->
