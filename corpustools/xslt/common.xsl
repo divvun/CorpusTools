@@ -26,12 +26,16 @@
 
 <!-- The following variables should be specified in the XSL -->
 <!-- template. They are added here, and kept in sync with   -->
-<!-- the DTD to avoid error messages for old templates not  -->
-<!-- containing all languages. -->
+<!-- the DTD to avoid errors for old .xsl files.            -->
 <xsl:variable name="ocr" select="''"/>
 <xsl:variable name="note" select="''"/>
+
 <xsl:variable name="mlangs">
 </xsl:variable>
+<xsl:variable name="parallels">
+</xsl:variable>
+
+<!-- Deprecated: -->
 <xsl:variable name="mlang_dan" select="''"/>
 <xsl:variable name="mlang_eng" select="''"/>
 <xsl:variable name="mlang_fin" select="''"/>
@@ -49,6 +53,8 @@
 <xsl:variable name="mlang_swe" select="''"/>
 <xsl:variable name="mlang_oth" select="''"/>
 
+<!-- Deprecated: -->
+<xsl:variable name="parallel_texts" select="''"/>
 <xsl:variable name="para_sme" select="''"/>
 <xsl:variable name="para_smj" select="''"/>
 <xsl:variable name="para_sma" select="''"/>
@@ -65,6 +71,7 @@
 <xsl:variable name="para_kpv" select="''"/>
 <xsl:variable name="para_rus" select="''"/>
 
+<!-- Deprecated: -->
 <xsl:variable name="smelang" select="'sme'"/>
 <xsl:variable name="smjlang" select="'smj'"/>
 <xsl:variable name="smalang" select="'sma'"/>
@@ -480,7 +487,8 @@
 			  </xsl:when>
 			  <xsl:otherwise>
 			    <xsl:element name="multilingual">
-                              <xsl:copy-of select="$mlangs"/>
+                              <!-- Rest of this <otherwise> is deprecated: -->
+			      <xsl:copy-of select="$mlangs"/>
 			      <xsl:if test="$mlang_sme">
 			        <xsl:element name="language">
 			          <xsl:attribute name="xml:lang">
@@ -582,6 +590,8 @@
 				</xsl:element>
 			</xsl:if>
 
+			<xsl:copy-of select="$parallels"/>
+                        <!-- Deprecated: -->
 			<xsl:if test="$parallel_texts">
 				<xsl:if test="$para_sme">
 					<xsl:element name="parallel_text">
