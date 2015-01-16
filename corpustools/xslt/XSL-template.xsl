@@ -75,7 +75,7 @@
      language recognition (treating everything as mainlang) -->
 <xsl:variable name="monolingual" select="''"/>
 
-<!-- If the monolingual is not set, the language is multilingual.
+<!-- If monolingual is not set, the document is multilingual.
      Uncomment the languages you want to check for (or add new lines
      with the right ISO-639-3 language codes).
 
@@ -134,23 +134,6 @@
 </xsl:variable>
 
 
-<!-- Tag the specified elements with the specified language: -->
-<xsl:variable name="danlang" select="'dan'"/>
-<xsl:variable name="englang" select="'eng'"/>
-<xsl:variable name="finlang" select="'fin'"/>
-<xsl:variable name="fkvlang" select="'fkv'"/>
-<xsl:variable name="gerlang" select="'ger'"/>
-<xsl:variable name="isllang" select="'isl'"/>
-<xsl:variable name="kallang" select="'kal'"/>
-<xsl:variable name="nnolang" select="'nno'"/>
-<xsl:variable name="noblang" select="'nob'"/>
-<xsl:variable name="smalang" select="'sma'"/>
-<xsl:variable name="smelang" select="'sme'"/>
-<xsl:variable name="smjlang" select="'smj'"/>
-<xsl:variable name="swelang" select="'swe'"/>
-<xsl:variable name="kpvlang" select="'kpv'"/>
-<xsl:variable name="ruslang" select="'rus'"/>
-
 <!-- For page oriented documents, mark which pages should be ignored -->
 <xsl:variable name="skip_pages" select="''"/>
 <!-- Text outside these margins will be ignored.
@@ -168,9 +151,7 @@ These are defaults, that are settable documentwise -->
 <!--
 <xsl:template match="//body/p[5]">
 	<xsl:element name="p">
-	<xsl:attribute name="xml:lang">
-		<xsl:value-of select="$smelang"/>
-	</xsl:attribute>
+	<xsl:attribute name="xml:lang">sme</xsl:attribute>
 	<xsl:apply-templates/>
 </xsl:element>
  </xsl:template>
