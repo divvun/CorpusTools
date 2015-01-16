@@ -7,6 +7,7 @@ import sys
 
 import lxml.etree as etree
 
+import util
 
 here = os.path.dirname(__file__)
 
@@ -17,10 +18,12 @@ class MetadataHandler(object):
 
     lang_key = "{http://www.w3.org/XML/1998/namespace}lang"
 
-    def __init__(self, filename):
+    def __init__(self, filename, create=False):
         self.filename = filename
 
         if not os.path.exists(filename):
+            if not create:
+                raise util.ArgumentError("{} does not exist!".format(filename))
             preprocessXsl = etree.parse(os.path.join(here,
                                                      'xslt/preprocxsl.xsl'))
             preprocessXslTransformer = etree.XSLT(preprocessXsl)
@@ -34,7 +37,7 @@ class MetadataHandler(object):
 
     def _get_variable_elt(self, key):
         return self.tree.getroot().find(
-            "{http://www.w3.org/1999/XSL/Transform}"
+            "{{http://www.w3.org/1999/XSL/Transform}}"
             "variable[@name='{}']".format(key))
 
     def set_variable(self, key, value):
@@ -54,20 +57,30 @@ class MetadataHandler(object):
 
     def get_parallel_texts(self):
         parallels = self._get_variable_elt("parallels")
-        elts = parallels.findall("parallel_rtext")
-        return { p.attrib[self.lang_key]: p.attrib["location"].strip("'")
-                 for p in elts }
+        if parallels is None:
+            return {}
+        else:
+            elts = parallels.findall("parallel_text")
+            return { p.attrib[self.lang_key]: p.attrib["location"].strip("'")
+                     for p in elts
+                     if p.attrib["location"].strip("'") != "" }
 
     def set_parallel_text(self, language, location):
         attrib = { self.lang_key: language,
                    "location" : location }
         parallels = self._get_variable_elt("parallels")
-        elt = parallels.find("parallel_text[@{}='{}']".format(
-            self.lang_key, language))
+        if parallels is None:
+            parallels = etree.Element("{http://www.w3.org/1999/XSL/Transform}variable", 
+                                      name="parallels")
+            parallels.text, parallels.tail = "\n", "\n\n"
+            self.tree.getroot().append(parallels)
+        elt = parallels.find("parallel_text[@{}='{}']".format(self.lang_key, language))
         if elt is not None:
-            elt.attrib = attrib
+            elt.attrib.update(attrib)
         else:
-            parallels.append( etree.Element("parallel_text", attrib=attrib) )
+            elt = etree.Element("parallel_text", attrib=attrib)
+            elt.tail = "\n"
+            parallels.append(elt)
 
 
     def write_file(self):

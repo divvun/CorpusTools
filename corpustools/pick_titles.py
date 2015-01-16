@@ -45,7 +45,7 @@ class DocumentPicker(object):
     def classify_file(self, file_):
         '''Identify the language of the file
         '''
-        mh = xslsetter.MetadataHandler(file_)
+        mh = xslsetter.MetadataHandler(file_, create=True)
         url = mh.get_variable('filename')
         if ('regjeringen.no' in url and 'regjeringen.no' not in file_ and
                 '.pdf' not in file_):

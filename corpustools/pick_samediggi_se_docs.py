@@ -144,7 +144,8 @@ class DocumentPicker(object):
 
     def set_metadata(self, file_, lang):
         mh = xslsetter.MetadataHandler(
-            self.get_goal_name(file_, lang) + '.xsl')
+            self.get_goal_name(file_, lang) + '.xsl',
+            create=True)
         for key, value in self.set_variables(file_, lang).items():
             mh.set_variable(key, value)
         mh.write_file()

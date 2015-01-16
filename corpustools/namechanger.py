@@ -149,7 +149,7 @@ class AddFileToCorpus(NameChangerBase):
         '''
         metafile_name = self.toname() + '.xsl'
         if not os.path.exists(metafile_name):
-            metadata_file = xslsetter.MetadataHandler(metafile_name)
+            metadata_file = xslsetter.MetadataHandler(metafile_name, create=True)
             if self.old_dirname.startswith('http'):
                 metadata_file.set_variable('filename', os.path.join(
                     self.old_dirname, self.old_filename))
@@ -243,7 +243,7 @@ class CorpusNameFixer(NameChangerBase):
                                            "/"+paralang+"/")
         parafile = os.path.join(paradir, '{}.xsl'.format(paraname))
         if os.path.exists(parafile):
-            paradata = xslsetter.MetadataHandler(metafile_name)
+            paradata = xslsetter.MetadataHandler(parafile)
             paradata.set_parallel_text(mainlang, self.new_filename)
             paradata.write_file()
 
@@ -256,7 +256,7 @@ class CorpusNameFixer(NameChangerBase):
         xslfile = os.path.join(self.old_dirname,
                                '{}.xsl'.format(self.new_filename))
         if os.path.exists(xslfile):
-            metadata = xslsetter.MetadataHandler(metafile_name)
+            metadata = xslsetter.MetadataHandler(xslfile)
             xslroot = metadata.tree.getroot()
 
             mainlang = xslroot.find(".//*[@name='mainlang']").get(
