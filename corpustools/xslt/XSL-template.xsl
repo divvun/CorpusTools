@@ -76,9 +76,9 @@
 <xsl:variable name="monolingual" select="''"/>
 
 <!-- If the monolingual is not set, the language is multilingual.
-     Uncomment the languages you want to check for. If no languages
-     are uncommented, the document is checked for all supported
-     languages.
+     Uncomment the languages you want to check for. If *no* languages
+     are uncommented (and monolingual is not 1), then the document
+     is checked for all supported languages.
      -->
 <xsl:variable name="mlangs">
   <!-- <language xml:lang="eng"/> -->
