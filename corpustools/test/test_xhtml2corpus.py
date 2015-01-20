@@ -2436,6 +2436,33 @@ tests = {
             '</document>'
             ),
         },
+    'div-a-b': {
+        'html': (
+            '<html>'
+            '  <body>'
+            '    <div>'
+            '      <a href="http://www.ovdamearka.no">'
+            '        <b>'
+            '          ovdamearka'
+            '        </b>'
+            '      </a>'
+            '    </div>'
+            '  </body>'
+            '</html>'
+            ),
+        'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <p>'
+            '      <em type="bold">ovdamearka</em>'
+            '    </p>'
+            '  </body>'
+            '</document>'
+            ),
+        },
     }
 
 
