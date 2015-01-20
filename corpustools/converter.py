@@ -155,7 +155,7 @@ class Converter(object):
             logfile.close()
 
             raise ConversionException(
-                'Not valid XML. More info in the log file:'
+                'Not valid XML. More info in the log file: '
                 '{}.log'.format(self.get_orig()))
 
     def maybe_write_intermediate(self, intermediate):
