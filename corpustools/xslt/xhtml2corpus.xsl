@@ -193,17 +193,19 @@ xsltproc xhtml2corpus.xsl - > file.xml
                         ancestor::html:h2">
             <xsl:apply-templates/>
         </xsl:when>
-        <xsl:when test="ancestor::html:p|ancestor::html:li|ancestor::html:td">
+        <xsl:when test="ancestor::html:p|
+                        ancestor::html:div|
+                        ancestor::html:li|
+                        ancestor::html:td|
+                        parent::html:p|
+                        parent::html:font|
+                        parent::html:span">
             <em type="bold">
                 <xsl:apply-templates/>
             </em>
         </xsl:when>
-        <xsl:when test="parent::html:p|parent::html:font|parent::html:span">
-            <em type="bold">
-                <xsl:apply-templates/>
-            </em>
-        </xsl:when>
-
+        <!-- If the above tests are correct and all failed, then we
+             have no ancestor that could have added a <p>: -->
         <xsl:otherwise>
             <p>
                 <em type="bold">
