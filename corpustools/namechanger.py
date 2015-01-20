@@ -216,8 +216,9 @@ class CorpusNameFixer(NameChangerBase):
         """Change the name of an xsl file using the
         routines of a given repository tool
         """
-        fromname = os.path.join(self.old_dirname,
-                                '{}.xsl'.format(self.old_filename))
+        fromname = os.path.join(
+            self.old_dirname,
+            '{}.xsl'.format(self.old_filename.encode('utf-8')))
         toname = os.path.join(self.old_dirname,
                               '{}.xsl'.format(self.new_filename))
 
