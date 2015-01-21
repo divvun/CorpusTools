@@ -136,7 +136,7 @@ class Converter(object):
             return None
 
     def transform_to_complete(self):
-        xm = XslMaker(self.get_xsl())
+        xm = xslsetter.MetadataHandler(self.get_xsl())
         intermediate = self.convert2intermediate()
 
         self.maybe_write_intermediate(intermediate)
@@ -1930,59 +1930,6 @@ class DocumentFixer(object):
                                                  attributes=paragraph.attrib))
 
                 paragraph.getparent().remove(paragraph)
-
-
-class XslMaker(object):
-    """
-    To convert the intermediate xml to a fullfledged  giellatekno document
-    a combination of three xsl files + the intermediate files is needed
-    This class makes the xsl file
-    """
-
-    def __init__(self, xslfile):
-        preprocessXsl = etree.parse(
-            os.path.join(here, 'xslt/preprocxsl.xsl'))
-        preprocessXslTransformer = etree.XSLT(preprocessXsl)
-
-        self.filename = xslfile
-        try:
-            filexsl = etree.parse(xslfile)
-        except etree.XMLSyntaxError as e:
-            logfile = open('{}.log'.format(self.filename), 'w')
-
-            logfile.write('Error at: {}'.format(str(ccat.lineno())))
-            for entry in e.error_log:
-                logfile.write('{}\n'.format(str(entry)))
-
-            logfile.close()
-            raise ConversionException("Syntax error in {}".format(
-                self.filename))
-
-        common_xsl_path = os.path.join(
-            here, 'xslt/common.xsl').replace(' ', '%20')
-        self.finalXsl = preprocessXslTransformer(
-            filexsl,
-            commonxsl=etree.XSLT.strparam('file://{}'.format(common_xsl_path)))
-
-    def get_xsl(self):
-        return self.finalXsl
-
-    def get_transformer(self):
-        xsltRoot = self.get_xsl()
-        try:
-            transform = etree.XSLT(xsltRoot)
-            return transform
-        except etree.XSLTParseError as (e):
-            logfile = open(self.filename.replace('.xsl', '') + '.log', 'w')
-
-            logfile.write('Error at: {}\n'.format(str(ccat.lineno())))
-            logfile.write('Invalid XML in {}\n'.format(self.filename))
-            for entry in e.error_log:
-                logfile.write('{}\n'.format(str(entry)))
-
-            logfile.close()
-            raise ConversionException("Invalid XML in {}".format(
-                self.filename))
 
 
 class LanguageDetector(object):

@@ -12,8 +12,16 @@ import util
 here = os.path.dirname(__file__)
 
 
+class XsltException(Exception):
+    pass
+
+
 class MetadataHandler(object):
     '''Class to handle metadata in .xsl files
+
+    To convert the intermediate xml to a fullfledged  giellatekno document
+    a combination of three xsl files + the intermediate files is needed
+    This class makes the xsl file
     '''
 
     lang_key = "{http://www.w3.org/XML/1998/namespace}lang"
@@ -33,11 +41,14 @@ class MetadataHandler(object):
     def make_tree(self, filexsl):
         preprocessXsl = etree.parse(os.path.join(here,
                                                  'xslt/preprocxsl.xsl'))
+        common_xsl_path = os.path.join(
+            here, 'xslt/common.xsl').replace(' ', '%20')
         preprocessXslTransformer = etree.XSLT(preprocessXsl)
-        tree = preprocessXslTransformer(
+
+        return preprocessXslTransformer(
             filexsl,
             commonxsl=etree.XSLT.strparam(
-                'file://' + os.path.join(here, 'xslt/common.xsl')))
+                'file://{}'.format(common_xsl_path)))
 
     def _get_variable_elt(self, key):
         return self.tree.getroot().find(
@@ -57,7 +68,6 @@ class MetadataHandler(object):
     def get_variable(self, key):
         variable = self._get_variable_elt(key)
         return variable.attrib['select'].replace("'", "")
-
 
     def get_parallel_texts(self):
         parallels = self._get_variable_elt("parallels")
@@ -86,7 +96,6 @@ class MetadataHandler(object):
             elt.tail = "\n"
             parallels.append(elt)
 
-
     def write_file(self):
         try:
             self.tree.write(self.filename, encoding="utf-8",
@@ -94,3 +103,23 @@ class MetadataHandler(object):
         except IOError:
             print 'cannot write', self.filename
             sys.exit(254)
+
+    def get_xsl(self):
+        return self.tree
+
+    def get_transformer(self):
+        try:
+            transform = etree.XSLT(self.tree)
+            return transform
+        except etree.XSLTParseError as (e):
+            logfile = open(self.filename.replace('.xsl', '') + '.log', 'w')
+
+            logfile.write('Error at: {}\n'.format(str(ccat.lineno())))
+            logfile.write('Invalid XML in {}\n'.format(self.filename))
+            for entry in e.error_log:
+                logfile.write('{}\n'.format(str(entry)))
+
+            logfile.close()
+            raise XsltException("Invalid XML in {}".format(
+                self.filename))
+
