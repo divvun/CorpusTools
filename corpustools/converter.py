@@ -931,7 +931,9 @@ class BiblexmlConverter(Converter):
 
         verses = []
         for verse in section_element.xpath('./verse'):
-            verses.append(self.process_verse(verse))
+            text = self.process_verse(verse)
+            if text is not None:
+                verses.append(text)
 
         p = etree.Element('p')
         p.text = '\n'.join(verses)
