@@ -621,6 +621,25 @@ class PDF2XMLConverter(Converter):
         self.skip_pages = []
         self.margins = {}
 
+    def extract_text(self):
+        """
+        Extract the text from the pdf file using pdftotext
+        output contains string from the program and is a utf-8 string
+        """
+        command = ['pdftohtml', '-enc', 'UTF-8', '-stdout',
+                   '-i', '-xml', self.orig]
+        return run_process(command, self.orig)
+
+    def convert2intermediate(self):
+        document = etree.Element('document')
+        etree.SubElement(document, 'header')
+        document.append(self.body)
+
+        root_element = etree.fromstring(self.extract_text())
+        self.parse_pages(root_element)
+
+        return document
+
     def set_margins(self, margin_lines={}):
         '''margins_lines will be fetched from the metadata file belonging to
         the original file. Before it is passed here, the validity of them
@@ -709,7 +728,7 @@ class PDF2XMLConverter(Converter):
                 if len(self.parts) > 0:
                     if isinstance(self.parts[-1], etree._Element):
                         if self.parts[-1].tail is not None:
-                            self.parts[-1].tail += ' {}'.format(
+                            self.parts[-1].tail += u' {}'.format(
                                 textelement.text)
                         else:
                             self.parts[-1].tail = textelement.text
