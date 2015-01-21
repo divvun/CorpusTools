@@ -85,50 +85,9 @@ class Converter(object):
         self._write_intermediate = write_intermediate
         self.languageGuesser = languageGuesser
 
-    def make_intermediate(self, encoding_from_xsl):
-        """Convert the input file from the original format to a basic
-        giellatekno xml document
-        """
-        self.fix_lang_genre_xsl()
-        if 'avvir_xml' in self.orig:
-            intermediate = AvvirConverter(self.orig)
-
-        elif self.orig.endswith('.txt'):
-            intermediate = PlaintextConverter(self.orig)
-
-        elif self.orig.endswith('.pdf'):
-            intermediate = PDFConverter(self.orig)
-
-        elif self.orig.endswith('.svg'):
-            intermediate = SVGConverter(self.orig)
-
-        elif '.htm' in self.orig or '.php' in self.orig:
-            intermediate = HTMLConverter(self.orig, encoding_from_xsl)
-
-        elif self.orig.endswith('.doc') or self.orig.endswith('.DOC'):
-            intermediate = DocConverter(self.orig)
-
-        elif self.orig.endswith('.docx'):
-            intermediate = DocxConverter(self.orig)
-
-        elif '.rtf' in self.orig:
-            intermediate = RTFConverter(self.orig)
-
-        elif self.orig.endswith('.bible.xml'):
-            intermediate = BiblexmlConverter(self.orig)
-
-        else:
-            raise ConversionException(
-                "Unknown file extension, not able to convert {} "
-                "\nHint: you may just have to rename the file".format(
-                    self.orig))
-
-        document = intermediate.convert2intermediate()
-
-        if isinstance(document, etree._XSLTResultTree):
-            document = etree.fromstring(etree.tostring(document))
-
-        return document
+    def convert2intermediate(self):
+        raise NotImplementedError(
+            'You have to subclass and override convert2intermediate')
 
     @staticmethod
     def get_dtd_location():
@@ -179,8 +138,10 @@ class Converter(object):
 
     def transform_to_complete(self):
         xm = XslMaker(self.get_xsl())
-        intermediate = self.make_intermediate(
-            self.encoding_from_xsl(xm.finalXsl))
+        intermediate = self.convert2intermediate()
+        if isinstance(intermediate, etree._XSLTResultTree):
+            intermediate = etree.fromstring(etree.tostring(intermediate))
+
         self.maybe_write_intermediate(intermediate)
 
         try:
@@ -2228,16 +2189,49 @@ class ConverterManager(object):
     def convert(self, xsl_file):
         orig_file = xsl_file[:-4]
         if os.path.exists(orig_file) and not orig_file.endswith('.xsl'):
-            conv = Converter(orig_file, self.LANGUAGEGUESSER,
-                             self._write_intermediate)
 
             try:
+                conv = self.converter(orig_file)
                 conv.write_complete()
             except ConversionException as e:
                 print >>sys.stderr, 'Could not convert {}'.format(orig_file)
                 print >>sys.stderr, str(e)
         else:
             print >>sys.stderr, '{} does not exist'.format(orig_file)
+
+    def converter(self, orig_file):
+        if 'avvir_xml' in orig_file:
+            return AvvirConverter(orig_file, self.LANGUAGEGUESSER)
+
+        elif orig_file.endswith('.txt'):
+            return PlaintextConverter(orig_file, self.LANGUAGEGUESSER)
+
+        elif orig_file.endswith('.pdf'):
+            return PDFConverter(orig_file, self.LANGUAGEGUESSER)
+
+        elif orig_file.endswith('.svg'):
+            return SVGConverter(orig_file, self.LANGUAGEGUESSER)
+
+        elif '.htm' in orig_file or '.php' in orig_file:
+            return HTMLConverter(orig_file, self.LANGUAGEGUESSER)
+
+        elif orig_file.endswith('.doc') or orig_file.endswith('.DOC'):
+            return DocConverter(orig_file, self.LANGUAGEGUESSER)
+
+        elif orig_file.endswith('.docx'):
+            return DocxConverter(orig_file, self.LANGUAGEGUESSER)
+
+        elif '.rtf' in orig_file:
+            return RTFConverter(orig_file, self.LANGUAGEGUESSER)
+
+        elif orig_file.endswith('.bible.xml'):
+            return BiblexmlConverter(orig_file, self.LANGUAGEGUESSER)
+
+        else:
+            raise ConversionException(
+                "Unknown file extension, not able to convert {} "
+                "\nHint: you may just have to rename the file".format(
+                    orig_file))
 
     def convert_in_parallel(self):
         print 'Starting the conversion of {} files'.format(len(self.FILES))

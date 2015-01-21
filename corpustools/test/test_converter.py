@@ -2275,7 +2275,7 @@ TITTEL: 3</p>
 
     def test_fix__body_encoding(self):
         newstext = converter.PlaintextConverter(
-            'tullball.txt')
+            'tullball.txt', text_cat.Classifier())
         text = newstext.content2xml(io.StringIO(u'''ÐMun lean njeallje jagi boaris.
 
 Nu beaivvdat.
@@ -2316,7 +2316,8 @@ LOGO: Smi kulturfestivala 1998
     def test_replace_ligatures(self):
         svgtext = converter.SVGConverter(
             os.path.join(here,
-                         'converter_data/Riddu_Riddu_avis_TXT.200923.svg'))
+                         'converter_data/Riddu_Riddu_avis_TXT.200923.svg'),
+            text_cat.Classifier())
         document_fixer = converter.DocumentFixer(
             etree.fromstring(etree.tostring(svgtext.convert2intermediate())))
         document_fixer.fix_body_encoding()
