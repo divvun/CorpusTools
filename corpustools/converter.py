@@ -1982,7 +1982,8 @@ class ConverterManager(object):
         if os.path.exists(orig_file) and not orig_file.endswith('.xsl'):
 
             try:
-                conv = self.converter(orig_file)
+                conv = self.converter(
+                    orig_file)
                 conv.write_complete(self.LANGUAGEGUESSER)
             except ConversionException as e:
                 print >>sys.stderr, 'Could not convert {}'.format(orig_file)
@@ -1992,31 +1993,40 @@ class ConverterManager(object):
 
     def converter(self, orig_file):
         if 'avvir_xml' in orig_file:
-            return AvvirConverter(orig_file)
+            return AvvirConverter(
+                orig_file, write_intermediate=self._write_intermediate)
 
         elif orig_file.endswith('.txt'):
-            return PlaintextConverter(orig_file)
+            return PlaintextConverter(
+                orig_file, write_intermediate=self._write_intermediate)
 
         elif orig_file.endswith('.pdf'):
-            return PDFConverter(orig_file)
+            return PDFConverter(
+                orig_file, write_intermediate=self._write_intermediate)
 
         elif orig_file.endswith('.svg'):
-            return SVGConverter(orig_file)
+            return SVGConverter(
+                orig_file, write_intermediate=self._write_intermediate)
 
         elif '.htm' in orig_file or '.php' in orig_file:
-            return HTMLConverter(orig_file)
+            return HTMLConverter(
+                orig_file, write_intermediate=self._write_intermediate)
 
         elif orig_file.endswith('.doc') or orig_file.endswith('.DOC'):
-            return DocConverter(orig_file)
+            return DocConverter(
+                orig_file, write_intermediate=self._write_intermediate)
 
         elif orig_file.endswith('.docx'):
-            return DocxConverter(orig_file)
+            return DocxConverter(
+                orig_file, write_intermediate=self._write_intermediate)
 
         elif '.rtf' in orig_file:
-            return RTFConverter(orig_file)
+            return RTFConverter(
+                orig_file, write_intermediate=self._write_intermediate)
 
         elif orig_file.endswith('.bible.xml'):
-            return BiblexmlConverter(orig_file)
+            return BiblexmlConverter(
+                orig_file, write_intermediate=self._write_intermediate)
 
         else:
             raise ConversionException(
