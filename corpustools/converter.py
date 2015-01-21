@@ -610,10 +610,12 @@ class PDFConverter(Converter):
         return document
 
 
-class PDF2XMLConverter(object):
+class PDF2XMLConverter(Converter):
     '''Class to convert pdf2xml
     '''
-    def __init__(self):
+    def __init__(self, filename, write_intermediate=False):
+        super(PDF2XMLConverter, self).__init__(filename,
+                                           write_intermediate)
         self.body = etree.Element('body')
         self.parts = []
         self.skip_pages = []
