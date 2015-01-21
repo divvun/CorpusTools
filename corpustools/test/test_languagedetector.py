@@ -29,14 +29,14 @@ class TestLanguageDetector(XMLTester):
     """
     def setUp(self):
         self.classifier = text_cat.Classifier()
-        self.document = etree.parse(
+        self.root = etree.parse(
             os.path.join(here,
                          'converter_data/samediggi-article-48s-before-lang-'
-                         'detection-with-multilingual-tag.xml'))
+                         'detection-with-multilingual-tag.xml')).getroot()
 
     def test_get_main_lang(self):
         test_main_lang = 'sme'
-        language_detector = converter.LanguageDetector(self.document,
+        language_detector = converter.LanguageDetector(self.root,
                                                        self.classifier)
         self.assertEqual(test_main_lang, language_detector.get_mainlang())
 
@@ -44,7 +44,7 @@ class TestLanguageDetector(XMLTester):
         orig_paragraph = '<p xml:lang="sme">I Orohagat</p>'
         expected_paragraph = '<p xml:lang="sme">I Orohagat</p>'
 
-        language_detector = converter.LanguageDetector(self.document,
+        language_detector = converter.LanguageDetector(self.root,
                                                        self.classifier)
         got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
@@ -73,7 +73,7 @@ class TestLanguageDetector(XMLTester):
             'dahje e-poastta namahussajis, ja go čálát sámegillii dakkár '
             'prográmmain, maid Microsoft ii leat ráhkadan.</p>')
 
-        language_detector = converter.LanguageDetector(self.document,
+        language_detector = converter.LanguageDetector(self.root,
                                                        self.classifier)
         got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
@@ -104,7 +104,7 @@ class TestLanguageDetector(XMLTester):
             'sámegillii dakkár prográmmain, maid Microsoft ii leat '
             'ráhkadan.</p>')
 
-        language_detector = converter.LanguageDetector(self.document,
+        language_detector = converter.LanguageDetector(self.root,
                                                        self.classifier)
         got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
@@ -139,7 +139,7 @@ class TestLanguageDetector(XMLTester):
             'sámegillii dakkár prográmmain, maid Microsoft ii leat '
             'ráhkadan.</p>')
 
-        language_detector = converter.LanguageDetector(self.document,
+        language_detector = converter.LanguageDetector(self.root,
                                                        self.classifier)
         got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
@@ -159,7 +159,7 @@ class TestLanguageDetector(XMLTester):
             'e-post, og med å skrive samisk i programmer levert av andre enn '
             'Microsoft.</p>')
 
-        language_detector = converter.LanguageDetector(self.document,
+        language_detector = converter.LanguageDetector(self.root,
                                                        self.classifier)
         got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
@@ -175,7 +175,7 @@ class TestLanguageDetector(XMLTester):
             '<span type="quote">bla3 bla</span> blo blo</p>')
         expected_paragraph = 'bla bla  ble ble  bli bli  blo blo'
 
-        language_detector = converter.LanguageDetector(self.document,
+        language_detector = converter.LanguageDetector(self.root,
                                                        self.classifier)
         got_paragraph = language_detector.remove_quote(
             etree.fromstring(orig_paragraph))
@@ -183,11 +183,13 @@ class TestLanguageDetector(XMLTester):
         self.assertEqual(got_paragraph, expected_paragraph)
 
     def test_detect_language_with_multilingualtag(self):
+        root = etree.parse(
+            os.path.join(
+                here,
+                'converter_data/samediggi-article-48s-before-'
+                'lang-detection-with-multilingual-tag.xml')).getroot()
         language_detector = converter.LanguageDetector(
-            etree.parse(
-                os.path.join(here,
-                             'converter_data/samediggi-article-48s-before-'
-                             'lang-detection-with-multilingual-tag.xml')),
+            root,
             self.classifier)
         language_detector.detect_language()
         got_document = language_detector.get_document()
@@ -201,10 +203,12 @@ class TestLanguageDetector(XMLTester):
                             etree.tostring(expected_document))
 
     def test_detect_language_without_multilingualtag(self):
-        language_detector = converter.LanguageDetector(etree.parse(
+        root = etree.parse(
             os.path.join(here,
                          'converter_data/samediggi-article-48s-before-lang-'
-                         'detection-without-multilingual-tag.xml')),
+                         'detection-without-multilingual-tag.xml')).getroot()
+        language_detector = converter.LanguageDetector(
+            root,
             self.classifier)
         language_detector.detect_language()
         got_document = language_detector.get_document()
