@@ -2560,7 +2560,7 @@ class TestPDF2XMLConverter(XMLTester):
     def test_extract_textelement1(self):
         '''Extract text from a plain pdf2xml text element
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         input = etree.fromstring(
             '<text top="649" left="545" width="269" height="14" font="20">'
@@ -2571,7 +2571,7 @@ class TestPDF2XMLConverter(XMLTester):
     def test_extract_textelement2(self):
         '''Extract text from a pdf2xml text element with width less than 1
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         input = etree.fromstring(
             '<text top="649" left="545" width="0" height="14" font="20">'
@@ -2582,7 +2582,7 @@ class TestPDF2XMLConverter(XMLTester):
     def test_extract_textelement3(self):
         '''Extract text from a pdf2xml text that contains an <i> element
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         input = etree.fromstring(
             '<text top="829" left="545" width="275" height="14" font="29">'
@@ -2595,7 +2595,7 @@ class TestPDF2XMLConverter(XMLTester):
     def test_extract_textelement4(self):
         '''Extract text from a pdf2xml text that contains a <b> element
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         input = etree.fromstring(
             '<text top="829" left="545" width="275" height="14" font="29">'
@@ -2609,7 +2609,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Extract text from a pdf2xml text that contains a <b> element
         inside the <i> element
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         input = etree.fromstring(
             '<text top="829" left="545" width="275" height="14" font="29">'
@@ -2624,7 +2624,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Extract text from a pdf2xml text that contains a <b> element
         including a tail
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         input = etree.fromstring(
             '<text top="829" left="545" width="275" height="14" font="29">'
@@ -2637,7 +2637,7 @@ class TestPDF2XMLConverter(XMLTester):
     def test_extract_textelement7(self):
         '''Extract text from a pdf2xml text that contains two <i> elements
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         input = etree.fromstring(
             '<text top="829" left="545" width="275" height="14" font="29">'
@@ -2656,7 +2656,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Extract text from a pdf2xml text that contains one <i> element
         with several <b> elements
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         input = etree.fromstring(
             '<text top="837" left="57" width="603" height="11" font="7">'
@@ -2671,7 +2671,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Extract text from a pdf2xml text that contains one <b> element
         with several <i> elements
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         input = etree.fromstring(
             '<text top="837" left="57" width="603" height="11" font="7">'
@@ -2686,7 +2686,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Extract text from a pdf2xml text that contains a string with a
         hyphen at the end.
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         input = etree.fromstring(
             '<text top="215" width="51" height="14">R-</text>')
@@ -2699,7 +2699,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Extract text from a pdf2xml text that contains a string with a
         hyphen at the end contained in a <b> element.
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         input = etree.fromstring(
             '<text top="215" width="51" height="14"><b>R-</b></text>')
@@ -2712,7 +2712,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Extract text from a pdf2xml text that contains a string with a
         hyphen at the end contained in a <i> element.
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         input = etree.fromstring(
             '<text top="215" width="51" height="14"><i>R-</i></text>')
@@ -2725,7 +2725,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Extract text from a pdf2xml text that contains a string with a
         hyphen at the end contained in a <i> contained in a <b> element.
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         input = etree.fromstring(
             '<text top="215" width="51" height="14"><i><b>R-</b></i></text>')
@@ -2738,7 +2738,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Extract text from a pdf2xml text that contains a string with a
         hyphen at the end contained in a <b> contained in a <i> element.
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         input = etree.fromstring(
             '<text top="215" width="51" height="14"><b><i>R-</i></b></text>')
@@ -2750,7 +2750,7 @@ class TestPDF2XMLConverter(XMLTester):
     def test_make_paragraph_1(self):
         '''Pass a parts list consisting of only strings
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parts = ['a b c ']
 
         self.assertXmlEqual(
@@ -2760,7 +2760,7 @@ class TestPDF2XMLConverter(XMLTester):
     def test_make_paragraph_2(self):
         '''Pass a parts list consisting of some strings and some etree.Elements
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parts = ['a b', etree.Element('em'), etree.Element('em')]
 
         self.assertXmlEqual(
@@ -2769,7 +2769,7 @@ class TestPDF2XMLConverter(XMLTester):
     def test_make_paragraph_3(self):
         '''Pass a parts list consisting of a string, a hyph element and another string.
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parts = ['a ', etree.Element('hyph'), ' c']
 
         self.assertXmlEqual(
@@ -2788,7 +2788,7 @@ class TestPDF2XMLConverter(XMLTester):
         em2.set('type', 'bold')
         em2.text = 'b'
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parts = [em1, em2]
 
         self.assertXmlEqual(
@@ -2808,7 +2808,7 @@ class TestPDF2XMLConverter(XMLTester):
         em2.set('type', 'bold')
         em2.text = 'b'
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parts = [em1, em2]
 
         self.assertXmlEqual(
@@ -2820,7 +2820,7 @@ class TestPDF2XMLConverter(XMLTester):
         when the x distance between the two elements is less than
         1.5 times the height of them both.
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         t1 = etree.fromstring('<text top="106" height="19" font="2"/>')
         t2 = etree.fromstring('<text top="126" height="19" font="2"/>')
@@ -2832,7 +2832,7 @@ class TestPDF2XMLConverter(XMLTester):
         when the x distance between the two elements is larger than
         1.5 times the height of them both.
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         t1 = etree.fromstring('<text top="106" height="19" font="2"/>')
         t2 = etree.fromstring('<text top="140" height="19" font="2"/>')
@@ -2843,7 +2843,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Test if two text elements belong to the same paragraph
         when they have different heights
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         t1 = etree.fromstring('<text top="106" height="19" font="2"/>')
         t2 = etree.fromstring('<text top="126" height="20" font="2"/>')
@@ -2854,7 +2854,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Test if two text elements belong to the same paragraph
         when they have different fonts
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         t1 = etree.fromstring('<text top="106" height="19" font="1"/>')
         t2 = etree.fromstring('<text top="126" height="19" font="2"/>')
@@ -2871,7 +2871,7 @@ class TestPDF2XMLConverter(XMLTester):
         margins['tm'] = 88
         margins['bm'] = 1174
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         self.assertTrue(p2x.is_inside_margins(t, margins))
 
@@ -2885,7 +2885,7 @@ class TestPDF2XMLConverter(XMLTester):
         margins['tm'] = 88
         margins['bm'] = 1174
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
@@ -2899,7 +2899,7 @@ class TestPDF2XMLConverter(XMLTester):
         margins['tm'] = 88
         margins['bm'] = 1174
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
@@ -2913,7 +2913,7 @@ class TestPDF2XMLConverter(XMLTester):
         margins['tm'] = 88
         margins['bm'] = 1174
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
@@ -2927,7 +2927,7 @@ class TestPDF2XMLConverter(XMLTester):
         margins['tm'] = 88
         margins['bm'] = 1174
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
@@ -2941,7 +2941,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="145" left="100" width="100" height="19">3.</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(
@@ -2959,7 +2959,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="186" left="100" width="100" height="19">4.</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(
@@ -2974,7 +2974,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="145" left="100" width="100" height="19">3.</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(
@@ -2993,7 +2993,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="245" left="100" width="39" height="14">Ø</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(
@@ -3010,7 +3010,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="235" left="100" width="39" height="14">Ø</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(
@@ -3026,7 +3026,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="235" left="100" width="39" height="14">Ø</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(
@@ -3042,7 +3042,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="235" left="100" width="39" height="14">Ø</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(
@@ -3059,7 +3059,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="223" left="118" width="123" height="21" font="15">'
             '<b>HANDEL</b></text></page>')
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(
@@ -3075,7 +3075,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="145" left="100" width="100" height="19">3.</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(
@@ -3091,7 +3091,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="145" left="100" width="100" height="19">3.</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(
@@ -3107,7 +3107,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="145" left="100" width="100" height="19">3.</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(
@@ -3123,7 +3123,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="145" left="100" width="100" height="19">3.</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_page(page_element)
 
         self.assertXmlEqual(
@@ -3133,14 +3133,14 @@ class TestPDF2XMLConverter(XMLTester):
     def test_get_body(self):
         '''Test the initial values when the class is initiated
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         self.assertXmlEqual(etree.tostring(p2x.get_body()), u'<body/>')
 
     def test_append_to_body(self):
         '''Check if an etree element really is appended to the body element
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.append_to_body(etree.Element('uptown'))
 
         self.assertXmlEqual(
@@ -3163,7 +3163,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</pdf2xml>')
         want = u'<body><p>1.</p><p>2.</p><p>3.</p></body>'
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.skip_pages = []
         p2x.parse_pages(pdf2xml)
 
@@ -3186,7 +3186,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</pdf2xml>')
         want = u'<body><p>1.</p><p>3.</p></body>'
 
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.skip_pages = ["2"]
         p2x.parse_pages(pdf2xml)
 
@@ -3195,7 +3195,7 @@ class TestPDF2XMLConverter(XMLTester):
     def test_compute_margin(self):
         '''Test if the default margins are set
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         self.assertEqual(p2x.compute_margin('rm', 1263, 862), 60)
         self.assertEqual(p2x.compute_margin('lm', 1263, 862), 801)
@@ -3205,7 +3205,7 @@ class TestPDF2XMLConverter(XMLTester):
     def test_set_margin(self):
         '''Test if the margin is set correctly
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
 
         self.assertEqual(p2x.set_margin('odd=230; even = 540 ; 8 = 340'),
                          {'odd': 230, 'even': 540, '8': 340})
@@ -3213,7 +3213,7 @@ class TestPDF2XMLConverter(XMLTester):
     def test_set_margins(self):
         '''Test set_margins
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.pdf')
         p2x.set_margins({'rm': 'odd=40;even=80;3=60',
                          'lm': '7=70',
                          'tm': '8=80',
@@ -3227,7 +3227,7 @@ class TestPDF2XMLConverter(XMLTester):
     def test_compute_margins1(self):
         '''Test set_margins
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.set_margins({'rm': 'odd=40;even=80;3=60',
                          'lm': '7=70',
                          'tm': '8=80',
@@ -3273,7 +3273,7 @@ class TestPDF2XMLConverter(XMLTester):
     def test_compute_margins2(self):
         '''Test set_margins
         '''
-        p2x = converter.PDF2XMLConverter()
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.set_margins({'rm': 'odd=40;even=80;3=60',
                          'lm': 'all=70',
                          'tm': '8=80',
