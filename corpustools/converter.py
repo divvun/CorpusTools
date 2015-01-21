@@ -77,12 +77,11 @@ class Converter(object):
     Class to take care of data common to all Converter classes
     """
     def __init__(self, filename, languageGuesser, write_intermediate=False,
-                 test=False):
+                 test=False, encoding_from_xsl=False):
         self.orig = os.path.abspath(filename)
         self.set_corpusdir()
         self.set_converted_name()
         self.dependencies = [self.get_orig(), self.get_xsl()]
-        self.fix_lang_genre_xsl()
         self._write_intermediate = write_intermediate
         self.languageGuesser = languageGuesser
 
@@ -90,6 +89,7 @@ class Converter(object):
         """Convert the input file from the original format to a basic
         giellatekno xml document
         """
+        self.fix_lang_genre_xsl()
         if 'avvir_xml' in self.orig:
             intermediate = AvvirConverter(self.orig)
 
@@ -382,13 +382,17 @@ class Converter(object):
         return self._convertedName
 
 
-class AvvirConverter(object):
+class AvvirConverter(Converter):
     """
     Class to convert Ávvir xml files to the giellatekno xml format
     """
 
-    def __init__(self, filename):
-        self.orig = filename
+
+    def __init__(self, filename, languageGuesser, write_intermediate=False,
+                 test=False, encoding_from_xsl=False):
+        super(AvvirConverter, self).__init__(filename, languageGuesser,
+                                             write_intermediate, test,
+                                             encoding_from_xsl)
 
     def convert2intermediate(self):
         """
@@ -469,13 +473,16 @@ class AvvirConverter(object):
         self.intermediate = document
 
 
-class SVGConverter(object):
+class SVGConverter(Converter):
     """
     Class to convert SVG files to the giellatekno xml format
     """
 
-    def __init__(self, filename):
-        self.orig = filename
+    def __init__(self, filename, languageGuesser, write_intermediate=False,
+                 test=False, encoding_from_xsl=False):
+        super(SVGConverter, self).__init__(filename, languageGuesser,
+                                           write_intermediate, test,
+                                           encoding_from_xsl)
         self.converter_xsl = resource_string(__name__, 'xslt/svg2corpus.xsl')
 
     def convert2intermediate(self):
@@ -492,14 +499,17 @@ class SVGConverter(object):
         return intermediate
 
 
-class PlaintextConverter(object):
+class PlaintextConverter(Converter):
     """
     A class to convert plain text files containing "news" tags to the
     giellatekno xml format
     """
 
-    def __init__(self, filename):
-        self.orig = filename
+    def __init__(self, filename, languageGuesser, write_intermediate=False,
+                 test=False, encoding_from_xsl=False):
+        super(PlaintextConverter, self).__init__(filename, languageGuesser,
+                                                 write_intermediate, test,
+                                                 encoding_from_xsl)
 
     def to_unicode(self):
         """
@@ -608,9 +618,14 @@ class PlaintextConverter(object):
         return document
 
 
-class PDFConverter(object):
-    def __init__(self, filename):
-        self.orig = filename
+class PDFConverter(Converter):
+    '''Convert PDF documents to plaintext, then to corpus xml
+    '''
+    def __init__(self, filename, languageGuesser, write_intermediate=False,
+                 test=False, encoding_from_xsl=False):
+        super(PDFConverter, self).__init__(filename, languageGuesser,
+                                           write_intermediate, test,
+                                           encoding_from_xsl)
 
     def replace_ligatures(self):
         """
@@ -927,12 +942,15 @@ class PDF2XMLConverter(object):
             return p
 
 
-class BiblexmlConverter(object):
+class BiblexmlConverter(Converter):
     """
     Class to convert bible xml files to the giellatekno xml format
     """
-    def __init__(self, filename):
-        self.orig = filename
+    def __init__(self, filename, languageGuesser, write_intermediate=False,
+                 test=False, encoding_from_xsl=False):
+        super(BiblexmlConverter, self).__init__(filename, languageGuesser,
+                                                write_intermediate, test,
+                                                encoding_from_xsl)
 
     def convert2intermediate(self):
         """

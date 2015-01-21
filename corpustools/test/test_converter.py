@@ -9,6 +9,7 @@ from lxml.html import html5parser
 import doctest
 
 from corpustools import converter
+from corpustools import text_cat
 
 
 here = os.path.dirname(__file__)
@@ -142,7 +143,8 @@ class XMLTester(unittest.TestCase):
 
 class TestAvvirConverter(XMLTester):
     def setUp(self):
-        self.avvir = converter.AvvirConverter('fakename')
+        languageguesser = text_cat.Classifier()
+        self.avvir = converter.AvvirConverter('fakename', languageguesser)
         self.avvir.intermediate = etree.fromstring(r'''<article>
     <story id="a" class="Tittel">
         <p>a</p>
@@ -263,9 +265,11 @@ class TestAvvirConverter(XMLTester):
 
 class TestSVGConverter(XMLTester):
     def setUp(self):
+        languageguesser = text_cat.Classifier()
         self.svg = converter.SVGConverter(
             os.path.join(here,
-                         'converter_data/Riddu_Riddu_avis_TXT.200923.svg'))
+                         'converter_data/Riddu_Riddu_avis_TXT.200923.svg'),
+            languageguesser)
 
     def test_convert2intermediate(self):
         got = self.svg.convert2intermediate()
@@ -278,9 +282,10 @@ class TestSVGConverter(XMLTester):
 
 class TestPlaintextConverter(XMLTester):
     def test_to_unicode(self):
+        languageguesser = text_cat.Classifier()
         plaintext = converter.PlaintextConverter(
             os.path.join(here,
-                         'converter_data/winsami2-test-ws2.txt'))
+                         'converter_data/winsami2-test-ws2.txt'), languageguesser)
         got = plaintext.to_unicode()
 
         # Ensure that the data in want is unicode
@@ -294,8 +299,9 @@ class TestPlaintextConverter(XMLTester):
         self.assertEqual(got, want)
 
     def test_strip_chars1(self):
+        languageguesser = text_cat.Classifier()
         plaintext = converter.PlaintextConverter(
-            'tullball.txt')
+            'tullball.txt', languageguesser)
         got = plaintext.strip_chars(
             '\x0d\n'
             '<ASCII-MAC>\n'
@@ -307,8 +313,9 @@ class TestPlaintextConverter(XMLTester):
         self.assertEqual(got, want)
 
     def test_strip_chars2(self):
+        languageguesser = text_cat.Classifier()
         plaintext = converter.PlaintextConverter(
-            'tullball.txt')
+            'tullball.txt', languageguesser)
         got = plaintext.strip_chars(
             '<0x010C><0x010D><0x0110><0x0111><0x014A><0x014B><0x0160><0x0161>'
             '<0x0166><0x0167><0x017D><0x017E><0x2003>')
@@ -317,8 +324,9 @@ class TestPlaintextConverter(XMLTester):
         self.assertEqual(got, want)
 
     def test_plaintext(self):
+        languageguesser = text_cat.Classifier()
         plaintext = converter.PlaintextConverter(
-            'tullball.txt')
+            'tullball.txt', languageguesser)
         got = plaintext.content2xml(io.StringIO(u'''Sámegiella.
 
 Buot leat.'''))
@@ -338,7 +346,9 @@ Buot leat.'''))
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_two_lines(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
+        languageguesser = text_cat.Classifier()
+        newstext = converter.PlaintextConverter('tullball.txt',
+                                                languageguesser)
         got = newstext.content2xml(io.StringIO(u'''Guovssahasa nieida.
 Filbma lea.
 '''))
@@ -354,7 +364,9 @@ Filbma lea.</p>
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_hyph(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
+        languageguesser = text_cat.Classifier()
+        newstext = converter.PlaintextConverter('tullball.txt',
+                                                languageguesser)
         got = newstext.content2xml(io.StringIO(u'''Guovssa<hyph/>hasa
 '''))
         want = etree.fromstring(u'''
@@ -370,8 +382,10 @@ Filbma lea.</p>
 
 class TestPDFConverter(XMLTester):
     def test_pdf_converter(self):
+        languageguesser = text_cat.Classifier()
         pdfdocument = converter.PDFConverter(
-            os.path.join(here, 'converter_data/pdf-test.pdf'))
+            os.path.join(here, 'converter_data/pdf-test.pdf'),
+            languageguesser)
         got = pdfdocument.convert2intermediate()
         want = etree.parse(
             os.path.join(here, 'converter_data/pdf-test.xml'))
@@ -383,7 +397,7 @@ class TestDocConverter(XMLTester):
     def setUp(self):
         self.testdoc = converter.DocConverter(
             os.path.join(here,
-                         'converter_data/doc-test.doc'))
+                         'converter_data/doc-test.doc'), 'bogus')
 
     def test_convert2intermediate(self):
         got = self.testdoc.convert2intermediate()
@@ -402,9 +416,10 @@ class TestDocConverter(XMLTester):
 
 class TestBiblexmlConverter(XMLTester):
     def setUp(self):
+        languageguesser = text_cat.Classifier()
         self.testdoc = converter.BiblexmlConverter(
             os.path.join(here,
-                         'converter_data/bible-test.xml'))
+                         'converter_data/bible-test.xml'), languageguesser)
 
     def test_convert2intermediate(self):
         got = self.testdoc.convert2intermediate()
