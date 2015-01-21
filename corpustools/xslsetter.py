@@ -8,6 +8,7 @@ import sys
 import lxml.etree as etree
 
 import util
+import ccat
 
 here = os.path.dirname(__file__)
 
@@ -122,7 +123,7 @@ class MetadataHandler(object):
             logfile = open(self.filename.replace('.xsl', '') + '.log', 'w')
 
             logfile.write('Error at: {}\n'.format(str(ccat.lineno())))
-            logfile.write('Invalid XML in {}\n'.format(self.filename))
+            logfile.write('Invalid XSLT in {}\n'.format(self.filename))
             for entry in e.error_log:
                 logfile.write('{}\n'.format(str(entry)))
 
