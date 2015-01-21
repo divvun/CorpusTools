@@ -2557,6 +2557,16 @@ LOGO: Smi kulturfestivala 1998
 class TestPDF2XMLConverter(XMLTester):
     '''Test the class that converts from pdf2xml to giellatekno/divvun xml
     '''
+    def test_pdf_converter(self):
+        pdfdocument = converter.PDF2XMLConverter(
+            os.path.join(here, 'converter_data/pdf-test.pdf'))
+        got = pdfdocument.convert2intermediate()
+        want = etree.parse(
+            os.path.join(here, 'converter_data/pdf-xml2pdf-test.xml'))
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+
     def test_extract_textelement1(self):
         '''Extract text from a plain pdf2xml text element
         '''
