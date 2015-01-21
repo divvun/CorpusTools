@@ -2437,7 +2437,7 @@ LOGO: Smi kulturfestivala 1998
         document_fixer = converter.DocumentFixer(orig_doc)
         document_fixer.set_word_count()
 
-        self.assertXmlEqual(etree.tostring(document_fixer.etree), expected_doc)
+        self.assertXmlEqual(etree.tostring(document_fixer.root), expected_doc)
 
     def test_replace_shy1(self):
         orig_doc = etree.parse(
@@ -2456,7 +2456,7 @@ LOGO: Smi kulturfestivala 1998
         document_fixer = converter.DocumentFixer(orig_doc)
         document_fixer.soft_hyphen_to_hyph_tag()
 
-        self.assertXmlEqual(etree.tostring(document_fixer.etree), expected_doc)
+        self.assertXmlEqual(etree.tostring(document_fixer.root), expected_doc)
 
     def test_replace_shy2(self):
         orig_doc = etree.parse(
@@ -2475,7 +2475,7 @@ LOGO: Smi kulturfestivala 1998
         document_fixer = converter.DocumentFixer(orig_doc)
         document_fixer.soft_hyphen_to_hyph_tag()
 
-        self.assertXmlEqual(etree.tostring(document_fixer.etree), expected_doc)
+        self.assertXmlEqual(etree.tostring(document_fixer.root), expected_doc)
 
     def test_compact_em1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>

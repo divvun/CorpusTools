@@ -144,7 +144,7 @@ class Converter(object):
         try:
             complete = xm.get_transformer()(intermediate)
 
-            return complete
+            return complete.getroot()
         except etree.XSLTApplyError as (e):
             logfile = open('{}.log'.format(self.orig), 'w')
 
@@ -182,19 +182,17 @@ class Converter(object):
                     self.get_orig() + u".log")
 
     def fix_document(self, complete):
-        fixer = DocumentFixer(etree.fromstring(etree.tostring(complete)))
+        fixer = DocumentFixer(complete)
 
         fixer.fix_newstags()
         fixer.soft_hyphen_to_hyph_tag()
         fixer.set_word_count()
         fixer.detect_quotes()
 
-        if (complete.getroot().
+        if (complete.
             attrib['{http://www.w3.org/XML/1998/namespace}lang'] in
                 ['sma', 'sme', 'smj', 'nob', 'fin']):
             fixer.fix_body_encoding()
-
-        return fixer.get_etree()
 
     def make_complete(self, languageGuesser):
         """Combine the intermediate giellatekno xml file and the metadata into
@@ -205,7 +203,7 @@ class Converter(object):
         complete = self.transform_to_complete()
         self.validate_complete(complete)
         self.convert_errormarkup(complete)
-        complete = self.fix_document(complete)
+        self.fix_document(complete)
         ld = LanguageDetector(complete, languageGuesser)
         ld.detect_language()
 
@@ -222,7 +220,7 @@ class Converter(object):
 
                 xml_printer = ccat.XMLPrinter(all_paragraphs=True,
                                               hyph_replacement=None)
-                xml_printer.etree = complete
+                xml_printer.etree = etree.ElementTree(complete)
                 text = xml_printer.process_file().getvalue()
 
                 if len(text) > 0:
@@ -1471,17 +1469,17 @@ class DocumentFixer(object):
     characters
     """
     def __init__(self, document):
-        self.etree = document
+        self.root = document
 
     def get_etree(self):
-        return etree.parse(io.BytesIO(etree.tostring(self.etree)))
+        return self.root
 
     def compact_ems(self):
         """Replace consecutive em elements divided by white space into
         a single element.
         """
         word = re.compile(u'\w+', re.UNICODE)
-        for element in self.etree.iter('p'):
+        for element in self.root.iter('p'):
             if len(element.xpath('.//em')) > 1:
                 lines = []
                 for em in element.iter('em'):
@@ -1502,7 +1500,7 @@ class DocumentFixer(object):
     def soft_hyphen_to_hyph_tag(self):
         """Replace soft hyphens in text by the hyph tag
         """
-        for element in self.etree.iter('p'):
+        for element in self.root.iter('p'):
             self.replace_shy(element)
 
     def replace_shy(self, element):
@@ -1539,7 +1537,7 @@ class DocumentFixer(object):
         """
         irritating_words_regex = re.compile(u'(govv(a|en|ejeaddji):)([^ ])',
                                             re.UNICODE | re.IGNORECASE)
-        for child in self.etree.find('.//body'):
+        for child in self.root.find('.//body'):
             self.insert_space_after_semicolon(child, irritating_words_regex)
 
     def insert_space_after_semicolon(self, element, irritating_words_regex):
@@ -1594,7 +1592,7 @@ class DocumentFixer(object):
             u"ﬅ": "ft",
         }
 
-        for element in self.etree.iter('p'):
+        for element in self.root.iter('p'):
             if element.text:
                 for key, value in replacements.items():
                     element.text = element.text.replace(key + ' ', value)
@@ -1608,10 +1606,7 @@ class DocumentFixer(object):
         """
         self.replace_ligatures()
 
-        if isinstance(self.etree, etree._XSLTResultTree):
-            sys.stderr.write("xslt!\n")
-
-        body = self.etree.find('body')
+        body = self.root.find('body')
         bodyString = etree.tostring(body, encoding='utf-8')
         body.getparent().remove(body)
 
@@ -1619,7 +1614,7 @@ class DocumentFixer(object):
         encoding = eg.guess_body_encoding(bodyString)
 
         body = etree.fromstring(eg.decode_para(encoding, bodyString))
-        self.etree.append(body)
+        self.root.append(body)
 
         self.fix_title_person('double-utf8')
         self.fix_title_person('mac-sami_to_latin1')
@@ -1627,7 +1622,7 @@ class DocumentFixer(object):
     def fix_title_person(self, encoding):
         eg = decode.EncodingGuesser()
 
-        title = self.etree.find('.//title')
+        title = self.root.find('.//title')
         if title is not None and title.text is not None:
             text = title.text
 
@@ -1638,7 +1633,7 @@ class DocumentFixer(object):
             text = text.encode('utf8')
             title.text = eg.decode_para(encoding, text).decode('utf-8')
 
-        persons = self.etree.findall('.//person')
+        persons = self.root.findall('.//person')
         for person in persons:
             if person is not None:
                 lastname = person.get('lastname')
@@ -1731,26 +1726,26 @@ class DocumentFixer(object):
     def detect_quotes(self):
         """Detect quotes in all paragraphs
         """
-        for paragraph in self.etree.iter('p'):
+        for paragraph in self.root.iter('p'):
             paragraph = self.detect_quote(paragraph)
 
     def set_word_count(self):
         """Count the words in the file
         """
         plist = []
-        for paragraph in self.etree.iter('p'):
+        for paragraph in self.root.iter('p'):
             plist.append(etree.tostring(paragraph,
                                         method='text',
                                         encoding='utf8'))
 
         words = len(re.findall(r'\S+', ' '.join(plist)))
 
-        wordcount = self.etree.find('header/wordcount')
+        wordcount = self.root.find('header/wordcount')
         if wordcount is None:
             tags = ['collection', 'publChannel', 'place', 'year',
                     'translated_from', 'translator', 'author']
             for tag in tags:
-                found = self.etree.find('header/' + tag)
+                found = self.root.find('header/' + tag)
                 if found is not None:
                     wordcount = etree.Element('wordcount')
                     header = found.getparent()
@@ -1793,10 +1788,10 @@ class DocumentFixer(object):
                                 re.UNICODE | re.IGNORECASE)
         boldtags = re.compile(u'@bold\s*:')
 
-        header = self.etree.find('.//header')
-        unknown = self.etree.find('.//unknown')
+        header = self.root.find('.//header')
+        unknown = self.root.find('.//unknown')
 
-        for em in self.etree.iter('em'):
+        for em in self.root.iter('em'):
             paragraph = em.getparent()
             if len(em) == 0 and em.text is not None:
 
@@ -1814,7 +1809,7 @@ class DocumentFixer(object):
                 elif newstags.match(em.text):
                     em.text = newstags.sub('', em.text).strip()
 
-        for paragraph in self.etree.iter('p'):
+        for paragraph in self.root.iter('p'):
             if len(paragraph) == 0 and paragraph.text is not None:
                 index = paragraph.getparent().index(paragraph)
                 lines = []
@@ -1990,13 +1985,13 @@ class XslMaker(object):
 
 class LanguageDetector(object):
     """
-    Receive an etree.
+    Receive an etree.Element
     Detect the languages of quotes.
     Detect the languages of the paragraphs.
     """
     def __init__(self, document, languageGuesser):
         self.document = document
-        self.mainlang = self.document.getroot().\
+        self.mainlang = self.document.\
             attrib['{http://www.w3.org/XML/1998/namespace}lang']
 
         self.inlangs = []
