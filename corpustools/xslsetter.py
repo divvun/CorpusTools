@@ -24,16 +24,20 @@ class MetadataHandler(object):
         if not os.path.exists(filename):
             if not create:
                 raise util.ArgumentError("{} does not exist!".format(filename))
-            preprocessXsl = etree.parse(os.path.join(here,
-                                                     'xslt/preprocxsl.xsl'))
-            preprocessXslTransformer = etree.XSLT(preprocessXsl)
             filexsl = etree.parse(os.path.join(here, 'xslt/XSL-template.xsl'))
-            self.tree = preprocessXslTransformer(
-                filexsl,
-                commonxsl=etree.XSLT.strparam(
-                    'file://' + os.path.join(here, 'xslt/common.xsl')))
         else:
-            self.tree = etree.parse(filename)
+            filexsl = etree.parse(filename)
+
+        self.tree = self.make_tree(filexsl)
+
+    def make_tree(self, filexsl):
+        preprocessXsl = etree.parse(os.path.join(here,
+                                                 'xslt/preprocxsl.xsl'))
+        preprocessXslTransformer = etree.XSLT(preprocessXsl)
+        tree = preprocessXslTransformer(
+            filexsl,
+            commonxsl=etree.XSLT.strparam(
+                'file://' + os.path.join(here, 'xslt/common.xsl')))
 
     def _get_variable_elt(self, key):
         return self.tree.getroot().find(
@@ -70,7 +74,7 @@ class MetadataHandler(object):
                    "location" : location }
         parallels = self._get_variable_elt("parallels")
         if parallels is None:
-            parallels = etree.Element("{http://www.w3.org/1999/XSL/Transform}variable", 
+            parallels = etree.Element("{http://www.w3.org/1999/XSL/Transform}variable",
                                       name="parallels")
             parallels.text, parallels.tail = "\n", "\n\n"
             self.tree.getroot().append(parallels)
