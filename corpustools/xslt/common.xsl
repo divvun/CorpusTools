@@ -35,59 +35,6 @@
 <xsl:variable name="parallels">
 </xsl:variable>
 
-<!-- Deprecated: -->
-<xsl:variable name="mlang_dan" select="''"/>
-<xsl:variable name="mlang_eng" select="''"/>
-<xsl:variable name="mlang_fin" select="''"/>
-<xsl:variable name="mlang_fkv" select="''"/>
-<xsl:variable name="mlang_ger" select="''"/>
-<xsl:variable name="mlang_isl" select="''"/>
-<xsl:variable name="mlang_kal" select="''"/>
-<xsl:variable name="mlang_kpv" select="''"/>
-<xsl:variable name="mlang_nno" select="''"/>
-<xsl:variable name="mlang_nob" select="''"/>
-<xsl:variable name="mlang_rus" select="''"/>
-<xsl:variable name="mlang_sma" select="''"/>
-<xsl:variable name="mlang_sme" select="''"/>
-<xsl:variable name="mlang_smj" select="''"/>
-<xsl:variable name="mlang_swe" select="''"/>
-<xsl:variable name="mlang_oth" select="''"/>
-
-<!-- Deprecated: -->
-<xsl:variable name="parallel_texts" select="''"/>
-<xsl:variable name="para_sme" select="''"/>
-<xsl:variable name="para_smj" select="''"/>
-<xsl:variable name="para_sma" select="''"/>
-<xsl:variable name="para_nob" select="''"/>
-<xsl:variable name="para_nno" select="''"/>
-<xsl:variable name="para_swe" select="''"/>
-<xsl:variable name="para_fin" select="''"/>
-<xsl:variable name="para_ger" select="''"/>
-<xsl:variable name="para_eng" select="''"/>
-<xsl:variable name="para_fkv" select="''"/>
-<xsl:variable name="para_dan" select="''"/>
-<xsl:variable name="para_isl" select="''"/>
-<xsl:variable name="para_kal" select="''"/>
-<xsl:variable name="para_kpv" select="''"/>
-<xsl:variable name="para_rus" select="''"/>
-
-<!-- Deprecated: -->
-<xsl:variable name="smelang" select="'sme'"/>
-<xsl:variable name="smjlang" select="'smj'"/>
-<xsl:variable name="smalang" select="'sma'"/>
-<xsl:variable name="noblang" select="'nob'"/>
-<xsl:variable name="nnolang" select="'nno'"/>
-<xsl:variable name="swelang" select="'swe'"/>
-<xsl:variable name="finlang" select="'fin'"/>
-<xsl:variable name="englang" select="'eng'"/>
-<xsl:variable name="gerlang" select="'ger'"/>
-<xsl:variable name="danlang" select="'dan'"/>
-<xsl:variable name="isllang" select="'isl'"/>
-<xsl:variable name="fkvlang" select="'fkv'"/>
-<xsl:variable name="kallang" select="'kal'"/>
-<xsl:variable name="kpvlang" select="'kpv'"/>
-<xsl:variable name="ruslang" select="'rus'"/>
-
 <xsl:variable name="debug" select="false()"/>
 <xsl:variable name="nl" select="'&#xa;'"/>
 
