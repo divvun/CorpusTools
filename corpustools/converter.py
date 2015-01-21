@@ -138,8 +138,6 @@ class Converter(object):
     def transform_to_complete(self):
         xm = XslMaker(self.get_xsl())
         intermediate = self.convert2intermediate()
-        if isinstance(intermediate, etree._XSLTResultTree):
-            intermediate = etree.fromstring(etree.tostring(intermediate))
 
         self.maybe_write_intermediate(intermediate)
 
@@ -365,7 +363,7 @@ class AvvirConverter(Converter):
         self.convert_story()
         self.convert_article()
 
-        return self.intermediate.getroottree()
+        return self.intermediate
 
     def insert_element(self, p, text, i):
         if text is not None:
@@ -456,7 +454,7 @@ class SVGConverter(Converter):
         doc = etree.parse(self.orig)
         intermediate = transform(doc)
 
-        return intermediate
+        return intermediate.getroot()
 
 
 class PlaintextConverter(Converter):
@@ -1291,7 +1289,7 @@ class HTMLContentConverter(Converter):
             raise ConversionException(
                 'transformation failed {}.log'.format(self.orig))
 
-        return intermediate
+        return intermediate.getroot()
 
 
 class HTMLConverter(HTMLContentConverter):
