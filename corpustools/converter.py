@@ -76,14 +76,13 @@ class Converter(object):
     """
     Class to take care of data common to all Converter classes
     """
-    def __init__(self, filename, languageGuesser, write_intermediate=False,
+    def __init__(self, filename, write_intermediate=False,
                  test=False, encoding_from_xsl=''):
         self.orig = os.path.abspath(filename)
         self.set_corpusdir()
         self.set_converted_name()
         self.dependencies = [self.get_orig(), self.get_xsl()]
         self._write_intermediate = write_intermediate
-        self.languageGuesser = languageGuesser
 
     def convert2intermediate(self):
         raise NotImplementedError(
@@ -199,7 +198,7 @@ class Converter(object):
 
         return fixer.get_etree()
 
-    def make_complete(self):
+    def make_complete(self, languageGuesser):
         """Combine the intermediate giellatekno xml file and the metadata into
         a complete giellatekno xml file.
         Fix the character encoding
@@ -209,19 +208,19 @@ class Converter(object):
         self.validate_complete(complete)
         self.convert_errormarkup(complete)
         complete = self.fix_document(complete)
-        ld = LanguageDetector(complete, self.languageGuesser)
+        ld = LanguageDetector(complete, languageGuesser)
         ld.detect_language()
 
         return complete
 
-    def write_complete(self):
+    def write_complete(self, languageguesser):
         if distutils.dep_util.newer_group(
                 self.dependencies, self.get_converted_name()):
             self.makedirs()
 
             if (('goldstandard' in self.orig and '.correct.' in self.orig) or
                     'goldstandard' not in self.orig):
-                complete = self.make_complete()
+                complete = self.make_complete(languageguesser)
 
                 xml_printer = ccat.XMLPrinter(all_paragraphs=True,
                                               hyph_replacement=None)
@@ -349,9 +348,9 @@ class AvvirConverter(Converter):
     """
 
 
-    def __init__(self, filename, languageGuesser, write_intermediate=False,
+    def __init__(self, filename, write_intermediate=False,
                  test=False, encoding_from_xsl=''):
-        super(AvvirConverter, self).__init__(filename, languageGuesser,
+        super(AvvirConverter, self).__init__(filename,
                                              write_intermediate, test,
                                              encoding_from_xsl)
 
@@ -439,9 +438,9 @@ class SVGConverter(Converter):
     Class to convert SVG files to the giellatekno xml format
     """
 
-    def __init__(self, filename, languageGuesser, write_intermediate=False,
+    def __init__(self, filename, write_intermediate=False,
                  test=False, encoding_from_xsl=''):
-        super(SVGConverter, self).__init__(filename, languageGuesser,
+        super(SVGConverter, self).__init__(filename,
                                            write_intermediate, test,
                                            encoding_from_xsl)
         self.converter_xsl = resource_string(__name__, 'xslt/svg2corpus.xsl')
@@ -466,9 +465,9 @@ class PlaintextConverter(Converter):
     giellatekno xml format
     """
 
-    def __init__(self, filename, languageGuesser, write_intermediate=False,
+    def __init__(self, filename, write_intermediate=False,
                  test=False, encoding_from_xsl=''):
-        super(PlaintextConverter, self).__init__(filename, languageGuesser,
+        super(PlaintextConverter, self).__init__(filename,
                                                  write_intermediate, test,
                                                  encoding_from_xsl)
 
@@ -582,9 +581,9 @@ class PlaintextConverter(Converter):
 class PDFConverter(Converter):
     '''Convert PDF documents to plaintext, then to corpus xml
     '''
-    def __init__(self, filename, languageGuesser, write_intermediate=False,
+    def __init__(self, filename, write_intermediate=False,
                  test=False, encoding_from_xsl=''):
-        super(PDFConverter, self).__init__(filename, languageGuesser,
+        super(PDFConverter, self).__init__(filename,
                                            write_intermediate, test,
                                            encoding_from_xsl)
 
@@ -907,9 +906,9 @@ class BiblexmlConverter(Converter):
     """
     Class to convert bible xml files to the giellatekno xml format
     """
-    def __init__(self, filename, languageGuesser, write_intermediate=False,
+    def __init__(self, filename, write_intermediate=False,
                  test=False, encoding_from_xsl=''):
-        super(BiblexmlConverter, self).__init__(filename, languageGuesser,
+        super(BiblexmlConverter, self).__init__(filename,
                                                 write_intermediate, test,
                                                 encoding_from_xsl)
 
@@ -991,11 +990,11 @@ class HTMLContentConverter(Converter):
     content is a string
     """
 
-    def __init__(self, filename, languageGuesser, write_intermediate=False,
+    def __init__(self, filename, write_intermediate=False,
                  test=False, encoding_from_xsl='', content=None):
         '''Clean up content, then convert it to xhtml using html5parser
         '''
-        super(HTMLContentConverter, self).__init__(filename, languageGuesser,
+        super(HTMLContentConverter, self).__init__(filename,
                                              write_intermediate, test,
                                              encoding_from_xsl)
 
@@ -1296,10 +1295,10 @@ class HTMLContentConverter(Converter):
 
 
 class HTMLConverter(HTMLContentConverter):
-    def __init__(self, filename, languageGuesser, write_intermediate=False,
+    def __init__(self, filename, write_intermediate=False,
                  test=False, encoding_from_xsl=''):
         f = open(filename)
-        super(HTMLConverter, self).__init__(filename, languageGuesser,
+        super(HTMLConverter, self).__init__(filename,
                                             content=f.read())
         f.close()
 
@@ -1308,7 +1307,7 @@ class RTFConverter(HTMLContentConverter):
     """
     Class to convert html documents to the giellatekno xml format
     """
-    def __init__(self, filename, languageGuesser, write_intermediate=False,
+    def __init__(self, filename, write_intermediate=False,
                  test=False, encoding_from_xsl=''):
         doc = open(filename, "rb")
         content = doc.read()
@@ -1319,7 +1318,7 @@ class RTFConverter(HTMLContentConverter):
             raise ConversionException('Unicode problems in {}'.format(
                 self.orig))
 
-        HTMLContentConverter.__init__(self, filename, languageGuesser,
+        HTMLContentConverter.__init__(self, filename,
                                       content=XHTMLWriter.write(doc, pretty=True).read(),
                                       encoding_from_xsl=encoding_from_xsl)
 
@@ -1328,10 +1327,10 @@ class RTFConverter(HTMLContentConverter):
 class DocxConverter(HTMLContentConverter):
     '''Class to convert docx documents to the giellatekno xml format
     '''
-    def __init__(self, filename, languageGuesser, write_intermediate=False,
+    def __init__(self, filename, write_intermediate=False,
                  test=False, encoding_from_xsl=''):
 
-        HTMLContentConverter.__init__(self, filename, languageGuesser,
+        HTMLContentConverter.__init__(self, filename,
                                       content=Docx2Html(path=filename).parsed,
                                       encoding_from_xsl=encoding_from_xsl)
 
@@ -1341,12 +1340,12 @@ class DocConverter(HTMLContentConverter):
     """
     Class to convert Microsoft Word documents to the giellatekno xml format
     """
-    def __init__(self, filename, languageGuesser, write_intermediate=False,
+    def __init__(self, filename, write_intermediate=False,
                  test=False, encoding_from_xsl=''):
         command = ['wvHtml', filename, '-']
         output = run_process(command, filename)
 
-        HTMLContentConverter.__init__(self, filename, languageGuesser,
+        HTMLContentConverter.__init__(self, filename,
                                       content=output,
                                       encoding_from_xsl=encoding_from_xsl)
 
@@ -2192,7 +2191,7 @@ class ConverterManager(object):
 
             try:
                 conv = self.converter(orig_file)
-                conv.write_complete()
+                conv.write_complete(self.LANGUAGEGUESSER)
             except ConversionException as e:
                 print >>sys.stderr, 'Could not convert {}'.format(orig_file)
                 print >>sys.stderr, str(e)
@@ -2201,31 +2200,31 @@ class ConverterManager(object):
 
     def converter(self, orig_file):
         if 'avvir_xml' in orig_file:
-            return AvvirConverter(orig_file, self.LANGUAGEGUESSER)
+            return AvvirConverter(orig_file)
 
         elif orig_file.endswith('.txt'):
-            return PlaintextConverter(orig_file, self.LANGUAGEGUESSER)
+            return PlaintextConverter(orig_file)
 
         elif orig_file.endswith('.pdf'):
-            return PDFConverter(orig_file, self.LANGUAGEGUESSER)
+            return PDFConverter(orig_file)
 
         elif orig_file.endswith('.svg'):
-            return SVGConverter(orig_file, self.LANGUAGEGUESSER)
+            return SVGConverter(orig_file)
 
         elif '.htm' in orig_file or '.php' in orig_file:
-            return HTMLConverter(orig_file, self.LANGUAGEGUESSER)
+            return HTMLConverter(orig_file)
 
         elif orig_file.endswith('.doc') or orig_file.endswith('.DOC'):
-            return DocConverter(orig_file, self.LANGUAGEGUESSER)
+            return DocConverter(orig_file)
 
         elif orig_file.endswith('.docx'):
-            return DocxConverter(orig_file, self.LANGUAGEGUESSER)
+            return DocxConverter(orig_file)
 
         elif '.rtf' in orig_file:
-            return RTFConverter(orig_file, self.LANGUAGEGUESSER)
+            return RTFConverter(orig_file)
 
         elif orig_file.endswith('.bible.xml'):
-            return BiblexmlConverter(orig_file, self.LANGUAGEGUESSER)
+            return BiblexmlConverter(orig_file)
 
         else:
             raise ConversionException(

@@ -4,7 +4,6 @@ import lxml.etree
 import doctest
 
 from corpustools import converter
-from corpustools import text_cat
 
 
 tests = {
@@ -2489,7 +2488,7 @@ def check_conversion(testname, html_xml):
     to corpus xml via the xhtml2corpus.xsl style sheet
     '''
     got = converter.HTMLContentConverter(
-        testname, text_cat.Classifier(),
+        testname,
         content=html_xml['html']).convert2intermediate()
     want = lxml.etree.fromstring(html_xml['xml'])
     assertXmlEqual(got, want)

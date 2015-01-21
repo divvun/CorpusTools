@@ -143,8 +143,7 @@ class XMLTester(unittest.TestCase):
 
 class TestAvvirConverter(XMLTester):
     def setUp(self):
-        languageguesser = text_cat.Classifier()
-        self.avvir = converter.AvvirConverter('fakename', languageguesser)
+        self.avvir = converter.AvvirConverter('fakename')
         self.avvir.intermediate = etree.fromstring(r'''<article>
     <story id="a" class="Tittel">
         <p>a</p>
@@ -265,11 +264,9 @@ class TestAvvirConverter(XMLTester):
 
 class TestSVGConverter(XMLTester):
     def setUp(self):
-        languageguesser = text_cat.Classifier()
         self.svg = converter.SVGConverter(
             os.path.join(here,
-                         'converter_data/Riddu_Riddu_avis_TXT.200923.svg'),
-            languageguesser)
+                         'converter_data/Riddu_Riddu_avis_TXT.200923.svg'))
 
     def test_convert2intermediate(self):
         got = self.svg.convert2intermediate()
@@ -282,10 +279,9 @@ class TestSVGConverter(XMLTester):
 
 class TestPlaintextConverter(XMLTester):
     def test_to_unicode(self):
-        languageguesser = text_cat.Classifier()
         plaintext = converter.PlaintextConverter(
             os.path.join(here,
-                         'converter_data/winsami2-test-ws2.txt'), languageguesser)
+                         'converter_data/winsami2-test-ws2.txt'))
         got = plaintext.to_unicode()
 
         # Ensure that the data in want is unicode
@@ -299,9 +295,8 @@ class TestPlaintextConverter(XMLTester):
         self.assertEqual(got, want)
 
     def test_strip_chars1(self):
-        languageguesser = text_cat.Classifier()
         plaintext = converter.PlaintextConverter(
-            'tullball.txt', languageguesser)
+            'tullball.txt')
         got = plaintext.strip_chars(
             '\x0d\n'
             '<ASCII-MAC>\n'
@@ -313,9 +308,8 @@ class TestPlaintextConverter(XMLTester):
         self.assertEqual(got, want)
 
     def test_strip_chars2(self):
-        languageguesser = text_cat.Classifier()
         plaintext = converter.PlaintextConverter(
-            'tullball.txt', languageguesser)
+            'tullball.txt')
         got = plaintext.strip_chars(
             '<0x010C><0x010D><0x0110><0x0111><0x014A><0x014B><0x0160><0x0161>'
             '<0x0166><0x0167><0x017D><0x017E><0x2003>')
@@ -324,9 +318,8 @@ class TestPlaintextConverter(XMLTester):
         self.assertEqual(got, want)
 
     def test_plaintext(self):
-        languageguesser = text_cat.Classifier()
         plaintext = converter.PlaintextConverter(
-            'tullball.txt', languageguesser)
+            'tullball.txt')
         got = plaintext.content2xml(io.StringIO(u'''Sámegiella.
 
 Buot leat.'''))
@@ -346,9 +339,7 @@ Buot leat.'''))
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_two_lines(self):
-        languageguesser = text_cat.Classifier()
-        newstext = converter.PlaintextConverter('tullball.txt',
-                                                languageguesser)
+        newstext = converter.PlaintextConverter('tullball.txt')
         got = newstext.content2xml(io.StringIO(u'''Guovssahasa nieida.
 Filbma lea.
 '''))
@@ -364,9 +355,7 @@ Filbma lea.</p>
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_hyph(self):
-        languageguesser = text_cat.Classifier()
-        newstext = converter.PlaintextConverter('tullball.txt',
-                                                languageguesser)
+        newstext = converter.PlaintextConverter('tullball.txt')
         got = newstext.content2xml(io.StringIO(u'''Guovssa<hyph/>hasa
 '''))
         want = etree.fromstring(u'''
@@ -382,10 +371,8 @@ Filbma lea.</p>
 
 class TestPDFConverter(XMLTester):
     def test_pdf_converter(self):
-        languageguesser = text_cat.Classifier()
         pdfdocument = converter.PDFConverter(
-            os.path.join(here, 'converter_data/pdf-test.pdf'),
-            languageguesser)
+            os.path.join(here, 'converter_data/pdf-test.pdf'))
         got = pdfdocument.convert2intermediate()
         want = etree.parse(
             os.path.join(here, 'converter_data/pdf-test.xml'))
@@ -416,10 +403,9 @@ class TestDocConverter(XMLTester):
 
 class TestBiblexmlConverter(XMLTester):
     def setUp(self):
-        languageguesser = text_cat.Classifier()
         self.testdoc = converter.BiblexmlConverter(
             os.path.join(here,
-                         'converter_data/bible-test.xml'), languageguesser)
+                         'converter_data/bible-test.xml'))
 
     def test_convert2intermediate(self):
         got = self.testdoc.convert2intermediate()
@@ -432,10 +418,8 @@ class TestBiblexmlConverter(XMLTester):
 
 class TestHTMLContentConverter(XMLTester):
     def test_remove_empty_class(self):
-        languageguesser = text_cat.Classifier()
         got = converter.HTMLContentConverter(
             'with-o:p.html',
-            languageguesser,
             content='<html><body><div class="">a</div><div class="a">'
             '<span class="">b</span></div></html>').tidy()
 
@@ -446,7 +430,6 @@ class TestHTMLContentConverter(XMLTester):
         self.assertEqual(got, etree.tostring(want))
 
     def test_remove_unwanted_classes_and_ids(self):
-        languageguesser = text_cat.Classifier()
         unwanted_classes_ids = {
             'div': {
                 'class': [
@@ -496,7 +479,6 @@ class TestHTMLContentConverter(XMLTester):
                 for value in values:
                     hc = converter.HTMLContentConverter(
                         '.html'.format(tag, key, value),
-                        languageguesser,
                         content='<html><body><{0} {1}="{2}">content:{0}{1}{2}</{0}>'
                         '<div class="ada"/></body>'
                         '</html>'.format(tag, key, value))
@@ -509,7 +491,6 @@ class TestHTMLContentConverter(XMLTester):
                         etree.tostring(hc.soup), etree.tostring(want))
 
     def test_remove_unwanted_tags(self):
-        languageguesser = text_cat.Classifier()
         unwanted_tags = [
             'script', 'style', 'area', 'object', 'meta',
             'hr', 'nf', 'mb', 'ms',
@@ -522,7 +503,6 @@ class TestHTMLContentConverter(XMLTester):
         for unwanted_tag in unwanted_tags:
             got = converter.HTMLContentConverter(
                 unwanted_tag + '.html',
-                        languageguesser,
                         content='<html><body><p>p1</p><%s/><p>p2</p2></body>'
                     '</html>' % unwanted_tag).tidy()
             want = (
@@ -533,10 +513,8 @@ class TestHTMLContentConverter(XMLTester):
             self.assertEqual(got, want)
 
     def test_remove_comment(self):
-        languageguesser = text_cat.Classifier()
         got = converter.HTMLContentConverter(
             'with-o:p.html',
-            languageguesser,
             content='<html><body><b><!--Hey, buddy. --></b></body></html>').tidy()
 
         want = (
@@ -546,10 +524,8 @@ class TestHTMLContentConverter(XMLTester):
         self.assertEqual(got, want)
 
     def test_remove_processinginstruction(self):
-        languageguesser = text_cat.Classifier()
         got = converter.HTMLContentConverter(
             'with-o:p.html',
-            languageguesser,
             content='<html><body><b><?ProcessingInstruction?></b></body></html>').tidy()
 
         want = (
@@ -561,10 +537,8 @@ class TestHTMLContentConverter(XMLTester):
     def test_add_p_around_text1(self):
         '''Only text before next significant element
         '''
-        languageguesser = text_cat.Classifier()
         hcc = converter.HTMLContentConverter(
             'withoutp.html',
-            languageguesser,
             content='<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">'
             '<html><head><meta http-equiv="Content-type" content="text/html; '
             'charset=utf-8"><title>– Den utdøende stammes frykt</title>'
@@ -583,10 +557,8 @@ class TestHTMLContentConverter(XMLTester):
     def test_add_p_around_text2(self):
         '''Text and i element before next significant element
         '''
-        languageguesser = text_cat.Classifier()
         hcc = converter.HTMLContentConverter(
             'withoutp.html',
-            languageguesser,
             content='<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN">'
             '<html><head><meta http-equiv="Content-type" content="text/html; '
             'charset=utf-8"><title>– Den utdøende stammes frykt</title>'
@@ -605,10 +577,8 @@ class TestHTMLContentConverter(XMLTester):
     def test_add_p_around_text3(self):
         '''h2 as a stop element
         '''
-        languageguesser = text_cat.Classifier()
         hcc = converter.HTMLContentConverter(
             'withoutp.html',
-            languageguesser,
             content='<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
             '<head><meta http-equiv="Content-type" content="text/html; '
             'charset=utf-8"><title>– Den utdøende stammes frykt</title>'
@@ -630,14 +600,13 @@ class TestHTMLContentConverter(XMLTester):
         '''Check that default charset is set, 1
         encoding_from_xsl = None, no charset in html header
         '''
-        languageguesser = text_cat.Classifier()
         content = (
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
             '<body></body></html>')
         encoding_from_xsl = None
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html', languageguesser,
+            'ugga.html',
             content=content, encoding_from_xsl=encoding_from_xsl)
 
         got = hcc.set_charset(content, encoding_from_xsl)
@@ -648,14 +617,13 @@ class TestHTMLContentConverter(XMLTester):
         '''Check that default charset is set, 2
         encoding_from_xsl = '', no charset in html header
         '''
-        languageguesser = text_cat.Classifier()
         content = (
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
             '<body></body></html>')
         encoding_from_xsl = ''
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html', languageguesser,
+            'ugga.html',
             content=content, encoding_from_xsl=encoding_from_xsl)
 
         got = hcc.set_charset(content, encoding_from_xsl)
@@ -665,14 +633,13 @@ class TestHTMLContentConverter(XMLTester):
     def test_set_charset_3(self):
         '''encoding_from_xsl = 'iso-8859-1', no charset in html header
         '''
-        languageguesser = text_cat.Classifier()
         content = (
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
             '<body></body></html>')
         encoding_from_xsl = 'iso-8859-1'
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html', languageguesser,
+            'ugga.html',
             content=content, encoding_from_xsl=encoding_from_xsl)
 
         got = hcc.set_charset(content, encoding_from_xsl)
@@ -683,7 +650,6 @@ class TestHTMLContentConverter(XMLTester):
         '''Check that encoding_from_xsl overrides meta charset
         encoding_from_xsl = 'iso-8859-1', charset in html header = utf-8
         '''
-        languageguesser = text_cat.Classifier()
         content = (
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
             '<head><meta http-equiv="Content-type" content="text/html; '
@@ -692,7 +658,7 @@ class TestHTMLContentConverter(XMLTester):
         encoding_from_xsl = 'iso-8859-1'
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html', languageguesser,
+            'ugga.html',
             content=content, encoding_from_xsl=encoding_from_xsl)
 
         got = hcc.set_charset(content, encoding_from_xsl)
@@ -702,7 +668,6 @@ class TestHTMLContentConverter(XMLTester):
     def test_set_charset_5(self):
         '''encoding_from_xsl = None, charset in html header = iso-8859-1
         '''
-        languageguesser = text_cat.Classifier()
         content = (
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
             '<head><meta http-equiv="Content-type" content="text/html; '
@@ -711,7 +676,7 @@ class TestHTMLContentConverter(XMLTester):
         encoding_from_xsl = None
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html', languageguesser,
+            'ugga.html',
             content=content, encoding_from_xsl=encoding_from_xsl)
 
         got = hcc.set_charset(content, encoding_from_xsl)
@@ -721,7 +686,6 @@ class TestHTMLContentConverter(XMLTester):
     def test_set_charset_6(self):
         '''encoding_from_xsl = '', charset in html header = iso-8859-1
         '''
-        languageguesser = text_cat.Classifier()
         content = (
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
             '<head><meta http-equiv="Content-type" content="text/html; '
@@ -730,7 +694,7 @@ class TestHTMLContentConverter(XMLTester):
         encoding_from_xsl = ''
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html', languageguesser,
+            'ugga.html',
             content=content, encoding_from_xsl=encoding_from_xsl)
 
         got = hcc.set_charset(content, encoding_from_xsl)
@@ -741,7 +705,6 @@ class TestHTMLContentConverter(XMLTester):
         '''Test if set_charset works with ' as quote mark around charset
         encoding_from_xsl = '', charset in html header = iso-8859-1
         '''
-        languageguesser = text_cat.Classifier()
         content = (
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
             '<head><meta http-equiv="Content-type" content=\'text/html; '
@@ -750,7 +713,7 @@ class TestHTMLContentConverter(XMLTester):
         encoding_from_xsl = ''
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html', languageguesser,
+            'ugga.html',
             content=content, encoding_from_xsl=encoding_from_xsl)
 
         got = hcc.set_charset(content, encoding_from_xsl)
@@ -762,7 +725,6 @@ class TestHTMLContentConverter(XMLTester):
         " is found later
         encoding_from_xsl = '', charset in html header = iso-8859-1
         '''
-        languageguesser = text_cat.Classifier()
         content = (
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
             '<head><meta http-equiv="Content-type" content=\'text/html; '
@@ -772,7 +734,7 @@ class TestHTMLContentConverter(XMLTester):
         encoding_from_xsl = ''
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html', languageguesser,
+            'ugga.html',
             content=content, encoding_from_xsl=encoding_from_xsl)
 
         got = hcc.set_charset(content, encoding_from_xsl)
@@ -784,7 +746,6 @@ class TestHTMLContentConverter(XMLTester):
         when ' is found later
         encoding_from_xsl = '', charset in html header = iso-8859-1
         '''
-        languageguesser = text_cat.Classifier()
         content = (
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
             '<head><meta http-equiv="Content-type" content="text/html; '
@@ -794,7 +755,7 @@ class TestHTMLContentConverter(XMLTester):
         encoding_from_xsl = ''
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html', languageguesser,
+            'ugga.html',
             content=content, encoding_from_xsl=encoding_from_xsl)
 
         got = hcc.set_charset(content, encoding_from_xsl)
@@ -802,9 +763,8 @@ class TestHTMLContentConverter(XMLTester):
         self.assertEqual(got, 'windows-1252')
 
     def test_center2div(self):
-        languageguesser = text_cat.Classifier()
         got = converter.HTMLContentConverter(
-            'center.html', languageguesser,
+            'center.html',
             content='<html><body><center><span class="">b</span></center></html>').tidy()
 
         want = html5parser.document_fromstring(
@@ -897,8 +857,7 @@ class TestHTMLContentConverter(XMLTester):
 class TestRTFConverter(XMLTester):
     def setUp(self):
         self.testrtf = converter.RTFConverter(
-            os.path.join(here, 'converter_data/folkemote.rtf'),
-            'languageguesser')
+            os.path.join(here, 'converter_data/folkemote.rtf'))
 
     def test_convert2intermediate(self):
         got = self.testrtf.convert2intermediate()
