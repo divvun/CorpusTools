@@ -248,7 +248,7 @@ class SentenceDivider:
         o_rel_path = o_path.replace(os.getcwd()+'/', '', 1)
         try:
             os.makedirs(o_rel_path)
-        except OSError, e:
+        except OSError as e:
             if e.errno != errno.EEXIST:
                 raise
         f = open(outfile, 'w')
