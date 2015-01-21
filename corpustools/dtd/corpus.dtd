@@ -1,0 +1,284 @@
+<!-- corpus.dtd -->
+<!-- $Id:$ -->
+
+<!--+ Common attributes
+    |    Every element has an xml:lang attribute.
+    +-->
+<!ENTITY % common.att '
+  id CDATA #IMPLIED
+  xml:lang NMTOKEN #IMPLIED'>
+
+<!--+ Error entity
+    |    All error types listed here
+    +-->
+<!ENTITY % error.ent "error | errorort | errorortreal | errorlex | errormorphsyn | errorsyn | errorlang" >
+
+<!--+ p continuation
+    |    Every p element can contain the following:
+    +-->
+<!ENTITY % p_cont '
+#PCDATA | em | hyph | %error.ent; | span | list'>
+
+<!-- =============================================================== -->
+<!-- Document -->
+<!-- =============================================================== -->
+<!ELEMENT document (header, body)>
+<!ATTLIST document
+  %common.att; >
+
+
+<!ELEMENT header (title,
+                  genre+,
+                  author+,
+                  translator*,
+                  translated_from*,
+                  year?,
+                  place?,
+                  publChannel?,
+                  collection?,
+                  wordcount?,
+                  ocr?,
+                  availability?,
+                  submitter?,
+                  multilingual?,
+                  origFileName?,
+                  parallel_text*,
+                  metadata,
+                  version?,
+                  note? )>
+
+<!ELEMENT title (#PCDATA)>
+
+<!ELEMENT translated_from EMPTY>
+<!ATTLIST translated_from
+%common.att; >
+
+
+<!-- scheme="dewey" code="44444" -->
+<!-- scheme should be dewey or uit or whatever -->
+<!ELEMENT genre EMPTY >
+<!ATTLIST genre
+            scheme  CDATA         #IMPLIED
+            code    CDATA         #IMPLIED
+    >
+
+<!ELEMENT author (person | unknown)>
+<!ELEMENT translator (person | unknown)>
+
+<!ELEMENT person EMPTY >
+<!ATTLIST person
+            firstname CDATA         #REQUIRED
+            lastname  CDATA         #REQUIRED
+            born      CDATA         #IMPLIED
+            sex       (m|f|unknown)   "unknown"
+            nationality CDATA  #IMPLIED
+    >
+
+<!ELEMENT unknown EMPTY>
+
+<!-- Whether the document is part of some journal, -->
+<!-- book or article collection -->
+<!ELEMENT collection (#PCDATA) >
+
+<!ELEMENT year  (#PCDATA)>
+<!ELEMENT place (#PCDATA)>
+<!ELEMENT publChannel (publication|unpublished)>
+<!ELEMENT publication (publisher, ISSN?, ISBN? )> <!-- etc -->
+
+<!ELEMENT unpublished EMPTY>
+<!ELEMENT publisher (#PCDATA)>
+<!ELEMENT ISBN (#PCDATA)>
+<!ELEMENT ISSN (#PCDATA)>
+
+<!ELEMENT wordcount (#PCDATA)>
+<!ELEMENT ocr (#PCDATA)>
+
+
+<!-- License information -->
+<!ELEMENT availability (free|license)>
+<!ELEMENT free EMPTY>
+<!ELEMENT license EMPTY>
+<!ATTLIST license
+    type  (standard|other) "standard"
+    contract_id CDATA #IMPLIED
+>
+
+<!-- indicates whether all relevant metadata is filled -->
+<!ELEMENT metadata (complete|uncomplete)>
+<!ELEMENT complete EMPTY>
+<!ELEMENT uncomplete EMPTY>
+
+<!-- The original name of the file -->
+<!-- The name may change during the conversion, -->
+<!-- although not yet implemented -->
+<!ELEMENT origFileName (#PCDATA)>
+
+<!ELEMENT parallel_text EMPTY>
+<!ATTLIST parallel_text
+           location CDATA #REQUIRED
+           %common.att; >
+
+<!-- List of languages that appear in the documente -->
+<!-- The list is used in language recognition -->
+<!ELEMENT multilingual (language)*>
+<!ELEMENT language EMPTY>
+<!ATTLIST language
+%common.att; >
+
+<!-- Version information of the different conversion tools -->
+<!ELEMENT version (#PCDATA)>
+
+<!-- The person who stored the file in the database -->
+<!-- In case of web-upload, the one who did the upload -->
+<!ELEMENT submitter EMPTY >
+<!ATTLIST submitter
+            name   CDATA     #REQUIRED
+            email  CDATA     #REQUIRED>
+
+<!ELEMENT note (#PCDATA) >
+
+<!ENTITY % text.ent "list|table|p|pre">
+<!ELEMENT body (section|(%text.ent;)|skip|later)*>
+<!ELEMENT skip (section|(%text.ent;))*>
+<!ELEMENT later (section|skip|(%text.ent;))*>
+<!ELEMENT section (section|(%text.ent;))*>
+
+<!ELEMENT list (p*) > <!-- type="listitem" -->
+<!ELEMENT table (row*)>
+<!ELEMENT row (p+)> <!-- type="tablecell" -->
+
+<!ELEMENT p ( %p_cont; | s )* >
+<!ATTLIST p type ( title | listitem | text | tablecell ) "text"
+  %common.att; >
+
+<!ELEMENT em (#PCDATA | hyph | span | %error.ent; )* >
+<!ATTLIST em type ( bold | italic | underline | delimited ) "italic" >
+
+<!ELEMENT span (#PCDATA | em | hyph | %error.ent; )* >
+<!ATTLIST span
+  type ( quote ) "quote"
+  %common.att; >
+
+<!ELEMENT hyph EMPTY>
+<!ELEMENT pre (#PCDATA)>
+
+<!-- Error markup -->
+<!-- this is <error correct="text">tekst</error> ... -->
+<!-- Errors can be nested -->
+
+<!-- Unclassified errors: -->
+<!ELEMENT error (#PCDATA | %error.ent; | hyph | em)*>
+<!ATTLIST error correct CDATA #IMPLIED >
+
+<!ELEMENT errorlang (#PCDATA | %error.ent; | hyph | em)*>
+<!ATTLIST errorlang correct CDATA #IMPLIED >
+
+<!-- Orthographical errors, non-words: -->
+<!ELEMENT errorort (#PCDATA | hyph | errorlex)*>
+<!ATTLIST errorort errorinfo CDATA #IMPLIED >
+<!ATTLIST errorort correct CDATA #IMPLIED >
+
+<!-- Orthographical errors, real words: -->
+<!ELEMENT errorortreal (#PCDATA | hyph | errorlex | errorort | span)*>
+<!ATTLIST errorortreal errorinfo CDATA #IMPLIED >
+<!ATTLIST errorortreal correct CDATA #IMPLIED >
+
+<!--
+<!ATTLIST errorort
+	pos ( noun | verb | adj | adv | num | interj | pp | cc | cs | pers | refl | dem | resip | indef | pcle | prop | acr | abbr | x ) "noun"
+	errtype ( a | á | conc | svow | vowc | vow | con | mono | diph | lime | meta | cap | min | suf | mix | ascii | cmp ) "svow"
+	teacher ( yes | no ) "no"
+	correct CDATA #IMPLIED
+>
+-->
+
+<!-- Lexical errors: -->
+<!ELEMENT errorlex (#PCDATA | error | errorort | errorortreal | errormorphsyn | hyph )*>
+<!ATTLIST errorlex correct CDATA #IMPLIED >
+<!ATTLIST errorlex errorinfo CDATA #IMPLIED >
+
+<!-- <!ATTLIST errorlex -->
+<!--           correct CDATA #IMPLIED -->
+<!--           pos ( noun | verb | adj | adv | num | interj | pp | cc | cs | pers | -->
+<!--                 refl | dem | resip | indef | pcle | prop | x ) -->
+<!--       origpos ( noun | verb | adj | adv | num | interj | pp | cc | cs | pers | -->
+<!--                 refl | dem | resip | indef | pcle | prop | foreign | x ) -->
+<!--           errtype ( der | w | x  ) -->
+<!--           teacher ( yes | no ) -->
+<!--           > -->
+
+<!-- Morphosyntactic errors: -->
+<!ELEMENT errormorphsyn ( %p_cont; )*>
+<!ATTLIST errormorphsyn correct CDATA #IMPLIED >
+<!ATTLIST errormorphsyn errorinfo CDATA #IMPLIED >
+
+<!-- <!ATTLIST errormorphsyn -->
+<!--           correct CDATA #IMPLIED -->
+<!--           pos ( noun | verb | adj | adv | num | interj | pp | cc | cs | pers | -->
+<!--                 refl | dem | resip | indef | pcle | prop | x ) -->
+<!--           const ( subj | obj | advl | v | spred | opred  | pcle  | interj | app | -->
+<!--                   conj | pph | attr | x ) -->
+<!--           cat ( nomsg | nompl | gensg | genpl | illsg | illpl | locsg | locpl | -->
+<!--                 comsg | compl | ess | sg1prt | sg2prt | sg3prt | du1prt | du2prt | -->
+<!--                 du3prt | pl1prt | pl2prt | pl3prt | sg1prs | sg2prs | sg3prs | -->
+<!--                 du1prs | du2prs | du3prs | pl1prs | pl2prs | pl3prs | attr | -->
+<!--                 pred | word | comp | superl | cmp | imprt | pot | infinite | -->
+<!--                 cond | conneg | ger | vgen | x ) -->
+<!--           orig ( nomsg | nompl | gensg | genpl | illsg | illpl | locsg | locpl | -->
+<!--                  comsg | compl | ess | sg1prt | sg2prt | sg3prt | du1prt | -->
+<!--                  du2prt | du3prt | pl1prt | pl2prt | pl3prt | sg1prs | sg2prs | -->
+<!--                  sg3prs | du1prs | du2prs | du3prs | pl1prs | pl2prs | pl3prs | -->
+<!--                  attr | pred | word | comp | superl | cmp | imprt | pot | -->
+<!--                  infinite | cond | conneg | ger | vgen | x ) -->
+<!--           errtype ( agr | case | tense | mode | nump | number | x  ) -->
+<!--           teacher ( yes | no ) -->
+<!--           > -->
+
+<!-- Syntactic errors: -->
+<!ELEMENT errorsyn ( %p_cont; )*>
+<!ATTLIST errorsyn correct CDATA #IMPLIED >
+<!ATTLIST errorsyn errorinfo CDATA #IMPLIED >
+<!-- <!ATTLIST errorsyn -->
+<!--           correct CDATA #IMPLIED -->
+<!--           pos ( noun | verb | adj | adv | num | interj | pp | cc | cs | pers | -->
+<!--                 refl | dem | resip | indef | pcle | prop | punct | x ) -->
+<!--           errtype ( wo | pph | redun | missing | cmp  | x ) -->
+<!--           teacher ( yes | no ) -->
+<!--           > -->
+
+<!-- Analyzed corpus -->
+
+<!ELEMENT s (#PCDATA | w)*>
+<!ATTLIST s
+  %common.att; >
+
+<!ELEMENT w (reading*)>
+<!ATTLIST w
+          form CDATA #REQUIRED
+		  %common.att; >
+
+<!ELEMENT reading EMPTY>
+<!ATTLIST reading
+    lemma CDATA #IMPLIED
+    Wordclass CDATA #IMPLIED
+	Subclass CDATA #IMPLIED
+	Number CDATA #IMPLIED
+	Case CDATA #IMPLIED
+	Attributive CDATA #IMPLIED
+	Grade CDATA #IMPLIED
+	Possessive CDATA #IMPLIED
+	Tense CDATA #IMPLIED
+	Mood CDATA #IMPLIED
+	Person-Number CDATA #IMPLIED
+	Transitivity CDATA #IMPLIED
+	Polarity CDATA #IMPLIED
+	Diathesis CDATA #IMPLIED
+	Infinite CDATA #IMPLIED
+	Clitic CDATA #IMPLIED
+	Punctuation CDATA #IMPLIED
+	Nametype CDATA #IMPLIED
+	Numeraltype CDATA #IMPLIED
+	Syntax CDATA #IMPLIED
+	Derivation CDATA #IMPLIED
+	DerivedRoot CDATA #IMPLIED
+>

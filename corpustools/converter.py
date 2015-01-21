@@ -90,7 +90,7 @@ class Converter(object):
 
     @staticmethod
     def get_dtd_location():
-        return os.path.join(os.getenv('GTHOME'), 'gt/dtd/corpus.dtd')
+        return os.path.join(here, 'dtd/corpus.dtd')
 
     def validate_complete(self, complete):
         """Validate the complete document
