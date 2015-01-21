@@ -20,7 +20,6 @@
 #   Copyright 2013-2014 Børre Gaup <borre.gaup@uit.no>
 #
 
-import inspect
 from lxml import etree
 import StringIO
 import os
