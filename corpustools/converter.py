@@ -31,7 +31,6 @@ import distutils.spawn
 import codecs
 import multiprocessing
 import argparse
-from pkg_resources import resource_string, resource_filename
 
 import lxml.etree as etree
 import lxml.html.clean as clean
@@ -46,6 +45,7 @@ import errormarkup
 import ccat
 import argparse_version
 import util
+import xslsetter
 
 
 here = os.path.dirname(__file__)
@@ -439,7 +439,7 @@ class SVGConverter(Converter):
         super(SVGConverter, self).__init__(filename,
                                            write_intermediate, test,
                                            encoding_from_xsl)
-        self.converter_xsl = resource_string(__name__, 'xslt/svg2corpus.xsl')
+        self.converter_xsl = os.path.join(here, 'xslt/svg2corpus.xsl')
 
     def convert2intermediate(self):
         """
@@ -447,7 +447,7 @@ class SVGConverter(Converter):
         metadata
         The resulting xml is stored in intermediate
         """
-        svgXsltRoot = etree.fromstring(self.converter_xsl)
+        svgXsltRoot = etree.parse(self.converter_xsl)
         transform = etree.XSLT(svgXsltRoot)
         doc = etree.parse(self.orig)
         intermediate = transform(doc)
@@ -1039,7 +1039,7 @@ class HTMLContentConverter(Converter):
 
         self.soup = html5parser.document_fromstring(superclean)
 
-        self.converter_xsl = resource_string(__name__, 'xslt/xhtml2corpus.xsl')
+        self.converter_xsl = os.path.join(here, 'xslt/xhtml2corpus.xsl')
 
     def set_charset(self, content, encoding_from_xsl):
         charset = 'utf-8'
@@ -1241,7 +1241,7 @@ class HTMLContentConverter(Converter):
         metadata
         The resulting xml is stored in intermediate
         """
-        html_xslt_root = etree.fromstring(self.converter_xsl)
+        html_xslt_root = etree.parse(self.converter_xsl)
         transform = etree.XSLT(html_xslt_root)
 
         intermediate = ''
@@ -1940,8 +1940,8 @@ class XslMaker(object):
     """
 
     def __init__(self, xslfile):
-        preprocessXsl = etree.fromstring(
-            resource_string(__name__, 'xslt/preprocxsl.xsl'))
+        preprocessXsl = etree.parse(
+            os.path.join(here, 'xslt/preprocxsl.xsl'))
         preprocessXslTransformer = etree.XSLT(preprocessXsl)
 
         self.filename = xslfile
@@ -1958,8 +1958,8 @@ class XslMaker(object):
             raise ConversionException("Syntax error in {}".format(
                 self.filename))
 
-        common_xsl_path = resource_filename(
-            __name__, 'xslt/common.xsl').replace(' ', '%20')
+        common_xsl_path = os.path.join(
+            here, 'xslt/common.xsl').replace(' ', '%20')
         self.finalXsl = preprocessXslTransformer(
             filexsl,
             commonxsl=etree.XSLT.strparam('file://{}'.format(common_xsl_path)))
@@ -2153,10 +2153,9 @@ class ConverterManager(object):
                 if os.path.isfile(xsl_file):
                     self.FILES.append(xsl_file)
                 else:
-                    xsl_stream = open(xsl_file, 'w')
-                    xsl_stream.write(
-                        resource_string(__name__, 'xslt/XSL-template.xsl'))
-                    xsl_stream.close()
+                    metadata = xslsetter.MetadataHandler(xsl_file,
+                                                         create=True)
+                    metadata.write()
                     print "Fill in meta info in", xsl_file, \
                         ', then run this command again'
                     sys.exit(1)
