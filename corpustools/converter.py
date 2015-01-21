@@ -84,6 +84,7 @@ class Converter(object):
         self.dependencies = [self.get_orig(), self.get_xsl()]
         self._write_intermediate = write_intermediate
         self.xm = xslsetter.MetadataHandler(self.get_xsl(), create=True)
+        self.fix_lang_genre_xsl()
 
     def convert2intermediate(self):
         raise NotImplementedError(
@@ -256,64 +257,29 @@ class Converter(object):
     def fix_lang_genre_xsl(self):
         """Set the mainlang and genre variables in the xsl file, if possible
         """
-        try:
-            transform = u'{http://www.w3.org/1999/XSL/Transform}'
-            mainlang = u'variable[@name="mainlang"]'
-            xslgenre = 'variable[@name="genre"]'
-            xsltree = etree.parse(self.get_xsl())
+        origname = self.get_orig().replace(self.get_corpusdir(), '')
+        if origname.startswith('/orig'):
+            to_write = False
+            parts = origname[1:].split('/')
 
-            root = xsltree.getroot()
-            origname = self.get_orig().replace(self.get_corpusdir(), '')
-            if origname.startswith('/orig'):
-                to_write = False
-                parts = origname[1:].split('/')
+            lang = self.xm.get_variable('mainlang')
 
-                lang = root.find(transform +
-                                 mainlang).attrib['select'].replace("'", "")
+            if lang == "":
+                to_write = True
+                lang = parts[1]
+                self.xm.set_variable('mainlang', lang)
 
-                if lang == "":
-                    to_write = True
-                    lang = parts[1]
-                    root.find(transform +
-                              mainlang).attrib['select'] = "'" + lang + "'"
+            genre = self.xm.get_variable('genre')
 
-                genre = root.find(transform +
-                                  xslgenre).attrib['select'].replace("'", "")
-
-                if genre == "" or genre not in ['admin', 'bible', 'facta',
-                                                'ficti', 'news']:
-                    to_write = True
-                    if parts[2] in ['admin', 'bible', 'facta', 'ficti',
-                                    'news']:
-                        genre = parts[parts.index('orig') + 2]
-                        root.find(transform +
-                                  xslgenre).attrib['select'] = \
-                            "'" + genre + "'"
-                if to_write:
-                    xsltree.write(
-                        self.get_xsl(), encoding="utf-8", xml_declaration=True)
-
-        except etree.XMLSyntaxError as e:
-            logfile = open('{}.log'.format(self.orig), 'w')
-
-            logfile.write('Error at: {}'.format(str(ccat.lineno())))
-            for entry in e.error_log:
-                logfile.write('\n')
-                logfile.write(str(entry.line))
-                logfile.write(':')
-                logfile.write(str(entry.column))
-                logfile.write(" ")
-
-                try:
-                    logfile.write(entry.message)
-                except ValueError:
-                    logfile.write(entry.message.encode('latin1'))
-
-                logfile.write('\n')
-            logfile.close()
-            raise ConversionException(
-                u"XSL syntax error. More info in the log file: " +
-                self.orig + u".log")
+            if genre == "" or genre not in ['admin', 'bible', 'facta',
+                                            'ficti', 'news']:
+                to_write = True
+                if parts[2] in ['admin', 'bible', 'facta', 'ficti',
+                                'news']:
+                    genre = parts[parts.index('orig') + 2]
+                    self.xm.set_variable('genre', genre)
+            if to_write:
+                self.xm.write_file()
 
     def set_converted_name(self):
         """Set the name of the converted file
