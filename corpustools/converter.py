@@ -76,8 +76,7 @@ class Converter(object):
     """
     Class to take care of data common to all Converter classes
     """
-    def __init__(self, filename, write_intermediate=False,
-                 test=False):
+    def __init__(self, filename, write_intermediate=False):
         self.orig = os.path.abspath(filename)
         self.set_corpusdir()
         self.set_converted_name()
@@ -301,10 +300,9 @@ class AvvirConverter(Converter):
     """
 
 
-    def __init__(self, filename, write_intermediate=False,
-                 test=False):
+    def __init__(self, filename, write_intermediate=False):
         super(AvvirConverter, self).__init__(filename,
-                                             write_intermediate, test)
+                                             write_intermediate)
 
     def convert2intermediate(self):
         """
@@ -390,10 +388,9 @@ class SVGConverter(Converter):
     Class to convert SVG files to the giellatekno xml format
     """
 
-    def __init__(self, filename, write_intermediate=False,
-                 test=False):
+    def __init__(self, filename, write_intermediate=False):
         super(SVGConverter, self).__init__(filename,
-                                           write_intermediate, test)
+                                           write_intermediate)
         self.converter_xsl = os.path.join(here, 'xslt/svg2corpus.xsl')
 
     def convert2intermediate(self):
@@ -416,10 +413,9 @@ class PlaintextConverter(Converter):
     giellatekno xml format
     """
 
-    def __init__(self, filename, write_intermediate=False,
-                 test=False):
+    def __init__(self, filename, write_intermediate=False):
         super(PlaintextConverter, self).__init__(filename,
-                                                 write_intermediate, test)
+                                                 write_intermediate)
 
     def to_unicode(self):
         """
@@ -531,10 +527,9 @@ class PlaintextConverter(Converter):
 class PDFConverter(Converter):
     '''Convert PDF documents to plaintext, then to corpus xml
     '''
-    def __init__(self, filename, write_intermediate=False,
-                 test=False):
+    def __init__(self, filename, write_intermediate=False):
         super(PDFConverter, self).__init__(filename,
-                                           write_intermediate, test)
+                                           write_intermediate)
 
     def replace_ligatures(self):
         """
@@ -855,10 +850,9 @@ class BiblexmlConverter(Converter):
     """
     Class to convert bible xml files to the giellatekno xml format
     """
-    def __init__(self, filename, write_intermediate=False,
-                 test=False):
+    def __init__(self, filename, write_intermediate=False):
         super(BiblexmlConverter, self).__init__(filename,
-                                                write_intermediate, test)
+                                                write_intermediate)
 
     def convert2intermediate(self):
         """
@@ -940,12 +934,11 @@ class HTMLContentConverter(Converter):
     content is a string
     """
 
-    def __init__(self, filename, write_intermediate=False,
-                 test=False, content=None):
+    def __init__(self, filename, write_intermediate=False, content=None):
         '''Clean up content, then convert it to xhtml using html5parser
         '''
         super(HTMLContentConverter, self).__init__(filename,
-                                             write_intermediate, test)
+                                             write_intermediate)
 
         # remove cruft from svenskakyrkan.se documents
         content = content.replace('//<script', '<script')
@@ -1246,8 +1239,7 @@ class HTMLContentConverter(Converter):
 
 
 class HTMLConverter(HTMLContentConverter):
-    def __init__(self, filename, write_intermediate=False,
-                 test=False):
+    def __init__(self, filename, write_intermediate=False):
         f = open(filename)
         super(HTMLConverter, self).__init__(filename,
                                             content=f.read())
@@ -1258,8 +1250,7 @@ class RTFConverter(HTMLContentConverter):
     """
     Class to convert html documents to the giellatekno xml format
     """
-    def __init__(self, filename, write_intermediate=False,
-                 test=False):
+    def __init__(self, filename, write_intermediate=False):
         doc = open(filename, "rb")
         content = doc.read()
         try:
@@ -1277,8 +1268,7 @@ class RTFConverter(HTMLContentConverter):
 class DocxConverter(HTMLContentConverter):
     '''Class to convert docx documents to the giellatekno xml format
     '''
-    def __init__(self, filename, write_intermediate=False,
-                 test=False):
+    def __init__(self, filename, write_intermediate=False):
 
         HTMLContentConverter.__init__(self, filename,
                                       content=Docx2Html(path=filename).parsed)
@@ -1289,8 +1279,7 @@ class DocConverter(HTMLContentConverter):
     """
     Class to convert Microsoft Word documents to the giellatekno xml format
     """
-    def __init__(self, filename, write_intermediate=False,
-                 test=False):
+    def __init__(self, filename, write_intermediate=False):
         command = ['wvHtml', filename, '-']
         output = run_process(command, filename)
 
