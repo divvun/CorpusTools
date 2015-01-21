@@ -83,6 +83,7 @@ class Converter(object):
         self.set_converted_name()
         self.dependencies = [self.get_orig(), self.get_xsl()]
         self._write_intermediate = write_intermediate
+        self.xm = xslsetter.MetadataHandler(self.get_xsl(), create=True)
 
     def convert2intermediate(self):
         raise NotImplementedError(
@@ -136,13 +137,13 @@ class Converter(object):
             return None
 
     def transform_to_complete(self):
-        xm = xslsetter.MetadataHandler(self.get_xsl())
+
         intermediate = self.convert2intermediate()
 
         self.maybe_write_intermediate(intermediate)
 
         try:
-            complete = xm.get_transformer()(intermediate)
+            complete = self.xm.get_transformer()(intermediate)
 
             return complete.getroot()
         except etree.XSLTApplyError as (e):
