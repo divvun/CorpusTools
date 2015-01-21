@@ -82,7 +82,7 @@ class Converter(object):
         self.set_converted_name()
         self.dependencies = [self.get_orig(), self.get_xsl()]
         self._write_intermediate = write_intermediate
-        self.xm = xslsetter.MetadataHandler(self.get_xsl(), create=True)
+        self.md = xslsetter.MetadataHandler(self.get_xsl(), create=True)
         self.fix_lang_genre_xsl()
 
     def convert2intermediate(self):
@@ -133,7 +133,8 @@ class Converter(object):
         self.maybe_write_intermediate(intermediate)
 
         try:
-            complete = self.xm.get_transformer()(intermediate)
+            xm = XslMaker(self.get_xsl())
+            complete = xm.get_transformer()(intermediate)
 
             return complete.getroot()
         except etree.XSLTApplyError as (e):
@@ -261,24 +262,21 @@ class Converter(object):
             to_write = False
             parts = origname[1:].split('/')
 
-            lang = self.xm.get_variable('mainlang')
+            lang = self.md.get_variable('mainlang')
 
             if lang == "":
                 to_write = True
                 lang = parts[1]
-                self.xm.set_variable('mainlang', lang)
+                self.md.set_variable('mainlang', lang)
 
-            genre = self.xm.get_variable('genre')
+            genre = self.md.get_variable('genre')
 
-            if genre == "" or genre not in ['admin', 'bible', 'facta',
-                                            'ficti', 'news']:
+            if genre == "" and parts[2] != os.path.basename(self.get_orig()):
                 to_write = True
-                if parts[2] in ['admin', 'bible', 'facta', 'ficti',
-                                'news']:
-                    genre = parts[parts.index('orig') + 2]
-                    self.xm.set_variable('genre', genre)
+                genre = parts[2]
+                self.md.set_variable('genre', genre)
             if to_write:
-                self.xm.write_file()
+                self.md.write_file()
 
     def set_converted_name(self):
         """Set the name of the converted file
@@ -1009,7 +1007,7 @@ class HTMLContentConverter(Converter):
     def set_charset(self, content):
         charset = 'utf-8'
 
-        encoding_from_xsl = self.xm.get_variable('text_encoding')
+        encoding_from_xsl = self.md.get_variable('text_encoding')
 
         if encoding_from_xsl == '' or encoding_from_xsl is None:
             cg = content.find('charset=')
@@ -1890,6 +1888,59 @@ class DocumentFixer(object):
                                                  attributes=paragraph.attrib))
 
                 paragraph.getparent().remove(paragraph)
+
+
+class XslMaker(object):
+    """
+    To convert the intermediate xml to a fullfledged  giellatekno document
+    a combination of three xsl files + the intermediate files is needed
+    This class makes the xsl file
+    """
+
+    def __init__(self, xslfile):
+        preprocessXsl = etree.parse(
+            os.path.join(here, 'xslt/preprocxsl.xsl'))
+        preprocessXslTransformer = etree.XSLT(preprocessXsl)
+
+        self.filename = xslfile
+        try:
+            filexsl = etree.parse(xslfile)
+        except etree.XMLSyntaxError as e:
+            logfile = open('{}.log'.format(self.filename), 'w')
+
+            logfile.write('Error at: {}'.format(str(ccat.lineno())))
+            for entry in e.error_log:
+                logfile.write('{}\n'.format(str(entry)))
+
+            logfile.close()
+            raise ConversionException("Syntax error in {}".format(
+                self.filename))
+
+        common_xsl_path = os.path.join(
+            here, 'xslt/common.xsl').replace(' ', '%20')
+        self.finalXsl = preprocessXslTransformer(
+            filexsl,
+            commonxsl=etree.XSLT.strparam('file://{}'.format(common_xsl_path)))
+
+    def get_xsl(self):
+        return self.finalXsl
+
+    def get_transformer(self):
+        xsltRoot = self.get_xsl()
+        try:
+            transform = etree.XSLT(xsltRoot)
+            return transform
+        except etree.XSLTParseError as (e):
+            logfile = open(self.filename.replace('.xsl', '') + '.log', 'w')
+
+            logfile.write('Error at: {}\n'.format(str(ccat.lineno())))
+            logfile.write('Invalid XML in {}\n'.format(self.filename))
+            for entry in e.error_log:
+                logfile.write('{}\n'.format(str(entry)))
+
+            logfile.close()
+            raise ConversionException("Invalid XML in {}".format(
+                self.filename))
 
 
 class LanguageDetector(object):

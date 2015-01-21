@@ -32,23 +32,17 @@ class MetadataHandler(object):
         if not os.path.exists(filename):
             if not create:
                 raise util.ArgumentError("{} does not exist!".format(filename))
+
+            preprocessXsl = etree.parse(os.path.join(here,
+                                                     'xslt/preprocxsl.xsl'))
+            preprocessXslTransformer = etree.XSLT(preprocessXsl)
             filexsl = etree.parse(os.path.join(here, 'xslt/XSL-template.xsl'))
+            self.tree = preprocessXslTransformer(
+                filexsl,
+                commonxsl=etree.XSLT.strparam(
+                    'file://' + os.path.join(here, 'xslt/common.xsl')))
         else:
-            filexsl = etree.parse(filename)
-
-        self.tree = self.make_tree(filexsl)
-
-    def make_tree(self, filexsl):
-        preprocessXsl = etree.parse(os.path.join(here,
-                                                 'xslt/preprocxsl.xsl'))
-        common_xsl_path = os.path.join(
-            here, 'xslt/common.xsl').replace(' ', '%20')
-        preprocessXslTransformer = etree.XSLT(preprocessXsl)
-
-        return preprocessXslTransformer(
-            filexsl,
-            commonxsl=etree.XSLT.strparam(
-                'file://{}'.format(common_xsl_path)))
+            self.tree = etree.parse(filename)
 
     def _get_variable_elt(self, key):
         return self.tree.getroot().find(
@@ -110,23 +104,3 @@ class MetadataHandler(object):
             print 'cannot write', self.filename
             print e
             sys.exit(254)
-
-    def get_xsl(self):
-        return self.tree
-
-    def get_transformer(self):
-        try:
-            transform = etree.XSLT(self.tree)
-            return transform
-        except etree.XSLTParseError as (e):
-            logfile = open(self.filename.replace('.xsl', '') + '.log', 'w')
-
-            logfile.write('Error at: {}\n'.format(str(util.lineno())))
-            logfile.write('Invalid XSLT in {}\n'.format(self.filename))
-            for entry in e.error_log:
-                logfile.write('{}\n'.format(str(entry)))
-
-            logfile.close()
-            raise XsltException("Invalid XML in {}".format(
-                self.filename))
-
