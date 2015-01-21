@@ -67,7 +67,11 @@ class MetadataHandler(object):
 
     def get_variable(self, key):
         variable = self._get_variable_elt(key)
-        return variable.attrib['select'].replace("'", "")
+        if variable is not None:
+            value = variable.attrib['select']
+            if value is not None:
+                return value.replace("'", "")
+        return None
 
     def get_parallel_texts(self):
         parallels = self._get_variable_elt("parallels")

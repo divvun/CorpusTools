@@ -29,6 +29,7 @@
     <!-- the DTD to avoid errors for old .xsl files.            -->
     <xsl:variable name="ocr" select="''"/>
     <xsl:variable name="note" select="''"/>
+    <xsl:variable name="text_encoding" select="''"/>
 
     <xsl:variable name="mlangs">
     </xsl:variable>
