@@ -102,6 +102,11 @@ def get_preprocess_command(lang):
     return [preprocess_script] + args
 
 
+def lineno():
+    """Returns the current line number in our program."""
+    return inspect.currentframe().f_back.f_lineno
+
+
 def print_element(element, level, indent, out):
     '''Format an html document
 

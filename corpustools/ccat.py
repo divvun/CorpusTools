@@ -30,10 +30,6 @@ import argparse
 import argparse_version
 
 
-def lineno():
-    """Returns the current line number in our program."""
-    return inspect.currentframe().f_back.f_lineno
-
 
 class XMLPrinter:
     """This is a class to convert giellatekno xml formatted files to plain text

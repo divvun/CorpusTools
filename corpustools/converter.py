@@ -102,7 +102,7 @@ class Converter(object):
             # print etree.tostring(complete)
             logfile = open('{}.log'.format(self.get_orig()), 'w')
 
-            logfile.write('Error at: {}'.format(str(ccat.lineno())))
+            logfile.write('Error at: {}'.format(str(util.lineno())))
             for entry in dtd.error_log:
                 logfile.write('\n')
                 logfile.write(str(entry))
@@ -139,7 +139,7 @@ class Converter(object):
         except etree.XSLTApplyError as (e):
             logfile = open('{}.log'.format(self.orig), 'w')
 
-            logfile.write('Error at: {}'.format(str(ccat.lineno())))
+            logfile.write('Error at: {}'.format(str(util.lineno())))
             for entry in e.error_log:
                 logfile.write(str(entry))
                 logfile.write('\n')
@@ -157,7 +157,7 @@ class Converter(object):
                     em.add_error_markup(element)
             except IndexError as e:
                 logfile = open('{}.log'.format(self.get_orig()), 'w')
-                logfile.write('Error at: {}'.format(str(ccat.lineno())))
+                logfile.write('Error at: {}'.format(str(util.lineno())))
                 logfile.write("There is a markup error\n")
                 logfile.write("The error message: ")
                 logfile.write(str(e))
@@ -722,7 +722,7 @@ class PDF2XMLConverter(Converter):
         elements become the text parts of <i> and <b> elements.
         '''
 
-        print ccat.lineno(), etree.tostring(textelement)
+        print util.lineno(), etree.tostring(textelement)
         if (textelement is not None and int(textelement.get('width')) > 0):
             if textelement.text is not None:
                 if len(self.parts) > 0:
@@ -776,7 +776,7 @@ class PDF2XMLConverter(Converter):
                 em.tail = child.tail
 
                 self.parts.append(em)
-        print ccat.lineno(), self.parts
+        print util.lineno(), self.parts
 
     def is_same_paragraph(self, text1, text2):
         '''Define the incoming text elements text1 and text2 to belong to
@@ -806,12 +806,12 @@ class PDF2XMLConverter(Converter):
         prev_t = None
         for t in page.iter('text'):
             if prev_t is not None:
-                print ccat.lineno(), etree.tostring(prev_t), etree.tostring(t)
+                print util.lineno(), etree.tostring(prev_t), etree.tostring(t)
                 if not self.is_same_paragraph(prev_t, t):
                     self.append_to_body(self.make_paragraph())
             if self.is_inside_margins(t, margins):
                 self.extract_textelement(t)
-                print ccat.lineno(), self.parts
+                print util.lineno(), self.parts
                 prev_t = t
 
         self.append_to_body(self.make_paragraph())
@@ -839,7 +839,7 @@ class PDF2XMLConverter(Converter):
         '''
         if len(self.parts) > 0:
             p = etree.Element('p')
-            print ccat.lineno(), self.parts[0], self.parts, type(self.parts[0])
+            print util.lineno(), self.parts[0], self.parts, type(self.parts[0])
             if (isinstance(self.parts[0], str) or
                     isinstance(self.parts[0], unicode)):
                 p.text = self.parts[0]
@@ -985,19 +985,19 @@ class HTMLContentConverter(Converter):
             superclean = cleaner.clean_html(c)
         except UnicodeDecodeError as e:
             logfile = open('{}.log'.format(self.orig), 'w')
-            print >>logfile, ccat.lineno(), str(e), self.orig
+            print >>logfile, util.lineno(), str(e), self.orig
             logfile.close()
             raise ConversionException('{}, ny encoding tull1'.format(
                 self.orig))
         except TypeError as e:
             logfile = open('{}.log'.format(self.orig), 'w')
-            print >>logfile, ccat.lineno(), str(e), self.orig
+            print >>logfile, util.lineno(), str(e), self.orig
             logfile.close()
             raise ConversionException('{}, ny encoding tull2'.format(
                 self.orig))
         except ValueError as e:
             logfile = open('{}.log'.format(self.orig), 'w')
-            print >>logfile, ccat.lineno(), str(e), self.orig
+            print >>logfile, util.lineno(), str(e), self.orig
             logfile.close()
             raise ConversionException('{}, ny encoding tull3'.format(
                 self.orig))
@@ -1224,7 +1224,7 @@ class HTMLContentConverter(Converter):
         except etree.XMLSyntaxError as e:
             logfile = open('{}.log'.format(self.orig), 'w')
 
-            logfile.write('Error at: {}'.format(str(ccat.lineno())))
+            logfile.write('Error at: {}'.format(str(util.lineno())))
             for entry in e.error_log:
                 logfile.write('\n{}: {} '.format(
                     str(entry.line), str(entry.column)))
@@ -1245,7 +1245,7 @@ class HTMLContentConverter(Converter):
 
             logfile = open('{}.log'.format(self.orig), 'w')
 
-            logfile.write('Error at: {}'.format(str(ccat.lineno())))
+            logfile.write('Error at: {}'.format(str(util.lineno())))
             for entry in transform.error_log:
                 logfile.write('\n{}: {} {}\n'.format(
                     str(entry.line), str(entry.column),

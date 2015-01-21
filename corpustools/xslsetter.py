@@ -8,7 +8,6 @@ import sys
 import lxml.etree as etree
 
 import util
-import ccat
 
 here = os.path.dirname(__file__)
 
@@ -122,7 +121,7 @@ class MetadataHandler(object):
         except etree.XSLTParseError as (e):
             logfile = open(self.filename.replace('.xsl', '') + '.log', 'w')
 
-            logfile.write('Error at: {}\n'.format(str(ccat.lineno())))
+            logfile.write('Error at: {}\n'.format(str(util.lineno())))
             logfile.write('Invalid XSLT in {}\n'.format(self.filename))
             for entry in e.error_log:
                 logfile.write('{}\n'.format(str(entry)))
