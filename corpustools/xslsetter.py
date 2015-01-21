@@ -98,10 +98,13 @@ class MetadataHandler(object):
 
     def write_file(self):
         try:
-            self.tree.write(self.filename, encoding="utf-8",
-                            xml_declaration=True)
-        except IOError:
+            with open(self.filename, 'w') as f:
+                f.write(etree.tostring(self.tree,
+                                       encoding="utf-8",
+                                       xml_declaration=True))
+        except IOError as e:
             print 'cannot write', self.filename
+            print e
             sys.exit(254)
 
     def get_xsl(self):
