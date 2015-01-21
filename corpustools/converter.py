@@ -2051,7 +2051,7 @@ class ConverterManager(object):
                 else:
                     metadata = xslsetter.MetadataHandler(xsl_file,
                                                          create=True)
-                    metadata.write()
+                    metadata.write_file()
                     print "Fill in meta info in", xsl_file, \
                         ', then run this command again'
                     sys.exit(1)
