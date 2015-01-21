@@ -63,54 +63,13 @@
 <!-- Select the potential langugages by adding the number "1" in the -->
 <!-- selection frame. If no languages are selected, the document is -->
 <!-- checked for all the languages below. -->
-<xsl:variable name="mlang_dan" select="''"/>
-<xsl:variable name="mlang_eng" select="''"/>
-<xsl:variable name="mlang_fin" select="''"/>
-<xsl:variable name="mlang_fkv" select="''"/>
-<xsl:variable name="mlang_ger" select="''"/>
-<xsl:variable name="mlang_isl" select="''"/>
-<xsl:variable name="mlang_kal" select="''"/>
-<xsl:variable name="mlang_nno" select="''"/>
-<xsl:variable name="mlang_nob" select="''"/>
-<xsl:variable name="mlang_sma" select="''"/>
-<xsl:variable name="mlang_sme" select="''"/>
-<xsl:variable name="mlang_smj" select="''"/>
-<xsl:variable name="mlang_swe" select="''"/>
-<xsl:variable name="mlang_oth" select="''"/>
+<xsl:variable name="mlangs"/>
 
 <!-- If the document has parallel texts, select "1" for parallel_texts -->
 <!-- Add the locations of the parallel files to the variables-->
-<xsl:variable name="parallel_texts" select="'1'"/>
-<xsl:variable name="para_dan" select="''"/>
-<xsl:variable name="para_eng" select="''"/>
-<xsl:variable name="para_fin" select="''"/>
-<xsl:variable name="para_fkv" select="''"/>
-<xsl:variable name="para_ger" select="''"/>
-<xsl:variable name="para_isl" select="''"/>
-<xsl:variable name="para_kal" select="''"/>
-<xsl:variable name="para_nno" select="''"/>
-<xsl:variable name="para_nob" select="''"/>
-<xsl:variable name="para_sma" select="''"/>
-<xsl:variable name="para_sme" select="'samediggi-article-48.html'"/>
-<xsl:variable name="para_smj" select="''"/>
-<xsl:variable name="para_swe" select="''"/>
-
-
-<!-- Tag the specified elements with the specified language: -->
-<xsl:variable name="danlang" select="'dan'"/>
-<xsl:variable name="englang" select="'eng'"/>
-<xsl:variable name="finlang" select="'fin'"/>
-<xsl:variable name="fkvlang" select="'fkv'"/>
-<xsl:variable name="gerlang" select="'ger'"/>
-<xsl:variable name="isllang" select="'isl'"/>
-<xsl:variable name="kallang" select="'kal'"/>
-<xsl:variable name="nnolang" select="'nno'"/>
-<xsl:variable name="noblang" select="'nob'"/>
-<xsl:variable name="smalang" select="'sma'"/>
-<xsl:variable name="smelang" select="'sme'"/>
-<xsl:variable name="smjlang" select="'smj'"/>
-<xsl:variable name="swelang" select="'swe'"/>
-
+<xsl:variable name="parallels">
+    <parallel_text xml:lang="sme" location="'samediggi-article-48.html'"/>
+</xsl:variable>
 
 <!-- Add all paragraphs that should have xml:lang=X-->
 <!-- Uncomment the following and add the paths, for example: -->
