@@ -977,39 +977,50 @@ class HTMLContentConverter(Converter):
                          'ins',
                          ])
 
-        try:
-            enc = self.set_charset(content)
-            c = unicode(content, encoding=enc)
-            superclean = cleaner.clean_html(c)
-        except UnicodeDecodeError as e:
-            logfile = open('{}.log'.format(self.orig), 'w')
-            print >>logfile, util.lineno(), str(e), self.orig
-            logfile.close()
-            raise ConversionException('{}, ny encoding tull1'.format(
-                self.orig))
-        except TypeError as e:
-            logfile = open('{}.log'.format(self.orig), 'w')
-            print >>logfile, util.lineno(), str(e), self.orig
-            logfile.close()
-            raise ConversionException('{}, ny encoding tull2'.format(
-                self.orig))
-        except ValueError as e:
-            logfile = open('{}.log'.format(self.orig), 'w')
-            print >>logfile, util.lineno(), str(e), self.orig
-            logfile.close()
-            raise ConversionException('{}, ny encoding tull3'.format(
-                self.orig))
+        c = self.to_unicode(content)
+        superclean = cleaner.clean_html(c)
 
         self.soup = html5parser.document_fromstring(superclean)
 
         self.converter_xsl = os.path.join(here, 'xslt/xhtml2corpus.xsl')
 
-    def set_charset(self, content):
+    def to_unicode(self, content):
+        found = self.get_charset(content)
+        more_guesses = [ (c, 'guess')
+                         for c in ["utf-8", "windows-1252"]
+                         if c != found[0] ]
+        errors = []
+        for charset, source in [found] + more_guesses:
+            try:
+                decoded = unicode(content, encoding=charset)
+                if source == 'guess':
+                    with open('{}.log'.format(self.orig), 'w') as f:
+                        f.write("converter.py:{} Charset of {} guessed as {}\n".format(
+                            util.lineno(), self.orig, charset))
+                return decoded
+            except UnicodeDecodeError as e:
+                if source == 'xsl':
+                    with open('{}.log'.format(self.orig), 'w') as f:
+                        print >>f, util.lineno(), str(e), self.orig
+                    raise ConversionException(
+                        'The text_encoding specified in {} lead to decoding errors, '
+                        'please fix the XSL'.format(self.md.filename))
+                else:
+                    errors.append(e)
+        if errors != []:
+            raise errors[0]
+        else:
+            raise ConversionException(
+                "Could not convert {} to unicode".format(self.orig))
+
+    def get_charset(self, content):
         charset = 'utf-8'
+        source = 'guess'
 
         encoding_from_xsl = self.md.get_variable('text_encoding')
 
         if encoding_from_xsl == '' or encoding_from_xsl is None:
+            source = 'content'
             cg = content.find('charset=')
             if cg > 0:
                 f1 = cg + content[cg:].find('"')
@@ -1025,12 +1036,13 @@ class HTMLContentConverter(Converter):
                     else:
                         charset = content[cg + len('charset='):f2].lower()
         else:
+            source = 'xsl'
             charset = encoding_from_xsl.lower()
 
         if charset == 'iso-8859-1' or charset == 'ascii':
-            return 'windows-1252'
+            return 'windows-1252', source
         else:
-            return charset
+            return charset, source
 
     def remove_empty_class(self):
         """Some documents have empty class attributes.
