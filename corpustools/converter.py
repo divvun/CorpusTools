@@ -971,10 +971,6 @@ class HTMLContentConverter(Converter):
         super(HTMLContentConverter, self).__init__(filename,
                                              write_intermediate)
 
-        # remove cruft from svenskakyrkan.se documents
-        content = content.replace('//<script', '<script')
-        content = content.replace('&nbsp;', ' ')
-
         cleaner = clean.Cleaner(
             page_structure=False,
             scripts=True,
@@ -989,12 +985,20 @@ class HTMLContentConverter(Converter):
                          'ins',
                          ])
 
-        c = self.to_unicode(content)
-        superclean = cleaner.clean_html(c)
+        decoded = self.to_unicode(content)
+        semiclean = self.remove_cruft(decoded)
+        superclean = cleaner.clean_html(semiclean)
 
         self.soup = html5parser.document_fromstring(superclean)
 
         self.converter_xsl = os.path.join(here, 'xslt/xhtml2corpus.xsl')
+
+    def remove_cruft(self, content):
+        # from svenskakyrkan.se documents
+        replacements = [ (u'//<script', u'<script'),
+                         (u'&nbsp;', u' '),
+        ]
+        return util.replace_all(replacements, content)
 
     def to_unicode(self, content):
         return self.remove_declared_encoding(
