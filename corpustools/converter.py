@@ -186,6 +186,17 @@ class Converter(object):
                 ['sma', 'sme', 'smj', 'nob', 'fin']):
             fixer.fix_body_encoding()
 
+    def replace_bad_unicode(self, content):
+        assert(type(content)==unicode)
+        # u'š'.encode('windows-1252') gives '\x9a', which sometimes
+        # appears in otherwise utf-8-encoded documents with the
+        # meaning 'š'
+        replacements = [(u'\x9a', u'š'),
+                        (u'\x8a', u'Š'),
+                        (u'\x9e', u'ž'),
+                        (u'\x8e', u'Ž')]
+        return util.replace_all(replacements, content)
+
     def make_complete(self, languageGuesser):
         """Combine the intermediate giellatekno xml file and the metadata into
         a complete giellatekno xml file.
@@ -434,31 +445,32 @@ class PlaintextConverter(Converter):
         return content
 
     def strip_chars(self, content, extra=u''):
-        content = content.replace(u'ÊÊ', '\n')
-        content = content.replace(u'<\!q>', u'')
-        content = content.replace(u'<\!h>', u'')
-        content = content.replace(u'<*B>', u'')
-        content = content.replace(u'<*P>', u'')
-        content = content.replace(u'<*I>', u'')
-        # Convert CR (carriage return) to LF (line feed)
-        content = content.replace('\x0d', '\x0a')
-        content = content.replace(u'<ASCII-MAC>', '')
-        content = content.replace(u'<vsn:3.000000>', u'')
-        # Some plain text files have some chars marked up this way …
-        content = content.replace(u'<0x010C>', u'Č')
-        content = content.replace(u'<0x010D>', u'č')
-        content = content.replace(u'<0x0110>', u'Đ')
-        content = content.replace(u'<0x0111>', u'đ')
-        content = content.replace(u'<0x014A>', u'Ŋ')
-        content = content.replace(u'<0x014B>', u'ŋ')
-        content = content.replace(u'<0x0160>', u'Š')
-        content = content.replace(u'<0x0161>', u'š')
-        content = content.replace(u'<0x0166>', u'Ŧ')
-        content = content.replace(u'<0x0167>', u'ŧ')
-        content = content.replace(u'<0x017D>', u'Ž')
-        content = content.replace(u'<0x017E>', u'ž')
-        content = content.replace(u'<0x2003>', u' ')
-
+        plaintext_oddities = [
+            (u'ÊÊ', u'\n'),
+            (u'<\!q>', u''),
+            (u'<\!h>', u''),
+            (u'<*B>', u''),
+            (u'<*P>', u''),
+            (u'<*I>', u''),
+            (u'\r', u'\n'),
+            (u'<ASCII-MAC>', ''),
+            (u'<vsn:3.000000>', u''),
+            (u'<0x010C>', u'Č'),
+            (u'<0x010D>', u'č'),
+            (u'<0x0110>', u'Đ'),
+            (u'<0x0111>', u'đ'),
+            (u'<0x014A>', u'Ŋ'),
+            (u'<0x014B>', u'ŋ'),
+            (u'<0x0160>', u'Š'),
+            (u'<0x0161>', u'š'),
+            (u'<0x0166>', u'Ŧ'),
+            (u'<0x0167>', u'ŧ'),
+            (u'<0x017D>', u'Ž'),
+            (u'<0x017E>', u'ž'),
+            (u'<0x2003>', u' '),
+        ]
+        content = util.replace_all(plaintext_oddities,
+                                   self.replace_bad_unicode(content))
         remove_re = re.compile(
             u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]'.format(extra))
         content, count = remove_re.subn('', content)
@@ -997,7 +1009,7 @@ class HTMLContentConverter(Converter):
                     with open('{}.log'.format(self.orig), 'w') as f:
                         f.write("converter.py:{} Charset of {} guessed as {}\n".format(
                             util.lineno(), self.orig, charset))
-                return decoded
+                return self.replace_bad_unicode(decoded)
             except UnicodeDecodeError as e:
                 if source == 'xsl':
                     with open('{}.log'.format(self.orig), 'w') as f:
