@@ -1014,7 +1014,7 @@ class HTMLContentConverter(Converter):
                     with open('{}.log'.format(self.orig), 'w') as f:
                         f.write("converter.py:{} Encoding of {} guessed as {}\n".format(
                             util.lineno(), self.orig, encoding))
-                return self.replace_bad_unicode(decoded)
+                return decoded
             except UnicodeDecodeError as e:
                 if source == 'xsl':
                     with open('{}.log'.format(self.orig), 'w') as f:
