@@ -1002,6 +1002,9 @@ class HTMLContentConverter(Converter):
                 self.try_decode_encodings(content)))
 
     def try_decode_encodings(self, content):
+        if type(content)==unicode:
+            return content
+        assert type(content)==str
         found = self.get_encoding(content)
         more_guesses = [ (c, 'guess')
                          for c in ["utf-8", "windows-1252"]
