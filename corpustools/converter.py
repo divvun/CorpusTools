@@ -997,18 +997,23 @@ class HTMLContentConverter(Converter):
         self.converter_xsl = os.path.join(here, 'xslt/xhtml2corpus.xsl')
 
     def to_unicode(self, content):
-        found = self.get_charset(content)
+        return self.remove_declared_encoding(
+            self.replace_bad_unicode(
+                self.try_decode_encodings(content)))
+
+    def try_decode_encodings(self, content):
+        found = self.get_encoding(content)
         more_guesses = [ (c, 'guess')
                          for c in ["utf-8", "windows-1252"]
                          if c != found[0] ]
         errors = []
-        for charset, source in [found] + more_guesses:
+        for encoding, source in [found] + more_guesses:
             try:
-                decoded = unicode(content, encoding=charset)
+                decoded = unicode(content, encoding=encoding)
                 if source == 'guess':
                     with open('{}.log'.format(self.orig), 'w') as f:
-                        f.write("converter.py:{} Charset of {} guessed as {}\n".format(
-                            util.lineno(), self.orig, charset))
+                        f.write("converter.py:{} Encoding of {} guessed as {}\n".format(
+                            util.lineno(), self.orig, encoding))
                 return self.replace_bad_unicode(decoded)
             except UnicodeDecodeError as e:
                 if source == 'xsl':
@@ -1025,36 +1030,45 @@ class HTMLContentConverter(Converter):
             raise ConversionException(
                 "Could not convert {} to unicode".format(self.orig))
 
-    def get_charset(self, content):
-        charset = 'utf-8'
+    xml_encoding_declaration_re = re.compile(r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*")
+    html_meta_charset_re = re.compile(r"<meta [^>]*[\"; ]charset=[\"']?([^\"' ]+)")
+    def get_encoding(self, content):
+        encoding = 'utf-8'
         source = 'guess'
 
         encoding_from_xsl = self.md.get_variable('text_encoding')
 
         if encoding_from_xsl == '' or encoding_from_xsl is None:
             source = 'content'
-            cg = content.find('charset=')
-            if cg > 0:
-                f1 = cg + content[cg:].find('"')
-                f2 = cg + content[cg:].find("'")
-
-                if f1 < cg and f2 > cg:
-                    charset = content[cg + len('charset='):f2].lower()
-                elif f2 < cg and f1 > cg:
-                    charset = content[cg + len('charset='):f1].lower()
-                elif f1 > cg and f2 > cg:
-                    if f1 < f2:
-                        charset = content[cg + len('charset='):f1].lower()
-                    else:
-                        charset = content[cg + len('charset='):f2].lower()
+            # <?xml version="1.0" encoding="ISO-8859-1"?>
+            # <meta charset="utf-8">
+            # <meta http-equiv="Content-Type" content="charset=utf-8" />
+            # <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            # <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+            m = ( re.search(self.xml_encoding_declaration_re, content)
+                  or
+                  re.search(self.html_meta_charset_re, content) )
+            if m is not None:
+                encoding = m.group(1).lower()
         else:
             source = 'xsl'
-            charset = encoding_from_xsl.lower()
+            encoding = encoding_from_xsl.lower()
 
-        if charset == 'iso-8859-1' or charset == 'ascii':
+        if encoding == 'iso-8859-1' or encoding == 'ascii':
             return 'windows-1252', source
         else:
-            return charset, source
+            if encoding != 'utf-8':
+                print >>sys.stderr, "Unusual encoding found in {} {}: {}".format(
+                    self.orig, source, encoding)
+            return encoding, source
+
+    def remove_declared_encoding(self, content):
+        """lxml explodes if we send a decoded Unicode string with an
+        xml-declared encoding
+        http://lxml.de/parsing.html#python-unicode-strings
+
+        """
+        return re.sub(self.xml_encoding_declaration_re, "", content)
 
     def remove_empty_class(self):
         """Some documents have empty class attributes.
