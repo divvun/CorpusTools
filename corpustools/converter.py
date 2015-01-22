@@ -1908,7 +1908,7 @@ class XslMaker(object):
         except etree.XMLSyntaxError as e:
             logfile = open('{}.log'.format(self.filename), 'w')
 
-            logfile.write('Error at: {}'.format(str(ccat.lineno())))
+            logfile.write('Error at: {}'.format(str(util.lineno())))
             for entry in e.error_log:
                 logfile.write('{}\n'.format(str(entry)))
 
@@ -1933,7 +1933,7 @@ class XslMaker(object):
         except etree.XSLTParseError as (e):
             logfile = open(self.filename.replace('.xsl', '') + '.log', 'w')
 
-            logfile.write('Error at: {}\n'.format(str(ccat.lineno())))
+            logfile.write('Error at: {}\n'.format(str(util.lineno())))
             logfile.write('Invalid XML in {}\n'.format(self.filename))
             for entry in e.error_log:
                 logfile.write('{}\n'.format(str(entry)))
