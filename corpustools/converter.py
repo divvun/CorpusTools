@@ -77,6 +77,7 @@ class Converter(object):
     Class to take care of data common to all Converter classes
     """
     def __init__(self, filename, write_intermediate=False):
+        codecs.register_error('mixed', self.mixed_decoder)
         self.orig = os.path.abspath(filename)
         self.set_corpusdir()
         self.set_converted_name()
@@ -186,7 +187,32 @@ class Converter(object):
                 ['sma', 'sme', 'smj', 'nob', 'fin']):
             fixer.fix_body_encoding()
 
+    mixed_to_unicode = {
+        'e4' : u'ä',
+        '85' : u'…',            # u'\u2026' ... character.
+        '96' : u'–',            # u'\u2013' en-dash
+        '97' : u'—',            # u'\u2014' em-dash
+        '91' : u"‘",            # u'\u2018' left single quote
+        '92' : u"’",            # u'\u2019' right single quote
+        '93' : u'“',            # u'\u201C' left double quote
+        '94' : u'”',            # u'\u201D' right double quote
+        '95' : u"•"             # u'\u2022' bullet
+    } 
+    def mixed_decoder(self, decode_error):
+        badstring = decode_error.object[decode_error.start:decode_error.end]
+        badhex = badstring.encode('hex')
+        repl = self.mixed_to_unicode.get(badhex, u'\ufffd')
+        if repl == u'\ufffd':   # � unicode REPLACEMENT CHARACTER
+            print "Skipped bad byte \\x{}, seen in {}".format(
+                badhex, self.orig)
+        return repl, (decode_error.start + len(repl))
+
     def replace_bad_unicode(self, content):
+        """These are e.g. 'valid utf-8' (don't give UnicodeDecodeErrors), but
+        we still want to replace them to what they most likely were
+        meant to be.
+
+        """
         assert(type(content)==unicode)
         # u'š'.encode('windows-1252') gives '\x9a', which sometimes
         # appears in otherwise utf-8-encoded documents with the
@@ -969,7 +995,7 @@ class HTMLContentConverter(Converter):
         '''Clean up content, then convert it to xhtml using html5parser
         '''
         super(HTMLContentConverter, self).__init__(filename,
-                                             write_intermediate)
+                                                   write_intermediate)
 
         cleaner = clean.Cleaner(
             page_structure=False,
@@ -1032,10 +1058,11 @@ class HTMLContentConverter(Converter):
                 else:
                     errors.append(e)
         if errors != []:
-            raise errors[0]
+            # If no "clean" encoding worked, we just skip the bad bytes:
+            return unicode(content, encoding='utf-8', errors='mixed')
         else:
             raise ConversionException(
-                "Could not convert {} to unicode".format(self.orig))
+                "Strange exception converting {} to unicode".format(self.orig))
 
     xml_encoding_declaration_re = re.compile(r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*")
     html_meta_charset_re = re.compile(r"<meta [^>]*[\"; ]charset=[\"']?([^\"' ]+)")
