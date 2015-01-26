@@ -1266,6 +1266,12 @@ class HTMLContentConverter(Converter):
                 h_parent = h.getparent()
                 h_parent.insert(h_parent.index(h) + 1, p)
 
+        for elt in self.soup.xpath(
+                './/html:body/html:br',
+                namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
+            elt.tag = '{http://www.w3.org/1999/xhtml}p'
+            elt.text = '&nbsp;'
+
     def center2div(self):
         '''Convert center to div in tidy style
         '''
