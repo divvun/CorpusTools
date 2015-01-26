@@ -1304,8 +1304,7 @@ class HTMLContentConverter(Converter):
 
                 logfile.write('\n')
 
-            # html is unicode, encode it as utf8 before writing it
-            logfile.write(html.encode('utf8'))
+            logfile.write(etree.tostring(self.soup).encode('utf8'))
             logfile.close()
             raise ConversionException(
                 "Invalid html, log is found in {}.log".format(self.orig))
@@ -1320,7 +1319,7 @@ class HTMLContentConverter(Converter):
                     str(entry.line), str(entry.column),
                     entry.message.encode('utf8')))
 
-            logfile.write(html.encode('utf8'))
+            logfile.write(etree.tostring(self.soup).encode('utf8'))
             logfile.close()
             raise ConversionException(
                 'transformation failed {}.log'.format(self.orig))
