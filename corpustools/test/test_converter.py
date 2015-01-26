@@ -298,11 +298,11 @@ class TestPlaintextConverter(XMLTester):
         plaintext = converter.PlaintextConverter(
             'tullball.txt')
         got = plaintext.strip_chars(
-            '\x0d\n'
-            '<ASCII-MAC>\n'
-            '<vsn:3.000000>\n'
-            '<\!q>\n'
-            '<\!h>\n')
+            u'\x0d\n'
+            u'<ASCII-MAC>\n'
+            u'<vsn:3.000000>\n'
+            u'<\!q>\n'
+            u'<\!h>\n')
         want = u'''\n\n\n\n\n\n'''
 
         self.assertEqual(got, want)
@@ -311,8 +311,8 @@ class TestPlaintextConverter(XMLTester):
         plaintext = converter.PlaintextConverter(
             'tullball.txt')
         got = plaintext.strip_chars(
-            '<0x010C><0x010D><0x0110><0x0111><0x014A><0x014B><0x0160><0x0161>'
-            '<0x0166><0x0167><0x017D><0x017E><0x2003>')
+            u'<0x010C><0x010D><0x0110><0x0111><0x014A><0x014B><0x0160><0x0161>'
+            u'<0x0166><0x0167><0x017D><0x017E><0x2003>')
         want = u'''ČčĐđŊŋŠšŦŧŽž '''
 
         self.assertEqual(got, want)
