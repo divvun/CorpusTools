@@ -1128,6 +1128,14 @@ class HTMLContentConverter(Converter):
         for elt in ps_as_divs:
             elt.tag = '{http://www.w3.org/1999/xhtml}div'
 
+        lists_as_divs = self.soup.xpath(
+            "//*[( descendant::html:ul or descendant::html:ol ) "
+            "and ( self::html:ul or self::html:ol )"
+            "    ]",
+            namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+        for elt in lists_as_divs:
+            elt.tag = '{http://www.w3.org/1999/xhtml}div'
+
     def remove_empty_p(self):
         ps = self.soup.xpath('//html:p',
             namespaces={'html': 'http://www.w3.org/1999/xhtml'})
