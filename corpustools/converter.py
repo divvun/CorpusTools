@@ -1111,9 +1111,14 @@ class HTMLContentConverter(Converter):
 
     def fix_spans_as_divs(self):
         spans_as_divs = self.soup.xpath(
-            "//*[( descendant::html:div or descendant::html:p ) "
+            "//*[( descendant::html:div or descendant::html:p"
+            "      or descendant::html:h1 or descendant::html:h2"
+            "      or descendant::html:h3 or descendant::html:h4"
+            "      or descendant::html:h5 or descendant::html:h6 ) "
             "and ( self::html:span or self::html:b or self::html:i"
-            "      or self::html:em or self::html:strong )]",
+            "      or self::html:em or self::html:strong "
+            "      or self::html:a )"
+            "    ]",
             namespaces={'html': 'http://www.w3.org/1999/xhtml'})
         for elt in spans_as_divs:
             elt.tag = '{http://www.w3.org/1999/xhtml}div'
@@ -1122,6 +1127,14 @@ class HTMLContentConverter(Converter):
             namespaces={'html': 'http://www.w3.org/1999/xhtml'})
         for elt in ps_as_divs:
             elt.tag = '{http://www.w3.org/1999/xhtml}div'
+
+    def remove_empty_p(self):
+        ps = self.soup.xpath('//html:p',
+            namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+
+        for elt in ps:
+            if elt.text is None and elt.tail is None:
+                elt.getparent().remove(elt)
 
     def remove_empty_class(self):
         """Some documents have empty class attributes.
@@ -1285,6 +1298,7 @@ class HTMLContentConverter(Converter):
 
         """
         self.remove_empty_class()
+        self.remove_empty_p()
         self.remove_elements()
         self.add_p_around_text()
         self.center2div()
