@@ -1109,6 +1109,20 @@ class HTMLContentConverter(Converter):
         """
         return re.sub(self.xml_encoding_declaration_re, "", content)
 
+    def fix_spans_as_divs(self):
+        spans_as_divs = self.soup.xpath(
+            "//*[( descendant::html:div or descendant::html:p ) "
+            "and ( self::html:span or self::html:b or self::html:i"
+            "      or self::html:em or self::html:strong )]",
+            namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+        for elt in spans_as_divs:
+            elt.tag = '{http://www.w3.org/1999/xhtml}div'
+
+        ps_as_divs = self.soup.xpath("//html:p[descendant::html:div]",
+            namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+        for elt in ps_as_divs:
+            elt.tag = '{http://www.w3.org/1999/xhtml}div'
+
     def remove_empty_class(self):
         """Some documents have empty class attributes.
         Delete these attributes.
@@ -1276,6 +1290,7 @@ class HTMLContentConverter(Converter):
         self.center2div()
         self.body_i()
         self.body_text()
+        self.fix_spans_as_divs()
 
     def convert2intermediate(self):
         """
