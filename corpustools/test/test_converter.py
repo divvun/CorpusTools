@@ -13,7 +13,7 @@ from corpustools import text_cat
 
 
 here = os.path.dirname(__file__)
-
+LANGUAGEGUESSER = text_cat.Classifier()
 
 class TestConverter(unittest.TestCase):
     def setUp(self):
@@ -421,13 +421,13 @@ class TestHTMLContentConverter(XMLTester):
         got = converter.HTMLContentConverter(
             'with-o:p.html',
             content='<html><body><div class="">a</div><div class="a">'
-            '<span class="">b</span></div></html>').tidy()
+            '<span class="">b</span></div></html>').soup
 
         want = html5parser.document_fromstring(
             '<html><head/><body><div>a</div><div class="a">'
             '<span>b</span></div></body></html>')
 
-        self.assertEqual(got, etree.tostring(want))
+        self.assertEqual(etree.tostring(got), etree.tostring(want))
 
     def test_remove_unwanted_classes_and_ids(self):
         unwanted_classes_ids = {
@@ -482,7 +482,6 @@ class TestHTMLContentConverter(XMLTester):
                         content='<html><body><{0} {1}="{2}">content:{0}{1}{2}</{0}>'
                         '<div class="ada"/></body>'
                         '</html>'.format(tag, key, value))
-                    hc.remove_elements()
 
                     want = html5parser.document_fromstring(
                         '<html><body><div class="ada"/></body></html>')
@@ -504,35 +503,35 @@ class TestHTMLContentConverter(XMLTester):
             got = converter.HTMLContentConverter(
                 unwanted_tag + '.html',
                         content='<html><body><p>p1</p><%s/><p>p2</p2></body>'
-                    '</html>' % unwanted_tag).tidy()
+                    '</html>' % unwanted_tag).soup
             want = (
                 '<html:html xmlns:html="http://www.w3.org/1999/xhtml">'
                 '<html:head/><html:body><html:p>p1</html:p><html:p>p2'
                 '</html:p></html:body></html:html>')
 
-            self.assertEqual(got, want)
+            self.assertEqual(etree.tostring(got), want)
 
     def test_remove_comment(self):
         got = converter.HTMLContentConverter(
             'with-o:p.html',
-            content='<html><body><b><!--Hey, buddy. --></b></body></html>').tidy()
+            content='<html><body><b><!--Hey, buddy. --></b></body></html>').soup
 
         want = (
             '<html:html xmlns:html="http://www.w3.org/1999/xhtml"><html:head/>'
             '<html:body><html:b/></html:body></html:html>')
 
-        self.assertEqual(got, want)
+        self.assertEqual(etree.tostring(got), want)
 
     def test_remove_processinginstruction(self):
         got = converter.HTMLContentConverter(
             'with-o:p.html',
-            content='<html><body><b><?ProcessingInstruction?></b></body></html>').tidy()
+            content='<html><body><b><?ProcessingInstruction?></b></body></html>').soup
 
         want = (
             '<html:html xmlns:html="http://www.w3.org/1999/xhtml">'
             '<html:head/><html:body><html:b/></html:body></html:html>')
 
-        self.assertEqual(got, want)
+        self.assertEqual(etree.tostring(got), want)
 
     def test_add_p_around_text1(self):
         '''Only text before next significant element
@@ -543,7 +542,6 @@ class TestHTMLContentConverter(XMLTester):
             '<html><head><meta http-equiv="Content-type" content="text/html; '
             'charset=utf-8"><title>– Den utdøende stammes frykt</title>'
             '</head><body><h3>VI</h3>... Finnerne<p>Der</body></html>')
-        hcc.add_p_around_text()
 
         want = (
             '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML '
@@ -563,7 +561,6 @@ class TestHTMLContentConverter(XMLTester):
             '<html><head><meta http-equiv="Content-type" content="text/html; '
             'charset=utf-8"><title>– Den utdøende stammes frykt</title>'
             '</head><body><h3>VI</h3>... Finnerne<i>Der</body></html>')
-        hcc.add_p_around_text()
 
         want = (
             '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML '
@@ -584,7 +581,6 @@ class TestHTMLContentConverter(XMLTester):
             'charset=utf-8"><title>– Den utdøende stammes frykt</title>'
             '</head><body><h3>VI</h3>... Finnerne<a/>'
             '<h2>Der</h2></body></html>')
-        hcc.add_p_around_text()
 
         want = (
             '<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML '
@@ -607,7 +603,7 @@ class TestHTMLContentConverter(XMLTester):
             'ugga.html',
             content=content)
 
-        got = hcc.set_charset(content)
+        got, _ = hcc.get_encoding(content)
 
         self.assertEqual(got, 'utf-8')
 
@@ -622,11 +618,11 @@ class TestHTMLContentConverter(XMLTester):
             'ugga.html',
             content=content)
 
-        got = hcc.set_charset(content)
+        got, _ = hcc.get_encoding(content)
 
         self.assertEqual(got, 'utf-8')
 
-    #def test_set_charset_3(self):
+    #def test_get_encoding_3(self):
         #'''encoding_from_xsl = 'iso-8859-1', no charset in html header
         #'''
         #content = (
@@ -638,11 +634,11 @@ class TestHTMLContentConverter(XMLTester):
             #'ugga.html',
             #content=content)
 
-        #got = hcc.set_charset(content)
+        #got, _ = hcc.get_encoding(content)
 
         #self.assertEqual(got, 'windows-1252')
 
-    #def test_set_charset_4(self):
+    #def test_get_encoding_4(self):
         #'''Check that encoding_from_xsl overrides meta charset
         #encoding_from_xsl = 'iso-8859-1', charset in html header = utf-8
         #'''
@@ -657,11 +653,11 @@ class TestHTMLContentConverter(XMLTester):
             #'ugga.html',
             #content=content)
 
-        #got = hcc.set_charset(content)
+        #got, _ = hcc.get_encoding(content)
 
         #self.assertEqual(got, 'windows-1252')
 
-    def test_set_charset_5(self):
+    def test_get_encoding_5(self):
         '''encoding_from_xsl = None, charset in html header = iso-8859-1
         '''
         content = (
@@ -673,11 +669,11 @@ class TestHTMLContentConverter(XMLTester):
             'ugga.html',
             content=content)
 
-        got = hcc.set_charset(content)
+        got, _ = hcc.get_encoding(content)
 
         self.assertEqual(got, 'windows-1252')
 
-    def test_set_charset_6(self):
+    def test_get_encoding_6(self):
         '''encoding_from_xsl = '', charset in html header = iso-8859-1
         '''
         content = (
@@ -689,7 +685,7 @@ class TestHTMLContentConverter(XMLTester):
             'ugga.html',
             content=content)
 
-        got = hcc.set_charset(content)
+        got, _ = hcc.get_encoding(content)
 
         self.assertEqual(got, 'windows-1252')
 
@@ -706,7 +702,7 @@ class TestHTMLContentConverter(XMLTester):
             'ugga.html',
             content=content)
 
-        got = hcc.set_charset(content)
+        got, _ = hcc.get_encoding(content)
 
         self.assertEqual(got, 'windows-1252')
 
@@ -725,7 +721,7 @@ class TestHTMLContentConverter(XMLTester):
             'ugga.html',
             content=content)
 
-        got = hcc.set_charset(content)
+        got, _ = hcc.get_encoding(content)
 
         self.assertEqual(got, 'windows-1252')
 
@@ -744,100 +740,100 @@ class TestHTMLContentConverter(XMLTester):
             'ugga.html',
             content=content)
 
-        got = hcc.set_charset(content)
+        got, _ = hcc.get_encoding(content)
 
         self.assertEqual(got, 'windows-1252')
 
     def test_center2div(self):
         got = converter.HTMLContentConverter(
             'center.html',
-            content='<html><body><center><span class="">b</span></center></html>').tidy()
+            content='<html><body><center><span class="">b</span></center></html>').soup
 
         want = html5parser.document_fromstring(
             '<html><head/><body><div class="c1"><span>b</span></div></body>'
             '</html>')
 
-        self.assertEqual(got, etree.tostring(want))
+        self.assertEqual(etree.tostring(got), etree.tostring(want))
 
     def test_body_i(self):
         got = converter.HTMLContentConverter(
-            'i.html', text_cat.Classifier(),
-            content='<html><body><i>b</i></body></html>').tidy()
+            'i.html', LANGUAGEGUESSER,
+            content='<html><body><i>b</i></body></html>').soup
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p><i>b</i></p></body></html>')
 
-        self.assertEqual(got, etree.tostring(want))
+        self.assertEqual(etree.tostring(got), etree.tostring(want))
 
     def test_body_a(self):
         got = converter.HTMLContentConverter(
-            'a.html', text_cat.Classifier(),
-            content='<html><body><a>b</a></body></html>').tidy()
+            'a.html', LANGUAGEGUESSER,
+            content='<html><body><a>b</a></body></html>').soup
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p><a>b</a></p></body></html>')
 
-        self.assertEqual(got, etree.tostring(want))
+        self.assertEqual(etree.tostring(got), etree.tostring(want))
 
     def test_body_em(self):
         got = converter.HTMLContentConverter(
-            'em.html', text_cat.Classifier(),
-            content='<html><body><em>b</em></body></html>').tidy()
+            'em.html', LANGUAGEGUESSER,
+            content='<html><body><em>b</em></body></html>').soup
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p><em>b</em></p></body></html>')
 
-        self.assertEqual(got, etree.tostring(want))
+        self.assertEqual(etree.tostring(got), etree.tostring(want))
 
     def test_body_font(self):
         got = converter.HTMLContentConverter(
-            'font.html', text_cat.Classifier(),
-            content='<html><body><font>b</font></body></html>').tidy()
+            'font.html', LANGUAGEGUESSER,
+            content='<html><body><font>b</font></body></html>').soup
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p><font>b</font></p></body></html>')
 
-        self.assertEqual(got, etree.tostring(want))
+        self.assertEqual(etree.tostring(got), etree.tostring(want))
 
     def test_body_u(self):
         got = converter.HTMLContentConverter(
-            'u.html', text_cat.Classifier(),
-            content='<html><body><u>b</u></body></html>').tidy()
+            'u.html', LANGUAGEGUESSER,
+            content='<html><body><u>b</u></body></html>').soup
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p><u>b</u></p></body></html>')
 
-        self.assertEqual(got, etree.tostring(want))
+        self.assertEqual(etree.tostring(got), etree.tostring(want))
 
     def test_body_strong(self):
         got = converter.HTMLContentConverter(
-            'strong.html', text_cat.Classifier(),
-            content='<html><body><strong>b</strong></body></html>').tidy()
+            'strong.html', LANGUAGEGUESSER,
+            content='<html><body><strong>b</strong></body></html>').soup
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p><strong>b</strong></p></body></html>')
 
-        self.assertEqual(got, etree.tostring(want))
+        self.assertEqual(etree.tostring(got), etree.tostring(want))
 
     def test_body_span(self):
         got = converter.HTMLContentConverter(
-            'span.html', text_cat.Classifier(),
-            content='<html><body><span>b</span></body></html>').tidy()
+            'span.html', LANGUAGEGUESSER,
+            content='<html><body><span>b</span></body></html>').soup
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p><span>b</span></p></body></html>')
 
-        self.assertEqual(got, etree.tostring(want))
+        self.assertEqual(etree.tostring(got), etree.tostring(want))
 
     def test_body_text(self):
         got = converter.HTMLContentConverter(
-            'text.html', text_cat.Classifier(),
-            content='<html><body>b</body></html>').tidy()
+            'text.html', LANGUAGEGUESSER,
+            content='<html><body>b</body></html>').soup
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p>b</p></body></html>')
 
-        self.assertEqual(got, etree.tostring(want))
+        self.assertEqual(etree.tostring(got), etree.tostring(want))
 
 
 class TestRTFConverter(XMLTester):
@@ -2220,7 +2216,7 @@ TITTEL: 3</p>
 
     def test_fix__body_encoding(self):
         newstext = converter.PlaintextConverter(
-            'tullball.txt', text_cat.Classifier())
+            'tullball.txt', LANGUAGEGUESSER)
         text = newstext.content2xml(io.StringIO(u'''ÐMun lean njeallje jagi boaris.
 
 Nu beaivvdat.
@@ -2262,7 +2258,7 @@ LOGO: Smi kulturfestivala 1998
         svgtext = converter.SVGConverter(
             os.path.join(here,
                          'converter_data/Riddu_Riddu_avis_TXT.200923.svg'),
-            text_cat.Classifier())
+            LANGUAGEGUESSER)
         document_fixer = converter.DocumentFixer(
             etree.fromstring(etree.tostring(svgtext.convert2intermediate())))
         document_fixer.fix_body_encoding()

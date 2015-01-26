@@ -1017,6 +1017,11 @@ class HTMLContentConverter(Converter):
 
         self.soup = html5parser.document_fromstring(superclean)
 
+        self.convert2xhtml()
+        #with open('{}.huff.xml'.format(self.orig), 'wb') as huff:
+        #    util.print_element(etree.fromstring(self.soup), 0, 2, huff)
+
+
         self.converter_xsl = os.path.join(here, 'xslt/xhtml2corpus.xsl')
 
     def remove_cruft(self, content):
@@ -1259,9 +1264,11 @@ class HTMLContentConverter(Converter):
             body.text = None
             body.insert(0, p)
 
-    def tidy(self):
+    def convert2xhtml(self):
         """
-        Clean up the html document
+        Clean up the html document. Destructively modifies self.soup, trying
+        to create strict xhtml for xhtml2corpus.xsl
+
         """
         self.remove_empty_class()
         self.remove_elements()
@@ -1269,8 +1276,6 @@ class HTMLContentConverter(Converter):
         self.center2div()
         self.body_i()
         self.body_text()
-
-        return etree.tostring(self.soup)
 
     def convert2intermediate(self):
         """
@@ -1283,14 +1288,8 @@ class HTMLContentConverter(Converter):
 
         intermediate = ''
 
-        html = self.tidy()
-
-        #  with open('{}.huff.xml'.format(self.orig), 'wb') as huff:
-        #  util.print_element(etree.fromstring(html), 0, 2, huff)
-
         try:
-            doc = etree.fromstring(html)
-            intermediate = transform(doc)
+            intermediate = transform(self.soup)
         except etree.XMLSyntaxError as e:
             logfile = open('{}.log'.format(self.orig), 'w')
 
