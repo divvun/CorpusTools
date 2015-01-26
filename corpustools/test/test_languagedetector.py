@@ -10,6 +10,7 @@ from corpustools import text_cat
 
 
 here = os.path.dirname(__file__)
+LANGUAGEGUESSER = text_cat.Classifier()
 
 
 class XMLTester(unittest.TestCase):
@@ -28,7 +29,6 @@ class TestLanguageDetector(XMLTester):
     Test the functionality of LanguageDetector
     """
     def setUp(self):
-        self.classifier = text_cat.Classifier()
         self.root = etree.parse(
             os.path.join(here,
                          'converter_data/samediggi-article-48s-before-lang-'
@@ -37,7 +37,7 @@ class TestLanguageDetector(XMLTester):
     def test_get_main_lang(self):
         test_main_lang = 'sme'
         language_detector = converter.LanguageDetector(self.root,
-                                                       self.classifier)
+                                                       LANGUAGEGUESSER)
         self.assertEqual(test_main_lang, language_detector.get_mainlang())
 
     def test_set_paragraph_language_preset_language(self):
@@ -45,7 +45,7 @@ class TestLanguageDetector(XMLTester):
         expected_paragraph = '<p xml:lang="sme">I Orohagat</p>'
 
         language_detector = converter.LanguageDetector(self.root,
-                                                       self.classifier)
+                                                       LANGUAGEGUESSER)
         got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
 
@@ -74,7 +74,7 @@ class TestLanguageDetector(XMLTester):
             'prográmmain, maid Microsoft ii leat ráhkadan.</p>')
 
         language_detector = converter.LanguageDetector(self.root,
-                                                       self.classifier)
+                                                       LANGUAGEGUESSER)
         got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
 
@@ -105,7 +105,7 @@ class TestLanguageDetector(XMLTester):
             'ráhkadan.</p>')
 
         language_detector = converter.LanguageDetector(self.root,
-                                                       self.classifier)
+                                                       LANGUAGEGUESSER)
         got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
 
@@ -140,7 +140,7 @@ class TestLanguageDetector(XMLTester):
             'ráhkadan.</p>')
 
         language_detector = converter.LanguageDetector(self.root,
-                                                       self.classifier)
+                                                       LANGUAGEGUESSER)
         got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
 
@@ -160,7 +160,7 @@ class TestLanguageDetector(XMLTester):
             'Microsoft.</p>')
 
         language_detector = converter.LanguageDetector(self.root,
-                                                       self.classifier)
+                                                       LANGUAGEGUESSER)
         got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
 
@@ -176,7 +176,7 @@ class TestLanguageDetector(XMLTester):
         expected_paragraph = 'bla bla  ble ble  bli bli  blo blo'
 
         language_detector = converter.LanguageDetector(self.root,
-                                                       self.classifier)
+                                                       LANGUAGEGUESSER)
         got_paragraph = language_detector.remove_quote(
             etree.fromstring(orig_paragraph))
 
@@ -190,7 +190,7 @@ class TestLanguageDetector(XMLTester):
                 'lang-detection-with-multilingual-tag.xml')).getroot()
         language_detector = converter.LanguageDetector(
             root,
-            self.classifier)
+            LANGUAGEGUESSER)
         language_detector.detect_language()
         got_document = language_detector.get_document()
 
@@ -209,7 +209,7 @@ class TestLanguageDetector(XMLTester):
                          'detection-without-multilingual-tag.xml')).getroot()
         language_detector = converter.LanguageDetector(
             root,
-            self.classifier)
+            LANGUAGEGUESSER)
         language_detector.detect_language()
         got_document = language_detector.get_document()
 
