@@ -29,10 +29,12 @@ import shutil
 import lxml.etree as etree
 import unidecode
 import requests
+import urllib
 
 import argparse_version
 import versioncontrol
 import xslsetter
+import util
 
 
 class NameChangerBase(object):
@@ -58,16 +60,17 @@ class NameChangerBase(object):
             u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
             u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_',
             u'<': u'_', u'>': u'_', u'"': u'_', u'&': u'_', u';': u'_',
-            u'&': u'_', u'%20': u'_',
+            u'&': u'_', u'#': u'_', u'=': u'-',
         }
 
         # unidecode.unidecode makes ascii only
-        newname = unicode(unidecode.unidecode(
-            self.old_filename)).lower()
+        newname = unicode(
+            unidecode.unidecode(
+                urllib.unquote(
+                    self.old_filename
+                ))).lower()
 
-        for key, value in unwanted_chars.items():
-            if key in newname:
-                newname = newname.replace(key, value)
+        newname = util.replace_all(unwanted_chars.items(), newname)
 
         while '__' in newname:
             newname = newname.replace('__', '_')
