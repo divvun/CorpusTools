@@ -58,7 +58,8 @@ class NameChangerBase(object):
             u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
             u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_',
             u'<': u'_', u'>': u'_', u'"': u'_', u'&': u'_', u';': u'_',
-            u'&': u'_'}
+            u'&': u'_', u'%20': u'_',
+        }
 
         # unidecode.unidecode makes ascii only
         newname = unicode(unidecode.unidecode(
