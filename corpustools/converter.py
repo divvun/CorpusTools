@@ -1109,7 +1109,23 @@ class HTMLContentConverter(Converter):
         """
         return re.sub(self.xml_encoding_declaration_re, "", content)
 
+    def simplify_tags(self):
+        """We don't care about the difference between <fieldsets>, <legend>
+        etc. – treat them all as <div>'s for xhtml2corpus
+
+        """
+        superfluously_named_tags = self.soup.xpath(
+            "//html:fieldset | //html:legend | //html:article | //html:hgroup",
+            namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+        for elt in superfluously_named_tags:
+            elt.tag = '{http://www.w3.org/1999/xhtml}div'
+
     def fix_spans_as_divs(self):
+        """XHTML doesn't allow (and xhtml2corpus doesn't handle) span-like
+        elements with div-like elements inside them; fix this and
+        similar issues by turning them into divs.
+
+        """
         spans_as_divs = self.soup.xpath(
             "//*[( descendant::html:div or descendant::html:p"
             "      or descendant::html:h1 or descendant::html:h2"
@@ -1266,6 +1282,7 @@ class HTMLContentConverter(Converter):
                 h_parent = h.getparent()
                 h_parent.insert(h_parent.index(h) + 1, p)
 
+        # br's are not allowed right under body in XHTML:
         for elt in self.soup.xpath(
                 './/html:body/html:br',
                 namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
@@ -1318,6 +1335,7 @@ class HTMLContentConverter(Converter):
         self.center2div()
         self.body_i()
         self.body_text()
+        self.simplify_tags()
         self.fix_spans_as_divs()
 
     def convert2intermediate(self):

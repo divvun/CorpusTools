@@ -470,10 +470,6 @@ If it is a container it has one or more of the these tags:
     </p>
 </xsl:template>
 
-<xsl:template match="html:article">
-    <xsl:apply-templates/>
-</xsl:template>
-
 <xsl:template match="html:header">
     <xsl:apply-templates/>
 </xsl:template>
@@ -483,12 +479,6 @@ If it is a container it has one or more of the these tags:
 </xsl:template>
 
 <xsl:template match="html:textarea">
-    <p>
-        <xsl:apply-templates />
-    </p>
-</xsl:template>
-
-<xsl:template match="html:fieldset">
     <p>
         <xsl:apply-templates />
     </p>
