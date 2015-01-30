@@ -566,8 +566,38 @@ class PDFConverter(Converter):
     def __init__(self, filename, write_intermediate=False):
         super(PDFConverter, self).__init__(filename,
                                            write_intermediate)
+        self.page_ranges = self.skip_to_include(self.md.get_variable('skip_pages'))
+
+    def skip_to_include(self, skip_pages):
+        """Turn skip list into include list.
+
+        If input is 1-4,7,9-12, then we want to include
+        [(5,6), (8,8), (13,0)]
+        where 0 means until the end of the document (pdftotext handily
+        treats -l 0 as ∞)
+
+        """
+        # Turn single pages into single-page ranges, e.g. 7 → 7-7
+        skip_ranges_norm = ( (r if '-' in r else r+"-"+r)
+                             for r in skip_pages.split(",")
+                             if r != "" )
+        try:
+            skip_ranges = ( tuple(map(int, r.split('-')))
+                            for r in skip_ranges_norm )
+        except ValueError as e:
+            print "Invalid format in skip_pages: {}".format(skip_pages)
+            raise e
+        page=1
+        include=[]
+        for a, b in sorted(skip_ranges):
+            if page <= a-1:
+                include.append((page, a-1))
+            page = b+1
+        include.append((page, 0))
+        return include
 
     def replace_ligatures(self):
+
         """
         document is a stringified xml document
         """
@@ -598,14 +628,37 @@ class PDFConverter(Converter):
             self.text = self.text.replace(key + ' ', value)
             self.text = self.text.replace(key, value)
 
+    def run_process(self, first, last):
+        command = ['pdftotext',
+                   '-enc', 'UTF-8', '-nopgbrk', '-eol', 'unix',
+                   '-f', str(first), '-l', str(last),
+                   self.orig, '-']
+        subp = subprocess.Popen(command,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+        (output, error) = subp.communicate()
+
+        if subp.returncode == 99 and "can not be after the last page" in error:
+            # This will happen if a skip-range goes all the way to the
+            # last page, making the next include-range start at last+1
+            return ""
+        elif subp.returncode != 0:
+            logfile = open('{}.log'.format(self.orig), 'w')
+            print >>logfile, 'stdout\n{}\n'.format(output)
+            print >>logfile, 'stderr\n{}\n'.format(error)
+            logfile.close()
+            raise ConversionException("{} failed. \
+                More info in the log file: {}.log".format((command[0]), self.orig))
+        else:
+            return output
+
     def extract_text(self):
         """
         Extract the text from the pdf file using pdftotext
         output contains string from the program and is a utf-8 string
         """
-        command = ['pdftotext', '-enc', 'UTF-8', '-nopgbrk', '-eol',
-                   'unix', self.orig, '-']
-        output = run_process(command, self.orig)
+        output = "\n".join( self.run_process(fr,to)
+                            for fr, to in self.page_ranges )
 
         self.text = unicode(output, encoding='utf8')
         self.replace_ligatures()
