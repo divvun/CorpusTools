@@ -138,7 +138,7 @@ class Converter(object):
             complete = xm.get_transformer()(intermediate)
 
             return complete.getroot()
-        except etree.XSLTApplyError as (e):
+        except etree.XSLTApplyError as e:
             logfile = open('{}.log'.format(self.orig), 'w')
 
             logfile.write('Error at: {}'.format(str(util.lineno())))

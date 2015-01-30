@@ -64,7 +64,7 @@ def path_possibilities(program):
 
 
 def executable_in_path(program):
-    fpath, fname = os.path.split(program)
+    fpath, _ = os.path.split(program)
     if fpath:
         return is_executable(program)
     else:
@@ -129,8 +129,7 @@ def print_element(element, level, indent, out):
     '''
     tag = element.tag.replace('{http://www.w3.org/1999/xhtml}', 'html:')
 
-    for i in range(0, level * indent):
-        out.write(' ')
+    out.write(' ' * (level * indent))
     out.write('<%s' % tag)
 
     for k, v in element.attrib.items():
@@ -138,18 +137,16 @@ def print_element(element, level, indent, out):
     out.write('>\n')
 
     if element.text is not None and element.text.strip() != '':
-        for i in range(0, (level + 1) * indent):
-            out.write(' ')
+        out.write(' ' * ((level + 1) * indent))
         out.write('%s\n' % element.text.strip().encode('utf8'))
 
     for child in element:
         print_element(child, level + 1, indent, out)
 
-    for i in range(0, level * indent):
-        out.write(' ')
+    out.write(' ' * (level * indent))
     out.write('</%s>\n' % tag)
 
     if level > 0 and element.tail is not None and element.tail.strip() != '':
-        for i in range(0, (level - 1) * indent):
+        for _ in range(0, (level - 1) * indent):
             out.write(' ')
         out.write('%s\n' % element.tail.strip().encode('utf8'))

@@ -108,7 +108,7 @@ class NGramModel(object):
                 g = unicode(parts[gram_column])
                 f = int(parts[freq_column])
                 freq[g] = f
-            except ValueError, e:
+            except ValueError as e:
                 raise ValueError("%s: %d %s" % (fname, nl+1, e))
         return freq
 
