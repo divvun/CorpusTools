@@ -577,6 +577,8 @@ class PDFConverter(Converter):
         treats -l 0 as ∞)
 
         """
+        if skip_pages is None:
+            return [(1,0)]
         # Turn single pages into single-page ranges, e.g. 7 → 7-7
         skip_ranges_norm = ( (r if '-' in r else r+"-"+r)
                              for r in skip_pages.split(",")
