@@ -1340,7 +1340,7 @@ class HTMLContentConverter(Converter):
                 './/html:body/html:br',
                 namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
             elt.tag = '{http://www.w3.org/1999/xhtml}p'
-            elt.text = '&nbsp;'
+            elt.text = ' '
 
     def center2div(self):
         '''Convert center to div in tidy style
