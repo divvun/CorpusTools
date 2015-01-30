@@ -45,10 +45,12 @@ def sort_by_value(table, **args):
                   key=operator.itemgetter(1),
                   **args)
 
+
 def replace_all(replacements, string):
     return reduce(lambda a, kv: a.replace(*kv),
                   replacements,
                   string)
+
 
 def is_executable(fullpath):
     return os.path.isfile(fullpath) and os.access(fullpath, os.X_OK)

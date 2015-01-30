@@ -312,7 +312,7 @@ class Classifier(object):
             if len(langs) != len(active_langs):
                 missing = langs - active_langs - self.langs_warned
                 if missing:
-                    self.langs_warned.update(missing) # only warn once per lang
+                    self.langs_warned.update(missing)  # only warn once per lang
                     note("WARNING: No language model for {}".format(
                         "/".join(missing)))
             return active_langs

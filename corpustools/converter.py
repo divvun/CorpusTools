@@ -188,16 +188,16 @@ class Converter(object):
             fixer.fix_body_encoding()
 
     mixed_to_unicode = {
-        'e4' : u'ä',
-        '85' : u'…',            # u'\u2026' ... character.
-        '96' : u'–',            # u'\u2013' en-dash
-        '97' : u'—',            # u'\u2014' em-dash
-        '91' : u"‘",            # u'\u2018' left single quote
-        '92' : u"’",            # u'\u2019' right single quote
-        '93' : u'“',            # u'\u201C' left double quote
-        '94' : u'”',            # u'\u201D' right double quote
-        '95' : u"•"             # u'\u2022' bullet
-    } 
+        'e4': u'ä',
+        '85': u'…',            # u'\u2026' ... character.
+        '96': u'–',            # u'\u2013' en-dash
+        '97': u'—',            # u'\u2014' em-dash
+        '91': u"‘",            # u'\u2018' left single quote
+        '92': u"’",            # u'\u2019' right single quote
+        '93': u'“',            # u'\u201C' left double quote
+        '94': u'”',            # u'\u201D' right double quote
+        '95': u"•"             # u'\u2022' bullet
+    }
     def mixed_decoder(self, decode_error):
         badstring = decode_error.object[decode_error.start:decode_error.end]
         badhex = badstring.encode('hex')
@@ -213,7 +213,7 @@ class Converter(object):
         meant to be.
 
         """
-        assert(type(content)==unicode)
+        assert(type(content) == unicode)
         # u'š'.encode('windows-1252') gives '\x9a', which sometimes
         # appears in otherwise utf-8-encoded documents with the
         # meaning 'š'
@@ -589,8 +589,8 @@ class PDFConverter(Converter):
         except ValueError as e:
             print "Invalid format in skip_pages: {}".format(skip_pages)
             raise e
-        page=1
-        include=[]
+        page = 1
+        include = []
         for a, b in sorted(skip_ranges):
             if page <= a-1:
                 include.append((page, a-1))
@@ -659,7 +659,7 @@ class PDFConverter(Converter):
         Extract the text from the pdf file using pdftotext
         output contains string from the program and is a utf-8 string
         """
-        output = "\n".join( self.run_process(fr,to)
+        output = "\n".join( self.run_process(fr, to)
                             for fr, to in self.page_ranges )
 
         self.text = unicode(output, encoding='utf8')
@@ -706,7 +706,7 @@ class PDF2XMLConverter(Converter):
     '''
     def __init__(self, filename, write_intermediate=False):
         super(PDF2XMLConverter, self).__init__(filename,
-                                           write_intermediate)
+                                               write_intermediate)
         self.body = etree.Element('body')
         self.parts = []
         self.skip_pages = []
@@ -1073,16 +1073,17 @@ class HTMLContentConverter(Converter):
         self.soup = html5parser.document_fromstring(superclean)
 
         self.convert2xhtml()
-        #with open('{}.huff.xml'.format(self.orig), 'wb') as huff:
-        #    util.print_element(etree.fromstring(self.soup), 0, 2, huff)
+        # with open('{}.huff.xml'.format(self.orig), 'wb') as huff:
+        #     util.print_element(etree.fromstring(self.soup), 0, 2, huff)
 
 
         self.converter_xsl = os.path.join(here, 'xslt/xhtml2corpus.xsl')
 
     def remove_cruft(self, content):
         # from svenskakyrkan.se documents
-        replacements = [ (u'//<script', u'<script'),
-                         (u'&nbsp;', u' '),
+        replacements = [
+            (u'//<script', u'<script'),
+            (u'&nbsp;', u' '),
         ]
         return util.replace_all(replacements, content)
 
@@ -1194,7 +1195,8 @@ class HTMLContentConverter(Converter):
         for elt in spans_as_divs:
             elt.tag = '{http://www.w3.org/1999/xhtml}div'
 
-        ps_as_divs = self.soup.xpath("//html:p[descendant::html:div]",
+        ps_as_divs = self.soup.xpath(
+            "//html:p[descendant::html:div]",
             namespaces={'html': 'http://www.w3.org/1999/xhtml'})
         for elt in ps_as_divs:
             elt.tag = '{http://www.w3.org/1999/xhtml}div'
@@ -1208,7 +1210,8 @@ class HTMLContentConverter(Converter):
             elt.tag = '{http://www.w3.org/1999/xhtml}div'
 
     def remove_empty_p(self):
-        ps = self.soup.xpath('//html:p',
+        ps = self.soup.xpath(
+            '//html:p',
             namespaces={'html': 'http://www.w3.org/1999/xhtml'})
 
         for elt in ps:

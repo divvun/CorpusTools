@@ -29,7 +29,6 @@ import argparse
 import argparse_version
 
 
-
 class XMLPrinter:
     """This is a class to convert giellatekno xml formatted files to plain text
     """

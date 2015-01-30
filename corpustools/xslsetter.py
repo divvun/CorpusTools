@@ -79,14 +79,16 @@ class MetadataHandler(object):
 
     def set_parallel_text(self, language, location):
         attrib = { self.lang_key: language,
-                   "location" : location }
+                   "location": location }
         parallels = self._get_variable_elt("parallels")
         if parallels is None:
-            parallels = etree.Element("{http://www.w3.org/1999/XSL/Transform}variable",
-                                      name="parallels")
+            parallels = etree.Element(
+                "{http://www.w3.org/1999/XSL/Transform}variable",
+                name="parallels")
             parallels.text, parallels.tail = "\n", "\n\n"
             self.tree.getroot().append(parallels)
-        elt = parallels.find("parallel_text[@{}='{}']".format(self.lang_key, language))
+        elt = parallels.find("parallel_text[@{}='{}']".format(self.lang_key,
+                                                              language))
         if elt is not None:
             elt.attrib.update(attrib)
         else:

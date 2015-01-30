@@ -153,7 +153,8 @@ class AddFileToCorpus(NameChangerBase):
         '''
         metafile_name = self.toname() + '.xsl'
         if not os.path.exists(metafile_name):
-            metadata_file = xslsetter.MetadataHandler(metafile_name, create=True)
+            metadata_file = xslsetter.MetadataHandler(metafile_name,
+                                                      create=True)
             if self.old_dirname.startswith('http'):
                 metadata_file.set_variable('filename', os.path.join(
                     self.old_dirname, self.old_filename))
