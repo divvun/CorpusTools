@@ -1149,13 +1149,18 @@ class HTMLContentConverter(Converter):
             source = 'xsl'
             encoding = encoding_from_xsl.lower()
 
-        if encoding == 'iso-8859-1' or encoding == 'ascii':
-            return 'windows-1252', source
+        encoding_norm = {
+            'iso-8859-1': 'windows-1252',
+            'ascii': 'windows-1252',
+            'windows-1252': 'windows-1252',
+            'utf-8': 'utf-8',
+        }
+        if encoding in encoding_norm:
+            encoding = encoding_norm[encoding]
         else:
-            if encoding != 'utf-8':
-                print >>sys.stderr, "Unusual encoding found in {} {}: {}".format(
-                    self.orig, source, encoding)
-            return encoding, source
+            print >>sys.stderr, "Unusual encoding found in {} {}: {}".format(
+                self.orig, source, encoding)
+        return encoding, source
 
     def remove_declared_encoding(self, content):
         """lxml explodes if we send a decoded Unicode string with an
