@@ -14,27 +14,28 @@ These scripts will be installed
 !!Requirements
 
 * python2
-* pysvn
 * pip for python2
-* tidyhtml
-* wvHtml
+* pysvn (only needed for add_files_to_corpus)
+* wvHtml (only needed for convert2xml)
+* Java (only needed for parallelize)
+* Perl (only needed for parallelize)
 
 On Mac, do:
 
 {{{
-sudo port install py-pysvn py-pip tidy wv
+sudo port install py-pysvn py-pip wv
 }}}
 
 On Debian/Ubuntu, do:
 
 {{{
-sudo apt-get install python-svn python-pip libtidy-0.99-0 wv
+sudo apt-get install python-svn python-pip
 }}}
 
 On Arch Linux, do:
 
 {{{
-sudo pacman -S python2-pip tidyhtml wv
+sudo pacman -S python2-pip wv
 yaourt -S python2-pysvn
 }}}
 
@@ -175,9 +176,7 @@ convert2xml depends on these external programs:
 as well as various files from the Divvun/Giellatekno SVN, at least the
 following files/directories need to exist under $GTHOME:
 
-* gt/script/corpus/bible2xml.pl
 * gt/dtd
-* gt/tools/lang-guesser
 
 !Usage
 
@@ -355,12 +354,10 @@ at least the following directories need to exist in $GTHOME:
 * gt/langs (specifically, the abbr.txt and corr.txt files)
 * gt/common
 * gt/script
-* gt/tools/lang-guesser
-* gt/tools/alignment-tools/tca2 (must be compiled)
 
-Before running, you need to compile st/nob and gt/sme (or at least
-pilfer the abbr/corr files off someone else), and tca2 (just type "ant"
-in $GTHOME/gt/tools/alignment-tools/tca2).
+It also uses the alignment program tca2, but for convenience, the
+alignment.jar-file is included in SVN and installed by CorpusTools
+(you can recompile it by simply typing "ant" in corpustools/tca2).
 
 
 The complete help text from the program is as follows:
