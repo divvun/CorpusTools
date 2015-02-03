@@ -377,6 +377,27 @@ optional arguments:
                         The language to parallelize the input document with
 }}}
 
+
+You run the program on the files created by convert2xml, e.g.
+{{{
+parallelize -p nob converted/sma/admin/ntfk/tsaekeme.html.xml
+}}}
+This will create a file named
+toktmx/sma2nob/admin/ntfk/tsaekeme.html.toktmx
+
+If you want to parallelize all your sma files with nob in one go, you
+can do e.g.
+{{{
+convert2xml orig/{sma,nob}
+find converted/sma/ -name '*.xml' -print0 | xargs -0 -n1 -P3 parallelize -p nob
+}}}
+
+(The -P3 means "run up to 3 processes at a time", this speeds things
+up since most computer these days have several processor cores.)
+
+The files will end up in corresponding directories under
+toktmx/sma2nob.
+
 !!saami_crawler
 
 Add files to freecorpus from a given site.
