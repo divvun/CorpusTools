@@ -233,6 +233,11 @@ class SentenceDivider:
         in_file.remove_skip()
         self.input_etree = in_file.get_etree()
 
+    def in_main_lang(self, elt):
+        return self.doc_lang == elt.attrib.get(
+            '{http://www.w3.org/XML/1998/namespace}lang',
+            self.doc_lang)
+
     def process_all_paragraphs(self):
         """Go through all paragraphs in the etree and process them one by one.
         """
@@ -240,11 +245,13 @@ class SentenceDivider:
         body = etree.Element('body')
         self.document.append(body)
 
-        paragraphs = ["".join(p.xpath('.//text()'))
-                    for p in self.input_etree.findall('//p')]
-        preprocessed = self.preprocess_paragraphs(paragraphs)
-        for p in preprocessed:
-            body.append(self.process_one_paragraph(p))
+        ps_doc_lang = filter(self.in_main_lang,
+                             self.input_etree.findall('//p'))
+        ps_text = ("".join(p.xpath('.//text()'))
+                   for p in ps_doc_lang)
+        preprocessed = self.preprocess_paragraphs(ps_text)
+        body.extend(map(self.process_one_paragraph,
+                        preprocessed))
 
     def write_result(self, outfile):
         """Write self.document to the given outfile name
@@ -270,7 +277,7 @@ class SentenceDivider:
         # Temporarily intersperse an XML tag <SKIP/> between
         # paragraphs so that we can use just one call to preprocess,
         # but still have them split at the right points.
-        sanitized = [p.replace("<SKIP/>", "") for p in paragraphs]
+        sanitized = (p.replace("<SKIP/>", "") for p in paragraphs)
         return self.ext_preprocess("<SKIP/>".join(sanitized)).split("<SKIP/>")
 
     def ext_preprocess(self, preprocess_input):
