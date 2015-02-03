@@ -3,3 +3,4 @@ recursive-include docs *.txt
 recursive-include corpustools/xslt *.xsl *.xml *.ent
 recursive-include corpustools/lm *.lm *.wm
 recursive-include corpustools/dtd *.dtd
+include corpustools/tca2/dist/lib/alignment.jar
