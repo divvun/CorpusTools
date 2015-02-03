@@ -20,6 +20,8 @@
 #   Copyright 2011-2014 Børre Gaup <borre.gaup@uit.no>
 #
 
+from __future__ import unicode_literals
+
 import os
 import errno
 import re
@@ -54,7 +56,7 @@ class CorpusXMLFile:
         self.sanity_check()
 
     def sanity_check(self):
-        if self.root.tag != u"document":
+        if self.root.tag != "document":
             raise util.ArgumentError(
                 "Expected Corpus XML file (output of convert2xml) with "
                 "<document> as the root tag, got {} -- did you pass the "
@@ -95,21 +97,21 @@ class CorpusXMLFile:
             return word_count.text
 
     def get_genre(self):
-        u"""
+        """
         @brief Get the genre from the xml file
 
         :returns: the genre as set in the xml file
         """
-        if self.root.find(u".//genre") is not None:
-            return self.root.find(u".//genre").attrib[u"code"]
+        if self.root.find(".//genre") is not None:
+            return self.root.find(".//genre").attrib["code"]
 
     def get_ocr(self):
-        u"""
+        """
         @brief Check if the ocr element exists
 
         :returns: the ocr element or None
         """
-        return self.root.find(u".//ocr")
+        return self.root.find(".//ocr")
 
     def get_parallel_basename(self, paralang):
         """
@@ -185,7 +187,7 @@ class CorpusXMLFile:
         '''Replace the body element with new_body element
         '''
         if new_body.tag == 'body':
-            oldbody = self.etree.find(u'.//body')
+            oldbody = self.etree.find('.//body')
             oldbody.getparent().replace(oldbody, new_body)
 
     def write(self, file_name=None):
@@ -195,7 +197,7 @@ class CorpusXMLFile:
             file_name = self.get_name()
 
         self.etree.write(file_name,
-                         encoding=u'utf8',
+                         encoding='utf8',
                          pretty_print=True,
                          xml_declaration=True)
 
@@ -238,8 +240,11 @@ class SentenceDivider:
         body = etree.Element('body')
         self.document.append(body)
 
-        for paragraph in self.input_etree.findall('//p'):
-            body.append(self.process_one_paragraph(paragraph))
+        paragraphs = ["".join(p.xpath('.//text()'))
+                    for p in self.input_etree.findall('//p')]
+        preprocessed = self.preprocess_paragraphs(paragraphs)
+        for p in preprocessed:
+            body.append(self.process_one_paragraph(p))
 
     def write_result(self, outfile):
         """Write self.document to the given outfile name
@@ -259,7 +264,16 @@ class SentenceDivider:
                  xml_declaration=True)
         f.close()
 
-    def get_preprocess_output(self, preprocess_input):
+    def preprocess_paragraphs(self, paragraphs):
+        """Run a list of paragraphs through preprocess.
+        """
+        # Temporarily intersperse an XML tag <SKIP/> between
+        # paragraphs so that we can use just one call to preprocess,
+        # but still have them split at the right points.
+        sanitized = [p.replace("<SKIP/>", "") for p in paragraphs]
+        return self.ext_preprocess("<SKIP/>".join(sanitized)).split("<SKIP/>")
+
+    def ext_preprocess(self, preprocess_input):
         """Send the text in preprocess_input into preprocess, return the
         result.
         If the process fails, exit the program
@@ -271,7 +285,7 @@ class SentenceDivider:
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         (output, error) = subp.communicate(
-            preprocess_input.encode('utf-8').replace('\n', ' '))
+            preprocess_input.replace('\n', ' ').encode('utf-8'))
 
         if subp.returncode != 0:
             print >>sys.stderr, 'Could not divide into sentences'
@@ -279,56 +293,49 @@ class SentenceDivider:
             print >>sys.stderr, error
             sys.exit()
         else:
-            return output
+            return output.decode('utf-8')
 
-    def process_one_paragraph(self, orig_paragraph):
-        """Run the content of the orig_paragraph through preprocess,
-        make sentences
-        Return a new paragraph containing the marked up sentences
+    pseudosent_re = re.compile(r"^[\W|\s]*$")
+
+    def process_one_paragraph(self, paragraph):
+        """Make sentences from the output of preprocess.
+        Return a new paragraph containing the marked up sentences.
         """
         new_paragraph = etree.Element("p")
 
-        all_text = orig_paragraph.xpath('.//text()')
-        preprocess_input = "".join(all_text)
+        sentence = []
+        incomplete_sentences = ['.', '?', '!', ')', ']', '...', '…',
+                                '"', '»', '”', '°', '', ':']
+        words = paragraph.split('\n')
+        i = 0
+        while i < len(words):
+            word = words[i].strip()
 
-        # Check if there is any text from preprocess
-        if (preprocess_input):
-            output = self.get_preprocess_output(preprocess_input)
-            sentence = []
-            incomplete_sentences = ['.', '?', '!', ')', ']', '...', '…', '"',
-                                    '»', '”', '°', '', ':']
-            words = output.split('\n')
-            i = 0
-            while i < len(words):
-                word = words[i].strip()
+            # If word exists in typos, replace it with the correction
+            if word in self.typos:
+                word = self.typos[word]
 
-                # If word exists in typos, replace it with the correction
-                if word in self.typos:
-                    word = self.typos[word]
+            sentence.append(word)
+            if word in ['.', '?', '!']:
+                while (i + 1 < len(words) and
+                       words[i + 1].strip() in incomplete_sentences):
+                    if words[i + 1] != '':
+                        sentence.append(words[i + 1].strip())
+                    i = i + 1
 
-                sentence.append(word.decode('utf-8'))
-                if (word == '.' or word == '?' or word == '!'):
-                    while (i + 1 < len(words) and
-                           words[i + 1].strip() in incomplete_sentences):
-                        if words[i + 1] != '':
-                            sentence.append(
-                                words[i + 1].decode('utf-8').strip())
-                        i = i + 1
+                # exclude pseudo-sentences, i.e. sentences that
+                # don't contain any alphanumeric characters
+                if not self.pseudosent_re.match(' '.join(sentence)):
+                    new_paragraph.append(self.make_sentence(sentence))
+                sentence = []
 
-                    # exclude pseudo-sentences, i.e. sentences that
-                    # don't contain any alphanumeric characters
-                    if not re.compile(
-                            r"^[\W|\s]*$").match(' '.join(sentence)):
-                        new_paragraph.append(self.make_sentence(sentence))
-                    sentence = []
+            i = i + 1
 
-                i = i + 1
-
-            # exclude pseudo-sentences, i.e. sentences that don't contain
-            # any alphanumeric characters
-            if (len(sentence) > 1 and not
-                    re.compile(r"^[\W|\s]*$").match(' '.join(sentence))):
-                new_paragraph.append(self.make_sentence(sentence))
+        # exclude pseudo-sentences, i.e. sentences that don't contain
+        # any alphanumeric characters
+        if (len(sentence) > 1
+            and not self.pseudosent_re.match(' '.join(sentence))):
+            new_paragraph.append(self.make_sentence(sentence))
 
         return new_paragraph
 
@@ -468,16 +475,18 @@ class Parallelize:
 
         anchor_name = self.generate_anchor_file()
 
-        subp = subprocess.Popen(['java',
-                                 '-Xms512m', '-Xmx1024m',
-                                 '-jar',
-                                 tca2_jar,
-                                 '-cli',
-                                 '-anchor={}'.format(anchor_name),
-                                 '-in1={}'.format(self.get_sent_filename(
-                                     self.get_filelist()[0])),
-                                 '-in2={}'.format(self.get_sent_filename(
-                                     self.get_filelist()[1]))],
+        command = ['java',
+                   '-Xms512m', '-Xmx1024m',
+                   '-jar',
+                   tca2_jar,
+                   '-cli',
+                   '-anchor={}'.format(anchor_name),
+                   '-in1={}'.format(self.get_sent_filename(
+                       self.get_filelist()[0])),
+                   '-in2={}'.format(self.get_sent_filename(
+                       self.get_filelist()[1]))]
+        print "Running tca2 aligner ..."
+        subp = subprocess.Popen(command,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         (output, error) = subp.communicate()
@@ -759,7 +768,7 @@ class Tca2ToTmx(Tmx):
         tuv = etree.Element("tuv")
         tuv.attrib["{http://www.w3.org/XML/1998/namespace}lang"] = lang
         seg = etree.Element("seg")
-        seg.text = self.remove_s_tag(line).strip().decode("utf-8")
+        seg.text = self.remove_s_tag(line).strip()
         tuv.append(seg)
 
         return tuv
@@ -834,9 +843,7 @@ class Tca2ToTmx(Tmx):
         text = ""
         pfile_name = self.get_sent_filename(pfile).replace('.xml', '_new.txt')
         try:
-            f = open(pfile_name, "r")
-            text = f.readlines()
-            f.close()
+            text = open(pfile_name, "r").read().decode('utf-8').split('\n')
         except IOError as e:
             print "I/O error({0}): {1}".format(e.errno, e.strerror)
             sys.exit(1)

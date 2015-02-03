@@ -52,7 +52,7 @@ class GenerateAnchorList(object):
                 with open(infile) as instream:
                     print 'Reading {}'.format(infile)
                     lineno = 0
-                    for line in instream.readlines():
+                    for line in instream:
                         lineno += 1
                         line = line.strip()
                         if (not line.startswith('#') or not

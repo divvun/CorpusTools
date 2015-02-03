@@ -106,7 +106,7 @@ def get_preprocess_command(lang):
             for opt, path in [('abbr', abbr),
                               ('corr', corr)]
             if path is not None]
-    return [preprocess_script] + args
+    return [preprocess_script, "--xml"] + args
 
 
 def lineno():

@@ -68,7 +68,8 @@ class Typos:
         self.typos = {}
         typofile = open(typosfile)
 
-        for line in typofile:
+        for strline in typofile:
+            line = strline.decode('utf-8')
             if line.strip():
                 tl = Typoline(line.rstrip())
                 if tl.getCorrection() and tl.getTypo() != tl.getCorrection():
