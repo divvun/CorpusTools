@@ -245,13 +245,17 @@ class SentenceDivider:
         body = etree.Element('body')
         self.document.append(body)
 
-        ps_doc_lang = filter(self.in_main_lang,
+        elts_doc_lang = filter(self.in_main_lang,
                              self.input_etree.findall('//p'))
-        ps_text = ("".join(p.xpath('.//text()'))
-                   for p in ps_doc_lang)
-        preprocessed = self.preprocess_paragraphs(ps_text)
-        body.extend(map(self.process_one_paragraph,
-                        preprocessed))
+        processed = self.process_elts(elts_doc_lang)
+        body.extend(processed)
+
+    def process_elts(self, elts):
+        para_texts = ("".join(elt.xpath('.//text()'))
+                      for elt in elts)
+        preprocessed = self.preprocess_para_texts(para_texts)
+        return map(self.process_one_para_text,
+                   preprocessed)
 
     def write_result(self, outfile):
         """Write self.document to the given outfile name
@@ -271,13 +275,13 @@ class SentenceDivider:
                  xml_declaration=True)
         f.close()
 
-    def preprocess_paragraphs(self, paragraphs):
+    def preprocess_para_texts(self, para_texts):
         """Run a list of paragraphs through preprocess.
         """
         # Temporarily intersperse an XML tag <SKIP/> between
         # paragraphs so that we can use just one call to preprocess,
         # but still have them split at the right points.
-        sanitized = (p.replace("<SKIP/>", "") for p in paragraphs)
+        sanitized = (p.replace("<SKIP/>", "") for p in para_texts)
         return self.ext_preprocess("<SKIP/>".join(sanitized)).split("<SKIP/>")
 
     def ext_preprocess(self, preprocess_input):
@@ -304,7 +308,7 @@ class SentenceDivider:
 
     pseudosent_re = re.compile(r"^[\W|\s]*$")
 
-    def process_one_paragraph(self, paragraph):
+    def process_one_para_text(self, para_text):
         """Make sentences from the output of preprocess.
         Return a new paragraph containing the marked up sentences.
         """
@@ -313,7 +317,7 @@ class SentenceDivider:
         sentence = []
         incomplete_sentences = ['.', '?', '!', ')', ']', '...', '…',
                                 '"', '»', '”', '°', '', ':']
-        words = paragraph.split('\n')
+        words = para_text.split('\n')
         i = 0
         while i < len(words):
             word = words[i].strip()

@@ -200,7 +200,7 @@ class TestSentenceDivider(unittest.TestCase):
             '<p>Jápmá go sámi kultuvra veahážiid mielde go nuorat ovdal '
             'guldalit Britney Spears go Áilluhačča? máksá Finnmárkkuopmodat. '
             '§ 10 Áššit meahcceeatnamiid</p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML(
             '<p><s id="0">Jápmá go sámi kultuvra veahážiid mielde go nuorat '
             'ovdal guldalit Britney Spears go Áilluhačča ?</s><s id="1">'
@@ -215,7 +215,7 @@ class TestSentenceDivider(unittest.TestCase):
             'mielddus A <em type="italic"><span type="quote">“Romssa '
             'universitehta ja guoskevaš institušuvnnaid sámi dutkan ja '
             'oahpahus”</span></em>  álggahusa ).</p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML(
             '<p><s id="3">Stuora oassi Romssa universitehta doaimmain lea '
             'juohkit dieđuid sámi , norgga ja riikkaidgaskasaš '
@@ -229,7 +229,7 @@ class TestSentenceDivider(unittest.TestCase):
         p = etree.XML(
             '<p>Artikkel i boka Samisk skolehistorie 2 . Davvi Girji '
             '2007.</p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML(
             '<p><s id="4">Artikkel i boka Samisk skolehistorie 2 .</s>'
             '<s id="5">Davvi Girji 2007 .</s></p>')
@@ -238,7 +238,7 @@ class TestSentenceDivider(unittest.TestCase):
         p = etree.XML(
             '<p><em type="bold">Bjørn Aarseth med elever på skitur - på '
             '1950-tallet.</em> (Foto: Trygve Madsen)</p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML(
             '<p><s id="6">Bjørn Aarseth med elever på skitur - på '
             '1950-tallet .</s><s id="7">( Foto : Trygve Madsen )</s></p>')
@@ -247,14 +247,14 @@ class TestSentenceDivider(unittest.TestCase):
         p = etree.XML(
             '<p>finne rom for etablering av en fast tilskuddsordning til '
             'allerede etablerte språksentra..</p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML(
             '<p><s id="8">finne rom for etablering av en fast '
             'tilskuddsordning til allerede etablerte språksentra . .</s></p>')
         self.assertXmlEqual(got, want)
 
         p = etree.XML('<p>elevene skal få!  Sametingsrådet mener målet</p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML(
             '<p><s id="9">elevene skal få !</s><s id="10">Sametingsrådet '
             'mener målet</s></p>')
@@ -270,7 +270,7 @@ class TestSentenceDivider(unittest.TestCase):
             '......... 7 Kommunal- og regionaldepartementet.................'
             '...............................................................'
             '... 9</p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML(
             '<p><s id="11">Sametinget ... 2 Utdannings- og '
             'forskningsdepartementet ... 3 Kultur- og kirkedepartementet ... '
@@ -283,7 +283,7 @@ class TestSentenceDivider(unittest.TestCase):
             'máttasámegielas. (... ). Berre leat vejolaš váldit '
             'oahpaheaddjeoahpu, mas erenoamáš deaddu lea davvi-, julev-, '
             'máttasámegielas ja kultuvrras.</p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML(
             '<p><s id="12">Allaskuvllas lea maiddái ovddasvástádus '
             'julevsámegielas ja máttasámegielas .</s><s id="13">Berre leat '
@@ -301,7 +301,7 @@ class TestSentenceDivider(unittest.TestCase):
             '<p>Alt det som har med norsk å gjøre, har jeg gruet meg for og '
             'hatet hele mitt liv - og kommer kanskje til å fortsette med '
             'det. ...</p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML(
             '<p><s id="0">Alt det som har med norsk å gjøre , har jeg gruet '
             'meg for og hatet hele mitt liv - og kommer kanskje til å '
@@ -323,7 +323,7 @@ class TestSentenceDivider(unittest.TestCase):
             'vi så fra år til år søkt å forbedre kursoppleggene til vi '
             'foran 1963-kursene står med planer som vi anser '
             'tilfredsstillende , men ikke endelige .)</p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML(
             '<p><s id="0">Forsøksrådet for skoleverket godkjente det '
             'praktiske opplegget for kurset i brev av 18/8 1959 og uttalte '
@@ -346,7 +346,7 @@ class TestSentenceDivider(unittest.TestCase):
             'gjøre at det blir en større grad av overensstemmelse mellom '
             'lovens begreper og det begrepsapparatet som er nyttet innenfor '
             'samisk kulturminnevern. , </p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML(
             '<p><s id="0">Etter Sametingets oppfatning vil forslagene til ny '
             '§ 1 Lovens formål og § 2 Kulturminner og kulturmiljØer - '
@@ -357,28 +357,28 @@ class TestSentenceDivider(unittest.TestCase):
 
         self.sentence_divider.doc_lang = 'nob'
         p = etree.XML('<p>, </p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML('<p/>')
         self.assertXmlEqual(got, want)
 
     def test_spurious_dot(self):
         self.sentence_divider.doc_lang = 'nob'
         p = etree.XML('<p>..</p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML('<p/>')
         self.assertXmlEqual(got, want)
 
     def test_lone_questionmark(self):
         self.sentence_divider.doc_lang = 'nob'
         p = etree.XML('<p>?</p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML('<p/>')
         self.assertXmlEqual(got, want)
 
     def test_dot_in_sentence_start(self):
         self.sentence_divider.doc_lang = 'nob'
         p = etree.XML('<p> . Cálliidlágádus 1999)</p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML('<p><s id="0">Cálliidlágádus 1999 )</s></p>')
         self.assertXmlEqual(got, want)
 
@@ -388,7 +388,7 @@ class TestSentenceDivider(unittest.TestCase):
             '<p>( Styrke institusjonssamarbeidet (Urfolksnettverket og '
             '<span type="quote">“Forum for urfolksspørsmål i '
             'bistanden”</span>)</p>')
-        got = self.sentence_divider.process_one_paragraph(p)
+        got = self.sentence_divider.process_elts([p])[0]
         want = etree.XML(
             '<p><s id="0">( Styrke institusjonssamarbeidet ( '
             'Urfolksnettverket og “ Forum for urfolksspørsmål i bistanden ” )'
