@@ -55,10 +55,11 @@ class ConversionException(Exception):
     pass
 
 
-def run_process(command, orig, to_stdin=None):
+def run_process(command, orig, cwd=None, to_stdin=None):
     subp = subprocess.Popen(command,
                             stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
+                            stderr=subprocess.PIPE,
+                            cwd=cwd)
     (output, error) = subp.communicate(to_stdin)
 
     if subp.returncode != 0:
@@ -1493,8 +1494,14 @@ class DocConverter(HTMLContentConverter):
     Class to convert Microsoft Word documents to the giellatekno xml format
     """
     def __init__(self, filename, write_intermediate=False):
-        command = ['wvHtml', filename, '-']
-        output = run_process(command, filename)
+        Converter.__init__(self, filename, write_intermediate)
+        command = ['wvHtml',
+                   os.path.realpath(filename),
+                   '-']
+        if not os.path.exists(self.get_tmpdir()):
+             # wvHtml leaves a mess in cwd
+            os.mkdir(self.get_tmpdir())
+        output = run_process(command, filename, cwd=self.get_tmpdir())
 
         HTMLContentConverter.__init__(self, filename,
                                       content=output)
