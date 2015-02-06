@@ -281,8 +281,12 @@ class SentenceDivider:
         # Temporarily intersperse an XML tag <SKIP/> between
         # paragraphs so that we can use just one call to preprocess,
         # but still have them split at the right points.
-        sanitized = (p.replace("<SKIP/>", "") for p in para_texts)
-        return self.ext_preprocess("<SKIP/>".join(sanitized)).split("<SKIP/>")
+        replacements = [("<", "&lt;"),
+                        (">", "&gt;"),
+                        ('\n', ' '),]
+        sanitized = (util.replace_all(replacements, p)
+                     for p in para_texts)
+        return self.ext_preprocess("\n<SKIP/>".join(sanitized)).split("<SKIP/>")
 
     def ext_preprocess(self, preprocess_input):
         """Send the text in preprocess_input into preprocess, return the
@@ -296,7 +300,7 @@ class SentenceDivider:
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         (output, error) = subp.communicate(
-            preprocess_input.replace('\n', ' ').encode('utf-8'))
+            preprocess_input.encode('utf-8'))
 
         if subp.returncode != 0:
             print >>sys.stderr, 'Could not divide into sentences'
