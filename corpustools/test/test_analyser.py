@@ -44,7 +44,6 @@ class TestAnalyser(unittest.TestCase):
                                                       'disambiguation.cg3'),
             function_analysis_file=os.path.join(here, 'functions.cg3'),
             dependency_analysis_file=os.path.join(here, 'dependency.cg3'))
-        self.a.set_corr_file(corr_file=os.path.join(here, 'corr.txt'))
 
     def assertXmlEqual(self, got, want):
         u"""Check if two stringified xml snippets are equal

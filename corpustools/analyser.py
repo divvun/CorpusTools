@@ -83,12 +83,6 @@ class Analyser(object):
         self.function_analysis_file = function_analysis_file
         self.dependency_analysis_file = dependency_analysis_file
 
-    def set_corr_file(self, corr_file):
-        '''Set the correct file used by preprocess
-        '''
-        self.exit_on_error(corr_file)
-        self.corr_file = corr_file
-
     def collect_files(self, converted_dirs):
         '''converted_dirs is a list of directories containing converted
         xml files

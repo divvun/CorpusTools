@@ -351,13 +351,24 @@ Parallelize two parallel corpus files, write the result to a .tmx file.
 parallelize depends on various files from the Divvun/Giellatekno SVN,
 at least the following directories need to exist in $GTHOME:
 
-* gt/langs (specifically, the abbr.txt and corr.txt files)
+* langs (specifically, the abbr.txt files)
 * gt/common
 * gt/script
 
 It also uses the alignment program tca2, but for convenience, the
 alignment.jar-file is included in SVN and installed by CorpusTools
 (you can recompile it by simply typing "ant" in corpustools/tca2).
+
+You can compile the abbr.txt file of langs/sme like this:
+
+{{{
+cd $GTHOME/langs/sme/tools/preprocess && make abbr
+}}}
+
+You should compile at least the sme abbr.txt file, this one is used as
+a fallback if any other language-specific abbr.txt file is not found,
+but preferably also the abbr.txt files of any other languages you plan
+on parallelising with.
 
 
 The complete help text from the program is as follows:

@@ -101,13 +101,9 @@ def get_preprocess_command(lang):
     sanity_check([preprocess_script])
     abbr_fb = get_lang_resource("sme", 'tools/preprocess/abbr.txt')
     abbr = get_lang_resource(lang, 'tools/preprocess/abbr.txt', abbr_fb)
-    corr = get_lang_resource(lang, 'src/syntax/corr.txt')
-    args = ["--{}={}".format(opt, path)
-            for opt, path in [('abbr', abbr),
-                              ('corr', corr)]
-            if path is not None]
-    return [preprocess_script, "--xml"] + args
-
+    return [preprocess_script,
+            "--xml",
+            "--abbr={}".format(abbr)]
 
 def lineno():
     """Returns the current line number in our program."""
