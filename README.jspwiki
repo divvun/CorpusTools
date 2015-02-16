@@ -54,7 +54,8 @@ sudo pip uninstall -y corpustools
 sudo python2.7 setup.py install --install-scripts=/usr/local/bin
 }}}
 
-Note the dot at the end of the second line. The scripts will then be
+Note the dot at the end of the second line. Also, on some systems, pip
+will be called pip2 or pip-2.7 or pip2.7. The scripts will then be
 found in /usr/local/bin
 
 !To own home directory
@@ -68,7 +69,8 @@ pip uninstall -y corpustools
 python2.7 setup.py install --user --install-scripts=$HOME/bin
 }}}
 
-Note the dot at the end of the second line. The scripts will then be
+Note the dot at the end of the second line. Also, on some systems, pip
+will be called pip2 or pip-2.7 or pip2.7. The scripts will then be
 found in ~/bin
 
 (It may look a bit odd that we first install and then uninstall. The
