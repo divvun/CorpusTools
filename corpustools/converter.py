@@ -718,7 +718,7 @@ class PDF2XMLConverter(Converter):
         self.parts = []
         self.skip_pages = self.set_skip_pages(self.md.get_variable(
             'skip_pages'))
-        self.margins = {}
+        self.margins = self.set_margins(self.get_margin_lines())
 
     def set_skip_pages(self, skip_pages):
         '''Turn a skip_pages entry into a list of pages
@@ -731,7 +731,7 @@ class PDF2XMLConverter(Converter):
                                 if r != "")
 
             skip_ranges = (tuple(map(int, r.split('-')))
-                        for r in skip_ranges_norm)
+                           for r in skip_ranges_norm)
 
             try:
                 for start, end in sorted(skip_ranges):
@@ -792,23 +792,46 @@ class PDF2XMLConverter(Converter):
 
         return document
 
+    def get_margin_lines(self):
+        '''Get the margin lines from the metadata file
+        '''
+        margin_lines = {}
+
+        for key in ['right_margin', 'top_margin', 'left_margin', 'bottom_margin']:
+            if self.md.get_variable(key) is not None and self.md.get_variable(key).strip() != '':
+                margin_lines[key] = self.md.get_variable(key).strip()
+
+        return margin_lines
+
     def set_margins(self, margin_lines={}):
         '''margins_lines is fetched from the metadata file belonging to
         the original file, if available. Before it is passed here, the
         validity of them are checked.
         '''
+        margins = {}
         for key, value in margin_lines.items():
-            self.margins[key] = self.set_margin(value)
+            if 'all' in value and ('odd' in value or 'even' in value):
+                raise ConversionException('Invalid format in the variable {} '
+                    'in the file:\n{}\n{}\n'
+                    'Format should be [all|odd|even|pagenumber]=integer'.format(
+                    key, self.get_xsl(), value))
+            try:
+                self.margins[key] = self.set_margin(value)
+            except ValueError as (e):
+                raise ConversionException('Invalid format in the variable {} '
+                    'in the file:\n{}\n{}\n'
+                    'Format should be [all|odd|even|pagenumber]=integer'.format(
+                    key, self.get_xsl(), value))
+
+        return margins
 
     def set_margin(self, value):
         '''
         '''
         m = {}
-        parts = value.split(',')
-        for part in parts:
-            page = part.split('=')[0].strip()
-            margin = int(part.split('=')[1])
-            m[page] = margin
+        for part in value.split(','):
+            (page, margin) = tuple(part.split('='))
+            m[page.strip()] = int(margin)
 
         return m
 

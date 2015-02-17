@@ -3421,7 +3421,7 @@ class TestPDF2XMLConverter(XMLTester):
         self.assertEqual(p2x.set_margin('odd=230, even = 540 , 8 = 340'),
                          {'odd': 230, 'even': 540, '8': 340})
 
-    def test_set_margins(self):
+    def test_set_margins1(self):
         '''Test set_margins
         '''
         p2x = converter.PDF2XMLConverter('bogus.pdf')
@@ -3434,6 +3434,40 @@ class TestPDF2XMLConverter(XMLTester):
                                        'left_margin': {'7': 70},
                                        'top_margin': {'8': 80},
                                        'bottom_margin': {'9': 200}})
+
+    def test_set_margins2(self):
+        '''all and even in margin line should raise ConversionException
+        '''
+        p2x = converter.PDF2XMLConverter('bogus.pdf')
+
+        self.assertRaises(converter.ConversionException, p2x.set_margins,
+                          {'right_margin': 'all=40,even=80'})
+
+    def test_set_margins3(self):
+        '''all and odd in margin line should raise ConversionException
+        '''
+        p2x = converter.PDF2XMLConverter('bogus.pdf')
+
+        self.assertRaises(converter.ConversionException, p2x.set_margins,
+                          {'right_margin': 'all=40,odd=80'})
+
+    def test_set_margins4(self):
+        '''text after = should raise ConversionException
+        '''
+        p2x = converter.PDF2XMLConverter('bogus.pdf')
+
+        self.assertRaises(converter.ConversionException, p2x.set_margins,
+                          {'right_margin': 'all=tullball'})
+
+    def test_set_margins5(self):
+        '''no = should raise ConversionException
+        '''
+        p2x = converter.PDF2XMLConverter('bogus.pdf')
+
+        self.assertRaises(converter.ConversionException, p2x.set_margins,
+                          {'right_margin': 'all 50'})
+
+
 
     def test_compute_margins1(self):
         '''Test set_margins
