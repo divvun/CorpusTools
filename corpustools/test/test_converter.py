@@ -3467,7 +3467,13 @@ class TestPDF2XMLConverter(XMLTester):
         self.assertRaises(converter.ConversionException, p2x.set_margins,
                           {'right_margin': 'all 50'})
 
+    def test_set_margins6(self):
+        '''line with no comma between values should raise ConversionException
+        '''
+        p2x = converter.PDF2XMLConverter('bogus.pdf')
 
+        self.assertRaises(converter.ConversionException, p2x.set_margins,
+                          {'right_margin': 'all=50 3'})
 
     def test_compute_margins1(self):
         '''Test set_margins

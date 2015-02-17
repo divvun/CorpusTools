@@ -810,7 +810,8 @@ class PDF2XMLConverter(Converter):
         '''
         margins = {}
         for key, value in margin_lines.items():
-            if 'all' in value and ('odd' in value or 'even' in value):
+            if ('all' in value and ('odd' in value or 'even' in value) or
+                '=' not in value):
                 raise ConversionException('Invalid format in the variable {} '
                     'in the file:\n{}\n{}\n'
                     'Format should be [all|odd|even|pagenumber]=integer'.format(
@@ -826,7 +827,11 @@ class PDF2XMLConverter(Converter):
         return margins
 
     def set_margin(self, value):
-        '''
+        '''Set the margins for given margin
+
+        If the value following the = sign is not an integer a ValueError is
+        raised.
+        That exception is caught by set_margins
         '''
         m = {}
         for part in value.split(','):
