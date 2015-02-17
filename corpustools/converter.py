@@ -725,8 +725,8 @@ class PDF2XMLConverter(Converter):
 
     def extract_text(self):
         """
-        Extract the text from the pdf file using pdftotext
-        output contains string from the program and is a utf-8 string
+        Extract the text from the pdf file using pdftohtml
+        run_process produces an utf-8 string containing the output of pdftohtml
         """
         command = ['pdftohtml', '-enc', 'UTF-8', '-stdout', '-nodrm', '-i',
                    '-xml', self.orig]
@@ -740,7 +740,29 @@ class PDF2XMLConverter(Converter):
         pdf_content = self.strip_chars(self.extract_text())
         #with open('/tmp/pdf.xml', 'w') as uff:
             #print >>uff, pdf_content
-        root_element = etree.fromstring(pdf_content)
+        try:
+            root_element = etree.fromstring(pdf_content)
+        except etree.XMLSyntaxError as e:
+            logfile = open('{}.log'.format(self.orig), 'w')
+
+            logfile.write('Error at: {}'.format(str(util.lineno())))
+            for entry in e.error_log:
+                logfile.write('\n{}: {} '.format(
+                    str(entry.line), str(entry.column)))
+                try:
+                    logfile.write(entry.message)
+                except ValueError:
+                    logfile.write(entry.message.encode('latin1'))
+
+                logfile.write('\n')
+
+            logfile.write(pdf_content)
+            logfile.close()
+            raise ConversionException(
+                'Invalid xml from pdftohtml, log is found in '
+                '{}.log'.format(self.orig))
+
+
         self.parse_pages(root_element)
 
         return document
