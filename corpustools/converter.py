@@ -831,8 +831,6 @@ class PDF2XMLConverter(Converter):
         if margin == 'bm':
             return int(page_height - default * page_height)
 
-        return margin
-
     def append_to_body(self, element):
         self.body.append(element)
         self.parts = []
