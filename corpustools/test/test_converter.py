@@ -3418,14 +3418,14 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
-        self.assertEqual(p2x.set_margin('odd=230; even = 540 ; 8 = 340'),
+        self.assertEqual(p2x.set_margin('odd=230, even = 540 , 8 = 340'),
                          {'odd': 230, 'even': 540, '8': 340})
 
     def test_set_margins(self):
         '''Test set_margins
         '''
         p2x = converter.PDF2XMLConverter('bogus.pdf')
-        p2x.set_margins({'rm': 'odd=40;even=80;3=60',
+        p2x.set_margins({'rm': 'odd=40,even=80,3=60',
                          'lm': '7=70',
                          'tm': '8=80',
                          'bm': '9=200'})
@@ -3439,7 +3439,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Test set_margins
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.set_margins({'rm': 'odd=40;even=80;3=60',
+        p2x.set_margins({'rm': 'odd=40,even=80,3=60',
                          'lm': '7=70',
                          'tm': '8=80',
                          'bm': '9=200'})
@@ -3485,7 +3485,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Test set_margins
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.set_margins({'rm': 'odd=40;even=80;3=60',
+        p2x.set_margins({'rm': 'odd=40,even=80,3=60',
                          'lm': 'all=70',
                          'tm': '8=80',
                          'bm': '9=200'})

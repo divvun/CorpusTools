@@ -780,7 +780,7 @@ class PDF2XMLConverter(Converter):
         '''
         '''
         m = {}
-        parts = value.split(';')
+        parts = value.split(',')
         for part in parts:
             page = part.split('=')[0].strip()
             margin = int(part.split('=')[1])
