@@ -820,30 +820,56 @@ class PDF2XMLConverter(Converter):
         print util.lineno(), etree.tostring(textelement)
         if (textelement is not None and int(textelement.get('width')) > 0):
             if textelement.text is not None:
+                found_hyph = re.search('\w-$', textelement.text, re.UNICODE)
                 if len(self.parts) > 0:
+                    print util.lineno(), textelement.text
                     if isinstance(self.parts[-1], etree._Element):
+                        print util.lineno(), textelement.text
                         if self.parts[-1].tail is not None:
-                            self.parts[-1].tail += u' {}'.format(
-                                textelement.text)
+                            if found_hyph:
+                                print util.lineno(), textelement.text
+                                self.parts[-1].tail += u' {}'.format(
+                                textelement.text[:-1])
+                                self.parts.append(etree.Element('hyph'))
+                            else:
+                                self.parts[-1].tail += u' {}'.format(
+                                    textelement.text)
                         else:
-                            self.parts[-1].tail = textelement.text
+                            if found_hyph:
+                                print util.lineno(), textelement.text
+                                self.parts[-1].tail = u' {}'.format(
+                                textelement.text[:-1])
+                                self.parts.append(etree.Element('hyph'))
+                            else:
+                                print util.lineno(), textelement.text
+                                self.parts[-1].tail = textelement.text
                     else:
-                        self.parts[-1] += u' {}'.format(
-                            unicode(textelement.text))
+                        print util.lineno(), textelement.text
+                        if found_hyph:
+                            print util.lineno(), textelement.text
+                            self.parts[-1] += u' {}'.format(
+                                unicode(textelement.text[:-1]))
+                            self.parts.append(etree.Element('hyph'))
+                        else:
+                            print util.lineno(), textelement.text
+                            self.parts[-1] += u' {}'.format(
+                                unicode(textelement.text))
                 else:
-                    m = re.search('\w-$', textelement.text, re.UNICODE)
-                    if m:
+                    print util.lineno(), textelement.text
+                    if found_hyph:
+                        print util.lineno(), textelement.text
                         self.parts.append(textelement.text[:-1])
                         self.parts.append(etree.Element('hyph'))
                     else:
+                        print util.lineno(), textelement.text
                         self.parts.append(textelement.text)
 
             for child in textelement:
                 em = etree.Element('em')
 
                 if child.text is not None:
-                    m = re.search('\w-$', child.text, re.UNICODE)
-                    if m:
+                    found_hyph = re.search('\w-$', child.text, re.UNICODE)
+                    if found_hyph:
                         em.text = child.text[:-1]
                         em.append(etree.Element('hyph'))
                     else:
@@ -854,8 +880,8 @@ class PDF2XMLConverter(Converter):
                 if len(child) > 0:
                     for grandchild in child:
                         if grandchild.text is not None:
-                            m = re.search('\w-$', grandchild.text, re.UNICODE)
-                            if m:
+                            found_hyph = re.search('\w-$', grandchild.text, re.UNICODE)
+                            if found_hyph:
                                 em.text += grandchild.text[:-1]
                                 em.append(etree.Element('hyph'))
                             else:
