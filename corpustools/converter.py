@@ -199,6 +199,7 @@ class Converter(object):
         '94': u'”',            # u'\u201D' right double quote
         '95': u"•"             # u'\u2022' bullet
     }
+
     def mixed_decoder(self, decode_error):
         badstring = decode_error.object[decode_error.start:decode_error.end]
         badhex = badstring.encode('hex')
@@ -334,7 +335,6 @@ class AvvirConverter(Converter):
     """
     Class to convert Ávvir xml files to the giellatekno xml format
     """
-
 
     def __init__(self, filename, write_intermediate=False):
         super(AvvirConverter, self).__init__(filename,
@@ -567,7 +567,8 @@ class PDFConverter(Converter):
     def __init__(self, filename, write_intermediate=False):
         super(PDFConverter, self).__init__(filename,
                                            write_intermediate)
-        self.page_ranges = self.skip_to_include(self.md.get_variable('skip_pages'))
+        self.page_ranges = self.skip_to_include(self.md.get_variable(
+            'skip_pages'))
 
     def skip_to_include(self, skip_pages):
         """Turn skip list into include list.
@@ -579,14 +580,14 @@ class PDFConverter(Converter):
 
         """
         if skip_pages is None:
-            return [(1,0)]
+            return [(1, 0)]
         # Turn single pages into single-page ranges, e.g. 7 → 7-7
-        skip_ranges_norm = ( (r if '-' in r else r+"-"+r)
-                             for r in skip_pages.split(",")
-                             if r != "" )
+        skip_ranges_norm = ((r if '-' in r else r+"-"+r)
+                            for r in skip_pages.split(",")
+                            if r != "")
         try:
-            skip_ranges = ( tuple(map(int, r.split('-')))
-                            for r in skip_ranges_norm )
+            skip_ranges = (tuple(map(int, r.split('-')))
+                           for r in skip_ranges_norm)
         except ValueError as e:
             print "Invalid format in skip_pages: {}".format(skip_pages)
             raise e
@@ -650,8 +651,9 @@ class PDFConverter(Converter):
             print >>logfile, 'stdout\n{}\n'.format(output)
             print >>logfile, 'stderr\n{}\n'.format(error)
             logfile.close()
-            raise ConversionException("{} failed. \
-                More info in the log file: {}.log".format((command[0]), self.orig))
+            raise ConversionException(
+                '{} failed. More info in the log file: {}.log'.format(
+                    command[0], self.orig))
         else:
             return output
 
@@ -660,8 +662,8 @@ class PDFConverter(Converter):
         Extract the text from the pdf file using pdftotext
         output contains string from the program and is a utf-8 string
         """
-        output = "\n".join( self.run_process(fr, to)
-                            for fr, to in self.page_ranges )
+        output = "\n".join(self.run_process(fr, to)
+                           for fr, to in self.page_ranges)
 
         self.text = unicode(output, encoding='utf8')
         self.replace_ligatures()
@@ -761,7 +763,6 @@ class PDF2XMLConverter(Converter):
             raise ConversionException(
                 'Invalid xml from pdftohtml, log is found in '
                 '{}.log'.format(self.orig))
-
 
         self.parse_pages(root_element)
 
@@ -863,7 +864,7 @@ class PDF2XMLConverter(Converter):
                             if found_hyph:
                                 #print util.lineno(), textelement.text
                                 self.parts[-1].tail += u' {}'.format(
-                                textelement.text[:-1])
+                                    textelement.text[:-1])
                                 self.parts.append(etree.Element('hyph'))
                             else:
                                 self.parts[-1].tail += u' {}'.format(
@@ -872,7 +873,7 @@ class PDF2XMLConverter(Converter):
                             if found_hyph:
                                 #print util.lineno(), textelement.text
                                 self.parts[-1].tail = u'{}'.format(
-                                textelement.text[:-1])
+                                    textelement.text[:-1])
                                 self.parts.append(etree.Element('hyph'))
                             else:
                                 #print util.lineno(), textelement.text
@@ -914,7 +915,8 @@ class PDF2XMLConverter(Converter):
                 if len(child) > 0:
                     for grandchild in child:
                         if grandchild.text is not None:
-                            found_hyph = re.search('\w-$', grandchild.text, re.UNICODE)
+                            found_hyph = re.search('\w-$', grandchild.text,
+                                                   re.UNICODE)
                             if found_hyph:
                                 em.text += grandchild.text[:-1]
                                 em.append(etree.Element('hyph'))
@@ -965,7 +967,8 @@ class PDF2XMLConverter(Converter):
                        text2.text[0] in self.LIST_CHARS)):
                 #print util.lineno()
                 result = True
-        elif (h1 == h2 and t1 > t2 and text2.text is not None and text2.text[0] == text2.text[0].lower()):
+        elif (h1 == h2 and t1 > t2 and text2.text is not None and
+              text2.text[0] == text2.text[0].lower()):
             #print util.lineno()
             result = True
         else:
@@ -1167,7 +1170,6 @@ class HTMLContentConverter(Converter):
         # with open('{}.huff.xml'.format(self.orig), 'wb') as huff:
         #     util.print_element(etree.fromstring(self.soup), 0, 2, huff)
 
-
         self.converter_xsl = os.path.join(here, 'xslt/xhtml2corpus.xsl')
 
     def remove_cruft(self, content):
@@ -1184,29 +1186,30 @@ class HTMLContentConverter(Converter):
                 self.try_decode_encodings(content)))
 
     def try_decode_encodings(self, content):
-        if type(content)==unicode:
+        if type(content) == unicode:
             return content
-        assert type(content)==str
+        assert type(content) == str
         found = self.get_encoding(content)
-        more_guesses = [ (c, 'guess')
-                         for c in ["utf-8", "windows-1252"]
-                         if c != found[0] ]
+        more_guesses = [(c, 'guess')
+                        for c in ["utf-8", "windows-1252"]
+                        if c != found[0]]
         errors = []
         for encoding, source in [found] + more_guesses:
             try:
                 decoded = unicode(content, encoding=encoding)
                 if source == 'guess':
                     with open('{}.log'.format(self.orig), 'w') as f:
-                        f.write("converter.py:{} Encoding of {} guessed as {}\n".format(
-                            util.lineno(), self.orig, encoding))
+                        f.write('converter.py: {} Encoding of {} guessed as '
+                                '{}\n'.format(util.lineno(), self.orig,
+                                              encoding))
                 return decoded
             except UnicodeDecodeError as e:
                 if source == 'xsl':
                     with open('{}.log'.format(self.orig), 'w') as f:
                         print >>f, util.lineno(), str(e), self.orig
                     raise ConversionException(
-                        'The text_encoding specified in {} lead to decoding errors, '
-                        'please fix the XSL'.format(self.md.filename))
+                        'The text_encoding specified in {} lead to decoding '
+                        'errors, please fix the XSL'.format(self.md.filename))
                 else:
                     errors.append(e)
         if errors != []:
@@ -1216,8 +1219,11 @@ class HTMLContentConverter(Converter):
             raise ConversionException(
                 "Strange exception converting {} to unicode".format(self.orig))
 
-    xml_encoding_declaration_re = re.compile(r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*")
-    html_meta_charset_re = re.compile(r"<meta [^>]*[\"; ]charset=[\"']?([^\"' ]+)")
+    xml_encoding_declaration_re = re.compile(
+        r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*")
+    html_meta_charset_re = re.compile(
+        r"<meta [^>]*[\"; ]charset=[\"']?([^\"' ]+)")
+
     def get_encoding(self, content):
         encoding = 'utf-8'
         source = 'guess'
@@ -1231,9 +1237,9 @@ class HTMLContentConverter(Converter):
             # <meta http-equiv="Content-Type" content="charset=utf-8" />
             # <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
             # <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-            m = ( re.search(self.xml_encoding_declaration_re, content)
-                  or
-                  re.search(self.html_meta_charset_re, content) )
+            m = (re.search(self.xml_encoding_declaration_re, content)
+                 or
+                 re.search(self.html_meta_charset_re, content))
             if m is not None:
                 encoding = m.group(1).lower()
         else:
@@ -1564,9 +1570,9 @@ class RTFConverter(HTMLContentConverter):
             raise ConversionException('Unicode problems in {}'.format(
                 self.orig))
 
-        HTMLContentConverter.__init__(self, filename,
-                                      content=XHTMLWriter.write(doc, pretty=True).read())
-
+        HTMLContentConverter.__init__(
+            self, filename,
+            content=XHTMLWriter.write(doc, pretty=True).read())
 
 
 class DocxConverter(HTMLContentConverter):
@@ -1576,7 +1582,6 @@ class DocxConverter(HTMLContentConverter):
 
         HTMLContentConverter.__init__(self, filename,
                                       content=Docx2Html(path=filename).parsed)
-
 
 
 class DocConverter(HTMLContentConverter):
@@ -1589,13 +1594,12 @@ class DocConverter(HTMLContentConverter):
                    os.path.realpath(filename),
                    '-']
         if not os.path.exists(self.get_tmpdir()):
-             # wvHtml leaves a mess in cwd
+            # wvHtml leaves a mess in cwd
             os.mkdir(self.get_tmpdir())
         output = run_process(command, filename, cwd=self.get_tmpdir())
 
         HTMLContentConverter.__init__(self, filename,
                                       content=output)
-
 
     def fix_wv_output(self):
         '''Examples of headings
