@@ -3322,6 +3322,25 @@ class TestPDF2XMLConverter(XMLTester):
             u'<p>Nubbi dábáláš linnjá</p>'
             u'</body>')
 
+    def test_parse_page_14(self):
+        '''Test that elements outside margin is not added
+        '''
+        page_element = etree.fromstring(
+            '<page height="1263" width="862">'
+            '<text top="1104" left="135" width="45" height="16" font="2">1751, </text>'
+            '<text top="1184" left="135" width="4" height="15" font="0"> </text>'
+            '<text top="1184" left="437" width="37" height="15" font="0">– 1 – </text>'
+            '</page>')
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.parse_page(page_element)
+
+        self.assertEqual(
+            etree.tostring(p2x.get_body(), encoding='unicode'),
+            u'<body>'
+            u'<p>1751, </p>'
+            u'</body>')
+
     def test_get_body(self):
         '''Test the initial values when the class is initiated
         '''

@@ -731,6 +731,8 @@ class PDF2XMLConverter(Converter):
         document.append(self.body)
 
         root_element = etree.fromstring(self.extract_text())
+        with open('/tmp/pdf.xml', 'w') as uff:
+            print >>uff, etree.tostring(root_element, pretty_print=True, encoding='utf8')
         self.parse_pages(root_element)
 
         return document
@@ -948,15 +950,18 @@ class PDF2XMLConverter(Converter):
         prev_t = None
         for t in page.iter('text'):
             if prev_t is not None:
-                print util.lineno(), etree.tostring(prev_t), etree.tostring(t)
                 if not self.is_same_paragraph(prev_t, t):
-                    self.append_to_body(self.make_paragraph())
+                    print util.lineno(), etree.tostring(prev_t, encoding='utf8'), etree.tostring(t, encoding='utf8')
+                    if len(self.parts) > 0:
+                        self.append_to_body(self.make_paragraph())
             if self.is_inside_margins(t, margins):
                 self.extract_textelement(t)
                 print util.lineno(), self.parts
                 prev_t = t
 
-        self.append_to_body(self.make_paragraph())
+        print util.lineno(), etree.tostring(prev_t, encoding='utf8'), etree.tostring(t, encoding='utf8')
+        if len(self.parts) > 0:
+            self.append_to_body(self.make_paragraph())
 
     def is_inside_margins(self, t, margins):
         '''Check if t is inside the given margins
@@ -979,38 +984,38 @@ class PDF2XMLConverter(Converter):
 
         The parts list is converted to a p element.
         '''
-        if len(self.parts) > 0:
-            p = etree.Element('p')
-            print util.lineno(), self.parts[0], self.parts, type(self.parts[0])
-            if (isinstance(self.parts[0], str) or
-                    isinstance(self.parts[0], unicode)):
-                p.text = self.parts[0]
-            else:
-                p.append(self.parts[0])
+        p = etree.Element('p')
+        print util.lineno(), self.parts[0], self.parts, type(self.parts[0])
+        if (isinstance(self.parts[0], str) or
+                isinstance(self.parts[0], unicode)):
+            p.text = self.parts[0]
+        else:
+            p.append(self.parts[0])
 
-            for part in self.parts[1:]:
-                if isinstance(part, etree._Element):
-                    if (len(p) > 0 and len(p[-1]) > 0 and
-                            p[-1][-1].tag == 'hyph'):
-                        if (p[-1].tag == part.tag and
-                                p[-1].get('type') == part.get('type')):
-                            p[-1][-1].tail = part.text
-                            p[-1].tail = part.tail
-                        else:
-                            p.append(part)
+        for part in self.parts[1:]:
+            if isinstance(part, etree._Element):
+                if (len(p) > 0 and len(p[-1]) > 0 and
+                        p[-1][-1].tag == 'hyph'):
+                    if (p[-1].tag == part.tag and
+                            p[-1].get('type') == part.get('type')):
+                        p[-1][-1].tail = part.text
+                        p[-1].tail = part.tail
                     else:
                         p.append(part)
                 else:
-                    if p[-1].tail is None:
-                        p[-1].tail = part
-                    else:
-                        p[-1].tail = ' {}'.format(part)
+                    p.append(part)
+            else:
+                if p[-1].tail is None:
+                    p[-1].tail = part
+                else:
+                    p[-1].tail = ' {}'.format(part)
 
-            if p.text is not None and p.text[0] in self.LIST_CHARS:
-                p.set('type', 'listitem')
-                p.text = p.text[1:]
+        if p.text is not None and p.text[0] in self.LIST_CHARS:
+            p.set('type', 'listitem')
+            p.text = p.text[1:]
+        print util.lineno(), self.parts[0], self.parts, type(self.parts[0])
 
-            return p
+        return p
 
 
 class BiblexmlConverter(Converter):
