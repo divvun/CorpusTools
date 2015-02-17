@@ -602,7 +602,6 @@ class PDFConverter(Converter):
         return include
 
     def replace_ligatures(self):
-
         """
         document is a stringified xml document
         """
@@ -749,6 +748,39 @@ class PDF2XMLConverter(Converter):
 
         return content
 
+    def replace_ligatures(self, content):
+        """
+        document is a stringified xml document
+        """
+        replacements = {
+            "[dstrok]": "đ",
+            "[Dstrok]": "Đ",
+            "[tstrok]": "ŧ",
+            "[Tstrok]": "Ŧ",
+            "[scaron]": "š",
+            "[Scaron]": "Š",
+            "[zcaron]": "ž",
+            "[Zcaron]": "Ž",
+            "[ccaron]": "č",
+            "[Ccaron]": "Č",
+            "[eng": "ŋ",
+            " ]": "",
+            "Ď": "đ",  # cough
+            "ď": "đ",  # cough
+            "ﬁ": "fi",
+            "ﬂ": "fl",
+            "ﬀ": "ff",
+            "ﬃ": "ffi",
+            "ﬄ": "ffl",
+            "ﬅ": "ft",
+        }
+
+        for key, value in replacements.items():
+            content = content.replace(key + ' ', value)
+            content = content.replace(key, value)
+
+        return content
+
     def extract_text(self):
         """
         Extract the text from the pdf file using pdftohtml
@@ -763,7 +795,7 @@ class PDF2XMLConverter(Converter):
         etree.SubElement(document, 'header')
         document.append(self.body)
 
-        pdf_content = self.strip_chars(self.extract_text())
+        pdf_content = self.replace_ligatures(self.strip_chars(self.extract_text()))
         #with open('/tmp/pdf.xml', 'w') as uff:
             #print >>uff, pdf_content
         try:
