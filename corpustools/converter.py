@@ -808,15 +808,15 @@ class PDF2XMLConverter(Converter):
                 elif int(page_number) % 2 == 1 and m.get('odd') is not None:
                     margins[margin] = m['odd']
                 else:
-                    margins[margin] = self.compute_margin(margin, page_height,
+                    margins[margin] = self.compute_default_margin(margin, page_height,
                                                           page_width)
             else:
-                margins[margin] = self.compute_margin(margin, page_height,
+                margins[margin] = self.compute_default_margin(margin, page_height,
                                                       page_width)
 
         return margins
 
-    def compute_margin(self, margin, page_height, page_width):
+    def compute_default_margin(self, margin, page_height, page_width):
         '''Compute the margins if they are not explicitely set
 
         The default margin is 7% of the page.

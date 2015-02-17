@@ -3403,15 +3403,15 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
 
-    def test_compute_margin(self):
+    def test_compute_default_margin(self):
         '''Test if the default margins are set
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
-        self.assertEqual(p2x.compute_margin('rm', 1263, 862), 60)
-        self.assertEqual(p2x.compute_margin('lm', 1263, 862), 801)
-        self.assertEqual(p2x.compute_margin('tm', 1263, 862), 88)
-        self.assertEqual(p2x.compute_margin('bm', 1263, 862), 1174)
+        self.assertEqual(p2x.compute_default_margin('rm', 1263, 862), 60)
+        self.assertEqual(p2x.compute_default_margin('lm', 1263, 862), 801)
+        self.assertEqual(p2x.compute_default_margin('tm', 1263, 862), 88)
+        self.assertEqual(p2x.compute_default_margin('bm', 1263, 862), 1174)
 
     def test_set_margin(self):
         '''Test if the margin is set correctly
