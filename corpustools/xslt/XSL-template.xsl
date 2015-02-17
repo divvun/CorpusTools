@@ -134,14 +134,32 @@
     </xsl:variable>
 
 
-    <!-- For page oriented documents, mark which pages should be ignored -->
-    <xsl:variable name="skip_pages" select="''"/>
-    <!-- Text outside these margins will be ignored.
-    These are defaults, that are settable documentwise -->
-    <xsl:variable name="right_margin" select="'7%'"/>
-    <xsl:variable name="left_margin" select="'7%'"/>
-    <xsl:variable name="top_margin" select="'7%'"/>
-    <xsl:variable name="bottom_margin" select="'7%'"/>
+    <!--
+        For page oriented documents, mark which pages should be ignored.
+        The format for this is a comma separated list of page number that
+        should be skipped. It is also possible to use ranges.
+        Examples:
+        1, 2, 3, 4
+        1, 6-10, 15, 20, 25-30
+    -->
+    <xsl:variable name="skip_pages" select=""/>
+    <!--
+        Text outside these margins will be ignored.
+        Setting a margin for all pages is done by writing a value into
+        one of the margin elements below. If there are several values, they
+        are divided by commas
+        Setting different margins for odd and even pages is done by writing
+        e.g. odd=240, even=540
+        It is also possible to set margins for particular pages:
+        8=240, 10=540
+        It is also possible to set margins for odd and even pages and
+        exceptions from those rules on particular pages
+        odd=240, even=540, 8=350, 11=700
+    -->
+    <xsl:variable name="right_margin" select=""/>
+    <xsl:variable name="left_margin" select=""/>
+    <xsl:variable name="top_margin" select=""/>
+    <xsl:variable name="bottom_margin" select=""/>
 
 
     <!-- Add all paragraphs that should have xml:lang=X           -->
