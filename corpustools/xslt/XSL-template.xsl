@@ -145,16 +145,24 @@
     <xsl:variable name="skip_pages" select=""/>
     <!--
         Text outside these margins will be ignored.
-        Setting a margin for all pages is done by writing a value into
-        one of the margin elements below. If there are several values, they
-        are divided by commas
+
+        The format for margin line is:
+        [all|odd|even|pagenumber]=integer
+
+        Margin lines *must* contain the keywords all, even, odd or a page
+        number followed by a = sign and an integer.
+        
+        If there are several values, they are divided by commas.
         Setting different margins for odd and even pages is done by writing
         e.g. odd=240, even=540
         It is also possible to set margins for particular pages:
         8=240, 10=540
         It is also possible to set margins for odd and even pages and
-        exceptions from those rules on particular pages
+        exceptions from those rules on particular pages.
+
+        Examples on how the select part could look:
         odd=240, even=540, 8=350, 11=700
+        all=350, 8=700
     -->
     <xsl:variable name="right_margin" select=""/>
     <xsl:variable name="left_margin" select=""/>
