@@ -716,6 +716,13 @@ class PDF2XMLConverter(Converter):
         self.skip_pages = []
         self.margins = {}
 
+    def strip_chars(self, content, extra=u''):
+        remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]'.format(
+            extra))
+        content, count = remove_re.subn('', content)
+
+        return content
+
     def extract_text(self):
         """
         Extract the text from the pdf file using pdftotext
@@ -730,9 +737,10 @@ class PDF2XMLConverter(Converter):
         etree.SubElement(document, 'header')
         document.append(self.body)
 
-        root_element = etree.fromstring(self.extract_text())
+        pdf_content = self.strip_chars(self.extract_text())
         with open('/tmp/pdf.xml', 'w') as uff:
-            print >>uff, etree.tostring(root_element, pretty_print=True, encoding='utf8')
+            print >>uff, pdf_content
+        root_element = etree.fromstring(pdf_content)
         self.parse_pages(root_element)
 
         return document
@@ -959,7 +967,6 @@ class PDF2XMLConverter(Converter):
                 print util.lineno(), self.parts
                 prev_t = t
 
-        print util.lineno(), etree.tostring(prev_t, encoding='utf8'), etree.tostring(t, encoding='utf8')
         if len(self.parts) > 0:
             self.append_to_body(self.make_paragraph())
 
