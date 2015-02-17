@@ -768,9 +768,9 @@ class PDF2XMLConverter(Converter):
         return document
 
     def set_margins(self, margin_lines={}):
-        '''margins_lines will be fetched from the metadata file belonging to
-        the original file. Before it is passed here, the validity of them
-        are checked.
+        '''margins_lines is fetched from the metadata file belonging to
+        the original file, if available. Before it is passed here, the
+        validity of them are checked.
         '''
         for key, value in margin_lines.items():
             self.margins[key] = self.set_margin(value)
@@ -817,6 +817,8 @@ class PDF2XMLConverter(Converter):
 
     def compute_margin(self, margin, page_height, page_width):
         '''Compute the margins if they are not explicitely set
+
+        The default margin is 7% of the page.
         '''
         default = 0.07
         if margin == 'rm':
