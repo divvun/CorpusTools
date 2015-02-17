@@ -738,8 +738,8 @@ class PDF2XMLConverter(Converter):
         document.append(self.body)
 
         pdf_content = self.strip_chars(self.extract_text())
-        with open('/tmp/pdf.xml', 'w') as uff:
-            print >>uff, pdf_content
+        #with open('/tmp/pdf.xml', 'w') as uff:
+            #print >>uff, pdf_content
         root_element = etree.fromstring(pdf_content)
         self.parse_pages(root_element)
 
@@ -907,7 +907,7 @@ class PDF2XMLConverter(Converter):
                 em.tail = child.tail
 
                 self.parts.append(em)
-        print util.lineno(), self.parts
+        #print util.lineno(), self.parts
 
     def is_same_paragraph(self, text1, text2):
         '''Define the incoming text elements text1 and text2 to belong to
@@ -921,7 +921,7 @@ class PDF2XMLConverter(Converter):
         h2 = float(text2.get('height'))
         t1 = int(text1.get('top'))
         t2 = int(text2.get('top'))
-        print util.lineno(), h1, h2, t1, t2, h1 == h2, t1 > t2
+        #print util.lineno(), h1, h2, t1, t2, h1 == h2, t1 > t2
         #f1 = text1.get('font')
         #f2 = text2.get('font')
         delta = float(text2.get('top')) - float(text1.get('top'))
@@ -930,22 +930,22 @@ class PDF2XMLConverter(Converter):
         if (h1 == h2 and delta < ratio * h1 and delta > 0):
             if (text2.text is not None and text2.text[0] in self.LIST_CHARS):
                 self.IN_LIST = True
-                print util.lineno(), text2.text
+                #print util.lineno(), text2.text
             elif (text2.text is not None and
                   re.match('\s', text2.text[0]) is None and
                   text2.text[0] == text2.text[0].upper() and self.IN_LIST):
                 self.IN_LIST = False
                 result = False
-                print util.lineno(), text2.text
+                #print util.lineno(), text2.text
             elif (not (text2.text is not None and
                        text2.text[0] in self.LIST_CHARS)):
-                print util.lineno()
+                #print util.lineno()
                 result = True
         elif (h1 == h2 and t1 > t2 and text2.text is not None and text2.text[0] == text2.text[0].lower()):
-            print util.lineno()
+            #print util.lineno()
             result = True
         else:
-            print util.lineno()
+            #print util.lineno()
             self.IN_LIST = False
 
         return result
@@ -959,12 +959,12 @@ class PDF2XMLConverter(Converter):
         for t in page.iter('text'):
             if prev_t is not None:
                 if not self.is_same_paragraph(prev_t, t):
-                    print util.lineno(), etree.tostring(prev_t, encoding='utf8'), etree.tostring(t, encoding='utf8')
+                    #print util.lineno(), etree.tostring(prev_t, encoding='utf8'), etree.tostring(t, encoding='utf8')
                     if len(self.parts) > 0:
                         self.append_to_body(self.make_paragraph())
             if self.is_inside_margins(t, margins):
                 self.extract_textelement(t)
-                print util.lineno(), self.parts
+                #print util.lineno(), self.parts
                 prev_t = t
 
         if len(self.parts) > 0:
@@ -992,7 +992,7 @@ class PDF2XMLConverter(Converter):
         The parts list is converted to a p element.
         '''
         p = etree.Element('p')
-        print util.lineno(), self.parts[0], self.parts, type(self.parts[0])
+        #print util.lineno(), self.parts[0], self.parts, type(self.parts[0])
         if (isinstance(self.parts[0], str) or
                 isinstance(self.parts[0], unicode)):
             p.text = self.parts[0]
@@ -1020,7 +1020,7 @@ class PDF2XMLConverter(Converter):
         if p.text is not None and p.text[0] in self.LIST_CHARS:
             p.set('type', 'listitem')
             p.text = p.text[1:]
-        print util.lineno(), self.parts[0], self.parts, type(self.parts[0])
+        #print util.lineno(), self.parts[0], self.parts, type(self.parts[0])
 
         return p
 
