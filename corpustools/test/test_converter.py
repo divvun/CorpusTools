@@ -2588,17 +2588,17 @@ class TestXslMaker(XMLTester):
 class TestPDF2XMLConverter(XMLTester):
     '''Test the class that converts from pdf2xml to giellatekno/divvun xml
     '''
-    #def test_pdf_converter(self):
-        #pdfdocument = converter.PDF2XMLConverter(
-            #os.path.join(here, 'converter_data/pdf-test.pdf'))
-        #got = pdfdocument.convert2intermediate()
-        #want = etree.parse(
-            #os.path.join(here, 'converter_data/pdf-xml2pdf-test.xml'))
+    def test_pdf_converter(self):
+        pdfdocument = converter.PDF2XMLConverter(
+            os.path.join(here, 'converter_data/pdf-test.pdf'))
+        got = pdfdocument.convert2intermediate()
+        want = etree.parse(
+            os.path.join(here, 'converter_data/pdf-xml2pdf-test.xml'))
 
-        #with open(os.path.join(here,
-                               #'converter_data/pdf-xml2pdf-test-result.xml'),
-        #'w') as uff:
-            #uff.write(etree.tostring(got, pretty_print=True, encoding='utf8'))
+        with open(os.path.join(here,
+                               'converter_data/pdf-xml2pdf-test-result.xml'),
+        'w') as uff:
+            uff.write(etree.tostring(got, pretty_print=True, encoding='utf8'))
         #self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_extract_textelement1(self):
@@ -2952,7 +2952,7 @@ class TestPDF2XMLConverter(XMLTester):
         t1 = etree.fromstring('<text top="106" height="19" font="1"/>')
         t2 = etree.fromstring('<text top="126" height="19" font="2"/>')
 
-        self.assertFalse(p2x.is_same_paragraph(t1, t2))
+        self.assertTrue(p2x.is_same_paragraph(t1, t2))
 
     def test_is_same_paragraph_5(self):
         '''List characters signal a new paragraph start
@@ -2989,6 +2989,17 @@ class TestPDF2XMLConverter(XMLTester):
             ' nubbi dábáláš linnjá</text>')
 
         self.assertTrue(p2x.is_same_paragraph(t1, t2))
+
+    def test_is_same_paragraph_8(self):
+        '''  and in_list=True signals same paragraph
+        '''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.IN_LIST = True
+
+        t1 = etree.fromstring('<text top="1218" left="796" width="8" height="18" font="0"/>')
+        t2 = etree.fromstring('<text top="536" left="104" width="318" height="18" font="1"/>')
+
+        self.assertFalse(p2x.is_same_paragraph(t1, t2))
 
     def test_is_inside_margins1(self):
         '''top and left inside margins

@@ -817,17 +817,17 @@ class PDF2XMLConverter(Converter):
         elements become the text parts of <i> and <b> elements.
         '''
 
-        print util.lineno(), etree.tostring(textelement)
+        #print util.lineno(), etree.tostring(textelement)
         if (textelement is not None and int(textelement.get('width')) > 0):
             if textelement.text is not None:
                 found_hyph = re.search('\w-$', textelement.text, re.UNICODE)
                 if len(self.parts) > 0:
-                    print util.lineno(), textelement.text
+                    #print util.lineno(), textelement.text
                     if isinstance(self.parts[-1], etree._Element):
-                        print util.lineno(), textelement.text
+                        #print util.lineno(), textelement.text
                         if self.parts[-1].tail is not None:
                             if found_hyph:
-                                print util.lineno(), textelement.text
+                                #print util.lineno(), textelement.text
                                 self.parts[-1].tail += u' {}'.format(
                                 textelement.text[:-1])
                                 self.parts.append(etree.Element('hyph'))
@@ -836,32 +836,32 @@ class PDF2XMLConverter(Converter):
                                     textelement.text)
                         else:
                             if found_hyph:
-                                print util.lineno(), textelement.text
-                                self.parts[-1].tail = u' {}'.format(
+                                #print util.lineno(), textelement.text
+                                self.parts[-1].tail = u'{}'.format(
                                 textelement.text[:-1])
                                 self.parts.append(etree.Element('hyph'))
                             else:
-                                print util.lineno(), textelement.text
+                                #print util.lineno(), textelement.text
                                 self.parts[-1].tail = textelement.text
                     else:
-                        print util.lineno(), textelement.text
+                        #print util.lineno(), textelement.text
                         if found_hyph:
-                            print util.lineno(), textelement.text
+                            #print util.lineno(), textelement.text
                             self.parts[-1] += u' {}'.format(
                                 unicode(textelement.text[:-1]))
                             self.parts.append(etree.Element('hyph'))
                         else:
-                            print util.lineno(), textelement.text
+                            #print util.lineno(), textelement.text
                             self.parts[-1] += u' {}'.format(
                                 unicode(textelement.text))
                 else:
-                    print util.lineno(), textelement.text
+                    #print util.lineno(), textelement.text
                     if found_hyph:
-                        print util.lineno(), textelement.text
+                        #print util.lineno(), textelement.text
                         self.parts.append(textelement.text[:-1])
                         self.parts.append(etree.Element('hyph'))
                     else:
-                        print util.lineno(), textelement.text
+                        #print util.lineno(), textelement.text
                         self.parts.append(textelement.text)
 
             for child in textelement:
@@ -909,12 +909,12 @@ class PDF2XMLConverter(Converter):
 
         h1 = float(text1.get('height'))
         h2 = float(text2.get('height'))
-        f1 = text1.get('font')
-        f2 = text2.get('font')
+        #f1 = text1.get('font')
+        #f2 = text2.get('font')
         delta = float(text2.get('top')) - float(text1.get('top'))
         ratio = 1.5
 
-        if (f1 == f2 and h1 == h2 and delta < ratio * h1):
+        if (h1 == h2 and delta < ratio * h1 and delta > 0):
             if (text2.text is not None and text2.text[0] in self.LIST_CHARS):
                 self.IN_LIST = True
                 print util.lineno(), text2.text
