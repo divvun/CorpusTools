@@ -2991,7 +2991,7 @@ class TestPDF2XMLConverter(XMLTester):
         self.assertTrue(p2x.is_same_paragraph(t1, t2))
 
     def test_is_same_paragraph_8(self):
-        '''  and in_list=True signals same paragraph
+        '''Make sure that bottom text is not part of the next line …
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.IN_LIST = True
@@ -3000,6 +3000,17 @@ class TestPDF2XMLConverter(XMLTester):
         t2 = etree.fromstring('<text top="536" left="104" width="318" height="18" font="1"/>')
 
         self.assertFalse(p2x.is_same_paragraph(t1, t2))
+
+    def test_is_same_paragraph_9(self):
+        '''Test if the text at the next columns belong to the previous paragraph
+        '''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.IN_LIST = True
+
+        t1 = etree.fromstring('<text top="1143" left="168" width="306" height="18" font="1">skuvl-</text>')
+        t2 = etree.fromstring('<text top="492" left="523" width="309" height="18" font="1">lain</text>')
+
+        self.assertTrue(p2x.is_same_paragraph(t1, t2))
 
     def test_is_inside_margins1(self):
         '''top and left inside margins

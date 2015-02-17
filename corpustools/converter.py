@@ -909,6 +909,9 @@ class PDF2XMLConverter(Converter):
 
         h1 = float(text1.get('height'))
         h2 = float(text2.get('height'))
+        t1 = int(text1.get('top'))
+        t2 = int(text2.get('top'))
+        print util.lineno(), h1, h2, t1, t2, h1 == h2, t1 > t2
         #f1 = text1.get('font')
         #f2 = text2.get('font')
         delta = float(text2.get('top')) - float(text1.get('top'))
@@ -928,6 +931,12 @@ class PDF2XMLConverter(Converter):
                        text2.text[0] in self.LIST_CHARS)):
                 print util.lineno()
                 result = True
+        elif (h1 == h2 and t1 > t2 and text2.text is not None and text2.text[0] == text2.text[0].lower()):
+            print util.lineno()
+            result = True
+        else:
+            print util.lineno()
+            self.IN_LIST = False
 
         return result
 
