@@ -810,9 +810,6 @@ class PDF2XMLConverter(Converter):
                 else:
                     margins[margin] = self.compute_default_margin(margin, page_height,
                                                           page_width)
-            else:
-                margins[margin] = self.compute_default_margin(margin, page_height,
-                                                      page_width)
 
         return margins
 
