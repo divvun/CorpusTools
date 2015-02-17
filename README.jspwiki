@@ -17,6 +17,7 @@ These scripts will be installed
 * pip for python2
 * pysvn (only needed for add_files_to_corpus)
 * wvHtml (only needed for convert2xml)
+* pdftohtml (only needed for convert2xml)
 * Java (only needed for parallelize)
 * Perl (only needed for parallelize)
 
