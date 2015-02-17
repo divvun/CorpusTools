@@ -598,6 +598,7 @@ class PDFConverter(Converter):
                 include.append((page, a-1))
             page = b+1
         include.append((page, 0))
+
         return include
 
     def replace_ligatures(self):
@@ -715,8 +716,31 @@ class PDF2XMLConverter(Converter):
         self.body = etree.Element('body')
         self.in_list = False
         self.parts = []
-        self.skip_pages = []
+        self.skip_pages = self.set_skip_pages(self.md.get_variable(
+            'skip_pages'))
         self.margins = {}
+
+    def set_skip_pages(self, skip_pages):
+        '''Turn a skip_pages entry into a list of pages
+        '''
+        pages = []
+        if skip_pages is not None:
+            # Turn single pages into single-page ranges, e.g. 7 → 7-7
+            skip_ranges_norm = ((r if '-' in r else r+"-"+r)
+                                for r in skip_pages.strip().split(",")
+                                if r != "")
+
+            skip_ranges = (tuple(map(int, r.split('-')))
+                        for r in skip_ranges_norm)
+
+            try:
+                for start, end in sorted(skip_ranges):
+                    for page in range(start, end + 1):
+                        pages.append(page)
+            except ValueError as e:
+                raise ConversionException("Invalid format in skip_pages: {}".format(skip_pages))
+
+        return pages
 
     def strip_chars(self, content, extra=u''):
         remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]'.format(
@@ -810,6 +834,9 @@ class PDF2XMLConverter(Converter):
                 else:
                     margins[margin] = self.compute_default_margin(margin, page_height,
                                                           page_width)
+            else:
+                margins[margin] = self.compute_default_margin(margin, page_height,
+                                                      page_width)
 
         return margins
 
