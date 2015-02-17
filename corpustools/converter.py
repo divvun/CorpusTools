@@ -2317,7 +2317,7 @@ class ConverterManager(object):
                 orig_file, write_intermediate=self._write_intermediate)
 
         elif orig_file.endswith('.pdf'):
-            return PDFConverter(
+            return PDF2XMLConverter(
                 orig_file, write_intermediate=self._write_intermediate)
 
         elif orig_file.endswith('.svg'):
