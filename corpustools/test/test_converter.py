@@ -3017,10 +3017,10 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         t = etree.fromstring('<text top="109" left="135"/>')
         margins = {}
-        margins['rm'] = 62
-        margins['lm'] = 802
-        margins['tm'] = 88
-        margins['bm'] = 1174
+        margins['right_margin'] = 62
+        margins['left_margin'] = 802
+        margins['top_margin'] = 88
+        margins['bottom_margin'] = 1174
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
@@ -3031,10 +3031,10 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         t = etree.fromstring('<text top="85" left="135"/>')
         margins = {}
-        margins['rm'] = 62
-        margins['lm'] = 802
-        margins['tm'] = 88
-        margins['bm'] = 1174
+        margins['right_margin'] = 62
+        margins['left_margin'] = 802
+        margins['top_margin'] = 88
+        margins['bottom_margin'] = 1174
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
@@ -3045,10 +3045,10 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         t = etree.fromstring('<text top="1178" left="135"/>')
         margins = {}
-        margins['rm'] = 62
-        margins['lm'] = 802
-        margins['tm'] = 88
-        margins['bm'] = 1174
+        margins['right_margin'] = 62
+        margins['left_margin'] = 802
+        margins['top_margin'] = 88
+        margins['bottom_margin'] = 1174
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
@@ -3059,10 +3059,10 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         t = etree.fromstring('<text top="1000" left="50"/>')
         margins = {}
-        margins['rm'] = 62
-        margins['lm'] = 802
-        margins['tm'] = 88
-        margins['bm'] = 1174
+        margins['right_margin'] = 62
+        margins['left_margin'] = 802
+        margins['top_margin'] = 88
+        margins['bottom_margin'] = 1174
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
@@ -3073,10 +3073,10 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         t = etree.fromstring('<text top="1000" left="805"/>')
         margins = {}
-        margins['rm'] = 62
-        margins['lm'] = 802
-        margins['tm'] = 88
-        margins['bm'] = 1174
+        margins['right_margin'] = 62
+        margins['left_margin'] = 802
+        margins['top_margin'] = 88
+        margins['bottom_margin'] = 1174
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
@@ -3408,10 +3408,10 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
-        self.assertEqual(p2x.compute_default_margin('rm', 1263, 862), 60)
-        self.assertEqual(p2x.compute_default_margin('lm', 1263, 862), 801)
-        self.assertEqual(p2x.compute_default_margin('tm', 1263, 862), 88)
-        self.assertEqual(p2x.compute_default_margin('bm', 1263, 862), 1174)
+        self.assertEqual(p2x.compute_default_margin('right_margin', 1263, 862), 60)
+        self.assertEqual(p2x.compute_default_margin('left_margin', 1263, 862), 801)
+        self.assertEqual(p2x.compute_default_margin('top_margin', 1263, 862), 88)
+        self.assertEqual(p2x.compute_default_margin('bottom_margin', 1263, 862), 1174)
 
     def test_set_margin(self):
         '''Test if the margin is set correctly
@@ -3425,107 +3425,107 @@ class TestPDF2XMLConverter(XMLTester):
         '''Test set_margins
         '''
         p2x = converter.PDF2XMLConverter('bogus.pdf')
-        p2x.set_margins({'rm': 'odd=40,even=80,3=60',
-                         'lm': '7=70',
-                         'tm': '8=80',
-                         'bm': '9=200'})
+        p2x.set_margins({'right_margin': 'odd=40,even=80,3=60',
+                         'left_margin': '7=70',
+                         'top_margin': '8=80',
+                         'bottom_margin': '9=200'})
 
-        self.assertEqual(p2x.margins, {'rm': {'odd': 40, 'even': 80, '3': 60},
-                                       'lm': {'7': 70},
-                                       'tm': {'8': 80},
-                                       'bm': {'9': 200}})
+        self.assertEqual(p2x.margins, {'right_margin': {'odd': 40, 'even': 80, '3': 60},
+                                       'left_margin': {'7': 70},
+                                       'top_margin': {'8': 80},
+                                       'bottom_margin': {'9': 200}})
 
     def test_compute_margins1(self):
         '''Test set_margins
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.set_margins({'rm': 'odd=40,even=80,3=60',
-                         'lm': '7=70',
-                         'tm': '8=80',
-                         'bm': '9=200'})
+        p2x.set_margins({'right_margin': 'odd=40,even=80,3=60',
+                         'left_margin': '7=70',
+                         'top_margin': '8=80',
+                         'bottom_margin': '9=200'})
 
         page1 = etree.fromstring(
             '<page number="1" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page1), {'rm': 40,
-                                                      'lm': 801,
-                                                      'tm': 88,
-                                                      'bm': 1174})
+        self.assertEqual(p2x.compute_margins(page1), {'right_margin': 40,
+                                                      'left_margin': 801,
+                                                      'top_margin': 88,
+                                                      'bottom_margin': 1174})
         page2 = etree.fromstring(
             '<page number="2" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page2), {'rm': 80,
-                                                      'lm': 801,
-                                                      'tm': 88,
-                                                      'bm': 1174})
+        self.assertEqual(p2x.compute_margins(page2), {'right_margin': 80,
+                                                      'left_margin': 801,
+                                                      'top_margin': 88,
+                                                      'bottom_margin': 1174})
         page3 = etree.fromstring(
             '<page number="3" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page3), {'rm': 60,
-                                                      'lm': 801,
-                                                      'tm': 88,
-                                                      'bm': 1174})
+        self.assertEqual(p2x.compute_margins(page3), {'right_margin': 60,
+                                                      'left_margin': 801,
+                                                      'top_margin': 88,
+                                                      'bottom_margin': 1174})
         page7 = etree.fromstring(
             '<page number="7" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page7), {'rm': 40,
-                                                      'lm': 70,
-                                                      'tm': 88,
-                                                      'bm': 1174})
+        self.assertEqual(p2x.compute_margins(page7), {'right_margin': 40,
+                                                      'left_margin': 70,
+                                                      'top_margin': 88,
+                                                      'bottom_margin': 1174})
         page8 = etree.fromstring(
             '<page number="8" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page8), {'rm': 80,
-                                                      'lm': 801,
-                                                      'tm': 80,
-                                                      'bm': 1174})
+        self.assertEqual(p2x.compute_margins(page8), {'right_margin': 80,
+                                                      'left_margin': 801,
+                                                      'top_margin': 80,
+                                                      'bottom_margin': 1174})
         page9 = etree.fromstring(
             '<page number="9" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page9), {'rm': 40,
-                                                      'lm': 801,
-                                                      'tm': 88,
-                                                      'bm': 200})
+        self.assertEqual(p2x.compute_margins(page9), {'right_margin': 40,
+                                                      'left_margin': 801,
+                                                      'top_margin': 88,
+                                                      'bottom_margin': 200})
 
     def test_compute_margins2(self):
         '''Test set_margins
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.set_margins({'rm': 'odd=40,even=80,3=60',
-                         'lm': 'all=70',
-                         'tm': '8=80',
-                         'bm': '9=200'})
+        p2x.set_margins({'right_margin': 'odd=40,even=80,3=60',
+                         'left_margin': 'all=70',
+                         'top_margin': '8=80',
+                         'bottom_margin': '9=200'})
 
         page1 = etree.fromstring(
             '<page number="1" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page1), {'rm': 40,
-                                                      'lm': 70,
-                                                      'tm': 88,
-                                                      'bm': 1174})
+        self.assertEqual(p2x.compute_margins(page1), {'right_margin': 40,
+                                                      'left_margin': 70,
+                                                      'top_margin': 88,
+                                                      'bottom_margin': 1174})
         page2 = etree.fromstring(
             '<page number="2" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page2), {'rm': 80,
-                                                      'lm': 70,
-                                                      'tm': 88,
-                                                      'bm': 1174})
+        self.assertEqual(p2x.compute_margins(page2), {'right_margin': 80,
+                                                      'left_margin': 70,
+                                                      'top_margin': 88,
+                                                      'bottom_margin': 1174})
         page3 = etree.fromstring(
             '<page number="3" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page3), {'rm': 60,
-                                                      'lm': 70,
-                                                      'tm': 88,
-                                                      'bm': 1174})
+        self.assertEqual(p2x.compute_margins(page3), {'right_margin': 60,
+                                                      'left_margin': 70,
+                                                      'top_margin': 88,
+                                                      'bottom_margin': 1174})
         page7 = etree.fromstring(
             '<page number="7" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page7), {'rm': 40,
-                                                      'lm': 70,
-                                                      'tm': 88,
-                                                      'bm': 1174})
+        self.assertEqual(p2x.compute_margins(page7), {'right_margin': 40,
+                                                      'left_margin': 70,
+                                                      'top_margin': 88,
+                                                      'bottom_margin': 1174})
         page8 = etree.fromstring(
             '<page number="8" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page8), {'rm': 80,
-                                                      'lm': 70,
-                                                      'tm': 80,
-                                                      'bm': 1174})
+        self.assertEqual(p2x.compute_margins(page8), {'right_margin': 80,
+                                                      'left_margin': 70,
+                                                      'top_margin': 80,
+                                                      'bottom_margin': 1174})
         page9 = etree.fromstring(
             '<page number="9" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page9), {'rm': 40,
-                                                      'lm': 70,
-                                                      'tm': 88,
-                                                      'bm': 200})
+        self.assertEqual(p2x.compute_margins(page9), {'right_margin': 40,
+                                                      'left_margin': 70,
+                                                      'top_margin': 88,
+                                                      'bottom_margin': 200})
 
     def test_set_skip_pages1(self):
         '''Test a valid skip_pages line

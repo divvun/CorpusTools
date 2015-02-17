@@ -820,7 +820,7 @@ class PDF2XMLConverter(Converter):
         page_width = int(page.get('width'))
         page_height = int(page.get('height'))
 
-        for margin in ['rm', 'lm', 'tm', 'bm']:
+        for margin in ['right_margin', 'left_margin', 'top_margin', 'bottom_margin']:
             if margin in self.margins.keys():
                 m = self.margins[margin]
                 if m.get(page_number) is not None:
@@ -846,13 +846,13 @@ class PDF2XMLConverter(Converter):
         The default margin is 7% of the page.
         '''
         default = 0.07
-        if margin == 'rm':
+        if margin == 'right_margin':
             return int(default * page_width)
-        if margin == 'lm':
+        if margin == 'left_margin':
             return int(page_width - default * page_width)
-        if margin == 'tm':
+        if margin == 'top_margin':
             return int(default * page_height)
-        if margin == 'bm':
+        if margin == 'bottom_margin':
             return int(page_height - default * page_height)
 
     def append_to_body(self, element):
@@ -1024,10 +1024,10 @@ class PDF2XMLConverter(Converter):
 
         t is a text element
         '''
-        return (int(t.get('top')) > margins['tm'] and
-                int(t.get('top')) < margins['bm'] and
-                int(t.get('left')) > margins['rm'] and
-                int(t.get('left')) < margins['lm'])
+        return (int(t.get('top')) > margins['top_margin'] and
+                int(t.get('top')) < margins['bottom_margin'] and
+                int(t.get('left')) > margins['right_margin'] and
+                int(t.get('left')) < margins['left_margin'])
 
     def parse_pages(self, root_element):
         for page in root_element.iter('page'):
