@@ -708,12 +708,12 @@ class PDF2XMLConverter(Converter):
     '''Class to convert pdf2xml
     '''
     LIST_CHARS = [u'•']
-    IN_LIST = False
 
     def __init__(self, filename, write_intermediate=False):
         super(PDF2XMLConverter, self).__init__(filename,
                                                write_intermediate)
         self.body = etree.Element('body')
+        self.in_list = False
         self.parts = []
         self.skip_pages = []
         self.margins = {}
@@ -955,12 +955,12 @@ class PDF2XMLConverter(Converter):
 
         if (h1 == h2 and delta < ratio * h1 and delta > 0):
             if (text2.text is not None and text2.text[0] in self.LIST_CHARS):
-                self.IN_LIST = True
+                self.in_list = True
                 #print util.lineno(), text2.text
             elif (text2.text is not None and
                   re.match('\s', text2.text[0]) is None and
-                  text2.text[0] == text2.text[0].upper() and self.IN_LIST):
-                self.IN_LIST = False
+                  text2.text[0] == text2.text[0].upper() and self.in_list):
+                self.in_list = False
                 result = False
                 #print util.lineno(), text2.text
             elif (not (text2.text is not None and
@@ -973,7 +973,7 @@ class PDF2XMLConverter(Converter):
             result = True
         else:
             #print util.lineno()
-            self.IN_LIST = False
+            self.in_list = False
 
         return result
 

@@ -2968,7 +2968,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Upper case char and in_list=True signals new paragraph start
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.IN_LIST = True
+        p2x.in_list = True
 
         t1 = etree.fromstring('<text top="300" left="104" width="324" height="18" font="1">'
             'linnjá</text>')
@@ -2981,7 +2981,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''  and in_list=True signals same paragraph
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.IN_LIST = True
+        p2x.in_list = True
 
         t1 = etree.fromstring('<text top="300" left="104" width="324" height="18" font="1">'
             'linnjá</text>')
@@ -2994,7 +2994,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Make sure that bottom text is not part of the next line …
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.IN_LIST = True
+        p2x.in_list = True
 
         t1 = etree.fromstring('<text top="1218" left="796" width="8" height="18" font="0"/>')
         t2 = etree.fromstring('<text top="536" left="104" width="318" height="18" font="1"/>')
@@ -3005,7 +3005,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Test if the text at the next columns belong to the previous paragraph
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.IN_LIST = True
+        p2x.in_list = True
 
         t1 = etree.fromstring('<text top="1143" left="168" width="306" height="18" font="1">skuvl-</text>')
         t2 = etree.fromstring('<text top="492" left="523" width="309" height="18" font="1">lain</text>')
