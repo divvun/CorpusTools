@@ -2595,8 +2595,11 @@ class TestPDF2XMLConverter(XMLTester):
         want = etree.parse(
             os.path.join(here, 'converter_data/pdf-xml2pdf-test.xml'))
 
+        #with open(os.path.join(here,
+                               #'converter_data/pdf-xml2pdf-test-result.xml'),
+        #'w') as uff:
+            #uff.write(etree.tostring(got, pretty_print=True, encoding='utf8'))
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
 
     def test_extract_textelement1(self):
         '''Extract text from a plain pdf2xml text element
@@ -2902,6 +2905,42 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertFalse(p2x.is_same_paragraph(t1, t2))
 
+    def test_is_same_paragraph_5(self):
+        '''List characters signal a new paragraph start
+        '''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+
+        t1 = etree.fromstring('<text top="106" height="19" font="2"/>')
+        t2 = etree.fromstring('<text top="126" height="19" font="2">•</text>')
+
+        self.assertFalse(p2x.is_same_paragraph(t1, t2))
+
+    def test_is_same_paragraph_6(self):
+        '''Upper case char and in_list=True signals new paragraph start
+        '''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.IN_LIST = True
+
+        t1 = etree.fromstring('<text top="300" left="104" width="324" height="18" font="1">'
+            'linnjá</text>')
+        t2 = etree.fromstring('<text top="321" left="121" width="40" height="18" font="1">'
+            'Nubbi dábáláš linnjá</text>')
+
+        self.assertFalse(p2x.is_same_paragraph(t1, t2))
+
+    def test_is_same_paragraph_7(self):
+        '''  and in_list=True signals same paragraph
+        '''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.IN_LIST = True
+
+        t1 = etree.fromstring('<text top="300" left="104" width="324" height="18" font="1">'
+            'linnjá</text>')
+        t2 = etree.fromstring('<text top="321" left="121" width="40" height="18" font="1">'
+            ' nubbi dábáláš linnjá</text>')
+
+        self.assertTrue(p2x.is_same_paragraph(t1, t2))
+
     def test_is_inside_margins1(self):
         '''top and left inside margins
         '''
@@ -3170,6 +3209,47 @@ class TestPDF2XMLConverter(XMLTester):
         self.assertXmlEqual(
             etree.tostring(p2x.get_body(), encoding='unicode'),
             u'<body><p>3.</p></body>')
+
+    def test_parse_page_13(self):
+        '''Test list detection with • character
+        '''
+        page_element = etree.fromstring(
+            '<page height="1263" width="862">'
+            '<text top="195" left="104" width="260" height="18" font="1">'
+            'vuosttaš dábálaš linnjá</text>'
+            '<text top="237" left="104" width="311" height="18" font="1">'
+            '• Vuosttaš listolinnjá </text>'
+            '<text top="258" left="121" width="296" height="18" font="1">'
+            'vuosttaš listolinnjá joaktta</text>'
+            '<text top="279" left="121" width="189" height="18" font="1">'
+            '• Nubbi listo-</text>'
+            '<text top="300" left="104" width="324" height="18" font="1">'
+            'linnjá</text>'
+            '<text top="321" left="121" width="40" height="18" font="1">'
+            'Nubbi dábáláš linnjá</text>'
+            '</page>')
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.parse_page(page_element)
+
+        self.maxDiff = None
+        print 'got', etree.tostring(p2x.get_body(), encoding='unicode')
+        print 'want', (u'<body>'
+            u'<p>vuosttaš dábálaš linnjá</p>'
+            u'<p type="listotem"> Vuosttaš listolinnjá  '
+            u'vuosttaš listolinnjá joaktta</p>'
+            u'<p type="listotem"> Nubbi listo<hyph/>linnjá</p>'
+            u'<p>Nubbi dábáláš linnjá</p>'
+            u'</body>')
+        self.assertEqual(
+            etree.tostring(p2x.get_body(), encoding='unicode'),
+            u'<body>'
+            u'<p>vuosttaš dábálaš linnjá</p>'
+            u'<p type="listitem"> Vuosttaš listolinnjá  '
+            u'vuosttaš listolinnjá joaktta</p>'
+            u'<p type="listitem"> Nubbi listo<hyph/>linnjá</p>'
+            u'<p>Nubbi dábáláš linnjá</p>'
+            u'</body>')
 
     def test_get_body(self):
         '''Test the initial values when the class is initiated

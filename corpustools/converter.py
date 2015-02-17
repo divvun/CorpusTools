@@ -705,6 +705,9 @@ class PDFConverter(Converter):
 class PDF2XMLConverter(Converter):
     '''Class to convert pdf2xml
     '''
+    LIST_CHARS = [u'•']
+    IN_LIST = False
+
     def __init__(self, filename, write_intermediate=False):
         super(PDF2XMLConverter, self).__init__(filename,
                                                write_intermediate)
@@ -886,7 +889,19 @@ class PDF2XMLConverter(Converter):
         ratio = 1.5
 
         if (f1 == f2 and h1 == h2 and delta < ratio * h1):
-            result = True
+            if (text2.text is not None and text2.text[0] in self.LIST_CHARS):
+                self.IN_LIST = True
+                print util.lineno(), text2.text
+            elif (text2.text is not None and
+                  re.match('\s', text2.text[0]) is None and
+                  text2.text[0] == text2.text[0].upper() and self.IN_LIST):
+                self.IN_LIST = False
+                result = False
+                print util.lineno(), text2.text
+            elif (not (text2.text is not None and
+                       text2.text[0] in self.LIST_CHARS)):
+                print util.lineno()
+                result = True
 
         return result
 
@@ -955,6 +970,10 @@ class PDF2XMLConverter(Converter):
                         p[-1].tail = part
                     else:
                         p[-1].tail = ' {}'.format(part)
+
+            if p.text is not None and p.text[0] in self.LIST_CHARS:
+                p.set('type', 'listitem')
+                p.text = p.text[1:]
 
             return p
 
