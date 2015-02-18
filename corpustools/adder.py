@@ -84,7 +84,7 @@ class AddFileToCorpus(namechanger.NameChangerBase):
                     if not os.path.exists(self.toname()):
                         with open(self.toname(), 'wb') as new_corpus_file:
                             new_corpus_file.write(r.content)
-                        print self.toname()
+                        print 'Added', self.toname()
                         self.vcs.add(self.toname())
                     else:
                         print >>sys.stderr, self.toname(), 'already exists'
@@ -102,7 +102,7 @@ class AddFileToCorpus(namechanger.NameChangerBase):
                 raise UserWarning
         else:
             shutil.copy(fromname, self.toname())
-            print self.toname()
+            print 'Added', self.toname()
             self.vcs.add(self.toname())
 
     def _get_parallels(self):
@@ -149,7 +149,7 @@ class AddFileToCorpus(namechanger.NameChangerBase):
             for lang, location in self.parallels.items():
                 metadata_file.set_parallel_text(lang, location)
 
-            print metadata_file.filename
+            print 'Added', metadata_file.filename
             metadata_file.write_file()
             self.vcs.add(metadata_file.filename)
         else:
