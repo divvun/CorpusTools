@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 #
@@ -258,8 +259,9 @@ class WordModel(NGramModel):
 class Classifier(object):
     DROP_RATIO = 1.10
 
-    def __init__(self, folder=os.path.join(here, 'lm'), langs=[],
-                 verbose=False):
+    def __init__(self, folder, langs=[], verbose=False):
+        if folder is None:
+            folder = os.path.join(here, 'lm')
         self.cmodels = {}
         self.wmodels = {}
 
@@ -406,7 +408,8 @@ class FileTrainer(object):
 
 
 def proc(args):
-    c = Classifier(folder=args.model_dir)
+    langs = [l for l in args.langs.split(",") if l != ""]
+    c = Classifier(folder=args.model_dir, langs=langs)
     if args.u is not None:
         c.DROP_RATIO = args.u
     if args.verbose:
@@ -455,15 +458,25 @@ def parse_options():
         help="(try e.g. 'proc -h' for help with that subcommand)")
 
     proc_parser = subparsers.add_parser('proc', help='Language classification')
-    proc_parser.add_argument('model_dir', help='Language model directory')
-    proc_parser.add_argument('-u', help="Drop ratio (defaults to 1.1) -- when "
-                             "the character model of a language is this much "
-                             "worse than the best guess, we don't include it "
-                             "in the word model comparison.",
+    proc_parser.add_argument('model_dir',
+                             help="Language model directory. Defaults to the "
+                             "directory {}.".format(os.path.join(here,'lm/')),
+                             nargs='?')
+    proc_parser.add_argument('-u',
+                             help="Drop ratio (defaults to 1.1) -- when the "
+                             "character model of a language is this much worse "
+                             "than the best guess, we don't include it in the "
+                             "word model comparison.",
                              type=float)
-    proc_parser.add_argument('-s', help="Classify on a line-by-line basis "
+    proc_parser.add_argument('-s',
+                             help="Classify on a line-by-line basis "
                              "(rather than the whole input as one text).",
                              action="store_true")
+    proc_parser.add_argument('-l', '--langs',
+                             help="Comma-separated list of languages to classify "
+                             "between (by default uses all languages in model_dir).",
+                             type=str,
+                             default="")
     proc_parser.set_defaults(func=proc)
 
     complm_parser = subparsers.add_parser(
@@ -490,6 +503,9 @@ def parse_options():
     return parser.parse_args()
 
 
-if __name__ == "__main__":
+def main():
     args = parse_options()
     args.func(args)
+
+if __name__ == "__main__":
+    main()

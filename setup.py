@@ -25,7 +25,9 @@ setup(
             'add_files_to_corpus = corpustools.namechanger:adder_main',
             'change_corpus_names = corpustools.namechanger:main',
             'saami_crawler = corpustools.saami_crawler:main',
-            'generate_anchor_list = generate_anchor_list:main']
+            'generate_anchor_list = generate_anchor_list:main',
+            'pytextcat = corpustools.text_cat:main',
+        ]
     },
     install_requires=[
         "pyth",
