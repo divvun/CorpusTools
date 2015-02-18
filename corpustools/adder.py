@@ -36,13 +36,16 @@ import corpustools.namechanger as namechanger
 class AddFileToCorpus(namechanger.NameChangerBase):
     '''Add a given file to a given corpus
     '''
-    def __init__(self, oldname, corpusdir, mainlang, path):
+    def __init__(self, oldname, corpusdir, mainlang, path, parallel_file):
         super(AddFileToCorpus, self).__init__(oldname)
+        self.corpusdir = corpusdir
         self.mainlang = mainlang
         self.path = path
         self.new_dirname = os.path.join(corpusdir, 'orig', mainlang, path)
         vcsfactory = versioncontrol.VersionControlFactory()
         self.vcs = vcsfactory.vcs(corpusdir)
+        self.parallel_file = parallel_file
+        self.parallels = self._get_parallels()
 
     def makedirs(self):
         try:
@@ -102,6 +105,21 @@ class AddFileToCorpus(namechanger.NameChangerBase):
             print self.toname()
             self.vcs.add(self.toname())
 
+    def _get_parallels(self):
+        '''Using the parallels metadata from the parallel file,
+        set all the parallels of the orig file
+        '''
+        parallels = {}
+
+        if self.parallel_file is not None:
+            parallel_metadata = xslsetter.MetadataHandler(
+                self.parallel_file + '.xsl')
+            parallels[parallel_metadata.get_variable(
+                'mainlang')] = os.path.basename(self.parallel_file)
+            parallels.update(parallel_metadata.get_parallel_texts())
+
+        return parallels
+
     def make_metadata_file(self, extra_values):
         '''extra_values is a dict that contains data for the metadata file
         that is not possible to infer from the data given in the constructor.
@@ -128,12 +146,22 @@ class AddFileToCorpus(namechanger.NameChangerBase):
             for key, value in extra_values.items():
                 metadata_file.set_variable(key, value)
 
+            for lang, location in self.parallels.items():
+                metadata_file.set_parallel_text(lang, location)
+
             print metadata_file.filename
             metadata_file.write_file()
             self.vcs.add(metadata_file.filename)
         else:
             print >>sys.stderr, metafile_name, 'already exists'
 
+    def update_parallel_files(self):
+        for lang, location in self.parallels.items():
+            parallel_metadata = xslsetter.MetadataHandler(
+                os.path.join(self.corpusdir, 'orig', lang, self.path,
+                             location + '.xsl'))
+            parallel_metadata.set_parallel_text(lang, location)
+            parallel_metadata.write_file()
 
 def gather_files(origs):
     file_list = []
@@ -163,9 +191,11 @@ def add_files(args):
             orig,
             args.corpusdir,
             args.mainlang,
-            args.path)
+            args.path,
+            args.parallel_file)
         adder.copy_orig_to_corpus()
         adder.make_metadata_file({})
+        adder.update_parallel_files()
 
 
 def parse_args():
@@ -176,6 +206,10 @@ def parse_args():
         original name, the main language and the genre are also made. The \
         files are added to the working copy.')
 
+    parser.add_argument('-p', '--parallel',
+                        dest='parallel_file',
+                        help='An existing file in the corpus that is '
+                        'parallel to the orig that is about to be added')
     parser.add_argument('corpusdir',
                         help='The corpus dir (freecorpus or boundcorpus)')
     parser.add_argument('mainlang',
@@ -195,6 +229,20 @@ def parse_args():
 
 def main():
     args = parse_args()
+
+    if args.parallel_file is not None:
+        if not os.path.exists(args.parallel_file):
+            print >>sys.stderr, ('The given parallel file\n\t{}\n'
+                'does not exist'.format(args.parallel_file))
+            sys.exit(1)
+        if len(args.origs) > 1:
+            print >>sys.stderr, ('When the -p option is given, it only makes '
+                'sense to add one file at a time.')
+            sys.exit(2)
+        if len(args.origs) == 1 and os.path.isdir(args.origs[-1]):
+            print >>sys.stderr, ('It is not possible to add a directory '
+                'when the -p option is given.')
+            sys.exit(3)
 
     if os.path.isdir(args.corpusdir):
         try:
