@@ -114,6 +114,7 @@ class AddFileToCorpus(namechanger.NameChangerBase):
         if self.parallel_file is not None:
             parallel_metadata = xslsetter.MetadataHandler(
                 self.parallel_file + '.xsl')
+            parallels[self.mainlang] = self.new_filename
             parallels[parallel_metadata.get_variable(
                 'mainlang')] = os.path.basename(self.parallel_file)
             parallels.update(parallel_metadata.get_parallel_texts())
@@ -145,23 +146,24 @@ class AddFileToCorpus(namechanger.NameChangerBase):
 
             for key, value in extra_values.items():
                 metadata_file.set_variable(key, value)
+            metadata_file.write_file()
 
-            for lang, location in self.parallels.items():
-                metadata_file.set_parallel_text(lang, location)
+            self.update_parallel_files()
 
             print 'Added', metadata_file.filename
-            metadata_file.write_file()
             self.vcs.add(metadata_file.filename)
         else:
             print >>sys.stderr, metafile_name, 'already exists'
 
     def update_parallel_files(self):
-        for lang, location in self.parallels.items():
-            parallel_metadata = xslsetter.MetadataHandler(
-                os.path.join(self.corpusdir, 'orig', lang, self.path,
-                             location + '.xsl'))
-            parallel_metadata.set_parallel_text(lang, location)
-            parallel_metadata.write_file()
+        for lang1, location1 in self.parallels.items():
+            for lang2, location2 in self.parallels.items():
+                if lang2 != lang1:
+                    parallel_metadata = xslsetter.MetadataHandler(
+                        os.path.join(self.corpusdir, 'orig', lang1, self.path,
+                                    location1 + '.xsl'))
+                    parallel_metadata.set_parallel_text(lang2, location2)
+                    parallel_metadata.write_file()
 
 def gather_files(origs):
     file_list = []
@@ -195,7 +197,6 @@ def add_files(args):
             args.parallel_file)
         adder.copy_orig_to_corpus()
         adder.make_metadata_file({})
-        adder.update_parallel_files()
 
 
 def parse_args():
