@@ -31,3 +31,4 @@ v<0.8.2>, <20141230> -- Countless improvements by Kevin Unhammer, added saami_cr
 v<0.9.0alpha1>, <20141230> -- Remove dependency on pytidylib and beautifulsoup4, replace them by lxml.html.clean and lxml.html.html5parser
 v<0.9.0alpha2>, <20150120> -- Make a ConverterManager, let it handle the conversion
 v<0.9.0beta1>, <20150217> -- pdf conversion based on PDF2XMLConverter
+v<0.9.0beta2>, <20150218> -- added parallel file handling to add_files_to_corpus
