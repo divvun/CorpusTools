@@ -162,8 +162,12 @@ class AddFileToCorpus(NameChangerBase):
                 metadata_file.set_variable('filename', self.old_filename)
             metadata_file.set_variable('genre', self.path.split('/')[0])
             metadata_file.set_variable('mainlang', self.mainlang)
-            metadata_file.set_variable('sub_name',
-                                       self.vcs.user_name().decode('utf-8'))
+            if isinstance(self.vcs.user_name(), str):
+                metadata_file.set_variable(
+                    'sub_name', self.vcs.user_name().decode('utf-8'))
+            else:
+                metadata_file.set_variable(
+                    'sub_name', self.vcs.user_name())
             metadata_file.set_variable('sub_email', self.vcs.user_email())
 
             for key, value in extra_values.items():
