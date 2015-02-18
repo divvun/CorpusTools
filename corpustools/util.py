@@ -22,6 +22,7 @@ from __future__ import unicode_literals
 import os
 import operator
 import inspect
+import platform
 
 
 class SetupException(Exception):
@@ -146,3 +147,12 @@ def print_element(element, level, indent, out):
         for _ in range(0, (level - 1) * indent):
             out.write(' ')
         out.write('%s\n' % element.tail.strip().encode('utf8'))
+
+
+def name_to_unicode(filename):
+    if platform.system() == 'Windows':
+        return filename
+    else:
+        return filename.decode('utf-8')
+
+
