@@ -306,45 +306,59 @@ optional arguments:
 The complete help text from the program is as follows:
 
 {{{
-usage: add_files_to_corpus [-h] corpusdir mainlang path origs [origs ...]
+usage: add_files_to_corpus [-h] [-v] [-p PARALLEL_FILE]
+                           corpusdir mainlang path origs [origs ...]
 
-Copy files to a corpus directory. The filenames are converted to ascii only
-names. Metadata files containing the original name, the main language and the
-genre are also made. The files are added to the working copy.
+Add file(s) to a corpus directory. The filenames are converted to ascii only
+names. Metadata files containing the original name, the main language, the
+genre and possibly parallel files are also made. The files are added to the
+working copy.
 
 positional arguments:
-  corpusdir   The corpus dir (freecorpus or boundcorpus)
-  mainlang    The language of the files that will be added (sma, sme, ...)
-  path        The genre directory where the files will be added. This may also
-              be a path, e.g. admin/facta/skuvlahistorja1
-  origs       The original files or directories where the original files
-              reside (not in svn)
+  corpusdir             The corpus dir (freecorpus or boundcorpus)
+  mainlang              The language of the files that will be added (sma,
+                        sme, ...)
+  path                  The genre directory where the files will be added.
+                        This may also be a path, e.g.
+                        admin/facta/skuvlahistorja1
+  origs                 The original files, urls or directories where the
+                        original files reside (not in svn)
 
 optional arguments:
-  -h, --help  show this help message and exit
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  -p PARALLEL_FILE, --parallel PARALLEL_FILE
+                        An existing file in the corpus that is parallel to the
+                        orig that is about to be added
 }}}
 
-This script adds files found on a local machine to a working copy of
-a corpus.
+Examples:
+Download and add parallel files from the net to the corpus:
 
-It copies files from a directory to the corpusdir. In the process
-it will
-* change the name of the file so that the filename only consists of ascii characters.
-* add a metadata file containing the original name, main language and genre
-* add the renamed files and the metadata files to the working copy
+cd $GTFREE
 
-Typical usage is:
-add_files_to_corpus $GTFREE sme admin/sd dir_where_files_are
+__Adding the first file__
 
-This will copy the files found in the directory {{dir_where_files_are}}
-to {{$GTFREE/orig/sme/admin/sd}}.
+The command
+{{{add_files_to_corpus $GTFREE sme admin/sd/other_files http://www.samediggi.no/content/download/5407/50892/version/2/file/Sametingets+%C3%A5rsmelding+2013+-+nordsamisk.pdf}}}
+
+Gives the message:
+{{{Added $GTFREE/orig/sme/admin/sd/other_files/sametingets_ay-rsmelding_2013_-_nordsamisk.pdf
+Added $GTFREE/orig/sme/admin/sd/other_files/sametingets_ay-rsmelding_2013_-_nordsamisk.pdf.xsl}}}
+
+__Adding the parallel file__
+
+{{{add_files_to_corpus -p orig/sme/admin/sd/other_files/sametingets_ay-rsmelding_2013_-_nordsamisk.pdf $GTFREE nob admin/sd/other_files  http://www.samediggi.no/content/download/5406/50888/version/2/file/Sametingets+%C3%A5rsmelding+2013+-+norsk.pdf}}}
+
+Gives the message:
+{{{Added $GTFREE/orig/nob/admin/sd/other_files/sametingets_ay-rsmelding_2013_-_norsk.pdf
+Added $GTFREE/orig/nob/admin/sd/other_files/sametingets_ay-rsmelding_2013_-_norsk.pdf.xsl}}}
 
 After this is done, you will have to commit the files to
 the working copy, like this:
 
 {{{
-cd $GTFREE/orig/sme/admin
-svn ci
+svn ci orig
 }}}
 
 !!parallelize

@@ -202,10 +202,10 @@ def add_files(args):
 def parse_args():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Copy files to a corpus directory. The filenames are \
-        converted to ascii only names. Metadata files containing the \
-        original name, the main language and the genre are also made. The \
-        files are added to the working copy.')
+        description='Add file(s) to a corpus directory. The filenames are '
+        'converted to ascii only names. Metadata files containing the '
+        'original name, the main language, the genre and possibly parallel '
+        'files are also made. The files are added to the working copy.')
 
     parser.add_argument('-p', '--parallel',
                         dest='parallel_file',
@@ -214,16 +214,16 @@ def parse_args():
     parser.add_argument('corpusdir',
                         help='The corpus dir (freecorpus or boundcorpus)')
     parser.add_argument('mainlang',
-                        help='The language of the files that will be added \
-                        (sma, sme, ...)')
+                        help='The language of the files that will be added '
+                        '(sma, sme, ...)')
     parser.add_argument('path',
-                        help='The genre directory where the files will be \
-                        added. This may also be a path, e.g. \
-                        admin/facta/skuvlahistorja1')
+                        help='The genre directory where the files will be '
+                        'added. This may also be a path, e.g. '
+                        'admin/facta/skuvlahistorja1')
     parser.add_argument('origs',
                         nargs='+',
-                        help='The original files, urls or directories where the \
-                        original files reside (not in svn)')
+                        help='The original files, urls or directories where the '
+                        'original files reside (not in svn)')
 
     return parser.parse_args()
 
