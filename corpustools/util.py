@@ -127,26 +127,40 @@ def print_element(element, level, indent, out):
     tag = element.tag.replace('{http://www.w3.org/1999/xhtml}', 'html:')
 
     out.write(' ' * (level * indent))
-    out.write('<%s' % tag)
+    out.write('<{}'.format(tag))
 
     for k, v in element.attrib.items():
-        out.write(' %s="%s"' % (k.encode('utf8'), v.encode('utf8')))
+        out.write(' ')
+        if isinstance(k, unicode):
+            out.write(k.encode('utf8'))
+        else:
+            out.write(k)
+        out.write('="')
+        if isinstance(v, unicode):
+            out.write(v.encode('utf8'))
+        else:
+            out.write(v)
+        out.write('"')
     out.write('>\n')
 
     if element.text is not None and element.text.strip() != '':
         out.write(' ' * ((level + 1) * indent))
-        out.write('%s\n' % element.text.strip().encode('utf8'))
+        if isinstance(element.text, unicode):
+            out.write(element.text.strip().encode('utf8'))
+        else:
+            out.write(element.text.strip())
+        out.write('\n')
 
     for child in element:
         print_element(child, level + 1, indent, out)
 
     out.write(' ' * (level * indent))
-    out.write('</%s>\n' % tag)
+    out.write('</{}>\n'.format(tag))
 
     if level > 0 and element.tail is not None and element.tail.strip() != '':
         for _ in range(0, (level - 1) * indent):
             out.write(' ')
-        out.write('%s\n' % element.tail.strip().encode('utf8'))
+        out.write('{}\n'.format(element.tail.strip().encode('utf8')))
 
 
 def name_to_unicode(filename):
