@@ -531,7 +531,7 @@ class Tmx:
         self.tmx = tmx
 
         # TODO: not actually used apart from in tests, remove?
-        # self.language_guesser = text_cat.Classifier()
+        # self.language_guesser = text_cat.Classifier(None)
 
     def get_src_lang(self):
         """

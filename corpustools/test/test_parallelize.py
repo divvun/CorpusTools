@@ -586,7 +586,7 @@ class TestTmx(unittest.TestCase):
         self.assertXmlEqual(got_tmx.get_tmx(), want_tmx.get_tmx())
 
     def test_check_language(self):
-        self.tmx.language_guesser = text_cat.Classifier()
+        self.tmx.language_guesser = text_cat.Classifier(None)
 
         tu_with_sme = etree.XML(
             '<tu><tuv xml:lang="sme"><seg>Bargo- ja '

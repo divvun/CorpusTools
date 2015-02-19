@@ -2409,7 +2409,7 @@ class LanguageDetector(object):
 class ConverterManager(object):
     '''Manage the conversion of original files to corpus xml
     '''
-    LANGUAGEGUESSER = text_cat.Classifier()
+    LANGUAGEGUESSER = text_cat.Classifier(None)
     FILES = []
 
     def __init__(self, write_intermediate):

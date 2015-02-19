@@ -10,7 +10,7 @@ from corpustools import text_cat
 
 
 here = os.path.dirname(__file__)
-LANGUAGEGUESSER = text_cat.Classifier()
+LANGUAGEGUESSER = text_cat.Classifier(None)
 
 
 class XMLTester(unittest.TestCase):
