@@ -382,7 +382,7 @@ class Parallelize:
     The other file is found via the metadata in the input file
     """
 
-    def __init__(self, origfile1, lang2):
+    def __init__(self, origfile1, lang2, quiet=False):
         """
         Set the original file name, the lang of the original file and the
         language that it should parallellized with.
@@ -402,6 +402,8 @@ class Parallelize:
 
         if self.is_translated_from_lang2():
             self.reshuffle_files()
+
+        self.quiet = quiet
 
     def reshuffle_files(self):
         """
@@ -468,7 +470,8 @@ class Parallelize:
         gal = generate_anchor_list.GenerateAnchorList(
             self.get_lang1(), self.get_lang2(), os.environ['GTFREE'])
         gal.generate_file([
-            os.path.join(os.environ['GTHOME'], 'gt/common/src/anchor.txt')])
+            os.path.join(os.environ['GTHOME'], 'gt/common/src/anchor.txt')],
+                          quiet=self.quiet)
 
         # Return the absolute path of the resulting file
         return os.path.abspath(gal.get_outfile())
@@ -519,7 +522,8 @@ class Parallelize:
                        self.get_filelist()[0])),
                    '-in2={}'.format(self.get_sent_filename(
                        self.get_filelist()[1]))]
-        print "Running tca2 aligner ..."
+        if not self.quiet:
+            print "Running tca2 aligner ..."
         subp = subprocess.Popen(command,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
@@ -1236,6 +1240,9 @@ def parse_options():
                         help="Overwrite output file if it already exists."
                         "The default is to skip parallelizing existing files.",
                         action="store_true")
+    parser.add_argument('-q', '--quiet',
+                        help="Don't mention anything out of the ordinary.",
+                        action="store_true")
     parser.add_argument('-p', '--parallel_language',
                         dest='parallel_language',
                         help="The language to parallelize the input "
@@ -1250,7 +1257,9 @@ def main():
     args = parse_options()
 
     try:
-        parallelizer = Parallelize(args.input_file, args.parallel_language)
+        parallelizer = Parallelize(args.input_file,
+                                   args.parallel_language,
+                                   args.quiet)
     except IOError as e:
         print e.message
         sys.exit(1)
@@ -1263,10 +1272,12 @@ def main():
             print "{} already exists, skipping ...".format(outfile)
             sys.exit(1)
 
-    print "Aligning {} and its parallel file".format(args.input_file)
-    print "Adding sentence structure that tca2 needs …"
+    if not args.quiet:
+        print "Aligning {} and its parallel file".format(args.input_file)
+        print "Adding sentence structure that tca2 needs …"
     if parallelizer.divide_p_into_sentences() == 0:
-        print "Aligning files …"
+        if not args.quiet:
+            print "Aligning files …"
         if parallelizer.parallelize_files() == 0:
             tmx = Tca2ToTmx(parallelizer.get_filelist())
 
@@ -1277,5 +1288,6 @@ def main():
             except OSError, e:
                 if e.errno != errno.EEXIST:
                     raise
-            print "Generating the tmx file {}".format(outfile)
+            if not args.quiet:
+                print "Generating the tmx file {}".format(outfile)
             tmx.write_tmx_file(outfile)

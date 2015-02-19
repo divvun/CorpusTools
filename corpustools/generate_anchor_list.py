@@ -39,18 +39,20 @@ class GenerateAnchorList(object):
     def get_outfile(self):
         return self.outfile
 
-    def generate_file(self, infiles):
+    def generate_file(self, infiles, quiet=False):
         '''infiles is a list of files
         '''
         lang1_index = self.LANGUAGES.index(self.lang1)
         lang2_index = self.LANGUAGES.index(self.lang2)
 
         with open(self.outfile, 'wb') as outfile:
-            print 'Generating anchor word list to {}'.format(self.outfile)
+            if not quiet:
+                print 'Generating anchor word list to {}'.format(self.outfile)
 
             for infile in infiles:
                 with open(infile) as instream:
-                    print 'Reading {}'.format(infile)
+                    if not quiet:
+                        print 'Reading {}'.format(infile)
                     lineno = 0
                     for line in instream:
                         lineno += 1
