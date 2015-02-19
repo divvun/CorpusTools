@@ -1237,10 +1237,21 @@ class HTMLContentConverter(Converter):
             processing_instructions=True,
             remove_unknown_tags=True,
             embedded=True,
-            remove_tags=['img', 'area', 'hr', 'cite', 'footer', 'figcaption',
-                         'aside', 'time', 'figure', 'nav', 'noscript', 'map',
-                         'ins',
-                         ])
+            remove_tags=[
+                'img',
+                'area',
+                'hr',
+                'cite',
+                'footer',
+                'figcaption',
+                'aside',
+                'time',
+                'figure',
+                'nav',
+                'noscript',
+                'map',
+                'ins',
+                ])
 
         decoded = self.to_unicode(content)
         semiclean = self.remove_cruft(decoded)
@@ -1249,8 +1260,8 @@ class HTMLContentConverter(Converter):
         self.soup = html5parser.document_fromstring(superclean)
 
         self.convert2xhtml()
-        # with open('{}.huff.xml'.format(self.orig), 'wb') as huff:
-        #     util.print_element(etree.fromstring(self.soup), 0, 2, huff)
+        #with open('{}.huff.xml'.format(self.orig), 'wb') as huff:
+            #util.print_element(self.soup, 0, 2, huff)
 
         self.converter_xsl = os.path.join(here, 'xslt/xhtml2corpus.xsl')
 
@@ -1419,8 +1430,6 @@ class HTMLContentConverter(Converter):
             'div': {
                 'class': [
                     'QuickNav', 'tabbedmenu', 'printContact', 'documentPaging',
-                    'breadcrumbs',
-                    'breadcrumbs ',  # regjeringen.no
                     'post-footer', 'documentInfoEm',
                     'article-column', 'nrk-globalfooter', 'article-related',
                     'outer-column', 'article-ad', 'article-bottom-element',
@@ -1429,16 +1438,22 @@ class HTMLContentConverter(Converter):
                     'expandable', 'toc', 'titlepage',
                     'container_full', 'moduletable_oikopolut',
                     "latestnews_uutisarkisto", 'back_button',
-                    'breadcrums span-12',       # svenskakyrkan.se
-                    'tipsarad mt6 selfClear',   # svenskakyrkan.se
-                    'imagecontainer',           # regjeringen.no
+                    # regjeringen.no
+                    'breadcrumbs ',
+                    'imagecontainer',
+                    # svenskakyrkan.se
+                    'breadcrums span-12',
+                    'tipsarad mt6 selfClear',
+                    # lovdata.no
+                    'sidebar',
+                    'ld-navbar',
+                    'fixed-header',
+                    'innholdsfortegenlse-child',
+                    'metaWrapper',
+                    'help closed hidden-xs',
+
                     ],
                 'id': [
-                    'pageFooter',               # svenskakyrkan.se
-                    'headerBar',                # svenskakyrkan.se
-                    'leftmenu',                 # svenskakyrkan.se
-                    'rightside',                # svenskakyrkan.se
-                    'readspeaker_button1',      # svenskakyrkan.se
                     'searchBox',
                     'murupolku',                # www.samediggi.fi
                     'main_navi_main',           # www.samediggi.fi
@@ -1461,6 +1476,14 @@ class HTMLContentConverter(Converter):
                     'article_footer',
                     'rightCol',
                     'PrintDocHead',
+                    # lovdata.no
+                    'deleModal',
+                    # svenskakyrkan.se
+                    'pageFooter',
+                    'headerBar',
+                    'leftmenu',
+                    'rightside',
+                    'readspeaker_button1',
                     ],
                 },
             'p': {
@@ -1468,19 +1491,27 @@ class HTMLContentConverter(Converter):
                 },
             'ul': {
                 'id': ['AreaTopPrintMeny', 'AreaTopLanguageNav'],
-                'class': ['QuickNav', 'article-tools', 'byline']
+                'class': [
+                    'QuickNav', 'article-tools', 'byline',
+                    # lovdata.no
+                    'chapter-index',
+                    'footer-nav',
+                    ],
                 },
             'span': {
                 'id': ['skiplinks'],
                 'class': [
                     'K-NOTE-FOTNOTE',
-                    'graytext',     # svenskakyrkan.se
+                    # svenskakyrkan.se
+                    'graytext',
                     ],
                 },
             'a': {
                 'id': ['leftPanelTab', ],
                 'class': [
                     'mainlevel',
+                    # lovdata.no
+                    'share-paragraf',
                     ],
                 },
             'td': {
