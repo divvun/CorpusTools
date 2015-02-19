@@ -622,6 +622,7 @@ class TestTca2ToTmx(unittest.TestCase):
                 'aarseth2-s.htm.xml'),
             "nob")
 
+        self.para = para
         self.tmx = parallelize.Tca2ToTmx(para.get_filelist())
 
     def assertXmlEqual(self, got, want):
@@ -680,7 +681,7 @@ class TestTca2ToTmx(unittest.TestCase):
 
     def test_get_outfile_name(self):
         self.assertEqual(
-            self.tmx.get_outfile_name(),
+            self.para.get_outfile_name(),
             os.path.join(
                 os.environ['GTFREE'],
                 ('prestable/toktmx/nob2sme/facta/skuvlahistorja2/'

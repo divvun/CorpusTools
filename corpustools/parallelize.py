@@ -411,6 +411,25 @@ class Parallelize:
         self.origfiles[0] = self.origfiles[1]
         self.origfiles[1] = tmp
 
+    def get_outfile_name(self):
+        """
+        Compute the name of the final tmx file
+        """
+
+        orig_path_part = '/converted/{}/'.format(self.origfiles[0].get_lang())
+        # First compute the part that shall replace /orig/ in the path
+        replace_path_part = '/toktmx/{}2{}/'.format(
+            self.origfiles[0].get_lang(),
+            self.origfiles[1].get_lang())
+        # Then set the outdir
+        out_dirname = self.origfiles[0].get_dirname().replace(
+            orig_path_part, replace_path_part)
+        # Replace xml with tmx in the filename
+        out_filename = self.origfiles[0].get_basename().replace('.xml',
+                                                               '.toktmx')
+
+        return os.path.join(out_dirname, out_filename)
+
     def get_filelist(self):
         """
         Return the list of (the two) files that are aligned
@@ -813,25 +832,6 @@ class Tca2ToTmx(Tmx):
 
         return line
 
-    def get_outfile_name(self):
-        """
-        Compute the name of the tmx file
-        """
-
-        orig_path_part = '/converted/{}/'.format(self.filelist[0].get_lang())
-        # First compute the part that shall replace /orig/ in the path
-        replace_path_part = '/toktmx/{}2{}/'.format(
-            self.filelist[0].get_lang(),
-            self.filelist[1].get_lang())
-        # Then set the outdir
-        out_dirname = self.filelist[0].get_dirname().replace(
-            orig_path_part, replace_path_part)
-        # Replace xml with tmx in the filename
-        out_filename = self.filelist[0].get_basename().replace('.xml',
-                                                               '.toktmx')
-
-        return os.path.join(out_dirname, out_filename)
-
     def set_tmx(self):
         """
         Make tmx file based on the two output files of tca2
@@ -1232,10 +1232,14 @@ def parse_options():
         containing the main language, and language to parallelize it with.')
 
     parser.add_argument('input_file', help="The input file")
+    parser.add_argument('-f', '--force',
+                        help="Overwrite output file if it already exists."
+                        "The default is to skip parallelizing existing files.",
+                        action="store_true")
     parser.add_argument('-p', '--parallel_language',
                         dest='parallel_language',
-                        help="The language to parallelize the input \
-                        document with",
+                        help="The language to parallelize the input "
+                        "document with",
                         required=True)
 
     args = parser.parse_args()
@@ -1251,6 +1255,14 @@ def main():
         print e.message
         sys.exit(1)
 
+    outfile = parallelizer.get_outfile_name()
+    if os.path.exists(outfile):
+        if args.force:
+            print "{} already exists, overwriting!".format(outfile)
+        else:
+            print "{} already exists, skipping ...".format(outfile)
+            sys.exit(1)
+
     print "Aligning {} and its parallel file".format(args.input_file)
     print "Adding sentence structure that tca2 needs …"
     if parallelizer.divide_p_into_sentences() == 0:
@@ -1258,12 +1270,12 @@ def main():
         if parallelizer.parallelize_files() == 0:
             tmx = Tca2ToTmx(parallelizer.get_filelist())
 
-            o_path, o_file = os.path.split(tmx.get_outfile_name())
+            o_path, o_file = os.path.split(outfile)
             o_rel_path = o_path.replace(os.getcwd()+'/', '', 1)
             try:
                 os.makedirs(o_rel_path)
             except OSError, e:
                 if e.errno != errno.EEXIST:
                     raise
-            print "Generating the tmx file {}".format(tmx.get_outfile_name())
-            tmx.write_tmx_file(tmx.get_outfile_name())
+            print "Generating the tmx file {}".format(outfile)
+            tmx.write_tmx_file(outfile)
