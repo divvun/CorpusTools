@@ -259,7 +259,7 @@ class WordModel(NGramModel):
 class Classifier(object):
     DROP_RATIO = 1.10
 
-    def __init__(self, folder, langs=[], verbose=False):
+    def __init__(self, folder=None, langs=[], verbose=False):
         if folder is None:
             folder = os.path.join(here, 'lm')
         self.cmodels = {}
