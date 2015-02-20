@@ -3,37 +3,54 @@ import unittest
 import os
 
 from corpustools import text_cat
-from corpustools import converter
 
 here = os.path.dirname(__file__)
-LANGUAGEGUESSER = text_cat.Classifier()
 
 class TestTextCat(unittest.TestCase):
     def setUp(self):
         pass
 
     def test_classify(self):
+        guesser = text_cat.Classifier()
         self.assertEqual(
-            LANGUAGEGUESSER.classify("eg køyrer ikkje"),
+            guesser.classify("eg køyrer ikkje"),
             "nno")
         self.assertEqual(
-            LANGUAGEGUESSER.classify("Sámediggi nammada sámi báikenammakonsuleanttaid"),
+            guesser.classify("Sámediggi nammada sámi báikenammakonsuleanttaid"),
             "sme")
 
     def test_folder_none(self):
-        fullguesser = text_cat.Classifier(None)
+        guesser = text_cat.Classifier(None)
         self.assertEqual(
-            fullguesser.classify("eg køyrer ikkje"),
+            guesser.classify("eg køyrer ikkje"),
             "nno")
         self.assertEqual(
-            fullguesser.classify("Almmá norggabeale guohtuneatnamiid ii leat vejolaš jođihit"),
+            guesser.classify("Almmá norggabeale guohtuneatnamiid ii leat vejolaš"),
             "sme")
 
     def test_restricted(self):
-        littleguesser = text_cat.Classifier(langs=["nob","sma"])
+        guesser = text_cat.Classifier(langs=["nob","sma"])
         self.assertEqual(
-            littleguesser.classify("Regional utvikling"),
+            guesser.classify("Regional utvikling"),
             "nob")
         self.assertEqual(
-            littleguesser.classify("Regijovnaale evtiedimmie"),
+            guesser.classify("Regijovnaale evtiedimmie"),
             "sma")
+        self.assertEqual(
+            guesser.classify("eg køyrer ikkje"),
+            "nob")              # because restriction
+
+    def test_charmodel_compare(self):
+        swe_train = """riksspråkets långa i och u i en mängd ord här (och likartat i det övriga) motsvaras av dette. På samma sätt heter"""
+        qer_train = """Ulið witå ig ir faingin få wårå jär å Skansem og sai åv liteð för ið um övkallmåleð. Merkwärdut naug ar eð itte weð kringt noger ar tålåð yvyr dyö jär, fast eð ärer Övdalim og övkallum til mier eld ollt eller."""
+        swe_model = text_cat.CharModel().of_text(swe_train)
+        qer_model = text_cat.CharModel().of_text(qer_train)
+        qer_test = "Ig dalsker nu að ið ollum"
+        swe_test = "sådan slåttermark som bara slås med orv och lie, oländig kanske stenig mark"
+        swe_testmodel = text_cat.CharModel().of_text(swe_test)
+        qer_testmodel = text_cat.CharModel().of_text(qer_test)
+        self.assertLess(swe_model.compare(swe_testmodel),
+                        qer_model.compare(swe_testmodel))
+        self.assertLess(qer_model.compare(qer_testmodel),
+                        swe_model.compare(qer_testmodel))
+
