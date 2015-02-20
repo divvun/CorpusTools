@@ -78,3 +78,18 @@ class TestTextCat(unittest.TestCase):
         self.assertEqual(['2\tja'], lines[:1])
         self.assertIn('1\tgáhkku', lines)
 
+    def test_compare_tc(self):
+        sme_train = "girjerájusbálvalusaid mat leat sámi álbmogii danne go nationála girjerájusstatistihkka ii bija dan materiealla mii lea sámegillii sierra kategoriijan"
+        nob_train = "Tocantins utgjorde opprinnelig nordre del av Goiás. Historisk sett har dette området vært adskilt fra resten av denne delstaten."
+        nob_test = "kategori:Goiás"
+        cmodel_sme = text_cat.CharModel().of_text(sme_train)
+        wmodel_sme = text_cat.WordModel().of_text(sme_train)
+        cmodel_nob = text_cat.CharModel().of_text(nob_train)
+        wmodel_nob = text_cat.WordModel().of_text(nob_train)
+        ctext_nob = text_cat.CharModel().of_text(nob_test)
+        self.assertLess(wmodel_sme.compare_tc(nob_test, cmodel_sme.compare(ctext_nob)),
+                        wmodel_nob.compare_tc(nob_test, cmodel_nob.compare(ctext_nob)))
+        self.assertLess(3930431,
+                        wmodel_nob.compare_tc(nob_test, cmodel_nob.compare(ctext_nob)))
+        self.assertEqual(0,
+                         wmodel_sme.compare_tc(nob_test, cmodel_sme.compare(ctext_nob)))
