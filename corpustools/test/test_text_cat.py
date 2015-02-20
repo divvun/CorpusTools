@@ -1,6 +1,11 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 import unittest
 import os
+import StringIO
 
 from corpustools import text_cat
 
@@ -53,4 +58,23 @@ class TestTextCat(unittest.TestCase):
                         qer_model.compare(swe_testmodel))
         self.assertLess(qer_model.compare(qer_testmodel),
                         swe_model.compare(qer_testmodel))
+
+    def test_charmodel_model_file(self):
+        model = text_cat.CharModel().of_text("šuhkoládagáhkku")
+        model_file = StringIO.StringIO()
+        model.to_model_file(model_file)
+        lines = model_file.getvalue().decode('utf-8').split("\n")
+        self.assertEqual(['k\t3'], lines[:1])
+        self.assertIn('á\t2', lines)
+        self.assertIn('hk\t2', lines)
+        self.assertIn('_\t2', lines)
+        self.assertIn('gáhk\t1', lines)
+
+    def test_wordmodel_model_file(self):
+        model = text_cat.WordModel().of_text("šuhkoláda ja gáhkku ja gáfe")
+        model_file = StringIO.StringIO()
+        model.to_model_file(model_file)
+        lines = model_file.getvalue().decode('utf-8').split("\n")
+        self.assertEqual(['2\tja'], lines[:1])
+        self.assertIn('1\tgáhkku', lines)
 
