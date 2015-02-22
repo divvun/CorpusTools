@@ -3304,14 +3304,6 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_page(page_element)
 
         self.maxDiff = None
-        print 'got', etree.tostring(p2x.get_body(), encoding='unicode')
-        print 'want', (u'<body>'
-            u'<p>vuosttaš dábálaš linnjá</p>'
-            u'<p type="listotem"> Vuosttaš listolinnjá  '
-            u'vuosttaš listolinnjá joaktta</p>'
-            u'<p type="listotem"> Nubbi listo<hyph/>linnjá</p>'
-            u'<p>Nubbi dábáláš linnjá</p>'
-            u'</body>')
         self.assertEqual(
             etree.tostring(p2x.get_body(), encoding='unicode'),
             u'<body>'
@@ -3399,6 +3391,62 @@ class TestPDF2XMLConverter(XMLTester):
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.skip_pages = ["2"]
+        p2x.parse_pages(pdf2xml)
+
+        self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
+
+    def test_parse_pdf2xmldoc3(self):
+        '''Check if paragraph is continued from page to page
+        Paragraph should continue if the first character on next page is a lower case character
+        '''
+        pdf2xml = etree.fromstring(
+            '<pdf2xml>'
+            '<page number="1" position="absolute" top="0" left="0" '
+            'height="1020" width="723">'
+            '<text top="898" left="80" width="512" height="19" font="0">'
+            'Dán </text>'
+            '</page>'
+            '<page number="2" position="absolute" top="0" left="0" '
+            'height="1020" width="723">'
+            '<text top="43" left="233" width="415" height="16" font="7">'
+            'Top text </text>'
+            '<text top="958" left="174" width="921" height="19" font="0">'
+            '15 </text>'
+            '<text top="93" left="131" width="512" height="19" font="0">'
+            'barggus.</text>'
+            '</page>'
+            '</pdf2xml>')
+        want = u'<body><p>Dán barggus.</p></body>'
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.parse_pages(pdf2xml)
+
+        self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
+
+    def test_parse_pdf2xmldoc4(self):
+        '''Check if paragraph is continued from page to page
+        Paragraph should continue if the first character on next page is a lower case character
+        '''
+        pdf2xml = etree.fromstring(
+            '<pdf2xml>'
+            '<page number="1" position="absolute" top="0" left="0" '
+            'height="1020" width="723">'
+            '<text top="898" left="80" width="512" height="19" font="0">'
+            'Dán ovddidan-</text>'
+            '</page>'
+            '<page number="2" position="absolute" top="0" left="0" '
+            'height="1020" width="723">'
+            '<text top="43" left="233" width="415" height="16" font="7">'
+            'Top text </text>'
+            '<text top="958" left="174" width="921" height="19" font="0">'
+            '15 </text>'
+            '<text top="93" left="131" width="512" height="19" font="0">'
+            'barggus.</text>'
+            '</page>'
+            '</pdf2xml>')
+        want = u'<body><p>Dán ovddidan<hyph/>barggus.</p></body>'
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
