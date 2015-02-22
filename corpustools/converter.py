@@ -1035,22 +1035,25 @@ class PDF2XMLConverter(Converter):
         delta = float(text2.get('top')) - float(text1.get('top'))
         ratio = 1.5
 
+        if len(text2) > 0:
+            real_text2 = text2[0].text
+        else:
+            real_text2 = text2.text
+
         if (h1 == h2 and delta < ratio * h1 and delta > 0):
-            if (text2.text is not None and text2.text[0] in self.LIST_CHARS):
+            if (real_text2[0] in self.LIST_CHARS):
                 self.in_list = True
                 #print util.lineno(), text2.text
-            elif (text2.text is not None and
-                  re.match('\s', text2.text[0]) is None and
-                  text2.text[0] == text2.text[0].upper() and self.in_list):
+            elif (re.match('\s', real_text2[0]) is None and
+                  real_text2[0] == real_text2[0].upper() and self.in_list):
                 self.in_list = False
                 result = False
                 #print util.lineno(), text2.text
-            elif (not (text2.text is not None and
-                       text2.text[0] in self.LIST_CHARS)):
+            elif (real_text2[0] not in self.LIST_CHARS):
                 #print util.lineno()
                 result = True
-        elif (h1 == h2 and t1 > t2 and text2.text is not None and
-              text2.text[0] == text2.text[0].lower()):
+        elif (h1 == h2 and t1 > t2 and
+              real_text2[0] == real_text2[0].lower()):
             #print util.lineno()
             result = True
         else:
@@ -1071,10 +1074,11 @@ class PDF2XMLConverter(Converter):
                     #print util.lineno(), etree.tostring(prev_t, encoding='utf8'), etree.tostring(t, encoding='utf8')
                     if len(self.parts) > 0:
                         self.append_to_body(self.make_paragraph())
-            if self.is_inside_margins(t, margins):
+            if ((len(t) > 0 or t.text is not None) and
+                    self.is_inside_margins(t, margins)):
                 self.extract_textelement(t)
-                #print util.lineno(), self.parts
                 prev_t = t
+                #print util.lineno(), self.parts
 
         if len(self.parts) > 0:
             self.append_to_body(self.make_paragraph())
