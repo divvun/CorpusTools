@@ -1429,15 +1429,33 @@ class HTMLContentConverter(Converter):
         unwanted_classes_ids = {
             'div': {
                 'class': [
-                    'QuickNav', 'tabbedmenu', 'printContact', 'documentPaging',
-                    'post-footer', 'documentInfoEm',
-                    'article-column', 'nrk-globalfooter', 'article-related',
-                    'outer-column', 'article-ad', 'article-bottom-element',
-                    'banner-element', 'nrk-globalnavigation', 'sharing', 'ad',
-                    'meta', 'authors', 'articleImageRig',  'btm_menu',
-                    'expandable', 'toc', 'titlepage',
-                    'container_full', 'moduletable_oikopolut',
-                    "latestnews_uutisarkisto", 'back_button',
+                    'QuickNav',
+                    'tabbedmenu',
+                    'printContact',
+                    'documentPaging',
+                    'post-footer',
+                    'documentInfoEm',
+                    'article-column',
+                    'nrk-globalfooter',
+                    'article-related',
+                    'outer-column',
+                    'article-ad',
+                    'article-bottom-element',
+                    'banner-element',
+                    'nrk-globalnavigation',
+                    'sharing',
+                    'ad',
+                    'meta',
+                    'authors',
+                    'articleImageRig',
+                    'btm_menu',
+                    'expandable',
+                    'toc',
+                    'titlepage',
+                    'container_full',
+                    'moduletable_oikopolut',
+                    "latestnews_uutisarkisto",
+                    'back_button',
                     # regjeringen.no
                     'breadcrumbs ',
                     'breadcrumbs',
@@ -1461,14 +1479,32 @@ class HTMLContentConverter(Converter):
                     'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
                     'ctl00_FullRegion_CenterAndRightRegion_HitsControl_'
                     'searchHitSummary',
-                    'AreaTopSiteNav', 'SamiDisclaimer', 'AreaTopRight',
-                    'AreaLeft', 'AreaRight', 'ShareArticle', 'tipafriend',
-                    'AreaLeftNav', 'PageFooter', 'blog-pager',
-                    'NAVheaderContainer', 'NAVbreadcrumbContainer',
-                    'NAVsubmenuContainer', 'NAVrelevantContentContainer',
-                    'NAVfooterContainer', 'sidebar-wrapper', 'footer-wrapper',
-                    'share-article', 'topUserMenu', 'rightAds', 'menu', 'aa',
-                    'sidebar', 'footer', 'chatBox', 'sendReminder',
+                    'AreaTopSiteNav',
+                    'SamiDisclaimer',
+                    'AreaTopRight',
+                    'AreaLeft',
+                    'AreaRight',
+                    'ShareArticle',
+                    'tipafriend',
+                    'AreaLeftNav',
+                    'PageFooter',
+                    'blog-pager',
+                    'NAVheaderContainer',
+                    'NAVbreadcrumbContainer',
+                    'NAVsubmenuContainer',
+                    'NAVrelevantContentContainer',
+                    'NAVfooterContainer',
+                    'sidebar-wrapper',
+                    'footer-wrapper',
+                    'share-article',
+                    'topUserMenu',
+                    'rightAds',
+                    'menu',
+                    'aa',
+                    'sidebar',
+                    'footer',
+                    'chatBox',
+                    'sendReminder',
                     'ctl00_MidtSone_ucArtikkel_ctl00_divNavigasjon',
                     'ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl01_divRessurser',
                     'leftPanel',
@@ -1488,19 +1524,29 @@ class HTMLContentConverter(Converter):
                     ],
                 },
             'p': {
-                'class': ['WebPartReadMoreParagraph', 'breadcrumbs'],
+                'class': [
+                    'WebPartReadMoreParagraph',
+                    'breadcrumbs'
+                    ],
                 },
             'ul': {
-                'id': ['AreaTopPrintMeny', 'AreaTopLanguageNav'],
+                'id': [
+                    'AreaTopPrintMeny',
+                    'AreaTopLanguageNav'
+                    ],
                 'class': [
-                    'QuickNav', 'article-tools', 'byline',
+                    'QuickNav',
+                    'article-tools',
+                    'byline',
                     # lovdata.no
                     'chapter-index',
                     'footer-nav',
                     ],
                 },
             'span': {
-                'id': ['skiplinks'],
+                'id': [
+                    'skiplinks'
+                    ],
                 'class': [
                     'K-NOTE-FOTNOTE',
                     # svenskakyrkan.se
@@ -1508,7 +1554,9 @@ class HTMLContentConverter(Converter):
                     ],
                 },
             'a': {
-                'id': ['leftPanelTab', ],
+                'id': [
+                    'leftPanelTab',
+                    ],
                 'class': [
                     'mainlevel',
                     # lovdata.no
@@ -1516,11 +1564,20 @@ class HTMLContentConverter(Converter):
                     ],
                 },
             'td': {
-                'id': ["paavalikko_linkit", "hakulomake", 'sg_oikea'],
-                'class': ["modifydate"],
+                'id': [
+                    "paavalikko_linkit",
+                    "hakulomake",
+                    'sg_oikea',
+                    ],
+                'class': [
+                    "modifydate",
+                    ],
                 },
             'tr': {
-                'id': ["sg_ylaosa1", "sg_ylaosa2"]
+                'id': [
+                    "sg_ylaosa1",
+                    "sg_ylaosa2",
+                    ]
                 },
             }
 
