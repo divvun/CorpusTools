@@ -1440,6 +1440,7 @@ class HTMLContentConverter(Converter):
                     "latestnews_uutisarkisto", 'back_button',
                     # regjeringen.no
                     'breadcrumbs ',
+                    'breadcrumbs',
                     'imagecontainer',
                     # svenskakyrkan.se
                     'breadcrums span-12',
