@@ -849,7 +849,7 @@ class PDF2XMLConverter(Converter):
                     'Format should be [all|odd|even|pagenumber]=integer'.format(
                     key, self.get_xsl(), value))
             try:
-                self.margins[key] = self.set_margin(value)
+                margins[key] = self.set_margin(value)
             except ValueError as (e):
                 raise ConversionException('Invalid format in the variable {} '
                     'in the file:\n{}\n{}\n'
