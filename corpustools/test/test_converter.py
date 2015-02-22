@@ -2915,8 +2915,10 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
-        t1 = etree.fromstring('<text top="106" height="19" font="2"/>')
-        t2 = etree.fromstring('<text top="126" height="19" font="2"/>')
+        t1 = etree.fromstring(
+            '<text top="106" height="19" font="2">Text1 </text>')
+        t2 = etree.fromstring(
+            '<text top="126" height="19" font="2">text2</text>')
 
         self.assertTrue(p2x.is_same_paragraph(t1, t2))
 
@@ -2949,8 +2951,10 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
-        t1 = etree.fromstring('<text top="106" height="19" font="1"/>')
-        t2 = etree.fromstring('<text top="126" height="19" font="2"/>')
+        t1 = etree.fromstring(
+            '<text top="106" height="19" font="1">Text1</text>')
+        t2 = etree.fromstring(
+            '<text top="126" height="19" font="2">Text2</text>')
 
         self.assertTrue(p2x.is_same_paragraph(t1, t2))
 
@@ -2989,17 +2993,6 @@ class TestPDF2XMLConverter(XMLTester):
             ' nubbi dábáláš linnjá</text>')
 
         self.assertTrue(p2x.is_same_paragraph(t1, t2))
-
-    def test_is_same_paragraph_8(self):
-        '''Make sure that bottom text is not part of the next line …
-        '''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.in_list = True
-
-        t1 = etree.fromstring('<text top="1218" left="796" width="8" height="18" font="0"/>')
-        t2 = etree.fromstring('<text top="536" left="104" width="318" height="18" font="1"/>')
-
-        self.assertFalse(p2x.is_same_paragraph(t1, t2))
 
     def test_is_same_paragraph_9(self):
         '''Test if the text at the next columns belong to the previous paragraph
