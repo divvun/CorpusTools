@@ -105,19 +105,75 @@ you'll have to "pip uninstall" them individually.
 
 Convert corpus format xml to clean text
 
-The basic function of ccat is to print paragraphs that have text type
-(empty type in our xml-files), that is the default. In addition to text paragraphs, it is possible to print titles, lists and tables.
+ccat is used to print out the content of converted files and converted files
+containing errormarkup (produced by
+[convert2xml|CorpusTools.html#convert2xml])
+and analysed files (produced by
+[analyse_corpus|CorpusTools.html#analyse_corpus]) to stdout.
 
-Typical usage is:
+!Printing content of converted files to stdout
+
+To print out all sme content of all the converted files found in
+$GTFREE/converted/sme/admin and its subdirectories, issue the command:
 
 {{{
 ccat -a -l sme $GTFREE/converted/sme/admin
 }}}
 
-This command will print all text marked in the language sme found the
-directory $GTFREE/converted/sme/admin and its subdirectories.
+It is also possible to print a file at a time:
 
-The complete help text from the program:
+{{{
+ccat -a -l sme $GTFREE/converted/sme/admin/sd/other_files/vl_05_1.doc.xml
+}}}
+
+To print out the content of e.g. all converted pdf files found in a directory
+and its subdirectories, issue this command:
+{{{
+find converted/sme/science/ -name "*.pdf.xml" | xargs ccat -a -l sme
+}}}
+
+!Printing content of analysed files to stdout
+
+The analysed files produced by
+[analyse_corpus|CorpusTools.html#analyse_corpus] contain among other one
+dependency element and one disambiguation element, that contain the
+dependency and disambiguation analysis of the original files content.
+
+{{{
+ccat -dis sda/sda_2006_1_aikio1.pdf.xml
+}}}
+
+Prints the content of the disambiguation element.
+
+{{{
+ccat -dep sda/sda_2006_1_aikio1.pdf.xml
+}}}
+
+Prints the content of the dependency element.
+
+The usage pattern for printing these elements is otherwise the same as
+printing the content of converted files.
+
+Printing dependency elements
+{{{
+ccat -dep $GTFREE/analysed/sme/admin
+ccat -dep $GTFREE/analysed/sme/admin/sd/other_files/vl_05_1.doc.xml
+find analysed/sme/science/ -name "*.pdf.xml" | xargs ccat -dep
+}}}
+
+Printing disambiguation elements
+{{{
+ccat -dis $GTFREE/analysed/sme/admin
+ccat -dis $GTFREE/analysed/sme/admin/sd/other_files/vl_05_1.doc.xml
+find analysed/sme/science/ -name "*.pdf.xml" | xargs ccat -dis
+}}}
+
+!Printing errormarkup content
+
+This usage mode is used in the speller tests. Examples of this usage pattern
+is found in the make files in $GTBIG/prooftools.
+
+!The complete help text from the program:
 
 {{{
 usage: ccat [-h] [-l LANG] [-T] [-L] [-t] [-a] [-c] [-C] [-ort] [-ortreal]
