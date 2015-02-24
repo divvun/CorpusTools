@@ -105,11 +105,10 @@ you'll have to "pip uninstall" them individually.
 
 Convert corpus format xml to clean text
 
-ccat is used to print out the content of converted files and converted files
-containing errormarkup (produced by
-[convert2xml|CorpusTools.html#convert2xml])
-and analysed files (produced by
-[analyse_corpus|CorpusTools.html#analyse_corpus]) to stdout.
+ccat has three usage modes, print to stdout the content of:
+* converted files (produced by [convert2xml|CorpusTools.html#convert2xml])
+* converted files containing errormarkup (produced by [convert2xml|CorpusTools.html#convert2xml])
+* analysed files (produced by [analyse_corpus|CorpusTools.html#analyse_corpus])
 
 !Printing content of converted files to stdout
 
