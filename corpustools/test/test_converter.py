@@ -413,15 +413,39 @@ class TestDocConverter(XMLTester):
 
 class TestBiblexmlConverter(XMLTester):
     def setUp(self):
-        self.testdoc = converter.BiblexmlConverter(
-            os.path.join(here,
-                         'converter_data/bible-test.xml'))
+        self.testdoc = converter.BiblexmlConverter('bogus.bible.xml')
 
     def test_convert2intermediate(self):
+        self.testdoc.orig = io.StringIO(
+            u'<document>'
+            u'  <head/>'
+            u'  <body>'
+            u'    <book title="Book title">'
+            u'      <chapter title="Kapittel 1">'
+            u'        <section title="Section 1">'
+            u'          <verse number="1">Vearsa 1 </verse>'
+            u'          <verse number="2">Vearsa 2 </verse>'
+            u'        </section>'
+            u'      </chapter>'
+            u'    </book>'
+            u'  </body>'
+            u'</document>')
         got = self.testdoc.convert2intermediate()
-        want = etree.parse(
-            os.path.join(here,
-                         'converter_data/bible-test.xml.xml'))
+        want = etree.fromstring(
+            '<document>'
+            '  <body>'
+            '    <section>'
+            '    <p type="title">Book title</p>'
+            '    <section>'
+            '      <p type="title">Kapittel 1</p>'
+            '      <section>'
+            '        <p type="title">Section 1</p>'
+            '        <p>Vearsa 1 Vearsa 2 </p>'
+            '      </section>'
+            '    </section>'
+            '    </section>'
+            '  </body>'
+            '</document>')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
