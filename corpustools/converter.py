@@ -1155,7 +1155,13 @@ class BiblexmlConverter(Converter):
 
         return document
 
-    def process_verse(self, verse_element):
+    @staticmethod
+    def process_verse(verse_element):
+        if verse_element.tag != 'verse':
+            raise UserWarning(
+                '{}: Unexpected element in verse: {}'.format(
+                    self.orig, verse_element.tag))
+
         return verse_element.text
 
     def process_section(self, section_element):
@@ -1168,29 +1174,70 @@ class BiblexmlConverter(Converter):
         section.append(title)
 
         verses = []
-        for verse in section_element.xpath('./verse'):
-            text = self.process_verse(verse)
+        for element in section_element:
+            if element.tag == 'p':
+                if len(verses) > 0:
+                    section.append(self.make_p(verses))
+                    verses = []
+                section.append(self.process_p(element))
+            elif element.tag == 'verse':
+                text = self.process_verse(element)
+                if text is not None:
+                    verses.append(text)
+            else:
+                raise UserWarning(
+                    '{}: Unexpected element in section: {}'.format(
+                        self.orig, element.tag))
+
+        section.append(self.make_p(verses))
+
+        return section
+
+    def process_p(self, p):
+        verses = []
+        for child in p:
+            text = self.process_verse(child)
             if text is not None:
                 verses.append(text)
 
         p = etree.Element('p')
         p.text = '\n'.join(verses)
 
-        section.append(p)
+        return p
 
-        return section
+    @staticmethod
+    def make_p(verses):
+        p = etree.Element('p')
+        p.text = '\n'.join(verses)
+
+        return p
 
     def process_chapter(self, chapter_element):
         section = etree.Element('section')
 
+        text_parts = []
+        if chapter_element.get('number') is not None:
+            text_parts.append(chapter_element.get('number'))
+        if chapter_element.get('title') is not None:
+            text_parts.append(chapter_element.get('title'))
+
         title = etree.Element('p')
         title.set('type', 'title')
-        title.text = chapter_element.get('title')
+        title.text = ' '.join(text_parts)
 
         section.append(title)
 
-        for section_element in chapter_element.xpath('./section'):
-            section.append(self.process_section(section_element))
+        for child in chapter_element:
+            if child.tag == 'section':
+                section.append(self.process_section(child))
+            elif child.tag == 'verse':
+                p = etree.Element('p')
+                p.text = child.text
+                section.append(p)
+            else:
+                raise UserWarning(
+                    '{}: Unexpected element in chapter: {}'.format(
+                        self.orig, child.tag))
 
         return section
 
@@ -1203,7 +1250,11 @@ class BiblexmlConverter(Converter):
 
         section.append(title)
 
-        for chapter_element in book_element.xpath('./chapter'):
+        for chapter_element in book_element:
+            if chapter_element.tag != 'chapter':
+                raise UserWarning(
+                    '{}: Unexpected element in book: {}'.format(
+                        self.orig, chapter_element.tag))
             section.append(self.process_chapter(chapter_element))
 
         return section

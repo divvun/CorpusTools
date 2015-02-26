@@ -8,7 +8,7 @@ from corpustools import converter
 
 
 tests = {
-    'type1': {
+    'book_chapter_section_verse': {
         'orig': (
             u'<document>'
             u'  <head/>'
@@ -28,14 +28,86 @@ tests = {
             '<document>'
             '  <body>'
             '    <section>'
-            '    <p type="title">Book title</p>'
-            '    <section>'
-            '      <p type="title">Kapittel 1</p>'
+            '      <p type="title">Book title</p>'
             '      <section>'
-            '        <p type="title">Section 1</p>'
-            '        <p>Vearsa 1 Vearsa 2 </p>'
+            '        <p type="title">Kapittel 1</p>'
+            '        <section>'
+            '          <p type="title">Section 1</p>'
+            '          <p>Vearsa 1 Vearsa 2 </p>'
+            '        </section>'
             '      </section>'
             '    </section>'
+            '  </body>'
+            '</document>'
+            ),
+        },
+    'book_chapter_verse': {
+        'orig': (
+            u'<document>'
+            u'  <header>'
+            u'    <title>1</title>'
+            u'  </header>'
+            u'  <body>'
+            u'    <book title="1 Sálmmaid girji ">'
+            u'      <chapter number="1">'
+            u'        <verse number="1">Vearsa1, </verse>'
+            u'        <verse number="2">vearsa2. </verse>'
+            u'      </chapter>'
+            u'    </book>'
+            u'  </body>'
+            u'</document>'
+            ),
+        'converted': (
+            '<document>'
+            '  <body>'
+            '    <section>'
+            '      <p type="title">1 Sálmmaid girji</p>'
+            '      <section>'
+            '        <p type="title">1</p>'
+            '        <p>Vearsa1, </p>'
+            '        <p>vearsa2. </p>'
+            '      </section>'
+            '    </section>'
+            '  </body>'
+            '</document>'
+            ),
+        },
+    'book_chapter_section_p': {
+        'orig': (
+            u'<document>'
+            u'  <header>'
+            u'    <title>1</title>'
+            u'  </header>'
+            u'  <body>'
+            u'    <book title="1 Sálmmaid girji ">'
+            u'      <chapter number="1">'
+            u'        <section title="Section title">'
+            u'          <verse number="1">Vearsa1 </verse>'
+            u'          <p>'
+            u'            <verse number="2">Vearsa2, </verse>'
+            u'            <verse number="3">vearsa3. </verse>'
+            u'          </p>'
+            u'          <verse number="4">Vearsa 4.</verse>'
+            u'        </section>'
+            u'      </chapter>'
+            u'    </book>'
+            u'  </body>'
+            u'</document>'
+            ),
+        'converted': (
+            '<document>'
+            '  <body>'
+            '    <section>'
+            '      <p type="title">1 Sálmmaid girji</p>'
+            '      <section>'
+            '        <p type="title">1</p>'
+            '        <section>'
+            '          <p type="title">Section title</p>'
+            '          <p>Vearsa1 </p>'
+            '          <p>Vearsa2, vearsa3.</p>'
+            '          <p>Vearsa 4.</p>'
+            '        </section>'
+            '      </section>'
             '    </section>'
             '  </body>'
             '</document>'
