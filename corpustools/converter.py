@@ -1580,6 +1580,12 @@ class HTMLContentConverter(Converter):
                     'leftmenu',
                     'rightside',
                     'readspeaker_button1',
+                    # finlex.fi
+                    'header',
+                    'main-content',
+                    'side-bar',
+                    'breadcrumbs-bottom',
+                    'sitemap',
                     ],
                 },
             'p': {
