@@ -88,7 +88,7 @@ class Converter(object):
             self.md = xslsetter.MetadataHandler(self.get_xsl(), create=True)
         except xslsetter.XsltException as e:
             raise ConversionException(e)
-        
+
         self.fix_lang_genre_xsl()
 
     def convert2intermediate(self):
@@ -1560,7 +1560,7 @@ class HTMLContentConverter(Converter):
                     'rightAds',
                     'menu',
                     'aa',
-                    'sidebar',
+                    'sidebar', # finlex.fi, too
                     'footer',
                     'chatBox',
                     'sendReminder',
@@ -1582,8 +1582,7 @@ class HTMLContentConverter(Converter):
                     'readspeaker_button1',
                     # finlex.fi
                     'header',
-                    'main-content',
-                    'side-bar',
+                    'document-header',
                     'breadcrumbs-bottom',
                     'sitemap',
                     ],
