@@ -84,7 +84,11 @@ class Converter(object):
         self.set_converted_name()
         self.dependencies = [self.get_orig(), self.get_xsl()]
         self._write_intermediate = write_intermediate
-        self.md = xslsetter.MetadataHandler(self.get_xsl(), create=True)
+        try:
+            self.md = xslsetter.MetadataHandler(self.get_xsl(), create=True)
+        except xslsetter.XsltException as e:
+            raise ConversionException(e)
+        
         self.fix_lang_genre_xsl()
 
     def convert2intermediate(self):

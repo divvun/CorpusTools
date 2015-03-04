@@ -42,7 +42,10 @@ class MetadataHandler(object):
                 commonxsl=etree.XSLT.strparam(
                     'file://' + os.path.join(here, 'xslt/common.xsl')))
         else:
-            self.tree = etree.parse(filename)
+            try:
+                self.tree = etree.parse(filename)
+            except etree.XMLSyntaxError as e:
+                raise XsltException('Syntax error in {}:\n{}'.format(self.filename, e))
 
     def _get_variable_elt(self, key):
         return self.tree.getroot().find(
