@@ -106,19 +106,14 @@ class Analyser(object):
                 print >>sys.stderr, (
                     'Could not handle the file name {}'.format(xml_file))
 
-    def makedirs(self):
+    @staticmethod
+    def makedirs(filename):
         u"""Make the analysed directory
         """
         try:
-            os.makedirs(os.path.dirname(self.analysis_xml_file))
+            os.makedirs(os.path.dirname(filename))
         except OSError:
             pass
-
-    def calculate_filenames(self, xml_file):
-        u"""Set the names of the analysis files
-        """
-        self.dependency_analysis_name = xml_file.replace(u'/converted/',
-                                                         u'/analysed')
 
     def ccat(self):
         u"""Turn an xml formatted file into clean text
@@ -256,16 +251,15 @@ class Analyser(object):
         u'''Analyse a file if it is not ocr'ed
         '''
         self.xml_file = parallelize.CorpusXMLFile(xml_file)
-        self.analysis_xml_file = self.xml_file.replace(u'converted/',
-                                                       u'analysed/')
-        self.calculate_filenames(xml_file)
+        analysis_xml_name = self.xml_file.get_name().replace(u'converted/',
+                                                             u'analysed/')
 
-        if self.get_ocr() is None:
+        if self.xml_file.get_ocr() is None:
             self.dependency_analysis()
             if self.get_disambiguation() is not None:
-                self.makedirs()
+                self.makedirs(analysis_xml_name)
                 self.get_analysis_xml()
-                self.xml_file.write(self.analysis_xml_file)
+                self.xml_file.write(analysis_xml_name)
         else:
             print >>sys.stderr, xml_file, 'is an OCR file and will not be \
             analysed'
