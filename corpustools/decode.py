@@ -215,6 +215,13 @@ CTYPES = {
         u'Â´': u'´',
         u'â€¢': u'•',
     },
+
+    u"finnish-lawtexts-in-pdf": {
+        u"þ": u"č",
+        u"á": u"á",
+    },
+
+
 }
 
 
@@ -272,6 +279,8 @@ class EncodingGuesser(object):
             winner = u"mix-of-latin4-and-iso-ir-197_to_cp1252"
         elif u'„' in content and u'˜' in content:
             winner = u"winsami2_to_cp1252"
+        elif u'þ' in content and u'š' in content and u'á' in content:
+            winner = u"finnish-lawtexts-in-pdf"
         elif u'Ã¡' in content:
             winner = u"double-utf8"
 
