@@ -712,7 +712,7 @@ class PDF2XMLConverter(Converter):
     '''Class to convert pdf2xml
     '''
     LIST_CHARS = [u'•']
-
+    margins = {}
     def __init__(self, filename, write_intermediate=False):
         super(PDF2XMLConverter, self).__init__(filename,
                                                write_intermediate)
@@ -721,7 +721,7 @@ class PDF2XMLConverter(Converter):
         self.parts = []
         self.skip_pages = self.set_skip_pages(self.md.get_variable(
             'skip_pages'))
-        self.margins = self.set_margins(self.get_margin_lines())
+        self.set_margins()
 
     def set_skip_pages(self, skip_pages):
         '''Turn a skip_pages entry into a list of pages
@@ -839,12 +839,13 @@ class PDF2XMLConverter(Converter):
 
         return margin_lines
 
-    def set_margins(self, margin_lines={}):
+    def set_margins(self):
         '''margins_lines is fetched from the metadata file belonging to
         the original file, if available. Before it is passed here, the
         validity of them are checked.
         '''
-        margins = {}
+        margin_lines = self.get_margin_lines()
+        #print >>sys.stderr, util.lineno(), margin_lines
         for key, value in margin_lines.items():
             if ('all' in value and ('odd' in value or 'even' in value) or
                 '=' not in value):
@@ -853,15 +854,15 @@ class PDF2XMLConverter(Converter):
                     'Format should be [all|odd|even|pagenumber]=integer'.format(
                     key, self.get_xsl(), value))
             try:
-                margins[key] = self.set_margin(value)
+                self.margins[key] = self.set_margin(value)
             except ValueError as (e):
                 raise ConversionException('Invalid format in the variable {} '
                     'in the file:\n{}\n{}\n'
                     'Format should be [all|odd|even|pagenumber]=integer'.format(
                     key, self.get_xsl(), value))
 
-        return margins
-
+        #print >>sys.stderr, util.lineno(), margins
+        
     def set_margin(self, value):
         '''Set the margins for given margin
 
@@ -885,39 +886,36 @@ class PDF2XMLConverter(Converter):
         page_height = int(page.get('height'))
 
         for margin in ['right_margin', 'left_margin', 'top_margin', 'bottom_margin']:
+            coefficient = 7
             if margin in self.margins.keys():
                 m = self.margins[margin]
                 if m.get(page_number) is not None:
-                    margins[margin] = m[page_number.strip()]
+                    coefficient = m[page_number.strip()]
                 elif m.get('all') is not None:
-                    margins[margin] = m['all']
+                    coefficient = m['all']
                 elif int(page_number) % 2 == 0 and m.get('even') is not None:
-                    margins[margin] = m['even']
+                    coefficient = m['even']
                 elif int(page_number) % 2 == 1 and m.get('odd') is not None:
-                    margins[margin] = m['odd']
-                else:
-                    margins[margin] = self.compute_default_margin(margin, page_height,
-                                                          page_width)
-            else:
-                margins[margin] = self.compute_default_margin(margin, page_height,
-                                                      page_width)
+                    coefficient = m['odd']
+
+            margins[margin] = self.compute_margin(margin, page_height,
+                                                  page_width, coefficient)
 
         return margins
 
-    def compute_default_margin(self, margin, page_height, page_width):
+    def compute_margin(self, margin, page_height, page_width, coefficient):
         '''Compute the margins if they are not explicitely set
 
-        The default margin is 7% of the page.
         '''
-        default = 0.07
+        #print util.lineno(), margin, page_height, page_width, coefficient
         if margin == 'right_margin':
-            return int(default * page_width)
+            return int(coefficient * page_width / 100)
         if margin == 'left_margin':
-            return int(page_width - default * page_width)
+            return int(page_width - coefficient * page_width / 100)
         if margin == 'top_margin':
-            return int(default * page_height)
+            return int(coefficient * page_height / 100)
         if margin == 'bottom_margin':
-            return int(page_height - default * page_height)
+            return int(page_height - coefficient * page_height / 100)
 
     def append_to_body(self, element):
         self.body.append(element)
