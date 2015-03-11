@@ -3065,7 +3065,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Page with one paragraph, three <text> elements
         '''
         page_element = etree.fromstring(
-            '<page height="1263" width="862">'
+            '<page number="1" height="1263" width="862">'
             '<text top="106" left="100" width="100" height="19">1 </text>'
             '<text top="126" left="100" width="100" height="19">2 </text>'
             '<text top="145" left="100" width="100" height="19">3.</text>'
@@ -3082,7 +3082,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Page with two paragraphs, four <text> elements
         '''
         page_element = etree.fromstring(
-            '<page height="1263" width="862">'
+            '<page number="1" height="1263" width="862">'
             '<text top="106" left="100" width="100" height="19">1 </text>'
             '<text top="126" left="100" width="100" height="19">2.</text>'
             '<text top="166" left="100" width="100" height="19">3 </text>'
@@ -3100,7 +3100,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Page with one paragraph, one <text> elements
         '''
         page_element = etree.fromstring(
-            '<page height="1263" width="862">'
+            '<page number="1" height="1263" width="862">'
             '<text top="145" left="100" width="100" height="19">3.</text>'
             '</page>')
 
@@ -3118,7 +3118,7 @@ class TestPDF2XMLConverter(XMLTester):
         of type str, the second list contains one element that is unicode.
         '''
         page_element = etree.fromstring(
-            '<page height="1263" width="862">'
+            '<page number="1" height="1263" width="862">'
             '<text top="215" left="100" width="51" height="14">R</text>'
             '<text top="245" left="100" width="39" height="14">Ø</text>'
             '</page>')
@@ -3135,7 +3135,7 @@ class TestPDF2XMLConverter(XMLTester):
         non-ascii string. Both belong to the same paragraph.
         '''
         page_element = etree.fromstring(
-            '<page height="1263" width="862">'
+            '<page number="1" height="1263" width="862">'
             '<text top="215" left="100" width="51" height="14"><b>R</b></text>'
             '<text top="235" left="100" width="39" height="14">Ø</text>'
             '</page>')
@@ -3151,7 +3151,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''One text element ending with a hyphen.
         '''
         page_element = etree.fromstring(
-            '<page height="1263" width="862">'
+            '<page number="1" height="1263" width="862">'
             '<text top="215" left="100" width="51" height="14">R-</text>'
             '<text top="235" left="100" width="39" height="14">Ø</text>'
             '</page>')
@@ -3167,7 +3167,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''One text element ending with a hyphen.
         '''
         page_element = etree.fromstring(
-            '<page height="1263" width="862">'
+            '<page number="1" height="1263" width="862">'
             '<text top="215" left="100" width="51" height="14">R -</text>'
             '<text top="235" left="100" width="39" height="14">Ø</text>'
             '</page>')
@@ -3183,7 +3183,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''One text element ending with a hyphen.
         '''
         page_element = etree.fromstring(
-            '<page height="1263" width="862">'
+            '<page number="1" height="1263" width="862">'
             '<text top="196" left="142" width="69" height="21" font="15">'
             '<b>JULE-</b></text>'
             '<text top="223" left="118" width="123" height="21" font="15">'
@@ -3200,7 +3200,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Two <text> elements. One is above the top margin.
         '''
         page_element = etree.fromstring(
-            '<page height="1263" width="862">'
+            '<page number="1" height="1263" width="862">'
             '<text top="70" left="100" width="100" height="19">Page 1</text>'
             '<text top="145" left="100" width="100" height="19">3.</text>'
             '</page>')
@@ -3216,7 +3216,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Two <text> elements. One is below the bottom margin.
         '''
         page_element = etree.fromstring(
-            '<page height="1263" width="862">'
+            '<page number="1" height="1263" width="862">'
             '<text top="1200" left="100" width="100" height="19">Page 1</text>'
             '<text top="145" left="100" width="100" height="19">3.</text>'
             '</page>')
@@ -3232,7 +3232,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Two <text> elements. One is to the left of the right margin.
         '''
         page_element = etree.fromstring(
-            '<page height="1263" width="862">'
+            '<page number="1" height="1263" width="862">'
             '<text top="500" left="50" width="100" height="19">Page 1</text>'
             '<text top="145" left="100" width="100" height="19">3.</text>'
             '</page>')
@@ -3248,7 +3248,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Two <text> elements. One is to the right of the left margin.
         '''
         page_element = etree.fromstring(
-            '<page height="1263" width="862">'
+            '<page number="1" height="1263" width="862">'
             '<text top="500" left="850" width="100" height="19">Page 1</text>'
             '<text top="145" left="100" width="100" height="19">3.</text>'
             '</page>')
@@ -3264,7 +3264,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Test list detection with • character
         '''
         page_element = etree.fromstring(
-            '<page height="1263" width="862">'
+            '<page number="1" height="1263" width="862">'
             '<text top="195" left="104" width="260" height="18" font="1">'
             'vuosttaš dábálaš linnjá</text>'
             '<text top="237" left="104" width="311" height="18" font="1">'
@@ -3297,7 +3297,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''Test that elements outside margin is not added
         '''
         page_element = etree.fromstring(
-            '<page height="1263" width="862">'
+            '<page number="1" height="1263" width="862">'
             '<text top="1104" left="135" width="45" height="16" font="2">1751, </text>'
             '<text top="1184" left="135" width="4" height="15" font="0"> </text>'
             '<text top="1184" left="437" width="37" height="15" font="0">– 1 – </text>'
@@ -3333,20 +3333,24 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         pdf2xml = etree.fromstring(
             '<pdf2xml>'
-            '<page height="1263" width="862"><fontspec/>'
+            '<page number="1" height="1263" width="862"><fontspec/>'
             '<text top="145" left="100" width="100" height="19">1.</text>'
             '</page>'
-            '<page height="1263" width="862">'
+            '<page number="2" height="1263" width="862">'
             '<text top="145" left="100" width="100" height="19">2.</text>'
             '</page>'
-            '<page height="1263" width="862">'
+            '<page number="3" height="1263" width="862">'
             '<text top="145" left="100" width="100" height="19">3.</text>'
             '</page>'
             '</pdf2xml>')
         want = u'<body><p>1.</p><p>2.</p><p>3.</p></body>'
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.skip_pages = []
+        p2x.md.set_variable('right_margin', 'all=7')
+        p2x.md.set_variable('left_margin', 'all=7')
+        p2x.md.set_variable('top_margin', 'all=7')
+        p2x.md.set_variable('bottom_margin', 'all=7')
+        p2x.set_margins()
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
@@ -3366,10 +3370,15 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="145" left="100" width="100" height="19">3.</text>'
             '</page>'
             '</pdf2xml>')
-        want = u'<body><p>1.</p><p>3.</p></body>'
+        want = u'<body><p>2.</p><p>3.</p></body>'
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.skip_pages = ["2"]
+        p2x.md.set_variable('right_margin', 'all=7')
+        p2x.md.set_variable('left_margin', 'all=7')
+        p2x.md.set_variable('top_margin', 'all=7')
+        p2x.md.set_variable('bottom_margin', 'all=7')
+        p2x.set_margins()
+        p2x.skip_pages = [1]
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
