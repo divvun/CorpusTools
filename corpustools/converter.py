@@ -1094,7 +1094,7 @@ class PDF2XMLConverter(Converter):
 
     def parse_pages(self, root_element):
         for page in root_element.iter('page'):
-            if page.get('number') not in self.skip_pages:
+            if int(page.get('number')) not in self.skip_pages:
                 self.parse_page(page)
 
     def make_paragraph(self):
