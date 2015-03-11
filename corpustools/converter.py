@@ -1037,10 +1037,7 @@ class PDF2XMLConverter(Converter):
         delta = float(text2.get('top')) - float(text1.get('top'))
         ratio = 1.5
 
-        if len(text2) > 0:
-            real_text2 = text2[0].text
-        else:
-            real_text2 = text2.text
+        real_text2 = etree.tostring(text2, method='text', encoding='unicode')
 
         if (h1 == h2 and delta < ratio * h1 and delta > 0):
             if (real_text2[0] in self.LIST_CHARS):
