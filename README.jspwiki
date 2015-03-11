@@ -43,6 +43,21 @@ yaourt -S python2-pysvn
 You also need to have the $GTHOME variable set to where you checked
 out https://victorio.uit.no/langtech/trunk/
 
+!Custom version of pdftohtml (poppler)
+
+The standard version of pdftohtml sometimes produces invalid xml-documents.
+A version that fixes this bug is found at https://github.com/albbas/poppler
+and the poppler developers have been notified about the bug.
+
+To install it do the following
+{{{
+git clone https://github.com/albbas/poppler
+cd poppler
+./autogen.sh
+make
+sudo make install
+}}}
+
 !!Installation
 
 !System wide
