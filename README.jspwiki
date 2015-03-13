@@ -53,6 +53,7 @@ To install it do the following
 {{{
 git clone https://github.com/albbas/poppler
 cd poppler
+git checkout fix_xml_wellformedness_with_a_twist
 ./autogen.sh
 make
 sudo make install
