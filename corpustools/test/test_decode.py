@@ -24,6 +24,8 @@ test_input = {
         "á ó ç ¤ º ŋ Á Ç ŧ Ó £ Ŋ Ž Ŧ ø Ø å Å æ Æ",
     u"double-utf8":
         "Ã¡ Å¡ Ä? Ä‘ Âº Å‹ Ã? ÄŒ Å§ Å  Đ ÅŠ Å½ Ŧ Ã¸ Ã˜ Ã¥ Ã… Ã¦ Æ",
+    u"finnish-lawtexts-in-pdf":
+        "á š þ đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ",
 }
 
 
@@ -42,9 +44,6 @@ class TestEncodingGuesser(unittest.TestCase):
         content = test_input[index]
 
         test_content = eg.decode_para(index, content)
-
-        print test_content
-        print utf8_content
 
         self.assertEqual(utf8_content, test_content)
 

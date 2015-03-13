@@ -254,8 +254,8 @@ class EncodingGuesser(object):
         disregard the encoding
 
         @param content a utf-8 encoded string
-        @return winner is an int pointing to a position in CTYPES or -1
-        to tell that no known encoding is found
+        @return winner is a key from CTYPES or None to tell that no known
+        encoding is found
         """
         winner = None
 
