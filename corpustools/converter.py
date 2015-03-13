@@ -939,7 +939,9 @@ class PDF2XMLConverter(Converter):
         #print util.lineno(), etree.tostring(textelement)
         if (textelement is not None and int(textelement.get('width')) > 0):
             if textelement.text is not None:
-                found_hyph = re.search('\w-$', textelement.text, re.UNICODE)
+                # NOTE: Search for both hyphen and soft hyphen
+                found_hyph = re.search('\w[-­]$', textelement.text,
+                                       re.UNICODE)
                 if len(self.parts) > 0:
                     #print util.lineno(), textelement.text
                     if isinstance(self.parts[-1], etree._Element):

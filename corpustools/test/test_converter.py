@@ -2790,6 +2790,19 @@ class TestPDF2XMLConverter(XMLTester):
         self.assertEqual(p2x.parts[0], u'Abba R')
         self.assertXmlEqual(etree.tostring(p2x.parts[1]), u'<hyph/>')
 
+    def test_extract_textelement16(self):
+        '''Extract text from a pdf2xml text that contains a string with a
+        soft hyphen at the end.
+        '''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+
+        input = etree.fromstring(
+            '<text top="215" width="51" height="14">R­</text>')
+        p2x.extract_textelement(input)
+
+        self.assertEqual(p2x.parts[0], u'R')
+        self.assertXmlEqual(etree.tostring(p2x.parts[1]), u'<hyph/>')
+
     def test_make_paragraph_1(self):
         '''Pass a parts list consisting of only strings
         '''
