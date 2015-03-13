@@ -790,8 +790,8 @@ class PDF2XMLConverter(Converter):
         Extract the text from the pdf file using pdftohtml
         run_process produces an utf-8 string containing the output of pdftohtml
         """
-        command = ['pdftohtml', '-enc', 'UTF-8', '-stdout', '-nodrm', '-i',
-                   '-xml', self.orig]
+        command = ['pdftohtml', '-hidden', '-enc', 'UTF-8', '-stdout',
+                   '-nodrm', '-i', '-xml', self.orig]
         return run_process(command, self.orig)
 
     def convert2intermediate(self):
