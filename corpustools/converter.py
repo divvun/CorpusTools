@@ -1422,7 +1422,8 @@ class HTMLContentConverter(Converter):
 
         """
         superfluously_named_tags = self.soup.xpath(
-            "//html:fieldset | //html:legend | //html:article | //html:hgroup",
+            "//html:fieldset | //html:legend | //html:article | //html:hgroup "
+            "| //html:section",
             namespaces={'html': 'http://www.w3.org/1999/xhtml'})
         for elt in superfluously_named_tags:
             elt.tag = '{http://www.w3.org/1999/xhtml}div'
