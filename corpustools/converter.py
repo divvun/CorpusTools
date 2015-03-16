@@ -1076,16 +1076,16 @@ class PDF2XMLConverter(Converter):
         margins = self.compute_margins(page)
 
         for t in page.iter('text'):
-            if self.prev_t is not None:
-                if not self.is_same_paragraph(t):
-                    #print util.lineno(), etree.tostring(self.prev_t, encoding='utf8'), etree.tostring(t, encoding='utf8')
-                    if len(self.parts) > 0:
-                        self.append_to_body(self.make_paragraph())
-            if ((len(t) > 0 or t.text is not None) and
-                    self.is_inside_margins(t, margins)):
-                self.extract_textelement(t)
-                self.prev_t = t
-                #print util.lineno(), self.parts
+            if self.is_inside_margins(t, margins):
+                if self.prev_t is not None:
+                    if not self.is_same_paragraph(t):
+                        #print util.lineno(), etree.tostring(self.prev_t, encoding='utf8'), etree.tostring(t, encoding='utf8')
+                        if len(self.parts) > 0:
+                            self.append_to_body(self.make_paragraph())
+                if len(t) > 0 or t.text is not None:
+                    self.extract_textelement(t)
+                    self.prev_t = t
+                    #print util.lineno(), self.parts
 
     def is_inside_margins(self, t, margins):
         '''Check if t is inside the given margins
