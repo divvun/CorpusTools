@@ -1021,6 +1021,16 @@ class PDF2XMLConverter(Converter):
                 self.parts.append(em)
         #print util.lineno(), self.parts
 
+    @staticmethod
+    def is_text_in_same_paragraph(text1, text2):
+        h1 = float(text1.get('height'))
+        h2 = float(text2.get('height'))
+
+        delta = float(text2.get('top')) - float(text1.get('top'))
+        ratio = 1.5
+
+        return h1 == h2 and delta < ratio * h1 and delta > 0
+
     def is_same_paragraph(self, text1, text2):
         '''Define the incoming text elements text1 and text2 to belong to
         the same paragraph if they have the same height and if the difference
@@ -1036,12 +1046,10 @@ class PDF2XMLConverter(Converter):
         #print util.lineno(), h1, h2, t1, t2, h1 == h2, t1 > t2
         #f1 = text1.get('font')
         #f2 = text2.get('font')
-        delta = float(text2.get('top')) - float(text1.get('top'))
-        ratio = 1.5
-
+        real_text1 = etree.tostring(text1, method='text', encoding='unicode')
         real_text2 = etree.tostring(text2, method='text', encoding='unicode')
 
-        if (h1 == h2 and delta < ratio * h1 and delta > 0):
+        if self.is_text_in_same_paragraph(text1, text2):
             if (real_text2[0] in self.LIST_CHARS):
                 self.in_list = True
                 #print util.lineno(), text2.text
