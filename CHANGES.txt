@@ -33,3 +33,4 @@ v<0.9.0alpha2>, <20150120> -- Make a ConverterManager, let it handle the convers
 v<0.9.0beta1>, <20150217> -- pdf conversion based on PDF2XMLConverter
 v<0.9.0beta2>, <20150218> -- added parallel file handling to add_files_to_corpus
 v<0.9.0beta3>, <20150304> -- catch error when trying to parse the xsl-file, telling what the error is
+v<0.9.0b4>, <20150316> -- Paragrahps in pdf documents that are split by a page change, will appear as one paragraph in the converted document.
