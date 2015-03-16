@@ -722,6 +722,7 @@ class PDF2XMLConverter(Converter):
         self.skip_pages = self.set_skip_pages(self.md.get_variable(
             'skip_pages'))
         self.set_margins()
+        self.prev_t = None
 
     def set_skip_pages(self, skip_pages):
         '''Turn a skip_pages entry into a list of pages
@@ -1021,48 +1022,46 @@ class PDF2XMLConverter(Converter):
                 self.parts.append(em)
         #print util.lineno(), self.parts
 
-    @staticmethod
-    def is_text_in_same_paragraph(text1, text2):
-        h1 = float(text1.get('height'))
-        h2 = float(text2.get('height'))
+    def is_text_in_same_paragraph(self, text):
+        h1 = float(self.prev_t.get('height'))
+        h2 = float(text.get('height'))
 
-        delta = float(text2.get('top')) - float(text1.get('top'))
+        delta = float(text.get('top')) - float(self.prev_t.get('top'))
         ratio = 1.5
 
         return h1 == h2 and delta < ratio * h1 and delta > 0
 
-    def is_same_paragraph(self, text1, text2):
-        '''Define the incoming text elements text1 and text2 to belong to
+    def is_same_paragraph(self, text):
+        '''Define the incoming text elements text1 and text to belong to
         the same paragraph if they have the same height and if the difference
         between the top attributes is less than ratio times the height of
         the text elements.
         '''
         result = False
 
-        h1 = float(text1.get('height'))
-        h2 = float(text2.get('height'))
-        t1 = int(text1.get('top'))
-        t2 = int(text2.get('top'))
+        h1 = float(self.prev_t.get('height'))
+        h2 = float(text.get('height'))
+        t1 = int(self.prev_t.get('top'))
+        t2 = int(text.get('top'))
         #print util.lineno(), h1, h2, t1, t2, h1 == h2, t1 > t2
-        #f1 = text1.get('font')
-        #f2 = text2.get('font')
-        real_text1 = etree.tostring(text1, method='text', encoding='unicode')
-        real_text2 = etree.tostring(text2, method='text', encoding='unicode')
+        #f1 = self.prev_t.get('font')
+        #f2 = text.get('font')
+        real_text = etree.tostring(text, method='text', encoding='unicode')
 
-        if self.is_text_in_same_paragraph(text1, text2):
-            if (real_text2[0] in self.LIST_CHARS):
+        if self.is_text_in_same_paragraph(text):
+            if (real_text[0] in self.LIST_CHARS):
                 self.in_list = True
-                #print util.lineno(), text2.text
-            elif (re.match('\s', real_text2[0]) is None and
-                  real_text2[0] == real_text2[0].upper() and self.in_list):
+                #print util.lineno(), text.text
+            elif (re.match('\s', real_text[0]) is None and
+                  real_text[0] == real_text[0].upper() and self.in_list):
                 self.in_list = False
                 result = False
-                #print util.lineno(), text2.text
-            elif (real_text2[0] not in self.LIST_CHARS):
+                #print util.lineno(), text.text
+            elif (real_text[0] not in self.LIST_CHARS):
                 #print util.lineno()
                 result = True
-        elif (h1 == h2 and t1 > t2 and not re.match('\d', real_text2[0]) and
-              real_text2[0] == real_text2[0].lower()):
+        elif (h1 == h2 and t1 > t2 and not re.match('\d', real_text[0]) and
+              real_text[0] == real_text[0].lower()):
             #print util.lineno()
             result = True
         else:
@@ -1076,17 +1075,16 @@ class PDF2XMLConverter(Converter):
         '''
         margins = self.compute_margins(page)
 
-        prev_t = None
         for t in page.iter('text'):
-            if prev_t is not None:
-                if not self.is_same_paragraph(prev_t, t):
-                    #print util.lineno(), etree.tostring(prev_t, encoding='utf8'), etree.tostring(t, encoding='utf8')
+            if self.prev_t is not None:
+                if not self.is_same_paragraph(t):
+                    #print util.lineno(), etree.tostring(self.prev_t, encoding='utf8'), etree.tostring(t, encoding='utf8')
                     if len(self.parts) > 0:
                         self.append_to_body(self.make_paragraph())
             if ((len(t) > 0 or t.text is not None) and
                     self.is_inside_margins(t, margins)):
                 self.extract_textelement(t)
-                prev_t = t
+                self.prev_t = t
                 #print util.lineno(), self.parts
 
         if len(self.parts) > 0:

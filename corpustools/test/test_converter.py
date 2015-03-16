@@ -2914,12 +2914,12 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
-        t1 = etree.fromstring(
+        p2x.prev_t = etree.fromstring(
             '<text top="106" height="19" font="2">Text1 </text>')
-        t2 = etree.fromstring(
+        t1 = etree.fromstring(
             '<text top="126" height="19" font="2">text2</text>')
 
-        self.assertTrue(p2x.is_same_paragraph(t1, t2))
+        self.assertTrue(p2x.is_same_paragraph(t1))
 
     def test_is_same_paragraph_2(self):
         '''Test if two text elements belong to the same paragraph
@@ -2928,10 +2928,10 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
-        t1 = etree.fromstring('<text top="106" height="19" font="2"/>')
-        t2 = etree.fromstring('<text top="140" height="19" font="2"/>')
+        p2x.prev_t = etree.fromstring('<text top="106" height="19" font="2"/>')
+        t1 = etree.fromstring('<text top="140" height="19" font="2"/>')
 
-        self.assertFalse(p2x.is_same_paragraph(t1, t2))
+        self.assertFalse(p2x.is_same_paragraph(t1))
 
     def test_is_same_paragraph_3(self):
         '''Test if two text elements belong to the same paragraph
@@ -2939,10 +2939,10 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
-        t1 = etree.fromstring('<text top="106" height="19" font="2"/>')
-        t2 = etree.fromstring('<text top="126" height="20" font="2"/>')
+        p2x.prev_t = etree.fromstring('<text top="106" height="19" font="2"/>')
+        t1 = etree.fromstring('<text top="126" height="20" font="2"/>')
 
-        self.assertFalse(p2x.is_same_paragraph(t1, t2))
+        self.assertFalse(p2x.is_same_paragraph(t1))
 
     def test_is_same_paragraph_4(self):
         '''Test if two text elements belong to the same paragraph
@@ -2950,22 +2950,22 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
-        t1 = etree.fromstring(
+        p2x.prev_t = etree.fromstring(
             '<text top="106" height="19" font="1">Text1</text>')
-        t2 = etree.fromstring(
+        t1 = etree.fromstring(
             '<text top="126" height="19" font="2">Text2</text>')
 
-        self.assertTrue(p2x.is_same_paragraph(t1, t2))
+        self.assertTrue(p2x.is_same_paragraph(t1))
 
     def test_is_same_paragraph_5(self):
         '''List characters signal a new paragraph start
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
-        t1 = etree.fromstring('<text top="106" height="19" font="2"/>')
-        t2 = etree.fromstring('<text top="126" height="19" font="2">•</text>')
+        p2x.prev_t = etree.fromstring('<text top="106" height="19" font="2"/>')
+        t1 = etree.fromstring('<text top="126" height="19" font="2">•</text>')
 
-        self.assertFalse(p2x.is_same_paragraph(t1, t2))
+        self.assertFalse(p2x.is_same_paragraph(t1))
 
     def test_is_same_paragraph_6(self):
         '''Upper case char and in_list=True signals new paragraph start
@@ -2973,12 +2973,12 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.in_list = True
 
-        t1 = etree.fromstring('<text top="300" left="104" width="324" height="18" font="1">'
+        p2x.prev_t = etree.fromstring('<text top="300" left="104" width="324" height="18" font="1">'
             'linnjá</text>')
-        t2 = etree.fromstring('<text top="321" left="121" width="40" height="18" font="1">'
+        t1 = etree.fromstring('<text top="321" left="121" width="40" height="18" font="1">'
             'Nubbi dábáláš linnjá</text>')
 
-        self.assertFalse(p2x.is_same_paragraph(t1, t2))
+        self.assertFalse(p2x.is_same_paragraph(t1))
 
     def test_is_same_paragraph_7(self):
         '''  and in_list=True signals same paragraph
@@ -2986,34 +2986,34 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.in_list = True
 
-        t1 = etree.fromstring('<text top="300" left="104" width="324" height="18" font="1">'
+        p2x.prev_t = etree.fromstring('<text top="300" left="104" width="324" height="18" font="1">'
             'linnjá</text>')
-        t2 = etree.fromstring('<text top="321" left="121" width="40" height="18" font="1">'
+        t1 = etree.fromstring('<text top="321" left="121" width="40" height="18" font="1">'
             ' nubbi dábáláš linnjá</text>')
 
-        self.assertTrue(p2x.is_same_paragraph(t1, t2))
+        self.assertTrue(p2x.is_same_paragraph(t1))
 
-    def test_is_same_paragraph_8(self):
+    def test_is_same_paragraph_on_different_column_or_page1(self):
         '''Not same paragraph if first letter in second element is number
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.in_list = True
 
-        t1 = etree.fromstring('<text top="1143" left="168" width="306" height="18" font="1">Kopp</text>')
-        t2 = etree.fromstring('<text top="492" left="523" width="309" height="18" font="1">2.</text>')
+        p2x.prev_t  = etree.fromstring('<text top="1143" left="168" width="306" height="18" font="1">Kopp</text>')
+        t1 = etree.fromstring('<text top="492" left="523" width="309" height="18" font="1">2.</text>')
 
-        self.assertFalse(p2x.is_same_paragraph(t1, t2))
+        self.assertFalse(p2x.is_same_paragraph(t1))
 
-    def test_is_same_paragraph_9(self):
-        '''Test if the text at the next columns belong to the previous paragraph
+    def test_is_same_paragraph_on_different_column_or_page2(self):
+        '''Same paragraph if first letter in second element is lower case
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.in_list = True
 
-        t1 = etree.fromstring('<text top="1143" left="168" width="306" height="18" font="1">skuvl-</text>')
-        t2 = etree.fromstring('<text top="492" left="523" width="309" height="18" font="1">lain</text>')
+        p2x.prev_t = etree.fromstring('<text top="1143" left="168" width="306" height="18" font="1">skuvl-</text>')
+        t1 = etree.fromstring('<text top="492" left="523" width="309" height="18" font="1">lain</text>')
 
-        self.assertTrue(p2x.is_same_paragraph(t1, t2))
+        self.assertTrue(p2x.is_same_paragraph(t1))
 
     def test_is_inside_margins1(self):
         '''top and left inside margins
