@@ -1087,9 +1087,6 @@ class PDF2XMLConverter(Converter):
                 self.prev_t = t
                 #print util.lineno(), self.parts
 
-        if len(self.parts) > 0:
-            self.append_to_body(self.make_paragraph())
-
     def is_inside_margins(self, t, margins):
         '''Check if t is inside the given margins
 
@@ -1104,6 +1101,9 @@ class PDF2XMLConverter(Converter):
         for page in root_element.iter('page'):
             if int(page.get('number')) not in self.skip_pages:
                 self.parse_page(page)
+
+        if len(self.parts) > 0:
+            self.append_to_body(self.make_paragraph())
 
     def make_paragraph(self):
         '''parts is a list of strings and etree.Elements that belong to the

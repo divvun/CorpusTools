@@ -2997,7 +2997,6 @@ class TestPDF2XMLConverter(XMLTester):
         '''Not same paragraph if first letter in second element is number
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.in_list = True
 
         p2x.prev_t  = etree.fromstring('<text top="1143" left="168" width="306" height="18" font="1">Kopp</text>')
         t1 = etree.fromstring('<text top="492" left="523" width="309" height="18" font="1">2.</text>')
@@ -3008,7 +3007,6 @@ class TestPDF2XMLConverter(XMLTester):
         '''Same paragraph if first letter in second element is lower case
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.in_list = True
 
         p2x.prev_t = etree.fromstring('<text top="1143" left="168" width="306" height="18" font="1">skuvl-</text>')
         t1 = etree.fromstring('<text top="492" left="523" width="309" height="18" font="1">lain</text>')
@@ -3096,7 +3094,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_page(page_element)
+        p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
             etree.tostring(p2x.get_body(), encoding='unicode'),
@@ -3114,7 +3112,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_page(page_element)
+        p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
             etree.tostring(p2x.get_body(), encoding='unicode'),
@@ -3129,7 +3127,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_page(page_element)
+        p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
             etree.tostring(p2x.get_body(), encoding='unicode'),
@@ -3148,7 +3146,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_page(page_element)
+        p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
             etree.tostring(p2x.get_body(), encoding='unicode'),
@@ -3165,7 +3163,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_page(page_element)
+        p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
             etree.tostring(p2x.get_body(), encoding='unicode'),
@@ -3181,7 +3179,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_page(page_element)
+        p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
             etree.tostring(p2x.get_body(), encoding='unicode'),
@@ -3197,7 +3195,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_page(page_element)
+        p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
             etree.tostring(p2x.get_body(), encoding='unicode'),
@@ -3214,7 +3212,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<b>HANDEL</b></text></page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_page(page_element)
+        p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
             etree.tostring(p2x.get_body(), encoding='unicode'),
@@ -3230,7 +3228,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_page(page_element)
+        p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
             etree.tostring(p2x.get_body(), encoding='unicode'),
@@ -3246,7 +3244,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_page(page_element)
+        p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
             etree.tostring(p2x.get_body(), encoding='unicode'),
@@ -3262,7 +3260,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_page(page_element)
+        p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
             etree.tostring(p2x.get_body(), encoding='unicode'),
@@ -3278,7 +3276,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_page(page_element)
+        p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
             etree.tostring(p2x.get_body(), encoding='unicode'),
@@ -3304,7 +3302,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_page(page_element)
+        p2x.parse_pages(page_element)
 
         self.maxDiff = None
         self.assertEqual(
@@ -3328,7 +3326,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_page(page_element)
+        p2x.parse_pages(page_element)
 
         self.assertEqual(
             etree.tostring(p2x.get_body(), encoding='unicode'),
