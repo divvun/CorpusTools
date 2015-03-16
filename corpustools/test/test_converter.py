@@ -2993,6 +2993,17 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertTrue(p2x.is_same_paragraph(t1, t2))
 
+    def test_is_same_paragraph_8(self):
+        '''Not same paragraph if first letter in second element is number
+        '''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.in_list = True
+
+        t1 = etree.fromstring('<text top="1143" left="168" width="306" height="18" font="1">Kopp</text>')
+        t2 = etree.fromstring('<text top="492" left="523" width="309" height="18" font="1">2.</text>')
+
+        self.assertFalse(p2x.is_same_paragraph(t1, t2))
+
     def test_is_same_paragraph_9(self):
         '''Test if the text at the next columns belong to the previous paragraph
         '''

@@ -1061,7 +1061,7 @@ class PDF2XMLConverter(Converter):
             elif (real_text2[0] not in self.LIST_CHARS):
                 #print util.lineno()
                 result = True
-        elif (h1 == h2 and t1 > t2 and
+        elif (h1 == h2 and t1 > t2 and not re.match('\d', real_text2[0]) and
               real_text2[0] == real_text2[0].lower()):
             #print util.lineno()
             result = True
