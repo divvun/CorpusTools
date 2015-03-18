@@ -1791,6 +1791,7 @@ class HTMLConverter(HTMLContentConverter):
     def __init__(self, filename, write_intermediate=False):
         f = open(filename)
         super(HTMLConverter, self).__init__(filename,
+                                            write_intermediate,
                                             content=f.read())
         f.close()
 
