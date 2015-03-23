@@ -87,6 +87,13 @@ class CorpusXMLFile:
         """
         return os.path.basename(self.name)
 
+    def get_basename_noext(self):
+        """
+        Return the basename of the file without the final .xml
+        """
+        root, _ = os.path.splitext(self.get_basename())
+        return root
+
     def get_lang(self):
         """
         Get the lang of the file
@@ -416,7 +423,7 @@ class Parallelize:
         """
         lang1 = f1.get_lang()
         para0 = f0.get_parallel_basename(lang1)
-        base1, _ = os.path.splitext(f1.get_basename())
+        base1 = f1.get_basename_noext()
         if para0 != base1:
             if para0 is None:
                 note("WARNING: {} missing from {} parallel_texts in {}!".format(
@@ -447,8 +454,7 @@ class Parallelize:
         out_dirname = self.origfiles[0].get_dirname().replace(
             orig_path_part, replace_path_part)
         # Replace xml with tmx in the filename
-        out_filename = self.origfiles[0].get_basename().replace('.xml',
-                                                               '.toktmx')
+        out_filename = self.origfiles[0].get_basename_noext() + '.toktmx'
 
         return os.path.join(out_dirname, out_filename)
 
@@ -518,7 +524,7 @@ class Parallelize:
         Compute a name for the corpus-analyze output and tca2 input file
         Input is a CorpusXMLFile
         """
-        origfilename = pfile.get_basename().replace('.xml', '')
+        origfilename = pfile.get_basename_noext()
         return os.path.join(os.environ['GTFREE'], 'tmp',
                             '{}{}_sent.xml'.format(
                                 origfilename, pfile.get_lang()))
@@ -894,7 +900,7 @@ class Tca2ToTmx(Tmx):
         Compute a name for the corpus-analyze output and tca2 input file
         Input is a CorpusXMLFile
         """
-        origfilename = pfile.get_basename().replace('.xml', '')
+        origfilename = pfile.get_basename_noext()
         return (os.path.join(
             os.environ['GTFREE'], 'tmp',
             '{}{}_sent.xml'.format(origfilename, pfile.get_lang())))
