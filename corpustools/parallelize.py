@@ -42,6 +42,9 @@ import generate_anchor_list
 
 here = os.path.dirname(__file__)
 
+def note(msg):
+    print >>sys.stderr, msg.encode('utf-8')
+
 
 class CorpusXMLFile:
     """
@@ -400,10 +403,27 @@ class Parallelize:
             raise IOError("{} doesn't have a parallel file in {}".format(
                 origfile1, lang2))
 
+        self.consistency_check(self.origfiles[1], self.origfiles[0])
+
         if self.is_translated_from_lang2():
             self.reshuffle_files()
 
         self.quiet = quiet
+
+    def consistency_check(self, f0, f1):
+        """
+        Warn if parallel_text of f0 is not f1
+        """
+        lang1 = f1.get_lang()
+        para0 = f0.get_parallel_basename(lang1)
+        base1, _ = os.path.splitext(f1.get_basename())
+        if para0 != base1:
+            if para0 is None:
+                note("WARNING: {} missing from {} parallel_texts in {}!".format(
+                    base1, lang1, f0.get_name()))
+            else:
+                note("WARNING: {}, not {}, in {} parallel_texts of {}!".format(
+                    para0, base1, lang1, f0.get_name()))
 
     def reshuffle_files(self):
         """
