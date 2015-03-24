@@ -138,13 +138,17 @@ class CorpusXMLFile:
         """
         Infer the absolute path of the parallel file
         """
-        parallel_dirname = self.get_dirname().replace(
-            self.get_lang(), paralang)
-        if self.get_parallel_basename(paralang) is not None:
-            parallel_basename = '{}.xml'.format(
-                self.get_parallel_basename(paralang))
+        if self.get_parallel_basename(paralang) is None:
+            return None
+        root, module, lang, genre, subdirs, _ = util.split_path(self.get_name())
+        parallel_basename = '{}.xml'.format(
+            self.get_parallel_basename(paralang))
+        return apply(
+            os.path.join,
+            [root, module, paralang, genre, subdirs,
+             parallel_basename]
+        )
 
-            return os.path.join(parallel_dirname, parallel_basename)
 
     def get_original_filename(self):
         """
@@ -403,9 +407,9 @@ class Parallelize:
         self.origfiles.append(CorpusXMLFile(
             os.path.abspath(origfile1)))
 
-        if self.origfiles[0].get_parallel_filename(lang2) is not None:
-            self.origfiles.append(CorpusXMLFile(
-                self.origfiles[0].get_parallel_filename(lang2)))
+        para_file = self.origfiles[0].get_parallel_filename(lang2)
+        if para_file is not None:
+            self.origfiles.append(CorpusXMLFile(para_file))
         else:
             raise IOError("{} doesn't have a parallel file in {}".format(
                 origfile1, lang2))
