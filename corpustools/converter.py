@@ -751,6 +751,10 @@ class PDF2XMLConverter(Converter):
             extra))
         content, count = remove_re.subn('', content)
 
+        # Microsoft Word PDF's have Latin-1 file names in links; we
+        # don't actually need any link attributes:
+        content = re.sub(r'<a [^>]+>','<a>', content)
+
         return content
 
     def replace_ligatures(self, content):
