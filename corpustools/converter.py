@@ -1317,6 +1317,7 @@ class HTMLContentConverter(Converter):
                 'noscript',
                 'map',
                 'ins',
+                's',
                 ])
 
         decoded = self.to_unicode(content)
