@@ -37,7 +37,11 @@ import lxml.html.clean as clean
 from lxml.html import html5parser
 from pyth.plugins.rtf15.reader import Rtf15Reader
 from pyth.plugins.xhtml.writer import XHTMLWriter
-from pydocx.pydocx import PyDocX
+try:
+    from pydocx.pydocx import PyDocX
+except ImportError:
+    from pydocx.parsers import Docx2Html
+
 
 import decode
 import text_cat
