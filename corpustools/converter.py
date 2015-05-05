@@ -871,7 +871,7 @@ class PDF2XMLConverter(Converter):
                     key, self.get_xsl(), value))
 
         #print >>sys.stderr, util.lineno(), margins
-        
+
     def set_margin(self, value):
         '''Set the margins for given margin
 
@@ -1078,11 +1078,39 @@ class PDF2XMLConverter(Converter):
 
         return result
 
+    def find_footnotes_superscript(self, page):
+        '''Search for text elements containing potential footnotes.
+        Add them to a list of potential list of footnotes.
+        '''
+        margins = self.compute_margins(page)
+        superscripts = []
+        for t in page.iter('text'):
+            if t.text is not None and self.is_inside_margins(t, margins):
+                try:
+                    int(t.text)
+                    superscripts.append(t)
+                except ValueError:
+                    pass
+
+        return superscripts
+
+    def remove_footnotes_superscript(self, page):
+        '''If the text element found is a footnote superscript,
+        remove that element.
+        '''
+        for superscript in self.find_footnotes_superscript(page):
+            previous_element = superscript.getprevious()
+            if (previous_element is not None and
+                    previous_element.text is not None and
+                    int(previous_element.get('top')) > int(superscript.get('top'))):
+                superscript.getparent().remove(superscript)
+
     def parse_page(self, page):
         '''Parse a page element
         '''
         margins = self.compute_margins(page)
 
+        self.remove_footnotes_superscript(page)
         for t in page.iter('text'):
             if self.is_inside_margins(t, margins):
                 if self.prev_t is not None:

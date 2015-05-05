@@ -3334,6 +3334,51 @@ class TestPDF2XMLConverter(XMLTester):
             u'<p>1751, </p>'
             u'</body>')
 
+    def test_remove_footnotes_superscript_1(self):
+        '''Footnote superscript is in the middle of a sentence
+        '''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+
+        page = etree.fromstring(
+            '<page number="1" height="1263" width="862">'
+            '   <text top="323" left="117" width="305" height="16" font="2">gihligotteriektái</text>'
+            '   <text top="319" left="422" width="6" height="11" font="7">3</text>'
+            '   <text top="323" left="428" width="220" height="16" font="2">, sáhtte</text>'
+            '</page>'
+            )
+        p2x.remove_footnotes_superscript(page)
+
+        want_page = (
+            '<page number="1" height="1263" width="862">'
+            '   <text top="323" left="117" width="305" height="16" font="2">gihligotteriektái</text>'
+            '   <text top="323" left="428" width="220" height="16" font="2">, sáhtte</text>'
+            '</page>')
+
+        self.assertXmlEqual(etree.tostring(page, encoding='utf8'), want_page)
+
+    def test_remove_footnotes_superscript_2(self):
+        '''Footnote superscript is at the end of a sentence
+        '''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+
+        page = etree.fromstring(
+            '<page number="1" height="1263" width="862">'
+            '   <text top="323" left="117" width="305" height="16" font="2">gihligotteriektái</text>'
+            '   <text top="319" left="422" width="6" height="11" font="7">3</text>'
+            '   <text top="344" left="428" width="220" height="16" font="2">, sáhtte</text>'
+            '</page>'
+            )
+        p2x.remove_footnotes_superscript(page)
+
+        want_page = (
+            '<page number="1" height="1263" width="862">'
+            '   <text top="323" left="117" width="305" height="16" font="2">gihligotteriektái</text>'
+            '   <text top="319" left="422" width="6" height="11" font="7">3</text>'
+            '   <text top="344" left="428" width="220" height="16" font="2">, sáhtte</text>'
+            '</page>')
+
+        self.assertXmlEqual(etree.tostring(page, encoding='utf8'), want_page)
+
     def test_get_body(self):
         '''Test the initial values when the class is initiated
         '''
