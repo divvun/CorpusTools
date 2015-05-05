@@ -3013,6 +3013,17 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertTrue(p2x.is_same_paragraph(t1))
 
+    def test_is_same_paragraph_when_top_is_equal(self):
+        '''Text elements that are on the same line should be considered to be
+        in the same paragraph
+        '''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+
+        p2x.prev_t = etree.fromstring('<text top="323" left="117" width="305" height="16" font="2">gihligotteriektái</text>')
+        t1 = etree.fromstring('<text top="323" left="428" width="220" height="16" font="2">, sáhtte</text>')
+
+        self.assertTrue(p2x.is_same_paragraph(t1))
+
     def test_is_inside_margins1(self):
         '''top and left inside margins
         '''
@@ -3373,7 +3384,6 @@ class TestPDF2XMLConverter(XMLTester):
         want_page = (
             '<page number="1" height="1263" width="862">'
             '   <text top="323" left="117" width="305" height="16" font="2">gihligotteriektái</text>'
-            '   <text top="319" left="422" width="6" height="11" font="7">3</text>'
             '   <text top="344" left="428" width="220" height="16" font="2">, sáhtte</text>'
             '</page>')
 
