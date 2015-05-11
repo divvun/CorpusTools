@@ -157,18 +157,18 @@ class Converter(object):
                 for element in complete.find('body'):
                     em.add_error_markup(element)
             except IndexError as e:
-                logfile = open('{}.log'.format(self.orig), 'w')
-                logfile.write('Error at: {}'.format(str(util.lineno())))
-                logfile.write("There is a markup error\n")
-                logfile.write("The error message: ")
-                logfile.write(str(e))
-                logfile.write("\n\n")
-                logfile.write("This is the xml tree:\n")
-                logfile.write(etree.tostring(complete,
-                                             encoding='utf8',
-                                             pretty_print=True))
-                logfile.write('\n')
-                logfile.close()
+                with open(self.logfile, 'w') as logfile:
+                    logfile.write('Error at: {}'.format(str(util.lineno())))
+                    logfile.write("There is a markup error\n")
+                    logfile.write("The error message: ")
+                    logfile.write(str(e))
+                    logfile.write("\n\n")
+                    logfile.write("This is the xml tree:\n")
+                    logfile.write(etree.tostring(complete,
+                                                encoding='utf8',
+                                                pretty_print=True))
+                    logfile.write('\n')
+
                 raise ConversionException(
                     u"Markup error. More info in the log file: {}".format(
                         self.logfile))
@@ -253,11 +253,10 @@ class Converter(object):
                 text = xml_printer.process_file().getvalue()
 
                 if len(text) > 0:
-                    converted = open(self.converted_name, 'w')
-                    converted.write(etree.tostring(complete,
-                                                   encoding='utf8',
-                                                   pretty_print='True'))
-                    converted.close()
+                    with open(self.converted_name, 'w') as converted:
+                        converted.write(etree.tostring(complete,
+                                                    encoding='utf8',
+                                                    pretty_print='True'))
                 else:
                     print >>sys.stderr, self.orig, "has no text"
 
@@ -2335,13 +2334,11 @@ class XslMaker(object):
         try:
             filexsl = etree.parse(self.filename)
         except etree.XMLSyntaxError as e:
-            logfile = open(self.logfile, 'w')
+            with open(self.logfile, 'w') as logfile:
+                logfile.write('Error at: {}'.format(str(util.lineno())))
+                for entry in e.error_log:
+                    logfile.write('{}\n'.format(str(entry)))
 
-            logfile.write('Error at: {}'.format(str(util.lineno())))
-            for entry in e.error_log:
-                logfile.write('{}\n'.format(str(entry)))
-
-            logfile.close()
             raise ConversionException('{}: Syntax error.\n'
                 'More info in {}'.format(
                     self.__name__, self.logfile))
@@ -2364,14 +2361,12 @@ class XslMaker(object):
             transform = etree.XSLT(xsltRoot)
             return transform
         except etree.XSLTParseError as (e):
-            logfile = open(self.filename.replace('.xsl', '') + '.log', 'w')
+            with open(self.filename.replace('.xsl', '') + '.log', 'w') as logfile:
+                logfile.write('Error at: {}\n'.format(str(util.lineno())))
+                logfile.write('Invalid XML in {}\n'.format(self.filename))
+                for entry in e.error_log:
+                    logfile.write('{}\n'.format(str(entry)))
 
-            logfile.write('Error at: {}\n'.format(str(util.lineno())))
-            logfile.write('Invalid XML in {}\n'.format(self.filename))
-            for entry in e.error_log:
-                logfile.write('{}\n'.format(str(entry)))
-
-            logfile.close()
             raise ConversionException("Invalid XML in {}".format(
                 self.filename))
 
