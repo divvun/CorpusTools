@@ -115,8 +115,8 @@ class Converter(object):
                                             pretty_print=True))
 
             raise ConversionException(
-                'Not valid XML. More info in the log file: '
-                '{}'.format(self.logfile))
+                '{}: Not valid XML. More info in the log file: '
+                '{}'.format(type(self).__name__, self.logfile))
 
     def maybe_write_intermediate(self, intermediate):
         if not self._write_intermediate:
