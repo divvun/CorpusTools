@@ -2584,7 +2584,7 @@ class TestXslMaker(XMLTester):
         xslmaker = converter.XslMaker(
             os.path.join(here,
                          'converter_data/samediggi-article-48.html.xsl'))
-        got = xslmaker.get_xsl()
+        got = xslmaker.xsl
 
         # The import href is different for each user testing, so just
         # check that it looks OK:

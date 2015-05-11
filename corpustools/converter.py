@@ -2316,32 +2316,47 @@ class XslMaker(object):
     """
 
     def __init__(self, xslfile):
-        preprocessXsl = etree.parse(
-            os.path.join(here, 'xslt/preprocxsl.xsl'))
-        preprocessXslTransformer = etree.XSLT(preprocessXsl)
-
         self.filename = xslfile
+
+    @property
+    def filename(self):
+        return self.__filename
+
+    @filename.setter
+    def filename(self, filename):
+        self.__filename = filename
+
+    @property
+    def logfile(self):
+        self.filename + '.log'
+
+    @property
+    def xsl(self):
         try:
-            filexsl = etree.parse(xslfile)
+            filexsl = etree.parse(self.filename)
         except etree.XMLSyntaxError as e:
-            logfile = open('{}.log'.format(self.filename), 'w')
+            logfile = open(self.logfile, 'w')
 
             logfile.write('Error at: {}'.format(str(util.lineno())))
             for entry in e.error_log:
                 logfile.write('{}\n'.format(str(entry)))
 
             logfile.close()
-            raise ConversionException("Syntax error in {}".format(
-                self.filename))
+            raise ConversionException('{}: Syntax error.\n'
+                'More info in {}'.format(
+                    self.__name__, self.logfile))
+
+        preprocessXsl = etree.parse(
+            os.path.join(here, 'xslt/preprocxsl.xsl'))
+        preprocessXslTransformer = etree.XSLT(preprocessXsl)
 
         common_xsl_path = os.path.join(
             here, 'xslt/common.xsl').replace(' ', '%20')
-        self.finalXsl = preprocessXslTransformer(
+
+        return preprocessXslTransformer(
             filexsl,
             commonxsl=etree.XSLT.strparam('file://{}'.format(common_xsl_path)))
 
-    def get_xsl(self):
-        return self.finalXsl
 
     def get_transformer(self):
         xsltRoot = self.xsl
