@@ -1290,17 +1290,18 @@ class HTMLContentConverter(Converter):
         '''If the encoding is said to be one of the keys in encoding_norm,
         they shold be interpreted as windows-1252
         '''
-        encoding_norm = {
-            'iso-8859-1': 'windows-1252',
-            'iso-8859-15': 'windows-1252',
-            'ascii': 'windows-1252',
-            'windows-1252': 'windows-1252',
-        }
-        if encoding in encoding_norm:
-            encoding = encoding_norm[encoding]
-        else:
-            print >>sys.stderr, "Unusual encoding found in {} {}: {}".format(
-                self.orig, source, encoding)
+        if encoding != 'utf-8':
+            encoding_norm = {
+                'iso-8859-1': 'windows-1252',
+                'iso-8859-15': 'windows-1252',
+                'ascii': 'windows-1252',
+                'windows-1252': 'windows-1252',
+            }
+            if encoding in encoding_norm:
+                encoding = encoding_norm[encoding]
+            else:
+                print >>sys.stderr, "Unusual encoding found in {} {}: {}".format(
+                    self.orig, source, encoding)
 
         return encoding
 
