@@ -31,8 +31,8 @@ import codecs
 import multiprocessing
 import argparse
 
-import lxml.etree as etree
-import lxml.html.clean as clean
+from lxml import etree
+from lxml.html import clean
 from lxml.html import html5parser
 from pyth.plugins.rtf15.reader import Rtf15Reader
 from pyth.plugins.xhtml.writer import XHTMLWriter
