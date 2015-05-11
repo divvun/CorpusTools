@@ -73,8 +73,8 @@ class Converter(object):
             raise ConversionException(e)
 
         self.fix_lang_genre_xsl()
-        if not os.path.exists(self.get_tmpdir()):
-            os.mkdir(self.get_tmpdir())
+        if not os.path.exists(self.tmpdir):
+            os.mkdir(self.tmpdir)
 
 
     @property
@@ -273,7 +273,8 @@ class Converter(object):
     def xsl(self):
         return self.orig + '.xsl'
 
-    def get_tmpdir(self):
+    @property
+    def tmpdir(self):
         if self.corpusdir == os.path.dirname(self.orig):
             return self.corpusdir
         else:
@@ -328,7 +329,7 @@ class Converter(object):
         Return a utf-8 encoded string containing the content of the document
         '''
         runner = util.ExternalCommandRunner()
-        runner.run(command, cwd=self.get_tmpdir())
+        runner.run(command, cwd=self.tmpdir)
 
         if runner.returncode != 0:
             with open(self.logfile, 'w') as logfile:

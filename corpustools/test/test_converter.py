@@ -77,18 +77,18 @@ class TestConverter(unittest.TestCase):
 
     def test_get_tmpdir(self):
         self.assertEqual(
-            self.converter_inside_orig.get_tmpdir(),
+            self.converter_inside_orig.tmpdir,
             os.path.join(
                 here,
                 'converter_data/fakecorpus/tmp'))
 
         self.assertEqual(
-            self.converter_outside_orig.get_tmpdir(),
+            self.converter_outside_orig.tmpdir,
             os.path.join(
                 here, 'converter_data'))
 
         self.assertEqual(
-            self.converter_inside_freecorpus.get_tmpdir(),
+            self.converter_inside_freecorpus.tmpdir,
             os.path.join(os.getenv('GTFREE'), 'tmp'))
 
     def test_get_corpusdir(self):
