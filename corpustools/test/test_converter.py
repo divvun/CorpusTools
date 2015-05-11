@@ -370,27 +370,6 @@ Filbma lea.</p>
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
 
-class TestPDFConverter(XMLTester):
-    def test_pdf_converter(self):
-        pdfdocument = converter.PDFConverter(
-            os.path.join(here, 'converter_data/pdf-test.pdf'))
-        got = pdfdocument.convert2intermediate()
-        want = etree.parse(
-            os.path.join(here, 'converter_data/pdf-test.xml'))
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_skip_to_include(self):
-        c = converter.PDFConverter(
-            os.path.join(here, 'converter_data/pdf-test.pdf'))
-        self.assertEqual( c.skip_to_include("7"),
-                          [(1, 6), (8, 0)] )
-        self.assertEqual( c.skip_to_include("1-4,7,9-12"),
-                          [(5, 6), (8, 8), (13, 0)] )
-        self.assertEqual( c.skip_to_include("3-4,7,9-12"),
-                          [(1, 2), (5, 6), (8, 8), (13, 0)] )
-
-
 class TestDocConverter(XMLTester):
     def setUp(self):
         self.testdoc = converter.DocConverter(
