@@ -36,20 +36,20 @@ class TestConverter(unittest.TestCase):
 
     def test_get_orig(self):
         self.assertEqual(
-            self.converter_inside_orig.get_orig(),
+            self.converter_inside_orig.orig,
             os.path.join(
                 here,
                 'converter_data/fakecorpus/orig/nob/samediggi-article-'
                 '16.html'))
 
         self.assertEqual(
-            self.converter_outside_orig.get_orig(),
+            self.converter_outside_orig.orig,
             os.path.join(
                 here,
                 'converter_data/samediggi-article-48.html'))
 
         self.assertEqual(
-            self.converter_inside_freecorpus.get_orig(),
+            self.converter_inside_freecorpus.orig,
             os.path.join(
                 os.getenv('GTFREE'),
                 'orig/sme/admin/sd/samediggi.no/samediggi-article-48.html'))

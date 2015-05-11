@@ -67,7 +67,7 @@ class Converter(object):
         self.orig = os.path.abspath(filename)
         self.set_corpusdir()
         self.set_converted_name()
-        self.dependencies = [self.get_orig(), self.get_xsl()]
+        self.dependencies = [self.orig, self.get_xsl()]
         self._write_intermediate = write_intermediate
         try:
             self.md = xslsetter.MetadataHandler(self.get_xsl(), create=True)
@@ -82,7 +82,15 @@ class Converter(object):
     @property
     def logfile(self):
         '''The name of the logfile'''
-        return self.get_orig() + '.log'
+        return self.orig + '.log'
+
+    @property
+    def orig(self):
+        return self.__orig
+
+    @orig.setter
+    def orig(self, orig):
+        self.__orig = orig
 
     def convert2intermediate(self):
         raise NotImplementedError(
@@ -146,12 +154,12 @@ class Converter(object):
     def convert_errormarkup(self, complete):
         if 'correct.' in self.orig:
             try:
-                em = errormarkup.ErrorMarkup(self.get_orig())
+                em = errormarkup.ErrorMarkup(self.orig)
 
                 for element in complete.find('body'):
                     em.add_error_markup(element)
             except IndexError as e:
-                logfile = open('{}.log'.format(self.get_orig()), 'w')
+                logfile = open('{}.log'.format(self.orig), 'w')
                 logfile.write('Error at: {}'.format(str(util.lineno())))
                 logfile.write("There is a markup error\n")
                 logfile.write("The error message: ")
@@ -165,7 +173,7 @@ class Converter(object):
                 logfile.close()
                 raise ConversionException(
                     u"Markup error. More info in the log file: " +
-                    self.get_orig() + u".log")
+                    self.orig + u".log")
 
     def fix_document(self, complete):
         fixer = DocumentFixer(complete)
@@ -263,9 +271,6 @@ class Converter(object):
         except OSError:
             pass
 
-    def get_orig(self):
-        return self.orig
-
     def get_xsl(self):
         return self.orig + '.xsl'
 
@@ -288,7 +293,7 @@ class Converter(object):
     def fix_lang_genre_xsl(self):
         """Set the mainlang and genre variables in the xsl file, if possible
         """
-        origname = self.get_orig().replace(self.get_corpusdir(), '')
+        origname = self.orig.replace(self.get_corpusdir(), '')
         if origname.startswith('/orig'):
             to_write = False
             parts = origname[1:].split('/')
@@ -302,7 +307,7 @@ class Converter(object):
 
             genre = self.md.get_variable('genre')
 
-            if genre == "" and parts[2] != os.path.basename(self.get_orig()):
+            if genre == "" and parts[2] != os.path.basename(self.orig):
                 to_write = True
                 genre = parts[2]
                 self.md.set_variable('genre', genre)
