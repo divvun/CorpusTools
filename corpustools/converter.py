@@ -78,8 +78,6 @@ class Converter(object):
         if not os.path.exists(self.get_tmpdir()):
             os.mkdir(self.get_tmpdir())
 
-
-
     def convert2intermediate(self):
         raise NotImplementedError(
             'You have to subclass and override convert2intermediate')
@@ -335,8 +333,9 @@ class Converter(object):
             with open('{}.log'.format(self.orig), 'w') as logfile:
                 print >>logfile, 'stdout\n{}\n'.format(runner.stdout)
                 print >>logfile, 'stderr\n{}\n'.format(runner.stderr)
-                raise ConversionException("{} failed. \
-                    More info in the log file: {}.log".format((command[0]), self.orig))
+                raise ConversionException(
+                    '{} failed. More info in the log file: {}.log'.format(
+                        command[0], self.orig))
 
         return runner.stdout
 
@@ -719,6 +718,7 @@ class PDF2XMLConverter(Converter):
     '''
     LIST_CHARS = [u'•']
     margins = {}
+
     def __init__(self, filename, write_intermediate=False):
         super(PDF2XMLConverter, self).__init__(filename,
                                                write_intermediate)
@@ -748,7 +748,8 @@ class PDF2XMLConverter(Converter):
                     for page in range(start, end + 1):
                         pages.append(page)
             except ValueError as e:
-                raise ConversionException("Invalid format in skip_pages: {}".format(skip_pages))
+                raise ConversionException(
+                    "Invalid format in skip_pages: {}".format(skip_pages))
 
         return pages
 
@@ -759,7 +760,7 @@ class PDF2XMLConverter(Converter):
 
         # Microsoft Word PDF's have Latin-1 file names in links; we
         # don't actually need any link attributes:
-        content = re.sub(r'<a [^>]+>','<a>', content)
+        content = re.sub(r'<a [^>]+>', '<a>', content)
 
         return content
 
@@ -801,7 +802,6 @@ class PDF2XMLConverter(Converter):
         etree.SubElement(document, 'header')
         document.append(self.body)
 
-
         command = ['pdftohtml', '-hidden', '-enc', 'UTF-8', '-stdout',
                    '-nodrm', '-i', '-xml', self.orig]
         pdf_content = self.replace_ligatures(self.strip_chars(self.extract_text(command)))
@@ -839,7 +839,8 @@ class PDF2XMLConverter(Converter):
         margin_lines = {}
 
         for key in ['right_margin', 'top_margin', 'left_margin', 'bottom_margin']:
-            if self.md.get_variable(key) is not None and self.md.get_variable(key).strip() != '':
+            if (self.md.get_variable(key) is not None and
+                    self.md.get_variable(key).strip() != ''):
                 margin_lines[key] = self.md.get_variable(key).strip()
 
         return margin_lines
@@ -1098,7 +1099,8 @@ class PDF2XMLConverter(Converter):
             previous_element = superscript.getprevious()
             if (previous_element is not None and
                     previous_element.text is not None and
-                    int(previous_element.get('top')) > int(superscript.get('top'))):
+                    int(previous_element.get('top')) >
+                    int(superscript.get('top'))):
                 superscript.getparent().remove(superscript)
 
     def parse_page(self, page):

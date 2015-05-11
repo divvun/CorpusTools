@@ -25,6 +25,7 @@ import inspect
 import platform
 import subprocess
 
+
 class SetupException(Exception):
     pass
 
@@ -52,6 +53,7 @@ def replace_all(replacements, string):
                   replacements,
                   string)
 
+
 def split_path(path):
     """
     Split an absolute path into useful components:
@@ -69,8 +71,6 @@ def split_path(path):
     l = lang_etc.split("/")
     lang, genre, subdirs, basename = l[0], l[1], l[2:-1], l[-1]
     return root, module, lang, genre, "/".join(subdirs), basename
-
-
 
 
 def is_executable(fullpath):
@@ -125,6 +125,7 @@ def get_preprocess_command(lang):
     return [preprocess_script,
             "--xml",
             "--abbr={}".format(abbr)]
+
 
 def lineno():
     """Returns the current line number in our program."""
