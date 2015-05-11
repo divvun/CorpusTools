@@ -60,10 +60,15 @@ class ConversionException(Exception):
 
 
 def run_process(command, orig, cwd=None, to_stdin=None):
-    subp = subprocess.Popen(command,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE,
-                            cwd=cwd)
+    try:
+        subp = subprocess.Popen(command,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE,
+                                cwd=cwd)
+    except OSError:
+        print('Please install {}'.format(command[0]))
+        raise
+
     (output, error) = subp.communicate(to_stdin)
 
     if subp.returncode != 0:
