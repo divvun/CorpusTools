@@ -130,6 +130,13 @@ class TestConverter(unittest.TestCase):
                 'converted/sme/admin/sd/samediggi.no/samediggi-'
                 'article-48.html.xml'))
 
+    def test_validate_complete(self):
+        '''Check that an exception is raised if a document is invalid
+        '''
+        complete = etree.fromstring('<document/>')
+
+        self.assertRaises(converter.ConversionException,
+                          self.converter_inside_orig.validate_complete, complete)
 
 class XMLTester(unittest.TestCase):
     def assertXmlEqual(self, got, want):
