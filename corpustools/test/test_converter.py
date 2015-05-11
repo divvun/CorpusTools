@@ -720,6 +720,24 @@ class TestHTMLContentConverter(XMLTester):
 
         self.assertEqual(got, ('windows-1252', 'content'))
 
+    def test_set_charset_10(self):
+        '''Test uppercase META, too
+        '''
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'
+            '<html>'
+            '<head>'
+            '<META HTTP-EQUIV="Content-Type" CONTENT="text/html;'
+            'charset=iso-8859-15">')
+
+        hcc = converter.HTMLContentConverter(
+            'ugga.html',
+            content=content)
+
+        got = hcc.get_encoding(content)
+
+        self.assertEqual(got, ('windows-1252', 'content'))
+
     def test_center2div(self):
         got = converter.HTMLContentConverter(
             'center.html',
