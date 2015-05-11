@@ -126,14 +126,11 @@ class Analyser(object):
     def run_external_command(self, command, input):
         '''Run the command with input using subprocess
         '''
-        subp = subprocess.Popen(command,
-                                stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
-        (output, error) = subp.communicate(input)
-        self.check_error(command, error)
+        runner = util.ExternalCommandRunner()
+        runner.run(command, to_stdin=input)
+        self.check_error(command, runner.stderr)
 
-        return output
+        return runner.stdout
 
     def preprocess(self):
         u"""Runs preprocess on the ccat output.
