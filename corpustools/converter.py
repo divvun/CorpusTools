@@ -1244,11 +1244,6 @@ class HTMLContentConverter(Converter):
         for encoding, source in [found] + more_guesses:
             try:
                 decoded = unicode(content, encoding=encoding)
-                if source == 'guess':
-                    with open('{}.log'.format(self.orig), 'w') as f:
-                        f.write('converter.py: {} Encoding of {} guessed as '
-                                '{}\n'.format(util.lineno(), self.orig,
-                                              encoding))
                 return decoded
             except UnicodeDecodeError as e:
                 if source == 'xsl':
