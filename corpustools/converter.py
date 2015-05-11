@@ -65,7 +65,6 @@ class Converter(object):
     def __init__(self, filename, write_intermediate=False):
         codecs.register_error('mixed', self.mixed_decoder)
         self.orig = os.path.abspath(filename)
-        self.set_corpusdir()
         self.set_converted_name()
         self.dependencies = [self.orig, self.get_xsl()]
         self._write_intermediate = write_intermediate
@@ -275,25 +274,23 @@ class Converter(object):
         return self.orig + '.xsl'
 
     def get_tmpdir(self):
-        if self.get_corpusdir() == os.path.dirname(self.orig):
-            return self.get_corpusdir()
+        if self.corpusdir == os.path.dirname(self.orig):
+            return self.corpusdir
         else:
-            return os.path.join(self.get_corpusdir(), 'tmp')
+            return os.path.join(self.corpusdir, 'tmp')
 
-    def get_corpusdir(self):
-        return self.corpusdir
-
-    def set_corpusdir(self):
+    @property
+    def corpusdir(self):
         orig_pos = self.orig.find('orig/')
         if orig_pos != -1:
-            self.corpusdir = os.path.dirname(self.orig[:orig_pos])
+            return os.path.dirname(self.orig[:orig_pos])
         else:
-            self.corpusdir = os.path.dirname(self.orig)
+            return os.path.dirname(self.orig)
 
     def fix_lang_genre_xsl(self):
         """Set the mainlang and genre variables in the xsl file, if possible
         """
-        origname = self.orig.replace(self.get_corpusdir(), '')
+        origname = self.orig.replace(self.corpusdir, '')
         if origname.startswith('/orig'):
             to_write = False
             parts = origname[1:].split('/')
