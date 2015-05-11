@@ -2361,14 +2361,15 @@ class XslMaker(object):
             transform = etree.XSLT(xsltRoot)
             return transform
         except etree.XSLTParseError as (e):
-            with open(self.filename.replace('.xsl', '') + '.log', 'w') as logfile:
+            with open(self.logfile, 'w') as logfile:
                 logfile.write('Error at: {}\n'.format(str(util.lineno())))
                 logfile.write('Invalid XML in {}\n'.format(self.filename))
                 for entry in e.error_log:
                     logfile.write('{}\n'.format(str(entry)))
 
-            raise ConversionException("Invalid XML in {}".format(
-                self.filename))
+            raise ConversionException('{}: Invalid XML in {}. '
+                'More info in {}'.format(type(self).__name__,
+                                         self.filename, self.logfile))
 
 
 class LanguageDetector(object):
