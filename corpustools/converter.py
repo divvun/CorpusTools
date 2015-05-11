@@ -37,7 +37,7 @@ from lxml.html import html5parser
 from pyth.plugins.rtf15.reader import Rtf15Reader
 from pyth.plugins.xhtml.writer import XHTMLWriter
 try:
-    from pydocx.pydocx import PyDocX
+    from pydocx.export import PyDocXHTMLExporter as Docx2Html
 except ImportError:
     from pydocx.parsers import Docx2Html
 
@@ -1728,7 +1728,7 @@ class DocxConverter(HTMLContentConverter):
     def __init__(self, filename, write_intermediate=False):
 
         HTMLContentConverter.__init__(self, filename,
-                                      content=Docx2Html(path=filename).parsed)
+                                      content=Docx2Html(filename).parsed)
 
 
 class DocConverter(HTMLContentConverter):
