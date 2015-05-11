@@ -78,6 +78,12 @@ class Converter(object):
         if not os.path.exists(self.get_tmpdir()):
             os.mkdir(self.get_tmpdir())
 
+
+    @property
+    def logfile(self):
+        '''The name of the logfile'''
+        return self.get_orig() + '.log'
+
     def convert2intermediate(self):
         raise NotImplementedError(
             'You have to subclass and override convert2intermediate')
@@ -92,23 +98,19 @@ class Converter(object):
         dtd = etree.DTD(Converter.get_dtd_location())
 
         if not dtd.validate(complete):
-            # print etree.tostring(complete)
-            logfile = open('{}.log'.format(self.get_orig()), 'w')
-
-            logfile.write('Error at: {}'.format(str(util.lineno())))
-            for entry in dtd.error_log:
-                logfile.write('\n')
-                logfile.write(str(entry))
-                logfile.write('\n')
-
-            logfile.write(etree.tostring(complete,
-                                         encoding='utf8',
-                                         pretty_print=True))
-            logfile.close()
+            with open(self.logfile, 'w') as logfile:
+                logfile.write('Error at: {}'.format(str(util.lineno())))
+                for entry in dtd.error_log:
+                    logfile.write('\n')
+                    logfile.write(str(entry))
+                    logfile.write('\n')
+                logfile.write(etree.tostring(complete,
+                                            encoding='utf8',
+                                            pretty_print=True))
 
             raise ConversionException(
                 'Not valid XML. More info in the log file: '
-                '{}.log'.format(self.get_orig()))
+                '{}'.format(self.logfile))
 
     def maybe_write_intermediate(self, intermediate):
         if not self._write_intermediate:
@@ -120,7 +122,8 @@ class Converter(object):
                                          pretty_print='True'))
 
     def transform_to_complete(self):
-
+        '''Combine the intermediate xml document with its medatata.
+        '''
         intermediate = self.convert2intermediate()
 
         self.maybe_write_intermediate(intermediate)
@@ -131,14 +134,12 @@ class Converter(object):
 
             return complete.getroot()
         except etree.XSLTApplyError as e:
-            logfile = open('{}.log'.format(self.orig), 'w')
+            with open(self.logfile, 'w') as logfile:
+                logfile.write('Error at: {}'.format(str(util.lineno())))
+                for entry in e.error_log:
+                    logfile.write(str(entry))
+                    logfile.write('\n')
 
-            logfile.write('Error at: {}'.format(str(util.lineno())))
-            for entry in e.error_log:
-                logfile.write(str(entry))
-                logfile.write('\n')
-
-            logfile.close()
             raise ConversionException("Check the syntax in: {}".format(
                 self.get_xsl()))
 
@@ -667,24 +668,22 @@ class PDF2XMLConverter(Converter):
         try:
             root_element = etree.fromstring(pdf_content)
         except etree.XMLSyntaxError as e:
-            logfile = open('{}.log'.format(self.orig), 'w')
+            with open(self.logfile, 'w') as logfile:
+                logfile.write('Error at: {}'.format(str(util.lineno())))
+                for entry in e.error_log:
+                    logfile.write('\n{}: {} '.format(
+                        str(entry.line), str(entry.column)))
+                    try:
+                        logfile.write(entry.message)
+                    except ValueError:
+                        logfile.write(entry.message.encode('latin1'))
 
-            logfile.write('Error at: {}'.format(str(util.lineno())))
-            for entry in e.error_log:
-                logfile.write('\n{}: {} '.format(
-                    str(entry.line), str(entry.column)))
-                try:
-                    logfile.write(entry.message)
-                except ValueError:
-                    logfile.write(entry.message.encode('latin1'))
+                    logfile.write('\n')
+                logfile.write(pdf_content)
 
-                logfile.write('\n')
-
-            logfile.write(pdf_content)
-            logfile.close()
             raise ConversionException(
                 'Invalid xml from pdftohtml, log is found in '
-                '{}.log'.format(self.orig))
+                '{}'.format(self.logfile))
 
         self.parse_pages(root_element)
 
@@ -1656,38 +1655,35 @@ class HTMLContentConverter(Converter):
         try:
             intermediate = transform(self.soup)
         except etree.XMLSyntaxError as e:
-            logfile = open('{}.log'.format(self.orig), 'w')
+            with open(self.logfile, 'w') as logfile:
+                logfile.write('Error at: {}'.format(str(util.lineno())))
+                for entry in e.error_log:
+                    logfile.write('\n{}: {} '.format(
+                        str(entry.line), str(entry.column)))
+                    try:
+                        logfile.write(entry.message)
+                    except ValueError:
+                        logfile.write(entry.message.encode('latin1'))
 
-            logfile.write('Error at: {}'.format(str(util.lineno())))
-            for entry in e.error_log:
-                logfile.write('\n{}: {} '.format(
-                    str(entry.line), str(entry.column)))
-                try:
-                    logfile.write(entry.message)
-                except ValueError:
-                    logfile.write(entry.message.encode('latin1'))
+                    logfile.write('\n')
 
-                logfile.write('\n')
+                logfile.write(etree.tostring(self.soup).encode('utf8'))
 
-            logfile.write(etree.tostring(self.soup).encode('utf8'))
-            logfile.close()
             raise ConversionException(
-                "Invalid html, log is found in {}.log".format(self.orig))
+                "Invalid html, log is found in {}".format(self.logfile))
 
         if len(transform.error_log) > 0:
+            with open(self.logfile, 'w') as logfile:
+                logfile.write('Error at: {}'.format(str(util.lineno())))
+                for entry in transform.error_log:
+                    logfile.write('\n{}: {} {}\n'.format(
+                        str(entry.line), str(entry.column),
+                        entry.message.encode('utf8')))
+                logfile.write(etree.tostring(self.soup).encode('utf8'))
 
-            logfile = open('{}.log'.format(self.orig), 'w')
-
-            logfile.write('Error at: {}'.format(str(util.lineno())))
-            for entry in transform.error_log:
-                logfile.write('\n{}: {} {}\n'.format(
-                    str(entry.line), str(entry.column),
-                    entry.message.encode('utf8')))
-
-            logfile.write(etree.tostring(self.soup).encode('utf8'))
-            logfile.close()
             raise ConversionException(
-                'transformation failed {}.log'.format(self.orig))
+                'HTMLContentConverter: transformation failed.'
+                'More info in {}'.format(self.logfile))
 
         return intermediate.getroot()
 
