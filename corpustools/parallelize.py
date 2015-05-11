@@ -281,13 +281,12 @@ class SentenceDivider:
         except OSError as e:
             if e.errno != errno.EEXIST:
                 raise
-        f = open(outfile, 'w')
-        et = etree.ElementTree(self.document)
-        et.write(f,
-                 pretty_print=True,
-                 encoding="utf-8",
-                 xml_declaration=True)
-        f.close()
+        with open(outfile, 'w') as sentence_file:
+            et = etree.ElementTree(self.document)
+            et.write(sentence_file,
+                    pretty_print=True,
+                    encoding="utf-8",
+                    xml_declaration=True)
 
     def preprocess_para_texts(self, para_texts):
         """Run a list of paragraphs through preprocess.
@@ -765,15 +764,13 @@ class Tmx:
         except OSError:
             pass
 
-        f = open(out_filename, "w")
-
-        string = etree.tostring(self.get_tmx(),
-                                pretty_print=True,
-                                encoding="utf-8",
-                                xml_declaration=True)
-        f.write(string)
-        f.close()
-        print "Wrote {}".format(out_filename)
+        with open(out_filename, "w") as tmx_file:
+            string = etree.tostring(self.get_tmx(),
+                                    pretty_print=True,
+                                    encoding="utf-8",
+                                    xml_declaration=True)
+            tmx_file.write(string)
+            print "Wrote {}".format(out_filename)
 
     def remove_tu_with_empty_seg(self):
         """Remove tu elements that contain empty seg element
@@ -889,15 +886,10 @@ class Tca2ToTmx(Tmx):
         Read the output of tca2
         Input is a CorpusXMLFile
         """
-        text = ""
         pfile_name = self.get_sent_filename(pfile).replace('.xml', '_new.txt')
-        try:
-            text = open(pfile_name, "r").read().decode('utf-8').split('\n')
-        except IOError as e:
-            print "I/O error({0}): {1}".format(e.errno, e.strerror)
-            sys.exit(1)
 
-        return text
+        with open(pfile_name, "r") as tca2_output:
+            return tca2_output.read().decode('utf-8').split('\n')
 
     def get_sent_filename(self, pfile):
         """
@@ -1020,16 +1012,10 @@ class TmxTestDataWriter():
         """
         Write the paragstesting data to a file
         """
-        try:
-            f = open(self.filename, "w")
-
+        with open(self.filename, "w") as paragstesting:
             et = etree.ElementTree(self.paragstesting)
-            et.write(f, pretty_print=True, encoding="utf-8",
+            et.write(paragstesting, pretty_print=True, encoding="utf-8",
                      xml_declaration=True)
-            f.close()
-        except IOError as e:
-            print "I/O error({0}): {1}".format(e.errno, e.strerror)
-            sys.exit(1)
 
 
 class TmxGoldstandardTester:
@@ -1151,23 +1137,17 @@ class TmxGoldstandardTester:
             os.path.dirname(self.testresult_writer.get_filename()),
             'tca2testing')
 
-        try:
-            f = open(os.path.join(dirname, filename), "w")
-        except IOError as e:
-            print "I/O error({0}): {1}".format(e.errno, e.strerror)
-            sys.exit(1)
-
-        f.write('!!!{}\n'.format(filename))
-        f.write("!!TMX diff\n{{{\n")
-        f.writelines(comparator.get_diff_as_text())
-        f.write("\n}}}\n!! diff\n{{{\n".format(parallelizer.get_lang1()))
-        f.writelines(comparator.get_lang_diff_as_text(
-            parallelizer.get_lang1()))
-        f.write("\n}}}\n!!{} diff\n{{{\n".format(parallelizer.get_lang2()))
-        f.writelines(comparator.get_lang_diff_as_text(
-            parallelizer.get_lang2()))
-        f.write("\n}}}\n")
-        f.close()
+        with open(os.path.join(dirname, filename), "w") as diff_file:
+            diff_file.write('!!!{}\n'.format(filename))
+            diff_file.write("!!TMX diff\n{{{\n")
+            diff_file.writelines(comparator.get_diff_as_text())
+            diff_file.write("\n}}}\n!! diff\n{{{\n".format(parallelizer.get_lang1()))
+            diff_file.writelines(comparator.get_lang_diff_as_text(
+                parallelizer.get_lang1()))
+            diff_file.write("\n}}}\n!!{} diff\n{{{\n".format(parallelizer.get_lang2()))
+            diff_file.writelines(comparator.get_lang_diff_as_text(
+                parallelizer.get_lang2()))
+            diff_file.write("\n}}}\n")
 
     def find_goldstandard_tmx_files(self):
         """

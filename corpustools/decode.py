@@ -236,13 +236,11 @@ class EncodingGuesser(object):
         @param filename name of an utf-8 encoded file
         @return winner is an int, pointing to a position in CTYPES, or -1
         """
+        with open(filename) as infile:
+            content = infile.read()
+            winner = self.guess_body_encoding(content)
 
-        infile = open(filename)
-        content = infile.read()
-        infile.close()
-        winner = self.guess_body_encoding(content)
-
-        return winner
+            return winner
 
     def guess_body_encoding(self, content):
         """@brief guess the encoding of the string content

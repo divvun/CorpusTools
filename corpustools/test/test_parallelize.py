@@ -500,31 +500,30 @@ class TestTmx(unittest.TestCase):
         self.assertEqual(self.tmx.tuv_to_string(tuv), "Sámegiella")
 
     def test_lang_to_string_list(self):
-        f = open(
-            os.path.join(
-                here,
-                'parallelize_data/aarseth2-n.htm.toktmx.as.txt'), 'r')
-        string_list = f.readlines()
+        toktmx_txt_name = os.path.join(
+            here,
+            'parallelize_data/aarseth2-n.htm.toktmx.as.txt')
+        with open(toktmx_txt_name, 'r') as toktmx_txt:
+            string_list = toktmx_txt.readlines()
 
-        nob_list = []
-        sme_list = []
-        for string in string_list:
-            pair_list = string.split('\t')
-            nob_list.append(pair_list[0])
-            sme_list.append(pair_list[1].strip())
+            nob_list = []
+            sme_list = []
+            for string in string_list:
+                pair_list = string.split('\t')
+                nob_list.append(pair_list[0])
+                sme_list.append(pair_list[1].strip())
 
-        self.assertEqual(self.tmx.lang_to_stringlist('nob'), nob_list)
-        self.assertEqual(self.tmx.lang_to_stringlist('sme'), sme_list)
+            self.assertEqual(self.tmx.lang_to_stringlist('nob'), nob_list)
+            self.assertEqual(self.tmx.lang_to_stringlist('sme'), sme_list)
 
     def test_tmx_to_stringlist(self):
-        f = open(
-            os.path.join(
-                here,
-                'parallelize_data/aarseth2-n.htm.toktmx.as.txt'), 'r')
-        want_list = f.readlines()
-        f.close()
-        # self.maxDiff = None
-        self.assertEqual(self.tmx.tmx_to_stringlist(), want_list)
+        toktmx_txt_name = os.path.join(
+            here,
+            'parallelize_data/aarseth2-n.htm.toktmx.as.txt')
+        with open(toktmx_txt_name, 'r') as toktmx_txt:
+            want_list = toktmx_txt.readlines()
+            # self.maxDiff = None
+            self.assertEqual(self.tmx.tmx_to_stringlist(), want_list)
 
     def test_prettify_segs(self):
         wantXml = etree.XML(

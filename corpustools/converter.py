@@ -1682,11 +1682,10 @@ class HTMLContentConverter(Converter):
 
 class HTMLConverter(HTMLContentConverter):
     def __init__(self, filename, write_intermediate=False):
-        f = open(filename)
-        super(HTMLConverter, self).__init__(filename,
-                                            write_intermediate,
-                                            content=f.read())
-        f.close()
+        with open(filename) as f:
+            super(HTMLConverter, self).__init__(filename,
+                                                write_intermediate,
+                                                content=f.read())
 
 
 class RTFConverter(HTMLContentConverter):
@@ -1694,18 +1693,17 @@ class RTFConverter(HTMLContentConverter):
     Class to convert html documents to the giellatekno xml format
     """
     def __init__(self, filename, write_intermediate=False):
-        doc = open(filename, "rb")
-        content = doc.read()
-        try:
-            doc = Rtf15Reader.read(
-                io.BytesIO(content.replace('fcharset256', 'fcharset255')))
-        except UnicodeDecodeError:
-            raise ConversionException('Unicode problems in {}'.format(
-                self.orig))
-
-        HTMLContentConverter.__init__(
-            self, filename,
-            content=XHTMLWriter.write(doc, pretty=True).read())
+        with open(filename, "rb") as rtf_document:
+            content = rtf_document.read()
+            try:
+                pyth_doc = Rtf15Reader.read(
+                    io.BytesIO(content.replace('fcharset256', 'fcharset255')))
+                HTMLContentConverter.__init__(
+                    self, filename,
+                    content=XHTMLWriter.write(pyth_doc, pretty=True).read())
+            except UnicodeDecodeError:
+                raise ConversionException('Unicode problems in {}'.format(
+                    self.orig))
 
 
 class DocxConverter(HTMLContentConverter):
