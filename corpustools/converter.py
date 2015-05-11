@@ -24,7 +24,6 @@ import os
 import sys
 import re
 import io
-import subprocess
 from copy import deepcopy
 import distutils.dep_util
 import distutils.spawn
@@ -59,29 +58,6 @@ class ConversionException(Exception):
     pass
 
 
-def run_process(command, orig, cwd=None, to_stdin=None):
-    try:
-        subp = subprocess.Popen(command,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE,
-                                cwd=cwd)
-    except OSError:
-        print('Please install {}'.format(command[0]))
-        raise
-
-    (output, error) = subp.communicate(to_stdin)
-
-    if subp.returncode != 0:
-        logfile = open('{}.log'.format(orig), 'w')
-        print >>logfile, 'stdout\n{}\n'.format(output)
-        print >>logfile, 'stderr\n{}\n'.format(error)
-        logfile.close()
-        raise ConversionException("{} failed. \
-            More info in the log file: {}.log".format((command[0]), orig))
-    else:
-        return output
-
-
 class Converter(object):
     """
     Class to take care of data common to all Converter classes
@@ -99,6 +75,10 @@ class Converter(object):
             raise ConversionException(e)
 
         self.fix_lang_genre_xsl()
+        if not os.path.exists(self.get_tmpdir()):
+            os.mkdir(self.get_tmpdir())
+
+
 
     def convert2intermediate(self):
         raise NotImplementedError(
@@ -342,6 +322,23 @@ class Converter(object):
 
     def get_converted_name(self):
         return self._convertedName
+
+    def extract_text(self, command):
+        '''Extract the text from a document using command
+
+        Return a utf-8 encoded string containing the content of the document
+        '''
+        runner = util.ExternalCommandRunner()
+        runner.run(command, cwd=self.get_tmpdir())
+
+        if runner.returncode != 0:
+            with open('{}.log'.format(self.orig), 'w') as logfile:
+                print >>logfile, 'stdout\n{}\n'.format(runner.stdout)
+                print >>logfile, 'stderr\n{}\n'.format(runner.stderr)
+                raise ConversionException("{} failed. \
+                    More info in the log file: {}.log".format((command[0]), self.orig))
+
+        return runner.stdout
 
 
 class AvvirConverter(Converter):
@@ -799,21 +796,15 @@ class PDF2XMLConverter(Converter):
 
         return content
 
-    def extract_text(self):
-        """
-        Extract the text from the pdf file using pdftohtml
-        run_process produces an utf-8 string containing the output of pdftohtml
-        """
-        command = ['pdftohtml', '-hidden', '-enc', 'UTF-8', '-stdout',
-                   '-nodrm', '-i', '-xml', self.orig]
-        return run_process(command, self.orig)
-
     def convert2intermediate(self):
         document = etree.Element('document')
         etree.SubElement(document, 'header')
         document.append(self.body)
 
-        pdf_content = self.replace_ligatures(self.strip_chars(self.extract_text()))
+
+        command = ['pdftohtml', '-hidden', '-enc', 'UTF-8', '-stdout',
+                   '-nodrm', '-i', '-xml', self.orig]
+        pdf_content = self.replace_ligatures(self.strip_chars(self.extract_text(command)))
         #with open('/tmp/pdf.xml', 'w') as uff:
             #print >>uff, pdf_content
         try:
@@ -1874,15 +1865,10 @@ class DocConverter(HTMLContentConverter):
     def __init__(self, filename, write_intermediate=False):
         Converter.__init__(self, filename, write_intermediate)
         command = ['wvHtml',
-                   os.path.realpath(filename),
+                   os.path.realpath(self.orig),
                    '-']
-        if not os.path.exists(self.get_tmpdir()):
-            # wvHtml leaves a mess in cwd
-            os.mkdir(self.get_tmpdir())
-        output = run_process(command, filename, cwd=self.get_tmpdir())
-
         HTMLContentConverter.__init__(self, filename,
-                                      content=output)
+                                      content=self.extract_text(command))
 
     def fix_wv_output(self):
         '''Examples of headings
