@@ -1267,9 +1267,41 @@ class HTMLContentConverter(Converter):
                 "Strange exception converting {} to unicode".format(self.orig))
 
     xml_encoding_declaration_re = re.compile(
-        r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*")
+        r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*", re.IGNORECASE)
     html_meta_charset_re = re.compile(
-        r"<meta [^>]*[\"; ]charset=[\"']?([^\"' ]+)")
+        r"<meta [^>]*[\"; ]charset=[\"']?([^\"' ]+)", re.IGNORECASE)
+
+    def get_encoding_from_content(self, content):
+        '''content is a utf-8 encoded byte string
+        return a string contaning the encoding
+        '''
+        # <?xml version="1.0" encoding="ISO-8859-1"?>
+        # <meta charset="utf-8">
+        # <meta http-equiv="Content-Type" content="charset=utf-8" />
+        # <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        # <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        m = (re.search(self.xml_encoding_declaration_re, content)
+                or
+                re.search(self.html_meta_charset_re, content))
+        if m is not None:
+            return m.group(1).lower()
+
+    def get_normalized_encoding(self, encoding, source):
+        '''If the encoding is said to be one of the keys in encoding_norm,
+        they shold be interpreted as windows-1252
+        '''
+        encoding_norm = {
+            'iso-8859-1': 'windows-1252',
+            'ascii': 'windows-1252',
+            'windows-1252': 'windows-1252',
+        }
+        if encoding in encoding_norm:
+            encoding = encoding_norm[encoding]
+        else:
+            print >>sys.stderr, "Unusual encoding found in {} {}: {}".format(
+                self.orig, source, encoding)
+
+        return encoding
 
     def get_encoding(self, content):
         encoding = 'utf-8'
@@ -1278,32 +1310,15 @@ class HTMLContentConverter(Converter):
         encoding_from_xsl = self.md.get_variable('text_encoding')
 
         if encoding_from_xsl == '' or encoding_from_xsl is None:
-            source = 'content'
-            # <?xml version="1.0" encoding="ISO-8859-1"?>
-            # <meta charset="utf-8">
-            # <meta http-equiv="Content-Type" content="charset=utf-8" />
-            # <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-            # <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-            m = (re.search(self.xml_encoding_declaration_re, content)
-                 or
-                 re.search(self.html_meta_charset_re, content))
-            if m is not None:
-                encoding = m.group(1).lower()
+            if self.get_encoding_from_content(content) is not None:
+                source = 'content'
+                encoding = self.get_encoding_from_content(content)
         else:
             source = 'xsl'
             encoding = encoding_from_xsl.lower()
 
-        encoding_norm = {
-            'iso-8859-1': 'windows-1252',
-            'ascii': 'windows-1252',
-            'windows-1252': 'windows-1252',
-            'utf-8': 'utf-8',
-        }
-        if encoding in encoding_norm:
-            encoding = encoding_norm[encoding]
-        else:
-            print >>sys.stderr, "Unusual encoding found in {} {}: {}".format(
-                self.orig, source, encoding)
+        encoding = self.get_normalized_encoding(encoding, source)
+
         return encoding, source
 
     def remove_declared_encoding(self, content):
