@@ -206,6 +206,7 @@ class ExternalCommandRunner(object):
         '''
         try:
             subp = subprocess.Popen(command,
+                                    stdin=subprocess.PIPE,
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE,
                                     cwd=cwd)
