@@ -578,9 +578,9 @@ class TestHTMLContentConverter(XMLTester):
             'ugga.html',
             content=content)
 
-        got, _ = hcc.get_encoding(content)
+        got = hcc.get_encoding(content)
 
-        self.assertEqual(got, 'utf-8')
+        self.assertEqual(got, ('utf-8', 'guess'))
 
     def test_set_charset_2(self):
         '''Check that default charset is set, 2
@@ -593,44 +593,45 @@ class TestHTMLContentConverter(XMLTester):
             'ugga.html',
             content=content)
 
-        got, _ = hcc.get_encoding(content)
+        got = hcc.get_encoding(content)
 
-        self.assertEqual(got, 'utf-8')
+        self.assertEqual(got, ('utf-8', 'guess'))
 
-    #def test_get_encoding_3(self):
-        #'''encoding_from_xsl = 'iso-8859-1', no charset in html header
-        #'''
-        #content = (
-            #'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
-            #'<body></body></html>')
-        #encoding_from_xsl = 'iso-8859-1'
+    def test_get_encoding_3(self):
+        '''encoding_from_xsl = 'iso-8859-1', no charset in html header
+        '''
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<body></body></html>')
 
-        #hcc = converter.HTMLContentConverter(
-            #'ugga.html',
-            #content=content)
 
-        #got, _ = hcc.get_encoding(content)
+        hcc = converter.HTMLContentConverter(
+            'ugga.html',
+            content=content)
+        hcc.md.set_variable('text_encoding', 'iso-8859-1')
 
-        #self.assertEqual(got, 'windows-1252')
+        got = hcc.get_encoding(content)
 
-    #def test_get_encoding_4(self):
-        #'''Check that encoding_from_xsl overrides meta charset
-        #encoding_from_xsl = 'iso-8859-1', charset in html header = utf-8
-        #'''
-        #content = (
-            #'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
-            #'<head><meta http-equiv="Content-type" content="text/html; '
-            #'charset=utf-8"></head><body></body></html>')
+        self.assertEqual(got, ('windows-1252', 'xsl'))
 
-        #encoding_from_xsl = 'iso-8859-1'
+    def test_get_encoding_4(self):
+        '''Check that encoding_from_xsl overrides meta charset
+        encoding_from_xsl = 'iso-8859-1', charset in html header = utf-8
+        '''
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<head><meta http-equiv="Content-type" content="text/html; '
+            'charset=utf-8"></head><body></body></html>')
 
-        #hcc = converter.HTMLContentConverter(
-            #'ugga.html',
-            #content=content)
 
-        #got, _ = hcc.get_encoding(content)
+        hcc = converter.HTMLContentConverter(
+            'ugga.html',
+            content=content)
+        hcc.md.set_variable('text_encoding', 'iso-8859-1')
 
-        #self.assertEqual(got, 'windows-1252')
+        got = hcc.get_encoding(content)
+
+        self.assertEqual(got, ('windows-1252', 'xsl'))
 
     def test_get_encoding_5(self):
         '''encoding_from_xsl = None, charset in html header = iso-8859-1
@@ -644,9 +645,9 @@ class TestHTMLContentConverter(XMLTester):
             'ugga.html',
             content=content)
 
-        got, _ = hcc.get_encoding(content)
+        got = hcc.get_encoding(content)
 
-        self.assertEqual(got, 'windows-1252')
+        self.assertEqual(got, ('windows-1252', 'content'))
 
     def test_get_encoding_6(self):
         '''encoding_from_xsl = '', charset in html header = iso-8859-1
@@ -660,9 +661,9 @@ class TestHTMLContentConverter(XMLTester):
             'ugga.html',
             content=content)
 
-        got, _ = hcc.get_encoding(content)
+        got = hcc.get_encoding(content)
 
-        self.assertEqual(got, 'windows-1252')
+        self.assertEqual(got, ('windows-1252', 'content'))
 
     def test_set_charset_7(self):
         '''Test if set_charset works with ' as quote mark around charset
@@ -677,9 +678,9 @@ class TestHTMLContentConverter(XMLTester):
             'ugga.html',
             content=content)
 
-        got, _ = hcc.get_encoding(content)
+        got = hcc.get_encoding(content)
 
-        self.assertEqual(got, 'windows-1252')
+        self.assertEqual(got, ('windows-1252', 'content'))
 
     def test_set_charset_8(self):
         '''Test if set_charset works with ' as quote mark around charset when
@@ -696,9 +697,9 @@ class TestHTMLContentConverter(XMLTester):
             'ugga.html',
             content=content)
 
-        got, _ = hcc.get_encoding(content)
+        got = hcc.get_encoding(content)
 
-        self.assertEqual(got, 'windows-1252')
+        self.assertEqual(got, ('windows-1252', 'content'))
 
     def test_set_charset_9(self):
         '''Test if set_charset works with " as quote mark around charset
@@ -715,9 +716,9 @@ class TestHTMLContentConverter(XMLTester):
             'ugga.html',
             content=content)
 
-        got, _ = hcc.get_encoding(content)
+        got = hcc.get_encoding(content)
 
-        self.assertEqual(got, 'windows-1252')
+        self.assertEqual(got, ('windows-1252', 'content'))
 
     def test_center2div(self):
         got = converter.HTMLContentConverter(
