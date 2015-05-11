@@ -23,7 +23,7 @@ import os
 import operator
 import inspect
 import platform
-
+import subprocess
 
 class SetupException(Exception):
     pass
@@ -190,3 +190,27 @@ def name_to_unicode(filename):
         return filename.decode('utf-8')
 
 
+class ExternalCommandRunner(object):
+    '''Class to run external command through subprocess
+
+    Save output, error and returnvalue
+    '''
+    def __init__(self):
+        self.stdout = None
+        self.stderr = None
+        self.returncode = None
+
+    def run(self, command, cwd=None, to_stdin=None):
+        '''Run the command, save the result
+        '''
+        try:
+            subp = subprocess.Popen(command,
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE,
+                                    cwd=cwd)
+        except OSError:
+            print('Please install {}'.format(command[0]))
+            raise
+
+        (self.stdout, self.stderr) = subp.communicate(to_stdin)
+        self.returncode = subp.returncode
