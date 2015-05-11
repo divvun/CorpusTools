@@ -172,8 +172,8 @@ class Converter(object):
                 logfile.write('\n')
                 logfile.close()
                 raise ConversionException(
-                    u"Markup error. More info in the log file: " +
-                    self.orig + u".log")
+                    u"Markup error. More info in the log file: {}".format(
+                        self.logfile))
 
     def fix_document(self, complete):
         fixer = DocumentFixer(complete)
@@ -336,12 +336,12 @@ class Converter(object):
         runner.run(command, cwd=self.get_tmpdir())
 
         if runner.returncode != 0:
-            with open('{}.log'.format(self.orig), 'w') as logfile:
+            with open(self.logfile, 'w') as logfile:
                 print >>logfile, 'stdout\n{}\n'.format(runner.stdout)
                 print >>logfile, 'stderr\n{}\n'.format(runner.stderr)
                 raise ConversionException(
-                    '{} failed. More info in the log file: {}.log'.format(
-                        command[0], self.orig))
+                    '{} failed. More info in the log file: {}'.format(
+                        command[0], self.logfile))
 
         return runner.stdout
 
