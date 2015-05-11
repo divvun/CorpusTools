@@ -1292,6 +1292,7 @@ class HTMLContentConverter(Converter):
         '''
         encoding_norm = {
             'iso-8859-1': 'windows-1252',
+            'iso-8859-15': 'windows-1252',
             'ascii': 'windows-1252',
             'windows-1252': 'windows-1252',
         }
