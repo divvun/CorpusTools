@@ -56,20 +56,20 @@ class TestConverter(unittest.TestCase):
 
     def test_get_xsl(self):
         self.assertEqual(
-            self.converter_inside_orig.get_xsl(),
+            self.converter_inside_orig.xsl,
             os.path.join(
                 here,
                 'converter_data/fakecorpus/orig/nob/samediggi-'
                 'article-16.html.xsl'))
 
         self.assertEqual(
-            self.converter_outside_orig.get_xsl(),
+            self.converter_outside_orig.xsl,
             os.path.join(
                 here,
                 'converter_data/samediggi-article-48.html.xsl'))
 
         self.assertEqual(
-            self.converter_inside_freecorpus.get_xsl(),
+            self.converter_inside_freecorpus.xsl,
             os.path.join(
                 os.getenv('GTFREE'),
                 'orig/sme/admin/sd/samediggi.no/samediggi-article-'

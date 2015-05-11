@@ -65,10 +65,10 @@ class Converter(object):
     def __init__(self, filename, write_intermediate=False):
         codecs.register_error('mixed', self.mixed_decoder)
         self.orig = os.path.abspath(filename)
-        self.dependencies = [self.orig, self.get_xsl()]
+        self.dependencies = [self.orig, self.xsl]
         self._write_intermediate = write_intermediate
         try:
-            self.md = xslsetter.MetadataHandler(self.get_xsl(), create=True)
+            self.md = xslsetter.MetadataHandler(self.xsl, create=True)
         except xslsetter.XsltException as e:
             raise ConversionException(e)
 
@@ -135,7 +135,7 @@ class Converter(object):
         self.maybe_write_intermediate(intermediate)
 
         try:
-            xm = XslMaker(self.get_xsl())
+            xm = XslMaker(self.xsl)
             complete = xm.get_transformer()(intermediate)
 
             return complete.getroot()
@@ -147,7 +147,7 @@ class Converter(object):
                     logfile.write('\n')
 
             raise ConversionException("Check the syntax in: {}".format(
-                self.get_xsl()))
+                self.xsl))
 
     def convert_errormarkup(self, complete):
         if 'correct.' in self.orig:
@@ -269,7 +269,8 @@ class Converter(object):
         except OSError:
             pass
 
-    def get_xsl(self):
+    @property
+    def xsl(self):
         return self.orig + '.xsl'
 
     def get_tmpdir(self):
@@ -713,14 +714,14 @@ class PDF2XMLConverter(Converter):
                 raise ConversionException('Invalid format in the variable {} '
                     'in the file:\n{}\n{}\n'
                     'Format should be [all|odd|even|pagenumber]=integer'.format(
-                    key, self.get_xsl(), value))
+                    key, self.xsl, value))
             try:
                 self.margins[key] = self.set_margin(value)
             except ValueError as (e):
                 raise ConversionException('Invalid format in the variable {} '
                     'in the file:\n{}\n{}\n'
                     'Format should be [all|odd|even|pagenumber]=integer'.format(
-                    key, self.get_xsl(), value))
+                    key, self.xsl, value))
 
         #print >>sys.stderr, util.lineno(), margins
 
@@ -2354,7 +2355,7 @@ class XslMaker(object):
         return self.finalXsl
 
     def get_transformer(self):
-        xsltRoot = self.get_xsl()
+        xsltRoot = self.xsl
         try:
             transform = etree.XSLT(xsltRoot)
             return transform
