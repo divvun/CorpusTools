@@ -455,7 +455,6 @@ class SVGConverter(Converter):
     def __init__(self, filename, write_intermediate=False):
         super(SVGConverter, self).__init__(filename,
                                            write_intermediate)
-        self.converter_xsl = os.path.join(here, 'xslt/svg2corpus.xsl')
 
     def convert2intermediate(self):
         """
@@ -463,7 +462,7 @@ class SVGConverter(Converter):
         metadata
         The resulting xml is stored in intermediate
         """
-        svgXsltRoot = etree.parse(self.converter_xsl)
+        svgXsltRoot = etree.parse(os.path.join(here, 'xslt/svg2corpus.xsl'))
         transform = etree.XSLT(svgXsltRoot)
         doc = etree.parse(self.orig)
         intermediate = transform(doc)
