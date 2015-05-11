@@ -339,6 +339,3 @@ def main():
             ana.analyse_in_parallel()
     else:
         print >>sys.stderr, "Did not find any files in", args.converted_dirs
-
-if __name__ == u'__main__':
-    main()
