@@ -109,7 +109,7 @@ class TestConverter(unittest.TestCase):
 
     def test_get_converted_name_inside_orig(self):
         self.assertEqual(
-            self.converter_inside_orig.get_converted_name(),
+            self.converter_inside_orig.converted_name,
             os.path.join(
                 here,
                 'converter_data/fakecorpus/converted/nob/samediggi-'
@@ -117,14 +117,14 @@ class TestConverter(unittest.TestCase):
 
     def test_get_converted_name_outside_orig(self):
         self.assertEqual(
-            self.converter_outside_orig.get_converted_name(),
+            self.converter_outside_orig.converted_name,
             os.path.join(
                 here,
                 'converter_data/samediggi-article-48.html.xml'))
 
     def test_get_converted_inside_freecorpus(self):
         self.assertEqual(
-            self.converter_inside_freecorpus.get_converted_name(),
+            self.converter_inside_freecorpus.converted_name,
             os.path.join(
                 os.getenv('GTFREE'),
                 'converted/sme/admin/sd/samediggi.no/samediggi-'

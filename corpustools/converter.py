@@ -65,7 +65,6 @@ class Converter(object):
     def __init__(self, filename, write_intermediate=False):
         codecs.register_error('mixed', self.mixed_decoder)
         self.orig = os.path.abspath(filename)
-        self.set_converted_name()
         self.dependencies = [self.orig, self.get_xsl()]
         self._write_intermediate = write_intermediate
         try:
@@ -241,7 +240,7 @@ class Converter(object):
 
     def write_complete(self, languageguesser):
         if distutils.dep_util.newer_group(
-                self.dependencies, self.get_converted_name()):
+                self.dependencies, self.converted_name):
             self.makedirs()
 
             if (('goldstandard' in self.orig and '.correct.' in self.orig) or
@@ -254,7 +253,7 @@ class Converter(object):
                 text = xml_printer.process_file().getvalue()
 
                 if len(text) > 0:
-                    converted = open(self.get_converted_name(), 'w')
+                    converted = open(self.converted_name, 'w')
                     converted.write(etree.tostring(complete,
                                                    encoding='utf8',
                                                    pretty_print='True'))
@@ -266,7 +265,7 @@ class Converter(object):
         """Make the converted directory
         """
         try:
-            os.makedirs(os.path.dirname(self.get_converted_name()))
+            os.makedirs(os.path.dirname(self.converted_name))
         except OSError:
             pass
 
@@ -311,18 +310,16 @@ class Converter(object):
             if to_write:
                 self.md.write_file()
 
-    def set_converted_name(self):
+    @property
+    def converted_name(self):
         """Set the name of the converted file
         """
         orig_pos = self.orig.find('orig/')
         if orig_pos != -1:
-            self._convertedName = self.orig.replace(
+            return self.orig.replace(
                 '/orig/', '/converted/') + '.xml'
         else:
-            self._convertedName = self.orig + '.xml'
-
-    def get_converted_name(self):
-        return self._convertedName
+            return self.orig + '.xml'
 
     def extract_text(self, command):
         '''Extract the text from a document using command
