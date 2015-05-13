@@ -65,8 +65,7 @@ class Converter(object):
     def __init__(self, filename, write_intermediate=False):
         codecs.register_error('mixed', self.mixed_decoder)
         self.orig = os.path.abspath(filename)
-        self.dependencies = [self.orig, self.xsl]
-        self._write_intermediate = write_intermediate
+        self.write_intermediate = write_intermediate
         try:
             self.md = xslsetter.MetadataHandler(self.xsl, create=True)
         except xslsetter.XsltException as e:
@@ -76,6 +75,9 @@ class Converter(object):
         if not os.path.exists(self.tmpdir):
             os.mkdir(self.tmpdir)
 
+    @property
+    def dependencies(self):
+        return [self.orig, self.xsl]
 
     @property
     def logfile(self):
@@ -89,6 +91,14 @@ class Converter(object):
     @orig.setter
     def orig(self, orig):
         self.__orig = orig
+
+    @property
+    def write_intermediate(self):
+        return self.__write_intermediate
+
+    @write_intermediate.setter
+    def write_intermediate(self, write_intermediate):
+        self.__write_intermediate = write_intermediate
 
     def convert2intermediate(self):
         raise NotImplementedError(
@@ -119,7 +129,7 @@ class Converter(object):
                 '{}'.format(type(self).__name__, self.logfile))
 
     def maybe_write_intermediate(self, intermediate):
-        if not self._write_intermediate:
+        if not self.write_intermediate:
             return
         im_name = self.orig + '.im.xml'
         with open(im_name, 'w') as im_file:
@@ -136,7 +146,7 @@ class Converter(object):
 
         try:
             xm = XslMaker(self.xsl)
-            complete = xm.get_transformer()(intermediate)
+            complete = xm.transformer(intermediate)
 
             return complete.getroot()
         except etree.XSLTApplyError as e:
@@ -2326,7 +2336,7 @@ class XslMaker(object):
 
     @property
     def logfile(self):
-        self.filename + '.log'
+        return self.filename + '.log'
 
     @property
     def xsl(self):
@@ -2353,12 +2363,10 @@ class XslMaker(object):
             filexsl,
             commonxsl=etree.XSLT.strparam('file://{}'.format(common_xsl_path)))
 
-
-    def get_transformer(self):
-        xsltRoot = self.xsl
+    @property
+    def transformer(self):
         try:
-            transform = etree.XSLT(xsltRoot)
-            return transform
+            return  etree.XSLT(self.xsl)
         except etree.XSLTParseError as (e):
             with open(self.logfile, 'w') as logfile:
                 logfile.write('Error at: {}\n'.format(str(util.lineno())))
@@ -2464,15 +2472,22 @@ class ConverterManager(object):
     FILES = []
 
     def __init__(self, write_intermediate):
-        self._write_intermediate = write_intermediate
+        self.write_intermediate = write_intermediate
+
+    @property
+    def write_intermediate(self):
+        return self.__write_intermediate
+
+    @write_intermediate.setter
+    def write_intermediate(self, write_intermediate):
+        self.__write_intermediate = write_intermediate
 
     def convert(self, xsl_file):
         orig_file = xsl_file[:-4]
         if os.path.exists(orig_file) and not orig_file.endswith('.xsl'):
 
             try:
-                conv = self.converter(
-                    orig_file)
+                conv = self.converter(orig_file)
                 conv.write_complete(self.LANGUAGEGUESSER)
             except ConversionException as e:
                 print >>sys.stderr, 'Could not convert {}'.format(orig_file)
@@ -2483,39 +2498,39 @@ class ConverterManager(object):
     def converter(self, orig_file):
         if 'avvir_xml' in orig_file:
             return AvvirConverter(
-                orig_file, write_intermediate=self._write_intermediate)
+                orig_file, write_intermediate=self.write_intermediate)
 
         elif orig_file.endswith('.txt'):
             return PlaintextConverter(
-                orig_file, write_intermediate=self._write_intermediate)
+                orig_file, write_intermediate=self.write_intermediate)
 
         elif orig_file.endswith('.pdf'):
             return PDF2XMLConverter(
-                orig_file, write_intermediate=self._write_intermediate)
+                orig_file, write_intermediate=self.write_intermediate)
 
         elif orig_file.endswith('.svg'):
             return SVGConverter(
-                orig_file, write_intermediate=self._write_intermediate)
+                orig_file, write_intermediate=self.write_intermediate)
 
         elif '.htm' in orig_file or '.php' in orig_file:
             return HTMLConverter(
-                orig_file, write_intermediate=self._write_intermediate)
+                orig_file, write_intermediate=self.write_intermediate)
 
         elif orig_file.endswith('.doc') or orig_file.endswith('.DOC'):
             return DocConverter(
-                orig_file, write_intermediate=self._write_intermediate)
+                orig_file, write_intermediate=self.write_intermediate)
 
         elif orig_file.endswith('.docx'):
             return DocxConverter(
-                orig_file, write_intermediate=self._write_intermediate)
+                orig_file, write_intermediate=self.write_intermediate)
 
         elif '.rtf' in orig_file:
             return RTFConverter(
-                orig_file, write_intermediate=self._write_intermediate)
+                orig_file, write_intermediate=self.write_intermediate)
 
         elif orig_file.endswith('.bible.xml'):
             return BiblexmlConverter(
-                orig_file, write_intermediate=self._write_intermediate)
+                orig_file, write_intermediate=self.write_intermediate)
 
         else:
             raise ConversionException(
