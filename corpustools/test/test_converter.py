@@ -756,8 +756,7 @@ class TestHTMLContentConverter(XMLTester):
         self.assertEqual(got, ('windows-1252', 'content'))
 
     def test_set_charset_10(self):
-        '''Test uppercase META, too
-        '''
+        '''Test uppercase iso-8859-15'''
         content = (
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'
             '<html>'
@@ -771,7 +770,7 @@ class TestHTMLContentConverter(XMLTester):
 
         got = hcc.get_encoding(content)
 
-        self.assertEqual(got, ('windows-1252', 'content'))
+        self.assertEqual(got, ('iso-8859-15', 'content'))
 
     def test_center2div(self):
         got = converter.HTMLContentConverter(
@@ -3460,7 +3459,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.md.set_variable('left_margin', 'all=7')
         p2x.md.set_variable('top_margin', 'all=7')
         p2x.md.set_variable('bottom_margin', 'all=7')
-        p2x.set_margins()
+        p2x.parse_margin_lines()
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
@@ -3487,7 +3486,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.md.set_variable('left_margin', 'all=7')
         p2x.md.set_variable('top_margin', 'all=7')
         p2x.md.set_variable('bottom_margin', 'all=7')
-        p2x.set_margins()
+        p2x.parse_margin_lines()
         p2x.skip_pages = [1]
         p2x.parse_pages(pdf2xml)
 
@@ -3566,73 +3565,73 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
-        self.assertEqual(p2x.set_margin('odd=230, even = 540 , 8 = 340'),
+        self.assertEqual(p2x.parse_margin_line('odd=230, even = 540 , 8 = 340'),
                          {'odd': 230, 'even': 540, '8': 340})
 
-    def test_set_margins1(self):
-        '''Test set_margins
+    def test_parse_margin_lines1(self):
+        '''Test parse_margin_lines
         '''
         p2x = converter.PDF2XMLConverter('bogus.pdf')
         p2x.md.set_variable('right_margin', 'odd=4,even=8,3=6')
         p2x.md.set_variable('left_margin', '7=7')
         p2x.md.set_variable('top_margin', '8=8')
         p2x.md.set_variable('bottom_margin', '9=2')
-        p2x.set_margins()
+        p2x.parse_margin_lines()
         self.assertEqual(p2x.margins, {
             'right_margin': {'odd': 4, 'even': 8, '3': 6},
             'left_margin': {'7': 7},
             'top_margin': {'8': 8},
             'bottom_margin': {'9': 2}})
 
-    def test_set_margins2(self):
+    def test_parse_margin_lines2(self):
         '''all and even in margin line should raise ConversionException
         '''
         p2x = converter.PDF2XMLConverter('bogus.pdf')
         p2x.md.set_variable('right_margin', 'all=40,even=80')
 
-        self.assertRaises(converter.ConversionException, p2x.set_margins)
+        self.assertRaises(converter.ConversionException, p2x.parse_margin_lines)
 
-    def test_set_margins3(self):
+    def test_parse_margin_lines3(self):
         '''all and odd in margin line should raise ConversionException
         '''
         p2x = converter.PDF2XMLConverter('bogus.pdf')
         p2x.md.set_variable('right_margin', 'all=40,odd=80')
 
-        self.assertRaises(converter.ConversionException, p2x.set_margins)
+        self.assertRaises(converter.ConversionException, p2x.parse_margin_lines)
 
-    def test_set_margins4(self):
+    def test_parse_margin_lines4(self):
         '''text after = should raise ConversionException
         '''
         p2x = converter.PDF2XMLConverter('bogus.pdf')
         p2x.md.set_variable('right_margin', 'all=tullball')
 
-        self.assertRaises(converter.ConversionException, p2x.set_margins)
+        self.assertRaises(converter.ConversionException, p2x.parse_margin_lines)
 
-    def test_set_margins5(self):
+    def test_parse_margin_lines5(self):
         '''no = should raise ConversionException
         '''
         p2x = converter.PDF2XMLConverter('bogus.pdf')
         p2x.md.set_variable('right_margin', 'all 50')
 
-        self.assertRaises(converter.ConversionException, p2x.set_margins)
+        self.assertRaises(converter.ConversionException, p2x.parse_margin_lines)
 
-    def test_set_margins6(self):
+    def test_parse_margin_lines6(self):
         '''line with no comma between values should raise ConversionException
         '''
         p2x = converter.PDF2XMLConverter('bogus.pdf')
         p2x.md.set_variable('right_margin', 'all=50 3')
 
-        self.assertRaises(converter.ConversionException, p2x.set_margins)
+        self.assertRaises(converter.ConversionException, p2x.parse_margin_lines)
 
     def test_compute_margins1(self):
-        '''Test set_margins
+        '''Test parse_margin_lines
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.md.set_variable('right_margin', 'odd=10,even=15,3=5')
         p2x.md.set_variable('left_margin', '7=5')
         p2x.md.set_variable('top_margin', '8=8')
         p2x.md.set_variable('bottom_margin', '9=20')
-        p2x.set_margins()
+        p2x.parse_margin_lines()
 
         page1 = etree.fromstring(
             '<page number="1" height="1263" width="862"/>')

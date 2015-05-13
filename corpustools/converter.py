@@ -20,16 +20,16 @@
 #   Copyright 2012-2014 Børre Gaup <borre.gaup@uit.no>
 #
 
-import os
-import sys
-import re
-import io
+import argparse
+import codecs
 from copy import deepcopy
 import distutils.dep_util
 import distutils.spawn
-import codecs
+import io
 import multiprocessing
-import argparse
+import os
+import re
+import sys
 
 from lxml import etree
 from lxml.html import clean
@@ -42,11 +42,11 @@ except ImportError:
     from pydocx.parsers import Docx2Html
 
 
-import decode
-import text_cat
-import errormarkup
-import ccat
 import argparse_version
+import ccat
+import decode
+import errormarkup
+import text_cat
 import util
 import xslsetter
 
@@ -59,9 +59,7 @@ class ConversionException(Exception):
 
 
 class Converter(object):
-    """
-    Class to take care of data common to all Converter classes
-    """
+    '''Take care of data common to all Converter classes'''
     def __init__(self, filename, write_intermediate=False):
         codecs.register_error('mixed', self.mixed_decoder)
         self.orig = os.path.abspath(filename)
@@ -86,6 +84,7 @@ class Converter(object):
 
     @property
     def orig(self):
+
         return self.__orig
 
     @orig.setter
@@ -109,8 +108,7 @@ class Converter(object):
         return os.path.join(here, 'dtd/corpus.dtd')
 
     def validate_complete(self, complete):
-        """Validate the complete document
-        """
+        '''Validate the complete document'''
         dtd = etree.DTD(Converter.get_dtd_location())
 
         if not dtd.validate(complete):
@@ -121,8 +119,8 @@ class Converter(object):
                     logfile.write(str(entry))
                     logfile.write('\n')
                 logfile.write(etree.tostring(complete,
-                                            encoding='utf8',
-                                            pretty_print=True))
+                                             encoding='utf8',
+                                             pretty_print=True))
 
             raise ConversionException(
                 '{}: Not valid XML. More info in the log file: '
@@ -138,8 +136,7 @@ class Converter(object):
                                          pretty_print='True'))
 
     def transform_to_complete(self):
-        '''Combine the intermediate xml document with its medatata.
-        '''
+        '''Combine the intermediate xml document with its medatata.'''
         intermediate = self.convert2intermediate()
 
         self.maybe_write_intermediate(intermediate)
@@ -175,8 +172,8 @@ class Converter(object):
                     logfile.write("\n\n")
                     logfile.write("This is the xml tree:\n")
                     logfile.write(etree.tostring(complete,
-                                                encoding='utf8',
-                                                pretty_print=True))
+                                                 encoding='utf8',
+                                                 pretty_print=True))
                     logfile.write('\n')
 
                 raise ConversionException(
@@ -218,11 +215,15 @@ class Converter(object):
         return repl, (decode_error.start + len(repl))
 
     def replace_bad_unicode(self, content):
-        """These are e.g. 'valid utf-8' (don't give UnicodeDecodeErrors), but
+        '''Replace some chars in an otherwise 'valid utf-8' document.
+
+        These chars e.g. 'valid utf-8' (don't give UnicodeDecodeErrors), but
         we still want to replace them to what they most likely were
         meant to be.
 
-        """
+        :param content: a unicode string
+        :returns: a cleaned up unicode string
+        '''
         assert(type(content) == unicode)
         # u'š'.encode('windows-1252') gives '\x9a', which sometimes
         # appears in otherwise utf-8-encoded documents with the
@@ -234,11 +235,11 @@ class Converter(object):
         return util.replace_all(replacements, content)
 
     def make_complete(self, languageGuesser):
-        """Combine the intermediate giellatekno xml file and the metadata into
+        '''Combine the intermediate giellatekno xml file and the metadata into
         a complete giellatekno xml file.
         Fix the character encoding
         Detect the languages in the xml file
-        """
+        '''
         complete = self.transform_to_complete()
         self.validate_complete(complete)
         self.convert_errormarkup(complete)
@@ -265,14 +266,13 @@ class Converter(object):
                 if len(text) > 0:
                     with open(self.converted_name, 'w') as converted:
                         converted.write(etree.tostring(complete,
-                                                    encoding='utf8',
-                                                    pretty_print='True'))
+                                                       encoding='utf8',
+                                                       pretty_print='True'))
                 else:
                     print >>sys.stderr, self.orig, "has no text"
 
     def makedirs(self):
-        """Make the converted directory
-        """
+        '''Make the converted directory.'''
         try:
             os.makedirs(os.path.dirname(self.converted_name))
         except OSError:
@@ -298,8 +298,7 @@ class Converter(object):
             return os.path.dirname(self.orig)
 
     def fix_lang_genre_xsl(self):
-        """Set the mainlang and genre variables in the xsl file, if possible
-        """
+        '''Set the mainlang and genre variables in the xsl file, if possible'''
         origname = self.orig.replace(self.corpusdir, '')
         if origname.startswith('/orig'):
             to_write = False
@@ -323,8 +322,7 @@ class Converter(object):
 
     @property
     def converted_name(self):
-        """Set the name of the converted file
-        """
+        '''Get the name of the converted file'''
         orig_pos = self.orig.find('orig/')
         if orig_pos != -1:
             return self.orig.replace(
@@ -333,9 +331,11 @@ class Converter(object):
             return self.orig + '.xml'
 
     def extract_text(self, command):
-        '''Extract the text from a document using command
+        '''Extract the text from a document.
 
-        Return a utf-8 encoded string containing the content of the document
+        :command: a list containing the command and the arguments sent to
+        ExternalCommandRunner.
+        :returns: a utf-8 encoded string containing the content of the document
         '''
         runner = util.ExternalCommandRunner()
         runner.run(command, cwd=self.tmpdir)
@@ -370,20 +370,14 @@ class Converter(object):
 
 
 class AvvirConverter(Converter):
-    """
-    Class to convert Ávvir xml files to the giellatekno xml format
-    """
+    '''Convert Ávvir xml files to the giellatekno xml format.'''
 
     def __init__(self, filename, write_intermediate=False):
         super(AvvirConverter, self).__init__(filename,
                                              write_intermediate)
 
     def convert2intermediate(self):
-        """
-        Convert the original document to the giellatekno xml format, with no
-        metadata
-        The resulting xml is stored in intermediate
-        """
+        '''Convert an Ávvir xml to an intermediate xml document.'''
         self.intermediate = etree.fromstring(open(self.orig).read())
         self.convert_p()
         self.convert_story()
@@ -458,20 +452,14 @@ class AvvirConverter(Converter):
 
 
 class SVGConverter(Converter):
-    """
-    Class to convert SVG files to the giellatekno xml format
-    """
+    '''Convert SVG files to the giellatekno xml format.'''
 
     def __init__(self, filename, write_intermediate=False):
         super(SVGConverter, self).__init__(filename,
                                            write_intermediate)
 
     def convert2intermediate(self):
-        """
-        Convert the original document to the giellatekno xml format, with no
-        metadata
-        The resulting xml is stored in intermediate
-        """
+        '''Transform svg to an intermediate xml document'''
         svgXsltRoot = etree.parse(os.path.join(here, 'xslt/svg2corpus.xsl'))
         transform = etree.XSLT(svgXsltRoot)
         doc = etree.parse(self.orig)
@@ -481,27 +469,24 @@ class SVGConverter(Converter):
 
 
 class PlaintextConverter(Converter):
-    """
-    A class to convert plain text files containing "news" tags to the
-    giellatekno xml format
-    """
+    '''Convert plain text files to the giellatekno xml format.'''
 
     def __init__(self, filename, write_intermediate=False):
         super(PlaintextConverter, self).__init__(filename,
                                                  write_intermediate)
 
     def to_unicode(self):
-        """
-        Read a file into a unicode string.
+        '''Read a file into a unicode string.
+
         If the content of the file is not utf-8, pretend the encoding is
         latin1. The real encoding (for sma, sme and smj) will be detected
         later.
 
-        Return a unicode string
-        """
+        :returns: a unicode string
+        '''
         try:
             content = codecs.open(self.orig, encoding='utf8').read()
-        except:
+        except ValueError:
             content = codecs.open(self.orig, encoding='latin1').read()
 
         content = self.strip_chars(content)
@@ -542,21 +527,14 @@ class PlaintextConverter(Converter):
         return content
 
     def make_element(self, eName, text):
-        """
-        @brief Makes an xml element containing the given name, text and
-        attributes. Adds a hyph element if necessary.
+        '''Makes an xml element.
 
         :param eName: Name of the xml element
-        :type eName: string
-
         :param text: The text the xml should contain
-        :type text: string
-
         :param attributes: The attributes the element should have
-        :type attributes: dict
 
         :returns: lxml.etree.Element
-        """
+        '''
         el = etree.Element(eName)
 
         hyph_parts = text.split('<hyph/>')
@@ -599,25 +577,23 @@ class PlaintextConverter(Converter):
 
 
 class PDF2XMLConverter(Converter):
-    '''Class to convert pdf2xml
-    '''
+    '''Class to convert the xml output of pdftohtml to giellatekno xml'''
     LIST_CHARS = [u'•']
-    margins = {}
 
     def __init__(self, filename, write_intermediate=False):
         super(PDF2XMLConverter, self).__init__(filename,
                                                write_intermediate)
         self.body = etree.Element('body')
+        self.margins = {}
         self.in_list = False
         self.parts = []
         self.skip_pages = self.set_skip_pages(self.md.get_variable(
             'skip_pages'))
-        self.set_margins()
+        self.parse_margin_lines()
         self.prev_t = None
 
     def set_skip_pages(self, skip_pages):
-        '''Turn a skip_pages entry into a list of pages
-        '''
+        '''Turn a skip_pages entry into a list of pages.'''
         pages = []
         if skip_pages is not None:
             # Turn single pages into single-page ranges, e.g. 7 → 7-7
@@ -632,7 +608,7 @@ class PDF2XMLConverter(Converter):
                 for start, end in sorted(skip_ranges):
                     for page in range(start, end + 1):
                         pages.append(page)
-            except ValueError as e:
+            except ValueError:
                 raise ConversionException(
                     "Invalid format in skip_pages: {}".format(skip_pages))
 
@@ -650,9 +626,7 @@ class PDF2XMLConverter(Converter):
         return content
 
     def replace_ligatures(self, content):
-        """
-        document is a stringified xml document
-        """
+        '''document is a stringified xml document'''
         replacements = {
             "[dstrok]": "đ",
             "[Dstrok]": "Đ",
@@ -702,47 +676,45 @@ class PDF2XMLConverter(Converter):
         return document
 
     def get_margin_lines(self):
-        '''Get the margin lines from the metadata file
-        '''
+        '''Get the margin lines from the metadata file.'''
         margin_lines = {}
 
-        for key in ['right_margin', 'top_margin', 'left_margin', 'bottom_margin']:
+        for key in ['right_margin', 'top_margin', 'left_margin',
+                    'bottom_margin']:
             if (self.md.get_variable(key) is not None and
                     self.md.get_variable(key).strip() != ''):
                 margin_lines[key] = self.md.get_variable(key).strip()
 
         return margin_lines
 
-    def set_margins(self):
-        '''margins_lines is fetched from the metadata file belonging to
-        the original file, if available. Before it is passed here, the
-        validity of them are checked.
-        '''
+    def parse_margin_lines(self):
+        '''Parse margin lines fetched from the .xsl file.'''
         margin_lines = self.get_margin_lines()
-        #print >>sys.stderr, util.lineno(), margin_lines
+        # print >>sys.stderr, util.lineno(), margin_lines
         for key, value in margin_lines.items():
             if ('all' in value and ('odd' in value or 'even' in value) or
-                '=' not in value):
-                raise ConversionException('Invalid format in the variable {} '
-                    'in the file:\n{}\n{}\n'
-                    'Format should be [all|odd|even|pagenumber]=integer'.format(
-                    key, self.xsl, value))
+                    '=' not in value):
+                raise ConversionException(
+                    'Invalid format in the variable {} in the file:\n{}\n{}\n'
+                    'Format must be [all|odd|even|pagenumber]=integer'.format(
+                        key, self.xsl, value))
             try:
-                self.margins[key] = self.set_margin(value)
-            except ValueError as (e):
-                raise ConversionException('Invalid format in the variable {} '
-                    'in the file:\n{}\n{}\n'
-                    'Format should be [all|odd|even|pagenumber]=integer'.format(
-                    key, self.xsl, value))
+                self.margins[key] = self.parse_margin_line(value)
+            except ValueError:
+                raise ConversionException(
+                    'Invalid format in the variable {} in the file:\n{}\n{}\n'
+                    'Format must be [all|odd|even|pagenumber]=integer'.format(
+                        key, self.xsl, value))
 
-        #print >>sys.stderr, util.lineno(), margins
+        # print >>sys.stderr, util.lineno(), margins
 
-    def set_margin(self, value):
-        '''Set the margins for given margin
+    def parse_margin_line(self, value):
+        '''Parse a margin line read from the .xsl file.
 
-        If the value following the = sign is not an integer a ValueError is
-        raised.
-        That exception is caught by set_margins
+        :param value: a string containing the margin settings for a particular
+        margin (right_margin, left_margin, top_margin, bottom_margin)
+
+        :returns: a dict containing the margins for pages in percent
         '''
         m = {}
         for part in value.split(','):
@@ -752,14 +724,19 @@ class PDF2XMLConverter(Converter):
         return m
 
     def compute_margins(self, page):
-        '''page is a page element
+        '''Compute the margins of a page in pixels.
+
+        :param page: a pdf2xml page element
+
+        :returns: a dict containing the four margins in pixels
         '''
         margins = {}
         page_number = page.get('number')
         page_width = int(page.get('width'))
         page_height = int(page.get('height'))
 
-        for margin in ['right_margin', 'left_margin', 'top_margin', 'bottom_margin']:
+        for margin in ['right_margin', 'left_margin', 'top_margin',
+                       'bottom_margin']:
             coefficient = 7
             if margin in self.margins.keys():
                 m = self.margins[margin]
@@ -778,10 +755,16 @@ class PDF2XMLConverter(Converter):
         return margins
 
     def compute_margin(self, margin, page_height, page_width, coefficient):
-        '''Compute the margins if they are not explicitely set
+        '''Compute a margin in pixels.
 
+        :param margin: name of the margin
+        :param page_height: height of the page
+        :param page_width: width of the page
+        :param coefficient: width of the margin in percent
+
+        :return: an int telling where the margin is on the page.
         '''
-        #print util.lineno(), margin, page_height, page_width, coefficient
+        # print util.lineno(), margin, page_height, page_width, coefficient
         if margin == 'right_margin':
             return int(coefficient * page_width / 100)
         if margin == 'left_margin':
@@ -810,19 +793,19 @@ class PDF2XMLConverter(Converter):
         elements become the text parts of <i> and <b> elements.
         '''
 
-        #print util.lineno(), etree.tostring(textelement)
+        # print util.lineno(), etree.tostring(textelement)
         if (textelement is not None and int(textelement.get('width')) > 0):
             if textelement.text is not None:
                 # NOTE: Search for both hyphen and soft hyphen
                 found_hyph = re.search('\w[-­]$', textelement.text,
                                        re.UNICODE)
                 if len(self.parts) > 0:
-                    #print util.lineno(), textelement.text
+                    # print util.lineno(), textelement.text
                     if isinstance(self.parts[-1], etree._Element):
-                        #print util.lineno(), textelement.text
+                        # print util.lineno(), textelement.text
                         if self.parts[-1].tail is not None:
                             if found_hyph:
-                                #print util.lineno(), textelement.text
+                                # print util.lineno(), textelement.text
                                 self.parts[-1].tail += u' {}'.format(
                                     textelement.text[:-1])
                                 self.parts.append(etree.Element('hyph'))
@@ -831,32 +814,32 @@ class PDF2XMLConverter(Converter):
                                     textelement.text)
                         else:
                             if found_hyph:
-                                #print util.lineno(), textelement.text
+                                # print util.lineno(), textelement.text
                                 self.parts[-1].tail = u'{}'.format(
                                     textelement.text[:-1])
                                 self.parts.append(etree.Element('hyph'))
                             else:
-                                #print util.lineno(), textelement.text
+                                # print util.lineno(), textelement.text
                                 self.parts[-1].tail = textelement.text
                     else:
-                        #print util.lineno(), textelement.text
+                        # print util.lineno(), textelement.text
                         if found_hyph:
-                            #print util.lineno(), textelement.text
+                            # print util.lineno(), textelement.text
                             self.parts[-1] += u' {}'.format(
                                 unicode(textelement.text[:-1]))
                             self.parts.append(etree.Element('hyph'))
                         else:
-                            #print util.lineno(), textelement.text
+                            # print util.lineno(), textelement.text
                             self.parts[-1] += u' {}'.format(
                                 unicode(textelement.text))
                 else:
-                    #print util.lineno(), textelement.text
+                    # print util.lineno(), textelement.text
                     if found_hyph:
-                        #print util.lineno(), textelement.text
+                        # print util.lineno(), textelement.text
                         self.parts.append(textelement.text[:-1])
                         self.parts.append(etree.Element('hyph'))
                     else:
-                        #print util.lineno(), textelement.text
+                        # print util.lineno(), textelement.text
                         self.parts.append(textelement.text)
 
             for child in textelement:
@@ -893,7 +876,7 @@ class PDF2XMLConverter(Converter):
                 em.tail = child.tail
 
                 self.parts.append(em)
-        #print util.lineno(), self.parts
+        # print util.lineno(), self.parts
 
     def is_text_in_same_paragraph(self, text):
         h1 = float(self.prev_t.get('height'))
@@ -905,47 +888,48 @@ class PDF2XMLConverter(Converter):
         return h1 == h2 and delta < ratio * h1 and delta > 0
 
     def is_same_paragraph(self, text):
-        '''Define the incoming text elements text1 and text to belong to
+        '''Find out if text belongs in the same paragraph as self.prev_t.
+
+        Define the incoming text elements text1 and self.prev_t to belong to
         the same paragraph if they have the same height and if the difference
         between the top attributes is less than ratio times the height of
         the text elements.
         '''
-        result = False
+        same_paragraph = False
 
         h1 = float(self.prev_t.get('height'))
         h2 = float(text.get('height'))
         t1 = int(self.prev_t.get('top'))
         t2 = int(text.get('top'))
-        #print util.lineno(), h1, h2, t1, t2, h1 == h2, t1 > t2
-        #f1 = self.prev_t.get('font')
-        #f2 = text.get('font')
+        # print util.lineno(), h1, h2, t1, t2, h1 == h2, t1 > t2
         real_text = etree.tostring(text, method='text', encoding='unicode')
 
         if self.is_text_in_same_paragraph(text):
             if (real_text[0] in self.LIST_CHARS):
                 self.in_list = True
-                #print util.lineno(), text.text
+                # print util.lineno(), text.text
             elif (re.match('\s', real_text[0]) is None and
                   real_text[0] == real_text[0].upper() and self.in_list):
                 self.in_list = False
-                result = False
-                #print util.lineno(), text.text
+                same_paragraph = False
+                # print util.lineno(), text.text
             elif (real_text[0] not in self.LIST_CHARS):
-                #print util.lineno()
-                result = True
+                # print util.lineno()
+                same_paragraph = True
         elif (h1 == h2 and t1 >= t2 and not re.match('\d', real_text[0]) and
               real_text[0] == real_text[0].lower()):
-            #print util.lineno()
-            result = True
+            # print util.lineno()
+            same_paragraph = True
         else:
-            #print util.lineno()
+            # print util.lineno()
             self.in_list = False
 
-        return result
+        return same_paragraph
 
     def find_footnotes_superscript(self, page):
         '''Search for text elements containing potential footnotes.
-        Add them to a list of potential list of footnotes.
+
+        :return superscripts: a list of potential footnotes.
         '''
         margins = self.compute_margins(page)
         superscripts = []
@@ -960,9 +944,7 @@ class PDF2XMLConverter(Converter):
         return superscripts
 
     def remove_footnotes_superscript(self, page):
-        '''If the text element found is a footnote superscript,
-        remove that element.
-        '''
+        '''Remove elements deemed to be footnote superscript.'''
         for superscript in self.find_footnotes_superscript(page):
             previous_element = superscript.getprevious()
             if (previous_element is not None and
@@ -972,8 +954,7 @@ class PDF2XMLConverter(Converter):
                 superscript.getparent().remove(superscript)
 
     def parse_page(self, page):
-        '''Parse a page element
-        '''
+        '''Parse the page element.'''
         margins = self.compute_margins(page)
 
         self.remove_footnotes_superscript(page)
@@ -981,13 +962,15 @@ class PDF2XMLConverter(Converter):
             if self.is_inside_margins(t, margins):
                 if self.prev_t is not None:
                     if not self.is_same_paragraph(t):
-                        #print util.lineno(), etree.tostring(self.prev_t, encoding='utf8'), etree.tostring(t, encoding='utf8')
+                        # print util.lineno(), \
+                        # etree.tostring(self.prev_t, encoding='utf8'), \
+                        # etree.tostring(t, encoding='utf8')
                         if len(self.parts) > 0:
                             self.append_to_body(self.make_paragraph())
                 if len(t) > 0 or t.text is not None:
                     self.extract_textelement(t)
                     self.prev_t = t
-                    #print util.lineno(), self.parts
+                    # print util.lineno(), self.parts
 
     def is_inside_margins(self, t, margins):
         '''Check if t is inside the given margins
@@ -1008,13 +991,13 @@ class PDF2XMLConverter(Converter):
             self.append_to_body(self.make_paragraph())
 
     def make_paragraph(self):
-        '''parts is a list of strings and etree.Elements that belong to the
-        same paragraph
+        '''Convert self.parts to a p element
 
-        The parts list is converted to a p element.
+        parts is a list of strings and etree.Elements that belong to the
+        same paragraph
         '''
         p = etree.Element('p')
-        #print util.lineno(), self.parts[0], self.parts, type(self.parts[0])
+        # print util.lineno(), self.parts[0], self.parts, type(self.parts[0])
         if (isinstance(self.parts[0], str) or
                 isinstance(self.parts[0], unicode)):
             p.text = self.parts[0]
@@ -1042,30 +1025,25 @@ class PDF2XMLConverter(Converter):
         if p.text is not None and p.text[0] in self.LIST_CHARS:
             p.set('type', 'listitem')
             p.text = p.text[1:]
-        #print util.lineno(), self.parts[0], self.parts, type(self.parts[0])
+        # print util.lineno(), self.parts[0], self.parts, type(self.parts[0])
 
         return p
 
 
 class BiblexmlConverter(Converter):
-    """
-    Class to convert bible xml files to the giellatekno xml format
-    """
+    '''Convert bible xml files to the giellatekno xml format'''
     def __init__(self, filename, write_intermediate=False):
         super(BiblexmlConverter, self).__init__(filename,
                                                 write_intermediate)
 
     def convert2intermediate(self):
-        """
-        Convert the bible xml to giellatekno xml format using bible2xml.pl
-        """
+        '''Convert the bible xml to intermediate giellatekno xml format'''
         document = etree.Element('document')
         document.append(self.process_bible())
 
         return document
 
-    @staticmethod
-    def process_verse(verse_element):
+    def process_verse(self, verse_element):
         if verse_element.tag != 'verse':
             raise UserWarning(
                 '{}: Unexpected element in verse: {}'.format(
@@ -1180,15 +1158,10 @@ class BiblexmlConverter(Converter):
 
 
 class HTMLContentConverter(Converter):
-    """
-    Class to convert html documents to the giellatekno xml format
-
-    content is a string
-    """
+    '''Convert html documents to the giellatekno xml format.'''
 
     def __init__(self, filename, write_intermediate=False, content=None):
-        '''Clean up content, then convert it to xhtml using html5parser
-        '''
+        '''Clean up content, then convert it to xhtml using html5parser'''
         super(HTMLContentConverter, self).__init__(filename,
                                                    write_intermediate)
 
@@ -1231,7 +1204,7 @@ class HTMLContentConverter(Converter):
         self.converter_xsl = os.path.join(here, 'xslt/xhtml2corpus.xsl')
 
     def remove_cruft(self, content):
-        # from svenskakyrkan.se documents
+        '''from svenskakyrkan.se documents'''
         replacements = [
             (u'//<script', u'<script'),
             (u'&nbsp;', u' '),
@@ -1278,28 +1251,26 @@ class HTMLContentConverter(Converter):
         r"<meta [^>]*[\"; ]charset=[\"']?([^\"' ]+)", re.IGNORECASE)
 
     def get_encoding_from_content(self, content):
-        '''content is a utf-8 encoded byte string
-        return a string contaning the encoding
+        '''Extract encoding from html header.
+
+        :param content: a utf-8 encoded byte string
+        :return: a string containing the encoding
         '''
         # <?xml version="1.0" encoding="ISO-8859-1"?>
         # <meta charset="utf-8">
         # <meta http-equiv="Content-Type" content="charset=utf-8" />
         # <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         # <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-        m = (re.search(self.xml_encoding_declaration_re, content)
-                or
-                re.search(self.html_meta_charset_re, content))
+        m = (re.search(self.xml_encoding_declaration_re, content) or
+             re.search(self.html_meta_charset_re, content))
         if m is not None:
             return m.group(1).lower()
 
     def get_normalized_encoding(self, encoding, source):
-        '''If the encoding is said to be one of the keys in encoding_norm,
-        they shold be interpreted as windows-1252
-        '''
-        if encoding != 'utf-8':
+        '''Interpret some 8-bit encodings as windows-1252.'''
+        if encoding not in ['iso-8859-15', 'utf-8']:
             encoding_norm = {
                 'iso-8859-1': 'windows-1252',
-                'iso-8859-15': 'windows-1252',
                 'ascii': 'windows-1252',
                 'windows-1252': 'windows-1252',
             }
@@ -1330,18 +1301,19 @@ class HTMLContentConverter(Converter):
         return encoding, source
 
     def remove_declared_encoding(self, content):
-        """lxml explodes if we send a decoded Unicode string with an
+        '''
+        lxml explodes if we send a decoded Unicode string with an
         xml-declared encoding
         http://lxml.de/parsing.html#python-unicode-strings
-
-        """
+        '''
         return re.sub(self.xml_encoding_declaration_re, "", content)
 
     def simplify_tags(self):
-        """We don't care about the difference between <fieldsets>, <legend>
-        etc. – treat them all as <div>'s for xhtml2corpus
+        '''Turn tags to divs.
 
-        """
+        We don't care about the difference between <fieldsets>, <legend>
+        etc. – treat them all as <div>'s for xhtml2corpus
+        '''
         superfluously_named_tags = self.soup.xpath(
             "//html:fieldset | //html:legend | //html:article | //html:hgroup "
             "| //html:section | //html:dl | //html:dd | //html:dt"
@@ -1351,11 +1323,12 @@ class HTMLContentConverter(Converter):
             elt.tag = '{http://www.w3.org/1999/xhtml}div'
 
     def fix_spans_as_divs(self):
-        """XHTML doesn't allow (and xhtml2corpus doesn't handle) span-like
+        '''Turn div like elements into div.
+
+        XHTML doesn't allow (and xhtml2corpus doesn't handle) span-like
         elements with div-like elements inside them; fix this and
         similar issues by turning them into divs.
-
-        """
+        '''
         spans_as_divs = self.soup.xpath(
             "//*[( descendant::html:div or descendant::html:p"
             "      or descendant::html:h1 or descendant::html:h2"
@@ -1393,9 +1366,7 @@ class HTMLContentConverter(Converter):
                 elt.getparent().remove(elt)
 
     def remove_empty_class(self):
-        """Some documents have empty class attributes.
-        Delete these attributes.
-        """
+        '''Delete empty class attributes.'''
         for element in self.soup.xpath('.//*[@class=""]'):
             del element.attrib['class']
 
@@ -1574,8 +1545,7 @@ class HTMLContentConverter(Converter):
                         unwanted.getparent().remove(unwanted)
 
     def add_p_around_text(self):
-        '''Add p around text after an hX element
-        '''
+        '''Add p around text after an hX element'''
         for h in self.soup.xpath(
                 './/html:body/*',
                 namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
@@ -1605,8 +1575,7 @@ class HTMLContentConverter(Converter):
             elt.text = ' '
 
     def center2div(self):
-        '''Convert center to div in tidy style
-        '''
+        '''Convert center to div in tidy style.'''
         for center in self.soup.xpath(
                 './/html:center',
                 namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
@@ -1614,9 +1583,7 @@ class HTMLContentConverter(Converter):
             center.set('class', 'c1')
 
     def body_i(self):
-        '''Embed em elements that are direct ancestors of body inside a p
-        element
-        '''
+        '''Wrap bare elements inside a p element.'''
         for tag in ['a', 'i', 'em', 'font', 'u', 'strong', 'span']:
             for bi in self.soup.xpath(
                     './/html:body/html:{}'.format(tag),
@@ -1627,6 +1594,7 @@ class HTMLContentConverter(Converter):
                 p.append(bi)
 
     def body_text(self):
+        '''Wrap bare text inside a p element.'''
         body = self.soup.find(
             './/html:body',
             namespaces={'html': 'http://www.w3.org/1999/xhtml'})
@@ -1638,11 +1606,11 @@ class HTMLContentConverter(Converter):
             body.insert(0, p)
 
     def convert2xhtml(self):
-        """
-        Clean up the html document. Destructively modifies self.soup, trying
-        to create strict xhtml for xhtml2corpus.xsl
+        '''Clean up the html document.
 
-        """
+        Destructively modifies self.soup, trying
+        to create strict xhtml for xhtml2corpus.xsl
+        '''
         self.remove_empty_class()
         self.remove_empty_p()
         self.remove_elements()
@@ -1654,11 +1622,10 @@ class HTMLContentConverter(Converter):
         self.fix_spans_as_divs()
 
     def convert2intermediate(self):
-        """
-        Convert the original document to the giellatekno xml format, with no
-        metadata
+        '''Convert the original document to the giellatekno xml format.
+
         The resulting xml is stored in intermediate
-        """
+        '''
         html_xslt_root = etree.parse(self.converter_xsl)
         transform = etree.XSLT(html_xslt_root)
 
@@ -1694,9 +1661,7 @@ class HTMLConverter(HTMLContentConverter):
 
 
 class RTFConverter(HTMLContentConverter):
-    """
-    Class to convert html documents to the giellatekno xml format
-    """
+    '''Convert html documents to the giellatekno xml format.'''
     def __init__(self, filename, write_intermediate=False):
         with open(filename, "rb") as rtf_document:
             content = rtf_document.read()
@@ -1712,8 +1677,7 @@ class RTFConverter(HTMLContentConverter):
 
 
 class DocxConverter(HTMLContentConverter):
-    '''Class to convert docx documents to the giellatekno xml format
-    '''
+    '''Convert docx documents to the giellatekno xml format'''
     def __init__(self, filename, write_intermediate=False):
 
         HTMLContentConverter.__init__(self, filename,
@@ -1721,9 +1685,7 @@ class DocxConverter(HTMLContentConverter):
 
 
 class DocConverter(HTMLContentConverter):
-    """
-    Class to convert Microsoft Word documents to the giellatekno xml format
-    """
+    '''Convert Microsoft Word documents to the giellatekno xml format'''
     def __init__(self, filename, write_intermediate=False):
         Converter.__init__(self, filename, write_intermediate)
         command = ['wvHtml',
@@ -1734,6 +1696,7 @@ class DocConverter(HTMLContentConverter):
 
     def fix_wv_output(self):
         '''Examples of headings
+
         h1:
         <html:ul>
             <html:li value="2">
@@ -1849,11 +1812,12 @@ class DocConverter(HTMLContentConverter):
 
 
 class DocumentFixer(object):
-    """
+    '''Fix the content of a giellatekno xml document.
+
     Receive a stringified etree from one of the raw converters,
     replace ligatures, fix the encoding and return an etree with correct
     characters
-    """
+    '''
     def __init__(self, document):
         self.root = document
 
@@ -1861,9 +1825,7 @@ class DocumentFixer(object):
         return self.root
 
     def compact_ems(self):
-        """Replace consecutive em elements divided by white space into
-        a single element.
-        """
+        '''Compact consecutive em elements into a single em if possible.'''
         word = re.compile(u'\w+', re.UNICODE)
         for element in self.root.iter('p'):
             if len(element.xpath('.//em')) > 1:
@@ -1884,15 +1846,11 @@ class DocumentFixer(object):
                         lines = []
 
     def soft_hyphen_to_hyph_tag(self):
-        """Replace soft hyphens in text by the hyph tag
-        """
+        '''Replace soft hyphen chars with hyphen tags.'''
         for element in self.root.iter('p'):
             self.replace_shy(element)
 
     def replace_shy(self, element):
-        """Split text and tail on shy. Insert hyph tags
-        between the parts.
-        """
         for child in element:
             self.replace_shy(child)
 
@@ -1919,8 +1877,7 @@ class DocumentFixer(object):
                     element.getparent().append(hyph)
 
     def insert_spaces_after_semicolon(self):
-        """Insert space after semicolon where needed
-        """
+        '''Insert space after semicolon where needed.'''
         irritating_words_regex = re.compile(u'(govv(a|en|ejeaddji):)([^ ])',
                                             re.UNICODE | re.IGNORECASE)
         for child in self.root.find('.//body'):
@@ -1935,9 +1892,7 @@ class DocumentFixer(object):
             element.tail = irritating_words_regex.sub(r'\1 \3', element.tail)
 
     def replace_ligatures(self):
-        """
-        document is a stringified xml document
-        """
+        '''Replace unwanted chars.'''
         replacements = {
             u"[dstrok]": u"đ",
             u"[Dstrok]": u"Đ",
@@ -1985,11 +1940,12 @@ class DocumentFixer(object):
                     element.text = element.text.replace(key, value)
 
     def fix_body_encoding(self):
-        """
+        '''Replace wrongly encoded saami chars with proper ones.
+
         Send a stringified version of the body into the EncodingGuesser class.
         It returns the same version, but with fixed characters.
         Parse the returned string, insert it into the document
-        """
+        '''
         self.replace_ligatures()
 
         body = self.root.find('body')
@@ -2006,6 +1962,7 @@ class DocumentFixer(object):
         self.fix_title_person('mac-sami_to_latin1')
 
     def fix_title_person(self, encoding):
+        '''Fix encoding problems'''
         eg = decode.EncodingGuesser()
 
         title = self.root.find('.//title')
@@ -2047,8 +2004,7 @@ class DocumentFixer(object):
                         firstname.encode('utf-8')).decode('utf-8'))
 
     def detect_quote(self, element):
-        """Detect quotes in an etree element.
-        """
+        '''Insert span elements around quotes.'''
         newelement = deepcopy(element)
 
         element.text = ''
@@ -2110,14 +2066,12 @@ class DocumentFixer(object):
         return element
 
     def detect_quotes(self):
-        """Detect quotes in all paragraphs
-        """
+        '''Detect quotes in all paragraphs.'''
         for paragraph in self.root.iter('p'):
             paragraph = self.detect_quote(paragraph)
 
     def set_word_count(self):
-        """Count the words in the file
-        """
+        '''Count the words in the file.'''
         plist = []
         for paragraph in self.root.iter('p'):
             plist.append(etree.tostring(paragraph,
@@ -2141,12 +2095,16 @@ class DocumentFixer(object):
         wordcount.text = str(words)
 
     def make_element(self, eName, text, attributes={}):
-        """
-        @brief Makes an xml element containing the given name, text and
-        attributes. Adds a hyph element if necessary.
+        '''Make an xml element.
+
+        :param eName: the name of the element
+        :param text: the content of the element
+        :param attributes: the elements attributes
+
+        Add hyph elements if necessary.
 
         :returns: lxml.etree.Element
-        """
+        '''
         el = etree.Element(eName)
         for key in attributes:
             el.set(key, attributes[key])
@@ -2156,8 +2114,7 @@ class DocumentFixer(object):
         return el
 
     def fix_newstags(self):
-        """Convert newstags found in text to xml elements
-        """
+        '''Convert newstags found in text to xml elements'''
         newstags = re.compile(
             r'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|'
             r'LED|bilde)*tekst:|@*foto:|@fotobyline:|@*bildetitt:|'
@@ -2317,11 +2274,11 @@ class DocumentFixer(object):
 
 
 class XslMaker(object):
-    """
+    '''Make an xsl file to combine with the intermediate xml file.
+
     To convert the intermediate xml to a fullfledged  giellatekno document
-    a combination of three xsl files + the intermediate files is needed
-    This class makes the xsl file
-    """
+    a combination of three xsl files + the intermediate xml file is needed.
+    '''
 
     def __init__(self, xslfile):
         self.filename = xslfile
@@ -2348,9 +2305,9 @@ class XslMaker(object):
                 for entry in e.error_log:
                     logfile.write('{}\n'.format(str(entry)))
 
-            raise ConversionException('{}: Syntax error.\n'
-                'More info in {}'.format(
-                    self.__name__, self.logfile))
+            raise ConversionException(
+                '{}: Syntax error. More info in {}'.format(self.__name__,
+                                                           self.logfile))
 
         preprocessXsl = etree.parse(
             os.path.join(here, 'xslt/preprocxsl.xsl'))
@@ -2366,7 +2323,7 @@ class XslMaker(object):
     @property
     def transformer(self):
         try:
-            return  etree.XSLT(self.xsl)
+            return etree.XSLT(self.xsl)
         except etree.XSLTParseError as (e):
             with open(self.logfile, 'w') as logfile:
                 logfile.write('Error at: {}\n'.format(str(util.lineno())))
@@ -2374,17 +2331,13 @@ class XslMaker(object):
                 for entry in e.error_log:
                     logfile.write('{}\n'.format(str(entry)))
 
-            raise ConversionException('{}: Invalid XML in {}. '
-                'More info in {}'.format(type(self).__name__,
-                                         self.filename, self.logfile))
+            raise ConversionException(
+                '{}: Invalid XML in {}. More info in {}'.format(
+                    type(self).__name__, self.filename, self.logfile))
 
 
 class LanguageDetector(object):
-    """
-    Receive an etree.Element
-    Detect the languages of quotes.
-    Detect the languages of the paragraphs.
-    """
+    '''Detect and set the languages of a document.'''
     def __init__(self, document, languageGuesser):
         self.document = document
         self.mainlang = self.document.\
@@ -2406,16 +2359,16 @@ class LanguageDetector(object):
         return self.document
 
     def get_mainlang(self):
-        """
-        Get the mainlang of the file
-        """
+        '''Get the mainlang of the file'''
         return self.mainlang
 
     def set_paragraph_language(self, paragraph):
-        """Extract the text outside the quotes, use this text to set
+        '''Set xml:lang of paragraph
+
+        Extract the text outside the quotes, use this text to set
         language of the paragraph.
-        Set the language of the quotes in the paragraph
-        """
+        Set the language of the quotes in the paragraph.
+        '''
 
         if paragraph.get('{http://www.w3.org/XML/1998/namespace}lang') is None:
             paragraph_text = self.remove_quote(paragraph)
@@ -2431,6 +2384,7 @@ class LanguageDetector(object):
         return paragraph
 
     def set_span_language(self, paragraph):
+        '''Set xml:lang of span element'''
         for element in paragraph.iter("span"):
             if element.get("type") == "quote":
                 if element.text is not None:
@@ -2442,7 +2396,7 @@ class LanguageDetector(object):
                             lang)
 
     def remove_quote(self, paragraph):
-        """Extract all text except the one inside <span type='quote'>"""
+        '''Extract all text except the one inside <span type='quote'>'''
         text = ''
         for element in paragraph.iter():
             if (element.tag == 'span' and
@@ -2458,16 +2412,14 @@ class LanguageDetector(object):
         return text
 
     def detect_language(self):
-        """Detect language in all the paragraphs in self.document
-        """
+        '''Detect language in all the paragraphs in self.document'''
         if self.document.find('header/multilingual') is not None:
             for paragraph in self.document.iter('p'):
                 self.set_paragraph_language(paragraph)
 
 
 class ConverterManager(object):
-    '''Manage the conversion of original files to corpus xml
-    '''
+    '''Manage the conversion of original files to corpus xml'''
     LANGUAGEGUESSER = text_cat.Classifier(None)
     FILES = []
 
