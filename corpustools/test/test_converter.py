@@ -3486,8 +3486,8 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.md.set_variable('left_margin', 'all=7')
         p2x.md.set_variable('top_margin', 'all=7')
         p2x.md.set_variable('bottom_margin', 'all=7')
+        p2x.md.set_variable('skip_pages', '1')
         p2x.parse_margin_lines()
-        p2x.skip_pages = [1]
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
@@ -3674,7 +3674,8 @@ class TestPDF2XMLConverter(XMLTester):
         '''Test a valid skip_pages line
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        got = p2x.set_skip_pages('1, 4-5, 7')
+        p2x.md.set_variable('skip_pages', '1, 4-5, 7')
+        got = p2x.get_skip_pages()
         want = [1, 4, 5, 7]
 
         self.assertEqual(got, want)
@@ -3683,15 +3684,16 @@ class TestPDF2XMLConverter(XMLTester):
         '''Test an invalid skip_pages line
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.md.set_variable('skip_pages', '1, 4 5, 7')
 
-        self.assertRaises(converter.ConversionException, p2x.set_skip_pages,
-                          '1, 4 5, 7')
+        self.assertRaises(converter.ConversionException, p2x.get_skip_pages)
 
     def test_set_skip_pages3(self):
         '''Test an empty skip_pages line
         '''
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        got = p2x.set_skip_pages(' ')
+        p2x.md.set_variable('skip_pages', ' ')
+        got = p2x.get_skip_pages()
         want = []
 
         self.assertEqual(got, want)

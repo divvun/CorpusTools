@@ -587,14 +587,13 @@ class PDF2XMLConverter(Converter):
         self.margins = {}
         self.in_list = False
         self.parts = []
-        self.skip_pages = self.set_skip_pages(self.md.get_variable(
-            'skip_pages'))
         self.parse_margin_lines()
         self.prev_t = None
 
-    def set_skip_pages(self, skip_pages):
+    def get_skip_pages(self):
         '''Turn a skip_pages entry into a list of pages.'''
         pages = []
+        skip_pages = self.md.get_variable('skip_pages')
         if skip_pages is not None:
             # Turn single pages into single-page ranges, e.g. 7 → 7-7
             skip_ranges_norm = ((r if '-' in r else r+"-"+r)
@@ -983,8 +982,9 @@ class PDF2XMLConverter(Converter):
                 int(t.get('left')) < margins['left_margin'])
 
     def parse_pages(self, root_element):
+        skip_pages = self.get_skip_pages()
         for page in root_element.iter('page'):
-            if int(page.get('number')) not in self.skip_pages:
+            if int(page.get('number')) not in skip_pages:
                 self.parse_page(page)
 
         if len(self.parts) > 0:
