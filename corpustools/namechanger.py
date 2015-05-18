@@ -57,6 +57,7 @@ class NameChangerBase(object):
             u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_',
             u'<': u'_', u'>': u'_', u'"': u'_', u'&': u'_', u';': u'_',
             u'&': u'_', u'#': u'_', u'=': u'-', u'\\': u'_', u'|': u'_',
+            u'$': u'_',
         }
 
         # unidecode.unidecode makes ascii only
