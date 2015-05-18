@@ -443,9 +443,11 @@ at least the following directories need to exist in $GTHOME:
 * gt/common
 * gt/script
 
-It also uses the alignment program tca2, but for convenience, the
-alignment.jar-file is included in SVN and installed by CorpusTools
-(you can recompile it by simply typing "ant" in corpustools/tca2).
+It also requires Java, since it uses the alignment program tca2. For
+convenience, a pre-compiled version of tca2's alignment.jar-file is
+included in SVN and installed by CorpusTools, but if you have ant
+installed, you can recompile it by simply typing "ant" in
+corpustools/tca2.
 
 You can compile the abbr.txt file of langs/sme like this:
 
@@ -496,6 +498,36 @@ up since most computer these days have several processor cores.)
 
 The files will end up in corresponding directories under
 toktmx/sma2nob.
+
+If you get a message like
+
+{{{
+Exception in thread "main" java.lang.UnsupportedClassVersionError: aksis/alignment/Alignment : Unsupported major.minor version 51.0
+        at java.lang.ClassLoader.defineClass1(Native Method)
+        at java.lang.ClassLoader.defineClassCond(ClassLoader.java:637)
+        at java.lang.ClassLoader.defineClass(ClassLoader.java:621)
+        at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:141)
+        at java.net.URLClassLoader.defineClass(URLClassLoader.java:283)
+        at java.net.URLClassLoader.access$000(URLClassLoader.java:58)
+        at java.net.URLClassLoader$1.run(URLClassLoader.java:197)
+        at java.security.AccessController.doPrivileged(Native Method)
+        at java.net.URLClassLoader.findClass(URLClassLoader.java:190)
+        at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+        at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:301)
+        at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+}}}
+
+then you need to recompile the Java parts and reinstall CorpusTools.
+Make sure you have Apache ant installed, then do:
+
+{{{
+cd corpustools/tca2
+ant
+cd -
+sudo python2.7 setup.py install --install-scripts=/usr/local/bin
+# Or, if you installed as user:
+python2.7 setup.py install --user --install-scripts=$HOME/bin
+}}}
 
 !!saami_crawler
 
