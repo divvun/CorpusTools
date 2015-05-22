@@ -32,15 +32,7 @@ class MetadataHandler(object):
         if not os.path.exists(filename):
             if not create:
                 raise util.ArgumentError("{} does not exist!".format(filename))
-
-            preprocessXsl = etree.parse(os.path.join(here,
-                                                     'xslt/preprocxsl.xsl'))
-            preprocessXslTransformer = etree.XSLT(preprocessXsl)
-            filexsl = etree.parse(os.path.join(here, 'xslt/XSL-template.xsl'))
-            self.tree = preprocessXslTransformer(
-                filexsl,
-                commonxsl=etree.XSLT.strparam(
-                    'file://' + os.path.join(here, 'xslt/common.xsl')))
+            self.tree = etree.parse(os.path.join(here, 'xslt/XSL-template.xsl'))
         else:
             try:
                 self.tree = etree.parse(filename)
