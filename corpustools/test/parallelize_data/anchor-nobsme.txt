@@ -1,0 +1,1370 @@
+&dash / &dash
+&mdash / &mdash
+0*, null / 0*, nolla
+1* / 1*, okta, ovtta
+2*, to, tjue* / 2*, guokt*, guovtt*
+3*, tree* / 3*, golbm*, golmm*
+4*, fire* / 4*, njeallj*, njealj*
+5*, fem* / 5*, vihtt*, viđa*
+6*, seks* / 6*, guhtt*, guđa*
+7*, sju*, syv*, søtti*, sytti* / 7*, čieža*, čihč*, čižii
+8*, åtte*, åtti* / 8*, gávcci*, gákcái
+9*, ni, nitti* / 9*, ovcci*, okcái
+Afrika / Afrihká*
+Alta / Álahea*, Áltá*, Álttá*
+afrikan* / afrihkála*
+Amerika / Amerihká*
+amerikan* / amerihkála*
+Amtmann* / Ámtamánni
+april / cuoŋomán*
+august / borgemán*
+Barents* / Barents*
+Børselv / Bissojo*
+kanad* / kanadala*
+kines* / kiinnála*
+jul* / juovla*, juovll*
+dansk* / dánskala*
+David* / Dávved*
+desember / juovlamán*
+hollandsk*, nederlandsk* / hollándala*, vuolleeatnanla*
+Enontekiö, Enontekis / Eanoda*
+påske / beassáž*
+Øst*, Aust* / Nuortta*, Nuorta*
+engelsk*, englend* / eaŋgals*, eaŋgalsol*, eŋgelas*
+Europa* / Eurohp*
+Evenes* / Evenášši
+februar / guovvamán*
+finne*, finsk* / suopmela*
+Finnmark* / Finnmárk*
+Frankrike / Fránkariik*
+fransk* / fránskkala*
+fredag* / bearjada*
+Gamvik / Gáŋgaviik*
+tysk* / duiskala*
+Tyskland / Duiska*, Duiskka*
+Gud / Ipmil*
+Hellas / Greika
+gresk* / greikala*
+Grønland* / Ruonáea*
+Gällivare / Váhčir*, Jiellevár*
+Hasvik* / Ákŋolu*
+Hammerfest / Hámmárfe*, Hámmarfe*
+Helsingfors / Helsse*
+Hjemmeluft / Jiepmaluo*
+Høyre* / Olgeš*
+jeg, eg / mun
+Irland / Irlánd*
+ir* / irlándala*
+Enare / Anár*
+italien* / itáliala*
+Italia / Itália*
+Jakob / Jáhkob*
+januar / ođđajagimán*
+japan* / jáhpánla*
+Jesus, Jesu / Jesus*
+Johannes / Johanas*
+Jokkmokk / Johkamuohk*, Johkamohk*
+juli / suoidnemán*
+juni / geassemán*
+Kautokeino* / Guovdageai*
+Karasjok / Kárášjo*
+Karigasniemi / Gáregasnjárg*
+Kåfjord / Gáivuo*
+Kirkenes* / Girkonjárg*
+Kola* / Guoláda*
+Kvænang* / Návuotna*, Návuona*, Návutnii
+Lakselv / Leavdnj*, Leavnnj*
+Lavang* / Loabá*
+Lyngen* / Ivgu*, Ivggu*
+Herre* / Hearrá*
+Manndalen* / Olmmáivágg*, Olmmáivákk*
+mars / njukčamán*
+Masi / Máze*, Mázii
+mai / miessemán*
+Mehamn / Donjevuo*
+Måsøy* / Muosá*
+mandag* / vuossárg*, mánnoda*
+herr / hearrá
+fru / eamit, eamid*
+München / Munchen*
+Murmansk* / Murmánsk*
+Neiden / Njávda*, Njávdá*
+Nesseby* / Unjárg*
+Nordreisa / Ráis*, Ráiss*
+Nederland / Hollánda, Vuolleeatna*
+Nord* / Davvi*, Nord*
+Norge*, Noreg*, Norske / Norg*
+norsk*, nordm* / norgala*, dáž*, dáčč*
+november / skábmamán*
+oktober / golggotmán*
+Ofot* / Ofuoht*
+Polmak* / Buolbmá*
+Porsanger* / Porsáŋg*
+Rovaniemi* / Roavvenjárg*
+Russland* / Ruošša*
+lørdag* / lávvarda*, lávvorda*
+skotte*, skotske*, Skottland / skohtta*
+september / čakčamán*
+Sirma* / Sirbmá*, Sirpmá*
+Skånland* / Skáni*
+Snåsa* / Snoasa*, Snoase*
+Sør* / Lulli*, Máttá*
+Spania / Spánska*, Spánskka*
+span* / spánskala*
+Storfjord* / Omasvu*
+søndag* / sotnabeaiv*
+Sverige* / Ruoŧŧa*, Ruoŧa*, Ruŧŧii
+svensk* / ruoŧŧela*
+Sør-Varanger, Sørvaranger / Mátta-Várjja*
+same*, sápmi, sámi, samisk* / sápmi*, sámi*, sáme*, sápmela*
+TV, fjernsyn* / TV
+Tana / Deanu*, Deatnu*
+torsdag* / duorasta*
+Tromsø, Troms / Roms*, Troms*
+Trondheim* / Troand*
+tirsdag* / maŋŋebárg*, dista*, disda*
+Utsjok* / Ohcejo*
+USA / USA*
+Vadsø* / Čáhcesu*
+Varanger* / Várjjá*
+Vardø* / Várggá*
+onsdag* / gaskavahk*
+Vest* / Oarje*
+noen, noko* / soames, muhtun
+litt / veahá
+bl.a., m.a. / ee., e.e.
+over / badjel*
+om / birra
+utland*, utenlands / olgoriik*
+absolutt* / ábsoluhtala*
+aksept*, godta*, godtok, godkjen* / dohkkeh*
+ulykke*, ulukk* / lihkohisvuo*
+anklage* / sivah*
+konkret* / konkrehtala*
+tilpas* / hiebah*, heiveh*, soabah*
+beundr* / hervvoš*
+voksen, voksne, vaksen, vaksne / ollesolmmo, ollesolb*
+råd* / neavvu*, ráđđe*
+Etter, etter / maŋŋá, maŋŋel, maŋŋil, mielde
+etter* / maŋŋil, maŋŋel*
+igjen, att / vuot, fas
+mot / vuostá
+siden, sidan, fra / dassái, várás, rájes
+overens*, samd*, enig* / leat seamma oaivilis*, guorras*, ovttaoaivilvu*, ovttamielalašvu*
+luft* / áibmu*, áimmu*, ilbm*, ilmm*
+All*, Alt, all*, alt, hel*, heil* / Buot, buot, visot, gait, gaik*, buohka*
+nesten / masá, varga, measta, gosii
+alene, aleine / okto, akto
+allerede, allereie / dál juo
+også / maid*
+alltid, bestandig / álo*
+blant / mielde
+og, samt / ja
+osv, osv.,og så videre, osb, og så vidare / jna, jna., ja nu ain, jnv., ja nu viidáseappot
+engel*, engle* / eaŋgel*, eŋgel*
+sinne / suhttu, moarri
+sint*, sinna / suhttuvuohta, suhtta*
+dyr* / ealli*, eallai, ellii*
+annen, annet, anna* / nubb*, nuppi*
+svar* / vástádus*, vástid*
+anslå* / vuord*, oadj*, ávašt*
+bortsett fr* / earret, eret
+oppnevn*, oppnemn*, utnevn*, utnemn* / nammad*, nammuh*
+eple* / eappel*, ebel*
+er / lea*, lei*, ledje*, letne, lehpet
+arm* / giehta*, gieđa*
+rundt / birra
+arranger* / doalah*, arrangere*, lágid*, doalla*
+kunst* / dáidda*, dáidag*
+mens, som / dego, go, nugo
+som om / áibbas dego
+spør*, spurt*, be, ber, bett, ba / jearra*, jeara*. jerre*
+tilknyt* / oktavuo*, gull*
+straks / dalán, ovttatmano
+åt, spist* / borre*, borai*
+tant* / siessá*, siesá*, muoŧ*, goaski*, goaskái, goskkii*, goaskki*, ipmi*, imi*
+høst* / čakč*, čavčča*
+bort* / eret
+tilbake, rygg*, bak* / ruovttoluotta, ruoktot
+dårlig*, ille / fuotni, fuones, heitto*, heajos
+bank* / báŋk, báŋkku*
+være / leat, leahkit
+ble, blei / bođii*, bohte*, šattai*, šadde*
+fordi, derfor, idet / danin go, danne, dannego, dasgo
+bli, blir, blitt / boaht*, boađá*, šatta*, šadd*
+seng* / seaŋg*
+bedre* / buoret, buoreb*, buorid*
+vært / leamaš, leahkán
+øl*, pils* / vuolla*, vullii*, vuola*
+før / ovdal
+begyn*, start* / álge*, álgg*, álgi*, álgo*, álgu*, álgá*,
+tro* / osku*
+under, nedenfor / vuolde, maŋŋel*, vuollel*
+benk* / beaŋka*
+i tillegg, dessuten / muđui, vel, dasa lassin
+best / buoremus*
+mellom / gaskkas, gaskal, gaskasaš, gaskii
+fugl* / loddi*, loddái, lotti*, lodde*
+bit* / bihttá*, bihtá*
+bitter* / suvr*, bahč*, rihč*
+svart*, sort* / čáhpp*
+skyld* / divat*, divad*, sivva*, sivvii, siva*
+salig* / ávdugas*
+velsign* / sivdni*
+blind* / čalmmeheapme*
+blod* / varra*, varrii*, vara*
+blodig*, fordømt* / varrái, garuhuvvon, varranaga
+blås*, blæs, bles / bossu*
+blå* / alit*
+styre* / lávdi*, lávddi*, lávddái, stivra*, stivrra*
+båt* / fanas*, fatnas*
+bomb* / bomba*
+bok*, bøke* / girji*, girjji*, girjái, girje*
+grens* / rádji*, ráji*, rádje*, rádjá*, rájá*
+født, fødd / riegád*
+begge, både, så vel / guktot, guktu*, goappaš*, sihke
+flask* / boahtal*, boahttal*, bohtal*, bohttal*
+boks* / gássa*, gássii, boksa*, boksii
+gut* / gánda*, gándii, gándda*, lunta*, luntii, luntta*, bárdn*, bártn*
+hjern* / vuoiŋŋama*, vuoiŋah*
+brød* / láibi*, láibái, láibbi*, láibe*
+frukost*, frokost* / iđitbihttá, iđitborramuš*, iđitbiebmu*, iđitbiepmu*
+bror*, brør* / viellja*, villjii, vielja*
+brun* / ruška*, ruškes*
+bygge*, byggje*, bygd, bygde, bygning* / hukse*, dállu*, dálu*, visti*, vistái, vistti*, viessu*, vissui*, viesu*, viesso*, ráhkad*
+bren* / boald*, bold*, buolli*, buollá*, bulii
+buss* / busse*, bussii*
+men / muhto
+smør* / vuodja*, vuoja*, vudjii
+innkjøp*, kjøp* / oasti*, oastá*, oste*, osto*, ostt*
+kalender* / kaleandar*, kaleanddar*
+kalle*, kalla*, kalt*, hete*, hette / namma lea, namma lei, gohččod*, gohčod*
+ring*, telefoner* / riŋge*, telefonere*
+kake*, kaka / gáhkku*, gáhku*, gáhkko*
+kom / bođii*, bohte*
+kan / sáhttá*, sáhtá*, sáhte*, sáhtte*
+bil* / biila*, biilla*, biilii
+gulrot*, gulerøt* / rušpi*, rušppi*, rušpái, rušpe*
+kontant* / ruhta*, ruđa*
+katt* / bussá*
+fang* / oažž* gitta, oččo* gitta, oačč* gitta, ožžo* gitta, bivdi*, bivddi*
+fanget, fanga / báhci* gitta
+tak* / gáhttu*, gáhtu*, dáhkki*, dáhki*, dáhkke*, rohpi*, rohpe*, robi*
+kjeller*, kjellar* / geallir*, keallir*, geallár*, keallár*
+senter*, sentr*, sentrum / guovddá*
+sentral* / guovddá*
+århundr*, hundreår* / jahkečuohtti*, jahkečuoht*, jahkečuođi*
+sikker*, viss* / dihto*, vissis, visses
+jf., jvnf., jfr. / gč., vrd., gč
+stol* / stuollu*, stuolu*, stullu*, stuolo*, stuollo*
+sjanse*, sjansa* / vejolašvuohta*, vejolašvuođa*
+forandr*, endr* / molsašuv*, rievda*
+kapell* / kapeall*
+kapit* / bihttá*, bihtá*, kapiht*
+sjarm* / šarbma*, šarmma*
+kinn* / muohtu*, muođu*, muhtui, nierra*, niera*, nirrii
+ost* / vuostá*, vuosttá*
+sjekk* / šeahkka*, šeahka*
+kylling* / vuonccis*, vuoncá*
+barn*, unge*, unga* / mánná*, máná*
+velge*, velje* / vállje*
+valgt*, vald* / válljii*, válljej*, válljen
+kirke*, kyrkj*, kirka* / girku*, girko*
+sigar* / duhpá*
+by* / gávppo*, gávpog*
+klasse*, klassa* / luohkká*, luohká*
+klar*, oppklar*, uoppklar*, klår* / čielga*
+klokke*, klokka / diibmu*, diimmu*, diibmo*
+klær*, kled* / biktasat*, biktasii*, bivttas*, gárvvu*
+klub*, forsamling* / klubba*, searvi*, searvái, searvvi*
+kyst* / riddu*, rittu*, riddo*, mearra*
+kaffe*, kaffi* / gáffe*, gáfe*, gáfii*
+kald* / galmmas*, galmas*, galbma*
+farve*, farga*, farge* / ivdn*, ivnn*
+kam, kamm* / čohku*, čogu*, galggan, galgan*
+komme*, kome, kjem / boahtá*, boađá*, boahti*
+kommed* / komediij*
+komi* / ráidogov*, komala*
+kommisjon* / kommišuvdna*, kommišuvnna
+utval*, komit* / komitea*, lávdego*
+felles* / oktasa*
+kommunik* / kommunikašuv*, gulahalla*
+selskap* / fitnoda*
+kompetanse*, kompetent* / gelbbola*
+klag* / váidal*, váidda*, váidag*
+fullfør* / ollašuht*, čađah*
+datamaskin* / dihtor*
+konsentr* / konsentrere*
+vilkår* / dilli*, dillái, dili*
+forbindelse, samband / oktavuohta, oktavuođa*
+betydel* / fuomášuhtti*, sakka
+kontakt* / oktavuođa*, oktavuohta*, gulahallan*
+forts* / joatk*
+kontroll* / hálddaš*, dárkkist*
+konvensjon* / konvenšuvdn*, konvenšuvnn*
+konverte* / rievdad*
+kopper*, kobber*, kopar* / veaik*
+samarbeid* / ovttasbarg*
+hjørne*, krok* / čiehka
+koste*, kosta / máksi*, máksá, mávssá
+hoste*, hosta / gosah*
+kunne / sáhtti*, sáhttá*, sáhtá*
+råd* / ráđđ*, ráđi*
+land* / eana*, eatna*, riikka*, riika*
+fylke*, fylka / fylka*, fylkka*, filka*, filkka*
+mot* / roahkkatvuohta*, roahkkatvuođa*
+ku* / gussa*, gusa*, gussi*
+forbryt*, krim*, brotsverk* / rihkus*, rihkos*
+kris* / kriisa*
+kritik*, kritisk* / kritihkka*
+skrik*, skrek*, skreik / huik*
+kultur* / kultuvr*, kultuvrra*, kultur*
+dans* / dánsa*, dánssa*
+fare*, farlig*, fåre, fårleg* / várra*
+farlig*, fårleg* / várala*
+våge* / duosta*, duostta*
+mørk* / seavdnja*, sevnjes*
+datter*, dotter* / nieida*, nieidda*, niidii
+dag* / beaivi*, beaivvi*, beaivái
+død*, daud* / jápmin, jápmim*
+kjær* / ráhkis*, ráhkkás*, ráhkes*
+tiår* / logija*
+bestem*, avgj*, fasts*, vedt* / mearrid*, mearrit, mearrádus*
+dyp*, djup* / čiekŋal*, čieŋal*
+forsvar* / bealušt*, suodjal*
+grad* / gráda*, muddu*, muttu*
+krav*, krev*, forlang* / gohčč*, gohču*, gáibid*, gáibit
+avheng* / čuožž*, čuočč*, čužž*
+konto* / báŋkokont*
+beskriv*, beskre*, skildr* / govvid*
+desper* / doaivvuheapme, duoaivvuheame*
+detalj* / detalj*
+utvikl* / ovddid*, ovdánaht*
+djev*, jæv* / biro*, birui
+dialekt* / suopman*, dialeakt*, dialeavt*
+dø, dør, død*, døy* / jábm*, jápm*, jámá*, jámi*
+forskjel*, annerledes, skilnad*, skil, skilde, skilte / earálágan*, earuh*, eroh*
+vanskel* / váttis*, váigat*
+grav*, grov / goaivu*, goivo*, goivv*
+middag* / biepmu*, biebmu*
+oppdag* / gávdna*, gávdno*, gávnna*
+forkle*, masker* / masker*, hápma*, háma*
+avstand* / mátki*, mátkki*
+fjern* / gáiddus*
+distrikt*, område* / guovlu*, guovlo*, guovll*, guvlui, oroha*, suorg*, surgg*
+gjør*, gjorde, gjer* / dahká, dahka*, daga*, dahke*, barg*
+doktor*, lege*, lækjar* / doavttir*, doaktár*
+dokument* / áššebáhpir*, áššebáb*, dokumeant*, dokument*
+hund* / beana*, beatnag*
+dukke*, dokke*, dokka / vávvá*
+dør* / uksa*, uvss*
+dobbel*, doble / dubbal*
+tvil* / eahpid*, eahpit
+ned / vulos
+drøm*, draum*, drøym* / niegad*
+under / áigge
+plikt* / geatnagasvuođa*, geatnagasvu*, geatnegasvuođa*, geatnegasvu*
+hver*, kvar* / juohke*, guđet*
+kvarandre, hverandre / juohke áidna
+iver*, ivrig* / gillemeahttun*, gillemeahttum*
+før, tidlig*, tidleg* / árrat
+jord* / eana*, eatna*
+øst*, aust* / nuorta*
+lett* / álki*
+et*, spis* / borra*, bora*
+økonomi* / ekonomiij*, ekonomal*
+redaktør* / redaktevra*, redaktevrra*, doaimmahead*
+egg* / manni*
+atten* / gávccinuppelohkái
+åttende*, åttande* / gávcci*
+åtti* / gávccilogi
+heller / joabbá goabbá
+ellev* / oktanuppelohkái*
+annen, annet, anna* / eará
+tom*, tøm* / guoros*, guorus*
+øde*, aude* / ávdi*
+slutt* / loahppa*
+fiende* / vašála*
+energ* / energiij*
+nok / doarvái
+miljø*, omgivelse* / biras*, birras*
+likestil* / dásseárv*
+spesielt, særlig / erenoamá*, earenoamá*, eandalii
+essen*, viktig* / deaŧala*, mávssola*, dehál*
+estim*, vurder* / árvvoštal*, guorahal*
+evig* / agála*
+atpåtil, til og med / juoba
+kveld* / eahke*
+hver*, kvar* / juohke*
+alle / buohka*, buot, juohke*
+alt / buot
+ond, onde, vond, vonde / bahá*
+eksakt*, nøyaktig* / dárkilis*
+undersøk*, eksam* / iskkos*, eksamen*
+eksemp* / ovdameark*
+eksist* / dihtto*
+ansl*, vent*, forvent* / vuord*, vurd*
+opplev*, erfar* / muosáh*
+uttrykk* / čájeh*, čáje
+ekstra* / badjelmearála*, lassi*, liige*
+øye*, øyn*, aug* / čalbmi*
+ansikt*, andlet* / muođut*, ámadadju*
+fakt* / fákta*
+trofast* / oskkálda*
+famili* / bearaš*, fuolk*
+far, faren, fedre* / áhčči*, áhči*
+frykt* / ballu*, ballá*, balá*
+føl*, kjenn*, kjent* / dovdi*, dovdá*, dovddá*
+fot, føtte*, føte* / juolg*
+følt* / dovddai
+kvinnel* / nisu*, nisson*
+få / moadde
+felt* / gieddi*
+femten* / vihttanuppelohkái*
+femte* / viđát*
+femti* / vihttalogi*
+kjempe*, kamp, slåss / doarru*
+film* / ealligov*, filbma*, filmma*
+endel* / viimmat
+finn* / gávdna*, gávnn*
+fing* / suorbma*
+kvelving*, hvelving* / guomuvuo*
+fjord* / vuona*, vuotn*, vutn*
+brann* / dolla*
+først* / vuostta*
+fisk* / guolli*, guoli*, guolle*
+flyte* / govdu*, govddu*
+gulv*, etasje*, golv* / láhtti*
+blom* / rássi*
+følg*, fylg* / čuovvu*, čuovvo*
+mat* / borramuš*, biebm*, biepm*
+føde*, føda* / biebmu*, biepmu*
+fot* / juolgi*
+glem*, gløym* / vajálduht*
+heldig* / lihkola*
+førti* / njealljelogi*
+kjempet, kjempa, sloss / doarui*
+fant, fann, funne* / gávnnai*, gávdnán
+fjorten* / njealljenuppelohkái*
+fjerde / njeallját, njealját
+fri* / friidja*
+fryse* / galmmid*
+ofte / dávjá
+ven* / usti*
+rynke* / nárvi*, nárvvi*, duorri*, duori*
+full* / dievva*
+fremtid*, framtid* / boahtteáig*
+lek*, spill*, leik*, spel* / stoahkan*
+garasje* / biilastálla*, garáš*
+have*, hage* / gilvvagárd*, šaddogárd*
+port* / poart*
+ga, gav / addii
+bli, blir, blitt, få, fekk, fikk, fått, får, gå / oažžu*, oačču*, ožžo*
+gave*, gåve*, gåva / skeaŋk*
+jente*, pike*, jenta / nieid*
+giro* / giro*
+gi, gir, gitt, gje* / addá*, addi*, atti*, atta*
+glas* / lássa*
+gå, går, gjekk, gikk, gått / manna*, manná*, mana*
+mål* / moal*, mihtto*, mihtu*, mihttu*, ulbmil*, áigumuš*
+Gud, gud* / Ipmil*
+ugudel* / ipmilmeaht*
+gull*, gyld* / golli*
+god*, bra, fin* / buorre, buore, buori*, buriid
+beite* / gohtu*, guohton*, guohtun*
+etterhvert, etterkvart, gradvis / maŋistaga, ceahkkálagaid, veahá veahá
+drue* / viidnemuorj*
+gress*, gras* / suoidn*, suoinni*
+stor*, svær* / stuorra*, stuora*
+større / stuorát
+størst* / stuorámus
+grøn* / ruoná*, ruonas
+hils*, hels* / dearvva*
+grå* / ránis*
+grupp* / joavkku*, joavku*
+vekst*, voks*, bli, blir, blitt, ble / šadda*, šatta*
+oppvekst* / bajásša*
+vokt*, vakt* / fákt*
+gjet* / árvid*
+skyld*, skuld* / sivala*
+vane* / dáhpi*, dábi*
+hadde, hatt / lei
+hår* / vuovtta*, vuokta*
+halv* / bealli*, beallá*, beali*
+hand*, hånd*, hend* / giehta*, gieđa*
+heng* / heaŋgái*
+skje*, hend* / dáhpáhuvv*
+lykke*, lykka, lukke*, lukka / lihkku*, lihku*, lihko*
+hard*, vanskelig* / garra*, váigat*, váttis*, váddás*
+neppe / nappo
+ha, har / lea
+hatt* / gahpir*
+hate* / vašš*
+han / son, su, dat
+hode*, hovud* / oaivi*, oaivvi*, oaive*
+helse* / dearvvasvuohta*
+hør*, høyr* / gullat
+hjert*, hjart / váibmu*
+tung* / lossat*
+holdt, heldt / doalai
+hjelpe*, hjalp / veahkah*, veahkat, veahki*
+henne*, hennar, ho, sin, sine, sitt / su
+Her, her, hit / Dás, dás, dása
+gjem*, gøym*, skjul* / čiehkkádit, čiehkat
+høy*, høg* / alimu*, guhkes*
+ham, honom, han / son
+selv, sjøl, seg / ieža*
+hans, sin, sine, sitt / su
+histori* / historjá*, historjjá*
+holde, halde / doallat
+ferie* / luopmu*
+hjem*, heim* / ruoktu*
+ærlig*, ærleg* / rehála*
+ære*, æra / gudni*, gutni*
+håp* / doaivva*
+hest* / heasta*
+fiendtl* / vašálaš
+varm* / báhkka*
+hotel* / hotealla*
+time* / diibmu*
+hus* / dállu*, dálu*, dállo*, viessu*, viesu*, viesso*, vissui
+hvordan, hvor, så, korleis, kor / mo, movt
+hundre* / čuohti*, čuođi*
+heng*, hang / heaŋgá*
+sult / nealg*
+jakt* / bivdu*, bivdo*, bivddu*, bivdi*, bivddá*, bivddii*, bivdá*
+skade*, vondt / bávččas*
+mann*, menn* / isit*, isid*
+is, isen / jiekŋa*, jieŋa*
+ide* / jurdda*
+om, hvis, viss, dersom, Dersom / Jos, jos, juos
+forestil*, fantasi* / govahall*
+viktig* / deaŧal*, deatal*, dehál*
+moderniser* / ođasmaht*
+foran, framfor / ovddas
+forgjeves, fånyttes / dušši*
+inntekt* / sisaboaht*
+lønn* / bálk*
+industr*, næring* / industriija*
+påvirk*, influer*, medvirk* / váikkuh*
+opplys*, inform* / dieđihi*, dieht*, dieđu*
+arv* / árbe*
+innland* / siseatn*, sisean*
+innenfor, innafor, innside, inn, inne / siste, siskobeal*, siskkobeal*
+i sted*, isted*, i staden / dan sajis*, dan sadjái
+intens* / garra*, árjjala*
+interes*, rente / beroštu*, reant*
+internasjon* / riikkaidgaskasa*, gaskariikkala*
+inn i / sisa
+usynlig* / oaidnemeahttu*
+invit*, innkall* / gohččun*, gohččum*
+jern*, jarn* / ruovdi*, ruovddi*
+irriter* / háht*, hárd*, eardu*, earddu*
+sin, sine, sitt / dan
+jakk* / jáhkka*, beaska*
+kjeve* / ollol*
+jazz* / jazz*
+job*, arbeid* / bargu*, barggu*
+dom*, domme*, domma* / duopmu*, duomu*, duopmo*
+jury* / jury*
+bare, berre, rettferdig* / dušše
+rettferdighet* / riekt*, rievtt*
+nøkkel*, nøkl*, lykil* / čoavdda*
+slag* / šlája*, šládja*
+snill / ustitla*
+konge* / gonagas*
+kjøkken* / gievkkan*
+kne* / čibbi*
+visste / diđii*, dihte*
+kniv* / niibi*, niibbi*
+vet, veit, vite, kunne, kan, kunnskap* / dieht*, dieđá*, máhttu*, máhtu*
+visst, kunn* / dovddus, dovdán
+kron* / kruvnu*, kruvnnu*, kruvdnos*, ruvnu*, ruvnnu*
+mangl* / massi*
+sjø*, vann*, vatn* / jávr*
+lam* / sávza*, sávzza*
+lamp* / lámpá*, lámppá*
+land / eana*, eatnan*, eatnam*
+språk* / giella*, giela*
+vare*, sist*, forrig* / maŋimus, maŋemus
+sen*, sein* / maŋŋil, maŋŋel*, njoahci, njoaz*
+senere, seinere, seinare / maŋŋá
+latter*, le*, lo* / čaibma*, čaimma*
+lov* / láhka*, lága*
+plen* / gieddi*
+leder*, leiar*, ordfør* / *jođiheaddj*
+lære*, lært* / oahppa*, oahpa*
+minstepensjon* / unnimuspenšun*, unnimuspenšuvdn*, unnimuspenšuvnna*, uniimuspenšon*, unnimuspenšovdn*, unnimuspenšovnna*
+minst* / unnimusat
+forlat* / guođđi*
+forlot, forlat*, venstre* / guđii
+ben*, bein* / juolgi*
+mindre / veahásot
+la, lar, let, lot / atti*, atta*
+brev*, bokstav* / reivve*, reive*, bustáv*
+nivå* / dássi*, dási*
+ligge*, lå, / vealla*, veala*, veallá*
+lyge*, lyve*, løgn* / gielist*, gielista, giellás*
+liv* / eallin*, eallim*
+lys*, lett* / čuovga*, čuovgga*
+like*, likt* / láhkása*, seammál*
+halt* / skierm*
+list* / listtu*
+hør*, høyr* / gulla*. gula*
+lev*, bo*, bu* / eallá*, eli*, ealá*
+lokal* / báikkála*
+ensom*, einsam / oktonas*
+lang*, leng* / guhk*
+se*, så, sjå / geahčča*, geahča*, gehč*, gč
+mist* / massi*, massá*, láhp*
+elsk*, kjærl* / ráhkist*
+lav*, låg* / vuollega*
+hell* / lihkku*, lihku*
+lunch*, lunsj* / beaiveborra*, biepmu*, borramuš*
+hoved*, hovud* / oaive*, váldo*
+majoritet*, flertall*, fleirtal* / eanetlo*, majoriteht*
+mannl* / almmái*, albm*
+mann* / almmái, albmá*, olmmo*, olbmo*
+mange / máŋga, máŋgga
+merke*, merk* / mearka*, mearkka*
+gift* / náitalan*
+ekteskap* / náittosliht*
+material*, stoff* / materiála*, ávnnas*, ávdnas*
+meg / mu, mun*
+bety*, tyd*, mene*, mini*, ment* / oaivvil*
+mid* / neavva*, neava*, ráđđi*, ráđi*
+mål* / mihttu*
+møt* / deaivvad*, čoahkkin*, čoahkkim*
+medlem* / lahttu*, lahtu*, miellaht*
+minn*, hukommelse* / muitu*
+menn* / almmáiolbmo*
+metall* / metálla*
+metod* / vuohki*, vuog*
+mikro* / mikro*
+mid* / gaskk*, gaski*
+mild* / veahtas*
+melk*, mjølk* / mielki*, mielkki*
+mill, million* / milj, miljovdna*, miljovnna*
+minutt* / minuhtta*, minuhta*
+savne*, sakn* / gáibid*, gáibit
+mhm*, mm* / hm*, mm*
+model* / málle*
+modern* / ođđaáigásaš*
+øyeblikk*, augneblink* / boddu*
+penge, penger, pengar / ruhta*, ruđa*
+måned*, månad* / mánotbadji*, mánu*, mánnu*
+måne* / mánnu*, mánu*
+moral* / morála*
+mer, meir, fler* / eanet, eambbo
+morgen*, morgon*, formiddag* / iđit*
+mest, meste, flest* / eatnasat
+mor* / eadni*, eatni*
+fjell*, / duoddar*, duottar, čearu*, čearru*
+vidde*, vidda / duoddar*, duottar, čearu*, čearru*
+mun* / njálbmi*, njálmmi*
+rør*, flytte* / sirdi*, fárre*, fárrii*, johtin*
+mye, mykje, mange, store / olu, ollu
+kommun* / gieldda*, gielda*, suohkan*
+musik* / musihk*
+må, måtte / ferte*, berre*, fertii*, berrii*
+mi, min, mine, mitt / mu
+selv, sjøl*, meg / ieš
+gåte* / imaš*
+navn*, namn* / namma*, nama*
+nasjon* / álbmot*, čeard*
+natur* / luondu*, lunddola*, luonddu*
+nær* / lahka*
+nødvendig*, naudsynt* / dárbbašla*
+treng*, trong*, behov*, behov* / dárbu*, dárbb*
+nabo*, grann* / ránnjá*
+nerv* / nearvva*
+aldri / goassege
+likevel / das fuolakeahttá
+Ny, Nye, ny, nye* / ođđa, Ođđa, ođas, ođđas*
+nyhet*, nyhende / ođđasat*, ođđasi*
+avis* / aviis*, áviis*
+nest* / čuovvovaš, boahtte
+natt*, nett* / idja*, ija*
+nitten* / ovccinuppelo*
+nitti* / ovccilog*
+niende, niande / ovccát*
+nr / nr
+nei, ikke, ikkje, inge* / in, it, ii, ean, eahppi, eaba, eat, ehpet, eai
+utvilsomt, tvillaust, sikkert / eahpitkeahttá
+ikke, ikkje, inge* / oktage
+normal* / normála*
+nord* / davvi*, davi*
+nese*, nas* / njunni*
+ikke, ikkje, inge* / ii
+merk* / fuopmá*, fuobmá*
+nå, no / dál
+nummer*, tal*, antall* / nummir*, lohku*, logu*
+sykepleie*, sjukeplei* / buohccedikšu*
+hav*, sjø* / meara*, mearr*
+selvfølgelig, selvsagt, sjølvsagt, naturlegvis, naturligvis / dieđusge
+kontor* / kántuvr*, kantuvr*
+offisi* / virggála*, almmola*
+ofte / dávjá
+gam*, eld* / boaris*
+en gang, ein gong / oktii
+bare, kun, ene*, berre / dušše
+åpen*, åpn*, open*, opn* / rabas*
+operatør* / operáhtor*
+motsatt, motsett / nuppegežiid, jorggu*, nuppe láhkai, nuppe ládje
+eller / dahje, vai
+befal* / gohčču*, gohču*, gohččo*
+organis* / organis*
+annen, annet, andre, annan, anna / nubbi*, nuppi*, eará*
+ellers, elles / muđui
+bør, burde / galggašii, berre
+vår* / min
+selv, sjøl*, oss / alccemet
+ut / olggos
+utanfor, utenfor, utside / olgun
+eie*, egen, egne, eig* / iežas*
+betalt* / máksojuvvon*
+smert*, vondt / bávččas
+mal*, mål* / mála*
+par* / bárra*
+papir* / bábir
+foreld* / vánhen*, váhnen*, váhnem*, vánhem*
+park* / párka*, párkka*, párki*
+del*, part* / oassi*, bealála*, bealli*, beali*, belii*
+særlig*, særleg*, spesiel* / dihto*
+forbi, fortid* / vássán áigi
+sti* / bálggis*, bálgá*
+betal* / máksi*, mávssi*
+betaling*, utbetaling* / máksu*, olggosmáks*, mávssih*
+fred* / ráffi*, ráfi*
+pær* / perra*, pera*
+penn* / peanna*
+folk*, menneske* / olbmot*, olbmu*, olmmo*
+pepper*, pepar* / bihppor*
+prosent* / proseanta*
+perfekt*, fullkom* / ollisla*
+kanskje / várra
+period* / áigoda*
+tillat* / lohpid*, lohpit, lobi*
+person* / olmmo*, olbmo*, persuv*, peršuv*
+foto* / govva*
+bilde*, bilet* / govva*, gova*
+stykk* / bihttá*
+gris*, svin* / spiidni*, spiinni*, spiidná*
+plass*, sted*, stad* / sadji*, saji*, báiki*, báikki*, báikái
+plan* / plána*
+spil*, spel*, lek* / stoahkan*
+plenum / dievasčoahkki*, ollesčoahkki*
+plomme* / lupmu*, lumu*, plomma*, plommi*
+poeng*, punkt* / čuokkis*, čuoggá*, poeŋ*
+politi* / boles*
+høfl* / olmmošla*, buorremenola*, smáđáhk*
+politik*, politisk* / politihk*
+fattig* / geaffi*, geafi*
+popul* / biekkán*
+posisjon*, stilling* / posišuv*, virgi*, virggi*
+positiv* / positiiv*
+mulig*, mogleg* / vejola*
+potet* / buđe*, bohtehtos*
+forbered*, førebu* / válmmašt*
+prins* / prinsa*
+prinsip* / prinsihppa*
+fengsel* / fáŋgal*
+privat* / priváht*
+pris* / haddi*
+antakelig, formodentlig, trolig, truleg, sannsynl* / jáhkedaht*, árvvedahtte
+problem* / váttisvuohta*
+faglig*, fagleg* / fágala*
+bevis*, prov** / duođaštus*
+prosjekt* / prošeakt*, prošeavt*, prošekt*
+beskytte* / suodjal*
+stolt* / čeavl*
+salme*, salma* / sálmm*, sálbm*
+psykiat* / psykiatr*
+offentl* / bigos*, bihkus*, almula*, almmola*
+publis*, utgi*, forlag* / julggášt*
+straff* / ráŋggášt*
+egenskap*, eigenskap*, kvalitet* / kvalitehta*
+fjerdedel*, kvarter / kvárta*
+dronning* / dronne*, fruvvá*, rovvá*
+spørsmål* / gažalda*, jearalda*
+rask*, fort* / johtilis*
+radio* / radio*
+regn* / arvi*
+rein* / boazu*, boazo*, bohcc*
+ganske / mealgat
+reag*, reak* / reagere*
+les*, las / lohka*, lohki*, loga*
+ferdig* / gárvvis*
+virkel*, egentlig*, riktig* / rivttes*
+grunn* / sivva*, vuođđu*, vuođđo*
+nylig*, nyleg* / maŋimus*, aittobáliid
+rød*, raud* / rukses*
+reduksjon*, lavere / vuoládus*
+nekt* / gieldi*, gieldá*, biehta*
+regelmessig* / regul*
+relasjon*, forhold* / relašuv*, dáfus
+lett* / geahpád*
+relig* / jubmeljáhk*
+huske*, hugs* / muiti*, muitá*
+leie*, leig* / láigu*
+rapport*, beretning* / rapoart*, dieđáhus*
+represent* / ovddast*, áiras*, áirras
+forsk* / dutkan*, dutkam*
+ressurs* / riggoda*, resurs*
+respekt* / gudnejaht*
+ansvar* / ovddasvástádus*
+hevn*, hemn* / máksu*, mávss*
+ris* / riisa
+rik* / riggis*
+høyre*, høgre*, rett, akkurat / olgeš*, riekta*, rievtt*
+rettighet* / vuoigatvuo*
+ring* / suorbmas*
+risik* / riska*
+elv* / johka*, johki*, joga*
+vei*, veg* / geaidnu*, geainn*, geinn*
+rom* / latnja*
+rot* / ruohttas*
+rund* / jorbbas
+gummi* / gumme*
+regel*, regle*, regla*, retningslin* / njuolggadus*
+rutin* / rutii*
+offer*, ofre*, ofra / oaffar*
+trygg* / dorvvola*
+sa, sagt / dajai*, dadje*, celkki*
+skyld, skuld / dihtii
+salt* / sálti*
+samme, same, tilsvarende / seamma, seammá
+sand* / sáddu*
+sang, song / lávlla
+satt, sat, sittet, sotte / čohkkái
+tilfreds*, fornøyd, nøgd / duhtava*, duđava*
+saus* / buonjus, butnjo*, buotnjumu*
+frelser*, frelsar* / beast*
+si, sier, seie* / dadjá, dadja*, dadje*, daja*, cealk*, celk*
+skandal* / skandála*
+skrem* / baldi*, balddá*, baldá*
+skole* / skuvl*
+vitenskap*, vitskap* / dieđa*, diehtag*
+rope*, ropt*, ropa*, skrik*, skreik / čuorv*, čurv*, huik*
+sekund*, annen, annet, andre, anna / sekunda*
+hemmel* / suollemas*
+sikker*, sikre*, forsikre* / sihkkar*, sihkar*, dorvo*, dorvu*. dorvvu*, dorvvol*
+se, ser, sett, forstå* / oaidni*
+frø*, sæd* / siepman*
+virk* / oidno*
+sjeld* / hárve*
+selv*, sjøl* / ieš*
+selge*, selje, sel, seld* / vuovd*
+send* / sádde*
+sendt*, send / sáddii*
+serie* / ráidu*
+alvorl* / duođalaš
+service, tjeneste*, tenest* / bálval*
+oppgjør*, oppgjer* / soahpamu*
+sytten*, søtten* / čiežanuppelohkái*
+syvende*, sjuende*, sjuande* / čihččet*
+sytti*, søtti* / čiežalogi*
+sex*, seksu* / seksa*, seksu*
+rist* / heailluh*, heaillut
+vil / galgga*, galga*, galggá, gallgi*
+skam*, skjem* / heahpa*, heahppá*
+hun, ho / son
+sau* / sávza
+skjort* / báidi*, báidd*
+sko* / gáma*, gápmag*
+kort* / oaneha*
+bør, burde, ville, skulle / galggaš*
+skulder*, skuldr* / oalgi*
+vise*, vist* / čájeh*, čujuh*
+lukke*, steng* / gokča*
+velsign* / buressiv*
+sida, siida*, distrikt* / siida*, siidda*, oroha*
+taus* / jaskes*
+sølv*, sylv* / silba*
+enkel*, enkle* / oktageardán*
+synd* / suddu*, suttu*, suttola*
+siden, sidan / dassái
+syng* / lávlut
+enk*, ensidig, eneste, einsidig, einaste / okta
+søster*, syster* / oabbá*
+sit* / čohkká*
+situasjon* / dille*, dile*, dilálašvu*
+seksten* / guhtanuppelohkái*
+sjette* / guđát*
+seksti* / guhtalogi*
+størrelse*, storleik* / sturrodat*
+skin*, hud* / náhki
+himmel*, himl* / almmi*, albmi*
+sov*, søv / oađđi*, oađđá*
+langsom*, sen*, sein* / hiđis*
+lite*, små, lille, vesle, få / unni, unna, smávva, unnán
+mindre / unnit
+minst / unnimus*
+lukt* / hádja*
+smil* / modji*
+røyk* / borgguh*, borggut
+snø*, sne* / muohta*, muohtti*
+så, slik* / nu
+samfunn* / servodat*, servodaga*
+solgt*, seld / vuvdon
+soldat* / sooalddá*, soaldá*
+løsning*, løysing* / čoavddus*, čovdos*
+noe*, noko* / soames*, muhtun, muhtum*, muhtom*, muhtin
+iblant, av og til / goasnu
+sønn*, son* / gánd*, bártni*, bárdni*
+sang*, song* / lávlla*
+snart / farga
+sjel* / siellu*
+lyd*, høres, hørtes / jietna*
+kilde*, kjeld* / gáldu*, gálddu*
+syd*, sør* / lulli*
+spesiel* / erenoamáš*
+forderv*, ødelegge*, ødela, øydel* / billaš*
+spion* / spiovdna*, spiovnna*,
+trapp*, trinn / tráhpat
+stå* / čuožžu*, čuočču*
+stjern* / násti*, nástti*
+stat*, Stat / Stáhta*, stáhta*, stáda*
+stasjon* / stašuvdnja*
+stjel*, stel* / suolád*, suolát
+skritt* / lávki*, lávkki*, lávkái
+fremdeles, framleis, enno, ennå, likevel, fortsett, stadig / liikká
+stjal, stjålet, stal, stole / suoládii
+stein*, sten* / geađgi*
+sto, stått / čuoččui
+stans*, stopp* / bisán*
+fortelling*, forteljing* / muitalus*
+gate*, gata / gáhta*
+sterk* / gievrras*, nana
+stud* / stud*, lohká, loga*
+emne*, fag*, subjekt* / fáddá*
+fremgang*, framgang* / menestuv*, sukseas*, ovdáneapmi*, ovdáneam*
+slik* / dakkár*
+plutsel* / fáhkka*
+sukker* / sohkar*
+forslag*, foresl*, framlegg* / evttoh*, árval*
+sommer*, sommar*, somra* / geassi*, geasse*
+sol* / beaivváš*
+sunge* / lávllui
+overflatisk, overfladisk / olggo*
+støtt*, stønad*, tilskudd*, tilskott* / doarja*, doarjja*
+overflat* / giera*, gierra*, govdila*, govddi*, bajil*
+overlev* / birge*, ceavz*
+system* / vuogádat*, system*
+bord*, tabell* / beavdi*, tabeall*
+ta, taka, tar, tek / váldit
+tatt, teke / váldon
+snakk*, prat*, tal* / hálla*, hálli*, hupma*, huma*
+smak* / smáhkka*
+skatt* / vearru*, vearro*, vearu*, verrui
+te* / teadja*
+lær*, undervis* / oahpah*, oahpás*
+tele* / tele*
+fjernsyn*, TV / TV
+fortel* / muital*
+ti / logi
+tiende, tiande / logát
+tekst* / teaksta*
+enn / go
+takk* / giitu*
+at / ahte
+den / dan
+deres, deira, si, sin, sitt, sine / sin
+dem, dei / sii
+da, så / dalle, de
+teor* / teoriija*
+der, dit / doppe
+derfor / dan geažil, danin, dan dihte, dan dihtii
+på grunn av / geažil
+som / nugo
+disse, desse / dát, dáid
+de, dei / sii, soai, dat, daid
+tykk*, tjukk* / govda*
+tyv*, tjuv* / suola*
+tynn* / guoirras*, seaggi*
+sak*, ting* / ášši*, tiŋga*
+tenk*, synes / jurddaš*
+tredje* / goalmmát*
+tretten* / golbmanuppelohkái*
+tredve, tretti* / golbmalogi*
+det*, den* / dá*
+sjølv om, selv om, skjønt / váikko, vaikko
+tenkt*, tanke* / jurdda*
+tusen* / duhát*, duháh*
+trusel, trusl* / uhkádus*
+kastet, kasta / bálkestii
+strupe* / čotta*, čoddag*
+gjennom* / čađa*
+kast* / bálkest*
+tid*, gang* / diibmu*, diimu*, áigi*, áiggi*
+trett*, trøytt*, trøtt* / váiban*
+tobakk* / duhpát
+idag, i dag / otne, odne, dál*
+tå*, tær* / juolgesuorbma*
+sammen, saman / ovttas
+enkelt* / ovttaskas
+hensyn / vuhtii váld*
+fortal* / dajai
+imorgen, i morgon, i morgen / ihttin
+tunge*, tunga* / njuovčča*, njuokč*
+Også, også, for, altfor / Maiddái, maiddái, várás
+tok / válddii
+redskap*, reidskap / bargoneavvu*
+topp* / alde
+turist* / turista*
+mot / guvlui*
+by* / gávpot*, gávpog*
+spor* / luodda*
+trafikk* / johtalu*, johtola*, trafihk*
+tragi*, trage* / surgos*, surggus*, surgula*
+tog* / toga*
+handsam*, behandl* / gieđahal*
+triumf* / illud*, triumf*
+sann*, sant / duohtavuohta*, duohta*
+forsøk*, prøv* / iska*, iskkai*
+vend* / vuorru*
+tolv* / guoktenuppelohkái*
+tyve*, tjue* / guoktelogi*
+to ganger, to gonger / guktii
+to, dobbel* / guovtegeard*
+type*, typa* / lágan*
+typisk* / mihtilmas, typihkala*
+enstem*, einstem*, samrøyst* / ovttajielala*
+onkel* / eanu*, čeahci*,
+forstå*, forsto / ipmird*, ipmir
+virksomhe* / doaibma*, doaimma*, doibmii
+bedra*, bedro* / beaht*
+univ* / univ*
+hvis ikke, vis ikkje, med mindre / jos ii
+til / dassážii, rádjai, rádjái
+uvanl* / eahpedábála*
+opp / bajás
+oss / min*, mis, midjiide
+bruk* / geavah*
+pleide, vant, brukt* / geavahuvvo*
+bruker*, brukar* / geavaheaddji*, geavaheddji*
+vanl* / dábála*
+verdi* / árvu*, árvvu*, árvo*
+vara* / várre*
+vase*, vasa* / lihtti*
+svært, meget / duođai, hui
+Gjennom, gjennom, med, for / bokte
+syn* / oaidn*, oainn*
+landsby*, bygd* / gilli*, gili*
+besøk* / fitna*, fidna*, guossis*
+stemme*, røyst* / jietna*, jiena*
+løn* / bálká
+vente*, venta* / vuordi*, vuorddi*, vuorddá*, vuordá*
+gå*, gikk, gjekk / vázz*, vácci*, vácce*, váccá*
+vegg*, mur* / seaidni*, seainni*
+vil*, ønske*, ønskj*, ynskj* / hálid*, háliid*
+krig* / soahti*, soađi*
+var / lei*, ledje*
+vask* / bassa*, basa*
+vann*, vatn*, vass* / čáhci*, čázi*, čáze*, čázá*
+måte*, vei*, veg*, utveg* / dáhpi*
+vi, me / mii, moai
+svak* / headju*, heajos*, heitto*
+vær* / dálki*
+uke*, veke*, veka / vahku*
+vel, bra / bures
+vest* / oarji*, oarje*
+hva, kva, hvilk* / mii
+når, da, mens / goas
+hvor, kvar, kor / gos, gosa, man, masa
+om / juogo
+hvilke*, som, kva / mas, mii, main, goabbá, makkár, geat
+stund, mens, lenge, i mens / dan botta
+hvit*, kvit* / vilges*
+hvem, som, kven / gii, mat
+hel*, heil* / obba, oba, oppa, olles
+hvis, hvem, som / gean, geaid
+hvorfor, kvifor, korfor / manin, manne
+kone*, kona / eamit, eamid*
+vill* / vilddas*
+vinn* / vuoiti*, vuo
+vind* / biegga*, biekka*
+vindu*, vindaug* / lássa*, lása*
+vin* / viidni*, viinni*
+vinter* / dálvi*, dálvvi*, dálve*
+klok*, vis* / viissisvuohta*, viissivuođa*
+ønsk*, ynskj* / doaivva*, doaivvo*, doaivvu*
+med / mielde
+uttak*, ta ut / olggosváld*
+uten, utan / haga, *keahttá, almmá
+kvinne*, kvinna / nisu*, nisson*
+vant, vann, vunne* / vuittii
+undr*, lur* / imašdal*, imaštal*
+tre*, trær* / muorra*, muora*
+ord* / sátni*, sáni*
+arbeid*, jobb* / barg*
+verden, verda / máilbmi*, máilmmi*
+verre / fuonit
+verst, verste / fuonimu*
+vil, ville / hálid*, sáhtáš*, áigu*, áiggu*
+sår* / hávvi*
+bryt* / heaibbod*
+skriv*, skrevet / čálli*, čáli*, čálá*, čáll*
+feil, gale / boastto
+skrev, skreiv / čálii
+år* / jahk*, jagi*
+gul* / fiskes*
+ja, jo / joo, juo, gal
+igår, i går / ikte
+ennå, enno, likevel / vel
+du / don, dus
+deg, din / du, dutnje, dus, duinna, dunin
+de, dere, De, Dem, Dykk / doai, dii
+dykk, dere, Dem, Dykk / dudno*, dudnu*, din, didjiide, dis, dinguin, dinin
+ung* / nuorra*, nuora*
+selv, sjøl*, deg, Dere / iežat
+selv, sjøl*, dere / iežadet
+null / nolla, 0*
+slekt* / sohka*, soga*
+fram, frem / ovdan
+helt / áibbas
+Finland* / Suopma, Suoma*, Supmii
+langs / miehtá
+Høyesterett* / Alimusrie*
+tiltak / doaibma*, doaimma*, doibmii, doaibmabidj*, doaibmabiju*
+nr. / nr.
+kr / kr., ru., kr, ru, kruvdnosaš, ruvdnosaš, kruvnn*, ruvnn*
+ulike / iešguđetlágan, iešguđe*, iešguhte*, sierranas
+Oslo / Oslo*
+søk / oza, ohca*, ohcá
+Videre, videre, samtidig, i tillegg / Dasto, dasto, seammás, seammas
+innen / ovdal
+tillegg / lassin, lassi
+videre / viidáset
+styrke / nanne*
+postboks / poastaboks*, boastaboks*
+Kautokeino / .Guovdageaidn*, Guovdageidn*, Guovdageain*
+e-post / e-poast*, e-boast*, e-post*, e-bost*
+faks / fáksa
+side / siidu , bealli, beali*, belii*
+knyttet / čatn*, čadn*
+opplæring / oahpah*, oahpu*, oahppu*, ohppu*
+Karasjok / Kárásjog*, Kárášjohk*, Kárášjo*, Karasjok
+imidlertid / almmatge, dattetge, dattege
+urfolk* / álgoálbmo*, eamiálbmo*
+departement* / departement*, departemeant*
+Sametinget* / Sámedigg*, Sámedikk*
+reindriftslov* / boazodoalloláhk*, boazodoallolága*
+stadfeste* / nanne*
+tilrå* / ráđđe*, ráv*
+elever / oahppi*, ohppi*
+Deres Majestet / Gonagaslaš Majesteht*
+NOU / NOU, NAČ
+økt / lassán*, lasih*
+befolkning* / álbmo*, ássi*
+eget / sierra
+tips / cavgil*
+utdanning* / oahpp*, ohppui, oahpu*, oahpahus*
+sammenheng / oktavuohta, oktavuođa*, oktavuhtii
+artikkel / artihkal*, artihkkal*
+post / poasta, boasta, poastta*, boastta*, postii, bostii
+direkte / njuolga, njuolgga
+regional* / guvllola*, guovlola*, guovllula*, guovlula*, regionála*, regiov*
+duodji / duodji*, duodje*, duodjái, duoji*
+innstilling / árvalus*, evttohus*
+samtidig / seammás
+søknad / ohcan, ohcam*
+familie* / bearaš*, bearraš*, sohka*, soga*
+tradisjon* / árbevirola*, árbevier*, árbevirr*
+Tana / Deatnu, Deatno*, Deanu*
+organ / orgána*, orgánii
+oppgave* / bargu*, barggu*, doaimma*, doaibma*, doibmii
+utfordring* / hástalus*
+St.meld. / St.dieđ*
+retts* / riekte*
+rolle / rolla*, rollii
+fornyings- / ođasmahttin-
+Fornyings- / Ođasmahttin-
+innebærer / mearkkaš*, mielddisbu*
+omfatter / fátmmast*, siskkil*
+henhold / mielde, vuođul, ektui
+befolkning / álbmot, álbmog*
+nytt / ođas, ođđa
+drift / doaimm*, doaibm*
+videre / viidáseappot, viidát, viidáset
+kl. / dii., dii, diibm*
+formål* / ulbmil*
+ivareta* / fuolah*, áimmáhuš*, áittard*
+side / siidu, siiddu*, bealli
+ansatte / bargi*
+tilbud / fálalda*
+basert / vuođđuduvv*
+Pedersen / Pedersen*
+mill. / milj., miljon
+budsjett* / bušeaht*
+*ombud* / *áittardeaddji*, *áittardeddji*
+bakgrunn* / duogáš*, duogáž*
+lovforslag* / láhkaevttohus*, láhkaárvalus*
+Finansdepartement* / Ruhtadandeparteme*
+finansdepartement* / ruhtadandeparteme*
+Fiskeri- og kystdepartement* / Guolástus- ja riddodeparteme*
+fiskeri- og kystdepartement* / guolástus- ja riddodeparteme*
+Regionaldepartement* / Guovlodeparteme*, Guovlludeparteme*
+regionaldepartement* / guovlodeparteme*, guovlludeparteme*
+Kunnskapsdepartement* / Máhttodeparteme*
+kunnskapsdepartement* / máhttodeparteme*
+matdepartement* / biebmodeparteme*
+Miljøverndepartement* / Birasgáhttendeparteme*
+miljøverndepartement* / birasgáhttendeparteme*
+kap. / kap., kap
+næring* / ealáhus*
+handelsdepartement* / gávpedeparteme*
+Samisk høgskole / Sámi allaskuvl*
+Reindriftsforvaltning* / Boazodoallohálddahus*
+reinbeitedistrikt* / oroha*
+reinmerk* / mearka*, mearkka*, merke*, mearku*, mearkku*, boazomeark*
+frist* / áigemear*, áigemer*
+høring* / gulaskuddan*
+reineier* / boazoeaiggá*
+Ot.prp. / Od.prp.
+Grunnlov* / Vuođđolá*
+folkerett* / álbmotriekt*, álbmotrievtt*
+departementet / departement*, departemeant*
+utgangspunkt / vuolggasadj*, vuolggasaji*
+utarbeide* / ráhkad*, hábme*
+Akersgata / Akersgata*
+konsultasjon*, konsulter* / ráđđádalla*
+innstillingen / evttohus*, árvalus*
+lulesam* / julevsá*
+produksjon* / buvttadea*, buvttadem*
+følgende / čuovvova*
+Porsanger / Porsáŋgu*, Porsáŋggu*
+valg* / válga*, válgga*, válgii, válljen, válljem*
+øvrig* / eará*
+inkluderingsdepartementet / searvadahttindeparteme*
+Inkluderingsdepartementet / Searvadahttindeparteme*
+konsekvens* / váikkuh*
+Einar / Einar*
+bærekraftig* / ceavzil*, nanaguovddeva*, guoddeva*, nana bissova*
+eventuel* / vejola*
+vern* / gáhtte*, suodjal*
+avtale* / soahpamu*, šiehtad*
+økning* / lasihea*
+forutsette*, forutsatt* / eaktud*
+post / poasta, poastta*, postii, boasta, boastta*, bostii
+generel* / oppala*, dábála*
+Olli / Olli*, Ollái
+utredning* / čielggade*, čielggadus*
+Egil / Egil*
+opprette* / ásah*
+oppfat* / ádde*, áddeju*
+Russland / Ruošša*, Ruššii
+oppnå / oččod*
+Tysfjord / Divtasvu*, Divttasvu*
+Kåfjord / Gáivuona*, Gáivu*
+innhold* / sisdoal*, sisdoll*
+ca. / sullii
+Eira / Eira*
+Hætta / Hætta*
+skriftlig / čálala*
+prioriter* / vuoruh*
+ramme* / rámma*
+artikkel / artihkal*, artihkkal*
+forutsetning* / eaktu*, eavttu*
+sosial* / sosiál*
+forhandl* / šiehtad*
+administrativ* / hálddahusla*
+tildel* / juollud*
+innspill / ávžžuh*
+avslut* / loahpah*, loahpa*, loahppa*
+mandat* / mandáht*
+total* / ollisla*, oktiibuot
+areal* / areál*, areal*, eanan*, eana*, eatna*
+ILO-konvensjon* / ILO-soahpamuš*, ILO-konvenšuv*
+utmark* / meahcci*, meahcce*, meahci*, meahccái*
+tap* / massi*
+melding* / diehtu*, dieđu*, dieđáhus*
+utnytt* / ávkkástal*
+begrens* / ráddje*
+uavhengig* / beroškeahttá
+inngrep* / sisabáhkke*
+aktør* / bealála*
+unntak* / spiehkas*
+utenriksdepartement* / olgoriikadeparteme*
+fremme* / ovddid*
+berør* / guosk*
+forvalte* / hálddaš*
+omsorgsdepartementet / fuolahusdeparteme*
+rettslig* / rievttála*
+rettslig vern* / riektesuodjal*
+driftsenhet* / doalloovttada*, doallu*, doalu*
+idrett* / valáštallan*
+biologisk / biologala*
+FN* / ON*
+tospråklig* / guovttegiel*
+klima* / dálkkádat*, dálkkáda*
+avdeling* / ossoda*
+interne / siskkáldas*
+EU* / EO*
+result* / boađus*, bohtos*
+presse* / preassa*
+konflikt* / riidu*, riiddu*, riido*
+grundig* / vuđola*
+minoritet* / unnitlogu*, unnitlohk*, minoriteht*
+erstat* / buhtadus*, buhtad*
+forbud / gielddus, gildos*
+oversend* / sádd*
+økologisk / ekologala*
+mineral* / minerál*
+nrl / nbr*
+rovvilt*, rovdyr* / boraspir*, boranávd*
+internat* / internáht*
+kvote* / earre*, earri, eari*
+innledning* / álggahus*
+hindre* / eastad*
+utforme / hábme*
+justisdepartementet / justisdeparteme*
+hvorvidt / man muddui
+press / deaddu*, deattu*
+samferdselsdepartement* / johtalusdepartemen*
+premiss* / eaktu*, eavttu*
+torsk* / dorski*, dorske*
+bibliotek* / girjerádj*, girjeráj*
+skal / galg*
+realiser* / ollašuht*
+dermed / nappo
+region* / guovlu*, guovllu*, guvlui
+alternativ* / molssaeakt*, molssaeavttu*
+ytre / olgguldas
+utsette* / maŋid*
+bevilg* / juollud*
+trussel / uhkád*
+rettsgrunnlag* / riektevuođ*, riektevuđđ*
+st.prp. / sd.prp.
+kollektiv* / oktasaš*, kollektiiv*
+oppsummer* / čoahkkáige*
+forutsigbar* / vuorddehahtti*
+ekspropriasjon* / bággolotn*, bággolon*
+olje- / oljo-
+hytte* / barta*, bartta*
+omstilling* / nuppástu*
+innstilling* / evttohus*, árvalus*
+oppfølging* / čuovvolea*
+notat / notáht*
+uenighet* / guovtteoaivilvu*
+reform* / ođastus*
+utveksl* / lonohalla*
+arktisk / arktala*
+forøvrig, for øvrig / muđui
+tamrein* / boazo*, boazu*, bohcco*
+proposisjon* / proposišuv*
+førskolelærer* / ovdaskuvlaoahpah*
+sanksjon* / ráŋggášt*
+siktemål* / ulbmil*
+i overkant / badjelaš
+slakt* / njuovva*, njuova*
+oppheve* / heaittih*
+kalv* / miesse*, miessi*, miesi*, misii*, gálbi*, gálbbi*, gálbe*, guottet*
+Det, det / dat
+fornorsk* / dáruiduhtti*
+forside / ovdasiid*
+benevnelse* / namahus*
+kap / kap
+råderett / ráđđenvuoigatvuo*
+eks / omd
+eks. / omd.

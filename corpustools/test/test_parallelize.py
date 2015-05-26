@@ -22,9 +22,11 @@ from lxml import etree
 from lxml import doctestcompare
 import os
 import doctest
+import tempfile
 
 from corpustools import parallelize
 from corpustools import text_cat
+from corpustools import generate_anchor_list
 
 
 here = os.path.dirname(__file__)
@@ -156,7 +158,7 @@ class TestSentenceDivider(unittest.TestCase):
         self.sentence_divider = parallelize.SentenceDivider(
             os.path.join(
                 here,
-                "parallelize_data/finnmarkkulahka_web_lettere.pdf.xml"), "nob")
+                "parallelize_data/finnmarkkulahka_web_lettere.pdf.xml"))
 
     def assertXmlEqual(self, got, want):
         """
@@ -411,11 +413,12 @@ class TestParallelize(unittest.TestCase):
     A test class for the Parallelize class
     """
     def setUp(self):
-        self.parallelize = parallelize.Parallelize(
+        self.parallelize = parallelize.ParallelizeTCA2(
             os.path.join(
                 os.environ['GTFREE'],
                 'prestable/converted/sme/facta/skuvlahistorja2/'
-                'aarseth2-s.htm.xml'), "nob")
+                'aarseth2-s.htm.xml'),
+            "nob")
 
     def test_orig_path(self):
         self.assertEqual(
@@ -442,20 +445,33 @@ class TestParallelize(unittest.TestCase):
     def test_get_sent_filename(self):
         self.assertEqual(
             self.parallelize.get_sent_filename(
-                self.parallelize.get_filelist()[0]),
+                self.parallelize.get_origfiles()[0]),
             os.path.join(os.environ['GTFREE'],
                          "tmp/aarseth2-n.htmnob_sent.xml"))
 
     def test_divide_p_into_sentences(self):
-        self.assertEqual(self.parallelize.divide_p_into_sentences(), 0)
+        self.parallelize.divide_p_into_sentences()
 
     def test_parallize_files(self):
-        self.assertEqual(self.parallelize.parallelize_files(), 0)
+        print self.parallelize.parallelize_files()
 
     def test_generate_anchor_file(self):
         self.assertEqual(self.parallelize.generate_anchor_file(),
                          os.path.join(os.environ['GTFREE'],
                                       'anchor-nobsme.txt'))
+
+class TestGenerateAnchorFile(unittest.TestCase):
+    """
+    A test class for the GenerateAnchorList class
+    """
+    def test_generate_anchor_output(self):
+        tmpdir = tempfile.mkdtemp()
+        gal = generate_anchor_list.GenerateAnchorList('nob', 'sme', tmpdir)
+        gal.generate_file([os.path.join(here, 'parallelize_data/anchor.txt')],
+                          quiet=True)
+        want = open(os.path.join(here, 'parallelize_data/anchor-nobsme.txt')).read()
+        got = open(os.path.join(tmpdir, 'anchor-nobsme.txt')).read()
+        self.assertEqual(got, want)
 
 
 class TestTmx(unittest.TestCase):
@@ -622,7 +638,8 @@ class TestTca2ToTmx(unittest.TestCase):
             "nob")
 
         self.para = para
-        self.tmx = parallelize.Tca2ToTmx(para.get_filelist())
+        self.tmx = parallelize.Tca2ToTmx(para.get_origfiles(),
+                                         para.get_sentfiles())
 
     def assertXmlEqual(self, got, want):
         """
@@ -642,7 +659,8 @@ class TestTca2ToTmx(unittest.TestCase):
         line1 = '<s id="1">ubba gubba.</s> <s id="2">ibba gibba.</s>'
         line2 = '<s id="1">abba gabba.</s> <s id="2">ebba gebba.</s>'
 
-        got_tu = self.tmx.make_tu(line1, line2)
+        got_tu = self.tmx.make_tu(self.tmx.remove_s_tag(line1),
+                                  self.tmx.remove_s_tag(line2))
 
         want_tu = etree.XML(
             '<tu><tuv xml:lang="nob"><seg>ubba gubba. ibba gibba.</seg>'
@@ -654,7 +672,7 @@ class TestTca2ToTmx(unittest.TestCase):
     def test_make_tuv(self):
         line = '<s id="1">ubba gubba.</s> <s id="2">ibba gibba.</s>'
         lang = 'smi'
-        got_tuv = self.tmx.make_tuv(line, lang)
+        got_tuv = self.tmx.make_tuv(self.tmx.remove_s_tag(line), lang)
 
         want_tuv = etree.XML(
             '<tuv xml:lang="smi"><seg>ubba gubba. ibba gibba.</seg></tuv>')

@@ -38,6 +38,7 @@ import text_cat
 import argparse_version
 import util
 import generate_anchor_list
+import tempfile
 
 
 here = os.path.dirname(__file__)
@@ -222,20 +223,21 @@ class SentenceDivider:
     into sentences, but otherwise is unchanged.
     Each sentence is encased in an s tag, and has an id number
     """
-    def __init__(self, input_xmlfile, parallel_lang):
+    def __init__(self, input_xmlfile):
         """Parse the input_xmlfile, set doc_lang to lang and read typos from
         the corresponding .typos file if it exists
         """
-        self.set_up_input_file(input_xmlfile, parallel_lang)
+        self.set_up_input_file(input_xmlfile)
         self.sentence_counter = 0
         self.typos = {}
+        self.document = None
 
         typosname = input_xmlfile.replace('.xml', '.typos')
         if os.path.isfile(typosname):
             t = typosfile.Typos(input_xmlfile.replace('.xml', '.typos'))
             self.typos.update(t.get_typos())
 
-    def set_up_input_file(self, input_xmlfile, parallel_lang):
+    def set_up_input_file(self, input_xmlfile):
         """
         Initialize the inputfile, skip those parts that are meant to be
         skipped, move <later> elements.
@@ -255,14 +257,16 @@ class SentenceDivider:
     def process_all_paragraphs(self):
         """Go through all paragraphs in the etree and process them one by one.
         """
-        self.document = etree.Element('document')
-        body = etree.Element('body')
-        self.document.append(body)
+        if self.document is None:
+            self.document = etree.Element('document')
+            body = etree.Element('body')
+            self.document.append(body)
 
-        elts_doc_lang = filter(self.in_main_lang,
-                             self.input_etree.findall('//p'))
-        processed = self.process_elts(elts_doc_lang)
-        body.extend(processed)
+            elts_doc_lang = filter(self.in_main_lang,
+                                self.input_etree.findall('//p'))
+            processed = self.process_elts(elts_doc_lang)
+            body.extend(processed)
+        return self.document
 
     def process_elts(self, elts):
         para_texts = ("".join(elt.xpath('.//text()'))
@@ -277,7 +281,8 @@ class SentenceDivider:
         o_path, o_file = os.path.split(outfile)
         o_rel_path = o_path.replace(os.getcwd()+'/', '', 1)
         try:
-            os.makedirs(o_rel_path)
+            if o_rel_path != '':
+                os.makedirs(o_rel_path)
         except OSError as e:
             if e.errno != errno.EEXIST:
                 raise
@@ -316,7 +321,7 @@ class SentenceDivider:
             preprocess_input.encode('utf-8'))
 
         if subp.returncode != 0:
-            print >>sys.stderr, 'Could not divide into sentences'
+            note('ERROR: Could not divide into sentences')
             print >>sys.stderr, output
             print >>sys.stderr, error
             sys.exit()
@@ -385,8 +390,7 @@ class SentenceDivider:
 
         return s
 
-
-class Parallelize:
+class Parallelize(object):
     """
     A class to parallelize two files
     Input is the xml file that should be parallellized and the language that it
@@ -419,6 +423,8 @@ class Parallelize:
             self.reshuffle_files()
 
         self.quiet = quiet
+        self.anchor_sources = [os.path.join(os.environ['GTHOME'],
+                                            'gt/common/src/anchor.txt')]
 
     def consistency_check(self, f0, f1):
         """
@@ -461,7 +467,10 @@ class Parallelize:
 
         return os.path.join(out_dirname, out_filename)
 
-    def get_filelist(self):
+    def get_sentfiles(self):
+        return map(self.get_sent_filename, self.get_origfiles())
+
+    def get_origfiles(self):
         """
         Return the list of (the two) files that are aligned
         """
@@ -490,37 +499,16 @@ class Parallelize:
         else:
             return False
 
-    def generate_anchor_file(self):
-        """
-        Generate an anchor file with lang1 and lang2. Return the path
-        to the anchor file
-        """
-
-        gal = generate_anchor_list.GenerateAnchorList(
-            self.get_lang1(), self.get_lang2(), os.environ['GTFREE'])
-        gal.generate_file([
-            os.path.join(os.environ['GTHOME'], 'gt/common/src/anchor.txt')],
-                          quiet=self.quiet)
-
-        # Return the absolute path of the resulting file
-        return os.path.abspath(gal.get_outfile())
-
     def divide_p_into_sentences(self):
         """
         Tokenize the text in the given file and reassemble it again
         """
         for pfile in self.origfiles:
             infile = os.path.join(pfile.get_name())
-            if os.path.exists(infile):
-                outfile = self.get_sent_filename(pfile)
-                divider = SentenceDivider(infile, pfile.get_lang())
-                divider.process_all_paragraphs()
-                divider.write_result(outfile)
-            else:
-                print >>sys.stderr, "{} doesn't exist".format(infile)
-                return 2
-
-        return 0
+            outfile = self.get_sent_filename(pfile)
+            divider = SentenceDivider(infile)
+            divider.process_all_paragraphs()
+            divider.write_result(outfile)
 
     def get_sent_filename(self, pfile):
         """
@@ -534,8 +522,102 @@ class Parallelize:
 
     def parallelize_files(self):
         """
+        Parallelize two files
+        """
+        if not self.quiet:
+            note("Aligning files …")
+        return self.align()
+
+    def run_command(self, command):
+        """
+        Run a parallelize command and return its output
+        """
+        if not self.quiet:
+            note("Running {}".format(" ".join(command)))
+        subp = subprocess.Popen(command,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+        (output, error) = subp.communicate()
+
+        if subp.returncode != 0:
+            raise Exception(
+                'Could not parallelize {} and {} into sentences\n{}\n\n{}\n'.format(
+                    self.get_sent_filename(self.get_origfiles()[0]),
+                    self.get_sent_filename(self.get_origfiles()[1]),
+                    output, error))
+
+        return output, error
+
+    def align(self):
+        raise NotImplementedError('You have to subclass and override align')
+
+
+class ParallelizeHunalign(Parallelize):
+    def make_dict(self):
+        gal = generate_anchor_list.GenerateAnchorList(
+            self.get_lang1(), self.get_lang2(), os.environ['GTFREE'])
+        words_pairs = gal.read_anchors(self.anchor_sources, quiet=self.quiet)
+        # turn [("foo, bar", "fie")] into [("foo", "fie"), ("bar", "fie")]:
+        split_on = re.compile(r' *, *')
+        expanded_pairs= [ (w1,w2)
+                          for w1s, w2s in words_pairs
+                          for w1 in re.split(split_on, w1s)
+                          for w2 in re.split(split_on, w2s)
+                          if w1 and w2]
+        return "\n".join([w1+" @ "+w2 for w1, w2 in expanded_pairs])
+
+    def to_sents(self, origfile):
+        divider = SentenceDivider(origfile.get_name())
+        doc = divider.process_all_paragraphs()
+        paragraphs = etree.ElementTree(doc).xpath('//p')
+        sents = [["<p>"]+p.xpath('./s/text()') for p in paragraphs]
+        return "\n".join(sum(sents, []))
+
+    def align(self):
+        """
+        Parallelize two files using hunalign
+        """
+        def tmp():
+            return tempfile.NamedTemporaryFile('w')
+        with tmp() as dict_f, tmp() as sent0_f, tmp() as sent1_f:
+            dict_f.write(self.make_dict().encode('utf-8'))
+            sent0_f.write(self.to_sents(self.get_origfiles()[0]).encode('utf-8'))
+            sent1_f.write(self.to_sents(self.get_origfiles()[1]).encode('utf-8'))
+
+            command = ['hunalign',
+                       '-utf',
+                       '-realign',
+                       '-text',
+                       dict_f.name,
+                       sent0_f.name, sent1_f.name,
+            ]
+            output, error = self.run_command(command)
+
+        tmx = HunalignToTmx(self.get_origfiles(), output.decode('utf-8'))
+        return tmx
+
+class ParallelizeTCA2(Parallelize):
+    def generate_anchor_file(self):
+        """
+        Generate an anchor file with lang1 and lang2. Return the path
+        to the anchor file
+        """
+
+        gal = generate_anchor_list.GenerateAnchorList(
+            self.get_lang1(), self.get_lang2(), os.environ['GTFREE'])
+        gal.generate_file(self.anchor_sources, quiet=self.quiet)
+
+        # Return the absolute path of the resulting file
+        return os.path.abspath(gal.get_outfile())
+
+    def align(self):
+        """
         Parallelize two files using tca2
         """
+        if not self.quiet:
+            note("Adding sentence structure for the aligner …")
+        self.divide_p_into_sentences()
+
         tca2_jar = os.path.join(here, 'tca2/dist/lib/alignment.jar')
         # util.sanity_check([tca2_script])
 
@@ -547,30 +629,16 @@ class Parallelize:
                    tca2_jar,
                    '-cli',
                    '-anchor={}'.format(anchor_name),
-                   '-in1={}'.format(self.get_sent_filename(
-                       self.get_filelist()[0])),
-                   '-in2={}'.format(self.get_sent_filename(
-                       self.get_filelist()[1]))]
-        if not self.quiet:
-            print "Running tca2 aligner ..."
-        subp = subprocess.Popen(command,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
-        (output, error) = subp.communicate()
+                   '-in1={}'.format(self.get_sent_filename(self.get_origfiles()[0])),
+                   '-in2={}'.format(self.get_sent_filename(self.get_origfiles()[1]))]
+        output, error = self.run_command(command)
+        # Ignore output, Tca2ToTmx guesses name of output-files from sentfiles
 
-        if subp.returncode != 0:
-            print >>sys.stderr, (
-                'Could not parallelize {} and {} into sentences'
-                '\n{}\n'
-                '\n{}\n'.format(
-                    self.get_sent_filename(self.get_filelist()[0]),
-                    self.get_sent_filename(self.get_filelist()[1]),
-                    output, error))
-
-        return subp.returncode
+        tmx = Tca2ToTmx(self.get_origfiles(), self.get_sentfiles())
+        return tmx
 
 
-class Tmx:
+class Tmx(object):
     """
     A class that reads a tmx file, and implements a bare minimum of
     functionality to be able to compare two tmx's.
@@ -759,10 +827,9 @@ class Tmx:
         """
         Write a tmx file given a tmx etree element and a filename
         """
-        try:
-            os.makedirs(os.path.dirname(out_filename))
-        except OSError:
-            pass
+        out_dir = os.path.dirname(out_filename)
+        if out_dir != '' and not os.path.isdir(out_dir):
+            os.makedirs(out_dir)
 
         with open(out_filename, "w") as tmx_file:
             string = etree.tostring(self.get_tmx(),
@@ -770,7 +837,6 @@ class Tmx:
                                     encoding="utf-8",
                                     xml_declaration=True)
             tmx_file.write(string)
-            print "Wrote {}".format(out_filename)
 
     def remove_tu_with_empty_seg(self):
         """Remove tu elements that contain empty seg element
@@ -804,16 +870,19 @@ class Tmx:
         return True
 
 
-class Tca2ToTmx(Tmx):
+class AlignmentToTmx(Tmx):
     """
-    A class to make tmx files based on the output from tca2
+    A class to make tmx files based on the output of an aligner
+
+    This just implements some common methods for the TCA2 and hunalign
+    subclasses.
     """
-    def __init__(self, filelist):
+    def __init__(self, origfiles):
         """
         Input is a list of CorpusXMLFile objects
         """
-        self.filelist = filelist
-        Tmx.__init__(self, self.set_tmx())
+        self.origfiles = origfiles
+        super(AlignmentToTmx, self).__init__(self.make_tmx())
 
     def make_tu(self, line1, line2):
         """
@@ -821,8 +890,8 @@ class Tca2ToTmx(Tmx):
         """
         tu = etree.Element("tu")
 
-        tu.append(self.make_tuv(line1, self.filelist[0].get_lang()))
-        tu.append(self.make_tuv(line2, self.filelist[1].get_lang()))
+        tu.append(self.make_tuv(line1, self.origfiles[0].get_lang()))
+        tu.append(self.make_tuv(line2, self.origfiles[1].get_lang()))
 
         return tu
 
@@ -833,7 +902,7 @@ class Tca2ToTmx(Tmx):
         tuv = etree.Element("tuv")
         tuv.attrib["{http://www.w3.org/XML/1998/namespace}lang"] = lang
         seg = etree.Element("seg")
-        seg.text = self.remove_s_tag(line).strip()
+        seg.text = line.strip()
         tuv.append(seg)
 
         return tuv
@@ -853,53 +922,107 @@ class Tca2ToTmx(Tmx):
 
         return header
 
-    def remove_s_tag(self, line):
+    def make_tmx(self):
         """
-        Remove the s tags that tca2 has added
-        """
-        line = line.replace('</s>', '')
-        sregex = re.compile('<s id="[^ ]*">')
-        line = sregex.sub('', line)
-
-        return line
-
-    def set_tmx(self):
-        """
-        Make tmx file based on the two output files of tca2
+        Make tmx file based on the output of the aligner
         """
         tmx = etree.Element("tmx")
-        header = self.make_tmx_header(self.filelist[0].get_lang())
+        header = self.make_tmx_header(self.origfiles[0].get_lang())
         tmx.append(header)
 
-        pfile1_data = self.read_tca2_output(self.filelist[0])
-        pfile2_data = self.read_tca2_output(self.filelist[1])
+        pfile1_data, pfile2_data = self.parse_alignment_results()
 
         body = etree.SubElement(tmx, "body")
-        for line1, line2 in map(None, pfile1_data, pfile2_data):
+        for line1, line2 in zip(pfile1_data, pfile2_data):
             tu = self.make_tu(line1, line2)
             body.append(tu)
 
         return tmx
 
-    def read_tca2_output(self, pfile):
+    def parse_alignment_results(self):
+        raise NotImplementedError(
+            'You have to subclass and override parse_alignment_results')
+
+
+class HunalignToTmx(AlignmentToTmx):
+    """
+    A class to make tmx files based on the output from hunalign
+    """
+    def __init__(self, origfiles, output):
+        """
+        Input is a list of CorpusXMLFile objects
+        """
+        self.output = output
+        self.threshold = 0.0 # TODO: user-settable?
+        super(HunalignToTmx, self).__init__(origfiles)
+
+    def parse_alignment_results(self):
+        """
+        Return parsed output files of tca2
+        """
+        pairs = [line.split("\t")
+                 for line in self.output.split("\n")
+                 if line]
+        pairs = filter(self.is_good_line,
+                       pairs)
+
+        src_lines = [self.clean_line(l[0])
+                     for l in pairs]
+        trg_lines = [self.clean_line(l[1])
+                     for l in pairs]
+        return src_lines, trg_lines
+
+    def is_good_line(self, l):
+        return (len(l) == 3 and
+                l[0] != "<p>" and
+                l[1] != "<p>" and
+                l[2] > self.threshold)
+
+    multi_sep = re.compile(r' *~~~ *')
+    def clean_line(self, line):
+        """
+        Remove the ~~~ occuring in multi-sentence alignments
+        """
+        return self.multi_sep.sub(' ', line)
+
+class Tca2ToTmx(AlignmentToTmx):
+    """
+    A class to make tmx files based on the output from tca2
+    """
+    def __init__(self, origfiles, sentfiles):
+        """
+        Input is a list of CorpusXMLFile objects
+        """
+        self.sentfiles = sentfiles
+        super(Tca2ToTmx, self).__init__(origfiles)
+
+    def parse_alignment_results(self):
+        """
+        Return parsed output files of tca2
+        """
+        pfile1_data = self.read_tca2_output(self.sentfiles[0])
+        pfile2_data = self.read_tca2_output(self.sentfiles[1])
+        return pfile1_data, pfile2_data
+
+    def read_tca2_output(self, sentfile):
         """
         Read the output of tca2
         Input is a CorpusXMLFile
         """
-        pfile_name = self.get_sent_filename(pfile).replace('.xml', '_new.txt')
+        sentfile_name = sentfile.replace('.xml', '_new.txt')
 
-        with open(pfile_name, "r") as tca2_output:
-            return tca2_output.read().decode('utf-8').split('\n')
+        with open(sentfile_name, "r") as tca2_output:
+            return map(self.remove_s_tag,
+                       tca2_output.read().decode('utf-8').split('\n'))
 
-    def get_sent_filename(self, pfile):
+    sregex = re.compile('<s id="[^ ]*">')
+    def remove_s_tag(self, line):
         """
-        Compute a name for the corpus-analyze output and tca2 input file
-        Input is a CorpusXMLFile
+        Remove the s tags that tca2 has added
         """
-        origfilename = pfile.get_basename_noext()
-        return (os.path.join(
-            os.environ['GTFREE'], 'tmp',
-            '{}{}_sent.xml'.format(origfilename, pfile.get_lang())))
+        line = line.replace('</s>', '')
+        line = self.sregex.sub('', line)
+        return line
 
 
 class TmxComparator:
@@ -968,7 +1091,7 @@ class TmxTestDataWriter():
             tree = etree.parse(filename)
             self.set_parags_testing_element(tree.getroot())
         except IOError, error:
-            print "I/O error({0}): {1}".format(error.errno, error.strerror)
+            note("I/O error({0}): {1}".format(error.errno, error.strerror))
             sys.exit(1)
 
     def get_filename(self):
@@ -1067,7 +1190,7 @@ class TmxGoldstandardTester:
                 paralang = 'nob'
 
             # Align files
-            self.align_files(testrun, want_tmx_file, paralang)
+            self.align_files(testrun, want_tmx_file, paralang, aligner="tca2")
 
         # All files have been tested, insert this run at the top of the
         # paragstest element
@@ -1075,7 +1198,7 @@ class TmxGoldstandardTester:
         # Write data to file
         self.testresult_writer.write_paragstesting_data()
 
-    def align_files(self, testrun, want_tmx_file, paralang):
+    def align_files(self, testrun, want_tmx_file, paralang, aligner):
         """
         Align files
         Compare the tmx's of the result of this parallellization and
@@ -1088,33 +1211,28 @@ class TmxGoldstandardTester:
         xml_file = self.compute_xmlfilename(want_tmx_file)
 
         parallelizer = Parallelize(xml_file, paralang)
-        if parallelizer.divide_p_into_sentences() == 0:
-            if parallelizer.parallelize_files() == 0:
+        got_tmx = parallelizer.parallelize_files()
 
-                # The result of the alignment is a tmx element
-                filelist = parallelizer.get_filelist()
-                got_tmx = Tca2ToTmx(filelist)
+        # This is the tmx element fetched from the goldstandard file
+        want_tmx = Tmx(etree.parse(want_tmx_file))
 
-                # This is the tmx element fetched from the goldstandard file
-                want_tmx = Tmx(etree.parse(want_tmx_file))
+        # Instantiate a comparator with the two tmxes
+        comparator = TmxComparator(want_tmx, got_tmx)
 
-                # Instantiate a comparator with the two tmxes
-                comparator = TmxComparator(want_tmx, got_tmx)
+        # Make a file_element for our results file
+        file_element = self.testresult_writer.make_file_element(
+            filelist[0].get_basename(),
+            str(comparator.get_lines_in_wantedfile()),
+            str(comparator.get_number_of_differing_lines()))
 
-                # Make a file_element for our results file
-                file_element = self.testresult_writer.make_file_element(
-                    filelist[0].get_basename(),
-                    str(comparator.get_lines_in_wantedfile()),
-                    str(comparator.get_number_of_differing_lines()))
+        self.set_number_of_diff_lines(
+            comparator.get_number_of_differing_lines())
 
-                self.set_number_of_diff_lines(
-                    comparator.get_number_of_differing_lines())
+        # Append the result for this file to the testrun element
+        testrun.append(file_element)
 
-                # Append the result for this file to the testrun element
-                testrun.append(file_element)
-
-                self.write_diff_files(comparator, parallelizer,
-                                      filelist[0].get_basename())
+        self.write_diff_files(comparator, parallelizer,
+                                filelist[0].get_basename())
 
     def compute_xmlfilename(self, want_tmx_file):
         """
@@ -1162,7 +1280,7 @@ class TmxGoldstandardTester:
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
-            print >>sys.stderr, 'Error when searching for goldstandard docs'
+            note('ERROR: When searching for goldstandard docs:')
             print >>sys.stderr, error
             sys.exit(1)
         else:
@@ -1231,7 +1349,7 @@ class Toktmx2Tmx:
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
-            print >>sys.stderr, 'Error when searching for toktmx docs'
+            note('ERROR: When searching for toktmx docs:')
             print >>sys.stderr, error
             sys.exit(1)
         else:
@@ -1245,7 +1363,13 @@ def parse_options():
         description='Sentence align two files. Input is the document \
         containing the main language, and language to parallelize it with.')
 
-    parser.add_argument('input_file', help="The input file")
+    parser.add_argument('input_file',
+                        help="The input filename")
+    parser.add_argument('output_file',
+                        help="Optionally an output filename. Defaults to "
+                        "toktmx/{LANGA}2{LANGB}/{GENRE}/…/{BASENAME}.toktmx",
+                        default=None,
+                        nargs='?')
     parser.add_argument('-f', '--force',
                         help="Overwrite output file if it already exists."
                         "The default is to skip parallelizing existing files.",
@@ -1253,6 +1377,10 @@ def parse_options():
     parser.add_argument('-q', '--quiet',
                         help="Don't mention anything out of the ordinary.",
                         action="store_true")
+    parser.add_argument('-a', '--aligner',
+                        dest='aligner',
+                        default='tca2',
+                        help="Either hunalign or tca2 (the default).")
     parser.add_argument('-p', '--parallel_language',
                         dest='parallel_language',
                         help="The language to parallelize the input "
@@ -1267,37 +1395,42 @@ def main():
     args = parse_options()
 
     try:
-        parallelizer = Parallelize(args.input_file,
-                                   args.parallel_language,
-                                   args.quiet)
+        if args.aligner == "hunalign":
+            parallelizer = ParallelizeHunalign(origfile1 = args.input_file,
+                                               lang2 = args.parallel_language,
+                                               quiet = args.quiet)
+        elif args.aligner == "tca2":
+            parallelizer = ParallelizeTCA2(origfile1 = args.input_file,
+                                           lang2 = args.parallel_language,
+                                           quiet = args.quiet)
+        else:
+            note("ERROR: Unknown aligner argument {}, expecting one of: tca2, hunalign"
+                 .format(args.aligner))
+            sys.exit(1)
+
     except IOError as e:
         print e.message
         sys.exit(1)
 
-    outfile = parallelizer.get_outfile_name()
-    if os.path.exists(outfile):
+    if args.output_file is None:
+        outfile = parallelizer.get_outfile_name()
+    elif args.output_file == "-":
+        outfile = "/dev/stdout"
+    else:
+        outfile = args.output_file
+    if outfile != "/dev/stdout" and os.path.exists(outfile):
         if args.force:
-            print "{} already exists, overwriting!".format(outfile)
+            note("{} already exists, overwriting!".format(outfile))
         else:
-            print "{} already exists, skipping ...".format(outfile)
+            note("{} already exists, skipping ...".format(outfile))
             sys.exit(1)
 
     if not args.quiet:
-        print "Aligning {} and its parallel file".format(args.input_file)
-        print "Adding sentence structure that tca2 needs …"
-    if parallelizer.divide_p_into_sentences() == 0:
-        if not args.quiet:
-            print "Aligning files …"
-        if parallelizer.parallelize_files() == 0:
-            tmx = Tca2ToTmx(parallelizer.get_filelist())
+        note("Aligning {} and its parallel file".format(args.input_file))
+    tmx = parallelizer.parallelize_files()
 
-            o_path, o_file = os.path.split(outfile)
-            o_rel_path = o_path.replace(os.getcwd()+'/', '', 1)
-            try:
-                os.makedirs(o_rel_path)
-            except OSError, e:
-                if e.errno != errno.EEXIST:
-                    raise
-            if not args.quiet:
-                print "Generating the tmx file {}".format(outfile)
-            tmx.write_tmx_file(outfile)
+    if not args.quiet:
+        note("Generating the tmx file {}".format(outfile))
+    tmx.write_tmx_file(outfile)
+    if not args.quiet:
+        note("Wrote {}".format(outfile))
