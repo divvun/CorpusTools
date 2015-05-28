@@ -683,7 +683,7 @@ class Tmx(object):
             pass
 
         string += '\n'
-        return string.encode('utf-8')
+        return string
 
     def tuv_to_string(self, tuv):
         """
@@ -695,7 +695,7 @@ class Tmx(object):
         except(AttributeError):
             pass
 
-        return string.encode('utf-8')
+        return string
 
     def lang_to_stringlist(self, lang):
         """

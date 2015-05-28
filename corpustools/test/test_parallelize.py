@@ -17,6 +17,8 @@
 #   Copyright 2011-2014 Børre Gaup <borre.gaup@uit.no>
 #
 
+from __future__ import unicode_literals
+
 import unittest
 from lxml import etree
 from lxml import doctestcompare
@@ -408,9 +410,9 @@ class TestSentenceDivider(unittest.TestCase):
             u'Sámerievtti ovdáneapmi lea dahkan vuđđosa Finnmárkkuláhkii')
 
 
-class TestParallelize(unittest.TestCase):
+class TestParallelizeTCA2(unittest.TestCase):
     """
-    A test class for the Parallelize class
+    A test class for the ParallelizeTCA2 class
     """
     def setUp(self):
         self.parallelize = parallelize.ParallelizeTCA2(
@@ -455,6 +457,37 @@ class TestParallelize(unittest.TestCase):
 
     def test_parallize_files(self):
         print self.parallelize.parallelize_files()
+
+class TestParallelizeHunalign(unittest.TestCase):
+    """
+    A test class for the ParallelizeHunalign class
+    """
+    def setUp(self):
+        self.parallelize = parallelize.ParallelizeHunalign(
+            os.path.join(
+                os.environ['GTFREE'],
+                'prestable/converted/sme/facta/skuvlahistorja2/'
+                'aarseth2-s.htm.xml'),
+            "nob",
+            quiet=True)
+
+    def test_parallize_files(self):
+        print self.parallelize.parallelize_files()
+
+    def test_hunalign_dict(self):
+        self.assertEqual(self.parallelize.anchor_to_dict(
+            [("foo, bar", "fie"),
+             ("1, ein", "eins"),
+             ("2, два", "2, guokte"),
+             ]),
+                         [("foo", "fie"),
+                          ("bar", "fie"),
+                          ("1", "eins"),
+                          ("ein","eins"),
+                          ("2", "2"),
+                          ("2", "guokte"),
+                          ("два", "2"),
+                          ("два", "guokte")])
 
 
 class TestGenerateAnchorFile(unittest.TestCase):
@@ -518,14 +551,15 @@ class TestTmx(unittest.TestCase):
             here,
             'parallelize_data/aarseth2-n.htm.toktmx.as.txt')
         with open(toktmx_txt_name, 'r') as toktmx_txt:
-            string_list = toktmx_txt.readlines()
+            string_list = toktmx_txt.read().decode('utf-8').split('\n')
 
             nob_list = []
             sme_list = []
             for string in string_list:
                 pair_list = string.split('\t')
-                nob_list.append(pair_list[0])
-                sme_list.append(pair_list[1].strip())
+                if len(pair_list) == 2:
+                    nob_list.append(pair_list[0])
+                    sme_list.append(pair_list[1].strip())
 
             self.assertEqual(self.tmx.lang_to_stringlist('nob'), nob_list)
             self.assertEqual(self.tmx.lang_to_stringlist('sme'), sme_list)
@@ -535,7 +569,8 @@ class TestTmx(unittest.TestCase):
             here,
             'parallelize_data/aarseth2-n.htm.toktmx.as.txt')
         with open(toktmx_txt_name, 'r') as toktmx_txt:
-            want_list = toktmx_txt.readlines()
+            want_list = [l.decode('utf-8')
+                         for l in toktmx_txt.readlines()]
             # self.maxDiff = None
             self.assertEqual(self.tmx.tmx_to_stringlist(), want_list)
 
