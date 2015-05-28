@@ -19,6 +19,8 @@
 #   Copyright 2013-2014 Børre Gaup <borre.gaup@uit.no>
 #
 
+from __future__ import unicode_literals
+
 import os
 import unittest
 import doctest
@@ -34,16 +36,15 @@ here = os.path.dirname(__file__)
 
 class TestAnalyser(unittest.TestCase):
     def setUp(self):
-        self.a = analyser.Analyser(u'sme')
-        self.a.xml_file = parallelize.CorpusXMLFile(
-            os.path.join(here, 'smefile.xml'))
-        self.a.set_analysis_files(
-            abbr_file=os.path.join(here, 'abbr.txt'),
+        self.a = analyser.Analyser(
+            u'sme',
             fst_file=os.path.join(here, 'analyser.xfst'),
             disambiguation_analysis_file=os.path.join(here,
                                                       'disambiguation.cg3'),
             function_analysis_file=os.path.join(here, 'functions.cg3'),
             dependency_analysis_file=os.path.join(here, 'dependency.cg3'))
+        self.a.xml_file = parallelize.CorpusXMLFile(
+            os.path.join(here, 'smefile.xml'))
 
     def assertXmlEqual(self, got, want):
         u"""Check if two stringified xml snippets are equal

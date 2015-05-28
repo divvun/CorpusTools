@@ -18,6 +18,9 @@
 #
 #   Copyright 2013 Børre Gaup <borre.gaup@uit.no>
 #
+
+from __future__ import unicode_literals
+
 '''This class makes a dependency analysis of sma, sme and smj files
 
 The pipeline is:
@@ -43,9 +46,25 @@ class Analyser(object):
     '''A class which can analyse giellatekno xml formatted documents
     using preprocess, lookup, lookup2cg and vislcg3
     '''
-    def __init__(self, lang):
+    def __init__(self, lang,
+                 fst_file=None,
+                 disambiguation_analysis_file=None,
+                 function_analysis_file=None,
+                 dependency_analysis_file=None):
+        '''Set the files needed by preprocess, lookup and vislcg3
+        '''
         self.lang = lang
         self.xml_printer = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
+
+        self.exit_on_error(fst_file)
+        self.exit_on_error(disambiguation_analysis_file)
+        self.exit_on_error(function_analysis_file)
+        self.exit_on_error(dependency_analysis_file)
+
+        self.fst_file = fst_file
+        self.disambiguation_analysis_file = disambiguation_analysis_file
+        self.function_analysis_file = function_analysis_file
+        self.dependency_analysis_file = dependency_analysis_file
 
     def exit_on_error(self, filename):
         '''Exit the process if filename does not exist
@@ -61,27 +80,6 @@ class Analyser(object):
 
         if error:
             sys.exit(4)
-
-    def set_analysis_files(self,
-                           abbr_file=None,
-                           fst_file=None,
-                           disambiguation_analysis_file=None,
-                           function_analysis_file=None,
-                           dependency_analysis_file=None):
-        '''Set the files needed by preprocess, lookup and vislcg3
-        '''
-        if self.lang in ['sma', 'sme', 'smj']:
-            self.exit_on_error(abbr_file)
-        self.exit_on_error(fst_file)
-        self.exit_on_error(disambiguation_analysis_file)
-        self.exit_on_error(function_analysis_file)
-        self.exit_on_error(dependency_analysis_file)
-
-        self.abbr_file = abbr_file
-        self.fst_file = fst_file
-        self.disambiguation_analysis_file = disambiguation_analysis_file
-        self.function_analysis_file = function_analysis_file
-        self.dependency_analysis_file = dependency_analysis_file
 
     def collect_files(self, converted_dirs):
         '''converted_dirs is a list of directories containing converted
@@ -136,10 +134,7 @@ class Analyser(object):
         u"""Runs preprocess on the ccat output.
         Returns the output of preprocess
         """
-        pre_process_command = [u'preprocess']
-
-        if self.abbr_file is not None:
-            pre_process_command.append(u'--abbr={}'.format(self.abbr_file))
+        pre_process_command = util.get_preprocess_command(self.lang)
 
         text = self.ccat()
         if text is not None:
@@ -312,24 +307,20 @@ def main():
     args = parse_options()
     util.sanity_check([u'preprocess', u'lookup2cg', u'lookup', u'vislcg3'])
 
-    ana = Analyser(args.lang)
-    ana.set_analysis_files(
-        abbr_file=os.path.join(
-            os.getenv(u'GTHOME'), u'langs',
-            args.lang, 'tools/preprocess/abbr.txt'),
-        fst_file=os.path.join(
-            os.getenv(u'GTHOME'), u'langs',
-            args.lang, u'src/analyser-disamb-gt-desc.xfst'),
-        disambiguation_analysis_file=os.path.join(
-            os.getenv(u'GTHOME'), u'langs',
-            args.lang, u'src/syntax/disambiguation.cg3'),
-        function_analysis_file=os.path.join(
-            os.getenv(u'GTHOME'),
-            u'gtcore/gtdshared/smi/src/syntax/korp.cg3'),
-        dependency_analysis_file=os.path.join(
-            os.getenv(u'GTHOME'),
-            u'gtcore/gtdshared/smi/src/syntax/dependency.cg3')
-        )
+    ana = Analyser(args.lang,
+                   fst_file=os.path.join(
+                       os.getenv(u'GTHOME'), u'langs',
+                       args.lang, u'src/analyser-disamb-gt-desc.xfst'),
+                   disambiguation_analysis_file=os.path.join(
+                       os.getenv(u'GTHOME'), u'langs',
+                       args.lang, u'src/syntax/disambiguation.cg3'),
+                   function_analysis_file=os.path.join(
+                       os.getenv(u'GTHOME'),
+                       u'gtcore/gtdshared/smi/src/syntax/korp.cg3'),
+                   dependency_analysis_file=os.path.join(
+                       os.getenv(u'GTHOME'),
+                       u'gtcore/gtdshared/smi/src/syntax/dependency.cg3')
+    )
 
     ana.collect_files(args.converted_dirs)
     if len(ana.xml_files) > 0:
