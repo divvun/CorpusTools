@@ -528,17 +528,21 @@ class Parallelize(object):
 
 
 class ParallelizeHunalign(Parallelize):
-    def make_dict(self):
-        gal = generate_anchor_list.GenerateAnchorList(
-            self.get_lang1(), self.get_lang2(), os.environ['GTFREE'])
-        words_pairs = gal.read_anchors(self.anchor_sources, quiet=self.quiet)
+    split_anchors_on = re.compile(r' *, *')
+    def anchor_to_dict(self, words_pairs):
         # turn [("foo, bar", "fie")] into [("foo", "fie"), ("bar", "fie")]:
-        split_on = re.compile(r' *, *')
         expanded_pairs= [ (w1,w2)
                           for w1s, w2s in words_pairs
-                          for w1 in re.split(split_on, w1s)
-                          for w2 in re.split(split_on, w2s)
+                          for w1 in re.split(self.split_anchors_on, w1s)
+                          for w2 in re.split(self.split_anchors_on, w2s)
                           if w1 and w2]
+        return expanded_pairs
+        
+    def make_dict(self):
+        gal = generate_anchor_list.GenerateAnchorList(
+            self.get_lang1(), self.get_lang2())
+        words_pairs = gal.read_anchors(self.anchor_sources, quiet=self.quiet)
+        expanded_pairs = self.anchor_to_dict(words_pairs)
         return "\n".join([w1+" @ "+w2 for w1, w2 in expanded_pairs])
 
     def to_sents(self, origfile):
