@@ -632,7 +632,9 @@ class ParallelizeTCA2(Parallelize):
                        '-in2={}'.format(self.get_sent_filename(self.get_origfiles()[1]))]
             output, error = self.run_command(command)
             # Ignore output, Tca2ToTmx guesses name of output-files from sentfiles
-            # (and for that reason, we have to use get_sent_filename)
+            # TODO: Use a tempfile.mkdtemp instead of hardcoded
+            # GTFREE/tmp? Can't use tmpfiles for in1/in2, since output
+            # file name is guessed based on them.
 
         tmx = Tca2ToTmx(self.get_origfiles(), self.get_sentfiles())
         return tmx

@@ -41,7 +41,7 @@ class TestCorpusXMLFile(unittest.TestCase):
     def setUp(self):
         self.pfile = parallelize.CorpusXMLFile(
             os.path.join(
-                os.environ['GTFREE'],
+                here, "parallelize_data",
                 "prestable/converted/sme/facta/skuvlahistorja2/"
                 "aarseth2-s.htm.xml"))
 
@@ -60,14 +60,14 @@ class TestCorpusXMLFile(unittest.TestCase):
     def test_dirname(self):
         self.assertEqual(
             self.pfile.get_dirname(),
-            os.path.join(os.environ['GTFREE'],
+            os.path.join(here, "parallelize_data",
                          "prestable/converted/sme/facta/skuvlahistorja2"))
 
     def test_name(self):
         self.assertEqual(
             self.pfile.get_name(),
             os.path.join(
-                os.environ['GTFREE'],
+                here, "parallelize_data",
                 "prestable/converted/sme/facta/skuvlahistorja2/"
                 "aarseth2-s.htm.xml"))
 
@@ -82,7 +82,7 @@ class TestCorpusXMLFile(unittest.TestCase):
         self.assertEqual(
             self.pfile.get_parallel_filename('nob'),
             os.path.join(
-                os.environ['GTFREE'],
+                here, "parallelize_data",
                 "prestable/converted/nob/facta/skuvlahistorja2/"
                 "aarseth2-n.htm.xml"))
 
@@ -90,7 +90,7 @@ class TestCorpusXMLFile(unittest.TestCase):
         self.assertEqual(
             self.pfile.get_original_filename(),
             os.path.join(
-                os.environ['GTFREE'],
+                here, "parallelize_data",
                 "orig/sme/facta/skuvlahistorja2/aarseth2-s.htm"))
 
     def test_get_translated_from(self):
@@ -417,7 +417,7 @@ class TestParallelizeTCA2(unittest.TestCase):
     def setUp(self):
         self.parallelize = parallelize.ParallelizeTCA2(
             os.path.join(
-                os.environ['GTFREE'],
+                here, "parallelize_data",
                 'prestable/converted/sme/facta/skuvlahistorja2/'
                 'aarseth2-s.htm.xml'),
             "nob",
@@ -427,7 +427,7 @@ class TestParallelizeTCA2(unittest.TestCase):
         self.assertEqual(
             self.parallelize.get_origfile1(),
             os.path.join(
-                os.environ['GTFREE'],
+                here, "parallelize_data",
                 'prestable/converted/nob/facta/skuvlahistorja2/'
                 'aarseth2-n.htm.xml'))
 
@@ -435,7 +435,7 @@ class TestParallelizeTCA2(unittest.TestCase):
         self.assertEqual(
             self.parallelize.get_origfile2(),
             os.path.join(
-                os.environ['GTFREE'],
+                here, "parallelize_data",
                 'prestable/converted/sme/facta/skuvlahistorja2/'
                 'aarseth2-s.htm.xml'))
 
@@ -465,7 +465,7 @@ class TestParallelizeHunalign(unittest.TestCase):
     def setUp(self):
         self.parallelize = parallelize.ParallelizeHunalign(
             os.path.join(
-                os.environ['GTFREE'],
+                here, "parallelize_data",
                 'prestable/converted/sme/facta/skuvlahistorja2/'
                 'aarseth2-s.htm.xml'),
             "nob",
@@ -665,7 +665,7 @@ class TestTca2ToTmx(unittest.TestCase):
         """
         para = parallelize.ParallelizeTCA2(
             os.path.join(
-                os.environ['GTFREE'],
+                here, "parallelize_data",
                 'prestable/converted/sme/facta/skuvlahistorja2/'
                 'aarseth2-s.htm.xml'),
             "nob")
@@ -733,9 +733,9 @@ class TestTca2ToTmx(unittest.TestCase):
         self.assertEqual(
             self.para.get_outfile_name(),
             os.path.join(
-                os.environ['GTFREE'],
-                ('prestable/toktmx/nob2sme/facta/skuvlahistorja2/'
-                    'aarseth2-n.htm.toktmx')))
+                here, "parallelize_data",
+                "prestable/toktmx/nob2sme/facta/skuvlahistorja2",
+                "aarseth2-n.htm.toktmx"))
 
 
 class TestTmxComparator(unittest.TestCase):
