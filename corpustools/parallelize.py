@@ -467,9 +467,6 @@ class Parallelize(object):
 
         return os.path.join(out_dirname, out_filename)
 
-    def get_sentfiles(self):
-        return map(self.get_sent_filename, self.get_origfiles())
-
     def get_origfiles(self):
         """
         Return the list of (the two) files that are aligned
@@ -499,27 +496,6 @@ class Parallelize(object):
         else:
             return False
 
-    def divide_p_into_sentences(self):
-        """
-        Tokenize the text in the given file and reassemble it again
-        """
-        for pfile in self.origfiles:
-            infile = os.path.join(pfile.get_name())
-            outfile = self.get_sent_filename(pfile)
-            divider = SentenceDivider(infile)
-            divider.process_all_paragraphs()
-            divider.write_result(outfile)
-
-    def get_sent_filename(self, pfile):
-        """
-        Compute a name for the corpus-analyze output and tca2 input file
-        Input is a CorpusXMLFile
-        """
-        origfilename = pfile.get_basename_noext()
-        return os.path.join(os.environ['GTFREE'], 'tmp',
-                            '{}{}_sent.xml'.format(
-                                origfilename, pfile.get_lang()))
-
     def parallelize_files(self):
         """
         Parallelize two files
@@ -542,8 +518,7 @@ class Parallelize(object):
         if subp.returncode != 0:
             raise Exception(
                 'Could not parallelize {} and {} into sentences\n{}\n\n{}\n'.format(
-                    self.get_sent_filename(self.get_origfiles()[0]),
-                    self.get_sent_filename(self.get_origfiles()[1]),
+                    self.get_origfiles()[0], self.get_origfiles()[1],
                     output, error))
 
         return output, error
@@ -605,6 +580,30 @@ class ParallelizeTCA2(Parallelize):
         gal = generate_anchor_list.GenerateAnchorList(
             self.get_lang1(), self.get_lang2())
         gal.generate_file(self.anchor_sources, outpath, quiet=self.quiet)
+
+    def divide_p_into_sentences(self):
+        """
+        Tokenize the text in the given file and reassemble it again
+        """
+        for pfile in self.origfiles:
+            infile = os.path.join(pfile.get_name())
+            outfile = self.get_sent_filename(pfile)
+            divider = SentenceDivider(infile)
+            divider.process_all_paragraphs()
+            divider.write_result(outfile)
+
+    def get_sentfiles(self):
+        return map(self.get_sent_filename, self.get_origfiles())
+
+    def get_sent_filename(self, pfile):
+        """
+        Compute a name for the corpus-analyze output and tca2 input file
+        Input is a CorpusXMLFile
+        """
+        origfilename = pfile.get_basename_noext()
+        return os.path.join(os.environ['GTFREE'], 'tmp',
+                            '{}{}_sent.xml'.format(
+                                origfilename, pfile.get_lang()))
 
     def align(self):
         """

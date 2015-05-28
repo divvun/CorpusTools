@@ -418,7 +418,8 @@ class TestParallelize(unittest.TestCase):
                 os.environ['GTFREE'],
                 'prestable/converted/sme/facta/skuvlahistorja2/'
                 'aarseth2-s.htm.xml'),
-            "nob")
+            "nob",
+            quiet=True)
 
     def test_orig_path(self):
         self.assertEqual(
@@ -627,7 +628,7 @@ class TestTca2ToTmx(unittest.TestCase):
         """
         Hand the data from the Parallelize class to the tmx class
         """
-        para = parallelize.Parallelize(
+        para = parallelize.ParallelizeTCA2(
             os.path.join(
                 os.environ['GTFREE'],
                 'prestable/converted/sme/facta/skuvlahistorja2/'
