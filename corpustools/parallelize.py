@@ -1381,6 +1381,7 @@ def parse_options():
                         action="store_true")
     parser.add_argument('-a', '--aligner',
                         dest='aligner',
+                        choices=['hunalign', 'tca2'],
                         default='tca2',
                         help="Either hunalign or tca2 (the default).")
     parser.add_argument('-p', '--parallel_language',
@@ -1405,10 +1406,6 @@ def main():
             parallelizer = ParallelizeTCA2(origfile1 = args.input_file,
                                            lang2 = args.parallel_language,
                                            quiet = args.quiet)
-        else:
-            note("ERROR: Unknown aligner argument {}, expecting one of: tca2, hunalign"
-                 .format(args.aligner))
-            sys.exit(1)
 
     except IOError as e:
         print e.message
