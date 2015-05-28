@@ -455,23 +455,20 @@ class TestParallelize(unittest.TestCase):
     def test_parallize_files(self):
         print self.parallelize.parallelize_files()
 
-    def test_generate_anchor_file(self):
-        self.assertEqual(self.parallelize.generate_anchor_file(),
-                         os.path.join(os.environ['GTFREE'],
-                                      'anchor-nobsme.txt'))
 
 class TestGenerateAnchorFile(unittest.TestCase):
     """
     A test class for the GenerateAnchorList class
     """
     def test_generate_anchor_output(self):
-        tmpdir = tempfile.mkdtemp()
-        gal = generate_anchor_list.GenerateAnchorList('nob', 'sme', tmpdir)
-        gal.generate_file([os.path.join(here, 'parallelize_data/anchor.txt')],
-                          quiet=True)
-        want = open(os.path.join(here, 'parallelize_data/anchor-nobsme.txt')).read()
-        got = open(os.path.join(tmpdir, 'anchor-nobsme.txt')).read()
-        self.assertEqual(got, want)
+        with tempfile.NamedTemporaryFile('w') as anchor_path:
+            gal = generate_anchor_list.GenerateAnchorList('nob', 'sme')
+            gal.generate_file([os.path.join(here, 'parallelize_data/anchor.txt')],
+                              anchor_path.name,
+                              quiet=True)
+            want = open(os.path.join(here, 'parallelize_data/anchor-nobsme.txt')).read()
+            got = open(anchor_path.name).read()
+            self.assertEqual(got, want)
 
 
 class TestTmx(unittest.TestCase):

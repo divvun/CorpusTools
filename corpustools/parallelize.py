@@ -597,18 +597,14 @@ class ParallelizeHunalign(Parallelize):
         return tmx
 
 class ParallelizeTCA2(Parallelize):
-    def generate_anchor_file(self):
+    def generate_anchor_file(self, outpath):
         """
-        Generate an anchor file with lang1 and lang2. Return the path
-        to the anchor file
+        Generate an anchor file with lang1 and lang2.
         """
 
         gal = generate_anchor_list.GenerateAnchorList(
-            self.get_lang1(), self.get_lang2(), os.environ['GTFREE'])
-        gal.generate_file(self.anchor_sources, quiet=self.quiet)
-
-        # Return the absolute path of the resulting file
-        return os.path.abspath(gal.get_outfile())
+            self.get_lang1(), self.get_lang2())
+        gal.generate_file(self.anchor_sources, outpath, quiet=self.quiet)
 
     def align(self):
         """
@@ -619,20 +615,21 @@ class ParallelizeTCA2(Parallelize):
         self.divide_p_into_sentences()
 
         tca2_jar = os.path.join(here, 'tca2/dist/lib/alignment.jar')
-        # util.sanity_check([tca2_script])
+        # util.sanity_check([tca2_jar])
 
-        anchor_name = self.generate_anchor_file()
-
-        command = ['java',
-                   '-Xms512m', '-Xmx1024m',
-                   '-jar',
-                   tca2_jar,
-                   '-cli',
-                   '-anchor={}'.format(anchor_name),
-                   '-in1={}'.format(self.get_sent_filename(self.get_origfiles()[0])),
-                   '-in2={}'.format(self.get_sent_filename(self.get_origfiles()[1]))]
-        output, error = self.run_command(command)
-        # Ignore output, Tca2ToTmx guesses name of output-files from sentfiles
+        with tempfile.NamedTemporaryFile('w') as anchor_path:
+            self.generate_anchor_file(anchor_path.name)
+            command = ['java',
+                       '-Xms512m', '-Xmx1024m',
+                       '-jar',
+                       tca2_jar,
+                       '-cli',
+                       '-anchor={}'.format(anchor_path.name),
+                       '-in1={}'.format(self.get_sent_filename(self.get_origfiles()[0])),
+                       '-in2={}'.format(self.get_sent_filename(self.get_origfiles()[1]))]
+            output, error = self.run_command(command)
+            # Ignore output, Tca2ToTmx guesses name of output-files from sentfiles
+            # (and for that reason, we have to use get_sent_filename)
 
         tmx = Tca2ToTmx(self.get_origfiles(), self.get_sentfiles())
         return tmx

@@ -34,16 +34,11 @@ def note(msg):
 class GenerateAnchorList(object):
     LANGUAGES = ['eng', 'nob', 'sme', 'fin', 'smj', 'sma']
 
-    def __init__(self, lang1, lang2, outdir):
+    def __init__(self, lang1, lang2):
         self.lang1 = lang1
         self.lang2 = lang2
         self.lang1_index = self.LANGUAGES.index(self.lang1)
         self.lang2_index = self.LANGUAGES.index(self.lang2)
-        self.outfile = os.path.join(outdir,
-                                    'anchor-{}{}.txt'.format(lang1, lang2))
-
-    def get_outfile(self):
-        return self.outfile
 
     def words_of_line(self, lineno, line, infile):
         """Either a word-pair or None, if no word-pair on that line."""
@@ -71,14 +66,14 @@ class GenerateAnchorList(object):
                         for i,l in enumerate(f.readlines())]
         return filter(None, out)
 
-    def generate_file(self, infiles, quiet=False):
+    def generate_file(self, infiles, outpath, quiet=False):
         '''infiles is a list of file paths
         '''
         anchors = self.read_anchors(infiles, quiet)
 
-        with open(self.outfile, 'wb') as outfile:
+        with open(outpath, 'wb') as outfile:
             if not quiet:
-                note('Generating anchor word list to {}'.format(self.outfile))
+                note('Generating anchor word list to {}'.format(outpath))
             out = "\n".join("{} / {}".format(w1, w2)
                             for w1,w2 in anchors)
             print >>outfile, out.encode('utf-8')
