@@ -420,30 +420,30 @@ class Parallelize(object):
 
         self.consistency_check(self.origfiles[1], self.origfiles[0])
 
-        self.gal = self.setup_anchors(anchor_file)
-        # User-specified anchor order is based on command line args, so
-        # anchor-setup has to happen before reshuffling
+        # As stated in --help, we assume user-specified anchor file
+        # has columns based on input files, where --parallel_file is
+        # column two regardless of what file was translated from what,
+        # therefore we set this before reshuffling:
+        anchor_cols = [self.get_lang1(), self.get_lang2()]
         if self.is_translated_from_lang2():
             self.reshuffle_files()
 
-    def setup_anchors(self, anchor_file):
-        if anchor_file is None:
-            lang_cols = ['eng', 'nob', 'sme', 'fin', 'smj', 'sma']
+        self.gal = self.setup_anchors(anchor_file, anchor_cols)
+
+    def setup_anchors(self, path, cols):
+        if path is None:
             path = os.path.join(os.environ['GTHOME'], 'gt/common/src/anchor.txt')
-            for l in {self.get_lang1(), self.get_lang2()} - set(lang_cols):
+            cols = ['eng', 'nob', 'sme', 'fin', 'smj', 'sma']
+            for l in {self.get_lang1(), self.get_lang2()} - set(cols):
                 note("WARNING: {} not supported by default anchor list!".format(l))
-        else:
-            lang_cols = [self.get_lang1(), self.get_lang2()]
-            path = anchor_file
-            if not self.quiet:
-                note("Assuming {} has the order {} / {}".format(path,
-                                                                lang_cols[0],
-                                                                lang_cols[1]))
+        elif not self.quiet:
+            assert len(cols)==2
+            note("Assuming {} has the order {} / {}".format(path, cols[0], cols[1]))
+        # The lang-codes are looked up in cols after reshuffling, so
+        # returned pairs should have first part as lang1, second as lang2:
         return generate_anchor_list.GenerateAnchorList(
-            self.get_lang1(),
-            self.get_lang2(),
-            lang_cols,
-            path)
+            self.get_lang1(), self.get_lang2(),
+            cols, path)
 
     def consistency_check(self, f0, f1):
         """
@@ -558,9 +558,16 @@ class ParallelizeHunalign(Parallelize):
         return expanded_pairs
 
     def make_dict(self):
+        assert self.gal.lang1 == self.get_lang1()
+        assert self.gal.lang2 == self.get_lang2()
         words_pairs = self.gal.read_anchors(quiet=self.quiet)
         expanded_pairs = self.anchor_to_dict(words_pairs)
-        return "\n".join([w1+" @ "+w2 for w1, w2 in expanded_pairs])
+        cleaned_pairs = [(w1.replace('*', ''), w2.replace('*', ''))
+                         for w1,w2 in expanded_pairs]
+        # Hunalign expects the _reverse_ format for the dictionary!
+        # See Dictionary under http://mokk.bme.hu/resources/hunalign/
+        return "\n".join(["{} @ {}".format(w2, w1)
+                          for w1, w2 in cleaned_pairs])+"\n"
 
     def to_sents(self, origfile):
         divider = SentenceDivider(origfile.get_name())
@@ -579,6 +586,9 @@ class ParallelizeHunalign(Parallelize):
             dict_f.write(self.make_dict().encode('utf-8'))
             sent0_f.write(self.to_sents(self.get_origfiles()[0]).encode('utf-8'))
             sent1_f.write(self.to_sents(self.get_origfiles()[1]).encode('utf-8'))
+            dict_f.flush()
+            sent0_f.flush()
+            sent1_f.flush()
 
             command = ['hunalign',
                        '-utf',
@@ -597,7 +607,8 @@ class ParallelizeTCA2(Parallelize):
         """
         Generate an anchor file with lang1 and lang2.
         """
-
+        assert self.gal.lang1 == self.get_lang1()
+        assert self.gal.lang2 == self.get_lang2()
         self.gal.generate_file(outpath, quiet=self.quiet)
 
     def divide_p_into_sentences(self):
@@ -635,14 +646,15 @@ class ParallelizeTCA2(Parallelize):
         tca2_jar = os.path.join(here, 'tca2/dist/lib/alignment.jar')
         # util.sanity_check([tca2_jar])
 
-        with tempfile.NamedTemporaryFile('w') as anchor_path:
-            self.generate_anchor_file(anchor_path.name)
+        with tempfile.NamedTemporaryFile('w') as anchor_file:
+            self.generate_anchor_file(anchor_file.name)
+            anchor_file.flush()
             command = ['java',
                        '-Xms512m', '-Xmx1024m',
                        '-jar',
                        tca2_jar,
                        '-cli',
-                       '-anchor={}'.format(anchor_path.name),
+                       '-anchor={}'.format(anchor_file.name),
                        '-in1={}'.format(self.get_sent_filename(self.get_origfiles()[0])),
                        '-in2={}'.format(self.get_sent_filename(self.get_origfiles()[1]))]
             output, error = self.run_command(command)

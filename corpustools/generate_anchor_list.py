@@ -32,13 +32,13 @@ def note(msg):
     print >>sys.stderr, msg.encode('utf-8')
 
 class GenerateAnchorList(object):
-    def __init__(self, lang1, lang2, lang_cols, anchor_file):
+    def __init__(self, lang1, lang2, columns, path):
         self.lang1 = lang1
         self.lang2 = lang2
-        self.lang1_index = lang_cols.index(lang1)
-        self.lang2_index = lang_cols.index(lang2)
-        self.lang_cols = lang_cols
-        self.anchor_file = anchor_file
+        self.lang1_index = columns.index(lang1)
+        self.lang2_index = columns.index(lang2)
+        self.columns = columns
+        self.path = path
 
     def words_of_line(self, lineno, line):
         """Either a word-pair or None, if no word-pair on that line."""
@@ -46,24 +46,24 @@ class GenerateAnchorList(object):
         if (not line.startswith('#') or not
                 line.startswith('&')):
             words = line.split('/')
-            if len(words) == len(self.lang_cols):
+            if len(words) == len(self.columns):
                 word1 = words[self.lang1_index].strip()
                 word2 = words[self.lang2_index].strip()
                 if len(word1) > 0 and len(word2) > 0:
                     return word1, word2
             else:
                 print >>sys.stderr, (
-                    'Invalid line at {} in {}'.format(lineno, self.anchor_file))
+                    'Invalid line at {} in {}'.format(lineno, self.path))
 
     def read_anchors(self, quiet=False):
         """List of word-pairs in infiles, empty/bad lines skipped."""
-        out = []
-        with open(self.anchor_file) as f:
+        with open(self.path) as f:
+            out = [self.words_of_line(i, l.decode('utf-8'))
+                   for i,l in enumerate(f.readlines())]
+            out = filter(None, out)
             if not quiet:
-                note('Reading {}'.format(self.anchor_file))
-            out += [self.words_of_line(i, l.decode('utf-8'))
-                    for i,l in enumerate(f.readlines())]
-        return filter(None, out)
+                note("Read {} anchors from {}".format(len(out), self.path))
+            return out
 
     def generate_file(self, outpath, quiet=False):
         '''infiles is a list of file paths
@@ -82,15 +82,15 @@ def parse_options():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
         description=(
-            'Generate paired anchor lisit for languages lg1 and lg2. '
-            'Output line format e.g. njukčamán* / mars. '
-            'Source file is given on the command line, the format is tailored '
-            'for the file gt/common/src/anchor.txt.'))
+            "Generate paired anchor list for languages lang1 and lang2. "
+            "Output line format e.g. njukčamán* / mars. "
+            "Source file is given on the command line, the format is hardcoded "
+            "for the languages used in $GTHOME/gt/common/src/anchor.txt."))
 
-    parser.add_argument('--lang1', help='First languages in the word list')
-    parser.add_argument('--lang2', help='Second languages in the word list')
-    parser.add_argument('--outdir', help='The output directory')
-    parser.add_argument('input_file', nargs='+', help="The input file(s)")
+    parser.add_argument("--lang1", help="First languages in the word list")
+    parser.add_argument("--lang2", help="Second languages in the word list")
+    parser.add_argument("--outdir", help="The output directory")
+    parser.add_argument("input_file", nargs='+', help="The input file(s)")
 
     args = parser.parse_args()
     return args
@@ -99,5 +99,9 @@ def parse_options():
 def main():
     args = parse_options()
 
-    gal = GenerateAnchorList(args.lang1, args.lang2, args.outdir)
-    gal.generate_file(args.input_file)
+    gal = GenerateAnchorList(args.lang1, args.lang2,
+                             ['eng', 'nob', 'sme', 'fin', 'smj', 'sma'],
+                             args.input_file)
+    gal.generate_file("{}/anchor-{}{}.txt".format(args.outdir,
+                                                  args.lang1,
+                                                  args.lang2))
