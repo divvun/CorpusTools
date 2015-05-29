@@ -638,7 +638,7 @@ class ParallelizeTCA2(Parallelize):
                             '{}{}_sent.xml'.format(
                                 origfilename, pfile.get_lang()))
 
-    def crop_to_bytes(name, max_bytes):
+    def crop_to_bytes(self, name, max_bytes):
         """
         Ensure `name` is less than `max_bytes` bytes, without splitting in the
         middle of a wide byte.
