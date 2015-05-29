@@ -399,12 +399,13 @@ class Parallelize(object):
     The other file is found via the metadata in the input file
     """
 
-    def __init__(self, origfile1, lang2, quiet=False):
+    def __init__(self, origfile1, lang2, anchor_file=None, quiet=False):
         """
         Set the original file name, the lang of the original file and the
         language that it should parallellized with.
         Parse the original file to get the access to metadata
         """
+        self.quiet = quiet
         self.origfiles = []
 
         self.origfiles.append(CorpusXMLFile(
@@ -419,13 +420,30 @@ class Parallelize(object):
 
         self.consistency_check(self.origfiles[1], self.origfiles[0])
 
+        self.gal = self.setup_anchors(anchor_file)
+        # User-specified anchor order is based on command line args, so
+        # anchor-setup has to happen before reshuffling
         if self.is_translated_from_lang2():
             self.reshuffle_files()
 
-        self.quiet = quiet
-        self.anchor_source = (['eng', 'nob', 'sme', 'fin', 'smj', 'sma'],
-                              os.path.join(os.environ['GTHOME'],
-                                           'gt/common/src/anchor.txt'))
+    def setup_anchors(self, anchor_file):
+        if anchor_file is None:
+            lang_cols = ['eng', 'nob', 'sme', 'fin', 'smj', 'sma']
+            path = os.path.join(os.environ['GTHOME'], 'gt/common/src/anchor.txt')
+            for l in {self.get_lang1(), self.get_lang2()} - set(lang_cols):
+                note("WARNING: {} not supported by default anchor list!".format(l))
+        else:
+            lang_cols = [self.get_lang1(), self.get_lang2()]
+            path = anchor_file
+            if not self.quiet:
+                note("Assuming {} has the order {} / {}".format(path,
+                                                                lang_cols[0],
+                                                                lang_cols[1]))
+        return generate_anchor_list.GenerateAnchorList(
+            self.get_lang1(),
+            self.get_lang2(),
+            lang_cols,
+            path)
 
     def consistency_check(self, f0, f1):
         """
@@ -540,12 +558,7 @@ class ParallelizeHunalign(Parallelize):
         return expanded_pairs
 
     def make_dict(self):
-        gal = generate_anchor_list.GenerateAnchorList(
-            self.get_lang1(),
-            self.get_lang2(),
-            self.anchor_source[0],
-            self.anchor_source[1])
-        words_pairs = gal.read_anchors(quiet=self.quiet)
+        words_pairs = self.gal.read_anchors(quiet=self.quiet)
         expanded_pairs = self.anchor_to_dict(words_pairs)
         return "\n".join([w1+" @ "+w2 for w1, w2 in expanded_pairs])
 
@@ -585,12 +598,7 @@ class ParallelizeTCA2(Parallelize):
         Generate an anchor file with lang1 and lang2.
         """
 
-        gal = generate_anchor_list.GenerateAnchorList(
-            self.get_lang1(),
-            self.get_lang2(),
-            self.anchor_source[0],
-            self.anchor_source[1])
-        gal.generate_file(outpath, quiet=self.quiet)
+        self.gal.generate_file(outpath, quiet=self.quiet)
 
     def divide_p_into_sentences(self):
         """
@@ -1387,12 +1395,17 @@ def parse_options():
                         help="Don't mention anything out of the ordinary.",
                         action="store_true")
     parser.add_argument('-a', '--aligner',
-                        dest='aligner',
                         choices=['hunalign', 'tca2'],
                         default='tca2',
                         help="Either hunalign or tca2 (the default).")
+    parser.add_argument('-d', '--dict',
+                        default=None,
+                        help="Use a different bilingual seed dictionary. Must have "
+                        "two columns, with input_file language first, and "
+                        "--parallel_language second, separated by `/'. By default, "
+                        "$GTHOME/gt/common/src/anchor.txt is used, but this file "
+                        "only supports pairings between sme/sma/smj/fin/eng/nob. ")
     parser.add_argument('-p', '--parallel_language',
-                        dest='parallel_language',
                         help="The language to parallelize the input "
                         "document with",
                         required=True)
@@ -1408,10 +1421,12 @@ def main():
         if args.aligner == "hunalign":
             parallelizer = ParallelizeHunalign(origfile1 = args.input_file,
                                                lang2 = args.parallel_language,
+                                               anchor_file = args.dict,
                                                quiet = args.quiet)
         elif args.aligner == "tca2":
             parallelizer = ParallelizeTCA2(origfile1 = args.input_file,
                                            lang2 = args.parallel_language,
+                                           anchor_file = args.dict,
                                            quiet = args.quiet)
 
     except IOError as e:

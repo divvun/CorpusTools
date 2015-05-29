@@ -32,12 +32,12 @@ def note(msg):
     print >>sys.stderr, msg.encode('utf-8')
 
 class GenerateAnchorList(object):
-    def __init__(self, lang1, lang2, languages, anchor_file):
+    def __init__(self, lang1, lang2, lang_cols, anchor_file):
         self.lang1 = lang1
         self.lang2 = lang2
-        self.lang1_index = languages.index(lang1)
-        self.lang2_index = languages.index(lang2)
-        self.languages = languages
+        self.lang1_index = lang_cols.index(lang1)
+        self.lang2_index = lang_cols.index(lang2)
+        self.lang_cols = lang_cols
         self.anchor_file = anchor_file
 
     def words_of_line(self, lineno, line):
@@ -46,7 +46,7 @@ class GenerateAnchorList(object):
         if (not line.startswith('#') or not
                 line.startswith('&')):
             words = line.split('/')
-            if len(words) == len(self.languages):
+            if len(words) == len(self.lang_cols):
                 word1 = words[self.lang1_index].strip()
                 word2 = words[self.lang2_index].strip()
                 if len(word1) > 0 and len(word2) > 0:

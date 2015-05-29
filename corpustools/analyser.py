@@ -295,7 +295,6 @@ def parse_options():
                         help="director(y|ies) where the converted files \
                         exist")
     parser.add_argument('-k', '--fstkit',
-                        dest='fstkit',
                         choices=['hfst', 'xfst'],
                         default='xfst',
                         help="Finite State Toolkit. Either hfst or xfst (the default).")
