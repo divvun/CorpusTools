@@ -134,6 +134,7 @@ public class Alignment {
 
 		opt.getSet().addOption("cfg", Options.Separator.EQUALS, Options.Multiplicity.ZERO_OR_ONE);   // name of file with settings
 		opt.getSet().addOption("cli", Options.Multiplicity.ZERO_OR_ONE);
+		opt.getSet().addOption("cli-plain", Options.Multiplicity.ZERO_OR_ONE);
 		opt.getSet().addOption("anchor", Options.Separator.EQUALS, Options.Multiplicity.ZERO_OR_ONE); // anchor file name
 		opt.getSet().addOption("in1", Options.Separator.EQUALS, Options.Multiplicity.ZERO_OR_ONE); // first input file name
 		opt.getSet().addOption("in2", Options.Separator.EQUALS, Options.Multiplicity.ZERO_OR_ONE); // second input file name
@@ -164,10 +165,22 @@ public class Alignment {
 			File file = new File(in2Filename);
 			model.loadTobeAlignedFile(file, 1);
 		}
+		
 
+		if (opt.getSet().isSet("cli") && opt.getSet().isSet("cli-plain")) {
+			System.err.println("Choose one of cli or cli-plain.");
+			System.exit(1);
+		}
+		
 		if (opt.getSet().isSet("cli")) {
 			model.suggestWithoutGui();
-			model.saveFilesAutomatically();
+			model.setAllCorrespAttributes();
+			model.savePlain();
+			model.saveXml();
+		} else if (opt.getSet().isSet("cli-plain")) {
+			model.suggestWithoutGui();
+			model.setAllCorrespAttributes();
+			model.savePlain();
 		} else {
 			gui = new AlignGui(model);
 

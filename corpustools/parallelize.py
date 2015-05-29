@@ -631,9 +631,21 @@ class ParallelizeTCA2(Parallelize):
         Input is a CorpusXMLFile
         """
         origfilename = pfile.get_basename_noext()
+        # Ensure we have 20 bytes of leeway to let TCA2 append
+        # lang_sent_new.txt without going over the 255 byte limit:
+        origfilename = self.crop_to_bytes(origfilename, (255 - 20))
         return os.path.join(os.environ['GTFREE'], 'tmp',
                             '{}{}_sent.xml'.format(
                                 origfilename, pfile.get_lang()))
+
+    def crop_to_bytes(name, max_bytes):
+        """
+        Ensure `name` is less than `max_bytes` bytes, without splitting in the
+        middle of a wide byte.
+        """
+        while len(name.encode('utf-8')) > max_bytes:
+            name = name[:-1]
+        return name
 
     def align(self):
         """
@@ -653,7 +665,7 @@ class ParallelizeTCA2(Parallelize):
                        '-Xms512m', '-Xmx1024m',
                        '-jar',
                        tca2_jar,
-                       '-cli',
+                       '-cli-plain',
                        '-anchor={}'.format(anchor_file.name),
                        '-in1={}'.format(self.get_sent_filename(self.get_origfiles()[0])),
                        '-in2={}'.format(self.get_sent_filename(self.get_origfiles()[1]))]

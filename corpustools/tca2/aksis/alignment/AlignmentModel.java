@@ -2068,26 +2068,27 @@ class AlignmentModel {
 
 	}
 
-	void saveFilesAutomatically() {
-			// establish corresp attributes in dom for all texts.
-			// methods for saving in "corresp" and "external" formats depend on this
-			for (int t=0; t<Alignment.NUM_FILES; t++) {
-				setCorrespAttributes(t);
-			}
+	public void setAllCorrespAttributes(){
+		// establish corresp attributes in dom for all texts.
+		// methods for saving in "corresp" and "external" formats depend on this
+		for (int t=0; t<Alignment.NUM_FILES; t++) {
+			setCorrespAttributes(t);
+		}
+	}
 
-			File tempPath;
+	public void saveXml() {
+			File inFile;
 			String outputFilenameSuggestion;
 			String path = "";
 			File outputFilepathSuggestion;
-			int returnVal;
 
 			// save in "external" format
 			// the basis for the suggestion is the input file paths
 			outputFilenameSuggestion = "";
 			for (int t=0; t<Alignment.NUM_FILES; t++) {
-				tempPath = new File(inputFilepath[t]);
-				path = tempPath.getParent();
-				String tempFilename = tempPath.getName();
+				inFile = new File(inputFilepath[t]);
+				path = inFile.getParent();
+				String tempFilename = inFile.getName();
 				if (outputFilenameSuggestion != "") {
 					outputFilenameSuggestion += "_";
 				}
@@ -2096,28 +2097,26 @@ class AlignmentModel {
 			outputFilenameSuggestion = path + "/" + outputFilenameSuggestion + ".xml";
 			outputFilepathSuggestion = new File(outputFilenameSuggestion);
 			saveExternalFormatFile(outputFilepathSuggestion);
-			for (int t=0; t<Alignment.NUM_FILES; t++) {
+		
+	}
 
-				// the basis for the suggestion is the input file path
-				tempPath = new File(inputFilepath[t]);
-				String tempFilename = tempPath.getName();
+	public void savePlain() {
+			File inFile;
+			String outputFilenameSuggestion;
+			String path = "";
+			File outputFilepathSuggestion;
+
+			for (int t=0; t<Alignment.NUM_FILES; t++) {
+				inFile = new File(inputFilepath[t]);
+				path = inFile.getParent();
+			}
+			for (int t=0; t<Alignment.NUM_FILES; t++) {
+				inFile = new File(inputFilepath[t]);
+				String tempFilename = inFile.getName();
 
 				for (int fi=0; fi<2; fi++) {
-
-					if (fi == 0) {
-// 						outputFilenameSuggestion = ExtensionUtils.appendName(tempFilename, "_cor");
-					} else {
-						// save in newline format
-						outputFilenameSuggestion = ExtensionUtils.changeExtension(ExtensionUtils.appendName(tempFilename, "_new"), "txt");   // ### ¤¤¤ ###########
-					}
-
-					if (fi == 0) {
-						// save in corresp format
-// 						outputFilenameSuggestion = path + "/" + outputFilenameSuggestion;
-// 						outputFilepathSuggestion = new File(outputFilenameSuggestion);
-// 						saveCorrespFormatFile(outputFilepathSuggestion, t, getCharset(t));
-					} else {
-						// save in newline format
+					if (fi != 0) {
+						outputFilenameSuggestion = ExtensionUtils.changeExtension(ExtensionUtils.appendName(tempFilename, "_new"), "txt");
 						outputFilenameSuggestion = path + "/" + outputFilenameSuggestion;
 						outputFilepathSuggestion = new File(outputFilenameSuggestion);
 						saveNewlineFormatFile(outputFilepathSuggestion, t, getCharset(t), getAncestorFilter());
