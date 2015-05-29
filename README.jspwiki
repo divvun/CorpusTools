@@ -452,7 +452,7 @@ corpustools/tca2.
 You can compile the abbr.txt file of langs/sme like this:
 
 {{{
-cd $GTHOME/langs/sme/tools/preprocess && make abbr
+cd $GTHOME/langs/sme && ./configure --enable-abbr
 }}}
 
 You should compile at least the sme abbr.txt file, this one is used as

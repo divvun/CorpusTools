@@ -120,7 +120,7 @@ def get_preprocess_command(lang):
     preprocess_script = os.path.join(os.environ['GTHOME'],
                                      'gt/script/preprocess')
     sanity_check([preprocess_script])
-    abbr_fb = get_lang_resource("sma", 'tools/preprocess/abbr.txt')
+    abbr_fb = get_lang_resource("sme", 'tools/preprocess/abbr.txt')
     abbr = get_lang_resource(lang, 'tools/preprocess/abbr.txt', abbr_fb)
     return [preprocess_script,
             "--xml",
