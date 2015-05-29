@@ -496,11 +496,13 @@ class TestGenerateAnchorFile(unittest.TestCase):
     """
     def test_generate_anchor_output(self):
         with tempfile.NamedTemporaryFile('w') as anchor_path:
-            gal = generate_anchor_list.GenerateAnchorList('nob', 'sme')
-            gal.generate_file([os.path.join(here, 'parallelize_data/anchor.txt')],
-                              anchor_path.name,
-                              quiet=True)
-            want = open(os.path.join(here, 'parallelize_data/anchor-nobsme.txt')).read()
+            gal = generate_anchor_list.GenerateAnchorList(
+                'nob', 'sme',
+                ['eng', 'nob', 'sme', 'fin', 'smj', 'sma'],
+                os.path.join(here, 'parallelize_data/anchor.txt'))
+            gal.generate_file(anchor_path.name, quiet=True)
+            want = open(os.path.join(here,
+                                     'parallelize_data/anchor-nobsme.txt')).read()
             got = open(anchor_path.name).read()
             self.assertEqual(got, want)
 

@@ -423,8 +423,9 @@ class Parallelize(object):
             self.reshuffle_files()
 
         self.quiet = quiet
-        self.anchor_sources = [os.path.join(os.environ['GTHOME'],
-                                            'gt/common/src/anchor.txt')]
+        self.anchor_source = (['eng', 'nob', 'sme', 'fin', 'smj', 'sma'],
+                              os.path.join(os.environ['GTHOME'],
+                                           'gt/common/src/anchor.txt'))
 
     def consistency_check(self, f0, f1):
         """
@@ -537,11 +538,14 @@ class ParallelizeHunalign(Parallelize):
                           for w2 in re.split(self.split_anchors_on, w2s)
                           if w1 and w2]
         return expanded_pairs
-        
+
     def make_dict(self):
         gal = generate_anchor_list.GenerateAnchorList(
-            self.get_lang1(), self.get_lang2())
-        words_pairs = gal.read_anchors(self.anchor_sources, quiet=self.quiet)
+            self.get_lang1(),
+            self.get_lang2(),
+            self.anchor_source[0],
+            self.anchor_source[1])
+        words_pairs = gal.read_anchors(quiet=self.quiet)
         expanded_pairs = self.anchor_to_dict(words_pairs)
         return "\n".join([w1+" @ "+w2 for w1, w2 in expanded_pairs])
 
@@ -582,8 +586,11 @@ class ParallelizeTCA2(Parallelize):
         """
 
         gal = generate_anchor_list.GenerateAnchorList(
-            self.get_lang1(), self.get_lang2())
-        gal.generate_file(self.anchor_sources, outpath, quiet=self.quiet)
+            self.get_lang1(),
+            self.get_lang2(),
+            self.anchor_source[0],
+            self.anchor_source[1])
+        gal.generate_file(outpath, quiet=self.quiet)
 
     def divide_p_into_sentences(self):
         """

@@ -32,44 +32,43 @@ def note(msg):
     print >>sys.stderr, msg.encode('utf-8')
 
 class GenerateAnchorList(object):
-    LANGUAGES = ['eng', 'nob', 'sme', 'fin', 'smj', 'sma']
-
-    def __init__(self, lang1, lang2):
+    def __init__(self, lang1, lang2, languages, anchor_file):
         self.lang1 = lang1
         self.lang2 = lang2
-        self.lang1_index = self.LANGUAGES.index(self.lang1)
-        self.lang2_index = self.LANGUAGES.index(self.lang2)
+        self.lang1_index = languages.index(lang1)
+        self.lang2_index = languages.index(lang2)
+        self.languages = languages
+        self.anchor_file = anchor_file
 
-    def words_of_line(self, lineno, line, infile):
+    def words_of_line(self, lineno, line):
         """Either a word-pair or None, if no word-pair on that line."""
         line = line.strip()
         if (not line.startswith('#') or not
                 line.startswith('&')):
             words = line.split('/')
-            if len(words) == len(self.LANGUAGES):
+            if len(words) == len(self.languages):
                 word1 = words[self.lang1_index].strip()
                 word2 = words[self.lang2_index].strip()
                 if len(word1) > 0 and len(word2) > 0:
                     return word1, word2
             else:
                 print >>sys.stderr, (
-                    'Invalid line at {} in {}'.format(lineno, infile))
+                    'Invalid line at {} in {}'.format(lineno, self.anchor_file))
 
-    def read_anchors(self, infiles, quiet=False):
+    def read_anchors(self, quiet=False):
         """List of word-pairs in infiles, empty/bad lines skipped."""
         out = []
-        for infile in infiles:
-            with open(infile) as f:
-                if not quiet:
-                    note('Reading {}'.format(infile))
-                out += [self.words_of_line(i, l.decode('utf-8'), infile)
-                        for i,l in enumerate(f.readlines())]
+        with open(self.anchor_file) as f:
+            if not quiet:
+                note('Reading {}'.format(self.anchor_file))
+            out += [self.words_of_line(i, l.decode('utf-8'))
+                    for i,l in enumerate(f.readlines())]
         return filter(None, out)
 
-    def generate_file(self, infiles, outpath, quiet=False):
+    def generate_file(self, outpath, quiet=False):
         '''infiles is a list of file paths
         '''
-        anchors = self.read_anchors(infiles, quiet)
+        anchors = self.read_anchors(quiet)
 
         with open(outpath, 'wb') as outfile:
             if not quiet:
