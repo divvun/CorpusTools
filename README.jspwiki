@@ -443,11 +443,23 @@ at least the following directories need to exist in $GTHOME:
 * gt/common
 * gt/script
 
-It also requires Java, since it uses the alignment program tca2. For
-convenience, a pre-compiled version of tca2's alignment.jar-file is
-included in SVN and installed by CorpusTools, but if you have ant
-installed, you can recompile it by simply typing "ant" in
-corpustools/tca2.
+It also requires Java if you wish to use the default (included)
+alignment program TCA2. For convenience, a pre-compiled version of
+TCA2's alignment.jar-file is included in SVN and installed by
+CorpusTools, but if you have ant installed, you can recompile it by
+simply typing "ant" in corpustools/tca2.
+
+Alternatively, you can align with Hunalign, if you have that installed
+(or don't have Java). Hunalign is faster, and the quality is less
+dependent on predefined dictionaries (though it can use those as
+well). Neither system gives perfect alignments.
+
+By default, it uses the $GTHOME/gt/common/src/anchor.txt file as an
+anchor dictionary for alignment. If your language pair is not in this
+dictionary, you can provide your own with the --dict argument. If you
+do not have a dictionary, you can use "--dict=<(echo)" to provide an
+"empty" dictionary – in this case, you should also use
+"--aligner=hunalign".
 
 You can compile the abbr.txt file of langs/sme like this:
 
@@ -463,19 +475,35 @@ on parallelising with.
 
 The complete help text from the program is as follows:
 {{{
-usage: parallelize [-h] [-v] -p PARALLEL_LANGUAGE input_file
+usage: parallelize [-h] [-v] [-f] [-q] [-a {hunalign,tca2}] [-d DICT] -p
+                   PARALLEL_LANGUAGE
+                   input_file [output_file]
 
 Sentence align two files. Input is the document containing the main language,
 and language to parallelize it with.
 
 positional arguments:
-  input_file            The input file
+  input_file            The input filename
+  output_file           Optionally an output filename. Defaults to
+                        toktmx/{LANGA}2{LANGB}/{GENRE}/.../{BASENAME}.toktmx
 
 optional arguments:
   -h, --help            show this help message and exit
   -v, --version         show program's version number and exit
+  -f, --force           Overwrite output file if it already exists.The default
+                        is to skip parallelizing existing files.
+  -q, --quiet           Don't mention anything out of the ordinary.
+  -a {hunalign,tca2}, --aligner {hunalign,tca2}
+                        Either hunalign or tca2 (the default).
+  -d DICT, --dict DICT  Use a different bilingual seed dictionary. Must have
+                        two columns, with input_file language first, and
+                        --parallel_language second, separated by `/'. By
+                        default, $GTHOME/gt/common/src/anchor.txt is used, but
+                        this file only supports pairings between
+                        sme/sma/smj/fin/eng/nob.
   -p PARALLEL_LANGUAGE, --parallel_language PARALLEL_LANGUAGE
                         The language to parallelize the input document with
+
 }}}
 
 

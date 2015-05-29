@@ -1396,7 +1396,7 @@ def parse_options():
                         help="The input filename")
     parser.add_argument('output_file',
                         help="Optionally an output filename. Defaults to "
-                        "toktmx/{LANGA}2{LANGB}/{GENRE}/…/{BASENAME}.toktmx",
+                        "toktmx/{LANGA}2{LANGB}/{GENRE}/.../{BASENAME}.toktmx",
                         default=None,
                         nargs='?')
     parser.add_argument('-f', '--force',
