@@ -22,10 +22,10 @@
 
 '''Change the names of files within a repository
 
-Normalize a file name: Replace non-ascii char with ascii ones and remove
+Normalise a file name: Replace non-ascii char with ascii ones and remove
 unwanted characters.
 
-When normalizing a file name containing unwanted characters or renaming it
+When normalising a file name containing unwanted characters or renaming it
 for other reasons:
 * change the name of original file
 * change the name of metadata file
