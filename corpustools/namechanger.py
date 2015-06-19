@@ -24,7 +24,6 @@ import os
 import subprocess
 import sys
 
-import lxml.etree as etree
 import unidecode
 import urllib
 
@@ -126,16 +125,6 @@ class CorpusNameFixer(NameChangerBase):
 
         if os.path.exists(fromname):
             self.move_file(fromname, toname)
-
-    def open_xslfile(self, xslfile):
-        """Open xslfile, return the tree"""
-        try:
-            tree = etree.parse(xslfile)
-        except Exception, inst:
-            print "Unexpected error opening {}: {}".format(xslfile, inst)
-            sys.exit(254)
-
-        return tree
 
     def set_para_backreference(self, mainlang, paralang, paraname):
         """Replace oldname with newname in parallell file reference."""
