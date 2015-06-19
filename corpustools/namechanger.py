@@ -74,156 +74,6 @@ class NamechangerException(Exception):
     pass
 
 
-def compute_hexdigest(path, blocksize=65536):
-    '''Compute the hexdigest of the file in path'''
-    with open(path, 'rb') as afile:
-        hasher = hashlib.md5()
-        buf = afile.read(blocksize)
-        while len(buf) > 0:
-            hasher.update(buf)
-            buf = afile.read(blocksize)
-
-        return hasher.hexdigest()
-
-
-def normalise_filename(filename):
-    """Normalise filename to ascii only
-
-    Downcase filename, replace non-ascii characters with ascii ones and
-    remove or replace unwanted characters.
-
-    Args:
-        filename: is a unicode string
-
-    Returns:
-        a downcased string containing only ascii chars
-    """
-    if type(filename) is not unicode:
-        raise NamechangerException('{} is not a unicode string'.format(
-            filename))
-
-    if os.sep in filename:
-        raise NamechangerException(
-            'Invalid filename {}.\n'
-            'Filename is not allowed to contain {}'.format(filename,
-                                                           os.sep))
-
-    unwanted_chars = {
-        u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
-        u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_',
-        u'<': u'_', u'>': u'_', u'"': u'_', u'&': u'_', u';': u'_',
-        u'&': u'_', u'#': u'_', u'\\': u'_', u'|': u'_', u'$': u'_',
-    }
-
-    # unidecode.unidecode makes ascii only
-    # urllib.unquote replaces %xx escapes by their single-character equivalent.
-    newname = unicode(
-        unidecode.unidecode(
-            urllib.unquote(
-                filename
-            ))).lower()
-
-    newname = util.replace_all(unwanted_chars.items(), newname)
-
-    while u'__' in newname:
-        newname = newname.replace(u'__', u'_')
-
-    return newname
-
-
-def are_duplicates(oldpath, newpath):
-    '''Check if oldpath and newpath are duplicates of each other.
-
-    Args:
-        oldpath (unicode): old path of the file
-        newpath (unicode): the wanted, new path of the file
-
-    Returns:
-        a boolean indicating if the two files are duplicates
-    '''
-    return (os.path.isfile(newpath) and
-            compute_hexdigest(oldpath) == compute_hexdigest(
-                newpath))
-
-
-def compute_new_basename(oldpath, wanted_path):
-    '''Compute the new path
-
-    Args:
-        oldpath (unicode): path to the old file
-        wanted_path (unicode): the path that one wants to move the file to
-
-    Returns:
-        a unicode string pointing to the new path
-    '''
-    wanted_basename = os.path.basename(wanted_path)
-    new_basename = os.path.basename(wanted_path)
-    newpath = os.path.join(os.path.dirname(wanted_path), new_basename)
-    n = 1
-
-    while os.path.exists(newpath):
-        if are_duplicates(oldpath, newpath):
-            raise UserWarning('{} and {} are duplicates. '
-                              'Please remove one of them'.format(oldpath,
-                                                                 newpath))
-        else:
-            if u'.' in wanted_basename:
-                dot = wanted_basename.rfind('.')
-                extension = wanted_basename[dot:]
-                pre_extension = wanted_basename[:dot]
-                new_basename = pre_extension + u'_' + unicode(n) + extension
-            else:
-                new_basename = wanted_basename + unicode(n)
-            newpath = os.path.join(os.path.dirname(wanted_path), new_basename)
-            n += 1
-
-    return newpath
-
-
-PathPair = namedtuple('PathPair', 'oldpath newpath')
-
-
-def normaliser():
-    '''Normalise the filenames in the corpuses'''
-    for corpus in [os.getenv('GTFREE'), os.getenv('GTBOUND')]:
-        for root, dirs, files in os.walk(os.path.join(corpus, 'orig')):
-            for f in files:
-                if not f.endswith('.xsl'):
-                    cfmu = CorpusFilesetMoverAndUpdater(
-                        os.path.join(root, f).decode('utf8'),
-                        os.path.join(root, f).decode('utf8'))
-                    filepair = cfmu.mc.filepairs[0]
-                    if filepair.oldpath != filepair.newpath:
-                        cfmu.move_files()
-                        cfmu.update_own_metadata()
-                        cfmu.update_parallel_files_metadata()
-
-def parse_args():
-    parser = argparse.ArgumentParser(
-        parents=[argparse_version.parser],
-        description='Program to automatically rename corpus files in the \
-        given directory. It downcases the filenames and removes unwanted \
-        characters.')
-
-    parser.add_argument('directory',
-                        help='The directory where filenames should be \
-                        renamed')
-
-    return parser.parse_args()
-
-
-def main():
-    normaliser()
-    #args = parse_args()
-
-    #for root, dirs, files in os.walk(args.directory):
-        #for file_ in files:
-            #if not file_.endswith('.xsl'):
-                #nc = CorpusNameFixer(
-                    #util.name_to_unicode(os.path.join(root, file_)))
-                #nc.change_name()
-
-
 class MovepairComputer(object):
     def __init__(self):
         self.filepairs = []
@@ -431,3 +281,153 @@ class CorpusFilesetMoverAndUpdater(object):
                     parallel_metadatafile.set_parallel_text(
                         new_components.lang, new_components.basename)
                 parallel_metadatafile.write_file()
+
+
+def compute_hexdigest(path, blocksize=65536):
+    '''Compute the hexdigest of the file in path'''
+    with open(path, 'rb') as afile:
+        hasher = hashlib.md5()
+        buf = afile.read(blocksize)
+        while len(buf) > 0:
+            hasher.update(buf)
+            buf = afile.read(blocksize)
+
+        return hasher.hexdigest()
+
+
+def normalise_filename(filename):
+    """Normalise filename to ascii only
+
+    Downcase filename, replace non-ascii characters with ascii ones and
+    remove or replace unwanted characters.
+
+    Args:
+        filename: is a unicode string
+
+    Returns:
+        a downcased string containing only ascii chars
+    """
+    if type(filename) is not unicode:
+        raise NamechangerException('{} is not a unicode string'.format(
+            filename))
+
+    if os.sep in filename:
+        raise NamechangerException(
+            'Invalid filename {}.\n'
+            'Filename is not allowed to contain {}'.format(filename,
+                                                           os.sep))
+
+    unwanted_chars = {
+        u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
+        u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_',
+        u'<': u'_', u'>': u'_', u'"': u'_', u'&': u'_', u';': u'_',
+        u'&': u'_', u'#': u'_', u'\\': u'_', u'|': u'_', u'$': u'_',
+    }
+
+    # unidecode.unidecode makes ascii only
+    # urllib.unquote replaces %xx escapes by their single-character equivalent.
+    newname = unicode(
+        unidecode.unidecode(
+            urllib.unquote(
+                filename
+            ))).lower()
+
+    newname = util.replace_all(unwanted_chars.items(), newname)
+
+    while u'__' in newname:
+        newname = newname.replace(u'__', u'_')
+
+    return newname
+
+
+def are_duplicates(oldpath, newpath):
+    '''Check if oldpath and newpath are duplicates of each other.
+
+    Args:
+        oldpath (unicode): old path of the file
+        newpath (unicode): the wanted, new path of the file
+
+    Returns:
+        a boolean indicating if the two files are duplicates
+    '''
+    return (os.path.isfile(newpath) and
+            compute_hexdigest(oldpath) == compute_hexdigest(
+                newpath))
+
+
+def compute_new_basename(oldpath, wanted_path):
+    '''Compute the new path
+
+    Args:
+        oldpath (unicode): path to the old file
+        wanted_path (unicode): the path that one wants to move the file to
+
+    Returns:
+        a unicode string pointing to the new path
+    '''
+    wanted_basename = os.path.basename(wanted_path)
+    new_basename = os.path.basename(wanted_path)
+    newpath = os.path.join(os.path.dirname(wanted_path), new_basename)
+    n = 1
+
+    while os.path.exists(newpath):
+        if are_duplicates(oldpath, newpath):
+            raise UserWarning('{} and {} are duplicates. '
+                              'Please remove one of them'.format(oldpath,
+                                                                 newpath))
+        else:
+            if u'.' in wanted_basename:
+                dot = wanted_basename.rfind('.')
+                extension = wanted_basename[dot:]
+                pre_extension = wanted_basename[:dot]
+                new_basename = pre_extension + u'_' + unicode(n) + extension
+            else:
+                new_basename = wanted_basename + unicode(n)
+            newpath = os.path.join(os.path.dirname(wanted_path), new_basename)
+            n += 1
+
+    return newpath
+
+
+PathPair = namedtuple('PathPair', 'oldpath newpath')
+
+
+def normaliser():
+    '''Normalise the filenames in the corpuses'''
+    for corpus in [os.getenv('GTFREE'), os.getenv('GTBOUND')]:
+        for root, dirs, files in os.walk(os.path.join(corpus, 'orig')):
+            for f in files:
+                if not f.endswith('.xsl'):
+                    cfmu = CorpusFilesetMoverAndUpdater(
+                        os.path.join(root, f).decode('utf8'),
+                        os.path.join(root, f).decode('utf8'))
+                    filepair = cfmu.mc.filepairs[0]
+                    if filepair.oldpath != filepair.newpath:
+                        cfmu.move_files()
+                        cfmu.update_own_metadata()
+                        cfmu.update_parallel_files_metadata()
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
+        description='Program to automatically rename corpus files in the \
+        given directory. It downcases the filenames and removes unwanted \
+        characters.')
+
+    parser.add_argument('directory',
+                        help='The directory where filenames should be \
+                        renamed')
+
+    return parser.parse_args()
+
+
+def main():
+    normaliser()
+    #args = parse_args()
+
+    #for root, dirs, files in os.walk(args.directory):
+        #for file_ in files:
+            #if not file_.endswith('.xsl'):
+                #nc = CorpusNameFixer(
+                    #util.name_to_unicode(os.path.join(root, file_)))
+                #nc.change_name()
