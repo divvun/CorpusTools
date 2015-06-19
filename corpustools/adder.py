@@ -19,6 +19,8 @@
 #   Copyright 2013-2014 Børre Gaup <borre.gaup@uit.no>
 #
 
+from __future__ import print_function
+
 import os
 import sys
 import argparse
@@ -84,25 +86,24 @@ class AddFileToCorpus(namechanger.NameChangerBase):
                     if not os.path.exists(self.toname()):
                         with open(self.toname(), 'wb') as new_corpus_file:
                             new_corpus_file.write(r.content)
-                        print 'Added', self.toname()
+                        print('Added {}'.format(self.toname()))
                         self.vcs.add(self.toname())
                     else:
-                        print >>sys.stderr, self.toname(), 'already exists'
+                        print('{} already exists'.format(self.toname()), file=sys.stderr)
                 else:
-                    print >>sys.stderr
-                    print >>sys.stderr, 'ERROR:', fromname, 'does not exist'
-                    print >>sys.stderr
+                    print('ERROR: {} does not exist'.format(fromname),
+                          file=sys.stderr)
                     raise UserWarning
             except requests.exceptions.MissingSchema:
-                print >>sys.stderr, 'Error: wrong schema'
+                print('Error: wrong schema', file=sys.stderr)
                 raise UserWarning
             except requests.exceptions.ConnectionError as e:
-                print >>sys.stderr, 'Could not connect'
-                print >>sys.stderr, str(e)
+                print('Could not connect', file=sys.stderr)
+                print(str(e), file=sys.stderr)
                 raise UserWarning
         else:
             shutil.copy(fromname, self.toname())
-            print 'Added', self.toname()
+            print('Added', self.toname())
             self.vcs.add(self.toname())
 
     def _get_parallels(self):
@@ -150,10 +151,10 @@ class AddFileToCorpus(namechanger.NameChangerBase):
 
             self.update_parallel_files()
 
-            print 'Added', metadata_file.filename
+            print('Added', metadata_file.filename)
             self.vcs.add(metadata_file.filename)
         else:
-            print >>sys.stderr, metafile_name, 'already exists'
+            print(metafile_name, 'already exists', file=sys.stderr)
 
     def update_parallel_files(self):
         for lang1, location1 in self.parallels.items():
@@ -179,9 +180,9 @@ def gather_files(origs):
         elif orig.startswith('http'):
             file_list.append(util.name_to_unicode(orig))
         else:
-            print >>sys.stderr, (
+            print(
                 'ERROR: {} is neither a directory, nor a file nor a '
-                'http-url\n'.format(orig))
+                'http-url\n'.format(orig), file=sys.stderr)
             raise UserWarning
 
     return file_list
@@ -222,8 +223,8 @@ def parse_args():
                         'admin/facta/skuvlahistorja1')
     parser.add_argument('origs',
                         nargs='+',
-                        help='The original files, urls or directories where the '
-                        'original files reside (not in svn)')
+                        help='The original files, urls or directories where '
+                        'the original files reside (not in svn)')
 
     return parser.parse_args()
 
@@ -233,16 +234,16 @@ def main():
 
     if args.parallel_file is not None:
         if not os.path.exists(args.parallel_file):
-            print >>sys.stderr, ('The given parallel file\n\t{}\n'
-                'does not exist'.format(args.parallel_file))
+            print('The given parallel file\n\t{}\n'
+                  'does not exist'.format(args.parallel_file), file=sys.stderr)
             sys.exit(1)
         if len(args.origs) > 1:
-            print >>sys.stderr, ('When the -p option is given, it only makes '
-                'sense to add one file at a time.')
+            print('When the -p option is given, it only makes '
+                  'sense to add one file at a time.', file=sys.stderr)
             sys.exit(2)
         if len(args.origs) == 1 and os.path.isdir(args.origs[-1]):
-            print >>sys.stderr, ('It is not possible to add a directory '
-                'when the -p option is given.')
+            print('It is not possible to add a directory '
+                  'when the -p option is given.', file=sys.stderr)
             sys.exit(3)
 
     if os.path.isdir(args.corpusdir):
@@ -251,7 +252,6 @@ def main():
         except UserWarning:
             pass
     else:
-        print >>sys.stderr, 'ERROR'
-        print >>sys.stderr, 'The given corpus directory,',
-        print >>sys.stderr, args.corpusdir,
-        print >>sys.stderr, 'does not exist'
+        print('ERROR', file=sys.stderr)
+        print('The given corpus directory, {}, '
+              'does not exist.'.format(args.corpusdir))
