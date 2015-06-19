@@ -369,3 +369,86 @@ class TestAddFileToCorpus(unittest.TestCase):
         sma_parallels = sma_metadata.get_parallel_texts()
         self.assertEqual(sma_parallels['sme'], 'd.txt')
         self.assertEqual(sma_parallels['smj'], 'f.txt')
+
+
+class TestDirectoryToCorpusWithDuplicates(unittest.TestCase):
+    def setUp(self):
+        self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
+        self.tempdir.write('origdirectory/a.txt', 'content of a')
+        self.tempdir.write('origdirectory/æ.txt', 'content of b')
+        self.tempdir.write('origdirectory/b.txt', 'content of b')
+        self.tempdir.write('origdirectory/sub/c.txt', 'content of a')
+        self.tempdir.write('origdirectory/sub/d.txt', 'content of d')
+        self.tempdir.makedir('corpus/orig')
+        self.origdirectory = os.path.join(self.tempdir.path,
+                                          'origdirectory')
+        self.realcorpusdir = os.path.join(self.tempdir.path,
+                                          'corpus').decode('utf8')
+        r = git.Repo.init(self.realcorpusdir)
+        r.index.add(['orig'])
+        r.index.commit('Added orig')
+
+    def tearDown(self):
+        self.tempdir.cleanup()
+
+    def test_add_directory_with_duplicate(self):
+        adtc = adder.AddDirectoryToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
+                                          self.origdirectory)
+        with self.assertRaises(adder.AdderException):
+            adtc.add_directory_to_corpus()
+
+
+class TestDirectoryToCorpusWithoutDuplicates(unittest.TestCase):
+    def setUp(self):
+        self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
+        self.tempdir.write('origdirectory/a.txt', 'content of a')
+        self.tempdir.write('origdirectory/æ.txt', 'content of æ')
+        self.tempdir.write('origdirectory/b.txt', 'content of b')
+        self.tempdir.write('origdirectory/sub/a.txt', 'content of sub/a')
+        self.tempdir.write('origdirectory/sub/c.txt', 'content of c')
+        self.tempdir.write('origdirectory/sub/d.txt', 'content of d')
+        self.tempdir.makedir('corpus/orig')
+        self.origdirectory = os.path.join(self.tempdir.path,
+                                          'origdirectory')
+        self.realcorpusdir = os.path.join(self.tempdir.path,
+                                          'corpus').decode('utf8')
+        r = git.Repo.init(self.realcorpusdir)
+        r.index.add(['orig'])
+        r.index.commit('Added orig')
+
+    def tearDown(self):
+        self.tempdir.cleanup()
+
+    def test_add_directory_with_duplicate(self):
+        adtc = adder.AddDirectoryToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
+                                          self.origdirectory)
+        adtc.add_directory_to_corpus()
+
+        self.tempdir.check_all(
+            '',
+            'corpus/',
+            'corpus/orig/',
+            'corpus/orig/sme/',
+            'corpus/orig/sme/ae/',
+            'corpus/orig/sme/ae/c/',
+            'corpus/orig/sme/ae/c/o/',
+            'corpus/orig/sme/ae/c/o/a.txt',
+            'corpus/orig/sme/ae/c/o/a.txt.xsl',
+            'corpus/orig/sme/ae/c/o/a_1.txt',
+            'corpus/orig/sme/ae/c/o/a_1.txt.xsl',
+            'corpus/orig/sme/ae/c/o/ae.txt',
+            'corpus/orig/sme/ae/c/o/ae.txt.xsl',
+            'corpus/orig/sme/ae/c/o/b.txt',
+            'corpus/orig/sme/ae/c/o/b.txt.xsl',
+            'corpus/orig/sme/ae/c/o/c.txt',
+            'corpus/orig/sme/ae/c/o/c.txt.xsl',
+            'corpus/orig/sme/ae/c/o/d.txt',
+            'corpus/orig/sme/ae/c/o/d.txt.xsl',
+            'origdirectory/',
+            'origdirectory/a.txt',
+            'origdirectory/b.txt',
+            'origdirectory/sub/',
+            'origdirectory/sub/a.txt',
+            'origdirectory/sub/c.txt',
+            'origdirectory/sub/d.txt',
+            'origdirectory/æ.txt')
