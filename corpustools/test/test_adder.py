@@ -170,10 +170,11 @@ class TestAddFileToCorpus(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_add_file_no_normalise_no_parallel(self):
-        aftc = adder.AddFileToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
-                                     os.path.join(self.origdirectory,
-                                                  u'a.txt'))
-        aftc.add_file_to_corpus()
+        atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
+
+        atc.copy_file_to_corpus(os.path.join(self.origdirectory,
+                                              u'a.txt'))
+        atc.add_files_to_working_copy()
 
         self.tempdir.check_all(
             '',
@@ -213,10 +214,9 @@ class TestAddFileToCorpus(unittest.TestCase):
         self.assertEqual(metadata.get_variable('mainlang'), 'sme')
 
     def test_add_file_normalise_no_parallel(self):
-        aftc = adder.AddFileToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
-                                     os.path.join(self.origdirectory,
-                                                  u'æ.txt'))
-        aftc.add_file_to_corpus()
+        atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
+        atc.copy_file_to_corpus(os.path.join(self.origdirectory, u'æ.txt'))
+        atc.add_files_to_working_copy()
 
         self.tempdir.check_all(
             '',
@@ -255,16 +255,10 @@ class TestAddFileToCorpus(unittest.TestCase):
         self.assertEqual(metadata.get_variable('genre'), 'ae')
         self.assertEqual(metadata.get_variable('mainlang'), 'sme')
 
-    def test_add_file_duplicate_no_parallel(self):
-        with self.assertRaises(UserWarning):
-            adder.AddFileToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
-                                  os.path.join(self.origdirectory, u'b.txt'))
-
     def test_add_file_identical_name_no_parallel(self):
-        aftc = adder.AddFileToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
-                                     os.path.join(self.origdirectory,
-                                                  u'c.txt'))
-        aftc.add_file_to_corpus()
+        atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
+        atc.copy_file_to_corpus(os.path.join(self.origdirectory, u'c.txt'))
+        atc.add_files_to_working_copy()
 
         self.tempdir.check_all(
             '',
@@ -304,22 +298,20 @@ class TestAddFileToCorpus(unittest.TestCase):
         self.assertEqual(metadata.get_variable('mainlang'), 'sme')
 
     def test_add_file_with_non_existing_parallel(self):
+        atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
         with self.assertRaises(adder.AdderException):
-            adder.AddFileToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
-                                  os.path.join(self.origdirectory,
-                                               u'd.txt'),
-                                  parallel_file=os.path.join(
-                                      self.realcorpusdir,
-                                      'orig/smi/ae/c/o/f.txt'))
+            atc.copy_file_to_corpus(
+                os.path.join(self.origdirectory, u'd.txt'),
+                parallelpath=os.path.join(self.realcorpusdir,
+                                           'orig/smi/ae/c/o/f.txt'))
 
     def test_add_file_with_parallel(self):
-        aftc = adder.AddFileToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
-                                     os.path.join(self.origdirectory,
-                                                  u'd.txt'),
-                                     parallel_file=os.path.join(
-                                         self.realcorpusdir,
-                                         'orig/smj/ae/c/o/f.txt'))
-        aftc.add_file_to_corpus()
+        atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
+        atc.copy_file_to_corpus(os.path.join(self.origdirectory, u'd.txt'),
+                                parallelpath=os.path.join(
+                                    self.realcorpusdir,
+                                    'orig/smj/ae/c/o/f.txt'))
+        atc.add_files_to_working_copy()
 
         self.tempdir.check_all(
             '',
@@ -392,10 +384,9 @@ class TestDirectoryToCorpusWithDuplicates(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_add_directory_with_duplicate(self):
-        adtc = adder.AddDirectoryToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
-                                          self.origdirectory)
+        atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
         with self.assertRaises(adder.AdderException):
-            adtc.add_directory_to_corpus()
+            atc.copy_files_in_dir_to_corpus(self.origdirectory)
 
 
 class TestDirectoryToCorpusWithoutDuplicates(unittest.TestCase):
@@ -419,10 +410,10 @@ class TestDirectoryToCorpusWithoutDuplicates(unittest.TestCase):
     def tearDown(self):
         self.tempdir.cleanup()
 
-    def test_add_directory_with_duplicate(self):
-        adtc = adder.AddDirectoryToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
-                                          self.origdirectory)
-        adtc.add_directory_to_corpus()
+    def test_add_directory_without_duplicate(self):
+        atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
+        atc.copy_files_in_dir_to_corpus(self.origdirectory)
+        atc.add_files_to_working_copy()
 
         self.tempdir.check_all(
             '',
