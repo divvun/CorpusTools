@@ -28,9 +28,8 @@ import platform
 import subprocess
 import sys
 
-PathComponents = namedtuple('PathComponents', ['root', 'module', 'lang',
-                                               'genre', 'subdirs',
-                                               'basename'])
+PathComponents = namedtuple('PathComponents',
+                            'root module lang genre subdirs basename')
 
 
 class SetupException(Exception):
