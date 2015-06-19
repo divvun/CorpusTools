@@ -271,7 +271,7 @@ class CorpusFilesetMoverAndUpdater(object):
 
             for parallel_filepair in parallel_filepairs:
                 parallel_metadatafile = xslsetter.MetadataHandler(
-                        parallel_filepair.newpath + '.xsl')
+                    parallel_filepair.newpath + '.xsl')
                 if old_components.lang != new_components.lang:
                     parallel_metadatafile.set_parallel_text(
                         old_components.lang, '')
@@ -395,39 +395,34 @@ PathPair = namedtuple('PathPair', 'oldpath newpath')
 def normaliser():
     '''Normalise the filenames in the corpuses'''
     for corpus in [os.getenv('GTFREE'), os.getenv('GTBOUND')]:
+        print('Normalising names in {}'.format(corpus))
         for root, dirs, files in os.walk(os.path.join(corpus, 'orig')):
+            print('\t' + root.replace(corpus, ''))
             for f in files:
                 if not f.endswith('.xsl'):
-                    cfmu = CorpusFilesetMoverAndUpdater(
-                        os.path.join(root, f).decode('utf8'),
-                        os.path.join(root, f).decode('utf8'))
-                    filepair = cfmu.mc.filepairs[0]
-                    if filepair.oldpath != filepair.newpath:
+                    try:
+                        cfmu = CorpusFilesetMoverAndUpdater(
+                            os.path.join(root, f).decode('utf8'),
+                            os.path.join(root, f).decode('utf8'))
+                        filepair = cfmu.mc.filepairs[0]
+                        print('\t\tmove {} -> {}'.format(
+                            filepair.oldpath, filepair.newpath))
                         cfmu.move_files()
                         cfmu.update_own_metadata()
                         cfmu.update_parallel_files_metadata()
+                    except UserWarning:
+                        pass
 
-def parse_args():
-    parser = argparse.ArgumentParser(
+
+def normalise_parse_args():
+    argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Program to automatically rename corpus files in the \
-        given directory. It downcases the filenames and removes unwanted \
-        characters.')
-
-    parser.add_argument('directory',
-                        help='The directory where filenames should be \
-                        renamed')
-
-    return parser.parse_args()
+        description='Program to automatically normalise names in '
+        '{} and {}. The filenames are downcases, non ascii characters are '
+        'replaced by ascii ones and some unwanted characters are '
+        'removed'.format(os.getenv('GTFREE'), os.getenv('GTBOUND')))
 
 
 def main():
+    normalise_parse_args()
     normaliser()
-    #args = parse_args()
-
-    #for root, dirs, files in os.walk(args.directory):
-        #for file_ in files:
-            #if not file_.endswith('.xsl'):
-                #nc = CorpusNameFixer(
-                    #util.name_to_unicode(os.path.join(root, file_)))
-                #nc.change_name()
