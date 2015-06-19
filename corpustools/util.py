@@ -19,11 +19,17 @@
 
 from __future__ import unicode_literals
 
+from collections import namedtuple
 import inspect
 import operator
 import os
 import platform
 import subprocess
+
+
+PathComponents = namedtuple('PathComponents', ['root', 'module', 'lang',
+                                               'genre', 'subdirs',
+                                               'basename'])
 
 
 class SetupException(Exception):
@@ -55,9 +61,10 @@ def replace_all(replacements, string):
 
 
 def split_path(path):
-    """Split an absolute path into useful components:
+    """Split an absolute path into useful components
 
-    (root, module, lang, genre, subdirs, basename)
+    :param: a path to a file
+    :returns: a PathComponents namedtuple
     """
     def split_on_module(p):
         for module in ["goldstandard/orig", "prestable/converted",
@@ -72,7 +79,9 @@ def split_path(path):
     root, module, lang_etc = split_on_module(abspath)
     l = lang_etc.split("/")
     lang, genre, subdirs, basename = l[0], l[1], l[2:-1], l[-1]
-    return root, module, lang, genre, "/".join(subdirs), basename
+
+    return PathComponents(root, module, lang, genre, "/".join(subdirs),
+                          basename)
 
 
 def is_executable(fullpath):
