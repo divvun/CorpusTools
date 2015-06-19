@@ -16,16 +16,18 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2013-2014 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
 #
+
+from __future__ import print_function
 
 import os
 import sys
 
-import pysvn
+import getpass
 import git
 import pwd
-import getpass
+import pysvn
 
 
 class VersionController(object):
@@ -35,13 +37,13 @@ class VersionController(object):
             [os.path.normpath(os.path.expanduser("~/.gitconfig"))],
             read_only=True)
 
-    def add(self, filename):
+    def add(self, path):
         raise NotImplementedError(
             "You have to subclass and override add")
 
-    def add_directory(self, directory):
+    def move(self, oldpath, newpath):
         raise NotImplementedError(
-            "You have to subclass and override add_directory")
+            "You have to subclass and override move")
 
     def user_name(self):
         if self.config.has_option("user", "name"):
@@ -62,25 +64,15 @@ class VersionController(object):
 
 class SVN(VersionController):
     def __init__(self, svnclient):
-        '''svnclient is a pysvn.Client
-        '''
+        '''svnclient is a pysvn.Client'''
         super(SVN, self).__init__()
         self.client = svnclient
 
-    def add(self, filename):
-        try:
-            self.client.add(filename)
-            if filename.endswith('.xsl'):
-                self.client.propset('svn:mime-type', 'text/plain', filename)
-        except pysvn.ClientError:
-            self.add_directory(os.path.dirname(filename))
+    def add(self, path):
+        self.client.add(path)
 
-    def add_directory(self, directory):
-        try:
-            self.client.status(directory)
-        except pysvn.ClientError:
-            self.add_directory(os.path.dirname(directory))
-            self.client.add(os.path.dirname(directory))
+    def move(self, oldpath, newpath):
+        self.client.move(oldpath, newpath)
 
 
 class GIT(VersionController):
@@ -89,16 +81,11 @@ class GIT(VersionController):
         self.gitrepo = gitrepo
         self.config = self.gitrepo.config_reader()
 
-    def add(self, filename):
-        if os.path.exists(filename):
-            self.gitrepo.git.add(filename)
-        else:
-            print >>sys.stderr, 'File does not exist {}'.format(filename)
-            raise UserWarning
+    def add(self, path):
+        self.gitrepo.git.add(path)
 
-    def add_directory(self, directory):
-        """Git doesn't need to add directories before adding contents."""
-        pass
+    def move(self, oldpath, newpath):
+        self.gitrepo.git.mv(oldpath, newpath)
 
 
 class VersionControlFactory(object):
@@ -112,8 +99,8 @@ class VersionControlFactory(object):
                 r = git.Repo(directory)
                 return GIT(r)
             except git.exc.InvalidGitRepositoryError:
-                print >>sys.stderr, (
+                print(
                     '{} is not a SVN working repository or a Git repo. '
                     'Files can only be added to a version controlled '
-                    'directory.'.format(directory))
+                    'directory.'.format(directory), file=sys.stderr)
                 raise UserWarning
