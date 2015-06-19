@@ -60,7 +60,9 @@ def split_path(path):
     (root, module, lang, genre, subdirs, basename)
     """
     def split_on_module(p):
-        for module in ["orig", "converted", "prestable", "stable"]: # toktmx?
+        for module in ["goldstandard/orig", "prestable/converted",
+                       "prestable/toktmx", "prestable/tmx", "orig",
+                       "converted", "stable"]: # toktmx?
             d = "/"+module+"/"
             if d in p:
                 root, rest = p.split(d)
