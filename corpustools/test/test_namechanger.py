@@ -24,8 +24,8 @@ from __future__ import print_function
 import os
 import unittest
 
-import testfixtures
 import git
+import testfixtures
 
 from corpustools import namechanger
 from corpustools import xslsetter
@@ -321,7 +321,6 @@ class TestMoveFileGenreChanged(unittest.TestCase):
         r.index.add(['orig'])
         r.index.commit('Added orig')
 
-
     def tearDown(self):
         self.tempdir.cleanup()
 
@@ -331,6 +330,7 @@ class TestMoveFileGenreChanged(unittest.TestCase):
             os.path.join(self.tempdir.path, 'orig/sme/facta/sub/b.txt'))
 
         #testfixtures.compare(self.tempdir.listdir('orig/sme/ficti/sub/'), '')
+
 
 class TestComputeMovepairs(unittest.TestCase):
     def setUp(self):
@@ -494,7 +494,7 @@ class TestComputeMovepairs(unittest.TestCase):
                 os.path.join(self.tempdir.path,
                              'orig/sma/ficti/sub/f.txt').decode('utf8'),
                 os.path.join(self.tempdir.path,
-                             'orig/sma/ficti/bub/f.txt').decode('utf8')),])
+                             'orig/sma/ficti/bub/f.txt').decode('utf8'))])
 
     def test_compute_movepairs_7(self):
         '''move to different genre, with parallels'''
@@ -544,7 +544,7 @@ class TestComputeMovepairs(unittest.TestCase):
                 os.path.join(self.tempdir.path,
                              'orig/sma/ficti/sub/f.txt').decode('utf8'),
                 os.path.join(self.tempdir.path,
-                             'orig/sma/facta/sub/f.txt').decode('utf8')),])
+                             'orig/sma/facta/sub/f.txt').decode('utf8'))])
 
     def test_compute_movepairs_8(self):
         '''move to different genre, one parallel needs normalisation'''
@@ -594,4 +594,4 @@ class TestComputeMovepairs(unittest.TestCase):
                 os.path.join(self.tempdir.path,
                              'orig/sma/ficti/sub/f.txt').decode('utf8'),
                 os.path.join(self.tempdir.path,
-                             'orig/sma/facta/sub/f.txt').decode('utf8')),])
+                             'orig/sma/facta/sub/f.txt').decode('utf8'))])

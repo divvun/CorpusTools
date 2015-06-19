@@ -58,17 +58,16 @@ from __future__ import print_function
 
 import argparse
 import os
-import subprocess
 
 from collections import namedtuple
 import hashlib
 import unidecode
 import urllib
 
-from . import argparse_version
-from . import util
-from . import xslsetter
-from . import versioncontrol
+from corpustools import argparse_version
+from corpustools import util
+from corpustools import versioncontrol
+from corpustools import xslsetter
 
 
 class NamechangerException(Exception):
@@ -247,7 +246,8 @@ class CorpusFileMover(object):
         self.new_components = util.split_path(newpath)
 
     def move_files(self):
-        vcs = versioncontrol.VersionControlFactory().vcs(self.old_components.root)
+        vcs = versioncontrol.VersionControlFactory().vcs(
+            self.old_components.root)
         for filepair in self.file_pairs:
             if os.path.isfile(filepair.oldpath):
                 if not os.path.exists(os.path.dirname(filepair.newpath)):
@@ -364,6 +364,7 @@ class CorpusFileMover(object):
 
         return filepairs
 
+
 def parse_args():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
@@ -410,18 +411,18 @@ class MovepairComputer(object):
         if (old_components.genre != new_components.genre or
                 old_components.subdirs != new_components.subdirs):
             metadatafile = xslsetter.MetadataHandler(oldpath + '.xsl')
-            for lang, parallel_file in metadatafile.get_parallel_texts().items():
+            for lang, parallel in metadatafile.get_parallel_texts().items():
                 oldparellelpath = u'/'.join((
                     old_components.root,
                     old_components.module,
                     lang, old_components.genre,
-                    old_components.subdirs, parallel_file))
+                    old_components.subdirs, parallel))
                 newparallelpath = u'/'.join((
                     new_components.root,
                     new_components.module,
                     lang, new_components.genre,
                     new_components.subdirs,
-                    parallel_file))
+                    parallel))
 
                 self.compute_movepairs(oldparellelpath, newparallelpath)
 
