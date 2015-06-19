@@ -34,11 +34,6 @@ for other reasons:
 * change the name of prestable/tmx file
 * change the reference to the file name in the parallel files' metadata
 
-Moving a file to another directory:
-* Move a file to another genre
-* Move a file to another language
-* Move a file to a new subdirectory, without changing language or genre
-
 When moving a file from one subdirectory to another:
 * move the original file
 * move the metadata file
@@ -131,14 +126,18 @@ def normalise_filename(filename):
 
     newname = util.replace_all(unwanted_chars.items(), newname)
 
-    while '__' in newname:
-        newname = newname.replace('__', '_')
+    while u'__' in newname:
+        newname = newname.replace(u'__', u'_')
 
     return newname
 
 
 def are_duplicates(oldpath, newpath):
     '''Check if oldpath and newpath are duplicates of each other.
+
+    Args:
+        oldpath (unicode): old path of the file
+        newpath (unicode): the wanted, new path of the file
 
     Returns:
         a boolean indicating if the two files are duplicates
@@ -152,11 +151,11 @@ def compute_new_basename(oldpath, wanted_path):
     '''Compute the new path
 
     Args:
-        oldpath: path to the old file
-        wanted_path: the path to move the file to
+        oldpath (unicode): path to the old file
+        wanted_path (unicode): the path that one wants to move the file to
 
     Returns:
-        a util.PathComponents namedtuple pointing to the new path
+        a unicode string pointing to the new path
     '''
     wanted_basename = os.path.basename(wanted_path)
     new_basename = os.path.basename(wanted_path)
@@ -169,22 +168,25 @@ def compute_new_basename(oldpath, wanted_path):
                               'Please remove one of them'.format(oldpath,
                                                                  newpath))
         else:
-            if '.' in wanted_basename:
+            if u'.' in wanted_basename:
                 dot = wanted_basename.rfind('.')
                 extension = wanted_basename[dot:]
                 pre_extension = wanted_basename[:dot]
-                new_basename = pre_extension + '_' + str(n) + extension
+                new_basename = pre_extension + u'_' + unicode(n) + extension
             else:
-                new_basename = wanted_basename + str(n)
+                new_basename = wanted_basename + unicode(n)
             newpath = os.path.join(os.path.dirname(wanted_path), new_basename)
             n += 1
 
-    return util.split_path(newpath)
+    return newpath
 
 
-PathPair = namedtuple('PathPair', ['oldpath', 'newpath'])
-PathComponentsPair = namedtuple('PathComponentsPair', ['oldcomponent',
-                                                       'newcomponent'])
+PathPair = namedtuple('PathPair', 'oldpath newpath')
+
+
+class PathComponentsPair(namedtuple('PathComponentsPair',
+                                    'oldcomponent newcomponent')):
+    pass
 
 
 def normaliser():
@@ -205,107 +207,143 @@ def normaliser():
                         mover.move_files()
 
 
+def file_mover(oldpath, newpath):
+    origmover = CorpusFileMover(oldpath, newpath)
+    origmover.move_files()
+    origmover.update_parallel_files()
+
+    if (origmover.old_components.subdirs != origmover.new_components.subdirs or
+            origmover.old_components.genre != origmover.new_components.genre):
+        metadatafile = xslsetter.MetadataHandler(origmover.xsl_pair.oldpath)
+        for lang, parallel_file in metadatafile.get_parallel_texts():
+            oldparellelpath = u'/'.join(
+                origmover.old_components.root,
+                origmover.old_components.module,
+                lang, origmover.old_components.genre,
+                origmover.old_components.subdirs, parallel_file)
+            newparallelpath = u'/'.join(
+                origmover.new_components.root,
+                origmover.new_components.module,
+                lang, origmover.new_components.genre,
+                origmover.new_components.subdirs, parallel_file)
+            parallelmover = CorpusFileMover(oldparellelpath, newparallelpath)
+            parallelmover.move_files()
+            parallelmover.update_parallel_files()
+
+
+
 class CorpusFileMover(object):
     '''Move an original file and all its associated files.'''
-    def __init__(self, path_components_pair):
+    def __init__(self, oldpath, newpath):
         '''
 
         Args:
-            path_components_pair: a PathComponentsPair namedtuple
+            oldpath (unicode): the old path
+            newpath (unicode): the new path
         '''
-        self.path_components_pair = path_components_pair
+        self.old_components = util.split_path(oldpath)
+        self.new_components = util.split_path(newpath)
 
     def move_files(self):
-        for filepair in self.__compute_filepairs():
-            if os.path.isfile(filepair[0]):
+        for filepair in self.file_pairs():
+            if os.path.isfile(filepair.old_path):
                 subprocess.call(['git', 'mv', filepair[0], filepair[1]])
-        self.__update_parallel_files()
 
-    def __update_parallel_files(self):
+    def update_parallel_files(self):
         '''Update the info in the parallel files'''
-        oldcomponent = self.path_components_pair.oldcomponent
-        newcomponent = self.path_components_pair.newcomponent
-        metadatafile = xslsetter.MetadataHandler('/'.join(
-            self.path_components_pair.newcomponent) + '.xsl')
-
+        metadatafile = xslsetter.MetadataHandler(self.xsl_pair.oldpath)
         parallels = metadatafile.get_parallel_texts()
-        if (oldcomponent.basename != newcomponent.basename and
-                oldcomponent.lang != newcomponent.lang):
-            metadatafile.set_parallel_text(newcomponent.lang,
-                                        newcomponent.basename)
-        if (oldcomponent.lang != newcomponent.lang):
-            metadatafile.set_parallel_text(newcomponent.lang,
-                                           newcomponent.basename)
-            metadatafile.set_parallel_text(oldcomponent.lang, '')
-        if (oldcomponent.genre != newcomponent.genre):
-            metadatafile.set_variable('genre', newcomponent.genre)
+        if (self.old_components.basename != self.new_components.basename and
+                self.old_components.lang != self.new_components.lang):
+            metadatafile.set_parallel_text(self.new_components.lang,
+                                           self.new_components.basename)
+        if (self.old_components.lang != self.new_components.lang):
+            metadatafile.set_parallel_text(self.new_components.lang,
+                                           self.new_components.basename)
+            metadatafile.set_parallel_text(self.old_components.lang, '')
+        if (self.old_components.genre != self.new_components.genre):
+            metadatafile.set_variable('genre', self.new_components.genre)
         metadatafile.write_file()
 
-    def __compute_filepairs(self):
-        filepairs = [('/'.join(self.path_components_pair.oldcomponent),
-                      '/'.join(self.path_components_pair.newcomponent))]
-        self.__get_xsl_pair(filepairs)
-        self.__get_prestable_converted_pair(filepairs)
-        self.__get_prestable_tmx_pairs(filepairs)
+    @property
+    def file_pairs(self):
+        return ([self.orig_pair, self.xsl_pair, self.prestable_converted_pair] +
+                self.prestable_tmx_pairs)
 
-        return filepairs
+    @property
+    def orig_pair(self):
+        '''Make an orig PathPair'''
+        return PathPair(u'/'.join(self.old_components),
+                        u'/'.join(self.new_components))
 
-    def __get_xsl_pair(self, filepairs):
+    @property
+    def xsl_pair(self):
         """Compute the new names of the metadata files.
 
         The new pair is appended to filepairs
         """
-        oldpath = self.path_components_pair.oldcomponent
-        newpath = self.path_components_pair.newcomponent
+        return PathPair(u'/'.join(self.old_components.root,
+                                  self.old_components.module,
+                                  self.old_components.lang,
+                                  self.old_components.genre,
+                                  self.old_components.subdirs,
+                                  self.old_components.basename + '.xsl'),
+                        u'/'.join(self.new_components.root,
+                                  self.new_components.module,
+                                  self.new_components.lang,
+                                  self.new_components.genre,
+                                  self.new_components.subdirs,
+                                  self.new_components.basename + '.xsl'))
 
-        oldname = os.path.join(oldpath.root, oldpath.module, oldpath.lang,
-                               oldpath.genre, oldpath.subdirs,
-                               oldpath.basename + '.xsl')
-        newname = os.path.join(newpath.root, newpath.module, newpath.lang,
-                               newpath.genre, newpath.subdirs,
-                               newpath.basename + '.xsl')
-
-        filepairs.append(PathPair(oldname, newname))
-
-    def __get_prestable_converted_pair(self, filepairs):
+    @property
+    def prestable_converted_pair(self):
         """Compute the new files of the prestabe/converted files.
 
         The new pair is appended to filepairs
         """
-        oldpath = self.path_components_pair.oldcomponent
-        newpath = self.path_components_pair.newcomponent
+        return PathPair(u'/'.join(self.old_components.root,
+                                  u'prestable/converted',
+                                  self.old_components.lang,
+                                  self.old_components.genre,
+                                  self.old_components.subdirs,
+                                  self.old_components.basename + '.xml'),
+                        u'/'.join(self.new_components.root,
+                                  u'prestable/converted',
+                                  self.new_components.lang,
+                                  self.new_components.genre,
+                                  self.new_components.subdirs,
+                                  self.new_components.basename + '.xsl'))
 
-        oldname = os.path.join(oldpath.root, 'prestable/converted',
-                               oldpath.lang, oldpath.genre, oldpath.subdirs,
-                               oldpath.basename + '.xml')
-        newname = os.path.join(newpath.root, 'prestable/converted',
-                               newpath.lang, newpath.genre, newpath.subdirs,
-                               newpath.basename + '.xml')
-
-        filepairs.append(PathPair(oldname, newname))
-
-    def __get_prestable_tmx_pairs(self, filepairs):
+    @property
+    def prestable_tmx_pairs(self):
         """Compute the new names of the tmx files in prestable
 
         The new pairs are appended to filepairs
         """
-        oldpath = self.path_components_pair.oldcomponent
-        newpath = self.path_components_pair.newcomponent
+        filepairs = []
+        for tmx in [u'tmx', u'toktmx']:
+            tmxdir = u'/'.join(u'prestable', tmx)
+            metadatafile = xslsetter.MetadataHandler(self.xsl_pair.oldpath)
+            translated_from = metadatafile.get_variable('translated_from')
+            if translated_from is None or translated_from == u'':
+                for lang in metadatafile.get_parallel_texts().keys():
+                    orig_lang = metadatafile.get_variable('mainlang')
+                    filepairs.append(
+                        PathPair(
+                            u'/'.join(self.old_components.root, tmxdir,
+                                      orig_lang + u'2' + lang,
+                                      self.old_components.genre,
+                                      self.old_components.subdirs,
+                                      self.old_components.basename + u'.' +
+                                      tmx),
+                            u'/'.join(self.new_components.root, tmxdir,
+                                      orig_lang + u'2' + lang,
+                                      self.new_components.genre,
+                                      self.new_components.subdirs,
+                                      self.new_components.basename + u'.' +
+                                      tmx)))
 
-        for tmx in ['tmx', 'toktmx']:
-            tmxdir = os.path.join('prestable', tmx)
-            for langsubdir in glob.glob(os.path.join(oldpath.root, tmxdir) + '/*'):
-                oldname = os.path.join(oldpath.root, tmxdir,
-                                       os.path.basename(langsubdir), oldpath.genre,
-                                       oldpath.subdirs,
-                                       oldpath.basename + '.' + tmx)
-                newname = os.path.join(newpath.root, tmxdir,
-                                       os.path.basename(langsubdir), newpath.genre,
-                                       newpath.subdirs,
-                                       newpath.basename + '.' + tmx)
-
-                filepairs.append(PathPair(oldname, newname))
-
+        return filepairs
 
 def parse_args():
     parser = argparse.ArgumentParser(
