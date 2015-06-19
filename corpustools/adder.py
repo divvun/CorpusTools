@@ -35,6 +35,21 @@ import corpustools.versioncontrol as versioncontrol
 import corpustools.xslsetter as xslsetter
 
 
+class AdderException(Exception):
+    pass
+
+
+class AddToCorpus(object):
+    def __init__(self, corpusdir, mainlang, path):
+        if not os.path.isdir(corpusdir):
+            raise AdderException('The given corpus directory, {}, '
+                                 'does not exist.'.format(corpusdir))
+
+        self.corpusdir = corpusdir
+        self.mainlang = mainlang
+        self.goaldir = os.path.join(corpusdir, 'orig', mainlang, path)
+
+
 class AddFileToCorpus(namechanger.NameChangerBase):
     '''Add a given file to a given corpus'''
     def __init__(self, oldname, corpusdir, mainlang, path, parallel_file):
@@ -253,5 +268,3 @@ def main():
             pass
     else:
         print('ERROR', file=sys.stderr)
-        print('The given corpus directory, {}, '
-              'does not exist.'.format(args.corpusdir))
