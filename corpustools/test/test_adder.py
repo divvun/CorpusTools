@@ -26,6 +26,7 @@ import unittest
 
 from corpustools import adder
 from corpustools import versioncontrol
+from corpustools import xslsetter
 
 
 class TestAddToCorpus(unittest.TestCase):
@@ -130,7 +131,9 @@ class TestAddFileToCorpus(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
         self.tempdir.write('origdirectory/a.txt', 'content of a')
         self.tempdir.write('origdirectory/æ.txt', 'content of æ')
+        self.tempdir.write('origdirectory/b.txt', 'content of b')
         self.tempdir.makedir('corpus/orig')
+        self.tempdir.write('corpus/orig/sme/ae/c/o/b.txt', 'content of b')
         self.realcorpusdir = os.path.join(self.tempdir.path,
                                           'corpus').decode('utf8')
         self.origdirectory = os.path.join(self.tempdir.path,
@@ -158,6 +161,41 @@ class TestAddFileToCorpus(unittest.TestCase):
             'corpus/orig/sme/ae/c/o/',
             'corpus/orig/sme/ae/c/o/a.txt',
             'corpus/orig/sme/ae/c/o/a.txt.xsl',
+            'corpus/orig/sme/ae/c/o/b.txt',
             'origdirectory/',
             'origdirectory/a.txt',
+            'origdirectory/b.txt',
             'origdirectory/æ.txt')
+
+        metadata = xslsetter.MetadataHandler(
+            os.path.join(self.realcorpusdir, 'orig/sme/ae/c/o/a.txt.xsl'))
+        self.assertEqual(metadata.get_variable('filename'), 'a.txt')
+        self.assertEqual(metadata.get_variable('genre'), 'ae')
+        self.assertEqual(metadata.get_variable('mainlang'), 'sme')
+
+    def test_add_file_normalise_no_parallel(self):
+        aftc = adder.AddFileToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
+                                     os.path.join(self.origdirectory, u'æ.txt'))
+        aftc.add_file_to_corpus()
+
+        self.tempdir.check_all(
+            '',
+            'corpus/',
+            'corpus/orig/',
+            'corpus/orig/sme/',
+            'corpus/orig/sme/ae/',
+            'corpus/orig/sme/ae/c/',
+            'corpus/orig/sme/ae/c/o/',
+            'corpus/orig/sme/ae/c/o/ae.txt',
+            'corpus/orig/sme/ae/c/o/ae.txt.xsl',
+            'corpus/orig/sme/ae/c/o/b.txt',
+            'origdirectory/',
+            'origdirectory/a.txt',
+            'origdirectory/b.txt',
+            'origdirectory/æ.txt')
+
+        metadata = xslsetter.MetadataHandler(
+            os.path.join(self.realcorpusdir, 'orig/sme/ae/c/o/ae.txt.xsl'))
+        self.assertEqual(metadata.get_variable('filename'), u'æ.txt')
+        self.assertEqual(metadata.get_variable('genre'), 'ae')
+        self.assertEqual(metadata.get_variable('mainlang'), 'sme')
