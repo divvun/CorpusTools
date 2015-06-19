@@ -177,6 +177,62 @@ class AddFileToCorpus(AddToCorpus):
                     metadata.write_file()
 
 
+class AddDirectoryToCorpus(AddToCorpus):
+    def __init__(self, corpusdir, mainlang, path, origdir):
+        super(AddDirectoryToCorpus, self).__init__(corpusdir, mainlang, path)
+        if not os.path.isdir(origdir):
+            raise AdderException('{} '
+                                 'is not a directory.'.format(origdir))
+        self.origdir = origdir
+
+    def find_duplicates(self):
+        duplicates = {}
+        for root, dirs, files in os.walk(self.origdir):
+            for f in files:
+                path = os.path.join(root, f).decode('utf8')
+                file_hash = namechanger.compute_hexdigest(path)
+                if file_hash in duplicates:
+                    duplicates[file_hash].append(path)
+                else:
+                    duplicates[file_hash] = [path]
+
+        results = list(filter(lambda x: len(x) > 1, duplicates.values()))
+        if len(results) > 0:
+            print(u'Duplicates Found:')
+            print(u'The following files are identical. The name could differ, but the content is identical')
+            print(u'___________________')
+            for result in results:
+                for subresult in result:
+                    print(u'\t\t{}'.format(subresult))
+                print(u'___________________')
+
+            raise AdderException(u'Found duplicates')
+
+    def add_directory_to_corpus(self):
+        '''Add the files contained in self.origdir to self.goaldir'''
+        self.find_duplicates()
+        for root, dirs, files in os.walk(self.origdir):
+            for f in files:
+                self.add_file_to_corpus(os.path.join(root, f).decode('utf8'))
+
+    def add_file_to_corpus(self, origpath):
+        mc = namechanger.MovepairComputer()
+        mc.compute_movepairs(origpath, os.path.join(
+            self.goaldir, os.path.basename(origpath)))
+
+        filepair = mc.filepairs[0]
+        shutil.copy(filepair.oldpath, filepair.newpath)
+        new_components = util.split_path(filepair.newpath)
+        new_metadata = xslsetter.MetadataHandler(filepair.newpath + '.xsl',
+                                                 create=True)
+        new_metadata.set_variable('filename', os.path.basename(
+            filepair.oldpath))
+        new_metadata.set_variable('mainlang', new_components.lang)
+        new_metadata.set_variable('genre', new_components.genre)
+        new_metadata.write_file()
+
+        self.vcs.add([filepair.newpath, filepair.newpath + '.xsl'])
+
     #def add_url_extension(self, content_type):
         #content_type_extension = {
             #'text/html': '.html',
@@ -272,27 +328,6 @@ class AddFileToCorpus(AddToCorpus):
                                      #location1 + '.xsl'))
                     #parallel_metadata.set_parallel_text(lang2, location2)
                     #parallel_metadata.write_file()
-
-
-#class AddDirToCorpus(AddToCorpus):
-    #def __init__(self, origdir, corpusdir, mainlang, path):
-        #super(AddDirToCorpus, self).__init(corpusdir, mainlang, path)
-        #if not os.path.isdir(origdir):
-            #raise AdderException('{} '
-                                 #'is not a directory.'.format(origdir))
-        #self.origdir = origdir
-
-    #def add(self):
-        #'''Add the files contained in self.origdir to self.goaldir'''
-        #additions = []
-        #if not os.path.isdir(self.goaldir):
-            #os.makedirs(self.goaldir)
-            #for root, dirs, files in os.walk(self.origdir):
-                #for f in files:
-                    #self.copy_to_corpusdirectory(root, f)
-                    #additions.append(os.path.join(root, f))
-
-        #self.vcs.add(additions)
 
 
 #def gather_files(origs):
