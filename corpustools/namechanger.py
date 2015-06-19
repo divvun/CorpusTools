@@ -18,42 +18,6 @@
 #
 #   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
 #
-
-
-'''Change the names of files within a repository
-
-Normalise a file name: Replace non-ascii char with ascii ones and remove
-unwanted characters.
-
-When normalising a file name containing unwanted characters or renaming it
-for other reasons:
-* change the name of original file
-* change the name of metadata file
-* change the name of prestable/converted file
-* change the name of prestable/toktmx file
-* change the name of prestable/tmx file
-* change the reference to the file name in the parallel files' metadata
-
-When moving a file from one subdirectory to another:
-* move the original file
-* move the metadata file
-* move the prestable/converted file
-* move the prestable/toktmx file
-* move the prestable/tmx file
-* move the parallel files the same way the original file has been moved.
-
-When moving a file to a new genre:
-* the subdirectory move operations +
-* change the genre reference in the metadata files
-
-When moving a file to a new language:
-* change the language of the file in the parallel files' metadata
-
-When doing these operations, detect name clashes for the original files.
-
-If a name clash is found, check if the files are duplicates. If they are
-duplicates, raise an exception, otherwise suggest a new name.
-'''
 from __future__ import print_function
 
 import argparse
@@ -237,7 +201,45 @@ class CorpusFileMover(object):
 
 
 class CorpusFilesetMoverAndUpdater(object):
-    '''Move an original, its parallel files and all their derived files'''
+    '''Change the names of files within a repository
+
+    Normalise a file name: Replace non-ascii char with ascii ones and remove
+    unwanted characters.
+
+    When normalising a file name containing unwanted characters or renaming it
+    for other reasons:
+    * move the original file
+    * move the metadata file
+    * move the prestable/converted file
+    * move the prestable/toktmx file
+    * move the prestable/tmx file
+    * change the reference to the file name in the parallel files' metadata
+
+    When moving a file from one subdirectory to another:
+    * move the original file
+    * move the metadata file
+    * move the prestable/converted file
+    * move the prestable/toktmx file
+    * move the prestable/tmx file
+    * move the parallel files the same way the original file has been moved.
+
+    When moving a file to a new genre:
+    * the subdirectory move operations +
+    * change the genre reference in the metadata files
+
+    When moving a file to a new language:
+    * move the original file
+    * move the metadata file
+    * move the prestable/converted file
+    * move the prestable/toktmx file
+    * move the prestable/tmx file
+    * change the language of the file in the parallel files' metadata
+
+    When doing these operations, detect name clashes for the original files.
+
+    If a name clash is found, check if the files are duplicates. If they are
+    duplicates, raise an exception, otherwise suggest a new name.
+    '''
     def __init__(self, oldpath, newpath):
         self.mc = MovepairComputer()
         self.mc.compute_all_movepairs(oldpath, newpath)
