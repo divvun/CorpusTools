@@ -121,16 +121,17 @@ class AddFileToCorpus(AddToCorpus):
     ** set the original basename as the filename
     ** set the mainlang
     ** set the genre
-    ** if a parallel file is given, set the parallel info in all the parellel files
+    ** if a parallel file is given, set the parallel info in all the parellel
+    files
     ** add both the newly copied file and the metadata file to the working copy
 '''
-    def __init__(self, corpusdir, mainlang, path, origpath, parallel_file=None):
+    def __init__(self, corpusdir, mainlang, path, origpath,
+                 parallel_file=None):
         super(AddFileToCorpus, self).__init__(corpusdir, mainlang, path)
 
         self.mc = namechanger.MovepairComputer()
         self.mc.compute_movepairs(origpath, os.path.join(
             self.goaldir, os.path.basename(origpath)))
-
 
         self.parallel_file = parallel_file
         if parallel_file is not None and not os.path.exists(parallel_file):
@@ -144,7 +145,8 @@ class AddFileToCorpus(AddToCorpus):
             new_components = util.split_path(filepair.newpath)
             new_metadata = xslsetter.MetadataHandler(filepair.newpath + '.xsl',
                                                      create=True)
-            new_metadata.set_variable('filename', os.path.basename(filepair.oldpath))
+            new_metadata.set_variable('filename', os.path.basename(
+                filepair.oldpath))
             new_metadata.set_variable('mainlang', new_components.lang)
             new_metadata.set_variable('genre', new_components.genre)
             new_metadata.write_file()
@@ -173,7 +175,6 @@ class AddFileToCorpus(AddToCorpus):
                         if lang1 != lang:
                             metadata.set_parallel_text(lang1, parallel1)
                     metadata.write_file()
-
 
 
     #def add_url_extension(self, content_type):
