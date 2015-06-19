@@ -47,12 +47,6 @@ Add a URL to the corpus
 ** if a parallel file is given, set the parallel info in all the parellel files
 ** add both the newly copied file and the metadata file to the working copy
 
-Add a directory to the corpus
-* Recursively walks through the given original directory
-** First checks for duplicates, raises an error printing a list of duplicate
-   files if duplicates are found
-** For each file, do the "add file to the corpus" operations (minus the
-   parallel info).
 '''
 
 
@@ -178,6 +172,14 @@ class AddFileToCorpus(AddToCorpus):
 
 
 class AddDirectoryToCorpus(AddToCorpus):
+    '''Add a directory to the corpus
+
+    * Recursively walks through the given original directory
+    ** First checks for duplicates, raises an error printing a list of duplicate
+    files if duplicates are found
+    ** For each file, do the "add file to the corpus" operations (minus the
+    parallel info).
+    '''
     def __init__(self, corpusdir, mainlang, path, origdir):
         super(AddDirectoryToCorpus, self).__init__(corpusdir, mainlang, path)
         if not os.path.isdir(origdir):
@@ -330,90 +332,92 @@ class AddDirectoryToCorpus(AddToCorpus):
                     #parallel_metadata.write_file()
 
 
-#def gather_files(origs):
-    #file_list = []
+def gather_files(origs):
+    file_list = []
 
-    #for orig in origs:
-        #if os.path.isdir(orig):
-            #for root, dirs, files in os.walk(orig):
-                #for f in files:
-                    #file_list.append(
-                        #util.name_to_unicode(os.path.join(root, f)))
-        #elif os.path.isfile(orig):
-            #file_list.append(util.name_to_unicode(orig))
-        #elif orig.startswith('http'):
-            #file_list.append(util.name_to_unicode(orig))
-        #else:
-            #print(
-                #'ERROR: {} is neither a directory, nor a file nor a '
-                #'http-url\n'.format(orig), file=sys.stderr)
-            #raise UserWarning
+    for orig in origs:
+        if os.path.isdir(orig):
+            for root, dirs, files in os.walk(orig):
+                for f in files:
+                    file_list.append(
+                        util.name_to_unicode(os.path.join(root, f)))
+        elif os.path.isfile(orig):
+            file_list.append(util.name_to_unicode(orig))
+        elif orig.startswith('http'):
+            file_list.append(util.name_to_unicode(orig))
+        else:
+            print(
+                'ERROR: {} is neither a directory, nor a file nor a '
+                'http-url\n'.format(orig), file=sys.stderr)
+            raise UserWarning
 
-    #return file_list
-
-
-#def add_files(args):
-    #for orig in gather_files(args.origs):
-        #adder = AddFileToCorpus(
-            #orig,
-            #args.corpusdir,
-            #args.mainlang,
-            #args.path,
-            #args.parallel_file)
-        #adder.copy_orig_to_corpus()
-        #adder.make_metadata_file({})
+    return file_list
 
 
-#def parse_args():
-    #parser = argparse.ArgumentParser(
-        #parents=[argparse_version.parser],
-        #description='Add file(s) to a corpus directory. The filenames are '
-        #'converted to ascii only names. Metadata files containing the '
-        #'original name, the main language, the genre and possibly parallel '
-        #'files are also made. The files are added to the working copy.')
-
-    #parser.add_argument('-p', '--parallel',
-                        #dest='parallel_file',
-                        #help='An existing file in the corpus that is '
-                        #'parallel to the orig that is about to be added')
-    #parser.add_argument('corpusdir',
-                        #help='The corpus dir (freecorpus or boundcorpus)')
-    #parser.add_argument('mainlang',
-                        #help='The language of the files that will be added '
-                        #'(sma, sme, ...)')
-    #parser.add_argument('path',
-                        #help='The genre directory where the files will be '
-                        #'added. This may also be a path, e.g. '
-                        #'admin/facta/skuvlahistorja1')
-    #parser.add_argument('origs',
-                        #nargs='+',
-                        #help='The original files, urls or directories where '
-                        #'the original files reside (not in svn)')
-
-    #return parser.parse_args()
+def add_files(args):
+    for orig in gather_files(args.origs):
+        if os.path.isfile(orig):
+            adder = AddFileToCorpus(
+                args.corpusdir.decode('utf8'),
+                args.mainlang.decode('utf8'),
+                args.path.decode('utf8'),
+                orig,
+                parallel_file=args.parallel_file)
+            adder.add_file_to_corpus()
+        elif os.path.isdir(orig):
+            adder = AddDirectoryToCorpus(
+                args.corpusdir.decode('utf8'),
+                args.mainlang.decode('utf8'),
+                args.path.decode('utf8'),
+                orig)
+            adder.add_directory_to_corpus()
 
 
-#def main():
-    #args = parse_args()
+def parse_args():
+    parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
+        description='Add file(s) to a corpus directory. The filenames are '
+        'converted to ascii only names. Metadata files containing the '
+        'original name, the main language, the genre and possibly parallel '
+        'files are also made. The files are added to the working copy.')
 
-    #if args.parallel_file is not None:
-        #if not os.path.exists(args.parallel_file):
-            #print('The given parallel file\n\t{}\n'
-                  #'does not exist'.format(args.parallel_file), file=sys.stderr)
-            #sys.exit(1)
-        #if len(args.origs) > 1:
-            #print('When the -p option is given, it only makes '
-                  #'sense to add one file at a time.', file=sys.stderr)
-            #sys.exit(2)
-        #if len(args.origs) == 1 and os.path.isdir(args.origs[-1]):
-            #print('It is not possible to add a directory '
-                  #'when the -p option is given.', file=sys.stderr)
-            #sys.exit(3)
+    parser.add_argument('-p', '--parallel',
+                        dest='parallel_file',
+                        help='An existing file in the corpus that is '
+                        'parallel to the orig that is about to be added')
+    parser.add_argument('corpusdir',
+                        help='The corpus dir (freecorpus or boundcorpus)')
+    parser.add_argument('mainlang',
+                        help='The language of the files that will be added '
+                        '(sma, sme, ...)')
+    parser.add_argument('path',
+                        help='The genre directory where the files will be '
+                        'added. This may also be a path, e.g. '
+                        'admin/facta/skuvlahistorja1')
+    parser.add_argument('origs',
+                        nargs='+',
+                        help='The original files, urls or directories where '
+                        'the original files reside (not in svn)')
 
-    #if os.path.isdir(args.corpusdir):
-        #try:
-            #add_files(args)
-        #except UserWarning:
-            #pass
-    #else:
-        #print('ERROR', file=sys.stderr)
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+
+    if args.parallel_file is not None:
+        if not os.path.exists(args.parallel_file):
+            print('The given parallel file\n\t{}\n'
+                  'does not exist'.format(args.parallel_file), file=sys.stderr)
+            sys.exit(1)
+        if len(args.origs) > 1:
+            print('When the -p option is given, it only makes '
+                  'sense to add one file at a time.', file=sys.stderr)
+            sys.exit(2)
+        if len(args.origs) == 1 and os.path.isdir(args.origs[-1]):
+            print('It is not possible to add a directory '
+                  'when the -p option is given.', file=sys.stderr)
+            sys.exit(3)
+
+    if os.path.isdir(args.corpusdir):
+        add_files(args)
