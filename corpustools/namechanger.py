@@ -16,30 +16,32 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2013-2014 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
 #
 
-import os
-import sys
-import subprocess
 import argparse
+import os
+import subprocess
+import sys
 
 import lxml.etree as etree
 import unidecode
 import urllib
 
 import corpustools.argparse_version as argparse_version
-import corpustools.xslsetter as xslsetter
 import corpustools.util as util
+import corpustools.xslsetter as xslsetter
 
 
 class NameChangerBase(object):
     """Class to change names of corpus files.
+
     Will also take care of changing info in meta data of parallel files.
     """
 
     def __init__(self, oldname):
         """Find the directory the oldname is in.
+
         self.oldname is the basename of oldname.
         self.newname is the basename of oldname, in lowercase and
         with some characters replaced.
@@ -50,8 +52,7 @@ class NameChangerBase(object):
         self.new_filename = self.change_to_ascii()
 
     def change_to_ascii(self):
-        """Downcase all chars in self.oldname, replace some chars
-        """
+        """Downcase all chars in self.oldname, replace some chars"""
         unwanted_chars = {
             u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
             u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_',
@@ -81,6 +82,7 @@ class CorpusNameFixer(NameChangerBase):
 
     def change_name(self):
         """Change the name of the original file and it's metadata file
+
         Update the name in parallel files
         Also move the other files that's connected to the original file
         """
@@ -108,18 +110,14 @@ class CorpusNameFixer(NameChangerBase):
             subprocess.call(['git', 'mv', oldname, newname])
 
     def move_origfile(self):
-        """Change the name of the original file
-        using the routines of a given repository tool
-        """
+        """Change the name of the original file."""
         fromname = os.path.join(self.old_dirname, self.old_filename)
         toname = os.path.join(self.old_dirname, self.new_filename)
 
         self.move_file(fromname, toname)
 
     def move_xslfile(self):
-        """Change the name of an xsl file using the
-        routines of a given repository tool
-        """
+        """Change the name of the metadata file."""
         fromname = os.path.join(
             self.old_dirname,
             u'{}.xsl'.format(self.old_filename))
@@ -140,10 +138,7 @@ class CorpusNameFixer(NameChangerBase):
         return tree
 
     def set_para_backreference(self, mainlang, paralang, paraname):
-        """Find the xsl file of the parallel file, and make it point correctly
-        to the new name of this file.
-
-        """
+        """Replace oldname with newname in parallell file reference."""
         paradir = self.old_dirname.replace("/"+mainlang+"/",
                                            "/"+paralang+"/")
         parafile = os.path.join(paradir, u'{}.xsl'.format(paraname))
@@ -154,6 +149,7 @@ class CorpusNameFixer(NameChangerBase):
 
     def update_name_in_parallel_files(self):
         """Open the .xsl file belonging to the file we are changing names of.
+
         Look for parallel files.
         Open the xsl files of these parallel files and change the name of this
         parallel from the old to the new one
@@ -173,8 +169,7 @@ class CorpusNameFixer(NameChangerBase):
                     self.set_para_backreference(mainlang, paralang, paraname)
 
     def move_prestable_converted(self):
-        """Move the file in prestable/converted from the old to the new name
-        """
+        """Move the file in prestable/converted from the old to the new name"""
         dirname = self.old_dirname.replace('/orig/', '/prestable/converted/')
         fromname = os.path.join(dirname, u'{}.xml'.format(self.old_filename))
         toname = os.path.join(dirname, '{}.xml'.format(self.new_filename))
@@ -183,8 +178,7 @@ class CorpusNameFixer(NameChangerBase):
             self.move_file(fromname, toname)
 
     def move_prestable_toktmx(self):
-        """Move the file in prestable/toktmx from the old to the new name
-        """
+        """Move the file in prestable/toktmx from the old to the new name"""
         for suggestion in ['/prestable/toktmx/sme2nob/',
                            '/prestable/toktmx/nob2sme/']:
             dirname = self.old_dirname.replace('/orig/', suggestion)
@@ -196,8 +190,7 @@ class CorpusNameFixer(NameChangerBase):
                 self.move_file(fromname, toname)
 
     def move_prestable_tmx(self):
-        """Move the file in prestable/tmx from the old to the new name
-        """
+        """Move the file in prestable/tmx from the old to the new name"""
         for suggestion in ['/prestable/tmx/sme2nob/',
                            '/prestable/tmx/nob2sme/']:
             dirname = self.old_dirname.replace('/orig/', suggestion)
