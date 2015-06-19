@@ -374,9 +374,8 @@ def compute_new_basename(oldpath, wanted_path):
 
     while os.path.exists(newpath):
         if are_duplicates(oldpath, newpath):
-            raise UserWarning('{} and {} are duplicates. '
-                              'Please remove one of them'.format(oldpath,
-                                                                 newpath))
+            raise UserWarning(u'{} and {} are duplicates. '.format(oldpath,
+                                                                  newpath))
         else:
             if u'.' in wanted_basename:
                 dot = wanted_basename.rfind('.')
