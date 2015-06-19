@@ -30,6 +30,10 @@ import pwd
 import pysvn
 
 
+class VersionControlException(Exception):
+    pass
+
+
 class VersionController(object):
     def __init__(self):
         # non-repo config to get at global values
@@ -99,8 +103,7 @@ class VersionControlFactory(object):
                 r = git.Repo(directory)
                 return GIT(r)
             except git.exc.InvalidGitRepositoryError:
-                print(
-                    '{} is not a SVN working repository or a Git repo. '
+                raise VersionControlException(
+                    '{} is neither a SVN working repository or a Git repo. '
                     'Files can only be added to a version controlled '
-                    'directory.'.format(directory), file=sys.stderr)
-                raise UserWarning
+                    'directory.'.format(directory))
