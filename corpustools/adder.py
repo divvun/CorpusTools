@@ -21,23 +21,22 @@
 
 from __future__ import print_function
 
-import os
-import sys
 import argparse
+import os
 import shutil
+import sys
 
 import requests
 
 import corpustools.argparse_version as argparse_version
+import corpustools.namechanger as namechanger
+import corpustools.util as util
 import corpustools.versioncontrol as versioncontrol
 import corpustools.xslsetter as xslsetter
-import corpustools.util as util
-import corpustools.namechanger as namechanger
 
 
 class AddFileToCorpus(namechanger.NameChangerBase):
-    '''Add a given file to a given corpus
-    '''
+    '''Add a given file to a given corpus'''
     def __init__(self, oldname, corpusdir, mainlang, path, parallel_file):
         super(AddFileToCorpus, self).__init__(oldname)
         self.corpusdir = corpusdir
@@ -73,8 +72,7 @@ class AddFileToCorpus(namechanger.NameChangerBase):
         return os.path.join(self.new_dirname, self.new_filename)
 
     def copy_orig_to_corpus(self):
-        '''Copy the original file to the correct place in the given corpus
-        '''
+        '''Copy the original file to the correct place in the given corpus'''
         fromname = os.path.join(self.old_dirname, self.old_filename)
         self.makedirs()
 
@@ -89,7 +87,8 @@ class AddFileToCorpus(namechanger.NameChangerBase):
                         print('Added {}'.format(self.toname()))
                         self.vcs.add(self.toname())
                     else:
-                        print('{} already exists'.format(self.toname()), file=sys.stderr)
+                        print('{} already exists'.format(self.toname()),
+                              file=sys.stderr)
                 else:
                     print('ERROR: {} does not exist'.format(fromname),
                           file=sys.stderr)
@@ -107,9 +106,7 @@ class AddFileToCorpus(namechanger.NameChangerBase):
             self.vcs.add(self.toname())
 
     def _get_parallels(self):
-        '''Using the parallels metadata from the parallel file,
-        set all the parallels of the orig file
-        '''
+        '''Set all the parallels of the orig file'''
         parallels = {}
 
         if self.parallel_file is not None:
@@ -123,7 +120,9 @@ class AddFileToCorpus(namechanger.NameChangerBase):
         return parallels
 
     def make_metadata_file(self, extra_values):
-        '''extra_values is a dict that contains data for the metadata file
+        '''Make a metadata file
+
+        :param: extra_values is a dict that contains data for the metadata file
         that is not possible to infer from the data given in the constructor.
         '''
         metafile_name = self.toname() + '.xsl'
@@ -162,9 +161,10 @@ class AddFileToCorpus(namechanger.NameChangerBase):
                 if lang2 != lang1:
                     parallel_metadata = xslsetter.MetadataHandler(
                         os.path.join(self.corpusdir, 'orig', lang1, self.path,
-                                    location1 + '.xsl'))
+                                     location1 + '.xsl'))
                     parallel_metadata.set_parallel_text(lang2, location2)
                     parallel_metadata.write_file()
+
 
 def gather_files(origs):
     file_list = []
