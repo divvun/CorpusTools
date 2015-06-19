@@ -19,6 +19,8 @@
 #   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
 #
 
+from __future__ import print_function
+
 import argparse
 import os
 import subprocess
@@ -95,11 +97,10 @@ class CorpusNameFixer(NameChangerBase):
                 self.move_prestable_toktmx()
                 self.move_prestable_tmx()
             else:
-                print >>sys.stderr, (
-                    '\nError renaming {}'
+                print('\nError renaming {}'
                     '\n{} exists\n'.format(
                         os.path.join(self.old_dirname, self.old_filename),
-                        fullname))
+                        fullname), file=sys.stderr)
 
     def move_file(self, oldname, newname):
         """Change name of file from fromname to toname"""
