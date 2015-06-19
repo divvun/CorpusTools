@@ -19,26 +19,106 @@
 #   Copyright 2015 Børre Gaup <borre.gaup@uit.no>
 #
 
+import git
 import os
+import testfixtures
 import unittest
 
 from corpustools import adder
-
-
-here = os.path.dirname(__file__)
+from corpustools import versioncontrol
 
 
 class TestAddToCorpus(unittest.TestCase):
-    def test_init_with_valid_corpusdir(self):
+    def setUp(self):
+        self.tempdir = testfixtures.TempDirectory()
+        self.tempdir.makedir('tull')
+        self.tempdir.makedir('corpus/orig')
+        self.realcorpusdir = os.path.join(self.tempdir.path,
+                                          'corpus').decode('utf8')
+
+        r = git.Repo.init(self.realcorpusdir)
+        r.index.add(['orig'])
+        r.index.commit('Added orig')
+
+    def tearDown(self):
+        self.tempdir.cleanup()
+
+    def test_init_with_non_unicode_corpusdir(self):
+        corpusdir = 'there'
+        lang = u'sme'
+        path = u'a/b/c'
+
+        with self.assertRaises(adder.AdderException):
+            adder.AddToCorpus(corpusdir, lang, path)
+
+    def test_init_with_non_unicode_lang(self):
+        corpusdir = u'there'
         lang = 'sme'
+        path = u'a/b/c'
+
+        with self.assertRaises(adder.AdderException):
+            adder.AddToCorpus(corpusdir, lang, path)
+
+    def test_init_with_non_unicode_path(self):
+        corpusdir = u'there'
+        lang = u'sme'
         path = 'a/b/c'
-        atc = adder.AddToCorpus(here, lang, path)
 
-        self.assertEqual((atc.corpusdir, atc.mainlang, atc.goaldir),
-                         (here, lang, '/'.join([here, 'orig', lang, path])))
+        with self.assertRaises(adder.AdderException):
+            adder.AddToCorpus(corpusdir, lang, path)
 
-    def test_init_with_invalid_corpusdir(self):
-        lang = 'sme'
-        path = 'a/b/c'
+    def test_init_with_non_existing_corpusdir(self):
+        corpusdir = u'there'
+        lang = u'sme'
+        path = u'a/b/c'
 
-        self.assertRaises(adder.AdderException, adder.AddToCorpus, 'there', lang, path)
+        with self.assertRaises(adder.AdderException):
+            adder.AddToCorpus(corpusdir, lang, path)
+
+    def test_init_with_existing_corpusdir_but_not_vcs(self):
+        lang = u'sme'
+        path = u'a/b/c'
+
+        with self.assertRaises(versioncontrol.VersionControlException):
+            adder.AddToCorpus(
+                os.path.join(self.tempdir.path, 'tull').decode('utf8'),
+                lang, path)
+
+    def test_init_with_vcs_corpusdir(self):
+        lang = u'sme'
+        path = u'a/b/c'
+
+        atc = adder.AddToCorpus(
+            self.realcorpusdir,
+            lang, path)
+        self.assertEqual(atc.goaldir, os.path.join(self.tempdir.path, 'corpus',
+                                                   'orig', lang, path))
+
+    def test_init_with_too_long_mainlang(self):
+        lang = u'smei'
+        path = u'a/b/c'
+
+        with self.assertRaises(adder.AdderException):
+            adder.AddToCorpus(self.realcorpusdir, lang, path)
+
+    def test_init_with_uppercase_mainlang(self):
+        lang = u'SME'
+        path = u'a/b/c'
+
+        with self.assertRaises(adder.AdderException):
+            adder.AddToCorpus(self.realcorpusdir, lang, path)
+
+    def test_init_with_non_ascii_mainlang(self):
+        lang = u'øåæ'
+        path = u'a/b/c'
+
+        with self.assertRaises(adder.AdderException):
+            adder.AddToCorpus(self.realcorpusdir, lang, path)
+
+    def test_init_with_path_that_must_be_normalised(self):
+        lang = u'sme'
+        path = u'æ/č/ö'
+
+        atc = adder.AddToCorpus(self.realcorpusdir, lang, path)
+        self.assertEqual(atc.goaldir, os.path.join(self.tempdir.path, 'corpus',
+                                                   'orig', lang, 'ae/c/o'))

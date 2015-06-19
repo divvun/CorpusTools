@@ -16,7 +16,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2013-2014 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
 #
 
 from __future__ import print_function
@@ -28,11 +28,48 @@ import sys
 
 import requests
 
-import corpustools.argparse_version as argparse_version
-import corpustools.namechanger as namechanger
-import corpustools.util as util
-import corpustools.versioncontrol as versioncontrol
-import corpustools.xslsetter as xslsetter
+from corpustools import argparse_version
+from corpustools import namechanger
+from corpustools import util
+from corpustools import versioncontrol
+from corpustools import xslsetter
+
+
+'''Adding files, directories and URL's to a corpus directory
+
+Command line arguments:
+* the corpus directory (check that this exists)
+* the lang of the file(s) to add
+** check that this exists, add if not, must be exactly three chars long
+* the path below lang directory where the file(s) should be added
+** normalise all the elements, add if it does not exist
+* when adding a file or a URL, optionally name a parallel file
+
+Add a file to the corpus
+* normalise the basename, copy the the file to the given directory
+* make a metadata file belonging to it
+** set the original basename as the filename
+** set the mainlang
+** set the genre
+** if a parallel file is given, set the parallel info in all the parellel files
+** add both the newly copied file and the metadata file to the working copy
+
+Add a URL to the corpus
+* normalise the basename, copy the the file to the given directory
+* make a metadata file belonging to it
+** set the url as the filename
+** set the mainlang
+** set the genre
+** if a parallel file is given, set the parallel info in all the parellel files
+** add both the newly copied file and the metadata file to the working copy
+
+Add a directory to the corpus
+* Recursively walks through the given original directory
+** First checks for duplicates, raises an error printing a list of duplicate
+   files if duplicates are found
+** For each file, do the "add file to the corpus" operations (minus the
+   parallel info).
+'''
 
 
 class AdderException(Exception):
@@ -41,254 +78,290 @@ class AdderException(Exception):
 
 class AddToCorpus(object):
     def __init__(self, corpusdir, mainlang, path):
-        if not os.path.isdir(corpusdir):
-            raise AdderException('The given corpus directory, {}, '
-                                 'does not exist.'.format(corpusdir))
+        '''Baseclass for adding something to the corpus
 
-        vcsfactory = versioncontrol.VersionControlFactory()
-        self.vcs = vcsfactory.vcs(corpusdir)
-        
-        self.corpusdir = corpusdir
-        self.mainlang = mainlang
-        self.goaldir = os.path.join(corpusdir, 'orig', mainlang, path)
-
-
-class AddDirToCorpus(AddToCorpus):
-    def __init__(self, origdir, corpusdir, mainlang, path):
-        super(AddDirToCorpus, self).__init(corpusdir, mainlang, path)
-        if not os.path.isdir(origdir):
-            raise AdderException('{} '
-                                 'is not a directory.'.format(origdir))
-        self.origdir = origdir
-
-    def add(self):
-        '''Add the files contained in self.origdir to self.goaldir'''
-        additions = []
-        if not os.path.isdir(self.goaldir):
-            os.makedirs(self.goaldir)
-            for root, dirs, files in os.walk(self.origdir):
-                for f in files:
-                    self.copy_to_corpusdirectory(root, f)
-                    additions.append(os.path.join(root, f))
-
-        self.vcs.add(additions)
-
-
-class AddFileToCorpus(namechanger.NameChangerBase):
-    '''Add a given file to a given corpus'''
-    def __init__(self, oldname, corpusdir, mainlang, path, parallel_file):
-        super(AddFileToCorpus, self).__init__(oldname)
-        self.corpusdir = corpusdir
-        self.mainlang = mainlang
-        self.path = path
-        self.new_dirname = os.path.join(corpusdir, 'orig', mainlang, path)
-        vcsfactory = versioncontrol.VersionControlFactory()
-        self.vcs = vcsfactory.vcs(corpusdir)
-        self.parallel_file = parallel_file
-        self.parallels = self._get_parallels()
-
-    def makedirs(self):
-        try:
-            os.makedirs(self.new_dirname)
-            self.vcs.add_directory(self.new_dirname)
-        except OSError:
-            pass
-
-    def add_url_extension(self, content_type):
-        content_type_extension = {
-            'text/html': '.html',
-            'application/msword': '.doc',
-            'application/pdf': '.pdf',
-            'text/plain': '.txt',
-        }
-
-        for ct, extension in content_type_extension.items():
-            if (ct in content_type and not
-                    self.new_filename.endswith(extension)):
-                self.new_filename += extension
-
-    def toname(self):
-        return os.path.join(self.new_dirname, self.new_filename)
-
-    def copy_orig_to_corpus(self):
-        '''Copy the original file to the correct place in the given corpus'''
-        fromname = os.path.join(self.old_dirname, self.old_filename)
-        self.makedirs()
-
-        if fromname.startswith('http'):
-            try:
-                r = requests.get(fromname)
-                if r.status_code == requests.codes.ok:
-                    self.add_url_extension(r.headers['content-type'])
-                    if not os.path.exists(self.toname()):
-                        with open(self.toname(), 'wb') as new_corpus_file:
-                            new_corpus_file.write(r.content)
-                        print('Added {}'.format(self.toname()))
-                        self.vcs.add(self.toname())
-                    else:
-                        print('{} already exists'.format(self.toname()),
-                              file=sys.stderr)
-                else:
-                    print('ERROR: {} does not exist'.format(fromname),
-                          file=sys.stderr)
-                    raise UserWarning
-            except requests.exceptions.MissingSchema:
-                print('Error: wrong schema', file=sys.stderr)
-                raise UserWarning
-            except requests.exceptions.ConnectionError as e:
-                print('Could not connect', file=sys.stderr)
-                print(str(e), file=sys.stderr)
-                raise UserWarning
-        else:
-            shutil.copy(fromname, self.toname())
-            print('Added', self.toname())
-            self.vcs.add(self.toname())
-
-    def _get_parallels(self):
-        '''Set all the parallels of the orig file'''
-        parallels = {}
-
-        if self.parallel_file is not None:
-            parallel_metadata = xslsetter.MetadataHandler(
-                self.parallel_file + '.xsl')
-            parallels[self.mainlang] = self.new_filename
-            parallels[parallel_metadata.get_variable(
-                'mainlang')] = os.path.basename(self.parallel_file)
-            parallels.update(parallel_metadata.get_parallel_texts())
-
-        return parallels
-
-    def make_metadata_file(self, extra_values):
-        '''Make a metadata file
-
-        :param: extra_values is a dict that contains data for the metadata file
-        that is not possible to infer from the data given in the constructor.
+        Args:
+            corpusdir: (unicode) the directory where the corpus is
+            mainlang: (unicode) three character long lang id (iso-639)
+            path: (unicode) path below the language directory where the files
+            should be added
         '''
-        metafile_name = self.toname() + '.xsl'
-        if not os.path.exists(metafile_name):
-            metadata_file = xslsetter.MetadataHandler(metafile_name,
-                                                      create=True)
-            if self.old_dirname.startswith('http'):
-                metadata_file.set_variable('filename', os.path.join(
-                    self.old_dirname, self.old_filename))
-            else:
-                metadata_file.set_variable('filename', self.old_filename)
-            metadata_file.set_variable('genre', self.path.split('/')[0])
-            metadata_file.set_variable('mainlang', self.mainlang)
-            if isinstance(self.vcs.user_name(), str):
-                metadata_file.set_variable(
-                    'sub_name', self.vcs.user_name().decode('utf-8'))
-            else:
-                metadata_file.set_variable(
-                    'sub_name', self.vcs.user_name())
-            metadata_file.set_variable('sub_email', self.vcs.user_email())
+        if type(corpusdir) is not unicode:
+            raise AdderException(u'corpusdir is not unicode: {}.'.format(
+                corpusdir))
 
-            for key, value in extra_values.items():
-                metadata_file.set_variable(key, value)
-            metadata_file.write_file()
+        if type(mainlang) is not unicode:
+            raise AdderException(u'mainlang is not unicode: {}.'.format(
+                mainlang))
 
-            self.update_parallel_files()
+        if type(path) is not unicode:
+            raise AdderException(u'path is not unicode: {}.'.format(
+                path))
 
-            print('Added', metadata_file.filename)
-            self.vcs.add(metadata_file.filename)
-        else:
-            print(metafile_name, 'already exists', file=sys.stderr)
+        if not os.path.isdir(corpusdir):
+            raise AdderException(u'The given corpus directory, {}, '
+                                 u'does not exist.'.format(corpusdir))
 
-    def update_parallel_files(self):
-        for lang1, location1 in self.parallels.items():
-            for lang2, location2 in self.parallels.items():
-                if lang2 != lang1:
-                    parallel_metadata = xslsetter.MetadataHandler(
-                        os.path.join(self.corpusdir, 'orig', lang1, self.path,
-                                     location1 + '.xsl'))
-                    parallel_metadata.set_parallel_text(lang2, location2)
-                    parallel_metadata.write_file()
+        if (len(mainlang) != 3 or mainlang != mainlang.lower() or
+                mainlang != namechanger.normalise_filename(mainlang)):
+            raise AdderException(
+                u'Invalid mainlang: {}. '
+                u'It must consist of three lowercase non ascii '
+                u'letters'.format(mainlang))
 
+        vcsfactory = versioncontrol.VersionControlFactory()
+        self.vcs = vcsfactory.vcs(corpusdir)
 
-def gather_files(origs):
-    file_list = []
+        self.corpusdir = corpusdir
+        self.mainlang = mainlang
+        self.goaldir = os.path.join(corpusdir, u'orig', mainlang,
+                                    self.__normalise_path(path))
 
-    for orig in origs:
-        if os.path.isdir(orig):
-            for root, dirs, files in os.walk(orig):
-                for f in files:
-                    file_list.append(
-                        util.name_to_unicode(os.path.join(root, f)))
-        elif os.path.isfile(orig):
-            file_list.append(util.name_to_unicode(orig))
-        elif orig.startswith('http'):
-            file_list.append(util.name_to_unicode(orig))
-        else:
-            print(
-                'ERROR: {} is neither a directory, nor a file nor a '
-                'http-url\n'.format(orig), file=sys.stderr)
-            raise UserWarning
+    @staticmethod
+    def __normalise_path(path):
+        new_parts = []
+        for part in path.split('/'):
+            if part != '':
+                new_parts.append(namechanger.normalise_filename(part))
 
-    return file_list
+        return u'/'.join(new_parts)
+
+#class AddDirToCorpus(AddToCorpus):
+    #def __init__(self, origdir, corpusdir, mainlang, path):
+        #super(AddDirToCorpus, self).__init(corpusdir, mainlang, path)
+        #if not os.path.isdir(origdir):
+            #raise AdderException('{} '
+                                 #'is not a directory.'.format(origdir))
+        #self.origdir = origdir
+
+    #def add(self):
+        #'''Add the files contained in self.origdir to self.goaldir'''
+        #additions = []
+        #if not os.path.isdir(self.goaldir):
+            #os.makedirs(self.goaldir)
+            #for root, dirs, files in os.walk(self.origdir):
+                #for f in files:
+                    #self.copy_to_corpusdirectory(root, f)
+                    #additions.append(os.path.join(root, f))
+
+        #self.vcs.add(additions)
 
 
-def add_files(args):
-    for orig in gather_files(args.origs):
-        adder = AddFileToCorpus(
-            orig,
-            args.corpusdir,
-            args.mainlang,
-            args.path,
-            args.parallel_file)
-        adder.copy_orig_to_corpus()
-        adder.make_metadata_file({})
+#class AddFileToCorpus(namechanger.NameChangerBase):
+    #'''Add a given file to a given corpus'''
+    #def __init__(self, oldname, corpusdir, mainlang, path, parallel_file):
+        #super(AddFileToCorpus, self).__init__(oldname)
+        #self.corpusdir = corpusdir
+        #self.mainlang = mainlang
+        #self.path = path
+        #self.new_dirname = os.path.join(corpusdir, 'orig', mainlang, path)
+        #vcsfactory = versioncontrol.VersionControlFactory()
+        #self.vcs = vcsfactory.vcs(corpusdir)
+        #self.parallel_file = parallel_file
+        #self.parallels = self._get_parallels()
+
+    #def makedirs(self):
+        #try:
+            #os.makedirs(self.new_dirname)
+            #self.vcs.add_directory(self.new_dirname)
+        #except OSError:
+            #pass
+
+    #def add_url_extension(self, content_type):
+        #content_type_extension = {
+            #'text/html': '.html',
+            #'application/msword': '.doc',
+            #'application/pdf': '.pdf',
+            #'text/plain': '.txt',
+        #}
+
+        #for ct, extension in content_type_extension.items():
+            #if (ct in content_type and not
+                    #self.new_filename.endswith(extension)):
+                #self.new_filename += extension
+
+    #def toname(self):
+        #return os.path.join(self.new_dirname, self.new_filename)
+
+    #def copy_orig_to_corpus(self):
+        #'''Copy the original file to the correct place in the given corpus'''
+        #fromname = os.path.join(self.old_dirname, self.old_filename)
+        #self.makedirs()
+
+        #if fromname.startswith('http'):
+            #try:
+                #r = requests.get(fromname)
+                #if r.status_code == requests.codes.ok:
+                    #self.add_url_extension(r.headers['content-type'])
+                    #if not os.path.exists(self.toname()):
+                        #with open(self.toname(), 'wb') as new_corpus_file:
+                            #new_corpus_file.write(r.content)
+                        #print('Added {}'.format(self.toname()))
+                        #self.vcs.add(self.toname())
+                    #else:
+                        #print('{} already exists'.format(self.toname()),
+                              #file=sys.stderr)
+                #else:
+                    #print('ERROR: {} does not exist'.format(fromname),
+                          #file=sys.stderr)
+                    #raise UserWarning
+            #except requests.exceptions.MissingSchema:
+                #print('Error: wrong schema', file=sys.stderr)
+                #raise UserWarning
+            #except requests.exceptions.ConnectionError as e:
+                #print('Could not connect', file=sys.stderr)
+                #print(str(e), file=sys.stderr)
+                #raise UserWarning
+        #else:
+            #shutil.copy(fromname, self.toname())
+            #print('Added', self.toname())
+            #self.vcs.add(self.toname())
+
+    #def _get_parallels(self):
+        #'''Set all the parallels of the orig file'''
+        #parallels = {}
+
+        #if self.parallel_file is not None:
+            #parallel_metadata = xslsetter.MetadataHandler(
+                #self.parallel_file + '.xsl')
+            #parallels[self.mainlang] = self.new_filename
+            #parallels[parallel_metadata.get_variable(
+                #'mainlang')] = os.path.basename(self.parallel_file)
+            #parallels.update(parallel_metadata.get_parallel_texts())
+
+        #return parallels
+
+    #def make_metadata_file(self, extra_values):
+        #'''Make a metadata file
+
+        #:param: extra_values is a dict that contains data for the metadata file
+        #that is not possible to infer from the data given in the constructor.
+        #'''
+        #metafile_name = self.toname() + '.xsl'
+        #if not os.path.exists(metafile_name):
+            #metadata_file = xslsetter.MetadataHandler(metafile_name,
+                                                      #create=True)
+            #if self.old_dirname.startswith('http'):
+                #metadata_file.set_variable('filename', os.path.join(
+                    #self.old_dirname, self.old_filename))
+            #else:
+                #metadata_file.set_variable('filename', self.old_filename)
+            #metadata_file.set_variable('genre', self.path.split('/')[0])
+            #metadata_file.set_variable('mainlang', self.mainlang)
+            #if isinstance(self.vcs.user_name(), str):
+                #metadata_file.set_variable(
+                    #'sub_name', self.vcs.user_name().decode('utf-8'))
+            #else:
+                #metadata_file.set_variable(
+                    #'sub_name', self.vcs.user_name())
+            #metadata_file.set_variable('sub_email', self.vcs.user_email())
+
+            #for key, value in extra_values.items():
+                #metadata_file.set_variable(key, value)
+            #metadata_file.write_file()
+
+            #self.update_parallel_files()
+
+            #print('Added', metadata_file.filename)
+            #self.vcs.add(metadata_file.filename)
+        #else:
+            #print(metafile_name, 'already exists', file=sys.stderr)
+
+    #def update_parallel_files(self):
+        #for lang1, location1 in self.parallels.items():
+            #for lang2, location2 in self.parallels.items():
+                #if lang2 != lang1:
+                    #parallel_metadata = xslsetter.MetadataHandler(
+                        #os.path.join(self.corpusdir, 'orig', lang1, self.path,
+                                     #location1 + '.xsl'))
+                    #parallel_metadata.set_parallel_text(lang2, location2)
+                    #parallel_metadata.write_file()
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(
-        parents=[argparse_version.parser],
-        description='Add file(s) to a corpus directory. The filenames are '
-        'converted to ascii only names. Metadata files containing the '
-        'original name, the main language, the genre and possibly parallel '
-        'files are also made. The files are added to the working copy.')
+#def gather_files(origs):
+    #file_list = []
 
-    parser.add_argument('-p', '--parallel',
-                        dest='parallel_file',
-                        help='An existing file in the corpus that is '
-                        'parallel to the orig that is about to be added')
-    parser.add_argument('corpusdir',
-                        help='The corpus dir (freecorpus or boundcorpus)')
-    parser.add_argument('mainlang',
-                        help='The language of the files that will be added '
-                        '(sma, sme, ...)')
-    parser.add_argument('path',
-                        help='The genre directory where the files will be '
-                        'added. This may also be a path, e.g. '
-                        'admin/facta/skuvlahistorja1')
-    parser.add_argument('origs',
-                        nargs='+',
-                        help='The original files, urls or directories where '
-                        'the original files reside (not in svn)')
+    #for orig in origs:
+        #if os.path.isdir(orig):
+            #for root, dirs, files in os.walk(orig):
+                #for f in files:
+                    #file_list.append(
+                        #util.name_to_unicode(os.path.join(root, f)))
+        #elif os.path.isfile(orig):
+            #file_list.append(util.name_to_unicode(orig))
+        #elif orig.startswith('http'):
+            #file_list.append(util.name_to_unicode(orig))
+        #else:
+            #print(
+                #'ERROR: {} is neither a directory, nor a file nor a '
+                #'http-url\n'.format(orig), file=sys.stderr)
+            #raise UserWarning
 
-    return parser.parse_args()
+    #return file_list
 
 
-def main():
-    args = parse_args()
+#def add_files(args):
+    #for orig in gather_files(args.origs):
+        #adder = AddFileToCorpus(
+            #orig,
+            #args.corpusdir,
+            #args.mainlang,
+            #args.path,
+            #args.parallel_file)
+        #adder.copy_orig_to_corpus()
+        #adder.make_metadata_file({})
 
-    if args.parallel_file is not None:
-        if not os.path.exists(args.parallel_file):
-            print('The given parallel file\n\t{}\n'
-                  'does not exist'.format(args.parallel_file), file=sys.stderr)
-            sys.exit(1)
-        if len(args.origs) > 1:
-            print('When the -p option is given, it only makes '
-                  'sense to add one file at a time.', file=sys.stderr)
-            sys.exit(2)
-        if len(args.origs) == 1 and os.path.isdir(args.origs[-1]):
-            print('It is not possible to add a directory '
-                  'when the -p option is given.', file=sys.stderr)
-            sys.exit(3)
 
-    if os.path.isdir(args.corpusdir):
-        try:
-            add_files(args)
-        except UserWarning:
-            pass
-    else:
-        print('ERROR', file=sys.stderr)
+#def parse_args():
+    #parser = argparse.ArgumentParser(
+        #parents=[argparse_version.parser],
+        #description='Add file(s) to a corpus directory. The filenames are '
+        #'converted to ascii only names. Metadata files containing the '
+        #'original name, the main language, the genre and possibly parallel '
+        #'files are also made. The files are added to the working copy.')
+
+    #parser.add_argument('-p', '--parallel',
+                        #dest='parallel_file',
+                        #help='An existing file in the corpus that is '
+                        #'parallel to the orig that is about to be added')
+    #parser.add_argument('corpusdir',
+                        #help='The corpus dir (freecorpus or boundcorpus)')
+    #parser.add_argument('mainlang',
+                        #help='The language of the files that will be added '
+                        #'(sma, sme, ...)')
+    #parser.add_argument('path',
+                        #help='The genre directory where the files will be '
+                        #'added. This may also be a path, e.g. '
+                        #'admin/facta/skuvlahistorja1')
+    #parser.add_argument('origs',
+                        #nargs='+',
+                        #help='The original files, urls or directories where '
+                        #'the original files reside (not in svn)')
+
+    #return parser.parse_args()
+
+
+#def main():
+    #args = parse_args()
+
+    #if args.parallel_file is not None:
+        #if not os.path.exists(args.parallel_file):
+            #print('The given parallel file\n\t{}\n'
+                  #'does not exist'.format(args.parallel_file), file=sys.stderr)
+            #sys.exit(1)
+        #if len(args.origs) > 1:
+            #print('When the -p option is given, it only makes '
+                  #'sense to add one file at a time.', file=sys.stderr)
+            #sys.exit(2)
+        #if len(args.origs) == 1 and os.path.isdir(args.origs[-1]):
+            #print('It is not possible to add a directory '
+                  #'when the -p option is given.', file=sys.stderr)
+            #sys.exit(3)
+
+    #if os.path.isdir(args.corpusdir):
+        #try:
+            #add_files(args)
+        #except UserWarning:
+            #pass
+    #else:
+        #print('ERROR', file=sys.stderr)
