@@ -130,8 +130,13 @@ class AddFileToCorpus(AddToCorpus):
         self.mc = namechanger.MovepairComputer()
         self.mc.compute_movepairs(origpath, os.path.join(
             self.goaldir, os.path.basename(origpath)))
+
+
         self.parallel_file = parallel_file
-        #self.parallels = self._get_parallels()
+        if parallel_file is not None and not os.path.exists(parallel_file):
+            raise AdderException(
+                'The given parallel file, {}, does not exist'.format(
+                    parallel_file))
 
     def add_file_to_corpus(self):
         for filepair in self.mc.filepairs:
@@ -144,6 +149,32 @@ class AddFileToCorpus(AddToCorpus):
             new_metadata.set_variable('genre', new_components.genre)
             new_metadata.write_file()
             self.vcs.add([filepair.newpath, filepair.newpath + '.xsl'])
+
+            if self.parallel_file is not None:
+                parallel_metadata = xslsetter.MetadataHandler(
+                    self.parallel_file + '.xsl')
+                parallels = parallel_metadata.get_parallel_texts()
+                parallels[new_components.lang] = new_components.basename
+
+                parall_components = util.split_path(self.parallel_file)
+                parallels[parall_components.lang] = parall_components.basename
+
+                for lang, parallel in parallels.items():
+                    metadata = xslsetter.MetadataHandler(
+                        '/'.join((
+                            new_components.root,
+                            new_components.module,
+                            lang,
+                            new_components.genre,
+                            new_components.subdirs,
+                            parallel + '.xsl')))
+
+                    for lang1, parallel1 in parallels.items():
+                        if lang1 != lang:
+                            metadata.set_parallel_text(lang1, parallel1)
+                    metadata.write_file()
+
+
 
     #def add_url_extension(self, content_type):
         #content_type_extension = {
@@ -194,21 +225,6 @@ class AddFileToCorpus(AddToCorpus):
             #shutil.copy(fromname, self.toname())
             #print('Added', self.toname())
             #self.vcs.add(self.toname())
-
-    @property
-    def parallels(self):
-        '''Set all the parallels of the orig file'''
-        parallels = {}
-
-        if self.parallel_file is not None:
-            parallel_metadata = xslsetter.MetadataHandler(
-                self.parallel_file + '.xsl')
-            parallels[self.mainlang] = self.new_filename
-            parallels[parallel_metadata.get_variable(
-                'mainlang')] = os.path.basename(self.parallel_file)
-            parallels.update(parallel_metadata.get_parallel_texts())
-
-        return parallels
 
     #def make_metadata_file(self, extra_values):
         #'''Make a metadata file
