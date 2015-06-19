@@ -133,13 +133,33 @@ class TestAddFileToCorpus(unittest.TestCase):
         self.tempdir.write('origdirectory/æ.txt', 'content of æ')
         self.tempdir.write('origdirectory/b.txt', 'content of b')
         self.tempdir.write('origdirectory/c.txt', 'original content of c')
+        self.tempdir.write('origdirectory/d.txt', 'content of d')
+
         self.tempdir.makedir('corpus/orig')
         self.tempdir.write('corpus/orig/sme/ae/c/o/b.txt', 'content of b')
         self.tempdir.write('corpus/orig/sme/ae/c/o/c.txt', 'corpusfile content of c')
+        self.tempdir.write('corpus/orig/smj/ae/c/o/f.txt', 'smj content of f')
+        self.tempdir.write('corpus/orig/sma/ae/c/o/f.txt', 'sma content of f')
+
         self.realcorpusdir = os.path.join(self.tempdir.path,
                                           'corpus').decode('utf8')
         self.origdirectory = os.path.join(self.tempdir.path,
                                           'origdirectory')
+
+        smj_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.realcorpusdir, 'orig/smj/ae/c/o/f.txt.xsl'),
+            create=True)
+        smj_metadata.set_variable('mainlang', 'smj')
+        smj_metadata.set_parallel_text('sma', 'f.txt')
+        smj_metadata.write_file()
+
+        sma_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.realcorpusdir, 'orig/sma/ae/c/o/f.txt.xsl'),
+            create=True)
+        sma_metadata.set_variable('mainlang', 'sma')
+        sma_metadata.set_variable('translated_from', 'smj')
+        sma_metadata.set_parallel_text('smj', u'f.txt')
+        sma_metadata.write_file()
 
         r = git.Repo.init(self.realcorpusdir)
         r.index.add(['orig'])
@@ -157,6 +177,12 @@ class TestAddFileToCorpus(unittest.TestCase):
             '',
             'corpus/',
             'corpus/orig/',
+            'corpus/orig/sma/',
+            'corpus/orig/sma/ae/',
+            'corpus/orig/sma/ae/c/',
+            'corpus/orig/sma/ae/c/o/',
+            'corpus/orig/sma/ae/c/o/f.txt',
+            'corpus/orig/sma/ae/c/o/f.txt.xsl',
             'corpus/orig/sme/',
             'corpus/orig/sme/ae/',
             'corpus/orig/sme/ae/c/',
@@ -165,10 +191,17 @@ class TestAddFileToCorpus(unittest.TestCase):
             'corpus/orig/sme/ae/c/o/a.txt.xsl',
             'corpus/orig/sme/ae/c/o/b.txt',
             'corpus/orig/sme/ae/c/o/c.txt',
+            'corpus/orig/smj/',
+            'corpus/orig/smj/ae/',
+            'corpus/orig/smj/ae/c/',
+            'corpus/orig/smj/ae/c/o/',
+            'corpus/orig/smj/ae/c/o/f.txt',
+            'corpus/orig/smj/ae/c/o/f.txt.xsl',
             'origdirectory/',
             'origdirectory/a.txt',
             'origdirectory/b.txt',
             'origdirectory/c.txt',
+            'origdirectory/d.txt',
             'origdirectory/æ.txt')
 
         metadata = xslsetter.MetadataHandler(
@@ -186,6 +219,12 @@ class TestAddFileToCorpus(unittest.TestCase):
             '',
             'corpus/',
             'corpus/orig/',
+            'corpus/orig/sma/',
+            'corpus/orig/sma/ae/',
+            'corpus/orig/sma/ae/c/',
+            'corpus/orig/sma/ae/c/o/',
+            'corpus/orig/sma/ae/c/o/f.txt',
+            'corpus/orig/sma/ae/c/o/f.txt.xsl',
             'corpus/orig/sme/',
             'corpus/orig/sme/ae/',
             'corpus/orig/sme/ae/c/',
@@ -194,10 +233,17 @@ class TestAddFileToCorpus(unittest.TestCase):
             'corpus/orig/sme/ae/c/o/ae.txt.xsl',
             'corpus/orig/sme/ae/c/o/b.txt',
             'corpus/orig/sme/ae/c/o/c.txt',
+            'corpus/orig/smj/',
+            'corpus/orig/smj/ae/',
+            'corpus/orig/smj/ae/c/',
+            'corpus/orig/smj/ae/c/o/',
+            'corpus/orig/smj/ae/c/o/f.txt',
+            'corpus/orig/smj/ae/c/o/f.txt.xsl',
             'origdirectory/',
             'origdirectory/a.txt',
             'origdirectory/b.txt',
             'origdirectory/c.txt',
+            'origdirectory/d.txt',
             'origdirectory/æ.txt')
 
         metadata = xslsetter.MetadataHandler(
@@ -220,6 +266,12 @@ class TestAddFileToCorpus(unittest.TestCase):
             '',
             'corpus/',
             'corpus/orig/',
+            'corpus/orig/sma/',
+            'corpus/orig/sma/ae/',
+            'corpus/orig/sma/ae/c/',
+            'corpus/orig/sma/ae/c/o/',
+            'corpus/orig/sma/ae/c/o/f.txt',
+            'corpus/orig/sma/ae/c/o/f.txt.xsl',
             'corpus/orig/sme/',
             'corpus/orig/sme/ae/',
             'corpus/orig/sme/ae/c/',
@@ -228,10 +280,17 @@ class TestAddFileToCorpus(unittest.TestCase):
             'corpus/orig/sme/ae/c/o/c.txt',
             'corpus/orig/sme/ae/c/o/c_1.txt',
             'corpus/orig/sme/ae/c/o/c_1.txt.xsl',
+            'corpus/orig/smj/',
+            'corpus/orig/smj/ae/',
+            'corpus/orig/smj/ae/c/',
+            'corpus/orig/smj/ae/c/o/',
+            'corpus/orig/smj/ae/c/o/f.txt',
+            'corpus/orig/smj/ae/c/o/f.txt.xsl',
             'origdirectory/',
             'origdirectory/a.txt',
             'origdirectory/b.txt',
             'origdirectory/c.txt',
+            'origdirectory/d.txt',
             'origdirectory/æ.txt')
 
         metadata = xslsetter.MetadataHandler(
@@ -240,3 +299,67 @@ class TestAddFileToCorpus(unittest.TestCase):
         self.assertEqual(metadata.get_variable('genre'), 'ae')
         self.assertEqual(metadata.get_variable('mainlang'), 'sme')
 
+    def test_add_file_with_non_existing_parallel(self):
+        with self.assertRaises(adder.AdderException):
+            aftc = adder.AddFileToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
+                                        os.path.join(self.origdirectory, u'd.txt'),
+                                        parallel_file=os.path.join(
+                                            self.realcorpusdir,
+                                            'orig/smi/ae/c/o/f.txt'))
+
+    def test_add_file_with_parallel(self):
+        aftc = adder.AddFileToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
+                                     os.path.join(self.origdirectory, u'd.txt'),
+                                     parallel_file=os.path.join(
+                                         self.realcorpusdir,
+                                         'orig/smj/ae/c/o/f.txt'))
+        aftc.add_file_to_corpus()
+
+        self.tempdir.check_all(
+            '',
+            'corpus/',
+            'corpus/orig/',
+            'corpus/orig/sma/',
+            'corpus/orig/sma/ae/',
+            'corpus/orig/sma/ae/c/',
+            'corpus/orig/sma/ae/c/o/',
+            'corpus/orig/sma/ae/c/o/f.txt',
+            'corpus/orig/sma/ae/c/o/f.txt.xsl',
+            'corpus/orig/sme/',
+            'corpus/orig/sme/ae/',
+            'corpus/orig/sme/ae/c/',
+            'corpus/orig/sme/ae/c/o/',
+            'corpus/orig/sme/ae/c/o/b.txt',
+            'corpus/orig/sme/ae/c/o/c.txt',
+            'corpus/orig/sme/ae/c/o/d.txt',
+            'corpus/orig/sme/ae/c/o/d.txt.xsl',
+            'corpus/orig/smj/',
+            'corpus/orig/smj/ae/',
+            'corpus/orig/smj/ae/c/',
+            'corpus/orig/smj/ae/c/o/',
+            'corpus/orig/smj/ae/c/o/f.txt',
+            'corpus/orig/smj/ae/c/o/f.txt.xsl',
+            'origdirectory/',
+            'origdirectory/a.txt',
+            'origdirectory/b.txt',
+            'origdirectory/c.txt',
+            'origdirectory/d.txt',
+            'origdirectory/æ.txt')
+
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.realcorpusdir, 'orig/sme/ae/c/o/d.txt.xsl'))
+        sme_parallels = sme_metadata.get_parallel_texts()
+        self.assertEqual(sme_parallels['sma'], 'f.txt')
+        self.assertEqual(sme_parallels['smj'], 'f.txt')
+
+        smj_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.realcorpusdir, 'orig/smj/ae/c/o/f.txt.xsl'))
+        smj_parallels = smj_metadata.get_parallel_texts()
+        self.assertEqual(smj_parallels['sma'], 'f.txt')
+        self.assertEqual(smj_parallels['sme'], 'd.txt')
+
+        sma_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.realcorpusdir, 'orig/sma/ae/c/o/f.txt.xsl'))
+        sma_parallels = sma_metadata.get_parallel_texts()
+        self.assertEqual(sma_parallels['sme'], 'd.txt')
+        self.assertEqual(sma_parallels['smj'], 'f.txt')
