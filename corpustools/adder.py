@@ -45,9 +45,33 @@ class AddToCorpus(object):
             raise AdderException('The given corpus directory, {}, '
                                  'does not exist.'.format(corpusdir))
 
+        vcsfactory = versioncontrol.VersionControlFactory()
+        self.vcs = vcsfactory.vcs(corpusdir)
+        
         self.corpusdir = corpusdir
         self.mainlang = mainlang
         self.goaldir = os.path.join(corpusdir, 'orig', mainlang, path)
+
+
+class AddDirToCorpus(AddToCorpus):
+    def __init__(self, origdir, corpusdir, mainlang, path):
+        super(AddDirToCorpus, self).__init(corpusdir, mainlang, path)
+        if not os.path.isdir(origdir):
+            raise AdderException('{} '
+                                 'is not a directory.'.format(origdir))
+        self.origdir = origdir
+
+    def add(self):
+        '''Add the files contained in self.origdir to self.goaldir'''
+        additions = []
+        if not os.path.isdir(self.goaldir):
+            os.makedirs(self.goaldir)
+            for root, dirs, files in os.walk(self.origdir):
+                for f in files:
+                    self.copy_to_corpusdirectory(root, f)
+                    additions.append(os.path.join(root, f))
+
+        self.vcs.add(additions)
 
 
 class AddFileToCorpus(namechanger.NameChangerBase):
