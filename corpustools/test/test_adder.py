@@ -199,3 +199,8 @@ class TestAddFileToCorpus(unittest.TestCase):
         self.assertEqual(metadata.get_variable('filename'), u'æ.txt')
         self.assertEqual(metadata.get_variable('genre'), 'ae')
         self.assertEqual(metadata.get_variable('mainlang'), 'sme')
+
+    def test_add_file_duplicate_no_parallel(self):
+        with self.assertRaises(UserWarning):
+            aftc = adder.AddFileToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
+                                        os.path.join(self.origdirectory, u'b.txt'))
