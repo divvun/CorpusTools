@@ -344,13 +344,14 @@ class TestComputeMovepairs(unittest.TestCase):
 
     def test_compute_movepairs_1(self):
         '''newpath does not exist, no parallels'''
-        movepairs = namechanger.compute_movepairs(
+        mc = namechanger.MovepairComputer()
+        mc.compute_all_movepairs(
             os.path.join(self.tempdir.path,
                          'orig/sme/ficti/sub/a.txt').decode('utf8'),
             os.path.join(self.tempdir.path,
                          'orig/sme/ficti/sub/b.txt').decode('utf8'))
 
-        testfixtures.compare(movepairs, [
+        testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
                 os.path.join(self.tempdir.path,
                              'orig/sme/ficti/sub/a.txt').decode('utf8'),
@@ -359,13 +360,14 @@ class TestComputeMovepairs(unittest.TestCase):
 
     def test_compute_movepairs_2(self):
         '''newpath does not exist, needs normalisation, no parallels'''
-        movepairs = namechanger.compute_movepairs(
+        mc = namechanger.MovepairComputer()
+        mc.compute_all_movepairs(
             os.path.join(self.tempdir.path,
                          'orig/sme/ficti/sub/æ.txt').decode('utf8'),
             os.path.join(self.tempdir.path,
                          'orig/sme/ficti/sub/æ.txt').decode('utf8'))
 
-        testfixtures.compare(movepairs, [
+        testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
                 os.path.join(self.tempdir.path,
                              'orig/sme/ficti/sub/æ.txt').decode('utf8'),
@@ -377,13 +379,14 @@ class TestComputeMovepairs(unittest.TestCase):
         self.tempdir.write('orig/sme/ficti/sub/c.txt', 'c content')
         self.tempdir.write('orig/sme/ficti/sub/d.txt', 'd content')
 
-        movepairs = namechanger.compute_movepairs(
+        mc = namechanger.MovepairComputer()
+        mc.compute_all_movepairs(
             os.path.join(self.tempdir.path,
                          'orig/sme/ficti/sub/c.txt').decode('utf8'),
             os.path.join(self.tempdir.path,
                          'orig/sme/ficti/sub/d.txt').decode('utf8'))
 
-        testfixtures.compare(movepairs, [
+        testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
                 os.path.join(self.tempdir.path,
                              'orig/sme/ficti/sub/c.txt').decode('utf8'),
@@ -396,7 +399,8 @@ class TestComputeMovepairs(unittest.TestCase):
         self.tempdir.write('orig/sme/ficti/sub/e.txt', 'c content')
 
         with self.assertRaises(UserWarning):
-            movepairs = namechanger.compute_movepairs(
+            mc = namechanger.MovepairComputer()
+            mc.compute_all_movepairs(
                 os.path.join(self.tempdir.path,
                              'orig/sme/ficti/sub/c.txt').decode('utf8'),
                 os.path.join(self.tempdir.path,
@@ -428,13 +432,14 @@ class TestComputeMovepairs(unittest.TestCase):
         sma_metadata.set_parallel_text('smj', 'f.txt')
         sma_metadata.write_file()
 
-        movepairs = namechanger.compute_movepairs(
+        mc = namechanger.MovepairComputer()
+        mc.compute_all_movepairs(
             os.path.join(self.tempdir.path,
                          'orig/sme/ficti/sub/f.txt').decode('utf8'),
             os.path.join(self.tempdir.path,
                          'orig/sme/ficti/sub/g.txt').decode('utf8'))
 
-        testfixtures.compare(movepairs, [
+        testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
                 os.path.join(self.tempdir.path,
                              'orig/sme/ficti/sub/f.txt').decode('utf8'),
@@ -467,13 +472,14 @@ class TestComputeMovepairs(unittest.TestCase):
         sma_metadata.set_parallel_text('smj', 'f.txt')
         sma_metadata.write_file()
 
-        movepairs = namechanger.compute_movepairs(
+        mc = namechanger.MovepairComputer()
+        mc.compute_all_movepairs(
             os.path.join(self.tempdir.path,
                          'orig/sme/ficti/sub/f.txt').decode('utf8'),
             os.path.join(self.tempdir.path,
                          'orig/sme/ficti/bub/g.txt').decode('utf8'))
 
-        testfixtures.compare(movepairs, [
+        testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
                 os.path.join(self.tempdir.path,
                              'orig/sme/ficti/sub/f.txt').decode('utf8'),
@@ -516,13 +522,14 @@ class TestComputeMovepairs(unittest.TestCase):
         sma_metadata.set_parallel_text('smj', 'f.txt')
         sma_metadata.write_file()
 
-        movepairs = namechanger.compute_movepairs(
+        mc = namechanger.MovepairComputer()
+        mc.compute_all_movepairs(
             os.path.join(self.tempdir.path,
                          'orig/sme/ficti/sub/f.txt').decode('utf8'),
             os.path.join(self.tempdir.path,
                          'orig/sme/facta/sub/g.txt').decode('utf8'))
 
-        testfixtures.compare(movepairs, [
+        testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
                 os.path.join(self.tempdir.path,
                              'orig/sme/ficti/sub/f.txt').decode('utf8'),
@@ -565,13 +572,14 @@ class TestComputeMovepairs(unittest.TestCase):
         sma_metadata.set_parallel_text('smj', u'ø.txt')
         sma_metadata.write_file()
 
-        movepairs = namechanger.compute_movepairs(
+        mc = namechanger.MovepairComputer()
+        mc.compute_all_movepairs(
             os.path.join(self.tempdir.path,
                          'orig/sme/ficti/sub/f.txt').decode('utf8'),
             os.path.join(self.tempdir.path,
                          'orig/sme/facta/sub/g.txt').decode('utf8'))
 
-        testfixtures.compare(movepairs, [
+        testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
                 os.path.join(self.tempdir.path,
                              'orig/sme/ficti/sub/f.txt').decode('utf8'),
@@ -587,4 +595,3 @@ class TestComputeMovepairs(unittest.TestCase):
                              'orig/sma/ficti/sub/f.txt').decode('utf8'),
                 os.path.join(self.tempdir.path,
                              'orig/sma/facta/sub/f.txt').decode('utf8')),])
-

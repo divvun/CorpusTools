@@ -390,39 +390,41 @@ def main():
                 #nc.change_name()
 
 
-def compute_parallels(oldpath, newpath):
-    filepairs = [PathPair(oldpath, newpath)]
+class MovepairComputer(object):
+    def __init__(self):
+        self.filepairs = []
 
-    old_components = util.split_path(oldpath)
-    new_components = util.split_path(newpath)
+    def compute_movepairs(self, oldpath, newpath):
+        normalisedpath = os.path.join(
+            os.path.dirname(newpath),
+            normalise_filename(os.path.basename(newpath)))
 
-    if (old_components.genre != new_components.genre or
-            old_components.subdirs != new_components.subdirs):
-        metadatafile = xslsetter.MetadataHandler(oldpath + '.xsl')
-        for lang, parallel_file in metadatafile.get_parallel_texts().items():
-            oldparellelpath = u'/'.join((
-                old_components.root,
-                old_components.module,
-                lang, old_components.genre,
-                old_components.subdirs, parallel_file))
-            newparallelpath = u'/'.join((
-                new_components.root,
-                new_components.module,
-                lang, new_components.genre,
-                new_components.subdirs,
-                normalise_filename(parallel_file)))
+        non_dupe_path = compute_new_basename(oldpath, normalisedpath)
 
-            non_dupe_parallelpath = compute_new_basename(oldparellelpath, newparallelpath)
+        self.filepairs.append(PathPair(oldpath, non_dupe_path))
 
-            filepairs.append(PathPair(oldparellelpath, non_dupe_parallelpath))
+    def compute_parallel_movepairs(self, oldpath, newpath):
+        old_components = util.split_path(oldpath)
+        new_components = util.split_path(newpath)
 
-    return filepairs
+        if (old_components.genre != new_components.genre or
+                old_components.subdirs != new_components.subdirs):
+            metadatafile = xslsetter.MetadataHandler(oldpath + '.xsl')
+            for lang, parallel_file in metadatafile.get_parallel_texts().items():
+                oldparellelpath = u'/'.join((
+                    old_components.root,
+                    old_components.module,
+                    lang, old_components.genre,
+                    old_components.subdirs, parallel_file))
+                newparallelpath = u'/'.join((
+                    new_components.root,
+                    new_components.module,
+                    lang, new_components.genre,
+                    new_components.subdirs,
+                    parallel_file))
 
-def compute_movepairs(oldpath, newpath):
-    normalisedpath = os.path.join(
-        os.path.dirname(newpath),
-        normalise_filename(os.path.basename(newpath)))
+                self.compute_movepairs(oldparellelpath, newparallelpath)
 
-    non_dupe_path = compute_new_basename(oldpath, normalisedpath)
-
-    return compute_parallels(oldpath, non_dupe_path)
+    def compute_all_movepairs(self, oldpath, newpath):
+        self.compute_movepairs(oldpath, newpath)
+        self.compute_parallel_movepairs(oldpath, newpath)
