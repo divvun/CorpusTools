@@ -183,28 +183,20 @@ def compute_new_basename(oldpath, wanted_path):
 PathPair = namedtuple('PathPair', 'oldpath newpath')
 
 
-class PathComponentsPair(namedtuple('PathComponentsPair',
-                                    'oldcomponent newcomponent')):
-    pass
-
-
 def normaliser():
     '''Normalise the filenames in the corpuses'''
     for corpus in [os.getenv('GTFREE'), os.getenv('GTBOUND')]:
-        os.chdir(corpus)
         for root, dirs, files in os.walk(os.path.join(corpus, 'orig')):
             for f in files:
                 if not f.endswith('.xsl'):
-                    old_path = os.path.join(root, f).decode('utf8')
-                    wanted_path = os.path.join(root, normalise_filename(
-                        f.decode('utf8')))
-                    if old_path != wanted_path:
-                        mover = CorpusFileMover(
-                            PathComponentsPair(util.split_path(old_path),
-                                               compute_new_basename(
-                                                   old_path, wanted_path)))
-                        mover.move_files()
-
+                    cfmu = CorpusFilesetMoverAndUpdater(
+                        os.path.join(root, f).decode('utf8'),
+                        os.path.join(root, f).decode('utf8'))
+                    filepair = cfmu.mc.filepairs[0]
+                    if filepair.oldpath != filepair.newpath:
+                        cfmu.move_files()
+                        cfmu.update_own_metadata()
+                        cfmu.update_parallel_files_metadata()
 
 def parse_args():
     parser = argparse.ArgumentParser(
