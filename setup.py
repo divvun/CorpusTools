@@ -39,6 +39,7 @@ setup(
         "pydocx",
         "gitpython",
         "requests",
+        "testfixtures",
     ],
     test_suite='nose.collector',
     include_package_data=True,
