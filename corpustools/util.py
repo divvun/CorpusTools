@@ -18,6 +18,7 @@
 #
 
 from __future__ import unicode_literals
+from __future__ import print_function
 
 from collections import namedtuple
 import inspect
@@ -25,7 +26,7 @@ import operator
 import os
 import platform
 import subprocess
-
+import sys
 
 PathComponents = namedtuple('PathComponents', ['root', 'module', 'lang',
                                                'genre', 'subdirs',
@@ -67,15 +68,15 @@ def split_path(path):
     :returns: a PathComponents namedtuple
     """
     def split_on_module(p):
-        for module in ["goldstandard/orig", "prestable/converted",
-                       "prestable/toktmx", "prestable/tmx", "orig",
-                       "converted", "stable"]:
-            d = "/"+module+"/"
+        for module in [u"goldstandard/orig", u"prestable/converted",
+                       u"prestable/toktmx", u"prestable/tmx", u"orig",
+                       u"converted", u"stable"]:
+            d = u"/" + module + u"/"
             if d in p:
                 root, rest = p.split(d)
                 return root, module, rest
     # Ensure we have at least one / before module, for safer splitting:
-    abspath = os.path.normpath(os.path.abspath(path))
+    abspath = os.path.normpath(os.path.abspath(path)).decode('utf8')
     root, module, lang_etc = split_on_module(abspath)
     l = lang_etc.split("/")
     lang, genre, subdirs, basename = l[0], l[1], l[2:-1], l[-1]

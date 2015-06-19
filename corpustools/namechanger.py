@@ -19,13 +19,55 @@
 #   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
 #
 
+
+'''Change the names of files within a repository
+
+Normalize a file name: Replace non-ascii char with ascii ones and remove
+unwanted characters.
+
+When normalizing a file name containing unwanted characters or renaming it
+for other reasons:
+* change the name of original file
+* change the name of metadata file
+* change the name of prestable/converted file
+* change the name of prestable/toktmx file
+* change the name of prestable/tmx file
+* change the reference to the file name in the parallel files' metadata
+
+Moving a file to another directory:
+* Move a file to another genre
+* Move a file to another language
+* Move a file to a new subdirectory, without changing language or genre
+
+When moving a file from one subdirectory to another:
+* move the original file
+* move the metadata file
+* move the prestable/converted file
+* move the prestable/toktmx file
+* move the prestable/tmx file
+* move the parallel files the same way the original file has been moved.
+
+When moving a file to a new genre:
+* the subdirectory move operations +
+* change the genre reference in the metadata files
+
+When moving a file to a new language:
+* change the language of the file in the parallel files' metadata
+
+When doing these operations, detect name clashes for the original files.
+
+If a name clash is found, check if the files are duplicates. If they are
+duplicates, raise an exception, otherwise suggest a new name.
+'''
 from __future__ import print_function
 
 import argparse
+import glob
 import os
 import subprocess
-import sys
 
+from collections import namedtuple
+import hashlib
 import unidecode
 import urllib
 
@@ -34,162 +76,235 @@ import corpustools.util as util
 import corpustools.xslsetter as xslsetter
 
 
-class NameChangerBase(object):
-    """Class to change names of corpus files.
+class NamechangerException(Exception):
+    pass
 
-    Will also take care of changing info in meta data of parallel files.
+
+def compute_hexdigest(path, blocksize=65536):
+    '''Compute the hexdigest of the file in path'''
+    with open(path, 'rb') as afile:
+        hasher = hashlib.md5()
+        buf = afile.read(blocksize)
+        while len(buf) > 0:
+            hasher.update(buf)
+            buf = afile.read(blocksize)
+
+        return hasher.hexdigest()
+
+
+def normalise_filename(filename):
+    """Normalise filename to ascii only
+
+    Downcase filename, replace non-ascii characters with ascii ones and
+    remove or replace unwanted characters.
+
+    Args:
+        filename: is a unicode string
+
+    Returns:
+        a downcased string containing only ascii chars
     """
+    if type(filename) is not unicode:
+        raise NamechangerException('{} is not a unicode string'.format(
+            filename))
 
-    def __init__(self, oldname):
-        """Find the directory the oldname is in.
+    if os.sep in filename:
+        raise NamechangerException(
+            'Invalid filename {}.\n'
+            'Filename is not allowed to contain {}'.format(filename,
+                                                           os.sep))
 
-        self.oldname is the basename of oldname.
-        self.newname is the basename of oldname, in lowercase and
-        with some characters replaced.
-        """
-        self.old_filename = os.path.basename(oldname)
-        self.old_dirname = os.path.dirname(oldname)
+    unwanted_chars = {
+        u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
+        u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_',
+        u'<': u'_', u'>': u'_', u'"': u'_', u'&': u'_', u';': u'_',
+        u'&': u'_', u'#': u'_', u'\\': u'_', u'|': u'_', u'$': u'_',
+    }
 
-        self.new_filename = self.change_to_ascii()
+    # unidecode.unidecode makes ascii only
+    # urllib.unquote replaces %xx escapes by their single-character equivalent.
+    newname = unicode(
+        unidecode.unidecode(
+            urllib.unquote(
+                filename
+            ))).lower()
 
-    def change_to_ascii(self):
-        """Downcase all chars in self.oldname, replace some chars"""
-        unwanted_chars = {
-            u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
-            u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_',
-            u'<': u'_', u'>': u'_', u'"': u'_', u'&': u'_', u';': u'_',
-            u'&': u'_', u'#': u'_', u'=': u'-', u'\\': u'_', u'|': u'_',
-            u'$': u'_',
-        }
+    newname = util.replace_all(unwanted_chars.items(), newname)
 
-        # unidecode.unidecode makes ascii only
-        newname = unicode(
-            unidecode.unidecode(
-                urllib.unquote(
-                    self.old_filename
-                ))).lower()
+    while '__' in newname:
+        newname = newname.replace('__', '_')
 
-        newname = util.replace_all(unwanted_chars.items(), newname)
-
-        while '__' in newname:
-            newname = newname.replace('__', '_')
-
-        return newname
+    return newname
 
 
-class CorpusNameFixer(NameChangerBase):
-    def __init__(self, oldname):
-        super(CorpusNameFixer, self).__init__(oldname)
+def are_duplicates(oldpath, newpath):
+    '''Check if oldpath and newpath are duplicates of each other.
 
-    def change_name(self):
-        """Change the name of the original file and it's metadata file
+    Returns:
+        a boolean indicating if the two files are duplicates
+    '''
+    return (os.path.isfile(newpath) and
+            compute_hexdigest(oldpath) == compute_hexdigest(
+                newpath))
 
-        Update the name in parallel files
-        Also move the other files that's connected to the original file
-        """
-        if self.old_filename != self.new_filename:
-            fullname = os.path.join(self.old_dirname, self.new_filename)
-            if not os.path.exists(fullname):
-                self.move_origfile()
-                self.move_xslfile()
-                self.update_name_in_parallel_files()
-                self.move_prestable_converted()
-                self.move_prestable_toktmx()
-                self.move_prestable_tmx()
+
+def compute_new_basename(oldpath, wanted_path):
+    '''Compute the new path
+
+    Args:
+        oldpath: path to the old file
+        wanted_path: the path to move the file to
+
+    Returns:
+        a util.PathComponents namedtuple pointing to the new path
+    '''
+    wanted_basename = os.path.basename(wanted_path)
+    new_basename = os.path.basename(wanted_path)
+    newpath = os.path.join(os.path.dirname(wanted_path), new_basename)
+    n = 1
+
+    while os.path.exists(newpath):
+        if are_duplicates(oldpath, newpath):
+            raise UserWarning('{} and {} are duplicates. '
+                              'Please remove one of them'.format(oldpath,
+                                                                 newpath))
+        else:
+            if '.' in wanted_basename:
+                dot = wanted_basename.rfind('.')
+                extension = wanted_basename[dot:]
+                pre_extension = wanted_basename[:dot]
+                new_basename = pre_extension + '_' + str(n) + extension
             else:
-                print('\nError renaming {}'
-                    '\n{} exists\n'.format(
-                        os.path.join(self.old_dirname, self.old_filename),
-                        fullname), file=sys.stderr)
+                new_basename = wanted_basename + str(n)
+            newpath = os.path.join(os.path.dirname(wanted_path), new_basename)
+            n += 1
 
-    def move_file(self, oldname, newname):
-        """Change name of file from fromname to toname"""
-        if not os.path.exists(os.path.dirname(newname)):
-            os.makedirs(os.path.dirname(newname))
-        if newname != oldname:
-            subprocess.call(['git', 'mv', oldname, newname])
+    return util.split_path(newpath)
 
-    def move_origfile(self):
-        """Change the name of the original file."""
-        fromname = os.path.join(self.old_dirname, self.old_filename)
-        toname = os.path.join(self.old_dirname, self.new_filename)
 
-        self.move_file(fromname, toname)
+PathPair = namedtuple('PathPair', ['oldpath', 'newpath'])
+PathComponentsPair = namedtuple('PathComponentsPair', ['oldcomponent',
+                                                       'newcomponent'])
 
-    def move_xslfile(self):
-        """Change the name of the metadata file."""
-        fromname = os.path.join(
-            self.old_dirname,
-            u'{}.xsl'.format(self.old_filename))
-        toname = os.path.join(self.old_dirname,
-                              '{}.xsl'.format(self.new_filename))
 
-        if os.path.exists(fromname):
-            self.move_file(fromname, toname)
+def normaliser():
+    '''Normalise the filenames in the corpuses'''
+    for corpus in [os.getenv('GTFREE'), os.getenv('GTBOUND')]:
+        os.chdir(corpus)
+        for root, dirs, files in os.walk(os.path.join(corpus, 'orig')):
+            for f in files:
+                if not f.endswith('.xsl'):
+                    old_path = os.path.join(root, f).decode('utf8')
+                    wanted_path = os.path.join(root, normalise_filename(
+                        f.decode('utf8')))
+                    if old_path != wanted_path:
+                        mover = CorpusFileMover(
+                            PathComponentsPair(util.split_path(old_path),
+                                               compute_new_basename(
+                                                   old_path, wanted_path)))
+                        mover.move_files()
 
-    def set_para_backreference(self, mainlang, paralang, paraname):
-        """Replace oldname with newname in parallell file reference."""
-        paradir = self.old_dirname.replace("/"+mainlang+"/",
-                                           "/"+paralang+"/")
-        parafile = os.path.join(paradir, u'{}.xsl'.format(paraname))
-        if os.path.exists(parafile):
-            paradata = xslsetter.MetadataHandler(parafile)
-            paradata.set_parallel_text(mainlang, self.new_filename)
-            paradata.write_file()
 
-    def update_name_in_parallel_files(self):
-        """Open the .xsl file belonging to the file we are changing names of.
+class CorpusFileMover(object):
+    '''Move an original file and all its associated files.'''
+    def __init__(self, path_components_pair):
+        '''
 
-        Look for parallel files.
-        Open the xsl files of these parallel files and change the name of this
-        parallel from the old to the new one
+        Args:
+            path_components_pair: a PathComponentsPair namedtuple
+        '''
+        self.path_components_pair = path_components_pair
+
+    def move_files(self):
+        for filepair in self.__compute_filepairs():
+            if os.path.isfile(filepair[0]):
+                subprocess.call(['git', 'mv', filepair[0], filepair[1]])
+        self.__update_parallel_files()
+
+    def __update_parallel_files(self):
+        '''Update the info in the parallel files'''
+        oldcomponent = self.path_components_pair.oldcomponent
+        newcomponent = self.path_components_pair.newcomponent
+        metadatafile = xslsetter.MetadataHandler('/'.join(
+            self.path_components_pair.newcomponent) + '.xsl')
+
+        parallels = metadatafile.get_parallel_texts()
+        if (oldcomponent.basename != newcomponent.basename and
+                oldcomponent.lang != newcomponent.lang):
+            metadatafile.set_parallel_text(newcomponent.lang,
+                                        newcomponent.basename)
+        if (oldcomponent.lang != newcomponent.lang):
+            metadatafile.set_parallel_text(newcomponent.lang,
+                                           newcomponent.basename)
+            metadatafile.set_parallel_text(oldcomponent.lang, '')
+        if (oldcomponent.genre != newcomponent.genre):
+            metadatafile.set_variable('genre', newcomponent.genre)
+        metadatafile.write_file()
+
+    def __compute_filepairs(self):
+        filepairs = [('/'.join(self.path_components_pair.oldcomponent),
+                      '/'.join(self.path_components_pair.newcomponent))]
+        self.__get_xsl_pair(filepairs)
+        self.__get_prestable_converted_pair(filepairs)
+        self.__get_prestable_tmx_pairs(filepairs)
+
+        return filepairs
+
+    def __get_xsl_pair(self, filepairs):
+        """Compute the new names of the metadata files.
+
+        The new pair is appended to filepairs
         """
-        xslfile = os.path.join(self.old_dirname,
-                               '{}.xsl'.format(self.new_filename))
-        if os.path.exists(xslfile):
-            metadata = xslsetter.MetadataHandler(xslfile)
-            xslroot = metadata.tree.getroot()
+        oldpath = self.path_components_pair.oldcomponent
+        newpath = self.path_components_pair.newcomponent
 
-            mainlang = xslroot.find(".//*[@name='mainlang']").get(
-                'select').strip("'")
+        oldname = os.path.join(oldpath.root, oldpath.module, oldpath.lang,
+                               oldpath.genre, oldpath.subdirs,
+                               oldpath.basename + '.xsl')
+        newname = os.path.join(newpath.root, newpath.module, newpath.lang,
+                               newpath.genre, newpath.subdirs,
+                               newpath.basename + '.xsl')
 
-            if mainlang != "":
-                parallels = metadata.get_parallel_texts()
-                for paralang, paraname in parallels.iteritems():
-                    self.set_para_backreference(mainlang, paralang, paraname)
+        filepairs.append(PathPair(oldname, newname))
 
-    def move_prestable_converted(self):
-        """Move the file in prestable/converted from the old to the new name"""
-        dirname = self.old_dirname.replace('/orig/', '/prestable/converted/')
-        fromname = os.path.join(dirname, u'{}.xml'.format(self.old_filename))
-        toname = os.path.join(dirname, '{}.xml'.format(self.new_filename))
+    def __get_prestable_converted_pair(self, filepairs):
+        """Compute the new files of the prestabe/converted files.
 
-        if os.path.exists(fromname):
-            self.move_file(fromname, toname)
+        The new pair is appended to filepairs
+        """
+        oldpath = self.path_components_pair.oldcomponent
+        newpath = self.path_components_pair.newcomponent
 
-    def move_prestable_toktmx(self):
-        """Move the file in prestable/toktmx from the old to the new name"""
-        for suggestion in ['/prestable/toktmx/sme2nob/',
-                           '/prestable/toktmx/nob2sme/']:
-            dirname = self.old_dirname.replace('/orig/', suggestion)
-            fromname = os.path.join(dirname, u'{}.toktmx'.format(
-                self.old_filename))
-            if os.path.exists(fromname):
-                toname = os.path.join(dirname, '{}.toktmx'.format(
-                    self.new_filename))
-                self.move_file(fromname, toname)
+        oldname = os.path.join(oldpath.root, 'prestable/converted',
+                               oldpath.lang, oldpath.genre, oldpath.subdirs,
+                               oldpath.basename + '.xml')
+        newname = os.path.join(newpath.root, 'prestable/converted',
+                               newpath.lang, newpath.genre, newpath.subdirs,
+                               newpath.basename + '.xml')
 
-    def move_prestable_tmx(self):
-        """Move the file in prestable/tmx from the old to the new name"""
-        for suggestion in ['/prestable/tmx/sme2nob/',
-                           '/prestable/tmx/nob2sme/']:
-            dirname = self.old_dirname.replace('/orig/', suggestion)
-            fromname = os.path.join(dirname, u'{}.tmx'.format(
-                self.old_filename))
-            if os.path.exists(fromname):
-                toname = os.path.join(dirname, '{}.tmx'.format(
-                    self.new_filename))
-                self.move_file(fromname, toname)
+        filepairs.append(PathPair(oldname, newname))
+
+    def __get_prestable_tmx_pairs(self, filepairs):
+        """Compute the new names of the tmx files in prestable
+
+        The new pairs are appended to filepairs
+        """
+        oldpath = self.path_components_pair.oldcomponent
+        newpath = self.path_components_pair.newcomponent
+
+        for tmx in ['tmx', 'toktmx']:
+            tmxdir = os.path.join('prestable', tmx)
+            for langsubdir in glob.glob(os.path.join(oldpath.root, tmxdir) + '/*'):
+                oldname = os.path.join(oldpath.root, tmxdir,
+                                       os.path.basename(langsubdir), oldpath.genre,
+                                       oldpath.subdirs,
+                                       oldpath.basename + '.' + tmx)
+                newname = os.path.join(newpath.root, tmxdir,
+                                       os.path.basename(langsubdir), newpath.genre,
+                                       newpath.subdirs,
+                                       newpath.basename + '.' + tmx)
+
+                filepairs.append(PathPair(oldname, newname))
 
 
 def parse_args():
@@ -207,11 +322,12 @@ def parse_args():
 
 
 def main():
-    args = parse_args()
+    normaliser()
+    #args = parse_args()
 
-    for root, dirs, files in os.walk(args.directory):
-        for file_ in files:
-            if not file_.endswith('.xsl'):
-                nc = CorpusNameFixer(
-                    util.name_to_unicode(os.path.join(root, file_)))
-                nc.change_name()
+    #for root, dirs, files in os.walk(args.directory):
+        #for file_ in files:
+            #if not file_.endswith('.xsl'):
+                #nc = CorpusNameFixer(
+                    #util.name_to_unicode(os.path.join(root, file_)))
+                #nc.change_name()
