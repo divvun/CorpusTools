@@ -13,15 +13,15 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2014 Kevin Brubeck Unhammer <unhammer@fsfe.org>
-#   Copyright 2014 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2014-2015 Kevin Brubeck Unhammer <unhammer@fsfe.org>
+#   Copyright 2015 Børre Gaup <borre.gaup@uit.no>
 #
 
 from __future__ import unicode_literals
 
-import os
-import operator
 import inspect
+import operator
+import os
 import platform
 import subprocess
 
@@ -55,14 +55,14 @@ def replace_all(replacements, string):
 
 
 def split_path(path):
-    """
-    Split an absolute path into useful components:
+    """Split an absolute path into useful components:
+
     (root, module, lang, genre, subdirs, basename)
     """
     def split_on_module(p):
         for module in ["goldstandard/orig", "prestable/converted",
                        "prestable/toktmx", "prestable/tmx", "orig",
-                       "converted", "stable"]: # toktmx?
+                       "converted", "stable"]:
             d = "/"+module+"/"
             if d in p:
                 root, rest = p.split(d)
@@ -98,6 +98,7 @@ def executable_in_path(program):
 
 def sanity_check(program_list):
     """Look for programs and files that are needed to do the analysis.
+
     If they don't exist, raise an exception.
     """
     if 'GTHOME' not in os.environ:
@@ -204,8 +205,7 @@ class ExternalCommandRunner(object):
         self.returncode = None
 
     def run(self, command, cwd=None, to_stdin=None):
-        '''Run the command, save the result
-        '''
+        '''Run the command, save the result'''
         try:
             subp = subprocess.Popen(command,
                                     stdin=subprocess.PIPE,
