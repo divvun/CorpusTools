@@ -132,8 +132,10 @@ class TestAddFileToCorpus(unittest.TestCase):
         self.tempdir.write('origdirectory/a.txt', 'content of a')
         self.tempdir.write('origdirectory/æ.txt', 'content of æ')
         self.tempdir.write('origdirectory/b.txt', 'content of b')
+        self.tempdir.write('origdirectory/c.txt', 'original content of c')
         self.tempdir.makedir('corpus/orig')
         self.tempdir.write('corpus/orig/sme/ae/c/o/b.txt', 'content of b')
+        self.tempdir.write('corpus/orig/sme/ae/c/o/c.txt', 'corpusfile content of c')
         self.realcorpusdir = os.path.join(self.tempdir.path,
                                           'corpus').decode('utf8')
         self.origdirectory = os.path.join(self.tempdir.path,
@@ -162,9 +164,11 @@ class TestAddFileToCorpus(unittest.TestCase):
             'corpus/orig/sme/ae/c/o/a.txt',
             'corpus/orig/sme/ae/c/o/a.txt.xsl',
             'corpus/orig/sme/ae/c/o/b.txt',
+            'corpus/orig/sme/ae/c/o/c.txt',
             'origdirectory/',
             'origdirectory/a.txt',
             'origdirectory/b.txt',
+            'origdirectory/c.txt',
             'origdirectory/æ.txt')
 
         metadata = xslsetter.MetadataHandler(
@@ -189,9 +193,11 @@ class TestAddFileToCorpus(unittest.TestCase):
             'corpus/orig/sme/ae/c/o/ae.txt',
             'corpus/orig/sme/ae/c/o/ae.txt.xsl',
             'corpus/orig/sme/ae/c/o/b.txt',
+            'corpus/orig/sme/ae/c/o/c.txt',
             'origdirectory/',
             'origdirectory/a.txt',
             'origdirectory/b.txt',
+            'origdirectory/c.txt',
             'origdirectory/æ.txt')
 
         metadata = xslsetter.MetadataHandler(
@@ -204,3 +210,33 @@ class TestAddFileToCorpus(unittest.TestCase):
         with self.assertRaises(UserWarning):
             aftc = adder.AddFileToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
                                         os.path.join(self.origdirectory, u'b.txt'))
+
+    def test_add_file_identical_name_no_parallel(self):
+        aftc = adder.AddFileToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
+                                     os.path.join(self.origdirectory, u'c.txt'))
+        aftc.add_file_to_corpus()
+
+        self.tempdir.check_all(
+            '',
+            'corpus/',
+            'corpus/orig/',
+            'corpus/orig/sme/',
+            'corpus/orig/sme/ae/',
+            'corpus/orig/sme/ae/c/',
+            'corpus/orig/sme/ae/c/o/',
+            'corpus/orig/sme/ae/c/o/b.txt',
+            'corpus/orig/sme/ae/c/o/c.txt',
+            'corpus/orig/sme/ae/c/o/c_1.txt',
+            'corpus/orig/sme/ae/c/o/c_1.txt.xsl',
+            'origdirectory/',
+            'origdirectory/a.txt',
+            'origdirectory/b.txt',
+            'origdirectory/c.txt',
+            'origdirectory/æ.txt')
+
+        metadata = xslsetter.MetadataHandler(
+            os.path.join(self.realcorpusdir, 'orig/sme/ae/c/o/c_1.txt.xsl'))
+        self.assertEqual(metadata.get_variable('filename'), u'c.txt')
+        self.assertEqual(metadata.get_variable('genre'), 'ae')
+        self.assertEqual(metadata.get_variable('mainlang'), 'sme')
+
