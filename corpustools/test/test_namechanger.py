@@ -16,14 +16,19 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2013-2014 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
 #
+
+from __future__ import print_function
 
 import os
 import unittest
 
+import testfixtures
+import git
+
 from corpustools import namechanger
-from corpustools import util
+from corpustools import xslsetter
 
 here = os.path.dirname(__file__)
 
@@ -139,7 +144,447 @@ class TestComputeNewBasename(unittest.TestCase):
                 os.path.join(here,
                              'name_changer_data/orig/sme/admin/other_files',
                              'new_none_dupe.txt')),
-            util.PathComponents(os.path.join(here, 'name_changer_data'),
-                                'orig', 'sme', 'admin', 'other_files',
-                                'new_none_dupe_1.txt')
+            os.path.join(here, 'name_changer_data', 'orig', 'sme', 'admin',
+                         'other_files', 'new_none_dupe_1.txt')
             )
+
+
+class TestMoveFileBasenameChanged(unittest.TestCase):
+    '''Test what happens when only basename is changed'''
+    def setUp(self):
+        self.tempdir = testfixtures.TempDirectory()
+        self.tempdir.makedir('orig/sme/ficti/sub')
+        self.tempdir.makedir('orig/smj/ficti/sub')
+        self.tempdir.makedir('orig/sma/ficti/sub')
+        self.cfm = namechanger.CorpusFileMover(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/a.txt'),
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/b.txt'))
+
+    def tearDown(self):
+        self.tempdir.cleanup()
+
+    def test_init_corpus_file_mover(self):
+        self.assertEqual(self.cfm.old_components, (
+            self.tempdir.path, u'orig', u'sme', u'ficti', u'sub', u'a.txt'))
+        self.assertEqual(self.cfm.new_components, (
+            self.tempdir.path, u'orig', u'sme', u'ficti', u'sub', u'b.txt'))
+
+    def test_corpus_file_mover_orig_pair(self):
+        self.assertEqual(self.cfm.orig_pair, (
+            os.path.join(self.tempdir.path, u'orig/sme/ficti/sub/a.txt'),
+            os.path.join(self.tempdir.path, u'orig/sme/ficti/sub/b.txt')))
+
+    def test_corpus_file_mover_xsl_pair(self):
+        self.assertEqual(self.cfm.xsl_pair, (
+            os.path.join(self.tempdir.path, u'orig/sme/ficti/sub/a.txt.xsl'),
+            os.path.join(self.tempdir.path, u'orig/sme/ficti/sub/b.txt.xsl')))
+
+    def test_corpus_file_mover_prestable_converted_pair(self):
+        self.assertEqual(self.cfm.prestable_converted_pair, (
+            os.path.join(self.tempdir.path,
+                         u'prestable/converted/sme/ficti/sub/a.txt.xml'),
+            os.path.join(self.tempdir.path,
+                         u'prestable/converted/sme/ficti/sub/b.txt.xml')))
+
+    def test_corpus_file_mover_prestable_tmx_pairs1(self):
+        '''If a file has parallels'''
+        mdh = xslsetter.MetadataHandler(os.path.join(
+            self.tempdir.path, 'orig/sme/ficti/sub/a.txt.xsl'), create=True)
+        mdh.set_variable('mainlang', 'sme')
+        mdh.set_parallel_text('smj', 'c.txt')
+        mdh.set_parallel_text('sma', 'd.txt')
+        mdh.write_file()
+
+        result = self.cfm.prestable_tmx_pairs
+        testfixtures.compare(
+            result[0],
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             u'prestable/tmx/sme2smj/ficti/sub/a.txt.tmx'),
+                os.path.join(self.tempdir.path,
+                             u'prestable/tmx/sme2smj/ficti/sub/b.txt.tmx')))
+        testfixtures.compare(
+            result[1],
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             u'prestable/tmx/sme2sma/ficti/sub/a.txt.tmx'),
+                os.path.join(self.tempdir.path,
+                             u'prestable/tmx/sme2sma/ficti/sub/b.txt.tmx')))
+        testfixtures.compare(
+            result[2],
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             u'prestable/toktmx/sme2smj/ficti/sub',
+                             u'a.txt.toktmx'),
+                os.path.join(self.tempdir.path,
+                             u'prestable/toktmx/sme2smj/ficti/sub',
+                             u'b.txt.toktmx')))
+        testfixtures.compare(
+            result[3],
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             u'prestable/toktmx/sme2sma/ficti/sub',
+                             u'a.txt.toktmx'),
+                os.path.join(self.tempdir.path,
+                             u'prestable/toktmx/sme2sma/ficti/sub',
+                             u'b.txt.toktmx')))
+
+    def test_corpus_file_mover_prestable_tmx_pairs2(self):
+        '''If a file has not parallels'''
+        mdh = xslsetter.MetadataHandler(os.path.join(
+            self.tempdir.path, 'orig/sme/ficti/sub/a.txt.xsl'), create=True)
+        mdh.set_variable('mainlang', 'sme')
+        mdh.write_file()
+
+        result = self.cfm.prestable_tmx_pairs
+        testfixtures.compare(result, [])
+
+    def test_corpus_file_mover_prestable_tmx_pairs3(self):
+        '''If a file has set translated_from'''
+        mdh = xslsetter.MetadataHandler(os.path.join(
+            self.tempdir.path, 'orig/sme/ficti/sub/a.txt.xsl'), create=True)
+        mdh.set_variable('mainlang', 'sme')
+        mdh.set_variable('translated_from', 'nob')
+        mdh.set_parallel_text('smj', 'c.txt')
+        mdh.set_parallel_text('sma', 'd.txt')
+        mdh.write_file()
+
+        result = self.cfm.prestable_tmx_pairs
+        testfixtures.compare(result, [])
+
+    #def test_corpus_file_mover_update_parallel_metadata(self):
+        #mdh = xslsetter.MetadataHandler(os.path.join(
+            #self.tempdir.path, 'orig/sme/ficti/sub/a.txt.xsl'), create=True)
+        #mdh.set_variable('mainlang', 'sme')
+        #mdh.set_variable('translated_from', 'nob')
+        #mdh.set_parallel_text('smj', 'c.txt')
+        #mdh.set_parallel_text('sma', 'd.txt')
+        #mdh.write_file()
+
+        #smj_mdh = xslsetter.MetadataHandler(os.path.join(
+            #self.tempdir.path, 'orig/smj/ficti/sub/c.txt.xsl'), create=True)
+        #smj_mdh.set_parallel_text('sme', 'a.txt')
+        #smj_mdh.write_file()
+
+        #sma_mdh = xslsetter.MetadataHandler(os.path.join(
+            #self.tempdir.path, 'orig/sma/ficti/sub/d.txt.xsl'), create=True)
+        #sma_mdh.set_parallel_text('sme', 'a.txt')
+        #sma_mdh.write_file()
+
+        #self.cfm.update_parallel_files_metadata()
+
+        #smj_mdh = xslsetter.MetadataHandler(os.path.join(
+            #self.tempdir.path, 'orig/smj/ficti/sub/c.txt.xsl'))
+        #smj_mdh_parallel_texts = smj_mdh.get_parallel_texts()
+        #self.assertEqual(smj_mdh_parallel_texts['sme'], 'b.txt')
+
+        #sma_mdh = xslsetter.MetadataHandler(os.path.join(
+            #self.tempdir.path, 'orig/sma/ficti/sub/d.txt.xsl'))
+        #sma_mdh_parallel_texts = sma_mdh.get_parallel_texts()
+        #self.assertEqual(sma_mdh_parallel_texts['sme'], 'b.txt')
+
+
+class TestMoveFileGenreChanged(unittest.TestCase):
+    '''Test what happens when genre is changed'''
+    def setUp(self):
+        self.tempdir = testfixtures.TempDirectory()
+
+        self.tempdir.write(('orig', 'sme', 'ficti', 'sub', 'a.txt'), 'a')
+        self.tempdir.write(('orig', 'smj', 'ficti', 'sub', 'c.txt'), 'a')
+        self.tempdir.write(('orig', 'sma', 'ficti', 'sub', 'd.txt'), 'a')
+
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/a.txt.xsl'),
+            create=True)
+        sme_metadata.set_variable('mainlang', 'sme')
+        sme_metadata.set_parallel_text('smj', 'c.txt')
+        sme_metadata.set_parallel_text('sma', 'd.txt')
+        sme_metadata.write_file()
+
+        smj_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/c.txt.xsl'),
+            create=True)
+        smj_metadata.set_variable('mainlang', 'smj')
+        smj_metadata.set_parallel_text('sme', 'a.txt')
+        smj_metadata.set_parallel_text('sma', 'd.txt')
+        smj_metadata.write_file()
+
+        sma_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sma/ficti/sub/d.txt.xsl'),
+            create=True)
+        sma_metadata.set_variable('mainlang', 'sma')
+        sma_metadata.set_parallel_text('sme', 'a.txt')
+        sma_metadata.set_parallel_text('smj', 'c.txt')
+        sma_metadata.write_file()
+
+        r = git.Repo.init(self.tempdir.path)
+        r.index.add(['orig'])
+        r.index.commit('Added orig')
+
+
+    def tearDown(self):
+        self.tempdir.cleanup()
+
+    def test_file_mover(self):
+        namechanger.file_mover(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/a.txt'),
+            os.path.join(self.tempdir.path, 'orig/sme/facta/sub/b.txt'))
+
+        #testfixtures.compare(self.tempdir.listdir('orig/sme/ficti/sub/'), '')
+
+class TestComputeMovepairs(unittest.TestCase):
+    def setUp(self):
+        self.tempdir = testfixtures.TempDirectory()
+        self.tempdir.makedir('orig/sme/ficti/sub')
+        self.tempdir.makedir('orig/smj/ficti/sub')
+        self.tempdir.makedir('orig/sma/ficti/sub')
+
+    def tearDown(self):
+        self.tempdir.cleanup()
+
+    def test_compute_movepairs_1(self):
+        '''newpath does not exist, no parallels'''
+        movepairs = namechanger.compute_movepairs(
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/a.txt').decode('utf8'),
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/b.txt').decode('utf8'))
+
+        testfixtures.compare(movepairs, [
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/a.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/b.txt').decode('utf8'))])
+
+    def test_compute_movepairs_2(self):
+        '''newpath does not exist, needs normalisation, no parallels'''
+        movepairs = namechanger.compute_movepairs(
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/æ.txt').decode('utf8'),
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/æ.txt').decode('utf8'))
+
+        testfixtures.compare(movepairs, [
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/æ.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/ae.txt').decode('utf8'))])
+
+    def test_compute_movepairs_3(self):
+        '''newpath exists, not duplicate, no parallels'''
+        self.tempdir.write('orig/sme/ficti/sub/c.txt', 'c content')
+        self.tempdir.write('orig/sme/ficti/sub/d.txt', 'd content')
+
+        movepairs = namechanger.compute_movepairs(
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/c.txt').decode('utf8'),
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/d.txt').decode('utf8'))
+
+        testfixtures.compare(movepairs, [
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/c.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/d_1.txt').decode('utf8'))])
+
+    def test_compute_movepairs_4(self):
+        '''newpath exists, duplicate, no parallels'''
+        self.tempdir.write('orig/sme/ficti/sub/c.txt', 'c content')
+        self.tempdir.write('orig/sme/ficti/sub/e.txt', 'c content')
+
+        with self.assertRaises(UserWarning):
+            movepairs = namechanger.compute_movepairs(
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/c.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/e.txt').decode('utf8'))
+
+    def test_compute_movepairs_5(self):
+        '''move to same directory, with parallels'''
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
+            create=True)
+        sme_metadata.set_variable('mainlang', 'sme')
+        sme_metadata.set_parallel_text('smj', 'f.txt')
+        sme_metadata.set_parallel_text('sma', 'f.txt')
+        sme_metadata.write_file()
+
+        smj_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/f.txt.xsl'),
+            create=True)
+        smj_metadata.set_variable('mainlang', 'smj')
+        smj_metadata.set_parallel_text('sme', 'f.txt')
+        smj_metadata.set_parallel_text('sma', 'f.txt')
+        smj_metadata.write_file()
+
+        sma_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sma/ficti/sub/f.txt.xsl'),
+            create=True)
+        sma_metadata.set_variable('mainlang', 'sma')
+        sma_metadata.set_parallel_text('sme', 'f.txt')
+        sma_metadata.set_parallel_text('smj', 'f.txt')
+        sma_metadata.write_file()
+
+        movepairs = namechanger.compute_movepairs(
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/f.txt').decode('utf8'),
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/g.txt').decode('utf8'))
+
+        testfixtures.compare(movepairs, [
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/f.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/g.txt').decode('utf8'))])
+
+    def test_compute_movepairs_6(self):
+        '''move to different subdir, with parallels'''
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
+            create=True)
+        sme_metadata.set_variable('mainlang', 'sme')
+        sme_metadata.set_parallel_text('smj', 'f.txt')
+        sme_metadata.set_parallel_text('sma', 'f.txt')
+        sme_metadata.write_file()
+
+        smj_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/f.txt.xsl'),
+            create=True)
+        smj_metadata.set_variable('mainlang', 'smj')
+        smj_metadata.set_parallel_text('sme', 'f.txt')
+        smj_metadata.set_parallel_text('sma', 'f.txt')
+        smj_metadata.write_file()
+
+        sma_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sma/ficti/sub/f.txt.xsl'),
+            create=True)
+        sma_metadata.set_variable('mainlang', 'sma')
+        sma_metadata.set_parallel_text('sme', 'f.txt')
+        sma_metadata.set_parallel_text('smj', 'f.txt')
+        sma_metadata.write_file()
+
+        movepairs = namechanger.compute_movepairs(
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/f.txt').decode('utf8'),
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/bub/g.txt').decode('utf8'))
+
+        testfixtures.compare(movepairs, [
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/f.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/bub/g.txt').decode('utf8')),
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/f.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/bub/f.txt').decode('utf8')),
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/bub/f.txt').decode('utf8')),])
+
+    def test_compute_movepairs_7(self):
+        '''move to different genre, with parallels'''
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
+            create=True)
+        sme_metadata.set_variable('mainlang', 'sme')
+        sme_metadata.set_parallel_text('smj', 'f.txt')
+        sme_metadata.set_parallel_text('sma', 'f.txt')
+        sme_metadata.write_file()
+
+        smj_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/f.txt.xsl'),
+            create=True)
+        smj_metadata.set_variable('mainlang', 'smj')
+        smj_metadata.set_parallel_text('sme', 'f.txt')
+        smj_metadata.set_parallel_text('sma', 'f.txt')
+        smj_metadata.write_file()
+
+        sma_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sma/ficti/sub/f.txt.xsl'),
+            create=True)
+        sma_metadata.set_variable('mainlang', 'sma')
+        sma_metadata.set_parallel_text('sme', 'f.txt')
+        sma_metadata.set_parallel_text('smj', 'f.txt')
+        sma_metadata.write_file()
+
+        movepairs = namechanger.compute_movepairs(
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/f.txt').decode('utf8'),
+            os.path.join(self.tempdir.path,
+                         'orig/sme/facta/sub/g.txt').decode('utf8'))
+
+        testfixtures.compare(movepairs, [
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/f.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sme/facta/sub/g.txt').decode('utf8')),
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/f.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/smj/facta/sub/f.txt').decode('utf8')),
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sma/facta/sub/f.txt').decode('utf8')),])
+
+    def test_compute_movepairs_8(self):
+        '''move to different genre, one parallel needs normalisation'''
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
+            create=True)
+        sme_metadata.set_variable('mainlang', 'sme')
+        sme_metadata.set_parallel_text('smj', u'ø.txt')
+        sme_metadata.set_parallel_text('sma', 'f.txt')
+        sme_metadata.write_file()
+
+        smj_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/ø.txt.xsl'),
+            create=True)
+        smj_metadata.set_variable('mainlang', 'smj')
+        smj_metadata.set_parallel_text('sme', 'f.txt')
+        smj_metadata.set_parallel_text('sma', 'f.txt')
+        smj_metadata.write_file()
+
+        sma_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sma/ficti/sub/f.txt.xsl'),
+            create=True)
+        sma_metadata.set_variable('mainlang', 'sma')
+        sma_metadata.set_parallel_text('sme', 'f.txt')
+        sma_metadata.set_parallel_text('smj', u'ø.txt')
+        sma_metadata.write_file()
+
+        movepairs = namechanger.compute_movepairs(
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/f.txt').decode('utf8'),
+            os.path.join(self.tempdir.path,
+                         'orig/sme/facta/sub/g.txt').decode('utf8'))
+
+        testfixtures.compare(movepairs, [
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/f.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sme/facta/sub/g.txt').decode('utf8')),
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/ø.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/smj/facta/sub/o.txt').decode('utf8')),
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sma/facta/sub/f.txt').decode('utf8')),])
+

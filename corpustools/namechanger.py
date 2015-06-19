@@ -57,7 +57,6 @@ duplicates, raise an exception, otherwise suggest a new name.
 from __future__ import print_function
 
 import argparse
-import glob
 import os
 import subprocess
 
@@ -66,9 +65,10 @@ import hashlib
 import unidecode
 import urllib
 
-import corpustools.argparse_version as argparse_version
-import corpustools.util as util
-import corpustools.xslsetter as xslsetter
+from . import argparse_version
+from . import util
+from . import xslsetter
+from . import versioncontrol
 
 
 class NamechangerException(Exception):
@@ -209,33 +209,35 @@ def normaliser():
 
 def file_mover(oldpath, newpath):
     origmover = CorpusFileMover(oldpath, newpath)
+    origmover.update_metadata()
+    origmover.update_parallel_files_metadata()
     origmover.move_files()
-    origmover.update_parallel_files()
 
     if (origmover.old_components.subdirs != origmover.new_components.subdirs or
             origmover.old_components.genre != origmover.new_components.genre):
         metadatafile = xslsetter.MetadataHandler(origmover.xsl_pair.oldpath)
-        for lang, parallel_file in metadatafile.get_parallel_texts():
-            oldparellelpath = u'/'.join(
+        print(metadatafile.get_parallel_texts())
+        for lang, parallel_file in metadatafile.get_parallel_texts().items():
+            oldparellelpath = u'/'.join((
                 origmover.old_components.root,
                 origmover.old_components.module,
                 lang, origmover.old_components.genre,
-                origmover.old_components.subdirs, parallel_file)
-            newparallelpath = u'/'.join(
+                origmover.old_components.subdirs, parallel_file))
+            newparallelpath = u'/'.join((
                 origmover.new_components.root,
                 origmover.new_components.module,
                 lang, origmover.new_components.genre,
-                origmover.new_components.subdirs, parallel_file)
+                origmover.new_components.subdirs, parallel_file))
             parallelmover = CorpusFileMover(oldparellelpath, newparallelpath)
+            parallelmover.update_metadata()
+            parallelmover.update_parallel_files_metadata()
             parallelmover.move_files()
-            parallelmover.update_parallel_files()
-
 
 
 class CorpusFileMover(object):
     '''Move an original file and all its associated files.'''
     def __init__(self, oldpath, newpath):
-        '''
+        '''Class to move corpus files
 
         Args:
             oldpath (unicode): the old path
@@ -245,29 +247,46 @@ class CorpusFileMover(object):
         self.new_components = util.split_path(newpath)
 
     def move_files(self):
-        for filepair in self.file_pairs():
-            if os.path.isfile(filepair.old_path):
-                subprocess.call(['git', 'mv', filepair[0], filepair[1]])
+        vcs = versioncontrol.VersionControlFactory().vcs(self.old_components.root)
+        for filepair in self.file_pairs:
+            if os.path.isfile(filepair.oldpath):
+                if not os.path.exists(os.path.dirname(filepair.newpath)):
+                    os.makedirs(os.path.dirname(filepair.newpath))
+                print('moving {}'.format(filepair))
+                vcs.move(filepair.oldpath, filepair.newpath)
 
-    def update_parallel_files(self):
-        '''Update the info in the parallel files'''
+    def update_metadata(self):
+        '''Update metadata'''
         metadatafile = xslsetter.MetadataHandler(self.xsl_pair.oldpath)
-        parallels = metadatafile.get_parallel_texts()
-        if (self.old_components.basename != self.new_components.basename and
-                self.old_components.lang != self.new_components.lang):
-            metadatafile.set_parallel_text(self.new_components.lang,
-                                           self.new_components.basename)
-        if (self.old_components.lang != self.new_components.lang):
-            metadatafile.set_parallel_text(self.new_components.lang,
-                                           self.new_components.basename)
-            metadatafile.set_parallel_text(self.old_components.lang, '')
         if (self.old_components.genre != self.new_components.genre):
             metadatafile.set_variable('genre', self.new_components.genre)
+        if (self.old_components.lang != self.new_components.lang):
+            metadatafile.set_variable('mainlang', self.new_components.lang)
         metadatafile.write_file()
+
+    def update_parallel_files_metadata(self):
+        '''Update the info in the parallel files'''
+        metadatafile = xslsetter.MetadataHandler(self.xsl_pair.oldpath)
+        parallel_files = metadatafile.get_parallel_texts()
+
+        for lang, parallel_file in parallel_files.items():
+            parallel_metadatafile = xslsetter.MetadataHandler(
+                '/'.join(
+                    (self.old_components.root,
+                     self.old_components.module,
+                     lang, self.old_components.genre,
+                     self.old_components.subdirs,
+                     parallel_file + '.xsl')))
+
+            if self.old_components.basename != self.new_components.basename:
+                parallel_metadatafile.set_parallel_text(
+                    self.new_components.lang, self.new_components.basename)
+            parallel_metadatafile.write_file()
 
     @property
     def file_pairs(self):
-        return ([self.orig_pair, self.xsl_pair, self.prestable_converted_pair] +
+        return ([self.orig_pair, self.xsl_pair,
+                 self.prestable_converted_pair] +
                 self.prestable_tmx_pairs)
 
     @property
@@ -282,18 +301,18 @@ class CorpusFileMover(object):
 
         The new pair is appended to filepairs
         """
-        return PathPair(u'/'.join(self.old_components.root,
+        return PathPair(u'/'.join((self.old_components.root,
                                   self.old_components.module,
                                   self.old_components.lang,
                                   self.old_components.genre,
                                   self.old_components.subdirs,
-                                  self.old_components.basename + '.xsl'),
-                        u'/'.join(self.new_components.root,
+                                  self.old_components.basename + '.xsl')),
+                        u'/'.join((self.new_components.root,
                                   self.new_components.module,
                                   self.new_components.lang,
                                   self.new_components.genre,
                                   self.new_components.subdirs,
-                                  self.new_components.basename + '.xsl'))
+                                  self.new_components.basename + '.xsl')))
 
     @property
     def prestable_converted_pair(self):
@@ -301,18 +320,18 @@ class CorpusFileMover(object):
 
         The new pair is appended to filepairs
         """
-        return PathPair(u'/'.join(self.old_components.root,
-                                  u'prestable/converted',
-                                  self.old_components.lang,
-                                  self.old_components.genre,
-                                  self.old_components.subdirs,
-                                  self.old_components.basename + '.xml'),
-                        u'/'.join(self.new_components.root,
-                                  u'prestable/converted',
-                                  self.new_components.lang,
-                                  self.new_components.genre,
-                                  self.new_components.subdirs,
-                                  self.new_components.basename + '.xsl'))
+        return PathPair(u'/'.join((self.old_components.root,
+                                   u'prestable/converted',
+                                   self.old_components.lang,
+                                   self.old_components.genre,
+                                   self.old_components.subdirs,
+                                   self.old_components.basename + '.xml')),
+                        u'/'.join((self.new_components.root,
+                                   u'prestable/converted',
+                                   self.new_components.lang,
+                                   self.new_components.genre,
+                                   self.new_components.subdirs,
+                                   self.new_components.basename + '.xml')))
 
     @property
     def prestable_tmx_pairs(self):
@@ -322,7 +341,7 @@ class CorpusFileMover(object):
         """
         filepairs = []
         for tmx in [u'tmx', u'toktmx']:
-            tmxdir = u'/'.join(u'prestable', tmx)
+            tmxdir = u'/'.join((u'prestable', tmx))
             metadatafile = xslsetter.MetadataHandler(self.xsl_pair.oldpath)
             translated_from = metadatafile.get_variable('translated_from')
             if translated_from is None or translated_from == u'':
@@ -330,18 +349,18 @@ class CorpusFileMover(object):
                     orig_lang = metadatafile.get_variable('mainlang')
                     filepairs.append(
                         PathPair(
-                            u'/'.join(self.old_components.root, tmxdir,
+                            u'/'.join((self.old_components.root, tmxdir,
                                       orig_lang + u'2' + lang,
                                       self.old_components.genre,
                                       self.old_components.subdirs,
                                       self.old_components.basename + u'.' +
-                                      tmx),
-                            u'/'.join(self.new_components.root, tmxdir,
+                                      tmx)),
+                            u'/'.join((self.new_components.root, tmxdir,
                                       orig_lang + u'2' + lang,
                                       self.new_components.genre,
                                       self.new_components.subdirs,
                                       self.new_components.basename + u'.' +
-                                      tmx)))
+                                      tmx))))
 
         return filepairs
 
@@ -369,3 +388,41 @@ def main():
                 #nc = CorpusNameFixer(
                     #util.name_to_unicode(os.path.join(root, file_)))
                 #nc.change_name()
+
+
+def compute_parallels(oldpath, newpath):
+    filepairs = [PathPair(oldpath, newpath)]
+
+    old_components = util.split_path(oldpath)
+    new_components = util.split_path(newpath)
+
+    if (old_components.genre != new_components.genre or
+            old_components.subdirs != new_components.subdirs):
+        metadatafile = xslsetter.MetadataHandler(oldpath + '.xsl')
+        for lang, parallel_file in metadatafile.get_parallel_texts().items():
+            oldparellelpath = u'/'.join((
+                old_components.root,
+                old_components.module,
+                lang, old_components.genre,
+                old_components.subdirs, parallel_file))
+            newparallelpath = u'/'.join((
+                new_components.root,
+                new_components.module,
+                lang, new_components.genre,
+                new_components.subdirs,
+                normalise_filename(parallel_file)))
+
+            non_dupe_parallelpath = compute_new_basename(oldparellelpath, newparallelpath)
+
+            filepairs.append(PathPair(oldparellelpath, non_dupe_parallelpath))
+
+    return filepairs
+
+def compute_movepairs(oldpath, newpath):
+    normalisedpath = os.path.join(
+        os.path.dirname(newpath),
+        normalise_filename(os.path.basename(newpath)))
+
+    non_dupe_path = compute_new_basename(oldpath, normalisedpath)
+
+    return compute_parallels(oldpath, non_dupe_path)
