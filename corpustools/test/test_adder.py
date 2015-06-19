@@ -30,7 +30,7 @@ from corpustools import versioncontrol
 
 class TestAddToCorpus(unittest.TestCase):
     def setUp(self):
-        self.tempdir = testfixtures.TempDirectory()
+        self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
         self.tempdir.makedir('tull')
         self.tempdir.makedir('corpus/orig')
         self.realcorpusdir = os.path.join(self.tempdir.path,
@@ -93,6 +93,7 @@ class TestAddToCorpus(unittest.TestCase):
             lang, path)
         self.assertEqual(atc.goaldir, os.path.join(self.tempdir.path, 'corpus',
                                                    'orig', lang, path))
+        self.tempdir.check_dir('corpus/orig/sme/a/b/c')
 
     def test_init_with_too_long_mainlang(self):
         lang = u'smei'
@@ -122,3 +123,41 @@ class TestAddToCorpus(unittest.TestCase):
         atc = adder.AddToCorpus(self.realcorpusdir, lang, path)
         self.assertEqual(atc.goaldir, os.path.join(self.tempdir.path, 'corpus',
                                                    'orig', lang, 'ae/c/o'))
+
+
+class TestAddFileToCorpus(unittest.TestCase):
+    def setUp(self):
+        self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
+        self.tempdir.write('origdirectory/a.txt', 'content of a')
+        self.tempdir.write('origdirectory/æ.txt', 'content of æ')
+        self.tempdir.makedir('corpus/orig')
+        self.realcorpusdir = os.path.join(self.tempdir.path,
+                                          'corpus').decode('utf8')
+        self.origdirectory = os.path.join(self.tempdir.path,
+                                          'origdirectory')
+
+        r = git.Repo.init(self.realcorpusdir)
+        r.index.add(['orig'])
+        r.index.commit('Added orig')
+
+    def tearDown(self):
+        self.tempdir.cleanup()
+
+    def test_add_file_no_normalise_no_parallel(self):
+        aftc = adder.AddFileToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö',
+                                     os.path.join(self.origdirectory, u'a.txt'))
+        aftc.add_file_to_corpus()
+
+        self.tempdir.check_all(
+            '',
+            'corpus/',
+            'corpus/orig/',
+            'corpus/orig/sme/',
+            'corpus/orig/sme/ae/',
+            'corpus/orig/sme/ae/c/',
+            'corpus/orig/sme/ae/c/o/',
+            'corpus/orig/sme/ae/c/o/a.txt',
+            'corpus/orig/sme/ae/c/o/a.txt.xsl',
+            'origdirectory/',
+            'origdirectory/a.txt',
+            'origdirectory/æ.txt')

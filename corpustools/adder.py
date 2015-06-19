@@ -37,22 +37,6 @@ from corpustools import xslsetter
 
 '''Adding files, directories and URL's to a corpus directory
 
-Command line arguments:
-* the corpus directory (check that this exists)
-* the lang of the file(s) to add
-** check that this exists, add if not, must be exactly three chars long
-* the path below lang directory where the file(s) should be added
-** normalise all the elements, add if it does not exist
-* when adding a file or a URL, optionally name a parallel file
-
-Add a file to the corpus
-* normalise the basename, copy the the file to the given directory
-* make a metadata file belonging to it
-** set the original basename as the filename
-** set the mainlang
-** set the genre
-** if a parallel file is given, set the parallel info in all the parellel files
-** add both the newly copied file and the metadata file to the working copy
 
 Add a URL to the corpus
 * normalise the basename, copy the the file to the given directory
@@ -116,6 +100,8 @@ class AddToCorpus(object):
         self.mainlang = mainlang
         self.goaldir = os.path.join(corpusdir, u'orig', mainlang,
                                     self.__normalise_path(path))
+        if not os.path.exists(self.goaldir):
+            os.makedirs(self.goaldir)
 
     @staticmethod
     def __normalise_path(path):
@@ -126,46 +112,38 @@ class AddToCorpus(object):
 
         return u'/'.join(new_parts)
 
-#class AddDirToCorpus(AddToCorpus):
-    #def __init__(self, origdir, corpusdir, mainlang, path):
-        #super(AddDirToCorpus, self).__init(corpusdir, mainlang, path)
-        #if not os.path.isdir(origdir):
-            #raise AdderException('{} '
-                                 #'is not a directory.'.format(origdir))
-        #self.origdir = origdir
 
-    #def add(self):
-        #'''Add the files contained in self.origdir to self.goaldir'''
-        #additions = []
-        #if not os.path.isdir(self.goaldir):
-            #os.makedirs(self.goaldir)
-            #for root, dirs, files in os.walk(self.origdir):
-                #for f in files:
-                    #self.copy_to_corpusdirectory(root, f)
-                    #additions.append(os.path.join(root, f))
+class AddFileToCorpus(AddToCorpus):
+    '''Add a file to the corpus
 
-        #self.vcs.add(additions)
+    * normalise the basename, copy the the file to the given directory
+    * make a metadata file belonging to it
+    ** set the original basename as the filename
+    ** set the mainlang
+    ** set the genre
+    ** if a parallel file is given, set the parallel info in all the parellel files
+    ** add both the newly copied file and the metadata file to the working copy
+'''
+    def __init__(self, corpusdir, mainlang, path, origpath, parallel_file=None):
+        super(AddFileToCorpus, self).__init__(corpusdir, mainlang, path)
 
-
-#class AddFileToCorpus(namechanger.NameChangerBase):
-    #'''Add a given file to a given corpus'''
-    #def __init__(self, oldname, corpusdir, mainlang, path, parallel_file):
-        #super(AddFileToCorpus, self).__init__(oldname)
-        #self.corpusdir = corpusdir
-        #self.mainlang = mainlang
-        #self.path = path
-        #self.new_dirname = os.path.join(corpusdir, 'orig', mainlang, path)
-        #vcsfactory = versioncontrol.VersionControlFactory()
-        #self.vcs = vcsfactory.vcs(corpusdir)
-        #self.parallel_file = parallel_file
+        self.mc = namechanger.MovepairComputer()
+        self.mc.compute_movepairs(origpath, os.path.join(
+            self.goaldir, os.path.basename(origpath)))
+        self.parallel_file = parallel_file
         #self.parallels = self._get_parallels()
 
-    #def makedirs(self):
-        #try:
-            #os.makedirs(self.new_dirname)
-            #self.vcs.add_directory(self.new_dirname)
-        #except OSError:
-            #pass
+    def add_file_to_corpus(self):
+        for filepair in self.mc.filepairs:
+            shutil.copy(filepair.oldpath, filepair.newpath)
+            new_components = util.split_path(filepair.newpath)
+            new_metadata = xslsetter.MetadataHandler(filepair.newpath + '.xsl',
+                                                     create=True)
+            new_metadata.set_variable('filename', os.path.basename(filepair.oldpath))
+            new_metadata.set_variable('mainlang', new_components.lang)
+            new_metadata.set_variable('genre', new_components.genre)
+            new_metadata.write_file()
+            self.vcs.add([filepair.newpath, filepair.newpath + '.xsl'])
 
     #def add_url_extension(self, content_type):
         #content_type_extension = {
@@ -217,19 +195,20 @@ class AddToCorpus(object):
             #print('Added', self.toname())
             #self.vcs.add(self.toname())
 
-    #def _get_parallels(self):
-        #'''Set all the parallels of the orig file'''
-        #parallels = {}
+    @property
+    def parallels(self):
+        '''Set all the parallels of the orig file'''
+        parallels = {}
 
-        #if self.parallel_file is not None:
-            #parallel_metadata = xslsetter.MetadataHandler(
-                #self.parallel_file + '.xsl')
-            #parallels[self.mainlang] = self.new_filename
-            #parallels[parallel_metadata.get_variable(
-                #'mainlang')] = os.path.basename(self.parallel_file)
-            #parallels.update(parallel_metadata.get_parallel_texts())
+        if self.parallel_file is not None:
+            parallel_metadata = xslsetter.MetadataHandler(
+                self.parallel_file + '.xsl')
+            parallels[self.mainlang] = self.new_filename
+            parallels[parallel_metadata.get_variable(
+                'mainlang')] = os.path.basename(self.parallel_file)
+            parallels.update(parallel_metadata.get_parallel_texts())
 
-        #return parallels
+        return parallels
 
     #def make_metadata_file(self, extra_values):
         #'''Make a metadata file
@@ -276,6 +255,27 @@ class AddToCorpus(object):
                                      #location1 + '.xsl'))
                     #parallel_metadata.set_parallel_text(lang2, location2)
                     #parallel_metadata.write_file()
+
+
+#class AddDirToCorpus(AddToCorpus):
+    #def __init__(self, origdir, corpusdir, mainlang, path):
+        #super(AddDirToCorpus, self).__init(corpusdir, mainlang, path)
+        #if not os.path.isdir(origdir):
+            #raise AdderException('{} '
+                                 #'is not a directory.'.format(origdir))
+        #self.origdir = origdir
+
+    #def add(self):
+        #'''Add the files contained in self.origdir to self.goaldir'''
+        #additions = []
+        #if not os.path.isdir(self.goaldir):
+            #os.makedirs(self.goaldir)
+            #for root, dirs, files in os.walk(self.origdir):
+                #for f in files:
+                    #self.copy_to_corpusdirectory(root, f)
+                    #additions.append(os.path.join(root, f))
+
+        #self.vcs.add(additions)
 
 
 #def gather_files(origs):
