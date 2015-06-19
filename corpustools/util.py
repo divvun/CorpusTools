@@ -75,7 +75,7 @@ def split_path(path):
                 root, rest = p.split(d)
                 return root, module, rest
     # Ensure we have at least one / before module, for safer splitting:
-    abspath = os.path.normpath(os.path.abspath(path)).decode('utf8')
+    abspath = os.path.normpath(os.path.abspath(path))
     root, module, lang_etc = split_on_module(abspath)
     l = lang_etc.split("/")
     lang, genre, subdirs, basename = l[0], l[1], l[2:-1], l[-1]
