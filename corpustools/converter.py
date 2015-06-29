@@ -2515,6 +2515,8 @@ class ConverterManager(object):
                 xsl_file = '{}.xsl'.format(source)
                 if os.path.isfile(xsl_file):
                     self.FILES.append(xsl_file)
+                elif source.endswith('.xsl') and os.path.isfile(source[:-4]):
+                    self.FILES.append(source)
                 else:
                     metadata = xslsetter.MetadataHandler(xsl_file,
                                                          create=True)
