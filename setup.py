@@ -21,6 +21,7 @@ setup(
             'analyse_corpus = corpustools.analyser:main',
             'ccat = corpustools.ccat:main',
             'change_corpus_names = corpustools.namechanger:main',
+            'compare_tmx_goldstandard = corpustools.compare_tmx_goldstandard:main',
             'convert2xml = corpustools.converter:main',
             'generate_anchor_list = corpustools.generate_anchor_list:main',
             'packagetmx = corpustools.packagetmx:main',
@@ -28,7 +29,6 @@ setup(
             'pick_sd_se = corpustools.pick_samediggi_se_docs:main',
             'pytextcat = corpustools.text_cat:main',
             'saami_crawler = corpustools.saami_crawler:main',
-            'test_tmx_goldstandard = corpustools.test_tmx_goldstandard:main',
             'toktmx2tmx = corpustools.toktmx2tmx:main',
         ]
     },
