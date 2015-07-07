@@ -20,7 +20,6 @@
 #
 from __future__ import print_function
 
-import argparse
 import os
 
 from collections import namedtuple
@@ -28,7 +27,6 @@ import hashlib
 import unidecode
 import urllib
 
-from corpustools import argparse_version
 from corpustools import util
 from corpustools import versioncontrol
 from corpustools import xslsetter
@@ -38,11 +36,22 @@ class NamechangerException(Exception):
     pass
 
 
+PathPair = namedtuple('PathPair', 'oldpath newpath')
+
+
 class MovepairComputer(object):
+    '''Compute oldname, newname pairs'''
     def __init__(self):
+        '''filepairs will be a list of PathPairs'''
         self.filepairs = []
 
     def compute_movepairs(self, oldpath, newpath):
+        '''Add the oldpath and the new goalpath to filepairs
+
+        Args:
+            oldpath (unicode): the old path to an original file
+            newpath (unicode): the new path of an original file
+        '''
         normalisedpath = os.path.join(
             os.path.dirname(newpath),
             normalise_filename(os.path.basename(newpath)))
@@ -52,6 +61,12 @@ class MovepairComputer(object):
         self.filepairs.append(PathPair(oldpath, non_dupe_path))
 
     def compute_parallel_movepairs(self, oldpath, newpath):
+        '''Add the parallel files of oldpath to filepairs
+
+        Args:
+            oldpath (unicode): the old path
+            newpath (unicode): the new path
+        '''
         old_components = util.split_path(oldpath)
         new_components = util.split_path(newpath)
 
@@ -140,7 +155,7 @@ class CorpusFileMover(object):
             u'/'.join(self.new_components))
 
     def move_xsl(self):
-        """Move the metadata file"""
+        '''Move the metadata file'''
         self._move(
             u'/'.join((self.old_components.root,
                        self.old_components.module,
@@ -156,7 +171,7 @@ class CorpusFileMover(object):
                        self.new_components.basename + '.xsl')))
 
     def move_prestable_converted(self):
-        """Move the prestable/converted file"""
+        '''Move the prestable/converted file'''
         self._move(
             u'/'.join((self.old_components.root,
                        u'prestable/converted',
@@ -172,7 +187,7 @@ class CorpusFileMover(object):
                        self.new_components.basename + '.xml')))
 
     def move_prestable_tmx(self):
-        """Move the prestable toktmx and tmx files"""
+        '''Move the prestable toktmx and tmx files'''
         for tmx in [u'tmx', u'toktmx']:
             tmxdir = u'/'.join((u'prestable', tmx))
             metadatafile = xslsetter.MetadataHandler(
@@ -286,7 +301,14 @@ class CorpusFilesetMoverAndUpdater(object):
 
 
 def compute_hexdigest(path, blocksize=65536):
-    '''Compute the hexdigest of the file in path'''
+    '''Compute the hexdigest of the file in path
+
+    Args:
+        path: the file to compute the hexdigest of
+
+    Returns:
+        a hexdigest of the file
+    '''
     with open(path, 'rb') as afile:
         hasher = hashlib.md5()
         buf = afile.read(blocksize)
@@ -298,7 +320,7 @@ def compute_hexdigest(path, blocksize=65536):
 
 
 def normalise_filename(filename):
-    """Normalise filename to ascii only
+    '''Normalise filename to ascii only
 
     Downcase filename, replace non-ascii characters with ascii ones and
     remove or replace unwanted characters.
@@ -308,7 +330,7 @@ def normalise_filename(filename):
 
     Returns:
         a downcased string containing only ascii chars
-    """
+    '''
     if type(filename) is not unicode:
         raise NamechangerException('{} is not a unicode string'.format(
             filename))
@@ -388,42 +410,3 @@ def compute_new_basename(oldpath, wanted_path):
             n += 1
 
     return newpath
-
-
-PathPair = namedtuple('PathPair', 'oldpath newpath')
-
-
-def normaliser():
-    '''Normalise the filenames in the corpuses'''
-    for corpus in [os.getenv('GTFREE'), os.getenv('GTBOUND')]:
-        print('Normalising names in {}'.format(corpus))
-        for root, dirs, files in os.walk(os.path.join(corpus, 'orig')):
-            print('\t' + root.replace(corpus, ''))
-            for f in files:
-                if not f.endswith('.xsl'):
-                    try:
-                        cfmu = CorpusFilesetMoverAndUpdater(
-                            os.path.join(root, f).decode('utf8'),
-                            os.path.join(root, f).decode('utf8'))
-                        filepair = cfmu.mc.filepairs[0]
-                        print('\t\tmove {} -> {}'.format(
-                            filepair.oldpath, filepair.newpath))
-                        cfmu.move_files()
-                        cfmu.update_own_metadata()
-                        cfmu.update_parallel_files_metadata()
-                    except UserWarning:
-                        pass
-
-
-def normalise_parse_args():
-    argparse.ArgumentParser(
-        parents=[argparse_version.parser],
-        description='Program to automatically normalise names in '
-        '{} and {}. The filenames are downcases, non ascii characters are '
-        'replaced by ascii ones and some unwanted characters are '
-        'removed'.format(os.getenv('GTFREE'), os.getenv('GTBOUND')))
-
-
-def main():
-    normalise_parse_args()
-    normaliser()

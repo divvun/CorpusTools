@@ -10,6 +10,7 @@ These scripts will be installed
 * [parallelize|CorpusTools.html#parallelize]
 * [saami_crawler|CorpusTools.html#saami_crawler]
 * [generate_anchor_list|CorpusTools.html#generate_anchor_list]
+* [normalise_corpus_names|CorpusTools.html#generate_anchor_list#normalise_corpus_names]
 
 !!Requirements
 
@@ -605,4 +606,20 @@ optional arguments:
   --lang1 LANG1    First languages in the word list
   --lang2 LANG2    Second languages in the word list
   --outdir OUTDIR  The output directory
+}}}
+
+!!normalise_corpus_names
+
+Normalise the filenames of the files found in the freecorpus and boundcorpus
+
+{{{
+usage: normalise_corpus_names [-h] [-v]
+
+Program to automatically normalise names in $GTFREE and $GTBOUND. The
+filenames are downcases, non ascii characters are replaced by ascii ones and
+some unwanted characters are removed
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -v, --version  show program's version number and exit
 }}}
