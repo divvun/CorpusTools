@@ -27,6 +27,7 @@ setup(
             'saami_crawler = corpustools.saami_crawler:main',
             'generate_anchor_list = corpustools.generate_anchor_list:main',
             'pytextcat = corpustools.text_cat:main',
+            'test_tmx_goldstandard = corpustools.test_tmx_goldstandard:main',
         ]
     },
     install_requires=[

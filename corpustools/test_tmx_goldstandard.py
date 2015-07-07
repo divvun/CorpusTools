@@ -195,6 +195,3 @@ def main():
     # Initialize an instance of a tmx test data writer
     tester = TmxGoldstandardTester(paragstestfile)
     tester.runTest()
-
-if __name__ == '__main__':
-    main()
