@@ -190,29 +190,30 @@ class CorpusFileMover(object):
         '''Move the prestable toktmx and tmx files'''
         for tmx in [u'tmx', u'toktmx']:
             tmxdir = u'/'.join((u'prestable', tmx))
-            metadatafile = xslsetter.MetadataHandler(
-                u'/'.join((self.new_components.root,
-                           self.new_components.module,
-                           self.new_components.lang,
-                           self.new_components.genre,
-                           self.new_components.subdirs,
-                           self.new_components.basename + '.xsl')))
-            translated_from = metadatafile.get_variable('translated_from')
-            if translated_from is None or translated_from == u'':
-                for lang in metadatafile.get_parallel_texts().keys():
-                    self._move(
-                        u'/'.join((self.old_components.root, tmxdir,
-                                   self.old_components.lang + u'2' + lang,
-                                   self.old_components.genre,
-                                   self.old_components.subdirs,
-                                   self.old_components.basename + u'.' +
-                                   tmx)),
-                        u'/'.join((self.new_components.root, tmxdir,
-                                   self.new_components.lang + u'2' + lang,
-                                   self.new_components.genre,
-                                   self.new_components.subdirs,
-                                   self.new_components.basename + u'.' +
-                                   tmx)))
+            metadataname = u'/'.join((self.new_components.root,
+                                      self.new_components.module,
+                                      self.new_components.lang,
+                                      self.new_components.genre,
+                                      self.new_components.subdirs,
+                                      self.new_components.basename + '.xsl'))
+            if os.path.isfile(metadataname):
+                metadatafile = xslsetter.MetadataHandler(metadataname)
+                translated_from = metadatafile.get_variable('translated_from')
+                if translated_from is None or translated_from == u'':
+                    for lang in metadatafile.get_parallel_texts().keys():
+                        self._move(
+                            u'/'.join((self.old_components.root, tmxdir,
+                                    self.old_components.lang + u'2' + lang,
+                                    self.old_components.genre,
+                                    self.old_components.subdirs,
+                                    self.old_components.basename + u'.' +
+                                    tmx)),
+                            u'/'.join((self.new_components.root, tmxdir,
+                                    self.new_components.lang + u'2' + lang,
+                                    self.new_components.genre,
+                                    self.new_components.subdirs,
+                                    self.new_components.basename + u'.' +
+                                    tmx)))
 
 
 class CorpusFilesetMoverAndUpdater(object):
@@ -374,7 +375,7 @@ def are_duplicates(oldpath, newpath):
     Returns:
         a boolean indicating if the two files are duplicates
     '''
-    return (os.path.isfile(newpath) and
+    return (os.path.isfile(oldpath) and os.path.isfile(newpath) and
             compute_hexdigest(oldpath) == compute_hexdigest(
                 newpath))
 
