@@ -23,6 +23,7 @@ setup(
             'change_corpus_names = corpustools.namechanger:main',
             'convert2xml = corpustools.converter:main',
             'generate_anchor_list = corpustools.generate_anchor_list:main',
+            'packagetmx = corpustools.packagetmx:main',
             'parallelize = corpustools.parallelize:main',
             'pick_sd_se = corpustools.pick_samediggi_se_docs:main',
             'pytextcat = corpustools.text_cat:main',

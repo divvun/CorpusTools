@@ -1,8 +1,7 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 #
-#   Add tmx files to a zipfile. 
+#   Add tmx files to a zipfile.
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -17,7 +16,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with program. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2012 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2012-2015 Børre Gaup <borre.gaup@uit.no>
 #
 
 import os
@@ -28,8 +27,6 @@ import subprocess
 import time
 import zlib
 
-sys.path.append(os.environ['GTHOME'] + '/gt/script/langTools')
-import parallelize
 
 class PackageTmx:
     """A class to package tmx files into a zip file
@@ -42,12 +39,12 @@ class PackageTmx:
         self.dirname = dirname
         self.zipname = self.dirname + '-' + self.date + '.zip'
         self.zipfile = zipfile.ZipFile(self.zipname, mode='w')
-    
+
     def __del__(self):
         """Close the zipfile"""
         print "All tmx files are in", self.zipname
         self.zipfile.close()
-        
+
     def findTmxFiles(self):
         """
         Find the tmx files in dirname, return them as a list
@@ -62,15 +59,15 @@ class PackageTmx:
         else:
             files = output.split('\n')
             return files[:-1]
-    
+
     def generateFilename(self):
         """Generate a new file name. Return the new filename
         """
         name = self.dirname + '-' + self.date + '-{0:06d}'.format(self.fileId) + '.tmx'
         self.fileId += 1
-        
+
         return name
-    
+
     def writeNewFile(self, tmxFile):
         """Write the file to the zipfile with a new filename
         """
@@ -82,18 +79,15 @@ def parse_options():
     Parse the command line. No arguments expected.
     """
     parser = argparse.ArgumentParser(description = 'Run this to add tmx files to a zip archive. It depends on tmx files to exist in $GTFREE/prestable/tmx.')
-    
+
     args = parser.parse_args()
     return args
 
 def main():
     args = parse_options()
 
-    
+
     for dirname in ['nob2sme']:
         packagetmx = PackageTmx(dirname)
         for filename in packagetmx.findTmxFiles():
             packagetmx.writeNewFile(filename)
-
-if __name__ == '__main__':
-    main()
