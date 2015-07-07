@@ -17,18 +17,18 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2013 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
 #
 
+from __future__ import print_function
 import re
 import sys
 
 from lxml import etree
 
 
-class ErrorMarkup:
-    '''This is a class to convert errormarkuped text to xml
-    '''
+class ErrorMarkup(object):
+    '''This is a class to convert errormarkuped text to xml'''
     def __init__(self, filename):
         self._filename = filename
         self.types = {u"$": u"errorort",
@@ -51,20 +51,18 @@ class ErrorMarkup:
             self.add_error_markup(elt)
 
     def really_add_error_markup(self, element):
-        '''
-        Search for errormarkup in the text and tail of an etree.Element
+        '''Search for errormarkup
+
         If found, replace errormarkuped text with xml
 
         To see examples of what new_content consists of, have a look at the
         test_error_parser* methods
-
         '''
         self.fix_text(element)
         self.fix_tail(element)
 
     def fix_text(self, element):
-        '''Replace the text of an element with errormarkup if possible
-        '''
+        '''Replace the text of an element with errormarkup if possible'''
         new_content = self.error_parser(element.text)
 
         if new_content:
@@ -80,8 +78,7 @@ class ErrorMarkup:
                 new_pos += 1
 
     def fix_tail(self, element):
-        '''Replace the tail of an element with errormarkup if possible
-        '''
+        '''Replace the tail of an element with errormarkup if possible'''
         new_content = self.error_parser(element.tail)
 
         if new_content:
@@ -97,8 +94,9 @@ class ErrorMarkup:
                 new_pos += 1
 
     def error_parser(self, text):
-        '''
-        Parse errormarkup found in text. If any markup is found, return
+        '''Parse errormarkup found in text.
+
+        If any markup is found, return
         a list of elements in elements
 
         result -- contains a list of non-correction/correction parts
@@ -111,7 +109,6 @@ class ErrorMarkup:
 
         If the preceding element in result is not a simple error, it is part of
         nested markup.
-
         '''
 
         if text:
@@ -195,12 +192,14 @@ class ErrorMarkup:
         try:
             inner_element = elements[-1]
         except IndexError:
-            print '\n{}'.format(self._filename)
-            print "Cannot handle:\n{} {}".format(errorstring, correctionstring)
-            print "This is either an error in the markup or an error in the \
-            errormarkup conversion code"
-            print "If the markup is correct, send a report about this error \
-            to borre.gaup@uit.no"
+            print(
+                u'{}\n'
+                u'Cannot handle:\n{} {}\n'
+                u'This is either an error in the markup or an error in the '
+                u'errormarkup conversion code.\n'
+                u'If the markup is correct, send a report about this error to '
+                u'borre.gaup@uit.no'.format(self._filename, errorstring,
+                                            correctionstring))
 
         elements.remove(elements[-1])
         if not self.is_correction(errorstring):
@@ -232,16 +231,17 @@ class ErrorMarkup:
                     try:
                         error_element.insert(0, inner_element)
                     except TypeError as e:
-                        print '\n{}'.format(self._filename)
-                        print str(e)
-                        print u"The program expected an error element, but \
-                        found a string:\n«{}»".format(inner_element)
-                        print u"There is either an error in errormarkup close \
-                        to this sentence"
-                        print u"or the program cannot evaluate a correct \
-                        errormarkup."
-                        print u"If the errormarkup is correct, please report \
-                        about the error to borre.gaup@uit.no"
+                        print(
+                            u'{}\n{}\n'
+                            u'The program expected an error element, but '
+                            u'found a string:\n«{}»\n'
+                            u'There is either an error in the errormarkup '
+                            u'close to this sentence or the program cannot '
+                            u'evaluate a correct errormarkup.\n'
+                            u'If the errormarkup is correct, please report '
+                            u'about the error to borre.gaup@uit.no'.format(
+                                self._filename, e, inner_element),
+                            file=sys.stderr)
 
     def get_text(self, element):
         text = None
@@ -256,7 +256,9 @@ class ErrorMarkup:
         return self.correction_regex.search(expression)
 
     def process_text(self, text):
-        '''Divide the text in to a list consisting of alternate
+        '''Divide the text in to a list
+
+        The list will consist of alternate
         non-correctionstring/correctionstrings
         '''
         result = []
@@ -277,8 +279,7 @@ class ErrorMarkup:
         return result
 
     def process_head(self, text):
-        '''Divide text into text/error parts
-        '''
+        '''Divide text into text/error parts'''
         matches = self.error_regex.search(text)
         text = self.error_regex.sub('', text)
 
@@ -292,7 +293,6 @@ class ErrorMarkup:
 
         error -- is either a string or an etree.Element
         correction -- is a correctionstring
-
         '''
         (fixed_correction, ext_att, att_list) = \
             self.look_for_extended_attributes(
@@ -308,8 +308,7 @@ class ErrorMarkup:
         return error_element
 
     def look_for_extended_attributes(self, correction):
-        '''Extract attributes and correction from a correctionstring
-        '''
+        '''Extract attributes and correction from a correctionstring'''
         ext_att = False
         att_list = None
         if '|' in correction:
@@ -317,7 +316,7 @@ class ErrorMarkup:
             try:
                 (att_list, correction) = correction.split('|')
             except ValueError as e:
-                print >>sys.stderr, (
+                print(
                     u"\n{}\n"
                     u"{}\n"
                     u"Too many | characters inside the correction. «{}»"
@@ -325,7 +324,8 @@ class ErrorMarkup:
                     u"parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?"
                     u"If the errormarkup is correct, send a report about "
                     u"this error to borre.gaup@uit.no".format(
-                        self._filename, str(e), correction))
+                        self._filename, str(e), correction),
+                    file=sys.stderr)
 
         return (correction, ext_att, att_list)
 

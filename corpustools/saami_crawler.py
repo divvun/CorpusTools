@@ -16,15 +16,18 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2013-2014 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
 #
-import os
-import sys
-import re
-import argparse
 
-import requests
+from __future__ import print_function
+
+import argparse
 import lxml.html
+import os
+import re
+import requests
+import sys
+
 
 import argparse_version
 import namechanger
@@ -86,9 +89,8 @@ class SamediggiFiCrawler(object):
             link = self.unvisited_links.pop()
             if link not in self.visited_links:
 
-                print >>sys.stderr
-                print >>sys.stderr, 'Before: unvisited_links',
-                print >>sys.stderr, len(self.unvisited_links)
+                print('\nBefore: unvisited_links', len(self.unvisited_links),
+                      file=sys.stderr)
 
                 try:
                     pages = []
@@ -96,9 +98,9 @@ class SamediggiFiCrawler(object):
                     for lang in self.langs.keys():
                         r = requests.get(link, params={'lang': lang})
                         if len(r.history) > 0:
-                            print 'history', r.history
+                            print('history', r.history)
                         if 'samediggi.fi' not in r.url:
-                            print 'url', r.url
+                            print('url', r.url)
 
                         if ('www.samediggi.fi' in r.url and
                                 r.status_code == requests.codes.ok and
@@ -113,24 +115,25 @@ class SamediggiFiCrawler(object):
                                 'admin/sd/www.samediggi.fi'))
                         else:
                             if 'samediggi.fi' not in r.url:
-                                print >>sys.stderr, (
+                                print(
                                     '\nNot fetching {} which was {}\n'.format(
-                                        r.url, link))
+                                        r.url, link), file=sys.stderr)
 
                     if found_saami:
                         self.save_pages(pages)
                 except UserWarning:
-                    print >>sys.stderr, '{} does not exist'.format(link)
+                    print('{} does not exist'.format(link), file=sys.stderr)
 
-                print >>sys.stderr, ('After: unvisited_links {}\n'.format(
-                    self.unvisited_links))
+                print('After: unvisited_links {}\n'.format(
+                    self.unvisited_links), file=sys.stderr)
 
             self.visited_links.add(link)
-            print >>sys.stderr, 'visited_links {}'.format(
-                len(self.visited_links))
+            print('visited_links {}'.format(
+                len(self.visited_links)), file=sys.stderr)
 
     def invalid_content(self, content):
         '''Return true if the page does not contain the strings
+
         * "Käännöstä ei ole saatavilla"
         * "There are no translations available"
         '''
@@ -190,7 +193,7 @@ class SamediggiFiCrawler(object):
                     other_langs[u'para_{}'.format(langer.mainlang)] = unicode(
                         langer.new_filename)
             adder.make_metadata_file(other_langs)
-        print
+        print()
 
 
 def parse_options():
@@ -211,11 +214,11 @@ def main():
 
     for site in args.sites:
         if site == 'www.samediggi.fi':
-            print 'Will crawl samediggi.fi'
+            print('Will crawl samediggi.fi')
             sc = SamediggiFiCrawler()
             sc.download_pages()
         else:
-            print 'Can not crawl {} yet'.format(site)
+            print('Can not crawl {} yet'.format(site))
 
 
 if __name__ == "__main__":

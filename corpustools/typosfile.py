@@ -17,15 +17,15 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2012-2014 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2012-2015 Børre Gaup <borre.gaup@uit.no>
 #
 
 
-class Typoline:
-    """Class to parse a line of a .typos file
-    """
+class Typoline(object):
+    """Class to parse a line of a .typos file"""
     def __init__(self, typoline):
         """Parse a typoline
+
         A typoline has a number showing frequency of the typo, the typo and
         possibly a correction
         """
@@ -48,8 +48,7 @@ class Typoline:
         return self.correction
 
     def makeTypoline(self):
-        """Make a typoline from the three data parts in this class
-        """
+        """Make a typoline from the three data parts in this class"""
         result = self.typo
         if self.correction and self.correction != self.typo:
             result = '{}\t{}'.format(result, self.correction)
@@ -57,12 +56,12 @@ class Typoline:
         return result
 
 
-class Typos:
-    """A class that reads typos and corrections from a .typos files and
-    stores them in a dict
-    """
+class Typos(object):
+    """A class that reads typos and corrections from a .typos files"""
     def __init__(self, typosfile):
-        """Read typos from typosfile. If a correction exists, insert the typos
+        """Read typos from typosfile.
+
+        If a correction exists, insert the typos
         and corrections into self.typos
         """
         self.typos = {}
@@ -77,6 +76,5 @@ class Typos:
         typofile.close()
 
     def getTypos(self):
-        """Return the typos dict
-        """
+        """Return the typos dict"""
         return self.typos

@@ -173,7 +173,7 @@ class TestAddFileToCorpus(unittest.TestCase):
         atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
 
         atc.copy_file_to_corpus(os.path.join(self.origdirectory,
-                                              u'a.txt'))
+                                             u'a.txt'))
         atc.add_files_to_working_copy()
 
         self.tempdir.check_all(
@@ -303,7 +303,7 @@ class TestAddFileToCorpus(unittest.TestCase):
             atc.copy_file_to_corpus(
                 os.path.join(self.origdirectory, u'd.txt'),
                 parallelpath=os.path.join(self.realcorpusdir,
-                                           'orig/smi/ae/c/o/f.txt'))
+                                          'orig/smi/ae/c/o/f.txt'))
 
     def test_add_file_with_parallel(self):
         atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')

@@ -113,8 +113,8 @@ class AddToCorpus(object):
         ** set the original basename as the filename
         ** set the mainlang
         ** set the genre
-        ** if a parallel file is given, set the parallel info in all the parellel
-        files
+        ** if a parallel file is given, set the parallel info in all the
+        parellel files
         '''
         normalised_path = os.path.join(self.goaldir,
                                        namechanger.normalise_filename(
@@ -127,7 +127,7 @@ class AddToCorpus(object):
             self.additions.append(none_dupe_path)
             new_components = util.split_path(none_dupe_path)
             new_metadata = xslsetter.MetadataHandler(none_dupe_path + '.xsl',
-                                                        create=True)
+                                                     create=True)
             new_metadata.set_variable('filename', os.path.basename(
                 origpath))
             new_metadata.set_variable('mainlang', new_components.lang)
@@ -169,8 +169,8 @@ class AddToCorpus(object):
         '''Add a directory to the corpus
 
         * Recursively walks through the given original directory
-        ** First checks for duplicates, raises an error printing a list of duplicate
-        files if duplicates are found
+        ** First checks for duplicates, raises an error printing a list of
+        duplicate files if duplicates are found
         ** For each file, do the "add file to the corpus" operations (minus the
         parallel info).
         '''
@@ -194,12 +194,11 @@ class AddToCorpus(object):
         results = list(filter(lambda x: len(x) > 1, duplicates.values()))
         if len(results) > 0:
             print(u'Duplicates Found:')
-            print(u'The following files are identical. The name could differ, but the content is identical')
-            print(u'___________________')
+            print(u'___')
             for result in results:
                 for subresult in result:
-                    print(u'\t\t{}'.format(subresult))
-                print(u'___________________')
+                    print(u'\t{}'.format(subresult))
+                print(u'___')
 
             raise AdderException(u'Found duplicates')
 

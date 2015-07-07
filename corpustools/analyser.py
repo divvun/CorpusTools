@@ -16,35 +16,32 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2013 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
 #
 
+from __future__ import print_function
 from __future__ import unicode_literals
 
-'''This class makes a dependency analysis of sma, sme and smj files
-
-The pipeline is:
-ccat <file> | preprocess (with optionally abbr file) |
-lookup <lang dependent files> | lookup2cg |
-vislcg3 <disambiguation files> | vislcg3 <function files |
-vislcg3 <dependency files>
-'''
+import argparse
+import lxml.etree as etree
+import multiprocessing
 import os
 import sys
-import subprocess
-import multiprocessing
-import lxml.etree as etree
-import argparse
 
+import argparse_version
 import ccat
 import parallelize
-import argparse_version
 import util
 
 
 class Analyser(object):
-    '''A class which can analyse giellatekno xml formatted documents
-    using preprocess, lookup, lookup2cg and vislcg3
+    '''This class makes a dependency analysis of sma, sme and smj files
+
+    The pipeline is:
+    ccat <file> | preprocess (with optionally abbr file) |
+    lookup <lang dependent files> | lookup2cg |
+    vislcg3 <disambiguation files> | vislcg3 <function files |
+    vislcg3 <dependency files>
     '''
     def __init__(self, lang,
                  fstkit,
@@ -52,8 +49,7 @@ class Analyser(object):
                  disambiguation_analysis_file,
                  function_analysis_file,
                  dependency_analysis_file):
-        '''Set the files needed by preprocess, lookup and vislcg3
-        '''
+        '''Set the files needed by preprocess, lookup and vislcg3'''
         self.lang = lang
         self.xml_printer = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
         self.fstkit = fstkit
@@ -69,15 +65,13 @@ class Analyser(object):
         self.dependency_analysis_file = dependency_analysis_file
 
     def raise_unless_exists(self, filename):
-        '''Raise an ArgumentError if filename does not exist
-        '''
+        '''Raise an ArgumentError if filename does not exist'''
         if not os.path.exists(filename):
-            raise(util.ArgumentError('ERROR: {} does not exist'.format(filename)))
+            raise(util.ArgumentError('ERROR: {} does not exist'.format(
+                filename)))
 
     def collect_files(self, converted_dirs):
-        '''converted_dirs is a list of directories containing converted
-        xml files
-        '''
+        '''Collect converted files'''
         self.xml_files = []
         for cdir in converted_dirs:
             if os.path.isfile(cdir):
@@ -94,29 +88,26 @@ class Analyser(object):
             self.xml_files.append(
                 unicode(xml_file, sys.getfilesystemencoding()))
         except UnicodeDecodeError:
-                print >>sys.stderr, (
-                    'Could not handle the file name {}'.format(xml_file))
+                print('Could not handle the file name {}'.format(xml_file),
+                      file=sys.stderr)
 
     @staticmethod
     def makedirs(filename):
-        """Make the analysed directory
-        """
+        """Make the analysed directory"""
         try:
             os.makedirs(os.path.dirname(filename))
         except OSError:
             pass
 
     def ccat(self):
-        """Turn an xml formatted file into clean text
-        """
+        """Turn an xml formatted file into clean text"""
         self.xml_printer.parse_file(self.xml_file.get_name())
         text = self.xml_printer.process_file().getvalue()
         if len(text) > 0:
             return text
 
     def run_external_command(self, command, input):
-        '''Run the command with input using subprocess
-        '''
+        '''Run the command with input using subprocess'''
         runner = util.ExternalCommandRunner()
         runner.run(command, to_stdin=input)
         self.check_error(command, runner.stderr)
@@ -125,6 +116,7 @@ class Analyser(object):
 
     def preprocess(self):
         """Runs preprocess on the ccat output.
+
         Returns the output of preprocess
         """
         pre_process_command = util.get_preprocess_command(self.lang)
@@ -135,6 +127,7 @@ class Analyser(object):
 
     def lookup(self):
         """Runs lookup on the preprocess output
+
         Returns the output of preprocess
         """
         lookup_command = ['lookup', '-q', '-flags', 'mbTT', self.fst_file]
@@ -145,6 +138,7 @@ class Analyser(object):
 
     def lookup2cg(self):
         """Runs lookup2cg on the lookup output
+
         Returns the output of lookup2cg
         """
         if self.fstkit == 'hfst':
@@ -203,19 +197,15 @@ class Analyser(object):
                                           self.function_analysis())
 
     def get_disambiguation(self):
-        '''Get the disambiguation analysis
-        '''
+        '''Get the disambiguation analysis'''
         return self.disambiguation
 
     def get_dependency(self):
-        '''Get the dependency analysis
-        '''
+        '''Get the dependency analysis'''
         return self.dependency
 
     def get_analysis_xml(self):
-        '''Replace the body of the converted document with disambiguation
-        and dependency analysis
-        '''
+        '''Insert disambiguation and dependency analysis into the body'''
         body = etree.Element('body')
 
         disambiguation = etree.Element('disambiguation')
@@ -230,16 +220,14 @@ class Analyser(object):
         self.xml_file.set_body(body)
 
     def check_error(self, command, error):
-        '''Print errors
-        '''
+        '''Print errors'''
         if error is not None and len(error) > 0:
-            print >>sys.stderr, self.xml_file.get_name()
-            print >>sys.stderr, command
-            print >>sys.stderr, error
+            print(self.xml_file.get_name(), file=sys.stderr)
+            print(command, file=sys.stderr)
+            print(error, file=sys.stderr)
 
     def analyse(self, xml_file):
-        '''Analyse a file if it is not ocr'ed
-        '''
+        '''Analyse a file if it is not ocr'ed'''
         self.xml_file = parallelize.CorpusXMLFile(xml_file)
         analysis_xml_name = self.xml_file.get_name().replace('converted/',
                                                              'analysed/')
@@ -251,12 +239,11 @@ class Analyser(object):
                 self.get_analysis_xml()
                 self.xml_file.write(analysis_xml_name)
         else:
-            print >>sys.stderr, xml_file, 'is an OCR file and will not be \
-            analysed'
+            print(xml_file, 'is an OCR file and will not be analysed',
+                  file=sys.stderr)
 
     def analyse_in_parallel(self):
-        '''Analyse file in parallel
-        '''
+        '''Analyse file in parallel'''
         pool_size = multiprocessing.cpu_count() * 2
         pool = multiprocessing.Pool(processes=pool_size,)
         pool.map(
@@ -266,10 +253,9 @@ class Analyser(object):
         pool.join()   # wrap up current tasks
 
     def analyse_serially(self):
-        '''Analyse files one by one
-        '''
+        '''Analyse files one by one'''
         for xml_file in self.xml_files:
-            print >>sys.stderr, 'Analysing', xml_file
+            print('Analysing', xml_file, file=sys.stderr)
             self.analyse(xml_file)
 
 
@@ -278,8 +264,7 @@ def unwrap_self_analyse(arg, **kwarg):
 
 
 def parse_options():
-    '''Parse the given options
-    '''
+    '''Parse the given options'''
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
         description='Analyse files found in the given directories \
@@ -297,15 +282,15 @@ def parse_options():
     parser.add_argument('-k', '--fstkit',
                         choices=['hfst', 'xfst'],
                         default='xfst',
-                        help="Finite State Toolkit. Either hfst or xfst (the default).")
+                        help='Finite State Toolkit. '
+                        'Either hfst or xfst (the default).')
 
     args = parser.parse_args()
     return args
 
 
 def main():
-    '''Analyse files in the given directories
-    '''
+    '''Analyse files in the given directories'''
     args = parse_options()
     util.sanity_check(['preprocess', 'lookup2cg', 'lookup', 'vislcg3'])
 
@@ -328,10 +313,9 @@ def main():
                            'gtcore/gtdshared/smi/src/syntax/korp.cg3'),
                        dependency_analysis_file=os.path.join(
                            os.getenv('GTHOME'),
-                           'gtcore/gtdshared/smi/src/syntax/dependency.cg3')
-        )
+                           'gtcore/gtdshared/smi/src/syntax/dependency.cg3'))
     except util.ArgumentError as a:
-        print >>sys.stderr, a.message
+        print(a.message, file=sys.stderr)
         sys.exit(4)
 
     ana.collect_files(args.converted_dirs)
@@ -341,4 +325,5 @@ def main():
         else:
             ana.analyse_in_parallel()
     else:
-        print >>sys.stderr, "Did not find any files in", args.converted_dirs
+        print("Did not find any files in", args.converted_dirs,
+              file=sys.stderr)

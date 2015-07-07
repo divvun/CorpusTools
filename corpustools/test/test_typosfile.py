@@ -16,7 +16,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2012-2014 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2012-2015 Børre Gaup <borre.gaup@uit.no>
 #
 
 import unittest
@@ -25,8 +25,7 @@ from corpustools import typosfile
 
 
 class TestTypoline(unittest.TestCase):
-    """Class to test the typos synchroniser
-    """
+    """Class to test the typos synchroniser"""
     def setUp(self):
         pass
 

@@ -1,18 +1,34 @@
 # -*- coding:utf-8 -*-
 
-from corpustools import ccat
-import unittest
-from lxml import etree
-import io
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this file. If not, see <http://www.gnu.org/licenses/>.
+#
+#   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
+#
+
 import cStringIO
+import io
+from lxml import etree
+import unittest
+
+from corpustools import ccat
 
 
 class TestCcatHyph(unittest.TestCase):
-    '''Test how ccat handles hyph
-    '''
+    '''Test how ccat handles hyph'''
     def test_hyph1(self):
-        '''Test the default treatment of hyph tags
-        '''
+        '''Test the default treatment of hyph tags'''
         xml_printer = ccat.XMLPrinter()
         buffer = cStringIO.StringIO()
         xml_printer.etree = etree.parse(
@@ -26,9 +42,7 @@ class TestCcatHyph(unittest.TestCase):
         self.assertEqual(buffer.getvalue(), 'mellomkrigstiden ¶\n')
 
     def test_hyph2(self):
-        '''Test the treatment of hyph tags when hyph_replacement is
-        set to "xml"
-        '''
+        '''Test hyph tags when hyph_replacement is set to "xml"'''
         xml_printer = ccat.XMLPrinter(hyph_replacement='xml')
         buffer = cStringIO.StringIO()
         xml_printer.etree = etree.parse(
@@ -43,9 +57,7 @@ class TestCcatHyph(unittest.TestCase):
                          'mellom<hyph/>krigs<hyph/>tiden ¶\n')
 
     def test_hyph3(self):
-        '''Test the treatment of hyph tags when hyph_replacement is
-        set to "-"
-        '''
+        '''Test hyph tags when hyph_replacement is set to "-"'''
         xml_printer = ccat.XMLPrinter(hyph_replacement='-')
         buffer = cStringIO.StringIO()
         xml_printer.etree = etree.parse(
@@ -59,8 +71,7 @@ class TestCcatHyph(unittest.TestCase):
         self.assertEqual(buffer.getvalue(), 'mellom-krigs-tiden ¶\n')
 
     def test_hyph4(self):
-        '''Test the treatment of two hyph tags in a row"
-        '''
+        '''Test the treatment of two hyph tags in a row'''
         xml_printer = ccat.XMLPrinter(hyph_replacement='-')
         buffer = cStringIO.StringIO()
 
@@ -75,9 +86,7 @@ class TestCcatHyph(unittest.TestCase):
         self.assertEqual(buffer.getvalue(), 'mellom-tiden ¶\n')
 
     def test_hyph5(self):
-        '''Test the treatment of hyph tags when hyph_replacement is
-        set to None
-        '''
+        '''Test hyph tags when hyph_replacement is set to None'''
         xml_printer = ccat.XMLPrinter(hyph_replacement=None)
         buffer = cStringIO.StringIO()
         xml_printer.etree = etree.parse(
@@ -92,11 +101,9 @@ class TestCcatHyph(unittest.TestCase):
 
 
 class TestCcatErrormarkup(unittest.TestCase):
-    '''Test how ccat handles errormarkup
-    '''
+    '''Test how ccat handles errormarkup'''
     def test_single_error_inline(self):
-        '''Plain error element, default text flow
-        '''
+        '''Plain error element, default text flow'''
         xml_printer = ccat.XMLPrinter()
         input_error = etree.fromstring(
             '<errorortreal correct="fiskeleting" errtype="nosplit" pos="noun">'
@@ -109,8 +116,7 @@ class TestCcatErrormarkup(unittest.TestCase):
         self.assertEqual('\n'.join(textlist), 'fiskeleting')
 
     def test_single_error_not_inline(self):
-        '''Plain error element, one word per line output
-        '''
+        '''Plain error element, one word per line output'''
         xml_printer = ccat.XMLPrinter()
         input_error = etree.fromstring(
             '<errorortreal correct="fiskeleting" errtype="nosplit" pos="noun">'
@@ -124,8 +130,7 @@ class TestCcatErrormarkup(unittest.TestCase):
             'fiske leting\tfiskeleting\t#errtype=nosplit,pos=noun'))
 
     def test_single_error_not_inline_with_filename(self):
-        '''Plain error element, one word per line output, with filename
-        '''
+        '''Plain error element, one word per line output, with filename'''
         xml_printer = ccat.XMLPrinter(print_filename=True)
         input_error = etree.fromstring(
             '<errorortreal correct="fiskeleting" errtype="nosplit" pos="noun">'
@@ -142,9 +147,6 @@ class TestCcatErrormarkup(unittest.TestCase):
             '\t#errtype=nosplit,pos=noun, file: p.xml'))
 
     def test_single_error_not_inline_with_filename_without_attributes(self):
-        '''Plain error element, one word per line output, with filename,
-        only correct attribute
-        '''
         xml_printer = ccat.XMLPrinter(print_filename=True)
         input_error = etree.fromstring(
             '<errorortreal correct="fiskeleting">'
@@ -160,8 +162,7 @@ class TestCcatErrormarkup(unittest.TestCase):
                          'fiske leting\tfiskeleting\t#file: p.xml')
 
     def test_multi_error_in_line(self):
-        '''Nested error element, default text flow
-        '''
+        '''Nested error element, default text flow'''
         xml_printer = ccat.XMLPrinter()
 
         input_error = etree.fromstring(
@@ -180,8 +181,7 @@ class TestCcatErrormarkup(unittest.TestCase):
                          u'skoledagene er så vanskelige')
 
     def test_multi_errormorphsyn_not_inline_with_filename(self):
-        '''Nested error element, one word per line output, with filename
-        '''
+        '''Nested error element, one word per line output, with filename'''
         input_error = etree.fromstring(
             '<errormorphsyn cat="x" const="spred" '
             'correct="skoledagene er så vanskelige" errtype="agr" orig="x" '
@@ -205,8 +205,7 @@ class TestCcatErrormarkup(unittest.TestCase):
             'vanskerlig\tvanskelig\t#errtype=nosilent,pos=adj, file: p.xml'))
 
     def test_multi_errorlex_not_inline(self):
-        '''Nested error element, one word per line output
-        '''
+        '''Nested error element, one word per line output'''
         input_error = etree.fromstring(
             '<errorlex correct="man soga">'
             '    <errorort correct="makkár" errtype="á" pos="interr">'
@@ -225,8 +224,7 @@ class TestCcatErrormarkup(unittest.TestCase):
 
 class TestCcat(unittest.TestCase):
     def test_p(self):
-        '''Test the output of a plain p with default text flow
-        '''
+        '''Test the output of a plain p with default text flow'''
         xml_printer = ccat.XMLPrinter()
         buffer = cStringIO.StringIO()
         input_p = etree.fromstring(
@@ -239,9 +237,7 @@ class TestCcat(unittest.TestCase):
             'Litt om Norge i mellomkrigstiden ¶\n'))
 
     def test_p_with_span(self):
-        '''Test the output of a plain p with a span element with default
-        text flow
-        '''
+        '''The output of a plain p with a span element'''
         xml_printer = ccat.XMLPrinter()
         buffer = cStringIO.StringIO()
 
@@ -257,9 +253,7 @@ class TestCcat(unittest.TestCase):
                          'I 1864 ga han ut boka "Fornuftigt Madstel" . ¶\n')
 
     def test_p_with_error(self):
-        '''Test the output of a p containing a nested error element,
-        with default text flow
-        '''
+        '''The output of a p containing a nested error element'''
         xml_printer = ccat.XMLPrinter()
         buffer = cStringIO.StringIO()
 
@@ -284,8 +278,7 @@ class TestCcat(unittest.TestCase):
                          "Bearpmahat earuha uskki ja loaiddu. ¶\n")
 
     def test_p_one_word_per_line(self):
-        '''Test the output of a plain p element, one word per line
-        '''
+        '''Test the output of a plain p element, one word per line'''
         input_p = etree.fromstring(
             '<p>Et stykke av Norge som er lite kjent - '
             'Litt om Norge i mellomkrigstiden</p>')
@@ -312,8 +305,9 @@ class TestCcat(unittest.TestCase):
             'mellomkrigstiden\n'))
 
     def test_p_with_span_one_word_per_line(self):
-        '''Test the output a plain p that contains a spen element,
-        one word per line
+        '''Output a plain p that contains a span element
+
+        one_word_per-line is True
         '''
         input_p = etree.fromstring(
             '<p>I 1864 ga han ut boka '
@@ -338,9 +332,6 @@ class TestCcat(unittest.TestCase):
             '.\n'))
 
     def test_p_with_error_one_word_per_line(self):
-        '''Test the output of a p element containing one plain and one
-        nested error element
-        '''
         input_p = etree.fromstring(
             '<p>livččii'
             '    <errorort correct="makkárge" errtype="á" pos="adv">'
@@ -368,10 +359,7 @@ class TestCcat(unittest.TestCase):
             'makkar\tmakkár\t#errtype=á,pos=interr\nsoga\nsii\n'))
 
     def test_p_with_error_correction(self):
-        '''Test the output of a plain p element containing two error elements,
-        one plain and one nested, when we want to print the corrections in the
-        error elements, with default text flow
-        '''
+        '''correction = True, print all corrections'''
         input_p = etree.fromstring(
             '<p>livččii'
             '    <errorort correct="makkárge" errtype="á" pos="adv">'
@@ -396,9 +384,7 @@ class TestCcat(unittest.TestCase):
             'man soga sii ¶\n'))
 
     def test_p_with_error_filtering_errorlex(self):
-        '''Test the output of plain p, when we only want the correction
-        from the errorlex element, with the default text flow
-        '''
+        '''errorlex = True, print errorlex corrections'''
         input_p = etree.fromstring(
             '<p>livččii'
             '    <errorort correct="makkárge" errtype="á" pos="adv">'
@@ -423,9 +409,7 @@ class TestCcat(unittest.TestCase):
             'man soga sii ¶\n'))
 
     def test_p_with_error_filtering_errormorphsyn(self):
-        '''Test the output of a p element containing two error elements
-        that are not affected by the error filtering, with default text flow.
-        '''
+        '''errormorphsyn = True, print errormorphsyn corrections'''
         input_p = etree.fromstring(
             '<p>livččii'
             '    <errorort correct="makkárge" errtype="á" pos="adv">'
@@ -450,10 +434,7 @@ class TestCcat(unittest.TestCase):
             'makkar soga sii ¶\n'))
 
     def test_p_with_error_filtering_errorort(self):
-        '''Test the output of a p element with two error elements,
-        where errorort filtering is on. That is the correct attributes of
-        the errorort elements should be printed instead of errorort.text.
-        '''
+        '''errorort = True, print errorort corrections'''
         xml_printer = ccat.XMLPrinter(errorort=True)
 
         input_p = etree.fromstring(
@@ -478,8 +459,6 @@ class TestCcat(unittest.TestCase):
             'makkár soga sii ¶\n'))
 
     def test_p_with_error_filtering_errorortreal(self):
-        '''
-        '''
         xml_printer = ccat.XMLPrinter(errorortreal=True)
 
         input_p = etree.fromstring(
@@ -504,9 +483,7 @@ class TestCcat(unittest.TestCase):
             'makkar soga sii ¶\n'))
 
     def test_visit_this_p_default(self):
-        '''Check that only plain p elements and p elements where the
-        type attribute is text is visited
-        '''
+        '''Visit only plain p and <p type=text> elements'''
         xml_printer = ccat.XMLPrinter()
 
         for types in [' type="title"',
@@ -521,9 +498,7 @@ class TestCcat(unittest.TestCase):
             self.assertTrue(xml_printer.visit_this_node(input_xml))
 
     def test_visit_this_p_title_set(self):
-        '''Check that only p elements where the
-        type attribute is title is visited, when the title option is True
-        '''
+        '''Visit only <p type=title> elements when title is True'''
         xml_printer = ccat.XMLPrinter(title=True)
 
         for types in ['',
@@ -538,9 +513,7 @@ class TestCcat(unittest.TestCase):
             self.assertTrue(xml_printer.visit_this_node(input_xml))
 
     def test_visit_this_p_listitem_set(self):
-        '''Check that only p elements where the
-        type attribute is listitem is visited, when the listitem option is True
-        '''
+        '''Visit only <p type=listitem> elements when listitem is True'''
         xml_printer = ccat.XMLPrinter(listitem=True)
 
         for types in ['',
@@ -555,10 +528,7 @@ class TestCcat(unittest.TestCase):
             self.assertTrue(xml_printer.visit_this_node(input_xml))
 
     def test_visit_this_p_tablecell_set(self):
-        '''Check that only p elements where the
-        type attribute is tablecess is visited, when the table option is
-        True
-        '''
+        '''Visit only <p type=tablecell> elements when table is True'''
         xml_printer = ccat.XMLPrinter(table=True)
 
         for types in ['',
@@ -573,9 +543,7 @@ class TestCcat(unittest.TestCase):
             self.assertTrue(xml_printer.visit_this_node(input_xml))
 
     def test_visit_this_p_allp_set(self):
-        '''Check that all p elements are visited when the
-        all_paragraphs option is True
-        '''
+        '''Visit all p elements when all_paragraphs is True'''
         xml_printer = ccat.XMLPrinter(all_paragraphs=True)
 
         for types in ['',
@@ -587,7 +555,9 @@ class TestCcat(unittest.TestCase):
             self.assertTrue(xml_printer.visit_this_node(input_xml))
 
     def test_process_file_default(self):
-        '''Check the output of plain p elements, with default settings
+        '''Default settings, print content of p elements
+
+        Check the output of plain p elements, with default settings
         Specifically, check that only plain p gets output, whereas
         p elements with the type title, listitem and tablecell get no output.
         '''
@@ -615,9 +585,7 @@ class TestCcat(unittest.TestCase):
             self.assertEqual(buffer.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
     def test_process_file_title_set(self):
-        '''When the title option is True, check that only p elements with
-        type=title gets output.
-        '''
+        '''Print only content of p elements with type=title.'''
         xml_printer = ccat.XMLPrinter(title=True)
 
         for types in ['',
@@ -642,9 +610,7 @@ class TestCcat(unittest.TestCase):
             self.assertEqual(buffer.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
     def test_process_file_listitem_set(self):
-        '''When the listitem option is True, check that only p elements with
-        type=listitem gets output.
-        '''
+        '''Print only content of p elements with type=listitem.'''
         xml_printer = ccat.XMLPrinter(listitem=True)
 
         for types in ['',
@@ -669,9 +635,7 @@ class TestCcat(unittest.TestCase):
             self.assertEqual(buffer.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
     def test_process_file_tablecell_set(self):
-        '''When the table option is True, check that only p elements with
-        type=title gets output.
-        '''
+        '''Print only content of p elements with type=title gets output.'''
         xml_printer = ccat.XMLPrinter(table=True)
 
         for types in ['',
@@ -696,9 +660,7 @@ class TestCcat(unittest.TestCase):
             self.assertEqual(buffer.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
     def test_process_file_allp_set(self):
-        '''When the all_paragraphs option is True, check that all p elements
-        get output.
-        '''
+        '''all_paragraphs option is True, all p elements get output.'''
         xml_printer = ccat.XMLPrinter(all_paragraphs=True)
 
         for types in ['',
@@ -715,7 +677,9 @@ class TestCcat(unittest.TestCase):
             self.assertEqual(buffer.getvalue(), 'ášŧŋđžčøåæ ¶\n')
 
     def test_process_file_one_word_per_line_errorlex(self):
-        '''Check the output of a p element containing two error elements,
+        '''Print only errorlex content
+
+        Check the output of a p element containing two error elements,
         a plain errorort one, and a nested errorlex one when
         the one_word_per_line and errorlex options are True.
         '''
@@ -758,7 +722,9 @@ class TestCcat(unittest.TestCase):
             'sii\n'))
 
     def test_process_file_one_word_per_line_errorort(self):
-        '''Check the output of a p element containing two error elements,
+        '''Print only errorort content
+
+        Check the output of a p element containing two error elements,
         a plain errorort one, and a nested errorlex one when
         the one_word_per_line and errorort options are True
         '''
@@ -802,7 +768,9 @@ class TestCcat(unittest.TestCase):
             'sii\n'))
 
     def test_process_file_typos(self):
-        '''Check the output of a p element containing two error elements,
+        '''Print all error content
+
+        Check the output of a p element containing two error elements,
         a plain errorort one, and a nested errorlex one when
         the typos option True
         '''
@@ -838,7 +806,9 @@ class TestCcat(unittest.TestCase):
             'makkar\tmakkár\t#errtype=á,pos=interr\n'))
 
     def test_process_file_typos_errorlex(self):
-        '''Check the output of a p element containing two error elements,
+        '''Print only errorlex content
+
+        Check the output of a p element containing two error elements,
         a plain errorort one, and a nested errorlex one when
         the typos and errorlex options are True
         '''
@@ -872,7 +842,9 @@ class TestCcat(unittest.TestCase):
                          'makkár soga\tman soga\n')
 
     def test_process_file_typos_errorort(self):
-        '''Check the output of a p element containing two error elements,
+        '''Print only errorort content
+
+        Check the output of a p element containing two error elements,
         a plain errorort one, and a nested errorlex one when
         the one_word_per_line, typos and errorort options are True
         '''
@@ -909,8 +881,7 @@ class TestCcat(unittest.TestCase):
             'makkar\tmakkár\t#errtype=á,pos=interr\n'))
 
     def test_get_lang(self):
-        '''Check that get_lang finds the main lang of the document
-        '''
+        '''Check that get_lang finds the main lang of the document'''
         xml_printer = ccat.XMLPrinter()
         xml_printer.etree = etree.parse(io.BytesIO(
             '<document id="no_id" xml:lang="sme"/>'))
@@ -918,10 +889,7 @@ class TestCcat(unittest.TestCase):
         self.assertEqual(xml_printer.get_lang(),  'sme')
 
     def test_get_element_language_same_as_parent(self):
-        '''Check that get_element_language returns the same language as the
-        main lang of the document when the xml:lang is not set in the p
-        element.
-        '''
+        '''xml:lang is not set in the p element. Return parent language.'''
         xml_printer = ccat.XMLPrinter()
 
         element = etree.fromstring('<p/>')
@@ -929,8 +897,7 @@ class TestCcat(unittest.TestCase):
                          'sme')
 
     def test_get_element_language_different_from_parent(self):
-        '''Check that the value of xml:lang is returned when it is set.
-        '''
+        '''Check that the value of xml:lang is returned when it is set.'''
         xml_printer = ccat.XMLPrinter()
 
         element = etree.fromstring('<p xml:lang="nob"/>')
@@ -938,9 +905,7 @@ class TestCcat(unittest.TestCase):
                          'nob')
 
     def test_process_file_language_nob(self):
-        '''Check that only content with the same language as the lang
-        options is output
-        '''
+        '''lang=nob, only nob content should be output'''
         xml_printer = ccat.XMLPrinter(lang='nob')
         xml_printer.etree = etree.parse(
             io.BytesIO(
@@ -960,9 +925,7 @@ class TestCcat(unittest.TestCase):
         self.assertEqual(buffer.getvalue(), 'nob1 nob2 ¶\n')
 
     def test_process_file_language_dan(self):
-        '''Check that only content with the same language as the lang
-        options is output
-        '''
+        '''lang=dan, only dan content should be output'''
         xml_printer = ccat.XMLPrinter(lang='dan')
         xml_printer.etree = etree.parse(
             io.BytesIO(
@@ -982,9 +945,7 @@ class TestCcat(unittest.TestCase):
         self.assertEqual(buffer.getvalue(), 'dan1 ¶\n')
 
     def test_process_two_paragraphs(self):
-        '''Check that the ¶ character is printed out when the content of
-        a p is output
-        '''
+        '''Check that the ¶ character is printed'''
         xml_printer = ccat.XMLPrinter()
         xml_printer.etree = etree.parse(
             io.BytesIO(
@@ -1003,7 +964,9 @@ class TestCcat(unittest.TestCase):
         self.assertEqual(buffer.getvalue(), 'nob1 ¶\nnob2 ¶\n')
 
     def test_process_minus_l_sme(self):
-        '''Check that nothing is output when the wanted language
+        '''lang=sme, no elements are sme
+
+        Check that nothing is output when the wanted language
         (set in the lang option) is not the same language as any of the
         content of the elements.
         '''
@@ -1034,7 +997,8 @@ class TestCcat(unittest.TestCase):
 
     def test_foreign(self):
         '''Check the output of a p containing an errorlang element
-        when the errorlang option is True.
+
+        The errorlang option is True.
         '''
         xml_printer = ccat.XMLPrinter(errorlang=True)
         xml_printer.etree = etree.parse(
@@ -1062,9 +1026,10 @@ class TestCcat(unittest.TestCase):
             'Vijmak bierjjedak! nor vijmak de bierjjedak sjattáj . ¶\n'))
 
     def test_no_foreign(self):
-        '''When the noforeign option is True, neither the errorlang.text
-        nor the correct attribute should be output. Check that this really
-        happens.
+        '''noforeign option is True
+
+        Neither the errorlang.text nor the correct attribute should be output.
+        Check that this really happens.
         '''
         xml_printer = ccat.XMLPrinter(noforeign=True)
         xml_printer.etree = etree.parse(
@@ -1092,7 +1057,9 @@ class TestCcat(unittest.TestCase):
             'Vijmak bierjjedak! vijmak de bierjjedak sjattáj . ¶\n'))
 
     def test_no_foreign_typos(self):
-        '''When the noforeign option is True, neither the errorlang.text
+        '''noforeign is True, typos is True
+
+        When the noforeign option is True, neither the errorlang.text
         nor the correct attribute should be output. Check that this really
         happens even when the typos option is set.
         '''
@@ -1122,8 +1089,9 @@ class TestCcat(unittest.TestCase):
                          'sjattáj\tsjattaj\t#errorinfo=vowlat,á-a\n')
 
     def test_typos_errordepth3(self):
-        '''Check the output of a p containing a nested error element of
-        depth 3 when the typos option is True.
+        '''Check the output of a p containing a nested error element
+
+        typos option is True, depth is 3
         '''
         xml_printer = ccat.XMLPrinter(typos=True)
         xml_printer.etree = etree.parse(
@@ -1162,7 +1130,9 @@ class TestCcat(unittest.TestCase):
                 'čoaggen\tčoggen\t#errtype=mono,pos=verb\n'))
 
     def test_typos_errormorphsyn_twice(self):
-        '''Check the output of a plain p containing a doubly nested
+        '''Check the output of a plain p
+
+        The p contains a doubly nested
         errormorphsyn element when the typos and errormorphsyn
         options are True
         '''
@@ -1195,8 +1165,7 @@ class TestCcat(unittest.TestCase):
             '\t#cat=nomsg,const=spred,errtype=case,orig=gensg,pos=n\n'))
 
     def test_process_file1(self):
-        '''Test process_file with a disambiguation element as input
-        '''
+        '''Test process_file with a disambiguation element as input'''
         xml_printer = ccat.XMLPrinter(disambiguation=True)
         xml_printer.etree = etree.parse(
             io.BytesIO(
@@ -1235,8 +1204,7 @@ class TestCcat(unittest.TestCase):
             '\t"." CLB\n\n"<¶>"\n\t"¶" CLB\n\n'))
 
     def test_process_file2(self):
-        '''Test process_file with a dependency element as input
-        '''
+        '''Test process_file with a dependency element as input'''
         xml_printer = ccat.XMLPrinter(dependency=True)
         xml_printer.etree = etree.parse(
             io.BytesIO(

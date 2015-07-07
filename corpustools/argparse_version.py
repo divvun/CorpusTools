@@ -16,11 +16,11 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2013-2014 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
 #
 
-import os
 import argparse
+import os
 
 
 here = os.path.dirname(__file__)

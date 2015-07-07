@@ -21,11 +21,11 @@
 
 from __future__ import unicode_literals
 
+import doctest
+from lxml import doctestcompare
+from lxml import etree
 import os
 import unittest
-import doctest
-from lxml import etree
-from lxml import doctestcompare
 
 from corpustools import analyser
 from corpustools import parallelize
@@ -49,8 +49,7 @@ class TestAnalyser(unittest.TestCase):
             os.path.join(here, 'smefile.xml'))
 
     def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
+        """Check if two stringified xml snippets are equal"""
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(want, got, 0):
             message = checker.output_difference(
@@ -63,17 +62,15 @@ class TestAnalyser(unittest.TestCase):
 
     def test_raise_on_bad_file(self):
         with self.assertRaises(util.ArgumentError):
-            analyser.Analyser('sme',
-                              'xfst',
-                              fst_file=os.path.join(here, 'notafile'),
-                              disambiguation_analysis_file=os.path.join(here,
-                                                                        'notafile'),
-                              function_analysis_file=os.path.join(here, 'notafile'),
-                              dependency_analysis_file=os.path.join(here, 'notafile'))
+            analyser.Analyser(
+                'sme', 'xfst',
+                fst_file=os.path.join(here, 'notafile'),
+                disambiguation_analysis_file=os.path.join(here, 'notafile'),
+                function_analysis_file=os.path.join(here, 'notafile'),
+                dependency_analysis_file=os.path.join(here, 'notafile'))
 
     def test_sme_ccat_output(self):
-        """Test if the ccat output is what we expect it to be
-        """
+        """Test if the ccat output is what we expect it to be"""
         got = self.a.ccat()
         want = (
             'Muhto gaskkohagaid, ja erenoamážit dalle go lei buolaš, '
@@ -82,8 +79,7 @@ class TestAnalyser(unittest.TestCase):
         self.assertEqual(got, want.encode('utf8'))
 
     def test_sme_preprocess_output(self):
-        """Test if the preprocess output is what we expect it to be
-        """
+        """Test if the preprocess output is what we expect it to be"""
         got = self.a.preprocess()
         want = (
             'Muhto\ngaskkohagaid\n,\nja\nerenoamážit\ndalle go\nlei\n'
@@ -92,8 +88,7 @@ class TestAnalyser(unittest.TestCase):
         self.assertEqual(got, want.encode('utf8'))
 
     def test_sme_disambiguation_output(self):
-        """Check if disambiguation analysis gives the expected output
-        """
+        """Check if disambiguation analysis gives the expected output"""
         self.a.disambiguation_analysis()
         got = self.a.get_disambiguation()
         want = (
@@ -112,8 +107,7 @@ class TestAnalyser(unittest.TestCase):
         self.assertEqual(got, want.encode('utf8'))
 
     def test_sme_dependency_output(self):
-        """Check if disambiguation analysis gives the expected output
-        """
+        """Check if disambiguation analysis gives the expected output"""
         self.a.dependency_analysis()
         got = self.a.get_dependency()
         want = (
@@ -133,8 +127,7 @@ class TestAnalyser(unittest.TestCase):
         self.assertEqual(got, want.encode('utf8'))
 
     def test_analysisXml(self):
-        """Check if the xml is what it is supposed to be
-        """
+        """Check if the xml is what it is supposed to be"""
         self.a.dependency_analysis()
         self.a.get_analysis_xml()
         got = self.a.xml_file.get_etree()

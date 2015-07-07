@@ -1,9 +1,30 @@
 # -*- coding: utf-8 -*-
 
-import unittest
-from lxml import etree
+#
+#   This file contains routines to change names of corpus files
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this file. If not, see <http://www.gnu.org/licenses/>.
+#
+#   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
+#
+
+from __future__ import print_function
+
 import doctest
 import lxml.doctestcompare as doctestcompare
+from lxml import etree
+import unittest
 
 from corpustools import errormarkup
 
@@ -13,8 +34,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.em = errormarkup.ErrorMarkup('testfilename')
 
     def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
+        """Check if two stringified xml snippets are equal"""
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(want, got, 0):
             message = checker.output_difference(
@@ -368,8 +388,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertEqual(got, want)
 
     def test_place_error_elements_before_old_element1(self):
-        '''Test if errorlements are inserted before the span element.
-        '''
+        '''Test if errorlements are inserted before the span element.'''
         in_elem = etree.fromstring(
             '<p>buvttadeaddji Anstein Mikkelsens$(typo|Mikkelsen) lea '
             'ráhkadan. bálkkášumi$(vowlat,á-a|bálkkašumi) miessemánu. <span '
@@ -387,8 +406,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertEqual(got, want)
 
     def test_place_error_elements_before_old_element2(self):
-        '''Test if errorlements are inserted before the span element.
-        '''
+        '''Test if errorlements are inserted before the span element.'''
         in_elem = etree.fromstring(
             '<p>Mikkelsens$(typo|Mikkelsen) lea ráhkadan. bálkkášumi$(vowlat,'
             'á-a|bálkkašumi) miessemánu. <span type="quote" xml:lang="eng">'
@@ -422,6 +440,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_place_error_element_before_and_after_old_element(self):
         '''The input:
+
         buvttadeaddji Anstein Mikkelsens$(typo|Mikkelsen) lea ráhkadan.
         «Best Shorts Competition» bálkkášumi$(vowlat,á-a|bálkkašumi)
         miessemánu.
@@ -452,6 +471,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_add_error_markup3Levels(self):
         '''The input:
+
         buvttadeaddji Anstein Mikkelsens$(typo|Mikkelsen) lea ráhkadan.
         «Best Shorts Competition» bálkkášumi$(vowlat,á-a|bálkkašumi)
         miessemánu.
@@ -918,7 +938,7 @@ class TestErrorMarkup(unittest.TestCase):
                 u'¢(noun,mix|epoksylim)',
                 u' med god kvalitet.']
 
-        print self.em.process_text(text)
+        print(self.em.process_text(text))
         self.assertEqual(self.em.process_text(text), want)
 
     def test_is_correction1(self):

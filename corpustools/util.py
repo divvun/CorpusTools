@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+#
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -14,7 +15,7 @@
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
 #   Copyright 2014-2015 Kevin Brubeck Unhammer <unhammer@fsfe.org>
-#   Copyright 2015 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2014-2015 Børre Gaup <borre.gaup@uit.no>
 #
 
 from __future__ import unicode_literals
@@ -26,7 +27,7 @@ import operator
 import os
 import platform
 import subprocess
-import sys
+
 
 PathComponents = namedtuple('PathComponents',
                             'root module lang genre subdirs basename')

@@ -17,8 +17,11 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2012-2014 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2012-2015 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2014-2015 Kevin Brubeck Unhammer <unhammer@fsfe.org>
 #
+
+from __future__ import print_function
 
 import argparse
 import codecs
@@ -36,6 +39,7 @@ from lxml.html import clean
 from lxml.html import html5parser
 from pyth.plugins.rtf15.reader import Rtf15Reader
 from pyth.plugins.xhtml.writer import XHTMLWriter
+
 try:
     from pydocx.export import PyDocXHTMLExporter as Docx2Html
 except ImportError:
@@ -210,8 +214,8 @@ class Converter(object):
         badhex = badstring.encode('hex')
         repl = self.mixed_to_unicode.get(badhex, u'\ufffd')
         if repl == u'\ufffd':   # � unicode REPLACEMENT CHARACTER
-            print "Skipped bad byte \\x{}, seen in {}".format(
-                badhex, self.orig)
+            print("Skipped bad byte \\x{}, seen in {}".format(
+                badhex, self.orig))
         return repl, (decode_error.start + len(repl))
 
     def replace_bad_unicode(self, content):
@@ -235,7 +239,9 @@ class Converter(object):
         return util.replace_all(replacements, content)
 
     def make_complete(self, languageGuesser):
-        '''Combine the intermediate giellatekno xml file and the metadata into
+        '''Make a complete giellatekno xml file
+
+        Combine the intermediate giellatekno xml file and the metadata into
         a complete giellatekno xml file.
         Fix the character encoding
         Detect the languages in the xml file
@@ -269,7 +275,7 @@ class Converter(object):
                                                        encoding='utf8',
                                                        pretty_print='True'))
                 else:
-                    print >>sys.stderr, self.orig, "has no text"
+                    print(self.orig, "has no text", file=sys.stderr)
 
     def makedirs(self):
         '''Make the converted directory.'''
@@ -342,8 +348,8 @@ class Converter(object):
 
         if runner.returncode != 0:
             with open(self.logfile, 'w') as logfile:
-                print >>logfile, 'stdout\n{}\n'.format(runner.stdout)
-                print >>logfile, 'stderr\n{}\n'.format(runner.stderr)
+                print('stdout\n{}\n'.format(runner.stdout), file=logfile)
+                print('stderr\n{}\n'.format(runner.stderr), file=logfile)
                 raise ConversionException(
                     '{} failed. More info in the log file: {}'.format(
                         command[0], self.logfile))
@@ -662,9 +668,9 @@ class PDF2XMLConverter(Converter):
 
         command = ['pdftohtml', '-hidden', '-enc', 'UTF-8', '-stdout',
                    '-nodrm', '-i', '-xml', self.orig]
-        pdf_content = self.replace_ligatures(self.strip_chars(self.extract_text(command)))
-        #with open('/tmp/pdf.xml', 'w') as uff:
-            #print >>uff, pdf_content
+        pdf_content = self.replace_ligatures(self.strip_chars(
+            self.extract_text(command)))
+
         try:
             root_element = etree.fromstring(pdf_content)
         except etree.XMLSyntaxError as e:
@@ -1196,11 +1202,7 @@ class HTMLContentConverter(Converter):
         superclean = cleaner.clean_html(semiclean)
 
         self.soup = html5parser.document_fromstring(superclean)
-
         self.convert2xhtml()
-        #with open('{}.huff.xml'.format(self.orig), 'wb') as huff:
-            #util.print_element(self.soup, 0, 2, huff)
-
         self.converter_xsl = os.path.join(here, 'xslt/xhtml2corpus.xsl')
 
     def remove_cruft(self, content):
@@ -1232,7 +1234,7 @@ class HTMLContentConverter(Converter):
             except UnicodeDecodeError as e:
                 if source == 'xsl':
                     with open('{}.log'.format(self.orig), 'w') as f:
-                        print >>f, util.lineno(), str(e), self.orig
+                        print(util.lineno(), str(e), self.orig, file=f)
                     raise ConversionException(
                         'The text_encoding specified in {} lead to decoding '
                         'errors, please fix the XSL'.format(self.md.filename))
@@ -1277,8 +1279,8 @@ class HTMLContentConverter(Converter):
             if encoding in encoding_norm:
                 encoding = encoding_norm[encoding]
             else:
-                print >>sys.stderr, "Unusual encoding found in {} {}: {}".format(
-                    self.orig, source, encoding)
+                print("Unusual encoding found in {} {}: {}".format(
+                    self.orig, source, encoding), file=sys.stderr)
 
         return encoding
 
@@ -1301,7 +1303,8 @@ class HTMLContentConverter(Converter):
         return encoding, source
 
     def remove_declared_encoding(self, content):
-        '''
+        '''Remove declared decoding
+
         lxml explodes if we send a decoded Unicode string with an
         xml-declared encoding
         http://lxml.de/parsing.html#python-unicode-strings
@@ -1451,7 +1454,7 @@ class HTMLContentConverter(Converter):
                     'rightAds',
                     'menu',
                     'aa',
-                    'sidebar', # finlex.fi, too
+                    'sidebar',  # finlex.fi, too
                     'footer',
                     'chatBox',
                     'sendReminder',
@@ -2442,10 +2445,11 @@ class ConverterManager(object):
                 conv = self.converter(orig_file)
                 conv.write_complete(self.LANGUAGEGUESSER)
             except ConversionException as e:
-                print >>sys.stderr, 'Could not convert {}'.format(orig_file)
-                print >>sys.stderr, str(e)
+                print('Could not convert {}'.format(orig_file),
+                      file=sys.stderr)
+                print(str(e), file=sys.stderr)
         else:
-            print >>sys.stderr, '{} does not exist'.format(orig_file)
+            print('{} does not exist'.format(orig_file), file=sys.stderr)
 
     def converter(self, orig_file):
         if 'avvir_xml' in orig_file:
@@ -2491,7 +2495,7 @@ class ConverterManager(object):
                     orig_file))
 
     def convert_in_parallel(self):
-        print 'Starting the conversion of {} files'.format(len(self.FILES))
+        print('Starting the conversion of {} files'.format(len(self.FILES)))
 
         pool_size = multiprocessing.cpu_count()
         pool = multiprocessing.Pool(processes=pool_size,)
@@ -2501,14 +2505,14 @@ class ConverterManager(object):
         pool.join()
 
     def convert_serially(self):
-        print 'Starting the conversion of {} files'.format(len(self.FILES))
+        print('Starting the conversion of {} files'.format(len(self.FILES)))
 
         for xsl_file in self.FILES:
-            print 'converting', xsl_file[:-4]
+            print('converting', xsl_file[:-4])
             self.convert(xsl_file)
 
     def collect_files(self, sources):
-        print 'Collecting files to convert'
+        print('Collecting files to convert')
 
         for source in sources:
             if os.path.isfile(source):
@@ -2521,8 +2525,8 @@ class ConverterManager(object):
                     metadata = xslsetter.MetadataHandler(xsl_file,
                                                          create=True)
                     metadata.write_file()
-                    print "Fill in meta info in", xsl_file, \
-                        ', then run this command again'
+                    print("Fill in meta info in", xsl_file,
+                          ', then run this command again')
                     sys.exit(1)
             elif os.path.isdir(source):
                 self.FILES.extend(
@@ -2530,8 +2534,9 @@ class ConverterManager(object):
                      for root, dirs, files in os.walk(source)
                      for f in files if f.endswith('.xsl')])
             else:
-                print >>sys.stderr, 'Can not process {}'.format(source)
-                print >>sys.stderr, 'This is neither a file nor a directory.'
+                print('Can not process {}'.format(source), file=sys.stderr)
+                print('This is neither a file nor a directory.',
+                      file=sys.stderr)
 
 
 def unwrap_self_convert(arg, **kwarg):
@@ -2559,6 +2564,7 @@ def parse_options():
                         directory/ies where the original files exist")
 
     args = parser.parse_args()
+
     return args
 
 

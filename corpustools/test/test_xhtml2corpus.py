@@ -1,7 +1,25 @@
 # -*- coding: utf-8 -*-
+
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this file. If not, see <http://www.gnu.org/licenses/>.
+#
+#   Copyright 2014-2015 Børre Gaup <borre.gaup@uit.no>
+#
+
+import doctest
 import lxml.doctestcompare
 import lxml.etree
-import doctest
 
 from corpustools import converter
 
@@ -2469,8 +2487,7 @@ tests = {
 
 
 def assertXmlEqual(got, want):
-    """Check if two xml snippets are equal
-    """
+    """Check if two xml snippets are equal"""
     got = lxml.etree.tostring(got)
     want = lxml.etree.tostring(want)
     checker = lxml.doctestcompare.LXMLOutputChecker()
@@ -2486,9 +2503,7 @@ def test_conversion():
 
 
 def check_conversion(testname, html_xml):
-    '''Check that the tidied html is correctly converted
-    to corpus xml via the xhtml2corpus.xsl style sheet
-    '''
+    '''Check that the tidied html is correctly converted to corpus xml'''
     got = converter.HTMLContentConverter(
         testname,
         content=html_xml['html']).convert2intermediate()

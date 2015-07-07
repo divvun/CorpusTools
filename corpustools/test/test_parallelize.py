@@ -14,30 +14,30 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2011-2014 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2011-2015 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2014-2015 Kevin Brubeck Unhammer <unhammer@fsfe.org>
 #
 
+from __future__ import print_function
 from __future__ import unicode_literals
 
-import unittest
-from lxml import etree
-from lxml import doctestcompare
-import os
 import doctest
+from lxml import doctestcompare
+from lxml import etree
+import os
 import tempfile
+import unittest
 
+from corpustools import generate_anchor_list
 from corpustools import parallelize
 from corpustools import text_cat
-from corpustools import generate_anchor_list
 
 
 here = os.path.dirname(__file__)
 
 
 class TestCorpusXMLFile(unittest.TestCase):
-    """
-    A test class for the CorpusXMLFile class
-    """
+    """A test class for the CorpusXMLFile class"""
     def setUp(self):
         self.pfile = parallelize.CorpusXMLFile(
             os.path.join(
@@ -46,8 +46,7 @@ class TestCorpusXMLFile(unittest.TestCase):
                 "aarseth2-s.htm.xml"))
 
     def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal
-        """
+        """Check if two stringified xml snippets are equal"""
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(want, got, 0):
             message = checker.output_difference(
@@ -154,8 +153,7 @@ class TestCorpusXMLFile(unittest.TestCase):
 
 
 class TestSentenceDivider(unittest.TestCase):
-    """A test class for the SentenceDivider class
-    """
+    """A test class for the SentenceDivider class"""
     def setUp(self):
         self.sentence_divider = parallelize.SentenceDivider(
             os.path.join(
@@ -163,9 +161,7 @@ class TestSentenceDivider(unittest.TestCase):
                 "parallelize_data/finnmarkkulahka_web_lettere.pdf.xml"))
 
     def assertXmlEqual(self, got, want):
-        """
-        Check if two xml snippets are equal
-        """
+        """Check if two xml snippets are equal"""
         string_got = etree.tostring(got, pretty_print=True)
         string_want = etree.tostring(want, pretty_print=True)
 
@@ -177,8 +173,7 @@ class TestSentenceDivider(unittest.TestCase):
             raise AssertionError(message)
 
     def test_constructor(self):
-        """Check that the constructor makes what it is suppposed to
-        """
+        """Check that the constructor makes what it is suppposed to"""
         self.assertEqual(self.sentence_divider.sentence_counter, 0)
         self.assertEqual(self.sentence_divider.doc_lang, 'sme')
         self.assertEqual(self.sentence_divider.input_etree.__class__.__name__,
@@ -197,8 +192,7 @@ class TestSentenceDivider(unittest.TestCase):
         self.assertXmlEqual(got, want)
 
     def test_process_one_paragraph(self):
-        """Check the output of process_one_paragraph
-        """
+        """Check the output of process_one_paragraph"""
         self.sentence_divider.doc_lang = 'sme'
         p = etree.XML(
             '<p>Jápmá go sámi kultuvra veahážiid mielde go nuorat ovdal '
@@ -297,9 +291,11 @@ class TestSentenceDivider(unittest.TestCase):
 
     def test_dot_followed_by_dot(self):
         """Test of how process_one_paragraph handles a paragraph
-        with . and ... in the end.
+
+        The paragraph ends with . and ...
         tca2 doesn't accept sentences without real letters, so we have to make
-        sure the ... doesn't end up alone inside a s tag"""
+        sure the ... doesn't end up alone inside a s tag
+        """
         self.sentence_divider.doc_lang = 'nob'
         p = etree.XML(
             '<p>Alt det som har med norsk å gjøre, har jeg gruet meg for og '
@@ -313,8 +309,7 @@ class TestSentenceDivider(unittest.TestCase):
         self.assertXmlEqual(got, want)
 
     def test_quotemarks(self):
-        """Test how SentenceDivider handles quotemarks
-        """
+        """Test how SentenceDivider handles quotemarks"""
         self.sentence_divider.doc_lang = 'nob'
         p = etree.XML(
             '<p>Forsøksrådet for skoleverket godkjente det praktiske '
@@ -411,9 +406,7 @@ class TestSentenceDivider(unittest.TestCase):
 
 
 class TestParallelizeTCA2(unittest.TestCase):
-    """
-    A test class for the ParallelizeTCA2 class
-    """
+    """A test class for the ParallelizeTCA2 class"""
     def setUp(self):
         self.parallelize = parallelize.ParallelizeTCA2(
             os.path.join(
@@ -456,12 +449,11 @@ class TestParallelizeTCA2(unittest.TestCase):
         self.parallelize.divide_p_into_sentences()
 
     def test_parallize_files(self):
-        print self.parallelize.parallelize_files()
+        print(self.parallelize.parallelize_files())
+
 
 class TestParallelizeHunalign(unittest.TestCase):
-    """
-    A test class for the ParallelizeHunalign class
-    """
+    """A test class for the ParallelizeHunalign class"""
     def setUp(self):
         self.parallelize = parallelize.ParallelizeHunalign(
             os.path.join(
@@ -472,7 +464,7 @@ class TestParallelizeHunalign(unittest.TestCase):
             quiet=True)
 
     def test_parallize_files(self):
-        print self.parallelize.parallelize_files()
+        print(self.parallelize.parallelize_files())
 
     def test_hunalign_dict(self):
         self.assertEqual(self.parallelize.anchor_to_dict(
@@ -480,20 +472,18 @@ class TestParallelizeHunalign(unittest.TestCase):
              ("1, ein", "eins"),
              ("2, два", "2, guokte"),
              ]),
-                         [("foo", "fie"),
-                          ("bar", "fie"),
-                          ("1", "eins"),
-                          ("ein","eins"),
-                          ("2", "2"),
-                          ("2", "guokte"),
-                          ("два", "2"),
-                          ("два", "guokte")])
+            [("foo", "fie"),
+             ("bar", "fie"),
+             ("1", "eins"),
+             ("ein", "eins"),
+             ("2", "2"),
+             ("2", "guokte"),
+             ("два", "2"),
+             ("два", "guokte")])
 
 
 class TestGenerateAnchorFile(unittest.TestCase):
-    """
-    A test class for the GenerateAnchorList class
-    """
+    """A test class for the GenerateAnchorList class"""
     def test_generate_anchor_output(self):
         with tempfile.NamedTemporaryFile('w') as anchor_path:
             gal = generate_anchor_list.GenerateAnchorList(
@@ -501,16 +491,15 @@ class TestGenerateAnchorFile(unittest.TestCase):
                 ['eng', 'nob', 'sme', 'fin', 'smj', 'sma'],
                 os.path.join(here, 'parallelize_data/anchor.txt'))
             gal.generate_file(anchor_path.name, quiet=True)
-            want = open(os.path.join(here,
-                                     'parallelize_data/anchor-nobsme.txt')).read()
+            want = open(
+                os.path.join(here,
+                             'parallelize_data/anchor-nobsme.txt')).read()
             got = open(anchor_path.name).read()
             self.assertEqual(got, want)
 
 
 class TestTmx(unittest.TestCase):
-    """
-    A test class for the Tmx class
-    """
+    """A test class for the Tmx class"""
     def setUp(self):
         self.tmx = parallelize.Tmx(etree.parse(
             os.path.join(
@@ -518,9 +507,7 @@ class TestTmx(unittest.TestCase):
                 'parallelize_data/aarseth2-n.htm.toktmx')))
 
     def assertXmlEqual(self, got, want):
-        """
-        Check if two xml snippets are equal
-        """
+        """Check if two xml snippets are equal"""
         string_got = etree.tostring(got, pretty_print=True)
         string_want = etree.tostring(want, pretty_print=True)
 
@@ -532,8 +519,7 @@ class TestTmx(unittest.TestCase):
             raise AssertionError(message)
 
     def test_get_src_lang(self):
-        """Test the get_src_lang routine
-        """
+        """Test the get_src_lang routine"""
         self.assertEqual(self.tmx.get_src_lang(), "nob")
 
     def test_tu_to_string(self):
@@ -658,13 +644,9 @@ class TestTmx(unittest.TestCase):
 
 
 class TestTca2ToTmx(unittest.TestCase):
-    """
-    A test class for the Tca2ToTmx class
-    """
+    """A test class for the Tca2ToTmx class"""
     def setUp(self):
-        """
-        Hand the data from the Parallelize class to the tmx class
-        """
+        """Hand the data from the Parallelize class to the tmx class"""
         para = parallelize.ParallelizeTCA2(
             os.path.join(
                 here, "parallelize_data",
@@ -677,9 +659,7 @@ class TestTca2ToTmx(unittest.TestCase):
                                          para.get_sentfiles())
 
     def assertXmlEqual(self, got, want):
-        """
-        Check if two xml snippets are equal
-        """
+        """Check if two xml snippets are equal"""
         string_got = etree.tostring(got, pretty_print=True)
         string_want = etree.tostring(want, pretty_print=True)
 
@@ -741,9 +721,7 @@ class TestTca2ToTmx(unittest.TestCase):
 
 
 class TestTmxComparator(unittest.TestCase):
-    """
-    A test class for the TmxComparator class
-    """
+    """A test class for the TmxComparator class"""
     def test_equal_tmxes(self):
         comp = parallelize.TmxComparator(
             parallelize.Tmx(etree.parse(

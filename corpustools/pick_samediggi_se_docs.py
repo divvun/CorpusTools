@@ -1,17 +1,36 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-'''Program to pick out documents to be saved to the corpus from samediggi.se
-'''
-
+#
+#   Program to pick out documents to be saved to the corpus from samediggi.se
+#
+#   This file contains routines to convert errormarkup to xml
+#   as specified in the giellatekno xml format.
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this file. If not, see <http://www.gnu.org/licenses/>.
+#
+#   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
+#
+from __future__ import print_function
 
 import os
-import sys
-import inspect
 import shutil
+import sys
 
 import lxml.etree as etree
 
+import util
 import xslsetter
 
 
@@ -20,11 +39,6 @@ version = os.path.join(here, '_version.py')
 scope = {}
 exec(open(version).read(), scope)
 version = scope['VERSION']
-
-
-def lineno():
-    """Returns the current line number in our program."""
-    return inspect.currentframe().f_back.f_lineno
 
 
 class DocumentPicker(object):
@@ -41,8 +55,7 @@ class DocumentPicker(object):
         self.total_file = 0
 
     def classify_files(self):
-        '''Iterate through all files, classify them according to language
-        '''
+        '''Iterate through all files, classify them according to language'''
         for root, dirs, files in os.walk(self.source_dir):
             for f in files:
                 if f.endswith('.html'):
@@ -65,8 +78,8 @@ class DocumentPicker(object):
         if os.path.exists(self.get_parallel_name(file_, a)):
             self.parallel_dict[file_].append(self.get_parallel_name(file_, a))
         else:
-            print >>sys.stderr, lineno(), self.get_parallel_name(file_, a), \
-                'does not exist', a.get('title'),  file_
+            print(util.lineno(), self.get_parallel_name(file_, a),
+                  'does not exist', a.get('title'),  file_, file=sys.stderr)
 
     def get_parallels(self, a, file_):
         self.parallel_dict.setdefault(file_, [])
@@ -89,8 +102,7 @@ class DocumentPicker(object):
         self.file_dict['none'].remove(file_)
 
     def classify_file(self, file_):
-        '''Identify the language of the file
-        '''
+        '''Identify the language of the file'''
         parser = etree.HTMLParser()
         html = etree.parse(file_, parser)
         self.file_dict['none'].append(file_)
@@ -117,9 +129,8 @@ class DocumentPicker(object):
         total = 0
         for key, value in self.file_dict.items():
             total += len(self.file_dict[key])
-            print key, len(self.file_dict[key])
-            print
-        print total, self.total_file
+            print(key, len(self.file_dict[key]))
+        print(total, self.total_file)
 
     def check_consistency(self):
         '''Check if all files that claim to have parallels actually exist
@@ -190,7 +201,7 @@ class DocumentPicker(object):
 
 def main():
     if sys.argv[1] == '-v':
-        print version
+        print(version)
         sys.exit(1)
 
     dp = DocumentPicker(sys.argv[1])

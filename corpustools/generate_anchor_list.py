@@ -18,18 +18,21 @@
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
 #   Copyright 2015 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2015 Kevin Brubeck Unhammer <unhammer@fsfe.org>
 #
 
+from __future__ import print_function
 from __future__ import unicode_literals
 
-import os
-import sys
 import argparse
+import sys
 
 import argparse_version
 
+
 def note(msg):
-    print >>sys.stderr, msg.encode('utf-8')
+    print(msg.encode('utf-8'), file=sys.stderr)
+
 
 class GenerateAnchorList(object):
     def __init__(self, lang1, lang2, columns, path):
@@ -52,30 +55,29 @@ class GenerateAnchorList(object):
                 if len(word1) > 0 and len(word2) > 0:
                     return word1, word2
             else:
-                print >>sys.stderr, (
-                    'Invalid line at {} in {}'.format(lineno, self.path))
+                print('Invalid line at {} in {}'.format(lineno, self.path),
+                      file=sys.stderr)
 
     def read_anchors(self, quiet=False):
         """List of word-pairs in infiles, empty/bad lines skipped."""
         with open(self.path) as f:
             out = [self.words_of_line(i, l.decode('utf-8'))
-                   for i,l in enumerate(f.readlines())]
+                   for i, l in enumerate(f.readlines())]
             out = filter(None, out)
             if not quiet:
                 note("Read {} anchors from {}".format(len(out), self.path))
             return out
 
     def generate_file(self, outpath, quiet=False):
-        '''infiles is a list of file paths
-        '''
+        '''infiles is a list of file paths'''
         anchors = self.read_anchors(quiet)
 
         with open(outpath, 'wb') as outfile:
             if not quiet:
                 note('Generating anchor word list to {}'.format(outpath))
             out = "\n".join("{} / {}".format(w1, w2)
-                            for w1,w2 in anchors)
-            print >>outfile, out.encode('utf-8')
+                            for w1, w2 in anchors)
+            print(out.encode('utf-8'), file=outfile)
 
 
 def parse_options():
@@ -84,8 +86,9 @@ def parse_options():
         description=(
             "Generate paired anchor list for languages lang1 and lang2. "
             "Output line format e.g. njukčamán* / mars. "
-            "Source file is given on the command line, the format is hardcoded "
-            "for the languages used in $GTHOME/gt/common/src/anchor.txt."))
+            "Source file is given on the command line, the format is "
+            "hardcoded for the languages used in "
+            "$GTHOME/gt/common/src/anchor.txt."))
 
     parser.add_argument("--lang1", help="First languages in the word list")
     parser.add_argument("--lang2", help="Second languages in the word list")

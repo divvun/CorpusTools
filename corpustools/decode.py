@@ -1,9 +1,27 @@
 # -*- coding: utf-8 -*-
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this file. If not, see <http://www.gnu.org/licenses/>.
+#
+#   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
+#
+
 '''(Northern) sami character eight bit encodings have been semi or
 non official standards and have been converted to the various systems'
 internal encodings. This module have functions that revert the damage
 done.
 '''
+from __future__ import print_function
 import sys
 
 CTYPES = {
@@ -226,12 +244,10 @@ CTYPES = {
 
 
 class EncodingGuesser(object):
-    """Try to find out if some text or a file has faultily encoded (northern)
-    sami letters
-    """
+    """Guess if some text or a file has faultily encoded sami letters"""
 
     def guess_file_encoding(self, filename):
-        """ @brief Guess the encoding of a file
+        """Guess the encoding of a file
 
         @param filename name of an utf-8 encoded file
         @return winner is an int, pointing to a position in CTYPES, or -1
@@ -243,7 +259,7 @@ class EncodingGuesser(object):
             return winner
 
     def guess_body_encoding(self, content):
-        """@brief guess the encoding of the string content
+        """Guess the encoding of the string content
 
         First get the frequencies of the "sami letters"
         Then get the frequencies of the letters in the encodings in CTYPES
@@ -285,7 +301,9 @@ class EncodingGuesser(object):
         return winner
 
     def decode_para(self, position, text):
-        """@brief Replace letters in text with the ones from the dict at
+        """Decode the text given to this function
+
+        Replace letters in text with the ones from the dict at
         position position in CTYPES
 
         @param position which place the encoding has in the CTYPES list
@@ -308,4 +326,4 @@ class EncodingGuesser(object):
 
 if __name__ == '__main__':
     eg = EncodingGuesser()
-    print eg.guess_file_encoding(sys.argv[1])
+    print(eg.guess_file_encoding(sys.argv[1]))
