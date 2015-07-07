@@ -1180,59 +1180,6 @@ class TmxTestDataWriter(object):
                      xml_declaration=True)
 
 
-class Toktmx2Tmx(object):
-    """A class to make a tidied up version of toktmx files.
-    Removes unwanted spaces around punctuation, parentheses and so on.
-    """
-    def read_toktmx_file(self, toktmx_file):
-        """Reads a toktmx file, parses it, sets the tmx file name
-        """
-        self.tmxfile_name = toktmx_file.replace('toktmx', 'tmx')
-        self.tmx = Tmx(etree.parse(toktmx_file))
-        self.add_filename_iD()
-
-    def add_filename_iD(self):
-        """Add the tmx filename as an prop element in the header
-        """
-        prop = etree.Element('prop')
-        prop.attrib['type'] = 'x-filename'
-        prop.text = os.path.basename(self.tmxfile_name).decode('utf-8')
-
-        root = self.tmx.get_tmx().getroot()
-
-        for header in root.iter('header'):
-            header.append(prop)
-
-    def write_cleanedup_tmx(self):
-        """Write the cleanup tmx
-        """
-        self.tmx.write_tmx_file(self.tmxfile_name)
-
-    def clean_toktmx(self):
-        """Do the cleanup of the toktmx file
-        """
-        self.tmx.remove_unwanted_space()
-        self.tmx.remove_tu_with_empty_seg()
-
-    def find_toktmx_files(self, dirname):
-        """
-        Find the toktmx files in dirname, return them as a list
-        """
-        subp = subprocess.Popen(
-            ['find', dirname,
-                '-name', '*.toktmx', '-print'],
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        (output, error) = subp.communicate()
-
-        if subp.returncode != 0:
-            util.note('ERROR: When searching for toktmx docs:')
-            util.note(error)
-            sys.exit(1)
-        else:
-            files = output.split('\n')
-            return files[:-1]
-
-
 def parse_options():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
