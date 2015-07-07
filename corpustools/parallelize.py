@@ -17,9 +17,11 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2011-2014 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2011-2015 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2014-2015 Kevin Brubeck Unhammer <unhammer@fsfe.org>
 #
 
+from __future__ import print_function
 from __future__ import unicode_literals
 
 import os
@@ -44,10 +46,10 @@ import tempfile
 here = os.path.dirname(__file__)
 
 def note(msg):
-    print >>sys.stderr, msg.encode('utf-8')
+    print(msg.encode('utf-8'), file=sys.stderr)
 
 
-class CorpusXMLFile:
+class CorpusXMLFile(object):
     """
     A class that contains the info on a file to be parallellized, name
     and language
@@ -217,7 +219,7 @@ class CorpusXMLFile:
                          xml_declaration=True)
 
 
-class SentenceDivider:
+class SentenceDivider(object):
     """A class that takes a giellatekno xml document as input.
     It spits out an xml document that has divided the text inside the p tags
     into sentences, but otherwise is unchanged.
@@ -322,8 +324,8 @@ class SentenceDivider:
 
         if subp.returncode != 0:
             note('ERROR: Could not divide into sentences')
-            print >>sys.stderr, output
-            print >>sys.stderr, error
+            note(output)
+            note(error)
             sys.exit()
         else:
             return output.decode('utf-8')
@@ -1066,7 +1068,7 @@ class Tca2ToTmx(AlignmentToTmx):
         return line
 
 
-class TmxComparator:
+class TmxComparator(object):
     """
     A class to compare two tmx-files
     """
@@ -1121,7 +1123,7 @@ class TmxComparator:
         return diff
 
 
-class TmxTestDataWriter():
+class TmxTestDataWriter(object):
     """
     A class that writes tmx test data to a file
     """
@@ -1182,7 +1184,7 @@ class TmxTestDataWriter():
                      xml_declaration=True)
 
 
-class TmxGoldstandardTester:
+class TmxGoldstandardTester(object):
     """
     A class to test the alignment pipeline against the tmx goldstandard
     """
@@ -1222,7 +1224,7 @@ class TmxGoldstandardTester:
         paralang = ""
         # Go through each tmx goldstandard file
         for want_tmx_file in self.find_goldstandard_tmx_files():
-            print "testing {} …".format(want_tmx_file)
+            print("testing {} …".format(want_tmx_file))
 
             # Calculate the parallel lang, to be used in parallelization
             if want_tmx_file.find('nob2sme') > -1:
@@ -1290,7 +1292,7 @@ class TmxGoldstandardTester:
         """
         Write diffs to a jspwiki file
         """
-        print "write_diff_files {}".format(filename)
+        print("write_diff_files {}".format(filename))
         filename = '{}_{}.jspwiki'.format(filename, self.date)
         dirname = os.path.join(
             os.path.dirname(self.testresult_writer.get_filename()),
@@ -1322,30 +1324,14 @@ class TmxGoldstandardTester:
 
         if subp.returncode != 0:
             note('ERROR: When searching for goldstandard docs:')
-            print >>sys.stderr, error
+            note(error)
             sys.exit(1)
         else:
             files = output.split('\n')
             return files[:-1]
 
 
-class TmxFixer:
-    """
-    A class to reverse the langs and change the name of a tmx file if needed
-    Possible errors of a tmx file:
-    * the languages can be in the wrong order
-    * the name is wrong
-    * the file is placed in the wrong lang directory
-    """
-
-    def __init__(self, filetofix):
-        """
-        Input is the tmx file we should consider to fix
-        """
-        pass
-
-
-class Toktmx2Tmx:
+class Toktmx2Tmx(object):
     """A class to make a tidied up version of toktmx files.
     Removes unwanted spaces around punctuation, parentheses and so on.
     """
@@ -1391,7 +1377,7 @@ class Toktmx2Tmx:
 
         if subp.returncode != 0:
             note('ERROR: When searching for toktmx docs:')
-            print >>sys.stderr, error
+            note(error)
             sys.exit(1)
         else:
             files = output.split('\n')
@@ -1454,7 +1440,7 @@ def main():
                                            quiet = args.quiet)
 
     except IOError as e:
-        print e.message
+        print(e.message)
         sys.exit(1)
 
     if args.output_file is None:
