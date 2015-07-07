@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #
-#   This program compares goldstandard tmx files to files produced by the
+#   This program compares prestable tmx files to files produced by the
 #   parallelizer pipeline
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -19,6 +19,8 @@
 #
 #   Copyright 2011-2015 Børre Gaup <borre.gaup@uit.no>
 #
+
+from __future__ import print_function
 
 import argparse
 import datetime
@@ -89,7 +91,7 @@ class TmxGoldstandardTester(object):
         Find all goldstandard tmx files
         """
         self.number_of_diff_lines = 0
-        self.testresult_writer = parallelize.TmxTestDataWriter(
+        self.testresult_writer = TmxTestDataWriter(
             testresult_filename)
         if dateformat_addition is None:
             self.date = self.dateformat()
@@ -202,21 +204,15 @@ class TmxGoldstandardTester(object):
 
     def find_goldstandard_tmx_files(self):
         """Find the goldstandard tmx files, return them as a list"""
-        subp = subprocess.Popen(
-            ['find', os.path.join(os.environ['GTFREE'],
-                                  'prestable/toktmx/goldstandard'),
-                '-name', '*.toktmx', '-print'],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        (output, error) = subp.communicate()
+        file_list = []
+        for root, dirs, files in os.walk(os.path.join(
+                os.environ['GTFREE'], 'prestable/toktmx')):
+            for f in files:
+                if f.endswith('.toktmx'):
+                    print(util.lineno(), f)
+                    file_list.append(os.path.join(root, f))
 
-        if subp.returncode != 0:
-            util.note('ERROR: When searching for goldstandard docs:')
-            util.note(error)
-            sys.exit(1)
-        else:
-            files = output.split('\n')
-            return files[:-1]
+        return file_list
 
 
 class TmxTestDataWriter(object):
