@@ -48,10 +48,6 @@ import gzip
 here = os.path.dirname(__file__)
 
 
-def note(msg):
-    print >>sys.stderr, msg.encode('utf-8')
-
-
 def pretty_tbl(table):
     return ", ".join("{}:{}".format(k, v) for k, v in table)
 
@@ -139,13 +135,13 @@ class NGramModel(object):
                 line = strline.decode('utf-8')
             except UnicodeDecodeError as e:
                 if self.unicode_warned == 0:
-                    note("WARNING: Line {} gave {}, skipping ... "
+                    util.note("WARNING: Line {} gave {}, skipping ... "
                          "(not warning again)".format(nl, e))
                 self.unicode_warned += 1
                 continue
             freq = self.freq_of_text(line, freq)
         if self.unicode_warned != 0:
-            note("Saw {} UnicodeDecodeErrors".format(self.unicode_warned))
+            util.note("Saw {} UnicodeDecodeErrors".format(self.unicode_warned))
         return freq
 
     def finish(self, freq):
@@ -287,7 +283,7 @@ class Classifier(object):
             self.cmodels[lang] = CharModel(lang).of_model_file(
                 open(fname, 'r'), fname)
             if verbose:
-                note("Loaded %s" % (fname,))
+                util.note("Loaded %s" % (fname,))
 
             fname_wm = os.path.join(folder, lang+'.wm')
             # fname_wmgz = os.path.join(folder, lang+'.wm.gz')
@@ -295,7 +291,7 @@ class Classifier(object):
                 self.wmodels[lang] = WordModel(lang).of_model_file(
                     open(fname_wm, 'r'), fname_wm)
                 if verbose:
-                    note("Loaded %s" % (fname_wm,))
+                    util.note("Loaded %s" % (fname_wm,))
             else:
                 self.wmodels[lang] = WordModel(lang).of_freq({})
 
@@ -315,7 +311,7 @@ class Classifier(object):
                 missing = langs - active_langs - self.langs_warned
                 if missing:
                     self.langs_warned.update(missing)  # only warn once per lang
-                    note("WARNING: No language model for {}".format(
+                    util.note("WARNING: No language model for {}".format(
                         "/".join(missing)))
             return active_langs
 
@@ -335,7 +331,7 @@ class Classifier(object):
 
         if len(cfiltered) <= 1:
             if verbose:
-                note("lm gave: {} as only result for input: {}".format(
+                util.note("lm gave: {} as only result for input: {}".format(
                     cfiltered, text))
             return list(cfiltered.iteritems())
         else:
@@ -349,11 +345,11 @@ class Classifier(object):
             cwranked = util.sort_by_value(cwcombined)
             if verbose:
                 if cranked[:len(cwranked)] == cwranked:
-                    note("lm gave: {}\t\twm gave no change\t\tfor"
+                    util.note("lm gave: {}\t\twm gave no change\t\tfor"
                          "input: {}".format(
                              pretty_tbl(cranked), text))
                 else:
-                    note("lm gave: {}\t\twm-weighted to: "
+                    util.note("lm gave: {}\t\twm-weighted to: "
                          "{}\t\tfor input: {}".format(
                              pretty_tbl(cranked), pretty_tbl(cwranked), text))
             return cwranked
@@ -374,7 +370,7 @@ class FolderTrainer(object):
                     msg = "Processing %s" % (fname,)
                     if os.path.getsize(fname) > 5000000:
                         msg += " (this may take a while)"
-                    note(msg)
+                    util.note(msg)
                     sys.stderr.flush()
                 lang = util.basename_noext(fname, ext)
                 self.models[lang] = Model(lang).of_text_file(
@@ -396,7 +392,7 @@ class FolderTrainer(object):
             fname = os.path.join(folder, lang+ext)
             model.to_model_file(open(fname, 'w'))
         if verbose and len(self.models) != 0:
-            note("Wrote {%s}%s" % (",".join(self.models.keys()), ext))
+            util.note("Wrote {%s}%s" % (",".join(self.models.keys()), ext))
 
 
 class FileTrainer(object):
@@ -413,7 +409,7 @@ def proc(args):
     if args.u is not None:
         c.DROP_RATIO = args.u
     if args.verbose:
-        note("Drop ratio: {}".format(c.DROP_RATIO))
+        util.note("Drop ratio: {}".format(c.DROP_RATIO))
     if args.s:
         for line in sys.stdin:
             print c.classify(line.decode('utf-8'), verbose=args.verbose)

@@ -45,10 +45,6 @@ import tempfile
 
 here = os.path.dirname(__file__)
 
-def note(msg):
-    print(msg.encode('utf-8'), file=sys.stderr)
-
-
 class CorpusXMLFile(object):
     """
     A class that contains the info on a file to be parallellized, name
@@ -323,9 +319,9 @@ class SentenceDivider(object):
             preprocess_input.encode('utf-8'))
 
         if subp.returncode != 0:
-            note('ERROR: Could not divide into sentences')
-            note(output)
-            note(error)
+            util.note('ERROR: Could not divide into sentences')
+            util.note(output)
+            util.note(error)
             sys.exit()
         else:
             return output.decode('utf-8')
@@ -437,10 +433,10 @@ class Parallelize(object):
             path = os.path.join(os.environ['GTHOME'], 'gt/common/src/anchor.txt')
             cols = ['eng', 'nob', 'sme', 'fin', 'smj', 'sma']
             for l in {self.get_lang1(), self.get_lang2()} - set(cols):
-                note("WARNING: {} not supported by default anchor list!".format(l))
+                util.note("WARNING: {} not supported by default anchor list!".format(l))
         elif not self.quiet:
             assert len(cols)==2
-            note("Assuming {} has the order {} / {}".format(path, cols[0], cols[1]))
+            util.note("Assuming {} has the order {} / {}".format(path, cols[0], cols[1]))
         # The lang-codes are looked up in cols after reshuffling, so
         # returned pairs should have first part as lang1, second as lang2:
         return generate_anchor_list.GenerateAnchorList(
@@ -456,10 +452,10 @@ class Parallelize(object):
         base1 = f1.get_basename_noext()
         if para0 != base1:
             if para0 is None:
-                note("WARNING: {} missing from {} parallel_texts in {}!".format(
+                util.note("WARNING: {} missing from {} parallel_texts in {}!".format(
                     base1, lang1, f0.get_name()))
             else:
-                note("WARNING: {}, not {}, in {} parallel_texts of {}!".format(
+                util.note("WARNING: {}, not {}, in {} parallel_texts of {}!".format(
                     para0, base1, lang1, f0.get_name()))
 
     def reshuffle_files(self):
@@ -522,7 +518,7 @@ class Parallelize(object):
         Parallelize two files
         """
         if not self.quiet:
-            note("Aligning files …")
+            util.note("Aligning files …")
         return self.align()
 
     def run_command(self, command):
@@ -530,7 +526,7 @@ class Parallelize(object):
         Run a parallelize command and return its output
         """
         if not self.quiet:
-            note("Running {}".format(" ".join(command)))
+            util.note("Running {}".format(" ".join(command)))
         subp = subprocess.Popen(command,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
@@ -654,7 +650,7 @@ class ParallelizeTCA2(Parallelize):
         Parallelize two files using tca2
         """
         if not self.quiet:
-            note("Adding sentence structure for the aligner …")
+            util.note("Adding sentence structure for the aligner …")
         self.divide_p_into_sentences()
 
         tca2_jar = os.path.join(here, 'tca2/dist/lib/alignment.jar')
@@ -1134,7 +1130,7 @@ class TmxTestDataWriter(object):
             tree = etree.parse(filename)
             self.set_parags_testing_element(tree.getroot())
         except IOError, error:
-            note("I/O error({0}): {1}".format(error.errno, error.strerror))
+            util.note("I/O error({0}): {1}".format(error.errno, error.strerror))
             sys.exit(1)
 
     def get_filename(self):
@@ -1376,8 +1372,8 @@ class Toktmx2Tmx(object):
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
-            note('ERROR: When searching for toktmx docs:')
-            note(error)
+            util.note('ERROR: When searching for toktmx docs:')
+            util.note(error)
             sys.exit(1)
         else:
             files = output.split('\n')
@@ -1451,17 +1447,17 @@ def main():
         outfile = args.output_file
     if outfile != "/dev/stdout" and os.path.exists(outfile):
         if args.force:
-            note("{} already exists, overwriting!".format(outfile))
+            util.note("{} already exists, overwriting!".format(outfile))
         else:
-            note("{} already exists, skipping ...".format(outfile))
+            util.note("{} already exists, skipping ...".format(outfile))
             sys.exit(1)
 
     if not args.quiet:
-        note("Aligning {} and its parallel file".format(args.input_file))
+        util.note("Aligning {} and its parallel file".format(args.input_file))
     tmx = parallelizer.parallelize_files()
 
     if not args.quiet:
-        note("Generating the tmx file {}".format(outfile))
+        util.note("Generating the tmx file {}".format(outfile))
     tmx.write_tmx_file(outfile)
     if not args.quiet:
-        note("Wrote {}".format(outfile))
+        util.note("Wrote {}".format(outfile))

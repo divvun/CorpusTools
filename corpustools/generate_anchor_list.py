@@ -28,11 +28,7 @@ import argparse
 import sys
 
 import argparse_version
-
-
-def note(msg):
-    print(msg.encode('utf-8'), file=sys.stderr)
-
+import util
 
 class GenerateAnchorList(object):
     def __init__(self, lang1, lang2, columns, path):
@@ -65,7 +61,7 @@ class GenerateAnchorList(object):
                    for i, l in enumerate(f.readlines())]
             out = filter(None, out)
             if not quiet:
-                note("Read {} anchors from {}".format(len(out), self.path))
+                util.note("Read {} anchors from {}".format(len(out), self.path))
             return out
 
     def generate_file(self, outpath, quiet=False):
@@ -74,7 +70,7 @@ class GenerateAnchorList(object):
 
         with open(outpath, 'wb') as outfile:
             if not quiet:
-                note('Generating anchor word list to {}'.format(outpath))
+                util.note('Generating anchor word list to {}'.format(outpath))
             out = "\n".join("{} / {}".format(w1, w2)
                             for w1, w2 in anchors)
             print(out.encode('utf-8'), file=outfile)

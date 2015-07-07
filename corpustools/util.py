@@ -27,6 +27,7 @@ import operator
 import os
 import platform
 import subprocess
+import sys
 
 
 PathComponents = namedtuple('PathComponents',
@@ -202,6 +203,10 @@ def name_to_unicode(filename):
         return filename
     else:
         return filename.decode('utf-8')
+
+
+def note(msg):
+    print(msg, file=sys.stderr)
 
 
 class ExternalCommandRunner(object):
