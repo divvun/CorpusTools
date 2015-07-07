@@ -23,6 +23,7 @@ setup(
             'compare_tmx_goldstandard = corpustools.compare_tmx_goldstandard:main',
             'convert2xml = corpustools.converter:main',
             'generate_anchor_list = corpustools.generate_anchor_list:main',
+            'move_corpus_file = corpustools.move_files:main',
             'normalise_corpus_names = corpustools.normalise_filenames:main',
             'packagetmx = corpustools.packagetmx:main',
             'parallelize = corpustools.parallelize:main',
