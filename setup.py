@@ -28,6 +28,7 @@ setup(
             'pytextcat = corpustools.text_cat:main',
             'saami_crawler = corpustools.saami_crawler:main',
             'test_tmx_goldstandard = corpustools.test_tmx_goldstandard:main',
+            'toktmx2tmx = corpustools.toktmx2tmx:main',
         ]
     },
     install_requires=[

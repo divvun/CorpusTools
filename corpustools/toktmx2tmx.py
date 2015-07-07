@@ -102,6 +102,3 @@ def main():
         toktmx2tmx.read_toktmx_file(filename)
         toktmx2tmx.clean_toktmx()
         toktmx2tmx.write_cleanedup_tmx()
-
-if __name__ == '__main__':
-    main()
