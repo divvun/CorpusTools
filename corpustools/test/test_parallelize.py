@@ -718,21 +718,3 @@ class TestTca2ToTmx(unittest.TestCase):
                 here, "parallelize_data",
                 "prestable/toktmx/nob2sme/facta/skuvlahistorja2",
                 "aarseth2-n.htm.toktmx"))
-
-
-class TestTmxComparator(unittest.TestCase):
-    """A test class for the TmxComparator class"""
-    def test_equal_tmxes(self):
-        comp = parallelize.TmxComparator(
-            parallelize.Tmx(etree.parse(
-                os.path.join(
-                    here,
-                    'parallelize_data/aarseth2-n.htm.toktmx'))),
-            parallelize.Tmx(etree.parse(
-                os.path.join(
-                    here,
-                    'parallelize_data/aarseth2-n.htm.toktmx'))))
-
-        self.assertEqual(comp.get_number_of_differing_lines(), -1)
-        self.assertEqual(comp.get_lines_in_wantedfile(), 274)
-        self.assertEqual(len(comp.get_diff_as_text()), 0)

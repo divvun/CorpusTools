@@ -22,6 +22,7 @@
 
 import argparse
 import datetime
+import difflib
 import lxml.etree as etree
 import os
 import subprocess
@@ -30,6 +31,54 @@ import time
 
 from corpustools import parallelize
 from corpustools import util
+
+
+class TmxComparator(object):
+    """A class to compare two tmx-files"""
+    def __init__(self, want_tmx, got_tmx):
+        self.want_tmx = want_tmx
+        self.got_tmx = got_tmx
+
+    def get_lines_in_wantedfile(self):
+        """Return the number of lines in the reference doc"""
+        return len(self.want_tmx.tmx_to_stringlist())
+
+    def get_number_of_differing_lines(self):
+        """Find how many lines differ between to tmx documents.
+
+        Given a unified_diff, find out how many lines in the reference doc
+        differs from the doc to be tested. A return value of -1 means that
+        the docs are equal
+        """
+        # Start at -1 because a unified diff always starts with a --- line
+        num_diff_lines = -1
+        for line in difflib.unified_diff(
+                self.want_tmx.tmx_to_stringlist(),
+                self.got_tmx.tmx_to_stringlist(), n=0):
+            if line[:1] == '-':
+                num_diff_lines += 1
+
+        return num_diff_lines
+
+    def get_diff_as_text(self):
+        """Return a stringlist containing the diff lines"""
+        diff = []
+        for line in difflib.unified_diff(
+                self.want_tmx.tmx_to_stringlist(),
+                self.got_tmx.tmx_to_stringlist(), n=0):
+            diff.append(line)
+
+        return diff
+
+    def get_lang_diff_as_text(self, lang):
+        """Return a stringlist containing the diff lines"""
+        diff = []
+        for line in difflib.unified_diff(
+                self.want_tmx.lang_to_stringlist(lang),
+                self.got_tmx.lang_to_stringlist(lang), n=0):
+            diff.append(line + '\n')
+
+        return diff
 
 
 class TmxGoldstandardTester(object):
@@ -103,7 +152,7 @@ class TmxGoldstandardTester(object):
         want_tmx = parallelize.Tmx(etree.parse(want_tmx_file))
 
         # Instantiate a comparator with the two tmxes
-        comparator = parallelize.TmxComparator(want_tmx, got_tmx)
+        comparator = TmxComparator(want_tmx, got_tmx)
 
         # Make a file_element for our results file
         file_element = self.testresult_writer.make_file_element(
@@ -170,6 +219,58 @@ class TmxGoldstandardTester(object):
             return files[:-1]
 
 
+class TmxTestDataWriter(object):
+    """A class that writes tmx test data to a file"""
+    def __init__(self, filename):
+        self.filename = filename
+
+        try:
+            tree = etree.parse(filename)
+            self.set_parags_testing_element(tree.getroot())
+        except IOError as error:
+            util.note("I/O error({0}): {1}".format(error.errno,
+                                                   error.strerror))
+            sys.exit(1)
+
+    def get_filename(self):
+        return self.filename
+
+    def make_file_element(self, name, gspairs, diffpairs):
+        """Make the element file, set the attributes"""
+        file_element = etree.Element("file")
+        file_element.attrib["name"] = name
+        file_element.attrib["gspairs"] = gspairs
+        file_element.attrib["diffpairs"] = diffpairs
+
+        return file_element
+
+    def set_parags_testing_element(self, paragstesting):
+        self.paragstesting = paragstesting
+
+    def make_testrun_element(self, datetime):
+        """Make the testrun element, set the attribute"""
+        testrun_element = etree.Element("testrun")
+        testrun_element.attrib["datetime"] = datetime
+
+        return testrun_element
+
+    def make_paragstesting_element(self):
+        """Make the paragstesting element"""
+        paragstesting_element = etree.Element("paragstesting")
+
+        return paragstesting_element
+
+    def insert_testrun_element(self, testrun):
+        self.paragstesting.insert(0, testrun)
+
+    def write_paragstesting_data(self):
+        """Write the paragstesting data to a file"""
+        with open(self.filename, "w") as paragstesting:
+            et = etree.ElementTree(self.paragstesting)
+            et.write(paragstesting, pretty_print=True, encoding="utf-8",
+                     xml_declaration=True)
+
+
 def parse_options():
     """Parse the command line.
 
@@ -191,4 +292,4 @@ def main():
 
     # Initialize an instance of a tmx test data writer
     tester = TmxGoldstandardTester(paragstestfile)
-    tester.runTest()
+    tester.run_test()
