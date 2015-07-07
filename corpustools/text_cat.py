@@ -32,17 +32,18 @@
 # Original Perl implementation and article available from
 # http://odur.let.rug.nl/~vannoord/TextCat/
 
+from __future__ import print_function
 from __future__ import unicode_literals
 
-import os
-import glob
-import sys
-import re
 import argparse
+import glob
+import gzip
+import os
+import re
+import sys
 
 import argparse_version
 import util
-import gzip
 
 
 here = os.path.dirname(__file__)
@@ -53,9 +54,10 @@ def pretty_tbl(table):
 
 
 def ensure_unicode(text):
-    """Helper for functions that should be able to operate on either utf-8
-    encoded bytes or decoded unicode objects
+    """Make sure text is unicode
 
+    Helper for functions that should be able to operate on either utf-8
+    encoded bytes or decoded unicode objects
     """
     if type(text) == str:
         return text.decode('utf-8')
@@ -110,10 +112,11 @@ class NGramModel(object):
         return freq
 
     def tokenise(self, text):
-        """Since use split() when loading the model file, we also use split()
+        """Tokenise the text
+
+        Since we use split() when loading the model file, we also use split()
         on the input text; this includes whitespace (like byte order
         marks) that might not all be in SPLITCHARS
-
         """
         tokens = (re.split(self.SPLITCHARS, t)
                   for t in text.split())
@@ -135,8 +138,9 @@ class NGramModel(object):
                 line = strline.decode('utf-8')
             except UnicodeDecodeError as e:
                 if self.unicode_warned == 0:
-                    util.note("WARNING: Line {} gave {}, skipping ... "
-                         "(not warning again)".format(nl, e))
+                    util.note(
+                        "WARNING: Line {} gave {}, skipping ... "
+                        "(not warning again)".format(nl, e))
                 self.unicode_warned += 1
                 continue
             freq = self.freq_of_text(line, freq)
@@ -234,9 +238,9 @@ class WordModel(NGramModel):
         }
 
     def compare_tc(self, unknown_text, normaliser):
-        """Implements line 442 of text_cat.pl, where `normaliser` is
-        results[language] from CharModel
+        """Implements line 442 of text_cat.pl
 
+        `normaliser` is results[language] from CharModel
         """
         if normaliser <= 0:
             return normaliser
@@ -310,7 +314,8 @@ class Classifier(object):
             if len(langs) != len(active_langs):
                 missing = langs - active_langs - self.langs_warned
                 if missing:
-                    self.langs_warned.update(missing)  # only warn once per lang
+                    # only warn once per lang
+                    self.langs_warned.update(missing)
                     util.note("WARNING: No language model for {}".format(
                         "/".join(missing)))
             return active_langs
@@ -345,13 +350,15 @@ class Classifier(object):
             cwranked = util.sort_by_value(cwcombined)
             if verbose:
                 if cranked[:len(cwranked)] == cwranked:
-                    util.note("lm gave: {}\t\twm gave no change\t\tfor"
-                         "input: {}".format(
-                             pretty_tbl(cranked), text))
+                    util.note(
+                        "lm gave: {}\t\twm gave no change\t\tfor"
+                        "input: {}".format(
+                            pretty_tbl(cranked), text))
                 else:
-                    util.note("lm gave: {}\t\twm-weighted to: "
-                         "{}\t\tfor input: {}".format(
-                             pretty_tbl(cranked), pretty_tbl(cwranked), text))
+                    util.note(
+                        "lm gave: {}\t\twm-weighted to: "
+                        "{}\t\tfor input: {}".format(
+                            pretty_tbl(cranked), pretty_tbl(cwranked), text))
             return cwranked
 
     def classify(self, text, langs=[], verbose=False):
@@ -412,10 +419,10 @@ def proc(args):
         util.note("Drop ratio: {}".format(c.DROP_RATIO))
     if args.s:
         for line in sys.stdin:
-            print c.classify(line.decode('utf-8'), verbose=args.verbose)
+            print(c.classify(line.decode('utf-8'), verbose=args.verbose))
     else:
-        print c.classify(sys.stdin.read().decode('utf-8'),
-                         verbose=args.verbose)
+        print(c.classify(sys.stdin.read().decode('utf-8'),
+                         verbose=args.verbose))
 
 
 def file_comp(args):
@@ -456,21 +463,22 @@ def parse_options():
     proc_parser = subparsers.add_parser('proc', help='Language classification')
     proc_parser.add_argument('model_dir',
                              help="Language model directory. Defaults to the "
-                             "directory {}.".format(os.path.join(here,'lm/')),
+                             "directory {}.".format(os.path.join(here, 'lm/')),
                              nargs='?')
     proc_parser.add_argument('-u',
                              help="Drop ratio (defaults to 1.1) -- when the "
-                             "character model of a language is this much worse "
-                             "than the best guess, we don't include it in the "
-                             "word model comparison.",
+                             "character model of a language is this much "
+                             "worse than the best guess, we don't include "
+                             "it in the word model comparison.",
                              type=float)
     proc_parser.add_argument('-s',
                              help="Classify on a line-by-line basis "
                              "(rather than the whole input as one text).",
                              action="store_true")
     proc_parser.add_argument('-l', '--langs',
-                             help="Comma-separated list of languages to classify "
-                             "between (by default uses all languages in model_dir).",
+                             help="Comma-separated list of languages to "
+                             "classify between (by default uses all "
+                             "languages in model_dir).",
                              type=str,
                              default="")
     proc_parser.set_defaults(func=proc)

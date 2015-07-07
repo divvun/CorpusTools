@@ -20,11 +20,11 @@
 #   Copyright 2011-2015 Børre Gaup <borre.gaup@uit.no>
 #
 
-import os
-import sys
 import argparse
-import lxml.etree
+from lxml import etree
+import os
 import subprocess
+import sys
 
 from corpustools import parallelize
 from corpustools import util
@@ -32,18 +32,17 @@ from corpustools import util
 
 class Toktmx2Tmx(object):
     """A class to make a tidied up version of toktmx files.
+
     Removes unwanted spaces around punctuation, parentheses and so on.
     """
     def read_toktmx_file(self, toktmx_file):
-        """Reads a toktmx file, parses it, sets the tmx file name
-        """
+        """Reads a toktmx file, parses it, sets the tmx file name"""
         self.tmxfile_name = toktmx_file.replace('toktmx', 'tmx')
         self.tmx = parallelize.Tmx(etree.parse(toktmx_file))
         self.add_filename_iD()
 
     def add_filename_iD(self):
-        """Add the tmx filename as an prop element in the header
-        """
+        """Add the tmx filename as an prop element in the header"""
         prop = etree.Element('prop')
         prop.attrib['type'] = 'x-filename'
         prop.text = os.path.basename(self.tmxfile_name).decode('utf-8')
@@ -54,20 +53,16 @@ class Toktmx2Tmx(object):
             header.append(prop)
 
     def write_cleanedup_tmx(self):
-        """Write the cleanup tmx
-        """
+        """Write the cleanup tmx"""
         self.tmx.write_tmx_file(self.tmxfile_name)
 
     def clean_toktmx(self):
-        """Do the cleanup of the toktmx file
-        """
+        """Do the cleanup of the toktmx file"""
         self.tmx.remove_unwanted_space()
         self.tmx.remove_tu_with_empty_seg()
 
     def find_toktmx_files(self, dirname):
-        """
-        Find the toktmx files in dirname, return them as a list
-        """
+        """Find the toktmx files in dirname, return them as a list"""
         subp = subprocess.Popen(
             ['find', dirname,
                 '-name', '*.toktmx', '-print'],
@@ -84,10 +79,11 @@ class Toktmx2Tmx(object):
 
 
 def parse_options():
-    """
-    Parse the command line. No arguments expected.
-    """
-    parser = argparse.ArgumentParser(description = 'Run this script to generate tmx files for use in e.g. Autshumato ITE. It depends on toktmx files to exist in $GTFREE/prestable/toktmx.')
+    """Parse the command line. No arguments expected."""
+    parser = argparse.ArgumentParser(
+        description='Run this script to generate tmx files for use in e.g. '
+        'Autshumato ITE. It depends on toktmx files to exist in '
+        '$GTFREE/prestable/toktmx.')
     parser.add_argument('dirname',
                         help="Directory where the toktmx files exist")
     args = parser.parse_args()

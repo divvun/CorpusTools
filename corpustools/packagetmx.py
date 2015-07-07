@@ -19,21 +19,17 @@
 #   Copyright 2012-2015 Børre Gaup <borre.gaup@uit.no>
 #
 
-import os
-import sys
+from __future__ import print_function
 import argparse
-import zipfile
-import subprocess
+import os
 import time
-import zlib
+import zipfile
 
 
-class PackageTmx:
-    """A class to package tmx files into a zip file
-    """
+class PackageTmx(object):
+    """A class to package tmx files into a zip file"""
     def __init__(self, dirname):
-        """Set the counter on which filenames are based
-        """
+        """Set the counter on which filenames are based"""
         self.fileId = 1
         self.date = time.strftime('%Y-%m-%d', time.localtime())
         self.dirname = dirname
@@ -42,52 +38,49 @@ class PackageTmx:
 
     def __del__(self):
         """Close the zipfile"""
-        print "All tmx files are in", self.zipname
+        print("All tmx files are in", self.zipname)
         self.zipfile.close()
 
-    def findTmxFiles(self):
-        """
-        Find the tmx files in dirname, return them as a list
-        """
-        subp = subprocess.Popen(['find', os.path.join(os.environ['GTFREE'], 'prestable/tmx/' + self.dirname), '-name', '*.tmx', '-print' ], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-        (output, error) = subp.communicate()
+    def find_tmx_files(self):
+        """Find the tmx files in dirname, return them as a list"""
+        filelist = []
+        for root, dirs, files in os.walk(os.path.join(
+                os.environ['GTFREE'], 'prestable/tmx/' + self.dirname)):
+            for f in files:
+                if f.endswith('.tmx'):
+                    filelist.append(os.path.join(root, f))
 
-        if subp.returncode != 0:
-            print >>sys.stderr, 'Error when searching for tmx docs'
-            print >>sys.stderr, error
-            sys.exit(1)
-        else:
-            files = output.split('\n')
-            return files[:-1]
+        return filelist
 
-    def generateFilename(self):
-        """Generate a new file name. Return the new filename
-        """
-        name = self.dirname + '-' + self.date + '-{0:06d}'.format(self.fileId) + '.tmx'
+    def generate_filename(self):
+        """Generate a new file name. Return the new filename"""
+        name = ''.join([self.dirname, '-', self.date,
+                        '-{0:06d}'.format(self.fileId), '.tmx'])
         self.fileId += 1
 
         return name
 
-    def writeNewFile(self, tmxFile):
-        """Write the file to the zipfile with a new filename
-        """
-        #print "Writing", self.tmxFile, 'as', self.generateFilename()
-        self.zipfile.write(tmxFile, arcname=self.generateFilename(), compress_type = zipfile.ZIP_DEFLATED)
+    def write_new_file(self, tmxFile):
+        """Write the file to the zipfile with a new filename"""
+        # print "Writing", self.tmxFile, 'as', self.generateFilename()
+        self.zipfile.write(tmxFile, arcname=self.generate_filename(),
+                           compress_type=zipfile.ZIP_DEFLATED)
+
 
 def parse_options():
-    """
-    Parse the command line. No arguments expected.
-    """
-    parser = argparse.ArgumentParser(description = 'Run this to add tmx files to a zip archive. It depends on tmx files to exist in $GTFREE/prestable/tmx.')
+    """Parse the command line. No arguments expected."""
+    parser = argparse.ArgumentParser(description='Run this to add tmx '
+                                     'files to a zip archive. It depends on '
+                                     'tmx files to exist in '
+                                     '$GTFREE/prestable/tmx.')
 
-    args = parser.parse_args()
-    return args
+    parser.parse_args()
+
 
 def main():
-    args = parse_options()
-
+    parse_options()
 
     for dirname in ['nob2sme']:
         packagetmx = PackageTmx(dirname)
-        for filename in packagetmx.findTmxFiles():
-            packagetmx.writeNewFile(filename)
+        for filename in packagetmx.find_tmx_files():
+            packagetmx.write_new_file(filename)

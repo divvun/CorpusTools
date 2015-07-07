@@ -27,8 +27,9 @@ from __future__ import unicode_literals
 import argparse
 import sys
 
-import argparse_version
-import util
+from corpustools import argparse_version
+from corpustools import util
+
 
 class GenerateAnchorList(object):
     def __init__(self, lang1, lang2, columns, path):
@@ -61,7 +62,8 @@ class GenerateAnchorList(object):
                    for i, l in enumerate(f.readlines())]
             out = filter(None, out)
             if not quiet:
-                util.note("Read {} anchors from {}".format(len(out), self.path))
+                util.note("Read {} anchors from {}".format(len(out),
+                                                           self.path))
             return out
 
     def generate_file(self, outpath, quiet=False):

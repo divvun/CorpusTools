@@ -24,33 +24,27 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import os
-import errno
-import re
-import sys
-import subprocess
-import difflib
-from lxml import etree
-import datetime
-import time
 import argparse
-
-import typosfile
-import text_cat
-import argparse_version
-import util
-import generate_anchor_list
+import difflib
+import errno
+from lxml import etree
+import os
+import re
+import subprocess
+import sys
 import tempfile
+
+from corpustools import argparse_version
+from corpustools import generate_anchor_list
+from corpustools import typosfile
+from corpustools import util
 
 
 here = os.path.dirname(__file__)
 
-class CorpusXMLFile(object):
-    """
-    A class that contains the info on a file to be parallellized, name
-    and language
-    """
 
+class CorpusXMLFile(object):
+    """A class to handle all the info of a corpus xml file"""
     def __init__(self, name):
         self.name = name
         self.etree = etree.parse(name)
@@ -69,34 +63,24 @@ class CorpusXMLFile(object):
         return self.etree
 
     def get_name(self):
-        """
-        Return the absolute path of the file
-        """
+        """Return the absolute path of the file"""
         return self.name
 
     def get_dirname(self):
-        """
-        Return the dirname of the file
-        """
+        """Return the dirname of the file"""
         return os.path.dirname(self.name)
 
     def get_basename(self):
-        """
-        Return the basename of the file
-        """
+        """Return the basename of the file"""
         return os.path.basename(self.name)
 
     def get_basename_noext(self):
-        """
-        Return the basename of the file without the final .xml
-        """
+        """Return the basename of the file without the final .xml"""
         root, _ = os.path.splitext(self.get_basename())
         return root
 
     def get_lang(self):
-        """
-        Get the lang of the file
-        """
+        """Get the lang of the file"""
         return self.root.attrib[
             '{http://www.w3.org/XML/1998/namespace}lang']
 
@@ -106,8 +90,7 @@ class CorpusXMLFile(object):
             return word_count.text
 
     def get_genre(self):
-        """
-        @brief Get the genre from the xml file
+        """Get the genre from the xml file
 
         :returns: the genre as set in the xml file
         """
@@ -115,16 +98,15 @@ class CorpusXMLFile(object):
             return self.root.find(".//genre").attrib["code"]
 
     def get_ocr(self):
-        """
-        @brief Check if the ocr element exists
+        """Check if the ocr element exists
 
         :returns: the ocr element or None
         """
         return self.root.find(".//ocr")
 
     def get_parallel_basename(self, paralang):
-        """
-        Get the basename of the parallel file
+        """Get the basename of the parallel file
+
         Input is the lang of the parallel file
         """
         parallel_files = self.root.findall(".//parallel_text")
@@ -134,12 +116,11 @@ class CorpusXMLFile(object):
                 return p.attrib['location']
 
     def get_parallel_filename(self, paralang):
-        """
-        Infer the absolute path of the parallel file
-        """
+        """Infer the absolute path of the parallel file"""
         if self.get_parallel_basename(paralang) is None:
             return None
-        root, module, lang, genre, subdirs, _ = util.split_path(self.get_name())
+        root, module, lang, genre, subdirs, _ = util.split_path(
+            self.get_name())
         parallel_basename = '{}.xml'.format(
             self.get_parallel_basename(paralang))
         return apply(
@@ -148,18 +129,13 @@ class CorpusXMLFile(object):
              parallel_basename]
         )
 
-
     def get_original_filename(self):
-        """
-        Infer the path of the original file
-        """
+        """Infer the path of the original file"""
         return self.get_name().replace('prestable/', '').replace(
             'converted/', 'orig/').replace('.xml', '')
 
     def get_translated_from(self):
-        """
-        Get the translated_from element from the orig doc
-        """
+        """Get the translated_from element from the orig doc"""
         translated_from = self.root.find(".//translated_from")
 
         if translated_from is not None:
@@ -167,8 +143,8 @@ class CorpusXMLFile(object):
                 '{http://www.w3.org/XML/1998/namespace}lang']
 
     def remove_version(self):
-        """
-        Remove the version element
+        """Remove the version element
+
         This is often the only difference between the otherwise
         identical files in converted and prestable/converted
         """
@@ -176,8 +152,8 @@ class CorpusXMLFile(object):
         version_element.getparent().remove(version_element)
 
     def remove_skip(self):
-        """
-        Remove the skip element
+        """Remove the skip element
+
         This contains text that is not wanted in e.g. sentence alignment
         """
         skip_list = self.root.findall(".//skip")
@@ -186,9 +162,7 @@ class CorpusXMLFile(object):
             skip_element.getparent().remove(skip_element)
 
     def move_later(self):
-        """
-        Move the later elements to the end of the body element.
-        """
+        """Move the later elements to the end of the body element."""
         body = self.root.xpath("/document/body")[0]
 
         later_list = self.root.xpath(".//later")
@@ -197,15 +171,13 @@ class CorpusXMLFile(object):
             body.append(later_element)
 
     def set_body(self, new_body):
-        '''Replace the body element with new_body element
-        '''
+        '''Replace the body element with new_body element'''
         if new_body.tag == 'body':
             oldbody = self.etree.find('.//body')
             oldbody.getparent().replace(oldbody, new_body)
 
     def write(self, file_name=None):
-        '''Write self.etree
-        '''
+        '''Write self.etree'''
         if file_name is None:
             file_name = self.get_name()
 
@@ -217,12 +189,15 @@ class CorpusXMLFile(object):
 
 class SentenceDivider(object):
     """A class that takes a giellatekno xml document as input.
+
     It spits out an xml document that has divided the text inside the p tags
     into sentences, but otherwise is unchanged.
     Each sentence is encased in an s tag, and has an id number
     """
     def __init__(self, input_xmlfile):
-        """Parse the input_xmlfile, set doc_lang to lang and read typos from
+        """Parse the input_xmlfile
+
+        Set doc_lang to lang and read typos from
         the corresponding .typos file if it exists
         """
         self.set_up_input_file(input_xmlfile)
@@ -236,8 +211,9 @@ class SentenceDivider(object):
             self.typos.update(t.get_typos())
 
     def set_up_input_file(self, input_xmlfile):
-        """
-        Initialize the inputfile, skip those parts that are meant to be
+        """Initialize the inputfile
+
+        Skip those parts that are meant to be
         skipped, move <later> elements.
         """
         in_file = CorpusXMLFile(input_xmlfile)
@@ -253,15 +229,14 @@ class SentenceDivider(object):
             self.doc_lang)
 
     def process_all_paragraphs(self):
-        """Go through all paragraphs in the etree and process them one by one.
-        """
+        """Go through all paragraphs in the etree and process them."""
         if self.document is None:
             self.document = etree.Element('document')
             body = etree.Element('body')
             self.document.append(body)
 
             elts_doc_lang = filter(self.in_main_lang,
-                                self.input_etree.findall('//p'))
+                                   self.input_etree.findall('//p'))
             processed = self.process_elts(elts_doc_lang)
             body.extend(processed)
         return self.document
@@ -274,8 +249,7 @@ class SentenceDivider(object):
                    preprocessed)
 
     def write_result(self, outfile):
-        """Write self.document to the given outfile name
-        """
+        """Write self.document to the given outfile name"""
         o_path, o_file = os.path.split(outfile)
         o_rel_path = o_path.replace(os.getcwd()+'/', '', 1)
         try:
@@ -287,26 +261,29 @@ class SentenceDivider(object):
         with open(outfile, 'w') as sentence_file:
             et = etree.ElementTree(self.document)
             et.write(sentence_file,
-                    pretty_print=True,
-                    encoding="utf-8",
-                    xml_declaration=True)
+                     pretty_print=True,
+                     encoding="utf-8",
+                     xml_declaration=True)
 
     def preprocess_para_texts(self, para_texts):
         """Run a list of paragraphs through preprocess.
+
+        Temporarily intersperse an XML tag <SKIP/> between
+        paragraphs so that we can use just one call to preprocess,
+        but still have them split at the right points.
         """
-        # Temporarily intersperse an XML tag <SKIP/> between
-        # paragraphs so that we can use just one call to preprocess,
-        # but still have them split at the right points.
         replacements = [("<", "&lt;"),
                         (">", "&gt;"),
-                        ('\n', ' '),]
+                        ('\n', ' ')]
         sanitized = (util.replace_all(replacements, p)
                      for p in para_texts)
-        return self.ext_preprocess("\n<SKIP/>".join(sanitized)).split("<SKIP/>")
+        return self.ext_preprocess("\n<SKIP/>".join(sanitized)).split(
+            "<SKIP/>")
 
     def ext_preprocess(self, preprocess_input):
-        """Send the text in preprocess_input into preprocess, return the
-        result.
+        """Send the text in preprocess_input into preprocess
+
+        Return the result.
         If the process fails, exit the program
         """
         preprocess_command = util.get_preprocess_command(self.doc_lang)
@@ -330,6 +307,7 @@ class SentenceDivider(object):
 
     def process_one_para_text(self, para_text):
         """Make sentences from the output of preprocess.
+
         Return a new paragraph containing the marked up sentences.
         """
         new_paragraph = etree.Element("p")
@@ -365,13 +343,15 @@ class SentenceDivider(object):
         # exclude pseudo-sentences, i.e. sentences that don't contain
         # any alphanumeric characters
         if (len(sentence) > 1
-            and not self.pseudosent_re.match(' '.join(sentence))):
+                and not self.pseudosent_re.match(' '.join(sentence))):
             new_paragraph.append(self.make_sentence(sentence))
 
         return new_paragraph
 
     def make_sentence(self, sentence):
-        """Make an s element, set the id and set the text to be the content of
+        """Make an s element
+
+        Set the id and set the text to be the content of
         the list sentence
         """
 
@@ -388,9 +368,10 @@ class SentenceDivider(object):
 
         return s
 
+
 class Parallelize(object):
-    """
-    A class to parallelize two files
+    """A class to parallelize two files
+
     Input is the xml file that should be parallellized and the language that it
     should be parallellized with.
     The language of the input file is found in the metadata of the input file.
@@ -398,11 +379,6 @@ class Parallelize(object):
     """
 
     def __init__(self, origfile1, lang2, anchor_file=None, quiet=False):
-        """
-        Set the original file name, the lang of the original file and the
-        language that it should parallellized with.
-        Parse the original file to get the access to metadata
-        """
         self.quiet = quiet
         self.origfiles = []
 
@@ -430,13 +406,16 @@ class Parallelize(object):
 
     def setup_anchors(self, path, cols):
         if path is None:
-            path = os.path.join(os.environ['GTHOME'], 'gt/common/src/anchor.txt')
+            path = os.path.join(os.environ['GTHOME'],
+                                'gt/common/src/anchor.txt')
             cols = ['eng', 'nob', 'sme', 'fin', 'smj', 'sma']
             for l in {self.get_lang1(), self.get_lang2()} - set(cols):
-                util.note("WARNING: {} not supported by default anchor list!".format(l))
+                util.note("WARNING: {} not supported by default anchor "
+                          "list.".format(l))
         elif not self.quiet:
-            assert len(cols)==2
-            util.note("Assuming {} has the order {} / {}".format(path, cols[0], cols[1]))
+            assert len(cols) == 2
+            util.note("Assuming {} has the order {} / {}".format(path, cols[0],
+                                                                 cols[1]))
         # The lang-codes are looked up in cols after reshuffling, so
         # returned pairs should have first part as lang1, second as lang2:
         return generate_anchor_list.GenerateAnchorList(
@@ -444,32 +423,31 @@ class Parallelize(object):
             cols, path)
 
     def consistency_check(self, f0, f1):
-        """
-        Warn if parallel_text of f0 is not f1
-        """
+        """Warn if parallel_text of f0 is not f1"""
         lang1 = f1.get_lang()
         para0 = f0.get_parallel_basename(lang1)
         base1 = f1.get_basename_noext()
         if para0 != base1:
             if para0 is None:
-                util.note("WARNING: {} missing from {} parallel_texts in {}!".format(
-                    base1, lang1, f0.get_name()))
+                util.note(
+                    "WARNING: {} missing from {} parallel_texts in {}!".format(
+                        base1, lang1, f0.get_name()))
             else:
-                util.note("WARNING: {}, not {}, in {} parallel_texts of {}!".format(
-                    para0, base1, lang1, f0.get_name()))
+                util.note(
+                    "WARNING: {}, not {}, in {} parallel_texts of {}!".format(
+                        para0, base1, lang1, f0.get_name()))
 
     def reshuffle_files(self):
-        """
-        Change the order of the files (so that the translated text is last)
+        """Change the order of the files
+
+        Make the translated file be the last element
         """
         tmp = self.origfiles[0]
         self.origfiles[0] = self.origfiles[1]
         self.origfiles[1] = tmp
 
     def get_outfile_name(self):
-        """
-        Compute the name of the final tmx file
-        """
+        """Compute the name of the final tmx file"""
 
         orig_path_part = '/converted/{}/'.format(self.origfiles[0].get_lang())
         # First compute the part that shall replace /orig/ in the path
@@ -485,9 +463,7 @@ class Parallelize(object):
         return os.path.join(out_dirname, out_filename)
 
     def get_origfiles(self):
-        """
-        Return the list of (the two) files that are aligned
-        """
+        """Return the list of (the two) files that are aligned"""
         return self.origfiles
 
     def get_lang1(self):
@@ -503,9 +479,7 @@ class Parallelize(object):
         return self.origfiles[1].get_name()
 
     def is_translated_from_lang2(self):
-        """
-        Find out if the given doc is translated from lang2
-        """
+        """Find out if the given doc is translated from lang2"""
         translated_from = self.origfiles[0].get_translated_from()
 
         if translated_from is not None:
@@ -514,17 +488,13 @@ class Parallelize(object):
             return False
 
     def parallelize_files(self):
-        """
-        Parallelize two files
-        """
+        """Parallelize two files"""
         if not self.quiet:
             util.note("Aligning files …")
         return self.align()
 
     def run_command(self, command):
-        """
-        Run a parallelize command and return its output
-        """
+        """Run a parallelize command and return its output"""
         if not self.quiet:
             util.note("Running {}".format(" ".join(command)))
         subp = subprocess.Popen(command,
@@ -534,7 +504,8 @@ class Parallelize(object):
 
         if subp.returncode != 0:
             raise Exception(
-                'Could not parallelize {} and {} into sentences\n{}\n\n{}\n'.format(
+                'Could not parallelize {} and {} into '
+                'sentences\n{}\n\n{}\n'.format(
                     self.get_origfiles()[0], self.get_origfiles()[1],
                     output, error))
 
@@ -546,9 +517,10 @@ class Parallelize(object):
 
 class ParallelizeHunalign(Parallelize):
     split_anchors_on = re.compile(r' *, *')
+
     def anchor_to_dict(self, words_pairs):
         # turn [("foo, bar", "fie")] into [("foo", "fie"), ("bar", "fie")]:
-        expanded_pairs= [ (w1,w2)
+        expanded_pairs = [(w1, w2)
                           for w1s, w2s in words_pairs
                           for w1 in re.split(self.split_anchors_on, w1s)
                           for w2 in re.split(self.split_anchors_on, w2s)
@@ -561,7 +533,7 @@ class ParallelizeHunalign(Parallelize):
         words_pairs = self.gal.read_anchors(quiet=self.quiet)
         expanded_pairs = self.anchor_to_dict(words_pairs)
         cleaned_pairs = [(w1.replace('*', ''), w2.replace('*', ''))
-                         for w1,w2 in expanded_pairs]
+                         for w1, w2 in expanded_pairs]
         # Hunalign expects the _reverse_ format for the dictionary!
         # See Dictionary under http://mokk.bme.hu/resources/hunalign/
         return "\n".join(["{} @ {}".format(w2, w1)
@@ -575,15 +547,15 @@ class ParallelizeHunalign(Parallelize):
         return "\n".join(sum(sents, []))
 
     def align(self):
-        """
-        Parallelize two files using hunalign
-        """
+        """Parallelize two files using hunalign"""
         def tmp():
             return tempfile.NamedTemporaryFile('w')
         with tmp() as dict_f, tmp() as sent0_f, tmp() as sent1_f:
             dict_f.write(self.make_dict().encode('utf-8'))
-            sent0_f.write(self.to_sents(self.get_origfiles()[0]).encode('utf-8'))
-            sent1_f.write(self.to_sents(self.get_origfiles()[1]).encode('utf-8'))
+            sent0_f.write(self.to_sents(
+                self.get_origfiles()[0]).encode('utf-8'))
+            sent1_f.write(self.to_sents(
+                self.get_origfiles()[1]).encode('utf-8'))
             dict_f.flush()
             sent0_f.flush()
             sent1_f.flush()
@@ -593,26 +565,22 @@ class ParallelizeHunalign(Parallelize):
                        '-realign',
                        '-text',
                        dict_f.name,
-                       sent0_f.name, sent1_f.name,
-            ]
+                       sent0_f.name, sent1_f.name]
             output, error = self.run_command(command)
 
         tmx = HunalignToTmx(self.get_origfiles(), output.decode('utf-8'))
         return tmx
 
+
 class ParallelizeTCA2(Parallelize):
     def generate_anchor_file(self, outpath):
-        """
-        Generate an anchor file with lang1 and lang2.
-        """
+        """Generate an anchor file with lang1 and lang2."""
         assert self.gal.lang1 == self.get_lang1()
         assert self.gal.lang2 == self.get_lang2()
         self.gal.generate_file(outpath, quiet=self.quiet)
 
     def divide_p_into_sentences(self):
-        """
-        Tokenize the text in the given file and reassemble it again
-        """
+        """Tokenize the text in the given file and reassemble it again"""
         for pfile in self.origfiles:
             infile = os.path.join(pfile.get_name())
             outfile = self.get_sent_filename(pfile)
@@ -624,8 +592,9 @@ class ParallelizeTCA2(Parallelize):
         return map(self.get_sent_filename, self.get_origfiles())
 
     def get_sent_filename(self, pfile):
-        """
-        Compute a name for the corpus-analyze output and tca2 input file
+        """Compute the name of the sentence file
+
+        This file is the corpus-analyze output and tca2 input file
         Input is a CorpusXMLFile
         """
         origfilename = pfile.get_basename_noext()
@@ -637,18 +606,16 @@ class ParallelizeTCA2(Parallelize):
                                 origfilename, pfile.get_lang()))
 
     def crop_to_bytes(self, name, max_bytes):
-        """
-        Ensure `name` is less than `max_bytes` bytes, without splitting in the
-        middle of a wide byte.
+        """Ensure `name` is less than `max_bytes` bytes,
+
+        Do not split name in the middle of a wide byte.
         """
         while len(name.encode('utf-8')) > max_bytes:
             name = name[:-1]
         return name
 
     def align(self):
-        """
-        Parallelize two files using tca2
-        """
+        """Parallelize two files using tca2"""
         if not self.quiet:
             util.note("Adding sentence structure for the aligner …")
         self.divide_p_into_sentences()
@@ -665,11 +632,14 @@ class ParallelizeTCA2(Parallelize):
                        tca2_jar,
                        '-cli-plain',
                        '-anchor={}'.format(anchor_file.name),
-                       '-in1={}'.format(self.get_sent_filename(self.get_origfiles()[0])),
-                       '-in2={}'.format(self.get_sent_filename(self.get_origfiles()[1]))]
+                       '-in1={}'.format(self.get_sent_filename(
+                           self.get_origfiles()[0])),
+                       '-in2={}'.format(self.get_sent_filename(
+                           self.get_origfiles()[1]))]
             output, error = self.run_command(command)
-            # Ignore output, Tca2ToTmx guesses name of output-files from sentfiles
-            # TODO: Use a tempfile.mkdtemp instead of hardcoded
+            # Ignore output, Tca2ToTmx guesses name of output-files from
+            # sentfiles
+            # TODO(kevin): Use a tempfile.mkdtemp instead of hardcoded
             # GTFREE/tmp? Can't use tmpfiles for in1/in2, since output
             # file name is guessed based on them.
 
@@ -678,36 +648,30 @@ class ParallelizeTCA2(Parallelize):
 
 
 class Tmx(object):
-    """
+    """A tmx file handler
+
     A class that reads a tmx file, and implements a bare minimum of
     functionality to be able to compare two tmx's.
     It also contains functions to manipulate the tmx in several ways.
     """
 
     def __init__(self, tmx):
-        """Input is a tmx element
-        """
+        """Input is a tmx element"""
         self.tmx = tmx
 
-        # TODO: not actually used apart from in tests, remove?
+        # TODO(boerre): not actually used apart from in tests, remove?
         # self.language_guesser = text_cat.Classifier(None)
 
     def get_src_lang(self):
-        """
-        Get the srclang from the header element
-        """
+        """Get the srclang from the header element"""
         return self.tmx.find(".//header").attrib['srclang'][:3]
 
     def get_tmx(self):
-        """
-        Get the tmx xml element
-        """
+        """Get the tmx xml element"""
         return self.tmx
 
     def tu_to_string(self, tu):
-        """
-        Extract the two strings of a tu element
-        """
+        """Extract the two strings of a tu element"""
         string = ""
         try:
             string = string + tu[0][0].text.strip()
@@ -725,9 +689,7 @@ class Tmx(object):
         return string
 
     def tuv_to_string(self, tuv):
-        """
-        Extract the string from the tuv element
-        """
+        """Extract the string from the tuv element"""
         string = ""
         try:
             string = tuv[0].text.strip()
@@ -737,10 +699,7 @@ class Tmx(object):
         return string
 
     def lang_to_stringlist(self, lang):
-        """
-        Get all the strings in the tmx in language lang, insert them
-        into the list strings
-        """
+        """Find all sentences of lang"""
         all_tuv = self.get_tmx().\
             xpath('.//tuv[@xml:lang="' + lang + '"]',
                   namespaces={'xml': 'http://www.w3.org/XML/1998/namespace'})
@@ -752,9 +711,7 @@ class Tmx(object):
         return strings
 
     def tmx_to_stringlist(self):
-        """
-        Extract all string pairs in a tmx to a list of strings
-        """
+        """Extract all string pairs in a tmx to a list of strings"""
         all_tu = self.get_tmx().findall('.//tu')
         strings = []
         for tu in all_tu:
@@ -763,8 +720,8 @@ class Tmx(object):
         return strings
 
     def prettify_segs(self, tu):
-        """Strip white space from start and end of the strings in the
-        seg elements
+        """Strip white space from start and end of the strings
+
         Input is a tu element
         Output is a tu element with white space stripped strings
         """
@@ -784,8 +741,8 @@ class Tmx(object):
 
     # to debug here
     def reverse_langs(self):
-        """
-        Reverse the langs in a tmx
+        """Reverse the langs in a tmx
+
         Return the reverted tmx
         """
         all_tu = self.get_tmx().findall('.//tu')
@@ -803,7 +760,9 @@ class Tmx(object):
         self.tmx = tmx
 
     def remove_unwanted_space(self):
-        """The SentenceDivider adds spaces before and after punctuation,
+        """Remove unwanted spaces from sentences
+
+        The SentenceDivider adds spaces before and after punctuation,
         quotemarks, parentheses and so on.
         Remove those spaces so that the tmxes are more appropriate for real
         world™ use cases.
@@ -814,7 +773,9 @@ class Tmx(object):
             tu = self.remove_unwanted_space_from_segs(tu)
 
     def remove_unwanted_space_from_segs(self, tu):
-        """Remove spaces before and after punctuation,
+        """Remove unwanted spaces
+
+        Remove spaces before and after punctuation,
         quotemarks, parentheses and so on as appropriate in the seg elements
         in the tu elements.
         Input is a tu element
@@ -837,9 +798,6 @@ class Tmx(object):
         return tu
 
     def remove_unwanted_space_from_string(self, input_string):
-        """Remove spaces before and after punctuation,
-        quotemarks, parentheses and so on as appropriate
-        """
         result = input_string
 
         # regex to find space followed by punctuation
@@ -863,9 +821,7 @@ class Tmx(object):
         return result
 
     def write_tmx_file(self, out_filename):
-        """
-        Write a tmx file given a tmx etree element and a filename
-        """
+        """Write a tmx file given a tmx etree element and a filename"""
         out_dir = os.path.dirname(out_filename)
         if out_dir != '' and not os.path.isdir(out_dir):
             os.makedirs(out_dir)
@@ -878,8 +834,7 @@ class Tmx(object):
             tmx_file.write(string)
 
     def remove_tu_with_empty_seg(self):
-        """Remove tu elements that contain empty seg element
-        """
+        """Remove tu elements that contain empty seg element"""
         root = self.get_tmx().getroot()
         for tu in root.iter("tu"):
             try:
@@ -889,6 +844,7 @@ class Tmx(object):
 
     def check_if_emtpy_seg(self, tu):
         """Check if a tu element contains empty strings
+
         If there are any empty elements an AttributeError is raised
         """
         string = tu[0][0].text.strip()
@@ -896,6 +852,7 @@ class Tmx(object):
 
     def check_language(self, tu, lang):
         """Get the text of the tuv element with the given lang
+
         Run the text through the language guesser, return the result
         of this test
         """
@@ -910,23 +867,18 @@ class Tmx(object):
 
 
 class AlignmentToTmx(Tmx):
-    """
-    A class to make tmx files based on the output of an aligner
+    """A class to make tmx files based on the output of an aligner
 
     This just implements some common methods for the TCA2 and hunalign
     subclasses.
     """
     def __init__(self, origfiles):
-        """
-        Input is a list of CorpusXMLFile objects
-        """
+        """Input is a list of CorpusXMLFile objects"""
         self.origfiles = origfiles
         super(AlignmentToTmx, self).__init__(self.make_tmx())
 
     def make_tu(self, line1, line2):
-        """
-        Make a tmx tu element based on line1 and line2 as input
-        """
+        """Make a tmx tu element based on line1 and line2 as input"""
         tu = etree.Element("tu")
 
         tu.append(self.make_tuv(line1, self.origfiles[0].get_lang()))
@@ -935,9 +887,7 @@ class AlignmentToTmx(Tmx):
         return tu
 
     def make_tuv(self, line, lang):
-        """
-        Make a tuv element given an input line and a lang variable
-        """
+        """Make a tuv element given an input line and a lang variable"""
         tuv = etree.Element("tuv")
         tuv.attrib["{http://www.w3.org/XML/1998/namespace}lang"] = lang
         seg = etree.Element("seg")
@@ -947,9 +897,7 @@ class AlignmentToTmx(Tmx):
         return tuv
 
     def make_tmx_header(self, lang):
-        """
-        Make a tmx header based on the lang variable
-        """
+        """Make a tmx header based on the lang variable"""
         header = etree.Element("header")
 
         # Set various attributes
@@ -962,9 +910,7 @@ class AlignmentToTmx(Tmx):
         return header
 
     def make_tmx(self):
-        """
-        Make tmx file based on the output of the aligner
-        """
+        """Make tmx file based on the output of the aligner"""
         tmx = etree.Element("tmx")
         header = self.make_tmx_header(self.origfiles[0].get_lang())
         tmx.append(header)
@@ -984,21 +930,15 @@ class AlignmentToTmx(Tmx):
 
 
 class HunalignToTmx(AlignmentToTmx):
-    """
-    A class to make tmx files based on the output from hunalign
-    """
+    """A class to make tmx files based on the output from hunalign"""
     def __init__(self, origfiles, output):
-        """
-        Input is a list of CorpusXMLFile objects
-        """
+        """Input is a list of CorpusXMLFile objects"""
         self.output = output
-        self.threshold = 0.0 # TODO: user-settable?
+        self.threshold = 0.0  # TODO(kevin): user-settable?
         super(HunalignToTmx, self).__init__(origfiles)
 
     def parse_alignment_results(self):
-        """
-        Return parsed output files of tca2
-        """
+        """Return parsed output files of tca2"""
         pairs = [line.split("\t")
                  for line in self.output.split("\n")
                  if line]
@@ -1017,35 +957,28 @@ class HunalignToTmx(AlignmentToTmx):
                 l[1] != "<p>" and
                 l[2] > self.threshold)
 
-    multi_sep = re.compile(r' *~~~ *')
     def clean_line(self, line):
-        """
-        Remove the ~~~ occuring in multi-sentence alignments
-        """
-        return self.multi_sep.sub(' ', line)
+        """Remove the ~~~ occuring in multi-sentence alignments"""
+        multi_sep = re.compile(r' *~~~ *')
+        return multi_sep.sub(' ', line)
+
 
 class Tca2ToTmx(AlignmentToTmx):
-    """
-    A class to make tmx files based on the output from tca2
-    """
+    """A class to make tmx files based on the output from tca2"""
     def __init__(self, origfiles, sentfiles):
-        """
-        Input is a list of CorpusXMLFile objects
-        """
+        """Input is a list of CorpusXMLFile objects"""
         self.sentfiles = sentfiles
         super(Tca2ToTmx, self).__init__(origfiles)
 
     def parse_alignment_results(self):
-        """
-        Return parsed output files of tca2
-        """
+        """Return parsed output files of tca2"""
         pfile1_data = self.read_tca2_output(self.sentfiles[0])
         pfile2_data = self.read_tca2_output(self.sentfiles[1])
         return pfile1_data, pfile2_data
 
     def read_tca2_output(self, sentfile):
-        """
-        Read the output of tca2
+        """Read the output of tca2
+
         Input is a CorpusXMLFile
         """
         sentfile_name = sentfile.replace('.xml', '_new.txt')
@@ -1054,32 +987,27 @@ class Tca2ToTmx(AlignmentToTmx):
             return map(self.remove_s_tag,
                        tca2_output.read().decode('utf-8').split('\n'))
 
-    sregex = re.compile('<s id="[^ ]*">')
     def remove_s_tag(self, line):
-        """
-        Remove the s tags that tca2 has added
-        """
+        """Remove the s tags that tca2 has added"""
+        sregex = re.compile('<s id="[^ ]*">')
         line = line.replace('</s>', '')
-        line = self.sregex.sub('', line)
+        line = sregex.sub('', line)
         return line
 
 
 class TmxComparator(object):
-    """
-    A class to compare two tmx-files
-    """
+    """A class to compare two tmx-files"""
     def __init__(self, want_tmx, got_tmx):
         self.want_tmx = want_tmx
         self.got_tmx = got_tmx
 
     def get_lines_in_wantedfile(self):
-        """
-        Return the number of lines in the reference doc
-        """
+        """Return the number of lines in the reference doc"""
         return len(self.want_tmx.tmx_to_stringlist())
 
     def get_number_of_differing_lines(self):
-        """
+        """Find how many lines differ between to tmx documents.
+
         Given a unified_diff, find out how many lines in the reference doc
         differs from the doc to be tested. A return value of -1 means that
         the docs are equal
@@ -1095,9 +1023,7 @@ class TmxComparator(object):
         return num_diff_lines
 
     def get_diff_as_text(self):
-        """
-        Return a stringlist containing the diff lines
-        """
+        """Return a stringlist containing the diff lines"""
         diff = []
         for line in difflib.unified_diff(
                 self.want_tmx.tmx_to_stringlist(),
@@ -1107,9 +1033,7 @@ class TmxComparator(object):
         return diff
 
     def get_lang_diff_as_text(self, lang):
-        """
-        Return a stringlist containing the diff lines
-        """
+        """Return a stringlist containing the diff lines"""
         diff = []
         for line in difflib.unified_diff(
                 self.want_tmx.lang_to_stringlist(lang),
@@ -1120,26 +1044,23 @@ class TmxComparator(object):
 
 
 class TmxTestDataWriter(object):
-    """
-    A class that writes tmx test data to a file
-    """
+    """A class that writes tmx test data to a file"""
     def __init__(self, filename):
         self.filename = filename
 
         try:
             tree = etree.parse(filename)
             self.set_parags_testing_element(tree.getroot())
-        except IOError, error:
-            util.note("I/O error({0}): {1}".format(error.errno, error.strerror))
+        except IOError as error:
+            util.note("I/O error({0}): {1}".format(error.errno,
+                                                   error.strerror))
             sys.exit(1)
 
     def get_filename(self):
         return self.filename
 
     def make_file_element(self, name, gspairs, diffpairs):
-        """
-        Make the element file, set the attributes
-        """
+        """Make the element file, set the attributes"""
         file_element = etree.Element("file")
         file_element.attrib["name"] = name
         file_element.attrib["gspairs"] = gspairs
@@ -1151,18 +1072,14 @@ class TmxTestDataWriter(object):
         self.paragstesting = paragstesting
 
     def make_testrun_element(self, datetime):
-        """
-        Make the testrun element, set the attribute
-        """
+        """Make the testrun element, set the attribute"""
         testrun_element = etree.Element("testrun")
         testrun_element.attrib["datetime"] = datetime
 
         return testrun_element
 
     def make_paragstesting_element(self):
-        """
-        Make the paragstesting element
-        """
+        """Make the paragstesting element"""
         paragstesting_element = etree.Element("paragstesting")
 
         return paragstesting_element
@@ -1171,9 +1088,7 @@ class TmxTestDataWriter(object):
         self.paragstesting.insert(0, testrun)
 
     def write_paragstesting_data(self):
-        """
-        Write the paragstesting data to a file
-        """
+        """Write the paragstesting data to a file"""
         with open(self.filename, "w") as paragstesting:
             et = etree.ElementTree(self.paragstesting)
             et.write(paragstesting, pretty_print=True, encoding="utf-8",
@@ -1206,11 +1121,13 @@ def parse_options():
                         help="Either hunalign or tca2 (the default).")
     parser.add_argument('-d', '--dict',
                         default=None,
-                        help="Use a different bilingual seed dictionary. Must have "
-                        "two columns, with input_file language first, and "
-                        "--parallel_language second, separated by `/'. By default, "
-                        "$GTHOME/gt/common/src/anchor.txt is used, but this file "
-                        "only supports pairings between sme/sma/smj/fin/eng/nob. ")
+                        help="Use a different bilingual seed dictionary. "
+                        "Must have two columns, with input_file language "
+                        "first, and --parallel_language second, separated "
+                        "by `/'. By default, "
+                        "$GTHOME/gt/common/src/anchor.txt is used, but this "
+                        "file only supports pairings between "
+                        "sme/sma/smj/fin/eng/nob. ")
     parser.add_argument('-p', '--parallel_language',
                         help="The language to parallelize the input "
                         "document with",
@@ -1225,15 +1142,15 @@ def main():
 
     try:
         if args.aligner == "hunalign":
-            parallelizer = ParallelizeHunalign(origfile1 = args.input_file,
-                                               lang2 = args.parallel_language,
-                                               anchor_file = args.dict,
-                                               quiet = args.quiet)
+            parallelizer = ParallelizeHunalign(origfile1=args.input_file,
+                                               lang2=args.parallel_language,
+                                               anchor_file=args.dict,
+                                               quiet=args.quiet)
         elif args.aligner == "tca2":
-            parallelizer = ParallelizeTCA2(origfile1 = args.input_file,
-                                           lang2 = args.parallel_language,
-                                           anchor_file = args.dict,
-                                           quiet = args.quiet)
+            parallelizer = ParallelizeTCA2(origfile1=args.input_file,
+                                           lang2=args.parallel_language,
+                                           anchor_file=args.dict,
+                                           quiet=args.quiet)
 
     except IOError as e:
         print(e.message)
