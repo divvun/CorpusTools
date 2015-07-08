@@ -26,6 +26,7 @@ setup(
             'move_corpus_file = corpustools.move_files:main',
             'normalise_corpus_names = corpustools.normalise_filenames:main',
             'packagetmx = corpustools.packagetmx:main',
+            'paracheck = corpustools.check_para_consistency:main',
             'parallelize = corpustools.parallelize:main',
             'pick_sd_se = corpustools.pick_samediggi_se_docs:main',
             'pytextcat = corpustools.text_cat:main',

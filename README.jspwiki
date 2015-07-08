@@ -11,6 +11,7 @@ These scripts will be installed
 * [saami_crawler|CorpusTools.html#saami_crawler]
 * [generate_anchor_list|CorpusTools.html#generate_anchor_list]
 * [normalise_corpus_names|CorpusTools.html#generate_anchor_list#normalise_corpus_names]
+* [paracheck|CorpusTools.html#paracheck]
 
 !!Requirements
 
@@ -635,6 +636,22 @@ positional arguments:
   oldpath        The path of the old file.
   newpath        The place to move the file to. newpath can be either a
                  filename or a directory
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -v, --version  show program's version number and exit
+}}}
+
+!!paracheck
+
+{{{
+usage: paracheck [-h] [-v] orig_dir
+
+Check the if the files in the parallel_text entries found in the metadata
+files exist
+
+positional arguments:
+  orig_dir       The directory where the original corpus files are
 
 optional arguments:
   -h, --help     show this help message and exit
