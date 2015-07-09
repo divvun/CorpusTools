@@ -327,6 +327,54 @@ class TestAvvirConverter(XMLTester):
         self.assertXmlEqual(etree.tostring(avvir.intermediate),
                             etree.tostring(want))
 
+    def test_convert_p_6(self):
+        '''previous.text not None, sub_p.tail is None'''
+        avvir = converter.AvvirConverter('fakename')
+        avvir.intermediate = etree.fromstring(
+            '<article>'
+            '   <story class="body">'
+            '       <p class="Privat ann tittel">Stohpu<br/>vuovdemassi'
+            '<p class="NormalParagraphStyle">85</p><br/></p>'
+            '   </story>'
+            '</article>')
+
+        want = etree.fromstring(
+            '<article>'
+            '   <story class="body">'
+            '       <p>Stohpu</p>'
+            '       <p>vuovdemassi</p>'
+            '   </story>'
+            '</article>')
+
+        avvir.convert_p()
+        self.assertXmlEqual(etree.tostring(avvir.intermediate),
+                            etree.tostring(want))
+
+    def test_convert_p_7(self):
+        '''previous.tail is None, sub_p.tail not None'''
+        avvir = converter.AvvirConverter('fakename')
+        avvir.intermediate = etree.fromstring(
+            '<article>'
+            '   <story class="body">'
+            '       <p class="Privat ann tittel">'
+            '<br/><p class="NormalParagraphStyle">157</p>Ozan visttáža <br/>'
+            '       </p>'
+            '   </story>'
+            '</article>')
+
+        want = etree.fromstring(
+            '<article>'
+            '   <story class="body">'
+            '       <p></p>'
+            '       <p>Ozan visttáža</p>'
+            '       <p></p>'
+            '   </story>'
+            '</article>')
+
+        avvir.convert_p()
+        self.assertXmlEqual(etree.tostring(avvir.intermediate),
+                            etree.tostring(want))
+
     def test_convert_story(self):
         want = etree.fromstring(
             '<article>'

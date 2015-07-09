@@ -413,7 +413,11 @@ class AvvirConverter(Converter):
                     else:
                         parent.text = sub_p.tail
             else:
-                previous.tail = previous.tail + sub_p.tail
+                if sub_p.tail is not None:
+                    if previous.tail is not None:
+                        previous.tail = previous.tail + sub_p.tail
+                    else:
+                        previous.tail = sub_p.tail
             p.remove(sub_p)
 
     def convert_subelement(self, p):
