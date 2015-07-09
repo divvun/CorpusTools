@@ -263,7 +263,7 @@ class TestAvvirConverter(XMLTester):
         avvir.intermediate = etree.fromstring(
             '<article>'
             '   <story class="body">'
-            '       <p>tja'
+            '       <p>'
             '           <span>bla bla</span>'
             '           corrected text <p>text with typo</p>with tail'
             '       </p>'
@@ -273,7 +273,6 @@ class TestAvvirConverter(XMLTester):
         want = etree.fromstring(
             '<article>'
             '   <story class="body">'
-            '       <p>tja</p>'
             '       <p>bla bla</p>'
             '       <p>corrected text with tail</p>'
             '   </story>'
@@ -365,9 +364,7 @@ class TestAvvirConverter(XMLTester):
         want = etree.fromstring(
             '<article>'
             '   <story class="body">'
-            '       <p></p>'
             '       <p>Ozan visttáža</p>'
-            '       <p></p>'
             '   </story>'
             '</article>')
 

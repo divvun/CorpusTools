@@ -392,8 +392,9 @@ class AvvirConverter(Converter):
 
         return self.intermediate
 
-    def insert_element(self, p, text, i):
-        if text is not None:
+    @staticmethod
+    def insert_element(p, text, i):
+        if text is not None and text.strip() != '':
             new_p = etree.Element('p')
             new_p.text = text
             grandparent = p.getparent()
@@ -440,6 +441,10 @@ class AvvirConverter(Converter):
 
             self.convert_sub_p(p)
             self.convert_subelement(p)
+
+            if p.text is None or p.text.strip() == '':
+                story = p.getparent()
+                story.remove(p)
 
     def convert_story(self):
         for title in self.intermediate.findall('.//story[@class="Tittel"]'):
