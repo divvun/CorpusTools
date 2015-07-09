@@ -194,7 +194,8 @@ class Converter(object):
 
         if (complete.
             attrib['{http://www.w3.org/XML/1998/namespace}lang'] in
-                ['sma', 'sme', 'smj', 'nob', 'fin']):
+                ['sma', 'sme', 'smj', 'smn', 'sms', 'nob', 'fin', 'swe',
+                 'nno', 'dan', 'fkv', 'sju', 'sje']):
             fixer.fix_body_encoding()
 
     mixed_to_unicode = {
