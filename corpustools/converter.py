@@ -407,7 +407,10 @@ class AvvirConverter(Converter):
             previous = sub_p.getprevious()
             if previous is None:
                 parent = sub_p.getparent()
-                parent.text = parent.text + sub_p.tail
+                if parent.text is not None:
+                    parent.text = parent.text + sub_p.tail
+                else:
+                    parent.text = sub_p.tail
             else:
                 previous.tail = previous.tail + sub_p.tail
             p.remove(sub_p)
