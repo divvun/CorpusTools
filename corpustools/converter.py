@@ -402,6 +402,16 @@ class AvvirConverter(Converter):
 
         return i
 
+    def convert_sub_p(self, p):
+        for sub_p in p.findall('.//p'):
+            previous = sub_p.getprevious()
+            if previous is None:
+                parent = sub_p.getparent()
+                parent.text = parent.text + sub_p.tail
+            else:
+                previous.tail = previous.tail + sub_p.tail
+            p.remove(sub_p)
+
     def convert_subelement(self, p):
         i = 1
         for subelement in p:
@@ -416,10 +426,11 @@ class AvvirConverter(Converter):
             p.remove(subelement)
 
     def convert_p(self):
-        for p in self.intermediate.findall('.//p'):
+        for p in self.intermediate.findall('./story/p'):
             if p.get("class") is not None:
                 del p.attrib["class"]
 
+            self.convert_sub_p(p)
             self.convert_subelement(p)
 
     def convert_story(self):
