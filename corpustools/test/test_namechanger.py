@@ -162,6 +162,10 @@ class TestComputeMovepairs(unittest.TestCase):
     def test_compute_movepairs_1(self):
         '''newpath does not exist, no parallels'''
         mc = namechanger.MovepairComputer()
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/a.txt.xsl'),
+            create=True)
+        sme_metadata.write_file()
         mc.compute_all_movepairs(
             os.path.join(self.tempdir.path,
                          'orig/sme/ficti/sub/a.txt').decode('utf8'),
@@ -178,6 +182,10 @@ class TestComputeMovepairs(unittest.TestCase):
     def test_compute_movepairs_2(self):
         '''newpath does not exist, needs normalisation, no parallels'''
         mc = namechanger.MovepairComputer()
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/æ.txt.xsl'),
+            create=True)
+        sme_metadata.write_file()
         mc.compute_all_movepairs(
             os.path.join(self.tempdir.path,
                          'orig/sme/ficti/sub/æ.txt').decode('utf8'),
@@ -197,6 +205,10 @@ class TestComputeMovepairs(unittest.TestCase):
         self.tempdir.write('orig/sme/ficti/sub/d.txt', 'd content')
 
         mc = namechanger.MovepairComputer()
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/c.txt.xsl'),
+            create=True)
+        sme_metadata.write_file()
         mc.compute_all_movepairs(
             os.path.join(self.tempdir.path,
                          'orig/sme/ficti/sub/c.txt').decode('utf8'),
@@ -261,7 +273,17 @@ class TestComputeMovepairs(unittest.TestCase):
                 os.path.join(self.tempdir.path,
                              'orig/sme/ficti/sub/f.txt').decode('utf8'),
                 os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/g.txt').decode('utf8'))])
+                             'orig/sme/ficti/sub/g.txt').decode('utf8')),
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/f.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/f.txt').decode('utf8')),
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt').decode('utf8'))])
 
     def test_compute_movepairs_6(self):
         '''move to different subdir, with parallels'''

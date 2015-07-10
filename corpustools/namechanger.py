@@ -45,7 +45,7 @@ class MovepairComputer(object):
         '''filepairs will be a list of PathPairs'''
         self.filepairs = []
 
-    def compute_movepairs(self, oldpath, newpath):
+    def compute_movepairs(self, oldpath, newpath, nochange=False):
         '''Add the oldpath and the new goalpath to filepairs
 
         Args:
@@ -56,7 +56,10 @@ class MovepairComputer(object):
             os.path.dirname(newpath),
             normalise_filename(os.path.basename(newpath)))
 
-        non_dupe_path = compute_new_basename(oldpath, normalisedpath)
+        if nochange:
+            non_dupe_path = normalisedpath
+        else:
+            non_dupe_path = compute_new_basename(oldpath, normalisedpath)
 
         self.filepairs.append(PathPair(oldpath, non_dupe_path))
 
@@ -70,23 +73,23 @@ class MovepairComputer(object):
         old_components = util.split_path(oldpath)
         new_components = util.split_path(newpath)
 
-        if (old_components.genre != new_components.genre or
-                old_components.subdirs != new_components.subdirs):
-            metadatafile = xslsetter.MetadataHandler(oldpath + '.xsl')
-            for lang, parallel in metadatafile.get_parallel_texts().items():
-                oldparellelpath = u'/'.join((
-                    old_components.root,
-                    old_components.module,
-                    lang, old_components.genre,
-                    old_components.subdirs, parallel))
-                newparallelpath = u'/'.join((
-                    new_components.root,
-                    new_components.module,
-                    lang, new_components.genre,
-                    new_components.subdirs,
-                    parallel))
+        metadatafile = xslsetter.MetadataHandler(oldpath + '.xsl')
+        for lang, parallel in metadatafile.get_parallel_texts().items():
+            oldparellelpath = u'/'.join((
+                old_components.root,
+                old_components.module,
+                lang, old_components.genre,
+                old_components.subdirs, parallel))
+            newparallelpath = u'/'.join((
+                new_components.root,
+                new_components.module,
+                lang, new_components.genre,
+                new_components.subdirs,
+                parallel))
+            no_mv_needed = (old_components.genre == new_components.genre and
+                            old_components.subdirs == new_components.subdirs)
+            self.compute_movepairs(oldparellelpath, newparallelpath, no_mv_needed)
 
-                self.compute_movepairs(oldparellelpath, newparallelpath)
 
     def compute_all_movepairs(self, oldpath, newpath):
         self.compute_movepairs(oldpath, newpath)
@@ -262,8 +265,9 @@ class CorpusFilesetMoverAndUpdater(object):
 
     def move_files(self):
         for filepair in self.mc.filepairs:
-            cfm = CorpusFileMover(filepair.oldpath, filepair.newpath)
-            cfm.move_files()
+            if filepair.oldpath != filepair.newpath:
+                cfm = CorpusFileMover(filepair.oldpath, filepair.newpath)
+                cfm.move_files()
 
     def update_own_metadata(self):
         '''Update metadata'''

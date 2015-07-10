@@ -84,7 +84,7 @@ class AddToCorpus(object):
                 mainlang != namechanger.normalise_filename(mainlang)):
             raise AdderException(
                 u'Invalid mainlang: {}. '
-                u'It must consist of three lowercase non ascii '
+                u'It must consist of three lowercase non ascii ' # *non*? TODO
                 u'letters'.format(mainlang))
 
         self.corpusdir = corpusdir
