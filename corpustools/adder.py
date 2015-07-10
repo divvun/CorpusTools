@@ -99,6 +99,7 @@ class AddToCorpus(object):
 
     @staticmethod
     def __normalise_path(path):
+        '''All paths in the corpus should consist of lowercase ascii letters'''
         new_parts = []
         for part in path.split('/'):
             if part != '':
