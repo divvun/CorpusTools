@@ -373,7 +373,7 @@ class Converter(object):
             logfile.write(invalid_input.encode('utf8'))
 
         raise ConversionException(
-            "{}: log is found in {}".format(self.__name__, self.logfile))
+            "{}: log is found in {}".format(type(self).__name__, self.logfile))
 
 
 class AvvirConverter(Converter):
@@ -699,7 +699,7 @@ class PDF2XMLConverter(Converter):
         try:
             root_element = etree.fromstring(pdf_content)
         except etree.XMLSyntaxError as e:
-            self.handle_syntaxerror(e, util.lineno(), pdf_content)
+            self.handle_syntaxerror(e, util.lineno(), pdf_content.decode('utf-8'))
 
         self.parse_pages(root_element)
 
@@ -2334,7 +2334,7 @@ class XslMaker(object):
                     logfile.write('{}\n'.format(str(entry)))
 
             raise ConversionException(
-                '{}: Syntax error. More info in {}'.format(self.__name__,
+                '{}: Syntax error. More info in {}'.format(type(self).__name__,
                                                            self.logfile))
 
         preprocessXsl = etree.parse(
