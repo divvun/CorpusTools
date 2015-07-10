@@ -377,7 +377,13 @@ class Converter(object):
 
 
 class AvvirConverter(Converter):
-    '''Convert Ávvir xml files to the giellatekno xml format.'''
+    '''Convert Ávvir xml files to the giellatekno xml format.
+
+    The root node in an Ávvir document is article.
+    article nodes contains one or more story nodes.
+    story nodes contain one or more p nodes.
+    p nodes contain span, br and (since 2013) p nodes.
+    '''
 
     def __init__(self, filename, write_intermediate=False):
         super(AvvirConverter, self).__init__(filename,
@@ -393,17 +399,37 @@ class AvvirConverter(Converter):
         return self.intermediate
 
     @staticmethod
-    def insert_element(p, text, i):
+    def insert_element(p, text, position):
+        '''Insert a new element in p's parent
+
+        Arguments:
+            p: an lxml element, it is a story/p element
+            text: (unicode) string
+            position: (integer) the position inside p's parent where the new
+                      element is inserted
+
+        Returns:
+            position: (integer)
+        '''
         if text is not None and text.strip() != '':
             new_p = etree.Element('p')
             new_p.text = text
             grandparent = p.getparent()
-            grandparent.insert(grandparent.index(p) + i, new_p)
-            i += 1
+            grandparent.insert(grandparent.index(p) + position, new_p)
+            position += 1
 
-        return i
+        return position
 
-    def convert_sub_p(self, p):
+    @staticmethod
+    def convert_sub_p(p):
+        '''Convert p element found inside story/p elements
+
+        These elements contain erroneous text that an editor has removed.
+        This function removes p.text and saves p.tail
+
+        Arguments:
+            p: an lxml element, it is a story/p element
+        '''
         for sub_p in p.findall('.//p'):
             previous = sub_p.getprevious()
             if previous is None:
@@ -422,19 +448,26 @@ class AvvirConverter(Converter):
             p.remove(sub_p)
 
     def convert_subelement(self, p):
-        i = 1
+        '''Convert subelements of story/p elements to p elements
+
+        Arguments:
+            p: an lxml element, it is a story/p element
+        '''
+        position = 1
         for subelement in p:
-            i = self.insert_element(p, subelement.text, i)
+            position = self.insert_element(p, subelement.text, position)
 
             for subsubelement in subelement:
                 for text in [subsubelement.text, subsubelement.tail]:
-                    i = self.insert_element(p, text, i)
+                    position = self.insert_element(p, text, position)
 
-            i = self.insert_element(p, subelement.tail, i)
+            position = self.insert_element(p, subelement.tail, position)
 
+            self.subelements.add(subelement.tag)
             p.remove(subelement)
 
     def convert_p(self):
+        '''Convert story/p elements to one or more p elements'''
         for p in self.intermediate.findall('./story/p'):
             if p.get("class") is not None:
                 del p.attrib["class"]
@@ -447,6 +480,7 @@ class AvvirConverter(Converter):
                 story.remove(p)
 
     def convert_story(self):
+        '''Convert story elements in to giellatekno xml elements'''
         for title in self.intermediate.findall('.//story[@class="Tittel"]'):
             for p in title.findall('./p'):
                 p.set('type', 'title')
@@ -476,6 +510,7 @@ class AvvirConverter(Converter):
             parent.remove(story)
 
     def convert_article(self):
+        '''The root element of an Ávvir doc is article, rename it to body'''
         self.intermediate.tag = 'body'
         document = etree.Element('document')
         document.append(self.intermediate)
