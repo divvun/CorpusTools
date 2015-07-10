@@ -17,6 +17,7 @@
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
 #   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
+#   Copyright 2014-2015 Kevin Brubeck Unhammer <unhammer@fsfe.org>
 #
 
 from __future__ import print_function
