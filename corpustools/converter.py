@@ -357,7 +357,7 @@ class Converter(object):
 
         return runner.stdout
 
-    def handle_xmlsyntaxerror(self, e, lineno, invalid_xml):
+    def handle_syntaxerror(self, e, lineno, invalid_input):
         with open(self.logfile, 'w') as logfile:
             logfile.write('Error at: {}'.format(lineno))
             for entry in e.error_log:
@@ -370,7 +370,7 @@ class Converter(object):
 
                 logfile.write('\n')
 
-            logfile.write(etree.tostring(invalid_xml).encode('utf8'))
+            logfile.write(invalid_input.encode('utf8'))
 
         raise ConversionException(
             "{}: log is found in {}".format(self.__name__, self.logfile))
@@ -699,7 +699,7 @@ class PDF2XMLConverter(Converter):
         try:
             root_element = etree.fromstring(pdf_content)
         except etree.XMLSyntaxError as e:
-            self.handle_xmlsyntaxerror(e, util.lineno(), pdf_content)
+            self.handle_syntaxerror(e, util.lineno(), pdf_content)
 
         self.parse_pages(root_element)
 
@@ -1662,7 +1662,7 @@ class HTMLContentConverter(Converter):
         try:
             intermediate = transform(self.soup)
         except etree.XMLSyntaxError as e:
-            self.handle_xmlsyntaxerror(e, util.lineno(), self.soup)
+            self.handle_syntaxerror(e, util.lineno(), etree.tostring(self.soup))
 
         if len(transform.error_log) > 0:
             with open(self.logfile, 'w') as logfile:
