@@ -463,7 +463,6 @@ class AvvirConverter(Converter):
 
             position = self.insert_element(p, subelement.tail, position)
 
-            self.subelements.add(subelement.tag)
             p.remove(subelement)
 
     def convert_p(self):
