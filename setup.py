@@ -22,6 +22,7 @@ setup(
             'ccat = corpustools.ccat:main',
             'compare_tmx_goldstandard = corpustools.compare_tmx_goldstandard:main',
             'convert2xml = corpustools.converter:main',
+            'debug_corpus = corpustools.debug_corpus:main',
             'generate_anchor_list = corpustools.generate_anchor_list:main',
             'move_corpus_file = corpustools.move_files:main',
             'normalise_corpus_names = corpustools.normalise_filenames:main',
