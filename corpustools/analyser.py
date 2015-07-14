@@ -228,19 +228,23 @@ class Analyser(object):
 
     def analyse(self, xml_file):
         '''Analyse a file if it is not ocr'ed'''
-        self.xml_file = parallelize.CorpusXMLFile(xml_file)
-        analysis_xml_name = self.xml_file.get_name().replace('converted/',
-                                                             'analysed/')
+        try:
+            self.xml_file = parallelize.CorpusXMLFile(xml_file)
+            analysis_xml_name = self.xml_file.get_name().replace('converted/',
+                                                                'analysed/')
 
-        if self.xml_file.get_ocr() is None:
-            self.dependency_analysis()
-            if self.get_disambiguation() is not None:
-                self.makedirs(analysis_xml_name)
-                self.get_analysis_xml()
-                self.xml_file.write(analysis_xml_name)
-        else:
-            print(xml_file, 'is an OCR file and will not be analysed',
-                  file=sys.stderr)
+            if self.xml_file.get_ocr() is None:
+                self.dependency_analysis()
+                if self.get_disambiguation() is not None:
+                    self.makedirs(analysis_xml_name)
+                    self.get_analysis_xml()
+                    self.xml_file.write(analysis_xml_name)
+            else:
+                print(xml_file, 'is an OCR file and will not be analysed',
+                    file=sys.stderr)
+        except etree.XMLSyntaxError as e:
+            print('Can not parse', xml_file, file=sys.stderr)
+            print('The error was:', str(e), file=sys.stderr)
 
     def analyse_in_parallel(self):
         '''Analyse file in parallel'''
