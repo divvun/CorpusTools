@@ -84,7 +84,6 @@ def main():
 
                     if not os.path.exists(converted_f):
                         cm.FILES.append(orig_f + '.xsl')
-                        ana.xml_files.append(converted_f)
                         print(orig_f)
                         print('\t' + converted_f)
                         print('\t' + analysed_f)
