@@ -1485,8 +1485,12 @@ class HTMLContentConverter(Converter):
                     'help closed hidden-xs',
                     'right',  # ntfk
                     'noindex',  # ntfk
+                    'dropmenudiv',  # calliidlagadus.org
+                    'egavpi',  # calliidlagadus.org
+                    'egavpi_fiskes',  # calliidlagadus.org
                     ],
                 'id': [
+                    'chromemenu',  # calliidlagadus.org
                     's4-leftpanel',  # ntfk
                     'ntfkNavMain',  # ntfk
                     'ntfkNavBreadcrumb',  # ntfk
