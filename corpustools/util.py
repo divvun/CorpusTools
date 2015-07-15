@@ -159,7 +159,7 @@ def print_element(element, level, indent, out):
     be indented
     out is a file like buffer, e.g. an opened file
     '''
-    tag = element.tag.replace('{http://www.w3.org/1999/xhtml}', 'html:')
+    tag = element.tag.replace('{http://www.w3.org/1999/xhtml}', '')
 
     out.write(' ' * (level * indent))
     out.write('<{}'.format(tag))
@@ -195,7 +195,8 @@ def print_element(element, level, indent, out):
     if level > 0 and element.tail is not None and element.tail.strip() != '':
         for _ in range(0, (level - 1) * indent):
             out.write(' ')
-        out.write('{}\n'.format(element.tail.strip().encode('utf8')))
+        out.write(element.tail.strip().encode('utf8'))
+        out.write('\n')
 
 
 def name_to_unicode(filename):
