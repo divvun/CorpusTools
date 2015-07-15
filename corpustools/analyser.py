@@ -258,6 +258,8 @@ class Analyser(object):
 
     def analyse_serially(self):
         '''Analyse files one by one'''
+        print('Starting the analysis of {} files'.format(len(self.xml_files)))
+
         for xml_file in self.xml_files:
             print('Analysing', xml_file, file=sys.stderr)
             self.analyse(xml_file)
