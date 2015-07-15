@@ -733,7 +733,8 @@ class PDF2XMLConverter(Converter):
         try:
             root_element = etree.fromstring(pdf_content)
         except etree.XMLSyntaxError as e:
-            self.handle_syntaxerror(e, util.lineno(), pdf_content.decode('utf-8'))
+            self.handle_syntaxerror(e, util.lineno(),
+                                    pdf_content.decode('utf-8'))
 
         self.parse_pages(root_element)
 
@@ -1482,9 +1483,13 @@ class HTMLContentConverter(Converter):
                     'innholdsfortegenlse-child',
                     'metaWrapper',
                     'help closed hidden-xs',
-
+                    'right',  # ntfk
+                    'noindex',  # ntfk
                     ],
                 'id': [
+                    's4-leftpanel',  # ntfk
+                    'ntfkNavMain',  # ntfk
+                    'ntfkNavBreadcrumb',  # ntfk
                     'searchBox',
                     'murupolku',                # www.samediggi.fi
                     'main_navi_main',           # www.samediggi.fi
@@ -1538,6 +1543,8 @@ class HTMLContentConverter(Converter):
                     'document-header',
                     'breadcrumbs-bottom',
                     'sitemap',
+                    'ntfkFooter',  # ntfk
+                    'ntfkHeader',  # ntfk
                     ],
                 },
             'p': {
@@ -1573,11 +1580,12 @@ class HTMLContentConverter(Converter):
             'a': {
                 'id': [
                     'leftPanelTab',
+                    'ctl00_IdWelcome_ExplicitLogin',  # ntfk
                     ],
                 'class': [
                     'mainlevel',
-                    # lovdata.no
-                    'share-paragraf',
+                    'share-paragraf',  # lovdata.no
+                    'addthis_button_print',  # ntfk
                     ],
                 },
             'td': {
@@ -1696,7 +1704,8 @@ class HTMLContentConverter(Converter):
         try:
             intermediate = transform(self.soup)
         except etree.XMLSyntaxError as e:
-            self.handle_syntaxerror(e, util.lineno(), etree.tostring(self.soup))
+            self.handle_syntaxerror(e, util.lineno(),
+                                    etree.tostring(self.soup))
 
         if len(transform.error_log) > 0:
             with open(self.logfile, 'w') as logfile:
@@ -2567,7 +2576,7 @@ class ConverterManager(object):
         print('Starting the conversion of {} files'.format(len(self.FILES)))
 
         for xsl_file in self.FILES:
-            print('converting', xsl_file[:-4])
+            print('converting', xsl_file[:-4], file=sys.stderr)
             self.convert(xsl_file)
 
     def collect_files(self, sources):
