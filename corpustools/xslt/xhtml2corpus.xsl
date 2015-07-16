@@ -172,7 +172,7 @@ xsltproc xhtml2corpus.xsl - > file.xml
 
 <xsl:template match="html:center">
     <xsl:if test="string-length(normalize-space(.)) > 1">
-        <p >
+        <p>
             <xsl:value-of select="text()"/>
         </p>
     </xsl:if>
@@ -451,9 +451,16 @@ If it is a container it has one or more of the these tags:
 </xsl:template>
 
 <xsl:template match="html:div/html:font|html:td/html:font">
-    <p>
-        <xsl:apply-templates/>
-    </p>
+    <xsl:choose>
+        <xsl:when test="ancestor::html:em">
+            <xsl:apply-templates/>
+        </xsl:when>
+        <xsl:otherwise>
+            <p>
+                <xsl:apply-templates/>
+            </p>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="pb">

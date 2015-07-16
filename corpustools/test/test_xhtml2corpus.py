@@ -2281,6 +2281,41 @@ tests = {
             '</document>'
             ),
         },
+    'em-table-tr-td-font-em': {
+        'html': (
+            '<html>'
+            '  <body>'
+            '    <em>'
+            '      <table>'
+            '        <tr>'
+            '          <td>'
+            '            <font'
+            '              <em>'
+            '                em-table-tr-td-font-em'
+            '              </em>'
+            '            </font>'
+            '          </td>'
+            '        </tr>'
+            '      </table>'
+            '    </em>'
+            '  </body>'
+            '</html>'
+            ),
+        'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <p>'
+            '      <em type="italic">'
+            '        em-table-tr-td-font-em'
+            '      </em>'
+            '    </p>'
+            '  </body>'
+            '</document>'
+            ),
+        },
     'ul-li-div-p': {
         'html': (
             '<html>'
