@@ -1490,6 +1490,8 @@ class HTMLContentConverter(Converter):
                     'egavpi_fiskes',  # calliidlagadus.org
                     ],
                 'id': [
+                    'path',  # new samediggi.no
+                    'leftcol',  # new samediggi.no
                     'chromemenu',  # calliidlagadus.org
                     's4-leftpanel',  # ntfk
                     'ntfkNavMain',  # ntfk
