@@ -1496,6 +1496,34 @@ tests = {
             '</document>'
             ),
         },
+    'p-sup-a-sup': {
+        'html': (
+            '<html>'
+            '  <body>'
+            '    <p>'
+            '      bla bla'
+            '      <sup>'
+            '        <a>'
+            '          <sup>2</sup>'
+            '        </a>'
+            '      </sup>'
+            '    </p>'
+            '  </body>'
+            '</html>'
+            ),
+        'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <p>'
+            '      bla bla 2'
+            '    </p>'
+            '  </body>'
+            '</document>'
+            ),
+        },
     'td-a-b': {
         'html': (
             '<html>'

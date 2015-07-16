@@ -390,7 +390,7 @@ If it is a container it has one or more of the these tags:
 </xsl:template>
 
 <!-- superscripts and subscripts are dropped to text -->
-<xsl:template match="html:big|html:small|html:sub|html:sup">
+<xsl:template match="html:sub|html:sup">
     <xsl:choose>
         <xsl:when test="text()">
             <xsl:choose>
@@ -402,6 +402,14 @@ If it is a container it has one or more of the these tags:
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="html:small">
+    <xsl:choose>
         <xsl:when test="html:a">
             <p>
                 <xsl:apply-templates/>
