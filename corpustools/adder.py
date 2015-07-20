@@ -324,18 +324,18 @@ def main():
         elif orig.startswith('http'):
             adder.copy_url_to_corpus(orig.decode('utf8'),
                                      args.parallel_file.decode('utf8'))
-
-    for orig in args.origs:
-        if os.path.isfile(orig):
-            adder.copy_file_to_corpus(orig.decode('utf8'))
-        elif orig.startswith('http'):
-            adder.copy_url_to_corpus(orig.decode('utf8'))
-        elif os.path.isdir(orig):
-            for root, dirs, files in os.walk(orig):
-                for f in files:
-                    adder.copy_file_to_corpus(os.path.join(root,
-                                                           f).decode('utf8'))
-        else:
-            print(u'Cannot handle {}'.format(orig), file=sys.stderr)
+    else:
+        for orig in args.origs:
+            if os.path.isfile(orig):
+                adder.copy_file_to_corpus(orig.decode('utf8'))
+            elif orig.startswith('http'):
+                adder.copy_url_to_corpus(orig.decode('utf8'))
+            elif os.path.isdir(orig):
+                for root, dirs, files in os.walk(orig):
+                    for f in files:
+                        adder.copy_file_to_corpus(os.path.join(root,
+                                                            f).decode('utf8'))
+            else:
+                print(u'Cannot handle {}'.format(orig), file=sys.stderr)
 
     adder.add_files_to_working_copy()
