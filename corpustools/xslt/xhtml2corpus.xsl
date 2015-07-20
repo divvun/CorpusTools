@@ -466,6 +466,9 @@ If it is a container it has one or more of the these tags:
         <xsl:when test="ancestor::html:em">
             <xsl:apply-templates/>
         </xsl:when>
+        <xsl:when test="html:font">
+            <xsl:apply-templates/>
+        </xsl:when>
         <xsl:otherwise>
             <p>
                 <xsl:apply-templates/>

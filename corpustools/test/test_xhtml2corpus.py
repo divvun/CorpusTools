@@ -1283,6 +1283,35 @@ tests = {
             '</document>'
             ),
         },
+    'div-font-font-p': {
+        'html': (
+            '<html>'
+            '  <body>'
+            '    <div>'
+            '      <font>'
+            '        <font>'
+            '          <p>'
+            '            Voksenopplæring'
+            '          </p>'
+            '        </font>'
+            '      </font>'
+            '    </div>'
+            '  </body>'
+            '</html>'
+            ),
+        'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <p>'
+            '      Voksenopplæring'
+            '    </p>'
+            '  </body>'
+            '</document>'
+            ),
+        },
     'p-span-b': {
         'html': (
             '<html>'
