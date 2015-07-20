@@ -582,6 +582,28 @@ class TestDocxConverter(XMLTester):
 
 
 class TestHTMLContentConverter(XMLTester):
+    def test_remove_empty_p_1(self):
+        '''Remove an empty p'''
+        got = converter.HTMLContentConverter(
+            'with-o:p.html',
+            content='<html><body><p/></html>').soup
+
+        want = html5parser.document_fromstring(
+            '<html><head/><body></body></html>')
+
+        self.assertEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_remove_empty_p_2(self):
+        '''Do not remove a p with content'''
+        got = converter.HTMLContentConverter(
+            'with-o:p.html',
+            content='<html><body><p><span>spanny</span></p></html>').soup
+
+        want = html5parser.document_fromstring(
+            '<html><head/><body><p><span>spanny</span></p></body></html>')
+
+        self.assertEqual(etree.tostring(got), etree.tostring(want))
+
     def test_remove_empty_class(self):
         got = converter.HTMLContentConverter(
             'with-o:p.html',

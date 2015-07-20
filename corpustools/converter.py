@@ -1230,7 +1230,6 @@ class HTMLContentConverter(Converter):
         '''Clean up content, then convert it to xhtml using html5parser'''
         super(HTMLContentConverter, self).__init__(filename,
                                                    write_intermediate)
-
         cleaner = clean.Cleaner(
             page_structure=False,
             scripts=True,
@@ -1260,6 +1259,7 @@ class HTMLContentConverter(Converter):
         decoded = self.to_unicode(content)
         semiclean = self.remove_cruft(decoded)
         superclean = cleaner.clean_html(semiclean)
+
 
         self.soup = html5parser.document_fromstring(superclean)
         self.convert2xhtml()
@@ -1426,7 +1426,7 @@ class HTMLContentConverter(Converter):
             namespaces={'html': 'http://www.w3.org/1999/xhtml'})
 
         for elt in ps:
-            if elt.text is None and elt.tail is None:
+            if elt.text is None and elt.tail is None and len(elt) == 0:
                 elt.getparent().remove(elt)
 
     def remove_empty_class(self):
