@@ -89,8 +89,8 @@ class MovepairComputer(object):
                 parallel))
             no_mv_needed = (old_components.genre == new_components.genre and
                             old_components.subdirs == new_components.subdirs)
-            self.compute_movepairs(oldparellelpath, newparallelpath, no_mv_needed)
-
+            self.compute_movepairs(oldparellelpath, newparallelpath,
+                                   no_mv_needed)
 
     def compute_all_movepairs(self, oldpath, newpath):
         self.compute_movepairs(oldpath, newpath)
@@ -207,17 +207,17 @@ class CorpusFileMover(object):
                     for lang in metadatafile.get_parallel_texts().keys():
                         self._move(
                             u'/'.join((self.old_components.root, tmxdir,
-                                    self.old_components.lang + u'2' + lang,
-                                    self.old_components.genre,
-                                    self.old_components.subdirs,
-                                    self.old_components.basename + u'.' +
-                                    tmx)),
+                                       self.old_components.lang + u'2' + lang,
+                                       self.old_components.genre,
+                                       self.old_components.subdirs,
+                                       self.old_components.basename + u'.' +
+                                       tmx)),
                             u'/'.join((self.new_components.root, tmxdir,
-                                    self.new_components.lang + u'2' + lang,
-                                    self.new_components.genre,
-                                    self.new_components.subdirs,
-                                    self.new_components.basename + u'.' +
-                                    tmx)))
+                                       self.new_components.lang + u'2' + lang,
+                                       self.new_components.genre,
+                                       self.new_components.subdirs,
+                                       self.new_components.basename + u'.' +
+                                       tmx)))
 
 
 class CorpusFilesetMoverAndUpdater(object):
