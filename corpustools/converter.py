@@ -1557,7 +1557,8 @@ class HTMLContentConverter(Converter):
             'p': {
                 'class': [
                     'WebPartReadMoreParagraph',
-                    'breadcrumbs'
+                    'breadcrumbs',
+                    'langs'  # oahpa.no
                     ],
                 },
             'ul': {
