@@ -122,9 +122,7 @@ class Converter(object):
                     logfile.write('\n')
                     logfile.write(str(entry))
                     logfile.write('\n')
-                logfile.write(etree.tostring(complete,
-                                             encoding='utf8',
-                                             pretty_print=True))
+                util.print_element(complete, 0, 4, logfile)
 
             raise ConversionException(
                 '{}: Not valid XML. More info in the log file: '
