@@ -171,17 +171,23 @@ class AddToCorpus(object):
             print(u'Skipping: {}'.format(e))
 
     def add_metadata_to_corpus(self, none_dupe_path, meta_filename):
-        new_components = util.split_path(none_dupe_path)
+        none_dupe_components = util.split_path(none_dupe_path)
         new_metadata = xslsetter.MetadataHandler(none_dupe_path + '.xsl',
                                                  create=True)
         new_metadata.set_variable('filename', meta_filename)
-        new_metadata.set_variable('mainlang', new_components.lang)
-        new_metadata.set_variable('genre', new_components.genre)
+        new_metadata.set_variable('mainlang', none_dupe_components.lang)
+        new_metadata.set_variable('genre', none_dupe_components.genre)
         new_metadata.write_file()
         self.additions.append(none_dupe_path + '.xsl')
 
     @staticmethod
-    def update_parallel_data(new_components, parallelpath):
+    def update_parallel_data(none_dupe_components, parallelpath):
+        '''Update metadata in the parallel files
+
+        Arguments:
+            new_components: (util.PathComponents) of none_dupe_path
+            parallelpath: (string) path of the parallel file
+        '''
         if len(parallelpath) > 0:
             if not os.path.exists(parallelpath):
                 raise AdderException('{} does not exist'.format(
@@ -190,7 +196,7 @@ class AddToCorpus(object):
             parallel_metadata = xslsetter.MetadataHandler(
                 parallelpath + '.xsl')
             parallels = parallel_metadata.get_parallel_texts()
-            parallels[new_components.lang] = new_components.basename
+            parallels[none_dupe_components.lang] = none_dupe_components.basename
 
             parall_components = util.split_path(parallelpath)
             parallels[parall_components.lang] = parall_components.basename
@@ -198,11 +204,11 @@ class AddToCorpus(object):
             for lang, parallel in parallels.items():
                 metadata = xslsetter.MetadataHandler(
                     '/'.join((
-                        new_components.root,
-                        new_components.module,
+                        none_dupe_components.root,
+                        none_dupe_components.module,
                         lang,
-                        new_components.genre,
-                        new_components.subdirs,
+                        none_dupe_components.genre,
+                        none_dupe_components.subdirs,
                         parallel + '.xsl')))
 
                 for lang1, parallel1 in parallels.items():
@@ -211,6 +217,12 @@ class AddToCorpus(object):
                 metadata.write_file()
 
     def none_dupe_path(self, path):
+        '''Compute the none duplicate path of the file to be added
+
+        Arguments:
+            path: (string) path of the file as given as input
+            This string may contain unwanted chars and
+        '''
         return namechanger.compute_new_basename(
             path, os.path.join(self.goaldir,
                                namechanger.normalise_filename(
@@ -310,14 +322,14 @@ def main():
             adder.copy_file_to_corpus(orig.decode('utf8'),
                                       args.parallel_file.decode('utf8'))
         elif orig.startswith('http'):
-            adder.copy_file_to_corpus(orig,
-                                      args.parallel_file.decode('utf8'))
+            adder.copy_url_to_corpus(orig.decode('utf8'),
+                                     args.parallel_file.decode('utf8'))
 
     for orig in args.origs:
         if os.path.isfile(orig):
             adder.copy_file_to_corpus(orig.decode('utf8'))
         elif orig.startswith('http'):
-            adder.copy_url_to_corpus(orig)
+            adder.copy_url_to_corpus(orig.decode('utf8'))
         elif os.path.isdir(orig):
             for root, dirs, files in os.walk(orig):
                 for f in files:
