@@ -237,6 +237,9 @@ xsltproc xhtml2corpus.xsl - > file.xml
                 <xsl:apply-templates/>
             </em>
         </xsl:when>
+        <xsl:when test="html:b">
+            <xsl:apply-templates/>
+        </xsl:when>
         <xsl:otherwise>
             <em type="italic">
                 <xsl:apply-templates/>

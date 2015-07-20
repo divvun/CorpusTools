@@ -2190,6 +2190,35 @@ tests = {
             '</document>'
             ),
         },
+    'p-span-u-b': {
+        'html': (
+            '<html>'
+            '  <body>'
+            '    <p>'
+            '      <span>'
+            '        <u>'
+            '          <b>'
+            '            Tysfjord turistsenter'
+            '          </b>'
+            '        </u>'
+            '      </span>'
+            '    </p>'
+            '  </body>'
+            '</html>'
+            ),
+        'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <p>'
+            '      <em type="bold">Tysfjord turistsenter</em>'
+            '    </p>'
+            '  </body>'
+            '</document>'
+            ),
+        },
     'th-b': {
         'html': (
             '<html>'

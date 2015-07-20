@@ -1488,10 +1488,15 @@ class HTMLContentConverter(Converter):
                     'dropmenudiv',  # calliidlagadus.org
                     'egavpi',  # calliidlagadus.org
                     'egavpi_fiskes',  # calliidlagadus.org
+                    'tipformcontainer',  # tysfjord.kommune.no
+                    'andrenyheter',  # tysfjord.kommune.no
                     ],
                 'id': [
+                    'skiplink',  # tysfjord.kommune.no
+                    'topnav',  # tysfjord.kommune.no
+                    'navbar',  # tysfjord.kommune.no
                     'leftbar',  # forrest (divvun and giellatekno sites)
-                    'path',  # new samediggi.no
+                    'path',  # new samediggi.no, tysfjord.kommune.no
                     'leftcol',  # new samediggi.no
                     'chromemenu',  # calliidlagadus.org
                     's4-leftpanel',  # ntfk
@@ -1526,7 +1531,7 @@ class HTMLContentConverter(Converter):
                     'menu',
                     'aa',
                     'sidebar',  # finlex.fi, too
-                    'footer',  # forrest, too
+                    'footer',  # forrest, too, tysfjord.kommune.no
                     'chatBox',
                     'sendReminder',
                     'ctl00_MidtSone_ucArtikkel_ctl00_divNavigasjon',
