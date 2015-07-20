@@ -1493,6 +1493,11 @@ class HTMLContentConverter(Converter):
                     'andrenyheter',  # tysfjord.kommune.no
                     ],
                 'id': [
+                    'WIPSELEMENT_HEADING',  # learoevierhtieh.no
+                    'WIPSELEMENT_MENU',  # learoevierhtieh.no
+                    'WIPSELEMENT_CALENDAR',  # learoevierhtieh.no
+                    'WIPSELEMENT_NEWS',  # learoevierhtieh.no
+                    'WIPSELEMENT_MENURIGHT',  # learoevierhtieh.no
                     'skiplink',  # tysfjord.kommune.no
                     'topnav',  # tysfjord.kommune.no
                     'navbar',  # tysfjord.kommune.no
