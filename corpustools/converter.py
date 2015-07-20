@@ -1270,6 +1270,7 @@ class HTMLContentConverter(Converter):
         replacements = [
             (u'//<script', u'<script'),
             (u'&nbsp;', u' '),
+            (u' ', u' '),
         ]
         return util.replace_all(replacements, content)
 
