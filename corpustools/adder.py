@@ -24,10 +24,9 @@ from __future__ import print_function
 
 import argparse
 import os
+import requests
 import shutil
 import sys
-
-import requests
 
 from corpustools import argparse_version
 from corpustools import namechanger
@@ -36,28 +35,13 @@ from corpustools import versioncontrol
 from corpustools import xslsetter
 
 
-'''Adding files, directories and URL's to a corpus directory
-
-
-Add a URL to the corpus
-* normalise the basename, copy the the file to the given directory
-* make a metadata file belonging to it
-** set the url as the filename
-** set the mainlang
-** set the genre
-** if a parallel file is given, set the parallel info in all the parellel files
-** add both the newly copied file and the metadata file to the working copy
-
-'''
-
-
 class AdderException(Exception):
     pass
 
 
 class AddToCorpus(object):
     def __init__(self, corpusdir, mainlang, path):
-        '''Baseclass for adding something to the corpus
+        '''Class to adding files, urls and dirs to the corpus
 
         Args:
             corpusdir: (unicode) the directory where the corpus is
@@ -107,6 +91,62 @@ class AddToCorpus(object):
 
         return u'/'.join(new_parts)
 
+    @staticmethod
+    def add_url_extension(filename, content_type):
+        content_type_extension = {
+            'text/html': '.html',
+            'application/msword': '.doc',
+            'application/pdf': '.pdf',
+            'text/plain': '.txt',
+        }
+
+        for ct, extension in content_type_extension.items():
+            if (ct in content_type and not filename.endswith(extension)):
+                filename += extension
+
+        return filename
+
+    def copy_url_to_corpus(self, url, parallelpath=''):
+        '''Add a URL to the corpus
+
+        * normalise the basename, copy the the file to the given directory
+        * make a metadata file belonging to it
+        ** set the url as the filename
+        ** set the mainlang
+        ** set the genre
+        ** if a parallel file is given, set the parallel info in all the
+        parellel files
+        ** add both the newly copied file and the metadata file to the working
+        copy
+        '''
+        try:
+            r = requests.get(url)
+            if r.status_code == requests.codes.ok:
+                tmpname = self.add_url_extension(
+                    os.path.join(self.corpusdir, 'tmp',
+                                 os.path.basename(url)),
+                    r.headers['content-type'])
+                with open(tmpname, 'wb') as tmpfile:
+                    tmpfile.write(r.content)
+
+                try:
+                    none_dupe_path = self.none_dupe_path(url)
+                    shutil.move(tmpname, none_dupe_path)
+                    self.additions.append(none_dupe_path)
+
+                    self.add_metadata_to_corpus(none_dupe_path, url)
+                    self.update_parallel_data(util.split_path(none_dupe_path),
+                                              parallelpath)
+                except UserWarning as e:
+                    print(u'Skipping: {}'.format(e))
+
+            else:
+                print('ERROR:', url, 'does not exist', file=sys.stderr)
+        except requests.exceptions.MissingSchema as e:
+            print(str(e), file=sys.stderr)
+        except requests.exceptions.ConnectionError as e:
+            print(str(e), file=sys.stderr)
+
     def copy_file_to_corpus(self, origpath, parallelpath=''):
         '''Add a file to the corpus
 
@@ -118,54 +158,63 @@ class AddToCorpus(object):
         ** if a parallel file is given, set the parallel info in all the
         parellel files
         '''
-        normalised_path = os.path.join(self.goaldir,
-                                       namechanger.normalise_filename(
-                                           os.path.basename(origpath)))
         try:
-            none_dupe_path = namechanger.compute_new_basename(
-                origpath, normalised_path)
-
+            none_dupe_path = self.none_dupe_path(origpath)
             shutil.copy(origpath, none_dupe_path)
             self.additions.append(none_dupe_path)
-            new_components = util.split_path(none_dupe_path)
-            new_metadata = xslsetter.MetadataHandler(none_dupe_path + '.xsl',
-                                                     create=True)
-            new_metadata.set_variable('filename', os.path.basename(
-                origpath))
-            new_metadata.set_variable('mainlang', new_components.lang)
-            new_metadata.set_variable('genre', new_components.genre)
-            new_metadata.write_file()
-            self.additions.append(none_dupe_path + '.xsl')
 
-            if len(parallelpath) > 0:
-                if not os.path.exists(parallelpath):
-                    raise AdderException('{} does not exist'.format(
-                        parallelpath))
-
-                parallel_metadata = xslsetter.MetadataHandler(
-                    parallelpath + '.xsl')
-                parallels = parallel_metadata.get_parallel_texts()
-                parallels[new_components.lang] = new_components.basename
-
-                parall_components = util.split_path(parallelpath)
-                parallels[parall_components.lang] = parall_components.basename
-
-                for lang, parallel in parallels.items():
-                    metadata = xslsetter.MetadataHandler(
-                        '/'.join((
-                            new_components.root,
-                            new_components.module,
-                            lang,
-                            new_components.genre,
-                            new_components.subdirs,
-                            parallel + '.xsl')))
-
-                    for lang1, parallel1 in parallels.items():
-                        if lang1 != lang:
-                            metadata.set_parallel_text(lang1, parallel1)
-                    metadata.write_file()
+            self.add_metadata_to_corpus(none_dupe_path,
+                                        os.path.basename(origpath))
+            self.update_parallel_data(util.split_path(none_dupe_path),
+                                      parallelpath)
         except UserWarning as e:
             print(u'Skipping: {}'.format(e))
+
+    def add_metadata_to_corpus(self, none_dupe_path, meta_filename):
+        new_components = util.split_path(none_dupe_path)
+        new_metadata = xslsetter.MetadataHandler(none_dupe_path + '.xsl',
+                                                 create=True)
+        new_metadata.set_variable('filename', meta_filename)
+        new_metadata.set_variable('mainlang', new_components.lang)
+        new_metadata.set_variable('genre', new_components.genre)
+        new_metadata.write_file()
+        self.additions.append(none_dupe_path + '.xsl')
+
+    @staticmethod
+    def update_parallel_data(new_components, parallelpath):
+        if len(parallelpath) > 0:
+            if not os.path.exists(parallelpath):
+                raise AdderException('{} does not exist'.format(
+                    parallelpath))
+
+            parallel_metadata = xslsetter.MetadataHandler(
+                parallelpath + '.xsl')
+            parallels = parallel_metadata.get_parallel_texts()
+            parallels[new_components.lang] = new_components.basename
+
+            parall_components = util.split_path(parallelpath)
+            parallels[parall_components.lang] = parall_components.basename
+
+            for lang, parallel in parallels.items():
+                metadata = xslsetter.MetadataHandler(
+                    '/'.join((
+                        new_components.root,
+                        new_components.module,
+                        lang,
+                        new_components.genre,
+                        new_components.subdirs,
+                        parallel + '.xsl')))
+
+                for lang1, parallel1 in parallels.items():
+                    if lang1 != lang:
+                        metadata.set_parallel_text(lang1, parallel1)
+                metadata.write_file()
+
+    def none_dupe_path(self, path):
+        return namechanger.compute_new_basename(
+            path, os.path.join(self.goaldir,
+                               namechanger.normalise_filename(
+                                   os.path.basename(path))))
 
     def copy_files_in_dir_to_corpus(self, origpath):
         '''Add a directory to the corpus
@@ -256,12 +305,19 @@ def main():
             print('It is not possible to add a directory '
                   'when the -p option is given.', file=sys.stderr)
             sys.exit(3)
-        adder.copy_file_to_corpus(args.origs[0].decode('utf8'),
-                                  args.parallel_file.decode('utf8'))
+        orig = args.origs[0]
+        if os.path.isfile(orig):
+            adder.copy_file_to_corpus(orig.decode('utf8'),
+                                      args.parallel_file.decode('utf8'))
+        elif orig.startswith('http'):
+            adder.copy_file_to_corpus(orig,
+                                      args.parallel_file.decode('utf8'))
 
     for orig in args.origs:
         if os.path.isfile(orig):
             adder.copy_file_to_corpus(orig.decode('utf8'))
+        elif orig.startswith('http'):
+            adder.copy_url_to_corpus(orig)
         elif os.path.isdir(orig):
             for root, dirs, files in os.walk(orig):
                 for f in files:
