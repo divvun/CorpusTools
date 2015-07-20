@@ -1490,6 +1490,7 @@ class HTMLContentConverter(Converter):
                     'egavpi_fiskes',  # calliidlagadus.org
                     ],
                 'id': [
+                    'leftbar',  # forrest (divvun and giellatekno sites)
                     'path',  # new samediggi.no
                     'leftcol',  # new samediggi.no
                     'chromemenu',  # calliidlagadus.org
@@ -1525,7 +1526,7 @@ class HTMLContentConverter(Converter):
                     'menu',
                     'aa',
                     'sidebar',  # finlex.fi, too
-                    'footer',
+                    'footer',  # forrest, too
                     'chatBox',
                     'sendReminder',
                     'ctl00_MidtSone_ucArtikkel_ctl00_divNavigasjon',
