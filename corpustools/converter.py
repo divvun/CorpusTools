@@ -1489,6 +1489,7 @@ class HTMLContentConverter(Converter):
                     'egavpi_fiskes',  # calliidlagadus.org
                     'tipformcontainer',  # tysfjord.kommune.no
                     'andrenyheter',  # tysfjord.kommune.no
+                    'InnholdForfatter',  # unginordland
                     ],
                 'id': [
                     'WIPSELEMENT_HEADING',  # learoevierhtieh.no
@@ -1561,6 +1562,10 @@ class HTMLContentConverter(Converter):
                     'sitemap',
                     'ntfkFooter',  # ntfk
                     'ntfkHeader',  # ntfk
+                    'venstre',  # unginordland
+                    'toppsone',  # unginordland
+                    'bunninformasjon',  # unginordland
+                    'hoyre',  # unginordland
                     ],
                 },
             'p': {
@@ -1573,6 +1578,7 @@ class HTMLContentConverter(Converter):
             'ul': {
                 'id': [
                     'AreaTopPrintMeny',
+                    'skiplinks',  # umo.se
                     'AreaTopLanguageNav'
                     ],
                 'class': [
@@ -1582,6 +1588,7 @@ class HTMLContentConverter(Converter):
                     # lovdata.no
                     'chapter-index',
                     'footer-nav',
+                    'hidden',  # unginordland
                     ],
                 },
             'span': {
@@ -1620,6 +1627,17 @@ class HTMLContentConverter(Converter):
                     "sg_ylaosa1",
                     "sg_ylaosa2",
                     ]
+                },
+            'header': {
+                'id': [
+                    'header',  # umo.se
+                    ],
+                },
+            'section': {
+                'class': [
+                    'tree-menu',  # umo.se
+                    'tree-menu current',  # umo.se
+                    ],
                 },
             }
 
