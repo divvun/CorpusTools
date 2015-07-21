@@ -1489,12 +1489,15 @@ class HTMLContentConverter(Converter):
                     'egavpi_fiskes',  # calliidlagadus.org
                     'tipformcontainer',  # tysfjord.kommune.no
                     'andrenyheter',  # tysfjord.kommune.no
+                    'articlegooglemap',  # tysfjord.kommune.no
                     'InnholdForfatter',  # unginordland
                     'clearfix breadcrumbsAndSocial noindex',  # udir.no
                     'feedbackContainer noindex',  # udir.no
                     'rightverticalgradient',  # udir.no
                     ],
                 'id': [
+                    'andrenyheter',  # tysfjord.kommune.no
+                    'attached',  # tysfjord.kommune.no
                     'skipLinks',  # udir.no
                     'WIPSELEMENT_HEADING',  # learoevierhtieh.no
                     'WIPSELEMENT_MENU',  # learoevierhtieh.no
@@ -1797,11 +1800,10 @@ class DocxConverter(HTMLContentConverter):
         '''Remove some docx specific html elements'''
         super(DocxConverter, self).remove_elements()
 
-        print(util.lineno(), 'aha!')
         unwanted_classes_ids = {
             'a': {
                 'name': [
-                    'footnote-ref',
+                    'footnote-ref',  # footnotes in running text
                     ],
                 }
             }
@@ -1810,9 +1812,7 @@ class DocxConverter(HTMLContentConverter):
             for key, values in attribs.items():
                 for value in values:
                     search = ('.//html:{}[starts-with(@{}, "{}")]'.format(tag, key, value))
-                    print(util.lineno(), search)
                     for unwanted in self.soup.xpath(search, namespaces=ns):
-                        print (util.lineno(), 'found it!')
                         unwanted.getparent().remove(unwanted)
 
 
