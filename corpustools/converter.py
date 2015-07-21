@@ -1490,8 +1490,12 @@ class HTMLContentConverter(Converter):
                     'tipformcontainer',  # tysfjord.kommune.no
                     'andrenyheter',  # tysfjord.kommune.no
                     'InnholdForfatter',  # unginordland
+                    'clearfix breadcrumbsAndSocial noindex',  # udir.no
+                    'feedbackContainer noindex',  # udir.no
+                    'rightverticalgradient',  # udir.no
                     ],
                 'id': [
+                    'skipLinks',  # udir.no
                     'WIPSELEMENT_HEADING',  # learoevierhtieh.no
                     'WIPSELEMENT_MENU',  # learoevierhtieh.no
                     'WIPSELEMENT_CALENDAR',  # learoevierhtieh.no
