@@ -1793,6 +1793,28 @@ class DocxConverter(HTMLContentConverter):
         HTMLContentConverter.__init__(self, filename,
                                       content=Docx2Html(filename).parsed)
 
+    def remove_elements(self):
+        '''Remove some docx specific html elements'''
+        super(DocxConverter, self).remove_elements()
+
+        print(util.lineno(), 'aha!')
+        unwanted_classes_ids = {
+            'a': {
+                'name': [
+                    'footnote-ref',
+                    ],
+                }
+            }
+        ns = {'html': 'http://www.w3.org/1999/xhtml'}
+        for tag, attribs in unwanted_classes_ids.items():
+            for key, values in attribs.items():
+                for value in values:
+                    search = ('.//html:{}[starts-with(@{}, "{}")]'.format(tag, key, value))
+                    print(util.lineno(), search)
+                    for unwanted in self.soup.xpath(search, namespaces=ns):
+                        print (util.lineno(), 'found it!')
+                        unwanted.getparent().remove(unwanted)
+
 
 class DocConverter(HTMLContentConverter):
     '''Convert Microsoft Word documents to the giellatekno xml format'''
