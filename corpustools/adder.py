@@ -130,7 +130,7 @@ class AddToCorpus(object):
                     tmpfile.write(r.content)
 
                 try:
-                    none_dupe_path = self.none_dupe_path(url)
+                    none_dupe_path = self.none_dupe_path(tmpname)
                     shutil.move(tmpname, none_dupe_path)
                     self.additions.append(none_dupe_path)
 
