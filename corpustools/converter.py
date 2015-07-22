@@ -37,6 +37,7 @@ import sys
 from lxml import etree
 from lxml.html import clean
 from lxml.html import html5parser
+from odf.odf2xhtml import ODF2XHTML
 from pyth.plugins.rtf15.reader import Rtf15Reader
 from pyth.plugins.xhtml.writer import XHTMLWriter
 
@@ -1756,7 +1757,7 @@ class HTMLContentConverter(Converter):
                     logfile.write('\n{}: {} {}\n'.format(
                         str(entry.line), str(entry.column),
                         entry.message.encode('utf8')))
-                logfile.write(etree.tostring(self.soup).encode('utf8'))
+                util.print_element(self.soup, 0, 4, logfile)
 
             raise ConversionException(
                 'HTMLContentConverter: transformation failed.'
@@ -1787,6 +1788,16 @@ class RTFConverter(HTMLContentConverter):
             except UnicodeDecodeError:
                 raise ConversionException('Unicode problems in {}'.format(
                     self.orig))
+
+
+class OdfConverter(HTMLContentConverter):
+    '''Convert odf documents to the giellatekno xml format'''
+    def __init__(self, filename, write_intermediate=False):
+        generatecss = False
+        embedable = True
+        odhandler = ODF2XHTML(generatecss, embedable)
+        HTMLContentConverter.__init__(self, filename,
+                                      content=odhandler.odf2xhtml(unicode(filename)))
 
 
 class DocxConverter(HTMLContentConverter):
@@ -2603,6 +2614,10 @@ class ConverterManager(object):
 
         elif orig_file.endswith('.doc') or orig_file.endswith('.DOC'):
             return DocConverter(
+                orig_file, write_intermediate=self.write_intermediate)
+
+        elif orig_file.endswith('.odt'):
+            return OdfConverter(
                 orig_file, write_intermediate=self.write_intermediate)
 
         elif orig_file.endswith('.docx'):

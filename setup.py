@@ -40,6 +40,7 @@ setup(
         'gitpython',
         'html5lib',
         'lxml',
+        'odfpy',
         'pydocx',
         'pyth',
         'requests',
