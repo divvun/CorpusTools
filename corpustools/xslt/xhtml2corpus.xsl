@@ -529,6 +529,7 @@ If it is a container it has one or more of the these tags:
 <!-- Ignored elements -->
 <xsl:template match="html:br"/>
 <xsl:template match="html:wbr"/>
+<xsl:template match="html:colgroup"/>
 
 </xsl:stylesheet>
 
