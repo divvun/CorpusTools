@@ -524,6 +524,31 @@ tests = {
             '</document>'
             ),
         },
+    'div-small': {
+        'html': (
+            '<html>'
+            '  <body>'
+            '    <div>'
+            '      <small>'
+            '         Harrieth Aira'
+            '      </small>'
+            '    </div>'
+            '  </body>'
+            '</html>'
+            ),
+        'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <p>'
+            '      Harrieth Aira'
+            '    </p>'
+            '  </body>'
+            '</document>'
+            ),
+        },
     'div-em-p-em': {
         'html': (
             '<html>'

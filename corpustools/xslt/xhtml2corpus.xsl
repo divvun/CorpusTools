@@ -421,7 +421,8 @@ If it is a container it has one or more of the these tags:
 
 <xsl:template match="html:small">
     <xsl:choose>
-        <xsl:when test="html:a">
+        <xsl:when test="html:a|
+                  ancestor::html:div">
             <p>
                 <xsl:apply-templates/>
             </p>
