@@ -12,6 +12,7 @@ These scripts will be installed
 * [generate_anchor_list|CorpusTools.html#generate_anchor_list]
 * [normalise_corpus_names|CorpusTools.html#generate_anchor_list#normalise_corpus_names]
 * [paracheck|CorpusTools.html#paracheck]
+* [html_cleaner|CorpusTools.html#html_cleaner]
 
 !!Requirements
 
@@ -652,6 +653,24 @@ files exist
 
 positional arguments:
   orig_dir       The directory where the original corpus files are
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -v, --version  show program's version number and exit
+}}}
+
+!!html_cleaner
+
+{{{
+usage: html_cleaner [-h] [-v] inhtml outhtml
+
+Program to print out a nicely indented html document. This makes it easier to
+see the structure of it. This eases debugging the conversion of html
+documents.
+
+positional arguments:
+  inhtml         The path of the html to indent.
+  outhtml        The place where the indented html doc is written
 
 optional arguments:
   -h, --help     show this help message and exit
