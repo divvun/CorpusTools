@@ -1443,9 +1443,6 @@ class HTMLContentConverter(Converter):
             'div': {
                 'class': [
                     "latestnews_uutisarkisto",
-                    # lovdata.no
-                    # regjeringen.no
-                    # svenskakyrkan.se
                     'InnholdForfatter',  # unginordland
                     'QuickNav',
                     'ad',
@@ -1463,6 +1460,7 @@ class HTMLContentConverter(Converter):
                     'breadcrumbs',
                     'breadcrums span-12',
                     'btm_menu',
+                    'c1',  # arran.no
                     'clearfix breadcrumbsAndSocial noindex',  # udir.no
                     'container_full',
                     'documentInfoEm',
@@ -1545,6 +1543,7 @@ class HTMLContentConverter(Converter):
                     'leftcol',  # new samediggi.no
                     'leftmenu',
                     'main_navi_main',           # www.samediggi.fi
+                    'mainsidebar',  # arran.no
                     'menu',
                     'murupolku',                # www.samediggi.fi
                     'navbar',  # tysfjord.kommune.no
@@ -1569,8 +1568,10 @@ class HTMLContentConverter(Converter):
                     'skipLinks',  # udir.no
                     'skiplink',  # tysfjord.kommune.no
                     'tipafriend',
+                    'tools',  # arran.no
                     'topMenu',
                     'topUserMenu',
+                    'top',  # arran.no
                     'topnav',  # tysfjord.kommune.no
                     'toppsone',  # unginordland
                     'venstre',  # unginordland
