@@ -3,10 +3,11 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:html="http://www.w3.org/1999/xhtml"
+                xmlns:svg="http://www.w3.org/2000/svg"
                 xmlns:saxon="http://icl.com/saxon"
                 xmlns:str="http://exslt.org/strings"
                 extension-element-prefixes="str"
-                exclude-result-prefixes="xsl fo html saxon">
+                exclude-result-prefixes="xsl fo html saxon svg">
 <!--$Revision: 38657 $ -->
 
 <!--
@@ -533,6 +534,7 @@ If it is a container it has one or more of the these tags:
 <xsl:template match="html:br"/>
 <xsl:template match="html:wbr"/>
 <xsl:template match="html:colgroup"/>
+<xsl:template match="svg:svg"/>
 
 </xsl:stylesheet>
 
