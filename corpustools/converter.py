@@ -1442,138 +1442,138 @@ class HTMLContentConverter(Converter):
         unwanted_classes_ids = {
             'div': {
                 'class': [
+                    "latestnews_uutisarkisto",
+                    # lovdata.no
+                    # regjeringen.no
+                    # svenskakyrkan.se
+                    'InnholdForfatter',  # unginordland
                     'QuickNav',
-                    'tabbedmenu',
-                    'printContact',
-                    'documentPaging',
-                    'post-footer',
-                    'documentInfoEm',
-                    'article-column',
-                    'nrk-globalfooter',
-                    'article-related',
-                    'outer-column',
+                    'ad',
+                    'andrenyheter',  # tysfjord.kommune.no
                     'article-ad',
                     'article-bottom-element',
-                    'banner-element',
-                    'nrk-globalnavigation',
-                    'sharing',
-                    'ad',
-                    'meta',
-                    'authors',
+                    'article-column',
+                    'article-related',
                     'articleImageRig',
-                    'btm_menu',
-                    'expandable',
-                    'toc',
-                    'titlepage',
-                    'container_full',
-                    'moduletable_oikopolut',
-                    "latestnews_uutisarkisto",
+                    'articlegooglemap',  # tysfjord.kommune.no
+                    'authors',
                     'back_button',
-                    # regjeringen.no
+                    'banner-element',
                     'breadcrumbs ',
                     'breadcrumbs',
-                    'imagecontainer',
-                    # svenskakyrkan.se
                     'breadcrums span-12',
-                    'tipsarad mt6 selfClear',
-                    # lovdata.no
-                    'sidebar',
-                    'ld-navbar',
-                    'fixed-header',
-                    'innholdsfortegenlse-child',
-                    'metaWrapper',
-                    'help closed hidden-xs',
-                    'right',  # ntfk
-                    'noindex',  # ntfk
+                    'btm_menu',
+                    'clearfix breadcrumbsAndSocial noindex',  # udir.no
+                    'container_full',
+                    'documentInfoEm',
+                    'documentPaging',
                     'dropmenudiv',  # calliidlagadus.org
                     'egavpi',  # calliidlagadus.org
                     'egavpi_fiskes',  # calliidlagadus.org
-                    'tipformcontainer',  # tysfjord.kommune.no
-                    'andrenyheter',  # tysfjord.kommune.no
-                    'articlegooglemap',  # tysfjord.kommune.no
-                    'InnholdForfatter',  # unginordland
-                    'clearfix breadcrumbsAndSocial noindex',  # udir.no
+                    'expandable',
                     'feedbackContainer noindex',  # udir.no
+                    'fixed-header',
+                    'help closed hidden-xs',
+                    'imagecontainer',
+                    'innholdsfortegenlse-child',
+                    'ld-navbar',
+                    'meta',
+                    'metaWrapper',
+                    'moduletable_oikopolut',
+                    'noindex',  # ntfk
+                    'nrk-globalfooter',
+                    'nrk-globalnavigation',
+                    'outer-column',
+                    'post-footer',
+                    'printContact',
+                    'right',  # ntfk
                     'rightverticalgradient',  # udir.no
+                    'sharing',
+                    'sidebar',
+                    'tabbedmenu',
+                    'tipformcontainer',  # tysfjord.kommune.no
+                    'tipsarad mt6 selfClear',
+                    'titlepage',
+                    'toc',
                     ],
                 'id': [
-                    'andrenyheter',  # tysfjord.kommune.no
-                    'attached',  # tysfjord.kommune.no
-                    'skipLinks',  # udir.no
+                    # finlex.fi
+                    # lovdata.no
+                    # svenskakyrkan.se
+                    'AreaLeft',
+                    'AreaLeftNav',
+                    'AreaRight',
+                    'AreaTopRight',
+                    'AreaTopSiteNav',
+                    'NAVbreadcrumbContainer',
+                    'NAVfooterContainer',
+                    'NAVheaderContainer',
+                    'NAVrelevantContentContainer',
+                    'NAVsubmenuContainer',
+                    'PageFooter',
+                    'PrintDocHead',
+                    'SamiDisclaimer',
+                    'ShareArticle',
+                    'WIPSELEMENT_CALENDAR',  # learoevierhtieh.no
                     'WIPSELEMENT_HEADING',  # learoevierhtieh.no
                     'WIPSELEMENT_MENU',  # learoevierhtieh.no
-                    'WIPSELEMENT_CALENDAR',  # learoevierhtieh.no
-                    'WIPSELEMENT_NEWS',  # learoevierhtieh.no
                     'WIPSELEMENT_MENURIGHT',  # learoevierhtieh.no
-                    'skiplink',  # tysfjord.kommune.no
-                    'topnav',  # tysfjord.kommune.no
-                    'navbar',  # tysfjord.kommune.no
-                    'leftbar',  # forrest (divvun and giellatekno sites)
-                    'path',  # new samediggi.no, tysfjord.kommune.no
-                    'leftcol',  # new samediggi.no
-                    'chromemenu',  # calliidlagadus.org
-                    's4-leftpanel',  # ntfk
-                    'ntfkNavMain',  # ntfk
-                    'ntfkNavBreadcrumb',  # ntfk
-                    'searchBox',
-                    'murupolku',                # www.samediggi.fi
-                    'main_navi_main',           # www.samediggi.fi
-                    'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
-                    'ctl00_FullRegion_CenterAndRightRegion_HitsControl_'
-                    'searchHitSummary',
-                    'AreaTopSiteNav',
-                    'SamiDisclaimer',
-                    'AreaTopRight',
-                    'AreaLeft',
-                    'AreaRight',
-                    'ShareArticle',
-                    'tipafriend',
-                    'AreaLeftNav',
-                    'PageFooter',
-                    'blog-pager',
-                    'NAVheaderContainer',
-                    'NAVbreadcrumbContainer',
-                    'NAVsubmenuContainer',
-                    'NAVrelevantContentContainer',
-                    'NAVfooterContainer',
-                    'sidebar-wrapper',
-                    'footer-wrapper',
-                    'share-article',
-                    'topUserMenu',
-                    'rightAds',
-                    'menu',
+                    'WIPSELEMENT_NEWS',  # learoevierhtieh.no
                     'aa',
-                    'sidebar',  # finlex.fi, too
-                    'footer',  # forrest, too, tysfjord.kommune.no
-                    'chatBox',
-                    'sendReminder',
-                    'ctl00_MidtSone_ucArtikkel_ctl00_divNavigasjon',
-                    'ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl01_divRessurser',
-                    'leftPanel',
-                    'leftMenu',
-                    'topMenu',
+                    'andrenyheter',  # tysfjord.kommune.no
                     'article_footer',
-                    'rightCol',
-                    'PrintDocHead',
-                    # lovdata.no
-                    'deleModal',
-                    # svenskakyrkan.se
-                    'pageFooter',
-                    'headerBar',
-                    'leftmenu',
-                    'rightside',
-                    'readspeaker_button1',
-                    # finlex.fi
-                    'header',
-                    'document-header',
+                    'attached',  # tysfjord.kommune.no
+                    'blog-pager',
                     'breadcrumbs-bottom',
-                    'sitemap',
+                    'bunninformasjon',  # unginordland
+                    'chatBox',
+                    'chromemenu',  # calliidlagadus.org
+                    'ctl00_FullRegion_CenterAndRightRegion_HitsControl_'
+                    'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
+                    'ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl01_divRessurser',
+                    'ctl00_MidtSone_ucArtikkel_ctl00_divNavigasjon',
+                    'deleModal',
+                    'document-header',
+                    'footer',  # forrest, too, tysfjord.kommune.no
+                    'footer-wrapper',
+                    'header',
+                    'headerBar',
+                    'hoyre',  # unginordland
+                    'leftMenu',
+                    'leftPanel',
+                    'leftbar',  # forrest (divvun and giellatekno sites)
+                    'leftcol',  # new samediggi.no
+                    'leftmenu',
+                    'main_navi_main',           # www.samediggi.fi
+                    'menu',
+                    'murupolku',                # www.samediggi.fi
+                    'navbar',  # tysfjord.kommune.no
                     'ntfkFooter',  # ntfk
                     'ntfkHeader',  # ntfk
-                    'venstre',  # unginordland
+                    'ntfkNavBreadcrumb',  # ntfk
+                    'ntfkNavMain',  # ntfk
+                    'pageFooter',
+                    'path',  # new samediggi.no, tysfjord.kommune.no
+                    'readspeaker_button1',
+                    'rightAds',
+                    'rightCol',
+                    'rightside',
+                    's4-leftpanel',  # ntfk
+                    'searchBox',
+                    'searchHitSummary',
+                    'sendReminder',
+                    'share-article',
+                    'sidebar',  # finlex.fi, too
+                    'sidebar-wrapper',
+                    'sitemap',
+                    'skipLinks',  # udir.no
+                    'skiplink',  # tysfjord.kommune.no
+                    'tipafriend',
+                    'topMenu',
+                    'topUserMenu',
+                    'topnav',  # tysfjord.kommune.no
                     'toppsone',  # unginordland
-                    'bunninformasjon',  # unginordland
-                    'hoyre',  # unginordland
+                    'venstre',  # unginordland
                     ],
                 },
             'p': {
@@ -1585,17 +1585,16 @@ class HTMLContentConverter(Converter):
                 },
             'ul': {
                 'id': [
+                    'AreaTopLanguageNav'
                     'AreaTopPrintMeny',
                     'skiplinks',  # umo.se
-                    'AreaTopLanguageNav'
                     ],
                 'class': [
                     'QuickNav',
                     'article-tools',
                     'byline',
-                    # lovdata.no
-                    'chapter-index',
-                    'footer-nav',
+                    'chapter-index',  # lovdata.no
+                    'footer-nav',  # lovdata.no
                     'hidden',  # unginordland
                     ],
                 },
@@ -1605,25 +1604,24 @@ class HTMLContentConverter(Converter):
                     ],
                 'class': [
                     'K-NOTE-FOTNOTE',
-                    # svenskakyrkan.se
-                    'graytext',
+                    'graytext',  # svenskakyrkan.se
                     ],
                 },
             'a': {
                 'id': [
-                    'leftPanelTab',
                     'ctl00_IdWelcome_ExplicitLogin',  # ntfk
+                    'leftPanelTab',
                     ],
                 'class': [
+                    'addthis_button_print',  # ntfk
                     'mainlevel',
                     'share-paragraf',  # lovdata.no
-                    'addthis_button_print',  # ntfk
                     ],
                 },
             'td': {
                 'id': [
-                    "paavalikko_linkit",
                     "hakulomake",
+                    "paavalikko_linkit",
                     'sg_oikea',
                     ],
                 'class': [
@@ -1643,8 +1641,8 @@ class HTMLContentConverter(Converter):
                 },
             'section': {
                 'class': [
-                    'tree-menu',  # umo.se
                     'tree-menu current',  # umo.se
+                    'tree-menu',  # umo.se
                     ],
                 },
             }
