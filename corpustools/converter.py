@@ -1450,6 +1450,7 @@ class HTMLContentConverter(Converter):
                     'article-ad',
                     'article-bottom-element',
                     'article-column',
+                    'article-dateline article-dateline-footer meta-widget-content',  # nrk.no
                     'article-related',
                     'articleImageRig',
                     'articlegooglemap',  # tysfjord.kommune.no
@@ -1474,6 +1475,12 @@ class HTMLContentConverter(Converter):
                     'expandable',
                     'feedbackContainer noindex',  # udir.no
                     'fixed-header',
+                    'g100 col fc s18 sg6 sg9 sg12 menu-reference',  # nrk.no
+                    'g100 col fc s18 sg6 sg9 sg12 flow-reference',  # nrk.no
+                    'g11 col fl s2 sl6 sl9 sl12 sl18',  # nrk.no
+                    'g22 col fl s4 sl6 sl9 sl12 sl18 article-header-sidebar',  # nrk.no
+                    'g94 col fl s17 sl18 sg6 sg9 sg12 meta-widget',  # nrk.no
+                    'grid cf',  # nrk.no
                     'help closed hidden-xs',
                     'imagecontainer',
                     'innholdsfortegenlse-child',
@@ -1484,8 +1491,9 @@ class HTMLContentConverter(Converter):
                     'metaWrapper',
                     'moduletable_oikopolut',
                     'noindex',  # ntfk
-                    'nrk-globalfooter',
-                    'nrk-globalnavigation',
+                    'nrk-globalfooter',  # nrk.no
+                    'nrk-globalfooter-dk lp_globalfooter',  # nrk.no
+                    'nrk-globalnavigation',  # nrk.no
                     'outer-column',
                     'post-footer',
                     'printContact',
@@ -1643,6 +1651,9 @@ class HTMLContentConverter(Converter):
             'header': {
                 'id': [
                     'header',  # umo.se
+                    ],
+                'class': [
+                    'nrk-masthead-content cf',  # nrk.no
                     ],
                 },
             'section': {
