@@ -1453,7 +1453,9 @@ class HTMLContentConverter(Converter):
                     'article-related',
                     'articleImageRig',
                     'articlegooglemap',  # tysfjord.kommune.no
+                    'articleTags',  # nord-salten.no
                     'authors',
+                    'authors ui-helper-clearfix',  # nord-salten.no
                     'back_button',
                     'banner-element',
                     'breadcrumbs ',
@@ -1465,6 +1467,7 @@ class HTMLContentConverter(Converter):
                     'container_full',
                     'documentInfoEm',
                     'documentPaging',
+                    'dotList',  # nord-salten.no
                     'dropmenudiv',  # calliidlagadus.org
                     'egavpi',  # calliidlagadus.org
                     'egavpi_fiskes',  # calliidlagadus.org
@@ -1476,6 +1479,8 @@ class HTMLContentConverter(Converter):
                     'innholdsfortegenlse-child',
                     'ld-navbar',
                     'meta',
+                    'meta ui-helper-clearfix',  # nord-salten.no
+                    'authors ui-helper-clearfix'  # nord-salten.no
                     'metaWrapper',
                     'moduletable_oikopolut',
                     'noindex',  # ntfk
@@ -1495,9 +1500,6 @@ class HTMLContentConverter(Converter):
                     'toc',
                     ],
                 'id': [
-                    # finlex.fi
-                    # lovdata.no
-                    # svenskakyrkan.se
                     'AreaLeft',
                     'AreaLeftNav',
                     'AreaRight',
@@ -1532,6 +1534,7 @@ class HTMLContentConverter(Converter):
                     'ctl00_MidtSone_ucArtikkel_ctl00_divNavigasjon',
                     'deleModal',
                     'document-header',
+                    'errorMessageContainer',  # nord-salten.no
                     'footer',  # forrest, too, tysfjord.kommune.no
                     'footer-wrapper',
                     'header',
@@ -1567,8 +1570,10 @@ class HTMLContentConverter(Converter):
                     'sitemap',
                     'skipLinks',  # udir.no
                     'skiplink',  # tysfjord.kommune.no
+                    'submenu',  # nord-salten.no
                     'tipafriend',
                     'tools',  # arran.no
+                    'topHeader',  # nord-salten.no
                     'topMenu',
                     'topUserMenu',
                     'top',  # arran.no
