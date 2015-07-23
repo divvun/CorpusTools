@@ -470,10 +470,9 @@ If it is a container it has one or more of the these tags:
 
 <xsl:template match="html:div/html:font|html:td/html:font">
     <xsl:choose>
-        <xsl:when test="ancestor::html:em">
-            <xsl:apply-templates/>
-        </xsl:when>
-        <xsl:when test="html:font">
+        <xsl:when test="ancestor::html:em|
+                  html:font|
+                  html:p">
             <xsl:apply-templates/>
         </xsl:when>
         <xsl:otherwise>

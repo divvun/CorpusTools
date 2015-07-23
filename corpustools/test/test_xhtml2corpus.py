@@ -1312,6 +1312,33 @@ tests = {
             '</document>'
             ),
         },
+    'div-font-p': {
+        'html': (
+            '<html>'
+            '  <body>'
+            '    <div>'
+            '      <font>'
+            '          <p>'
+            '            Aerpievuekien daajroe'
+            '          </p>'
+            '      </font>'
+            '    </div>'
+            '  </body>'
+            '</html>'
+            ),
+        'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <p>'
+            '      Aerpievuekien daajroe'
+            '    </p>'
+            '  </body>'
+            '</document>'
+            ),
+        },
     'p-span-b': {
         'html': (
             '<html>'
