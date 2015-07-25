@@ -57,12 +57,12 @@ xsltproc xhtml2corpus.xsl - > file.xml
      bridgeheads. It attempts to assign an ID to each bridgehead by looking
      for a named anchor as a child of the header or as the immediate preceding
      or following sibling -->
-<xsl:template match="html:h1
-              |html:h2
-              |html:h3
-              |html:h4
-              |html:h5
-              |html:h6">
+<xsl:template match="html:h1|
+              html:h2|
+              html:h3|
+              html:h4|
+              html:h5|
+              html:h6">
     <xsl:if test="string-length(normalize-space(.)) > 1">
         <xsl:choose>
             <xsl:when test="ancestor::html:li">
@@ -77,10 +77,16 @@ xsltproc xhtml2corpus.xsl - > file.xml
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="html:p|html:label">
+<xsl:template match="html:p|
+              html:label">
     <xsl:if test="string-length(normalize-space(.)) > 1">
         <xsl:choose>
-            <xsl:when test="ancestor::html:i|ancestor::html:u|ancestor::html:b|ancestor::html:p|ancestor::html:li|ancestor::html:span">
+            <xsl:when test="ancestor::html:i|
+                      ancestor::html:u|
+                      ancestor::html:b|
+                      ancestor::html:p|
+                      ancestor::html:li|
+                      ancestor::html:span">
                 <xsl:apply-templates />
             </xsl:when>
             <xsl:when test="contains(., '•')">
@@ -91,9 +97,9 @@ xsltproc xhtml2corpus.xsl - > file.xml
                 </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
-                    <p>
-                        <xsl:apply-templates />
-                    </p>
+                <p>
+                    <xsl:apply-templates />
+                </p>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
@@ -107,7 +113,8 @@ xsltproc xhtml2corpus.xsl - > file.xml
 
 <!-- LIST ELEMENTS -->
 
-<xsl:template match="html:ol|html:ul">
+<xsl:template match="html:ol|
+              html:ul">
     <list>
         <xsl:apply-templates select="*"/>
     </list>
@@ -225,15 +232,28 @@ xsltproc xhtml2corpus.xsl - > file.xml
     </p>
 </xsl:template>
 
-<xsl:template match="html:i|html:em|html:u|html:strong">
+<xsl:template match="html:i|
+              html:em|
+              html:u|
+              html:strong">
     <xsl:choose>
-        <xsl:when test="ancestor::html:strong|ancestor::html:b|ancestor::html:i|ancestor::html:em|ancestor::html:u">
+        <xsl:when test="ancestor::html:strong|
+                  ancestor::html:b|
+                  ancestor::html:i|
+                  ancestor::html:em|
+                  ancestor::html:u">
             <xsl:apply-templates/>
         </xsl:when>
         <xsl:when test="ancestor::html:li">
             <em><xsl:apply-templates/></em>
         </xsl:when>
-        <xsl:when test="not(ancestor::html:p|ancestor::html:a|ancestor::html:h1|ancestor::html:h2|ancestor::html:h3|ancestor::html:h4|ancestor::html:li)">
+        <xsl:when test="not(ancestor::html:p|
+                  ancestor::html:a|
+                  ancestor::html:h1|
+                  ancestor::html:h2|
+                  ancestor::html:h3|
+                  ancestor::html:h4|
+                  ancestor::html:li)">
             <em type="bold">
                 <xsl:apply-templates/>
             </em>
@@ -249,7 +269,8 @@ xsltproc xhtml2corpus.xsl - > file.xml
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="html:div/html:i|html:td/html:i">
+<xsl:template match="html:div/html:i|
+              html:td/html:i">
     <p>
         <em type="italic">
             <xsl:apply-templates/>
@@ -257,7 +278,8 @@ xsltproc xhtml2corpus.xsl - > file.xml
     </p>
 </xsl:template>
 
-<xsl:template match="html:div/html:em|html:td/html:em">
+<xsl:template match="html:div/html:em|
+              html:td/html:em">
     <xsl:choose>
         <xsl:when test="html:p">
             <xsl:apply-templates/>
@@ -276,7 +298,10 @@ xsltproc xhtml2corpus.xsl - > file.xml
     <xsl:value-of select="text()"/>
 </xsl:template>
 
-<xsl:template match="html:div/html:u|html:td/html:u|html:div/html:strong|html:td/html:strong">
+<xsl:template match="html:div/html:u|
+              html:td/html:u|
+              html:div/html:strong|
+              html:td/html:strong">
     <p>
         <em type="bold">
             <xsl:apply-templates/>
@@ -284,7 +309,8 @@ xsltproc xhtml2corpus.xsl - > file.xml
     </p>
 </xsl:template>
 
-<xsl:template match="html:td/html:a/html:p|html:div/html:a/html:p">
+<xsl:template match="html:td/html:a/html:p|
+              html:div/html:a/html:p">
     <xsl:apply-templates />
 </xsl:template>
 
@@ -331,9 +357,17 @@ If it is a container it has one or more of the these tags:
     <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="html:caption|html:th">
+<xsl:template match="html:caption|
+              html:th">
     <xsl:choose>
-        <xsl:when test="html:div|ancestor::html:p|ancestor::html:b|ancestor::html:i|ancestor::html:u|ancestor::html:a|html:p|html:b">
+        <xsl:when test="html:div|
+                  ancestor::html:p|
+                  ancestor::html:b|
+                  ancestor::html:i|
+                  ancestor::html:u|
+                  ancestor::html:a|
+                  html:p|
+                  html:b">
             <xsl:apply-templates/>
         </xsl:when>
         <xsl:otherwise>
@@ -353,9 +387,11 @@ If it is a container it has one or more of the these tags:
     <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="html:div/html:a|html:td/html:a">
+<xsl:template match="html:div/html:a|
+              html:td/html:a">
     <xsl:choose>
-        <xsl:when test="html:h2|html:div">
+        <xsl:when test="html:h2|
+                  html:div">
             <xsl:apply-templates/>
         </xsl:when>
         <xsl:otherwise>
@@ -366,7 +402,9 @@ If it is a container it has one or more of the these tags:
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="html:div/text()|html:td/text()|html:div/html:abbr">
+<xsl:template match="html:div/text()|
+              html:td/text()|
+              html:div/html:abbr">
     <p>
         <xsl:value-of select="."/>
     </p>
@@ -376,7 +414,8 @@ If it is a container it has one or more of the these tags:
     <xsl:value-of select="text()"/>
 </xsl:template>
 
-<xsl:template match="html:form|html:input">
+<xsl:template match="html:form|
+              html:input">
     <xsl:apply-templates/>
 </xsl:template>
 
@@ -394,7 +433,8 @@ If it is a container it has one or more of the these tags:
 </xsl:template>
 
 <!-- superscripts and subscripts are dropped to text -->
-<xsl:template match="html:sub|html:sup">
+<xsl:template match="html:sub|
+              html:sup">
     <xsl:choose>
         <xsl:when test="text()">
             <xsl:choose>
@@ -437,7 +477,8 @@ If it is a container it has one or more of the these tags:
     <xsl:apply-templates/><xsl:text> </xsl:text>
 </xsl:template>
 
-<xsl:template match="html:div/html:span|html:td/html:span">
+<xsl:template match="html:div/html:span|
+              html:td/html:span">
     <p>
         <xsl:apply-templates/>
     </p>
@@ -448,7 +489,19 @@ If it is a container it has one or more of the these tags:
     <xsl:choose>
         <xsl:when test="text()">
             <xsl:choose>
-                <xsl:when test="ancestor::html:p|ancestor::html:b|ancestor::html:i|ancestor::html:u|ancestor::html:a|ancestor::html:dt|ancestor::html:h1|ancestor::html:h2|ancestor::html:h3|ancestor::html:h4|ancestor::html:strong|ancestor::html:span|ancestor::html:li">
+                <xsl:when test="ancestor::html:p|
+                          ancestor::html:b|
+                          ancestor::html:i|
+                          ancestor::html:u|
+                          ancestor::html:a|
+                          ancestor::html:dt|
+                          ancestor::html:h1|
+                          ancestor::html:h2|
+                          ancestor::html:h3|
+                          ancestor::html:h4|
+                          ancestor::html:strong|
+                          ancestor::html:span|
+                          ancestor::html:li">
                     <xsl:apply-templates/><xsl:text> </xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
@@ -470,7 +523,8 @@ If it is a container it has one or more of the these tags:
     <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="html:div/html:font|html:td/html:font">
+<xsl:template match="html:div/html:font|
+              html:td/html:font">
     <xsl:choose>
         <xsl:when test="ancestor::html:em|
                   html:font|
