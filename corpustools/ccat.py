@@ -205,10 +205,8 @@ class XMLPrinter(object):
         text += attributes.get('correct')
         del attributes['correct']
 
-        attr = []
-        for key in sorted(attributes):
-            attr.append(u'{}={}'.format(key,
-                                        unicode(attributes[key])))
+        attr = [key + u'=' + unicode(attributes[key])
+                for key in sorted(attributes)]
 
         if len(attr) > 0:
             text += '\t#'
