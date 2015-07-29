@@ -86,7 +86,9 @@ xsltproc xhtml2corpus.xsl - > file.xml
                       ancestor::html:b|
                       ancestor::html:p|
                       ancestor::html:li|
-                      ancestor::html:span">
+                      ancestor::html:span|
+                      html:*/html:ol|
+                      html:*/html:ul">
                 <xsl:apply-templates />
             </xsl:when>
             <xsl:when test="contains(., '•')">
@@ -241,7 +243,9 @@ xsltproc xhtml2corpus.xsl - > file.xml
                   ancestor::html:b|
                   ancestor::html:i|
                   ancestor::html:em|
-                  ancestor::html:u">
+                  ancestor::html:u|
+                  html:ol|
+                  html:ul">
             <xsl:apply-templates/>
         </xsl:when>
         <xsl:when test="ancestor::html:li">
