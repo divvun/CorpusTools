@@ -2486,27 +2486,26 @@ class LanguageDetector(object):
     '''Detect and set the languages of a document.'''
     def __init__(self, document, languageGuesser):
         self.document = document
-        self.mainlang = self.document.\
-            attrib['{http://www.w3.org/XML/1998/namespace}lang']
-
-        self.inlangs = []
-        for language in self.document.findall('header/multilingual/language'):
-            self.inlangs.append(
-                language.get('{http://www.w3.org/XML/1998/namespace}lang'))
-        if len(self.inlangs) != 0:
-            if self.mainlang != '':
-                self.inlangs.append(self.mainlang)
-            else:
-                raise ConversionException('mainlang not set')
-
         self.languageGuesser = languageGuesser
 
-    def get_document(self):
-        return self.document
 
-    def get_mainlang(self):
+    @property
+    def inlangs(self):
+        inlangs = [language.get('{http://www.w3.org/XML/1998/namespace}'
+                                     'lang')
+                   for language in self.document.findall(
+                            'header/multilingual/language')]
+        if len(inlangs) != 0:
+            inlangs.append(self.mainlang)
+
+        return inlangs
+
+
+    @property
+    def mainlang(self):
         '''Get the mainlang of the file'''
-        return self.mainlang
+        return self.document.\
+            attrib['{http://www.w3.org/XML/1998/namespace}lang']
 
     def set_paragraph_language(self, paragraph):
         '''Set xml:lang of paragraph
@@ -2521,7 +2520,7 @@ class LanguageDetector(object):
             if self.languageGuesser is not None:
                 lang = self.languageGuesser.classify(paragraph_text,
                                                      langs=self.inlangs)
-                if lang != self.get_mainlang():
+                if lang != self.mainlang:
                     paragraph.set('{http://www.w3.org/XML/1998/namespace}lang',
                                   lang)
 
@@ -2536,7 +2535,7 @@ class LanguageDetector(object):
                 if element.text is not None:
                     lang = self.languageGuesser.classify(element.text,
                                                          langs=self.inlangs)
-                    if lang != self.get_mainlang():
+                    if lang != self.mainlang:
                         element.set(
                             '{http://www.w3.org/XML/1998/namespace}lang',
                             lang)

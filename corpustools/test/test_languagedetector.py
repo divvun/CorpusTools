@@ -54,7 +54,7 @@ class TestLanguageDetector(XMLTester):
         test_main_lang = 'sme'
         language_detector = converter.LanguageDetector(self.root,
                                                        LANGUAGEGUESSER)
-        self.assertEqual(test_main_lang, language_detector.get_mainlang())
+        self.assertEqual(test_main_lang, language_detector.mainlang)
 
     def test_set_paragraph_language_preset_language(self):
         orig_paragraph = '<p xml:lang="sme">I Orohagat</p>'
@@ -208,7 +208,7 @@ class TestLanguageDetector(XMLTester):
             root,
             LANGUAGEGUESSER)
         language_detector.detect_language()
-        got_document = language_detector.get_document()
+        got_document = language_detector.document
 
         expected_document = etree.parse(
             os.path.join(here,
@@ -227,7 +227,7 @@ class TestLanguageDetector(XMLTester):
             root,
             LANGUAGEGUESSER)
         language_detector.detect_language()
-        got_document = language_detector.get_document()
+        got_document = language_detector.document
 
         expected_document = etree.parse(
             os.path.join(here,
