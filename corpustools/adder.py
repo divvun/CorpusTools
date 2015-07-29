@@ -84,12 +84,8 @@ class AddToCorpus(object):
     @staticmethod
     def __normalise_path(path):
         '''All paths in the corpus should consist of lowercase ascii letters'''
-        new_parts = []
-        for part in path.split('/'):
-            if part != '':
-                new_parts.append(namechanger.normalise_filename(part))
-
-        return u'/'.join(new_parts)
+        return u'/'.join([namechanger.normalise_filename(part)
+                          for part in path.split('/')])
 
     @staticmethod
     def add_url_extension(filename, content_type):
