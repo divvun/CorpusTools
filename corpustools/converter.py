@@ -2159,6 +2159,30 @@ class DocumentFixer(object):
                         encoding,
                         firstname.encode('utf-8')).decode('utf-8'))
 
+    @staticmethod
+    def get_quote_list(text):
+        quote_regexes = [re.compile('".+?"'),
+                         re.compile(u'«.+?»'),
+                         re.compile(u'“.+?”')]
+        quote_list = [m.span()
+                      for quote_regex in quote_regexes
+                      for m in quote_regex.finditer(text)]
+        quote_list.sort()
+
+        return quote_list
+
+    @staticmethod
+    def append_quotes(element, text, quote_list):
+        for x in range(0, len(quote_list)):
+            span = etree.Element('span')
+            span.set('type', 'quote')
+            span.text = text[quote_list[x][0]:quote_list[x][1]]
+            if x + 1 < len(quote_list):
+                span.tail = text[quote_list[x][1]:quote_list[x + 1][0]]
+            else:
+                span.tail = text[quote_list[x][1]:]
+            element.append(span)
+
     def detect_quote(self, element):
         '''Insert span elements around quotes.'''
         newelement = deepcopy(element)
@@ -2167,30 +2191,12 @@ class DocumentFixer(object):
         for child in element:
             child.getparent().remove(child)
 
-        quote_list = []
-        quote_regexes = [re.compile('".+?"'),
-                         re.compile(u'«.+?»'),
-                         re.compile(u'“.+?”')]
-
         text = newelement.text
         if text:
-            for quote_regex in quote_regexes:
-                for m in quote_regex.finditer(text):
-                    quote_list.append(m.span())
-
+            quote_list = self.get_quote_list(text)
             if len(quote_list) > 0:
-                quote_list.sort()
                 element.text = text[0:quote_list[0][0]]
-
-                for x in range(0, len(quote_list)):
-                    span = etree.Element('span')
-                    span.set('type', 'quote')
-                    span.text = text[quote_list[x][0]:quote_list[x][1]]
-                    if x + 1 < len(quote_list):
-                        span.tail = text[quote_list[x][1]:quote_list[x + 1][0]]
-                    else:
-                        span.tail = text[quote_list[x][1]:]
-                    element.append(span)
+                self.append_quotes(element, text, quote_list)
             else:
                 element.text = text
 
@@ -2198,26 +2204,11 @@ class DocumentFixer(object):
             element.append(self.detect_quote(child))
 
             if child.tail:
-                quote_list = []
                 text = child.tail
-
-                for quote_regex in quote_regexes:
-                    for m in quote_regex.finditer(text):
-                        quote_list.append(m.span())
-
+                quote_list = self.get_quote_list(text)
                 if len(quote_list) > 0:
-                    quote_list.sort()
                     child.tail = text[0:quote_list[0][0]]
-
-                for x in range(0, len(quote_list)):
-                    span = etree.Element('span')
-                    span.set('type', 'quote')
-                    span.text = text[quote_list[x][0]:quote_list[x][1]]
-                    if x + 1 < len(quote_list):
-                        span.tail = text[quote_list[x][1]:quote_list[x + 1][0]]
-                    else:
-                        span.tail = text[quote_list[x][1]:]
-                    element.append(span)
+                    self.append_quotes(element, text, quote_list)
 
         return element
 
