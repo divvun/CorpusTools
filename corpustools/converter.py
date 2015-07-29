@@ -668,9 +668,10 @@ class PDF2XMLConverter(Converter):
                            for r in skip_ranges_norm)
 
             try:
-                for start, end in sorted(skip_ranges):
-                    for page in range(start, end + 1):
-                        pages.append(page)
+                pages = [page
+                         for start, end in sorted(skip_ranges)
+                         for page in range(start, end + 1)]
+
             except ValueError:
                 raise ConversionException(
                     "Invalid format in skip_pages: {}".format(skip_pages))
