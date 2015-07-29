@@ -84,7 +84,8 @@ CTYPES = {
         u"ª": u"š",
         u"∏": u"č",
         u"π": u"đ",
-        u"Ω": u"ž",
+        u"Ω": u"ž",  # OHM SIGN, U+2126
+        u"Ω": u"ž",  # GREEK CAPITAL LETTER OMEGA, U+03A9
         u"∫": u"ŋ",
         u"Á": u"Á",
         u"¢": u"Č",
