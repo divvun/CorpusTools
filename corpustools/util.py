@@ -137,7 +137,6 @@ def get_preprocess_command(lang):
     abbr_fb = get_lang_resource("sme", 'tools/preprocess/abbr.txt')
     abbr = get_lang_resource(lang, 'tools/preprocess/abbr.txt', abbr_fb)
     return [preprocess_script,
-            "--xml",
             "--abbr={}".format(abbr)]
 
 
