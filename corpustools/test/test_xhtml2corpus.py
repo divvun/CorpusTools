@@ -1103,6 +1103,56 @@ tests = {
             '</document>'
             ),
         },
+    'i-ol-li': {
+        'html': (
+            '<html>'
+            '  <body>'
+            '    <i>'
+            '      <ol>'
+            '        <li>wtf ol!</li>'
+            '      </ol>'
+            '    </i>'
+            '  </body>'
+            '</html>'
+            ),
+        'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <list>'
+            '      <p type="listitem">wtf ol!</p>'
+            '    </list>'
+            '  </body>'
+            '</document>'
+            ),
+        },
+    'i-ul-li': {
+        'html': (
+            '<html>'
+            '  <body>'
+            '    <i>'
+            '      <ul>'
+            '        <li>wtf ul!</li>'
+            '      </ul>'
+            '    </i>'
+            '  </body>'
+            '</html>'
+            ),
+        'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <list>'
+            '      <p type="listitem">wtf ul!</p>'
+            '    </list>'
+            '  </body>'
+            '</document>'
+            ),
+        },
     'ol-i-li': {
         'html': (
             '<html>'
