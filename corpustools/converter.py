@@ -741,13 +741,12 @@ class PDF2XMLConverter(Converter):
 
     def get_margin_lines(self):
         '''Get the margin lines from the metadata file.'''
-        margin_lines = {}
-
-        for key in ['right_margin', 'top_margin', 'left_margin',
-                    'bottom_margin']:
+        margin_lines = {
+            key: self.md.get_variable(key).strip()
+            for key in ['right_margin', 'top_margin', 'left_margin',
+                        'bottom_margin']
             if (self.md.get_variable(key) is not None and
-                    self.md.get_variable(key).strip() != ''):
-                margin_lines[key] = self.md.get_variable(key).strip()
+                self.md.get_variable(key).strip() != '')}
 
         return margin_lines
 
@@ -787,6 +786,22 @@ class PDF2XMLConverter(Converter):
 
         return m
 
+    def get_coefficient(self, margin, page_number):
+        '''Get the width of the margin in percent'''
+        coefficient = 7
+        if margin in self.margins.keys():
+            m = self.margins[margin]
+            if m.get(page_number) is not None:
+                coefficient = m[page_number.strip()]
+            elif m.get('all') is not None:
+                coefficient = m['all']
+            elif int(page_number) % 2 == 0 and m.get('even') is not None:
+                coefficient = m['even']
+            elif int(page_number) % 2 == 1 and m.get('odd') is not None:
+                coefficient = m['odd']
+
+        return coefficient
+
     def compute_margins(self, page):
         '''Compute the margins of a page in pixels.
 
@@ -794,41 +809,24 @@ class PDF2XMLConverter(Converter):
 
         :returns: a dict containing the four margins in pixels
         '''
-        margins = {}
-        page_number = page.get('number')
-        page_width = int(page.get('width'))
-        page_height = int(page.get('height'))
-
-        for margin in ['right_margin', 'left_margin', 'top_margin',
-                       'bottom_margin']:
-            coefficient = 7
-            if margin in self.margins.keys():
-                m = self.margins[margin]
-                if m.get(page_number) is not None:
-                    coefficient = m[page_number.strip()]
-                elif m.get('all') is not None:
-                    coefficient = m['all']
-                elif int(page_number) % 2 == 0 and m.get('even') is not None:
-                    coefficient = m['even']
-                elif int(page_number) % 2 == 1 and m.get('odd') is not None:
-                    coefficient = m['odd']
-
-            margins[margin] = self.compute_margin(margin, page_height,
-                                                  page_width, coefficient)
+        margins = {margin: self.compute_margin(margin, page)
+                   for margin in ['right_margin', 'left_margin', 'top_margin',
+                                  'bottom_margin']}
 
         return margins
 
-    def compute_margin(self, margin, page_height, page_width, coefficient):
+    def compute_margin(self, margin, page):
         '''Compute a margin in pixels.
 
-        :param margin: name of the margin
-        :param page_height: height of the page
-        :param page_width: width of the page
-        :param coefficient: width of the margin in percent
+        :param page: a pdf2xml page element
 
         :return: an int telling where the margin is on the page.
         '''
+        page_width = int(page.get('width'))
+        page_height = int(page.get('height'))
+        coefficient = self.get_coefficient(margin, page.get('number'))
         # print util.lineno(), margin, page_height, page_width, coefficient
+
         if margin == 'right_margin':
             return int(coefficient * page_width / 100)
         if margin == 'left_margin':
