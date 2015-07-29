@@ -2217,16 +2217,15 @@ class DocumentFixer(object):
         for paragraph in self.root.iter('p'):
             paragraph = self.detect_quote(paragraph)
 
-    def set_word_count(self):
+    def calculate_wordcount(self):
         '''Count the words in the file.'''
-        plist = []
-        for paragraph in self.root.iter('p'):
-            plist.append(etree.tostring(paragraph,
-                                        method='text',
-                                        encoding='utf8'))
+        plist = [etree.tostring(paragraph, method='text', encoding='utf8')
+                 for paragraph in self.root.iter('p')]
 
-        words = len(re.findall(r'\S+', ' '.join(plist)))
+        return str(len(re.findall(r'\S+', ' '.join(plist))))
 
+    def set_word_count(self):
+        '''Set the wordcount element'''
         wordcount = self.root.find('header/wordcount')
         if wordcount is None:
             tags = ['collection', 'publChannel', 'place', 'year',
@@ -2239,7 +2238,7 @@ class DocumentFixer(object):
                     header.insert(header.index(found) + 1, wordcount)
                     break
 
-        wordcount.text = str(words)
+        wordcount.text = self.calculate_wordcount()
 
     def make_element(self, eName, text, attributes={}):
         '''Make an xml element.
