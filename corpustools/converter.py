@@ -1504,6 +1504,7 @@ class HTMLContentConverter(Converter):
                     'rightverticalgradient',  # udir.no
                     'sharing',
                     'sidebar',
+                    'spalte300',  # osko.no
                     'tabbedmenu',
                     'tipformcontainer',  # tysfjord.kommune.no
                     'tipsarad mt6 selfClear',
@@ -1553,6 +1554,7 @@ class HTMLContentConverter(Converter):
                     'frontgallery',  # visitstetind.no
                     'header',
                     'headerBar',
+                    'headWrapper',  # osko.no
                     'hoyre',  # unginordland
                     'leftMenu',
                     'leftPanel',
@@ -1585,6 +1587,7 @@ class HTMLContentConverter(Converter):
                     'sitemap',
                     'skipLinks',  # udir.no
                     'skiplink',  # tysfjord.kommune.no
+                    'spraakvelger',  # osko.no
                     'subfoote',  # visitstetind.no
                     'submenu',  # nord-salten.no
                     'tipafriend',
