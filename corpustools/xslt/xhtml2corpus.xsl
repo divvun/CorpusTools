@@ -464,17 +464,7 @@ If it is a container it has one or more of the these tags:
 </xsl:template>
 
 <xsl:template match="html:small">
-    <xsl:choose>
-        <xsl:when test="html:a|
-                  ancestor::html:div">
-            <p>
-                <xsl:apply-templates/>
-            </p>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="html:span">

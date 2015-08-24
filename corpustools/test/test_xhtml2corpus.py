@@ -517,9 +517,7 @@ tests = {
             '    <title/>'
             '  </header>'
             '  <body>'
-            '    <p>'
             '      Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
-            '    </p>'
             '  </body>'
             '</document>'
             ),
@@ -542,8 +540,33 @@ tests = {
             '    <title/>'
             '  </header>'
             '  <body>'
-            '    <p>'
             '      Harrieth Aira'
+            '  </body>'
+            '</document>'
+            ),
+        },
+    'div-p-small': {
+        'html': (
+            '<html>'
+            '  <body>'
+            '    <div>'
+            '      <p>'
+            '        <small>'
+            '          div-p-small'
+            '        </small>'
+            '      </p>'
+            '    </div>'
+            '  </body>'
+            '</html>'
+            ),
+        'xml': (
+            '<document>'
+            '  <header>'
+            '    <title/>'
+            '  </header>'
+            '  <body>'
+            '    <p>'
+            '      div-p-small'
             '    </p>'
             '  </body>'
             '</document>'
