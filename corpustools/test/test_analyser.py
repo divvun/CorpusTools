@@ -36,6 +36,7 @@ here = os.path.dirname(__file__)
 
 
 class TestAnalyser(unittest.TestCase):
+
     def setUp(self):
         self.a = analyser.Analyser(
             'sme',

@@ -25,7 +25,9 @@ from corpustools import typosfile
 
 
 class TestTypoline(unittest.TestCase):
+
     """Class to test the typos synchroniser"""
+
     def setUp(self):
         pass
 

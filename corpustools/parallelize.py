@@ -44,7 +44,9 @@ here = os.path.dirname(__file__)
 
 
 class CorpusXMLFile(object):
+
     """A class to handle all the info of a corpus xml file"""
+
     def __init__(self, name):
         self.name = name
         self.etree = etree.parse(name)
@@ -188,12 +190,14 @@ class CorpusXMLFile(object):
 
 
 class SentenceDivider(object):
+
     """A class that takes a giellatekno xml document as input.
 
     It spits out an xml document that has divided the text inside the p tags
     into sentences, but otherwise is unchanged.
     Each sentence is encased in an s tag, and has an id number
     """
+
     def __init__(self, input_xmlfile):
         """Parse the input_xmlfile
 
@@ -251,7 +255,7 @@ class SentenceDivider(object):
     def write_result(self, outfile):
         """Write self.document to the given outfile name"""
         o_path, o_file = os.path.split(outfile)
-        o_rel_path = o_path.replace(os.getcwd()+'/', '', 1)
+        o_rel_path = o_path.replace(os.getcwd() + '/', '', 1)
         try:
             if o_rel_path != '':
                 os.makedirs(o_rel_path)
@@ -370,6 +374,7 @@ class SentenceDivider(object):
 
 
 class Parallelize(object):
+
     """A class to parallelize two files
 
     Input is the xml file that should be parallellized and the language that it
@@ -537,13 +542,13 @@ class ParallelizeHunalign(Parallelize):
         # Hunalign expects the _reverse_ format for the dictionary!
         # See Dictionary under http://mokk.bme.hu/resources/hunalign/
         return "\n".join(["{} @ {}".format(w2, w1)
-                          for w1, w2 in cleaned_pairs])+"\n"
+                          for w1, w2 in cleaned_pairs]) + "\n"
 
     def to_sents(self, origfile):
         divider = SentenceDivider(origfile.get_name())
         doc = divider.process_all_paragraphs()
         paragraphs = etree.ElementTree(doc).xpath('//p')
-        sents = [["<p>"]+p.xpath('./s/text()') for p in paragraphs]
+        sents = [["<p>"] + p.xpath('./s/text()') for p in paragraphs]
         return "\n".join(sum(sents, []))
 
     def align(self):
@@ -573,6 +578,7 @@ class ParallelizeHunalign(Parallelize):
 
 
 class ParallelizeTCA2(Parallelize):
+
     def generate_anchor_file(self, outpath):
         """Generate an anchor file with lang1 and lang2."""
         assert self.gal.lang1 == self.get_lang1()
@@ -648,6 +654,7 @@ class ParallelizeTCA2(Parallelize):
 
 
 class Tmx(object):
+
     """A tmx file handler
 
     A class that reads a tmx file, and implements a bare minimum of
@@ -867,11 +874,13 @@ class Tmx(object):
 
 
 class AlignmentToTmx(Tmx):
+
     """A class to make tmx files based on the output of an aligner
 
     This just implements some common methods for the TCA2 and hunalign
     subclasses.
     """
+
     def __init__(self, origfiles):
         """Input is a list of CorpusXMLFile objects"""
         self.origfiles = origfiles
@@ -930,7 +939,9 @@ class AlignmentToTmx(Tmx):
 
 
 class HunalignToTmx(AlignmentToTmx):
+
     """A class to make tmx files based on the output from hunalign"""
+
     def __init__(self, origfiles, output):
         """Input is a list of CorpusXMLFile objects"""
         self.output = output
@@ -964,7 +975,9 @@ class HunalignToTmx(AlignmentToTmx):
 
 
 class Tca2ToTmx(AlignmentToTmx):
+
     """A class to make tmx files based on the output from tca2"""
+
     def __init__(self, origfiles, sentfiles):
         """Input is a list of CorpusXMLFile objects"""
         self.sentfiles = sentfiles

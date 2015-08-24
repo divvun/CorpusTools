@@ -210,10 +210,12 @@ def note(msg):
 
 
 class ExternalCommandRunner(object):
+
     '''Class to run external command through subprocess
 
     Save output, error and returnvalue
     '''
+
     def __init__(self):
         self.stdout = None
         self.stderr = None

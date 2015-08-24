@@ -27,6 +27,7 @@ from corpustools import argparse_version
 from corpustools import converter
 from corpustools import util
 
+
 def parse_args():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],

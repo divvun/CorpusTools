@@ -37,7 +37,9 @@ here = os.path.dirname(__file__)
 
 
 class TestCorpusXMLFile(unittest.TestCase):
+
     """A test class for the CorpusXMLFile class"""
+
     def setUp(self):
         self.pfile = parallelize.CorpusXMLFile(
             os.path.join(
@@ -153,7 +155,9 @@ class TestCorpusXMLFile(unittest.TestCase):
 
 
 class TestSentenceDivider(unittest.TestCase):
+
     """A test class for the SentenceDivider class"""
+
     def setUp(self):
         self.sentence_divider = parallelize.SentenceDivider(
             os.path.join(
@@ -406,7 +410,9 @@ class TestSentenceDivider(unittest.TestCase):
 
 
 class TestParallelizeTCA2(unittest.TestCase):
+
     """A test class for the ParallelizeTCA2 class"""
+
     def setUp(self):
         self.parallelize = parallelize.ParallelizeTCA2(
             os.path.join(
@@ -453,7 +459,9 @@ class TestParallelizeTCA2(unittest.TestCase):
 
 
 class TestParallelizeHunalign(unittest.TestCase):
+
     """A test class for the ParallelizeHunalign class"""
+
     def setUp(self):
         self.parallelize = parallelize.ParallelizeHunalign(
             os.path.join(
@@ -483,7 +491,9 @@ class TestParallelizeHunalign(unittest.TestCase):
 
 
 class TestGenerateAnchorFile(unittest.TestCase):
+
     """A test class for the GenerateAnchorList class"""
+
     def test_generate_anchor_output(self):
         with tempfile.NamedTemporaryFile('w') as anchor_path:
             gal = generate_anchor_list.GenerateAnchorList(
@@ -499,7 +509,9 @@ class TestGenerateAnchorFile(unittest.TestCase):
 
 
 class TestTmx(unittest.TestCase):
+
     """A test class for the Tmx class"""
+
     def setUp(self):
         self.tmx = parallelize.Tmx(etree.parse(
             os.path.join(
@@ -644,7 +656,9 @@ class TestTmx(unittest.TestCase):
 
 
 class TestTca2ToTmx(unittest.TestCase):
+
     """A test class for the Tca2ToTmx class"""
+
     def setUp(self):
         """Hand the data from the Parallelize class to the tmx class"""
         para = parallelize.ParallelizeTCA2(

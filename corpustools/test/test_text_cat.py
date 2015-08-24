@@ -32,6 +32,7 @@ here = os.path.dirname(__file__)
 
 
 class TestTextCat(unittest.TestCase):
+
     def setUp(self):
         pass
 

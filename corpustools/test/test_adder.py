@@ -30,6 +30,7 @@ from corpustools import xslsetter
 
 
 class TestAddToCorpus(unittest.TestCase):
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
         self.tempdir.makedir('tull')
@@ -127,6 +128,7 @@ class TestAddToCorpus(unittest.TestCase):
 
 
 class TestAddFileToCorpus(unittest.TestCase):
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
         self.tempdir.write('origdirectory/a.txt', 'content of a')
@@ -364,6 +366,7 @@ class TestAddFileToCorpus(unittest.TestCase):
 
 
 class TestDirectoryToCorpusWithDuplicates(unittest.TestCase):
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
         self.tempdir.write('origdirectory/a.txt', 'content of a')
@@ -390,6 +393,7 @@ class TestDirectoryToCorpusWithDuplicates(unittest.TestCase):
 
 
 class TestDirectoryToCorpusWithoutDuplicates(unittest.TestCase):
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
         self.tempdir.write('origdirectory/a.txt', 'content of a')

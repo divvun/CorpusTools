@@ -27,7 +27,9 @@ import zipfile
 
 
 class PackageTmx(object):
+
     """A class to package tmx files into a zip file"""
+
     def __init__(self, dirname):
         """Set the counter on which filenames are based"""
         self.fileId = 1

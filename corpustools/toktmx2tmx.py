@@ -31,10 +31,12 @@ from corpustools import util
 
 
 class Toktmx2Tmx(object):
+
     """A class to make a tidied up version of toktmx files.
 
     Removes unwanted spaces around punctuation, parentheses and so on.
     """
+
     def read_toktmx_file(self, toktmx_file):
         """Reads a toktmx file, parses it, sets the tmx file name"""
         self.tmxfile_name = toktmx_file.replace('toktmx', 'tmx')

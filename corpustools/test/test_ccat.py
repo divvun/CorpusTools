@@ -26,7 +26,9 @@ from corpustools import ccat
 
 
 class TestCcatHyph(unittest.TestCase):
+
     '''Test how ccat handles hyph'''
+
     def test_hyph1(self):
         '''Test the default treatment of hyph tags'''
         xml_printer = ccat.XMLPrinter()
@@ -36,7 +38,7 @@ class TestCcatHyph(unittest.TestCase):
                 '<document id="no_id" xml:lang="nob">'
                 '<body><p>mellom<hyph/>krigs<hyph/>tiden</p></body>'
                 '</document>')
-            )
+        )
 
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), 'mellomkrigstiden ¶\n')
@@ -50,7 +52,7 @@ class TestCcatHyph(unittest.TestCase):
                 '<document id="no_id" xml:lang="nob">'
                 '<body><p>mellom<hyph/>krigs<hyph/>tiden</p></body>'
                 '</document>')
-            )
+        )
 
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(),
@@ -65,7 +67,7 @@ class TestCcatHyph(unittest.TestCase):
                 '<document id="no_id" xml:lang="nob">'
                 '<body><p>mellom<hyph/>krigs<hyph/>tiden</p></body>'
                 '</document>')
-            )
+        )
 
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), 'mellom-krigs-tiden ¶\n')
@@ -80,7 +82,7 @@ class TestCcatHyph(unittest.TestCase):
                 '<document id="no_id" xml:lang="nob">'
                 '<body><p>mellom<hyph/><hyph/>tiden</p></body>'
                 '</document>')
-            )
+        )
 
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), 'mellom-tiden ¶\n')
@@ -94,14 +96,16 @@ class TestCcatHyph(unittest.TestCase):
                 '<document id="no_id" xml:lang="nob">'
                 '<body><p>mellom<hyph/>krigs<hyph/>tiden</p></body>'
                 '</document>')
-            )
+        )
 
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), 'mellom krigs tiden ¶\n')
 
 
 class TestCcatErrormarkup(unittest.TestCase):
+
     '''Test how ccat handles errormarkup'''
+
     def test_single_error_inline(self):
         '''Plain error element, default text flow'''
         xml_printer = ccat.XMLPrinter()
@@ -223,6 +227,7 @@ class TestCcatErrormarkup(unittest.TestCase):
 
 
 class TestCcat(unittest.TestCase):
+
     def test_p(self):
         '''Test the output of a plain p with default text flow'''
         xml_printer = ccat.XMLPrinter()

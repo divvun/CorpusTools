@@ -35,7 +35,9 @@ here = os.path.dirname(__file__)
 
 
 class TestFilenameToAscii(unittest.TestCase):
+
     '''Test the normalise_filename function'''
+
     def test_none_ascii_lower(self):
         oldname = u'ášŧŋđžčåøæöäï+'
         want = u'astngdzcaoaeoai_'
@@ -104,7 +106,9 @@ class TestFilenameToAscii(unittest.TestCase):
 
 
 class TestAreDuplicates(unittest.TestCase):
+
     '''Test the are_duplicates function'''
+
     def test_are_duplicate_nonexisting_file(self):
         self.assertFalse(namechanger.are_duplicates('old.txt', 'new.txt'))
 
@@ -124,6 +128,7 @@ class TestAreDuplicates(unittest.TestCase):
 
 
 class TestComputeNewBasename(unittest.TestCase):
+
     def test_compute_new_basename_duplicates(self):
         '''What happens when the wanted name is taken, and a duplicate'''
         with self.assertRaises(UserWarning):
@@ -147,10 +152,11 @@ class TestComputeNewBasename(unittest.TestCase):
                              'new_none_dupe.txt')),
             os.path.join(here, 'name_changer_data', 'orig', 'sme', 'admin',
                          'other_files', 'new_none_dupe_1.txt')
-            )
+        )
 
 
 class TestComputeMovepairs(unittest.TestCase):
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory()
         self.tempdir.makedir('orig/sme/ficti/sub')
@@ -438,6 +444,7 @@ class TestComputeMovepairs(unittest.TestCase):
 
 
 class TestCorpusFileMover(unittest.TestCase):
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
@@ -506,6 +513,7 @@ class TestCorpusFileMover(unittest.TestCase):
 
 
 class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
@@ -675,6 +683,7 @@ class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
 
 
 class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 

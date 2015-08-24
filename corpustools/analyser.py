@@ -35,6 +35,7 @@ import util
 
 
 class Analyser(object):
+
     '''This class makes a dependency analysis of sma, sme and smj files
 
     The pipeline is:
@@ -43,6 +44,7 @@ class Analyser(object):
     vislcg3 <disambiguation files> | vislcg3 <function files |
     vislcg3 <dependency files>
     '''
+
     def __init__(self, lang,
                  fstkit,
                  fst_file,
@@ -231,7 +233,7 @@ class Analyser(object):
         try:
             self.xml_file = parallelize.CorpusXMLFile(xml_file)
             analysis_xml_name = self.xml_file.get_name().replace('converted/',
-                                                                'analysed/')
+                                                                 'analysed/')
 
             if self.xml_file.get_ocr() is None:
                 self.dependency_analysis()
@@ -241,7 +243,7 @@ class Analyser(object):
                     self.xml_file.write(analysis_xml_name)
             else:
                 print(xml_file, 'is an OCR file and will not be analysed',
-                    file=sys.stderr)
+                      file=sys.stderr)
         except etree.XMLSyntaxError as e:
             print('Can not parse', xml_file, file=sys.stderr)
             print('The error was:', str(e), file=sys.stderr)
@@ -252,7 +254,7 @@ class Analyser(object):
         pool = multiprocessing.Pool(processes=pool_size,)
         pool.map(
             unwrap_self_analyse,
-            zip([self]*len(self.xml_files), self.xml_files))
+            zip([self] * len(self.xml_files), self.xml_files))
         pool.close()  # no more tasks
         pool.join()   # wrap up current tasks
 

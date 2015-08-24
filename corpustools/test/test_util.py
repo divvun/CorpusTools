@@ -24,6 +24,7 @@ from corpustools import util
 
 
 class TestSplitPath(unittest.TestCase):
+
     def test_split_converted(self):
         self.assertEqual(
             util.split_path("/home/me/src/freecorpus-git/converted/sma/admin/"

@@ -64,7 +64,9 @@ class ConversionException(Exception):
 
 
 class Converter(object):
+
     '''Take care of data common to all Converter classes'''
+
     def __init__(self, filename, write_intermediate=False):
         codecs.register_error('mixed', self.mixed_decoder)
         self.orig = os.path.abspath(filename)
@@ -376,6 +378,7 @@ class Converter(object):
 
 
 class AvvirConverter(Converter):
+
     '''Convert Ávvir xml files to the giellatekno xml format.
 
     The root node in an Ávvir document is article.
@@ -516,6 +519,7 @@ class AvvirConverter(Converter):
 
 
 class SVGConverter(Converter):
+
     '''Convert SVG files to the giellatekno xml format.'''
 
     def __init__(self, filename, write_intermediate=False):
@@ -533,6 +537,7 @@ class SVGConverter(Converter):
 
 
 class PlaintextConverter(Converter):
+
     '''Convert plain text files to the giellatekno xml format.'''
 
     def __init__(self, filename, write_intermediate=False):
@@ -641,6 +646,7 @@ class PlaintextConverter(Converter):
 
 
 class PDF2XMLConverter(Converter):
+
     '''Class to convert the xml output of pdftohtml to giellatekno xml'''
     LIST_CHARS = [u'•']
 
@@ -660,7 +666,7 @@ class PDF2XMLConverter(Converter):
         skip_pages = self.md.get_variable('skip_pages')
         if skip_pages is not None:
             # Turn single pages into single-page ranges, e.g. 7 → 7-7
-            skip_ranges_norm = ((r if '-' in r else r+"-"+r)
+            skip_ranges_norm = ((r if '-' in r else r + "-" + r)
                                 for r in skip_pages.strip().split(",")
                                 if r != "")
 
@@ -1095,7 +1101,9 @@ class PDF2XMLConverter(Converter):
 
 
 class BiblexmlConverter(Converter):
+
     '''Convert bible xml files to the giellatekno xml format'''
+
     def __init__(self, filename, write_intermediate=False):
         super(BiblexmlConverter, self).__init__(filename,
                                                 write_intermediate)
@@ -1222,6 +1230,7 @@ class BiblexmlConverter(Converter):
 
 
 class HTMLContentConverter(Converter):
+
     '''Convert html documents to the giellatekno xml format.'''
 
     def __init__(self, filename, write_intermediate=False, content=None):
@@ -1252,12 +1261,11 @@ class HTMLContentConverter(Converter):
                 'map',
                 'ins',
                 's',
-                ])
+            ])
 
         decoded = self.to_unicode(content)
         semiclean = self.remove_cruft(decoded)
         superclean = cleaner.clean_html(semiclean)
-
 
         self.soup = html5parser.document_fromstring(superclean)
         self.convert2xhtml()
@@ -1511,7 +1519,7 @@ class HTMLContentConverter(Converter):
                     'titlepage',
                     'toc',
                     'tools',  # arran.no
-                    ],
+                ],
                 'id': [
                     'AreaLeft',
                     'AreaLeftNav',
@@ -1599,21 +1607,21 @@ class HTMLContentConverter(Converter):
                     'topnav',  # tysfjord.kommune.no
                     'toppsone',  # unginordland
                     'venstre',  # unginordland
-                    ],
-                },
+                ],
+            },
             'p': {
                 'class': [
                     'WebPartReadMoreParagraph',
                     'breadcrumbs',
                     'langs'  # oahpa.no
-                    ],
-                },
+                ],
+            },
             'ul': {
                 'id': [
                     'AreaTopLanguageNav'
                     'AreaTopPrintMeny',
                     'skiplinks',  # umo.se
-                    ],
+                ],
                 'class': [
                     'QuickNav',
                     'article-tools',
@@ -1621,59 +1629,59 @@ class HTMLContentConverter(Converter):
                     'chapter-index',  # lovdata.no
                     'footer-nav',  # lovdata.no
                     'hidden',  # unginordland
-                    ],
-                },
+                ],
+            },
             'span': {
                 'id': [
                     'skiplinks'
-                    ],
+                ],
                 'class': [
                     'K-NOTE-FOTNOTE',
                     'graytext',  # svenskakyrkan.se
-                    ],
-                },
+                ],
+            },
             'a': {
                 'id': [
                     'ctl00_IdWelcome_ExplicitLogin',  # ntfk
                     'leftPanelTab',
-                    ],
+                ],
                 'class': [
                     'addthis_button_print',  # ntfk
                     'mainlevel',
                     'share-paragraf',  # lovdata.no
-                    ],
-                },
+                ],
+            },
             'td': {
                 'id': [
                     "hakulomake",
                     "paavalikko_linkit",
                     'sg_oikea',
-                    ],
+                ],
                 'class': [
                     "modifydate",
-                    ],
-                },
+                ],
+            },
             'tr': {
                 'id': [
                     "sg_ylaosa1",
                     "sg_ylaosa2",
-                    ]
-                },
+                ]
+            },
             'header': {
                 'id': [
                     'header',  # umo.se
-                    ],
+                ],
                 'class': [
                     'nrk-masthead-content cf',  # nrk.no
-                    ],
-                },
+                ],
+            },
             'section': {
                 'class': [
                     'tree-menu current',  # umo.se
                     'tree-menu',  # umo.se
-                    ],
-                },
-            }
+                ],
+            },
+        }
 
         ns = {'html': 'http://www.w3.org/1999/xhtml'}
         for tag, attribs in unwanted_classes_ids.items():
@@ -1793,6 +1801,7 @@ class HTMLContentConverter(Converter):
 
 
 class HTMLConverter(HTMLContentConverter):
+
     def __init__(self, filename, write_intermediate=False):
         with open(filename) as f:
             super(HTMLConverter, self).__init__(filename,
@@ -1801,7 +1810,9 @@ class HTMLConverter(HTMLContentConverter):
 
 
 class RTFConverter(HTMLContentConverter):
+
     '''Convert html documents to the giellatekno xml format.'''
+
     def __init__(self, filename, write_intermediate=False):
         with open(filename, "rb") as rtf_document:
             content = rtf_document.read()
@@ -1817,7 +1828,9 @@ class RTFConverter(HTMLContentConverter):
 
 
 class OdfConverter(HTMLContentConverter):
+
     '''Convert odf documents to the giellatekno xml format'''
+
     def __init__(self, filename, write_intermediate=False):
         generatecss = False
         embedable = True
@@ -1827,7 +1840,9 @@ class OdfConverter(HTMLContentConverter):
 
 
 class DocxConverter(HTMLContentConverter):
+
     '''Convert docx documents to the giellatekno xml format'''
+
     def __init__(self, filename, write_intermediate=False):
 
         HTMLContentConverter.__init__(self, filename,
@@ -1841,9 +1856,9 @@ class DocxConverter(HTMLContentConverter):
             'a': {
                 'name': [
                     'footnote-ref',  # footnotes in running text
-                    ],
-                }
+                ],
             }
+        }
         ns = {'html': 'http://www.w3.org/1999/xhtml'}
         for tag, attribs in unwanted_classes_ids.items():
             for key, values in attribs.items():
@@ -1854,7 +1869,9 @@ class DocxConverter(HTMLContentConverter):
 
 
 class DocConverter(HTMLContentConverter):
+
     '''Convert Microsoft Word documents to the giellatekno xml format'''
+
     def __init__(self, filename, write_intermediate=False):
         Converter.__init__(self, filename, write_intermediate)
         command = ['wvHtml',
@@ -1981,12 +1998,14 @@ class DocConverter(HTMLContentConverter):
 
 
 class DocumentFixer(object):
+
     '''Fix the content of a giellatekno xml document.
 
     Receive a stringified etree from one of the raw converters,
     replace ligatures, fix the encoding and return an etree with correct
     characters
     '''
+
     def __init__(self, document):
         self.root = document
 
@@ -2433,6 +2452,7 @@ class DocumentFixer(object):
 
 
 class XslMaker(object):
+
     '''Make an xsl file to combine with the intermediate xml file.
 
     To convert the intermediate xml to a fullfledged  giellatekno document
@@ -2496,23 +2516,23 @@ class XslMaker(object):
 
 
 class LanguageDetector(object):
+
     '''Detect and set the languages of a document.'''
+
     def __init__(self, document, languageGuesser):
         self.document = document
         self.languageGuesser = languageGuesser
 
-
     @property
     def inlangs(self):
         inlangs = [language.get('{http://www.w3.org/XML/1998/namespace}'
-                                     'lang')
+                                'lang')
                    for language in self.document.findall(
-                            'header/multilingual/language')]
+            'header/multilingual/language')]
         if len(inlangs) != 0:
             inlangs.append(self.mainlang)
 
         return inlangs
-
 
     @property
     def mainlang(self):
@@ -2577,6 +2597,7 @@ class LanguageDetector(object):
 
 
 class ConverterManager(object):
+
     '''Manage the conversion of original files to corpus xml'''
     LANGUAGEGUESSER = text_cat.Classifier(None)
     FILES = []
@@ -2659,7 +2680,7 @@ class ConverterManager(object):
         pool_size = multiprocessing.cpu_count()
         pool = multiprocessing.Pool(processes=pool_size,)
         pool.map(unwrap_self_convert,
-                 zip([self]*len(self.FILES), self.FILES))
+                 zip([self] * len(self.FILES), self.FILES))
         pool.close()
         pool.join()
 

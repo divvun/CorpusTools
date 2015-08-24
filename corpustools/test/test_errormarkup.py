@@ -30,6 +30,7 @@ from corpustools import errormarkup
 
 
 class TestErrorMarkup(unittest.TestCase):
+
     def setUp(self):
         self.em = errormarkup.ErrorMarkup('testfilename')
 

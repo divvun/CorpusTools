@@ -30,6 +30,7 @@ test_input = {
 
 
 class TestEncodingGuesser(unittest.TestCase):
+
     def test_encoding_guesser(self):
         guesser = decode.EncodingGuesser()
         for i in decode.CTYPES.keys():

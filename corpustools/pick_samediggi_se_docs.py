@@ -42,6 +42,7 @@ version = scope['VERSION']
 
 
 class DocumentPicker(object):
+
     def __init__(self, source_dir):
         self.freecorpus = os.getenv('GTFREE')
         self.source_dir = source_dir

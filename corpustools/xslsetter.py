@@ -36,6 +36,7 @@ class XsltException(Exception):
 
 
 class MetadataHandler(object):
+
     '''Class to handle metadata in .xsl files
 
     To convert the intermediate xml to a fullfledged  giellatekno document

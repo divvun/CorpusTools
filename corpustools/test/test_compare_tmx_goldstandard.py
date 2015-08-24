@@ -30,7 +30,9 @@ here = os.path.dirname(__file__)
 
 
 class TestTmxComparator(unittest.TestCase):
+
     """A test class for the TmxComparator class"""
+
     def test_equal_tmxes(self):
         comp = compare_tmx_goldstandard.TmxComparator(
             parallelize.Tmx(etree.parse(

@@ -33,6 +33,7 @@ LANGUAGEGUESSER = text_cat.Classifier(None)
 
 
 class XMLTester(unittest.TestCase):
+
     def assertXmlEqual(self, got, want):
         """Check if two stringified xml snippets are equal"""
         checker = doctestcompare.LXMLOutputChecker()
@@ -43,7 +44,9 @@ class XMLTester(unittest.TestCase):
 
 
 class TestLanguageDetector(XMLTester):
+
     """Test the functionality of LanguageDetector"""
+
     def setUp(self):
         self.root = etree.parse(
             os.path.join(here,

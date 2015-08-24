@@ -28,7 +28,9 @@ from lxml import etree
 
 
 class ErrorMarkup(object):
+
     '''This is a class to convert errormarkuped text to xml'''
+
     def __init__(self, filename):
         self._filename = filename
         self.types = {u"$": u"errorort",
@@ -125,16 +127,16 @@ class ErrorMarkup(object):
 
                 for index in range(0, len(result)):
                     if self.is_correction(result[index]):
-                        if (not self.is_correction(result[index-1]) and
-                                self.is_error(result[index-1])):
+                        if (not self.is_correction(result[index - 1]) and
+                                self.is_error(result[index - 1])):
                             self.add_simple_error(elements,
-                                                  result[index-1],
+                                                  result[index - 1],
                                                   result[index])
 
                         else:
 
                             self.add_nested_error(elements,
-                                                  result[index-1],
+                                                  result[index - 1],
                                                   result[index])
 
                 if not self.is_correction(result[-1]):
@@ -218,7 +220,7 @@ class ErrorMarkup(object):
                 if index > -1:
                     parenthesis_found = True
 
-                    error_element.text = text[index+1:]
+                    error_element.text = text[index + 1:]
                     if isinstance(elements[-1], etree._Element):
                         elements[-1].tail = text[:index]
                     else:

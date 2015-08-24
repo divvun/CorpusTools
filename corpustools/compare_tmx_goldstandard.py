@@ -36,7 +36,9 @@ from corpustools import util
 
 
 class TmxComparator(object):
+
     """A class to compare two tmx-files"""
+
     def __init__(self, want_tmx, got_tmx):
         self.want_tmx = want_tmx
         self.got_tmx = got_tmx
@@ -84,7 +86,9 @@ class TmxComparator(object):
 
 
 class TmxGoldstandardTester(object):
+
     """A class to test the alignment pipeline against the tmx goldstandard"""
+
     def __init__(self, testresult_filename, dateformat_addition=None):
         """Set the name where the testresults should be written
 
@@ -216,7 +220,9 @@ class TmxGoldstandardTester(object):
 
 
 class TmxTestDataWriter(object):
+
     """A class that writes tmx test data to a file"""
+
     def __init__(self, filename):
         self.filename = filename
 

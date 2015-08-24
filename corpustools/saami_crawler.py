@@ -34,6 +34,7 @@ import namechanger
 
 
 class SamediggiFiCrawler(object):
+
     '''Notes about samediggi.fi
 
     Start page is:
@@ -72,6 +73,7 @@ class SamediggiFiCrawler(object):
 
     Same procedure with links here
     '''
+
     def __init__(self):
         self.unvisited_links = set()
         self.unvisited_links.add(

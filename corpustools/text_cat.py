@@ -102,13 +102,13 @@ class NGramModel(object):
             parts = line.split()
             if len(parts) != 2:
                 raise ValueError("%s:%d invalid line, was split to %s"
-                                 % (fname, nl+1, parts))
+                                 % (fname, nl + 1, parts))
             try:
                 g = unicode(parts[gram_column])
                 f = int(parts[freq_column])
                 freq[g] = f
             except ValueError as e:
-                raise ValueError("%s: %d %s" % (fname, nl+1, e))
+                raise ValueError("%s: %d %s" % (fname, nl + 1, e))
         return freq
 
     def tokenise(self, text):
@@ -176,6 +176,7 @@ class NGramModel(object):
 
 
 class CharModel(NGramModel):
+
     def of_model_file(self, fil, fname):
         self.finish(self.freq_of_model_file(
             fil, fname, gram_column=0, freq_column=1))
@@ -191,13 +192,13 @@ class CharModel(NGramModel):
     def freq_of_text(self, text, freq):
         words = self.tokenise(text)
         for word in words:
-            _word_ = '_'+word+'_'
+            _word_ = '_' + word + '_'
             size = len(_word_)
             for i in range(size):
                 for s in (1, 2, 3, 4):
-                    sub = _word_[i:i+s]
+                    sub = _word_[i:i + s]
                     freq[sub] = freq.get(sub, 0) + 1
-                    if i+s >= size:
+                    if i + s >= size:
                         break
         return freq
 
@@ -268,7 +269,7 @@ class Classifier(object):
         ext = '.lm'
         fnames = []
 
-        folder_glob = os.path.join(folder, '*'+ext)
+        folder_glob = os.path.join(folder, '*' + ext)
         found_fnames = glob.glob(os.path.normcase(folder_glob))
         if len(found_fnames) == 0:
             raise ValueError("No language files found in %s" % (folder,))
@@ -276,7 +277,7 @@ class Classifier(object):
         if len(langs) == 0:
             fnames = found_fnames
         else:
-            fnames = [os.path.join(folder, lang+ext) for lang in langs]
+            fnames = [os.path.join(folder, lang + ext) for lang in langs]
             not_found = set(fnames) - set(found_fnames)
             if len(not_found) != 0:
                 raise ValueError(
@@ -289,7 +290,7 @@ class Classifier(object):
             if verbose:
                 util.note("Loaded %s" % (fname,))
 
-            fname_wm = os.path.join(folder, lang+'.wm')
+            fname_wm = os.path.join(folder, lang + '.wm')
             # fname_wmgz = os.path.join(folder, lang+'.wm.gz')
             if os.path.exists(fname_wm):
                 self.wmodels[lang] = WordModel(lang).of_model_file(
@@ -366,12 +367,13 @@ class Classifier(object):
 
 
 class FolderTrainer(object):
+
     def __init__(self, folder, exts=['.txt', '.txt.gz'], Model=CharModel,
                  verbose=False):
         self.models = {}
 
         for ext in exts:
-            files = glob.glob(os.path.normcase(os.path.join(folder, '*'+ext)))
+            files = glob.glob(os.path.normcase(os.path.join(folder, '*' + ext)))
             for fname in files:
                 if verbose:
                     msg = "Processing %s" % (fname,)
@@ -396,13 +398,14 @@ class FolderTrainer(object):
 
     def save(self, folder, ext='.lm', verbose=False):
         for lang, model in self.models.iteritems():
-            fname = os.path.join(folder, lang+ext)
+            fname = os.path.join(folder, lang + ext)
             model.to_model_file(open(fname, 'w'))
         if verbose and len(self.models) != 0:
             util.note("Wrote {%s}%s" % (",".join(self.models.keys()), ext))
 
 
 class FileTrainer(object):
+
     def __init__(self, fil, Model=CharModel, verbose=False):
         self.model = Model().of_text_file(fil)
 

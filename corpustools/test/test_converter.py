@@ -36,6 +36,7 @@ LANGUAGEGUESSER = text_cat.Classifier(None)
 
 
 class TestConverter(unittest.TestCase):
+
     def setUp(self):
         self.converter_inside_orig = converter.Converter(
             os.path.join(here,
@@ -159,6 +160,7 @@ class TestConverter(unittest.TestCase):
 
 
 class XMLTester(unittest.TestCase):
+
     def assertXmlEqual(self, got, want):
         """Check if two stringified xml snippets are equal"""
         checker = doctestcompare.LXMLOutputChecker()
@@ -169,6 +171,7 @@ class XMLTester(unittest.TestCase):
 
 
 class TestAvvirConverter(XMLTester):
+
     def setUp(self):
         self.avvir = converter.AvvirConverter('fakename')
         self.avvir.intermediate = etree.fromstring(
@@ -431,6 +434,7 @@ class TestAvvirConverter(XMLTester):
 
 
 class TestSVGConverter(XMLTester):
+
     def setUp(self):
         self.svg = converter.SVGConverter(
             os.path.join(here,
@@ -446,6 +450,7 @@ class TestSVGConverter(XMLTester):
 
 
 class TestPlaintextConverter(XMLTester):
+
     def test_to_unicode(self):
         plaintext = converter.PlaintextConverter(
             os.path.join(here,
@@ -538,6 +543,7 @@ Filbma lea.</p>
 
 
 class TestDocConverter(XMLTester):
+
     def setUp(self):
         self.testdoc = converter.DocConverter(
             os.path.join(here,
@@ -553,6 +559,7 @@ class TestDocConverter(XMLTester):
 
 
 class TestDocxConverter(XMLTester):
+
     def setUp(self):
         self.testdoc = converter.DocxConverter(
             os.path.join(here,
@@ -582,6 +589,7 @@ class TestDocxConverter(XMLTester):
 
 
 class TestHTMLContentConverter(XMLTester):
+
     def test_remove_empty_p_1(self):
         '''Remove an empty p'''
         got = converter.HTMLContentConverter(
@@ -647,19 +655,19 @@ class TestHTMLContentConverter(XMLTester):
                     (
                         'ctl00_MidtSone_ucArtikkel_ctl00_'
                         'ctl00_ctl01_divRessurser')],
-                },
+            },
             'p': {
                 'class': ['WebPartReadMoreParagraph', 'breadcrumbs'],
-                },
+            },
             'ul': {
                 'id': ['AreaTopPrintMeny', 'AreaTopLanguageNav'],
                 'class': ['QuickNav', 'article-tools', 'byline']
-                },
+            },
             'span': {
                 'id': ['skiplinks'],
                 'class': ['K-NOTE-FOTNOTE']
-                },
-            }
+            },
+        }
 
         for tag, attribs in unwanted_classes_ids.items():
             for key, values in attribs.items():
@@ -685,7 +693,7 @@ class TestHTMLContentConverter(XMLTester):
             'figure', 'nav', 'select', 'noscript', 'iframe', 'map',
             'colgroup', 'st1:country-region', 'v:shapetype', 'v:shape',
             'st1:metricconverter', 'fb:comments', 'g:plusone', 'fb:like',
-            ]
+        ]
 
         for unwanted_tag in unwanted_tags:
             got = converter.HTMLContentConverter(
@@ -1040,6 +1048,7 @@ class TestHTMLContentConverter(XMLTester):
 
 
 class TestRTFConverter(XMLTester):
+
     def setUp(self):
         self.testrtf = converter.RTFConverter(
             os.path.join(here, 'converter_data/folkemote.rtf'))
@@ -1053,6 +1062,7 @@ class TestRTFConverter(XMLTester):
 
 
 class TestDocumentFixer(XMLTester):
+
     def test_insert_spaces_after_semicolon(self):
         a = {u'Govven:Á': u'Govven: Á',
              u'govven:á': u'govven: á',
@@ -2747,6 +2757,7 @@ LOGO: Smi kulturfestivala 1998
 
 
 class TestXslMaker(XMLTester):
+
     def test_get_xsl(self):
         xslmaker = converter.XslMaker(
             os.path.join(here,
@@ -2772,7 +2783,9 @@ class TestXslMaker(XMLTester):
 
 
 class TestPDF2XMLConverter(XMLTester):
+
     '''Test the class that converts from pdf2xml to giellatekno/divvun xml'''
+
     def test_pdf_converter(self):
         pdfdocument = converter.PDF2XMLConverter(
             os.path.join(here, 'converter_data/pdf-test.pdf'))
@@ -3509,7 +3522,7 @@ class TestPDF2XMLConverter(XMLTester):
             '   <text top="323" left="428" width="220" height="16" font="2">, '
             'sáhtte</text>'
             '</page>'
-            )
+        )
         p2x.remove_footnotes_superscript(page)
 
         want_page = (
@@ -3535,7 +3548,7 @@ class TestPDF2XMLConverter(XMLTester):
             '   <text top="344" left="428" width="220" height="16" font="2">,'
             'sáhtte</text>'
             '</page>'
-            )
+        )
         p2x.remove_footnotes_superscript(page)
 
         want_page = (

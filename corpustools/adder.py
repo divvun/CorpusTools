@@ -40,6 +40,7 @@ class AdderException(Exception):
 
 
 class AddToCorpus(object):
+
     def __init__(self, corpusdir, mainlang, path):
         '''Class to adding files, urls and dirs to the corpus
 
@@ -330,7 +331,7 @@ def main():
                 for root, dirs, files in os.walk(orig):
                     for f in files:
                         adder.copy_file_to_corpus(os.path.join(root,
-                                                            f).decode('utf8'))
+                                                               f).decode('utf8'))
             else:
                 print(u'Cannot handle {}'.format(orig), file=sys.stderr)
 

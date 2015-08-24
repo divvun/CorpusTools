@@ -41,7 +41,9 @@ PathPair = namedtuple('PathPair', 'oldpath newpath')
 
 
 class MovepairComputer(object):
+
     '''Compute oldname, newname pairs'''
+
     def __init__(self):
         '''filepairs will be a list of PathPairs'''
         self.filepairs = []
@@ -98,7 +100,9 @@ class MovepairComputer(object):
 
 
 class CorpusFileMover(object):
+
     '''Move an original file and all its derived files.'''
+
     def __init__(self, oldpath, newpath):
         '''Class to move corpus files
 
@@ -221,6 +225,7 @@ class CorpusFileMover(object):
 
 
 class CorpusFilesetMoverAndUpdater(object):
+
     '''Change the names of files within a repository
 
     Normalise a file name: Replace non-ascii char with ascii ones and remove
@@ -260,6 +265,7 @@ class CorpusFilesetMoverAndUpdater(object):
     If a name clash is found, check if the files are duplicates. If they are
     duplicates, raise an exception, otherwise suggest a new name.
     '''
+
     def __init__(self, oldpath, newpath):
         self.mc = MovepairComputer()
         self.mc.compute_all_movepairs(oldpath, newpath)

@@ -32,7 +32,9 @@ import argparse_version
 
 
 class XMLPrinter(object):
+
     """Convert giellatekno xml formatted files to plain text"""
+
     def __init__(self,
                  lang=None,
                  all_paragraphs=False,
@@ -317,7 +319,7 @@ class XMLPrinter(object):
             element.tag.startswith('error') and self.one_word_per_line and not
             self.error_filtering or
             self.include_this_error(element)
-            )
+        )
 
     def visit_error_inline(self, element):
         """Determine whether element should be visited"""
@@ -337,7 +339,7 @@ class XMLPrinter(object):
             (element.tag == 'errorlex' and self.errorlex) or
             (element.tag == 'errorlang' and self.errorlang) or
             (element.tag == 'errorlang' and self.noforeign)
-            )
+        )
 
     def parse_file(self, filename):
         self.filename = filename

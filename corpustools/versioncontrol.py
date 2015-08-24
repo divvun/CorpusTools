@@ -34,6 +34,7 @@ class VersionControlException(Exception):
 
 
 class VersionController(object):
+
     def __init__(self):
         # non-repo config to get at global values
         self.config = git.GitConfigParser(
@@ -66,6 +67,7 @@ class VersionController(object):
 
 
 class SVN(VersionController):
+
     def __init__(self, svnclient):
         '''svnclient is a pysvn.Client'''
         super(SVN, self).__init__()
@@ -79,6 +81,7 @@ class SVN(VersionController):
 
 
 class GIT(VersionController):
+
     def __init__(self, gitrepo):
         super(GIT, self).__init__()
         self.gitrepo = gitrepo
@@ -92,6 +95,7 @@ class GIT(VersionController):
 
 
 class VersionControlFactory(object):
+
     def vcs(self, directory):
         try:
             s = pysvn.Client()

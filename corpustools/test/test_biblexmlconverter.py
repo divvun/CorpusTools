@@ -41,7 +41,7 @@ tests = {
             u'    </book>'
             u'  </body>'
             u'</document>'
-            ),
+        ),
         'converted': (
             '<document>'
             '  <body>'
@@ -57,8 +57,8 @@ tests = {
             '    </section>'
             '  </body>'
             '</document>'
-            ),
-        },
+        ),
+    },
     'book_chapter_verse': {
         'orig': (
             u'<document>'
@@ -74,7 +74,7 @@ tests = {
             u'    </book>'
             u'  </body>'
             u'</document>'
-            ),
+        ),
         'converted': (
             '<document>'
             '  <body>'
@@ -88,8 +88,8 @@ tests = {
             '    </section>'
             '  </body>'
             '</document>'
-            ),
-        },
+        ),
+    },
     'book_chapter_section_p': {
         'orig': (
             u'<document>'
@@ -111,7 +111,7 @@ tests = {
             u'    </book>'
             u'  </body>'
             u'</document>'
-            ),
+        ),
         'converted': (
             '<document>'
             '  <body>'
@@ -129,9 +129,9 @@ tests = {
             '    </section>'
             '  </body>'
             '</document>'
-            ),
-        },
-    }
+        ),
+    },
+}
 
 
 def assertXmlEqual(got, want):

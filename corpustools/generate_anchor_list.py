@@ -32,6 +32,7 @@ from corpustools import util
 
 
 class GenerateAnchorList(object):
+
     def __init__(self, lang1, lang2, columns, path):
         self.lang1 = lang1
         self.lang2 = lang2
