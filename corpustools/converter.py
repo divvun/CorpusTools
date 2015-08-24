@@ -1480,6 +1480,7 @@ class HTMLContentConverter(Converter):
                     'g11 col fl s2 sl6 sl9 sl12 sl18',  # nrk.no
                     'g22 col fl s4 sl6 sl9 sl12 sl18 article-header-sidebar',  # nrk.no
                     'g94 col fl s17 sl18 sg6 sg9 sg12 meta-widget',  # nrk.no
+                    'globmenu',  # visitstetind.no
                     'grid cf',  # nrk.no
                     'help closed hidden-xs',
                     'imagecontainer',
@@ -1488,8 +1489,10 @@ class HTMLContentConverter(Converter):
                     'meta',
                     'meta ui-helper-clearfix',  # nord-salten.no
                     'authors ui-helper-clearfix'  # nord-salten.no
+                    'menu',  # visitstetind.no
                     'metaWrapper',
                     'moduletable_oikopolut',
+                    'naviHlp',  # visitstetind.no
                     'noindex',  # ntfk
                     'nrk-globalfooter',  # nrk.no
                     'nrk-globalfooter-dk lp_globalfooter',  # nrk.no
@@ -1537,6 +1540,7 @@ class HTMLContentConverter(Converter):
                     'bunninformasjon',  # unginordland
                     'chatBox',
                     'chromemenu',  # calliidlagadus.org
+                    'crumbs',  # visitstetind.no
                     'ctl00_FullRegion_CenterAndRightRegion_HitsControl_'
                     'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
                     'ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl01_divRessurser',
@@ -1546,6 +1550,7 @@ class HTMLContentConverter(Converter):
                     'errorMessageContainer',  # nord-salten.no
                     'footer',  # forrest, too, tysfjord.kommune.no
                     'footer-wrapper',
+                    'frontgallery',  # visitstetind.no
                     'header',
                     'headerBar',
                     'hoyre',  # unginordland
@@ -1559,6 +1564,7 @@ class HTMLContentConverter(Converter):
                     'menu',
                     'murupolku',                # www.samediggi.fi
                     'navbar',  # tysfjord.kommune.no
+                    'ncFooter',  # visitstetind.no
                     'ntfkFooter',  # ntfk
                     'ntfkHeader',  # ntfk
                     'ntfkNavBreadcrumb',  # ntfk
@@ -1579,6 +1585,7 @@ class HTMLContentConverter(Converter):
                     'sitemap',
                     'skipLinks',  # udir.no
                     'skiplink',  # tysfjord.kommune.no
+                    'subfoote',  # visitstetind.no
                     'submenu',  # nord-salten.no
                     'tipafriend',
                     'tools',  # arran.no
