@@ -339,16 +339,16 @@ LIST @SUBJ> = @SUBJ> ;		  #!! @SUBJ>
 SET SUBJ = @<SUBJ OR @SUBJ> OR @SUBJ ;
 SET SPRED = @<SPRED OR @SPRED> OR @SPRED ;
 SET OPRED = @<OPRED OR @OPRED> OR @OPRED ;
-LIST @PPRED = @PPRED ;        #!! @PPRED
-LIST @APP = @APP ;			   #!! @APP
-LIST @APP-N< = @APP-N< ;	   #!! @APP-N<
-LIST @APP-Pron< = @APP-Pron< ; #!! @APP-Pron<
-LIST @APP>Pron = @APP>Pron ;   #!! @APP>Pron
-LIST @APP-Num< = @APP-Num< ;   #!! @APP-Num<
-LIST @APP-ADVL< = @APP-ADVL< ; #!! @APP-ADVL<
-LIST @VOC = @VOC ;			   #!! @VOC
-LIST @CVP = @CVP ;			   #!! @CVP
-LIST @CNP = @CNP ;			   #!! @CNP
+LIST @PPRED = @PPRED ;        #!! @PPRED
+LIST @APP = @APP ;			   #!! @APP
+LIST @APP-N< = @APP-N< ;	   #!! @APP-N<
+LIST @APP-Pron< = @APP-Pron< ; #!! @APP-Pron<
+LIST @APP>Pron = @APP>Pron ;   #!! @APP>Pron
+LIST @APP-Num< = @APP-Num< ;   #!! @APP-Num<
+LIST @APP-ADVL< = @APP-ADVL< ; #!! @APP-ADVL<
+LIST @VOC = @VOC ;			   #!! @VOC
+LIST @CVP = @CVP ;			   #!! @CVP
+LIST @CNP = @CNP ;			   #!! @CNP
 SET OBJ = (@<OBJ) OR (@OBJ>) OR (@OBJ) OR (@-F<OBJ) OR (@-FOBJ>) ;
 LIST <OBJ = @-F<OBJ @<OBJ ;
 LIST OBJ> = @OBJ> @-FOBJ> ;
@@ -357,7 +357,7 @@ SET OBJ>-OTHERS = OBJ> OR (Gen) OR (Nom) OR (Ess) OR (Loc) OR (Adv) ;
 SET NOT-FAUXV = FMAINV OR OBJ + V OR ADVL + V ;
 # Works after the mapping rules for verbs.
 SET SYN-V = FMAINV OR FAUXV OR V + SUBJ OR OBJ + V OR ADVL + V OR (V @>N) OR (V @N<) OR (V @A<) ;
-LIST @X = @X ;    #!! @X
+LIST @X = @X ;    #!! @X
 
 
 
@@ -390,7 +390,7 @@ LIST WORD = N A Adv V Pron CS CC Po Pr Interj Pcle Num ABBR ACR  \? ; #!! WORD
  # any word
 SET REAL-WORD = WORD - Num - Ord ; #!! REAL-WORD
 SET REAL-WORD-NOT-ABBR = WORD - Num - Ord - (ABBR N) ; # This is former REALWORD-NOTABBR #!! REAL-WORD-NOT-ABBR
-SET WORD-NOT-de = WORD - ("de") ; #!! WORD-NOT-de
+SET WORD-NOT-de = WORD - ("de") ; #!! WORD-NOT-de
 SET NOT-COMMA = WORD - COMMA ;  #!! NOT-COMMA
  # Note! We also have CLB_NOT-COMMA
 
@@ -1973,8 +1973,8 @@ SET CCCOMMA = CC OR COMMA ;
 #!! !Syntactic sets
 # --------------
 
-LIST ALLSYNTAG = (@+FAUXV) (@+FMAINV) (@-FAUXV) (@-FMAINV) (@-FSUBJ>)(@-FOBJ)(@-F<ADVL)(@-FADVL>)(@>A) (@>ADVL) (@ADVL<) (@<ADVL) (@ADVL>) (@ADVL) (@HAB>) (@<HAB) (@>N) (@APP) (@APP-N<) (@APP-Pron<) (@APP>Pron) (@APP-Num<) (@APP-ADVL<) (@VOC) (@CNP) (@CVP) (@P<) (@>P) (@HNOUN) (@INTERJ) (@Pron<) (@OBJ) (@OBJ>) (@<OBJ) (@OPRED) (@<OPRED) (@OPRED>) (@SPRED<OBJ) (@PCLE) (@COMP-CS<) (@N<) (@SPRED) (@<SPRED) (@SPRED>) (@PPRED) (@Num<) (@SUBJ) (@<SUBJ) (@SUBJ>) (@X); #!! ALLSYNTAG
-SET NON-APP = ALLSYNTAG - (@APP); #!! NON-APP
+LIST ALLSYNTAG = (@+FAUXV) (@+FMAINV) (@-FAUXV) (@-FMAINV) (@-FSUBJ>)(@-FOBJ)(@-F<ADVL)(@-FADVL>)(@>A) (@>ADVL) (@ADVL<) (@<ADVL) (@ADVL>) (@ADVL) (@HAB>) (@<HAB) (@>N) (@APP) (@APP-N<) (@APP-Pron<) (@APP>Pron) (@APP-Num<) (@APP-ADVL<) (@VOC) (@CNP) (@CVP) (@P<) (@>P) (@HNOUN) (@INTERJ) (@Pron<) (@OBJ) (@OBJ>) (@<OBJ) (@OPRED) (@<OPRED) (@OPRED>) (@SPRED<OBJ) (@PCLE) (@COMP-CS<) (@N<) (@SPRED) (@<SPRED) (@SPRED>) (@PPRED) (@Num<) (@SUBJ) (@<SUBJ) (@SUBJ>) (@X); #!! ALLSYNTAG
+SET NON-APP = ALLSYNTAG - (@APP); #!! NON-APP
 
 #!! ''These were the set types.''
 
@@ -4785,7 +4785,7 @@ SELECT:wordQst Pcle IF (-1 Adv OR A LINK *-1 BOS BARRIER NOT-PCLE)(0 go)(*1 VFIN
 #!! * __killPcle__ removes all remaining Pcle for go
 REMOVE:killPcle Pcle IF (0 go) ;
 
-SELECT:ConNegIfNeg ConNeg IF (*-1 REAL-NEG BARRIER ConNeg OR PrfPrc OR SV-BOUNDARY OR CS)(NEGATE 0 N OR PrfPrc OR Pron LINK *1 ConNeg BARRIER NOT-ADV-PCLE)(NEGATE 0 Loc LINK -1 NEGFOC LINK -1 Loc)(NEGATE 0 Inf LINK *-1 REAL-NEG LINK -1 ConNeg LINK -1 REAL-NEG)(NEGATE 0 Comp LINK1 go) ; #(NEGATE *1 ("leat") + FMAINV );
+SELECT:ConNegIfNeg ConNeg IF (*-1 REAL-NEG BARRIER ConNeg OR PrfPrc OR SV-BOUNDARY OR CS)(NEGATE 0 N OR PrfPrc OR Pron LINK *1 ConNeg BARRIER NOT-ADV-PCLE)(NEGATE 0 Loc LINK -1 NEGFOC LINK -1 Loc)(NEGATE 0 Inf LINK *-1 REAL-NEG LINK -1 ConNeg LINK -1 REAL-NEG)(NEGATE 0 Comp LINK1 go) ; #(NEGATE *1 ("leat") + FMAINV )
 	#% Máhttájeaddji ii leat stuorit go oahpaheaddjis, ii ge bálvaleaddji stuorit go hearrás.
 
 #SELECT:ConNegIfNeg ConNeg IF (*-1 REAL-NEG BARRIER ConNeg) ; # OR PrfPrc OR SV-BOUNDARY)(NEGATE 0 N OR PrfPrc LINK *1 ConNeg BARRIER NOT-ADV-PCLE)(NEGATE 0 Loc LINK -1 NEGFOC LINK -1 Loc)(NEGATE 0 Inf LINK *-1 REAL-NEG LINK -1 ConNeg LINK -1 REAL-NEG) ;
@@ -5704,7 +5704,7 @@ SELECT:AAttrCop (A Attr) IF (*-1 COPULAS BARRIER NOT-ADV)(NEGATE 0 Adv LINK 1 A)
 	#$ Dán áiggi sii johtet biillaiguin, jos headjavissui lea guhkit mátki.
 	#$ Sámegiella ja dárogiella leat ovttaárvosaš gielat.
 
-SELECT:ANomCop (A Nom) IF (*-1 COPULAS BARRIER NOT-ADV LINK *-1 BOS BARRIER Nom)(0 DEHALAS + Attr LINK 1 N - Nom - Gen LINK NOT *1 REAL-V BARRIER S-BOUNDARY)
+SELECT:ANomCop (A Nom) IF (*-1 COPULAS BARRIER NOT-ADV LINK *-1 BOS BARRIER Nom)(0 DEHALAS + Attr LINK 1 N - Nom - Gen LINK NOT *1 REAL-V BARRIER S-BOUNDARY) ;
 	#$ Lea suohtas kurssas.
 
 
