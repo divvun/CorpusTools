@@ -829,9 +829,9 @@ class PDF2XMLConverter(Converter):
         coefficient = self.get_coefficient(margin, page.get('number'))
         # print util.lineno(), margin, page_height, page_width, coefficient
 
-        if margin == 'right_margin':
-            return int(coefficient * page_width / 100)
         if margin == 'left_margin':
+            return int(coefficient * page_width / 100)
+        if margin == 'right_margin':
             return int(page_width - coefficient * page_width / 100)
         if margin == 'top_margin':
             return int(coefficient * page_height / 100)
@@ -1043,8 +1043,8 @@ class PDF2XMLConverter(Converter):
         '''
         return (int(t.get('top')) > margins['top_margin'] and
                 int(t.get('top')) < margins['bottom_margin'] and
-                int(t.get('left')) > margins['right_margin'] and
-                int(t.get('left')) < margins['left_margin'])
+                int(t.get('left')) > margins['left_margin'] and
+                int(t.get('left')) < margins['right_margin'])
 
     def parse_pages(self, root_element):
         skip_pages = self.get_skip_pages()
