@@ -215,26 +215,6 @@ class Converter(object):
                 badhex, self.orig))
         return repl, (decode_error.start + len(repl))
 
-    def replace_bad_unicode(self, content):
-        '''Replace some chars in an otherwise 'valid utf-8' document.
-
-        These chars e.g. 'valid utf-8' (don't give UnicodeDecodeErrors), but
-        we still want to replace them to what they most likely were
-        meant to be.
-
-        :param content: a unicode string
-        :returns: a cleaned up unicode string
-        '''
-        assert(type(content) == unicode)
-        # u'š'.encode('windows-1252') gives '\x9a', which sometimes
-        # appears in otherwise utf-8-encoded documents with the
-        # meaning 'š'
-        replacements = [(u'\x9a', u'š'),
-                        (u'\x8a', u'Š'),
-                        (u'\x9e', u'ž'),
-                        (u'\x8e', u'Ž')]
-        return util.replace_all(replacements, content)
-
     def make_complete(self, languageGuesser):
         '''Make a complete giellatekno xml file
 
@@ -582,8 +562,7 @@ class PlaintextConverter(Converter):
             (u'<0x017E>', u'ž'),
             (u'<0x2003>', u' '),
         ]
-        content = util.replace_all(plaintext_oddities,
-                                   self.replace_bad_unicode(content))
+        content = util.replace_all(plaintext_oddities, content)
         remove_re = re.compile(
             u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]'.format(extra))
         content, count = remove_re.subn('', content)
@@ -1277,8 +1256,7 @@ class HTMLContentConverter(Converter):
 
     def to_unicode(self, content):
         return self.remove_declared_encoding(
-            self.replace_bad_unicode(
-                self.try_decode_encodings(content)))
+            self.try_decode_encodings(content))
 
     def try_decode_encodings(self, content):
         if type(content) == unicode:
@@ -2122,6 +2100,27 @@ class DocumentFixer(object):
                     element.text = element.text.replace(key + ' ', value)
                     element.text = element.text.replace(key, value)
 
+    def replace_bad_unicode(self):
+        '''Replace some chars in an otherwise 'valid utf-8' document.
+
+        These chars e.g. 'valid utf-8' (don't give UnicodeDecodeErrors), but
+        we still want to replace them to what they most likely were
+        meant to be.
+
+        :param content: a unicode string
+        :returns: a cleaned up unicode string
+        '''
+        # u'š'.encode('windows-1252') gives '\x9a', which sometimes
+        # appears in otherwise utf-8-encoded documents with the
+        # meaning 'š'
+        replacements = [(u'\x9a', u'š'),
+                        (u'\x8a', u'Š'),
+                        (u'\x9e', u'ž'),
+                        (u'\x8e', u'Ž')]
+        for element in self.root.iter('p'):
+            if element.text:
+                element.text = util.replace_all(replacements, element.text)
+
     def fix_body_encoding(self):
         '''Replace wrongly encoded saami chars with proper ones.
 
@@ -2143,6 +2142,7 @@ class DocumentFixer(object):
 
         self.fix_title_person('double-utf8')
         self.fix_title_person('mac-sami_to_latin1')
+        self.replace_bad_unicode()
 
     def fix_title_person(self, encoding):
         '''Fix encoding problems'''
