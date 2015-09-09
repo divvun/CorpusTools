@@ -293,7 +293,8 @@ class EncodingGuesser(object):
             winner = u"latin4_to_cp1252"
         elif u'ó' in content and u'ç' in content and u'¤' in content:
             winner = u"mix-of-latin4-and-iso-ir-197_to_cp1252"
-        elif u'„' in content and u'˜' in content:
+        elif u'„' in content and (u'˜' in content or
+                                  u'¹' in content):
             winner = u"winsami2_to_cp1252"
         elif u'þ' in content and u'š' in content and u'á' in content:
             winner = u"finnish-lawtexts-in-pdf"
