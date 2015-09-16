@@ -62,10 +62,10 @@ def main():
             args.lang, 'src/syntax/disambiguation.cg3'),
         function_analysis_file=os.path.join(
             os.getenv('GTHOME'),
-            'gtcore/gtdshared/smi/src/syntax/korp.cg3'),
+            'gtcore/giella-shared/smi/src/syntax/korp.cg3'),
         dependency_analysis_file=os.path.join(
             os.getenv('GTHOME'),
-            'gtcore/gtdshared/smi/src/syntax/dependency.cg3'))
+            'gtcore/giella-shared/smi/src/syntax/dependency.cg3'))
 
     ana.xml_files = []
     for directory in args.dirs:
