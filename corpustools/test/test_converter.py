@@ -2755,6 +2755,29 @@ LOGO: Smi kulturfestivala 1998
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
+    def test_fix_sms(self):
+        document_fixer = converter.DocumentFixer(etree.fromstring(
+            u'<document xml:lang="sms">'
+            u'  <header/>'
+            u'  <body>'
+            u'     <p>'
+            u'       Ođđee´jj-tä´lvvmannu <em>ääi´jest</em> kaaupi kää´šnin2'
+            u'     </p>'
+            u'  </body>'
+            u'</document>'))
+        document_fixer.fix_body_encoding()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(
+            u'<document xml:lang="sms">'
+            u'  <header/>'
+            u'  <body>'
+            u'     <p>'
+            u"       Ođđee'jj-tä'lvvmannu <em>ääi'jest</em> kaaupi kää'šnin2"
+            u'     </p>'
+            u'  </body>'
+            u'</document>')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
 class TestXslMaker(XMLTester):
 

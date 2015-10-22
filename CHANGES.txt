@@ -36,3 +36,4 @@ v<0.9.0beta3>, <20150304> -- catch error when trying to parse the xsl-file, tell
 v<0.9.0b4>, <20150316> -- Paragrahps in pdf documents that are split by a page change, will appear as one paragraph in the converted document.
 v<0.9.8>, <20150909> -- Fix Š and Ž problems mentioned in http://giellatekno.uit.no/bugzilla/show_bug.cgi?id=1954#c20
 v<0.9.9>, <20150909> -- Fix ¹ and Ü problems mentioned in http://giellatekno.uit.no/bugzilla/show_bug.cgi?id=1954#c20
+v<0.9.10>, <20151022> -- Always convert ´ to ' when language is sms
