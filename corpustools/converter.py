@@ -2122,12 +2122,21 @@ class DocumentFixer(object):
                 element.text = util.replace_all(replacements, element.text)
 
     def fix_sms(self, element):
-        if element.text and u'´' in element.text:
-            element.text = element.text.replace(u'´', u"'")
+
+        replacement_pairs = [
+            (u'\u2019', u'\u02BC'),
+            (u'\u0027', u'\u02BC'),
+            (u'\u2032', u'\u02B9'),
+            (u'\u00B4', u'\u02B9'),
+        ]
+
+        for replacement_pair in replacement_pairs:
+            if element.text:
+                element.text = element.text.replace(replacement_pair[0], replacement_pair[1])
+            if element.tail:
+                element.tail = element.tail.replace(replacement_pair[0], replacement_pair[1])
         for child in element:
             self.fix_sms(child)
-        if element.tail and u'´' in element.tail:
-            element.tail = element.tail.replace(u'´', u"'")
 
     def fix_body_encoding(self):
         '''Replace wrongly encoded saami chars with proper ones.
@@ -2152,11 +2161,11 @@ class DocumentFixer(object):
         self.fix_title_person('mac-sami_to_latin1')
         self.replace_bad_unicode()
 
-        #try:
-            #if self.root.attrib['{http://www.w3.org/XML/1998/namespace}lang'] == 'sms':
-                #self.fix_sms(self.root.find('body'))
-        #except KeyError:
-            #pass
+        try:
+            if self.root.attrib['{http://www.w3.org/XML/1998/namespace}lang'] == 'sms':
+                self.fix_sms(self.root.find('body'))
+        except KeyError:
+            pass
 
 
     def fix_title_person(self, encoding):

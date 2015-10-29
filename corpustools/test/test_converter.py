@@ -2755,13 +2755,14 @@ LOGO: Smi kulturfestivala 1998
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-    def test_fix_sms(self):
+    def test_fix_sms1(self):
+        '''\u2019 (’) should be replaced by \u02BC (ʼ)'''
         document_fixer = converter.DocumentFixer(etree.fromstring(
             u'<document xml:lang="sms">'
             u'  <header/>'
             u'  <body>'
             u'     <p>'
-            u'       Ođđee´jj-tä´lvvmannu <em>ääi´jest</em> kaaupi kää´šnin2'
+            u'       Mätt’temaaunâstuâjj '
             u'     </p>'
             u'  </body>'
             u'</document>'))
@@ -2772,12 +2773,88 @@ LOGO: Smi kulturfestivala 1998
             u'  <header/>'
             u'  <body>'
             u'     <p>'
-            u"       Ođđee'jj-tä'lvvmannu <em>ääi'jest</em> kaaupi kää'šnin2"
+            u'       Mättʼtemaaunâstuâjj '
             u'     </p>'
             u'  </body>'
             u'</document>')
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_fix_sms2(self):
+        '''\u0027 (')  should be replaced by \u02BC (ʼ)'''
+        document_fixer = converter.DocumentFixer(etree.fromstring(
+            u'<document xml:lang="sms">'
+            u'  <header/>'
+            u'  <body>'
+            u'     <p>'
+            u"       ǩiõll'laž da kulttuursaž vuõiggâdvuõđi"
+            u'     </p>'
+            u'  </body>'
+            u'</document>'))
+        document_fixer.fix_body_encoding()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(
+            u'<document xml:lang="sms">'
+            u'  <header/>'
+            u'  <body>'
+            u'     <p>'
+            u'       ǩiõllʼlaž da kulttuursaž vuõiggâdvuõđi'
+            u'     </p>'
+            u'  </body>'
+            u'</document>')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_fix_sms3(self):
+        '''\u2032 (′)  should be replaced by \u02B9 (ʹ)'''
+        document_fixer = converter.DocumentFixer(etree.fromstring(
+            u'<document xml:lang="sms">'
+            u'  <header/>'
+            u'  <body>'
+            u'     <p>'
+            u'       Mon tõzz še njui′ǩǩeem tõ′st dõõzze.'
+            u'     </p>'
+            u'  </body>'
+            u'</document>'))
+        document_fixer.fix_body_encoding()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(
+            u'<document xml:lang="sms">'
+            u'  <header/>'
+            u'  <body>'
+            u'     <p>'
+            u'       Mon tõzz še njuiʹǩǩeem tõʹst dõõzze.'
+            u'     </p>'
+            u'  </body>'
+            u'</document>')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_fix_sms4(self):
+        '''\u00B4 (´)  should be replaced by \u02B9 (ʹ)'''
+        document_fixer = converter.DocumentFixer(etree.fromstring(
+            u'<document xml:lang="sms">'
+            u'  <header/>'
+            u'  <body>'
+            u'     <p>'
+            u'       Materialbaaŋk čuä´jtumuš'
+            u'     </p>'
+            u'  </body>'
+            u'</document>'))
+        document_fixer.fix_body_encoding()
+        got = document_fixer.get_etree()
+        want = etree.fromstring(
+            u'<document xml:lang="sms">'
+            u'  <header/>'
+            u'  <body>'
+            u'     <p>'
+            u'       Materialbaaŋk čuäʹjtumuš'
+            u'     </p>'
+            u'  </body>'
+            u'</document>')
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
 
 class TestXslMaker(XMLTester):
 
