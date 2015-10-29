@@ -2152,11 +2152,11 @@ class DocumentFixer(object):
         self.fix_title_person('mac-sami_to_latin1')
         self.replace_bad_unicode()
 
-        try:
-            if self.root.attrib['{http://www.w3.org/XML/1998/namespace}lang'] == 'sms':
-                self.fix_sms(self.root.find('body'))
-        except KeyError:
-            pass
+        #try:
+            #if self.root.attrib['{http://www.w3.org/XML/1998/namespace}lang'] == 'sms':
+                #self.fix_sms(self.root.find('body'))
+        #except KeyError:
+            #pass
 
 
     def fix_title_person(self, encoding):
