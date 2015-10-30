@@ -35,6 +35,7 @@ setup(
             'saami_crawler = corpustools.saami_crawler:main',
             'toktmx2tmx = corpustools.toktmx2tmx:main',
             'duperemover = corpustools.dupe_finder:main',
+            'dupefinder = corpustools.dupe_finder:find',
         ]
     },
     install_requires=[

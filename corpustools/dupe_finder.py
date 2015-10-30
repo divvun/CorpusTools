@@ -88,6 +88,28 @@ class DupeFinder(object):
             new_xsl.set_parallel_text(orig_lang, '')
             new_xsl.write_file()
 
+    def find_almost_dupes(self):
+        for filename1 in self.files.iterkeys():
+            if filename1 not in self.dupe_files:
+                for filename2 in self.files.iterkeys():
+                    if filename1 != filename2 and filename2 not in self.dupe_files:
+                        sm = difflib.SequenceMatcher(a=self.files[filename1],
+                                                    b=self.files[filename2])
+                        ratio = sm.ratio()
+                        if ratio > 0.90:
+                            self.dupe_files.add(filename2)
+                            print()
+                            print(round(ratio, 2), len(self.files[filename1]))
+
+                            result = difflib.unified_diff(
+                                self.files[filename1].splitlines(1),
+                                self.files[filename2].splitlines(1),
+                                fromfile=os.path.basename(filename1),
+                                tofile=os.path.basename(filename2))
+                            sys.stdout.writelines(result)
+
+        print('Almost dupes', len(self.dupe_files))
+
 
 
 def parse_options():
@@ -108,3 +130,9 @@ def main():
 
     df = DupeFinder(args.dir)
     df.remove_dupe_files()
+
+def find():
+    args = parse_options()
+
+    df = DupeFinder(args.dir)
+    df.find_almost_dupes()
