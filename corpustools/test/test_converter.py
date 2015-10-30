@@ -671,6 +671,9 @@ class TestHTMLContentConverter(XMLTester):
                 'class': ['mainlevel_alavalikko',
                           'sublevel_alavalikko'],
             },
+            'td': {
+                'id': ['sg_vasen'],
+            },
         }
 
         for tag, attribs in unwanted_classes_ids.items():

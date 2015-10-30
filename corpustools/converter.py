@@ -1628,9 +1628,10 @@ class HTMLContentConverter(Converter):
             },
             'td': {
                 'id': [
-                    "hakulomake",
-                    "paavalikko_linkit",
-                    'sg_oikea',
+                    "hakulomake",  # www.samediggi.fi
+                    "paavalikko_linkit",  # www.samediggi.fi
+                    'sg_oikea',  # www.samediggi.fi
+                    'sg_vasen',  # www.samediggi.fi
                 ],
                 'class': [
                     "modifydate",
