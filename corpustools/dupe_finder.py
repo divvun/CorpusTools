@@ -83,9 +83,10 @@ class DupeFinder(object):
             orig_lang = orig_xsl.get_variable('mainlang')
             new_xslname = orig_xslname.replace(orig_lang + '/', lang + '/')
             new_xslname = new_xslname.replace(os.path.basename(orig_xslname), filename + '.xsl')
-            new_xsl = xslsetter.MetadataHandler(new_xslname)
-            new_xsl.set_parallel_text(orig_lang, '')
-            new_xsl.write_file()
+            if os.path.exists(new_xslname):
+                new_xsl = xslsetter.MetadataHandler(new_xslname)
+                new_xsl.set_parallel_text(orig_lang, '')
+                new_xsl.write_file()
 
     def find_almost_dupes(self):
         for filename1 in self.files.iterkeys():
