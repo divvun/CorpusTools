@@ -668,7 +668,8 @@ class TestHTMLContentConverter(XMLTester):
                 'class': ['K-NOTE-FOTNOTE']
             },
             'a': {
-                'class': ['mainlevel_alavalikko'],
+                'class': ['mainlevel_alavalikko',
+                          'sublevel_alavalikko'],
             },
         }
 

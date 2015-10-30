@@ -1623,6 +1623,7 @@ class HTMLContentConverter(Converter):
                     'mainlevel',
                     'share-paragraf',  # lovdata.no
                     'mainlevel_alavalikko',  # www.samediggi.fi
+                    'sublevel_alavalikko',  # www.samediggi.fi
                 ],
             },
             'td': {
