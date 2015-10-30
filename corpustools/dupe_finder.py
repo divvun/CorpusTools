@@ -25,7 +25,9 @@ from __future__ import print_function
 
 import argparse
 import difflib
+import io
 import os
+import sys
 
 import argparse_version
 import ccat
@@ -50,21 +52,17 @@ class DupeFinder(object):
             if filename1 not in dupe_files:
                 for filename2 in self.files.iterkeys():
                     if filename1 != filename2 and filename2 not in dupe_files:
-                        sm = difflib.SequenceMatcher(a=self.files[filename1],
-                                                    b=self.files[filename2])
-                        ratio = sm.ratio()
-                        if ratio > 0.95:
+                        result = list(difflib.unified_diff(
+                            self.files[filename1].splitlines(1),
+                            self.files[filename2].splitlines(1)))
+                        if len(result) == 0:
                             dupe_files.add(filename2)
-                            print(round(ratio, 2), len(self.files[filename1]),
-                                  len(self.files[filename2]))
-                            print('\t', os.path.basename(filename1))
-                            print('\t', os.path.basename(filename2))
-                            for block in sm.get_matching_blocks():
-                                print("a[%d] and b[%d] match for %d elements" % block)
                             xsl = filename2.replace('converted/', 'orig/').replace('.xml', '.xsl')
                             orig = xsl.replace('.xsl', '')
                             os.remove(xsl)
                             os.remove(orig)
+                            print('Removed:', orig)
+
         print(len(dupe_files), len(self.files))
 
 
