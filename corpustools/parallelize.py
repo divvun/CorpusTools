@@ -25,7 +25,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import argparse
-import difflib
 import errno
 from lxml import etree
 import os
@@ -346,8 +345,7 @@ class SentenceDivider(object):
 
         # exclude pseudo-sentences, i.e. sentences that don't contain
         # any alphanumeric characters
-        if (len(sentence) > 1
-                and not self.pseudosent_re.match(' '.join(sentence))):
+        if (len(sentence) > 1 and not self.pseudosent_re.match(' '.join(sentence))):
             new_paragraph.append(self.make_sentence(sentence))
 
         return new_paragraph

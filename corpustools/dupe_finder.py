@@ -25,7 +25,6 @@ from __future__ import print_function
 
 import argparse
 import difflib
-import io
 import os
 import sys
 
@@ -33,7 +32,6 @@ import argparse_version
 import ccat
 import versioncontrol
 import xslsetter
-
 
 
 class DupeFinder(object):
@@ -95,7 +93,7 @@ class DupeFinder(object):
                 for filename2 in self.files.iterkeys():
                     if filename1 != filename2 and filename2 not in self.dupe_files:
                         sm = difflib.SequenceMatcher(a=self.files[filename1],
-                                                    b=self.files[filename2])
+                                                     b=self.files[filename2])
                         ratio = sm.ratio()
                         if ratio > 0.90:
                             self.dupe_files.add(filename2)
@@ -110,7 +108,6 @@ class DupeFinder(object):
                             sys.stdout.writelines(result)
 
         print('Almost dupes', len(self.dupe_files))
-
 
 
 def parse_options():
@@ -131,6 +128,7 @@ def main():
 
     df = DupeFinder(args.dir)
     df.remove_dupe_files()
+
 
 def find():
     args = parse_options()

@@ -2171,7 +2171,6 @@ class DocumentFixer(object):
         except KeyError:
             pass
 
-
     def fix_title_person(self, encoding):
         '''Fix encoding problems'''
         eg = decode.EncodingGuesser()
