@@ -667,6 +667,9 @@ class TestHTMLContentConverter(XMLTester):
                 'id': ['skiplinks'],
                 'class': ['K-NOTE-FOTNOTE']
             },
+            'a': {
+                'class': ['mainlevel_alavalikko'],
+            },
         }
 
         for tag, attribs in unwanted_classes_ids.items():
