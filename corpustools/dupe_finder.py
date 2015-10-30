@@ -31,49 +31,72 @@ import sys
 
 import argparse_version
 import ccat
+import versioncontrol
+import xslsetter
 
 
 
 class DupeFinder(object):
     def __init__(self, directory):
-        self.files = {}
+        self.files = self._get_files(directory)
+        self.dupe_files = set()
+        absdir = os.path.abspath(directory)
+        corpusdir = absdir[:absdir.find('/converted/')]
+        self.vcs = versioncontrol.VersionControlFactory().vcs(corpusdir)
 
+    @staticmethod
+    def _get_files(directory):
+        files = {}
         xmlprinter = ccat.XMLPrinter(all_paragraphs=True)
-        for root, dirs, files in os.walk(directory):
-            for f in files:
-                if f.endswith('.xml'):
-                    filename = os.path.join(root, f)
-                    xmlprinter.parse_file(filename)
-                    self.files[filename] = xmlprinter.process_file().getvalue()
+        for f in os.listdir(directory):
+            if f.endswith('.xml'):
+                filename = os.path.join(directory, f)
+                xmlprinter.parse_file(filename)
+                files[filename] = xmlprinter.process_file().getvalue()
 
-    def compare_files(self):
-        dupe_files = set()
+        return files
+
+    def remove_dupe_files(self):
         for filename1 in self.files.iterkeys():
-            if filename1 not in dupe_files:
+            if filename1 not in self.dupe_files:
                 for filename2 in self.files.iterkeys():
-                    if filename1 != filename2 and filename2 not in dupe_files:
-                        result = list(difflib.unified_diff(
-                            self.files[filename1].splitlines(1),
-                            self.files[filename2].splitlines(1)))
-                        if len(result) == 0:
-                            dupe_files.add(filename2)
-                            xsl = filename2.replace('converted/', 'orig/').replace('.xml', '.xsl')
-                            orig = xsl.replace('.xsl', '')
-                            os.remove(xsl)
-                            os.remove(orig)
-                            print('Removed:', orig)
+                    if filename1 != filename2 and filename2 not in self.dupe_files:
+                        self.remove_dupe_file(filename1, filename2)
 
-        print(len(dupe_files), len(self.files))
+    def remove_dupe_file(self, filename1, filename2):
+        result = list(difflib.unified_diff(
+            self.files[filename1].splitlines(1),
+            self.files[filename2].splitlines(1)))
+        if len(result) == 0:
+            self.dupe_files.add(filename2)
+            xsl = filename2.replace('converted/', 'orig/').replace('.xml', '.xsl')
+            orig = xsl.replace('.xsl', '')
+            self.remove_from_parallel_files(xsl)
+            self.vcs.remove(xsl)
+            self.vcs.remove(orig)
+            print('Removed:', orig)
+
+    def remove_from_parallel_files(self, orig_xslname):
+        orig_xsl = xslsetter.MetadataHandler(orig_xslname)
+        parallel_files = orig_xsl.get_parallel_texts()
+
+        for lang, filename in parallel_files.iteritems():
+            orig_lang = orig_xsl.get_variable('mainlang')
+            new_xslname = orig_xslname.replace(orig_lang + '/', lang + '/')
+            new_xslname = new_xslname.replace(os.path.basename(orig_xslname), filename + '.xsl')
+            new_xsl = xslsetter.MetadataHandler(new_xslname)
+            new_xsl.set_parallel_text(orig_lang, '')
+            new_xsl.write_file()
+
 
 
 def parse_options():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Convert original files to giellatekno xml.')
+        description='Remove duplicate files.')
 
     parser.add_argument('dir',
-                        help="The original file(s) or \
-                        directory/ies where the original files exist")
+                        help="The directory the converted files exist")
 
     args = parser.parse_args()
 
@@ -84,4 +107,4 @@ def main():
     args = parse_options()
 
     df = DupeFinder(args.dir)
-    df.compare_files()
+    df.remove_dupe_files()
