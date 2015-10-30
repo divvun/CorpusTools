@@ -69,6 +69,7 @@ class DupeFinder(object):
             self.files[filename2].splitlines(1)))
         if len(result) == 0:
             self.dupe_files.add(filename2)
+            os.remove(filename2)
             xsl = filename2.replace('converted/', 'orig/').replace('.xml', '.xsl')
             orig = xsl.replace('.xsl', '')
             self.remove_from_parallel_files(xsl)
