@@ -49,6 +49,10 @@ class VersionController(object):
         raise NotImplementedError(
             "You have to subclass and override move")
 
+    def remove(self, path):
+        raise NotImplementedError(
+            "You have to subclass and override remove")
+
     def user_name(self):
         if self.config.has_option("user", "name"):
             return self.config.get("user", "name")
@@ -79,6 +83,9 @@ class SVN(VersionController):
     def move(self, oldpath, newpath):
         self.client.move(oldpath, newpath)
 
+    def remove(self, path):
+        self.client.remove(path)
+
 
 class GIT(VersionController):
 
@@ -92,6 +99,9 @@ class GIT(VersionController):
 
     def move(self, oldpath, newpath):
         self.gitrepo.git.mv(oldpath, newpath)
+
+    def remove(self, path):
+        self.gitrepo.git.rm(path)
 
 
 class VersionControlFactory(object):
