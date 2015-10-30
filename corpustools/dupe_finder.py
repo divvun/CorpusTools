@@ -74,6 +74,8 @@ class DupeFinder(object):
             self.vcs.remove(xsl)
             self.vcs.remove(orig)
             print('Removed:', orig)
+            print('Parallel to:', filename1.replace('converted/',
+                                                    'orig/').replace('.xsl', ''))
 
     def remove_from_parallel_files(self, orig_xslname):
         orig_xsl = xslsetter.MetadataHandler(orig_xslname)
