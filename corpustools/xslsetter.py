@@ -14,8 +14,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright 2013-2015 Børre Gaup <borre.gaup@uit.no>
-#   Copyright 2014-2015 Kevin Brubeck Unhammer <unhammer@fsfe.org>
+#   Copyright © 2013-2015 The University of Tromsø & the Norwegian Sámi Parliament
+#   http://giellatekno.uit.no & http://divvun.no
 #
 
 from __future__ import print_function
