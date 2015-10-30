@@ -55,9 +55,17 @@ class DupeFinder(object):
                         ratio = sm.ratio()
                         if ratio > 0.95:
                             dupe_files.add(filename2)
-                            print(round(ratio, 2), len(self.files[filename1]))
+                            print(round(ratio, 2), len(self.files[filename1]),
+                                  len(self.files[filename2]))
                             print('\t', os.path.basename(filename1))
                             print('\t', os.path.basename(filename2))
+                            for block in sm.get_matching_blocks():
+                                print("a[%d] and b[%d] match for %d elements" % block)
+                            xsl = filename2.replace('converted/', 'orig/').replace('.xml', '.xsl')
+                            orig = xsl.replace('.xsl', '')
+                            os.remove(xsl)
+                            os.remove(orig)
+        print(len(dupe_files), len(self.files))
 
 
 def parse_options():
