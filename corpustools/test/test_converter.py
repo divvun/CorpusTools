@@ -636,7 +636,7 @@ class TestHTMLContentConverter(XMLTester):
                     'outer-column', 'article-ad', 'article-bottom-element',
                     'banner-element', 'nrk-globalnavigation', 'sharing', 'ad',
                     'meta', 'authors', 'articleImageRig',  'btm_menu',
-                    'expandable'],
+                    'expandable', 'moduletable_etulinkki'],
                 'id': [
                     'searchBox',
                     'murupolku',

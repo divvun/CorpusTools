@@ -1473,6 +1473,7 @@ class HTMLContentConverter(Converter):
                     'menu',  # visitstetind.no
                     'metaWrapper',
                     'moduletable_oikopolut',
+                    'moduletable_etulinkki',  # www.samediggi.fi
                     'naviHlp',  # visitstetind.no
                     'noindex',  # ntfk
                     'nrk-globalfooter',  # nrk.no
