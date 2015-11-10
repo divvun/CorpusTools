@@ -113,13 +113,13 @@ class DupeFinder(object):
         print('Almost dupes', len(self.dupe_files))
 
 
-def parse_options():
+def parse_remover_options():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Remove duplicate files.')
+        description='Remove duplicate files from the given directory')
 
     parser.add_argument('dir',
-                        help="The directory the converted files exist")
+                        help="The directory where the converted files exist")
 
     args = parser.parse_args()
 
@@ -127,14 +127,27 @@ def parse_options():
 
 
 def main():
-    args = parse_options()
+    args = parse_remover_options()
 
     df = DupeFinder(args.dir)
     df.remove_dupe_files()
 
 
+def parse_finder_options():
+    parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
+        description='Find files with more than 90% similarity in the given directory')
+
+    parser.add_argument('dir',
+                        help="The directory where the converted files exist")
+
+    args = parser.parse_args()
+
+    return args
+
+
 def find():
-    args = parse_options()
+    args = parse_finder_options()
 
     df = DupeFinder(args.dir)
     df.find_almost_dupes()
