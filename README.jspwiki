@@ -13,6 +13,8 @@ These scripts will be installed
 * [normalise_corpus_names|CorpusTools.html#generate_anchor_list#normalise_corpus_names]
 * [paracheck|CorpusTools.html#paracheck]
 * [html_cleaner|CorpusTools.html#html_cleaner]
+* [duperemover|CorpusTools.html#duperemover]
+* [dupefinder|CorpusTools.html#dupefinder]
 
 !!Requirements
 
@@ -671,6 +673,34 @@ documents.
 positional arguments:
   inhtml         The path of the html to indent.
   outhtml        The place where the indented html doc is written
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -v, --version  show program's version number and exit
+}}}
+
+!!duperemover
+{{{
+usage: duperemover [-h] [-v] dir
+
+Remove duplicate files from the given directory
+
+positional arguments:
+  dir            The directory where the converted files exist
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -v, --version  show program's version number and exit
+}}}
+
+!!dupefinder
+{{{
+usage: dupefinder [-h] [-v] dir
+
+Find files with more than 90% similarity in the given directory
+
+positional arguments:
+  dir            The directory where the converted files exist
 
 optional arguments:
   -h, --help     show this help message and exit
