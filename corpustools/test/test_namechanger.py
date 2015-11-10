@@ -35,9 +35,7 @@ here = os.path.dirname(__file__)
 
 
 class TestFilenameToAscii(unittest.TestCase):
-
     '''Test the normalise_filename function'''
-
     def test_none_ascii_lower(self):
         oldname = u'ášŧŋđžčåøæöäï+'
         want = u'astngdzcaoaeoai_'
@@ -106,52 +104,68 @@ class TestFilenameToAscii(unittest.TestCase):
 
 
 class TestAreDuplicates(unittest.TestCase):
-
     '''Test the are_duplicates function'''
+    def setUp(self):
+        self.tempdir = testfixtures.TempDirectory()
+        self.tempdir.write('old_dupe.txt', 'a')
+        self.tempdir.write('new_dupe.txt', 'a')
+        self.tempdir.write('new_none_dupe.txt', 'b')
+
+    def tearDown(self):
+        self.tempdir.cleanup()
 
     def test_are_duplicate_nonexisting_file(self):
+        '''If one or none of the files do not exist, return False'''
         self.assertFalse(namechanger.are_duplicates('old.txt', 'new.txt'))
 
     def test_are_duplicate_equal_files(self):
+        '''Both files exist, with same content, return True'''
         self.assertTrue(namechanger.are_duplicates(
-            os.path.join(here, 'name_changer_data/orig/sme/admin/other_files',
-                         'old_dupe.txt'),
-            os.path.join(here, 'name_changer_data/orig/sme/admin/other_files',
-                         'new_dupe.txt')))
+            os.path.join(self.tempdir.path, 'old_dupe.txt'),
+            os.path.join(self.tempdir.path, 'new_dupe.txt')))
 
     def test_are_duplicate_unequal_files(self):
+        '''Both files exist, not same content, return False'''
         self.assertFalse(namechanger.are_duplicates(
-            os.path.join(here, 'name_changer_data/orig/sme/admin/other_files',
-                         'old_dupe.txt'),
-            os.path.join(here, 'name_changer_data/orig/sme/admin/other_files',
-                         'new_none_dupe.txt')))
+            os.path.join(self.tempdir.path, 'old_dupe.txt'),
+            os.path.join(self.tempdir.path, 'new_none_dupe.txt')))
 
 
 class TestComputeNewBasename(unittest.TestCase):
+    def setUp(self):
+        self.tempdir = testfixtures.TempDirectory()
+        self.tempdir.makedir('orig/sme/admin/other_files')
+        self.tempdir.write('orig/sme/admin/other_files/old_dupe.txt', 'a')
+        self.tempdir.write('orig/sme/admin/other_files/new_dupe.txt', 'a')
+        self.tempdir.write('orig/sme/admin/other_files/new_none_dupe.txt', 'b')
+        self.tempdir.write('orig/sme/admin/other_files/new_none_düpe.txt', 'a')
+
+    def tearDown(self):
+        self.tempdir.cleanup()
 
     def test_compute_new_basename_duplicates(self):
         '''What happens when the wanted name is taken, and a duplicate'''
         with self.assertRaises(UserWarning):
             namechanger.compute_new_basename(
-                os.path.join(here,
-                             'name_changer_data/orig/sme/admin/other_files',
+                os.path.join(self.tempdir.path,
+                             'orig/sme/admin/other_files',
                              'old_dupe.txt'),
-                os.path.join(here,
-                             'name_changer_data/orig/sme/admin/other_files',
+                os.path.join(self.tempdir.path,
+                             'orig/sme/admin/other_files',
                              'new_dupe.txt'))
 
     def test_compute_new_basename_same_name(self):
-        '''What happens when the wanted name is taken, but not duplicate'''
+        '''What happens when the suggested name is taken, but not duplicate'''
+        oldpath = unicode(os.path.join(self.tempdir.path,
+                                       'orig/sme/admin/other_files',
+                                       'new_none_düpe.txt'), encoding='utf8')
+        suggestedpath = unicode(os.path.join(self.tempdir.path,
+                                             'orig/sme/admin/other_files',
+                                             'new_none_dupe.txt'))
         self.assertEqual(
-            namechanger.compute_new_basename(
-                os.path.join(here,
-                             'name_changer_data/orig/sme/admin/other_files',
-                             'new_none_düpe.txt'),
-                os.path.join(here,
-                             'name_changer_data/orig/sme/admin/other_files',
-                             'new_none_dupe.txt')),
-            os.path.join(here, 'name_changer_data', 'orig', 'sme', 'admin',
-                         'other_files', 'new_none_dupe_1.txt')
+            namechanger.compute_new_basename(oldpath, suggestedpath),
+            unicode(os.path.join(self.tempdir.path, 'orig/sme/admin/other_files',
+                                 'new_none_dupe_1.txt'))
         )
 
 
