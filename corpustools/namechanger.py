@@ -312,24 +312,28 @@ class CorpusFilesetMoverAndUpdater(object):
 
     def move_files(self):
         for filepair in self.mc.filepairs:
-            if filepair.oldpath != filepair.newpath:
+            if len(filepair.newpath) == 0:
+                cfr = CorpusFileRemover(filepair.oldpath)
+                cfr.remove_files()
+            elif filepair.oldpath != filepair.newpath:
                 cfm = CorpusFileMover(filepair.oldpath, filepair.newpath)
                 cfm.move_files()
 
     def update_own_metadata(self):
         '''Update metadata'''
         for filepair in self.mc.filepairs:
-            old_components = util.split_path(filepair.oldpath)
-            new_components = util.split_path(filepair.newpath)
+            if len(filepair.newpath) > 0:
+                old_components = util.split_path(filepair.oldpath)
+                new_components = util.split_path(filepair.newpath)
 
-            metadataname = filepair.newpath + '.xsl'
-            if os.path.isfile(metadataname):
-                metadatafile = xslsetter.MetadataHandler(metadataname)
-                if (old_components.genre != new_components.genre):
-                    metadatafile.set_variable('genre', new_components.genre)
-                if (old_components.lang != new_components.lang):
-                    metadatafile.set_variable('mainlang', new_components.lang)
-                metadatafile.write_file()
+                metadataname = filepair.newpath + '.xsl'
+                if os.path.isfile(metadataname):
+                    metadatafile = xslsetter.MetadataHandler(metadataname)
+                    if (old_components.genre != new_components.genre):
+                        metadatafile.set_variable('genre', new_components.genre)
+                    if (old_components.lang != new_components.lang):
+                        metadatafile.set_variable('mainlang', new_components.lang)
+                    metadatafile.write_file()
 
     def update_parallel_files_metadata(self):
         '''Update the info in the parallel files'''
@@ -338,22 +342,32 @@ class CorpusFilesetMoverAndUpdater(object):
             parallel_filepairs.remove(filepair)
 
             old_components = util.split_path(filepair.oldpath)
-            new_components = util.split_path(filepair.newpath)
+            if len(filepair.newpath) > 0:
+                new_components = util.split_path(filepair.newpath)
 
-            for parallel_filepair in parallel_filepairs:
-                parallel_name = parallel_filepair.newpath + '.xsl'
-                if os.path.isfile(parallel_name):
-                    parallel_metadatafile = xslsetter.MetadataHandler(
-                        parallel_name)
-                    if old_components.lang != new_components.lang:
+                for parallel_filepair in parallel_filepairs:
+                    parallel_name = parallel_filepair.newpath + '.xsl'
+                    if os.path.isfile(parallel_name):
+                        parallel_metadatafile = xslsetter.MetadataHandler(
+                            parallel_name)
+                        if old_components.lang != new_components.lang:
+                            parallel_metadatafile.set_parallel_text(
+                                old_components.lang, '')
+                            parallel_metadatafile.set_parallel_text(
+                                new_components.lang, new_components.basename)
+                        elif old_components.basename != new_components.basename:
+                            parallel_metadatafile.set_parallel_text(
+                                new_components.lang, new_components.basename)
+                        parallel_metadatafile.write_file()
+            else:
+                for parallel_filepair in parallel_filepairs:
+                    parallel_name = parallel_filepair.newpath + '.xsl'
+                    if os.path.isfile(parallel_name):
+                        parallel_metadatafile = xslsetter.MetadataHandler(
+                            parallel_name)
                         parallel_metadatafile.set_parallel_text(
-                            old_components.lang, '')
-                        parallel_metadatafile.set_parallel_text(
-                            new_components.lang, new_components.basename)
-                    elif old_components.basename != new_components.basename:
-                        parallel_metadatafile.set_parallel_text(
-                            new_components.lang, new_components.basename)
-                    parallel_metadatafile.write_file()
+                                old_components.lang, u'')
+                        parallel_metadatafile.write_file()
 
 
 def compute_hexdigest(path, blocksize=65536):
