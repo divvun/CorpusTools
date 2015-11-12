@@ -266,19 +266,29 @@ class CorpusFileRemover(object):
 
 
 class CorpusFilesetMoverAndUpdater(object):
-    '''Change the names of files within a repository
+    '''Move or remove a file within a repository
 
-    Normalise a file name: Replace non-ascii char with ascii ones and remove
-    unwanted characters.
-
-    When normalising a file name containing unwanted characters or renaming it
-    for other reasons:
+    When moving a file inside the same directory:
     * move the original file
     * move the metadata file
     * move the prestable/converted file
     * move the prestable/toktmx file
     * move the prestable/tmx file
+    * change the metadata in the metadata file, if needed
+    * change the reference to the file name in the parallel files' metadata, if needed
+    * if the parallel files need name normalisation, move them the same way the
+      original file is handled
+
+    Removal is signaled by an empty string for the newpath argument.
+    When removing a file. :
+    * remove the original file
+    * remove the metadata file
+    * remove the prestable/converted file
+    * remove the prestable/toktmx file
+    * remove the prestable/tmx file
     * change the reference to the file name in the parallel files' metadata
+    * if the parallel files need name normalisation, move them the same way the
+      original file is handled
 
     When moving a file from one subdirectory to another:
     * move the original file
@@ -286,6 +296,9 @@ class CorpusFilesetMoverAndUpdater(object):
     * move the prestable/converted file
     * move the prestable/toktmx file
     * move the prestable/tmx file
+    * change the metadata in the metadata file, if needed
+    * change the reference to the file name in the parallel files' metadata, if needed
+    * change the reference to the file name in the parallel files' metadata if needed
     * move the parallel files the same way the original file has been moved.
 
     When moving a file to a new genre:
@@ -299,6 +312,11 @@ class CorpusFilesetMoverAndUpdater(object):
     * move the prestable/toktmx file
     * move the prestable/tmx file
     * change the language of the file in the parallel files' metadata
+    * if the parallel files need name normalisation, move them the same way the
+      original file is handled
+
+    Normalise a file name: Replace non-ascii char with ascii ones and remove
+    unwanted characters.
 
     When doing these operations, detect name clashes for the original files.
 
