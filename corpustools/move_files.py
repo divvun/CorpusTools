@@ -51,7 +51,7 @@ def mover(oldpath, newpath):
         print('\tmoving {} -> {}'.format(
             filepair.oldpath, filepair.newpath))
     else:
-        print('\tremoving {} -> {}'.format(filepair.oldpath, filepair.newpath))
+        print('\tremoving {}'.format(filepair.oldpath))
     cfmu.move_files()
     cfmu.update_own_metadata()
     cfmu.update_parallel_files_metadata()
