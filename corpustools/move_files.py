@@ -24,6 +24,7 @@ from __future__ import print_function
 
 import argparse
 import os
+import sys
 
 from corpustools import argparse_version
 from corpustools import namechanger
@@ -69,4 +70,10 @@ def mover_parse_args():
 
 def main():
     args = mover_parse_args()
-    mover(args.oldpath, args.newpath)
+    if args.oldpath == args.newpath:
+        print('{} and {} are the same file'.format(args.oldpath, args.newpath), file=sys.stderr)
+    else:
+        try:
+            mover(args.oldpath, args.newpath)
+        except UserWarning as e:
+            print('Can not move file:', str(e), file=sys.stderr)
