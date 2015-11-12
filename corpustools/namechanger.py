@@ -120,34 +120,6 @@ class CorpusFileMover(object):
         self.move_prestable_converted()
         self.move_prestable_tmx()
 
-    def update_metadata(self):
-        '''Update metadata'''
-        metadatafile = xslsetter.MetadataHandler(self.xsl_pair.oldpath)
-        if (self.old_components.genre != self.new_components.genre):
-            metadatafile.set_variable('genre', self.new_components.genre)
-        if (self.old_components.lang != self.new_components.lang):
-            metadatafile.set_variable('mainlang', self.new_components.lang)
-        metadatafile.write_file()
-
-    def update_parallel_files_metadata(self):
-        '''Update the info in the parallel files'''
-        metadatafile = xslsetter.MetadataHandler(self.xsl_pair.oldpath)
-        parallel_files = metadatafile.get_parallel_texts()
-
-        for lang, parallel_file in parallel_files.items():
-            parallel_metadatafile = xslsetter.MetadataHandler(
-                '/'.join(
-                    (self.old_components.root,
-                     self.old_components.module,
-                     lang, self.old_components.genre,
-                     self.old_components.subdirs,
-                     parallel_file + '.xsl')))
-
-            if self.old_components.basename != self.new_components.basename:
-                parallel_metadatafile.set_parallel_text(
-                    self.new_components.lang, self.new_components.basename)
-            parallel_metadatafile.write_file()
-
     def _move(self, oldpath, newpath):
         if os.path.exists(oldpath):
             newdir = os.path.dirname(newpath)
