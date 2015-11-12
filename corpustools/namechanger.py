@@ -59,8 +59,8 @@ class MovepairComputer(object):
             os.path.dirname(newpath),
             normalise_filename(os.path.basename(newpath)))
 
-        if nochange:
-            non_dupe_path = normalisedpath
+        if normalisedpath == newpath and nochange:
+            non_dupe_path = newpath
         else:
             non_dupe_path = compute_new_basename(oldpath, normalisedpath)
 
