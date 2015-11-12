@@ -30,6 +30,7 @@ import sys
 
 import argparse_version
 import ccat
+import move_files
 import versioncontrol
 import xslsetter
 
@@ -39,8 +40,6 @@ class DupeFinder(object):
         self.files = self._get_files(directory)
         self.dupe_files = set()
         absdir = os.path.abspath(directory)
-        corpusdir = absdir[:absdir.find('/converted/')]
-        self.vcs = versioncontrol.VersionControlFactory().vcs(corpusdir)
 
     @staticmethod
     def _get_files(directory):
@@ -67,15 +66,9 @@ class DupeFinder(object):
             self.files[filename2].splitlines(1)))
         if len(result) == 0:
             self.dupe_files.add(filename2)
-            os.remove(filename2)
-            xsl = filename2.replace('converted/', 'orig/').replace('.xml', '.xsl')
-            orig = xsl.replace('.xsl', '')
-            self.remove_from_parallel_files(xsl)
-            self.vcs.remove(xsl)
-            self.vcs.remove(orig)
-            print('Removed:', orig)
-            print('Parallel to:', filename1.replace('converted/',
-                                                    'orig/').replace('.xsl', ''))
+            origname = filename2.replace(
+                'converted/', 'orig/').replace('.xml', '').decode('utf8')
+            move_files.mover(origname, u'')
 
     def remove_from_parallel_files(self, orig_xslname):
         orig_xsl = xslsetter.MetadataHandler(orig_xslname)
