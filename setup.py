@@ -26,6 +26,7 @@ setup(
             'generate_anchor_list = corpustools.generate_anchor_list:main',
             'html_cleaner = corpustools.html_cleaner:main',
             'move_corpus_file = corpustools.move_files:main',
+            'remove_corpus_file = corpustools.move_files:remove_main',
             'normalise_corpus_names = corpustools.normalise_filenames:main',
             'packagetmx = corpustools.packagetmx:main',
             'paracheck = corpustools.check_para_consistency:main',

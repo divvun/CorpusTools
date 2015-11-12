@@ -47,8 +47,11 @@ def mover(oldpath, newpath):
         oldpath.decode('utf8'),
         newpath.decode('utf8'))
     filepair = cfmu.mc.filepairs[0]
-    print('\tmoving {} -> {}'.format(
-        filepair.oldpath, filepair.newpath))
+    if len(filepair.newpath) > 0:
+        print('\tmoving {} -> {}'.format(
+            filepair.oldpath, filepair.newpath))
+    else:
+        print('\tremoving {} -> {}'.format(filepair.oldpath, filepair.newpath))
     cfmu.move_files()
     cfmu.update_own_metadata()
     cfmu.update_parallel_files_metadata()
@@ -57,7 +60,7 @@ def mover(oldpath, newpath):
 def mover_parse_args():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Program to move or rename files inside the corpus.')
+        description='Program to move or rename a file inside the corpus.')
 
     parser.add_argument('oldpath',
                         help='The path of the old file.')
@@ -77,3 +80,22 @@ def main():
             mover(args.oldpath, args.newpath)
         except UserWarning as e:
             print('Can not move file:', str(e), file=sys.stderr)
+
+
+def remover_parse_args():
+    parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
+        description='Program to remove a file from the corpus.')
+
+    parser.add_argument('oldpath',
+                        help='The path of the old file.')
+
+    return parser.parse_args()
+
+
+def remove_main():
+    args = remover_parse_args()
+    try:
+        mover(args.oldpath, '')
+    except UserWarning as e:
+        print('Can not move file:', str(e), file=sys.stderr)
