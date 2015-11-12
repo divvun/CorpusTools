@@ -170,7 +170,6 @@ class TestComputeNewBasename(unittest.TestCase):
 
 
 class TestComputeMovepairs(unittest.TestCase):
-
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory()
         self.tempdir.makedir('orig/sme/ficti/sub')
@@ -456,9 +455,50 @@ class TestComputeMovepairs(unittest.TestCase):
                 os.path.join(self.tempdir.path,
                              'orig/sma/facta/sub/f.txt').decode('utf8'))])
 
+    def test_compute_movepairs_9(self):
+        '''move to same directory, with parallels.
+
+        Parallel needs normalisation. The new parallel name collides with
+        normalised name, but is not a duplicate of it.'''
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
+            create=True)
+        sme_metadata.set_variable('mainlang', 'sme')
+        sme_metadata.set_parallel_text('sma', u'ø.txt')
+        sme_metadata.write_file()
+
+        sma_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sma/ficti/sub/ø.txt.xsl'),
+            create=True)
+        sma_metadata.set_variable('mainlang', 'sma')
+        sma_metadata.set_parallel_text('sme', 'f.txt')
+        sma_metadata.set_parallel_text('smj', 'f.txt')
+        sma_metadata.write_file()
+
+        self.tempdir.write('orig/sma/ficti/sub/ø.txt', 'content of ø')
+        self.tempdir.write('orig/sma/ficti/sub/o.txt', 'content of o')
+
+        mc = namechanger.MovepairComputer()
+        mc.compute_all_movepairs(
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/f.txt').decode('utf8'),
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/g.txt').decode('utf8'))
+
+        testfixtures.compare(mc.filepairs, [
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/f.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/g.txt').decode('utf8')),
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/ø.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/o_1.txt').decode('utf8'))])
+
 
 class TestCorpusFileMover(unittest.TestCase):
-
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
@@ -489,6 +529,7 @@ class TestCorpusFileMover(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_move_orig(self):
+        '''move to different subdir, with parallels'''
         cfm = namechanger.CorpusFileMover(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
             os.path.join(self.tempdir.path, 'orig/sme/facta/bub/g.txt'))
@@ -527,7 +568,7 @@ class TestCorpusFileMover(unittest.TestCase):
 
 
 class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
-
+    '''move to new genre/subdir, with parallels, parallel needs normalisation'''
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
@@ -697,7 +738,7 @@ class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
 
 
 class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
-
+    '''move to new lang/genre/subdir, with parallels, parallel needs normalisation'''
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
@@ -874,3 +915,235 @@ class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
         self.assertEqual(smj_parallels['sma'], 'f.txt')
         with self.assertRaises(KeyError):
             smj_parallels['sme']
+
+
+class TestCorpusFilesetMetadataUpdater3(unittest.TestCase):
+    '''move to new genre/subdir, with parallel
+
+    parallel needs normalisation, normalised name of parallel exists, but the
+    file with the normalised name is not a duplicate of the parallel file
+    '''
+    def setUp(self):
+        self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
+
+        self.tempdir.makedir('orig/sme/ficti/sub')
+        self.tempdir.write('orig/sme/ficti/sub/f.txt', 'content of f')
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
+            create=True)
+        sme_metadata.set_variable('mainlang', 'sme')
+        sme_metadata.set_parallel_text('smj', u'ø.txt')
+        sme_metadata.write_file()
+        self.tempdir.makedir('prestable/converted/sme/ficti/sub')
+        self.tempdir.write('prestable/converted/sme/ficti/sub/f.txt.xml',
+                           'converted content of f')
+        self.tempdir.makedir('prestable/tmx/sme2smj/ficti/sub')
+        self.tempdir.write('prestable/tmx/sme2smj/ficti/sub/f.txt.tmx',
+                           'parallelised content of f')
+        self.tempdir.makedir('prestable/toktmx/sme2smj/ficti/sub')
+        self.tempdir.write('prestable/toktmx/sme2smj/ficti/sub/f.txt.toktmx',
+                           'parallelised content of f')
+
+        self.tempdir.makedir('orig/smj/ficti/sub')
+        self.tempdir.write('orig/smj/ficti/sub/ø.txt', 'content of ø')
+        smj_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/ø.txt.xsl'),
+            create=True)
+        smj_metadata.set_variable('mainlang', 'smj')
+        smj_metadata.set_variable('translated_from', 'sme')
+        smj_metadata.set_parallel_text('sme', 'f.txt')
+        smj_metadata.write_file()
+
+        self.tempdir.write('orig/smj/facta/bub/o.txt', 'content of o')
+        smj_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/smj/facta/bub/o.txt.xsl'),
+            create=True)
+        smj_metadata.write_file()
+
+        self.tempdir.makedir('prestable/converted/smj/ficti/sub')
+        self.tempdir.write('prestable/converted/smj/ficti/sub/ø.txt.xml',
+                           'converted content of ø')
+
+        r = git.Repo.init(self.tempdir.path)
+        r.index.add(['orig', 'prestable'])
+        r.index.commit('Added orig and prestable')
+
+        oldpath = os.path.join(self.tempdir.path,
+                               'orig/sme/ficti/sub/f.txt').decode('utf8')
+        newpath = os.path.join(self.tempdir.path,
+                               'orig/sme/facta/bub/g.txt').decode('utf8')
+        cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
+        cfm.move_files()
+        cfm.update_own_metadata()
+        cfm.update_parallel_files_metadata()
+
+    def tearDown(self):
+        self.tempdir.cleanup()
+
+    def test_move_fileset(self):
+        self.tempdir.check_all(
+            '',
+            'orig/',
+            'orig/sme/',
+            'orig/sme/facta/',
+            'orig/sme/facta/bub/',
+            'orig/sme/facta/bub/g.txt',
+            'orig/sme/facta/bub/g.txt.xsl',
+            'orig/sme/ficti/',
+            'orig/sme/ficti/sub/',
+            'orig/smj/',
+            'orig/smj/facta/',
+            'orig/smj/facta/bub/',
+            'orig/smj/facta/bub/o.txt',
+            'orig/smj/facta/bub/o.txt.xsl',
+            'orig/smj/facta/bub/o_1.txt',
+            'orig/smj/facta/bub/o_1.txt.xsl',
+            'orig/smj/ficti/',
+            'orig/smj/ficti/sub/',
+            'prestable/',
+            'prestable/converted/',
+            'prestable/converted/sme/',
+            'prestable/converted/sme/facta/',
+            'prestable/converted/sme/facta/bub/',
+            'prestable/converted/sme/facta/bub/g.txt.xml',
+            'prestable/converted/sme/ficti/',
+            'prestable/converted/sme/ficti/sub/',
+            'prestable/converted/smj/',
+            'prestable/converted/smj/facta/',
+            'prestable/converted/smj/facta/bub/',
+            'prestable/converted/smj/facta/bub/o_1.txt.xml',
+            'prestable/converted/smj/ficti/',
+            'prestable/converted/smj/ficti/sub/',
+            'prestable/tmx/',
+            'prestable/tmx/sme2smj/',
+            'prestable/tmx/sme2smj/facta/',
+            'prestable/tmx/sme2smj/facta/bub/',
+            'prestable/tmx/sme2smj/facta/bub/g.txt.tmx',
+            'prestable/tmx/sme2smj/ficti/',
+            'prestable/tmx/sme2smj/ficti/sub/',
+            'prestable/toktmx/',
+            'prestable/toktmx/sme2smj/',
+            'prestable/toktmx/sme2smj/facta/',
+            'prestable/toktmx/sme2smj/facta/bub/',
+            'prestable/toktmx/sme2smj/facta/bub/g.txt.toktmx',
+            'prestable/toktmx/sme2smj/ficti/',
+            'prestable/toktmx/sme2smj/ficti/sub/')
+
+    def test_update_metadata(self):
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/facta/bub/g.txt.xsl'))
+        self.assertEqual(sme_metadata.get_variable('genre'), 'facta')
+        self.assertEqual(sme_metadata.get_variable('mainlang'), 'sme')
+        sme_parallels = sme_metadata.get_parallel_texts()
+        self.assertEqual(sme_parallels['smj'], 'o_1.txt')
+
+        smj_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/smj/facta/bub/o_1.txt.xsl'))
+        self.assertEqual(smj_metadata.get_variable('genre'), 'facta')
+        smj_parallels = smj_metadata.get_parallel_texts()
+        self.assertEqual(smj_parallels['sme'], 'g.txt')
+
+
+class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
+    '''move to new genre/subdir, with parallel
+
+    parallel needs normalisation, normalised name of parallel exists.
+    The file with the normalised name is a duplicate of the parallel file
+    '''
+    def setUp(self):
+        self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
+
+        self.tempdir.makedir('orig/sme/ficti/sub')
+        self.tempdir.write('orig/sme/ficti/sub/f.txt', 'content of f')
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
+            create=True)
+        sme_metadata.set_variable('mainlang', 'sme')
+        sme_metadata.set_parallel_text('smj', u'ø.txt')
+        sme_metadata.write_file()
+        self.tempdir.makedir('prestable/converted/sme/ficti/sub')
+        self.tempdir.write('prestable/converted/sme/ficti/sub/f.txt.xml',
+                           'converted content of f')
+        self.tempdir.makedir('prestable/tmx/sme2smj/ficti/sub')
+        self.tempdir.write('prestable/tmx/sme2smj/ficti/sub/f.txt.tmx',
+                           'parallelised content of f')
+        self.tempdir.makedir('prestable/toktmx/sme2smj/ficti/sub')
+        self.tempdir.write('prestable/toktmx/sme2smj/ficti/sub/f.txt.toktmx',
+                           'parallelised content of f')
+
+        self.tempdir.makedir('orig/smj/ficti/sub')
+        self.tempdir.write('orig/smj/ficti/sub/ø.txt', 'content of ø')
+        smj_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/ø.txt.xsl'),
+            create=True)
+        smj_metadata.set_variable('mainlang', 'smj')
+        smj_metadata.set_variable('translated_from', 'sme')
+        smj_metadata.set_parallel_text('sme', 'f.txt')
+        smj_metadata.write_file()
+
+        self.tempdir.write('orig/smj/facta/bub/o.txt', 'content of ø')
+        smj_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/smj/facta/bub/o.txt.xsl'),
+            create=True)
+        smj_metadata.write_file()
+
+        self.tempdir.makedir('prestable/converted/smj/ficti/sub')
+        self.tempdir.write('prestable/converted/smj/ficti/sub/ø.txt.xml',
+                           'converted content of ø')
+
+        r = git.Repo.init(self.tempdir.path)
+        r.index.add(['orig', 'prestable'])
+        r.index.commit('Added orig and prestable')
+
+
+    def tearDown(self):
+        self.tempdir.cleanup()
+
+    def test_move_fileset(self):
+        oldpath = os.path.join(self.tempdir.path,
+                               'orig/sme/ficti/sub/f.txt').decode('utf8')
+        newpath = os.path.join(self.tempdir.path,
+                               'orig/sme/facta/bub/g.txt').decode('utf8')
+        with self.assertRaises(UserWarning):
+            cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
+            cfm.move_files()
+            cfm.update_own_metadata()
+            cfm.update_parallel_files_metadata()
+
+        self.tempdir.check_all(
+            '',
+            'orig/',
+            'orig/sme/',
+            'orig/sme/ficti/',
+            'orig/sme/ficti/sub/',
+            'orig/sme/ficti/sub/f.txt',
+            'orig/sme/ficti/sub/f.txt.xsl',
+            'orig/smj/',
+            'orig/smj/facta/',
+            'orig/smj/facta/bub/',
+            'orig/smj/facta/bub/o.txt',
+            'orig/smj/facta/bub/o.txt.xsl',
+            'orig/smj/ficti/',
+            'orig/smj/ficti/sub/',
+            'orig/smj/ficti/sub/ø.txt',
+            'orig/smj/ficti/sub/ø.txt.xsl',
+            'prestable/',
+            'prestable/converted/',
+            'prestable/converted/sme/',
+            'prestable/converted/sme/ficti/',
+            'prestable/converted/sme/ficti/sub/',
+            'prestable/converted/sme/ficti/sub/f.txt.xml',
+            'prestable/converted/smj/',
+            'prestable/converted/smj/ficti/',
+            'prestable/converted/smj/ficti/sub/',
+            'prestable/converted/smj/ficti/sub/ø.txt.xml',
+            'prestable/tmx/',
+            'prestable/tmx/sme2smj/',
+            'prestable/tmx/sme2smj/ficti/',
+            'prestable/tmx/sme2smj/ficti/sub/',
+            'prestable/tmx/sme2smj/ficti/sub/f.txt.tmx',
+            'prestable/toktmx/',
+            'prestable/toktmx/sme2smj/',
+            'prestable/toktmx/sme2smj/ficti/',
+            'prestable/toktmx/sme2smj/ficti/sub/',
+            'prestable/toktmx/sme2smj/ficti/sub/f.txt.toktmx',)
