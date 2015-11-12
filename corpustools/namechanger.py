@@ -74,6 +74,10 @@ class MovepairComputer(object):
             newpath (unicode): the new path
         '''
         old_components = util.split_path(oldpath)
+
+        if newpath == u'':
+            newpath = oldpath
+
         new_components = util.split_path(newpath)
 
         metadatafile = xslsetter.MetadataHandler(oldpath + '.xsl')
@@ -91,8 +95,7 @@ class MovepairComputer(object):
                 parallel))
             no_mv_needed = (old_components.genre == new_components.genre and
                             old_components.subdirs == new_components.subdirs)
-            self.compute_movepairs(oldparellelpath, newparallelpath,
-                                   no_mv_needed)
+            self.compute_movepairs(oldparellelpath, newparallelpath, no_mv_needed)
 
     def compute_all_movepairs(self, oldpath, newpath):
         self.compute_movepairs(oldpath, newpath)

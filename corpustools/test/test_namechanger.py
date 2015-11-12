@@ -497,6 +497,120 @@ class TestComputeMovepairs(unittest.TestCase):
                 os.path.join(self.tempdir.path,
                              'orig/sma/ficti/sub/o_1.txt').decode('utf8'))])
 
+    def test_compute_movepairs_10(self):
+        '''newpath is empty, no parallels'''
+        mc = namechanger.MovepairComputer()
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/a.txt.xsl'),
+            create=True)
+        sme_metadata.write_file()
+        mc.compute_all_movepairs(
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/a.txt').decode('utf8'),
+            u'')
+
+        testfixtures.compare(mc.filepairs, [
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/a.txt').decode('utf8'),
+                u'')])
+
+    def test_compute_movepairs_11(self):
+        '''newpath is empty, with parallels'''
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
+            create=True)
+        sme_metadata.set_variable('mainlang', 'sme')
+        sme_metadata.set_parallel_text('smj', 'f.txt')
+        sme_metadata.set_parallel_text('sma', 'f.txt')
+        sme_metadata.write_file()
+
+        smj_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/f.txt.xsl'),
+            create=True)
+        smj_metadata.set_variable('mainlang', 'smj')
+        smj_metadata.set_parallel_text('sme', 'f.txt')
+        smj_metadata.set_parallel_text('sma', 'f.txt')
+        smj_metadata.write_file()
+
+        sma_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sma/ficti/sub/f.txt.xsl'),
+            create=True)
+        sma_metadata.set_variable('mainlang', 'sma')
+        sma_metadata.set_parallel_text('sme', 'f.txt')
+        sma_metadata.set_parallel_text('smj', 'f.txt')
+        sma_metadata.write_file()
+
+        mc = namechanger.MovepairComputer()
+        mc.compute_all_movepairs(
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/f.txt').decode('utf8'),
+            u'')
+
+        testfixtures.compare(mc.filepairs, [
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/f.txt').decode('utf8'),
+                u''),
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/f.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/f.txt').decode('utf8')),
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt').decode('utf8'))])
+
+    def test_compute_movepairs_12(self):
+        '''newpath is empty, one parallel needs normalisation'''
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
+            create=True)
+        sme_metadata.set_variable('mainlang', 'sme')
+        sme_metadata.set_parallel_text('smj', u'ø.txt')
+        sme_metadata.set_parallel_text('sma', 'f.txt')
+        sme_metadata.write_file()
+
+        smj_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/ø.txt.xsl'),
+            create=True)
+        smj_metadata.set_variable('mainlang', 'smj')
+        smj_metadata.set_parallel_text('sme', 'f.txt')
+        smj_metadata.set_parallel_text('sma', 'f.txt')
+        smj_metadata.write_file()
+
+        sma_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sma/ficti/sub/f.txt.xsl'),
+            create=True)
+        sma_metadata.set_variable('mainlang', 'sma')
+        sma_metadata.set_parallel_text('sme', 'f.txt')
+        sma_metadata.set_parallel_text('smj', u'ø.txt')
+        sma_metadata.write_file()
+
+        mc = namechanger.MovepairComputer()
+        mc.compute_all_movepairs(
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/f.txt').decode('utf8'),
+            u'')
+
+        testfixtures.compare(mc.filepairs, [
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/f.txt').decode('utf8'),
+                u''),
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/ø.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/o.txt').decode('utf8')),
+            namechanger.PathPair(
+                os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt').decode('utf8'),
+                os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt').decode('utf8'))])
+
 
 class TestCorpusFileMover(unittest.TestCase):
     def setUp(self):
@@ -1094,7 +1208,6 @@ class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
         r = git.Repo.init(self.tempdir.path)
         r.index.add(['orig', 'prestable'])
         r.index.commit('Added orig and prestable')
-
 
     def tearDown(self):
         self.tempdir.cleanup()
