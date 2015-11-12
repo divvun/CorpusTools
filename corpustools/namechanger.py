@@ -41,9 +41,7 @@ PathPair = namedtuple('PathPair', 'oldpath newpath')
 
 
 class MovepairComputer(object):
-
     '''Compute oldname, newname pairs'''
-
     def __init__(self):
         '''filepairs will be a list of PathPairs'''
         self.filepairs = []
@@ -103,9 +101,7 @@ class MovepairComputer(object):
 
 
 class CorpusFileMover(object):
-
     '''Move an original file and all its derived files.'''
-
     def __init__(self, oldpath, newpath):
         '''Class to move corpus files
 
@@ -227,8 +223,77 @@ class CorpusFileMover(object):
                                        tmx)))
 
 
-class CorpusFilesetMoverAndUpdater(object):
+class CorpusFileRemover(object):
+    '''Remove an original file and all its derived files'''
+    def __init__(self, oldpath):
+        '''Class to remove corpus files
 
+        Args:
+            oldpath (unicode): the old path
+        '''
+        self.old_components = util.split_path(oldpath)
+        self.vcs = versioncontrol.VersionControlFactory().vcs(
+            self.old_components.root)
+
+    def remove_files(self):
+        self.remove_prestable_tmx()
+        self.remove_prestable_converted()
+        self.remove_xsl()
+        self.remove_orig()
+
+    def _remove(self, oldpath):
+        if os.path.exists(oldpath):
+            self.vcs.remove(oldpath.encode('utf8'))
+
+    def remove_orig(self):
+        '''Remove the original file'''
+        self._remove(u'/'.join(self.old_components))
+
+    def remove_xsl(self):
+        '''Remove the metadata file'''
+        self._remove(
+            u'/'.join((self.old_components.root,
+                       self.old_components.module,
+                       self.old_components.lang,
+                       self.old_components.genre,
+                       self.old_components.subdirs,
+                       self.old_components.basename + '.xsl')))
+
+    def remove_prestable_converted(self):
+        '''Remove the prestable/converted file'''
+        self._remove(
+            u'/'.join((self.old_components.root,
+                       u'prestable/converted',
+                       self.old_components.lang,
+                       self.old_components.genre,
+                       self.old_components.subdirs,
+                       self.old_components.basename + '.xml')))
+
+    def remove_prestable_tmx(self):
+        '''Remove the prestable toktmx and tmx files'''
+        for tmx in [u'tmx', u'toktmx']:
+            tmxdir = u'/'.join((u'prestable', tmx))
+            metadataname = u'/'.join((self.old_components.root,
+                                      self.old_components.module,
+                                      self.old_components.lang,
+                                      self.old_components.genre,
+                                      self.old_components.subdirs,
+                                      self.old_components.basename + '.xsl'))
+            if os.path.isfile(metadataname):
+                metadatafile = xslsetter.MetadataHandler(metadataname)
+                translated_from = metadatafile.get_variable('translated_from')
+                if translated_from is None or translated_from == u'':
+                    for lang in metadatafile.get_parallel_texts().keys():
+                        self._remove(
+                            u'/'.join((self.old_components.root, tmxdir,
+                                       self.old_components.lang + u'2' + lang,
+                                       self.old_components.genre,
+                                       self.old_components.subdirs,
+                                       self.old_components.basename + u'.' +
+                                       tmx)))
+
+
+class CorpusFilesetMoverAndUpdater(object):
     '''Change the names of files within a repository
 
     Normalise a file name: Replace non-ascii char with ascii ones and remove

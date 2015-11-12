@@ -681,6 +681,44 @@ class TestCorpusFileMover(unittest.TestCase):
             'prestable/tmx/sme2smj/ficti/sub/')
 
 
+class TestCorpusFileRemover(unittest.TestCase):
+    def setUp(self):
+        self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
+
+        self.tempdir.makedir('orig/sme/ficti/sub')
+        self.tempdir.write('orig/sme/ficti/sub/f.txt', 'content of f')
+        sme_metadata = xslsetter.MetadataHandler(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
+            create=True)
+        sme_metadata.set_variable('mainlang', 'sme')
+        sme_metadata.set_parallel_text('smj', u'ø.txt')
+        sme_metadata.set_parallel_text('sma', 'f.txt')
+        sme_metadata.write_file()
+        self.tempdir.makedir('prestable/converted/sme/ficti/sub')
+        self.tempdir.write('prestable/converted/sme/ficti/sub/f.txt.xml',
+                           'converted content of f')
+        self.tempdir.makedir('prestable/tmx/sme2smj/ficti/sub')
+        self.tempdir.write('prestable/tmx/sme2smj/ficti/sub/f.txt.tmx',
+                           'parallelised content of f')
+        self.tempdir.makedir('prestable/tmx/sme2sma/ficti/sub')
+        self.tempdir.write('prestable/tmx/sme2sma/ficti/sub/f.txt.tmx',
+                           'parallelised content of f')
+
+        r = git.Repo.init(self.tempdir.path)
+        r.index.add(['orig', 'prestable'])
+        r.index.commit('Added orig and prestable')
+
+    def tearDown(self):
+        self.tempdir.cleanup()
+
+    def test_remove_orig(self):
+        '''remove file, with parallels'''
+        cfm = namechanger.CorpusFileRemover(
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt'))
+        cfm.remove_files()
+        self.tempdir.check_all('',)
+
+
 class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
     '''move to new genre/subdir, with parallels, parallel needs normalisation'''
     def setUp(self):
