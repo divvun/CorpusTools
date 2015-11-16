@@ -31,7 +31,6 @@ import sys
 import argparse_version
 import ccat
 import move_files
-import versioncontrol
 import xslsetter
 
 
@@ -39,7 +38,6 @@ class DupeFinder(object):
     def __init__(self, directory):
         self.files = self._get_files(directory)
         self.dupe_files = set()
-        absdir = os.path.abspath(directory)
 
     @staticmethod
     def _get_files(directory):
