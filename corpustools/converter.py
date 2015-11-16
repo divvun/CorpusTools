@@ -639,6 +639,17 @@ class PDF2XMLConverter(Converter):
         pages = []
         skip_pages = self.md.get_variable('skip_pages')
         if skip_pages is not None:
+            if 'odd' in skip_pages and 'even' in skip_pages:
+                raise ConversionException(
+                    'Cannot have both "even" and "odd" in this line')
+
+            if 'odd' in skip_pages:
+                pages.append('odd')
+                skip_pages = skip_pages.replace('odd', u'')
+            if 'even' in skip_pages:
+                pages.append('even')
+                skip_pages = skip_pages.replace('even', '')
+
             # Turn single pages into single-page ranges, e.g. 7 → 7-7
             skip_ranges_norm = ((r if '-' in r else r + "-" + r)
                                 for r in skip_pages.strip().split(",")
@@ -648,9 +659,9 @@ class PDF2XMLConverter(Converter):
                            for r in skip_ranges_norm)
 
             try:
-                pages = [page
-                         for start, end in sorted(skip_ranges)
-                         for page in range(start, end + 1)]
+                pages.extend([page
+                              for start, end in sorted(skip_ranges)
+                              for page in range(start, end + 1)])
 
             except ValueError:
                 raise ConversionException(
@@ -1026,10 +1037,17 @@ class PDF2XMLConverter(Converter):
                 int(t.get('left')) > margins['left_margin'] and
                 int(t.get('left')) < margins['right_margin'])
 
+    @staticmethod
+    def is_skip_page(page_number, skip_pages):
+        '''True if a page should be skipped, otherwise false'''
+        return ('odd' in skip_pages and (page_number % 2) == 1) or \
+            ('even' in skip_pages and (page_number % 2) == 0) or \
+                page_number in skip_pages
+
     def parse_pages(self, root_element):
         skip_pages = self.get_skip_pages()
         for page in root_element.iter('page'):
-            if int(page.get('number')) not in skip_pages:
+            if not self.is_skip_page(int(page.get('number')), skip_pages):
                 self.parse_page(page)
 
         if len(self.parts) > 0:

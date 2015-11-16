@@ -3944,3 +3944,66 @@ class TestPDF2XMLConverter(XMLTester):
         want = []
 
         self.assertEqual(got, want)
+
+    def test_set_skip_pages4(self):
+        '''Test with odd as a page range'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.md.set_variable('skip_pages', 'odd, 2')
+        got = p2x.get_skip_pages()
+        want = ['odd', 2]
+
+        self.assertEqual(got, want)
+
+    def test_set_skip_pages5(self):
+        '''Test with even as a page range'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.md.set_variable('skip_pages', 'even, 1')
+        got = p2x.get_skip_pages()
+        want = ['even', 1]
+
+        self.assertEqual(got, want)
+
+    def test_set_skip_pages6(self):
+        '''Raise an exception if both odd and even are used'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.md.set_variable('skip_pages', 'odd, even')
+
+        with self.assertRaises(converter.ConversionException):
+            p2x.get_skip_pages()
+
+    def test_is_skip_page_1(self):
+        '''Odd page should be skipped when odd is in skip_pages'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+
+        self.assertTrue(p2x.is_skip_page(1, ['odd']))
+
+    def test_is_skip_page_2(self):
+        '''Even page should be skipped when even is in skip_pages'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+
+        self.assertTrue(p2x.is_skip_page(2, ['even']))
+
+
+    def test_is_skip_page_3(self):
+        '''Even page should not be skipped when odd is in skip_pages'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+
+        self.assertFalse(p2x.is_skip_page(2, ['odd']))
+
+    def test_is_skip_page_4(self):
+        '''Odd page should not be skipped when even is in skip_pages'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+
+        self.assertFalse(p2x.is_skip_page(1, ['even']))
+
+    def test_is_skip_page_5(self):
+        '''Page should not be skipped when not in skip_range'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+
+        self.assertFalse(p2x.is_skip_page(1, ['even', 3]))
+
+    def test_is_skip_page_6(self):
+        '''Page should be skipped when in skip_range'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+
+        self.assertTrue(p2x.is_skip_page(3, ['even', 3]))
