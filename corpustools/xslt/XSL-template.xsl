@@ -151,7 +151,8 @@
         [all|odd|even|pagenumber]=integer
 
         Margin lines *must* contain the keywords all, even, odd or a page
-        number followed by a = sign and an integer.
+        number followed by a = sign and an integer. Pages with the same margin
+        may be separated with ;.
 
         The integer must be between 0 and 100.
 
@@ -166,6 +167,7 @@
         Examples on how the select part could look:
         odd=5, even=8, 8=15, 11=3
         all=9, 8=12
+        1;3;8=20, 4;5;7=10
     -->
     <xsl:variable name="right_margin" select="''"/>
     <xsl:variable name="left_margin" select="''"/>

@@ -36,7 +36,6 @@ LANGUAGEGUESSER = text_cat.Classifier(None)
 
 
 class TestConverter(unittest.TestCase):
-
     def setUp(self):
         self.converter_inside_orig = converter.Converter(
             os.path.join(here,
@@ -2890,9 +2889,7 @@ class TestXslMaker(XMLTester):
 
 
 class TestPDF2XMLConverter(XMLTester):
-
     '''Test the class that converts from pdf2xml to giellatekno/divvun xml'''
-
     def test_pdf_converter(self):
         pdfdocument = converter.PDF2XMLConverter(
             os.path.join(here, 'converter_data/pdf-test.pdf'))
@@ -3867,6 +3864,15 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertRaises(converter.ConversionException,
                           p2x.parse_margin_lines)
+
+    def test_parse_margin_lines7(self):
+        '''multiple pages with the same margin are separated by semicolon'''
+        p2x = converter.PDF2XMLConverter('bogus.pdf')
+        p2x.md.set_variable('right_margin', '1;3=50, 2=30')
+        p2x.parse_margin_lines()
+
+        self.assertEqual(p2x.margins, {
+            'right_margin': {'1': 50, '2': 30, '3': 50}})
 
     def test_compute_margins1(self):
         '''Test parse_margin_lines'''

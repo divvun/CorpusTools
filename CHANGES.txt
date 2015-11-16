@@ -41,3 +41,4 @@ v<0.9.11>, <20151029> -- Comment out the previous change, it did the wrong thing
 v<0.9.12>, <20151029> -- Activate fix_sms in converter.py again
 v<0.10.0>, <20151030> -- Add two new scripts, dupefinder and duperemover
 v<0.11.0>, <20151112> -- Add the remove_corpus_file script
+v<0.11.1>, <20151116> -- Let multiple pages with same margin be separated by semicolon. Fixes bug 2102
