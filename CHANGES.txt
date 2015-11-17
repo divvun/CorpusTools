@@ -42,3 +42,4 @@ v<0.9.12>, <20151029> -- Activate fix_sms in converter.py again
 v<0.10.0>, <20151030> -- Add two new scripts, dupefinder and duperemover
 v<0.11.0>, <20151112> -- Add the remove_corpus_file script
 v<0.11.1>, <20151116> -- Let multiple pages with same margin be separated by semicolon. Fixes bug 2102
+v<0.11.2>, <20151116> -- Allow use of odd and even in skip_pages. Fixes bug 2103
