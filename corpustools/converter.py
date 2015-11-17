@@ -1009,7 +1009,7 @@ class PDF2XMLConverter(Converter):
             previous_element = superscript.getprevious()
             if (previous_element is not None and
                     self.has_content(previous_element) and
-                    int(previous_element.get('top')) >
+                    int(previous_element.get('top')) >=
                     int(superscript.get('top'))):
                 superscript.getparent().remove(superscript)
 

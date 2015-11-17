@@ -3709,6 +3709,28 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(page, encoding='utf8'), want_page)
 
+    def test_remove_footnotes_superscript_5(self):
+        '''Footnote superscript at the samel level as other text'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+
+        page = etree.fromstring(
+            '<page number="1" height="1261" width="892">'
+            '   <text top="560" left="102" width="231" height="15" font="4">Boazu lea, nu movt eará smirezasti</text>'
+            '   <text top="560" left="333" width="8" height="9" font="12">1 </text>'
+            '   <text top="560" left="341" width="91" height="15" font="4">eallit nai, ere-</text>'
+            '</page>'
+        )
+        p2x.remove_footnotes_superscript(page)
+
+        want_page = (
+            '<page number="1" height="1261" width="892">'
+            '   <text top="560" left="102" width="231" height="15" font="4">Boazu lea, nu movt eará smirezasti</text>'
+            '   <text top="560" left="341" width="91" height="15" font="4">eallit nai, ere-</text>'
+            '</page>'
+        )
+
+        self.assertXmlEqual(etree.tostring(page, encoding='utf8'), want_page)
+
     def test_get_body(self):
         '''Test the initial values when the class is initiated'''
         p2x = converter.PDF2XMLConverter('bogus.xml')
@@ -4026,7 +4048,6 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
         self.assertTrue(p2x.is_skip_page(2, ['even']))
-
 
     def test_is_skip_page_3(self):
         '''Even page should not be skipped when odd is in skip_pages'''
