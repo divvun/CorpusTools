@@ -989,9 +989,9 @@ class PDF2XMLConverter(Converter):
         margins = self.compute_margins(page)
         superscripts = []
         for t in page.iter('text'):
-            if t.text is not None and self.is_inside_margins(t, margins):
+            if self.is_inside_margins(t, margins):
                 try:
-                    int(t.text)
+                    int(t.xpath("string()").strip())
                     superscripts.append(t)
                 except ValueError:
                     pass
