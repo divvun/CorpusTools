@@ -998,12 +998,17 @@ class PDF2XMLConverter(Converter):
 
         return superscripts
 
+    @staticmethod
+    def has_content(element):
+        '''True if an element either has text or contains another element'''
+        return element.text is not None or len(element) > 0
+
     def remove_footnotes_superscript(self, page):
         '''Remove elements deemed to be footnote superscript.'''
         for superscript in self.find_footnotes_superscript(page):
             previous_element = superscript.getprevious()
             if (previous_element is not None and
-                    previous_element.text is not None and
+                    self.has_content(previous_element) and
                     int(previous_element.get('top')) >
                     int(superscript.get('top'))):
                 superscript.getparent().remove(superscript)

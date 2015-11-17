@@ -3665,6 +3665,28 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(page, encoding='utf8'), want_page)
 
+    def test_remove_footnotes_superscript_3(self):
+        '''Footnote superscript in between i-elements'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+
+        page = etree.fromstring(
+            '<page number="1" height="1263" width="892">'
+            '    <text top="267" left="119" width="164" height="22" font="9"><i>riektedilálašvuođa</i></text>'
+            '    <text top="265" left="283" width="15" height="15" font="7">16</text>'
+            '    <text top="267" left="298" width="503" height="22" font="9"><i> </i>čielggadeamit&#34; (min deattuhus) ráddjejuvvot dasa mii </text>'
+            '</page>'
+        )
+        p2x.remove_footnotes_superscript(page)
+
+        want_page = (
+            '<page number="1" height="1263" width="892">'
+            '    <text top="267" left="119" width="164" height="22" font="9"><i>riektedilálašvuođa</i></text>'
+            '    <text top="267" left="298" width="503" height="22" font="9"><i> </i>čielggadeamit&#34; (min deattuhus) ráddjejuvvot dasa mii </text>'
+            '</page>'
+        )
+
+        self.assertXmlEqual(etree.tostring(page, encoding='utf8'), want_page)
+
     def test_get_body(self):
         '''Test the initial values when the class is initiated'''
         p2x = converter.PDF2XMLConverter('bogus.xml')
