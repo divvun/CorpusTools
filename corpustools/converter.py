@@ -709,6 +709,22 @@ class PDF2XMLConverter(Converter):
 
         return coefficient
 
+    def get_inner_coefficient(self, margin, page_number):
+        '''Get the width of the margin in percent'''
+        coefficient = 0
+        if margin in self.md.inner_margins.keys():
+            m = self.md.inner_margins[margin]
+            if m.get(page_number) is not None:
+                coefficient = m[page_number.strip()]
+            elif m.get('all') is not None:
+                coefficient = m['all']
+            elif int(page_number) % 2 == 0 and m.get('even') is not None:
+                coefficient = m['even']
+            elif int(page_number) % 2 == 1 and m.get('odd') is not None:
+                coefficient = m['odd']
+
+        return coefficient
+
     def compute_margins(self, page):
         '''Compute the margins of a page in pixels.
 
@@ -722,9 +738,24 @@ class PDF2XMLConverter(Converter):
 
         return margins
 
+    def compute_inner_margins(self, page):
+
+        margins = {margin: self.compute_inner_margin(margin, page)
+                   for margin in ['inner_right_margin', 'inner_left_margin',
+                                  'inner_top_margin', 'inner_bottom_margin']}
+
+        if (margins['inner_bottom_margin'] == int(page.get('height')) and
+            margins['inner_top_margin'] == 0 and
+            margins['inner_left_margin'] == 0 and
+            margins['inner_right_margin'] == int(page.get('width'))):
+            margins = {}
+
+        return margins
+
     def compute_margin(self, margin, page):
         '''Compute a margin in pixels.
 
+        :param margin: the name of the margin
         :param page: a pdf2xml page element
 
         :return: an int telling where the margin is on the page.
@@ -741,6 +772,27 @@ class PDF2XMLConverter(Converter):
         if margin == 'top_margin':
             return int(coefficient * page_height / 100)
         if margin == 'bottom_margin':
+            return int(page_height - coefficient * page_height / 100)
+
+    def compute_inner_margin(self, margin, page):
+        '''Compute a margin in pixels.
+
+        :param margin: the name of the margin
+        :param page: a pdf2xml page element
+
+        :return: an int telling where the margin is on the page.
+        '''
+        page_width = int(page.get('width'))
+        page_height = int(page.get('height'))
+        coefficient = self.get_inner_coefficient(margin, page.get('number'))
+
+        if margin == 'inner_left_margin':
+            return int(coefficient * page_width / 100)
+        if margin == 'inner_right_margin':
+            return int(page_width - coefficient * page_width / 100)
+        if margin == 'inner_top_margin':
+            return int(coefficient * page_height / 100)
+        if margin == 'inner_bottom_margin':
             return int(page_height - coefficient * page_height / 100)
 
     def append_to_body(self, element):
@@ -900,15 +952,13 @@ class PDF2XMLConverter(Converter):
 
         :return superscripts: a list of potential footnotes.
         '''
-        margins = self.compute_margins(page)
         superscripts = []
         for t in page.iter('text'):
-            if self.is_inside_margins(t, margins):
-                try:
-                    int(t.xpath("string()").strip())
-                    superscripts.append(t)
-                except ValueError:
-                    pass
+            try:
+                int(t.xpath("string()").strip())
+                superscripts.append(t)
+            except ValueError:
+                pass
 
         return superscripts
 
@@ -935,8 +985,12 @@ class PDF2XMLConverter(Converter):
 
     def remove_elements_not_within_margin(self, page):
         margins = self.compute_margins(page)
+        inner_margins = self.compute_inner_margins(page)
         for t in page.iter('text'):
             if not self.is_inside_margins(t, margins):
+                t.getparent().remove(t)
+            elif (len(inner_margins) > 0 and
+                  self.is_inside_inner_margins(t, inner_margins)):
                 t.getparent().remove(t)
 
     def extract_text_from_page(self, page):
@@ -962,6 +1016,16 @@ class PDF2XMLConverter(Converter):
                 int(t.get('top')) < margins['bottom_margin'] and
                 int(t.get('left')) > margins['left_margin'] and
                 int(t.get('left')) < margins['right_margin'])
+
+    def is_inside_inner_margins(self, t, margins):
+        '''Check if t is inside the given margins
+
+        t is a text element
+        '''
+        return (int(t.get('top')) > margins['inner_top_margin'] and
+                int(t.get('top')) < margins['inner_bottom_margin'] and
+                int(t.get('left')) > margins['inner_left_margin'] and
+                int(t.get('left')) < margins['inner_right_margin'])
 
     @staticmethod
     def is_skip_page(page_number, skip_pages):

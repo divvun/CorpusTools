@@ -3912,6 +3912,30 @@ class TestPDF2XMLConverter(XMLTester):
                                                       'top_margin': 88,
                                                       'bottom_margin': 1011})
 
+    def test_compute_inner_margins_1(self):
+        '''Test if inner margins is set for the specified page'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.md.set_variable('inner_top_margin', '1=40')
+        p2x.md.set_variable('inner_bottom_margin', '1=40')
+
+        page1 = etree.fromstring(
+            '<page number="1" height="1263" width="862"/>')
+
+        self.assertEqual(p2x.compute_inner_margins(page1),
+                         {'inner_top_margin': 505, 'inner_bottom_margin': 758,
+                          'inner_left_margin': 0, 'inner_right_margin': 862})
+
+    def test_compute_inner_margins_2(self):
+        '''Test that inner margins is empty for the specified page'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.md.set_variable('inner_top_margin', '1=40')
+        p2x.md.set_variable('inner_bottom_margin', '1=40')
+
+        page1 = etree.fromstring(
+            '<page number="2" height="1263" width="862"/>')
+
+        self.assertEqual(p2x.compute_inner_margins(page1), {})
+
     def test_is_skip_page_1(self):
         '''Odd page should be skipped when odd is in skip_pages'''
         p2x = converter.PDF2XMLConverter('bogus.xml')
@@ -3947,3 +3971,50 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
         self.assertTrue(p2x.is_skip_page(3, ['even', 3]))
+
+    def test_remove_elements_not_within_margin_1(self):
+        '''Check that elements within inner_margins for a specific page are removed'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.md.set_variable('inner_top_margin', '8=40')
+        p2x.md.set_variable('inner_bottom_margin', '8=40')
+        page = etree.fromstring(
+            '\n'.join([
+            '<page number="8" height="1263" width="862">',
+            '<text top="500" left="80" width="512" height="19" font="0">1</text>'
+            '<text top="600" left="80" width="512" height="19" font="0">2</text>'
+            '<text top="800" left="80" width="512" height="19" font="0">3</text>'
+            '</page>'
+        ]))
+        p2x.remove_elements_not_within_margin(page)
+        page_want = '\n'.join([
+            '<page number="8" height="1263" width="862">',
+            '<text top="500" left="80" width="512" height="19" font="0">1</text>'
+            '<text top="800" left="80" width="512" height="19" font="0">3</text>'
+            '</page>'
+        ])
+
+        self.assertXmlEqual(etree.tostring(page, encoding='utf8'), page_want)
+
+    def test_remove_elements_not_within_margin_2(self):
+        '''Check that no elements are removed when inner_margins is not defined for the page'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.md.set_variable('inner_top_margin', '1=40')
+        p2x.md.set_variable('inner_bottom_margin', '1=40')
+        page = etree.fromstring(
+            '\n'.join([
+            '<page number="8" height="1263" width="862">',
+            '<text top="500" left="80" width="512" height="19" font="0">1</text>'
+            '<text top="600" left="80" width="512" height="19" font="0">2</text>'
+            '<text top="800" left="80" width="512" height="19" font="0">3</text>'
+            '</page>'
+        ]))
+        p2x.remove_elements_not_within_margin(page)
+        page_want = '\n'.join([
+            '<page number="8" height="1263" width="862">',
+            '<text top="500" left="80" width="512" height="19" font="0">1</text>'
+            '<text top="600" left="80" width="512" height="19" font="0">2</text>'
+            '<text top="800" left="80" width="512" height="19" font="0">3</text>'
+            '</page>'
+        ])
+
+        self.assertXmlEqual(etree.tostring(page, encoding='utf8'), page_want)
