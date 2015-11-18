@@ -763,7 +763,7 @@ class PDF2XMLConverter(Converter):
         page_width = int(page.get('width'))
         page_height = int(page.get('height'))
         coefficient = self.get_coefficient(margin, page.get('number'))
-        # print util.lineno(), margin, page_height, page_width, coefficient
+        # print(util.lineno(), margin, page_height, page_width, coefficient, file=sys.stderr)
 
         if margin == 'left_margin':
             return int(coefficient * page_width / 100)
@@ -814,19 +814,19 @@ class PDF2XMLConverter(Converter):
         elements become the text parts of <i> and <b> elements.
         '''
 
-        # print util.lineno(), etree.tostring(textelement)
+        # print(util.lineno(), etree.tostring(textelement), file=sys.stderr)
         if (textelement is not None and int(textelement.get('width')) > 0):
             if textelement.text is not None:
                 # NOTE: Search for both hyphen and soft hyphen
                 found_hyph = re.search('\w[-­]$', textelement.text,
                                        re.UNICODE)
                 if len(self.parts) > 0:
-                    # print util.lineno(), textelement.text
+                    # print(util.lineno(), textelement.text, file=sys.stderr)
                     if isinstance(self.parts[-1], etree._Element):
-                        # print util.lineno(), textelement.text
+                        # print(util.lineno(), textelement.text, file=sys.stderr)
                         if self.parts[-1].tail is not None:
                             if found_hyph:
-                                # print util.lineno(), textelement.text
+                                # print(util.lineno(), textelement.text, file=sys.stderr)
                                 self.parts[-1].tail += u' {}'.format(
                                     textelement.text[:-1])
                                 self.parts.append(etree.Element('hyph'))
@@ -835,32 +835,32 @@ class PDF2XMLConverter(Converter):
                                     textelement.text)
                         else:
                             if found_hyph:
-                                # print util.lineno(), textelement.text
+                                # print(util.lineno(), textelement.text, file=sys.stderr)
                                 self.parts[-1].tail = u'{}'.format(
                                     textelement.text[:-1])
                                 self.parts.append(etree.Element('hyph'))
                             else:
-                                # print util.lineno(), textelement.text
+                                # print(util.lineno(), textelement.text, file=sys.stderr)
                                 self.parts[-1].tail = textelement.text
                     else:
-                        # print util.lineno(), textelement.text
+                        # print(util.lineno(), textelement.text, file=sys.stderr)
                         if found_hyph:
-                            # print util.lineno(), textelement.text
+                            # print(util.lineno(), textelement.text, file=sys.stderr)
                             self.parts[-1] += u' {}'.format(
                                 unicode(textelement.text[:-1]))
                             self.parts.append(etree.Element('hyph'))
                         else:
-                            # print util.lineno(), textelement.text
+                            # print(util.lineno(), textelement.text, file=sys.stderr)
                             self.parts[-1] += u' {}'.format(
                                 unicode(textelement.text))
                 else:
-                    # print util.lineno(), textelement.text
+                    # print(util.lineno(), textelement.text, file=sys.stderr)
                     if found_hyph:
-                        # print util.lineno(), textelement.text
+                        # print(util.lineno(), textelement.text, file=sys.stderr)
                         self.parts.append(textelement.text[:-1])
                         self.parts.append(etree.Element('hyph'))
                     else:
-                        # print util.lineno(), textelement.text
+                        # print(util.lineno(), textelement.text, file=sys.stderr)
                         self.parts.append(textelement.text)
 
             for child in textelement:
@@ -897,7 +897,7 @@ class PDF2XMLConverter(Converter):
                 em.tail = child.tail
 
                 self.parts.append(em)
-        # print util.lineno(), self.parts
+        # print(util.lineno(), self.parts, file=sys.stderr)
 
     def is_text_in_same_paragraph(self, text):
         h1 = float(self.prev_t.get('height'))
@@ -922,27 +922,27 @@ class PDF2XMLConverter(Converter):
         h2 = float(text.get('height'))
         t1 = int(self.prev_t.get('top'))
         t2 = int(text.get('top'))
-        # print util.lineno(), h1, h2, t1, t2, h1 == h2, t1 > t2
+        # print(util.lineno(), h1, h2, t1, t2, h1 == h2, t1 > t2, file=sys.stderr)
         real_text = etree.tostring(text, method='text', encoding='unicode')
 
         if self.is_text_in_same_paragraph(text):
             if (real_text[0] in self.LIST_CHARS):
                 self.in_list = True
-                # print util.lineno(), text.text
+                # print(util.lineno(), text.text, file=sys.stderr)
             elif (re.match('\s', real_text[0]) is None and
                   real_text[0] == real_text[0].upper() and self.in_list):
                 self.in_list = False
                 same_paragraph = False
-                # print util.lineno(), text.text
+                # print(util.lineno(), text.text, file=sys.stderr)
             elif (real_text[0] not in self.LIST_CHARS):
-                # print util.lineno()
+                # print(util.lineno(), file=sys.stderr)
                 same_paragraph = True
         elif (h1 == h2 and t1 >= t2 and not re.match('\d', real_text[0]) and
               real_text[0] == real_text[0].lower()):
-            # print util.lineno()
+            # print(util.lineno(), file=sys.stderr)
             same_paragraph = True
         else:
-            # print util.lineno()
+            # print(util.lineno(), file=sys.stderr)
             self.in_list = False
 
         return same_paragraph
@@ -997,7 +997,7 @@ class PDF2XMLConverter(Converter):
         for t in page.iter('text'):
             if self.prev_t is not None:
                 if not self.is_same_paragraph(t):
-                    # print util.lineno(), \
+                    # print(util.lineno(), \, file=sys.stderr)
                     # etree.tostring(self.prev_t, encoding='utf8'), \
                     # etree.tostring(t, encoding='utf8')
                     if len(self.parts) > 0:
@@ -1005,7 +1005,7 @@ class PDF2XMLConverter(Converter):
             if len(t) > 0 or t.text is not None:
                 self.extract_textelement(t)
                 self.prev_t = t
-                # print util.lineno(), self.parts
+                # print(util.lineno(), self.parts, file=sys.stderr)
 
     def is_inside_margins(self, t, margins):
         '''Check if t is inside the given margins
@@ -1050,7 +1050,7 @@ class PDF2XMLConverter(Converter):
         same paragraph
         '''
         p = etree.Element('p')
-        # print util.lineno(), self.parts[0], self.parts, type(self.parts[0])
+        # print(util.lineno(), self.parts[0], self.parts, type(self.parts[0]), file=sys.stderr)
         if (isinstance(self.parts[0], str) or
                 isinstance(self.parts[0], unicode)):
             p.text = self.parts[0]
@@ -1078,7 +1078,7 @@ class PDF2XMLConverter(Converter):
         if p.text is not None and p.text[0] in self.LIST_CHARS:
             p.set('type', 'listitem')
             p.text = p.text[1:]
-        # print util.lineno(), self.parts[0], self.parts, type(self.parts[0])
+        # print(util.lineno(), self.parts[0], self.parts, type(self.parts[0]), file=sys.stderr)
 
         return p
 
