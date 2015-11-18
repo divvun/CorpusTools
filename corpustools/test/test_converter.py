@@ -3861,14 +3861,12 @@ class TestPDF2XMLConverter(XMLTester):
         pdf2xml = etree.fromstring(
             '''<pdf2xml>
 <page number="40" position="absolute" top="0" left="0" height="1263" width="892">
-<text top="1061" left="106" width="680" height="20" font="7"><i>Go livččii oktasaš vuođđu de rádjeguovlluid gielddaide livččii álkit oažžut oktasaš oahppoplánaid vuođđooahpa-</i></text>
-<text top="1085" left="106" width="653" height="20" font="7"><i>hussi ja logahatoahpahussi, earanoamážit sámegielat oahpahussi mas lea sáhka seamma gielas ja kultuvrras. </i></text>
+<text top="1061" left="106" width="680" height="20" font="7"><i>vuođđooahpa-</i></text>
+<text top="1085" left="106" width="653" height="20" font="7"><i>hussi. </i></text>
 <text top="1110" left="106" width="5" height="20" font="7"><i> </i></text>
 </page></pdf2xml>''')
-        want = u'''<body><p><em type="italic">
-      Go livččii oktasaš vuođđu de rádjeguovlluid gielddaide livččii álkit oažžut oktasaš oahppoplánaid vuođđooahpa
-        <hyph></hyph>hussi ja logahatoahpahussi, earanoamážit sámegielat oahpahussi mas lea sáhka seamma gielas ja kultuvrras.
-      </em></p></body>'''
+        want = u'''<body><p><em type="italic">vuođđooahpa
+        <hyph></hyph>hussi.</em></p></body>'''
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
