@@ -3856,6 +3856,25 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
 
+    def test_text_disappears(self):
+        '''bug 2115, Store deler av teksten blir borte'''
+        pdf2xml = etree.fromstring(
+            '''<pdf2xml>
+<page number="40" position="absolute" top="0" left="0" height="1263" width="892">
+<text top="1061" left="106" width="680" height="20" font="7"><i>Go livččii oktasaš vuođđu de rádjeguovlluid gielddaide livččii álkit oažžut oktasaš oahppoplánaid vuođđooahpa-</i></text>
+<text top="1085" left="106" width="653" height="20" font="7"><i>hussi ja logahatoahpahussi, earanoamážit sámegielat oahpahussi mas lea sáhka seamma gielas ja kultuvrras. </i></text>
+<text top="1110" left="106" width="5" height="20" font="7"><i> </i></text>
+</page></pdf2xml>''')
+        want = u'''<body><p><em type="italic">
+      Go livččii oktasaš vuođđu de rádjeguovlluid gielddaide livččii álkit oažžut oktasaš oahppoplánaid vuođđooahpa
+        <hyph></hyph>hussi ja logahatoahpahussi, earanoamážit sámegielat oahpahussi mas lea sáhka seamma gielas ja kultuvrras.
+      </em></p></body>'''
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.parse_pages(pdf2xml)
+
+        self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
+
     def test_compute_default_margins(self):
         '''Test if the default margins are set'''
         p2x = converter.PDF2XMLConverter('bogus.xml')
