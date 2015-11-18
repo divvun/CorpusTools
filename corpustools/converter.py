@@ -620,7 +620,6 @@ class PlaintextConverter(Converter):
 
 
 class PDF2XMLConverter(Converter):
-
     '''Class to convert the xml output of pdftohtml to giellatekno xml'''
     LIST_CHARS = [u'•']
 
