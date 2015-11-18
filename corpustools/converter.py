@@ -1063,8 +1063,12 @@ class PDF2XMLConverter(Converter):
                         p[-1][-1].tag == 'hyph'):
                     if (p[-1].tag == part.tag and
                             p[-1].get('type') == part.get('type')):
-                        p[-1][-1].tail = part.text
-                        p[-1].tail = part.tail
+                        if p[-1][-1].tail is None:
+                            p[-1][-1].tail = part.text
+                            p[-1].tail = part.tail
+                        else:
+                            p[-1][-1].tail += part.text
+                            p[-1].tail = part.tail
                     else:
                         p.append(part)
                 else:
