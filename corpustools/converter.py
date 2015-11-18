@@ -929,22 +929,29 @@ class PDF2XMLConverter(Converter):
 
     def parse_page(self, page):
         '''Parse the page element.'''
-        margins = self.compute_margins(page)
-
+        self.remove_elements_not_within_margin(page)
         self.remove_footnotes_superscript(page)
+        self.extract_text_from_page(page)
+
+    def remove_elements_not_within_margin(self, page):
+        margins = self.compute_margins(page)
         for t in page.iter('text'):
-            if self.is_inside_margins(t, margins):
-                if self.prev_t is not None:
-                    if not self.is_same_paragraph(t):
-                        # print util.lineno(), \
-                        # etree.tostring(self.prev_t, encoding='utf8'), \
-                        # etree.tostring(t, encoding='utf8')
-                        if len(self.parts) > 0:
-                            self.append_to_body(self.make_paragraph())
-                if len(t) > 0 or t.text is not None:
-                    self.extract_textelement(t)
-                    self.prev_t = t
-                    # print util.lineno(), self.parts
+            if not self.is_inside_margins(t, margins):
+                t.getparent().remove(t)
+
+    def extract_text_from_page(self, page):
+        for t in page.iter('text'):
+            if self.prev_t is not None:
+                if not self.is_same_paragraph(t):
+                    # print util.lineno(), \
+                    # etree.tostring(self.prev_t, encoding='utf8'), \
+                    # etree.tostring(t, encoding='utf8')
+                    if len(self.parts) > 0:
+                        self.append_to_body(self.make_paragraph())
+            if len(t) > 0 or t.text is not None:
+                self.extract_textelement(t)
+                self.prev_t = t
+                # print util.lineno(), self.parts
 
     def is_inside_margins(self, t, margins):
         '''Check if t is inside the given margins
