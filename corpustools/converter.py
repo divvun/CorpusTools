@@ -634,41 +634,6 @@ class PDF2XMLConverter(Converter):
         self.parse_margin_lines()
         self.prev_t = None
 
-    def get_skip_pages(self):
-        '''Turn a skip_pages entry into a list of pages.'''
-        pages = []
-        skip_pages = self.md.get_variable('skip_pages')
-        if skip_pages is not None:
-            if 'odd' in skip_pages and 'even' in skip_pages:
-                raise ConversionException(
-                    'Cannot have both "even" and "odd" in this line')
-
-            if 'odd' in skip_pages:
-                pages.append('odd')
-                skip_pages = skip_pages.replace('odd', u'')
-            if 'even' in skip_pages:
-                pages.append('even')
-                skip_pages = skip_pages.replace('even', '')
-
-            # Turn single pages into single-page ranges, e.g. 7 → 7-7
-            skip_ranges_norm = ((r if '-' in r else r + "-" + r)
-                                for r in skip_pages.strip().split(",")
-                                if r != "")
-
-            skip_ranges = (tuple(map(int, r.split('-')))
-                           for r in skip_ranges_norm)
-
-            try:
-                pages.extend([page
-                              for start, end in sorted(skip_ranges)
-                              for page in range(start, end + 1)])
-
-            except ValueError:
-                raise ConversionException(
-                    "Invalid format in skip_pages: {}".format(skip_pages))
-
-        return pages
-
     def strip_chars(self, content, extra=u''):
         remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]'.format(
             extra))
@@ -1050,7 +1015,7 @@ class PDF2XMLConverter(Converter):
                 page_number in skip_pages
 
     def parse_pages(self, root_element):
-        skip_pages = self.get_skip_pages()
+        skip_pages = self.md.skip_pages
         for page in root_element.iter('page'):
             if not self.is_skip_page(int(page.get('number')), skip_pages):
                 self.parse_page(page)

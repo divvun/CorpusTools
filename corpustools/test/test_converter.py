@@ -3986,57 +3986,6 @@ class TestPDF2XMLConverter(XMLTester):
                                                       'top_margin': 88,
                                                       'bottom_margin': 1011})
 
-    def test_set_skip_pages1(self):
-        '''Test a valid skip_pages line'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.md.set_variable('skip_pages', '1, 4-5, 7')
-        got = p2x.get_skip_pages()
-        want = [1, 4, 5, 7]
-
-        self.assertEqual(got, want)
-
-    def test_set_skip_pages2(self):
-        '''Test an invalid skip_pages line'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.md.set_variable('skip_pages', '1, 4 5, 7')
-
-        self.assertRaises(converter.ConversionException, p2x.get_skip_pages)
-
-    def test_set_skip_pages3(self):
-        '''Test an empty skip_pages line'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.md.set_variable('skip_pages', ' ')
-        got = p2x.get_skip_pages()
-        want = []
-
-        self.assertEqual(got, want)
-
-    def test_set_skip_pages4(self):
-        '''Test with odd as a page range'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.md.set_variable('skip_pages', 'odd, 2')
-        got = p2x.get_skip_pages()
-        want = ['odd', 2]
-
-        self.assertEqual(got, want)
-
-    def test_set_skip_pages5(self):
-        '''Test with even as a page range'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.md.set_variable('skip_pages', 'even, 1')
-        got = p2x.get_skip_pages()
-        want = ['even', 1]
-
-        self.assertEqual(got, want)
-
-    def test_set_skip_pages6(self):
-        '''Raise an exception if both odd and even are used'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.md.set_variable('skip_pages', 'odd, even')
-
-        with self.assertRaises(converter.ConversionException):
-            p2x.get_skip_pages()
-
     def test_is_skip_page_1(self):
         '''Odd page should be skipped when odd is in skip_pages'''
         p2x = converter.PDF2XMLConverter('bogus.xml')

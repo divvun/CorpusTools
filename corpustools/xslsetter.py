@@ -112,6 +112,43 @@ class MetadataHandler(object):
             elt.tail = "\n"
             parallels.append(elt)
 
+    @property
+    def skip_pages(self):
+        '''Turn a skip_pages entry into a list of pages.'''
+        pages = []
+        skip_pages = self.get_variable('skip_pages')
+        if skip_pages is not None:
+            if 'odd' in skip_pages and 'even' in skip_pages:
+                raise XsltException(
+                    'Invalid format: Cannot have both "even" and "odd" in this line\n'
+                    '{}'.format(skip_pages))
+
+            if 'odd' in skip_pages:
+                pages.append('odd')
+                skip_pages = skip_pages.replace('odd', u'')
+            if 'even' in skip_pages:
+                pages.append('even')
+                skip_pages = skip_pages.replace('even', '')
+
+            # Turn single pages into single-page ranges, e.g. 7 → 7-7
+            skip_ranges_norm = ((r if '-' in r else r + "-" + r)
+                                for r in skip_pages.strip().split(",")
+                                if r != "")
+
+            skip_ranges = (tuple(map(int, r.split('-')))
+                           for r in skip_ranges_norm)
+
+            try:
+                pages.extend([page
+                              for start, end in sorted(skip_ranges)
+                              for page in range(start, end + 1)])
+
+            except ValueError:
+                raise XsltException(
+                    "Invalid format: {}".format(skip_pages))
+
+        return pages
+
     def write_file(self):
         try:
             with open(self.filename, 'w') as f:
