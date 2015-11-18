@@ -36,11 +36,8 @@ class XsltException(Exception):
 
 
 class MetadataHandler(object):
-
     '''Class to handle metadata in .xsl files
 
-    To convert the intermediate xml to a fullfledged  giellatekno document
-    a combination of three xsl files + the intermediate files is needed
     This class makes the xsl file
     '''
     lang_key = "{http://www.w3.org/XML/1998/namespace}lang"
@@ -149,21 +146,18 @@ class MetadataHandler(object):
 
         return pages
 
-    def get_margin_lines(self):
+    def get_margin_lines(self, position=''):
         '''Get the margin lines from the metadata file.'''
         margin_lines = {
             key: self.get_variable(key).strip()
-            for key in ['right_margin', 'top_margin', 'left_margin',
-                        'bottom_margin']
+            for key in [position + 'right_margin', position + 'top_margin',
+                        position + 'left_margin', position + 'bottom_margin']
             if (self.get_variable(key) is not None and
                 self.get_variable(key).strip() != '')}
 
         return margin_lines
 
-    @property
-    def margins(self):
-        '''Parse margin lines fetched from the .xsl file.'''
-        margin_lines = self.get_margin_lines()
+    def validate_and_set_margins(self, margin_lines):
         _margins = {}
         for key, value in margin_lines.items():
             if ('all' in value and ('odd' in value or 'even' in value) or
@@ -181,6 +175,45 @@ class MetadataHandler(object):
                         key, self.filename, value))
 
         return _margins
+
+    @property
+    def margins(self):
+        '''Parse margin lines fetched from the .xsl file.'''
+        margin_lines = self.get_margin_lines()
+
+        return self.validate_and_set_margins(margin_lines)
+
+    @property
+    def inner_margins(self):
+        margin_lines = self.get_margin_lines(position='inner_')
+        _inner_margins = self.validate_and_set_margins(margin_lines)
+
+        keys = _inner_margins.keys()
+        for key in keys:
+            if key == 'inner_left_margin':
+                if 'inner_right_margin' not in keys:
+                    raise XsltException('Invalid format in {}: both '
+                        'inner_right_margin and inner_left_margin must '
+                        'be set'.format(self.filename))
+                if sorted(_inner_margins['inner_left_margin']) != sorted(_inner_margins['inner_right_margin']):
+                    raise XsltException('Invalid format in {}: both '
+                        'margins for the same pages must be set in inner_right_margin and inner_left_margin'.format(self.filename))
+            if key == 'inner_right_margin' and 'left_inner_margin' not in keys:
+                raise XsltException('Invalid format in {}: both inner_right_margin '
+                    'and inner_left_margin must be set'.format(self.filename))
+            if key == 'inner_bottom_margin':
+                if 'inner_top_margin' not in keys:
+                    raise XsltException('Invalid format in {}: both '
+                        'inner_bottom_margin and inner_top_margin must '
+                        'be set'.format(self.filename))
+                if sorted(_inner_margins['inner_bottom_margin']) != sorted(_inner_margins['inner_top_margin']):
+                    raise XsltException('Invalid format in {}: '
+                        'margins for the same pages must be set in inner_top_margin and inner_bottom_margin'.format(self.filename))
+            if key == 'inner_top_margin' and 'inner_bottom_margin' not in keys:
+                raise XsltException('Invalid format in {}: both inner_bottom_margin '
+                    'and inner_top_margin must be set'.format(self.filename))
+
+        return _inner_margins
 
     @staticmethod
     def parse_margin_line(value):

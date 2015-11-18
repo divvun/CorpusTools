@@ -146,3 +146,36 @@ class TestMetadataHandler(unittest.TestCase):
         self.assertEqual(md.margins, {
             'right_margin': {'1': 50, '2': 30, '3': 50}})
 
+
+    def test_inner_margin1(self):
+        '''Raise exception if inner_right is set and not inner_left'''
+        for p in ['top', 'bottom', 'right', 'left']:
+            md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+            md.set_variable('inner_' + p + '_margin', '5=30')
+
+            with self.assertRaises(xslsetter.XsltException):
+                md.inner_margins
+
+    def test_inner_margin2(self):
+        '''Raise exception if not the same pages are set'''
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('inner_top_margin', '5=30')
+        md.set_variable('inner_bottom_margin', '6=30')
+        with self.assertRaises(xslsetter.XsltException):
+            md.inner_margins
+
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('inner_left_margin', '5=30')
+        md.set_variable('inner_right_margin', '6=30')
+        with self.assertRaises(xslsetter.XsltException):
+            md.inner_margins
+
+    def test_inner_margin3(self):
+        '''Test whether a correctly set inner margin gives the wanted result'''
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('inner_top_margin', '6=20, 5=20')
+        md.set_variable('inner_bottom_margin', '5=30, 6=50')
+
+        self.assertEqual(md.inner_margins,
+                         {u'inner_bottom_margin': {u'5': 30, u'6': 50},
+                          u'inner_top_margin': {u'5': 20, u'6': 20}})
