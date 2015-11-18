@@ -149,6 +149,56 @@ class MetadataHandler(object):
 
         return pages
 
+    def get_margin_lines(self):
+        '''Get the margin lines from the metadata file.'''
+        margin_lines = {
+            key: self.get_variable(key).strip()
+            for key in ['right_margin', 'top_margin', 'left_margin',
+                        'bottom_margin']
+            if (self.get_variable(key) is not None and
+                self.get_variable(key).strip() != '')}
+
+        return margin_lines
+
+    @property
+    def margins(self):
+        '''Parse margin lines fetched from the .xsl file.'''
+        margin_lines = self.get_margin_lines()
+        _margins = {}
+        for key, value in margin_lines.items():
+            if ('all' in value and ('odd' in value or 'even' in value) or
+                    '=' not in value):
+                raise XsltException(
+                    'Invalid format in the variable {} in the file:\n{}\n{}\n'
+                    'Format must be [all|odd|even|pagenumber]=integer'.format(
+                        key, self.filename, value))
+            try:
+                _margins[key] = self.parse_margin_line(value)
+            except ValueError:
+                raise XsltException(
+                    'Invalid format in the variable {} in the file:\n{}\n{}\n'
+                    'Format must be [all|odd|even|pagenumber]=integer'.format(
+                        key, self.filename, value))
+
+        return _margins
+
+    @staticmethod
+    def parse_margin_line(value):
+        '''Parse a margin line read from the .xsl file.
+
+        :param value: a string containing the margin settings for a particular
+        margin (right_margin, left_margin, top_margin, bottom_margin)
+
+        :returns: a dict containing the margins for pages in percent
+        '''
+        m = {}
+        for part in value.split(','):
+            (pages, margin) = tuple(part.split('='))
+            for page in pages.split(';'):
+                m[page.strip()] = int(margin)
+
+        return m
+
     def write_file(self):
         try:
             with open(self.filename, 'w') as f:

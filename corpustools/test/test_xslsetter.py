@@ -76,5 +76,73 @@ class TestMetadataHandler(unittest.TestCase):
         with self.assertRaises(xslsetter.XsltException):
             md.skip_pages
 
+    def test_set_margin(self):
+        '''Test if the margin is set correctly'''
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
 
+        self.assertEqual(
+            md.parse_margin_line('odd=230, even = 540 , 8 = 340'),
+            {'odd': 230, 'even': 540, '8': 340})
+
+    def test_parse_margin_lines1(self):
+        '''Test parse_margin_lines'''
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('left_margin', '7=7')
+        md.set_variable('right_margin', 'odd=4,even=8,3=6')
+        md.set_variable('top_margin', '8=8')
+        md.set_variable('bottom_margin', '9=2')
+
+        self.assertEqual(md.margins, {
+            'left_margin': {'7': 7},
+            'right_margin': {'odd': 4, 'even': 8, '3': 6},
+            'top_margin': {'8': 8},
+            'bottom_margin': {'9': 2}})
+
+    def test_parse_margin_lines2(self):
+        '''all and even in margin line should raise ConversionException'''
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('right_margin', 'all=40,even=80')
+
+        with self.assertRaises(xslsetter.XsltException):
+                md.margins
+
+    def test_parse_margin_lines3(self):
+        '''all and odd in margin line should raise ConversionException'''
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('right_margin', 'all=40,odd=80')
+
+        with self.assertRaises(xslsetter.XsltException):
+            md.margins
+
+    def test_parse_margin_lines4(self):
+        '''text after = should raise ConversionException'''
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('right_margin', 'all=tullball')
+
+        with self.assertRaises(xslsetter.XsltException):
+            md.margins
+
+    def test_parse_margin_lines5(self):
+        '''no = should raise ConversionException'''
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('right_margin', 'all 50')
+
+        with self.assertRaises(xslsetter.XsltException):
+            md.margins
+
+    def test_parse_margin_lines6(self):
+        '''line with no comma between values should raise an exception'''
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('right_margin', 'all=50 3')
+
+        with self.assertRaises(xslsetter.XsltException):
+            md.margins
+
+    def test_parse_margin_lines7(self):
+        '''multiple pages with the same margin are separated by semicolon'''
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('right_margin', '1;3=50, 2=30')
+
+        self.assertEqual(md.margins, {
+            'right_margin': {'1': 50, '2': 30, '3': 50}})
 

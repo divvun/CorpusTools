@@ -628,10 +628,8 @@ class PDF2XMLConverter(Converter):
         super(PDF2XMLConverter, self).__init__(filename,
                                                write_intermediate)
         self.body = etree.Element('body')
-        self.margins = {}
         self.in_list = False
         self.parts = []
-        self.parse_margin_lines()
         self.prev_t = None
 
     def strip_chars(self, content, extra=u''):
@@ -696,59 +694,11 @@ class PDF2XMLConverter(Converter):
 
         return document
 
-    def get_margin_lines(self):
-        '''Get the margin lines from the metadata file.'''
-        margin_lines = {
-            key: self.md.get_variable(key).strip()
-            for key in ['right_margin', 'top_margin', 'left_margin',
-                        'bottom_margin']
-            if (self.md.get_variable(key) is not None and
-                self.md.get_variable(key).strip() != '')}
-
-        return margin_lines
-
-    def parse_margin_lines(self):
-        '''Parse margin lines fetched from the .xsl file.'''
-        margin_lines = self.get_margin_lines()
-        # print >>sys.stderr, util.lineno(), margin_lines
-        for key, value in margin_lines.items():
-            if ('all' in value and ('odd' in value or 'even' in value) or
-                    '=' not in value):
-                raise ConversionException(
-                    'Invalid format in the variable {} in the file:\n{}\n{}\n'
-                    'Format must be [all|odd|even|pagenumber]=integer'.format(
-                        key, self.xsl, value))
-            try:
-                self.margins[key] = self.parse_margin_line(value)
-            except ValueError:
-                raise ConversionException(
-                    'Invalid format in the variable {} in the file:\n{}\n{}\n'
-                    'Format must be [all|odd|even|pagenumber]=integer'.format(
-                        key, self.xsl, value))
-
-        # print >>sys.stderr, util.lineno(), margins
-
-    def parse_margin_line(self, value):
-        '''Parse a margin line read from the .xsl file.
-
-        :param value: a string containing the margin settings for a particular
-        margin (right_margin, left_margin, top_margin, bottom_margin)
-
-        :returns: a dict containing the margins for pages in percent
-        '''
-        m = {}
-        for part in value.split(','):
-            (pages, margin) = tuple(part.split('='))
-            for page in pages.split(';'):
-                m[page.strip()] = int(margin)
-
-        return m
-
     def get_coefficient(self, margin, page_number):
         '''Get the width of the margin in percent'''
         coefficient = 7
-        if margin in self.margins.keys():
-            m = self.margins[margin]
+        if margin in self.md.margins.keys():
+            m = self.md.margins[margin]
             if m.get(page_number) is not None:
                 coefficient = m[page_number.strip()]
             elif m.get('all') is not None:
