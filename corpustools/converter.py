@@ -995,14 +995,14 @@ class PDF2XMLConverter(Converter):
 
     def extract_text_from_page(self, page):
         for t in page.iter('text'):
-            if self.prev_t is not None:
-                if not self.is_same_paragraph(t):
-                    # print(util.lineno(), \, file=sys.stderr)
-                    # etree.tostring(self.prev_t, encoding='utf8'), \
-                    # etree.tostring(t, encoding='utf8')
-                    if len(self.parts) > 0:
-                        self.append_to_body(self.make_paragraph())
-            if len(t) > 0 or t.text is not None:
+            if len(t.xpath("string()").strip()) > 0:
+                if self.prev_t is not None:
+                    if not self.is_same_paragraph(t):
+                        # print(util.lineno(), \, file=sys.stderr)
+                        # etree.tostring(self.prev_t, encoding='utf8'), \
+                        # etree.tostring(t, encoding='utf8')
+                        if len(self.parts) > 0:
+                            self.append_to_body(self.make_paragraph())
                 self.extract_textelement(t)
                 self.prev_t = t
                 # print(util.lineno(), self.parts, file=sys.stderr)
