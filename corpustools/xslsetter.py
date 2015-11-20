@@ -198,7 +198,7 @@ class MetadataHandler(object):
                 if sorted(_inner_margins['inner_left_margin']) != sorted(_inner_margins['inner_right_margin']):
                     raise XsltException('Invalid format in {}: both '
                         'margins for the same pages must be set in inner_right_margin and inner_left_margin'.format(self.filename))
-            if key == 'inner_right_margin' and 'left_inner_margin' not in keys:
+            if key == 'inner_right_margin' and 'inner_left_margin' not in keys:
                 raise XsltException('Invalid format in {}: both inner_right_margin '
                     'and inner_left_margin must be set'.format(self.filename))
             if key == 'inner_bottom_margin':

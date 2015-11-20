@@ -179,3 +179,14 @@ class TestMetadataHandler(unittest.TestCase):
         self.assertEqual(md.inner_margins,
                          {u'inner_bottom_margin': {u'5': 30, u'6': 50},
                           u'inner_top_margin': {u'5': 20, u'6': 20}})
+
+    def test_inner_margin4(self):
+        '''Test whether a correctly set inner margin gives the wanted result'''
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('inner_left_margin', '6=20, 5=20')
+        md.set_variable('inner_right_margin', '5=30, 6=50')
+
+        self.assertEqual(md.inner_margins,
+                         {u'inner_right_margin': {u'5': 30, u'6': 50},
+                          u'inner_left_margin': {u'5': 20, u'6': 20}})
+
