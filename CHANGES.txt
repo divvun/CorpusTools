@@ -47,3 +47,4 @@ v<0.11.3>, <20151117> -- Fix more footnote superscript omissions. Related to bug
 v<0.11.4>, <20151118> -- Added inner_margins. Fixes bug 2104.
 v<0.11.5>, <20151118> -- Fixes bug 2115.
 v<0.11.6>, <20151120> -- In pdf files, do not try to extract text from text elements only containg whitespace. Fixes bug 2111.
+v<0.11.7>, <20151123> -- Make parallelize work correctly again.
