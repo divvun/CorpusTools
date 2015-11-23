@@ -290,6 +290,7 @@ class SentenceDivider(object):
         If the process fails, exit the program
         """
         preprocess_command = util.get_preprocess_command(self.doc_lang)
+        preprocess_command.append('--xml')
 
         subp = subprocess.Popen(preprocess_command,
                                 stdin=subprocess.PIPE,
