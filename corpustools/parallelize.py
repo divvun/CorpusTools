@@ -412,7 +412,7 @@ class Parallelize(object):
         if path is None:
             path = os.path.join(os.environ['GTHOME'],
                                 'gt/common/src/anchor.txt')
-            cols = ['eng', 'nob', 'sme', 'fin', 'smj', 'sma']
+            cols = ['eng', 'nob', 'sme', 'fin', 'smj', 'sma', 'sms']
             for l in {self.get_lang1(), self.get_lang2()} - set(cols):
                 util.note("WARNING: {} not supported by default anchor "
                           "list.".format(l))
@@ -1063,7 +1063,6 @@ def main():
                                            lang2=args.parallel_language,
                                            anchor_file=args.dict,
                                            quiet=args.quiet)
-
     except IOError as e:
         print(e.message)
         sys.exit(1)
