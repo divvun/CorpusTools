@@ -19,71 +19,54 @@
 #
 
 from __future__ import print_function
-from __future__ import unicode_literals
 
-import doctest
-from lxml import doctestcompare
-from lxml import etree
 import os
-import tempfile
 import unittest
 
-from corpustools import generate_anchor_list
 from corpustools import parallelize
-from corpustools import text_cat
+from corpustools import pick-parallel-docs
 
 
 here = os.path.dirname(__file__)
 
 
-def PrintFrame(input = "empty"):
-    """
-    Print debug output
-    """
-    callerframerecord = inspect.stack()[1]    # 0 represents this line
-                                                # 1 represents line at caller
-    frame = callerframerecord[0]
-    info = inspect.getframeinfo(frame)
-
-    print(info.lineno, info.function, input)
-
 class TestParallelPicker(unittest.TestCase):
     def setUp(self):
-        self.language1ConvertedDir = os.path.join(os.environ['GTHOME'], 'gt/script/langTools/fakecorpus/converted/sme')
+        self.language1_converted_dir = os.path.join(os.environ['GTHOME'], 'gt/script/langTools/fakecorpus/converted/sme')
 
-        self.pp = ParallelPicker(self.language1ConvertedDir, 'nob', '73', '110')
+        self.pp = ParallelPicker(self.language1_converted_dir, 'nob', '73', '110')
 
-    def testCalculateLanguage1(self):
-        self.pp.calculateLanguage1(self.language1ConvertedDir)
+    def test_calculate_language1(self):
+        self.pp.calculate_language1(self.language1_converted_dir)
         self.assertEqual(self.pp.getLanguage1(), 'sme')
 
-    def testGetParallelLanguage(self):
-        self.assertEqual(self.pp.getParallelLanguage(), 'nob')
+    def test_get_parallel_language(self):
+        self.assertEqual(self.pp.get_parallel_language(), 'nob')
 
-    def testHasOrig(self):
-        fileWithOrig1 = parallelize.CorpusXMLFile(os.path.join(self.language1ConvertedDir, 'samediggi-article-47.html.xml'), self.pp.getParallelLanguage())
-        self.assertEqual(self.pp.hasOrig(fileWithOrig1), True)
+    def test_has_orig(self):
+        file_with_orig1 = parallelize.CorpusXMLFile(os.path.join(self.language1_converted_dir, 'samediggi-article-47.html.xml'), self.pp.get_parallel_language())
+        self.assertEqual(self.pp.has_orig(file_with_orig1), True)
 
-        language1PrestableConvertedDir = os.path.join(os.environ['GTHOME'], 'gt/script/langTools/fakecorpus/prestable/converted/sme')
-        fileWithOrig2 = parallelize.CorpusXMLFile(os.path.join(language1PrestableConvertedDir, 'samediggi-article-47.html.xml'), self.pp.getParallelLanguage())
-        self.assertEqual(self.pp.hasOrig(fileWithOrig2), True)
+        language1_prestable_converted_dir = os.path.join(os.environ['GTHOME'], 'gt/script/langTools/fakecorpus/prestable/converted/sme')
+        file_with_orig2 = parallelize.CorpusXMLFile(os.path.join(language1_prestable_converted_dir, 'samediggi-article-47.html.xml'), self.pp.get_parallel_language())
+        self.assertEqual(self.pp.has_orig(file_with_orig2), True)
 
-        fileWithoutOrig1 = parallelize.CorpusXMLFile(os.path.join(self.language1ConvertedDir, 'samediggi-article-1.html.xml'), self.pp.getParallelLanguage())
-        self.assertEqual(self.pp.hasOrig(fileWithoutOrig1), False)
+        file_without_orig1 = parallelize.CorpusXMLFile(os.path.join(self.language1_converted_dir, 'samediggi-article-1.html.xml'), self.pp.get_parallel_language())
+        self.assertEqual(self.pp.has_orig(file_without_orig1), False)
 
-        fileWithoutOrig2 = parallelize.CorpusXMLFile(os.path.join(language1PrestableConvertedDir, 'samediggi-article-1.html.xml'), self.pp.getParallelLanguage())
-        self.assertEqual(self.pp.hasOrig(fileWithoutOrig2), False)
+        file_without_orig2 = parallelize.CorpusXMLFile(os.path.join(language1_prestable_converted_dir, 'samediggi-article-1.html.xml'), self.pp.get_parallel_language())
+        self.assertEqual(self.pp.has_orig(file_without_orig2), False)
 
-    def testHasParallel(self):
-        fileWithParallel1 = parallelize.CorpusXMLFile(os.path.join(self.language1ConvertedDir, 'samediggi-article-47.html.xml'), self.pp.getParallelLanguage())
-        self.assertEqual(self.pp.hasParallel(fileWithParallel1), True)
+    def test_has_parallel(self):
+        file_with_parallel1 = parallelize.CorpusXMLFile(os.path.join(self.language1_converted_dir, 'samediggi-article-47.html.xml'), self.pp.get_parallel_language())
+        self.assertEqual(self.pp.has_parallel(file_with_parallel1), True)
 
-        language1PrestableConvertedDir = os.path.join(os.environ['GTHOME'], 'gt/script/langTools/fakecorpus/prestable/converted/sme')
-        fileWithParallel2 = parallelize.CorpusXMLFile(os.path.join(language1PrestableConvertedDir, 'samediggi-article-47.html.xml'), self.pp.getParallelLanguage())
-        self.assertEqual(self.pp.hasParallel(fileWithParallel2), True)
+        language1_prestable_converted_dir = os.path.join(os.environ['GTHOME'], 'gt/script/langTools/fakecorpus/prestable/converted/sme')
+        file_with_parallel2 = parallelize.CorpusXMLFile(os.path.join(language1_prestable_converted_dir, 'samediggi-article-47.html.xml'), self.pp.get_parallel_language())
+        self.assertEqual(self.pp.has_parallel(file_with_parallel2), True)
 
-        fileWithoutParallel1 = parallelize.CorpusXMLFile(os.path.join(self.language1ConvertedDir, 'samediggi-article-53.html.xml'), self.pp.getParallelLanguage())
-        self.assertEqual(self.pp.hasParallel(fileWithoutParallel1), False)
+        file_without_parallel1 = parallelize.CorpusXMLFile(os.path.join(self.language1_converted_dir, 'samediggi-article-53.html.xml'), self.pp.get_parallel_language())
+        self.assertEqual(self.pp.has_parallel(file_without_parallel1), False)
 
-        fileWithoutParallel2 = parallelize.CorpusXMLFile(os.path.join(language1PrestableConvertedDir, 'samediggi-article-53.html.xml'), self.pp.getParallelLanguage())
-        self.assertEqual(self.pp.hasParallel(fileWithoutParallel2), False)
+        file_without_parallel2 = parallelize.CorpusXMLFile(os.path.join(language1_prestable_converted_dir, 'samediggi-article-53.html.xml'), self.pp.get_parallel_language())
+        self.assertEqual(self.pp.has_parallel(file_without_parallel2), False)
