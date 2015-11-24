@@ -35,6 +35,8 @@ class ParallelPicker:
         self.language1_dir = language1_dir
         self.calculate_language1(language1_dir)
         self.parallel_language = parallel_language
+        self.parallel_files = 0
+        self.copied_files = 0
         self.minratio = minratio
         self.maxratio = maxratio
         self.old_files = []
@@ -226,14 +228,13 @@ class ParallelPicker:
     def one_file_translated_from(self, language1_file, parallel_file):
         if (language1_file.get_translated_from() == self.parallel_language or
                 parallel_file.get_translated_from() == language1_file.get_lang()):
-            if self.valid_diff(language1_file, parallel_file.get_lang()):
+            if (self.valid_diff(language1_file, parallel_file.get_lang()) and
+                self.valid_diff(parallel_file, language1_file.get_lang())):
+                self.copied_files += 1
                 self.add_changed_file(language1_file)
                 self.copy_file(language1_file)
-
-            if self.valid_diff(parallel_file, language1_file.get_lang()):
                 self.add_changed_file(parallel_file)
                 self.copy_file(parallel_file)
-
         else:
             # print ("None of the files are translations of the other", language1_file.get_name(), parallel_file.get_name())
             self.add_no_files_translations(language1_file, parallel_file)
@@ -246,6 +247,7 @@ class ParallelPicker:
             # print('.', end='')
 
             if self.has_parallel(language1_file):
+                self.parallel_files += 1
                 parallel_file = parallelize.CorpusXMLFile(
                     language1_file.get_parallel_filename(self.parallel_language))
 
@@ -314,6 +316,8 @@ class ParallelPicker:
         for old_file in self.old_files:
             self.remove_file(old_file)
 
+        print('Out of', self.parallel_files, 'parallel files')
+        print(self.copied_files, 'were deemed good enough')
         print(len(self.old_files), 'of the original prestable files were deleted')
         print(len(self.no_orig), 'of the original prestable files had no original file')
         print(len(self.no_parallel), 'of the original prestable files had no original file')
