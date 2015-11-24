@@ -155,15 +155,15 @@ class ParallelPicker:
         """
         Check if the given file has a parallel file
         """
-
-        return language1_file.get_parallel_filename(self.parallel_language) is not None and os.path.isfile(language1_file.get_parallel_filename(self.parallel_language))
+        parallel_name = language1_file.get_parallel_filename(self.parallel_language)
+        return parallel_name is not None and os.path.isfile(parallel_name)
 
     def has_orig(self, language1_file):
         """
         Check if the given file has an original file
         """
-
-        return language1_file.get_original_filename() is not None and os.path.isfile(language1_file.get_original_filename())
+        orig_name = language1_file.get_original_filename()
+        return orig_name is not None and os.path.isfile(orig_name)
 
     def has_sufficient_words(self, language1_file, parallel_file):
         """
