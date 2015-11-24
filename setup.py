@@ -37,6 +37,7 @@ setup(
             'toktmx2tmx = corpustools.toktmx2tmx:main',
             'duperemover = corpustools.dupe_finder:main',
             'dupefinder = corpustools.dupe_finder:find',
+            'pick_parallel_docs = corpustools.pick_parallel_docs:main',
         ]
     },
     install_requires=[
