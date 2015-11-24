@@ -59,14 +59,14 @@ class TestParallelPicker(unittest.TestCase):
 
     def test_has_parallel(self):
         file_with_parallel1 = parallelize.CorpusXMLFile(os.path.join(self.language1_converted_dir, 'samediggi-article-47.html.xml'))
-        self.assertEqual(self.pp.has_parallel(file_with_parallel1, 'nob'), True)
+        self.assertEqual(self.pp.has_parallel(file_with_parallel1), True)
 
         language1_prestable_converted_dir = os.path.join(here, 'pick_parallel_docs/prestable/converted/sme/admin')
         file_with_parallel2 = parallelize.CorpusXMLFile(os.path.join(language1_prestable_converted_dir, 'samediggi-article-47.html.xml'))
-        self.assertEqual(self.pp.has_parallel(file_with_parallel2, 'nob'), True)
+        self.assertEqual(self.pp.has_parallel(file_with_parallel2), True)
 
         file_without_parallel1 = parallelize.CorpusXMLFile(os.path.join(self.language1_converted_dir, 'samediggi-article-53.html.xml'))
-        self.assertEqual(self.pp.has_parallel(file_without_parallel1, 'nob'), False)
+        self.assertEqual(self.pp.has_parallel(file_without_parallel1), False)
 
         file_without_parallel2 = parallelize.CorpusXMLFile(os.path.join(language1_prestable_converted_dir, 'samediggi-article-53.html.xml'))
-        self.assertEqual(self.pp.has_parallel(file_without_parallel2, 'nob'), False)
+        self.assertEqual(self.pp.has_parallel(file_without_parallel2), False)
