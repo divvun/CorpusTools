@@ -44,29 +44,29 @@ class TestParallelPicker(unittest.TestCase):
         self.assertEqual(self.pp.get_parallel_language(), 'nob')
 
     def test_has_orig(self):
-        file_with_orig1 = parallelize.CorpusXMLFile(os.path.join(self.language1_converted_dir, 'samediggi-article-47.html.xml'), self.pp.get_parallel_language())
+        file_with_orig1 = parallelize.CorpusXMLFile(os.path.join(self.language1_converted_dir, 'samediggi-article-47.html.xml'))
         self.assertEqual(self.pp.has_orig(file_with_orig1), True)
 
         language1_prestable_converted_dir = os.path.join(os.environ['GTHOME'], 'gt/script/langTools/fakecorpus/prestable/converted/sme')
-        file_with_orig2 = parallelize.CorpusXMLFile(os.path.join(language1_prestable_converted_dir, 'samediggi-article-47.html.xml'), self.pp.get_parallel_language())
+        file_with_orig2 = parallelize.CorpusXMLFile(os.path.join(language1_prestable_converted_dir, 'samediggi-article-47.html.xml'))
         self.assertEqual(self.pp.has_orig(file_with_orig2), True)
 
-        file_without_orig1 = parallelize.CorpusXMLFile(os.path.join(self.language1_converted_dir, 'samediggi-article-1.html.xml'), self.pp.get_parallel_language())
+        file_without_orig1 = parallelize.CorpusXMLFile(os.path.join(self.language1_converted_dir, 'samediggi-article-1.html.xml'))
         self.assertEqual(self.pp.has_orig(file_without_orig1), False)
 
-        file_without_orig2 = parallelize.CorpusXMLFile(os.path.join(language1_prestable_converted_dir, 'samediggi-article-1.html.xml'), self.pp.get_parallel_language())
+        file_without_orig2 = parallelize.CorpusXMLFile(os.path.join(language1_prestable_converted_dir, 'samediggi-article-1.html.xml'))
         self.assertEqual(self.pp.has_orig(file_without_orig2), False)
 
     def test_has_parallel(self):
-        file_with_parallel1 = parallelize.CorpusXMLFile(os.path.join(self.language1_converted_dir, 'samediggi-article-47.html.xml'), self.pp.get_parallel_language())
+        file_with_parallel1 = parallelize.CorpusXMLFile(os.path.join(self.language1_converted_dir, 'samediggi-article-47.html.xml'))
         self.assertEqual(self.pp.has_parallel(file_with_parallel1), True)
 
         language1_prestable_converted_dir = os.path.join(os.environ['GTHOME'], 'gt/script/langTools/fakecorpus/prestable/converted/sme')
-        file_with_parallel2 = parallelize.CorpusXMLFile(os.path.join(language1_prestable_converted_dir, 'samediggi-article-47.html.xml'), self.pp.get_parallel_language())
+        file_with_parallel2 = parallelize.CorpusXMLFile(os.path.join(language1_prestable_converted_dir, 'samediggi-article-47.html.xml'))
         self.assertEqual(self.pp.has_parallel(file_with_parallel2), True)
 
-        file_without_parallel1 = parallelize.CorpusXMLFile(os.path.join(self.language1_converted_dir, 'samediggi-article-53.html.xml'), self.pp.get_parallel_language())
+        file_without_parallel1 = parallelize.CorpusXMLFile(os.path.join(self.language1_converted_dir, 'samediggi-article-53.html.xml'))
         self.assertEqual(self.pp.has_parallel(file_without_parallel1), False)
 
-        file_without_parallel2 = parallelize.CorpusXMLFile(os.path.join(language1_prestable_converted_dir, 'samediggi-article-53.html.xml'), self.pp.get_parallel_language())
+        file_without_parallel2 = parallelize.CorpusXMLFile(os.path.join(language1_prestable_converted_dir, 'samediggi-article-53.html.xml'))
         self.assertEqual(self.pp.has_parallel(file_without_parallel2), False)
