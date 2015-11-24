@@ -38,7 +38,7 @@ class TestParallelPicker(unittest.TestCase):
 
     def test_calculate_language1(self):
         self.pp.calculate_language1(self.language1_converted_dir)
-        self.assertEqual(self.pp.getLanguage1(), 'sme')
+        self.assertEqual(self.pp.get_language1(), 'sme')
 
     def test_get_parallel_language(self):
         self.assertEqual(self.pp.get_parallel_language(), 'nob')

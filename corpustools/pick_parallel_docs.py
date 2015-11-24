@@ -176,7 +176,7 @@ class ParallelPicker:
         Check if the given file has an original file
         """
 
-        return language1_file.getOriginalFilename() is not None and os.path.isfile(language1_file.getOriginalFilename())
+        return language1_file.get_original_filename() is not None and os.path.isfile(language1_file.get_original_filename())
 
     def has_sufficient_words(self, language1_file, parallel_file):
         """
