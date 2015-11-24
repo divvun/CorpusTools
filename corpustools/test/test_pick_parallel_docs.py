@@ -24,7 +24,7 @@ import os
 import unittest
 
 from corpustools import parallelize
-from corpustools import pick-parallel-docs
+from corpustools import pick_parallel_docs
 
 
 here = os.path.dirname(__file__)
@@ -34,7 +34,7 @@ class TestParallelPicker(unittest.TestCase):
     def setUp(self):
         self.language1_converted_dir = os.path.join(os.environ['GTHOME'], 'gt/script/langTools/fakecorpus/converted/sme')
 
-        self.pp = ParallelPicker(self.language1_converted_dir, 'nob', '73', '110')
+        self.pp = pick_parallel_docs.ParallelPicker(self.language1_converted_dir, 'nob', '73', '110')
 
     def test_calculate_language1(self):
         self.pp.calculate_language1(self.language1_converted_dir)
