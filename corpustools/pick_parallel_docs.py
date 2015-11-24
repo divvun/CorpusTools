@@ -127,7 +127,7 @@ class ParallelPicker:
             for f in files:
                 if f.endswith('.xml'):
                     # PrintFrame(os.path.join(root, f))
-                    corpus_file = parallelize.CorpusXMLFile(os.path.join(root, f), self.get_parallel_language())
+                    corpus_file = parallelize.CorpusXMLFile(os.path.join(root, f))
                     self.check_prestable_file(corpus_file)
 
         l2prestable_dir = prestable_dir.replace('/' + self.get_language1(), '/' + self.get_parallel_language())
@@ -136,7 +136,7 @@ class ParallelPicker:
             for f in files:
                 if f.endswith('.xml'):
                     # PrintFrame(os.path.join(root, f))
-                    corpus_file = parallelize.CorpusXMLFile(os.path.join(root, f), self.get_language1())
+                    corpus_file = parallelize.CorpusXMLFile(os.path.join(root, f))
                     self.check_prestable_file(corpus_file)
 
     def find_lang1_files(self):
@@ -147,7 +147,7 @@ class ParallelPicker:
         for root, dirs, files in os.walk(self.language1_dir):  # Walk directory tree
             for f in files:
                 if f.endswith('.xml'):
-                    language1_files.append(parallelize.CorpusXMLFile(root + '/' + f, self.parallel_language))
+                    language1_files.append(parallelize.CorpusXMLFile(os.path.join(root, f)))
 
         return language1_files
 
@@ -246,8 +246,8 @@ class ParallelPicker:
             # print('.', end='')
 
             if self.has_parallel(language1_file):
-
-                parallel_file = parallelize.CorpusXMLFile(language1_file.get_parallel_filename(), language1_file.get_lang())
+                parallel_file = parallelize.CorpusXMLFile(
+                    language1_file.get_parallel_filename(self.parallel_language))
 
                 # PrintFrame(language1_file.get_name() + ' ' + language1_file.get_word_count())
                 # PrintFrame(parallel_file.get_name() + ' ' + parallel_file.get_word_count())
@@ -348,12 +348,8 @@ def parse_options():
 def main():
     args = parse_options()
 
-    language1_dir = args.language1_dir
-    parallel_language = args.parallel_language
-    minratio = args.minratio
-    maxratio = args.maxratio
-
-    pp = ParallelPicker(language1_dir, parallel_language, minratio, maxratio)
+    pp = ParallelPicker(args.language1_dir, args.parallel_language,
+                        args.minratio, args.maxratio)
     pp.get_old_file_names()
     pp.traverse_files()
     pp.treat_lists()
