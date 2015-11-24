@@ -24,10 +24,12 @@
 from __future__ import print_function
 import os
 import argparse
-import parallelize
 from lxml import etree
 from lxml import doctestcompare
 import shutil
+
+from corpustools import parallelize
+from corpustools import util
 
 
 class ParallelPicker:
@@ -107,8 +109,8 @@ class ParallelPicker:
             self.remove_file(corpus_file.get_name())
 
             if self.has_parallel(corpus_file):
-                self.add_no_orig(corpus_file.get_parallel_filename())
-                self.remove_file(corpus_file.get_parallel_filename())
+                self.add_no_orig(corpus_file.get_parallel_filename(self.parallel_language))
+                self.remove_file(corpus_file.get_parallel_filename(self.parallel_language))
 
         elif not self.has_parallel(corpus_file):
             self.add_no_parallel(corpus_file.get_name())
@@ -210,7 +212,7 @@ class ParallelPicker:
     def add_changed_file(self, corpus_file):
         self.changed_files.append(corpus_file.get_name())
         prestable_filename = corpus_file.get_name().replace('converted/', 'prestable/converted/')
-        print(prestable_filename)
+        util.print_frame(debug=prestable_filename)
 
         if prestable_filename in self.old_files:
             self.old_files.remove(prestable_filename)
@@ -270,7 +272,7 @@ class ParallelPicker:
         prestable_filename = converted_file.get_name().replace('converted/', 'prestable/converted/')
 
         if os.path.isfile(prestable_filename):
-            prestable_file = parallelize.CorpusXMLFile(prestable_filename, parallel_language)
+            prestable_file = parallelize.CorpusXMLFile(prestable_filename)
 
             prestable_file.remove_version()
             converted_file.remove_version()
@@ -301,7 +303,7 @@ class ParallelPicker:
         """
         Copy xml_file to prestable/converted
         """
-        prestable_dir = xml_file.getDirname().replace('converted/', 'prestable/converted/')
+        prestable_dir = xml_file.get_dirname().replace('converted/', 'prestable/converted/')
 
         if not os.path.isdir(prestable_dir):
             try:
