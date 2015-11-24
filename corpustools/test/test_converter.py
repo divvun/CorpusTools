@@ -3996,12 +3996,13 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.md.set_variable('inner_bottom_margin', '8=40')
         page = etree.fromstring(
             '\n'.join([
-            '<page number="8" height="1263" width="862">',
-            '<text top="500" left="80" width="512" height="19" font="0">1</text>'
-            '<text top="600" left="80" width="512" height="19" font="0">2</text>'
-            '<text top="800" left="80" width="512" height="19" font="0">3</text>'
-            '</page>'
-        ]))
+                '<page number="8" height="1263" width="862">',
+                '<text top="500" left="80" width="512" height="19" font="0">1</text>'
+                '<text top="600" left="80" width="512" height="19" font="0">2</text>'
+                '<text top="800" left="80" width="512" height="19" font="0">3</text>'
+                '</page>'
+            ])
+        )
         p2x.remove_elements_not_within_margin(page)
         page_want = '\n'.join([
             '<page number="8" height="1263" width="862">',
@@ -4019,12 +4020,13 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.md.set_variable('inner_bottom_margin', '1=40')
         page = etree.fromstring(
             '\n'.join([
-            '<page number="8" height="1263" width="862">',
-            '<text top="500" left="80" width="512" height="19" font="0">1</text>'
-            '<text top="600" left="80" width="512" height="19" font="0">2</text>'
-            '<text top="800" left="80" width="512" height="19" font="0">3</text>'
-            '</page>'
-        ]))
+                '<page number="8" height="1263" width="862">',
+                '<text top="500" left="80" width="512" height="19" font="0">1</text>'
+                '<text top="600" left="80" width="512" height="19" font="0">2</text>'
+                '<text top="800" left="80" width="512" height="19" font="0">3</text>'
+                '</page>'
+            ])
+        )
         p2x.remove_elements_not_within_margin(page)
         page_want = '\n'.join([
             '<page number="8" height="1263" width="862">',

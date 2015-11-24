@@ -146,7 +146,6 @@ class TestMetadataHandler(unittest.TestCase):
         self.assertEqual(md.margins, {
             'right_margin': {'1': 50, '2': 30, '3': 50}})
 
-
     def test_inner_margin1(self):
         '''Raise exception if inner_right is set and not inner_left'''
         for p in ['top', 'bottom', 'right', 'left']:
@@ -189,4 +188,3 @@ class TestMetadataHandler(unittest.TestCase):
         self.assertEqual(md.inner_margins,
                          {u'inner_right_margin': {u'5': 30, u'6': 50},
                           u'inner_left_margin': {u'5': 20, u'6': 20}})
-

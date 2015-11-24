@@ -192,25 +192,31 @@ class MetadataHandler(object):
         for key in keys:
             if key == 'inner_left_margin':
                 if 'inner_right_margin' not in keys:
-                    raise XsltException('Invalid format in {}: both '
+                    raise XsltException(
+                        'Invalid format in {}:\nboth '
                         'inner_right_margin and inner_left_margin must '
                         'be set'.format(self.filename))
                 if sorted(_inner_margins['inner_left_margin']) != sorted(_inner_margins['inner_right_margin']):
-                    raise XsltException('Invalid format in {}: both '
+                    raise XsltException(
+                        'Invalid format in {}:\nboth '
                         'margins for the same pages must be set in inner_right_margin and inner_left_margin'.format(self.filename))
             if key == 'inner_right_margin' and 'inner_left_margin' not in keys:
-                raise XsltException('Invalid format in {}: both inner_right_margin '
+                raise XsltException(
+                    'Invalid format in {}:\nboth inner_right_margin '
                     'and inner_left_margin must be set'.format(self.filename))
             if key == 'inner_bottom_margin':
                 if 'inner_top_margin' not in keys:
-                    raise XsltException('Invalid format in {}: both '
+                    raise XsltException(
+                        'Invalid format in {}:\nboth '
                         'inner_bottom_margin and inner_top_margin must '
                         'be set'.format(self.filename))
                 if sorted(_inner_margins['inner_bottom_margin']) != sorted(_inner_margins['inner_top_margin']):
-                    raise XsltException('Invalid format in {}: '
+                    raise XsltException(
+                        'Invalid format in {}:\n'
                         'margins for the same pages must be set in inner_top_margin and inner_bottom_margin'.format(self.filename))
             if key == 'inner_top_margin' and 'inner_bottom_margin' not in keys:
-                raise XsltException('Invalid format in {}: both inner_bottom_margin '
+                raise XsltException(
+                    'Invalid format in {}:\nboth inner_bottom_margin '
                     'and inner_top_margin must be set'.format(self.filename))
 
         return _inner_margins
