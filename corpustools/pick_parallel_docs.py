@@ -28,6 +28,7 @@ from lxml import etree
 from lxml import doctestcompare
 import shutil
 
+from corpustools import argparse_version
 from corpustools import parallelize
 from corpustools import util
 
@@ -340,7 +341,9 @@ class ParallelPicker:
 
 
 def parse_options():
-    parser = argparse.ArgumentParser(description='Pick out parallel files from converted to prestable/converted.')
+    parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
+        description='Pick out parallel files from converted to prestable/converted.')
 
     parser.add_argument('language1_dir', help="directory where the files of language1 exist")
     parser.add_argument('-p', '--parallel_language', dest='parallel_language', help="The language where we would like to find parallel documents", required=True)
