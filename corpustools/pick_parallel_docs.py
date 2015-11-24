@@ -28,19 +28,6 @@ import parallelize
 from lxml import etree
 from lxml import doctestcompare
 import shutil
-import inspect
-
-
-def print_frame(input="empty"):
-    """
-    Print debug output
-    """
-    # 0 represents this line, 1 represents line at caller
-    callerframerecord = inspect.stack()[1]
-    frame = callerframerecord[0]
-    info = inspect.getframeinfo(frame)
-
-    print(info.lineno, info.function, input)
 
 
 class ParallelPicker:

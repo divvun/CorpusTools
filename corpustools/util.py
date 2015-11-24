@@ -46,6 +46,16 @@ class ArgumentError(Exception):
     pass
 
 
+def print_frame(debug=''):
+    """Print debug output"""
+    # 0 represents this line, 1 represents line at caller
+    callerframerecord = inspect.stack()[1]
+    frame = callerframerecord[0]
+    info = inspect.getframeinfo(frame)
+
+    print(info.lineno, info.function, info.filename, debug, file=sys.stderr)
+
+
 def basename_noext(fname, ext):
     return os.path.basename(fname)[:-len(ext)]
 
