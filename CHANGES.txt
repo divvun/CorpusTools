@@ -49,3 +49,4 @@ v<0.11.5>, <20151118> -- Fixes bug 2115.
 v<0.11.6>, <20151120> -- In pdf files, do not try to extract text from text elements only containg whitespace. Fixes bug 2111.
 v<0.11.7>, <20151123> -- Make parallelize work correctly again.
 v<0.12.0>, <20151123> -- Added support for sms in parallelize.
+v<0.13.0>, <20151124> -- Add the script pick_parallel_docs
