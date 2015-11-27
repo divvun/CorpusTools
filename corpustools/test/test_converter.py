@@ -3762,10 +3762,6 @@ class TestPDF2XMLConverter(XMLTester):
         want = u'<body><p>1.</p><p>2.</p><p>3.</p></body>'
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.md.set_variable('right_margin', 'all=7')
-        p2x.md.set_variable('left_margin', 'all=7')
-        p2x.md.set_variable('top_margin', 'all=7')
-        p2x.md.set_variable('bottom_margin', 'all=7')
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
@@ -3787,10 +3783,6 @@ class TestPDF2XMLConverter(XMLTester):
         want = u'<body><p>2.</p><p>3.</p></body>'
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.md.set_variable('right_margin', 'all=7')
-        p2x.md.set_variable('left_margin', 'all=7')
-        p2x.md.set_variable('top_margin', 'all=7')
-        p2x.md.set_variable('bottom_margin', 'all=7')
         p2x.md.set_variable('skip_pages', '1')
         p2x.parse_pages(pdf2xml)
 
