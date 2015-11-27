@@ -898,6 +898,7 @@ class PDF2XMLConverter(Converter):
 
                 self.parts.append(em)
         # print(util.lineno(), self.parts, file=sys.stderr)
+        self.prev_t = textelement
 
     def is_text_on_same_line(self, text):
         if self.prev_t is None:
@@ -1008,7 +1009,6 @@ class PDF2XMLConverter(Converter):
         for t in page.iter('text'):
             if self.is_text_on_same_line(t):
                 self.extract_textelement(t)
-                self.prev_t = t
             else:
                 if len(t.xpath("string()").strip()) > 0:
                     if self.prev_t is not None:
@@ -1019,7 +1019,6 @@ class PDF2XMLConverter(Converter):
                             if len(self.parts) > 0:
                                 self.append_to_body(self.make_paragraph())
                     self.extract_textelement(t)
-                    self.prev_t = t
                     # print(util.lineno(), self.parts, file=sys.stderr)
 
     def is_inside_margins(self, t, margins):
