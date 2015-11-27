@@ -989,11 +989,26 @@ class PDF2XMLConverter(Converter):
                     int(superscript.get('top'))):
                 superscript.getparent().remove(superscript)
 
+    def get_last_string(self):
+        '''Get the last string of self.parts'''
+        if (isinstance(self.parts[-1], unicode) or
+                isinstance(self.parts[-1], str)):
+            return self.parts[-1]
+        else:
+            return self.parts[-1].xpath("string()")
+
     def parse_page(self, page):
         '''Parse the page element.'''
         self.remove_elements_not_within_margin(page)
         self.remove_footnotes_superscript(page)
         self.extract_text_from_page(page)
+
+        # If the last string on a page is the end of a sentence,
+        # wrap self.parts into a paragraph
+        if len(self.parts) > 0:
+            last_string = self.get_last_string()
+            if re.search(u'[\.]$', last_string):
+                self.append_to_body(self.make_paragraph())
 
     def remove_elements_not_within_margin(self, page):
         margins = self.compute_margins(page)
