@@ -1011,15 +1011,11 @@ class PDF2XMLConverter(Converter):
                 self.extract_textelement(t)
             else:
                 if len(t.xpath("string()").strip()) > 0:
-                    if self.prev_t is not None:
-                        if not self.is_same_paragraph(t):
-                            # print(util.lineno(), \, file=sys.stderr)
-                            # etree.tostring(self.prev_t, encoding='utf8'), \
-                            # etree.tostring(t, encoding='utf8')
-                            if len(self.parts) > 0:
-                                self.append_to_body(self.make_paragraph())
+                    if (self.prev_t is not None and
+                            not self.is_same_paragraph(t) and
+                            len(self.parts) > 0):
+                        self.append_to_body(self.make_paragraph())
                     self.extract_textelement(t)
-                    # print(util.lineno(), self.parts, file=sys.stderr)
 
     def is_inside_margins(self, t, margins):
         '''Check if t is inside the given margins
