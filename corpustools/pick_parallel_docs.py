@@ -232,7 +232,7 @@ class ParallelPicker:
         if (language1_file.get_translated_from() == self.parallel_language or
                 parallel_file.get_translated_from() == language1_file.get_lang()):
             if (self.valid_diff(language1_file, parallel_file.get_lang()) and
-                self.valid_diff(parallel_file, language1_file.get_lang())):
+                    self.valid_diff(parallel_file, language1_file.get_lang())):
                 self.copied_files += 1
                 self.add_changed_file(language1_file)
                 self.copy_file(language1_file)

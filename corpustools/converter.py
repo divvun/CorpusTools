@@ -745,9 +745,9 @@ class PDF2XMLConverter(Converter):
                                   'inner_top_margin', 'inner_bottom_margin']}
 
         if (margins['inner_bottom_margin'] == int(page.get('height')) and
-            margins['inner_top_margin'] == 0 and
-            margins['inner_left_margin'] == 0 and
-            margins['inner_right_margin'] == int(page.get('width'))):
+                margins['inner_top_margin'] == 0 and
+                margins['inner_left_margin'] == 0 and
+                margins['inner_right_margin'] == int(page.get('width'))):
             margins = {}
 
         return margins
@@ -905,7 +905,6 @@ class PDF2XMLConverter(Converter):
             return True
 
         h1 = float(self.prev_t.get('height'))
-        h2 = float(text.get('height'))
         t1 = float(self.prev_t.get('top'))
         t2 = float(text.get('top'))
 
@@ -1055,9 +1054,9 @@ class PDF2XMLConverter(Converter):
     @staticmethod
     def is_skip_page(page_number, skip_pages):
         '''True if a page should be skipped, otherwise false'''
-        return ('odd' in skip_pages and (page_number % 2) == 1) or \
-            ('even' in skip_pages and (page_number % 2) == 0) or \
-                page_number in skip_pages
+        return (('odd' in skip_pages and (page_number % 2) == 1) or
+                ('even' in skip_pages and (page_number % 2) == 0) or
+                page_number in skip_pages)
 
     def parse_pages(self, root_element):
         skip_pages = self.md.skip_pages
