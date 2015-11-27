@@ -3889,6 +3889,82 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
 
+    def test_parse_pdf2xmldoc_ends_with_dot(self):
+        '''If last string on a page ends with ., do not continue paragraph to next page'''
+        pdf2xml = etree.fromstring(
+            '<pdf2xml>'
+            '<page number="1" height="1263" width="862"><fontspec/>'
+            '<text top="145" left="100" width="100" height="19">1.</text>'
+            '</page>'
+            '<page number="2" height="1263" width="862">'
+            '<text top="145" left="100" width="100" height="19">2.</text>'
+            '</page>'
+
+            '</pdf2xml>')
+        want = u'<body><p>1.</p><p>2.</p></body>'
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.parse_pages(pdf2xml)
+
+        self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
+
+    def test_parse_pdf2xmldoc_ends_with_exclam(self):
+        '''If last string on a page ends with !, do not continue paragraph to next page'''
+        pdf2xml = etree.fromstring(
+            '<pdf2xml>'
+            '<page number="1" height="1263" width="862"><fontspec/>'
+            '<text top="145" left="100" width="100" height="19">1!</text>'
+            '</page>'
+            '<page number="2" height="1263" width="862">'
+            '<text top="145" left="100" width="100" height="19">2.</text>'
+            '</page>'
+
+            '</pdf2xml>')
+        want = u'<body><p>1!</p><p>2.</p></body>'
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.parse_pages(pdf2xml)
+
+        self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
+
+    def test_parse_pdf2xmldoc_ends_with_question(self):
+        '''If last string on a page ends with ?, do not continue paragraph to next page'''
+        pdf2xml = etree.fromstring(
+            '<pdf2xml>'
+            '<page number="1" height="1263" width="862"><fontspec/>'
+            '<text top="145" left="100" width="100" height="19">1?</text>'
+            '</page>'
+            '<page number="2" height="1263" width="862">'
+            '<text top="145" left="100" width="100" height="19">2.</text>'
+            '</page>'
+
+            '</pdf2xml>')
+        want = u'<body><p>1?</p><p>2.</p></body>'
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.parse_pages(pdf2xml)
+
+        self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
+
+    def test_parse_pdf2xmldoc_not_end_of_sentence(self):
+        '''If last string on a page is not ended, continue paragraph'''
+        pdf2xml = etree.fromstring(
+            '<pdf2xml>'
+            '<page number="1" height="1263" width="862"><fontspec/>'
+            '<text top="145" left="100" width="100" height="19">1 </text>'
+            '</page>'
+            '<page number="2" height="1263" width="862">'
+            '<text top="145" left="100" width="100" height="19">2.</text>'
+            '</page>'
+
+            '</pdf2xml>')
+        want = u'<body><p>1 2.</p></body>'
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.parse_pages(pdf2xml)
+
+        self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
+
     def test_compute_default_margins(self):
         '''Test if the default margins are set'''
         p2x = converter.PDF2XMLConverter('bogus.xml')

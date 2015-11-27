@@ -1007,7 +1007,7 @@ class PDF2XMLConverter(Converter):
         # wrap self.parts into a paragraph
         if len(self.parts) > 0:
             last_string = self.get_last_string()
-            if re.search(u'[\.]$', last_string):
+            if re.search(u'[.?!]$', last_string):
                 self.append_to_body(self.make_paragraph())
 
     def remove_elements_not_within_margin(self, page):
