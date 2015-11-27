@@ -4037,3 +4037,52 @@ class TestPDF2XMLConverter(XMLTester):
         ])
 
         self.assertXmlEqual(etree.tostring(page, encoding='utf8'), page_want)
+
+    def test_is_text_on_same_line_1(self):
+        '''When top is the same, two text elements are on the same line'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.in_list = False
+
+        p2x.prev_t = etree.fromstring(
+            '<text top="354" left="119" width="205" height="22" font="2">'
+            '1.1.   RIEKTEJOAVKKU</text>')
+        t1 = etree.fromstring(
+            '<text top="354" left="332" width="6" height="22" font="2"> </text>')
+
+        self.assertTrue(p2x.is_text_on_same_line(t1))
+
+    def test_is_text_on_same_line_2(self):
+        ''''''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.in_list = False
+
+        p2x.prev_t = etree.fromstring(
+            '<text top="354" left="332" width="6" height="22" font="2"> </text>')
+        t1 = etree.fromstring(
+            '<text top="350" left="339" width="4" height="16" font="7"> </text>')
+
+        self.assertTrue(p2x.is_text_on_same_line(t1))
+
+    def test_is_text_on_same_line_3(self):
+        ''''''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.in_list = False
+
+        p2x.prev_t = etree.fromstring(
+            '<text top="350" left="339" width="4" height="16" font="7"> </text>')
+        t1 = etree.fromstring(
+            '<text top="354" left="343" width="104" height="22" font="2">MANDÁHTA</text>')
+
+        self.assertTrue(p2x.is_text_on_same_line(t1))
+
+    def test_is_text_on_same_line_4(self):
+        ''''''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.in_list = False
+
+        p2x.prev_t = etree.fromstring(
+            '<text top="354" left="615" width="13" height="22" font="2">  </text>')
+        t1 = etree.fromstring(
+            '<text top="376" left="119" width="6" height="22" font="2"> </text>')
+
+        self.assertFalse(p2x.is_text_on_same_line(t1))

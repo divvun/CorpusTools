@@ -899,6 +899,17 @@ class PDF2XMLConverter(Converter):
                 self.parts.append(em)
         # print(util.lineno(), self.parts, file=sys.stderr)
 
+    def is_text_on_same_line(self, text):
+        if self.prev_t is None:
+            return True
+
+        h1 = float(self.prev_t.get('height'))
+        h2 = float(text.get('height'))
+        t1 = float(self.prev_t.get('top'))
+        t2 = float(text.get('top'))
+
+        return t1 + h1 > t2 and t1 - h1 < t2
+
     def is_text_in_same_paragraph(self, text):
         h1 = float(self.prev_t.get('height'))
         h2 = float(text.get('height'))
