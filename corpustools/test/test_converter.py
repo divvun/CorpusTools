@@ -3873,6 +3873,30 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
 
+    def test_text_unwanted_line_shift(self):
+        '''bug 2107, Linjeskift hvor det ikke skal være'''
+        pdf2xml = etree.fromstring(
+            '''<pdf2xml>
+<page number="40" position="absolute" top="0" left="0" height="1263" width="892">
+<text top="354" left="119" width="205" height="22" font="2">1.1.   RIEKTEJOAVKKU</text>
+<text top="352" left="325" width="8" height="15" font="7">1</text>
+<text top="354" left="332" width="6" height="22" font="2"> </text>
+<text top="350" left="339" width="4" height="16" font="7"> </text>
+<text top="354" left="343" width="104" height="22" font="2">MANDÁHTA</text>
+<text top="352" left="447" width="12" height="15" font="7">2 </text>
+<text top="354" left="460" width="143" height="22" font="2">JA ČOAHKÁDUS</text>
+<text top="352" left="603" width="12" height="15" font="7">3 </text>
+<text top="354" left="615" width="13" height="22" font="2">  </text>
+<text top="376" left="119" width="6" height="22" font="2"> </text>
+<text top="398" left="119" width="389" height="22" font="2">1.1.1 Riektejoavkku nammadeami duogáš </text>
+</page></pdf2xml>''')
+        want = u'''<body><p>1.1. RIEKTEJOAVKKU MANDÁHTA JA ČOAHKÁDUS</p><p>1.1.1 Riektejoavkku nammadeami duogáš</p></body>'''
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.parse_pages(pdf2xml)
+
+        self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
+
     def test_compute_default_margins(self):
         '''Test if the default margins are set'''
         p2x = converter.PDF2XMLConverter('bogus.xml')
