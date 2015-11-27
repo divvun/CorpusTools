@@ -50,3 +50,4 @@ v<0.11.6>, <20151120> -- In pdf files, do not try to extract text from text elem
 v<0.11.7>, <20151123> -- Make parallelize work correctly again.
 v<0.12.0>, <20151123> -- Added support for sms in parallelize.
 v<0.13.0>, <20151124> -- Add the script pick_parallel_docs
+v<0.13.1>, <20151127> -- Fix bug 2107, fix unexpected line shifts
