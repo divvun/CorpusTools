@@ -755,7 +755,7 @@ class PDF2XMLConverter(Converter):
     def compute_margin(self, margin, page):
         '''Compute a margin in pixels.
 
-        :param margin: the name of the margin
+        :param margin: the name of the  margin
         :param page: a pdf2xml page element
 
         :return: an int telling where the margin is on the page.
