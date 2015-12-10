@@ -1020,16 +1020,15 @@ class PDF2XMLConverter(Converter):
 
     def extract_text_from_page(self, page):
         for t in page.iter('text'):
-            if (t is not None and int(t.get('width')) > 0):
+            if (len(t.xpath("string()").strip()) > 0 and int(t.get('width')) > 0):
                 if self.is_text_on_same_line(t):
-                        self.extract_textelement(t)
+                    self.extract_textelement(t)
                 else:
-                    if len(t.xpath("string()").strip()) > 0:
-                        if (self.prev_t is not None and
-                                not self.is_same_paragraph(t) and
-                                len(self.parts) > 0):
-                            self.append_to_body(self.make_paragraph())
-                        self.extract_textelement(t)
+                    if (self.prev_t is not None and
+                            not self.is_same_paragraph(t) and
+                            len(self.parts) > 0):
+                        self.append_to_body(self.make_paragraph())
+                    self.extract_textelement(t)
                 self.prev_t = t
 
     def is_inside_margins(self, t, margins):
