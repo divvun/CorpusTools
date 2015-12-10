@@ -995,11 +995,19 @@ class PDF2XMLConverter(Converter):
                 t.getparent().remove(t)
 
     def extract_text_from_page(self, page):
+        '''Decide which text elements are sent to extract_textelement
+
+        When t elements is on the same line as self.prev_t, allow empty elements or
+        elements containing only whitespace
+
+        If t is not on the same line as self.prev_t, do not not use them
+        '''
         for t in page.iter('text'):
-            if (len(t.xpath("string()").strip()) > 0 and int(t.get('width')) > 0):
+            if int(t.get('width')) > 0:
                 if self.is_text_on_same_line(t):
                     self.extractor.extract_textelement(t)
-                else:
+                    self.prev_t = t
+                elif len(t.xpath("string()").strip()) > 0:
                     if (self.prev_t is not None and
                             not self.is_same_paragraph(t) and
                             len(self.extractor.p.xpath("string()")) > 0):
@@ -1007,7 +1015,7 @@ class PDF2XMLConverter(Converter):
                     else:
                         self.extractor.handle_line_ending()
                     self.extractor.extract_textelement(t)
-                self.prev_t = t
+                    self.prev_t = t
 
         # If the last string on a page is the end of a sentence,
         # wrap self.parts into a paragraph
