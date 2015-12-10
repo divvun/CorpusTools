@@ -3346,7 +3346,7 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(
             etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p><em type="bold">JULE\xADHANDEL</em></p></body>')
+            u'<body><p><em type="bold">JULE\xAD</em><em type="bold">HANDEL</em></p></body>')
 
     def test_parse_page_9(self):
         '''Two <text> elements. One is above the top margin.'''
@@ -3705,12 +3705,12 @@ class TestPDF2XMLConverter(XMLTester):
 <text top="1085" left="106" width="653" height="20" font="7"><i>hussi. </i></text>
 <text top="1110" left="106" width="5" height="20" font="7"><i> </i></text>
 </page></pdf2xml>''')
-        want = u'''<body><p><em type="italic">vuođđooahpa\xADhussi.</em></p></body>'''
+        want = u'''<body><p><em type="italic">vuođđooahpa\xAD</em><em type="italic">hussi. </em></p></body>'''
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
 
-        self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+        self.assertXmlEqual(etree.tostring(p2x.extractor.body, encoding='unicode'), want)
 
     def test_text_unwanted_line_shift(self):
         '''bug 2107, Linjeskift hvor det ikke skal være'''
