@@ -692,7 +692,7 @@ class PDFTextExtractor(object):
     def handle_line_ending(self):
         '''Add a soft hyphen or a space at the end of self.p'''
         p_content = self.p.xpath("string()")
-        if p_content.endswith('-'):
+        if re.search('\S-$', p_content):
             if len(self.p) == 0:
                 self.p.text = self.p.text[:-1] + u'\xAD'
             else:
