@@ -626,7 +626,17 @@ class PDFTextExtractor(object):
         self.body = etree.Element('body')
         self.p = etree.Element('p')
 
+    def replace_list_chars(self):
+        if self.get_last_string().startswith(u'•'):
+            if self.p.text is None:
+                self.p[0].text = re.sub(u'•\s*', '', self.p[0].text)
+            else:
+                self.p.text = re.sub(u'•\s*', '', self.p.text)
+
+            self.p.set('type', 'listitem')
+
     def append_to_body(self):
+        self.replace_list_chars()
         self.body.append(self.p)
         self.p = etree.Element('p')
 
@@ -986,15 +996,20 @@ class PDF2XMLConverter(Converter):
     def extract_text_from_page(self, page):
         for t in page.iter('text'):
             if (len(t.xpath("string()").strip()) > 0 and int(t.get('width')) > 0):
+                # util.print_frame(debug=etree.tostring(t, method='text', encoding='utf8'))
                 if self.is_text_on_same_line(t):
+                    # util.print_frame()
                     self.extractor.extract_textelement(t)
                 else:
                     if (self.prev_t is not None and
                             not self.is_same_paragraph(t) and
                             len(self.extractor.p.xpath("string()")) > 0):
+                        # util.print_frame()
                         self.extractor.append_to_body()
                     else:
+                        # util.print_frame()
                         self.extractor.handle_line_ending()
+                    # util.print_frame()
                     self.extractor.extract_textelement(t)
                 self.prev_t = t
 
