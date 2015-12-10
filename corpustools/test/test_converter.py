@@ -3430,13 +3430,13 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(page_element)
 
         self.maxDiff = None
-        self.assertEqual(
+        self.assertXmlEqual(
             etree.tostring(p2x.extractor.body, encoding='unicode'),
             u'<body>'
             u'<p>vuosttaš dábálaš linnjá</p>'
             u'<p type="listitem"> Vuosttaš listolinnjá  '
             u'vuosttaš listolinnjá joaktta</p>'
-            u'<p type="listitem"> Nubbi listo<hyph/>linnjá</p>'
+            u'<p type="listitem"> Nubbi listo\xADlinnjá</p>'
             u'<p>Nubbi dábáláš linnjá</p>'
             u'</body>')
 
