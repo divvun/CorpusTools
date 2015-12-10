@@ -973,10 +973,10 @@ class PDF2XMLConverter(Converter):
                     self.has_content(previous_element) and
                     int(previous_element.get('top')) >=
                     int(superscript.get('top'))):
-                if len(superscript) > 0:
-                    superscript[-1].text = re.sub('\d+', '', superscript[-1].text)
-                else:
-                    superscript.text = re.sub('\d+', '', superscript.text)
+                child = superscript
+                while len(child) > 0:
+                    child = child[0]
+                child.text = re.sub('\d+', '', child.text)
 
     def parse_page(self, page):
         '''Parse the page element.'''
