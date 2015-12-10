@@ -2888,20 +2888,10 @@ class TestXslMaker(XMLTester):
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
 
-class TestPDF2XMLConverter(XMLTester):
-    '''Test the class that converts from pdf2xml to giellatekno/divvun xml'''
-    def test_pdf_converter(self):
-        pdfdocument = converter.PDF2XMLConverter(
-            os.path.join(here, 'converter_data/pdf-test.pdf'))
-        got = pdfdocument.convert2intermediate()
-        want = etree.parse(
-            os.path.join(here, 'converter_data/pdf-xml2pdf-test.xml'))
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
+class TestPDFTextExtractor(XMLTester):
     def test_extract_textelement1(self):
         '''Extract text from a plain pdf2xml text element'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         input = etree.fromstring(
             '<text top="649" left="545" width="269" height="14" font="20">'
@@ -2911,7 +2901,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_extract_textelement3(self):
         '''Extract text from a pdf2xml text that contains an <i> element'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         input = etree.fromstring(
             '<text top="829" left="545" width="275" height="14" font="29">'
@@ -2923,7 +2913,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_extract_textelement4(self):
         '''Extract text from a pdf2xml text that contains a <b> element'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         input = etree.fromstring(
             '<text top="829" left="545" width="275" height="14" font="29">'
@@ -2935,7 +2925,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_extract_textelement5(self):
         '''Text that contains a <b> element inside the <i> element'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         input = etree.fromstring(
             '<text top="829" left="545" width="275" height="14" font="29">'
@@ -2948,7 +2938,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_extract_textelement6(self):
         '''Text that contains a <b> element including a tail'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         input = etree.fromstring(
             '<text top="829" left="545" width="275" height="14" font="29">'
@@ -2960,7 +2950,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_extract_textelement7(self):
         '''Extract text from a pdf2xml text that contains two <i> elements'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         input = etree.fromstring(
             '<text top="829" left="545" width="275" height="14" font="29">'
@@ -2977,7 +2967,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_extract_textelement8(self):
         '''Text that contains one <i> element with several <b> elements'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         input = etree.fromstring(
             '<text top="837" left="57" width="603" height="11" font="7">'
@@ -2990,7 +2980,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_extract_textelement9(self):
         '''Text that contains one <b> element with several <i> elements'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         input = etree.fromstring(
             '<text top="837" left="57" width="603" height="11" font="7">'
@@ -3003,7 +2993,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_extract_textelement10(self):
         '''Hyphen at the end.'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         input = etree.fromstring(
             '<text top="215" width="51" height="14">R-</text>')
@@ -3014,7 +3004,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_extract_textelement11(self):
         '''Hyphen at the end contained in a <b> element.'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         input = etree.fromstring(
             '<text top="215" width="51" height="14"><b>R-</b></text>')
@@ -3025,7 +3015,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_extract_textelement12(self):
         '''Hyphen at the end contained in a <i> element.'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         input = etree.fromstring(
             '<text top="215" width="51" height="14"><i>R-</i></text>')
@@ -3036,7 +3026,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_extract_textelement13(self):
         '''Hyphen at the end contained in a <i> contained in a <b> element.'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         input = etree.fromstring(
             '<text top="215" width="51" height="14"><i><b>R-</b></i></text>')
@@ -3047,7 +3037,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_extract_textelement14(self):
         '''Hyphen at the end contained in a <b> contained in a <i> element.'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         input = etree.fromstring(
             '<text top="215" width="51" height="14"><b><i>R-</i></b></text>')
@@ -3058,7 +3048,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_extract_textelement15(self):
         '''Make hyphen even when there is a text part already'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         p2x.parts = ['Abba']
         input = etree.fromstring(
@@ -3070,7 +3060,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_extract_textelement16(self):
         '''pdf2xml text containing a string with a soft hyphen at the end.'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         input = etree.fromstring(
             '<text top="215" width="51" height="14">R­</text>')
@@ -3081,7 +3071,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_make_paragraph_1(self):
         '''Pass a parts list consisting of only strings'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
         p2x.parts = ['a b c ']
 
         self.assertXmlEqual(
@@ -3090,7 +3080,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_make_paragraph_2(self):
         '''Parts list consisting of some strings and some etree.Elements'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
         p2x.parts = ['a b', etree.Element('em'), etree.Element('em')]
 
         self.assertXmlEqual(
@@ -3098,7 +3088,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_make_paragraph_3(self):
         '''Parts list consisting of a string, a hyph element and a string.'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
         p2x.parts = ['a ', etree.Element('hyph'), ' c']
 
         self.assertXmlEqual(
@@ -3115,7 +3105,7 @@ class TestPDF2XMLConverter(XMLTester):
         em2.set('type', 'bold')
         em2.text = 'b'
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
         p2x.parts = [em1, em2]
 
         self.assertXmlEqual(
@@ -3133,7 +3123,7 @@ class TestPDF2XMLConverter(XMLTester):
         em2.set('type', 'bold')
         em2.text = 'b'
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
         p2x.parts = [em1, em2]
 
         self.assertXmlEqual(
@@ -3142,7 +3132,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_make_paragraph_6(self):
         '''Make hyphen even when there is a text part already'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         hyph = etree.Element('hyph')
         hyph.tail = 'r'
@@ -3157,7 +3147,7 @@ class TestPDF2XMLConverter(XMLTester):
 
     def test_make_paragraph_7(self):
         '''Make hyphen even when there is a text part already'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDFTextExtractor()
 
         input = etree.fromstring(
             '<text top="215" width="51" height="14">R </text>')
@@ -3174,6 +3164,18 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(
             etree.tostring(p2x.make_paragraph()), '<p>R R<hyph/>R<hyph/>R</p>')
+
+
+class TestPDF2XMLConverter(XMLTester):
+    '''Test the class that converts from pdf2xml to giellatekno/divvun xml'''
+    def test_pdf_converter(self):
+        pdfdocument = converter.PDF2XMLConverter(
+            os.path.join(here, 'converter_data/pdf-test.pdf'))
+        got = pdfdocument.convert2intermediate()
+        want = etree.parse(
+            os.path.join(here, 'converter_data/pdf-xml2pdf-test.xml'))
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_is_same_paragraph_1(self):
         '''Two text elements, x distance less 1.5 times their height'''
