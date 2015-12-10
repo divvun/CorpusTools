@@ -3418,11 +3418,11 @@ class TestPDF2XMLConverter(XMLTester):
             '• Vuosttaš listolinnjá </text>'
             '<text top="258" left="121" width="296" height="18" font="1">'
             'vuosttaš listolinnjá joaktta</text>'
-            '<text top="279" left="121" width="189" height="18" font="1">'
+            '<text top="279" left="104" width="189" height="18" font="1">'
             '• Nubbi listo-</text>'
-            '<text top="300" left="104" width="324" height="18" font="1">'
+            '<text top="300" left="121" width="324" height="18" font="1">'
             'linnjá</text>'
-            '<text top="321" left="121" width="40" height="18" font="1">'
+            '<text top="321" left="104" width="40" height="18" font="1">'
             'Nubbi dábáláš linnjá</text>'
             '</page>')
 
