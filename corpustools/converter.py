@@ -646,7 +646,7 @@ class PDFTextExtractor(object):
             self.p.text = text
         elif len(self.p) == 0 and self.p.text is not None:
             self.p.text += text
-        if len(self.p) > 0 and self.p.text is None:
+        if len(self.p) > 0:
             last = self.p[-1]
             if last.tail is None:
                 last.tail = text
@@ -667,7 +667,6 @@ class PDFTextExtractor(object):
 
         # print(util.lineno(), etree.tostring(textelement), file=sys.stderr)
         if textelement.text is not None:
-            # NOTE: Search for both hyphen and soft hyphen
             self.append_text_to_p(textelement.text)
 
         for child in textelement:
@@ -693,7 +692,6 @@ class PDFTextExtractor(object):
             em.tail = child.tail
 
             self.p.append(em)
-        # print(util.lineno(), self.parts, file=sys.stderr)
 
     def get_last_string(self):
         '''Get the last string of self.parts'''
@@ -711,7 +709,7 @@ class PDFTextExtractor(object):
                     last.text = last.text[:-1] + u'\xAD'
                 else:
                     last.tail = last.tail[:-1] + u'\xAD'
-        elif not p_content.endswith(u'\xAD'):
+        elif not re.search(u'[ \xAD]$', p_content):
             self.extract_textelement(etree.fromstring('<text> </text>'))
 
 
@@ -996,20 +994,15 @@ class PDF2XMLConverter(Converter):
     def extract_text_from_page(self, page):
         for t in page.iter('text'):
             if (len(t.xpath("string()").strip()) > 0 and int(t.get('width')) > 0):
-                # util.print_frame(debug=etree.tostring(t, method='text', encoding='utf8'))
                 if self.is_text_on_same_line(t):
-                    # util.print_frame()
                     self.extractor.extract_textelement(t)
                 else:
                     if (self.prev_t is not None and
                             not self.is_same_paragraph(t) and
                             len(self.extractor.p.xpath("string()")) > 0):
-                        # util.print_frame()
                         self.extractor.append_to_body()
                     else:
-                        # util.print_frame()
                         self.extractor.handle_line_ending()
-                    # util.print_frame()
                     self.extractor.extract_textelement(t)
                 self.prev_t = t
 
