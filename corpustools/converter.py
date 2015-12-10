@@ -630,9 +630,6 @@ class PDFTextExtractor(object):
         self.body.append(element)
         self.parts = []
 
-    def get_body(self):
-        return self.body
-
     def extract_textelement(self, textelement):
         '''Convert one <text> element to an array of text and etree Elements.
 
