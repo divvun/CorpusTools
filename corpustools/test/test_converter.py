@@ -3315,7 +3315,7 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(
             etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p>R<hyph/>Ø</p></body>')
+            u'<body><p>R\xADØ</p></body>')
 
     def test_parse_page_7(self):
         '''One text element ending with a hyphen.'''
@@ -3346,7 +3346,7 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(
             etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p><em type="bold">JULE<hyph/>HANDEL</em></p></body>')
+            u'<body><p><em type="bold">JULE\xADHANDEL</em></p></body>')
 
     def test_parse_page_9(self):
         '''Two <text> elements. One is above the top margin.'''
@@ -3689,7 +3689,7 @@ class TestPDF2XMLConverter(XMLTester):
             'barggus.</text>'
             '</page>'
             '</pdf2xml>')
-        want = u'<body><p>Dán ovddidan<hyph/>barggus.</p></body>'
+        want = u'<body><p>Dán ovddidan\xADbarggus.</p></body>'
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
