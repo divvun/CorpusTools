@@ -911,27 +911,28 @@ class PDF2XMLConverter(Converter):
         h2 = float(text.get('height'))
         t1 = int(self.prev_t.get('top'))
         t2 = int(text.get('top'))
-        # print(util.lineno(), h1, h2, t1, t2, h1 == h2, t1 > t2, file=sys.stderr)
+        # util.print_frame(
+        #    debug='{} {} {} {} {} {}'.format(h1, h2, t1, t2, h1 == h2, t1 > t2))
         real_text = etree.tostring(text, method='text', encoding='unicode')
 
         if self.is_text_in_same_paragraph(text):
             if (real_text[0] in self.extractor.LIST_CHARS):
                 self.in_list = True
-                # print(util.lineno(), text.text, file=sys.stderr)
+                # util.print_frame(debug=text.text)
             elif (re.match('\s', real_text[0]) is None and
                   real_text[0] == real_text[0].upper() and self.in_list):
                 self.in_list = False
                 same_paragraph = False
-                # print(util.lineno(), text.text, file=sys.stderr)
+                # util.print_frame(debug=text.text)
             elif (real_text[0] not in self.extractor.LIST_CHARS):
-                # print(util.lineno(), file=sys.stderr)
+                # util.print_frame()
                 same_paragraph = True
         elif (h1 == h2 and t1 >= t2 and not re.match('\d', real_text[0]) and
               real_text[0] == real_text[0].lower()):
-            # print(util.lineno(), file=sys.stderr)
+            # util.print_frame()
             same_paragraph = True
         else:
-            # print(util.lineno(), file=sys.stderr)
+            # util.print_frame()
             self.in_list = False
 
         return same_paragraph
