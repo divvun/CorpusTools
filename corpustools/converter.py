@@ -700,7 +700,7 @@ class PDFTextExtractor(object):
                 if last.tail is None:
                     last.text = last.text[:-1] + u'\xAD'
                 else:
-                    last.tail = last.text[:-1] + u'\xAD'
+                    last.tail = last.tail[:-1] + u'\xAD'
         elif not p_content.endswith(u'\xAD'):
             self.extract_textelement(etree.fromstring('<text> </text>'))
 
