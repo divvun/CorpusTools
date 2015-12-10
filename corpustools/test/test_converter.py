@@ -3965,6 +3965,23 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
 
+    def test_parse_pdf2xmldoc_text_on_same_line_different_font(self):
+        '''Test of bug2101'''
+        pdf2xml = etree.fromstring(
+            '<pdf2xml>'
+            '<page number="1" height="1263" width="862"><fontspec/>'
+            '<text top="187" left="64" width="85" height="14" font="20">bajás</text>'
+            '<text top="187" left="149" width="6" height="14" font="8">š</text>'
+            '<text top="187" left="155" width="280" height="14" font="20">addandili</text>'    '</page>'
+
+            '</pdf2xml>')
+        want = u'<body><p>bajásšaddandili</p></body>'
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.parse_pages(pdf2xml)
+
+        self.assertXmlEqual(etree.tostring(p2x.get_body()), want)
+
     def test_compute_default_margins(self):
         '''Test if the default margins are set'''
         p2x = converter.PDF2XMLConverter('bogus.xml')
