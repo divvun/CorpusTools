@@ -815,90 +815,89 @@ class PDF2XMLConverter(Converter):
         '''
 
         # print(util.lineno(), etree.tostring(textelement), file=sys.stderr)
-        if (textelement is not None and int(textelement.get('width')) > 0):
-            if textelement.text is not None:
-                # NOTE: Search for both hyphen and soft hyphen
-                found_hyph = re.search('\w[-­]$', textelement.text,
-                                       re.UNICODE)
-                if len(self.parts) > 0:
+        if textelement.text is not None:
+            # NOTE: Search for both hyphen and soft hyphen
+            found_hyph = re.search('\w[-­]$', textelement.text,
+                                    re.UNICODE)
+            if len(self.parts) > 0:
+                # print(util.lineno(), textelement.text, file=sys.stderr)
+                if isinstance(self.parts[-1], etree._Element):
                     # print(util.lineno(), textelement.text, file=sys.stderr)
-                    if isinstance(self.parts[-1], etree._Element):
-                        # print(util.lineno(), textelement.text, file=sys.stderr)
-                        if self.parts[-1].tail is not None:
-                            if found_hyph:
-                                # print(util.lineno(), textelement.text, file=sys.stderr)
-                                self.parts[-1].tail += u' {}'.format(
-                                    textelement.text[:-1])
-                                self.parts.append(etree.Element('hyph'))
-                            else:
-                                self.parts[-1].tail += u' {}'.format(
-                                    textelement.text)
-                        else:
-                            if found_hyph:
-                                # print(util.lineno(), textelement.text, file=sys.stderr)
-                                self.parts[-1].tail = u'{}'.format(
-                                    textelement.text[:-1])
-                                self.parts.append(etree.Element('hyph'))
-                            else:
-                                # print(util.lineno(), textelement.text, file=sys.stderr)
-                                self.parts[-1].tail = textelement.text
-                    else:
-                        # print(util.lineno(), textelement.text, file=sys.stderr)
+                    if self.parts[-1].tail is not None:
                         if found_hyph:
                             # print(util.lineno(), textelement.text, file=sys.stderr)
-                            self.parts[-1] += u' {}'.format(
-                                unicode(textelement.text[:-1]))
+                            self.parts[-1].tail += u' {}'.format(
+                                textelement.text[:-1])
+                            self.parts.append(etree.Element('hyph'))
+                        else:
+                            self.parts[-1].tail += u' {}'.format(
+                                textelement.text)
+                    else:
+                        if found_hyph:
+                            # print(util.lineno(), textelement.text, file=sys.stderr)
+                            self.parts[-1].tail = u'{}'.format(
+                                textelement.text[:-1])
                             self.parts.append(etree.Element('hyph'))
                         else:
                             # print(util.lineno(), textelement.text, file=sys.stderr)
-                            self.parts[-1] += u' {}'.format(
-                                unicode(textelement.text))
+                            self.parts[-1].tail = textelement.text
                 else:
                     # print(util.lineno(), textelement.text, file=sys.stderr)
                     if found_hyph:
                         # print(util.lineno(), textelement.text, file=sys.stderr)
-                        self.parts.append(textelement.text[:-1])
+                        self.parts[-1] += u' {}'.format(
+                            unicode(textelement.text[:-1]))
                         self.parts.append(etree.Element('hyph'))
                     else:
                         # print(util.lineno(), textelement.text, file=sys.stderr)
-                        self.parts.append(textelement.text)
-
-            for child in textelement:
-                em = etree.Element('em')
-
-                if child.text is not None:
-                    found_hyph = re.search('\w-$', child.text, re.UNICODE)
-                    if found_hyph:
-                        em.text = child.text[:-1]
-                        em.append(etree.Element('hyph'))
-                    else:
-                        em.text = child.text
+                        self.parts[-1] += u' {}'.format(
+                            unicode(textelement.text))
+            else:
+                # print(util.lineno(), textelement.text, file=sys.stderr)
+                if found_hyph:
+                    # print(util.lineno(), textelement.text, file=sys.stderr)
+                    self.parts.append(textelement.text[:-1])
+                    self.parts.append(etree.Element('hyph'))
                 else:
-                    em.text = ''
+                    # print(util.lineno(), textelement.text, file=sys.stderr)
+                    self.parts.append(textelement.text)
 
-                if len(child) > 0:
-                    for grandchild in child:
-                        if grandchild.text is not None:
-                            found_hyph = re.search('\w-$', grandchild.text,
-                                                   re.UNICODE)
-                            if found_hyph:
-                                em.text += grandchild.text[:-1]
-                                em.append(etree.Element('hyph'))
-                            else:
-                                em.text += grandchild.text
-                        if grandchild.tail is not None:
-                            em.text += grandchild.tail
+        for child in textelement:
+            em = etree.Element('em')
 
-                if child.tag == 'i':
-                    em.set('type', 'italic')
-                elif child.tag == 'b':
-                    em.set('type', 'bold')
+            if child.text is not None:
+                found_hyph = re.search('\w-$', child.text, re.UNICODE)
+                if found_hyph:
+                    em.text = child.text[:-1]
+                    em.append(etree.Element('hyph'))
+                else:
+                    em.text = child.text
+            else:
+                em.text = ''
 
-                em.tail = child.tail
+            if len(child) > 0:
+                for grandchild in child:
+                    if grandchild.text is not None:
+                        found_hyph = re.search('\w-$', grandchild.text,
+                                                re.UNICODE)
+                        if found_hyph:
+                            em.text += grandchild.text[:-1]
+                            em.append(etree.Element('hyph'))
+                        else:
+                            em.text += grandchild.text
+                    if grandchild.tail is not None:
+                        em.text += grandchild.tail
 
-                self.parts.append(em)
+            if child.tag == 'i':
+                em.set('type', 'italic')
+            elif child.tag == 'b':
+                em.set('type', 'bold')
+
+            em.tail = child.tail
+
+            self.parts.append(em)
         # print(util.lineno(), self.parts, file=sys.stderr)
-        self.prev_t = textelement
+
 
     def is_text_on_same_line(self, text):
         if self.prev_t is None:
@@ -1021,15 +1020,17 @@ class PDF2XMLConverter(Converter):
 
     def extract_text_from_page(self, page):
         for t in page.iter('text'):
-            if self.is_text_on_same_line(t):
-                self.extract_textelement(t)
-            else:
-                if len(t.xpath("string()").strip()) > 0:
-                    if (self.prev_t is not None and
-                            not self.is_same_paragraph(t) and
-                            len(self.parts) > 0):
-                        self.append_to_body(self.make_paragraph())
-                    self.extract_textelement(t)
+            if (t is not None and int(t.get('width')) > 0):
+                if self.is_text_on_same_line(t):
+                        self.extract_textelement(t)
+                else:
+                    if len(t.xpath("string()").strip()) > 0:
+                        if (self.prev_t is not None and
+                                not self.is_same_paragraph(t) and
+                                len(self.parts) > 0):
+                            self.append_to_body(self.make_paragraph())
+                        self.extract_textelement(t)
+                self.prev_t = t
 
     def is_inside_margins(self, t, margins):
         '''Check if t is inside the given margins
