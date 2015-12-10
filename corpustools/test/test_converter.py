@@ -3475,6 +3475,22 @@ class TestPDF2XMLConverter(XMLTester):
             etree.tostring(p2x.extractor.body, encoding='unicode'),
             u'<body/>')
 
+    def test_parse_page_soria_moria(self):
+        '''The last element was not added to the p element'''
+        page_element = etree.fromstring(
+            '<page number="1" height="1263" width="862">'
+            '<text top="666" left="104" width="312" height="18" font="1">A – <i>b </i></text>'
+            '<text top="687" left="104" width="318" height="18" font="6"><i>c-d</i> – e-</text>'
+            '<text top="708" left="104" width="328" height="18" font="1">f </text>'
+            '</page>')
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.parse_pages(page_element)
+
+        self.assertEqual(
+            etree.tostring(p2x.extractor.body, encoding='unicode'),
+            u'<body><p>A – <em type="italic">b </em><em type="italic">c-d</em> – e\xADf </p></body>')
+
     def test_remove_footnotes_superscript_1(self):
         '''Footnote superscript is in the middle of a sentence'''
         p2x = converter.PDF2XMLConverter('bogus.xml')
