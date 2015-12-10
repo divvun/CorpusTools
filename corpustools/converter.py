@@ -624,11 +624,24 @@ class PDFTextExtractor(object):
 
     def __init__(self):
         self.body = etree.Element('body')
-        self.parts = []
+        self.p = etree.Element('p')
 
-    def append_to_body(self, element):
-        self.body.append(element)
-        self.parts = []
+    def append_to_body(self):
+        self.body.append(self.p)
+        self.p = etree.Element('p')
+
+    def append_text_to_p(self, text):
+        '''text is a string'''
+        if len(self.p) == 0 and self.p.text is None:
+            self.p.text = text
+        elif len(self.p) == 0 and self.p.text is not None:
+            self.p.text += text
+        if len(self.p) > 0 and self.p.text is None:
+            last = self.p[-1]
+            if last.tail is None:
+                last.tail = text
+            else:
+                last.tail += text
 
     def extract_textelement(self, textelement):
         '''Convert one <text> element to an array of text and etree Elements.
@@ -645,74 +658,20 @@ class PDFTextExtractor(object):
         # print(util.lineno(), etree.tostring(textelement), file=sys.stderr)
         if textelement.text is not None:
             # NOTE: Search for both hyphen and soft hyphen
-            found_hyph = re.search('\w[-­]$', textelement.text,
-                                    re.UNICODE)
-            if len(self.parts) > 0:
-                # print(util.lineno(), textelement.text, file=sys.stderr)
-                if isinstance(self.parts[-1], etree._Element):
-                    # print(util.lineno(), textelement.text, file=sys.stderr)
-                    if self.parts[-1].tail is not None:
-                        if found_hyph:
-                            # print(util.lineno(), textelement.text, file=sys.stderr)
-                            self.parts[-1].tail += u' {}'.format(
-                                textelement.text[:-1])
-                            self.parts.append(etree.Element('hyph'))
-                        else:
-                            self.parts[-1].tail += u' {}'.format(
-                                textelement.text)
-                    else:
-                        if found_hyph:
-                            # print(util.lineno(), textelement.text, file=sys.stderr)
-                            self.parts[-1].tail = u'{}'.format(
-                                textelement.text[:-1])
-                            self.parts.append(etree.Element('hyph'))
-                        else:
-                            # print(util.lineno(), textelement.text, file=sys.stderr)
-                            self.parts[-1].tail = textelement.text
-                else:
-                    # print(util.lineno(), textelement.text, file=sys.stderr)
-                    if found_hyph:
-                        # print(util.lineno(), textelement.text, file=sys.stderr)
-                        self.parts[-1] += u' {}'.format(
-                            unicode(textelement.text[:-1]))
-                        self.parts.append(etree.Element('hyph'))
-                    else:
-                        # print(util.lineno(), textelement.text, file=sys.stderr)
-                        self.parts[-1] += u' {}'.format(
-                            unicode(textelement.text))
-            else:
-                # print(util.lineno(), textelement.text, file=sys.stderr)
-                if found_hyph:
-                    # print(util.lineno(), textelement.text, file=sys.stderr)
-                    self.parts.append(textelement.text[:-1])
-                    self.parts.append(etree.Element('hyph'))
-                else:
-                    # print(util.lineno(), textelement.text, file=sys.stderr)
-                    self.parts.append(textelement.text)
+            self.append_text_to_p(textelement.text)
 
         for child in textelement:
             em = etree.Element('em')
 
             if child.text is not None:
-                found_hyph = re.search('\w-$', child.text, re.UNICODE)
-                if found_hyph:
-                    em.text = child.text[:-1]
-                    em.append(etree.Element('hyph'))
-                else:
-                    em.text = child.text
+                em.text = child.text
             else:
                 em.text = ''
 
             if len(child) > 0:
                 for grandchild in child:
                     if grandchild.text is not None:
-                        found_hyph = re.search('\w-$', grandchild.text,
-                                                re.UNICODE)
-                        if found_hyph:
-                            em.text += grandchild.text[:-1]
-                            em.append(etree.Element('hyph'))
-                        else:
-                            em.text += grandchild.text
+                        em.text += grandchild.text
                     if grandchild.tail is not None:
                         em.text += grandchild.tail
 
@@ -723,59 +682,27 @@ class PDFTextExtractor(object):
 
             em.tail = child.tail
 
-            self.parts.append(em)
+            self.p.append(em)
         # print(util.lineno(), self.parts, file=sys.stderr)
 
     def get_last_string(self):
         '''Get the last string of self.parts'''
-        if (isinstance(self.parts[-1], unicode) or
-                isinstance(self.parts[-1], str)):
-            return self.parts[-1]
-        else:
-            return self.parts[-1].xpath("string()")
+        return self.p.xpath("string()")
 
-    def make_paragraph(self):
-        '''Convert self.parts to a p element
-
-        parts is a list of strings and etree.Elements that belong to the
-        same paragraph
-        '''
-        p = etree.Element('p')
-        # print(util.lineno(), self.parts[0], self.parts, type(self.parts[0]), file=sys.stderr)
-        if (isinstance(self.parts[0], str) or
-                isinstance(self.parts[0], unicode)):
-            p.text = self.parts[0]
-        else:
-            p.append(self.parts[0])
-
-        for part in self.parts[1:]:
-            if isinstance(part, etree._Element):
-                if (len(p) > 0 and len(p[-1]) > 0 and
-                        p[-1][-1].tag == 'hyph'):
-                    if (p[-1].tag == part.tag and
-                            p[-1].get('type') == part.get('type')):
-                        if p[-1][-1].tail is None:
-                            p[-1][-1].tail = part.text
-                            p[-1].tail = part.tail
-                        else:
-                            p[-1][-1].tail += part.text
-                            p[-1].tail = part.tail
-                    else:
-                        p.append(part)
-                else:
-                    p.append(part)
+    def handle_line_ending(self):
+        '''Add a soft hyphen or a space at the end of self.p'''
+        p_content = self.p.xpath("string()")
+        if p_content.endswith('-'):
+            if len(self.p) == 0:
+                self.p.text = self.p.text[:-1] + u'\xAD'
             else:
-                if p[-1].tail is None:
-                    p[-1].tail = part
+                last = self.p[-1]
+                if last.tail is None:
+                    last.text = last.text[:-1] + u'\xAD'
                 else:
-                    p[-1].tail = ' {}'.format(part)
-
-        if p.text is not None and p.text[0] in self.LIST_CHARS:
-            p.set('type', 'listitem')
-            p.text = p.text[1:]
-        # print(util.lineno(), self.parts[0], self.parts, type(self.parts[0]), file=sys.stderr)
-
-        return p
+                    last.tail = last.text[:-1] + u'\xAD'
+        elif not p_content.endswith(u'\xAD'):
+            self.extract_textelement(etree.fromstring('<text> </text>'))
 
 
 class PDF2XMLConverter(Converter):
@@ -1063,17 +990,19 @@ class PDF2XMLConverter(Converter):
                 else:
                     if (self.prev_t is not None and
                             not self.is_same_paragraph(t) and
-                            len(self.extractor.parts) > 0):
-                        self.extractor.append_to_body(self.extractor.make_paragraph())
+                            len(self.extractor.p.xpath("string()")) > 0):
+                        self.extractor.append_to_body()
+                    else:
+                        self.extractor.handle_line_ending()
                     self.extractor.extract_textelement(t)
                 self.prev_t = t
 
         # If the last string on a page is the end of a sentence,
         # wrap self.parts into a paragraph
-        if len(self.extractor.parts) > 0:
+        if len(self.extractor.p.xpath("string()")) > 0:
             last_string = self.extractor.get_last_string()
             if re.search(u'[.?!]$', last_string):
-                self.extractor.append_to_body(self.extractor.make_paragraph())
+                self.extractor.append_to_body()
 
     def is_inside_margins(self, t, margins):
         '''Check if t is inside the given margins
@@ -1108,8 +1037,8 @@ class PDF2XMLConverter(Converter):
             if not self.is_skip_page(int(page.get('number')), skip_pages):
                 self.parse_page(page)
 
-        if len(self.extractor.parts) > 0:
-            self.extractor.append_to_body(self.extractor.make_paragraph())
+        if len(self.extractor.get_last_string()) > 0:
+            self.extractor.append_to_body()
 
 
 class BiblexmlConverter(Converter):
