@@ -832,7 +832,7 @@ class PDF2XMLConverter(Converter):
     def convert2intermediate(self):
         document = etree.Element('document')
         etree.SubElement(document, 'header')
-        document.append(self.body)
+        document.append(self.extractor.body)
 
         command = ['pdftohtml', '-hidden', '-enc', 'UTF-8', '-stdout',
                    '-nodrm', '-i', '-xml', self.orig]
@@ -988,7 +988,7 @@ class PDF2XMLConverter(Converter):
         real_text = etree.tostring(text, method='text', encoding='unicode')
 
         if self.is_text_in_same_paragraph(text):
-            if (real_text[0] in self.LIST_CHARS):
+            if (real_text[0] in self.extractor.LIST_CHARS):
                 self.in_list = True
                 # print(util.lineno(), text.text, file=sys.stderr)
             elif (re.match('\s', real_text[0]) is None and
@@ -996,7 +996,7 @@ class PDF2XMLConverter(Converter):
                 self.in_list = False
                 same_paragraph = False
                 # print(util.lineno(), text.text, file=sys.stderr)
-            elif (real_text[0] not in self.LIST_CHARS):
+            elif (real_text[0] not in self.extractor.LIST_CHARS):
                 # print(util.lineno(), file=sys.stderr)
                 same_paragraph = True
         elif (h1 == h2 and t1 >= t2 and not re.match('\d', real_text[0]) and
@@ -1108,8 +1108,8 @@ class PDF2XMLConverter(Converter):
             if not self.is_skip_page(int(page.get('number')), skip_pages):
                 self.parse_page(page)
 
-        if len(self.parts) > 0:
-            self.append_to_body(self.make_paragraph())
+        if len(self.extractor.parts) > 0:
+            self.extractor.append_to_body(self.extractor.make_paragraph())
 
 
 class BiblexmlConverter(Converter):
