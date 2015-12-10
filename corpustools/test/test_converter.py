@@ -2909,16 +2909,6 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.extract_textelement(input)
         self.assertEqual(p2x.parts, [u'berret bargat. '])
 
-    def test_extract_textelement2(self):
-        '''Extract text from a pdf2xml text element with width less than 1'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        input = etree.fromstring(
-            '<text top="649" left="545" width="0" height="14" font="20">'
-            'berret bargat. </text>')
-        p2x.extract_textelement(input)
-        self.assertEqual(p2x.parts, [])
-
     def test_extract_textelement3(self):
         '''Extract text from a pdf2xml text that contains an <i> element'''
         p2x = converter.PDF2XMLConverter('bogus.xml')
@@ -3612,6 +3602,20 @@ class TestPDF2XMLConverter(XMLTester):
             u'<body>'
             u'<p>1751, </p>'
             u'</body>')
+
+    def test_parse_page_textelement_witdh_zero_not_added(self):
+        page_element = etree.fromstring(
+            '<page number="1" height="1263" width="862">'
+            '<text top="649" left="545" width="0" height="14" font="20">'
+            'berret bargat. </text>'
+            '</page>')
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.parse_pages(page_element)
+
+        self.assertEqual(
+            etree.tostring(p2x.get_body(), encoding='unicode'),
+            u'<body/>')
 
     def test_remove_footnotes_superscript_1(self):
         '''Footnote superscript is in the middle of a sentence'''
