@@ -966,14 +966,17 @@ class PDF2XMLConverter(Converter):
         return element.text is not None or len(element) > 0
 
     def remove_footnotes_superscript(self, page):
-        '''Remove elements deemed to be footnote superscript.'''
+        '''Remove numbers from elements found by find_footnotes_superscript.'''
         for superscript in self.find_footnotes_superscript(page):
             previous_element = superscript.getprevious()
             if (previous_element is not None and
                     self.has_content(previous_element) and
                     int(previous_element.get('top')) >=
                     int(superscript.get('top'))):
-                superscript.getparent().remove(superscript)
+                if len(superscript) > 0:
+                    superscript[-1].text = re.sub('\d+', '', superscript[-1].text)
+                else:
+                    superscript.text = re.sub('\d+', '', superscript.text)
 
     def parse_page(self, page):
         '''Parse the page element.'''

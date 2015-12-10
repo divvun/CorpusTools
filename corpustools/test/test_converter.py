@@ -3511,6 +3511,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<page number="1" height="1263" width="862">'
             '   <text top="323" left="117" width="305" height="16" font="2">'
             'gihligotteriektái</text>'
+            '   <text top="319" left="422" width="6" height="11" font="7"></text>'
             '   <text top="323" left="428" width="220" height="16" font="2">, '
             'sáhtte</text>'
             '</page>')
@@ -3537,6 +3538,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<page number="1" height="1263" width="862">'
             '   <text top="323" left="117" width="305" height="16" font="2">'
             'gihligotteriektái</text>'
+            '   <text top="319" left="422" width="6" height="11" font="7"></text>'
             '   <text top="344" left="428" width="220" height="16" font="2">,'
             'sáhtte</text>'
             '</page>')
@@ -3559,6 +3561,7 @@ class TestPDF2XMLConverter(XMLTester):
         want_page = (
             '<page number="1" height="1263" width="892">'
             '    <text top="267" left="119" width="164" height="22" font="9"><i>riektedilálašvuođa</i></text>'
+            '    <text top="265" left="283" width="15" height="15" font="7"></text>'
             '    <text top="267" left="298" width="503" height="22" font="9"><i> </i>čielggadeamit&#34; (min deattuhus) ráddjejuvvot dasa mii </text>'
             '</page>'
         )
@@ -3581,6 +3584,7 @@ class TestPDF2XMLConverter(XMLTester):
         want_page = (
             '<page number="1" height="1263" width="892">'
             '   <text top="682" left="119" width="187" height="22" font="9"><i>báhcánvuoigatvuođa</i></text>'
+            '   <text top="680" left="306" width="20" height="15" font="11"><i></i> </text>'
             '   <text top="704" left="119" width="666" height="22" font="2"> - nuppiin sániiguin dan mii áiggis áigái ii leat čuldon dahje earát váldán. </text>'
             '</page>'
         )
@@ -3603,6 +3607,7 @@ class TestPDF2XMLConverter(XMLTester):
         want_page = (
             '<page number="1" height="1261" width="892">'
             '   <text top="560" left="102" width="231" height="15" font="4">Boazu lea, nu movt eará smirezasti</text>'
+            '   <text top="560" left="333" width="8" height="9" font="12"> </text>'
             '   <text top="560" left="341" width="91" height="15" font="4">eallit nai, ere-</text>'
             '</page>'
         )
