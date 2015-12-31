@@ -626,6 +626,14 @@ class BoundingBox(object):
         self.bottom = 0
         self.right = 0
 
+    @property
+    def width(self):
+        return self.right - self.left
+
+    @property
+    def height(self):
+        return self.bottom - self.top
+
     def is_below(self, other_box):
         '''True if this element is below other_box'''
         return self.top >= other_box.bottom
@@ -745,10 +753,24 @@ class PDFParagraph(object):
 
     def append_textelement(self, textelement):
         if len(self.paragraph) > 0 and textelement.is_right_of(self.paragraph[-1]):
-                self.boundingboxes.append(BoundingBox())
-
+            self.boundingboxes.append(BoundingBox())
         self.boundingboxes[-1].increase_box(textelement)
         self.paragraph.append(textelement)
+
+    def __unicode__(self):
+        return u'\n'.join([t.plain_text for t in self.textelements])
+
+
+class PDFSection(BoundingBox):
+    def __init__(self):
+        self.paragraphs = []
+
+    def append_paragraph(self, paragraph):
+        '''paragraph is PDFParagraph'''
+        for textelement in paragraph.textelements:
+            self.increase_box(textelement)
+
+        self.paragraphs.append(paragraph)
 
 
 class PDFTextExtractor(object):
@@ -1107,6 +1129,45 @@ class PDFPage(object):
 
         return self.sort_text_elements()
 
+    def list_valid_elements(self):
+        self.remove_elements_not_within_margin()
+        self.remove_footnotes_superscript()
+        self.merge_elements_on_same_line()
+        self.remove_invalid_elements()
+
+        pp = PDFParagraph()
+        paragraphs = []
+        paragraphs.append(pp)
+        paragraphs[-1].append_textelement(self.textelements[0])
+
+        columns = 1
+        for i in range(1, len(self.textelements)):
+            t = self.textelements[i]
+            prev_t = self.textelements[i - 1]
+            if not prev_t.is_text_in_same_paragraph(t):
+                if len(paragraphs[-1].boundingboxes) > 1:
+                    columns += 1
+
+                if len(paragraphs) > 1:
+                    prev_p = paragraphs[-2]
+                    if not prev_p.boundingboxes[-1].is_above(paragraphs[-1].boundingboxes[0]):
+                        info = []
+                        info.append(str(i))
+                        util.print_frame(debug=' '.join(info))
+                        util.print_frame(debug=unicode(prev_p) + u'\n')
+                        util.print_frame(debug=unicode(paragraphs[-1]) + u'\n')
+
+                pp = PDFParagraph()
+                paragraphs.append(pp)
+
+            paragraphs[-1].append_textelement(t)
+
+        info = ['\n']
+        info.append('page: ' + str(self.number))
+        info.append('columns: ' + str(columns))
+
+        util.print_frame(debug='\n'.join(info))
+
 
 class PDF2XMLConverter(Converter):
     '''Class to convert the xml output of pdftohtml to giellatekno xml'''
@@ -1177,6 +1238,7 @@ class PDF2XMLConverter(Converter):
 
         return document
 
+
     def parse_page(self, page):
         '''Parse the page element.'''
         pdfpage = PDFPage(page, metadata_margins=self.md.margins,
@@ -1187,6 +1249,28 @@ class PDF2XMLConverter(Converter):
     def parse_pages(self, root_element):
         for page in root_element.iter('page'):
             self.parse_page(page)
+
+    def list_pages(self):
+        document = etree.Element('document')
+        etree.SubElement(document, 'header')
+        document.append(self.extractor.body)
+
+        command = ['pdftohtml', '-hidden', '-enc', 'UTF-8', '-stdout',
+                   '-nodrm', '-i', '-xml', self.orig]
+        pdf_content = self.replace_ligatures(self.strip_chars(
+            self.extract_text(command)))
+
+        try:
+            root_element = etree.fromstring(pdf_content)
+        except etree.XMLSyntaxError as e:
+            self.handle_syntaxerror(e, util.lineno(),
+                                    pdf_content.decode('utf-8'))
+
+        for page in root_element.iter('page'):
+            pdfpage = PDFPage(page, metadata_margins=self.md.margins,
+                            metadata_inner_margins=self.md.inner_margins)
+            if not pdfpage.is_skip_page(self.md.skip_pages):
+                pdfpage.list_valid_elements()
 
 
 class BiblexmlConverter(Converter):
@@ -2907,3 +2991,8 @@ def main():
         cm.convert_serially()
     else:
         cm.convert_in_parallel()
+
+def list_main():
+    pdf = PDF2XMLConverter(sys.argv[1])
+    util.print_frame(debug=sys.argv[1])
+    pdf.list_pages()
