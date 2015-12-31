@@ -3022,6 +3022,173 @@ class TestPDFTextExtractor(XMLTester):
         self.assertXmlEqual(
             etree.tostring(p2x.p), u'<p>a </p>')
 
+    def test_is_same_paragraph_1(self):
+        '''Two text elements, x distance less 1.5 times their height'''
+        p2x = converter.PDFTextExtractor()
+
+        p2x.prev_t = etree.fromstring(
+            '<text top="106" height="19" font="2">Text1 </text>')
+        t1 = etree.fromstring(
+            '<text top="126" height="19" font="2">text2</text>')
+
+        self.assertTrue(p2x.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_2(self):
+        '''Two text elements, x distance larger 1.5 times their height'''
+        p2x = converter.PDFTextExtractor()
+
+        p2x.prev_t = etree.fromstring('<text top="106" height="19" font="2"/>')
+        t1 = etree.fromstring('<text top="140" height="19" font="2"/>')
+
+        self.assertFalse(p2x.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_3(self):
+        '''Two text elements, different heights'''
+        p2x = converter.PDFTextExtractor()
+
+        p2x.prev_t = etree.fromstring('<text top="106" height="19" font="2"/>')
+        t1 = etree.fromstring('<text top="126" height="20" font="2"/>')
+
+        self.assertFalse(p2x.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_4(self):
+        '''Two text elements, different fonts'''
+        p2x = converter.PDFTextExtractor()
+
+        p2x.prev_t = etree.fromstring(
+            '<text top="106" height="19" font="1">Text1</text>')
+        t1 = etree.fromstring(
+            '<text top="126" height="19" font="2">Text2</text>')
+
+        self.assertTrue(p2x.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_5(self):
+        '''List characters signal a new paragraph start'''
+        p2x = converter.PDFTextExtractor()
+
+        p2x.prev_t = etree.fromstring('<text top="106" height="19" font="2"/>')
+        t1 = etree.fromstring('<text top="126" height="19" font="2">•</text>')
+
+        self.assertFalse(p2x.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_6(self):
+        '''Upper case char and in_list=True signals new paragraph start'''
+        p2x = converter.PDFTextExtractor()
+        p2x.in_list = True
+
+        p2x.prev_t = etree.fromstring(
+            '<text top="300" left="104" width="324" height="18" font="1">'
+            'linnjá</text>')
+        t1 = etree.fromstring(
+            '<text top="321" left="121" width="40" height="18" font="1">'
+            'Nubbi dábáláš linnjá</text>')
+
+        self.assertFalse(p2x.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_7(self):
+        '''and in_list=True signals same paragraph'''
+        p2x = converter.PDFTextExtractor()
+        p2x.in_list = True
+
+        p2x.prev_t = etree.fromstring(
+            '<text top="300" left="104" width="324" height="18" font="1">'
+            'linnjá</text>')
+        t1 = etree.fromstring(
+            '<text top="321" left="121" width="40" height="18" font="1">'
+            ' nubbi dábáláš linnjá</text>')
+
+        self.assertTrue(p2x.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_on_different_column_or_page1(self):
+        '''Not same paragraph if first letter in second element is number'''
+        p2x = converter.PDFTextExtractor()
+
+        p2x.prev_t = etree.fromstring(
+            '<text top="1143" left="168" width="306" height="18" '
+            'font="1">Kopp</text>')
+        t1 = etree.fromstring(
+            '<text top="492" left="523" width="309" height="18" '
+            'font="1">2.</text>')
+
+        self.assertFalse(p2x.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_on_different_column_or_page2(self):
+        '''Same paragraph if first letter in second element is lower case'''
+        p2x = converter.PDFTextExtractor()
+
+        p2x.prev_t = etree.fromstring(
+            '<text top="1143" left="168" '
+            'width="306" height="18" font="1">skuvl-</text>')
+        t1 = etree.fromstring(
+            '<text top="492" left="523" width="309" '
+            'height="18" font="1">lain</text>')
+
+        self.assertTrue(p2x.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_when_top_is_equal(self):
+        '''Test is_same_paragraph
+
+        Text elements that are on the same line should be considered to be
+        in the same paragraph
+        '''
+        p2x = converter.PDFTextExtractor()
+
+        p2x.prev_t = etree.fromstring('<text top="323" left="117" '
+                                      'width="305" height="16" font="2">'
+                                      'gihligotteriektái</text>')
+        t1 = etree.fromstring('<text top="323" left="428" width="220" '
+                              'height="16" font="2">, sáhtte</text>')
+
+        self.assertTrue(p2x.is_same_paragraph(t1))
+
+    def test_is_text_on_same_line_1(self):
+        '''When top is the same, two text elements are on the same line'''
+        p2x = converter.PDFTextExtractor()
+        p2x.in_list = False
+
+        p2x.prev_t = etree.fromstring(
+            '<text top="354" left="119" width="205" height="22" font="2">'
+            '1.1.   RIEKTEJOAVKKU</text>')
+        t1 = etree.fromstring(
+            '<text top="354" left="332" width="6" height="22" font="2"> </text>')
+
+        self.assertTrue(p2x.is_text_on_same_line(t1))
+
+    def test_is_text_on_same_line_2(self):
+        ''''''
+        p2x = converter.PDFTextExtractor()
+        p2x.in_list = False
+
+        p2x.prev_t = etree.fromstring(
+            '<text top="354" left="332" width="6" height="22" font="2"> </text>')
+        t1 = etree.fromstring(
+            '<text top="350" left="339" width="4" height="16" font="7"> </text>')
+
+        self.assertTrue(p2x.is_text_on_same_line(t1))
+
+    def test_is_text_on_same_line_3(self):
+        ''''''
+        p2x = converter.PDFTextExtractor()
+        p2x.in_list = False
+
+        p2x.prev_t = etree.fromstring(
+            '<text top="350" left="339" width="4" height="16" font="7"> </text>')
+        t1 = etree.fromstring(
+            '<text top="354" left="343" width="104" height="22" font="2">MANDÁHTA</text>')
+
+        self.assertTrue(p2x.is_text_on_same_line(t1))
+
+    def test_is_text_on_same_line_4(self):
+        ''''''
+        p2x = converter.PDFTextExtractor()
+        p2x.in_list = False
+
+        p2x.prev_t = etree.fromstring(
+            '<text top="354" left="615" width="13" height="22" font="2">  </text>')
+        t1 = etree.fromstring(
+            '<text top="376" left="119" width="6" height="22" font="2"> </text>')
+
+        self.assertFalse(p2x.is_text_on_same_line(t1))
 
 class TestPDFPage(XMLTester):
     def test_width(self):
@@ -3452,137 +3619,6 @@ class TestPDFPage(XMLTester):
         #self.assertXmlEqual(etree.tostring(test_page), want_page)
         self.assertEqual(got_list, want_list)
 
-
-class TestPDF2XMLConverter(XMLTester):
-    '''Test the class that converts from pdf2xml to giellatekno/divvun xml'''
-    def test_pdf_converter(self):
-        pdfdocument = converter.PDF2XMLConverter(
-            os.path.join(here, 'converter_data/pdf-test.pdf'))
-        got = pdfdocument.convert2intermediate()
-        want = etree.parse(
-            os.path.join(here, 'converter_data/pdf-xml2pdf-test.xml'))
-
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
-
-    def test_is_same_paragraph_1(self):
-        '''Two text elements, x distance less 1.5 times their height'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        p2x.prev_t = etree.fromstring(
-            '<text top="106" height="19" font="2">Text1 </text>')
-        t1 = etree.fromstring(
-            '<text top="126" height="19" font="2">text2</text>')
-
-        self.assertTrue(p2x.is_same_paragraph(t1))
-
-    def test_is_same_paragraph_2(self):
-        '''Two text elements, x distance larger 1.5 times their height'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        p2x.prev_t = etree.fromstring('<text top="106" height="19" font="2"/>')
-        t1 = etree.fromstring('<text top="140" height="19" font="2"/>')
-
-        self.assertFalse(p2x.is_same_paragraph(t1))
-
-    def test_is_same_paragraph_3(self):
-        '''Two text elements, different heights'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        p2x.prev_t = etree.fromstring('<text top="106" height="19" font="2"/>')
-        t1 = etree.fromstring('<text top="126" height="20" font="2"/>')
-
-        self.assertFalse(p2x.is_same_paragraph(t1))
-
-    def test_is_same_paragraph_4(self):
-        '''Two text elements, different fonts'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        p2x.prev_t = etree.fromstring(
-            '<text top="106" height="19" font="1">Text1</text>')
-        t1 = etree.fromstring(
-            '<text top="126" height="19" font="2">Text2</text>')
-
-        self.assertTrue(p2x.is_same_paragraph(t1))
-
-    def test_is_same_paragraph_5(self):
-        '''List characters signal a new paragraph start'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        p2x.prev_t = etree.fromstring('<text top="106" height="19" font="2"/>')
-        t1 = etree.fromstring('<text top="126" height="19" font="2">•</text>')
-
-        self.assertFalse(p2x.is_same_paragraph(t1))
-
-    def test_is_same_paragraph_6(self):
-        '''Upper case char and in_list=True signals new paragraph start'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.in_list = True
-
-        p2x.prev_t = etree.fromstring(
-            '<text top="300" left="104" width="324" height="18" font="1">'
-            'linnjá</text>')
-        t1 = etree.fromstring(
-            '<text top="321" left="121" width="40" height="18" font="1">'
-            'Nubbi dábáláš linnjá</text>')
-
-        self.assertFalse(p2x.is_same_paragraph(t1))
-
-    def test_is_same_paragraph_7(self):
-        '''and in_list=True signals same paragraph'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.in_list = True
-
-        p2x.prev_t = etree.fromstring(
-            '<text top="300" left="104" width="324" height="18" font="1">'
-            'linnjá</text>')
-        t1 = etree.fromstring(
-            '<text top="321" left="121" width="40" height="18" font="1">'
-            ' nubbi dábáláš linnjá</text>')
-
-        self.assertTrue(p2x.is_same_paragraph(t1))
-
-    def test_is_same_paragraph_on_different_column_or_page1(self):
-        '''Not same paragraph if first letter in second element is number'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        p2x.prev_t = etree.fromstring(
-            '<text top="1143" left="168" width="306" height="18" '
-            'font="1">Kopp</text>')
-        t1 = etree.fromstring(
-            '<text top="492" left="523" width="309" height="18" '
-            'font="1">2.</text>')
-
-        self.assertFalse(p2x.is_same_paragraph(t1))
-
-    def test_is_same_paragraph_on_different_column_or_page2(self):
-        '''Same paragraph if first letter in second element is lower case'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        p2x.prev_t = etree.fromstring(
-            '<text top="1143" left="168" '
-            'width="306" height="18" font="1">skuvl-</text>')
-        t1 = etree.fromstring(
-            '<text top="492" left="523" width="309" '
-            'height="18" font="1">lain</text>')
-
-        self.assertTrue(p2x.is_same_paragraph(t1))
-
-    def test_is_same_paragraph_when_top_is_equal(self):
-        '''Test is_same_paragraph
-
-        Text elements that are on the same line should be considered to be
-        in the same paragraph
-        '''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        p2x.prev_t = etree.fromstring('<text top="323" left="117" '
-                                      'width="305" height="16" font="2">'
-                                      'gihligotteriektái</text>')
-        t1 = etree.fromstring('<text top="323" left="428" width="220" '
-                              'height="16" font="2">, sáhtte</text>')
-
-        self.assertTrue(p2x.is_same_paragraph(t1))
-
     def test_parse_page_1(self):
         '''Page with one paragraph, three <text> elements'''
         page_element = etree.fromstring(
@@ -3598,6 +3634,18 @@ class TestPDF2XMLConverter(XMLTester):
         self.assertXmlEqual(
             etree.tostring(p2x.extractor.body, encoding='unicode'),
             u'<body><p>1 2 3.</p></body>')
+
+
+class TestPDF2XMLConverter(XMLTester):
+    '''Test the class that converts from pdf2xml to giellatekno/divvun xml'''
+    def test_pdf_converter(self):
+        pdfdocument = converter.PDF2XMLConverter(
+            os.path.join(here, 'converter_data/pdf-test.pdf'))
+        got = pdfdocument.convert2intermediate()
+        want = etree.parse(
+            os.path.join(here, 'converter_data/pdf-xml2pdf-test.xml'))
+
+        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_parse_page_2(self):
         '''Page with two paragraphs, four <text> elements'''
@@ -4128,52 +4176,3 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
         self.assertTrue(p2x.is_skip_page(3, ['even', 3]))
-
-    def test_is_text_on_same_line_1(self):
-        '''When top is the same, two text elements are on the same line'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.in_list = False
-
-        p2x.prev_t = etree.fromstring(
-            '<text top="354" left="119" width="205" height="22" font="2">'
-            '1.1.   RIEKTEJOAVKKU</text>')
-        t1 = etree.fromstring(
-            '<text top="354" left="332" width="6" height="22" font="2"> </text>')
-
-        self.assertTrue(p2x.is_text_on_same_line(t1))
-
-    def test_is_text_on_same_line_2(self):
-        ''''''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.in_list = False
-
-        p2x.prev_t = etree.fromstring(
-            '<text top="354" left="332" width="6" height="22" font="2"> </text>')
-        t1 = etree.fromstring(
-            '<text top="350" left="339" width="4" height="16" font="7"> </text>')
-
-        self.assertTrue(p2x.is_text_on_same_line(t1))
-
-    def test_is_text_on_same_line_3(self):
-        ''''''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.in_list = False
-
-        p2x.prev_t = etree.fromstring(
-            '<text top="350" left="339" width="4" height="16" font="7"> </text>')
-        t1 = etree.fromstring(
-            '<text top="354" left="343" width="104" height="22" font="2">MANDÁHTA</text>')
-
-        self.assertTrue(p2x.is_text_on_same_line(t1))
-
-    def test_is_text_on_same_line_4(self):
-        ''''''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.in_list = False
-
-        p2x.prev_t = etree.fromstring(
-            '<text top="354" left="615" width="13" height="22" font="2">  </text>')
-        t1 = etree.fromstring(
-            '<text top="376" left="119" width="6" height="22" font="2"> </text>')
-
-        self.assertFalse(p2x.is_text_on_same_line(t1))

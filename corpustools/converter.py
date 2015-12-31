@@ -627,6 +627,8 @@ class PDFTextExtractor(object):
     def __init__(self):
         self.body = etree.Element('body')
         self.p = etree.Element('p')
+        self.prev_t = None
+        self.in_list = False
 
     def replace_list_chars(self):
         if self.get_last_string().startswith(u'•'):
@@ -713,6 +715,94 @@ class PDFTextExtractor(object):
                     last.tail = last.tail[:-1] + u'\xAD'
         elif not re.search(u'[ \xAD]$', p_content):
             self.extract_textelement(etree.fromstring('<text> </text>'))
+
+    def extract_text_from_page(self, text_elements):
+        '''Decide which text elements are sent to extract_textelement
+
+        When t elements is on the same line as self.prev_t, allow empty elements or
+        elements containing only whitespace
+
+        If t is not on the same line as self.prev_t, do not not use them
+        '''
+        for t in text_elements:
+            if self.is_text_on_same_line(t):
+                self.extract_textelement(t)
+                self.prev_t = t
+            elif len(t.xpath("string()").strip()) > 0:
+                if (self.prev_t is not None and
+                        not self.is_same_paragraph(t) and
+                        len(self.p.xpath("string()")) > 0):
+                    self.append_to_body()
+                else:
+                    self.handle_line_ending()
+                self.extract_textelement(t)
+                self.prev_t = t
+
+        # If the last string on a page is the end of a sentence,
+        # wrap self.parts into a paragraph
+        if len(self.p.xpath("string()")) > 0:
+            last_string = self.get_last_string()
+            if re.search(u'[.?!]$', last_string):
+                self.append_to_body()
+
+    def is_text_on_same_line(self, text):
+        if self.prev_t is None:
+            return True
+
+        h1 = float(self.prev_t.get('height'))
+        t1 = float(self.prev_t.get('top'))
+        t2 = float(text.get('top'))
+
+        return t1 + h1 > t2 and t1 - h1 < t2
+
+    def is_text_in_same_paragraph(self, text):
+        h1 = float(self.prev_t.get('height'))
+        h2 = float(text.get('height'))
+
+        delta = float(text.get('top')) - float(self.prev_t.get('top'))
+        ratio = 1.5
+
+        return h1 == h2 and delta < ratio * h1 and delta > 0
+
+    def is_same_paragraph(self, text):
+        '''Find out if text belongs in the same paragraph as self.prev_t.
+
+        Define the incoming text elements text1 and self.prev_t to belong to
+        the same paragraph if they have the same height and if the difference
+        between the top attributes is less than ratio times the height of
+        the text elements.
+        '''
+        same_paragraph = False
+
+        h1 = float(self.prev_t.get('height'))
+        h2 = float(text.get('height'))
+        t1 = int(self.prev_t.get('top'))
+        t2 = int(text.get('top'))
+        # util.print_frame(
+        #    debug='{} {} {} {} {} {}'.format(h1, h2, t1, t2, h1 == h2, t1 > t2))
+        real_text = etree.tostring(text, method='text', encoding='unicode')
+
+        if self.is_text_in_same_paragraph(text):
+            if (real_text[0] in self.LIST_CHARS):
+                self.in_list = True
+                # util.print_frame(debug=text.text)
+            elif (re.match('\s', real_text[0]) is None and
+                  real_text[0] == real_text[0].upper() and self.in_list):
+                self.in_list = False
+                same_paragraph = False
+                # util.print_frame(debug=text.text)
+            elif (real_text[0] not in self.LIST_CHARS):
+                # util.print_frame()
+                same_paragraph = True
+        elif (h1 == h2 and t1 >= t2 and not re.match('\d', real_text[0]) and
+              real_text[0] == real_text[0].lower()):
+            # util.print_frame()
+            same_paragraph = True
+        else:
+            # util.print_frame()
+            self.in_list = False
+
+        return same_paragraph
 
 
 class BoundingBox(namedtuple('BoundingBox', ['top', 'left', 'bottom', 'right'])):
@@ -936,6 +1026,13 @@ class PDFPage(object):
 
         return sorted_list
 
+    def pick_valid_text_elements(self):
+        self.remove_elements_not_within_margin()
+        self.remove_footnotes_superscript()
+        self.sort_text_elements()
+
+        return [t for t in self.page.iter('text')
+                if int(t.get('width')) > 0]
 
 class PDF2XMLConverter(Converter):
     '''Class to convert the xml output of pdftohtml to giellatekno xml'''
@@ -943,8 +1040,6 @@ class PDF2XMLConverter(Converter):
         super(PDF2XMLConverter, self).__init__(filename,
                                                write_intermediate)
         self.extractor = PDFTextExtractor()
-        self.in_list = False
-        self.prev_t = None
 
     def strip_chars(self, content, extra=u''):
         remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]'.format(
@@ -1008,100 +1103,11 @@ class PDF2XMLConverter(Converter):
 
         return document
 
-    def is_text_on_same_line(self, text):
-        if self.prev_t is None:
-            return True
-
-        h1 = float(self.prev_t.get('height'))
-        t1 = float(self.prev_t.get('top'))
-        t2 = float(text.get('top'))
-
-        return t1 + h1 > t2 and t1 - h1 < t2
-
-    def is_text_in_same_paragraph(self, text):
-        h1 = float(self.prev_t.get('height'))
-        h2 = float(text.get('height'))
-
-        delta = float(text.get('top')) - float(self.prev_t.get('top'))
-        ratio = 1.5
-
-        return h1 == h2 and delta < ratio * h1 and delta > 0
-
-    def is_same_paragraph(self, text):
-        '''Find out if text belongs in the same paragraph as self.prev_t.
-
-        Define the incoming text elements text1 and self.prev_t to belong to
-        the same paragraph if they have the same height and if the difference
-        between the top attributes is less than ratio times the height of
-        the text elements.
-        '''
-        same_paragraph = False
-
-        h1 = float(self.prev_t.get('height'))
-        h2 = float(text.get('height'))
-        t1 = int(self.prev_t.get('top'))
-        t2 = int(text.get('top'))
-        # util.print_frame(
-        #    debug='{} {} {} {} {} {}'.format(h1, h2, t1, t2, h1 == h2, t1 > t2))
-        real_text = etree.tostring(text, method='text', encoding='unicode')
-
-        if self.is_text_in_same_paragraph(text):
-            if (real_text[0] in self.extractor.LIST_CHARS):
-                self.in_list = True
-                # util.print_frame(debug=text.text)
-            elif (re.match('\s', real_text[0]) is None and
-                  real_text[0] == real_text[0].upper() and self.in_list):
-                self.in_list = False
-                same_paragraph = False
-                # util.print_frame(debug=text.text)
-            elif (real_text[0] not in self.extractor.LIST_CHARS):
-                # util.print_frame()
-                same_paragraph = True
-        elif (h1 == h2 and t1 >= t2 and not re.match('\d', real_text[0]) and
-              real_text[0] == real_text[0].lower()):
-            # util.print_frame()
-            same_paragraph = True
-        else:
-            # util.print_frame()
-            self.in_list = False
-
-        return same_paragraph
-
     def parse_page(self, page):
         '''Parse the page element.'''
-        self.remove_elements_not_within_margin(page)
-        self.remove_footnotes_superscript(page)
-        self.extract_text_from_page(page)
-
-    def extract_text_from_page(self, page):
-        '''Decide which text elements are sent to extract_textelement
-
-        When t elements is on the same line as self.prev_t, allow empty elements or
-        elements containing only whitespace
-
-        If t is not on the same line as self.prev_t, do not not use them
-        '''
-        for t in page.iter('text'):
-            if int(t.get('width')) > 0:
-                if self.is_text_on_same_line(t):
-                    self.extractor.extract_textelement(t)
-                    self.prev_t = t
-                elif len(t.xpath("string()").strip()) > 0:
-                    if (self.prev_t is not None and
-                            not self.is_same_paragraph(t) and
-                            len(self.extractor.p.xpath("string()")) > 0):
-                        self.extractor.append_to_body()
-                    else:
-                        self.extractor.handle_line_ending()
-                    self.extractor.extract_textelement(t)
-                    self.prev_t = t
-
-        # If the last string on a page is the end of a sentence,
-        # wrap self.parts into a paragraph
-        if len(self.extractor.p.xpath("string()")) > 0:
-            last_string = self.extractor.get_last_string()
-            if re.search(u'[.?!]$', last_string):
-                self.extractor.append_to_body()
+        pdfpage = PDFPage(page, metadata_margins=self.md.margins,
+                          metadata_inner_margins=self.md.inner_margins)
+        self.extractor.extract_text_from_page(pdfpage.pick_valid_text_elements())
 
     @staticmethod
     def is_skip_page(page_number, skip_pages):
