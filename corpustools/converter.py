@@ -625,9 +625,12 @@ class PDFTextExtractor(object):
 
     def __init__(self):
         self.body = etree.Element('body')
-        self.p = etree.Element('p')
-        self.prev_t = None
+        etree.SubElement(self.body, 'p')
         self.in_list = False
+
+    @property
+    def p(self):
+        return self.body[-1]
 
     def replace_list_chars(self):
         if self.get_last_string().startswith(u'•'):
@@ -640,8 +643,7 @@ class PDFTextExtractor(object):
 
     def append_to_body(self):
         self.replace_list_chars()
-        self.body.append(self.p)
-        self.p = etree.Element('p')
+        etree.SubElement(self.body, 'p')
 
     def append_text_to_p(self, text):
         '''text is a string'''
@@ -702,8 +704,7 @@ class PDFTextExtractor(object):
 
     def handle_line_ending(self):
         '''Add a soft hyphen or a space at the end of self.p'''
-        p_content = self.p.xpath("string()")
-        if re.search('\S-$', p_content):
+        if re.search('\S-$', self.get_last_string()):
             if len(self.p) == 0:
                 self.p.text = self.p.text[:-1] + u'\xAD'
             else:
@@ -712,8 +713,15 @@ class PDFTextExtractor(object):
                     last.text = last.text[:-1] + u'\xAD'
                 else:
                     last.tail = last.tail[:-1] + u'\xAD'
-        elif len(p_content) > 0 and not re.search(u'[ \xAD]$', p_content):
+        elif len(self.get_last_string()) > 0 and not re.search(u'[ \xAD]$', self.get_last_string()):
             self.extract_textelement(etree.fromstring('<text> </text>'))
+
+    def is_first_page(self):
+        return len(self.body) == 1 and len(self.get_last_string()) == 0
+
+    def is_last_paragraph_end_of_page(self):
+        return (len(self.get_last_string()) > 0 and
+                re.search(u'[.?!]\s*$', self.get_last_string()))
 
     def extract_text_from_page(self, text_elements):
         '''Decide which text elements are sent to extract_textelement
@@ -723,33 +731,26 @@ class PDFTextExtractor(object):
 
         If t is not on the same line as self.prev_t, do not not use them
         '''
-        for t in text_elements:
-            if (self.prev_t is not None and
-                    not self.is_same_paragraph(t) and
-                    len(self.p.xpath("string()")) > 0):
+        if len(text_elements) > 0:
+            if not self.is_first_page() and self.is_last_paragraph_end_of_page():
                 self.append_to_body()
             else:
                 self.handle_line_ending()
-            self.extract_textelement(t)
-            self.prev_t = t
 
-        # If the last string on a page is the end of a sentence,
-        # wrap self.parts into a paragraph
-        if len(self.p.xpath("string()")) > 0:
-            last_string = self.get_last_string()
-            if re.search(u'[.?!]$', last_string):
-                self.append_to_body()
+            self.extract_textelement(text_elements[0].t)
+            for i in range(1, len(text_elements)):
+                prev_t = text_elements[i - 1]
+                t = text_elements[i]
+                if (not self.is_same_paragraph(prev_t, t) and len(self.p.xpath("string()")) > 0):
+                    self.append_to_body()
+                else:
+                    self.handle_line_ending()
+                self.extract_textelement(t.t)
 
-    def is_text_in_same_paragraph(self, text):
-        h1 = float(self.prev_t.get('height'))
-        h2 = float(text.get('height'))
+        if len(self.get_last_string()) == 0:
+            self.body.remove(self.p)
 
-        delta = float(text.get('top')) - float(self.prev_t.get('top'))
-        ratio = 1.5
-
-        return h1 == h2 and delta < ratio * h1 and delta > 0
-
-    def is_same_paragraph(self, text):
+    def is_same_paragraph(self, prev_text, text):
         '''Find out if text belongs in the same paragraph as self.prev_t.
 
         Define the incoming text elements text1 and self.prev_t to belong to
@@ -759,15 +760,11 @@ class PDFTextExtractor(object):
         '''
         same_paragraph = False
 
-        h1 = float(self.prev_t.get('height'))
-        h2 = float(text.get('height'))
-        t1 = int(self.prev_t.get('top'))
-        t2 = int(text.get('top'))
         # util.print_frame(
         #    debug='{} {} {} {} {} {}'.format(h1, h2, t1, t2, h1 == h2, t1 > t2))
-        real_text = etree.tostring(text, method='text', encoding='unicode')
+        real_text = text.plain_text
 
-        if self.is_text_in_same_paragraph(text):
+        if prev_text.is_text_in_same_paragraph(text):
             if (real_text[0] in self.LIST_CHARS):
                 self.in_list = True
                 # util.print_frame(debug=text.text)
@@ -779,10 +776,6 @@ class PDFTextExtractor(object):
             elif (real_text[0] not in self.LIST_CHARS):
                 # util.print_frame()
                 same_paragraph = True
-        elif (h1 == h2 and t1 >= t2 and not re.match('\d', real_text[0]) and
-              real_text[0] == real_text[0].lower()):
-            # util.print_frame()
-            same_paragraph = True
         else:
             # util.print_frame()
             self.in_list = False
@@ -844,8 +837,24 @@ class PDFTextElement(object):
         except ValueError:
             pass
 
+    @property
+    def plain_text(self):
+        return self.t.xpath("string()")
+
     def is_text_on_same_line(self, other_box):
         return not self.is_below(other_box) and not self.is_above(other_box)
+
+    def is_text_in_same_paragraph(self, other_box):
+        if self.is_above(other_box):
+            ratio = 1.5
+            delta = other_box.top - self.top
+
+            return self.height == other_box.height and delta < ratio * self.height
+        else:
+            return (self.height == other_box.height and
+                    self.top >= other_box.top and
+                    not re.match('\d', self.plain_text[0]) and
+                    self.plain_text[0] == self.plain_text[0].lower())
 
     def merge_text_elements(self, other_box):
         '''Merge the contents of other_box into self'''
@@ -1066,7 +1075,7 @@ class PDFPage(object):
         self.merge_elements_on_same_line()
         self.remove_invalid_elements()
 
-        return [box.t for box in self.sort_text_elements()]
+        return self.sort_text_elements()
 
 
 class PDF2XMLConverter(Converter):
@@ -1148,9 +1157,6 @@ class PDF2XMLConverter(Converter):
     def parse_pages(self, root_element):
         for page in root_element.iter('page'):
             self.parse_page(page)
-
-        if len(self.extractor.get_last_string()) > 0:
-            self.extractor.append_to_body()
 
 
 class BiblexmlConverter(Converter):
