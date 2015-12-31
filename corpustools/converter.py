@@ -713,7 +713,7 @@ class PDFTextExtractor(object):
                     last.text = last.text[:-1] + u'\xAD'
                 else:
                     last.tail = last.tail[:-1] + u'\xAD'
-        elif not re.search(u'[ \xAD]$', p_content):
+        elif len(p_content) > 0 and not re.search(u'[ \xAD]$', p_content):
             self.extract_textelement(etree.fromstring('<text> </text>'))
 
     def extract_text_from_page(self, text_elements):
