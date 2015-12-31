@@ -742,6 +742,8 @@ class PDFParagraph(object):
         self.in_list = False
 
     def append_textelement(self, textelement):
+        if len(textelement.plain_text) > 0 and textelement.plain_text[0] in self.LIST_CHARS:
+            self.in_list = True
         if len(self.paragraph) > 0 and textelement.is_right_of(self.paragraph[-1]):
             self.boundingboxes.append(BoundingBox())
         self.boundingboxes[-1].increase_box(textelement)
@@ -776,19 +778,12 @@ class PDFParagraph(object):
         real_text = other_box.plain_text
 
         if self.is_text_in_same_paragraph(other_box):
-            if (real_text[0] in self.LIST_CHARS):
-                self.in_list = True
-                # util.print_frame(debug=text.text)
-            elif (re.match('\s', real_text[0]) is None and
+            if (re.match('\s', real_text[0]) is None and
                   real_text[0] == real_text[0].upper() and self.in_list):
                 self.in_list = False
-                same_paragraph = False
-                # util.print_frame(debug=text.text)
             elif (real_text[0] not in self.LIST_CHARS):
-                # util.print_frame()
                 same_paragraph = True
         else:
-            # util.print_frame()
             self.in_list = False
 
         return same_paragraph
@@ -914,6 +909,7 @@ class PDFTextExtractor(object):
         for textelement in paragraph.paragraph:
             self.extract_textelement(textelement.t)
             self.handle_line_ending()
+        self.append_to_body()
 
     def extract_text_from_page(self, paragraphs):
         '''Decide which text elements are sent to extract_textelement
@@ -923,24 +919,13 @@ class PDFTextExtractor(object):
 
         If t is not on the same line as self.prev_t, do not not use them
         '''
-        pass
-        #if not self.is_first_page() and self.is_last_paragraph_end_of_page():
-            #self.append_to_body()
-        #else:
-            #self.handle_line_ending()
+        for paragraph in paragraphs:
+            if not self.is_first_page() and self.is_last_paragraph_end_of_page():
+                self.append_to_body()
+            self.extract_text_from_paragraph(paragraph)
 
-        #self.extract_textelement(paragraphs[0].t)
-        #for i in range(1, len(paragraphs)):
-            #prev_t = paragraphs[i - 1]
-            #t = paragraphs[i]
-            #if (not self.is_same_paragraph(prev_t, t) and len(self.p.xpath("string()")) > 0):
-                #self.append_to_body()
-            #else:
-                #self.handle_line_ending()
-            #self.extract_textelement(t.t)
-
-        #if len(self.get_last_string()) == 0:
-            #self.body.remove(self.p)
+        if len(self.get_last_string()) == 0:
+            self.body.remove(self.p)
 
 
 class PDFPage(object):
@@ -1128,9 +1113,10 @@ class PDFPage(object):
         return sorted_list
 
     def make_paragraphs(self):
+        textelement = self.textelements[0]
         paragraphs = []
         paragraphs.append(PDFParagraph())
-        paragraphs[-1].append_textelement(self.textelements[0])
+        paragraphs[-1].append_textelement(textelement)
 
         for textelement in self.textelements[1:]:
             if not paragraphs[-1].is_same_paragraph(textelement):

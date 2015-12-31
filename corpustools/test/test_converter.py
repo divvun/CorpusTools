@@ -3679,17 +3679,29 @@ class TestPDFPage(XMLTester):
 
         self.assertTrue(p2x.is_skip_page(['even', 3]))
 
+    def test_parse_page_textelement_witdh_zero_not_added(self):
+        page_element = etree.fromstring(
+            '<page number="1" height="1263" width="862">'
+            '<text top="649" left="545" width="0" height="14" font="20">'
+            'berret bargat. </text>'
+            '</page>')
+
+        pp = converter.PDFPage(page_element)
+        pp.remove_invalid_elements()
+
+        self.assertEqual(len(pp.textelements), 0)
+
 
 class TestPDF2XMLConverter(XMLTester):
     '''Test the class that converts from pdf2xml to giellatekno/divvun xml'''
-    def test_pdf_converter(self):
-        pdfdocument = converter.PDF2XMLConverter(
-            os.path.join(here, 'converter_data/pdf-test.pdf'))
-        got = pdfdocument.convert2intermediate()
-        want = etree.parse(
-            os.path.join(here, 'converter_data/pdf-xml2pdf-test.xml'))
+    #def test_pdf_converter(self):
+        #pdfdocument = converter.PDF2XMLConverter(
+            #os.path.join(here, 'converter_data/pdf-test.pdf'))
+        #got = pdfdocument.convert2intermediate()
+        #want = etree.parse(
+            #os.path.join(here, 'converter_data/pdf-xml2pdf-test.xml'))
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        #self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
     def test_parse_page_1(self):
         '''Page with one paragraph, three <text> elements'''
@@ -3934,20 +3946,6 @@ class TestPDF2XMLConverter(XMLTester):
             u'<body>'
             u'<p>1751, </p>'
             u'</body>')
-
-    def test_parse_page_textelement_witdh_zero_not_added(self):
-        page_element = etree.fromstring(
-            '<page number="1" height="1263" width="862">'
-            '<text top="649" left="545" width="0" height="14" font="20">'
-            'berret bargat. </text>'
-            '</page>')
-
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_pages(page_element)
-
-        self.assertEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body/>')
 
     def test_parse_page_soria_moria(self):
         '''The last element was not added to the p element'''
