@@ -3190,6 +3190,7 @@ class TestPDFTextExtractor(XMLTester):
 
         self.assertFalse(p2x.is_text_on_same_line(t1))
 
+
 class TestPDFPage(XMLTester):
     def test_width(self):
         page = converter.PDFPage(etree.fromstring('<page number="1" height="1263" width="862"/>'))
@@ -3634,6 +3635,42 @@ class TestPDFPage(XMLTester):
         self.assertXmlEqual(
             etree.tostring(p2x.extractor.body, encoding='unicode'),
             u'<body><p>1 2 3.</p></body>')
+
+    def test_is_skip_page_1(self):
+        '''Odd page should be skipped when odd is in skip_pages'''
+        p2x = converter.PDFPage(etree.fromstring('<page number="1"/>'))
+
+        self.assertTrue(p2x.is_skip_page(['odd']))
+
+    def test_is_skip_page_2(self):
+        '''Even page should be skipped when even is in skip_pages'''
+        p2x = converter.PDFPage(etree.fromstring('<page number="2"/>'))
+
+        self.assertTrue(p2x.is_skip_page(['even']))
+
+    def test_is_skip_page_3(self):
+        '''Even page should not be skipped when odd is in skip_pages'''
+        p2x = converter.PDFPage(etree.fromstring('<page number="2"/>'))
+
+        self.assertFalse(p2x.is_skip_page(['odd']))
+
+    def test_is_skip_page_4(self):
+        '''Odd page should not be skipped when even is in skip_pages'''
+        p2x = converter.PDFPage(etree.fromstring('<page number="1"/>'))
+
+        self.assertFalse(p2x.is_skip_page(['even']))
+
+    def test_is_skip_page_5(self):
+        '''Page should not be skipped when not in skip_range'''
+        p2x = converter.PDFPage(etree.fromstring('<page number="1"/>'))
+
+        self.assertFalse(p2x.is_skip_page(['even', 3]))
+
+    def test_is_skip_page_6(self):
+        '''Page should be skipped when in skip_range'''
+        p2x = converter.PDFPage(etree.fromstring('<page number="3"/>'))
+
+        self.assertTrue(p2x.is_skip_page(['even', 3]))
 
 
 class TestPDF2XMLConverter(XMLTester):
@@ -4140,39 +4177,3 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
-
-    def test_is_skip_page_1(self):
-        '''Odd page should be skipped when odd is in skip_pages'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        self.assertTrue(p2x.is_skip_page(1, ['odd']))
-
-    def test_is_skip_page_2(self):
-        '''Even page should be skipped when even is in skip_pages'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        self.assertTrue(p2x.is_skip_page(2, ['even']))
-
-    def test_is_skip_page_3(self):
-        '''Even page should not be skipped when odd is in skip_pages'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        self.assertFalse(p2x.is_skip_page(2, ['odd']))
-
-    def test_is_skip_page_4(self):
-        '''Odd page should not be skipped when even is in skip_pages'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        self.assertFalse(p2x.is_skip_page(1, ['even']))
-
-    def test_is_skip_page_5(self):
-        '''Page should not be skipped when not in skip_range'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        self.assertFalse(p2x.is_skip_page(1, ['even', 3]))
-
-    def test_is_skip_page_6(self):
-        '''Page should be skipped when in skip_range'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        self.assertTrue(p2x.is_skip_page(3, ['even', 3]))

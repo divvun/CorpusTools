@@ -837,6 +837,12 @@ class PDFPage(object):
     def width(self):
         return int(self.page.get('width'))
 
+    def is_skip_page(self, skip_pages):
+        '''True if a page should be skipped, otherwise false'''
+        return (('odd' in skip_pages and (self.number % 2) == 1) or
+                ('even' in skip_pages and (self.number % 2) == 0) or
+                self.number in skip_pages)
+
     def find_footnotes_superscript(self):
         '''Search for text elements containing potential footnotes.
 
@@ -999,7 +1005,6 @@ class PDFPage(object):
                 int(t.get('left')) < margins['inner_right_margin'])
 
     def sort_text_elements(self):
-        element_dict = {}
         sorted_list = []
         for t in self.page.iter('text'):
             top = int(t.get('top'))
@@ -1033,6 +1038,7 @@ class PDFPage(object):
 
         return [t for t in self.page.iter('text')
                 if int(t.get('width')) > 0]
+
 
 class PDF2XMLConverter(Converter):
     '''Class to convert the xml output of pdftohtml to giellatekno xml'''
@@ -1107,20 +1113,12 @@ class PDF2XMLConverter(Converter):
         '''Parse the page element.'''
         pdfpage = PDFPage(page, metadata_margins=self.md.margins,
                           metadata_inner_margins=self.md.inner_margins)
-        self.extractor.extract_text_from_page(pdfpage.pick_valid_text_elements())
-
-    @staticmethod
-    def is_skip_page(page_number, skip_pages):
-        '''True if a page should be skipped, otherwise false'''
-        return (('odd' in skip_pages and (page_number % 2) == 1) or
-                ('even' in skip_pages and (page_number % 2) == 0) or
-                page_number in skip_pages)
+        if not pdfpage.is_skip_page(self.md.skip_pages):
+            self.extractor.extract_text_from_page(pdfpage.pick_valid_text_elements())
 
     def parse_pages(self, root_element):
-        skip_pages = self.md.skip_pages
         for page in root_element.iter('page'):
-            if not self.is_skip_page(int(page.get('number')), skip_pages):
-                self.parse_page(page)
+            self.parse_page(page)
 
         if len(self.extractor.get_last_string()) > 0:
             self.extractor.append_to_body()
