@@ -25,7 +25,7 @@ from __future__ import print_function
 
 import argparse
 import codecs
-import collections
+from collections import namedtuple
 from copy import deepcopy
 import distutils.dep_util
 import distutils.spawn
@@ -714,7 +714,14 @@ class PDFTextExtractor(object):
             self.extract_textelement(etree.fromstring('<text> </text>'))
 
 
-BoundingBox = collections.namedtuple('BoundingBox', ['top', 'left', 'bottom', 'right'])
+class BoundingBox(namedtuple('BoundingBox', ['top', 'left', 'bottom', 'right'])):
+    __slots__ = ()
+
+    def is_below(self, other_box):
+        return self.top > other_box.bottom
+
+    def is_right_of(self, other_box):
+        return self.left > other_box.right
 
 
 class PDF2XMLConverter(Converter):
@@ -1005,11 +1012,11 @@ class PDF2XMLConverter(Converter):
 
             util.print_frame(debug=bounding_box)
             i = 0
-            while i < len(sorted_list) and bounding_box.left > sorted_list[i].right:
+            while i < len(sorted_list) and bounding_box.is_right_of(sorted_list[i]):
                 util.print_frame(debug=i)
                 util.print_frame(sorted_list[i])
                 i += 1
-            while i < len(sorted_list) and bounding_box.top > sorted_list[i].bottom:
+            while i < len(sorted_list) and bounding_box.is_below(sorted_list[i]):
                 util.print_frame(debug=i)
                 util.print_frame(sorted_list[i])
                 i += 1
