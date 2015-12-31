@@ -791,18 +791,18 @@ class PDFTextExtractor(object):
         return same_paragraph
 
 
-class BoundingBox(namedtuple('BoundingBox', ['top', 'left', 'bottom', 'right'])):
+class BoundingBox(namedtuple('BoundingBox', ['top', 'left', 'bottom', 'right', 't'])):
     __slots__ = ()
 
     def is_below(self, other_box):
-        return self.top > other_box.bottom
+        return self.top >= other_box.bottom
 
     def is_right_of(self, other_box):
-        return self.left > other_box.right
+        return self.left >= other_box.right
 
     def is_covered(self, other_box):
         '''Is self sideways (partly) covered by other_box'''
-        return self.left < other_box.right and self.right > other_box.left
+        return self.left <= other_box.right and self.right >= other_box.left
 
 
 class PDFPage(object):
@@ -1042,7 +1042,7 @@ class PDFPage(object):
             height = int(t.get('height'))
             width = int(t.get('width'))
             bounding_box = BoundingBox(top=top, left=left, bottom=top + height,
-                                       right=left + width)
+                                       right=left + width, t=t)
 
             i = 0
             for box in sorted_list:
@@ -1066,9 +1066,8 @@ class PDFPage(object):
         self.remove_footnotes_superscript()
         self.merge_elements_on_same_line()
         self.remove_invalid_elements()
-        self.sort_text_elements()
 
-        return [t for t in self.page.iter('text')]
+        return [box.t for box in self.sort_text_elements()]
 
 
 class PDF2XMLConverter(Converter):
