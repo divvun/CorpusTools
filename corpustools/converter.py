@@ -658,6 +658,9 @@ class PDFTextElement(object):
     def is_right_of(self, other_box):
         return self.left >= other_box.right
 
+    def is_left_of(self, other_box):
+        return self.right <= other_box.left
+
     def is_covered(self, other_box):
         '''Is self sideways (partly) covered by other_box'''
         return self.left <= other_box.right and self.right >= other_box.left
@@ -689,6 +692,7 @@ class PDFTextElement(object):
         else:
             return (self.height == other_box.height and
                     self.top >= other_box.top and
+                    self.is_left_of(other_box) and
                     not re.match('\d', self.plain_text[0]) and
                     self.plain_text[0] == self.plain_text[0].lower())
 
