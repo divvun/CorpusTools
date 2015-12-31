@@ -4143,14 +4143,14 @@ class TestPDF2XMLConverter(XMLTester):
         pdf2xml = etree.fromstring(
             '<pdf2xml>'
             '<page number="1" height="1263" width="862"><fontspec/>'
-            '<text top="145" left="100" width="100" height="19">1 </text>'
+            '<text top="145" left="100" width="100" height="19">a </text>'
             '</page>'
             '<page number="2" height="1263" width="862">'
-            '<text top="145" left="100" width="100" height="19">2.</text>'
+            '<text top="145" left="100" width="100" height="19">b.</text>'
             '</page>'
 
             '</pdf2xml>')
-        want = u'<body><p>1 2.</p></body>'
+        want = u'<body><p>a b.</p></body>'
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
