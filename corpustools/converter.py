@@ -25,7 +25,6 @@ from __future__ import print_function
 
 import argparse
 import codecs
-from collections import namedtuple
 from copy import deepcopy
 import distutils.dep_util
 import distutils.spawn
@@ -820,7 +819,12 @@ class PDFTextElement(object):
         return self.left + self.width
 
     def is_below(self, other_box):
+        '''True if this element is below other_box'''
         return self.top >= other_box.bottom
+
+    def is_above(self, other_box):
+        '''True if this element is above other_box'''
+        return other_box.top >= self.bottom
 
     def is_right_of(self, other_box):
         return self.left >= other_box.right
@@ -840,6 +844,31 @@ class PDFTextElement(object):
         except ValueError:
             pass
 
+    def is_text_on_same_line(self, other_box):
+        return not self.is_below(other_box) and not self.is_above(other_box)
+
+    def merge_text_elements(self, other_box):
+        '''Merge the contents of other_box into self'''
+        prev_t = self.t
+        t = other_box.t
+        if len(prev_t) == 0:
+            if prev_t.text is None:
+                prev_t.text = t.text
+            else:
+                prev_t.text += t.text
+        else:
+            last = prev_t[-1]
+            if t.text is not None:
+                if last.tail is None:
+                    last.tail = t.text
+                else:
+                    last.tail += t.text
+        for child in t:
+            prev_t.append(child)
+
+        orig_width = int(prev_t.get('width'))
+        t_width = int(t.get('width'))
+        prev_t.set('width', str(orig_width + t_width))
 
 
 class PDFPage(object):
@@ -878,49 +907,19 @@ class PDFPage(object):
             self.textelements[:] = [t for t in self.textelements
                                     if not self.is_inside_inner_margins(t, inner_margins)]
 
-    @staticmethod
-    def is_text_on_same_line(prev_t, t):
-        h1 = float(prev_t.get('height'))
-        t1 = float(prev_t.get('top'))
-        t2 = float(t.get('top'))
-
-        return t1 + h1 > t2 and t1 - h1 < t2
-
-    @staticmethod
-    def merge_text_elements(prev_t, t):
-        '''Merge the contents of prev_t and t'''
-        if len(prev_t) == 0:
-            if prev_t.text is None:
-                prev_t.text = t.text
-            else:
-                prev_t.text += t.text
-        else:
-            last = prev_t[-1]
-            if t.text is not None:
-                if last.tail is None:
-                    last.tail = t.text
-                else:
-                    last.tail += t.text
-        for child in t:
-            prev_t.append(child)
-        orig_width = int(prev_t.get('width'))
-        t_width = int(t.get('width'))
-        prev_t.set('width', str(orig_width + t_width))
-        t.getparent().remove(t)
-
-
     def merge_elements_on_same_line(self):
-        prev_t = None
-        for t in self.page.iter('text'):
-            if prev_t is not None and self.is_text_on_same_line(prev_t, t):
-                self.merge_text_elements(prev_t, t)
-            else:
-                prev_t = t
+        same_line_indexes = [i for i in range(1, len(self.textelements))
+                             if self.textelements[i - 1].is_text_on_same_line(
+                                 self.textelements[i])]
+        for i in reversed(same_line_indexes):
+            self.textelements[i - 1].merge_text_elements(
+                self.textelements[i])
+            del self.textelements[i]
 
     def remove_invalid_elements(self):
-        for t in self.page.iter('text'):
-            if len(t.xpath("string()").strip()) == 0 or int(t.get('width')) < 1:
-                t.getparent().remove(t)
+        self.textelements[:] = [t for t in self.textelements
+                                if not (len(t.t.xpath("string()").strip()) == 0 or
+                                        t.width < 1)]
 
     def compute_margins(self):
         '''Compute the margins of a page in pixels.
