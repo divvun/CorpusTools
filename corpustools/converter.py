@@ -737,20 +737,20 @@ class PDFParagraph(object):
     LIST_CHARS = [u'•']
 
     def __init__(self):
-        self.paragraph = []
+        self.textelements = []
         self.boundingboxes = [BoundingBox()]
         self.in_list = False
 
     def append_textelement(self, textelement):
         if len(textelement.plain_text) > 0 and textelement.plain_text[0] in self.LIST_CHARS:
             self.in_list = True
-        if len(self.paragraph) > 0 and textelement.is_right_of(self.paragraph[-1]):
+        if len(self.textelements) > 0 and textelement.is_right_of(self.textelements[-1]):
             self.boundingboxes.append(BoundingBox())
         self.boundingboxes[-1].increase_box(textelement)
-        self.paragraph.append(textelement)
+        self.textelements.append(textelement)
 
     def is_text_in_same_paragraph(self, other_box):
-        prev_box = self.paragraph[-1]
+        prev_box = self.textelements[-1]
         if prev_box.is_above(other_box):
             ratio = 1.5
             delta = other_box.top - prev_box.top
@@ -906,7 +906,7 @@ class PDFTextExtractor(object):
                 re.search(u'[.?!]\s*$', self.get_last_string()))
 
     def extract_text_from_paragraph(self, paragraph):
-        for textelement in paragraph.paragraph:
+        for textelement in paragraph.textelements:
             self.extract_textelement(textelement.t)
             self.handle_line_ending()
         self.append_to_body()

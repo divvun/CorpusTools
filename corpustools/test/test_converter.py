@@ -2957,7 +2957,7 @@ class TestPDFParagraph(XMLTester):
         pp = converter.PDFParagraph()
         pp.append_textelement(self.textelements[0])
 
-        self.assertListEqual(pp.paragraph, self.textelements[:-2])
+        self.assertListEqual(pp.textelements, self.textelements[:-2])
         self.assertEqual(pp.boundingboxes[-1].top, self.textelements[0].top)
         self.assertEqual(pp.boundingboxes[-1].left, self.textelements[0].left)
         self.assertEqual(pp.boundingboxes[-1].bottom, self.textelements[0].bottom)
@@ -2969,7 +2969,7 @@ class TestPDFParagraph(XMLTester):
         pp.append_textelement(self.textelements[0])
         pp.append_textelement(self.textelements[1])
 
-        self.assertListEqual(pp.paragraph, self.textelements[:-1])
+        self.assertListEqual(pp.textelements, self.textelements[:-1])
         self.assertEqual(len(pp.boundingboxes), 1)
         self.assertEqual(pp.boundingboxes[-1].top, self.textelements[0].top)
         self.assertEqual(pp.boundingboxes[-1].left, self.textelements[1].left)
@@ -2982,7 +2982,7 @@ class TestPDFParagraph(XMLTester):
         pp.append_textelement(self.textelements[1])
         pp.append_textelement(self.textelements[2])
 
-        self.assertListEqual(pp.paragraph, self.textelements)
+        self.assertListEqual(pp.textelements, self.textelements)
 
         self.assertEqual(len(pp.boundingboxes), 2)
         self.assertEqual(pp.boundingboxes[-2].top, self.textelements[0].top)
