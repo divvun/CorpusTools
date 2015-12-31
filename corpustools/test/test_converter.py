@@ -4088,7 +4088,6 @@ class TestPDF2XMLConverter(XMLTester):
         self.assertFalse(p2x.is_text_on_same_line(t1))
 
     def test_sort_text_elements_1(self):
-        '''Test data for bug2106, Header appears at the end of the page'''
         self.maxDiff = None
         p2x = converter.PDF2XMLConverter('bogus.xml')
         test_page = etree.fromstring(
@@ -4099,6 +4098,43 @@ class TestPDF2XMLConverter(XMLTester):
             <text top="232" left="85" width="347" height="15" font="4">4</text>
 
             <text top="198" left="478" width="330" height="15" font="4">5</text>
+            <text top="215" left="461" width="347" height="15" font="4">6</text>
+
+            <text top="110" left="239" width="416" height="30" font="6">2</text>
+            </page>''')
+        got_list = p2x.sort_text_elements(test_page)
+        want_page = (
+            u'''<page number="13" position="absolute" top="0" left="0" height="1261" width="892">
+            <text top="72" left="85" width="62" height="12" font="5">1</text>
+            <text top="110" left="239" width="416" height="30" font="6">2</text>
+            <text top="193" left="85" width="213" height="24" font="10">3</text>
+            <text top="232" left="85" width="347" height="15" font="4">4</text>
+            <text top="198" left="478" width="330" height="15" font="4">5</text>
+            <text top="215" left="461" width="347" height="15" font="4">6</text>
+
+            </page>''')
+        want_list = [converter.BoundingBox(top=72, left=85, bottom=84, right=147),
+                     converter.BoundingBox(top=110, left=239, bottom=140, right=655),
+                     converter.BoundingBox(top=193, left=85, bottom=217, right=298),
+                     converter.BoundingBox(top=232, left=85, bottom=247, right=432),
+                     converter.BoundingBox(top=198, left=478, bottom=213, right=808),
+                     converter.BoundingBox(top=215, left=461, bottom=230, right=808)
+                     ]
+
+        #self.assertXmlEqual(etree.tostring(test_page), want_page)
+        self.assertEqual(got_list, want_list)
+
+    def test_sort_text_elements_2(self):
+        self.maxDiff = None
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        test_page = etree.fromstring(
+            u'''<page number="13" position="absolute" top="0" left="0" height="1261" width="892">
+            <text top="72" left="85" width="62" height="12" font="5">1</text>
+
+            <text top="198" left="478" width="330" height="15" font="4">5</text>
+            <text top="193" left="85" width="213" height="24" font="10">3</text>
+            <text top="232" left="85" width="347" height="15" font="4">4</text>
+
             <text top="215" left="461" width="347" height="15" font="4">6</text>
 
             <text top="110" left="239" width="416" height="30" font="6">2</text>
