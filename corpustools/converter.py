@@ -709,19 +709,6 @@ class PDFTextElement(BoundingBox):
     def is_text_on_same_line(self, other_box):
         return not self.is_below(other_box) and not self.is_above(other_box)
 
-    def is_text_in_same_paragraph(self, other_box):
-        if self.is_above(other_box):
-            ratio = 1.5
-            delta = other_box.top - self.top
-
-            return self.height == other_box.height and delta < ratio * self.height
-        else:
-            return (self.height == other_box.height and
-                    self.top >= other_box.top and
-                    self.is_left_of(other_box) and
-                    not re.match('\d', self.plain_text[0]) and
-                    self.plain_text[0] == self.plain_text[0].lower())
-
     def merge_text_elements(self, other_box):
         '''Merge the contents of other_box into self'''
         prev_t = self.t
@@ -747,15 +734,64 @@ class PDFTextElement(BoundingBox):
 
 
 class PDFParagraph(object):
+    LIST_CHARS = [u'•']
+
     def __init__(self):
         self.paragraph = []
         self.boundingboxes = [BoundingBox()]
+        self.in_list = False
 
     def append_textelement(self, textelement):
         if len(self.paragraph) > 0 and textelement.is_right_of(self.paragraph[-1]):
             self.boundingboxes.append(BoundingBox())
         self.boundingboxes[-1].increase_box(textelement)
         self.paragraph.append(textelement)
+
+    def is_text_in_same_paragraph(self, other_box):
+        prev_box = self.paragraph[-1]
+        if prev_box.is_above(other_box):
+            ratio = 1.5
+            delta = other_box.top - prev_box.top
+
+            return prev_box.height == other_box.height and delta < ratio * prev_box.height
+        else:
+            return (prev_box.height == other_box.height and
+                    prev_box.top >= other_box.top and
+                    prev_box.is_left_of(other_box) and
+                    not re.match('\d', prev_box.plain_text[0]) and
+                    prev_box.plain_text[0] == prev_box.plain_text[0].lower())
+
+    def is_same_paragraph(self, other_box):
+        '''Find out if text belongs in the same paragraph as self.prev_t.
+
+        Define the incoming text elements text1 and self.prev_t to belong to
+        the same paragraph if they have the same height and if the difference
+        between the top attributes is less than ratio times the height of
+        the text elements.
+        '''
+        same_paragraph = False
+
+        # util.print_frame(
+        #    debug='{} {} {} {} {} {}'.format(h1, h2, t1, t2, h1 == h2, t1 > t2))
+        real_text = other_box.plain_text
+
+        if self.is_text_in_same_paragraph(other_box):
+            if (real_text[0] in self.LIST_CHARS):
+                self.in_list = True
+                # util.print_frame(debug=text.text)
+            elif (re.match('\s', real_text[0]) is None and
+                  real_text[0] == real_text[0].upper() and self.in_list):
+                self.in_list = False
+                same_paragraph = False
+                # util.print_frame(debug=text.text)
+            elif (real_text[0] not in self.LIST_CHARS):
+                # util.print_frame()
+                same_paragraph = True
+        else:
+            # util.print_frame()
+            self.in_list = False
+
+        return same_paragraph
 
     def __unicode__(self):
         return u'\n'.join([t.plain_text for t in self.textelements])
@@ -767,20 +803,17 @@ class PDFSection(BoundingBox):
 
     def append_paragraph(self, paragraph):
         '''paragraph is PDFParagraph'''
-        for textelement in paragraph.textelements:
-            self.increase_box(textelement)
+        for box in paragraph.boundingboxes:
+            self.increase_box(box)
 
         self.paragraphs.append(paragraph)
 
 
 class PDFTextExtractor(object):
-    '''Extract text from pdf text elements'''
-    LIST_CHARS = [u'•']
-
+    '''Extract text from a list of PDFParagraphs'''
     def __init__(self):
         self.body = etree.Element('body')
         etree.SubElement(self.body, 'p')
-        self.in_list = False
 
     @property
     def p(self):
@@ -877,7 +910,12 @@ class PDFTextExtractor(object):
         return (len(self.get_last_string()) > 0 and
                 re.search(u'[.?!]\s*$', self.get_last_string()))
 
-    def extract_text_from_page(self, text_elements):
+    def extract_text_from_paragraph(self, paragraph):
+        for textelement in paragraph.paragraph:
+            self.extract_textelement(textelement.t)
+            self.handle_line_ending()
+
+    def extract_text_from_page(self, paragraphs):
         '''Decide which text elements are sent to extract_textelement
 
         When t elements is on the same line as self.prev_t, allow empty elements or
@@ -885,56 +923,24 @@ class PDFTextExtractor(object):
 
         If t is not on the same line as self.prev_t, do not not use them
         '''
-        if len(text_elements) > 0:
-            if not self.is_first_page() and self.is_last_paragraph_end_of_page():
-                self.append_to_body()
-            else:
-                self.handle_line_ending()
+        pass
+        #if not self.is_first_page() and self.is_last_paragraph_end_of_page():
+            #self.append_to_body()
+        #else:
+            #self.handle_line_ending()
 
-            self.extract_textelement(text_elements[0].t)
-            for i in range(1, len(text_elements)):
-                prev_t = text_elements[i - 1]
-                t = text_elements[i]
-                if (not self.is_same_paragraph(prev_t, t) and len(self.p.xpath("string()")) > 0):
-                    self.append_to_body()
-                else:
-                    self.handle_line_ending()
-                self.extract_textelement(t.t)
+        #self.extract_textelement(paragraphs[0].t)
+        #for i in range(1, len(paragraphs)):
+            #prev_t = paragraphs[i - 1]
+            #t = paragraphs[i]
+            #if (not self.is_same_paragraph(prev_t, t) and len(self.p.xpath("string()")) > 0):
+                #self.append_to_body()
+            #else:
+                #self.handle_line_ending()
+            #self.extract_textelement(t.t)
 
-        if len(self.get_last_string()) == 0:
-            self.body.remove(self.p)
-
-    def is_same_paragraph(self, prev_text, text):
-        '''Find out if text belongs in the same paragraph as self.prev_t.
-
-        Define the incoming text elements text1 and self.prev_t to belong to
-        the same paragraph if they have the same height and if the difference
-        between the top attributes is less than ratio times the height of
-        the text elements.
-        '''
-        same_paragraph = False
-
-        # util.print_frame(
-        #    debug='{} {} {} {} {} {}'.format(h1, h2, t1, t2, h1 == h2, t1 > t2))
-        real_text = text.plain_text
-
-        if prev_text.is_text_in_same_paragraph(text):
-            if (real_text[0] in self.LIST_CHARS):
-                self.in_list = True
-                # util.print_frame(debug=text.text)
-            elif (re.match('\s', real_text[0]) is None and
-                  real_text[0] == real_text[0].upper() and self.in_list):
-                self.in_list = False
-                same_paragraph = False
-                # util.print_frame(debug=text.text)
-            elif (real_text[0] not in self.LIST_CHARS):
-                # util.print_frame()
-                same_paragraph = True
-        else:
-            # util.print_frame()
-            self.in_list = False
-
-        return same_paragraph
+        #if len(self.get_last_string()) == 0:
+            #self.body.remove(self.p)
 
 
 class PDFPage(object):
@@ -1121,13 +1127,25 @@ class PDFPage(object):
 
         return sorted_list
 
+    def make_paragraphs(self):
+        paragraphs = []
+        paragraphs.append(PDFParagraph())
+        paragraphs[-1].append_textelement(self.textelements[0])
+
+        for textelement in self.textelements[1:]:
+            if not paragraphs[-1].is_same_paragraph(textelement):
+                paragraphs.append(PDFParagraph())
+            paragraphs[-1].append_textelement(textelement)
+
+        return paragraphs
+
     def pick_valid_text_elements(self):
         self.remove_elements_not_within_margin()
         self.remove_footnotes_superscript()
         self.merge_elements_on_same_line()
         self.remove_invalid_elements()
 
-        return self.sort_text_elements()
+        return self.make_paragraphs()
 
     def list_valid_elements(self):
         self.remove_elements_not_within_margin()
@@ -1238,7 +1256,6 @@ class PDF2XMLConverter(Converter):
 
         return document
 
-
     def parse_page(self, page):
         '''Parse the page element.'''
         pdfpage = PDFPage(page, metadata_margins=self.md.margins,
@@ -1268,7 +1285,7 @@ class PDF2XMLConverter(Converter):
 
         for page in root_element.iter('page'):
             pdfpage = PDFPage(page, metadata_margins=self.md.margins,
-                            metadata_inner_margins=self.md.inner_margins)
+                              metadata_inner_margins=self.md.inner_margins)
             if not pdfpage.is_skip_page(self.md.skip_pages):
                 pdfpage.list_valid_elements()
 
@@ -2991,6 +3008,7 @@ def main():
         cm.convert_serially()
     else:
         cm.convert_in_parallel()
+
 
 def list_main():
     pdf = PDF2XMLConverter(sys.argv[1])
