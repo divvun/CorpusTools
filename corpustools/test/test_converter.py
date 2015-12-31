@@ -3141,55 +3141,6 @@ class TestPDFTextExtractor(XMLTester):
 
         self.assertTrue(p2x.is_same_paragraph(t1))
 
-    def test_is_text_on_same_line_1(self):
-        '''When top is the same, two text elements are on the same line'''
-        p2x = converter.PDFTextExtractor()
-        p2x.in_list = False
-
-        p2x.prev_t = etree.fromstring(
-            '<text top="354" left="119" width="205" height="22" font="2">'
-            '1.1.   RIEKTEJOAVKKU</text>')
-        t1 = etree.fromstring(
-            '<text top="354" left="332" width="6" height="22" font="2"> </text>')
-
-        self.assertTrue(p2x.is_text_on_same_line(t1))
-
-    def test_is_text_on_same_line_2(self):
-        ''''''
-        p2x = converter.PDFTextExtractor()
-        p2x.in_list = False
-
-        p2x.prev_t = etree.fromstring(
-            '<text top="354" left="332" width="6" height="22" font="2"> </text>')
-        t1 = etree.fromstring(
-            '<text top="350" left="339" width="4" height="16" font="7"> </text>')
-
-        self.assertTrue(p2x.is_text_on_same_line(t1))
-
-    def test_is_text_on_same_line_3(self):
-        ''''''
-        p2x = converter.PDFTextExtractor()
-        p2x.in_list = False
-
-        p2x.prev_t = etree.fromstring(
-            '<text top="350" left="339" width="4" height="16" font="7"> </text>')
-        t1 = etree.fromstring(
-            '<text top="354" left="343" width="104" height="22" font="2">MANDÁHTA</text>')
-
-        self.assertTrue(p2x.is_text_on_same_line(t1))
-
-    def test_is_text_on_same_line_4(self):
-        ''''''
-        p2x = converter.PDFTextExtractor()
-        p2x.in_list = False
-
-        p2x.prev_t = etree.fromstring(
-            '<text top="354" left="615" width="13" height="22" font="2">  </text>')
-        t1 = etree.fromstring(
-            '<text top="376" left="119" width="6" height="22" font="2"> </text>')
-
-        self.assertFalse(p2x.is_text_on_same_line(t1))
-
 
 class TestPDFPage(XMLTester):
     def test_width(self):
@@ -3620,22 +3571,6 @@ class TestPDFPage(XMLTester):
         #self.assertXmlEqual(etree.tostring(test_page), want_page)
         self.assertEqual(got_list, want_list)
 
-    def test_parse_page_1(self):
-        '''Page with one paragraph, three <text> elements'''
-        page_element = etree.fromstring(
-            '<page number="1" height="1263" width="862">'
-            '<text top="106" left="100" width="100" height="19">1 </text>'
-            '<text top="126" left="100" width="100" height="19">2 </text>'
-            '<text top="145" left="100" width="100" height="19">3.</text>'
-            '</page>')
-
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.parse_pages(page_element)
-
-        self.assertXmlEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p>1 2 3.</p></body>')
-
     def test_is_skip_page_1(self):
         '''Odd page should be skipped when odd is in skip_pages'''
         p2x = converter.PDFPage(etree.fromstring('<page number="1"/>'))
@@ -3672,6 +3607,51 @@ class TestPDFPage(XMLTester):
 
         self.assertTrue(p2x.is_skip_page(['even', 3]))
 
+    def test_is_text_on_same_line_1(self):
+        '''When top is the same, two text elements are on the same line'''
+        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+
+        prev_t = etree.fromstring(
+            '<text top="354" left="119" width="205" height="22" font="2">'
+            '1.1.   RIEKTEJOAVKKU</text>')
+        t1 = etree.fromstring(
+            '<text top="354" left="332" width="6" height="22" font="2"> </text>')
+
+        self.assertTrue(p2x.is_text_on_same_line(prev_t, t1))
+
+    def test_is_text_on_same_line_2(self):
+        ''''''
+        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+
+        prev_t = etree.fromstring(
+            '<text top="354" left="332" width="6" height="22" font="2"> </text>')
+        t1 = etree.fromstring(
+            '<text top="350" left="339" width="4" height="16" font="7"> </text>')
+
+        self.assertTrue(p2x.is_text_on_same_line(prev_t, t1))
+
+    def test_is_text_on_same_line_3(self):
+        ''''''
+        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+
+        prev_t = etree.fromstring(
+            '<text top="350" left="339" width="4" height="16" font="7"> </text>')
+        t1 = etree.fromstring(
+            '<text top="354" left="343" width="104" height="22" font="2">MANDÁHTA</text>')
+
+        self.assertTrue(p2x.is_text_on_same_line(prev_t, t1))
+
+    def test_is_text_on_same_line_4(self):
+        ''''''
+        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+
+        prev_t = etree.fromstring(
+            '<text top="354" left="615" width="13" height="22" font="2">  </text>')
+        t1 = etree.fromstring(
+            '<text top="376" left="119" width="6" height="22" font="2"> </text>')
+
+        self.assertFalse(p2x.is_text_on_same_line(prev_t, t1))
+
 
 class TestPDF2XMLConverter(XMLTester):
     '''Test the class that converts from pdf2xml to giellatekno/divvun xml'''
@@ -3683,6 +3663,22 @@ class TestPDF2XMLConverter(XMLTester):
             os.path.join(here, 'converter_data/pdf-xml2pdf-test.xml'))
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+
+    def test_parse_page_1(self):
+        '''Page with one paragraph, three <text> elements'''
+        page_element = etree.fromstring(
+            '<page number="1" height="1263" width="862">'
+            '<text top="106" left="100" width="100" height="19">1 </text>'
+            '<text top="126" left="100" width="100" height="19">2 </text>'
+            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '</page>')
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.parse_pages(page_element)
+
+        self.assertXmlEqual(
+            etree.tostring(p2x.extractor.body, encoding='unicode'),
+            u'<body><p>1 2 3.</p></body>')
 
     def test_parse_page_2(self):
         '''Page with two paragraphs, four <text> elements'''

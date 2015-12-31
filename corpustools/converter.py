@@ -725,18 +725,14 @@ class PDFTextExtractor(object):
         If t is not on the same line as self.prev_t, do not not use them
         '''
         for t in text_elements:
-            if self.is_text_on_same_line(t):
-                self.extract_textelement(t)
-                self.prev_t = t
-            elif len(t.xpath("string()").strip()) > 0:
-                if (self.prev_t is not None and
-                        not self.is_same_paragraph(t) and
-                        len(self.p.xpath("string()")) > 0):
-                    self.append_to_body()
-                else:
-                    self.handle_line_ending()
-                self.extract_textelement(t)
-                self.prev_t = t
+            if (self.prev_t is not None and
+                    not self.is_same_paragraph(t) and
+                    len(self.p.xpath("string()")) > 0):
+                self.append_to_body()
+            else:
+                self.handle_line_ending()
+            self.extract_textelement(t)
+            self.prev_t = t
 
         # If the last string on a page is the end of a sentence,
         # wrap self.parts into a paragraph
@@ -744,16 +740,6 @@ class PDFTextExtractor(object):
             last_string = self.get_last_string()
             if re.search(u'[.?!]$', last_string):
                 self.append_to_body()
-
-    def is_text_on_same_line(self, text):
-        if self.prev_t is None:
-            return True
-
-        h1 = float(self.prev_t.get('height'))
-        t1 = float(self.prev_t.get('top'))
-        t2 = float(text.get('top'))
-
-        return t1 + h1 > t2 and t1 - h1 < t2
 
     def is_text_in_same_paragraph(self, text):
         h1 = float(self.prev_t.get('height'))
@@ -884,6 +870,50 @@ class PDFPage(object):
                 t.getparent().remove(t)
             elif (len(inner_margins) > 0 and
                   self.is_inside_inner_margins(t, inner_margins)):
+                t.getparent().remove(t)
+
+    @staticmethod
+    def is_text_on_same_line(prev_t, t):
+        h1 = float(prev_t.get('height'))
+        t1 = float(prev_t.get('top'))
+        t2 = float(t.get('top'))
+
+        return t1 + h1 > t2 and t1 - h1 < t2
+
+    @staticmethod
+    def merge_text_elements(prev_t, t):
+        '''Merge the contents of prev_t and t'''
+        if len(prev_t) == 0:
+            if prev_t.text is None:
+                prev_t.text = t.text
+            else:
+                prev_t.text += t.text
+        else:
+            last = prev_t[-1]
+            if t.text is not None:
+                if last.tail is None:
+                    last.tail = t.text
+                else:
+                    last.tail += t.text
+        for child in t:
+            prev_t.append(child)
+        orig_width = int(prev_t.get('width'))
+        t_width = int(t.get('width'))
+        prev_t.set('width', str(orig_width + t_width))
+        t.getparent().remove(t)
+
+
+    def merge_elements_on_same_line(self):
+        prev_t = None
+        for t in self.page.iter('text'):
+            if prev_t is not None and self.is_text_on_same_line(prev_t, t):
+                self.merge_text_elements(prev_t, t)
+            else:
+                prev_t = t
+
+    def remove_invalid_elements(self):
+        for t in self.page.iter('text'):
+            if len(t.xpath("string()").strip()) == 0 or int(t.get('width')) < 1:
                 t.getparent().remove(t)
 
     def compute_margins(self):
@@ -1034,10 +1064,11 @@ class PDFPage(object):
     def pick_valid_text_elements(self):
         self.remove_elements_not_within_margin()
         self.remove_footnotes_superscript()
+        self.merge_elements_on_same_line()
+        self.remove_invalid_elements()
         self.sort_text_elements()
 
-        return [t for t in self.page.iter('text')
-                if int(t.get('width')) > 0]
+        return [t for t in self.page.iter('text')]
 
 
 class PDF2XMLConverter(Converter):
