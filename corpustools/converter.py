@@ -745,6 +745,39 @@ class PDFPage(object):
     def width(self):
         return int(self.page.get('width'))
 
+    def find_footnotes_superscript(self):
+        '''Search for text elements containing potential footnotes.
+
+        :return superscripts: a list of potential footnotes.
+        '''
+        superscripts = []
+        for t in self.page.iter('text'):
+            try:
+                int(t.xpath("string()").strip())
+                superscripts.append(t)
+            except ValueError:
+                pass
+
+        return superscripts
+
+    @staticmethod
+    def has_content(element):
+        '''True if an element either has text or contains another element'''
+        return element.text is not None or len(element) > 0
+
+    def remove_footnotes_superscript(self):
+        '''Remove numbers from elements found by find_footnotes_superscript.'''
+        for superscript in self.find_footnotes_superscript():
+            previous_element = superscript.getprevious()
+            if (previous_element is not None and
+                    self.has_content(previous_element) and
+                    int(previous_element.get('top')) >=
+                    int(superscript.get('top'))):
+                child = superscript
+                while len(child) > 0:
+                    child = child[0]
+                child.text = re.sub('\d+', '', child.text)
+
 
 class PDF2XMLConverter(Converter):
     '''Class to convert the xml output of pdftohtml to giellatekno xml'''
@@ -977,39 +1010,6 @@ class PDF2XMLConverter(Converter):
             self.in_list = False
 
         return same_paragraph
-
-    def find_footnotes_superscript(self, page):
-        '''Search for text elements containing potential footnotes.
-
-        :return superscripts: a list of potential footnotes.
-        '''
-        superscripts = []
-        for t in page.iter('text'):
-            try:
-                int(t.xpath("string()").strip())
-                superscripts.append(t)
-            except ValueError:
-                pass
-
-        return superscripts
-
-    @staticmethod
-    def has_content(element):
-        '''True if an element either has text or contains another element'''
-        return element.text is not None or len(element) > 0
-
-    def remove_footnotes_superscript(self, page):
-        '''Remove numbers from elements found by find_footnotes_superscript.'''
-        for superscript in self.find_footnotes_superscript(page):
-            previous_element = superscript.getprevious()
-            if (previous_element is not None and
-                    self.has_content(previous_element) and
-                    int(previous_element.get('top')) >=
-                    int(superscript.get('top'))):
-                child = superscript
-                while len(child) > 0:
-                    child = child[0]
-                child.text = re.sub('\d+', '', child.text)
 
     def remove_elements_not_within_margin(self, page):
         margins = self.compute_margins(page)

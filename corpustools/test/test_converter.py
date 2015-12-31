@@ -3021,6 +3021,7 @@ class TestPDFTextExtractor(XMLTester):
         self.assertXmlEqual(
             etree.tostring(p2x.p), u'<p>a </p>')
 
+
 class TestPDFPage(XMLTester):
     def test_width(self):
         page = converter.PDFPage(etree.fromstring('<page number="1" height="1263" width="862"/>'))
@@ -3028,6 +3029,146 @@ class TestPDFPage(XMLTester):
         self.assertEqual(page.number, '1')
         self.assertEqual(page.height, 1263)
         self.assertEqual(page.width, 862)
+
+    def test_remove_footnotes_superscript_1(self):
+        '''Footnote superscript is in the middle of a sentence'''
+        page = etree.fromstring(
+            '<page number="1" height="1263" width="862">'
+            '   <text top="323" left="117" width="305" height="16" font="2">'
+            'gihligotteriektái</text>'
+            '   <text top="319" left="422" width="6" height="11" font="7">3'
+            '</text>'
+            '   <text top="323" left="428" width="220" height="16" font="2">, '
+            'sáhtte</text>'
+            '</page>'
+        )
+        pdfpage = converter.PDFPage(page)
+        pdfpage.remove_footnotes_superscript()
+
+        want_page = (
+            '<page number="1" height="1263" width="862">'
+            '   <text top="323" left="117" width="305" height="16" font="2">'
+            'gihligotteriektái</text>'
+            '   <text top="319" left="422" width="6" height="11" font="7"></text>'
+            '   <text top="323" left="428" width="220" height="16" font="2">, '
+            'sáhtte</text>'
+            '</page>')
+
+        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), want_page)
+
+    def test_remove_footnotes_superscript_2(self):
+        '''Footnote superscript is at the end of a sentence'''
+        page = etree.fromstring(
+            '<page number="1" height="1263" width="862">'
+            '   <text top="323" left="117" width="305" height="16" font="2">'
+            'gihligotteriektái</text>'
+            '   <text top="319" left="422" width="6" height="11" font="7">'
+            '3</text>'
+            '   <text top="344" left="428" width="220" height="16" font="2">,'
+            'sáhtte</text>'
+            '</page>'
+        )
+        pdfpage = converter.PDFPage(page)
+        pdfpage.remove_footnotes_superscript()
+
+        want_page = (
+            '<page number="1" height="1263" width="862">'
+            '   <text top="323" left="117" width="305" height="16" font="2">'
+            'gihligotteriektái</text>'
+            '   <text top="319" left="422" width="6" height="11" font="7"></text>'
+            '   <text top="344" left="428" width="220" height="16" font="2">,'
+            'sáhtte</text>'
+            '</page>')
+
+        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), want_page)
+
+    def test_remove_footnotes_superscript_3(self):
+        '''Footnote superscript in between i-elements'''
+        page = etree.fromstring(
+            '<page number="1" height="1263" width="892">'
+            '    <text top="267" left="119" width="164" height="22" font="9"><i>riektedilálašvuođa</i></text>'
+            '    <text top="265" left="283" width="15" height="15" font="7">16</text>'
+            '    <text top="267" left="298" width="503" height="22" font="9"><i> </i>čielggadeamit&#34; (min deattuhus) ráddjejuvvot dasa mii </text>'
+            '</page>'
+        )
+        pdfpage = converter.PDFPage(page)
+        pdfpage.remove_footnotes_superscript()
+
+        want_page = (
+            '<page number="1" height="1263" width="892">'
+            '    <text top="267" left="119" width="164" height="22" font="9"><i>riektedilálašvuođa</i></text>'
+            '    <text top="265" left="283" width="15" height="15" font="7"></text>'
+            '    <text top="267" left="298" width="503" height="22" font="9"><i> </i>čielggadeamit&#34; (min deattuhus) ráddjejuvvot dasa mii </text>'
+            '</page>'
+        )
+
+        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), want_page)
+
+    def test_remove_footnotes_superscript_4(self):
+        '''Footnote superscript contained in i-element'''
+        page = etree.fromstring(
+            '<page number="1" height="1263" width="892">'
+            '   <text top="682" left="119" width="187" height="22" font="9"><i>báhcánvuoigatvuođa</i></text>'
+            '   <text top="680" left="306" width="20" height="15" font="11"><i>59</i> </text>'
+            '   <text top="704" left="119" width="666" height="22" font="2"> - nuppiin sániiguin dan mii áiggis áigái ii leat čuldon dahje earát váldán. </text>'
+            '</page>'
+        )
+        pdfpage = converter.PDFPage(page)
+        pdfpage.remove_footnotes_superscript()
+
+        want_page = (
+            '<page number="1" height="1263" width="892">'
+            '   <text top="682" left="119" width="187" height="22" font="9"><i>báhcánvuoigatvuođa</i></text>'
+            '   <text top="680" left="306" width="20" height="15" font="11"><i></i> </text>'
+            '   <text top="704" left="119" width="666" height="22" font="2"> - nuppiin sániiguin dan mii áiggis áigái ii leat čuldon dahje earát váldán. </text>'
+            '</page>'
+        )
+
+        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), want_page)
+
+    def test_remove_footnotes_superscript_5(self):
+        '''Footnote superscript at the samel level as other text'''
+        page = etree.fromstring(
+            '<page number="1" height="1261" width="892">'
+            '   <text top="560" left="102" width="231" height="15" font="4">Boazu lea, nu movt eará smirezasti</text>'
+            '   <text top="560" left="333" width="8" height="9" font="12">1 </text>'
+            '   <text top="560" left="341" width="91" height="15" font="4">eallit nai, ere-</text>'
+            '</page>'
+        )
+        pdfpage = converter.PDFPage(page)
+        pdfpage.remove_footnotes_superscript()
+
+        want_page = (
+            '<page number="1" height="1261" width="892">'
+            '   <text top="560" left="102" width="231" height="15" font="4">Boazu lea, nu movt eará smirezasti</text>'
+            '   <text top="560" left="333" width="8" height="9" font="12"> </text>'
+            '   <text top="560" left="341" width="91" height="15" font="4">eallit nai, ere-</text>'
+            '</page>'
+        )
+
+        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), want_page)
+
+    def test_remove_footnotes_superscript_6(self):
+        '''Footnote superscript inside two levels'''
+        page = etree.fromstring(
+            '<page number="1" height="1261" width="892">'
+            '   <text top="560" left="102" width="231" height="15" font="4">Boazu lea, nu movt eará smirezasti</text>'
+            '   <text top="560" left="333" width="8" height="9" font="12"><a><b>34</b></a></text>'
+            '   <text top="560" left="341" width="91" height="15" font="4">eallit nai, ere-</text>'
+            '</page>'
+        )
+        pdfpage = converter.PDFPage(page)
+        pdfpage.remove_footnotes_superscript()
+
+        want_page = (
+            '<page number="1" height="1261" width="892">'
+            '   <text top="560" left="102" width="231" height="15" font="4">Boazu lea, nu movt eará smirezasti</text>'
+            '   <text top="560" left="333" width="8" height="9" font="12"><a><b></b></a></text>'
+            '   <text top="560" left="341" width="91" height="15" font="4">eallit nai, ere-</text>'
+            '</page>'
+        )
+
+        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), want_page)
 
 
 class TestPDF2XMLConverter(XMLTester):
@@ -3498,152 +3639,6 @@ class TestPDF2XMLConverter(XMLTester):
         self.assertEqual(
             etree.tostring(p2x.extractor.body, encoding='unicode'),
             u'<body><p>A – <em type="italic">b </em><em type="italic">c-d</em> – e\xADf </p></body>')
-
-    def test_remove_footnotes_superscript_1(self):
-        '''Footnote superscript is in the middle of a sentence'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        page = etree.fromstring(
-            '<page number="1" height="1263" width="862">'
-            '   <text top="323" left="117" width="305" height="16" font="2">'
-            'gihligotteriektái</text>'
-            '   <text top="319" left="422" width="6" height="11" font="7">3'
-            '</text>'
-            '   <text top="323" left="428" width="220" height="16" font="2">, '
-            'sáhtte</text>'
-            '</page>'
-        )
-        p2x.remove_footnotes_superscript(page)
-
-        want_page = (
-            '<page number="1" height="1263" width="862">'
-            '   <text top="323" left="117" width="305" height="16" font="2">'
-            'gihligotteriektái</text>'
-            '   <text top="319" left="422" width="6" height="11" font="7"></text>'
-            '   <text top="323" left="428" width="220" height="16" font="2">, '
-            'sáhtte</text>'
-            '</page>')
-
-        self.assertXmlEqual(etree.tostring(page, encoding='utf8'), want_page)
-
-    def test_remove_footnotes_superscript_2(self):
-        '''Footnote superscript is at the end of a sentence'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        page = etree.fromstring(
-            '<page number="1" height="1263" width="862">'
-            '   <text top="323" left="117" width="305" height="16" font="2">'
-            'gihligotteriektái</text>'
-            '   <text top="319" left="422" width="6" height="11" font="7">'
-            '3</text>'
-            '   <text top="344" left="428" width="220" height="16" font="2">,'
-            'sáhtte</text>'
-            '</page>'
-        )
-        p2x.remove_footnotes_superscript(page)
-
-        want_page = (
-            '<page number="1" height="1263" width="862">'
-            '   <text top="323" left="117" width="305" height="16" font="2">'
-            'gihligotteriektái</text>'
-            '   <text top="319" left="422" width="6" height="11" font="7"></text>'
-            '   <text top="344" left="428" width="220" height="16" font="2">,'
-            'sáhtte</text>'
-            '</page>')
-
-        self.assertXmlEqual(etree.tostring(page, encoding='utf8'), want_page)
-
-    def test_remove_footnotes_superscript_3(self):
-        '''Footnote superscript in between i-elements'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        page = etree.fromstring(
-            '<page number="1" height="1263" width="892">'
-            '    <text top="267" left="119" width="164" height="22" font="9"><i>riektedilálašvuođa</i></text>'
-            '    <text top="265" left="283" width="15" height="15" font="7">16</text>'
-            '    <text top="267" left="298" width="503" height="22" font="9"><i> </i>čielggadeamit&#34; (min deattuhus) ráddjejuvvot dasa mii </text>'
-            '</page>'
-        )
-        p2x.remove_footnotes_superscript(page)
-
-        want_page = (
-            '<page number="1" height="1263" width="892">'
-            '    <text top="267" left="119" width="164" height="22" font="9"><i>riektedilálašvuođa</i></text>'
-            '    <text top="265" left="283" width="15" height="15" font="7"></text>'
-            '    <text top="267" left="298" width="503" height="22" font="9"><i> </i>čielggadeamit&#34; (min deattuhus) ráddjejuvvot dasa mii </text>'
-            '</page>'
-        )
-
-        self.assertXmlEqual(etree.tostring(page, encoding='utf8'), want_page)
-
-    def test_remove_footnotes_superscript_4(self):
-        '''Footnote superscript contained in i-element'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        page = etree.fromstring(
-            '<page number="1" height="1263" width="892">'
-            '   <text top="682" left="119" width="187" height="22" font="9"><i>báhcánvuoigatvuođa</i></text>'
-            '   <text top="680" left="306" width="20" height="15" font="11"><i>59</i> </text>'
-            '   <text top="704" left="119" width="666" height="22" font="2"> - nuppiin sániiguin dan mii áiggis áigái ii leat čuldon dahje earát váldán. </text>'
-            '</page>'
-        )
-        p2x.remove_footnotes_superscript(page)
-
-        want_page = (
-            '<page number="1" height="1263" width="892">'
-            '   <text top="682" left="119" width="187" height="22" font="9"><i>báhcánvuoigatvuođa</i></text>'
-            '   <text top="680" left="306" width="20" height="15" font="11"><i></i> </text>'
-            '   <text top="704" left="119" width="666" height="22" font="2"> - nuppiin sániiguin dan mii áiggis áigái ii leat čuldon dahje earát váldán. </text>'
-            '</page>'
-        )
-
-        self.assertXmlEqual(etree.tostring(page, encoding='utf8'), want_page)
-
-    def test_remove_footnotes_superscript_5(self):
-        '''Footnote superscript at the samel level as other text'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        page = etree.fromstring(
-            '<page number="1" height="1261" width="892">'
-            '   <text top="560" left="102" width="231" height="15" font="4">Boazu lea, nu movt eará smirezasti</text>'
-            '   <text top="560" left="333" width="8" height="9" font="12">1 </text>'
-            '   <text top="560" left="341" width="91" height="15" font="4">eallit nai, ere-</text>'
-            '</page>'
-        )
-        p2x.remove_footnotes_superscript(page)
-
-        want_page = (
-            '<page number="1" height="1261" width="892">'
-            '   <text top="560" left="102" width="231" height="15" font="4">Boazu lea, nu movt eará smirezasti</text>'
-            '   <text top="560" left="333" width="8" height="9" font="12"> </text>'
-            '   <text top="560" left="341" width="91" height="15" font="4">eallit nai, ere-</text>'
-            '</page>'
-        )
-
-        self.assertXmlEqual(etree.tostring(page, encoding='utf8'), want_page)
-
-    def test_remove_footnotes_superscript_6(self):
-        '''Footnote superscript inside two levels'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        page = etree.fromstring(
-            '<page number="1" height="1261" width="892">'
-            '   <text top="560" left="102" width="231" height="15" font="4">Boazu lea, nu movt eará smirezasti</text>'
-            '   <text top="560" left="333" width="8" height="9" font="12"><a><b>34</b></a></text>'
-            '   <text top="560" left="341" width="91" height="15" font="4">eallit nai, ere-</text>'
-            '</page>'
-        )
-        p2x.remove_footnotes_superscript(page)
-
-        want_page = (
-            '<page number="1" height="1261" width="892">'
-            '   <text top="560" left="102" width="231" height="15" font="4">Boazu lea, nu movt eará smirezasti</text>'
-            '   <text top="560" left="333" width="8" height="9" font="12"><a><b></b></a></text>'
-            '   <text top="560" left="341" width="91" height="15" font="4">eallit nai, ere-</text>'
-            '</page>'
-        )
-
-        self.assertXmlEqual(etree.tostring(page, encoding='utf8'), want_page)
 
     def test_parse_pdf2xmldoc1(self):
         '''Test how a parsing a simplistic pdf2xml document works'''
