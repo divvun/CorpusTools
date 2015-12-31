@@ -619,7 +619,43 @@ class PlaintextConverter(Converter):
         return document
 
 
-class PDFTextElement(object):
+class BoundingBox(object):
+    def __init__(self):
+        self.top = sys.maxsize
+        self.left = sys.maxsize
+        self.bottom = 0
+        self.right = 0
+
+    def is_below(self, other_box):
+        '''True if this element is below other_box'''
+        return self.top >= other_box.bottom
+
+    def is_above(self, other_box):
+        '''True if this element is above other_box'''
+        return other_box.top >= self.bottom
+
+    def is_right_of(self, other_box):
+        return self.left >= other_box.right
+
+    def is_left_of(self, other_box):
+        return self.right <= other_box.left
+
+    def is_covered(self, other_box):
+        '''Is self sideways (partly) covered by other_box'''
+        return self.left <= other_box.right and self.right >= other_box.left
+
+    def increase_box(self, other_box):
+        if self.top > other_box.top:
+            self.top = other_box.top
+        if self.left > other_box.left:
+            self.left = other_box.left
+        if self.bottom < other_box.bottom:
+            self.bottom = other_box.bottom
+        if self.right < other_box.right:
+            self.right = other_box.right
+
+
+class PDFTextElement(BoundingBox):
     def __init__(self, t):
         self.t = t
 
@@ -646,24 +682,6 @@ class PDFTextElement(object):
     @property
     def right(self):
         return self.left + self.width
-
-    def is_below(self, other_box):
-        '''True if this element is below other_box'''
-        return self.top >= other_box.bottom
-
-    def is_above(self, other_box):
-        '''True if this element is above other_box'''
-        return other_box.top >= self.bottom
-
-    def is_right_of(self, other_box):
-        return self.left >= other_box.right
-
-    def is_left_of(self, other_box):
-        return self.right <= other_box.left
-
-    def is_covered(self, other_box):
-        '''Is self sideways (partly) covered by other_box'''
-        return self.left <= other_box.right and self.right >= other_box.left
 
     def remove_superscript(self):
         try:
@@ -718,6 +736,19 @@ class PDFTextElement(object):
         orig_width = int(prev_t.get('width'))
         t_width = int(t.get('width'))
         prev_t.set('width', str(orig_width + t_width))
+
+
+class PDFParagraph(object):
+    def __init__(self):
+        self.paragraph = []
+        self.boundingboxes = [BoundingBox()]
+
+    def append_textelement(self, textelement):
+        if len(self.paragraph) > 0 and textelement.is_right_of(self.paragraph[-1]):
+                self.boundingboxes.append(BoundingBox())
+
+        self.boundingboxes[-1].increase_box(textelement)
+        self.paragraph.append(textelement)
 
 
 class PDFTextExtractor(object):

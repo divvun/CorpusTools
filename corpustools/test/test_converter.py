@@ -2991,6 +2991,59 @@ class TestPDFTextElement(XMLTester):
         self.assertTrue(prev_t.is_text_in_same_paragraph(t1))
 
 
+class TestPDFParagraph(XMLTester):
+    def setUp(self):
+        self.textelements = [
+            converter.PDFTextElement(etree.fromstring(
+                u'<text top="1078" left="86" width="347" height="15" font="4">guoh-</text>')),
+            converter.PDFTextElement(etree.fromstring(
+                u'<text top="1095" left="85" width="349" height="15" font="4">tuma </text>')),
+            converter.PDFTextElement(etree.fromstring(
+                u'<text top="112" left="464" width="347" height="15" font="4">main</text>'))
+        ]
+
+    def test_append_first_textelement(self):
+        pp = converter.PDFParagraph()
+        pp.append_textelement(self.textelements[0])
+
+        self.assertListEqual(pp.paragraph, self.textelements[:-2])
+        self.assertEqual(pp.boundingboxes[-1].top, self.textelements[0].top)
+        self.assertEqual(pp.boundingboxes[-1].left, self.textelements[0].left)
+        self.assertEqual(pp.boundingboxes[-1].bottom, self.textelements[0].bottom)
+        self.assertEqual(pp.boundingboxes[-1].right, self.textelements[0].right)
+        self.assertEqual(len(pp.boundingboxes), 1)
+
+    def test_append_textelement_from_same_column(self):
+        pp = converter.PDFParagraph()
+        pp.append_textelement(self.textelements[0])
+        pp.append_textelement(self.textelements[1])
+
+        self.assertListEqual(pp.paragraph, self.textelements[:-1])
+        self.assertEqual(len(pp.boundingboxes), 1)
+        self.assertEqual(pp.boundingboxes[-1].top, self.textelements[0].top)
+        self.assertEqual(pp.boundingboxes[-1].left, self.textelements[1].left)
+        self.assertEqual(pp.boundingboxes[-1].bottom, self.textelements[1].bottom)
+        self.assertEqual(pp.boundingboxes[-1].right, self.textelements[1].right)
+
+    def test_append_textelement_from_different_column(self):
+        pp = converter.PDFParagraph()
+        pp.append_textelement(self.textelements[0])
+        pp.append_textelement(self.textelements[1])
+        pp.append_textelement(self.textelements[2])
+
+        self.assertListEqual(pp.paragraph, self.textelements)
+
+        self.assertEqual(len(pp.boundingboxes), 2)
+        self.assertEqual(pp.boundingboxes[-2].top, self.textelements[0].top)
+        self.assertEqual(pp.boundingboxes[-2].left, self.textelements[1].left)
+        self.assertEqual(pp.boundingboxes[-2].bottom, self.textelements[1].bottom)
+        self.assertEqual(pp.boundingboxes[-2].right, self.textelements[1].right)
+        self.assertEqual(pp.boundingboxes[-1].top, self.textelements[2].top)
+        self.assertEqual(pp.boundingboxes[-1].left, self.textelements[2].left)
+        self.assertEqual(pp.boundingboxes[-1].bottom, self.textelements[2].bottom)
+        self.assertEqual(pp.boundingboxes[-1].right, self.textelements[2].right)
+
+
 class TestPDFTextExtractor(XMLTester):
     def test_extract_textelement1(self):
         '''Extract text from a plain pdf2xml text element'''
