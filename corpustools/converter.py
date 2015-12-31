@@ -620,6 +620,10 @@ class PlaintextConverter(Converter):
 
 
 class BoundingBox(object):
+    '''Define an area that a box covers
+
+    Used in PDF conversion classes
+    '''
     def __init__(self):
         self.top = sys.maxsize
         self.left = sys.maxsize
@@ -643,9 +647,11 @@ class BoundingBox(object):
         return other_box.top >= self.bottom
 
     def is_right_of(self, other_box):
+        '''True if this element is right of other_box'''
         return self.left >= other_box.right
 
     def is_left_of(self, other_box):
+        '''True if this element is left of other_box'''
         return self.right <= other_box.left
 
     def is_covered(self, other_box):
@@ -653,6 +659,7 @@ class BoundingBox(object):
         return self.left <= other_box.right and self.right >= other_box.left
 
     def increase_box(self, other_box):
+        '''Increase area of the boundingbox'''
         if self.top > other_box.top:
             self.top = other_box.top
         if self.left > other_box.left:
@@ -662,8 +669,18 @@ class BoundingBox(object):
         if self.right < other_box.right:
             self.right = other_box.right
 
+    def __unicode__(self):
+        info = []
+        for key, value in self.__dict__.items():
+            info.append(unicode(key) + u' ' + unicode(value))
+        info.append(u'height ' + unicode(self.height))
+        info.append(u'width ' + unicode(self.width))
+
+        return u'\n'.join(info)
+
 
 class PDFTextElement(BoundingBox):
+    '''pdf2xml text elements are enclose in class'''
     def __init__(self, t):
         self.t = t
 
@@ -691,6 +708,13 @@ class PDFTextElement(BoundingBox):
     def right(self):
         return self.left + self.width
 
+    @property
+    def plain_text(self):
+        return self.t.xpath("string()")
+
+    def is_text_on_same_line(self, other_box):
+        return not self.is_below(other_box) and not self.is_above(other_box)
+
     def remove_superscript(self):
         try:
             int(self.t.xpath("string()").strip())
@@ -701,13 +725,6 @@ class PDFTextElement(BoundingBox):
 
         except ValueError:
             pass
-
-    @property
-    def plain_text(self):
-        return self.t.xpath("string()")
-
-    def is_text_on_same_line(self, other_box):
-        return not self.is_below(other_box) and not self.is_above(other_box)
 
     def merge_text_elements(self, other_box):
         '''Merge the contents of other_box into self'''
@@ -732,8 +749,31 @@ class PDFTextElement(BoundingBox):
         t_width = int(t.get('width'))
         prev_t.set('width', str(orig_width + t_width))
 
+    def __unicode__(self):
+        info = []
+        info.append(u'text ' + self.plain_text)
+        info.append(u'top ' + unicode(self.top))
+        info.append(u'left ' + unicode(self.left))
+        info.append(u'bottom ' + unicode(self.bottom))
+        info.append(u'right ' + unicode(self.right))
+        info.append(u'height ' + unicode(self.height))
+        info.append(u'width ' + unicode(self.width))
+
+        return '\n'.join(info)
+
 
 class PDFParagraph(object):
+    '''Mimic a paragraph
+
+    textelements is a list of PDFTextElements
+
+    boundingboxes is a list of BoundingBoxes.
+    Since a paragraph can span several columns, there will be made a
+    boundingbox for each column.
+
+    in_list is a boolean to indicate whether the paragraph contains a
+    list
+    '''
     LIST_CHARS = [u'•']
 
     def __init__(self):
@@ -750,6 +790,15 @@ class PDFParagraph(object):
         self.textelements.append(textelement)
 
     def is_text_in_same_paragraph(self, other_box):
+        '''Find out if other_box is in the same paragraph as last textelement in the paragraph.
+
+        other_box is PDFTextElement
+
+        Define the last element in self.textelements and other_box to belong to
+        the same paragraph if they have the same height and if the difference
+        between the top attributes is less than ratio times the height of
+        the text elements.
+        '''
         prev_box = self.textelements[-1]
         if prev_box.is_above(other_box):
             ratio = 1.5
@@ -764,13 +813,7 @@ class PDFParagraph(object):
                     prev_box.plain_text[0] == prev_box.plain_text[0].lower())
 
     def is_same_paragraph(self, other_box):
-        '''Find out if text belongs in the same paragraph as self.prev_t.
-
-        Define the incoming text elements text1 and self.prev_t to belong to
-        the same paragraph if they have the same height and if the difference
-        between the top attributes is less than ratio times the height of
-        the text elements.
-        '''
+        '''Look for list characters in other_box'''
         same_paragraph = False
 
         # util.print_frame(
@@ -793,15 +836,115 @@ class PDFParagraph(object):
 
 
 class PDFSection(BoundingBox):
+    '''A PDFSection contains paragraphs that belong together
+
+    A PDFSection conceptually covers the page width.
+
+    paragraphs is a list of PDFParagraphs
+    '''
     def __init__(self):
+        super(PDFSection, self).__init__()
         self.paragraphs = []
 
     def append_paragraph(self, paragraph):
-        '''paragraph is PDFParagraph'''
+        '''Append a paragraph and increase the area of the section
+
+        paragraph is PDFParagraph
+        '''
         for box in paragraph.boundingboxes:
             self.increase_box(box)
 
         self.paragraphs.append(paragraph)
+
+    def is_same_section(self, paragraph):
+        '''Define whether a paragraph belongs to this section
+
+        Use the left and width properties to define this.
+
+        paragraph is PDFParagraph
+        '''
+        if len(self.paragraphs) == 0:
+            return True
+        else:
+            prev_box = self.paragraphs[-1].boundingboxes[-1]
+            new_box = paragraph.boundingboxes[0]
+
+            # If the ending of the last paragraph and the start of the new
+            # paragraph are in the same column, this check is done
+            if (prev_box.is_above(new_box) and prev_box.left == new_box.left and
+                prev_box.width - 5 < new_box.width and prev_box.width + 5 > new_box.width):
+                    return True
+            # TODO
+            # If the ending of the last paragraph and the start of the new
+            # paragraph are in different columns, this check is done
+            # No test for this one yet
+            # elif prev_box.is_left_of(new_box) and prev_box.width == new_box.width:
+            # return True
+            else:
+                return False
+
+    def __unicode__(self):
+        info = [unicode(paragraph)
+                for paragraph in self.paragraphs]
+
+        info.append(super(PDFSection, self).__unicode__())
+
+        return u'\n'.join(info)
+
+
+class OrderedPDFSections(object):
+    '''Place the PDFSections in the order they are placed on the page
+
+    sections is a list of PDFSections
+
+    pdftohtml mostly renders the content of a pdf in the
+    reading order. In that case a PDFSection covers the
+    whole page.
+
+    In other cases, separate sections of a page are rendered
+    in the reading order, but the sections are mixed up.
+
+    One example, where the main heading that belongs almost at
+    the top of the page, but appears as the last element of a
+    page element, is illustrated in TestPDFSection2.
+
+    Another example, where a page contains multicolumn text
+    intersperced with tables, is illustrated in TestPDFSection1.
+    '''
+    def __init__(self):
+        self.sections = []
+
+    def find_position(self, new_section):
+        i = 0
+        for section in self.sections:
+            if new_section.is_above(section):
+                break
+            else:
+                i += 1
+
+        return i
+
+    def insert_section(self, new_section):
+        '''new_section is a PDFSection'''
+        i = self.find_position(new_section)
+        if len(self.sections) == 0 or i == len(self.sections):
+            self.sections.append(new_section)
+        else:
+            if i < len(self.sections) and self.sections[i].is_below(new_section):
+                self.sections.insert(i, new_section)
+            else:
+                if i < 0:
+                    util.print_frame(debug=unicode(self.sections[i - 1]))
+                util.print_frame(debug=unicode(new_section))
+                util.print_frame(debug=unicode(self.sections[i]))
+                assert self.sections[i].is_below(new_section), \
+                    'new_section does not fit between sections'
+
+    @property
+    def paragraphs(self):
+        return [p
+                for section in self.sections
+                for p in section.paragraphs]
 
 
 class PDFTextExtractor(object):
@@ -881,7 +1024,7 @@ class PDFTextExtractor(object):
             self.p.append(em)
 
     def get_last_string(self):
-        '''Get the last string of self.parts'''
+        '''Get the plain text of the last paragraph of body'''
         return self.p.xpath("string()")
 
     def handle_line_ending(self):
@@ -912,12 +1055,9 @@ class PDFTextExtractor(object):
         self.append_to_body()
 
     def extract_text_from_page(self, paragraphs):
-        '''Decide which text elements are sent to extract_textelement
+        '''paragraphs contain the text of one pdf page
 
-        When t elements is on the same line as self.prev_t, allow empty elements or
-        elements containing only whitespace
-
-        If t is not on the same line as self.prev_t, do not not use them
+        paragraphs is a list PDFParagraphs
         '''
         for paragraph in paragraphs:
             if not self.is_first_page() and self.is_last_paragraph_end_of_page():
@@ -929,6 +1069,14 @@ class PDFTextExtractor(object):
 
 
 class PDFPage(object):
+    '''Reads a page element
+
+    textelements is a list of PDFTextElements
+
+    The textelements are manipulated in several ways,
+    then ordered in the way they appear on the page and
+    finally sent to PDFTextExtractor
+    '''
     def __init__(self, page_element, metadata_margins={}, metadata_inner_margins={}):
         self.number = int(page_element.get('number'))
         self.height = int(page_element.get('height'))
@@ -950,6 +1098,7 @@ class PDFPage(object):
             textelement.remove_superscript()
 
     def remove_elements_not_within_margin(self):
+        '''Remove PDFTextElements from textelements if needed'''
         margins = self.compute_margins()
         inner_margins = self.compute_inner_margins()
 
@@ -960,6 +1109,7 @@ class PDFPage(object):
                                     if not self.is_inside_inner_margins(t, inner_margins)]
 
     def merge_elements_on_same_line(self):
+        '''Merge PDFTextElements that are on the same line'''
         same_line_indexes = [i for i in range(1, len(self.textelements))
                              if self.textelements[i - 1].is_text_on_same_line(
                                  self.textelements[i])]
@@ -969,14 +1119,13 @@ class PDFPage(object):
             del self.textelements[i]
 
     def remove_invalid_elements(self):
+        '''Remove elements with empty strings or where the width is zero or negative'''
         self.textelements[:] = [t for t in self.textelements
                                 if not (len(t.t.xpath("string()").strip()) == 0 or
                                         t.width < 1)]
 
     def compute_margins(self):
         '''Compute the margins of a page in pixels.
-
-        :param page: a pdf2xml page element
 
         :returns: a dict containing the four margins in pixels
         '''
@@ -990,7 +1139,6 @@ class PDFPage(object):
         '''Compute a margin in pixels.
 
         :param margin: the name of the  margin
-        :param page: a pdf2xml page element
 
         :return: an int telling where the margin is on the page.
         '''
@@ -1040,7 +1188,6 @@ class PDFPage(object):
         '''Compute a margin in pixels.
 
         :param margin: the name of the margin
-        :param page: a pdf2xml page element
 
         :return: an int telling where the margin is on the page.
         '''
@@ -1091,86 +1238,50 @@ class PDFPage(object):
                 t.left > margins['inner_left_margin'] and
                 t.left < margins['inner_right_margin'])
 
-    def sort_text_elements(self):
-        sorted_list = []
-        for textelement in self.textelements:
-
-            i = 0
-            for box in sorted_list:
-                if textelement.is_right_of(sorted_list[i]):
-                    i += 1
-                elif (textelement.is_below(sorted_list[i]) and
-                      textelement.is_covered(sorted_list[i])):
-                    i += 1
-                else:
-                    break
-
-            if i == len(sorted_list):
-                sorted_list.append(textelement)
-            else:
-                sorted_list.insert(i, textelement)
-
-        return sorted_list
-
     def make_paragraphs(self):
+        '''Order the text elements the order they appear on the page
+
+        The text elements are placed into PDFParagraphs,
+        the PDFParagraphs are placed into PDFSections and finally
+        the PDFSections are placed into an OrderedPDFSections
+
+        Returns a list of PDFParagraphs
+        '''
+        ordered_sections = OrderedPDFSections()
+        section = PDFSection()
+
         textelement = self.textelements[0]
-        paragraphs = []
-        paragraphs.append(PDFParagraph())
-        paragraphs[-1].append_textelement(textelement)
+        p = PDFParagraph()
+        p.append_textelement(textelement)
 
         for textelement in self.textelements[1:]:
-            if not paragraphs[-1].is_same_paragraph(textelement):
-                paragraphs.append(PDFParagraph())
-            paragraphs[-1].append_textelement(textelement)
+            if not p.is_same_paragraph(textelement):
+                if not section.is_same_section(p):
+                    ordered_sections.insert_section(section)
+                    section = PDFSection()
+                section.append_paragraph(p)
+                p = PDFParagraph()
+            p.append_textelement(textelement)
 
-        return paragraphs
+        if not section.is_same_section(p):
+            ordered_sections.insert_section(section)
+            section = PDFSection()
+        section.append_paragraph(p)
+        ordered_sections.insert_section(section)
+
+        return ordered_sections.paragraphs
 
     def pick_valid_text_elements(self):
+        '''Pick the wanted text elements from a page
+
+        This is the main function of this class
+        '''
         self.remove_elements_not_within_margin()
         self.remove_footnotes_superscript()
         self.merge_elements_on_same_line()
         self.remove_invalid_elements()
 
         return self.make_paragraphs()
-
-    def list_valid_elements(self):
-        self.remove_elements_not_within_margin()
-        self.remove_footnotes_superscript()
-        self.merge_elements_on_same_line()
-        self.remove_invalid_elements()
-
-        pp = PDFParagraph()
-        paragraphs = []
-        paragraphs.append(pp)
-        paragraphs[-1].append_textelement(self.textelements[0])
-
-        columns = 1
-        for i in range(1, len(self.textelements)):
-            t = self.textelements[i]
-            prev_t = self.textelements[i - 1]
-            if not prev_t.is_text_in_same_paragraph(t):
-                if len(paragraphs[-1].boundingboxes) > 1:
-                    columns += 1
-
-                if len(paragraphs) > 1:
-                    prev_p = paragraphs[-2]
-                    if not prev_p.boundingboxes[-1].is_above(paragraphs[-1].boundingboxes[0]):
-                        info = []
-                        info.append(str(i))
-                        util.print_frame(debug=' '.join(info))
-                        util.print_frame(debug=unicode(prev_p) + u'\n')
-                        util.print_frame(debug=unicode(paragraphs[-1]) + u'\n')
-
-                pp = PDFParagraph()
-                paragraphs.append(pp)
-
-            paragraphs[-1].append_textelement(t)
-
-        info = ['\n']
-        info.append('page: ' + str(self.number))
-        info.append('columns: ' + str(columns))
-
-        util.print_frame(debug='\n'.join(info))
 
 
 class PDF2XMLConverter(Converter):
@@ -2994,9 +3105,3 @@ def main():
         cm.convert_serially()
     else:
         cm.convert_in_parallel()
-
-
-def list_main():
-    pdf = PDF2XMLConverter(sys.argv[1])
-    util.print_frame(debug=sys.argv[1])
-    pdf.list_pages()
