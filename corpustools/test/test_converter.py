@@ -3021,6 +3021,14 @@ class TestPDFTextExtractor(XMLTester):
         self.assertXmlEqual(
             etree.tostring(p2x.p), u'<p>a </p>')
 
+class TestPDFPage(XMLTester):
+    def test_width(self):
+        page = converter.PDFPage(etree.fromstring('<page number="1" height="1263" width="862"/>'))
+
+        self.assertEqual(page.number, '1')
+        self.assertEqual(page.height, 1263)
+        self.assertEqual(page.width, 862)
+
 
 class TestPDF2XMLConverter(XMLTester):
     '''Test the class that converts from pdf2xml to giellatekno/divvun xml'''

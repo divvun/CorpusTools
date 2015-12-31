@@ -729,6 +729,23 @@ class BoundingBox(namedtuple('BoundingBox', ['top', 'left', 'bottom', 'right']))
         return self.left < other_box.right and self.right > other_box.left
 
 
+class PDFPage(object):
+    def __init__(self, page_element):
+        self.page = page_element
+
+    @property
+    def number(self):
+        return self.page.get('number')
+
+    @property
+    def height(self):
+        return int(self.page.get('height'))
+
+    @property
+    def width(self):
+        return int(self.page.get('width'))
+
+
 class PDF2XMLConverter(Converter):
     '''Class to convert the xml output of pdftohtml to giellatekno xml'''
     def __init__(self, filename, write_intermediate=False):
