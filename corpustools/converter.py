@@ -621,6 +621,7 @@ class PlaintextConverter(Converter):
 
 
 class PDFTextExtractor(object):
+    '''Extract text from pdf text elements'''
     LIST_CHARS = [u'•']
 
     def __init__(self):
@@ -722,6 +723,10 @@ class BoundingBox(namedtuple('BoundingBox', ['top', 'left', 'bottom', 'right']))
 
     def is_right_of(self, other_box):
         return self.left > other_box.right
+
+    def is_covered(self, other_box):
+        '''Is self sideways (partly) covered by other_box'''
+        return self.left < other_box.right and self.right > other_box.left
 
 
 class PDF2XMLConverter(Converter):
@@ -1010,24 +1015,20 @@ class PDF2XMLConverter(Converter):
             bounding_box = BoundingBox(top=top, left=left, bottom=top + height,
                                        right=left + width)
 
-            util.print_frame(debug=bounding_box)
             i = 0
-            while i < len(sorted_list) and bounding_box.is_right_of(sorted_list[i]):
-                util.print_frame(debug=i)
-                util.print_frame(sorted_list[i])
-                i += 1
-            while i < len(sorted_list) and bounding_box.is_below(sorted_list[i]):
-                util.print_frame(debug=i)
-                util.print_frame(sorted_list[i])
-                i += 1
+            for box in sorted_list:
+                if bounding_box.is_right_of(sorted_list[i]):
+                    i += 1
+                elif (bounding_box.is_below(sorted_list[i]) and
+                      bounding_box.is_covered(sorted_list[i])):
+                    i += 1
+                else:
+                    break
 
-            util.print_frame(debug=i)
             if i == len(sorted_list):
                 sorted_list.append(bounding_box)
             else:
                 sorted_list.insert(i, bounding_box)
-            util.print_frame(debug=sorted_list)
-            print(file=sys.stderr)
 
         return sorted_list
 
