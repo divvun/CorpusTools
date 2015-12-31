@@ -791,8 +791,33 @@ class PDFTextExtractor(object):
         return same_paragraph
 
 
-class BoundingBox(namedtuple('BoundingBox', ['top', 'left', 'bottom', 'right', 't'])):
-    __slots__ = ()
+class BoundingBox(object):
+    def __init__(self, t):
+        self.t = t
+
+    @property
+    def top(self):
+        return int(self.t.get('top'))
+
+    @property
+    def left(self):
+        return int(self.t.get('left'))
+
+    @property
+    def height(self):
+        return int(self.t.get('height'))
+
+    @property
+    def width(self):
+        return int(self.t.get('width'))
+
+    @property
+    def bottom(self):
+        return self.top + self.height
+
+    @property
+    def right(self):
+        return self.left + self.width
 
     def is_below(self, other_box):
         return self.top >= other_box.bottom
@@ -1037,12 +1062,7 @@ class PDFPage(object):
     def sort_text_elements(self):
         sorted_list = []
         for t in self.page.iter('text'):
-            top = int(t.get('top'))
-            left = int(t.get('left'))
-            height = int(t.get('height'))
-            width = int(t.get('width'))
-            bounding_box = BoundingBox(top=top, left=left, bottom=top + height,
-                                       right=left + width, t=t)
+            bounding_box = BoundingBox(t)
 
             i = 0
             for box in sorted_list:

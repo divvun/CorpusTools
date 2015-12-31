@@ -3515,18 +3515,11 @@ class TestPDFPage(XMLTester):
         test_page.append(two)
 
         pdfpage = converter.PDFPage(test_page)
-        got_list = pdfpage.sort_text_elements()
-        pdfpage = converter.PDFPage(test_page)
-        got_list = pdfpage.sort_text_elements()
-        want_list = [converter.BoundingBox(top=72, left=85, bottom=84, right=147, t=one),
-                     converter.BoundingBox(top=110, left=239, bottom=140, right=655, t=two),
-                     converter.BoundingBox(top=193, left=85, bottom=217, right=298, t=three),
-                     converter.BoundingBox(top=232, left=85, bottom=247, right=432, t=four),
-                     converter.BoundingBox(top=198, left=478, bottom=213, right=808, t=five),
-                     converter.BoundingBox(top=215, left=461, bottom=230, right=808, t=six)
-                     ]
+        want_list = ["1", "2", "3", "4", "5", "6"]
 
-        self.assertEqual(got_list, want_list)
+        self.assertEqual(
+            [box.t.xpath("string()") for box in pdfpage.sort_text_elements()],
+            want_list)
 
     def test_sort_text_elements_2(self):
         self.maxDiff = None
@@ -3547,16 +3540,11 @@ class TestPDFPage(XMLTester):
         test_page.append(two)
 
         pdfpage = converter.PDFPage(test_page)
-        got_list = pdfpage.sort_text_elements()
-        want_list = [converter.BoundingBox(top=72, left=85, bottom=84, right=147, t=one),
-                     converter.BoundingBox(top=110, left=239, bottom=140, right=655, t=two),
-                     converter.BoundingBox(top=193, left=85, bottom=217, right=298, t=three),
-                     converter.BoundingBox(top=232, left=85, bottom=247, right=432, t=four),
-                     converter.BoundingBox(top=198, left=478, bottom=213, right=808, t=five),
-                     converter.BoundingBox(top=215, left=461, bottom=230, right=808, t=six)
-                     ]
+        want_list = ["1", "2", "3", "4", "5", "6"]
 
-        self.assertEqual(got_list, want_list)
+        self.assertEqual(
+            [box.t.xpath("string()") for box in pdfpage.sort_text_elements()],
+            want_list)
 
     def test_sort_text_elements_3(self):
         self.maxDiff = None
@@ -3571,13 +3559,11 @@ class TestPDFPage(XMLTester):
         test_page.append(three)
 
         pdfpage = converter.PDFPage(test_page)
-        got_list = pdfpage.sort_text_elements()
-        want_list = [converter.BoundingBox(top=106, left=100, bottom=125, right=200, t=one),
-                     converter.BoundingBox(top=126, left=100, bottom=145, right=200, t=two),
-                     converter.BoundingBox(top=145, left=100, bottom=164, right=200, t=three),
-                     ]
+        want_list = ["1 ", "2 ", "3."]
 
-        self.assertEqual(got_list, want_list)
+        self.assertEqual(
+            [box.t.xpath("string()") for box in pdfpage.sort_text_elements()],
+            want_list)
 
     def test_is_skip_page_1(self):
         '''Odd page should be skipped when odd is in skip_pages'''
