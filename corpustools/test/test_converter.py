@@ -3194,7 +3194,7 @@ class TestPDFPage(XMLTester):
     def test_width(self):
         page = converter.PDFPage(etree.fromstring('<page number="1" height="1263" width="862"/>'))
 
-        self.assertEqual(page.number, '1')
+        self.assertEqual(page.number, 1)
         self.assertEqual(page.height, 1263)
         self.assertEqual(page.width, 862)
 

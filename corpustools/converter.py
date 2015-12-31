@@ -827,7 +827,7 @@ class PDFPage(object):
 
     @property
     def number(self):
-        return self.page.get('number')
+        return int(self.page.get('number'))
 
     @property
     def height(self):
@@ -918,13 +918,13 @@ class PDFPage(object):
         coefficient = 7
         if margin in self.metadata_margins.keys():
             m = self.metadata_margins[margin]
-            if m.get(self.number) is not None:
-                coefficient = m[self.number.strip()]
+            if m.get(str(self.number)) is not None:
+                coefficient = m[str(self.number)]
             elif m.get('all') is not None:
                 coefficient = m['all']
-            elif int(self.number) % 2 == 0 and m.get('even') is not None:
+            elif self.number % 2 == 0 and m.get('even') is not None:
                 coefficient = m['even']
-            elif int(self.number) % 2 == 1 and m.get('odd') is not None:
+            elif self.number % 2 == 1 and m.get('odd') is not None:
                 coefficient = m['odd']
 
         return coefficient
@@ -967,13 +967,13 @@ class PDFPage(object):
         coefficient = 0
         if margin in self.metadata_inner_margins.keys():
             m = self.metadata_inner_margins[margin]
-            if m.get(self.number) is not None:
-                coefficient = m[self.number.strip()]
+            if m.get(str(self.number)) is not None:
+                coefficient = m[str(self.number)]
             elif m.get('all') is not None:
                 coefficient = m['all']
-            elif int(self.number) % 2 == 0 and m.get('even') is not None:
+            elif self.number % 2 == 0 and m.get('even') is not None:
                 coefficient = m['even']
-            elif int(self.number) % 2 == 1 and m.get('odd') is not None:
+            elif self.number % 2 == 1 and m.get('odd') is not None:
                 coefficient = m['odd']
 
         return coefficient
