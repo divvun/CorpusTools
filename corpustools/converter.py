@@ -619,6 +619,103 @@ class PlaintextConverter(Converter):
         return document
 
 
+class PDFTextElement(object):
+    def __init__(self, t):
+        self.t = t
+
+    @property
+    def top(self):
+        return int(self.t.get('top'))
+
+    @property
+    def left(self):
+        return int(self.t.get('left'))
+
+    @property
+    def height(self):
+        return int(self.t.get('height'))
+
+    @property
+    def width(self):
+        return int(self.t.get('width'))
+
+    @property
+    def bottom(self):
+        return self.top + self.height
+
+    @property
+    def right(self):
+        return self.left + self.width
+
+    def is_below(self, other_box):
+        '''True if this element is below other_box'''
+        return self.top >= other_box.bottom
+
+    def is_above(self, other_box):
+        '''True if this element is above other_box'''
+        return other_box.top >= self.bottom
+
+    def is_right_of(self, other_box):
+        return self.left >= other_box.right
+
+    def is_covered(self, other_box):
+        '''Is self sideways (partly) covered by other_box'''
+        return self.left <= other_box.right and self.right >= other_box.left
+
+    def remove_superscript(self):
+        try:
+            int(self.t.xpath("string()").strip())
+            child = self.t
+            while len(child) > 0:
+                child = child[0]
+            child.text = re.sub('\d+', '', child.text)
+
+        except ValueError:
+            pass
+
+    @property
+    def plain_text(self):
+        return self.t.xpath("string()")
+
+    def is_text_on_same_line(self, other_box):
+        return not self.is_below(other_box) and not self.is_above(other_box)
+
+    def is_text_in_same_paragraph(self, other_box):
+        if self.is_above(other_box):
+            ratio = 1.5
+            delta = other_box.top - self.top
+
+            return self.height == other_box.height and delta < ratio * self.height
+        else:
+            return (self.height == other_box.height and
+                    self.top >= other_box.top and
+                    not re.match('\d', self.plain_text[0]) and
+                    self.plain_text[0] == self.plain_text[0].lower())
+
+    def merge_text_elements(self, other_box):
+        '''Merge the contents of other_box into self'''
+        prev_t = self.t
+        t = other_box.t
+        if len(prev_t) == 0:
+            if prev_t.text is None:
+                prev_t.text = t.text
+            else:
+                prev_t.text += t.text
+        else:
+            last = prev_t[-1]
+            if t.text is not None:
+                if last.tail is None:
+                    last.tail = t.text
+                else:
+                    last.tail += t.text
+        for child in t:
+            prev_t.append(child)
+
+        orig_width = int(prev_t.get('width'))
+        t_width = int(t.get('width'))
+        prev_t.set('width', str(orig_width + t_width))
+
+
 class PDFTextExtractor(object):
     '''Extract text from pdf text elements'''
     LIST_CHARS = [u'•']
@@ -781,103 +878,6 @@ class PDFTextExtractor(object):
             self.in_list = False
 
         return same_paragraph
-
-
-class PDFTextElement(object):
-    def __init__(self, t):
-        self.t = t
-
-    @property
-    def top(self):
-        return int(self.t.get('top'))
-
-    @property
-    def left(self):
-        return int(self.t.get('left'))
-
-    @property
-    def height(self):
-        return int(self.t.get('height'))
-
-    @property
-    def width(self):
-        return int(self.t.get('width'))
-
-    @property
-    def bottom(self):
-        return self.top + self.height
-
-    @property
-    def right(self):
-        return self.left + self.width
-
-    def is_below(self, other_box):
-        '''True if this element is below other_box'''
-        return self.top >= other_box.bottom
-
-    def is_above(self, other_box):
-        '''True if this element is above other_box'''
-        return other_box.top >= self.bottom
-
-    def is_right_of(self, other_box):
-        return self.left >= other_box.right
-
-    def is_covered(self, other_box):
-        '''Is self sideways (partly) covered by other_box'''
-        return self.left <= other_box.right and self.right >= other_box.left
-
-    def remove_superscript(self):
-        try:
-            int(self.t.xpath("string()").strip())
-            child = self.t
-            while len(child) > 0:
-                child = child[0]
-            child.text = re.sub('\d+', '', child.text)
-
-        except ValueError:
-            pass
-
-    @property
-    def plain_text(self):
-        return self.t.xpath("string()")
-
-    def is_text_on_same_line(self, other_box):
-        return not self.is_below(other_box) and not self.is_above(other_box)
-
-    def is_text_in_same_paragraph(self, other_box):
-        if self.is_above(other_box):
-            ratio = 1.5
-            delta = other_box.top - self.top
-
-            return self.height == other_box.height and delta < ratio * self.height
-        else:
-            return (self.height == other_box.height and
-                    self.top >= other_box.top and
-                    not re.match('\d', self.plain_text[0]) and
-                    self.plain_text[0] == self.plain_text[0].lower())
-
-    def merge_text_elements(self, other_box):
-        '''Merge the contents of other_box into self'''
-        prev_t = self.t
-        t = other_box.t
-        if len(prev_t) == 0:
-            if prev_t.text is None:
-                prev_t.text = t.text
-            else:
-                prev_t.text += t.text
-        else:
-            last = prev_t[-1]
-            if t.text is not None:
-                if last.tail is None:
-                    last.tail = t.text
-                else:
-                    last.tail += t.text
-        for child in t:
-            prev_t.append(child)
-
-        orig_width = int(prev_t.get('width'))
-        t_width = int(t.get('width'))
-        prev_t.set('width', str(orig_width + t_width))
 
 
 class PDFPage(object):
