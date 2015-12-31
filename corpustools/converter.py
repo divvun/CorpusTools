@@ -931,11 +931,6 @@ class PDFPage(object):
                 ('even' in skip_pages and (self.number % 2) == 0) or
                 self.number in skip_pages)
 
-    @staticmethod
-    def has_content(element):
-        '''True if an element either has text or contains another element'''
-        return element.text is not None or len(element) > 0
-
     def remove_footnotes_superscript(self):
         '''Remove numbers from elements found by find_footnotes_superscript.'''
         for textelement in self.textelements[1:]:
