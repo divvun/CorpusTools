@@ -3165,16 +3165,10 @@ class TestPDFPage(XMLTester):
         pdfpage = converter.PDFPage(page)
         pdfpage.remove_footnotes_superscript()
 
-        want_page = (
-            '<page number="1" height="1263" width="862">'
-            '   <text top="323" left="117" width="305" height="16" font="2">'
-            'gihligotteriektái</text>'
-            '   <text top="319" left="422" width="6" height="11" font="7"></text>'
-            '   <text top="323" left="428" width="220" height="16" font="2">, '
-            'sáhtte</text>'
-            '</page>')
+        page_want = [u'gihligotteriektái', '', u', sáhtte']
 
-        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), want_page)
+        self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements],
+                             page_want)
 
     def test_remove_footnotes_superscript_2(self):
         '''Footnote superscript is at the end of a sentence'''
@@ -3191,16 +3185,10 @@ class TestPDFPage(XMLTester):
         pdfpage = converter.PDFPage(page)
         pdfpage.remove_footnotes_superscript()
 
-        want_page = (
-            '<page number="1" height="1263" width="862">'
-            '   <text top="323" left="117" width="305" height="16" font="2">'
-            'gihligotteriektái</text>'
-            '   <text top="319" left="422" width="6" height="11" font="7"></text>'
-            '   <text top="344" left="428" width="220" height="16" font="2">,'
-            'sáhtte</text>'
-            '</page>')
+        page_want = [u'gihligotteriektái', '', u',sáhtte']
 
-        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), want_page)
+        self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements],
+                             page_want)
 
     def test_remove_footnotes_superscript_3(self):
         '''Footnote superscript in between i-elements'''
@@ -3214,15 +3202,10 @@ class TestPDFPage(XMLTester):
         pdfpage = converter.PDFPage(page)
         pdfpage.remove_footnotes_superscript()
 
-        want_page = (
-            '<page number="1" height="1263" width="892">'
-            '    <text top="267" left="119" width="164" height="22" font="9"><i>riektedilálašvuođa</i></text>'
-            '    <text top="265" left="283" width="15" height="15" font="7"></text>'
-            '    <text top="267" left="298" width="503" height="22" font="9"><i> </i>čielggadeamit&#34; (min deattuhus) ráddjejuvvot dasa mii </text>'
-            '</page>'
-        )
+        page_want = [u'riektedilálašvuođa', u'', u' čielggadeamit" (min deattuhus) ráddjejuvvot dasa mii ']
 
-        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), want_page)
+        self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements],
+                             page_want)
 
     def test_remove_footnotes_superscript_4(self):
         '''Footnote superscript contained in i-element'''
@@ -3236,15 +3219,10 @@ class TestPDFPage(XMLTester):
         pdfpage = converter.PDFPage(page)
         pdfpage.remove_footnotes_superscript()
 
-        want_page = (
-            '<page number="1" height="1263" width="892">'
-            '   <text top="682" left="119" width="187" height="22" font="9"><i>báhcánvuoigatvuođa</i></text>'
-            '   <text top="680" left="306" width="20" height="15" font="11"><i></i> </text>'
-            '   <text top="704" left="119" width="666" height="22" font="2"> - nuppiin sániiguin dan mii áiggis áigái ii leat čuldon dahje earát váldán. </text>'
-            '</page>'
-        )
+        page_want = [u'báhcánvuoigatvuođa', u' ', u' - nuppiin sániiguin dan mii áiggis áigái ii leat čuldon dahje earát váldán. ']
 
-        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), want_page)
+        self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements],
+                             page_want)
 
     def test_remove_footnotes_superscript_5(self):
         '''Footnote superscript at the samel level as other text'''
@@ -3258,15 +3236,10 @@ class TestPDFPage(XMLTester):
         pdfpage = converter.PDFPage(page)
         pdfpage.remove_footnotes_superscript()
 
-        want_page = (
-            '<page number="1" height="1261" width="892">'
-            '   <text top="560" left="102" width="231" height="15" font="4">Boazu lea, nu movt eará smirezasti</text>'
-            '   <text top="560" left="333" width="8" height="9" font="12"> </text>'
-            '   <text top="560" left="341" width="91" height="15" font="4">eallit nai, ere-</text>'
-            '</page>'
-        )
+        page_want = [u'Boazu lea, nu movt eará smirezasti', u' ', u'eallit nai, ere-']
 
-        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), want_page)
+        self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements],
+                             page_want)
 
     def test_remove_footnotes_superscript_6(self):
         '''Footnote superscript inside two levels'''
@@ -3280,15 +3253,10 @@ class TestPDFPage(XMLTester):
         pdfpage = converter.PDFPage(page)
         pdfpage.remove_footnotes_superscript()
 
-        want_page = (
-            '<page number="1" height="1261" width="892">'
-            '   <text top="560" left="102" width="231" height="15" font="4">Boazu lea, nu movt eará smirezasti</text>'
-            '   <text top="560" left="333" width="8" height="9" font="12"><a><b></b></a></text>'
-            '   <text top="560" left="341" width="91" height="15" font="4">eallit nai, ere-</text>'
-            '</page>'
-        )
+        page_want = [u"Boazu lea, nu movt eará smirezasti", u"", u"eallit nai, ere-"]
 
-        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), want_page)
+        self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements],
+                             page_want)
 
     def test_remove_elements_not_within_margin_1(self):
         '''Check that elements within inner_margins for a specific page are removed'''
@@ -3308,14 +3276,9 @@ class TestPDFPage(XMLTester):
         pdfpage = converter.PDFPage(page,
                                     metadata_inner_margins=md.inner_margins)
         pdfpage.remove_elements_not_within_margin()
-        page_want = '\n'.join([
-            '<page number="8" height="1263" width="862">',
-            '<text top="500" left="80" width="512" height="19" font="0">1</text>'
-            '<text top="800" left="80" width="512" height="19" font="0">3</text>'
-            '</page>'
-        ])
+        page_want = ["1", "3"]
 
-        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), page_want)
+        self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements], page_want)
 
     def test_remove_elements_not_within_margin_2(self):
         '''Check that no elements are removed when inner_margins is not defined for the page'''
@@ -3334,15 +3297,9 @@ class TestPDFPage(XMLTester):
         )
         pdfpage = converter.PDFPage(page, metadata_inner_margins=md.inner_margins)
         pdfpage.remove_elements_not_within_margin()
-        page_want = '\n'.join([
-            '<page number="8" height="1263" width="862">',
-            '<text top="500" left="80" width="512" height="19" font="0">1</text>'
-            '<text top="600" left="80" width="512" height="19" font="0">2</text>'
-            '<text top="800" left="80" width="512" height="19" font="0">3</text>'
-            '</page>'
-        ])
+        page_want = ["1", "2", "3"]
 
-        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), page_want)
+        self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements], page_want)
 
     def test_compute_default_margins(self):
         '''Test if the default margins are set'''
@@ -3434,66 +3391,66 @@ class TestPDFPage(XMLTester):
 
     def test_is_inside_margins1(self):
         '''top and left inside margins'''
-        t = etree.fromstring('<text top="109" left="135"/>')
+        t = converter.PDFTextElement(etree.fromstring('<text top="109" left="135"/>'))
         margins = {}
         margins['left_margin'] = 62
         margins['right_margin'] = 802
         margins['top_margin'] = 88
         margins['bottom_margin'] = 1174
 
-        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
 
         self.assertTrue(p2x.is_inside_margins(t, margins))
 
     def test_is_inside_margins2(self):
         '''top above top margin and left inside margins'''
-        t = etree.fromstring('<text top="85" left="135"/>')
+        t = converter.PDFTextElement(etree.fromstring('<text top="85" left="135"/>'))
         margins = {}
         margins['left_margin'] = 62
         margins['right_margin'] = 802
         margins['top_margin'] = 88
         margins['bottom_margin'] = 1174
 
-        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
     def test_is_inside_margins3(self):
         '''top below bottom margin and left inside margins'''
-        t = etree.fromstring('<text top="1178" left="135"/>')
+        t = converter.PDFTextElement(etree.fromstring('<text top="1178" left="135"/>'))
         margins = {}
         margins['left_margin'] = 62
         margins['right_margin'] = 802
         margins['top_margin'] = 88
         margins['bottom_margin'] = 1174
 
-        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
     def test_is_inside_margins4(self):
         '''top inside margins and left outside right margin'''
-        t = etree.fromstring('<text top="1000" left="50"/>')
+        t = converter.PDFTextElement(etree.fromstring('<text top="1000" left="50"/>'))
         margins = {}
         margins['left_margin'] = 62
         margins['right_margin'] = 802
         margins['top_margin'] = 88
         margins['bottom_margin'] = 1174
 
-        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
     def test_is_inside_margins5(self):
         '''top inside margins and left outside left margin'''
-        t = etree.fromstring('<text top="1000" left="805"/>')
+        t = converter.PDFTextElement(etree.fromstring('<text top="1000" left="805"/>'))
         margins = {}
         margins['left_margin'] = 62
         margins['right_margin'] = 802
         margins['top_margin'] = 88
         margins['bottom_margin'] = 1174
 
-        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
@@ -3570,43 +3527,43 @@ class TestPDFPage(XMLTester):
 
     def test_is_skip_page_1(self):
         '''Odd page should be skipped when odd is in skip_pages'''
-        p2x = converter.PDFPage(etree.fromstring('<page number="1"/>'))
+        p2x = converter.PDFPage(etree.fromstring('<page number="1" height="1263" width="862"/>'))
 
         self.assertTrue(p2x.is_skip_page(['odd']))
 
     def test_is_skip_page_2(self):
         '''Even page should be skipped when even is in skip_pages'''
-        p2x = converter.PDFPage(etree.fromstring('<page number="2"/>'))
+        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
 
         self.assertTrue(p2x.is_skip_page(['even']))
 
     def test_is_skip_page_3(self):
         '''Even page should not be skipped when odd is in skip_pages'''
-        p2x = converter.PDFPage(etree.fromstring('<page number="2"/>'))
+        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
 
         self.assertFalse(p2x.is_skip_page(['odd']))
 
     def test_is_skip_page_4(self):
         '''Odd page should not be skipped when even is in skip_pages'''
-        p2x = converter.PDFPage(etree.fromstring('<page number="1"/>'))
+        p2x = converter.PDFPage(etree.fromstring('<page number="1" height="1263" width="862"/>'))
 
         self.assertFalse(p2x.is_skip_page(['even']))
 
     def test_is_skip_page_5(self):
         '''Page should not be skipped when not in skip_range'''
-        p2x = converter.PDFPage(etree.fromstring('<page number="1"/>'))
+        p2x = converter.PDFPage(etree.fromstring('<page number="1" height="1263" width="862"/>'))
 
         self.assertFalse(p2x.is_skip_page(['even', 3]))
 
     def test_is_skip_page_6(self):
         '''Page should be skipped when in skip_range'''
-        p2x = converter.PDFPage(etree.fromstring('<page number="3"/>'))
+        p2x = converter.PDFPage(etree.fromstring('<page number="3" height="1263" width="862"/>'))
 
         self.assertTrue(p2x.is_skip_page(['even', 3]))
 
     def test_is_text_on_same_line_1(self):
         '''When top is the same, two text elements are on the same line'''
-        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
 
         prev_t = etree.fromstring(
             '<text top="354" left="119" width="205" height="22" font="2">'
@@ -3618,7 +3575,7 @@ class TestPDFPage(XMLTester):
 
     def test_is_text_on_same_line_2(self):
         ''''''
-        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
 
         prev_t = etree.fromstring(
             '<text top="354" left="332" width="6" height="22" font="2"> </text>')
@@ -3629,7 +3586,7 @@ class TestPDFPage(XMLTester):
 
     def test_is_text_on_same_line_3(self):
         ''''''
-        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
 
         prev_t = etree.fromstring(
             '<text top="350" left="339" width="4" height="16" font="7"> </text>')
@@ -3640,7 +3597,7 @@ class TestPDFPage(XMLTester):
 
     def test_is_text_on_same_line_4(self):
         ''''''
-        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
 
         prev_t = etree.fromstring(
             '<text top="354" left="615" width="13" height="22" font="2">  </text>')

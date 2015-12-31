@@ -829,45 +829,34 @@ class PDFTextElement(object):
         '''Is self sideways (partly) covered by other_box'''
         return self.left <= other_box.right and self.right >= other_box.left
 
+    def remove_superscript(self):
+        try:
+            int(self.t.xpath("string()").strip())
+            child = self.t
+            while len(child) > 0:
+                child = child[0]
+            child.text = re.sub('\d+', '', child.text)
+
+        except ValueError:
+            pass
+
+
 
 class PDFPage(object):
     def __init__(self, page_element, metadata_margins={}, metadata_inner_margins={}):
-        self.page = page_element
+        self.number = int(page_element.get('number'))
+        self.height = int(page_element.get('height'))
+        self.width = int(page_element.get('width'))
         self.metadata_margins = metadata_margins
         self.metadata_inner_margins = metadata_inner_margins
-
-    @property
-    def number(self):
-        return int(self.page.get('number'))
-
-    @property
-    def height(self):
-        return int(self.page.get('height'))
-
-    @property
-    def width(self):
-        return int(self.page.get('width'))
+        self.textelements = [PDFTextElement(t)
+                             for t in page_element.iter('text')]
 
     def is_skip_page(self, skip_pages):
         '''True if a page should be skipped, otherwise false'''
         return (('odd' in skip_pages and (self.number % 2) == 1) or
                 ('even' in skip_pages and (self.number % 2) == 0) or
                 self.number in skip_pages)
-
-    def find_footnotes_superscript(self):
-        '''Search for text elements containing potential footnotes.
-
-        :return superscripts: a list of potential footnotes.
-        '''
-        superscripts = []
-        for t in self.page.iter('text'):
-            try:
-                int(t.xpath("string()").strip())
-                superscripts.append(t)
-            except ValueError:
-                pass
-
-        return superscripts
 
     @staticmethod
     def has_content(element):
@@ -876,26 +865,18 @@ class PDFPage(object):
 
     def remove_footnotes_superscript(self):
         '''Remove numbers from elements found by find_footnotes_superscript.'''
-        for superscript in self.find_footnotes_superscript():
-            previous_element = superscript.getprevious()
-            if (previous_element is not None and
-                    self.has_content(previous_element) and
-                    int(previous_element.get('top')) >=
-                    int(superscript.get('top'))):
-                child = superscript
-                while len(child) > 0:
-                    child = child[0]
-                child.text = re.sub('\d+', '', child.text)
+        for textelement in self.textelements[1:]:
+            textelement.remove_superscript()
 
     def remove_elements_not_within_margin(self):
         margins = self.compute_margins()
         inner_margins = self.compute_inner_margins()
-        for t in self.page.iter('text'):
-            if not self.is_inside_margins(t, margins):
-                t.getparent().remove(t)
-            elif (len(inner_margins) > 0 and
-                  self.is_inside_inner_margins(t, inner_margins)):
-                t.getparent().remove(t)
+
+        self.textelements[:] = [t for t in self.textelements
+                                if self.is_inside_margins(t, margins)]
+        if len(inner_margins) > 0:
+            self.textelements[:] = [t for t in self.textelements
+                                    if not self.is_inside_inner_margins(t, inner_margins)]
 
     @staticmethod
     def is_text_on_same_line(prev_t, t):
@@ -1044,25 +1025,24 @@ class PDFPage(object):
 
         t is a text element
         '''
-        return (int(t.get('top')) > margins['top_margin'] and
-                int(t.get('top')) < margins['bottom_margin'] and
-                int(t.get('left')) > margins['left_margin'] and
-                int(t.get('left')) < margins['right_margin'])
+        return (t.top > margins['top_margin'] and
+                t.top < margins['bottom_margin'] and
+                t.left > margins['left_margin'] and
+                t.left < margins['right_margin'])
 
     def is_inside_inner_margins(self, t, margins):
         '''Check if t is inside the given margins
 
         t is a text element
         '''
-        return (int(t.get('top')) > margins['inner_top_margin'] and
-                int(t.get('top')) < margins['inner_bottom_margin'] and
-                int(t.get('left')) > margins['inner_left_margin'] and
-                int(t.get('left')) < margins['inner_right_margin'])
+        return (t.top > margins['inner_top_margin'] and
+                t.top < margins['inner_bottom_margin'] and
+                t.left > margins['inner_left_margin'] and
+                t.left < margins['inner_right_margin'])
 
     def sort_text_elements(self):
         sorted_list = []
-        for t in self.page.iter('text'):
-            textelement = PDFTextElement(t)
+        for textelement in self.textelements:
 
             i = 0
             for box in sorted_list:
