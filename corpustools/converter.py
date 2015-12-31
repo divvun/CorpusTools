@@ -25,6 +25,7 @@ from __future__ import print_function
 
 import argparse
 import codecs
+import collections
 from copy import deepcopy
 import distutils.dep_util
 import distutils.spawn
@@ -713,6 +714,9 @@ class PDFTextExtractor(object):
             self.extract_textelement(etree.fromstring('<text> </text>'))
 
 
+BoundingBox = collections.namedtuple('BoundingBox', ['top', 'left', 'bottom', 'right'])
+
+
 class PDF2XMLConverter(Converter):
     '''Class to convert the xml output of pdftohtml to giellatekno xml'''
     def __init__(self, filename, write_intermediate=False):
@@ -987,6 +991,38 @@ class PDF2XMLConverter(Converter):
             elif (len(inner_margins) > 0 and
                   self.is_inside_inner_margins(t, inner_margins)):
                 t.getparent().remove(t)
+
+    def sort_text_elements(self, page):
+        element_dict = {}
+        sorted_list = []
+        for t in page.iter('text'):
+            top = int(t.get('top'))
+            left = int(t.get('left'))
+            height = int(t.get('height'))
+            width = int(t.get('width'))
+            bounding_box = BoundingBox(top=top, left=left, bottom=top + height,
+                                       right=left + width)
+
+            util.print_frame(debug=bounding_box)
+            i = 0
+            while i < len(sorted_list) and bounding_box.left > sorted_list[i].right:
+                util.print_frame(debug=i)
+                util.print_frame(sorted_list[i])
+                i += 1
+            while i < len(sorted_list) and bounding_box.top > sorted_list[i].bottom:
+                util.print_frame(debug=i)
+                util.print_frame(sorted_list[i])
+                i += 1
+
+            util.print_frame(debug=i)
+            if i == len(sorted_list):
+                sorted_list.append(bounding_box)
+            else:
+                sorted_list.insert(i, bounding_box)
+            util.print_frame(debug=sorted_list)
+            print(file=sys.stderr)
+
+        return sorted_list
 
     def parse_page(self, page):
         '''Parse the page element.'''
