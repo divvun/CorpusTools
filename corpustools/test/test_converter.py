@@ -3498,21 +3498,23 @@ class TestPDFPage(XMLTester):
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
     def test_sort_text_elements_1(self):
-        one = etree.fromstring('<text top="72" left="85" width="62" height="12" font="5">1</text>')
-        two = etree.fromstring('<text top="110" left="239" width="416" height="30" font="6">2</text>')
-        three = etree.fromstring('<text top="193" left="85" width="213" height="24" font="10">3</text>')
-        four = etree.fromstring('<text top="232" left="85" width="347" height="15" font="4">4</text>')
-        five = etree.fromstring('<text top="198" left="478" width="330" height="15" font="4">5</text>')
-        six = etree.fromstring('<text top="215" left="461" width="347" height="15" font="4">6</text>')
+        elementlist = [
+            etree.fromstring('<text top="72" left="85" width="62" height="12" font="5">1</text>'),
+            etree.fromstring('<text top="110" left="239" width="416" height="30" font="6">2</text>'),
+            etree.fromstring('<text top="193" left="85" width="213" height="24" font="10">3</text>'),
+            etree.fromstring('<text top="232" left="85" width="347" height="15" font="4">4</text>'),
+            etree.fromstring('<text top="198" left="478" width="330" height="15" font="4">5</text>'),
+            etree.fromstring('<text top="215" left="461" width="347" height="15" font="4">6</text>')]
+
 
         test_page = etree.fromstring(
             u'<page number="13" position="absolute" top="0" left="0" height="1261" width="892"/>')
-        test_page.append(one)
-        test_page.append(three)
-        test_page.append(five)
-        test_page.append(six)
-        test_page.append(four)
-        test_page.append(two)
+        test_page.append(elementlist[0])
+        test_page.append(elementlist[2])
+        test_page.append(elementlist[4])
+        test_page.append(elementlist[5])
+        test_page.append(elementlist[3])
+        test_page.append(elementlist[1])
 
         pdfpage = converter.PDFPage(test_page)
         want_list = ["1", "2", "3", "4", "5", "6"]
@@ -3523,21 +3525,22 @@ class TestPDFPage(XMLTester):
 
     def test_sort_text_elements_2(self):
         self.maxDiff = None
-        one = etree.fromstring('<text top="72" left="85" width="62" height="12" font="5">1</text>')
-        two = etree.fromstring('<text top="110" left="239" width="416" height="30" font="6">2</text>')
-        three = etree.fromstring('<text top="193" left="85" width="213" height="24" font="10">3</text>')
-        four = etree.fromstring('<text top="232" left="85" width="347" height="15" font="4">4</text>')
-        five = etree.fromstring('<text top="198" left="478" width="330" height="15" font="4">5</text>')
-        six = etree.fromstring('<text top="215" left="461" width="347" height="15" font="4">6</text>')
+        elementlist = [
+            etree.fromstring('<text top="72" left="85" width="62" height="12" font="5">1</text>'),
+            etree.fromstring('<text top="110" left="239" width="416" height="30" font="6">2</text>'),
+            etree.fromstring('<text top="193" left="85" width="213" height="24" font="10">3</text>'),
+            etree.fromstring('<text top="232" left="85" width="347" height="15" font="4">4</text>'),
+            etree.fromstring('<text top="198" left="478" width="330" height="15" font="4">5</text>'),
+            etree.fromstring('<text top="215" left="461" width="347" height="15" font="4">6</text>')]
 
         test_page = etree.fromstring(
             u'<page number="13" position="absolute" top="0" left="0" height="1261" width="892"/>')
-        test_page.append(one)
-        test_page.append(five)
-        test_page.append(three)
-        test_page.append(four)
-        test_page.append(six)
-        test_page.append(two)
+        test_page.append(elementlist[0])
+        test_page.append(elementlist[4])
+        test_page.append(elementlist[2])
+        test_page.append(elementlist[3])
+        test_page.append(elementlist[5])
+        test_page.append(elementlist[1])
 
         pdfpage = converter.PDFPage(test_page)
         want_list = ["1", "2", "3", "4", "5", "6"]
@@ -3548,18 +3551,18 @@ class TestPDFPage(XMLTester):
 
     def test_sort_text_elements_3(self):
         self.maxDiff = None
-        one = etree.fromstring('<text top="106" left="100" width="100" height="19">1 </text>')
-        two = etree.fromstring('<text top="126" left="100" width="100" height="19">2 </text>')
-        three = etree.fromstring('<text top="145" left="100" width="100" height="19">3.</text>')
+        elementlist = [
+            etree.fromstring('<text top="106" left="100" width="100" height="19">1 </text>'),
+            etree.fromstring('<text top="126" left="100" width="100" height="19">2 </text>'),
+            etree.fromstring('<text top="145" left="100" width="100" height="19">3.</text>')]
 
         test_page = etree.fromstring(
             u'<page number="13" position="absolute" top="0" left="0" height="1261" width="892"/>')
-        test_page.append(one)
-        test_page.append(two)
-        test_page.append(three)
+        for t in elementlist:
+            test_page.append(t)
 
         pdfpage = converter.PDFPage(test_page)
-        want_list = ["1 ", "2 ", "3."]
+        want_list = [t.xpath("string()") for t in elementlist]
 
         self.assertEqual(
             [box.t.xpath("string()") for box in pdfpage.sort_text_elements()],
