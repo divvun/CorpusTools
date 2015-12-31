@@ -3313,6 +3313,71 @@ class TestPDFPage(XMLTester):
 
         self.assertEqual(page1.compute_inner_margins(), {})
 
+    def test_is_inside_margins1(self):
+        '''top and left inside margins'''
+        t = etree.fromstring('<text top="109" left="135"/>')
+        margins = {}
+        margins['left_margin'] = 62
+        margins['right_margin'] = 802
+        margins['top_margin'] = 88
+        margins['bottom_margin'] = 1174
+
+        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+
+        self.assertTrue(p2x.is_inside_margins(t, margins))
+
+    def test_is_inside_margins2(self):
+        '''top above top margin and left inside margins'''
+        t = etree.fromstring('<text top="85" left="135"/>')
+        margins = {}
+        margins['left_margin'] = 62
+        margins['right_margin'] = 802
+        margins['top_margin'] = 88
+        margins['bottom_margin'] = 1174
+
+        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+
+        self.assertFalse(p2x.is_inside_margins(t, margins))
+
+    def test_is_inside_margins3(self):
+        '''top below bottom margin and left inside margins'''
+        t = etree.fromstring('<text top="1178" left="135"/>')
+        margins = {}
+        margins['left_margin'] = 62
+        margins['right_margin'] = 802
+        margins['top_margin'] = 88
+        margins['bottom_margin'] = 1174
+
+        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+
+        self.assertFalse(p2x.is_inside_margins(t, margins))
+
+    def test_is_inside_margins4(self):
+        '''top inside margins and left outside right margin'''
+        t = etree.fromstring('<text top="1000" left="50"/>')
+        margins = {}
+        margins['left_margin'] = 62
+        margins['right_margin'] = 802
+        margins['top_margin'] = 88
+        margins['bottom_margin'] = 1174
+
+        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+
+        self.assertFalse(p2x.is_inside_margins(t, margins))
+
+    def test_is_inside_margins5(self):
+        '''top inside margins and left outside left margin'''
+        t = etree.fromstring('<text top="1000" left="805"/>')
+        margins = {}
+        margins['left_margin'] = 62
+        margins['right_margin'] = 802
+        margins['top_margin'] = 88
+        margins['bottom_margin'] = 1174
+
+        p2x = converter.PDFPage(etree.fromstring('<page/>'))
+
+        self.assertFalse(p2x.is_inside_margins(t, margins))
+
     def test_sort_text_elements_1(self):
         self.maxDiff = None
         test_page = etree.fromstring(
@@ -3517,71 +3582,6 @@ class TestPDF2XMLConverter(XMLTester):
                               'height="16" font="2">, sáhtte</text>')
 
         self.assertTrue(p2x.is_same_paragraph(t1))
-
-    def test_is_inside_margins1(self):
-        '''top and left inside margins'''
-        t = etree.fromstring('<text top="109" left="135"/>')
-        margins = {}
-        margins['left_margin'] = 62
-        margins['right_margin'] = 802
-        margins['top_margin'] = 88
-        margins['bottom_margin'] = 1174
-
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        self.assertTrue(p2x.is_inside_margins(t, margins))
-
-    def test_is_inside_margins2(self):
-        '''top above top margin and left inside margins'''
-        t = etree.fromstring('<text top="85" left="135"/>')
-        margins = {}
-        margins['left_margin'] = 62
-        margins['right_margin'] = 802
-        margins['top_margin'] = 88
-        margins['bottom_margin'] = 1174
-
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        self.assertFalse(p2x.is_inside_margins(t, margins))
-
-    def test_is_inside_margins3(self):
-        '''top below bottom margin and left inside margins'''
-        t = etree.fromstring('<text top="1178" left="135"/>')
-        margins = {}
-        margins['left_margin'] = 62
-        margins['right_margin'] = 802
-        margins['top_margin'] = 88
-        margins['bottom_margin'] = 1174
-
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        self.assertFalse(p2x.is_inside_margins(t, margins))
-
-    def test_is_inside_margins4(self):
-        '''top inside margins and left outside right margin'''
-        t = etree.fromstring('<text top="1000" left="50"/>')
-        margins = {}
-        margins['left_margin'] = 62
-        margins['right_margin'] = 802
-        margins['top_margin'] = 88
-        margins['bottom_margin'] = 1174
-
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        self.assertFalse(p2x.is_inside_margins(t, margins))
-
-    def test_is_inside_margins5(self):
-        '''top inside margins and left outside left margin'''
-        t = etree.fromstring('<text top="1000" left="805"/>')
-        margins = {}
-        margins['left_margin'] = 62
-        margins['right_margin'] = 802
-        margins['top_margin'] = 88
-        margins['bottom_margin'] = 1174
-
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-
-        self.assertFalse(p2x.is_inside_margins(t, margins))
 
     def test_parse_page_1(self):
         '''Page with one paragraph, three <text> elements'''
