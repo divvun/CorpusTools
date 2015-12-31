@@ -4086,3 +4086,44 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="376" left="119" width="6" height="22" font="2"> </text>')
 
         self.assertFalse(p2x.is_text_on_same_line(t1))
+
+    def test_sort_text_elements_1(self):
+        '''Test data for bug2106, Header appears at the end of the page'''
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        test_page = etree.fromstring(
+            u'''<page number="13" position="absolute" top="0" left="0" height="1261" width="892">
+            <text top="51" left="85" width="17" height="15" font="4"/>
+            <text top="72" left="85" width="62" height="12" font="5"/>
+
+            <text top="193" left="85" width="213" height="24" font="10"/>
+            <text top="232" left="85" width="347" height="15" font="4"/>
+            <text top="250" left="85" width="347" height="15" font="4"/>
+            <text top="267" left="85" width="347" height="15" font="4"/>
+
+            <text top="198" left="478" width="330" height="15" font="4"/>
+            <text top="215" left="461" width="347" height="15" font="4"/>
+            <text top="232" left="461" width="347" height="15" font="4"/>
+            <text top="250" left="461" width="347" height="15" font="4"/>
+
+            <text top="110" left="239" width="416" height="30" font="6"/>
+            </page>''')
+        p2x.sort_text_elements(test_page)
+        want_page = etree.fromstring(
+            u'''<page number="13" position="absolute" top="0" left="0" height="1261" width="892">
+            <text top="51" left="85" width="17" height="15" font="4"/>
+            <text top="72" left="85" width="62" height="12" font="5"/>
+
+            <text top="110" left="239" width="416" height="30" font="6"/>
+
+            <text top="193" left="85" width="213" height="24" font="10"/>
+            <text top="232" left="85" width="347" height="15" font="4"/>
+            <text top="250" left="85" width="347" height="15" font="4"/>
+            <text top="267" left="85" width="347" height="15" font="4"/>
+
+            <text top="198" left="478" width="330" height="15" font="4"/>
+            <text top="215" left="461" width="347" height="15" font="4"/>
+            <text top="232" left="461" width="347" height="15" font="4"/>
+            <text top="250" left="461" width="347" height="15" font="4"/>
+            </page>''')
+
+        self.assertXmlEqual(test_page, want_page)
