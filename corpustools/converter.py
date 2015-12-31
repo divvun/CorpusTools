@@ -908,6 +908,34 @@ class PDFPage(object):
                 int(t.get('left')) > margins['inner_left_margin'] and
                 int(t.get('left')) < margins['inner_right_margin'])
 
+    def sort_text_elements(self):
+        element_dict = {}
+        sorted_list = []
+        for t in self.page.iter('text'):
+            top = int(t.get('top'))
+            left = int(t.get('left'))
+            height = int(t.get('height'))
+            width = int(t.get('width'))
+            bounding_box = BoundingBox(top=top, left=left, bottom=top + height,
+                                       right=left + width)
+
+            i = 0
+            for box in sorted_list:
+                if bounding_box.is_right_of(sorted_list[i]):
+                    i += 1
+                elif (bounding_box.is_below(sorted_list[i]) and
+                      bounding_box.is_covered(sorted_list[i])):
+                    i += 1
+                else:
+                    break
+
+            if i == len(sorted_list):
+                sorted_list.append(bounding_box)
+            else:
+                sorted_list.insert(i, bounding_box)
+
+        return sorted_list
+
 
 class PDF2XMLConverter(Converter):
     '''Class to convert the xml output of pdftohtml to giellatekno xml'''
@@ -1038,34 +1066,6 @@ class PDF2XMLConverter(Converter):
             self.in_list = False
 
         return same_paragraph
-
-    def sort_text_elements(self, page):
-        element_dict = {}
-        sorted_list = []
-        for t in page.iter('text'):
-            top = int(t.get('top'))
-            left = int(t.get('left'))
-            height = int(t.get('height'))
-            width = int(t.get('width'))
-            bounding_box = BoundingBox(top=top, left=left, bottom=top + height,
-                                       right=left + width)
-
-            i = 0
-            for box in sorted_list:
-                if bounding_box.is_right_of(sorted_list[i]):
-                    i += 1
-                elif (bounding_box.is_below(sorted_list[i]) and
-                      bounding_box.is_covered(sorted_list[i])):
-                    i += 1
-                else:
-                    break
-
-            if i == len(sorted_list):
-                sorted_list.append(bounding_box)
-            else:
-                sorted_list.insert(i, bounding_box)
-
-        return sorted_list
 
     def parse_page(self, page):
         '''Parse the page element.'''
