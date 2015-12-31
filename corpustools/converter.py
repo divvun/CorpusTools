@@ -730,8 +730,10 @@ class BoundingBox(namedtuple('BoundingBox', ['top', 'left', 'bottom', 'right']))
 
 
 class PDFPage(object):
-    def __init__(self, page_element):
+    def __init__(self, page_element, metadata_margins={}, metadata_inner_margins={}):
         self.page = page_element
+        self.metadata_margins = metadata_margins
+        self.metadata_inner_margins = metadata_inner_margins
 
     @property
     def number(self):
@@ -777,6 +779,134 @@ class PDFPage(object):
                 while len(child) > 0:
                     child = child[0]
                 child.text = re.sub('\d+', '', child.text)
+
+    def remove_elements_not_within_margin(self):
+        margins = self.compute_margins()
+        inner_margins = self.compute_inner_margins()
+        for t in self.page.iter('text'):
+            if not self.is_inside_margins(t, margins):
+                t.getparent().remove(t)
+            elif (len(inner_margins) > 0 and
+                  self.is_inside_inner_margins(t, inner_margins)):
+                t.getparent().remove(t)
+
+    def compute_margins(self):
+        '''Compute the margins of a page in pixels.
+
+        :param page: a pdf2xml page element
+
+        :returns: a dict containing the four margins in pixels
+        '''
+        margins = {margin: self.compute_margin(margin)
+                   for margin in ['right_margin', 'left_margin', 'top_margin',
+                                  'bottom_margin']}
+
+        return margins
+
+    def compute_margin(self, margin):
+        '''Compute a margin in pixels.
+
+        :param margin: the name of the  margin
+        :param page: a pdf2xml page element
+
+        :return: an int telling where the margin is on the page.
+        '''
+        coefficient = self.get_coefficient(margin)
+        # print(util.lineno(), margin, page_height, page_width, coefficient, file=sys.stderr)
+
+        if margin == 'left_margin':
+            return int(coefficient * self.width / 100)
+        if margin == 'right_margin':
+            return int(self.width - coefficient * self.width / 100)
+        if margin == 'top_margin':
+            return int(coefficient * self.height / 100)
+        if margin == 'bottom_margin':
+            return int(self.height - coefficient * self.height / 100)
+
+    def get_coefficient(self, margin):
+        '''Get the width of the margin in percent'''
+        coefficient = 7
+        if margin in self.metadata_margins.keys():
+            m = self.metadata_margins[margin]
+            if m.get(self.number) is not None:
+                coefficient = m[self.number.strip()]
+            elif m.get('all') is not None:
+                coefficient = m['all']
+            elif int(self.number) % 2 == 0 and m.get('even') is not None:
+                coefficient = m['even']
+            elif int(self.number) % 2 == 1 and m.get('odd') is not None:
+                coefficient = m['odd']
+
+        return coefficient
+
+    def compute_inner_margins(self):
+
+        margins = {margin: self.compute_inner_margin(margin)
+                   for margin in ['inner_right_margin', 'inner_left_margin',
+                                  'inner_top_margin', 'inner_bottom_margin']}
+
+        if (margins['inner_bottom_margin'] == self.height and
+                margins['inner_top_margin'] == 0 and
+                margins['inner_left_margin'] == 0 and
+                margins['inner_right_margin'] == self.width):
+            margins = {}
+
+        return margins
+
+    def compute_inner_margin(self, margin):
+        '''Compute a margin in pixels.
+
+        :param margin: the name of the margin
+        :param page: a pdf2xml page element
+
+        :return: an int telling where the margin is on the page.
+        '''
+        coefficient = self.get_inner_coefficient(margin)
+
+        if margin == 'inner_left_margin':
+            return int(coefficient * self.width / 100)
+        if margin == 'inner_right_margin':
+            return int(self.width - coefficient * self.width / 100)
+        if margin == 'inner_top_margin':
+            return int(coefficient * self.height / 100)
+        if margin == 'inner_bottom_margin':
+            return int(self.height - coefficient * self.height / 100)
+
+    def get_inner_coefficient(self, margin):
+        '''Get the width of the margin in percent'''
+        coefficient = 0
+        if margin in self.metadata_inner_margins.keys():
+            m = self.metadata_inner_margins[margin]
+            if m.get(self.number) is not None:
+                coefficient = m[self.number.strip()]
+            elif m.get('all') is not None:
+                coefficient = m['all']
+            elif int(self.number) % 2 == 0 and m.get('even') is not None:
+                coefficient = m['even']
+            elif int(self.number) % 2 == 1 and m.get('odd') is not None:
+                coefficient = m['odd']
+
+        return coefficient
+
+    def is_inside_margins(self, t, margins):
+        '''Check if t is inside the given margins
+
+        t is a text element
+        '''
+        return (int(t.get('top')) > margins['top_margin'] and
+                int(t.get('top')) < margins['bottom_margin'] and
+                int(t.get('left')) > margins['left_margin'] and
+                int(t.get('left')) < margins['right_margin'])
+
+    def is_inside_inner_margins(self, t, margins):
+        '''Check if t is inside the given margins
+
+        t is a text element
+        '''
+        return (int(t.get('top')) > margins['inner_top_margin'] and
+                int(t.get('top')) < margins['inner_bottom_margin'] and
+                int(t.get('left')) > margins['inner_left_margin'] and
+                int(t.get('left')) < margins['inner_right_margin'])
 
 
 class PDF2XMLConverter(Converter):
@@ -850,108 +980,6 @@ class PDF2XMLConverter(Converter):
 
         return document
 
-    def get_coefficient(self, margin, page_number):
-        '''Get the width of the margin in percent'''
-        coefficient = 7
-        if margin in self.md.margins.keys():
-            m = self.md.margins[margin]
-            if m.get(page_number) is not None:
-                coefficient = m[page_number.strip()]
-            elif m.get('all') is not None:
-                coefficient = m['all']
-            elif int(page_number) % 2 == 0 and m.get('even') is not None:
-                coefficient = m['even']
-            elif int(page_number) % 2 == 1 and m.get('odd') is not None:
-                coefficient = m['odd']
-
-        return coefficient
-
-    def get_inner_coefficient(self, margin, page_number):
-        '''Get the width of the margin in percent'''
-        coefficient = 0
-        if margin in self.md.inner_margins.keys():
-            m = self.md.inner_margins[margin]
-            if m.get(page_number) is not None:
-                coefficient = m[page_number.strip()]
-            elif m.get('all') is not None:
-                coefficient = m['all']
-            elif int(page_number) % 2 == 0 and m.get('even') is not None:
-                coefficient = m['even']
-            elif int(page_number) % 2 == 1 and m.get('odd') is not None:
-                coefficient = m['odd']
-
-        return coefficient
-
-    def compute_margins(self, page):
-        '''Compute the margins of a page in pixels.
-
-        :param page: a pdf2xml page element
-
-        :returns: a dict containing the four margins in pixels
-        '''
-        margins = {margin: self.compute_margin(margin, page)
-                   for margin in ['right_margin', 'left_margin', 'top_margin',
-                                  'bottom_margin']}
-
-        return margins
-
-    def compute_inner_margins(self, page):
-
-        margins = {margin: self.compute_inner_margin(margin, page)
-                   for margin in ['inner_right_margin', 'inner_left_margin',
-                                  'inner_top_margin', 'inner_bottom_margin']}
-
-        if (margins['inner_bottom_margin'] == int(page.get('height')) and
-                margins['inner_top_margin'] == 0 and
-                margins['inner_left_margin'] == 0 and
-                margins['inner_right_margin'] == int(page.get('width'))):
-            margins = {}
-
-        return margins
-
-    def compute_margin(self, margin, page):
-        '''Compute a margin in pixels.
-
-        :param margin: the name of the  margin
-        :param page: a pdf2xml page element
-
-        :return: an int telling where the margin is on the page.
-        '''
-        page_width = int(page.get('width'))
-        page_height = int(page.get('height'))
-        coefficient = self.get_coefficient(margin, page.get('number'))
-        # print(util.lineno(), margin, page_height, page_width, coefficient, file=sys.stderr)
-
-        if margin == 'left_margin':
-            return int(coefficient * page_width / 100)
-        if margin == 'right_margin':
-            return int(page_width - coefficient * page_width / 100)
-        if margin == 'top_margin':
-            return int(coefficient * page_height / 100)
-        if margin == 'bottom_margin':
-            return int(page_height - coefficient * page_height / 100)
-
-    def compute_inner_margin(self, margin, page):
-        '''Compute a margin in pixels.
-
-        :param margin: the name of the margin
-        :param page: a pdf2xml page element
-
-        :return: an int telling where the margin is on the page.
-        '''
-        page_width = int(page.get('width'))
-        page_height = int(page.get('height'))
-        coefficient = self.get_inner_coefficient(margin, page.get('number'))
-
-        if margin == 'inner_left_margin':
-            return int(coefficient * page_width / 100)
-        if margin == 'inner_right_margin':
-            return int(page_width - coefficient * page_width / 100)
-        if margin == 'inner_top_margin':
-            return int(coefficient * page_height / 100)
-        if margin == 'inner_bottom_margin':
-            return int(page_height - coefficient * page_height / 100)
-
     def is_text_on_same_line(self, text):
         if self.prev_t is None:
             return True
@@ -1010,16 +1038,6 @@ class PDF2XMLConverter(Converter):
             self.in_list = False
 
         return same_paragraph
-
-    def remove_elements_not_within_margin(self, page):
-        margins = self.compute_margins(page)
-        inner_margins = self.compute_inner_margins(page)
-        for t in page.iter('text'):
-            if not self.is_inside_margins(t, margins):
-                t.getparent().remove(t)
-            elif (len(inner_margins) > 0 and
-                  self.is_inside_inner_margins(t, inner_margins)):
-                t.getparent().remove(t)
 
     def sort_text_elements(self, page):
         element_dict = {}
@@ -1084,26 +1102,6 @@ class PDF2XMLConverter(Converter):
             last_string = self.extractor.get_last_string()
             if re.search(u'[.?!]$', last_string):
                 self.extractor.append_to_body()
-
-    def is_inside_margins(self, t, margins):
-        '''Check if t is inside the given margins
-
-        t is a text element
-        '''
-        return (int(t.get('top')) > margins['top_margin'] and
-                int(t.get('top')) < margins['bottom_margin'] and
-                int(t.get('left')) > margins['left_margin'] and
-                int(t.get('left')) < margins['right_margin'])
-
-    def is_inside_inner_margins(self, t, margins):
-        '''Check if t is inside the given margins
-
-        t is a text element
-        '''
-        return (int(t.get('top')) > margins['inner_top_margin'] and
-                int(t.get('top')) < margins['inner_bottom_margin'] and
-                int(t.get('left')) > margins['inner_left_margin'] and
-                int(t.get('left')) < margins['inner_right_margin'])
 
     @staticmethod
     def is_skip_page(page_number, skip_pages):

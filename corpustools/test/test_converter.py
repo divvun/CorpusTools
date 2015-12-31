@@ -29,6 +29,7 @@ import unittest
 
 from corpustools import converter
 from corpustools import text_cat
+from corpustools import xslsetter
 
 
 here = os.path.dirname(__file__)
@@ -3170,6 +3171,148 @@ class TestPDFPage(XMLTester):
 
         self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), want_page)
 
+    def test_remove_elements_not_within_margin_1(self):
+        '''Check that elements within inner_margins for a specific page are removed'''
+        md = xslsetter.MetadataHandler('test.pdf.xsl', create=True)
+        md.set_variable('inner_top_margin', '8=40')
+        md.set_variable('inner_bottom_margin', '8=40')
+
+        page = etree.fromstring(
+            '\n'.join([
+                '<page number="8" height="1263" width="862">',
+                '<text top="500" left="80" width="512" height="19" font="0">1</text>'
+                '<text top="600" left="80" width="512" height="19" font="0">2</text>'
+                '<text top="800" left="80" width="512" height="19" font="0">3</text>'
+                '</page>'
+            ])
+        )
+        pdfpage = converter.PDFPage(page,
+                                    metadata_inner_margins=md.inner_margins)
+        pdfpage.remove_elements_not_within_margin()
+        page_want = '\n'.join([
+            '<page number="8" height="1263" width="862">',
+            '<text top="500" left="80" width="512" height="19" font="0">1</text>'
+            '<text top="800" left="80" width="512" height="19" font="0">3</text>'
+            '</page>'
+        ])
+
+        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), page_want)
+
+    def test_remove_elements_not_within_margin_2(self):
+        '''Check that no elements are removed when inner_margins is not defined for the page'''
+        md = xslsetter.MetadataHandler('test.pdf.xsl', create=True)
+        md.set_variable('inner_top_margin', '1=40')
+        md.set_variable('inner_bottom_margin', '1=40')
+
+        page = etree.fromstring(
+            '\n'.join([
+                '<page number="8" height="1263" width="862">',
+                '<text top="500" left="80" width="512" height="19" font="0">1</text>'
+                '<text top="600" left="80" width="512" height="19" font="0">2</text>'
+                '<text top="800" left="80" width="512" height="19" font="0">3</text>'
+                '</page>'
+            ])
+        )
+        pdfpage = converter.PDFPage(page, metadata_inner_margins=md.inner_margins)
+        pdfpage.remove_elements_not_within_margin()
+        page_want = '\n'.join([
+            '<page number="8" height="1263" width="862">',
+            '<text top="500" left="80" width="512" height="19" font="0">1</text>'
+            '<text top="600" left="80" width="512" height="19" font="0">2</text>'
+            '<text top="800" left="80" width="512" height="19" font="0">3</text>'
+            '</page>'
+        ])
+
+        self.assertXmlEqual(etree.tostring(pdfpage.page, encoding='utf8'), page_want)
+
+    def test_compute_default_margins(self):
+        '''Test if the default margins are set'''
+        page1 = converter.PDFPage(etree.fromstring(
+            '<page number="1" height="1263" width="862"/>'))
+
+        self.assertEqual(page1.compute_margins(), {'left_margin': 60,
+                                                   'right_margin': 802,
+                                                   'top_margin': 88,
+                                                   'bottom_margin': 1175})
+
+    def test_compute_margins1(self):
+        '''Test parse_margin_lines'''
+        md = xslsetter.MetadataHandler('test.pdf.xsl', create=True)
+        md.set_variable('left_margin', '7=5')
+        md.set_variable('right_margin', 'odd=10,even=15,3=5')
+        md.set_variable('top_margin', '8=8')
+        md.set_variable('bottom_margin', '9=20')
+
+        page1 = converter.PDFPage(
+            etree.fromstring('<page number="1" height="1263" width="862"/>'),
+            metadata_margins=md.margins)
+
+        self.assertEqual(page1.compute_margins(), {'left_margin': 60,
+                                                   'right_margin': 776,
+                                                   'top_margin': 88,
+                                                   'bottom_margin': 1175})
+        page2 = converter.PDFPage(
+            etree.fromstring('<page number="2" height="1263" width="862"/>'),
+            metadata_margins=md.margins)
+        self.assertEqual(page2.compute_margins(), {'left_margin': 60,
+                                                   'right_margin': 733,
+                                                   'top_margin': 88,
+                                                   'bottom_margin': 1175})
+        page3 = converter.PDFPage(
+            etree.fromstring('<page number="3" height="1263" width="862"/>'),
+            metadata_margins=md.margins)
+        self.assertEqual(page3.compute_margins(), {'left_margin': 60,
+                                                   'right_margin': 819,
+                                                   'top_margin': 88,
+                                                   'bottom_margin': 1175})
+        page7 = converter.PDFPage(
+            etree.fromstring('<page number="7" height="1263" width="862"/>'),
+            metadata_margins=md.margins)
+        self.assertEqual(page7.compute_margins(), {'left_margin': 43,
+                                                   'right_margin': 776,
+                                                   'top_margin': 88,
+                                                   'bottom_margin': 1175})
+        page8 = converter.PDFPage(
+            etree.fromstring('<page number="8" height="1263" width="862"/>'),
+            metadata_margins=md.margins)
+        self.assertEqual(page8.compute_margins(), {'left_margin': 60,
+                                                   'right_margin': 733,
+                                                   'top_margin': 101,
+                                                   'bottom_margin': 1175})
+        page9 = converter.PDFPage(
+            etree.fromstring('<page number="9" height="1263" width="862"/>'),
+            metadata_margins=md.margins)
+        self.assertEqual(page9.compute_margins(), {'left_margin': 60,
+                                                   'right_margin': 776,
+                                                   'top_margin': 88,
+                                                   'bottom_margin': 1011})
+
+    def test_compute_inner_margins_1(self):
+        '''Test if inner margins is set for the specified page'''
+        md = xslsetter.MetadataHandler('test.pdf.xsl', create=True)
+        md.set_variable('inner_top_margin', '1=40')
+        md.set_variable('inner_bottom_margin', '1=40')
+
+        page1 = converter.PDFPage(
+            etree.fromstring('<page number="1" height="1263" width="862"/>'),
+            metadata_inner_margins=md.inner_margins)
+
+        self.assertEqual(page1.compute_inner_margins(),
+                         {'inner_top_margin': 505, 'inner_bottom_margin': 758,
+                          'inner_left_margin': 0, 'inner_right_margin': 862})
+
+    def test_compute_inner_margins_2(self):
+        '''Test that inner margins is empty for the specified page'''
+        md = xslsetter.MetadataHandler('test.pdf.xsl', create=True)
+        md.set_variable('inner_top_margin', '1=40')
+        md.set_variable('inner_bottom_margin', '1=40')
+
+        page1 = converter.PDFPage(
+            etree.fromstring('<page number="2" height="1263" width="862"/>'),
+            metadata_inner_margins=md.inner_margins)
+
+        self.assertEqual(page1.compute_inner_margins(), {})
+
 
 class TestPDF2XMLConverter(XMLTester):
     '''Test the class that converts from pdf2xml to giellatekno/divvun xml'''
@@ -3876,86 +4019,6 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
 
-    def test_compute_default_margins(self):
-        '''Test if the default margins are set'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        page1 = etree.fromstring(
-            '<page number="1" height="1263" width="862"/>')
-
-        self.assertEqual(p2x.compute_margins(page1), {'left_margin': 60,
-                                                      'right_margin': 802,
-                                                      'top_margin': 88,
-                                                      'bottom_margin': 1175})
-
-    def test_compute_margins1(self):
-        '''Test parse_margin_lines'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.md.set_variable('left_margin', '7=5')
-        p2x.md.set_variable('right_margin', 'odd=10,even=15,3=5')
-        p2x.md.set_variable('top_margin', '8=8')
-        p2x.md.set_variable('bottom_margin', '9=20')
-
-        page1 = etree.fromstring(
-            '<page number="1" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page1), {'left_margin': 60,
-                                                      'right_margin': 776,
-                                                      'top_margin': 88,
-                                                      'bottom_margin': 1175})
-        page2 = etree.fromstring(
-            '<page number="2" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page2), {'left_margin': 60,
-                                                      'right_margin': 733,
-                                                      'top_margin': 88,
-                                                      'bottom_margin': 1175})
-        page3 = etree.fromstring(
-            '<page number="3" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page3), {'left_margin': 60,
-                                                      'right_margin': 819,
-                                                      'top_margin': 88,
-                                                      'bottom_margin': 1175})
-        page7 = etree.fromstring(
-            '<page number="7" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page7), {'left_margin': 43,
-                                                      'right_margin': 776,
-                                                      'top_margin': 88,
-                                                      'bottom_margin': 1175})
-        page8 = etree.fromstring(
-            '<page number="8" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page8), {'left_margin': 60,
-                                                      'right_margin': 733,
-                                                      'top_margin': 101,
-                                                      'bottom_margin': 1175})
-        page9 = etree.fromstring(
-            '<page number="9" height="1263" width="862"/>')
-        self.assertEqual(p2x.compute_margins(page9), {'left_margin': 60,
-                                                      'right_margin': 776,
-                                                      'top_margin': 88,
-                                                      'bottom_margin': 1011})
-
-    def test_compute_inner_margins_1(self):
-        '''Test if inner margins is set for the specified page'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.md.set_variable('inner_top_margin', '1=40')
-        p2x.md.set_variable('inner_bottom_margin', '1=40')
-
-        page1 = etree.fromstring(
-            '<page number="1" height="1263" width="862"/>')
-
-        self.assertEqual(p2x.compute_inner_margins(page1),
-                         {'inner_top_margin': 505, 'inner_bottom_margin': 758,
-                          'inner_left_margin': 0, 'inner_right_margin': 862})
-
-    def test_compute_inner_margins_2(self):
-        '''Test that inner margins is empty for the specified page'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.md.set_variable('inner_top_margin', '1=40')
-        p2x.md.set_variable('inner_bottom_margin', '1=40')
-
-        page1 = etree.fromstring(
-            '<page number="2" height="1263" width="862"/>')
-
-        self.assertEqual(p2x.compute_inner_margins(page1), {})
-
     def test_is_skip_page_1(self):
         '''Odd page should be skipped when odd is in skip_pages'''
         p2x = converter.PDF2XMLConverter('bogus.xml')
@@ -3991,55 +4054,6 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
 
         self.assertTrue(p2x.is_skip_page(3, ['even', 3]))
-
-    def test_remove_elements_not_within_margin_1(self):
-        '''Check that elements within inner_margins for a specific page are removed'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.md.set_variable('inner_top_margin', '8=40')
-        p2x.md.set_variable('inner_bottom_margin', '8=40')
-        page = etree.fromstring(
-            '\n'.join([
-                '<page number="8" height="1263" width="862">',
-                '<text top="500" left="80" width="512" height="19" font="0">1</text>'
-                '<text top="600" left="80" width="512" height="19" font="0">2</text>'
-                '<text top="800" left="80" width="512" height="19" font="0">3</text>'
-                '</page>'
-            ])
-        )
-        p2x.remove_elements_not_within_margin(page)
-        page_want = '\n'.join([
-            '<page number="8" height="1263" width="862">',
-            '<text top="500" left="80" width="512" height="19" font="0">1</text>'
-            '<text top="800" left="80" width="512" height="19" font="0">3</text>'
-            '</page>'
-        ])
-
-        self.assertXmlEqual(etree.tostring(page, encoding='utf8'), page_want)
-
-    def test_remove_elements_not_within_margin_2(self):
-        '''Check that no elements are removed when inner_margins is not defined for the page'''
-        p2x = converter.PDF2XMLConverter('bogus.xml')
-        p2x.md.set_variable('inner_top_margin', '1=40')
-        p2x.md.set_variable('inner_bottom_margin', '1=40')
-        page = etree.fromstring(
-            '\n'.join([
-                '<page number="8" height="1263" width="862">',
-                '<text top="500" left="80" width="512" height="19" font="0">1</text>'
-                '<text top="600" left="80" width="512" height="19" font="0">2</text>'
-                '<text top="800" left="80" width="512" height="19" font="0">3</text>'
-                '</page>'
-            ])
-        )
-        p2x.remove_elements_not_within_margin(page)
-        page_want = '\n'.join([
-            '<page number="8" height="1263" width="862">',
-            '<text top="500" left="80" width="512" height="19" font="0">1</text>'
-            '<text top="600" left="80" width="512" height="19" font="0">2</text>'
-            '<text top="800" left="80" width="512" height="19" font="0">3</text>'
-            '</page>'
-        ])
-
-        self.assertXmlEqual(etree.tostring(page, encoding='utf8'), page_want)
 
     def test_is_text_on_same_line_1(self):
         '''When top is the same, two text elements are on the same line'''
