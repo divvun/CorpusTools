@@ -38,7 +38,6 @@ setup(
             'duperemover = corpustools.dupe_finder:main',
             'dupefinder = corpustools.dupe_finder:find',
             'pick_parallel_docs = corpustools.pick_parallel_docs:main',
-            'pdf_debugger = corpustools.converter:list_main',
         ]
     },
     install_requires=[
