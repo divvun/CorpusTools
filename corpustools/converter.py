@@ -791,7 +791,7 @@ class PDFTextExtractor(object):
         return same_paragraph
 
 
-class BoundingBox(object):
+class PDFTextElement(object):
     def __init__(self, t):
         self.t = t
 
@@ -1062,22 +1062,22 @@ class PDFPage(object):
     def sort_text_elements(self):
         sorted_list = []
         for t in self.page.iter('text'):
-            bounding_box = BoundingBox(t)
+            textelement = PDFTextElement(t)
 
             i = 0
             for box in sorted_list:
-                if bounding_box.is_right_of(sorted_list[i]):
+                if textelement.is_right_of(sorted_list[i]):
                     i += 1
-                elif (bounding_box.is_below(sorted_list[i]) and
-                      bounding_box.is_covered(sorted_list[i])):
+                elif (textelement.is_below(sorted_list[i]) and
+                      textelement.is_covered(sorted_list[i])):
                     i += 1
                 else:
                     break
 
             if i == len(sorted_list):
-                sorted_list.append(bounding_box)
+                sorted_list.append(textelement)
             else:
-                sorted_list.insert(i, bounding_box)
+                sorted_list.insert(i, textelement)
 
         return sorted_list
 
