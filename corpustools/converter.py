@@ -978,12 +978,6 @@ class PDF2XMLConverter(Converter):
                     child = child[0]
                 child.text = re.sub('\d+', '', child.text)
 
-    def parse_page(self, page):
-        '''Parse the page element.'''
-        self.remove_elements_not_within_margin(page)
-        self.remove_footnotes_superscript(page)
-        self.extract_text_from_page(page)
-
     def remove_elements_not_within_margin(self, page):
         margins = self.compute_margins(page)
         inner_margins = self.compute_inner_margins(page)
@@ -993,6 +987,12 @@ class PDF2XMLConverter(Converter):
             elif (len(inner_margins) > 0 and
                   self.is_inside_inner_margins(t, inner_margins)):
                 t.getparent().remove(t)
+
+    def parse_page(self, page):
+        '''Parse the page element.'''
+        self.remove_elements_not_within_margin(page)
+        self.remove_footnotes_superscript(page)
+        self.extract_text_from_page(page)
 
     def extract_text_from_page(self, page):
         '''Decide which text elements are sent to extract_textelement
