@@ -3562,6 +3562,25 @@ class TestPDFPage(XMLTester):
             [box.t.xpath("string()") for box in pdfpage.sort_text_elements()],
             want_list)
 
+    def test_sort_text_elements_4(self):
+        self.maxDiff = None
+        elementlist = [
+            etree.fromstring('<text top="467" left="85" width="289" height="18" font="11"><i><b>1</b></i></text>'),
+            etree.fromstring('<text top="485" left="136" width="79" height="18" font="11"><i><b>2</b></i></text>'),
+            etree.fromstring('<text top="888" left="85" width="46" height="15" font="4">3</text>')]
+
+        test_page = etree.fromstring(
+            u'<page number="13" position="absolute" top="0" left="0" height="1261" width="892"/>')
+        for t in elementlist:
+            test_page.append(t)
+
+        pdfpage = converter.PDFPage(test_page)
+        want_list = [t.xpath("string()") for t in elementlist]
+
+        self.assertEqual(
+            [box.t.xpath("string()") for box in pdfpage.sort_text_elements()],
+            want_list)
+
     def test_is_skip_page_1(self):
         '''Odd page should be skipped when odd is in skip_pages'''
         p2x = converter.PDFPage(etree.fromstring('<page number="1" height="1263" width="862"/>'))
