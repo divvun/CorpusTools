@@ -822,7 +822,7 @@ class PDFParagraph(object):
 
         if self.is_text_in_same_paragraph(other_box):
             if (re.match('\s', real_text[0]) is None and
-                  real_text[0] == real_text[0].upper() and self.in_list):
+                    real_text[0] == real_text[0].upper() and self.in_list):
                 self.in_list = False
             elif (real_text[0] not in self.LIST_CHARS):
                 same_paragraph = True
@@ -872,8 +872,8 @@ class PDFSection(BoundingBox):
             # If the ending of the last paragraph and the start of the new
             # paragraph are in the same column, this check is done
             if (prev_box.is_above(new_box) and prev_box.left == new_box.left and
-                prev_box.width - 5 < new_box.width and prev_box.width + 5 > new_box.width):
-                    return True
+                    prev_box.width - 5 < new_box.width and prev_box.width + 5 > new_box.width):
+                return True
             # TODO
             # If the ending of the last paragraph and the start of the new
             # paragraph are in different columns, this check is done

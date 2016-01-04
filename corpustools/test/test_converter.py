@@ -3431,12 +3431,11 @@ class TestPDFSection1(XMLTester):
 
         want_page = etree.fromstring('<page height="1261" left="0" number="258" position="absolute" top="0" width="892"/>')
         want_sections = [0, 1, 12]
-        want_sections.extend(range(2,12))
+        want_sections.extend(range(2, 12))
 
         for pos in want_sections:
             this_pos = self.sections[pos]
             for textelement in self.textelements[this_pos.start:this_pos.end]:
-                #util.print_frame(debug=textelement.plain_text.strip())
                 want_page.append(textelement.t)
 
         self.assertEqual(uff, etree.tostring(want_page, encoding=unicode, pretty_print=True))
