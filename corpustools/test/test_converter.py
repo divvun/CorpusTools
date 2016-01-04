@@ -3242,6 +3242,43 @@ class TestPDFTextExtractor(XMLTester):
         self.assertXmlEqual(
             etree.tostring(p2x.p), u'<p>a </p>')
 
+    def test_handle_upper_case_on_new_page(self):
+        '''If the first paragraph begins with an uppercase letter, start a new p'''
+        p2x = converter.PDFTextExtractor()
+        p2x.p.text = 'not ending with sentence stop character'
+
+        paragraphs = [converter.PDFParagraph()]
+        paragraphs[-1].append_textelement(
+            converter.PDFTextElement(etree.fromstring(
+                '<text top="1" left="1" width="1" height="1">Upper case.</text>')))
+
+        p2x.extract_text_from_page(paragraphs)
+
+        self.assertXmlEqual(etree.tostring(p2x.body),
+                            u'''
+                            <body>
+                                <p>not ending with sentence stop character</p>
+                                <p>Upper case.</p>
+                            </body>''')
+
+    def test_handle_number_on_new_page(self):
+        '''If the first paragraph begins with an uppercase letter, start a new p'''
+        p2x = converter.PDFTextExtractor()
+        p2x.p.text = 'not ending with sentence stop character'
+
+        paragraphs = [converter.PDFParagraph()]
+        paragraphs[-1].append_textelement(
+            converter.PDFTextElement(etree.fromstring(
+                '<text top="1" left="1" width="1" height="1">1 element.</text>')))
+
+        p2x.extract_text_from_page(paragraphs)
+
+        self.assertXmlEqual(etree.tostring(p2x.body),
+                            u'''
+                            <body>
+                                <p>not ending with sentence stop character</p>
+                                <p>1 element.</p>
+                            </body>''')
 
 Interval = collections.namedtuple('Interval', ['start', 'end'])
 

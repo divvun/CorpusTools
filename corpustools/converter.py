@@ -1048,7 +1048,13 @@ class PDFTextExtractor(object):
         return (len(self.get_last_string()) > 0 and
                 re.search(u'[.?!]\s*$', self.get_last_string()))
 
+    def is_new_page(self, paragraph):
+        '''paragraph is a PDFParagraph'''
+        firstletter = paragraph.textelements[-1].plain_text[0]
+        return firstletter == firstletter.upper()
+
     def extract_text_from_paragraph(self, paragraph):
+        '''paragraph is a PDFParagraph'''
         for textelement in paragraph.textelements:
             self.extract_textelement(textelement.t)
             self.handle_line_ending()
@@ -1059,9 +1065,12 @@ class PDFTextExtractor(object):
 
         paragraphs is a list PDFParagraphs
         '''
-        for paragraph in paragraphs:
-            if not self.is_first_page() and self.is_last_paragraph_end_of_page():
+        if (not self.is_first_page() and
+            (self.is_new_page(paragraphs[0]) or
+             self.is_last_paragraph_end_of_page())):
                 self.append_to_body()
+
+        for paragraph in paragraphs:
             self.extract_text_from_paragraph(paragraph)
 
         if len(self.get_last_string()) == 0:
