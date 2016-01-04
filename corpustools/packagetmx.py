@@ -16,7 +16,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with program. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2012-2015 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2012-2016 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
