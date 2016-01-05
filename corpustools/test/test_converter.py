@@ -3683,8 +3683,155 @@ class TestPDFSection2(XMLTester):
         self.assertFalse(s.is_same_section(p2))
 
 
-class TestPDFSection3(XMLTester):
+class TestProblematiPage(XMLTester):
     def setUp(self):
+        self.start_page = etree.fromstring(u'''
+            <page number="1" position="absolute" top="0" left="0" height="1262" width="892">
+                <text top="298" left="51" width="234" height="19" font="0"><b>Dán giđa kártengeahččalemiid birra</b></text>
+                <text top="316" left="51" width="194" height="18" font="1">2015 giđa galget skuvllat čađahit </text>
+                <text top="334" left="51" width="246" height="18" font="1">geatnegahtton kártengeahččalemiid 1., 2. </text>
+                <text top="352" left="51" width="240" height="18" font="1">ja 3. ceahkis. Oahpahusdirektoráhtta fállá </text>
+                <text top="370" left="51" width="245" height="18" font="1">maid eaktodáhtolaš kártengeahččalemiid </text>
+                <text top="388" left="51" width="225" height="18" font="1">1., 3. ja 4. ceahkis. 2015 giđa fállojuvvo  </text>
+                <text top="406" left="51" width="218" height="18" font="1">vel lassin ođđa eaktodáhtolaš kárten- </text>
+                <text top="424" left="51" width="248" height="18" font="1">geahččaleamit eŋgelasgielas 3. ceahkkái.    </text>
+                <text top="460" left="51" width="242" height="19" font="0"><b>Geatnegahtton kártengeahččaleamit</b></text>
+                <text top="478" left="51" width="245" height="18" font="1">Leat geatnegahtton kártengeahččaleamit:</text>
+                <text top="496" left="51" width="163" height="18" font="1">• Lohkamis 1., 2. ja 3. ceahkis</text>
+                <text top="514" left="51" width="153" height="18" font="1">• Rehkenastimis 2. ceahkis </text>
+                <text top="550" left="51" width="193" height="18" font="1">Buot oahppit galget váldit daid </text>
+                <text top="568" left="51" width="230" height="18" font="1">geatnegahtton kártengeahččalemiid. </text>
+                <text top="586" left="51" width="214" height="18" font="1">Oahppit geat leat eret geahččalan- </text>
+                <text top="604" left="51" width="228" height="18" font="1">beaivvi, galget čađahit geahččaleami </text>
+                <text top="622" left="51" width="45" height="18" font="1">maŋŋil.</text>
+                <text top="658" left="51" width="202" height="18" font="1">Kártengeahččalemiide leat sierra </text>
+                <text top="676" left="51" width="225" height="18" font="1">luvvennjuolggadusat. Vaikko oahppi </text>
+                <text top="694" left="51" width="241" height="18" font="1">deavddášii luvvema eavttuid, de sáhttá </text>
+                <text top="712" left="51" width="241" height="18" font="1">oahppi ieš dahje su váhnemat dattetge </text>
+                <text top="730" left="51" width="222" height="18" font="1">mearridit ahte oahppi galgá čađahit </text>
+                <text top="748" left="51" width="88" height="18" font="1">geahččaleami.</text>
+                <text top="784" left="51" width="236" height="19" font="0"><b>Eaktodáhtolaš kártengeahččaleamit</b></text>
+                <text top="802" left="51" width="231" height="18" font="1">Geatnegahtton kártengeahččalemiide </text>
+                <text top="820" left="51" width="206" height="18" font="1">lassin fállá Oahpahusdirektoráhtta </text>
+                <text top="838" left="51" width="220" height="18" font="1">eaktodáhtolaš kártengeahččalemiid. </text>
+                <text top="856" left="51" width="187" height="18" font="1">Jus skuvla dahje skuvlaeaiggát  </text>
+                <text top="874" left="51" width="192" height="18" font="1">mearrida čađahit eaktodáhtolaš </text>
+                <text top="892" left="51" width="224" height="18" font="1">kártengeahččalemiid, de fertejit buot </text>
+                <text top="910" left="51" width="228" height="18" font="1">oahppit dan ceahkis masa dát guoská </text>
+                <text top="928" left="51" width="122" height="18" font="1">váldit geahččaleami.</text>
+                <text top="964" left="51" width="163" height="18" font="1">Fállojuvvojit eaktodáhtolaš </text>
+                <text top="982" left="51" width="129" height="18" font="1">kártengeahččaleamit:</text>
+                <text top="1000" left="51" width="185" height="18" font="1">• Rehkenastimis 1. ja 3. ceahkis</text>
+                <text top="1018" left="51" width="152" height="18" font="1">• Eŋgelasgielas 3. ceahkis</text>
+                <text top="1036" left="51" width="173" height="18" font="1">• Digitála gálggain 4. ceahkis</text>
+                <text top="1072" left="51" width="177" height="19" font="0"><b>Dieđut geahččalemiid birra</b></text>
+                <text top="1090" left="51" width="230" height="18" font="1">Kártengeahččalemiid galget skuvla ja </text>
+                <text top="1108" left="51" width="245" height="18" font="1">oahpaheaddjit geavahit gávnnahit geat </text>
+                <text top="1126" left="51" width="239" height="18" font="1">dárbbašit lasi čuovvoleami álgooahpa- </text>
+                <text top="1144" left="51" width="216" height="18" font="1">husas. Eanaš oahppit máhttet buot </text>
+                <text top="1162" left="51" width="246" height="18" font="1">hárjehusaid, ja máŋgasiid mielas ges lea </text>
+                <text top="1180" left="51" width="238" height="18" font="1">geahččaleapmi álki. Geahččaleamit eai </text>
+                <text top="298" left="322" width="216" height="18" font="1">muital olus ohppiid birra geain leat </text>
+                <text top="316" left="322" width="91" height="18" font="1">buorit gálggat.</text>
+                <text top="352" left="322" width="180" height="18" font="1">Kártengeahččaleamit eai leat </text>
+                <text top="370" left="322" width="175" height="18" font="1">geahččaleamit fágas, muhto </text>
+                <text top="388" left="322" width="182" height="18" font="1">vuođđogálggain fágaid rastá. </text>
+                <text top="406" left="322" width="223" height="18" font="1">Oahppoplánain leat vuođđogálggat </text>
+                <text top="424" left="322" width="114" height="18" font="1">definerejuvvon ná:</text>
+                <text top="442" left="322" width="128" height="18" font="1">• njálmmálaš gálggat</text>
+                <text top="460" left="322" width="94" height="18" font="1">• máhttit lohkat</text>
+                <text top="478" left="322" width="84" height="18" font="1">• máhttit čállit</text>
+                <text top="496" left="322" width="124" height="18" font="1">• máhttit rehkenastit</text>
+                <text top="514" left="322" width="103" height="18" font="1">• digitála gálggat</text>
+                <text top="550" left="322" width="213" height="18" font="1">Rehkenastinbihtáid ovdamearkkat </text>
+                <text top="568" left="322" width="236" height="18" font="1">sáhttet leat lohkat, sirret loguid sturro- </text>
+                <text top="586" left="322" width="218" height="18" font="1">dagaid mielde, loahpahit lohkogur- </text>
+                <text top="604" left="322" width="210" height="18" font="1">gadasaid ja rehkenastit plussain ja </text>
+                <text top="622" left="322" width="225" height="18" font="1">minusiin. Lohkamis sáhttá leat sáhka </text>
+                <text top="640" left="322" width="235" height="18" font="1">ovdamearkka dihtii bustávaid čállimis, </text>
+                <text top="658" left="322" width="237" height="18" font="1">sániid lohkamis ja cealkagiid lohkamis. </text>
+                <text top="676" left="322" width="239" height="18" font="1">Guovddážis digitála gálggaid geahčča- </text>
+                <text top="694" left="322" width="237" height="18" font="1">leami bihtáin lea háhkat ja meannudit, </text>
+                <text top="712" left="322" width="249" height="18" font="1">buvttadit ja divodit, gulahallat ja digitála </text>
+                <text top="730" left="322" width="202" height="18" font="1">árvvoštallannávccat. Guovddážis </text>
+                <text top="748" left="322" width="241" height="18" font="1">eŋgelasgiellageahččaleamis lea dovdat </text>
+                <text top="766" left="322" width="247" height="18" font="1">ja ipmirdit oahpes ja beaivválaš sániid ja </text>
+                <text top="784" left="322" width="208" height="18" font="1">dajaldagaid, njálmmálaččat dahje </text>
+                <text top="802" left="322" width="233" height="18" font="1">čálalaččat. Geahččaleamis leat guokte </text>
+                <text top="820" left="322" width="209" height="18" font="1">oasi, guldalanoassi ja lohkanoassi. </text>
+                <text top="838" left="322" width="212" height="18" font="1">Ohppiin ferte leat oaivetelefovdna </text>
+                <text top="856" left="322" width="93" height="18" font="1">guldalanoasis.  </text>
+                <text top="298" left="593" width="170" height="19" font="0"><b>Bohtosat ja čuovvoleapmi</b></text>
+                <text top="316" left="593" width="249" height="18" font="1">Kártengeahččalemiid bohtosiid ii galgga </text>
+                <text top="334" left="593" width="248" height="18" font="1">rapporteret Oahpahusdirektoráhttii ii ge </text>
+                <text top="352" left="593" width="207" height="18" font="1">geavahit buohtastahttit skuvllaid, </text>
+                <text top="370" left="593" width="149" height="18" font="1">gielddaid dahje fylkkaid.</text>
+                <text top="406" left="593" width="241" height="18" font="1">Bohtosiid galgá vuosttažettiin geavahit </text>
+                <text top="424" left="593" width="197" height="18" font="1">siskkáldasat skuvllas láhčin dihti </text>
+                <text top="442" left="593" width="208" height="18" font="1">oahpahusa nu, ahte oahppit, geat </text>
+                <text top="460" left="593" width="252" height="18" font="1">dárbbašit dan, ožžot lassi bagadallama ja </text>
+                <text top="478" left="593" width="230" height="18" font="1">doarjaga. Oahpaheddjiide leat ráhka- </text>
+                <text top="496" left="593" width="211" height="18" font="1">duvvon bagadallanmateriálat mat </text>
+                <text top="514" left="593" width="225" height="18" font="1">čilgehit mo geahččalemiid bohtosiid </text>
+                <text top="532" left="593" width="100" height="18" font="1">sáhttá čuovvolit.</text>
+                <text top="568" left="593" width="225" height="18" font="1">Jus čađaheami bohtosat čájehit ahte </text>
+                <text top="586" left="593" width="242" height="18" font="1">oahppis lea dárbu lassi čuovvoleapmái, </text>
+                <text top="604" left="593" width="190" height="18" font="1">de galgá váhnemiidda dieđihit </text>
+                <text top="622" left="593" width="226" height="18" font="1">geahččalanbohtosiid birra ja muitalit </text>
+                <text top="640" left="593" width="213" height="18" font="1">makkár doaimmaid áigot álggahit. </text>
+                <text top="658" left="593" width="217" height="18" font="1">Váhnemat sáhttet váldit oktavuođa </text>
+                <text top="676" left="593" width="186" height="18" font="1">skuvllain jus ležžet gažaldagat.</text>
+                <text top="712" left="593" width="84" height="19" font="0"><b>Eanet dieđut</b></text>
+                <text top="730" left="593" width="244" height="18" font="1">Eanet dieđut kártengeahččalemiid birra </text>
+                <text top="748" left="593" width="80" height="18" font="1">leat dáppe:    </text>
+                <text top="766" left="593" width="189" height="18" font="2">http://www.udir.no/Vurdering/</text>
+                <text top="784" left="593" width="96" height="18" font="2">Kartlegging-gs/</text>
+                <text top="820" left="593" width="230" height="18" font="1">Máhttoloktema oahppoplánabuvttus </text>
+                <text top="838" left="593" width="69" height="18" font="1">lea dáppe:  </text>
+                <text top="856" left="593" width="193" height="18" font="2">http://www.udir.no/Lareplaner/</text>
+                <text top="874" left="593" width="104" height="18" font="2">Kunnskapsloftet/</text>
+                <text top="209" left="147" width="605" height="39" font="3"><b>Diehtu 2015 giđa kártengeahččalemiid birra</b></text>
+                <text top="262" left="306" width="286" height="19" font="4"><b>Váhnemiidda geain leat mánát 1.- 4. ceahkis</b></text>
+                <text top="967" left="443" width="281" height="19" font="0"><b>2015 giđa kártengeahččalemiid bajilgovva </b></text>
+                <text top="1006" left="326" width="41" height="15" font="5"><b>Ceahkki</b></text>
+                <text top="1006" left="390" width="78" height="15" font="5"><b>Geahččaleapmi</b></text>
+                <text top="999" left="577" width="82" height="15" font="5"><b>Geatnegahtton/</b></text>
+                <text top="1013" left="577" width="73" height="15" font="5"><b>eaktodáhtolaš</b></text>
+                <text top="1006" left="718" width="26" height="15" font="5"><b>Goas</b></text>
+                <text top="1035" left="326" width="48" height="14" font="6">1. ceahkki</text>
+                <text top="1035" left="390" width="36" height="14" font="6">Lohkan</text>
+                <text top="1035" left="577" width="75" height="14" font="6">Geatnegahtton</text>
+                <text top="1035" left="718" width="117" height="14" font="6">cuoŋománu 13.b. - 30.b.</text>
+                <text top="1056" left="326" width="48" height="14" font="6">2. ceahkki</text>
+                <text top="1056" left="390" width="36" height="14" font="6">Lohkan</text>
+                <text top="1056" left="577" width="75" height="14" font="6">Geatnegahtton</text>
+                <text top="1056" left="718" width="117" height="14" font="6">cuoŋománu 13.b. - 30.b.</text>
+                <text top="1077" left="326" width="48" height="14" font="6">3. ceahkki</text>
+                <text top="1077" left="390" width="36" height="14" font="6">Lohkan</text>
+                <text top="1077" left="577" width="75" height="14" font="6">Geatnegahtton</text>
+                <text top="1077" left="718" width="117" height="14" font="6">cuoŋománu 13.b. - 30.b.</text>
+                <text top="1098" left="326" width="48" height="14" font="6">1. ceahkki</text>
+                <text top="1098" left="390" width="60" height="14" font="6">Rehkenastin</text>
+                <text top="1098" left="577" width="69" height="14" font="6">Eaktodáhtolaš</text>
+                <text top="1098" left="718" width="117" height="14" font="6">cuoŋománu 13.b. - 30.b.</text>
+                <text top="1119" left="326" width="48" height="14" font="6">2. ceahkki</text>
+                <text top="1119" left="390" width="60" height="14" font="6">Rehkenastin</text>
+                <text top="1119" left="577" width="75" height="14" font="6">Geatnegahtton</text>
+                <text top="1119" left="718" width="117" height="14" font="6">cuoŋománu 13.b. - 30.b.</text>
+                <text top="1140" left="326" width="48" height="14" font="6">3. ceahkki</text>
+                <text top="1140" left="390" width="60" height="14" font="6">Rehkenastin</text>
+                <text top="1140" left="577" width="69" height="14" font="6">Eaktodáhtolaš</text>
+                <text top="1140" left="718" width="117" height="14" font="6">cuoŋománu 13.b. - 30.b.</text>
+                <text top="1161" left="326" width="48" height="14" font="6">3. ceahkki</text>
+                <text top="1161" left="390" width="160" height="14" font="6">Eŋgelasgiella (elektrovnnalaččat)</text>
+                <text top="1161" left="577" width="69" height="14" font="6">Eaktodáhtolaš</text>
+                <text top="1161" left="718" width="115" height="14" font="6">njukčamánu 2.b. - 20. b.</text>
+                <text top="1182" left="326" width="48" height="14" font="6">4. ceahkki</text>
+                <text top="1182" left="390" width="256" height="14" font="6">Digitála gálggat (elektrovnnalaččat) Eaktodáhtolaš</text>
+                <text top="1182" left="718" width="115" height="14" font="6">njukčamánu 2.b. - 20. b.</text>
+                <text top="143" left="398" width="97" height="18" font="0"><b>Davvisámegillii</b></text>
+            </page>
+            ''')
         self.textelements = [
             converter.PDFTextElement(etree.fromstring(u'''<text top="298" left="322" width="216" height="18" font="1">muital olus ohppiid birra geain leat </text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text top="316" left="322" width="91" height="18" font="1">buorit gálggat.</text>''')),
@@ -3728,6 +3875,7 @@ class TestPDFSection3(XMLTester):
             Interval(start=0, end=31),
         ]
 
+
     def test_is_same_section_1(self):
         p1 = converter.PDFParagraph()
         for t in self.textelements[self.paragraphs[-2].start:self.paragraphs[-2].end]:
@@ -3740,6 +3888,424 @@ class TestPDFSection3(XMLTester):
         s.append_paragraph(p1)
 
         self.assertTrue(s.is_same_section(p2))
+
+    def test_adjust_line_heights(self):
+        adjusted_page = etree.fromstring(u'''
+            <page number="1" position="absolute" top="0" left="0" height="1262" width="892">
+                <text top="298" left="51" width="234" height="18" font="0"><b>Dán giđa kártengeahččalemiid birra</b></text>
+                <text top="316" left="51" width="194" height="18" font="1">2015 giđa galget skuvllat čađahit </text>
+                <text top="334" left="51" width="246" height="18" font="1">geatnegahtton kártengeahččalemiid 1., 2. </text>
+                <text top="352" left="51" width="240" height="18" font="1">ja 3. ceahkis. Oahpahusdirektoráhtta fállá </text>
+                <text top="370" left="51" width="245" height="18" font="1">maid eaktodáhtolaš kártengeahččalemiid </text>
+                <text top="388" left="51" width="225" height="18" font="1">1., 3. ja 4. ceahkis. 2015 giđa fállojuvvo  </text>
+                <text top="406" left="51" width="218" height="18" font="1">vel lassin ođđa eaktodáhtolaš kárten- </text>
+                <text top="424" left="51" width="248" height="18" font="1">geahččaleamit eŋgelasgielas 3. ceahkkái.    </text>
+                <text top="460" left="51" width="242" height="18" font="0"><b>Geatnegahtton kártengeahččaleamit</b></text>
+                <text top="478" left="51" width="245" height="18" font="1">Leat geatnegahtton kártengeahččaleamit:</text>
+                <text top="496" left="51" width="163" height="18" font="1">• Lohkamis 1., 2. ja 3. ceahkis</text>
+                <text top="514" left="51" width="153" height="18" font="1">• Rehkenastimis 2. ceahkis </text>
+                <text top="550" left="51" width="193" height="18" font="1">Buot oahppit galget váldit daid </text>
+                <text top="568" left="51" width="230" height="18" font="1">geatnegahtton kártengeahččalemiid. </text>
+                <text top="586" left="51" width="214" height="18" font="1">Oahppit geat leat eret geahččalan- </text>
+                <text top="604" left="51" width="228" height="18" font="1">beaivvi, galget čađahit geahččaleami </text>
+                <text top="622" left="51" width="45" height="18" font="1">maŋŋil.</text>
+                <text top="658" left="51" width="202" height="18" font="1">Kártengeahččalemiide leat sierra </text>
+                <text top="676" left="51" width="225" height="18" font="1">luvvennjuolggadusat. Vaikko oahppi </text>
+                <text top="694" left="51" width="241" height="18" font="1">deavddášii luvvema eavttuid, de sáhttá </text>
+                <text top="712" left="51" width="241" height="18" font="1">oahppi ieš dahje su váhnemat dattetge </text>
+                <text top="730" left="51" width="222" height="18" font="1">mearridit ahte oahppi galgá čađahit </text>
+                <text top="748" left="51" width="88" height="18" font="1">geahččaleami.</text>
+                <text top="784" left="51" width="236" height="18" font="0"><b>Eaktodáhtolaš kártengeahččaleamit</b></text>
+                <text top="802" left="51" width="231" height="18" font="1">Geatnegahtton kártengeahččalemiide </text>
+                <text top="820" left="51" width="206" height="18" font="1">lassin fállá Oahpahusdirektoráhtta </text>
+                <text top="838" left="51" width="220" height="18" font="1">eaktodáhtolaš kártengeahččalemiid. </text>
+                <text top="856" left="51" width="187" height="18" font="1">Jus skuvla dahje skuvlaeaiggát  </text>
+                <text top="874" left="51" width="192" height="18" font="1">mearrida čađahit eaktodáhtolaš </text>
+                <text top="892" left="51" width="224" height="18" font="1">kártengeahččalemiid, de fertejit buot </text>
+                <text top="910" left="51" width="228" height="18" font="1">oahppit dan ceahkis masa dát guoská </text>
+                <text top="928" left="51" width="122" height="18" font="1">váldit geahččaleami.</text>
+                <text top="964" left="51" width="163" height="18" font="1">Fállojuvvojit eaktodáhtolaš </text>
+                <text top="982" left="51" width="129" height="18" font="1">kártengeahččaleamit:</text>
+                <text top="1000" left="51" width="185" height="18" font="1">• Rehkenastimis 1. ja 3. ceahkis</text>
+                <text top="1018" left="51" width="152" height="18" font="1">• Eŋgelasgielas 3. ceahkis</text>
+                <text top="1036" left="51" width="173" height="18" font="1">• Digitála gálggain 4. ceahkis</text>
+                <text top="1072" left="51" width="177" height="18" font="0"><b>Dieđut geahččalemiid birra</b></text>
+                <text top="1090" left="51" width="230" height="18" font="1">Kártengeahččalemiid galget skuvla ja </text>
+                <text top="1108" left="51" width="245" height="18" font="1">oahpaheaddjit geavahit gávnnahit geat </text>
+                <text top="1126" left="51" width="239" height="18" font="1">dárbbašit lasi čuovvoleami álgooahpa- </text>
+                <text top="1144" left="51" width="216" height="18" font="1">husas. Eanaš oahppit máhttet buot </text>
+                <text top="1162" left="51" width="246" height="18" font="1">hárjehusaid, ja máŋgasiid mielas ges lea </text>
+                <text top="1180" left="51" width="238" height="18" font="1">geahččaleapmi álki. Geahččaleamit eai </text>
+                <text top="298" left="322" width="216" height="18" font="1">muital olus ohppiid birra geain leat </text>
+                <text top="316" left="322" width="91" height="18" font="1">buorit gálggat.</text>
+                <text top="352" left="322" width="180" height="18" font="1">Kártengeahččaleamit eai leat </text>
+                <text top="370" left="322" width="175" height="18" font="1">geahččaleamit fágas, muhto </text>
+                <text top="388" left="322" width="182" height="18" font="1">vuođđogálggain fágaid rastá. </text>
+                <text top="406" left="322" width="223" height="18" font="1">Oahppoplánain leat vuođđogálggat </text>
+                <text top="424" left="322" width="114" height="18" font="1">definerejuvvon ná:</text>
+                <text top="442" left="322" width="128" height="18" font="1">• njálmmálaš gálggat</text>
+                <text top="460" left="322" width="94" height="18" font="1">• máhttit lohkat</text>
+                <text top="478" left="322" width="84" height="18" font="1">• máhttit čállit</text>
+                <text top="496" left="322" width="124" height="18" font="1">• máhttit rehkenastit</text>
+                <text top="514" left="322" width="103" height="18" font="1">• digitála gálggat</text>
+                <text top="550" left="322" width="213" height="18" font="1">Rehkenastinbihtáid ovdamearkkat </text>
+                <text top="568" left="322" width="236" height="18" font="1">sáhttet leat lohkat, sirret loguid sturro- </text>
+                <text top="586" left="322" width="218" height="18" font="1">dagaid mielde, loahpahit lohkogur- </text>
+                <text top="604" left="322" width="210" height="18" font="1">gadasaid ja rehkenastit plussain ja </text>
+                <text top="622" left="322" width="225" height="18" font="1">minusiin. Lohkamis sáhttá leat sáhka </text>
+                <text top="640" left="322" width="235" height="18" font="1">ovdamearkka dihtii bustávaid čállimis, </text>
+                <text top="658" left="322" width="237" height="18" font="1">sániid lohkamis ja cealkagiid lohkamis. </text>
+                <text top="676" left="322" width="239" height="18" font="1">Guovddážis digitála gálggaid geahčča- </text>
+                <text top="694" left="322" width="237" height="18" font="1">leami bihtáin lea háhkat ja meannudit, </text>
+                <text top="712" left="322" width="249" height="18" font="1">buvttadit ja divodit, gulahallat ja digitála </text>
+                <text top="730" left="322" width="202" height="18" font="1">árvvoštallannávccat. Guovddážis </text>
+                <text top="748" left="322" width="241" height="18" font="1">eŋgelasgiellageahččaleamis lea dovdat </text>
+                <text top="766" left="322" width="247" height="18" font="1">ja ipmirdit oahpes ja beaivválaš sániid ja </text>
+                <text top="784" left="322" width="208" height="18" font="1">dajaldagaid, njálmmálaččat dahje </text>
+                <text top="802" left="322" width="233" height="18" font="1">čálalaččat. Geahččaleamis leat guokte </text>
+                <text top="820" left="322" width="209" height="18" font="1">oasi, guldalanoassi ja lohkanoassi. </text>
+                <text top="838" left="322" width="212" height="18" font="1">Ohppiin ferte leat oaivetelefovdna </text>
+                <text top="856" left="322" width="93" height="18" font="1">guldalanoasis.  </text>
+                <text top="298" left="593" width="170" height="18" font="0"><b>Bohtosat ja čuovvoleapmi</b></text>
+                <text top="316" left="593" width="249" height="18" font="1">Kártengeahččalemiid bohtosiid ii galgga </text>
+                <text top="334" left="593" width="248" height="18" font="1">rapporteret Oahpahusdirektoráhttii ii ge </text>
+                <text top="352" left="593" width="207" height="18" font="1">geavahit buohtastahttit skuvllaid, </text>
+                <text top="370" left="593" width="149" height="18" font="1">gielddaid dahje fylkkaid.</text>
+                <text top="406" left="593" width="241" height="18" font="1">Bohtosiid galgá vuosttažettiin geavahit </text>
+                <text top="424" left="593" width="197" height="18" font="1">siskkáldasat skuvllas láhčin dihti </text>
+                <text top="442" left="593" width="208" height="18" font="1">oahpahusa nu, ahte oahppit, geat </text>
+                <text top="460" left="593" width="252" height="18" font="1">dárbbašit dan, ožžot lassi bagadallama ja </text>
+                <text top="478" left="593" width="230" height="18" font="1">doarjaga. Oahpaheddjiide leat ráhka- </text>
+                <text top="496" left="593" width="211" height="18" font="1">duvvon bagadallanmateriálat mat </text>
+                <text top="514" left="593" width="225" height="18" font="1">čilgehit mo geahččalemiid bohtosiid </text>
+                <text top="532" left="593" width="100" height="18" font="1">sáhttá čuovvolit.</text>
+                <text top="568" left="593" width="225" height="18" font="1">Jus čađaheami bohtosat čájehit ahte </text>
+                <text top="586" left="593" width="242" height="18" font="1">oahppis lea dárbu lassi čuovvoleapmái, </text>
+                <text top="604" left="593" width="190" height="18" font="1">de galgá váhnemiidda dieđihit </text>
+                <text top="622" left="593" width="226" height="18" font="1">geahččalanbohtosiid birra ja muitalit </text>
+                <text top="640" left="593" width="213" height="18" font="1">makkár doaimmaid áigot álggahit. </text>
+                <text top="658" left="593" width="217" height="18" font="1">Váhnemat sáhttet váldit oktavuođa </text>
+                <text top="676" left="593" width="186" height="18" font="1">skuvllain jus ležžet gažaldagat.</text>
+                <text top="712" left="593" width="84" height="18" font="0"><b>Eanet dieđut</b></text>
+                <text top="730" left="593" width="244" height="18" font="1">Eanet dieđut kártengeahččalemiid birra </text>
+                <text top="748" left="593" width="80" height="18" font="1">leat dáppe:    </text>
+                <text top="766" left="593" width="189" height="18" font="2">http://www.udir.no/Vurdering/</text>
+                <text top="784" left="593" width="96" height="18" font="2">Kartlegging-gs/</text>
+                <text top="820" left="593" width="230" height="18" font="1">Máhttoloktema oahppoplánabuvttus </text>
+                <text top="838" left="593" width="69" height="18" font="1">lea dáppe:  </text>
+                <text top="856" left="593" width="193" height="18" font="2">http://www.udir.no/Lareplaner/</text>
+                <text top="874" left="593" width="104" height="18" font="2">Kunnskapsloftet/</text>
+                <text top="209" left="147" width="605" height="39" font="3"><b>Diehtu 2015 giđa kártengeahččalemiid birra</b></text>
+                <text top="262" left="306" width="286" height="19" font="4"><b>Váhnemiidda geain leat mánát 1.- 4. ceahkis</b></text>
+                <text top="967" left="443" width="281" height="19" font="0"><b>2015 giđa kártengeahččalemiid bajilgovva </b></text>
+                <text top="1006" left="326" width="41" height="15" font="5"><b>Ceahkki</b></text>
+                <text top="1006" left="390" width="78" height="15" font="5"><b>Geahččaleapmi</b></text>
+                <text top="999" left="577" width="82" height="14" font="5"><b>Geatnegahtton/</b></text>
+                <text top="1013" left="577" width="73" height="15" font="5"><b>eaktodáhtolaš</b></text>
+                <text top="1006" left="718" width="26" height="15" font="5"><b>Goas</b></text>
+                <text top="1035" left="326" width="48" height="14" font="6">1. ceahkki</text>
+                <text top="1035" left="390" width="36" height="14" font="6">Lohkan</text>
+                <text top="1035" left="577" width="75" height="14" font="6">Geatnegahtton</text>
+                <text top="1035" left="718" width="117" height="14" font="6">cuoŋománu 13.b. - 30.b.</text>
+                <text top="1056" left="326" width="48" height="14" font="6">2. ceahkki</text>
+                <text top="1056" left="390" width="36" height="14" font="6">Lohkan</text>
+                <text top="1056" left="577" width="75" height="14" font="6">Geatnegahtton</text>
+                <text top="1056" left="718" width="117" height="14" font="6">cuoŋománu 13.b. - 30.b.</text>
+                <text top="1077" left="326" width="48" height="14" font="6">3. ceahkki</text>
+                <text top="1077" left="390" width="36" height="14" font="6">Lohkan</text>
+                <text top="1077" left="577" width="75" height="14" font="6">Geatnegahtton</text>
+                <text top="1077" left="718" width="117" height="14" font="6">cuoŋománu 13.b. - 30.b.</text>
+                <text top="1098" left="326" width="48" height="14" font="6">1. ceahkki</text>
+                <text top="1098" left="390" width="60" height="14" font="6">Rehkenastin</text>
+                <text top="1098" left="577" width="69" height="14" font="6">Eaktodáhtolaš</text>
+                <text top="1098" left="718" width="117" height="14" font="6">cuoŋománu 13.b. - 30.b.</text>
+                <text top="1119" left="326" width="48" height="14" font="6">2. ceahkki</text>
+                <text top="1119" left="390" width="60" height="14" font="6">Rehkenastin</text>
+                <text top="1119" left="577" width="75" height="14" font="6">Geatnegahtton</text>
+                <text top="1119" left="718" width="117" height="14" font="6">cuoŋománu 13.b. - 30.b.</text>
+                <text top="1140" left="326" width="48" height="14" font="6">3. ceahkki</text>
+                <text top="1140" left="390" width="60" height="14" font="6">Rehkenastin</text>
+                <text top="1140" left="577" width="69" height="14" font="6">Eaktodáhtolaš</text>
+                <text top="1140" left="718" width="117" height="14" font="6">cuoŋománu 13.b. - 30.b.</text>
+                <text top="1161" left="326" width="48" height="14" font="6">3. ceahkki</text>
+                <text top="1161" left="390" width="160" height="14" font="6">Eŋgelasgiella (elektrovnnalaččat)</text>
+                <text top="1161" left="577" width="69" height="14" font="6">Eaktodáhtolaš</text>
+                <text top="1161" left="718" width="115" height="14" font="6">njukčamánu 2.b. - 20. b.</text>
+                <text top="1182" left="326" width="48" height="14" font="6">4. ceahkki</text>
+                <text top="1182" left="390" width="256" height="14" font="6">Digitála gálggat (elektrovnnalaččat) Eaktodáhtolaš</text>
+                <text top="1182" left="718" width="115" height="14" font="6">njukčamánu 2.b. - 20. b.</text>
+                <text top="143" left="398" width="97" height="18" font="0"><b>Davvisámegillii</b></text>
+            </page>
+            ''')
+
+        pp = converter.PDFPage(self.start_page)
+        pp.adjust_line_heights()
+        expected_page = etree.fromstring('<page number="1" position="absolute" top="0" left="0" height="1262" width="892"/>')
+        for pdftextelement in pp.textelements:
+            expected_page.append(pdftextelement.t)
+
+        self.assertXmlEqual(etree.tostring(expected_page),
+                            etree.tostring(adjusted_page))
+
+    def test_not_within_margin_page(self):
+        not_within_margin_page = etree.fromstring(u'''
+            <page number="1" position="absolute" top="0" left="0" height="1262" width="892">
+                <text top="298" left="51" width="234" height="18" font="0"><b>Dán giđa kártengeahččalemiid birra</b></text>
+                <text top="316" left="51" width="194" height="18" font="1">2015 giđa galget skuvllat čađahit </text>
+                <text top="334" left="51" width="246" height="18" font="1">geatnegahtton kártengeahččalemiid 1., 2. </text>
+                <text top="352" left="51" width="240" height="18" font="1">ja 3. ceahkis. Oahpahusdirektoráhtta fállá </text>
+                <text top="370" left="51" width="245" height="18" font="1">maid eaktodáhtolaš kártengeahččalemiid </text>
+                <text top="388" left="51" width="225" height="18" font="1">1., 3. ja 4. ceahkis. 2015 giđa fállojuvvo  </text>
+                <text top="406" left="51" width="218" height="18" font="1">vel lassin ođđa eaktodáhtolaš kárten- </text>
+                <text top="424" left="51" width="248" height="18" font="1">geahččaleamit eŋgelasgielas 3. ceahkkái.    </text>
+                <text top="460" left="51" width="242" height="18" font="0"><b>Geatnegahtton kártengeahččaleamit</b></text>
+                <text top="478" left="51" width="245" height="18" font="1">Leat geatnegahtton kártengeahččaleamit:</text>
+                <text top="496" left="51" width="163" height="18" font="1">• Lohkamis 1., 2. ja 3. ceahkis</text>
+                <text top="514" left="51" width="153" height="18" font="1">• Rehkenastimis 2. ceahkis </text>
+                <text top="550" left="51" width="193" height="18" font="1">Buot oahppit galget váldit daid </text>
+                <text top="568" left="51" width="230" height="18" font="1">geatnegahtton kártengeahččalemiid. </text>
+                <text top="586" left="51" width="214" height="18" font="1">Oahppit geat leat eret geahččalan- </text>
+                <text top="604" left="51" width="228" height="18" font="1">beaivvi, galget čađahit geahččaleami </text>
+                <text top="622" left="51" width="45" height="18" font="1">maŋŋil.</text>
+                <text top="658" left="51" width="202" height="18" font="1">Kártengeahččalemiide leat sierra </text>
+                <text top="676" left="51" width="225" height="18" font="1">luvvennjuolggadusat. Vaikko oahppi </text>
+                <text top="694" left="51" width="241" height="18" font="1">deavddášii luvvema eavttuid, de sáhttá </text>
+                <text top="712" left="51" width="241" height="18" font="1">oahppi ieš dahje su váhnemat dattetge </text>
+                <text top="730" left="51" width="222" height="18" font="1">mearridit ahte oahppi galgá čađahit </text>
+                <text top="748" left="51" width="88" height="18" font="1">geahččaleami.</text>
+                <text top="784" left="51" width="236" height="18" font="0"><b>Eaktodáhtolaš kártengeahččaleamit</b></text>
+                <text top="802" left="51" width="231" height="18" font="1">Geatnegahtton kártengeahččalemiide </text>
+                <text top="820" left="51" width="206" height="18" font="1">lassin fállá Oahpahusdirektoráhtta </text>
+                <text top="838" left="51" width="220" height="18" font="1">eaktodáhtolaš kártengeahččalemiid. </text>
+                <text top="856" left="51" width="187" height="18" font="1">Jus skuvla dahje skuvlaeaiggát  </text>
+                <text top="874" left="51" width="192" height="18" font="1">mearrida čađahit eaktodáhtolaš </text>
+                <text top="892" left="51" width="224" height="18" font="1">kártengeahččalemiid, de fertejit buot </text>
+                <text top="910" left="51" width="228" height="18" font="1">oahppit dan ceahkis masa dát guoská </text>
+                <text top="928" left="51" width="122" height="18" font="1">váldit geahččaleami.</text>
+                <text top="964" left="51" width="163" height="18" font="1">Fállojuvvojit eaktodáhtolaš </text>
+                <text top="982" left="51" width="129" height="18" font="1">kártengeahččaleamit:</text>
+                <text top="1000" left="51" width="185" height="18" font="1">• Rehkenastimis 1. ja 3. ceahkis</text>
+                <text top="1018" left="51" width="152" height="18" font="1">• Eŋgelasgielas 3. ceahkis</text>
+                <text top="1036" left="51" width="173" height="18" font="1">• Digitála gálggain 4. ceahkis</text>
+                <text top="1072" left="51" width="177" height="18" font="0"><b>Dieđut geahččalemiid birra</b></text>
+                <text top="1090" left="51" width="230" height="18" font="1">Kártengeahččalemiid galget skuvla ja </text>
+                <text top="1108" left="51" width="245" height="18" font="1">oahpaheaddjit geavahit gávnnahit geat </text>
+                <text top="1126" left="51" width="239" height="18" font="1">dárbbašit lasi čuovvoleami álgooahpa- </text>
+                <text top="1144" left="51" width="216" height="18" font="1">husas. Eanaš oahppit máhttet buot </text>
+                <text top="1162" left="51" width="246" height="18" font="1">hárjehusaid, ja máŋgasiid mielas ges lea </text>
+                <text top="1180" left="51" width="238" height="18" font="1">geahččaleapmi álki. Geahččaleamit eai </text>
+                <text top="298" left="322" width="216" height="18" font="1">muital olus ohppiid birra geain leat </text>
+                <text top="316" left="322" width="91" height="18" font="1">buorit gálggat.</text>
+                <text top="352" left="322" width="180" height="18" font="1">Kártengeahččaleamit eai leat </text>
+                <text top="370" left="322" width="175" height="18" font="1">geahččaleamit fágas, muhto </text>
+                <text top="388" left="322" width="182" height="18" font="1">vuođđogálggain fágaid rastá. </text>
+                <text top="406" left="322" width="223" height="18" font="1">Oahppoplánain leat vuođđogálggat </text>
+                <text top="424" left="322" width="114" height="18" font="1">definerejuvvon ná:</text>
+                <text top="442" left="322" width="128" height="18" font="1">• njálmmálaš gálggat</text>
+                <text top="460" left="322" width="94" height="18" font="1">• máhttit lohkat</text>
+                <text top="478" left="322" width="84" height="18" font="1">• máhttit čállit</text>
+                <text top="496" left="322" width="124" height="18" font="1">• máhttit rehkenastit</text>
+                <text top="514" left="322" width="103" height="18" font="1">• digitála gálggat</text>
+                <text top="550" left="322" width="213" height="18" font="1">Rehkenastinbihtáid ovdamearkkat </text>
+                <text top="568" left="322" width="236" height="18" font="1">sáhttet leat lohkat, sirret loguid sturro- </text>
+                <text top="586" left="322" width="218" height="18" font="1">dagaid mielde, loahpahit lohkogur- </text>
+                <text top="604" left="322" width="210" height="18" font="1">gadasaid ja rehkenastit plussain ja </text>
+                <text top="622" left="322" width="225" height="18" font="1">minusiin. Lohkamis sáhttá leat sáhka </text>
+                <text top="640" left="322" width="235" height="18" font="1">ovdamearkka dihtii bustávaid čállimis, </text>
+                <text top="658" left="322" width="237" height="18" font="1">sániid lohkamis ja cealkagiid lohkamis. </text>
+                <text top="676" left="322" width="239" height="18" font="1">Guovddážis digitála gálggaid geahčča- </text>
+                <text top="694" left="322" width="237" height="18" font="1">leami bihtáin lea háhkat ja meannudit, </text>
+                <text top="712" left="322" width="249" height="18" font="1">buvttadit ja divodit, gulahallat ja digitála </text>
+                <text top="730" left="322" width="202" height="18" font="1">árvvoštallannávccat. Guovddážis </text>
+                <text top="748" left="322" width="241" height="18" font="1">eŋgelasgiellageahččaleamis lea dovdat </text>
+                <text top="766" left="322" width="247" height="18" font="1">ja ipmirdit oahpes ja beaivválaš sániid ja </text>
+                <text top="784" left="322" width="208" height="18" font="1">dajaldagaid, njálmmálaččat dahje </text>
+                <text top="802" left="322" width="233" height="18" font="1">čálalaččat. Geahččaleamis leat guokte </text>
+                <text top="820" left="322" width="209" height="18" font="1">oasi, guldalanoassi ja lohkanoassi. </text>
+                <text top="838" left="322" width="212" height="18" font="1">Ohppiin ferte leat oaivetelefovdna </text>
+                <text top="856" left="322" width="93" height="18" font="1">guldalanoasis.  </text>
+                <text top="298" left="593" width="170" height="18" font="0"><b>Bohtosat ja čuovvoleapmi</b></text>
+                <text top="316" left="593" width="249" height="18" font="1">Kártengeahččalemiid bohtosiid ii galgga </text>
+                <text top="334" left="593" width="248" height="18" font="1">rapporteret Oahpahusdirektoráhttii ii ge </text>
+                <text top="352" left="593" width="207" height="18" font="1">geavahit buohtastahttit skuvllaid, </text>
+                <text top="370" left="593" width="149" height="18" font="1">gielddaid dahje fylkkaid.</text>
+                <text top="406" left="593" width="241" height="18" font="1">Bohtosiid galgá vuosttažettiin geavahit </text>
+                <text top="424" left="593" width="197" height="18" font="1">siskkáldasat skuvllas láhčin dihti </text>
+                <text top="442" left="593" width="208" height="18" font="1">oahpahusa nu, ahte oahppit, geat </text>
+                <text top="460" left="593" width="252" height="18" font="1">dárbbašit dan, ožžot lassi bagadallama ja </text>
+                <text top="478" left="593" width="230" height="18" font="1">doarjaga. Oahpaheddjiide leat ráhka- </text>
+                <text top="496" left="593" width="211" height="18" font="1">duvvon bagadallanmateriálat mat </text>
+                <text top="514" left="593" width="225" height="18" font="1">čilgehit mo geahččalemiid bohtosiid </text>
+                <text top="532" left="593" width="100" height="18" font="1">sáhttá čuovvolit.</text>
+                <text top="568" left="593" width="225" height="18" font="1">Jus čađaheami bohtosat čájehit ahte </text>
+                <text top="586" left="593" width="242" height="18" font="1">oahppis lea dárbu lassi čuovvoleapmái, </text>
+                <text top="604" left="593" width="190" height="18" font="1">de galgá váhnemiidda dieđihit </text>
+                <text top="622" left="593" width="226" height="18" font="1">geahččalanbohtosiid birra ja muitalit </text>
+                <text top="640" left="593" width="213" height="18" font="1">makkár doaimmaid áigot álggahit. </text>
+                <text top="658" left="593" width="217" height="18" font="1">Váhnemat sáhttet váldit oktavuođa </text>
+                <text top="676" left="593" width="186" height="18" font="1">skuvllain jus ležžet gažaldagat.</text>
+                <text top="712" left="593" width="84" height="18" font="0"><b>Eanet dieđut</b></text>
+                <text top="730" left="593" width="244" height="18" font="1">Eanet dieđut kártengeahččalemiid birra </text>
+                <text top="748" left="593" width="80" height="18" font="1">leat dáppe:    </text>
+                <text top="766" left="593" width="189" height="18" font="2">http://www.udir.no/Vurdering/</text>
+                <text top="784" left="593" width="96" height="18" font="2">Kartlegging-gs/</text>
+                <text top="820" left="593" width="230" height="18" font="1">Máhttoloktema oahppoplánabuvttus </text>
+                <text top="838" left="593" width="69" height="18" font="1">lea dáppe:  </text>
+                <text top="856" left="593" width="193" height="18" font="2">http://www.udir.no/Lareplaner/</text>
+                <text top="874" left="593" width="104" height="18" font="2">Kunnskapsloftet/</text>
+                <text top="209" left="147" width="605" height="39" font="3"><b>Diehtu 2015 giđa kártengeahččalemiid birra</b></text>
+                <text top="262" left="306" width="286" height="19" font="4"><b>Váhnemiidda geain leat mánát 1.- 4. ceahkis</b></text>
+                <text top="143" left="398" width="97" height="18" font="0"><b>Davvisámegillii</b></text>
+            </page>
+            ''')
+
+        md = xslsetter.MetadataHandler('test.pdf.xsl', create=True)
+        md.set_variable('left_margin', 'all=3')
+        md.set_variable('bottom_margin', 'all=3')
+        md.set_variable('inner_top_margin', '1=76')
+        md.set_variable('inner_bottom_margin', '1=0')
+        md.set_variable('inner_left_margin', '1=35')
+        md.set_variable('inner_right_margin', '1=0')
+
+        pp = converter.PDFPage(self.start_page, metadata_margins=md.margins,
+                               metadata_inner_margins=md.inner_margins)
+        pp.adjust_line_heights()
+        pp.remove_elements_not_within_margin()
+
+        expected_page = etree.fromstring('<page number="1" position="absolute" top="0" left="0" height="1262" width="892"/>')
+        for pdftextelement in pp.textelements:
+            expected_page.append(pdftextelement.t)
+
+        self.assertXmlEqual(etree.tostring(expected_page),
+                            etree.tostring(not_within_margin_page))
+
+    def test_make_unordered_paragraphs(self):
+        expected_page = etree.fromstring(u'''
+            <body>
+                <p><em type="bold">Dán giđa kártengeahččalemiid birra</em></p>
+                <p>2015 giđa galget skuvllat čađahit
+                geatnegahtton kártengeahččalemiid 1., 2.
+                ja 3. ceahkis. Oahpahusdirektoráhtta fállá
+                maid eaktodáhtolaš kártengeahččalemiid
+                1., 3. ja 4. ceahkis. 2015 giđa fállojuvvo
+                vel lassin ođđa eaktodáhtolaš kártengeahččaleamit eŋgelasgielas 3. ceahkkái.</p>
+                <p><em type="bold">Geatnegahtton kártengeahččaleamit</em></p>
+                <p>Leat geatnegahtton kártengeahččaleamit:</p>
+                <p type="listitem"> Lohkamis 1., 2. ja 3. ceahkis</p>
+                <p type="listitem"> Rehkenastimis 2. ceahkis</p>
+                <p>Buot oahppit galget váldit daid
+                geatnegahtton kártengeahččalemiid.
+                Oahppit geat leat eret geahččalanbeaivvi, galget čađahit geahččaleami
+                maŋŋil.</p>
+                <p>Kártengeahččalemiide leat sierra
+                luvvennjuolggadusat. Vaikko oahppi
+                deavddášii luvvema eavttuid, de sáhttá
+                oahppi ieš dahje su váhnemat dattetge
+                mearridit ahte oahppi galgá čađahit
+                geahččaleami.</p>
+                <p><em type="bold">Eaktodáhtolaš kártengeahččaleamit</em></p>
+                <p>Geatnegahtton kártengeahččalemiide
+                lassin fállá Oahpahusdirektoráhtta
+                eaktodáhtolaš kártengeahččalemiid.
+                Jus skuvla dahje skuvlaeaiggát
+                mearrida čađahit eaktodáhtolaš
+                kártengeahččalemiid, de fertejit buot
+                oahppit dan ceahkis masa dát guoská
+                váldit geahččaleami.</p>
+                <p>Fállojuvvojit eaktodáhtolaš
+                kártengeahččaleamit:</p>
+                <p type="listitem"> Rehkenastimis 1. ja 3. ceahkis</p>
+                <p type="listitem"> Eŋgelasgielas 3. ceahkis</p>
+                <p type="listitem"> Digitála gálggain 4. ceahkis</p>
+                <p><em type="bold">Dieđut geahččalemiid birra</em></p>
+                <p>Kártengeahččalemiid galget skuvla ja
+                oahpaheaddjit geavahit gávnnahit geat
+                dárbbašit lasi čuovvoleami álgooahpahusas. Eanaš oahppit máhttet buot
+                hárjehusaid, ja máŋgasiid mielas ges lea
+                geahččaleapmi álki. Geahččaleamit eai
+                muital olus ohppiid birra geain leat
+                buorit gálggat.</p>
+                <p>Kártengeahččaleamit eai leat
+                geahččaleamit fágas, muhto
+                vuođđogálggain fágaid rastá.
+                Oahppoplánain leat vuođđogálggat
+                definerejuvvon ná:</p>
+                <p type="listitem"> njálmmálaš gálggat</p>
+                <p type="listitem"> máhttit lohkat</p>
+                <p type="listitem"> máhttit čállit</p>
+                <p type="listitem"> máhttit rehkenastit</p>
+                <p type="listitem"> digitála gálggat</p>
+                <p>Rehkenastinbihtáid ovdamearkkat
+                sáhttet leat lohkat, sirret loguid sturrodagaid mielde, loahpahit lohkogurgadasaid ja rehkenastit plussain ja
+                minusiin. Lohkamis sáhttá leat sáhka
+                ovdamearkka dihtii bustávaid čállimis,
+                sániid lohkamis ja cealkagiid lohkamis.
+                Guovddážis digitála gálggaid geahččaleami bihtáin lea háhkat ja meannudit,
+                buvttadit ja divodit, gulahallat ja digitála
+                árvvoštallannávccat. Guovddážis
+                eŋgelasgiellageahččaleamis lea dovdat
+                ja ipmirdit oahpes ja beaivválaš sániid ja
+                dajaldagaid, njálmmálaččat dahje
+                čálalaččat. Geahččaleamis leat guokte
+                oasi, guldalanoassi ja lohkanoassi.
+                Ohppiin ferte leat oaivetelefovdna
+                guldalanoasis.</p>
+                <p><em type="bold">Bohtosat ja čuovvoleapmi</em></p>
+                <p>Kártengeahččalemiid bohtosiid ii galgga
+                rapporteret Oahpahusdirektoráhttii ii ge
+                geavahit buohtastahttit skuvllaid,
+                gielddaid dahje fylkkaid.</p>
+                <p>Bohtosiid galgá vuosttažettiin geavahit
+                siskkáldasat skuvllas láhčin dihti
+                oahpahusa nu, ahte oahppit, geat
+                dárbbašit dan, ožžot lassi bagadallama ja
+                doarjaga. Oahpaheddjiide leat ráhkaduvvon bagadallanmateriálat mat
+                čilgehit mo geahččalemiid bohtosiid
+                sáhttá čuovvolit.</p>
+                <p>Jus čađaheami bohtosat čájehit ahte
+                oahppis lea dárbu lassi čuovvoleapmái,
+                de galgá váhnemiidda dieđihit
+                geahččalanbohtosiid birra ja muitalit
+                makkár doaimmaid áigot álggahit.
+                Váhnemat sáhttet váldit oktavuođa
+                skuvllain jus ležžet gažaldagat.</p>
+                <p><em type="bold">Eanet dieđut</em></p>
+                <p>Eanet dieđut kártengeahččalemiid birra
+                leat dáppe:
+                http://www.udir.no/Vurdering/
+                Kartlegging-gs/</p>
+                <p>Máhttoloktema oahppoplánabuvttus
+                lea dáppe:
+                http://www.udir.no/Lareplaner/
+                Kunnskapsloftet/</p>
+                <p>Davvisámegillii</p>
+                <p>Diehtu 2015 giđa kártengeahččalemiid birra</p>
+                <p>Váhnemiidda geain leat mánát 1.- 4. ceahkis</p>
+            </body>
+            ''')
+
+        md = xslsetter.MetadataHandler('test.pdf.xsl', create=True)
+        md.set_variable('left_margin', 'all=3')
+        md.set_variable('bottom_margin', 'all=3')
+        md.set_variable('inner_top_margin', '1=76')
+        md.set_variable('inner_bottom_margin', '1=0')
+        md.set_variable('inner_left_margin', '1=35')
+        md.set_variable('inner_right_margin', '1=0')
+
+        pp = converter.PDFPage(self.start_page, metadata_margins=md.margins,
+                               metadata_inner_margins=md.inner_margins)
+        pp.adjust_line_heights()
+        pp.remove_elements_not_within_margin()
+        pp.remove_footnotes_superscript()
+        pp.merge_elements_on_same_line()
+        pp.remove_invalid_elements()
+
+        paragraphs = pp.make_unordered_paragraphs()
+
+        extractor = converter.PDFTextExtractor()
+        extractor.extract_text_from_page(paragraphs)
+        self.assertXmlEqual(etree.tostring(extractor.body),
+                            etree.tostring(expected_page))
 
 
 class TestPDFPage(XMLTester):
