@@ -4191,8 +4191,8 @@ class TestProblematiPage(XMLTester):
                 vel lassin ođđa eaktodáhtolaš kártengeahččaleamit eŋgelasgielas 3. ceahkkái.</p>
                 <p><em type="bold">Geatnegahtton kártengeahččaleamit</em></p>
                 <p>Leat geatnegahtton kártengeahččaleamit:</p>
-                <p type="listitem"> Lohkamis 1., 2. ja 3. ceahkis</p>
-                <p type="listitem"> Rehkenastimis 2. ceahkis</p>
+                <p type="listitem">• Lohkamis 1., 2. ja 3. ceahkis</p>
+                <p type="listitem">• Rehkenastimis 2. ceahkis</p>
                 <p>Buot oahppit galget váldit daid
                 geatnegahtton kártengeahččalemiid.
                 Oahppit geat leat eret geahččalanbeaivvi, galget čađahit geahččaleami
@@ -4214,9 +4214,9 @@ class TestProblematiPage(XMLTester):
                 váldit geahččaleami.</p>
                 <p>Fállojuvvojit eaktodáhtolaš
                 kártengeahččaleamit:</p>
-                <p type="listitem"> Rehkenastimis 1. ja 3. ceahkis</p>
-                <p type="listitem"> Eŋgelasgielas 3. ceahkis</p>
-                <p type="listitem"> Digitála gálggain 4. ceahkis</p>
+                <p type="listitem">• Rehkenastimis 1. ja 3. ceahkis</p>
+                <p type="listitem">• Eŋgelasgielas 3. ceahkis</p>
+                <p type="listitem">• Digitála gálggain 4. ceahkis</p>
                 <p><em type="bold">Dieđut geahččalemiid birra</em></p>
                 <p>Kártengeahččalemiid galget skuvla ja
                 oahpaheaddjit geavahit gávnnahit geat
@@ -4230,11 +4230,11 @@ class TestProblematiPage(XMLTester):
                 vuođđogálggain fágaid rastá.
                 Oahppoplánain leat vuođđogálggat
                 definerejuvvon ná:</p>
-                <p type="listitem"> njálmmálaš gálggat</p>
-                <p type="listitem"> máhttit lohkat</p>
-                <p type="listitem"> máhttit čállit</p>
-                <p type="listitem"> máhttit rehkenastit</p>
-                <p type="listitem"> digitála gálggat</p>
+                <p type="listitem">• njálmmálaš gálggat</p>
+                <p type="listitem">• máhttit lohkat</p>
+                <p type="listitem">• máhttit čállit</p>
+                <p type="listitem">• máhttit rehkenastit</p>
+                <p type="listitem">• digitála gálggat</p>
                 <p>Rehkenastinbihtáid ovdamearkkat
                 sáhttet leat lohkat, sirret loguid sturrodagaid mielde, loahpahit lohkogurgadasaid ja rehkenastit plussain ja
                 minusiin. Lohkamis sáhttá leat sáhka
@@ -4912,9 +4912,9 @@ class TestPDF2XMLConverter(XMLTester):
             etree.tostring(p2x.extractor.body, encoding='unicode'),
             u'<body>'
             u'<p>vuosttaš dábálaš linnjá</p>'
-            u'<p type="listitem"> Vuosttaš listolinnjá  '
+            u'<p type="listitem">• Vuosttaš listolinnjá  '
             u'vuosttaš listolinnjá joaktta</p>'
-            u'<p type="listitem"> Nubbi listo\xADlinnjá</p>'
+            u'<p type="listitem">• Nubbi listo\xADlinnjá</p>'
             u'<p>Nubbi dábáláš linnjá</p>'
             u'</body>')
 

@@ -963,11 +963,6 @@ class PDFTextExtractor(object):
 
     def replace_list_chars(self):
         if self.get_last_string().startswith(u'•'):
-            if self.p.text is None:
-                self.p[0].text = re.sub(u'•\s*', '', self.p[0].text)
-            else:
-                self.p.text = re.sub(u'•\s*', '', self.p.text)
-
             self.p.set('type', 'listitem')
 
     def append_to_body(self):
