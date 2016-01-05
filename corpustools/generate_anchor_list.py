@@ -102,7 +102,7 @@ def main():
     args = parse_options()
 
     gal = GenerateAnchorList(args.lang1, args.lang2,
-                             ['eng', 'nob', 'sme', 'fin', 'smj', 'sma'],
+                             ['eng', 'nob', 'sme', 'fin', 'smj', 'sma', 'smn', 'sms'],
                              args.input_file)
     gal.generate_file("{}/anchor-{}{}.txt".format(args.outdir,
                                                   args.lang1,
