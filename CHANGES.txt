@@ -54,3 +54,4 @@ v<0.13.1>, <20151127> -- Fix bug 2107, fix unexpected line shifts
 v<0.13.2>, <20151210> -- Fix bug 2101, unexpected space before and after saami characters
 v<0.13.3>, <20151210> -- Fixed an error in the way footnote superscript were handled
 v<0.13.4>, <20160104> -- Fix bug 2106, headings appear at the end of the page
+v<0.13.5>, <20160105> -- Don't crash if a page is empty

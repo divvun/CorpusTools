@@ -731,10 +731,11 @@ class PDFTextElement(BoundingBox):
         prev_t = self.t
         t = other_box.t
         if len(prev_t) == 0:
-            if prev_t.text is None:
-                prev_t.text = t.text
-            else:
-                prev_t.text += t.text
+            if t.text is not None:
+                if prev_t.text is None:
+                    prev_t.text = t.text
+                else:
+                    prev_t.text += t.text
         else:
             last = prev_t[-1]
             if t.text is not None:
@@ -1080,6 +1081,10 @@ class PDFTextExtractor(object):
             self.body.remove(self.p)
 
 
+class PDFEmptyPageException(Exception):
+    pass
+
+
 class PDFPage(object):
     '''Reads a page element
 
@@ -1306,8 +1311,11 @@ class PDFPage(object):
         self.merge_elements_on_same_line()
         self.remove_invalid_elements()
 
-        ordered_sections = self.make_ordered_sections()
-        return ordered_sections.paragraphs
+        if len(self.textelements) == 0:
+            raise PDFEmptyPageException()
+        else:
+            ordered_sections = self.make_ordered_sections()
+            return ordered_sections.paragraphs
 
 
 class PDF2XMLConverter(Converter):
@@ -1384,7 +1392,10 @@ class PDF2XMLConverter(Converter):
         pdfpage = PDFPage(page, metadata_margins=self.md.margins,
                           metadata_inner_margins=self.md.inner_margins)
         if not pdfpage.is_skip_page(self.md.skip_pages):
-            self.extractor.extract_text_from_page(pdfpage.pick_valid_text_elements())
+            try:
+                self.extractor.extract_text_from_page(pdfpage.pick_valid_text_elements())
+            except PDFEmptyPageException:
+                pass
 
     def parse_pages(self, root_element):
         for page in root_element.iter('page'):
