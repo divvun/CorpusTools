@@ -1258,7 +1258,19 @@ class PDFPage(object):
                 t.left > margins['inner_left_margin'] and
                 t.left < margins['inner_right_margin'])
 
-    def make_paragraphs(self):
+    def make_unordered_paragraphs(self):
+        paragraphs = [PDFParagraph()]
+        textelement = self.textelements[0]
+        paragraphs[-1].append_textelement(textelement)
+
+        for textelement in self.textelements[1:]:
+            if not paragraphs[-1].is_same_paragraph(textelement):
+                paragraphs.append(PDFParagraph())
+            paragraphs[-1].append_textelement(textelement)
+
+        return paragraphs
+
+    def make_ordered_sections(self):
         '''Order the text elements the order they appear on the page
 
         The text elements are placed into PDFParagraphs,
@@ -1267,29 +1279,21 @@ class PDFPage(object):
 
         Returns a list of PDFParagraphs
         '''
-        ordered_sections = OrderedPDFSections()
+        paragraphs = self.make_unordered_paragraphs()
         section = PDFSection()
+        section.append_paragraph(paragraphs[0])
 
-        textelement = self.textelements[0]
-        p = PDFParagraph()
-        p.append_textelement(textelement)
+        ordered_sections = OrderedPDFSections()
 
-        for textelement in self.textelements[1:]:
-            if not p.is_same_paragraph(textelement):
-                if not section.is_same_section(p):
-                    ordered_sections.insert_section(section)
-                    section = PDFSection()
-                section.append_paragraph(p)
-                p = PDFParagraph()
-            p.append_textelement(textelement)
+        for paragraph in paragraphs[1:]:
+            if not section.is_same_section(paragraph):
+                ordered_sections.insert_section(section)
+                section = PDFSection()
+            section.append_paragraph(paragraph)
 
-        if not section.is_same_section(p):
-            ordered_sections.insert_section(section)
-            section = PDFSection()
-        section.append_paragraph(p)
         ordered_sections.insert_section(section)
 
-        return ordered_sections.paragraphs
+        return ordered_sections
 
     def pick_valid_text_elements(self):
         '''Pick the wanted text elements from a page
@@ -1302,7 +1306,8 @@ class PDFPage(object):
         self.merge_elements_on_same_line()
         self.remove_invalid_elements()
 
-        return self.make_paragraphs()
+        ordered_sections = self.make_ordered_sections()
+        return ordered_sections.paragraphs
 
 
 class PDF2XMLConverter(Converter):

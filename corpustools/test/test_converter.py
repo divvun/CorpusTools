@@ -3435,7 +3435,7 @@ class TestPDFSection1(XMLTester):
         pp = converter.PDFPage(in_page)
 
         got_page = etree.fromstring('<page height="1261" left="0" number="258" position="absolute" top="0" width="892"/>')
-        for paragraph in pp.make_paragraphs():
+        for paragraph in pp.make_ordered_sections().paragraphs:
             for textelement in paragraph.textelements:
                 got_page.append(textelement.t)
         uff = etree.tostring(got_page, encoding=unicode, pretty_print=True)
@@ -3654,7 +3654,7 @@ class TestPDFSection2(XMLTester):
         pp = converter.PDFPage(in_page)
 
         got_page = etree.fromstring('<page height="1261" left="0" number="258" position="absolute" top="0" width="892"/>')
-        for paragraph in pp.make_paragraphs():
+        for paragraph in pp.make_ordered_sections().paragraphs:
             for textelement in paragraph.textelements:
                 got_page.append(textelement.t)
         uff = etree.tostring(got_page, encoding=unicode, pretty_print=True)
