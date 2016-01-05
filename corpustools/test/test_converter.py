@@ -3901,6 +3901,21 @@ class TestPDFPage(XMLTester):
 
         self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements], page_want)
 
+    def test_adjust_line_heights(self):
+        page = etree.fromstring(
+            '\n'.join([
+                '<page number="1" position="absolute" top="0" left="0" height="1262" width="892">',
+                '<text top="298" left="51" width="234" height="19" font="0"><b>Dán giđa kártengeahččalemiid birra</b></text>'
+                '<text top="316" left="51" width="194" height="18" font="1">2015 giđa galget skuvllat čađahit </text>'
+                '</page>'
+            ])
+        )
+        pdfpage = converter.PDFPage(page)
+        pdfpage.adjust_line_heights()
+
+        wanted_heights = [18, 18]
+        self.assertListEqual([t.height for t in pdfpage.textelements], wanted_heights)
+
     def test_compute_default_margins(self):
         '''Test if the default margins are set'''
         page1 = converter.PDFPage(etree.fromstring(

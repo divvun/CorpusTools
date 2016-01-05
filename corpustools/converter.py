@@ -1104,6 +1104,14 @@ class PDFPage(object):
                 ('even' in skip_pages and (self.number % 2) == 0) or
                 self.number in skip_pages)
 
+    def adjust_line_heights(self):
+        '''If there is a 1 pixel overlap between neighbouring elements, adjust the height'''
+        for i in range(1, len(self.textelements)):
+            prev_textelement = self.textelements[i - 1]
+            textelement = self.textelements[i]
+            if prev_textelement.bottom == textelement.top + 1:
+                prev_textelement.t.set('height', unicode(prev_textelement.height - 1))
+
     def remove_footnotes_superscript(self):
         '''Remove numbers from elements found by find_footnotes_superscript.'''
         for textelement in self.textelements[1:]:
@@ -1288,6 +1296,7 @@ class PDFPage(object):
 
         This is the main function of this class
         '''
+        self.adjust_line_heights()
         self.remove_elements_not_within_margin()
         self.remove_footnotes_superscript()
         self.merge_elements_on_same_line()
