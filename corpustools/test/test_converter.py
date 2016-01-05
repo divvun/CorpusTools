@@ -3287,18 +3287,23 @@ class TestPDFSection1(XMLTester):
     def setUp(self):
         self.textelements = [
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="51" width="25">258</text>''')),
+
             converter.PDFTextElement(etree.fromstring(u'''<text font="5" height="12" left="85" top="72" width="62">1. Mielddus</text>''')),
+
             converter.PDFTextElement(etree.fromstring(u'''<text font="9" height="15" left="85" top="377" width="86">
             <i>
                 <b>6.1. tabealla.</b>
             </i>
             </text>''')),
+
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="274" top="403" width="291">DoalloovttadagatOlbmotAlimus boazolohku</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="428" width="95">Elgå 6303 000</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="446" width="158">Riast/Hylling10514 500</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="463" width="121">Essand 10434 500</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="480" width="142">Trollheimen5201 600</text>''')),
+
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="506" width="133">Submi 3114413 600</text>''')),
+
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="560" width="347">Femunddas  lea  alimus  mearriduvvon  boazolohku</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="577" width="347">9 000  bohcco.  Boazolohku  lea  juhkkojuvvon  ovt-</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="595" width="347">tamađe Riast/Hylling ja Essand orohagaid gaskka. Go</text>''')),
@@ -3307,19 +3312,23 @@ class TestPDFSection1(XMLTester):
             </text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="577" width="347">deami juohke areálovttadaga nammii, leat Femundda</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="595" width="283">areálat juogáduvvon dán guovtti orohahkii.</text>''')),
+
             converter.PDFTextElement(etree.fromstring(u'''<text font="9" height="15" left="85" top="638" width="560">
             <i>
                 <b>6.2. tabealla.</b>Lulli-Trøndelága/Hedmark boazodoalloguovllu eatnamiid geavaheapmi.
             </i>
             </text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="299" top="666" width="210">AreálaBoazolohkuBuvttadeapmi</text>''')),
+
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="308" top="684" width="263">km201.04.98juohke km2kg/km2kg/boazu</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="713" width="161">Elgå100730263,032,411</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="730" width="259">Femund (dálvejagi guohtun)1103(8887)</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="747" width="316">Riast/Hylling (bievlajahki)248143141,722,612,3</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="764" width="275">Essand (bievlajahki)287645731,617,310,5</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="782" width="216">Trollheimen223516300,77,910,7</text>''')),
+
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="304" top="807" width="303">8598135431,618,211,2</text>''')),
+
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="853" width="347">Lea mihá eambo boazoeatnatvuohta go Davvi-Trøn-</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="871" width="347">delágas, Nordlánddas ja Romssas. Duogážin lea dál-</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="888" width="347">vejagi  guohtumiid  vejolašvuohta,  ja  áigodaga  iešgu-</text>''')),
@@ -3344,6 +3353,7 @@ class TestPDFSection1(XMLTester):
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="991" width="347">said  geažil,  muhto  erohusat  sáhttet  maiddái  váikku-</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="1009" width="347">huvvot das makkár bohccuid leat njuovvan ja makkár</text>''')),
             converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="1026" width="130">ealihanbohccot leat.</text>''')),
+
             converter.PDFTextElement(etree.fromstring(u'''<text font="10" height="24" left="85" top="110" width="344">
             <b>6.1 Lulli-Trøndelága/Hedmark –</b>
             </text>''')),
@@ -3353,6 +3363,7 @@ class TestPDFSection1(XMLTester):
             converter.PDFTextElement(etree.fromstring(u'''<text font="10" height="24" left="136" top="158" width="69">
             <b>guovlu</b>
             </text>''')),
+
             converter.PDFTextElement(etree.fromstring(u'''<text font="9" height="15" left="85" top="198" width="76">
             <i>
                 <b>Obbalaččat</b>
@@ -3440,7 +3451,7 @@ class TestPDFSection1(XMLTester):
 
         self.assertEqual(uff, etree.tostring(want_page, encoding=unicode, pretty_print=True))
 
-    def test_is_same_section_1(self):
+    def test_is_same_section_first_pdftextelement_is_true(self):
         t = converter.PDFTextElement(etree.fromstring(u'''<text font="10" height="24" left="85" top="110" width="344">
             <b>6.1 Lulli-Trøndelága/Hedmark –</b>
             </text>'''))
@@ -3451,6 +3462,7 @@ class TestPDFSection1(XMLTester):
         self.assertTrue(s.is_same_section(p))
 
     def test_is_same_section_2(self):
+
         p1 = converter.PDFParagraph()
         for t in self.textelements[self.paragraphs[-2].start:self.paragraphs[-2].end]:
             p1.append_textelement(t)
@@ -3669,6 +3681,65 @@ class TestPDFSection2(XMLTester):
         s.append_paragraph(p1)
 
         self.assertFalse(s.is_same_section(p2))
+
+
+class TestPDFSection3(XMLTester):
+    def setUp(self):
+        self.textelements = [
+            converter.PDFTextElement(etree.fromstring(u'''<text top="298" left="322" width="216" height="18" font="1">muital olus ohppiid birra geain leat </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="316" left="322" width="91" height="18" font="1">buorit gálggat.</text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="352" left="322" width="180" height="18" font="1">Kártengeahččaleamit eai leat </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="370" left="322" width="175" height="18" font="1">geahččaleamit fágas, muhto </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="388" left="322" width="182" height="18" font="1">vuođđogálggain fágaid rastá. </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="406" left="322" width="223" height="18" font="1">Oahppoplánain leat vuođđogálggat </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="424" left="322" width="114" height="18" font="1">definerejuvvon ná:</text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="442" left="322" width="128" height="18" font="1">• njálmmálaš gálggat</text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="460" left="322" width="94" height="18" font="1">• máhttit lohkat</text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="478" left="322" width="84" height="18" font="1">• máhttit čállit</text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="496" left="322" width="124" height="18" font="1">• máhttit rehkenastit</text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="514" left="322" width="103" height="18" font="1">• digitála gálggat</text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="550" left="322" width="213" height="18" font="1">Rehkenastinbihtáid ovdamearkkat </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="568" left="322" width="236" height="18" font="1">sáhttet leat lohkat, sirret loguid sturro- </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="586" left="322" width="218" height="18" font="1">dagaid mielde, loahpahit lohkogur- </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="604" left="322" width="210" height="18" font="1">gadasaid ja rehkenastit plussain ja </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="622" left="322" width="225" height="18" font="1">minusiin. Lohkamis sáhttá leat sáhka </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="640" left="322" width="235" height="18" font="1">ovdamearkka dihtii bustávaid čállimis, </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="658" left="322" width="237" height="18" font="1">sániid lohkamis ja cealkagiid lohkamis. </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="676" left="322" width="239" height="18" font="1">Guovddážis digitála gálggaid geahčča- </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="694" left="322" width="237" height="18" font="1">leami bihtáin lea háhkat ja meannudit, </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="712" left="322" width="249" height="18" font="1">buvttadit ja divodit, gulahallat ja digitála </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="730" left="322" width="202" height="18" font="1">árvvoštallannávccat. Guovddážis </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="748" left="322" width="241" height="18" font="1">eŋgelasgiellageahččaleamis lea dovdat </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="766" left="322" width="247" height="18" font="1">ja ipmirdit oahpes ja beaivválaš sániid ja </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="784" left="322" width="208" height="18" font="1">dajaldagaid, njálmmálaččat dahje </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="802" left="322" width="233" height="18" font="1">čálalaččat. Geahččaleamis leat guokte </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="820" left="322" width="209" height="18" font="1">oasi, guldalanoassi ja lohkanoassi. </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="838" left="322" width="212" height="18" font="1">Ohppiin ferte leat oaivetelefovdna </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="856" left="322" width="93" height="18" font="1">guldalanoasis.  </text>''')),
+            converter.PDFTextElement(etree.fromstring(u'''<text top="298" left="593" width="170" height="19" font="0"><b>Bohtosat ja čuovvoleapmi</b></text>''')),
+        ]
+
+        self.paragraphs = [
+            Interval(start=0, end=30),
+            Interval(start=30, end=31),
+        ]
+
+        self.sections = [
+            Interval(start=0, end=31),
+        ]
+
+    def test_is_same_section_1(self):
+        p1 = converter.PDFParagraph()
+        for t in self.textelements[self.paragraphs[-2].start:self.paragraphs[-2].end]:
+            p1.append_textelement(t)
+        p2 = converter.PDFParagraph()
+        for t in self.textelements[self.paragraphs[-1].start:self.paragraphs[-1].end]:
+            p2.append_textelement(t)
+
+        s = converter.PDFSection()
+        s.append_paragraph(p1)
+
+        self.assertTrue(s.is_same_section(p2))
 
 
 class TestPDFPage(XMLTester):

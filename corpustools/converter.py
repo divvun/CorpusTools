@@ -871,15 +871,17 @@ class PDFSection(BoundingBox):
 
             # If the ending of the last paragraph and the start of the new
             # paragraph are in the same column, this check is done
-            if (prev_box.is_above(new_box) and prev_box.left == new_box.left and
+            if prev_box.is_above(new_box):
+                if (prev_box.left == new_box.left and
                     prev_box.width - 5 < new_box.width and prev_box.width + 5 > new_box.width):
-                return True
-            # TODO
+                    return True
+                else:
+                    return False
             # If the ending of the last paragraph and the start of the new
             # paragraph are in different columns, this check is done
-            # No test for this one yet
-            # elif prev_box.is_left_of(new_box) and prev_box.width == new_box.width:
-            # return True
+            elif (prev_box.is_left_of(new_box) and
+                  new_box.bottom > self.top):
+                return True
             else:
                 return False
 
