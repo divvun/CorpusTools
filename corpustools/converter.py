@@ -1027,7 +1027,24 @@ class PDFTextExtractor(object):
         return self.p.xpath("string()")
 
     def handle_line_ending(self):
-        '''Add a soft hyphen or a space at the end of self.p'''
+        '''Add a soft hyphen or a space at the end of self.p
+
+        If - is followed by a space, do not replace it by a soft hyphen
+        Sometimes this should be replaced by a soft hyphen, other times not.
+        Examples of when not to replace it:
+        katt-\space\n
+        og hundehold
+        giella-\space
+        ja guovlodepartemeanta
+
+        Examples of when to replace it:
+        katte-\n
+        hår
+        gussa-\n
+        seaibi
+
+        The tech to be able to replace it is not accessible at this stage.
+        '''
         if re.search('\S-$', self.get_last_string()):
             if len(self.p) == 0:
                 self.p.text = self.p.text[:-1] + u'\xAD'

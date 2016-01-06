@@ -3234,6 +3234,31 @@ class TestPDFTextExtractor(XMLTester):
         self.assertXmlEqual(
             etree.tostring(p2x.p), u'<p>a\xAD</p>')
 
+    def test_handle_line_ending_hyphen_last_child_has_no_tail(self):
+        p2x = converter.PDFTextExtractor()
+        p2x.extract_textelement(etree.fromstring(u'<text><i>a-</i></text>'))
+        p2x.handle_line_ending()
+
+        self.assertXmlEqual(
+            etree.tostring(p2x.p), u'<p><em type="italic">a\xAD</em></p>')
+
+    def test_handle_line_ending_hyphen_last_child_has_tail(self):
+        p2x = converter.PDFTextExtractor()
+        p2x.extract_textelement(etree.fromstring(u'<text><i>a</i>-</text>'))
+        p2x.handle_line_ending()
+
+        self.assertXmlEqual(
+            etree.tostring(p2x.p), u'<p><em type="italic">a</em>\xAD</p>')
+
+    def test_handle_line_ending_hyphen_space(self):
+        '''If - is not the last char, do not replace it by a soft hyphen'''
+        p2x = converter.PDFTextExtractor()
+        p2x.extract_textelement(etree.fromstring(u'<text>a- </text>'))
+        p2x.handle_line_ending()
+
+        self.assertXmlEqual(
+            etree.tostring(p2x.p), u'<p>a-</p>')
+
     def test_handle_line_not_shy_nor_hyphen(self):
         p2x = converter.PDFTextExtractor()
         p2x.extract_textelement(etree.fromstring(u'<text>a</text>'))
@@ -3683,7 +3708,7 @@ class TestPDFSection2(XMLTester):
         self.assertFalse(s.is_same_section(p2))
 
 
-class TestProblematiPage(XMLTester):
+class TestProblematicPage(XMLTester):
     def setUp(self):
         self.start_page = etree.fromstring(u'''
             <page number="1" position="absolute" top="0" left="0" height="1262" width="892">
@@ -4182,103 +4207,32 @@ class TestProblematiPage(XMLTester):
     def test_make_unordered_paragraphs(self):
         expected_page = etree.fromstring(u'''
             <body>
-                <p><em type="bold">Dán giđa kártengeahččalemiid birra</em></p>
-                <p>2015 giđa galget skuvllat čađahit
-                geatnegahtton kártengeahččalemiid 1., 2.
-                ja 3. ceahkis. Oahpahusdirektoráhtta fállá
-                maid eaktodáhtolaš kártengeahččalemiid
-                1., 3. ja 4. ceahkis. 2015 giđa fállojuvvo
-                vel lassin ođđa eaktodáhtolaš kártengeahččaleamit eŋgelasgielas 3. ceahkkái.</p>
-                <p><em type="bold">Geatnegahtton kártengeahččaleamit</em></p>
-                <p>Leat geatnegahtton kártengeahččaleamit:</p>
+                <p><em type="bold">Dán giđa kártengeahččalemiid birra</em>2015 giđa galget skuvllat čađahit geatnegahtton kártengeahččalemiid 1., 2. ja 3. ceahkis. Oahpahusdirektoráhtta fállá maid eaktodáhtolaš kártengeahččalemiid 1., 3. ja 4. ceahkis. 2015 giđa fállojuvvo vel lassin ođđa eaktodáhtolaš kártengeahččaleamit eŋgelasgielas 3. ceahkkái.</p>
+                <p><em type="bold">Geatnegahtton kártengeahččaleamit</em>Leat geatnegahtton kártengeahččaleamit:</p>
                 <p type="listitem">• Lohkamis 1., 2. ja 3. ceahkis</p>
                 <p type="listitem">• Rehkenastimis 2. ceahkis</p>
-                <p>Buot oahppit galget váldit daid
-                geatnegahtton kártengeahččalemiid.
-                Oahppit geat leat eret geahččalanbeaivvi, galget čađahit geahččaleami
-                maŋŋil.</p>
-                <p>Kártengeahččalemiide leat sierra
-                luvvennjuolggadusat. Vaikko oahppi
-                deavddášii luvvema eavttuid, de sáhttá
-                oahppi ieš dahje su váhnemat dattetge
-                mearridit ahte oahppi galgá čađahit
-                geahččaleami.</p>
-                <p><em type="bold">Eaktodáhtolaš kártengeahččaleamit</em></p>
-                <p>Geatnegahtton kártengeahččalemiide
-                lassin fállá Oahpahusdirektoráhtta
-                eaktodáhtolaš kártengeahččalemiid.
-                Jus skuvla dahje skuvlaeaiggát
-                mearrida čađahit eaktodáhtolaš
-                kártengeahččalemiid, de fertejit buot
-                oahppit dan ceahkis masa dát guoská
-                váldit geahččaleami.</p>
-                <p>Fállojuvvojit eaktodáhtolaš
-                kártengeahččaleamit:</p>
+                <p>Buot oahppit galget váldit daid geatnegahtton kártengeahččalemiid. Oahppit geat leat eret geahččalanbeaivvi, galget čađahit geahččaleami maŋŋil.</p>
+                <p>Kártengeahččalemiide leat sierra luvvennjuolggadusat. Vaikko oahppi deavddášii luvvema eavttuid, de sáhttá oahppi ieš dahje su váhnemat dattetge mearridit ahte oahppi galgá čađahit geahččaleami.</p>
+                <p><em type="bold">Eaktodáhtolaš kártengeahččaleamit</em>Geatnegahtton kártengeahččalemiide lassin fállá Oahpahusdirektoráhtta eaktodáhtolaš kártengeahččalemiid. Jus skuvla dahje skuvlaeaiggát mearrida čađahit eaktodáhtolaš kártengeahččalemiid, de fertejit buot oahppit dan ceahkis masa dát guoská váldit geahččaleami.</p>
+                <p>Fállojuvvojit eaktodáhtolaš kártengeahččaleamit:</p>
                 <p type="listitem">• Rehkenastimis 1. ja 3. ceahkis</p>
                 <p type="listitem">• Eŋgelasgielas 3. ceahkis</p>
                 <p type="listitem">• Digitála gálggain 4. ceahkis</p>
                 <p><em type="bold">Dieđut geahččalemiid birra</em></p>
-                <p>Kártengeahččalemiid galget skuvla ja
-                oahpaheaddjit geavahit gávnnahit geat
-                dárbbašit lasi čuovvoleami álgooahpahusas. Eanaš oahppit máhttet buot
-                hárjehusaid, ja máŋgasiid mielas ges lea
-                geahččaleapmi álki. Geahččaleamit eai
-                muital olus ohppiid birra geain leat
-                buorit gálggat.</p>
-                <p>Kártengeahččaleamit eai leat
-                geahččaleamit fágas, muhto
-                vuođđogálggain fágaid rastá.
-                Oahppoplánain leat vuođđogálggat
-                definerejuvvon ná:</p>
+                <p>Kártengeahččalemiid galget skuvla ja oahpaheaddjit geavahit gávnnahit geat dárbbašit lasi čuovvoleami álgooahpahusas. Eanaš oahppit máhttet buot hárjehusaid, ja máŋgasiid mielas ges lea geahččaleapmi álki. Geahččaleamit eai muital olus ohppiid birra geain leat buorit gálggat.</p>
+                <p>Kártengeahččaleamit eai leat geahččaleamit fágas, muhto vuođđogálggain fágaid rastá. Oahppoplánain leat vuođđogálggat definerejuvvon ná:</p>
                 <p type="listitem">• njálmmálaš gálggat</p>
                 <p type="listitem">• máhttit lohkat</p>
                 <p type="listitem">• máhttit čállit</p>
                 <p type="listitem">• máhttit rehkenastit</p>
                 <p type="listitem">• digitála gálggat</p>
-                <p>Rehkenastinbihtáid ovdamearkkat
-                sáhttet leat lohkat, sirret loguid sturrodagaid mielde, loahpahit lohkogurgadasaid ja rehkenastit plussain ja
-                minusiin. Lohkamis sáhttá leat sáhka
-                ovdamearkka dihtii bustávaid čállimis,
-                sániid lohkamis ja cealkagiid lohkamis.
-                Guovddážis digitála gálggaid geahččaleami bihtáin lea háhkat ja meannudit,
-                buvttadit ja divodit, gulahallat ja digitála
-                árvvoštallannávccat. Guovddážis
-                eŋgelasgiellageahččaleamis lea dovdat
-                ja ipmirdit oahpes ja beaivválaš sániid ja
-                dajaldagaid, njálmmálaččat dahje
-                čálalaččat. Geahččaleamis leat guokte
-                oasi, guldalanoassi ja lohkanoassi.
-                Ohppiin ferte leat oaivetelefovdna
-                guldalanoasis.</p>
-                <p><em type="bold">Bohtosat ja čuovvoleapmi</em></p>
-                <p>Kártengeahččalemiid bohtosiid ii galgga
-                rapporteret Oahpahusdirektoráhttii ii ge
-                geavahit buohtastahttit skuvllaid,
-                gielddaid dahje fylkkaid.</p>
-                <p>Bohtosiid galgá vuosttažettiin geavahit
-                siskkáldasat skuvllas láhčin dihti
-                oahpahusa nu, ahte oahppit, geat
-                dárbbašit dan, ožžot lassi bagadallama ja
-                doarjaga. Oahpaheddjiide leat ráhkaduvvon bagadallanmateriálat mat
-                čilgehit mo geahččalemiid bohtosiid
-                sáhttá čuovvolit.</p>
-                <p>Jus čađaheami bohtosat čájehit ahte
-                oahppis lea dárbu lassi čuovvoleapmái,
-                de galgá váhnemiidda dieđihit
-                geahččalanbohtosiid birra ja muitalit
-                makkár doaimmaid áigot álggahit.
-                Váhnemat sáhttet váldit oktavuođa
-                skuvllain jus ležžet gažaldagat.</p>
-                <p><em type="bold">Eanet dieđut</em></p>
-                <p>Eanet dieđut kártengeahččalemiid birra
-                leat dáppe:
-                http://www.udir.no/Vurdering/
-                Kartlegging-gs/</p>
-                <p>Máhttoloktema oahppoplánabuvttus
-                lea dáppe:
-                http://www.udir.no/Lareplaner/
-                Kunnskapsloftet/</p>
-                <p>Davvisámegillii</p>
+                <p>Rehkenastinbihtáid ovdamearkkat sáhttet leat lohkat, sirret loguid sturrodagaid mielde, loahpahit lohkogurgadasaid ja rehkenastit plussain ja minusiin. Lohkamis sáhttá leat sáhka ovdamearkka dihtii bustávaid čállimis, sániid lohkamis ja cealkagiid lohkamis. Guovddážis digitála gálggaid geahččaleami bihtáin lea háhkat ja meannudit, buvttadit ja divodit, gulahallat ja digitála árvvoštallannávccat. Guovddážis eŋgelasgiellageahččaleamis lea dovdat ja ipmirdit oahpes ja beaivválaš sániid ja dajaldagaid, njálmmálaččat dahje čálalaččat. Geahččaleamis leat guokte oasi, guldalanoassi ja lohkanoassi. Ohppiin ferte leat oaivetelefovdna guldalanoasis.</p>
+                <p><em type="bold">Bohtosat ja čuovvoleapmi</em>Kártengeahččalemiid bohtosiid ii galgga rapporteret Oahpahusdirektoráhttii ii ge geavahit buohtastahttit skuvllaid, gielddaid dahje fylkkaid.</p>
+                <p>Bohtosiid galgá vuosttažettiin geavahit siskkáldasat skuvllas láhčin dihti oahpahusa nu, ahte oahppit, geat dárbbašit dan, ožžot lassi bagadallama ja doarjaga. Oahpaheddjiide leat ráhkaduvvon bagadallanmateriálat mat čilgehit mo geahččalemiid bohtosiid sáhttá čuovvolit.</p>
+                <p>Jus čađaheami bohtosat čájehit ahte oahppis lea dárbu lassi čuovvoleapmái, de galgá váhnemiidda dieđihit geahččalanbohtosiid birra ja muitalit makkár doaimmaid áigot álggahit. Váhnemat sáhttet váldit oktavuođa skuvllain jus ležžet gažaldagat.</p>
+                <p><em type="bold">Eanet dieđut</em>Eanet dieđut kártengeahččalemiid birra leat dáppe: http://www.udir.no/Vurdering/ Kartlegging-gs/</p>
+                <p>Máhttoloktema oahppoplánabuvttus lea dáppe: http://www.udir.no/Lareplaner/ Kunnskapsloftet/</p>
+                <p><em type="bold">Davvisámegillii</em></p>
                 <p>Diehtu 2015 giđa kártengeahččalemiid birra</p>
                 <p>Váhnemiidda geain leat mánát 1.- 4. ceahkis</p>
             </body>
@@ -4304,8 +4258,8 @@ class TestProblematiPage(XMLTester):
 
         extractor = converter.PDFTextExtractor()
         extractor.extract_text_from_page(paragraphs)
-        self.assertXmlEqual(etree.tostring(extractor.body),
-                            etree.tostring(expected_page))
+        self.assertXmlEqual(etree.tostring(extractor.body, pretty_print=True),
+                            etree.tostring(expected_page, pretty_print=True))
 
 
 class TestPDFPage(XMLTester):
