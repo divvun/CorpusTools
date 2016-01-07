@@ -3353,389 +3353,406 @@ class TestPDFSection(XMLTester):
 Interval = collections.namedtuple('Interval', ['start', 'end'])
 
 
-class TestPDFSection1(XMLTester):
+class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
     def setUp(self):
-        self.textelements = [
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="51" width="25">258</text>''')),
+        self.start_page = etree.fromstring('''
+            <page number="258" position="absolute" top="0" left="0" height="1261" width="892">
+                <text top="51" left="85" width="25" height="15" font="4">258</text>
+                <text top="72" left="85" width="62" height="12" font="5">1. Mielddus</text>
+                <text top="377" left="85" width="86" height="15" font="9"><i><b>6.1. tabealla.</b></i></text>
+                <text top="403" left="274" width="113" height="15" font="4">Doalloovttadagat</text>
+                <text top="403" left="496" width="51" height="15" font="4">Olbmot</text>
+                <text top="403" left="642" width="127" height="15" font="4">Alimus boazolohku</text>
+                <text top="428" left="85" width="32" height="15" font="4">Elgå </text>
+                <text top="428" left="331" width="8" height="15" font="4">6</text>
+                <text top="428" left="517" width="17" height="15" font="4">30</text>
+                <text top="428" left="690" width="38" height="15" font="4">3 000</text>
+                <text top="446" left="85" width="86" height="15" font="4">Riast/Hylling</text>
+                <text top="446" left="323" width="17" height="15" font="4">10</text>
+                <text top="446" left="517" width="17" height="15" font="4">51</text>
+                <text top="446" left="690" width="38" height="15" font="4">4 500</text>
+                <text top="463" left="85" width="49" height="15" font="4">Essand </text>
+                <text top="463" left="323" width="17" height="15" font="4">10</text>
+                <text top="463" left="517" width="17" height="15" font="4">43</text>
+                <text top="463" left="690" width="38" height="15" font="4">4 500</text>
+                <text top="480" left="85" width="79" height="15" font="4">Trollheimen</text>
+                <text top="480" left="331" width="8" height="15" font="4">5</text>
+                <text top="480" left="517" width="17" height="15" font="4">20</text>
+                <text top="480" left="690" width="38" height="15" font="4">1 600</text>
+                <text top="506" left="85" width="45" height="15" font="4">Submi </text>
+                <text top="506" left="323" width="17" height="15" font="4">31</text>
+                <text top="506" left="509" width="25" height="15" font="4">144</text>
+                <text top="506" left="682" width="46" height="15" font="4">13 600</text>
+                <text top="560" left="85" width="347" height="15" font="4">Femunddas  lea  alimus  mearriduvvon  boazolohku</text>
+                <text top="577" left="85" width="347" height="15" font="4">9 000  bohcco.  Boazolohku  lea  juhkkojuvvon  ovt-</text>
+                <text top="595" left="85" width="347" height="15" font="4">tamađe Riast/Hylling ja Essand orohagaid gaskka. Go</text>
+                <text top="560" left="461" width="347" height="15" font="7"><b>6.2. tabeallas </b>meroštallá boazoeatnatvuođa ja buvtta-</text>
+                <text top="577" left="461" width="347" height="15" font="4">deami juohke areálovttadaga nammii, leat Femundda</text>
+                <text top="595" left="461" width="283" height="15" font="4">areálat juogáduvvon dán guovtti orohahkii.</text>
+                <text top="638" left="85" width="560" height="15" font="9"><i><b>6.2. tabealla. </b>Lulli-Trøndelága/Hedmark boazodoalloguovllu eatnamiid geavaheapmi.</i></text>
+                <text top="666" left="299" width="42" height="15" font="4">Areála</text>
+                <text top="663" left="446" width="78" height="15" font="4">Boazolohku</text>
+                <text top="663" left="665" width="90" height="15" font="4">Buvttadeapmi</text>
+                <text top="684" left="308" width="21" height="15" font="4">km</text>
+                <text top="684" left="328" width="5" height="9" font="12">2</text>
+                <text top="687" left="392" width="58" height="15" font="4">01.04.98</text>
+                <text top="687" left="500" width="69" height="15" font="4">juohke km</text>
+                <text top="687" left="569" width="5" height="9" font="12">2</text>
+                <text top="687" left="627" width="41" height="15" font="4">kg/km</text>
+                <text top="687" left="667" width="5" height="9" font="12">2</text>
+                <text top="687" left="724" width="59" height="15" font="4">kg/boazu</text>
+                <text top="713" left="85" width="28" height="15" font="4">Elgå</text>
+                <text top="713" left="304" width="33" height="15" font="4">1007</text>
+                <text top="713" left="405" width="33" height="15" font="4">3026</text>
+                <text top="713" left="526" width="21" height="15" font="4">3,0</text>
+                <text top="713" left="635" width="29" height="15" font="4">32,4</text>
+                <text top="713" left="745" width="17" height="15" font="4">11</text>
+                <text top="730" left="85" width="183" height="15" font="4">Femund (dálvejagi guohtun)</text>
+                <text top="730" left="304" width="33" height="15" font="4">1103</text>
+                <text top="730" left="400" width="43" height="15" font="4">(8887)</text>
+                <text top="747" left="85" width="171" height="15" font="4">Riast/Hylling (bievlajahki)</text>
+                <text top="747" left="304" width="33" height="15" font="4">2481</text>
+                <text top="747" left="405" width="33" height="15" font="4">4314</text>
+                <text top="747" left="526" width="21" height="15" font="4">1,7</text>
+                <text top="747" left="635" width="29" height="15" font="4">22,6</text>
+                <text top="747" left="739" width="29" height="15" font="4">12,3</text>
+                <text top="764" left="85" width="130" height="15" font="4">Essand (bievlajahki)</text>
+                <text top="764" left="304" width="33" height="15" font="4">2876</text>
+                <text top="764" left="405" width="33" height="15" font="4">4573</text>
+                <text top="764" left="526" width="21" height="15" font="4">1,6</text>
+                <text top="764" left="635" width="29" height="15" font="4">17,3</text>
+                <text top="764" left="739" width="29" height="15" font="4">10,5</text>
+                <text top="782" left="85" width="79" height="15" font="4">Trollheimen</text>
+                <text top="782" left="304" width="33" height="15" font="4">2235</text>
+                <text top="782" left="405" width="33" height="15" font="4">1630</text>
+                <text top="782" left="526" width="21" height="15" font="4">0,7</text>
+                <text top="782" left="639" width="21" height="15" font="4">7,9</text>
+                <text top="782" left="739" width="29" height="15" font="4">10,7</text>
+                <text top="807" left="304" width="33" height="15" font="4">8598</text>
+                <text top="807" left="401" width="42" height="15" font="4">13543</text>
+                <text top="807" left="526" width="21" height="15" font="4">1,6</text>
+                <text top="807" left="635" width="207" height="15" font="4">18,211,2</text>
+                <text top="853" left="85" width="347" height="15" font="4">Lea mihá eambo boazoeatnatvuohta go Davvi-Trøn-</text>
+                <text top="871" left="85" width="347" height="15" font="4">delágas, Nordlánddas ja Romssas. Duogážin lea dál-</text>
+                <text top="888" left="85" width="347" height="15" font="4">vejagi  guohtumiid  vejolašvuohta,  ja  áigodaga  iešgu-</text>
+                <text top="905" left="85" width="347" height="15" font="4">đetlágan  guođohanvejolašvuohta.  Earret  Elgå,  leat</text>
+                <text top="922" left="85" width="347" height="15" font="4">Lulli-Trøndelága/Hedmark  orohagaid  boazoeatnat-</text>
+                <text top="940" left="85" width="318" height="15" font="4">vuohta  vuollelis  go  Kárášjogas  (2,4  bohcco/km</text>
+                <text top="940" left="403" width="5" height="9" font="12">2</text>
+                <text top="940" left="408" width="23" height="15" font="4">)  ja</text>
+                <text top="957" left="85" width="239" height="15" font="4">Oarje-Finnmárkkus  (3,1  bohcco/km</text>
+                <text top="957" left="324" width="5" height="9" font="12">2</text>
+                <text top="957" left="329" width="102" height="15" font="4">).  Riast/Hylling</text>
+                <text top="974" left="85" width="347" height="15" font="4">orohagas lea eambbo buvttadeapmi bohcco ektui go</text>
+                <text top="991" left="85" width="347" height="15" font="4">dáin earáin, muhto buot orohagaid dássi lea vuollelis</text>
+                <text top="1009" left="85" width="347" height="15" font="4">go ovdal. Elgå:s lea mearkkašahtti alla boazolohku ja</text>
+                <text top="1026" left="85" width="347" height="15" font="4">buvttadeapmi  juohke  areálovttadaga  nammii.  Eará</text>
+                <text top="853" left="461" width="347" height="15" font="4">orohagain Norggas ii dáidde leat ná stuora areálbuvt-</text>
+                <text top="871" left="461" width="64" height="15" font="4">tadeapmi.</text>
+                <text top="888" left="478" width="329" height="15" font="4">Maŋemus  golmma  jagi  njuovvandeattuid  oaidnit</text>
+                <text top="905" left="461" width="347" height="15" font="7"><b>6.2. tabeallas. </b>Das oaidnit orohagaid siskkáldas ero-</text>
+                <text top="922" left="461" width="347" height="15" font="4">husaid jagis jahkái. Dás boahtá ovdan ahte dássi lea</text>
+                <text top="940" left="461" width="347" height="15" font="4">veahá vuollelis go Nordlánddas ja Davvi-Trøndelágas</text>
+                <text top="957" left="461" width="347" height="15" font="4">ja arvat vuollelis Romssa. Orohagaid siskkáldas ero-</text>
+                <text top="974" left="461" width="347" height="15" font="4">husat jagis jahkái leat luonddudilálašvuođaid erohu-</text>
+                <text top="991" left="461" width="347" height="15" font="4">said  geažil,  muhto  erohusat  sáhttet  maiddái  váikku-</text>
+                <text top="1009" left="461" width="347" height="15" font="4">huvvot das makkár bohccuid leat njuovvan ja makkár</text>
+                <text top="1026" left="461" width="130" height="15" font="4">ealihanbohccot leat.</text>
+                <text top="110" left="85" width="344" height="24" font="10"><b>6.1 Lulli-Trøndelága/Hedmark –</b></text>
+                <text top="134" left="136" width="227" height="24" font="10"><b>Jämtlándda leana, lulit</b></text>
+                <text top="158" left="136" width="69" height="24" font="10"><b>guovlu</b></text>
+                <text top="198" left="85" width="76" height="15" font="9"><i><b>Obbalaččat</b></i></text>
+                <text top="215" left="85" width="347" height="15" font="4">Prinsihpas eai leat orohatrájit rievdaduvvon jagi 1894</text>
+                <text top="232" left="85" width="347" height="15" font="4">rájes. Rievdadeamit leat váldosaččat dahkkon máŋg-</text>
+                <text top="250" left="85" width="347" height="15" font="4">gaid duomuid vuođul maid Alimusriekti lea meannu-</text>
+                <text top="267" left="85" width="347" height="15" font="4">dan. Das daddjo ahte orohagat leat ovddasvástádus-</text>
+                <text top="284" left="85" width="347" height="15" font="4">suorggit,  ja  dat  ii  dárbbaš  mearkkašit  ahte  dain  lea</text>
+                <text top="301" left="85" width="346" height="15" font="4">vuoigatvuohta  guovlluide.  Lávdegotti  mandáhttan</text>
+                <text top="319" left="85" width="347" height="15" font="4">ii leat  čiekŋudit  dien  áššái,  muhto  fágalávdegoddi</text>
+                <text top="336" left="85" width="347" height="15" font="4">oaidná movt eahpečielga riektedilli lea dagahan labiila</text>
+                <text top="112" left="461" width="347" height="15" font="4">dilálašvuođaid.  Dán  geažil  leage  lávdegoddái  váttis</text>
+                <text top="129" left="461" width="347" height="15" font="4">suokkardit dálá guohtuneatnamiid geavaheami ja dan</text>
+                <text top="146" left="461" width="289" height="15" font="4">vuođul evttohit rievdadusaid guohtunrájiide.</text>
+                <text top="163" left="478" width="330" height="15" font="4">Guovllus leat 6 boazoorohaga. Riast ja Hylling lea</text>
+                <text top="181" left="461" width="347" height="15" font="4">oktasaš. Essand ja Riast/Hylling orohagain lea oktasaš</text>
+                <text top="198" left="461" width="347" height="15" font="4">dálvejagi  guohtun  Femunddas.  Elgå  ja  Trollheimen</text>
+                <text top="215" left="461" width="347" height="15" font="4">leat  fas  birrajagiorohagat.  Trollheimen  lea  áidna</text>
+                <text top="232" left="461" width="347" height="15" font="4">orohat  mii  ii  leat  riikaráji  guoras,  muhto  lea  sierra</text>
+                <text top="250" left="461" width="347" height="15" font="4">eará orohagain eret. Danne eat čilge dárkileappot dán</text>
+                <text top="267" left="461" width="347" height="15" font="4">orohaga  birra.  Eará  orohagaid  birra  mii  čilget</text>
+                <text top="284" left="461" width="72" height="15" font="4">oktasaččat.</text>
+                <text top="301" left="478" width="330" height="15" font="7"><b>6.1.  ja  6.2.  tabeallas </b>oaidnit  boazodoalloguovllu</text>
+                <text top="319" left="461" width="190" height="15" font="4">struktuvrra ja eatnamiid anu.</text>
+            </page>
+        ''')
 
-            converter.PDFTextElement(etree.fromstring(u'''<text font="5" height="12" left="85" top="72" width="62">1. Mielddus</text>''')),
+    def test_make_unordered_paragraphs(self):
+        expected_page = etree.fromstring(u'''
+            <body>
+                <p>
+                    <em type="italic">6.1. tabealla.</em>
+                </p>
+                <p>DoalloovttadagatOlbmotAlimus boazolohku</p>
+                <p>Elgå 3 000 Riast/Hylling4 500 Essand 4 500 Trollheimen1 600</p>
+                <p>Submi 13 600</p>
+                <p>
+                Femunddas  lea  alimus  mearriduvvon  boazolohku 9 000  bohcco.  Boazolohku  lea  juhkkojuvvon  ovt­tamađe Riast/Hylling ja Essand orohagaid gaskka. Go
+                    <em type="bold">6.2. tabeallas</em>meroštallá boazoeatnatvuođa ja buvtta\xADdeami juohke areálovttadaga nammii, leat Femundda areálat juogáduvvon dán guovtti orohahkii.
+                </p>
+                <p>
+                    <em type="italic">6.2. tabealla. Lulli-Trøndelága/Hedmark boazodoalloguovllu eatnamiid geavaheapmi.</em>
+                </p>
+                <p>AreálaBoazolohkuBuvttadeapmi km01.04.98juohke kmkg/kmkg/boazu</p>
+                <p>Elgå3,032,4 Femund (dálvejagi guohtun)(8887) Riast/Hylling (bievlajahki)1,722,612,3 Essand (bievlajahki)1,617,310,5 Trollheimen0,77,910,7</p>
+                <p>1,618,211,2</p>
+                <p>
+                Lea mihá eambo boazoeatnatvuohta go Davvi-Trøn­delágas, Nordlánddas ja Romssas. Duogážin lea dál­vejagi  guohtumiid  vejolašvuohta,  ja  áigodaga  iešgu­đetlágan  guođohanvejolašvuohta.  Earret  Elgå,  leat Lulli-Trøndelága/Hedmark  orohagaid  boazoeatnat­vuohta  vuollelis  go  Kárášjogas  (2,4  bohcco/km)  ja Oarje-Finnmárkkus  (3,1  bohcco/km).  Riast/Hylling orohagas lea eambbo buvttadeapmi bohcco ektui go dáin earáin, muhto buot orohagaid dássi lea vuollelis go ovdal. Elgå:s lea mearkkašahtti alla boazolohku ja buvttadeapmi  juohke  areálovttadaga  nammii.  Eará orohagain Norggas ii dáidde leat ná stuora areálbuvt­tadeapmi. Maŋemus  golmma  jagi  njuovvandeattuid  oaidnit
+                    <em type="bold">6.2. tabeallas.</em>Das oaidnit orohagaid siskkáldas ero\xADhusaid jagis jahkái. Dás boahtá ovdan ahte dássi lea veahá vuollelis go Nordlánddas ja Davvi-Trøndelágas ja arvat vuollelis Romssa. Orohagaid siskkáldas ero­husat jagis jahkái leat luonddudilálašvuođaid erohu­said  geažil,  muhto  erohusat  sáhttet  maiddái  váikku­huvvot das makkár bohccuid leat njuovvan ja makkár ealihanbohccot leat.
+                </p>
+                <p>
+                    <em type="bold">6.1 Lulli-Trøndelága/Hedmark –</em>
+                    <em type="bold">Jämtlándda leana, lulit</em>
+                    <em type="bold">guovlu</em>
+                </p>
+                <p>
+                    <em type="italic">Obbalaččat</em>Prinsihpas eai leat orohatrájit rievdaduvvon jagi 1894 rájes. Rievdadeamit leat váldosaččat dahkkon máŋg­gaid duomuid vuođul maid Alimusriekti lea meannu­dan. Das daddjo ahte orohagat leat ovddasvástádus­suorggit,  ja  dat  ii  dárbbaš  mearkkašit  ahte  dain  lea vuoigatvuohta  guovlluide.  Lávdegotti  mandáhttan ii leat  čiekŋudit  dien  áššái,  muhto  fágalávdegoddi oaidná movt eahpečielga riektedilli lea dagahan labiila dilálašvuođaid.  Dán  geažil  leage  lávdegoddái  váttis suokkardit dálá guohtuneatnamiid geavaheami ja dan vuođul evttohit rievdadusaid guohtunrájiide. Guovllus leat 6 boazoorohaga. Riast ja Hylling lea oktasaš. Essand ja Riast/Hylling orohagain lea oktasaš dálvejagi  guohtun  Femunddas.  Elgå  ja  Trollheimen leat  fas  birrajagiorohagat.  Trollheimen  lea  áidna orohat  mii  ii  leat  riikaráji  guoras,  muhto  lea  sierra eará orohagain eret. Danne eat čilge dárkileappot dán orohaga  birra.  Eará  orohagaid  birra  mii  čilget oktasaččat.
+                    <em type="bold">6.1.  ja  6.2.  tabeallas</em>oaidnit  boazodoalloguovllu
+                            struktuvrra ja eatnamiid anu.
+                </p>
+            </body>
+        ''')
+        pp = converter.PDFPage(self.start_page)
+        pp.adjust_line_heights()
+        pp.remove_elements_not_within_margin()
+        pp.remove_footnotes_superscript()
+        pp.merge_elements_on_same_line()
+        pp.remove_invalid_elements()
 
-            converter.PDFTextElement(etree.fromstring(u'''<text font="9" height="15" left="85" top="377" width="86">
-            <i>
-                <b>6.1. tabealla.</b>
-            </i>
-            </text>''')),
+        paragraphs = pp.make_unordered_paragraphs()
 
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="274" top="403" width="291">DoalloovttadagatOlbmotAlimus boazolohku</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="428" width="95">Elgå 6303 000</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="446" width="158">Riast/Hylling10514 500</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="463" width="121">Essand 10434 500</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="480" width="142">Trollheimen5201 600</text>''')),
+        extractor = converter.PDFTextExtractor()
+        extractor.extract_text_from_page(paragraphs)
+        self.assertXmlEqual(etree.tostring(extractor.body, pretty_print=True),
+                            etree.tostring(expected_page, pretty_print=True))
 
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="506" width="133">Submi 3114413 600</text>''')),
+    def test_make_ordered_sections(self):
+        expected_page = etree.fromstring(u'''
+            <body>
+                <p>
+                    <em type="bold">6.1 Lulli-Trøndelága/Hedmark –</em>
+                    <em type="bold">Jämtlándda leana, lulit</em>
+                    <em type="bold">guovlu</em>
+                </p>
+                <p>
+                    <em type="italic">Obbalaččat</em>Prinsihpas eai leat orohatrájit rievdaduvvon jagi 1894 rájes. Rievdadeamit leat váldosaččat dahkkon máŋg­gaid duomuid vuođul maid Alimusriekti lea meannu­dan. Das daddjo ahte orohagat leat ovddasvástádus­suorggit,  ja  dat  ii  dárbbaš  mearkkašit  ahte  dain  lea vuoigatvuohta  guovlluide.  Lávdegotti  mandáhttan ii leat  čiekŋudit  dien  áššái,  muhto  fágalávdegoddi oaidná movt eahpečielga riektedilli lea dagahan labiila dilálašvuođaid.  Dán  geažil  leage  lávdegoddái  váttis suokkardit dálá guohtuneatnamiid geavaheami ja dan vuođul evttohit rievdadusaid guohtunrájiide. Guovllus leat 6 boazoorohaga. Riast ja Hylling lea oktasaš. Essand ja Riast/Hylling orohagain lea oktasaš dálvejagi  guohtun  Femunddas.  Elgå  ja  Trollheimen leat  fas  birrajagiorohagat.  Trollheimen  lea  áidna orohat  mii  ii  leat  riikaráji  guoras,  muhto  lea  sierra eará orohagain eret. Danne eat čilge dárkileappot dán orohaga  birra.  Eará  orohagaid  birra  mii  čilget oktasaččat.
+                    <em type="bold">6.1.  ja  6.2.  tabeallas</em>oaidnit  boazodoalloguovllu
+                            struktuvrra ja eatnamiid anu.
+                </p>
+                <p>
+                    <em type="italic">6.1. tabealla.</em>
+                </p>
+                <p>DoalloovttadagatOlbmotAlimus boazolohku</p>
+                <p>Elgå 3 000 Riast/Hylling4 500 Essand 4 500 Trollheimen1 600</p>
+                <p>Submi 13 600</p>
+                <p>
+                Femunddas  lea  alimus  mearriduvvon  boazolohku 9 000  bohcco.  Boazolohku  lea  juhkkojuvvon  ovt­tamađe Riast/Hylling ja Essand orohagaid gaskka. Go
+                    <em type="bold">6.2. tabeallas</em>meroštallá boazoeatnatvuođa ja buvtta\xADdeami juohke areálovttadaga nammii, leat Femundda areálat juogáduvvon dán guovtti orohahkii.
+                </p>
+                <p>
+                    <em type="italic">6.2. tabealla. Lulli-Trøndelága/Hedmark boazodoalloguovllu eatnamiid geavaheapmi.</em>
+                </p>
+                <p>AreálaBoazolohkuBuvttadeapmi km01.04.98juohke kmkg/kmkg/boazu</p>
+                <p>Elgå3,032,4 Femund (dálvejagi guohtun)(8887) Riast/Hylling (bievlajahki)1,722,612,3 Essand (bievlajahki)1,617,310,5 Trollheimen0,77,910,7</p>
+                <p>1,618,211,2</p>
+                <p>
+                Lea mihá eambo boazoeatnatvuohta go Davvi-Trøn­delágas, Nordlánddas ja Romssas. Duogážin lea dál­vejagi  guohtumiid  vejolašvuohta,  ja  áigodaga  iešgu­đetlágan  guođohanvejolašvuohta.  Earret  Elgå,  leat Lulli-Trøndelága/Hedmark  orohagaid  boazoeatnat­vuohta  vuollelis  go  Kárášjogas  (2,4  bohcco/km)  ja Oarje-Finnmárkkus  (3,1  bohcco/km).  Riast/Hylling orohagas lea eambbo buvttadeapmi bohcco ektui go dáin earáin, muhto buot orohagaid dássi lea vuollelis go ovdal. Elgå:s lea mearkkašahtti alla boazolohku ja buvttadeapmi  juohke  areálovttadaga  nammii.  Eará orohagain Norggas ii dáidde leat ná stuora areálbuvt­tadeapmi. Maŋemus  golmma  jagi  njuovvandeattuid  oaidnit
+                    <em type="bold">6.2. tabeallas.</em>Das oaidnit orohagaid siskkáldas ero\xADhusaid jagis jahkái. Dás boahtá ovdan ahte dássi lea veahá vuollelis go Nordlánddas ja Davvi-Trøndelágas ja arvat vuollelis Romssa. Orohagaid siskkáldas ero­husat jagis jahkái leat luonddudilálašvuođaid erohu­said  geažil,  muhto  erohusat  sáhttet  maiddái  váikku­huvvot das makkár bohccuid leat njuovvan ja makkár ealihanbohccot leat.
+                </p>
+            </body>
+        ''')
+        pp = converter.PDFPage(self.start_page)
+        pp.adjust_line_heights()
+        pp.remove_elements_not_within_margin()
+        pp.remove_footnotes_superscript()
+        pp.merge_elements_on_same_line()
+        pp.remove_invalid_elements()
 
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="560" width="347">Femunddas  lea  alimus  mearriduvvon  boazolohku</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="577" width="347">9 000  bohcco.  Boazolohku  lea  juhkkojuvvon  ovt-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="595" width="347">tamađe Riast/Hylling ja Essand orohagaid gaskka. Go</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="7" height="15" left="461" top="560" width="347">
-            <b>6.2. tabeallas</b>meroštallá boazoeatnatvuođa ja buvtta-
-            </text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="577" width="347">deami juohke areálovttadaga nammii, leat Femundda</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="595" width="283">areálat juogáduvvon dán guovtti orohahkii.</text>''')),
-
-            converter.PDFTextElement(etree.fromstring(u'''<text font="9" height="15" left="85" top="638" width="560">
-            <i>
-                <b>6.2. tabealla.</b>Lulli-Trøndelága/Hedmark boazodoalloguovllu eatnamiid geavaheapmi.
-            </i>
-            </text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="299" top="666" width="210">AreálaBoazolohkuBuvttadeapmi</text>''')),
-
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="308" top="684" width="263">km201.04.98juohke km2kg/km2kg/boazu</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="713" width="161">Elgå100730263,032,411</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="730" width="259">Femund (dálvejagi guohtun)1103(8887)</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="747" width="316">Riast/Hylling (bievlajahki)248143141,722,612,3</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="764" width="275">Essand (bievlajahki)287645731,617,310,5</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="782" width="216">Trollheimen223516300,77,910,7</text>''')),
-
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="304" top="807" width="303">8598135431,618,211,2</text>''')),
-
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="853" width="347">Lea mihá eambo boazoeatnatvuohta go Davvi-Trøn-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="871" width="347">delágas, Nordlánddas ja Romssas. Duogážin lea dál-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="888" width="347">vejagi  guohtumiid  vejolašvuohta,  ja  áigodaga  iešgu-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="905" width="347">đetlágan  guođohanvejolašvuohta.  Earret  Elgå,  leat</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="922" width="347">Lulli-Trøndelága/Hedmark  orohagaid  boazoeatnat-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="940" width="346">vuohta  vuollelis  go  Kárášjogas  (2,4  bohcco/km2)  ja</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="957" width="346">Oarje-Finnmárkkus  (3,1  bohcco/km2).  Riast/Hylling</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="974" width="347">orohagas lea eambbo buvttadeapmi bohcco ektui go</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="991" width="347">dáin earáin, muhto buot orohagaid dássi lea vuollelis</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="1009" width="347">go ovdal. Elgå:s lea mearkkašahtti alla boazolohku ja</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="1026" width="347">buvttadeapmi  juohke  areálovttadaga  nammii.  Eará</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="853" width="347">orohagain Norggas ii dáidde leat ná stuora areálbuvt-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="871" width="64">tadeapmi.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="478" top="888" width="329">Maŋemus  golmma  jagi  njuovvandeattuid  oaidnit</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="7" height="15" left="461" top="905" width="347">
-            <b>6.2. tabeallas.</b>Das oaidnit orohagaid siskkáldas ero-
-            </text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="922" width="347">husaid jagis jahkái. Dás boahtá ovdan ahte dássi lea</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="940" width="347">veahá vuollelis go Nordlánddas ja Davvi-Trøndelágas</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="957" width="347">ja arvat vuollelis Romssa. Orohagaid siskkáldas ero-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="974" width="347">husat jagis jahkái leat luonddudilálašvuođaid erohu-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="991" width="347">said  geažil,  muhto  erohusat  sáhttet  maiddái  váikku-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="1009" width="347">huvvot das makkár bohccuid leat njuovvan ja makkár</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="1026" width="130">ealihanbohccot leat.</text>''')),
-
-            converter.PDFTextElement(etree.fromstring(u'''<text font="10" height="24" left="85" top="110" width="344">
-            <b>6.1 Lulli-Trøndelága/Hedmark –</b>
-            </text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="10" height="24" left="136" top="134" width="227">
-            <b>Jämtlándda leana, lulit</b>
-            </text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="10" height="24" left="136" top="158" width="69">
-            <b>guovlu</b>
-            </text>''')),
-
-            converter.PDFTextElement(etree.fromstring(u'''<text font="9" height="15" left="85" top="198" width="76">
-            <i>
-                <b>Obbalaččat</b>
-            </i>
-            </text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="215" width="347">Prinsihpas eai leat orohatrájit rievdaduvvon jagi 1894</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="232" width="347">rájes. Rievdadeamit leat váldosaččat dahkkon máŋg-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="250" width="347">gaid duomuid vuođul maid Alimusriekti lea meannu-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="267" width="347">dan. Das daddjo ahte orohagat leat ovddasvástádus-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="284" width="347">suorggit,  ja  dat  ii  dárbbaš  mearkkašit  ahte  dain  lea</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="301" width="346">vuoigatvuohta  guovlluide.  Lávdegotti  mandáhttan</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="319" width="347">ii leat  čiekŋudit  dien  áššái,  muhto  fágalávdegoddi</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="85" top="336" width="347">oaidná movt eahpečielga riektedilli lea dagahan labiila</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="112" width="347">dilálašvuođaid.  Dán  geažil  leage  lávdegoddái  váttis</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="129" width="347">suokkardit dálá guohtuneatnamiid geavaheami ja dan</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="146" width="289">vuođul evttohit rievdadusaid guohtunrájiide.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="478" top="163" width="330">Guovllus leat 6 boazoorohaga. Riast ja Hylling lea</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="181" width="347">oktasaš. Essand ja Riast/Hylling orohagain lea oktasaš</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="198" width="347">dálvejagi  guohtun  Femunddas.  Elgå  ja  Trollheimen</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="215" width="347">leat  fas  birrajagiorohagat.  Trollheimen  lea  áidna</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="232" width="347">orohat  mii  ii  leat  riikaráji  guoras,  muhto  lea  sierra</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="250" width="347">eará orohagain eret. Danne eat čilge dárkileappot dán</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="267" width="347">orohaga  birra.  Eará  orohagaid  birra  mii  čilget</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="284" width="72">oktasaččat.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="7" height="15" left="478" top="301" width="330">
-            <b>6.1.  ja  6.2.  tabeallas</b>oaidnit  boazodoalloguovllu
-            </text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text font="4" height="15" left="461" top="319" width="190">struktuvrra ja eatnamiid anu.</text>''')),
-        ]
-
-        self.paragraphs = [
-            Interval(start=0, end=1),
-            Interval(start=1, end=2),
-            Interval(start=2, end=3),
-            Interval(start=3, end=4),
-            Interval(start=4, end=8),
-            Interval(start=8, end=9),
-            Interval(start=9, end=15),
-            Interval(start=15, end=16),
-            Interval(start=16, end=18),
-            Interval(start=18, end=23),
-            Interval(start=23, end=24),
-            Interval(start=24, end=46),
-            Interval(start=46, end=49),
-            Interval(start=49, end=72),
-        ]
-
-        self.sections = [
-            Interval(start=0, end=1),
-            Interval(start=1, end=2),
-            Interval(start=2, end=3),
-            Interval(start=3, end=4),
-            Interval(start=4, end=8),
-            Interval(start=8, end=9),
-            Interval(start=9, end=15),
-            Interval(start=15, end=16),
-            Interval(start=16, end=18),
-            Interval(start=18, end=23),
-            Interval(start=23, end=24),
-            Interval(start=24, end=46),
-            Interval(start=46, end=72),
-        ]
-
-    def test_one_page(self):
-        in_page = etree.fromstring('<page height="1261" left="0" number="258" position="absolute" top="0" width="892"/>')
-        for textelement in self.textelements:
-            in_page.append(textelement.t)
-
-        pp = converter.PDFPage(in_page)
-
-        got_page = etree.fromstring('<page height="1261" left="0" number="258" position="absolute" top="0" width="892"/>')
-        for paragraph in pp.make_ordered_sections().paragraphs:
-            for textelement in paragraph.textelements:
-                got_page.append(textelement.t)
-        uff = etree.tostring(got_page, encoding=unicode, pretty_print=True)
-
-        want_page = etree.fromstring('<page height="1261" left="0" number="258" position="absolute" top="0" width="892"/>')
-        want_sections = [0, 1, 12]
-        want_sections.extend(range(2, 12))
-
-        for pos in want_sections:
-            this_pos = self.sections[pos]
-            for textelement in self.textelements[this_pos.start:this_pos.end]:
-                want_page.append(textelement.t)
-        self.maxDiff = None
-        self.assertEqual(uff, etree.tostring(want_page, encoding=unicode, pretty_print=True))
-
-    def test_is_same_section_first_pdftextelement_is_true(self):
-        t = converter.PDFTextElement(etree.fromstring(u'''<text font="10" height="24" left="85" top="110" width="344">
-            <b>6.1 Lulli-Trøndelága/Hedmark –</b>
-            </text>'''))
-        p = converter.PDFParagraph()
-        p.append_textelement(t)
-
-        s = converter.PDFSection()
-        self.assertTrue(s.is_same_section(p))
-
-    def test_is_same_section_2(self):
-
-        p1 = converter.PDFParagraph()
-        for t in self.textelements[self.paragraphs[-2].start:self.paragraphs[-2].end]:
-            p1.append_textelement(t)
-        p2 = converter.PDFParagraph()
-        for t in self.textelements[self.paragraphs[-1].start:self.paragraphs[-1].end]:
-            p2.append_textelement(t)
-
-        s = converter.PDFSection()
-        s.append_paragraph(p1)
-
-        self.assertTrue(s.is_same_section(p2))
-
-    def test_ordering_1(self):
-        os = converter.OrderedPDFSections()
-        sections = []
-
-        s = converter.PDFSection()
-        p = converter.PDFParagraph()
-        for t in self.textelements[self.paragraphs[-3].start:self.paragraphs[-3].end]:
-            p.append_textelement(t)
-        s.append_paragraph(p)
-        sections.append(s)
-        os.insert_section(s)
-
-        s = converter.PDFSection()
-        p = converter.PDFParagraph()
-        for t in self.textelements[self.paragraphs[-2].start:self.paragraphs[-2].end]:
-            p.append_textelement(t)
-        s.append_paragraph(p)
-
-        s = converter.PDFSection()
-        p = converter.PDFParagraph()
-        for t in self.textelements[self.paragraphs[-2].start:self.paragraphs[-2].end]:
-            p.append_textelement(t)
-        s.append_paragraph(p)
-
-        sections.insert(0, s)
-        os.insert_section(s)
-
-        self.assertListEqual(os.sections, sections)
+        extractor = converter.PDFTextExtractor()
+        extractor.extract_text_from_page(pp.make_ordered_sections().paragraphs)
+        self.assertXmlEqual(etree.tostring(extractor.body, pretty_print=True),
+                            etree.tostring(expected_page, pretty_print=True))
 
 
-class TestPDFSection2(XMLTester):
+class TestProblematicPageTwoColumnsHeaderLast(XMLTester):
     def setUp(self):
-        self.textelements = [
-            converter.PDFTextElement(etree.fromstring(u'''<text top="51" left="85" width="17" height="15" font="4">12</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="72" left="85" width="62" height="12" font="5">1. Mielddus</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="193" left="85" width="213" height="24" font="10"><b>1.1 Bohcco dárbbut</b></text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="232" left="85" width="347" height="15" font="4">Miehtá  Davvikálohta  leat  asehis  guohtoneatnamat</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="250" left="85" width="347" height="15" font="4">bohccuide. Boazu lea luonddudilálašvuođaid hálddus</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="267" left="85" width="347" height="15" font="4">birra jagi. Guohtunšattut leat iešguđetláganat jagi ieš-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="284" left="85" width="347" height="15" font="4">guđetge áiggis, ja guohtundilli váikkuhage dasto man</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="301" left="85" width="347" height="15" font="4">ollu boazu guohtu ja movt johtala. Dákko dáfus lea</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="319" left="85" width="347" height="15" font="4">boazu  sierralágan  dilis,  Skandinávia  eará  dábmojuv-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="336" left="85" width="347" height="15" font="4">von  elliid  suktii.  Go  mii  árvvoštállat  guohtumiid,</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="353" left="85" width="347" height="15" font="4">bidjat  bohcco  fysiologalaš  dárbbuid  vuođđun  ja</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="370" left="85" width="231" height="15" font="4">makkár guohtuma boazu dárbbaša.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="433" left="85" width="215" height="18" font="11"><i><b>1.1.1 Fysiologalaš dárbbut</b></i></text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="457" left="85" width="347" height="15" font="4">Boazu maiddái, nu movt earáge eallit, dárbbaša kar-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="474" left="85" width="347" height="15" font="4">bohydráhtaid ja buoiddi, maid joraha álšan ja doalaha</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="491" left="85" width="347" height="15" font="4">goruda doaimmaid, oažžu lieggasa ja sáhttá lihkadit.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="508" left="85" width="347" height="15" font="4">Proteiinnat,  vitamiinnat  ja  minerálat  adnojit  hukset</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="526" left="85" width="347" height="15" font="4">dehkiid  ja  eará  gorutgođđosiid,  ja  mielkki  buvtta-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="543" left="85" width="59" height="15" font="4">deapmái.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="560" left="102" width="330" height="15" font="4">Boazu lea, nu movt eará smirezasti eallit nai, ere-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="577" left="85" width="347" height="15" font="4">noamážit heivehuvvon smoldet guohtunšattuid. Alm-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="595" left="85" width="347" height="15" font="4">matge smoaldanit duššefal okta oasáš das maid boazu</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="612" left="85" width="347" height="15" font="4">guohtu. Dakkár guohtunšattut mat smoaldanit geahp-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="629" left="85" width="347" height="15" font="4">pasit,  leat  buorit  guohtun.  Ruonasšattut  smoaldanit</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="646" left="85" width="347" height="15" font="4">álkimusat dalle go leat beallešattus ja smoaldaneapmi</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="664" left="85" width="347" height="15" font="4">hedjona  dađi  mielde  go  šattuid  šaddandássi  ovdána.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="681" left="85" width="347" height="15" font="4">Go biebmu smoaldahuvvá unnán, ii oaččo boazu nu</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="698" left="85" width="347" height="15" font="4">ollu energiija dehe álšša. Maiddái biebmojohtin čoliid</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="715" left="85" width="142" height="15" font="4">čađa mánná njozebut.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="733" left="102" width="330" height="15" font="4">Boazu lea mihá buorebut, go eará smirezasti eallit,</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="750" left="85" width="347" height="15" font="4">heivehuvvon  smoldet  jeahkála.  Jeahkála  smoalda-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="767" left="85" width="347" height="15" font="4">neapmi  lea  buorre  birra  jagi.  Dainna  lágiin  nagoda</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="784" left="85" width="347" height="15" font="4">boazu  doalahit  buorren  obbalaš  biebmosmoldema,</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="802" left="85" width="347" height="15" font="4">vaikko vel eará guohtun leage vánis ja maiddái kvali-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="819" left="85" width="347" height="15" font="4">tehta lea rievddalmas. Dađistaga go čavččabeallái hed-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="836" left="85" width="347" height="15" font="4">jona  ruonasšattuid  smoaldaneapmi,  guohtugoahtá</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="853" left="85" width="347" height="15" font="4">boazu  eambbo  jeahkála,  iige  guođo  nu  ollu  ruonas-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="871" left="85" width="347" height="15" font="4">šattuid,  ja  nu  nagoda  almmatge  doalahit  dássedis</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="888" left="85" width="118" height="15" font="4">biebmosmoldema.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="905" left="102" width="330" height="15" font="4">Jeagil smoaldana geahppasit, muhto lea ovttagear-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="922" left="85" width="347" height="15" font="4">dánis fuođđar. Jeagelšlájain oažžu boazu nu ollu álšša</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="940" left="85" width="347" height="15" font="4">(karbohydráhtaid)  ahte  ceavzá  badjel  dálvvi,  muhto</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="957" left="85" width="347" height="15" font="4">váilot  proteiinnat,  vitamiinnat  ja  minerálat.  Bohcco</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="974" left="85" width="346" height="15" font="4">guomočoavjebaktearat  dárbbašit  dađistaga  ee.  pro-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="991" left="85" width="347" height="15" font="4">teiinnat,  ja  danne  váikkuha  smolden  čoavjjis  ahte</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="1009" left="85" width="347" height="15" font="4">boazu, mii lea jeagelguohtumis, deahkkehuvvá dálvet.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="1026" left="85" width="347" height="15" font="4">Boazu deahkkehuvvagoahtá dakkaviđe go boahtá jea-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="1043" left="85" width="347" height="15" font="4">gelguohtumii. Muhto bohccos lea sierralágan vuohki</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="1060" left="85" width="347" height="15" font="4">mainna easttada vai ii deahkkehuva, go boazu sáhttá</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="1078" left="85" width="347" height="15" font="4">“nuppádassii  geavahit”  nitrogena,  maid  eará  smire-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="1095" left="85" width="129" height="15" font="4">zasti eallit eai sáhte.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="198" left="478" width="330" height="15" font="4">Vaikko  boazu  deahkkehuvváge,  sáhttá  dat  liikká</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="215" left="461" width="347" height="15" font="4">lossut  dálvet,  jus  fal  lea  buorre  jeagelguohtun,  mas</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="232" left="461" width="347" height="15" font="4">boazu oažžu eambbo energiija go dat man loaktá. Dát</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="250" left="461" width="347" height="15" font="4">energiija jorrá buoidin gorudii ja čoggo dohko nu ahte</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="267" left="461" width="107" height="15" font="4">boazu ii geahpo.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="284" left="478" width="330" height="15" font="4">Boazu guoira gal dábálaččat dálvvis. Rávis njiŋŋe-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="301" left="461" width="347" height="15" font="4">las  geahppu  giđđii  15  %  čakčadeattu  ektui,  vaikko</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="319" left="461" width="347" height="15" font="4">leage čoavjjehin ja miessi deaddá 4-5 kg šattadettiin.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="336" left="461" width="347" height="15" font="4">Sarvát  sáhttet  geahpput  30  %  čakčamánus  juovla-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="353" left="461" width="347" height="15" font="4">mánnui. Dálvvi mielde gehppot bohccot dađistaga ja</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="370" left="461" width="347" height="15" font="4">erenoamáš heajos guohtumis sáhttet geahpput gitta 50</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="388" left="461" width="347" height="15" font="4">% rádjái. Jus guohtun hedjona nu sakka ahte čoavje-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="405" left="461" width="347" height="15" font="4">liepma goiká, dehe nuppeládje dadjat ahte mikroorga-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="422" left="461" width="347" height="15" font="4">nismmat  nohket,  nealgugoahtá  boazu.  Lassin  dasa</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="439" left="461" width="347" height="15" font="4">ahte boazu dárbbaša eallámuša (proteiinnaid ja mine-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="457" left="461" width="347" height="15" font="4">rálaid),  gollada  boazu  deahkkemássa  ja  joraha  dán</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="474" left="461" width="347" height="15" font="4">energiijan. Guhkálmas nealgumiin ii nagat šat boazu</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="491" left="461" width="283" height="15" font="4">doalahit dábálaš gorutdoaimmaid ja jápmá.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="508" left="478" width="330" height="15" font="4">Miesit  ja  boarrasit  varrásat  nelgot  bahábut  go</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="526" left="461" width="347" height="15" font="4">njiŋŋelasat ja čearpmahat. Sarvát rávžet ragatáiggi, ja</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="543" left="461" width="347" height="15" font="4">nuolppot  manahit  maiddái  bohccuidgaskasaš  árvo-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="560" left="461" width="347" height="15" font="4">dási.  Nuolppot  eai  bálle  guohtut  ráfis,  dannego</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="577" left="461" width="347" height="15" font="4">njiŋŋelasat doroldahttet nulpobohccuid eret suvnnjiin.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="595" left="461" width="347" height="15" font="4">Gehppes  miesit  sáhttet  nealgut.  Smávva  áldduin  leat</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="612" left="461" width="347" height="15" font="4">dávjá  gehppes  miesit,  mii  fas  dagaha  stuorit  miesse-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="629" left="461" width="347" height="15" font="4">jámu. Heajos dálveguohtun dagaha fas áldduid mielk-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="646" left="461" width="347" height="15" font="4">keheabbon  go  dábálaš  dan  vuosttaš  geasi,  ja  dat  fas</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="664" left="461" width="347" height="15" font="4">váikkuha ahte miesit leat geahppaseappot čakčat. Boa-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="681" left="461" width="347" height="15" font="4">zomassimat, mat bohciidit fysiologalaš beliid sivas, eai</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="698" left="461" width="347" height="15" font="4">leat  nu  oidnosis  dannego  boraspirevahágat  lassánit</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="715" left="461" width="66" height="15" font="4">dađistaga.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="733" left="478" width="330" height="15" font="4">Bohccuid  sáhttá  biebmat  fuođđariiguin  dálvet</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="750" left="461" width="347" height="15" font="4">heajos guohtumiid áigge, ja dustet váttisvuođa dáinna-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="767" left="461" width="347" height="15" font="4">lágiin.  Guomočoavjji  mikrobat  dahket  almmatge</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="784" left="461" width="347" height="15" font="4">duššin dáid iešguđetlágan fuođđaršlájaid. Danne dárb-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="802" left="461" width="347" height="15" font="4">bašit bohccot dagalduvvat fuođđariidda hui árrat, dan</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="819" left="461" width="347" height="15" font="4">bále go mikroorganismmat leat olleslogus čoavjjis ja</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="836" left="461" width="347" height="15" font="4">nákcejit smoldegoahtit ođđa fuođđariid. Eanas boazo-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="853" left="461" width="347" height="15" font="4">eaiggádat eai almmatge biebmagoađe bohccuid áiggil,</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="871" left="461" width="347" height="15" font="4">muhto vurdet eaigo guohtumat buorrán. Doloža rájes</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="888" left="461" width="347" height="15" font="4">lei  vierrun  diktit  ealu  lávdat  jus  heajos  guohtumat</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="905" left="461" width="347" height="15" font="4">biste guhkit áiggi. Dalle boazu ieš ohcá guohtuma mii</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="922" left="461" width="58" height="15" font="4">gávdnoš.</text>''')), converter.PDFTextElement(etree.fromstring(u'''<text top="940" left="478" width="330" height="15" font="4">Dálvet  guohtu  eallu  eanas  áigge,  lea  lodji,  iige</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="957" left="461" width="347" height="15" font="4">manat álššaid duššái. Lihkadeapmái adnojit álššat, ja</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="974" left="461" width="347" height="15" font="4">joavdelas  lihkahallan  dehe  lihkadeapmi  manaha</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="991" left="461" width="347" height="15" font="4">álššaid.  Lihkahallan  sáhttá  ovdamearkka  dihte  leat</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="1009" left="461" width="347" height="15" font="4">čohkkemat,  boraspiret  ja  mátkkošteaddjit  muose-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="1026" left="461" width="347" height="15" font="4">huhttet ealu, dehe eallu ruvgala jna. Lassin dasa gask-</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="1043" left="461" width="347" height="15" font="4">kalduvvá  guohtumiin.  Álšamanaheami  ii  sáhte  šat</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="1060" left="461" width="347" height="15" font="4">buhttet maŋŋil eambbo guohtumiin. Danne geahppu</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="1078" left="461" width="347" height="15" font="4">boazu,  ja  jus  hui  hejot  manná,  sáhttet  váibbahat</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="1095" left="461" width="316" height="15" font="4">jápmit go oalát nohkkojit duksejuvvon buoiddis.</text>''')),
-            converter.PDFTextElement(etree.fromstring(u'''<text top="110" left="239" width="416" height="30" font="6"><b>1. Boazoguohtumat Skandinavias</b></text>''')),
-        ]
+        self.start_page = etree.fromstring(u'''
+            <page height="1261" left="0" number="258" position="absolute" top="0" width="892">
+                <text top="51" left="85" width="17" height="15" font="4">12</text>
+                <text top="72" left="85" width="62" height="12" font="5">1. Mielddus</text>
+                <text top="193" left="85" width="213" height="24" font="10"><b>1.1 Bohcco dárbbut</b></text>
+                <text top="232" left="85" width="347" height="15" font="4">Miehtá  Davvikálohta  leat  asehis  guohtoneatnamat</text>
+                <text top="250" left="85" width="347" height="15" font="4">bohccuide. Boazu lea luonddudilálašvuođaid hálddus</text>
+                <text top="267" left="85" width="347" height="15" font="4">birra jagi. Guohtunšattut leat iešguđetláganat jagi ieš-</text>
+                <text top="284" left="85" width="347" height="15" font="4">guđetge áiggis, ja guohtundilli váikkuhage dasto man</text>
+                <text top="301" left="85" width="347" height="15" font="4">ollu boazu guohtu ja movt johtala. Dákko dáfus lea</text>
+                <text top="319" left="85" width="347" height="15" font="4">boazu  sierralágan  dilis,  Skandinávia  eará  dábmojuv-</text>
+                <text top="336" left="85" width="347" height="15" font="4">von  elliid  suktii.  Go  mii  árvvoštállat  guohtumiid,</text>
+                <text top="353" left="85" width="347" height="15" font="4">bidjat  bohcco  fysiologalaš  dárbbuid  vuođđun  ja</text>
+                <text top="370" left="85" width="231" height="15" font="4">makkár guohtuma boazu dárbbaša.</text>
+                <text top="433" left="85" width="215" height="18" font="11"><i><b>1.1.1 Fysiologalaš dárbbut</b></i></text>
+                <text top="457" left="85" width="347" height="15" font="4">Boazu maiddái, nu movt earáge eallit, dárbbaša kar-</text>
+                <text top="474" left="85" width="347" height="15" font="4">bohydráhtaid ja buoiddi, maid joraha álšan ja doalaha</text>
+                <text top="491" left="85" width="347" height="15" font="4">goruda doaimmaid, oažžu lieggasa ja sáhttá lihkadit.</text>
+                <text top="508" left="85" width="347" height="15" font="4">Proteiinnat,  vitamiinnat  ja  minerálat  adnojit  hukset</text>
+                <text top="526" left="85" width="347" height="15" font="4">dehkiid  ja  eará  gorutgođđosiid,  ja  mielkki  buvtta-</text>
+                <text top="543" left="85" width="59" height="15" font="4">deapmái.</text>
+                <text top="560" left="102" width="330" height="15" font="4">Boazu lea, nu movt eará smirezasti eallit nai, ere-</text>
+                <text top="577" left="85" width="347" height="15" font="4">noamážit heivehuvvon smoldet guohtunšattuid. Alm-</text>
+                <text top="595" left="85" width="347" height="15" font="4">matge smoaldanit duššefal okta oasáš das maid boazu</text>
+                <text top="612" left="85" width="347" height="15" font="4">guohtu. Dakkár guohtunšattut mat smoaldanit geahp-</text>
+                <text top="629" left="85" width="347" height="15" font="4">pasit,  leat  buorit  guohtun.  Ruonasšattut  smoaldanit</text>
+                <text top="646" left="85" width="347" height="15" font="4">álkimusat dalle go leat beallešattus ja smoaldaneapmi</text>
+                <text top="664" left="85" width="347" height="15" font="4">hedjona  dađi  mielde  go  šattuid  šaddandássi  ovdána.</text>
+                <text top="681" left="85" width="347" height="15" font="4">Go biebmu smoaldahuvvá unnán, ii oaččo boazu nu</text>
+                <text top="698" left="85" width="347" height="15" font="4">ollu energiija dehe álšša. Maiddái biebmojohtin čoliid</text>
+                <text top="715" left="85" width="142" height="15" font="4">čađa mánná njozebut.</text>
+                <text top="733" left="102" width="330" height="15" font="4">Boazu lea mihá buorebut, go eará smirezasti eallit,</text>
+                <text top="750" left="85" width="347" height="15" font="4">heivehuvvon  smoldet  jeahkála.  Jeahkála  smoalda-</text>
+                <text top="767" left="85" width="347" height="15" font="4">neapmi  lea  buorre  birra  jagi.  Dainna  lágiin  nagoda</text>
+                <text top="784" left="85" width="347" height="15" font="4">boazu  doalahit  buorren  obbalaš  biebmosmoldema,</text>
+                <text top="802" left="85" width="347" height="15" font="4">vaikko vel eará guohtun leage vánis ja maiddái kvali-</text>
+                <text top="819" left="85" width="347" height="15" font="4">tehta lea rievddalmas. Dađistaga go čavččabeallái hed-</text>
+                <text top="836" left="85" width="347" height="15" font="4">jona  ruonasšattuid  smoaldaneapmi,  guohtugoahtá</text>
+                <text top="853" left="85" width="347" height="15" font="4">boazu  eambbo  jeahkála,  iige  guođo  nu  ollu  ruonas-</text>
+                <text top="871" left="85" width="347" height="15" font="4">šattuid,  ja  nu  nagoda  almmatge  doalahit  dássedis</text>
+                <text top="888" left="85" width="118" height="15" font="4">biebmosmoldema.</text>
+                <text top="905" left="102" width="330" height="15" font="4">Jeagil smoaldana geahppasit, muhto lea ovttagear-</text>
+                <text top="922" left="85" width="347" height="15" font="4">dánis fuođđar. Jeagelšlájain oažžu boazu nu ollu álšša</text>
+                <text top="940" left="85" width="347" height="15" font="4">(karbohydráhtaid)  ahte  ceavzá  badjel  dálvvi,  muhto</text>
+                <text top="957" left="85" width="347" height="15" font="4">váilot  proteiinnat,  vitamiinnat  ja  minerálat.  Bohcco</text>
+                <text top="974" left="85" width="346" height="15" font="4">guomočoavjebaktearat  dárbbašit  dađistaga  ee.  pro-</text>
+                <text top="991" left="85" width="347" height="15" font="4">teiinnat,  ja  danne  váikkuha  smolden  čoavjjis  ahte</text>
+                <text top="1009" left="85" width="347" height="15" font="4">boazu, mii lea jeagelguohtumis, deahkkehuvvá dálvet.</text>
+                <text top="1026" left="85" width="347" height="15" font="4">Boazu deahkkehuvvagoahtá dakkaviđe go boahtá jea-</text>
+                <text top="1043" left="85" width="347" height="15" font="4">gelguohtumii. Muhto bohccos lea sierralágan vuohki</text>
+                <text top="1060" left="85" width="347" height="15" font="4">mainna easttada vai ii deahkkehuva, go boazu sáhttá</text>
+                <text top="1078" left="85" width="347" height="15" font="4">“nuppádassii  geavahit”  nitrogena,  maid  eará  smire-</text>
+                <text top="1095" left="85" width="129" height="15" font="4">zasti eallit eai sáhte.</text>
+                <text top="198" left="478" width="330" height="15" font="4">Vaikko  boazu  deahkkehuvváge,  sáhttá  dat  liikká</text>
+                <text top="215" left="461" width="347" height="15" font="4">lossut  dálvet,  jus  fal  lea  buorre  jeagelguohtun,  mas</text>
+                <text top="232" left="461" width="347" height="15" font="4">boazu oažžu eambbo energiija go dat man loaktá. Dát</text>
+                <text top="250" left="461" width="347" height="15" font="4">energiija jorrá buoidin gorudii ja čoggo dohko nu ahte</text>
+                <text top="267" left="461" width="107" height="15" font="4">boazu ii geahpo.</text>
+                <text top="284" left="478" width="330" height="15" font="4">Boazu guoira gal dábálaččat dálvvis. Rávis njiŋŋe-</text>
+                <text top="301" left="461" width="347" height="15" font="4">las  geahppu  giđđii  15  %  čakčadeattu  ektui,  vaikko</text>
+                <text top="319" left="461" width="347" height="15" font="4">leage čoavjjehin ja miessi deaddá 4-5 kg šattadettiin.</text>
+                <text top="336" left="461" width="347" height="15" font="4">Sarvát  sáhttet  geahpput  30  %  čakčamánus  juovla-</text>
+                <text top="353" left="461" width="347" height="15" font="4">mánnui. Dálvvi mielde gehppot bohccot dađistaga ja</text>
+                <text top="370" left="461" width="347" height="15" font="4">erenoamáš heajos guohtumis sáhttet geahpput gitta 50</text>
+                <text top="388" left="461" width="347" height="15" font="4">% rádjái. Jus guohtun hedjona nu sakka ahte čoavje-</text>
+                <text top="405" left="461" width="347" height="15" font="4">liepma goiká, dehe nuppeládje dadjat ahte mikroorga-</text>
+                <text top="422" left="461" width="347" height="15" font="4">nismmat  nohket,  nealgugoahtá  boazu.  Lassin  dasa</text>
+                <text top="439" left="461" width="347" height="15" font="4">ahte boazu dárbbaša eallámuša (proteiinnaid ja mine-</text>
+                <text top="457" left="461" width="347" height="15" font="4">rálaid),  gollada  boazu  deahkkemássa  ja  joraha  dán</text>
+                <text top="474" left="461" width="347" height="15" font="4">energiijan. Guhkálmas nealgumiin ii nagat šat boazu</text>
+                <text top="491" left="461" width="283" height="15" font="4">doalahit dábálaš gorutdoaimmaid ja jápmá.</text>
+                <text top="508" left="478" width="330" height="15" font="4">Miesit  ja  boarrasit  varrásat  nelgot  bahábut  go</text>
+                <text top="526" left="461" width="347" height="15" font="4">njiŋŋelasat ja čearpmahat. Sarvát rávžet ragatáiggi, ja</text>
+                <text top="543" left="461" width="347" height="15" font="4">nuolppot  manahit  maiddái  bohccuidgaskasaš  árvo-</text>
+                <text top="560" left="461" width="347" height="15" font="4">dási.  Nuolppot  eai  bálle  guohtut  ráfis,  dannego</text>
+                <text top="577" left="461" width="347" height="15" font="4">njiŋŋelasat doroldahttet nulpobohccuid eret suvnnjiin.</text>
+                <text top="595" left="461" width="347" height="15" font="4">Gehppes  miesit  sáhttet  nealgut.  Smávva  áldduin  leat</text>
+                <text top="612" left="461" width="347" height="15" font="4">dávjá  gehppes  miesit,  mii  fas  dagaha  stuorit  miesse-</text>
+                <text top="629" left="461" width="347" height="15" font="4">jámu. Heajos dálveguohtun dagaha fas áldduid mielk-</text>
+                <text top="646" left="461" width="347" height="15" font="4">keheabbon  go  dábálaš  dan  vuosttaš  geasi,  ja  dat  fas</text>
+                <text top="664" left="461" width="347" height="15" font="4">váikkuha ahte miesit leat geahppaseappot čakčat. Boa-</text>
+                <text top="681" left="461" width="347" height="15" font="4">zomassimat, mat bohciidit fysiologalaš beliid sivas, eai</text>
+                <text top="698" left="461" width="347" height="15" font="4">leat  nu  oidnosis  dannego  boraspirevahágat  lassánit</text>
+                <text top="715" left="461" width="66" height="15" font="4">dađistaga.</text>
+                <text top="733" left="478" width="330" height="15" font="4">Bohccuid  sáhttá  biebmat  fuođđariiguin  dálvet</text>
+                <text top="750" left="461" width="347" height="15" font="4">heajos guohtumiid áigge, ja dustet váttisvuođa dáinna-</text>
+                <text top="767" left="461" width="347" height="15" font="4">lágiin.  Guomočoavjji  mikrobat  dahket  almmatge</text>
+                <text top="784" left="461" width="347" height="15" font="4">duššin dáid iešguđetlágan fuođđaršlájaid. Danne dárb-</text>
+                <text top="802" left="461" width="347" height="15" font="4">bašit bohccot dagalduvvat fuođđariidda hui árrat, dan</text>
+                <text top="819" left="461" width="347" height="15" font="4">bále go mikroorganismmat leat olleslogus čoavjjis ja</text>
+                <text top="836" left="461" width="347" height="15" font="4">nákcejit smoldegoahtit ođđa fuođđariid. Eanas boazo-</text>
+                <text top="853" left="461" width="347" height="15" font="4">eaiggádat eai almmatge biebmagoađe bohccuid áiggil,</text>
+                <text top="871" left="461" width="347" height="15" font="4">muhto vurdet eaigo guohtumat buorrán. Doloža rájes</text>
+                <text top="888" left="461" width="347" height="15" font="4">lei  vierrun  diktit  ealu  lávdat  jus  heajos  guohtumat</text>
+                <text top="905" left="461" width="347" height="15" font="4">biste guhkit áiggi. Dalle boazu ieš ohcá guohtuma mii</text>
+                <text top="922" left="461" width="58" height="15" font="4">gávdnoš.</text> <text top="940" left="478" width="330" height="15" font="4">Dálvet  guohtu  eallu  eanas  áigge,  lea  lodji,  iige</text>
+                <text top="957" left="461" width="347" height="15" font="4">manat álššaid duššái. Lihkadeapmái adnojit álššat, ja</text>
+                <text top="974" left="461" width="347" height="15" font="4">joavdelas  lihkahallan  dehe  lihkadeapmi  manaha</text>
+                <text top="991" left="461" width="347" height="15" font="4">álššaid.  Lihkahallan  sáhttá  ovdamearkka  dihte  leat</text>
+                <text top="1009" left="461" width="347" height="15" font="4">čohkkemat,  boraspiret  ja  mátkkošteaddjit  muose-</text>
+                <text top="1026" left="461" width="347" height="15" font="4">huhttet ealu, dehe eallu ruvgala jna. Lassin dasa gask-</text>
+                <text top="1043" left="461" width="347" height="15" font="4">kalduvvá  guohtumiin.  Álšamanaheami  ii  sáhte  šat</text>
+                <text top="1060" left="461" width="347" height="15" font="4">buhttet maŋŋil eambbo guohtumiin. Danne geahppu</text>
+                <text top="1078" left="461" width="347" height="15" font="4">boazu,  ja  jus  hui  hejot  manná,  sáhttet  váibbahat</text>
+                <text top="1095" left="461" width="316" height="15" font="4">jápmit go oalát nohkkojit duksejuvvon buoiddis.</text>
+                <text top="110" left="239" width="416" height="30" font="6"><b>1. Boazoguohtumat Skandinavias</b></text>
+            </page>
+        ''')
 
-        self.paragraphs = [
-            Interval(start=0, end=1),
-            Interval(start=1, end=2),
-            Interval(start=2, end=12),
-            Interval(start=12, end=13),
-            Interval(start=13, end=104),
-            Interval(start=104, end=105),
-        ]
+    def test_unordered_paragraphs(self):
+        expected_page = etree.fromstring(u'''
+            <body>
+                <p>
+                <em type="bold">1.1 Bohcco dárbbut</em>
+                </p>
+                <p>Miehtá  Davvikálohta  leat  asehis  guohtoneatnamat bohccuide. Boazu lea luonddudilálašvuođaid hálddus birra jagi. Guohtunšattut leat iešguđetláganat jagi ieš­guđetge áiggis, ja guohtundilli váikkuhage dasto man ollu boazu guohtu ja movt johtala. Dákko dáfus lea boazu  sierralágan  dilis,  Skandinávia  eará  dábmojuv­von  elliid  suktii.  Go  mii  árvvoštállat  guohtumiid, bidjat  bohcco  fysiologalaš  dárbbuid  vuođđun  ja makkár guohtuma boazu dárbbaša.</p>
+                <p>
+                <em type="italic">1.1.1 Fysiologalaš dárbbut</em>
+                </p>
+                <p>Boazu maiddái, nu movt earáge eallit, dárbbaša kar­bohydráhtaid ja buoiddi, maid joraha álšan ja doalaha goruda doaimmaid, oažžu lieggasa ja sáhttá lihkadit. Proteiinnat,  vitamiinnat  ja  minerálat  adnojit  hukset dehkiid  ja  eará  gorutgođđosiid,  ja  mielkki  buvtta­deapmái. Boazu lea, nu movt eará smirezasti eallit nai, ere­noamážit heivehuvvon smoldet guohtunšattuid. Alm­matge smoaldanit duššefal okta oasáš das maid boazu guohtu. Dakkár guohtunšattut mat smoaldanit geahp­pasit,  leat  buorit  guohtun.  Ruonasšattut  smoaldanit álkimusat dalle go leat beallešattus ja smoaldaneapmi hedjona  dađi  mielde  go  šattuid  šaddandássi  ovdána. Go biebmu smoaldahuvvá unnán, ii oaččo boazu nu ollu energiija dehe álšša. Maiddái biebmojohtin čoliid čađa mánná njozebut. Boazu lea mihá buorebut, go eará smirezasti eallit, heivehuvvon  smoldet  jeahkála.  Jeahkála  smoalda­neapmi  lea  buorre  birra  jagi.  Dainna  lágiin  nagoda boazu  doalahit  buorren  obbalaš  biebmosmoldema, vaikko vel eará guohtun leage vánis ja maiddái kvali­tehta lea rievddalmas. Dađistaga go čavččabeallái hed­jona  ruonasšattuid  smoaldaneapmi,  guohtugoahtá boazu  eambbo  jeahkála,  iige  guođo  nu  ollu  ruonas­šattuid,  ja  nu  nagoda  almmatge  doalahit  dássedis biebmosmoldema. Jeagil smoaldana geahppasit, muhto lea ovttagear­dánis fuođđar. Jeagelšlájain oažžu boazu nu ollu álšša (karbohydráhtaid)  ahte  ceavzá  badjel  dálvvi,  muhto váilot  proteiinnat,  vitamiinnat  ja  minerálat.  Bohcco guomočoavjebaktearat  dárbbašit  dađistaga  ee.  pro­teiinnat,  ja  danne  váikkuha  smolden  čoavjjis  ahte boazu, mii lea jeagelguohtumis, deahkkehuvvá dálvet. Boazu deahkkehuvvagoahtá dakkaviđe go boahtá jea­gelguohtumii. Muhto bohccos lea sierralágan vuohki mainna easttada vai ii deahkkehuva, go boazu sáhttá “nuppádassii  geavahit” nitrogena,  maid  eará  smire­zasti eallit eai sáhte. Vaikko  boazu  deahkkehuvváge,  sáhttá  dat  liikká lossut  dálvet,  jus  fal  lea  buorre  jeagelguohtun,  mas boazu oažžu eambbo energiija go dat man loaktá. Dát energiija jorrá buoidin gorudii ja čoggo dohko nu ahte boazu ii geahpo. Boazu guoira gal dábálaččat dálvvis. Rávis njiŋŋe­las  geahppu  giđđii  15  %  čakčadeattu  ektui,  vaikko leage čoavjjehin ja miessi deaddá 4-5 kg šattadettiin. Sarvát  sáhttet  geahpput  30  %  čakčamánus  juovla­mánnui. Dálvvi mielde gehppot bohccot dađistaga ja erenoamáš heajos guohtumis sáhttet geahpput gitta 50 % rádjái. Jus guohtun hedjona nu sakka ahte čoavje­liepma goiká, dehe nuppeládje dadjat ahte mikroorga­nismmat  nohket,  nealgugoahtá  boazu.  Lassin  dasa ahte boazu dárbbaša eallámuša (proteiinnaid ja mine­rálaid),  gollada  boazu  deahkkemássa  ja  joraha  dán energiijan. Guhkálmas nealgumiin ii nagat šat boazu doalahit dábálaš gorutdoaimmaid ja jápmá. Miesit  ja  boarrasit  varrásat  nelgot  bahábut  go njiŋŋelasat ja čearpmahat. Sarvát rávžet ragatáiggi, ja nuolppot  manahit  maiddái  bohccuidgaskasaš  árvo­dási.  Nuolppot  eai  bálle  guohtut  ráfis,  dannego njiŋŋelasat doroldahttet nulpobohccuid eret suvnnjiin. Gehppes  miesit  sáhttet  nealgut.  Smávva  áldduin  leat dávjá  gehppes  miesit,  mii  fas  dagaha  stuorit  miesse­jámu. Heajos dálveguohtun dagaha fas áldduid mielk­keheabbon  go  dábálaš  dan  vuosttaš  geasi,  ja  dat  fas váikkuha ahte miesit leat geahppaseappot čakčat. Boa­zomassimat, mat bohciidit fysiologalaš beliid sivas, eai leat  nu  oidnosis  dannego  boraspirevahágat  lassánit dađistaga. Bohccuid  sáhttá  biebmat  fuođđariiguin  dálvet heajos guohtumiid áigge, ja dustet váttisvuođa dáinna­lágiin.  Guomočoavjji  mikrobat  dahket  almmatge duššin dáid iešguđetlágan fuođđaršlájaid. Danne dárb­bašit bohccot dagalduvvat fuođđariidda hui árrat, dan bále go mikroorganismmat leat olleslogus čoavjjis ja nákcejit smoldegoahtit ođđa fuođđariid. Eanas boazo­eaiggádat eai almmatge biebmagoađe bohccuid áiggil, muhto vurdet eaigo guohtumat buorrán. Doloža rájes lei  vierrun  diktit  ealu  lávdat  jus  heajos  guohtumat biste guhkit áiggi. Dalle boazu ieš ohcá guohtuma mii gávdnoš. Dálvet  guohtu  eallu  eanas  áigge,  lea  lodji,  iige manat álššaid duššái. Lihkadeapmái adnojit álššat, ja joavdelas  lihkahallan  dehe  lihkadeapmi  manaha álššaid.  Lihkahallan  sáhttá  ovdamearkka  dihte  leat čohkkemat,  boraspiret  ja  mátkkošteaddjit  muose­huhttet ealu, dehe eallu ruvgala jna. Lassin dasa gask­kalduvvá  guohtumiin.  Álšamanaheami  ii  sáhte  šat buhttet maŋŋil eambbo guohtumiin. Danne geahppu boazu,  ja  jus  hui  hejot  manná,  sáhttet  váibbahat jápmit go oalát nohkkojit duksejuvvon buoiddis.</p>
+                <p>
+                <em type="bold">1. Boazoguohtumat Skandinavias</em>
+                </p>
+            </body>
+        ''')
 
-        self.sections = [
-            Interval(start=0, end=1),
-            Interval(start=1, end=2),
-            Interval(start=2, end=104),
-            Interval(start=104, end=105),
-        ]
+        pp = converter.PDFPage(self.start_page)
+        pp.adjust_line_heights()
+        pp.remove_elements_not_within_margin()
+        pp.remove_footnotes_superscript()
+        pp.merge_elements_on_same_line()
+        pp.remove_invalid_elements()
 
-    def test_one_page(self):
-        in_page = etree.fromstring('<page height="1261" left="0" number="258" position="absolute" top="0" width="892"/>')
-        for textelement in self.textelements:
-            in_page.append(textelement.t)
+        paragraphs = pp.make_unordered_paragraphs()
 
-        pp = converter.PDFPage(in_page)
+        extractor = converter.PDFTextExtractor()
+        extractor.extract_text_from_page(paragraphs)
+        self.assertXmlEqual(etree.tostring(extractor.body, pretty_print=True),
+                            etree.tostring(expected_page, pretty_print=True))
 
-        got_page = etree.fromstring('<page height="1261" left="0" number="258" position="absolute" top="0" width="892"/>')
-        for paragraph in pp.make_ordered_sections().paragraphs:
-            for textelement in paragraph.textelements:
-                got_page.append(textelement.t)
-        uff = etree.tostring(got_page, encoding=unicode, pretty_print=True)
+    def test_make_ordered_sections(self):
+        expected_page = etree.fromstring(u'''
+            <body>
+                <p>
+                    <em type="bold">1. Boazoguohtumat Skandinavias</em>
+                </p>
+                <p>
+                    <em type="bold">1.1 Bohcco dárbbut</em>
+                </p>
+                <p>Miehtá  Davvikálohta  leat  asehis  guohtoneatnamat bohccuide. Boazu lea luonddudilálašvuođaid hálddus birra jagi. Guohtunšattut leat iešguđetláganat jagi ieš­guđetge áiggis, ja guohtundilli váikkuhage dasto man ollu boazu guohtu ja movt johtala. Dákko dáfus lea boazu  sierralágan  dilis,  Skandinávia  eará  dábmojuv­von  elliid  suktii.  Go  mii  árvvoštállat  guohtumiid, bidjat  bohcco  fysiologalaš  dárbbuid  vuođđun  ja makkár guohtuma boazu dárbbaša.</p>
+                <p>
+                    <em type="italic">1.1.1 Fysiologalaš dárbbut</em>
+                </p>
+                <p>Boazu maiddái, nu movt earáge eallit, dárbbaša kar­bohydráhtaid ja buoiddi, maid joraha álšan ja doalaha goruda doaimmaid, oažžu lieggasa ja sáhttá lihkadit. Proteiinnat,  vitamiinnat  ja  minerálat  adnojit  hukset dehkiid  ja  eará  gorutgođđosiid,  ja  mielkki  buvtta­deapmái. Boazu lea, nu movt eará smirezasti eallit nai, ere­noamážit heivehuvvon smoldet guohtunšattuid. Alm­matge smoaldanit duššefal okta oasáš das maid boazu guohtu. Dakkár guohtunšattut mat smoaldanit geahp­pasit,  leat  buorit  guohtun.  Ruonasšattut  smoaldanit álkimusat dalle go leat beallešattus ja smoaldaneapmi hedjona  dađi  mielde  go  šattuid  šaddandássi  ovdána. Go biebmu smoaldahuvvá unnán, ii oaččo boazu nu ollu energiija dehe álšša. Maiddái biebmojohtin čoliid čađa mánná njozebut. Boazu lea mihá buorebut, go eará smirezasti eallit, heivehuvvon  smoldet  jeahkála.  Jeahkála  smoalda­neapmi  lea  buorre  birra  jagi.  Dainna  lágiin  nagoda boazu  doalahit  buorren  obbalaš  biebmosmoldema, vaikko vel eará guohtun leage vánis ja maiddái kvali­tehta lea rievddalmas. Dađistaga go čavččabeallái hed­jona  ruonasšattuid  smoaldaneapmi,  guohtugoahtá boazu  eambbo  jeahkála,  iige  guođo  nu  ollu  ruonas­šattuid,  ja  nu  nagoda  almmatge  doalahit  dássedis biebmosmoldema. Jeagil smoaldana geahppasit, muhto lea ovttagear­dánis fuođđar. Jeagelšlájain oažžu boazu nu ollu álšša (karbohydráhtaid)  ahte  ceavzá  badjel  dálvvi,  muhto váilot  proteiinnat,  vitamiinnat  ja  minerálat.  Bohcco guomočoavjebaktearat  dárbbašit  dađistaga  ee.  pro­teiinnat,  ja  danne  váikkuha  smolden  čoavjjis  ahte boazu, mii lea jeagelguohtumis, deahkkehuvvá dálvet. Boazu deahkkehuvvagoahtá dakkaviđe go boahtá jea­gelguohtumii. Muhto bohccos lea sierralágan vuohki mainna easttada vai ii deahkkehuva, go boazu sáhttá “nuppádassii  geavahit” nitrogena,  maid  eará  smire­zasti eallit eai sáhte. Vaikko  boazu  deahkkehuvváge,  sáhttá  dat  liikká lossut  dálvet,  jus  fal  lea  buorre  jeagelguohtun,  mas boazu oažžu eambbo energiija go dat man loaktá. Dát energiija jorrá buoidin gorudii ja čoggo dohko nu ahte boazu ii geahpo. Boazu guoira gal dábálaččat dálvvis. Rávis njiŋŋe­las  geahppu  giđđii  15  %  čakčadeattu  ektui,  vaikko leage čoavjjehin ja miessi deaddá 4-5 kg šattadettiin. Sarvát  sáhttet  geahpput  30  %  čakčamánus  juovla­mánnui. Dálvvi mielde gehppot bohccot dađistaga ja erenoamáš heajos guohtumis sáhttet geahpput gitta 50 % rádjái. Jus guohtun hedjona nu sakka ahte čoavje­liepma goiká, dehe nuppeládje dadjat ahte mikroorga­nismmat  nohket,  nealgugoahtá  boazu.  Lassin  dasa ahte boazu dárbbaša eallámuša (proteiinnaid ja mine­rálaid),  gollada  boazu  deahkkemássa  ja  joraha  dán energiijan. Guhkálmas nealgumiin ii nagat šat boazu doalahit dábálaš gorutdoaimmaid ja jápmá. Miesit  ja  boarrasit  varrásat  nelgot  bahábut  go njiŋŋelasat ja čearpmahat. Sarvát rávžet ragatáiggi, ja nuolppot  manahit  maiddái  bohccuidgaskasaš  árvo­dási.  Nuolppot  eai  bálle  guohtut  ráfis,  dannego njiŋŋelasat doroldahttet nulpobohccuid eret suvnnjiin. Gehppes  miesit  sáhttet  nealgut.  Smávva  áldduin  leat dávjá  gehppes  miesit,  mii  fas  dagaha  stuorit  miesse­jámu. Heajos dálveguohtun dagaha fas áldduid mielk­keheabbon  go  dábálaš  dan  vuosttaš  geasi,  ja  dat  fas váikkuha ahte miesit leat geahppaseappot čakčat. Boa­zomassimat, mat bohciidit fysiologalaš beliid sivas, eai leat  nu  oidnosis  dannego  boraspirevahágat  lassánit dađistaga. Bohccuid  sáhttá  biebmat  fuođđariiguin  dálvet heajos guohtumiid áigge, ja dustet váttisvuođa dáinna­lágiin.  Guomočoavjji  mikrobat  dahket  almmatge duššin dáid iešguđetlágan fuođđaršlájaid. Danne dárb­bašit bohccot dagalduvvat fuođđariidda hui árrat, dan bále go mikroorganismmat leat olleslogus čoavjjis ja nákcejit smoldegoahtit ođđa fuođđariid. Eanas boazo­eaiggádat eai almmatge biebmagoađe bohccuid áiggil, muhto vurdet eaigo guohtumat buorrán. Doloža rájes lei  vierrun  diktit  ealu  lávdat  jus  heajos  guohtumat biste guhkit áiggi. Dalle boazu ieš ohcá guohtuma mii gávdnoš. Dálvet  guohtu  eallu  eanas  áigge,  lea  lodji,  iige manat álššaid duššái. Lihkadeapmái adnojit álššat, ja joavdelas  lihkahallan  dehe  lihkadeapmi  manaha álššaid.  Lihkahallan  sáhttá  ovdamearkka  dihte  leat čohkkemat,  boraspiret  ja  mátkkošteaddjit  muose­huhttet ealu, dehe eallu ruvgala jna. Lassin dasa gask­kalduvvá  guohtumiin.  Álšamanaheami  ii  sáhte  šat buhttet maŋŋil eambbo guohtumiin. Danne geahppu boazu,  ja  jus  hui  hejot  manná,  sáhttet  váibbahat jápmit go oalát nohkkojit duksejuvvon buoiddis.</p>
+            </body>
+        ''')
 
-        want_page = etree.fromstring('<page height="1261" left="0" number="258" position="absolute" top="0" width="892"/>')
-        want_sections = [0, 1, 3, 2]
+        pp = converter.PDFPage(self.start_page)
+        pp.adjust_line_heights()
+        pp.remove_elements_not_within_margin()
+        pp.remove_footnotes_superscript()
+        pp.merge_elements_on_same_line()
+        pp.remove_invalid_elements()
 
-        for pos in want_sections:
-            this_pos = self.sections[pos]
-            for textelement in self.textelements[this_pos.start:this_pos.end]:
-                want_page.append(textelement.t)
-        self.maxDiff = None
-        self.assertEqual(uff, etree.tostring(want_page, encoding=unicode, pretty_print=True))
-
-    def test_is_same_section_1(self):
-        p1 = converter.PDFParagraph()
-        for t in self.textelements[self.paragraphs[-2].start:self.paragraphs[-2].end]:
-            p1.append_textelement(t)
-        p2 = converter.PDFParagraph()
-        for t in self.textelements[self.paragraphs[-1].start:self.paragraphs[-1].end]:
-            p2.append_textelement(t)
-
-        s = converter.PDFSection()
-        s.append_paragraph(p1)
-
-        self.assertFalse(s.is_same_section(p2))
-
+        extractor = converter.PDFTextExtractor()
+        extractor.extract_text_from_page(pp.make_ordered_sections().paragraphs)
+        self.assertXmlEqual(etree.tostring(extractor.body, pretty_print=True),
+                            etree.tostring(expected_page, pretty_print=True))
 
 class TestProblematicPageThreeColumns(XMLTester):
     '''This page has three columns, a couple of headings above them and a table
