@@ -961,12 +961,7 @@ class PDFTextExtractor(object):
     def p(self):
         return self.body[-1]
 
-    def replace_list_chars(self):
-        if self.get_last_string().startswith(u'•'):
-            self.p.set('type', 'listitem')
-
     def append_to_body(self):
-        self.replace_list_chars()
         etree.SubElement(self.body, 'p')
 
     def append_text_to_p(self, text):
@@ -1087,6 +1082,8 @@ class PDFTextExtractor(object):
                 self.append_to_body()
 
         for paragraph in paragraphs:
+            if paragraph.is_listitem:
+                self.p.set('type', 'listitem')
             self.extract_text_from_paragraph(paragraph)
 
         if len(self.get_last_string()) == 0:
