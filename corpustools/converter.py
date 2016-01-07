@@ -775,7 +775,7 @@ class PDFParagraph(object):
     in_list is a boolean to indicate whether the paragraph contains a
     list
     '''
-    LIST_CHARS = [u'•']
+    LIST_CHARS = [u'•', unichr(61623), unichr(61553)]
 
     def __init__(self):
         self.textelements = []

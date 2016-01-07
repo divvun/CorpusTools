@@ -2995,6 +2995,27 @@ class TestPDFParagraph(XMLTester):
         self.assertEqual(pp.boundingboxes[-1].bottom, self.textelements[2].bottom)
         self.assertEqual(pp.boundingboxes[-1].right, self.textelements[2].right)
 
+    def test_append_first_textelement_with_list_character_F0B7(self):
+        pp = converter.PDFParagraph()
+        pp.append_textelement(converter.PDFTextElement(etree.fromstring(
+            '<text top="961" left="152" width="334" height="26" font="0">  Bajásšaddan</text>')))
+
+        self.assertTrue(pp.is_listitem)
+
+    def test_append_first_textelement_with_list_character_F071(self):
+        pp = converter.PDFParagraph()
+        pp.append_textelement(converter.PDFTextElement(etree.fromstring(
+            '<text top="961" left="152" width="334" height="26" font="0">  Bajásšaddan</text>')))
+
+        self.assertTrue(pp.is_listitem)
+
+    def test_append_first_textelement_with_list_character_bullet(self):
+        pp = converter.PDFParagraph()
+        pp.append_textelement(converter.PDFTextElement(etree.fromstring(
+            '<text top="961" left="152" width="334" height="26" font="0">•  Bajásšaddan</text>')))
+
+        self.assertTrue(pp.is_listitem)
+
     def test_is_same_paragraph_when_top_is_equal(self):
         '''Test is_same_paragraph
 
@@ -3091,6 +3112,17 @@ class TestPDFParagraph(XMLTester):
             ' nubbi dábáláš linnjá</text>'))
 
         self.assertTrue(pp.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_8(self):
+        '''List characters signal a new paragraph start'''
+        pp = converter.PDFParagraph()
+        pp.append_textelement(
+            converter.PDFTextElement(etree.fromstring(
+                '<text top="106" left="117" width="305" height="19" font="2"/>')))
+        t1 = converter.PDFTextElement(etree.fromstring(
+            u'<text top="961" left="152" width="334" height="26" font="0">\xF0B7  Bajásšaddan, oahpahusa ja dutkama </text>'))
+
+        self.assertFalse(pp.is_same_paragraph(t1))
 
     def test_is_same_paragraph_on_different_column_or_page1(self):
         '''Not same paragraph if first letter in second element is number'''
@@ -3305,6 +3337,28 @@ class TestPDFTextExtractor(XMLTester):
                                 <p>1 element.</p>
                             </body>''')
 
+    def test_add_list_paragraphs(self):
+        texts = [
+            '<text top="961" left="152" width="334" height="26" font="0"></text>',
+            '<text top="961" left="152" width="334" height="26" font="0"></text>',
+            '<text top="961" left="152" width="334" height="26" font="0">•</text>'
+        ]
+
+        paragraphs = []
+        for t in texts:
+            pp = converter.PDFParagraph()
+            pp.append_textelement(converter.PDFTextElement(etree.fromstring(t)))
+            paragraphs.append(pp)
+
+        p2x = converter.PDFTextExtractor()
+        p2x.extract_text_from_page(paragraphs)
+
+        self.assertEqual(etree.tostring(p2x.body),
+                         '<body>'
+                         '<p type="listitem">&#61623; </p>'
+                         '<p type="listitem">&#61553; </p>'
+                         '<p type="listitem">&#8226; </p>'
+                         '</body>')
 
 class TestPDFSection(XMLTester):
     def test_is_same_section_paragraph_following_listitems(self):
