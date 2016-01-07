@@ -842,6 +842,7 @@ class PDFSection(BoundingBox):
     def __init__(self):
         super(PDFSection, self).__init__()
         self.paragraphs = []
+        self.column_width = 0
 
     def append_paragraph(self, paragraph):
         '''Append a paragraph and increase the area of the section
@@ -850,6 +851,8 @@ class PDFSection(BoundingBox):
         '''
         for box in paragraph.boundingboxes:
             self.increase_box(box)
+            if box.width > self.column_width:
+                self.column_width = box.width
 
         self.paragraphs.append(paragraph)
 
@@ -870,16 +873,16 @@ class PDFSection(BoundingBox):
             # paragraph are in the same column, this check is done
             if prev_box.is_above(new_box):
                 if (paragraph.is_listitem or
-                        (prev_box.left == new_box.left and
-                         prev_box.width - 5 < new_box.width and
-                         prev_box.width + 5 > new_box.width)):
+                    (prev_box.left == new_box.left and
+                     self.column_width * 1.1 > new_box.width)):
                     return True
                 else:
                     return False
             # If the ending of the last paragraph and the start of the new
             # paragraph are in different columns, this check is done
             elif (prev_box.is_left_of(new_box) and
-                  new_box.bottom > self.top):
+                  new_box.bottom > self.top and
+                     self.column_width * 1.1 > new_box.width):
                 return True
             else:
                 return False

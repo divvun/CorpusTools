@@ -3307,7 +3307,35 @@ class TestPDFTextExtractor(XMLTester):
 
 
 class TestPDFSection(XMLTester):
-    def test_is_same_section_1(self):
+    def test_is_same_section_paragraph_following_listitems(self):
+        section_elements = [
+            '<text top="478" left="51" width="245" height="18" font="1">Leat geatnegahtton kártengeahččaleamit:</text>',
+            '<text top="496" left="51" width="163" height="18" font="1">• Lohkamis 1., 2. ja 3. ceahkis</text>',
+            '<text top="514" left="51" width="153" height="18" font="1">• Rehkenastimis 2. ceahkis </text>',
+        ]
+        section = converter.PDFSection()
+        for element in section_elements:
+            p1 = converter.PDFParagraph()
+            p1.append_textelement(converter.PDFTextElement(etree.fromstring(
+                element)))
+            section.append_paragraph(p1)
+
+        paragraph_elements = [
+            '<text top="550" left="51" width="193" height="18" font="1">Buot oahppit galget váldit daid </text>',
+            '<text top="568" left="51" width="230" height="18" font="1">geatnegahtton kártengeahččalemiid. </text>',
+            '<text top="586" left="51" width="214" height="18" font="1">Oahppit geat leat eret geahččalan- </text>',
+            '<text top="604" left="51" width="228" height="18" font="1">beaivvi, galget čađahit geahččaleami </text>',
+            '<text top="622" left="51" width="45" height="18" font="1">maŋŋil.</text>'
+        ]
+        p2 = converter.PDFParagraph()
+        for element in paragraph_elements:
+            p2.append_textelement(converter.PDFTextElement(etree.fromstring(
+                element)))
+
+        self.assertTrue(section.is_same_section(p2))
+
+    def test_is_same_section_listitem_following_standard_paragraph(self):
+        '''list items are often narrower than previous standard paragraphs'''
         p1 = converter.PDFParagraph()
         p1.append_textelement(converter.PDFTextElement(etree.fromstring(
             '<text top="460" left="51" width="242" height="18" font="0"><b>Geatnegahtton kártengeahččaleamit</b></text>')))
@@ -3726,6 +3754,13 @@ class TestPDFSection2(XMLTester):
 
 
 class TestProblematicPage(XMLTester):
+    '''This page has three columns, a couple of headings above them and a table
+
+    Test that
+    * unwanted parts of the document is removed
+    * paragraphs are made correctly
+    * the ordering of paragraphs is done correctly.
+    '''
     def setUp(self):
         self.start_page = etree.fromstring(u'''
             <page number="1" position="absolute" top="0" left="0" height="1262" width="892">
@@ -4280,9 +4315,9 @@ class TestProblematicPage(XMLTester):
     def test_make_ordered_sections(self):
         expected_page = etree.fromstring(u'''
             <body>
+                <p><em type="bold">Davvisámegillii</em></p>
                 <p><em type="bold">Diehtu 2015 giđa kártengeahččalemiid birra</em></p>
                 <p><em type="bold">Váhnemiidda geain leat mánát 1.- 4. ceahkis</em></p>
-                <p><em type="bold">Davvisámegillii</em></p>
                 <p><em type="bold">Dán giđa kártengeahččalemiid birra</em>2015 giđa galget skuvllat čađahit geatnegahtton kártengeahččalemiid 1., 2. ja 3. ceahkis. Oahpahusdirektoráhtta fállá maid eaktodáhtolaš kártengeahččalemiid 1., 3. ja 4. ceahkis. 2015 giđa fállojuvvo vel lassin ođđa eaktodáhtolaš kárten- geahččaleamit eŋgelasgielas 3. ceahkkái.</p>
                 <p><em type="bold">Geatnegahtton kártengeahččaleamit</em>Leat geatnegahtton kártengeahččaleamit:</p>
                 <p type="listitem">• Lohkamis 1., 2. ja 3. ceahkis</p>
@@ -4326,21 +4361,10 @@ class TestProblematicPage(XMLTester):
         pp.merge_elements_on_same_line()
         pp.remove_invalid_elements()
 
-        ordered_sections = pp.make_ordered_sections()
-
-        #self.assertEqual(len(ordered_sections.sections), 0)
-        from corpustools import util
-        sections = ordered_sections.sections
-        for section in sections:
-            for paragraph in section.paragraphs:
-                util.print_frame()
-                for textelement in paragraph.textelements:
-                    util.print_frame(debug=textelement.plain_text.strip())
-
-        #extractor = converter.PDFTextExtractor()
-        #extractor.extract_text_from_page(ordered_sections.paragraphs)
-        #self.assertXmlEqual(etree.tostring(extractor.body, pretty_print=True),
-                            #etree.tostring(expected_page, pretty_print=True))
+        extractor = converter.PDFTextExtractor()
+        extractor.extract_text_from_page(pp.make_ordered_sections())
+        self.assertXmlEqual(etree.tostring(extractor.body, pretty_print=True),
+                            etree.tostring(expected_page, pretty_print=True))
 
 
 class TestPDFPage(XMLTester):
