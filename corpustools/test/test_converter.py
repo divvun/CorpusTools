@@ -4362,7 +4362,7 @@ class TestProblematicPage(XMLTester):
         pp.remove_invalid_elements()
 
         extractor = converter.PDFTextExtractor()
-        extractor.extract_text_from_page(pp.make_ordered_sections())
+        extractor.extract_text_from_page(pp.make_ordered_sections().paragraphs)
         self.assertXmlEqual(etree.tostring(extractor.body, pretty_print=True),
                             etree.tostring(expected_page, pretty_print=True))
 
