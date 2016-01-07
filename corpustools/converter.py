@@ -882,7 +882,7 @@ class PDFSection(BoundingBox):
             # paragraph are in different columns, this check is done
             elif (prev_box.is_left_of(new_box) and
                   new_box.bottom > self.top and
-                     self.column_width * 1.1 > new_box.width):
+                  self.column_width * 1.1 > new_box.width):
                 return True
             else:
                 return False
