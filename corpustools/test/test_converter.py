@@ -3287,7 +3287,7 @@ class TestPDFTextExtractor(XMLTester):
                             </body>''')
 
     def test_handle_number_on_new_page(self):
-        '''If the first paragraph begins with an uppercase letter, start a new p'''
+        '''If the first paragraph begins with a number, start a new p'''
         p2x = converter.PDFTextExtractor()
         p2x.p.text = 'not ending with sentence stop character'
 
