@@ -780,11 +780,11 @@ class PDFParagraph(object):
     def __init__(self):
         self.textelements = []
         self.boundingboxes = [BoundingBox()]
-        self.in_list = False
+        self.is_listitem = False
 
     def append_textelement(self, textelement):
         if len(textelement.plain_text) > 0 and textelement.plain_text[0] in self.LIST_CHARS:
-            self.in_list = True
+            self.is_listitem = True
         if len(self.textelements) > 0 and textelement.is_right_of(self.textelements[-1]):
             self.boundingboxes.append(BoundingBox())
         self.boundingboxes[-1].increase_box(textelement)
@@ -815,22 +815,18 @@ class PDFParagraph(object):
 
     def is_same_paragraph(self, other_box):
         '''Look for list characters in other_box'''
-        same_paragraph = False
-
         # util.print_frame(
         #    debug='{} {} {} {} {} {}'.format(h1, h2, t1, t2, h1 == h2, t1 > t2))
         real_text = other_box.plain_text
 
         if self.is_text_in_same_paragraph(other_box):
             if (re.match('\s', real_text[0]) is None and
-                    real_text[0] == real_text[0].upper() and self.in_list):
-                self.in_list = False
+                    real_text[0] == real_text[0].upper() and self.is_listitem):
+                return False
             elif (real_text[0] not in self.LIST_CHARS):
-                same_paragraph = True
+                return True
         else:
-            self.in_list = False
-
-        return same_paragraph
+            return False
 
     def __unicode__(self):
         return u'\n'.join([t.plain_text for t in self.textelements])
@@ -873,9 +869,10 @@ class PDFSection(BoundingBox):
             # If the ending of the last paragraph and the start of the new
             # paragraph are in the same column, this check is done
             if prev_box.is_above(new_box):
-                if (prev_box.left == new_box.left and
-                        prev_box.width - 5 < new_box.width and
-                        prev_box.width + 5 > new_box.width):
+                if (paragraph.is_listitem or
+                        (prev_box.left == new_box.left and
+                         prev_box.width - 5 < new_box.width and
+                         prev_box.width + 5 > new_box.width)):
                     return True
                 else:
                     return False
