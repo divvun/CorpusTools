@@ -3441,9 +3441,10 @@ class TestPDFTextExtractor(XMLTester):
 
     def test_add_list_paragraphs(self):
         texts = [
-            '<text top="961" left="152" width="334" height="26" font="0"></text>',
-            '<text top="961" left="152" width="334" height="26" font="0"></text>',
-            '<text top="961" left="152" width="334" height="26" font="0">•</text>'
+            '<text top="961" left="152" width="334" height="26" font="0"></text>',  # U+F0B7
+            '<text top="961" left="152" width="334" height="26" font="0"></text>',  # U+F071
+            '<text top="961" left="152" width="334" height="26" font="0">•</text>',  # U+2022: BULLET
+            '<text top="961" left="152" width="334" height="26" font="0">–</text>',  # U+2013: EN DASH
         ]
 
         paragraphs = []
@@ -3460,6 +3461,7 @@ class TestPDFTextExtractor(XMLTester):
                          '<p type="listitem">&#61623; </p>'
                          '<p type="listitem">&#61553; </p>'
                          '<p type="listitem">&#8226; </p>'
+                         '<p type="listitem">&#8211; </p>'
                          '</body>')
 
 
