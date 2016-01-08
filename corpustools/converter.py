@@ -801,48 +801,47 @@ class PDFParagraph(object):
 
         return delta < ratio * self.textelements[-1].height
 
-    def is_text_in_same_paragraph(self, textelement):
-        '''Find out if other_box is in the same paragraph as last textelement in the paragraph.
-
-        other_box is PDFTextElement
-
-        Define the last element in self.textelements and other_box to belong to
-        the same paragraph if they have the same height and if the difference
-        between the top attributes is less than ratio times the height of
-        the text elements.
-        '''
-        if self.textelements[-1].is_above(textelement):
-            return self.textelements[-1].height == textelement.height and self.is_within_line_distance(textelement)
-        else:
-            return self.is_paragraph_continued_in_next_column(textelement)
-
-    def is_paragraph_continued_in_next_column(self, textelement):
-        return (
-            self.textelements[-1].height == textelement.height and
-            self.textelements[-1].top >= textelement.top and
-            self.textelements[-1].is_left_of(textelement) and
-            not re.match('\d', self.textelements[-1].plain_text[0]) and
-            self.textelements[-1].plain_text[0] == self.textelements[-1].plain_text[0].lower())
-
     def is_same_paragraph(self, textelement):
         '''Look for list characters in other_box'''
         if textelement.plain_text[0] in self.LIST_CHARS:
             return False
-        if self.is_listitem:
+        elif self.is_listitem:
             if (self.textelements[-1].is_above(textelement) and
+                    (
+                        (self.textelements[0].left < textelement.left and re.search('^\S', textelement.plain_text)) or
+                        (self.textelements[0].left == textelement.left and re.search('^\s', textelement.plain_text))
+                    ) and
+                    not textelement.is_left_of(self.textelements[-1]) and
                     self.is_within_line_distance(textelement) and
-                    self.textelements[-1].left <= textelement.left and
                     self.textelements[-1].height - textelement.height < 2 and
                     self.textelements[-1].font == textelement.font):
                 return True
-            else:
-                False
-        elif self.is_text_in_same_paragraph(textelement):
-            if (re.match('\s', textelement.plain_text[0]) is None and
-                    textelement.plain_text[0] == textelement.plain_text[0].upper() and self.is_listitem):
-                return False
-            elif (textelement.plain_text[0] not in self.LIST_CHARS):
+            elif (self.textelements[-1].is_left_of(textelement) and
+                  self.textelements[-1].is_below(textelement) and
+                  self.textelements[-1].height - textelement.height < 2 and
+                  self.textelements[-1].font == textelement.font and
+                  (
+                      (not re.search(u'[.?!]\s*$', self.textelements[-1].plain_text) and
+                       textelement.plain_text[0] == textelement.plain_text[0].lower()) or
+                      (re.search(u'[.?!]\s*$', self.textelements[-1].plain_text) and
+                       textelement.plain_text[0] == textelement.plain_text[0].upper())
+                  )):
                 return True
+            else:
+                return False
+        elif not self.is_listitem:
+            if (self.textelements[-1].is_above(textelement) and
+                    self.textelements[-1].height == textelement.height and
+                    self.is_within_line_distance(textelement)):
+                return True
+            elif (self.textelements[-1].is_left_of(textelement) and
+                  self.textelements[-1].is_below(textelement) and
+                  self.textelements[-1].height == textelement.height and
+                  not re.match('\d', self.textelements[-1].plain_text[0]) and
+                  self.textelements[-1].plain_text[0] == self.textelements[-1].plain_text[0].lower()):
+                return True
+            else:
+                return False
         else:
             return False
 

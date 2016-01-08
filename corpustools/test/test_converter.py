@@ -3023,21 +3023,6 @@ class TestPDFParagraph(XMLTester):
 
         self.assertTrue(pp.is_listitem)
 
-    def test_is_same_paragraph_when_top_is_equal(self):
-        '''Test is_same_paragraph
-
-        Text elements that are on the same line should be considered to be
-        in the same paragraph
-        '''
-        pp = converter.PDFParagraph()
-        pp.append_textelement(
-            converter.PDFTextElement(etree.fromstring(
-                '<text top="323" left="117" width="305" height="16" font="2">gihligotteriektái</text>')))
-        t1 = converter.PDFTextElement(etree.fromstring(
-            '<text top="323" left="428" width="220" height="16" font="2">, sáhtte</text>'))
-
-        self.assertTrue(pp.is_text_in_same_paragraph(t1))
-
     def test_is_same_paragraph_1(self):
         '''Two text elements, x distance less 1.5 times their height'''
         pp = converter.PDFParagraph()
@@ -3047,29 +3032,29 @@ class TestPDFParagraph(XMLTester):
         t1 = converter.PDFTextElement(etree.fromstring(
             '<text top="126" left="117" width="305" height="19" font="2">text2</text>'))
 
-        self.assertTrue(pp.is_text_in_same_paragraph(t1))
+        self.assertTrue(pp.is_same_paragraph(t1))
 
     def test_is_same_paragraph_2(self):
         '''Two text elements, x distance larger 1.5 times their height'''
         pp = converter.PDFParagraph()
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
-                '<text top="106" left="117" width="305" height="19" font="2"/>')))
+                '<text top="106" left="117" width="305" height="19" font="2">a</text>')))
         t1 = converter.PDFTextElement(etree.fromstring(
-            '<text top="140" left="117" width="305" height="19" font="2"/>'))
+            '<text top="140" left="117" width="305" height="19" font="2">b</text>'))
 
-        self.assertFalse(pp.is_text_in_same_paragraph(t1))
+        self.assertFalse(pp.is_same_paragraph(t1))
 
     def test_is_same_paragraph_3(self):
         '''Two text elements, different heights'''
         pp = converter.PDFParagraph()
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
-                '<text top="106" left="117" width="305" height="19" font="2"/>')))
+                '<text top="106" left="117" width="305" height="19" font="2">a</text>')))
         t1 = converter.PDFTextElement(etree.fromstring(
-            '<text top="126" left="117" width="305" height="20" font="2"/>'))
+            '<text top="126" left="117" width="305" height="20" font="2">b</text>'))
 
-        self.assertFalse(pp.is_text_in_same_paragraph(t1))
+        self.assertFalse(pp.is_same_paragraph(t1))
 
     def test_is_same_paragraph_4(self):
         '''Two text elements, different fonts'''
@@ -3080,7 +3065,7 @@ class TestPDFParagraph(XMLTester):
         t1 = converter.PDFTextElement(etree.fromstring(
             '<text top="126" left="117" width="305" height="19" font="2">Text2</text>'))
 
-        self.assertTrue(pp.is_text_in_same_paragraph(t1))
+        self.assertTrue(pp.is_same_paragraph(t1))
 
     def test_is_same_paragraph_5(self):
         '''List characters signal a new paragraph start'''
@@ -3182,6 +3167,88 @@ class TestPDFParagraph(XMLTester):
         t1 = converter.PDFTextElement(etree.fromstring(
             '<text top="382" left="160" width="330" height="20" font="1">'
             'Gielddat sáhttet lágidit bálvalusa ovttas.</text>'))
+
+        self.assertTrue(pp.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_next_line_in_list_paragraph_starts_with_lower(self):
+        '''List lines, same height, same font, second starts with lower'''
+        pp = converter.PDFParagraph()
+        pp.append_textelement(
+            converter.PDFTextElement(etree.fromstring(
+                '<text top="991" left="85" width="347" height="15" font="4">'
+                '• Ásahit  sierra  siidda  mas  leat  searveeallu  ovttain'
+                '</text>')))
+        pp.append_textelement(
+            converter.PDFTextElement(etree.fromstring(
+                '<text top="1009" left="106" width="325" height="15" font="4">'
+                'čearuin/dahje eambbogiiguin Ruoŧabealde ránnjá-</text>')))
+        t1 = converter.PDFTextElement(etree.fromstring(
+            '<text top="112" left="483" width="325" height="15" font="4">'
+            'čearuiguin.</text>'))
+
+        self.assertTrue(pp.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_ends_with_stop_next_line_in_list_paragraph_starts_with_number(self):
+        '''List lines, same height, same font, second starts with lower'''
+        pp = converter.PDFParagraph()
+        pp.append_textelement(
+            converter.PDFTextElement(etree.fromstring(
+                '<text top="991" left="85" width="347" height="15" font="4">'
+                '• Ásahit  sierra  siidda  mas  leat  searveeallu  ovttain'
+                '</text>')))
+        pp.append_textelement(
+            converter.PDFTextElement(etree.fromstring(
+                '<text top="1009" left="106" width="325" height="15" font="4">'
+                'čearuin/dahje eambbogiiguin Ruoŧabealde ránnjá.</text>')))
+        t1 = converter.PDFTextElement(etree.fromstring(
+            '<text top="112" left="483" width="325" height="15" font="4">'
+            '2 čearuiguin.</text>'))
+
+        self.assertTrue(pp.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_next_line_in_list_paragraph_starts_with_upper(self):
+        '''List lines, same height, same font, second starts with upper'''
+        pp = converter.PDFParagraph()
+        pp.append_textelement(
+            converter.PDFTextElement(etree.fromstring(
+                '<text top="991" left="85" width="347" height="15" font="4">'
+                '• Ásahit  sierra  siidda  mas  leat  searveeallu  ovttain'
+                '</text>')))
+        pp.append_textelement(
+            converter.PDFTextElement(etree.fromstring(
+                '<text top="1009" left="106" width="325" height="15" font="4">'
+                'čearuin/dahje eambbogiiguin Ruoŧabealde ránnjá.</text>')))
+        t1 = converter.PDFTextElement(etree.fromstring(
+            '<text top="112" left="483" width="325" height="15" font="4">'
+            'Čearuiguin.</text>'))
+
+        self.assertTrue(pp.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_next_line_in_list_paragraph_starts_with_number(self):
+        '''List lines, same height, same font, second starts with upper'''
+        pp = converter.PDFParagraph()
+        pp.append_textelement(
+            converter.PDFTextElement(etree.fromstring(
+                '<text top="991" left="85" width="347" height="15" font="4">'
+                '• Ásahit  sierra  siidda  mas  leat  searveeallu  ovttain'
+                '</text>')))
+        pp.append_textelement(
+            converter.PDFTextElement(etree.fromstring(
+                '<text top="1009" left="106" width="325" height="15" font="4">'
+                'čearuin/dahje eambbogiiguin Ruoŧabealde ránnjá.</text>')))
+        t1 = converter.PDFTextElement(etree.fromstring(
+            '<text top="112" left="483" width="325" height="15" font="4">'
+            '2 čearuiguin.</text>'))
+
+        self.assertTrue(pp.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_list_paragraph_no_indent_but_space(self):
+        pp = converter.PDFParagraph()
+        pp.append_textelement(
+            converter.PDFTextElement(etree.fromstring(
+                '<text top="342" left="104" width="295" height="18" font="1">•   Buohkain       galgá   leat    vuoigatvuohta   oahppat </text>')))
+        t1 = converter.PDFTextElement(etree.fromstring(
+            '<text top="363" left="104" width="80" height="18" font="1">  sámegiela</text>'))
 
         self.assertTrue(pp.is_same_paragraph(t1))
 
