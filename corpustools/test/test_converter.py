@@ -3360,6 +3360,7 @@ class TestPDFTextExtractor(XMLTester):
                          '<p type="listitem">&#8226; </p>'
                          '</body>')
 
+
 class TestPDFSection(XMLTester):
     def test_is_same_section_paragraph_following_listitems(self):
         section_elements = [
@@ -3560,8 +3561,23 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
                 <p>Elgå3,032,4 Femund (dálvejagi guohtun)(8887) Riast/Hylling (bievlajahki)1,722,612,3 Essand (bievlajahki)1,617,310,5 Trollheimen0,77,910,7</p>
                 <p>1,618,211,2</p>
                 <p>
-                Lea mihá eambo boazoeatnatvuohta go Davvi-Trøn­delágas, Nordlánddas ja Romssas. Duogážin lea dál­vejagi  guohtumiid  vejolašvuohta,  ja  áigodaga  iešgu­đetlágan  guođohanvejolašvuohta.  Earret  Elgå,  leat Lulli-Trøndelága/Hedmark  orohagaid  boazoeatnat­vuohta  vuollelis  go  Kárášjogas  (2,4  bohcco/km)  ja Oarje-Finnmárkkus  (3,1  bohcco/km).  Riast/Hylling orohagas lea eambbo buvttadeapmi bohcco ektui go dáin earáin, muhto buot orohagaid dássi lea vuollelis go ovdal. Elgå:s lea mearkkašahtti alla boazolohku ja buvttadeapmi  juohke  areálovttadaga  nammii.  Eará orohagain Norggas ii dáidde leat ná stuora areálbuvt­tadeapmi. Maŋemus  golmma  jagi  njuovvandeattuid  oaidnit
-                    <em type="bold">6.2. tabeallas.</em>Das oaidnit orohagaid siskkáldas ero\xADhusaid jagis jahkái. Dás boahtá ovdan ahte dássi lea veahá vuollelis go Nordlánddas ja Davvi-Trøndelágas ja arvat vuollelis Romssa. Orohagaid siskkáldas ero­husat jagis jahkái leat luonddudilálašvuođaid erohu­said  geažil,  muhto  erohusat  sáhttet  maiddái  váikku­huvvot das makkár bohccuid leat njuovvan ja makkár ealihanbohccot leat.
+                Lea mihá eambo boazoeatnatvuohta go Davvi-Trøn­delágas, Nordlánddas ja Romssas.
+                Duogážin lea dál­vejagi  guohtumiid  vejolašvuohta,  ja  áigodaga  iešgu­đetlágan  guođohanvejolašvuohta.
+                Earret  Elgå,  leat Lulli-Trøndelága/Hedmark  orohagaid
+                boazoeatnat­vuohta  vuollelis  go  Kárášjogas  (2,4  bohcco/km)
+                ja Oarje-Finnmárkkus  (3,1  bohcco/km).  Riast/Hylling orohagas
+                lea eambbo buvttadeapmi bohcco ektui go dáin earáin, muhto buot
+                orohagaid dássi lea vuollelis go ovdal. Elgå:s lea mearkkašahtti
+                alla boazolohku ja buvttadeapmi  juohke  areálovttadaga  nammii.  Eará orohagain Norggas ii dáidde leat ná stuora areálbuvt­tadeapmi.
+                Maŋemus  golmma  jagi  njuovvandeattuid  oaidnit
+                    <em type="bold">6.2. tabeallas.</em>Das oaidnit orohagaid
+                    siskkáldas ero\xADhusaid jagis jahkái. Dás boahtá ovdan ahte
+                    dássi lea veahá vuollelis go Nordlánddas ja
+                    Davvi-Trøndelágas ja arvat vuollelis Romssa. Orohagaid
+                    siskkáldas ero­husat jagis jahkái leat luonddudilálašvuođaid
+                    erohu­said  geažil,  muhto  erohusat  sáhttet  maiddái
+                    váikku­huvvot das makkár bohccuid leat njuovvan ja makkár
+                    ealihanbohccot leat.
                 </p>
                 <p>
                     <em type="bold">6.1 Lulli-Trøndelága/Hedmark –</em>
@@ -3569,8 +3585,27 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
                     <em type="bold">guovlu</em>
                 </p>
                 <p>
-                    <em type="italic">Obbalaččat</em>Prinsihpas eai leat orohatrájit rievdaduvvon jagi 1894 rájes. Rievdadeamit leat váldosaččat dahkkon máŋg­gaid duomuid vuođul maid Alimusriekti lea meannu­dan. Das daddjo ahte orohagat leat ovddasvástádus­suorggit,  ja  dat  ii  dárbbaš  mearkkašit  ahte  dain  lea vuoigatvuohta  guovlluide.  Lávdegotti  mandáhttan ii leat  čiekŋudit  dien  áššái,  muhto  fágalávdegoddi oaidná movt eahpečielga riektedilli lea dagahan labiila dilálašvuođaid.  Dán  geažil  leage  lávdegoddái  váttis suokkardit dálá guohtuneatnamiid geavaheami ja dan vuođul evttohit rievdadusaid guohtunrájiide. Guovllus leat 6 boazoorohaga. Riast ja Hylling lea oktasaš. Essand ja Riast/Hylling orohagain lea oktasaš dálvejagi  guohtun  Femunddas.  Elgå  ja  Trollheimen leat  fas  birrajagiorohagat.  Trollheimen  lea  áidna orohat  mii  ii  leat  riikaráji  guoras,  muhto  lea  sierra eará orohagain eret. Danne eat čilge dárkileappot dán orohaga  birra.  Eará  orohagaid  birra  mii  čilget oktasaččat.
-                    <em type="bold">6.1.  ja  6.2.  tabeallas</em>oaidnit  boazodoalloguovllu
+                    <em type="italic">Obbalaččat</em>Prinsihpas eai leat
+                    orohatrájit rievdaduvvon jagi 1894 rájes. Rievdadeamit leat
+                    váldosaččat dahkkon máŋg­gaid duomuid vuođul maid
+                    Alimusriekti lea meannu­dan. Das daddjo ahte orohagat leat
+                    ovddasvástádus­suorggit,  ja  dat  ii  dárbbaš  mearkkašit
+                    ahte  dain  lea vuoigatvuohta  guovlluide.  Lávdegotti
+                    mandáhttan ii leat  čiekŋudit  dien  áššái,  muhto
+                    fágalávdegoddi oaidná movt eahpečielga riektedilli lea
+                    dagahan labiila dilálašvuođaid.  Dán  geažil  leage
+                    lávdegoddái  váttis suokkardit dálá guohtuneatnamiid
+                    geavaheami ja dan vuođul evttohit rievdadusaid
+                    guohtunrájiide. Guovllus leat 6 boazoorohaga. Riast ja
+                    Hylling lea oktasaš. Essand ja Riast/Hylling orohagain lea
+                    oktasaš dálvejagi  guohtun  Femunddas.  Elgå  ja
+                    Trollheimen leat  fas  birrajagiorohagat.  Trollheimen  lea
+                    áidna orohat  mii  ii  leat  riikaráji  guoras,  muhto  lea
+                    sierra eará orohagain eret. Danne eat čilge dárkileappot dán
+                    orohaga  birra.  Eará  orohagaid  birra  mii  čilget
+                    oktasaččat.
+                    <em type="bold">6.1.  ja  6.2.  tabeallas</em>oaidnit
+                    boazodoalloguovllu
                             struktuvrra ja eatnamiid anu.
                 </p>
             </body>
@@ -3598,8 +3633,27 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
                     <em type="bold">guovlu</em>
                 </p>
                 <p>
-                    <em type="italic">Obbalaččat</em>Prinsihpas eai leat orohatrájit rievdaduvvon jagi 1894 rájes. Rievdadeamit leat váldosaččat dahkkon máŋg­gaid duomuid vuođul maid Alimusriekti lea meannu­dan. Das daddjo ahte orohagat leat ovddasvástádus­suorggit,  ja  dat  ii  dárbbaš  mearkkašit  ahte  dain  lea vuoigatvuohta  guovlluide.  Lávdegotti  mandáhttan ii leat  čiekŋudit  dien  áššái,  muhto  fágalávdegoddi oaidná movt eahpečielga riektedilli lea dagahan labiila dilálašvuođaid.  Dán  geažil  leage  lávdegoddái  váttis suokkardit dálá guohtuneatnamiid geavaheami ja dan vuođul evttohit rievdadusaid guohtunrájiide. Guovllus leat 6 boazoorohaga. Riast ja Hylling lea oktasaš. Essand ja Riast/Hylling orohagain lea oktasaš dálvejagi  guohtun  Femunddas.  Elgå  ja  Trollheimen leat  fas  birrajagiorohagat.  Trollheimen  lea  áidna orohat  mii  ii  leat  riikaráji  guoras,  muhto  lea  sierra eará orohagain eret. Danne eat čilge dárkileappot dán orohaga  birra.  Eará  orohagaid  birra  mii  čilget oktasaččat.
-                    <em type="bold">6.1.  ja  6.2.  tabeallas</em>oaidnit  boazodoalloguovllu
+                    <em type="italic">Obbalaččat</em>Prinsihpas eai leat
+                    orohatrájit rievdaduvvon jagi 1894 rájes. Rievdadeamit leat
+                    váldosaččat dahkkon máŋg­gaid duomuid vuođul maid
+                    Alimusriekti lea meannu­dan. Das daddjo ahte orohagat leat
+                    ovddasvástádus­suorggit,  ja  dat  ii  dárbbaš  mearkkašit
+                    ahte  dain  lea vuoigatvuohta  guovlluide.  Lávdegotti
+                    mandáhttan ii leat  čiekŋudit  dien  áššái,  muhto
+                    fágalávdegoddi oaidná movt eahpečielga riektedilli lea
+                    dagahan labiila dilálašvuođaid.  Dán  geažil  leage
+                    lávdegoddái  váttis suokkardit dálá guohtuneatnamiid
+                    geavaheami ja dan vuođul evttohit rievdadusaid
+                    guohtunrájiide. Guovllus leat 6 boazoorohaga. Riast ja
+                    Hylling lea oktasaš. Essand ja Riast/Hylling orohagain lea
+                    oktasaš dálvejagi  guohtun  Femunddas.  Elgå  ja
+                    Trollheimen leat  fas  birrajagiorohagat.  Trollheimen  lea
+                    áidna orohat  mii  ii  leat  riikaráji  guoras,  muhto  lea
+                    sierra eará orohagain eret. Danne eat čilge dárkileappot dán
+                    orohaga  birra.  Eará  orohagaid  birra  mii  čilget
+                    oktasaččat.
+                    <em type="bold">6.1.  ja  6.2.  tabeallas</em>oaidnit
+                    boazodoalloguovllu
                             struktuvrra ja eatnamiid anu.
                 </p>
                 <p>
@@ -3609,18 +3663,45 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
                 <p>Elgå 3 000 Riast/Hylling4 500 Essand 4 500 Trollheimen1 600</p>
                 <p>Submi 13 600</p>
                 <p>
-                Femunddas  lea  alimus  mearriduvvon  boazolohku 9 000  bohcco.  Boazolohku  lea  juhkkojuvvon  ovt­tamađe Riast/Hylling ja Essand orohagaid gaskka. Go
-                    <em type="bold">6.2. tabeallas</em>meroštallá boazoeatnatvuođa ja buvtta\xADdeami juohke areálovttadaga nammii, leat Femundda areálat juogáduvvon dán guovtti orohahkii.
+                Femunddas  lea  alimus  mearriduvvon  boazolohku 9 000  bohcco.
+                Boazolohku  lea  juhkkojuvvon  ovt­tamađe Riast/Hylling ja Essand
+                orohagaid gaskka. Go
+                    <em type="bold">6.2. tabeallas</em>meroštallá
+                    boazoeatnatvuođa ja buvtta\xADdeami juohke areálovttadaga
+                    nammii, leat Femundda areálat juogáduvvon dán guovtti
+                    orohahkii.
                 </p>
                 <p>
-                    <em type="italic">6.2. tabealla. Lulli-Trøndelága/Hedmark boazodoalloguovllu eatnamiid geavaheapmi.</em>
+                    <em type="italic">6.2. tabealla. Lulli-Trøndelága/Hedmark
+                    boazodoalloguovllu eatnamiid geavaheapmi.</em>
                 </p>
                 <p>AreálaBoazolohkuBuvttadeapmi km01.04.98juohke kmkg/kmkg/boazu</p>
-                <p>Elgå3,032,4 Femund (dálvejagi guohtun)(8887) Riast/Hylling (bievlajahki)1,722,612,3 Essand (bievlajahki)1,617,310,5 Trollheimen0,77,910,7</p>
+                <p>Elgå3,032,4 Femund (dálvejagi guohtun)(8887) Riast/Hylling
+                (bievlajahki)1,722,612,3 Essand (bievlajahki)1,617,310,5
+                Trollheimen0,77,910,7</p>
                 <p>1,618,211,2</p>
                 <p>
-                Lea mihá eambo boazoeatnatvuohta go Davvi-Trøn­delágas, Nordlánddas ja Romssas. Duogážin lea dál­vejagi  guohtumiid  vejolašvuohta,  ja  áigodaga  iešgu­đetlágan  guođohanvejolašvuohta.  Earret  Elgå,  leat Lulli-Trøndelága/Hedmark  orohagaid  boazoeatnat­vuohta  vuollelis  go  Kárášjogas  (2,4  bohcco/km)  ja Oarje-Finnmárkkus  (3,1  bohcco/km).  Riast/Hylling orohagas lea eambbo buvttadeapmi bohcco ektui go dáin earáin, muhto buot orohagaid dássi lea vuollelis go ovdal. Elgå:s lea mearkkašahtti alla boazolohku ja buvttadeapmi  juohke  areálovttadaga  nammii.  Eará orohagain Norggas ii dáidde leat ná stuora areálbuvt­tadeapmi. Maŋemus  golmma  jagi  njuovvandeattuid  oaidnit
-                    <em type="bold">6.2. tabeallas.</em>Das oaidnit orohagaid siskkáldas ero\xADhusaid jagis jahkái. Dás boahtá ovdan ahte dássi lea veahá vuollelis go Nordlánddas ja Davvi-Trøndelágas ja arvat vuollelis Romssa. Orohagaid siskkáldas ero­husat jagis jahkái leat luonddudilálašvuođaid erohu­said  geažil,  muhto  erohusat  sáhttet  maiddái  váikku­huvvot das makkár bohccuid leat njuovvan ja makkár ealihanbohccot leat.
+                Lea mihá eambo boazoeatnatvuohta go Davvi-Trøn­delágas,
+                Nordlánddas ja Romssas. Duogážin lea dál­vejagi  guohtumiid
+                vejolašvuohta,  ja  áigodaga  iešgu­đetlágan
+                guođohanvejolašvuohta.  Earret  Elgå,
+                leat Lulli-Trøndelága/Hedmark  orohagaid  boazoeatnat­vuohta
+                vuollelis  go  Kárášjogas  (2,4  bohcco/km)  ja
+                Oarje-Finnmárkkus  (3,1  bohcco/km).  Riast/Hylling orohagas lea
+                eambbo buvttadeapmi bohcco ektui go dáin earáin, muhto buot
+                orohagaid dássi lea vuollelis go ovdal. Elgå:s lea mearkkašahtti
+                alla boazolohku ja buvttadeapmi  juohke  areálovttadaga  nammii.
+                Eará orohagain Norggas ii dáidde leat ná stuora
+                areálbuvt­tadeapmi. Maŋemus  golmma  jagi  njuovvandeattuid
+                oaidnit
+                    <em type="bold">6.2. tabeallas.</em>Das oaidnit orohagaid
+                    siskkáldas ero\xADhusaid jagis jahkái. Dás boahtá ovdan ahte
+                    dássi lea veahá vuollelis go Nordlánddas ja
+                    Davvi-Trøndelágas ja arvat vuollelis Romssa. Orohagaid
+                    siskkáldas ero­husat jagis jahkái leat luonddudilálašvuođaid
+                    erohu­said  geažil,  muhto  erohusat  sáhttet  maiddái
+                    váikku­huvvot das makkár bohccuid leat njuovvan ja makkár
+                    ealihanbohccot leat.
                 </p>
             </body>
         ''')
@@ -3754,11 +3835,91 @@ class TestProblematicPageTwoColumnsHeaderLast(XMLTester):
                 <p>
                 <em type="bold">1.1 Bohcco dárbbut</em>
                 </p>
-                <p>Miehtá  Davvikálohta  leat  asehis  guohtoneatnamat bohccuide. Boazu lea luonddudilálašvuođaid hálddus birra jagi. Guohtunšattut leat iešguđetláganat jagi ieš­guđetge áiggis, ja guohtundilli váikkuhage dasto man ollu boazu guohtu ja movt johtala. Dákko dáfus lea boazu  sierralágan  dilis,  Skandinávia  eará  dábmojuv­von  elliid  suktii.  Go  mii  árvvoštállat  guohtumiid, bidjat  bohcco  fysiologalaš  dárbbuid  vuođđun  ja makkár guohtuma boazu dárbbaša.</p>
+                <p>Miehtá  Davvikálohta  leat  asehis  guohtoneatnamat
+                bohccuide. Boazu lea luonddudilálašvuođaid hálddus birra jagi.
+                Guohtunšattut leat iešguđetláganat jagi ieš­guđetge áiggis, ja
+                guohtundilli váikkuhage dasto man ollu boazu guohtu ja movt
+                johtala. Dákko dáfus lea boazu  sierralágan  dilis,  Skandinávia
+                eará  dábmojuv­von  elliid  suktii.  Go  mii  árvvoštállat
+                guohtumiid, bidjat  bohcco  fysiologalaš  dárbbuid  vuođđun  ja
+                makkár guohtuma boazu dárbbaša.</p>
                 <p>
                 <em type="italic">1.1.1 Fysiologalaš dárbbut</em>
                 </p>
-                <p>Boazu maiddái, nu movt earáge eallit, dárbbaša kar­bohydráhtaid ja buoiddi, maid joraha álšan ja doalaha goruda doaimmaid, oažžu lieggasa ja sáhttá lihkadit. Proteiinnat,  vitamiinnat  ja  minerálat  adnojit  hukset dehkiid  ja  eará  gorutgođđosiid,  ja  mielkki  buvtta­deapmái. Boazu lea, nu movt eará smirezasti eallit nai, ere­noamážit heivehuvvon smoldet guohtunšattuid. Alm­matge smoaldanit duššefal okta oasáš das maid boazu guohtu. Dakkár guohtunšattut mat smoaldanit geahp­pasit,  leat  buorit  guohtun.  Ruonasšattut  smoaldanit álkimusat dalle go leat beallešattus ja smoaldaneapmi hedjona  dađi  mielde  go  šattuid  šaddandássi  ovdána. Go biebmu smoaldahuvvá unnán, ii oaččo boazu nu ollu energiija dehe álšša. Maiddái biebmojohtin čoliid čađa mánná njozebut. Boazu lea mihá buorebut, go eará smirezasti eallit, heivehuvvon  smoldet  jeahkála.  Jeahkála  smoalda­neapmi  lea  buorre  birra  jagi.  Dainna  lágiin  nagoda boazu  doalahit  buorren  obbalaš  biebmosmoldema, vaikko vel eará guohtun leage vánis ja maiddái kvali­tehta lea rievddalmas. Dađistaga go čavččabeallái hed­jona  ruonasšattuid  smoaldaneapmi,  guohtugoahtá boazu  eambbo  jeahkála,  iige  guođo  nu  ollu  ruonas­šattuid,  ja  nu  nagoda  almmatge  doalahit  dássedis biebmosmoldema. Jeagil smoaldana geahppasit, muhto lea ovttagear­dánis fuođđar. Jeagelšlájain oažžu boazu nu ollu álšša (karbohydráhtaid)  ahte  ceavzá  badjel  dálvvi,  muhto váilot  proteiinnat,  vitamiinnat  ja  minerálat.  Bohcco guomočoavjebaktearat  dárbbašit  dađistaga  ee.  pro­teiinnat,  ja  danne  váikkuha  smolden  čoavjjis  ahte boazu, mii lea jeagelguohtumis, deahkkehuvvá dálvet. Boazu deahkkehuvvagoahtá dakkaviđe go boahtá jea­gelguohtumii. Muhto bohccos lea sierralágan vuohki mainna easttada vai ii deahkkehuva, go boazu sáhttá “nuppádassii  geavahit” nitrogena,  maid  eará  smire­zasti eallit eai sáhte. Vaikko  boazu  deahkkehuvváge,  sáhttá  dat  liikká lossut  dálvet,  jus  fal  lea  buorre  jeagelguohtun,  mas boazu oažžu eambbo energiija go dat man loaktá. Dát energiija jorrá buoidin gorudii ja čoggo dohko nu ahte boazu ii geahpo. Boazu guoira gal dábálaččat dálvvis. Rávis njiŋŋe­las  geahppu  giđđii  15  %  čakčadeattu  ektui,  vaikko leage čoavjjehin ja miessi deaddá 4-5 kg šattadettiin. Sarvát  sáhttet  geahpput  30  %  čakčamánus  juovla­mánnui. Dálvvi mielde gehppot bohccot dađistaga ja erenoamáš heajos guohtumis sáhttet geahpput gitta 50 % rádjái. Jus guohtun hedjona nu sakka ahte čoavje­liepma goiká, dehe nuppeládje dadjat ahte mikroorga­nismmat  nohket,  nealgugoahtá  boazu.  Lassin  dasa ahte boazu dárbbaša eallámuša (proteiinnaid ja mine­rálaid),  gollada  boazu  deahkkemássa  ja  joraha  dán energiijan. Guhkálmas nealgumiin ii nagat šat boazu doalahit dábálaš gorutdoaimmaid ja jápmá. Miesit  ja  boarrasit  varrásat  nelgot  bahábut  go njiŋŋelasat ja čearpmahat. Sarvát rávžet ragatáiggi, ja nuolppot  manahit  maiddái  bohccuidgaskasaš  árvo­dási.  Nuolppot  eai  bálle  guohtut  ráfis,  dannego njiŋŋelasat doroldahttet nulpobohccuid eret suvnnjiin. Gehppes  miesit  sáhttet  nealgut.  Smávva  áldduin  leat dávjá  gehppes  miesit,  mii  fas  dagaha  stuorit  miesse­jámu. Heajos dálveguohtun dagaha fas áldduid mielk­keheabbon  go  dábálaš  dan  vuosttaš  geasi,  ja  dat  fas váikkuha ahte miesit leat geahppaseappot čakčat. Boa­zomassimat, mat bohciidit fysiologalaš beliid sivas, eai leat  nu  oidnosis  dannego  boraspirevahágat  lassánit dađistaga. Bohccuid  sáhttá  biebmat  fuođđariiguin  dálvet heajos guohtumiid áigge, ja dustet váttisvuođa dáinna­lágiin.  Guomočoavjji  mikrobat  dahket  almmatge duššin dáid iešguđetlágan fuođđaršlájaid. Danne dárb­bašit bohccot dagalduvvat fuođđariidda hui árrat, dan bále go mikroorganismmat leat olleslogus čoavjjis ja nákcejit smoldegoahtit ođđa fuođđariid. Eanas boazo­eaiggádat eai almmatge biebmagoađe bohccuid áiggil, muhto vurdet eaigo guohtumat buorrán. Doloža rájes lei  vierrun  diktit  ealu  lávdat  jus  heajos  guohtumat biste guhkit áiggi. Dalle boazu ieš ohcá guohtuma mii gávdnoš. Dálvet  guohtu  eallu  eanas  áigge,  lea  lodji,  iige manat álššaid duššái. Lihkadeapmái adnojit álššat, ja joavdelas  lihkahallan  dehe  lihkadeapmi  manaha álššaid.  Lihkahallan  sáhttá  ovdamearkka  dihte  leat čohkkemat,  boraspiret  ja  mátkkošteaddjit  muose­huhttet ealu, dehe eallu ruvgala jna. Lassin dasa gask­kalduvvá  guohtumiin.  Álšamanaheami  ii  sáhte  šat buhttet maŋŋil eambbo guohtumiin. Danne geahppu boazu,  ja  jus  hui  hejot  manná,  sáhttet  váibbahat jápmit go oalát nohkkojit duksejuvvon buoiddis.</p>
+                <p>Boazu maiddái, nu movt earáge eallit, dárbbaša
+                kar­bohydráhtaid ja buoiddi, maid joraha álšan ja doalaha goruda
+                doaimmaid, oažžu lieggasa ja sáhttá lihkadit. Proteiinnat,
+                vitamiinnat  ja  minerálat  adnojit  hukset dehkiid  ja  eará
+                gorutgođđosiid,  ja  mielkki  buvtta­deapmái. Boazu lea, nu movt
+                eará smirezasti eallit nai, ere­noamážit heivehuvvon smoldet
+                guohtunšattuid. Alm­matge smoaldanit duššefal okta oasáš das maid
+                boazu guohtu. Dakkár guohtunšattut mat smoaldanit geahp­pasit,
+                leat  buorit  guohtun.  Ruonasšattut  smoaldanit álkimusat dalle
+                go leat beallešattus ja smoaldaneapmi hedjona  dađi  mielde  go
+                šattuid  šaddandássi  ovdána. Go biebmu smoaldahuvvá unnán, ii
+                oaččo boazu nu ollu energiija dehe álšša. Maiddái biebmojohtin
+                čoliid čađa mánná njozebut. Boazu lea mihá buorebut, go eará
+                smirezasti eallit, heivehuvvon  smoldet  jeahkála.  Jeahkála
+                smoalda­neapmi  lea  buorre  birra  jagi.  Dainna  lágiin  nagoda
+                boazu  doalahit  buorren  obbalaš  biebmosmoldema, vaikko vel
+                eará guohtun leage vánis ja maiddái kvali­tehta lea rievddalmas.
+                Dađistaga go čavččabeallái hed­jona  ruonasšattuid
+                smoaldaneapmi,  guohtugoahtá boazu  eambbo  jeahkála,  iige
+                guođo  nu  ollu  ruonas­šattuid,  ja  nu  nagoda  almmatge
+                doalahit  dássedis biebmosmoldema. Jeagil smoaldana geahppasit,
+                muhto lea ovttagear­dánis fuođđar. Jeagelšlájain oažžu boazu nu
+                ollu álšša (karbohydráhtaid)  ahte  ceavzá  badjel  dálvvi,
+                muhto váilot  proteiinnat,  vitamiinnat  ja  minerálat.  Bohcco
+                guomočoavjebaktearat  dárbbašit  dađistaga  ee.  pro­teiinnat,
+                ja  danne  váikkuha  smolden  čoavjjis  ahte boazu, mii lea
+                jeagelguohtumis, deahkkehuvvá dálvet. Boazu deahkkehuvvagoahtá
+                dakkaviđe go boahtá jea­gelguohtumii. Muhto bohccos lea
+                sierralágan vuohki mainna easttada vai ii deahkkehuva, go boazu
+                sáhttá “nuppádassii  geavahit” nitrogena,  maid  eará
+                smire­zasti eallit eai sáhte. Vaikko  boazu  deahkkehuvváge,
+                sáhttá  dat  liikká lossut  dálvet,  jus  fal  lea  buorre
+                jeagelguohtun,  mas boazu oažžu eambbo energiija go dat man
+                loaktá. Dát energiija jorrá buoidin gorudii ja čoggo dohko nu
+                ahte boazu ii geahpo. Boazu guoira gal dábálaččat dálvvis. Rávis
+                njiŋŋe­las  geahppu  giđđii  15  %  čakčadeattu  ektui,  vaikko
+                leage čoavjjehin ja miessi deaddá 4-5 kg šattadettiin. Sarvát
+                sáhttet  geahpput  30  %  čakčamánus  juovla­mánnui. Dálvvi
+                mielde gehppot bohccot dađistaga ja erenoamáš heajos guohtumis
+                sáhttet geahpput gitta 50 % rádjái. Jus guohtun hedjona nu sakka ahte čoavje­liepma goiká, dehe nuppeládje dadjat ahte
+                mikroorga­nismmat  nohket,  nealgugoahtá  boazu.  Lassin  dasa
+                ahte boazu dárbbaša eallámuša (proteiinnaid ja mine­rálaid),
+                gollada  boazu  deahkkemássa  ja  joraha  dán energiijan.
+                Guhkálmas nealgumiin ii nagat šat boazu doalahit dábálaš
+                gorutdoaimmaid ja jápmá. Miesit  ja  boarrasit  varrásat  nelgot
+                bahábut  go njiŋŋelasat ja čearpmahat. Sarvát rávžet ragatáiggi,
+                ja nuolppot  manahit  maiddái  bohccuidgaskasaš  árvo­dási.
+                Nuolppot  eai  bálle  guohtut  ráfis,  dannego njiŋŋelasat
+                doroldahttet nulpobohccuid eret suvnnjiin. Gehppes  miesit
+                sáhttet  nealgut.  Smávva  áldduin  leat dávjá  gehppes  miesit,
+                mii  fas  dagaha  stuorit  miesse­jámu. Heajos dálveguohtun
+                dagaha fas áldduid mielk­keheabbon  go  dábálaš  dan  vuosttaš
+                geasi,  ja  dat  fas váikkuha ahte miesit leat geahppaseappot
+                čakčat. Boa­zomassimat, mat bohciidit fysiologalaš beliid sivas,
+                eai leat  nu  oidnosis  dannego  boraspirevahágat  lassánit
+                dađistaga. Bohccuid  sáhttá  biebmat  fuođđariiguin  dálvet
+                heajos guohtumiid áigge, ja dustet váttisvuođa dáinna­lágiin.
+                Guomočoavjji  mikrobat  dahket  almmatge duššin dáid
+                iešguđetlágan fuođđaršlájaid. Danne dárb­bašit bohccot
+                dagalduvvat fuođđariidda hui árrat, dan bále go mikroorganismmat
+                leat olleslogus čoavjjis ja nákcejit smoldegoahtit ođđa
+                fuođđariid. Eanas boazo­eaiggádat eai almmatge biebmagoađe
+                bohccuid áiggil, muhto vurdet eaigo guohtumat buorrán. Doloža
+                rájes lei  vierrun  diktit  ealu  lávdat  jus  heajos  guohtumat
+                biste guhkit áiggi. Dalle boazu ieš ohcá guohtuma mii gávdnoš.
+                Dálvet  guohtu  eallu  eanas  áigge,  lea  lodji,  iige manat
+                álššaid duššái. Lihkadeapmái adnojit álššat, ja joavdelas
+                lihkahallan  dehe  lihkadeapmi  manaha álššaid.  Lihkahallan
+                sáhttá  ovdamearkka  dihte  leat čohkkemat,  boraspiret  ja
+                mátkkošteaddjit  muose­huhttet ealu, dehe eallu ruvgala jna.
+                Lassin dasa gask­kalduvvá  guohtumiin.  Álšamanaheami  ii  sáhte
+                šat buhttet maŋŋil eambbo guohtumiin. Danne geahppu boazu,  ja
+                jus  hui  hejot  manná,  sáhttet  váibbahat jápmit go oalát
+                nohkkojit duksejuvvon buoiddis.</p>
                 <p>
                 <em type="bold">1. Boazoguohtumat Skandinavias</em>
                 </p>
@@ -3788,11 +3949,92 @@ class TestProblematicPageTwoColumnsHeaderLast(XMLTester):
                 <p>
                     <em type="bold">1.1 Bohcco dárbbut</em>
                 </p>
-                <p>Miehtá  Davvikálohta  leat  asehis  guohtoneatnamat bohccuide. Boazu lea luonddudilálašvuođaid hálddus birra jagi. Guohtunšattut leat iešguđetláganat jagi ieš­guđetge áiggis, ja guohtundilli váikkuhage dasto man ollu boazu guohtu ja movt johtala. Dákko dáfus lea boazu  sierralágan  dilis,  Skandinávia  eará  dábmojuv­von  elliid  suktii.  Go  mii  árvvoštállat  guohtumiid, bidjat  bohcco  fysiologalaš  dárbbuid  vuođđun  ja makkár guohtuma boazu dárbbaša.</p>
+                <p>Miehtá  Davvikálohta  leat  asehis  guohtoneatnamat
+                bohccuide. Boazu lea luonddudilálašvuođaid hálddus birra jagi.
+                Guohtunšattut leat iešguđetláganat jagi ieš­guđetge áiggis, ja
+                guohtundilli váikkuhage dasto man ollu boazu guohtu ja movt
+                johtala. Dákko dáfus lea boazu  sierralágan  dilis,  Skandinávia
+                eará  dábmojuv­von  elliid  suktii.  Go  mii  árvvoštállat
+                guohtumiid, bidjat  bohcco  fysiologalaš  dárbbuid  vuođđun  ja
+                makkár guohtuma boazu dárbbaša.</p>
                 <p>
                     <em type="italic">1.1.1 Fysiologalaš dárbbut</em>
                 </p>
-                <p>Boazu maiddái, nu movt earáge eallit, dárbbaša kar­bohydráhtaid ja buoiddi, maid joraha álšan ja doalaha goruda doaimmaid, oažžu lieggasa ja sáhttá lihkadit. Proteiinnat,  vitamiinnat  ja  minerálat  adnojit  hukset dehkiid  ja  eará  gorutgođđosiid,  ja  mielkki  buvtta­deapmái. Boazu lea, nu movt eará smirezasti eallit nai, ere­noamážit heivehuvvon smoldet guohtunšattuid. Alm­matge smoaldanit duššefal okta oasáš das maid boazu guohtu. Dakkár guohtunšattut mat smoaldanit geahp­pasit,  leat  buorit  guohtun.  Ruonasšattut  smoaldanit álkimusat dalle go leat beallešattus ja smoaldaneapmi hedjona  dađi  mielde  go  šattuid  šaddandássi  ovdána. Go biebmu smoaldahuvvá unnán, ii oaččo boazu nu ollu energiija dehe álšša. Maiddái biebmojohtin čoliid čađa mánná njozebut. Boazu lea mihá buorebut, go eará smirezasti eallit, heivehuvvon  smoldet  jeahkála.  Jeahkála  smoalda­neapmi  lea  buorre  birra  jagi.  Dainna  lágiin  nagoda boazu  doalahit  buorren  obbalaš  biebmosmoldema, vaikko vel eará guohtun leage vánis ja maiddái kvali­tehta lea rievddalmas. Dađistaga go čavččabeallái hed­jona  ruonasšattuid  smoaldaneapmi,  guohtugoahtá boazu  eambbo  jeahkála,  iige  guođo  nu  ollu  ruonas­šattuid,  ja  nu  nagoda  almmatge  doalahit  dássedis biebmosmoldema. Jeagil smoaldana geahppasit, muhto lea ovttagear­dánis fuođđar. Jeagelšlájain oažžu boazu nu ollu álšša (karbohydráhtaid)  ahte  ceavzá  badjel  dálvvi,  muhto váilot  proteiinnat,  vitamiinnat  ja  minerálat.  Bohcco guomočoavjebaktearat  dárbbašit  dađistaga  ee.  pro­teiinnat,  ja  danne  váikkuha  smolden  čoavjjis  ahte boazu, mii lea jeagelguohtumis, deahkkehuvvá dálvet. Boazu deahkkehuvvagoahtá dakkaviđe go boahtá jea­gelguohtumii. Muhto bohccos lea sierralágan vuohki mainna easttada vai ii deahkkehuva, go boazu sáhttá “nuppádassii  geavahit” nitrogena,  maid  eará  smire­zasti eallit eai sáhte. Vaikko  boazu  deahkkehuvváge,  sáhttá  dat  liikká lossut  dálvet,  jus  fal  lea  buorre  jeagelguohtun,  mas boazu oažžu eambbo energiija go dat man loaktá. Dát energiija jorrá buoidin gorudii ja čoggo dohko nu ahte boazu ii geahpo. Boazu guoira gal dábálaččat dálvvis. Rávis njiŋŋe­las  geahppu  giđđii  15  %  čakčadeattu  ektui,  vaikko leage čoavjjehin ja miessi deaddá 4-5 kg šattadettiin. Sarvát  sáhttet  geahpput  30  %  čakčamánus  juovla­mánnui. Dálvvi mielde gehppot bohccot dađistaga ja erenoamáš heajos guohtumis sáhttet geahpput gitta 50 % rádjái. Jus guohtun hedjona nu sakka ahte čoavje­liepma goiká, dehe nuppeládje dadjat ahte mikroorga­nismmat  nohket,  nealgugoahtá  boazu.  Lassin  dasa ahte boazu dárbbaša eallámuša (proteiinnaid ja mine­rálaid),  gollada  boazu  deahkkemássa  ja  joraha  dán energiijan. Guhkálmas nealgumiin ii nagat šat boazu doalahit dábálaš gorutdoaimmaid ja jápmá. Miesit  ja  boarrasit  varrásat  nelgot  bahábut  go njiŋŋelasat ja čearpmahat. Sarvát rávžet ragatáiggi, ja nuolppot  manahit  maiddái  bohccuidgaskasaš  árvo­dási.  Nuolppot  eai  bálle  guohtut  ráfis,  dannego njiŋŋelasat doroldahttet nulpobohccuid eret suvnnjiin. Gehppes  miesit  sáhttet  nealgut.  Smávva  áldduin  leat dávjá  gehppes  miesit,  mii  fas  dagaha  stuorit  miesse­jámu. Heajos dálveguohtun dagaha fas áldduid mielk­keheabbon  go  dábálaš  dan  vuosttaš  geasi,  ja  dat  fas váikkuha ahte miesit leat geahppaseappot čakčat. Boa­zomassimat, mat bohciidit fysiologalaš beliid sivas, eai leat  nu  oidnosis  dannego  boraspirevahágat  lassánit dađistaga. Bohccuid  sáhttá  biebmat  fuođđariiguin  dálvet heajos guohtumiid áigge, ja dustet váttisvuođa dáinna­lágiin.  Guomočoavjji  mikrobat  dahket  almmatge duššin dáid iešguđetlágan fuođđaršlájaid. Danne dárb­bašit bohccot dagalduvvat fuođđariidda hui árrat, dan bále go mikroorganismmat leat olleslogus čoavjjis ja nákcejit smoldegoahtit ođđa fuođđariid. Eanas boazo­eaiggádat eai almmatge biebmagoađe bohccuid áiggil, muhto vurdet eaigo guohtumat buorrán. Doloža rájes lei  vierrun  diktit  ealu  lávdat  jus  heajos  guohtumat biste guhkit áiggi. Dalle boazu ieš ohcá guohtuma mii gávdnoš. Dálvet  guohtu  eallu  eanas  áigge,  lea  lodji,  iige manat álššaid duššái. Lihkadeapmái adnojit álššat, ja joavdelas  lihkahallan  dehe  lihkadeapmi  manaha álššaid.  Lihkahallan  sáhttá  ovdamearkka  dihte  leat čohkkemat,  boraspiret  ja  mátkkošteaddjit  muose­huhttet ealu, dehe eallu ruvgala jna. Lassin dasa gask­kalduvvá  guohtumiin.  Álšamanaheami  ii  sáhte  šat buhttet maŋŋil eambbo guohtumiin. Danne geahppu boazu,  ja  jus  hui  hejot  manná,  sáhttet  váibbahat jápmit go oalát nohkkojit duksejuvvon buoiddis.</p>
+                <p>Boazu maiddái, nu movt earáge eallit, dárbbaša
+                kar­bohydráhtaid ja buoiddi, maid joraha álšan ja doalaha goruda
+                doaimmaid, oažžu lieggasa ja sáhttá lihkadit. Proteiinnat,
+                vitamiinnat  ja  minerálat  adnojit  hukset dehkiid  ja  eará
+                gorutgođđosiid,  ja  mielkki  buvtta­deapmái. Boazu lea, nu movt
+                eará smirezasti eallit nai, ere­noamážit heivehuvvon smoldet
+                guohtunšattuid. Alm­matge smoaldanit duššefal okta oasáš das maid
+                boazu guohtu. Dakkár guohtunšattut mat smoaldanit geahp­pasit,
+                leat  buorit  guohtun.  Ruonasšattut  smoaldanit álkimusat dalle
+                go leat beallešattus ja smoaldaneapmi hedjona  dađi  mielde  go
+                šattuid  šaddandássi  ovdána. Go biebmu smoaldahuvvá unnán, ii
+                oaččo boazu nu ollu energiija dehe álšša. Maiddái biebmojohtin
+                čoliid čađa mánná njozebut. Boazu lea mihá buorebut, go eará
+                smirezasti eallit, heivehuvvon  smoldet  jeahkála.  Jeahkála
+                smoalda­neapmi  lea  buorre  birra  jagi.  Dainna  lágiin  nagoda
+                boazu  doalahit  buorren  obbalaš  biebmosmoldema, vaikko vel
+                eará guohtun leage vánis ja maiddái kvali­tehta lea rievddalmas.
+                Dađistaga go čavččabeallái hed­jona  ruonasšattuid
+                smoaldaneapmi,  guohtugoahtá boazu  eambbo  jeahkála,  iige
+                guođo  nu  ollu  ruonas­šattuid,  ja  nu  nagoda  almmatge
+                doalahit  dássedis biebmosmoldema. Jeagil smoaldana geahppasit,
+                muhto lea ovttagear­dánis fuođđar. Jeagelšlájain oažžu boazu nu
+                ollu álšša (karbohydráhtaid)  ahte  ceavzá  badjel  dálvvi,
+                muhto váilot  proteiinnat,  vitamiinnat  ja  minerálat.  Bohcco
+                guomočoavjebaktearat  dárbbašit  dađistaga  ee.  pro­teiinnat,
+                ja  danne  váikkuha  smolden  čoavjjis  ahte boazu, mii lea
+                jeagelguohtumis, deahkkehuvvá dálvet. Boazu deahkkehuvvagoahtá
+                dakkaviđe go boahtá jea­gelguohtumii. Muhto bohccos lea
+                sierralágan vuohki mainna easttada vai ii deahkkehuva, go boazu
+                sáhttá “nuppádassii  geavahit” nitrogena,  maid  eará
+                smire­zasti eallit eai sáhte. Vaikko  boazu  deahkkehuvváge,
+                sáhttá  dat  liikká lossut  dálvet,  jus  fal  lea  buorre
+                jeagelguohtun,  mas boazu oažžu eambbo energiija go dat man
+                loaktá. Dát energiija jorrá buoidin gorudii ja čoggo dohko nu
+                ahte boazu ii geahpo. Boazu guoira gal dábálaččat dálvvis. Rávis
+                njiŋŋe­las  geahppu  giđđii  15  %  čakčadeattu  ektui,  vaikko
+                leage čoavjjehin ja miessi deaddá 4-5 kg šattadettiin. Sarvát
+                sáhttet  geahpput  30  %  čakčamánus  juovla­mánnui. Dálvvi
+                mielde gehppot bohccot dađistaga ja erenoamáš heajos guohtumis
+                sáhttet geahpput gitta 50 % rádjái. Jus guohtun hedjona nu sakka
+                ahte čoavje­liepma goiká, dehe nuppeládje dadjat ahte
+                mikroorga­nismmat  nohket,  nealgugoahtá  boazu.  Lassin  dasa
+                ahte boazu dárbbaša eallámuša (proteiinnaid ja mine­rálaid),
+                gollada  boazu  deahkkemássa  ja  joraha  dán energiijan.
+                Guhkálmas nealgumiin ii nagat šat boazu doalahit dábálaš
+                gorutdoaimmaid ja jápmá. Miesit  ja  boarrasit  varrásat  nelgot
+                bahábut  go njiŋŋelasat ja čearpmahat. Sarvát rávžet ragatáiggi,
+                ja nuolppot  manahit  maiddái  bohccuidgaskasaš  árvo­dási.
+                Nuolppot  eai  bálle  guohtut  ráfis,  dannego njiŋŋelasat
+                doroldahttet nulpobohccuid eret suvnnjiin. Gehppes  miesit
+                sáhttet  nealgut.  Smávva  áldduin  leat dávjá  gehppes  miesit,
+                mii  fas  dagaha  stuorit  miesse­jámu. Heajos dálveguohtun
+                dagaha fas áldduid mielk­keheabbon  go  dábálaš  dan  vuosttaš
+                geasi,  ja  dat  fas váikkuha ahte miesit leat geahppaseappot
+                čakčat. Boa­zomassimat, mat bohciidit fysiologalaš beliid sivas,
+                eai leat  nu  oidnosis  dannego  boraspirevahágat  lassánit
+                dađistaga. Bohccuid  sáhttá  biebmat  fuođđariiguin  dálvet
+                heajos guohtumiid áigge, ja dustet váttisvuođa dáinna­lágiin.
+                Guomočoavjji  mikrobat  dahket  almmatge duššin dáid
+                iešguđetlágan fuođđaršlájaid. Danne dárb­bašit bohccot
+                dagalduvvat fuođđariidda hui árrat, dan bále go mikroorganismmat
+                leat olleslogus čoavjjis ja nákcejit smoldegoahtit ođđa
+                fuođđariid. Eanas boazo­eaiggádat eai almmatge biebmagoađe
+                bohccuid áiggil, muhto vurdet eaigo guohtumat buorrán. Doloža
+                rájes lei  vierrun  diktit  ealu  lávdat  jus  heajos  guohtumat
+                biste guhkit áiggi. Dalle boazu ieš ohcá guohtuma mii gávdnoš.
+                Dálvet  guohtu  eallu  eanas  áigge,  lea  lodji,  iige manat
+                álššaid duššái. Lihkadeapmái adnojit álššat, ja joavdelas
+                lihkahallan  dehe  lihkadeapmi  manaha álššaid.  Lihkahallan
+                sáhttá  ovdamearkka  dihte  leat čohkkemat,  boraspiret  ja
+                mátkkošteaddjit  muose­huhttet ealu, dehe eallu ruvgala jna.
+                Lassin dasa gask­kalduvvá  guohtumiin.  Álšamanaheami  ii  sáhte
+                šat buhttet maŋŋil eambbo guohtumiin. Danne geahppu boazu,  ja
+                jus  hui  hejot  manná,  sáhttet  váibbahat jápmit go oalát
+                nohkkojit duksejuvvon buoiddis.</p>
             </body>
         ''')
 
@@ -3807,6 +4049,7 @@ class TestProblematicPageTwoColumnsHeaderLast(XMLTester):
         extractor.extract_text_from_page(pp.make_ordered_sections().paragraphs)
         self.assertXmlEqual(etree.tostring(extractor.body, pretty_print=True),
                             etree.tostring(expected_page, pretty_print=True))
+
 
 class TestProblematicPageThreeColumns(XMLTester):
     '''This page has three columns, a couple of headings above them and a table
@@ -4258,30 +4501,75 @@ class TestProblematicPageThreeColumns(XMLTester):
     def test_make_unordered_paragraphs(self):
         expected_page = etree.fromstring(u'''
             <body>
-                <p><em type="bold">Dán giđa kártengeahččalemiid birra</em>2015 giđa galget skuvllat čađahit geatnegahtton kártengeahččalemiid 1., 2. ja 3. ceahkis. Oahpahusdirektoráhtta fállá maid eaktodáhtolaš kártengeahččalemiid 1., 3. ja 4. ceahkis. 2015 giđa fállojuvvo vel lassin ođđa eaktodáhtolaš kárten- geahččaleamit eŋgelasgielas 3. ceahkkái.</p>
-                <p><em type="bold">Geatnegahtton kártengeahččaleamit</em>Leat geatnegahtton kártengeahččaleamit:</p>
+                <p><em type="bold">Dán giđa kártengeahččalemiid birra</em>2015
+                giđa galget skuvllat čađahit geatnegahtton kártengeahččalemiid
+                1., 2. ja 3. ceahkis. Oahpahusdirektoráhtta fállá maid
+                eaktodáhtolaš kártengeahččalemiid 1., 3. ja 4. ceahkis. 2015
+                giđa fállojuvvo vel lassin ođđa eaktodáhtolaš kárten-
+                geahččaleamit eŋgelasgielas 3. ceahkkái.</p>
+                <p><em type="bold">Geatnegahtton kártengeahččaleamit</em>Leat
+                geatnegahtton kártengeahččaleamit:</p>
                 <p type="listitem">• Lohkamis 1., 2. ja 3. ceahkis</p>
                 <p type="listitem">• Rehkenastimis 2. ceahkis</p>
-                <p>Buot oahppit galget váldit daid geatnegahtton kártengeahččalemiid. Oahppit geat leat eret geahččalan- beaivvi, galget čađahit geahččaleami maŋŋil.</p>
-                <p>Kártengeahččalemiide leat sierra luvvennjuolggadusat. Vaikko oahppi deavddášii luvvema eavttuid, de sáhttá oahppi ieš dahje su váhnemat dattetge mearridit ahte oahppi galgá čađahit geahččaleami.</p>
-                <p><em type="bold">Eaktodáhtolaš kártengeahččaleamit</em>Geatnegahtton kártengeahččalemiide lassin fállá Oahpahusdirektoráhtta eaktodáhtolaš kártengeahččalemiid. Jus skuvla dahje skuvlaeaiggát mearrida čađahit eaktodáhtolaš kártengeahččalemiid, de fertejit buot oahppit dan ceahkis masa dát guoská váldit geahččaleami.</p>
+                <p>Buot oahppit galget váldit daid geatnegahtton
+                kártengeahččalemiid. Oahppit geat leat eret geahččalan- beaivvi,
+                galget čađahit geahččaleami maŋŋil.</p>
+                <p>Kártengeahččalemiide leat sierra luvvennjuolggadusat. Vaikko
+                oahppi deavddášii luvvema eavttuid, de sáhttá oahppi ieš dahje
+                su váhnemat dattetge mearridit ahte oahppi galgá čađahit
+                geahččaleami.</p>
+                <p><em type="bold">Eaktodáhtolaš kártengeahččaleamit
+                </em>Geatnegahtton kártengeahččalemiide lassin fállá
+                Oahpahusdirektoráhtta eaktodáhtolaš kártengeahččalemiid. Jus
+                skuvla dahje skuvlaeaiggát mearrida čađahit eaktodáhtolaš
+                kártengeahččalemiid, de fertejit buot oahppit dan ceahkis masa
+                dát guoská váldit geahččaleami.</p>
                 <p>Fállojuvvojit eaktodáhtolaš kártengeahččaleamit:</p>
                 <p type="listitem">• Rehkenastimis 1. ja 3. ceahkis</p>
                 <p type="listitem">• Eŋgelasgielas 3. ceahkis</p>
                 <p type="listitem">• Digitála gálggain 4. ceahkis</p>
-                <p><em type="bold">Dieđut geahččalemiid birra</em>Kártengeahččalemiid galget skuvla ja oahpaheaddjit geavahit gávnnahit geat dárbbašit lasi čuovvoleami álgooahpa- husas. Eanaš oahppit máhttet buot hárjehusaid, ja máŋgasiid mielas ges lea geahččaleapmi álki. Geahččaleamit eai muital olus ohppiid birra geain leat buorit gálggat.</p>
-                <p>Kártengeahččaleamit eai leat geahččaleamit fágas, muhto vuođđogálggain fágaid rastá. Oahppoplánain leat vuođđogálggat definerejuvvon ná:</p>
+                <p><em type="bold">Dieđut geahččalemiid birra
+                </em>Kártengeahččalemiid galget skuvla ja oahpaheaddjit geavahit
+                gávnnahit geat dárbbašit lasi čuovvoleami álgooahpa- husas.
+                Eanaš oahppit máhttet buot hárjehusaid, ja máŋgasiid mielas ges
+                lea geahččaleapmi álki. Geahččaleamit eai muital olus ohppiid
+                birra geain leat buorit gálggat.</p>
+                <p>Kártengeahččaleamit eai leat geahččaleamit fágas, muhto
+                vuođđogálggain fágaid rastá. Oahppoplánain leat vuođđogálggat
+                definerejuvvon ná:</p>
                 <p type="listitem">• njálmmálaš gálggat</p>
                 <p type="listitem">• máhttit lohkat</p>
                 <p type="listitem">• máhttit čállit</p>
                 <p type="listitem">• máhttit rehkenastit</p>
                 <p type="listitem">• digitála gálggat</p>
-                <p>Rehkenastinbihtáid ovdamearkkat sáhttet leat lohkat, sirret loguid sturro- dagaid mielde, loahpahit lohkogur- gadasaid ja rehkenastit plussain ja minusiin. Lohkamis sáhttá leat sáhka ovdamearkka dihtii bustávaid čállimis, sániid lohkamis ja cealkagiid lohkamis. Guovddážis digitála gálggaid geahčča- leami bihtáin lea háhkat ja meannudit, buvttadit ja divodit, gulahallat ja digitála árvvoštallannávccat. Guovddážis eŋgelasgiellageahččaleamis lea dovdat ja ipmirdit oahpes ja beaivválaš sániid ja dajaldagaid, njálmmálaččat dahje čálalaččat. Geahččaleamis leat guokte oasi, guldalanoassi ja lohkanoassi. Ohppiin ferte leat oaivetelefovdna guldalanoasis.
-                <em type="bold">Bohtosat ja čuovvoleapmi</em>Kártengeahččalemiid bohtosiid ii galgga rapporteret Oahpahusdirektoráhttii ii ge geavahit buohtastahttit skuvllaid, gielddaid dahje fylkkaid.</p>
-                <p>Bohtosiid galgá vuosttažettiin geavahit siskkáldasat skuvllas láhčin dihti oahpahusa nu, ahte oahppit, geat dárbbašit dan, ožžot lassi bagadallama ja doarjaga. Oahpaheddjiide leat ráhka- duvvon bagadallanmateriálat mat čilgehit mo geahččalemiid bohtosiid sáhttá čuovvolit.</p>
-                <p>Jus čađaheami bohtosat čájehit ahte oahppis lea dárbu lassi čuovvoleapmái, de galgá váhnemiidda dieđihit geahččalanbohtosiid birra ja muitalit makkár doaimmaid áigot álggahit. Váhnemat sáhttet váldit oktavuođa skuvllain jus ležžet gažaldagat.</p>
-                <p><em type="bold">Eanet dieđut</em>Eanet dieđut kártengeahččalemiid birra leat dáppe: http://www.udir.no/Vurdering/ Kartlegging-gs/</p>
-                <p>Máhttoloktema oahppoplánabuvttus lea dáppe: http://www.udir.no/Lareplaner/ Kunnskapsloftet/</p>
+                <p>Rehkenastinbihtáid ovdamearkkat sáhttet leat lohkat, sirret
+                loguid sturro- dagaid mielde, loahpahit lohkogur- gadasaid ja
+                rehkenastit plussain ja minusiin. Lohkamis sáhttá leat sáhka
+                ovdamearkka dihtii bustávaid čállimis, sániid lohkamis ja
+                cealkagiid lohkamis. Guovddážis digitála gálggaid geahčča- leami
+                bihtáin lea háhkat ja meannudit, buvttadit ja divodit,
+                gulahallat ja digitála árvvoštallannávccat. Guovddážis
+                eŋgelasgiellageahččaleamis lea dovdat ja ipmirdit oahpes ja
+                beaivválaš sániid ja dajaldagaid, njálmmálaččat dahje
+                čálalaččat. Geahččaleamis leat guokte oasi, guldalanoassi ja
+                lohkanoassi. Ohppiin ferte leat oaivetelefovdna guldalanoasis.
+                <em type="bold">Bohtosat ja čuovvoleapmi</em>Kártengeahččalemiid
+                bohtosiid ii galgga rapporteret Oahpahusdirektoráhttii ii ge
+                geavahit buohtastahttit skuvllaid, gielddaid dahje fylkkaid.</p>
+                <p>Bohtosiid galgá vuosttažettiin geavahit siskkáldasat skuvllas
+                láhčin dihti oahpahusa nu, ahte oahppit, geat dárbbašit dan,
+                ožžot lassi bagadallama ja doarjaga. Oahpaheddjiide leat ráhka-
+                duvvon bagadallanmateriálat mat čilgehit mo geahččalemiid
+                bohtosiid sáhttá čuovvolit.</p>
+                <p>Jus čađaheami bohtosat čájehit ahte oahppis lea dárbu lassi
+                čuovvoleapmái, de galgá váhnemiidda dieđihit geahččalanbohtosiid
+                birra ja muitalit makkár doaimmaid áigot álggahit. Váhnemat
+                sáhttet váldit oktavuođa skuvllain jus ležžet gažaldagat.</p>
+                <p><em type="bold">Eanet dieđut</em>Eanet dieđut
+                kártengeahččalemiid birra leat dáppe:
+                http://www.udir.no/Vurdering/ Kartlegging-gs/</p>
+                <p>Máhttoloktema oahppoplánabuvttus lea dáppe:
+                http://www.udir.no/Lareplaner/ Kunnskapsloftet/</p>
                 <p><em type="bold">Diehtu 2015 giđa kártengeahččalemiid birra</em></p>
                 <p><em type="bold">Váhnemiidda geain leat mánát 1.- 4. ceahkis</em></p>
                 <p><em type="bold">Davvisámegillii</em></p>
@@ -4317,30 +4605,76 @@ class TestProblematicPageThreeColumns(XMLTester):
                 <p><em type="bold">Davvisámegillii</em></p>
                 <p><em type="bold">Diehtu 2015 giđa kártengeahččalemiid birra</em></p>
                 <p><em type="bold">Váhnemiidda geain leat mánát 1.- 4. ceahkis</em></p>
-                <p><em type="bold">Dán giđa kártengeahččalemiid birra</em>2015 giđa galget skuvllat čađahit geatnegahtton kártengeahččalemiid 1., 2. ja 3. ceahkis. Oahpahusdirektoráhtta fállá maid eaktodáhtolaš kártengeahččalemiid 1., 3. ja 4. ceahkis. 2015 giđa fállojuvvo vel lassin ođđa eaktodáhtolaš kárten- geahččaleamit eŋgelasgielas 3. ceahkkái.</p>
-                <p><em type="bold">Geatnegahtton kártengeahččaleamit</em>Leat geatnegahtton kártengeahččaleamit:</p>
+                <p><em type="bold">Dán giđa kártengeahččalemiid birra</em>2015
+                giđa galget skuvllat čađahit geatnegahtton kártengeahččalemiid
+                1., 2. ja 3. ceahkis. Oahpahusdirektoráhtta fállá maid
+                eaktodáhtolaš kártengeahččalemiid 1., 3. ja 4. ceahkis. 2015
+                giđa fállojuvvo vel lassin ođđa eaktodáhtolaš kárten-
+                geahččaleamit eŋgelasgielas 3. ceahkkái.</p>
+                <p><em type="bold">Geatnegahtton kártengeahččaleamit</em>Leat
+                geatnegahtton kártengeahččaleamit:</p>
                 <p type="listitem">• Lohkamis 1., 2. ja 3. ceahkis</p>
                 <p type="listitem">• Rehkenastimis 2. ceahkis</p>
-                <p>Buot oahppit galget váldit daid geatnegahtton kártengeahččalemiid. Oahppit geat leat eret geahččalan- beaivvi, galget čađahit geahččaleami maŋŋil.</p>
-                <p>Kártengeahččalemiide leat sierra luvvennjuolggadusat. Vaikko oahppi deavddášii luvvema eavttuid, de sáhttá oahppi ieš dahje su váhnemat dattetge mearridit ahte oahppi galgá čađahit geahččaleami.</p>
-                <p><em type="bold">Eaktodáhtolaš kártengeahččaleamit</em>Geatnegahtton kártengeahččalemiide lassin fállá Oahpahusdirektoráhtta eaktodáhtolaš kártengeahččalemiid. Jus skuvla dahje skuvlaeaiggát mearrida čađahit eaktodáhtolaš kártengeahččalemiid, de fertejit buot oahppit dan ceahkis masa dát guoská váldit geahččaleami.</p>
+                <p>Buot oahppit galget váldit daid geatnegahtton
+                kártengeahččalemiid. Oahppit geat leat eret geahččalan- beaivvi,
+                galget čađahit geahččaleami maŋŋil.</p>
+                <p>Kártengeahččalemiide leat sierra luvvennjuolggadusat. Vaikko
+                oahppi deavddášii luvvema eavttuid, de sáhttá oahppi ieš dahje
+                su váhnemat dattetge mearridit ahte oahppi galgá čađahit
+                geahččaleami.</p>
+                <p><em type="bold">Eaktodáhtolaš kártengeahččaleamit</em>
+                Geatnegahtton kártengeahččalemiide lassin fállá
+                Oahpahusdirektoráhtta eaktodáhtolaš kártengeahččalemiid. Jus
+                skuvla dahje skuvlaeaiggát mearrida čađahit eaktodáhtolaš
+                kártengeahččalemiid, de fertejit buot oahppit dan ceahkis masa
+                dát guoská váldit geahččaleami.</p>
                 <p>Fállojuvvojit eaktodáhtolaš kártengeahččaleamit:</p>
                 <p type="listitem">• Rehkenastimis 1. ja 3. ceahkis</p>
                 <p type="listitem">• Eŋgelasgielas 3. ceahkis</p>
                 <p type="listitem">• Digitála gálggain 4. ceahkis</p>
-                <p><em type="bold">Dieđut geahččalemiid birra</em>Kártengeahččalemiid galget skuvla ja oahpaheaddjit geavahit gávnnahit geat dárbbašit lasi čuovvoleami álgooahpa- husas. Eanaš oahppit máhttet buot hárjehusaid, ja máŋgasiid mielas ges lea geahččaleapmi álki. Geahččaleamit eai muital olus ohppiid birra geain leat buorit gálggat.</p>
-                <p>Kártengeahččaleamit eai leat geahččaleamit fágas, muhto vuođđogálggain fágaid rastá. Oahppoplánain leat vuođđogálggat definerejuvvon ná:</p>
+                <p><em type="bold">Dieđut geahččalemiid birra</em>
+                Kártengeahččalemiid galget skuvla ja oahpaheaddjit geavahit
+                gávnnahit geat dárbbašit lasi čuovvoleami álgooahpa- husas.
+                Eanaš oahppit máhttet buot hárjehusaid, ja máŋgasiid mielas ges
+                lea geahččaleapmi álki. Geahččaleamit eai muital olus ohppiid
+                birra geain leat buorit gálggat.</p>
+                <p>Kártengeahččaleamit eai leat geahččaleamit fágas, muhto
+                vuođđogálggain fágaid rastá. Oahppoplánain leat vuođđogálggat
+                definerejuvvon ná:</p>
                 <p type="listitem">• njálmmálaš gálggat</p>
                 <p type="listitem">• máhttit lohkat</p>
                 <p type="listitem">• máhttit čállit</p>
                 <p type="listitem">• máhttit rehkenastit</p>
                 <p type="listitem">• digitála gálggat</p>
-                <p>Rehkenastinbihtáid ovdamearkkat sáhttet leat lohkat, sirret loguid sturro- dagaid mielde, loahpahit lohkogur- gadasaid ja rehkenastit plussain ja minusiin. Lohkamis sáhttá leat sáhka ovdamearkka dihtii bustávaid čállimis, sániid lohkamis ja cealkagiid lohkamis. Guovddážis digitála gálggaid geahčča- leami bihtáin lea háhkat ja meannudit, buvttadit ja divodit, gulahallat ja digitála árvvoštallannávccat. Guovddážis eŋgelasgiellageahččaleamis lea dovdat ja ipmirdit oahpes ja beaivválaš sániid ja dajaldagaid, njálmmálaččat dahje čálalaččat. Geahččaleamis leat guokte oasi, guldalanoassi ja lohkanoassi. Ohppiin ferte leat oaivetelefovdna guldalanoasis.
-                <em type="bold">Bohtosat ja čuovvoleapmi</em>Kártengeahččalemiid bohtosiid ii galgga rapporteret Oahpahusdirektoráhttii ii ge geavahit buohtastahttit skuvllaid, gielddaid dahje fylkkaid.</p>
-                <p>Bohtosiid galgá vuosttažettiin geavahit siskkáldasat skuvllas láhčin dihti oahpahusa nu, ahte oahppit, geat dárbbašit dan, ožžot lassi bagadallama ja doarjaga. Oahpaheddjiide leat ráhka- duvvon bagadallanmateriálat mat čilgehit mo geahččalemiid bohtosiid sáhttá čuovvolit.</p>
-                <p>Jus čađaheami bohtosat čájehit ahte oahppis lea dárbu lassi čuovvoleapmái, de galgá váhnemiidda dieđihit geahččalanbohtosiid birra ja muitalit makkár doaimmaid áigot álggahit. Váhnemat sáhttet váldit oktavuođa skuvllain jus ležžet gažaldagat.</p>
-                <p><em type="bold">Eanet dieđut</em>Eanet dieđut kártengeahččalemiid birra leat dáppe: http://www.udir.no/Vurdering/ Kartlegging-gs/</p>
-                <p>Máhttoloktema oahppoplánabuvttus lea dáppe: http://www.udir.no/Lareplaner/ Kunnskapsloftet/</p>
+                <p>Rehkenastinbihtáid ovdamearkkat sáhttet leat lohkat, sirret
+                loguid sturro- dagaid mielde, loahpahit lohkogur- gadasaid ja
+                rehkenastit plussain ja minusiin. Lohkamis sáhttá leat sáhka
+                ovdamearkka dihtii bustávaid čállimis, sániid lohkamis ja
+                cealkagiid lohkamis. Guovddážis digitála gálggaid geahčča- leami
+                bihtáin lea háhkat ja meannudit, buvttadit ja divodit,
+                gulahallat ja digitála árvvoštallannávccat. Guovddážis
+                eŋgelasgiellageahččaleamis lea dovdat ja ipmirdit oahpes ja
+                beaivválaš sániid ja dajaldagaid, njálmmálaččat dahje
+                čálalaččat. Geahččaleamis leat guokte oasi, guldalanoassi ja
+                lohkanoassi. Ohppiin ferte leat oaivetelefovdna guldalanoasis.
+                <em type="bold">Bohtosat ja čuovvoleapmi</em>
+                Kártengeahččalemiid bohtosiid ii galgga rapporteret
+                Oahpahusdirektoráhttii ii ge geavahit buohtastahttit skuvllaid,
+                gielddaid dahje fylkkaid.</p>
+                <p>Bohtosiid galgá vuosttažettiin geavahit siskkáldasat skuvllas
+                láhčin dihti oahpahusa nu, ahte oahppit, geat dárbbašit dan,
+                ožžot lassi bagadallama ja doarjaga. Oahpaheddjiide leat ráhka-
+                duvvon bagadallanmateriálat mat čilgehit mo geahččalemiid
+                bohtosiid sáhttá čuovvolit.</p>
+                <p>Jus čađaheami bohtosat čájehit ahte oahppis lea dárbu lassi
+                čuovvoleapmái, de galgá váhnemiidda dieđihit geahččalanbohtosiid
+                birra ja muitalit makkár doaimmaid áigot álggahit. Váhnemat
+                sáhttet váldit oktavuođa skuvllain jus ležžet gažaldagat.</p>
+                <p><em type="bold">Eanet dieđut</em>
+                Eanet dieđut kártengeahččalemiid birra leat dáppe:
+                http://www.udir.no/Vurdering/ Kartlegging-gs/</p>
+                <p>Máhttoloktema oahppoplánabuvttus lea dáppe:
+                http://www.udir.no/Lareplaner/ Kunnskapsloftet/</p>
             </body>
             ''')
 
