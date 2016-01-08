@@ -5702,3 +5702,22 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+
+    def test_parse_pdf2xmldoc_pp_tjenesten(self):
+        '''Test of bug2101'''
+        pdf2xml = etree.fromstring(u'''
+            <pdf2xml>
+                <page number="4" position="absolute" top="0" left="0" height="1262" width="892">
+                    <text top="942" left="133" width="640" height="23" font="4"> ahte buoridit unnitlogugielagiid oahpahusfálaldaga dási ja buoridit barggu, man olis </text>
+                    <text top="965" left="160" width="617" height="22" font="4">ovddidit fátmmasteaddji, máŋggakultuvrralaš oahppansearvevuođaid mánáidgárdái </text>
+                    <text top="986" left="160" width="165" height="22" font="4">ja vuođđooahpahussii.</text>
+                </page>
+            </pdf2xml>''')
+        want = (u'''<body>
+            <p type="listitem"> ahte buoridit unnitlogugielagiid oahpahusfálaldaga dási ja buoridit barggu, man olis ovddidit fátmmasteaddji, máŋggakultuvrralaš oahppansearvevuođaid mánáidgárdái ja vuođđooahpahussii.</p></body>''')
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.parse_pages(pdf2xml)
+
+        self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+
