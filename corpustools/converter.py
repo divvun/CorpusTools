@@ -824,13 +824,15 @@ class PDFParagraph(object):
             not re.match('\d', self.textelements[-1].plain_text[0]) and
             self.textelements[-1].plain_text[0] == self.textelements[-1].plain_text[0].lower())
 
-    def is_same_paragraph(self, other_box):
+    def is_same_paragraph(self, textelement):
         '''Look for list characters in other_box'''
-        if self.is_text_in_same_paragraph(other_box):
-            if (re.match('\s', other_box.plain_text[0]) is None and
-                    other_box.plain_text[0] == other_box.plain_text[0].upper() and self.is_listitem):
+        if textelement.plain_text[0] in self.LIST_CHARS:
+            return False
+        elif self.is_text_in_same_paragraph(textelement):
+            if (re.match('\s', textelement.plain_text[0]) is None and
+                    textelement.plain_text[0] == textelement.plain_text[0].upper() and self.is_listitem):
                 return False
-            elif (other_box.plain_text[0] not in self.LIST_CHARS):
+            elif (textelement.plain_text[0] not in self.LIST_CHARS):
                 return True
         else:
             return False
