@@ -709,6 +709,10 @@ class PDFTextElement(BoundingBox):
         return self.left + self.width
 
     @property
+    def font(self):
+        return self.t.get('font')
+
+    @property
     def plain_text(self):
         return self.t.xpath("string()")
 

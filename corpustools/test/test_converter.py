@@ -2891,6 +2891,13 @@ class TestXslMaker(XMLTester):
 
 
 class TestPDFTextElement(XMLTester):
+    def test_font_property(self):
+        '''When top is the same, two text elements are on the same line'''
+        t1 = converter.PDFTextElement(etree.fromstring(
+            '<text top="354" left="332" width="6" height="22" font="2"> </text>'))
+
+        self.assertEqual(t1.font, '2')
+
     def test_is_text_on_same_line_1(self):
         '''When top is the same, two text elements are on the same line'''
         prev_t = converter.PDFTextElement(etree.fromstring(
