@@ -4720,8 +4720,8 @@ class TestPDFPage(XMLTester):
 
         self.assertEqual(len(pdfpage.textelements), 1)
         self.assertXmlEqual(etree.tostring(pdfpage.textelements[0].t),
-                            '<text top="197" left="257" width="497" height="17" font="8">'
-                            'Departemeanttat fertejit dahkat vuolit et&#225;htaid'
+                            '<text top="197" left="257" width="497" height="20" font="8">'
+                            'Departemeanttat fertejit dahkat vuolit et&#225;htaid '
                             'dihtomielala&#382;&#382;an das </text>')
 
     def test_remove_footnotes_superscript_1(self):

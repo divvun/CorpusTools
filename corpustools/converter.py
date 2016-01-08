@@ -746,9 +746,10 @@ class PDFTextElement(BoundingBox):
         for child in t:
             prev_t.append(child)
 
-        orig_width = int(prev_t.get('width'))
-        t_width = int(t.get('width'))
-        prev_t.set('width', str(orig_width + t_width))
+
+        prev_t.set('width', str(self.width + other_box.width))
+        if self.height < other_box.height:
+            prev_t.set('height', unicode(other_box.height))
 
     def __unicode__(self):
         info = []
