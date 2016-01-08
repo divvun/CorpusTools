@@ -795,7 +795,7 @@ class PDFParagraph(object):
         self.boundingboxes[-1].increase_box(textelement)
         self.textelements.append(textelement)
 
-    def is_within_line_height(self, textelement):
+    def is_within_line_distance(self, textelement):
         ratio = 1.5
         delta = textelement.top - self.textelements[-1].top
 
@@ -812,7 +812,7 @@ class PDFParagraph(object):
         the text elements.
         '''
         if self.textelements[-1].is_above(textelement):
-            return self.textelements[-1].height == textelement.height and self.is_within_line_height(textelement)
+            return self.textelements[-1].height == textelement.height and self.is_within_line_distance(textelement)
         else:
             return self.is_paragraph_continued_in_next_column(textelement)
 
@@ -828,6 +828,15 @@ class PDFParagraph(object):
         '''Look for list characters in other_box'''
         if textelement.plain_text[0] in self.LIST_CHARS:
             return False
+        if self.is_listitem:
+            if (self.textelements[-1].is_above(textelement) and
+                    self.is_within_line_distance(textelement) and
+                    self.textelements[-1].left <= textelement.left and
+                    self.textelements[-1].height - textelement.height < 2 and
+                    self.textelements[-1].font == textelement.font):
+                return True
+            else:
+                False
         elif self.is_text_in_same_paragraph(textelement):
             if (re.match('\s', textelement.plain_text[0]) is None and
                     textelement.plain_text[0] == textelement.plain_text[0].upper() and self.is_listitem):
