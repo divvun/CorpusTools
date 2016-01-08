@@ -823,15 +823,11 @@ class PDFParagraph(object):
 
     def is_same_paragraph(self, other_box):
         '''Look for list characters in other_box'''
-        # util.print_frame(
-        #    debug='{} {} {} {} {} {}'.format(h1, h2, t1, t2, h1 == h2, t1 > t2))
-        real_text = other_box.plain_text
-
         if self.is_text_in_same_paragraph(other_box):
-            if (re.match('\s', real_text[0]) is None and
-                    real_text[0] == real_text[0].upper() and self.is_listitem):
+            if (re.match('\s', other_box.plain_text[0]) is None and
+                    other_box.plain_text[0] == other_box.plain_text[0].upper() and self.is_listitem):
                 return False
-            elif (real_text[0] not in self.LIST_CHARS):
+            elif (other_box.plain_text[0] not in self.LIST_CHARS):
                 return True
         else:
             return False
