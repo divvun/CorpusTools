@@ -795,13 +795,13 @@ class PDFParagraph(object):
         self.boundingboxes[-1].increase_box(textelement)
         self.textelements.append(textelement)
 
-    def is_within_line_height(self, other_box):
+    def is_within_line_height(self, textelement):
         ratio = 1.5
-        delta = other_box.top - self.textelements[-1].top
+        delta = textelement.top - self.textelements[-1].top
 
         return delta < ratio * self.textelements[-1].height
 
-    def is_text_in_same_paragraph(self, other_box):
+    def is_text_in_same_paragraph(self, textelement):
         '''Find out if other_box is in the same paragraph as last textelement in the paragraph.
 
         other_box is PDFTextElement
@@ -812,12 +812,12 @@ class PDFParagraph(object):
         the text elements.
         '''
         prev_box = self.textelements[-1]
-        if prev_box.is_above(other_box):
-            return prev_box.height == other_box.height and self.is_within_line_height(other_box)
+        if prev_box.is_above(textelement):
+            return prev_box.height == textelement.height and self.is_within_line_height(textelement)
         else:
-            return (prev_box.height == other_box.height and
-                    prev_box.top >= other_box.top and
-                    prev_box.is_left_of(other_box) and
+            return (prev_box.height == textelement.height and
+                    prev_box.top >= textelement.top and
+                    prev_box.is_left_of(textelement) and
                     not re.match('\d', prev_box.plain_text[0]) and
                     prev_box.plain_text[0] == prev_box.plain_text[0].lower())
 
