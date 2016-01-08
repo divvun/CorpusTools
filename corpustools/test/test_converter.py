@@ -4708,6 +4708,22 @@ class TestPDFPage(XMLTester):
         self.assertEqual(page.height, 1263)
         self.assertEqual(page.width, 862)
 
+    def test_merge_text_elements(self):
+        page = etree.fromstring(u'''
+            <page number="1" height="1263" width="862">'
+                <text top="197" left="257" width="4" height="17" font="8"> </text>
+                <text top="195" left="267" width="493" height="20" font="0">Departemeanttat fertejit dahkat vuolit etáhtaid dihtomielalažžan das </text>
+            </page>'''
+        )
+        pdfpage = converter.PDFPage(page)
+        pdfpage.merge_elements_on_same_line()
+
+        self.assertEqual(len(pdfpage.textelements), 1)
+        self.assertXmlEqual(etree.tostring(pdfpage.textelements[0].t),
+                            '<text top="197" left="257" width="497" height="17" font="8">'
+                            'Departemeanttat fertejit dahkat vuolit et&#225;htaid'
+                            'dihtomielala&#382;&#382;an das </text>')
+
     def test_remove_footnotes_superscript_1(self):
         '''Footnote superscript is in the middle of a sentence'''
         page = etree.fromstring(
