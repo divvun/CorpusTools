@@ -811,15 +811,18 @@ class PDFParagraph(object):
         between the top attributes is less than ratio times the height of
         the text elements.
         '''
-        prev_box = self.textelements[-1]
-        if prev_box.is_above(textelement):
-            return prev_box.height == textelement.height and self.is_within_line_height(textelement)
+        if self.textelements[-1].is_above(textelement):
+            return self.textelements[-1].height == textelement.height and self.is_within_line_height(textelement)
         else:
-            return (prev_box.height == textelement.height and
-                    prev_box.top >= textelement.top and
-                    prev_box.is_left_of(textelement) and
-                    not re.match('\d', prev_box.plain_text[0]) and
-                    prev_box.plain_text[0] == prev_box.plain_text[0].lower())
+            return self.is_paragraph_continued_in_next_column(textelement)
+
+    def is_paragraph_continued_in_next_column(self, textelement):
+        return (
+            self.textelements[-1].height == textelement.height and
+            self.textelements[-1].top >= textelement.top and
+            self.textelements[-1].is_left_of(textelement) and
+            not re.match('\d', self.textelements[-1].plain_text[0]) and
+            self.textelements[-1].plain_text[0] == self.textelements[-1].plain_text[0].lower())
 
     def is_same_paragraph(self, other_box):
         '''Look for list characters in other_box'''
