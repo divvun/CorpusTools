@@ -1976,7 +1976,7 @@ class HTMLContentConverter(Converter):
             },
             'ul': {
                 'id': [
-                    'AreaTopLanguageNav'
+                    'AreaTopLanguageNav',
                     'AreaTopPrintMeny',
                     'skiplinks',  # umo.se
                 ],
