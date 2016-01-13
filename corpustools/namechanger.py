@@ -327,6 +327,9 @@ class CorpusFilesetMoverAndUpdater(object):
     def __init__(self, oldpath, newpath):
         self.mc = MovepairComputer()
         self.mc.compute_all_movepairs(oldpath, newpath)
+        self.old_components = util.split_path(oldpath)
+        self.vcs = versioncontrol.VersionControlFactory().vcs(
+            self.old_components.root)
 
     def move_files(self):
         for filepair in self.mc.filepairs:
@@ -352,6 +355,7 @@ class CorpusFilesetMoverAndUpdater(object):
                     if (old_components.lang != new_components.lang):
                         metadatafile.set_variable('mainlang', new_components.lang)
                     metadatafile.write_file()
+                    self.vcs.add(metadataname)
 
     def update_parallel_files_metadata(self):
         '''Update the info in the parallel files'''
@@ -377,6 +381,8 @@ class CorpusFilesetMoverAndUpdater(object):
                             parallel_metadatafile.set_parallel_text(
                                 new_components.lang, new_components.basename)
                         parallel_metadatafile.write_file()
+                        self.vcs.add(parallel_name)
+
             else:
                 for parallel_filepair in parallel_filepairs:
                     parallel_name = parallel_filepair.newpath + '.xsl'
@@ -386,6 +392,7 @@ class CorpusFilesetMoverAndUpdater(object):
                         parallel_metadatafile.set_parallel_text(
                                 old_components.lang, u'')
                         parallel_metadatafile.write_file()
+                        self.vcs.add(parallel_name)
 
 
 def compute_hexdigest(path, blocksize=65536):
