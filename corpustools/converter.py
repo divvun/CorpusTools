@@ -783,9 +783,11 @@ class PDFParagraph(object):
     LIST_CHARS = [
         u'•',  # U+2022: BULLET
         u'–',  # U+2013: EN DASH
+        u'\-',  # U+00AD: HYPHEN-MINUS
         unichr(61623),  # U+F0B7
         unichr(61553),  # U+F071
     ]
+    LIST_RE = re.compile(u'^[{}]\s'.format(u''.join(LIST_CHARS)))
 
     def __init__(self):
         self.textelements = []
@@ -793,7 +795,8 @@ class PDFParagraph(object):
         self.is_listitem = False
 
     def append_textelement(self, textelement):
-        if len(textelement.plain_text) > 0 and textelement.plain_text[0] in self.LIST_CHARS:
+        if (len(textelement.plain_text) > 0 and
+                self.LIST_RE.search(textelement.plain_text)):
             self.is_listitem = True
         if len(self.textelements) > 0 and textelement.is_right_of(self.textelements[-1]):
             self.boundingboxes.append(BoundingBox())
@@ -808,7 +811,7 @@ class PDFParagraph(object):
 
     def is_same_paragraph(self, textelement):
         '''Look for list characters in other_box'''
-        if textelement.plain_text[0] in self.LIST_CHARS:
+        if self.LIST_RE.search(textelement.plain_text):
             return False
         elif self.is_listitem:
             if (self.textelements[-1].is_above(textelement) and
@@ -1071,7 +1074,7 @@ class PDFTextExtractor(object):
                     last.text = last.text[:-1] + u'\xAD'
                 else:
                     last.tail = last.tail[:-1] + u'\xAD'
-        elif len(self.get_last_string()) > 0 and not re.search(u'[ \xAD]$', self.get_last_string()):
+        elif len(self.get_last_string()) > 0 and not re.search(u'[\s\xAD]$', self.get_last_string()):
             self.extract_textelement(etree.fromstring('<text> </text>'))
 
     def is_first_page(self):

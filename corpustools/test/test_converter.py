@@ -3074,7 +3074,7 @@ class TestPDFParagraph(XMLTester):
             converter.PDFTextElement(etree.fromstring(
                 '<text top="106" left="117" width="305" height="19" font="2"/>')))
         t1 = converter.PDFTextElement(etree.fromstring(
-            '<text top="126" left="117" width="305" height="19" font="2">•</text>'))
+            '<text top="126" left="117" width="305" height="19" font="2">• </text>'))
 
         self.assertFalse(pp.is_same_paragraph(t1))
 
@@ -3386,12 +3386,13 @@ class TestPDFTextExtractor(XMLTester):
 
     def test_handle_line_ending_hyphen_space(self):
         '''If - is not the last char, do not replace it by a soft hyphen'''
-        p2x = converter.PDFTextExtractor()
-        p2x.extract_textelement(etree.fromstring(u'<text>a- </text>'))
-        p2x.handle_line_ending()
+        for test_text in ['a-\t', 'a- ']:
+            p2x = converter.PDFTextExtractor()
+            p2x.extract_textelement(etree.fromstring(u'<text>a- </text>'))
+            p2x.handle_line_ending()
 
-        self.assertXmlEqual(
-            etree.tostring(p2x.p), u'<p>a-</p>')
+            self.assertXmlEqual(
+                etree.tostring(p2x.p), u'<p>a-</p>')
 
     def test_handle_line_not_shy_nor_hyphen(self):
         p2x = converter.PDFTextExtractor()
@@ -3441,10 +3442,11 @@ class TestPDFTextExtractor(XMLTester):
 
     def test_add_list_paragraphs(self):
         texts = [
-            '<text top="961" left="152" width="334" height="26" font="0"></text>',  # U+F0B7
-            '<text top="961" left="152" width="334" height="26" font="0"></text>',  # U+F071
-            '<text top="961" left="152" width="334" height="26" font="0">•</text>',  # U+2022: BULLET
-            '<text top="961" left="152" width="334" height="26" font="0">–</text>',  # U+2013: EN DASH
+            '<text top="961" left="152" width="334" height="26" font="0"> </text>',  # U+F0B7
+            '<text top="961" left="152" width="334" height="26" font="0"> </text>',  # U+F071
+            '<text top="961" left="152" width="334" height="26" font="0">•\t</text>',  # U+2022: BULLET
+            '<text top="961" left="152" width="334" height="26" font="0">– </text>',  # U+2013: EN DASH
+            '<text top="961" left="152" width="334" height="26" font="0">- </text>',  # U+002D: HYPHEN-MINUS
         ]
 
         paragraphs = []
@@ -3460,8 +3462,9 @@ class TestPDFTextExtractor(XMLTester):
                          '<body>'
                          '<p type="listitem">&#61623; </p>'
                          '<p type="listitem">&#61553; </p>'
-                         '<p type="listitem">&#8226; </p>'
+                         '<p type="listitem">&#8226;\t</p>'
                          '<p type="listitem">&#8211; </p>'
+                         '<p type="listitem">- </p>'
                          '</body>')
 
 
