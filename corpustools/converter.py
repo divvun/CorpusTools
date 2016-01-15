@@ -1005,6 +1005,7 @@ class OrderedPDFSections(object):
 class PDFTextExtractor(object):
     '''Extract text from a list of PDFParagraphs'''
     def __init__(self):
+        self.pdffontspecs = PDFFontspecs()
         self.body = etree.Element('body')
         etree.SubElement(self.body, 'p')
 
@@ -1027,6 +1028,10 @@ class PDFTextExtractor(object):
                 last.tail = text
             else:
                 last.tail += text
+
+    def add_fontspecs(self, page):
+        for xmlfontspec in page.iter('fontspec'):
+            self.pdffontspecs.add_fontspec(xmlfontspec)
 
     def extract_textelement(self, textelement):
         '''Convert one <text> element to an array of text and etree Elements.
@@ -1459,29 +1464,8 @@ class PDF2XMLConverter(Converter):
 
     def parse_pages(self, root_element):
         for page in root_element.iter('page'):
+            self.extractor.add_fontspecs(page)
             self.parse_page(page)
-
-    def list_pages(self):
-        document = etree.Element('document')
-        etree.SubElement(document, 'header')
-        document.append(self.extractor.body)
-
-        command = ['pdftohtml', '-hidden', '-enc', 'UTF-8', '-stdout',
-                   '-nodrm', '-i', '-xml', self.orig]
-        pdf_content = self.replace_ligatures(self.strip_chars(
-            self.extract_text(command)))
-
-        try:
-            root_element = etree.fromstring(pdf_content)
-        except etree.XMLSyntaxError as e:
-            self.handle_syntaxerror(e, util.lineno(),
-                                    pdf_content.decode('utf-8'))
-
-        for page in root_element.iter('page'):
-            pdfpage = PDFPage(page, metadata_margins=self.md.margins,
-                              metadata_inner_margins=self.md.inner_margins)
-            if not pdfpage.is_skip_page(self.md.skip_pages):
-                pdfpage.list_valid_elements()
 
 
 class BiblexmlConverter(Converter):
