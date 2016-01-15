@@ -619,6 +619,32 @@ class PlaintextConverter(Converter):
         return document
 
 
+class PDFFontspec(object):
+    def __init__(self, xmlfontspec):
+        self.size = xmlfontspec.get('size')
+        self.family = xmlfontspec.get('family')
+        self.color = xmlfontspec.get('color')
+        self.equivalents = set()
+
+    def __eq__(self, other):
+        return ((self.size, self.family, self.color) ==
+                (other.size, other.family, other.color))
+
+
+class PDFFontspecs(object):
+    def __init__(self):
+        self.pdffontspecs = {}
+
+    def add_fontspec(self, xmlfontspec):
+        this_id = xmlfontspec.get('id')
+        self.pdffontspecs[this_id] = PDFFontspec(xmlfontspec)
+
+        for font_id in self.pdffontspecs.keys():
+            if font_id != this_id and self.pdffontspecs[font_id] == self.pdffontspecs[this_id]:
+                self.pdffontspecs[font_id].equivalents.add(this_id)
+                self.pdffontspecs[this_id].equivalents.add(font_id)
+
+
 class BoundingBox(object):
     '''Define an area that a box covers
 
