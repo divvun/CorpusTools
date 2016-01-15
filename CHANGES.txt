@@ -56,3 +56,4 @@ v<0.13.3>, <20151210> -- Fixed an error in the way footnote superscript were han
 v<0.13.4>, <20160104> -- Fix bug 2106, headings appear at the end of the page
 v<0.13.5>, <20160105> -- Don't crash if a page is empty
 v<0.13.6>, <20160105> -- Add support for smn in parallelize and generate_anchor_list
+v<0.13.7>, <20160115> -- Lots of improvements in paragraph handling
