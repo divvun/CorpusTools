@@ -1077,7 +1077,18 @@ class PDFTextExtractor(object):
 
             em.tail = child.tail
 
-            self.p.append(em)
+            if len(self.p) > 0:
+                last = self.p[-1]
+                if last.tail is None and last.tag == em.tag and last.attrib == em.attrib:
+                    if last.text is not None:
+                        last.text += em.text
+                    else:
+                        last.text = em.text
+                    last.tail = em.tail
+                else:
+                    self.p.append(em)
+            else:
+                self.p.append(em)
 
     def get_last_string(self):
         '''Get the plain text of the last paragraph of body'''

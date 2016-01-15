@@ -5595,7 +5595,7 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(
             etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p><em type="bold">JULE\xAD</em><em type="bold">HANDEL</em></p></body>')
+            u'<body><p><em type="bold">JULE\xADHANDEL</em></p></body>')
 
     def test_parse_page_9(self):
         '''Two <text> elements. One is above the top margin.'''
@@ -5728,7 +5728,7 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertEqual(
             etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p>A – <em type="italic">b </em><em type="italic">c-d</em> – e\xADf </p></body>')
+            u'<body><p>A – <em type="italic">b c-d</em> – e\xADf </p></body>')
 
     def test_parse_pdf2xmldoc1(self):
         '''Test how a parsing a simplistic pdf2xml document works'''
@@ -5844,7 +5844,7 @@ class TestPDF2XMLConverter(XMLTester):
 <text top="1085" left="106" width="653" height="20" font="7"><i>hussi. </i></text>
 <text top="1110" left="106" width="5" height="20" font="7"><i> </i></text>
 </page></pdf2xml>''')
-        want = u'''<body><p><em type="italic">vuođđooahpa\xAD</em><em type="italic">hussi. </em></p></body>'''
+        want = u'''<body><p><em type="italic">vuođđooahpa\xADhussi. </em></p></body>'''
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
@@ -5984,6 +5984,38 @@ class TestPDF2XMLConverter(XMLTester):
             </pdf2xml>''')
         want = (u'''<body>
             <p type="listitem"> ahte buoridit unnitlogugielagiid oahpahusfálaldaga dási ja buoridit barggu, man olis ovddidit fátmmasteaddji, máŋggakultuvrralaš oahppansearvevuođaid mánáidgárdái ja vuođđooahpahussii.</p></body>''')
+
+        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x.parse_pages(pdf2xml)
+
+        self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+
+    def test_parse_pdf2xmldoc_em_at_end_of_page_and_start_of_next_page(self):
+        pdf2xml = etree.fromstring(u'''
+            <pdf2xml>
+                <page number="1" position="absolute" top="0" left="0" height="1263" width="892">
+                    <fontspec id="0" size="18" family="Times" color="#000000"/>
+                    <text top="899" left="98" width="719" height="23" font="0">Tabeallas 2.1 oaidnit lohku bissu dássedin mánáidgárddiin main lea </text>
+                    <text top="926" left="98" width="703" height="23" font="0">sámegielfálaldat. Lohku mánáidgárddiin maid Sámediggi gohčoda  <i>sámi</i> </text>
+                    <text top="954" left="98" width="717" height="23" font="0">mánáidgárdin, gal lea njiedjan maŋemus vihtta jagi ollislaččat, muhto </text>
+                    <text top="982" left="98" width="697" height="23" font="0">mánáidgárdefálaldagat gohčoduvvon  <i>sámegielat fálaldat dárogielat mánáid-</i></text>
+                </page>
+                <page number="1" position="absolute" top="0" left="0" height="1263" width="892">
+                    <fontspec id="2" size="18" family="Times" color="#000000"/>
+                    <text top="116" left="98" width="710" height="23" font="2"><i>gárddiin</i> leat lassánan, nu ahte fálaldagaid ollislaš lohku lea goitge bisson </text>
+                </page>
+            </pdf2xml>''')
+        want = (u'''
+            <body>
+                <p>
+                    Tabeallas 2.1 oaidnit lohku bissu dássedin mánáidgárddiin main lea
+                    sámegielfálaldat. Lohku mánáidgárddiin maid Sámediggi gohčoda
+                    <em type="italic">sámi</em>mánáidgárdin, gal lea njiedjan maŋemus
+                    vihtta jagi ollislaččat, muhto mánáidgárdefálaldagat gohčoduvvon
+                    <em type="italic">sámegielat fálaldat dárogielat mánáid\xADgárddiin</em>leat
+                    lassánan, nu ahte fálaldagaid ollislaš lohku lea goitge bisson
+                </p>
+            </body>''')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
