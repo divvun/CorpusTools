@@ -788,7 +788,6 @@ class PDFTextElement(BoundingBox):
         for child in t:
             prev_t.append(child)
 
-
         prev_t.set('width', str(self.width + other_box.width))
         if self.height < other_box.height:
             prev_t.set('height', unicode(other_box.height))
@@ -1412,7 +1411,6 @@ class PDF2XMLConverter(Converter):
                                                write_intermediate)
         self.extractor = PDFTextExtractor()
         self.pdffontspecs = PDFFontspecs()
-
 
     def strip_chars(self, content, extra=u''):
         remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]'.format(

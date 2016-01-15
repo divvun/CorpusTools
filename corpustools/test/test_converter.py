@@ -866,7 +866,6 @@ class TestHTMLContentConverter(XMLTester):
                 ],
             },
         }
-        from corpustools import util
         for tag, attribs in unwanted_classes_ids.items():
             for key, values in attribs.items():
                 for value in values:
@@ -877,7 +876,8 @@ class TestHTMLContentConverter(XMLTester):
                         inner = '<table><tbody><tr><{0} {1}="{2}">content:{0} {1} {2}</tr></tbody></table>'.format(tag, key, value)
                         inner_r = '<table><tbody><tr/></tbody></table>'
                     else:
-                        inner = ('<{0} {1}="{2}">'
+                        inner = (
+                            '<{0} {1}="{2}">'
                             'content:{0} {1} {2}'
                             '</{0}>'.format(tag, key, value))
                         inner_r = ''
@@ -5068,8 +5068,7 @@ class TestPDFPage(XMLTester):
             <page number="1" height="1263" width="862">'
                 <text top="197" left="257" width="4" height="17" font="8"> </text>
                 <text top="195" left="267" width="493" height="20" font="0">Departemeanttat fertejit dahkat vuolit etáhtaid dihtomielalažžan das </text>
-            </page>'''
-        )
+            </page>''')
         pdfpage = converter.PDFPage(page)
         pdfpage.merge_elements_on_same_line()
 
