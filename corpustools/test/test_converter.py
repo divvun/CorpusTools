@@ -3463,6 +3463,44 @@ class TestPDFParagraph(XMLTester):
         self.assertTrue(pp.is_same_paragraph(t1))
 
 
+class TestPDFFontspecs(unittest.TestCase):
+    def test_add_fontspec(self):
+        f1 = etree.fromstring('<fontspec id="1" size="13" family="Times" color="#231f20"/>')
+        f2 = etree.fromstring('<fontspec id="5" size="19" family="Times" color="#231f20"/>')
+        f3 = etree.fromstring('<fontspec id="6" size="13" family="Times" color="#231f20"/>')
+
+        pdffontspecs = converter.PDFFontspecs()
+        pdffontspecs.add_fontspec(f1)
+        pdffontspecs.add_fontspec(f2)
+        pdffontspecs.add_fontspec(f3)
+
+        self.assertListEqual(
+            sorted([id for p, id in pdffontspecs.pdffontspecs.items()]),
+            ["1", "5"])
+        self.assertDictEqual(pdffontspecs.duplicates, {"6": "1"})
+
+    def test_corrected_id(self):
+        page = etree.fromstring(
+            '''
+            <page number="3" position="absolute" top="0" left="0" height="1325" width="955">
+                <fontspec id="1" size="13" family="Times" color="#231f20"/>
+                <fontspec id="5" size="19" family="Times" color="#231f20"/>
+                <fontspec id="6" size="13" family="Times" color="#231f20"/>
+                <text top="634" left="104" width="178" height="26" font="5"><i><b>Politihkalaš vuođđu </b></i></text>
+                <text top="666" left="104" width="312" height="18" font="1">Ráđđehusbellodagaid politihkalaš vuođđu – <i>Soria </i></text>
+                <text top="687" left="104" width="318" height="18" font="6"><i>Moria-julggaštus</i> – almmuha ulbmilin dakkár sáme-</text>
+            </page>
+            ''')
+        pfs = converter.PDFFontspecs()
+        for xmlfontspec in page.iter('fontspec'):
+            pfs.add_fontspec(xmlfontspec)
+        ppage = converter.PDFPage(page)
+        ppage.fix_font_id(pfs)
+
+        self.assertListEqual([pdftextelement.font for pdftextelement in ppage.textelements],
+                             ["5", "1", "1"])
+
+
 class TestPDFTextExtractor(XMLTester):
     def test_extract_textelement1(self):
         '''Extract text from a plain pdf2xml text element'''
@@ -5424,9 +5462,10 @@ class TestPDF2XMLConverter(XMLTester):
         '''Page with one paragraph, three <text> elements'''
         page_element = etree.fromstring(
             '<page number="1" height="1263" width="862">'
-            '<text top="106" left="100" width="100" height="19">a </text>'
-            '<text top="126" left="100" width="100" height="19">b </text>'
-            '<text top="145" left="100" width="100" height="19">c.</text>'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="106" left="100" width="100" height="19" font="1">a </text>'
+            '<text top="126" left="100" width="100" height="19" font="1">b </text>'
+            '<text top="145" left="100" width="100" height="19" font="1">c.</text>'
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
@@ -5440,10 +5479,11 @@ class TestPDF2XMLConverter(XMLTester):
         '''Page with two paragraphs, four <text> elements'''
         page_element = etree.fromstring(
             '<page number="1" height="1263" width="862">'
-            '<text top="106" left="100" width="100" height="19">a </text>'
-            '<text top="126" left="100" width="100" height="19">b.</text>'
-            '<text top="166" left="100" width="100" height="19">c </text>'
-            '<text top="186" left="100" width="100" height="19">d.</text>'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="106" left="100" width="100" height="19" font="1">a </text>'
+            '<text top="126" left="100" width="100" height="19" font="1">b.</text>'
+            '<text top="166" left="100" width="100" height="19" font="1">c </text>'
+            '<text top="186" left="100" width="100" height="19" font="1">d.</text>'
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
@@ -5457,7 +5497,8 @@ class TestPDF2XMLConverter(XMLTester):
         '''Page with one paragraph, one <text> elements'''
         page_element = etree.fromstring(
             '<page number="1" height="1263" width="862">'
-            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="145" left="100" width="100" height="19" font="1">3.</text>'
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
@@ -5475,8 +5516,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         page_element = etree.fromstring(
             '<page number="1" height="1263" width="862">'
-            '<text top="215" left="100" width="51" height="14">R</text>'
-            '<text top="245" left="100" width="39" height="14">Ø</text>'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="215" left="100" width="51" height="14" font="1">R</text>'
+            '<text top="245" left="100" width="39" height="14" font="1">Ø</text>'
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
@@ -5494,8 +5536,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''
         page_element = etree.fromstring(
             '<page number="1" height="1263" width="862">'
-            '<text top="215" left="100" width="51" height="14"><b>R</b></text>'
-            '<text top="235" left="100" width="39" height="14">Ø</text>'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="215" left="100" width="51" height="14" font="1"><b>R</b></text>'
+            '<text top="235" left="100" width="39" height="14" font="1">Ø</text>'
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
@@ -5509,8 +5552,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''One text element ending with a hyphen.'''
         page_element = etree.fromstring(
             '<page number="1" height="1263" width="862">'
-            '<text top="215" left="100" width="51" height="14">R-</text>'
-            '<text top="235" left="100" width="39" height="14">Ø</text>'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="215" left="100" width="51" height="14" font="1">R-</text>'
+            '<text top="235" left="100" width="39" height="14" font="1">Ø</text>'
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
@@ -5524,8 +5568,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''One text element ending with a hyphen.'''
         page_element = etree.fromstring(
             '<page number="1" height="1263" width="862">'
-            '<text top="215" left="100" width="51" height="14">R -</text>'
-            '<text top="235" left="100" width="39" height="14">Ø</text>'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="215" left="100" width="51" height="14" font="1">R -</text>'
+            '<text top="235" left="100" width="39" height="14" font="1">Ø</text>'
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
@@ -5539,6 +5584,7 @@ class TestPDF2XMLConverter(XMLTester):
         '''One text element ending with a hyphen.'''
         page_element = etree.fromstring(
             '<page number="1" height="1263" width="862">'
+            '<fontspec id="15" size="13" family="Times" color="#231f20"/>'
             '<text top="196" left="142" width="69" height="21" font="15">'
             '<b>JULE-</b></text>'
             '<text top="223" left="118" width="123" height="21" font="15">'
@@ -5555,8 +5601,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''Two <text> elements. One is above the top margin.'''
         page_element = etree.fromstring(
             '<page number="1" height="1263" width="862">'
-            '<text top="70" left="100" width="100" height="19">Page 1</text>'
-            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="70" left="100" width="100" height="19" font="1">Page 1</text>'
+            '<text top="145" left="100" width="100" height="19" font="1">3.</text>'
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
@@ -5570,8 +5617,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''Two <text> elements. One is below the bottom margin.'''
         page_element = etree.fromstring(
             '<page number="1" height="1263" width="862">'
-            '<text top="1200" left="100" width="100" height="19">Page 1</text>'
-            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="1200" left="100" width="100" height="19" font="1">Page 1</text>'
+            '<text top="145" left="100" width="100" height="19" font="1">3.</text>'
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
@@ -5585,8 +5633,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''Two <text> elements. One is to the left of the right margin.'''
         page_element = etree.fromstring(
             '<page number="1" height="1263" width="862">'
-            '<text top="500" left="50" width="100" height="19">Page 1</text>'
-            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="500" left="50" width="100" height="19" font="1">Page 1</text>'
+            '<text top="145" left="100" width="100" height="19" font="1">3.</text>'
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
@@ -5600,8 +5649,9 @@ class TestPDF2XMLConverter(XMLTester):
         '''Two <text> elements. One is to the right of the left margin.'''
         page_element = etree.fromstring(
             '<page number="1" height="1263" width="862">'
-            '<text top="500" left="850" width="100" height="19">Page 1</text>'
-            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="500" left="850" width="100" height="19" font="1">Page 1</text>'
+            '<text top="145" left="100" width="100" height="19" font="1">3.</text>'
             '</page>')
 
         p2x = converter.PDF2XMLConverter('bogus.xml')
@@ -5684,14 +5734,15 @@ class TestPDF2XMLConverter(XMLTester):
         '''Test how a parsing a simplistic pdf2xml document works'''
         pdf2xml = etree.fromstring(
             '<pdf2xml>'
-            '<page number="1" height="1263" width="862"><fontspec/>'
-            '<text top="145" left="100" width="100" height="19">1.</text>'
+            '<page number="1" height="1263" width="862">'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="145" left="100" width="100" height="19" font="1">1.</text>'
             '</page>'
             '<page number="2" height="1263" width="862">'
-            '<text top="145" left="100" width="100" height="19">2.</text>'
+            '<text top="145" left="100" width="100" height="19" font="1">2.</text>'
             '</page>'
             '<page number="3" height="1263" width="862">'
-            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '<text top="145" left="100" width="100" height="19" font="1">3.</text>'
             '</page>'
             '</pdf2xml>')
         want = u'<body><p>1.</p><p>2.</p><p>3.</p></body>'
@@ -5705,14 +5756,15 @@ class TestPDF2XMLConverter(XMLTester):
         '''Test if pages really are skipped'''
         pdf2xml = etree.fromstring(
             '<pdf2xml>'
-            '<page number="1" height="1263" width="862"><fontspec/>'
-            '<text top="145" left="100" width="100" height="19">1.</text>'
+            '<page number="1" height="1263" width="862">'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="145" left="100" width="100" height="19" font="1">1.</text>'
             '</page>'
             '<page number="2" height="1263" width="862">'
-            '<text top="145" left="100" width="100" height="19">2.</text>'
+            '<text top="145" left="100" width="100" height="19" font="1">2.</text>'
             '</page>'
             '<page number="3" height="1263" width="862">'
-            '<text top="145" left="100" width="100" height="19">3.</text>'
+            '<text top="145" left="100" width="100" height="19" font="1">3.</text>'
             '</page>'
             '</pdf2xml>')
         want = u'<body><p>2.</p><p>3.</p></body>'
@@ -5827,11 +5879,12 @@ class TestPDF2XMLConverter(XMLTester):
         '''If last string on a page ends with ., do not continue paragraph to next page'''
         pdf2xml = etree.fromstring(
             '<pdf2xml>'
-            '<page number="1" height="1263" width="862"><fontspec/>'
-            '<text top="145" left="100" width="100" height="19">1.</text>'
+            '<page number="1" height="1263" width="862">'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="145" left="100" width="100" height="19" font="1">1.</text>'
             '</page>'
             '<page number="2" height="1263" width="862">'
-            '<text top="145" left="100" width="100" height="19">2.</text>'
+            '<text top="145" left="100" width="100" height="19" font="1">2.</text>'
             '</page>'
 
             '</pdf2xml>')
@@ -5846,11 +5899,12 @@ class TestPDF2XMLConverter(XMLTester):
         '''If last string on a page ends with !, do not continue paragraph to next page'''
         pdf2xml = etree.fromstring(
             '<pdf2xml>'
-            '<page number="1" height="1263" width="862"><fontspec/>'
-            '<text top="145" left="100" width="100" height="19">1!</text>'
+            '<page number="1" height="1263" width="862">'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="145" left="100" width="100" height="19" font="1">1!</text>'
             '</page>'
             '<page number="2" height="1263" width="862">'
-            '<text top="145" left="100" width="100" height="19">2.</text>'
+            '<text top="145" left="100" width="100" height="19" font="1">2.</text>'
             '</page>'
 
             '</pdf2xml>')
@@ -5865,11 +5919,12 @@ class TestPDF2XMLConverter(XMLTester):
         '''If last string on a page ends with ?, do not continue paragraph to next page'''
         pdf2xml = etree.fromstring(
             '<pdf2xml>'
-            '<page number="1" height="1263" width="862"><fontspec/>'
-            '<text top="145" left="100" width="100" height="19">1?</text>'
+            '<page number="1" height="1263" width="862">'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="145" left="100" width="100" height="19" font="1">1?</text>'
             '</page>'
             '<page number="2" height="1263" width="862">'
-            '<text top="145" left="100" width="100" height="19">2.</text>'
+            '<text top="145" left="100" width="100" height="19" font="1">2.</text>'
             '</page>'
 
             '</pdf2xml>')
@@ -5884,11 +5939,12 @@ class TestPDF2XMLConverter(XMLTester):
         '''If last string on a page is not ended, continue paragraph'''
         pdf2xml = etree.fromstring(
             '<pdf2xml>'
-            '<page number="1" height="1263" width="862"><fontspec/>'
-            '<text top="145" left="100" width="100" height="19">a </text>'
+            '<page number="1" height="1263" width="862">'
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
+            '<text top="145" left="100" width="100" height="19" font="1">a </text>'
             '</page>'
             '<page number="2" height="1263" width="862">'
-            '<text top="145" left="100" width="100" height="19">b.</text>'
+            '<text top="145" left="100" width="100" height="19" font="1">b.</text>'
             '</page>'
 
             '</pdf2xml>')
@@ -5933,4 +5989,3 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
-

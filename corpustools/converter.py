@@ -634,15 +634,27 @@ class PDFFontspec(object):
 class PDFFontspecs(object):
     def __init__(self):
         self.pdffontspecs = {}
+        self.duplicates = {}
 
     def add_fontspec(self, xmlfontspec):
         this_id = xmlfontspec.get('id')
-        self.pdffontspecs[this_id] = PDFFontspec(xmlfontspec)
+        this_fontspec = PDFFontspec(xmlfontspec)
 
-        for font_id in self.pdffontspecs.keys():
-            if font_id != this_id and self.pdffontspecs[font_id] == self.pdffontspecs[this_id]:
-                self.pdffontspecs[font_id].equivalents.add(this_id)
-                self.pdffontspecs[this_id].equivalents.add(font_id)
+        found = False
+        for fontspec in self.pdffontspecs.keys():
+            if fontspec == this_fontspec:
+                found = True
+                self.duplicates[this_id] = self.pdffontspecs[fontspec]
+                break
+
+        if not found:
+            self.pdffontspecs[this_fontspec] = this_id
+
+    def corrected_id(self, id):
+        if id in self.duplicates:
+            return self.duplicates[id]
+        else:
+            return id
 
 
 class BoundingBox(object):
@@ -1004,7 +1016,6 @@ class OrderedPDFSections(object):
 class PDFTextExtractor(object):
     '''Extract text from a list of PDFParagraphs'''
     def __init__(self):
-        self.pdffontspecs = PDFFontspecs()
         self.body = etree.Element('body')
         etree.SubElement(self.body, 'p')
 
@@ -1027,10 +1038,6 @@ class PDFTextExtractor(object):
                 last.tail = text
             else:
                 last.tail += text
-
-    def add_fontspecs(self, page):
-        for xmlfontspec in page.iter('fontspec'):
-            self.pdffontspecs.add_fontspec(xmlfontspec)
 
     def extract_textelement(self, textelement):
         '''Convert one <text> element to an array of text and etree Elements.
@@ -1172,6 +1179,11 @@ class PDFPage(object):
         return (('odd' in skip_pages and (self.number % 2) == 1) or
                 ('even' in skip_pages and (self.number % 2) == 0) or
                 self.number in skip_pages)
+
+    def fix_font_id(self, pdffontspecs):
+        for textelement in self.textelements:
+            correct = pdffontspecs.corrected_id(textelement.font)
+            textelement.t.set('font', correct)
 
     def adjust_line_heights(self):
         '''If there is a 1 pixel overlap between neighbouring elements, adjust the height'''
@@ -1388,6 +1400,8 @@ class PDF2XMLConverter(Converter):
         super(PDF2XMLConverter, self).__init__(filename,
                                                write_intermediate)
         self.extractor = PDFTextExtractor()
+        self.pdffontspecs = PDFFontspecs()
+
 
     def strip_chars(self, content, extra=u''):
         remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]'.format(
@@ -1456,6 +1470,7 @@ class PDF2XMLConverter(Converter):
         pdfpage = PDFPage(page, metadata_margins=self.md.margins,
                           metadata_inner_margins=self.md.inner_margins)
         if not pdfpage.is_skip_page(self.md.skip_pages):
+            pdfpage.fix_font_id(self.pdffontspecs)
             try:
                 self.extractor.extract_text_from_page(pdfpage.pick_valid_text_elements())
             except PDFEmptyPageException:
@@ -1463,8 +1478,12 @@ class PDF2XMLConverter(Converter):
 
     def parse_pages(self, root_element):
         for page in root_element.iter('page'):
-            self.extractor.add_fontspecs(page)
+            self.add_fontspecs(page)
             self.parse_page(page)
+
+    def add_fontspecs(self, page):
+        for xmlfontspec in page.iter('fontspec'):
+            self.pdffontspecs.add_fontspec(xmlfontspec)
 
 
 class BiblexmlConverter(Converter):
