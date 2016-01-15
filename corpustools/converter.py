@@ -847,7 +847,6 @@ class PDFParagraph(object):
                     ) and
                     not textelement.is_left_of(self.textelements[-1]) and
                     self.is_within_line_distance(textelement) and
-                    self.textelements[-1].height - textelement.height < 3 and
                     self.textelements[-1].font == textelement.font):
                 return True
             elif (self.textelements[-1].is_left_of(textelement) and

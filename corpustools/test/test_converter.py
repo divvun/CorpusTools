@@ -3452,6 +3452,16 @@ class TestPDFParagraph(XMLTester):
 
         self.assertTrue(pp.is_same_paragraph(t1))
 
+    def test_is_same_paragraph_list_paragraph_same_font_different_height(self):
+        pp = converter.PDFParagraph()
+        pp.append_textelement(
+            converter.PDFTextElement(etree.fromstring(
+                '<text top="1049" left="152" width="542" height="26" font="0">  Dearvvašvuođa ja sosiála, dákko bakte olmmošlogu rievdan, </text>')))
+        t1 = converter.PDFTextElement(etree.fromstring(
+            '<text top="1079" left="179" width="177" height="23" font="0">demografiija, dienas </text>'))
+
+        self.assertTrue(pp.is_same_paragraph(t1))
+
 
 class TestPDFTextExtractor(XMLTester):
     def test_extract_textelement1(self):
