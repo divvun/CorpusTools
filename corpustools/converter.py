@@ -624,7 +624,6 @@ class PDFFontspec(object):
         self.size = xmlfontspec.get('size')
         self.family = xmlfontspec.get('family')
         self.color = xmlfontspec.get('color')
-        self.equivalents = set()
 
     def __eq__(self, other):
         return ((self.size, self.family, self.color) ==
