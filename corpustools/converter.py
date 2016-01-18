@@ -873,12 +873,12 @@ class PDFParagraph(object):
                 return False
         elif not self.is_listitem:
             if (self.textelements[-1].is_above(textelement) and
-                    self.textelements[-1].height == textelement.height and
+                    self.textelements[-1].font == textelement.font and
                     self.is_within_line_distance(textelement)):
                 return True
             elif (self.textelements[-1].is_left_of(textelement) and
                   self.textelements[-1].is_below(textelement) and
-                  self.textelements[-1].height == textelement.height and
+                  self.textelements[-1].font == textelement.font and
                   not re.match('\d', self.textelements[-1].plain_text[0]) and
                   self.textelements[-1].plain_text[0] == self.textelements[-1].plain_text[0].lower()):
                 return True

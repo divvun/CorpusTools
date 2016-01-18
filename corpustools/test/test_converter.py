@@ -3254,7 +3254,7 @@ class TestPDFParagraph(XMLTester):
         t1 = converter.PDFTextElement(etree.fromstring(
             '<text top="126" left="117" width="305" height="20" font="2">b</text>'))
 
-        self.assertFalse(pp.is_same_paragraph(t1))
+        self.assertTrue(pp.is_same_paragraph(t1))
 
     def test_is_same_paragraph_4(self):
         '''Two text elements, different fonts'''
@@ -3265,7 +3265,7 @@ class TestPDFParagraph(XMLTester):
         t1 = converter.PDFTextElement(etree.fromstring(
             '<text top="126" left="117" width="305" height="19" font="2">Text2</text>'))
 
-        self.assertTrue(pp.is_same_paragraph(t1))
+        self.assertFalse(pp.is_same_paragraph(t1))
 
     def test_is_same_paragraph_5(self):
         '''List characters signal a new paragraph start'''
@@ -3806,7 +3806,7 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
                 <text top="560" left="85" width="347" height="15" font="4">Femunddas  lea  alimus  mearriduvvon  boazolohku</text>
                 <text top="577" left="85" width="347" height="15" font="4">9 000  bohcco.  Boazolohku  lea  juhkkojuvvon  ovt-</text>
                 <text top="595" left="85" width="347" height="15" font="4">tamađe Riast/Hylling ja Essand orohagaid gaskka. Go</text>
-                <text top="560" left="461" width="347" height="15" font="7"><b>6.2. tabeallas </b>meroštallá boazoeatnatvuođa ja buvtta-</text>
+                <text top="560" left="461" width="347" height="15" font="4"><b>6.2. tabeallas </b>meroštallá boazoeatnatvuođa ja buvtta-</text>
                 <text top="577" left="461" width="347" height="15" font="4">deami juohke areálovttadaga nammii, leat Femundda</text>
                 <text top="595" left="461" width="283" height="15" font="4">areálat juogáduvvon dán guovtti orohahkii.</text>
                 <text top="638" left="85" width="560" height="15" font="9"><i><b>6.2. tabealla. </b>Lulli-Trøndelága/Hedmark boazodoalloguovllu eatnamiid geavaheapmi.</i></text>
@@ -3870,7 +3870,7 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
                 <text top="853" left="461" width="347" height="15" font="4">orohagain Norggas ii dáidde leat ná stuora areálbuvt-</text>
                 <text top="871" left="461" width="64" height="15" font="4">tadeapmi.</text>
                 <text top="888" left="478" width="329" height="15" font="4">Maŋemus  golmma  jagi  njuovvandeattuid  oaidnit</text>
-                <text top="905" left="461" width="347" height="15" font="7"><b>6.2. tabeallas. </b>Das oaidnit orohagaid siskkáldas ero-</text>
+                <text top="905" left="461" width="347" height="15" font="4"><b>6.2. tabeallas. </b>Das oaidnit orohagaid siskkáldas ero-</text>
                 <text top="922" left="461" width="347" height="15" font="4">husaid jagis jahkái. Dás boahtá ovdan ahte dássi lea</text>
                 <text top="940" left="461" width="347" height="15" font="4">veahá vuollelis go Nordlánddas ja Davvi-Trøndelágas</text>
                 <text top="957" left="461" width="347" height="15" font="4">ja arvat vuollelis Romssa. Orohagaid siskkáldas ero-</text>
@@ -3901,7 +3901,7 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
                 <text top="250" left="461" width="347" height="15" font="4">eará orohagain eret. Danne eat čilge dárkileappot dán</text>
                 <text top="267" left="461" width="347" height="15" font="4">orohaga  birra.  Eará  orohagaid  birra  mii  čilget</text>
                 <text top="284" left="461" width="72" height="15" font="4">oktasaččat.</text>
-                <text top="301" left="478" width="330" height="15" font="7"><b>6.1.  ja  6.2.  tabeallas </b>oaidnit  boazodoalloguovllu</text>
+                <text top="301" left="478" width="330" height="15" font="4"><b>6.1.  ja  6.2.  tabeallas </b>oaidnit  boazodoalloguovllu</text>
                 <text top="319" left="461" width="190" height="15" font="4">struktuvrra ja eatnamiid anu.</text>
             </page>
         ''')
@@ -3949,8 +3949,9 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
                     <em type="bold">Jämtlándda leana, lulit</em>
                     <em type="bold">guovlu</em>
                 </p>
+                <p><em type="italic">Obbalaččat</em></p>
                 <p>
-                    <em type="italic">Obbalaččat</em>Prinsihpas eai leat
+                    Prinsihpas eai leat
                     orohatrájit rievdaduvvon jagi 1894 rájes. Rievdadeamit leat
                     váldosaččat dahkkon máŋg­gaid duomuid vuođul maid
                     Alimusriekti lea meannu­dan. Das daddjo ahte orohagat leat
@@ -3968,10 +3969,8 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
                     áidna orohat  mii  ii  leat  riikaráji  guoras,  muhto  lea
                     sierra eará orohagain eret. Danne eat čilge dárkileappot dán
                     orohaga  birra.  Eará  orohagaid  birra  mii  čilget
-                    oktasaččat.
-                    <em type="bold">6.1.  ja  6.2.  tabeallas</em>oaidnit
-                    boazodoalloguovllu
-                            struktuvrra ja eatnamiid anu.
+                    oktasaččat. <em type="bold">6.1.  ja  6.2.  tabeallas</em>oaidnit
+                    boazodoalloguovllu struktuvrra ja eatnamiid anu.
                 </p>
             </body>
         ''')
@@ -3997,8 +3996,9 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
                     <em type="bold">Jämtlándda leana, lulit</em>
                     <em type="bold">guovlu</em>
                 </p>
+                <p><em type="italic">Obbalaččat</em></p>
                 <p>
-                    <em type="italic">Obbalaččat</em>Prinsihpas eai leat
+                    Prinsihpas eai leat
                     orohatrájit rievdaduvvon jagi 1894 rájes. Rievdadeamit leat
                     váldosaččat dahkkon máŋg­gaid duomuid vuođul maid
                     Alimusriekti lea meannu­dan. Das daddjo ahte orohagat leat
@@ -4016,10 +4016,8 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
                     áidna orohat  mii  ii  leat  riikaráji  guoras,  muhto  lea
                     sierra eará orohagain eret. Danne eat čilge dárkileappot dán
                     orohaga  birra.  Eará  orohagaid  birra  mii  čilget
-                    oktasaččat.
-                    <em type="bold">6.1.  ja  6.2.  tabeallas</em>oaidnit
-                    boazodoalloguovllu
-                            struktuvrra ja eatnamiid anu.
+                    oktasaččat. <em type="bold">6.1.  ja  6.2.  tabeallas</em>
+                    oaidnit boazodoalloguovllu struktuvrra ja eatnamiid anu.
                 </p>
                 <p>
                     <em type="italic">6.1. tabealla.</em>
@@ -4046,20 +4044,19 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
                 Trollheimen0,77,910,7</p>
                 <p>1,618,211,2</p>
                 <p>
-                Lea mihá eambo boazoeatnatvuohta go Davvi-Trøn­delágas,
-                Nordlánddas ja Romssas. Duogážin lea dál­vejagi  guohtumiid
-                vejolašvuohta,  ja  áigodaga  iešgu­đetlágan
-                guođohanvejolašvuohta.  Earret  Elgå,
-                leat Lulli-Trøndelága/Hedmark  orohagaid  boazoeatnat­vuohta
-                vuollelis  go  Kárášjogas  (2,4  bohcco/km)  ja
-                Oarje-Finnmárkkus  (3,1  bohcco/km).  Riast/Hylling orohagas lea
-                eambbo buvttadeapmi bohcco ektui go dáin earáin, muhto buot
-                orohagaid dássi lea vuollelis go ovdal. Elgå:s lea mearkkašahtti
-                alla boazolohku ja buvttadeapmi  juohke  areálovttadaga  nammii.
-                Eará orohagain Norggas ii dáidde leat ná stuora
-                areálbuvt­tadeapmi. Maŋemus  golmma  jagi  njuovvandeattuid
-                oaidnit
-                    <em type="bold">6.2. tabeallas.</em>Das oaidnit orohagaid
+                    Lea mihá eambo boazoeatnatvuohta go Davvi-Trøn­delágas,
+                    Nordlánddas ja Romssas. Duogážin lea dál­vejagi  guohtumiid
+                    vejolašvuohta,  ja  áigodaga  iešgu­đetlágan
+                    guođohanvejolašvuohta.  Earret  Elgå,
+                    leat Lulli-Trøndelága/Hedmark  orohagaid  boazoeatnat­vuohta
+                    vuollelis  go  Kárášjogas  (2,4  bohcco/km)  ja
+                    Oarje-Finnmárkkus  (3,1  bohcco/km).  Riast/Hylling orohagas lea
+                    eambbo buvttadeapmi bohcco ektui go dáin earáin, muhto buot
+                    orohagaid dássi lea vuollelis go ovdal. Elgå:s lea mearkkašahtti
+                    alla boazolohku ja buvttadeapmi  juohke  areálovttadaga  nammii.
+                    Eará orohagain Norggas ii dáidde leat ná stuora
+                    areálbuvt­tadeapmi. Maŋemus  golmma  jagi  njuovvandeattuid
+                    oaidnit <em type="bold">6.2. tabeallas.</em>Das oaidnit orohagaid
                     siskkáldas ero\xADhusaid jagis jahkái. Dás boahtá ovdan ahte
                     dássi lea veahá vuollelis go Nordlánddas ja
                     Davvi-Trøndelágas ja arvat vuollelis Romssa. Orohagaid
@@ -4866,13 +4863,15 @@ class TestProblematicPageThreeColumns(XMLTester):
     def test_make_unordered_paragraphs(self):
         expected_page = etree.fromstring(u'''
             <body>
-                <p><em type="bold">Dán giđa kártengeahččalemiid birra</em>2015
+                <p><em type="bold">Dán giđa kártengeahččalemiid birra</em></p>
+                <p>2015
                 giđa galget skuvllat čađahit geatnegahtton kártengeahččalemiid
                 1., 2. ja 3. ceahkis. Oahpahusdirektoráhtta fállá maid
                 eaktodáhtolaš kártengeahččalemiid 1., 3. ja 4. ceahkis. 2015
                 giđa fállojuvvo vel lassin ođđa eaktodáhtolaš kárten-
                 geahččaleamit eŋgelasgielas 3. ceahkkái.</p>
-                <p><em type="bold">Geatnegahtton kártengeahččaleamit</em>Leat
+                <p><em type="bold">Geatnegahtton kártengeahččaleamit</em></p>
+                <p>Leat
                 geatnegahtton kártengeahččaleamit:</p>
                 <p type="listitem">• Lohkamis 1., 2. ja 3. ceahkis</p>
                 <p type="listitem">• Rehkenastimis 2. ceahkis</p>
@@ -4883,8 +4882,8 @@ class TestProblematicPageThreeColumns(XMLTester):
                 oahppi deavddášii luvvema eavttuid, de sáhttá oahppi ieš dahje
                 su váhnemat dattetge mearridit ahte oahppi galgá čađahit
                 geahččaleami.</p>
-                <p><em type="bold">Eaktodáhtolaš kártengeahččaleamit
-                </em>Geatnegahtton kártengeahččalemiide lassin fállá
+                <p><em type="bold">Eaktodáhtolaš kártengeahččaleamit</em></p>
+                <p>Geatnegahtton kártengeahččalemiide lassin fállá
                 Oahpahusdirektoráhtta eaktodáhtolaš kártengeahččalemiid. Jus
                 skuvla dahje skuvlaeaiggát mearrida čađahit eaktodáhtolaš
                 kártengeahččalemiid, de fertejit buot oahppit dan ceahkis masa
@@ -4893,8 +4892,8 @@ class TestProblematicPageThreeColumns(XMLTester):
                 <p type="listitem">• Rehkenastimis 1. ja 3. ceahkis</p>
                 <p type="listitem">• Eŋgelasgielas 3. ceahkis</p>
                 <p type="listitem">• Digitála gálggain 4. ceahkis</p>
-                <p><em type="bold">Dieđut geahččalemiid birra
-                </em>Kártengeahččalemiid galget skuvla ja oahpaheaddjit geavahit
+                <p><em type="bold">Dieđut geahččalemiid birra</em></p>
+                <p>Kártengeahččalemiid galget skuvla ja oahpaheaddjit geavahit
                 gávnnahit geat dárbbašit lasi čuovvoleami álgooahpa- husas.
                 Eanaš oahppit máhttet buot hárjehusaid, ja máŋgasiid mielas ges
                 lea geahččaleapmi álki. Geahččaleamit eai muital olus ohppiid
@@ -4917,8 +4916,9 @@ class TestProblematicPageThreeColumns(XMLTester):
                 eŋgelasgiellageahččaleamis lea dovdat ja ipmirdit oahpes ja
                 beaivválaš sániid ja dajaldagaid, njálmmálaččat dahje
                 čálalaččat. Geahččaleamis leat guokte oasi, guldalanoassi ja
-                lohkanoassi. Ohppiin ferte leat oaivetelefovdna guldalanoasis.
-                <em type="bold">Bohtosat ja čuovvoleapmi</em>Kártengeahččalemiid
+                lohkanoassi. Ohppiin ferte leat oaivetelefovdna guldalanoasis.</p>
+                <p><em type="bold">Bohtosat ja čuovvoleapmi</em></p>
+                <p>Kártengeahččalemiid
                 bohtosiid ii galgga rapporteret Oahpahusdirektoráhttii ii ge
                 geavahit buohtastahttit skuvllaid, gielddaid dahje fylkkaid.</p>
                 <p>Bohtosiid galgá vuosttažettiin geavahit siskkáldasat skuvllas
@@ -4930,11 +4930,12 @@ class TestProblematicPageThreeColumns(XMLTester):
                 čuovvoleapmái, de galgá váhnemiidda dieđihit geahččalanbohtosiid
                 birra ja muitalit makkár doaimmaid áigot álggahit. Váhnemat
                 sáhttet váldit oktavuođa skuvllain jus ležžet gažaldagat.</p>
-                <p><em type="bold">Eanet dieđut</em>Eanet dieđut
-                kártengeahččalemiid birra leat dáppe:
-                http://www.udir.no/Vurdering/ Kartlegging-gs/</p>
-                <p>Máhttoloktema oahppoplánabuvttus lea dáppe:
-                http://www.udir.no/Lareplaner/ Kunnskapsloftet/</p>
+                <p><em type="bold">Eanet dieđut</em></p>
+                <p>Eanet dieđut
+                kártengeahččalemiid birra leat dáppe:</p>
+                <p>http://www.udir.no/Vurdering/ Kartlegging-gs/</p>
+                <p>Máhttoloktema oahppoplánabuvttus lea dáppe:</p>
+                <p>http://www.udir.no/Lareplaner/ Kunnskapsloftet/</p>
                 <p><em type="bold">Diehtu 2015 giđa kártengeahččalemiid birra</em></p>
                 <p><em type="bold">Váhnemiidda geain leat mánát 1.- 4. ceahkis</em></p>
                 <p><em type="bold">Davvisámegillii</em></p>
@@ -4970,13 +4971,15 @@ class TestProblematicPageThreeColumns(XMLTester):
                 <p><em type="bold">Davvisámegillii</em></p>
                 <p><em type="bold">Diehtu 2015 giđa kártengeahččalemiid birra</em></p>
                 <p><em type="bold">Váhnemiidda geain leat mánát 1.- 4. ceahkis</em></p>
-                <p><em type="bold">Dán giđa kártengeahččalemiid birra</em>2015
+                <p><em type="bold">Dán giđa kártengeahččalemiid birra</em></p>
+                <p>2015
                 giđa galget skuvllat čađahit geatnegahtton kártengeahččalemiid
                 1., 2. ja 3. ceahkis. Oahpahusdirektoráhtta fállá maid
                 eaktodáhtolaš kártengeahččalemiid 1., 3. ja 4. ceahkis. 2015
                 giđa fállojuvvo vel lassin ođđa eaktodáhtolaš kárten-
                 geahččaleamit eŋgelasgielas 3. ceahkkái.</p>
-                <p><em type="bold">Geatnegahtton kártengeahččaleamit</em>Leat
+                <p><em type="bold">Geatnegahtton kártengeahččaleamit</em></p>
+                <p>Leat
                 geatnegahtton kártengeahččaleamit:</p>
                 <p type="listitem">• Lohkamis 1., 2. ja 3. ceahkis</p>
                 <p type="listitem">• Rehkenastimis 2. ceahkis</p>
@@ -4987,8 +4990,8 @@ class TestProblematicPageThreeColumns(XMLTester):
                 oahppi deavddášii luvvema eavttuid, de sáhttá oahppi ieš dahje
                 su váhnemat dattetge mearridit ahte oahppi galgá čađahit
                 geahččaleami.</p>
-                <p><em type="bold">Eaktodáhtolaš kártengeahččaleamit</em>
-                Geatnegahtton kártengeahččalemiide lassin fállá
+                <p><em type="bold">Eaktodáhtolaš kártengeahččaleamit</em></p>
+                <p>Geatnegahtton kártengeahččalemiide lassin fállá
                 Oahpahusdirektoráhtta eaktodáhtolaš kártengeahččalemiid. Jus
                 skuvla dahje skuvlaeaiggát mearrida čađahit eaktodáhtolaš
                 kártengeahččalemiid, de fertejit buot oahppit dan ceahkis masa
@@ -4997,8 +5000,8 @@ class TestProblematicPageThreeColumns(XMLTester):
                 <p type="listitem">• Rehkenastimis 1. ja 3. ceahkis</p>
                 <p type="listitem">• Eŋgelasgielas 3. ceahkis</p>
                 <p type="listitem">• Digitála gálggain 4. ceahkis</p>
-                <p><em type="bold">Dieđut geahččalemiid birra</em>
-                Kártengeahččalemiid galget skuvla ja oahpaheaddjit geavahit
+                <p><em type="bold">Dieđut geahččalemiid birra</em></p>
+                <p>Kártengeahččalemiid galget skuvla ja oahpaheaddjit geavahit
                 gávnnahit geat dárbbašit lasi čuovvoleami álgooahpa- husas.
                 Eanaš oahppit máhttet buot hárjehusaid, ja máŋgasiid mielas ges
                 lea geahččaleapmi álki. Geahččaleamit eai muital olus ohppiid
@@ -5021,9 +5024,9 @@ class TestProblematicPageThreeColumns(XMLTester):
                 eŋgelasgiellageahččaleamis lea dovdat ja ipmirdit oahpes ja
                 beaivválaš sániid ja dajaldagaid, njálmmálaččat dahje
                 čálalaččat. Geahččaleamis leat guokte oasi, guldalanoassi ja
-                lohkanoassi. Ohppiin ferte leat oaivetelefovdna guldalanoasis.
-                <em type="bold">Bohtosat ja čuovvoleapmi</em>
-                Kártengeahččalemiid bohtosiid ii galgga rapporteret
+                lohkanoassi. Ohppiin ferte leat oaivetelefovdna guldalanoasis.</p>
+                <p><em type="bold">Bohtosat ja čuovvoleapmi</em></p>
+                <p>Kártengeahččalemiid bohtosiid ii galgga rapporteret
                 Oahpahusdirektoráhttii ii ge geavahit buohtastahttit skuvllaid,
                 gielddaid dahje fylkkaid.</p>
                 <p>Bohtosiid galgá vuosttažettiin geavahit siskkáldasat skuvllas
@@ -5035,11 +5038,11 @@ class TestProblematicPageThreeColumns(XMLTester):
                 čuovvoleapmái, de galgá váhnemiidda dieđihit geahččalanbohtosiid
                 birra ja muitalit makkár doaimmaid áigot álggahit. Váhnemat
                 sáhttet váldit oktavuođa skuvllain jus ležžet gažaldagat.</p>
-                <p><em type="bold">Eanet dieđut</em>
-                Eanet dieđut kártengeahččalemiid birra leat dáppe:
-                http://www.udir.no/Vurdering/ Kartlegging-gs/</p>
-                <p>Máhttoloktema oahppoplánabuvttus lea dáppe:
-                http://www.udir.no/Lareplaner/ Kunnskapsloftet/</p>
+                <p><em type="bold">Eanet dieđut</em></p>
+                <p>Eanet dieđut kártengeahččalemiid birra leat dáppe:</p>
+                <p>http://www.udir.no/Vurdering/ Kartlegging-gs/</p>
+                <p>Máhttoloktema oahppoplánabuvttus lea dáppe:</p>
+                <p>http://www.udir.no/Lareplaner/ Kunnskapsloftet/</p>
             </body>
             ''')
 
@@ -5728,7 +5731,7 @@ class TestPDF2XMLConverter(XMLTester):
         page_element = etree.fromstring(
             '<page number="1" height="1263" width="862">'
             '<text top="666" left="104" width="312" height="18" font="1">A – <i>b </i></text>'
-            '<text top="687" left="104" width="318" height="18" font="6"><i>c-d</i> – e-</text>'
+            '<text top="687" left="104" width="318" height="18" font="1"><i>c-d</i> – e-</text>'
             '<text top="708" left="104" width="328" height="18" font="1">f </text>'
             '</page>')
 
