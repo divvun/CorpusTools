@@ -861,7 +861,6 @@ class PDFParagraph(object):
                 return True
             elif (self.textelements[-1].is_left_of(textelement) and
                   self.textelements[-1].is_below(textelement) and
-                  self.textelements[-1].height - textelement.height < 2 and
                   self.textelements[-1].font == textelement.font and
                   (
                       (not re.search(u'[.?!]\s*$', self.textelements[-1].plain_text) and
