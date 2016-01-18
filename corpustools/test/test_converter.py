@@ -3462,6 +3462,16 @@ class TestPDFParagraph(XMLTester):
 
         self.assertTrue(pp.is_same_paragraph(t1))
 
+    def test_is_same_paragraph_indented_paragraph_start(self):
+        pp = converter.PDFParagraph()
+        pp.append_textelement(
+            converter.PDFTextElement(etree.fromstring(
+                '<text top="586" left="149" width="324" height="20" font="6">nuppástuvvan maŋimuš logijagiid áigge olu. </text>')))
+        t1 = converter.PDFTextElement(etree.fromstring(
+            '<text top="606" left="174" width="604" height="20" font="6">Bargomárkanat  leat  juohkásan  albmáid  ja  nissoniid  ámmátsurggiide.  Dušše  15 </text>'))
+
+        self.assertFalse(pp.is_same_paragraph(t1))
+
 
 class TestPDFFontspecs(unittest.TestCase):
     def test_add_fontspec(self):
