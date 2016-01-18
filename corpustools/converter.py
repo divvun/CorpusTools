@@ -847,7 +847,7 @@ class PDFParagraph(object):
         return delta < ratio * self.textelements[-1].height
 
     def is_same_paragraph(self, textelement):
-        '''Look for list characters in other_box'''
+        '''Decide whether textelement belongs to this paragraph'''
         if self.LIST_RE.search(textelement.plain_text):
             return False
         elif self.is_listitem:
