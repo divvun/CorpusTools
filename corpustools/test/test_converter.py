@@ -37,7 +37,18 @@ here = os.path.dirname(__file__)
 LANGUAGEGUESSER = text_cat.Classifier(None)
 
 
-class TestConverter(unittest.TestCase):
+class XMLTester(unittest.TestCase):
+
+    def assertXmlEqual(self, got, want):
+        """Check if two stringified xml snippets are equal"""
+        checker = doctestcompare.LXMLOutputChecker()
+        if not checker.check_output(want, got, 0):
+            message = checker.output_difference(
+                doctest.Example("", want), got, 0).encode('utf-8')
+            raise AssertionError(message)
+
+
+class TestConverter(XMLTester):
     def setUp(self):
         self.converter_inside_orig = converter.Converter(
             os.path.join(here,
@@ -159,16 +170,49 @@ class TestConverter(unittest.TestCase):
                           self.converter_inside_orig.validate_complete,
                           complete)
 
+    def test_detect_quote_is_skipped_on_errormarkup_documents(self):
+        '''quote detection should not be done in errormarkup documents
 
-class XMLTester(unittest.TestCase):
+        This is a test for that covers the case covered in
+        http://giellatekno.uit.no/bugzilla/show_bug.cgi?id=2151
+        '''
+        c = converter.PlaintextConverter('blogg_5.correct.txt')
+        complete_string = u'''
+            <document xml:lang="smj" id="no_id">
+            <header>
+                <title/>
+                <genre code="ficti"/>
+                <year>2011</year>
+                <wordcount>15</wordcount>
+            </header>
+                <body>
+                    <p>
+                        Lev lähkám Skánen,
+                        <errorort correct="Evenskjeran" errorinfo="vowm,á-a">
+                            Evenskjerán
+                        </errorort>
+                        Sáme
+                        <errorort correct="gilppusijn" errorinfo="infl">
+                            gilppojn
+                        </errorort>
+                        ja lev aj dán vahko lähkám
+                        <errorort
+                            correct="&quot;hárjjidallamskåvlån&quot;"
+                            errorinfo="conc,rj-rjj;cmp,2-X">
+                                hárjidallam-"skåvlån"
+                        </errorort>
+                        <errorort correct="tjuojggusijn" errorinfo="vowlat,o-u">
+                            tjuojggosijn
+                        </errorort>.
+                    </p>
+                </body>
+            </document>
+        '''
+        complete = etree.fromstring(complete_string)
+        c.fix_document(complete)
 
-    def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal"""
-        checker = doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
-            message = checker.output_difference(
-                doctest.Example("", want), got, 0).encode('utf-8')
-            raise AssertionError(message)
+        self.assertXmlEqual(complete_string,
+                            etree.tostring(complete))
 
 
 class TestAvvirConverter(XMLTester):
@@ -2628,7 +2672,7 @@ TITTEL: 3</p>
 
         self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
-    def test_fix__body_encoding(self):
+    def test_fix_body_encoding(self):
         newstext = converter.PlaintextConverter(
             'tullball.txt', LANGUAGEGUESSER)
         text = newstext.content2xml(io.StringIO(u'''ÐMun lean njeallje jagi boaris.

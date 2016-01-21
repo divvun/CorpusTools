@@ -186,7 +186,8 @@ class Converter(object):
         fixer.fix_newstags()
         fixer.soft_hyphen_to_hyph_tag()
         fixer.set_word_count()
-        fixer.detect_quotes()
+        if not 'correct.' in self.orig:
+            fixer.detect_quotes()
 
         if (complete.
             attrib['{http://www.w3.org/XML/1998/namespace}lang'] in
