@@ -1299,6 +1299,100 @@ class TestHTMLContentConverter(XMLTester):
 
         self.assertEqual(etree.tostring(got), etree.tostring(want))
 
+    def test_convert2intermediate_with_bare_text_after_p(self):
+        content = '''
+            <html lang="no" dir="ltr">
+                <head>
+                    <title>
+                        Visit Stetind: Histåvrrå: Nasjonálvárre
+                    </title>
+                </head>
+                <body>
+                    <div id="bbody">
+                        <div id="mframe">
+                            <div class="sub" id="masterpage">
+                                <div id="mpage">
+                                    <h1>Gå Stáddá</h1>
+                                    <div class="ingress">
+                                        <font size="3">
+                                            <font>
+                                                Gå ÅN
+                                                <span>
+                                                </span>
+                                            </font>
+                                        </font>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        '''
+        want = '''
+            <document>
+                <header>
+                    <title>Visit Stetind: Histåvrrå: Nasjonálvárre</title>
+                </header>
+                <body>
+                    <p type="title">Gå Stáddá</p>
+                    <p>Gå ÅN</p>
+                </body>
+            </document>
+        '''
+
+        got = converter.HTMLContentConverter(
+            'text.html', LANGUAGEGUESSER,
+            content=content).convert2intermediate()
+
+        self.assertXmlEqual(etree.tostring(got), want)
+
+    def test_convert2intermediate_with_body_bare_text(self):
+        content = '''
+            <html lang="no" dir="ltr">
+                <head>
+                    <title>
+                        Visit Stetind: Histåvrrå: Nasjonálvárre
+                    </title>
+                </head>
+                <body>
+                    <div id="bbody">
+                        <div id="mframe">
+                            <div class="sub" id="masterpage">
+                                <div id="mpage">
+                                    <div class="ingress">
+                                        <font size="3">
+                                            <font>
+                                                Gå ÅN
+                                                <span>
+                                                </span>
+                                            </font>
+                                        </font>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        '''
+        want = '''
+            <document>
+                <header>
+                    <title>Visit Stetind: Histåvrrå: Nasjonálvárre</title>
+                </header>
+                <body>
+                    <p>Gå ÅN</p>
+                </body>
+            </document>
+        '''
+
+        got = converter.HTMLContentConverter(
+            'text.html', LANGUAGEGUESSER,
+            content=content).convert2intermediate()
+
+        self.assertXmlEqual(etree.tostring(got), want)
+
 
 class TestRTFConverter(XMLTester):
 

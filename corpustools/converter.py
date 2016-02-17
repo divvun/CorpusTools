@@ -2178,6 +2178,21 @@ class HTMLContentConverter(Converter):
 
         try:
             intermediate = transform(self.soup)
+
+            body = intermediate.find('.//body')
+            if body.text is not None and body.text.strip() != '':
+                new_p = etree.Element('p')
+                new_p.text = body.text
+                body.text = None
+                body.insert(0, new_p)
+
+            for p in intermediate.findall('.//p'):
+                if p.tail is not None and p.tail.strip() != '':
+                    new_p = etree.Element('p')
+                    new_p.text = p.tail
+                    p.tail = None
+                    p.addnext(new_p)
+
         except etree.XMLSyntaxError as e:
             self.handle_syntaxerror(e, util.lineno(),
                                     etree.tostring(self.soup))
