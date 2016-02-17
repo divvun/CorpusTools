@@ -2186,12 +2186,13 @@ class HTMLContentConverter(Converter):
                 body.text = None
                 body.insert(0, new_p)
 
-            for p in intermediate.findall('.//p'):
-                if p.tail is not None and p.tail.strip() != '':
-                    new_p = etree.Element('p')
-                    new_p.text = p.tail
-                    p.tail = None
-                    p.addnext(new_p)
+            for element in ['list', 'p']:
+                for found_element in intermediate.findall('.//' + element):
+                    if found_element.tail is not None and found_element.tail.strip() != '':
+                        new_p = etree.Element('p')
+                        new_p.text = found_element.tail
+                        found_element.tail = None
+                        found_element.addnext(new_p)
 
         except etree.XMLSyntaxError as e:
             self.handle_syntaxerror(e, util.lineno(),

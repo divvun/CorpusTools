@@ -1347,6 +1347,41 @@ class TestHTMLContentConverter(XMLTester):
 
         self.assertXmlEqual(etree.tostring(got), want)
 
+    def test_convert2intermediate_with_bare_text_after_list(self):
+        content = '''
+            <html lang="no" dir="ltr">
+                <body>
+                    <UL>
+                        <LI><A href="http://www.soff.no">www.soff.no</A>
+                        <LI><A href="http://www.soff.uit.no">www.soff.uit.no</A> </LI>
+                    </UL>
+                    <CENTER><SMALL>
+                            <a href='http://www.fmno.no'>Fylkesmannen i Nordland &copy; 2005</a>
+                    </SMALL></CENTER>
+                </body>
+            </html>
+        '''
+        want = '''
+            <document>
+                <header>
+                    <title/>
+                </header>
+                <body>
+                    <list>
+                        <p type="listitem">www.soff.no</p>
+                        <p type="listitem">www.soff.uit.no</p>
+                    </list>
+                    <p>Fylkesmannen i Nordland © 2005</p>
+                </body>
+            </document>
+        '''
+
+        got = converter.HTMLContentConverter(
+            'text.html', LANGUAGEGUESSER,
+            content=content).convert2intermediate()
+
+        self.assertXmlEqual(etree.tostring(got), want)
+
     def test_convert2intermediate_with_body_bare_text(self):
         content = '''
             <html lang="no" dir="ltr">
