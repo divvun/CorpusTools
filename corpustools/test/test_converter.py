@@ -720,7 +720,7 @@ class TestHTMLContentConverter(XMLTester):
                     'ld-navbar',
                     'meta',
                     'meta ui-helper-clearfix',  # nord-salten.no
-                    'authors ui-helper-clearfix'  # nord-salten.no
+                    'authors ui-helper-clearfix',  # nord-salten.no
                     'menu',  # visitstetind.no
                     'metaWrapper',
                     'moduletable_oikopolut',
