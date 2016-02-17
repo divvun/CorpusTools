@@ -738,6 +738,7 @@ class TestHTMLContentConverter(XMLTester):
                     'sharing',
                     'sidebar',
                     'spalte300',  # osko.no
+                    'subfooter',  # visitstetind.no
                     'tabbedmenu',
                     'tipformcontainer',  # tysfjord.kommune.no
                     'tipsarad mt6 selfClear',
