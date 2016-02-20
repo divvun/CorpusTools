@@ -1864,7 +1864,6 @@ class HTMLContentConverter(Converter):
                     'breadcrums span-12',
                     'btm_menu',
                     'byline',  # arran.no
-                    'c1',  # arran.no
                     'clearfix breadcrumbsAndSocial noindex',  # udir.no
                     'container_full',
                     'documentInfoEm',
@@ -1993,6 +1992,15 @@ class HTMLContentConverter(Converter):
                     'spraakvelger',  # osko.no
                     'subfoote',  # visitstetind.no
                     'submenu',  # nord-salten.no
+                    'svid10_49531bad1412ceb82564aea',  # ostersund.se
+                    'svid10_6c1eb18a13ec7d9b5b82ee7',  # ostersund.se
+                    'svid10_b0dabad141b6aeaf101229',  # ostersund.se
+                    'svid10_49531bad1412ceb82564af3',  # ostersund.se
+                    'svid10_6c1eb18a13ec7d9b5b82ee3',  # ostersund.se
+                    'svid10_6c1eb18a13ec7d9b5b82edf',  # ostersund.se
+                    'svid10_6c1eb18a13ec7d9b5b82edd',  # ostersund.se
+                    'svid10_6c1eb18a13ec7d9b5b82eda',  # ostersund.se
+                    'svid10_6c1eb18a13ec7d9b5b82ed5',  # ostersund.se
                     'tipafriend',
                     'tools',  # arran.no
                     'topHeader',  # nord-salten.no
