@@ -39,6 +39,50 @@ class AdderException(Exception):
     pass
 
 
+class UrlDownloader(object):
+    def __init__(self, url, download_dir):
+        self.download_dir = download_dir
+        self.url
+
+    @staticmethod
+    def add_url_extension(filename, content_type):
+        content_type_extension = {
+            'text/html': '.html',
+            'application/msword': '.doc',
+            'application/pdf': '.pdf',
+            'text/plain': '.txt',
+        }
+
+        for ct, extension in content_type_extension.items():
+            if (ct in content_type and not filename.endswith(extension)):
+                filename += extension
+
+        return filename
+
+    def download(self):
+        '''Download a url to a temporary file
+
+        Return the request object and the name of the temporary file
+        '''
+        try:
+            r = requests.get(self.url)
+            if r.status_code == requests.codes.ok:
+                tmpname = self.add_url_extension(
+                    os.path.join(self.download_dir,
+                                 os.path.basename(r.url)),
+                    r.headers['content-type'])
+                with open(tmpname, 'wb') as tmpfile:
+                    tmpfile.write(r.content)
+
+                return (r, tmpname)
+            else:
+                raise AdderException('ERROR:', url, 'does not exist')
+        except requests.exceptions.MissingSchema as e:
+            raise AdderException(str(e))
+        except requests.exceptions.ConnectionError as e:
+            raise AdderException(str(e))
+
+
 class AddToCorpus(object):
 
     def __init__(self, corpusdir, mainlang, path):
@@ -88,55 +132,18 @@ class AddToCorpus(object):
         return u'/'.join([namechanger.normalise_filename(part)
                           for part in path.split('/')])
 
-    @staticmethod
-    def add_url_extension(filename, content_type):
-        content_type_extension = {
-            'text/html': '.html',
-            'application/msword': '.doc',
-            'application/pdf': '.pdf',
-            'text/plain': '.txt',
-        }
-
-        for ct, extension in content_type_extension.items():
-            if (ct in content_type and not filename.endswith(extension)):
-                filename += extension
-
-        return filename
-
     def copy_url_to_corpus(self, url, parallelpath=''):
         '''Add a URL to the corpus
 
-        * normalise the basename, copy the the file to the given directory
-        * make a metadata file belonging to it
-        ** set the url as the filename
-        ** set the mainlang
-        ** set the genre
-        ** if a parallel file is given, set the parallel info in all the
-        parellel files
-        ** add both the newly copied file and the metadata file to the working
-        copy
+        Copy a downloaded url to the corpus
         '''
         try:
-            r = requests.get(url)
-            if r.status_code == requests.codes.ok:
-                tmpname = self.add_url_extension(
-                    os.path.join(self.corpusdir, 'tmp',
-                                 os.path.basename(r.url)),
-                    r.headers['content-type'])
-                with open(tmpname, 'wb') as tmpfile:
-                    tmpfile.write(r.content)
+            downloader = UrlDownloader(url, os.path.join(self.corpusdir, 'tmp'))
+            (r, tmpname) = downloader.download()
 
-                try:
-                    return self.copy_file_to_corpus(tmpname, r.url, parallelpath)
-                except UserWarning as e:
-                    print(u'Skipping: {}'.format(e))
-
-            else:
-                print('ERROR:', url, 'does not exist', file=sys.stderr)
-        except requests.exceptions.MissingSchema as e:
-            print(str(e), file=sys.stderr)
-        except requests.exceptions.ConnectionError as e:
-            print(str(e), file=sys.stderr)
+            return self.copy_file_to_corpus(tmpname, r.url, parallelpath)
+        except UserWarning as e:
+            print(u'Skipping: {}'.format(e))
 
     def copy_file_to_corpus(self, origpath, metadata_filename, parallelpath=''):
         '''Add a file to the corpus
