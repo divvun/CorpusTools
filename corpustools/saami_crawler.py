@@ -155,7 +155,8 @@ class SamediggiFiCrawler(object):
         '''
         return ('ei ole saatavilla' in content or
                 'There are no translations available' in content or
-                '<div class="login-form">' in content)
+                '<div class="login-form">' in content or
+                'Sinulla ei ole tarvittavia' in content)
 
     def harvest_links(self, content):
         '''Harvest all links, bar some restrictions
@@ -192,7 +193,7 @@ class SamediggiFiCrawler(object):
                             'klemetti.blogspot|/nuorat|/#|com_events|'
                             'com_search|haettavana|do_pdf|pop=1|com_docman|'
                             '/images|com_weblink|task=vcard|view_contact_id|'
-                            'com_contact|mad4joomla',
+                            'com_contact|mad4joomla|mailto',
                             href) and
                         href.startswith('http://www.samediggi.fi')):
                     self.unvisited_links.add(href)
