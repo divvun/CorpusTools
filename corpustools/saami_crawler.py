@@ -31,7 +31,7 @@ import sys
 
 
 import argparse_version
-import namechanger
+import adder
 
 
 class SamediggiFiCrawler(object):
@@ -78,7 +78,7 @@ class SamediggiFiCrawler(object):
     def __init__(self):
         self.unvisited_links = set()
         self.unvisited_links.add(
-            'http://www.samediggi.fi/')
+            u'http://www.samediggi.fi/')
         self.visited_links = set()
         self.download_links = set()
         self.langs = {u'finnish': u'fin',
@@ -87,16 +87,33 @@ class SamediggiFiCrawler(object):
                       u'nuortta': u'sms',
                       u'english': u'eng'}
 
+        self.corpus_adders = {
+            u'finnish': adder.AddToCorpus(
+                unicode(os.getenv('GTFREE')), u'fin', u'admin/sd/www.samediggi.fi'),
+            u'davvi': adder.AddToCorpus(
+                unicode(os.getenv('GTFREE')), u'sme', u'admin/sd/www.samediggi.fi'),
+            u'anaras': adder.AddToCorpus(
+                unicode(os.getenv('GTFREE')), u'smn', u'admin/sd/www.samediggi.fi'),
+            u'nuortta': adder.AddToCorpus(
+                unicode(os.getenv('GTFREE')), u'sms', u'admin/sd/www.samediggi.fi'),
+            u'english': adder.AddToCorpus(
+                unicode(os.getenv('GTFREE')), u'eng', u'admin/sd/www.samediggi.fi'),
+        }
+
+    def __del__(self):
+        for (lang, corpus_adder) in self.corpus_adders.items():
+            corpus_adder.add_files_to_working_copy()
+
     def download_pages(self):
         while len(self.unvisited_links) > 0:
             link = self.unvisited_links.pop()
-            if link not in self.visited_links:
 
+            if link not in self.visited_links:
                 print('\nBefore: unvisited_links', len(self.unvisited_links),
                       file=sys.stderr)
 
                 try:
-                    pages = []
+                    parallel_pages = []
                     found_saami = False
                     for lang in self.langs.keys():
                         r = requests.get(link, params={'lang': lang})
@@ -111,11 +128,7 @@ class SamediggiFiCrawler(object):
                             if lang in ['davvi', 'anaras', 'nuortta']:
                                 found_saami = True
                             self.harvest_links(r.content)
-                            pages.append(namechanger.AddFileToCorpus(
-                                r.url,
-                                os.getenv('GTFREE'),
-                                self.langs[lang],
-                                'admin/sd/www.samediggi.fi'))
+                            parallel_pages.append((r.url, lang))
                         else:
                             if 'samediggi.fi' not in r.url:
                                 print(
@@ -123,7 +136,7 @@ class SamediggiFiCrawler(object):
                                         r.url, link), file=sys.stderr)
 
                     if found_saami:
-                        self.save_pages(pages)
+                        self.save_pages(parallel_pages)
                 except UserWarning:
                     print('{} does not exist'.format(link), file=sys.stderr)
 
@@ -187,18 +200,13 @@ class SamediggiFiCrawler(object):
     def save_pages(self, pages):
         '''Write pages to disk
 
-        pages is a dict of langage:content pairs
+        pages is a list of r.url, lang tuples
         '''
-        for adder in pages:
-            adder.copy_orig_to_corpus()
-            other_langs = {}
-            for langer in pages:
-                if langer != adder:
-                    other_langs[u'parallel_texts'] = u'1'
-                    other_langs[u'para_{}'.format(langer.mainlang)] = unicode(
-                        langer.new_filename)
-            adder.make_metadata_file(other_langs)
-        print()
+        (url, lang) = pages[0]
+        parallel_path = self.corpus_adders[lang].copy_url_to_corpus(url)
+
+        for (url, lang) in pages[1:]:
+            self.corpus_adders[lang].copy_url_to_corpus(url, parallel_path)
 
 
 def parse_options():
