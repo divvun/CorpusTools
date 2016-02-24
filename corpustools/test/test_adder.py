@@ -174,9 +174,8 @@ class TestAddFileToCorpus(unittest.TestCase):
 
     def test_add_file_no_normalise_no_parallel(self):
         atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
-
-        atc.copy_file_to_corpus(os.path.join(self.origdirectory,
-                                             u'a.txt'))
+        orig_name = os.path.join(self.origdirectory, u'a.txt')
+        atc.copy_file_to_corpus(orig_name, os.path.basename(orig_name))
         atc.add_files_to_working_copy()
 
         self.tempdir.check_all(
@@ -218,7 +217,8 @@ class TestAddFileToCorpus(unittest.TestCase):
 
     def test_add_file_normalise_no_parallel(self):
         atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
-        atc.copy_file_to_corpus(os.path.join(self.origdirectory, u'æ.txt'))
+        orig_name = os.path.join(self.origdirectory, u'æ.txt')
+        atc.copy_file_to_corpus(orig_name, os.path.basename(orig_name))
         atc.add_files_to_working_copy()
 
         self.tempdir.check_all(
@@ -260,7 +260,8 @@ class TestAddFileToCorpus(unittest.TestCase):
 
     def test_add_file_identical_name_no_parallel(self):
         atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
-        atc.copy_file_to_corpus(os.path.join(self.origdirectory, u'c.txt'))
+        orig_name = os.path.join(self.origdirectory, u'c.txt')
+        atc.copy_file_to_corpus(orig_name, os.path.basename(orig_name))
         atc.add_files_to_working_copy()
 
         self.tempdir.check_all(
@@ -303,14 +304,16 @@ class TestAddFileToCorpus(unittest.TestCase):
     def test_add_file_with_non_existing_parallel(self):
         atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
         with self.assertRaises(adder.AdderException):
+            orig_name = os.path.join(self.origdirectory, u'd.txt')
             atc.copy_file_to_corpus(
-                os.path.join(self.origdirectory, u'd.txt'),
+                orig_name, os.path.basename(orig_name),
                 parallelpath=os.path.join(self.realcorpusdir,
                                           'orig/smi/ae/c/o/f.txt'))
 
     def test_add_file_with_parallel(self):
         atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
-        atc.copy_file_to_corpus(os.path.join(self.origdirectory, u'd.txt'),
+        orig_name = os.path.join(self.origdirectory, u'd.txt')
+        atc.copy_file_to_corpus(orig_name, os.path.basename(orig_name),
                                 parallelpath=os.path.join(
                                     self.realcorpusdir,
                                     'orig/smj/ae/c/o/f.txt'))

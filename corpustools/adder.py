@@ -127,13 +127,7 @@ class AddToCorpus(object):
                     tmpfile.write(r.content)
 
                 try:
-                    none_dupe_path = self.none_dupe_path(tmpname)
-                    shutil.move(tmpname, none_dupe_path)
-                    self.additions.append(none_dupe_path)
-
-                    self.add_metadata_to_corpus(none_dupe_path, r.url)
-                    self.update_parallel_data(util.split_path(none_dupe_path),
-                                              parallelpath)
+                    self.copy_file_to_corpus(tmpname, r.url, parallelpath)
                 except UserWarning as e:
                     print(u'Skipping: {}'.format(e))
 
@@ -144,7 +138,7 @@ class AddToCorpus(object):
         except requests.exceptions.ConnectionError as e:
             print(str(e), file=sys.stderr)
 
-    def copy_file_to_corpus(self, origpath, parallelpath=''):
+    def copy_file_to_corpus(self, origpath, metadata_filename, parallelpath=''):
         '''Add a file to the corpus
 
         * normalise the basename, copy the the file to the given directory
@@ -161,7 +155,7 @@ class AddToCorpus(object):
             self.additions.append(none_dupe_path)
 
             self.add_metadata_to_corpus(none_dupe_path,
-                                        os.path.basename(origpath))
+                                        metadata_filename)
             self.update_parallel_data(util.split_path(none_dupe_path),
                                       parallelpath)
         except UserWarning as e:
@@ -237,7 +231,9 @@ class AddToCorpus(object):
         self.find_duplicates(origpath)
         for root, dirs, files in os.walk(origpath):
             for f in files:
-                self.copy_file_to_corpus(os.path.join(root, f).decode('utf8'))
+                orig_f = os.path.join(root, f).decode('utf8')
+                self.copy_file_to_corpus(orig_f, os.path.basename(orig_f))
+
 
     @staticmethod
     def find_duplicates(origpath):
@@ -324,14 +320,12 @@ def main():
     else:
         for orig in args.origs:
             if os.path.isfile(orig):
-                adder.copy_file_to_corpus(orig.decode('utf8'))
+                adder.copy_file_to_corpus(orig.decode('utf8'),
+                                          os.path.basename(orig.decode('utf8')))
             elif orig.startswith('http'):
                 adder.copy_url_to_corpus(orig.decode('utf8'))
             elif os.path.isdir(orig):
-                for root, dirs, files in os.walk(orig):
-                    for f in files:
-                        adder.copy_file_to_corpus(os.path.join(root,
-                                                               f).decode('utf8'))
+                adder.copy_files_in_dir_to_corpus(orig)
             else:
                 print(u'Cannot handle {}'.format(orig), file=sys.stderr)
 
