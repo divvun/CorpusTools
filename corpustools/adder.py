@@ -127,7 +127,7 @@ class AddToCorpus(object):
                     tmpfile.write(r.content)
 
                 try:
-                    self.copy_file_to_corpus(tmpname, r.url, parallelpath)
+                    return self.copy_file_to_corpus(tmpname, r.url, parallelpath)
                 except UserWarning as e:
                     print(u'Skipping: {}'.format(e))
 
@@ -158,6 +158,7 @@ class AddToCorpus(object):
                                         metadata_filename)
             self.update_parallel_data(util.split_path(none_dupe_path),
                                       parallelpath)
+            return none_dupe_path
         except UserWarning as e:
             print(u'Skipping: {}'.format(e))
 
@@ -233,7 +234,6 @@ class AddToCorpus(object):
             for f in files:
                 orig_f = os.path.join(root, f).decode('utf8')
                 self.copy_file_to_corpus(orig_f, os.path.basename(orig_f))
-
 
     @staticmethod
     def find_duplicates(origpath):
