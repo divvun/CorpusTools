@@ -121,7 +121,7 @@ class AddToCorpus(object):
             if r.status_code == requests.codes.ok:
                 tmpname = self.add_url_extension(
                     os.path.join(self.corpusdir, 'tmp',
-                                 os.path.basename(url)),
+                                 os.path.basename(r.url)),
                     r.headers['content-type'])
                 with open(tmpname, 'wb') as tmpfile:
                     tmpfile.write(r.content)
@@ -131,7 +131,7 @@ class AddToCorpus(object):
                     shutil.move(tmpname, none_dupe_path)
                     self.additions.append(none_dupe_path)
 
-                    self.add_metadata_to_corpus(none_dupe_path, url)
+                    self.add_metadata_to_corpus(none_dupe_path, r.url)
                     self.update_parallel_data(util.split_path(none_dupe_path),
                                               parallelpath)
                 except UserWarning as e:
