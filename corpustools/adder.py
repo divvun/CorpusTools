@@ -40,9 +40,8 @@ class AdderException(Exception):
 
 
 class UrlDownloader(object):
-    def __init__(self, url, download_dir):
+    def __init__(self, download_dir):
         self.download_dir = download_dir
-        self.url = url
 
     @staticmethod
     def add_url_extension(filename, content_type):
@@ -59,13 +58,13 @@ class UrlDownloader(object):
 
         return filename
 
-    def download(self):
+    def download(self, url, params={}):
         '''Download a url to a temporary file
 
         Return the request object and the name of the temporary file
         '''
         try:
-            r = requests.get(self.url)
+            r = requests.get(url, params=params)
             if r.status_code == requests.codes.ok:
                 tmpname = self.add_url_extension(
                     os.path.join(self.download_dir,
@@ -138,8 +137,8 @@ class AddToCorpus(object):
         Copy a downloaded url to the corpus
         '''
         try:
-            downloader = UrlDownloader(url, os.path.join(self.corpusdir, 'tmp'))
-            (r, tmpname) = downloader.download()
+            downloader = UrlDownloader(os.path.join(self.corpusdir, 'tmp'))
+            (r, tmpname) = downloader.download(url)
 
             return self.copy_file_to_corpus(tmpname, r.url, parallelpath)
         except UserWarning as e:
