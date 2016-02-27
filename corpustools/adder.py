@@ -42,7 +42,10 @@ class AdderException(Exception):
 class UrlDownloader(object):
     def __init__(self, download_dir):
         self.download_dir = download_dir
-        self.headers = {'user-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) Gecko/20130331 Firefox/21.0'}
+        self.headers = {
+            'user-agent':
+                'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) '
+                'Gecko/20130331 Firefox/21.0'}
 
     @staticmethod
     def add_url_extension(filename, content_type):

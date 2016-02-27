@@ -1457,20 +1457,24 @@ class TestDocumentFixer(XMLTester):
              u'<em>Govven:Á</em>': u'<em>Govven: Á</em>',
              }
         for key, value in a.items():
-            document_fixer = converter.DocumentFixer(etree.fromstring(u'''<document>
-        <header/>
-        <body>
-            <p>''' + key + u'''</p>
-        </body>
-    </document>'''))
+            document_fixer = converter.DocumentFixer(etree.fromstring(u'''
+                <document>
+                    <header/>
+                    <body>
+                        <p>''' + key + u'''</p>
+                    </body>
+                </document>
+            '''))
             document_fixer.insert_spaces_after_semicolon()
             got = document_fixer.get_etree()
-            want = etree.fromstring(u'''<document>
-        <header/>
-        <body>
-            <p>''' + value + u'''</p>
-        </body>
-    </document>''')
+            want = etree.fromstring(u'''
+                <document>
+                    <header/>
+                    <body>
+                        <p>''' + value + u'''</p>
+                    </body>
+                </document>
+            ''')
 
             self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
