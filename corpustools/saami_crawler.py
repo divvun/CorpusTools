@@ -117,12 +117,39 @@ class SamediggiFiCrawler(object):
         for (lang, corpus_adder) in self.corpus_adders.items():
             corpus_adder.add_files_to_working_copy()
 
+    def fix_dupe(self):
+        possible_dupe = {
+            'Itemid=149': 'Itemid=195',
+            'Itemid=323': 'Itemid=195',
+            'Itemid=327': 'Itemid=195',
+            'Itemid=112': 'Itemid=195',
+            'Itemid=128': 'Itemid=195',
+            'Itemid=306': 'Itemid=195',
+            'Itemid=307': 'Itemid=195',
+            'Itemid=273': 'Itemid=195',
+            'Itemid=279': 'Itemid=195',
+            'Itemid=280': 'Itemid=195',
+            'Itemid=251': 'Itemid=195',
+            'Itemid=61': 'Itemid=195',
+            'Itemid=39': 'Itemid=195',
+            'Itemid=256': 'Itemid=195',
+        }
+
+        link = self.unvisited_links.pop()
+
+        for (unwanted, wanted) in possible_dupe.items():
+            if unwanted in link:
+                self.visited_links.add(link)
+                link = link.replace(unwanted, wanted)
+
+        return link
+
     def download_pages(self):
         while len(self.unvisited_links) > 0:
-            link = self.unvisited_links.pop()
+            link = self.fix_dupe()
 
             if link not in self.visited_links:
-                util.print_frame(debug='About to visit {}'.format(link))
+                util.print_frame(debug='About to visit ' + link)
                 util.print_frame(
                     debug='Before: unvisited_links {}'.format(len(self.unvisited_links)))
 
@@ -147,13 +174,13 @@ class SamediggiFiCrawler(object):
                         else:
                             if 'samediggi.fi' not in r.url:
                                 util.print_frame(
-                                    debug='Not fetching {} which was {}\n'.format(
+                                    debug=u'Not fetching {} which was {}\n'.format(
                                         r.url, link))
 
                     if found_saami and len(parallel_pages) > 0:
                         self.save_pages(parallel_pages)
                 except UserWarning:
-                    print('{} does not exist'.format(link), file=sys.stderr)
+                    print(link, u'does not exist', file=sys.stderr)
 
                 util.print_frame(debug='After: unvisited_links {}'.format(len(self.unvisited_links)))
 
