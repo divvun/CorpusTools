@@ -23,17 +23,19 @@
 from __future__ import print_function
 
 import argparse
+import lxml.etree as etree
 import lxml.html
 import os
 import re
 import requests
+import shutil
 import sys
-
+import urlparse
 
 import adder
 import argparse_version
+import namechanger
 import util
-import shutil
 import xslsetter
 
 
@@ -105,6 +107,8 @@ class SamediggiFiCrawler(object):
                 self.goaldir, u'eng', u'admin/sd/www.samediggi.fi'),
         }
         self.get_old_urls()
+        self.downloader = adder.UrlDownloader(os.path.join(
+            self.goaldir, 'tmp'))
 
     def get_old_urls(self):
         for (lang, corpus_adder) in self.corpus_adders.items():
@@ -119,43 +123,11 @@ class SamediggiFiCrawler(object):
         for (lang, corpus_adder) in self.corpus_adders.items():
             corpus_adder.add_files_to_working_copy()
 
-    def fix_dupe(self):
-        possible_dupe = {
-            'Itemid=39': 'Itemid=195',
-            'Itemid=61': 'Itemid=195',
-            'Itemid=112': 'Itemid=195',
-            'Itemid=123': 'Itemid=195',
-            'Itemid=128': 'Itemid=195',
-            'Itemid=149': 'Itemid=195',
-            'Itemid=182': 'Itemid=195',
-            'Itemid=251': 'Itemid=195',
-            'Itemid=256': 'Itemid=195',
-            'Itemid=273': 'Itemid=195',
-            'Itemid=276': 'Itemid=195',
-            'Itemid=279': 'Itemid=195',
-            'Itemid=280': 'Itemid=195',
-            'Itemid=306': 'Itemid=195',
-            'Itemid=307': 'Itemid=195',
-            'Itemid=323': 'Itemid=195',
-            'Itemid=327': 'Itemid=195',
-            'Itemid=339': 'Itemid=195',
-            'Itemid=340': 'Itemid=195',
-        }
-
-        link = self.unvisited_links.pop()
-
-        for (unwanted, wanted) in possible_dupe.items():
-            if unwanted in link:
-                self.visited_links.add(link)
-                link = link.replace(unwanted, wanted)
-
-        return link
-
     def download_pages(self):
         downloader = adder.UrlDownloader(
             os.path.join(self.goaldir, 'tmp'))
         while len(self.unvisited_links) > 0:
-            link = self.fix_dupe()
+            link = self.unvisited_links.pop()
 
             if link not in self.visited_links:
                 util.print_frame(debug=link)
@@ -165,30 +137,28 @@ class SamediggiFiCrawler(object):
                 parallel_pages = []
                 found_saami = False
                 for lang in self.langs.keys():
-                    try:
-                        (r, tmpname) = downloader.download(
-                            link, params={'lang': lang})
-                    except adder.AdderException as e:
-                        util.print_frame(debug=str(e))
-                    else:
-                        if len(r.history) > 0:
-                            print('history', r.history)
-                        if 'samediggi.fi' not in r.url:
-                            print('url', r.url)
+                    r = requests.get(link, params={'lang': lang})
 
-                        if ('www.samediggi.fi' in r.url and
-                                r.status_code == requests.codes.ok and
-                                not self.invalid_content(r.content)):
-                            if lang in ['davvi', 'anaras', 'nuortta']:
-                                found_saami = True
-                            self.harvest_links(r.content)
-                            if ('blogcategory' not in r.url):
-                                parallel_pages.append((tmpname, r.url, lang))
-                        else:
-                            if 'samediggi.fi' not in r.url:
-                                util.print_frame(
-                                    debug=u'Not fetching {} which was {}\n'.format(
-                                        r.url, link))
+                    if len(r.history) > 0:
+                        print('history', r.history)
+
+                    if 'samediggi.fi' not in r.url:
+                        print('url', r.url)
+
+                    if ('www.samediggi.fi' in r.url and
+                            r.status_code == requests.codes.ok and
+                            not self.invalid_content(r.content)):
+                        if lang in ['davvi', 'anaras', 'nuortta']:
+                            found_saami = True
+                        self.harvest_links(r.content)
+                        print_url = self.get_print_url(r.content, lang)
+                        if print_url is not None:
+                            parallel_pages.append((print_url, lang))
+                    else:
+                        if 'samediggi.fi' not in r.url:
+                            util.print_frame(
+                                debug=u'Not fetching {} which was {}\n'.format(
+                                    r.url, link))
 
                 if found_saami and len(parallel_pages) > 0:
                     self.save_pages(parallel_pages)
@@ -199,6 +169,31 @@ class SamediggiFiCrawler(object):
             util.print_frame(
                 debug='visited_links {}\n'.format(len(self.visited_links)))
 
+    def get_print_url(self, content, lang):
+        tree = lxml.html.document_fromstring(content)
+        print_img = tree.find('.//img[@src="http://www.samediggi.fi/images/M_images/printButton.png"]')
+
+        if print_img is not None:
+            parent = print_img.getparent()
+            href = urlparse.urlparse(parent.get('href'))
+
+            query = href.query
+            newquery = [part for part in query.split('&')
+                        if (part.startswith('option') or
+                            part.startswith('id') or
+                            part.startswith('task'))]
+            newquery.append('lang=' + lang)
+
+            newhref = urlparse.urlunparse(
+                (href.scheme,
+                    href.netloc,
+                    href.path,
+                    href.params,
+                    '&'.join(newquery),
+                    href.fragment))
+
+            return newhref
+
     def invalid_content(self, content):
         '''Return true if the page does not contain the strings
 
@@ -208,7 +203,8 @@ class SamediggiFiCrawler(object):
         return ('ei ole saatavilla' in content or
                 'There are no translations available' in content or
                 '<div class="login-form">' in content or
-                'Sinulla ei ole tarvittavia' in content)
+                'Sinulla ei ole tarvittavia' in content or
+                'You need to login' in content)
 
     def harvest_links(self, content):
         '''Harvest all links, bar some restrictions
@@ -232,11 +228,17 @@ class SamediggiFiCrawler(object):
         for address in tree.findall('.//a'):
             href = address.get('href')
             if href is not None:
+                href = href.replace('?lang=finnish', '')
+                href = href.replace('?lang=davvi', '')
+                href = href.replace('?lang=anaras', '')
+                href = href.replace('?lang=nuortta', '')
+                href = href.replace('?lang=english', '')
                 href = href.replace('&lang=finnish', '')
                 href = href.replace('&lang=davvi', '')
                 href = href.replace('&lang=anaras', '')
                 href = href.replace('&lang=nuortta', '')
                 href = href.replace('&lang=english', '')
+
                 if not href.startswith('http'):
                     href = os.path.join('http://www.samediggi.fi', href)
 
@@ -245,7 +247,8 @@ class SamediggiFiCrawler(object):
                             'klemetti.blogspot|/nuorat|/#|com_events|'
                             'com_search|haettavana|do_pdf|pop=1|com_docman|'
                             '/images|com_weblink|task=vcard|view_contact_id|'
-                            'com_contact|mad4joomla|mailto',
+                            'com_contact|mad4joomla|mailto|javascript|'
+                            'administrator/',
                             href) and
                         href.startswith('http://www.samediggi.fi')):
                     self.unvisited_links.add(href)
@@ -253,34 +256,36 @@ class SamediggiFiCrawler(object):
     def save_pages(self, pages):
         '''Write pages to disk
 
-        pages is a list of r.url, lang tuples
+        pages is a list of tmpname, url, lang tuples
         '''
-        (tmpname, url, lang) = pages[0]
-        if url in self.old_urls.keys():
-            util.print_frame(debug='updating {}'.format(self.old_urls[url]))
-            shutil.copy(tmpname, self.old_urls[url])
-            parallelpath = self.old_urls[url]
-            self.corpus_adders[lang].additions.append(self.old_urls[url])
-        else:
+        (url, lang) = pages[0]
+        (r, tmpname) = self.downloader.download(url)
+
+        normalised_name = namechanger.normalise_filename(
+            os.path.basename(tmpname))
+        normalised_path = os.path.join(
+            self.corpus_adders[lang].goaldir, normalised_name)
+
+        if not os.path.exists(normalised_path):
             parallelpath = self.corpus_adders[lang].copy_file_to_corpus(
                 tmpname, url)
             util.print_frame(
-                    debug='adding {}'.format(parallelpath))
+                    debug='adding {}\n'.format(parallelpath))
+        else:
+            parallelpath = normalised_path
 
-        for (tmpname, url, lang) in pages[1:]:
-            if url in self.old_urls.keys():
-                util.print_frame(debug='updating {}'.format(self.old_urls[url]))
-                shutil.copy(tmpname, self.old_urls[url])
-                self.corpus_adders[lang].update_parallel_data(
-                    util.split_path(self.old_urls[url]),
-                    parallelpath)
-                self.corpus_adders[lang].additions.append(self.old_urls[url])
-                self.corpus_adders[lang].additions.append(self.old_urls[url] + '.xsl')
-            else:
-                util.print_frame(
-                    debug='adding {}'.format(
-                        self.corpus_adders[lang].copy_file_to_corpus(
-                            tmpname, url, parallelpath=parallelpath)))
+        for (url, lang) in pages[1:]:
+            (r, tmpname) = self.downloader.download(url)
+
+            normalised_name = namechanger.normalise_filename(
+                os.path.basename(tmpname))
+            normalised_path = os.path.join(
+                self.corpus_adders[lang].goaldir, normalised_name)
+
+            if not os.path.exists(normalised_path):
+                util.print_frame(debug='adding {}\n'.format(
+                    self.corpus_adders[lang].copy_file_to_corpus(
+                        tmpname, url, parallelpath=parallelpath)))
 
 
 def parse_options():
