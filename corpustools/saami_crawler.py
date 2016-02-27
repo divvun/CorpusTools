@@ -33,6 +33,7 @@ import sys
 import adder
 import argparse_version
 import util
+import shutil
 import xslsetter
 
 
@@ -78,6 +79,7 @@ class SamediggiFiCrawler(object):
     '''
 
     def __init__(self):
+        self.goaldir = unicode(os.getenv('GTFREE'))
         self.unvisited_links = set()
         self.unvisited_links.add(
             u'http://www.samediggi.fi/')
@@ -92,15 +94,15 @@ class SamediggiFiCrawler(object):
 
         self.corpus_adders = {
             u'finnish': adder.AddToCorpus(
-                unicode(os.getenv('GTFREE')), u'fin', u'admin/sd/www.samediggi.fi'),
+                self.goaldir, u'fin', u'admin/sd/www.samediggi.fi'),
             u'davvi': adder.AddToCorpus(
-                unicode(os.getenv('GTFREE')), u'sme', u'admin/sd/www.samediggi.fi'),
+                self.goaldir, u'sme', u'admin/sd/www.samediggi.fi'),
             u'anaras': adder.AddToCorpus(
-                unicode(os.getenv('GTFREE')), u'smn', u'admin/sd/www.samediggi.fi'),
+                self.goaldir, u'smn', u'admin/sd/www.samediggi.fi'),
             u'nuortta': adder.AddToCorpus(
-                unicode(os.getenv('GTFREE')), u'sms', u'admin/sd/www.samediggi.fi'),
+                self.goaldir, u'sms', u'admin/sd/www.samediggi.fi'),
             u'english': adder.AddToCorpus(
-                unicode(os.getenv('GTFREE')), u'eng', u'admin/sd/www.samediggi.fi'),
+                self.goaldir, u'eng', u'admin/sd/www.samediggi.fi'),
         }
         self.get_old_urls()
 
@@ -119,20 +121,22 @@ class SamediggiFiCrawler(object):
 
     def fix_dupe(self):
         possible_dupe = {
-            'Itemid=149': 'Itemid=195',
-            'Itemid=323': 'Itemid=195',
-            'Itemid=327': 'Itemid=195',
+            'Itemid=39': 'Itemid=195',
+            'Itemid=61': 'Itemid=195',
             'Itemid=112': 'Itemid=195',
             'Itemid=128': 'Itemid=195',
-            'Itemid=306': 'Itemid=195',
-            'Itemid=307': 'Itemid=195',
+            'Itemid=149': 'Itemid=195',
+            'Itemid=182': 'Itemid=195',
+            'Itemid=251': 'Itemid=195',
+            'Itemid=256': 'Itemid=195',
             'Itemid=273': 'Itemid=195',
             'Itemid=279': 'Itemid=195',
             'Itemid=280': 'Itemid=195',
-            'Itemid=251': 'Itemid=195',
-            'Itemid=61': 'Itemid=195',
-            'Itemid=39': 'Itemid=195',
-            'Itemid=256': 'Itemid=195',
+            'Itemid=306': 'Itemid=195',
+            'Itemid=307': 'Itemid=195',
+            'Itemid=323': 'Itemid=195',
+            'Itemid=327': 'Itemid=195',
+            'Itemid=340': 'Itemid=195',
         }
 
         link = self.unvisited_links.pop()
@@ -145,19 +149,25 @@ class SamediggiFiCrawler(object):
         return link
 
     def download_pages(self):
+        downloader = adder.UrlDownloader(
+            os.path.join(self.goaldir, 'tmp'))
         while len(self.unvisited_links) > 0:
             link = self.fix_dupe()
 
             if link not in self.visited_links:
-                util.print_frame(debug='About to visit ' + link)
+                util.print_frame(debug=link)
                 util.print_frame(
                     debug='Before: unvisited_links {}'.format(len(self.unvisited_links)))
 
-                try:
-                    parallel_pages = []
-                    found_saami = False
-                    for lang in self.langs.keys():
-                        r = requests.get(link, params={'lang': lang})
+                parallel_pages = []
+                found_saami = False
+                for lang in self.langs.keys():
+                    try:
+                        (r, tmpname) = downloader.download(
+                            link, params={'lang': lang})
+                    except adder.AdderException as e:
+                        util.print_frame(debug=str(e))
+                    else:
                         if len(r.history) > 0:
                             print('history', r.history)
                         if 'samediggi.fi' not in r.url:
@@ -170,17 +180,15 @@ class SamediggiFiCrawler(object):
                                 found_saami = True
                             self.harvest_links(r.content)
                             if ('blogcategory' not in r.url):
-                                parallel_pages.append((r, lang))
+                                parallel_pages.append((tmpname, r.url, lang))
                         else:
                             if 'samediggi.fi' not in r.url:
                                 util.print_frame(
                                     debug=u'Not fetching {} which was {}\n'.format(
                                         r.url, link))
 
-                    if found_saami and len(parallel_pages) > 0:
-                        self.save_pages(parallel_pages)
-                except UserWarning:
-                    print(link, u'does not exist', file=sys.stderr)
+                if found_saami and len(parallel_pages) > 0:
+                    self.save_pages(parallel_pages)
 
                 util.print_frame(debug='After: unvisited_links {}'.format(len(self.unvisited_links)))
 
@@ -244,28 +252,32 @@ class SamediggiFiCrawler(object):
 
         pages is a list of r.url, lang tuples
         '''
-        (rurl, lang) = pages[0]
-        if rurl.url in self.old_urls.keys():
-            util.print_frame(debug='updating {}'.format(self.old_urls[rurl.url]))
-            with open(self.old_urls[rurl.url], 'wb') as oldfile:
-                oldfile.write(rurl.content)
-            parallel_path = self.old_urls[rurl.url]
+        (tmpname, url, lang) = pages[0]
+        if url in self.old_urls.keys():
+            util.print_frame(debug='updating {}'.format(self.old_urls[url]))
+            shutil.copy(tmpname, self.old_urls[url])
+            parallelpath = self.old_urls[url]
+            self.corpus_adders[lang].additions.append(self.old_urls[url])
         else:
-            parallel_path = self.corpus_adders[lang].copy_url_to_corpus(rurl.url)
+            parallelpath = self.corpus_adders[lang].copy_file_to_corpus(
+                tmpname, url)
+            util.print_frame(
+                    debug='adding {}'.format(parallelpath))
 
-        for (rurl, lang) in pages[1:]:
-            if rurl.url in self.old_urls.keys():
-                util.print_frame(debug='updating {}'.format(self.old_urls[rurl.url]))
-                with open(self.old_urls[rurl.url], 'wb') as oldfile:
-                    oldfile.write(rurl.content)
+        for (tmpname, url, lang) in pages[1:]:
+            if url in self.old_urls.keys():
+                util.print_frame(debug='updating {}'.format(self.old_urls[url]))
+                shutil.copy(tmpname, self.old_urls[url])
                 self.corpus_adders[lang].update_parallel_data(
-                    util.split_path(self.old_urls[rurl.url]),
-                    parallel_path)
+                    util.split_path(self.old_urls[url]),
+                    parallelpath)
+                self.corpus_adders[lang].additions.append(self.old_urls[url])
+                self.corpus_adders[lang].additions.append(self.old_urls[url] + '.xsl')
             else:
                 util.print_frame(
                     debug='adding {}'.format(
-                        self.corpus_adders[lang].copy_url_to_corpus(rurl.url,
-                                                                    parallel_path)))
+                        self.corpus_adders[lang].copy_file_to_corpus(
+                            tmpname, url, parallelpath=parallelpath)))
 
 
 def parse_options():
