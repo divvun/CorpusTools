@@ -42,7 +42,7 @@ class AdderException(Exception):
 class UrlDownloader(object):
     def __init__(self, url, download_dir):
         self.download_dir = download_dir
-        self.url
+        self.url = url
 
     @staticmethod
     def add_url_extension(filename, content_type):
