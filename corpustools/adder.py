@@ -42,6 +42,7 @@ class AdderException(Exception):
 class UrlDownloader(object):
     def __init__(self, download_dir):
         self.download_dir = download_dir
+        self.headers = {'user-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) Gecko/20130331 Firefox/21.0'}
 
     @staticmethod
     def add_url_extension(filename, content_type):
@@ -64,7 +65,7 @@ class UrlDownloader(object):
         Return the request object and the name of the temporary file
         '''
         try:
-            r = requests.get(url, params=params)
+            r = requests.get(url, headers=self.headers, params=params)
             if r.status_code == requests.codes.ok:
                 tmpname = self.add_url_extension(
                     os.path.join(self.download_dir,
