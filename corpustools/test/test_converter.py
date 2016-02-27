@@ -695,7 +695,6 @@ class TestHTMLContentConverter(XMLTester):
                     'breadcrums span-12',
                     'btm_menu',
                     'byline',  # arran.no
-                    'c1',  # arran.no
                     'clearfix breadcrumbsAndSocial noindex',  # udir.no
                     'container_full',
                     'documentInfoEm',

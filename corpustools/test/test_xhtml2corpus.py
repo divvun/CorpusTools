@@ -518,7 +518,7 @@ tests = {
             '    <title/>'
             '  </header>'
             '  <body>'
-            '      Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
+            '      <p>Gulaskuddanáigimearri: guovvamánu 20. b. 2010</p>'
             '  </body>'
             '</document>'
         ),
@@ -541,7 +541,7 @@ tests = {
             '    <title/>'
             '  </header>'
             '  <body>'
-            '      Harrieth Aira'
+            '      <p>Harrieth Aira</p>'
             '  </body>'
             '</document>'
         ),
