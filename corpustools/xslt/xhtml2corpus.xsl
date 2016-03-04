@@ -318,12 +318,6 @@ xsltproc xhtml2corpus.xsl - > file.xml
     <xsl:apply-templates />
 </xsl:template>
 
-<xsl:template match="html:address">
-    <p>
-        <xsl:apply-templates/>
-    </p>
-</xsl:template>
-
 <!-- Table formatting -->
 <xsl:template match="html:tbody">
     <xsl:apply-templates />
