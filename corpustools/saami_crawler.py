@@ -89,7 +89,6 @@ class Crawler(object):
 
 
 class SamediggiFiCrawler(Crawler):
-
     '''Notes about samediggi.fi
 
     Start page is:
@@ -157,6 +156,7 @@ class SamediggiFiCrawler(Crawler):
                         self.old_urls[mdh.get_variable('filename')] = path.replace('.xsl', '')
 
     def crawl_site(self):
+        '''Crawl samediggi.fi'''
         while len(self.unvisited_links) > 0:
             link = self.unvisited_links.pop()
 
@@ -285,6 +285,128 @@ class SamediggiFiCrawler(Crawler):
                     self.unvisited_links.add(href)
 
 
+class SamediggiNoPage(object):
+    def __init__(self, url):
+        r = requests.get(url)
+        self.parsed_url = urlparse.urlparse(r.url)
+        self.tree = lxml.html.document_fromstring(r.content)
+
+        self.ok_netlocs = ['www.sametinget.no',
+                           'www.samediggi.no',
+                           'www.saemiedigkie.no',
+                           'www.samedigge.no']
+
+
+    @property
+    def url(self):
+        return self.parsed_url.geturl()
+
+    @property
+    def parallel_links(self):
+        return [urlparse.urlunparse((self.parsed_url.scheme,
+                                     self.parsed_url.netloc,
+                                     a.get('href'), '', '', ''))
+                for a in self.tree.xpath('.//ul[@id="languageList"]/li/a[@href]')]
+
+    @property
+    def print_url(self):
+        print_link = self.tree.find('.//link[@media="print"]')
+
+        if print_link is not None:
+            url = print_link.get('href')
+
+            return urlparse.urlunparse((
+                self.parsed_url.scheme,
+                self.parsed_url.netloc,
+                url, '', '', ''))
+
+    @property
+    def lang(self):
+        uff = {}
+        uff['no-bokmaal'] = 'nob'
+        uff['sma-NO'] = 'sma'
+        uff['sme-NO'] = 'sme'
+        uff['smj-no'] = 'smj'
+        content_language = self.tree.find('.//meta[@name="Content-language"]')
+
+        return uff[content_language.get('content')]
+
+    @property
+    def links(self):
+        links = set()
+        for address in self.tree.findall('.//a'):
+            href = address.get('href')
+            if href is not None:
+                if not re.search(
+                    'tv.samediggi.no|^#|/rss/feed|switchlanguage|facebook.com|'
+                    'Web-tv|user/login|mailto|/Dokumenter|/Dokumeantta|'
+                    '/Tjaatsegh|.pdf|.doc|.xls',
+                    href):
+                    if href.startswith('/'):
+                        href = urlparse.urlunparse(
+                            (self.parsed_url.scheme,
+                             self.parsed_url.netloc,
+                             href, '', '', ''))
+
+                    add = False
+                    for uff in self.ok_netlocs:
+                        if uff in href:
+                            add = True
+                            links.add(href)
+
+                    if not add:
+                        util.print_frame(debug=href)
+
+        return links
+
+class SamediggiNoCrawler(Crawler):
+    def __init__(self):
+        super(SamediggiNoCrawler, self).__init__()
+        self.unvisited_links.add(u'http://www.samediggi.no/')
+        self.unvisited_links.add(u'http://www.sametinget.no/')
+        self.unvisited_links.add(u'http://www.saemiedigkie.no/')
+        self.unvisited_links.add(u'http://www.samedigge.no/')
+
+        self.langs = [u'nob', u'sma', u'sme', u'smj']
+
+        for iso in self.langs:
+            self.corpus_adders[iso] = adder.AddToCorpus(
+                self.goaldir, iso, u'admin/sd/samediggi.no')
+
+    def crawl_site(self):
+        '''Crawl samediggi.no'''
+        while len(self.unvisited_links) > 0:
+            link = self.unvisited_links.pop()
+
+            if link not in self.visited_links:
+                self.visited_links.add(link)
+                util.print_frame(debug=link)
+                util.print_frame(
+                    debug='Before: unvisited_links {}'.format(len(self.unvisited_links)))
+
+                parallel_pages = []
+                found_saami = False
+
+                orig_page = SamediggiNoPage(link)
+                self.visited_links.add(orig_page.url)
+                util.print_frame(debug=orig_page.url)
+                self.unvisited_links.union(orig_page.links)
+
+                parallel_pages.append((orig_page.print_url, orig_page.lang))
+
+                for parallel_link in orig_page.parallel_links:
+                    if parallel_link not in self.visited_links:
+                        self.visited_links.add(parallel_link)
+                        util.print_frame(debug=parallel_link)
+                        parallel_page = SamediggiNoPage(parallel_link)
+                        self.visited_links.add(parallel_page.url)
+                        util.print_frame(debug=parallel_page.url)
+                        self.unvisited_links.union(parallel_page.links)
+                        parallel_pages.append((parallel_page.print_url, parallel_page.lang))
+
+                self.save_pages(parallel_pages)
+
+
 def parse_options():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
@@ -305,6 +427,10 @@ def main():
         if site == 'www.samediggi.fi':
             print('Will crawl samediggi.fi')
             sc = SamediggiFiCrawler()
+            sc.crawl_site()
+        elif site == 'samediggi.no':
+            print('Will crawl samediggi.no')
+            sc = SamediggiNoCrawler()
             sc.crawl_site()
         else:
             print('Can not crawl {} yet'.format(site))
