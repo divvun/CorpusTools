@@ -39,7 +39,56 @@ import util
 import xslsetter
 
 
-class SamediggiFiCrawler(object):
+class Crawler(object):
+    def __init__(self):
+        self.goaldir = unicode(os.getenv('GTFREE'))
+        self.unvisited_links = set()
+        self.visited_links = set()
+        self.download_links = set()
+        self.corpus_adders = {}
+        self.downloader = adder.UrlDownloader(os.path.join(
+            self.goaldir, 'tmp'))
+
+    def __del__(self):
+        for (lang, corpus_adder) in self.corpus_adders.items():
+            corpus_adder.add_files_to_working_copy()
+
+    def save_pages(self, pages):
+        '''Write pages to disk
+
+        pages is a list of url, lang tuples
+        '''
+        (url, lang) = pages[0]
+        (r, tmpname) = self.downloader.download(url)
+
+        normalised_name = namechanger.normalise_filename(
+            os.path.basename(tmpname))
+        normalised_path = os.path.join(
+            self.corpus_adders[lang].goaldir, normalised_name)
+
+        if not os.path.exists(normalised_path):
+            parallelpath = self.corpus_adders[lang].copy_file_to_corpus(
+                tmpname, url)
+            util.print_frame(
+                    debug='adding {}\n'.format(parallelpath))
+        else:
+            parallelpath = normalised_path
+
+        for (url, lang) in pages[1:]:
+            (r, tmpname) = self.downloader.download(url)
+
+            normalised_name = namechanger.normalise_filename(
+                os.path.basename(tmpname))
+            normalised_path = os.path.join(
+                self.corpus_adders[lang].goaldir, normalised_name)
+
+            if not os.path.exists(normalised_path):
+                util.print_frame(debug='adding {}\n'.format(
+                    self.corpus_adders[lang].copy_file_to_corpus(
+                        tmpname, url, parallelpath=parallelpath)))
+
+
+class SamediggiFiCrawler(Crawler):
 
     '''Notes about samediggi.fi
 
@@ -81,12 +130,10 @@ class SamediggiFiCrawler(object):
     '''
 
     def __init__(self):
-        self.goaldir = unicode(os.getenv('GTFREE'))
-        self.unvisited_links = set()
+        super(SamediggiFiCrawler, self).__init__()
+
         self.unvisited_links.add(
             u'http://www.samediggi.fi/')
-        self.visited_links = set()
-        self.download_links = set()
         self.old_urls = {}
         self.langs = {u'finnish': u'fin',
                       u'davvi': u'sme',
@@ -94,21 +141,11 @@ class SamediggiFiCrawler(object):
                       u'nuortta': u'sms',
                       u'english': u'eng'}
 
-        self.corpus_adders = {
-            u'finnish': adder.AddToCorpus(
-                self.goaldir, u'fin', u'admin/sd/www.samediggi.fi'),
-            u'davvi': adder.AddToCorpus(
-                self.goaldir, u'sme', u'admin/sd/www.samediggi.fi'),
-            u'anaras': adder.AddToCorpus(
-                self.goaldir, u'smn', u'admin/sd/www.samediggi.fi'),
-            u'nuortta': adder.AddToCorpus(
-                self.goaldir, u'sms', u'admin/sd/www.samediggi.fi'),
-            u'english': adder.AddToCorpus(
-                self.goaldir, u'eng', u'admin/sd/www.samediggi.fi'),
-        }
+        for (natural, iso) in self.langs.items():
+            self.corpus_adders[natural] = adder.AddToCorpus(
+                self.goaldir, iso, u'admin/sd/www.samediggi.fi')
+
         self.get_old_urls()
-        self.downloader = adder.UrlDownloader(os.path.join(
-            self.goaldir, 'tmp'))
 
     def get_old_urls(self):
         for (lang, corpus_adder) in self.corpus_adders.items():
@@ -119,13 +156,7 @@ class SamediggiFiCrawler(object):
                         mdh = xslsetter.MetadataHandler(path)
                         self.old_urls[mdh.get_variable('filename')] = path.replace('.xsl', '')
 
-    def __del__(self):
-        for (lang, corpus_adder) in self.corpus_adders.items():
-            corpus_adder.add_files_to_working_copy()
-
-    def download_pages(self):
-        downloader = adder.UrlDownloader(
-            os.path.join(self.goaldir, 'tmp'))
+    def crawl_site(self):
         while len(self.unvisited_links) > 0:
             link = self.unvisited_links.pop()
 
@@ -253,40 +284,6 @@ class SamediggiFiCrawler(object):
                         href.startswith('http://www.samediggi.fi')):
                     self.unvisited_links.add(href)
 
-    def save_pages(self, pages):
-        '''Write pages to disk
-
-        pages is a list of tmpname, url, lang tuples
-        '''
-        (url, lang) = pages[0]
-        (r, tmpname) = self.downloader.download(url)
-
-        normalised_name = namechanger.normalise_filename(
-            os.path.basename(tmpname))
-        normalised_path = os.path.join(
-            self.corpus_adders[lang].goaldir, normalised_name)
-
-        if not os.path.exists(normalised_path):
-            parallelpath = self.corpus_adders[lang].copy_file_to_corpus(
-                tmpname, url)
-            util.print_frame(
-                    debug='adding {}\n'.format(parallelpath))
-        else:
-            parallelpath = normalised_path
-
-        for (url, lang) in pages[1:]:
-            (r, tmpname) = self.downloader.download(url)
-
-            normalised_name = namechanger.normalise_filename(
-                os.path.basename(tmpname))
-            normalised_path = os.path.join(
-                self.corpus_adders[lang].goaldir, normalised_name)
-
-            if not os.path.exists(normalised_path):
-                util.print_frame(debug='adding {}\n'.format(
-                    self.corpus_adders[lang].copy_file_to_corpus(
-                        tmpname, url, parallelpath=parallelpath)))
-
 
 def parse_options():
     parser = argparse.ArgumentParser(
@@ -308,7 +305,7 @@ def main():
         if site == 'www.samediggi.fi':
             print('Will crawl samediggi.fi')
             sc = SamediggiFiCrawler()
-            sc.download_pages()
+            sc.crawl_site()
         else:
             print('Can not crawl {} yet'.format(site))
 
