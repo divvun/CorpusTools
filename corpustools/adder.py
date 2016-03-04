@@ -171,6 +171,7 @@ class AddToCorpus(object):
                                         metadata_filename)
             self.update_parallel_data(util.split_path(none_dupe_path),
                                       parallelpath)
+            print('Added', none_dupe_path)
             return none_dupe_path
         except UserWarning as e:
             print(u'Skipping: {}'.format(e))
@@ -282,35 +283,68 @@ def parse_args():
         'converted to ascii only names. Metadata files containing the '
         'original name, the main language, the genre and possibly parallel '
         'files are also made. The files are added to the working copy.')
-
-    parser.add_argument('-p', '--parallel',
-                        dest='parallel_file',
-                        help='An existing file in the corpus that is '
-                        'parallel to the orig that is about to be added')
-    parser.add_argument('corpusdir',
-                        help='The corpus dir (freecorpus or boundcorpus)')
-    parser.add_argument('mainlang',
-                        help='The language of the files that will be added '
-                        '(sma, sme, ...)')
-    parser.add_argument('path',
-                        help='The genre directory where the files will be '
-                        'added. This may also be a path, e.g. '
-                        'admin/facta/skuvlahistorja1')
     parser.add_argument('origs',
                         nargs='+',
                         help='The original files, urls or directories where '
                         'the original files reside (not in svn)')
+
+    parallel = parser.add_argument_group('parallel')
+    parallel.add_argument('-p', '--parallel',
+                          dest='parallel_file',
+                          help='Path to an existing file in the corpus that '
+                          'will be parallel to the orig that is about to be added')
+    parallel.add_argument('-l', '--lang',
+                          dest='lang',
+                          help='Language of the file to be added')
+
+    no_parallel = parser.add_argument_group('no_parallel')
+    no_parallel.add_argument('-d', '--directory',
+                        dest='directory',
+                        help='The directory where the origs should be placed')
 
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
-    adder = AddToCorpus(args.corpusdir.decode('utf8'),
-                        args.mainlang.decode('utf8'),
-                        args.path.decode('utf8'))
 
-    if args.parallel_file is not None:
+    if args.parallel_file is None:
+        if args.lang is not None:
+            print('The argument -l|--lang is not allowed together with -d|--directory', file=sys.stderr)
+            sys.exit(2)
+        (root, module, lang, genre, path, basename) = util.split_path(
+            os.path.join(args.directory, 'dummy.txt').decode('utf8'))
+        if genre == 'dummy.txt':
+            print(
+                'Error!\n'
+                'You must add genre to the directory\ne.g. '
+                + os.path.join(args.directory, 'admin'), file=sys.stderr)
+            sys.exit(4)
+
+        adder = AddToCorpus(root,
+                            lang,
+                            os.path.join(genre, path))
+        for orig in args.origs:
+            if os.path.isfile(orig):
+                adder.copy_file_to_corpus(orig.decode('utf8'),
+                                          os.path.basename(orig.decode('utf8')))
+            elif orig.startswith('http'):
+                adder.copy_url_to_corpus(orig.decode('utf8'))
+            elif os.path.isdir(orig):
+                adder.copy_files_in_dir_to_corpus(orig)
+            else:
+                print(u'Cannot handle {}'.format(orig), file=sys.stderr)
+    else:
+        if args.directory is not None:
+            print('The argument -d|--directory is not allowed together with -p|--parallel', file=sys.stderr)
+            print('Only -l|--lang is allowed together with -p|--parallel', file=sys.stderr)
+            sys.exit(3)
+        (root, module, lang, genre, path, basename) = util.split_path(
+            args.parallel_file.decode('utf8'))
+        adder = AddToCorpus(root,
+                            args.lang.decode('utf8'),
+                            os.path.join(genre, path))
+
         if not os.path.exists(args.parallel_file):
             print('The given parallel file\n\t{}\n'
                   'does not exist'.format(args.parallel_file), file=sys.stderr)
@@ -330,16 +364,5 @@ def main():
         elif orig.startswith('http'):
             adder.copy_url_to_corpus(orig.decode('utf8'),
                                      args.parallel_file.decode('utf8'))
-    else:
-        for orig in args.origs:
-            if os.path.isfile(orig):
-                adder.copy_file_to_corpus(orig.decode('utf8'),
-                                          os.path.basename(orig.decode('utf8')))
-            elif orig.startswith('http'):
-                adder.copy_url_to_corpus(orig.decode('utf8'))
-            elif os.path.isdir(orig):
-                adder.copy_files_in_dir_to_corpus(orig)
-            else:
-                print(u'Cannot handle {}'.format(orig), file=sys.stderr)
 
     adder.add_files_to_working_copy()

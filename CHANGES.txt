@@ -60,3 +60,4 @@ v<0.13.7>, <20160115> -- Lots of improvements in paragraph handling
 v<0.13.8>, <20160217> -- Handle bare text in body in HTMLContentConverter. Also handle more tags to remove from html.
 v<0.13.9>, <20160220> -- More classes and ids to avoid. More files are converted.
 v<0.13.10>, <20160227> -- Improved saami_crawler
+v<0.13.11>, <20160304> -- Changed the user interface of add_files_to_corpus
