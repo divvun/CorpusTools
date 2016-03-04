@@ -49,6 +49,7 @@ setup(
         'pydocx',
         'pyth',
         'requests',
+        'requests-mock',
         'six',
         'testfixtures',
         'unidecode',
