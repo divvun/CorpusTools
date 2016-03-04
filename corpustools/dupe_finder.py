@@ -24,13 +24,16 @@
 from __future__ import print_function
 
 import argparse
+import collections
 import difflib
+import lxml.etree as etree
 import os
 import sys
 
 import argparse_version
 import ccat
 import move_files
+import util
 import xslsetter
 
 
@@ -81,18 +84,37 @@ class DupeFinder(object):
                 new_xsl.set_parallel_text(orig_lang, '')
                 new_xsl.write_file()
 
+    @staticmethod
+    def get_wc(filename):
+        tree = etree.parse(filename)
+        w = tree.find('.//wordcount').text
+
+        return float(w)
+
+    def good_word_ratio(self, filename1, filename2):
+        w1 = self.get_wc(filename1)
+        w2 = self.get_wc(filename2)
+
+        ratio = min(w1, w2) / max(w1, w2)
+
+        return ratio > 0.9
+
     def find_almost_dupes(self):
+        wrong_ratio = 0
+        good_ratio = 0
+        checked_files = collections.defaultdict(set)
         for filename1 in self.files.iterkeys():
-            if filename1 not in self.dupe_files:
-                for filename2 in self.files.iterkeys():
-                    if filename1 != filename2 and filename2 not in self.dupe_files:
+            for filename2 in self.files.iterkeys():
+                if filename1 != filename2 and filename1 not in checked_files[filename2]:
+                    if self.good_word_ratio(filename1, filename2):
+                        good_ratio += 1
                         sm = difflib.SequenceMatcher(a=self.files[filename1],
                                                      b=self.files[filename2])
                         ratio = sm.ratio()
                         if ratio > 0.90:
-                            self.dupe_files.add(filename2)
+                            self.dupe_files.add((filename1, filename2))
                             print()
-                            print(round(ratio, 2), len(self.files[filename1]))
+                            print(round(ratio, 2), filename1, filename2)
 
                             result = difflib.unified_diff(
                                 self.files[filename1].splitlines(1),
@@ -100,7 +122,13 @@ class DupeFinder(object):
                                 fromfile=os.path.basename(filename1),
                                 tofile=os.path.basename(filename2))
                             sys.stdout.writelines(result)
+                    checked_files[filename1].add(filename2)
+                    checked_files[filename2].add(filename1)
+                else:
+                    wrong_ratio += 1
 
+        util.print_frame(debug=good_ratio)
+        util.print_frame(debug=wrong_ratio)
         print('Almost dupes', len(self.dupe_files))
 
 
