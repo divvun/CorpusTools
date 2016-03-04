@@ -49,6 +49,9 @@ class UrlDownloader(object):
 
     @staticmethod
     def add_url_extension(filename, content_type):
+        if os.path.basename(filename) == '':
+            filename += 'index'
+
         content_type_extension = {
             'text/html': '.html',
             'application/msword': '.doc',
