@@ -1640,9 +1640,10 @@ class HTMLContentConverter(Converter):
             processing_instructions=True,
             remove_unknown_tags=True,
             embedded=True,
-            remove_tags=[
+            kill_tags=[
                 'img',
                 'area',
+                'address',
                 'hr',
                 'cite',
                 'footer',

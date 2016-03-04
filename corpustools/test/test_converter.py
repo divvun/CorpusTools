@@ -939,7 +939,7 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_remove_unwanted_tags(self):
         unwanted_tags = [
-            'script', 'style', 'area', 'object', 'meta',
+            'address', 'script', 'style', 'area', 'object', 'meta',
             'hr', 'nf', 'mb', 'ms',
             'img', 'cite', 'embed', 'footer', 'figcaption', 'aside', 'time',
             'figure', 'nav', 'select', 'noscript', 'iframe', 'map',
