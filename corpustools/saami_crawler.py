@@ -35,6 +35,7 @@ import urlparse
 import adder
 import argparse_version
 import namechanger
+import text_cat
 import util
 import xslsetter
 
@@ -73,12 +74,12 @@ class Crawler(object):
 
                 if not os.path.exists(normalised_path):
                     parallelpath = self.corpus_adders[lang].copy_file_to_corpus(
-                        tmpname, url)
+                        tmpname, url, parallelpath=parallelpath)
                     util.print_frame(
-                            debug='adding {}\n'.format(parallelpath))
+                            debug='adding {}'.format(parallelpath))
                 else:
                     parallelpath = normalised_path
-
+        print(file=sys.stderr)
 
 class SamediggiFiCrawler(Crawler):
     '''Notes about samediggi.fi
@@ -153,7 +154,7 @@ class SamediggiFiCrawler(Crawler):
             link = self.unvisited_links.pop()
 
             if link not in self.visited_links:
-                util.print_frame(debug=link)
+                util.print_frame(debug=link.encode('utf8'))
                 util.print_frame(
                     debug='Before: unvisited_links {}'.format(len(self.unvisited_links)))
 
@@ -181,7 +182,7 @@ class SamediggiFiCrawler(Crawler):
                         if 'samediggi.fi' not in r.url:
                             util.print_frame(
                                 debug=u'Not fetching {} which was {}\n'.format(
-                                    r.url, link))
+                                    r.url.encode('utf8'), link.encode('utf8')))
 
                 if found_saami and len(parallel_pages) > 0:
                     self.save_pages(parallel_pages)
@@ -321,7 +322,11 @@ class SamediggiNoPage(object):
         uff['smj-no'] = 'smj'
         content_language = self.tree.find('.//meta[@name="Content-language"]')
 
-        return uff[content_language.get('content')]
+        if content_language is not None:
+            return uff[content_language.get('content')]
+        else:
+            uff = 'no language {}'.format(self.url.encode('utf8'))
+            util.print_frame(debug=uff)
 
     @property
     def links(self):
@@ -333,7 +338,7 @@ class SamediggiNoPage(object):
                     'tv.samediggi.no|^#|/rss/feed|switchlanguage|facebook.com|'
                     'Web-tv|user/login|mailto|/Dokumenter|/Dokumeantta|'
                     '/Tjaatsegh|.pdf|.doc|.xls|/images/|/download/|/Biejjielaahkoe|/Kalender|'
-                    '/Dahpahusat',
+                    '/Dahpahusat|javascript|tel:',
                     href):
                     if href.startswith('/'):
                         href = urlparse.urlunparse(
@@ -348,9 +353,15 @@ class SamediggiNoPage(object):
                             links.add(href)
 
                     if not add:
-                        util.print_frame(debug=href + '\n')
+                        util.print_frame(debug=href.encode('utf8') + '\n')
 
         return links
+
+    @property
+    def body_text(self):
+        body = self.tree.find('.//body')
+
+        return ' '.join(body.xpath('.//text()'))
 
 class SamediggiNoCrawler(Crawler):
     def __init__(self):
@@ -365,18 +376,22 @@ class SamediggiNoCrawler(Crawler):
         for iso in self.langs:
             self.corpus_adders[iso] = adder.AddToCorpus(
                 self.goaldir, iso, u'admin/sd/samediggi.no')
+        self.languageguesser = text_cat.Classifier()
 
-    def crawl_page(self, link, parallel_pages):
+    def crawl_page(self, link):
         self.visited_links.add(link)
-        orig_page = SamediggiNoPage(link)
-        self.visited_links.add(orig_page.url)
-        self.unvisited_links = self.unvisited_links.union(orig_page.links)
-        parallel_pages.append((orig_page.print_url, orig_page.lang))
+        util.print_frame(debug=link.encode('utf8'))
+        try:
+            orig_page = SamediggiNoPage(link)
+        except requests.exceptions.SSLError as e:
+            util.print_frame(debug=str(e))
+        else:
+            self.visited_links.add(orig_page.url)
+            self.unvisited_links = self.unvisited_links.union(orig_page.links)
 
-        util.print_frame(debug=link)
-        util.print_frame(debug=orig_page.url + '\n')
+            util.print_frame(debug=orig_page.url.encode('utf8') + '\n')
 
-        return orig_page
+            return orig_page
 
     def crawl_site(self):
         '''Crawl samediggi.no'''
@@ -384,18 +399,45 @@ class SamediggiNoCrawler(Crawler):
             link = self.unvisited_links.pop()
 
             if link not in self.visited_links:
-                util.print_frame(
-                    debug='Before: unvisited_links {}'.format(len(self.unvisited_links)))
+                self.crawl_pageset(link)
 
-                parallel_pages = []
+    def crawl_pageset(self, link):
+        parallel_pages = []
 
-                orig_page = self.crawl_page(link, parallel_pages)
+        found_saami = False
+        orig_page = self.crawl_page(link)
+        if orig_page is not None:
+            body_lang = self.languageguesser.classify(orig_page.body_text,
+                                                      langs=self.langs)
+            if orig_page.lang == body_lang:
+                if body_lang in [u'sme', u'sma', u'smj']:
+                    found_saami = True
+                parallel_pages.append((orig_page.print_url,
+                                       orig_page.lang))
+            else:
+                uff = 'not same lang {}:\n orig: {} body: {}'.format(orig_page.url.encode('utf8'), orig_page.lang, body_lang)
+                util.print_frame(debug=uff)
 
-                for parallel_link in orig_page.parallel_links:
-                    if parallel_link not in self.visited_links:
-                        self.crawl_page(parallel_link, parallel_pages)
+            for parallel_link in orig_page.parallel_links:
+                if parallel_link not in self.visited_links:
+                    parallel_page = self.crawl_page(parallel_link)
+                    if parallel_link is not None:
+                        body_lang = self.languageguesser.classify(parallel_page.body_text,
+                                                      langs=self.langs)
+                        if parallel_page.lang == body_lang:
+                            if body_lang in [u'sme', u'sma', u'smj']:
+                                found_saami = True
+                            util.print_frame()
+                            parallel_pages.append((parallel_page.print_url,
+                                                   parallel_page.lang))
+                        else:
+                            uff = 'not same lang {}:\n orig: {} body: {}'.format(parallel_page.url.encode('utf8'), parallel_page.lang, body_lang)
+                            util.print_frame(debug=uff)
 
-                self.save_pages(parallel_pages)
+        if found_saami:
+            self.save_pages(parallel_pages)
+        else:
+            util.print_frame(debug='No saami found')
 
 
 def parse_options():
@@ -425,7 +467,3 @@ def main():
             sc.crawl_site()
         else:
             print('Can not crawl {} yet'.format(site))
-
-
-if __name__ == "__main__":
-    main()
