@@ -58,34 +58,26 @@ class Crawler(object):
 
         pages is a list of url, lang tuples
         '''
-        (url, lang) = pages[0]
-        (r, tmpname) = self.downloader.download(url)
+        parallelpath = ''
 
-        normalised_name = namechanger.normalise_filename(
-            os.path.basename(tmpname))
-        normalised_path = os.path.join(
-            self.corpus_adders[lang].goaldir, normalised_name)
+        for (url, lang) in pages:
+            try:
+                (r, tmpname) = self.downloader.download(url)
+            except adder.AdderException as e:
+                util.print_frame(debug=str(e) + '\n')
+            else:
+                normalised_name = namechanger.normalise_filename(
+                    os.path.basename(tmpname))
+                normalised_path = os.path.join(
+                    self.corpus_adders[lang].goaldir, normalised_name)
 
-        if not os.path.exists(normalised_path):
-            parallelpath = self.corpus_adders[lang].copy_file_to_corpus(
-                tmpname, url)
-            util.print_frame(
-                    debug='adding {}\n'.format(parallelpath))
-        else:
-            parallelpath = normalised_path
-
-        for (url, lang) in pages[1:]:
-            (r, tmpname) = self.downloader.download(url)
-
-            normalised_name = namechanger.normalise_filename(
-                os.path.basename(tmpname))
-            normalised_path = os.path.join(
-                self.corpus_adders[lang].goaldir, normalised_name)
-
-            if not os.path.exists(normalised_path):
-                util.print_frame(debug='adding {}\n'.format(
-                    self.corpus_adders[lang].copy_file_to_corpus(
-                        tmpname, url, parallelpath=parallelpath)))
+                if not os.path.exists(normalised_path):
+                    parallelpath = self.corpus_adders[lang].copy_file_to_corpus(
+                        tmpname, url)
+                    util.print_frame(
+                            debug='adding {}\n'.format(parallelpath))
+                else:
+                    parallelpath = normalised_path
 
 
 class SamediggiFiCrawler(Crawler):
@@ -340,7 +332,8 @@ class SamediggiNoPage(object):
                 if not re.search(
                     'tv.samediggi.no|^#|/rss/feed|switchlanguage|facebook.com|'
                     'Web-tv|user/login|mailto|/Dokumenter|/Dokumeantta|'
-                    '/Tjaatsegh|.pdf|.doc|.xls',
+                    '/Tjaatsegh|.pdf|.doc|.xls|/images/|/download/|/Biejjielaahkoe|/Kalender|'
+                    '/Dahpahusat',
                     href):
                     if href.startswith('/'):
                         href = urlparse.urlunparse(
@@ -355,7 +348,7 @@ class SamediggiNoPage(object):
                             links.add(href)
 
                     if not add:
-                        util.print_frame(debug=href)
+                        util.print_frame(debug=href + '\n')
 
         return links
 
@@ -373,36 +366,34 @@ class SamediggiNoCrawler(Crawler):
             self.corpus_adders[iso] = adder.AddToCorpus(
                 self.goaldir, iso, u'admin/sd/samediggi.no')
 
+    def crawl_page(self, link, parallel_pages):
+        self.visited_links.add(link)
+        orig_page = SamediggiNoPage(link)
+        self.visited_links.add(orig_page.url)
+        self.unvisited_links = self.unvisited_links.union(orig_page.links)
+        parallel_pages.append((orig_page.print_url, orig_page.lang))
+
+        util.print_frame(debug=link)
+        util.print_frame(debug=orig_page.url + '\n')
+
+        return orig_page
+
     def crawl_site(self):
         '''Crawl samediggi.no'''
         while len(self.unvisited_links) > 0:
             link = self.unvisited_links.pop()
 
             if link not in self.visited_links:
-                self.visited_links.add(link)
-                util.print_frame(debug=link)
                 util.print_frame(
                     debug='Before: unvisited_links {}'.format(len(self.unvisited_links)))
 
                 parallel_pages = []
-                found_saami = False
 
-                orig_page = SamediggiNoPage(link)
-                self.visited_links.add(orig_page.url)
-                util.print_frame(debug=orig_page.url)
-                self.unvisited_links.union(orig_page.links)
-
-                parallel_pages.append((orig_page.print_url, orig_page.lang))
+                orig_page = self.crawl_page(link, parallel_pages)
 
                 for parallel_link in orig_page.parallel_links:
                     if parallel_link not in self.visited_links:
-                        self.visited_links.add(parallel_link)
-                        util.print_frame(debug=parallel_link)
-                        parallel_page = SamediggiNoPage(parallel_link)
-                        self.visited_links.add(parallel_page.url)
-                        util.print_frame(debug=parallel_page.url)
-                        self.unvisited_links.union(parallel_page.links)
-                        parallel_pages.append((parallel_page.print_url, parallel_page.lang))
+                        self.crawl_page(parallel_link, parallel_pages)
 
                 self.save_pages(parallel_pages)
 

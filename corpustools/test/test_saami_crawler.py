@@ -979,7 +979,7 @@ På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
 
             sdnp = saami_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
 
-            self.assertEqual(sdnp.print_url, 'http://www.saemiedigkie.no/layout/set/print/index')
+            self.assertEqual(sdnp.print_url, 'http://www.saemiedigkie.no/layout/set/print')
 
     def test_lang(self):
         with requests_mock.Mocker() as m:
@@ -1007,7 +1007,6 @@ På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
                      u'http://www.saemiedigkie.no/Saemiedigkien-bijre',
                      u'http://www.saemiedigkie.no/Kultuvrejieleme/Gaarsjelimmie',
                      u'http://www.saemiedigkie.no/Jielemh/Duedtie/Duoji-doaibmadoarjjaortnet',
-                     u'http://www.saemiedigkie.no/Biejjielaahkoe/Searva-AWG',
                      u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Gaskesadth-mijjine',
                      u'http://www.saemiedigkie.no/Saemiedigkien-bijre/AAaarganisasjovnestruktuvre/Saemiedigkieraerie',
                      u'http://www.saemiedigkie.no/Gaskenasjovnaale-barkoe/Gaskenasjovnaale-aalkoealmetjelaavenjostoe',
@@ -1034,12 +1033,10 @@ På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
                      u'http://www.saemiedigkie.no/Gaskenasjovnaale-barkoe/Saemien-laavenjostoe',
                      u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Tjirkijh',
                      u'http://www.saemiedigkie.no/Preessebievnesh/Pressebievnesh/PRM-Sametinget-og-Oslo-kommune-vil-styrke-samisk-spraak-og-kultur-i-Oslo',
-                     u'http://www.saemiedigkie.no/Biejjielaahkoe/Violence-Against-Indigenous-Women',
                      u'http://www.saemiedigkie.no/Giele/Bievnesh-saemien-gieli-bijre/Savvat-buori-sagastallama',
                      u'http://www.saemiedigkie.no/Kultuvrejieleme',
                      u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Eatnemegellievoete',
                      'http://www.samediggi.no/Samedikki-coahk',
-                     u'http://www.saemiedigkie.no/Biejjielaahkoe/AAST',
                      u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Areale/Baaetieh-raeriejgujmie-baaetijen-aejkien-areale-jih-byjresepolitihkese',
                      u'http://www.saemiedigkie.no/Stipendh-jih-daaarjoeh',
                      u'http://www.saemiedigkie.no/Giele/Bievnesh-saemien-gieli-bijre',
@@ -1049,11 +1046,7 @@ På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
                      u'http://www.saemiedigkie.no/Kultuvrejieleme/Meedijah',
                      u'http://www.saemiedigkie.no/Lierehtimmie',
                      u'http://www.saemiedigkie.no/Giele/Saemien-sijjienommh',
-                     u'http://www.saemiedigkie.no/Biejjielaahkoe/AIEC2016-oeoernesaavva-Guovdageaidnusne',
                      u'http://www.saemiedigkie.no/Lierehtimmie/Dotkeme-jih-jollebe-oeoehpehtimmie',
-                     u'http://www.saemiedigkie.no/Biejjielaahkoe',
-                     u'http://www.saemiedigkie.no/Biejjielaahkoe/Bovdehus-gielddaseminarii',
-                     u'http://www.saemiedigkie.no/Biejjielaahkoe/Seminar-Joikens-frie-natur',
                      u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Kultuvremojhtesh',
                      u'http://www.saemiedigkie.no/Lierehtimmie/Maadthskuvle-jih-Jaaa',
                      u'http://www.saemiedigkie.no/Laante-jih-vierhtiereaktah/Goeoelemereakta',
