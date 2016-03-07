@@ -73,19 +73,6 @@ class DupeFinder(object):
                 'converted/', 'orig/').replace('.xml', '').decode('utf8')
             move_files.mover(origname, u'')
 
-    def remove_from_parallel_files(self, orig_xslname):
-        orig_xsl = xslsetter.MetadataHandler(orig_xslname)
-        parallel_files = orig_xsl.get_parallel_texts()
-
-        for lang, filename in parallel_files.iteritems():
-            orig_lang = orig_xsl.get_variable('mainlang')
-            new_xslname = orig_xslname.replace(orig_lang + '/', lang + '/')
-            new_xslname = new_xslname.replace(os.path.basename(orig_xslname), filename + '.xsl')
-            if os.path.exists(new_xslname):
-                new_xsl = xslsetter.MetadataHandler(new_xslname)
-                new_xsl.set_parallel_text(orig_lang, '')
-                new_xsl.write_file()
-
     @staticmethod
     def get_wc(filename):
         tree = etree.parse(filename)
