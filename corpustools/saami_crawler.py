@@ -421,7 +421,7 @@ class SamediggiNoCrawler(Crawler):
             for parallel_link in orig_page.parallel_links:
                 if parallel_link not in self.visited_links:
                     parallel_page = self.crawl_page(parallel_link)
-                    if parallel_link is not None:
+                    if parallel_page is not None:
                         body_lang = self.languageguesser.classify(parallel_page.body_text,
                                                       langs=self.langs)
                         if parallel_page.lang == body_lang:
