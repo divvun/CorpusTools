@@ -54,20 +54,22 @@ class DupeFinder(object):
 
         return files
 
-    def remove_dupe_files(self):
-        for filename1 in self.files.iterkeys():
-            if filename1 not in self.dupe_files:
-                for filename2 in self.files.iterkeys():
-                    if filename1 != filename2 and filename2 not in self.dupe_files:
-                        self.remove_dupe_file(filename1, filename2)
+    @staticmethod
+    def get_parallel_texts(filename1):
+        return etree.parse(filename1).xpath('.//parallel_text')
 
     def remove_dupe_file(self, filename1, filename2):
         result = list(difflib.unified_diff(
             self.files[filename1].splitlines(1),
             self.files[filename2].splitlines(1)))
         if len(result) == 0:
-            self.dupe_files.add(filename2)
-            origname = filename2.replace(
+            print('\nParallels:', filename1, filename2)
+            to_remove = filename1
+            if self.get_parallel_texts(filename1) > self.get_parallel_texts(filename2):
+                to_remove = filename2
+
+            self.dupe_files.add(to_remove)
+            origname = to_remove.replace(
                 'converted/', 'orig/').replace('.xml', '').decode('utf8')
             move_files.mover(origname, u'')
 
@@ -99,7 +101,23 @@ class DupeFinder(object):
 
         return ratio > 0.9
 
-    def find_almost_dupes(self):
+    def compare_files(self, filename1, filename2):
+        sm = difflib.SequenceMatcher(a=self.files[filename1],
+                                        b=self.files[filename2])
+        ratio = sm.ratio()
+        if ratio > 0.90:
+            self.dupe_files.add((filename1, filename2))
+            print()
+            print(round(ratio, 2), filename1, filename2)
+
+            result = difflib.unified_diff(
+                self.files[filename1].splitlines(1),
+                self.files[filename2].splitlines(1),
+                fromfile=os.path.basename(filename1),
+                tofile=os.path.basename(filename2))
+            sys.stdout.writelines(result)
+
+    def iterate_all_files(self, remove=False):
         wrong_ratio = 0
         good_ratio = 0
         checked_files = collections.defaultdict(set)
@@ -108,20 +126,11 @@ class DupeFinder(object):
                 if filename1 != filename2 and filename1 not in checked_files[filename2]:
                     if self.good_word_ratio(filename1, filename2):
                         good_ratio += 1
-                        sm = difflib.SequenceMatcher(a=self.files[filename1],
-                                                     b=self.files[filename2])
-                        ratio = sm.ratio()
-                        if ratio > 0.90:
-                            self.dupe_files.add((filename1, filename2))
-                            print()
-                            print(round(ratio, 2), filename1, filename2)
+                        if remove:
+                            self.remove_dupe_file(filename1, filename2)
+                        else:
+                            self.compare_files(filename1, filename2)
 
-                            result = difflib.unified_diff(
-                                self.files[filename1].splitlines(1),
-                                self.files[filename2].splitlines(1),
-                                fromfile=os.path.basename(filename1),
-                                tofile=os.path.basename(filename2))
-                            sys.stdout.writelines(result)
                     checked_files[filename1].add(filename2)
                     checked_files[filename2].add(filename1)
                 else:
@@ -149,7 +158,7 @@ def main():
     args = parse_remover_options()
 
     df = DupeFinder(args.dir)
-    df.remove_dupe_files()
+    df.iterate_all_files(remove=True)
 
 
 def parse_finder_options():
@@ -169,4 +178,4 @@ def find():
     args = parse_finder_options()
 
     df = DupeFinder(args.dir)
-    df.find_almost_dupes()
+    df.iterate_all_files()
