@@ -71,7 +71,8 @@ class DupeFinder(object):
             self.dupe_files.add(to_remove)
             origname = to_remove.replace(
                 'converted/', 'orig/').replace('.xml', '').decode('utf8')
-            move_files.mover(origname, u'')
+            if os.path.exists(origname):
+                move_files.mover(origname, u'')
 
     @staticmethod
     def get_wc(filename):
