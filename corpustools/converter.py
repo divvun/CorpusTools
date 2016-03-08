@@ -2224,7 +2224,6 @@ class HTMLContentConverter(Converter):
 
 
 class HTMLConverter(HTMLContentConverter):
-
     def __init__(self, filename, write_intermediate=False):
         with open(filename) as f:
             super(HTMLConverter, self).__init__(filename,
@@ -2233,8 +2232,7 @@ class HTMLConverter(HTMLContentConverter):
 
 
 class RTFConverter(HTMLContentConverter):
-
-    '''Convert html documents to the giellatekno xml format.'''
+    '''Convert rtf documents to the giellatekno xml format.'''
 
     def __init__(self, filename, write_intermediate=False):
         with open(filename, "rb") as rtf_document:
