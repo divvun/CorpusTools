@@ -479,10 +479,8 @@ class AvvirConverter(Converter):
 
         for story in self.intermediate.findall('./story'):
             parent = story.getparent()
-            i = 1
-            for p in story.findall('./p'):
-                parent.insert(parent.index(story) + i, p)
-                i += 1
+            for i, p in enumerate(story.findall('./p')):
+                parent.insert(parent.index(story) + i + 1, p)
 
             parent.remove(story)
 
@@ -976,14 +974,11 @@ class OrderedPDFSections(object):
         self.sections = []
 
     def find_position(self, new_section):
-        i = 0
-        for section in self.sections:
+        for i, section in enumerate(self.sections):
             if new_section.is_above(section):
-                break
-            else:
-                i += 1
-
-        return i
+                return i
+        else:
+            return len(self.sections)
 
     def insert_section(self, new_section):
         '''new_section is a PDFSection'''
@@ -2463,12 +2458,10 @@ class DocumentFixer(object):
             parts = text.split(u'­')
             if len(parts) > 1:
                 element.text = parts[0]
-                x = 0
-                for part in parts[1:]:
+                for x, part in enumerate(parts[1:]):
                     hyph = etree.Element('hyph')
                     hyph.tail = part
                     element.insert(x, hyph)
-                    x += 1
 
         text = element.tail
         if text is not None:

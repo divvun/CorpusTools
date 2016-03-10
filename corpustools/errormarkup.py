@@ -75,10 +75,8 @@ class ErrorMarkup(object):
                 element.text = new_content[0]
                 new_content = new_content[1:]
 
-            new_pos = 0
-            for part in new_content:
-                element.insert(new_pos, part)
-                new_pos += 1
+            for pos, part in enumerate(new_content):
+                element.insert(pos, part)
 
     def fix_tail(self, element):
         '''Replace the tail of an element with errormarkup if possible'''
@@ -92,9 +90,8 @@ class ErrorMarkup(object):
                 new_content = new_content[1:]
 
             new_pos = element.getparent().index(element) + 1
-            for part in new_content:
-                element.getparent().insert(new_pos, part)
-                new_pos += 1
+            for pos, part in enumerate(new_content):
+                element.getparent().insert(new_pos + pos, part)
 
     def error_parser(self, text):
         '''Parse errormarkup found in text.
