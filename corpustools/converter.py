@@ -709,7 +709,7 @@ class BoundingBox(object):
 
     def __unicode__(self):
         info = []
-        for key, value in self.__dict__.items():
+        for key, value in self.__dict__.iteritems():
             info.append(unicode(key) + u' ' + unicode(value))
         info.append(u'height ' + unicode(self.height))
         info.append(u'width ' + unicode(self.width))
@@ -1447,7 +1447,7 @@ class PDF2XMLConverter(Converter):
             "ﬅ": "ft",
         }
 
-        for key, value in replacements.items():
+        for key, value in replacements.iteritems():
             content = content.replace(key + ' ', value)
             content = content.replace(key, value)
 
@@ -2091,8 +2091,8 @@ class HTMLContentConverter(Converter):
         }
 
         ns = {'html': 'http://www.w3.org/1999/xhtml'}
-        for tag, attribs in unwanted_classes_ids.items():
-            for key, values in attribs.items():
+        for tag, attribs in unwanted_classes_ids.iteritems():
+            for key, values in attribs.iteritems():
                 for value in values:
                     search = ('.//html:{}[@{}="{}"]'.format(tag, key, value))
                     for unwanted in self.soup.xpath(search, namespaces=ns):
@@ -2281,8 +2281,8 @@ class DocxConverter(HTMLContentConverter):
             }
         }
         ns = {'html': 'http://www.w3.org/1999/xhtml'}
-        for tag, attribs in unwanted_classes_ids.items():
-            for key, values in attribs.items():
+        for tag, attribs in unwanted_classes_ids.iteritems():
+            for key, values in attribs.iteritems():
                 for value in values:
                     search = ('.//html:{}[starts-with(@{}, "{}")]'.format(tag, key, value))
                     for unwanted in self.soup.xpath(search, namespaces=ns):
@@ -2544,7 +2544,7 @@ class DocumentFixer(object):
 
         for element in self.root.iter('p'):
             if element.text:
-                for key, value in replacements.items():
+                for key, value in replacements.iteritems():
                     element.text = element.text.replace(key + ' ', value)
                     element.text = element.text.replace(key, value)
 

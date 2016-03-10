@@ -79,7 +79,7 @@ class MovepairComputer(object):
         new_components = util.split_path(newpath)
 
         metadatafile = xslsetter.MetadataHandler(oldpath + '.xsl')
-        for lang, parallel in metadatafile.get_parallel_texts().items():
+        for lang, parallel in metadatafile.get_parallel_texts().iteritems():
             oldparellelpath = u'/'.join((
                 old_components.root,
                 old_components.module,
@@ -451,7 +451,7 @@ def normalise_filename(filename):
                 filename
             ))).lower()
 
-    newname = util.replace_all(unwanted_chars.items(), newname)
+    newname = util.replace_all(unwanted_chars.iteritems(), newname)
 
     while u'__' in newname:
         newname = newname.replace(u'__', u'_')

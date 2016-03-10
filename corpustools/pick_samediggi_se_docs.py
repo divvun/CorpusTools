@@ -128,7 +128,7 @@ class DocumentPicker(object):
 
     def conclude(self):
         total = 0
-        for key, value in self.file_dict.items():
+        for key, value in self.file_dict.iteritems():
             total += len(self.file_dict[key])
             print(key, len(self.file_dict[key]))
         print(total, self.total_file)
@@ -158,7 +158,7 @@ class DocumentPicker(object):
         mh = xslsetter.MetadataHandler(
             self.get_goal_name(file_, lang) + '.xsl',
             create=True)
-        for key, value in self.set_variables(file_, lang).items():
+        for key, value in self.set_variables(file_, lang).iteritems():
             mh.set_variable(key, value)
         mh.write_file()
 

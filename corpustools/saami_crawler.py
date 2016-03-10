@@ -51,7 +51,7 @@ class Crawler(object):
             self.goaldir, 'tmp'))
 
     def __del__(self):
-        for (lang, corpus_adder) in self.corpus_adders.items():
+        for (lang, corpus_adder) in self.corpus_adders.iteritems():
             corpus_adder.add_files_to_working_copy()
 
     def save_pages(self, pages):
@@ -133,14 +133,14 @@ class SamediggiFiCrawler(Crawler):
                       u'nuortta': u'sms',
                       u'english': u'eng'}
 
-        for (natural, iso) in self.langs.items():
+        for (natural, iso) in self.langs.iteritems():
             self.corpus_adders[natural] = adder.AddToCorpus(
                 self.goaldir, iso, u'admin/sd/www.samediggi.fi')
 
         self.get_old_urls()
 
     def get_old_urls(self):
-        for (lang, corpus_adder) in self.corpus_adders.items():
+        for (lang, corpus_adder) in self.corpus_adders.iteritems():
             for root, dirs, files in os.walk(corpus_adder.goaldir):
                 for f in files:
                     if f.endswith('.xsl'):

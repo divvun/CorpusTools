@@ -159,7 +159,7 @@ class MetadataHandler(object):
 
     def validate_and_set_margins(self, margin_lines):
         _margins = {}
-        for key, value in margin_lines.items():
+        for key, value in margin_lines.iteritems():
             if ('all' in value and ('odd' in value or 'even' in value) or
                     '=' not in value):
                 raise XsltException(

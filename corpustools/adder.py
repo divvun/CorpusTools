@@ -59,7 +59,7 @@ class UrlDownloader(object):
             'text/plain': '.txt',
         }
 
-        for ct, extension in content_type_extension.items():
+        for ct, extension in content_type_extension.iteritems():
             if (ct in content_type and not filename.endswith(extension)):
                 filename += extension
 
@@ -207,7 +207,7 @@ class AddToCorpus(object):
             parall_components = util.split_path(parallelpath)
             parallels[parall_components.lang] = parall_components.basename
 
-            for lang, parallel in parallels.items():
+            for lang, parallel in parallels.iteritems():
                 metadata = xslsetter.MetadataHandler(
                     '/'.join((
                         none_dupe_components.root,
@@ -217,7 +217,7 @@ class AddToCorpus(object):
                         none_dupe_components.subdirs,
                         parallel + '.xsl')))
 
-                for lang1, parallel1 in parallels.items():
+                for lang1, parallel1 in parallels.iteritems():
                     if lang1 != lang:
                         metadata.set_parallel_text(lang1, parallel1)
                 metadata.write_file()

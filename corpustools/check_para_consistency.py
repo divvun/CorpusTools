@@ -61,7 +61,7 @@ def main():
                     xsl = xslsetter.MetadataHandler(xsl_name)
 
                     para_files = []
-                    for lang, parallel in xsl.get_parallel_texts().items():
+                    for lang, parallel in xsl.get_parallel_texts().iteritems():
                         parallelpath = u'/'.join((
                             orig_components.root,
                             orig_components.module,

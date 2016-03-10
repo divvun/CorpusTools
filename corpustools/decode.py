@@ -319,7 +319,7 @@ class EncodingGuesser(object):
         if position is not None:
             encoding = CTYPES[position]
 
-            for key, value in encoding.items():
+            for key, value in encoding.iteritems():
                 text = text.replace(key, value)
 
             if position == u'mac-sami_to_latin1':

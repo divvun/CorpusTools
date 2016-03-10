@@ -173,7 +173,7 @@ def print_element(element, level, indent, out):
     out.write(' ' * (level * indent))
     out.write('<{}'.format(tag))
 
-    for k, v in element.attrib.items():
+    for k, v in element.attrib.iteritems():
         out.write(' ')
         if isinstance(k, unicode):
             out.write(k.encode('utf8'))
