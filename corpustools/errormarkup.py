@@ -212,21 +212,18 @@ class ErrorMarkup(object):
         if self.is_correction(errorstring):
             elements.append(error_element)
         else:
-            parenthesis_found = False
-
-            while not parenthesis_found:
+            while True:
                 text = self.get_text(elements[-1])
 
                 index = text.rfind('(')
                 if index > -1:
-                    parenthesis_found = True
-
                     error_element.text = text[index + 1:]
                     if isinstance(elements[-1], etree._Element):
                         elements[-1].tail = text[:index]
                     else:
                         elements[-1] = text[:index]
                     elements.append(error_element)
+                    break
 
                 else:
                     inner_element = elements[-1]
