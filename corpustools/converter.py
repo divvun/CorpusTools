@@ -2104,8 +2104,7 @@ class HTMLContentConverter(Converter):
                 p = etree.Element('{http://www.w3.org/1999/xhtml}p')
                 p.text = h.tail
                 h.tail = None
-                n = h.getnext()
-                while n is not None:
+                for n in iter(h.getnext, None):
                     if (n.tag == '{http://www.w3.org/1999/xhtml}p' or
                             n.tag == '{http://www.w3.org/1999/xhtml}h3' or
                             n.tag == '{http://www.w3.org/1999/xhtml}h2' or
@@ -2113,7 +2112,6 @@ class HTMLContentConverter(Converter):
                             n.tag == '{http://www.w3.org/1999/xhtml}table'):
                         break
                     p.append(n)
-                    n = n.getnext()
 
                 h_parent = h.getparent()
                 h_parent.insert(h_parent.index(h) + 1, p)
