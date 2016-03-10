@@ -2092,6 +2092,12 @@ class HTMLContentConverter(Converter):
 
     def add_p_around_text(self):
         '''Add p around text after an hX element'''
+        stop_tags = [
+            '{http://www.w3.org/1999/xhtml}p',
+            '{http://www.w3.org/1999/xhtml}h3',
+            '{http://www.w3.org/1999/xhtml}h2',
+            '{http://www.w3.org/1999/xhtml}div',
+            '{http://www.w3.org/1999/xhtml}table']
         for h in self.soup.xpath(
                 './/html:body/*',
                 namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
@@ -2099,14 +2105,10 @@ class HTMLContentConverter(Converter):
                 p = etree.Element('{http://www.w3.org/1999/xhtml}p')
                 p.text = h.tail
                 h.tail = None
-                for n in iter(h.getnext, None):
-                    if (n.tag == '{http://www.w3.org/1999/xhtml}p' or
-                            n.tag == '{http://www.w3.org/1999/xhtml}h3' or
-                            n.tag == '{http://www.w3.org/1999/xhtml}h2' or
-                            n.tag == '{http://www.w3.org/1999/xhtml}div' or
-                            n.tag == '{http://www.w3.org/1999/xhtml}table'):
+                for next_element in iter(h.getnext, None):
+                    if next_element.tag in stop_tags:
                         break
-                    p.append(n)
+                    p.append(next_element)
 
                 h_parent = h.getparent()
                 h_parent.insert(h_parent.index(h) + 1, p)
