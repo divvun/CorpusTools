@@ -59,43 +59,6 @@ tests = {
             '</document>'
         ),
     },
-    'address': {
-        'html': (
-            '<html>'
-            '  <body>'
-            '    <address>'
-            '      Sametingets plenumsmøte er <a>direktesendt</a>'
-            '        .<br />'
-            '        Program for fredag 29. mai 08.30-12.30 (pause'
-            '        10.30-11.00<br />'
-            '       Arbeids- og inkluderingsminister'
-            '       til Sametinget<br />'
-            '       Sak 25/09 Revidering av Sametingets arbeidsorden<br />'
-            '       Sak 26/09 Reinbeitekonvensjonen Norge - Sverige<br />'
-            '  </address>'
-            '  </body>'
-            '</html>'
-        ),
-        'xml': (
-            '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
-            '  <body>'
-            '    <p>'
-            '      Sametingets plenumsmøte er direktesendt'
-            '      .'
-            '      Program for fredag 29. mai 08.30-12.30 (pause'
-            '      10.30-11.00'
-            '      Arbeids- og inkluderingsminister'
-            '      til Sametinget'
-            '      Sak 25/09 Revidering av Sametingets arbeidsorden'
-            '      Sak 26/09 Reinbeitekonvensjonen Norge - Sverige'
-            '  </p>'
-            '  </body>'
-            '</document>'
-        ),
-    },
     'blockquote-p': {
         'html': (
             '<html>'
