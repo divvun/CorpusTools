@@ -404,7 +404,8 @@ class Parallelize(object):
         # therefore we set this before reshuffling:
         anchor_cols = [self.get_lang1(), self.get_lang2()]
         if self.is_translated_from_lang2():
-            self.reshuffle_files()
+            (self.origfiles[1], self.origfiles[0]) = (self.origfiles[0],
+                                                      self.origfiles[1])
 
         self.gal = self.setup_anchors(anchor_file, anchor_cols)
 
@@ -440,15 +441,6 @@ class Parallelize(object):
                 util.note(
                     "WARNING: {}, not {}, in {} parallel_texts of {}!".format(
                         para0, base1, lang1, f0.get_name()))
-
-    def reshuffle_files(self):
-        """Change the order of the files
-
-        Make the translated file be the last element
-        """
-        tmp = self.origfiles[0]
-        self.origfiles[0] = self.origfiles[1]
-        self.origfiles[1] = tmp
 
     def get_outfile_name(self):
         """Compute the name of the final tmx file"""
