@@ -22,6 +22,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from collections import namedtuple
+from contextlib import contextmanager
 import inspect
 import operator
 import os
@@ -217,6 +218,14 @@ def name_to_unicode(filename):
 
 def note(msg):
     print(msg, file=sys.stderr)
+
+
+@contextmanager
+def ignored(*exceptions):
+    try:
+        yield
+    except exceptions:
+        pass
 
 
 class ExternalCommandRunner(object):
