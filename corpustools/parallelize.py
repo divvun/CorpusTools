@@ -255,12 +255,8 @@ class SentenceDivider(object):
         """Write self.document to the given outfile name"""
         o_path, o_file = os.path.split(outfile)
         o_rel_path = o_path.replace(os.getcwd() + '/', '', 1)
-        try:
-            if o_rel_path != '':
-                os.makedirs(o_rel_path)
-        except OSError as e:
-            if e.errno != errno.EEXIST:
-                raise
+        with util.ignored(OSError):
+            os.makedirs(o_rel_path)
         with open(outfile, 'w') as sentence_file:
             et = etree.ElementTree(self.document)
             et.write(sentence_file,
@@ -807,7 +803,7 @@ class Tmx(object):
     def write_tmx_file(self, out_filename):
         """Write a tmx file given a tmx etree element and a filename"""
         out_dir = os.path.dirname(out_filename)
-        if out_dir != '' and not os.path.isdir(out_dir):
+        with util.ignored(OSError):
             os.makedirs(out_dir)
 
         with open(out_filename, "w") as tmx_file:

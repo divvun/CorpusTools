@@ -128,7 +128,7 @@ class AddToCorpus(object):
         self.vcs = vcsfactory.vcs(self.corpusdir)
         self.goaldir = os.path.join(corpusdir, u'orig', mainlang,
                                     self.__normalise_path(path))
-        if not os.path.exists(self.goaldir):
+        with util.ignored(OSError):
             os.makedirs(self.goaldir)
         self.additions = []
 

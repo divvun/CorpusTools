@@ -94,12 +94,6 @@ class Analyser(object):
                 print('Could not handle the file name {}'.format(xml_file),
                       file=sys.stderr)
 
-    @staticmethod
-    def makedirs(filename):
-        """Make the analysed directory"""
-        with util.ignored(OSError):
-            os.makedirs(os.path.dirname(filename))
-
     def ccat(self):
         """Turn an xml formatted file into clean text"""
         self.xml_printer.parse_file(self.xml_file.get_name())
@@ -237,7 +231,8 @@ class Analyser(object):
             if self.xml_file.get_ocr() is None:
                 self.dependency_analysis()
                 if self.get_disambiguation() is not None:
-                    self.makedirs(analysis_xml_name)
+                    with util.ignored(OSError):
+                        os.makedirs(os.path.dirname(analysis_xml_name))
                     self.get_analysis_xml()
                     self.xml_file.write(analysis_xml_name)
             else:

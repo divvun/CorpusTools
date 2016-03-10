@@ -123,7 +123,7 @@ class CorpusFileMover(object):
     def _move(self, oldpath, newpath):
         if os.path.exists(oldpath):
             newdir = os.path.dirname(newpath)
-            if not os.path.exists(newdir):
+            with util.ignored(OSError):
                 os.makedirs(newdir)
             self.vcs.move(oldpath.encode('utf8'), newpath.encode('utf8'))
 

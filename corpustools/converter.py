@@ -236,7 +236,8 @@ class Converter(object):
     def write_complete(self, languageguesser):
         if distutils.dep_util.newer_group(
                 self.dependencies, self.converted_name):
-            self.makedirs()
+            with util.ignored(OSError):
+                os.makedirs(os.path.dirname(self.converted_name))
 
             if (('goldstandard' in self.orig and '.correct.' in self.orig) or
                     'goldstandard' not in self.orig):
@@ -254,11 +255,6 @@ class Converter(object):
                                                        pretty_print='True'))
                 else:
                     print(self.orig, "has no text", file=sys.stderr)
-
-    def makedirs(self):
-        '''Make the converted directory.'''
-        with util.ignored(OSError):
-            os.makedirs(os.path.dirname(self.converted_name))
 
     @property
     def xsl(self):
