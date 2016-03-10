@@ -671,17 +671,13 @@ class Tmx(object):
     def tu_to_string(self, tu):
         """Extract the two strings of a tu element"""
         string = ""
-        try:
+        with util.ignored(AttributeError):
             string = string + tu[0][0].text.strip()
-        except(AttributeError):
-            pass
 
         string += '\t'
 
-        try:
+        with util.ignored(AttributeError):
             string = string + tu[1][0].text.strip()
-        except(AttributeError):
-            pass
 
         string += '\n'
         return string
@@ -689,10 +685,8 @@ class Tmx(object):
     def tuv_to_string(self, tuv):
         """Extract the string from the tuv element"""
         string = ""
-        try:
+        with util.ignored(AttributeError):
             string = tuv[0].text.strip()
-        except(AttributeError):
-            pass
 
         return string
 
@@ -723,17 +717,13 @@ class Tmx(object):
         Input is a tu element
         Output is a tu element with white space stripped strings
         """
-        try:
+        with util.ignored(AttributeError):
             string = tu[0][0].text.strip()
             tu[0][0].text = string
-        except(AttributeError):
-            pass
 
-        try:
+        with util.ignored(AttributeError):
             string = tu[1][0].text.strip()
             tu[1][0].text = string
-        except(AttributeError):
-            pass
 
         return tu
 
@@ -779,19 +769,15 @@ class Tmx(object):
         Input is a tu element
         Output is a tu element with modified seg elements
         """
-        try:
+        with util.ignored(AttributeError):
             string = tu[0][0].text.strip()
             string = self.remove_unwanted_space_from_string(string)
             tu[0][0].text = string
-        except AttributeError:
-            pass
 
-        try:
+        with util.ignored(AttributeError):
             string = tu[1][0].text.strip()
             string = self.remove_unwanted_space_from_string(string)
             tu[1][0].text = string
-        except AttributeError:
-            pass
 
         return tu
 

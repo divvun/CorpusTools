@@ -257,10 +257,8 @@ class Converter(object):
 
     def makedirs(self):
         '''Make the converted directory.'''
-        try:
+        with util.ignored(OSError):
             os.makedirs(os.path.dirname(self.converted_name))
-        except OSError:
-            pass
 
     @property
     def xsl(self):
@@ -753,15 +751,12 @@ class PDFTextElement(BoundingBox):
         return not self.is_below(other_box) and not self.is_above(other_box)
 
     def remove_superscript(self):
-        try:
+        with util.ignored(ValueError):
             int(self.t.xpath("string()").strip())
             child = self.t
             while len(child) > 0:
                 child = child[0]
             child.text = re.sub('\d+', '', child.text)
-
-        except ValueError:
-            pass
 
     def merge_text_elements(self, other_box):
         '''Merge the contents of other_box into self'''
@@ -1471,10 +1466,8 @@ class PDF2XMLConverter(Converter):
                           metadata_inner_margins=self.md.inner_margins)
         if not pdfpage.is_skip_page(self.md.skip_pages):
             pdfpage.fix_font_id(self.pdffontspecs)
-            try:
+            with util.ignored(PDFEmptyPageException):
                 self.extractor.extract_text_from_page(pdfpage.pick_valid_text_elements())
-            except PDFEmptyPageException:
-                pass
 
     def parse_pages(self, root_element):
         for page in root_element.iter('page'):
@@ -2599,11 +2592,9 @@ class DocumentFixer(object):
         self.fix_title_person('mac-sami_to_latin1')
         self.replace_bad_unicode()
 
-        try:
+        with util.ignored(KeyError):
             if self.root.attrib['{http://www.w3.org/XML/1998/namespace}lang'] == 'sms':
                 self.fix_sms(self.root.find('body'))
-        except KeyError:
-            pass
 
     def fix_title_person(self, encoding):
         '''Fix encoding problems'''

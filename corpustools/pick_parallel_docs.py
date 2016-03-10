@@ -307,11 +307,8 @@ class ParallelPicker:
         prestable_dir = xml_file.get_dirname().replace('converted/', 'prestable/converted/')
 
         if not os.path.isdir(prestable_dir):
-            try:
+            with util.ignored(OSError):
                 os.makedirs(prestable_dir)
-            except os.error:
-                pass
-                # print ("couldn't make", prestable_dir)
 
         shutil.copy(xml_file.get_name(), prestable_dir)
 

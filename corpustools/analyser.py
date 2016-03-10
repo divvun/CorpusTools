@@ -97,10 +97,8 @@ class Analyser(object):
     @staticmethod
     def makedirs(filename):
         """Make the analysed directory"""
-        try:
+        with util.ignored(OSError):
             os.makedirs(os.path.dirname(filename))
-        except OSError:
-            pass
 
     def ccat(self):
         """Turn an xml formatted file into clean text"""
