@@ -640,14 +640,11 @@ class PDFFontspecs(object):
         this_id = xmlfontspec.get('id')
         this_fontspec = PDFFontspec(xmlfontspec)
 
-        found = False
         for fontspec in self.pdffontspecs.keys():
             if fontspec == this_fontspec:
-                found = True
                 self.duplicates[this_id] = self.pdffontspecs[fontspec]
                 break
-
-        if not found:
+        else:
             self.pdffontspecs[this_fontspec] = this_id
 
     def corrected_id(self, id):
