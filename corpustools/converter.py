@@ -3069,34 +3069,44 @@ class ConverterManager(object):
     def convert_serially(self):
         print('Starting the conversion of {} files'.format(len(self.FILES)))
 
-        for xsl_file in self.FILES:
-            print('converting', xsl_file[:-4], file=sys.stderr)
-            self.convert(xsl_file)
+        for orig_file in self.FILES:
+            print('converting', orig_file, file=sys.stderr)
+            self.convert(orig_file)
 
     def add_file(self, xsl_file):
+        '''Add file for conversion'''
         if os.path.isfile(xsl_file) and os.path.isfile(xsl_file[:-4]):
-            self.FILES.append(xsl_file[:4])
+            self.FILES.append(xsl_file[:-4])
         else:
             print('{} does not exist'.format(xsl_file[:-4]), file=sys.stderr)
 
+    @staticmethod
+    def make_xsl_file(source):
+        '''Write an xsl file if it does not exist'''
+        xsl_file = source if source.endswith('.xsl') else source + '.xsl'
+        if not os.path.isfile(xsl_file):
+            metadata = xslsetter.MetadataHandler(xsl_file, create=True)
+            metadata.set_lang_genre_xsl()
+            metadata.write_file()
+
+        return xsl_file
+
+    def add_directory(self, directory):
+        '''Add all files in a directory for conversion'''
+        for root, dirs, files in os.walk(directory):
+            for f in files:
+                if f.endswith('.xsl'):
+                    self.add_file(os.path.join(root, f))
 
     def collect_files(self, sources):
         print('Collecting files to convert')
 
         for source in sources:
             if os.path.isfile(source):
-                xsl_file = source if source.endswith('.xsl') else source + '.xsl'
-                if not os.path.isfile(xsl_file):
-                    metadata = xslsetter.MetadataHandler(xsl_file,
-                                                         create=True)
-                    metadata.set_lang_genre_xsl()
-                    metadata.write_file()
+                xsl_file = self.make_xsl_file(source)
                 self.add_file(xsl_file)
             elif os.path.isdir(source):
-                for root, dirs, files in os.walk(source):
-                    for f in files:
-                        if f.endswith('.xsl'):
-                            self.add_file(os.path.join(root, f))
+                self.add_directory(source)
             else:
                 print('Can not process {}'.format(source), file=sys.stderr)
                 print('This is neither a file nor a directory.',
