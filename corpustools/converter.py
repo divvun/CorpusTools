@@ -1800,6 +1800,7 @@ class HTMLContentConverter(Converter):
                     'articleImageRig',
                     'articlegooglemap',  # tysfjord.kommune.no
                     'articleTags',  # nord-salten.no
+                    'attribute-related_object',  # samediggi.no
                     'authors',
                     'authors ui-helper-clearfix',  # nord-salten.no
                     'back_button',
