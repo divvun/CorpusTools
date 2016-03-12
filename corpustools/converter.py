@@ -2682,8 +2682,6 @@ class DocumentFixer(object):
         :param text: the content of the element
         :param attributes: the elements attributes
 
-        Add hyph elements if necessary.
-
         :returns: lxml.etree.Element
         '''
         el = etree.Element(eName)
