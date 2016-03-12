@@ -3078,28 +3078,30 @@ class ConverterManager(object):
             print('converting', xsl_file[:-4], file=sys.stderr)
             self.convert(xsl_file)
 
+    def add_file(self, xsl_file):
+        if os.path.isfile(xsl_file) and os.path.isfile(xsl_file[:-4]):
+            self.FILES.append(xsl_file[:4])
+        else:
+            print('{} does not exist'.format(xsl_file[:-4]), file=sys.stderr)
+
+
     def collect_files(self, sources):
         print('Collecting files to convert')
 
         for source in sources:
             if os.path.isfile(source):
                 xsl_file = source if source.endswith('.xsl') else source + '.xsl'
-                if os.path.isfile(xsl_file) and os.path.isfile(xsl_file[:-4]):
-                    self.FILES.append(xsl_file)
-                else:
+                if not os.path.isfile(xsl_file):
                     metadata = xslsetter.MetadataHandler(xsl_file,
                                                          create=True)
+                    metadata.set_lang_genre_xsl()
                     metadata.write_file()
-                    print("Fill in meta info in", xsl_file,
-                          ', then run this command again')
-                    sys.exit(1)
+                self.add_file(xsl_file)
             elif os.path.isdir(source):
                 for root, dirs, files in os.walk(source):
                     for f in files:
                         if f.endswith('.xsl'):
-                            file_ = os.path.join(root, f)
-                            if os.path.exists(file_[:-4]):
-                                self.FILES.append(file_)
+                            self.add_file(os.path.join(root, f))
             else:
                 print('Can not process {}'.format(source), file=sys.stderr)
                 print('This is neither a file nor a directory.',
