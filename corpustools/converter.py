@@ -71,7 +71,7 @@ class Converter(object):
         except xslsetter.XsltException as e:
             raise ConversionException(e)
 
-        self.fix_lang_genre_xsl()
+        self.md.set_lang_genre_xsl()
         with util.ignored(OSError):
             os.makedirs(self.tmpdir)
 
@@ -257,29 +257,6 @@ class Converter(object):
             return os.path.dirname(self.orig[:orig_pos])
         else:
             return os.path.dirname(self.orig)
-
-    def fix_lang_genre_xsl(self):
-        '''Set the mainlang and genre variables in the xsl file, if possible'''
-        origname = self.orig.replace(self.corpusdir, '')
-        if origname.startswith('/orig'):
-            to_write = False
-            parts = origname[1:].split('/')
-
-            lang = self.md.get_variable('mainlang')
-
-            if lang == "":
-                to_write = True
-                lang = parts[1]
-                self.md.set_variable('mainlang', lang)
-
-            genre = self.md.get_variable('genre')
-
-            if genre == "" and parts[2] != os.path.basename(self.orig):
-                to_write = True
-                genre = parts[2]
-                self.md.set_variable('genre', genre)
-            if to_write:
-                self.md.write_file()
 
     @property
     def converted_name(self):

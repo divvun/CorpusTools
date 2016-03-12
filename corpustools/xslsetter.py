@@ -25,7 +25,6 @@ import lxml.etree as etree
 import os
 import sys
 
-
 import util
 
 here = os.path.dirname(__file__)
@@ -237,6 +236,13 @@ class MetadataHandler(object):
                 m[page.strip()] = int(margin)
 
         return m
+
+    def set_lang_genre_xsl(self):
+        '''Set the mainlang and genre variables in the xsl file, if possible'''
+        with util.ignored(TypeError):
+            xsl_tuple = util.split_path(self.filename)
+            self.set_variable('mainlang', xsl_tuple.lang)
+            self.set_variable('genre', xsl_tuple.genre)
 
     def write_file(self):
         try:
