@@ -3119,10 +3119,12 @@ class ConverterManager(object):
                           ', then run this command again')
                     sys.exit(1)
             elif os.path.isdir(source):
-                self.FILES.extend(
-                    [os.path.join(root, f)
-                     for root, dirs, files in os.walk(source)
-                     for f in files if f.endswith('.xsl')])
+                for root, dirs, files in os.walk(source):
+                    for f in files:
+                        if f.endswith('.xsl'):
+                            file_ = os.path.join(root, f)
+                            if os.path.exists(file_[:-4]):
+                                self.FILES.append(file_)
             else:
                 print('Can not process {}'.format(source), file=sys.stderr)
                 print('This is neither a file nor a directory.',
