@@ -3000,19 +3000,14 @@ class ConverterManager(object):
     def __init__(self, write_intermediate):
         self.write_intermediate = write_intermediate
 
-    def convert(self, xsl_file):
-        orig_file = xsl_file[:-4]
-        if os.path.exists(orig_file) and not orig_file.endswith('.xsl'):
-
-            try:
-                conv = self.converter(orig_file)
-                conv.write_complete(self.LANGUAGEGUESSER)
-            except ConversionException as e:
-                print('Could not convert {}'.format(orig_file),
-                      file=sys.stderr)
-                print(str(e), file=sys.stderr)
-        else:
-            print('{} does not exist'.format(orig_file), file=sys.stderr)
+    def convert(self, orig_file):
+        try:
+            conv = self.converter(orig_file)
+            conv.write_complete(self.LANGUAGEGUESSER)
+        except ConversionException as e:
+            print('Could not convert {}'.format(orig_file),
+                    file=sys.stderr)
+            print(str(e), file=sys.stderr)
 
     def converter(self, orig_file):
         if 'avvir_xml' in orig_file:
