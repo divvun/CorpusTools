@@ -72,8 +72,8 @@ class Converter(object):
             raise ConversionException(e)
 
         self.fix_lang_genre_xsl()
-        if not os.path.exists(self.tmpdir):
-            os.mkdir(self.tmpdir)
+        with util.ignored(OSError):
+            os.mkdirs(self.tmpdir)
 
     @property
     def dependencies(self):
@@ -83,23 +83,6 @@ class Converter(object):
     def logfile(self):
         '''The name of the logfile'''
         return self.orig + '.log'
-
-    @property
-    def orig(self):
-
-        return self.__orig
-
-    @orig.setter
-    def orig(self, orig):
-        self.__orig = orig
-
-    @property
-    def write_intermediate(self):
-        return self.__write_intermediate
-
-    @write_intermediate.setter
-    def write_intermediate(self, write_intermediate):
-        self.__write_intermediate = write_intermediate
 
     def convert2intermediate(self):
         raise NotImplementedError(
@@ -2906,14 +2889,6 @@ class XslMaker(object):
         self.filename = xslfile
 
     @property
-    def filename(self):
-        return self.__filename
-
-    @filename.setter
-    def filename(self, filename):
-        self.__filename = filename
-
-    @property
     def logfile(self):
         return self.filename + '.log'
 
@@ -3047,14 +3022,6 @@ class ConverterManager(object):
 
     def __init__(self, write_intermediate):
         self.write_intermediate = write_intermediate
-
-    @property
-    def write_intermediate(self):
-        return self.__write_intermediate
-
-    @write_intermediate.setter
-    def write_intermediate(self, write_intermediate):
-        self.__write_intermediate = write_intermediate
 
     def convert(self, xsl_file):
         orig_file = xsl_file[:-4]
