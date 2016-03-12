@@ -216,6 +216,14 @@ class Converter(object):
 
         return complete
 
+    @staticmethod
+    def has_content(complete):
+        xml_printer = ccat.XMLPrinter(all_paragraphs=True,
+                                      hyph_replacement=None)
+        xml_printer.etree = etree.ElementTree(complete)
+
+        return len(xml_printer.process_file().getvalue())
+
     def write_complete(self, languageguesser):
         if distutils.dep_util.newer_group(
                 self.dependencies, self.converted_name):
@@ -226,12 +234,7 @@ class Converter(object):
                     'goldstandard' not in self.orig):
                 complete = self.make_complete(languageguesser)
 
-                xml_printer = ccat.XMLPrinter(all_paragraphs=True,
-                                              hyph_replacement=None)
-                xml_printer.etree = etree.ElementTree(complete)
-                text = xml_printer.process_file().getvalue()
-
-                if len(text) > 0:
+                if self.has_content(complete):
                     with open(self.converted_name, 'w') as converted:
                         converted.write(etree.tostring(complete,
                                                        encoding='utf8',
