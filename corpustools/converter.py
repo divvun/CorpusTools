@@ -73,7 +73,7 @@ class Converter(object):
 
         self.fix_lang_genre_xsl()
         with util.ignored(OSError):
-            os.mkdirs(self.tmpdir)
+            os.makedirs(self.tmpdir)
 
     @property
     def dependencies(self):
