@@ -60,7 +60,7 @@ def main():
                 if os.path.exists(xsl_name):
                     xsl = xslsetter.MetadataHandler(xsl_name)
 
-                    para_files = []
+                    para_files = set()
                     for lang, parallel in xsl.get_parallel_texts().iteritems():
                         parallelpath = u'/'.join((
                             orig_components.root,
@@ -75,15 +75,15 @@ def main():
 
                             if not os.path.isfile(none_dupe_path):
                                 para_fail += 1
-                                para_files.append(none_dupe_path)
+                                para_files.add(none_dupe_path)
 
                     if len(para_files) > 0:
-                        print(orig)
+                        print(orig, 'points to non-existing file')
                         for p in para_files:
-                            print(p)
+                            print('\t', p)
                         print()
                 else:
                     no_orig_xsl += 1
 
-    print('Total {}, fails {}, files with no xsl'.format(total, para_fail,
+    print('Total {}, fails {}, {} files with no xsl'.format(total, para_fail,
                                                          no_orig_xsl))
