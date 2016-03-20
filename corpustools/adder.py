@@ -23,6 +23,7 @@
 from __future__ import print_function
 
 import argparse
+import cgi
 import os
 import requests
 import shutil
@@ -49,7 +50,7 @@ class UrlDownloader(object):
 
     @staticmethod
     def add_url_extension(filename, content_type):
-        if os.path.basename(filename) == '':
+        if filename == '':
             filename += 'index'
 
         content_type_extension = {
@@ -65,6 +66,15 @@ class UrlDownloader(object):
 
         return filename
 
+    def filename(self, response):
+        '''response is a requests.get response'''
+        try:
+            _, params = cgi.parse_header(response.headers['Content-Disposition'])
+            return params['filename']
+        except KeyError:
+            return self.add_url_extension(os.path.basename(response.url),
+                                          response.headers['content-type'])
+
     def download(self, url, params={}):
         '''Download a url to a temporary file
 
@@ -73,10 +83,8 @@ class UrlDownloader(object):
         try:
             r = requests.get(url, headers=self.headers, params=params)
             if r.status_code == requests.codes.ok:
-                tmpname = self.add_url_extension(
-                    os.path.join(self.download_dir,
-                                 os.path.basename(r.url)),
-                    r.headers['content-type'])
+                tmpname = os.path.join(self.download_dir,
+                                       self.filename(r))
                 with open(tmpname, 'wb') as tmpfile:
                     tmpfile.write(r.content)
 
