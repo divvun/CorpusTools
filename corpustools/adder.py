@@ -83,8 +83,12 @@ class UrlDownloader(object):
         try:
             r = requests.get(url, headers=self.headers, params=params)
             if r.status_code == requests.codes.ok:
-                tmpname = os.path.join(self.download_dir,
-                                       self.filename(r))
+                f = self.filename(r)
+                try:
+                    f = f.decode('utf8')
+                except UnicodeDecodeError:
+                    f = f.decode('latin1')
+                tmpname = os.path.join(self.download_dir, f)
                 with open(tmpname, 'wb') as tmpfile:
                     tmpfile.write(r.content)
 

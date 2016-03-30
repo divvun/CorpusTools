@@ -62,3 +62,4 @@ v<0.13.9>, <20160220> -- More classes and ids to avoid. More files are converted
 v<0.13.10>, <20160227> -- Improved saami_crawler
 v<0.13.11>, <20160304> -- Changed the user interface of add_files_to_corpus
 v<0.13.12>, <20160320> -- Make add_files_to_corpus get names for downloaded documents from the http-header, if possible.
+v<0.13.13>, <20160330> -- Handle both utf8 and latin1 encoded filenames when downloading pdf files.
