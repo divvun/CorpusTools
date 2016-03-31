@@ -40,7 +40,8 @@ from corpustools import xslsetter
 def main():
     #find_files_without_parallels()
     #find_not_analysed(sys.argv[1])
-    fix_pdf_filenames(sys.argv[1])
+    #fix_pdf_filenames(sys.argv[1])
+    move_twenty_percent_to_goldcorpus()
 
 
 def print_equality_ratios_in_dir():
@@ -285,6 +286,7 @@ def find_no_sami_parallel(directory):
                 else:
                     move_files.mover(file_[:-4], '')
 
+
 def fix_pdf_filenames(directory):
     for root, dirs, files in os.walk(directory):
         for f in files:
@@ -305,3 +307,31 @@ def fix_pdf_filenames(directory):
                         if newfilename != f:
                             util.print_frame(debug=newfilename)
                             move_files.mover(file_, os.path.join(root, newfilename))
+
+
+def move_twenty_percent_to_goldcorpus():
+    '''Move twenty percent of the files to the goldcorpus'''
+    directories = ['orig/sme/admin/sd/cealkamusat_fi',
+                   'orig/sme/admin/sd/davviriikkalas_samekonvensuvdna_fi',
+                   'orig/sme/admin/sd/inaugurations_fi',
+                   'orig/sme/admin/sd/ohcan_lahkai_fi',
+                   'orig/sme/admin/sd/sami_parlamentarals_raddi_fi',
+                   'orig/sme/admin/sd/www.samediggi.fi',
+                   'orig/sme/facta/samediggi.fi/']
+
+    fluff = collections.defaultdict(list)
+    for dir in directories:
+        for root, dirs, files in os.walk(os.path.join(os.getenv('GTFREE'), dir)):
+            for f in files:
+                if f.endswith('.xsl'):
+                    name = os.path.join(root, f[:-4])
+                    size = os.path.getsize(name)
+                    fluff[size].append(name)
+
+    i = 0
+    for size in sorted(fluff.keys(), reverse=True):
+        for f in fluff[size]:
+            if i == 4:
+                move_files.mover(f, f.replace('orig/', 'goldstandard/orig/'))
+                i = 0
+            i += 1
