@@ -2216,7 +2216,7 @@ class OdfConverter(HTMLContentConverter):
         odhandler = ODF2XHTML(generatecss, embedable)
         try:
             HTMLContentConverter.__init__(self, filename,
-                                        content=odhandler.odf2xhtml(filename))
+                                        content=odhandler.odf2xhtml(six.text_type(filename)))
         except TypeError as e:
             raise ConversionException('Error: {}'.format(e))
 
