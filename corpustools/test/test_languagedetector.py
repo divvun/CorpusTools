@@ -37,6 +37,9 @@ class XMLTester(unittest.TestCase):
 
     def assertXmlEqual(self, got, want):
         """Check if two stringified xml snippets are equal"""
+        got = etree.tostring(got, encoding='unicode')
+        want = etree.tostring(want, encoding='unicode')
+
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(want, got, 0):
             message = checker.output_difference(
@@ -62,14 +65,14 @@ class TestLanguageDetector(XMLTester):
 
     def test_set_paragraph_language_preset_language(self):
         orig_paragraph = '<p xml:lang="sme">I Orohagat</p>'
-        expected_paragraph = '<p xml:lang="sme">I Orohagat</p>'
+        expected_paragraph = etree.fromstring('<p xml:lang="sme">I Orohagat</p>')
 
         language_detector = converter.LanguageDetector(self.root,
                                                        LANGUAGEGUESSER)
         got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
 
-        self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
+        self.assertXmlEqual(got_paragraph, expected_paragraph)
 
     def test_set_paragraph_language_mainlanguage(self):
         orig_paragraph = (
@@ -82,7 +85,7 @@ class TestLanguageDetector(XMLTester):
             'deaividit váttisvuođat go čálát sámegiela Outlook-kaleandaris '
             'dahje e-poastta namahussajis, ja go čálát sámegillii dakkár '
             'prográmmain, maid Microsoft ii leat ráhkadan.</p>')
-        expected_paragraph = (
+        expected_paragraph = etree.fromstring(
             '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga '
             'Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte '
             'sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. '
@@ -98,7 +101,7 @@ class TestLanguageDetector(XMLTester):
         got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
 
-        self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
+        self.assertXmlEqual(got_paragraph, expected_paragraph)
 
     def test_set_paragraph_language_mainlanguage_quote_mainlang(self):
         orig_paragraph = (
@@ -112,7 +115,7 @@ class TestLanguageDetector(XMLTester):
             'Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát '
             'sámegillii dakkár prográmmain, maid Microsoft ii leat '
             'ráhkadan.</p>')
-        expected_paragraph = (
+        expected_paragraph = etree.fromstring(
             '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga '
             'Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte '
             'sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. '
@@ -129,7 +132,7 @@ class TestLanguageDetector(XMLTester):
         got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
 
-        self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
+        self.assertXmlEqual(got_paragraph, expected_paragraph)
 
     def test_set_paragraph_language_mainlanguage_quote_not_mainlang(self):
         orig_paragraph = (
@@ -145,7 +148,7 @@ class TestLanguageDetector(XMLTester):
             'Outlook-kaleandaris dahje e-poastta namahussajis, ja go čálát '
             'sámegillii dakkár prográmmain, maid Microsoft ii leat '
             'ráhkadan.</p>')
-        expected_paragraph = (
+        expected_paragraph = etree.fromstring(
             '<p>Sámegiella lea 2004 čavčča rájes standárda giellaválga '
             'Microsofta operatiivavuogádagas Windows XP. Dat mearkkaša ahte '
             'sámegiel bustávaid ja hámiid sáhttá válljet buot prográmmain. '
@@ -164,7 +167,7 @@ class TestLanguageDetector(XMLTester):
         got_paragraph = language_detector.set_paragraph_language(
             etree.fromstring(orig_paragraph))
 
-        self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
+        self.assertXmlEqual(got_paragraph, expected_paragraph)
 
     def test_set_paragraph_language_not_mainlanguage(self):
         orig_paragraph = (
@@ -219,8 +222,7 @@ class TestLanguageDetector(XMLTester):
                          'converter_data/samediggi-article-48s-after-lang-'
                          'detection-with-multilingual-tag.xml'))
 
-        self.assertXmlEqual(etree.tostring(got_document),
-                            etree.tostring(expected_document))
+        self.assertXmlEqual(got_document, expected_document)
 
     def test_detect_language_without_multilingualtag(self):
         root = etree.parse(
@@ -238,5 +240,4 @@ class TestLanguageDetector(XMLTester):
                          'converter_data/samediggi-article-48s-after-lang-'
                          'detection-without-multilingual-tag.xml'))
 
-        self.assertXmlEqual(etree.tostring(got_document),
-                            etree.tostring(expected_document))
+        self.assertXmlEqual(got_document, expected_document)
