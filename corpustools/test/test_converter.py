@@ -595,7 +595,7 @@ class TestSVGConverter(XMLTester):
     def setUp(self):
         self.svg = converter.SVGConverter(
             os.path.join(here,
-                         'converter_data/Riddu_Riddu_avis_TXT.200923.svg'))
+                         'converter_data/fakecorpus/orig/sme/riddu/Riddu_Riddu_avis_TXT.200923.svg'))
 
     def test_convert2intermediate(self):
         got = self.svg.convert2intermediate()

@@ -70,6 +70,7 @@ class CorpusPath(object):
         path: path to a corpus file
     '''
     def __init__(self, path):
+        util.print_frame(path)
         self.pathcomponents = self.split_path(path)
         self.md = xslsetter.MetadataHandler(self.xsl, create=True)
 
@@ -87,6 +88,7 @@ class CorpusPath(object):
             ValueError: the path is not part of a corpus.
         '''
         def split_on_module(p):
+            util.print_frame(path)
             for module in [u'goldstandard/orig', u'prestable/converted',
                            u'prestable/toktmx', u'prestable/tmx', u'orig',
                            u'converted', u'stable', u'toktmx', u'tmx']:
@@ -95,12 +97,12 @@ class CorpusPath(object):
                     root, rest = p.split(d)
                     return root, module, rest
 
+            raise ValueError('File is not part of a corpus: {}'.format(path))
+
+
         # Ensure we have at least one / before module, for safer splitting:
         abspath = os.path.normpath(os.path.abspath(path))
         root, module, lang_etc = split_on_module(abspath)
-
-        if not len(module):
-            raise ValueError('File is not part of a corpus: {}'.format(path))
 
         l = lang_etc.split('/')
         lang, genre, subdirs, basename = l[0], l[1], l[2:-1], l[-1]
@@ -167,10 +169,11 @@ class Converter(object):
 
     def __init__(self, filename, write_intermediate=False):
         codecs.register_error('mixed', self.mixed_decoder)
-        self.orig = os.path.abspath(filename)
+        util.print_frame(filename)
+        self.names = CorpusPath(filename)
         self.write_intermediate = write_intermediate
         try:
-            self.md = xslsetter.MetadataHandler(self.xsl, create=True)
+            self.md = xslsetter.MetadataHandler(self.names.xsl, create=True)
         except xslsetter.XsltException as e:
             raise ConversionException(e)
 
@@ -180,12 +183,7 @@ class Converter(object):
 
     @property
     def dependencies(self):
-        return [self.orig, self.xsl]
-
-    @property
-    def logfile(self):
-        '''The name of the logfile'''
-        return self.orig + '.log'
+        return [self.names.orig, self.names.xsl]
 
     @property
     def standard(self):
@@ -208,7 +206,7 @@ class Converter(object):
         dtd = etree.DTD(Converter.get_dtd_location())
 
         if not dtd.validate(complete):
-            with codecs.open(self.logfile, 'w', encoding='utf8') as logfile:
+            with codecs.open(self.names.log, 'w', encoding='utf8') as logfile:
                 logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
                 for entry in dtd.error_log:
                     logfile.write('\n')
@@ -218,12 +216,12 @@ class Converter(object):
 
             raise ConversionException(
                 '{}: Not valid XML. More info in the log file: '
-                '{}'.format(type(self).__name__, self.logfile))
+                '{}'.format(type(self).__name__, self.names.log))
 
     def maybe_write_intermediate(self, intermediate):
         if not self.write_intermediate:
             return
-        im_name = self.orig + '.im.xml'
+        im_name = self.names.orig + '.im.xml'
         with open(im_name, 'w') as im_file:
             im_file.write(etree.tostring(intermediate,
                                          encoding='utf8',
@@ -236,19 +234,19 @@ class Converter(object):
         self.maybe_write_intermediate(intermediate)
 
         try:
-            xm = XslMaker(self.xsl)
+            xm = XslMaker(self.names.xsl)
             complete = xm.transformer(intermediate)
 
             return complete.getroot()
         except etree.XSLTApplyError as e:
-            with open(self.logfile, 'w') as logfile:
+            with open(self.names.log, 'w') as logfile:
                 logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
                 for entry in e.error_log:
                     logfile.write(six.text_type(entry))
                     logfile.write('\n')
 
             raise ConversionException("Check the syntax in: {}".format(
-                self.xsl))
+                self.names.xsl))
 
     def convert_errormarkup(self, complete):
         if 'correct.' in self.orig:
@@ -258,7 +256,7 @@ class Converter(object):
                 for element in complete.find('body'):
                     em.add_error_markup(element)
             except IndexError as e:
-                with open(self.logfile, 'w') as logfile:
+                with open(self.names.log, 'w') as logfile:
                     logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
                     logfile.write("There is a markup error\n")
                     logfile.write("The error message: ")
@@ -272,7 +270,7 @@ class Converter(object):
 
                 raise ConversionException(
                     u"Markup error. More info in the log file: {}".format(
-                        self.logfile))
+                        self.names.log))
 
     def fix_document(self, complete):
         fixer = DocumentFixer(complete)
@@ -307,7 +305,7 @@ class Converter(object):
         repl = self.mixed_to_unicode.get(badhex, u'\ufffd')
         if repl == u'\ufffd':   # � unicode REPLACEMENT CHARACTER
             print("Skipped bad byte \\x{}, seen in {}".format(
-                badhex, self.orig))
+                badhex, self.names.orig))
         return repl, (decode_error.start + len(repl))
 
     def make_complete(self, languageGuesser):
@@ -337,50 +335,29 @@ class Converter(object):
 
     def write_complete(self, languageguesser):
         if distutils.dep_util.newer_group(
-                self.dependencies, self.converted_name):
+                self.dependencies, self.names.converted):
             with util.ignored(OSError):
-                os.makedirs(os.path.dirname(self.converted_name))
+                os.makedirs(os.path.dirname(self.names.converted))
 
             if (('goldstandard' in self.orig and '.correct.' in self.orig) or
                     'goldstandard' not in self.orig):
                 complete = self.make_complete(languageguesser)
 
                 if self.has_content(complete):
-                    with open(self.converted_name, 'wb') as converted:
+                    with open(self.names.converted, 'wb') as converted:
                         converted.write(etree.tostring(complete,
                                                        encoding='utf8',
                                                        pretty_print='True'))
                 else:
-                    print(self.orig, "has no text", file=sys.stderr)
-
-    @property
-    def xsl(self):
-        return self.orig + '.xsl'
+                    print(self.names.orig, "has no text", file=sys.stderr)
 
     @property
     def tmpdir(self):
-        if self.corpusdir == os.path.dirname(self.orig):
-            return self.corpusdir
-        else:
-            return os.path.join(self.corpusdir, 'tmp')
+        return os.path.join(self.names.pathcomponents.root, 'tmp')
 
     @property
     def corpusdir(self):
-        orig_pos = self.orig.find('orig/')
-        if orig_pos != -1:
-            return os.path.dirname(self.orig[:orig_pos])
-        else:
-            return os.path.dirname(self.orig)
-
-    @property
-    def converted_name(self):
-        '''Get the name of the converted file'''
-        orig_pos = self.orig.find('orig/')
-        if orig_pos != -1:
-            return self.orig.replace(
-                '/orig/', '/converted/') + '.xml'
-        else:
-            return self.orig + '.xml'
+        return self.names.pathcomponents.root
 
     def extract_text(self, command):
         '''Extract the text from a document.
@@ -393,17 +370,17 @@ class Converter(object):
         runner.run(command, cwd=self.tmpdir)
 
         if runner.returncode != 0:
-            with open(self.logfile, 'w') as logfile:
+            with open(self.names.log, 'w') as logfile:
                 print('stdout\n{}\n'.format(runner.stdout), file=logfile)
                 print('stderr\n{}\n'.format(runner.stderr), file=logfile)
                 raise ConversionException(
                     '{} failed. More info in the log file: {}'.format(
-                        command[0], self.logfile))
+                        command[0], self.names.log))
 
         return runner.stdout
 
     def handle_syntaxerror(self, e, lineno, invalid_input):
-        with open(self.logfile, 'w') as logfile:
+        with open(self.names.log, 'w') as logfile:
             logfile.write('Error at: {}'.format(lineno))
             for entry in e.error_log:
                 logfile.write('\n{}: {} '.format(
@@ -421,7 +398,7 @@ class Converter(object):
                 logfile.write(invalid_input.encode('utf8'))
 
         raise ConversionException(
-            "{}: log is found in {}".format(type(self).__name__, self.logfile))
+            "{}: log is found in {}".format(type(self).__name__, self.names.log))
 
 
 class AvvirConverter(Converter):
@@ -575,7 +552,7 @@ class SVGConverter(Converter):
         '''Transform svg to an intermediate xml document'''
         svgXsltRoot = etree.parse(os.path.join(here, 'xslt/svg2corpus.xsl'))
         transform = etree.XSLT(svgXsltRoot)
-        doc = etree.parse(self.orig)
+        doc = etree.parse(self.names.orig)
         intermediate = transform(doc)
 
         return intermediate.getroot()
@@ -2276,7 +2253,7 @@ class HTMLContentConverter(Converter):
                                     etree.tostring(self.soup))
 
         if len(transform.error_log) > 0:
-            with open(self.logfile, 'w') as logfile:
+            with open(self.names.log, 'w') as logfile:
                 logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
                 for entry in transform.error_log:
                     logfile.write('\n{}: {} {}\n'.format(
@@ -2286,7 +2263,7 @@ class HTMLContentConverter(Converter):
 
             raise ConversionException(
                 'HTMLContentConverter: transformation failed.'
-                'More info in {}'.format(self.logfile))
+                'More info in {}'.format(self.names.log))
 
         return intermediate.getroot()
 
@@ -3005,14 +2982,14 @@ class XslMaker(object):
         try:
             filexsl = etree.parse(self.filename)
         except etree.XMLSyntaxError as e:
-            with open(self.logfile, 'w') as logfile:
+            with open(self.names.log, 'w') as logfile:
                 logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
                 for entry in e.error_log:
                     logfile.write('{}\n'.format(six.text_type(entry)))
 
             raise ConversionException(
                 '{}: Syntax error. More info in {}'.format(type(self).__name__,
-                                                           self.logfile))
+                                                           self.names.log))
 
         preprocessXsl = etree.parse(
             os.path.join(here, 'xslt/preprocxsl.xsl'))
@@ -3028,10 +3005,10 @@ class XslMaker(object):
     @property
     def transformer(self):
         try:
-            return etree.XSLT(self.xsl)
+            return etree.XSLT(self.names.xsl)
         except etree.XSLTParseError as xxx_todo_changeme:
             (e) = xxx_todo_changeme
-            with open(self.logfile, 'w') as logfile:
+            with open(self.names.log, 'w') as logfile:
                 logfile.write('Error at: {}\n'.format(six.text_type(util.lineno())))
                 logfile.write('Invalid XML in {}\n'.format(self.filename))
                 for entry in e.error_log:
@@ -3039,7 +3016,7 @@ class XslMaker(object):
 
             raise ConversionException(
                 '{}: Invalid XML in {}. More info in {}'.format(
-                    type(self).__name__, self.filename, self.logfile))
+                    type(self).__name__, self.filename, self.names.log))
 
 
 class LanguageDetector(object):
