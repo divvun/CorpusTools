@@ -38,257 +38,236 @@ class TestErrorMarkup(unittest.TestCase):
 
     def assertXmlEqual(self, got, want):
         """Check if two stringified xml snippets are equal"""
+        got = etree.tostring(got, encoding='unicode')
+        want = etree.tostring(want, encoding='unicode')
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(want, got, 0):
             message = checker.output_difference(
-                doctest.Example("", want), got, 0).encode('utf-8')
+                doctest.Example("", want), got, 0)
             raise AssertionError(message)
-
-        pass
 
     def test_only_text_in_element(self):
         in_elem = etree.fromstring('<p>Muittán doložiid</p>')
-        want = '<p>Muittán doložiid</p>'
+        want = etree.fromstring('<p>Muittán doložiid</p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_parser_errorlang_infinity(self):
         in_elem = u'(molekylærbiologimi)∞(kal,bio)'
-        want = u'<errorlang correct="kal,bio">molekylærbiologimi</errorlang>'
+        want = etree.fromstring('<errorlang correct="kal,bio">molekylærbiologimi</errorlang>')
 
         got = self.em.error_parser(in_elem)
         self.assertEqual(len(got), 1)
-        self.assertXmlEqual(etree.tostring(got[0]), want)
+        self.assertXmlEqual(got[0], want)
 
     def test_error_parser_errorlang_infinity_with_new_lines(self):
         in_elem = u'\n\n\n\n(molekylærbiologimi)∞(kal,bio)\n\n\n\n'
-        want = u'<errorlang correct="kal,bio">molekylærbiologimi</errorlang>'
+        want = etree.fromstring('<errorlang correct="kal,bio">molekylærbiologimi</errorlang>')
 
         got = self.em.error_parser(in_elem)
         self.assertEqual(len(got), 2)
-        self.assertXmlEqual(etree.tostring(got[1]), want)
+        self.assertXmlEqual(got[1], want)
 
     def test_quote_char(self):
         in_elem = u'”sjievnnijis”$(conc,vnn-vnnj|sjievnnjis)'
-        want = (
+        want = etree.fromstring(
             u'<errorort errorinfo="conc,vnn-vnnj"         '
             u'correct="sjievnnjis">”sjievnnijis”</errorort>')
 
         got = self.em.error_parser(in_elem)
         self.assertEqual(len(got), 1)
-        self.assertXmlEqual(etree.tostring(got[0]), want)
+        self.assertXmlEqual(got[0], want)
 
     def test_paragraph_character(self):
         in_elem = etree.fromstring('<p>Vuodoláhkaj §110a</p>')
-        want = u'<p>Vuodoláhkaj §110a</p>'
+        want = etree.fromstring(u'<p>Vuodoláhkaj §110a</p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_parser_errorort1(self):
         in_elem = u'jne.$(adv,typo|jna.)'
-        want = u'<errorort errorinfo="adv,typo" correct="jna.">jne.</errorort>'
+        want = etree.fromstring('<errorort errorinfo="adv,typo" correct="jna.">jne.</errorort>')
 
         got = self.em.error_parser(in_elem)
         self.assertEqual(len(got), 1)
-        self.assertXmlEqual(etree.tostring(got[0]), want)
+        self.assertXmlEqual(got[0], want)
 
     def test_errorort1(self):
         in_elem = etree.fromstring('<p>jne.$(adv,typo|jna.)</p>')
-        want = (
+        want = etree.fromstring(
             '<p><errorort errorinfo="adv,typo" correct="jna.">jne.'
             '</errorort></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_errorort2(self):
         in_elem = etree.fromstring('<p>daesn\'$daesnie</p>')
-        want = '<p><errorort correct="daesnie">daesn\'</errorort></p>'
+        want = etree.fromstring('<p><errorort correct="daesnie">daesn\'</errorort></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_input_contains_slash(self):
         in_elem = etree.fromstring(
             '<p>magistter/$(loan,vowlat,e-a|magisttar)</p>')
-        want = (
+        want = etree.fromstring(
             '<p><errorort correct="magisttar" errorinfo="loan,vowlat,e-a">'
             'magistter/</errorort></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_correct1(self):
         in_elem = etree.fromstring('<p>1]§Ij</p>')
-        want = '<p><error correct="Ij">1]</error></p>'
+        want = etree.fromstring('<p><error correct="Ij">1]</error></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_correct2(self):
         in_elem = etree.fromstring('<p>væ]keles§(væjkeles)</p>')
-        want = '<p><error correct="væjkeles">væ]keles</error></p>'
+        want = etree.fromstring('<p><error correct="væjkeles">væ]keles</error></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_correct3(self):
         in_elem = etree.fromstring('<p>smávi-§smávit-</p>')
-        want = '<p><error correct="smávit-">smávi-</error></p>'
+        want = etree.fromstring('<p><error correct="smávit-">smávi-</error></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_correct4(self):
         in_elem = etree.fromstring('<p>CD:t§CD:at</p>')
-        want = '<p><error correct="CD:at">CD:t</error></p>'
+        want = etree.fromstring('<p><error correct="CD:at">CD:t</error></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_correct5(self):
         in_elem = etree.fromstring('<p>DNB-feaskáris§(DnB-feaskáris)</p>')
-        want = '<p><error correct="DnB-feaskáris">DNB-feaskáris</error></p>'
+        want = etree.fromstring('<p><error correct="DnB-feaskáris">DNB-feaskáris</error></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_correct6(self):
         in_elem = etree.fromstring('<p>boade§boađe</p>')
-        want = '<p><error correct="boađe">boade</error></p>'
+        want = etree.fromstring('<p><error correct="boađe">boade</error></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_correct7(self):
         in_elem = etree.fromstring('<p>2005’as§2005:s</p>')
-        want = '<p><error correct="2005:s">2005’as</error></p>'
+        want = etree.fromstring('<p><error correct="2005:s">2005’as</error></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_correct8(self):
         in_elem = etree.fromstring('<p>NSRii§NSR:i</p>')
-        want = '<p><error correct="NSR:i">NSRii</error></p>'
+        want = etree.fromstring('<p><error correct="NSR:i">NSRii</error></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_correct9(self):
         in_elem = etree.fromstring('<p>Nordkjosbotn\'ii§Nordkjosbotnii</p>')
-        want = (
+        want = etree.fromstring(
             '<p><error correct="Nordkjosbotnii">Nordkjosbotn\'ii</error></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_errorort3(self):
         in_elem = etree.fromstring('<p>nourra$(a,meta|nuorra)</p>')
-        want = (
+        want = etree.fromstring(
             '<p><errorort errorinfo="a,meta" '
             'correct="nuorra">nourra</errorort></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_morphsyn1(self):
         in_elem = etree.fromstring(
             '<p>(Nieiddat leat nuorra)£(a,spred,nompl,nomsg,agr|Nieiddat leat '
             'nuorat)</p>')
-        want = (
+        want = etree.fromstring(
             '<p><errormorphsyn errorinfo="a,spred,nompl,nomsg,agr" '
             'correct="Nieiddat leat nuorat">Nieiddat leat '
             'nuorra</errormorphsyn></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_parser_error_morphsyn1(self):
         in_elem = (
             u'(Nieiddat leat nuorra)£(a,spred,nompl,nomsg,agr|Nieiddat leat '
             'nuorat)')
-        want = (
+        want = etree.fromstring(
             u'<errormorphsyn errorinfo="a,spred,nompl,nomsg,agr" correct="'
             'Nieiddat leat nuorat">Nieiddat leat nuorra</errormorphsyn>')
 
         got = self.em.error_parser(in_elem)
         self.assertEqual(len(got), 1)
-        self.assertXmlEqual(etree.tostring(got[0]), want)
+        self.assertXmlEqual(got[0], want)
 
     def test_error_syn1(self):
         in_elem = etree.fromstring(
             '<p>(riŋgen nieidda lusa)¥(x,pph|riŋgen niidii)</p>')
-        want = (
+        want = etree.fromstring(
             '<p><errorsyn errorinfo="x,pph" correct="riŋgen niidii">riŋgen '
             'nieidda lusa</errorsyn></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_syn2(self):
         in_elem = etree.fromstring('<p>ovtta¥(num,redun| )</p>')
-        want = (
+        want = etree.fromstring(
             '<p><errorsyn errorinfo="num,redun" correct=" ">ovtta'
             '</errorsyn></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_erro_lex1(self):
         in_elem = etree.fromstring(
             '<p>dábálaš€(adv,adj,der|dábálaččat)</p>')
-        want = (
+        want = etree.fromstring(
             '<p><errorlex errorinfo="adv,adj,der" correct="dábálaččat">'
             'dábálaš</errorlex></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_ortreal1(self):
         in_elem = etree.fromstring(
             '<p>ráhččamušaid¢(noun,mix|rahčamušaid)</p>')
-        want = (
+        want = etree.fromstring(
             '<p><errorortreal errorinfo="noun,mix"         '
             'correct="rahčamušaid">ráhččamušaid</errorortreal></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_ortreal2(self):
         in_elem = etree.fromstring(
             '<p>gitta Nordkjosbotn\'ii$Nordkjosbotnii (mii lea ge '
             'nordkjosbotn$Nordkjosbotn sámegillii? Muhtin, veahket mu!) '
             'gos</p>')
-        want = (
+        want = etree.fromstring(
             '<p>gitta <errorort correct="Nordkjosbotnii">Nordkjosbotn\'ii'
             '</errorort> (mii lea ge <errorort correct="Nordkjosbotn">'
             'nordkjosbotn</errorort> sámegillii? Muhtin, veahket mu!) gos</p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_parser_with_two_simple_errors(self):
         in_elem = (
@@ -299,13 +278,13 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertEqual(len(got), 3)
         self.assertEqual(got[0], u'gitta ')
         self.assertEqual(
-            etree.tostring(got[1], encoding='utf8'),
-            '<errorort correct="Nordkjosbotnii">Nordkjosbotn\'ii</errorort> '
-            '(mii lea ge ')
+            etree.tostring(got[1], encoding='unicode'),
+            u'<errorort correct="Nordkjosbotnii">Nordkjosbotn\'ii</errorort> '
+            u'(mii lea ge ')
         self.assertEqual(
-            etree.tostring(got[2], encoding='utf8'),
-            '<errorort correct="Nordkjosbotn">nordkjosbotn</errorort> '
-            'sámegillii? Muhtin, veahket mu!) gos')
+            etree.tostring(got[2], encoding='unicode'),
+            u'<errorort correct="Nordkjosbotn">nordkjosbotn</errorort> '
+            u'sámegillii? Muhtin, veahket mu!) gos')
 
     def test_error_morphsyn2(self):
         in_elem = etree.fromstring(
@@ -313,60 +292,56 @@ class TestErrorMarkup(unittest.TestCase):
             'maiddái ovttasbargu gaskal (skuvla '
             'ohppiid)£(noun,attr,gensg,nomsg,case|skuvlla ohppiid)'
             'ja VSM.</p>')
-        want = (
+        want = etree.fromstring(
             '<p>Čáppa muohtaskulptuvrraid ráhkadeapmi VSM olggobealde lei '
             'maiddái ovttasbargu gaskal <errormorphsyn '
             'errorinfo="noun,attr,gensg,nomsg,case" correct="skuvlla '
             'ohppiid">skuvla ohppiid</errormorphsyn> ja VSM.</p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_errorort4(self):
         in_elem = etree.fromstring(
             '<p>- ruksesruonáčalmmehisvuohta lea sullii 8%:as$('
             'acr,suf|8%:s)</p>')
-        want = (
+        want = etree.fromstring(
             '<p>- ruksesruonáčalmmehisvuohta lea sullii <errorort '
             'correct="8%:s" errorinfo="acr,suf">8%:as</errorort></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_error_ortreal3(self):
         in_elem = etree.fromstring(
             '<p>( nissonin¢(noun,suf|nissoniin) dušše (0.6 %:s)£(0.6 %) )</p>')
-        want = (
+        want = etree.fromstring(
             '<p>( <errorortreal errorinfo="noun,suf" correct="nissoniin">'
             'nissonin</errorortreal> dušše <errormorphsyn correct="0.6 %">'
             '0.6 %:s</errormorphsyn> )</p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_errorort5(self):
         in_elem = etree.fromstring(
             '<p>(haploida) ja njiŋŋalas$(noun,á|njiŋŋálas) ságahuvvon$(verb,'
             'a|sagahuvvon) manneseallas (diploida)</p>')
-        want = (
+        want = etree.fromstring(
             '<p>(haploida) ja <errorort errorinfo="noun,á" '
             'correct="njiŋŋálas">njiŋŋalas</errorort> <errorort '
             'errorinfo="verb,a" correct="sagahuvvon">ságahuvvon</errorort> '
             'manneseallas (diploida)</p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_errorort6(self):
         in_elem = etree.fromstring(
             '<p>(gii oahpaha) giinu$(x,notcmp|gii nu) manai intiánalávlagat$'
             '(loan,conc|indiánalávlagat) (guovža-klána)$(noun,cmp|'
             'guovžaklána) olbmuid</p>')
-        want = (
+        want = etree.fromstring(
             '<p>(gii oahpaha) <errorort errorinfo="x,notcmp" correct="gii '
             'nu">giinu</errorort> manai <errorort errorinfo="loan,conc" '
             'correct="indiánalávlagat">intiánalávlagat</errorort> <errorort '
@@ -374,8 +349,7 @@ class TestErrorMarkup(unittest.TestCase):
             '</errorort> olbmuid</p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_preserve_space_at_end_of_sentence(self):
         in_elem = etree.fromstring(
@@ -383,11 +357,11 @@ class TestErrorMarkup(unittest.TestCase):
             'ráhkadan. </p>')
 
         want = (
-            '<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
-            'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. </p>')
+            u'<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
+            u'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. </p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
+        got = etree.tostring(in_elem, encoding='unicode')
         self.assertEqual(got, want)
 
     def test_place_error_elements_before_old_element1(self):
@@ -398,14 +372,14 @@ class TestErrorMarkup(unittest.TestCase):
             'type="quote" xml:lang="eng">«Best Shorts Competition»</span></p>')
 
         want = (
-            '<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
-            'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. <errorort '
-            'correct="bálkkašumi" errorinfo="vowlat,á-a">bálkkášumi'
-            '</errorort> miessemánu. <span type="quote" xml:lang="eng">«Best '
-            'Shorts Competition»</span></p>')
+            u'<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
+            u'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. <errorort '
+            u'correct="bálkkašumi" errorinfo="vowlat,á-a">bálkkášumi'
+            u'</errorort> miessemánu. <span type="quote" xml:lang="eng">«Best '
+            u'Shorts Competition»</span></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
+        got = etree.tostring(in_elem, encoding='unicode')
         self.assertEqual(got, want)
 
     def test_place_error_elements_before_old_element2(self):
@@ -416,13 +390,13 @@ class TestErrorMarkup(unittest.TestCase):
             '«Best Shorts Competition»</span></p>')
 
         want = (
-            '<p><errorort correct="Mikkelsen" errorinfo="typo">Mikkelsens'
-            '</errorort> lea ráhkadan. <errorort correct="bálkkašumi" '
-            'errorinfo="vowlat,á-a">bálkkášumi</errorort> miessemánu. <span '
-            'type="quote" xml:lang="eng">«Best Shorts Competition»</span></p>')
+            u'<p><errorort correct="Mikkelsen" errorinfo="typo">Mikkelsens'
+            u'</errorort> lea ráhkadan. <errorort correct="bálkkašumi" '
+            u'errorinfo="vowlat,á-a">bálkkášumi</errorort> miessemánu. <span '
+            u'type="quote" xml:lang="eng">«Best Shorts Competition»</span></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
+        got = etree.tostring(in_elem, encoding='unicode')
         self.assertEqual(got, want)
 
     def test_place_error_element_after_old_element(self):
@@ -432,13 +406,13 @@ class TestErrorMarkup(unittest.TestCase):
             'døde 5. januar 1885, nesten 73 år gammel.</p>')
 
         want = (
-            '<p>I 1864 ga han ut boka <span type="quote" xml:lang="swe">'
-            '"Fornuftigt Madstel"</span>. <errorort correct="Asbjørnsen" '
-            'errorinfo="prop,typo">Asbjørsen</errorort> døde 5. januar 1885, '
-            'nesten 73 år gammel.</p>')
+            u'<p>I 1864 ga han ut boka <span type="quote" xml:lang="swe">'
+            u'"Fornuftigt Madstel"</span>. <errorort correct="Asbjørnsen" '
+            u'errorinfo="prop,typo">Asbjørsen</errorort> døde 5. januar 1885, '
+            u'nesten 73 år gammel.</p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
+        got = etree.tostring(in_elem, encoding='unicode')
         self.assertEqual(got, want)
 
     def test_place_error_element_before_and_after_old_element(self):
@@ -462,14 +436,14 @@ class TestErrorMarkup(unittest.TestCase):
             'miessemánu.</p>')
 
         want = (
-            '<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
-            'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. <span '
-            'type="quote" xml:lang="eng">«Best Shorts Competition»</span> '
-            '<errorort correct="bálkkašumi" errorinfo="vowlat,á-a">'
-            'bálkkášumi</errorort> miessemánu.</p>')
+            u'<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
+            u'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. <span '
+            u'type="quote" xml:lang="eng">«Best Shorts Competition»</span> '
+            u'<errorort correct="bálkkašumi" errorinfo="vowlat,á-a">'
+            u'bálkkášumi</errorort> miessemánu.</p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
+        got = etree.tostring(in_elem, encoding='unicode')
         self.assertEqual(got, want)
 
     def test_add_error_markup3Levels(self):
@@ -497,19 +471,19 @@ class TestErrorMarkup(unittest.TestCase):
             'bálkkášumi$(vowlat,á-a|bálkkašumi) miessemánu.</em></p>')
 
         want = (
-            '<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
-            'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. <span '
-            'type="quote" xml:lang="eng">«Best Shorts Competition»</span> '
-            '<errorort correct="bálkkašumi" errorinfo="vowlat,á-a">'
-            'bálkkášumi</errorort> miessemánu. <em>buvttadeaddji Anstein '
-            '<errorort correct="Mikkelsen" errorinfo="typo">Mikkelsens'
-            '</errorort> lea ráhkadan. <span type="quote" xml:lang="eng">'
-            '«Best Shorts Competition»</span> <errorort correct="bálkkašumi" '
-            'errorinfo="vowlat,á-a">bálkkášumi</errorort> '
-            'miessemánu.</em></p>')
+            u'<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
+            u'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. <span '
+            u'type="quote" xml:lang="eng">«Best Shorts Competition»</span> '
+            u'<errorort correct="bálkkašumi" errorinfo="vowlat,á-a">'
+            u'bálkkášumi</errorort> miessemánu. <em>buvttadeaddji Anstein '
+            u'<errorort correct="Mikkelsen" errorinfo="typo">Mikkelsens'
+            u'</errorort> lea ráhkadan. <span type="quote" xml:lang="eng">'
+            u'«Best Shorts Competition»</span> <errorort correct="bálkkašumi" '
+            u'errorinfo="vowlat,á-a">bálkkášumi</errorort> '
+            u'miessemánu.</em></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
+        got = etree.tostring(in_elem, encoding='unicode')
         self.assertEqual(got, want)
 
     # Nested markup
@@ -517,56 +491,52 @@ class TestErrorMarkup(unittest.TestCase):
         in_elem = etree.fromstring(
             '<p>(šaddai$(verb,conc|šattai) ollu áššit)£(verb,fin,pl3prs,'
             'sg3prs,tense|šadde ollu áššit)</p>')
-        want = (
+        want = etree.fromstring(
             '<p><errormorphsyn errorinfo="verb,fin,pl3prs,sg3prs,tense" '
             'correct="šadde ollu áššit"><errorort errorinfo="verb,conc" '
             'correct="šattai">šaddai</errorort> ollu áššit'
             '</errormorphsyn></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_nested_markup2(self):
         in_elem = etree.fromstring(
             '<p>(guokte ganddat§(n,á|gánddat))£(n,nump,gensg,nompl,case|'
             'guokte gándda)</p>')
-        want = (
+        want = etree.fromstring(
             '<p><errormorphsyn errorinfo="n,nump,gensg,nompl,case" '
             'correct="guokte gándda">guokte <error errorinfo="n,á" '
             'correct="gánddat">ganddat</error></errormorphsyn></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_nested_markup3(self):
         in_elem = etree.fromstring(
             '<p>(Nieiddat leat nourra$(adj,meta|nuorra))£(adj,spred,nompl,'
             'nomsg,agr|Nieiddat leat nuorat)</p>')
-        want = (
+        want = etree.fromstring(
             '<p><errormorphsyn errorinfo="adj,spred,nompl,nomsg,agr" '
             'correct="Nieiddat leat nuorat">Nieiddat leat <errorort '
             'errorinfo="adj,meta" '
             'correct="nuorra">nourra</errorort></errormorphsyn></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_nested_markup4(self):
         in_elem = etree.fromstring(
             '<p>(leat (okta máná)£(n,spred,nomsg,gensg,case|okta mánná))£'
             '(v,v,sg3prs,pl3prs,agr|lea okta mánná)</p>')
-        want = (
+        want = etree.fromstring(
             '<p><errormorphsyn errorinfo="v,v,sg3prs,pl3prs,agr" correct="'
             'lea okta mánná">leat <errormorphsyn errorinfo="n,spred,nomsg,'
             'gensg,case" correct="okta mánná">okta máná</errormorphsyn>'
             '</errormorphsyn></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_nested_markup5(self):
         in_elem = etree.fromstring(
@@ -575,7 +545,7 @@ class TestErrorMarkup(unittest.TestCase):
             'politihkka, muhto rahpasit baicca muitalivčče (makkar$(interr,á|'
             'makkár) soga)€(man soga) sii ovddasttit$(verb,conc|'
             'ovddastit).</p>')
-        want = (
+        want = etree.fromstring(
             '<p>heaitit <errorort correct="dahkaluddame" errorinfo="verb,a">'
             'dáhkaluddame</errorort> ahte sis <errorortreal correct="mahkáš" '
             'errorinfo="adv,á">máhkaš</errorortreal> livččii <errorort '
@@ -587,8 +557,7 @@ class TestErrorMarkup(unittest.TestCase):
             '</errorort>.</p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_process_text29(self):
         text = (
@@ -610,7 +579,7 @@ class TestErrorMarkup(unittest.TestCase):
             '<p>(Bearpmahat$(noun,svow|Bearpmehat) earuha€(verb,v,w|sirre))£'
             '(verb,fin,pl3prs,sg3prs,agr|Bearpmehat sirrejit) uskki ja '
             'loaiddu.</p>')
-        want = (
+        want = etree.fromstring(
             '<p><errormorphsyn errorinfo="verb,fin,pl3prs,sg3prs,agr" '
             'correct="Bearpmehat sirrejit"><errorort errorinfo="noun,svow" '
             'correct="Bearpmehat">Bearpmahat</errorort> <errorlex '
@@ -618,8 +587,7 @@ class TestErrorMarkup(unittest.TestCase):
             '</errormorphsyn> uskki ja loaiddu.</p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_process_text30(self):
         text = (
@@ -635,14 +603,13 @@ class TestErrorMarkup(unittest.TestCase):
         in_elem = etree.fromstring(
             '<p>Mirja ja Line leaba (gulahallan olbmožat)¢(noun,cmp|'
             'gulahallanolbmožat)€gulahallanolbmot</p>')
-        want = (
+        want = etree.fromstring(
             '<p>Mirja ja Line leaba <errorlex correct="gulahallanolbmot">'
             '<errorortreal errorinfo="noun,cmp" correct="gulahallanolbmožat">'
             'gulahallan olbmožat</errorortreal></errorlex></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_nested_markup8(self):
         in_elem = etree.fromstring(
@@ -650,7 +617,7 @@ class TestErrorMarkup(unittest.TestCase):
             '((čoaggen$(verb,mono|čoggen) ollu jokŋat)£(noun,obj,genpl,nompl,'
             'case|čoggen ollu joŋaid) ja sarridat)£(noun,obj,genpl,nompl,case|'
             'čoggen ollu joŋaid ja sarridiid)</p>')
-        want = (
+        want = etree.fromstring(
             '<p><errormorphsyn errorinfo="noun,advl,gensg,locsg,case" '
             'correct="Ovddit geasi">Ovddit geasis</errormorphsyn> '
             '<errormorphsyn errorinfo="noun,obj,genpl,nompl,case" '
@@ -661,21 +628,19 @@ class TestErrorMarkup(unittest.TestCase):
             '</errormorphsyn></p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_nested_markup9(self):
         in_elem = etree.fromstring(
             '<p>Bruk ((epoxi)$(noun,cons|epoksy) lim)¢(noun,mix|epoksylim) '
             'med god kvalitet.</p>')
-        want = (
+        want = etree.fromstring(
             '<p>Bruk <errorortreal errorinfo="noun,mix" correct="epoksylim">'
             '<errorort errorinfo="noun,cons" correct="epoksy">epoxi'
             '</errorort> lim</errorortreal> med god kvalitet.</p>')
 
         self.em.add_error_markup(in_elem)
-        got = etree.tostring(in_elem, encoding='utf8')
-        self.assertXmlEqual(got, want)
+        self.assertXmlEqual(in_elem, want)
 
     def test_process_text1(self):
         text = u'jne.$(adv,typo|jna.)'
