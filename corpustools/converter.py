@@ -1120,7 +1120,7 @@ class PDFPage(object):
     finally sent to PDFTextExtractor
     '''
     def __init__(self, page_element, metadata_margins={}, metadata_inner_margins={}):
-        self.number = int(page_element.get('number'))
+        self.page_number = int(page_element.get('number'))
         self.height = int(page_element.get('height'))
         self.width = int(page_element.get('width'))
         self.metadata_margins = metadata_margins
@@ -1130,9 +1130,9 @@ class PDFPage(object):
 
     def is_skip_page(self, skip_pages):
         '''True if a page should be skipped, otherwise false'''
-        return (('odd' in skip_pages and (self.number % 2) == 1) or
-                ('even' in skip_pages and (self.number % 2) == 0) or
-                self.number in skip_pages)
+        return (('odd' in skip_pages and (self.page_number % 2) == 1) or
+                ('even' in skip_pages and (self.page_number % 2) == 0) or
+                self.page_number in skip_pages)
 
     def fix_font_id(self, pdffontspecs):
         for textelement in self.textelements:
@@ -1214,13 +1214,13 @@ class PDFPage(object):
         coefficient = 7
         if margin in list(self.metadata_margins.keys()):
             m = self.metadata_margins[margin]
-            if m.get(str(self.number)) is not None:
-                coefficient = m[str(self.number)]
+            if m.get(str(self.page_number)) is not None:
+                coefficient = m[str(self.page_number)]
             elif m.get('all') is not None:
                 coefficient = m['all']
-            elif self.number % 2 == 0 and m.get('even') is not None:
+            elif self.page_number % 2 == 0 and m.get('even') is not None:
                 coefficient = m['even']
-            elif self.number % 2 == 1 and m.get('odd') is not None:
+            elif self.page_number % 2 == 1 and m.get('odd') is not None:
                 coefficient = m['odd']
 
         return coefficient
@@ -1262,13 +1262,13 @@ class PDFPage(object):
         coefficient = 0
         if margin in list(self.metadata_inner_margins.keys()):
             m = self.metadata_inner_margins[margin]
-            if m.get(str(self.number)) is not None:
-                coefficient = m[str(self.number)]
+            if m.get(str(self.page_number)) is not None:
+                coefficient = m[str(self.page_number)]
             elif m.get('all') is not None:
                 coefficient = m['all']
-            elif self.number % 2 == 0 and m.get('even') is not None:
+            elif self.page_number % 2 == 0 and m.get('even') is not None:
                 coefficient = m['even']
-            elif self.number % 2 == 1 and m.get('odd') is not None:
+            elif self.page_number % 2 == 1 and m.get('odd') is not None:
                 coefficient = m['odd']
 
         return coefficient
