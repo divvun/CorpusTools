@@ -39,8 +39,8 @@ def normaliser():
                 if not f.endswith('.xsl'):
                     try:
                         cfmu = namechanger.CorpusFilesetMoverAndUpdater(
-                            os.path.join(root, f).decode('utf8'),
-                            os.path.join(root, f).decode('utf8'))
+                            os.path.join(root, f),
+                            os.path.join(root, f))
                         filepair = cfmu.mc.filepairs[0]
                         print(('\t\tmove {} -> {}'.format(
                             filepair.oldpath, filepair.newpath)))
