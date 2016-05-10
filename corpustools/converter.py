@@ -334,7 +334,7 @@ class AvvirConverter(Converter):
 
     def convert2intermediate(self):
         '''Convert an Ávvir xml to an intermediate xml document.'''
-        self.intermediate = etree.fromstring(open(self.orig).read())
+        self.intermediate = etree.parse(self.orig).getroot()
         self.convert_p()
         self.convert_story()
         self.convert_article()
