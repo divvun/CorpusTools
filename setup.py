@@ -39,7 +39,7 @@ setup(
             'pick_parallel_docs = corpustools.pick_parallel_docs:main',
         ]
     },
-    dependency_links=['https://github.com/sheepeatingtaz/pyth/archive/pyth-py3.zip#egg=pyth-0.7.0'],
+    dependency_links=['https://github.com/prechelt/pyth/archive/pyth-py3.zip#egg=pyth-0.7.0'],
     install_requires=[
         'gitdb',
         'gitpython',
