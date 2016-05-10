@@ -65,6 +65,7 @@
         * image:        documents consisting of images, should be possible to
                         ocr, then do conversion on it
         * standard:     a usual doc, meant to be used as part of the standard corpus
+        * unsupported:  document that cannot be converted by our conversion tools
     -->
     <xsl:variable name="conversion_status" select="'standard'"/>
     <xsl:variable name="metadata" select="'uncomplete'"/>
