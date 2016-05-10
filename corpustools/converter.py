@@ -26,6 +26,7 @@ from __future__ import print_function
 from __future__ import absolute_import
 import argparse
 import codecs
+import collections
 from copy import deepcopy
 import distutils.dep_util
 import distutils.spawn
@@ -293,7 +294,7 @@ class Converter(object):
                     '{} failed. More info in the log file: {}'.format(
                         command[0], self.logfile))
 
-        return runner.stdout
+        return str(runner.stdout)
 
     def handle_syntaxerror(self, e, lineno, invalid_input):
         with open(self.logfile, 'w') as logfile:
@@ -579,15 +580,7 @@ class PlaintextConverter(Converter):
         return document
 
 
-class PDFFontspec(object):
-    def __init__(self, xmlfontspec):
-        self.size = xmlfontspec.get('size')
-        self.family = xmlfontspec.get('family')
-        self.color = xmlfontspec.get('color')
-
-    def __eq__(self, other):
-        return ((self.size, self.family, self.color) ==
-                (other.size, other.family, other.color))
+PDFFontspec = collections.namedtuple('PDFFontspec', ['size', 'family', 'color'])
 
 
 class PDFFontspecs(object):
@@ -597,7 +590,9 @@ class PDFFontspecs(object):
 
     def add_fontspec(self, xmlfontspec):
         this_id = xmlfontspec.get('id')
-        this_fontspec = PDFFontspec(xmlfontspec)
+        this_fontspec = PDFFontspec(size=xmlfontspec.get('size'),
+                                    family=xmlfontspec.get('family'),
+                                    color=xmlfontspec.get('color'))
 
         for fontspec in self.pdffontspecs.keys():
             if fontspec == this_fontspec:
@@ -2543,7 +2538,7 @@ class DocumentFixer(object):
         self.replace_ligatures()
 
         body = self.root.find('body')
-        bodyString = etree.tostring(body, encoding='utf-8')
+        bodyString = etree.tostring(body, encoding='unicode')
         body.getparent().remove(body)
 
         eg = decode.EncodingGuesser()
@@ -2572,8 +2567,8 @@ class DocumentFixer(object):
                 text = text.replace(u'‡', u'á')
                 text = text.replace(u'Œ', u'å')
 
-            text = text.encode('utf8')
-            title.text = eg.decode_para(encoding, text).decode('utf-8')
+            text = text
+            title.text = eg.decode_para(encoding, text)
 
         persons = self.root.findall('.//person')
         for person in persons:

@@ -49,7 +49,7 @@ class XMLTester(unittest.TestCase):
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(want, got, 0):
             message = checker.output_difference(
-                doctest.Example("", want), got, 0).encode('utf-8')
+                doctest.Example("", want), got, 0)
             raise AssertionError(message)
 
 
@@ -1019,7 +1019,7 @@ class TestHTMLContentConverter(XMLTester):
             content='<head><title>– Den utdøende stammes frykt</title>'
             '</head><body><h3>VI</h3>... Finnerne<i>Der</body></html>').soup
 
-        want = (
+        want = html5parser.document_fromstring(
             '<html><head>'
             '<title>– Den utdøende stammes frykt</title></head><body>'
             '<h3>VI</h3>  <p>... Finnerne<i>Der</i></p></body></html>')
@@ -5677,8 +5677,8 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p>a b c.</p></body>')
+            p2x.extractor.body,
+            etree.fromstring('<body><p>a b c.</p></body>'))
 
     def test_parse_page_2(self):
         '''Page with two paragraphs, four <text> elements'''
@@ -5695,8 +5695,8 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p>a b.</p><p>c d.</p></body>')
+            p2x.extractor.body,
+            etree.fromstring('<body><p>a b.</p><p>c d.</p></body>'))
 
     def test_parse_page_3(self):
         '''Page with one paragraph, one <text> elements'''
@@ -5710,8 +5710,8 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p>3.</p></body>')
+            p2x.extractor.body,
+            etree.fromstring('<body><p>3.</p></body>'))
 
     def test_parse_page_4(self):
         '''One text element with a ascii letter, the other one with a non-ascii
@@ -5730,8 +5730,8 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p>R</p><p>Ø</p></body>')
+            p2x.extractor.body,
+            etree.fromstring('<body><p>R</p><p>Ø</p></body>'))
 
     def test_parse_page_5(self):
         '''Test parse pages
@@ -5750,8 +5750,8 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p><em type="bold">R</em>Ø</p></body>')
+            p2x.extractor.body,
+            etree.fromstring('<body><p><em type="bold">R</em>Ø</p></body>'))
 
     def test_parse_page_6(self):
         '''One text element ending with a hyphen.'''
@@ -5766,8 +5766,8 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p>R\xADØ</p></body>')
+            p2x.extractor.body,
+            etree.fromstring('<body><p>R\xADØ</p></body>'))
 
     def test_parse_page_7(self):
         '''One text element ending with a hyphen.'''
@@ -5782,8 +5782,8 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p>R - Ø</p></body>')
+            p2x.extractor.body,
+            etree.fromstring('<body><p>R - Ø</p></body>'))
 
     def test_parse_page_8(self):
         '''One text element ending with a hyphen.'''
@@ -5799,8 +5799,8 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p><em type="bold">JULE\xADHANDEL</em></p></body>')
+            p2x.extractor.body,
+            etree.fromstring('<body><p><em type="bold">JULE\xADHANDEL</em></p></body>'))
 
     def test_parse_page_9(self):
         '''Two <text> elements. One is above the top margin.'''
@@ -5815,8 +5815,8 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p>3.</p></body>')
+            p2x.extractor.body,
+            etree.fromstring('<body><p>3.</p></body>'))
 
     def test_parse_page_10(self):
         '''Two <text> elements. One is below the bottom margin.'''
@@ -5831,8 +5831,8 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p>3.</p></body>')
+            p2x.extractor.body,
+            etree.fromstring('<body><p>3.</p></body>'))
 
     def test_parse_page_11(self):
         '''Two <text> elements. One is to the left of the right margin.'''
@@ -5847,8 +5847,8 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p>3.</p></body>')
+            p2x.extractor.body,
+            etree.fromstring('<body><p>3.</p></body>'))
 
     def test_parse_page_12(self):
         '''Two <text> elements. One is to the right of the left margin.'''
@@ -5863,8 +5863,8 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p>3.</p></body>')
+            p2x.extractor.body,
+            etree.fromstring('<body><p>3.</p></body>'))
 
     def test_parse_page_13(self):
         '''Test list detection with • character'''
@@ -5913,11 +5913,11 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(page_element)
 
-        self.assertEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body>'
-            u'<p>1751, </p>'
-            u'</body>')
+        self.assertXmlEqual(
+            p2x.extractor.body,
+            etree.fromstring('<body>'
+            '<p>1751, </p>'
+            '</body>'))
 
     def test_parse_page_soria_moria(self):
         '''The last element was not added to the p element'''
@@ -5931,9 +5931,9 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(page_element)
 
-        self.assertEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body><p>A – <em type="italic">b c-d</em> – e\xADf </p></body>')
+        self.assertXmlEqual(
+            p2x.extractor.body,
+            etree.fromstring('<body><p>A – <em type="italic">b c-d</em> – e\xADf </p></body>'))
 
     def test_parse_pdf2xmldoc1(self):
         '''Test how a parsing a simplistic pdf2xml document works'''
