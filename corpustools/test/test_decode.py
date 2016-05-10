@@ -26,25 +26,25 @@ from corpustools import decode
 #       "á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ",
 test_input = {
     u"mac-sami_to_latin1":
-        " » ¸ ¹ ½ º ç ¢ ¼ ´ ° ± · µ ¿ ¯   ¾ ®",
+        u" » ¸ ¹ ½ º ç ¢ ¼ ´ ° ± · µ ¿ ¯   ¾ ®",
     u"mac-sami_to_mac":
-        "á ª ∏ π Ω ∫ Á ¢ º ¥ ∞ ± ∑ µ ø Ø å Å æ Æ",
+        u"á ª ∏ π Ω ∫ Á ¢ º ¥ ∞ ± ∑ µ ø Ø å Å æ Æ",
     u"winsami2_to_cp1252":
-        "á š „ ˜ ¿ ¹ Á ‚ ¼ Š ‰ ¸ ¾ º ø Ø å Å æ Æ",
+        u"á š „ ˜ ¿ ¹ Á ‚ ¼ Š ‰ ¸ ¾ º ø Ø å Å æ Æ",
     u"mix-mac-sami-and-some-unknown-encoding":
-        " _ ã ÷ À ŋ ç â ¼ Š Đ Ŋ Ž Ŧ ¿ Ø å Å æ Æ",
+        u" _ ã ÷ À ŋ ç â ¼ Š Đ Ŋ Ž Ŧ ¿ Ø å Å æ Æ",
     u"latin4_to_cp1252":
-        "á ¹ è ð ¾ ¿ Á È ¼ © Ð ½ ® ¬ ø Ø å Å æ Æ",
+        u"á ¹ è ð ¾ ¿ Á È ¼ © Ð ½ ® ¬ ø Ø å Å æ Æ",
     u"winsam_to_cp1252":
-        "á ó ç ð þ ñ Á Ç ý Ó Ð Ñ Þ Ý ø Ø å Å æ Æ",
+        u"á ó ç ð þ ñ Á Ç ý Ó Ð Ñ Þ Ý ø Ø å Å æ Æ",
     u"iso-ir-197_to_cp1252":
-        "á ³ ¢ ¤ º ± Á ¡ ¸ ² £ ¯ ¹ µ ø Ø å Å æ Æ",
+        u"á ³ ¢ ¤ º ± Á ¡ ¸ ² £ ¯ ¹ µ ø Ø å Å æ Æ",
     u"mix-of-latin4-and-iso-ir-197_to_cp1252":
-        "á ó ç ¤ º ŋ Á Ç ŧ Ó £ Ŋ Ž Ŧ ø Ø å Å æ Æ",
+        u"á ó ç ¤ º ŋ Á Ç ŧ Ó £ Ŋ Ž Ŧ ø Ø å Å æ Æ",
     u"double-utf8":
-        "Ã¡ Å¡ Ä? Ä‘ Âº Å‹ Ã? ÄŒ Å§ Å  Đ ÅŠ Å½ Ŧ Ã¸ Ã˜ Ã¥ Ã… Ã¦ Æ",
+        u"Ã¡ Å¡ Ä? Ä‘ Âº Å‹ Ã? ÄŒ Å§ Å  Đ ÅŠ Å½ Ŧ Ã¸ Ã˜ Ã¥ Ã… Ã¦ Æ",
     u"finnish-lawtexts-in-pdf":
-        "á š þ đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ",
+        u"á š þ đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ",
 }
 
 
@@ -59,13 +59,13 @@ class TestEncodingGuesser(unittest.TestCase):
     def round_trip_x(self, index):
         eg = decode.EncodingGuesser()
 
-        utf8_content = "á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ"
+        unicode_content = u"á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ"
 
         content = test_input[index]
 
         test_content = eg.decode_para(index, content)
 
-        self.assertEqual(utf8_content, test_content)
+        self.assertEqual(unicode_content, test_content)
 
     def test_round_tripping(self):
         for k in test_input.keys():

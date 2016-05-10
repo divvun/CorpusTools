@@ -273,12 +273,11 @@ class EncodingGuesser(object):
         If "sami letters" that the encoding tries to fix exist in "content",
         disregard the encoding
 
-        @param content a utf-8 encoded string
+        @param content a unicode string
         @return winner is a key from CTYPES or None to tell that no known
         encoding is found
         """
         winner = None
-
         if (
                 (u'' in content and u'ã' not in content) or
                 (u'' in content) or
