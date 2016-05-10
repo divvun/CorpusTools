@@ -92,7 +92,7 @@
 
 <!ELEMENT wordcount (#PCDATA)>
 <!ELEMENT conversion_status EMPTY>
-<!ATTLIST conversion_status type (ocr|goldstandard|correct|image|standard) #REQUIRED>
+<!ATTLIST conversion_status type (ocr|goldstandard|correct|image|standard|unsupported) #REQUIRED>
 
 
 <!-- License information -->
