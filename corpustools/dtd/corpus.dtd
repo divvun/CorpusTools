@@ -37,7 +37,7 @@
                   publChannel?,
                   collection?,
                   wordcount?,
-                  ocr?,
+                  conversion_status+,
                   availability?,
                   submitter?,
                   multilingual?,
@@ -91,7 +91,8 @@
 <!ELEMENT ISSN (#PCDATA)>
 
 <!ELEMENT wordcount (#PCDATA)>
-<!ELEMENT ocr (#PCDATA)>
+<!ELEMENT conversion_status EMPTY>
+<!ATTLIST conversion_status type (ocr|goldstandard|correct|image|standard) #REQUIRED>
 
 
 <!-- License information -->

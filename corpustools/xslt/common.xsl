@@ -27,7 +27,7 @@
     <!-- The following variables should be specified in the XSL -->
     <!-- template. They are added here, and kept in sync with   -->
     <!-- the DTD to avoid errors for old .xsl files.            -->
-    <xsl:variable name="ocr" select="''"/>
+    <xsl:variable name="conversion_status" select="''"/>
     <xsl:variable name="note" select="''"/>
     <xsl:variable name="text_encoding" select="''"/>
 
@@ -367,11 +367,19 @@
                 </xsl:choose>
 
                 <xsl:choose>
-                    <xsl:when test="$ocr">
-                        <xsl:element name="ocr"/>
+                    <xsl:when test="$conversion_status">
+                        <xsl:element name="conversion_status">
+                            <xsl:attribute name="type">
+                                <xsl:value-of select="$conversion_status"/>
+                            </xsl:attribute>
+                        </xsl:element>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:apply-templates select="header/ocr"/>
+                        <xsl:element name="conversion_status">
+                            <xsl:attribute name="type">
+                                <xsl:value-of select="'standard'"/>
+                            </xsl:attribute>
+                        </xsl:element>
                     </xsl:otherwise>
                 </xsl:choose>
 
