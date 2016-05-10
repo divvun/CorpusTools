@@ -249,9 +249,9 @@ class Converter(object):
                 self.names.xsl))
 
     def convert_errormarkup(self, complete):
-        if 'correct.' in self.orig:
+        if 'correct.' in self.names.orig:
             try:
-                em = errormarkup.ErrorMarkup(self.orig)
+                em = errormarkup.ErrorMarkup(self.names.orig)
 
                 for element in complete.find('body'):
                     em.add_error_markup(element)
@@ -278,7 +278,7 @@ class Converter(object):
         fixer.fix_newstags()
         fixer.soft_hyphen_to_hyph_tag()
         fixer.set_word_count()
-        if not 'correct.' in self.orig:
+        if not 'correct.' in self.names.orig:
             fixer.detect_quotes()
 
         if (complete.
@@ -339,8 +339,8 @@ class Converter(object):
             with util.ignored(OSError):
                 os.makedirs(os.path.dirname(self.names.converted))
 
-            if (('goldstandard' in self.orig and '.correct.' in self.orig) or
-                    'goldstandard' not in self.orig):
+            if (('goldstandard' in self.names.orig and '.correct.' in self.names.orig) or
+                    'goldstandard' not in self.names.orig):
                 complete = self.make_complete(languageguesser)
 
                 if self.has_content(complete):
@@ -417,7 +417,7 @@ class AvvirConverter(Converter):
 
     def convert2intermediate(self):
         '''Convert an Ávvir xml to an intermediate xml document.'''
-        self.intermediate = etree.parse(self.orig).getroot()
+        self.intermediate = etree.parse(self.names.orig).getroot()
         self.convert_p()
         self.convert_story()
         self.convert_article()
@@ -576,9 +576,9 @@ class PlaintextConverter(Converter):
         :returns: a unicode string
         '''
         try:
-            content = codecs.open(self.orig, encoding='utf8').read()
+            content = codecs.open(self.names.orig, encoding='utf8').read()
         except ValueError:
-            content = codecs.open(self.orig, encoding='latin1').read()
+            content = codecs.open(self.names.orig, encoding='latin1').read()
 
         content = self.strip_chars(content)
 
@@ -1501,7 +1501,7 @@ class PDF2XMLConverter(Converter):
         document.append(self.extractor.body)
 
         command = ['pdftohtml', '-hidden', '-enc', 'UTF-8', '-stdout',
-                   '-nodrm', '-i', '-xml', self.orig]
+                   '-nodrm', '-i', '-xml', self.names.orig]
         pdftohtmloutput = self.extract_text(command)
         pdf_content = self.replace_ligatures(self.strip_chars(
             pdftohtmloutput.decode('utf8', 'ignore')))
@@ -1554,7 +1554,7 @@ class BiblexmlConverter(Converter):
         if verse_element.tag != 'verse':
             raise UserWarning(
                 '{}: Unexpected element in verse: {}'.format(
-                    self.orig, verse_element.tag))
+                    self.names.orig, verse_element.tag))
 
         return verse_element.text
 
@@ -1581,7 +1581,7 @@ class BiblexmlConverter(Converter):
             else:
                 raise UserWarning(
                     '{}: Unexpected element in section: {}'.format(
-                        self.orig, element.tag))
+                        self.names.orig, element.tag))
 
         section.append(self.make_p(verses))
 
@@ -1631,7 +1631,7 @@ class BiblexmlConverter(Converter):
             else:
                 raise UserWarning(
                     '{}: Unexpected element in chapter: {}'.format(
-                        self.orig, child.tag))
+                        self.names.orig, child.tag))
 
         return section
 
@@ -1648,13 +1648,13 @@ class BiblexmlConverter(Converter):
             if chapter_element.tag != 'chapter':
                 raise UserWarning(
                     '{}: Unexpected element in book: {}'.format(
-                        self.orig, chapter_element.tag))
+                        self.names.orig, chapter_element.tag))
             section.append(self.process_chapter(chapter_element))
 
         return section
 
     def process_bible(self):
-        bible = etree.parse(self.orig)
+        bible = etree.parse(self.names.orig)
 
         body = etree.Element('body')
 
@@ -1738,8 +1738,8 @@ class HTMLContentConverter(Converter):
                 return decoded
             except UnicodeDecodeError as e:
                 if source == 'xsl':
-                    with open('{}.log'.format(self.orig), 'w') as f:
-                        print(util.lineno(), six.text_type(e), self.orig, file=f)
+                    with open('{}.log'.format(self.names.orig), 'w') as f:
+                        print(util.lineno(), six.text_type(e), self.names.orig, file=f)
                     raise ConversionException(
                         'The text_encoding specified in {} lead to decoding '
                         'errors, please fix the XSL'.format(self.md.filename))
@@ -1750,7 +1750,7 @@ class HTMLContentConverter(Converter):
             return six.text_type(content, encoding='utf-8', errors='mixed')
         else:
             raise ConversionException(
-                "Strange exception converting {} to unicode".format(self.orig))
+                "Strange exception converting {} to unicode".format(self.names.orig))
 
     xml_encoding_declaration_re = re.compile(
         r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*", re.IGNORECASE)
@@ -1785,7 +1785,7 @@ class HTMLContentConverter(Converter):
                 encoding = encoding_norm[encoding]
             else:
                 print("Unusual encoding found in {} {}: {}".format(
-                    self.orig, source, encoding), file=sys.stderr)
+                    self.names.orig, source, encoding), file=sys.stderr)
 
         return encoding
 
@@ -2289,7 +2289,7 @@ class RTFConverter(HTMLContentConverter):
                     content=six.text_type(XHTMLWriter.write(pyth_doc, pretty=True).read(), encoding='utf8'))
             except UnicodeDecodeError:
                 raise ConversionException('Unicode problems in {}'.format(
-                    self.orig))
+                    self.names.orig))
 
 
 class OdfConverter(HTMLContentConverter):
@@ -2343,7 +2343,7 @@ class DocConverter(HTMLContentConverter):
     def __init__(self, filename, write_intermediate=False):
         Converter.__init__(self, filename, write_intermediate)
         command = ['wvHtml',
-                   os.path.realpath(self.orig),
+                   os.path.realpath(self.names.orig),
                    '-']
         try:
             HTMLContentConverter.__init__(self, filename,

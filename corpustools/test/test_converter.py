@@ -173,13 +173,9 @@ class TestConverter(XMLTester):
     def setUp(self):
         self.converter_inside_orig = converter.Converter(
             os.path.join(here,
-                         'converter_data/fakecorpus/orig/nob/samediggi-'
+                         'converter_data/fakecorpus/orig/nob/admin/samediggi-'
                          'article-16.html'),
             True)
-
-        self.converter_outside_orig = converter.Converter(
-            os.path.join(here,
-                         'converter_data/samediggi-article-48.html'), False)
 
         self.converter_inside_freecorpus = converter.Converter(
             os.path.join(
@@ -189,40 +185,28 @@ class TestConverter(XMLTester):
 
     def test_get_orig(self):
         self.assertEqual(
-            self.converter_inside_orig.orig,
+            self.converter_inside_orig.names.orig,
             os.path.join(
                 here,
-                'converter_data/fakecorpus/orig/nob/samediggi-article-'
+                'converter_data/fakecorpus/orig/nob/admin/samediggi-article-'
                 '16.html'))
 
         self.assertEqual(
-            self.converter_outside_orig.orig,
-            os.path.join(
-                here,
-                'converter_data/samediggi-article-48.html'))
-
-        self.assertEqual(
-            self.converter_inside_freecorpus.orig,
+            self.converter_inside_freecorpus.names.orig,
             os.path.join(
                 os.getenv('GTFREE'),
                 'orig/sme/admin/sd/samediggi.no/samediggi-article-48.html'))
 
     def test_get_xsl(self):
         self.assertEqual(
-            self.converter_inside_orig.xsl,
+            self.converter_inside_orig.names.xsl,
             os.path.join(
                 here,
-                'converter_data/fakecorpus/orig/nob/samediggi-'
+                'converter_data/fakecorpus/orig/nob/admin/samediggi-'
                 'article-16.html.xsl'))
 
         self.assertEqual(
-            self.converter_outside_orig.xsl,
-            os.path.join(
-                here,
-                'converter_data/samediggi-article-48.html.xsl'))
-
-        self.assertEqual(
-            self.converter_inside_freecorpus.xsl,
+            self.converter_inside_freecorpus.names.xsl,
             os.path.join(
                 os.getenv('GTFREE'),
                 'orig/sme/admin/sd/samediggi.no/samediggi-article-'
@@ -236,11 +220,6 @@ class TestConverter(XMLTester):
                 'converter_data/fakecorpus/tmp'))
 
         self.assertEqual(
-            self.converter_outside_orig.tmpdir,
-            os.path.join(
-                here, 'converter_data'))
-
-        self.assertEqual(
             self.converter_inside_freecorpus.tmpdir,
             os.path.join(os.getenv('GTFREE'), 'tmp'))
 
@@ -252,32 +231,21 @@ class TestConverter(XMLTester):
                 'converter_data/fakecorpus'))
 
         self.assertEqual(
-            self.converter_outside_orig.corpusdir.rstrip(os.path.sep),
-            os.path.join(here, 'converter_data'))
-
-        self.assertEqual(
             self.converter_inside_freecorpus.corpusdir.rstrip(
                 os.path.sep),
             os.getenv('GTFREE').rstrip(os.path.sep))
 
     def test_get_converted_name_inside_orig(self):
         self.assertEqual(
-            self.converter_inside_orig.converted_name,
+            self.converter_inside_orig.names.converted,
             os.path.join(
                 here,
-                'converter_data/fakecorpus/converted/nob/samediggi-'
+                'converter_data/fakecorpus/converted/nob/admin/samediggi-'
                 'article-16.html.xml'))
-
-    def test_get_converted_name_outside_orig(self):
-        self.assertEqual(
-            self.converter_outside_orig.converted_name,
-            os.path.join(
-                here,
-                'converter_data/samediggi-article-48.html.xml'))
 
     def test_get_converted_inside_freecorpus(self):
         self.assertEqual(
-            self.converter_inside_freecorpus.converted_name,
+            self.converter_inside_freecorpus.names.converted,
             os.path.join(
                 os.getenv('GTFREE'),
                 'converted/sme/admin/sd/samediggi.no/samediggi-'
@@ -297,7 +265,7 @@ class TestConverter(XMLTester):
         This is a test for that covers the case covered in
         http://giellatekno.uit.no/bugzilla/show_bug.cgi?id=2151
         '''
-        c = converter.PlaintextConverter('blogg_5.correct.txt')
+        c = converter.PlaintextConverter('orig/sme/admin/blogg_5.correct.txt')
         want_string = '''
             <document xml:lang="smj" id="no_id">
             <header>
@@ -339,7 +307,7 @@ class TestConverter(XMLTester):
 class TestAvvirConverter(XMLTester):
 
     def setUp(self):
-        self.avvir = converter.AvvirConverter('fakename')
+        self.avvir = converter.AvvirConverter('orig/sme/admin/fakename.xml')
         self.avvir.intermediate = etree.fromstring(
             '<article>'
             '    <story id="a" class="Tittel">'
@@ -406,7 +374,7 @@ class TestAvvirConverter(XMLTester):
 
     def test_convert_p_2(self):
         '''p contains only p'''
-        avvir = converter.AvvirConverter('fakename')
+        avvir = converter.AvvirConverter('orig/sme/admin/fakename.xml')
         avvir.intermediate = etree.fromstring(
             '<article>'
             '   <story class="body">'
@@ -426,7 +394,7 @@ class TestAvvirConverter(XMLTester):
 
     def test_convert_p_3(self):
         '''p contains span and p'''
-        avvir = converter.AvvirConverter('fakename')
+        avvir = converter.AvvirConverter('orig/sme/admin/fakename.xml')
         avvir.intermediate = etree.fromstring(
             '<article>'
             '   <story class="body">'
@@ -450,7 +418,7 @@ class TestAvvirConverter(XMLTester):
 
     def test_convert_p_4(self):
         '''p.text is None'''
-        avvir = converter.AvvirConverter('fakename')
+        avvir = converter.AvvirConverter('orig/sme/admin/fakename.xml')
         avvir.intermediate = etree.fromstring(
             '<article>'
             '   <story class="body">'
@@ -471,7 +439,7 @@ class TestAvvirConverter(XMLTester):
 
     def test_convert_p_5(self):
         '''sub_p.tail is None'''
-        avvir = converter.AvvirConverter('fakename')
+        avvir = converter.AvvirConverter('orig/sme/admin/fakename.xml')
         avvir.intermediate = etree.fromstring(
             '<article>'
             '   <story class="body">'
@@ -492,7 +460,7 @@ class TestAvvirConverter(XMLTester):
 
     def test_convert_p_6(self):
         '''previous.text not None, sub_p.tail is None'''
-        avvir = converter.AvvirConverter('fakename')
+        avvir = converter.AvvirConverter('orig/sme/admin/fakename.xml')
         avvir.intermediate = etree.fromstring(
             '<article>'
             '   <story class="body">'
@@ -514,7 +482,7 @@ class TestAvvirConverter(XMLTester):
 
     def test_convert_p_7(self):
         '''previous.tail is None, sub_p.tail not None'''
-        avvir = converter.AvvirConverter('fakename')
+        avvir = converter.AvvirConverter('orig/sme/admin/fakename.xml')
         avvir.intermediate = etree.fromstring(
             '<article>'
             '   <story class="body">'
@@ -611,7 +579,7 @@ class TestPlaintextConverter(XMLTester):
     def test_to_unicode(self):
         plaintext = converter.PlaintextConverter(
             os.path.join(here,
-                         'converter_data/winsami2-test-ws2.txt'))
+                         'converter_data/fakecorpus/orig/sme/riddu/winsami2-test-ws2.txt'))
         got = plaintext.to_unicode()
 
         # Ensure that the data in want is unicode
@@ -626,7 +594,7 @@ class TestPlaintextConverter(XMLTester):
 
     def test_strip_chars1(self):
         plaintext = converter.PlaintextConverter(
-            'tullball.txt')
+            'orig/sme/riddu/tullball.txt')
         got = plaintext.strip_chars(
             u'\x0d\n'
             u'<ASCII-MAC>\n'
@@ -639,7 +607,7 @@ class TestPlaintextConverter(XMLTester):
 
     def test_strip_chars2(self):
         plaintext = converter.PlaintextConverter(
-            'tullball.txt')
+            'orig/sme/riddu/tullball.txt')
         got = plaintext.strip_chars(
             u'<0x010C><0x010D><0x0110><0x0111><0x014A><0x014B><0x0160><0x0161>'
             u'<0x0166><0x0167><0x017D><0x017E><0x2003>')
@@ -649,7 +617,7 @@ class TestPlaintextConverter(XMLTester):
 
     def test_plaintext(self):
         plaintext = converter.PlaintextConverter(
-            'tullball.txt')
+            'orig/sme/riddu/tullball.txt')
         got = plaintext.content2xml(io.StringIO(u'''Sámegiella.
 
 Buot leat.'''))
@@ -669,7 +637,7 @@ Buot leat.'''))
         self.assertXmlEqual(got, want)
 
     def test_two_lines(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
+        newstext = converter.PlaintextConverter('orig/sme/admin/tullball.txt')
         got = newstext.content2xml(io.StringIO(u'''Guovssahasa nieida.
 Filbma lea.
 '''))
@@ -685,7 +653,7 @@ Filbma lea.</p>
         self.assertXmlEqual(got, want)
 
     def test_hyph(self):
-        newstext = converter.PlaintextConverter('tullball.txt')
+        newstext = converter.PlaintextConverter('orig/sme/riddu/tullball.txt')
         got = newstext.content2xml(io.StringIO(u'''Guovssa<hyph/>hasa
 '''))
         want = etree.fromstring(u'''
@@ -704,7 +672,7 @@ class TestDocConverter(XMLTester):
     def setUp(self):
         self.testdoc = converter.DocConverter(
             os.path.join(here,
-                         'converter_data/doc-test.doc'), 'bogus')
+                         'converter_data/fakecorpus/orig/sme/riddu/doc-test.doc'), 'bogus')
 
     def test_convert2intermediate(self):
         got = self.testdoc.convert2intermediate()
@@ -720,7 +688,7 @@ class TestDocxConverter(XMLTester):
     def setUp(self):
         self.testdoc = converter.DocxConverter(
             os.path.join(here,
-                         'converter_data/doc-test.docx'), 'bogus')
+                         'converter_data/fakecorpus/orig/sme/riddu/doc-test.docx'), 'bogus')
 
     def test_convert2intermediate(self):
         got = self.testdoc.convert2intermediate()
@@ -762,7 +730,7 @@ class TestHTMLContentConverter(XMLTester):
     def test_remove_empty_p_1(self):
         '''Remove an empty p'''
         got = converter.HTMLContentConverter(
-            'with-o:p.html',
+            'orig/sme/admin/with-o:p.html',
             content='<html><body><p/></html>').soup
 
         want = html5parser.document_fromstring(
@@ -774,7 +742,7 @@ class TestHTMLContentConverter(XMLTester):
     def test_remove_empty_p_2(self):
         '''Do not remove a p with content'''
         got = converter.HTMLContentConverter(
-            'with-o:p.html',
+            'orig/sme/admin/with-o:p.html',
             content='<html><body><p><span>spanny</span></p></html>').soup
 
         want = html5parser.document_fromstring(
@@ -785,7 +753,7 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_remove_empty_class(self):
         got = converter.HTMLContentConverter(
-            'with-o:p.html',
+            'orig/sme/admin/with-o:p.html',
             content='<html><body><div class="">a</div><div class="a">'
             '<span class="">b</span></div></html>').soup
 
@@ -1054,7 +1022,7 @@ class TestHTMLContentConverter(XMLTester):
                             '</{0}>'.format(tag, key, value))
                         inner_r = ''
                     hc = converter.HTMLContentConverter(
-                        'bogus.html',
+                        'orig/sme/admin/bogus.html',
                         content='<html><body>'
                         '{}</body>'
                         '</html>'.format(inner))
@@ -1077,7 +1045,7 @@ class TestHTMLContentConverter(XMLTester):
 
         for unwanted_tag in unwanted_tags:
             got = converter.HTMLContentConverter(
-                unwanted_tag + '.html',
+                'orig/sme/admin/' + unwanted_tag + '.html',
                 content='<html><body><p>p1</p><%s/><p>p2</p2></body>'
                 '</html>' % unwanted_tag).soup
             want = html5parser.document_fromstring(
@@ -1090,7 +1058,7 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_remove_comment(self):
         got = converter.HTMLContentConverter(
-            'with-o:p.html',
+            'orig/sme/admin/with-o:p.html',
             content='<html><body><b><!--Hey, buddy. --></b></body>'
             '</html>').soup
 
@@ -1103,7 +1071,7 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_remove_processinginstruction(self):
         got = converter.HTMLContentConverter(
-            'with-o:p.html',
+            'orig/sme/admin/with-o:p.html',
             content='<html><body><b><?ProcessingInstruction?></b></body>'
             '</html>').soup
 
@@ -1116,7 +1084,7 @@ class TestHTMLContentConverter(XMLTester):
     def test_add_p_around_text1(self):
         '''Only text before next significant element'''
         got = converter.HTMLContentConverter(
-            'withoutp.html',
+            'orig/sme/admin/withoutp.html',
             content='<html><head><title>– Den utdøende stammes frykt</title>'
             '</head><body><h3>VI</h3>... Finnerne<p>Der</body></html>').soup
 
@@ -1131,7 +1099,7 @@ class TestHTMLContentConverter(XMLTester):
     def test_add_p_around_text2(self):
         '''Text and i element before next significant element'''
         got = converter.HTMLContentConverter(
-            'withoutp.html',
+            'orig/sme/admin/withoutp.html',
             content='<head><title>– Den utdøende stammes frykt</title>'
             '</head><body><h3>VI</h3>... Finnerne<i>Der</body></html>').soup
 
@@ -1146,7 +1114,7 @@ class TestHTMLContentConverter(XMLTester):
     def test_add_p_around_text3(self):
         '''h2 as a stop element'''
         got = converter.HTMLContentConverter(
-            'withoutp.html',
+            'orig/sme/admin/withoutp.html',
             content='<html>'
             '<title>– Den utdøende stammes frykt</title>'
             '</head><body><h3>VI</h3>... Finnerne<a/>'
@@ -1167,7 +1135,7 @@ class TestHTMLContentConverter(XMLTester):
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
             '<body></body></html>')
         hcc = converter.HTMLContentConverter(
-            'ugga.html',
+            'orig/sme/admin/ugga.html',
             content=content)
 
         got = hcc.get_encoding(content)
@@ -1180,7 +1148,7 @@ class TestHTMLContentConverter(XMLTester):
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
             '<body></body></html>')
         hcc = converter.HTMLContentConverter(
-            'ugga.html',
+            'orig/sme/admin/ugga.html',
             content=content)
 
         got = hcc.get_encoding(content)
@@ -1194,7 +1162,7 @@ class TestHTMLContentConverter(XMLTester):
             '<body></body></html>')
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html',
+            'orig/sme/admin/ugga.html',
             content=content)
         hcc.md.set_variable('text_encoding', 'iso-8859-1')
 
@@ -1213,7 +1181,7 @@ class TestHTMLContentConverter(XMLTester):
             'charset=utf-8"></head><body></body></html>')
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html',
+            'orig/sme/admin/ugga.html',
             content=content)
         hcc.md.set_variable('text_encoding', 'iso-8859-1')
 
@@ -1229,7 +1197,7 @@ class TestHTMLContentConverter(XMLTester):
             'charset=iso-8859-1"></head><body></body></html>')
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html',
+            'orig/sme/admin/ugga.html',
             content=content)
 
         got = hcc.get_encoding(content)
@@ -1244,7 +1212,7 @@ class TestHTMLContentConverter(XMLTester):
             'charset=iso-8859-1"></head><body></body></html>')
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html',
+            'orig/sme/admin/ugga.html',
             content=content)
 
         got = hcc.get_encoding(content)
@@ -1262,7 +1230,7 @@ class TestHTMLContentConverter(XMLTester):
             'charset=iso-8859-1\'></head><body></body></html>')
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html',
+            'orig/sme/admin/ugga.html',
             content=content)
 
         got = hcc.get_encoding(content)
@@ -1282,7 +1250,7 @@ class TestHTMLContentConverter(XMLTester):
             '</body></html>')
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html',
+            'orig/sme/admin/ugga.html',
             content=content)
 
         got = hcc.get_encoding(content)
@@ -1302,7 +1270,7 @@ class TestHTMLContentConverter(XMLTester):
             '</body></html>')
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html',
+            'orig/sme/admin/ugga.html',
             content=content)
 
         got = hcc.get_encoding(content)
@@ -1320,7 +1288,7 @@ class TestHTMLContentConverter(XMLTester):
             'charset=iso-8859-15">')
 
         hcc = converter.HTMLContentConverter(
-            'ugga.html',
+            'orig/sme/admin/ugga.html',
             content=content)
 
         got = hcc.get_encoding(content)
@@ -1329,7 +1297,7 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_center2div(self):
         got = converter.HTMLContentConverter(
-            'center.html',
+            'orig/sme/admin/center.html',
             content='<html><body><center><span class="">b</span>'
             '</center></html>').soup
 
@@ -1342,7 +1310,7 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_i(self):
         got = converter.HTMLContentConverter(
-            'i.html', LANGUAGEGUESSER,
+            'orig/sme/admin/i.html', LANGUAGEGUESSER,
             content='<html><body><i>b</i></body></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1353,7 +1321,7 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_a(self):
         got = converter.HTMLContentConverter(
-            'a.html', LANGUAGEGUESSER,
+            'orig/sme/admin/a.html', LANGUAGEGUESSER,
             content='<html><body><a>b</a></body></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1364,7 +1332,7 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_em(self):
         got = converter.HTMLContentConverter(
-            'em.html', LANGUAGEGUESSER,
+            'orig/sme/admin/em.html', LANGUAGEGUESSER,
             content='<html><body><em>b</em></body></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1375,7 +1343,7 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_font(self):
         got = converter.HTMLContentConverter(
-            'font.html', LANGUAGEGUESSER,
+            'orig/sme/admin/font.html', LANGUAGEGUESSER,
             content='<html><body><font>b</font></body></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1386,7 +1354,7 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_u(self):
         got = converter.HTMLContentConverter(
-            'u.html', LANGUAGEGUESSER,
+            'orig/sme/admin/u.html', LANGUAGEGUESSER,
             content='<html><body><u>b</u></body></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1397,7 +1365,7 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_strong(self):
         got = converter.HTMLContentConverter(
-            'strong.html', LANGUAGEGUESSER,
+            'orig/sme/admin/strong.html', LANGUAGEGUESSER,
             content='<html><body><strong>b</strong></body></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1408,7 +1376,7 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_span(self):
         got = converter.HTMLContentConverter(
-            'span.html', LANGUAGEGUESSER,
+            'orig/sme/admin/span.html', LANGUAGEGUESSER,
             content='<html><body><span>b</span></body></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1419,7 +1387,7 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_text(self):
         got = converter.HTMLContentConverter(
-            'text.html', LANGUAGEGUESSER,
+            'orig/sme/admin/text.html', LANGUAGEGUESSER,
             content='<html><body>b</body></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1471,7 +1439,7 @@ class TestHTMLContentConverter(XMLTester):
         '''
 
         got = converter.HTMLContentConverter(
-            'text.html', LANGUAGEGUESSER,
+            'orig/sme/admin/text.html', LANGUAGEGUESSER,
             content=content).convert2intermediate()
 
         self.assertXmlEqual(got, etree.fromstring(want))
@@ -1506,7 +1474,7 @@ class TestHTMLContentConverter(XMLTester):
         '''
 
         got = converter.HTMLContentConverter(
-            'text.html', LANGUAGEGUESSER,
+            'orig/sme/admin/text.html', LANGUAGEGUESSER,
             content=content).convert2intermediate()
 
         self.assertXmlEqual(got, etree.fromstring(want))
@@ -1552,7 +1520,7 @@ class TestHTMLContentConverter(XMLTester):
         '''
 
         got = converter.HTMLContentConverter(
-            'text.html', LANGUAGEGUESSER,
+            'orig/sme/admin/text.html', LANGUAGEGUESSER,
             content=content).convert2intermediate()
 
         self.assertXmlEqual(got, etree.fromstring(want))
@@ -2939,7 +2907,7 @@ TITTEL: 3</p>
 
     def test_fix_body_encoding(self):
         newstext = converter.PlaintextConverter(
-            'tullball.txt', LANGUAGEGUESSER)
+            'orig/sme/riddu/tullball.txt', LANGUAGEGUESSER)
         text = newstext.content2xml(io.StringIO(u'''ÐMun lean njeallje jagi boaris.
 
 Nu beaivvdat.
@@ -2980,7 +2948,7 @@ LOGO: Smi kulturfestivala 1998
     def test_replace_ligatures(self):
         svgtext = converter.SVGConverter(
             os.path.join(here,
-                         'converter_data/Riddu_Riddu_avis_TXT.200923.svg'),
+                         'converter_data/fakecorpus/orig/sme/riddu/Riddu_Riddu_avis_TXT.200923.svg'),
             LANGUAGEGUESSER)
         document_fixer = converter.DocumentFixer(
             etree.fromstring(etree.tostring(svgtext.convert2intermediate())))
@@ -5785,7 +5753,7 @@ class TestPDF2XMLConverter(XMLTester):
     '''Test the class that converts from pdf2xml to giellatekno/divvun xml'''
     def test_pdf_converter(self):
         pdfdocument = converter.PDF2XMLConverter(
-            os.path.join(here, 'converter_data/pdf-test.pdf'))
+            os.path.join(here, 'converter_data/fakecorpus/orig/sme/riddu/pdf-test.pdf'))
         got = pdfdocument.convert2intermediate()
         want = etree.parse(
             os.path.join(here, 'converter_data/pdf-xml2pdf-test.xml'))
@@ -5802,7 +5770,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="145" left="100" width="100" height="19" font="1">c.</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
@@ -5820,7 +5788,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="186" left="100" width="100" height="19" font="1">d.</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
@@ -5835,7 +5803,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="145" left="100" width="100" height="19" font="1">3.</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
@@ -5855,7 +5823,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="245" left="100" width="39" height="14" font="1">Ø</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
@@ -5875,7 +5843,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="235" left="100" width="39" height="14" font="1">Ø</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
@@ -5891,7 +5859,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="235" left="100" width="39" height="14" font="1">Ø</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
@@ -5907,7 +5875,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="235" left="100" width="39" height="14" font="1">Ø</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
@@ -5924,7 +5892,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="223" left="118" width="123" height="21" font="15">'
             '<b>HANDEL</b></text></page>')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
@@ -5940,7 +5908,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="145" left="100" width="100" height="19" font="1">3.</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
@@ -5956,7 +5924,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="145" left="100" width="100" height="19" font="1">3.</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
@@ -5972,7 +5940,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="145" left="100" width="100" height="19" font="1">3.</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
@@ -5988,7 +5956,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="145" left="100" width="100" height="19" font="1">3.</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
@@ -6013,7 +5981,7 @@ class TestPDF2XMLConverter(XMLTester):
             'Nubbi dábáláš linnjá</text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(page_element)
 
         self.maxDiff = None
@@ -6039,7 +6007,7 @@ class TestPDF2XMLConverter(XMLTester):
             '– 1 – </text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
@@ -6057,7 +6025,7 @@ class TestPDF2XMLConverter(XMLTester):
             '<text top="708" left="104" width="328" height="18" font="1">f </text>'
             '</page>')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(page_element)
 
         self.assertXmlEqual(
@@ -6081,7 +6049,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</pdf2xml>')
         want = u'<body><p>1.</p><p>2.</p><p>3.</p></body>'
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
@@ -6103,7 +6071,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</pdf2xml>')
         want = u'<body><p>2.</p><p>3.</p></body>'
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.md.set_variable('skip_pages', '1')
         p2x.parse_pages(pdf2xml)
 
@@ -6134,7 +6102,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</pdf2xml>')
         want = u'<body><p>Dán barggus.</p></body>'
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
@@ -6164,7 +6132,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</pdf2xml>')
         want = u'<body><p>Dán ovddidan\xADbarggus.</p></body>'
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
@@ -6180,7 +6148,7 @@ class TestPDF2XMLConverter(XMLTester):
 </page></pdf2xml>''')
         want = u'''<body><p><em type="italic">vuođđooahpa\xADhussi. </em></p></body>'''
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
@@ -6204,7 +6172,7 @@ class TestPDF2XMLConverter(XMLTester):
 </page></pdf2xml>''')
         want = u'''<body><p>1.1. RIEKTEJOAVKKU MANDÁHTA JA ČOAHKÁDUS</p><p>1.1.1 Riektejoavkku nammadeami duogáš</p></body>'''
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
@@ -6224,7 +6192,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</pdf2xml>')
         want = u'<body><p>1.</p><p>2.</p></body>'
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
@@ -6244,7 +6212,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</pdf2xml>')
         want = u'<body><p>1!</p><p>2.</p></body>'
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
@@ -6264,7 +6232,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</pdf2xml>')
         want = u'<body><p>1?</p><p>2.</p></body>'
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
@@ -6284,7 +6252,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</pdf2xml>')
         want = u'<body><p>a b.</p></body>'
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
@@ -6301,7 +6269,7 @@ class TestPDF2XMLConverter(XMLTester):
             '</pdf2xml>')
         want = u'<body><p>bajásšaddandili</p></body>'
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
@@ -6319,7 +6287,7 @@ class TestPDF2XMLConverter(XMLTester):
         want = (u'''<body>
             <p type="listitem"> ahte buoridit unnitlogugielagiid oahpahusfálaldaga dási ja buoridit barggu, man olis ovddidit fátmmasteaddji, máŋggakultuvrralaš oahppansearvevuođaid mánáidgárdái ja vuođđooahpahussii.</p></body>''')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
@@ -6351,7 +6319,7 @@ class TestPDF2XMLConverter(XMLTester):
                 </p>
             </body>''')
 
-        p2x = converter.PDF2XMLConverter('bogus.xml')
+        p2x = converter.PDF2XMLConverter('orig/sme/riddu/bogus.xml')
         p2x.parse_pages(pdf2xml)
 
         self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
