@@ -197,10 +197,7 @@ def print_element(element, level, indent, out):
 
     if element.text is not None and element.text.strip() != '':
         out.write(' ' * ((level + 1) * indent))
-        if isinstance(element.text, six.text_type):
-            out.write(element.text.strip())
-        else:
-            out.write(element.text.strip())
+        out.write(element.text.strip())
         out.write('\n')
 
     for child in element:

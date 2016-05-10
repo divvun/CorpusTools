@@ -102,7 +102,7 @@ class Converter(object):
         dtd = etree.DTD(Converter.get_dtd_location())
 
         if not dtd.validate(complete):
-            with open(self.logfile, 'w') as logfile:
+            with codecs.open(self.logfile, 'w', encoding='utf8') as logfile:
                 logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
                 for entry in dtd.error_log:
                     logfile.write('\n')
