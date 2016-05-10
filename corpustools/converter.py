@@ -89,6 +89,14 @@ class Converter(object):
         '''The name of the logfile'''
         return self.orig + '.log'
 
+    @property
+    def standard(self):
+        return self.md.get_variable('conversion_status') == 'standard'
+
+    @property
+    def goldstandard(self):
+        return self.md.get_variable('conversion_status') == 'correct'
+
     def convert2intermediate(self):
         raise NotImplementedError(
             'You have to subclass and override convert2intermediate')
