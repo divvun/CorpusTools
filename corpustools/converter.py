@@ -240,7 +240,7 @@ class Converter(object):
                 complete = self.make_complete(languageguesser)
 
                 if self.has_content(complete):
-                    with open(self.converted_name, 'w') as converted:
+                    with open(self.converted_name, 'wb') as converted:
                         converted.write(etree.tostring(complete,
                                                        encoding='utf8',
                                                        pretty_print='True'))
