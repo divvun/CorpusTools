@@ -79,16 +79,16 @@ class TestAnalyser(unittest.TestCase):
             'Muhto gaskkohagaid, ja erenoamážit dalle go lei buolaš, '
             'de aggregáhta billánii. ¶\n')
 
-        self.assertEqual(got, want.encode('utf8'))
+        self.assertEqual(got, want)
 
     def test_sme_preprocess_output(self):
         """Test if the preprocess output is what we expect it to be"""
         got = self.a.preprocess()
         want = (
             'Muhto\ngaskkohagaid\n,\nja\nerenoamážit\ndalle go\nlei\n'
-            'buolaš\n,\nde\naggregáhta\nbillánii\n.\n¶\n')
+            'buolaš\n,\nde\naggregáhta\nbillánii\n.\n¶\n').encode('utf8')
 
-        self.assertEqual(got, want.encode('utf8'))
+        self.assertEqual(got, want)
 
     def test_sme_disambiguation_output(self):
         """Check if disambiguation analysis gives the expected output"""
@@ -105,9 +105,9 @@ class TestAnalyser(unittest.TestCase):
             '\t"," CLB\n"<de>"\n\t"de" Adv <sme>\n"<aggregáhta>"\n'
             '\t"aggregáhta" N <sme> Sg Nom\n"<billánii>"\n'
             '\t"billánit" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<.>"\n'
-            '\t"." CLB\n\n"<¶>"\n\t"¶" CLB\n\n')
+            '\t"." CLB\n\n"<¶>"\n\t"¶" CLB\n\n').encode('utf8')
 
-        self.assertEqual(got, want.encode('utf8'))
+        self.assertEqual(got, want)
 
     def test_sme_dependency_output(self):
         """Check if disambiguation analysis gives the expected output"""
@@ -125,9 +125,9 @@ class TestAnalyser(unittest.TestCase):
             '\t"de" Adv @ADVL> #10->12\n"<aggregáhta>"\n'
             '\t"aggregáhta" N Sg Nom @SUBJ> #11->12\n"<billánii>"\n'
             '\t"billánit" V IV Ind Prt Sg3 @FS-ADVL> #12->0\n"<.>"\n'
-            '\t"." CLB #13->12\n\n"<¶>"\n\t"¶" CLB #1->1\n\n')
+            '\t"." CLB #13->12\n\n"<¶>"\n\t"¶" CLB #1->1\n\n').encode('utf8')
 
-        self.assertEqual(got, want.encode('utf8'))
+        self.assertEqual(got, want)
 
     def test_analysisXml(self):
         """Check if the xml is what it is supposed to be"""

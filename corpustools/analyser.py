@@ -121,7 +121,7 @@ class Analyser(object):
 
         text = self.ccat()
         if text is not None:
-            return self.run_external_command(pre_process_command, text)
+            return self.run_external_command(pre_process_command, text.encode('utf8'))
 
     def lookup(self):
         """Runs lookup on the preprocess output

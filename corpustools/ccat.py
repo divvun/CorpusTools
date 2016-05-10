@@ -242,10 +242,10 @@ class XMLPrinter(object):
 
         if len(textlist) > 0:
             if not self.one_word_per_line:
-                buffer.write(' '.join(textlist).encode('utf8'))
+                buffer.write(' '.join(textlist))
                 buffer.write(' ¶\n')
             else:
-                buffer.write('\n'.join(textlist).encode('utf8'))
+                buffer.write('\n'.join(textlist))
                 buffer.write('\n')
 
     def get_contents(self, elt_contents, textlist, elt_lang):
