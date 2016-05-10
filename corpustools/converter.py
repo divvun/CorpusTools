@@ -2180,10 +2180,9 @@ class HTMLContentConverter(Converter):
 
 class HTMLConverter(HTMLContentConverter):
     def __init__(self, filename, write_intermediate=False):
-        with open(filename) as f:
-            super(HTMLConverter, self).__init__(filename,
-                                                write_intermediate,
-                                                content=f.read())
+        with codecs.open(filename, encoding='utf8', errors='ignore') as f:
+            super(HTMLConverter, self).__init__(
+                filename, write_intermediate, content=f.read())
 
 
 class RTFConverter(HTMLContentConverter):
