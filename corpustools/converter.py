@@ -1138,7 +1138,7 @@ class PDFPageMetadata(object):
         :return: an int telling where the margin is on the page.
         '''
         coefficient = self.get_coefficient(margin)
-        # print(util.lineno(), margin, page_height, page_width, coefficient, file=sys.stderr)
+        #util.print_frame(margin, self.page_height, self.page_width, coefficient)
 
         if margin == 'left_margin':
             return int(coefficient * self.page_width / 100.0)
