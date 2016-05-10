@@ -103,10 +103,10 @@ class Converter(object):
 
         if not dtd.validate(complete):
             with open(self.logfile, 'w') as logfile:
-                logfile.write('Error at: {}'.format(str(util.lineno())))
+                logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
                 for entry in dtd.error_log:
                     logfile.write('\n')
-                    logfile.write(str(entry))
+                    logfile.write(six.text_type(entry))
                     logfile.write('\n')
                 util.print_element(complete, 0, 4, logfile)
 
@@ -136,9 +136,9 @@ class Converter(object):
             return complete.getroot()
         except etree.XSLTApplyError as e:
             with open(self.logfile, 'w') as logfile:
-                logfile.write('Error at: {}'.format(str(util.lineno())))
+                logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
                 for entry in e.error_log:
-                    logfile.write(str(entry))
+                    logfile.write(six.text_type(entry))
                     logfile.write('\n')
 
             raise ConversionException("Check the syntax in: {}".format(
@@ -153,10 +153,10 @@ class Converter(object):
                     em.add_error_markup(element)
             except IndexError as e:
                 with open(self.logfile, 'w') as logfile:
-                    logfile.write('Error at: {}'.format(str(util.lineno())))
+                    logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
                     logfile.write("There is a markup error\n")
                     logfile.write("The error message: ")
-                    logfile.write(str(e))
+                    logfile.write(six.text_type(e))
                     logfile.write("\n\n")
                     logfile.write("This is the xml tree:\n")
                     logfile.write(etree.tostring(complete,
@@ -301,7 +301,7 @@ class Converter(object):
             logfile.write('Error at: {}'.format(lineno))
             for entry in e.error_log:
                 logfile.write('\n{}: {} '.format(
-                    str(entry.line), str(entry.column)))
+                    six.text_type(entry.line), six.text_type(entry.column)))
                 try:
                     logfile.write(entry.message)
                 except ValueError:
@@ -309,7 +309,7 @@ class Converter(object):
 
                 logfile.write('\n')
 
-            logfile.write(invalid_input)
+            logfile.write(six.text_type(invalid_input))
 
         raise ConversionException(
             "{}: log is found in {}".format(type(self).__name__, self.logfile))
@@ -736,7 +736,7 @@ class PDFTextElement(BoundingBox):
         for child in t:
             prev_t.append(child)
 
-        prev_t.set('width', str(self.width + other_box.width))
+        prev_t.set('width', six.text_type(self.width + other_box.width))
         if self.height < other_box.height:
             prev_t.set('height', six.text_type(other_box.height))
 
@@ -1154,8 +1154,8 @@ class PDFPageMetadata(object):
         coefficient = 7
         if margin in list(self.metadata_margins.keys()):
             m = self.metadata_margins[margin]
-            if m.get(str(self.page_number)) is not None:
-                coefficient = m[str(self.page_number)]
+            if m.get(six.text_type(self.page_number)) is not None:
+                coefficient = m[six.text_type(self.page_number)]
             elif m.get('all') is not None:
                 coefficient = m['all']
             elif self.page_number % 2 == 0 and m.get('even') is not None:
@@ -1202,8 +1202,8 @@ class PDFPageMetadata(object):
         coefficient = 0
         if margin in list(self.metadata_inner_margins.keys()):
             m = self.metadata_inner_margins[margin]
-            if m.get(str(self.page_number)) is not None:
-                coefficient = m[str(self.page_number)]
+            if m.get(six.text_type(self.page_number)) is not None:
+                coefficient = m[six.text_type(self.page_number)]
             elif m.get('all') is not None:
                 coefficient = m['all']
             elif self.page_number % 2 == 0 and m.get('even') is not None:
@@ -1250,7 +1250,7 @@ class PDFPage(object):
             prev_textelement = self.textelements[i - 1]
             textelement = self.textelements[i]
             if prev_textelement.bottom == textelement.top + 1:
-                prev_textelement.t.set('height', str(prev_textelement.height - 1))
+                prev_textelement.t.set('height', six.text_type(prev_textelement.height - 1))
 
     def remove_footnotes_superscript(self):
         '''Remove numbers from elements found by find_footnotes_superscript.'''
@@ -1374,7 +1374,7 @@ class PDF2XMLConverter(Converter):
 
         # Microsoft Word PDF's have Latin-1 file names in links; we
         # don't actually need any link attributes:
-        content = re.sub(r'<a [^>]+>', '<a>', content)
+        content = re.sub(u'<a [^>]+>', '<a>', content)
 
         return content
 
@@ -1650,7 +1650,7 @@ class HTMLContentConverter(Converter):
             except UnicodeDecodeError as e:
                 if source == 'xsl':
                     with open('{}.log'.format(self.orig), 'w') as f:
-                        print(util.lineno(), str(e), self.orig, file=f)
+                        print(util.lineno(), six.text_type(e), self.orig, file=f)
                     raise ConversionException(
                         'The text_encoding specified in {} lead to decoding '
                         'errors, please fix the XSL'.format(self.md.filename))
@@ -2165,10 +2165,10 @@ class HTMLContentConverter(Converter):
 
         if len(transform.error_log) > 0:
             with open(self.logfile, 'w') as logfile:
-                logfile.write('Error at: {}'.format(str(util.lineno())))
+                logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
                 for entry in transform.error_log:
                     logfile.write('\n{}: {} {}\n'.format(
-                        str(entry.line), str(entry.column),
+                        six.text_type(entry.line), six.text_type(entry.column),
                         entry.message.encode('utf8')))
                 util.print_element(self.soup, 0, 4, logfile)
 
@@ -2197,7 +2197,7 @@ class RTFConverter(HTMLContentConverter):
                     io.BytesIO(content.replace(b'fcharset256', b'fcharset255')))
                 HTMLContentConverter.__init__(
                     self, filename,
-                    content=str(XHTMLWriter.write(pyth_doc, pretty=True).read(), encoding='utf8'))
+                    content=six.text_type(XHTMLWriter.write(pyth_doc, pretty=True).read(), encoding='utf8'))
             except UnicodeDecodeError:
                 raise ConversionException('Unicode problems in {}'.format(
                     self.orig))
@@ -2675,7 +2675,7 @@ class DocumentFixer(object):
         plist = [etree.tostring(paragraph, method='text', encoding='unicode')
                  for paragraph in self.root.iter('p')]
 
-        return str(len(re.findall(u'\S+', ' '.join(plist))))
+        return six.text_type(len(re.findall(u'\S+', ' '.join(plist))))
 
     def set_word_count(self):
         '''Set the wordcount element'''
@@ -2891,9 +2891,9 @@ class XslMaker(object):
             filexsl = etree.parse(self.filename)
         except etree.XMLSyntaxError as e:
             with open(self.logfile, 'w') as logfile:
-                logfile.write('Error at: {}'.format(str(util.lineno())))
+                logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
                 for entry in e.error_log:
-                    logfile.write('{}\n'.format(str(entry)))
+                    logfile.write('{}\n'.format(six.text_type(entry)))
 
             raise ConversionException(
                 '{}: Syntax error. More info in {}'.format(type(self).__name__,
@@ -2917,10 +2917,10 @@ class XslMaker(object):
         except etree.XSLTParseError as xxx_todo_changeme:
             (e) = xxx_todo_changeme
             with open(self.logfile, 'w') as logfile:
-                logfile.write('Error at: {}\n'.format(str(util.lineno())))
+                logfile.write('Error at: {}\n'.format(six.text_type(util.lineno())))
                 logfile.write('Invalid XML in {}\n'.format(self.filename))
                 for entry in e.error_log:
-                    logfile.write('{}\n'.format(str(entry)))
+                    logfile.write('{}\n'.format(six.text_type(entry)))
 
             raise ConversionException(
                 '{}: Invalid XML in {}. More info in {}'.format(
@@ -3024,7 +3024,7 @@ class ConverterManager(object):
         except ConversionException as e:
             print('Could not convert {}'.format(orig_file),
                     file=sys.stderr)
-            print(str(e), file=sys.stderr)
+            print(six.text_type(e), file=sys.stderr)
 
     def converter(self, orig_file):
         if 'avvir_xml' in orig_file:
