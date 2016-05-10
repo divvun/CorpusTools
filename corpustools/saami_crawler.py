@@ -31,7 +31,7 @@ import re
 import requests
 import shutil
 import sys
-import urlparse
+from six.moves.urllib import parse
 
 from . import adder
 from . import argparse_version
@@ -201,7 +201,7 @@ class SamediggiFiCrawler(Crawler):
 
         if print_img is not None:
             parent = print_img.getparent()
-            href = urlparse.urlparse(parent.get('href'))
+            href = parse.urlparse(parent.get('href'))
 
             query = href.query
             newquery = [part for part in query.split('&')
@@ -283,7 +283,7 @@ class SamediggiFiCrawler(Crawler):
 class SamediggiNoPage(object):
     def __init__(self, url):
         r = requests.get(url)
-        self.parsed_url = urlparse.urlparse(r.url)
+        self.parsed_url = parse.urlparse(r.url)
         self.tree = lxml.html.document_fromstring(r.content)
 
         self.ok_netlocs = ['www.sametinget.no',
@@ -298,7 +298,7 @@ class SamediggiNoPage(object):
 
     @property
     def parallel_links(self):
-        return [urlparse.urlunparse((self.parsed_url.scheme,
+        return [parse.urlunparse((self.parsed_url.scheme,
                                      self.parsed_url.netloc,
                                      a.get('href'), '', '', ''))
                 for a in self.tree.xpath('.//ul[@id="languageList"]/li/a[@href]')]
@@ -310,7 +310,7 @@ class SamediggiNoPage(object):
         if print_link is not None:
             url = print_link.get('href')
 
-            return urlparse.urlunparse((
+            return parse.urlunparse((
                 self.parsed_url.scheme,
                 self.parsed_url.netloc,
                 url, '', '', ''))
@@ -343,7 +343,7 @@ class SamediggiNoPage(object):
                     '/Dahpahusat|javascript|tel:',
                     href):
                     if href.startswith('/'):
-                        href = urlparse.urlunparse(
+                        href = parse.urlunparse(
                             (self.parsed_url.scheme,
                              self.parsed_url.netloc,
                              href, '', '', ''))
@@ -355,7 +355,7 @@ class SamediggiNoPage(object):
                             links.add(href)
 
                     if not add:
-                        util.print_frame(debug=href.encode('utf8') + '\n')
+                        util.print_frame(debug=href + '\n')
 
         return links
 

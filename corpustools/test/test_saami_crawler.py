@@ -22,6 +22,7 @@ from __future__ import print_function
 
 from __future__ import absolute_import
 import lxml.etree as etree
+import six
 import sys
 import requests_mock
 import unittest
@@ -954,6 +955,8 @@ På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
 </html>
             '''
         )
+        if six.PY3:
+            self.content = self.content.encode('utf8')
 
     def test_url(self):
         with requests_mock.Mocker() as m:
