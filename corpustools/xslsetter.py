@@ -20,16 +20,13 @@
 
 from __future__ import print_function
 from __future__ import unicode_literals
-
 from __future__ import absolute_import
+from corpustools import util
 import lxml.etree as etree
 import os
+import six
 import sys
 
-from . import util
-import six
-from six.moves import map
-from six.moves import range
 
 here = os.path.dirname(__file__)
 
@@ -70,8 +67,9 @@ class MetadataHandler(object):
             variable = self._get_variable_elt(key)
             variable.attrib['select'] = "'{}'".format(value)
         except AttributeError as e:
-            raise UserWarning('Tried to update {} with value {}\n'
-                  'Error was {}'.format(key, value, str(e)).encode('utf-8'))
+            raise UserWarning(
+                'Tried to update {} with value {}\n'
+                'Error was {}'.format(key, value, str(e)))
 
     def get_variable(self, key):
         variable = self._get_variable_elt(key)
@@ -133,13 +131,13 @@ class MetadataHandler(object):
                                 for r in skip_pages.strip().split(",")
                                 if r != "")
 
-            skip_ranges = (tuple(map(int, r.split('-')))
+            skip_ranges = (tuple(six.moves.map(int, r.split('-')))
                            for r in skip_ranges_norm)
 
             try:
                 pages.extend([page
                               for start, end in sorted(skip_ranges)
-                              for page in range(start, end + 1)])
+                              for page in six.moves.range(start, end + 1)])
 
             except ValueError:
                 raise XsltException(
@@ -197,10 +195,13 @@ class MetadataHandler(object):
                         'Invalid format in {}:\nboth '
                         'inner_right_margin and inner_left_margin must '
                         'be set'.format(self.filename))
-                if sorted(_inner_margins['inner_left_margin']) != sorted(_inner_margins['inner_right_margin']):
+                if sorted(_inner_margins['inner_left_margin']) != \
+                        sorted(_inner_margins['inner_right_margin']):
                     raise XsltException(
                         'Invalid format in {}:\nboth '
-                        'margins for the same pages must be set in inner_right_margin and inner_left_margin'.format(self.filename))
+                        'margins for the same pages must be set in '
+                        'inner_right_margin and inner_left_margin'.format(
+                            self.filename))
             if key == 'inner_right_margin' and 'inner_left_margin' not in keys:
                 raise XsltException(
                     'Invalid format in {}:\nboth inner_right_margin '
@@ -211,10 +212,13 @@ class MetadataHandler(object):
                         'Invalid format in {}:\nboth '
                         'inner_bottom_margin and inner_top_margin must '
                         'be set'.format(self.filename))
-                if sorted(_inner_margins['inner_bottom_margin']) != sorted(_inner_margins['inner_top_margin']):
+                if sorted(_inner_margins['inner_bottom_margin']) != \
+                        sorted(_inner_margins['inner_top_margin']):
                     raise XsltException(
                         'Invalid format in {}:\n'
-                        'margins for the same pages must be set in inner_top_margin and inner_bottom_margin'.format(self.filename))
+                        'margins for the same pages must be set in '
+                        'inner_top_margin and inner_bottom_margin'.format(
+                            self.filename))
             if key == 'inner_top_margin' and 'inner_bottom_margin' not in keys:
                 raise XsltException(
                     'Invalid format in {}:\nboth inner_bottom_margin '
