@@ -63,6 +63,104 @@ class ConversionException(Exception):
     pass
 
 
+class CorpusPath(object):
+    '''Map filenames in a corpus
+
+    Args:
+        path: path to a corpus file
+    '''
+    def __init__(self, path):
+        self.pathcomponents = self.split_path(path)
+        self.md = xslsetter.MetadataHandler(self.xsl, create=True)
+
+    def split_path(self, path):
+        '''Map path to the original file
+
+        Args:
+            path: a path to a corpus file
+
+        Returns:
+            A PathComponents namedtuple containing the components of the
+            original file
+
+        Raises:
+            ValueError: the path is not part of a corpus.
+        '''
+        def split_on_module(p):
+            for module in [u'goldstandard/orig', u'prestable/converted',
+                           u'prestable/toktmx', u'prestable/tmx', u'orig',
+                           u'converted', u'stable', u'toktmx', u'tmx']:
+                d = u'/' + module + u'/'
+                if d in p:
+                    root, rest = p.split(d)
+                    return root, module, rest
+
+        # Ensure we have at least one / before module, for safer splitting:
+        abspath = os.path.normpath(os.path.abspath(path))
+        root, module, lang_etc = split_on_module(abspath)
+
+        if not len(module):
+            raise ValueError('File is not part of a corpus: {}'.format(path))
+
+        l = lang_etc.split('/')
+        lang, genre, subdirs, basename = l[0], l[1], l[2:-1], l[-1]
+
+        if 'orig' in module:
+            if basename.endswith('.xsl'):
+                basename = util.basename_noext(basename, '.xsl')
+            elif basename.endswith('.log'):
+                basename = util.basename_noext(basename, '.log')
+        elif 'converted' in module or 'analysed' in module:
+            basename = util.basename_noext(basename, '.xml')
+        elif 'toktmx' in module:
+            basename = util.basename_noext(basename, '.toktmx')
+        elif 'tmx' in module:
+            basename = util.basename_noext(basename, '.tmx')
+
+        return util.PathComponents(root, 'orig', lang, genre,
+                                   '/'.join(subdirs), basename)
+
+    @property
+    def orig(self):
+        return os.path.join(*list(self.pathcomponents))
+
+    @property
+    def xsl(self):
+        return self.orig + '.xsl'
+
+    @property
+    def log(self):
+        return self.orig + '.log'
+
+    def name(self, module, extension):
+        return os.path.join(self.pathcomponents.root,
+                            module,
+                            self.pathcomponents.lang,
+                            self.pathcomponents.genre,
+                            self.pathcomponents.subdirs,
+                            self.pathcomponents.basename + extension)
+
+    @property
+    def converted(self):
+        module = 'converted'
+        if self.md.get_variable('conversion_status') == 'correct':
+            module = 'goldstandard/converted'
+
+        return self.name(module, '.xml')
+
+    @property
+    def prestable_converted(self):
+        module = 'prestable/converted'
+        if self.md.get_variable('conversion_status') == 'correct':
+            module = 'prestable/goldstandard/converted'
+
+        return self.name(module, '.xml')
+
+    @property
+    def analysed(self):
+        return self.name('analysed', '.xml')
+
+
 class Converter(object):
 
     '''Take care of data common to all Converter classes'''

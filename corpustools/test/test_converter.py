@@ -54,6 +54,121 @@ class XMLTester(unittest.TestCase):
             raise AssertionError(message)
 
 
+path_to_corpuspath = {
+    'orig_to_orig': {
+        'in_name': os.path.join(
+            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
+        'want_name': os.path.join(
+            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
+    },
+    'xsl_to_orig': {
+        'in_name': os.path.join(
+            here, 'orig/sme/admin/subdir/subsubdir/filename.html.xsl'),
+        'want_name': os.path.join(
+            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
+    },
+    'log_to_orig': {
+        'in_name': os.path.join(
+            here, 'orig/sme/admin/subdir/subsubdir/filename.html.log'),
+        'want_name': os.path.join(
+            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
+    },
+    'converted_to_orig': {
+        'in_name': os.path.join(
+            here, 'converted/sme/admin/subdir/subsubdir/filename.html.xml'),
+        'want_name': os.path.join(
+            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
+    },
+    'prestable_converted_to_orig': {
+        'in_name': os.path.join(
+            here, 'prestable/converted/sme/admin/subdir/subsubdir/filename.html.xml'),
+        'want_name': os.path.join(
+            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
+    },
+    'analysed_to_orig': {
+        'in_name': os.path.join(
+            here, 'converted/sme/admin/subdir/subsubdir/filename.html.xml'),
+        'want_name': os.path.join(
+            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
+    },
+    'toktmx_to_orig': {
+        'in_name': os.path.join(
+            here, 'toktmx/sme/admin/subdir/subsubdir/filename.html.toktmx'),
+        'want_name': os.path.join(
+            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
+    },
+    'prestable_toktmx_to_orig': {
+        'in_name': os.path.join(
+            here, 'prestable/toktmx/sme/admin/subdir/subsubdir/filename.html.toktmx'),
+        'want_name': os.path.join(
+            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
+    },
+    'tmx_to_orig': {
+        'in_name': os.path.join(
+            here, 'tmx/sme/admin/subdir/subsubdir/filename.html.tmx'),
+        'want_name': os.path.join(
+            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
+    },
+    'prestable_tmx_to_orig': {
+        'in_name': os.path.join(
+            here, 'prestable/tmx/sme/admin/subdir/subsubdir/filename.html.tmx'),
+        'want_name': os.path.join(
+            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
+    },
+}
+
+
+def test_path_to_corpuspath():
+    for testname, testcontent in six.iteritems(path_to_corpuspath):
+        yield check_names_to_corpuspath, testname, testcontent
+
+
+def check_names_to_corpuspath(testname, testcontent):
+    cp = converter.CorpusPath(testcontent['in_name'])
+
+    if cp.orig != testcontent['want_name']:
+        raise AssertionError('{}:\nexpected {}\ngot {}'.format(
+            testname, testcontent['want_name'], cp.orig))
+
+
+class TestComputeCorpusnames(unittest.TestCase):
+    def name(self, module):
+        return os.path.join(here, module, 'sme/admin/subdir/subsubdir/filename.html')
+
+    def setUp(self):
+        self.cp = converter.CorpusPath(self.name('orig'))
+
+    def test_compute_orig(self):
+        self.assertEqual(
+            self.cp.orig, self.name('orig'))
+
+    def test_compute_xsl(self):
+        self.assertEqual(self.cp.xsl, self.name('orig') + '.xsl')
+
+    def test_compute_log(self):
+        self.assertEqual(self.cp.log, self.name('orig') + '.log')
+
+    def test_compute_converted(self):
+        self.assertEqual(self.cp.converted, self.name('converted') + '.xml')
+
+    def test_compute_prestable_converted(self):
+        self.assertEqual(self.cp.prestable_converted,
+                         self.name('prestable/converted') + '.xml')
+
+    def test_compute_goldstandard_converted(self):
+        self.cp.md.set_variable('conversion_status', 'correct')
+        self.assertEqual(self.cp.converted,
+                         self.name('goldstandard/converted') + '.xml')
+
+    def test_compute_prestable_goldstandard_converted(self):
+        self.cp.md.set_variable('conversion_status', 'correct')
+        self.assertEqual(self.cp.prestable_converted,
+                         self.name('prestable/goldstandard/converted') + '.xml')
+
+    def test_compute_analysed(self):
+        self.assertEqual(self.cp.analysed, self.name('analysed') + '.xml')
+
+
 class TestConverter(XMLTester):
     def setUp(self):
         self.converter_inside_orig = converter.Converter(
