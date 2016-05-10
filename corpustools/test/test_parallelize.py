@@ -22,10 +22,12 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from __future__ import absolute_import
+import codecs
 import doctest
 from lxml import doctestcompare
 from lxml import etree
 import os
+import six
 import tempfile
 import unittest
 
@@ -50,10 +52,14 @@ class TestCorpusXMLFile(unittest.TestCase):
 
     def assertXmlEqual(self, got, want):
         """Check if two stringified xml snippets are equal"""
+        string_got = etree.tostring(got, encoding='unicode')
+        string_want = etree.tostring(want, encoding='unicode')
+
         checker = doctestcompare.LXMLOutputChecker()
-        if not checker.check_output(want, got, 0):
+        if not checker.check_output(string_want, string_got, 0):
             message = checker.output_difference(
-                doctest.Example("", want), got, 0).encode('utf-8')
+                doctest.Example("", string_want),
+                string_got, 0)
             raise AssertionError(message)
 
     def test_basename(self):
@@ -117,8 +123,8 @@ class TestCorpusXMLFile(unittest.TestCase):
 
         file_with_version.remove_version()
 
-        got = etree.tostring(file_without_version.get_etree())
-        want = etree.tostring(file_with_version.get_etree())
+        got = file_without_version.get_etree()
+        want = file_with_version.get_etree()
 
         self.assertXmlEqual(got, want)
 
@@ -134,8 +140,8 @@ class TestCorpusXMLFile(unittest.TestCase):
 
         file_with_skip.remove_skip()
 
-        got = etree.tostring(file_without_skip.get_etree())
-        want = etree.tostring(file_with_skip.get_etree())
+        got = file_without_skip.get_etree()
+        want = file_with_skip.get_etree()
 
         self.assertXmlEqual(got, want)
 
@@ -150,8 +156,8 @@ class TestCorpusXMLFile(unittest.TestCase):
                 'parallelize_data/aarseth2-s-with-moved-later.htm.xml'))
 
         file_with_later.move_later()
-        got = etree.tostring(file_with_moved_later.get_etree())
-        want = etree.tostring(file_with_later.get_etree())
+        got = file_with_moved_later.get_etree()
+        want = file_with_later.get_etree()
         self.assertXmlEqual(got, want)
 
 
@@ -167,14 +173,14 @@ class TestSentenceDivider(unittest.TestCase):
 
     def assertXmlEqual(self, got, want):
         """Check if two xml snippets are equal"""
-        string_got = etree.tostring(got, pretty_print=True)
-        string_want = etree.tostring(want, pretty_print=True)
+        string_got = etree.tostring(got, encoding='unicode')
+        string_want = etree.tostring(want, encoding='unicode')
 
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(string_want, string_got, 0):
             message = checker.output_difference(
                 doctest.Example("", string_want),
-                string_got, 0).encode('utf-8')
+                string_got, 0)
             raise AssertionError(message)
 
     def test_constructor(self):
@@ -521,14 +527,14 @@ class TestTmx(unittest.TestCase):
 
     def assertXmlEqual(self, got, want):
         """Check if two xml snippets are equal"""
-        string_got = etree.tostring(got, pretty_print=True)
-        string_want = etree.tostring(want, pretty_print=True)
+        string_got = etree.tostring(got, encoding='unicode')
+        string_want = etree.tostring(want, encoding='unicode')
 
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(string_want, string_got, 0):
             message = checker.output_difference(
                 doctest.Example("", string_want),
-                string_got, 0).encode('utf-8')
+                string_got, 0)
             raise AssertionError(message)
 
     def test_get_src_lang(self):
@@ -551,8 +557,8 @@ class TestTmx(unittest.TestCase):
         toktmx_txt_name = os.path.join(
             here,
             'parallelize_data/aarseth2-n.htm.toktmx.as.txt')
-        with open(toktmx_txt_name, 'r') as toktmx_txt:
-            string_list = toktmx_txt.read().decode('utf-8').split('\n')
+        with codecs.open(toktmx_txt_name, encoding='utf8') as toktmx_txt:
+            string_list = toktmx_txt.read().split('\n')
 
             nob_list = []
             sme_list = []
@@ -569,8 +575,8 @@ class TestTmx(unittest.TestCase):
         toktmx_txt_name = os.path.join(
             here,
             'parallelize_data/aarseth2-n.htm.toktmx.as.txt')
-        with open(toktmx_txt_name, 'r') as toktmx_txt:
-            want_list = [l.decode('utf-8')
+        with codecs.open(toktmx_txt_name, encoding='utf8') as toktmx_txt:
+            want_list = [l
                          for l in toktmx_txt.readlines()]
             # self.maxDiff = None
             self.assertEqual(self.tmx.tmx_to_stringlist(), want_list)
@@ -675,14 +681,14 @@ class TestTca2ToTmx(unittest.TestCase):
 
     def assertXmlEqual(self, got, want):
         """Check if two xml snippets are equal"""
-        string_got = etree.tostring(got, pretty_print=True)
-        string_want = etree.tostring(want, pretty_print=True)
+        string_got = etree.tostring(got, encoding='unicode')
+        string_want = etree.tostring(want, encoding='unicode')
 
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(string_want, string_got, 0):
             message = checker.output_difference(
                 doctest.Example("", string_want),
-                string_got, 0).encode('utf-8')
+                string_got, 0)
             raise AssertionError(message)
 
     def test_make_tu(self):

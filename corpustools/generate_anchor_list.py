@@ -26,6 +26,7 @@ from __future__ import unicode_literals
 
 from __future__ import absolute_import
 import argparse
+import codecs
 import sys
 
 from corpustools import argparse_version
@@ -59,8 +60,8 @@ class GenerateAnchorList(object):
 
     def read_anchors(self, quiet=False):
         """List of word-pairs in infiles, empty/bad lines skipped."""
-        with open(self.path) as f:
-            out = [self.words_of_line(i, l.decode('utf-8'))
+        with codecs.open(self.path, encoding='utf8') as f:
+            out = [self.words_of_line(i, l)
                    for i, l in enumerate(f.readlines())]
             out = [_f for _f in out if _f]
             if not quiet:
@@ -72,12 +73,13 @@ class GenerateAnchorList(object):
         '''infiles is a list of file paths'''
         anchors = self.read_anchors(quiet)
 
-        with open(outpath, 'wb') as outfile:
+        with codecs.open(outpath, 'w', encoding='utf8') as outfile:
             if not quiet:
                 util.note('Generating anchor word list to {}'.format(outpath))
-            out = "\n".join("{} / {}".format(w1, w2)
+            out = u"\n".join(u"{} / {}".format(w1, w2)
                             for w1, w2 in anchors)
-            print(out.encode('utf-8'), file=outfile)
+            outfile.write(out)
+            outfile.write('\n')
 
 
 def parse_options():

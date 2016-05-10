@@ -26,6 +26,7 @@ from __future__ import unicode_literals
 
 from __future__ import absolute_import
 import argparse
+import codecs
 import errno
 from lxml import etree
 import os
@@ -258,11 +259,11 @@ class SentenceDivider(object):
         o_rel_path = o_path.replace(os.getcwd() + '/', '', 1)
         with util.ignored(OSError):
             os.makedirs(o_rel_path)
-        with open(outfile, 'w') as sentence_file:
+        with open(outfile, 'wb') as sentence_file:
             et = etree.ElementTree(self.document)
             et.write(sentence_file,
                      pretty_print=True,
-                     encoding="utf-8",
+                     encoding='utf8',
                      xml_declaration=True)
 
     def preprocess_para_texts(self, para_texts):
@@ -544,11 +545,11 @@ class ParallelizeHunalign(Parallelize):
         def tmp():
             return tempfile.NamedTemporaryFile('w')
         with tmp() as dict_f, tmp() as sent0_f, tmp() as sent1_f:
-            dict_f.write(self.make_dict().encode('utf-8'))
+            dict_f.write(self.make_dict())
             sent0_f.write(self.to_sents(
-                self.get_origfiles()[0]).encode('utf-8'))
+                self.get_origfiles()[0]))
             sent1_f.write(self.to_sents(
-                self.get_origfiles()[1]).encode('utf-8'))
+                self.get_origfiles()[1]))
             dict_f.flush()
             sent0_f.flush()
             sent1_f.flush()
@@ -970,9 +971,9 @@ class Tca2ToTmx(AlignmentToTmx):
         """
         sentfile_name = sentfile.replace('.xml', '_new.txt')
 
-        with open(sentfile_name, "r") as tca2_output:
+        with codecs.open(sentfile_name, encoding='utf8') as tca2_output:
             return list(map(self.remove_s_tag,
-                       tca2_output.read().decode('utf-8').split('\n')))
+                       tca2_output.read().split('\n')))
 
     def remove_s_tag(self, line):
         """Remove the s tags that tca2 has added"""
