@@ -309,7 +309,10 @@ class Converter(object):
 
                 logfile.write('\n')
 
-            logfile.write(six.text_type(invalid_input))
+            if six.PY3:
+                logfile.write(invalid_input)
+            else:
+                logfile.write(invalid_input.encode('utf8'))
 
         raise ConversionException(
             "{}: log is found in {}".format(type(self).__name__, self.logfile))
