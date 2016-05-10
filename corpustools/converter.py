@@ -3111,7 +3111,13 @@ class ConverterManager(object):
     def add_file(self, xsl_file):
         '''Add file for conversion'''
         if os.path.isfile(xsl_file) and os.path.isfile(xsl_file[:-4]):
-            self.FILES.append(xsl_file[:-4])
+            md = xslsetter.MetadataHandler(xsl_file)
+            if (
+                (md.get_variable('conversion_status') == 'standard' and
+                 not self.goldstandard) or (
+                     md.get_variable('conversion_status') == 'correct' and
+                     self.goldstandard)):
+                self.FILES.append(xsl_file[:-4])
         else:
             print('{} does not exist'.format(xsl_file[:-4]), file=sys.stderr)
 
