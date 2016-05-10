@@ -58,7 +58,10 @@ def print_frame(debug='', *args):
     frame = callerframerecord[0]
     info = inspect.getframeinfo(frame)
 
-    print(info.lineno, info.function, debug, args, file=sys.stderr)
+    print(info.lineno, info.function, debug, file=sys.stderr, end=' ')
+    for arg in args:
+        print(arg, file=sys.stderr, end=' ')
+    print(file=sys.stderr)
 
 
 def basename_noext(fname, ext):
