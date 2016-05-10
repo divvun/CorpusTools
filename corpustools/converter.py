@@ -1615,7 +1615,10 @@ class HTMLContentConverter(Converter):
 
         decoded = self.to_unicode(content)
         semiclean = self.remove_cruft(decoded)
-        superclean = cleaner.clean_html(semiclean)
+        try:
+            superclean = cleaner.clean_html(semiclean)
+        except etree.ParserError as e:
+            raise ConversionException(six.text_type(e))
 
         self.soup = html5parser.document_fromstring(superclean)
         self.convert2xhtml()
