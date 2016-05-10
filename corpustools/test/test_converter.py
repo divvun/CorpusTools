@@ -2130,12 +2130,13 @@ NSR ii áiggo.</p>
         self.assertXmlEqual(got, want)
 
     def test_tekst_6(self):
-        document_fixer = converter.DocumentFixer(etree.fromstring(u'''<document>
-    <header/>
-    <body>
-        <p>Ê@tekst:ii</p>
-    </body>
-</document>'''))
+        document_fixer = converter.DocumentFixer(etree.fromstring(
+            '<document>'
+            '   <header/>'
+            '   <body>'
+            '       <p>Ê@tekst:ii</p>'
+            '   </body>'
+            '</document>'))
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
