@@ -37,6 +37,7 @@ from __future__ import unicode_literals
 
 from __future__ import absolute_import
 import argparse
+import codecs
 import glob
 import gzip
 import os
@@ -100,14 +101,14 @@ class NGramModel(object):
         freq = {}
         for nl, strline in enumerate(fil.readlines()):
             line = strline.strip()
-            if line == "":
+            if line == u"":
                 continue
             parts = line.split()
             if len(parts) != 2:
                 raise ValueError("%s:%d invalid line, was split to %s"
                                  % (fname, nl + 1, parts))
             try:
-                g = six.u(parts[gram_column])
+                g = parts[gram_column]
                 f = int(parts[freq_column])
                 freq[g] = f
             except ValueError as e:
@@ -293,7 +294,7 @@ class Classifier(object):
         for fname in fnames:
             lang = util.basename_noext(fname, ext)
             self.cmodels[lang] = CharModel(lang).of_model_file(
-                open(fname, 'r'), fname)
+                codecs.open(fname, 'r', encoding='utf8'), fname)
             if verbose:
                 util.note("Loaded %s" % (fname,))
 
@@ -301,7 +302,7 @@ class Classifier(object):
             # fname_wmgz = os.path.join(folder, lang+'.wm.gz')
             if os.path.exists(fname_wm):
                 self.wmodels[lang] = WordModel(lang).of_model_file(
-                    open(fname_wm, 'r'), fname_wm)
+                    codecs.open(fname_wm, 'r', encoding='utf8'), fname_wm)
                 if verbose:
                     util.note("Loaded %s" % (fname_wm,))
             else:
@@ -401,12 +402,12 @@ class FolderTrainer(object):
         if fname.endswith('.gz'):
             return gzip.open(fname, 'rb')
         else:
-            return open(fname, 'r')
+            return codecs.open(fname, 'r', encoding='utf8')
 
     def save(self, folder, ext='.lm', verbose=False):
         for lang, model in six.iteritems(self.models):
             fname = os.path.join(folder, lang + ext)
-            model.to_model_file(open(fname, 'w'))
+            model.to_model_file(codecs.open(fname, 'w', encoding='utf8'))
         if verbose and len(self.models) != 0:
             util.note("Wrote {%s}%s" % (",".join(list(self.models.keys())), ext))
 
