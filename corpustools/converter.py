@@ -2214,8 +2214,11 @@ class OdfConverter(HTMLContentConverter):
         generatecss = False
         embedable = True
         odhandler = ODF2XHTML(generatecss, embedable)
-        HTMLContentConverter.__init__(self, filename,
-                                      content=odhandler.odf2xhtml(six.text_type(filename)))
+        try:
+            HTMLContentConverter.__init__(self, filename,
+                                        content=odhandler.odf2xhtml(filename))
+        except TypeError as e:
+            raise ConversionException('Error: {}'.format(e))
 
 
 class DocxConverter(HTMLContentConverter):
