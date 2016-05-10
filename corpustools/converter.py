@@ -281,7 +281,7 @@ class Converter(object):
 
         :command: a list containing the command and the arguments sent to
         ExternalCommandRunner.
-        :returns: a utf-8 encoded string containing the content of the document
+        :returns: byte string containing the output of the program
         '''
         runner = util.ExternalCommandRunner()
         runner.run(command, cwd=self.tmpdir)
@@ -294,10 +294,7 @@ class Converter(object):
                     '{} failed. More info in the log file: {}'.format(
                         command[0], self.logfile))
 
-        try:
-            return runner.stdout.decode('utf8')
-        except UnicodeDecodeError:
-            return runner.stdout.decode('windows-1252')
+        return runner.stdout
 
     def handle_syntaxerror(self, e, lineno, invalid_input):
         with open(self.logfile, 'w') as logfile:
@@ -1419,11 +1416,12 @@ class PDF2XMLConverter(Converter):
 
         command = ['pdftohtml', '-hidden', '-enc', 'UTF-8', '-stdout',
                    '-nodrm', '-i', '-xml', self.orig]
+        pdftohtmloutput = self.extract_text(command)
         pdf_content = self.replace_ligatures(self.strip_chars(
-            self.extract_text(command))).encode('utf8')
+            pdftohtmloutput.decode('utf8', 'ignore')))
 
         try:
-            root_element = etree.fromstring(pdf_content)
+            root_element = etree.fromstring(pdf_content.encode('utf8'))
         except etree.XMLSyntaxError as e:
             self.handle_syntaxerror(e, util.lineno(),
                                     pdf_content)
@@ -2255,9 +2253,13 @@ class DocConverter(HTMLContentConverter):
         command = ['wvHtml',
                    os.path.realpath(self.orig),
                    '-']
-        HTMLContentConverter.__init__(self, filename,
-                                      content=self.extract_text(command))
-
+        try:
+            HTMLContentConverter.__init__(self, filename,
+                                          content=self.extract_text(command).decode('utf8'))
+        except:
+            HTMLContentConverter.__init__(self, filename,
+                                          content=self.extract_text(command).decode(
+                                              'windows-1252'))
     def fix_wv_output(self):
         '''Examples of headings
 
