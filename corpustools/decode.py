@@ -107,7 +107,7 @@ CTYPES = {
     # and freecorpus/orig/sme/admin/guovda/KS_02.12.99.doc
     u"winsami2_to_cp1252": {
         u"á": u"á",
-        unichr(154): u"š",
+        six.unichr(154): u"š",
         u"š": u"š",
         u"„": u"č",
         u"˜": u"đ",

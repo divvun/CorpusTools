@@ -27,7 +27,7 @@ from __future__ import absolute_import
 import argparse
 from lxml import etree
 import os
-import StringIO
+from io import StringIO
 import sys
 
 from . import argparse_version

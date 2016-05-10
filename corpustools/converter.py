@@ -774,8 +774,8 @@ class PDFParagraph(object):
         u'•',  # U+2022: BULLET
         u'–',  # U+2013: EN DASH
         u'\-',  # U+00AD: HYPHEN-MINUS
-        unichr(61623),  # U+F0B7
-        unichr(61553),  # U+F071
+        six.unichr(61623),  # U+F0B7
+        six.unichr(61553),  # U+F071
     ]
     LIST_RE = re.compile(u'^[{}]\s'.format(u''.join(LIST_CHARS)))
 
