@@ -126,7 +126,7 @@ class CorpusFileMover(object):
             newdir = os.path.dirname(newpath)
             with util.ignored(OSError):
                 os.makedirs(newdir)
-            self.vcs.move(oldpath.encode('utf8'), newpath.encode('utf8'))
+            self.vcs.move(oldpath, newpath)
 
     def move_orig(self):
         '''Move the original file'''
@@ -216,7 +216,7 @@ class CorpusFileRemover(object):
 
     def _remove(self, oldpath):
         if os.path.exists(oldpath):
-            self.vcs.remove(oldpath.encode('utf8'))
+            self.vcs.remove(oldpath)
 
     def remove_orig(self):
         '''Remove the original file'''

@@ -123,24 +123,24 @@ class TestAreDuplicates(unittest.TestCase):
     def test_are_duplicate_equal_files(self):
         '''Both files exist, with same content, return True'''
         self.assertTrue(namechanger.are_duplicates(
-            os.path.join(self.tempdir.path, 'old_dupe.txt'),
-            os.path.join(self.tempdir.path, 'new_dupe.txt')))
+            six.text_type(os.path.join(self.tempdir.path, 'old_dupe.txt')),
+            six.text_type(os.path.join(self.tempdir.path, 'new_dupe.txt'))))
 
     def test_are_duplicate_unequal_files(self):
         '''Both files exist, not same content, return False'''
         self.assertFalse(namechanger.are_duplicates(
-            os.path.join(self.tempdir.path, 'old_dupe.txt'),
-            os.path.join(self.tempdir.path, 'new_none_dupe.txt')))
+            six.text_type(os.path.join(self.tempdir.path, 'old_dupe.txt')),
+            six.text_type(os.path.join(self.tempdir.path, 'new_none_dupe.txt'))))
 
 
 class TestComputeNewBasename(unittest.TestCase):
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory()
         self.tempdir.makedir('orig/sme/admin/other_files')
-        self.tempdir.write('orig/sme/admin/other_files/old_dupe.txt', bytes('a', 'utf8'))
-        self.tempdir.write('orig/sme/admin/other_files/new_dupe.txt', bytes('a', 'utf8'))
-        self.tempdir.write('orig/sme/admin/other_files/new_none_dupe.txt', bytes('b', 'utf8'))
-        self.tempdir.write('orig/sme/admin/other_files/new_none_düpe.txt', bytes('a', 'utf8'))
+        self.tempdir.write('orig/sme/admin/other_files/old_dupe.txt', six.b('a'))
+        self.tempdir.write('orig/sme/admin/other_files/new_dupe.txt', six.b('a'))
+        self.tempdir.write('orig/sme/admin/other_files/new_none_dupe.txt', six.b('b'))
+        self.tempdir.write('orig/sme/admin/other_files/new_none_düpe.txt', six.b('a'))
 
     def tearDown(self):
         self.tempdir.cleanup()
@@ -149,18 +149,20 @@ class TestComputeNewBasename(unittest.TestCase):
         '''What happens when the wanted name is taken, and a duplicate'''
         with self.assertRaises(UserWarning):
             namechanger.compute_new_basename(
-                os.path.join(self.tempdir.path,
+                six.text_type(os.path.join(self.tempdir.path,
                              'orig/sme/admin/other_files',
-                             'old_dupe.txt'),
-                os.path.join(self.tempdir.path,
+                             'old_dupe.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
                              'orig/sme/admin/other_files',
-                             'new_dupe.txt'))
+                             'new_dupe.txt')))
 
     def test_compute_new_basename_same_name(self):
         '''What happens when the suggested name is taken, but not duplicate'''
-        oldpath = six.text_type(os.path.join(self.tempdir.path,
+        oldpath = os.path.join(self.tempdir.path,
                                        'orig/sme/admin/other_files',
-                                       'new_none_düpe.txt'), encoding='utf8')
+                                       'new_none_düpe.txt')
+        if six.PY2:
+            oldpath = six.text_type(oldpath, encoding='utf8')
         suggestedpath = six.text_type(os.path.join(self.tempdir.path,
                                              'orig/sme/admin/other_files',
                                              'new_none_dupe.txt'))
@@ -189,17 +191,17 @@ class TestComputeMovepairs(unittest.TestCase):
             create=True)
         sme_metadata.write_file()
         mc.compute_all_movepairs(
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/a.txt').decode('utf8'),
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/b.txt').decode('utf8'))
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/a.txt')),
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/b.txt')))
 
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/a.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/b.txt').decode('utf8'))])
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/a.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/b.txt')))])
 
     def test_compute_movepairs_2(self):
         '''newpath does not exist, needs normalisation, no parallels'''
@@ -208,18 +210,19 @@ class TestComputeMovepairs(unittest.TestCase):
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/æ.txt.xsl'),
             create=True)
         sme_metadata.write_file()
+        ae = os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/æ.txt')
+        if six.PY2:
+            ae = six.text_type(ae, encoding='utf8')
         mc.compute_all_movepairs(
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/æ.txt').decode('utf8'),
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/æ.txt').decode('utf8'))
+            ae,
+            ae)
 
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/æ.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/ae.txt').decode('utf8'))])
+                ae,
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/ae.txt')))])
 
     def test_compute_movepairs_3(self):
         '''newpath exists, not duplicate, no parallels'''
@@ -232,17 +235,17 @@ class TestComputeMovepairs(unittest.TestCase):
             create=True)
         sme_metadata.write_file()
         mc.compute_all_movepairs(
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/c.txt').decode('utf8'),
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/d.txt').decode('utf8'))
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/c.txt')),
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/d.txt')))
 
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/c.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/d_1.txt').decode('utf8'))])
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/c.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/d_1.txt')))])
 
     def test_compute_movepairs_4(self):
         '''newpath exists, duplicate, no parallels'''
@@ -252,10 +255,10 @@ class TestComputeMovepairs(unittest.TestCase):
         with self.assertRaises(UserWarning):
             mc = namechanger.MovepairComputer()
             mc.compute_all_movepairs(
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/c.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/e.txt').decode('utf8'))
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/c.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/e.txt')))
 
     def test_compute_movepairs_5(self):
         '''move to same directory, with parallels'''
@@ -285,27 +288,27 @@ class TestComputeMovepairs(unittest.TestCase):
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/f.txt').decode('utf8'),
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/g.txt').decode('utf8'))
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/f.txt')),
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/g.txt')))
 
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/f.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/g.txt').decode('utf8')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/f.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/g.txt'))),
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/smj/ficti/sub/f.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/smj/ficti/sub/f.txt').decode('utf8')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/f.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/f.txt'))),
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sma/ficti/sub/f.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sma/ficti/sub/f.txt').decode('utf8'))])
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt')))])
 
     def test_compute_movepairs_6(self):
         '''move to different subdir, with parallels'''
@@ -335,27 +338,27 @@ class TestComputeMovepairs(unittest.TestCase):
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/f.txt').decode('utf8'),
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/bub/g.txt').decode('utf8'))
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/f.txt')),
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/bub/g.txt')))
 
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/f.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/bub/g.txt').decode('utf8')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/f.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/bub/g.txt'))),
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/smj/ficti/sub/f.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/smj/ficti/bub/f.txt').decode('utf8')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/f.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/bub/f.txt'))),
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sma/ficti/sub/f.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sma/ficti/bub/f.txt').decode('utf8'))])
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/bub/f.txt')))])
 
     def test_compute_movepairs_7(self):
         '''move to different genre, with parallels'''
@@ -385,27 +388,27 @@ class TestComputeMovepairs(unittest.TestCase):
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/f.txt').decode('utf8'),
-            os.path.join(self.tempdir.path,
-                         'orig/sme/facta/sub/g.txt').decode('utf8'))
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/f.txt')),
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/facta/sub/g.txt')))
 
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/f.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sme/facta/sub/g.txt').decode('utf8')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/f.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/facta/sub/g.txt'))),
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/smj/ficti/sub/f.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/smj/facta/sub/f.txt').decode('utf8')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/f.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/smj/facta/sub/f.txt'))),
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sma/ficti/sub/f.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sma/facta/sub/f.txt').decode('utf8'))])
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sma/facta/sub/f.txt')))])
 
     def test_compute_movepairs_8(self):
         '''move to different genre, one parallel needs normalisation'''
@@ -435,27 +438,30 @@ class TestComputeMovepairs(unittest.TestCase):
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/f.txt').decode('utf8'),
-            os.path.join(self.tempdir.path,
-                         'orig/sme/facta/sub/g.txt').decode('utf8'))
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/f.txt')),
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/facta/sub/g.txt')))
 
+        oe = os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/ø.txt')
+        if six.PY2:
+            oe = six.text_type(oe, encoding='utf8')
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/f.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sme/facta/sub/g.txt').decode('utf8')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/f.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/facta/sub/g.txt'))),
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/smj/ficti/sub/ø.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/smj/facta/sub/o.txt').decode('utf8')),
+                oe,
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/smj/facta/sub/o.txt'))),
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sma/ficti/sub/f.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sma/facta/sub/f.txt').decode('utf8'))])
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sma/facta/sub/f.txt')))])
 
     def test_compute_movepairs_9(self):
         '''move to same directory, with parallels.
@@ -477,27 +483,29 @@ class TestComputeMovepairs(unittest.TestCase):
         sma_metadata.set_parallel_text('smj', 'f.txt')
         sma_metadata.write_file()
 
-        self.tempdir.write('orig/sma/ficti/sub/ø.txt', bytes('content of ø', 'utf8'))
-        self.tempdir.write('orig/sma/ficti/sub/o.txt', bytes('content of o', 'utf8'))
+        self.tempdir.write('orig/sma/ficti/sub/ø.txt', six.b('content of ø'))
+        self.tempdir.write('orig/sma/ficti/sub/o.txt', six.b('content of o'))
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/f.txt').decode('utf8'),
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/g.txt').decode('utf8'))
-
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/f.txt')),
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/g.txt')))
+        oe = os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/ø.txt')
+        if six.PY2:
+            six.text_type(oe, encoding='utf8')
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/f.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/g.txt').decode('utf8')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/f.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/g.txt'))),
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sma/ficti/sub/ø.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sma/ficti/sub/o_1.txt').decode('utf8'))])
+                oe,
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/o_1.txt')))])
 
     def test_compute_movepairs_10(self):
         '''newpath is empty, no parallels'''
@@ -507,14 +515,14 @@ class TestComputeMovepairs(unittest.TestCase):
             create=True)
         sme_metadata.write_file()
         mc.compute_all_movepairs(
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/a.txt').decode('utf8'),
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/a.txt')),
             u'')
 
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/a.txt').decode('utf8'),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/a.txt')),
                 u'')])
 
     def test_compute_movepairs_11(self):
@@ -545,25 +553,25 @@ class TestComputeMovepairs(unittest.TestCase):
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/f.txt').decode('utf8'),
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/f.txt')),
             u'')
 
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/f.txt').decode('utf8'),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/f.txt')),
                 u''),
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/smj/ficti/sub/f.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/smj/ficti/sub/f.txt').decode('utf8')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/f.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/f.txt'))),
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sma/ficti/sub/f.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sma/ficti/sub/f.txt').decode('utf8'))])
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt')))])
 
     def test_compute_movepairs_12(self):
         '''newpath is empty, one parallel needs normalisation'''
@@ -593,25 +601,28 @@ class TestComputeMovepairs(unittest.TestCase):
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/f.txt').decode('utf8'),
+            six.text_type(os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/f.txt')),
             u'')
 
+        oe = os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/ø.txt')
+        if six.PY2:
+            oe = six.text_type(oe, encoding='utf8'),
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sme/ficti/sub/f.txt').decode('utf8'),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sme/ficti/sub/f.txt')),
                 u''),
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/smj/ficti/sub/ø.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/smj/ficti/sub/o.txt').decode('utf8')),
+                oe,
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/smj/ficti/sub/o.txt'))),
             namechanger.PathPair(
-                os.path.join(self.tempdir.path,
-                             'orig/sma/ficti/sub/f.txt').decode('utf8'),
-                os.path.join(self.tempdir.path,
-                             'orig/sma/ficti/sub/f.txt').decode('utf8'))])
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt')),
+                six.text_type(os.path.join(self.tempdir.path,
+                             'orig/sma/ficti/sub/f.txt')))])
 
 
 class TestCorpusFileMover(unittest.TestCase):
@@ -619,7 +630,7 @@ class TestCorpusFileMover(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
         self.tempdir.makedir('orig/sme/ficti/sub')
-        self.tempdir.write('orig/sme/ficti/sub/f.txt', bytes('content of f', 'utf8'))
+        self.tempdir.write('orig/sme/ficti/sub/f.txt', six.b('content of f'))
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
             create=True)
@@ -629,13 +640,13 @@ class TestCorpusFileMover(unittest.TestCase):
         sme_metadata.write_file()
         self.tempdir.makedir('prestable/converted/sme/ficti/sub')
         self.tempdir.write('prestable/converted/sme/ficti/sub/f.txt.xml',
-                           bytes('converted content of f', 'utf8'))
+                           six.b('converted content of f'))
         self.tempdir.makedir('prestable/tmx/sme2smj/ficti/sub')
         self.tempdir.write('prestable/tmx/sme2smj/ficti/sub/f.txt.tmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
         self.tempdir.makedir('prestable/tmx/sme2sma/ficti/sub')
         self.tempdir.write('prestable/tmx/sme2sma/ficti/sub/f.txt.tmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
 
         r = git.Repo.init(self.tempdir.path)
         r.index.add(['orig', 'prestable'])
@@ -647,8 +658,8 @@ class TestCorpusFileMover(unittest.TestCase):
     def test_move_orig(self):
         '''move to different subdir, with parallels'''
         cfm = namechanger.CorpusFileMover(
-            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
-            os.path.join(self.tempdir.path, 'orig/sme/facta/bub/g.txt'))
+            six.text_type(os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
+            six.text_type(os.path.join(self.tempdir.path, 'orig/sme/facta/bub/g.txt')))
         cfm.move_files()
         self.tempdir.check_all(
             '',
@@ -688,7 +699,7 @@ class TestCorpusFileRemover(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
         self.tempdir.makedir('orig/sme/ficti/sub')
-        self.tempdir.write('orig/sme/ficti/sub/f.txt', bytes('content of f', 'utf8'))
+        self.tempdir.write('orig/sme/ficti/sub/f.txt', six.b('content of f'))
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
             create=True)
@@ -698,13 +709,13 @@ class TestCorpusFileRemover(unittest.TestCase):
         sme_metadata.write_file()
         self.tempdir.makedir('prestable/converted/sme/ficti/sub')
         self.tempdir.write('prestable/converted/sme/ficti/sub/f.txt.xml',
-                           bytes('converted content of f', 'utf8'))
+                           six.b('converted content of f'))
         self.tempdir.makedir('prestable/tmx/sme2smj/ficti/sub')
         self.tempdir.write('prestable/tmx/sme2smj/ficti/sub/f.txt.tmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
         self.tempdir.makedir('prestable/tmx/sme2sma/ficti/sub')
         self.tempdir.write('prestable/tmx/sme2sma/ficti/sub/f.txt.tmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
 
         r = git.Repo.init(self.tempdir.path)
         r.index.add(['orig', 'prestable'])
@@ -716,7 +727,7 @@ class TestCorpusFileRemover(unittest.TestCase):
     def test_remove_orig(self):
         '''remove file, with parallels'''
         cfm = namechanger.CorpusFileRemover(
-            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt'))
+            six.text_type(os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt')))
         cfm.remove_files()
         self.tempdir.check_all('',)
 
@@ -727,7 +738,7 @@ class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
         self.tempdir.makedir('orig/sme/ficti/sub')
-        self.tempdir.write('orig/sme/ficti/sub/f.txt', bytes('content of f', 'utf8'))
+        self.tempdir.write('orig/sme/ficti/sub/f.txt', six.b('content of f'))
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
             create=True)
@@ -737,22 +748,22 @@ class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
         sme_metadata.write_file()
         self.tempdir.makedir('prestable/converted/sme/ficti/sub')
         self.tempdir.write('prestable/converted/sme/ficti/sub/f.txt.xml',
-                           bytes('converted content of f', 'utf8'))
+                           six.b('converted content of f'))
         self.tempdir.makedir('prestable/tmx/sme2smj/ficti/sub')
         self.tempdir.write('prestable/tmx/sme2smj/ficti/sub/f.txt.tmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
         self.tempdir.makedir('prestable/tmx/sme2sma/ficti/sub')
         self.tempdir.write('prestable/tmx/sme2sma/ficti/sub/f.txt.tmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
         self.tempdir.makedir('prestable/toktmx/sme2smj/ficti/sub')
         self.tempdir.write('prestable/toktmx/sme2smj/ficti/sub/f.txt.toktmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
         self.tempdir.makedir('prestable/toktmx/sme2sma/ficti/sub')
         self.tempdir.write('prestable/toktmx/sme2sma/ficti/sub/f.txt.toktmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
 
         self.tempdir.makedir('orig/smj/ficti/sub')
-        self.tempdir.write('orig/smj/ficti/sub/ø.txt', bytes('content of ø', 'utf8'))
+        self.tempdir.write('orig/smj/ficti/sub/ø.txt', six.b('content of ø'))
         smj_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/ø.txt.xsl'),
             create=True)
@@ -763,10 +774,10 @@ class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
         smj_metadata.write_file()
         self.tempdir.makedir('prestable/converted/smj/ficti/sub')
         self.tempdir.write('prestable/converted/smj/ficti/sub/ø.txt.xml',
-                           bytes('converted content of ø', 'utf8'))
+                           six.b('converted content of ø'))
 
         self.tempdir.makedir('orig/sma/ficti/sub')
-        self.tempdir.write('orig/sma/ficti/sub/f.txt', bytes('content of f', 'utf8'))
+        self.tempdir.write('orig/sma/ficti/sub/f.txt', six.b('content of f'))
         sma_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sma/ficti/sub/f.txt.xsl'),
             create=True)
@@ -777,16 +788,16 @@ class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
         sma_metadata.write_file()
         self.tempdir.makedir('prestable/converted/sma/ficti/sub')
         self.tempdir.write('prestable/converted/sma/ficti/sub/f.txt.xml',
-                           bytes('converted content of f', 'utf8'))
+                           six.b('converted content of f'))
 
         r = git.Repo.init(self.tempdir.path)
         r.index.add(['orig', 'prestable'])
         r.index.commit('Added orig and prestable')
 
-        oldpath = os.path.join(self.tempdir.path,
-                               'orig/sme/ficti/sub/f.txt').decode('utf8')
-        newpath = os.path.join(self.tempdir.path,
-                               'orig/sme/facta/bub/g.txt').decode('utf8')
+        oldpath = six.text_type(os.path.join(self.tempdir.path,
+                               'orig/sme/ficti/sub/f.txt'))
+        newpath = six.text_type(os.path.join(self.tempdir.path,
+                               'orig/sme/facta/bub/g.txt'))
         cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
         cfm.move_files()
         cfm.update_own_metadata()
@@ -897,7 +908,7 @@ class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
         self.tempdir.makedir('orig/sme/ficti/sub')
-        self.tempdir.write('orig/sme/ficti/sub/f.txt', bytes('content of f', 'utf8'))
+        self.tempdir.write('orig/sme/ficti/sub/f.txt', six.b('content of f'))
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
             create=True)
@@ -907,22 +918,22 @@ class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
         sme_metadata.write_file()
         self.tempdir.makedir('prestable/converted/sme/ficti/sub')
         self.tempdir.write('prestable/converted/sme/ficti/sub/f.txt.xml',
-                           bytes('converted content of f', 'utf8'))
+                           six.b('converted content of f'))
         self.tempdir.makedir('prestable/tmx/sme2smj/ficti/sub')
         self.tempdir.write('prestable/tmx/sme2smj/ficti/sub/f.txt.tmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
         self.tempdir.makedir('prestable/tmx/sme2sma/ficti/sub')
         self.tempdir.write('prestable/tmx/sme2sma/ficti/sub/f.txt.tmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
         self.tempdir.makedir('prestable/toktmx/sme2smj/ficti/sub')
         self.tempdir.write('prestable/toktmx/sme2smj/ficti/sub/f.txt.toktmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
         self.tempdir.makedir('prestable/toktmx/sme2sma/ficti/sub')
         self.tempdir.write('prestable/toktmx/sme2sma/ficti/sub/f.txt.toktmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
 
         self.tempdir.makedir('orig/smj/ficti/sub')
-        self.tempdir.write('orig/smj/ficti/sub/ø.txt', bytes('content of ø', 'utf8'))
+        self.tempdir.write('orig/smj/ficti/sub/ø.txt', six.b('content of ø'))
         smj_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/ø.txt.xsl'),
             create=True)
@@ -933,10 +944,10 @@ class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
         smj_metadata.write_file()
         self.tempdir.makedir('prestable/converted/smj/ficti/sub')
         self.tempdir.write('prestable/converted/smj/ficti/sub/ø.txt.xml',
-                           bytes('converted content of ø', 'utf8'))
+                           six.b('converted content of ø'))
 
         self.tempdir.makedir('orig/sma/ficti/sub')
-        self.tempdir.write('orig/sma/ficti/sub/f.txt', bytes('content of f', 'utf8'))
+        self.tempdir.write('orig/sma/ficti/sub/f.txt', six.b('content of f'))
         sma_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sma/ficti/sub/f.txt.xsl'),
             create=True)
@@ -947,16 +958,16 @@ class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
         sma_metadata.write_file()
         self.tempdir.makedir('prestable/converted/sma/ficti/sub')
         self.tempdir.write('prestable/converted/sma/ficti/sub/f.txt.xml',
-                           bytes('converted content of f', 'utf8'))
+                           six.b('converted content of f'))
 
         r = git.Repo.init(self.tempdir.path)
         r.index.add(['orig', 'prestable'])
         r.index.commit('Added orig and prestable')
 
-        oldpath = os.path.join(self.tempdir.path,
-                               'orig/sme/ficti/sub/f.txt').decode('utf8')
-        newpath = os.path.join(self.tempdir.path,
-                               'orig/smn/facta/bub/g.txt').decode('utf8')
+        oldpath = six.text_type(os.path.join(self.tempdir.path,
+                               'orig/sme/ficti/sub/f.txt'))
+        newpath = six.text_type(os.path.join(self.tempdir.path,
+                               'orig/smn/facta/bub/g.txt'))
         cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
         cfm.move_files()
         cfm.update_own_metadata()
@@ -1081,7 +1092,7 @@ class TestCorpusFilesetMetadataUpdater3(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
         self.tempdir.makedir('orig/sme/ficti/sub')
-        self.tempdir.write('orig/sme/ficti/sub/f.txt', bytes('content of f', 'utf8'))
+        self.tempdir.write('orig/sme/ficti/sub/f.txt', six.b('content of f'))
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
             create=True)
@@ -1090,16 +1101,16 @@ class TestCorpusFilesetMetadataUpdater3(unittest.TestCase):
         sme_metadata.write_file()
         self.tempdir.makedir('prestable/converted/sme/ficti/sub')
         self.tempdir.write('prestable/converted/sme/ficti/sub/f.txt.xml',
-                           bytes('converted content of f', 'utf8'))
+                           six.b('converted content of f'))
         self.tempdir.makedir('prestable/tmx/sme2smj/ficti/sub')
         self.tempdir.write('prestable/tmx/sme2smj/ficti/sub/f.txt.tmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
         self.tempdir.makedir('prestable/toktmx/sme2smj/ficti/sub')
         self.tempdir.write('prestable/toktmx/sme2smj/ficti/sub/f.txt.toktmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
 
         self.tempdir.makedir('orig/smj/ficti/sub')
-        self.tempdir.write('orig/smj/ficti/sub/ø.txt', bytes('content of ø', 'utf8'))
+        self.tempdir.write('orig/smj/ficti/sub/ø.txt', six.b('content of ø'))
         smj_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/ø.txt.xsl'),
             create=True)
@@ -1108,7 +1119,7 @@ class TestCorpusFilesetMetadataUpdater3(unittest.TestCase):
         smj_metadata.set_parallel_text('sme', 'f.txt')
         smj_metadata.write_file()
 
-        self.tempdir.write('orig/smj/facta/bub/o.txt', bytes('content of o', 'utf8'))
+        self.tempdir.write('orig/smj/facta/bub/o.txt', six.b('content of o'))
         smj_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/smj/facta/bub/o.txt.xsl'),
             create=True)
@@ -1116,16 +1127,16 @@ class TestCorpusFilesetMetadataUpdater3(unittest.TestCase):
 
         self.tempdir.makedir('prestable/converted/smj/ficti/sub')
         self.tempdir.write('prestable/converted/smj/ficti/sub/ø.txt.xml',
-                           bytes('converted content of ø', 'utf8'))
+                           six.b('converted content of ø'))
 
         r = git.Repo.init(self.tempdir.path)
         r.index.add(['orig', 'prestable'])
         r.index.commit('Added orig and prestable')
 
-        oldpath = os.path.join(self.tempdir.path,
-                               'orig/sme/ficti/sub/f.txt')
-        newpath = os.path.join(self.tempdir.path,
-                               'orig/sme/facta/bub/g.txt')
+        oldpath = six.text_type(os.path.join(self.tempdir.path,
+                               'orig/sme/ficti/sub/f.txt'))
+        newpath = six.text_type(os.path.join(self.tempdir.path,
+                               'orig/sme/facta/bub/g.txt'))
         cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
         cfm.move_files()
         cfm.update_own_metadata()
@@ -1208,7 +1219,7 @@ class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
         self.tempdir.makedir('orig/sme/ficti/sub')
-        self.tempdir.write('orig/sme/ficti/sub/f.txt', bytes('content of f', 'utf8'))
+        self.tempdir.write('orig/sme/ficti/sub/f.txt', six.b('content of f'))
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
             create=True)
@@ -1217,16 +1228,16 @@ class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
         sme_metadata.write_file()
         self.tempdir.makedir('prestable/converted/sme/ficti/sub')
         self.tempdir.write('prestable/converted/sme/ficti/sub/f.txt.xml',
-                           bytes('converted content of f', 'utf8'))
+                           six.b('converted content of f'))
         self.tempdir.makedir('prestable/tmx/sme2smj/ficti/sub')
         self.tempdir.write('prestable/tmx/sme2smj/ficti/sub/f.txt.tmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
         self.tempdir.makedir('prestable/toktmx/sme2smj/ficti/sub')
         self.tempdir.write('prestable/toktmx/sme2smj/ficti/sub/f.txt.toktmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
 
         self.tempdir.makedir('orig/smj/ficti/sub')
-        self.tempdir.write('orig/smj/ficti/sub/ø.txt', bytes('content of ø', 'utf8'))
+        self.tempdir.write('orig/smj/ficti/sub/ø.txt', six.b('content of ø'))
         smj_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/ø.txt.xsl'),
             create=True)
@@ -1235,7 +1246,7 @@ class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
         smj_metadata.set_parallel_text('sme', 'f.txt')
         smj_metadata.write_file()
 
-        self.tempdir.write('orig/smj/facta/bub/o.txt', bytes('content of ø', 'utf8'))
+        self.tempdir.write('orig/smj/facta/bub/o.txt', six.b('content of ø'))
         smj_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/smj/facta/bub/o.txt.xsl'),
             create=True)
@@ -1243,7 +1254,7 @@ class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
 
         self.tempdir.makedir('prestable/converted/smj/ficti/sub')
         self.tempdir.write('prestable/converted/smj/ficti/sub/ø.txt.xml',
-                           bytes('converted content of ø', 'utf8'))
+                           six.b('converted content of ø'))
 
         r = git.Repo.init(self.tempdir.path)
         r.index.add(['orig', 'prestable'])
@@ -1253,10 +1264,10 @@ class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_move_fileset(self):
-        oldpath = os.path.join(self.tempdir.path,
-                               'orig/sme/ficti/sub/f.txt').decode('utf8')
-        newpath = os.path.join(self.tempdir.path,
-                               'orig/sme/facta/bub/g.txt').decode('utf8')
+        oldpath = six.text_type(os.path.join(self.tempdir.path,
+                               'orig/sme/ficti/sub/f.txt'))
+        newpath = six.text_type(os.path.join(self.tempdir.path,
+                               'orig/sme/facta/bub/g.txt'))
         with self.assertRaises(UserWarning):
             cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
             cfm.move_files()
@@ -1308,7 +1319,7 @@ class TestCorpusFilesetMetadataUpdater5(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
         self.tempdir.makedir('orig/sme/ficti/sub')
-        self.tempdir.write('orig/sme/ficti/sub/f.txt', bytes('content of f', 'utf8'))
+        self.tempdir.write('orig/sme/ficti/sub/f.txt', six.b('content of f'))
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
             create=True)
@@ -1318,22 +1329,22 @@ class TestCorpusFilesetMetadataUpdater5(unittest.TestCase):
         sme_metadata.write_file()
         self.tempdir.makedir('prestable/converted/sme/ficti/sub')
         self.tempdir.write('prestable/converted/sme/ficti/sub/f.txt.xml',
-                           bytes('converted content of f', 'utf8'))
+                           six.b('converted content of f'))
         self.tempdir.makedir('prestable/tmx/sme2smj/ficti/sub')
         self.tempdir.write('prestable/tmx/sme2smj/ficti/sub/f.txt.tmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
         self.tempdir.makedir('prestable/tmx/sme2sma/ficti/sub')
         self.tempdir.write('prestable/tmx/sme2sma/ficti/sub/f.txt.tmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
         self.tempdir.makedir('prestable/toktmx/sme2smj/ficti/sub')
         self.tempdir.write('prestable/toktmx/sme2smj/ficti/sub/f.txt.toktmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
         self.tempdir.makedir('prestable/toktmx/sme2sma/ficti/sub')
         self.tempdir.write('prestable/toktmx/sme2sma/ficti/sub/f.txt.toktmx',
-                           bytes('parallelised content of f', 'utf8'))
+                           six.b('parallelised content of f'))
 
         self.tempdir.makedir('orig/smj/ficti/sub')
-        self.tempdir.write('orig/smj/ficti/sub/ø.txt', bytes('content of ø', 'utf8'))
+        self.tempdir.write('orig/smj/ficti/sub/ø.txt', six.b('content of ø'))
         smj_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/ø.txt.xsl'),
             create=True)
@@ -1345,10 +1356,10 @@ class TestCorpusFilesetMetadataUpdater5(unittest.TestCase):
         smj_metadata.write_file()
         self.tempdir.makedir('prestable/converted/smj/ficti/sub')
         self.tempdir.write('prestable/converted/smj/ficti/sub/ø.txt.xml',
-                           bytes('converted content of ø', 'utf8'))
+                           six.b('converted content of ø'))
 
         self.tempdir.makedir('orig/sma/ficti/sub')
-        self.tempdir.write('orig/sma/ficti/sub/f.txt', bytes('content of f', 'utf8'))
+        self.tempdir.write('orig/sma/ficti/sub/f.txt', six.b('content of f'))
         sma_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sma/ficti/sub/f.txt.xsl'),
             create=True)
@@ -1360,14 +1371,14 @@ class TestCorpusFilesetMetadataUpdater5(unittest.TestCase):
         sma_metadata.write_file()
         self.tempdir.makedir('prestable/converted/sma/ficti/sub')
         self.tempdir.write('prestable/converted/sma/ficti/sub/f.txt.xml',
-                           bytes('converted content of f', 'utf8'))
+                           six.b('converted content of f'))
 
         r = git.Repo.init(self.tempdir.path)
         r.index.add(['orig', 'prestable'])
         r.index.commit('Added orig and prestable')
 
-        oldpath = os.path.join(self.tempdir.path,
-                               'orig/sme/ficti/sub/f.txt').decode('utf8')
+        oldpath = six.text_type(os.path.join(self.tempdir.path,
+                               'orig/sme/ficti/sub/f.txt'))
 
         cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, u'')
         cfm.move_files()
