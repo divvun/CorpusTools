@@ -250,9 +250,9 @@ class MetadataHandler(object):
 
     def write_file(self):
         try:
-            with open(self.filename, 'w') as f:
+            with open(self.filename, 'wb') as f:
                 f.write(etree.tostring(self.tree,
-                                       encoding="unicode"))
+                                       encoding="utf8"))
         except IOError as e:
             print('cannot write', self.filename)
             print(e)

@@ -27,7 +27,6 @@ import os
 from collections import namedtuple
 import hashlib
 import unidecode
-import urllib
 
 from corpustools import util
 from corpustools import versioncontrol
@@ -449,7 +448,7 @@ def normalise_filename(filename):
     # urllib.unquote replaces %xx escapes by their single-character equivalent.
     newname = six.text_type(
         unidecode.unidecode(
-            urllib.unquote(
+            six.moves.urllib.parse.unquote(
                 filename
             ))).lower()
 

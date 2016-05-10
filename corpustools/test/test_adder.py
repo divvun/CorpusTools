@@ -23,6 +23,7 @@
 from __future__ import absolute_import
 import git
 import os
+import six
 import testfixtures
 import unittest
 
@@ -37,8 +38,8 @@ class TestAddToCorpus(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
         self.tempdir.makedir('tull')
         self.tempdir.makedir('corpus/orig')
-        self.realcorpusdir = os.path.join(self.tempdir.path,
-                                          'corpus')
+        self.realcorpusdir = six.u(os.path.join(self.tempdir.path,
+                                          'corpus'))
 
         r = git.Repo.init(self.realcorpusdir)
         r.index.add(['orig'])
@@ -48,7 +49,7 @@ class TestAddToCorpus(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_init_with_non_unicode_corpusdir(self):
-        corpusdir = 'there'
+        corpusdir = u'there'
         lang = u'sme'
         path = u'a/b/c'
 
@@ -85,7 +86,7 @@ class TestAddToCorpus(unittest.TestCase):
 
         with self.assertRaises(versioncontrol.VersionControlException):
             adder.AddToCorpus(
-                os.path.join(self.tempdir.path, 'tull'), lang, path)
+                six.u(os.path.join(self.tempdir.path, 'tull')), lang, path)
 
     def test_init_with_vcs_corpusdir(self):
         lang = u'sme'
@@ -132,21 +133,21 @@ class TestAddFileToCorpus(unittest.TestCase):
 
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
-        self.tempdir.write('origdirectory/a.txt', b'content of a')
-        self.tempdir.write('origdirectory/æ.txt', 'content of æ'.encode('utf8'))
-        self.tempdir.write('origdirectory/b.txt', b'content of b')
-        self.tempdir.write('origdirectory/c.txt', b'original content of c')
-        self.tempdir.write('origdirectory/d.txt', b'content of d')
+        self.tempdir.write('origdirectory/a.txt', six.b('content of a'))
+        self.tempdir.write('origdirectory/æ.txt', six.b('content of æ'))
+        self.tempdir.write('origdirectory/b.txt', six.b('content of b'))
+        self.tempdir.write('origdirectory/c.txt', six.b('original content of c'))
+        self.tempdir.write('origdirectory/d.txt', six.b('content of d'))
 
         self.tempdir.makedir('corpus/orig')
-        self.tempdir.write('corpus/orig/sme/ae/c/o/b.txt', b'content of b')
+        self.tempdir.write('corpus/orig/sme/ae/c/o/b.txt', six.b('content of b'))
         self.tempdir.write('corpus/orig/sme/ae/c/o/c.txt',
-                           b'corpusfile content of c')
-        self.tempdir.write('corpus/orig/smj/ae/c/o/f.txt', b'smj content of f')
-        self.tempdir.write('corpus/orig/sma/ae/c/o/f.txt', b'sma content of f')
+                           six.b('corpusfile content of c'))
+        self.tempdir.write('corpus/orig/smj/ae/c/o/f.txt', six.b('smj content of f'))
+        self.tempdir.write('corpus/orig/sma/ae/c/o/f.txt', six.b('sma content of f'))
 
-        self.realcorpusdir = os.path.join(self.tempdir.path, 'corpus')
-        self.origdirectory = os.path.join(self.tempdir.path, 'origdirectory')
+        self.realcorpusdir = six.u(os.path.join(self.tempdir.path, 'corpus'))
+        self.origdirectory = six.u(os.path.join(self.tempdir.path, 'origdirectory'))
 
         smj_metadata = xslsetter.MetadataHandler(
             os.path.join(self.realcorpusdir, 'orig/smj/ae/c/o/f.txt.xsl'),
@@ -371,15 +372,15 @@ class TestDirectoryToCorpusWithDuplicates(unittest.TestCase):
 
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
-        self.tempdir.write('origdirectory/a.txt', b'content of a')
-        self.tempdir.write('origdirectory/æ.txt', b'content of b')
-        self.tempdir.write('origdirectory/b.txt', b'content of b')
-        self.tempdir.write('origdirectory/sub/c.txt', b'content of a')
-        self.tempdir.write('origdirectory/sub/d.txt', b'content of d')
+        self.tempdir.write('origdirectory/a.txt', six.b('content of a'))
+        self.tempdir.write('origdirectory/æ.txt', six.b('content of b'))
+        self.tempdir.write('origdirectory/b.txt', six.b('content of b'))
+        self.tempdir.write('origdirectory/sub/c.txt', six.b('content of a'))
+        self.tempdir.write('origdirectory/sub/d.txt', six.b('content of d'))
         self.tempdir.makedir('corpus/orig')
-        self.origdirectory = os.path.join(self.tempdir.path,
-                                          'origdirectory')
-        self.realcorpusdir = os.path.join(self.tempdir.path, 'corpus')
+        self.origdirectory = six.u(os.path.join(self.tempdir.path,
+                                          'origdirectory'))
+        self.realcorpusdir = six.u(os.path.join(self.tempdir.path, 'corpus'))
         r = git.Repo.init(self.realcorpusdir)
         r.index.add(['orig'])
         r.index.commit('Added orig')
@@ -397,17 +398,17 @@ class TestDirectoryToCorpusWithoutDuplicates(unittest.TestCase):
 
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
-        self.tempdir.write('origdirectory/a.txt', b'content of a')
-        self.tempdir.write('origdirectory/æ.txt', 'content of æ'.encode('utf8'))
-        self.tempdir.write('origdirectory/b.txt', b'content of b')
-        self.tempdir.write('origdirectory/sub/a.txt', b'content of sub/a')
-        self.tempdir.write('origdirectory/sub/c.txt', b'content of c')
-        self.tempdir.write('origdirectory/sub/d.txt', b'content of d')
+        self.tempdir.write('origdirectory/a.txt', six.b('content of a'))
+        self.tempdir.write('origdirectory/æ.txt', u'content of æ'.encode('utf8'))
+        self.tempdir.write('origdirectory/b.txt', six.b('content of b'))
+        self.tempdir.write('origdirectory/sub/a.txt', six.b('content of sub/a'))
+        self.tempdir.write('origdirectory/sub/c.txt', six.b('content of c'))
+        self.tempdir.write('origdirectory/sub/d.txt', six.b('content of d'))
         self.tempdir.makedir('corpus/orig')
-        self.origdirectory = os.path.join(self.tempdir.path,
-                                          'origdirectory')
-        self.realcorpusdir = os.path.join(self.tempdir.path,
-                                          'corpus')
+        self.origdirectory = six.u(os.path.join(self.tempdir.path,
+                                          'origdirectory'))
+        self.realcorpusdir = six.u(os.path.join(self.tempdir.path,
+                                          'corpus'))
         r = git.Repo.init(self.realcorpusdir)
         r.index.add(['orig'])
         r.index.commit('Added orig')
