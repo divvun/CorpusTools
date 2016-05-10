@@ -70,10 +70,8 @@ class MetadataHandler(object):
             variable = self._get_variable_elt(key)
             variable.attrib['select'] = "'{}'".format(value)
         except AttributeError as e:
-            print('Tried to update {} with value {}\n'
-                  'Error was {}'.format(key, value, str(e)).encode('utf-8'),
-                  file=sys.stderr)
-            raise UserWarning
+            raise UserWarning('Tried to update {} with value {}\n'
+                  'Error was {}'.format(key, value, str(e)).encode('utf-8'))
 
     def get_variable(self, key):
         variable = self._get_variable_elt(key)
