@@ -70,7 +70,6 @@ class CorpusPath(object):
         path: path to a corpus file
     '''
     def __init__(self, path):
-        util.print_frame(path)
         self.pathcomponents = self.split_path(path)
         self.md = xslsetter.MetadataHandler(self.xsl, create=True)
 
@@ -88,7 +87,6 @@ class CorpusPath(object):
             ValueError: the path is not part of a corpus.
         '''
         def split_on_module(p):
-            util.print_frame(path)
             for module in [u'goldstandard/orig', u'prestable/converted',
                            u'prestable/toktmx', u'prestable/tmx', u'orig',
                            u'converted', u'stable', u'toktmx', u'tmx']:
@@ -169,7 +167,6 @@ class Converter(object):
 
     def __init__(self, filename, write_intermediate=False):
         codecs.register_error('mixed', self.mixed_decoder)
-        util.print_frame(filename)
         self.names = CorpusPath(filename)
         self.write_intermediate = write_intermediate
         try:
@@ -3275,9 +3272,7 @@ def main():
     sanity_check()
     args = parse_options()
 
-    util.print_frame(args.goldstandard)
     cm = ConverterManager(args.write_intermediate, args.goldstandard)
-
     cm.collect_files(args.sources)
 
     if args.serial:
