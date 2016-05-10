@@ -1562,7 +1562,7 @@ class TestRTFConverter(XMLTester):
 
     def setUp(self):
         self.testrtf = converter.RTFConverter(
-            os.path.join(here, 'converter_data/folkemote.rtf'))
+            os.path.join(here, 'converter_data/fakecorpus/orig/sme/riddu/folkemote.rtf'))
 
     def test_convert2intermediate(self):
         got = self.testrtf.convert2intermediate()
