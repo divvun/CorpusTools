@@ -119,7 +119,7 @@
            location CDATA #REQUIRED
            %common.att; >
 
-<!-- List of languages that appear in the documente -->
+<!-- List of languages that appear in the document -->
 <!-- The list is used in language recognition -->
 <!ELEMENT multilingual (language)*>
 <!ELEMENT language EMPTY>
