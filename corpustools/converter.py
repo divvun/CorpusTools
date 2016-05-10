@@ -1110,74 +1110,14 @@ class PDFEmptyPageException(Exception):
     pass
 
 
-class PDFPage(object):
-    '''Reads a page element
-
-    textelements is a list of PDFTextElements
-
-    The textelements are manipulated in several ways,
-    then ordered in the way they appear on the page and
-    finally sent to PDFTextExtractor
-    '''
-    def __init__(self, page_element, metadata_margins={}, metadata_inner_margins={}):
-        self.page_number = int(page_element.get('number'))
-        self.height = int(page_element.get('height'))
-        self.width = int(page_element.get('width'))
+class PDFPageMetadata(object):
+    def __init__(self, page_number=0, page_height=0, page_width=0,
+                 metadata_margins={}, metadata_inner_margins={}):
+        self.page_number = page_number
+        self.page_height = page_height
+        self.page_width = page_width
         self.metadata_margins = metadata_margins
         self.metadata_inner_margins = metadata_inner_margins
-        self.textelements = [PDFTextElement(t)
-                             for t in page_element.iter('text')]
-
-    def is_skip_page(self, skip_pages):
-        '''True if a page should be skipped, otherwise false'''
-        return (('odd' in skip_pages and (self.page_number % 2) == 1) or
-                ('even' in skip_pages and (self.page_number % 2) == 0) or
-                self.page_number in skip_pages)
-
-    def fix_font_id(self, pdffontspecs):
-        for textelement in self.textelements:
-            correct = pdffontspecs.corrected_id(textelement.font)
-            textelement.t.set('font', correct)
-
-    def adjust_line_heights(self):
-        '''If there is a 1 pixel overlap between neighbouring elements, adjust the height'''
-        for i in range(1, len(self.textelements)):
-            prev_textelement = self.textelements[i - 1]
-            textelement = self.textelements[i]
-            if prev_textelement.bottom == textelement.top + 1:
-                prev_textelement.t.set('height', six.text_type(prev_textelement.height - 1))
-
-    def remove_footnotes_superscript(self):
-        '''Remove numbers from elements found by find_footnotes_superscript.'''
-        for textelement in self.textelements[1:]:
-            textelement.remove_superscript()
-
-    def remove_elements_not_within_margin(self):
-        '''Remove PDFTextElements from textelements if needed'''
-        margins = self.compute_margins()
-        inner_margins = self.compute_inner_margins()
-
-        self.textelements[:] = [t for t in self.textelements
-                                if self.is_inside_margins(t, margins)]
-        if len(inner_margins) > 0:
-            self.textelements[:] = [t for t in self.textelements
-                                    if not self.is_inside_inner_margins(t, inner_margins)]
-
-    def merge_elements_on_same_line(self):
-        '''Merge PDFTextElements that are on the same line'''
-        same_line_indexes = [i for i in range(1, len(self.textelements))
-                             if self.textelements[i - 1].is_text_on_same_line(
-                                 self.textelements[i])]
-        for i in reversed(same_line_indexes):
-            self.textelements[i - 1].merge_text_elements(
-                self.textelements[i])
-            del self.textelements[i]
-
-    def remove_invalid_elements(self):
-        '''Remove elements with empty strings or where the width is zero or negative'''
-        self.textelements[:] = [t for t in self.textelements
-                                if not (len(t.t.xpath("string()").strip()) == 0 or
-                                        t.width < 1)]
 
     def compute_margins(self):
         '''Compute the margins of a page in pixels.
@@ -1201,13 +1141,13 @@ class PDFPage(object):
         # print(util.lineno(), margin, page_height, page_width, coefficient, file=sys.stderr)
 
         if margin == 'left_margin':
-            return int(coefficient * self.width / 100.0)
+            return int(coefficient * self.page_width / 100.0)
         if margin == 'right_margin':
-            return int(self.width - coefficient * self.width / 100.0)
+            return int(self.page_width - coefficient * self.page_width / 100.0)
         if margin == 'top_margin':
-            return int(coefficient * self.height / 100.0)
+            return int(coefficient * self.page_height / 100.0)
         if margin == 'bottom_margin':
-            return int(self.height - coefficient * self.height / 100.0)
+            return int(self.page_height - coefficient * self.page_height / 100.0)
 
     def get_coefficient(self, margin):
         '''Get the width of the margin in percent'''
@@ -1231,10 +1171,10 @@ class PDFPage(object):
                    for margin in ['inner_right_margin', 'inner_left_margin',
                                   'inner_top_margin', 'inner_bottom_margin']}
 
-        if (margins['inner_bottom_margin'] == self.height and
+        if (margins['inner_bottom_margin'] == self.page_height and
                 margins['inner_top_margin'] == 0 and
                 margins['inner_left_margin'] == 0 and
-                margins['inner_right_margin'] == self.width):
+                margins['inner_right_margin'] == self.page_width):
             margins = {}
 
         return margins
@@ -1249,13 +1189,13 @@ class PDFPage(object):
         coefficient = self.get_inner_coefficient(margin)
 
         if margin == 'inner_left_margin':
-            return int(coefficient * self.width / 100.0)
+            return int(coefficient * self.page_width / 100.0)
         if margin == 'inner_right_margin':
-            return int(self.width - coefficient * self.width / 100.0)
+            return int(self.page_width - coefficient * self.page_width / 100.0)
         if margin == 'inner_top_margin':
-            return int(coefficient * self.height / 100.0)
+            return int(coefficient * self.page_height / 100.0)
         if margin == 'inner_bottom_margin':
-            return int(self.height - coefficient * self.height / 100.0)
+            return int(self.page_height - coefficient * self.page_height / 100.0)
 
     def get_inner_coefficient(self, margin):
         '''Get the width of the margin in percent'''
@@ -1272,6 +1212,77 @@ class PDFPage(object):
                 coefficient = m['odd']
 
         return coefficient
+
+
+class PDFPage(object):
+    '''Reads a page element
+
+    textelements is a list of PDFTextElements
+
+    The textelements are manipulated in several ways,
+    then ordered in the way they appear on the page and
+    finally sent to PDFTextExtractor
+    '''
+    def __init__(self, page_element, metadata_margins={}, metadata_inner_margins={}):
+        self.textelements = [PDFTextElement(t)
+                             for t in page_element.iter('text')]
+        self.pdf_pagemetadata = PDFPageMetadata(
+            page_number=int(page_element.get('number')),
+            page_height=int(page_element.get('height')),
+            page_width=int(page_element.get('width')),
+            metadata_margins=metadata_margins,
+            metadata_inner_margins=metadata_inner_margins)
+
+    def is_skip_page(self, skip_pages):
+        '''True if a page should be skipped, otherwise false'''
+        return (('odd' in skip_pages and (self.pdf_pagemetadata.page_number % 2) == 1) or
+                ('even' in skip_pages and (self.pdf_pagemetadata.page_number % 2) == 0) or
+                self.pdf_pagemetadata.page_number in skip_pages)
+
+    def fix_font_id(self, pdffontspecs):
+        for textelement in self.textelements:
+            correct = pdffontspecs.corrected_id(textelement.font)
+            textelement.t.set('font', correct)
+
+    def adjust_line_heights(self):
+        '''If there is a 1 pixel overlap between neighbouring elements, adjust the height'''
+        for i in range(1, len(self.textelements)):
+            prev_textelement = self.textelements[i - 1]
+            textelement = self.textelements[i]
+            if prev_textelement.bottom == textelement.top + 1:
+                prev_textelement.t.set('height', str(prev_textelement.height - 1))
+
+    def remove_footnotes_superscript(self):
+        '''Remove numbers from elements found by find_footnotes_superscript.'''
+        for textelement in self.textelements[1:]:
+            textelement.remove_superscript()
+
+    def remove_elements_not_within_margin(self):
+        '''Remove PDFTextElements from textelements if needed'''
+        margins = self.pdf_pagemetadata.compute_margins()
+        inner_margins = self.pdf_pagemetadata.compute_inner_margins()
+
+        self.textelements[:] = [t for t in self.textelements
+                                if self.is_inside_margins(t, margins)]
+        if len(inner_margins) > 0:
+            self.textelements[:] = [t for t in self.textelements
+                                    if not self.is_inside_inner_margins(t, inner_margins)]
+
+    def merge_elements_on_same_line(self):
+        '''Merge PDFTextElements that are on the same line'''
+        same_line_indexes = [i for i in range(1, len(self.textelements))
+                             if self.textelements[i - 1].is_text_on_same_line(
+                                 self.textelements[i])]
+        for i in reversed(same_line_indexes):
+            self.textelements[i - 1].merge_text_elements(
+                self.textelements[i])
+            del self.textelements[i]
+
+    def remove_invalid_elements(self):
+        '''Remove elements with empty strings or where the width is zero or negative'''
+        self.textelements[:] = [t for t in self.textelements
+                                if not (len(t.t.xpath("string()").strip()) == 0 or
+                                        t.width < 1)]
 
     def is_inside_margins(self, t, margins):
         '''Check if t is inside the given margins

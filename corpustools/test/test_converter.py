@@ -5271,14 +5271,106 @@ class TestProblematicPageThreeColumns(XMLTester):
                             expected_page)
 
 
-class TestPDFPage(XMLTester):
+class TestPDFPageMetaData(unittest.TestCase):
+    def test_compute_default_margins(self):
+        '''Test if the default margins are set'''
+        page1 = converter.PDFPageMetadata(page_number=1,
+                                          page_height=1263,
+                                          page_width=862)
+
+        self.assertEqual(page1.compute_margins(), {'left_margin': 60,
+                                                   'right_margin': 801,
+                                                   'top_margin': 88,
+                                                   'bottom_margin': 1174})
+
+    def test_compute_margins1(self):
+        '''Test parse_margin_lines'''
+        md = xslsetter.MetadataHandler('test.pdf.xsl', create=True)
+        md.set_variable('left_margin', '7=5')
+        md.set_variable('right_margin', 'odd=10,even=15,3=5')
+        md.set_variable('top_margin', '8=8')
+        md.set_variable('bottom_margin', '9=20')
+
+        page1 = converter.PDFPageMetadata(
+            page_number=1, page_height=1263, page_width=862,
+            metadata_margins=md.margins)
+
+        self.assertEqual(page1.compute_margins(), {'left_margin': 60,
+                                                   'right_margin': 775,
+                                                   'top_margin': 88,
+                                                   'bottom_margin': 1174})
+        page2 = converter.PDFPageMetadata(
+            page_number=2, page_height=1263, page_width=862,
+            metadata_margins=md.margins)
+        self.assertEqual(page2.compute_margins(), {'left_margin': 60,
+                                                   'right_margin': 732,
+                                                   'top_margin': 88,
+                                                   'bottom_margin': 1174})
+        page3 = converter.PDFPageMetadata(
+            page_number=3, page_height=1263, page_width=862,
+            metadata_margins=md.margins)
+        self.assertEqual(page3.compute_margins(), {'left_margin': 60,
+                                                   'right_margin': 818,
+                                                   'top_margin': 88,
+                                                   'bottom_margin': 1174})
+        page7 = converter.PDFPageMetadata(
+            page_number=7, page_height=1263, page_width=862,
+            metadata_margins=md.margins)
+        self.assertEqual(page7.compute_margins(), {'left_margin': 43,
+                                                   'right_margin': 775,
+                                                   'top_margin': 88,
+                                                   'bottom_margin': 1174})
+        page8 = converter.PDFPageMetadata(
+            page_number=8, page_height=1263, page_width=862,
+            metadata_margins=md.margins)
+        self.assertEqual(page8.compute_margins(), {'left_margin': 60,
+                                                   'right_margin': 732,
+                                                   'top_margin': 101,
+                                                   'bottom_margin': 1174})
+        page9 = converter.PDFPageMetadata(
+            page_number=9, page_height=1263, page_width=862,
+            metadata_margins=md.margins)
+        self.assertEqual(page9.compute_margins(), {'left_margin': 60,
+                                                   'right_margin': 775,
+                                                   'top_margin': 88,
+                                                   'bottom_margin': 1010})
+
+    def test_compute_inner_margins_1(self):
+        '''Test if inner margins is set for the specified page'''
+        md = xslsetter.MetadataHandler('test.pdf.xsl', create=True)
+        md.set_variable('inner_top_margin', '1=40')
+        md.set_variable('inner_bottom_margin', '1=40')
+
+        page1 = converter.PDFPageMetadata(
+            page_number=1, page_height=1263, page_width=862,
+            metadata_inner_margins=md.inner_margins)
+
+        self.assertEqual(page1.compute_inner_margins(),
+                         {'inner_top_margin': 505, 'inner_bottom_margin': 757,
+                          'inner_left_margin': 0, 'inner_right_margin': 862})
+
+    def test_compute_inner_margins_2(self):
+        '''Test that inner margins is empty for the specified page'''
+        md = xslsetter.MetadataHandler('test.pdf.xsl', create=True)
+        md.set_variable('inner_top_margin', '1=40')
+        md.set_variable('inner_bottom_margin', '1=40')
+
+        page1 = converter.PDFPageMetadata(
+            page_number=2, page_height=1263, page_width=862,
+            metadata_inner_margins=md.inner_margins)
+
+        self.assertEqual(page1.compute_inner_margins(), {})
+
     def test_width(self):
-        page = converter.PDFPage(etree.fromstring('<page number="1" height="1263" width="862"/>'))
+        page = converter.PDFPageMetadata(
+            page_number=1, page_height=1263, page_width=862)
 
         self.assertEqual(page.page_number, 1)
-        self.assertEqual(page.height, 1263)
-        self.assertEqual(page.width, 862)
+        self.assertEqual(page.page_height, 1263)
+        self.assertEqual(page.page_width, 862)
 
+
+class TestPDFPage(XMLTester):
     def test_merge_text_elements(self):
         page = etree.fromstring(u'''
             <page number="1" height="1263" width="862">'
@@ -5459,94 +5551,6 @@ class TestPDFPage(XMLTester):
 
         wanted_heights = [18, 18]
         self.assertListEqual([t.height for t in pdfpage.textelements], wanted_heights)
-
-    def test_compute_default_margins(self):
-        '''Test if the default margins are set'''
-        page1 = converter.PDFPage(etree.fromstring(
-            '<page number="1" height="1263" width="862"/>'))
-
-        self.assertEqual(page1.compute_margins(), {'left_margin': 60,
-                                                   'right_margin': 801,
-                                                   'top_margin': 88,
-                                                   'bottom_margin': 1174})
-
-    def test_compute_margins1(self):
-        '''Test parse_margin_lines'''
-        md = xslsetter.MetadataHandler('test.pdf.xsl', create=True)
-        md.set_variable('left_margin', '7=5')
-        md.set_variable('right_margin', 'odd=10,even=15,3=5')
-        md.set_variable('top_margin', '8=8')
-        md.set_variable('bottom_margin', '9=20')
-
-        page1 = converter.PDFPage(
-            etree.fromstring('<page number="1" height="1263" width="862"/>'),
-            metadata_margins=md.margins)
-
-        self.assertEqual(page1.compute_margins(), {'left_margin': 60,
-                                                   'right_margin': 775,
-                                                   'top_margin': 88,
-                                                   'bottom_margin': 1174})
-        page2 = converter.PDFPage(
-            etree.fromstring('<page number="2" height="1263" width="862"/>'),
-            metadata_margins=md.margins)
-        self.assertEqual(page2.compute_margins(), {'left_margin': 60,
-                                                   'right_margin': 732,
-                                                   'top_margin': 88,
-                                                   'bottom_margin': 1174})
-        page3 = converter.PDFPage(
-            etree.fromstring('<page number="3" height="1263" width="862"/>'),
-            metadata_margins=md.margins)
-        self.assertEqual(page3.compute_margins(), {'left_margin': 60,
-                                                   'right_margin': 818,
-                                                   'top_margin': 88,
-                                                   'bottom_margin': 1174})
-        page7 = converter.PDFPage(
-            etree.fromstring('<page number="7" height="1263" width="862"/>'),
-            metadata_margins=md.margins)
-        self.assertEqual(page7.compute_margins(), {'left_margin': 43,
-                                                   'right_margin': 775,
-                                                   'top_margin': 88,
-                                                   'bottom_margin': 1174})
-        page8 = converter.PDFPage(
-            etree.fromstring('<page number="8" height="1263" width="862"/>'),
-            metadata_margins=md.margins)
-        self.assertEqual(page8.compute_margins(), {'left_margin': 60,
-                                                   'right_margin': 732,
-                                                   'top_margin': 101,
-                                                   'bottom_margin': 1174})
-        page9 = converter.PDFPage(
-            etree.fromstring('<page number="9" height="1263" width="862"/>'),
-            metadata_margins=md.margins)
-        self.assertEqual(page9.compute_margins(), {'left_margin': 60,
-                                                   'right_margin': 775,
-                                                   'top_margin': 88,
-                                                   'bottom_margin': 1010})
-
-    def test_compute_inner_margins_1(self):
-        '''Test if inner margins is set for the specified page'''
-        md = xslsetter.MetadataHandler('test.pdf.xsl', create=True)
-        md.set_variable('inner_top_margin', '1=40')
-        md.set_variable('inner_bottom_margin', '1=40')
-
-        page1 = converter.PDFPage(
-            etree.fromstring('<page number="1" height="1263" width="862"/>'),
-            metadata_inner_margins=md.inner_margins)
-
-        self.assertEqual(page1.compute_inner_margins(),
-                         {'inner_top_margin': 505, 'inner_bottom_margin': 757,
-                          'inner_left_margin': 0, 'inner_right_margin': 862})
-
-    def test_compute_inner_margins_2(self):
-        '''Test that inner margins is empty for the specified page'''
-        md = xslsetter.MetadataHandler('test.pdf.xsl', create=True)
-        md.set_variable('inner_top_margin', '1=40')
-        md.set_variable('inner_bottom_margin', '1=40')
-
-        page1 = converter.PDFPage(
-            etree.fromstring('<page number="2" height="1263" width="862"/>'),
-            metadata_inner_margins=md.inner_margins)
-
-        self.assertEqual(page1.compute_inner_margins(), {})
 
     def test_is_inside_margins1(self):
         '''top and left inside margins'''
