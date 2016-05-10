@@ -32,5 +32,5 @@ exec(open(version).read(), scope)
 version = scope['VERSION']
 
 
-parser = argparse.ArgumentParser(add_help=False,
-                                 version=version)
+parser = argparse.ArgumentParser(add_help=False)
+parser.add_argument('--version', action='version', version=version)
