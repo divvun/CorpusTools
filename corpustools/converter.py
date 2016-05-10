@@ -40,8 +40,8 @@ from lxml import etree
 from lxml.html import clean
 from lxml.html import html5parser
 from odf.odf2xhtml import ODF2XHTML
-#from pyth.plugins.rtf15.reader import Rtf15Reader
-#from pyth.plugins.xhtml.writer import XHTMLWriter
+from pyth.plugins.rtf15.reader import Rtf15Reader
+from pyth.plugins.xhtml.writer import XHTMLWriter
 from pydocx.export import PyDocXHTMLExporter
 
 from . import argparse_version
@@ -2186,21 +2186,21 @@ class HTMLConverter(HTMLContentConverter):
                                                 content=f.read())
 
 
-#class RTFConverter(HTMLContentConverter):
-    #'''Convert rtf documents to the giellatekno xml format.'''
+class RTFConverter(HTMLContentConverter):
+    '''Convert rtf documents to the giellatekno xml format.'''
 
-    #def __init__(self, filename, write_intermediate=False):
-        #with open(filename, "rb") as rtf_document:
-            #content = rtf_document.read()
-            #try:
-                #pyth_doc = Rtf15Reader.read(
-                    #io.BytesIO(content.replace('fcharset256', 'fcharset255')))
-                #HTMLContentConverter.__init__(
-                    #self, filename,
-                    #content=XHTMLWriter.write(pyth_doc, pretty=True).read())
-            #except UnicodeDecodeError:
-                #raise ConversionException('Unicode problems in {}'.format(
-                    #self.orig))
+    def __init__(self, filename, write_intermediate=False):
+        with open(filename, "rb") as rtf_document:
+            content = rtf_document.read()
+            try:
+                pyth_doc = Rtf15Reader.read(
+                    io.BytesIO(content.replace(b'fcharset256', b'fcharset255')))
+                HTMLContentConverter.__init__(
+                    self, filename,
+                    content=str(XHTMLWriter.write(pyth_doc, pretty=True).read(), encoding='utf8'))
+            except UnicodeDecodeError:
+                raise ConversionException('Unicode problems in {}'.format(
+                    self.orig))
 
 
 class OdfConverter(HTMLContentConverter):
