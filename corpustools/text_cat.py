@@ -175,10 +175,10 @@ class NGramModel(object):
             for gram, rank
             in six.iteritems(unknown.ngrams) if gram in self.ngrams
         )
-        util.print_frame(debug=missing_count)
-        util.print_frame(debug=d_missing)
-        util.print_frame(debug=d_found)
-        
+        #util.print_frame(debug=missing_count)
+        #util.print_frame(debug=d_missing)
+        #util.print_frame(debug=d_found)
+
         return d_missing + d_found
 
 
