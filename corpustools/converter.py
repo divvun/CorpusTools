@@ -1201,13 +1201,13 @@ class PDFPage(object):
         # print(util.lineno(), margin, page_height, page_width, coefficient, file=sys.stderr)
 
         if margin == 'left_margin':
-            return int(coefficient * self.width / 100)
+            return int(coefficient * self.width / 100.0)
         if margin == 'right_margin':
-            return int(self.width - coefficient * self.width / 100)
+            return int(self.width - coefficient * self.width / 100.0)
         if margin == 'top_margin':
-            return int(coefficient * self.height / 100)
+            return int(coefficient * self.height / 100.0)
         if margin == 'bottom_margin':
-            return int(self.height - coefficient * self.height / 100)
+            return int(self.height - coefficient * self.height / 100.0)
 
     def get_coefficient(self, margin):
         '''Get the width of the margin in percent'''
@@ -1249,13 +1249,13 @@ class PDFPage(object):
         coefficient = self.get_inner_coefficient(margin)
 
         if margin == 'inner_left_margin':
-            return int(coefficient * self.width / 100)
+            return int(coefficient * self.width / 100.0)
         if margin == 'inner_right_margin':
-            return int(self.width - coefficient * self.width / 100)
+            return int(self.width - coefficient * self.width / 100.0)
         if margin == 'inner_top_margin':
-            return int(coefficient * self.height / 100)
+            return int(coefficient * self.height / 100.0)
         if margin == 'inner_bottom_margin':
-            return int(self.height - coefficient * self.height / 100)
+            return int(self.height - coefficient * self.height / 100.0)
 
     def get_inner_coefficient(self, margin):
         '''Get the width of the margin in percent'''
@@ -1370,30 +1370,30 @@ class PDF2XMLConverter(Converter):
     def replace_ligatures(self, content):
         '''document is a stringified xml document'''
         replacements = {
-            "[dstrok]": "đ",
-            "[Dstrok]": "Đ",
-            "[tstrok]": "ŧ",
-            "[Tstrok]": "Ŧ",
-            "[scaron]": "š",
-            "[Scaron]": "Š",
-            "[zcaron]": "ž",
-            "[Zcaron]": "Ž",
-            "[ccaron]": "č",
-            "[Ccaron]": "Č",
-            "[eng": "ŋ",
-            " ]": "",
-            "Ď": "đ",  # cough
-            "ď": "đ",  # cough
-            "ﬁ": "fi",
-            "ﬂ": "fl",
-            "ﬀ": "ff",
-            "ﬃ": "ffi",
-            "ﬄ": "ffl",
-            "ﬅ": "ft",
+            u"[dstrok]": u"đ",
+            u"[Dstrok]": u"Đ",
+            u"[tstrok]": u"ŧ",
+            u"[Tstrok]": u"Ŧ",
+            u"[scaron]": u"š",
+            u"[Scaron]": u"Š",
+            u"[zcaron]": u"ž",
+            u"[Zcaron]": u"Ž",
+            u"[ccaron]": u"č",
+            u"[Ccaron]": u"Č",
+            u"[eng": u"ŋ",
+            u" ]": u"",
+            u"Ď": u"đ",  # cough
+            u"ď": u"đ",  # cough
+            u"ﬁ": u"fi",
+            u"ﬂ": u"fl",
+            u"ﬀ": u"ff",
+            u"ﬃ": u"ffi",
+            u"ﬄ": u"ffl",
+            u"ﬅ": u"ft",
         }
 
         for key, value in six.iteritems(replacements):
-            content = content.replace(key + ' ', value)
+            content = content.replace(key + u' ', value)
             content = content.replace(key, value)
 
         return content
@@ -1406,10 +1406,10 @@ class PDF2XMLConverter(Converter):
         command = ['pdftohtml', '-hidden', '-enc', 'UTF-8', '-stdout',
                    '-nodrm', '-i', '-xml', self.orig]
         pdf_content = self.replace_ligatures(self.strip_chars(
-            self.extract_text(command)))
+            self.extract_text(command))).encode('utf8')
 
         try:
-            root_element = etree.fromstring(bytes(pdf_content, 'utf8'))
+            root_element = etree.fromstring(pdf_content)
         except etree.XMLSyntaxError as e:
             self.handle_syntaxerror(e, util.lineno(),
                                     pdf_content)
@@ -2456,26 +2456,26 @@ class DocumentFixer(object):
             u"[ccaron]": u"č",
             u"[Ccaron]": u"Č",
             u"[eng": u"ŋ",
-            " ]": "",
+            u" ]": u"",
             u"Ď": u"đ",  # cough
             u"ď": u"đ",  # cough
-            "\x03": "",
-            "\x04": "",
-            "\x07": "",
-            "\x08": "",
-            "\x0F": "",
-            "\x10": "",
-            "\x11": "",
-            "\x13": "",
-            "\x14": "",
-            "\x15": "",
-            "\x17": "",
-            "\x18": "",
-            "\x1A": "",
-            "\x1B": "",
-            "\x1C": "",
-            "\x1D": "",
-            "\x1E": "",
+            "\x03": u"",
+            "\x04": u"",
+            "\x07": u"",
+            "\x08": u"",
+            "\x0F": u"",
+            "\x10": u"",
+            "\x11": u"",
+            "\x13": u"",
+            "\x14": u"",
+            "\x15": u"",
+            "\x17": u"",
+            "\x18": u"",
+            "\x1A": u"",
+            "\x1B": u"",
+            "\x1C": u"",
+            "\x1D": u"",
+            "\x1E": u"",
             u"ﬁ": "fi",
             u"ﬂ": "fl",
             u"ﬀ": "ff",

@@ -28,6 +28,7 @@ import lxml.etree as etree
 import lxml.objectify as objectify
 from lxml.html import html5parser
 import os
+import six
 import unittest
 
 from corpustools import converter
@@ -182,7 +183,7 @@ class TestConverter(XMLTester):
         http://giellatekno.uit.no/bugzilla/show_bug.cgi?id=2151
         '''
         c = converter.PlaintextConverter('blogg_5.correct.txt')
-        complete_string = u'''
+        want_string = '''
             <document xml:lang="smj" id="no_id">
             <header>
                 <title/>
@@ -213,11 +214,11 @@ class TestConverter(XMLTester):
                 </body>
             </document>
         '''
-        complete = etree.fromstring(complete_string)
-        c.fix_document(complete)
+        got = etree.fromstring(want_string)
+        c.fix_document(got)
 
-        self.assertXmlEqual(complete_string,
-                            etree.tostring(complete))
+        self.assertXmlEqual(got,
+                            etree.fromstring(want_string))
 
 
 class TestAvvirConverter(XMLTester):
@@ -3004,15 +3005,18 @@ LOGO: Smi kulturfestivala 1998
                             etree.fromstring(expected_paragraph))
 
     def test_word_count(self):
-        orig_doc = etree.parse(
-            io.BytesIO((
+        document = (
                 '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
                 '<author><unknown/></author><availability><free/>'
                 '</availability><multilingual/></header><body><p>Bïevnesh '
                 'naasjovnalen pryövoej bïjre</p><p>2008</p><p>Bïevnesh '
                 'eejhtegidie, tjidtjieh aehtjieh bielide naasjovnalen '
                 'pryövoej bïjre giej leah maanah 5. jïh 8. '
-                'tsiehkine</p></body></document>').encode('utf8')))
+                'tsiehkine</p></body></document>')
+        if six.PY3:
+            document = document.encode('utf8')
+        orig_doc = etree.parse(
+            io.BytesIO(document))
 
         expected_doc = (
             '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
@@ -3029,12 +3033,15 @@ LOGO: Smi kulturfestivala 1998
         self.assertXmlEqual(document_fixer.root, etree.fromstring(expected_doc))
 
     def test_replace_shy1(self):
-        orig_doc = etree.parse(
-            io.BytesIO((
+        document = (
                 '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
                 '<author><unknown/></author><availability><free/>'
                 '</availability><multilingual/></header><body><p>a­b­c'
-                '<span>d­e</span>f­g</p></body></document>').encode('utf8')))
+                '<span>d­e</span>f­g</p></body></document>')
+        if six.PY3:
+            document = document.encode('utf8')
+        orig_doc = etree.parse(
+            io.BytesIO(document))
 
         expected_doc = (
             '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
@@ -3048,12 +3055,15 @@ LOGO: Smi kulturfestivala 1998
         self.assertXmlEqual(document_fixer.root, etree.fromstring(expected_doc))
 
     def test_replace_shy2(self):
-        orig_doc = etree.parse(
-            io.BytesIO((
+        document = (
                 '<document xml:lang="sma" id="no_id">'
                 '<header><title/><genre/><author><unknown/></author>'
                 '<availability><free/></availability><multilingual/></header>'
-                '<body><p>a­b­c<span>d­e</span></p></body></document>').encode('utf8')))
+                '<body><p>a­b­c<span>d­e</span></p></body></document>')
+        if six.PY3:
+            document = document.encode('utf8')
+        orig_doc = etree.parse(
+            io.BytesIO(document))
 
         expected_doc = (
             '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
@@ -3808,7 +3818,7 @@ class TestPDFTextExtractor(XMLTester):
         p2x.handle_line_ending()
 
         self.assertXmlEqual(
-            p2x.p, etree.fromstring('<p>a\xAD</p>'))
+            p2x.p, etree.fromstring(u'<p>a\xAD</p>'))
 
     def test_handle_line_ending_hyphen(self):
         p2x = converter.PDFTextExtractor()
@@ -3816,7 +3826,7 @@ class TestPDFTextExtractor(XMLTester):
         p2x.handle_line_ending()
 
         self.assertXmlEqual(
-            p2x.p, etree.fromstring('<p>a\xAD</p>'))
+            p2x.p, etree.fromstring(u'<p>a\xAD</p>'))
 
     def test_handle_line_ending_hyphen_last_child_has_no_tail(self):
         p2x = converter.PDFTextExtractor()
@@ -3824,7 +3834,7 @@ class TestPDFTextExtractor(XMLTester):
         p2x.handle_line_ending()
 
         self.assertXmlEqual(
-            p2x.p, etree.fromstring('<p><em type="italic">a\xAD</em></p>'))
+            p2x.p, etree.fromstring(u'<p><em type="italic">a\xAD</em></p>'))
 
     def test_handle_line_ending_hyphen_last_child_has_tail(self):
         p2x = converter.PDFTextExtractor()
@@ -3832,7 +3842,7 @@ class TestPDFTextExtractor(XMLTester):
         p2x.handle_line_ending()
 
         self.assertXmlEqual(
-            p2x.p, etree.fromstring('<p><em type="italic">a</em>\xAD</p>'))
+            p2x.p, etree.fromstring(u'<p><em type="italic">a</em>\xAD</p>'))
 
     def test_handle_line_ending_hyphen_space(self):
         '''If - is not the last char, do not replace it by a soft hyphen'''
@@ -5767,7 +5777,7 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(
             p2x.extractor.body,
-            etree.fromstring('<body><p>R\xADØ</p></body>'))
+            etree.fromstring(u'<body><p>R\xADØ</p></body>'))
 
     def test_parse_page_7(self):
         '''One text element ending with a hyphen.'''
@@ -5800,7 +5810,7 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(
             p2x.extractor.body,
-            etree.fromstring('<body><p><em type="bold">JULE\xADHANDEL</em></p></body>'))
+            etree.fromstring(u'<body><p><em type="bold">JULE\xADHANDEL</em></p></body>'))
 
     def test_parse_page_9(self):
         '''Two <text> elements. One is above the top margin.'''
@@ -5890,13 +5900,13 @@ class TestPDF2XMLConverter(XMLTester):
         self.maxDiff = None
         self.assertXmlEqual(
             p2x.extractor.body,
-            etree.fromstring('<body>'
-            '<p>vuosttaš dábálaš linnjá</p>'
-            '<p type="listitem">• Vuosttaš listolinnjá  '
-            'vuosttaš listolinnjá joaktta</p>'
-            '<p type="listitem">• Nubbi listo\xADlinnjá</p>'
-            '<p>Nubbi dábáláš linnjá</p>'
-            '</body>'))
+            etree.fromstring(u'<body>'
+            u'<p>vuosttaš dábálaš linnjá</p>'
+            u'<p type="listitem">• Vuosttaš listolinnjá  '
+            u'vuosttaš listolinnjá joaktta</p>'
+            u'<p type="listitem">• Nubbi listo\xADlinnjá</p>'
+            u'<p>Nubbi dábáláš linnjá</p>'
+            u'</body>'))
 
     def test_parse_page_14(self):
         '''Test that elements outside margin is not added'''
@@ -5933,7 +5943,7 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.assertXmlEqual(
             p2x.extractor.body,
-            etree.fromstring('<body><p>A – <em type="italic">b c-d</em> – e\xADf </p></body>'))
+            etree.fromstring(U'<body><p>A – <em type="italic">b c-d</em> – e\xADf </p></body>'))
 
     def test_parse_pdf2xmldoc1(self):
         '''Test how a parsing a simplistic pdf2xml document works'''
