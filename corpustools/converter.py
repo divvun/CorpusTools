@@ -3023,8 +3023,9 @@ class ConverterManager(object):
     LANGUAGEGUESSER = text_cat.Classifier(None)
     FILES = []
 
-    def __init__(self, write_intermediate):
+    def __init__(self, write_intermediate, goldstandard):
         self.write_intermediate = write_intermediate
+        self.goldstandard = goldstandard
 
     def convert(self, orig_file):
         try:
@@ -3158,6 +3159,9 @@ def parse_options():
                         help=u"Write the intermediate XML representation \
                         to ORIGFILE.im.xml, for debugging the XSLT.\
                         (Has no effect if the converted file already exists.)")
+    parser.add_argument(u'--goldstandard',
+                        action=u"store_true",
+                        help=u'Convert goldstandard and .correct files')
     parser.add_argument('sources',
                         nargs='+',
                         help="The original file(s) or \
@@ -3182,7 +3186,8 @@ def main():
     sanity_check()
     args = parse_options()
 
-    cm = ConverterManager(args.write_intermediate)
+    util.print_frame(args.goldstandard)
+    cm = ConverterManager(args.write_intermediate, args.goldstandard)
 
     cm.collect_files(args.sources)
 
