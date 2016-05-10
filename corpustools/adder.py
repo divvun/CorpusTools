@@ -260,7 +260,7 @@ class AddToCorpus(object):
         self.find_duplicates(origpath)
         for root, dirs, files in os.walk(origpath):
             for f in files:
-                orig_f = os.path.join(root, f).decode('utf8')
+                orig_f = os.path.join(root, f)
                 self.copy_file_to_corpus(orig_f, os.path.basename(orig_f))
 
     @staticmethod
@@ -268,7 +268,7 @@ class AddToCorpus(object):
         duplicates = {}
         for root, dirs, files in os.walk(origpath):
             for f in files:
-                path = os.path.join(root, f).decode('utf8')
+                path = os.path.join(root, f)
                 file_hash = namechanger.compute_hexdigest(path)
                 if file_hash in duplicates:
                     duplicates[file_hash].append(path)

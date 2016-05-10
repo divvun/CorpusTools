@@ -252,8 +252,7 @@ class MetadataHandler(object):
         try:
             with open(self.filename, 'w') as f:
                 f.write(etree.tostring(self.tree,
-                                       encoding="utf-8",
-                                       xml_declaration=True))
+                                       encoding="unicode"))
         except IOError as e:
             print('cannot write', self.filename)
             print(e)
