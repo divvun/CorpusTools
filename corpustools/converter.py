@@ -3002,10 +3002,10 @@ class XslMaker(object):
     @property
     def transformer(self):
         try:
-            return etree.XSLT(self.names.xsl)
+            return etree.XSLT(self.xsl)
         except etree.XSLTParseError as xxx_todo_changeme:
             (e) = xxx_todo_changeme
-            with open(self.names.log, 'w') as logfile:
+            with open(self.logfile, 'w') as logfile:
                 logfile.write('Error at: {}\n'.format(six.text_type(util.lineno())))
                 logfile.write('Invalid XML in {}\n'.format(self.filename))
                 for entry in e.error_log:
