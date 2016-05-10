@@ -28,6 +28,7 @@ from io import StringIO
 import unittest
 
 from corpustools import text_cat
+from corpustools import util
 
 
 here = os.path.dirname(__file__)
@@ -129,11 +130,14 @@ class TestTextCat(unittest.TestCase):
             wmodel_sme.to_model_file(sme_wm)
         cmodel_nob = text_cat.CharModel().of_text(nob_train)
         with open('nob.lm3', 'w') as nob_lm:
-            cmodel_sme.to_model_file(nob_lm)
+            cmodel_nob.to_model_file(nob_lm)
         wmodel_nob = text_cat.WordModel().of_text(nob_train)
         with open('nob.wm3', 'w') as nob_wm:
             wmodel_nob.to_model_file(nob_wm)
         ctext_nob = text_cat.CharModel().of_text(nob_test)
+
+        util.print_frame(debug=cmodel_sme.compare(ctext_nob))
+        util.print_frame(debug=cmodel_nob.compare(ctext_nob))
         self.assertLess(wmodel_sme.compare_tc(nob_test,
                                               cmodel_sme.compare(ctext_nob)),
                         wmodel_nob.compare_tc(nob_test,
