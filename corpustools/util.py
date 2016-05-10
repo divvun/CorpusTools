@@ -184,12 +184,12 @@ def print_element(element, level, indent, out):
     for k, v in six.iteritems(element.attrib):
         out.write(' ')
         if isinstance(k, six.text_type):
-            out.write(k.encode('utf8'))
+            out.write(k)
         else:
             out.write(k)
         out.write('="')
         if isinstance(v, six.text_type):
-            out.write(v.encode('utf8'))
+            out.write(v)
         else:
             out.write(v)
         out.write('"')
@@ -198,7 +198,7 @@ def print_element(element, level, indent, out):
     if element.text is not None and element.text.strip() != '':
         out.write(' ' * ((level + 1) * indent))
         if isinstance(element.text, six.text_type):
-            out.write(element.text.strip().encode('utf8'))
+            out.write(element.text.strip())
         else:
             out.write(element.text.strip())
         out.write('\n')
@@ -212,7 +212,7 @@ def print_element(element, level, indent, out):
     if level > 0 and element.tail is not None and element.tail.strip() != '':
         for _ in range(0, (level - 1) * indent):
             out.write(' ')
-        out.write(element.tail.strip().encode('utf8'))
+        out.write(element.tail.strip())
         out.write('\n')
 
 
