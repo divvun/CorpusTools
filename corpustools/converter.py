@@ -294,7 +294,10 @@ class Converter(object):
                     '{} failed. More info in the log file: {}'.format(
                         command[0], self.logfile))
 
-        return runner.stdout.decode('utf8')
+        try:
+            return runner.stdout.decode('utf8')
+        except UnicodeDecodeError:
+            return runner.stdout.decode('windows-1252')
 
     def handle_syntaxerror(self, e, lineno, invalid_input):
         with open(self.logfile, 'w') as logfile:
