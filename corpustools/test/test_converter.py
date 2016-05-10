@@ -265,7 +265,6 @@ class TestConverter(XMLTester):
         This is a test for that covers the case covered in
         http://giellatekno.uit.no/bugzilla/show_bug.cgi?id=2151
         '''
-        c = converter.PlaintextConverter('orig/sme/admin/blogg_5.correct.txt')
         want_string = '''
             <document xml:lang="smj" id="no_id">
             <header>
@@ -298,10 +297,13 @@ class TestConverter(XMLTester):
             </document>
         '''
         got = etree.fromstring(want_string)
+
+        c = converter.PlaintextConverter('orig/sme/admin/blogg_5.correct.txt')
+        c.md = xslsetter.MetadataHandler(c.names.xsl, create=True)
+        c.md.set_variable('conversion_status', 'correct')
         c.fix_document(got)
 
-        self.assertXmlEqual(got,
-                            etree.fromstring(want_string))
+        self.assertXmlEqual(got, etree.fromstring(want_string))
 
 
 class TestAvvirConverter(XMLTester):

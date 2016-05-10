@@ -246,7 +246,7 @@ class Converter(object):
                 self.names.xsl))
 
     def convert_errormarkup(self, complete):
-        if 'correct.' in self.names.orig:
+        if self.goldstandard:
             try:
                 em = errormarkup.ErrorMarkup(self.names.orig)
 
@@ -275,7 +275,7 @@ class Converter(object):
         fixer.fix_newstags()
         fixer.soft_hyphen_to_hyph_tag()
         fixer.set_word_count()
-        if not 'correct.' in self.names.orig:
+        if not self.goldstandard:
             fixer.detect_quotes()
 
         if (complete.
@@ -336,8 +336,7 @@ class Converter(object):
             with util.ignored(OSError):
                 os.makedirs(os.path.dirname(self.names.converted))
 
-            if (('goldstandard' in self.names.orig and '.correct.' in self.names.orig) or
-                    'goldstandard' not in self.names.orig):
+            if self.standard or self.goldstandard:
                 complete = self.make_complete(languageguesser)
 
                 if self.has_content(complete):
