@@ -279,7 +279,6 @@ class EncodingGuesser(object):
         """
         winner = None
 
-        content = content.decode('utf8')
         if (
                 (u'' in content and u'ã' not in content) or
                 (u'' in content) or
@@ -316,8 +315,6 @@ class EncodingGuesser(object):
         @param text utf8 encoded str
         @return utf8 encoded str
         """
-        text = text.decode('utf8')
-
         if position is not None:
             encoding = CTYPES[position]
 
@@ -328,7 +325,7 @@ class EncodingGuesser(object):
                 text = text.replace(u"Ç", u"«")
                 text = text.replace(u"È", u"»")
 
-        return text.encode('utf8')
+        return text
 
 if __name__ == '__main__':
     eg = EncodingGuesser()
