@@ -21,6 +21,7 @@
 #
 from __future__ import print_function
 
+from __future__ import absolute_import
 import os
 
 from collections import namedtuple
@@ -31,6 +32,7 @@ import urllib
 from corpustools import util
 from corpustools import versioncontrol
 from corpustools import xslsetter
+import six
 
 
 class NamechangerException(Exception):
@@ -79,7 +81,7 @@ class MovepairComputer(object):
         new_components = util.split_path(newpath)
 
         metadatafile = xslsetter.MetadataHandler(oldpath + '.xsl')
-        for lang, parallel in metadatafile.get_parallel_texts().iteritems():
+        for lang, parallel in six.iteritems(metadatafile.get_parallel_texts()):
             oldparellelpath = u'/'.join((
                 old_components.root,
                 old_components.module,
@@ -426,7 +428,7 @@ def normalise_filename(filename):
     Returns:
         a downcased string containing only ascii chars
     '''
-    if type(filename) is not unicode:
+    if type(filename) is not six.text_type:
         raise NamechangerException('{} is not a unicode string'.format(
             filename))
 
@@ -445,13 +447,13 @@ def normalise_filename(filename):
 
     # unidecode.unidecode makes ascii only
     # urllib.unquote replaces %xx escapes by their single-character equivalent.
-    newname = unicode(
+    newname = six.text_type(
         unidecode.unidecode(
             urllib.unquote(
                 filename
             ))).lower()
 
-    newname = util.replace_all(unwanted_chars.iteritems(), newname)
+    newname = util.replace_all(six.iteritems(unwanted_chars), newname)
 
     while u'__' in newname:
         newname = newname.replace(u'__', u'_')
@@ -498,9 +500,9 @@ def compute_new_basename(oldpath, wanted_path):
                 dot = wanted_basename.rfind('.')
                 extension = wanted_basename[dot:]
                 pre_extension = wanted_basename[:dot]
-                new_basename = pre_extension + u'_' + unicode(n) + extension
+                new_basename = pre_extension + u'_' + six.text_type(n) + extension
             else:
-                new_basename = wanted_basename + unicode(n)
+                new_basename = wanted_basename + six.text_type(n)
             newpath = os.path.join(os.path.dirname(wanted_path), new_basename)
             n += 1
 

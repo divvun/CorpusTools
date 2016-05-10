@@ -23,13 +23,15 @@
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import argparse
 from lxml import etree
 import os
 import StringIO
 import sys
 
-import argparse_version
+from . import argparse_version
+import six
 
 
 class XMLPrinter(object):
@@ -208,7 +210,7 @@ class XMLPrinter(object):
         text += attributes.get('correct')
         del attributes['correct']
 
-        attr = [key + u'=' + unicode(attributes[key])
+        attr = [key + u'=' + six.text_type(attributes[key])
                 for key in sorted(attributes)]
 
         if len(attr) > 0:

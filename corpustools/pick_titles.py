@@ -25,14 +25,15 @@
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import os
 import shutil
 import sys
 import time
 import urllib2
 
-import util
-import xslsetter
+from . import util
+from . import xslsetter
 
 
 class DocumentPicker(object):

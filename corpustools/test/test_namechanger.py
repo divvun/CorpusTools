@@ -22,6 +22,7 @@
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import os
 import unittest
 
@@ -30,6 +31,7 @@ import testfixtures
 
 from corpustools import namechanger
 from corpustools import xslsetter
+import six
 
 here = os.path.dirname(__file__)
 
@@ -156,15 +158,15 @@ class TestComputeNewBasename(unittest.TestCase):
 
     def test_compute_new_basename_same_name(self):
         '''What happens when the suggested name is taken, but not duplicate'''
-        oldpath = unicode(os.path.join(self.tempdir.path,
+        oldpath = six.text_type(os.path.join(self.tempdir.path,
                                        'orig/sme/admin/other_files',
                                        'new_none_düpe.txt'), encoding='utf8')
-        suggestedpath = unicode(os.path.join(self.tempdir.path,
+        suggestedpath = six.text_type(os.path.join(self.tempdir.path,
                                              'orig/sme/admin/other_files',
                                              'new_none_dupe.txt'))
         self.assertEqual(
             namechanger.compute_new_basename(oldpath, suggestedpath),
-            unicode(os.path.join(self.tempdir.path, 'orig/sme/admin/other_files',
+            six.text_type(os.path.join(self.tempdir.path, 'orig/sme/admin/other_files',
                                  'new_none_dupe_1.txt'))
         )
 

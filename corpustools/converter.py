@@ -23,6 +23,7 @@
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import argparse
 import codecs
 from copy import deepcopy
@@ -42,13 +43,16 @@ from pyth.plugins.rtf15.reader import Rtf15Reader
 from pyth.plugins.xhtml.writer import XHTMLWriter
 from pydocx.export import PyDocXHTMLExporter
 
-import argparse_version
-import ccat
-import decode
-import errormarkup
-import text_cat
-import util
-import xslsetter
+from . import argparse_version
+from . import ccat
+from . import decode
+from . import errormarkup
+from . import text_cat
+from . import util
+from . import xslsetter
+import six
+from six.moves import range
+from six.moves import zip
 
 
 here = os.path.dirname(__file__)
@@ -661,10 +665,10 @@ class BoundingBox(object):
 
     def __unicode__(self):
         info = []
-        for key, value in self.__dict__.iteritems():
-            info.append(unicode(key) + u' ' + unicode(value))
-        info.append(u'height ' + unicode(self.height))
-        info.append(u'width ' + unicode(self.width))
+        for key, value in six.iteritems(self.__dict__):
+            info.append(six.text_type(key) + u' ' + six.text_type(value))
+        info.append(u'height ' + six.text_type(self.height))
+        info.append(u'width ' + six.text_type(self.width))
 
         return u'\n'.join(info)
 
@@ -739,17 +743,17 @@ class PDFTextElement(BoundingBox):
 
         prev_t.set('width', str(self.width + other_box.width))
         if self.height < other_box.height:
-            prev_t.set('height', unicode(other_box.height))
+            prev_t.set('height', six.text_type(other_box.height))
 
     def __unicode__(self):
         info = []
         info.append(u'text ' + self.plain_text)
-        info.append(u'top ' + unicode(self.top))
-        info.append(u'left ' + unicode(self.left))
-        info.append(u'bottom ' + unicode(self.bottom))
-        info.append(u'right ' + unicode(self.right))
-        info.append(u'height ' + unicode(self.height))
-        info.append(u'width ' + unicode(self.width))
+        info.append(u'top ' + six.text_type(self.top))
+        info.append(u'left ' + six.text_type(self.left))
+        info.append(u'bottom ' + six.text_type(self.bottom))
+        info.append(u'right ' + six.text_type(self.right))
+        info.append(u'height ' + six.text_type(self.height))
+        info.append(u'width ' + six.text_type(self.width))
 
         return '\n'.join(info)
 
@@ -897,7 +901,7 @@ class PDFSection(BoundingBox):
                 return False
 
     def __unicode__(self):
-        info = [unicode(paragraph)
+        info = [six.text_type(paragraph)
                 for paragraph in self.paragraphs]
 
         info.append(super(PDFSection, self).__unicode__())
@@ -944,9 +948,9 @@ class OrderedPDFSections(object):
                 self.sections.insert(i, new_section)
             else:
                 if i < 0:
-                    util.print_frame(debug=unicode(self.sections[i - 1]))
-                util.print_frame(debug=unicode(new_section))
-                util.print_frame(debug=unicode(self.sections[i]))
+                    util.print_frame(debug=six.text_type(self.sections[i - 1]))
+                util.print_frame(debug=six.text_type(new_section))
+                util.print_frame(debug=six.text_type(self.sections[i]))
                 assert self.sections[i].is_below(new_section), \
                     'new_section does not fit between sections'
 
@@ -1146,7 +1150,7 @@ class PDFPage(object):
             prev_textelement = self.textelements[i - 1]
             textelement = self.textelements[i]
             if prev_textelement.bottom == textelement.top + 1:
-                prev_textelement.t.set('height', unicode(prev_textelement.height - 1))
+                prev_textelement.t.set('height', six.text_type(prev_textelement.height - 1))
 
     def remove_footnotes_superscript(self):
         '''Remove numbers from elements found by find_footnotes_superscript.'''
@@ -1213,7 +1217,7 @@ class PDFPage(object):
     def get_coefficient(self, margin):
         '''Get the width of the margin in percent'''
         coefficient = 7
-        if margin in self.metadata_margins.keys():
+        if margin in list(self.metadata_margins.keys()):
             m = self.metadata_margins[margin]
             if m.get(str(self.number)) is not None:
                 coefficient = m[str(self.number)]
@@ -1261,7 +1265,7 @@ class PDFPage(object):
     def get_inner_coefficient(self, margin):
         '''Get the width of the margin in percent'''
         coefficient = 0
-        if margin in self.metadata_inner_margins.keys():
+        if margin in list(self.metadata_inner_margins.keys()):
             m = self.metadata_inner_margins[margin]
             if m.get(str(self.number)) is not None:
                 coefficient = m[str(self.number)]
@@ -1393,7 +1397,7 @@ class PDF2XMLConverter(Converter):
             "ﬅ": "ft",
         }
 
-        for key, value in replacements.iteritems():
+        for key, value in six.iteritems(replacements):
             content = content.replace(key + ' ', value)
             content = content.replace(key, value)
 
@@ -1624,7 +1628,7 @@ class HTMLContentConverter(Converter):
             self.try_decode_encodings(content))
 
     def try_decode_encodings(self, content):
-        if type(content) == unicode:
+        if type(content) == six.text_type:
             return content
         assert type(content) == str
         found = self.get_encoding(content)
@@ -1634,7 +1638,7 @@ class HTMLContentConverter(Converter):
         errors = []
         for encoding, source in [found] + more_guesses:
             try:
-                decoded = unicode(content, encoding=encoding)
+                decoded = six.text_type(content, encoding=encoding)
                 return decoded
             except UnicodeDecodeError as e:
                 if source == 'xsl':
@@ -1647,7 +1651,7 @@ class HTMLContentConverter(Converter):
                     errors.append(e)
         if errors != []:
             # If no "clean" encoding worked, we just skip the bad bytes:
-            return unicode(content, encoding='utf-8', errors='mixed')
+            return six.text_type(content, encoding='utf-8', errors='mixed')
         else:
             raise ConversionException(
                 "Strange exception converting {} to unicode".format(self.orig))
@@ -2036,8 +2040,8 @@ class HTMLContentConverter(Converter):
         }
 
         ns = {'html': 'http://www.w3.org/1999/xhtml'}
-        for tag, attribs in unwanted_classes_ids.iteritems():
-            for key, values in attribs.iteritems():
+        for tag, attribs in six.iteritems(unwanted_classes_ids):
+            for key, values in six.iteritems(attribs):
                 for value in values:
                     search = ('.//html:{}[@{}="{}"]'.format(tag, key, value))
                     for unwanted in self.soup.xpath(search, namespaces=ns):
@@ -2202,7 +2206,7 @@ class OdfConverter(HTMLContentConverter):
         embedable = True
         odhandler = ODF2XHTML(generatecss, embedable)
         HTMLContentConverter.__init__(self, filename,
-                                      content=odhandler.odf2xhtml(unicode(filename)))
+                                      content=odhandler.odf2xhtml(six.text_type(filename)))
 
 
 class DocxConverter(HTMLContentConverter):
@@ -2226,8 +2230,8 @@ class DocxConverter(HTMLContentConverter):
             }
         }
         ns = {'html': 'http://www.w3.org/1999/xhtml'}
-        for tag, attribs in unwanted_classes_ids.iteritems():
-            for key, values in attribs.iteritems():
+        for tag, attribs in six.iteritems(unwanted_classes_ids):
+            for key, values in six.iteritems(attribs):
                 for value in values:
                     search = ('.//html:{}[starts-with(@{}, "{}")]'.format(tag, key, value))
                     for unwanted in self.soup.xpath(search, namespaces=ns):
@@ -2487,7 +2491,7 @@ class DocumentFixer(object):
 
         for element in self.root.iter('p'):
             if element.text:
-                for key, value in replacements.iteritems():
+                for key, value in six.iteritems(replacements):
                     element.text = element.text.replace(key + ' ', value)
                     element.text = element.text.replace(key, value)
 
@@ -2900,7 +2904,8 @@ class XslMaker(object):
     def transformer(self):
         try:
             return etree.XSLT(self.xsl)
-        except etree.XSLTParseError as (e):
+        except etree.XSLTParseError as xxx_todo_changeme:
+            (e) = xxx_todo_changeme
             with open(self.logfile, 'w') as logfile:
                 logfile.write('Error at: {}\n'.format(str(util.lineno())))
                 logfile.write('Invalid XML in {}\n'.format(self.filename))
@@ -3064,7 +3069,7 @@ class ConverterManager(object):
         pool_size = multiprocessing.cpu_count()
         pool = multiprocessing.Pool(processes=pool_size,)
         pool.map(unwrap_self_convert,
-                 zip([self] * len(self.FILES), self.FILES))
+                 list(zip([self] * len(self.FILES), self.FILES)))
         pool.close()
         pool.join()
 

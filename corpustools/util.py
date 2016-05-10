@@ -21,6 +21,7 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
+from __future__ import absolute_import
 from collections import namedtuple
 from contextlib import contextmanager
 import inspect
@@ -29,6 +30,9 @@ import os
 import platform
 import subprocess
 import sys
+import six
+from six.moves import range
+from functools import reduce
 
 
 PathComponents = namedtuple('PathComponents',
@@ -62,7 +66,7 @@ def basename_noext(fname, ext):
 
 
 def sort_by_value(table, **args):
-    return sorted(table.iteritems(),
+    return sorted(six.iteritems(table),
                   key=operator.itemgetter(1),
                   **args)
 
@@ -174,14 +178,14 @@ def print_element(element, level, indent, out):
     out.write(' ' * (level * indent))
     out.write('<{}'.format(tag))
 
-    for k, v in element.attrib.iteritems():
+    for k, v in six.iteritems(element.attrib):
         out.write(' ')
-        if isinstance(k, unicode):
+        if isinstance(k, six.text_type):
             out.write(k.encode('utf8'))
         else:
             out.write(k)
         out.write('="')
-        if isinstance(v, unicode):
+        if isinstance(v, six.text_type):
             out.write(v.encode('utf8'))
         else:
             out.write(v)
@@ -190,7 +194,7 @@ def print_element(element, level, indent, out):
 
     if element.text is not None and element.text.strip() != '':
         out.write(' ' * ((level + 1) * indent))
-        if isinstance(element.text, unicode):
+        if isinstance(element.text, six.text_type):
             out.write(element.text.strip().encode('utf8'))
         else:
             out.write(element.text.strip())

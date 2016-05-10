@@ -20,6 +20,8 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
+from __future__ import absolute_import
+from __future__ import print_function
 import argparse
 import os
 
@@ -30,9 +32,9 @@ from corpustools import namechanger
 def normaliser():
     '''Normalise the filenames in the corpuses'''
     for corpus in [os.getenv('GTFREE'), os.getenv('GTBOUND')]:
-        print('Normalising names in {}'.format(corpus))
+        print(('Normalising names in {}'.format(corpus)))
         for root, dirs, files in os.walk(os.path.join(corpus, 'orig')):
-            print('\t' + root.replace(corpus, ''))
+            print(('\t' + root.replace(corpus, '')))
             for f in files:
                 if not f.endswith('.xsl'):
                     try:
@@ -40,8 +42,8 @@ def normaliser():
                             os.path.join(root, f).decode('utf8'),
                             os.path.join(root, f).decode('utf8'))
                         filepair = cfmu.mc.filepairs[0]
-                        print('\t\tmove {} -> {}'.format(
-                            filepair.oldpath, filepair.newpath))
+                        print(('\t\tmove {} -> {}'.format(
+                            filepair.oldpath, filepair.newpath)))
                         cfmu.move_files()
                         cfmu.update_own_metadata()
                         cfmu.update_parallel_files_metadata()

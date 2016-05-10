@@ -18,6 +18,7 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
+from __future__ import absolute_import
 import lxml.etree as etree
 import os
 import unittest

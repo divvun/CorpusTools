@@ -22,6 +22,7 @@
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import argparse
 import cgi
 import os
@@ -34,6 +35,7 @@ from corpustools import namechanger
 from corpustools import util
 from corpustools import versioncontrol
 from corpustools import xslsetter
+import six
 
 
 class AdderException(Exception):
@@ -60,7 +62,7 @@ class UrlDownloader(object):
             'text/plain': '.txt',
         }
 
-        for ct, extension in content_type_extension.iteritems():
+        for ct, extension in six.iteritems(content_type_extension):
             if (ct in content_type and not filename.endswith(extension)):
                 filename += extension
 
@@ -112,15 +114,15 @@ class AddToCorpus(object):
             path: (unicode) path below the language directory where the files
             should be added
         '''
-        if type(corpusdir) is not unicode:
+        if type(corpusdir) is not six.text_type:
             raise AdderException(u'corpusdir is not unicode: {}.'.format(
                 corpusdir))
 
-        if type(mainlang) is not unicode:
+        if type(mainlang) is not six.text_type:
             raise AdderException(u'mainlang is not unicode: {}.'.format(
                 mainlang))
 
-        if type(path) is not unicode:
+        if type(path) is not six.text_type:
             raise AdderException(u'path is not unicode: {}.'.format(
                 path))
 
@@ -219,7 +221,7 @@ class AddToCorpus(object):
             parall_components = util.split_path(parallelpath)
             parallels[parall_components.lang] = parall_components.basename
 
-            for lang, parallel in parallels.iteritems():
+            for lang, parallel in six.iteritems(parallels):
                 metadata = xslsetter.MetadataHandler(
                     '/'.join((
                         none_dupe_components.root,
@@ -229,7 +231,7 @@ class AddToCorpus(object):
                         none_dupe_components.subdirs,
                         parallel + '.xsl')))
 
-                for lang1, parallel1 in parallels.iteritems():
+                for lang1, parallel1 in six.iteritems(parallels):
                     if lang1 != lang:
                         metadata.set_parallel_text(lang1, parallel1)
                 metadata.write_file()
@@ -273,7 +275,7 @@ class AddToCorpus(object):
                 else:
                     duplicates[file_hash] = [path]
 
-        results = list(filter(lambda x: len(x) > 1, duplicates.values()))
+        results = list([x for x in list(duplicates.values()) if len(x) > 1])
         if len(results) > 0:
             print(u'Duplicates Found:')
             print(u'___')

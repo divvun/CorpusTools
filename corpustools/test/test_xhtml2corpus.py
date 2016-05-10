@@ -18,11 +18,13 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
+from __future__ import absolute_import
 import doctest
 import lxml.doctestcompare
 import lxml.etree
 
 from corpustools import converter
+import six
 
 
 tests = {
@@ -2708,7 +2710,7 @@ def assertXmlEqual(got, want):
 
 
 def test_conversion():
-    for testname, html_xml in tests.iteritems():
+    for testname, html_xml in six.iteritems(tests):
         yield check_conversion, testname, html_xml
 
 

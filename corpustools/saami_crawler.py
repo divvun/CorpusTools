@@ -22,6 +22,7 @@
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import argparse
 import lxml.etree as etree
 import lxml.html
@@ -32,17 +33,18 @@ import shutil
 import sys
 import urlparse
 
-import adder
-import argparse_version
-import namechanger
-import text_cat
-import util
-import xslsetter
+from . import adder
+from . import argparse_version
+from . import namechanger
+from . import text_cat
+from . import util
+from . import xslsetter
+import six
 
 
 class Crawler(object):
     def __init__(self):
-        self.goaldir = unicode(os.getenv('GTFREE'))
+        self.goaldir = six.text_type(os.getenv('GTFREE'))
         self.unvisited_links = set()
         self.visited_links = set()
         self.download_links = set()
@@ -51,7 +53,7 @@ class Crawler(object):
             self.goaldir, 'tmp'))
 
     def __del__(self):
-        for (lang, corpus_adder) in self.corpus_adders.iteritems():
+        for (lang, corpus_adder) in six.iteritems(self.corpus_adders):
             corpus_adder.add_files_to_working_copy()
 
     def save_pages(self, pages):
@@ -133,14 +135,14 @@ class SamediggiFiCrawler(Crawler):
                       u'nuortta': u'sms',
                       u'english': u'eng'}
 
-        for (natural, iso) in self.langs.iteritems():
+        for (natural, iso) in six.iteritems(self.langs):
             self.corpus_adders[natural] = adder.AddToCorpus(
                 self.goaldir, iso, u'admin/sd/www.samediggi.fi')
 
         self.get_old_urls()
 
     def get_old_urls(self):
-        for (lang, corpus_adder) in self.corpus_adders.iteritems():
+        for (lang, corpus_adder) in six.iteritems(self.corpus_adders):
             for root, dirs, files in os.walk(corpus_adder.goaldir):
                 for f in files:
                     if f.endswith('.xsl'):

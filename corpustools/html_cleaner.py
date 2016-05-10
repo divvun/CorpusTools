@@ -21,6 +21,7 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
+from __future__ import absolute_import
 import argparse
 
 from corpustools import argparse_version

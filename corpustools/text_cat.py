@@ -35,6 +35,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from __future__ import absolute_import
 import argparse
 import glob
 import gzip
@@ -42,8 +43,10 @@ import os
 import re
 import sys
 
-import argparse_version
-import util
+from . import argparse_version
+from . import util
+import six
+from six.moves import range
 
 
 here = os.path.dirname(__file__)
@@ -62,7 +65,7 @@ def ensure_unicode(text):
     if type(text) == str:
         return text.decode('utf-8')
     else:
-        assert(type(text) == unicode)
+        assert(type(text) == six.text_type)
         return text
 
 
@@ -104,7 +107,7 @@ class NGramModel(object):
                 raise ValueError("%s:%d invalid line, was split to %s"
                                  % (fname, nl + 1, parts))
             try:
-                g = unicode(parts[gram_column])
+                g = six.text_type(parts[gram_column])
                 f = int(parts[freq_column])
                 freq[g] = f
             except ValueError as e:
@@ -170,7 +173,7 @@ class NGramModel(object):
         d_found = sum(
             abs(rank - self.ngrams[gram])
             for gram, rank
-            in unknown.ngrams.iteritems() if gram in self.ngrams
+            in six.iteritems(unknown.ngrams) if gram in self.ngrams
         )
         return d_missing + d_found
 
@@ -235,7 +238,7 @@ class WordModel(NGramModel):
         normaliser = float(n_words) / float(self.NB_NGRAMS)
         self.invrank = {
             gram: ((n_words - rank) / normaliser)
-            for gram, rank in self.ngrams.iteritems()
+            for gram, rank in six.iteritems(self.ngrams)
         }
 
     def compare_tc(self, unknown_text, normaliser):
@@ -328,7 +331,7 @@ class Classifier(object):
         ingram = CharModel().of_text(text)
 
         cscored = {l: model.compare(ingram)
-                   for l, model in self.cmodels.iteritems()
+                   for l, model in six.iteritems(self.cmodels)
                    if l in active_langs}
         cranked = util.sort_by_value(cscored)
         cbest = cranked[0]
@@ -339,15 +342,15 @@ class Classifier(object):
             if verbose:
                 util.note("lm gave: {} as only result for input: {}".format(
                     cfiltered, text))
-            return list(cfiltered.iteritems())
+            return list(six.iteritems(cfiltered))
         else:
             # Along with compare_tc, implements text_cat.pl line
             # 442 and on:
             wscored = {l: model.compare_tc(text, cscored[l])
-                       for l, model in self.wmodels.iteritems()
+                       for l, model in six.iteritems(self.wmodels)
                        if l in cfiltered}
             cwcombined = {l: (cscored[l] - wscore)
-                          for l, wscore in wscored.iteritems()}
+                          for l, wscore in six.iteritems(wscored)}
             cwranked = util.sort_by_value(cwcombined)
             if verbose:
                 if cranked[:len(cwranked)] == cwranked:
@@ -397,11 +400,11 @@ class FolderTrainer(object):
             return open(fname, 'r')
 
     def save(self, folder, ext='.lm', verbose=False):
-        for lang, model in self.models.iteritems():
+        for lang, model in six.iteritems(self.models):
             fname = os.path.join(folder, lang + ext)
             model.to_model_file(open(fname, 'w'))
         if verbose and len(self.models) != 0:
-            util.note("Wrote {%s}%s" % (",".join(self.models.keys()), ext))
+            util.note("Wrote {%s}%s" % (",".join(list(self.models.keys())), ext))
 
 
 class FileTrainer(object):

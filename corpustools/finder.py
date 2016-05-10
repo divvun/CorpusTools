@@ -21,6 +21,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from __future__ import absolute_import
 import collections
 import difflib
 import lxml.html
@@ -35,6 +36,7 @@ from corpustools import move_files
 from corpustools import namechanger
 from corpustools import util
 from corpustools import xslsetter
+import six
 
 
 def main():
@@ -70,8 +72,8 @@ def remove_files_with_duplicate_content():
 
     foundcount = 0
     notfoundcount = 0
-    fingetter = adder.AddToCorpus(unicode(os.getenv('GTFREE')), u'fin', u'admin/sd/www.samediggi.fi')
-    smsgetter = adder.AddToCorpus(unicode(os.getenv('GTFREE')), this_lang, u'admin/sd/www.samediggi.fi')
+    fingetter = adder.AddToCorpus(six.text_type(os.getenv('GTFREE')), u'fin', u'admin/sd/www.samediggi.fi')
+    smsgetter = adder.AddToCorpus(six.text_type(os.getenv('GTFREE')), this_lang, u'admin/sd/www.samediggi.fi')
     for root, dirs, files in os.walk(os.path.join(os.getenv('GTFREE'), 'orig', this_lang,
                                                   u'admin/sd/www.samediggi.fi')):
         print(root)
@@ -329,7 +331,7 @@ def move_twenty_percent_to_goldcorpus():
                     fluff[size].append(name)
 
     i = 0
-    for size in sorted(fluff.keys(), reverse=True):
+    for size in sorted(list(fluff.keys()), reverse=True):
         for f in fluff[size]:
             if i == 4:
                 move_files.mover(f, f.replace('orig/', 'goldstandard/orig/'))

@@ -21,11 +21,15 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from __future__ import absolute_import
 import lxml.etree as etree
 import os
 import sys
 
-import util
+from . import util
+import six
+from six.moves import map
+from six.moves import range
 
 here = os.path.dirname(__file__)
 
@@ -158,7 +162,7 @@ class MetadataHandler(object):
 
     def validate_and_set_margins(self, margin_lines):
         _margins = {}
-        for key, value in margin_lines.iteritems():
+        for key, value in six.iteritems(margin_lines):
             if ('all' in value and ('odd' in value or 'even' in value) or
                     '=' not in value):
                 raise XsltException(
@@ -187,7 +191,7 @@ class MetadataHandler(object):
         margin_lines = self.get_margin_lines(position='inner_')
         _inner_margins = self.validate_and_set_margins(margin_lines)
 
-        keys = _inner_margins.keys()
+        keys = list(_inner_margins.keys())
         for key in keys:
             if key == 'inner_left_margin':
                 if 'inner_right_margin' not in keys:

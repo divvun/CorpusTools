@@ -23,16 +23,19 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from __future__ import absolute_import
 import argparse
 import lxml.etree as etree
 import multiprocessing
 import os
 import sys
 
-import argparse_version
-import ccat
-import parallelize
-import util
+from . import argparse_version
+from . import ccat
+from . import parallelize
+from . import util
+import six
+from six.moves import zip
 
 
 class Analyser(object):
@@ -89,7 +92,7 @@ class Analyser(object):
         '''Append xml_file to the xml_files list'''
         try:
             self.xml_files.append(
-                unicode(xml_file, sys.getfilesystemencoding()))
+                six.text_type(xml_file, sys.getfilesystemencoding()))
         except UnicodeDecodeError:
                 print('Could not handle the file name {}'.format(xml_file),
                       file=sys.stderr)
@@ -248,7 +251,7 @@ class Analyser(object):
         pool = multiprocessing.Pool(processes=pool_size,)
         pool.map(
             unwrap_self_analyse,
-            zip([self] * len(self.xml_files), self.xml_files))
+            list(zip([self] * len(self.xml_files), self.xml_files)))
         pool.close()  # no more tasks
         pool.join()   # wrap up current tasks
 

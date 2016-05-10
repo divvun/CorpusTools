@@ -24,6 +24,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from __future__ import absolute_import
 import argparse
 import errno
 from lxml import etree
@@ -37,6 +38,9 @@ from corpustools import argparse_version
 from corpustools import generate_anchor_list
 from corpustools import typosfile
 from corpustools import util
+from six.moves import filter
+from six.moves import map
+from six.moves import zip
 
 
 here = os.path.dirname(__file__)
@@ -124,11 +128,8 @@ class CorpusXMLFile(object):
             self.get_name())
         parallel_basename = '{}.xml'.format(
             self.get_parallel_basename(paralang))
-        return apply(
-            os.path.join,
-            [root, module, paralang, genre, subdirs,
-             parallel_basename]
-        )
+        return os.path.join(*[root, module, paralang, genre, subdirs,
+             parallel_basename])
 
     def get_original_filename(self):
         """Infer the path of the original file"""
@@ -238,8 +239,8 @@ class SentenceDivider(object):
             body = etree.Element('body')
             self.document.append(body)
 
-            elts_doc_lang = filter(self.in_main_lang,
-                                   self.input_etree.findall('//p'))
+            elts_doc_lang = list(filter(self.in_main_lang,
+                                   self.input_etree.findall('//p')))
             processed = self.process_elts(elts_doc_lang)
             body.extend(processed)
         return self.document
@@ -248,8 +249,8 @@ class SentenceDivider(object):
         para_texts = ("".join(elt.xpath('.//text()'))
                       for elt in elts)
         preprocessed = self.preprocess_para_texts(para_texts)
-        return map(self.process_one_para_text,
-                   preprocessed)
+        return list(map(self.process_one_para_text,
+                   preprocessed))
 
     def write_result(self, outfile):
         """Write self.document to the given outfile name"""
@@ -582,7 +583,7 @@ class ParallelizeTCA2(Parallelize):
             divider.write_result(outfile)
 
     def get_sentfiles(self):
-        return map(self.get_sent_filename, self.get_origfiles())
+        return list(map(self.get_sent_filename, self.get_origfiles()))
 
     def get_sent_filename(self, pfile):
         """Compute the name of the sentence file
@@ -926,8 +927,8 @@ class HunalignToTmx(AlignmentToTmx):
         pairs = [line.split("\t")
                  for line in self.output.split("\n")
                  if line]
-        pairs = filter(self.is_good_line,
-                       pairs)
+        pairs = list(filter(self.is_good_line,
+                       pairs))
 
         src_lines = [self.clean_line(l[0])
                      for l in pairs]
@@ -970,8 +971,8 @@ class Tca2ToTmx(AlignmentToTmx):
         sentfile_name = sentfile.replace('.xml', '_new.txt')
 
         with open(sentfile_name, "r") as tca2_output:
-            return map(self.remove_s_tag,
-                       tca2_output.read().decode('utf-8').split('\n'))
+            return list(map(self.remove_s_tag,
+                       tca2_output.read().decode('utf-8').split('\n')))
 
     def remove_s_tag(self, line):
         """Remove the s tags that tca2 has added"""

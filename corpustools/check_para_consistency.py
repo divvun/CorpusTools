@@ -22,6 +22,7 @@
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import argparse
 import os
 
@@ -29,6 +30,7 @@ from corpustools import argparse_version
 from corpustools import namechanger
 from corpustools import util
 from corpustools import xslsetter
+import six
 
 
 def parse_args():
@@ -61,7 +63,7 @@ def main():
                     xsl = xslsetter.MetadataHandler(xsl_name)
 
                     para_files = set()
-                    for lang, parallel in xsl.get_parallel_texts().iteritems():
+                    for lang, parallel in six.iteritems(xsl.get_parallel_texts()):
                         parallelpath = u'/'.join((
                             orig_components.root,
                             orig_components.module,

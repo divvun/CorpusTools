@@ -23,6 +23,7 @@
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import argparse
 import collections
 import difflib
@@ -30,11 +31,12 @@ import lxml.etree as etree
 import os
 import sys
 
-import argparse_version
-import ccat
-import move_files
-import util
-import xslsetter
+from . import argparse_version
+from . import ccat
+from . import move_files
+from . import util
+from . import xslsetter
+import six
 
 
 class DupeFinder(object):
@@ -109,8 +111,8 @@ class DupeFinder(object):
         wrong_ratio = 0
         good_ratio = 0
         checked_files = collections.defaultdict(set)
-        for filename1 in self.files.iterkeys():
-            for filename2 in self.files.iterkeys():
+        for filename1 in six.iterkeys(self.files):
+            for filename2 in six.iterkeys(self.files):
                 if filename1 != filename2 and filename1 not in checked_files[filename2]:
                     if self.good_word_ratio(filename1, filename2):
                         good_ratio += 1

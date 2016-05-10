@@ -24,14 +24,16 @@
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import os
 import shutil
 import sys
 
 import lxml.etree as etree
 
-import util
-import xslsetter
+from . import util
+from . import xslsetter
+import six
 
 
 here = os.path.dirname(__file__)
@@ -128,7 +130,7 @@ class DocumentPicker(object):
 
     def conclude(self):
         total = 0
-        for key, value in self.file_dict.iteritems():
+        for key, value in six.iteritems(self.file_dict):
             total += len(self.file_dict[key])
             print(key, len(self.file_dict[key]))
         print(total, self.total_file)
@@ -158,7 +160,7 @@ class DocumentPicker(object):
         mh = xslsetter.MetadataHandler(
             self.get_goal_name(file_, lang) + '.xsl',
             create=True)
-        for key, value in self.set_variables(file_, lang).iteritems():
+        for key, value in six.iteritems(self.set_variables(file_, lang)):
             mh.set_variable(key, value)
         mh.write_file()
 

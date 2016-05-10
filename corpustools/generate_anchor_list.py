@@ -24,6 +24,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from __future__ import absolute_import
 import argparse
 import sys
 
@@ -61,7 +62,7 @@ class GenerateAnchorList(object):
         with open(self.path) as f:
             out = [self.words_of_line(i, l.decode('utf-8'))
                    for i, l in enumerate(f.readlines())]
-            out = filter(None, out)
+            out = [_f for _f in out if _f]
             if not quiet:
                 util.note("Read {} anchors from {}".format(len(out),
                                                            self.path))

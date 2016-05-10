@@ -23,7 +23,9 @@ internal encodings. This module have functions that revert the damage
 done.
 '''
 from __future__ import print_function
+from __future__ import absolute_import
 import sys
+import six
 
 CTYPES = {
 
@@ -319,7 +321,7 @@ class EncodingGuesser(object):
         if position is not None:
             encoding = CTYPES[position]
 
-            for key, value in encoding.iteritems():
+            for key, value in six.iteritems(encoding):
                 text = text.replace(key, value)
 
             if position == u'mac-sami_to_latin1':

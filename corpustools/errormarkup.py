@@ -22,10 +22,13 @@
 #
 
 from __future__ import print_function
+from __future__ import absolute_import
 import re
 import sys
 
 from lxml import etree
+import six
+from six.moves import range
 
 
 class ErrorMarkup(object):
@@ -71,7 +74,7 @@ class ErrorMarkup(object):
         if new_content:
             element.text = None
 
-            if isinstance(new_content[0], basestring):
+            if isinstance(new_content[0], six.string_types):
                 element.text = new_content[0]
                 new_content = new_content[1:]
 
@@ -85,7 +88,7 @@ class ErrorMarkup(object):
         if new_content:
             element.tail = None
 
-            if isinstance(new_content[0], basestring):
+            if isinstance(new_content[0], six.string_types):
                 element.tail = new_content[0]
                 new_content = new_content[1:]
 
