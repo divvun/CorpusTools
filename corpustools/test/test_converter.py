@@ -42,6 +42,9 @@ class XMLTester(unittest.TestCase):
 
     def assertXmlEqual(self, got, want):
         """Check if two stringified xml snippets are equal"""
+        got = etree.tostring(got, encoding='unicode')
+        want = etree.tostring(want, encoding='unicode')
+
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(want, got, 0):
             message = checker.output_difference(
@@ -282,8 +285,7 @@ class TestAvvirConverter(XMLTester):
             '</article>')
 
         self.avvir.convert_p()
-        self.assertXmlEqual(
-            etree.tostring(self.avvir.intermediate), etree.tostring(want))
+        self.assertXmlEqual(self.avvir.intermediate, want)
 
     def test_convert_p_2(self):
         '''p contains only p'''
@@ -303,8 +305,7 @@ class TestAvvirConverter(XMLTester):
             '</article>')
 
         avvir.convert_p()
-        self.assertXmlEqual(etree.tostring(avvir.intermediate),
-                            etree.tostring(want))
+        self.assertXmlEqual(avvir.intermediate, want)
 
     def test_convert_p_3(self):
         '''p contains span and p'''
@@ -328,8 +329,7 @@ class TestAvvirConverter(XMLTester):
             '</article>')
 
         avvir.convert_p()
-        self.assertXmlEqual(etree.tostring(avvir.intermediate),
-                            etree.tostring(want))
+        self.assertXmlEqual(avvir.intermediate, want)
 
     def test_convert_p_4(self):
         '''p.text is None'''
@@ -350,8 +350,7 @@ class TestAvvirConverter(XMLTester):
             '</article>')
 
         avvir.convert_p()
-        self.assertXmlEqual(etree.tostring(avvir.intermediate),
-                            etree.tostring(want))
+        self.assertXmlEqual(avvir.intermediate, want)
 
     def test_convert_p_5(self):
         '''sub_p.tail is None'''
@@ -372,8 +371,7 @@ class TestAvvirConverter(XMLTester):
             '</article>')
 
         avvir.convert_p()
-        self.assertXmlEqual(etree.tostring(avvir.intermediate),
-                            etree.tostring(want))
+        self.assertXmlEqual(avvir.intermediate, want)
 
     def test_convert_p_6(self):
         '''previous.text not None, sub_p.tail is None'''
@@ -395,8 +393,7 @@ class TestAvvirConverter(XMLTester):
             '</article>')
 
         avvir.convert_p()
-        self.assertXmlEqual(etree.tostring(avvir.intermediate),
-                            etree.tostring(want))
+        self.assertXmlEqual(avvir.intermediate, want)
 
     def test_convert_p_7(self):
         '''previous.tail is None, sub_p.tail not None'''
@@ -418,8 +415,7 @@ class TestAvvirConverter(XMLTester):
             '</article>')
 
         avvir.convert_p()
-        self.assertXmlEqual(etree.tostring(avvir.intermediate),
-                            etree.tostring(want))
+        self.assertXmlEqual(avvir.intermediate, want)
 
     def test_convert_story(self):
         want = etree.fromstring(
@@ -445,8 +441,7 @@ class TestAvvirConverter(XMLTester):
 
         self.avvir.convert_p()
         self.avvir.convert_story()
-        self.assertXmlEqual(
-            etree.tostring(self.avvir.intermediate), etree.tostring(want))
+        self.assertXmlEqual(self.avvir.intermediate, want)
 
     def test_convert_article(self):
         want = etree.fromstring(
@@ -475,8 +470,7 @@ class TestAvvirConverter(XMLTester):
         self.avvir.convert_p()
         self.avvir.convert_story()
         self.avvir.convert_article()
-        self.assertXmlEqual(
-            etree.tostring(self.avvir.intermediate), etree.tostring(want))
+        self.assertXmlEqual(self.avvir.intermediate, want)
 
 
 class TestSVGConverter(XMLTester):
@@ -492,7 +486,7 @@ class TestSVGConverter(XMLTester):
             os.path.join(here,
                          'converter_data/Riddu_Riddu_avis_TXT.200923.svg.xml'))
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
 
 class TestPlaintextConverter(XMLTester):
@@ -555,7 +549,7 @@ Buot leat.'''))
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_two_lines(self):
         newstext = converter.PlaintextConverter('tullball.txt')
@@ -571,7 +565,7 @@ Filbma lea.</p>
 </document>
 ''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_hyph(self):
         newstext = converter.PlaintextConverter('tullball.txt')
@@ -585,7 +579,7 @@ Filbma lea.</p>
             </body>
             </document> ''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
 
 class TestDocConverter(XMLTester):
@@ -601,7 +595,7 @@ class TestDocConverter(XMLTester):
             os.path.join(here,
                          'converter_data/doc-test.xml'))
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
 
 class TestDocxConverter(XMLTester):
@@ -631,7 +625,7 @@ class TestDocxConverter(XMLTester):
             '    </body>'
             '</document>')
 
-        self.assertXmlEqual(etree.tostring(got), want)
+        self.assertXmlEqual(got, etree.fromstring(want))
 
 
 class TestHTMLContentConverter(XMLTester):
@@ -645,7 +639,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body></body></html>')
 
-        self.assertEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_remove_empty_p_2(self):
         '''Do not remove a p with content'''
@@ -656,7 +650,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><span>spanny</span></p></body></html>')
 
-        self.assertEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_remove_empty_class(self):
         got = converter.HTMLContentConverter(
@@ -668,7 +662,7 @@ class TestHTMLContentConverter(XMLTester):
             '<html><head/><body><div>a</div><div class="a">'
             '<span>b</span></div></body></html>')
 
-        self.assertEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_remove_unwanted_classes_and_ids(self):
         unwanted_classes_ids = {
@@ -959,7 +953,7 @@ class TestHTMLContentConverter(XMLTester):
                 '<html:head/><html:body><html:p>p1</html:p><html:p>p2'
                 '</html:p></html:body></html:html>')
 
-            self.assertEqual(etree.tostring(got), want)
+            self.assertXmlEqual(got, etree.fromstring(want))
 
     def test_remove_comment(self):
         got = converter.HTMLContentConverter(
@@ -971,7 +965,7 @@ class TestHTMLContentConverter(XMLTester):
             '<html:html xmlns:html="http://www.w3.org/1999/xhtml"><html:head/>'
             '<html:body><html:b/></html:body></html:html>')
 
-        self.assertEqual(etree.tostring(got), want)
+        self.assertXmlEqual(got, etree.fromstring(want))
 
     def test_remove_processinginstruction(self):
         got = converter.HTMLContentConverter(
@@ -983,7 +977,7 @@ class TestHTMLContentConverter(XMLTester):
             '<html:html xmlns:html="http://www.w3.org/1999/xhtml">'
             '<html:head/><html:body><html:b/></html:body></html:html>')
 
-        self.assertEqual(etree.tostring(got), want)
+        self.assertXmlEqual(got, etree.fromstring(want))
 
     def test_add_p_around_text1(self):
         '''Only text before next significant element'''
@@ -1001,7 +995,7 @@ class TestHTMLContentConverter(XMLTester):
             '<title>– Den utdøende stammes frykt</title></head><body>'
             '<h3>VI</h3>  <p>... Finnerne</p><p>Der</p></body></html>')
 
-        self.assertXmlEqual(etree.tostring(hcc.soup), want)
+        self.assertXmlEqual(hcc.soup, etree.fromstring(want))
 
     def test_add_p_around_text2(self):
         '''Text and i element before next significant element'''
@@ -1019,7 +1013,7 @@ class TestHTMLContentConverter(XMLTester):
             '<title>– Den utdøende stammes frykt</title></head><body>'
             '<h3>VI</h3>  <p>... Finnerne<i>Der</i></p></body></html>')
 
-        self.assertXmlEqual(etree.tostring(hcc.soup), want)
+        self.assertXmlEqual(hcc.soup, etree.fromstring(want))
 
     def test_add_p_around_text3(self):
         '''h2 as a stop element'''
@@ -1040,7 +1034,7 @@ class TestHTMLContentConverter(XMLTester):
             'utdøende stammes frykt</title>  </head><body>  <h3>VI</h3>  '
             '<p>... Finnerne<a/></p><h2>Der</h2></body></html>')
 
-        self.assertXmlEqual(etree.tostring(hcc.soup), want)
+        self.assertXmlEqual(hcc.soup, etree.fromstring(want))
 
     def test_set_charset_1(self):
         '''encoding_from_xsl = None, no charset in html header'''
@@ -1218,7 +1212,7 @@ class TestHTMLContentConverter(XMLTester):
             '<html><head/><body><div class="c1"><span>b</span></div></body>'
             '</html>')
 
-        self.assertEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_body_i(self):
         got = converter.HTMLContentConverter(
@@ -1228,7 +1222,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><i>b</i></p></body></html>')
 
-        self.assertEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_body_a(self):
         got = converter.HTMLContentConverter(
@@ -1238,7 +1232,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><a>b</a></p></body></html>')
 
-        self.assertEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_body_em(self):
         got = converter.HTMLContentConverter(
@@ -1248,7 +1242,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><em>b</em></p></body></html>')
 
-        self.assertEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_body_font(self):
         got = converter.HTMLContentConverter(
@@ -1258,7 +1252,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><font>b</font></p></body></html>')
 
-        self.assertEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_body_u(self):
         got = converter.HTMLContentConverter(
@@ -1268,7 +1262,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><u>b</u></p></body></html>')
 
-        self.assertEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_body_strong(self):
         got = converter.HTMLContentConverter(
@@ -1278,7 +1272,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><strong>b</strong></p></body></html>')
 
-        self.assertEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_body_span(self):
         got = converter.HTMLContentConverter(
@@ -1288,7 +1282,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><span>b</span></p></body></html>')
 
-        self.assertEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_body_text(self):
         got = converter.HTMLContentConverter(
@@ -1298,7 +1292,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p>b</p></body></html>')
 
-        self.assertEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_convert2intermediate_with_bare_text_after_p(self):
         content = '''
@@ -1346,7 +1340,7 @@ class TestHTMLContentConverter(XMLTester):
             'text.html', LANGUAGEGUESSER,
             content=content).convert2intermediate()
 
-        self.assertXmlEqual(etree.tostring(got), want)
+        self.assertXmlEqual(got, etree.fromstring(want))
 
     def test_convert2intermediate_with_bare_text_after_list(self):
         content = '''
@@ -1381,7 +1375,7 @@ class TestHTMLContentConverter(XMLTester):
             'text.html', LANGUAGEGUESSER,
             content=content).convert2intermediate()
 
-        self.assertXmlEqual(etree.tostring(got), want)
+        self.assertXmlEqual(got, etree.fromstring(want))
 
     def test_convert2intermediate_with_body_bare_text(self):
         content = '''
@@ -1427,7 +1421,7 @@ class TestHTMLContentConverter(XMLTester):
             'text.html', LANGUAGEGUESSER,
             content=content).convert2intermediate()
 
-        self.assertXmlEqual(etree.tostring(got), want)
+        self.assertXmlEqual(got, etree.fromstring(want))
 
 
 #class TestRTFConverter(XMLTester):
@@ -1441,7 +1435,7 @@ class TestHTMLContentConverter(XMLTester):
         #want = etree.parse(
             #os.path.join(here, 'converter_data/folkemote.xml'))
 
-        #self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        #self.assertXmlEqual(got, want)
 
 
 class TestDocumentFixer(XMLTester):
@@ -1477,7 +1471,7 @@ class TestDocumentFixer(XMLTester):
                 </document>
             ''')
 
-            self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+            self.assertXmlEqual(got, want)
 
     def test_fix_newstags_bold_1(self):
         '''Test conversion of the @bold: newstag'''
@@ -1498,7 +1492,7 @@ seaggi</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_fix_newstags_bold_2(self):
         '''Test conversion of the @bold: newstag'''
@@ -1519,7 +1513,7 @@ seaggi</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_fix_newstags_bold_3(self):
         '''Test conversion of the @bold: newstag'''
@@ -1538,7 +1532,7 @@ seaggi</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_byline1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1563,7 +1557,7 @@ seaggi</p>
     <body/>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_byline2(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1588,7 +1582,7 @@ seaggi</p>
     <body/>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_byline3(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1613,7 +1607,7 @@ seaggi</p>
     <body/>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_byline4(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1638,7 +1632,7 @@ seaggi</p>
     <body/>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_byline5(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1663,7 +1657,7 @@ seaggi</p>
     <body/>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_byline6(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1688,7 +1682,7 @@ seaggi</p>
     <body/>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_byline7(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1713,7 +1707,7 @@ seaggi</p>
     <body/>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_byline8(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1738,7 +1732,7 @@ seaggi</p>
     <body/>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_kursiv(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1757,7 +1751,7 @@ seaggi</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_ledtekst(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1776,7 +1770,7 @@ seaggi</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_bildetekst(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1795,7 +1789,7 @@ seaggi</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_logo(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1814,7 +1808,7 @@ seaggi</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_fotobyline(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1833,7 +1827,7 @@ seaggi</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_foto(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1854,7 +1848,7 @@ seaggi</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_bildetitt(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1875,7 +1869,7 @@ seaggi</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_bilde(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1906,7 +1900,7 @@ Billedtekst: 3</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_ingress_1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1947,7 +1941,7 @@ TEKST/INGRESS: 5
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_ingress_2(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1966,7 +1960,7 @@ TEKST/INGRESS: 5
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_mtitt1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -1997,7 +1991,7 @@ M:TITT:Lea go dus meahccebiila?
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_mtitt2(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2016,7 +2010,7 @@ M:TITT:Lea go dus meahccebiila?
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_tekst_1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(u'''<document>
@@ -2040,7 +2034,7 @@ TEKST:ÐMii lea suohttaseamos geassebargu dus?
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_tekst_2(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(u'''<document>
@@ -2059,7 +2053,7 @@ NSR ii áiggo.</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_tekst_3(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(u'''<document>
@@ -2079,7 +2073,7 @@ NSR ii áiggo.</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_tekst_4(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(u'''<document>
@@ -2097,7 +2091,7 @@ NSR ii áiggo.</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_tekst_5(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(u'''<document>
@@ -2115,7 +2109,7 @@ NSR ii áiggo.</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_tekst_6(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(u'''<document>
@@ -2133,7 +2127,7 @@ NSR ii áiggo.</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_stikktitt(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2157,7 +2151,7 @@ NSR ii áiggo.</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_utitt1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2175,7 +2169,7 @@ NSR ii áiggo.</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_utitt2(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2193,7 +2187,7 @@ NSR ii áiggo.</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_udot_titt(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2211,7 +2205,7 @@ NSR ii áiggo.</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_undertitt(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2231,7 +2225,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_undertittel(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2249,7 +2243,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_ttitt(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2267,7 +2261,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2289,7 +2283,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_2(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2311,7 +2305,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_3(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2333,7 +2327,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_4(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2355,7 +2349,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_5(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2377,7 +2371,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_6(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2399,7 +2393,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_7(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2421,7 +2415,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_8(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2443,7 +2437,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_9(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2465,7 +2459,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_10(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2487,7 +2481,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_11(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2513,7 +2507,7 @@ titt:Ruovttusuodjaleaddjit
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_12(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2535,7 +2529,7 @@ titt:Ruovttusuodjaleaddjit
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_13(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2557,7 +2551,7 @@ titt:Ruovttusuodjaleaddjit
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_14(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2579,7 +2573,7 @@ titt:Ruovttusuodjaleaddjit
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_15(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2601,7 +2595,7 @@ titt:Ruovttusuodjaleaddjit
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_headertitletags_16(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2639,7 +2633,7 @@ TITTEL: 3</p>
 </document>
 ''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_ttt(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2657,7 +2651,7 @@ TITTEL: 3</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_newstags_tit(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2675,7 +2669,7 @@ TITTEL: 3</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_newstags_text_before_titletags(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2695,7 +2689,7 @@ TITTEL: 3</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_newstags_text_before_headtitletags(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2719,7 +2713,7 @@ TITTEL: 3</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_newstags_text_before_bylinetags(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2746,7 +2740,7 @@ TITTEL: 3</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_newstags_text_before_boldtags(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2766,7 +2760,7 @@ TITTEL: 3</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_newstags_text_before_kursiv(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -2786,7 +2780,7 @@ TITTEL: 3</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_fix_newstags_4(self):
         '''Check that p attributes are kept'''
@@ -2805,7 +2799,7 @@ TITTEL: 3</p>
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_fix_body_encoding(self):
         newstext = converter.PlaintextConverter(
@@ -2845,7 +2839,7 @@ LOGO: Smi kulturfestivala 1998
         </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_replace_ligatures(self):
         svgtext = converter.SVGConverter(
@@ -2861,7 +2855,7 @@ LOGO: Smi kulturfestivala 1998
             os.path.join(here,
                          'converter_data/Riddu_Riddu_avis_TXT.200923.xml'))
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_simple_detect_quote1(self):
         orig_paragraph = '<p>bla bla "bla bla" bla bla </p>'
@@ -2876,7 +2870,7 @@ LOGO: Smi kulturfestivala 1998
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
-        self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
+        self.assertXmlEqual(got_paragraph, etree.fromstring(expected_paragraph))
 
     def test_simple_detect_quote2(self):
         orig_paragraph = '<p>bla bla “bla bla” bla bla</p>'
@@ -2891,7 +2885,7 @@ LOGO: Smi kulturfestivala 1998
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
-        self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
+        self.assertXmlEqual(got_paragraph, etree.fromstring(expected_paragraph))
 
     def test_simple_detect_quote3(self):
         orig_paragraph = '<p>bla bla «bla bla» bla bla</p>'
@@ -2906,7 +2900,7 @@ LOGO: Smi kulturfestivala 1998
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
-        self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
+        self.assertXmlEqual(got_paragraph, etree.fromstring(expected_paragraph))
 
     def test_simple_detect_quote4(self):
         orig_paragraph = (
@@ -2922,7 +2916,7 @@ LOGO: Smi kulturfestivala 1998
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
-        self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
+        self.assertXmlEqual(got_paragraph, etree.fromstring(expected_paragraph))
 
     def test_simple_detect_quote2_quotes(self):
         orig_paragraph = '<p>bla bla «bla bla» bla bla «bla bla» bla bla</p>'
@@ -2938,7 +2932,7 @@ LOGO: Smi kulturfestivala 1998
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
-        self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
+        self.assertXmlEqual(got_paragraph, etree.fromstring(expected_paragraph))
 
     def test_detect_quote_with_following_tag(self):
         orig_paragraph = '<p>bla bla «bla bla» <em>bla bla</em></p>'
@@ -2954,7 +2948,7 @@ LOGO: Smi kulturfestivala 1998
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
-        self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
+        self.assertXmlEqual(got_paragraph, etree.fromstring(expected_paragraph))
 
     def test_detect_quote_with_tag_infront(self):
         orig_paragraph = '<p>bla bla <em>bla bla</em> «bla bla»</p>'
@@ -2970,7 +2964,7 @@ LOGO: Smi kulturfestivala 1998
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
-        self.assertXmlEqual(etree.tostring(got_paragraph), expected_paragraph)
+        self.assertXmlEqual(got_paragraph, etree.fromstring(expected_paragraph))
 
     def test_detect_quote_within_tag(self):
         orig_paragraph = '<p>bla bla <em>bla bla «bla bla»</em></p>'
@@ -2986,19 +2980,19 @@ LOGO: Smi kulturfestivala 1998
         got_paragraph = document_fixer.detect_quote(
             etree.fromstring(orig_paragraph))
 
-        self.assertXmlEqual(etree.tostring(got_paragraph),
-                            expected_paragraph)
+        self.assertXmlEqual(got_paragraph,
+                            etree.fromstring(expected_paragraph))
 
     def test_word_count(self):
         orig_doc = etree.parse(
-            io.BytesIO(
+            io.BytesIO((
                 '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
                 '<author><unknown/></author><availability><free/>'
                 '</availability><multilingual/></header><body><p>Bïevnesh '
                 'naasjovnalen pryövoej bïjre</p><p>2008</p><p>Bïevnesh '
                 'eejhtegidie, tjidtjieh aehtjieh bielide naasjovnalen '
                 'pryövoej bïjre giej leah maanah 5. jïh 8. '
-                'tsiehkine</p></body></document>'))
+                'tsiehkine</p></body></document>').encode('utf8')))
 
         expected_doc = (
             '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
@@ -3012,15 +3006,15 @@ LOGO: Smi kulturfestivala 1998
         document_fixer = converter.DocumentFixer(orig_doc)
         document_fixer.set_word_count()
 
-        self.assertXmlEqual(etree.tostring(document_fixer.root), expected_doc)
+        self.assertXmlEqual(document_fixer.root, etree.fromstring(expected_doc))
 
     def test_replace_shy1(self):
         orig_doc = etree.parse(
-            io.BytesIO(
+            io.BytesIO((
                 '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
                 '<author><unknown/></author><availability><free/>'
                 '</availability><multilingual/></header><body><p>a­b­c'
-                '<span>d­e</span>f­g</p></body></document>'))
+                '<span>d­e</span>f­g</p></body></document>').encode('utf8')))
 
         expected_doc = (
             '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
@@ -3031,15 +3025,15 @@ LOGO: Smi kulturfestivala 1998
         document_fixer = converter.DocumentFixer(orig_doc)
         document_fixer.soft_hyphen_to_hyph_tag()
 
-        self.assertXmlEqual(etree.tostring(document_fixer.root), expected_doc)
+        self.assertXmlEqual(document_fixer.root, etree.fromstring(expected_doc))
 
     def test_replace_shy2(self):
         orig_doc = etree.parse(
-            io.BytesIO(
+            io.BytesIO((
                 '<document xml:lang="sma" id="no_id">'
                 '<header><title/><genre/><author><unknown/></author>'
                 '<availability><free/></availability><multilingual/></header>'
-                '<body><p>a­b­c<span>d­e</span></p></body></document>'))
+                '<body><p>a­b­c<span>d­e</span></p></body></document>').encode('utf8')))
 
         expected_doc = (
             '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
@@ -3050,7 +3044,7 @@ LOGO: Smi kulturfestivala 1998
         document_fixer = converter.DocumentFixer(orig_doc)
         document_fixer.soft_hyphen_to_hyph_tag()
 
-        self.assertXmlEqual(etree.tostring(document_fixer.root), expected_doc)
+        self.assertXmlEqual(document_fixer.root, etree.fromstring(expected_doc))
 
     def test_compact_em1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -3068,7 +3062,7 @@ LOGO: Smi kulturfestivala 1998
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_compact_em2(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -3086,7 +3080,7 @@ LOGO: Smi kulturfestivala 1998
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_compact_em3(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -3104,7 +3098,7 @@ LOGO: Smi kulturfestivala 1998
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_compact_em4(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -3122,7 +3116,7 @@ LOGO: Smi kulturfestivala 1998
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_compact_em5(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -3140,7 +3134,7 @@ LOGO: Smi kulturfestivala 1998
     </body>
 </document>''')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_fix_sms1(self):
         '''\u2019 (’) should be replaced by \u02BC (ʼ)'''
@@ -3165,7 +3159,7 @@ LOGO: Smi kulturfestivala 1998
             u'  </body>'
             u'</document>')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_fix_sms2(self):
         '''\u0027 (')  should be replaced by \u02BC (ʼ)'''
@@ -3190,7 +3184,7 @@ LOGO: Smi kulturfestivala 1998
             u'  </body>'
             u'</document>')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_fix_sms3(self):
         '''\u2032 (′)  should be replaced by \u02B9 (ʹ)'''
@@ -3215,7 +3209,7 @@ LOGO: Smi kulturfestivala 1998
             u'  </body>'
             u'</document>')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_fix_sms4(self):
         '''\u00B4 (´)  should be replaced by \u02B9 (ʹ)'''
@@ -3240,7 +3234,7 @@ LOGO: Smi kulturfestivala 1998
             u'  </body>'
             u'</document>')
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
 
 class TestXslMaker(XMLTester):
@@ -3266,7 +3260,7 @@ class TestXslMaker(XMLTester):
             'corpustools/xslt/common.xsl')
 
         want = etree.parse(os.path.join(here, 'converter_data/test.xsl'))
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
 
 class TestPDFTextElement(XMLTester):
@@ -3323,10 +3317,9 @@ class TestPDFTextElement(XMLTester):
             '<text top="354" left="332" width="6" height="22" font="2"> </text>'))
 
         prev_t.merge_text_elements(t1)
-        self.assertXmlEqual(
-            etree.tostring(prev_t.t),
-            '<text top="354" left="119" width="211" height="22" font="2">'
-            '1.1. RIEKTEJOAVKKU </text>')
+        self.assertXmlEqual(prev_t.t,
+            etree.fromstring('<text top="354" left="119" width="211" height="22" font="2">'
+            '1.1. RIEKTEJOAVKKU </text>'))
 
 
 class TestPDFParagraph(XMLTester):
@@ -3699,8 +3692,8 @@ class TestPDFTextExtractor(XMLTester):
             '<text top="649" left="545" width="269" height="14" font="20">'
             'berret bargat. </text>')
         p2x.extract_textelement(input)
-        self.assertXmlEqual(etree.tostring(p2x.p, encoding='utf8'),
-                            '<p>berret bargat. </p>')
+        self.assertXmlEqual(p2x.p,
+                            etree.fromstring('<p>berret bargat. </p>'))
 
     def test_extract_textelement3(self):
         '''Extract text from a pdf2xml text that contains an <i> element'''
@@ -3710,8 +3703,8 @@ class TestPDFTextExtractor(XMLTester):
             '<text top="829" left="545" width="275" height="14" font="29">'
             '<i>Ei </i></text>')
         p2x.extract_textelement(input)
-        self.assertXmlEqual(etree.tostring(p2x.p, encoding='utf8'),
-                            '<p><em type="italic">Ei </em></p>')
+        self.assertXmlEqual(p2x.p,
+                            etree.fromstring('<p><em type="italic">Ei </em></p>'))
 
     def test_extract_textelement4(self):
         '''Extract text from a pdf2xml text that contains a <b> element'''
@@ -3721,8 +3714,8 @@ class TestPDFTextExtractor(XMLTester):
             '<text top="829" left="545" width="275" height="14" font="29">'
             '<b>Ei </b></text>')
         p2x.extract_textelement(input)
-        self.assertXmlEqual(etree.tostring(p2x.p, encoding='utf8'),
-                            '<p><em type="bold">Ei </em></p>')
+        self.assertXmlEqual(p2x.p,
+                            etree.fromstring('<p><em type="bold">Ei </em></p>'))
 
     def test_extract_textelement5(self):
         '''Text that contains a <b> element inside the <i> element'''
@@ -3733,8 +3726,8 @@ class TestPDFTextExtractor(XMLTester):
             '<i><b>Eiš </b></i></text>')
         p2x.extract_textelement(input)
 
-        self.assertXmlEqual(etree.tostring(p2x.p, encoding='utf8'),
-                            '<p><em type="italic">Eiš </em></p>')
+        self.assertXmlEqual(p2x.p,
+                            etree.fromstring('<p><em type="italic">Eiš </em></p>'))
 
     def test_extract_textelement6(self):
         '''Text that contains a <b> element including a tail'''
@@ -3744,8 +3737,8 @@ class TestPDFTextExtractor(XMLTester):
             '<text top="829" left="545" width="275" height="14" font="29">'
             '<b>E</b> a</text>')
         p2x.extract_textelement(input)
-        self.assertXmlEqual(etree.tostring(p2x.p, encoding='utf8'),
-                            '<p><em type="bold">E</em> a</p>')
+        self.assertXmlEqual(p2x.p,
+                            etree.fromstring('<p><em type="bold">E</em> a</p>'))
 
     def test_extract_textelement7(self):
         '''Extract text from a pdf2xml text that contains two <i> elements'''
@@ -3756,8 +3749,8 @@ class TestPDFTextExtractor(XMLTester):
             '<i>E</i> a <i>b</i></text>')
         p2x.extract_textelement(input)
 
-        self.assertXmlEqual(etree.tostring(p2x.p, encoding='utf8'),
-                            '<p><em type="italic">E</em> a <em type="italic">b</em></p>')
+        self.assertXmlEqual(p2x.p,
+                            etree.fromstring('<p><em type="italic">E</em> a <em type="italic">b</em></p>'))
 
     def test_extract_textelement8(self):
         '''Text that contains one <i> element with several <b> elements'''
@@ -3768,8 +3761,8 @@ class TestPDFTextExtractor(XMLTester):
             '<i><b>Å.</b> B <b>F.</b> A </i></text>')
         p2x.extract_textelement(input)
 
-        self.assertXmlEqual(etree.tostring(p2x.p, encoding='utf8'),
-                            '<p><em type="italic">Å. B F. A </em></p>')
+        self.assertXmlEqual(p2x.p,
+                            etree.fromstring('<p><em type="italic">Å. B F. A </em></p>'))
 
     def test_extract_textelement9(self):
         '''Text that contains one <b> element with several <i> elements'''
@@ -3780,14 +3773,14 @@ class TestPDFTextExtractor(XMLTester):
             '<b><i>Å.</i> B <i>F.</i> A </b></text>')
         p2x.extract_textelement(input)
 
-        self.assertXmlEqual(etree.tostring(p2x.p, encoding='utf8'),
-                            '<p><em type="bold">Å. B F. A </em></p>')
+        self.assertXmlEqual(p2x.p,
+                            etree.fromstring('<p><em type="bold">Å. B F. A </em></p>'))
 
     def test_get_body(self):
         '''Test the initial values when the class is initiated'''
         p2x = converter.PDFTextExtractor()
 
-        self.assertXmlEqual(etree.tostring(p2x.body), u'<body><p/></body>')
+        self.assertXmlEqual(p2x.body, etree.fromstring('<body><p/></body>'))
 
     def test_handle_line_ending_shy(self):
         p2x = converter.PDFTextExtractor()
@@ -3795,7 +3788,7 @@ class TestPDFTextExtractor(XMLTester):
         p2x.handle_line_ending()
 
         self.assertXmlEqual(
-            etree.tostring(p2x.p), u'<p>a\xAD</p>')
+            p2x.p, etree.fromstring('<p>a\xAD</p>'))
 
     def test_handle_line_ending_hyphen(self):
         p2x = converter.PDFTextExtractor()
@@ -3803,7 +3796,7 @@ class TestPDFTextExtractor(XMLTester):
         p2x.handle_line_ending()
 
         self.assertXmlEqual(
-            etree.tostring(p2x.p), u'<p>a\xAD</p>')
+            p2x.p, etree.fromstring('<p>a\xAD</p>'))
 
     def test_handle_line_ending_hyphen_last_child_has_no_tail(self):
         p2x = converter.PDFTextExtractor()
@@ -3811,7 +3804,7 @@ class TestPDFTextExtractor(XMLTester):
         p2x.handle_line_ending()
 
         self.assertXmlEqual(
-            etree.tostring(p2x.p), u'<p><em type="italic">a\xAD</em></p>')
+            p2x.p, etree.fromstring('<p><em type="italic">a\xAD</em></p>'))
 
     def test_handle_line_ending_hyphen_last_child_has_tail(self):
         p2x = converter.PDFTextExtractor()
@@ -3819,7 +3812,7 @@ class TestPDFTextExtractor(XMLTester):
         p2x.handle_line_ending()
 
         self.assertXmlEqual(
-            etree.tostring(p2x.p), u'<p><em type="italic">a</em>\xAD</p>')
+            p2x.p, etree.fromstring('<p><em type="italic">a</em>\xAD</p>'))
 
     def test_handle_line_ending_hyphen_space(self):
         '''If - is not the last char, do not replace it by a soft hyphen'''
@@ -3829,7 +3822,7 @@ class TestPDFTextExtractor(XMLTester):
             p2x.handle_line_ending()
 
             self.assertXmlEqual(
-                etree.tostring(p2x.p), u'<p>a-</p>')
+                p2x.p, etree.fromstring('<p>a-</p>'))
 
     def test_handle_line_not_shy_nor_hyphen(self):
         p2x = converter.PDFTextExtractor()
@@ -3837,7 +3830,7 @@ class TestPDFTextExtractor(XMLTester):
         p2x.handle_line_ending()
 
         self.assertXmlEqual(
-            etree.tostring(p2x.p), u'<p>a </p>')
+            p2x.p, etree.fromstring('<p>a </p>'))
 
     def test_handle_upper_case_on_new_page(self):
         '''If the first paragraph begins with an uppercase letter, start a new p'''
@@ -3851,12 +3844,12 @@ class TestPDFTextExtractor(XMLTester):
 
         p2x.extract_text_from_page(paragraphs)
 
-        self.assertXmlEqual(etree.tostring(p2x.body),
-                            u'''
+        self.assertXmlEqual(p2x.body,
+                            etree.fromstring('''
                             <body>
                                 <p>not ending with sentence stop character</p>
                                 <p>Upper case.</p>
-                            </body>''')
+                            </body>'''))
 
     def test_handle_number_on_new_page(self):
         '''If the first paragraph begins with a number, start a new p'''
@@ -3870,12 +3863,12 @@ class TestPDFTextExtractor(XMLTester):
 
         p2x.extract_text_from_page(paragraphs)
 
-        self.assertXmlEqual(etree.tostring(p2x.body),
-                            u'''
+        self.assertXmlEqual(p2x.body,
+                            etree.fromstring('''
                             <body>
                                 <p>not ending with sentence stop character</p>
                                 <p>1 element.</p>
-                            </body>''')
+                            </body>'''))
 
     def test_add_list_paragraphs(self):
         texts = [
@@ -3895,14 +3888,15 @@ class TestPDFTextExtractor(XMLTester):
         p2x = converter.PDFTextExtractor()
         p2x.extract_text_from_page(paragraphs)
 
-        self.assertEqual(etree.tostring(p2x.body),
-                         '<body>'
-                         '<p type="listitem">&#61623; </p>'
-                         '<p type="listitem">&#61553; </p>'
-                         '<p type="listitem">&#8226;\t</p>'
-                         '<p type="listitem">&#8211; </p>'
-                         '<p type="listitem">- </p>'
-                         '</body>')
+        self.assertXmlEqual(p2x.body,
+                            etree.fromstring(
+                                '<body>'
+                                '<p type="listitem">&#61623; </p>'
+                                '<p type="listitem">&#61553; </p>'
+                                '<p type="listitem">&#8226;\t</p>'
+                                '<p type="listitem">&#8211; </p>'
+                                '<p type="listitem">- </p>'
+                                '</body>'))
 
 
 class TestPDFSection(XMLTester):
@@ -4164,8 +4158,8 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
 
         extractor = converter.PDFTextExtractor()
         extractor.extract_text_from_page(paragraphs)
-        self.assertXmlEqual(etree.tostring(extractor.body, pretty_print=True),
-                            etree.tostring(expected_page, pretty_print=True))
+        self.assertXmlEqual(extractor.body,
+                            expected_page)
 
     def test_make_ordered_sections(self):
         expected_page = etree.fromstring(u'''
@@ -4255,8 +4249,8 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
 
         extractor = converter.PDFTextExtractor()
         extractor.extract_text_from_page(pp.make_ordered_sections().paragraphs)
-        self.assertXmlEqual(etree.tostring(extractor.body, pretty_print=True),
-                            etree.tostring(expected_page, pretty_print=True))
+        self.assertXmlEqual(extractor.body,
+                            expected_page,)
 
 
 class TestProblematicPageTwoColumnsHeaderLast(XMLTester):
@@ -4478,8 +4472,8 @@ class TestProblematicPageTwoColumnsHeaderLast(XMLTester):
 
         extractor = converter.PDFTextExtractor()
         extractor.extract_text_from_page(paragraphs)
-        self.assertXmlEqual(etree.tostring(extractor.body, pretty_print=True),
-                            etree.tostring(expected_page, pretty_print=True))
+        self.assertXmlEqual(extractor.body,
+                            expected_page)
 
     def test_make_ordered_sections(self):
         expected_page = etree.fromstring(u'''
@@ -4588,8 +4582,8 @@ class TestProblematicPageTwoColumnsHeaderLast(XMLTester):
 
         extractor = converter.PDFTextExtractor()
         extractor.extract_text_from_page(pp.make_ordered_sections().paragraphs)
-        self.assertXmlEqual(etree.tostring(extractor.body, pretty_print=True),
-                            etree.tostring(expected_page, pretty_print=True))
+        self.assertXmlEqual(extractor.body,
+                            expected_page)
 
 
 class TestProblematicPageThreeColumns(XMLTester):
@@ -4904,8 +4898,8 @@ class TestProblematicPageThreeColumns(XMLTester):
         for pdftextelement in pp.textelements:
             expected_page.append(pdftextelement.t)
 
-        self.assertXmlEqual(etree.tostring(expected_page),
-                            etree.tostring(adjusted_page))
+        self.assertXmlEqual(expected_page,
+                            adjusted_page)
 
     def test_not_within_margin_page(self):
         not_within_margin_page = etree.fromstring(u'''
@@ -5036,8 +5030,8 @@ class TestProblematicPageThreeColumns(XMLTester):
         for pdftextelement in pp.textelements:
             expected_page.append(pdftextelement.t)
 
-        self.assertXmlEqual(etree.tostring(expected_page),
-                            etree.tostring(not_within_margin_page))
+        self.assertXmlEqual(expected_page,
+                            not_within_margin_page)
 
     def test_make_unordered_paragraphs(self):
         expected_page = etree.fromstring(u'''
@@ -5141,8 +5135,8 @@ class TestProblematicPageThreeColumns(XMLTester):
 
         extractor = converter.PDFTextExtractor()
         extractor.extract_text_from_page(paragraphs)
-        self.assertXmlEqual(etree.tostring(extractor.body, pretty_print=True),
-                            etree.tostring(expected_page, pretty_print=True))
+        self.assertXmlEqual(extractor.body,
+                            expected_page)
 
     def test_make_ordered_sections(self):
         expected_page = etree.fromstring(u'''
@@ -5243,8 +5237,8 @@ class TestProblematicPageThreeColumns(XMLTester):
 
         extractor = converter.PDFTextExtractor()
         extractor.extract_text_from_page(pp.make_ordered_sections().paragraphs)
-        self.assertXmlEqual(etree.tostring(extractor.body, pretty_print=True),
-                            etree.tostring(expected_page, pretty_print=True))
+        self.assertXmlEqual(extractor.body,
+                            expected_page)
 
 
 class TestPDFPage(XMLTester):
@@ -5265,10 +5259,10 @@ class TestPDFPage(XMLTester):
         pdfpage.merge_elements_on_same_line()
 
         self.assertEqual(len(pdfpage.textelements), 1)
-        self.assertXmlEqual(etree.tostring(pdfpage.textelements[0].t),
-                            '<text top="197" left="257" width="497" height="20" font="8">'
+        self.assertXmlEqual(pdfpage.textelements[0].t,
+                            etree.fromstring('<text top="197" left="257" width="497" height="20" font="8">'
                             'Departemeanttat fertejit dahkat vuolit et&#225;htaid '
-                            'dihtomielala&#382;&#382;an das </text>')
+                            'dihtomielala&#382;&#382;an das </text>'))
 
     def test_remove_footnotes_superscript_1(self):
         '''Footnote superscript is in the middle of a sentence'''
@@ -5442,9 +5436,9 @@ class TestPDFPage(XMLTester):
             '<page number="1" height="1263" width="862"/>'))
 
         self.assertEqual(page1.compute_margins(), {'left_margin': 60,
-                                                   'right_margin': 802,
+                                                   'right_margin': 801,
                                                    'top_margin': 88,
-                                                   'bottom_margin': 1175})
+                                                   'bottom_margin': 1174})
 
     def test_compute_margins1(self):
         '''Test parse_margin_lines'''
@@ -5459,44 +5453,44 @@ class TestPDFPage(XMLTester):
             metadata_margins=md.margins)
 
         self.assertEqual(page1.compute_margins(), {'left_margin': 60,
-                                                   'right_margin': 776,
+                                                   'right_margin': 775,
                                                    'top_margin': 88,
-                                                   'bottom_margin': 1175})
+                                                   'bottom_margin': 1174})
         page2 = converter.PDFPage(
             etree.fromstring('<page number="2" height="1263" width="862"/>'),
             metadata_margins=md.margins)
         self.assertEqual(page2.compute_margins(), {'left_margin': 60,
-                                                   'right_margin': 733,
+                                                   'right_margin': 732,
                                                    'top_margin': 88,
-                                                   'bottom_margin': 1175})
+                                                   'bottom_margin': 1174})
         page3 = converter.PDFPage(
             etree.fromstring('<page number="3" height="1263" width="862"/>'),
             metadata_margins=md.margins)
         self.assertEqual(page3.compute_margins(), {'left_margin': 60,
-                                                   'right_margin': 819,
+                                                   'right_margin': 818,
                                                    'top_margin': 88,
-                                                   'bottom_margin': 1175})
+                                                   'bottom_margin': 1174})
         page7 = converter.PDFPage(
             etree.fromstring('<page number="7" height="1263" width="862"/>'),
             metadata_margins=md.margins)
         self.assertEqual(page7.compute_margins(), {'left_margin': 43,
-                                                   'right_margin': 776,
+                                                   'right_margin': 775,
                                                    'top_margin': 88,
-                                                   'bottom_margin': 1175})
+                                                   'bottom_margin': 1174})
         page8 = converter.PDFPage(
             etree.fromstring('<page number="8" height="1263" width="862"/>'),
             metadata_margins=md.margins)
         self.assertEqual(page8.compute_margins(), {'left_margin': 60,
-                                                   'right_margin': 733,
+                                                   'right_margin': 732,
                                                    'top_margin': 101,
-                                                   'bottom_margin': 1175})
+                                                   'bottom_margin': 1174})
         page9 = converter.PDFPage(
             etree.fromstring('<page number="9" height="1263" width="862"/>'),
             metadata_margins=md.margins)
         self.assertEqual(page9.compute_margins(), {'left_margin': 60,
-                                                   'right_margin': 776,
+                                                   'right_margin': 775,
                                                    'top_margin': 88,
-                                                   'bottom_margin': 1011})
+                                                   'bottom_margin': 1010})
 
     def test_compute_inner_margins_1(self):
         '''Test if inner margins is set for the specified page'''
@@ -5509,7 +5503,7 @@ class TestPDFPage(XMLTester):
             metadata_inner_margins=md.inner_margins)
 
         self.assertEqual(page1.compute_inner_margins(),
-                         {'inner_top_margin': 505, 'inner_bottom_margin': 758,
+                         {'inner_top_margin': 505, 'inner_bottom_margin': 757,
                           'inner_left_margin': 0, 'inner_right_margin': 862})
 
     def test_compute_inner_margins_2(self):
@@ -5647,7 +5641,7 @@ class TestPDF2XMLConverter(XMLTester):
         want = etree.parse(
             os.path.join(here, 'converter_data/pdf-xml2pdf-test.xml'))
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        self.assertXmlEqual(got, want)
 
     def test_parse_page_1(self):
         '''Page with one paragraph, three <text> elements'''
@@ -5875,14 +5869,14 @@ class TestPDF2XMLConverter(XMLTester):
 
         self.maxDiff = None
         self.assertXmlEqual(
-            etree.tostring(p2x.extractor.body, encoding='unicode'),
-            u'<body>'
-            u'<p>vuosttaš dábálaš linnjá</p>'
-            u'<p type="listitem">• Vuosttaš listolinnjá  '
-            u'vuosttaš listolinnjá joaktta</p>'
-            u'<p type="listitem">• Nubbi listo\xADlinnjá</p>'
-            u'<p>Nubbi dábáláš linnjá</p>'
-            u'</body>')
+            p2x.extractor.body,
+            etree.fromstring('<body>'
+            '<p>vuosttaš dábálaš linnjá</p>'
+            '<p type="listitem">• Vuosttaš listolinnjá  '
+            'vuosttaš listolinnjá joaktta</p>'
+            '<p type="listitem">• Nubbi listo\xADlinnjá</p>'
+            '<p>Nubbi dábáláš linnjá</p>'
+            '</body>'))
 
     def test_parse_page_14(self):
         '''Test that elements outside margin is not added'''
@@ -5941,7 +5935,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
 
-        self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+        self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
 
     def test_parse_pdf2xmldoc2(self):
         '''Test if pages really are skipped'''
@@ -5964,7 +5958,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x.md.set_variable('skip_pages', '1')
         p2x.parse_pages(pdf2xml)
 
-        self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+        self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
 
     def test_parse_pdf2xmldoc3(self):
         '''Check if paragraph is continued from page to page
@@ -5994,7 +5988,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
 
-        self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+        self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
 
     def test_parse_pdf2xmldoc4(self):
         '''Check if paragraph is continued from page to page
@@ -6024,7 +6018,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
 
-        self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+        self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
 
     def test_text_disappears(self):
         '''bug 2115, Store deler av teksten blir borte'''
@@ -6040,7 +6034,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
 
-        self.assertXmlEqual(etree.tostring(p2x.extractor.body, encoding='unicode'), want)
+        self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
 
     def test_text_unwanted_line_shift(self):
         '''bug 2107, Linjeskift hvor det ikke skal være'''
@@ -6064,7 +6058,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
 
-        self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+        self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
 
     def test_parse_pdf2xmldoc_ends_with_dot(self):
         '''If last string on a page ends with ., do not continue paragraph to next page'''
@@ -6084,7 +6078,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
 
-        self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+        self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
 
     def test_parse_pdf2xmldoc_ends_with_exclam(self):
         '''If last string on a page ends with !, do not continue paragraph to next page'''
@@ -6104,7 +6098,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
 
-        self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+        self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
 
     def test_parse_pdf2xmldoc_ends_with_question(self):
         '''If last string on a page ends with ?, do not continue paragraph to next page'''
@@ -6124,7 +6118,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
 
-        self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+        self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
 
     def test_parse_pdf2xmldoc_not_end_of_sentence(self):
         '''If last string on a page is not ended, continue paragraph'''
@@ -6144,7 +6138,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
 
-        self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+        self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
 
     def test_parse_pdf2xmldoc_text_on_same_line_different_font(self):
         '''Test of bug2101'''
@@ -6161,7 +6155,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
 
-        self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+        self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
 
     def test_parse_pdf2xmldoc_pp_tjenesten(self):
         '''Test of bug2101'''
@@ -6179,7 +6173,7 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
 
-        self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+        self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
 
     def test_parse_pdf2xmldoc_em_at_end_of_page_and_start_of_next_page(self):
         pdf2xml = etree.fromstring(u'''
@@ -6211,4 +6205,4 @@ class TestPDF2XMLConverter(XMLTester):
         p2x = converter.PDF2XMLConverter('bogus.xml')
         p2x.parse_pages(pdf2xml)
 
-        self.assertXmlEqual(etree.tostring(p2x.extractor.body), want)
+        self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))

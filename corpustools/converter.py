@@ -2662,10 +2662,10 @@ class DocumentFixer(object):
 
     def calculate_wordcount(self):
         '''Count the words in the file.'''
-        plist = [etree.tostring(paragraph, method='text', encoding='utf8')
+        plist = [etree.tostring(paragraph, method='text', encoding='unicode')
                  for paragraph in self.root.iter('p')]
 
-        return str(len(re.findall(r'\S+', ' '.join(plist))))
+        return str(len(re.findall(u'\S+', ' '.join(plist))))
 
     def set_word_count(self):
         '''Set the wordcount element'''
