@@ -24,7 +24,7 @@ from __future__ import unicode_literals
 
 from __future__ import absolute_import
 import os
-import StringIO
+from io import StringIO
 import unittest
 
 from corpustools import text_cat
@@ -94,9 +94,9 @@ class TestTextCat(unittest.TestCase):
 
     def test_charmodel_model_file(self):
         model = text_cat.CharModel().of_text("šuhkoládagáhkku")
-        model_file = StringIO.StringIO()
+        model_file = StringIO()
         model.to_model_file(model_file)
-        lines = model_file.getvalue().decode('utf-8').split("\n")
+        lines = model_file.getvalue().split("\n")
         self.assertEqual(['k\t3'], lines[:1])
         self.assertIn('á\t2', lines)
         self.assertIn('hk\t2', lines)
@@ -105,9 +105,9 @@ class TestTextCat(unittest.TestCase):
 
     def test_wordmodel_model_file(self):
         model = text_cat.WordModel().of_text("šuhkoláda ja gáhkku ja gáfe")
-        model_file = StringIO.StringIO()
+        model_file = StringIO()
         model.to_model_file(model_file)
-        lines = model_file.getvalue().decode('utf-8').split("\n")
+        lines = model_file.getvalue().split("\n")
         self.assertEqual(['2\tja'], lines[:1])
         self.assertIn('1\tgáhkku', lines)
 
@@ -122,9 +122,17 @@ class TestTextCat(unittest.TestCase):
             'denne delstaten.')
         nob_test = "kategori:Goiás"
         cmodel_sme = text_cat.CharModel().of_text(sme_train)
+        with open('sme.lm3', 'w') as sme_lm:
+            cmodel_sme.to_model_file(sme_lm)
         wmodel_sme = text_cat.WordModel().of_text(sme_train)
+        with open('sme.wm3', 'w') as sme_wm:
+            wmodel_sme.to_model_file(sme_wm)
         cmodel_nob = text_cat.CharModel().of_text(nob_train)
+        with open('nob.lm3', 'w') as nob_lm:
+            cmodel_sme.to_model_file(nob_lm)
         wmodel_nob = text_cat.WordModel().of_text(nob_train)
+        with open('nob.wm3', 'w') as nob_wm:
+            wmodel_nob.to_model_file(nob_wm)
         ctext_nob = text_cat.CharModel().of_text(nob_test)
         self.assertLess(wmodel_sme.compare_tc(nob_test,
                                               cmodel_sme.compare(ctext_nob)),

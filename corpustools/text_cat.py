@@ -62,7 +62,7 @@ def ensure_unicode(text):
     Helper for functions that should be able to operate on either utf-8
     encoded bytes or decoded unicode objects
     """
-    if type(text) == str:
+    if type(text) == bytes:
         return text.decode('utf-8')
     else:
         assert(type(text) == six.text_type)
@@ -99,7 +99,7 @@ class NGramModel(object):
     def freq_of_model_file(self, fil, fname, gram_column, freq_column):
         freq = {}
         for nl, strline in enumerate(fil.readlines()):
-            line = strline.decode('utf-8').strip()
+            line = strline.strip()
             if line == "":
                 continue
             parts = line.split()
@@ -107,7 +107,7 @@ class NGramModel(object):
                 raise ValueError("%s:%d invalid line, was split to %s"
                                  % (fname, nl + 1, parts))
             try:
-                g = six.text_type(parts[gram_column])
+                g = six.u(parts[gram_column])
                 f = int(parts[freq_column])
                 freq[g] = f
             except ValueError as e:
@@ -190,7 +190,7 @@ class CharModel(NGramModel):
                          for g, f
                          in util.sort_by_value(self.freq, reverse=True)
                          if g != ''])
-        fil.write(lines.encode('utf-8'))
+        fil.write(lines)
 
     def freq_of_text(self, text, freq):
         words = self.tokenise(text)
@@ -219,7 +219,7 @@ class WordModel(NGramModel):
                          for g, f
                          in util.sort_by_value(self.freq, reverse=True)
                          if g != ''])
-        fil.write(lines.encode('utf-8'))
+        fil.write(lines)
 
     def freq_of_text(self, text, freq):
         words = self.tokenise(text)
