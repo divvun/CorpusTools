@@ -123,17 +123,9 @@ class TestTextCat(unittest.TestCase):
             'denne delstaten.')
         nob_test = "kategori:Goiás"
         cmodel_sme = text_cat.CharModel().of_text(sme_train)
-        with open('sme.lm3', 'w') as sme_lm:
-            cmodel_sme.to_model_file(sme_lm)
         wmodel_sme = text_cat.WordModel().of_text(sme_train)
-        with open('sme.wm3', 'w') as sme_wm:
-            wmodel_sme.to_model_file(sme_wm)
         cmodel_nob = text_cat.CharModel().of_text(nob_train)
-        with open('nob.lm3', 'w') as nob_lm:
-            cmodel_nob.to_model_file(nob_lm)
         wmodel_nob = text_cat.WordModel().of_text(nob_train)
-        with open('nob.wm3', 'w') as nob_wm:
-            wmodel_nob.to_model_file(nob_wm)
         ctext_nob = text_cat.CharModel().of_text(nob_test)
 
         util.print_frame(debug=cmodel_sme.compare(ctext_nob))
