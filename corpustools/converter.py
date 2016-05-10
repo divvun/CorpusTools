@@ -2703,18 +2703,18 @@ class DocumentFixer(object):
     def fix_newstags(self):
         '''Convert newstags found in text to xml elements'''
         newstags = re.compile(
-            r'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|'
-            r'LED|bilde)*tekst:|@*foto:|@fotobyline:|@*bildetitt:|'
-            r'<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|'
-            r'@*Samleingress:*|tekst/ingress:|billedtekst:)', re.IGNORECASE)
+            u'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|'
+            u'LED|bilde)*tekst:|@*foto:|@fotobyline:|@*bildetitt:|'
+            u'<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|'
+            u'@*Samleingress:*|tekst/ingress:|billedtekst:|.@tekst:)', re.IGNORECASE)
         titletags = re.compile(
-            r'\s*@m.titt[\.:]|\s*@*stikk:|Mellomtittel:|@*(stikk\.*|'
-            r'under)titt(el)*:|@ttt:|\s*@*[utm]*[:\.]*tit+:|<pstyle:m.titt>|'
-            r'undertittel:', re.IGNORECASE)
+            u'\s*@m.titt[\.:]|\s*@*stikk:|Mellomtittel:|@*(stikk\.*|'
+            u'under)titt(el)*:|@ttt:|\s*@*[utm]*[:\.]*tit+:|<pstyle:m.titt>|'
+            u'undertittel:', re.IGNORECASE)
         headertitletags = re.compile(
-            r'(\s*@*(led)*tittel:|\s*@*titt(\s\d)*:|@LEDtitt:|'
-            r'<pstyle:tittel>|@*(hoved|over)titt(el)*:)', re.IGNORECASE)
-        bylinetags = re.compile(u'(<pstyle:|\s*@*)[Bb]yline[:>]*\s*(\S+:)*',
+            u'(\s*@*(led)*tittel:|\s*@*titt(\s\d)*:|@LEDtitt:|'
+            u'<pstyle:tittel>|@*(hoved|over)titt(el)*:)', re.IGNORECASE)
+        bylinetags = re.compile('(<pstyle:|\s*@*)[Bb]yline[:>]*\s*(\S+:)*',
                                 re.UNICODE | re.IGNORECASE)
         boldtags = re.compile(u'@bold\s*:')
 
