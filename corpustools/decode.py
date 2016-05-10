@@ -312,8 +312,8 @@ class EncodingGuesser(object):
         position position in CTYPES
 
         @param position which place the encoding has in the CTYPES list
-        @param text utf8 encoded str
-        @return utf8 encoded str
+        @param text str
+        @return str
         """
         if position is not None:
             encoding = CTYPES[position]

@@ -2594,7 +2594,7 @@ class DocumentFixer(object):
                     'lastname',
                     eg.decode_para(
                         encoding,
-                        lastname.encode('utf-8')).decode('utf-8'))
+                        lastname))
 
                 firstname = person.get('firstname')
 
@@ -2606,7 +2606,7 @@ class DocumentFixer(object):
                     'firstname',
                     eg.decode_para(
                         encoding,
-                        firstname.encode('utf-8')).decode('utf-8'))
+                        firstname))
 
     @staticmethod
     def get_quote_list(text):
