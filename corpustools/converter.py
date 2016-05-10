@@ -294,7 +294,7 @@ class Converter(object):
                     '{} failed. More info in the log file: {}'.format(
                         command[0], self.logfile))
 
-        return str(runner.stdout)
+        return runner.stdout.decode('utf8')
 
     def handle_syntaxerror(self, e, lineno, invalid_input):
         with open(self.logfile, 'w') as logfile:
@@ -309,7 +309,7 @@ class Converter(object):
 
                 logfile.write('\n')
 
-            logfile.write(invalid_input.encode('utf8'))
+            logfile.write(invalid_input)
 
         raise ConversionException(
             "{}: log is found in {}".format(type(self).__name__, self.logfile))
@@ -1409,10 +1409,10 @@ class PDF2XMLConverter(Converter):
             self.extract_text(command)))
 
         try:
-            root_element = etree.fromstring(pdf_content)
+            root_element = etree.fromstring(bytes(pdf_content, 'utf8'))
         except etree.XMLSyntaxError as e:
             self.handle_syntaxerror(e, util.lineno(),
-                                    pdf_content.decode('utf-8'))
+                                    pdf_content)
 
         self.parse_pages(root_element)
 
