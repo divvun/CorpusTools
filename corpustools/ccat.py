@@ -219,11 +219,11 @@ class XMLPrinter(object):
 
             if self.print_filename:
                 text += u', file: {}'.format(
-                    os.path.basename(self.filename).decode('utf8'))
+                    os.path.basename(self.filename))
 
         elif self.print_filename:
             text += u'\t#file: {}'.format(
-                os.path.basename(self.filename).decode('utf8'))
+                os.path.basename(self.filename))
 
         return text
 
@@ -242,11 +242,11 @@ class XMLPrinter(object):
 
         if len(textlist) > 0:
             if not self.one_word_per_line:
-                buffer.write(' '.join(textlist))
-                buffer.write(' ¶\n')
+                buffer.write(u' '.join(textlist))
+                buffer.write(u' ¶\n')
             else:
-                buffer.write('\n'.join(textlist))
-                buffer.write('\n')
+                buffer.write(u'\n'.join(textlist))
+                buffer.write(u'\n')
 
     def get_contents(self, elt_contents, textlist, elt_lang):
         if elt_contents is not None:
@@ -354,7 +354,7 @@ class XMLPrinter(object):
 
         Returns the buffer
         """
-        buffer = StringIO.StringIO()
+        buffer = StringIO()
 
         if self.hyph_replacement is not None:
             self.handle_hyph()
@@ -386,7 +386,7 @@ class XMLPrinter(object):
 
     def print_element(self, element, buffer):
         if element is not None and element.text is not None:
-            buffer.write(element.text.encode('utf8'))
+            buffer.write(element.text)
 
     def print_file(self, file_):
         '''Print a xml file to stdout'''
