@@ -1430,18 +1430,18 @@ class TestHTMLContentConverter(XMLTester):
         self.assertXmlEqual(etree.tostring(got), want)
 
 
-class TestRTFConverter(XMLTester):
+#class TestRTFConverter(XMLTester):
 
-    def setUp(self):
-        self.testrtf = converter.RTFConverter(
-            os.path.join(here, 'converter_data/folkemote.rtf'))
+    #def setUp(self):
+        #self.testrtf = converter.RTFConverter(
+            #os.path.join(here, 'converter_data/folkemote.rtf'))
 
-    def test_convert2intermediate(self):
-        got = self.testrtf.convert2intermediate()
-        want = etree.parse(
-            os.path.join(here, 'converter_data/folkemote.xml'))
+    #def test_convert2intermediate(self):
+        #got = self.testrtf.convert2intermediate()
+        #want = etree.parse(
+            #os.path.join(here, 'converter_data/folkemote.xml'))
 
-        self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
+        #self.assertXmlEqual(etree.tostring(got), etree.tostring(want))
 
 
 class TestDocumentFixer(XMLTester):
