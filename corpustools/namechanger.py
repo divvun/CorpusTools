@@ -19,19 +19,19 @@
 #   Copyright © 2013-2016 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-from __future__ import print_function
 
+from __future__ import print_function
 from __future__ import absolute_import
 import os
 
 from collections import namedtuple
 import hashlib
+import six
 import unidecode
 
 from corpustools import util
 from corpustools import versioncontrol
 from corpustools import xslsetter
-import six
 
 
 class NamechangerException(Exception):
