@@ -334,7 +334,7 @@ class CorpusFilesetMoverAndUpdater(object):
 
     def move_files(self):
         for filepair in self.mc.filepairs:
-            if len(filepair.newpath) == 0:
+            if not filepair.newpath:
                 cfr = CorpusFileRemover(filepair.oldpath)
                 cfr.remove_files()
             elif filepair.oldpath != filepair.newpath:
@@ -344,7 +344,7 @@ class CorpusFilesetMoverAndUpdater(object):
     def update_own_metadata(self):
         '''Update metadata'''
         for filepair in self.mc.filepairs:
-            if len(filepair.newpath) > 0:
+            if filepair.newpath:
                 old_components = util.split_path(filepair.oldpath)
                 new_components = util.split_path(filepair.newpath)
 
@@ -365,7 +365,7 @@ class CorpusFilesetMoverAndUpdater(object):
             parallel_filepairs.remove(filepair)
 
             old_components = util.split_path(filepair.oldpath)
-            if len(filepair.newpath) > 0:
+            if filepair.newpath:
                 new_components = util.split_path(filepair.newpath)
 
                 for parallel_filepair in parallel_filepairs:
@@ -408,7 +408,7 @@ def compute_hexdigest(path, blocksize=65536):
     with open(path, 'rb') as afile:
         hasher = hashlib.md5()
         buf = afile.read(blocksize)
-        while len(buf) > 0:
+        while buf:
             hasher.update(buf)
             buf = afile.read(blocksize)
 

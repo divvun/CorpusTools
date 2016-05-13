@@ -52,7 +52,7 @@ class GenerateAnchorList(object):
             if len(words) == len(self.columns):
                 word1 = words[self.lang1_index].strip()
                 word2 = words[self.lang2_index].strip()
-                if len(word1) > 0 and len(word2) > 0:
+                if word1 and word2:
                     return word1, word2
             else:
                 print('Invalid line at {} in {}'.format(lineno, self.path),

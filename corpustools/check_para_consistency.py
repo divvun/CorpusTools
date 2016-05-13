@@ -79,7 +79,7 @@ def main():
                                 para_fail += 1
                                 para_files.add(none_dupe_path)
 
-                    if len(para_files) > 0:
+                    if para_files:
                         print(orig, 'points to non-existing file')
                         for p in para_files:
                             print('\t', p)

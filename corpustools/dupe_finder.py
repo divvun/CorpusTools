@@ -64,7 +64,7 @@ class DupeFinder(object):
         result = list(difflib.unified_diff(
             self.files[filename1].splitlines(1),
             self.files[filename2].splitlines(1)))
-        if len(result) == 0:
+        if not result:
             print('\nParallels:', filename1, filename2)
             to_remove = filename1
             if self.get_parallel_texts(filename1) > self.get_parallel_texts(filename2):

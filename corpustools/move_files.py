@@ -48,7 +48,7 @@ def mover(oldpath, newpath):
         oldpath,
         newpath)
     filepair = cfmu.mc.filepairs[0]
-    if len(filepair.newpath) > 0:
+    if filepair.newpath:
         print('\tmoving {} -> {}'.format(
             filepair.oldpath, filepair.newpath))
     else:

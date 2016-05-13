@@ -279,15 +279,15 @@ class Classifier(object):
 
         folder_glob = os.path.join(folder, '*' + ext)
         found_fnames = glob.glob(os.path.normcase(folder_glob))
-        if len(found_fnames) == 0:
+        if not found_fnames:
             raise ValueError("No language files found in %s" % (folder,))
 
-        if len(langs) == 0:
+        if not langs:
             fnames = found_fnames
         else:
             fnames = [os.path.join(folder, lang + ext) for lang in langs]
             not_found = set(fnames) - set(found_fnames)
-            if len(not_found) != 0:
+            if not_found:
                 raise ValueError(
                     "Unknown language(s): " + ", ".join(not_found))
 
@@ -308,7 +308,7 @@ class Classifier(object):
             else:
                 self.wmodels[lang] = WordModel(lang).of_freq({})
 
-        if len(self.cmodels) == 0:
+        if not self.cmodels:
             raise ValueError("No character models created!")
         else:
             self.langs = set(self.cmodels.keys())
@@ -393,7 +393,7 @@ class FolderTrainer(object):
                 self.models[lang] = Model(lang).of_text_file(
                     self.open_corpus(fname))
 
-        if len(self.models) == 0:
+        if not self.models:
             raise Exception(
                 "No suitable files found matching {}/*.{}{}{}!".format(
                     folder, "{", ",".join(exts), "}"))
@@ -408,7 +408,7 @@ class FolderTrainer(object):
         for lang, model in six.iteritems(self.models):
             fname = os.path.join(folder, lang + ext)
             model.to_model_file(codecs.open(fname, 'w', encoding='utf8'))
-        if verbose and len(self.models) != 0:
+        if verbose and self.models:
             util.note("Wrote {%s}%s" % (",".join(list(self.models.keys())), ext))
 
 

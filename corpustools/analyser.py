@@ -101,7 +101,7 @@ class Analyser(object):
         """Turn an xml formatted file into clean text"""
         self.xml_printer.parse_file(self.xml_file.get_name())
         text = self.xml_printer.process_file().getvalue()
-        if len(text) > 0:
+        if text:
             return text
 
     def run_external_command(self, command, input):
@@ -219,7 +219,7 @@ class Analyser(object):
 
     def check_error(self, command, error):
         '''Print errors'''
-        if error is not None and len(error) > 0:
+        if error:
             print(self.xml_file.get_name(), file=sys.stderr)
             print(command, file=sys.stderr)
             print(error, file=sys.stderr)
@@ -324,7 +324,7 @@ def main():
         sys.exit(4)
 
     ana.collect_files(args.converted_dirs)
-    if len(ana.xml_files) > 0:
+    if ana.xml_files:
         if args.serial:
             ana.analyse_serially()
         else:

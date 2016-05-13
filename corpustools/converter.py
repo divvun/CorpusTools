@@ -794,7 +794,7 @@ class PDFTextElement(BoundingBox):
         with util.ignored(ValueError):
             int(self.t.xpath("string()").strip())
             child = self.t
-            while len(child) > 0:
+            while len(child):
                 child = child[0]
             child.text = re.sub('\d+', '', child.text)
 
@@ -802,7 +802,7 @@ class PDFTextElement(BoundingBox):
         '''Merge the contents of other_box into self'''
         prev_t = self.t
         t = other_box.t
-        if len(prev_t) == 0:
+        if not len(prev_t):
             if t.text is not None:
                 if prev_t.text is None:
                     prev_t.text = t.text
@@ -862,10 +862,10 @@ class PDFParagraph(object):
         self.is_listitem = False
 
     def append_textelement(self, textelement):
-        if (len(textelement.plain_text) > 0 and
+        if (textelement.plain_text and
                 self.LIST_RE.search(textelement.plain_text)):
             self.is_listitem = True
-        if len(self.textelements) > 0 and textelement.is_right_of(self.textelements[-1]):
+        if self.textelements and textelement.is_right_of(self.textelements[-1]):
             self.boundingboxes.append(BoundingBox())
         self.boundingboxes[-1].increase_box(textelement)
         self.textelements.append(textelement)
@@ -953,7 +953,7 @@ class PDFSection(BoundingBox):
 
         paragraph is PDFParagraph
         '''
-        if len(self.paragraphs) == 0:
+        if not self.paragraphs:
             return True
         else:
             prev_box = self.paragraphs[-1].boundingboxes[-1]
@@ -1018,7 +1018,7 @@ class OrderedPDFSections(object):
     def insert_section(self, new_section):
         '''new_section is a PDFSection'''
         i = self.find_position(new_section)
-        if len(self.sections) == 0 or i == len(self.sections):
+        if not self.sections or i == len(self.sections):
             self.sections.append(new_section)
         else:
             if i < len(self.sections) and self.sections[i].is_below(new_section):
@@ -1053,13 +1053,13 @@ class PDFTextExtractor(object):
 
     def append_text_to_p(self, text):
         '''text is a string'''
-        if len(self.p) == 0 and self.p.text is None:
+        if not len(self.p) and not self.p.text:
             self.p.text = text
-        elif len(self.p) == 0 and self.p.text is not None:
+        elif not len(self.p) and self.p.text:
             self.p.text += text
-        if len(self.p) > 0:
+        if len(self.p):
             last = self.p[-1]
-            if last.tail is None:
+            if not last.tail:
                 last.tail = text
             else:
                 last.tail += text
@@ -1077,22 +1077,22 @@ class PDFTextExtractor(object):
         '''
 
         # print(util.lineno(), etree.tostring(textelement), file=sys.stderr)
-        if textelement.text is not None:
+        if textelement.text:
             self.append_text_to_p(textelement.text)
 
         for child in textelement:
             em = etree.Element('em')
 
-            if child.text is not None:
+            if child.text:
                 em.text = child.text
             else:
                 em.text = ''
 
-            if len(child) > 0:
+            if len(child):
                 for grandchild in child:
-                    if grandchild.text is not None:
+                    if grandchild.text:
                         em.text += grandchild.text
-                    if grandchild.tail is not None:
+                    if grandchild.tail:
                         em.text += grandchild.tail
 
             if child.tag == 'i':
@@ -1102,10 +1102,10 @@ class PDFTextExtractor(object):
 
             em.tail = child.tail
 
-            if len(self.p) > 0:
+            if len(self.p):
                 last = self.p[-1]
                 if last.tail is None and last.tag == em.tag and last.attrib == em.attrib:
-                    if last.text is not None:
+                    if last.text:
                         last.text += em.text
                     else:
                         last.text = em.text
@@ -1139,7 +1139,7 @@ class PDFTextExtractor(object):
         The tech to be able to replace it is not accessible at this stage.
         '''
         if re.search('\S-$', self.get_last_string()):
-            if len(self.p) == 0:
+            if not len(self.p):
                 self.p.text = self.p.text[:-1] + u'\xAD'
             else:
                 last = self.p[-1]
@@ -1147,14 +1147,15 @@ class PDFTextExtractor(object):
                     last.text = last.text[:-1] + u'\xAD'
                 else:
                     last.tail = last.tail[:-1] + u'\xAD'
-        elif len(self.get_last_string()) > 0 and not re.search(u'[\s\xAD]$', self.get_last_string()):
+        elif self.get_last_string() and not re.search(u'[\s\xAD]$',
+                                                      self.get_last_string()):
             self.extract_textelement(etree.fromstring('<text> </text>'))
 
     def is_first_page(self):
-        return len(self.body) == 1 and len(self.get_last_string()) == 0
+        return len(self.body) == 1 and not self.get_last_string()
 
     def is_last_paragraph_end_of_page(self):
-        return (len(self.get_last_string()) > 0 and
+        return (self.get_last_string() and
                 re.search(u'[.?!]\s*$', self.get_last_string()))
 
     def is_new_page(self, paragraph):
@@ -1346,7 +1347,7 @@ class PDFPage(object):
 
         self.textelements[:] = [t for t in self.textelements
                                 if self.is_inside_margins(t, margins)]
-        if len(inner_margins) > 0:
+        if inner_margins:
             self.textelements[:] = [t for t in self.textelements
                                     if not self.is_inside_inner_margins(t, inner_margins)]
 
@@ -1363,7 +1364,7 @@ class PDFPage(object):
     def remove_invalid_elements(self):
         '''Remove elements with empty strings or where the width is zero or negative'''
         self.textelements[:] = [t for t in self.textelements
-                                if not (len(t.t.xpath("string()").strip()) == 0 or
+                                if not (not t.t.xpath("string()").strip() or
                                         t.width < 1)]
 
     def is_inside_margins(self, t, margins):
@@ -1434,7 +1435,7 @@ class PDFPage(object):
         self.merge_elements_on_same_line()
         self.remove_invalid_elements()
 
-        if len(self.textelements) == 0:
+        if not self.textelements:
             raise PDFEmptyPageException()
         else:
             ordered_sections = self.make_ordered_sections()
@@ -1566,13 +1567,13 @@ class BiblexmlConverter(Converter):
         verses = []
         for element in section_element:
             if element.tag == 'p':
-                if len(verses) > 0:
+                if verses:
                     section.append(self.make_p(verses))
                     verses = []
                 section.append(self.process_p(element))
             elif element.tag == 'verse':
                 text = self.process_verse(element)
-                if text is not None:
+                if text:
                     verses.append(text)
             else:
                 raise UserWarning(
@@ -1587,7 +1588,7 @@ class BiblexmlConverter(Converter):
         verses = []
         for child in p:
             text = self.process_verse(child)
-            if text is not None:
+            if text:
                 verses.append(text)
 
         p = etree.Element('p')
@@ -1866,7 +1867,7 @@ class HTMLContentConverter(Converter):
             namespaces={'html': 'http://www.w3.org/1999/xhtml'})
 
         for elt in ps:
-            if elt.text is None and elt.tail is None and len(elt) == 0:
+            if elt.text is None and elt.tail is None and not len(elt):
                 elt.getparent().remove(elt)
 
     def remove_empty_class(self):
@@ -2248,7 +2249,7 @@ class HTMLContentConverter(Converter):
             self.handle_syntaxerror(e, util.lineno(),
                                     etree.tostring(self.soup))
 
-        if len(transform.error_log) > 0:
+        if transform.error_log:
             with open(self.names.log, 'w') as logfile:
                 logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
                 for entry in transform.error_log:
@@ -2735,7 +2736,7 @@ class DocumentFixer(object):
         text = newelement.text
         if text:
             quote_list = self.get_quote_list(text)
-            if len(quote_list) > 0:
+            if quote_list:
                 element.text = text[0:quote_list[0][0]]
                 self.append_quotes(element, text, quote_list)
             else:
@@ -2747,7 +2748,7 @@ class DocumentFixer(object):
             if child.tail:
                 text = child.tail
                 quote_list = self.get_quote_list(text)
-                if len(quote_list) > 0:
+                if quote_list:
                     child.tail = text[0:quote_list[0][0]]
                     self.append_quotes(element, text, quote_list)
 
@@ -2821,8 +2822,7 @@ class DocumentFixer(object):
 
         for em in self.root.iter('em'):
             paragraph = em.getparent()
-            if len(em) == 0 and em.text is not None:
-
+            if not len(em) and em.text:
                 if bylinetags.match(em.text):
                     line = bylinetags.sub('', em.text).strip()
                     if unknown is not None:
@@ -2838,13 +2838,13 @@ class DocumentFixer(object):
                     em.text = newstags.sub('', em.text).strip()
 
         for paragraph in self.root.iter('p'):
-            if len(paragraph) == 0 and paragraph.text is not None:
+            if not len(paragraph) and paragraph.text:
                 index = paragraph.getparent().index(paragraph)
                 lines = []
 
                 for line in paragraph.text.split('\n'):
                     if newstags.match(line):
-                        if len(lines) > 0:
+                        if lines:
                             index += 1
                             paragraph.getparent().insert(
                                 index,
@@ -2855,7 +2855,7 @@ class DocumentFixer(object):
 
                         lines.append(newstags.sub('', line))
                     elif bylinetags.match(line):
-                        if len(lines) > 0:
+                        if lines:
                             index += 1
                             paragraph.getparent().insert(
                                 index,
@@ -2874,7 +2874,7 @@ class DocumentFixer(object):
 
                         lines = []
                     elif boldtags.match(line):
-                        if len(lines) > 0:
+                        if lines:
                             index += 1
                             paragraph.getparent().insert(
                                 index,
@@ -2889,7 +2889,7 @@ class DocumentFixer(object):
                                                    {'type': 'bold'}))
                         paragraph.getparent().insert(index, p)
                     elif line.startswith('@kursiv:'):
-                        if len(lines) > 0:
+                        if lines:
                             index += 1
                             paragraph.getparent().insert(
                                 index,
@@ -2904,7 +2904,7 @@ class DocumentFixer(object):
                                                    {'type': 'italic'}))
                         paragraph.getparent().insert(index, p)
                     elif headertitletags.match(line):
-                        if len(lines) > 0:
+                        if lines:
                             index += 1
                             paragraph.getparent().insert(
                                 index,
@@ -2922,7 +2922,7 @@ class DocumentFixer(object):
                             self.make_element('p', line.strip(),
                                               {'type': 'title'}))
                     elif titletags.match(line):
-                        if len(lines) > 0:
+                        if lines:
                             index += 1
                             paragraph.getparent().insert(
                                 index,
@@ -2936,19 +2936,18 @@ class DocumentFixer(object):
                             index,
                             self.make_element(
                                 'p', line.strip(), {'type': 'title'}))
-                    elif line == '' and len(lines) > 0:
-                        if len(lines) > 0:
-                            index += 1
-                            paragraph.getparent().insert(
-                                index,
-                                self.make_element('p',
-                                                  ' '.join(lines).strip(),
-                                                  attributes=paragraph.attrib))
+                    elif line == '' and lines:
+                        index += 1
+                        paragraph.getparent().insert(
+                            index,
+                            self.make_element('p',
+                                              ' '.join(lines).strip(),
+                                              attributes=paragraph.attrib))
                         lines = []
                     else:
                         lines.append(line)
 
-                if len(lines) > 0:
+                if lines:
                     index += 1
                     paragraph.getparent().insert(
                         index, self.make_element('p',
@@ -3029,7 +3028,7 @@ class LanguageDetector(object):
                                 'lang')
                    for language in self.document.findall(
             'header/multilingual/language')]
-        if len(inlangs) != 0:
+        if inlangs:
             inlangs.append(self.mainlang)
 
         return inlangs

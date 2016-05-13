@@ -183,8 +183,9 @@ class AddToCorpus(object):
 
             self.add_metadata_to_corpus(none_dupe_path,
                                         metadata_filename)
-            self.update_parallel_data(util.split_path(none_dupe_path),
-                                      parallelpath)
+            if parallelpath:
+                self.update_parallel_data(util.split_path(none_dupe_path),
+                                          parallelpath)
             print('Added', none_dupe_path)
             return none_dupe_path
         except UserWarning as e:
@@ -208,33 +209,32 @@ class AddToCorpus(object):
             new_components: (util.PathComponents) of none_dupe_path
             parallelpath: (string) path of the parallel file
         '''
-        if len(parallelpath) > 0:
-            if not os.path.exists(parallelpath):
-                raise AdderException('{} does not exist'.format(
-                    parallelpath))
+        if not os.path.exists(parallelpath):
+            raise AdderException('{} does not exist'.format(
+                parallelpath))
 
-            parallel_metadata = xslsetter.MetadataHandler(
-                parallelpath + '.xsl')
-            parallels = parallel_metadata.get_parallel_texts()
-            parallels[none_dupe_components.lang] = none_dupe_components.basename
+        parallel_metadata = xslsetter.MetadataHandler(
+            parallelpath + '.xsl')
+        parallels = parallel_metadata.get_parallel_texts()
+        parallels[none_dupe_components.lang] = none_dupe_components.basename
 
-            parall_components = util.split_path(parallelpath)
-            parallels[parall_components.lang] = parall_components.basename
+        parall_components = util.split_path(parallelpath)
+        parallels[parall_components.lang] = parall_components.basename
 
-            for lang, parallel in six.iteritems(parallels):
-                metadata = xslsetter.MetadataHandler(
-                    '/'.join((
-                        none_dupe_components.root,
-                        none_dupe_components.module,
-                        lang,
-                        none_dupe_components.genre,
-                        none_dupe_components.subdirs,
-                        parallel + '.xsl')))
+        for lang, parallel in six.iteritems(parallels):
+            metadata = xslsetter.MetadataHandler(
+                '/'.join((
+                    none_dupe_components.root,
+                    none_dupe_components.module,
+                    lang,
+                    none_dupe_components.genre,
+                    none_dupe_components.subdirs,
+                    parallel + '.xsl')))
 
-                for lang1, parallel1 in six.iteritems(parallels):
-                    if lang1 != lang:
-                        metadata.set_parallel_text(lang1, parallel1)
-                metadata.write_file()
+            for lang1, parallel1 in six.iteritems(parallels):
+                if lang1 != lang:
+                    metadata.set_parallel_text(lang1, parallel1)
+            metadata.write_file()
 
     def none_dupe_path(self, path):
         '''Compute the none duplicate path of the file to be added
@@ -276,7 +276,7 @@ class AddToCorpus(object):
                     duplicates[file_hash] = [path]
 
         results = list([x for x in list(duplicates.values()) if len(x) > 1])
-        if len(results) > 0:
+        if results:
             print(u'Duplicates Found:')
             print(u'___')
             for result in results:

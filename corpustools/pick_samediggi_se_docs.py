@@ -176,7 +176,7 @@ class DocumentPicker(object):
         if lang != u'swe':
             variables[u'translated_from'] = u'swe'
 
-        if len(self.parallel_dict[file_]) > 0:
+        if self.parallel_dict[file_]:
             variables[u'parallel_texts'] = '1'
             para_langs = [u'sma', u'sme', u'smj', u'swe']
             para_langs.remove(lang)

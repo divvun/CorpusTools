@@ -152,7 +152,7 @@ class SamediggiFiCrawler(Crawler):
 
     def crawl_site(self):
         '''Crawl samediggi.fi'''
-        while len(self.unvisited_links) > 0:
+        while self.unvisited_links:
             link = self.unvisited_links.pop()
 
             if link not in self.visited_links:
@@ -165,7 +165,7 @@ class SamediggiFiCrawler(Crawler):
                 for lang in self.langs.keys():
                     r = requests.get(link, params={'lang': lang})
 
-                    if len(r.history) > 0:
+                    if r.history:
                         print('history', r.history)
 
                     if 'samediggi.fi' not in r.url:
@@ -186,7 +186,7 @@ class SamediggiFiCrawler(Crawler):
                                 debug=u'Not fetching {} which was {}\n'.format(
                                     r.url.encode('utf8'), link.encode('utf8')))
 
-                if found_saami and len(parallel_pages) > 0:
+                if found_saami and parallel_pages:
                     self.save_pages(parallel_pages)
 
                 util.print_frame(debug='After: unvisited_links {}'.format(len(self.unvisited_links)))
@@ -397,7 +397,7 @@ class SamediggiNoCrawler(Crawler):
 
     def crawl_site(self):
         '''Crawl samediggi.no'''
-        while len(self.unvisited_links) > 0:
+        while self.unvisited_links:
             link = self.unvisited_links.pop()
 
             if link not in self.visited_links:

@@ -213,7 +213,7 @@ class XMLPrinter(object):
         attr = [key + u'=' + six.text_type(attributes[key])
                 for key in sorted(attributes)]
 
-        if len(attr) > 0:
+        if attr:
             text += '\t#'
             text += ','.join(attr)
 
@@ -240,7 +240,7 @@ class XMLPrinter(object):
 
         self.visit_nonerror_element(element, textlist, parentlang)
 
-        if len(textlist) > 0:
+        if textlist:
             if not self.one_word_per_line:
                 buffer.write(u' '.join(textlist))
                 buffer.write(u' ¶\n')

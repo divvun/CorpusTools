@@ -155,7 +155,7 @@ class ErrorMarkup(object):
 
         '''
         (head, error) = self.process_head(errorstring)
-        if len(elements) == 0:
+        if not elements:
             if head != '':
                 elements.append(head)
         else:
