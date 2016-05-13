@@ -2717,7 +2717,7 @@ def test_conversion():
 def check_conversion(testname, html_xml):
     '''Check that the tidied html is correctly converted to corpus xml'''
     got = converter.HTMLContentConverter(
-        testname,
+        'orig/sme/admin/sd/' + testname,
         content=html_xml['html']).convert2intermediate()
     want = lxml.etree.fromstring(html_xml['xml'])
     assertXmlEqual(got, want)
