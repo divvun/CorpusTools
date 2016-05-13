@@ -19,13 +19,16 @@
 #
 
 from __future__ import absolute_import
-import doctest
 import io
+
+import doctest
 import lxml.doctestcompare
 import lxml.etree
+import os
+import six
+from testfixtures import TempDirectory
 
 from corpustools import converter
-import six
 
 
 tests = {
@@ -156,8 +159,10 @@ def test_conversion():
 
 def check_conversion(testname, bible_xml):
     '''Check that the tidied html is correctly converted'''
-    bc = converter.BiblexmlConverter('bogus.bible.xml')
-    bc.orig = io.StringIO(bible_xml['orig'])
-    got = bc.convert2intermediate()
-    want = lxml.etree.fromstring(bible_xml['converted'])
-    assertXmlEqual(got, want)
+    with TempDirectory() as d:
+        corpusfilename = 'orig/sme/bible/nt/bogus.bible.xml'
+        d.write(corpusfilename, bible_xml['orig'].encode('utf8'))
+        bc = converter.BiblexmlConverter(os.path.join(d.path, corpusfilename))
+        got = bc.convert2intermediate()
+        want = lxml.etree.fromstring(bible_xml['converted'])
+        assertXmlEqual(got, want)
