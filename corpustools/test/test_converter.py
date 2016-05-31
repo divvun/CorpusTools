@@ -207,6 +207,12 @@ def test_detect_quote():
                  expected=(
                      '<p>bla bla <em>bla bla <span type="quote">'
                      '«bla bla»</span></em></p>')),
+        TestItem(
+            name='complex quote detection',
+            orig=(
+                '<p>“bla”, bla ”bla” bla «bla» bla “bla” ― «bla» bla.</p>'),
+            expected=(
+                '<p><span type="quote">“bla”</span>, bla <span type="quote">”bla”</span> bla <span type="quote">«bla»</span> bla <span type="quote">“bla”</span> ― <span type="quote">«bla»</span> bla.</p>')),
     ]
 
     for name, orig, expected in quote_tests:
@@ -218,7 +224,7 @@ def check_quote_detection(name, orig, expected):
         etree.parse(
             os.path.join(here,
                             'converter_data/samediggi-article-48s-before-'
-                            'lang-detection-with-multilingual-tag.xml')))
+                            'lang-detection-without-multilingual-tag.xml')))
     got_paragraph = document_fixer.detect_quote(
         etree.fromstring(orig))
 
