@@ -65,3 +65,4 @@ v<0.13.12>, <20160320> -- Make add_files_to_corpus get names for downloaded docu
 v<0.13.13>, <20160330> -- Handle both utf8 and latin1 encoded filenames when downloading pdf files.
 v<0.14.0>, <20160504> -- CorpusTools is now both python2 and python3 compatible
 v<0.14.1>, <20160510> -- CorpusTools now supports goldstandard files inside orig
+v<0.14.2>, <20160531> -- Improved quote detection and more tags to remove from regjeringen.no files. Improves the situation for bug 1780.
