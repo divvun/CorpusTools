@@ -157,6 +157,12 @@ def test_detect_quote():
                      '<p>bla bla <span type="quote">"bla bla"</span> '
                      'bla bla</p>')),
         TestItem(
+            name='RIGHT DOUBLE QUOTATION MARK',
+            orig='<p>bla bla ”bla bla” bla bla </p>',
+            expected=(
+                     '<p>bla bla <span type="quote">”bla bla”</span> '
+                     'bla bla</p>')),
+        TestItem(
             name=(
                 'quote within LEFT DOUBLE QUOTATION MARK and '
                 'RIGHT DOUBLE QUOTATION MARK'),

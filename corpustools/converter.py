@@ -2712,7 +2712,8 @@ class DocumentFixer(object):
     def get_quote_list(text):
         quote_regexes = [re.compile('".+?"'),
                          re.compile(u'«.+?»'),
-                         re.compile(u'“.+?”')]
+                         re.compile(u'“.+?”'),
+                         re.compile(u'”.+?”'),]
         quote_list = [m.span()
                       for quote_regex in quote_regexes
                       for m in quote_regex.finditer(text)]
