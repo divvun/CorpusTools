@@ -34,10 +34,23 @@ import unittest
 from corpustools import converter
 from corpustools import text_cat
 from corpustools import xslsetter
+from corpustools.test.test_xhtml2corpus import assertXmlEqual
 
 
 here = os.path.dirname(__file__)
 LANGUAGEGUESSER = text_cat.Classifier(None)
+
+
+def clean_namespaces(elementlist):
+    for huff in elementlist:
+        tree = huff.getroottree()
+        root = tree.getroot()
+        for el in root.getiterator():
+            i = el.tag.find('}')
+            if i >= 0:
+                el.tag = el.tag[i+1:]
+
+        objectify.deannotate(root, cleanup_namespaces=True)
 
 
 class XMLTester(unittest.TestCase):
@@ -403,6 +416,34 @@ def check_unwanted_classes_and_ids(tag, key, value):
     if etree.tostring(hc.soup) != etree.tostring(want):
         raise AssertionError('Remove classes and ids:\nexpected {}\ngot {}'.format(
             etree.tostring(want), etree.tostring(hc.soup)))
+
+
+def test_remove_unwanted_tags():
+    unwanted_tags = [
+        'address', 'script', 'style', 'area', 'object', 'meta',
+        'hr', 'nf', 'mb', 'ms',
+        'img', 'cite', 'embed', 'footer', 'figcaption', 'aside', 'time',
+        'figure', 'nav', 'select', 'noscript', 'iframe', 'map',
+        'colgroup', 'st1:country-region', 'v:shapetype', 'v:shape',
+        'st1:metricconverter', 'fb:comments', 'g:plusone', 'fb:like',
+    ]
+
+    for unwanted_tag in unwanted_tags:
+        yield check_unwanted_tag, unwanted_tag
+
+def check_unwanted_tag(unwanted_tag):
+    got = converter.HTMLContentConverter(
+        'orig/sme/admin/' + unwanted_tag + '.html',
+        content='<html><body><p>p1</p><%s/><p>p2</p2></body>'
+        '</html>' % unwanted_tag).soup
+    want = html5parser.document_fromstring(
+        '<html>'
+        '<head/><body><p>p1</p><p>p2'
+        '</p></body></html>')
+
+    clean_namespaces([got, want])
+    assertXmlEqual(got, want)
+
 
 
 class TestComputeCorpusnames(unittest.TestCase):
@@ -991,18 +1032,6 @@ class TestDocxConverter(XMLTester):
 
 class TestHTMLContentConverter(XMLTester):
 
-    @staticmethod
-    def clean_namespaces(elementlist):
-        for huff in elementlist:
-            tree = huff.getroottree()
-            root = tree.getroot()
-            for el in root.getiterator():
-                i = el.tag.find('}')
-                if i >= 0:
-                    el.tag = el.tag[i+1:]
-
-            objectify.deannotate(root, cleanup_namespaces=True)
-
     def test_remove_empty_p_1(self):
         '''Remove an empty p'''
         got = converter.HTMLContentConverter(
@@ -1012,7 +1041,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_remove_empty_p_2(self):
@@ -1024,7 +1053,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><span>spanny</span></p></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_remove_empty_class(self):
@@ -1037,31 +1066,8 @@ class TestHTMLContentConverter(XMLTester):
             '<html><head/><body><div>a</div><div class="a">'
             '<span>b</span></div></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
-
-    def test_remove_unwanted_tags(self):
-        unwanted_tags = [
-            'address', 'script', 'style', 'area', 'object', 'meta',
-            'hr', 'nf', 'mb', 'ms',
-            'img', 'cite', 'embed', 'footer', 'figcaption', 'aside', 'time',
-            'figure', 'nav', 'select', 'noscript', 'iframe', 'map',
-            'colgroup', 'st1:country-region', 'v:shapetype', 'v:shape',
-            'st1:metricconverter', 'fb:comments', 'g:plusone', 'fb:like',
-        ]
-
-        for unwanted_tag in unwanted_tags:
-            got = converter.HTMLContentConverter(
-                'orig/sme/admin/' + unwanted_tag + '.html',
-                content='<html><body><p>p1</p><%s/><p>p2</p2></body>'
-                '</html>' % unwanted_tag).soup
-            want = html5parser.document_fromstring(
-                '<html>'
-                '<head/><body><p>p1</p><p>p2'
-                '</p></body></html>')
-
-            self.clean_namespaces([got, want])
-            self.assertXmlEqual(got, want)
 
     def test_remove_comment(self):
         got = converter.HTMLContentConverter(
@@ -1073,7 +1079,7 @@ class TestHTMLContentConverter(XMLTester):
             '<html><head/>'
             '<body><b/></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_remove_processinginstruction(self):
@@ -1085,7 +1091,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><b/></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_add_p_around_text1(self):
@@ -1100,7 +1106,7 @@ class TestHTMLContentConverter(XMLTester):
             '<title>– Den utdøende stammes frykt</title></head><body>'
             '<h3>VI</h3>  <p>... Finnerne</p><p>Der</p></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_add_p_around_text2(self):
@@ -1115,7 +1121,7 @@ class TestHTMLContentConverter(XMLTester):
             '<title>– Den utdøende stammes frykt</title></head><body>'
             '<h3>VI</h3>  <p>... Finnerne<i>Der</i></p></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_add_p_around_text3(self):
@@ -1133,7 +1139,7 @@ class TestHTMLContentConverter(XMLTester):
             '</head><body>  <h3>VI</h3>  '
             '<p>... Finnerne<a/></p><h2>Der</h2></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_set_charset_1(self):
@@ -1312,7 +1318,7 @@ class TestHTMLContentConverter(XMLTester):
             '<html><head/><body><div class="c1"><span>b</span></div></body>'
             '</html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_body_i(self):
@@ -1323,7 +1329,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><i>b</i></p></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_body_a(self):
@@ -1334,7 +1340,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><a>b</a></p></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_body_em(self):
@@ -1345,7 +1351,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><em>b</em></p></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_body_font(self):
@@ -1356,7 +1362,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><font>b</font></p></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_body_u(self):
@@ -1367,7 +1373,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><u>b</u></p></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_body_strong(self):
@@ -1378,7 +1384,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><strong>b</strong></p></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_body_span(self):
@@ -1389,7 +1395,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p><span>b</span></p></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_body_text(self):
@@ -1400,7 +1406,7 @@ class TestHTMLContentConverter(XMLTester):
         want = html5parser.document_fromstring(
             '<html><head/><body><p>b</p></body></html>')
 
-        self.clean_namespaces([got, want])
+        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
     def test_convert2intermediate_with_bare_text_after_p(self):
