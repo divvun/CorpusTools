@@ -130,6 +130,280 @@ def check_names_to_corpuspath(testname, testcontent):
         raise AssertionError('{}:\nexpected {}\ngot {}'.format(
             testname, testcontent['want_name'], cp.orig))
 
+def test_remove_unwanted_classes_and_ids():
+    unwanted_classes_ids = {
+        'div': {
+            'class': [
+                "latestnews_uutisarkisto",
+                'InnholdForfatter',  # unginordland
+                'QuickNav',
+                'ad',
+                'andrenyheter',  # tysfjord.kommune.no
+                'article-ad',
+                'article-bottom-element',
+                'article-column',
+                'article-dateline article-dateline-footer meta-widget-content',  # nrk.no
+                'article-related',
+                'articleImageRig',
+                'articlegooglemap',  # tysfjord.kommune.no
+                'articleTags',  # nord-salten.no
+                'attribute-related_object',  # samediggi.no
+                'authors',
+                'authors ui-helper-clearfix',  # nord-salten.no
+                'back_button',
+                'banner-element',
+                'breadcrumbs ',
+                'breadcrumbs',
+                'breadcrums span-12',
+                'btm_menu',
+                'byline',  # arran.no
+                'clearfix breadcrumbsAndSocial noindex',  # udir.no
+                'container_full',
+                'documentInfoEm',
+                'documentPaging',
+                'dotList',  # nord-salten.no
+                'dropmenudiv',  # calliidlagadus.org
+                'egavpi',  # calliidlagadus.org
+                'egavpi_fiskes',  # calliidlagadus.org
+                'expandable',
+                'feedbackContainer noindex',  # udir.no
+                'fixed-header',
+                'g100 col fc s18 sg6 sg9 sg12 menu-reference',  # nrk.no
+                'g100 col fc s18 sg6 sg9 sg12 flow-reference',  # nrk.no
+                'g11 col fl s2 sl6 sl9 sl12 sl18',  # nrk.no
+                'g22 col fl s4 sl6 sl9 sl12 sl18 article-header-sidebar',  # nrk.no
+                'g94 col fl s17 sl18 sg6 sg9 sg12 meta-widget',  # nrk.no
+                'globmenu',  # visitstetind.no
+                'grid cf',  # nrk.no
+                'help closed hidden-xs',
+                'imagecontainer',
+                'innholdsfortegenlse-child',
+                'ld-navbar',
+                'meta',
+                'meta ui-helper-clearfix',  # nord-salten.no
+                'authors ui-helper-clearfix',  # nord-salten.no
+                'menu',  # visitstetind.no
+                'metaWrapper',
+                'moduletable_oikopolut',
+                'moduletable_etulinkki',  # www.samediggi.fi
+                'naviHlp',  # visitstetind.no
+                'noindex',  # ntfk
+                'nrk-globalfooter',  # nrk.no
+                'nrk-globalfooter-dk lp_globalfooter',  # nrk.no
+                'nrk-globalnavigation',  # nrk.no
+                'outer-column',
+                'post-footer',
+                'printContact',
+                'right',  # ntfk
+                'rightverticalgradient',  # udir.no
+                'sharing',
+                'sidebar',
+                'spalte300',  # osko.no
+                'subfooter',  # visitstetind.no
+                'tabbedmenu',
+                'tipformcontainer',  # tysfjord.kommune.no
+                'tipsarad mt6 selfClear',
+                'titlepage',
+                'toc',
+                'tools',  # arran.no
+            ],
+            'id': [
+                'AreaLeft',
+                'AreaLeftNav',
+                'AreaRight',
+                'AreaTopRight',
+                'AreaTopSiteNav',
+                'NAVbreadcrumbContainer',
+                'NAVfooterContainer',
+                'NAVheaderContainer',
+                'NAVrelevantContentContainer',
+                'NAVsubmenuContainer',
+                'PageFooter',
+                'PrintDocHead',
+                'SamiDisclaimer',
+                'ShareArticle',
+                'WIPSELEMENT_CALENDAR',  # learoevierhtieh.no
+                'WIPSELEMENT_HEADING',  # learoevierhtieh.no
+                'WIPSELEMENT_MENU',  # learoevierhtieh.no
+                'WIPSELEMENT_MENURIGHT',  # learoevierhtieh.no
+                'WIPSELEMENT_NEWS',  # learoevierhtieh.no
+                'aa',
+                'andrenyheter',  # tysfjord.kommune.no
+                'article_footer',
+                'attached',  # tysfjord.kommune.no
+                'blog-pager',
+                'breadcrumbs-bottom',
+                'bunninformasjon',  # unginordland
+                'chatBox',
+                'chromemenu',  # calliidlagadus.org
+                'crumbs',  # visitstetind.no
+                'ctl00_FullRegion_CenterAndRightRegion_HitsControl_'
+                'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
+                'ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl01_divRessurser',
+                'ctl00_MidtSone_ucArtikkel_ctl00_divNavigasjon',
+                'deleModal',
+                'document-header',
+                'errorMessageContainer',  # nord-salten.no
+                'footer',  # forrest, too, tysfjord.kommune.no
+                'footer-wrapper',
+                'frontgallery',  # visitstetind.no
+                'header',
+                'headerBar',
+                'headWrapper',  # osko.no
+                'hoyre',  # unginordland
+                'leftMenu',
+                'leftPanel',
+                'leftbar',  # forrest (divvun and giellatekno sites)
+                'leftcol',  # new samediggi.no
+                'leftmenu',
+                'main_navi_main',           # www.samediggi.fi
+                'mainsidebar',  # arran.no
+                'menu',
+                'murupolku',                # www.samediggi.fi
+                'navbar',  # tysfjord.kommune.no
+                'ncFooter',  # visitstetind.no
+                'ntfkFooter',  # ntfk
+                'ntfkHeader',  # ntfk
+                'ntfkNavBreadcrumb',  # ntfk
+                'ntfkNavMain',  # ntfk
+                'pageFooter',
+                'path',  # new samediggi.no, tysfjord.kommune.no
+                'readspeaker_button1',
+                'rightAds',
+                'rightCol',
+                'rightside',
+                's4-leftpanel',  # ntfk
+                'searchBox',
+                'searchHitSummary',
+                'sendReminder',
+                'share-article',
+                'sidebar',  # finlex.fi, too
+                'sidebar-wrapper',
+                'sitemap',
+                'skipLinks',  # udir.no
+                'skiplink',  # tysfjord.kommune.no
+                'spraakvelger',  # osko.no
+                'subfoote',  # visitstetind.no
+                'submenu',  # nord-salten.no
+                'tipafriend',
+                'tools',  # arran.no
+                'topHeader',  # nord-salten.no
+                'topMenu',
+                'topUserMenu',
+                'top',  # arran.no
+                'topnav',  # tysfjord.kommune.no
+                'toppsone',  # unginordland
+                'venstre',  # unginordland
+            ],
+        },
+        'p': {
+            'class': [
+                'WebPartReadMoreParagraph',
+                'breadcrumbs',
+                'langs'  # oahpa.no
+            ],
+        },
+        'ul': {
+            'id': [
+                'AreaTopPrintMeny',
+                'AreaTopLanguageNav',
+                'skiplinks',  # umo.se
+            ],
+            'class': [
+                'QuickNav',
+                'article-tools',
+                'byline',
+                'chapter-index',  # lovdata.no
+                'footer-nav',  # lovdata.no
+                'hidden',  # unginordland
+            ],
+        },
+        'span': {
+            'id': [
+                'skiplinks'
+            ],
+            'class': [
+                'K-NOTE-FOTNOTE',
+                'graytext',  # svenskakyrkan.se
+            ],
+        },
+        'a': {
+            'id': [
+                'ctl00_IdWelcome_ExplicitLogin',  # ntfk
+                'leftPanelTab',
+            ],
+            'class': [
+                'addthis_button_print',  # ntfk
+                'mainlevel',
+                'share-paragraf',  # lovdata.no
+                'mainlevel_alavalikko',  # www.samediggi.fi
+                'sublevel_alavalikko',  # www.samediggi.fi
+            ],
+        },
+        'td': {
+            'id': [
+                "hakulomake",  # www.samediggi.fi
+                "paavalikko_linkit",  # www.samediggi.fi
+                'sg_oikea',  # www.samediggi.fi
+                'sg_vasen',  # www.samediggi.fi
+            ],
+            'class': [
+                "modifydate",
+            ],
+        },
+        'tr': {
+            'id': [
+                "sg_ylaosa1",
+                "sg_ylaosa2",
+            ]
+        },
+        'header': {
+            'id': [
+                'header',  # umo.se
+            ],
+            'class': [
+                'nrk-masthead-content cf',  # nrk.no
+            ],
+        },
+        'section': {
+            'class': [
+                'tree-menu current',  # umo.se
+                'tree-menu',  # umo.se
+            ],
+        },
+    }
+
+    for tag, attribs in unwanted_classes_ids.items():
+        for key, values in attribs.items():
+            for value in values:
+                yield check_unwanted_classes_and_ids, tag, key, value
+
+def check_unwanted_classes_and_ids(tag, key, value):
+    if tag == 'tr':
+        inner = '<table><tbody><{0} {1}="{2}"><td>content:{0} {1} {2}</td></tbody></table>'.format(tag, key, value)
+        inner_r = '<table><tbody/></table>'
+    elif tag == 'td':
+        inner = '<table><tbody><tr><{0} {1}="{2}">content:{0} {1} {2}</tr></tbody></table>'.format(tag, key, value)
+        inner_r = '<table><tbody><tr/></tbody></table>'
+    else:
+        inner = (
+            '<{0} {1}="{2}">'
+            'content:{0} {1} {2}'
+            '</{0}>'.format(tag, key, value))
+        inner_r = ''
+    hc = converter.HTMLContentConverter(
+        'orig/sme/admin/bogus.html',
+        content='<html><body>'
+        '{}</body>'
+        '</html>'.format(inner))
+
+    want = html5parser.document_fromstring(
+        '<html><body>{}</body></html>'.format(inner_r))
+
+    if etree.tostring(hc.soup) != etree.tostring(want):
+        raise AssertionError('Remove classes and ids:\nexpected {}\ngot {}'.format(
+            etree.tostring(want), etree.tostring(hc.soup)))
+
 
 class TestComputeCorpusnames(unittest.TestCase):
     def name(self, module):
@@ -765,275 +1039,6 @@ class TestHTMLContentConverter(XMLTester):
 
         self.clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
-
-    def test_remove_unwanted_classes_and_ids(self):
-        unwanted_classes_ids = {
-            'div': {
-                'class': [
-                    "latestnews_uutisarkisto",
-                    'InnholdForfatter',  # unginordland
-                    'QuickNav',
-                    'ad',
-                    'andrenyheter',  # tysfjord.kommune.no
-                    'article-ad',
-                    'article-bottom-element',
-                    'article-column',
-                    'article-dateline article-dateline-footer meta-widget-content',  # nrk.no
-                    'article-related',
-                    'articleImageRig',
-                    'articlegooglemap',  # tysfjord.kommune.no
-                    'articleTags',  # nord-salten.no
-                    'attribute-related_object',  # samediggi.no
-                    'authors',
-                    'authors ui-helper-clearfix',  # nord-salten.no
-                    'back_button',
-                    'banner-element',
-                    'breadcrumbs ',
-                    'breadcrumbs',
-                    'breadcrums span-12',
-                    'btm_menu',
-                    'byline',  # arran.no
-                    'clearfix breadcrumbsAndSocial noindex',  # udir.no
-                    'container_full',
-                    'documentInfoEm',
-                    'documentPaging',
-                    'dotList',  # nord-salten.no
-                    'dropmenudiv',  # calliidlagadus.org
-                    'egavpi',  # calliidlagadus.org
-                    'egavpi_fiskes',  # calliidlagadus.org
-                    'expandable',
-                    'feedbackContainer noindex',  # udir.no
-                    'fixed-header',
-                    'g100 col fc s18 sg6 sg9 sg12 menu-reference',  # nrk.no
-                    'g100 col fc s18 sg6 sg9 sg12 flow-reference',  # nrk.no
-                    'g11 col fl s2 sl6 sl9 sl12 sl18',  # nrk.no
-                    'g22 col fl s4 sl6 sl9 sl12 sl18 article-header-sidebar',  # nrk.no
-                    'g94 col fl s17 sl18 sg6 sg9 sg12 meta-widget',  # nrk.no
-                    'globmenu',  # visitstetind.no
-                    'grid cf',  # nrk.no
-                    'help closed hidden-xs',
-                    'imagecontainer',
-                    'innholdsfortegenlse-child',
-                    'ld-navbar',
-                    'meta',
-                    'meta ui-helper-clearfix',  # nord-salten.no
-                    'authors ui-helper-clearfix',  # nord-salten.no
-                    'menu',  # visitstetind.no
-                    'metaWrapper',
-                    'moduletable_oikopolut',
-                    'moduletable_etulinkki',  # www.samediggi.fi
-                    'naviHlp',  # visitstetind.no
-                    'noindex',  # ntfk
-                    'nrk-globalfooter',  # nrk.no
-                    'nrk-globalfooter-dk lp_globalfooter',  # nrk.no
-                    'nrk-globalnavigation',  # nrk.no
-                    'outer-column',
-                    'post-footer',
-                    'printContact',
-                    'right',  # ntfk
-                    'rightverticalgradient',  # udir.no
-                    'sharing',
-                    'sidebar',
-                    'spalte300',  # osko.no
-                    'subfooter',  # visitstetind.no
-                    'tabbedmenu',
-                    'tipformcontainer',  # tysfjord.kommune.no
-                    'tipsarad mt6 selfClear',
-                    'titlepage',
-                    'toc',
-                    'tools',  # arran.no
-                ],
-                'id': [
-                    'AreaLeft',
-                    'AreaLeftNav',
-                    'AreaRight',
-                    'AreaTopRight',
-                    'AreaTopSiteNav',
-                    'NAVbreadcrumbContainer',
-                    'NAVfooterContainer',
-                    'NAVheaderContainer',
-                    'NAVrelevantContentContainer',
-                    'NAVsubmenuContainer',
-                    'PageFooter',
-                    'PrintDocHead',
-                    'SamiDisclaimer',
-                    'ShareArticle',
-                    'WIPSELEMENT_CALENDAR',  # learoevierhtieh.no
-                    'WIPSELEMENT_HEADING',  # learoevierhtieh.no
-                    'WIPSELEMENT_MENU',  # learoevierhtieh.no
-                    'WIPSELEMENT_MENURIGHT',  # learoevierhtieh.no
-                    'WIPSELEMENT_NEWS',  # learoevierhtieh.no
-                    'aa',
-                    'andrenyheter',  # tysfjord.kommune.no
-                    'article_footer',
-                    'attached',  # tysfjord.kommune.no
-                    'blog-pager',
-                    'breadcrumbs-bottom',
-                    'bunninformasjon',  # unginordland
-                    'chatBox',
-                    'chromemenu',  # calliidlagadus.org
-                    'crumbs',  # visitstetind.no
-                    'ctl00_FullRegion_CenterAndRightRegion_HitsControl_'
-                    'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
-                    'ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl01_divRessurser',
-                    'ctl00_MidtSone_ucArtikkel_ctl00_divNavigasjon',
-                    'deleModal',
-                    'document-header',
-                    'errorMessageContainer',  # nord-salten.no
-                    'footer',  # forrest, too, tysfjord.kommune.no
-                    'footer-wrapper',
-                    'frontgallery',  # visitstetind.no
-                    'header',
-                    'headerBar',
-                    'headWrapper',  # osko.no
-                    'hoyre',  # unginordland
-                    'leftMenu',
-                    'leftPanel',
-                    'leftbar',  # forrest (divvun and giellatekno sites)
-                    'leftcol',  # new samediggi.no
-                    'leftmenu',
-                    'main_navi_main',           # www.samediggi.fi
-                    'mainsidebar',  # arran.no
-                    'menu',
-                    'murupolku',                # www.samediggi.fi
-                    'navbar',  # tysfjord.kommune.no
-                    'ncFooter',  # visitstetind.no
-                    'ntfkFooter',  # ntfk
-                    'ntfkHeader',  # ntfk
-                    'ntfkNavBreadcrumb',  # ntfk
-                    'ntfkNavMain',  # ntfk
-                    'pageFooter',
-                    'path',  # new samediggi.no, tysfjord.kommune.no
-                    'readspeaker_button1',
-                    'rightAds',
-                    'rightCol',
-                    'rightside',
-                    's4-leftpanel',  # ntfk
-                    'searchBox',
-                    'searchHitSummary',
-                    'sendReminder',
-                    'share-article',
-                    'sidebar',  # finlex.fi, too
-                    'sidebar-wrapper',
-                    'sitemap',
-                    'skipLinks',  # udir.no
-                    'skiplink',  # tysfjord.kommune.no
-                    'spraakvelger',  # osko.no
-                    'subfoote',  # visitstetind.no
-                    'submenu',  # nord-salten.no
-                    'tipafriend',
-                    'tools',  # arran.no
-                    'topHeader',  # nord-salten.no
-                    'topMenu',
-                    'topUserMenu',
-                    'top',  # arran.no
-                    'topnav',  # tysfjord.kommune.no
-                    'toppsone',  # unginordland
-                    'venstre',  # unginordland
-                ],
-            },
-            'p': {
-                'class': [
-                    'WebPartReadMoreParagraph',
-                    'breadcrumbs',
-                    'langs'  # oahpa.no
-                ],
-            },
-            'ul': {
-                'id': [
-                    'AreaTopPrintMeny',
-                    'AreaTopLanguageNav',
-                    'skiplinks',  # umo.se
-                ],
-                'class': [
-                    'QuickNav',
-                    'article-tools',
-                    'byline',
-                    'chapter-index',  # lovdata.no
-                    'footer-nav',  # lovdata.no
-                    'hidden',  # unginordland
-                ],
-            },
-            'span': {
-                'id': [
-                    'skiplinks'
-                ],
-                'class': [
-                    'K-NOTE-FOTNOTE',
-                    'graytext',  # svenskakyrkan.se
-                ],
-            },
-            'a': {
-                'id': [
-                    'ctl00_IdWelcome_ExplicitLogin',  # ntfk
-                    'leftPanelTab',
-                ],
-                'class': [
-                    'addthis_button_print',  # ntfk
-                    'mainlevel',
-                    'share-paragraf',  # lovdata.no
-                    'mainlevel_alavalikko',  # www.samediggi.fi
-                    'sublevel_alavalikko',  # www.samediggi.fi
-                ],
-            },
-            'td': {
-                'id': [
-                    "hakulomake",  # www.samediggi.fi
-                    "paavalikko_linkit",  # www.samediggi.fi
-                    'sg_oikea',  # www.samediggi.fi
-                    'sg_vasen',  # www.samediggi.fi
-                ],
-                'class': [
-                    "modifydate",
-                ],
-            },
-            'tr': {
-                'id': [
-                    "sg_ylaosa1",
-                    "sg_ylaosa2",
-                ]
-            },
-            'header': {
-                'id': [
-                    'header',  # umo.se
-                ],
-                'class': [
-                    'nrk-masthead-content cf',  # nrk.no
-                ],
-            },
-            'section': {
-                'class': [
-                    'tree-menu current',  # umo.se
-                    'tree-menu',  # umo.se
-                ],
-            },
-        }
-        for tag, attribs in unwanted_classes_ids.items():
-            for key, values in attribs.items():
-                for value in values:
-                    if tag == 'tr':
-                        inner = '<table><tbody><{0} {1}="{2}"><td>content:{0} {1} {2}</td></tbody></table>'.format(tag, key, value)
-                        inner_r = '<table><tbody/></table>'
-                    elif tag == 'td':
-                        inner = '<table><tbody><tr><{0} {1}="{2}">content:{0} {1} {2}</tr></tbody></table>'.format(tag, key, value)
-                        inner_r = '<table><tbody><tr/></tbody></table>'
-                    else:
-                        inner = (
-                            '<{0} {1}="{2}">'
-                            'content:{0} {1} {2}'
-                            '</{0}>'.format(tag, key, value))
-                        inner_r = ''
-                    hc = converter.HTMLContentConverter(
-                        'orig/sme/admin/bogus.html',
-                        content='<html><body>'
-                        '{}</body>'
-                        '</html>'.format(inner))
-
-                    want = html5parser.document_fromstring(
-                        '<html><body>{}</body></html>'.format(inner_r))
-
-                    self.assertEqual(
-                        etree.tostring(hc.soup), etree.tostring(want))
 
     def test_remove_unwanted_tags(self):
         unwanted_tags = [
