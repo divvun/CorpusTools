@@ -45,13 +45,13 @@ from pyth.plugins.xhtml.writer import XHTMLWriter
 from pydocx.export import PyDocXHTMLExporter
 import six
 
-from . import argparse_version
-from . import ccat
-from . import decode
-from . import errormarkup
-from . import text_cat
-from . import util
-from . import xslsetter
+from corpustools import argparse_version
+from corpustools import ccat
+from corpustools import decode
+from corpustools import errormarkup
+from corpustools import text_cat
+from corpustools import util
+from corpustools import xslsetter
 
 
 here = os.path.dirname(__file__)
