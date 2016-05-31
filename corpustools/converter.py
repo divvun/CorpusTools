@@ -22,8 +22,8 @@
 #
 
 from __future__ import print_function
-
 from __future__ import absolute_import
+
 import argparse
 import codecs
 import collections
@@ -1891,6 +1891,7 @@ class HTMLContentConverter(Converter):
                     'article-bottom-element',
                     'article-column',
                     'article-dateline article-dateline-footer meta-widget-content',  # nrk.no
+                    'article-info',  # regjeringen.no
                     'article-related',
                     'articleImageRig',
                     'articlegooglemap',  # tysfjord.kommune.no
@@ -1906,9 +1907,11 @@ class HTMLContentConverter(Converter):
                     'btm_menu',
                     'byline',  # arran.no
                     'clearfix breadcrumbsAndSocial noindex',  # udir.no
+                    'complexDocumentBottom',  # regjeringen.no
                     'container_full',
                     'documentInfoEm',
                     'documentPaging',
+                    'documentTop',  # regjeringen.no
                     'dotList',  # nord-salten.no
                     'dropmenudiv',  # calliidlagadus.org
                     'egavpi',  # calliidlagadus.org
@@ -1924,6 +1927,8 @@ class HTMLContentConverter(Converter):
                     'globmenu',  # visitstetind.no
                     'grid cf',  # nrk.no
                     'help closed hidden-xs',
+                    'historic-info',  # regjeringen.no
+                    'historic-label',  # regjeringen.no
                     'imagecontainer',
                     'innholdsfortegenlse-child',
                     'ld-navbar',
@@ -1967,6 +1972,7 @@ class HTMLContentConverter(Converter):
                     'NAVrelevantContentContainer',
                     'NAVsubmenuContainer',
                     'PageFooter',
+                    'PageLanguageInfo',   # regjeringen.no
                     'PrintDocHead',
                     'SamiDisclaimer',
                     'ShareArticle',
@@ -1999,6 +2005,7 @@ class HTMLContentConverter(Converter):
                     'headerBar',
                     'headWrapper',  # osko.no
                     'hoyre',  # unginordland
+                    'innholdsfortegnelse',  # regjeringen.no
                     'leftMenu',
                     'leftPanel',
                     'leftbar',  # forrest (divvun and giellatekno sites)
@@ -2050,6 +2057,7 @@ class HTMLContentConverter(Converter):
                     'top',  # arran.no
                     'topnav',  # tysfjord.kommune.no
                     'toppsone',  # unginordland
+                    'vedleggogregistre',  # regjeringen.no
                     'venstre',  # unginordland
                 ],
             },
@@ -2120,6 +2128,7 @@ class HTMLContentConverter(Converter):
                 ],
                 'class': [
                     'nrk-masthead-content cf',  # nrk.no
+                    'pageHeader ',  # regjeringen.no
                 ],
             },
             'section': {

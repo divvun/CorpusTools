@@ -156,6 +156,7 @@ def test_remove_unwanted_classes_and_ids():
                 'article-bottom-element',
                 'article-column',
                 'article-dateline article-dateline-footer meta-widget-content',  # nrk.no
+                'article-info',  # regjeringen.no
                 'article-related',
                 'articleImageRig',
                 'articlegooglemap',  # tysfjord.kommune.no
@@ -171,9 +172,11 @@ def test_remove_unwanted_classes_and_ids():
                 'btm_menu',
                 'byline',  # arran.no
                 'clearfix breadcrumbsAndSocial noindex',  # udir.no
+                'complexDocumentBottom',  # regjeringen.no
                 'container_full',
                 'documentInfoEm',
                 'documentPaging',
+                'documentTop',  # regjeringen.no
                 'dotList',  # nord-salten.no
                 'dropmenudiv',  # calliidlagadus.org
                 'egavpi',  # calliidlagadus.org
@@ -189,6 +192,8 @@ def test_remove_unwanted_classes_and_ids():
                 'globmenu',  # visitstetind.no
                 'grid cf',  # nrk.no
                 'help closed hidden-xs',
+                'historic-info',  # regjeringen.no
+                'historic-label',  # regjeringen.no
                 'imagecontainer',
                 'innholdsfortegenlse-child',
                 'ld-navbar',
@@ -264,6 +269,7 @@ def test_remove_unwanted_classes_and_ids():
                 'headerBar',
                 'headWrapper',  # osko.no
                 'hoyre',  # unginordland
+                'innholdsfortegnelse',  # regjeringen.no
                 'leftMenu',
                 'leftPanel',
                 'leftbar',  # forrest (divvun and giellatekno sites)
@@ -280,6 +286,7 @@ def test_remove_unwanted_classes_and_ids():
                 'ntfkNavBreadcrumb',  # ntfk
                 'ntfkNavMain',  # ntfk
                 'pageFooter',
+                'PageLanguageInfo',  # regjeringen.no
                 'path',  # new samediggi.no, tysfjord.kommune.no
                 'readspeaker_button1',
                 'rightAds',
@@ -306,6 +313,7 @@ def test_remove_unwanted_classes_and_ids():
                 'top',  # arran.no
                 'topnav',  # tysfjord.kommune.no
                 'toppsone',  # unginordland
+                'vedleggogregistre',  # regjeringen.no
                 'venstre',  # unginordland
             ],
         },
@@ -376,6 +384,7 @@ def test_remove_unwanted_classes_and_ids():
             ],
             'class': [
                 'nrk-masthead-content cf',  # nrk.no
+                'pageHeader ',  # regjeringen.no
             ],
         },
         'section': {
