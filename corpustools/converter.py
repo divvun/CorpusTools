@@ -43,6 +43,7 @@ from odf.odf2xhtml import ODF2XHTML
 from pyth.plugins.rtf15.reader import Rtf15Reader
 from pyth.plugins.xhtml.writer import XHTMLWriter
 from pydocx.export import PyDocXHTMLExporter
+import six
 
 from . import argparse_version
 from . import ccat
@@ -51,9 +52,6 @@ from . import errormarkup
 from . import text_cat
 from . import util
 from . import xslsetter
-import six
-from six.moves import range
-from six.moves import zip
 
 
 here = os.path.dirname(__file__)
@@ -1329,7 +1327,7 @@ class PDFPage(object):
 
     def adjust_line_heights(self):
         '''If there is a 1 pixel overlap between neighbouring elements, adjust the height'''
-        for i in range(1, len(self.textelements)):
+        for i in six.moves.range(1, len(self.textelements)):
             prev_textelement = self.textelements[i - 1]
             textelement = self.textelements[i]
             if prev_textelement.bottom == textelement.top + 1:
@@ -1353,7 +1351,7 @@ class PDFPage(object):
 
     def merge_elements_on_same_line(self):
         '''Merge PDFTextElements that are on the same line'''
-        same_line_indexes = [i for i in range(1, len(self.textelements))
+        same_line_indexes = [i for i in six.moves.range(1, len(self.textelements))
                              if self.textelements[i - 1].is_text_on_same_line(
                                  self.textelements[i])]
         for i in reversed(same_line_indexes):
@@ -2715,7 +2713,7 @@ class DocumentFixer(object):
 
     @staticmethod
     def append_quotes(element, text, quote_list):
-        for x in range(0, len(quote_list)):
+        for x in six.moves.range(0, len(quote_list)):
             span = etree.Element('span')
             span.set('type', 'quote')
             span.text = text[quote_list[x][0]:quote_list[x][1]]
@@ -3167,7 +3165,7 @@ class ConverterManager(object):
         pool_size = multiprocessing.cpu_count()
         pool = multiprocessing.Pool(processes=pool_size,)
         pool.map(unwrap_self_convert,
-                 list(zip([self] * len(self.FILES), self.FILES)))
+                 list(six.moves.zip([self] * len(self.FILES), self.FILES)))
         pool.close()
         pool.join()
 
