@@ -152,12 +152,12 @@ def test_detect_quote():
     quote_tests = [
         TestItem(
             name='quote within QUOTATION MARK',
-            orig='<p>bla bla "bla bla" bla bla </p>',
+            orig='<p>bla "bla" bla "bla" bla </p>',
             expected=(
-                     '<p>bla bla <span type="quote">"bla bla"</span> '
-                     'bla bla</p>')),
+                     '<p>bla <span type="quote">"bla"</span> bla'
+                     '<span type="quote">"bla"</span> bla</p>')),
         TestItem(
-            name='RIGHT DOUBLE QUOTATION MARK',
+            name='quote within RIGHT DOUBLE QUOTATION MARK',
             orig='<p>bla bla ”bla bla” bla bla </p>',
             expected=(
                      '<p>bla bla <span type="quote">”bla bla”</span> '
@@ -169,6 +169,15 @@ def test_detect_quote():
             orig='<p>bla bla “bla bla” bla bla</p>',
             expected=(
                 '<p>bla bla <span type="quote">“bla bla”</span> bla bla</p>')),
+        TestItem(
+            name=(
+                'quote within RIGHT DOUBLE QUOTATION MARK and '
+                'quote within LEFT DOUBLE QUOTATION MARK and '
+                'RIGHT DOUBLE QUOTATION MARK'),
+            orig='<p>bla “bla” bla ”bla” bla</p>',
+            expected=(
+                '<p>bla <span type="quote">“bla”</span> bla '
+                '<span type="quote">”bla”</span> bla</p>')),
         TestItem(name='simple_detect_quote3',
                  orig='<p>bla bla «bla bla» bla bla</p>',
                  expected=(
