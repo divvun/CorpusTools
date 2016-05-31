@@ -67,6 +67,9 @@ class XMLTester(unittest.TestCase):
             raise AssertionError(message)
 
 
+TestItem = collections.namedtuple('TestItem', ['name', 'orig', 'expected'])
+
+
 path_to_corpuspath = {
     'orig_to_orig': {
         'in_name': os.path.join(
@@ -142,6 +145,70 @@ def check_names_to_corpuspath(testname, testcontent):
     if cp.orig != testcontent['want_name']:
         raise AssertionError('{}:\nexpected {}\ngot {}'.format(
             testname, testcontent['want_name'], cp.orig))
+
+
+def test_detect_quote():
+
+    quote_tests = [
+        TestItem(
+            name='quote within QUOTATION MARK',
+            orig='<p>bla bla "bla bla" bla bla </p>',
+            expected=(
+                     '<p>bla bla <span type="quote">"bla bla"</span> '
+                     'bla bla</p>')),
+        TestItem(
+            name=(
+                'quote within LEFT DOUBLE QUOTATION MARK and '
+                'RIGHT DOUBLE QUOTATION MARK'),
+            orig='<p>bla bla “bla bla” bla bla</p>',
+            expected=(
+                '<p>bla bla <span type="quote">“bla bla”</span> bla bla</p>')),
+        TestItem(name='simple_detect_quote3',
+                 orig='<p>bla bla «bla bla» bla bla</p>',
+                 expected=(
+                     '<p>bla bla <span type="quote">«bla bla»</span> '
+                     'bla bla</p>')),
+        TestItem(name='simple_detect_quote4',
+                 orig='<p type="title">Sámegiel čálamearkkat Windows XP várás.</p>',
+                 expected=(
+                     '<p type="title">Sámegiel čálamearkkat Windows XP várás.</p>')),
+        TestItem(name='simple_detect_quote2_quotes',
+                 orig='<p>bla bla «bla bla» bla bla «bla bla» bla bla</p>',
+                 expected=(
+                     '<p>bla bla <span type="quote">«bla bla»</span> bla bla '
+                     '<span type="quote">«bla bla»</span> bla bla</p>')),
+        TestItem(name='detect_quote_with_following_tag',
+                 orig='<p>bla bla «bla bla» <em>bla bla</em></p>',
+                 expected=(
+                     '<p>bla bla <span type="quote">«bla bla»</span> <em>'
+                     'bla bla</em></p>')),
+        TestItem(name='detect_quote_with_tag_infront',
+                 orig='<p>bla bla <em>bla bla</em> «bla bla»</p>',
+                 expected=(
+                     '<p>bla bla <em>bla bla</em> <span type="quote">'
+                     '«bla bla»</span></p>')),
+        TestItem(name='detect_quote_within_tag',
+                 orig='<p>bla bla <em>bla bla «bla bla»</em></p>',
+                 expected=(
+                     '<p>bla bla <em>bla bla <span type="quote">'
+                     '«bla bla»</span></em></p>')),
+    ]
+
+    for name, orig, expected in quote_tests:
+        yield check_quote_detection, name, orig, expected
+
+
+def check_quote_detection(name, orig, expected):
+    document_fixer = converter.DocumentFixer(
+        etree.parse(
+            os.path.join(here,
+                            'converter_data/samediggi-article-48s-before-'
+                            'lang-detection-with-multilingual-tag.xml')))
+    got_paragraph = document_fixer.detect_quote(
+        etree.fromstring(orig))
+
+    assertXmlEqual(got_paragraph, etree.fromstring(expected))
+
 
 def test_remove_unwanted_classes_and_ids():
     unwanted_classes_ids = {
@@ -2982,132 +3049,6 @@ LOGO: Smi kulturfestivala 1998
                          'converter_data/Riddu_Riddu_avis_TXT.200923.xml'))
 
         self.assertXmlEqual(got, want)
-
-    def test_simple_detect_quote1(self):
-        orig_paragraph = '<p>bla bla "bla bla" bla bla </p>'
-        expected_paragraph = (
-            '<p>bla bla <span type="quote">"bla bla"</span> bla bla</p>')
-
-        document_fixer = converter.DocumentFixer(
-            etree.parse(
-                os.path.join(here,
-                             'converter_data/samediggi-article-48s-before-'
-                             'lang-detection-with-multilingual-tag.xml')))
-        got_paragraph = document_fixer.detect_quote(
-            etree.fromstring(orig_paragraph))
-
-        self.assertXmlEqual(got_paragraph, etree.fromstring(expected_paragraph))
-
-    def test_simple_detect_quote2(self):
-        orig_paragraph = '<p>bla bla “bla bla” bla bla</p>'
-        expected_paragraph = (
-            '<p>bla bla <span type="quote">“bla bla”</span> bla bla</p>')
-
-        document_fixer = converter.DocumentFixer(
-            etree.parse(
-                os.path.join(here,
-                             'converter_data/samediggi-article-48s-before-'
-                             'lang-detection-with-multilingual-tag.xml')))
-        got_paragraph = document_fixer.detect_quote(
-            etree.fromstring(orig_paragraph))
-
-        self.assertXmlEqual(got_paragraph, etree.fromstring(expected_paragraph))
-
-    def test_simple_detect_quote3(self):
-        orig_paragraph = '<p>bla bla «bla bla» bla bla</p>'
-        expected_paragraph = (
-            '<p>bla bla <span type="quote">«bla bla»</span> bla bla</p>')
-
-        document_fixer = converter.DocumentFixer(
-            etree.parse(
-                os.path.join(here,
-                             'converter_data/samediggi-article-48s-before-'
-                             'lang-detection-with-multilingual-tag.xml')))
-        got_paragraph = document_fixer.detect_quote(
-            etree.fromstring(orig_paragraph))
-
-        self.assertXmlEqual(got_paragraph, etree.fromstring(expected_paragraph))
-
-    def test_simple_detect_quote4(self):
-        orig_paragraph = (
-            '<p type="title">Sámegiel čálamearkkat Windows XP várás.</p>')
-        expected_paragraph = (
-            '<p type="title">Sámegiel čálamearkkat Windows XP várás.</p>')
-
-        document_fixer = converter.DocumentFixer(
-            etree.parse(
-                os.path.join(here,
-                             'converter_data/samediggi-article-48s-before-'
-                             'lang-detection-with-multilingual-tag.xml')))
-        got_paragraph = document_fixer.detect_quote(
-            etree.fromstring(orig_paragraph))
-
-        self.assertXmlEqual(got_paragraph, etree.fromstring(expected_paragraph))
-
-    def test_simple_detect_quote2_quotes(self):
-        orig_paragraph = '<p>bla bla «bla bla» bla bla «bla bla» bla bla</p>'
-        expected_paragraph = (
-            '<p>bla bla <span type="quote">«bla bla»</span> bla bla '
-            '<span type="quote">«bla bla»</span> bla bla</p>')
-
-        document_fixer = converter.DocumentFixer(
-            etree.parse(
-                os.path.join(here,
-                             'converter_data/samediggi-article-48s-before-'
-                             'lang-detection-with-multilingual-tag.xml')))
-        got_paragraph = document_fixer.detect_quote(
-            etree.fromstring(orig_paragraph))
-
-        self.assertXmlEqual(got_paragraph, etree.fromstring(expected_paragraph))
-
-    def test_detect_quote_with_following_tag(self):
-        orig_paragraph = '<p>bla bla «bla bla» <em>bla bla</em></p>'
-        expected_paragraph = (
-            '<p>bla bla <span type="quote">«bla bla»</span> <em>'
-            'bla bla</em></p>')
-
-        document_fixer = converter.DocumentFixer(
-            etree.parse(
-                os.path.join(here,
-                             'converter_data/samediggi-article-48s-before-'
-                             'lang-detection-with-multilingual-tag.xml')))
-        got_paragraph = document_fixer.detect_quote(
-            etree.fromstring(orig_paragraph))
-
-        self.assertXmlEqual(got_paragraph, etree.fromstring(expected_paragraph))
-
-    def test_detect_quote_with_tag_infront(self):
-        orig_paragraph = '<p>bla bla <em>bla bla</em> «bla bla»</p>'
-        expected_paragraph = (
-            '<p>bla bla <em>bla bla</em> <span type="quote">'
-            '«bla bla»</span></p>')
-
-        document_fixer = converter.DocumentFixer(
-            etree.parse(
-                os.path.join(here,
-                             'converter_data/samediggi-article-48s-before-'
-                             'lang-detection-with-multilingual-tag.xml')))
-        got_paragraph = document_fixer.detect_quote(
-            etree.fromstring(orig_paragraph))
-
-        self.assertXmlEqual(got_paragraph, etree.fromstring(expected_paragraph))
-
-    def test_detect_quote_within_tag(self):
-        orig_paragraph = '<p>bla bla <em>bla bla «bla bla»</em></p>'
-        expected_paragraph = (
-            '<p>bla bla <em>bla bla <span type="quote">'
-            '«bla bla»</span></em></p>')
-
-        document_fixer = converter.DocumentFixer(
-            etree.parse(
-                os.path.join(here,
-                             'converter_data/samediggi-article-48s-before-'
-                             'lang-detection-with-multilingual-tag.xml')))
-        got_paragraph = document_fixer.detect_quote(
-            etree.fromstring(orig_paragraph))
-
-        self.assertXmlEqual(got_paragraph,
-                            etree.fromstring(expected_paragraph))
 
     def test_word_count(self):
         document = (
