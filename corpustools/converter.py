@@ -2710,10 +2710,11 @@ class DocumentFixer(object):
 
     @staticmethod
     def get_quote_list(text):
-        quote_regexes = [re.compile('"\S.+?\S"'),
+        unwanted = '[^:,!?.\s]'
+        quote_regexes = [re.compile('"{0}.+?{0}"'.format(unwanted)),
                          re.compile(u'«.+?»'),
                          re.compile(u'“.+?”'),
-                         re.compile(u'”\S.+?\S”'),]
+                         re.compile(u'”{0}.+?{0}”'.format(unwanted)),]
         quote_list = [m.span()
                       for quote_regex in quote_regexes
                       for m in quote_regex.finditer(text)]

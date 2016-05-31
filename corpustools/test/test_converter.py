@@ -207,13 +207,17 @@ def test_detect_quote():
                  expected=(
                      '<p>bla bla <em>bla bla <span type="quote">'
                      '«bla bla»</span></em></p>')),
-        TestItem(
-            name='complex quote detection',
-            orig=(
-                '<p>“bla”, bla ”bla” bla «bla» bla “bla” ― «bla» bla.</p>'),
-            expected=(
-                '<p><span type="quote">“bla”</span>, bla <span type="quote">”bla”</span> bla <span type="quote">«bla»</span> bla <span type="quote">“bla”</span> ― <span type="quote">«bla»</span> bla.</p>')),
     ]
+
+    for i in '.,?!:':
+        quote_tests.append(
+            TestItem(
+            name='quote followed by {}'.format(i),
+            orig=(
+                '<p>“bla”{} bla ”bla”</p>'.format(i)),
+            expected=(
+                '<p><span type="quote">“bla”</span>{} bla '
+                '<span type="quote">”bla”</span></p>'.format(i))))
 
     for name, orig, expected in quote_tests:
         yield check_quote_detection, name, orig, expected
@@ -3332,7 +3336,6 @@ LOGO: Smi kulturfestivala 1998
             u'</document>')
 
         self.assertXmlEqual(got, want)
-
 
 class TestXslMaker(XMLTester):
 
