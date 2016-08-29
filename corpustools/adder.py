@@ -21,21 +21,21 @@
 #
 
 from __future__ import print_function
-
 from __future__ import absolute_import
+
 import argparse
 import cgi
 import os
 import requests
 import shutil
 import sys
+import six
 
 from corpustools import argparse_version
 from corpustools import namechanger
 from corpustools import util
 from corpustools import versioncontrol
 from corpustools import xslsetter
-import six
 
 
 class AdderException(Exception):
@@ -327,7 +327,7 @@ def main():
             print('The argument -l|--lang is not allowed together with -d|--directory', file=sys.stderr)
             sys.exit(2)
         (root, module, lang, genre, path, basename) = util.split_path(
-            os.path.join(args.directory, 'dummy.txt').decode('utf8'))
+            os.path.join(args.directory, 'dummy.txt'))
         if genre == 'dummy.txt':
             print(
                 'Error!\n'
@@ -340,10 +340,10 @@ def main():
                             os.path.join(genre, path))
         for orig in args.origs:
             if os.path.isfile(orig):
-                adder.copy_file_to_corpus(orig.decode('utf8'),
-                                          os.path.basename(orig.decode('utf8')))
+                adder.copy_file_to_corpus(orig,
+                                          os.path.basename(orig))
             elif orig.startswith('http'):
-                adder.copy_url_to_corpus(orig.decode('utf8'))
+                adder.copy_url_to_corpus(orig)
             elif os.path.isdir(orig):
                 adder.copy_files_in_dir_to_corpus(orig)
             else:
@@ -354,9 +354,9 @@ def main():
             print('Only -l|--lang is allowed together with -p|--parallel', file=sys.stderr)
             sys.exit(3)
         (root, module, lang, genre, path, basename) = util.split_path(
-            args.parallel_file.decode('utf8'))
+            args.parallel_file)
         adder = AddToCorpus(root,
-                            args.lang.decode('utf8'),
+                            args.lang,
                             os.path.join(genre, path))
 
         if not os.path.exists(args.parallel_file):
@@ -373,10 +373,10 @@ def main():
             sys.exit(3)
         orig = args.origs[0]
         if os.path.isfile(orig):
-            adder.copy_file_to_corpus(orig.decode('utf8'),
-                                      args.parallel_file.decode('utf8'))
+            adder.copy_file_to_corpus(orig,
+                                      args.parallel_file)
         elif orig.startswith('http'):
-            adder.copy_url_to_corpus(orig.decode('utf8'),
-                                     args.parallel_file.decode('utf8'))
+            adder.copy_url_to_corpus(orig,
+                                     args.parallel_file)
 
     adder.add_files_to_working_copy()
