@@ -1662,11 +1662,13 @@ class BiblexmlConverter(Converter):
 class HTMLContentConverter(Converter):
 
     '''Convert html documents to the giellatekno xml format.'''
-
     def __init__(self, filename, write_intermediate=False, content=None):
         '''Clean up content, then convert it to xhtml using html5parser'''
         super(HTMLContentConverter, self).__init__(filename,
                                                    write_intermediate)
+        self.convert2xhtml(content)
+
+    def superclean(self, content):
         cleaner = clean.Cleaner(
             page_structure=False,
             scripts=True,
@@ -1694,16 +1696,10 @@ class HTMLContentConverter(Converter):
                 's',
             ])
 
-        decoded = self.to_unicode(content)
-        semiclean = self.remove_cruft(decoded)
         try:
-            superclean = cleaner.clean_html(semiclean)
+            return cleaner.clean_html(self.remove_cruft(content))
         except etree.ParserError as e:
             raise ConversionException(six.text_type(e))
-
-        self.soup = html5parser.document_fromstring(superclean)
-        self.convert2xhtml()
-        self.converter_xsl = os.path.join(here, 'xslt/xhtml2corpus.xsl')
 
     def remove_cruft(self, content):
         '''from svenskakyrkan.se documents'''
@@ -1712,7 +1708,7 @@ class HTMLContentConverter(Converter):
             (u'&nbsp;', u' '),
             (u' ', u' '),
         ]
-        return util.replace_all(replacements, content)
+        return util.replace_all(replacements, self.to_unicode(content))
 
     def to_unicode(self, content):
         return self.remove_declared_encoding(
@@ -2208,12 +2204,15 @@ class HTMLContentConverter(Converter):
             body.text = None
             body.insert(0, p)
 
-    def convert2xhtml(self):
+    def convert2xhtml(self, content):
         '''Clean up the html document.
 
         Destructively modifies self.soup, trying
         to create strict xhtml for xhtml2corpus.xsl
         '''
+        self.soup = html5parser.document_fromstring(
+            self.superclean(content))
+
         self.remove_empty_class()
         self.remove_empty_p()
         self.remove_elements()
@@ -2229,10 +2228,10 @@ class HTMLContentConverter(Converter):
 
         The resulting xml is stored in intermediate
         '''
-        html_xslt_root = etree.parse(self.converter_xsl)
-        transform = etree.XSLT(html_xslt_root)
+        converter_xsl = os.path.join(here, 'xslt/xhtml2corpus.xsl')
 
-        intermediate = ''
+        html_xslt_root = etree.parse(converter_xsl)
+        transform = etree.XSLT(html_xslt_root)
 
         try:
             intermediate = transform(self.soup)
@@ -2252,6 +2251,7 @@ class HTMLContentConverter(Converter):
                         found_element.tail = None
                         found_element.addnext(new_p)
 
+            return intermediate.getroot()
         except etree.XMLSyntaxError as e:
             self.handle_syntaxerror(e, util.lineno(),
                                     etree.tostring(self.soup))
@@ -2269,7 +2269,6 @@ class HTMLContentConverter(Converter):
                 'HTMLContentConverter: transformation failed.'
                 'More info in {}'.format(self.names.log))
 
-        return intermediate.getroot()
 
 
 class HTMLConverter(HTMLContentConverter):
