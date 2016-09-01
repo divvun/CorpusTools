@@ -2234,6 +2234,24 @@ class HTMLConverter(Converter):
         converter = HTMLContentConverter()
         return converter.convert2xhtml(u_content)
 
+    @staticmethod
+    def replace_bare_text_in_body_with_p(body):
+        if body.text is not None and body.text.strip() != '':
+            new_p = etree.Element('p')
+            new_p.text = body.text
+            body.text = None
+            body.insert(0, new_p)
+
+    @staticmethod
+    def add_p_instead_of_tail(intermediate):
+        for element in ['list', 'p']:
+            for found_element in intermediate.findall('.//' + element):
+                if found_element.tail is not None and found_element.tail.strip() != '':
+                    new_p = etree.Element('p')
+                    new_p.text = found_element.tail
+                    found_element.tail = None
+                    found_element.addnext(new_p)
+
     def convert2intermediate(self):
         '''Convert the original document to the giellatekno xml format.
 
@@ -2247,20 +2265,8 @@ class HTMLConverter(Converter):
         try:
             intermediate = transform(self.convert2xhtml())
 
-            body = intermediate.find('.//body')
-            if body.text is not None and body.text.strip() != '':
-                new_p = etree.Element('p')
-                new_p.text = body.text
-                body.text = None
-                body.insert(0, new_p)
-
-            for element in ['list', 'p']:
-                for found_element in intermediate.findall('.//' + element):
-                    if found_element.tail is not None and found_element.tail.strip() != '':
-                        new_p = etree.Element('p')
-                        new_p.text = found_element.tail
-                        found_element.tail = None
-                        found_element.addnext(new_p)
+            self.replace_bare_text_in_body_with_p(intermediate.find('.//body'))
+            self.add_p_instead_of_tail(intermediate)
 
             return intermediate.getroot()
         except etree.XMLSyntaxError as e:
@@ -2277,7 +2283,7 @@ class HTMLConverter(Converter):
                 util.print_element(self.soup, 0, 4, logfile)
 
             raise ConversionException(
-                'HTMLContentConverter: transformation failed.'
+                'HTMLConverter: transformation failed.'
                 'More info in {}'.format(self.names.log))
 
 
