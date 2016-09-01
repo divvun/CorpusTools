@@ -29,6 +29,7 @@ import lxml.objectify as objectify
 from lxml.html import html5parser
 import os
 import six
+import testfixtures
 import unittest
 
 from corpustools import converter
@@ -1199,8 +1200,8 @@ class TestHTMLContentConverter(XMLTester):
         '''Only text before next significant element'''
         got = converter.HTMLContentConverter(
             'orig/sme/admin/withoutp.html',
-            content='<html><head><title>– Den utdøende stammes frykt</title>'
-            '</head><body><h3>VI</h3>... Finnerne<p>Der</body></html>').soup
+            content=u'<html><head><title>– Den utdøende stammes frykt</title>'
+            u'</head><body><h3>VI</h3>... Finnerne<p>Der</body></html>').soup
 
         want = html5parser.document_fromstring(
             '<html><head>'
@@ -1214,8 +1215,8 @@ class TestHTMLContentConverter(XMLTester):
         '''Text and i element before next significant element'''
         got = converter.HTMLContentConverter(
             'orig/sme/admin/withoutp.html',
-            content='<head><title>– Den utdøende stammes frykt</title>'
-            '</head><body><h3>VI</h3>... Finnerne<i>Der</body></html>').soup
+            content=u'<head><title>– Den utdøende stammes frykt</title>'
+            u'</head><body><h3>VI</h3>... Finnerne<i>Der</body></html>').soup
 
         want = html5parser.document_fromstring(
             '<html><head>'
@@ -1230,9 +1231,9 @@ class TestHTMLContentConverter(XMLTester):
         got = converter.HTMLContentConverter(
             'orig/sme/admin/withoutp.html',
             content='<html>'
-            '<title>– Den utdøende stammes frykt</title>'
-            '</head><body><h3>VI</h3>... Finnerne<a/>'
-            '<h2><a>Der</a></h2></body></html>').soup
+            u'<title>– Den utdøende stammes frykt</title>'
+            u'</head><body><h3>VI</h3>... Finnerne<a/>'
+            u'<h2><a>Der</a></h2></body></html>').soup
 
         want = html5parser.document_fromstring(
             '<html><head><title>– Den '
@@ -1242,172 +1243,6 @@ class TestHTMLContentConverter(XMLTester):
 
         clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
-
-    def test_set_charset_1(self):
-        '''encoding_from_xsl = None, no charset in html header'''
-        content = (
-            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
-            '<body></body></html>')
-        hcc = converter.HTMLContentConverter(
-            'orig/sme/admin/ugga.html',
-            content=content)
-
-        got = hcc.get_encoding(content)
-
-        self.assertEqual(got, ('utf-8', 'guess'))
-
-    def test_set_charset_2(self):
-        '''encoding_from_xsl = '', no charset in html header'''
-        content = (
-            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
-            '<body></body></html>')
-        hcc = converter.HTMLContentConverter(
-            'orig/sme/admin/ugga.html',
-            content=content)
-
-        got = hcc.get_encoding(content)
-
-        self.assertEqual(got, ('utf-8', 'guess'))
-
-    def test_get_encoding_3(self):
-        '''encoding_from_xsl = 'iso-8859-1', no charset in html header'''
-        content = (
-            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
-            '<body></body></html>')
-
-        hcc = converter.HTMLContentConverter(
-            'orig/sme/admin/ugga.html',
-            content=content)
-        hcc.md.set_variable('text_encoding', 'iso-8859-1')
-
-        got = hcc.get_encoding(content)
-
-        self.assertEqual(got, ('windows-1252', 'xsl'))
-
-    def test_get_encoding_4(self):
-        '''Check that encoding_from_xsl overrides meta charset
-
-        encoding_from_xsl = 'iso-8859-1', charset in html header = utf-8
-        '''
-        content = (
-            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
-            '<head><meta http-equiv="Content-type" content="text/html; '
-            'charset=utf-8"></head><body></body></html>')
-
-        hcc = converter.HTMLContentConverter(
-            'orig/sme/admin/ugga.html',
-            content=content)
-        hcc.md.set_variable('text_encoding', 'iso-8859-1')
-
-        got = hcc.get_encoding(content)
-
-        self.assertEqual(got, ('windows-1252', 'xsl'))
-
-    def test_get_encoding_5(self):
-        '''encoding_from_xsl = None, charset in html header = iso-8859-1'''
-        content = (
-            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
-            '<head><meta http-equiv="Content-type" content="text/html; '
-            'charset=iso-8859-1"></head><body></body></html>')
-
-        hcc = converter.HTMLContentConverter(
-            'orig/sme/admin/ugga.html',
-            content=content)
-
-        got = hcc.get_encoding(content)
-
-        self.assertEqual(got, ('windows-1252', 'content'))
-
-    def test_get_encoding_6(self):
-        '''encoding_from_xsl = '', charset in html header = iso-8859-1'''
-        content = (
-            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
-            '<head><meta http-equiv="Content-type" content="text/html; '
-            'charset=iso-8859-1"></head><body></body></html>')
-
-        hcc = converter.HTMLContentConverter(
-            'orig/sme/admin/ugga.html',
-            content=content)
-
-        got = hcc.get_encoding(content)
-
-        self.assertEqual(got, ('windows-1252', 'content'))
-
-    def test_set_charset_7(self):
-        '''' as quote mark around charset
-
-        encoding_from_xsl = '', charset in html header = iso-8859-1
-        '''
-        content = (
-            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
-            '<head><meta http-equiv="Content-type" content=\'text/html; '
-            'charset=iso-8859-1\'></head><body></body></html>')
-
-        hcc = converter.HTMLContentConverter(
-            'orig/sme/admin/ugga.html',
-            content=content)
-
-        got = hcc.get_encoding(content)
-
-        self.assertEqual(got, ('windows-1252', 'content'))
-
-    def test_set_charset_8(self):
-        '''' is quote mark around charset when
-
-        " is found later
-        encoding_from_xsl = '', charset in html header = iso-8859-1
-        '''
-        content = (
-            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
-            '<head><meta http-equiv="Content-type" content=\'text/html; '
-            'charset=iso-8859-1\'><link rel="index.html"></head><body>'
-            '</body></html>')
-
-        hcc = converter.HTMLContentConverter(
-            'orig/sme/admin/ugga.html',
-            content=content)
-
-        got = hcc.get_encoding(content)
-
-        self.assertEqual(got, ('windows-1252', 'content'))
-
-    def test_set_charset_9(self):
-        '''" is quote mark around charset
-
-        ' is found later
-        encoding_from_xsl = '', charset in html header = iso-8859-1
-        '''
-        content = (
-            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
-            '<head><meta http-equiv="Content-type" content="text/html; '
-            'charset=iso-8859-1"><link rel=\'index.html\'></head><body>'
-            '</body></html>')
-
-        hcc = converter.HTMLContentConverter(
-            'orig/sme/admin/ugga.html',
-            content=content)
-
-        got = hcc.get_encoding(content)
-
-        self.assertEqual(got, ('windows-1252', 'content'))
-
-    def test_set_charset_10(self):
-        '''Test uppercase iso-8859-15'''
-        content = (
-            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" '
-            '"http://www.w3.org/TR/REC-html40/loose.dtd">'
-            '<html>'
-            '<head>'
-            '<META HTTP-EQUIV="Content-Type" CONTENT="text/html;'
-            'charset=iso-8859-15">')
-
-        hcc = converter.HTMLContentConverter(
-            'orig/sme/admin/ugga.html',
-            content=content)
-
-        got = hcc.get_encoding(content)
-
-        self.assertEqual(got, ('iso-8859-15', 'content'))
 
     def test_center2div(self):
         got = converter.HTMLContentConverter(
@@ -1510,7 +1345,10 @@ class TestHTMLContentConverter(XMLTester):
         clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
+
+class TestHTMLConverter(XMLTester):
     def test_convert2intermediate_with_bare_text_after_p(self):
+        filename = 'orig/sme/admin/ugga.html'
         content = '''
             <html lang="no" dir="ltr">
                 <head>
@@ -1552,13 +1390,17 @@ class TestHTMLContentConverter(XMLTester):
             </document>
         '''
 
-        got = converter.HTMLContentConverter(
-            'orig/sme/admin/text.html', LANGUAGEGUESSER,
-            content=content).convert2intermediate()
+        with testfixtures.TempDirectory() as temp_dir:
+            temp_dir.write(filename, content)
+            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
+                                                       filename))
 
-        self.assertXmlEqual(got, etree.fromstring(want))
+            got = hcc.convert2intermediate()
+
+            self.assertXmlEqual(got, etree.fromstring(want))
 
     def test_convert2intermediate_with_bare_text_after_list(self):
+        filename = 'orig/sme/admin/ugga.html'
         content = '''
             <html lang="no" dir="ltr">
                 <body>
@@ -1587,13 +1429,17 @@ class TestHTMLContentConverter(XMLTester):
             </document>
         '''
 
-        got = converter.HTMLContentConverter(
-            'orig/sme/admin/text.html', LANGUAGEGUESSER,
-            content=content).convert2intermediate()
+        with testfixtures.TempDirectory() as temp_dir:
+            temp_dir.write(filename, content)
+            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
+                                                       filename))
 
-        self.assertXmlEqual(got, etree.fromstring(want))
+            got = hcc.convert2intermediate()
+
+            self.assertXmlEqual(got, etree.fromstring(want))
 
     def test_convert2intermediate_with_body_bare_text(self):
+        filename = 'orig/sme/admin/ugga.html'
         content = '''
             <html lang="no" dir="ltr">
                 <head>
@@ -1633,11 +1479,199 @@ class TestHTMLContentConverter(XMLTester):
             </document>
         '''
 
-        got = converter.HTMLContentConverter(
-            'orig/sme/admin/text.html', LANGUAGEGUESSER,
-            content=content).convert2intermediate()
+        with testfixtures.TempDirectory() as temp_dir:
+            temp_dir.write(filename, content)
+            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
+                                                       filename))
 
-        self.assertXmlEqual(got, etree.fromstring(want))
+            got = hcc.convert2intermediate()
+
+            self.assertXmlEqual(got, etree.fromstring(want))
+
+    def test_set_charset_1(self):
+        '''encoding_from_xsl = None, no charset in html header'''
+        filename = 'orig/sme/admin/ugga.html'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<body></body></html>')
+        with testfixtures.TempDirectory() as temp_dir:
+            temp_dir.write(filename, content)
+            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
+                                                       filename))
+
+            got = hcc.get_encoding(content)
+
+            self.assertEqual(got, ('utf-8', 'guess'))
+
+    def test_set_charset_2(self):
+        '''encoding_from_xsl = '', no charset in html header'''
+        filename = 'orig/sme/admin/ugga.html'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<body></body></html>')
+
+        with testfixtures.TempDirectory() as temp_dir:
+            temp_dir.write(filename, content)
+            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
+                                                       filename))
+
+            got = hcc.get_encoding(content)
+
+            self.assertEqual(got, ('utf-8', 'guess'))
+
+    def test_get_encoding_3(self):
+        '''encoding_from_xsl = 'iso-8859-1', no charset in html header'''
+        filename = 'orig/sme/admin/ugga.html'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<body></body></html>')
+
+        with testfixtures.TempDirectory() as temp_dir:
+            temp_dir.write(filename, content)
+            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
+                                                       filename))
+            hcc.md.set_variable('text_encoding', 'iso-8859-1')
+            got = hcc.get_encoding(content)
+
+            self.assertEqual(got, ('windows-1252', 'xsl'))
+
+    def test_get_encoding_4(self):
+        '''Check that encoding_from_xsl overrides meta charset
+
+        encoding_from_xsl = 'iso-8859-1', charset in html header = utf-8
+        '''
+        filename = 'orig/sme/admin/ugga.html'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<head><meta http-equiv="Content-type" content="text/html; '
+            'charset=utf-8"></head><body></body></html>')
+
+        with testfixtures.TempDirectory() as temp_dir:
+            temp_dir.write(filename, content)
+            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
+                                                       filename))
+            hcc.md.set_variable('text_encoding', 'iso-8859-1')
+            got = hcc.get_encoding(content)
+
+            self.assertEqual(got, ('windows-1252', 'xsl'))
+
+    def test_get_encoding_5(self):
+        '''encoding_from_xsl = None, charset in html header = iso-8859-1'''
+        filename = 'orig/sme/admin/ugga.html'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<head><meta http-equiv="Content-type" content="text/html; '
+            'charset=iso-8859-1"></head><body></body></html>')
+
+        with testfixtures.TempDirectory() as temp_dir:
+            temp_dir.write(filename, content)
+            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
+                                                       filename))
+
+            got = hcc.get_encoding(content)
+
+            self.assertEqual(got, ('windows-1252', 'content'))
+
+    def test_get_encoding_6(self):
+        '''encoding_from_xsl = '', charset in html header = iso-8859-1'''
+        filename = 'orig/sme/admin/ugga.html'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<head><meta http-equiv="Content-type" content="text/html; '
+            'charset=iso-8859-1"></head><body></body></html>')
+
+        with testfixtures.TempDirectory() as temp_dir:
+            temp_dir.write(filename, content)
+            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
+                                                       filename))
+
+            got = hcc.get_encoding(content)
+
+            self.assertEqual(got, ('windows-1252', 'content'))
+
+    def test_set_charset_7(self):
+        '''' as quote mark around charset
+
+        encoding_from_xsl = '', charset in html header = iso-8859-1
+        '''
+        filename = 'orig/sme/admin/ugga.html'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<head><meta http-equiv="Content-type" content=\'text/html; '
+            'charset=iso-8859-1\'></head><body></body></html>')
+
+        with testfixtures.TempDirectory() as temp_dir:
+            temp_dir.write(filename, content)
+            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
+                                                       filename))
+
+            got = hcc.get_encoding(content)
+
+            self.assertEqual(got, ('windows-1252', 'content'))
+
+    def test_set_charset_8(self):
+        '''' is quote mark around charset when
+
+        " is found later
+        encoding_from_xsl = '', charset in html header = iso-8859-1
+        '''
+        filename = 'orig/sme/admin/ugga.html'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            '<head><meta http-equiv="Content-type" content=\'text/html; '
+            'charset=iso-8859-1\'><link rel="index.html"></head><body>'
+            '</body></html>')
+
+        with testfixtures.TempDirectory() as temp_dir:
+            temp_dir.write(filename, content)
+            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
+                                                       filename))
+
+            got = hcc.get_encoding(content)
+
+            self.assertEqual(got, ('windows-1252', 'content'))
+
+    def test_set_charset_9(self):
+        '''" is quote mark around charset
+
+        ' is found later
+        encoding_from_xsl = '', charset in html header = iso-8859-1
+        '''
+        filename = 'orig/sme/admin/ugga.html'
+        content = (
+            b'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
+            b'<head><meta http-equiv="Content-type" content="text/html; '
+            b'charset=iso-8859-1"><link rel=\'index.html\'></head><body>'
+            b'</body></html>')
+
+        with testfixtures.TempDirectory() as temp_dir:
+            temp_dir.write(filename, content)
+            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
+                                                       filename))
+
+            got = hcc.get_encoding(content)
+
+            self.assertEqual(got, ('windows-1252', 'content'))
+
+    def test_set_charset_10(self):
+        '''Test uppercase iso-8859-15'''
+        filename = 'orig/sme/admin/ugga.html'
+        content = (
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" '
+            '"http://www.w3.org/TR/REC-html40/loose.dtd">'
+            '<html>'
+            '<head>'
+            '<META HTTP-EQUIV="Content-Type" CONTENT="text/html;'
+            'charset=iso-8859-15">')
+
+        with testfixtures.TempDirectory() as temp_dir:
+            temp_dir.write(filename, content)
+            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
+                                                       filename))
+
+            got = hcc.get_encoding(content)
+
+            self.assertEqual(got, ('iso-8859-15', 'content'))
 
 
 class TestRTFConverter(XMLTester):
