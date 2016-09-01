@@ -1137,7 +1137,6 @@ class TestHTMLContentConverter(XMLTester):
     def test_remove_empty_p_1(self):
         '''Remove an empty p'''
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/with-o:p.html',
             content='<html><body><p/></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1149,7 +1148,6 @@ class TestHTMLContentConverter(XMLTester):
     def test_remove_empty_p_2(self):
         '''Do not remove a p with content'''
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/with-o:p.html',
             content='<html><body><p><span>spanny</span></p></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1160,7 +1158,6 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_remove_empty_class(self):
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/with-o:p.html',
             content='<html><body><div class="">a</div><div class="a">'
             '<span class="">b</span></div></html>').soup
 
@@ -1173,7 +1170,6 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_remove_comment(self):
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/with-o:p.html',
             content='<html><body><b><!--Hey, buddy. --></b></body>'
             '</html>').soup
 
@@ -1186,7 +1182,6 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_remove_processinginstruction(self):
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/with-o:p.html',
             content='<html><body><b><?ProcessingInstruction?></b></body>'
             '</html>').soup
 
@@ -1199,7 +1194,6 @@ class TestHTMLContentConverter(XMLTester):
     def test_add_p_around_text1(self):
         '''Only text before next significant element'''
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/withoutp.html',
             content=u'<html><head><title>– Den utdøende stammes frykt</title>'
             u'</head><body><h3>VI</h3>... Finnerne<p>Der</body></html>').soup
 
@@ -1214,7 +1208,6 @@ class TestHTMLContentConverter(XMLTester):
     def test_add_p_around_text2(self):
         '''Text and i element before next significant element'''
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/withoutp.html',
             content=u'<head><title>– Den utdøende stammes frykt</title>'
             u'</head><body><h3>VI</h3>... Finnerne<i>Der</body></html>').soup
 
@@ -1229,7 +1222,6 @@ class TestHTMLContentConverter(XMLTester):
     def test_add_p_around_text3(self):
         '''h2 as a stop element'''
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/withoutp.html',
             content='<html>'
             u'<title>– Den utdøende stammes frykt</title>'
             u'</head><body><h3>VI</h3>... Finnerne<a/>'
@@ -1246,7 +1238,6 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_center2div(self):
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/center.html',
             content='<html><body><center><span class="">b</span>'
             '</center></html>').soup
 
@@ -1259,7 +1250,6 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_i(self):
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/i.html', LANGUAGEGUESSER,
             content='<html><body><i>b</i></body></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1270,7 +1260,6 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_a(self):
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/a.html', LANGUAGEGUESSER,
             content='<html><body><a>b</a></body></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1281,7 +1270,6 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_em(self):
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/em.html', LANGUAGEGUESSER,
             content='<html><body><em>b</em></body></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1292,7 +1280,6 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_font(self):
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/font.html', LANGUAGEGUESSER,
             content='<html><body><font>b</font></body></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1303,7 +1290,6 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_u(self):
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/u.html', LANGUAGEGUESSER,
             content='<html><body><u>b</u></body></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1314,7 +1300,6 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_strong(self):
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/strong.html', LANGUAGEGUESSER,
             content='<html><body><strong>b</strong></body></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1325,7 +1310,6 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_span(self):
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/span.html', LANGUAGEGUESSER,
             content='<html><body><span>b</span></body></html>').soup
 
         want = html5parser.document_fromstring(
@@ -1336,7 +1320,6 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_body_text(self):
         got = converter.HTMLContentConverter(
-            'orig/sme/admin/text.html', LANGUAGEGUESSER,
             content='<html><body>b</body></html>').soup
 
         want = html5parser.document_fromstring(
