@@ -1660,11 +1660,7 @@ class BiblexmlConverter(Converter):
 
 
 class HTMLContentConverter(object):
-
     '''Convert html documents to the giellatekno xml format.'''
-    def __init__(self, content=None):
-        '''Clean up content, then convert it to xhtml using html5parser'''
-        self.convert2xhtml(content)
 
     def superclean(self, content):
         cleaner = clean.Cleaner(
@@ -2126,6 +2122,8 @@ class HTMLContentConverter(object):
         self.simplify_tags()
         self.fix_spans_as_divs()
 
+        return self.soup
+
 
 class HTMLConverter(Converter):
     def __init__(self, filename, write_intermediate=False):
@@ -2137,8 +2135,8 @@ class HTMLConverter(Converter):
             d_content = self.try_decode_encodings(content, (encoding, source))
             u_content = self.remove_declared_encoding(content)
 
-            converter = HTMLContentConverter(content=u_content)
-            self.soup = converter.soup
+            converter = HTMLContentConverter()
+            self.soup = converter.convert2xhtml(u_content)
 
     def try_decode_encodings(self, content, found):
         if type(content) == six.text_type:

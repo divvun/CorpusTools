@@ -1136,8 +1136,9 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_remove_empty_p_1(self):
         '''Remove an empty p'''
-        got = converter.HTMLContentConverter(
-            content='<html><body><p/></html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            '<html><body><p/></html>')
 
         want = html5parser.document_fromstring(
             '<html><head/><body></body></html>')
@@ -1147,8 +1148,9 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_remove_empty_p_2(self):
         '''Do not remove a p with content'''
-        got = converter.HTMLContentConverter(
-            content='<html><body><p><span>spanny</span></p></html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            '<html><body><p><span>spanny</span></p></html>')
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p><span>spanny</span></p></body></html>')
@@ -1157,9 +1159,10 @@ class TestHTMLContentConverter(XMLTester):
         self.assertXmlEqual(got, want)
 
     def test_remove_empty_class(self):
-        got = converter.HTMLContentConverter(
-            content='<html><body><div class="">a</div><div class="a">'
-            '<span class="">b</span></div></html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            '<html><body><div class="">a</div><div class="a">'
+            '<span class="">b</span></div></html>')
 
         want = html5parser.document_fromstring(
             '<html><head/><body><div>a</div><div class="a">'
@@ -1169,9 +1172,10 @@ class TestHTMLContentConverter(XMLTester):
         self.assertXmlEqual(got, want)
 
     def test_remove_comment(self):
-        got = converter.HTMLContentConverter(
-            content='<html><body><b><!--Hey, buddy. --></b></body>'
-            '</html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            '<html><body><b><!--Hey, buddy. --></b></body>'
+            '</html>')
 
         want = html5parser.document_fromstring(
             '<html><head/>'
@@ -1181,9 +1185,10 @@ class TestHTMLContentConverter(XMLTester):
         self.assertXmlEqual(got, want)
 
     def test_remove_processinginstruction(self):
-        got = converter.HTMLContentConverter(
-            content='<html><body><b><?ProcessingInstruction?></b></body>'
-            '</html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            '<html><body><b><?ProcessingInstruction?></b></body>'
+            '</html>')
 
         want = html5parser.document_fromstring(
             '<html><head/><body><b/></body></html>')
@@ -1193,9 +1198,10 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_add_p_around_text1(self):
         '''Only text before next significant element'''
-        got = converter.HTMLContentConverter(
-            content=u'<html><head><title>– Den utdøende stammes frykt</title>'
-            u'</head><body><h3>VI</h3>... Finnerne<p>Der</body></html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            u'<html><head><title>– Den utdøende stammes frykt</title>'
+            u'</head><body><h3>VI</h3>... Finnerne<p>Der</body></html>')
 
         want = html5parser.document_fromstring(
             '<html><head>'
@@ -1207,9 +1213,10 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_add_p_around_text2(self):
         '''Text and i element before next significant element'''
-        got = converter.HTMLContentConverter(
-            content=u'<head><title>– Den utdøende stammes frykt</title>'
-            u'</head><body><h3>VI</h3>... Finnerne<i>Der</body></html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            u'<head><title>– Den utdøende stammes frykt</title>'
+            u'</head><body><h3>VI</h3>... Finnerne<i>Der</body></html>')
 
         want = html5parser.document_fromstring(
             '<html><head>'
@@ -1221,11 +1228,12 @@ class TestHTMLContentConverter(XMLTester):
 
     def test_add_p_around_text3(self):
         '''h2 as a stop element'''
-        got = converter.HTMLContentConverter(
-            content='<html>'
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            '<html>'
             u'<title>– Den utdøende stammes frykt</title>'
             u'</head><body><h3>VI</h3>... Finnerne<a/>'
-            u'<h2><a>Der</a></h2></body></html>').soup
+            u'<h2><a>Der</a></h2></body></html>')
 
         want = html5parser.document_fromstring(
             '<html><head><title>– Den '
@@ -1237,9 +1245,10 @@ class TestHTMLContentConverter(XMLTester):
         self.assertXmlEqual(got, want)
 
     def test_center2div(self):
-        got = converter.HTMLContentConverter(
-            content='<html><body><center><span class="">b</span>'
-            '</center></html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            '<html><body><center><span class="">b</span>'
+            '</center></html>')
 
         want = html5parser.document_fromstring(
             '<html><head/><body><div class="c1"><span>b</span></div></body>'
@@ -1249,8 +1258,9 @@ class TestHTMLContentConverter(XMLTester):
         self.assertXmlEqual(got, want)
 
     def test_body_i(self):
-        got = converter.HTMLContentConverter(
-            content='<html><body><i>b</i></body></html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            '<html><body><i>b</i></body></html>')
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p><i>b</i></p></body></html>')
@@ -1259,8 +1269,9 @@ class TestHTMLContentConverter(XMLTester):
         self.assertXmlEqual(got, want)
 
     def test_body_a(self):
-        got = converter.HTMLContentConverter(
-            content='<html><body><a>b</a></body></html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            '<html><body><a>b</a></body></html>')
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p><a>b</a></p></body></html>')
@@ -1269,8 +1280,9 @@ class TestHTMLContentConverter(XMLTester):
         self.assertXmlEqual(got, want)
 
     def test_body_em(self):
-        got = converter.HTMLContentConverter(
-            content='<html><body><em>b</em></body></html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            '<html><body><em>b</em></body></html>')
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p><em>b</em></p></body></html>')
@@ -1279,8 +1291,9 @@ class TestHTMLContentConverter(XMLTester):
         self.assertXmlEqual(got, want)
 
     def test_body_font(self):
-        got = converter.HTMLContentConverter(
-            content='<html><body><font>b</font></body></html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            '<html><body><font>b</font></body></html>')
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p><font>b</font></p></body></html>')
@@ -1289,8 +1302,9 @@ class TestHTMLContentConverter(XMLTester):
         self.assertXmlEqual(got, want)
 
     def test_body_u(self):
-        got = converter.HTMLContentConverter(
-            content='<html><body><u>b</u></body></html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            '<html><body><u>b</u></body></html>')
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p><u>b</u></p></body></html>')
@@ -1299,8 +1313,9 @@ class TestHTMLContentConverter(XMLTester):
         self.assertXmlEqual(got, want)
 
     def test_body_strong(self):
-        got = converter.HTMLContentConverter(
-            content='<html><body><strong>b</strong></body></html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            '<html><body><strong>b</strong></body></html>')
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p><strong>b</strong></p></body></html>')
@@ -1309,8 +1324,9 @@ class TestHTMLContentConverter(XMLTester):
         self.assertXmlEqual(got, want)
 
     def test_body_span(self):
-        got = converter.HTMLContentConverter(
-            content='<html><body><span>b</span></body></html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            '<html><body><span>b</span></body></html>')
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p><span>b</span></p></body></html>')
@@ -1319,8 +1335,9 @@ class TestHTMLContentConverter(XMLTester):
         self.assertXmlEqual(got, want)
 
     def test_body_text(self):
-        got = converter.HTMLContentConverter(
-            content='<html><body>b</body></html>').soup
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            '<html><body>b</body></html>')
 
         want = html5parser.document_fromstring(
             '<html><head/><body><p>b</p></body></html>')
