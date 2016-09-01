@@ -506,16 +506,13 @@ def check_unwanted_classes_and_ids(tag, key, value):
             'content:{0} {1} {2}'
             '</{0}>'.format(tag, key, value))
         inner_r = ''
-    hc = converter.HTMLContentConverter(
-        'orig/sme/admin/bogus.html',
-        content='<html><body>'
-        '{}</body>'
-        '</html>'.format(inner))
+    got = converter.HTMLContentConverter().convert2xhtml(
+        '<html><body>{}</body></html>'.format(inner))
 
     want = html5parser.document_fromstring(
         '<html><body>{}</body></html>'.format(inner_r))
 
-    if etree.tostring(hc.soup) != etree.tostring(want):
+    if etree.tostring(got) != etree.tostring(want):
         raise AssertionError('Remove classes and ids:\nexpected {}\ngot {}'.format(
             etree.tostring(want), etree.tostring(hc.soup)))
 
@@ -534,10 +531,9 @@ def test_remove_unwanted_tags():
         yield check_unwanted_tag, unwanted_tag
 
 def check_unwanted_tag(unwanted_tag):
-    got = converter.HTMLContentConverter(
-        'orig/sme/admin/' + unwanted_tag + '.html',
-        content='<html><body><p>p1</p><%s/><p>p2</p2></body>'
-        '</html>' % unwanted_tag).soup
+    got = converter.HTMLContentConverter().convert2xhtml(
+        '<html><body><p>p1</p><%s/><p>p2</p2></body>'
+        '</html>' % unwanted_tag)
     want = html5parser.document_fromstring(
         '<html>'
         '<head/><body><p>p1</p><p>p2'
