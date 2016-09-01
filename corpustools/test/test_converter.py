@@ -1132,6 +1132,41 @@ class TestDocxConverter(XMLTester):
         self.assertXmlEqual(got, etree.fromstring(want))
 
 
+class TestEpubConverter(XMLTester):
+    """Test the epub converter."""
+
+    def setUp(self):
+        self.testdoc = converter.EpubConverter(
+            os.path.join(
+                here, 'converter_data/fakecorpus/orig/sme/riddu/test.epub'),
+            'bogus')
+
+    def test_convert2intermediate(self):
+        got = self.testdoc.convert2intermediate()
+        want = (
+            '<document>'
+            '    <header>'
+            '        <title/>'
+            '    </header>'
+            '    <body>'
+            '        <p type="title">1 Bajilčála</p>'
+            '        <p>asdf</p>'
+            '        <p type="title">1.1 Bajilčála</p>'
+            '        <p>asdf</p>'
+            '        <p type="title">1.1.1 Bajilčála</p>'
+            '        <p>asdf</p>'
+            '        <p type="title">2 Bajilčála</p>'
+            '        <p>asdf</p>'
+            '        <p type="title">2.1 Bajilčála</p>'
+            '        <p>asdf</p>'
+            '        <p type="title">2.1.1 Bajilčála</p>'
+            '        <p>asdf</p>'
+            '    </body>'
+            '</document>')
+
+        self.assertXmlEqual(got, etree.fromstring(want))
+
+
 class TestHTMLContentConverter(XMLTester):
 
     def test_remove_empty_p_1(self):

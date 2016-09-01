@@ -30,6 +30,7 @@ import collections
 from copy import deepcopy
 import distutils.dep_util
 import distutils.spawn
+import epub
 import io
 import multiprocessing
 import os
@@ -2347,6 +2348,36 @@ class DocxConverter(HTMLConverter):
                         unwanted.getparent().remove(unwanted)
 
 
+class EpubConverter(HTMLConverter):
+    """Convert docx documents to the giellatekno xml format."""
+
+    @property
+    def content(self):
+        """Get the xhtml content from epub files as a string."""
+        book = epub.Book(epub.open_epub(self.names.orig))
+
+        chapters = book.chapters
+
+        try:
+            mainfile = etree.fromstring(chapters[0].read())
+        except KeyError as e:
+            raise ConversionException(e)
+
+        mainbody = mainfile.find('{http://www.w3.org/1999/xhtml}body')
+
+        for chapter in chapters[1:]:
+            try:
+                chapterfile = etree.fromstring(chapter.read())
+                chapterbody = chapterfile.find(
+                    '{http://www.w3.org/1999/xhtml}body')
+                for element in chapterbody:
+                    mainbody.append(element)
+            except KeyError as e:
+                raise ConversionError(e)
+
+        return etree.tostring(mainfile, encoding='unicode')
+
+
 class DocConverter(HTMLConverter):
 
     '''Convert Microsoft Word documents to the giellatekno xml format'''
@@ -3159,6 +3190,10 @@ class ConverterManager(object):
 
         elif orig_file.endswith('.docx'):
             return DocxConverter(
+                orig_file, write_intermediate=self.write_intermediate)
+
+        elif orig_file.endswith('.epub'):
+            return EpubConverter(
                 orig_file, write_intermediate=self.write_intermediate)
 
         elif '.rtf' in orig_file:
