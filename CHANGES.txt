@@ -67,3 +67,4 @@ v<0.14.0>, <20160504> -- CorpusTools is now both python2 and python3 compatible
 v<0.14.1>, <20160510> -- CorpusTools now supports goldstandard files inside orig
 v<0.14.2>, <20160531> -- Improved quote detection and more tags to remove from regjeringen.no files. Improves the situation for bug 1780.
 v<0.14.3>, <20160901> -- Change paths for syntax analysis files after the gtcore -> giella-core, giella-shared transition
+v<0.15.0>, <20160901> -- Add basic support for conversion of epub files.
