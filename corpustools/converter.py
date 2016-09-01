@@ -2126,17 +2126,11 @@ class HTMLContentConverter(object):
 
 
 class HTMLConverter(Converter):
-    def __init__(self, filename, write_intermediate=False):
-        super(HTMLConverter, self).__init__(
-            filename, write_intermediate=write_intermediate)
-        with codecs.open(filename, encoding='utf8', errors='ignore') as f:
-            content=f.read()
-            encoding, source = self.get_encoding(content)
-            d_content = self.try_decode_encodings(content, (encoding, source))
-            u_content = self.remove_declared_encoding(content)
-
-            converter = HTMLContentConverter()
-            self.soup = converter.convert2xhtml(u_content)
+    @property
+    def content(self):
+        with codecs.open(self.names.orig, encoding='utf8',
+                         errors='ignore') as f:
+             return f.read()
 
     def try_decode_encodings(self, content, found):
         if type(content) == six.text_type:
@@ -2231,6 +2225,15 @@ class HTMLConverter(Converter):
         '''
         return re.sub(self.xml_encoding_declaration_re, "", content)
 
+    def convert2xhtml(self):
+        content = self.content
+        encoding, source = self.get_encoding(content)
+        d_content = self.try_decode_encodings(content, (encoding, source))
+        u_content = self.remove_declared_encoding(d_content)
+
+        converter = HTMLContentConverter()
+        return converter.convert2xhtml(u_content)
+
     def convert2intermediate(self):
         '''Convert the original document to the giellatekno xml format.
 
@@ -2242,7 +2245,7 @@ class HTMLConverter(Converter):
         transform = etree.XSLT(html_xslt_root)
 
         try:
-            intermediate = transform(self.soup)
+            intermediate = transform(self.convert2xhtml())
 
             body = intermediate.find('.//body')
             if body.text is not None and body.text.strip() != '':
@@ -2278,46 +2281,45 @@ class HTMLConverter(Converter):
                 'More info in {}'.format(self.names.log))
 
 
-class RTFConverter(HTMLContentConverter):
+class RTFConverter(HTMLConverter):
     '''Convert rtf documents to the giellatekno xml format.'''
 
-    def __init__(self, filename, write_intermediate=False):
-        with open(filename, "rb") as rtf_document:
+    @property
+    def content(self):
+        with open(self.names.orig, "rb") as rtf_document:
             content = rtf_document.read()
             try:
                 pyth_doc = Rtf15Reader.read(
                     io.BytesIO(content.replace(b'fcharset256', b'fcharset255')))
-                HTMLContentConverter.__init__(
-                    self, filename,
-                    content=six.text_type(XHTMLWriter.write(pyth_doc, pretty=True).read(), encoding='utf8'))
+                return six.text_type(XHTMLWriter.write(
+                    pyth_doc, pretty=True).read(), encoding='utf8')
             except UnicodeDecodeError:
                 raise ConversionException('Unicode problems in {}'.format(
                     self.names.orig))
 
 
-class OdfConverter(HTMLContentConverter):
+class OdfConverter(HTMLConverter):
 
     '''Convert odf documents to the giellatekno xml format'''
 
-    def __init__(self, filename, write_intermediate=False):
+    @property
+    def content(self):
         generatecss = False
         embedable = True
         odhandler = ODF2XHTML(generatecss, embedable)
         try:
-            HTMLContentConverter.__init__(self, filename,
-                                        content=odhandler.odf2xhtml(six.text_type(filename)))
+            return odhandler.odf2xhtml(six.text_type(self.names.orig))
         except TypeError as e:
             raise ConversionException('Error: {}'.format(e))
 
 
-class DocxConverter(HTMLContentConverter):
+class DocxConverter(HTMLConverter):
 
     '''Convert docx documents to the giellatekno xml format'''
 
-    def __init__(self, filename, write_intermediate=False):
-
-        HTMLContentConverter.__init__(self, filename,
-                                      content=PyDocXHTMLExporter(filename).export())
+    @property
+    def content(self):
+        return PyDocXHTMLExporter(self.names.orig).export()
 
     def remove_elements(self):
         '''Remove some docx specific html elements'''
@@ -2339,22 +2341,20 @@ class DocxConverter(HTMLContentConverter):
                         unwanted.getparent().remove(unwanted)
 
 
-class DocConverter(HTMLContentConverter):
+class DocConverter(HTMLConverter):
 
     '''Convert Microsoft Word documents to the giellatekno xml format'''
 
-    def __init__(self, filename, write_intermediate=False):
-        Converter.__init__(self, filename, write_intermediate)
+    @property
+    def content(self):
         command = ['wvHtml',
                    os.path.realpath(self.names.orig),
                    '-']
         try:
-            HTMLContentConverter.__init__(self, filename,
-                                          content=self.extract_text(command).decode('utf8'))
+            return self.extract_text(command).decode('utf8')
         except:
-            HTMLContentConverter.__init__(self, filename,
-                                          content=self.extract_text(command).decode(
-                                              'windows-1252'))
+            return self.extract_text(command).decode('windows-1252')
+
     def fix_wv_output(self):
         '''Examples of headings
 
