@@ -1697,7 +1697,7 @@ class HTMLContentConverter(Converter):
             ])
 
         try:
-            return cleaner.clean_html(self.remove_cruft(content))
+            return cleaner.clean_html(content)
         except etree.ParserError as e:
             raise ConversionException(six.text_type(e))
 
@@ -1708,17 +1708,13 @@ class HTMLContentConverter(Converter):
             (u'&nbsp;', u' '),
             (u' ', u' '),
         ]
-        return util.replace_all(replacements, self.to_unicode(content))
+        return util.replace_all(replacements, content)
 
-    def to_unicode(self, content):
-        return self.remove_declared_encoding(
-            self.try_decode_encodings(content))
-
-    def try_decode_encodings(self, content):
+    def try_decode_encodings(self, content, found):
         if type(content) == six.text_type:
             return content
         assert type(content) == str
-        found = self.get_encoding(content)
+
         more_guesses = [(c, 'guess')
                         for c in ["utf-8", "windows-1252"]
                         if c != found[0]]
@@ -2210,8 +2206,13 @@ class HTMLContentConverter(Converter):
         Destructively modifies self.soup, trying
         to create strict xhtml for xhtml2corpus.xsl
         '''
+        encoding, source = self.get_encoding(content)
+        d_content = self.try_decode_encodings(content, (encoding, source))
+        u_content = self.remove_declared_encoding(d_content)
+        c_content = self.remove_cruft(u_content)
+
         self.soup = html5parser.document_fromstring(
-            self.superclean(content))
+            self.superclean(c_content))
 
         self.remove_empty_class()
         self.remove_empty_p()
