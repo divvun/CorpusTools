@@ -2138,7 +2138,7 @@ class HTMLConverter(Converter):
     def content(self):
         with codecs.open(self.names.orig, encoding='utf8',
                          errors='ignore') as f:
-             return f.read()
+            return f.read()
 
     def try_decode_encodings(self, content, found):
         if type(content) == six.text_type:
