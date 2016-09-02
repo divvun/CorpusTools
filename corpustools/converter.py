@@ -3166,7 +3166,7 @@ class ConverterManager(object):
             conv.write_complete(self.LANGUAGEGUESSER)
         except ConversionException as e:
             print('Could not convert {}'.format(orig_file),
-                    file=sys.stderr)
+                  file=sys.stderr)
             print(six.text_type(e), file=sys.stderr)
 
     def converter(self, orig_file):
