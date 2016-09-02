@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 #
-#   Script to write a nicely indented html doc. Mainly used to debug the
-#   input to the converter.HTMLContentConverter
-#
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -20,6 +17,12 @@
 #   Copyright © 2013-2016 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
+
+"""Script to write a nicely indented html doc.
+
+Mainly used to debug the input to the converter.HTMLContentConverter.
+"""
+
 
 from __future__ import absolute_import
 

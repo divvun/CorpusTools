@@ -23,6 +23,12 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
+"""Program to pick out documents to be saved to the corpus from samediggi.se.
+
+The documents have been fetched using wget.
+"""
+
+
 from __future__ import absolute_import, print_function
 
 import os

@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 #
-#   This program converts toktmx files to tmx files useful for e.g.
-#   Autshumato ITE
-#
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -20,6 +17,12 @@
 #   Copyright © 2011-2016 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
+
+"""This program converts toktmx files to tmx files.
+
+This is` useful for e.g. Autshumato ITE.
+"""
+
 
 from __future__ import absolute_import
 

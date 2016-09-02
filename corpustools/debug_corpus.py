@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 #
-#   This script is used find out why conversion or analysis stops when ran in
-#   multiprocess mode.
-#
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -20,6 +17,8 @@
 #   Copyright © 2015-2016 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
+
+"""Find out why conversion or analysis stops when ran in multiprocess mode."""
 
 
 from __future__ import absolute_import, print_function

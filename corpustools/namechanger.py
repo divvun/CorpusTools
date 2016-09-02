@@ -1,8 +1,6 @@
 # -*- coding:utf-8 -*-
 
 #
-#   This file contains routines to change names of corpus files
-#
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -19,6 +17,9 @@
 #   Copyright © 2013-2016 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
+
+"""Classes and functions change names of corpus files."""
+
 
 from __future__ import absolute_import, print_function
 

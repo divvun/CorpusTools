@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 
 #
-#   This file contains classes to handle .typos files in $GTFREE
-#
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -20,6 +18,8 @@
 #   Copyright © 2012-2016 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
+
+"""Classes to handle .typos files in $GTFREE."""
 
 
 class Typoline(object):

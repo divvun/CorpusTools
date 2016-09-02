@@ -2,9 +2,6 @@
 # -*- coding: utf-8 -*-
 
 #
-#   Program to pick out documents to be saved to the corpus from samediggi.se.
-#   The documents have been fetched using wget.
-#
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -21,6 +18,12 @@
 #   Copyright © 2013-2016 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
+
+"""Program to pick out documents to be saved to the corpus from samediggi.se.
+
+The documents have been fetched using wget.
+"""
+
 
 from __future__ import absolute_import, print_function
 

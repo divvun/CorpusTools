@@ -20,6 +20,9 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
+"""Add version to the argument parser."""
+
+
 from __future__ import absolute_import
 
 import argparse

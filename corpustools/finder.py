@@ -18,6 +18,9 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
+"""Manage corpus files in various ways."""
+
+
 from __future__ import absolute_import, print_function, unicode_literals
 
 import collections

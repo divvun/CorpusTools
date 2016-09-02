@@ -2,9 +2,6 @@
 # -*- coding: utf-8 -*-
 
 #
-#   This file contains an implementation of the ``N-Gram-Based Text
-#   Categorization'' algorithm by Cavnar & Trenkle 1994
-#
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -22,15 +19,19 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-# Original article:
-#
-# Cavnar, W. B. and J. M. Trenkle, ``N-Gram-Based Text
-# Categorization'' In Proceedings of Third Annual Symposium on
-# Document Analysis and Information Retrieval, Las Vegas, NV, UNLV
-# Publications/Reprographics, pp. 161-175, 11-13 April 1994.
-#
-# Original Perl implementation and article available from
-# http://odur.let.rug.nl/~vannoord/TextCat/
+"""An implementation of the ``N-Gram-Based Text Categorization'' algorithm.
+
+Original article:
+
+Cavnar, W. B. and J. M. Trenkle, ``N-Gram-Based Text
+Categorization'' In Proceedings of Third Annual Symposium on
+Document Analysis and Information Retrieval, Las Vegas, NV, UNLV
+Publications/Reprographics, pp. 161-175, 11-13 April 1994.
+
+Original Perl implementation and article available from
+http://odur.let.rug.nl/~vannoord/TextCat/
+"""
+
 
 from __future__ import absolute_import, print_function, unicode_literals
 

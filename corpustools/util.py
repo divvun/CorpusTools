@@ -18,6 +18,9 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
+"""Utility functions and classes used by other modules in CorpusTools."""
+
+
 from __future__ import absolute_import, print_function, unicode_literals
 
 import inspect

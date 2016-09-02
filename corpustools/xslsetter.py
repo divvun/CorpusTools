@@ -18,6 +18,9 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
+"""Get and set metadata in metadata files."""
+
+
 from __future__ import absolute_import, print_function, unicode_literals
 
 import os

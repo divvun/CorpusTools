@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 #
-#   This program compares prestable tmx files to files produced by the
-#   parallelizer pipeline
-#
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -20,6 +17,9 @@
 #   Copyright © 2011-2016 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
+
+"""Compare prestable tmx files to files produced by the parallelizer."""
+
 
 from __future__ import absolute_import, print_function
 

@@ -1,8 +1,5 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#
-#   This file contains routines to sentence align two files
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,6 +17,9 @@
 #   Copyright © 2011-2016 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
+
+"""Classes and functions to sentence align two files."""
+
 
 from __future__ import absolute_import, print_function, unicode_literals
 
