@@ -1549,7 +1549,7 @@ class PDFPage(object):
                                         t.width < 1)]
 
     def is_inside_margins(self, t, margins):
-        """Check if t is inside the given margins
+        """Check if t is inside the given margins.
 
         t is a text element
         """
@@ -1559,7 +1559,7 @@ class PDFPage(object):
                 t.left < margins['right_margin'])
 
     def is_inside_inner_margins(self, t, margins):
-        """Check if t is inside the given margins
+        """Check if t is inside the given margins.
 
         t is a text element
         """
@@ -1582,7 +1582,7 @@ class PDFPage(object):
         return paragraphs
 
     def make_ordered_sections(self):
-        """Order the text elements the order they appear on the page
+        """Order the text elements the order they appear on the page.
 
         The text elements are placed into PDFParagraphs,
         the PDFParagraphs are placed into PDFSections and finally
@@ -1607,7 +1607,7 @@ class PDFPage(object):
         return ordered_sections
 
     def pick_valid_text_elements(self):
-        """Pick the wanted text elements from a page
+        """Pick the wanted text elements from a page.
 
         This is the main function of this class
         """
@@ -1625,7 +1625,7 @@ class PDFPage(object):
 
 
 class PDF2XMLConverter(Converter):
-    """Class to convert the xml output of pdftohtml to giellatekno xml"""
+    """Class to convert the xml output of pdftohtml to giellatekno xml."""
     def __init__(self, filename, write_intermediate=False):
         """Initialise the PDF2XMLConverte class.
 
@@ -1747,10 +1747,10 @@ class PDF2XMLConverter(Converter):
 
 class BiblexmlConverter(Converter):
 
-    """Convert bible xml files to the giellatekno xml format"""
+    """Convert bible xml files to the giellatekno xml format."""
 
     def convert2intermediate(self):
-        """Convert the bible xml to intermediate giellatekno xml format"""
+        """Convert the bible xml to intermediate giellatekno xml format."""
         document = etree.Element('document')
         document.append(self.process_bible())
 
@@ -1968,7 +1968,7 @@ class HTMLContentConverter(object):
             raise ConversionException(six.text_type(e))
 
     def remove_cruft(self, content):
-        """from svenskakyrkan.se documents"""
+        """from svenskakyrkan.se documents."""
         replacements = [
             (u'//<script', u'<script'),
             (u'&nbsp;', u' '),
@@ -2040,7 +2040,7 @@ class HTMLContentConverter(object):
             del element.attrib['class']
 
     def remove_elements(self):
-        """Remove unwanted tags from a html document
+        """Remove unwanted tags from a html document.
 
         The point with this exercise is to remove all but the main content of
         the document.
@@ -2315,7 +2315,7 @@ class HTMLContentConverter(object):
                         unwanted.getparent().remove(unwanted)
 
     def add_p_around_text(self):
-        """Add p around text after an hX element"""
+        """Add p around text after an hX element."""
         stop_tags = [
             '{http://www.w3.org/1999/xhtml}p',
             '{http://www.w3.org/1999/xhtml}h3',
