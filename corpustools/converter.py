@@ -1222,7 +1222,6 @@ class PDFPageMetadata(object):
         :return: an int telling where the margin is on the page.
         """
         coefficient = self.get_coefficient(margin)
-        #util.print_frame(margin, self.page_height, self.page_width, coefficient)
 
         if margin == 'left_margin':
             return int(coefficient * self.page_width / 100.0)
@@ -2382,7 +2381,7 @@ class EpubConverter(HTMLConverter):
                 for element in chapterbody:
                     mainbody.append(element)
             except KeyError as e:
-                raise ConversionError(e)
+                raise ConversionException(e)
 
         return etree.tostring(mainfile, encoding='unicode')
 
