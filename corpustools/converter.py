@@ -1216,7 +1216,6 @@ class PDFTextExtractor(object):
         The text and tail parts of the elements contained in the <i> and <b>
         elements become the text parts of <i> and <b> elements.
         """
-
         # print(util.lineno(), etree.tostring(textelement), file=sys.stderr)
         if textelement.text:
             self.append_text_to_p(textelement.text)
@@ -3501,7 +3500,6 @@ class LanguageDetector(object):
         language of the paragraph.
         Set the language of the quotes in the paragraph.
         """
-
         if paragraph.get('{http://www.w3.org/XML/1998/namespace}lang') is None:
             paragraph_text = self.remove_quote(paragraph)
             if self.languageGuesser is not None:
