@@ -96,7 +96,6 @@ class CorpusPath(object):
 
             raise ValueError('File is not part of a corpus: {}'.format(path))
 
-
         # Ensure we have at least one / before module, for safer splitting:
         abspath = os.path.normpath(os.path.abspath(path))
         root, module, lang_etc = split_on_module(abspath)
