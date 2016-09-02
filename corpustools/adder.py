@@ -356,7 +356,7 @@ def main():
         (root, module, lang, genre, path, basename) = util.split_path(
             args.parallel_file)
         adder = AddToCorpus(root,
-                            args.lang,
+                            six.u(args.lang),
                             os.path.join(genre, path))
 
         if not os.path.exists(args.parallel_file):
