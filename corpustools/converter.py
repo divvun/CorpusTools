@@ -3752,6 +3752,7 @@ def parse_options():
 
 
 def sanity_check():
+    """Check that needed programs and environment variables are set."""
     util.sanity_check([u'wvHtml', u'pdftotext'])
     if not os.path.isfile(Converter.get_dtd_location()):
         raise util.SetupException(
@@ -3762,6 +3763,7 @@ def sanity_check():
 
 
 def main():
+    """Convert documents to giellatekno xml format."""
     sanity_check()
     args = parse_options()
 
