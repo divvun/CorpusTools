@@ -75,7 +75,8 @@ def mover_parse_args():
 def main():
     args = mover_parse_args()
     if args.oldpath == args.newpath:
-        print('{} and {} are the same file'.format(args.oldpath, args.newpath), file=sys.stderr)
+        print('{} and {} are the same file'.format(
+            args.oldpath, args.newpath), file=sys.stderr)
     else:
         try:
             mover(args.oldpath, args.newpath)

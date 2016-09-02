@@ -1,8 +1,6 @@
 # -*- coding:utf-8 -*-
 
 #
-#   This file contains routines to add files to a corpus directory
-#
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -19,6 +17,9 @@
 #   Copyright © 2013-2016 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
+
+"""This file contains classes to add files to a corpus directory."""
+
 
 from __future__ import print_function
 from __future__ import absolute_import
@@ -43,6 +44,7 @@ class AdderException(Exception):
 
 
 class UrlDownloader(object):
+
     def __init__(self, download_dir):
         self.download_dir = download_dir
         self.headers = {
@@ -71,7 +73,8 @@ class UrlDownloader(object):
     def filename(self, response):
         '''response is a requests.get response'''
         try:
-            _, params = cgi.parse_header(response.headers['Content-Disposition'])
+            _, params = cgi.parse_header(
+                response.headers['Content-Disposition'])
             return params['filename']
         except KeyError:
             return self.add_url_extension(os.path.basename(response.url),
@@ -313,8 +316,8 @@ def parse_args():
 
     no_parallel = parser.add_argument_group('no_parallel')
     no_parallel.add_argument('-d', '--directory',
-                        dest='directory',
-                        help='The directory where the origs should be placed')
+                             dest='directory',
+                             help='The directory where the origs should be placed')
 
     return parser.parse_args()
 
@@ -324,7 +327,8 @@ def main():
 
     if args.parallel_file is None:
         if args.lang is not None:
-            print('The argument -l|--lang is not allowed together with -d|--directory', file=sys.stderr)
+            print(
+                'The argument -l|--lang is not allowed together with -d|--directory', file=sys.stderr)
             sys.exit(2)
         (root, module, lang, genre, path, basename) = util.split_path(
             os.path.join(args.directory, 'dummy.txt'))
@@ -350,8 +354,10 @@ def main():
                 print(u'Cannot handle {}'.format(orig), file=sys.stderr)
     else:
         if args.directory is not None:
-            print('The argument -d|--directory is not allowed together with -p|--parallel', file=sys.stderr)
-            print('Only -l|--lang is allowed together with -p|--parallel', file=sys.stderr)
+            print(
+                'The argument -d|--directory is not allowed together with -p|--parallel', file=sys.stderr)
+            print('Only -l|--lang is allowed together with -p|--parallel',
+                  file=sys.stderr)
             sys.exit(3)
         (root, module, lang, genre, path, basename) = util.split_path(
             args.parallel_file)

@@ -579,7 +579,8 @@ class TestCcat(unittest.TestCase):
                 '''>ášŧŋđžčøåæ</p></body></document>''')
 
             if six.PY3:
-                xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
+                xml_printer.etree = etree.parse(
+                    io.BytesIO(document.encode('utf8')))
             else:
                 xml_printer.etree = etree.parse(io.BytesIO(document))
             buffer = xml_printer.process_file()
@@ -593,7 +594,8 @@ class TestCcat(unittest.TestCase):
                 '''>ášŧŋđžčøåæ</p></body></document>''')
 
             if six.PY3:
-                xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
+                xml_printer.etree = etree.parse(
+                    io.BytesIO(document.encode('utf8')))
             else:
                 xml_printer.etree = etree.parse(io.BytesIO(document))
             buffer = xml_printer.process_file()
@@ -610,7 +612,8 @@ class TestCcat(unittest.TestCase):
             document = (
                 '<document id="no_id" xml:lang="sme"><body><p {}>ášŧŋđžčøåæ</p></body></document>'.format(types))
             if six.PY3:
-                xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
+                xml_printer.etree = etree.parse(
+                    io.BytesIO(document.encode('utf8')))
             else:
                 xml_printer.etree = etree.parse(io.BytesIO(document))
             buffer = xml_printer.process_file()
@@ -620,7 +623,8 @@ class TestCcat(unittest.TestCase):
             document = (
                 '<document id="no_id" xml:lang="sme"><body><p {}>ášŧŋđžčøåæ</p></body></document>'.format(types))
             if six.PY3:
-                xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
+                xml_printer.etree = etree.parse(
+                    io.BytesIO(document.encode('utf8')))
             else:
                 xml_printer.etree = etree.parse(io.BytesIO(document))
             buffer = xml_printer.process_file()
@@ -639,7 +643,8 @@ class TestCcat(unittest.TestCase):
                 types +
                 '''>ášŧŋđžčøåæ</p></body></document>''')
             if six.PY3:
-                xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
+                xml_printer.etree = etree.parse(
+                    io.BytesIO(document.encode('utf8')))
             else:
                 xml_printer.etree = etree.parse(io.BytesIO(document))
             buffer = xml_printer.process_file()
@@ -651,7 +656,8 @@ class TestCcat(unittest.TestCase):
                 types +
                 '''>ášŧŋđžčøåæ</p></body></document>''')
             if six.PY3:
-                xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
+                xml_printer.etree = etree.parse(
+                    io.BytesIO(document.encode('utf8')))
             else:
                 xml_printer.etree = etree.parse(io.BytesIO(document))
             buffer = xml_printer.process_file()
@@ -671,7 +677,8 @@ class TestCcat(unittest.TestCase):
                 '>ášŧŋđžčøåæ</p></body></document>')
 
             if six.PY3:
-                xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
+                xml_printer.etree = etree.parse(
+                    io.BytesIO(document.encode('utf8')))
             else:
                 xml_printer.etree = etree.parse(io.BytesIO(document))
             buffer = xml_printer.process_file()
@@ -683,7 +690,8 @@ class TestCcat(unittest.TestCase):
                 types +
                 '>ášŧŋđžčøåæ</p></body></document>')
             if six.PY3:
-                xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
+                xml_printer.etree = etree.parse(
+                    io.BytesIO(document.encode('utf8')))
             else:
                 xml_printer.etree = etree.parse(io.BytesIO(document))
             buffer = xml_printer.process_file()
@@ -703,7 +711,8 @@ class TestCcat(unittest.TestCase):
                 types +
                 '''>ášŧŋđžčøåæ</p></body></document>''')
             if six.PY3:
-                xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
+                xml_printer.etree = etree.parse(
+                    io.BytesIO(document.encode('utf8')))
             else:
                 xml_printer.etree = etree.parse(io.BytesIO(document))
             buffer = xml_printer.process_file()
@@ -858,26 +867,26 @@ class TestCcat(unittest.TestCase):
         the typos and errorlex options are True
         '''
         document = (
-                '<document id="no_id" xml:lang="sme">'
-                '   <body>'
-                '       <p>'
-                '           livččii'
-                '           <errorort correct="makkárge" errtype="á" '
-                '           pos="adv">'
-                '               makkarge'
-                '           </errorort>'
-                '           politihkka, muhto rahpasit baicca muitalivčče'
-                '           <errorlex correct="man soga">'
-                '               <errorort correct="makkár" errtype="á" '
-                '               pos="interr">'
-                '                   makkar'
-                '               </errorort>'
-                '               soga'
-                '           </errorlex>'
-                '           sii'
-                '       </p>'
-                '   </body>'
-                '</document>')
+            '<document id="no_id" xml:lang="sme">'
+            '   <body>'
+            '       <p>'
+            '           livččii'
+            '           <errorort correct="makkárge" errtype="á" '
+            '           pos="adv">'
+            '               makkarge'
+            '           </errorort>'
+            '           politihkka, muhto rahpasit baicca muitalivčče'
+            '           <errorlex correct="man soga">'
+            '               <errorort correct="makkár" errtype="á" '
+            '               pos="interr">'
+            '                   makkar'
+            '               </errorort>'
+            '               soga'
+            '           </errorlex>'
+            '           sii'
+            '       </p>'
+            '   </body>'
+            '</document>')
 
         xml_printer = ccat.XMLPrinter(typos=True, errorlex=True)
         if six.PY3:
@@ -1215,22 +1224,22 @@ class TestCcat(unittest.TestCase):
         options are True
         '''
         document = (
-                '<document id="no_id" xml:lang="nob">'
-                '   <body>'
-                '       <p>'
-                '           <errormorphsyn cat="sg3prs" const="v" '
-                '           correct="lea okta mánná" errtype="agr" '
-                '           orig="pl3prs" pos="v">'
-                '               leat'
-                '               <errormorphsyn cat="nomsg" const="spred" '
-                '               correct="okta mánná" errtype="case" '
-                '               orig="gensg" pos="n">'
-                '                   okta máná'
-                '               </errormorphsyn>'
-                '           </errormorphsyn>'
-                '       </p>'
-                '   </body>'
-                '</document>')
+            '<document id="no_id" xml:lang="nob">'
+            '   <body>'
+            '       <p>'
+            '           <errormorphsyn cat="sg3prs" const="v" '
+            '           correct="lea okta mánná" errtype="agr" '
+            '           orig="pl3prs" pos="v">'
+            '               leat'
+            '               <errormorphsyn cat="nomsg" const="spred" '
+            '               correct="okta mánná" errtype="case" '
+            '               orig="gensg" pos="n">'
+            '                   okta máná'
+            '               </errormorphsyn>'
+            '           </errormorphsyn>'
+            '       </p>'
+            '   </body>'
+            '</document>')
 
         xml_printer = ccat.XMLPrinter(typos=True, errormorphsyn=True)
         if six.PY3:

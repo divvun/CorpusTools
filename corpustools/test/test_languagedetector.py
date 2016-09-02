@@ -65,7 +65,8 @@ class TestLanguageDetector(XMLTester):
 
     def test_set_paragraph_language_preset_language(self):
         orig_paragraph = '<p xml:lang="sme">I Orohagat</p>'
-        expected_paragraph = etree.fromstring('<p xml:lang="sme">I Orohagat</p>')
+        expected_paragraph = etree.fromstring(
+            '<p xml:lang="sme">I Orohagat</p>')
 
         language_detector = converter.LanguageDetector(self.root,
                                                        LANGUAGEGUESSER)

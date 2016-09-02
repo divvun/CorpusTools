@@ -77,7 +77,7 @@ class GenerateAnchorList(object):
             if not quiet:
                 util.note('Generating anchor word list to {}'.format(outpath))
             out = u"\n".join(u"{} / {}".format(w1, w2)
-                            for w1, w2 in anchors)
+                             for w1, w2 in anchors)
             outfile.write(out)
             outfile.write('\n')
 
@@ -105,7 +105,8 @@ def main():
     args = parse_options()
 
     gal = GenerateAnchorList(args.lang1, args.lang2,
-                             ['eng', 'nob', 'sme', 'fin', 'smj', 'sma', 'smn', 'sms'],
+                             ['eng', 'nob', 'sme', 'fin',
+                                 'smj', 'sma', 'smn', 'sms'],
                              args.input_file)
     gal.generate_file("{}/anchor-{}{}.txt".format(args.outdir,
                                                   args.lang1,

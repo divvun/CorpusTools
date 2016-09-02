@@ -43,6 +43,7 @@ PathPair = namedtuple('PathPair', 'oldpath newpath')
 
 class MovepairComputer(object):
     '''Compute oldname, newname pairs'''
+
     def __init__(self):
         '''filepairs will be a list of PathPairs'''
         self.filepairs = []
@@ -94,7 +95,8 @@ class MovepairComputer(object):
                 parallel))
             no_mv_needed = (old_components.genre == new_components.genre and
                             old_components.subdirs == new_components.subdirs)
-            self.compute_movepairs(oldparellelpath, newparallelpath, no_mv_needed)
+            self.compute_movepairs(
+                oldparellelpath, newparallelpath, no_mv_needed)
 
     def compute_all_movepairs(self, oldpath, newpath):
         self.compute_movepairs(oldpath, newpath)
@@ -103,6 +105,7 @@ class MovepairComputer(object):
 
 class CorpusFileMover(object):
     '''Move an original file and all its derived files.'''
+
     def __init__(self, oldpath, newpath):
         '''Class to move corpus files
 
@@ -198,6 +201,7 @@ class CorpusFileMover(object):
 
 class CorpusFileRemover(object):
     '''Remove an original file and all its derived files'''
+
     def __init__(self, oldpath):
         '''Class to remove corpus files
 
@@ -354,7 +358,8 @@ class CorpusFilesetMoverAndUpdater(object):
                     if (old_components.genre != new_components.genre):
                         metadatafile.set_variable('genre', new_components.genre)
                     if (old_components.lang != new_components.lang):
-                        metadatafile.set_variable('mainlang', new_components.lang)
+                        metadatafile.set_variable(
+                            'mainlang', new_components.lang)
                     metadatafile.write_file()
                     self.vcs.add(metadataname)
 
@@ -391,7 +396,7 @@ class CorpusFilesetMoverAndUpdater(object):
                         parallel_metadatafile = xslsetter.MetadataHandler(
                             parallel_name)
                         parallel_metadatafile.set_parallel_text(
-                                old_components.lang, u'')
+                            old_components.lang, u'')
                         parallel_metadatafile.write_file()
                         self.vcs.add(parallel_name)
 
@@ -499,7 +504,8 @@ def compute_new_basename(oldpath, wanted_path):
                 dot = wanted_basename.rfind('.')
                 extension = wanted_basename[dot:]
                 pre_extension = wanted_basename[:dot]
-                new_basename = pre_extension + u'_' + six.text_type(n) + extension
+                new_basename = pre_extension + \
+                    u'_' + six.text_type(n) + extension
             else:
                 new_basename = wanted_basename + six.text_type(n)
             newpath = os.path.join(os.path.dirname(wanted_path), new_basename)

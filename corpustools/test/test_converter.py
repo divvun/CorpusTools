@@ -49,7 +49,7 @@ def clean_namespaces(elementlist):
         for el in root.getiterator():
             i = el.tag.find('}')
             if i >= 0:
-                el.tag = el.tag[i+1:]
+                el.tag = el.tag[i + 1:]
 
         objectify.deannotate(root, cleanup_namespaces=True)
 
@@ -155,14 +155,14 @@ def test_detect_quote():
             name='quote within QUOTATION MARK',
             orig='<p>bla "bla" bla "bla" bla </p>',
             expected=(
-                     '<p>bla <span type="quote">"bla"</span> bla'
-                     '<span type="quote">"bla"</span> bla</p>')),
+                '<p>bla <span type="quote">"bla"</span> bla'
+                '<span type="quote">"bla"</span> bla</p>')),
         TestItem(
             name='quote within RIGHT DOUBLE QUOTATION MARK',
             orig='<p>bla bla ”bla bla” bla bla </p>',
             expected=(
-                     '<p>bla bla <span type="quote">”bla bla”</span> '
-                     'bla bla</p>')),
+                '<p>bla bla <span type="quote">”bla bla”</span> '
+                'bla bla</p>')),
         TestItem(
             name=(
                 'quote within LEFT DOUBLE QUOTATION MARK and '
@@ -213,12 +213,12 @@ def test_detect_quote():
     for i in '.,?!:':
         quote_tests.append(
             TestItem(
-            name='quote followed by {}'.format(i),
-            orig=(
-                '<p>“bla”{} bla ”bla”</p>'.format(i)),
-            expected=(
-                '<p><span type="quote">“bla”</span>{} bla '
-                '<span type="quote">”bla”</span></p>'.format(i))))
+                name='quote followed by {}'.format(i),
+                orig=(
+                    '<p>“bla”{} bla ”bla”</p>'.format(i)),
+                expected=(
+                    '<p><span type="quote">“bla”</span>{} bla '
+                    '<span type="quote">”bla”</span></p>'.format(i))))
 
     for name, orig, expected in quote_tests:
         yield check_quote_detection, name, orig, expected
@@ -228,8 +228,8 @@ def check_quote_detection(name, orig, expected):
     document_fixer = converter.DocumentFixer(
         etree.parse(
             os.path.join(here,
-                            'converter_data/samediggi-article-48s-before-'
-                            'lang-detection-without-multilingual-tag.xml')))
+                         'converter_data/samediggi-article-48s-before-'
+                         'lang-detection-without-multilingual-tag.xml')))
     got_paragraph = document_fixer.detect_quote(
         etree.fromstring(orig))
 
@@ -493,12 +493,15 @@ def test_remove_unwanted_classes_and_ids():
             for value in values:
                 yield check_unwanted_classes_and_ids, tag, key, value
 
+
 def check_unwanted_classes_and_ids(tag, key, value):
     if tag == 'tr':
-        inner = '<table><tbody><{0} {1}="{2}"><td>content:{0} {1} {2}</td></tbody></table>'.format(tag, key, value)
+        inner = '<table><tbody><{0} {1}="{2}"><td>content:{0} {1} {2}</td></tbody></table>'.format(
+            tag, key, value)
         inner_r = '<table><tbody/></table>'
     elif tag == 'td':
-        inner = '<table><tbody><tr><{0} {1}="{2}">content:{0} {1} {2}</tr></tbody></table>'.format(tag, key, value)
+        inner = '<table><tbody><tr><{0} {1}="{2}">content:{0} {1} {2}</tr></tbody></table>'.format(
+            tag, key, value)
         inner_r = '<table><tbody><tr/></tbody></table>'
     else:
         inner = (
@@ -530,6 +533,7 @@ def test_remove_unwanted_tags():
     for unwanted_tag in unwanted_tags:
         yield check_unwanted_tag, unwanted_tag
 
+
 def check_unwanted_tag(unwanted_tag):
     got = converter.HTMLContentConverter().convert2xhtml(
         '<html><body><p>p1</p><%s/><p>p2</p2></body>'
@@ -543,8 +547,8 @@ def check_unwanted_tag(unwanted_tag):
     assertXmlEqual(got, want)
 
 
-
 class TestComputeCorpusnames(unittest.TestCase):
+
     def name(self, module):
         return os.path.join(here, module, 'sme/admin/subdir/subsubdir/filename.html')
 
@@ -583,6 +587,7 @@ class TestComputeCorpusnames(unittest.TestCase):
 
 
 class TestConverter(XMLTester):
+
     def setUp(self):
         self.converter_inside_orig = converter.Converter(
             os.path.join(here,
@@ -1378,6 +1383,7 @@ class TestHTMLContentConverter(XMLTester):
 
 
 class TestHTMLConverter(XMLTester):
+
     def test_convert2intermediate_with_bare_text_after_p(self):
         filename = 'orig/sme/admin/ugga.html'
         content = '''
@@ -3142,13 +3148,13 @@ LOGO: Smi kulturfestivala 1998
 
     def test_word_count(self):
         document = (
-                '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
-                '<author><unknown/></author><availability><free/>'
-                '</availability><multilingual/></header><body><p>Bïevnesh '
-                'naasjovnalen pryövoej bïjre</p><p>2008</p><p>Bïevnesh '
-                'eejhtegidie, tjidtjieh aehtjieh bielide naasjovnalen '
-                'pryövoej bïjre giej leah maanah 5. jïh 8. '
-                'tsiehkine</p></body></document>')
+            '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
+            '<author><unknown/></author><availability><free/>'
+            '</availability><multilingual/></header><body><p>Bïevnesh '
+            'naasjovnalen pryövoej bïjre</p><p>2008</p><p>Bïevnesh '
+            'eejhtegidie, tjidtjieh aehtjieh bielide naasjovnalen '
+            'pryövoej bïjre giej leah maanah 5. jïh 8. '
+            'tsiehkine</p></body></document>')
         if six.PY3:
             document = document.encode('utf8')
         orig_doc = etree.parse(
@@ -3166,14 +3172,15 @@ LOGO: Smi kulturfestivala 1998
         document_fixer = converter.DocumentFixer(orig_doc)
         document_fixer.set_word_count()
 
-        self.assertXmlEqual(document_fixer.root, etree.fromstring(expected_doc))
+        self.assertXmlEqual(document_fixer.root,
+                            etree.fromstring(expected_doc))
 
     def test_replace_shy1(self):
         document = (
-                '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
-                '<author><unknown/></author><availability><free/>'
-                '</availability><multilingual/></header><body><p>a­b­c'
-                '<span>d­e</span>f­g</p></body></document>')
+            '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
+            '<author><unknown/></author><availability><free/>'
+            '</availability><multilingual/></header><body><p>a­b­c'
+            '<span>d­e</span>f­g</p></body></document>')
         if six.PY3:
             document = document.encode('utf8')
         orig_doc = etree.parse(
@@ -3188,14 +3195,15 @@ LOGO: Smi kulturfestivala 1998
         document_fixer = converter.DocumentFixer(orig_doc)
         document_fixer.soft_hyphen_to_hyph_tag()
 
-        self.assertXmlEqual(document_fixer.root, etree.fromstring(expected_doc))
+        self.assertXmlEqual(document_fixer.root,
+                            etree.fromstring(expected_doc))
 
     def test_replace_shy2(self):
         document = (
-                '<document xml:lang="sma" id="no_id">'
-                '<header><title/><genre/><author><unknown/></author>'
-                '<availability><free/></availability><multilingual/></header>'
-                '<body><p>a­b­c<span>d­e</span></p></body></document>')
+            '<document xml:lang="sma" id="no_id">'
+            '<header><title/><genre/><author><unknown/></author>'
+            '<availability><free/></availability><multilingual/></header>'
+            '<body><p>a­b­c<span>d­e</span></p></body></document>')
         if six.PY3:
             document = document.encode('utf8')
         orig_doc = etree.parse(
@@ -3210,7 +3218,8 @@ LOGO: Smi kulturfestivala 1998
         document_fixer = converter.DocumentFixer(orig_doc)
         document_fixer.soft_hyphen_to_hyph_tag()
 
-        self.assertXmlEqual(document_fixer.root, etree.fromstring(expected_doc))
+        self.assertXmlEqual(document_fixer.root,
+                            etree.fromstring(expected_doc))
 
     def test_compact_em1(self):
         document_fixer = converter.DocumentFixer(etree.fromstring(r'''<document>
@@ -3402,6 +3411,7 @@ LOGO: Smi kulturfestivala 1998
 
         self.assertXmlEqual(got, want)
 
+
 class TestXslMaker(XMLTester):
 
     def test_get_xsl(self):
@@ -3429,6 +3439,7 @@ class TestXslMaker(XMLTester):
 
 
 class TestPDFTextElement(XMLTester):
+
     def test_font_property(self):
         '''When top is the same, two text elements are on the same line'''
         t1 = converter.PDFTextElement(etree.fromstring(
@@ -3483,11 +3494,12 @@ class TestPDFTextElement(XMLTester):
 
         prev_t.merge_text_elements(t1)
         self.assertXmlEqual(prev_t.t,
-            etree.fromstring('<text top="354" left="119" width="211" height="22" font="2">'
-            '1.1. RIEKTEJOAVKKU </text>'))
+                            etree.fromstring('<text top="354" left="119" width="211" height="22" font="2">'
+                                             '1.1. RIEKTEJOAVKKU </text>'))
 
 
 class TestPDFParagraph(XMLTester):
+
     def setUp(self):
         self.textelements = [
             converter.PDFTextElement(etree.fromstring(
@@ -3505,8 +3517,10 @@ class TestPDFParagraph(XMLTester):
         self.assertListEqual(pp.textelements, self.textelements[:-2])
         self.assertEqual(pp.boundingboxes[-1].top, self.textelements[0].top)
         self.assertEqual(pp.boundingboxes[-1].left, self.textelements[0].left)
-        self.assertEqual(pp.boundingboxes[-1].bottom, self.textelements[0].bottom)
-        self.assertEqual(pp.boundingboxes[-1].right, self.textelements[0].right)
+        self.assertEqual(
+            pp.boundingboxes[-1].bottom, self.textelements[0].bottom)
+        self.assertEqual(
+            pp.boundingboxes[-1].right, self.textelements[0].right)
         self.assertEqual(len(pp.boundingboxes), 1)
 
     def test_append_textelement_from_same_column(self):
@@ -3518,8 +3532,10 @@ class TestPDFParagraph(XMLTester):
         self.assertEqual(len(pp.boundingboxes), 1)
         self.assertEqual(pp.boundingboxes[-1].top, self.textelements[0].top)
         self.assertEqual(pp.boundingboxes[-1].left, self.textelements[1].left)
-        self.assertEqual(pp.boundingboxes[-1].bottom, self.textelements[1].bottom)
-        self.assertEqual(pp.boundingboxes[-1].right, self.textelements[1].right)
+        self.assertEqual(
+            pp.boundingboxes[-1].bottom, self.textelements[1].bottom)
+        self.assertEqual(
+            pp.boundingboxes[-1].right, self.textelements[1].right)
 
     def test_append_textelement_from_different_column(self):
         pp = converter.PDFParagraph()
@@ -3532,12 +3548,16 @@ class TestPDFParagraph(XMLTester):
         self.assertEqual(len(pp.boundingboxes), 2)
         self.assertEqual(pp.boundingboxes[-2].top, self.textelements[0].top)
         self.assertEqual(pp.boundingboxes[-2].left, self.textelements[1].left)
-        self.assertEqual(pp.boundingboxes[-2].bottom, self.textelements[1].bottom)
-        self.assertEqual(pp.boundingboxes[-2].right, self.textelements[1].right)
+        self.assertEqual(
+            pp.boundingboxes[-2].bottom, self.textelements[1].bottom)
+        self.assertEqual(
+            pp.boundingboxes[-2].right, self.textelements[1].right)
         self.assertEqual(pp.boundingboxes[-1].top, self.textelements[2].top)
         self.assertEqual(pp.boundingboxes[-1].left, self.textelements[2].left)
-        self.assertEqual(pp.boundingboxes[-1].bottom, self.textelements[2].bottom)
-        self.assertEqual(pp.boundingboxes[-1].right, self.textelements[2].right)
+        self.assertEqual(
+            pp.boundingboxes[-1].bottom, self.textelements[2].bottom)
+        self.assertEqual(
+            pp.boundingboxes[-1].right, self.textelements[2].right)
 
     def test_append_first_textelement_with_list_character_F0B7(self):
         pp = converter.PDFParagraph()
@@ -3811,10 +3831,14 @@ class TestPDFParagraph(XMLTester):
 
 
 class TestPDFFontspecs(unittest.TestCase):
+
     def test_add_fontspec(self):
-        f1 = etree.fromstring('<fontspec id="1" size="13" family="Times" color="#231f20"/>')
-        f2 = etree.fromstring('<fontspec id="5" size="19" family="Times" color="#231f20"/>')
-        f3 = etree.fromstring('<fontspec id="6" size="13" family="Times" color="#231f20"/>')
+        f1 = etree.fromstring(
+            '<fontspec id="1" size="13" family="Times" color="#231f20"/>')
+        f2 = etree.fromstring(
+            '<fontspec id="5" size="19" family="Times" color="#231f20"/>')
+        f3 = etree.fromstring(
+            '<fontspec id="6" size="13" family="Times" color="#231f20"/>')
 
         pdffontspecs = converter.PDFFontspecs()
         pdffontspecs.add_fontspec(f1)
@@ -3849,6 +3873,7 @@ class TestPDFFontspecs(unittest.TestCase):
 
 
 class TestPDFTextExtractor(XMLTester):
+
     def test_extract_textelement1(self):
         '''Extract text from a plain pdf2xml text element'''
         p2x = converter.PDFTextExtractor()
@@ -4041,13 +4066,15 @@ class TestPDFTextExtractor(XMLTester):
             '<text top="961" left="152" width="334" height="26" font="0"> </text>',  # U+F071
             '<text top="961" left="152" width="334" height="26" font="0">•\t</text>',  # U+2022: BULLET
             '<text top="961" left="152" width="334" height="26" font="0">– </text>',  # U+2013: EN DASH
-            '<text top="961" left="152" width="334" height="26" font="0">- </text>',  # U+002D: HYPHEN-MINUS
+            # U+002D: HYPHEN-MINUS
+            '<text top="961" left="152" width="334" height="26" font="0">- </text>',
         ]
 
         paragraphs = []
         for t in texts:
             pp = converter.PDFParagraph()
-            pp.append_textelement(converter.PDFTextElement(etree.fromstring(t)))
+            pp.append_textelement(
+                converter.PDFTextElement(etree.fromstring(t)))
             paragraphs.append(pp)
 
         p2x = converter.PDFTextExtractor()
@@ -4065,6 +4092,7 @@ class TestPDFTextExtractor(XMLTester):
 
 
 class TestPDFSection(XMLTester):
+
     def test_is_same_section_paragraph_following_listitems(self):
         section_elements = [
             '<text top="478" left="51" width="245" height="18" font="1">Leat geatnegahtton kártengeahččaleamit:</text>',
@@ -4112,6 +4140,7 @@ Interval = collections.namedtuple('Interval', ['start', 'end'])
 
 
 class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
+
     def setUp(self):
         self.start_page = etree.fromstring('''
             <page number="258" position="absolute" top="0" left="0" height="1261" width="892">
@@ -4419,6 +4448,7 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(XMLTester):
 
 
 class TestProblematicPageTwoColumnsHeaderLast(XMLTester):
+
     def setUp(self):
         self.start_page = etree.fromstring(u'''
             <page height="1261" left="0" number="258" position="absolute" top="0" width="892">
@@ -4759,6 +4789,7 @@ class TestProblematicPageThreeColumns(XMLTester):
     * paragraphs are made correctly
     * the ordering of paragraphs is done correctly.
     '''
+
     def setUp(self):
         self.start_page = etree.fromstring(u'''
             <page number="1" position="absolute" top="0" left="0" height="1262" width="892">
@@ -5059,7 +5090,8 @@ class TestProblematicPageThreeColumns(XMLTester):
 
         pp = converter.PDFPage(self.start_page)
         pp.adjust_line_heights()
-        expected_page = etree.fromstring('<page number="1" position="absolute" top="0" left="0" height="1262" width="892"/>')
+        expected_page = etree.fromstring(
+            '<page number="1" position="absolute" top="0" left="0" height="1262" width="892"/>')
         for pdftextelement in pp.textelements:
             expected_page.append(pdftextelement.t)
 
@@ -5191,7 +5223,8 @@ class TestProblematicPageThreeColumns(XMLTester):
         pp.adjust_line_heights()
         pp.remove_elements_not_within_margin()
 
-        expected_page = etree.fromstring('<page number="1" position="absolute" top="0" left="0" height="1262" width="892"/>')
+        expected_page = etree.fromstring(
+            '<page number="1" position="absolute" top="0" left="0" height="1262" width="892"/>')
         for pdftextelement in pp.textelements:
             expected_page.append(pdftextelement.t)
 
@@ -5407,6 +5440,7 @@ class TestProblematicPageThreeColumns(XMLTester):
 
 
 class TestPDFPageMetaData(unittest.TestCase):
+
     def test_compute_default_margins(self):
         '''Test if the default margins are set'''
         page1 = converter.PDFPageMetadata(page_number=1,
@@ -5506,6 +5540,7 @@ class TestPDFPageMetaData(unittest.TestCase):
 
 
 class TestPDFPage(XMLTester):
+
     def test_merge_text_elements(self):
         page = etree.fromstring(u'''
             <page number="1" height="1263" width="862">'
@@ -5518,8 +5553,8 @@ class TestPDFPage(XMLTester):
         self.assertEqual(len(pdfpage.textelements), 1)
         self.assertXmlEqual(pdfpage.textelements[0].t,
                             etree.fromstring('<text top="197" left="257" width="497" height="20" font="8">'
-                            'Departemeanttat fertejit dahkat vuolit et&#225;htaid '
-                            'dihtomielala&#382;&#382;an das </text>'))
+                                             'Departemeanttat fertejit dahkat vuolit et&#225;htaid '
+                                             'dihtomielala&#382;&#382;an das </text>'))
 
     def test_remove_footnotes_superscript_1(self):
         '''Footnote superscript is in the middle of a sentence'''
@@ -5573,7 +5608,8 @@ class TestPDFPage(XMLTester):
         pdfpage = converter.PDFPage(page)
         pdfpage.remove_footnotes_superscript()
 
-        page_want = [u'riektedilálašvuođa', u'', u' čielggadeamit" (min deattuhus) ráddjejuvvot dasa mii ']
+        page_want = [u'riektedilálašvuođa', u'',
+                     u' čielggadeamit" (min deattuhus) ráddjejuvvot dasa mii ']
 
         self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements],
                              page_want)
@@ -5590,7 +5626,8 @@ class TestPDFPage(XMLTester):
         pdfpage = converter.PDFPage(page)
         pdfpage.remove_footnotes_superscript()
 
-        page_want = [u'báhcánvuoigatvuođa', u' ', u' - nuppiin sániiguin dan mii áiggis áigái ii leat čuldon dahje earát váldán. ']
+        page_want = [u'báhcánvuoigatvuođa', u' ',
+                     u' - nuppiin sániiguin dan mii áiggis áigái ii leat čuldon dahje earát váldán. ']
 
         self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements],
                              page_want)
@@ -5607,7 +5644,8 @@ class TestPDFPage(XMLTester):
         pdfpage = converter.PDFPage(page)
         pdfpage.remove_footnotes_superscript()
 
-        page_want = [u'Boazu lea, nu movt eará smirezasti', u' ', u'eallit nai, ere-']
+        page_want = [u'Boazu lea, nu movt eará smirezasti',
+                     u' ', u'eallit nai, ere-']
 
         self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements],
                              page_want)
@@ -5624,7 +5662,8 @@ class TestPDFPage(XMLTester):
         pdfpage = converter.PDFPage(page)
         pdfpage.remove_footnotes_superscript()
 
-        page_want = [u"Boazu lea, nu movt eará smirezasti", u"", u"eallit nai, ere-"]
+        page_want = [u"Boazu lea, nu movt eará smirezasti",
+                     u"", u"eallit nai, ere-"]
 
         self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements],
                              page_want)
@@ -5649,7 +5688,8 @@ class TestPDFPage(XMLTester):
         pdfpage.remove_elements_not_within_margin()
         page_want = ["1", "3"]
 
-        self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements], page_want)
+        self.assertListEqual([t.t.xpath('string()')
+                              for t in pdfpage.textelements], page_want)
 
     def test_remove_elements_not_within_margin_2(self):
         '''Check that no elements are removed when inner_margins is not defined for the page'''
@@ -5666,11 +5706,13 @@ class TestPDFPage(XMLTester):
                 '</page>'
             ])
         )
-        pdfpage = converter.PDFPage(page, metadata_inner_margins=md.inner_margins)
+        pdfpage = converter.PDFPage(
+            page, metadata_inner_margins=md.inner_margins)
         pdfpage.remove_elements_not_within_margin()
         page_want = ["1", "2", "3"]
 
-        self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements], page_want)
+        self.assertListEqual([t.t.xpath('string()')
+                              for t in pdfpage.textelements], page_want)
 
     def test_adjust_line_heights(self):
         page = etree.fromstring(
@@ -5685,106 +5727,123 @@ class TestPDFPage(XMLTester):
         pdfpage.adjust_line_heights()
 
         wanted_heights = [18, 18]
-        self.assertListEqual([t.height for t in pdfpage.textelements], wanted_heights)
+        self.assertListEqual(
+            [t.height for t in pdfpage.textelements], wanted_heights)
 
     def test_is_inside_margins1(self):
         '''top and left inside margins'''
-        t = converter.PDFTextElement(etree.fromstring('<text top="109" left="135"/>'))
+        t = converter.PDFTextElement(
+            etree.fromstring('<text top="109" left="135"/>'))
         margins = {}
         margins['left_margin'] = 62
         margins['right_margin'] = 802
         margins['top_margin'] = 88
         margins['bottom_margin'] = 1174
 
-        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
+        p2x = converter.PDFPage(etree.fromstring(
+            '<page number="2" height="1263" width="862"/>'))
 
         self.assertTrue(p2x.is_inside_margins(t, margins))
 
     def test_is_inside_margins2(self):
         '''top above top margin and left inside margins'''
-        t = converter.PDFTextElement(etree.fromstring('<text top="85" left="135"/>'))
+        t = converter.PDFTextElement(
+            etree.fromstring('<text top="85" left="135"/>'))
         margins = {}
         margins['left_margin'] = 62
         margins['right_margin'] = 802
         margins['top_margin'] = 88
         margins['bottom_margin'] = 1174
 
-        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
+        p2x = converter.PDFPage(etree.fromstring(
+            '<page number="2" height="1263" width="862"/>'))
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
     def test_is_inside_margins3(self):
         '''top below bottom margin and left inside margins'''
-        t = converter.PDFTextElement(etree.fromstring('<text top="1178" left="135"/>'))
+        t = converter.PDFTextElement(
+            etree.fromstring('<text top="1178" left="135"/>'))
         margins = {}
         margins['left_margin'] = 62
         margins['right_margin'] = 802
         margins['top_margin'] = 88
         margins['bottom_margin'] = 1174
 
-        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
+        p2x = converter.PDFPage(etree.fromstring(
+            '<page number="2" height="1263" width="862"/>'))
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
     def test_is_inside_margins4(self):
         '''top inside margins and left outside right margin'''
-        t = converter.PDFTextElement(etree.fromstring('<text top="1000" left="50"/>'))
+        t = converter.PDFTextElement(
+            etree.fromstring('<text top="1000" left="50"/>'))
         margins = {}
         margins['left_margin'] = 62
         margins['right_margin'] = 802
         margins['top_margin'] = 88
         margins['bottom_margin'] = 1174
 
-        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
+        p2x = converter.PDFPage(etree.fromstring(
+            '<page number="2" height="1263" width="862"/>'))
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
     def test_is_inside_margins5(self):
         '''top inside margins and left outside left margin'''
-        t = converter.PDFTextElement(etree.fromstring('<text top="1000" left="805"/>'))
+        t = converter.PDFTextElement(
+            etree.fromstring('<text top="1000" left="805"/>'))
         margins = {}
         margins['left_margin'] = 62
         margins['right_margin'] = 802
         margins['top_margin'] = 88
         margins['bottom_margin'] = 1174
 
-        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
+        p2x = converter.PDFPage(etree.fromstring(
+            '<page number="2" height="1263" width="862"/>'))
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
     def test_is_skip_page_1(self):
         '''Odd page should be skipped when odd is in skip_pages'''
-        p2x = converter.PDFPage(etree.fromstring('<page number="1" height="1263" width="862"/>'))
+        p2x = converter.PDFPage(etree.fromstring(
+            '<page number="1" height="1263" width="862"/>'))
 
         self.assertTrue(p2x.is_skip_page(['odd']))
 
     def test_is_skip_page_2(self):
         '''Even page should be skipped when even is in skip_pages'''
-        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
+        p2x = converter.PDFPage(etree.fromstring(
+            '<page number="2" height="1263" width="862"/>'))
 
         self.assertTrue(p2x.is_skip_page(['even']))
 
     def test_is_skip_page_3(self):
         '''Even page should not be skipped when odd is in skip_pages'''
-        p2x = converter.PDFPage(etree.fromstring('<page number="2" height="1263" width="862"/>'))
+        p2x = converter.PDFPage(etree.fromstring(
+            '<page number="2" height="1263" width="862"/>'))
 
         self.assertFalse(p2x.is_skip_page(['odd']))
 
     def test_is_skip_page_4(self):
         '''Odd page should not be skipped when even is in skip_pages'''
-        p2x = converter.PDFPage(etree.fromstring('<page number="1" height="1263" width="862"/>'))
+        p2x = converter.PDFPage(etree.fromstring(
+            '<page number="1" height="1263" width="862"/>'))
 
         self.assertFalse(p2x.is_skip_page(['even']))
 
     def test_is_skip_page_5(self):
         '''Page should not be skipped when not in skip_range'''
-        p2x = converter.PDFPage(etree.fromstring('<page number="1" height="1263" width="862"/>'))
+        p2x = converter.PDFPage(etree.fromstring(
+            '<page number="1" height="1263" width="862"/>'))
 
         self.assertFalse(p2x.is_skip_page(['even', 3]))
 
     def test_is_skip_page_6(self):
         '''Page should be skipped when in skip_range'''
-        p2x = converter.PDFPage(etree.fromstring('<page number="3" height="1263" width="862"/>'))
+        p2x = converter.PDFPage(etree.fromstring(
+            '<page number="3" height="1263" width="862"/>'))
 
         self.assertTrue(p2x.is_skip_page(['even', 3]))
 
@@ -5803,6 +5862,7 @@ class TestPDFPage(XMLTester):
 
 class TestPDF2XMLConverter(XMLTester):
     '''Test the class that converts from pdf2xml to giellatekno/divvun xml'''
+
     def test_pdf_converter(self):
         pdfdocument = converter.PDF2XMLConverter(
             os.path.join(here, 'converter_data/fakecorpus/orig/sme/riddu/pdf-test.pdf'))
@@ -6040,12 +6100,12 @@ class TestPDF2XMLConverter(XMLTester):
         self.assertXmlEqual(
             p2x.extractor.body,
             etree.fromstring(u'<body>'
-            u'<p>vuosttaš dábálaš linnjá</p>'
-            u'<p type="listitem">• Vuosttaš listolinnjá  '
-            u'vuosttaš listolinnjá joaktta</p>'
-            u'<p type="listitem">• Nubbi listo\xADlinnjá</p>'
-            u'<p>Nubbi dábáláš linnjá</p>'
-            u'</body>'))
+                             u'<p>vuosttaš dábálaš linnjá</p>'
+                             u'<p type="listitem">• Vuosttaš listolinnjá  '
+                             u'vuosttaš listolinnjá joaktta</p>'
+                             u'<p type="listitem">• Nubbi listo\xADlinnjá</p>'
+                             u'<p>Nubbi dábáláš linnjá</p>'
+                             u'</body>'))
 
     def test_parse_page_14(self):
         '''Test that elements outside margin is not added'''
@@ -6065,8 +6125,8 @@ class TestPDF2XMLConverter(XMLTester):
         self.assertXmlEqual(
             p2x.extractor.body,
             etree.fromstring('<body>'
-            '<p>1751, </p>'
-            '</body>'))
+                             '<p>1751, </p>'
+                             '</body>'))
 
     def test_parse_page_soria_moria(self):
         '''The last element was not added to the p element'''

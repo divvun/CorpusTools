@@ -40,6 +40,7 @@ import six
 
 
 class DupeFinder(object):
+
     def __init__(self, directory):
         self.files = self._get_files(directory)
         self.dupe_files = set()
@@ -93,7 +94,7 @@ class DupeFinder(object):
 
     def compare_files(self, filename1, filename2):
         sm = difflib.SequenceMatcher(a=self.files[filename1],
-                                        b=self.files[filename2])
+                                     b=self.files[filename2])
         ratio = sm.ratio()
         if ratio > 0.90:
             self.dupe_files.add((filename1, filename2))

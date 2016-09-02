@@ -34,6 +34,7 @@ from corpustools import saami_crawler
 
 
 class TestSamediggiNoPage(unittest.TestCase):
+
     def setUp(self):
         self.content = (
             '''
@@ -983,7 +984,8 @@ På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
 
             sdnp = saami_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
 
-            self.assertEqual(sdnp.print_url, 'http://www.saemiedigkie.no/layout/set/print')
+            self.assertEqual(
+                sdnp.print_url, 'http://www.saemiedigkie.no/layout/set/print')
 
     def test_lang(self):
         with requests_mock.Mocker() as m:

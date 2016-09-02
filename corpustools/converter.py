@@ -230,7 +230,8 @@ class Converter(object):
 
         if not dtd.validate(complete):
             with codecs.open(self.names.log, 'w', encoding='utf8') as logfile:
-                logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
+                logfile.write('Error at: {}'.format(
+                    six.text_type(util.lineno())))
                 for entry in dtd.error_log:
                     logfile.write('\n')
                     logfile.write(six.text_type(entry))
@@ -267,7 +268,8 @@ class Converter(object):
             return complete.getroot()
         except etree.XSLTApplyError as e:
             with open(self.names.log, 'w') as logfile:
-                logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
+                logfile.write('Error at: {}'.format(
+                    six.text_type(util.lineno())))
                 for entry in e.error_log:
                     logfile.write(six.text_type(entry))
                     logfile.write('\n')
@@ -285,7 +287,8 @@ class Converter(object):
                     em.add_error_markup(element)
             except IndexError as e:
                 with open(self.names.log, 'w') as logfile:
-                    logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
+                    logfile.write('Error at: {}'.format(
+                        six.text_type(util.lineno())))
                     logfile.write("There is a markup error\n")
                     logfile.write("The error message: ")
                     logfile.write(six.text_type(e))
@@ -1008,7 +1011,7 @@ class PDFParagraph(object):
                          re.search('^\S', textelement.plain_text)) or
                         (self.textelements[0].left == textelement.left and
                          re.search('^\s', textelement.plain_text))
-                    ) and
+            ) and
                     not textelement.is_left_of(self.textelements[-1]) and
                     self.is_within_line_distance(textelement) and
                     self.textelements[-1].font == textelement.font):
@@ -1021,7 +1024,7 @@ class PDFParagraph(object):
                        textelement.plain_text[0] == textelement.plain_text[0].lower()) or
                       (re.search(u'[.?!]\s*$', self.textelements[-1].plain_text) and
                        textelement.plain_text[0] == textelement.plain_text[0].upper())
-                  )):
+            )):
                 return True
             else:
                 return False
@@ -1331,7 +1334,7 @@ class PDFTextExtractor(object):
         if (not self.is_first_page() and
             (self.is_new_page(paragraphs[0]) or
              self.is_last_paragraph_end_of_page())):
-                self.append_to_body()
+            self.append_to_body()
 
         for paragraph in paragraphs:
             if paragraph.is_listitem:
@@ -1746,7 +1749,8 @@ class PDF2XMLConverter(Converter):
         if not pdfpage.is_skip_page(self.md.skip_pages):
             pdfpage.fix_font_id(self.pdffontspecs)
             with util.ignored(PDFEmptyPageException):
-                self.extractor.extract_text_from_page(pdfpage.pick_valid_text_elements())
+                self.extractor.extract_text_from_page(
+                    pdfpage.pick_valid_text_elements())
 
     def parse_pages(self, root_element):
         """Parse the pages of the pdf xml document.
@@ -2457,7 +2461,8 @@ class HTMLConverter(Converter):
             except UnicodeDecodeError as e:
                 if source == 'xsl':
                     with open('{}.log'.format(self.names.orig), 'w') as f:
-                        print(util.lineno(), six.text_type(e), self.names.orig, file=f)
+                        print(util.lineno(), six.text_type(
+                            e), self.names.orig, file=f)
                     raise ConversionException(
                         'The text_encoding specified in {} lead to decoding '
                         'errors, please fix the XSL'.format(self.md.filename))
@@ -2609,7 +2614,8 @@ class HTMLConverter(Converter):
 
         if transform.error_log:
             with open(self.names.log, 'w') as logfile:
-                logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
+                logfile.write('Error at: {}'.format(
+                    six.text_type(util.lineno())))
                 for entry in transform.error_log:
                     logfile.write('\n{}: {} {}\n'.format(
                         six.text_type(entry.line), six.text_type(entry.column),
@@ -3424,7 +3430,8 @@ class XslMaker(object):
             filexsl = etree.parse(self.filename)
         except etree.XMLSyntaxError as e:
             with open(self.names.log, 'w') as logfile:
-                logfile.write('Error at: {}'.format(six.text_type(util.lineno())))
+                logfile.write('Error at: {}'.format(
+                    six.text_type(util.lineno())))
                 for entry in e.error_log:
                     logfile.write('{}\n'.format(six.text_type(entry)))
 
@@ -3457,7 +3464,8 @@ class XslMaker(object):
         except etree.XSLTParseError as xxx_todo_changeme:
             (e) = xxx_todo_changeme
             with open(self.logfile, 'w') as logfile:
-                logfile.write('Error at: {}\n'.format(six.text_type(util.lineno())))
+                logfile.write('Error at: {}\n'.format(
+                    six.text_type(util.lineno())))
                 logfile.write('Invalid XML in {}\n'.format(self.filename))
                 for entry in e.error_log:
                     logfile.write('{}\n'.format(six.text_type(entry)))

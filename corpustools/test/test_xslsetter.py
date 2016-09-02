@@ -25,6 +25,7 @@ from corpustools import xslsetter
 
 
 class TestMetadataHandler(unittest.TestCase):
+
     def test_set_skip_pages1(self):
         '''Test a valid skip_pages line'''
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
@@ -105,7 +106,7 @@ class TestMetadataHandler(unittest.TestCase):
         md.set_variable('right_margin', 'all=40,even=80')
 
         with self.assertRaises(xslsetter.XsltException):
-                md.margins
+            md.margins
 
     def test_parse_margin_lines3(self):
         '''all and odd in margin line should raise ConversionException'''

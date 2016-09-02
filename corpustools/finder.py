@@ -40,9 +40,9 @@ import six
 
 
 def main():
-    #find_files_without_parallels()
-    #find_not_analysed(sys.argv[1])
-    #fix_pdf_filenames(sys.argv[1])
+    # find_files_without_parallels()
+    # find_not_analysed(sys.argv[1])
+    # fix_pdf_filenames(sys.argv[1])
     move_twenty_percent_to_goldcorpus()
 
 
@@ -52,11 +52,13 @@ def print_equality_ratios_in_dir():
         for f in files:
             if f.endswith('.html') and sys.argv[2] in f:
                 path = os.path.join(root, f)
-                sm = difflib.SequenceMatcher(a=path, b=path.replace(sys.argv[2], sys.argv[3]))
+                sm = difflib.SequenceMatcher(
+                    a=path, b=path.replace(sys.argv[2], sys.argv[3]))
                 ratios.add(round(sm.ratio(), 2))
 
     for ratio in ratios:
         print(ratio)
+
 
 def remove_files_with_duplicate_content():
     '''To replace: 123, , 339, 340'''
@@ -72,8 +74,10 @@ def remove_files_with_duplicate_content():
 
     foundcount = 0
     notfoundcount = 0
-    fingetter = adder.AddToCorpus(six.text_type(os.getenv('GTFREE')), u'fin', u'admin/sd/www.samediggi.fi')
-    smsgetter = adder.AddToCorpus(six.text_type(os.getenv('GTFREE')), this_lang, u'admin/sd/www.samediggi.fi')
+    fingetter = adder.AddToCorpus(six.text_type(
+        os.getenv('GTFREE')), u'fin', u'admin/sd/www.samediggi.fi')
+    smsgetter = adder.AddToCorpus(six.text_type(
+        os.getenv('GTFREE')), this_lang, u'admin/sd/www.samediggi.fi')
     for root, dirs, files in os.walk(os.path.join(os.getenv('GTFREE'), 'orig', this_lang,
                                                   u'admin/sd/www.samediggi.fi')):
         print(root)
@@ -85,12 +89,15 @@ def remove_files_with_duplicate_content():
 
                 parallellfile = path.replace('/' + this_lang + '/', '/fin/')
                 parallellfile = parallellfile.replace('.xsl', '')
-                parallellfile = parallellfile.replace('lang=' + ufflangs[this_lang], 'lang=finnish')
-                parallellfile = parallellfile.replace('itemid=256', 'itemid=195')
+                parallellfile = parallellfile.replace(
+                    'lang=' + ufflangs[this_lang], 'lang=finnish')
+                parallellfile = parallellfile.replace(
+                    'itemid=256', 'itemid=195')
 
                 if not os.path.exists(parallellfile):
                     if this_lang != 'fin':
-                        fingetter.copy_url_to_corpus(filename.replace('Itemid=256', 'Itemid=195').replace('lang=' + ufflangs[this_lang], 'lang=finnish'))
+                        fingetter.copy_url_to_corpus(filename.replace('Itemid=256', 'Itemid=195').replace(
+                            'lang=' + ufflangs[this_lang], 'lang=finnish'))
 
                 smsgetter.copy_url_to_corpus(filename.replace('Itemid=256', 'Itemid=195'),
                                              parallelpath=parallellfile)
@@ -105,7 +112,8 @@ def adder_adderexception_invalid_url():
     downloader = adder.UrlDownloader(os.path.join(os.getenv('GTFREE'), 'klaff'))
     for lang in langs:
         try:
-            (r, tmpname) = downloader.download('http://www.samediggi.fi/index2.php?option=com_content&task=view&id=420&pop=1&page=0&Itemid=149', params={'lang': lang})
+            (r, tmpname) = downloader.download(
+                'http://www.samediggi.fi/index2.php?option=com_content&task=view&id=420&pop=1&page=0&Itemid=149', params={'lang': lang})
         except adder.AdderException as e:
             print('her gikk det galt', str(e))
 
@@ -132,7 +140,8 @@ def print_finder():
                     file_count += 1
                     path = os.path.join(root, f)
                     tree = lxml.html.parse(path)
-                    print_img = tree.find('.//img[@src="http://www.samediggi.fi/images/M_images/printButton.png"]')
+                    print_img = tree.find(
+                        './/img[@src="http://www.samediggi.fi/images/M_images/printButton.png"]')
                     if print_img is not None:
                         img_count += 1
                         parent = print_img.getparent()
@@ -156,7 +165,8 @@ def print_finder():
                         print('about to download', newhref)
                         (r, tmpname) = downloader.download(newhref)
 
-                        newname = namechanger.normalise_filename(os.path.basename(newhref)) + '.html'
+                        newname = namechanger.normalise_filename(
+                            os.path.basename(newhref)) + '.html'
 
                         newpath = os.path.join(root, newname)
                         with open(newpath, 'w') as newfile:
@@ -206,6 +216,7 @@ def remove_if_no_smX():
                     if smx_exists is False:
                         move_files.mover(path, '')
 
+
 def find_files_without_parallels():
     url_to_filename = {}
     for root, dirs, files in os.walk(sys.argv[1]):
@@ -235,8 +246,10 @@ def find_files_without_parallels():
             util.print_frame(debug=nurl)
             try:
                 (r, tmpname) = downloader.download(nurl)
-                newfilename = namechanger.normalise_filename(os.path.basename(tmpname))
-                newpath = os.path.join(os.path.dirname(url_to_filename[url]), newfilename)
+                newfilename = namechanger.normalise_filename(
+                    os.path.basename(tmpname))
+                newpath = os.path.join(os.path.dirname(
+                    url_to_filename[url]), newfilename)
                 oldpath = url_to_filename[url].replace('.xsl', '')
 
                 if os.path.exists(newpath) and oldpath != newpath:
@@ -298,17 +311,20 @@ def fix_pdf_filenames(directory):
                 url = mdh.get_variable('filename')
                 #print(file_, url)
 
-                downloader = adder.UrlDownloader(os.path.join(os.getenv('GTFREE'), 'tmp'))
+                downloader = adder.UrlDownloader(
+                    os.path.join(os.getenv('GTFREE'), 'tmp'))
                 with util.ignored(KeyError):
                     try:
                         (r, tmpname) = downloader.download(url)
                     except adder.AdderException as e:
                         print(str(e))
                     else:
-                        newfilename = namechanger.normalise_filename(os.path.basename(tmpname))
+                        newfilename = namechanger.normalise_filename(
+                            os.path.basename(tmpname))
                         if newfilename != f:
                             util.print_frame(debug=newfilename)
-                            move_files.mover(file_, os.path.join(root, newfilename))
+                            move_files.mover(
+                                file_, os.path.join(root, newfilename))
 
 
 def move_twenty_percent_to_goldcorpus():

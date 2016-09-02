@@ -176,9 +176,9 @@ class NGramModel(object):
             for gram, rank
             in six.iteritems(unknown.ngrams) if gram in self.ngrams
         )
-        #util.print_frame(debug=missing_count)
-        #util.print_frame(debug=d_missing)
-        #util.print_frame(debug=d_found)
+        # util.print_frame(debug=missing_count)
+        # util.print_frame(debug=d_missing)
+        # util.print_frame(debug=d_found)
 
         return d_missing + d_found
 
@@ -257,7 +257,8 @@ class WordModel(NGramModel):
             unknown_freq = self.freq_of_text(unknown_text, {})
             return (
                 sum(
-                    self.invrank[word]**2 * unknown_freq[word] * 100 / normaliser
+                    self.invrank[word]**2 *
+                    unknown_freq[word] * 100 / normaliser
 
                     for word in unknown_freq.keys()
                     if word in self.ngrams
@@ -409,7 +410,8 @@ class FolderTrainer(object):
             fname = os.path.join(folder, lang + ext)
             model.to_model_file(codecs.open(fname, 'w', encoding='utf8'))
         if verbose and self.models:
-            util.note("Wrote {%s}%s" % (",".join(list(self.models.keys())), ext))
+            util.note("Wrote {%s}%s" %
+                      (",".join(list(self.models.keys())), ext))
 
 
 class FileTrainer(object):

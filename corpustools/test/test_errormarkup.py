@@ -55,7 +55,8 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_error_parser_errorlang_infinity(self):
         in_elem = u'(molekylærbiologimi)∞(kal,bio)'
-        want = etree.fromstring('<errorlang correct="kal,bio">molekylærbiologimi</errorlang>')
+        want = etree.fromstring(
+            '<errorlang correct="kal,bio">molekylærbiologimi</errorlang>')
 
         got = self.em.error_parser(in_elem)
         self.assertEqual(len(got), 1)
@@ -63,7 +64,8 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_error_parser_errorlang_infinity_with_new_lines(self):
         in_elem = u'\n\n\n\n(molekylærbiologimi)∞(kal,bio)\n\n\n\n'
-        want = etree.fromstring('<errorlang correct="kal,bio">molekylærbiologimi</errorlang>')
+        want = etree.fromstring(
+            '<errorlang correct="kal,bio">molekylærbiologimi</errorlang>')
 
         got = self.em.error_parser(in_elem)
         self.assertEqual(len(got), 2)
@@ -88,7 +90,8 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_error_parser_errorort1(self):
         in_elem = u'jne.$(adv,typo|jna.)'
-        want = etree.fromstring('<errorort errorinfo="adv,typo" correct="jna.">jne.</errorort>')
+        want = etree.fromstring(
+            '<errorort errorinfo="adv,typo" correct="jna.">jne.</errorort>')
 
         got = self.em.error_parser(in_elem)
         self.assertEqual(len(got), 1)
@@ -105,7 +108,8 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_errorort2(self):
         in_elem = etree.fromstring('<p>daesn\'$daesnie</p>')
-        want = etree.fromstring('<p><errorort correct="daesnie">daesn\'</errorort></p>')
+        want = etree.fromstring(
+            '<p><errorort correct="daesnie">daesn\'</errorort></p>')
 
         self.em.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
@@ -129,14 +133,16 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_error_correct2(self):
         in_elem = etree.fromstring('<p>væ]keles§(væjkeles)</p>')
-        want = etree.fromstring('<p><error correct="væjkeles">væ]keles</error></p>')
+        want = etree.fromstring(
+            '<p><error correct="væjkeles">væ]keles</error></p>')
 
         self.em.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
 
     def test_error_correct3(self):
         in_elem = etree.fromstring('<p>smávi-§smávit-</p>')
-        want = etree.fromstring('<p><error correct="smávit-">smávi-</error></p>')
+        want = etree.fromstring(
+            '<p><error correct="smávit-">smávi-</error></p>')
 
         self.em.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
@@ -150,7 +156,8 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_error_correct5(self):
         in_elem = etree.fromstring('<p>DNB-feaskáris§(DnB-feaskáris)</p>')
-        want = etree.fromstring('<p><error correct="DnB-feaskáris">DNB-feaskáris</error></p>')
+        want = etree.fromstring(
+            '<p><error correct="DnB-feaskáris">DNB-feaskáris</error></p>')
 
         self.em.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
@@ -164,7 +171,8 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_error_correct7(self):
         in_elem = etree.fromstring('<p>2005’as§2005:s</p>')
-        want = etree.fromstring('<p><error correct="2005:s">2005’as</error></p>')
+        want = etree.fromstring(
+            '<p><error correct="2005:s">2005’as</error></p>')
 
         self.em.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)

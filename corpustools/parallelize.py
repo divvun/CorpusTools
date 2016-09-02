@@ -130,7 +130,7 @@ class CorpusXMLFile(object):
         parallel_basename = '{}.xml'.format(
             self.get_parallel_basename(paralang))
         return os.path.join(*[root, module, paralang, genre, subdirs,
-             parallel_basename])
+                              parallel_basename])
 
     def get_original_filename(self):
         """Infer the path of the original file"""
@@ -241,7 +241,7 @@ class SentenceDivider(object):
             self.document.append(body)
 
             elts_doc_lang = list(filter(self.in_main_lang,
-                                   self.input_etree.findall('//p')))
+                                        self.input_etree.findall('//p')))
             processed = self.process_elts(elts_doc_lang)
             body.extend(processed)
         return self.document
@@ -251,7 +251,7 @@ class SentenceDivider(object):
                       for elt in elts)
         preprocessed = self.preprocess_para_texts(para_texts)
         return list(map(self.process_one_para_text,
-                   preprocessed))
+                        preprocessed))
 
     def write_result(self, outfile):
         """Write self.document to the given outfile name"""
@@ -929,7 +929,7 @@ class HunalignToTmx(AlignmentToTmx):
                  for line in self.output.split("\n")
                  if line]
         pairs = list(filter(self.is_good_line,
-                       pairs))
+                            pairs))
 
         src_lines = [self.clean_line(l[0])
                      for l in pairs]
@@ -973,7 +973,7 @@ class Tca2ToTmx(AlignmentToTmx):
 
         with codecs.open(sentfile_name, encoding='utf8') as tca2_output:
             return list(map(self.remove_s_tag,
-                       tca2_output.read().split('\n')))
+                            tca2_output.read().split('\n')))
 
     def remove_s_tag(self, line):
         """Remove the s tags that tca2 has added"""

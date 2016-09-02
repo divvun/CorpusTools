@@ -43,6 +43,7 @@ import six
 
 
 class Crawler(object):
+
     def __init__(self):
         self.goaldir = six.text_type(os.getenv('GTFREE'))
         self.unvisited_links = set()
@@ -78,10 +79,11 @@ class Crawler(object):
                     parallelpath = self.corpus_adders[lang].copy_file_to_corpus(
                         tmpname, url, parallelpath=parallelpath)
                     util.print_frame(
-                            debug='adding {}'.format(parallelpath))
+                        debug='adding {}'.format(parallelpath))
                 else:
                     parallelpath = normalised_path
         print(file=sys.stderr)
+
 
 class SamediggiFiCrawler(Crawler):
     '''Notes about samediggi.fi
@@ -148,7 +150,8 @@ class SamediggiFiCrawler(Crawler):
                     if f.endswith('.xsl'):
                         path = os.path.join(root, f)
                         mdh = xslsetter.MetadataHandler(path)
-                        self.old_urls[mdh.get_variable('filename')] = path.replace('.xsl', '')
+                        self.old_urls[mdh.get_variable(
+                            'filename')] = path.replace('.xsl', '')
 
     def crawl_site(self):
         '''Crawl samediggi.fi'''
@@ -189,7 +192,8 @@ class SamediggiFiCrawler(Crawler):
                 if found_saami and parallel_pages:
                     self.save_pages(parallel_pages)
 
-                util.print_frame(debug='After: unvisited_links {}'.format(len(self.unvisited_links)))
+                util.print_frame(debug='After: unvisited_links {}'.format(
+                    len(self.unvisited_links)))
 
             self.visited_links.add(link)
             util.print_frame(
@@ -197,7 +201,8 @@ class SamediggiFiCrawler(Crawler):
 
     def get_print_url(self, content, lang):
         tree = lxml.html.document_fromstring(content)
-        print_img = tree.find('.//img[@src="http://www.samediggi.fi/images/M_images/printButton.png"]')
+        print_img = tree.find(
+            './/img[@src="http://www.samediggi.fi/images/M_images/printButton.png"]')
 
         if print_img is not None:
             parent = print_img.getparent()
@@ -281,6 +286,7 @@ class SamediggiFiCrawler(Crawler):
 
 
 class SamediggiNoPage(object):
+
     def __init__(self, url):
         r = requests.get(url)
         self.parsed_url = parse.urlparse(r.url)
@@ -291,7 +297,6 @@ class SamediggiNoPage(object):
                            'www.saemiedigkie.no',
                            'www.samedigge.no']
 
-
     @property
     def url(self):
         return self.parsed_url.geturl()
@@ -299,8 +304,8 @@ class SamediggiNoPage(object):
     @property
     def parallel_links(self):
         return [parse.urlunparse((self.parsed_url.scheme,
-                                     self.parsed_url.netloc,
-                                     a.get('href'), '', '', ''))
+                                  self.parsed_url.netloc,
+                                  a.get('href'), '', '', ''))
                 for a in self.tree.xpath('.//ul[@id="languageList"]/li/a[@href]')]
 
     @property
@@ -337,11 +342,11 @@ class SamediggiNoPage(object):
             href = address.get('href')
             if href is not None:
                 if not re.search(
-                    'tv.samediggi.no|^#|/rss/feed|switchlanguage|facebook.com|'
-                    'Web-tv|user/login|mailto|/Dokumenter|/Dokumeantta|'
-                    '/Tjaatsegh|.pdf|.doc|.xls|/images/|/download/|/Biejjielaahkoe|/Kalender|'
-                    '/Dahpahusat|javascript|tel:',
-                    href):
+                        'tv.samediggi.no|^#|/rss/feed|switchlanguage|facebook.com|'
+                        'Web-tv|user/login|mailto|/Dokumenter|/Dokumeantta|'
+                        '/Tjaatsegh|.pdf|.doc|.xls|/images/|/download/|/Biejjielaahkoe|/Kalender|'
+                        '/Dahpahusat|javascript|tel:',
+                        href):
                     if href.startswith('/'):
                         href = parse.urlunparse(
                             (self.parsed_url.scheme,
@@ -365,7 +370,9 @@ class SamediggiNoPage(object):
 
         return ' '.join(body.xpath('.//text()'))
 
+
 class SamediggiNoCrawler(Crawler):
+
     def __init__(self):
         super(SamediggiNoCrawler, self).__init__()
         self.unvisited_links.add(u'http://www.samediggi.no/')
@@ -417,7 +424,8 @@ class SamediggiNoCrawler(Crawler):
                 parallel_pages.append((orig_page.print_url,
                                        orig_page.lang))
             else:
-                uff = 'not same lang {}:\n orig: {} body: {}'.format(orig_page.url.encode('utf8'), orig_page.lang, body_lang)
+                uff = 'not same lang {}:\n orig: {} body: {}'.format(
+                    orig_page.url.encode('utf8'), orig_page.lang, body_lang)
                 util.print_frame(debug=uff)
 
             for parallel_link in orig_page.parallel_links:
@@ -425,7 +433,7 @@ class SamediggiNoCrawler(Crawler):
                     parallel_page = self.crawl_page(parallel_link)
                     if parallel_page is not None:
                         body_lang = self.languageguesser.classify(parallel_page.body_text,
-                                                      langs=self.langs)
+                                                                  langs=self.langs)
                         if parallel_page.lang == body_lang:
                             if body_lang in [u'sme', u'sma', u'smj']:
                                 found_saami = True
@@ -433,7 +441,8 @@ class SamediggiNoCrawler(Crawler):
                             parallel_pages.append((parallel_page.print_url,
                                                    parallel_page.lang))
                         else:
-                            uff = 'not same lang {}:\n orig: {} body: {}'.format(parallel_page.url.encode('utf8'), parallel_page.lang, body_lang)
+                            uff = 'not same lang {}:\n orig: {} body: {}'.format(
+                                parallel_page.url.encode('utf8'), parallel_page.lang, body_lang)
                             util.print_frame(debug=uff)
 
         if found_saami:

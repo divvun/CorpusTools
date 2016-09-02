@@ -88,4 +88,4 @@ def main():
                     no_orig_xsl += 1
 
     print('Total {}, fails {}, {} files with no xsl'.format(total, para_fail,
-                                                         no_orig_xsl))
+                                                            no_orig_xsl))

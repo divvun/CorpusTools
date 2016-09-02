@@ -38,6 +38,7 @@ here = os.path.dirname(__file__)
 
 class TestFilenameToAscii(unittest.TestCase):
     '''Test the normalise_filename function'''
+
     def test_none_ascii_lower(self):
         oldname = u'ášŧŋđžčåøæöäï+'
         want = u'astngdzcaoaeoai_'
@@ -107,6 +108,7 @@ class TestFilenameToAscii(unittest.TestCase):
 
 class TestAreDuplicates(unittest.TestCase):
     '''Test the are_duplicates function'''
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory()
         self.tempdir.write('old_dupe.txt', b'a')
@@ -134,13 +136,18 @@ class TestAreDuplicates(unittest.TestCase):
 
 
 class TestComputeNewBasename(unittest.TestCase):
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory()
         self.tempdir.makedir('orig/sme/admin/other_files')
-        self.tempdir.write('orig/sme/admin/other_files/old_dupe.txt', six.b('a'))
-        self.tempdir.write('orig/sme/admin/other_files/new_dupe.txt', six.b('a'))
-        self.tempdir.write('orig/sme/admin/other_files/new_none_dupe.txt', six.b('b'))
-        self.tempdir.write('orig/sme/admin/other_files/new_none_düpe.txt', six.b('a'))
+        self.tempdir.write(
+            'orig/sme/admin/other_files/old_dupe.txt', six.b('a'))
+        self.tempdir.write(
+            'orig/sme/admin/other_files/new_dupe.txt', six.b('a'))
+        self.tempdir.write(
+            'orig/sme/admin/other_files/new_none_dupe.txt', six.b('b'))
+        self.tempdir.write(
+            'orig/sme/admin/other_files/new_none_düpe.txt', six.b('a'))
 
     def tearDown(self):
         self.tempdir.cleanup()
@@ -173,6 +180,7 @@ class TestComputeNewBasename(unittest.TestCase):
 
 
 class TestComputeMovepairs(unittest.TestCase):
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory()
         self.tempdir.makedir('orig/sme/ficti/sub')
@@ -643,6 +651,7 @@ class TestComputeMovepairs(unittest.TestCase):
 
 
 class TestCorpusFileMover(unittest.TestCase):
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
@@ -675,7 +684,8 @@ class TestCorpusFileMover(unittest.TestCase):
     def test_move_orig(self):
         '''move to different subdir, with parallels'''
         cfm = namechanger.CorpusFileMover(
-            six.text_type(os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
+            six.text_type(os.path.join(self.tempdir.path,
+                                       'orig/sme/ficti/sub/f.txt')),
             six.text_type(os.path.join(self.tempdir.path, 'orig/sme/facta/bub/g.txt')))
         cfm.move_files()
         self.tempdir.check_all(
@@ -712,6 +722,7 @@ class TestCorpusFileMover(unittest.TestCase):
 
 
 class TestCorpusFileRemover(unittest.TestCase):
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
@@ -751,6 +762,7 @@ class TestCorpusFileRemover(unittest.TestCase):
 
 class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
     '''move to new genre/subdir, with parallels, parallel needs normalisation'''
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
@@ -921,6 +933,7 @@ class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
 
 class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
     '''move to new lang/genre/subdir, with parallels, parallel needs normalisation'''
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
@@ -1105,6 +1118,7 @@ class TestCorpusFilesetMetadataUpdater3(unittest.TestCase):
     parallel needs normalisation, normalised name of parallel exists, but the
     file with the normalised name is not a duplicate of the parallel file
     '''
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
@@ -1232,6 +1246,7 @@ class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
     parallel needs normalisation, normalised name of parallel exists.
     The file with the normalised name is a duplicate of the parallel file
     '''
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
@@ -1332,6 +1347,7 @@ class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
 
 class TestCorpusFilesetMetadataUpdater5(unittest.TestCase):
     '''remove file, with parallels, parallel needs normalisation'''
+
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
 
