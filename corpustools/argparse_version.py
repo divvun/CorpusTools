@@ -21,9 +21,9 @@
 #
 
 from __future__ import absolute_import
+
 import argparse
 import os
-
 
 here = os.path.dirname(__file__)
 version = os.path.join(here, '_version.py')

@@ -22,14 +22,15 @@
 #
 
 from __future__ import absolute_import
+
 import argparse
-from lxml import etree
 import os
 import subprocess
 import sys
 
-from corpustools import parallelize
-from corpustools import util
+from lxml import etree
+
+from corpustools import parallelize, util
 
 
 class Toktmx2Tmx(object):

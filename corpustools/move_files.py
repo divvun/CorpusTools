@@ -20,15 +20,13 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-from __future__ import absolute_import
 import argparse
 import os
 import sys
 
-from corpustools import argparse_version
-from corpustools import namechanger
+from corpustools import argparse_version, namechanger
 
 
 def mover(oldpath, newpath):

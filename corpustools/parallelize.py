@@ -21,28 +21,21 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 
-from __future__ import absolute_import
 import argparse
 import codecs
 import errno
-from lxml import etree
 import os
 import re
 import subprocess
 import sys
 import tempfile
 
-from corpustools import argparse_version
-from corpustools import generate_anchor_list
-from corpustools import typosfile
-from corpustools import util
-from six.moves import filter
-from six.moves import map
-from six.moves import zip
+import six
+from lxml import etree
 
+from corpustools import argparse_version, generate_anchor_list, typosfile, util
 
 here = os.path.dirname(__file__)
 
@@ -902,7 +895,7 @@ class AlignmentToTmx(Tmx):
         pfile1_data, pfile2_data = self.parse_alignment_results()
 
         body = etree.SubElement(tmx, "body")
-        for line1, line2 in zip(pfile1_data, pfile2_data):
+        for line1, line2 in six.moves.zip(pfile1_data, pfile2_data):
             tu = self.make_tu(line1, line2)
             body.append(tu)
 

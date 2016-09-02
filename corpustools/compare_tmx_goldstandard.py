@@ -21,20 +21,19 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-from __future__ import absolute_import
 import argparse
 import datetime
 import difflib
-import lxml.etree as etree
 import os
 import subprocess
 import sys
 import time
 
-from corpustools import parallelize
-from corpustools import util
+import lxml.etree as etree
+
+from corpustools import parallelize, util
 
 
 class TmxComparator(object):

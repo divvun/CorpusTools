@@ -22,19 +22,16 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-from __future__ import absolute_import
 import os
 import shutil
 import sys
 
 import lxml.etree as etree
-
-from . import util
-from . import xslsetter
 import six
 
+from corpustools import util, xslsetter
 
 here = os.path.dirname(__file__)
 version = os.path.join(here, '_version.py')

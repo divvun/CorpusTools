@@ -18,15 +18,15 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
-from __future__ import unicode_literals
-from __future__ import absolute_import
-from corpustools import util
-import lxml.etree as etree
+from __future__ import absolute_import, print_function, unicode_literals
+
 import os
-import six
 import sys
 
+import lxml.etree as etree
+import six
+
+from corpustools import util
 
 here = os.path.dirname(__file__)
 

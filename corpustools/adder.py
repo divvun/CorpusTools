@@ -21,22 +21,19 @@
 """This file contains classes to add files to a corpus directory."""
 
 
-from __future__ import print_function
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
 import argparse
 import cgi
 import os
-import requests
 import shutil
 import sys
+
+import requests
 import six
 
-from corpustools import argparse_version
-from corpustools import namechanger
-from corpustools import util
-from corpustools import versioncontrol
-from corpustools import xslsetter
+from corpustools import (argparse_version, namechanger, util, versioncontrol,
+                         xslsetter)
 
 
 class AdderException(Exception):

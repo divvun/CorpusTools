@@ -20,14 +20,13 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
-
-from __future__ import absolute_import
-import os
+from __future__ import absolute_import, print_function
 
 import getpass
-import git
+import os
 import pwd
+
+import git
 import pysvn
 
 

@@ -19,15 +19,16 @@
 #
 
 from __future__ import absolute_import
+
 import doctest
+import os
+
 import lxml.doctestcompare
 import lxml.etree
-import os
+import six
 import testfixtures
 
 from corpustools import converter
-import six
-
 
 tests = {
     'ul-li-a': {

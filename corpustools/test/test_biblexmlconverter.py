@@ -19,17 +19,17 @@
 #
 
 from __future__ import absolute_import
-import io
 
 import doctest
+import io
+import os
+
 import lxml.doctestcompare
 import lxml.etree
-import os
 import six
 from testfixtures import TempDirectory
 
 from corpustools import converter
-
 
 tests = {
     'book_chapter_section_verse': {

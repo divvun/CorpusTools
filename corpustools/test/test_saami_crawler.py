@@ -18,14 +18,14 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-from __future__ import absolute_import
-import lxml.etree as etree
-import six
 import sys
-import requests_mock
 import unittest
+
+import lxml.etree as etree
+import requests_mock
+import six
 
 from corpustools import saami_crawler
 

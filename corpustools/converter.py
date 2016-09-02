@@ -20,39 +20,31 @@
 """This file contains classes to convert files to the giellatekno xml format."""
 
 
-from __future__ import print_function
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
 import argparse
 import codecs
 import collections
-from copy import deepcopy
 import distutils.dep_util
 import distutils.spawn
-import epub
 import io
 import multiprocessing
 import os
 import re
 import sys
+from copy import deepcopy
 
+import six
 from lxml import etree
-from lxml.html import clean
-from lxml.html import html5parser
+from lxml.html import clean, html5parser
 from odf.odf2xhtml import ODF2XHTML
+from pydocx.export import PyDocXHTMLExporter
 from pyth.plugins.rtf15.reader import Rtf15Reader
 from pyth.plugins.xhtml.writer import XHTMLWriter
-from pydocx.export import PyDocXHTMLExporter
-import six
 
-from corpustools import argparse_version
-from corpustools import ccat
-from corpustools import decode
-from corpustools import errormarkup
-from corpustools import text_cat
-from corpustools import util
-from corpustools import xslsetter
-
+import epub
+from corpustools import (argparse_version, ccat, decode, errormarkup, text_cat,
+                         util, xslsetter)
 
 here = os.path.dirname(__file__)
 

@@ -21,17 +21,17 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-from __future__ import absolute_import
 import argparse
-from lxml import etree
 import os
-from io import StringIO
 import sys
+from io import StringIO
 
-from . import argparse_version
 import six
+from lxml import etree
+
+from corpustools import argparse_version
 
 
 class XMLPrinter(object):

@@ -21,14 +21,13 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
+
 import re
 import sys
 
-from lxml import etree
 import six
-from six.moves import range
+from lxml import etree
 
 
 class ErrorMarkup(object):
@@ -126,7 +125,7 @@ class ErrorMarkup(object):
                 # Start with the two first elements
                 # The first contains an error, the second one is a correction
 
-                for index in range(0, len(result)):
+                for index in six.moves.range(0, len(result)):
                     if self.is_correction(result[index]):
                         if (not self.is_correction(result[index - 1]) and
                                 self.is_error(result[index - 1])):

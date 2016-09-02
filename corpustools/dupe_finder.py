@@ -21,22 +21,18 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-from __future__ import absolute_import
 import argparse
 import collections
 import difflib
-import lxml.etree as etree
 import os
 import sys
 
-from . import argparse_version
-from . import ccat
-from . import move_files
-from . import util
-from . import xslsetter
+import lxml.etree as etree
 import six
+
+from corpustools import argparse_version, ccat, move_files, util, xslsetter
 
 
 class DupeFinder(object):

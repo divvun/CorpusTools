@@ -20,18 +20,16 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import absolute_import
-from __future__ import print_function
+from __future__ import absolute_import, print_function
+
 import os
-import six
 import unittest
 
 import git
+import six
 import testfixtures
 
-from corpustools import namechanger
-from corpustools import xslsetter
-
+from corpustools import namechanger, xslsetter
 
 here = os.path.dirname(__file__)
 

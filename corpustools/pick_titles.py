@@ -23,17 +23,15 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-from __future__ import absolute_import
 import os
 import shutil
 import sys
 import time
 import urllib2
 
-from . import util
-from . import xslsetter
+from corpustools import util, xslsetter
 
 
 class DocumentPicker(object):

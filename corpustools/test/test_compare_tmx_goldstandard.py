@@ -19,13 +19,13 @@
 #
 
 from __future__ import absolute_import
-import lxml.etree as etree
+
 import os
 import unittest
 
-from corpustools import compare_tmx_goldstandard
-from corpustools import parallelize
+import lxml.etree as etree
 
+from corpustools import compare_tmx_goldstandard, parallelize
 
 here = os.path.dirname(__file__)
 

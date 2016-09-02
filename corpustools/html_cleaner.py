@@ -22,11 +22,10 @@
 #
 
 from __future__ import absolute_import
+
 import argparse
 
-from corpustools import argparse_version
-from corpustools import converter
-from corpustools import util
+from corpustools import argparse_version, converter, util
 
 
 def parse_args():

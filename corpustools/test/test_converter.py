@@ -19,24 +19,23 @@
 #
 
 from __future__ import absolute_import
+
 import codecs
 import collections
 import doctest
 import io
+import os
+import unittest
+
 import lxml.doctestcompare as doctestcompare
 import lxml.etree as etree
 import lxml.objectify as objectify
-from lxml.html import html5parser
-import os
 import six
 import testfixtures
-import unittest
+from lxml.html import html5parser
 
-from corpustools import converter
-from corpustools import text_cat
-from corpustools import xslsetter
+from corpustools import converter, text_cat, xslsetter
 from corpustools.test.test_xhtml2corpus import assertXmlEqual
-
 
 here = os.path.dirname(__file__)
 LANGUAGEGUESSER = text_cat.Classifier(None)

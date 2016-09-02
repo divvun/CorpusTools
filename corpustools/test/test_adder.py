@@ -21,15 +21,15 @@
 #
 
 from __future__ import absolute_import
-import git
+
 import os
-import six
-import testfixtures
 import unittest
 
-from corpustools import adder
-from corpustools import versioncontrol
-from corpustools import xslsetter
+import git
+import six
+import testfixtures
+
+from corpustools import adder, versioncontrol, xslsetter
 
 
 class TestAddToCorpus(unittest.TestCase):

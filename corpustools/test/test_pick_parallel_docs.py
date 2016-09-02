@@ -18,15 +18,12 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-from __future__ import absolute_import
 import os
 import unittest
 
-from corpustools import parallelize
-from corpustools import pick_parallel_docs
-
+from corpustools import parallelize, pick_parallel_docs
 
 here = os.path.dirname(__file__)
 

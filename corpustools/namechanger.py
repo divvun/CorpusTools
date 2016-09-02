@@ -20,18 +20,16 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
-from __future__ import absolute_import
-import os
+from __future__ import absolute_import, print_function
 
-from collections import namedtuple
 import hashlib
-import six
-import unidecode
+import os
+from collections import namedtuple
 
-from corpustools import util
-from corpustools import versioncontrol
-from corpustools import xslsetter
+import six
+
+import unidecode
+from corpustools import util, versioncontrol, xslsetter
 
 
 class NamechangerException(Exception):

@@ -19,15 +19,15 @@
 #
 
 from __future__ import absolute_import
+
 import doctest
-import lxml.doctestcompare as doctestcompare
-import lxml.etree as etree
 import os
 import unittest
 
-from corpustools import converter
-from corpustools import text_cat
+import lxml.doctestcompare as doctestcompare
+import lxml.etree as etree
 
+from corpustools import converter, text_cat
 
 here = os.path.dirname(__file__)
 LANGUAGEGUESSER = text_cat.Classifier(None)

@@ -21,16 +21,13 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 
-from __future__ import absolute_import
 import argparse
 import codecs
 import sys
 
-from corpustools import argparse_version
-from corpustools import util
+from corpustools import argparse_version, util
 
 
 class GenerateAnchorList(object):

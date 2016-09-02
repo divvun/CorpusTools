@@ -18,23 +18,18 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 
-from __future__ import absolute_import
 import codecs
 import doctest
-from lxml import doctestcompare
-from lxml import etree
 import os
-import six
 import tempfile
 import unittest
 
-from corpustools import generate_anchor_list
-from corpustools import parallelize
-from corpustools import text_cat
+import six
+from lxml import doctestcompare, etree
 
+from corpustools import generate_anchor_list, parallelize, text_cat
 
 here = os.path.dirname(__file__)
 

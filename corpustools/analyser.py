@@ -20,22 +20,17 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 
-from __future__ import absolute_import
 import argparse
-import lxml.etree as etree
 import multiprocessing
 import os
 import sys
 
-from . import argparse_version
-from . import ccat
-from . import parallelize
-from . import util
+import lxml.etree as etree
 import six
-from six.moves import zip
+
+from corpustools import argparse_version, ccat, parallelize, util
 
 
 class Analyser(object):

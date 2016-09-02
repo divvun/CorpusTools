@@ -20,26 +20,21 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-from __future__ import absolute_import
 import argparse
-import lxml.etree as etree
-import lxml.html
 import os
 import re
-import requests
 import shutil
 import sys
-from six.moves.urllib import parse
 
-from . import adder
-from . import argparse_version
-from . import namechanger
-from . import text_cat
-from . import util
-from . import xslsetter
+import lxml.etree as etree
+import lxml.html
+import requests
 import six
+
+from corpustools import (adder, argparse_version, namechanger, text_cat, util,
+                         xslsetter)
 
 
 class Crawler(object):
@@ -206,7 +201,7 @@ class SamediggiFiCrawler(Crawler):
 
         if print_img is not None:
             parent = print_img.getparent()
-            href = parse.urlparse(parent.get('href'))
+            href = six.moves.parse.urlparse(parent.get('href'))
 
             query = href.query
             newquery = [part for part in query.split('&')
@@ -289,7 +284,7 @@ class SamediggiNoPage(object):
 
     def __init__(self, url):
         r = requests.get(url)
-        self.parsed_url = parse.urlparse(r.url)
+        self.parsed_url = six.moves.parse.urlparse(r.url)
         self.tree = lxml.html.document_fromstring(r.content)
 
         self.ok_netlocs = ['www.sametinget.no',
@@ -315,7 +310,7 @@ class SamediggiNoPage(object):
         if print_link is not None:
             url = print_link.get('href')
 
-            return parse.urlunparse((
+            return six.moves.parse.urlunparse((
                 self.parsed_url.scheme,
                 self.parsed_url.netloc,
                 url, '', '', ''))
@@ -348,7 +343,7 @@ class SamediggiNoPage(object):
                         '/Dahpahusat|javascript|tel:',
                         href):
                     if href.startswith('/'):
-                        href = parse.urlunparse(
+                        href = six.moves.parse.urlunparse(
                             (self.parsed_url.scheme,
                              self.parsed_url.netloc,
                              href, '', '', ''))

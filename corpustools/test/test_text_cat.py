@@ -20,16 +20,13 @@
 #
 
 
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
-from __future__ import absolute_import
 import os
-from io import StringIO
 import unittest
+from io import StringIO
 
-from corpustools import text_cat
-from corpustools import util
-
+from corpustools import text_cat, util
 
 here = os.path.dirname(__file__)
 

@@ -20,13 +20,13 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-from __future__ import absolute_import
 import doctest
+import unittest
+
 import lxml.doctestcompare as doctestcompare
 from lxml import etree
-import unittest
 
 from corpustools import errormarkup
 

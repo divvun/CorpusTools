@@ -18,22 +18,21 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import unicode_literals
-from __future__ import print_function
+from __future__ import absolute_import, print_function, unicode_literals
 
-from __future__ import absolute_import
-from collections import namedtuple
-from contextlib import contextmanager
 import inspect
 import operator
 import os
 import platform
 import subprocess
 import sys
-import six
-from six.moves import range
+from collections import namedtuple
+from contextlib import contextmanager
 from functools import reduce
 
+import six
+
+from six.moves import range
 
 PathComponents = namedtuple('PathComponents',
                             'root module lang genre subdirs basename')

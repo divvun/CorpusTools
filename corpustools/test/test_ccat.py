@@ -19,10 +19,12 @@
 #
 
 from __future__ import absolute_import
+
 import io
-from lxml import etree
-import six
 import unittest
+
+import six
+from lxml import etree
 
 from corpustools import ccat
 

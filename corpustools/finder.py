@@ -18,25 +18,20 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 
-from __future__ import absolute_import
 import collections
 import difflib
-import lxml.html
 import os
-import requests
 import shutil
 import sys
 import urlparse
 
-from corpustools import adder
-from corpustools import move_files
-from corpustools import namechanger
-from corpustools import util
-from corpustools import xslsetter
+import lxml.html
+import requests
 import six
+
+from corpustools import adder, move_files, namechanger, util, xslsetter
 
 
 def main():

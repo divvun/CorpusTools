@@ -32,10 +32,8 @@
 # Original Perl implementation and article available from
 # http://odur.let.rug.nl/~vannoord/TextCat/
 
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 
-from __future__ import absolute_import
 import argparse
 import codecs
 import glob
@@ -44,11 +42,9 @@ import os
 import re
 import sys
 
-from . import argparse_version
-from . import util
 import six
-from six.moves import range
 
+from corpustools import argparse_version, util
 
 here = os.path.dirname(__file__)
 
@@ -202,7 +198,7 @@ class CharModel(NGramModel):
         for word in words:
             _word_ = '_' + word + '_'
             size = len(_word_)
-            for i in range(size):
+            for i in six.moves.range(size):
                 for s in (1, 2, 3, 4):
                     sub = _word_[i:i + s]
                     freq[sub] = freq.get(sub, 0) + 1

@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 import corpustools.argparse_version
-
 
 setup(
     name='CorpusTools',

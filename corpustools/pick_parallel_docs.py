@@ -21,17 +21,15 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import print_function
-from __future__ import absolute_import
-import os
+from __future__ import absolute_import, print_function
+
 import argparse
-from lxml import etree
-from lxml import doctestcompare
+import os
 import shutil
 
-from corpustools import argparse_version
-from corpustools import parallelize
-from corpustools import util
+from lxml import doctestcompare, etree
+
+from corpustools import argparse_version, parallelize, util
 
 
 class ParallelPicker:
