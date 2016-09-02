@@ -174,7 +174,6 @@ class CorpusPath(object):
 
 
 class Converter(object):
-
     """Take care of data common to all Converter classes."""
 
     def __init__(self, filename, write_intermediate=False):
@@ -453,7 +452,6 @@ class Converter(object):
 
 
 class AvvirConverter(Converter):
-
     """Convert Ávvir xml files to the giellatekno xml format.
 
     The root node in an Ávvir document is article.
@@ -588,7 +586,6 @@ class AvvirConverter(Converter):
 
 
 class SVGConverter(Converter):
-
     """Convert SVG files to the giellatekno xml format."""
 
     def convert2intermediate(self):
@@ -602,7 +599,6 @@ class SVGConverter(Converter):
 
 
 class PlaintextConverter(Converter):
-
     """Convert plain text files to the giellatekno xml format."""
 
     def to_unicode(self):
@@ -1755,7 +1751,6 @@ class PDF2XMLConverter(Converter):
 
 
 class BiblexmlConverter(Converter):
-
     """Convert bible xml files to the giellatekno xml format."""
 
     def convert2intermediate(self):
@@ -2633,7 +2628,6 @@ class RTFConverter(HTMLConverter):
 
 
 class OdfConverter(HTMLConverter):
-
     """Convert odf documents to the giellatekno xml format."""
 
     @property
@@ -2653,7 +2647,6 @@ class OdfConverter(HTMLConverter):
 
 
 class DocxConverter(HTMLConverter):
-
     """Convert docx documents to the giellatekno xml format."""
 
     @property
@@ -2722,7 +2715,6 @@ class EpubConverter(HTMLConverter):
 
 
 class DocConverter(HTMLConverter):
-
     """Convert Microsoft Word documents to the giellatekno xml format."""
 
     @property
@@ -2858,7 +2850,6 @@ class DocConverter(HTMLConverter):
 
 
 class DocumentFixer(object):
-
     """Fix the content of a giellatekno xml document.
 
     Receive a stringified etree from one of the raw converters,
@@ -3385,7 +3376,6 @@ class DocumentFixer(object):
 
 
 class XslMaker(object):
-
     """Make an xsl file to combine with the intermediate xml file.
 
     To convert the intermediate xml to a fullfledged  giellatekno document
@@ -3460,7 +3450,6 @@ class XslMaker(object):
 
 
 class LanguageDetector(object):
-
     """Detect and set the languages of a document."""
 
     def __init__(self, document, languageGuesser):
@@ -3548,7 +3537,6 @@ class LanguageDetector(object):
 
 
 class ConverterManager(object):
-
     """Manage the conversion of original files to corpus xml."""
 
     LANGUAGEGUESSER = text_cat.Classifier(None)
