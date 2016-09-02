@@ -284,7 +284,7 @@ class SamediggiNoPage(object):
 
     def __init__(self, url):
         r = requests.get(url)
-        self.parsed_url = six.moves.parse.urlparse(r.url)
+        self.parsed_url = six.moves.urllib.parse.urlparse(r.url)
         self.tree = lxml.html.document_fromstring(r.content)
 
         self.ok_netlocs = ['www.sametinget.no',
@@ -298,9 +298,9 @@ class SamediggiNoPage(object):
 
     @property
     def parallel_links(self):
-        return [parse.urlunparse((self.parsed_url.scheme,
-                                  self.parsed_url.netloc,
-                                  a.get('href'), '', '', ''))
+        return [six.moves.urllib.parse.urlunparse((self.parsed_url.scheme,
+                                                   self.parsed_url.netloc,
+                                                   a.get('href'), '', '', ''))
                 for a in self.tree.xpath('.//ul[@id="languageList"]/li/a[@href]')]
 
     @property
@@ -310,7 +310,7 @@ class SamediggiNoPage(object):
         if print_link is not None:
             url = print_link.get('href')
 
-            return six.moves.parse.urlunparse((
+            return six.moves.urllib.parse.urlunparse((
                 self.parsed_url.scheme,
                 self.parsed_url.netloc,
                 url, '', '', ''))
@@ -343,7 +343,7 @@ class SamediggiNoPage(object):
                         '/Dahpahusat|javascript|tel:',
                         href):
                     if href.startswith('/'):
-                        href = six.moves.parse.urlunparse(
+                        href = six.moves.urllib.parse.urlunparse(
                             (self.parsed_url.scheme,
                              self.parsed_url.netloc,
                              href, '', '', ''))
