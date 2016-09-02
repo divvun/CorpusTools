@@ -333,8 +333,8 @@ def main():
         if genre == 'dummy.txt':
             print(
                 'Error!\n'
-                'You must add genre to the directory\ne.g. '
-                + os.path.join(args.directory, 'admin'), file=sys.stderr)
+                'You must add genre to the directory\ne.g. {}'.format(
+                    os.path.join(args.directory, 'admin')), file=sys.stderr)
             sys.exit(4)
 
         adder = AddToCorpus(root,
