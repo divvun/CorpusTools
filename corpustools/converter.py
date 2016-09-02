@@ -59,6 +59,8 @@ here = os.path.dirname(__file__)
 
 
 class ConversionException(Exception):
+    """Raise this exception when an error occurs in the converter module."""
+
     pass
 
 
@@ -729,6 +731,8 @@ PDFFontspec = collections.namedtuple('PDFFontspec', ['size', 'family', 'color'])
 
 
 class PDFFontspecs(object):
+    """Add font specs found in a pdf page to this class."""
+
     def __init__(self):
         """Initialise the PDFFontspecs class."""
         self.pdffontspecs = {}
@@ -1337,10 +1341,18 @@ class PDFTextExtractor(object):
 
 
 class PDFEmptyPageException(Exception):
+    """Raise this exception if a pdf page is empty."""
+
     pass
 
 
 class PDFPageMetadata(object):
+    """Read pdf metadata from the metadata file into this class.
+
+    Compute metadata needed by the conversion from the data contained in
+    this class.
+    """
+
     def __init__(self, page_number=0, page_height=0, page_width=0,
                  metadata_margins={}, metadata_inner_margins={}):
         """Initialise the PDFPageMetadata class.
@@ -2404,6 +2416,8 @@ class HTMLContentConverter(object):
 
 
 class HTMLConverter(Converter):
+    """Convert html pages to giellatekno xml documents."""
+
     @property
     def content(self):
         """Return the content of the html doc as a string.
