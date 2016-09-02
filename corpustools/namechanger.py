@@ -100,6 +100,12 @@ class MovepairComputer(object):
                 oldparellelpath, newparallelpath, no_mv_needed)
 
     def compute_all_movepairs(self, oldpath, newpath):
+        """Compute all the potential name pairs that should be moved.
+
+        Args:
+            oldpath (str): path to the original file.
+            newpath (str): path to the new file.
+        """
         self.compute_movepairs(oldpath, newpath)
         self.compute_parallel_movepairs(oldpath, newpath)
 
@@ -111,8 +117,8 @@ class CorpusFileMover(object):
         """Class to move corpus files
 
         Args:
-            oldpath (unicode): the old path
-            newpath (unicode): the new path
+            oldpath (unicode): the old path of the original file.
+            newpath (unicode): the new path of tht original file.
         """
         self.old_components = util.split_path(oldpath)
         self.new_components = util.split_path(newpath)
@@ -120,12 +126,18 @@ class CorpusFileMover(object):
             self.old_components.root)
 
     def move_files(self):
+        """Move all files that are under version control."""
         self.move_orig()
         self.move_xsl()
         self.move_prestable_converted()
         self.move_prestable_tmx()
 
     def _move(self, oldpath, newpath):
+        """Move files from oldpath to newpath.
+        Args:
+            oldpath: the old name of the file.
+            newpath: the new name of the file.
+        """
         if os.path.exists(oldpath):
             newdir = os.path.dirname(newpath)
             with util.ignored(OSError):
@@ -214,12 +226,18 @@ class CorpusFileRemover(object):
             self.old_components.root)
 
     def remove_files(self):
+        """Remove all the files that are under version control."""
         self.remove_prestable_tmx()
         self.remove_prestable_converted()
         self.remove_xsl()
         self.remove_orig()
 
     def _remove(self, oldpath):
+        """Remove a file.
+
+        Args:
+            oldpath (str): path to the file that should be removed.
+        """
         if os.path.exists(oldpath):
             self.vcs.remove(oldpath)
 
@@ -331,6 +349,11 @@ class CorpusFilesetMoverAndUpdater(object):
     """
 
     def __init__(self, oldpath, newpath):
+        """Initialise the CorpusFilesetMoverAndUpdater class.
+
+        oldpath (str): path to the file that should be renamed.
+        newpath (str): path to the new name of the file.
+        """
         self.mc = MovepairComputer()
         self.mc.compute_all_movepairs(oldpath, newpath)
         self.old_components = util.split_path(oldpath)
@@ -338,6 +361,7 @@ class CorpusFilesetMoverAndUpdater(object):
             self.old_components.root)
 
     def move_files(self):
+        """Move all files under version control that belong to the original."""
         for filepair in self.mc.filepairs:
             if not filepair.newpath:
                 cfr = CorpusFileRemover(filepair.oldpath)

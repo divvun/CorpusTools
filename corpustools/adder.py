@@ -46,6 +46,12 @@ class UrlDownloader(object):
     """Download a document from a url."""
 
     def __init__(self, download_dir):
+        """Initialise the UrlDownloader class.
+
+        Arguments:
+            download_dir: a string containing the path where the file should
+            be saved.
+        """
         self.download_dir = download_dir
         self.headers = {
             'user-agent':
@@ -54,6 +60,7 @@ class UrlDownloader(object):
 
     @staticmethod
     def add_url_extension(filename, content_type):
+        """Add an extension to the file depending on the content type."""
         if filename == '':
             filename += 'index'
 
@@ -269,6 +276,7 @@ class AddToCorpus(object):
 
     @staticmethod
     def find_duplicates(origpath):
+        """Find duplicates based on the hex digests of the corpus files."""
         duplicates = {}
         for root, dirs, files in os.walk(origpath):
             for f in files:
@@ -291,6 +299,7 @@ class AddToCorpus(object):
             raise AdderException(u'Found duplicates')
 
     def add_files_to_working_copy(self):
+        """Add the downloaded files to the working copy."""
         self.vcs.add(self.additions)
 
 

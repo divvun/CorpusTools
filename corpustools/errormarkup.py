@@ -34,6 +34,11 @@ class ErrorMarkup(object):
     """This is a class to convert errormarkuped text to xml"""
 
     def __init__(self, filename):
+        """Initialise the ErrorMarkup class.
+
+        Args:
+            filename (str): path to the file that should be converted.
+        """
         self._filename = filename
         self.types = {u"$": u"errorort",
                       u"¢": "errorortreal",
@@ -50,6 +55,12 @@ class ErrorMarkup(object):
             re.UNICODE)
 
     def add_error_markup(self, element):
+        """Convert error markup to xml in this element and its children.
+
+        Args:
+            element (etree._Element): The element where error markup should
+                be converted to xml.
+        """
         self.really_add_error_markup(element)
         for elt in element:
             self.add_error_markup(elt)
@@ -242,6 +253,14 @@ class ErrorMarkup(object):
                             file=sys.stderr)
 
     def get_text(self, element):
+        """Get the text an element.
+
+        Args:
+            element(etree._Element or str):
+
+        Returns:
+            If text is found, str. Otherwise return None.
+        """
         text = None
         if isinstance(element, etree._Element):
             text = element.tail
@@ -284,13 +303,21 @@ class ErrorMarkup(object):
         return (text, matches.group('error'))
 
     def is_error(self, text):
+        """Check if the test contains an error markup.
+
+        Args:
+            text (str): the text to search for error markup.
+
+        Returns:
+            A re.match() if error markup is found, else None
+        """
         return self.error_regex.search(text)
 
     def get_error(self, error, correction):
         """Make an error_element
 
-        error -- is either a string or an etree.Element
-        correction -- is a correctionstring
+        error - - is either a string or an etree.Element
+        correction - - is a correctionstring
         """
         (fixed_correction, ext_att, att_list) = \
             self.look_for_extended_attributes(
@@ -335,6 +362,17 @@ class ErrorMarkup(object):
                            fixed_correction,
                            element_name,
                            att_list):
+        """Make an error xml element.
+
+        Args:
+            error (str or etree._Element):
+            fixed_correction (str):
+            element_name (str):
+            att_list (str):
+
+        Returns:
+            An etree._Element representing the error markup.
+        """
         error_element = etree.Element(element_name)
         if isinstance(error, etree._Element):
             error_element.append(error)

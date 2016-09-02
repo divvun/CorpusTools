@@ -44,12 +44,18 @@ class CorpusXMLFile(object):
     """A class to handle all the info of a corpus xml file"""
 
     def __init__(self, name):
+        """Initialise the CorpusXMLFile class.
+
+        Args:
+            name (str): path to the xml file.
+        """
         self.name = name
         self.etree = etree.parse(name)
         self.root = self.etree.getroot()
         self.sanity_check()
 
     def sanity_check(self):
+        """Check if the file really is a corpus xml file."""
         if self.root.tag != "document":
             raise util.ArgumentError(
                 "Expected Corpus XML file (output of convert2xml) with "
@@ -83,6 +89,7 @@ class CorpusXMLFile(object):
             '{http://www.w3.org/XML/1998/namespace}lang']
 
     def get_word_count(self):
+        """Return the word count of the file."""
         word_count = self.root.find(".//wordcount")
         if word_count is not None:
             return word_count.text
@@ -238,6 +245,15 @@ class SentenceDivider(object):
         return self.document
 
     def process_elts(self, elts):
+        """Markup sentences in a paragraph.
+
+        Args:
+            list (etree._Element): all the p elements in a file.
+
+        Return:
+            list of etree._Element that contain p elements. Each p element
+            contain a number of s elements, representing sentences.
+        """
         para_texts = ("".join(elt.xpath('.//text()'))
                       for elt in elts)
         preprocessed = self.preprocess_para_texts(para_texts)
@@ -371,6 +387,18 @@ class Parallelize(object):
     """
 
     def __init__(self, origfile1, lang2, anchor_file=None, quiet=False):
+        """Initialise the Parallelize class.
+
+        Args:
+            origfile1 (str): path the one of the files that should be
+                sentence aligned.
+            lang2 (str): language of the other file that should be
+                sentence aligned.
+            anchor_file (str): path to the anchor file. Defaults to None.
+                A real file is only needed when using tca2 for sentence
+                alignment.
+            quiet (bool): If True, be verbose. Otherwise, be quiet.
+        """
         self.quiet = quiet
         self.origfiles = []
 
@@ -398,6 +426,15 @@ class Parallelize(object):
         self.gal = self.setup_anchors(anchor_file, anchor_cols)
 
     def setup_anchors(self, path, cols):
+        """Setup anchor file.
+
+        Args:
+            path (str): where the anchor file will be written.
+            cols (list of str): list of all the possible langs.
+
+        Returns:
+            generate_anchor_list.GenerateAnchorList
+        """
         if path is None:
             path = os.path.join(os.environ['GTHOME'],
                                 'gt/common/src/anchor.txt')
@@ -496,6 +533,7 @@ class Parallelize(object):
         return output, error
 
     def align(self):
+        """Sentence align two corpus files."""
         raise NotImplementedError('You have to subclass and override align')
 
 
@@ -772,6 +810,15 @@ class Tmx(object):
         return tu
 
     def remove_unwanted_space_from_string(self, input_string):
+        """Remove unwanted space from string.
+
+        Args:
+            input_string (str): the string we would like to remove
+                unwanted space from:
+
+        Returns:
+            str without unwanted space.
+        """
         result = input_string
 
         # regex to find space followed by punctuation

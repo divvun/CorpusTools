@@ -248,6 +248,13 @@ class XMLPrinter(object):
                 buffer.write(u'\n')
 
     def get_contents(self, elt_contents, textlist, elt_lang):
+        """Get the contents of a xml document.
+
+        Args:
+            elt_contents (str): the text of an etree element.
+            textlist (list of str): text will be added this list.
+            elt_lang (str): language of the element.
+        """
         if elt_contents is not None:
             text = elt_contents.strip()
             if text != '' and (
@@ -344,6 +351,11 @@ class XMLPrinter(object):
         )
 
     def parse_file(self, filename):
+        """Parse the xml document.
+
+        Args:
+            filename (str): path to the filename.
+        """
         self.filename = filename
         p = etree.XMLParser(huge_tree=True)
         self.etree = etree.parse(filename, p)
@@ -384,6 +396,12 @@ class XMLPrinter(object):
             hyph.getparent().remove(hyph)
 
     def print_element(self, element, buffer):
+        """Write the text of the element to the buffer.
+
+        Args:
+            element (etree._Element):
+            buffer ():
+        """
         if element is not None and element.text is not None:
             buffer.write(element.text)
 

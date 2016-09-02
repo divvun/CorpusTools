@@ -106,6 +106,7 @@ class TmxGoldstandardTester(object):
         self.number_of_diff_lines += diff_lines
 
     def get_number_of_diff_lines(self):
+        """Get the number of diff lines."""
         return self.number_of_diff_lines
 
     def dateformat(self):
@@ -115,7 +116,10 @@ class TmxGoldstandardTester(object):
         return d.strftime("%Y%m%d-%H%M")
 
     def run_test(self):
-        # Make a testrun element, which will contain the result of the test
+        """Make a testrun element.
+
+        This element contain the result of the test.
+        """
         testrun = self.testresult_writer.make_testrun_element(self.date)
 
         paralang = ""

@@ -36,6 +36,17 @@ class ParallelPicker:
     """Pick parallel files from converted xml files."""
 
     def __init__(self, language1_dir, parallel_language, minratio, maxratio):
+        """Initialise the ParallelPicker class.
+
+        Args:
+            language1_dir (str): the directory where the lang1 files exist.
+            parallel_language (str): the parallel language where the lang2
+                files exist.
+            minratio (int): the minimum acceptable ratio of sentences
+                between two parallel documents
+            maxratio (int): the maximum acceptable ratio of sentences
+                between two parallel documents
+        """
         self.language1_dir = language1_dir
         self.calculate_language1(language1_dir)
         self.parallel_language = parallel_language
@@ -225,6 +236,11 @@ class ParallelPicker:
         self.poor_ratio.append(name1 + ',' + name2 + ',' + repr(ratio))
 
     def add_changed_file(self, corpus_file):
+        """Add changed file to prestable/converted.
+
+        Args:
+            corpus_file (parallelize.CorpusXMLFile)
+        """
         self.changed_files.append(corpus_file.get_name())
         prestable_filename = corpus_file.get_name().replace(
             'converted/', 'prestable/converted/')
@@ -234,7 +250,16 @@ class ParallelPicker:
             self.old_files.remove(prestable_filename)
 
     def both_files_translated_from(self, parallel_file, language1_file):
+        """Check if both files claim to be translations of each other.
 
+        Args:
+            parallel_file (parallelize.CorpusXMLFile):
+            language1_file (parallelize.CorpusXMLFile):
+
+        Returns:
+            bool: True if both files claim to be a translation of the other,
+            False otherwise.
+        """
         if (parallel_file.get_translated_from() == language1_file.get_lang() and
                 language1_file.get_translated_from() == self.parallel_language):
             # print ("Both files claim to be translations of the other")
@@ -244,6 +269,14 @@ class ParallelPicker:
             return False
 
     def one_file_translated_from(self, language1_file, parallel_file):
+        """Check if the files are a translation of the other.
+
+        Place them in different dicts depending on if this is true or not.
+
+        Args:
+            parallel_file (parallelize.CorpusXMLFile):
+            language1_file (parallelize.CorpusXMLFile):
+        """
         if (language1_file.get_translated_from() == self.parallel_language or
                 parallel_file.get_translated_from() == language1_file.get_lang()):
             if (self.valid_diff(language1_file, parallel_file.get_lang()) and
@@ -332,6 +365,7 @@ class ParallelPicker:
         shutil.copy(xml_file.get_name(), prestable_dir)
 
     def treat_lists(self):
+        """Give a report on the result of the search."""
         for old_file in self.old_files:
             self.remove_file(old_file)
 
@@ -350,6 +384,7 @@ class ParallelPicker:
               'pairs of the candidate files had no translated_from entry')
 
     def write_log(self):
+        """Write a log containing the old files."""
         log_file = open('pick.log', 'w')
 
         log_file.write('old_files' + '\n')

@@ -35,6 +35,15 @@ class GenerateAnchorList(object):
     """Generate anchor list used by tca2."""
 
     def __init__(self, lang1, lang2, columns, path):
+        """Initialise the GenerateAnchorList class.
+
+        Args:
+            lang1: the main lang
+            lang2: the translated lang
+            columns (list of str): contains all the possible langs
+                found in the main anchor file.
+            path (str): path to the new anchor file.
+        """
         self.lang1 = lang1
         self.lang2 = lang2
         self.lang1_index = columns.index(lang1)

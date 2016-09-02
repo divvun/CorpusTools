@@ -47,6 +47,11 @@ class DupeFinder(object):
 
     @staticmethod
     def _get_files(directory):
+        """Get the xml documents from the directory.
+
+        Args:
+            directory (str): the directory to collect xml files from.
+        """
         files = {}
         xmlprinter = ccat.XMLPrinter(all_paragraphs=True)
         for f in os.listdir(directory):
@@ -59,9 +64,18 @@ class DupeFinder(object):
 
     @staticmethod
     def get_parallel_texts(filename1):
+        """Get the names of the parallel files.
+
+        filename (str): name of the file that should be searched.
+        """
         return etree.parse(filename1).xpath('.//parallel_text')
 
     def remove_dupe_file(self, filename1, filename2):
+        """Remove duplicate files.
+
+        filename1 (str): name of the first file to be compared.
+        filename2 (str): name of the second file to be compared.
+        """
         result = list(difflib.unified_diff(
             self.files[filename1].splitlines(1),
             self.files[filename2].splitlines(1)))
@@ -79,12 +93,29 @@ class DupeFinder(object):
 
     @staticmethod
     def get_wc(filename):
+        """Get the wordcount of a file.
+
+        Args:
+            filename (str): name of the file to retrieve the word count from.
+
+        Returns:
+            float
+        """
         tree = etree.parse(filename)
         w = tree.find('.//wordcount').text
 
         return float(w)
 
     def good_word_ratio(self, filename1, filename2):
+        """Check if the word ratio of two files are nearly equal.
+
+        Args:
+            filename1 (str): name of the first file.
+            filename2 (str): name of the second file.
+
+        Returns:
+            bool: True if the ratio is larger than 0.9, False if it is less.
+        """
         w1 = self.get_wc(filename1)
         w2 = self.get_wc(filename2)
 
@@ -93,6 +124,12 @@ class DupeFinder(object):
         return ratio > 0.9
 
     def compare_files(self, filename1, filename2):
+        """Compare two files.
+
+        Args:
+            filename1 (str): name of the first file.
+            filename2 (str): name of the second file.
+        """
         sm = difflib.SequenceMatcher(a=self.files[filename1],
                                      b=self.files[filename2])
         ratio = sm.ratio()
@@ -109,6 +146,12 @@ class DupeFinder(object):
             sys.stdout.writelines(result)
 
     def iterate_all_files(self, remove=False):
+        """Compare all files to each other.
+
+        Args:
+            remove (bool): Defaults to False. If True, remove files,
+                otherwise keep files.
+        """
         wrong_ratio = 0
         good_ratio = 0
         checked_files = collections.defaultdict(set)
