@@ -405,10 +405,6 @@ class AvvirConverter(Converter):
     p nodes contain span, br and (since 2013) p nodes.
     """
 
-    def __init__(self, filename, write_intermediate=False):
-        super(AvvirConverter, self).__init__(filename,
-                                             write_intermediate)
-
     def convert2intermediate(self):
         """Convert an Ávvir xml to an intermediate xml document."""
         self.intermediate = etree.parse(self.names.orig).getroot()
@@ -538,10 +534,6 @@ class SVGConverter(Converter):
 
     """Convert SVG files to the giellatekno xml format."""
 
-    def __init__(self, filename, write_intermediate=False):
-        super(SVGConverter, self).__init__(filename,
-                                           write_intermediate)
-
     def convert2intermediate(self):
         """Transform svg to an intermediate xml document."""
         svgXsltRoot = etree.parse(os.path.join(here, 'xslt/svg2corpus.xsl'))
@@ -555,10 +547,6 @@ class SVGConverter(Converter):
 class PlaintextConverter(Converter):
 
     """Convert plain text files to the giellatekno xml format."""
-
-    def __init__(self, filename, write_intermediate=False):
-        super(PlaintextConverter, self).__init__(filename,
-                                                 write_intermediate)
 
     def to_unicode(self):
         """Read a file into a unicode string.
@@ -1540,10 +1528,6 @@ class PDF2XMLConverter(Converter):
 class BiblexmlConverter(Converter):
 
     """Convert bible xml files to the giellatekno xml format"""
-
-    def __init__(self, filename, write_intermediate=False):
-        super(BiblexmlConverter, self).__init__(filename,
-                                                write_intermediate)
 
     def convert2intermediate(self):
         """Convert the bible xml to intermediate giellatekno xml format"""
