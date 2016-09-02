@@ -3186,7 +3186,7 @@ class ConverterManager(object):
             return SVGConverter(
                 orig_file, write_intermediate=self.write_intermediate)
 
-        elif '.htm' in orig_file or '.php' in orig_file or  '.xhtm' in orig_file:
+        elif '.htm' in orig_file or '.php' in orig_file or '.xhtm' in orig_file:
             return HTMLConverter(
                 orig_file, write_intermediate=self.write_intermediate)
 
