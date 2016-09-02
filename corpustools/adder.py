@@ -325,7 +325,8 @@ def main():
     if args.parallel_file is None:
         if args.lang is not None:
             print(
-                'The argument -l|--lang is not allowed together with -d|--directory', file=sys.stderr)
+                'The argument -l|--lang is not allowed together with '
+                '-d|--directory', file=sys.stderr)
             sys.exit(2)
         (root, module, lang, genre, path, basename) = util.split_path(
             os.path.join(args.directory, 'dummy.txt'))
@@ -352,7 +353,8 @@ def main():
     else:
         if args.directory is not None:
             print(
-                'The argument -d|--directory is not allowed together with -p|--parallel', file=sys.stderr)
+                'The argument -d|--directory is not allowed together with '
+                '-p|--parallel', file=sys.stderr)
             print('Only -l|--lang is allowed together with -p|--parallel',
                   file=sys.stderr)
             sys.exit(3)
