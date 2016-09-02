@@ -63,17 +63,17 @@ class ConversionException(Exception):
 
 
 class CorpusPath(object):
-    '''Map filenames in a corpus
+    """Map filenames in a corpus
 
     Args:
         path: path to a corpus file
-    '''
+    """
     def __init__(self, path):
         self.pathcomponents = self.split_path(path)
         self.md = xslsetter.MetadataHandler(self.xsl, create=True)
 
     def split_path(self, path):
-        '''Map path to the original file
+        """Map path to the original file
 
         Args:
             path: a path to a corpus file
@@ -84,7 +84,7 @@ class CorpusPath(object):
 
         Raises:
             ValueError: the path is not part of a corpus.
-        '''
+        """
         def split_on_module(p):
             for module in [u'goldstandard/orig', u'prestable/converted',
                            u'prestable/toktmx', u'prestable/tmx', u'orig',
@@ -162,7 +162,7 @@ class CorpusPath(object):
 
 class Converter(object):
 
-    '''Take care of data common to all Converter classes'''
+    """Take care of data common to all Converter classes"""
 
     def __init__(self, filename, write_intermediate=False):
         codecs.register_error('mixed', self.mixed_decoder)
@@ -198,7 +198,7 @@ class Converter(object):
         return os.path.join(here, 'dtd/corpus.dtd')
 
     def validate_complete(self, complete):
-        '''Validate the complete document'''
+        """Validate the complete document"""
         dtd = etree.DTD(Converter.get_dtd_location())
 
         if not dtd.validate(complete):
@@ -224,7 +224,7 @@ class Converter(object):
                                          pretty_print='True'))
 
     def transform_to_complete(self):
-        '''Combine the intermediate xml document with its medatata.'''
+        """Combine the intermediate xml document with its medatata."""
         intermediate = self.convert2intermediate()
 
         self.maybe_write_intermediate(intermediate)
@@ -305,13 +305,13 @@ class Converter(object):
         return repl, (decode_error.start + len(repl))
 
     def make_complete(self, languageGuesser):
-        '''Make a complete giellatekno xml file
+        """Make a complete giellatekno xml file
 
         Combine the intermediate giellatekno xml file and the metadata into
         a complete giellatekno xml file.
         Fix the character encoding
         Detect the languages in the xml file
-        '''
+        """
         complete = self.transform_to_complete()
         self.validate_complete(complete)
         self.convert_errormarkup(complete)
@@ -355,12 +355,12 @@ class Converter(object):
         return self.names.pathcomponents.root
 
     def extract_text(self, command):
-        '''Extract the text from a document.
+        """Extract the text from a document.
 
         :command: a list containing the command and the arguments sent to
         ExternalCommandRunner.
         :returns: byte string containing the output of the program
-        '''
+        """
         runner = util.ExternalCommandRunner()
         runner.run(command, cwd=self.tmpdir)
 
@@ -398,20 +398,20 @@ class Converter(object):
 
 class AvvirConverter(Converter):
 
-    '''Convert Ávvir xml files to the giellatekno xml format.
+    """Convert Ávvir xml files to the giellatekno xml format.
 
     The root node in an Ávvir document is article.
     article nodes contains one or more story nodes.
     story nodes contain one or more p nodes.
     p nodes contain span, br and (since 2013) p nodes.
-    '''
+    """
 
     def __init__(self, filename, write_intermediate=False):
         super(AvvirConverter, self).__init__(filename,
                                              write_intermediate)
 
     def convert2intermediate(self):
-        '''Convert an Ávvir xml to an intermediate xml document.'''
+        """Convert an Ávvir xml to an intermediate xml document."""
         self.intermediate = etree.parse(self.names.orig).getroot()
         self.convert_p()
         self.convert_story()
@@ -421,7 +421,7 @@ class AvvirConverter(Converter):
 
     @staticmethod
     def insert_element(p, text, position):
-        '''Insert a new element in p's parent
+        """Insert a new element in p's parent
 
         Arguments:
             p: an lxml element, it is a story/p element
@@ -431,7 +431,7 @@ class AvvirConverter(Converter):
 
         Returns:
             position: (integer)
-        '''
+        """
         if text is not None and text.strip() != '':
             new_p = etree.Element('p')
             new_p.text = text
@@ -443,14 +443,14 @@ class AvvirConverter(Converter):
 
     @staticmethod
     def convert_sub_p(p):
-        '''Convert p element found inside story/p elements
+        """Convert p element found inside story/p elements
 
         These elements contain erroneous text that an editor has removed.
         This function removes p.text and saves p.tail
 
         Arguments:
             p: an lxml element, it is a story/p element
-        '''
+        """
         for sub_p in p.findall('.//p'):
             previous = sub_p.getprevious()
             if previous is None:
@@ -469,11 +469,11 @@ class AvvirConverter(Converter):
             p.remove(sub_p)
 
     def convert_subelement(self, p):
-        '''Convert subelements of story/p elements to p elements
+        """Convert subelements of story/p elements to p elements
 
         Arguments:
             p: an lxml element, it is a story/p element
-        '''
+        """
         position = 1
         for subelement in p:
             position = self.insert_element(p, subelement.text, position)
@@ -487,7 +487,7 @@ class AvvirConverter(Converter):
             p.remove(subelement)
 
     def convert_p(self):
-        '''Convert story/p elements to one or more p elements'''
+        """Convert story/p elements to one or more p elements"""
         for p in self.intermediate.findall('./story/p'):
             if p.get("class") is not None:
                 del p.attrib["class"]
@@ -500,7 +500,7 @@ class AvvirConverter(Converter):
                 story.remove(p)
 
     def convert_story(self):
-        '''Convert story elements in to giellatekno xml elements'''
+        """Convert story elements in to giellatekno xml elements"""
         for title in self.intermediate.findall('.//story[@class="Tittel"]'):
             for p in title.findall('./p'):
                 p.set('type', 'title')
@@ -528,7 +528,7 @@ class AvvirConverter(Converter):
             parent.remove(story)
 
     def convert_article(self):
-        '''The root element of an Ávvir doc is article, rename it to body'''
+        """The root element of an Ávvir doc is article, rename it to body"""
         self.intermediate.tag = 'body'
         document = etree.Element('document')
         document.append(self.intermediate)
@@ -537,14 +537,14 @@ class AvvirConverter(Converter):
 
 class SVGConverter(Converter):
 
-    '''Convert SVG files to the giellatekno xml format.'''
+    """Convert SVG files to the giellatekno xml format."""
 
     def __init__(self, filename, write_intermediate=False):
         super(SVGConverter, self).__init__(filename,
                                            write_intermediate)
 
     def convert2intermediate(self):
-        '''Transform svg to an intermediate xml document'''
+        """Transform svg to an intermediate xml document"""
         svgXsltRoot = etree.parse(os.path.join(here, 'xslt/svg2corpus.xsl'))
         transform = etree.XSLT(svgXsltRoot)
         doc = etree.parse(self.names.orig)
@@ -555,21 +555,21 @@ class SVGConverter(Converter):
 
 class PlaintextConverter(Converter):
 
-    '''Convert plain text files to the giellatekno xml format.'''
+    """Convert plain text files to the giellatekno xml format."""
 
     def __init__(self, filename, write_intermediate=False):
         super(PlaintextConverter, self).__init__(filename,
                                                  write_intermediate)
 
     def to_unicode(self):
-        '''Read a file into a unicode string.
+        """Read a file into a unicode string.
 
         If the content of the file is not utf-8, pretend the encoding is
         latin1. The real encoding (for sma, sme and smj) will be detected
         later.
 
         :returns: a unicode string
-        '''
+        """
         try:
             content = codecs.open(self.names.orig, encoding='utf8').read()
         except ValueError:
@@ -612,14 +612,14 @@ class PlaintextConverter(Converter):
         return content
 
     def make_element(self, eName, text):
-        '''Makes an xml element.
+        """Makes an xml element.
 
         :param eName: Name of the xml element
         :param text: The text the xml should contain
         :param attributes: The attributes the element should have
 
         :returns: lxml.etree.Element
-        '''
+        """
         el = etree.Element(eName)
 
         hyph_parts = text.split('<hyph/>')
@@ -690,10 +690,10 @@ class PDFFontspecs(object):
 
 
 class BoundingBox(object):
-    '''Define an area that a box covers
+    """Define an area that a box covers
 
     Used in PDF conversion classes
-    '''
+    """
     def __init__(self):
         self.top = sys.maxsize
         self.left = sys.maxsize
@@ -709,27 +709,27 @@ class BoundingBox(object):
         return self.bottom - self.top
 
     def is_below(self, other_box):
-        '''True if this element is below other_box'''
+        """True if this element is below other_box"""
         return self.top >= other_box.bottom
 
     def is_above(self, other_box):
-        '''True if this element is above other_box'''
+        """True if this element is above other_box"""
         return other_box.top >= self.bottom
 
     def is_right_of(self, other_box):
-        '''True if this element is right of other_box'''
+        """True if this element is right of other_box"""
         return self.left >= other_box.right
 
     def is_left_of(self, other_box):
-        '''True if this element is left of other_box'''
+        """True if this element is left of other_box"""
         return self.right <= other_box.left
 
     def is_covered(self, other_box):
-        '''Is self sideways (partly) covered by other_box'''
+        """Is self sideways (partly) covered by other_box"""
         return self.left <= other_box.right and self.right >= other_box.left
 
     def increase_box(self, other_box):
-        '''Increase area of the boundingbox'''
+        """Increase area of the boundingbox"""
         if self.top > other_box.top:
             self.top = other_box.top
         if self.left > other_box.left:
@@ -750,7 +750,7 @@ class BoundingBox(object):
 
 
 class PDFTextElement(BoundingBox):
-    '''pdf2xml text elements are enclose in class'''
+    """pdf2xml text elements are enclose in class"""
     def __init__(self, t):
         self.t = t
 
@@ -798,7 +798,7 @@ class PDFTextElement(BoundingBox):
             child.text = re.sub('\d+', '', child.text)
 
     def merge_text_elements(self, other_box):
-        '''Merge the contents of other_box into self'''
+        """Merge the contents of other_box into self"""
         prev_t = self.t
         t = other_box.t
         if not len(prev_t):
@@ -835,7 +835,7 @@ class PDFTextElement(BoundingBox):
 
 
 class PDFParagraph(object):
-    '''Mimic a paragraph
+    """Mimic a paragraph
 
     textelements is a list of PDFTextElements
 
@@ -845,7 +845,7 @@ class PDFParagraph(object):
 
     in_list is a boolean to indicate whether the paragraph contains a
     list
-    '''
+    """
     LIST_CHARS = [
         u'•',  # U+2022: BULLET
         u'–',  # U+2013: EN DASH
@@ -876,7 +876,7 @@ class PDFParagraph(object):
         return delta < ratio * self.textelements[-1].height
 
     def is_same_paragraph(self, textelement):
-        '''Decide whether textelement belongs to this paragraph'''
+        """Decide whether textelement belongs to this paragraph"""
         if self.LIST_RE.search(textelement.plain_text):
             return False
         elif self.is_listitem:
@@ -925,22 +925,22 @@ class PDFParagraph(object):
 
 
 class PDFSection(BoundingBox):
-    '''A PDFSection contains paragraphs that belong together
+    """A PDFSection contains paragraphs that belong together
 
     A PDFSection conceptually covers the page width.
 
     paragraphs is a list of PDFParagraphs
-    '''
+    """
     def __init__(self):
         super(PDFSection, self).__init__()
         self.paragraphs = []
         self.column_width = 0
 
     def append_paragraph(self, paragraph):
-        '''Append a paragraph and increase the area of the section
+        """Append a paragraph and increase the area of the section
 
         paragraph is PDFParagraph
-        '''
+        """
         for box in paragraph.boundingboxes:
             self.increase_box(box)
             if box.width > self.column_width:
@@ -949,12 +949,12 @@ class PDFSection(BoundingBox):
         self.paragraphs.append(paragraph)
 
     def is_same_section(self, paragraph):
-        '''Define whether a paragraph belongs to this section
+        """Define whether a paragraph belongs to this section
 
         Use the left and width properties to define this.
 
         paragraph is PDFParagraph
-        '''
+        """
         if not self.paragraphs:
             return True
         else:
@@ -989,7 +989,7 @@ class PDFSection(BoundingBox):
 
 
 class OrderedPDFSections(object):
-    '''Place the PDFSections in the order they are placed on the page
+    """Place the PDFSections in the order they are placed on the page
 
     sections is a list of PDFSections
 
@@ -1006,7 +1006,7 @@ class OrderedPDFSections(object):
 
     Another example, where a page contains multicolumn text
     intersperced with tables, is illustrated in TestPDFSection1.
-    '''
+    """
     def __init__(self):
         self.sections = []
 
@@ -1018,7 +1018,7 @@ class OrderedPDFSections(object):
             return len(self.sections)
 
     def insert_section(self, new_section):
-        '''new_section is a PDFSection'''
+        """new_section is a PDFSection"""
         i = self.find_position(new_section)
         if not self.sections or i == len(self.sections):
             self.sections.append(new_section)
@@ -1041,7 +1041,7 @@ class OrderedPDFSections(object):
 
 
 class PDFTextExtractor(object):
-    '''Extract text from a list of PDFParagraphs'''
+    """Extract text from a list of PDFParagraphs"""
     def __init__(self):
         self.body = etree.Element('body')
         etree.SubElement(self.body, 'p')
@@ -1054,7 +1054,7 @@ class PDFTextExtractor(object):
         etree.SubElement(self.body, 'p')
 
     def append_text_to_p(self, text):
-        '''text is a string'''
+        """text is a string"""
         if not len(self.p) and not self.p.text:
             self.p.text = text
         elif not len(self.p) and self.p.text:
@@ -1067,7 +1067,7 @@ class PDFTextExtractor(object):
                 last.tail += text
 
     def extract_textelement(self, textelement):
-        '''Convert one <text> element to an array of text and etree Elements.
+        """Convert one <text> element to an array of text and etree Elements.
 
         A <text> element can contain <i> and <b> elements.
 
@@ -1076,7 +1076,7 @@ class PDFTextExtractor(object):
 
         The text and tail parts of the elements contained in the <i> and <b>
         elements become the text parts of <i> and <b> elements.
-        '''
+        """
 
         # print(util.lineno(), etree.tostring(textelement), file=sys.stderr)
         if textelement.text:
@@ -1118,11 +1118,11 @@ class PDFTextExtractor(object):
                 self.p.append(em)
 
     def get_last_string(self):
-        '''Get the plain text of the last paragraph of body'''
+        """Get the plain text of the last paragraph of body"""
         return self.p.xpath("string()")
 
     def handle_line_ending(self):
-        '''Add a soft hyphen or a space at the end of self.p
+        """Add a soft hyphen or a space at the end of self.p
 
         If - is followed by a space, do not replace it by a soft hyphen
         Sometimes this should be replaced by a soft hyphen, other times not.
@@ -1139,7 +1139,7 @@ class PDFTextExtractor(object):
         seaibi
 
         The tech to be able to replace it is not accessible at this stage.
-        '''
+        """
         if re.search('\S-$', self.get_last_string()):
             if not len(self.p):
                 self.p.text = self.p.text[:-1] + u'\xAD'
@@ -1161,22 +1161,22 @@ class PDFTextExtractor(object):
                 re.search(u'[.?!]\s*$', self.get_last_string()))
 
     def is_new_page(self, paragraph):
-        '''paragraph is a PDFParagraph'''
+        """paragraph is a PDFParagraph"""
         firstletter = paragraph.textelements[-1].plain_text[0]
         return firstletter == firstletter.upper()
 
     def extract_text_from_paragraph(self, paragraph):
-        '''paragraph is a PDFParagraph'''
+        """paragraph is a PDFParagraph"""
         for textelement in paragraph.textelements:
             self.extract_textelement(textelement.t)
             self.handle_line_ending()
         self.append_to_body()
 
     def extract_text_from_page(self, paragraphs):
-        '''paragraphs contain the text of one pdf page
+        """paragraphs contain the text of one pdf page
 
         paragraphs is a list PDFParagraphs
-        '''
+        """
         if (not self.is_first_page() and
             (self.is_new_page(paragraphs[0]) or
              self.is_last_paragraph_end_of_page())):
@@ -1205,10 +1205,10 @@ class PDFPageMetadata(object):
         self.metadata_inner_margins = metadata_inner_margins
 
     def compute_margins(self):
-        '''Compute the margins of a page in pixels.
+        """Compute the margins of a page in pixels.
 
         :returns: a dict containing the four margins in pixels
-        '''
+        """
         margins = {margin: self.compute_margin(margin)
                    for margin in ['right_margin', 'left_margin', 'top_margin',
                                   'bottom_margin']}
@@ -1216,12 +1216,12 @@ class PDFPageMetadata(object):
         return margins
 
     def compute_margin(self, margin):
-        '''Compute a margin in pixels.
+        """Compute a margin in pixels.
 
         :param margin: the name of the  margin
 
         :return: an int telling where the margin is on the page.
-        '''
+        """
         coefficient = self.get_coefficient(margin)
         #util.print_frame(margin, self.page_height, self.page_width, coefficient)
 
@@ -1235,7 +1235,7 @@ class PDFPageMetadata(object):
             return int(self.page_height - coefficient * self.page_height / 100.0)
 
     def get_coefficient(self, margin):
-        '''Get the width of the margin in percent'''
+        """Get the width of the margin in percent"""
         coefficient = 7
         if margin in list(self.metadata_margins.keys()):
             m = self.metadata_margins[margin]
@@ -1265,12 +1265,12 @@ class PDFPageMetadata(object):
         return margins
 
     def compute_inner_margin(self, margin):
-        '''Compute a margin in pixels.
+        """Compute a margin in pixels.
 
         :param margin: the name of the margin
 
         :return: an int telling where the margin is on the page.
-        '''
+        """
         coefficient = self.get_inner_coefficient(margin)
 
         if margin == 'inner_left_margin':
@@ -1283,7 +1283,7 @@ class PDFPageMetadata(object):
             return int(self.page_height - coefficient * self.page_height / 100.0)
 
     def get_inner_coefficient(self, margin):
-        '''Get the width of the margin in percent'''
+        """Get the width of the margin in percent"""
         coefficient = 0
         if margin in list(self.metadata_inner_margins.keys()):
             m = self.metadata_inner_margins[margin]
@@ -1300,14 +1300,14 @@ class PDFPageMetadata(object):
 
 
 class PDFPage(object):
-    '''Reads a page element
+    """Reads a page element
 
     textelements is a list of PDFTextElements
 
     The textelements are manipulated in several ways,
     then ordered in the way they appear on the page and
     finally sent to PDFTextExtractor
-    '''
+    """
     def __init__(self, page_element, metadata_margins={}, metadata_inner_margins={}):
         self.textelements = [PDFTextElement(t)
                              for t in page_element.iter('text')]
@@ -1319,7 +1319,7 @@ class PDFPage(object):
             metadata_inner_margins=metadata_inner_margins)
 
     def is_skip_page(self, skip_pages):
-        '''True if a page should be skipped, otherwise false'''
+        """True if a page should be skipped, otherwise false"""
         return (('odd' in skip_pages and
                  (self.pdf_pagemetadata.page_number % 2) == 1) or
                 ('even' in skip_pages and
@@ -1332,7 +1332,7 @@ class PDFPage(object):
             textelement.t.set('font', correct)
 
     def adjust_line_heights(self):
-        '''Adjust the height if there is a 1 pixel overlap between elements.'''
+        """Adjust the height if there is a 1 pixel overlap between elements."""
         for i in six.moves.range(1, len(self.textelements)):
             prev_textelement = self.textelements[i - 1]
             textelement = self.textelements[i]
@@ -1341,12 +1341,12 @@ class PDFPage(object):
                     'height', six.text_type(prev_textelement.height - 1))
 
     def remove_footnotes_superscript(self):
-        '''Remove numbers from elements found by find_footnotes_superscript.'''
+        """Remove numbers from elements found by find_footnotes_superscript."""
         for textelement in self.textelements[1:]:
             textelement.remove_superscript()
 
     def remove_elements_not_within_margin(self):
-        '''Remove PDFTextElements from textelements if needed'''
+        """Remove PDFTextElements from textelements if needed"""
         margins = self.pdf_pagemetadata.compute_margins()
         inner_margins = self.pdf_pagemetadata.compute_inner_margins()
 
@@ -1358,7 +1358,7 @@ class PDFPage(object):
                 if not self.is_inside_inner_margins(t, inner_margins)]
 
     def merge_elements_on_same_line(self):
-        '''Merge PDFTextElements that are on the same line'''
+        """Merge PDFTextElements that are on the same line"""
         same_line_indexes = [i for i in six.moves.range(1,
                                                         len(self.textelements))
                              if self.textelements[i - 1].is_text_on_same_line(
@@ -1369,26 +1369,26 @@ class PDFPage(object):
             del self.textelements[i]
 
     def remove_invalid_elements(self):
-        '''Remove elements with empty strings or where the width is zero or negative'''
+        """Remove elements with empty strings or where the width is zero or negative"""
         self.textelements[:] = [t for t in self.textelements
                                 if not (not t.t.xpath("string()").strip() or
                                         t.width < 1)]
 
     def is_inside_margins(self, t, margins):
-        '''Check if t is inside the given margins
+        """Check if t is inside the given margins
 
         t is a text element
-        '''
+        """
         return (t.top > margins['top_margin'] and
                 t.top < margins['bottom_margin'] and
                 t.left > margins['left_margin'] and
                 t.left < margins['right_margin'])
 
     def is_inside_inner_margins(self, t, margins):
-        '''Check if t is inside the given margins
+        """Check if t is inside the given margins
 
         t is a text element
-        '''
+        """
         return (t.top > margins['inner_top_margin'] and
                 t.top < margins['inner_bottom_margin'] and
                 t.left > margins['inner_left_margin'] and
@@ -1407,14 +1407,14 @@ class PDFPage(object):
         return paragraphs
 
     def make_ordered_sections(self):
-        '''Order the text elements the order they appear on the page
+        """Order the text elements the order they appear on the page
 
         The text elements are placed into PDFParagraphs,
         the PDFParagraphs are placed into PDFSections and finally
         the PDFSections are placed into an OrderedPDFSections
 
         Returns a list of PDFParagraphs
-        '''
+        """
         paragraphs = self.make_unordered_paragraphs()
         section = PDFSection()
         section.append_paragraph(paragraphs[0])
@@ -1432,10 +1432,10 @@ class PDFPage(object):
         return ordered_sections
 
     def pick_valid_text_elements(self):
-        '''Pick the wanted text elements from a page
+        """Pick the wanted text elements from a page
 
         This is the main function of this class
-        '''
+        """
         self.adjust_line_heights()
         self.remove_elements_not_within_margin()
         self.remove_footnotes_superscript()
@@ -1450,7 +1450,7 @@ class PDFPage(object):
 
 
 class PDF2XMLConverter(Converter):
-    '''Class to convert the xml output of pdftohtml to giellatekno xml'''
+    """Class to convert the xml output of pdftohtml to giellatekno xml"""
     def __init__(self, filename, write_intermediate=False):
         super(PDF2XMLConverter, self).__init__(filename,
                                                write_intermediate)
@@ -1469,7 +1469,7 @@ class PDF2XMLConverter(Converter):
         return content
 
     def replace_ligatures(self, content):
-        '''document is a stringified xml document'''
+        """document is a stringified xml document"""
         replacements = {
             u"[dstrok]": u"đ",
             u"[Dstrok]": u"Đ",
@@ -1521,7 +1521,7 @@ class PDF2XMLConverter(Converter):
         return document
 
     def parse_page(self, page):
-        '''Parse the page element.'''
+        """Parse the page element."""
         pdfpage = PDFPage(page, metadata_margins=self.md.margins,
                           metadata_inner_margins=self.md.inner_margins)
         if not pdfpage.is_skip_page(self.md.skip_pages):
@@ -1541,14 +1541,14 @@ class PDF2XMLConverter(Converter):
 
 class BiblexmlConverter(Converter):
 
-    '''Convert bible xml files to the giellatekno xml format'''
+    """Convert bible xml files to the giellatekno xml format"""
 
     def __init__(self, filename, write_intermediate=False):
         super(BiblexmlConverter, self).__init__(filename,
                                                 write_intermediate)
 
     def convert2intermediate(self):
-        '''Convert the bible xml to intermediate giellatekno xml format'''
+        """Convert the bible xml to intermediate giellatekno xml format"""
         document = etree.Element('document')
         document.append(self.process_bible())
 
@@ -1669,7 +1669,7 @@ class BiblexmlConverter(Converter):
 
 
 class HTMLContentConverter(object):
-    '''Convert html documents to the giellatekno xml format.'''
+    """Convert html documents to the giellatekno xml format."""
 
     def superclean(self, content):
         cleaner = clean.Cleaner(
@@ -1705,7 +1705,7 @@ class HTMLContentConverter(object):
             raise ConversionException(six.text_type(e))
 
     def remove_cruft(self, content):
-        '''from svenskakyrkan.se documents'''
+        """from svenskakyrkan.se documents"""
         replacements = [
             (u'//<script', u'<script'),
             (u'&nbsp;', u' '),
@@ -1714,11 +1714,11 @@ class HTMLContentConverter(object):
         return util.replace_all(replacements, content)
 
     def simplify_tags(self):
-        '''Turn tags to divs.
+        """Turn tags to divs.
 
         We don't care about the difference between <fieldsets>, <legend>
         etc. – treat them all as <div>'s for xhtml2corpus
-        '''
+        """
         superfluously_named_tags = self.soup.xpath(
             "//html:fieldset | //html:legend | //html:article | //html:hgroup "
             "| //html:section | //html:dl | //html:dd | //html:dt"
@@ -1728,12 +1728,12 @@ class HTMLContentConverter(object):
             elt.tag = '{http://www.w3.org/1999/xhtml}div'
 
     def fix_spans_as_divs(self):
-        '''Turn div like elements into div.
+        """Turn div like elements into div.
 
         XHTML doesn't allow (and xhtml2corpus doesn't handle) span-like
         elements with div-like elements inside them; fix this and
         similar issues by turning them into divs.
-        '''
+        """
         spans_as_divs = self.soup.xpath(
             "//*[( descendant::html:div or descendant::html:p"
             "      or descendant::html:h1 or descendant::html:h2"
@@ -1771,16 +1771,16 @@ class HTMLContentConverter(object):
                 elt.getparent().remove(elt)
 
     def remove_empty_class(self):
-        '''Delete empty class attributes.'''
+        """Delete empty class attributes."""
         for element in self.soup.xpath('.//*[@class=""]'):
             del element.attrib['class']
 
     def remove_elements(self):
-        '''Remove unwanted tags from a html document
+        """Remove unwanted tags from a html document
 
         The point with this exercise is to remove all but the main content of
         the document.
-        '''
+        """
         unwanted_classes_ids = {
             'div': {
                 'class': [
@@ -2051,7 +2051,7 @@ class HTMLContentConverter(object):
                         unwanted.getparent().remove(unwanted)
 
     def add_p_around_text(self):
-        '''Add p around text after an hX element'''
+        """Add p around text after an hX element"""
         stop_tags = [
             '{http://www.w3.org/1999/xhtml}p',
             '{http://www.w3.org/1999/xhtml}h3',
@@ -2081,7 +2081,7 @@ class HTMLContentConverter(object):
             elt.text = ' '
 
     def center2div(self):
-        '''Convert center to div in tidy style.'''
+        """Convert center to div in tidy style."""
         for center in self.soup.xpath(
                 './/html:center',
                 namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
@@ -2089,7 +2089,7 @@ class HTMLContentConverter(object):
             center.set('class', 'c1')
 
     def body_i(self):
-        '''Wrap bare elements inside a p element.'''
+        """Wrap bare elements inside a p element."""
         for tag in ['a', 'i', 'em', 'font', 'u', 'strong', 'span']:
             for bi in self.soup.xpath(
                     './/html:body/html:{}'.format(tag),
@@ -2100,7 +2100,7 @@ class HTMLContentConverter(object):
                 p.append(bi)
 
     def body_text(self):
-        '''Wrap bare text inside a p element.'''
+        """Wrap bare text inside a p element."""
         body = self.soup.find(
             './/html:body',
             namespaces={'html': 'http://www.w3.org/1999/xhtml'})
@@ -2112,11 +2112,11 @@ class HTMLContentConverter(object):
             body.insert(0, p)
 
     def convert2xhtml(self, content):
-        '''Clean up the html document.
+        """Clean up the html document.
 
         Destructively modifies self.soup, trying
         to create strict xhtml for xhtml2corpus.xsl
-        '''
+        """
         c_content = self.remove_cruft(content)
 
         self.soup = html5parser.document_fromstring(
@@ -2195,7 +2195,7 @@ class HTMLConverter(Converter):
         r"<meta [^>]*[\"; ]charset=[\"']?([^\"' ]+)", re.IGNORECASE)
 
     def get_normalized_encoding(self, encoding, source):
-        '''Interpret some 8-bit encodings as windows-1252.'''
+        """Interpret some 8-bit encodings as windows-1252."""
         if encoding not in ['iso-8859-15', 'utf-8']:
             encoding_norm = {
                 'iso-8859-1': 'windows-1252',
@@ -2211,11 +2211,11 @@ class HTMLConverter(Converter):
         return encoding
 
     def get_encoding_from_content(self, content):
-        '''Extract encoding from html header.
+        """Extract encoding from html header.
 
         :param content: a utf-8 encoded byte string
         :return: a string containing the encoding
-        '''
+        """
         # <?xml version="1.0" encoding="ISO-8859-1"?>
         # <meta charset="utf-8">
         # <meta http-equiv="Content-Type" content="charset=utf-8" />
@@ -2227,12 +2227,12 @@ class HTMLConverter(Converter):
             return m.group(1).lower()
 
     def remove_declared_encoding(self, content):
-        '''Remove declared decoding
+        """Remove declared decoding
 
         lxml explodes if we send a decoded Unicode string with an
         xml-declared encoding
         http://lxml.de/parsing.html#python-unicode-strings
-        '''
+        """
         return re.sub(self.xml_encoding_declaration_re, "", content)
 
     def convert2xhtml(self):
@@ -2263,10 +2263,10 @@ class HTMLConverter(Converter):
                     found_element.addnext(new_p)
 
     def convert2intermediate(self):
-        '''Convert the original document to the giellatekno xml format.
+        """Convert the original document to the giellatekno xml format.
 
         The resulting xml is stored in intermediate
-        '''
+        """
         converter_xsl = os.path.join(here, 'xslt/xhtml2corpus.xsl')
 
         html_xslt_root = etree.parse(converter_xsl)
@@ -2298,7 +2298,7 @@ class HTMLConverter(Converter):
 
 
 class RTFConverter(HTMLConverter):
-    '''Convert rtf documents to the giellatekno xml format.'''
+    """Convert rtf documents to the giellatekno xml format."""
 
     @property
     def content(self):
@@ -2316,7 +2316,7 @@ class RTFConverter(HTMLConverter):
 
 class OdfConverter(HTMLConverter):
 
-    '''Convert odf documents to the giellatekno xml format'''
+    """Convert odf documents to the giellatekno xml format"""
 
     @property
     def content(self):
@@ -2331,14 +2331,14 @@ class OdfConverter(HTMLConverter):
 
 class DocxConverter(HTMLConverter):
 
-    '''Convert docx documents to the giellatekno xml format'''
+    """Convert docx documents to the giellatekno xml format"""
 
     @property
     def content(self):
         return PyDocXHTMLExporter(self.names.orig).export()
 
     def remove_elements(self):
-        '''Remove some docx specific html elements'''
+        """Remove some docx specific html elements"""
         super(DocxConverter, self).remove_elements()
 
         unwanted_classes_ids = {
@@ -2390,7 +2390,7 @@ class EpubConverter(HTMLConverter):
 
 class DocConverter(HTMLConverter):
 
-    '''Convert Microsoft Word documents to the giellatekno xml format'''
+    """Convert Microsoft Word documents to the giellatekno xml format"""
 
     @property
     def content(self):
@@ -2403,7 +2403,7 @@ class DocConverter(HTMLConverter):
             return self.extract_text(command).decode('windows-1252')
 
     def fix_wv_output(self):
-        '''Examples of headings
+        """Examples of headings
 
         h1:
         <html:ul>
@@ -2515,18 +2515,18 @@ class DocConverter(HTMLConverter):
             </html:p>
         </html:div>
 
-        '''
+        """
         pass
 
 
 class DocumentFixer(object):
 
-    '''Fix the content of a giellatekno xml document.
+    """Fix the content of a giellatekno xml document.
 
     Receive a stringified etree from one of the raw converters,
     replace ligatures, fix the encoding and return an etree with correct
     characters
-    '''
+    """
 
     def __init__(self, document):
         self.root = document
@@ -2535,7 +2535,7 @@ class DocumentFixer(object):
         return self.root
 
     def compact_ems(self):
-        '''Compact consecutive em elements into a single em if possible.'''
+        """Compact consecutive em elements into a single em if possible."""
         word = re.compile(u'\w+', re.UNICODE)
         for element in self.root.iter('p'):
             if len(element.xpath('.//em')) > 1:
@@ -2556,7 +2556,7 @@ class DocumentFixer(object):
                         lines = []
 
     def soft_hyphen_to_hyph_tag(self):
-        '''Replace soft hyphen chars with hyphen tags.'''
+        """Replace soft hyphen chars with hyphen tags."""
         for element in self.root.iter('p'):
             self.replace_shy(element)
 
@@ -2585,7 +2585,7 @@ class DocumentFixer(object):
                     element.getparent().append(hyph)
 
     def insert_spaces_after_semicolon(self):
-        '''Insert space after semicolon where needed.'''
+        """Insert space after semicolon where needed."""
         irritating_words_regex = re.compile(u'(govv(a|en|ejeaddji):)([^ ])',
                                             re.UNICODE | re.IGNORECASE)
         for child in self.root.find('.//body'):
@@ -2600,7 +2600,7 @@ class DocumentFixer(object):
             element.tail = irritating_words_regex.sub(r'\1 \3', element.tail)
 
     def replace_ligatures(self):
-        '''Replace unwanted chars.'''
+        """Replace unwanted chars."""
         replacements = {
             u"[dstrok]": u"đ",
             u"[Dstrok]": u"Đ",
@@ -2648,7 +2648,7 @@ class DocumentFixer(object):
                     element.text = element.text.replace(key, value)
 
     def replace_bad_unicode(self):
-        '''Replace some chars in an otherwise 'valid utf-8' document.
+        """Replace some chars in an otherwise 'valid utf-8' document.
 
         These chars e.g. 'valid utf-8' (don't give UnicodeDecodeErrors), but
         we still want to replace them to what they most likely were
@@ -2656,7 +2656,7 @@ class DocumentFixer(object):
 
         :param content: a unicode string
         :returns: a cleaned up unicode string
-        '''
+        """
         # u'š'.encode('windows-1252') gives '\x9a', which sometimes
         # appears in otherwise utf-8-encoded documents with the
         # meaning 'š'
@@ -2688,12 +2688,12 @@ class DocumentFixer(object):
             self.fix_sms(child)
 
     def fix_body_encoding(self):
-        '''Replace wrongly encoded saami chars with proper ones.
+        """Replace wrongly encoded saami chars with proper ones.
 
         Send a stringified version of the body into the EncodingGuesser class.
         It returns the same version, but with fixed characters.
         Parse the returned string, insert it into the document
-        '''
+        """
         self.replace_ligatures()
 
         body = self.root.find('body')
@@ -2715,7 +2715,7 @@ class DocumentFixer(object):
                 self.fix_sms(self.root.find('body'))
 
     def fix_title_person(self, encoding):
-        '''Fix encoding problems'''
+        """Fix encoding problems"""
         eg = decode.EncodingGuesser()
 
         title = self.root.find('.//title')
@@ -2783,7 +2783,7 @@ class DocumentFixer(object):
             element.append(span)
 
     def detect_quote(self, element):
-        '''Insert span elements around quotes.'''
+        """Insert span elements around quotes."""
         newelement = deepcopy(element)
 
         element.text = ''
@@ -2812,19 +2812,19 @@ class DocumentFixer(object):
         return element
 
     def detect_quotes(self):
-        '''Detect quotes in all paragraphs.'''
+        """Detect quotes in all paragraphs."""
         for paragraph in self.root.iter('p'):
             paragraph = self.detect_quote(paragraph)
 
     def calculate_wordcount(self):
-        '''Count the words in the file.'''
+        """Count the words in the file."""
         plist = [etree.tostring(paragraph, method='text', encoding='unicode')
                  for paragraph in self.root.iter('p')]
 
         return six.text_type(len(re.findall(u'\S+', ' '.join(plist))))
 
     def set_word_count(self):
-        '''Set the wordcount element'''
+        """Set the wordcount element"""
         wordcount = self.root.find('header/wordcount')
         if wordcount is None:
             tags = ['collection', 'publChannel', 'place', 'year',
@@ -2840,14 +2840,14 @@ class DocumentFixer(object):
         wordcount.text = self.calculate_wordcount()
 
     def make_element(self, eName, text, attributes={}):
-        '''Make an xml element.
+        """Make an xml element.
 
         :param eName: the name of the element
         :param text: the content of the element
         :param attributes: the elements attributes
 
         :returns: lxml.etree.Element
-        '''
+        """
         el = etree.Element(eName)
         for key in attributes:
             el.set(key, attributes[key])
@@ -2857,7 +2857,7 @@ class DocumentFixer(object):
         return el
 
     def fix_newstags(self):
-        '''Convert newstags found in text to xml elements'''
+        """Convert newstags found in text to xml elements"""
         newstags = re.compile(
             u'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|'
             u'LED|bilde)*tekst:|@*foto:|@fotobyline:|@*bildetitt:|'
@@ -3016,11 +3016,11 @@ class DocumentFixer(object):
 
 class XslMaker(object):
 
-    '''Make an xsl file to combine with the intermediate xml file.
+    """Make an xsl file to combine with the intermediate xml file.
 
     To convert the intermediate xml to a fullfledged  giellatekno document
     a combination of three xsl files + the intermediate xml file is needed.
-    '''
+    """
 
     def __init__(self, xslfile):
         self.filename = xslfile
@@ -3073,7 +3073,7 @@ class XslMaker(object):
 
 class LanguageDetector(object):
 
-    '''Detect and set the languages of a document.'''
+    """Detect and set the languages of a document."""
 
     def __init__(self, document, languageGuesser):
         self.document = document
@@ -3092,17 +3092,17 @@ class LanguageDetector(object):
 
     @property
     def mainlang(self):
-        '''Get the mainlang of the file'''
+        """Get the mainlang of the file"""
         return self.document.\
             attrib['{http://www.w3.org/XML/1998/namespace}lang']
 
     def set_paragraph_language(self, paragraph):
-        '''Set xml:lang of paragraph
+        """Set xml:lang of paragraph
 
         Extract the text outside the quotes, use this text to set
         language of the paragraph.
         Set the language of the quotes in the paragraph.
-        '''
+        """
 
         if paragraph.get('{http://www.w3.org/XML/1998/namespace}lang') is None:
             paragraph_text = self.remove_quote(paragraph)
@@ -3118,7 +3118,7 @@ class LanguageDetector(object):
         return paragraph
 
     def set_span_language(self, paragraph):
-        '''Set xml:lang of span element'''
+        """Set xml:lang of span element"""
         for element in paragraph.iter("span"):
             if element.get("type") == "quote":
                 if element.text is not None:
@@ -3130,7 +3130,7 @@ class LanguageDetector(object):
                             lang)
 
     def remove_quote(self, paragraph):
-        '''Extract all text except the one inside <span type='quote'>'''
+        """Extract all text except the one inside <span type='quote'>"""
         text = ''
         for element in paragraph.iter():
             if (element.tag == 'span' and
@@ -3146,7 +3146,7 @@ class LanguageDetector(object):
         return text
 
     def detect_language(self):
-        '''Detect language in all the paragraphs in self.document'''
+        """Detect language in all the paragraphs in self.document"""
         if self.document.find('header/multilingual') is not None:
             for paragraph in self.document.iter('p'):
                 self.set_paragraph_language(paragraph)
@@ -3154,7 +3154,7 @@ class LanguageDetector(object):
 
 class ConverterManager(object):
 
-    '''Manage the conversion of original files to corpus xml'''
+    """Manage the conversion of original files to corpus xml"""
     LANGUAGEGUESSER = text_cat.Classifier(None)
     FILES = []
 
@@ -3240,7 +3240,7 @@ class ConverterManager(object):
             self.convert(orig_file)
 
     def add_file(self, xsl_file):
-        '''Add file for conversion'''
+        """Add file for conversion"""
         if os.path.isfile(xsl_file) and os.path.isfile(xsl_file[:-4]):
             md = xslsetter.MetadataHandler(xsl_file)
             if (
@@ -3254,7 +3254,7 @@ class ConverterManager(object):
 
     @staticmethod
     def make_xsl_file(source):
-        '''Write an xsl file if it does not exist'''
+        """Write an xsl file if it does not exist"""
         xsl_file = source if source.endswith('.xsl') else source + '.xsl'
         if not os.path.isfile(xsl_file):
             metadata = xslsetter.MetadataHandler(xsl_file, create=True)
@@ -3264,7 +3264,7 @@ class ConverterManager(object):
         return xsl_file
 
     def add_directory(self, directory):
-        '''Add all files in a directory for conversion'''
+        """Add all files in a directory for conversion"""
         for root, dirs, files in os.walk(directory):
             for f in files:
                 if f.endswith('.xsl'):
