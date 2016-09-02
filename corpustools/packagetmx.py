@@ -30,7 +30,6 @@ import zipfile
 
 
 class PackageTmx(object):
-
     """A class to package tmx files into a zip file"""
 
     def __init__(self, dirname):

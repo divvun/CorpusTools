@@ -35,7 +35,6 @@ from corpustools import argparse_version, ccat, parallelize, util
 
 
 class Analyser(object):
-
     """This class makes a dependency analysis of sma, sme and smj files
 
     The pipeline is:

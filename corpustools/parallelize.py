@@ -41,7 +41,6 @@ here = os.path.dirname(__file__)
 
 
 class CorpusXMLFile(object):
-
     """A class to handle all the info of a corpus xml file"""
 
     def __init__(self, name):
@@ -184,7 +183,6 @@ class CorpusXMLFile(object):
 
 
 class SentenceDivider(object):
-
     """A class that takes a giellatekno xml document as input.
 
     It spits out an xml document that has divided the text inside the p tags
@@ -364,7 +362,6 @@ class SentenceDivider(object):
 
 
 class Parallelize(object):
-
     """A class to parallelize two files
 
     Input is the xml file that should be parallellized and the language that it
@@ -639,7 +636,6 @@ class ParallelizeTCA2(Parallelize):
 
 
 class Tmx(object):
-
     """A tmx file handler
 
     A class that reads a tmx file, and implements a bare minimum of
@@ -845,7 +841,6 @@ class Tmx(object):
 
 
 class AlignmentToTmx(Tmx):
-
     """A class to make tmx files based on the output of an aligner
 
     This just implements some common methods for the TCA2 and hunalign
@@ -910,7 +905,6 @@ class AlignmentToTmx(Tmx):
 
 
 class HunalignToTmx(AlignmentToTmx):
-
     """A class to make tmx files based on the output from hunalign"""
 
     def __init__(self, origfiles, output):
@@ -946,7 +940,6 @@ class HunalignToTmx(AlignmentToTmx):
 
 
 class Tca2ToTmx(AlignmentToTmx):
-
     """A class to make tmx files based on the output from tca2"""
 
     def __init__(self, origfiles, sentfiles):

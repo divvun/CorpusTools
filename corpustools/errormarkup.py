@@ -31,7 +31,6 @@ from lxml import etree
 
 
 class ErrorMarkup(object):
-
     """This is a class to convert errormarkuped text to xml"""
 
     def __init__(self, filename):

@@ -241,7 +241,6 @@ def ignored(*exceptions):
 
 
 class ExternalCommandRunner(object):
-
     """Class to run external command through subprocess
 
     Save output, error and returnvalue

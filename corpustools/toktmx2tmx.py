@@ -37,7 +37,6 @@ from corpustools import parallelize, util
 
 
 class Toktmx2Tmx(object):
-
     """A class to make a tidied up version of toktmx files.
 
     Removes unwanted spaces around punctuation, parentheses and so on.

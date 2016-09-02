@@ -23,7 +23,6 @@
 
 
 class Typoline(object):
-
     """Class to parse a line of a .typos file"""
 
     def __init__(self, typoline):
@@ -60,7 +59,6 @@ class Typoline(object):
 
 
 class Typos(object):
-
     """A class that reads typos and corrections from a .typos files"""
 
     def __init__(self, typosfile):

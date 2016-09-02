@@ -35,7 +35,6 @@ from corpustools import argparse_version
 
 
 class XMLPrinter(object):
-
     """Convert giellatekno xml formatted files to plain text"""
 
     def __init__(self,

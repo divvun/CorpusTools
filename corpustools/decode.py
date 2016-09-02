@@ -250,7 +250,6 @@ CTYPES = {
 
 
 class EncodingGuesser(object):
-
     """Guess if some text or a file has faultily encoded sami letters"""
 
     def guess_file_encoding(self, filename):
