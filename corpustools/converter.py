@@ -664,7 +664,7 @@ class PlaintextConverter(Converter):
         return content
 
     def make_element(self, eName, text):
-        """Makes an xml element.
+        """Make an xml element.
 
         :param eName: Name of the xml element
         :param text: The text the xml should contain
@@ -814,7 +814,7 @@ class BoundingBox(object):
         return self.right <= other_box.left
 
     def is_covered(self, other_box):
-        """Is self sideways (partly) covered by other_box."""
+        """Check if self is sideways (partly) covered by other_box."""
         return self.left <= other_box.right and self.right >= other_box.left
 
     def increase_box(self, other_box):
@@ -2746,7 +2746,9 @@ class DocConverter(HTMLConverter):
             return self.extract_text(command).decode('windows-1252')
 
     def fix_wv_output(self):
-        """Examples of headings.
+        """Fix headers in the docx xhtml output.
+
+        Examples of headings:
 
         h1:
         <html:ul>
