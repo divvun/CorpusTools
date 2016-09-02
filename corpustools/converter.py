@@ -882,8 +882,10 @@ class PDFParagraph(object):
         elif self.is_listitem:
             if (self.textelements[-1].is_above(textelement) and
                     (
-                        (self.textelements[0].left < textelement.left and re.search('^\S', textelement.plain_text)) or
-                        (self.textelements[0].left == textelement.left and re.search('^\s', textelement.plain_text))
+                        (self.textelements[0].left < textelement.left and
+                         re.search('^\S', textelement.plain_text)) or
+                        (self.textelements[0].left == textelement.left and
+                         re.search('^\s', textelement.plain_text))
                     ) and
                     not textelement.is_left_of(self.textelements[-1]) and
                     self.is_within_line_distance(textelement) and
@@ -910,7 +912,8 @@ class PDFParagraph(object):
                   self.textelements[-1].is_below(textelement) and
                   self.textelements[-1].font == textelement.font and
                   not re.match('\d', self.textelements[-1].plain_text[0]) and
-                  self.textelements[-1].plain_text[0] == self.textelements[-1].plain_text[0].lower()):
+                  self.textelements[-1].plain_text[0] ==
+                  self.textelements[-1].plain_text[0].lower()):
                 return True
             else:
                 return False
@@ -1317,8 +1320,10 @@ class PDFPage(object):
 
     def is_skip_page(self, skip_pages):
         '''True if a page should be skipped, otherwise false'''
-        return (('odd' in skip_pages and (self.pdf_pagemetadata.page_number % 2) == 1) or
-                ('even' in skip_pages and (self.pdf_pagemetadata.page_number % 2) == 0) or
+        return (('odd' in skip_pages and
+                 (self.pdf_pagemetadata.page_number % 2) == 1) or
+                ('even' in skip_pages and
+                 (self.pdf_pagemetadata.page_number % 2) == 0) or
                 self.pdf_pagemetadata.page_number in skip_pages)
 
     def fix_font_id(self, pdffontspecs):
@@ -1327,12 +1332,13 @@ class PDFPage(object):
             textelement.t.set('font', correct)
 
     def adjust_line_heights(self):
-        '''If there is a 1 pixel overlap between neighbouring elements, adjust the height'''
+        '''Adjust the height if there is a 1 pixel overlap between elements.'''
         for i in six.moves.range(1, len(self.textelements)):
             prev_textelement = self.textelements[i - 1]
             textelement = self.textelements[i]
             if prev_textelement.bottom == textelement.top + 1:
-                prev_textelement.t.set('height', six.text_type(prev_textelement.height - 1))
+                prev_textelement.t.set(
+                    'height', six.text_type(prev_textelement.height - 1))
 
     def remove_footnotes_superscript(self):
         '''Remove numbers from elements found by find_footnotes_superscript.'''
@@ -1347,12 +1353,14 @@ class PDFPage(object):
         self.textelements[:] = [t for t in self.textelements
                                 if self.is_inside_margins(t, margins)]
         if inner_margins:
-            self.textelements[:] = [t for t in self.textelements
-                                    if not self.is_inside_inner_margins(t, inner_margins)]
+            self.textelements[:] = [
+                t for t in self.textelements
+                if not self.is_inside_inner_margins(t, inner_margins)]
 
     def merge_elements_on_same_line(self):
         '''Merge PDFTextElements that are on the same line'''
-        same_line_indexes = [i for i in six.moves.range(1, len(self.textelements))
+        same_line_indexes = [i for i in six.moves.range(1,
+                                                        len(self.textelements))
                              if self.textelements[i - 1].is_text_on_same_line(
                                  self.textelements[i])]
         for i in reversed(same_line_indexes):
@@ -1784,7 +1792,8 @@ class HTMLContentConverter(object):
                     'article-ad',
                     'article-bottom-element',
                     'article-column',
-                    'article-dateline article-dateline-footer meta-widget-content',  # nrk.no
+                    ('article-dateline article-dateline-footer '
+                     'meta-widget-content'),  # nrk.no
                     'article-info',  # regjeringen.no
                     'article-related',
                     'articleImageRig',
@@ -2343,7 +2352,8 @@ class DocxConverter(HTMLConverter):
         for tag, attribs in six.iteritems(unwanted_classes_ids):
             for key, values in six.iteritems(attribs):
                 for value in values:
-                    search = ('.//html:{}[starts-with(@{}, "{}")]'.format(tag, key, value))
+                    search = ('.//html:{}[starts-with(@{}, "{}")]'.format(
+                        tag, key, value))
                     for unwanted in self.soup.xpath(search, namespaces=ns):
                         unwanted.getparent().remove(unwanted)
 
@@ -2669,9 +2679,11 @@ class DocumentFixer(object):
 
         for replacement_pair in replacement_pairs:
             if element.text:
-                element.text = element.text.replace(replacement_pair[0], replacement_pair[1])
+                element.text = element.text.replace(replacement_pair[0],
+                                                    replacement_pair[1])
             if element.tail:
-                element.tail = element.tail.replace(replacement_pair[0], replacement_pair[1])
+                element.tail = element.tail.replace(replacement_pair[0],
+                                                    replacement_pair[1])
         for child in element:
             self.fix_sms(child)
 
