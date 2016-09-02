@@ -63,7 +63,7 @@ class ConversionException(Exception):
 
 
 class CorpusPath(object):
-    """Map filenames in a corpus
+    """Map filenames in a corpus.
 
     Args:
         path: path to a corpus file
@@ -73,7 +73,7 @@ class CorpusPath(object):
         self.md = xslsetter.MetadataHandler(self.xsl, create=True)
 
     def split_path(self, path):
-        """Map path to the original file
+        """Map path to the original file.
 
         Args:
             path: a path to a corpus file
@@ -162,7 +162,7 @@ class CorpusPath(object):
 
 class Converter(object):
 
-    """Take care of data common to all Converter classes"""
+    """Take care of data common to all Converter classes."""
 
     def __init__(self, filename, write_intermediate=False):
         codecs.register_error('mixed', self.mixed_decoder)
@@ -198,7 +198,7 @@ class Converter(object):
         return os.path.join(here, 'dtd/corpus.dtd')
 
     def validate_complete(self, complete):
-        """Validate the complete document"""
+        """Validate the complete document."""
         dtd = etree.DTD(Converter.get_dtd_location())
 
         if not dtd.validate(complete):
@@ -305,7 +305,7 @@ class Converter(object):
         return repl, (decode_error.start + len(repl))
 
     def make_complete(self, languageGuesser):
-        """Make a complete giellatekno xml file
+        """Make a complete giellatekno xml file.
 
         Combine the intermediate giellatekno xml file and the metadata into
         a complete giellatekno xml file.
@@ -421,7 +421,7 @@ class AvvirConverter(Converter):
 
     @staticmethod
     def insert_element(p, text, position):
-        """Insert a new element in p's parent
+        """Insert a new element in p's parent.
 
         Arguments:
             p: an lxml element, it is a story/p element
@@ -443,7 +443,7 @@ class AvvirConverter(Converter):
 
     @staticmethod
     def convert_sub_p(p):
-        """Convert p element found inside story/p elements
+        """Convert p element found inside story/p elements.
 
         These elements contain erroneous text that an editor has removed.
         This function removes p.text and saves p.tail
@@ -469,7 +469,7 @@ class AvvirConverter(Converter):
             p.remove(sub_p)
 
     def convert_subelement(self, p):
-        """Convert subelements of story/p elements to p elements
+        """Convert subelements of story/p elements to p elements.
 
         Arguments:
             p: an lxml element, it is a story/p element
@@ -528,7 +528,7 @@ class AvvirConverter(Converter):
             parent.remove(story)
 
     def convert_article(self):
-        """The root element of an Ávvir doc is article, rename it to body"""
+        """The root element of an Ávvir doc is article, rename it to body."""
         self.intermediate.tag = 'body'
         document = etree.Element('document')
         document.append(self.intermediate)
@@ -544,7 +544,7 @@ class SVGConverter(Converter):
                                            write_intermediate)
 
     def convert2intermediate(self):
-        """Transform svg to an intermediate xml document"""
+        """Transform svg to an intermediate xml document."""
         svgXsltRoot = etree.parse(os.path.join(here, 'xslt/svg2corpus.xsl'))
         transform = etree.XSLT(svgXsltRoot)
         doc = etree.parse(self.names.orig)
@@ -690,7 +690,7 @@ class PDFFontspecs(object):
 
 
 class BoundingBox(object):
-    """Define an area that a box covers
+    """Define an area that a box covers.
 
     Used in PDF conversion classes
     """
@@ -709,27 +709,27 @@ class BoundingBox(object):
         return self.bottom - self.top
 
     def is_below(self, other_box):
-        """True if this element is below other_box"""
+        """True if this element is below other_box."""
         return self.top >= other_box.bottom
 
     def is_above(self, other_box):
-        """True if this element is above other_box"""
+        """True if this element is above other_box."""
         return other_box.top >= self.bottom
 
     def is_right_of(self, other_box):
-        """True if this element is right of other_box"""
+        """True if this element is right of other_box."""
         return self.left >= other_box.right
 
     def is_left_of(self, other_box):
-        """True if this element is left of other_box"""
+        """True if this element is left of other_box."""
         return self.right <= other_box.left
 
     def is_covered(self, other_box):
-        """Is self sideways (partly) covered by other_box"""
+        """Is self sideways (partly) covered by other_box."""
         return self.left <= other_box.right and self.right >= other_box.left
 
     def increase_box(self, other_box):
-        """Increase area of the boundingbox"""
+        """Increase area of the boundingbox."""
         if self.top > other_box.top:
             self.top = other_box.top
         if self.left > other_box.left:
@@ -750,7 +750,7 @@ class BoundingBox(object):
 
 
 class PDFTextElement(BoundingBox):
-    """pdf2xml text elements are enclose in class"""
+    """pdf2xml text elements are enclose in class."""
     def __init__(self, t):
         self.t = t
 
@@ -798,7 +798,7 @@ class PDFTextElement(BoundingBox):
             child.text = re.sub('\d+', '', child.text)
 
     def merge_text_elements(self, other_box):
-        """Merge the contents of other_box into self"""
+        """Merge the contents of other_box into self."""
         prev_t = self.t
         t = other_box.t
         if not len(prev_t):
@@ -835,7 +835,7 @@ class PDFTextElement(BoundingBox):
 
 
 class PDFParagraph(object):
-    """Mimic a paragraph
+    """Mimic a paragraph.
 
     textelements is a list of PDFTextElements
 
@@ -876,7 +876,7 @@ class PDFParagraph(object):
         return delta < ratio * self.textelements[-1].height
 
     def is_same_paragraph(self, textelement):
-        """Decide whether textelement belongs to this paragraph"""
+        """Decide whether textelement belongs to this paragraph."""
         if self.LIST_RE.search(textelement.plain_text):
             return False
         elif self.is_listitem:
@@ -925,7 +925,7 @@ class PDFParagraph(object):
 
 
 class PDFSection(BoundingBox):
-    """A PDFSection contains paragraphs that belong together
+    """A PDFSection contains paragraphs that belong together.
 
     A PDFSection conceptually covers the page width.
 
@@ -2227,7 +2227,7 @@ class HTMLConverter(Converter):
             return m.group(1).lower()
 
     def remove_declared_encoding(self, content):
-        """Remove declared decoding
+        """Remove declared decoding.
 
         lxml explodes if we send a decoded Unicode string with an
         xml-declared encoding
@@ -2316,7 +2316,7 @@ class RTFConverter(HTMLConverter):
 
 class OdfConverter(HTMLConverter):
 
-    """Convert odf documents to the giellatekno xml format"""
+    """Convert odf documents to the giellatekno xml format."""
 
     @property
     def content(self):
@@ -2331,14 +2331,14 @@ class OdfConverter(HTMLConverter):
 
 class DocxConverter(HTMLConverter):
 
-    """Convert docx documents to the giellatekno xml format"""
+    """Convert docx documents to the giellatekno xml format."""
 
     @property
     def content(self):
         return PyDocXHTMLExporter(self.names.orig).export()
 
     def remove_elements(self):
-        """Remove some docx specific html elements"""
+        """Remove some docx specific html elements."""
         super(DocxConverter, self).remove_elements()
 
         unwanted_classes_ids = {
@@ -2390,7 +2390,7 @@ class EpubConverter(HTMLConverter):
 
 class DocConverter(HTMLConverter):
 
-    """Convert Microsoft Word documents to the giellatekno xml format"""
+    """Convert Microsoft Word documents to the giellatekno xml format."""
 
     @property
     def content(self):
@@ -2403,7 +2403,7 @@ class DocConverter(HTMLConverter):
             return self.extract_text(command).decode('windows-1252')
 
     def fix_wv_output(self):
-        """Examples of headings
+        """Examples of headings.
 
         h1:
         <html:ul>
@@ -2715,7 +2715,7 @@ class DocumentFixer(object):
                 self.fix_sms(self.root.find('body'))
 
     def fix_title_person(self, encoding):
-        """Fix encoding problems"""
+        """Fix encoding problems."""
         eg = decode.EncodingGuesser()
 
         title = self.root.find('.//title')
@@ -2824,7 +2824,7 @@ class DocumentFixer(object):
         return six.text_type(len(re.findall(u'\S+', ' '.join(plist))))
 
     def set_word_count(self):
-        """Set the wordcount element"""
+        """Set the wordcount element."""
         wordcount = self.root.find('header/wordcount')
         if wordcount is None:
             tags = ['collection', 'publChannel', 'place', 'year',
@@ -2857,7 +2857,7 @@ class DocumentFixer(object):
         return el
 
     def fix_newstags(self):
-        """Convert newstags found in text to xml elements"""
+        """Convert newstags found in text to xml elements."""
         newstags = re.compile(
             u'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|'
             u'LED|bilde)*tekst:|@*foto:|@fotobyline:|@*bildetitt:|'
@@ -3092,12 +3092,12 @@ class LanguageDetector(object):
 
     @property
     def mainlang(self):
-        """Get the mainlang of the file"""
+        """Get the mainlang of the file."""
         return self.document.\
             attrib['{http://www.w3.org/XML/1998/namespace}lang']
 
     def set_paragraph_language(self, paragraph):
-        """Set xml:lang of paragraph
+        """Set xml:lang of paragraph.
 
         Extract the text outside the quotes, use this text to set
         language of the paragraph.
@@ -3118,7 +3118,7 @@ class LanguageDetector(object):
         return paragraph
 
     def set_span_language(self, paragraph):
-        """Set xml:lang of span element"""
+        """Set xml:lang of span element."""
         for element in paragraph.iter("span"):
             if element.get("type") == "quote":
                 if element.text is not None:
@@ -3130,7 +3130,7 @@ class LanguageDetector(object):
                             lang)
 
     def remove_quote(self, paragraph):
-        """Extract all text except the one inside <span type='quote'>"""
+        """Extract all text except the one inside <span type='quote'>."""
         text = ''
         for element in paragraph.iter():
             if (element.tag == 'span' and
@@ -3146,7 +3146,7 @@ class LanguageDetector(object):
         return text
 
     def detect_language(self):
-        """Detect language in all the paragraphs in self.document"""
+        """Detect language in all the paragraphs in self.document."""
         if self.document.find('header/multilingual') is not None:
             for paragraph in self.document.iter('p'):
                 self.set_paragraph_language(paragraph)
@@ -3154,7 +3154,7 @@ class LanguageDetector(object):
 
 class ConverterManager(object):
 
-    """Manage the conversion of original files to corpus xml"""
+    """Manage the conversion of original files to corpus xml."""
     LANGUAGEGUESSER = text_cat.Classifier(None)
     FILES = []
 
@@ -3240,7 +3240,7 @@ class ConverterManager(object):
             self.convert(orig_file)
 
     def add_file(self, xsl_file):
-        """Add file for conversion"""
+        """Add file for conversion."""
         if os.path.isfile(xsl_file) and os.path.isfile(xsl_file[:-4]):
             md = xslsetter.MetadataHandler(xsl_file)
             if (
@@ -3254,7 +3254,7 @@ class ConverterManager(object):
 
     @staticmethod
     def make_xsl_file(source):
-        """Write an xsl file if it does not exist"""
+        """Write an xsl file if it does not exist."""
         xsl_file = source if source.endswith('.xsl') else source + '.xsl'
         if not os.path.isfile(xsl_file):
             metadata = xslsetter.MetadataHandler(xsl_file, create=True)
@@ -3264,7 +3264,7 @@ class ConverterManager(object):
         return xsl_file
 
     def add_directory(self, directory):
-        """Add all files in a directory for conversion"""
+        """Add all files in a directory for conversion."""
         for root, dirs, files in os.walk(directory):
             for f in files:
                 if f.endswith('.xsl'):
