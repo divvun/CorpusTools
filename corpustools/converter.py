@@ -829,6 +829,7 @@ class BoundingBox(object):
             self.right = other_box.right
 
     def __unicode__(self):
+        """Turn the data in this class into a string."""
         info = []
         for key, value in six.iteritems(self.__dict__):
             info.append(six.text_type(key) + u' ' + six.text_type(value))
@@ -927,6 +928,7 @@ class PDFTextElement(BoundingBox):
             prev_t.set('height', six.text_type(other_box.height))
 
     def __unicode__(self):
+        """Turn the data in this class into a string."""
         info = []
         info.append(u'text ' + self.plain_text)
         info.append(u'top ' + six.text_type(self.top))
@@ -1042,6 +1044,7 @@ class PDFParagraph(object):
             return False
 
     def __unicode__(self):
+        """Turn the data in this class into a string."""
         return u'\n'.join([t.plain_text for t in self.textelements])
 
 
@@ -1103,6 +1106,7 @@ class PDFSection(BoundingBox):
                 return False
 
     def __unicode__(self):
+        """Turn the data in this class into a string."""
         info = [six.text_type(paragraph)
                 for paragraph in self.paragraphs]
 
