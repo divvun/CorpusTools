@@ -59,7 +59,7 @@ class DocumentPicker(object):
         self.total_file = 0
 
     def classify_files(self):
-        '''Iterate through all files, classify them according to language'''
+        """Iterate through all files, classify them according to language"""
         for root, dirs, files in os.walk(self.source_dir):
             for f in files:
                 if f.endswith('.html'):
@@ -106,7 +106,7 @@ class DocumentPicker(object):
         self.file_dict['none'].remove(file_)
 
     def classify_file(self, file_):
-        '''Identify the language of the file'''
+        """Identify the language of the file"""
         parser = etree.HTMLParser()
         html = etree.parse(file_, parser)
         self.file_dict['none'].append(file_)
@@ -137,10 +137,10 @@ class DocumentPicker(object):
         print(total, self.total_file)
 
     def check_consistency(self):
-        '''Check if all files that claim to have parallels actually exist
+        """Check if all files that claim to have parallels actually exist
 
         Remove the parallel file from the list of parallels
-        '''
+        """
         for file_ in self.parallel_dict:
             for parallel_file in self.parallel_dict[file_]:
                 try:

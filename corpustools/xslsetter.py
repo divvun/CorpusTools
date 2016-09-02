@@ -41,10 +41,10 @@ class XsltException(Exception):
 
 
 class MetadataHandler(object):
-    '''Class to handle metadata in .xsl files
+    """Class to handle metadata in .xsl files
 
     This class makes the xsl file
-    '''
+    """
     lang_key = "{http://www.w3.org/XML/1998/namespace}lang"
 
     def __init__(self, filename, create=False):
@@ -115,7 +115,7 @@ class MetadataHandler(object):
 
     @property
     def skip_pages(self):
-        '''Turn a skip_pages entry into a list of pages.'''
+        """Turn a skip_pages entry into a list of pages."""
         pages = []
         skip_pages = self.get_variable('skip_pages')
         if skip_pages is not None:
@@ -151,7 +151,7 @@ class MetadataHandler(object):
         return pages
 
     def get_margin_lines(self, position=''):
-        '''Get the margin lines from the metadata file.'''
+        """Get the margin lines from the metadata file."""
         margin_lines = {
             key: self.get_variable(key).strip()
             for key in [position + 'right_margin', position + 'top_margin',
@@ -182,7 +182,7 @@ class MetadataHandler(object):
 
     @property
     def margins(self):
-        '''Parse margin lines fetched from the .xsl file.'''
+        """Parse margin lines fetched from the .xsl file."""
         margin_lines = self.get_margin_lines()
 
         return self.validate_and_set_margins(margin_lines)
@@ -233,13 +233,13 @@ class MetadataHandler(object):
 
     @staticmethod
     def parse_margin_line(value):
-        '''Parse a margin line read from the .xsl file.
+        """Parse a margin line read from the .xsl file.
 
         :param value: a string containing the margin settings for a particular
         margin (right_margin, left_margin, top_margin, bottom_margin)
 
         :returns: a dict containing the margins for pages in percent
-        '''
+        """
         m = {}
         for part in value.split(','):
             (pages, margin) = tuple(part.split('='))
@@ -249,7 +249,7 @@ class MetadataHandler(object):
         return m
 
     def set_lang_genre_xsl(self):
-        '''Set the mainlang and genre variables in the xsl file, if possible'''
+        """Set the mainlang and genre variables in the xsl file, if possible"""
         with util.ignored(TypeError):
             xsl_tuple = util.split_path(self.filename)
             self.set_variable('mainlang', xsl_tuple.lang)

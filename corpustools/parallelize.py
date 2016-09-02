@@ -167,13 +167,13 @@ class CorpusXMLFile(object):
             body.append(later_element)
 
     def set_body(self, new_body):
-        '''Replace the body element with new_body element'''
+        """Replace the body element with new_body element"""
         if new_body.tag == 'body':
             oldbody = self.etree.find('.//body')
             oldbody.getparent().replace(oldbody, new_body)
 
     def write(self, file_name=None):
-        '''Write self.etree'''
+        """Write self.etree"""
         if file_name is None:
             file_name = self.get_name()
 

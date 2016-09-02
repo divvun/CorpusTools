@@ -55,10 +55,10 @@ class Crawler(object):
             corpus_adder.add_files_to_working_copy()
 
     def save_pages(self, pages):
-        '''Write pages to disk
+        """Write pages to disk
 
         pages is a list of url, lang tuples
-        '''
+        """
         parallelpath = ''
 
         for (url, lang) in pages:
@@ -83,7 +83,7 @@ class Crawler(object):
 
 
 class SamediggiFiCrawler(Crawler):
-    '''Notes about samediggi.fi
+    """Notes about samediggi.fi
 
     Start page is:
     http://www.samediggi.fi/index.php?option=com_frontpage&Itemid=39
@@ -120,7 +120,7 @@ class SamediggiFiCrawler(Crawler):
     * &lang=sms
 
     Same procedure with links here
-    '''
+    """
 
     def __init__(self):
         super(SamediggiFiCrawler, self).__init__()
@@ -151,7 +151,7 @@ class SamediggiFiCrawler(Crawler):
                             'filename')] = path.replace('.xsl', '')
 
     def crawl_site(self):
-        '''Crawl samediggi.fi'''
+        """Crawl samediggi.fi"""
         while self.unvisited_links:
             link = self.unvisited_links.pop()
 
@@ -223,11 +223,11 @@ class SamediggiFiCrawler(Crawler):
             return newhref
 
     def invalid_content(self, content):
-        '''Return true if the page does not contain the strings
+        """Return true if the page does not contain the strings
 
         * "Käännöstä ei ole saatavilla"
         * "There are no translations available"
-        '''
+        """
         return ('ei ole saatavilla' in content or
                 'There are no translations available' in content or
                 '<div class="login-form">' in content or
@@ -235,7 +235,7 @@ class SamediggiFiCrawler(Crawler):
                 'You need to login' in content)
 
     def harvest_links(self, content):
-        '''Harvest all links, bar some restrictions
+        """Harvest all links, bar some restrictions
 
             Insert links into a set
 
@@ -250,7 +250,7 @@ class SamediggiFiCrawler(Crawler):
 
             Don't follow (don't save content), but save links containg
             doc_download
-        '''
+        """
         tree = lxml.html.document_fromstring(content)
 
         for address in tree.findall('.//a'):
@@ -402,7 +402,7 @@ class SamediggiNoCrawler(Crawler):
             return orig_page
 
     def crawl_site(self):
-        '''Crawl samediggi.no'''
+        """Crawl samediggi.no"""
         while self.unvisited_links:
             link = self.unvisited_links.pop()
 

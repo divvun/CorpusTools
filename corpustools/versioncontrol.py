@@ -79,7 +79,7 @@ class SVN(VersionController):
     """Implement basic svn functionality."""
 
     def __init__(self, svnclient):
-        '''svnclient is a pysvn.Client'''
+        """svnclient is a pysvn.Client"""
         super(SVN, self).__init__()
         self.client = svnclient
 

@@ -30,7 +30,7 @@ from corpustools import argparse_version, namechanger
 
 
 def normaliser():
-    '''Normalise the filenames in the corpuses'''
+    """Normalise the filenames in the corpuses"""
     for corpus in [os.getenv('GTFREE'), os.getenv('GTBOUND')]:
         print(('Normalising names in {}'.format(corpus)))
         for root, dirs, files in os.walk(os.path.join(corpus, 'orig')):

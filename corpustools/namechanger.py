@@ -43,19 +43,19 @@ PathPair = namedtuple('PathPair', 'oldpath newpath')
 
 
 class MovepairComputer(object):
-    '''Compute oldname, newname pairs'''
+    """Compute oldname, newname pairs"""
 
     def __init__(self):
-        '''filepairs will be a list of PathPairs'''
+        """filepairs will be a list of PathPairs"""
         self.filepairs = []
 
     def compute_movepairs(self, oldpath, newpath, nochange=False):
-        '''Add the oldpath and the new goalpath to filepairs
+        """Add the oldpath and the new goalpath to filepairs
 
         Args:
             oldpath (unicode): the old path to an original file
             newpath (unicode): the new path of an original file
-        '''
+        """
         normalisedpath = os.path.join(
             os.path.dirname(newpath),
             normalise_filename(os.path.basename(newpath)))
@@ -68,12 +68,12 @@ class MovepairComputer(object):
         self.filepairs.append(PathPair(oldpath, non_dupe_path))
 
     def compute_parallel_movepairs(self, oldpath, newpath):
-        '''Add the parallel files of oldpath to filepairs
+        """Add the parallel files of oldpath to filepairs
 
         Args:
             oldpath (unicode): the old path
             newpath (unicode): the new path
-        '''
+        """
         old_components = util.split_path(oldpath)
 
         if newpath == u'':
@@ -105,15 +105,15 @@ class MovepairComputer(object):
 
 
 class CorpusFileMover(object):
-    '''Move an original file and all its derived files.'''
+    """Move an original file and all its derived files."""
 
     def __init__(self, oldpath, newpath):
-        '''Class to move corpus files
+        """Class to move corpus files
 
         Args:
             oldpath (unicode): the old path
             newpath (unicode): the new path
-        '''
+        """
         self.old_components = util.split_path(oldpath)
         self.new_components = util.split_path(newpath)
         self.vcs = versioncontrol.VersionControlFactory().vcs(
@@ -133,13 +133,13 @@ class CorpusFileMover(object):
             self.vcs.move(oldpath, newpath)
 
     def move_orig(self):
-        '''Move the original file'''
+        """Move the original file"""
         self._move(
             u'/'.join(self.old_components),
             u'/'.join(self.new_components))
 
     def move_xsl(self):
-        '''Move the metadata file'''
+        """Move the metadata file"""
         self._move(
             u'/'.join((self.old_components.root,
                        self.old_components.module,
@@ -155,7 +155,7 @@ class CorpusFileMover(object):
                        self.new_components.basename + '.xsl')))
 
     def move_prestable_converted(self):
-        '''Move the prestable/converted file'''
+        """Move the prestable/converted file"""
         self._move(
             u'/'.join((self.old_components.root,
                        u'prestable/converted',
@@ -171,7 +171,7 @@ class CorpusFileMover(object):
                        self.new_components.basename + '.xml')))
 
     def move_prestable_tmx(self):
-        '''Move the prestable toktmx and tmx files'''
+        """Move the prestable toktmx and tmx files"""
         for tmx in [u'tmx', u'toktmx']:
             tmxdir = u'/'.join((u'prestable', tmx))
             metadataname = u'/'.join((self.new_components.root,
@@ -201,14 +201,14 @@ class CorpusFileMover(object):
 
 
 class CorpusFileRemover(object):
-    '''Remove an original file and all its derived files'''
+    """Remove an original file and all its derived files"""
 
     def __init__(self, oldpath):
-        '''Class to remove corpus files
+        """Class to remove corpus files
 
         Args:
             oldpath (unicode): the old path
-        '''
+        """
         self.old_components = util.split_path(oldpath)
         self.vcs = versioncontrol.VersionControlFactory().vcs(
             self.old_components.root)
@@ -224,11 +224,11 @@ class CorpusFileRemover(object):
             self.vcs.remove(oldpath)
 
     def remove_orig(self):
-        '''Remove the original file'''
+        """Remove the original file"""
         self._remove(u'/'.join(self.old_components))
 
     def remove_xsl(self):
-        '''Remove the metadata file'''
+        """Remove the metadata file"""
         self._remove(
             u'/'.join((self.old_components.root,
                        self.old_components.module,
@@ -238,7 +238,7 @@ class CorpusFileRemover(object):
                        self.old_components.basename + '.xsl')))
 
     def remove_prestable_converted(self):
-        '''Remove the prestable/converted file'''
+        """Remove the prestable/converted file"""
         self._remove(
             u'/'.join((self.old_components.root,
                        u'prestable/converted',
@@ -248,7 +248,7 @@ class CorpusFileRemover(object):
                        self.old_components.basename + '.xml')))
 
     def remove_prestable_tmx(self):
-        '''Remove the prestable toktmx and tmx files'''
+        """Remove the prestable toktmx and tmx files"""
         for tmx in [u'tmx', u'toktmx']:
             tmxdir = u'/'.join((u'prestable', tmx))
             metadataname = u'/'.join((self.old_components.root,
@@ -272,7 +272,7 @@ class CorpusFileRemover(object):
 
 
 class CorpusFilesetMoverAndUpdater(object):
-    '''Move or remove a file within a repository
+    """Move or remove a file within a repository
 
     When moving a file inside the same directory:
     * move the original file
@@ -328,7 +328,7 @@ class CorpusFilesetMoverAndUpdater(object):
 
     If a name clash is found, check if the files are duplicates. If they are
     duplicates, raise an exception, otherwise suggest a new name.
-    '''
+    """
 
     def __init__(self, oldpath, newpath):
         self.mc = MovepairComputer()
@@ -347,7 +347,7 @@ class CorpusFilesetMoverAndUpdater(object):
                 cfm.move_files()
 
     def update_own_metadata(self):
-        '''Update metadata'''
+        """Update metadata"""
         for filepair in self.mc.filepairs:
             if filepair.newpath:
                 old_components = util.split_path(filepair.oldpath)
@@ -365,7 +365,7 @@ class CorpusFilesetMoverAndUpdater(object):
                     self.vcs.add(metadataname)
 
     def update_parallel_files_metadata(self):
-        '''Update the info in the parallel files'''
+        """Update the info in the parallel files"""
         for filepair in self.mc.filepairs:
             parallel_filepairs = list(self.mc.filepairs)
             parallel_filepairs.remove(filepair)
@@ -403,14 +403,14 @@ class CorpusFilesetMoverAndUpdater(object):
 
 
 def compute_hexdigest(path, blocksize=65536):
-    '''Compute the hexdigest of the file in path
+    """Compute the hexdigest of the file in path
 
     Args:
         path: the file to compute the hexdigest of
 
     Returns:
         a hexdigest of the file
-    '''
+    """
     with open(path, 'rb') as afile:
         hasher = hashlib.md5()
         buf = afile.read(blocksize)
@@ -422,7 +422,7 @@ def compute_hexdigest(path, blocksize=65536):
 
 
 def normalise_filename(filename):
-    '''Normalise filename to ascii only
+    """Normalise filename to ascii only
 
     Downcase filename, replace non-ascii characters with ascii ones and
     remove or replace unwanted characters.
@@ -432,7 +432,7 @@ def normalise_filename(filename):
 
     Returns:
         a downcased string containing only ascii chars
-    '''
+    """
     if type(filename) is not six.text_type:
         raise NamechangerException('{} is not a unicode string'.format(
             filename))
@@ -467,7 +467,7 @@ def normalise_filename(filename):
 
 
 def are_duplicates(oldpath, newpath):
-    '''Check if oldpath and newpath are duplicates of each other.
+    """Check if oldpath and newpath are duplicates of each other.
 
     Args:
         oldpath (unicode): old path of the file
@@ -475,14 +475,14 @@ def are_duplicates(oldpath, newpath):
 
     Returns:
         a boolean indicating if the two files are duplicates
-    '''
+    """
     return (os.path.isfile(oldpath) and os.path.isfile(newpath) and
             compute_hexdigest(oldpath) == compute_hexdigest(
                 newpath))
 
 
 def compute_new_basename(oldpath, wanted_path):
-    '''Compute the new path
+    """Compute the new path
 
     Args:
         oldpath (unicode): path to the old file
@@ -490,7 +490,7 @@ def compute_new_basename(oldpath, wanted_path):
 
     Returns:
         a unicode string pointing to the new path
-    '''
+    """
     wanted_basename = os.path.basename(wanted_path)
     new_basename = os.path.basename(wanted_path)
     newpath = os.path.join(os.path.dirname(wanted_path), new_basename)

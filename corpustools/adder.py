@@ -71,7 +71,7 @@ class UrlDownloader(object):
         return filename
 
     def filename(self, response):
-        '''response is a requests.get response'''
+        """response is a requests.get response"""
         try:
             _, params = cgi.parse_header(
                 response.headers['Content-Disposition'])
@@ -81,10 +81,10 @@ class UrlDownloader(object):
                                           response.headers['content-type'])
 
     def download(self, url, params={}):
-        '''Download a url to a temporary file
+        """Download a url to a temporary file
 
         Return the request object and the name of the temporary file
-        '''
+        """
         try:
             r = requests.get(url, headers=self.headers, params=params)
             if r.status_code == requests.codes.ok:
@@ -110,14 +110,14 @@ class AddToCorpus(object):
     """Class to add files, urls and dirs to the corpus."""
 
     def __init__(self, corpusdir, mainlang, path):
-        '''Initialise the AddToCorpus class.
+        """Initialise the AddToCorpus class.
 
         Args:
             corpusdir: (unicode) the directory where the corpus is
             mainlang: (unicode) three character long lang id (iso-639)
             path: (unicode) path below the language directory where the files
             should be added
-        '''
+        """
         if type(corpusdir) is not six.text_type:
             raise AdderException(u'corpusdir is not unicode: {}.'.format(
                 corpusdir))
@@ -152,15 +152,15 @@ class AddToCorpus(object):
 
     @staticmethod
     def __normalise_path(path):
-        '''All paths in the corpus should consist of lowercase ascii letters'''
+        """All paths in the corpus should consist of lowercase ascii letters"""
         return u'/'.join([namechanger.normalise_filename(part)
                           for part in path.split('/')])
 
     def copy_url_to_corpus(self, url, parallelpath=''):
-        '''Add a URL to the corpus
+        """Add a URL to the corpus
 
         Copy a downloaded url to the corpus
-        '''
+        """
         try:
             downloader = UrlDownloader(os.path.join(self.corpusdir, 'tmp'))
             (r, tmpname) = downloader.download(url)
@@ -170,7 +170,7 @@ class AddToCorpus(object):
             print(u'Skipping: {}'.format(e))
 
     def copy_file_to_corpus(self, origpath, metadata_filename, parallelpath=''):
-        '''Add a file to the corpus
+        """Add a file to the corpus
 
         * normalise the basename, copy the the file to the given directory
         * make a metadata file belonging to it
@@ -179,7 +179,7 @@ class AddToCorpus(object):
         ** set the genre
         ** if a parallel file is given, set the parallel info in all the
         parellel files
-        '''
+        """
         try:
             none_dupe_path = self.none_dupe_path(origpath)
             shutil.copy(origpath, none_dupe_path)
@@ -207,12 +207,12 @@ class AddToCorpus(object):
 
     @staticmethod
     def update_parallel_data(none_dupe_components, parallelpath):
-        '''Update metadata in the parallel files
+        """Update metadata in the parallel files
 
         Arguments:
             new_components: (util.PathComponents) of none_dupe_path
             parallelpath: (string) path of the parallel file
-        '''
+        """
         if not os.path.exists(parallelpath):
             raise AdderException('{} does not exist'.format(
                 parallelpath))
@@ -241,26 +241,26 @@ class AddToCorpus(object):
             metadata.write_file()
 
     def none_dupe_path(self, path):
-        '''Compute the none duplicate path of the file to be added
+        """Compute the none duplicate path of the file to be added
 
         Arguments:
             path: (string) path of the file as given as input
             This string may contain unwanted chars and
-        '''
+        """
         return namechanger.compute_new_basename(
             path, os.path.join(self.goaldir,
                                namechanger.normalise_filename(
                                    os.path.basename(path))))
 
     def copy_files_in_dir_to_corpus(self, origpath):
-        '''Add a directory to the corpus
+        """Add a directory to the corpus
 
         * Recursively walks through the given original directory
         ** First checks for duplicates, raises an error printing a list of
         duplicate files if duplicates are found
         ** For each file, do the "add file to the corpus" operations (minus the
         parallel info).
-        '''
+        """
         self.find_duplicates(origpath)
         for root, dirs, files in os.walk(origpath):
             for f in files:

@@ -17,11 +17,11 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-'''(Northern) sami character eight bit encodings have been semi or
+"""(Northern) sami character eight bit encodings have been semi or
 non official standards and have been converted to the various systems'
 internal encodings. This module have functions that revert the damage
 done.
-'''
+"""
 from __future__ import absolute_import, print_function
 
 import sys

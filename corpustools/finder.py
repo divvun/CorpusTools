@@ -59,7 +59,7 @@ def print_equality_ratios_in_dir():
 
 
 def remove_files_with_duplicate_content():
-    '''To replace: 123, , 339, 340'''
+    """To replace: 123, , 339, 340"""
     ufflangs = {
         u'fin': u'finnish',
         u'eng': u'english',
@@ -326,7 +326,7 @@ def fix_pdf_filenames(directory):
 
 
 def move_twenty_percent_to_goldcorpus():
-    '''Move twenty percent of the files to the goldcorpus'''
+    """Move twenty percent of the files to the goldcorpus"""
     directories = ['orig/sme/admin/sd/cealkamusat_fi',
                    'orig/sme/admin/sd/davviriikkalas_samekonvensuvdna_fi',
                    'orig/sme/admin/sd/inaugurations_fi',

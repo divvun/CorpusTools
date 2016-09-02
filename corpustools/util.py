@@ -172,7 +172,7 @@ def lineno():
 
 
 def print_element(element, level, indent, out):
-    '''Format an html document
+    """Format an html document
 
     This function formats html documents for readability, to see
     the structure of the given document. It ruins white space in
@@ -183,7 +183,7 @@ def print_element(element, level, indent, out):
     indent is an integer indicating how many spaces this element should
     be indented
     out is a file like buffer, e.g. an opened file
-    '''
+    """
     tag = element.tag.replace('{http://www.w3.org/1999/xhtml}', '')
 
     out.write(' ' * (level * indent))
@@ -242,10 +242,10 @@ def ignored(*exceptions):
 
 class ExternalCommandRunner(object):
 
-    '''Class to run external command through subprocess
+    """Class to run external command through subprocess
 
     Save output, error and returnvalue
-    '''
+    """
 
     def __init__(self):
         self.stdout = None
@@ -253,7 +253,7 @@ class ExternalCommandRunner(object):
         self.returncode = None
 
     def run(self, command, cwd=None, to_stdin=None):
-        '''Run the command, save the result'''
+        """Run the command, save the result"""
         try:
             subp = subprocess.Popen(command,
                                     stdin=subprocess.PIPE,

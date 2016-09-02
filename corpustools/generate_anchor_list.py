@@ -69,7 +69,7 @@ class GenerateAnchorList(object):
             return out
 
     def generate_file(self, outpath, quiet=False):
-        '''infiles is a list of file paths'''
+        """infiles is a list of file paths"""
         anchors = self.read_anchors(quiet)
 
         with codecs.open(outpath, 'w', encoding='utf8') as outfile:

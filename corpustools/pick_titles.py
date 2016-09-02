@@ -56,7 +56,7 @@ class DocumentPicker(object):
         self.total_file = 0
 
     def classify_files(self):
-        '''Iterate through all files, classify them according to language'''
+        """Iterate through all files, classify them according to language"""
         for root, dirs, files in os.walk(self.source_dir):
             for f in files:
                 if f.endswith('.xsl'):
@@ -64,7 +64,7 @@ class DocumentPicker(object):
                     self.classify_file(os.path.join(root, f))
 
     def classify_file(self, file_):
-        '''Identify the language of the file'''
+        """Identify the language of the file"""
         mh = xslsetter.MetadataHandler(file_, create=True)
         url = mh.get_variable('filename')
         if ('regjeringen.no' in url and 'regjeringen.no' not in file_ and
