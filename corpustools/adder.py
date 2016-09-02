@@ -37,10 +37,13 @@ from corpustools import (argparse_version, namechanger, util, versioncontrol,
 
 
 class AdderException(Exception):
+    """Raise this exception when errors happen in this module."""
+
     pass
 
 
 class UrlDownloader(object):
+    """Download a document from a url."""
 
     def __init__(self, download_dir):
         self.download_dir = download_dir
@@ -104,9 +107,10 @@ class UrlDownloader(object):
 
 
 class AddToCorpus(object):
+    """Class to add files, urls and dirs to the corpus."""
 
     def __init__(self, corpusdir, mainlang, path):
-        '''Class to adding files, urls and dirs to the corpus
+        '''Initialise the AddToCorpus class.
 
         Args:
             corpusdir: (unicode) the directory where the corpus is

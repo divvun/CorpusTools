@@ -31,10 +31,13 @@ import pysvn
 
 
 class VersionControlException(Exception):
+    """Raise this exception when errors arise in this module."""
+
     pass
 
 
 class VersionController(object):
+    """A very basic version control class."""
 
     def __init__(self):
         # non-repo config to get at global values
@@ -72,6 +75,7 @@ class VersionController(object):
 
 
 class SVN(VersionController):
+    """Implement basic svn functionality."""
 
     def __init__(self, svnclient):
         '''svnclient is a pysvn.Client'''
@@ -89,6 +93,7 @@ class SVN(VersionController):
 
 
 class GIT(VersionController):
+    """Implement basic git functionality."""
 
     def __init__(self, gitrepo):
         super(GIT, self).__init__()
@@ -106,6 +111,7 @@ class GIT(VersionController):
 
 
 class VersionControlFactory(object):
+    """Class to create the appropriate version control class."""
 
     def vcs(self, directory):
         try:

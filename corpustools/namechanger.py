@@ -33,6 +33,8 @@ from corpustools import util, versioncontrol, xslsetter
 
 
 class NamechangerException(Exception):
+    """This exception is raised when errors occurs in this module."""
+
     pass
 
 

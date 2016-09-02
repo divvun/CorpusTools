@@ -36,6 +36,7 @@ from corpustools import argparse_version, ccat, move_files, util, xslsetter
 
 
 class DupeFinder(object):
+    """Handle duplicates in the corpus."""
 
     def __init__(self, directory):
         self.files = self._get_files(directory)

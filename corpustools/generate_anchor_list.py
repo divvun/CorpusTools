@@ -31,6 +31,7 @@ from corpustools import argparse_version, util
 
 
 class GenerateAnchorList(object):
+    """Generate anchor list used by tca2."""
 
     def __init__(self, lang1, lang2, columns, path):
         self.lang1 = lang1

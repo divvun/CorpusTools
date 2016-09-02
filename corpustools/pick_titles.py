@@ -35,6 +35,7 @@ from corpustools import util, xslsetter
 
 
 class DocumentPicker(object):
+    """Pick documents from samediggi.se to be added to the corpus."""
 
     def __init__(self, source_dir):
         self.freecorpus = os.getenv('GTFREE')

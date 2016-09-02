@@ -39,14 +39,20 @@ PathComponents = namedtuple('PathComponents',
 
 
 class SetupException(Exception):
+    """This exception is raised when setup is faulty."""
+
     pass
 
 
 class ExecutableMissingException(Exception):
+    """This exception is raised when wanted executables are missing."""
+
     pass
 
 
 class ArgumentError(Exception):
+    """This exception is raised when argument errors arise."""
+
     pass
 
 

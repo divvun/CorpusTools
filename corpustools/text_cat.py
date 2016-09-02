@@ -263,6 +263,8 @@ class WordModel(NGramModel):
 
 
 class Classifier(object):
+    """Guess which language a text is written in."""
+
     DROP_RATIO = 1.10
 
     def __init__(self, folder=None, langs=[], verbose=False):
@@ -372,6 +374,7 @@ class Classifier(object):
 
 
 class FolderTrainer(object):
+    """Train the language guesser from a directory."""
 
     def __init__(self, folder, exts=['.txt', '.txt.gz'], Model=CharModel,
                  verbose=False):
@@ -411,6 +414,7 @@ class FolderTrainer(object):
 
 
 class FileTrainer(object):
+    """Train the language guesser from a file."""
 
     def __init__(self, fil, Model=CharModel, verbose=False):
         self.model = Model().of_text_file(fil)

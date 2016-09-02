@@ -503,6 +503,8 @@ class Parallelize(object):
 
 
 class ParallelizeHunalign(Parallelize):
+    """Use hunalign to parallelise two converted corpus files."""
+
     split_anchors_on = re.compile(r' *, *')
 
     def anchor_to_dict(self, words_pairs):
@@ -560,6 +562,7 @@ class ParallelizeHunalign(Parallelize):
 
 
 class ParallelizeTCA2(Parallelize):
+    """Use tca2 to parallelise two converted corpus files."""
 
     def generate_anchor_file(self, outpath):
         """Generate an anchor file with lang1 and lang2."""

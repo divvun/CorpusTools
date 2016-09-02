@@ -32,6 +32,8 @@ here = os.path.dirname(__file__)
 
 
 class XsltException(Exception):
+    """Raise this exception when errors arise in this module."""
+
     pass
 
 

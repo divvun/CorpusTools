@@ -33,6 +33,7 @@ from corpustools import argparse_version, parallelize, util
 
 
 class ParallelPicker:
+    """Pick parallel files from converted xml files."""
 
     def __init__(self, language1_dir, parallel_language, minratio, maxratio):
         self.language1_dir = language1_dir

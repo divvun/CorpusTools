@@ -38,6 +38,7 @@ from corpustools import (adder, argparse_version, namechanger, text_cat, util,
 
 
 class Crawler(object):
+    """A base class to save downloaded files to the corpus."""
 
     def __init__(self):
         self.goaldir = six.text_type(os.getenv('GTFREE'))
@@ -281,6 +282,7 @@ class SamediggiFiCrawler(Crawler):
 
 
 class SamediggiNoPage(object):
+    """Save a samediggi.no page to the corpus."""
 
     def __init__(self, url):
         r = requests.get(url)
@@ -367,6 +369,7 @@ class SamediggiNoPage(object):
 
 
 class SamediggiNoCrawler(Crawler):
+    """Crawl samediggi.no and save html documents to the corpus."""
 
     def __init__(self):
         super(SamediggiNoCrawler, self).__init__()
