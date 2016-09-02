@@ -68,6 +68,7 @@ class CorpusPath(object):
     Args:
         path: path to a corpus file
     """
+
     def __init__(self, path):
         """Initialise the CorpusPath class."""
         self.pathcomponents = self.split_path(path)
@@ -778,6 +779,7 @@ class BoundingBox(object):
 
     Used in PDF conversion classes
     """
+
     def __init__(self):
         """Initialise the BoundingBox class."""
         self.top = sys.maxsize
@@ -838,6 +840,7 @@ class BoundingBox(object):
 
 class PDFTextElement(BoundingBox):
     """pdf2xml text elements are enclosed in this class."""
+
     def __init__(self, t):
         """Initialise the PDFTextElement class:
 
@@ -948,6 +951,7 @@ class PDFParagraph(object):
     in_list is a boolean to indicate whether the paragraph contains a
     list
     """
+
     LIST_CHARS = [
         u'•',  # U+2022: BULLET
         u'–',  # U+2013: EN DASH
@@ -1048,6 +1052,7 @@ class PDFSection(BoundingBox):
 
     paragraphs is a list of PDFParagraphs
     """
+
     def __init__(self):
         """Initialise the PDFSection class."""
         super(PDFSection, self).__init__()
@@ -1125,6 +1130,7 @@ class OrderedPDFSections(object):
     Another example, where a page contains multicolumn text
     intersperced with tables, is illustrated in TestPDFSection1.
     """
+
     def __init__(self):
         """Initialise the OrderedPDFSections class."""
         self.sections = []
@@ -1171,6 +1177,7 @@ class OrderedPDFSections(object):
 
 class PDFTextExtractor(object):
     """Extract text from a list of PDFParagraphs"""
+
     def __init__(self):
         """Initialise the PDFTextExtractor class."""
         self.body = etree.Element('body')
@@ -1465,6 +1472,7 @@ class PDFPage(object):
     then ordered in the way they appear on the page and
     finally sent to PDFTextExtractor
     """
+
     def __init__(self, page_element, metadata_margins={}, metadata_inner_margins={}):
         """Initialise the PDFPage class.
 
@@ -1626,6 +1634,7 @@ class PDFPage(object):
 
 class PDF2XMLConverter(Converter):
     """Class to convert the xml output of pdftohtml to giellatekno xml."""
+
     def __init__(self, filename, write_intermediate=False):
         """Initialise the PDF2XMLConverte class.
 
@@ -3541,6 +3550,7 @@ class LanguageDetector(object):
 class ConverterManager(object):
 
     """Manage the conversion of original files to corpus xml."""
+
     LANGUAGEGUESSER = text_cat.Classifier(None)
     FILES = []
 
