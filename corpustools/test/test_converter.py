@@ -29,10 +29,10 @@ import unittest
 
 import lxml.doctestcompare as doctestcompare
 import lxml.etree as etree
+import lxml.html as html5parser
 import lxml.objectify as objectify
 import six
 import testfixtures
-from lxml.html import html5parser
 
 from corpustools import converter, text_cat, xslsetter
 from corpustools.test.test_xhtml2corpus import assertXmlEqual
