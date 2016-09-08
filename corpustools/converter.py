@@ -2720,7 +2720,7 @@ class DocxConverter(HTMLConverter):
 class EpubConverter(HTMLConverter):
     """Convert epub documents to the giellatekno xml format.
 
-    Epub files are zip files taht contain text in xhtml files. This class reads
+    Epub files are zip files that contain text in xhtml files. This class reads
     all xhtml files found in this archive. The body element of these files are
     converted to div elements, and appended inside a new body element.
 
