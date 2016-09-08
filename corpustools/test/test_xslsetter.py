@@ -193,3 +193,24 @@ class TestMetadataHandler(unittest.TestCase):
         self.assertEqual(md.inner_margins,
                          {u'inner_right_margin': {u'5': 30, u'6': 50},
                           u'inner_left_margin': {u'5': 20, u'6': 20}})
+
+    def test_skip_elements_1(self):
+        """Test if getting skip_elements is possible."""
+        md = xslsetter.MetadataHandler('bogus.epub.xsl', create=True)
+        md.set_variable('skip_elements',
+                        './/body/div[1]/h2[1];.//body/div[3]/div[1]/h3[1]')
+
+        self.assertEqual(md.skip_elements,
+                         [('.//body/div[1]/h2[1]',
+                           './/body/div[3]/div[1]/h3[1]')])
+
+    def test_skip_elements_2(self):
+        """Test if getting a pair of skip_elements is possible."""
+        md = xslsetter.MetadataHandler('bogus.epub.xsl', create=True)
+        md.set_variable('skip_elements',
+                        './/body/div[5];.//body/div[8]/div[3]/h1[1], '
+                        './/body/div[11]/div[2];.//body/div[11]/div[5]')
+
+        self.assertEqual(md.skip_elements,
+                         [('.//body/div[5]', './/body/div[8]/div[3]/h1[1]'),
+                          ('.//body/div[11]/div[2]', './/body/div[11]/div[5]')])

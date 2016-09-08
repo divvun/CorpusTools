@@ -186,6 +186,19 @@
     <xsl:variable name="inner_top_margin" select="''"/>
     <xsl:variable name="inner_bottom_margin" select="''"/>
 
+    <!--
+        This variable is used for epub files.
+
+        select contains comma separated xpath path pairs.
+        A path pair is separated by a semicolon.
+        Each path should start with .//body
+
+        Examples of valid pairs:
+        * .//body/div[1]/h2[1];.//body/div[3]/div[1]/h3[1]
+        * .//body/div[5];.//body/div[8]/div[3]/h1[1], .//body/div[11]/div[2];.//body/div[11]/div[5]
+    -->
+    <xsl:variable name="skip_elements" select="''"/>
+
     <!-- Add all paragraphs that should have xml:lang=X           -->
     <!-- Uncomment the following and add the paths, for example:  -->
     <!-- <xsl:template match="/root/section[2]/paragraph[5] |
