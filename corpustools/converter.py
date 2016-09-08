@@ -2718,7 +2718,8 @@ class DocxConverter(HTMLConverter):
 
 
 class EpubConverter(HTMLConverter):
-    """Convert docx documents to the giellatekno xml format."""
+    """Convert epub documents to the giellatekno xml format."""
+
 
     @property
     def content(self):
