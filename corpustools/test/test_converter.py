@@ -1175,6 +1175,7 @@ class TestEpubConverter(XMLTester):
         self.assertXmlEqual(got, want)
 
     def test_convert2intermediate(self):
+        """Test without skip_elements."""
         got = self.testdoc.convert2intermediate()
         want = ("""
             <document>
@@ -1196,6 +1197,30 @@ class TestEpubConverter(XMLTester):
                     <p>6asdf</p>
                     <p type="title">3.1 Bajilčála</p>
                     <p>7asdf</p>
+                    <p type="title">3.1.1 Bajilčála</p>
+                    <p>8asdf</p>
+                </body>
+            </document>
+        """)
+
+        self.assertXmlEqual(got, etree.fromstring(want))
+
+    def test_convert2intermediate_with_skip_elements(self):
+        """Test with skip_elements."""
+        self.testdoc.md.set_variable(
+            'skip_elements',
+            './/html:body/html:div[1]/html:h2[1];'
+            './/html:body/html:div[3]/html:div[1]/html:h3[1]')
+
+        got = self.testdoc.convert2intermediate()
+        want = ("""
+            <document>
+                <header>
+                    <title></title>
+                </header>
+                <body>
+                    <p type="title">1 Bajilčála</p>
+                    <p>1asdf</p>
                     <p type="title">3.1.1 Bajilčála</p>
                     <p>8asdf</p>
                 </body>

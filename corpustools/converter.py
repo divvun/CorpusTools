@@ -2779,6 +2779,9 @@ class EpubConverter(HTMLConverter):
         html.append(etree.Element('{http://www.w3.org/1999/xhtml}head'))
         html.append(mainbody)
 
+        for pairs in self.md.skip_elements:
+            self.remove_range(pairs[0], pairs[1], html)
+
         return etree.tostring(html, encoding='unicode')
 
     @staticmethod
@@ -2825,7 +2828,6 @@ class EpubConverter(HTMLConverter):
             tuple of list of str: paths to the new start and end element, now
                 with the same length.
         """
-
         starts, ends = path1.split('/'), path2.split('/')
 
         while len(starts) > len(ends):
