@@ -18,6 +18,7 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
+"""Test the MetadataHandler class."""
 from __future__ import absolute_import
 
 import unittest
@@ -26,9 +27,10 @@ from corpustools import xslsetter
 
 
 class TestMetadataHandler(unittest.TestCase):
+    """Test the MetadataHandler class."""
 
     def test_set_skip_pages1(self):
-        '''Test a valid skip_pages line'''
+        """Test a valid skip_pages line."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('skip_pages', '1, 4-5, 7')
         got = md.skip_pages
@@ -37,7 +39,7 @@ class TestMetadataHandler(unittest.TestCase):
         self.assertEqual(got, want)
 
     def test_set_skip_pages2(self):
-        '''Test an invalid skip_pages line'''
+        """Test an invalid skip_pages line."""
         md = xslsetter.MetadataHandler('bogus.xml', create=True)
         md.set_variable('skip_pages', '1, 4 5, 7')
 
@@ -45,7 +47,7 @@ class TestMetadataHandler(unittest.TestCase):
             md.skip_pages
 
     def test_set_skip_pages3(self):
-        '''Test an empty skip_pages line'''
+        """Test an empty skip_pages line."""
         md = xslsetter.MetadataHandler('bogus.xml', create=True)
         md.set_variable('skip_pages', ' ')
         got = md.skip_pages
@@ -54,7 +56,7 @@ class TestMetadataHandler(unittest.TestCase):
         self.assertEqual(got, want)
 
     def test_set_skip_pages4(self):
-        '''Test with odd as a page range'''
+        """Test with odd as a page range."""
         md = xslsetter.MetadataHandler('bogus.xml', create=True)
         md.set_variable('skip_pages', 'odd, 2')
         got = md.skip_pages
@@ -63,7 +65,7 @@ class TestMetadataHandler(unittest.TestCase):
         self.assertEqual(got, want)
 
     def test_set_skip_pages5(self):
-        '''Test with even as a page range'''
+        """Test with even as a page range."""
         md = xslsetter.MetadataHandler('bogus.xml', create=True)
         md.set_variable('skip_pages', 'even, 1')
         got = md.skip_pages
@@ -72,7 +74,7 @@ class TestMetadataHandler(unittest.TestCase):
         self.assertEqual(got, want)
 
     def test_set_skip_pages6(self):
-        '''Raise an exception if both odd and even are used'''
+        """Raise an exception if both odd and even are used."""
         md = xslsetter.MetadataHandler('bogus.xml', create=True)
         md.set_variable('skip_pages', 'odd, even')
 
@@ -80,7 +82,7 @@ class TestMetadataHandler(unittest.TestCase):
             md.skip_pages
 
     def test_set_margin(self):
-        '''Test if the margin is set correctly'''
+        """Test if the margin is set correctly."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
 
         self.assertEqual(
@@ -88,7 +90,7 @@ class TestMetadataHandler(unittest.TestCase):
             {'odd': 230, 'even': 540, '8': 340})
 
     def test_parse_margin_lines1(self):
-        '''Test parse_margin_lines'''
+        """Test parse_margin_lines."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('left_margin', '7=7')
         md.set_variable('right_margin', 'odd=4,even=8,3=6')
@@ -102,7 +104,7 @@ class TestMetadataHandler(unittest.TestCase):
             'bottom_margin': {'9': 2}})
 
     def test_parse_margin_lines2(self):
-        '''all and even in margin line should raise ConversionException'''
+        """Raise ConversionException if both 'all' and 'even' is found."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('right_margin', 'all=40,even=80')
 
@@ -110,7 +112,7 @@ class TestMetadataHandler(unittest.TestCase):
             md.margins
 
     def test_parse_margin_lines3(self):
-        '''all and odd in margin line should raise ConversionException'''
+        """Raise ConversionException if 'all' and 'odd' is found."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('right_margin', 'all=40,odd=80')
 
@@ -118,7 +120,7 @@ class TestMetadataHandler(unittest.TestCase):
             md.margins
 
     def test_parse_margin_lines4(self):
-        '''text after = should raise ConversionException'''
+        """Raise ConversionException if text after '=' is found."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('right_margin', 'all=tullball')
 
@@ -126,7 +128,7 @@ class TestMetadataHandler(unittest.TestCase):
             md.margins
 
     def test_parse_margin_lines5(self):
-        '''no = should raise ConversionException'''
+        """Raise ConversionException if no '=' is found."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('right_margin', 'all 50')
 
@@ -134,7 +136,7 @@ class TestMetadataHandler(unittest.TestCase):
             md.margins
 
     def test_parse_margin_lines6(self):
-        '''line with no comma between values should raise an exception'''
+        """Line with no comma between values should raise an exception."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('right_margin', 'all=50 3')
 
@@ -142,7 +144,7 @@ class TestMetadataHandler(unittest.TestCase):
             md.margins
 
     def test_parse_margin_lines7(self):
-        '''multiple pages with the same margin are separated by semicolon'''
+        """Multiple pages with the same margin are separated by semicolon."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('right_margin', '1;3=50, 2=30')
 
@@ -150,7 +152,7 @@ class TestMetadataHandler(unittest.TestCase):
             'right_margin': {'1': 50, '2': 30, '3': 50}})
 
     def test_inner_margin1(self):
-        '''Raise exception if inner_right is set and not inner_left'''
+        """Raise exception if inner_right is set and not inner_left."""
         for p in ['top', 'bottom', 'right', 'left']:
             md = xslsetter.MetadataHandler('bogus.pdf', create=True)
             md.set_variable('inner_' + p + '_margin', '5=30')
@@ -159,7 +161,7 @@ class TestMetadataHandler(unittest.TestCase):
                 md.inner_margins
 
     def test_inner_margin2(self):
-        '''Raise exception if not the same pages are set'''
+        """Raise exception if not the same pages are set."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('inner_top_margin', '5=30')
         md.set_variable('inner_bottom_margin', '6=30')
@@ -173,7 +175,7 @@ class TestMetadataHandler(unittest.TestCase):
             md.inner_margins
 
     def test_inner_margin3(self):
-        '''Test whether a correctly set inner margin gives the wanted result'''
+        """Test whether a correctly set inner margin gives the wanted result."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('inner_top_margin', '6=20, 5=20')
         md.set_variable('inner_bottom_margin', '5=30, 6=50')
@@ -183,7 +185,7 @@ class TestMetadataHandler(unittest.TestCase):
                           u'inner_top_margin': {u'5': 20, u'6': 20}})
 
     def test_inner_margin4(self):
-        '''Test whether a correctly set inner margin gives the wanted result'''
+        """Test whether a correctly set inner margin gives the wanted result."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('inner_left_margin', '6=20, 5=20')
         md.set_variable('inner_right_margin', '5=30, 6=50')
