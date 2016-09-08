@@ -1141,6 +1141,37 @@ class TestEpubConverter(XMLTester):
                 here, 'converter_data/fakecorpus/orig/sme/riddu/test.epub'),
             'bogus')
 
+    def test_remove_range(self):
+        """Test the remove_range function."""
+        content = etree.fromstring(self.testdoc.content)
+
+        path1 = './/html:body/html:div[1]/html:h2[1]'
+        path2 = './/html:body/html:div[3]/html:div[1]/html:h3[1]'
+
+        got = self.testdoc.remove_range(path1, path2, content)
+        want = html5parser.document_fromstring(u"""
+            <html>
+                <head/>
+                <body>
+                    <div id="Text/Section0001.xhtml">
+                        <div>
+                            <h1>1 Bajilčála</h1>
+                            <p>1asdf</p>
+                        </div>
+                    </div>
+                    <div id="Text/Section0003.xhtml">
+                        <div>
+                            <h3 id="sigil_toc_id_5">3.1.1 Bajilčála</h3>
+                            <div>8asdf</div>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        """)
+
+        clean_namespaces([got, want])
+        self.assertXmlEqual(got, want)
+
     def test_convert2intermediate(self):
         got = self.testdoc.convert2intermediate()
         want = ("""

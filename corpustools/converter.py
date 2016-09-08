@@ -2773,6 +2773,142 @@ class EpubConverter(HTMLConverter):
 
         return etree.tostring(html, encoding='unicode')
 
+    @staticmethod
+    def remove_siblings_shorten_path(parts, content, preceding=False):
+        """Remove all siblings before or after an element.
+
+        Args:
+            parts (list of str): a xpath path split on /
+            content (etree._Element): an xhtml document
+            preceding (bool): When True, iterate through the preceding siblings
+                of the found element, otherwise iterate throughe the following
+                siblings.
+
+        Returns:
+            list of str: the path to the parent of parts.
+        """
+        path = '/'.join(parts)
+        found = content.find(
+            path, namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+        parent = found.getparent()
+        for sibling in found.itersiblings(preceding=preceding):
+            parent.remove(sibling)
+
+        return parts[:-1]
+
+    def shorten_longest_path(self, path1, path2, content):
+        """Remove elements from the longest path.
+
+        If starts is longer than ends, remove the siblings following starts,
+        shorten starts with one step (going to the parent). If starts still is
+        longer than ends, remove the siblings following the parent. This is
+        done untill starts and ends are of equal length.
+
+        If on the other hand ends is longer than starts, remove the siblings
+        preceding ends, then shorten ends (going to its parent).
+
+        Args:
+            path1 (str): path to first element
+            path2 (str): path to second element
+            content (etree._Element): xhtml document, where elements are
+                removed.
+
+        Returns:
+            tuple of list of str: paths to the new start and end element, now
+                with the same length.
+        """
+
+        starts, ends = path1.split('/'), path2.split('/')
+
+        while len(starts) > len(ends):
+            starts = self.remove_siblings_shorten_path(starts, content)
+
+        while len(ends) > len(starts):
+            ends = self.remove_siblings_shorten_path(
+                ends, content, preceding=True)
+
+        return starts, ends
+
+    def remove_trees_with_unequal_parents(self, path1, path2, content):
+        """Remove tree nodes that do not have the same parents.
+
+        While the parents in starts and ends are unequal (that means that
+        starts and ends belong in different trees), remove elements
+        following starts and preceding ends. Shorten the path to the parents
+        of starts and ends and remove more elements if needed. starts and
+        ends are of equal length.
+
+        Args:
+            path1 (str): path to first element
+            path2 (str): path to second element
+            content (etree._Element): xhtml document, where elements are
+                removed.
+
+        Returns:
+            tuple of list of str: paths to the new start and end element.
+        """
+        starts, ends = self.shorten_longest_path(path1, path2, content)
+
+        while starts[-2] != ends[-2]:
+            starts = self.remove_siblings_shorten_path(starts, content)
+            ends = self.remove_siblings_shorten_path(
+                ends, content, preceding=True)
+
+        return starts, ends
+
+    def remove_trees_with_equal_parents(self, starts, ends, content):
+        """Remove tree nodes that have the same parents.
+
+        Now that the parents of starts and ends are equal, remove the last
+        trees of nodes between starts and ends (if necessary).
+
+        Args:
+            starts (list of str): path to first element
+            ends (list of str): path to second element
+            content (etree._Element): xhtml document, where elements are
+                removed.
+        """
+        deepest_start = content.find(
+            '/'.join(starts), namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+        deepest_end = content.find(
+            '/'.join(ends), namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+        parent = deepest_start.getparent()
+        for sibling in deepest_start.itersiblings():
+            if sibling != deepest_end:
+                parent.remove(sibling)
+
+    @staticmethod
+    def remove_first_element(path1, content):
+        """Remove the first element in the range.
+
+        Args:
+            path1 (str): path to the first element to remove.
+            content (etree._Element): the xhtml document that should
+                be altered.
+        """
+        first_start = content.find(
+            path1, namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+        first_start.getparent().remove(first_start)
+
+    def remove_range(self, path1, path2, content):
+        """Remove a range of elements from an xhtml document.
+
+        Args:
+            path1 (str): path to first element
+            path2 (str): path to second element
+            content (etree._Element): xhtml document
+
+        Returns:
+            etree._Element: an xhtml where the range of elements between
+                path1 and path2 have been removed.
+        """
+        starts, ends = self.remove_trees_with_unequal_parents(path1, path2,
+                                                              content)
+        self.remove_trees_with_equal_parents(starts, ends, content)
+        self.remove_first_element(path1, content)
+
+        return content
+
 
 class DocConverter(HTMLConverter):
     """Convert Microsoft Word documents to the giellatekno xml format."""
