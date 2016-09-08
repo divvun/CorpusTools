@@ -533,7 +533,7 @@ class AvvirConverter(Converter):
             p.remove(subelement)
 
     def convert_p(self):
-        """Convert story/p elements to one or more p elements"""
+        """Convert story/p elements to one or more p elements."""
         for p in self.intermediate.findall('./story/p'):
             if p.get("class") is not None:
                 del p.attrib["class"]
@@ -546,7 +546,7 @@ class AvvirConverter(Converter):
                 story.remove(p)
 
     def convert_story(self):
-        """Convert story elements in to giellatekno xml elements"""
+        """Convert story elements in to giellatekno xml elements."""
         for title in self.intermediate.findall('.//story[@class="Tittel"]'):
             for p in title.findall('./p'):
                 p.set('type', 'title')
@@ -837,7 +837,7 @@ class PDFTextElement(BoundingBox):
     """pdf2xml text elements are enclosed in this class."""
 
     def __init__(self, t):
-        """Initialise the PDFTextElement class:
+        """Initialise the PDFTextElement class.
 
         Arguments:
             t: a pdf2xml text element
@@ -1057,7 +1057,7 @@ class PDFSection(BoundingBox):
         self.column_width = 0
 
     def append_paragraph(self, paragraph):
-        """Append a paragraph and increase the area of the section
+        """Append a paragraph and increase the area of the section.
 
         paragraph is PDFParagraph
         """
@@ -1069,7 +1069,7 @@ class PDFSection(BoundingBox):
         self.paragraphs.append(paragraph)
 
     def is_same_section(self, paragraph):
-        """Define whether a paragraph belongs to this section
+        """Define whether a paragraph belongs to this section.
 
         Use the left and width properties to define this.
 
@@ -1110,7 +1110,7 @@ class PDFSection(BoundingBox):
 
 
 class OrderedPDFSections(object):
-    """Place the PDFSections in the order they are placed on the page
+    """Place the PDFSections in the order they are placed on the page.
 
     sections is a list of PDFSections
 
@@ -1150,7 +1150,7 @@ class OrderedPDFSections(object):
             return len(self.sections)
 
     def insert_section(self, new_section):
-        """new_section is a PDFSection"""
+        """new_section is a PDFSection."""
         i = self.find_position(new_section)
         if not self.sections or i == len(self.sections):
             self.sections.append(new_section)
@@ -1174,7 +1174,7 @@ class OrderedPDFSections(object):
 
 
 class PDFTextExtractor(object):
-    """Extract text from a list of PDFParagraphs"""
+    """Extract text from a list of PDFParagraphs."""
 
     def __init__(self):
         """Initialise the PDFTextExtractor class."""
@@ -1191,7 +1191,11 @@ class PDFTextExtractor(object):
         etree.SubElement(self.body, 'p')
 
     def append_text_to_p(self, text):
-        """text is a string"""
+        """Append text to self.p.
+
+        Args:
+            text (str): content of a text element.
+        """
         if not len(self.p) and not self.p.text:
             self.p.text = text
         elif not len(self.p) and self.p.text:
@@ -1254,11 +1258,11 @@ class PDFTextExtractor(object):
                 self.p.append(em)
 
     def get_last_string(self):
-        """Get the plain text of the last paragraph of body"""
+        """Get the plain text of the last paragraph of body."""
         return self.p.xpath("string()")
 
     def handle_line_ending(self):
-        """Add a soft hyphen or a space at the end of self.p
+        r"""Add a soft hyphen or a space at the end of self.p.
 
         If - is followed by a space, do not replace it by a soft hyphen
         Sometimes this should be replaced by a soft hyphen, other times not.
@@ -1307,21 +1311,34 @@ class PDFTextExtractor(object):
                 re.search(u'[.?!]\s*$', self.get_last_string()))
 
     def is_new_page(self, paragraph):
-        """paragraph is a PDFParagraph"""
+        """Check if the paragraph is the start of a new page.
+
+        Args:
+            paragraph (PDFParagraph)
+
+        Returns:
+            bool
+        """
         firstletter = paragraph.textelements[-1].plain_text[0]
         return firstletter == firstletter.upper()
 
     def extract_text_from_paragraph(self, paragraph):
-        """paragraph is a PDFParagraph"""
+        """Append text from a paragraph to the xml document.
+
+        Args:
+            paragraph (PDFParagraph)
+        """
         for textelement in paragraph.textelements:
             self.extract_textelement(textelement.t)
             self.handle_line_ending()
         self.append_to_body()
 
     def extract_text_from_page(self, paragraphs):
-        """paragraphs contain the text of one pdf page
+        """Append text from a page to the xml document.
 
-        paragraphs is a list PDFParagraphs
+        Args:
+            paragraphs (list of PDFParagraph): contains the text of one pdf
+                page.
         """
         if (not self.is_first_page() and
             (self.is_new_page(paragraphs[0]) or
@@ -1399,7 +1416,7 @@ class PDFPageMetadata(object):
             return int(self.page_height - coefficient * self.page_height / 100.0)
 
     def get_coefficient(self, margin):
-        """Get the width of the margin in percent"""
+        """Get the width of the margin in percent."""
         coefficient = 7
         if margin in list(self.metadata_margins.keys()):
             m = self.metadata_margins[margin]
@@ -1452,7 +1469,7 @@ class PDFPageMetadata(object):
             return int(self.page_height - coefficient * self.page_height / 100.0)
 
     def get_inner_coefficient(self, margin):
-        """Get the width of the margin in percent"""
+        """Get the width of the margin in percent."""
         coefficient = 0
         if margin in list(self.metadata_inner_margins.keys()):
             m = self.metadata_inner_margins[margin]
@@ -1469,7 +1486,7 @@ class PDFPageMetadata(object):
 
 
 class PDFPage(object):
-    """Reads a page element
+    """Reads a page element.
 
     textelements is a list of PDFTextElements
 
@@ -1498,7 +1515,7 @@ class PDFPage(object):
             metadata_inner_margins=metadata_inner_margins)
 
     def is_skip_page(self, skip_pages):
-        """True if a page should be skipped, otherwise false"""
+        """True if a page should be skipped, otherwise false."""
         return (('odd' in skip_pages and
                  (self.pdf_pagemetadata.page_number % 2) == 1) or
                 ('even' in skip_pages and
@@ -1533,7 +1550,7 @@ class PDFPage(object):
             textelement.remove_superscript()
 
     def remove_elements_not_within_margin(self):
-        """Remove PDFTextElements from textelements if needed"""
+        """Remove PDFTextElements from textelements if needed."""
         margins = self.pdf_pagemetadata.compute_margins()
         inner_margins = self.pdf_pagemetadata.compute_inner_margins()
 
@@ -1545,7 +1562,7 @@ class PDFPage(object):
                 if not self.is_inside_inner_margins(t, inner_margins)]
 
     def merge_elements_on_same_line(self):
-        """Merge PDFTextElements that are on the same line"""
+        """Merge PDFTextElements that are on the same line."""
         same_line_indexes = [i for i in six.moves.range(1,
                                                         len(self.textelements))
                              if self.textelements[i - 1].is_text_on_same_line(
@@ -1556,7 +1573,7 @@ class PDFPage(object):
             del self.textelements[i]
 
     def remove_invalid_elements(self):
-        """Remove elements with empty strings or where the width is zero or negative"""
+        """Remove elements with empty strings or where the width is zero or negative."""
         self.textelements[:] = [t for t in self.textelements
                                 if not (not t.t.xpath("string()").strip() or
                                         t.width < 1)]
@@ -1982,7 +1999,14 @@ class HTMLContentConverter(object):
             raise ConversionException(six.text_type(e))
 
     def remove_cruft(self, content):
-        """from svenskakyrkan.se documents."""
+        """Remove cruft from svenskakyrkan.se documents.
+
+        Args:
+            content (str): the content of a document.
+
+        Returns:
+            str: The content of the document without the cruft.
+        """
         replacements = [
             (u'//<script', u'<script'),
             (u'&nbsp;', u' '),
