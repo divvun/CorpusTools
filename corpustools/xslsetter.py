@@ -41,13 +41,34 @@ class XsltException(Exception):
 
 
 class MetadataHandler(object):
-    """Class to handle metadata in .xsl files
+    """Class to handle metadata in .xsl files.
 
     This class makes the xsl file
     """
+
     lang_key = "{http://www.w3.org/XML/1998/namespace}lang"
 
     def __init__(self, filename, create=False):
+        """Initialise the MetadataHandler class.
+
+        Args:
+            filename (str): path to the metadata file.
+            create (bool): Define if a MetadataHandler will be created from a
+                metadata file belonging to a original file inside the corpus or
+                created from a template file containing default values.
+
+                If false, try to read a metadata file, and create a
+                MetadataHandler from this. If the file does not exist, raise a
+                util.ArgumentError.
+
+                If True, create a new MetadataHandler with default values
+                from the template file.
+
+        Raises:
+            util.ArgumentError if create is False and the filename does not
+            exist.
+            XsltException if there is a syntax error in the metadata file.
+        """
         self.filename = filename
 
         if not os.path.exists(filename):
@@ -63,11 +84,25 @@ class MetadataHandler(object):
                     self.filename, e))
 
     def _get_variable_elt(self, key):
+        """Get the variable element.
+
+        Args:
+            key (str): The name of the variable that should be looked up.
+
+        Returns:
+            etree._Element: The element that contains the key.
+        """
         return self.tree.getroot().find(
             "{{http://www.w3.org/1999/XSL/Transform}}"
             "variable[@name='{}']".format(key))
 
     def set_variable(self, key, value):
+        """Set the value of a variable.
+
+        Args:
+            key (str): Name of the variable to set.
+            value (str): The value the variable should be set to.
+        """
         try:
             variable = self._get_variable_elt(key)
             variable.attrib['select'] = "'{}'".format(value)
@@ -77,6 +112,14 @@ class MetadataHandler(object):
                 'Error was {}'.format(key, value, str(e)))
 
     def get_variable(self, key):
+        """Get the value associated with the key.
+
+        Args:
+            key (str): Name of the variable to get.
+
+        Returns:
+            str or None: The string contains the value associated with the key.
+        """
         variable = self._get_variable_elt(key)
         if variable is not None:
             value = variable.attrib['select']
@@ -85,6 +128,11 @@ class MetadataHandler(object):
         return None
 
     def get_parallel_texts(self):
+        """Get the parallel texts.
+
+        Returns:
+            dict: A dict of parallel files containing language:filename pairs.
+        """
         parallels = self._get_variable_elt("parallels")
         if parallels is None:
             return {}
@@ -95,6 +143,12 @@ class MetadataHandler(object):
                     if p.attrib["location"].strip("'") != ""}
 
     def set_parallel_text(self, language, location):
+        """Insert the name of a parallel file into the parallels element.
+
+        Args:
+            language (str): the language of the parallel file.
+            location (str): the name of the parallel file.
+        """
         attrib = {self.lang_key: language,
                   "location": location}
         parallels = self._get_variable_elt("parallels")
@@ -151,7 +205,15 @@ class MetadataHandler(object):
         return pages
 
     def get_margin_lines(self, position=''):
-        """Get the margin lines from the metadata file."""
+        """Get the margin lines from the metadata file.
+
+        Args:
+            position (str): empty if getting regular margin lines,
+                otherwise inner_ if getting inner margin lines.
+
+        Returns:
+            dict: Contains marginname:percentage pairs.
+        """
         margin_lines = {
             key: self.get_variable(key).strip()
             for key in [position + 'right_margin', position + 'top_margin',
@@ -162,6 +224,19 @@ class MetadataHandler(object):
         return margin_lines
 
     def validate_and_set_margins(self, margin_lines):
+        """Set and validate the margin lines.
+
+        Args:
+            margin_lines (dict): The dict consists of
+                marginname:percentage pairs
+
+        Returns:
+            dict: The dict consists of marginname:percentage pairs.
+
+        Raises:
+            XsltException: Raise this exception if there are errors in the
+                margin_lines.
+        """
         _margins = {}
         for key, value in six.iteritems(margin_lines):
             if ('all' in value and ('odd' in value or 'even' in value) or
@@ -182,13 +257,26 @@ class MetadataHandler(object):
 
     @property
     def margins(self):
-        """Parse margin lines fetched from the .xsl file."""
+        """Parse margin lines fetched from the .xsl file.
+
+        Returns:
+            dict: The dict consists of marginname:percentage pairs.
+        """
         margin_lines = self.get_margin_lines()
 
         return self.validate_and_set_margins(margin_lines)
 
     @property
     def inner_margins(self):
+        """Parse inner margin lines fetched from the .xsl file.
+
+        Returns:
+            dict: The dict consists of marginname:percentage pairs.
+
+        Raises:
+            XsltException: Raise this exception if there are errors in the
+                inner_margin_lines.
+        """
         margin_lines = self.get_margin_lines(position='inner_')
         _inner_margins = self.validate_and_set_margins(margin_lines)
 
@@ -235,10 +323,12 @@ class MetadataHandler(object):
     def parse_margin_line(value):
         """Parse a margin line read from the .xsl file.
 
-        :param value: a string containing the margin settings for a particular
-        margin (right_margin, left_margin, top_margin, bottom_margin)
+        Args:
+            param (str): contains the margin settings for a particular
+                margin (right_margin, left_margin, top_margin, bottom_margin)
 
-        :returns: a dict containing the margins for pages in percent
+        Returns:
+            dict: marginname: int (in percentage) pairs
         """
         m = {}
         for part in value.split(','):
@@ -249,13 +339,14 @@ class MetadataHandler(object):
         return m
 
     def set_lang_genre_xsl(self):
-        """Set the mainlang and genre variables in the xsl file, if possible"""
+        """Set the mainlang and genre variables in the xsl file, if possible."""
         with util.ignored(TypeError):
             xsl_tuple = util.split_path(self.filename)
             self.set_variable('mainlang', xsl_tuple.lang)
             self.set_variable('genre', xsl_tuple.genre)
 
     def write_file(self):
+        """Write self.tree to self.filename."""
         try:
             with open(self.filename, 'wb') as f:
                 f.write(etree.tostring(self.tree,
