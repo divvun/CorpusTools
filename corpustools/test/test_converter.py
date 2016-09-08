@@ -512,11 +512,12 @@ def check_unwanted_classes_and_ids(tag, key, value):
         '<html><body>{}</body></html>'.format(inner))
 
     want = html5parser.document_fromstring(
-        '<html><body>{}</body></html>'.format(inner_r))
+        '<html><head/><body>{}</body></html>'.format(inner_r))
 
+    clean_namespaces([got, want])
     if etree.tostring(got) != etree.tostring(want):
         raise AssertionError('Remove classes and ids:\nexpected {}\ngot {}'.format(
-            etree.tostring(want), etree.tostring(hc.soup)))
+            etree.tostring(want), etree.tostring(got)))
 
 
 def test_remove_unwanted_tags():
@@ -1307,10 +1308,10 @@ class TestHTMLContentConverter(XMLTester):
             u'<h2><a>Der</a></h2></body></html>')
 
         want = html5parser.document_fromstring(
-            '<html><head><title>– Den '
-            'utdøende stammes frykt</title>'
-            '</head><body>  <h3>VI</h3>  '
-            '<p>... Finnerne<a/></p><h2>Der</h2></body></html>')
+            u'<html><head><title>– Den '
+            u'utdøende stammes frykt</title>'
+            u'</head><body>  <h3>VI</h3>  '
+            u'<p>... Finnerne<a/></p><h2>Der</h2></body></html>')
 
         clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
