@@ -1143,26 +1143,31 @@ class TestEpubConverter(XMLTester):
 
     def test_convert2intermediate(self):
         got = self.testdoc.convert2intermediate()
-        want = (
-            '<document>'
-            '    <header>'
-            '        <title/>'
-            '    </header>'
-            '    <body>'
-            '        <p type="title">1 Bajilčála</p>'
-            '        <p>asdf</p>'
-            '        <p type="title">1.1 Bajilčála</p>'
-            '        <p>asdf</p>'
-            '        <p type="title">1.1.1 Bajilčála</p>'
-            '        <p>asdf</p>'
-            '        <p type="title">2 Bajilčála</p>'
-            '        <p>asdf</p>'
-            '        <p type="title">2.1 Bajilčála</p>'
-            '        <p>asdf</p>'
-            '        <p type="title">2.1.1 Bajilčála</p>'
-            '        <p>asdf</p>'
-            '    </body>'
-            '</document>')
+        want = ("""
+            <document>
+                <header>
+                    <title></title>
+                </header>
+                <body>
+                    <p type="title">1 Bajilčála</p>
+                    <p>1asdf</p>
+                    <p type="title">1.1 Bajilčála</p>
+                    <p>2asdf</p>
+                    <p type="title">1.1.1 Bajilčála</p>
+                    <p>3asdf</p>
+                    <p type="title">2 Bajilčála</p>
+                    <p>4asdf</p>
+                    <p type="title">2.1 Bajilčála</p>
+                    <p>5asdf</p>
+                    <p type="title">2.1.1 Bajilčála</p>
+                    <p>6asdf</p>
+                    <p type="title">3.1 Bajilčála</p>
+                    <p>7asdf</p>
+                    <p type="title">3.1.1 Bajilčála</p>
+                    <p>8asdf</p>
+                </body>
+            </document>
+        """)
 
         self.assertXmlEqual(got, etree.fromstring(want))
 
