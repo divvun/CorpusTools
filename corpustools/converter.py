@@ -2718,7 +2718,16 @@ class DocxConverter(HTMLConverter):
 
 
 class EpubConverter(HTMLConverter):
-    """Convert epub documents to the giellatekno xml format."""
+    """Convert epub documents to the giellatekno xml format.
+
+    Epub files are zip files taht contain text in xhtml files. This class reads
+    all xhtml files found in this archive. The body element of these files are
+    converted to div elements, and appended inside a new body element.
+
+    It is possible to filter away ranges of elements from this new xhtml file.
+    These ranges consist pairs of xpath paths, specified inside the metadata
+    file that belongs to this epub file.
+    """
 
     @staticmethod
     def read_chapter(chapter):
@@ -2761,7 +2770,6 @@ class EpubConverter(HTMLConverter):
             a string containing the content of all xhtml files
             found in the epub file.
         """
-
         mainbody = etree.Element('{http://www.w3.org/1999/xhtml}body')
 
         for chapterbody in self.chapters():
