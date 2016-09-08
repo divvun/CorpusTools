@@ -24,6 +24,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import os
+import re
 import sys
 
 import lxml.etree as etree
@@ -359,16 +360,23 @@ class MetadataHandler(object):
 
     @property
     def skip_elements(self):
-        """Get the skip_elements variable."""
-        uff = []
+        """Get the skip_elements variable.
+
+        Returns:
+            list of tuples of str: each tuple has a (start, end) xpath path
+            pair. If the skip_elements variable is empty, return None.
+        """
+        def get_with_ns(path):
+            return '/'.join(['html:' + part if not part.startswith('html:') and
+                             re.match('^\w', part) else part
+                             for part in path.split('/')])
+
+        def get_pair(pair):
+            p = pair.split(';')
+            return (
+                get_with_ns(p[0].strip()),
+                get_with_ns(p[1].strip()))
+
         if self.get_variable('skip_elements'):
-            for pair in self.get_variable('skip_elements').split(','):
-                util.print_frame(pair)
-                paths = pair.split(';')
-                util.print_frame(paths)
-                if len(paths):
-                    uff.append((paths[0].strip(), paths[1].strip()))
-
-        util.print_frame(uff)
-
-        return uff
+            return [get_pair(pair)
+                    for pair in self.get_variable('skip_elements').split(',')]

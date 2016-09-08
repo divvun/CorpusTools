@@ -201,8 +201,8 @@ class TestMetadataHandler(unittest.TestCase):
                         './/body/div[1]/h2[1];.//body/div[3]/div[1]/h3[1]')
 
         self.assertEqual(md.skip_elements,
-                         [('.//body/div[1]/h2[1]',
-                           './/body/div[3]/div[1]/h3[1]')])
+                         [('.//html:body/html:div[1]/html:h2[1]',
+                           './/html:body/html:div[3]/html:div[1]/html:h3[1]')])
 
     def test_skip_elements_2(self):
         """Test if getting a pair of skip_elements is possible."""
@@ -212,5 +212,12 @@ class TestMetadataHandler(unittest.TestCase):
                         './/body/div[11]/div[2];.//body/div[11]/div[5]')
 
         self.assertEqual(md.skip_elements,
-                         [('.//body/div[5]', './/body/div[8]/div[3]/h1[1]'),
-                          ('.//body/div[11]/div[2]', './/body/div[11]/div[5]')])
+                         [('.//html:body/html:div[5]',
+                           './/html:body/html:div[8]/html:div[3]/html:h1[1]'),
+                          ('.//html:body/html:div[11]/html:div[2]',
+                           './/html:body/html:div[11]/html:div[5]')])
+
+    def test_skip_elements_empty(self):
+        """Empty skip_elements returns None."""
+        md = xslsetter.MetadataHandler('bogus.epub.xsl', create=True)
+        self.assertIsNone(md.skip_elements)
