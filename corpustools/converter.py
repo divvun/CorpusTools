@@ -2779,8 +2779,9 @@ class EpubConverter(HTMLConverter):
         html.append(etree.Element('{http://www.w3.org/1999/xhtml}head'))
         html.append(mainbody)
 
-        for pairs in self.md.skip_elements:
-            self.remove_range(pairs[0], pairs[1], html)
+        if self.md.skip_elements:
+            for pairs in self.md.skip_elements:
+                self.remove_range(pairs[0], pairs[1], html)
 
         return etree.tostring(html, encoding='unicode')
 
