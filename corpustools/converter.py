@@ -2905,17 +2905,11 @@ class EpubConverter(HTMLConverter):
             path1 (str): path to first element
             path2 (str): path to second element
             content (etree._Element): xhtml document
-
-        Returns:
-            etree._Element: an xhtml where the range of elements between
-                path1 and path2 have been removed.
         """
         starts, ends = self.remove_trees_with_unequal_parents(path1, path2,
                                                               content)
         self.remove_trees_with_equal_parents(starts, ends, content)
         self.remove_first_element(path1, content)
-
-        return content
 
 
 class DocConverter(HTMLConverter):

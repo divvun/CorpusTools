@@ -1149,7 +1149,8 @@ class TestEpubConverter(XMLTester):
         path1 = './/html:body/html:div[1]/html:h2[1]'
         path2 = './/html:body/html:div[3]/html:div[1]/html:h3[1]'
 
-        got = self.testdoc.remove_range(path1, path2, content)
+        self.testdoc.remove_range(path1, path2, content)
+        got = content
         want = html5parser.document_fromstring(u"""
             <html>
                 <head/>
