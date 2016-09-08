@@ -2720,37 +2720,58 @@ class DocxConverter(HTMLConverter):
 class EpubConverter(HTMLConverter):
     """Convert epub documents to the giellatekno xml format."""
 
+    @staticmethod
+    def read_chapter(chapter):
+        """Read the contents of a epub_file chapter.
+
+        Args:
+            chapter (epub.BookChapter): the chapter of an epub file
+
+        Returns:
+            str: The contents of a chapter
+
+        Raises:
+            ConversionException
+        """
+        try:
+            return etree.fromstring(chapter.read())
+        except KeyError as e:
+            raise ConversionException(e)
+
+    def chapters(self):
+        """Get the all linear chapters of the epub book.
+
+        Yields:
+            etree._Element: The body of an xhtml file found in the epub file.
+        """
+        book = epub.Book(epub.open_epub(self.names.orig))
+
+        for chapter in book.chapters:
+            chapterbody = self.read_chapter(chapter).find(
+                '{http://www.w3.org/1999/xhtml}body')
+            chapterbody.tag = '{http://www.w3.org/1999/xhtml}div'
+            chapterbody.set('id', chapter._manifest_item.href)
+            yield chapterbody
 
     @property
     def content(self):
-        """Get the xhtml content from epub files as a string.
+        """Append all chapter bodies as divs to an html file.
 
         Returns:
             a string containing the content of all xhtml files
             found in the epub file.
         """
-        book = epub.Book(epub.open_epub(self.names.orig))
 
-        chapters = book.chapters
+        mainbody = etree.Element('{http://www.w3.org/1999/xhtml}body')
 
-        try:
-            mainfile = etree.fromstring(chapters[0].read())
-        except KeyError as e:
-            raise ConversionException(e)
+        for chapterbody in self.chapters():
+            mainbody.append(chapterbody)
 
-        mainbody = mainfile.find('{http://www.w3.org/1999/xhtml}body')
+        html = etree.Element('{http://www.w3.org/1999/xhtml}html')
+        html.append(etree.Element('{http://www.w3.org/1999/xhtml}head'))
+        html.append(mainbody)
 
-        for chapter in chapters[1:]:
-            try:
-                chapterfile = etree.fromstring(chapter.read())
-                chapterbody = chapterfile.find(
-                    '{http://www.w3.org/1999/xhtml}body')
-                for element in chapterbody:
-                    mainbody.append(element)
-            except KeyError as e:
-                raise ConversionException(e)
-
-        return etree.tostring(mainfile, encoding='unicode')
+        return etree.tostring(html, encoding='unicode')
 
 
 class DocConverter(HTMLConverter):
