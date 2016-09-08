@@ -60,7 +60,7 @@ class ArgumentError(Exception):
 
 
 def print_frame(debug='', *args):
-    """Print debug output"""
+    """Print debug output."""
     # 0 represents this line, 1 represents line at caller
     callerframerecord = inspect.stack()[1]
     frame = callerframerecord[0]
@@ -73,26 +73,56 @@ def print_frame(debug='', *args):
 
 
 def basename_noext(fname, ext):
+    """Get the basename without the extension.
+
+    Args:
+        fname (str): path to the file.
+        ext (str): the extension that should be removed.
+
+    Returns:
+        str: fname without the extension.
+    """
     return os.path.basename(fname)[:-len(ext)]
 
 
-def sort_by_value(table, **args):
+def sort_by_value(table, **kwargs):
+    """Sort the table by value.
+
+    Args:
+        table (dict): the dictionary that should be sorted.
+        **kwargs: Keyword arguments passed on to the sorted function.
+
+    Returns:
+        dict: sorted by value.
+    """
     return sorted(six.iteritems(table),
                   key=operator.itemgetter(1),
-                  **args)
+                  **kwargs)
 
 
 def replace_all(replacements, string):
+    """Replace unwanted strings with wanted strings.
+
+    Args:
+        replacements (dict): unwanted:wanted string pairs.
+        string (str): the string where replacements should be done.
+
+    Returns:
+        str: string with replaced strings.
+    """
     return reduce(lambda a, kv: a.replace(*kv),
                   replacements,
                   string)
 
 
 def split_path(path):
-    """Split an absolute path into useful components
+    """Split an absolute path into useful components.
 
-    :param: a path to a file
-    :returns: a PathComponents namedtuple
+    Args:
+        path (str): a path to a file
+
+    Returns:
+        PathComponents namedtuple
     """
     def split_on_module(p):
         for module in [u"goldstandard/orig", u"prestable/converted",
@@ -113,17 +143,39 @@ def split_path(path):
 
 
 def is_executable(fullpath):
+    """Check if the program in fullpath is executable.
+
+    Args:
+        fullpath (str): the path to the program or script.
+
+    Returns:
+        bool: True if fullpath contains a executable, False otherwise.
+    """
     return os.path.isfile(fullpath) and os.access(fullpath, os.X_OK)
 
 
 def path_possibilities(program):
-    return (os.path.join(path.strip('"'),
-                         program)
-            for path
-            in os.environ["PATH"].split(os.pathsep))
+    """Check if program is found in $PATH.
+
+    Args:
+        program: name of program of script.
+
+    Yields:
+        possible fullpath to the program
+    """
+    return (os.path.join(path.strip('"'), program)
+            for path in os.environ["PATH"].split(os.pathsep))
 
 
 def executable_in_path(program):
+    """Check if program is in path.
+
+    Args:
+        program (str): name of the program
+
+    Returns:
+        bool: True if program is found, False otherwise.
+    """
     fpath, _ = os.path.split(program)
     if fpath:
         return is_executable(program)
@@ -149,6 +201,16 @@ def sanity_check(program_list):
 
 
 def get_lang_resource(lang, resource, fallback=None):
+    """Get a language resource.
+
+    Args:
+        lang (str): the language of the resource.
+        resource (str): the resource that is needed.
+        fallback (str or None): the fallback resource. Default is None.
+
+    Returns:
+        str: path to the resource or fallback.
+    """
     path = os.path.join(os.environ['GTHOME'], 'langs', lang, resource)
     if os.path.exists(path):
         return path
@@ -157,6 +219,14 @@ def get_lang_resource(lang, resource, fallback=None):
 
 
 def get_preprocess_command(lang):
+    """Get the complete proprocess command for lang.
+
+    Args:
+        lang (str): the language
+
+    Returns:
+        str: the complete preprocess command.
+    """
     preprocess_script = os.path.join(os.environ['GTHOME'],
                                      'gt/script/preprocess')
     sanity_check([preprocess_script])
@@ -172,17 +242,17 @@ def lineno():
 
 
 def print_element(element, level, indent, out):
-    """Format an html document
+    """Format an html document.
 
     This function formats html documents for readability, to see
     the structure of the given document. It ruins white space in
     text parts.
 
-    element is a lxml.etree element
-    level is an integer indicating at what level this element is
-    indent is an integer indicating how many spaces this element should
-    be indented
-    out is a file like buffer, e.g. an opened file
+    Args:
+        element (etree._Element): the element to format.
+        level (int): indicate at what level this element is.
+        indent (int): indicate how many spaces this element should be indented
+        out (stream): a buffer where the formatted element is written.
     """
     tag = element.tag.replace('{http://www.w3.org/1999/xhtml}', '')
 
@@ -222,6 +292,14 @@ def print_element(element, level, indent, out):
 
 
 def name_to_unicode(filename):
+    """Turn a filename to a unicode string.
+
+    Args:
+        filename (str): name of the file
+
+    Returns:
+        A unicode string.
+    """
     if platform.system() == 'Windows':
         return filename
     else:
@@ -229,11 +307,17 @@ def name_to_unicode(filename):
 
 
 def note(msg):
+    """Print msg to stderr.
+
+    Args:
+        msg (str): the message
+    """
     print(msg, file=sys.stderr)
 
 
 @contextmanager
 def ignored(*exceptions):
+    """Ignore exceptions."""
     try:
         yield
     except exceptions:
@@ -241,18 +325,22 @@ def ignored(*exceptions):
 
 
 class ExternalCommandRunner(object):
-    """Class to run external command through subprocess
+    """Class to run external command through subprocess.
 
-    Save output, error and returnvalue
+    Attributes:
+        stdout: save the stdout of the command here.
+        stderr: save the stderr of the command here.
+        returncode: save the returncode of the command here.
     """
 
     def __init__(self):
+        """Initialise the ExternalCommandRunner class."""
         self.stdout = None
         self.stderr = None
         self.returncode = None
 
     def run(self, command, cwd=None, to_stdin=None):
-        """Run the command, save the result"""
+        """Run the command, save the result."""
         try:
             subp = subprocess.Popen(command,
                                     stdin=subprocess.PIPE,
