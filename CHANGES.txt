@@ -69,3 +69,4 @@ v<0.14.2>, <20160531> -- Improved quote detection and more tags to remove from r
 v<0.14.3>, <20160901> -- Change paths for syntax analysis files after the gtcore -> giella-core, giella-shared transition
 v<0.15.0>, <20160901> -- Add basic support for conversion of epub files.
 v<0.15.1>, <20160902> -- Ensure that lang is unicode in adder.py. Fixes a bug in add_files_to_corpus
+v<0.15.2>, <20160908> -- Add skip_elements in metadata. Makes it possible to set ranges of elements that should be skipped in epub files.
