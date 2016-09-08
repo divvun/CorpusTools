@@ -361,11 +361,14 @@ class MetadataHandler(object):
     def skip_elements(self):
         """Get the skip_elements variable."""
         uff = []
-        for pair in self.get_variable('skip_elements').split(','):
-            util.print_frame(pair)
-            paths = pair.split(';')
-            util.print_frame(paths)
-            uff.append((paths[0].strip(), paths[1].strip()))
+        if self.get_variable('skip_elements'):
+            for pair in self.get_variable('skip_elements').split(','):
+                util.print_frame(pair)
+                paths = pair.split(';')
+                util.print_frame(paths)
+                if len(paths):
+                    uff.append((paths[0].strip(), paths[1].strip()))
 
         util.print_frame(uff)
+
         return uff
