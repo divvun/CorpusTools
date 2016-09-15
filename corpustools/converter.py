@@ -2860,7 +2860,7 @@ class EpubConverter(HTMLConverter):
         """
         starts, ends = self.shorten_longest_path(path1, path2, content)
 
-        while starts[-2] != ends[-2]:
+        while starts[:-1] != ends[:-1]:
             starts = self.remove_siblings_shorten_path(starts, content)
             ends = self.remove_siblings_shorten_path(
                 ends, content, preceding=True)
