@@ -408,7 +408,11 @@ class XMLPrinter(object):
         """Print a xml file to stdout."""
         if file_.endswith('.xml'):
             self.parse_file(file_)
-            sys.stdout.write(self.process_file().getvalue())
+            if six.PY2:
+                sys.stdout.write(
+                    self.process_file().getvalue().encode('utf8'))
+            else:
+                sys.stdout.write(self.process_file().getvalue())
 
 
 def parse_options():
