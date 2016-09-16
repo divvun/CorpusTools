@@ -2759,7 +2759,6 @@ class EpubConverter(HTMLConverter):
             chapterbody = self.read_chapter(chapter).find(
                 '{http://www.w3.org/1999/xhtml}body')
             chapterbody.tag = '{http://www.w3.org/1999/xhtml}div'
-            chapterbody.set('id', chapter._manifest_item.href)
             yield chapterbody
 
     @property
