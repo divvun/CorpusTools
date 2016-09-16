@@ -409,10 +409,16 @@ class XMLPrinter(object):
         if file_.endswith('.xml'):
             self.parse_file(file_)
             if six.PY2:
-                sys.stdout.write(
-                    self.process_file().getvalue().encode('utf8'))
+                try:
+                    sys.stdout.write(
+                        self.process_file().getvalue().encode('utf8'))
+                except IOError:
+                    pass
             else:
-                sys.stdout.write(self.process_file().getvalue())
+                try:
+                    sys.stdout.write(self.process_file().getvalue())
+                except BrokenPipeError:
+                    pass
 
 
 def parse_options():
