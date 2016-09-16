@@ -532,6 +532,29 @@ def parse_options():
     return args
 
 
+def find_files(targets, extension):
+    """Search for files with extension in targets.
+
+    Args:
+        targets (list of str): files or directories
+        extension (str): interesting files has this extension.
+
+    Yields:
+        str: path to the interesting file
+    """
+    for target in targets:
+        if os.path.exists(target):
+            if os.path.isfile(target) and target.endswith(extension):
+                yield target
+            elif os.path.isdir(target):
+                for root, _, files in os.walk(target):
+                    for xml_file in files:
+                        if xml_file.endswith(extension):
+                            yield os.path.join(root, xml_file)
+        else:
+            print('{} does not exist'.format(target), file=sys.stderr)
+
+
 def main():
     """Set up the XMLPrinter class with the given command line options.
 
@@ -561,16 +584,8 @@ def main():
                              disambiguation=args.disambiguation,
                              hyph_replacement=args.hyph_replacement)
 
-    for target in args.targets:
-        if os.path.exists(target):
-            if os.path.isfile(target):
-                xml_printer.print_file(target)
-            elif os.path.isdir(target):
-                for root, _, files in os.walk(target):
-                    for xml_file in files:
-                        xml_printer.print_file(os.path.join(root, xml_file))
-        else:
-            print('{} does not exist'.format(target), file=sys.stderr)
+    for filename in find_files(args.targets, '.xml'):
+        xml_printer.print_file(filename)
 
 if __name__ == '__main__':
     main()
