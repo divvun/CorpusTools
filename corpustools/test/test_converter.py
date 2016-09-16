@@ -1245,7 +1245,7 @@ class TestEpubConverter1(XMLTester):
             'bogus')
 
     def test_convert2intermediate(self):
-        """Test with skip_elements."""
+        """Range of same depth, with the same name in the next to last level."""
         self.testdoc.md.set_variable(
             'skip_elements',
             './/body/div[1]/div[1]/p[1];.//body/div[2]/div[1]/p[4]')
@@ -1257,6 +1257,31 @@ class TestEpubConverter1(XMLTester):
                     <title></title>
                 </header>
                 <body>
+                    <p>igjen går hesten</p>
+                    <p>baklengs inni framtida</p>
+                </body>
+            </document>
+        """)
+
+        self.assertXmlEqual(got, etree.fromstring(want))
+
+    def test_convert2intermediate1(self):
+        """Range with same parents."""
+        self.testdoc.md.set_variable(
+            'skip_elements',
+            './/body/div[2]/div[1]/p[1];.//body/div[2]/div[1]/p[4]')
+
+        got = self.testdoc.convert2intermediate()
+        want = ("""
+            <document>
+                <header>
+                    <title></title>
+                </header>
+                <body>
+                    <p>alle gir gass</p>
+                    <p>men ikke</p>
+                    <p>alle</p>
+                    <p>har tass</p>
                     <p>igjen går hesten</p>
                     <p>baklengs inni framtida</p>
                 </body>

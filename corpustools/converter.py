@@ -2884,7 +2884,9 @@ class EpubConverter(HTMLConverter):
             '/'.join(ends), namespaces={'html': 'http://www.w3.org/1999/xhtml'})
         parent = deepest_start.getparent()
         for sibling in deepest_start.itersiblings():
-            if sibling != deepest_end:
+            if sibling == deepest_end:
+                break
+            else:
                 parent.remove(sibling)
 
     @staticmethod
