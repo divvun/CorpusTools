@@ -26,12 +26,46 @@ from __future__ import absolute_import, print_function
 import argparse
 import os
 import sys
+from functools import wraps
 from io import StringIO
+from traceback import print_exc
 
 import six
 from lxml import etree
 
 from corpustools import argparse_version
+
+
+def suppress_broken_pipe_msg(function):
+    """Suppress message after a broken pipe error.
+
+    This code is fetched from:
+    http://stackoverflow.com/questions/14207708/ioerror-errno-32-broken-pipe-python
+
+    Args:
+        function: the function that should be wrapped by this function.
+    """
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        try:
+            return function(*args, **kwargs)
+        except SystemExit:
+            raise
+        except:
+            print_exc()
+            sys.exit(1)
+        finally:
+            try:
+                sys.stdout.flush()
+            finally:
+                try:
+                    sys.stdout.close()
+                finally:
+                    try:
+                        sys.stderr.flush()
+                    finally:
+                        sys.stderr.close()
+    return wrapper
 
 
 class XMLPrinter(object):
@@ -555,6 +589,7 @@ def find_files(targets, extension):
             print('{} does not exist'.format(target), file=sys.stderr)
 
 
+@suppress_broken_pipe_msg
 def main():
     """Set up the XMLPrinter class with the given command line options.
 
