@@ -97,6 +97,15 @@ class TestFilenameToAscii(unittest.TestCase):
 
         self.assertEqual(namechanger.normalise_filename(oldname), want)
 
+    def test_own_name_with_cyrillic(self):
+        """Test what happens when given cyrillic characters."""
+        oldname = (u'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+                   u'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦ‌​ЧШЩЪЫЬЭЮЯ.txt')
+        want = (u'abvgdeiozhziiklmnoprstufkhtschshshch_y_eiuia'
+                u'abvgdeiozhziiklmnoprstufkhts_chshshch_y_eiuia.txt')
+
+        self.assertEqual(namechanger.normalise_filename(oldname), want)
+
     def test_own_name_with_complete_path(self):
         oldname = u'j/a/b/c/aba>.txt'
 
