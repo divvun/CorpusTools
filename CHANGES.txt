@@ -72,3 +72,4 @@ v<0.15.1>, <20160902> -- Ensure that lang is unicode in adder.py. Fixes a bug in
 v<0.15.2>, <20160908> -- Add skip_elements in metadata. Makes it possible to set ranges of elements that should be skipped in epub files.
 v<0.15.3>, <20160915> -- Fix bug in skip_elements handling, handle ranges of same depth.
 v<0.15.4>, <20160916> -- Fix bug in skip_elements handling, stop removal at stop element, do not just avoid it.
+v<0.15.5>, <20160921> -- Make sure that adder uses unicode filenames even in python2.

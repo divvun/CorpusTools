@@ -195,6 +195,10 @@ class AddToCorpus(object):
         parellel files
         """
         try:
+            if six.PY2:
+                origpath = unicode(origpath, 'utf8')
+                metadata_filename = unicode(metadata_filename, 'utf8')
+
             none_dupe_path = self.none_dupe_path(origpath)
             shutil.copy(origpath, none_dupe_path)
             self.additions.append(none_dupe_path)
