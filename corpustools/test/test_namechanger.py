@@ -35,7 +35,7 @@ here = os.path.dirname(__file__)
 
 
 class TestFilenameToAscii(unittest.TestCase):
-    '''Test the normalise_filename function'''
+    """Test the normalise_filename function"""
 
     def test_none_ascii_lower(self):
         oldname = u'ášŧŋđžčåøæöäï+'
@@ -105,7 +105,7 @@ class TestFilenameToAscii(unittest.TestCase):
 
 
 class TestAreDuplicates(unittest.TestCase):
-    '''Test the are_duplicates function'''
+    """Test the are_duplicates function"""
 
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory()
@@ -117,17 +117,17 @@ class TestAreDuplicates(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_are_duplicate_nonexisting_file(self):
-        '''If one or none of the files do not exist, return False'''
+        """If one or none of the files do not exist, return False"""
         self.assertFalse(namechanger.are_duplicates('old.txt', 'new.txt'))
 
     def test_are_duplicate_equal_files(self):
-        '''Both files exist, with same content, return True'''
+        """Both files exist, with same content, return True"""
         self.assertTrue(namechanger.are_duplicates(
             six.text_type(os.path.join(self.tempdir.path, 'old_dupe.txt')),
             six.text_type(os.path.join(self.tempdir.path, 'new_dupe.txt'))))
 
     def test_are_duplicate_unequal_files(self):
-        '''Both files exist, not same content, return False'''
+        """Both files exist, not same content, return False"""
         self.assertFalse(namechanger.are_duplicates(
             six.text_type(os.path.join(self.tempdir.path, 'old_dupe.txt')),
             six.text_type(os.path.join(self.tempdir.path, 'new_none_dupe.txt'))))
@@ -151,7 +151,7 @@ class TestComputeNewBasename(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_compute_new_basename_duplicates(self):
-        '''What happens when the wanted name is taken, and a duplicate'''
+        """What happens when the wanted name is taken, and a duplicate"""
         with self.assertRaises(UserWarning):
             namechanger.compute_new_basename(
                 six.text_type(os.path.join(self.tempdir.path,
@@ -162,7 +162,7 @@ class TestComputeNewBasename(unittest.TestCase):
                                            'new_dupe.txt')))
 
     def test_compute_new_basename_same_name(self):
-        '''What happens when the suggested name is taken, but not duplicate'''
+        """What happens when the suggested name is taken, but not duplicate"""
         oldpath = os.path.join(self.tempdir.path, 'orig/sme/admin/other_files',
                                'new_none_düpe.txt')
         if six.PY2:
@@ -189,7 +189,7 @@ class TestComputeMovepairs(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_compute_movepairs_1(self):
-        '''newpath does not exist, no parallels'''
+        """newpath does not exist, no parallels"""
         mc = namechanger.MovepairComputer()
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/a.txt.xsl'),
@@ -209,7 +209,7 @@ class TestComputeMovepairs(unittest.TestCase):
                                                    'orig/sme/ficti/sub/b.txt')))])
 
     def test_compute_movepairs_2(self):
-        '''newpath does not exist, needs normalisation, no parallels'''
+        """newpath does not exist, needs normalisation, no parallels"""
         mc = namechanger.MovepairComputer()
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/æ.txt.xsl'),
@@ -227,7 +227,7 @@ class TestComputeMovepairs(unittest.TestCase):
                                                    'orig/sme/ficti/sub/ae.txt')))])
 
     def test_compute_movepairs_3(self):
-        '''newpath exists, not duplicate, no parallels'''
+        """newpath exists, not duplicate, no parallels"""
         self.tempdir.write('orig/sme/ficti/sub/c.txt', b'c content')
         self.tempdir.write('orig/sme/ficti/sub/d.txt', b'd content')
 
@@ -250,7 +250,7 @@ class TestComputeMovepairs(unittest.TestCase):
                                                    'orig/sme/ficti/sub/d_1.txt')))])
 
     def test_compute_movepairs_4(self):
-        '''newpath exists, duplicate, no parallels'''
+        """newpath exists, duplicate, no parallels"""
         self.tempdir.write('orig/sme/ficti/sub/c.txt', b'c content')
         self.tempdir.write('orig/sme/ficti/sub/e.txt', b'c content')
 
@@ -263,7 +263,7 @@ class TestComputeMovepairs(unittest.TestCase):
                     self.tempdir.path, 'orig/sme/ficti/sub/e.txt')))
 
     def test_compute_movepairs_5(self):
-        '''move to same directory, with parallels'''
+        """move to same directory, with parallels"""
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
             create=True)
@@ -316,7 +316,7 @@ class TestComputeMovepairs(unittest.TestCase):
         self.assertListEqual(got, want)
 
     def test_compute_movepairs_6(self):
-        '''move to different subdir, with parallels'''
+        """move to different subdir, with parallels"""
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
             create=True)
@@ -369,7 +369,7 @@ class TestComputeMovepairs(unittest.TestCase):
         self.assertListEqual(got, want)
 
     def test_compute_movepairs_7(self):
-        '''move to different genre, with parallels'''
+        """move to different genre, with parallels"""
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
             create=True)
@@ -422,7 +422,7 @@ class TestComputeMovepairs(unittest.TestCase):
         self.assertListEqual(got, want)
 
     def test_compute_movepairs_8(self):
-        '''move to different genre, one parallel needs normalisation'''
+        """Move to different genre, one parallel needs normalisation"""
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
             create=True)
@@ -477,11 +477,11 @@ class TestComputeMovepairs(unittest.TestCase):
         self.assertListEqual(got, want)
 
     def test_compute_movepairs_9(self):
-        '''move to same directory, with parallels.
+        """move to same directory, with parallels.
 
         Parallel needs normalisation. The new parallel name collides with
         normalised name, but is not a duplicate of it.
-        '''
+        """
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
             create=True)
@@ -526,7 +526,7 @@ class TestComputeMovepairs(unittest.TestCase):
         self.assertListEqual(got, want)
 
     def test_compute_movepairs_10(self):
-        '''newpath is empty, no parallels'''
+        """newpath is empty, no parallels"""
         mc = namechanger.MovepairComputer()
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/a.txt.xsl'),
@@ -544,7 +544,7 @@ class TestComputeMovepairs(unittest.TestCase):
                 newpath=u'')])
 
     def test_compute_movepairs_11(self):
-        '''newpath is empty, with parallels'''
+        """newpath is empty, with parallels"""
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
             create=True)
@@ -595,7 +595,7 @@ class TestComputeMovepairs(unittest.TestCase):
         self.assertListEqual(got, want)
 
     def test_compute_movepairs_12(self):
-        '''newpath is empty, one parallel needs normalisation'''
+        """Newpath is empty, one parallel needs normalisation."""
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt.xsl'),
             create=True)
@@ -649,6 +649,7 @@ class TestComputeMovepairs(unittest.TestCase):
 
 
 class TestCorpusFileMover(unittest.TestCase):
+    """Test the CorpusFileMover class."""
 
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
@@ -680,7 +681,7 @@ class TestCorpusFileMover(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_move_orig(self):
-        '''move to different subdir, with parallels'''
+        """move to different subdir, with parallels."""
         cfm = namechanger.CorpusFileMover(
             six.text_type(os.path.join(self.tempdir.path,
                                        'orig/sme/ficti/sub/f.txt')),
@@ -720,6 +721,7 @@ class TestCorpusFileMover(unittest.TestCase):
 
 
 class TestCorpusFileRemover(unittest.TestCase):
+    """Test the CorpusFileRemover class."""
 
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
@@ -751,7 +753,7 @@ class TestCorpusFileRemover(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_remove_orig(self):
-        '''remove file, with parallels'''
+        """Remove file, with parallels."""
         cfm = namechanger.CorpusFileRemover(
             six.text_type(os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt')))
         cfm.remove_files()
@@ -759,7 +761,7 @@ class TestCorpusFileRemover(unittest.TestCase):
 
 
 class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
-    '''move to new genre/subdir, with parallels, parallel needs normalisation'''
+    """Move to new genre/subdir, with parallels, parallel needs normalisation."""
 
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
@@ -834,6 +836,7 @@ class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_move_fileset(self):
+        """Move a set of files."""
         self.tempdir.check_all(
             '',
             'orig/',
@@ -930,7 +933,7 @@ class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
 
 
 class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
-    '''move to new lang/genre/subdir, with parallels, parallel needs normalisation'''
+    """move to new lang/genre/subdir, with parallels, parallel needs normalisation"""
 
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
@@ -1083,6 +1086,7 @@ class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
             'prestable/toktmx/smn2smj/facta/bub/g.txt.toktmx')
 
     def test_update_metadata(self):
+        """Update metadata."""
         smn_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/smn/facta/bub/g.txt.xsl'))
         self.assertEqual(smn_metadata.get_variable('genre'), 'facta')
@@ -1111,11 +1115,11 @@ class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
 
 
 class TestCorpusFilesetMetadataUpdater3(unittest.TestCase):
-    '''move to new genre/subdir, with parallel
+    """Move to new genre/subdir, with parallel
 
     parallel needs normalisation, normalised name of parallel exists, but the
     file with the normalised name is not a duplicate of the parallel file
-    '''
+    """
 
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
@@ -1175,6 +1179,7 @@ class TestCorpusFilesetMetadataUpdater3(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_move_fileset(self):
+        """Move fileset."""
         self.tempdir.check_all(
             '',
             'orig/',
@@ -1224,6 +1229,7 @@ class TestCorpusFilesetMetadataUpdater3(unittest.TestCase):
             'prestable/toktmx/sme2smj/ficti/sub/')
 
     def test_update_metadata(self):
+        """Update metadata."""
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sme/facta/bub/g.txt.xsl'))
         self.assertEqual(sme_metadata.get_variable('genre'), 'facta')
@@ -1239,11 +1245,11 @@ class TestCorpusFilesetMetadataUpdater3(unittest.TestCase):
 
 
 class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
-    '''move to new genre/subdir, with parallel
+    """move to new genre/subdir, with parallel
 
     parallel needs normalisation, normalised name of parallel exists.
     The file with the normalised name is a duplicate of the parallel file
-    '''
+    """
 
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
@@ -1294,6 +1300,7 @@ class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_move_fileset(self):
+        """Move a set of files."""
         oldpath = six.text_type(os.path.join(
             self.tempdir.path, 'orig/sme/ficti/sub/f.txt'))
         newpath = six.text_type(os.path.join(
@@ -1344,7 +1351,7 @@ class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
 
 
 class TestCorpusFilesetMetadataUpdater5(unittest.TestCase):
-    '''remove file, with parallels, parallel needs normalisation'''
+    """Remove file, with parallels, parallel needs normalisation."""
 
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
@@ -1445,6 +1452,7 @@ class TestCorpusFilesetMetadataUpdater5(unittest.TestCase):
             'prestable/converted/smj/ficti/sub/o.txt.xml')
 
     def test_update_metadata(self):
+        """Update metadata."""
         sma_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, 'orig/sma/ficti/sub/f.txt.xsl'))
         self.assertEqual(sma_metadata.get_variable('genre'), 'ficti')

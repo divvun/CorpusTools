@@ -78,7 +78,14 @@ class UrlDownloader(object):
         return filename
 
     def filename(self, response):
-        """response is a requests.get response."""
+        """Compute the filename.
+
+        Args:
+            response (requests.get response).
+
+        Returns:
+            str: Name of the file.
+        """
         try:
             _, params = cgi.parse_header(
                 response.headers['Content-Disposition'])
