@@ -35,7 +35,7 @@ import sys
 import lxml.etree as etree
 import six
 
-from corpustools import argparse_version, ccat, move_files, util, xslsetter
+from corpustools import argparse_version, ccat, move_files, util
 
 
 class DupeFinder(object):

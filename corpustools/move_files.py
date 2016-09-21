@@ -31,6 +31,7 @@ from corpustools import argparse_version, namechanger
 
 
 def mover(oldpath, newpath):
+    """Move a file from oldpath to newpath."""
     if os.path.isfile(oldpath):
         if oldpath.endswith('.xsl'):
             oldpath = oldpath[:-4]
@@ -58,6 +59,11 @@ def mover(oldpath, newpath):
 
 
 def mover_parse_args():
+    """Parse the commandline options.
+
+    Returns:
+        a list of arguments as parsed by argparse.Argumentparser.
+    """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
         description='Program to move or rename a file inside the corpus.')
@@ -72,6 +78,7 @@ def mover_parse_args():
 
 
 def main():
+    """Move a file."""
     args = mover_parse_args()
     if args.oldpath == args.newpath:
         print('{} and {} are the same file'.format(
@@ -84,6 +91,11 @@ def main():
 
 
 def remover_parse_args():
+    """Parse the commandline options.
+
+    Returns:
+        a list of arguments as parsed by argparse.Argumentparser.
+    """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
         description='Program to remove a file from the corpus.')
@@ -95,8 +107,9 @@ def remover_parse_args():
 
 
 def remove_main():
+    """Remove a file."""
     args = remover_parse_args()
     try:
         mover(args.oldpath, '')
     except UserWarning as e:
-        print('Can not move file:', str(e), file=sys.stderr)
+        print('Can not remove file:', str(e), file=sys.stderr)

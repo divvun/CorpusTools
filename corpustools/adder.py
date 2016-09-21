@@ -78,7 +78,7 @@ class UrlDownloader(object):
         return filename
 
     def filename(self, response):
-        """response is a requests.get response"""
+        """response is a requests.get response."""
         try:
             _, params = cgi.parse_header(
                 response.headers['Content-Disposition'])
@@ -88,7 +88,7 @@ class UrlDownloader(object):
                                           response.headers['content-type'])
 
     def download(self, url, params={}):
-        """Download a url to a temporary file
+        """Download a url to a temporary file.
 
         Return the request object and the name of the temporary file
         """
@@ -159,12 +159,12 @@ class AddToCorpus(object):
 
     @staticmethod
     def __normalise_path(path):
-        """All paths in the corpus should consist of lowercase ascii letters"""
+        """All paths in the corpus should consist of lowercase ascii letters."""
         return u'/'.join([namechanger.normalise_filename(part)
                           for part in path.split('/')])
 
     def copy_url_to_corpus(self, url, parallelpath=''):
-        """Add a URL to the corpus
+        """Add a URL to the corpus.
 
         Copy a downloaded url to the corpus
         """
@@ -177,7 +177,7 @@ class AddToCorpus(object):
             print(u'Skipping: {}'.format(e))
 
     def copy_file_to_corpus(self, origpath, metadata_filename, parallelpath=''):
-        """Add a file to the corpus
+        """Add a file to the corpus.
 
         * normalise the basename, copy the the file to the given directory
         * make a metadata file belonging to it
@@ -203,6 +203,7 @@ class AddToCorpus(object):
             print(u'Skipping: {}'.format(e))
 
     def add_metadata_to_corpus(self, none_dupe_path, meta_filename):
+        """Add the metadata file to the corpus."""
         none_dupe_components = util.split_path(none_dupe_path)
         new_metadata = xslsetter.MetadataHandler(none_dupe_path + '.xsl',
                                                  create=True)
@@ -214,7 +215,7 @@ class AddToCorpus(object):
 
     @staticmethod
     def update_parallel_data(none_dupe_components, parallelpath):
-        """Update metadata in the parallel files
+        """Update metadata in the parallel files.
 
         Arguments:
             new_components: (util.PathComponents) of none_dupe_path

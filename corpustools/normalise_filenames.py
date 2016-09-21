@@ -30,7 +30,7 @@ from corpustools import argparse_version, namechanger
 
 
 def normaliser():
-    """Normalise the filenames in the corpuses"""
+    """Normalise the filenames in the corpuses."""
     for corpus in [os.getenv('GTFREE'), os.getenv('GTBOUND')]:
         print(('Normalising names in {}'.format(corpus)))
         for root, dirs, files in os.walk(os.path.join(corpus, 'orig')):
@@ -52,6 +52,11 @@ def normaliser():
 
 
 def normalise_parse_args():
+    """Parse the commandline options.
+
+    Returns:
+        a list of arguments as parsed by argparse.Argumentparser.
+    """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
         description='Program to automatically normalise names in '
@@ -63,5 +68,6 @@ def normalise_parse_args():
 
 
 def main():
+    """Normalise filenames."""
     normalise_parse_args()
     normaliser()

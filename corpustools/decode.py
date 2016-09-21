@@ -250,10 +250,10 @@ CTYPES = {
 
 
 class EncodingGuesser(object):
-    """Guess if some text or a file has faultily encoded sami letters"""
+    """Guess if some text or a file has faultily encoded sami letters."""
 
     def guess_file_encoding(self, filename):
-        """Guess the encoding of a file
+        """Guess the encoding of a file.
 
         @param filename name of an utf-8 encoded file
         @return winner is an int, pointing to a position in CTYPES, or -1
@@ -265,7 +265,7 @@ class EncodingGuesser(object):
             return winner
 
     def guess_body_encoding(self, content):
-        """Guess the encoding of the string content
+        """Guess the encoding of the string content.
 
         First get the frequencies of the "sami letters"
         Then get the frequencies of the letters in the encodings in CTYPES
@@ -305,7 +305,7 @@ class EncodingGuesser(object):
         return winner
 
     def decode_para(self, position, text):
-        """Decode the text given to this function
+        """Decode the text given to this function.
 
         Replace letters in text with the ones from the dict at
         position position in CTYPES

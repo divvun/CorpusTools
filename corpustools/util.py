@@ -237,7 +237,7 @@ def get_preprocess_command(lang):
 
 
 def lineno():
-    """Returns the current line number in our program."""
+    """Return the current line number in our program."""
     return inspect.currentframe().f_back.f_lineno
 
 

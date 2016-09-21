@@ -43,14 +43,17 @@ PathPair = namedtuple('PathPair', 'oldpath newpath')
 
 
 class MovepairComputer(object):
-    """Compute oldname, newname pairs"""
+    """Compute oldname, newname pairs."""
 
     def __init__(self):
-        """filepairs will be a list of PathPairs"""
+        """Initialise the MovepairComputer.
+
+        filepairs (list of PathPairs): List of filepairs that should be moved.
+        """
         self.filepairs = []
 
     def compute_movepairs(self, oldpath, newpath, nochange=False):
-        """Add the oldpath and the new goalpath to filepairs
+        """Add the oldpath and the new goalpath to filepairs.
 
         Args:
             oldpath (unicode): the old path to an original file
@@ -68,7 +71,7 @@ class MovepairComputer(object):
         self.filepairs.append(PathPair(oldpath, non_dupe_path))
 
     def compute_parallel_movepairs(self, oldpath, newpath):
-        """Add the parallel files of oldpath to filepairs
+        """Add the parallel files of oldpath to filepairs.
 
         Args:
             oldpath (unicode): the old path
@@ -114,7 +117,7 @@ class CorpusFileMover(object):
     """Move an original file and all its derived files."""
 
     def __init__(self, oldpath, newpath):
-        """Class to move corpus files
+        """Class to move corpus files.
 
         Args:
             oldpath (unicode): the old path of the original file.
@@ -134,6 +137,7 @@ class CorpusFileMover(object):
 
     def _move(self, oldpath, newpath):
         """Move files from oldpath to newpath.
+
         Args:
             oldpath: the old name of the file.
             newpath: the new name of the file.
@@ -145,13 +149,13 @@ class CorpusFileMover(object):
             self.vcs.move(oldpath, newpath)
 
     def move_orig(self):
-        """Move the original file"""
+        """Move the original file."""
         self._move(
             u'/'.join(self.old_components),
             u'/'.join(self.new_components))
 
     def move_xsl(self):
-        """Move the metadata file"""
+        """Move the metadata file."""
         self._move(
             u'/'.join((self.old_components.root,
                        self.old_components.module,
@@ -167,7 +171,7 @@ class CorpusFileMover(object):
                        self.new_components.basename + '.xsl')))
 
     def move_prestable_converted(self):
-        """Move the prestable/converted file"""
+        """Move the prestable/converted file."""
         self._move(
             u'/'.join((self.old_components.root,
                        u'prestable/converted',
@@ -183,7 +187,7 @@ class CorpusFileMover(object):
                        self.new_components.basename + '.xml')))
 
     def move_prestable_tmx(self):
-        """Move the prestable toktmx and tmx files"""
+        """Move the prestable toktmx and tmx files."""
         for tmx in [u'tmx', u'toktmx']:
             tmxdir = u'/'.join((u'prestable', tmx))
             metadataname = u'/'.join((self.new_components.root,
@@ -213,10 +217,10 @@ class CorpusFileMover(object):
 
 
 class CorpusFileRemover(object):
-    """Remove an original file and all its derived files"""
+    """Remove an original file and all its derived files."""
 
     def __init__(self, oldpath):
-        """Class to remove corpus files
+        """Class to remove corpus files.
 
         Args:
             oldpath (unicode): the old path
@@ -242,11 +246,11 @@ class CorpusFileRemover(object):
             self.vcs.remove(oldpath)
 
     def remove_orig(self):
-        """Remove the original file"""
+        """Remove the original file."""
         self._remove(u'/'.join(self.old_components))
 
     def remove_xsl(self):
-        """Remove the metadata file"""
+        """Remove the metadata file."""
         self._remove(
             u'/'.join((self.old_components.root,
                        self.old_components.module,
@@ -256,7 +260,7 @@ class CorpusFileRemover(object):
                        self.old_components.basename + '.xsl')))
 
     def remove_prestable_converted(self):
-        """Remove the prestable/converted file"""
+        """Remove the prestable/converted file."""
         self._remove(
             u'/'.join((self.old_components.root,
                        u'prestable/converted',
@@ -266,7 +270,7 @@ class CorpusFileRemover(object):
                        self.old_components.basename + '.xml')))
 
     def remove_prestable_tmx(self):
-        """Remove the prestable toktmx and tmx files"""
+        """Remove the prestable toktmx and tmx files."""
         for tmx in [u'tmx', u'toktmx']:
             tmxdir = u'/'.join((u'prestable', tmx))
             metadataname = u'/'.join((self.old_components.root,
@@ -290,7 +294,7 @@ class CorpusFileRemover(object):
 
 
 class CorpusFilesetMoverAndUpdater(object):
-    """Move or remove a file within a repository
+    """Move or remove a file within a repository.
 
     When moving a file inside the same directory:
     * move the original file
@@ -371,7 +375,7 @@ class CorpusFilesetMoverAndUpdater(object):
                 cfm.move_files()
 
     def update_own_metadata(self):
-        """Update metadata"""
+        """Update metadata."""
         for filepair in self.mc.filepairs:
             if filepair.newpath:
                 old_components = util.split_path(filepair.oldpath)
@@ -389,7 +393,7 @@ class CorpusFilesetMoverAndUpdater(object):
                     self.vcs.add(metadataname)
 
     def update_parallel_files_metadata(self):
-        """Update the info in the parallel files"""
+        """Update the info in the parallel files."""
         for filepair in self.mc.filepairs:
             parallel_filepairs = list(self.mc.filepairs)
             parallel_filepairs.remove(filepair)
@@ -427,7 +431,7 @@ class CorpusFilesetMoverAndUpdater(object):
 
 
 def compute_hexdigest(path, blocksize=65536):
-    """Compute the hexdigest of the file in path
+    """Compute the hexdigest of the file in path.
 
     Args:
         path: the file to compute the hexdigest of
@@ -446,7 +450,7 @@ def compute_hexdigest(path, blocksize=65536):
 
 
 def normalise_filename(filename):
-    """Normalise filename to ascii only
+    """Normalise filename to ascii only.
 
     Downcase filename, replace non-ascii characters with ascii ones and
     remove or replace unwanted characters.
@@ -506,7 +510,7 @@ def are_duplicates(oldpath, newpath):
 
 
 def compute_new_basename(oldpath, wanted_path):
-    """Compute the new path
+    """Compute the new path.
 
     Args:
         oldpath (unicode): path to the old file

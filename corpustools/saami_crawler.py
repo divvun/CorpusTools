@@ -26,10 +26,8 @@ from __future__ import absolute_import, print_function
 import argparse
 import os
 import re
-import shutil
 import sys
 
-import lxml.etree as etree
 import lxml.html
 import requests
 import six
@@ -42,6 +40,7 @@ class Crawler(object):
     """A base class to save downloaded files to the corpus."""
 
     def __init__(self):
+        """Initialise the Crawler class."""
         self.goaldir = six.text_type(os.getenv('GTFREE'))
         self.unvisited_links = set()
         self.visited_links = set()
@@ -51,11 +50,12 @@ class Crawler(object):
             self.goaldir, 'tmp'))
 
     def __del__(self):
+        """Add all files to the corpus."""
         for (lang, corpus_adder) in six.iteritems(self.corpus_adders):
             corpus_adder.add_files_to_working_copy()
 
     def save_pages(self, pages):
-        """Write pages to disk
+        """Write pages to disk.
 
         pages is a list of url, lang tuples
         """
@@ -83,7 +83,7 @@ class Crawler(object):
 
 
 class SamediggiFiCrawler(Crawler):
-    """Notes about samediggi.fi
+    """Notes about samediggi.fi.
 
     Start page is:
     http://www.samediggi.fi/index.php?option=com_frontpage&Itemid=39
@@ -123,6 +123,7 @@ class SamediggiFiCrawler(Crawler):
     """
 
     def __init__(self):
+        """Initialise the SamediggiFiCrawler class."""
         super(SamediggiFiCrawler, self).__init__()
 
         self.unvisited_links.add(
@@ -141,6 +142,7 @@ class SamediggiFiCrawler(Crawler):
         self.get_old_urls()
 
     def get_old_urls(self):
+        """Collect the urls of already downloaded pages."""
         for (lang, corpus_adder) in six.iteritems(self.corpus_adders):
             for root, dirs, files in os.walk(corpus_adder.goaldir):
                 for f in files:
@@ -151,7 +153,7 @@ class SamediggiFiCrawler(Crawler):
                             'filename')] = path.replace('.xsl', '')
 
     def crawl_site(self):
-        """Crawl samediggi.fi"""
+        """Crawl samediggi.fi."""
         while self.unvisited_links:
             link = self.unvisited_links.pop()
 
@@ -197,6 +199,7 @@ class SamediggiFiCrawler(Crawler):
                 debug='visited_links {}\n'.format(len(self.visited_links)))
 
     def get_print_url(self, content, lang):
+        """Compute the print url of the page."""
         tree = lxml.html.document_fromstring(content)
         print_img = tree.find(
             './/img[@src="http://www.samediggi.fi/images/M_images/printButton.png"]')
@@ -212,7 +215,7 @@ class SamediggiFiCrawler(Crawler):
                             part.startswith('task'))]
             newquery.append('lang=' + lang)
 
-            newhref = urlparse.urlunparse(
+            newhref = six.moves.urllib.urlparse.urlunparse(
                 (href.scheme,
                     href.netloc,
                     href.path,
@@ -223,7 +226,7 @@ class SamediggiFiCrawler(Crawler):
             return newhref
 
     def invalid_content(self, content):
-        """Return true if the page does not contain the strings
+        """Return true if the page does not contain the strings.
 
         * "Käännöstä ei ole saatavilla"
         * "There are no translations available"
@@ -235,21 +238,21 @@ class SamediggiFiCrawler(Crawler):
                 'You need to login' in content)
 
     def harvest_links(self, content):
-        """Harvest all links, bar some restrictions
+        """Harvest all links, bar some restrictions.
 
-            Insert links into a set
+        Insert links into a set
 
-            Discard links containing a href=
-            * "#"
-            * "*do_pdf*"
-            * "pop=1"
-            * com_events
-            * com_search
-            * www.samediggi.fi/haettavana
-            * http://klemetti.blogspot.com/
+        Discard links containing a href=
+        * "#"
+        * "*do_pdf*"
+        * "pop=1"
+        * com_events
+        * com_search
+        * www.samediggi.fi/haettavana
+        * http://klemetti.blogspot.com/
 
-            Don't follow (don't save content), but save links containg
-            doc_download
+        Don't follow (don't save content), but save links containg
+        doc_download
         """
         tree = lxml.html.document_fromstring(content)
 
@@ -286,6 +289,7 @@ class SamediggiNoPage(object):
     """Save a samediggi.no page to the corpus."""
 
     def __init__(self, url):
+        """Initialise the SamediggiNoPage class."""
         r = requests.get(url)
         self.parsed_url = six.moves.urllib.parse.urlparse(r.url)
         self.tree = lxml.html.document_fromstring(r.content)
@@ -297,10 +301,12 @@ class SamediggiNoPage(object):
 
     @property
     def url(self):
+        """Get the url."""
         return self.parsed_url.geturl()
 
     @property
     def parallel_links(self):
+        """Get links to the parallels of this document."""
         return [six.moves.urllib.parse.urlunparse((self.parsed_url.scheme,
                                                    self.parsed_url.netloc,
                                                    a.get('href'), '', '', ''))
@@ -308,6 +314,7 @@ class SamediggiNoPage(object):
 
     @property
     def print_url(self):
+        """Get the print url of the document."""
         print_link = self.tree.find('.//link[@media="print"]')
 
         if print_link is not None:
@@ -320,6 +327,7 @@ class SamediggiNoPage(object):
 
     @property
     def lang(self):
+        """Return the language of the file."""
         uff = {}
         uff['no-bokmaal'] = 'nob'
         uff['sma-NO'] = 'sma'
@@ -335,14 +343,17 @@ class SamediggiNoPage(object):
 
     @property
     def links(self):
+        """Get all the links found in a file."""
         links = set()
         for address in self.tree.findall('.//a'):
             href = address.get('href')
             if href is not None:
                 if not re.search(
-                        'tv.samediggi.no|^#|/rss/feed|switchlanguage|facebook.com|'
+                        'tv.samediggi.no|^#|/rss/feed|switchlanguage|'
+                        'facebook.com|'
                         'Web-tv|user/login|mailto|/Dokumenter|/Dokumeantta|'
-                        '/Tjaatsegh|.pdf|.doc|.xls|/images/|/download/|/Biejjielaahkoe|/Kalender|'
+                        '/Tjaatsegh|.pdf|.doc|.xls|/images/|/download/|'
+                        '/Biejjielaahkoe|/Kalender|'
                         '/Dahpahusat|javascript|tel:',
                         href):
                     if href.startswith('/'):
@@ -364,6 +375,7 @@ class SamediggiNoPage(object):
 
     @property
     def body_text(self):
+        """Get all the text inside 'body'."""
         body = self.tree.find('.//body')
 
         return ' '.join(body.xpath('.//text()'))
@@ -373,6 +385,7 @@ class SamediggiNoCrawler(Crawler):
     """Crawl samediggi.no and save html documents to the corpus."""
 
     def __init__(self):
+        """Initialise the SamediggiNoCrawler class."""
         super(SamediggiNoCrawler, self).__init__()
         self.unvisited_links.add(u'http://www.samediggi.no/')
         self.unvisited_links.add(u'http://www.sametinget.no/')
@@ -387,6 +400,7 @@ class SamediggiNoCrawler(Crawler):
         self.languageguesser = text_cat.Classifier()
 
     def crawl_page(self, link):
+        """Collect links from a page."""
         self.visited_links.add(link)
         util.print_frame(debug=link.encode('utf8'))
         try:
@@ -402,7 +416,7 @@ class SamediggiNoCrawler(Crawler):
             return orig_page
 
     def crawl_site(self):
-        """Crawl samediggi.no"""
+        """Crawl samediggi.no."""
         while self.unvisited_links:
             link = self.unvisited_links.pop()
 
@@ -410,6 +424,7 @@ class SamediggiNoCrawler(Crawler):
                 self.crawl_pageset(link)
 
     def crawl_pageset(self, link):
+        """Crawl a pageset that link gives us."""
         parallel_pages = []
 
         found_saami = False
@@ -431,8 +446,8 @@ class SamediggiNoCrawler(Crawler):
                 if parallel_link not in self.visited_links:
                     parallel_page = self.crawl_page(parallel_link)
                     if parallel_page is not None:
-                        body_lang = self.languageguesser.classify(parallel_page.body_text,
-                                                                  langs=self.langs)
+                        body_lang = self.languageguesser.classify(
+                            parallel_page.body_text, langs=self.langs)
                         if parallel_page.lang == body_lang:
                             if body_lang in [u'sme', u'sma', u'smj']:
                                 found_saami = True
@@ -440,9 +455,10 @@ class SamediggiNoCrawler(Crawler):
                             parallel_pages.append((parallel_page.print_url,
                                                    parallel_page.lang))
                         else:
-                            uff = 'not same lang {}:\n orig: {} body: {}'.format(
-                                parallel_page.url.encode('utf8'), parallel_page.lang, body_lang)
-                            util.print_frame(debug=uff)
+                            util.print_frame(
+                                'not same lang {}:\n orig: {} body: {}'.format(
+                                    parallel_page.url.encode('utf8'),
+                                    parallel_page.lang, body_lang))
 
         if found_saami:
             self.save_pages(parallel_pages)
@@ -451,6 +467,11 @@ class SamediggiNoCrawler(Crawler):
 
 
 def parse_options():
+    """Parse the commandline options.
+
+    Returns:
+        a list of arguments as parsed by argparse.Argumentparser.
+    """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
         description='Crawl saami sites (for now, only www.samediggi.fi).')
@@ -464,6 +485,7 @@ def parse_options():
 
 
 def main():
+    """Crawl sites."""
     args = parse_options()
 
     for site in args.sites:

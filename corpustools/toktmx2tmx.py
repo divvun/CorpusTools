@@ -43,13 +43,13 @@ class Toktmx2Tmx(object):
     """
 
     def read_toktmx_file(self, toktmx_file):
-        """Reads a toktmx file, parses it, sets the tmx file name"""
+        """Read a toktmx file, parses it, sets the tmx file name."""
         self.tmxfile_name = toktmx_file.replace('toktmx', 'tmx')
         self.tmx = parallelize.Tmx(etree.parse(toktmx_file))
         self.add_filename_iD()
 
     def add_filename_iD(self):
-        """Add the tmx filename as an prop element in the header"""
+        """Add the tmx filename as an prop element in the header."""
         prop = etree.Element('prop')
         prop.attrib['type'] = 'x-filename'
         prop.text = os.path.basename(self.tmxfile_name).decode('utf-8')
@@ -60,16 +60,16 @@ class Toktmx2Tmx(object):
             header.append(prop)
 
     def write_cleanedup_tmx(self):
-        """Write the cleanup tmx"""
+        """Write the cleanup tmx."""
         self.tmx.write_tmx_file(self.tmxfile_name)
 
     def clean_toktmx(self):
-        """Do the cleanup of the toktmx file"""
+        """Do the cleanup of the toktmx file."""
         self.tmx.remove_unwanted_space()
         self.tmx.remove_tu_with_empty_seg()
 
     def find_toktmx_files(self, dirname):
-        """Find the toktmx files in dirname, return them as a list"""
+        """Find the toktmx files in dirname, return them as a list."""
         subp = subprocess.Popen(
             ['find', dirname,
                 '-name', '*.toktmx', '-print'],
@@ -98,6 +98,7 @@ def parse_options():
 
 
 def main():
+    """Turn toktmx file into tmx files."""
     args = parse_options()
 
     toktmx2tmx = Toktmx2Tmx()

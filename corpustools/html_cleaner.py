@@ -32,6 +32,11 @@ from corpustools import argparse_version, converter, util
 
 
 def parse_args():
+    """Parse the commandline options.
+
+    Returns:
+        a list of arguments as parsed by argparse.Argumentparser.
+    """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
         description='Program to print out a nicely indented html document. '
@@ -47,6 +52,7 @@ def parse_args():
 
 
 def main():
+    """Convert an html file, and print the result to outfile."""
     args = parse_args()
 
     with open(args.inhtml) as f:

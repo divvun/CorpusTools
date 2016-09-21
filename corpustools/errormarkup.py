@@ -31,7 +31,7 @@ from lxml import etree
 
 
 class ErrorMarkup(object):
-    """This is a class to convert errormarkuped text to xml"""
+    """This is a class to convert errormarkuped text to xml."""
 
     def __init__(self, filename):
         """Initialise the ErrorMarkup class.
@@ -66,7 +66,7 @@ class ErrorMarkup(object):
             self.add_error_markup(elt)
 
     def really_add_error_markup(self, element):
-        """Search for errormarkup
+        """Search for errormarkup.
 
         If found, replace errormarkuped text with xml
 
@@ -77,7 +77,7 @@ class ErrorMarkup(object):
         self.fix_tail(element)
 
     def fix_text(self, element):
-        """Replace the text of an element with errormarkup if possible"""
+        """Replace the text of an element with errormarkup if possible."""
         new_content = self.error_parser(element.text)
 
         if new_content:
@@ -91,7 +91,7 @@ class ErrorMarkup(object):
                 element.insert(pos, part)
 
     def fix_tail(self, element):
-        """Replace the tail of an element with errormarkup if possible"""
+        """Replace the tail of an element with errormarkup if possible."""
         new_content = self.error_parser(element.tail)
 
         if new_content:
@@ -122,7 +122,6 @@ class ErrorMarkup(object):
         If the preceding element in result is not a simple error, it is part of
         nested markup.
         """
-
         if text:
             text = text.replace('\n', ' ')
             result = self.process_text(text)
@@ -155,7 +154,7 @@ class ErrorMarkup(object):
                 return elements
 
     def add_simple_error(self, elements, errorstring, correctionstring):
-        """Make an error element, append it to elements
+        """Make an error element, append it to elements.
 
         elements -- a list of error_elements
         errorstring -- a string containing a text part and an errormarkup
@@ -175,7 +174,7 @@ class ErrorMarkup(object):
         elements.append(error_element)
 
     def add_nested_error(self, elements, errorstring, correctionstring):
-        """Make error_element, append it to elements
+        """Make error_element, append it to elements.
 
         elements -- a list of error_elements
         errorstring -- contains either a correction or string ending with
@@ -273,7 +272,7 @@ class ErrorMarkup(object):
         return self.correction_regex.search(expression)
 
     def process_text(self, text):
-        """Divide the text in to a list
+        """Divide the text in to a list.
 
         The list will consist of alternate
         non-correctionstring/correctionstrings
@@ -296,7 +295,7 @@ class ErrorMarkup(object):
         return result
 
     def process_head(self, text):
-        """Divide text into text/error parts"""
+        """Divide text into text/error parts."""
         matches = self.error_regex.search(text)
         text = self.error_regex.sub('', text)
 
@@ -314,7 +313,7 @@ class ErrorMarkup(object):
         return self.error_regex.search(text)
 
     def get_error(self, error, correction):
-        """Make an error_element
+        """Make an error_element.
 
         error - - is either a string or an etree.Element
         correction - - is a correctionstring
@@ -333,7 +332,7 @@ class ErrorMarkup(object):
         return error_element
 
     def look_for_extended_attributes(self, correction):
-        """Extract attributes and correction from a correctionstring"""
+        """Extract attributes and correction from a correctionstring."""
         ext_att = False
         att_list = None
         if '|' in correction:

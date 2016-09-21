@@ -299,7 +299,7 @@ class Converter(object):
         """Fix a misc. issues found in converted document."""
         fixer = DocumentFixer(complete)
 
-        fixer.fix_newstags()
+        fixer.fix_newstagss()
         fixer.soft_hyphen_to_hyph_tag()
         fixer.set_word_count()
         if not self.goldstandard:

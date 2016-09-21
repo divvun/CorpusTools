@@ -30,10 +30,10 @@ import zipfile
 
 
 class PackageTmx(object):
-    """A class to package tmx files into a zip file"""
+    """A class to package tmx files into a zip file."""
 
     def __init__(self, dirname):
-        """Set the counter on which filenames are based"""
+        """Set the counter on which filenames are based."""
         self.fileId = 1
         self.date = time.strftime('%Y-%m-%d', time.localtime())
         self.dirname = dirname
@@ -41,12 +41,12 @@ class PackageTmx(object):
         self.zipfile = zipfile.ZipFile(self.zipname, mode='w')
 
     def __del__(self):
-        """Close the zipfile"""
+        """Close the zipfile."""
         print("All tmx files are in", self.zipname)
         self.zipfile.close()
 
     def find_tmx_files(self):
-        """Find the tmx files in dirname, return them as a list"""
+        """Find the tmx files in dirname, return them as a list."""
         filelist = []
         for root, dirs, files in os.walk(os.path.join(
                 os.environ['GTFREE'], 'prestable/tmx/' + self.dirname)):
@@ -57,7 +57,7 @@ class PackageTmx(object):
         return filelist
 
     def generate_filename(self):
-        """Generate a new file name. Return the new filename"""
+        """Generate a new file name. Return the new filename."""
         name = ''.join([self.dirname, '-', self.date,
                         '-{0:06d}'.format(self.fileId), '.tmx'])
         self.fileId += 1
@@ -65,7 +65,7 @@ class PackageTmx(object):
         return name
 
     def write_new_file(self, tmxFile):
-        """Write the file to the zipfile with a new filename"""
+        """Write the file to the zipfile with a new filename."""
         # print "Writing", self.tmxFile, 'as', self.generateFilename()
         self.zipfile.write(tmxFile, arcname=self.generate_filename(),
                            compress_type=zipfile.ZIP_DEFLATED)
@@ -82,6 +82,7 @@ def parse_options():
 
 
 def main():
+    """Make a package containing the tmx files."""
     parse_options()
 
     for dirname in ['nob2sme']:

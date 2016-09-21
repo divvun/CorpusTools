@@ -41,24 +41,29 @@ class VersionController(object):
     """A very basic version control class."""
 
     def __init__(self):
+        """Initialise the VersionController class."""
         # non-repo config to get at global values
         self.config = git.GitConfigParser(
             [os.path.normpath(os.path.expanduser("~/.gitconfig"))],
             read_only=True)
 
     def add(self, path):
+        """Meta function."""
         raise NotImplementedError(
             "You have to subclass and override add")
 
     def move(self, oldpath, newpath):
+        """Meta function."""
         raise NotImplementedError(
             "You have to subclass and override move")
 
     def remove(self, path):
+        """Meta function."""
         raise NotImplementedError(
             "You have to subclass and override remove")
 
     def user_name(self):
+        """Try to get a username."""
         if self.config.has_option("user", "name"):
             return self.config.get("user", "name")
         else:
@@ -69,6 +74,7 @@ class VersionController(object):
                 return ""
 
     def user_email(self):
+        """Try to get the users email."""
         if self.config.has_option("user", "email"):
             return self.config.get("user", "email")
         else:
@@ -79,17 +85,23 @@ class SVN(VersionController):
     """Implement basic svn functionality."""
 
     def __init__(self, svnclient):
-        """svnclient is a pysvn.Client"""
+        """Initialise the SVN class.
+
+        svnclient is a pysvn.Client
+        """
         super(SVN, self).__init__()
         self.client = svnclient
 
     def add(self, path):
+        """Add a file to the working copy."""
         self.client.add(path)
 
     def move(self, oldpath, newpath):
+        """Move file in the working copy."""
         self.client.move(oldpath, newpath)
 
     def remove(self, path):
+        """Remove a file from the working copy."""
         self.client.remove(path)
 
 
@@ -115,6 +127,7 @@ class VersionControlFactory(object):
     """Class to create the appropriate version control class."""
 
     def vcs(self, directory):
+        """Get a version control system."""
         try:
             s = pysvn.Client()
             s.info(directory)
