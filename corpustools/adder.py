@@ -260,7 +260,7 @@ class AddToCorpus(object):
             metadata.write_file()
 
     def none_dupe_path(self, path):
-        """Compute the none duplicate path of the file to be added
+        """Compute the none duplicate path of the file to be added.
 
         Arguments:
             path: (string) path of the file as given as input
@@ -272,7 +272,7 @@ class AddToCorpus(object):
                                    os.path.basename(path))))
 
     def copy_files_in_dir_to_corpus(self, origpath):
-        """Add a directory to the corpus
+        """Add a directory to the corpus.
 
         * Recursively walks through the given original directory
         ** First checks for duplicates, raises an error printing a list of
@@ -316,6 +316,11 @@ class AddToCorpus(object):
 
 
 def parse_args():
+    """Parse the commandline options.
+
+    Returns:
+        a list of arguments as parsed by argparse.Argumentparser.
+    """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
         description='Add file(s) to a corpus directory. The filenames are '
@@ -345,6 +350,7 @@ def parse_args():
 
 
 def main():
+    """Add files, directories and urls to the corpus."""
     args = parse_args()
 
     if args.parallel_file is None:
