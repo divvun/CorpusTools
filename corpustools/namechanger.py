@@ -456,14 +456,15 @@ def normalise_filename(filename):
     remove or replace unwanted characters.
 
     Args:
-        filename: is a unicode string
+        filename (str): name of the file
 
     Returns:
         a downcased string containing only ascii chars
     """
+
+    # unicode.decode wants a unicode string
     if type(filename) is not six.text_type:
-        raise NamechangerException('{} is not a unicode string'.format(
-            filename))
+        filename = filename.decode('utf8')
 
     if os.sep in filename:
         raise NamechangerException(
