@@ -133,20 +133,20 @@ class AddToCorpus(object):
             should be added
         """
         if not os.path.isdir(corpusdir):
-            raise AdderException(u'The given corpus directory, {}, '
-                                 u'does not exist.'.format(corpusdir))
+            raise AdderException('The given corpus directory, {}, '
+                                 'does not exist.'.format(corpusdir))
 
         if (len(mainlang) != 3 or mainlang != mainlang.lower() or
                 mainlang != namechanger.normalise_filename(mainlang)):
             raise AdderException(
-                u'Invalid mainlang: {}. '
-                u'It must consist of three lowercase ascii '
-                u'letters'.format(mainlang))
+                'Invalid mainlang: {}. '
+                'It must consist of three lowercase ascii '
+                'letters'.format(mainlang))
 
         self.corpusdir = corpusdir
         vcsfactory = versioncontrol.VersionControlFactory()
         self.vcs = vcsfactory.vcs(self.corpusdir)
-        self.goaldir = os.path.join(corpusdir, u'orig', mainlang,
+        self.goaldir = os.path.join(corpusdir, 'orig', mainlang,
                                     self.__normalise_path(path))
         with util.ignored(OSError):
             os.makedirs(self.goaldir)
@@ -155,8 +155,8 @@ class AddToCorpus(object):
     @staticmethod
     def __normalise_path(path):
         """All paths in the corpus should consist of lowercase ascii letters."""
-        return u'/'.join([namechanger.normalise_filename(part)
-                          for part in path.split('/')])
+        return '/'.join([namechanger.normalise_filename(part)
+                         for part in path.split('/')])
 
     def copy_url_to_corpus(self, url, parallelpath=''):
         """Add a URL to the corpus.
@@ -169,7 +169,7 @@ class AddToCorpus(object):
 
             return self.copy_file_to_corpus(tmpname, r.url, parallelpath)
         except UserWarning as e:
-            print(u'Skipping: {}'.format(e))
+            print('Skipping: {}'.format(e))
 
     def copy_file_to_corpus(self, origpath, metadata_filename, parallelpath=''):
         """Add a file to the corpus.
@@ -199,7 +199,7 @@ class AddToCorpus(object):
             print('Added', none_dupe_path)
             return none_dupe_path
         except UserWarning as e:
-            print(u'Skipping: {}'.format(e))
+            print('Skipping: {}'.format(e))
 
     def add_metadata_to_corpus(self, none_dupe_path, meta_filename):
         """Add the metadata file to the corpus."""
@@ -289,14 +289,14 @@ class AddToCorpus(object):
 
         results = list([x for x in list(duplicates.values()) if len(x) > 1])
         if results:
-            print(u'Duplicates Found:')
-            print(u'___')
+            print('Duplicates Found:')
+            print('___')
             for result in results:
                 for subresult in result:
-                    print(u'\t{}'.format(subresult))
-                print(u'___')
+                    print('\t{}'.format(subresult))
+                print('___')
 
-            raise AdderException(u'Found duplicates')
+            raise AdderException('Found duplicates')
 
     def add_files_to_working_copy(self):
         """Add the downloaded files to the working copy."""
@@ -368,7 +368,7 @@ def main():
             elif os.path.isdir(orig):
                 adder.copy_files_in_dir_to_corpus(orig)
             else:
-                print(u'Cannot handle {}'.format(orig), file=sys.stderr)
+                print('Cannot handle {}'.format(orig), file=sys.stderr)
     else:
         if args.directory is not None:
             print(
