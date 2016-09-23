@@ -38,8 +38,8 @@ class TestAddToCorpus(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
         self.tempdir.makedir('tull')
         self.tempdir.makedir('corpus/orig')
-        self.realcorpusdir = six.u(os.path.join(self.tempdir.path,
-                                                'corpus'))
+        self.realcorpusdir = os.path.join(self.tempdir.path,
+                                          'corpus')
 
         r = git.Repo.init(self.realcorpusdir)
         r.index.add(['orig'])
@@ -49,48 +49,48 @@ class TestAddToCorpus(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_init_with_non_unicode_corpusdir(self):
-        corpusdir = u'there'
-        lang = u'sme'
-        path = u'a/b/c'
+        corpusdir = 'there'
+        lang = 'sme'
+        path = 'a/b/c'
 
         with self.assertRaises(adder.AdderException):
             adder.AddToCorpus(corpusdir, lang, path)
 
     def test_init_with_non_unicode_lang(self):
-        corpusdir = u'there'
+        corpusdir = 'there'
         lang = 'sme'
-        path = u'a/b/c'
+        path = 'a/b/c'
 
         with self.assertRaises(adder.AdderException):
             adder.AddToCorpus(corpusdir, lang, path)
 
     def test_init_with_non_unicode_path(self):
-        corpusdir = u'there'
-        lang = u'sme'
+        corpusdir = 'there'
+        lang = 'sme'
         path = 'a/b/c'
 
         with self.assertRaises(adder.AdderException):
             adder.AddToCorpus(corpusdir, lang, path)
 
     def test_init_with_non_existing_corpusdir(self):
-        corpusdir = u'there'
-        lang = u'sme'
-        path = u'a/b/c'
+        corpusdir = 'there'
+        lang = 'sme'
+        path = 'a/b/c'
 
         with self.assertRaises(adder.AdderException):
             adder.AddToCorpus(corpusdir, lang, path)
 
     def test_init_with_existing_corpusdir_but_not_vcs(self):
-        lang = u'sme'
-        path = u'a/b/c'
+        lang = 'sme'
+        path = 'a/b/c'
 
         with self.assertRaises(versioncontrol.VersionControlException):
             adder.AddToCorpus(
-                six.u(os.path.join(self.tempdir.path, 'tull')), lang, path)
+                os.path.join(self.tempdir.path, 'tull'), lang, path)
 
     def test_init_with_vcs_corpusdir(self):
-        lang = u'sme'
-        path = u'a/b/c'
+        lang = 'sme'
+        path = 'a/b/c'
 
         atc = adder.AddToCorpus(
             self.realcorpusdir,
@@ -100,29 +100,29 @@ class TestAddToCorpus(unittest.TestCase):
         self.tempdir.check_dir('corpus/orig/sme/a/b/c')
 
     def test_init_with_too_long_mainlang(self):
-        lang = u'smei'
-        path = u'a/b/c'
+        lang = 'smei'
+        path = 'a/b/c'
 
         with self.assertRaises(adder.AdderException):
             adder.AddToCorpus(self.realcorpusdir, lang, path)
 
     def test_init_with_uppercase_mainlang(self):
-        lang = u'SME'
-        path = u'a/b/c'
+        lang = 'SME'
+        path = 'a/b/c'
 
         with self.assertRaises(adder.AdderException):
             adder.AddToCorpus(self.realcorpusdir, lang, path)
 
     def test_init_with_non_ascii_mainlang(self):
-        lang = u'øåæ'
-        path = u'a/b/c'
+        lang = 'øåæ'
+        path = 'a/b/c'
 
         with self.assertRaises(adder.AdderException):
             adder.AddToCorpus(self.realcorpusdir, lang, path)
 
     def test_init_with_path_that_must_be_normalised(self):
-        lang = u'sme'
-        path = u'æ/č/ö'
+        lang = 'sme'
+        path = 'æ/č/ö'
 
         atc = adder.AddToCorpus(self.realcorpusdir, lang, path)
         self.assertEqual(atc.goaldir, os.path.join(self.tempdir.path, 'corpus',
@@ -150,9 +150,9 @@ class TestAddFileToCorpus(unittest.TestCase):
         self.tempdir.write('corpus/orig/sma/ae/c/o/f.txt',
                            six.b('sma content of f'))
 
-        self.realcorpusdir = six.u(os.path.join(self.tempdir.path, 'corpus'))
-        self.origdirectory = six.u(os.path.join(
-            self.tempdir.path, 'origdirectory'))
+        self.realcorpusdir = os.path.join(self.tempdir.path, 'corpus')
+        self.origdirectory = os.path.join(
+            self.tempdir.path, 'origdirectory')
 
         smj_metadata = xslsetter.MetadataHandler(
             os.path.join(self.realcorpusdir, 'orig/smj/ae/c/o/f.txt.xsl'),
@@ -166,7 +166,7 @@ class TestAddFileToCorpus(unittest.TestCase):
             create=True)
         sma_metadata.set_variable('mainlang', 'sma')
         sma_metadata.set_variable('translated_from', 'smj')
-        sma_metadata.set_parallel_text('smj', u'f.txt')
+        sma_metadata.set_parallel_text('smj', 'f.txt')
         sma_metadata.write_file()
 
         r = git.Repo.init(self.realcorpusdir)
@@ -177,8 +177,8 @@ class TestAddFileToCorpus(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_add_file_no_normalise_no_parallel(self):
-        atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
-        orig_name = os.path.join(self.origdirectory, u'a.txt')
+        atc = adder.AddToCorpus(self.realcorpusdir, 'sme', 'æ/č/ö')
+        orig_name = os.path.join(self.origdirectory, 'a.txt')
         atc.copy_file_to_corpus(orig_name, os.path.basename(orig_name))
         atc.add_files_to_working_copy()
 
@@ -220,8 +220,8 @@ class TestAddFileToCorpus(unittest.TestCase):
         self.assertEqual(metadata.get_variable('mainlang'), 'sme')
 
     def test_add_file_normalise_no_parallel(self):
-        atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
-        orig_name = os.path.join(self.origdirectory, u'æ.txt')
+        atc = adder.AddToCorpus(self.realcorpusdir, 'sme', 'æ/č/ö')
+        orig_name = os.path.join(self.origdirectory, 'æ.txt')
         atc.copy_file_to_corpus(orig_name, os.path.basename(orig_name))
         atc.add_files_to_working_copy()
 
@@ -263,8 +263,8 @@ class TestAddFileToCorpus(unittest.TestCase):
         self.assertEqual(metadata.get_variable('mainlang'), 'sme')
 
     def test_add_file_identical_name_no_parallel(self):
-        atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
-        orig_name = os.path.join(self.origdirectory, u'c.txt')
+        atc = adder.AddToCorpus(self.realcorpusdir, 'sme', 'æ/č/ö')
+        orig_name = os.path.join(self.origdirectory, 'c.txt')
         atc.copy_file_to_corpus(orig_name, os.path.basename(orig_name))
         atc.add_files_to_working_copy()
 
@@ -301,22 +301,22 @@ class TestAddFileToCorpus(unittest.TestCase):
 
         metadata = xslsetter.MetadataHandler(
             os.path.join(self.realcorpusdir, 'orig/sme/ae/c/o/c_1.txt.xsl'))
-        self.assertEqual(metadata.get_variable('filename'), u'c.txt')
+        self.assertEqual(metadata.get_variable('filename'), 'c.txt')
         self.assertEqual(metadata.get_variable('genre'), 'ae')
         self.assertEqual(metadata.get_variable('mainlang'), 'sme')
 
     def test_add_file_with_non_existing_parallel(self):
-        atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
+        atc = adder.AddToCorpus(self.realcorpusdir, 'sme', 'æ/č/ö')
         with self.assertRaises(adder.AdderException):
-            orig_name = os.path.join(self.origdirectory, u'd.txt')
+            orig_name = os.path.join(self.origdirectory, 'd.txt')
             atc.copy_file_to_corpus(
                 orig_name, os.path.basename(orig_name),
                 parallelpath=os.path.join(self.realcorpusdir,
                                           'orig/smi/ae/c/o/f.txt'))
 
     def test_add_file_with_parallel(self):
-        atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
-        orig_name = os.path.join(self.origdirectory, u'd.txt')
+        atc = adder.AddToCorpus(self.realcorpusdir, 'sme', 'æ/č/ö')
+        orig_name = os.path.join(self.origdirectory, 'd.txt')
         atc.copy_file_to_corpus(orig_name, os.path.basename(orig_name),
                                 parallelpath=os.path.join(
                                     self.realcorpusdir,
@@ -383,9 +383,9 @@ class TestDirectoryToCorpusWithDuplicates(unittest.TestCase):
         self.tempdir.write('origdirectory/sub/c.txt', six.b('content of a'))
         self.tempdir.write('origdirectory/sub/d.txt', six.b('content of d'))
         self.tempdir.makedir('corpus/orig')
-        self.origdirectory = six.u(os.path.join(self.tempdir.path,
-                                                'origdirectory'))
-        self.realcorpusdir = six.u(os.path.join(self.tempdir.path, 'corpus'))
+        self.origdirectory = os.path.join(self.tempdir.path,
+                                          'origdirectory')
+        self.realcorpusdir = os.path.join(self.tempdir.path, 'corpus')
         r = git.Repo.init(self.realcorpusdir)
         r.index.add(['orig'])
         r.index.commit('Added orig')
@@ -394,7 +394,7 @@ class TestDirectoryToCorpusWithDuplicates(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_add_directory_with_duplicate(self):
-        atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
+        atc = adder.AddToCorpus(self.realcorpusdir, 'sme', 'æ/č/ö')
         with self.assertRaises(adder.AdderException):
             atc.copy_files_in_dir_to_corpus(self.origdirectory)
 
@@ -412,10 +412,10 @@ class TestDirectoryToCorpusWithoutDuplicates(unittest.TestCase):
         self.tempdir.write('origdirectory/sub/c.txt', six.b('content of c'))
         self.tempdir.write('origdirectory/sub/d.txt', six.b('content of d'))
         self.tempdir.makedir('corpus/orig')
-        self.origdirectory = six.u(os.path.join(self.tempdir.path,
-                                                'origdirectory'))
-        self.realcorpusdir = six.u(os.path.join(self.tempdir.path,
-                                                'corpus'))
+        self.origdirectory = os.path.join(self.tempdir.path,
+                                          'origdirectory')
+        self.realcorpusdir = os.path.join(self.tempdir.path,
+                                          'corpus')
         r = git.Repo.init(self.realcorpusdir)
         r.index.add(['orig'])
         r.index.commit('Added orig')
@@ -424,7 +424,7 @@ class TestDirectoryToCorpusWithoutDuplicates(unittest.TestCase):
         self.tempdir.cleanup()
 
     def test_add_directory_without_duplicate(self):
-        atc = adder.AddToCorpus(self.realcorpusdir, u'sme', u'æ/č/ö')
+        atc = adder.AddToCorpus(self.realcorpusdir, 'sme', 'æ/č/ö')
         atc.copy_files_in_dir_to_corpus(self.origdirectory)
         atc.add_files_to_working_copy()
 
