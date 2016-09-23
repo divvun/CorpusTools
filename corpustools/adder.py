@@ -132,18 +132,6 @@ class AddToCorpus(object):
             path: (unicode) path below the language directory where the files
             should be added
         """
-        if type(corpusdir) is not six.text_type:
-            raise AdderException(u'corpusdir is not unicode: {}.'.format(
-                corpusdir))
-
-        if type(mainlang) is not six.text_type:
-            raise AdderException(u'mainlang is not unicode: {}.'.format(
-                mainlang))
-
-        if type(path) is not six.text_type:
-            raise AdderException(u'path is not unicode: {}.'.format(
-                path))
-
         if not os.path.isdir(corpusdir):
             raise AdderException(u'The given corpus directory, {}, '
                                  u'does not exist.'.format(corpusdir))
