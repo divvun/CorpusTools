@@ -25,6 +25,7 @@ from __future__ import absolute_import, print_function
 
 import hashlib
 import os
+import re
 from collections import namedtuple
 
 import six
@@ -461,38 +462,22 @@ def normalise_filename(filename):
     Returns:
         a downcased string containing only ascii chars
     """
-
-    # unicode.decode wants a unicode string
-    if type(filename) is not six.text_type:
-        filename = filename.decode('utf8')
-
     if os.sep in filename:
         raise NamechangerException(
             'Invalid filename {}.\n'
             'Filename is not allowed to contain {}'.format(filename,
                                                            os.sep))
 
-    unwanted_chars = {
-        u'+': '_', u' ': u'_', u'(': u'_', u')': u'_', u"'": u'_',
-        u'–': u'-', u'?': u'_', u',': u'_', u'!': u'_', u',': u'_',
-        u'<': u'_', u'>': u'_', u'"': u'_', u'&': u'_', u';': u'_',
-        u'&': u'_', u'#': u'_', u'\\': u'_', u'|': u'_', u'$': u'_',
-    }
+    # unicode.decode wants a unicode string
+    if type(filename) is not six.text_type:
+        filename = filename.decode('utf8')
 
     # unidecode.unidecode makes ascii only
     # urllib.unquote replaces %xx escapes by their single-character equivalent.
-    newname = six.text_type(
-        unidecode.unidecode(
-            six.moves.urllib.parse.unquote(
-                filename
-            ))).lower()
+    asciiname = unidecode.unidecode(six.moves.urllib.parse.unquote(filename))
+    unwanted = re.compile('[+ ()\'–?,!,<>"&;&#\\|$]+')
 
-    newname = util.replace_all(six.iteritems(unwanted_chars), newname)
-
-    while u'__' in newname:
-        newname = newname.replace(u'__', u'_')
-
-    return newname
+    return unwanted.sub('_', asciiname).lower()
 
 
 def are_duplicates(oldpath, newpath):
