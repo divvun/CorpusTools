@@ -2336,118 +2336,15 @@ class HTMLConverter(Converter):
         Returns:
             a string containing the html document.
         """
-        with codecs.open(self.names.orig, encoding='utf8',
-                         errors='ignore') as f:
-            return f.read()
+        try:
+            tree = etree.parse(self.names.orig)
+        except etree.XMLSyntaxError:
+            parser = etree.HTMLParser()
+            tree = etree.parse(self.names.orig, parser)
 
-    def try_decode_encodings(self, content, found):
-        """Convert html document to unicode.
+        return etree.tostring(tree.getroot())
 
-        Arguments:
-            content: a string containing the html document.
-            found: a tuple containing the encoding and the source where
-            the encoding was found.
-
-        Returns:
-            a unicode string containing the html document.
-        """
-        if type(content) == six.text_type:
-            return content
-        assert type(content) == str
-
-        more_guesses = [(c, 'guess')
-                        for c in ["utf-8", "windows-1252"]
-                        if c != found[0]]
-        errors = []
-        for encoding, source in [found] + more_guesses:
-            try:
-                decoded = six.text_type(content, encoding=encoding)
-                return decoded
-            except UnicodeDecodeError as e:
-                if source == 'xsl':
-                    with open('{}.log'.format(self.names.orig), 'w') as f:
-                        print(util.lineno(), six.text_type(
-                            e), self.names.orig, file=f)
-                    raise ConversionException(
-                        'The text_encoding specified in {} lead to decoding '
-                        'errors, please fix the XSL'.format(self.md.filename))
-                else:
-                    errors.append(e)
-        if errors != []:
-            # If no "clean" encoding worked, we just skip the bad bytes:
-            return six.text_type(content, encoding='utf-8', errors='mixed')
-        else:
-            raise ConversionException(
-                "Strange exception converting {} to unicode".format(self.names.orig))
-
-    def get_encoding(self, content):
-        """Find the encoding of the html document.
-
-        Arguments:
-            content: a string containing the document
-
-        Returns:
-            a tuple containing the encoding of the document and the source
-            where it was found.
-        """
-        encoding = 'utf-8'
-        source = 'guess'
-
-        encoding_from_xsl = self.md.get_variable('text_encoding')
-
-        if encoding_from_xsl == '' or encoding_from_xsl is None:
-            if self.get_encoding_from_content(content) is not None:
-                source = 'content'
-                encoding = self.get_encoding_from_content(content)
-        else:
-            source = 'xsl'
-            encoding = encoding_from_xsl.lower()
-
-        encoding = self.get_normalized_encoding(encoding, source)
-
-        return encoding, source
-
-    xml_encoding_declaration_re = re.compile(
-        r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*", re.IGNORECASE)
-    html_meta_charset_re = re.compile(
-        r"<meta [^>]*[\"; ]charset=[\"']?([^\"' ]+)", re.IGNORECASE)
-
-    def get_normalized_encoding(self, encoding, source):
-        """Interpret some 8-bit encodings as windows-1252."""
-        if encoding not in ['iso-8859-15', 'utf-8']:
-            encoding_norm = {
-                'iso-8859-1': 'windows-1252',
-                'ascii': 'windows-1252',
-                'windows-1252': 'windows-1252',
-            }
-            if encoding in encoding_norm:
-                encoding = encoding_norm[encoding]
-            else:
-                print("Unusual encoding found in {} {}: {}".format(
-                    self.names.orig, source, encoding), file=sys.stderr)
-
-        return encoding
-
-    def get_encoding_from_content(self, content):
-        """Extract encoding from html header.
-
-        Arguments:
-            content: a utf-8 encoded byte string
-
-        Returns:
-            a string containing the encoding
-        """
-        # <?xml version="1.0" encoding="ISO-8859-1"?>
-        # <meta charset="utf-8">
-        # <meta http-equiv="Content-Type" content="charset=utf-8" />
-        # <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        # <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-        m = (re.search(self.xml_encoding_declaration_re, content) or
-             re.search(self.html_meta_charset_re, content))
-        if m is not None:
-            return m.group(1).lower()
-
-    def remove_declared_encoding(self, content):
+    def remove_declared_encoding(self):
         """Remove declared decoding.
 
         lxml explodes if we send a decoded Unicode string with an
@@ -2460,7 +2357,10 @@ class HTMLConverter(Converter):
         Returns:
             a string where the declared decoding is removed.
         """
-        return re.sub(self.xml_encoding_declaration_re, "", content)
+        xml_encoding_declaration_re = re.compile(
+            r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*", re.IGNORECASE)
+
+        return re.sub(xml_encoding_declaration_re, "", self.content)
 
     def convert2xhtml(self):
         """Convert html document to a cleaned up xhtml document.
@@ -2468,13 +2368,10 @@ class HTMLConverter(Converter):
         Returns:
             a cleaned up xhtml document as an etree element.
         """
-        content = self.content
-        encoding, source = self.get_encoding(content)
-        d_content = self.try_decode_encodings(content, (encoding, source))
-        u_content = self.remove_declared_encoding(d_content)
+        self.remove_declared_encoding()
 
         converter = HTMLContentConverter()
-        return converter.convert2xhtml(u_content)
+        return converter.convert2xhtml(self.content)
 
     @staticmethod
     def replace_bare_text_in_body_with_p(body):
