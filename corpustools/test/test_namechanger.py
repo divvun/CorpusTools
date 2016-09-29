@@ -28,6 +28,7 @@ import unittest
 import git
 import six
 import testfixtures
+from nose_parameterized import parameterized
 
 from corpustools import namechanger, xslsetter
 
@@ -36,75 +37,27 @@ here = os.path.dirname(__file__)
 
 class TestFilenameToAscii(unittest.TestCase):
     """Test the normalise_filename function"""
-
-    def test_none_ascii_lower(self):
-        oldname = u'ášŧŋđžčåøæöäï+'
-        want = u'astngdzcaoaeoai_'
-
-        self.assertEqual(namechanger.normalise_filename(oldname), want)
-
-    def test_none_ascii_upper(self):
-        oldname = u'ÁŠŦŊĐŽČÅØÆÖÄÏ+'
-        want = u'astngdzcaoaeoai_'
-
-        self.assertEqual(namechanger.normalise_filename(oldname), want)
-
-    def test_none_ascii_blabla(self):
-        oldname = u'ášŧŋđŽČÅØÆÖÄï+'
-        want = u'astngdzcaoaeoai_'
-
-        self.assertEqual(namechanger.normalise_filename(oldname), want)
-
-    def test_own_name_with_only_ascii(self):
-        oldname = u'YoullNeverWalkAlone'
-        want = u'youllneverwalkalone'
-
-        self.assertEqual(namechanger.normalise_filename(oldname), want)
-
-    def test_own_name_with_only_ascii_and_space(self):
-        oldname = u'Youll Never Walk Alone'
-        want = u'youll_never_walk_alone'
-
-        self.assertEqual(namechanger.normalise_filename(oldname), want)
-
-    def test_own_name_with_ascii_and_space_and_apostrophe(self):
-        oldname = u"You'll Never Walk Alone"
-        want = u'you_ll_never_walk_alone'
-
-        self.assertEqual(namechanger.normalise_filename(oldname), want)
-
-    def test_own_name_with_non_ascii(self):
-        oldname = u'Šaddágo beaivi vai idja'
-        want = u'saddago_beaivi_vai_idja'
-
-        self.assertEqual(namechanger.normalise_filename(oldname), want)
-
-    def test_own_name_with_quote(self):
-        oldname = u'aba".txt'
-        want = u'aba_.txt'
-
-        self.assertEqual(namechanger.normalise_filename(oldname), want)
-
-    def test_own_name_with_lt(self):
-        oldname = u'aba<.txt'
-        want = u'aba_.txt'
-
-        self.assertEqual(namechanger.normalise_filename(oldname), want)
-
-    def test_own_name_with_gt(self):
-        oldname = u'aba>.txt'
-        want = u'aba_.txt'
-
-        self.assertEqual(namechanger.normalise_filename(oldname), want)
-
-    def test_own_name_with_cyrillic(self):
-        """Test what happens when given cyrillic characters."""
-        oldname = (u'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
-                   u'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦ‌​ЧШЩЪЫЬЭЮЯ.txt')
-        want = (u'abvgdeiozhziiklmnoprstufkhtschshshch_y_eiuia'
-                u'abvgdeiozhziiklmnoprstufkhts_chshshch_y_eiuia.txt')
-
-        self.assertEqual(namechanger.normalise_filename(oldname), want)
+    @parameterized.expand([
+        (u'ášŧŋđžčåøæöäï+', u'astngdzcaoaeoai_'),
+        (u'ÁŠŦŊĐŽČÅØÆÖÄÏ+', u'astngdzcaoaeoai_'),
+        (u'ášŧŋđŽČÅØÆÖÄï+', u'astngdzcaoaeoai_'),
+        (u'YoullNeverWalkAlone', u'youllneverwalkalone'),
+        (u'Youll Never Walk Alone', u'youll_never_walk_alone'),
+        (u"You'll Never Walk Alone", u'you_ll_never_walk_alone'),
+        (u'Šaddágo beaivi vai idja', u'saddago_beaivi_vai_idja'),
+        (u'aba".txt', u'aba_.txt'),
+        (u'aba<.txt', u'aba_.txt'),
+        (u'aba>.txt', u'aba_.txt'),
+        ((
+            u'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+            u'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦ‌​ЧШЩЪЫЬЭЮЯ.txt'),
+         (
+            u'abvgdeiozhziiklmnoprstufkhtschshshch_y_eiuia'
+            u'abvgdeiozhziiklmnoprstufkhts_chshshch_y_eiuia.txt')),
+    ])
+    def test_filename_to_ascii(self, orig, expected):
+        """Check that non ascii filenames are converted to ascii only ones."""
+        self.assertEqual(namechanger.normalise_filename(orig), expected)
 
     def test_own_name_with_complete_path(self):
         oldname = u'j/a/b/c/aba>.txt'

@@ -38,13 +38,15 @@ setup(
             'pick_parallel_docs = corpustools.pick_parallel_docs:main',
         ]
     },
-    dependency_links=['https://github.com/albbas/pyth/archive/pyth-py3+bs4+io+handle_super.zip#egg=pyth-0.7.0'],
+    dependency_links=[
+        'https://github.com/albbas/pyth/archive/pyth-py3+bs4+io+handle_super.zip#egg=pyth-0.7.0'],  # nopep8
     install_requires=[
         'epub',
         'gitdb',
         'gitpython',
         'html5lib',
         'lxml',
+        'nose-parameterized',
         'odfpy',
         'pydocx',
         'pyth==0.7.0',
