@@ -34,7 +34,7 @@ import lxml.objectify as objectify
 import six
 import testfixtures
 
-from corpustools import converter, text_cat, xslsetter
+from corpustools import converter, corpuspath, text_cat, xslsetter
 from corpustools.test.test_xhtml2corpus import assertXmlEqual
 
 here = os.path.dirname(__file__)
@@ -68,83 +68,6 @@ class XMLTester(unittest.TestCase):
 
 
 TestItem = collections.namedtuple('TestItem', ['name', 'orig', 'expected'])
-
-
-path_to_corpuspath = {
-    'orig_to_orig': {
-        'in_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'xsl_to_orig': {
-        'in_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html.xsl'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'log_to_orig': {
-        'in_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html.log'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'converted_to_orig': {
-        'in_name': os.path.join(
-            here, 'converted/sme/admin/subdir/subsubdir/filename.html.xml'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'prestable_converted_to_orig': {
-        'in_name': os.path.join(
-            here, 'prestable/converted/sme/admin/subdir/subsubdir/filename.html.xml'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'analysed_to_orig': {
-        'in_name': os.path.join(
-            here, 'converted/sme/admin/subdir/subsubdir/filename.html.xml'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'toktmx_to_orig': {
-        'in_name': os.path.join(
-            here, 'toktmx/sme/admin/subdir/subsubdir/filename.html.toktmx'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'prestable_toktmx_to_orig': {
-        'in_name': os.path.join(
-            here, 'prestable/toktmx/sme/admin/subdir/subsubdir/filename.html.toktmx'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'tmx_to_orig': {
-        'in_name': os.path.join(
-            here, 'tmx/sme/admin/subdir/subsubdir/filename.html.tmx'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'prestable_tmx_to_orig': {
-        'in_name': os.path.join(
-            here, 'prestable/tmx/sme/admin/subdir/subsubdir/filename.html.tmx'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-}
-
-
-def test_path_to_corpuspath():
-    for testname, testcontent in six.iteritems(path_to_corpuspath):
-        yield check_names_to_corpuspath, testname, testcontent
-
-
-def check_names_to_corpuspath(testname, testcontent):
-    cp = converter.CorpusPath(testcontent['in_name'])
-
-    if cp.orig != testcontent['want_name']:
-        raise AssertionError('{}:\nexpected {}\ngot {}'.format(
-            testname, testcontent['want_name'], cp.orig))
 
 
 def test_detect_quote():
@@ -554,7 +477,7 @@ class TestComputeCorpusnames(unittest.TestCase):
         return os.path.join(here, module, 'sme/admin/subdir/subsubdir/filename.html')
 
     def setUp(self):
-        self.cp = converter.CorpusPath(self.name('orig'))
+        self.cp = corpuspath.CorpusPath(self.name('orig'))
 
     def test_compute_orig(self):
         self.assertEqual(
@@ -679,11 +602,11 @@ class TestConverter(XMLTester):
                           complete)
 
     def test_detect_quote_is_skipped_on_errormarkup_documents(self):
-        '''quote detection should not be done in errormarkup documents
+        """quote detection should not be done in errormarkup documents
 
         This is a test for that covers the case covered in
         http://giellatekno.uit.no/bugzilla/show_bug.cgi?id=2151
-        '''
+        """
         want_string = '''
             <document xml:lang="smj" id="no_id">
             <header>
@@ -1696,10 +1619,10 @@ class TestHTMLConverter(XMLTester):
             self.assertEqual(got, ('windows-1252', 'xsl'))
 
     def test_get_encoding_4(self):
-        '''Check that encoding_from_xsl overrides meta charset
+        """Check that encoding_from_xsl overrides meta charset
 
         encoding_from_xsl = 'iso-8859-1', charset in html header = utf-8
-        '''
+        """
         filename = 'orig/sme/admin/ugga.html'
         content = (
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
@@ -1750,10 +1673,10 @@ class TestHTMLConverter(XMLTester):
             self.assertEqual(got, ('windows-1252', 'content'))
 
     def test_set_charset_7(self):
-        '''' as quote mark around charset
+        """' as quote mark around charset
 
         encoding_from_xsl = '', charset in html header = iso-8859-1
-        '''
+        """
         filename = 'orig/sme/admin/ugga.html'
         content = (
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
@@ -1770,11 +1693,11 @@ class TestHTMLConverter(XMLTester):
             self.assertEqual(got, ('windows-1252', 'content'))
 
     def test_set_charset_8(self):
-        '''' is quote mark around charset when
+        """' is quote mark around charset when
 
         " is found later
         encoding_from_xsl = '', charset in html header = iso-8859-1
-        '''
+        """
         filename = 'orig/sme/admin/ugga.html'
         content = (
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
@@ -1792,11 +1715,11 @@ class TestHTMLConverter(XMLTester):
             self.assertEqual(got, ('windows-1252', 'content'))
 
     def test_set_charset_9(self):
-        '''" is quote mark around charset
+        """" is quote mark around charset
 
         ' is found later
         encoding_from_xsl = '', charset in html header = iso-8859-1
-        '''
+        """
         filename = 'orig/sme/admin/ugga.html'
         content = (
             b'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Final//EN"><html>'
@@ -4961,13 +4884,13 @@ class TestProblematicPageTwoColumnsHeaderLast(XMLTester):
 
 
 class TestProblematicPageThreeColumns(XMLTester):
-    '''This page has three columns, a couple of headings above them and a table
+    """This page has three columns, a couple of headings above them and a table
 
     Test that
     * unwanted parts of the document is removed
     * paragraphs are made correctly
     * the ordering of paragraphs is done correctly.
-    '''
+    """
 
     def setUp(self):
         self.start_page = etree.fromstring(u'''
@@ -6104,11 +6027,11 @@ class TestPDF2XMLConverter(XMLTester):
             etree.fromstring('<body><p>3.</p></body>'))
 
     def test_parse_page_4(self):
-        '''One text element with a ascii letter, the other one with a non-ascii
+        """One text element with a ascii letter, the other one with a non-ascii
 
         This makes two parts lists. The first list contains one element that is
         of type str, the second list contains one element that is unicode.
-        '''
+        """
         page_element = etree.fromstring(
             '<page number="1" height="1263" width="862">'
             '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
@@ -6124,11 +6047,11 @@ class TestPDF2XMLConverter(XMLTester):
             etree.fromstring('<body><p>R</p><p>Ø</p></body>'))
 
     def test_parse_page_5(self):
-        '''Test parse pages
+        """Test parse pages
 
         One text element containing a <b>, the other one with a
         non-ascii string. Both belong to the same paragraph.
-        '''
+        """
         page_element = etree.fromstring(
             '<page number="1" height="1263" width="862">'
             '<fontspec id="1" size="13" family="Times" color="#231f20"/>'
@@ -6375,11 +6298,11 @@ class TestPDF2XMLConverter(XMLTester):
         self.assertXmlEqual(p2x.extractor.body, etree.fromstring(want))
 
     def test_parse_pdf2xmldoc3(self):
-        '''Check if paragraph is continued from page to page
+        """Check if paragraph is continued from page to page
 
         Paragraph should continue if the first character on next page is a
         lower case character
-        '''
+        """
         pdf2xml = etree.fromstring('''
             <pdf2xml>
                 <page number="1" position="absolute" top="0" left="0" height="1020" width="723">
