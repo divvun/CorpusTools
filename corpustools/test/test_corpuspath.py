@@ -25,83 +25,29 @@ from __future__ import absolute_import
 import os
 
 import six
+from nose_parameterized import parameterized
 
 from corpustools import corpuspath
 
 here = os.path.dirname(__file__)
 
+def name(module, extension):
+    return os.path.join(here, module,
+                        'sme/subdir/subsubdir/filename.html' + extension)
 
-path_to_corpuspath = {
-    'orig_to_orig': {
-        'in_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'xsl_to_orig': {
-        'in_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html.xsl'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'log_to_orig': {
-        'in_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html.log'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'converted_to_orig': {
-        'in_name': os.path.join(
-            here, 'converted/sme/admin/subdir/subsubdir/filename.html.xml'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'prestable_converted_to_orig': {
-        'in_name': os.path.join(
-            here, 'prestable/converted/sme/admin/subdir/subsubdir/filename.html.xml'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'analysed_to_orig': {
-        'in_name': os.path.join(
-            here, 'converted/sme/admin/subdir/subsubdir/filename.html.xml'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'toktmx_to_orig': {
-        'in_name': os.path.join(
-            here, 'toktmx/sme/admin/subdir/subsubdir/filename.html.toktmx'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'prestable_toktmx_to_orig': {
-        'in_name': os.path.join(
-            here, 'prestable/toktmx/sme/admin/subdir/subsubdir/filename.html.toktmx'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'tmx_to_orig': {
-        'in_name': os.path.join(
-            here, 'tmx/sme/admin/subdir/subsubdir/filename.html.tmx'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-    'prestable_tmx_to_orig': {
-        'in_name': os.path.join(
-            here, 'prestable/tmx/sme/admin/subdir/subsubdir/filename.html.tmx'),
-        'want_name': os.path.join(
-            here, 'orig/sme/admin/subdir/subsubdir/filename.html'),
-    },
-}
-
-
-def test_path_to_corpuspath():
-    """Test the naming scheme for corpus paths."""
-    for testname, testcontent in six.iteritems(path_to_corpuspath):
-        yield check_names_to_corpuspath, testname, testcontent
-
-
-def check_names_to_corpuspath(testname, testcontent):
+@parameterized([
+    ('orig_to_orig', name('orig', '')),
+    ('xsl_to_orig', name('orig', '.xsl')),
+    ('log_to_orig', name('orig', '.log')),
+    ('converted_to_orig', name('converted', '.xml')),
+    ('prestable_converted_to_orig', name('prestable/converted', '.xml')),
+    ('analysed_to_orig', name('converted', '.xml')),
+    ('toktmx_to_orig', name('toktmx/', '.toktmx')),
+    ('prestable_toktmx_to_orig', name('prestable/toktmx/', '.toktmx')),
+    ('tmx_to_orig', name('tmx', '.tmx')),
+    ('prestable_tmx_to_orig', name('prestable/tmx/', '.tmx')),
+])
+def test_path_to_corpuspath(testname, orig):
     """Check that the corpus file naming scheme works as it should.
 
     Args:
@@ -111,8 +57,8 @@ def check_names_to_corpuspath(testname, testcontent):
     Raises:
         AssertionError: is raised if the result is not what is expected
     """
-    cp = corpuspath.CorpusPath(testcontent['in_name'])
+    cp = corpuspath.CorpusPath(orig)
 
-    if cp.orig != testcontent['want_name']:
+    if cp.orig != name('orig', ''):
         raise AssertionError('{}:\nexpected {}\ngot {}'.format(
-            testname, testcontent['want_name'], cp.orig))
+            testname, name('orig', ''), cp.orig))
