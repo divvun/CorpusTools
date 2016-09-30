@@ -190,7 +190,8 @@ class Converter(object):
 
         fixer.fix_newstags()
         fixer.soft_hyphen_to_hyph_tag()
-        fixer.set_word_count()
+        self.md.set_variable('wordcount', fixer.calculate_wordcount())
+
         if not self.goldstandard:
             fixer.detect_quotes()
 
@@ -3173,22 +3174,6 @@ class DocumentFixer(object):
                  for paragraph in self.root.iter('p')]
 
         return six.text_type(len(re.findall(u'\S+', ' '.join(plist))))
-
-    def set_word_count(self):
-        """Set the wordcount element."""
-        wordcount = self.root.find('header/wordcount')
-        if wordcount is None:
-            tags = ['collection', 'publChannel', 'place', 'year',
-                    'translated_from', 'translator', 'author']
-            for tag in tags:
-                found = self.root.find('header/' + tag)
-                if found is not None:
-                    wordcount = etree.Element('wordcount')
-                    header = found.getparent()
-                    header.insert(header.index(found) + 1, wordcount)
-                    break
-
-        wordcount.text = self.calculate_wordcount()
 
     def make_element(self, eName, text, attributes={}):
         """Make an xml element.
