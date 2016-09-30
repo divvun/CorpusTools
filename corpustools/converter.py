@@ -195,8 +195,7 @@ class Converter(object):
         if not self.goldstandard:
             fixer.detect_quotes()
 
-        if (complete.
-            attrib['{http://www.w3.org/XML/1998/namespace}lang'] in
+        if (self.md.get_variable('mainlang') in
                 ['sma', 'sme', 'smj', 'smn', 'sms', 'nob', 'fin', 'swe',
                  'nno', 'dan', 'fkv', 'sju', 'sje']):
             fixer.fix_body_encoding()
