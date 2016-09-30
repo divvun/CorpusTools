@@ -139,7 +139,7 @@ class Converter(object):
     def transform_to_complete(self):
         """Combine the intermediate xml document with its medatata."""
         intermediate = self.convert2intermediate()
-
+        self.fix_document(intermediate)
         self.maybe_write_intermediate(intermediate)
 
         try:
@@ -233,7 +233,6 @@ class Converter(object):
         complete = self.transform_to_complete()
         self.validate_complete(complete)
         self.convert_errormarkup(complete)
-        self.fix_document(complete)
         ld = LanguageDetector(complete, languageGuesser)
         ld.detect_language()
 
@@ -2312,7 +2311,6 @@ class HTMLContentConverter(object):
 
         self.soup = html5parser.document_fromstring(
             self.superclean(c_content))
-
         self.remove_empty_class()
         self.remove_empty_p()
         self.remove_elements()
