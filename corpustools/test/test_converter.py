@@ -3008,34 +3008,34 @@ LOGO: Smi kulturfestivala 1998
 
         self.assertXmlEqual(got, want)
 
-    def test_word_count(self):
-        document = (
-            '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
-            '<author><unknown/></author><availability><free/>'
-            '</availability><multilingual/></header><body><p>Bïevnesh '
-            'naasjovnalen pryövoej bïjre</p><p>2008</p><p>Bïevnesh '
-            'eejhtegidie, tjidtjieh aehtjieh bielide naasjovnalen '
-            'pryövoej bïjre giej leah maanah 5. jïh 8. '
-            'tsiehkine</p></body></document>')
-        if six.PY3:
-            document = document.encode('utf8')
-        orig_doc = etree.parse(
-            io.BytesIO(document))
+    #def test_word_count(self):
+        #document = (
+            #'<document xml:lang="sma" id="no_id"><header><title/><genre/>'
+            #'<author><unknown/></author><availability><free/>'
+            #'</availability><multilingual/></header><body><p>Bïevnesh '
+            #'naasjovnalen pryövoej bïjre</p><p>2008</p><p>Bïevnesh '
+            #'eejhtegidie, tjidtjieh aehtjieh bielide naasjovnalen '
+            #'pryövoej bïjre giej leah maanah 5. jïh 8. '
+            #'tsiehkine</p></body></document>')
+        #if six.PY3:
+            #document = document.encode('utf8')
+        #orig_doc = etree.parse(
+            #io.BytesIO(document))
 
-        expected_doc = (
-            '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
-            '<author><unknown/></author><wordcount>20</wordcount>'
-            '<availability><free/></availability><multilingual/></header>'
-            '<body><p>Bïevnesh naasjovnalen pryövoej bïjre</p>'
-            '<p>2008</p><p>Bïevnesh eejhtegidie, tjidtjieh aehtjieh bielide '
-            'naasjovnalen pryövoej bïjre giej leah maanah 5. jïh 8. '
-            'tsiehkine</p></body></document>')
+        #expected_doc = (
+            #'<document xml:lang="sma" id="no_id"><header><title/><genre/>'
+            #'<author><unknown/></author><wordcount>20</wordcount>'
+            #'<availability><free/></availability><multilingual/></header>'
+            #'<body><p>Bïevnesh naasjovnalen pryövoej bïjre</p>'
+            #'<p>2008</p><p>Bïevnesh eejhtegidie, tjidtjieh aehtjieh bielide '
+            #'naasjovnalen pryövoej bïjre giej leah maanah 5. jïh 8. '
+            #'tsiehkine</p></body></document>')
 
-        document_fixer = converter.DocumentFixer(orig_doc)
-        document_fixer.set_word_count()
+        #document_fixer = converter.DocumentFixer(orig_doc)
+        #document_fixer.set_word_count()
 
-        self.assertXmlEqual(document_fixer.root,
-                            etree.fromstring(expected_doc))
+        #self.assertXmlEqual(document_fixer.root,
+                            #etree.fromstring(expected_doc))
 
     def test_replace_shy1(self):
         document = (
