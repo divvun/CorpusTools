@@ -141,7 +141,6 @@ class Converter(object):
         intermediate = self.convert2intermediate()
         self.fix_document(intermediate)
         self.maybe_write_intermediate(intermediate)
-
         try:
             xm = XslMaker(self.names.xsl)
             complete = xm.transformer(intermediate)
@@ -194,6 +193,10 @@ class Converter(object):
 
         if not self.goldstandard:
             fixer.detect_quotes()
+
+        # The above line adds text to hyph, fix that
+        for hyph in complete.iter('hyph'):
+            hyph.text = None
 
         if (self.md.get_variable('mainlang') in
                 ['sma', 'sme', 'smj', 'smn', 'sms', 'nob', 'fin', 'swe',
@@ -3034,6 +3037,7 @@ class DocumentFixer(object):
         encoding = eg.guess_body_encoding(bodyString)
 
         body = etree.fromstring(eg.decode_para(encoding, bodyString))
+
         self.root.append(body)
 
         self.fix_title_person('double-utf8')
@@ -3305,7 +3309,7 @@ class DocumentFixer(object):
                         lines = []
                         index += 1
                         title = header.find('./title')
-                        if title.text is None:
+                        if title is not None and title.text is None:
                             title.text = line.strip()
                         paragraph.getparent().insert(
                             index,
