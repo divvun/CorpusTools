@@ -75,3 +75,4 @@ v<0.15.4>, <20160916> -- Fix bug in skip_elements handling, stop removal at stop
 v<0.15.5>, <20160921> -- Make sure that adder uses unicode filenames even in python2.
 v<0.15.6>, <20160930> -- Remove all custom encoding guessing. This gives the correct encoding to www.samediggi.fi html documents, and fixes the disappearing ž's.
 v<0.15.7>, <20161001> -- Sámi character encoding guessing must be done on the intermediate document, before the intermediate document and the metadata are merged. This is because some characters are lost in the merge.
+v<0.15.8>, <20161009> -- Fix bug 2223, problemer med konvertering av sørsamiske dokumenter (which also affected quite a lot of other documents).
