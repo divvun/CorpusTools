@@ -1424,7 +1424,7 @@ class TestHTMLContentConverter(XMLTester):
 
 
 class TestHTMLConverter(XMLTester):
-
+    """Test conversion of html documents."""
     @parameterized.expand([
         (
             'bare_text_after_p',
@@ -1545,7 +1545,7 @@ class TestHTMLConverter(XMLTester):
         )
     ])
     def test_convert2intermediate(self, testname, filename, content, want):
-
+        """Check that convoluted html is correctly converted to xml."""
         with testfixtures.TempDirectory() as temp_dir:
             temp_dir.write(filename, content)
             hcc = converter.HTMLConverter(os.path.join(temp_dir.path, filename))
