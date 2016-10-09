@@ -33,6 +33,7 @@ import lxml.html as html5parser
 import lxml.objectify as objectify
 import six
 import testfixtures
+from nose_parameterized import parameterized
 
 from corpustools import converter, corpuspath, text_cat, xslsetter
 from corpustools.test.test_xhtml2corpus import assertXmlEqual
@@ -444,21 +445,15 @@ def check_unwanted_classes_and_ids(tag, key, value):
                                              etree.tostring(got)))
 
 
-def test_remove_unwanted_tags():
-    unwanted_tags = [
-        'address', 'script', 'style', 'area', 'object', 'meta',
-        'hr', 'nf', 'mb', 'ms',
-        'img', 'cite', 'embed', 'footer', 'figcaption', 'aside', 'time',
-        'figure', 'nav', 'select', 'noscript', 'iframe', 'map',
-        'colgroup', 'st1:country-region', 'v:shapetype', 'v:shape',
-        'st1:metricconverter', 'fb:comments', 'g:plusone', 'fb:like',
-    ]
-
-    for unwanted_tag in unwanted_tags:
-        yield check_unwanted_tag, unwanted_tag
-
-
-def check_unwanted_tag(unwanted_tag):
+@parameterized([
+    'address', 'script', 'style', 'area', 'object', 'meta',
+    'hr', 'nf', 'mb', 'ms',
+    'img', 'cite', 'embed', 'footer', 'figcaption', 'aside', 'time',
+    'figure', 'nav', 'select', 'noscript', 'iframe', 'map',
+    'colgroup', 'st1:country-region', 'v:shapetype', 'v:shape',
+    'st1:metricconverter', 'fb:comments', 'g:plusone', 'fb:like',
+])
+def test_unwanted_tag(unwanted_tag):
     got = converter.HTMLContentConverter().convert2xhtml(
         '<html><body><p>p1</p><%s/><p>p2</p2></body>'
         '</html>' % unwanted_tag)
@@ -1430,9 +1425,11 @@ class TestHTMLContentConverter(XMLTester):
 
 class TestHTMLConverter(XMLTester):
 
-    def test_convert2intermediate_with_bare_text_after_p(self):
-        filename = 'orig/sme/admin/ugga.html'
-        content = '''
+    @parameterized.expand([
+        (
+            'bare_text_after_p',
+            'orig/sme/admin/ugga.html',
+            '''
             <html lang="no" dir="ltr">
                 <head>
                     <title>
@@ -1460,8 +1457,8 @@ class TestHTMLConverter(XMLTester):
                     </div>
                 </body>
             </html>
-        '''
-        want = '''
+            ''',
+            '''
             <document>
                 <header>
                     <title>Visit Stetind: Histåvrrå: Nasjonálvárre</title>
@@ -1471,20 +1468,12 @@ class TestHTMLConverter(XMLTester):
                     <p>Gå ÅN</p>
                 </body>
             </document>
-        '''
-
-        with testfixtures.TempDirectory() as temp_dir:
-            temp_dir.write(filename, content)
-            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
-                                                       filename))
-
-            got = hcc.convert2intermediate()
-
-            self.assertXmlEqual(got, etree.fromstring(want))
-
-    def test_convert2intermediate_with_bare_text_after_list(self):
-        filename = 'orig/sme/admin/ugga.html'
-        content = '''
+            '''
+        ),
+        (
+            'bare_text_after_list',
+            'orig/sme/admin/ugga.html',
+            '''
             <html lang="no" dir="ltr">
                 <body>
                     <UL>
@@ -1496,8 +1485,8 @@ class TestHTMLConverter(XMLTester):
                     </SMALL></CENTER>
                 </body>
             </html>
-        '''  # nopep8
-        want = '''
+            ''',  # nopep8
+            '''
             <document>
                 <header>
                     <title/>
@@ -1510,20 +1499,12 @@ class TestHTMLConverter(XMLTester):
                     <p>Fylkesmannen i Nordland © 2005</p>
                 </body>
             </document>
-        '''
-
-        with testfixtures.TempDirectory() as temp_dir:
-            temp_dir.write(filename, content)
-            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
-                                                       filename))
-
-            got = hcc.convert2intermediate()
-
-            self.assertXmlEqual(got, etree.fromstring(want))
-
-    def test_convert2intermediate_with_body_bare_text(self):
-        filename = 'orig/sme/admin/ugga.html'
-        content = '''
+            '''
+        ),
+        (
+            'body_bare_text',
+            'orig/sme/admin/ugga.html',
+            '''
             <html lang="no" dir="ltr">
                 <head>
                     <title>
@@ -1550,8 +1531,8 @@ class TestHTMLConverter(XMLTester):
                     </div>
                 </body>
             </html>
-        '''
-        want = '''
+            ''',
+            '''
             <document>
                 <header>
                     <title>Visit Stetind: Histåvrrå: Nasjonálvárre</title>
@@ -1560,13 +1541,14 @@ class TestHTMLConverter(XMLTester):
                     <p>Gå ÅN</p>
                 </body>
             </document>
-        '''
+            '''
+        )
+    ])
+    def test_convert2intermediate(self, testname, filename, content, want):
 
         with testfixtures.TempDirectory() as temp_dir:
             temp_dir.write(filename, content)
-            hcc = converter.HTMLConverter(os.path.join(temp_dir.path,
-                                                       filename))
-
+            hcc = converter.HTMLConverter(os.path.join(temp_dir.path, filename))
             got = hcc.convert2intermediate()
 
             self.assertXmlEqual(got, etree.fromstring(want))
