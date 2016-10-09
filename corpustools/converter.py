@@ -35,9 +35,8 @@ import sys
 from copy import deepcopy
 
 import six
-from lxml import etree
-from lxml import html
-from lxml.html import html5parser, clean
+from lxml import etree, html
+from lxml.html import clean, html5parser
 from odf.odf2xhtml import ODF2XHTML
 from pydocx.export import PyDocXHTMLExporter
 from pyth.plugins.rtf15.reader import Rtf15Reader
