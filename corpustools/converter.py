@@ -36,7 +36,8 @@ from copy import deepcopy
 
 import six
 from lxml import etree
-from lxml.html import clean, html5parser
+from lxml import html
+from lxml.html import html5parser, clean
 from odf.odf2xhtml import ODF2XHTML
 from pydocx.export import PyDocXHTMLExporter
 from pyth.plugins.rtf15.reader import Rtf15Reader
@@ -2339,13 +2340,19 @@ class HTMLConverter(Converter):
         """
         try:
             tree = etree.parse(self.names.orig)
+            return etree.tostring(tree.getroot())
         except etree.XMLSyntaxError:
-            parser = etree.HTMLParser()
-            tree = etree.parse(self.names.orig, parser)
+            for encoding in ['utf-8', 'windows-1252', 'latin1']:
+                try:
+                    with codecs.open(self.names.orig, encoding=encoding) as f:
+                        return etree.tostring(html.document_fromstring(
+                            self.remove_declared_encoding(f.read())))
+                except UnicodeDecodeError:
+                    pass
 
-        return etree.tostring(tree.getroot())
+        raise ConversionException('HTML error'.format(self.names.orig))
 
-    def remove_declared_encoding(self):
+    def remove_declared_encoding(self, content):
         """Remove declared decoding.
 
         lxml explodes if we send a decoded Unicode string with an
@@ -2359,9 +2366,10 @@ class HTMLConverter(Converter):
             a string where the declared decoding is removed.
         """
         xml_encoding_declaration_re = re.compile(
-            r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*", re.IGNORECASE)
+            r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*",
+            re.IGNORECASE)
 
-        return re.sub(xml_encoding_declaration_re, "", self.content)
+        return re.sub(xml_encoding_declaration_re, "", content)
 
     def convert2xhtml(self):
         """Convert html document to a cleaned up xhtml document.
@@ -2369,8 +2377,6 @@ class HTMLConverter(Converter):
         Returns:
             a cleaned up xhtml document as an etree element.
         """
-        self.remove_declared_encoding()
-
         converter = HTMLContentConverter()
         return converter.convert2xhtml(self.content)
 

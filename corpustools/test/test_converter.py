@@ -1553,6 +1553,38 @@ class TestHTMLConverter(XMLTester):
 
             self.assertXmlEqual(got, etree.fromstring(want))
 
+    def test_content(self):
+        """Check that content really is real utf-8."""
+        content = u'''
+            <!DOCTYPE html>
+            <html lang="sma-NO">
+                <head>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                </head>
+                <body>
+                    <h1>ï å</h1>
+                </body>
+            </html>
+        '''.encode(encoding='utf-8')
+        want = u'''
+            <html lang="sma-NO">
+                <head>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                </head>
+                <body>
+                    <h1>&#239; &#229;</h1>
+                </body>
+            </html>
+        '''
+        filename = 'orig/sme/admin/ugga.html'
+        with testfixtures.TempDirectory() as temp_dir:
+            temp_dir.write(filename, content)
+            hcc = converter.HTMLConverter(os.path.join(temp_dir.path, filename))
+            got = hcc.content
+
+            assertXmlEqual(html5parser.fromstring(got),
+                           html5parser.fromstring(want))
+
 
 class TestRTFConverter(XMLTester):
 
