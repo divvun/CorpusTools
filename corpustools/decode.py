@@ -287,7 +287,7 @@ class EncodingGuesser(object):
             winner = u"mix-mac-sami-and-some-unknown-encoding"
         elif u'³' in content and u'¢' in content and u'¤' in content:
             winner = u"iso-ir-197_to_cp1252"
-        elif u'á' in content and u'ª' in content:
+        elif u'á' in content and (u'ª' in content or u'∫' in content):
             winner = u"mac-sami_to_mac"
         elif u'ó' in content and u'ç' in content and u'ð' in content:
             winner = u"winsam_to_cp1252"
