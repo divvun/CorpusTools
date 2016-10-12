@@ -2313,7 +2313,7 @@ class HTMLContentConverter(object):
         c_content = self.remove_cruft(content)
 
         self.soup = html5parser.document_fromstring(
-            self.superclean(c_content))
+            self.superclean(c_content).encode('utf-8'))
         self.remove_empty_class()
         self.remove_empty_p()
         self.remove_elements()
