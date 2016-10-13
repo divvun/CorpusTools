@@ -2292,6 +2292,47 @@ class HTMLContentConverter(object):
                 bi_parent.insert(bi_parent.index(bi), p)
                 p.append(bi)
 
+    @staticmethod
+    def font_text(font_elt):
+        """Get the text of font_elt.
+
+        Args:
+            font_elt (etree.Element): a font element.
+        Yields:
+            str: strings of the font element.
+        """
+        if font_elt.text is not None:
+            yield font_elt.text
+        if font_elt.tail is not None:
+            yield font_elt.tail
+
+    def convert_font_text(self, font_parent, font_elt):
+        """Integrate the font strings into the parent element.
+
+        Args:
+            font_parent (etree.Element): parent of the font_elt.
+            font_elt (etree.Element): a font element.
+        """
+        alltext = [text for text in self.font_text(font_elt)]
+        font_index = font_parent.index(font_elt)
+
+        if font_index > 0:
+            previous_element = font_parent[font_index - 1]
+            if previous_element.tail is not None:
+                alltext.insert(0, previous_element.tail)
+            previous_element.tail = ''.join(alltext)
+        else:
+            if font_parent.text is not None:
+                alltext.insert(0, font_parent.text)
+            font_parent.text = ''.join(alltext)
+
+    def remove_font(self):
+        """Remove font elements, leaving the text only."""
+        for font_elt in reversed(list(self.soup.iter('{*}font'))):
+            font_parent = font_elt.getparent()
+            self.convert_font_text(font_parent, font_elt)
+            font_parent.remove(font_elt)
+
     def body_text(self):
         """Wrap bare text inside a p element."""
         body = self.soup.find(
@@ -2317,6 +2358,7 @@ class HTMLContentConverter(object):
         self.remove_empty_class()
         self.remove_empty_p()
         self.remove_elements()
+        self.remove_font()
         self.add_p_around_text()
         self.center2div()
         self.body_i()
@@ -2377,6 +2419,7 @@ class HTMLConverter(Converter):
             a cleaned up xhtml document as an etree element.
         """
         converter = HTMLContentConverter()
+
         return converter.convert2xhtml(self.content)
 
     @staticmethod
