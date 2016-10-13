@@ -34,6 +34,7 @@ import re
 import sys
 from copy import deepcopy
 
+import epub
 import six
 from lxml import etree, html
 from lxml.html import clean, html5parser
@@ -42,7 +43,6 @@ from pydocx.export import PyDocXHTMLExporter
 from pyth.plugins.rtf15.reader import Rtf15Reader
 from pyth.plugins.xhtml.writer import XHTMLWriter
 
-import epub
 from corpustools import (argparse_version, ccat, corpuspath, decode,
                          errormarkup, text_cat, util, xslsetter)
 
