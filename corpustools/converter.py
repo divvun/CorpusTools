@@ -339,7 +339,7 @@ class Converter(object):
 
 
 class AvvirConverter(Converter):
-    """Convert Ávvir xml files to the giellatekno xml format.
+    u"""Convert Ávvir xml files to the giellatekno xml format.
 
     The root node in an Ávvir document is article.
     article nodes contains one or more story nodes.
@@ -348,7 +348,7 @@ class AvvirConverter(Converter):
     """
 
     def convert2intermediate(self):
-        """Convert an Ávvir xml to an intermediate xml document."""
+        u"""Convert an Ávvir xml to an intermediate xml document."""
         self.intermediate = etree.parse(self.names.orig).getroot()
         self.convert_p()
         self.convert_story()
@@ -465,7 +465,7 @@ class AvvirConverter(Converter):
             parent.remove(story)
 
     def convert_article(self):
-        """The root element of an Ávvir doc is article, rename it to body."""
+        u"""The root element of an Ávvir doc is article, rename it to body."""
         self.intermediate.tag = 'body'
         document = etree.Element('document')
         document.append(self.intermediate)
@@ -1153,14 +1153,14 @@ class PDFTextExtractor(object):
         return self.p.xpath("string()")
 
     def handle_line_ending(self):
-        r"""Add a soft hyphen or a space at the end of self.p.
+        ur"""Add a soft hyphen or a space at the end of self.p.
 
         If - is followed by a space, do not replace it by a soft hyphen
         Sometimes this should be replaced by a soft hyphen, other times not.
         Examples of when not to replace it:
-        katt-\space\n
+        katt- \n
         og hundehold
-        giella-\space
+        giella- \n
         ja guovlodepartemeanta
 
         Examples of when to replace it:
@@ -1906,7 +1906,7 @@ class HTMLContentConverter(object):
         return util.replace_all(replacements, content)
 
     def simplify_tags(self):
-        """Turn tags to divs.
+        u"""Turn tags to divs.
 
         We don't care about the difference between <fieldsets>, <legend>
         etc. – treat them all as <div>'s for xhtml2corpus
@@ -2727,7 +2727,7 @@ class DocConverter(HTMLConverter):
             return self.extract_text(command).decode('windows-1252')
 
     def fix_wv_output(self):
-        """Fix headers in the docx xhtml output.
+        u"""Fix headers in the docx xhtml output.
 
         Examples of headings:
 
