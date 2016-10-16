@@ -1242,7 +1242,7 @@ class PDFTextExtractor(object):
                 self.p.set('type', 'listitem')
             self.extract_text_from_paragraph(paragraph)
 
-        if len(self.last_string) == 0:
+        if not self.last_string:
             self.body.remove(self.p)
 
 
