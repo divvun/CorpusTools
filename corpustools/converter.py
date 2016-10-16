@@ -1148,12 +1148,13 @@ class PDFTextExtractor(object):
             else:
                 self.p.append(em)
 
-    def get_last_string(self):
+    @property
+    def last_string(self):
         """Get the plain text of the last paragraph of body."""
         return self.p.xpath("string()")
 
     def handle_line_ending(self):
-        ur"""Add a soft hyphen or a space at the end of self.p.
+        r"""Add a soft hyphen or a space at the end of self.p.
 
         If - is followed by a space, do not replace it by a soft hyphen
         Sometimes this should be replaced by a soft hyphen, other times not.
@@ -1171,7 +1172,7 @@ class PDFTextExtractor(object):
 
         The tech to be able to replace it is not accessible at this stage.
         """
-        if re.search('\S-$', self.get_last_string()):
+        if re.search('\S-$', self.last_string):
             if not len(self.p):
                 self.p.text = self.p.text[:-1] + u'\xAD'
             else:
@@ -1180,8 +1181,8 @@ class PDFTextExtractor(object):
                     last.text = last.text[:-1] + u'\xAD'
                 else:
                     last.tail = last.tail[:-1] + u'\xAD'
-        elif self.get_last_string() and not re.search(u'[\s\xAD]$',
-                                                      self.get_last_string()):
+        elif self.last_string and not re.search(u'[\s\xAD]$',
+                                                      self.last_string):
             self.extract_textelement(etree.fromstring('<text> </text>'))
 
     def is_first_page(self):
@@ -1190,7 +1191,7 @@ class PDFTextExtractor(object):
         Returns:
             A boolean indicating if this is the first page.
         """
-        return len(self.body) == 1 and not self.get_last_string()
+        return len(self.body) == 1 and not self.last_string
 
     def is_last_paragraph_end_of_page(self):
         """Find out if the last paragraph is at the end of the page.
@@ -1198,8 +1199,8 @@ class PDFTextExtractor(object):
         Returns:
             A boolean indicating if this is the last paragraph of the page.
         """
-        return (self.get_last_string() and
-                re.search(u'[.?!]\s*$', self.get_last_string()))
+        return (self.last_string and
+                re.search(u'[.?!]\s*$', self.last_string))
 
     def is_new_page(self, paragraph):
         """Check if the paragraph is the start of a new page.
@@ -1241,7 +1242,7 @@ class PDFTextExtractor(object):
                 self.p.set('type', 'listitem')
             self.extract_text_from_paragraph(paragraph)
 
-        if len(self.get_last_string()) == 0:
+        if len(self.last_string) == 0:
             self.body.remove(self.p)
 
 
