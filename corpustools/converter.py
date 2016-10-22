@@ -3438,7 +3438,7 @@ class XslMaker(object):
 
             raise ConversionException(
                 '{}: Syntax error. More info in {}'.format(type(self).__name__,
-                                                           self.names.log))
+                                                           self.logfile))
 
         preprocessXsl = etree.parse(
             os.path.join(here, 'xslt/preprocxsl.xsl'))
@@ -3473,7 +3473,7 @@ class XslMaker(object):
 
             raise ConversionException(
                 '{}: Invalid XML in {}. More info in {}'.format(
-                    type(self).__name__, self.filename, self.names.log))
+                    type(self).__name__, self.filename, self.logfile))
 
 
 class LanguageDetector(object):

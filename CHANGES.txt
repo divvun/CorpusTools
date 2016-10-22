@@ -78,3 +78,4 @@ v<0.15.7>, <20161001> -- Sámi character encoding guessing must be done on the i
 v<0.15.8>, <20161009> -- Fix bug 2223, problemer med konvertering av sørsamiske dokumenter (which also affected quite a lot of other documents).
 v<0.15.9>, <20161012> -- Some converted smj docs contained ∫, that should have been ŋ. Turned out they used the mac-sami encoding internally. Fixed the decoding detection to cover these cases, too.
 v<0.15.10>, <20161013> -- Fix parts of bug 1938, space in front of the letter ŋ. Font elements in html are removed, leaving only the text of these elements.
+v<0.15.11>, <20161022> -- Fix error message which crashed convert2xml
