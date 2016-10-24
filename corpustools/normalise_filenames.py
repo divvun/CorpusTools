@@ -25,6 +25,7 @@ from __future__ import absolute_import, print_function
 
 import argparse
 import os
+import six
 
 from corpustools import argparse_version, namechanger
 
@@ -40,6 +41,10 @@ def normalise(target_dir):
         for f in files:
             if not f.endswith('.xsl'):
                 try:
+                    orig_path = os.path.join(root, f)
+                    if six.PY2:
+                        orig_path = unicode(orig_path, 'utf8')
+
                     cfmu = namechanger.CorpusFilesetMoverAndUpdater(
                         os.path.join(root, f),
                         os.path.join(root, f))

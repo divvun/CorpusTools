@@ -25,6 +25,7 @@ from __future__ import absolute_import, print_function
 
 import argparse
 import os
+import six
 import sys
 
 from corpustools import argparse_version, namechanger
@@ -84,8 +85,10 @@ def main():
         print('{} and {} are the same file'.format(
             args.oldpath, args.newpath), file=sys.stderr)
     else:
+        oldpath = unicode(args.oldpath, 'utf8') if six.PY2 else args.oldpath
+        newpath = unicode(args.newpath, 'utf8') if six.PY2 else args.newpath
         try:
-            mover(args.oldpath, args.newpath)
+            mover(oldpath, newpath)
         except UserWarning as e:
             print('Can not move file:', str(e), file=sys.stderr)
 
