@@ -29,26 +29,28 @@ import os
 from corpustools import argparse_version, namechanger
 
 
-def normaliser():
-    """Normalise the filenames in the corpuses."""
-    for corpus in [os.getenv('GTFREE'), os.getenv('GTBOUND')]:
-        print(('Normalising names in {}'.format(corpus)))
-        for root, dirs, files in os.walk(os.path.join(corpus, 'orig')):
-            print(('\t' + root.replace(corpus, '')))
-            for f in files:
-                if not f.endswith('.xsl'):
-                    try:
-                        cfmu = namechanger.CorpusFilesetMoverAndUpdater(
-                            os.path.join(root, f),
-                            os.path.join(root, f))
-                        filepair = cfmu.mc.filepairs[0]
-                        print(('\t\tmove {} -> {}'.format(
-                            filepair.oldpath, filepair.newpath)))
-                        cfmu.move_files()
-                        cfmu.update_own_metadata()
-                        cfmu.update_parallel_files_metadata()
-                    except UserWarning:
-                        pass
+def normalise(target_dir):
+    """Normalise the filenames in the corpuses.
+
+    Args:
+        target_dir (str): directory where filenames should be normalised
+    """
+    print(('Normalising names in {}'.format(target_dir)))
+    for root, dirs, files in os.walk(os.path.join(target_dir)):
+        for f in files:
+            if not f.endswith('.xsl'):
+                try:
+                    cfmu = namechanger.CorpusFilesetMoverAndUpdater(
+                        os.path.join(root, f),
+                        os.path.join(root, f))
+                    filepair = cfmu.mc.filepairs[0]
+                    print(('\t\tmove {} -> {}'.format(
+                        filepair.oldpath, filepair.newpath)))
+                    cfmu.move_files()
+                    cfmu.update_own_metadata()
+                    cfmu.update_parallel_files_metadata()
+                except UserWarning:
+                    pass
 
 
 def normalise_parse_args():
@@ -59,15 +61,21 @@ def normalise_parse_args():
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Program to automatically normalise names in '
-        '$GTFREE and $GTBOUND. The filenames are downcases, non ascii '
-        'characters are replaced by ascii ones and some unwanted characters '
-        'are removed')
+        description='Program to normalise names in given directories. '
+        'The filenames are downcased, non ascii characters are replaced '
+        'by ascii ones and some unwanted characters are removed.')
+    parser.add_argument(
+        'target_dirs',
+        nargs='+',
+        help="The directory/ies where filenames should be normalised.")
 
-    parser.parse_args()
+
+    args = parser.parse_args()
+
+    return args
 
 
 def main():
     """Normalise filenames."""
-    normalise_parse_args()
-    normaliser()
+    for target_dir in normalise_parse_args().target_dirs:
+        normalise(target_dir)
