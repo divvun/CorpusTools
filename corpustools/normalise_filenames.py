@@ -46,11 +46,11 @@ def normalise(target_dir):
                         orig_path = unicode(orig_path, 'utf8')
 
                     cfmu = namechanger.CorpusFilesetMoverAndUpdater(
-                        os.path.join(root, f),
-                        os.path.join(root, f))
+                        orig_path,
+                        orig_path)
                     filepair = cfmu.mc.filepairs[0]
-                    print(('\t\tmove {} -> {}'.format(
-                        filepair.oldpath, filepair.newpath)))
+                    print(u'\t\tmove {} -> {}'.format(
+                        filepair.oldpath, filepair.newpath))
                     cfmu.move_files()
                     cfmu.update_own_metadata()
                     cfmu.update_parallel_files_metadata()
