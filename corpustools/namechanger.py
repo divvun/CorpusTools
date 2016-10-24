@@ -129,6 +129,7 @@ class CorpusFileMover(object):
         self.vcs = versioncontrol.VersionControlFactory().vcs(
             self.old_components.root)
 
+
     def move_files(self):
         """Move all files that are under version control."""
         self.move_orig()
@@ -359,11 +360,19 @@ class CorpusFilesetMoverAndUpdater(object):
         oldpath (str): path to the file that should be renamed.
         newpath (str): path to the new name of the file.
         """
-        self.mc = MovepairComputer()
-        self.mc.compute_all_movepairs(oldpath, newpath)
         self.old_components = util.split_path(oldpath)
         self.vcs = versioncontrol.VersionControlFactory().vcs(
             self.old_components.root)
+
+        old_xsl = oldpath + '.xsl'
+        if not os.path.exists(old_xsl):
+            metadata = xslsetter.MetadataHandler(old_xsl, create=True)
+            metadata.set_lang_genre_xsl()
+            metadata.write_file()
+            self.vcs.add(old_xsl)
+
+        self.mc = MovepairComputer()
+        self.mc.compute_all_movepairs(oldpath, newpath)
 
     def move_files(self):
         """Move all files under version control that belong to the original."""
