@@ -712,11 +712,13 @@ class TestTca2ToTmx(unittest.TestCase):
 
     def test_make_tmx_header(self):
         lang = 'smi'
-        got_tuv = self.tmx.make_tmx_header(lang)
+        got_tuv = self.tmx.make_tmx_header('filename.tmx', lang)
 
         want_tuv = etree.XML(
             '<header segtype="sentence" o-tmf="OmegaT TMX" adminlang="en-US" '
-            'srclang="smi" datatype="plaintext"/>')
+            'srclang="smi" datatype="plaintext">'
+            '<prop type="x-filename">filename.tmx</prop>'
+            '</header>')
 
         self.assertXmlEqual(got_tuv, want_tuv)
 
@@ -732,5 +734,5 @@ class TestTca2ToTmx(unittest.TestCase):
             self.para.get_outfile_name(),
             os.path.join(
                 here, "parallelize_data",
-                "prestable/toktmx/nob2sme/facta/skuvlahistorja2",
-                "aarseth2-n.htm.toktmx"))
+                "prestable/tmx/nob2sme/facta/skuvlahistorja2",
+                "aarseth2-n.htm.tmx"))

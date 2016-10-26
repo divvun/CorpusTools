@@ -471,14 +471,14 @@ class Parallelize(object):
         """Compute the name of the final tmx file."""
         orig_path_part = '/converted/{}/'.format(self.origfiles[0].get_lang())
         # First compute the part that shall replace /orig/ in the path
-        replace_path_part = '/toktmx/{}2{}/'.format(
+        replace_path_part = '/tmx/{}2{}/'.format(
             self.origfiles[0].get_lang(),
             self.origfiles[1].get_lang())
         # Then set the outdir
         out_dirname = self.origfiles[0].get_dirname().replace(
             orig_path_part, replace_path_part)
         # Replace xml with tmx in the filename
-        out_filename = self.origfiles[0].get_basename_noext() + '.toktmx'
+        out_filename = self.origfiles[0].get_basename_noext() + '.tmx'
 
         return os.path.join(out_dirname, out_filename)
 
@@ -790,7 +790,7 @@ class Tmx(object):
         Remove those spaces so that the tmxes are more appropriate for real
         world™ use cases.
         """
-        root = self.get_tmx().getroot()
+        root = self.tmx
         for tu in root.iter("tu"):
             tu = self.remove_unwanted_space_from_segs(tu)
 
@@ -862,7 +862,7 @@ class Tmx(object):
 
     def remove_tu_with_empty_seg(self):
         """Remove tu elements that contain empty seg element."""
-        root = self.get_tmx().getroot()
+        root = self.tmx
         for tu in root.iter("tu"):
             try:
                 self.check_if_emtpy_seg(tu)
@@ -891,6 +891,22 @@ class Tmx(object):
                     return False
 
         return True
+
+    def add_filename_id(self):
+        """Add the tmx filename as an prop element in the header."""
+        prop = etree.Element('prop')
+        prop.attrib['type'] = 'x-filename'
+        prop.text = os.path.basename(self.tmxfile_name).decode('utf-8')
+
+        root = self.get_tmx().getroot()
+
+        for header in root.iter('header'):
+            header.append(prop)
+
+    def clean_toktmx(self):
+        """Do the cleanup of the toktmx file."""
+        self.remove_unwanted_space()
+        self.remove_tu_with_empty_seg()
 
 
 class AlignmentToTmx(Tmx):
@@ -924,7 +940,15 @@ class AlignmentToTmx(Tmx):
 
         return tuv
 
-    def make_tmx_header(self, lang):
+    def add_filename_id(self, filename):
+        """Add the tmx filename as an prop element in the header."""
+        prop = etree.Element('prop')
+        prop.attrib['type'] = 'x-filename'
+        prop.text = os.path.basename(filename)
+
+        return prop
+
+    def make_tmx_header(self, filename, lang):
         """Make a tmx header based on the lang variable."""
         header = etree.Element("header")
 
@@ -935,12 +959,16 @@ class AlignmentToTmx(Tmx):
         header.attrib["srclang"] = lang
         header.attrib["datatype"] = "plaintext"
 
+        header.append(self.add_filename_id(filename))
+
         return header
 
     def make_tmx(self):
         """Make tmx file based on the output of the aligner."""
         tmx = etree.Element("tmx")
-        header = self.make_tmx_header(self.origfiles[0].get_lang())
+        header = self.make_tmx_header(
+            self.origfiles[0].get_basename(),
+            self.origfiles[0].get_lang())
         tmx.append(header)
 
         pfile1_data, pfile2_data = self.parse_alignment_results()
@@ -1045,7 +1073,7 @@ def parse_options():
                         help='Whether output of the parallelisation '
                         'should be written to stdout or a files. '
                         'Defaults to '
-                        'toktmx/{lang1}2{lang2}/{GENRE}/.../{BASENAME}.toktmx',
+                        'tmx/{lang1}2{lang2}/{GENRE}/.../{BASENAME}.tmx',
                         action="store_true")
     parser.add_argument('-f', '--force',
                         help="Overwrite output file if it already exists."
@@ -1103,12 +1131,12 @@ def parallelise_file(input_file, lang1, lang2, dict, quiet, aligner, stdout,
         outfile = '/dev/stdout' if stdout else parallelizer.get_outfile_name()
 
         if (outfile == "/dev/stdout" or not os.path.exists(outfile) or
-            (os.path.exists(outfile) and force)):
+                (os.path.exists(outfile) and force)):
             if not quiet:
                 util.note("Aligning {} and its parallel file".format(
                     input_file))
             tmx = parallelizer.parallelize_files()
-
+            tmx.clean_toktmx()
             if not quiet:
                 util.note("Generating the tmx file {}".format(outfile))
             tmx.write_tmx_file(outfile)

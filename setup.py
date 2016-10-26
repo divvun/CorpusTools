@@ -32,7 +32,6 @@ setup(
             'pick_sd_se = corpustools.pick_samediggi_se_docs:main',
             'pytextcat = corpustools.text_cat:main',
             'saami_crawler = corpustools.saami_crawler:main',
-            'toktmx2tmx = corpustools.toktmx2tmx:main',
             'duperemover = corpustools.dupe_finder:main',
             'dupefinder = corpustools.dupe_finder:find',
             'pick_parallel_docs = corpustools.pick_parallel_docs:main',
