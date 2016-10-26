@@ -1035,8 +1035,7 @@ def parse_options():
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Sentence align two files. Input is the document \
-        containing the main language, and language to parallelize it with.')
+        description='Sentence align file pairs.')
 
     parser.add_argument('sources',
                         nargs='+',
