@@ -1100,10 +1100,7 @@ def parallelise_file(input_file, lang1, lang2, dict, quiet, aligner, stdout,
 
     else:
 
-        if not stdout:
-            outfile = parallelizer.get_outfile_name()
-        else:
-            outfile = '/dev/stdout'
+        outfile = '/dev/stdout' if stdout else parallelizer.get_outfile_name()
 
         if (outfile == "/dev/stdout" or not os.path.exists(outfile) or
             (os.path.exists(outfile) and force)):
