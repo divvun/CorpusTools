@@ -43,6 +43,12 @@ LANGUAGEGUESSER = text_cat.Classifier(None)
 
 
 def clean_namespaces(elementlist):
+    """Remove namespaces from elements.
+
+    Args:
+        elementlist (list of etree.Element): elements where namespaces should
+            be removed
+    """
     for element in elementlist:
         tree = element.getroottree()
         root = tree.getroot()
