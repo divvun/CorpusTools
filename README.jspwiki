@@ -444,7 +444,7 @@ svn ci orig
 
 !!parallelize
 
-Parallelize two parallel corpus files, write the result to a .tmx file.
+Parallelize parallel corpus files, write the results to .tmx files.
 
 parallelize depends on various files from the Divvun/Giellatekno SVN,
 at least the following directories need to exist in $GTHOME:
@@ -474,7 +474,7 @@ do not have a dictionary, you can use "--dict=<(echo)" to provide an
 You can compile the abbr.txt file of langs/sme like this:
 
 {{{
-cd $GTHOME/langs/sme && ./configure --enable-abbr
+cd $GTHOME/langs/sme && ./configure --enable-abbr && make
 }}}
 
 You should compile at least the sme abbr.txt file, this one is used as
@@ -485,21 +485,22 @@ on parallelising with.
 
 The complete help text from the program is as follows:
 {{{
-usage: parallelize [-h] [-v] [-f] [-q] [-a {hunalign,tca2}] [-d DICT] -p
-                   PARALLEL_LANGUAGE
-                   input_file [output_file]
+usage: parallelize [-h] [--version] [-s] [-f] [-q] [-a {hunalign,tca2}]
+                   [-d DICT] -l1 LANG1 -l2 LANG2
+                   sources [sources ...]
 
-Sentence align two files. Input is the document containing the main language,
-and language to parallelize it with.
+Sentence align file pairs.
 
 positional arguments:
-  input_file            The input filename
-  output_file           Optionally an output filename. Defaults to
-                        toktmx/{LANGA}2{LANGB}/{GENRE}/.../{BASENAME}.toktmx
+  sources               Files or directories to search for parallelisable
+                        files
 
 optional arguments:
   -h, --help            show this help message and exit
-  -v, --version         show program's version number and exit
+  --version             show program's version number and exit
+  -s, --stdout          Whether output of the parallelisation should be
+                        written to stdout or a files. Defaults to
+                        tmx/{lang1}2{lang2}/{GENRE}/.../{BASENAME}.tmx
   -f, --force           Overwrite output file if it already exists.The default
                         is to skip parallelizing existing files.
   -q, --quiet           Don't mention anything out of the ordinary.
@@ -511,31 +512,31 @@ optional arguments:
                         default, $GTHOME/gt/common/src/anchor.txt is used, but
                         this file only supports pairings between
                         sme/sma/smj/fin/eng/nob.
-  -p PARALLEL_LANGUAGE, --parallel_language PARALLEL_LANGUAGE
-                        The language to parallelize the input document with
-
+  -l1 LANG1, --lang1 LANG1
+                        The first language of a pair where parallelisation
+                        should be done.
+  -l2 LANG2, --lang2 LANG2
+                        The second language of a pair where parallelisation
+                        should be done.
 }}}
 
 
 You run the program on the files created by convert2xml, e.g.
 {{{
-parallelize -p nob converted/sma/admin/ntfk/tsaekeme.html.xml
+parallelize -l1 nob -l2 sma converted/sma/admin/ntfk/tsaekeme.html.xml
 }}}
 This will create a file named
-toktmx/sma2nob/admin/ntfk/tsaekeme.html.toktmx
+tmx/sma2nob/admin/ntfk/tsaekeme.html.tmx
 
 If you want to parallelize all your sma files with nob in one go, you
 can do e.g.
 {{{
 convert2xml orig/{sma,nob}
-find converted/sma/ -name '*.xml' -print0 | xargs -0 -n1 -P3 parallelize -p nob
+parallelize -l1 nob -l2 sma orig/sma
 }}}
 
-(The -P3 means "run up to 3 processes at a time", this speeds things
-up since most computer these days have several processor cores.)
-
 The files will end up in corresponding directories under
-toktmx/sma2nob.
+tmx/sma2nob.
 
 If you get a message like
 
