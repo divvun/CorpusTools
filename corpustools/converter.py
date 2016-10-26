@@ -28,6 +28,7 @@ import collections
 import distutils.dep_util
 import distutils.spawn
 import io
+import logging
 import multiprocessing
 import os
 import re
@@ -47,6 +48,10 @@ from corpustools import (argparse_version, ccat, corpuspath, decode,
                          errormarkup, text_cat, util, xslsetter)
 
 here = os.path.dirname(__file__)
+
+
+logging.basicConfig(level=logging.CRITICAL)
+logger = logging.getLogger(__name__)
 
 
 class ConversionException(Exception):
@@ -221,7 +226,7 @@ class Converter(object):
         badhex = badstring.encode('hex')
         repl = self.mixed_to_unicode.get(badhex, u'\ufffd')
         if repl == u'\ufffd':   # � unicode REPLACEMENT CHARACTER
-            print("Skipped bad byte \\x{}, seen in {}".format(
+            logger.warn("Skipped bad byte \\x{}, seen in {}".format(
                 badhex, self.names.orig))
         return repl, (decode_error.start + len(repl))
 
@@ -277,7 +282,7 @@ class Converter(object):
                                                        encoding='utf8',
                                                        pretty_print='True'))
                 else:
-                    print(self.names.orig, "has no text", file=sys.stderr)
+                    logger.error(self.names.orig, "has no text")
 
     @property
     def tmpdir(self):
@@ -3590,9 +3595,8 @@ class ConverterManager(object):
             conv = self.converter(orig_file)
             conv.write_complete(self.LANGUAGEGUESSER)
         except ConversionException as e:
-            print('Could not convert {}'.format(orig_file),
-                  file=sys.stderr)
-            print(six.text_type(e), file=sys.stderr)
+            logger.warn('Could not convert {}\n{}'.format(orig_file,
+                                                          six.text_type(e)))
 
     def converter(self, orig_file):
         """Return correct converter class based on the orig file name.
@@ -3654,7 +3658,7 @@ class ConverterManager(object):
 
     def convert_in_parallel(self):
         """Convert files using the multiprocessing module."""
-        print('Starting the conversion of {} files'.format(len(self.FILES)))
+        logger.info('Starting the conversion of {} files'.format(len(self.FILES)))
 
         pool_size = multiprocessing.cpu_count()
         pool = multiprocessing.Pool(processes=pool_size,)
@@ -3665,10 +3669,10 @@ class ConverterManager(object):
 
     def convert_serially(self):
         """Convert the files in one process."""
-        print('Starting the conversion of {} files'.format(len(self.FILES)))
+        logger.info('Starting the conversion of {} files'.format(len(self.FILES)))
 
         for orig_file in self.FILES:
-            print('converting', orig_file, file=sys.stderr)
+            logger.debug('converting', orig_file)
             self.convert(orig_file)
 
     def add_file(self, xsl_file):
@@ -3682,7 +3686,7 @@ class ConverterManager(object):
                      self.goldstandard)):
                 self.FILES.append(xsl_file[:-4])
         else:
-            print('{} does not exist'.format(xsl_file[:-4]), file=sys.stderr)
+            logger.warn('{} does not exist'.format(xsl_file[:-4]))
 
     @staticmethod
     def make_xsl_file(source):
@@ -3709,7 +3713,7 @@ class ConverterManager(object):
             sources: a list of files or directories where convertable
             files are found.
         """
-        print('Collecting files to convert')
+        logger.info('Collecting files to convert')
 
         for source in sources:
             if os.path.isfile(source):
@@ -3718,9 +3722,9 @@ class ConverterManager(object):
             elif os.path.isdir(source):
                 self.add_directory(source)
             else:
-                print('Can not process {}'.format(source), file=sys.stderr)
-                print('This is neither a file nor a directory.',
-                      file=sys.stderr)
+                logger.error(
+                    'Can not process {}\n'
+                    'This is neither a file nor a directory.'.format(source))
 
 
 def unwrap_self_convert(arg, **kwarg):
