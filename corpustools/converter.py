@@ -2289,7 +2289,7 @@ class HTMLContentConverter(object):
 
     def body_i(self):
         """Wrap bare elements inside a p element."""
-        for tag in ['a', 'i', 'em', 'font', 'u', 'strong', 'span']:
+        for tag in ['a', 'i', 'em', 'u', 'strong', 'span']:
             for bi in self.soup.xpath(
                     './/html:body/html:{}'.format(tag),
                     namespaces={'html': 'http://www.w3.org/1999/xhtml'}):

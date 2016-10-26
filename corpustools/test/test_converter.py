@@ -1442,7 +1442,7 @@ class TestHTMLContentConverter(XMLTester):
             '<html><body><font>b</font></body></html>')
 
         want = html5parser.document_fromstring(
-            '<html><head/><body><p><font>b</font></p></body></html>')
+            '<html><head/><body><p>b</p></body></html>')
 
         clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
