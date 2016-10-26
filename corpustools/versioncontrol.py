@@ -31,7 +31,7 @@ import git
 import pysvn
 
 
-class VersionControlException(Exception):
+class VersionControlError(Exception):
     """Raise this exception when errors arise in this module."""
 
     pass
@@ -137,7 +137,7 @@ class VersionControlFactory(object):
                 r = git.Repo(directory)
                 return GIT(r)
             except git.exc.InvalidGitRepositoryError:
-                raise VersionControlException(
+                raise VersionControlError(
                     '{} is neither a SVN working repository or a Git repo. '
                     'Files can only be added to a version controlled '
                     'directory.'.format(directory))

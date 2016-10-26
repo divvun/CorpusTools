@@ -36,7 +36,7 @@ from corpustools import (argparse_version, namechanger, util, versioncontrol,
                          xslsetter)
 
 
-class AdderException(Exception):
+class AdderError(Exception):
     """Raise this exception when errors happen in this module."""
 
     pass
@@ -113,11 +113,11 @@ class UrlDownloader(object):
 
                 return (r, tmpname)
             else:
-                raise AdderException('ERROR:', url, 'does not exist')
+                raise AdderError('ERROR:', url, 'does not exist')
         except requests.exceptions.MissingSchema as e:
-            raise AdderException(str(e))
+            raise AdderError(str(e))
         except requests.exceptions.ConnectionError as e:
-            raise AdderException(str(e))
+            raise AdderError(str(e))
 
 
 class AddToCorpus(object):
@@ -133,12 +133,12 @@ class AddToCorpus(object):
             should be added
         """
         if not os.path.isdir(corpusdir):
-            raise AdderException('The given corpus directory, {}, '
+            raise AdderError('The given corpus directory, {}, '
                                  'does not exist.'.format(corpusdir))
 
         if (len(mainlang) != 3 or mainlang != mainlang.lower() or
                 mainlang != namechanger.normalise_filename(mainlang)):
-            raise AdderException(
+            raise AdderError(
                 'Invalid mainlang: {}. '
                 'It must consist of three lowercase ascii '
                 'letters'.format(mainlang))
@@ -221,7 +221,7 @@ class AddToCorpus(object):
             parallelpath: (string) path of the parallel file
         """
         if not os.path.exists(parallelpath):
-            raise AdderException('{} does not exist'.format(
+            raise AdderError('{} does not exist'.format(
                 parallelpath))
 
         parallel_metadata = xslsetter.MetadataHandler(
@@ -296,7 +296,7 @@ class AddToCorpus(object):
                     print('\t{}'.format(subresult))
                 print('___')
 
-            raise AdderException('Found duplicates')
+            raise AdderError('Found duplicates')
 
     def add_files_to_working_copy(self):
         """Add the downloaded files to the working copy."""

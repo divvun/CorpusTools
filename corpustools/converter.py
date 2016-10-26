@@ -54,7 +54,7 @@ logging.basicConfig(level=logging.CRITICAL)
 logger = logging.getLogger(__name__)
 
 
-class ConversionException(Exception):
+class ConversionError(Exception):
     """Raise this exception when an error occurs in the converter module."""
 
     pass
@@ -78,8 +78,8 @@ class Converter(object):
         self.write_intermediate = write_intermediate
         try:
             self.md = xslsetter.MetadataHandler(self.names.xsl, create=True)
-        except xslsetter.XsltException as e:
-            raise ConversionException(e)
+        except xslsetter.XsltError as e:
+            raise ConversionError(e)
 
         self.md.set_lang_genre_xsl()
         with util.ignored(OSError):
@@ -124,7 +124,7 @@ class Converter(object):
                     logfile.write('\n')
                 util.print_element(complete, 0, 4, logfile)
 
-            raise ConversionException(
+            raise ConversionError(
                 '{}: Not valid XML. More info in the log file: '
                 '{}'.format(type(self).__name__, self.names.log))
 
@@ -159,7 +159,7 @@ class Converter(object):
                     logfile.write(six.text_type(entry))
                     logfile.write('\n')
 
-            raise ConversionException("Check the syntax in: {}".format(
+            raise ConversionError("Check the syntax in: {}".format(
                 self.names.xsl))
 
     def convert_errormarkup(self, complete):
@@ -184,7 +184,7 @@ class Converter(object):
                                                  pretty_print=True))
                     logfile.write('\n')
 
-                raise ConversionException(
+                raise ConversionError(
                     u"Markup error. More info in the log file: {}".format(
                         self.names.log))
 
@@ -308,7 +308,7 @@ class Converter(object):
             with open(self.names.log, 'w') as logfile:
                 print('stdout\n{}\n'.format(runner.stdout), file=logfile)
                 print('stderr\n{}\n'.format(runner.stderr), file=logfile)
-                raise ConversionException(
+                raise ConversionError(
                     '{} failed. More info in the log file: {}'.format(
                         command[0], self.names.log))
 
@@ -339,7 +339,7 @@ class Converter(object):
             else:
                 logfile.write(invalid_input.encode('utf8'))
 
-        raise ConversionException(
+        raise ConversionError(
             "{}: log is found in {}".format(type(self).__name__, self.names.log))
 
 
@@ -1251,7 +1251,7 @@ class PDFTextExtractor(object):
             self.body.remove(self.p)
 
 
-class PDFEmptyPageException(Exception):
+class PDFEmptyPageError(Exception):
     """Raise this exception if a pdf page is empty."""
 
     pass
@@ -1545,7 +1545,7 @@ class PDFPage(object):
         self.remove_invalid_elements()
 
         if not self.textelements:
-            raise PDFEmptyPageException()
+            raise PDFEmptyPageError()
         else:
             ordered_sections = self.make_ordered_sections()
             return ordered_sections.paragraphs
@@ -1654,7 +1654,7 @@ class PDF2XMLConverter(Converter):
                           metadata_inner_margins=self.md.inner_margins)
         if not pdfpage.is_skip_page(self.md.skip_pages):
             pdfpage.fix_font_id(self.pdffontspecs)
-            with util.ignored(PDFEmptyPageException):
+            with util.ignored(PDFEmptyPageError):
                 self.extractor.extract_text_from_page(
                     pdfpage.pick_valid_text_elements())
 
@@ -1893,7 +1893,7 @@ class HTMLContentConverter(object):
         try:
             return cleaner.clean_html(content)
         except etree.ParserError as e:
-            raise ConversionException(six.text_type(e))
+            raise ConversionError(six.text_type(e))
 
     def remove_cruft(self, content):
         """Remove cruft from svenskakyrkan.se documents.
@@ -2397,7 +2397,7 @@ class HTMLConverter(Converter):
                 except UnicodeDecodeError:
                     pass
 
-        raise ConversionException('HTML error'.format(self.names.orig))
+        raise ConversionError('HTML error'.format(self.names.orig))
 
     def remove_declared_encoding(self, content):
         """Remove declared decoding.
@@ -2479,7 +2479,7 @@ class HTMLConverter(Converter):
                         entry.message.encode('utf8')))
                 util.print_element(self.soup, 0, 4, logfile)
 
-            raise ConversionException(
+            raise ConversionError(
                 'HTMLConverter: transformation failed.'
                 'More info in {}'.format(self.names.log))
 
@@ -2502,7 +2502,7 @@ class RTFConverter(HTMLConverter):
                 return six.text_type(XHTMLWriter.write(
                     pyth_doc, pretty=True).read(), encoding='utf8')
             except UnicodeDecodeError:
-                raise ConversionException('Unicode problems in {}'.format(
+                raise ConversionError('Unicode problems in {}'.format(
                     self.names.orig))
 
 
@@ -2522,7 +2522,7 @@ class OdfConverter(HTMLConverter):
         try:
             return odhandler.odf2xhtml(six.text_type(self.names.orig))
         except TypeError as e:
-            raise ConversionException('Error: {}'.format(e))
+            raise ConversionError('Error: {}'.format(e))
 
 
 class DocxConverter(HTMLConverter):
@@ -2586,7 +2586,7 @@ class EpubConverter(HTMLConverter):
         try:
             return etree.fromstring(chapter.read())
         except KeyError as e:
-            raise ConversionException(e)
+            raise ConversionError(e)
 
     def chapters(self):
         """Get the all linear chapters of the epub book.
@@ -3441,7 +3441,7 @@ class XslMaker(object):
                 for entry in e.error_log:
                     logfile.write('{}\n'.format(six.text_type(entry)))
 
-            raise ConversionException(
+            raise ConversionError(
                 '{}: Syntax error. More info in {}'.format(type(self).__name__,
                                                            self.logfile))
 
@@ -3476,7 +3476,7 @@ class XslMaker(object):
                 for entry in e.error_log:
                     logfile.write('{}\n'.format(six.text_type(entry)))
 
-            raise ConversionException(
+            raise ConversionError(
                 '{}: Invalid XML in {}. More info in {}'.format(
                     type(self).__name__, self.filename, self.logfile))
 
@@ -3594,7 +3594,7 @@ class ConverterManager(object):
         try:
             conv = self.converter(orig_file)
             conv.write_complete(self.LANGUAGEGUESSER)
-        except ConversionException as e:
+        except ConversionError as e:
             logger.warn('Could not convert {}\n{}'.format(orig_file,
                                                           six.text_type(e)))
 
@@ -3651,7 +3651,7 @@ class ConverterManager(object):
                 orig_file, write_intermediate=self.write_intermediate)
 
         else:
-            raise ConversionException(
+            raise ConversionError(
                 "Unknown file extension, not able to convert {} "
                 "\nHint: you may just have to rename the file".format(
                     orig_file))
@@ -3773,7 +3773,7 @@ def sanity_check():
     """Check that needed programs and environment variables are set."""
     util.sanity_check([u'wvHtml', u'pdftotext'])
     if not os.path.isfile(Converter.get_dtd_location()):
-        raise util.SetupException(
+        raise util.SetupError(
             "Couldn't find {}\n"
             "Check that GTHOME points at the right directory "
             "(currently: {}).".format(Converter.get_dtd_location(),

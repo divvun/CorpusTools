@@ -41,13 +41,13 @@ PathComponents = namedtuple('PathComponents',
                             'root module lang genre subdirs basename')
 
 
-class SetupException(Exception):
+class SetupError(Exception):
     """This exception is raised when setup is faulty."""
 
     pass
 
 
-class ExecutableMissingException(Exception):
+class ExecutableMissingError(Exception):
     """This exception is raised when wanted executables are missing."""
 
     pass
@@ -191,11 +191,11 @@ def sanity_check(program_list):
     If they don't exist, raise an exception.
     """
     if 'GTHOME' not in os.environ:
-        raise SetupException("You have to set the environment variable GTHOME "
+        raise SetupError("You have to set the environment variable GTHOME "
                              "to your checkout of langtech/trunk!")
     for program in program_list:
         if executable_in_path(program) is False:
-            raise ExecutableMissingException(
+            raise ExecutableMissingError(
                 "Couldn't find %s in $PATH or it is not executable." % (
                     program.encode('utf-8'),))
 

@@ -62,7 +62,7 @@ class TestFilenameToAscii(unittest.TestCase):
     def test_own_name_with_complete_path(self):
         oldname = u'j/a/b/c/aba>.txt'
 
-        self.assertRaises(namechanger.NamechangerException,
+        self.assertRaises(namechanger.NamechangerError,
                           namechanger.normalise_filename, oldname)
 
 

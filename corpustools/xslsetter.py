@@ -35,7 +35,7 @@ from corpustools import util
 here = os.path.dirname(__file__)
 
 
-class XsltException(Exception):
+class XsltError(Exception):
     """Raise this exception when errors arise in this module."""
 
     pass
@@ -81,7 +81,7 @@ class MetadataHandler(object):
             try:
                 self.tree = etree.parse(filename)
             except etree.XMLSyntaxError as e:
-                raise XsltException('Syntax error in {}:\n{}'.format(
+                raise XsltError('Syntax error in {}:\n{}'.format(
                     self.filename, e))
 
     def _get_variable_elt(self, key):
@@ -175,7 +175,7 @@ class MetadataHandler(object):
         skip_pages = self.get_variable('skip_pages')
         if skip_pages is not None:
             if 'odd' in skip_pages and 'even' in skip_pages:
-                raise XsltException(
+                raise XsltError(
                     'Invalid format: Cannot have both "even" and "odd" in this line\n'
                     '{}'.format(skip_pages))
 
@@ -200,7 +200,7 @@ class MetadataHandler(object):
                               for page in six.moves.range(start, end + 1)])
 
             except ValueError:
-                raise XsltException(
+                raise XsltError(
                     "Invalid format: {}".format(skip_pages))
 
         return pages
@@ -242,14 +242,14 @@ class MetadataHandler(object):
         for key, value in six.iteritems(margin_lines):
             if ('all' in value and ('odd' in value or 'even' in value) or
                     '=' not in value):
-                raise XsltException(
+                raise XsltError(
                     'Invalid format in the variable {} in the file:\n{}\n{}\n'
                     'Format must be [all|odd|even|pagenumber]=integer'.format(
                         key, self.filename, value))
             try:
                 _margins[key] = self.parse_margin_line(value)
             except ValueError:
-                raise XsltException(
+                raise XsltError(
                     'Invalid format in the variable {} in the file:\n{}\n{}\n'
                     'Format must be [all|odd|even|pagenumber]=integer'.format(
                         key, self.filename, value))
@@ -285,36 +285,36 @@ class MetadataHandler(object):
         for key in keys:
             if key == 'inner_left_margin':
                 if 'inner_right_margin' not in keys:
-                    raise XsltException(
+                    raise XsltError(
                         'Invalid format in {}:\nboth '
                         'inner_right_margin and inner_left_margin must '
                         'be set'.format(self.filename))
                 if sorted(_inner_margins['inner_left_margin']) != \
                         sorted(_inner_margins['inner_right_margin']):
-                    raise XsltException(
+                    raise XsltError(
                         'Invalid format in {}:\nboth '
                         'margins for the same pages must be set in '
                         'inner_right_margin and inner_left_margin'.format(
                             self.filename))
             if key == 'inner_right_margin' and 'inner_left_margin' not in keys:
-                raise XsltException(
+                raise XsltError(
                     'Invalid format in {}:\nboth inner_right_margin '
                     'and inner_left_margin must be set'.format(self.filename))
             if key == 'inner_bottom_margin':
                 if 'inner_top_margin' not in keys:
-                    raise XsltException(
+                    raise XsltError(
                         'Invalid format in {}:\nboth '
                         'inner_bottom_margin and inner_top_margin must '
                         'be set'.format(self.filename))
                 if sorted(_inner_margins['inner_bottom_margin']) != \
                         sorted(_inner_margins['inner_top_margin']):
-                    raise XsltException(
+                    raise XsltError(
                         'Invalid format in {}:\n'
                         'margins for the same pages must be set in '
                         'inner_top_margin and inner_bottom_margin'.format(
                             self.filename))
             if key == 'inner_top_margin' and 'inner_bottom_margin' not in keys:
-                raise XsltException(
+                raise XsltError(
                     'Invalid format in {}:\nboth inner_bottom_margin '
                     'and inner_top_margin must be set'.format(self.filename))
 

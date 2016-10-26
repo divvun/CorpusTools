@@ -34,7 +34,7 @@ import unidecode
 from corpustools import util, versioncontrol, xslsetter
 
 
-class NamechangerException(Exception):
+class NamechangerError(Exception):
     """This exception is raised when errors occurs in this module."""
 
     pass
@@ -472,7 +472,7 @@ def normalise_filename(filename):
         a downcased string containing only ascii chars
     """
     if os.sep in filename:
-        raise NamechangerException(
+        raise NamechangerError(
             'Invalid filename {}.\n'
             'Filename is not allowed to contain {}'.format(filename,
                                                            os.sep))
