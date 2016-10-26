@@ -1366,6 +1366,22 @@ class TestHTMLContentConverter(XMLTester):
         clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
 
+    def test_remove_font_with_elements(self):
+        """Test the remove_font function."""
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            u'<html><body><p>x '
+            u'<font>a <i>b</i> c.</font> d'
+            u'</p></body></html>')
+
+        want = html5parser.document_fromstring(
+            '<html><head/><body><p>x '
+            'a <i>b</i> c. d'
+            '</p></body></html>')
+
+        clean_namespaces([got, want])
+        self.assertXmlEqual(got, want)
+
     def test_body_a(self):
         hcc = converter.HTMLContentConverter()
         got = hcc.convert2xhtml(
