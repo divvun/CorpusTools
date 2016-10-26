@@ -527,7 +527,7 @@ class Parallelize(object):
         (output, error) = subp.communicate()
 
         if subp.returncode != 0:
-            raise Exception(
+            raise UserWarning(
                 'Could not parallelize {} and {} into '
                 'sentences\n{}\n\n{}\n'.format(
                     self.get_origfiles()[0], self.get_origfiles()[1],
