@@ -592,7 +592,7 @@ class TestConverter(XMLTester):
         """Check that an exception is raised if a document is invalid."""
         complete = etree.fromstring('<document/>')
 
-        self.assertRaises(converter.ConversionException,
+        self.assertRaises(converter.ConversionError,
                           self.converter_inside_orig.validate_complete,
                           complete)
 
@@ -1210,283 +1210,120 @@ class TestEpubConverter1(XMLTester):
 
 
 class TestHTMLContentConverter(XMLTester):
+    @parameterized.expand([
+        ('Remove an empty p.',
+         '<html><body><p/></html>',
+         '<html><head/><body></body></html>'),
+        ('Do not remove a p with content.',
+         '<html><body><p><span>spanny</span></p></html>',
+         '<html><head/><body><p><span>spanny</span></p></body></html>'),
+        ('Remove empty class',
+         '<html><body><div class="">a</div><div class="a">'
+         '<span class="">b</span></div></html>',
+         '<html><head/><body><div>a</div><div class="a">'
+        '<span>b</span></div></body></html>'),
+        ('Remove comment',
+         '<html><body><b><!--Hey, buddy. --></b></body></html>',
+         '<html><head/><body><b/></body></html>'),
+        ('Remove processing instruction',
+         '<html><body><b><?ProcessingInstruction?></b></body></html>',
+         '<html><head/><body><b/></body></html>'),
+        ('Only text before next significant element',
+         u'<html><head><title>– Den utdøende stammes frykt</title>'
+         u'</head><body><h3>VI</h3>... Finnerne<p>Der</body></html>',
+         '<html><head>'
+         '<title>– Den utdøende stammes frykt</title></head><body>'
+         '<h3>VI</h3>  <p>... Finnerne</p><p>Der</p></body></html>'),
+        ('Text and i element before next significant element',
+         u'<head><title>– Den utdøende stammes frykt</title>'
+         u'</head><body><h3>VI</h3>... Finnerne<i>Der</body></html>',
+         '<html><head>'
+         '<title>– Den utdøende stammes frykt</title></head><body>'
+         '<h3>VI</h3>  <p>... Finnerne<i>Der</i></p></body></html>'),
+        ('h2 as a stop element',
+         u'<html>'
+         u'<title>– Den utdøende stammes frykt</title>'
+         u'</head><body><h3>VI</h3>... Finnerne<a/>'
+         u'<h2><a>Der</a></h2></body></html>',
+         '<html><head><title>– Den '
+         'utdøende stammes frykt</title>'
+         '</head><body>  <h3>VI</h3>  '
+         '<p>... Finnerne<a/></p><h2>Der</h2></body></html>'),
+        ('center2div',
+         '<html><body><center><span class="">b</span></center></html>',
+         '<html><head/><body><div class="c1"><span>b</span></div></body>'
+         '</html>'),
+        ('test_body_i',
+         '<html><body><i>b</i></body></html>',
+         '<html><head/><body><p><i>b</i></p></body></html>'),
+        ('Font elements with only text',
+         '<html><body><p>x '
+         '<font>a, b </font>'
+         '<font>c</font>'
+         '<font>d</font>'
+         '<font>e</font>'
+         '<font> f</font>'
+         '<font>. </font>'
+         '</p></body></html>',
+         '<html><head/><body><p>'
+         'x a, b cde f. '
+         '</p></body></html>'),
+        ('Font element containing other xml elements',
+         '<html><body><p>x '
+         '<font>a <i>b</i> c.</font> d'
+         '</p></body></html>',
+         '<html><head/><body><p>x '
+         'a <i>b</i> c. d'
+         '</p></body></html>'),
+        ('Font element containing font elements',
+         '<html><body><p><font>x</font> '
+         '<font>a <i>b</i> c.</font> <font>d</font>'
+         '</p></body></html>',
+         '<html><head/><body><p>x a <i>b</i> c. d'
+         '</p></body></html>'),
+        ('Font element containing font xml elements',
+         '<html><body><p><font>x</font> '
+         '<font>a <font><i>b</i></font> c.</font> <font>d</font>'
+         '</p></body></html>',
+         '<html><head/><body><p>x '
+         'a <i>b</i> c. d'
+         '</p></body></html>'),
+        ('test_body_a',
+         '<html><body><a>b</a></body></html>',
+         '<html><head/><body><p><a>b</a></p></body></html>'),
+        ('test_body_em',
+         '<html><body><em>b</em></body></html>',
+         '<html><head/><body><p><em>b</em></p></body></html>'),
+        ('test_body_font',
+         '<html><body><font>b</font></body></html>',
+         '<html><head/><body><p>b</p></body></html>'),
+        ('test_body_u',
+         '<html><body><u>b</u></body></html>',
+         '<html><head/><body><p><u>b</u></p></body></html>'),
+        ('test_body_strong',
+         '<html><body><strong>b</strong></body></html>',
+         '<html><head/><body><p><strong>b</strong></p></body></html>'),
+        ('test_body_span',
+         '<html><body><span>b</span></body></html>',
+         '<html><head/><body><p><span>b</span></p></body></html>'),
+        ('test_body_text',
+         '<html><body>b</body></html>',
+         '<html><head/><body><p>b</p></body></html>'),
+    ])
+    def test_convert2xhtml(self, testname, test_input, want_input):
+        """Test convert2xhtml.
 
-    def test_remove_empty_p_1(self):
-        """Remove an empty p."""
+        Args:
+            testname (str): name of the test
+            test_input (str): input sent to convert2xhtml
+            want_input (str): input to html5parser.document_fromstring
+
+        Raises:
+            AssertionError if got and want are unequal.
+        """
         hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            '<html><body><p/></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_remove_empty_p_2(self):
-        """Do not remove a p with content."""
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            '<html><body><p><span>spanny</span></p></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><p><span>spanny</span></p></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_remove_empty_class(self):
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            '<html><body><div class="">a</div><div class="a">'
-            '<span class="">b</span></div></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><div>a</div><div class="a">'
-            '<span>b</span></div></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_remove_comment(self):
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            '<html><body><b><!--Hey, buddy. --></b></body>'
-            '</html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/>'
-            '<body><b/></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_remove_processinginstruction(self):
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            '<html><body><b><?ProcessingInstruction?></b></body>'
-            '</html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><b/></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_add_p_around_text1(self):
-        """Only text before next significant element."""
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            u'<html><head><title>– Den utdøende stammes frykt</title>'
-            u'</head><body><h3>VI</h3>... Finnerne<p>Der</body></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head>'
-            '<title>– Den utdøende stammes frykt</title></head><body>'
-            '<h3>VI</h3>  <p>... Finnerne</p><p>Der</p></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_add_p_around_text2(self):
-        """Text and i element before next significant element."""
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            u'<head><title>– Den utdøende stammes frykt</title>'
-            u'</head><body><h3>VI</h3>... Finnerne<i>Der</body></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head>'
-            '<title>– Den utdøende stammes frykt</title></head><body>'
-            '<h3>VI</h3>  <p>... Finnerne<i>Der</i></p></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_add_p_around_text3(self):
-        """h2 as a stop element."""
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            '<html>'
-            u'<title>– Den utdøende stammes frykt</title>'
-            u'</head><body><h3>VI</h3>... Finnerne<a/>'
-            u'<h2><a>Der</a></h2></body></html>')
-
-        want = html5parser.document_fromstring(
-            u'<html><head><title>– Den '
-            u'utdøende stammes frykt</title>'
-            u'</head><body>  <h3>VI</h3>  '
-            u'<p>... Finnerne<a/></p><h2>Der</h2></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_center2div(self):
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            '<html><body><center><span class="">b</span>'
-            '</center></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><div class="c1"><span>b</span></div></body>'
-            '</html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_body_i(self):
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            '<html><body><i>b</i></body></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><p><i>b</i></p></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_remove_font(self):
-        """Font elements with only text."""
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            u'<html><body><p>x '
-            u'<font>a, b </font>'
-            u'<font>c</font>'
-            u'<font>d</font>'
-            u'<font>e</font>'
-            u'<font> f</font>'
-            u'<font>. </font>'
-            u'</p></body></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><p>'
-            'x a, b cde f. '
-            '</p></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_remove_font_with_elements(self):
-        """Font element containing other xml elements."""
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            u'<html><body><p>x '
-            u'<font>a <i>b</i> c.</font> d'
-            u'</p></body></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><p>x '
-            'a <i>b</i> c. d'
-            '</p></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_remove_font_with_elements_and_text(self):
-        """Font element containing font elements."""
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            u'<html><body><p><font>x</font> '
-            u'<font>a <i>b</i> c.</font> <font>d</font>'
-            u'</p></body></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><p>x '
-            'a <i>b</i> c. d'
-            '</p></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_remove_font_with_font_within_font(self):
-        """Font element containing font xml elements."""
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            u'<html><body><p><font>x</font> '
-            u'<font>a <font><i>b</i></font> c.</font> <font>d</font>'
-            u'</p></body></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><p>x '
-            'a <i>b</i> c. d'
-            '</p></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_body_a(self):
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            '<html><body><a>b</a></body></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><p><a>b</a></p></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_body_em(self):
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            '<html><body><em>b</em></body></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><p><em>b</em></p></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_body_font(self):
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            '<html><body><font>b</font></body></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><p>b</p></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_body_u(self):
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            '<html><body><u>b</u></body></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><p><u>b</u></p></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_body_strong(self):
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            '<html><body><strong>b</strong></body></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><p><strong>b</strong></p></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_body_span(self):
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            '<html><body><span>b</span></body></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><p><span>b</span></p></body></html>')
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
-
-    def test_body_text(self):
-        hcc = converter.HTMLContentConverter()
-        got = hcc.convert2xhtml(
-            '<html><body>b</body></html>')
-
-        want = html5parser.document_fromstring(
-            '<html><head/><body><p>b</p></body></html>')
+        got = hcc.convert2xhtml(test_input)
+        want = html5parser.document_fromstring(want_input)
 
         clean_namespaces([got, want])
         self.assertXmlEqual(got, want)
