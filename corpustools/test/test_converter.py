@@ -1346,7 +1346,7 @@ class TestHTMLContentConverter(XMLTester):
         self.assertXmlEqual(got, want)
 
     def test_remove_font(self):
-        """Test the remove_font function."""
+        """Font elements with only text."""
         hcc = converter.HTMLContentConverter()
         got = hcc.convert2xhtml(
             u'<html><body><p>x '
@@ -1367,11 +1367,43 @@ class TestHTMLContentConverter(XMLTester):
         self.assertXmlEqual(got, want)
 
     def test_remove_font_with_elements(self):
-        """Test the remove_font function."""
+        """Font element containing other xml elements."""
         hcc = converter.HTMLContentConverter()
         got = hcc.convert2xhtml(
             u'<html><body><p>x '
             u'<font>a <i>b</i> c.</font> d'
+            u'</p></body></html>')
+
+        want = html5parser.document_fromstring(
+            '<html><head/><body><p>x '
+            'a <i>b</i> c. d'
+            '</p></body></html>')
+
+        clean_namespaces([got, want])
+        self.assertXmlEqual(got, want)
+
+    def test_remove_font_with_elements_and_text(self):
+        """Font element containing font elements."""
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            u'<html><body><p><font>x</font> '
+            u'<font>a <i>b</i> c.</font> <font>d</font>'
+            u'</p></body></html>')
+
+        want = html5parser.document_fromstring(
+            '<html><head/><body><p>x '
+            'a <i>b</i> c. d'
+            '</p></body></html>')
+
+        clean_namespaces([got, want])
+        self.assertXmlEqual(got, want)
+
+    def test_remove_font_with_font_within_font(self):
+        """Font element containing font xml elements."""
+        hcc = converter.HTMLContentConverter()
+        got = hcc.convert2xhtml(
+            u'<html><body><p><font>x</font> '
+            u'<font>a <font><i>b</i></font> c.</font> <font>d</font>'
             u'</p></body></html>')
 
         want = html5parser.document_fromstring(

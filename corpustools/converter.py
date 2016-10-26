@@ -2299,45 +2299,81 @@ class HTMLContentConverter(object):
                 p.append(bi)
 
     @staticmethod
-    def font_text(font_elt):
-        """Get the text of font_elt.
+    def handle_font_text(font_elt):
+        """Incorporate font.text into correct element.
 
         Args:
             font_elt (etree.Element): a font element.
-        Yields:
-            str: strings of the font element.
         """
-        if font_elt.text is not None:
-            yield font_elt.text
-        if font_elt.tail is not None:
-            yield font_elt.tail
-
-    def convert_font_text(self, font_parent, font_elt):
-        """Integrate the font strings into the parent element.
-
-        Args:
-            font_parent (etree.Element): parent of the font_elt.
-            font_elt (etree.Element): a font element.
-        """
-        alltext = [text for text in self.font_text(font_elt)]
+        font_parent = font_elt.getparent()
         font_index = font_parent.index(font_elt)
 
-        if font_index > 0:
-            previous_element = font_parent[font_index - 1]
-            if previous_element.tail is not None:
-                alltext.insert(0, previous_element.tail)
-            previous_element.tail = ''.join(alltext)
-        else:
-            if font_parent.text is not None:
-                alltext.insert(0, font_parent.text)
-            font_parent.text = ''.join(alltext)
+        if font_elt.text is not None:
+            if font_index > 0:
+                previous_element = font_parent[font_index - 1]
+                if previous_element.tail is not None:
+                    previous_element.tail += font_elt.text
+                else:
+                    previous_element.tail = font_elt.text
+            else:
+                if font_elt.text is not None:
+                    if font_parent.text is not None:
+                        font_parent.text += font_elt.text
+                    else:
+                        font_parent.text = font_elt.text
+
+    @staticmethod
+    def handle_font_children(font_elt):
+        """Incorporate font children into correct element.
+
+        Args:
+            font_elt (etree.Element): a font element.
+        """
+        font_parent = font_elt.getparent()
+        font_index = font_parent.index(font_elt)
+
+        for position, font_child in enumerate(font_elt, start=font_index):
+            if font_elt.tail is not None:
+                if font_elt[-1].tail is not None:
+                    font_elt[-1].tail += font_elt.tail
+                else:
+                    font_elt[-1].tail = font_elt.tail
+            font_parent.insert(position, font_child)
+
+    @staticmethod
+    def handle_font_tail(font_elt):
+        """Incorporate font.tail into correct element.
+
+        Args:
+            font_elt (etree.Element): a font element.
+        """
+        font_parent = font_elt.getparent()
+        font_index = font_parent.index(font_elt)
+        previous_element = font_parent[font_index - 1]
+
+        if font_elt.tail is not None:
+            if font_index > 0:
+                if previous_element.tail is not None:
+                    previous_element.tail += font_elt.tail
+                else:
+                    previous_element.tail = font_elt.tail
+            else:
+                if font_parent.text is not None:
+                    font_parent.text += font_elt.tail
+                else:
+                    font_parent.text = font_elt.tail
 
     def remove_font(self):
-        """Remove font elements, leaving the text only."""
+        """Remove font elements, incorporate content into it's parent."""
         for font_elt in reversed(list(self.soup.iter('{*}font'))):
-            font_parent = font_elt.getparent()
-            self.convert_font_text(font_parent, font_elt)
-            font_parent.remove(font_elt)
+            self.handle_font_text(font_elt)
+
+            if len(font_elt) > 0:
+                self.handle_font_children(font_elt)
+            else:
+                self.handle_font_tail(font_elt)
+
+            font_elt.getparent().remove(font_elt)
 
     def body_text(self):
         """Wrap bare text inside a p element."""
