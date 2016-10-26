@@ -43,8 +43,8 @@ LANGUAGEGUESSER = text_cat.Classifier(None)
 
 
 def clean_namespaces(elementlist):
-    for huff in elementlist:
-        tree = huff.getroottree()
+    for element in elementlist:
+        tree = element.getroottree()
         root = tree.getroot()
         for el in root.getiterator():
             i = el.tag.find('}')
