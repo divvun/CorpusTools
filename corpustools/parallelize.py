@@ -1038,13 +1038,16 @@ def parse_options():
         description='Sentence align two files. Input is the document \
         containing the main language, and language to parallelize it with.')
 
-    parser.add_argument('input_file',
-                        help="The input filename")
-    parser.add_argument('output_file',
-                        help="Optionally an output filename. Defaults to "
-                        "toktmx/{LANGA}2{LANGB}/{GENRE}/.../{BASENAME}.toktmx",
-                        default=None,
-                        nargs='?')
+    parser.add_argument('sources',
+                        nargs='+',
+                        help='Files or directories to search for '
+                        'parallelisable files')
+    parser.add_argument('-s', '--stdout',
+                        help='Whether output of the parallelisation '
+                        'should be written to stdout or a files. '
+                        'Defaults to '
+                        'toktmx/{lang1}2{lang2}/{GENRE}/.../{BASENAME}.toktmx',
+                        action="store_true")
     parser.add_argument('-f', '--force',
                         help="Overwrite output file if it already exists."
                         "The default is to skip parallelizing existing files.",
@@ -1065,53 +1068,76 @@ def parse_options():
                         "$GTHOME/gt/common/src/anchor.txt is used, but this "
                         "file only supports pairings between "
                         "sme/sma/smj/fin/eng/nob. ")
-    parser.add_argument('-p', '--parallel_language',
-                        help="The language to parallelize the input "
-                        "document with",
+    parser.add_argument('-l1', '--lang1',
+                        help='The first language of a pair where '
+                        'parallelisation should be done.',
+                        required=True)
+    parser.add_argument('-l2', '--lang2',
+                        help='The second language of a pair where '
+                        'parallelisation should be done.',
                         required=True)
 
     args = parser.parse_args()
     return args
 
 
-def main():
+def parallelise_file(input_file, lang1, lang2, dict, quiet, aligner, stdout,
+                     force):
     """Align sentences of two parallel files."""
-    args = parse_options()
-
     try:
-        if args.aligner == "hunalign":
-            parallelizer = ParallelizeHunalign(origfile1=args.input_file,
-                                               lang2=args.parallel_language,
-                                               anchor_file=args.dict,
-                                               quiet=args.quiet)
-        elif args.aligner == "tca2":
-            parallelizer = ParallelizeTCA2(origfile1=args.input_file,
-                                           lang2=args.parallel_language,
-                                           anchor_file=args.dict,
-                                           quiet=args.quiet)
+        if aligner == "hunalign":
+            parallelizer = ParallelizeHunalign(origfile1=input_file,
+                                               lang2=lang2,
+                                               anchor_file=dict,
+                                               quiet=quiet)
+        elif aligner == "tca2":
+            parallelizer = ParallelizeTCA2(origfile1=input_file,
+                                           lang2=lang2,
+                                           anchor_file=dict,
+                                           quiet=quiet)
     except IOError as e:
-        print(e.message)
-        sys.exit(1)
+        if not quiet:
+            util.note(e.message)
 
-    if args.output_file is None:
-        outfile = parallelizer.get_outfile_name()
-    elif args.output_file == "-":
-        outfile = "/dev/stdout"
     else:
-        outfile = args.output_file
-    if outfile != "/dev/stdout" and os.path.exists(outfile):
-        if args.force:
-            util.note("{} already exists, overwriting!".format(outfile))
+
+        if not stdout:
+            outfile = parallelizer.get_outfile_name()
+        else:
+            outfile = '/dev/stdout'
+
+        if (outfile == "/dev/stdout" or not os.path.exists(outfile) or
+            (os.path.exists(outfile) and force)):
+            if not quiet:
+                util.note("Aligning {} and its parallel file".format(
+                    input_file))
+            tmx = parallelizer.parallelize_files()
+
+            if not quiet:
+                util.note("Generating the tmx file {}".format(outfile))
+            tmx.write_tmx_file(outfile)
+            if not quiet:
+                util.note("Wrote {}".format(outfile))
         else:
             util.note("{} already exists, skipping ...".format(outfile))
-            sys.exit(1)
 
-    if not args.quiet:
-        util.note("Aligning {} and its parallel file".format(args.input_file))
-    tmx = parallelizer.parallelize_files()
 
-    if not args.quiet:
-        util.note("Generating the tmx file {}".format(outfile))
-    tmx.write_tmx_file(outfile)
-    if not args.quiet:
-        util.note("Wrote {}".format(outfile))
+def main():
+    '''Parallelise files'''
+    args = parse_options()
+
+    for source in args.sources:
+        if os.path.isfile(source):
+            parallelise_file(source, args.lang1, args.lang2,
+                             args.dict, args.quiet, args.aligner,
+                             args.stdout, args.force)
+        elif os.path.isdir(source):
+            for root, _, files in os.walk(source):
+                for f in files:
+                    path = os.path.join(root, f)
+                    try:
+                        parallelise_file(path, args.lang1, args.lang2,
+                                        args.dict, args.quiet, args.aligner,
+                                        args.stdout, args.force)
+                    except UserWarning as e:
+                        print(str(e))
