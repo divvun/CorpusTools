@@ -199,6 +199,30 @@
     -->
     <xsl:variable name="skip_elements" select="''"/>
 
+    <!--
+        The format for linespacing is:
+        [all|odd|even|pagenumber]=float (where float is written as integer.integer,
+        not integer,integer).
+
+        linespacing lines *must* contain the keywords all, even, odd or a page
+        number followed by a = sign and a floating point number. Pages with the
+        same linespacing may be separated with ;.
+
+        If there are several values, they are divided by commas.
+        Setting different linespacing for odd and even pages is done by writing
+        e.g. odd=8, even=15
+        It is also possible to set linespacing for particular pages:
+        8=8, 10=12
+        It is also possible to set linespacing for odd and even pages and
+        exceptions from those rules on particular pages.
+
+        Examples on how the select part could look:
+        odd=5, even=8, 8=15, 11=3
+        all=9, 8=12
+        1;3;8=20, 4;5;7=10
+    -->
+    <xsl:variable name="linespacing" select="''"/>
+
     <!-- Add all paragraphs that should have xml:lang=X           -->
     <!-- Uncomment the following and add the paths, for example:  -->
     <!-- <xsl:template match="/root/section[2]/paragraph[5] |

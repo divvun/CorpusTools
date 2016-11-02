@@ -81,6 +81,53 @@ class TestMetadataHandler(unittest.TestCase):
         with self.assertRaises(xslsetter.XsltError):
             md.skip_pages
 
+    def test_set_linespacing_1(self):
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('linespacing', 'odd=2')
+        got = md.linespacing
+        want = {'odd': 2.0}
+
+        self.assertDictEqual(got, want)
+
+    def test_set_linespacing_2(self):
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('linespacing', 'even=2')
+        got = md.linespacing
+        want = {'even': 2.0}
+
+        self.assertDictEqual(got, want)
+
+    def test_set_linespacing_3(self):
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('linespacing', 'all=2')
+        got = md.linespacing
+        want = {'all': 2.0}
+
+        self.assertDictEqual(got, want)
+
+    def test_set_linespacing_4(self):
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('linespacing', 'all=2, even=1.6')
+
+        with self.assertRaises(xslsetter.XsltError):
+            md.linespacing
+
+    def test_set_linespacing_5(self):
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('linespacing', 'all=2,0')
+
+        with self.assertRaises(xslsetter.XsltError):
+            md.linespacing
+
+    def test_set_linespacing_6(self):
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('linespacing', '1;2;3=0.5')
+
+        got = md.linespacing
+        want = {'1': 0.5, '2': 0.5, '3': 0.5}
+
+        self.assertDictEqual(got, want)
+
     def test_set_margin(self):
         """Test if the margin is set correctly."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)

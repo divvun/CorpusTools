@@ -385,3 +385,42 @@ class MetadataHandler(object):
         if self.get_variable('skip_elements'):
             return [get_pair(pair)
                     for pair in self.get_variable('skip_elements').split(',')]
+
+    @property
+    def linespacing(self):
+        value = self.get_variable('linespacing')
+
+        if ('all' in value and ('odd' in value or 'even' in value) or
+                '=' not in value):
+            raise XsltError(
+                'Invalid format in the variable linespacing in the file:'
+                '\n{}\n{}\n'
+                'Format must be [all|odd|even|pagenumber]=integer'.format(
+                    self.filename, value))
+
+        try:
+            return self.parse_linespacing_line(value)
+        except ValueError:
+            raise XsltError(
+                'Invalid format in the variable linespacing in the file:'
+                '\n{}\n{}\n'
+                'Format must be [all|odd|even|pagenumber]=float'.format(
+                    self.filename, value))
+
+    @staticmethod
+    def parse_linespacing_line(value):
+        """Parse a linespacing line read from the .xsl file.
+
+        Args:
+            param (str): contains the linespacing
+
+        Returns:
+            dict: page: float pairs
+        """
+        l = {}
+        for part in value.split(','):
+            (pages, linespacing) = tuple(part.split('='))
+            for page in pages.split(';'):
+                l[page.strip()] = float(linespacing)
+
+        return l
