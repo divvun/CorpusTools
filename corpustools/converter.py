@@ -3645,7 +3645,7 @@ class ConverterManager(object):
     """Manage the conversion of original files to corpus xml."""
 
     LANGUAGEGUESSER = text_cat.Classifier(None)
-    FILES = []
+
 
     def __init__(self, write_intermediate, goldstandard):
         """Initialise the ConverterManager class.
@@ -3658,6 +3658,7 @@ class ConverterManager(object):
         """
         self.write_intermediate = write_intermediate
         self.goldstandard = goldstandard
+        self.FILES = []
 
     def convert(self, orig_file):
         """Convert file to corpus xml format.

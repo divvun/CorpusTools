@@ -35,6 +35,7 @@ setup(
             'duperemover = corpustools.dupe_finder:main',
             'dupefinder = corpustools.dupe_finder:find',
             'pick_parallel_docs = corpustools.pick_parallel_docs:main',
+            'count_analysed = corpustools.counter:main',
         ]
     },
     dependency_links=[
