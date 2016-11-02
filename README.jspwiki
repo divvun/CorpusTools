@@ -70,7 +70,7 @@ sudo make install
 !!Installation
 
 !System wide
-Install the tools for all users on a machine by writing
+Install and update the tools for all users on a machine by writing these four sudo commands:
 
 {{{
 cd $GTHOME/tools/CorpusTools
