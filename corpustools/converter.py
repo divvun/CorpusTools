@@ -621,7 +621,13 @@ PDFFontspec = collections.namedtuple('PDFFontspec', ['size', 'family', 'color'])
 
 
 class PDFFontspecs(object):
-    """Add font specs found in a pdf page to this class."""
+    """Add font specs found in a pdf page to this class.
+
+    Attributes:
+        pdffontspecs (dict{PDFFontspec:int}): map fontspecs to fontspec ids.
+        duplicates (dict{str:str}): map ids of duplicate fontspecs to the
+            id of the first instance of this fontspec.
+    """
 
     def __init__(self):
         """Initialise the PDFFontspecs class."""
@@ -631,7 +637,7 @@ class PDFFontspecs(object):
     def add_fontspec(self, xmlfontspec):
         """Add a pdf2xml fontspec to this class.
 
-        xmlfontspec: a PDF2XML fontspec element found in a PDF2XML page
+        xmlfontspec (etree.Element): a PDF2XML fontspec element found in a PDF2XML page
         element.
         """
         this_id = xmlfontspec.get('id')
