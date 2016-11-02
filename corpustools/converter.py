@@ -1662,9 +1662,10 @@ class PDF2XMLConverter(Converter):
         etree.SubElement(document, 'header')
         document.append(self.extractor.body)
 
-        command = ['pdftohtml', '-hidden', '-enc', 'UTF-8', '-stdout',
-                   '-nodrm', '-i', '-xml', self.names.orig]
-        pdftohtmloutput = self.extract_text(command)
+        command = (
+            'pdftohtml -hidden -enc UTF-8 -stdout -nodrm -i -xml {}'.format(
+                self.names.orig))
+        pdftohtmloutput = self.extract_text(command.split())
         pdf_content = self.replace_ligatures(self.strip_chars(
             pdftohtmloutput.decode('utf8', 'ignore')))
 
