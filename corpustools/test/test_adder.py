@@ -53,7 +53,7 @@ class TestAddToCorpus(unittest.TestCase):
         lang = 'sme'
         path = 'a/b/c'
 
-        with self.assertRaises(adder.AdderException):
+        with self.assertRaises(adder.AdderError):
             adder.AddToCorpus(corpusdir, lang, path)
 
     def test_init_with_non_unicode_lang(self):
@@ -61,7 +61,7 @@ class TestAddToCorpus(unittest.TestCase):
         lang = 'sme'
         path = 'a/b/c'
 
-        with self.assertRaises(adder.AdderException):
+        with self.assertRaises(adder.AdderError):
             adder.AddToCorpus(corpusdir, lang, path)
 
     def test_init_with_non_unicode_path(self):
@@ -69,7 +69,7 @@ class TestAddToCorpus(unittest.TestCase):
         lang = 'sme'
         path = 'a/b/c'
 
-        with self.assertRaises(adder.AdderException):
+        with self.assertRaises(adder.AdderError):
             adder.AddToCorpus(corpusdir, lang, path)
 
     def test_init_with_non_existing_corpusdir(self):
@@ -77,14 +77,14 @@ class TestAddToCorpus(unittest.TestCase):
         lang = 'sme'
         path = 'a/b/c'
 
-        with self.assertRaises(adder.AdderException):
+        with self.assertRaises(adder.AdderError):
             adder.AddToCorpus(corpusdir, lang, path)
 
     def test_init_with_existing_corpusdir_but_not_vcs(self):
         lang = 'sme'
         path = 'a/b/c'
 
-        with self.assertRaises(versioncontrol.VersionControlException):
+        with self.assertRaises(versioncontrol.VersionControlError):
             adder.AddToCorpus(
                 os.path.join(self.tempdir.path, 'tull'), lang, path)
 
@@ -103,21 +103,21 @@ class TestAddToCorpus(unittest.TestCase):
         lang = 'smei'
         path = 'a/b/c'
 
-        with self.assertRaises(adder.AdderException):
+        with self.assertRaises(adder.AdderError):
             adder.AddToCorpus(self.realcorpusdir, lang, path)
 
     def test_init_with_uppercase_mainlang(self):
         lang = 'SME'
         path = 'a/b/c'
 
-        with self.assertRaises(adder.AdderException):
+        with self.assertRaises(adder.AdderError):
             adder.AddToCorpus(self.realcorpusdir, lang, path)
 
     def test_init_with_non_ascii_mainlang(self):
         lang = 'øåæ'
         path = 'a/b/c'
 
-        with self.assertRaises(adder.AdderException):
+        with self.assertRaises(adder.AdderError):
             adder.AddToCorpus(self.realcorpusdir, lang, path)
 
     def test_init_with_path_that_must_be_normalised(self):
@@ -307,7 +307,7 @@ class TestAddFileToCorpus(unittest.TestCase):
 
     def test_add_file_with_non_existing_parallel(self):
         atc = adder.AddToCorpus(self.realcorpusdir, 'sme', 'æ/č/ö')
-        with self.assertRaises(adder.AdderException):
+        with self.assertRaises(adder.AdderError):
             orig_name = os.path.join(self.origdirectory, 'd.txt')
             atc.copy_file_to_corpus(
                 orig_name, os.path.basename(orig_name),
@@ -395,7 +395,7 @@ class TestDirectoryToCorpusWithDuplicates(unittest.TestCase):
 
     def test_add_directory_with_duplicate(self):
         atc = adder.AddToCorpus(self.realcorpusdir, 'sme', 'æ/č/ö')
-        with self.assertRaises(adder.AdderException):
+        with self.assertRaises(adder.AdderError):
             atc.copy_files_in_dir_to_corpus(self.origdirectory)
 
 

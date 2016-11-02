@@ -43,7 +43,7 @@ class TestMetadataHandler(unittest.TestCase):
         md = xslsetter.MetadataHandler('bogus.xml', create=True)
         md.set_variable('skip_pages', '1, 4 5, 7')
 
-        with self.assertRaises(xslsetter.XsltException):
+        with self.assertRaises(xslsetter.XsltError):
             md.skip_pages
 
     def test_set_skip_pages3(self):
@@ -78,7 +78,7 @@ class TestMetadataHandler(unittest.TestCase):
         md = xslsetter.MetadataHandler('bogus.xml', create=True)
         md.set_variable('skip_pages', 'odd, even')
 
-        with self.assertRaises(xslsetter.XsltException):
+        with self.assertRaises(xslsetter.XsltError):
             md.skip_pages
 
     def test_set_margin(self):
@@ -104,35 +104,35 @@ class TestMetadataHandler(unittest.TestCase):
             'bottom_margin': {'9': 2}})
 
     def test_parse_margin_lines2(self):
-        """Raise ConversionException if both 'all' and 'even' is found."""
+        """Raise ConversionError if both 'all' and 'even' is found."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('right_margin', 'all=40,even=80')
 
-        with self.assertRaises(xslsetter.XsltException):
+        with self.assertRaises(xslsetter.XsltError):
             md.margins
 
     def test_parse_margin_lines3(self):
-        """Raise ConversionException if 'all' and 'odd' is found."""
+        """Raise ConversionError if 'all' and 'odd' is found."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('right_margin', 'all=40,odd=80')
 
-        with self.assertRaises(xslsetter.XsltException):
+        with self.assertRaises(xslsetter.XsltError):
             md.margins
 
     def test_parse_margin_lines4(self):
-        """Raise ConversionException if text after '=' is found."""
+        """Raise ConversionError if text after '=' is found."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('right_margin', 'all=tullball')
 
-        with self.assertRaises(xslsetter.XsltException):
+        with self.assertRaises(xslsetter.XsltError):
             md.margins
 
     def test_parse_margin_lines5(self):
-        """Raise ConversionException if no '=' is found."""
+        """Raise ConversionError if no '=' is found."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('right_margin', 'all 50')
 
-        with self.assertRaises(xslsetter.XsltException):
+        with self.assertRaises(xslsetter.XsltError):
             md.margins
 
     def test_parse_margin_lines6(self):
@@ -140,7 +140,7 @@ class TestMetadataHandler(unittest.TestCase):
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('right_margin', 'all=50 3')
 
-        with self.assertRaises(xslsetter.XsltException):
+        with self.assertRaises(xslsetter.XsltError):
             md.margins
 
     def test_parse_margin_lines7(self):
@@ -157,7 +157,7 @@ class TestMetadataHandler(unittest.TestCase):
             md = xslsetter.MetadataHandler('bogus.pdf', create=True)
             md.set_variable('inner_' + p + '_margin', '5=30')
 
-            with self.assertRaises(xslsetter.XsltException):
+            with self.assertRaises(xslsetter.XsltError):
                 md.inner_margins
 
     def test_inner_margin2(self):
@@ -165,13 +165,13 @@ class TestMetadataHandler(unittest.TestCase):
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('inner_top_margin', '5=30')
         md.set_variable('inner_bottom_margin', '6=30')
-        with self.assertRaises(xslsetter.XsltException):
+        with self.assertRaises(xslsetter.XsltError):
             md.inner_margins
 
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
         md.set_variable('inner_left_margin', '5=30')
         md.set_variable('inner_right_margin', '6=30')
-        with self.assertRaises(xslsetter.XsltException):
+        with self.assertRaises(xslsetter.XsltError):
             md.inner_margins
 
     def test_inner_margin3(self):
