@@ -1070,7 +1070,11 @@ class OrderedPDFSections(object):
 
 
 class PDFTextExtractor(object):
-    """Extract text from a list of PDFParagraphs."""
+    """Extract text from a list of PDFParagraphs.
+
+    Attributes:
+        body (etree.Element): Contains the text of all pdf pages.
+    """
 
     def __init__(self):
         """Initialise the PDFTextExtractor class."""
@@ -1385,7 +1389,9 @@ class PDFPageMetadata(object):
 class PDFPage(object):
     """Reads a page element.
 
-    textelements is a list of PDFTextElements
+    Attributes:
+        textelements (list of PDFTextElements): contains the text of the page
+        pdf_pagemetadata (PDFPageMetadata): contains the metadata of the page
 
     The textelements are manipulated in several ways,
     then ordered in the way they appear on the page and
@@ -1412,7 +1418,15 @@ class PDFPage(object):
             metadata_inner_margins=metadata_inner_margins)
 
     def is_skip_page(self, skip_pages):
-        """True if a page should be skipped, otherwise false."""
+        """Found out if this page should be skipped.
+
+        Arguments:
+            skip_pages (list of mixed): list of the pages that should be
+                skipped.
+
+        Returns:
+            boolean: True if this page should be skipped, otherwise false.
+        """
         return (('odd' in skip_pages and
                  (self.pdf_pagemetadata.page_number % 2) == 1) or
                 ('even' in skip_pages and
@@ -1426,7 +1440,7 @@ class PDFPage(object):
         if necessary.
 
         Arguments:
-            pdffontspecs: a PDFFontspecs instance.
+            pdffontspecs (PDFFontspecs): a PDFFontspecs instance.
         """
         for textelement in self.textelements:
             correct = pdffontspecs.corrected_id(textelement.font)
@@ -1488,7 +1502,12 @@ class PDFPage(object):
     def is_inside_inner_margins(self, t, margins):
         """Check if t is inside the given margins.
 
-        t is a text element
+        Arguments:
+            t (etree.Element): a text element
+            margins (dict): contains the page margins as pixels
+
+        Returns:
+            boolean: True if t is inside the margings, False otherwise
         """
         return (t.top > margins['inner_top_margin'] and
                 t.top < margins['inner_bottom_margin'] and
@@ -1552,15 +1571,22 @@ class PDFPage(object):
 
 
 class PDF2XMLConverter(Converter):
-    """Class to convert the xml output of pdftohtml to giellatekno xml."""
+    """Class to convert the xml output of pdftohtml to giellatekno xml.
+
+    Attributes:
+        extractor (PDFTextExtractor): class to extract text from the xml that
+            pdftohtml produces.
+        pdffontspecs (PDFFontspecs): class to store fontspecs found in the xml
+            pages.
+    """
 
     def __init__(self, filename, write_intermediate=False):
         """Initialise the PDF2XMLConverte class.
 
         Arguments:
-            filename: string containing the path to the pdf file.
-            write_intermediate: boolean indicating whether intermediate
-            versions of the converter document should be written to disk.
+            filename (str): the path to the pdf file.
+            write_intermediate (boolean): indicate whether intermediate
+                versions of the converter document should be written to disk.
         """
         super(PDF2XMLConverter, self).__init__(filename,
                                                write_intermediate)
@@ -1568,7 +1594,15 @@ class PDF2XMLConverter(Converter):
         self.pdffontspecs = PDFFontspecs()
 
     def strip_chars(self, content, extra=u''):
-        """Strip unwanted chars from the document."""
+        """Strip unwanted chars from the document.
+
+        Arguments:
+            content (str): the xml document that pdftohtml produces
+            extra (str): more character that should be removed
+
+        Returns:
+            str containing the modified version of the document.
+        """
         remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]'.format(
             extra))
         content, count = remove_re.subn('', content)
@@ -1583,7 +1617,7 @@ class PDF2XMLConverter(Converter):
         """Replace unwanted strings with correct replacements.
 
         Arguments:
-            content is a string containing the content of an xml document.
+            content (str): content of an xml document.
 
         Returns:
             String containing the new content of the xml document.
@@ -1669,7 +1703,11 @@ class PDF2XMLConverter(Converter):
             self.parse_page(page)
 
     def add_fontspecs(self, page):
-        """Extract font specs found in a pdf2xml page element."""
+        """Extract font specs found in a pdf2xml page element.
+
+        Arguments:
+            page (etree.Element): a pdf page
+        """
         for xmlfontspec in page.iter('fontspec'):
             self.pdffontspecs.add_fontspec(xmlfontspec)
 

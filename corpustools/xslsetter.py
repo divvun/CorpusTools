@@ -170,7 +170,12 @@ class MetadataHandler(object):
 
     @property
     def skip_pages(self):
-        """Turn a skip_pages entry into a list of pages."""
+        """Turn a skip_pages entry into a list of pages.
+
+        Returns:
+            list (mixed): the list can contain the strings 'all',
+                'even' and 'odd' or specific page numbers as integers.
+        """
         pages = []
         skip_pages = self.get_variable('skip_pages')
         if skip_pages is not None:
