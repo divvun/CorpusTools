@@ -859,11 +859,12 @@ class PDFParagraph(object):
     ]
     LIST_RE = re.compile(u'^[{}]\s'.format(u''.join(LIST_CHARS)))
 
-    def __init__(self):
+    def __init__(self, linespacing):
         """Initialise the PDFParagraph class."""
         self.textelements = []
         self.boundingboxes = [BoundingBox()]
         self.is_listitem = False
+        self.linespacing = linespacing
 
     def append_textelement(self, textelement):
         """Append a PDFTextElement to this paragraph.
@@ -889,7 +890,7 @@ class PDFParagraph(object):
             A boolean indicating whether textelement belongs to this
             paragraph.
         """
-        ratio = 1.5
+        ratio = self.linespacing
         delta = textelement.top - self.textelements[-1].top
 
         return delta < ratio * self.textelements[-1].height
@@ -1404,7 +1405,8 @@ class PDFPage(object):
     finally sent to PDFTextExtractor
     """
 
-    def __init__(self, page_element, metadata_margins={}, metadata_inner_margins={}):
+    def __init__(self, page_element, metadata_margins={}, metadata_inner_margins={},
+                 linespacing={}):
         """Initialise the PDFPage class.
 
         Arguments:
@@ -1422,6 +1424,7 @@ class PDFPage(object):
             page_width=int(page_element.get('width')),
             metadata_margins=metadata_margins,
             metadata_inner_margins=metadata_inner_margins)
+        self.linespacing_dict = linespacing
 
     def is_skip_page(self, skip_pages):
         """Found out if this page should be skipped.
@@ -1438,6 +1441,21 @@ class PDFPage(object):
                 ('even' in skip_pages and
                  (self.pdf_pagemetadata.page_number % 2) == 0) or
                 self.pdf_pagemetadata.page_number in skip_pages)
+
+    @property
+    def linespacing(self):
+        if self.linespacing_dict.get('all'):
+            return self.linespacing_dict['all']
+        elif self.linespacing_dict.get('even') and (\
+                (self.pdf_pagemetadata.page_number % 2) == 0):
+            return self.linespacing_dict['even']
+        elif self.linespacing_dict.get('odd') and (\
+                (self.pdf_pagemetadata.page_number % 2) == 1):
+            return self.linespacing_dict['odd']
+        elif self.linespacing_dict.get(self.pdf_pagemetadata.page_number):
+            return self.linespacing_dict[self.pdf_pagemetadata.page_number]
+        else:
+            return 1.5
 
     def fix_font_id(self, pdffontspecs):
         """Fix font id in text elements.
@@ -1522,13 +1540,13 @@ class PDFPage(object):
 
     def make_unordered_paragraphs(self):
         """Make paragraphs from the text elements found in a pdf page."""
-        paragraphs = [PDFParagraph()]
+        paragraphs = [PDFParagraph(self.linespacing)]
         textelement = self.textelements[0]
         paragraphs[-1].append_textelement(textelement)
 
         for textelement in self.textelements[1:]:
             if not paragraphs[-1].is_same_paragraph(textelement):
-                paragraphs.append(PDFParagraph())
+                paragraphs.append(PDFParagraph(self.linespacing))
             paragraphs[-1].append_textelement(textelement)
 
         return paragraphs
@@ -1692,7 +1710,8 @@ class PDF2XMLConverter(Converter):
             page: a pdf xml page element.
         """
         pdfpage = PDFPage(page, metadata_margins=self.md.margins,
-                          metadata_inner_margins=self.md.inner_margins)
+                          metadata_inner_margins=self.md.inner_margins,
+                          linespacing=self.md.linespacing)
         if not pdfpage.is_skip_page(self.md.skip_pages):
             pdfpage.fix_font_id(self.pdffontspecs)
             with util.ignored(PDFEmptyPageError):

@@ -3312,7 +3312,7 @@ class TestPDFParagraph(XMLTester):
         ]
 
     def test_append_first_textelement(self):
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(self.textelements[0])
 
         self.assertListEqual(pp.textelements, self.textelements[:-2])
@@ -3325,7 +3325,7 @@ class TestPDFParagraph(XMLTester):
         self.assertEqual(len(pp.boundingboxes), 1)
 
     def test_append_textelement_from_same_column(self):
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(self.textelements[0])
         pp.append_textelement(self.textelements[1])
 
@@ -3339,7 +3339,7 @@ class TestPDFParagraph(XMLTester):
             pp.boundingboxes[-1].right, self.textelements[1].right)
 
     def test_append_textelement_from_different_column(self):
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(self.textelements[0])
         pp.append_textelement(self.textelements[1])
         pp.append_textelement(self.textelements[2])
@@ -3361,7 +3361,7 @@ class TestPDFParagraph(XMLTester):
             pp.boundingboxes[-1].right, self.textelements[2].right)
 
     def test_append_first_textelement_with_list_character_F0B7(self):
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(converter.PDFTextElement(etree.fromstring(
             '<text top="961" left="152" width="334" height="26" font="0">  '
             'Bajásšaddan</text>')))
@@ -3369,7 +3369,7 @@ class TestPDFParagraph(XMLTester):
         self.assertTrue(pp.is_listitem)
 
     def test_append_first_textelement_with_list_character_F071(self):
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(converter.PDFTextElement(etree.fromstring(
             '<text top="961" left="152" width="334" height="26" font="0">  '
             'Bajásšaddan</text>')))
@@ -3377,7 +3377,7 @@ class TestPDFParagraph(XMLTester):
         self.assertTrue(pp.is_listitem)
 
     def test_append_first_textelement_with_list_character_bullet(self):
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(converter.PDFTextElement(etree.fromstring(
             '<text top="961" left="152" width="334" height="26" font="0">•  '
             'Bajásšaddan</text>')))
@@ -3386,7 +3386,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_1(self):
         """Two text elements, x distance less 1.5 times their height."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="106" left="117" width="305" height="19" font="2">'
@@ -3399,7 +3399,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_2(self):
         """Two text elements, x distance larger 1.5 times their height."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="106" left="117" width="305" height="19" font="2">a'
@@ -3412,7 +3412,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_3(self):
         """Two text elements, different heights."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="106" left="117" width="305" height="19" font="2">a</text>')))
@@ -3423,7 +3423,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_4(self):
         """Two text elements, different fonts."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="106" left="117" width="305" height="19" font="1">'
@@ -3436,7 +3436,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_5(self):
         """List characters signal a new paragraph start."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="106" left="117" width="305" height="19" '
@@ -3449,7 +3449,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_6(self):
         """Upper case char and in_list=True signals new paragraph start."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="300" left="104" width="324" height="18" font="1">'
@@ -3462,7 +3462,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_7(self):
         """and in_list=True signals same paragraph."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="300" left="104" width="324" height="18" font="1">'
@@ -3476,7 +3476,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_8(self):
         """List characters signal a new paragraph start."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="106" left="117" width="305" height="19" '
@@ -3489,7 +3489,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_on_different_column_or_page1(self):
         """Not same paragraph if first letter in second element is number."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="1143" left="168" width="306" height="18" '
@@ -3502,7 +3502,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_on_different_column(self):
         """Same paragraph if first letter in second element is lower case."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="1143" left="168" '
@@ -3515,7 +3515,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_second_line_in_list_paragraph_starts_with_lower(self):
         """List lines, different height, same font, second starts with lower."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="361" left="133" width="555" height="21" font="1">'
@@ -3529,7 +3529,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_second_line_in_list_paragraph_starts_with_upper(self):
         """List lines, different height, same font, second starts with uower."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="361" left="133" width="555" height="21" font="1">'
@@ -3543,7 +3543,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_next_line_in_list_paragraph_starts_with_lower(self):
         """List lines, same height, same font, second starts with lower."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="991" left="85" width="347" height="15" font="4">'
@@ -3561,7 +3561,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_ends_with_stop_next_line_in_list_paragraph_starts_with_number(self):
         """List lines, same height, same font, second starts with lower."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="991" left="85" width="347" height="15" font="4">'
@@ -3579,7 +3579,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_next_line_in_list_paragraph_starts_with_upper(self):
         """List lines, same height, same font, second starts with upper."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="991" left="85" width="347" height="15" font="4">'
@@ -3597,7 +3597,7 @@ class TestPDFParagraph(XMLTester):
 
     def test_is_same_paragraph_next_line_in_list_paragraph_starts_with_number(self):
         """List lines, same height, same font, second starts with upper."""
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="991" left="85" width="347" height="15" font="4">'
@@ -3614,7 +3614,7 @@ class TestPDFParagraph(XMLTester):
         self.assertTrue(pp.is_same_paragraph(t1))
 
     def test_is_same_paragraph_list_paragraph_no_indent_but_space(self):
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="342" left="104" width="295" height="18" font="1">'
@@ -3627,7 +3627,7 @@ class TestPDFParagraph(XMLTester):
         self.assertTrue(pp.is_same_paragraph(t1))
 
     def test_is_same_paragraph_list_paragraph_same_font_different_height(self):
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="1049" left="152" width="542" height="26" font="0">'
@@ -3640,7 +3640,7 @@ class TestPDFParagraph(XMLTester):
         self.assertTrue(pp.is_same_paragraph(t1))
 
     def test_is_same_paragraph_indented_paragraph_start(self):
-        pp = converter.PDFParagraph()
+        pp = converter.PDFParagraph(1.5)
         pp.append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="586" left="149" width="324" height="20" font="6">'
@@ -3651,6 +3651,18 @@ class TestPDFParagraph(XMLTester):
             'ámmátsurggiide.  Dušše  15 </text>'))
 
         self.assertFalse(pp.is_same_paragraph(t1))
+
+    def test_is_same_paragraph_larger_than_default_linespacing(self):
+        pp = converter.PDFParagraph(2.0)
+        pp.append_textelement(
+            converter.PDFTextElement(etree.fromstring(
+                '<text top="106" left="117" width="305" height="19" font="2">'
+                'Text1 </text>')))
+        t1 = converter.PDFTextElement(etree.fromstring(
+            '<text top="136" left="117" width="305" height="19" font="2">text2'
+            '</text>'))
+
+        self.assertTrue(pp.is_same_paragraph(t1))
 
 
 class TestPDFFontspecs(unittest.TestCase):
@@ -3854,7 +3866,7 @@ class TestPDFTextExtractor(XMLTester):
         p2x = converter.PDFTextExtractor()
         p2x.p.text = 'not ending with sentence stop character'
 
-        paragraphs = [converter.PDFParagraph()]
+        paragraphs = [converter.PDFParagraph(1.5)]
         paragraphs[-1].append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="1" left="1" width="1" height="1">Upper case.'
@@ -3874,7 +3886,7 @@ class TestPDFTextExtractor(XMLTester):
         p2x = converter.PDFTextExtractor()
         p2x.p.text = 'not ending with sentence stop character'
 
-        paragraphs = [converter.PDFParagraph()]
+        paragraphs = [converter.PDFParagraph(1.5)]
         paragraphs[-1].append_textelement(
             converter.PDFTextElement(etree.fromstring(
                 '<text top="1" left="1" width="1" height="1">1 element.'
@@ -3903,7 +3915,7 @@ class TestPDFTextExtractor(XMLTester):
 
         paragraphs = []
         for listchar in listchars:
-            pp = converter.PDFParagraph()
+            pp = converter.PDFParagraph(1.5)
             pp.append_textelement(
                 converter.PDFTextElement(etree.fromstring(
                     listtemplate.format(listchar))))
@@ -3936,7 +3948,7 @@ class TestPDFSection(XMLTester):
         ]
         section = converter.PDFSection()
         for element in section_elements:
-            p1 = converter.PDFParagraph()
+            p1 = converter.PDFParagraph(1.5)
             p1.append_textelement(converter.PDFTextElement(etree.fromstring(
                 element)))
             section.append_paragraph(p1)
@@ -3953,7 +3965,7 @@ class TestPDFSection(XMLTester):
             '<text top="622" left="51" width="45" height="18" font="1">'
             'maŋŋil.</text>'
         ]
-        p2 = converter.PDFParagraph()
+        p2 = converter.PDFParagraph(1.5)
         for element in paragraph_elements:
             p2.append_textelement(converter.PDFTextElement(etree.fromstring(
                 element)))
@@ -3962,7 +3974,7 @@ class TestPDFSection(XMLTester):
 
     def test_is_same_section_listitem_following_standard_paragraph(self):
         """list items are often narrower than previous standard paragraphs."""
-        p1 = converter.PDFParagraph()
+        p1 = converter.PDFParagraph(1.5)
         p1.append_textelement(converter.PDFTextElement(etree.fromstring(
             '<text top="460" left="51" width="242" height="18" font="0"><b>'
             'Geatnegahtton kártengeahččaleamit</b></text>')))
@@ -3972,7 +3984,7 @@ class TestPDFSection(XMLTester):
         section = converter.PDFSection()
         section.append_paragraph(p1)
 
-        p2 = converter.PDFParagraph()
+        p2 = converter.PDFParagraph(1.5)
         p2.append_textelement(converter.PDFTextElement(etree.fromstring(
             '<text top="496" left="51" width="163" height="18" font="1">'
             '• Lohkamis 1., 2. ja 3. ceahkis</text>')))

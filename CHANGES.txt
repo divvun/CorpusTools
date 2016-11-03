@@ -81,3 +81,4 @@ v<0.15.10>, <20161013> -- Fix parts of bug 1938, space in front of the letter ŋ
 v<0.15.11>, <20161022> -- Fix error message which crashed convert2xml
 v<0.15.12>, <20161024> -- Improve renaming of files: Add basic metadata file if it does not exist and handle non-ascii names.
 v<0.16.0>, <20161026> -- Make parallelize accept directories as well as files as input.
+v<0.16.1>, <20161026> -- Add linespacing to metadata and use it in pdf conversion.
