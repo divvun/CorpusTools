@@ -388,6 +388,11 @@ class MetadataHandler(object):
 
     @property
     def linespacing(self):
+        ''':obj:`dict` of :obj:`str` pairs
+
+        The key may be all, odd, even or a pagenumber, the value is a
+        floating point number.
+        '''
         value = self.get_variable('linespacing')
 
         if (value) and (
