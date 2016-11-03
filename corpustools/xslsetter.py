@@ -390,12 +390,13 @@ class MetadataHandler(object):
     def linespacing(self):
         value = self.get_variable('linespacing')
 
-        if ('all' in value and ('odd' in value or 'even' in value) or
-                '=' not in value):
+        if (value) and (
+                ('all' in value and ('odd' in value or 'even' in value) or
+                '=' not in value)):
             raise XsltError(
                 'Invalid format in the variable linespacing in the file:'
                 '\n{}\n{}\n'
-                'Format must be [all|odd|even|pagenumber]=integer'.format(
+                'Format must be [all|odd|even|pagenumber]=float'.format(
                     self.filename, value))
 
         try:
@@ -418,9 +419,10 @@ class MetadataHandler(object):
             dict: page: float pairs
         """
         l = {}
-        for part in value.split(','):
-            (pages, linespacing) = tuple(part.split('='))
-            for page in pages.split(';'):
-                l[page.strip()] = float(linespacing)
+        if value:
+            for part in value.split(','):
+                (pages, linespacing) = tuple(part.split('='))
+                for page in pages.split(';'):
+                    l[page.strip()] = float(linespacing)
 
         return l

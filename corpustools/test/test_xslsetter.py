@@ -128,6 +128,15 @@ class TestMetadataHandler(unittest.TestCase):
 
         self.assertDictEqual(got, want)
 
+    def test_set_linespacing_7(self):
+        '''Test the default value.'''
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+
+        got = md.linespacing
+        want = {}
+
+        self.assertDictEqual(got, want)
+
     def test_set_margin(self):
         """Test if the margin is set correctly."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
