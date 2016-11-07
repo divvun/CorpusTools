@@ -2484,17 +2484,15 @@ class HTMLConverter(Converter):
         Returns:
             a string containing the html document.
         """
-        try:
-            tree = etree.parse(self.names.orig)
-            return etree.tostring(tree.getroot())
-        except etree.XMLSyntaxError:
-            for encoding in ['utf-8', 'windows-1252', 'latin1']:
-                try:
-                    with codecs.open(self.names.orig, encoding=encoding) as f:
-                        return etree.tostring(html.document_fromstring(
-                            self.remove_declared_encoding(f.read())))
-                except UnicodeDecodeError:
-                    pass
+        for encoding in ['utf-8', 'windows-1252', 'latin1']:
+            try:
+                with codecs.open(self.names.orig, encoding=encoding) as f:
+                    c = f.read()
+                    r = self.remove_declared_encoding(c)
+                    return etree.tostring(html.document_fromstring(
+                        r))
+            except UnicodeDecodeError:
+                pass
 
         raise ConversionError('HTML error'.format(self.names.orig))
 
