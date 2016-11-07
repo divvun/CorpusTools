@@ -125,8 +125,6 @@ class TestTextCat(unittest.TestCase):
         wmodel_nob = text_cat.WordModel().of_text(nob_train)
         ctext_nob = text_cat.CharModel().of_text(nob_test)
 
-        util.print_frame(debug=cmodel_sme.compare(ctext_nob))
-        util.print_frame(debug=cmodel_nob.compare(ctext_nob))
         self.assertLess(wmodel_sme.compare_tc(nob_test,
                                               cmodel_sme.compare(ctext_nob)),
                         wmodel_nob.compare_tc(nob_test,
