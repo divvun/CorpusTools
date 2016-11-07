@@ -62,9 +62,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <list>'
             '      <p type="listitem">'
@@ -91,9 +88,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '  <p>'
             '      <span type="quote">'
@@ -121,9 +115,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p type="title">'
             '            Pressesenter'
@@ -149,9 +140,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '  <p>'
             '      Pressesenter'
@@ -177,9 +165,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '  <p>'
             '      <em type="bold">'
@@ -210,9 +195,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '  <p>'
             '           John-Marcus Kuhmunen'
@@ -237,9 +219,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '  <p>Geahča buot áššebáhpáriid</p>'
             '  </body>'
@@ -265,9 +244,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      maajjen'
@@ -297,9 +273,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      <em type="italic">'
@@ -326,9 +299,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p type="title">'
             '      Terje Riis-Johansen'
@@ -359,9 +329,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p type="title">'
             '      Ledige stillingar'
@@ -394,9 +361,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p type="title">Sámedikki doarjja</p>'
             '  </body>'
@@ -417,9 +381,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>Rikspolitiske verv</p>'
             '    <p>abc</p>'
@@ -450,9 +411,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      <em type="italic">'
@@ -483,9 +441,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
@@ -511,9 +466,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '      <p>Gulaskuddanáigimearri: guovvamánu 20. b. 2010</p>'
             '  </body>'
@@ -535,9 +487,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '      <p>Harrieth Aira</p>'
             '  </body>'
@@ -561,9 +510,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      div-p-small'
@@ -591,9 +537,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      <em type="italic">'
@@ -621,9 +564,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
@@ -653,9 +593,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '    <body>'
             '      <p>'
             '        abc'
@@ -687,9 +624,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      Tällä viikolla'
@@ -717,9 +651,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>Laitan blogini lukijoille</p>'
             '    <p>Voimassa oleva</p>'
@@ -742,9 +673,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      Almmuhan Kuhmunen, John-Marcus.'
@@ -778,9 +706,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <list>'
             '      <p type="listitem">FoU</p>'
@@ -808,9 +733,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <list>'
             '      <p type="listitem">Teknologiaovdánahttin ja DGT (IKT)</p>'
@@ -836,9 +758,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      Sámediggi lea juolludan doarjaga.'
@@ -866,9 +785,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      John-Marcus Kuhmunen'
@@ -896,9 +812,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      aa'
@@ -923,9 +836,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p type="title">header1</p>'
             '    <p type="title">header2</p>'
@@ -950,9 +860,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p type="title">'
             '      Phone'
@@ -972,9 +879,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>Geahča</p>'
             '    <p>'
@@ -1003,9 +907,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p type="listitem">'
             '      <em type="bold">'
@@ -1039,9 +940,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <list>'
             '      <p type="listitem">'
@@ -1069,9 +967,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <list>'
             '      <p type="listitem">FoU</p>'
@@ -1095,9 +990,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>2009</p>'
             '  </body>'
@@ -1118,9 +1010,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>[1] Vestertana. [2] Fra 1918. </p>'
             '  </body>'
@@ -1138,9 +1027,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '  </body>'
             '</document>'
@@ -1161,9 +1047,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <list>'
             '      <p type="listitem">wtf ol!</p>'
@@ -1187,9 +1070,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <list>'
             '      <p type="listitem">wtf ul!</p>'
@@ -1213,9 +1093,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <list>'
             '      <p type="listitem">Lærer K. Bruflodt </p>'
@@ -1247,9 +1124,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <list>'
             '      <p type="listitem">1</p>'
@@ -1292,9 +1166,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <list>'
             '      <p type="listitem">1</p>'
@@ -1331,9 +1202,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      <em type="bold">'
@@ -1361,9 +1229,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      <em type="bold">'
@@ -1398,9 +1263,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      <em type="bold">Bargit</em> fertejit dahkat.'
@@ -1428,9 +1290,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      Voksenopplæring'
@@ -1456,9 +1315,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      Aerpievuekien daajroe'
@@ -1484,9 +1340,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      <em type="bold">'
@@ -1509,9 +1362,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p type="listitem">mearridit gielddaid </p>'
             '    <p type="listitem">ovddidit servodatsihkkarvuođa</p>'
@@ -1530,9 +1380,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p type="title">Kapittel</p>'
             '  </body>'
@@ -1550,9 +1397,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p><em type="bold">&#167; 1-1.</em></p>'
             '  </body>'
@@ -1585,9 +1429,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <list>'
             '      <p type="listitem">Energiija(EV) (goallostat)</p>'
@@ -1618,9 +1459,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <list>'
             '      <p type="listitem">Oljo (goallostat)</p>'
@@ -1653,9 +1491,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '           Energiija (goallostat)'
@@ -1677,9 +1512,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <list>'
             '            <p type="listitem">km 2</p>'
@@ -1706,9 +1538,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      bla bla 2'
@@ -1734,10 +1563,8 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
+            '    <p/>'
             '    <p>'
             '      <em type="bold">'
             '        Innholdsfortegnelse'
@@ -1764,9 +1591,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      Klara'
@@ -1796,9 +1620,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '   <p>'
             '     Pressesenter'
@@ -1820,9 +1641,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      22 24 91 03'
@@ -1848,9 +1666,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      <em type="bold">'
@@ -1879,9 +1694,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      <em type="bold">'
@@ -1918,9 +1730,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '  <p></p>'
             '    <p type="title">Láhka</p>'
@@ -1955,9 +1764,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '  <p>'
             '           Møre og Romsdal Fylkkadiggemiellahttu'
@@ -1983,12 +1789,9 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
-            '      <em type="italic">'
+            '      <em type="bold">'
             '        Politihkalaš doaimmat'
             '      </em>'
             '    </p>'
@@ -2013,9 +1816,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      Stáhtačálli, Eanandoallo- ja biebmodepartemeanta'
@@ -2037,9 +1837,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '           Kvirrevitt'
@@ -2067,9 +1864,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p type="title">'
             '      Departementet ber skoledirektøren om hjelp'
@@ -2101,9 +1895,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p type="title">'
             '      Gulaskuddanásahusat'
@@ -2132,9 +1923,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      <em type="bold">'
@@ -2180,9 +1968,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      link'
@@ -2220,9 +2005,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>Riikkačoahkkincealkámušat 2006</p>'
             '    <p>'
@@ -2255,9 +2037,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      Riikkačoahkkincealkámušat 2006'
@@ -2282,9 +2061,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>Náitalan, 3 máná</p>'
             '  </body>'
@@ -2304,12 +2080,9 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
-            '      <em type="italic">Gaskavahkku</em>'
+            '      <em type="bold">Gaskavahkku</em>'
             '    </p>'
             '  </body>'
             '</document>'
@@ -2332,9 +2105,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      Kvirrevitt'
@@ -2362,9 +2132,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      Nuohta:'
@@ -2394,12 +2161,9 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
-            '      <em type="italic">Ášši nr. 54/60:</em>'
+            '      <em type="bold">Ášši nr. 54/60:</em>'
             '    </p>'
             '  </body>'
             '</document>'
@@ -2424,9 +2188,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      <em type="bold">Tysfjord turistsenter</em>'
@@ -2448,9 +2209,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      <em type="bold">Språktilbudet</em>'
@@ -2474,9 +2232,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      Jan'
@@ -2498,9 +2253,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      Kap. Poasta'
@@ -2521,9 +2273,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '  </body>'
             '</document>'
@@ -2546,49 +2295,10 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
-            '      <em type="italic">'
+            '      <em>'
             '        Kapittel 1'
-            '      </em>'
-            '    </p>'
-            '  </body>'
-            '</document>'
-        ),
-    ),
-    (
-        'em-table-tr-td-font-em',
-        (
-            '<html>'
-            '  <body>'
-            '    <em>'
-            '      <table>'
-            '        <tr>'
-            '          <td>'
-            '            <font'
-            '              <em>'
-            '                em-table-tr-td-font-em'
-            '              </em>'
-            '            </font>'
-            '          </td>'
-            '        </tr>'
-            '      </table>'
-            '    </em>'
-            '  </body>'
-            '</html>'
-        ),
-        (
-            '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
-            '  <body>'
-            '    <p>'
-            '      <em type="italic">'
-            '        em-table-tr-td-font-em'
             '      </em>'
             '    </p>'
             '  </body>'
@@ -2614,9 +2324,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <list>'
             '      <p type="listitem">'
@@ -2654,9 +2361,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '  <list>'
             '      <p type="listitem">'
@@ -2690,9 +2394,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <list>'
             '      <p>'
@@ -2721,9 +2422,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      Kl.'
@@ -2761,9 +2459,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p type="title">'
             '      Kl.'
@@ -2792,9 +2487,6 @@ def assertXmlEqual(got, want):
         ),
         (
             '<document>'
-            '  <header>'
-            '    <title/>'
-            '  </header>'
             '  <body>'
             '    <p>'
             '      <em type="bold">ovdamearka</em>'
