@@ -1952,6 +1952,7 @@ class HTMLContentConverter(object):
                 'map',
                 'ins',
                 's',
+                'colgroup',
             ])
 
         try:
