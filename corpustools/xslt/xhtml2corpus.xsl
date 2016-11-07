@@ -208,7 +208,6 @@ xsltproc xhtml2corpus.xsl - > file.xml
                         ancestor::li|
                         ancestor::td|
                         parent::p|
-                        parent::font|
                         parent::span">
             <em type="bold">
                 <xsl:apply-templates/>
@@ -441,7 +440,6 @@ If it is a container it has one or more of the these tags:
                           ancestor::i|
                           ancestor::u|
                           ancestor::a|
-                          ancestor::font|
                           ancestor::li|
                           ancestor::span">
                     <xsl:apply-templates select="text()"/>
@@ -503,28 +501,8 @@ If it is a container it has one or more of the these tags:
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="font">
-    <xsl:apply-templates/>
-</xsl:template>
-
 <xsl:template match="ol/i">
     <xsl:apply-templates/>
-</xsl:template>
-
-<xsl:template match="div/font|
-              td/font">
-    <xsl:choose>
-        <xsl:when test="ancestor::em|
-                  font|
-                  p">
-            <xsl:apply-templates/>
-        </xsl:when>
-        <xsl:otherwise>
-            <p>
-                <xsl:apply-templates/>
-            </p>
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="pb">
