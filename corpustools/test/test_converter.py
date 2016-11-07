@@ -442,7 +442,7 @@ def check_unwanted_classes_and_ids(tag, key, value):
         '<html><body>{}</body></html>'.format(inner))
 
     want = html5parser.document_fromstring(
-        '<html><head/><body>{}</body></html>'.format(inner_r))
+        '<html><body>{}</body></html>'.format(inner_r))
 
     clean_namespaces([got, want])
     if etree.tostring(got) != etree.tostring(want):
@@ -465,7 +465,7 @@ def test_unwanted_tag(unwanted_tag):
         '</html>' % unwanted_tag)
     want = html5parser.document_fromstring(
         '<html>'
-        '<head/><body><p>p1</p><p>p2'
+        '<body><p>p1</p><p>p2'
         '</p></body></html>')
 
     clean_namespaces([got, want])
@@ -1084,13 +1084,13 @@ class TestEpubConverter(XMLTester):
             <html>
                 <head/>
                 <body>
-                    <div id="Text/Section0001.xhtml">
+                    <div">
                         <div>
                             <h1>1 Bajilčála</h1>
                             <p>1asdf</p>
                         </div>
                     </div>
-                    <div id="Text/Section0003.xhtml">
+                    <div">
                         <div>
                             <h3 id="sigil_toc_id_5">3.1.1 Bajilčála</h3>
                             <div>8asdf</div>
@@ -1108,9 +1108,6 @@ class TestEpubConverter(XMLTester):
         got = self.testdoc.convert2intermediate()
         want = ("""
             <document>
-                <header>
-                    <title></title>
-                </header>
                 <body>
                     <p type="title">1 Bajilčála</p>
                     <p>1asdf</p>
@@ -1144,9 +1141,6 @@ class TestEpubConverter(XMLTester):
         got = self.testdoc.convert2intermediate()
         want = ("""
             <document>
-                <header>
-                    <title></title>
-                </header>
                 <body>
                     <p type="title">1 Bajilčála</p>
                     <p>1asdf</p>
@@ -1177,9 +1171,6 @@ class TestEpubConverter1(XMLTester):
         got = self.testdoc.convert2intermediate()
         want = ("""
             <document>
-                <header>
-                    <title></title>
-                </header>
                 <body>
                     <p>igjen går hesten</p>
                     <p>baklengs inni framtida</p>
@@ -1198,9 +1189,6 @@ class TestEpubConverter1(XMLTester):
         got = self.testdoc.convert2intermediate()
         want = ("""
             <document>
-                <header>
-                    <title></title>
-                </header>
                 <body>
                     <p>alle gir gass</p>
                     <p>men ikke</p>
@@ -1219,49 +1207,49 @@ class TestHTMLContentConverter(XMLTester):
     @parameterized.expand([
         ('Remove an empty p.',
          '<html><body><p/></html>',
-         '<html><head/><body></body></html>'),
+         '<html><body></body></html>'),
         ('Do not remove a p with content.',
          '<html><body><p><span>spanny</span></p></html>',
-         '<html><head/><body><p><span>spanny</span></p></body></html>'),
+         '<html><body><p><span>spanny</span></p></body></html>'),
         ('Remove empty class',
          '<html><body><div class="">a</div><div class="a">'
          '<span class="">b</span></div></html>',
-         '<html><head/><body><div>a</div><div class="a">'
+         '<html><body><div>a</div><div class="a">'
         '<span>b</span></div></body></html>'),
         ('Remove comment',
          '<html><body><b><!--Hey, buddy. --></b></body></html>',
-         '<html><head/><body><b/></body></html>'),
+         '<html><body><b/></body></html>'),
         ('Remove processing instruction',
          '<html><body><b><?ProcessingInstruction?></b></body></html>',
-         '<html><head/><body><b/></body></html>'),
+         '<html><body><b/></body></html>'),
         ('Only text before next significant element',
          u'<html><head><title>– Den utdøende stammes frykt</title>'
          u'</head><body><h3>VI</h3>... Finnerne<p>Der</body></html>',
-         '<html><head>'
-         '<title>– Den utdøende stammes frykt</title></head><body>'
-         '<h3>VI</h3>  <p>... Finnerne</p><p>Der</p></body></html>'),
+         u'<html><head>'
+         u'<title>– Den utdøende stammes frykt</title></head><body>'
+         u'<h3>VI</h3>  <p>... Finnerne</p><p>Der</p></body></html>'),
         ('Text and i element before next significant element',
          u'<head><title>– Den utdøende stammes frykt</title>'
          u'</head><body><h3>VI</h3>... Finnerne<i>Der</body></html>',
-         '<html><head>'
-         '<title>– Den utdøende stammes frykt</title></head><body>'
-         '<h3>VI</h3>  <p>... Finnerne<i>Der</i></p></body></html>'),
+         u'<html><head>'
+         u'<title>– Den utdøende stammes frykt</title></head><body>'
+         u'<h3>VI</h3>  <p>... Finnerne<i>Der</i></p></body></html>'),
         ('h2 as a stop element',
          u'<html>'
          u'<title>– Den utdøende stammes frykt</title>'
          u'</head><body><h3>VI</h3>... Finnerne<a/>'
-         u'<h2><a>Der</a></h2></body></html>',
-         '<html><head><title>– Den '
-         'utdøende stammes frykt</title>'
-         '</head><body>  <h3>VI</h3>  '
-         '<p>... Finnerne<a/></p><h2>Der</h2></body></html>'),
+         u'<h2>Der</h2></body></html>',
+         u'<html><head><title>– Den '
+         u'utdøende stammes frykt</title>'
+         u'</head><body>  <h3>VI</h3>  '
+         u'<p>... Finnerne<a/></p><h2>Der</h2></body></html>'),
         ('center2div',
          '<html><body><center><span class="">b</span></center></html>',
-         '<html><head/><body><div class="c1"><span>b</span></div></body>'
+         '<html><body><div class="c1"><span>b</span></div></body>'
          '</html>'),
         ('test_body_i',
          '<html><body><i>b</i></body></html>',
-         '<html><head/><body><p><i>b</i></p></body></html>'),
+         '<html><body><p><i>b</i></p></body></html>'),
         ('Font elements with only text',
          '<html><body><p>x '
          '<font>a, b </font>'
@@ -1271,50 +1259,43 @@ class TestHTMLContentConverter(XMLTester):
          '<font> f</font>'
          '<font>. </font>'
          '</p></body></html>',
-         '<html><head/><body><p>'
+         '<html><body><p>'
          'x a, b cde f. '
          '</p></body></html>'),
         ('Font element containing other xml elements',
          '<html><body><p>x '
          '<font>a <i>b</i> c.</font> d'
          '</p></body></html>',
-         '<html><head/><body><p>x '
+         '<html><body><p>x '
          'a <i>b</i> c. d'
          '</p></body></html>'),
         ('Font element containing font elements',
          '<html><body><p><font>x</font> '
          '<font>a <i>b</i> c.</font> <font>d</font>'
          '</p></body></html>',
-         '<html><head/><body><p>x a <i>b</i> c. d'
-         '</p></body></html>'),
-        ('Font element containing font xml elements',
-         '<html><body><p><font>x</font> '
-         '<font>a <font><i>b</i></font> c.</font> <font>d</font>'
-         '</p></body></html>',
-         '<html><head/><body><p>x '
-         'a <i>b</i> c. d'
+         '<html><body><p>x a <i>b</i> c. d'
          '</p></body></html>'),
         ('test_body_a',
          '<html><body><a>b</a></body></html>',
-         '<html><head/><body><p><a>b</a></p></body></html>'),
+         '<html><body><p><a>b</a></p></body></html>'),
         ('test_body_em',
          '<html><body><em>b</em></body></html>',
-         '<html><head/><body><p><em>b</em></p></body></html>'),
+         '<html><body><p><em>b</em></p></body></html>'),
         ('test_body_font',
          '<html><body><font>b</font></body></html>',
-         '<html><head/><body><p>b</p></body></html>'),
+         '<html><body><p>b</p></body></html>'),
         ('test_body_u',
          '<html><body><u>b</u></body></html>',
-         '<html><head/><body><p><u>b</u></p></body></html>'),
+         '<html><body><p><u>b</u></p></body></html>'),
         ('test_body_strong',
          '<html><body><strong>b</strong></body></html>',
-         '<html><head/><body><p><strong>b</strong></p></body></html>'),
+         '<html><body><p><strong>b</strong></p></body></html>'),
         ('test_body_span',
          '<html><body><span>b</span></body></html>',
-         '<html><head/><body><p><span>b</span></p></body></html>'),
+         '<html><body><p><span>b</span></p></body></html>'),
         ('test_body_text',
          '<html><body>b</body></html>',
-         '<html><head/><body><p>b</p></body></html>'),
+         '<html><body><p>b</p></body></html>'),
     ])
     def test_convert2xhtml(self, testname, test_input, want_input):
         """Test convert2xhtml.
@@ -1378,6 +1359,7 @@ class TestHTMLConverter(XMLTester):
                 <body>
                     <p type="title">Gå Stáddá</p>
                     <p>Gå ÅN</p>
+                    <p></p>
                 </body>
             </document>
             '''
@@ -1400,9 +1382,6 @@ class TestHTMLConverter(XMLTester):
             ''',  # nopep8
             '''
             <document>
-                <header>
-                    <title/>
-                </header>
                 <body>
                     <list>
                         <p type="listitem">www.soff.no</p>
@@ -1451,6 +1430,7 @@ class TestHTMLConverter(XMLTester):
                 </header>
                 <body>
                     <p>Gå ÅN</p>
+                    <p></p>
                 </body>
             </document>
             '''

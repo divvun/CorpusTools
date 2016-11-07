@@ -1982,12 +1982,12 @@ class HTMLContentConverter(object):
         etc. – treat them all as <div>'s for xhtml2corpus
         """
         superfluously_named_tags = self.soup.xpath(
-            "//html:fieldset | //html:legend | //html:article | //html:hgroup "
-            "| //html:section | //html:dl | //html:dd | //html:dt"
-            "| //html:menu",
-            namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+            "//fieldset | //legend | //article | //hgroup "
+            "| //section | //dl | //dd | //dt"
+            "| //menu",
+            )
         for elt in superfluously_named_tags:
-            elt.tag = '{http://www.w3.org/1999/xhtml}div'
+            elt.tag = 'div'
 
     def fix_spans_as_divs(self):
         """Turn div like elements into div.
@@ -1997,37 +1997,37 @@ class HTMLContentConverter(object):
         similar issues by turning them into divs.
         """
         spans_as_divs = self.soup.xpath(
-            "//*[( descendant::html:div or descendant::html:p"
-            "      or descendant::html:h1 or descendant::html:h2"
-            "      or descendant::html:h3 or descendant::html:h4"
-            "      or descendant::html:h5 or descendant::html:h6 ) "
-            "and ( self::html:span or self::html:b or self::html:i"
-            "      or self::html:em or self::html:strong "
-            "      or self::html:a )"
+            "//*[( descendant::div or descendant::p"
+            "      or descendant::h1 or descendant::h2"
+            "      or descendant::h3 or descendant::h4"
+            "      or descendant::h5 or descendant::h6 ) "
+            "and ( self::span or self::b or self::i"
+            "      or self::em or self::strong "
+            "      or self::a )"
             "    ]",
-            namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+            )
         for elt in spans_as_divs:
-            elt.tag = '{http://www.w3.org/1999/xhtml}div'
+            elt.tag = 'div'
 
         ps_as_divs = self.soup.xpath(
-            "//html:p[descendant::html:div]",
-            namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+            "//p[descendant::div]",
+            )
         for elt in ps_as_divs:
-            elt.tag = '{http://www.w3.org/1999/xhtml}div'
+            elt.tag = 'div'
 
         lists_as_divs = self.soup.xpath(
-            "//*[( child::html:ul or child::html:ol ) "
-            "and ( self::html:ul or self::html:ol )"
+            "//*[( child::ul or child::ol ) "
+            "and ( self::ul or self::ol )"
             "    ]",
-            namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+            )
         for elt in lists_as_divs:
-            elt.tag = '{http://www.w3.org/1999/xhtml}div'
+            elt.tag = 'div'
 
     def remove_empty_p(self):
         """Remove empty p elements."""
         ps = self.soup.xpath(
-            '//html:p',
-            namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+            '//p',
+            )
 
         for elt in ps:
             if elt.text is None and elt.tail is None and not len(elt):
@@ -2309,23 +2309,23 @@ class HTMLContentConverter(object):
         for tag, attribs in six.iteritems(unwanted_classes_ids):
             for key, values in six.iteritems(attribs):
                 for value in values:
-                    search = ('.//html:{}[@{}="{}"]'.format(tag, key, value))
+                    search = ('.//{}[@{}="{}"]'.format(tag, key, value))
                     for unwanted in self.soup.xpath(search, namespaces=ns):
                         unwanted.getparent().remove(unwanted)
 
     def add_p_around_text(self):
         """Add p around text after an hX element."""
         stop_tags = [
-            '{http://www.w3.org/1999/xhtml}p',
-            '{http://www.w3.org/1999/xhtml}h3',
-            '{http://www.w3.org/1999/xhtml}h2',
-            '{http://www.w3.org/1999/xhtml}div',
-            '{http://www.w3.org/1999/xhtml}table']
+            'p',
+            'h3',
+            'h2',
+            'div',
+            'table']
         for h in self.soup.xpath(
-                './/html:body/*',
-                namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
+                './/body/*',
+                ):
             if h.tail is not None and h.tail.strip() != '':
-                p = etree.Element('{http://www.w3.org/1999/xhtml}p')
+                p = etree.Element('p')
                 p.text = h.tail
                 h.tail = None
                 for next_element in iter(h.getnext, None):
@@ -2338,26 +2338,26 @@ class HTMLContentConverter(object):
 
         # br's are not allowed right under body in XHTML:
         for elt in self.soup.xpath(
-                './/html:body/html:br',
-                namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
-            elt.tag = '{http://www.w3.org/1999/xhtml}p'
+                './/body/br',
+                ):
+            elt.tag = 'p'
             elt.text = ' '
 
     def center2div(self):
         """Convert center to div in tidy style."""
         for center in self.soup.xpath(
-                './/html:center',
-                namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
-            center.tag = '{http://www.w3.org/1999/xhtml}div'
+                './/center',
+                ):
+            center.tag = 'div'
             center.set('class', 'c1')
 
     def body_i(self):
         """Wrap bare elements inside a p element."""
         for tag in ['a', 'i', 'em', 'u', 'strong', 'span']:
             for bi in self.soup.xpath(
-                    './/html:body/html:{}'.format(tag),
-                    namespaces={'html': 'http://www.w3.org/1999/xhtml'}):
-                p = etree.Element('{http://www.w3.org/1999/xhtml}p')
+                    './/body/{}'.format(tag),
+                    ):
+                p = etree.Element('p')
                 bi_parent = bi.getparent()
                 bi_parent.insert(bi_parent.index(bi), p)
                 p.append(bi)
@@ -2442,11 +2442,10 @@ class HTMLContentConverter(object):
     def body_text(self):
         """Wrap bare text inside a p element."""
         body = self.soup.find(
-            './/html:body',
-            namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+            './/body')
 
         if body.text is not None:
-            p = etree.Element('{http://www.w3.org/1999/xhtml}p')
+            p = etree.Element('p')
             p.text = body.text
             body.text = None
             body.insert(0, p)
@@ -2459,8 +2458,8 @@ class HTMLContentConverter(object):
         """
         c_content = self.remove_cruft(content)
 
-        self.soup = html5parser.document_fromstring(
-            self.superclean(c_content).encode('utf-8'))
+        c_clean = self.superclean(c_content)
+        self.soup = html.document_fromstring(c_clean)
         self.remove_empty_class()
         self.remove_empty_p()
         self.remove_elements()

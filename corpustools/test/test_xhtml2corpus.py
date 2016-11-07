@@ -1413,9 +1413,6 @@ def assertXmlEqual(got, want):
         'div-font-font-p',
         (
             '<html>'
-            '  <header>'
-            '    <meta charset="UTF-8"> '
-            '  </header>;'
             '  <body>'
             '    <div>'
             '      <font>'
