@@ -50,7 +50,7 @@ from corpustools import (argparse_version, ccat, corpuspath, decode,
 here = os.path.dirname(__file__)
 
 
-logging.basicConfig(level=logging.CRITICAL)
+logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
@@ -1709,14 +1709,17 @@ class PDF2XMLConverter(Converter):
         Arguments:
             page: a pdf xml page element.
         """
-        pdfpage = PDFPage(page, metadata_margins=self.md.margins,
-                          metadata_inner_margins=self.md.inner_margins,
-                          linespacing=self.md.linespacing)
-        if not pdfpage.is_skip_page(self.md.skip_pages):
-            pdfpage.fix_font_id(self.pdffontspecs)
-            with util.ignored(PDFEmptyPageError):
-                self.extractor.extract_text_from_page(
-                    pdfpage.pick_valid_text_elements())
+        try:
+            pdfpage = PDFPage(page, metadata_margins=self.md.margins,
+                            metadata_inner_margins=self.md.inner_margins,
+                            linespacing=self.md.linespacing)
+            if not pdfpage.is_skip_page(self.md.skip_pages):
+                pdfpage.fix_font_id(self.pdffontspecs)
+                with util.ignored(PDFEmptyPageError):
+                    self.extractor.extract_text_from_page(
+                        pdfpage.pick_valid_text_elements())
+        except xslsetter.XsltError as e:
+            raise ConversionError(str(e))
 
     def parse_pages(self, root_element):
         """Parse the pages of the pdf xml document.
