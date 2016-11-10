@@ -2491,10 +2491,12 @@ class HTMLConverter(Converter):
         for encoding in ['utf-8', 'windows-1252', 'latin1']:
             try:
                 with codecs.open(self.names.orig, encoding=encoding) as f:
-                    c = f.read()
-                    r = self.remove_declared_encoding(c)
-                    return etree.tostring(html.document_fromstring(
-                        r))
+                    return etree.tostring(
+                        html.document_fromstring(
+                            self.remove_declared_encoding(f.read())
+                        ),
+                        encoding='unicode'
+                    )
             except UnicodeDecodeError:
                 pass
 
