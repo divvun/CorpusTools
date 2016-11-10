@@ -1439,10 +1439,11 @@ class TestHTMLConverter(XMLTester):
     def test_convert2intermediate(self, testname, filename, content, want):
         """Check that convoluted html is correctly converted to xml."""
         with testfixtures.TempDirectory() as temp_dir:
+            if six.PY3:
+                content = content.encode('utf8')
             temp_dir.write(filename, content)
             hcc = converter.HTMLConverter(os.path.join(temp_dir.path, filename))
             got = hcc.convert2intermediate()
-
             self.assertXmlEqual(got, etree.fromstring(want))
 
     def test_content(self):

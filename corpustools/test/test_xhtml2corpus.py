@@ -337,8 +337,6 @@ def assertXmlEqual(got, want):
             '      No kan du søke jobb.'
             '    </p>'
             '    <p>'
-            '    </p>'
-            '    <p>'
             '      Sjekk også våre rekrutteringssider'
             '    </p>'
             '    <p>'
@@ -1564,7 +1562,6 @@ def assertXmlEqual(got, want):
         (
             '<document>'
             '  <body>'
-            '    <p/>'
             '    <p>'
             '      <em type="bold">'
             '        Innholdsfortegnelse'
@@ -2500,6 +2497,8 @@ def test_conversion(testname, html, xml):
     '''Check that the tidied html is correctly converted to corpus xml'''
     with testfixtures.TempDirectory() as temp_dir:
         filepath = os.path.join('orig/sme/admin/sd', testname)
+        if six.PY3:
+            html = html.encode('utf8')
         temp_dir.write(filepath, html)
         got = converter.HTMLConverter(
             os.path.join(temp_dir.path, filepath)).convert2intermediate()
