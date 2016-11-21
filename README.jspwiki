@@ -129,7 +129,7 @@ you'll have to "pip uninstall" them individually.
 
 !!ccat
 
-Convert corpus format xml to clean text
+Convert corpus format xml to clean text.
 
 ccat has three usage modes, print to stdout the content of:
 * converted files (produced by [convert2xml|CorpusTools.html#convert2xml])
@@ -248,9 +248,13 @@ optional arguments:
                         Replace hyph tags with the given argument
 }}}
 
+!Source code
+* [ccat.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/ccat.py]
+
 !!convert2xml
 
 Convert original files in a corpus to giellatekno/divvun xml format.
+
 
 convert2xml depends on these external programs:
 
@@ -325,11 +329,19 @@ optional arguments:
                         effect if the converted file already exists.)
 }}}
 
+!Source code
+* [converter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/converter.py]
+* [ccat.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/ccat.py]
+* [corpuspath.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/corpuspath.py]
+* [decode.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/decode.py]
+* [errormarkup.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/errormarkup.py]
+* [text_cat.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/text_cat.py]
+* [xslsetter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/xslsetter.py]
+* [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
+
 !!analyse_corpus
 
-Analyse converted corpus files. So far it only supports analysing sma, sme and
-smj files.
-Only these three languages have the necessary vislcg3 support.
+Analyse converted corpus files.
 
 analyse_corpus depends on these external programs:
 
@@ -381,6 +393,12 @@ optional arguments:
   --serial        When this argument is used files will be analysed one by
                   one.
 }}}
+
+!Source code
+* [analyser.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/analyser.py]
+* [ccat.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/ccat.py]
+* [parallelize.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/parallelize.py]
+* [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
 
 !!add_files_to_corpus
 
@@ -441,6 +459,12 @@ the working copy, like this:
 {{{
 svn ci orig
 }}}
+
+!Source code
+* [adder.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/adder.py]
+* [namechanger.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/namechanger.py]
+* [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
+* [xslsetter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/xslsetter.py]
 
 !!parallelize
 
@@ -568,6 +592,12 @@ sudo python2.7 setup.py install --install-scripts=/usr/local/bin
 python2.7 setup.py install --user --install-scripts=$HOME/bin
 }}}
 
+!Source code
+* [parallelize.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/parallelize.py]
+* [generate_anchor_list.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/generate_anchor_list.py]
+* [typosfile.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/typosfile.py]
+* [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
+
 !!saami_crawler
 
 Add files to freecorpus from a given site.
@@ -595,6 +625,12 @@ optional arguments:
   -v, --version  show program's version number and exit
 }}}
 
+!Source code
+* [saami_crawler.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/saami_crawler.py]
+* [namechanger.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/namechanger.py]
+* [text_cat.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/text_cat.py]
+* [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
+* [xslsetter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/xslsetter.py]
 
 !!generate_anchor_list
 
@@ -618,9 +654,13 @@ optional arguments:
   --outdir OUTDIR  The output directory
 }}}
 
+!Source code
+* [generate_anchor_list.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/generate_anchor_list.py]
+* [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
+
 !!normalise_corpus_names
 
-Normalise the filenames of the files found in the given directories
+Normalise the filenames of the files found in the given directories.
 
 {{{
 usage: normalise_corpus_names [-h] [--version] target_dirs [target_dirs ...]
@@ -636,6 +676,10 @@ optional arguments:
   -h, --help   show this help message and exit
   --version    show program's version number and exit
 }}}
+
+!Source code
+* [normalise_filenames|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/normalise_filenames.py]
+* [namechanger.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/namechanger.py]
 
 !!move_corpus_file
 
@@ -654,6 +698,10 @@ optional arguments:
   -v, --version  show program's version number and exit
 }}}
 
+!Source code
+* [move_files.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/move_files.py]
+* [namechanger.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/namechanger.py]
+
 !!paracheck
 
 {{{
@@ -669,6 +717,12 @@ optional arguments:
   -h, --help     show this help message and exit
   -v, --version  show program's version number and exit
 }}}
+
+!Source code
+* [check_para_consistency.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/check_para_consistency.py]
+* [namechanger.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/namechanger.py]
+* [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
+* [xslsetter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/xslsetter.py]
 
 !!html_cleaner
 
@@ -688,7 +742,13 @@ optional arguments:
   -v, --version  show program's version number and exit
 }}}
 
+!Source code
+* [html_cleaner.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/html_cleaner.py]
+* [converter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/converter.py]
+* [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
+
 !!duperemover
+
 {{{
 usage: duperemover [-h] [-v] dir
 
@@ -702,7 +762,15 @@ optional arguments:
   -v, --version  show program's version number and exit
 }}}
 
+
+!Source code
+* [dupe_finder.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/dupe_finder.py]
+* [ccat.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/ccat.py]
+* [move_files.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/move_files.py]
+* [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
+
 !!dupefinder
+
 {{{
 usage: dupefinder [-h] [-v] dir
 
@@ -716,7 +784,14 @@ optional arguments:
   -v, --version  show program's version number and exit
 }}}
 
+!Source code
+* [dupe_finder.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/dupe_finder.py]
+* [ccat.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/ccat.py]
+* [move_files.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/move_files.py]
+* [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
+
 !!move_corpus_file
+
 {{{
 usage: move_corpus_file [-h] [-v] oldpath newpath
 
@@ -732,7 +807,12 @@ optional arguments:
   -v, --version  show program's version number and exit
 }}}
 
+!Source code
+* [move_files.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/move_files.py]
+* [namechanger.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/namechanger.py]
+
 !!remove_corpus_file
+
 {{{
 usage: remove_corpus_file [-h] [-v] oldpath
 
@@ -746,7 +826,12 @@ optional arguments:
   -v, --version  show program's version number and exit
 }}}
 
+!Source code
+* [move_files.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/move_files.py]
+* [namechanger.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/namechanger.py]
+
 !!pick_parallel_docs
+
 {{{
 usage: pick_parallel_docs [-h] [-v] -p PARALLEL_LANGUAGE --minratio MINRATIO
                           --maxratio MAXRATIO
@@ -766,3 +851,8 @@ optional arguments:
   --minratio MINRATIO   The minimum ratio
   --maxratio MAXRATIO   The maximum ratio
 }}}
+
+!Source code
+* [pick_parallel_docs.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/pick_parallel_docs.py]
+* [parallelize.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/parallelize.py]
+* [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
