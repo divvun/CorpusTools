@@ -60,7 +60,7 @@ class TestFilenameToAscii(unittest.TestCase):
         self.assertEqual(namechanger.normalise_filename(orig), expected)
 
     def test_own_name_with_complete_path(self):
-        oldname = u'j/a/b/c/aba>.txt'
+        oldname = 'j/a/b/c/aba>.txt'
 
         self.assertRaises(namechanger.NamechangerError,
                           namechanger.normalise_filename, oldname)
@@ -85,14 +85,14 @@ class TestAreDuplicates(unittest.TestCase):
     def test_are_duplicate_equal_files(self):
         """Both files exist, with same content, return True"""
         self.assertTrue(namechanger.are_duplicates(
-            six.text_type(os.path.join(self.tempdir.path, 'old_dupe.txt')),
-            six.text_type(os.path.join(self.tempdir.path, 'new_dupe.txt'))))
+            os.path.join(self.tempdir.path, 'old_dupe.txt'),
+            os.path.join(self.tempdir.path, 'new_dupe.txt')))
 
     def test_are_duplicate_unequal_files(self):
         """Both files exist, not same content, return False"""
         self.assertFalse(namechanger.are_duplicates(
-            six.text_type(os.path.join(self.tempdir.path, 'old_dupe.txt')),
-            six.text_type(os.path.join(self.tempdir.path, 'new_none_dupe.txt'))))
+            os.path.join(self.tempdir.path, 'old_dupe.txt'),
+            os.path.join(self.tempdir.path, 'new_none_dupe.txt')))
 
 
 class TestComputeNewBasename(unittest.TestCase):
@@ -116,26 +116,24 @@ class TestComputeNewBasename(unittest.TestCase):
         """What happens when the wanted name is taken, and a duplicate"""
         with self.assertRaises(UserWarning):
             namechanger.compute_new_basename(
-                six.text_type(os.path.join(self.tempdir.path,
-                                           'orig/sme/admin/other_files',
-                                           'old_dupe.txt')),
-                six.text_type(os.path.join(self.tempdir.path,
-                                           'orig/sme/admin/other_files',
-                                           'new_dupe.txt')))
+                os.path.join(self.tempdir.path,
+                             'orig/sme/admin/other_files',
+                             'old_dupe.txt'),
+                os.path.join(self.tempdir.path,
+                             'orig/sme/admin/other_files',
+                             'new_dupe.txt'))
 
     def test_compute_new_basename_same_name(self):
         """What happens when the suggested name is taken, but not duplicate"""
         oldpath = os.path.join(self.tempdir.path, 'orig/sme/admin/other_files',
                                'new_none_düpe.txt')
-        if six.PY2:
-            oldpath = six.text_type(oldpath, encoding='utf8')
-        suggestedpath = six.text_type(os.path.join(
-            self.tempdir.path, 'orig/sme/admin/other_files', 'new_none_dupe.txt'))
+        suggestedpath = os.path.join(
+            self.tempdir.path, 'orig/sme/admin/other_files', 'new_none_dupe.txt')
         self.assertEqual(
             namechanger.compute_new_basename(oldpath, suggestedpath),
-            six.text_type(os.path.join(
+            os.path.join(
                 self.tempdir.path, 'orig/sme/admin/other_files',
-                'new_none_dupe_1.txt'))
+                'new_none_dupe_1.txt')
         )
 
 
@@ -158,17 +156,17 @@ class TestComputeMovepairs(unittest.TestCase):
             create=True)
         sme_metadata.write_file()
         mc.compute_all_movepairs(
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/a.txt')),
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/b.txt')))
+            os.path.join(
+                self.tempdir.path, 'orig/sme/ficti/sub/a.txt'),
+            os.path.join(
+                self.tempdir.path, 'orig/sme/ficti/sub/b.txt'))
 
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(self.tempdir.path,
-                                                   'orig/sme/ficti/sub/a.txt')),
-                newpath=six.text_type(os.path.join(self.tempdir.path,
-                                                   'orig/sme/ficti/sub/b.txt')))])
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/sub/a.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/sub/b.txt'))])
 
     def test_compute_movepairs_2(self):
         """newpath does not exist, needs normalisation, no parallels"""
@@ -178,15 +176,13 @@ class TestComputeMovepairs(unittest.TestCase):
             create=True)
         sme_metadata.write_file()
         ae = os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/æ.txt')
-        if six.PY2:
-            ae = six.text_type(ae, encoding='utf8')
         mc.compute_all_movepairs(ae, ae)
 
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
                 oldpath=ae,
-                newpath=six.text_type(os.path.join(self.tempdir.path,
-                                                   'orig/sme/ficti/sub/ae.txt')))])
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/sub/ae.txt'))])
 
     def test_compute_movepairs_3(self):
         """newpath exists, not duplicate, no parallels"""
@@ -199,17 +195,17 @@ class TestComputeMovepairs(unittest.TestCase):
             create=True)
         sme_metadata.write_file()
         mc.compute_all_movepairs(
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/c.txt')),
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/d.txt')))
+            os.path.join(
+                self.tempdir.path, 'orig/sme/ficti/sub/c.txt'),
+            os.path.join(
+                self.tempdir.path, 'orig/sme/ficti/sub/d.txt'))
 
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(self.tempdir.path,
-                                                   'orig/sme/ficti/sub/c.txt')),
-                newpath=six.text_type(os.path.join(self.tempdir.path,
-                                                   'orig/sme/ficti/sub/d_1.txt')))])
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/sub/c.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/sub/d_1.txt'))])
 
     def test_compute_movepairs_4(self):
         """newpath exists, duplicate, no parallels"""
@@ -219,10 +215,10 @@ class TestComputeMovepairs(unittest.TestCase):
         with self.assertRaises(UserWarning):
             mc = namechanger.MovepairComputer()
             mc.compute_all_movepairs(
-                six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/c.txt')),
-                six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/e.txt')))
+                os.path.join(
+                    self.tempdir.path, 'orig/sme/ficti/sub/c.txt'),
+                os.path.join(
+                    self.tempdir.path, 'orig/sme/ficti/sub/e.txt'))
 
     def test_compute_movepairs_5(self):
         """move to same directory, with parallels"""
@@ -252,27 +248,27 @@ class TestComputeMovepairs(unittest.TestCase):
 
         want = sorted([
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/g.txt'))),
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+                newpath=os.path.join(
+                    self.tempdir.path, 'orig/sme/ficti/sub/g.txt')),
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/smj/ficti/sub/f.txt'),
+                newpath=os.path.join(
                     self.tempdir.path, 'orig/smj/ficti/sub/f.txt')),
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/smj/ficti/sub/f.txt'))),
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt')),
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt')))])
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'),
+                newpath=os.path.join(
+                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'))])
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/g.txt')))
+            os.path.join(
+                self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+            os.path.join(
+                self.tempdir.path, 'orig/sme/ficti/sub/g.txt'))
         got = sorted(mc.filepairs)
 
         self.assertListEqual(got, want)
@@ -305,27 +301,27 @@ class TestComputeMovepairs(unittest.TestCase):
 
         want = sorted([
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/bub/g.txt'))),
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+                newpath=os.path.join(
+                    self.tempdir.path, 'orig/sme/ficti/bub/g.txt')),
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/smj/ficti/sub/f.txt')),
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/smj/ficti/bub/f.txt'))),
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/smj/ficti/sub/f.txt'),
+                newpath=os.path.join(
+                    self.tempdir.path, 'orig/smj/ficti/bub/f.txt')),
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt')),
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/bub/f.txt')))])
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'),
+                newpath=os.path.join(
+                    self.tempdir.path, 'orig/sma/ficti/bub/f.txt'))])
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/bub/g.txt')))
+            os.path.join(
+                self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+            os.path.join(
+                self.tempdir.path, 'orig/sme/ficti/bub/g.txt'))
         got = sorted(mc.filepairs)
 
         self.assertListEqual(got, want)
@@ -358,27 +354,27 @@ class TestComputeMovepairs(unittest.TestCase):
 
         want = sorted([
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sme/facta/sub/g.txt'))),
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+                newpath=os.path.join(
+                    self.tempdir.path, 'orig/sme/facta/sub/g.txt')),
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/smj/ficti/sub/f.txt')),
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/smj/facta/sub/f.txt'))),
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/smj/ficti/sub/f.txt'),
+                newpath=os.path.join(
+                    self.tempdir.path, 'orig/smj/facta/sub/f.txt')),
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt')),
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sma/facta/sub/f.txt')))])
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'),
+                newpath=os.path.join(
+                    self.tempdir.path, 'orig/sma/facta/sub/f.txt'))])
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/facta/sub/g.txt')))
+            os.path.join(
+                self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+            os.path.join(
+                self.tempdir.path, 'orig/sme/facta/sub/g.txt'))
         got = sorted(mc.filepairs)
 
         self.assertListEqual(got, want)
@@ -410,30 +406,28 @@ class TestComputeMovepairs(unittest.TestCase):
         sma_metadata.write_file()
 
         oe = os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/ø.txt')
-        if six.PY2:
-            oe = six.text_type(oe, encoding='utf8')
         want = sorted([
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sme/facta/sub/g.txt'))),
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+                newpath=os.path.join(
+                    self.tempdir.path, 'orig/sme/facta/sub/g.txt')),
             namechanger.PathPair(
                 oldpath=oe,
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/smj/facta/sub/o.txt'))),
+                newpath=os.path.join(
+                    self.tempdir.path, 'orig/smj/facta/sub/o.txt')),
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt')),
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sma/facta/sub/f.txt')))])
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'),
+                newpath=os.path.join(
+                    self.tempdir.path, 'orig/sma/facta/sub/f.txt'))])
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/facta/sub/g.txt')))
+            os.path.join(
+                self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+            os.path.join(
+                self.tempdir.path, 'orig/sme/facta/sub/g.txt'))
         got = sorted(mc.filepairs)
 
         self.assertListEqual(got, want)
@@ -462,29 +456,30 @@ class TestComputeMovepairs(unittest.TestCase):
         self.tempdir.write('orig/sma/ficti/sub/ø.txt', six.b('content of ø'))
         self.tempdir.write('orig/sma/ficti/sub/o.txt', six.b('content of o'))
 
+        from corpustools import util
         oe = os.path.join(self.tempdir.path, 'orig/sma/ficti/sub/ø.txt')
         o_1 = os.path.join(self.tempdir.path, 'orig/sma/ficti/sub/o_1.txt')
-        if six.PY2:
-            oe = six.text_type(oe, encoding='utf8')
-            o_1 = six.text_type(o_1, encoding='utf8')
+        util.print_frame(type(oe))
         want = sorted([
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/g.txt'))),
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+                newpath=os.path.join(
+                    self.tempdir.path, 'orig/sme/ficti/sub/g.txt')),
             namechanger.PathPair(
                 oldpath=oe,
                 newpath=o_1)])
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/g.txt')))
+            os.path.join(
+                self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+            os.path.join(
+                self.tempdir.path, 'orig/sme/ficti/sub/g.txt'))
         got = sorted(mc.filepairs)
 
+        util.print_frame(got)
+        util.print_frame(want)
         self.assertListEqual(got, want)
 
     def test_compute_movepairs_10(self):
@@ -495,15 +490,15 @@ class TestComputeMovepairs(unittest.TestCase):
             create=True)
         sme_metadata.write_file()
         mc.compute_all_movepairs(
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/a.txt')),
-            u'')
+            os.path.join(
+                self.tempdir.path, 'orig/sme/ficti/sub/a.txt'),
+            '')
 
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/a.txt')),
-                newpath=u'')])
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/sme/ficti/sub/a.txt'),
+                newpath='')])
 
     def test_compute_movepairs_11(self):
         """newpath is empty, with parallels"""
@@ -533,25 +528,25 @@ class TestComputeMovepairs(unittest.TestCase):
 
         want = sorted([
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
-                newpath=u''),
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+                newpath=''),
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/smj/ficti/sub/f.txt'),
+                newpath=os.path.join(
                     self.tempdir.path, 'orig/smj/ficti/sub/f.txt')),
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/smj/ficti/sub/f.txt'))),
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt')),
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt')))])
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'),
+                newpath=os.path.join(
+                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'))])
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
-            u'')
+            os.path.join(
+                self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+            '')
         got = sorted(mc.filepairs)
 
         self.assertListEqual(got, want)
@@ -583,28 +578,26 @@ class TestComputeMovepairs(unittest.TestCase):
         sma_metadata.write_file()
 
         oe = os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/ø.txt')
-        if six.PY2:
-            oe = six.text_type(oe, encoding='utf8')
         want = sorted([
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
-                newpath=u''),
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+                newpath=''),
             namechanger.PathPair(
                 oldpath=oe,
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/smj/ficti/sub/o.txt'))),
+                newpath=os.path.join(
+                    self.tempdir.path, 'orig/smj/ficti/sub/o.txt')),
             namechanger.PathPair(
-                oldpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt')),
-                newpath=six.text_type(os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt')))])
+                oldpath=os.path.join(
+                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'),
+                newpath=os.path.join(
+                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'))])
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            six.text_type(os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/f.txt')),
-            u'')
+            os.path.join(
+                self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+            '')
         got = sorted(mc.filepairs)
 
         self.assertListEqual(got, want)
@@ -645,9 +638,9 @@ class TestCorpusFileMover(unittest.TestCase):
     def test_move_orig(self):
         """move to different subdir, with parallels."""
         cfm = namechanger.CorpusFileMover(
-            six.text_type(os.path.join(self.tempdir.path,
-                                       'orig/sme/ficti/sub/f.txt')),
-            six.text_type(os.path.join(self.tempdir.path, 'orig/sme/facta/bub/g.txt')))
+            os.path.join(self.tempdir.path,
+                         'orig/sme/ficti/sub/f.txt'),
+            os.path.join(self.tempdir.path, 'orig/sme/facta/bub/g.txt'))
         cfm.move_files()
         self.tempdir.check_all(
             '',
@@ -717,7 +710,7 @@ class TestCorpusFileRemover(unittest.TestCase):
     def test_remove_orig(self):
         """Remove file, with parallels."""
         cfm = namechanger.CorpusFileRemover(
-            six.text_type(os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt')))
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt'))
         cfm.remove_files()
         self.tempdir.check_all('',)
 
@@ -785,10 +778,10 @@ class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
         r.index.add(['orig', 'prestable'])
         r.index.commit('Added orig and prestable')
 
-        oldpath = six.text_type(os.path.join(
-            self.tempdir.path, 'orig/sme/ficti/sub/f.txt'))
-        newpath = six.text_type(os.path.join(
-            self.tempdir.path, 'orig/sme/facta/bub/g.txt'))
+        oldpath = os.path.join(
+            self.tempdir.path, 'orig/sme/ficti/sub/f.txt')
+        newpath = os.path.join(
+            self.tempdir.path, 'orig/sme/facta/bub/g.txt')
         cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
         cfm.move_files()
         cfm.update_own_metadata()
@@ -957,10 +950,10 @@ class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
         r.index.add(['orig', 'prestable'])
         r.index.commit('Added orig and prestable')
 
-        oldpath = six.text_type(os.path.join(
-            self.tempdir.path, 'orig/sme/ficti/sub/f.txt'))
-        newpath = six.text_type(os.path.join(
-            self.tempdir.path, 'orig/smn/facta/bub/g.txt'))
+        oldpath = os.path.join(
+            self.tempdir.path, 'orig/sme/ficti/sub/f.txt')
+        newpath = os.path.join(
+            self.tempdir.path, 'orig/smn/facta/bub/g.txt')
         cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
         cfm.move_files()
         cfm.update_own_metadata()
@@ -1128,10 +1121,10 @@ class TestCorpusFilesetMetadataUpdater3(unittest.TestCase):
         r.index.add(['orig', 'prestable'])
         r.index.commit('Added orig and prestable')
 
-        oldpath = six.text_type(os.path.join(
-            self.tempdir.path, 'orig/sme/ficti/sub/f.txt'))
-        newpath = six.text_type(os.path.join(
-            self.tempdir.path, 'orig/sme/facta/bub/g.txt'))
+        oldpath = os.path.join(
+            self.tempdir.path, 'orig/sme/ficti/sub/f.txt')
+        newpath = os.path.join(
+            self.tempdir.path, 'orig/sme/facta/bub/g.txt')
         cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
         cfm.move_files()
         cfm.update_own_metadata()
@@ -1263,10 +1256,10 @@ class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
 
     def test_move_fileset(self):
         """Move a set of files."""
-        oldpath = six.text_type(os.path.join(
-            self.tempdir.path, 'orig/sme/ficti/sub/f.txt'))
-        newpath = six.text_type(os.path.join(
-            self.tempdir.path,  'orig/sme/facta/bub/g.txt'))
+        oldpath = os.path.join(
+            self.tempdir.path, 'orig/sme/ficti/sub/f.txt')
+        newpath = os.path.join(
+            self.tempdir.path,  'orig/sme/facta/bub/g.txt')
         with self.assertRaises(UserWarning):
             cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
             cfm.move_files()
@@ -1377,10 +1370,10 @@ class TestCorpusFilesetMetadataUpdater5(unittest.TestCase):
         r.index.add(['orig', 'prestable'])
         r.index.commit('Added orig and prestable')
 
-        oldpath = six.text_type(os.path.join(
-            self.tempdir.path, 'orig/sme/ficti/sub/f.txt'))
+        oldpath = os.path.join(
+            self.tempdir.path, 'orig/sme/ficti/sub/f.txt')
 
-        cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, u'')
+        cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, '')
         cfm.move_files()
         cfm.update_own_metadata()
         cfm.update_parallel_files_metadata()
