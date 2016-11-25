@@ -681,7 +681,47 @@ class TestAvvirConverter(XMLTester):
             '            o'
             '        </p>'
             '    </story>'
-            '</article>')
+            '    <story id="a">'
+            '        <p>a<p>b</p></p>'
+            '    </story>'
+            '</article>'
+        )
+
+    def test_remove_identical_ids(self):
+        """Check that only the first of stories with identical ids are kept."""
+        want = etree.fromstring(
+            '<article>'
+            '    <story id="a" class="Tittel">'
+            '        <p>a</p>'
+            '    </story>'
+            '    <story id="b" class="Undertittel">'
+            '        <p>b</p>'
+            '    </story>'
+            '    <story id="c" class="ingress">'
+            '        <p>c</p>'
+            '    </story>'
+            '    <story id="d" class="body">'
+            '        <p class="tekst">d<br/>e<br/></p>'
+            '        <p>f</p>'
+            '    </story>'
+            '    <story id="g" class="body">'
+            '        <p class="tekst">h<span>i</span>j</p>'
+            '    </story>'
+            '    <story id="k" class="body">'
+            '        <p>l'
+            '            <span>'
+            '                m'
+            '                <br/>'
+            '                n'
+            '            </span>'
+            '            o'
+            '        </p>'
+            '    </story>'
+            '</article>'
+        )
+
+        self.avvir.remove_identical_ids()
+        self.assertXmlEqual(self.avvir.intermediate, want)
 
     def test_convert_p_1(self):
         """p does not contain p."""
@@ -714,6 +754,7 @@ class TestAvvirConverter(XMLTester):
             '    </story>'
             '</article>')
 
+        self.avvir.remove_identical_ids()
         self.avvir.convert_p()
         self.assertXmlEqual(self.avvir.intermediate, want)
 
@@ -869,6 +910,7 @@ class TestAvvirConverter(XMLTester):
             '    <p>o</p>'
             '</article>')
 
+        self.avvir.remove_identical_ids()
         self.avvir.convert_p()
         self.avvir.convert_story()
         self.assertXmlEqual(self.avvir.intermediate, want)
@@ -897,6 +939,7 @@ class TestAvvirConverter(XMLTester):
             '    </body>'
             '</document>')
 
+        self.avvir.remove_identical_ids()
         self.avvir.convert_p()
         self.avvir.convert_story()
         self.avvir.convert_article()

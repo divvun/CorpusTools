@@ -355,11 +355,21 @@ class AvvirConverter(Converter):
     def convert2intermediate(self):
         u"""Convert an Ávvir xml to an intermediate xml document."""
         self.intermediate = etree.parse(self.names.orig).getroot()
+        self.remove_identical_ids()
         self.convert_p()
         self.convert_story()
         self.convert_article()
 
         return self.intermediate
+
+    def remove_identical_ids(self):
+        story_ids = set()
+        for story in self.intermediate.xpath('.//story[@id]'):
+            story_id = story.get('id')
+            if story_id not in story_ids:
+                story_ids.add(story_id)
+            else:
+                story.getparent().remove(story)
 
     @staticmethod
     def insert_element(p, text, position):
