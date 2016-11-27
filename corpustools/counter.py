@@ -25,6 +25,7 @@ from __future__ import absolute_import, print_function
 import argparse
 import logging
 import os
+from collections import defaultdict
 
 from corpustools import argparse_version, converter, util
 
@@ -32,29 +33,68 @@ from corpustools import argparse_version, converter, util
 logging.basicConfig(level=logging.CRITICAL)
 
 
+def parse_options():
+    """Parse the commandline options.
+
+    Returns:
+        a list of arguments as parsed by argparse.Argumentparser.
+    """
+    parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
+        description='Count corpus files. List them if called for.')
+
+    parser.add_argument(u'--listfiles',
+                        action=u"store_true",
+                        help=u'List lacking converted and analysed files.')
+
+    args = parser.parse_args()
+
+    return args
+
+
 def count_files(path):
     """Count files in the given language."""
     cm = converter.ConverterManager(False, False)
     cm.collect_files([path])
-
-    con = 0
-    ana = 0
+    counter = defaultdict(int)
+    lacking_files = defaultdict(set)
     for f in cm.FILES:
         c = cm.converter(f)
         if os.path.exists(c.names.converted):
-            con += 1
+            counter['con'] += 1
+        else:
+            lacking_files['con'].add(c.names.converted)
         if os.path.exists(c.names.analysed):
-            ana += 1
+            counter['ana'] += 1
+        else:
+            if os.path.exists(c.names.converted):
+                lacking_files['ana'].add(c.names.analysed)
 
-    return(len(cm.FILES), con, ana)
+    return(len(cm.FILES), counter['con'], counter['ana'], lacking_files)
 
 
 def main():
 
+    args = parse_options()
+
+    lacking_files = defaultdict(set)
     for corpus in [os.getenv('GTFREE'), os.getenv('GTBOUND')]:
         print(corpus)
         for language in ['fkv', 'sma', 'sme', 'smj', 'smn', 'sms']:
-            print(language,
-                  count_files(os.path.join(corpus, 'orig', language)),
-                  corpus
+            result = count_files(os.path.join(corpus, 'orig', language))
+            print('{}\t{}\t{}\t{}'.format(
+                language,
+                result[0],
+                result[1],
+                result[2]
+                )
             )
+            for key, value in result[3].items():
+                lacking_files[key].update(value)
+
+    if args.listfiles:
+        for key, value in lacking_files.items():
+            print(key)
+            for f in value:
+                print('\t', f)
+        print()
