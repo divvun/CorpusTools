@@ -610,13 +610,14 @@ class PlaintextConverter(Converter):
 
         ptext = ''
 
-        for line in content:
-            if line.strip() == '':
-                if ptext.strip() != '':
-                    body.append(self.make_element('p', ptext))
-                ptext = ''
-            else:
-                ptext = ptext + line
+        for line_no, line in enumerate(content, start=1):
+            if line_no not in self.md.skip_lines:
+                if line.strip() == '':
+                    if ptext.strip() != '':
+                        body.append(self.make_element('p', ptext))
+                    ptext = ''
+                else:
+                    ptext = ptext + line
 
         if ptext != '':
             body.append(self.make_element('p', ptext))

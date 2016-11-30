@@ -84,3 +84,4 @@ v<0.16.0>, <20161026> -- Make parallelize accept directories as well as files as
 v<0.16.1>, <20161026> -- Add linespacing to metadata and use it in pdf conversion.
 v<0.16.2>, <20161107> -- Fix double utf-8'ing problems when converting html documents and other documents with html as a temporary format.
 v<0.16.3>, <20161125> -- Remove all but the first story element with identical ids in avvirxml files.
+v<0.16.4>, <20161130> -- Make it possible to skip lines in plain text document.

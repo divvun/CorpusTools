@@ -1056,6 +1056,35 @@ Filbma lea.</p>
 
         self.assertXmlEqual(got, want)
 
+    def test_skip_lines(self):
+        content = u'''
+a
+
+b
+
+c
+
+d
+
+e
+'''
+        want_string = u'''
+<document>
+    <header/>
+    <body>
+        <p>a</p>
+        <p>d</p>
+        <p>e</p>
+    </body>
+</document>
+'''
+        text = converter.PlaintextConverter('orig/sme/riddu/tullball.txt')
+        text.md.set_variable('skip_lines', '4-6')
+        got = text.content2xml(io.StringIO(content))
+        want = etree.fromstring(want_string)
+
+        self.assertXmlEqual(got, want)
+
 
 class TestDocConverter(XMLTester):
 

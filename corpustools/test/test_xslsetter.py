@@ -29,6 +29,32 @@ from corpustools import xslsetter
 class TestMetadataHandler(unittest.TestCase):
     """Test the MetadataHandler class."""
 
+    def test_set_skip_lines1(self):
+        """Test a valid skip_pages line."""
+        md = xslsetter.MetadataHandler('bogus.pdf', create=True)
+        md.set_variable('skip_lines', '1, 4-5, 7')
+        got = md.skip_lines
+        want = [1, 4, 5, 7]
+
+        self.assertEqual(got, want)
+
+    def test_set_skip_lines2(self):
+        """Test an invalid skip_lines line."""
+        md = xslsetter.MetadataHandler('bogus.xml', create=True)
+        md.set_variable('skip_lines', '1, 4 5, 7')
+
+        with self.assertRaises(xslsetter.XsltError):
+            md.skip_lines
+
+    def test_set_skip_lines3(self):
+        """Test an empty skip_lines line."""
+        md = xslsetter.MetadataHandler('bogus.xml', create=True)
+        md.set_variable('skip_lines', ' ')
+        got = md.skip_lines
+        want = []
+
+        self.assertEqual(got, want)
+
     def test_set_skip_pages1(self):
         """Test a valid skip_pages line."""
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)

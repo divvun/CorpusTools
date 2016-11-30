@@ -140,16 +140,25 @@
         <!-- <parallel_text xml:lang="swe" location=""/> -->
     </xsl:variable>
 
-
     <!--
         For pdf documents, mark which pages should be ignored.
-        The format for this is a comma separated list of page number that
-        should be skipped. It is also possible to use ranges.
+        The format for this is a comma separated list of page numbers
+        that should be skipped. It is also possible to use ranges.
         Examples:
         1, 2, 3, 4
         1, 6-10, 15, 20, 25-30
     -->
     <xsl:variable name="skip_pages" select="''"/>
+
+    <!--
+        For txt documents, mark which lines should be ignored.
+        The format for this is a comma separated list of line numbers
+        that should be skipped. It is also possible to use ranges.
+        Examples:
+        1, 2, 3, 4
+        1, 6-10, 15, 20, 25-30
+    -->
+    <xsl:variable name="skip_lines" select="''"/>
 
     <!--
         Text outside these margins will be ignored.
