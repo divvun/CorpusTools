@@ -86,3 +86,4 @@ v<0.16.2>, <20161107> -- Fix double utf-8'ing problems when converting html docu
 v<0.16.3>, <20161125> -- Remove all but the first story element with identical ids in avvirxml files.
 v<0.16.4>, <20161130> -- Make it possible to skip lines in plain text document.
 v<0.16.5>, <20161209> -- Fix sms documents again. This was initially fixed in v0.9.12, but in v0.15.7 this regressed.
+v<0.16.6>, <20161209> -- Additions to mac-sami_to_latin1. Fixes: Bug 2301 - smj: tekst med mye feil konvertert.

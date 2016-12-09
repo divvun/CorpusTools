@@ -29,15 +29,16 @@ import sys
 import six
 
 CTYPES = {
-
     # mac-sami to latin1
     u"mac-sami_to_latin1": {
+        u'‡': u'á',
         u"": u"á",
         u"»": u"š",
         u"¸": u"č",
         u"¹": u"đ",
         u"½": u"ž",
         u"º": u"ŋ",
+        u'∫': u'ŋ',
         u"ç": u"Á",
         u"¢": u"Č",
         u"¼": u"ŧ",
@@ -52,6 +53,7 @@ CTYPES = {
         u"¿": u"ø",
         u"¯": u"Ø",
         u"": u"å",
+        u'Œ': u'å',
         u"": u"é",
         u"": u"Å",
         u"": u"ä",
@@ -77,6 +79,7 @@ CTYPES = {
         u"": u"õ",
         u"": u"â",
         u"÷": u"ʒ",
+        u'Ë': u'À',
         # "Ç": u"«",
         # "È": u"»",
     },
@@ -245,7 +248,6 @@ CTYPES = {
         u"á": u"á",
     },
 
-
 }
 
 
@@ -281,7 +283,8 @@ class EncodingGuesser(object):
         if (
                 (u'' in content and u'ã' not in content) or
                 (u'' in content) or
-                (u'¯' in content and u'Ø' not in content)):
+                (u'¯' in content and u'Ø' not in content) or
+                (u'‡')):
             winner = u"mac-sami_to_latin1"
         elif u'' in content and u'ã':
             winner = u"mix-mac-sami-and-some-unknown-encoding"
