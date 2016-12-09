@@ -206,7 +206,7 @@ class Converter(object):
         if (self.md.get_variable('mainlang') in
                 ['sma', 'sme', 'smj', 'smn', 'sms', 'nob', 'fin', 'swe',
                  'nno', 'dan', 'fkv', 'sju', 'sje']):
-            fixer.fix_body_encoding()
+            fixer.fix_body_encoding(self.md.get_variable('mainlang'))
 
     mixed_to_unicode = {
         'e4': u'ä',
@@ -3188,7 +3188,7 @@ class DocumentFixer(object):
         for child in element:
             self.fix_sms(child)
 
-    def fix_body_encoding(self):
+    def fix_body_encoding(self, mainlang):
         """Replace wrongly encoded saami chars with proper ones.
 
         Send a stringified version of the body into the EncodingGuesser class.
@@ -3212,9 +3212,8 @@ class DocumentFixer(object):
         self.fix_title_person('mac-sami_to_latin1')
         self.replace_bad_unicode()
 
-        with util.ignored(KeyError):
-            if self.root.attrib['{http://www.w3.org/XML/1998/namespace}lang'] == 'sms':
-                self.fix_sms(self.root.find('body'))
+        if mainlang == 'sms':
+            self.fix_sms(self.root.find('body'))
 
     def fix_title_person(self, encoding):
         """Fix encoding problems."""
