@@ -63,12 +63,12 @@ def count_files(path):
         if os.path.exists(c.names.converted):
             counter['con'] += 1
         else:
-            lacking_files['con'].add(c.names.converted)
+            lacking_files['con'].add(c.names.orig)
         if os.path.exists(c.names.analysed):
             counter['ana'] += 1
         else:
             if os.path.exists(c.names.converted):
-                lacking_files['ana'].add(c.names.analysed)
+                lacking_files['ana'].add(c.names.converted)
 
     return(len(cm.FILES), counter['con'], counter['ana'], lacking_files)
 
