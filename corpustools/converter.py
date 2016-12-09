@@ -282,7 +282,7 @@ class Converter(object):
                                                        encoding='utf8',
                                                        pretty_print='True'))
                 else:
-                    logger.error(self.names.orig, "has no text")
+                    logger.error("{} has no text".format(self.names.orig))
 
     @property
     def tmpdir(self):
