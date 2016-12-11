@@ -436,21 +436,29 @@ class Parallelize(object):
             generate_anchor_list.GenerateAnchorList
         """
         if path is None:
-            path = os.path.join(os.environ['GTHOME'],
-                                'gt/common/src/anchor.txt')
-            cols = ['eng', 'nob', 'sme', 'fin', 'smj', 'sma', 'smn', 'sms']
-            for l in {self.get_lang1(), self.get_lang2()} - set(cols):
-                util.note("WARNING: {} not supported by default anchor "
-                          "list.".format(l))
-        elif not self.quiet:
-            assert len(cols) == 2
-            util.note("Assuming {} has the order {} / {}".format(path, cols[0],
-                                                                 cols[1]))
-        # The lang-codes are looked up in cols after reshuffling, so
-        # returned pairs should have first part as lang1, second as lang2:
-        return generate_anchor_list.GenerateAnchorList(
-            self.get_lang1(), self.get_lang2(),
-            cols, path)
+            path1 = os.path.join(
+                os.environ['GTHOME'],
+                'gt/common/src/anchor-{}-{}.txt'.format(self.get_lang1(),
+                                                        self.get_lang2()))
+            path2 = os.path.join(
+                os.environ['GTHOME'],
+                'gt/common/src/anchor-{}-{}.txt'.format(self.get_lang2(),
+                                                        self.get_lang1()))
+            if os.path.exists(path1):
+
+                return generate_anchor_list.GenerateAnchorList(
+                    self.get_lang1(), self.get_lang2(),
+                    [self.get_lang1(), self.get_lang2()], path1)
+            elif os.path.exists(path2):
+                return generate_anchor_list.GenerateAnchorList(
+                    self.get_lang1(), self.get_lang2(),
+                    [self.get_lang2(), self.get_lang1()], path2)
+            else:
+                if not self.quiet:
+                    util.note(
+                        'No anchor file for the {}/{} combo. '
+                        'Making a fake anchor file'.format(self.get_lang1(),
+                                                           self.get_lang2()))
 
     def consistency_check(self, f0, f1):
         """Warn if parallel_text of f0 is not f1."""
@@ -607,9 +615,14 @@ class ParallelizeTCA2(Parallelize):
 
     def generate_anchor_file(self, outpath):
         """Generate an anchor file with lang1 and lang2."""
-        assert self.gal.lang1 == self.get_lang1()
-        assert self.gal.lang2 == self.get_lang2()
-        self.gal.generate_file(outpath, quiet=self.quiet)
+        if self.gal is not None:
+            assert self.gal.lang1 == self.get_lang1()
+            assert self.gal.lang2 == self.get_lang2()
+            self.gal.generate_file(outpath, quiet=self.quiet)
+        else:
+            with open(outpath, 'w') as outfile:
+                print('{} / {}'.format(self.get_lang1(), self.get_lang2()),
+                      file=outfile)
 
     def divide_p_into_sentences(self):
         """Tokenize the text in the given file and reassemble it again."""
