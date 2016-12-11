@@ -1154,9 +1154,9 @@ def parallelise_file(input_file, lang1, lang2, dict, quiet, aligner, stdout,
                 util.note("Generating the tmx file {}".format(outfile))
             tmx.write_tmx_file(outfile)
             if not quiet:
-                util.note("Wrote {}".format(outfile))
+                util.note("Wrote {}\n".format(outfile))
         else:
-            util.note("{} already exists, skipping ...".format(outfile))
+            util.note("{} already exists, skipping …".format(outfile))
 
 
 def main():
