@@ -34,7 +34,7 @@ from corpustools import argparse_version, util
 class GenerateAnchorList(object):
     """Generate anchor list used by tca2."""
 
-    def __init__(self, lang1, lang2, columns, path):
+    def __init__(self, lang1, lang2, columns, input_file):
         """Initialise the GenerateAnchorList class.
 
         Args:
@@ -42,14 +42,14 @@ class GenerateAnchorList(object):
             lang2: the translated lang
             columns (list of str): contains all the possible langs
                 found in the main anchor file.
-            path (str): path to the new anchor file.
+            path (str): path of the existing anchor file.
         """
         self.lang1 = lang1
         self.lang2 = lang2
         self.lang1_index = columns.index(lang1)
         self.lang2_index = columns.index(lang2)
         self.columns = columns
-        self.path = path
+        self.input_file = input_file
 
     def words_of_line(self, lineno, line):
         """Either a word-pair or None, if no word-pair on that line."""
@@ -63,18 +63,18 @@ class GenerateAnchorList(object):
                 if word1 and word2:
                     return word1, word2
             else:
-                print('Invalid line at {} in {}'.format(lineno, self.path),
+                print('Invalid line at {} in {}'.format(lineno, self.input_file),
                       file=sys.stderr)
 
     def read_anchors(self, quiet=False):
         """List of word-pairs in infiles, empty/bad lines skipped."""
-        with codecs.open(self.path, encoding='utf8') as f:
+        with codecs.open(self.input_file, encoding='utf8') as f:
             out = [self.words_of_line(i, l)
                    for i, l in enumerate(f.readlines())]
             out = [_f for _f in out if _f]
             if not quiet:
                 util.note("Read {} anchors from {}".format(len(out),
-                                                           self.path))
+                                                           self.input_file))
             return out
 
     def generate_file(self, outpath, quiet=False):
