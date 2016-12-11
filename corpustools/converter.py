@@ -147,7 +147,7 @@ class Converter(object):
         self.fix_document(intermediate)
         self.maybe_write_intermediate(intermediate)
         try:
-            xm = XslMaker(self.names.xsl)
+            xm = XslMaker(self.md.tree)
             complete = xm.transformer(intermediate)
 
             return complete.getroot()
@@ -3531,7 +3531,7 @@ class XslMaker(object):
         Arguments:
             xslfile: a string containing the path to the xsl file.
         """
-        self.filename = xslfile
+        self.filexsl = xslfile
 
     @property
     def logfile(self):
@@ -3545,19 +3545,6 @@ class XslMaker(object):
         Raises:
             In case of an xml syntax error, raise ConversionException.
         """
-        try:
-            filexsl = etree.parse(self.filename)
-        except etree.XMLSyntaxError as e:
-            with open(self.names.log, 'w') as logfile:
-                logfile.write('Error at: {}'.format(
-                    six.text_type(util.lineno())))
-                for entry in e.error_log:
-                    logfile.write('{}\n'.format(six.text_type(entry)))
-
-            raise ConversionError(
-                '{}: Syntax error. More info in {}'.format(type(self).__name__,
-                                                           self.logfile))
-
         preprocessXsl = etree.parse(
             os.path.join(here, 'xslt/preprocxsl.xsl'))
         preprocessXslTransformer = etree.XSLT(preprocessXsl)
@@ -3566,7 +3553,7 @@ class XslMaker(object):
             here, 'xslt/common.xsl').replace(' ', '%20')
 
         return preprocessXslTransformer(
-            filexsl,
+            self.filexsl,
             commonxsl=etree.XSLT.strparam('file://{}'.format(common_xsl_path)))
 
     @property
