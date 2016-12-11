@@ -161,6 +161,16 @@ class Converter(object):
 
             raise ConversionError("Check the syntax in: {}".format(
                 self.names.xsl))
+        except etree.XSLTParseError as e:
+            with open(self.names.log, 'w') as logfile:
+                logfile.write('Error at: {}'.format(
+                    six.text_type(util.lineno())))
+                for entry in e.error_log:
+                    logfile.write(six.text_type(entry))
+                    logfile.write('\n')
+
+            raise ConversionError("XSLTParseError in: {}\nError {}".format(
+                self.names.xsl, str(e)))
 
     def convert_errormarkup(self, complete):
         """Convert error markup to xml."""
@@ -3565,20 +3575,7 @@ class XslMaker(object):
         Returns:
             an etree.XSLT transformer
         """
-        try:
-            return etree.XSLT(self.xsl)
-        except etree.XSLTParseError as xxx_todo_changeme:
-            (e) = xxx_todo_changeme
-            with open(self.logfile, 'w') as logfile:
-                logfile.write('Error at: {}\n'.format(
-                    six.text_type(util.lineno())))
-                logfile.write('Invalid XML in {}\n'.format(self.filename))
-                for entry in e.error_log:
-                    logfile.write('{}\n'.format(six.text_type(entry)))
-
-            raise ConversionError(
-                '{}: Invalid XML in {}. More info in {}'.format(
-                    type(self).__name__, self.filename, self.logfile))
+        return etree.XSLT(self.xsl)
 
 
 class LanguageDetector(object):
