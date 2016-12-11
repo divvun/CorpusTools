@@ -255,17 +255,13 @@ class ParallelPicker:
             parallel_file (parallelize.CorpusXMLFile):
             language1_file (parallelize.CorpusXMLFile):
         """
-        if (language1_file.get_translated_from() == self.parallel_language or
-                parallel_file.get_translated_from() == language1_file.get_lang()):
-            if (self.valid_diff(language1_file, parallel_file.get_lang()) and
-                    self.valid_diff(parallel_file, language1_file.get_lang())):
-                self.copied_files += 1
-                self.add_changed_file(language1_file)
-                self.copy_file(language1_file)
-                self.add_changed_file(parallel_file)
-                self.copy_file(parallel_file)
-        else:
-            self.add_no_files_translations(language1_file, parallel_file)
+        if (self.valid_diff(language1_file, parallel_file.get_lang()) and
+                self.valid_diff(parallel_file, language1_file.get_lang())):
+            self.copied_files += 1
+            self.add_changed_file(language1_file)
+            self.copy_file(language1_file)
+            self.add_changed_file(parallel_file)
+            self.copy_file(parallel_file)
 
     def traverse_files(self):
         """
