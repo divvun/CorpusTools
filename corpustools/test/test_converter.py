@@ -2951,7 +2951,7 @@ LOGO: Smi kulturfestivala 1998
 '''))
 
         document_fixer = converter.DocumentFixer(text)
-        document_fixer.fix_body_encoding()
+        document_fixer.fix_body_encoding('sme')
         got = document_fixer.get_etree()
 
         want = etree.fromstring(u'''<document>
@@ -2978,7 +2978,7 @@ LOGO: Smi kulturfestivala 1998
             LANGUAGEGUESSER)
         document_fixer = converter.DocumentFixer(
             etree.fromstring(etree.tostring(svgtext.convert2intermediate())))
-        document_fixer.fix_body_encoding()
+        document_fixer.fix_body_encoding('sme')
         got = document_fixer.get_etree()
 
         want = etree.parse(
@@ -3163,7 +3163,7 @@ LOGO: Smi kulturfestivala 1998
             u'     </p>'
             u'  </body>'
             u'</document>'))
-        document_fixer.fix_body_encoding()
+        document_fixer.fix_body_encoding('sms')
         got = document_fixer.get_etree()
         want = etree.fromstring(
             u'<document xml:lang="sms">'
@@ -3188,7 +3188,7 @@ LOGO: Smi kulturfestivala 1998
             u'     </p>'
             u'  </body>'
             u'</document>'))
-        document_fixer.fix_body_encoding()
+        document_fixer.fix_body_encoding('sms')
         got = document_fixer.get_etree()
         want = etree.fromstring(
             u'<document xml:lang="sms">'
@@ -3213,7 +3213,7 @@ LOGO: Smi kulturfestivala 1998
             u'     </p>'
             u'  </body>'
             u'</document>'))
-        document_fixer.fix_body_encoding()
+        document_fixer.fix_body_encoding('sms')
         got = document_fixer.get_etree()
         want = etree.fromstring(
             u'<document xml:lang="sms">'
@@ -3238,7 +3238,7 @@ LOGO: Smi kulturfestivala 1998
             u'     </p>'
             u'  </body>'
             u'</document>'))
-        document_fixer.fix_body_encoding()
+        document_fixer.fix_body_encoding('sms')
         got = document_fixer.get_etree()
         want = etree.fromstring(
             u'<document xml:lang="sms">'
