@@ -93,6 +93,8 @@ class CorpusXMLFile(object):
         word_count = self.root.find(".//wordcount")
         if word_count is not None:
             return word_count.text
+        else:
+            raise util.AttributeError('wordcount not found!')
 
     def get_genre(self):
         """Get the genre from the xml file.
