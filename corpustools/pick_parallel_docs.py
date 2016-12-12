@@ -144,9 +144,9 @@ class ParallelPicker(object):
             return True
         else:
             self.poor_ratio.append(
-                (file1.get_name(),
+                (file1.name,
                  file1.get_word_count(),
-                 file2.get_name(),
+                 file2.name,
                  file2.get_word_count(),
                  ratio))
 
@@ -166,10 +166,10 @@ class ParallelPicker(object):
 
         prestable_name = os.path.join(prestable_dir, xml_file.get_basename())
         if not os.path.exists(prestable_name):
-            shutil.copy(xml_file.get_name(), prestable_dir)
+            shutil.copy(xml_file.name, prestable_dir)
             self.vcs.add(prestable_name)
         else:
-            shutil.copy(xml_file.get_name(), prestable_dir)
+            shutil.copy(xml_file.name, prestable_dir)
 
     def copy_valid_parallels(self):
         """Copy valid parallel files from converted to prestable/converted."""

@@ -94,7 +94,7 @@ class Analyser(object):
 
     def ccat(self):
         """Turn an xml formatted file into clean text."""
-        self.xml_printer.parse_file(self.xml_file.get_name())
+        self.xml_printer.parse_file(self.xml_file.name)
         text = self.xml_printer.process_file().getvalue()
         if text:
             return text
@@ -215,7 +215,7 @@ class Analyser(object):
     def check_error(self, command, error):
         """Print errors."""
         if error:
-            print(self.xml_file.get_name(), file=sys.stderr)
+            print(self.xml_file.name, file=sys.stderr)
             print(command, file=sys.stderr)
             print(error, file=sys.stderr)
 
@@ -223,10 +223,10 @@ class Analyser(object):
         """Analyse a file if it is not ocr'ed."""
         try:
             self.xml_file = parallelize.CorpusXMLFile(xml_file)
-            analysis_xml_name = self.xml_file.get_name().replace('converted/',
-                                                                 'analysed/')
+            analysis_xml_name = self.xml_file.name.replace('converted/',
+                                                           'analysed/')
 
-            if self.xml_file.get_ocr() is None:
+            if self.xml_file.ocr is None:
                 self.dependency_analysis()
                 if self.get_disambiguation() is not None:
                     with util.ignored(OSError):

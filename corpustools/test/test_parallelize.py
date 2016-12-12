@@ -58,24 +58,24 @@ class TestCorpusXMLFile(unittest.TestCase):
             raise AssertionError(message)
 
     def test_basename(self):
-        self.assertEqual(self.pfile.get_basename(), "aarseth2-s.htm.xml")
+        self.assertEqual(self.pfile.basename, "aarseth2-s.htm.xml")
 
     def test_dirname(self):
         self.assertEqual(
-            self.pfile.get_dirname(),
+            self.pfile.dirname,
             os.path.join(here, "parallelize_data",
                          "prestable/converted/sme/facta/skuvlahistorja2"))
 
     def test_name(self):
         self.assertEqual(
-            self.pfile.get_name(),
+            self.pfile.name,
             os.path.join(
                 here, "parallelize_data",
                 "prestable/converted/sme/facta/skuvlahistorja2/"
                 "aarseth2-s.htm.xml"))
 
     def test_lang(self):
-        self.assertEqual(self.pfile.get_lang(), "sme")
+        self.assertEqual(self.pfile.lang, "sme")
 
     def test_get_parallel_basename(self):
         self.assertEqual(self.pfile.get_parallel_basename('nob'),
@@ -91,20 +91,20 @@ class TestCorpusXMLFile(unittest.TestCase):
 
     def test_get_original_filename(self):
         self.assertEqual(
-            self.pfile.get_original_filename(),
+            self.pfile.original_filename,
             os.path.join(
                 here, "parallelize_data",
                 "orig/sme/facta/skuvlahistorja2/aarseth2-s.htm"))
 
     def test_get_translated_from(self):
-        self.assertEqual(self.pfile.get_translated_from(), "nob")
+        self.assertEqual(self.pfile.translated_from, "nob")
 
     def test_get_word_count(self):
         corpusfile = parallelize.CorpusXMLFile(
             os.path.join(
                 here,
                 'parallelize_data/aarseth2-n-with-version.htm.xml'))
-        self.assertEqual(corpusfile.get_word_count(), "4009")
+        self.assertEqual(corpusfile.word_count, "4009")
 
     def test_remove_version(self):
         file_with_version = parallelize.CorpusXMLFile(
@@ -118,8 +118,8 @@ class TestCorpusXMLFile(unittest.TestCase):
 
         file_with_version.remove_version()
 
-        got = file_without_version.get_etree()
-        want = file_with_version.get_etree()
+        got = file_without_version.etree
+        want = file_with_version.etree
 
         self.assertXmlEqual(got, want)
 
@@ -135,8 +135,8 @@ class TestCorpusXMLFile(unittest.TestCase):
 
         file_with_skip.remove_skip()
 
-        got = file_without_skip.get_etree()
-        want = file_with_skip.get_etree()
+        got = file_without_skip.etree
+        want = file_with_skip.etree
 
         self.assertXmlEqual(got, want)
 
@@ -151,8 +151,8 @@ class TestCorpusXMLFile(unittest.TestCase):
                 'parallelize_data/aarseth2-s-with-moved-later.htm.xml'))
 
         file_with_later.move_later()
-        got = file_with_moved_later.get_etree()
-        want = file_with_later.get_etree()
+        got = file_with_moved_later.etree
+        want = file_with_later.etree
         self.assertXmlEqual(got, want)
 
 
@@ -426,7 +426,7 @@ class TestParallelizeTCA2(unittest.TestCase):
 
     def test_orig_path(self):
         self.assertEqual(
-            self.parallelize.get_origfile1(),
+            self.parallelize.origfile1,
             os.path.join(
                 here, "parallelize_data",
                 'prestable/converted/nob/facta/skuvlahistorja2/'
@@ -434,22 +434,22 @@ class TestParallelizeTCA2(unittest.TestCase):
 
     def test_parallel_path(self):
         self.assertEqual(
-            self.parallelize.get_origfile2(),
+            self.parallelize.origfile2,
             os.path.join(
                 here, "parallelize_data",
                 'prestable/converted/sme/facta/skuvlahistorja2/'
                 'aarseth2-s.htm.xml'))
 
     def test_lang1(self):
-        self.assertEqual(self.parallelize.get_lang1(), "nob")
+        self.assertEqual(self.parallelize.lang1, "nob")
 
     def test_lang2(self):
-        self.assertEqual(self.parallelize.get_lang2(), "sme")
+        self.assertEqual(self.parallelize.lang2, "sme")
 
     def test_get_sent_filename(self):
         self.assertEqual(
             self.parallelize.get_sent_filename(
-                self.parallelize.get_origfiles()[0]),
+                self.parallelize.origfiles[0]),
             os.path.join(os.environ['GTFREE'],
                          "tmp/aarseth2-n.htmnob_sent.xml"))
 
@@ -473,6 +473,7 @@ class TestParallelizeHunalign(unittest.TestCase):
             "nob",
             quiet=True)
 
+    @unittest.skip('Hunalign')
     def test_parallize_files(self):
         print(self.parallelize.parallelize_files())
 
@@ -534,7 +535,7 @@ class TestTmx(unittest.TestCase):
 
     def test_get_src_lang(self):
         """Test the get_src_lang routine"""
-        self.assertEqual(self.tmx.get_src_lang(), "nob")
+        self.assertEqual(self.tmx.src_lang, "nob")
 
     def test_tu_to_string(self):
         tu = etree.XML(
@@ -633,7 +634,7 @@ class TestTmx(unittest.TestCase):
                     'parallelize_data/'
                     'aarseth2-n-without-empty-seg.htm.toktmx')))
 
-        self.assertXmlEqual(got_tmx.get_tmx(), want_tmx.get_tmx())
+        self.assertXmlEqual(got_tmx.tmx, want_tmx.tmx)
 
     def test_check_language(self):
         self.tmx.language_guesser = text_cat.Classifier(None)
@@ -671,8 +672,8 @@ class TestTca2ToTmx(unittest.TestCase):
             "nob")
 
         self.para = para
-        self.tmx = parallelize.Tca2ToTmx(para.get_origfiles(),
-                                         para.get_sentfiles())
+        self.tmx = parallelize.Tca2ToTmx(para.origfiles,
+                                         para.sentfiles)
 
     def assertXmlEqual(self, got, want):
         """Check if two xml snippets are equal"""
@@ -731,7 +732,7 @@ class TestTca2ToTmx(unittest.TestCase):
 
     def test_get_outfile_name(self):
         self.assertEqual(
-            self.para.get_outfile_name(),
+            self.para.outfile_name,
             os.path.join(
                 here, "parallelize_data",
                 "prestable/tmx/nob2sme/facta/skuvlahistorja2",

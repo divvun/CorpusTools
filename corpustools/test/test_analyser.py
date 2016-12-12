@@ -129,7 +129,7 @@ class TestAnalyser(unittest.TestCase):
         """Check if the xml is what it is supposed to be"""
         self.a.dependency_analysis()
         self.a.get_analysis_xml()
-        got = self.a.xml_file.get_etree()
+        got = self.a.xml_file.etree
         want = (
             '<document xml:lang="sme" id="no_id">\n'
             '  <header>\n'
