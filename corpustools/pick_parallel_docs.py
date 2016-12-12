@@ -197,9 +197,9 @@ class ParallelPicker:
         """Check if the given file contains more words than the threshold."""
 
         if (language1_file.get_word_count() is not None and
-                float(language1_file.get_word_count()) > 30 and
+                int(language1_file.get_word_count()) > 30 and
                 parallel_file.get_word_count() is not None and
-                float(parallel_file.get_word_count()) > 30):
+                int(parallel_file.get_word_count()) > 30):
             return True
         else:
             self.add_too_few_words(
