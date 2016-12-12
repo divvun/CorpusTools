@@ -210,11 +210,6 @@ class SentenceDivider(object):
         self.typos = {}
         self.document = None
 
-        typosname = input_xmlfile.replace('.xml', '.typos')
-        if os.path.isfile(typosname):
-            t = typosfile.Typos(input_xmlfile.replace('.xml', '.typos'))
-            self.typos.update(t.get_typos())
-
     def set_up_input_file(self, input_xmlfile):
         """Initialize the inputfile.
 
