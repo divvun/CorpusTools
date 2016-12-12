@@ -171,16 +171,16 @@ class ParallelPicker:
                     self.check_prestable_file(corpus_file)
 
     def find_lang1_files(self):
-        """Find the language1 files."""
-        language1_files = []
+        """Find the language1 files.
+
+        Yields:
+            parallelize.CorpusXMLFile
+        """
         # Walk directory tree
         for root, dirs, files in os.walk(self.language1_dir):
             for f in files:
                 if f.endswith('.xml'):
-                    language1_files.append(
-                        parallelize.CorpusXMLFile(os.path.join(root, f)))
-
-        return language1_files
+                    yield parallelize.CorpusXMLFile(os.path.join(root, f))
 
     def has_parallel(self, language1_file):
         """Check if the given file has a parallel file."""
