@@ -82,6 +82,9 @@ class CorpusPath(object):
         elif 'tmx' in module:
             basename = util.basename_noext(basename, '.tmx')
 
+        if '2' in lang and 'tmx' in module:
+            lang = lang[:lang.find('2')]
+
         return util.PathComponents(root, 'orig', lang, genre,
                                    '/'.join(subdirs), basename)
 

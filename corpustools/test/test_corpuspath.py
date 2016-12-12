@@ -31,21 +31,21 @@ from corpustools import corpuspath
 
 here = os.path.dirname(__file__)
 
-def name(module, extension):
-    return os.path.join(here, module,
-                        'sme/subdir/subsubdir/filename.html' + extension)
+def name(module, lang, extension):
+    return os.path.join(here, module, lang,
+                        'subdir/subsubdir/filename.html' + extension)
 
 @parameterized([
-    ('orig_to_orig', name('orig', '')),
-    ('xsl_to_orig', name('orig', '.xsl')),
-    ('log_to_orig', name('orig', '.log')),
-    ('converted_to_orig', name('converted', '.xml')),
-    ('prestable_converted_to_orig', name('prestable/converted', '.xml')),
-    ('analysed_to_orig', name('converted', '.xml')),
-    ('toktmx_to_orig', name('toktmx/', '.toktmx')),
-    ('prestable_toktmx_to_orig', name('prestable/toktmx/', '.toktmx')),
-    ('tmx_to_orig', name('tmx', '.tmx')),
-    ('prestable_tmx_to_orig', name('prestable/tmx/', '.tmx')),
+    ('orig_to_orig', name('orig', 'sme', '')),
+    ('xsl_to_orig', name('orig', 'sme', '.xsl')),
+    ('log_to_orig', name('orig', 'sme', '.log')),
+    ('converted_to_orig', name('converted', 'sme', '.xml')),
+    ('prestable_converted_to_orig', name('prestable/converted', 'sme', '.xml')),
+    ('analysed_to_orig', name('converted', 'sme', '.xml')),
+    ('toktmx_to_orig', name('toktmx/', 'sme2nob', '.toktmx')),
+    ('prestable_toktmx_to_orig', name('prestable/toktmx/', 'sme2nob', '.toktmx')),
+    ('tmx_to_orig', name('tmx', 'sme2nob', '.tmx')),
+    ('prestable_tmx_to_orig', name('prestable/tmx/', 'sme2nob', '.tmx')),
 ])
 def test_path_to_corpuspath(testname, orig):
     """Check that the corpus file naming scheme works as it should.
@@ -59,6 +59,6 @@ def test_path_to_corpuspath(testname, orig):
     """
     cp = corpuspath.CorpusPath(orig)
 
-    if cp.orig != name('orig', ''):
+    if cp.orig != name('orig', 'sme', ''):
         raise AssertionError('{}:\nexpected {}\ngot {}'.format(
-            testname, name('orig', ''), cp.orig))
+            testname, name('orig', 'sme', ''), cp.orig))
