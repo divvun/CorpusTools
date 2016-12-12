@@ -14,7 +14,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2012-2016 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2012-2016 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
@@ -26,13 +27,12 @@ from __future__ import absolute_import, print_function
 import argparse
 import os
 import shutil
+from collections import defaultdict
 
-from lxml import doctestcompare, etree
-
-from corpustools import argparse_version, parallelize, util
+from corpustools import argparse_version, parallelize, util, versioncontrol
 
 
-class ParallelPicker:
+class ParallelPicker(object):
     """Pick parallel files from converted xml files.
 
     Attributes:
@@ -59,25 +59,21 @@ class ParallelPicker:
             maxratio (int): the maximum acceptable ratio of sentences
                 between two parallel documents
         """
+        vcsfactory = versioncontrol.VersionControlFactory()
+        self.vcs = vcsfactory.vcs(language1_dir[
+            :language1_dir.find('converted/')])
         self.language1_dir = language1_dir
         self.calculate_language1(language1_dir)
         self.parallel_language = parallel_language
-        self.parallel_files = 0
-        self.copied_files = 0
-        self.minratio = minratio
-        self.maxratio = maxratio
-        self.old_files = []
-        self.no_orig = []
-        self.no_parallel = []
+        self.minratio = float(minratio)
+        self.maxratio = float(maxratio)
         self.poor_ratio = []
-        self.too_few_words = []
-        self.changed_files = []
-        self.no_files_translations = []
 
     def calculate_language1(self, language1_dir):
         """The language is the part after 'converted/'."""
         converted_pos = language1_dir.find('converted/')
-        part_after_converted = language1_dir[converted_pos + len('converted/'):]
+        part_after_converted = language1_dir[
+            converted_pos + len('converted/'):]
 
         if part_after_converted.find('/') == -1:
             self.language1 = part_after_converted
@@ -85,322 +81,149 @@ class ParallelPicker:
             self.language1 = part_after_converted[
                 :part_after_converted.find('/')]
 
-    def get_language1(self):
-        return self.language1
-
-    def get_parallel_language(self):
-        return self.parallel_language
-
-    def add_oldfiles(self, filename):
-        """
-        Add a filename to the list of files that were in prestable before
-        new files were added
-        """
-        self.old_files.append(filename)
-
-    def add_no_orig(self, filename):
-        """
-        Add a filename to the list of files in prestable that had no original
-        file before new files were added
-        """
-        self.no_orig.append(filename)
-
-    def add_no_parallel(self, filename):
-        """
-        Add a filename to the list of files in prestable that had no parallel
-        file before new files were added
-        """
-        self.no_parallel.append(filename)
-
-    def add_no_files_translations(self, language1_file, parallel_file):
-        self.no_files_translations.append(
-            language1_file.get_name() + ' ,' + parallel_file.get_name())
-
-    def remove_file(self, filename):
-        """Remove the given file."""
-        os.remove(filename)
-
-    def check_prestable_file(self, corpus_file):
-        """
-        Remove a file and its parallel file from prestable if it has no orig file
-        Remove a file from prestable if it has no parallel
-        If not, add the file name to the list of old files
-        """
-        # PrintFrame()
-        if not self.has_orig(corpus_file):
-            self.add_no_orig(corpus_file.get_name())
-            self.remove_file(corpus_file.get_name())
-
-            if self.has_parallel(corpus_file):
-                self.add_no_orig(corpus_file.get_parallel_filename(
-                    self.parallel_language))
-                self.remove_file(corpus_file.get_parallel_filename(
-                    self.parallel_language))
-
-        elif not self.has_parallel(corpus_file):
-            self.add_no_parallel(corpus_file.get_name())
-            self.remove_file(corpus_file.get_name())
-
-        else:
-            self.add_oldfiles(corpus_file.get_name())
-
-    def get_old_file_names(self):
-        """Get all the filenames in prestable for the language pair that is given to the program."""
-
-        prestable_dir = self.language1_dir.replace(
-            'converted/', 'prestable/converted/')
-        # PrintFrame(prestable_dir)
-
-        for root, dirs, files in os.walk(prestable_dir):  # Walk directory tree
-            for f in files:
-                if f.endswith('.xml'):
-                    # PrintFrame(os.path.join(root, f))
-                    corpus_file = parallelize.CorpusXMLFile(
-                        os.path.join(root, f))
-                    self.check_prestable_file(corpus_file)
-
-        l2prestable_dir = prestable_dir.replace(
-            '/' + self.get_language1(), '/' + self.get_parallel_language())
-
-        for root, dirs, files in os.walk(l2prestable_dir):  # Walk directory tree
-            for f in files:
-                if f.endswith('.xml'):
-                    # PrintFrame(os.path.join(root, f))
-                    corpus_file = parallelize.CorpusXMLFile(
-                        os.path.join(root, f))
-                    self.check_prestable_file(corpus_file)
-
     def find_lang1_files(self):
         """Find the language1 files.
 
         Yields:
             parallelize.CorpusXMLFile
         """
-        # Walk directory tree
-        for root, dirs, files in os.walk(self.language1_dir):
-            for f in files:
-                if f.endswith('.xml'):
-                    yield parallelize.CorpusXMLFile(os.path.join(root, f))
+        for root, _, files in os.walk(self.language1_dir):
+            for lang1_file in files:
+                if lang1_file.endswith('.xml'):
+                    yield parallelize.CorpusXMLFile(
+                        os.path.join(root, lang1_file))
 
     def has_parallel(self, language1_file):
-        """Check if the given file has a parallel file."""
+        """Check if the given file has a parallel file.
+
+        Arguments:
+            language1_file (parallelize.CorpusXMLFile): The first file of a
+                parallel pair.
+
+        Returns:
+            boolean
+        """
         parallel_name = language1_file.get_parallel_filename(
             self.parallel_language)
         return parallel_name is not None and os.path.isfile(parallel_name)
 
-    def has_orig(self, language1_file):
-        """Check if the given file has an original file."""
-        orig_name = language1_file.get_original_filename()
-        return orig_name is not None and os.path.isfile(orig_name)
+    @staticmethod
+    def has_sufficient_words(file1, file2):
+        """Check if the given file contains more words than the threshold.
 
-    def has_sufficient_words(self, language1_file, parallel_file):
-        """Check if the given file contains more words than the threshold."""
-
-        if (language1_file.get_word_count() is not None and
-                int(language1_file.get_word_count()) > 30 and
-                parallel_file.get_word_count() is not None and
-                int(parallel_file.get_word_count()) > 30):
-            return True
-        else:
-            self.add_too_few_words(
-                language1_file.get_name(), parallel_file.get_name())
-            return False
-
-    def add_too_few_words(self, name1, name2):
-        """Add the file names of the files with to few words."""
-        self.too_few_words.append(name1 + ' ' + name2)
-
-    def has_sufficient_ratio(self, file1, file2):
-        """See if the ratio of words is good enough."""
-        ratio = float(file1.get_word_count()) / \
-            float(file2.get_word_count()) * 100
-
-        if ratio > float(self.minratio) and ratio < float(self.maxratio):
-            return True
-        else:
-            self.add_poor_ratio(file1.get_name(), file2.get_name(), ratio)
-            return False
-
-    def add_poor_ratio(self, name1, name2, ratio):
-        """Add filenames to the poor_ratio list."""
-        self.poor_ratio.append(name1 + ',' + name2 + ',' + repr(ratio))
-
-    def add_changed_file(self, corpus_file):
-        """Add changed file to prestable/converted.
-
-        Args:
-            corpus_file (parallelize.CorpusXMLFile)
-        """
-        self.changed_files.append(corpus_file.get_name())
-        prestable_filename = corpus_file.get_name().replace(
-            'converted/', 'prestable/converted/')
-        util.print_frame(debug=prestable_filename)
-
-        if prestable_filename in self.old_files:
-            self.old_files.remove(prestable_filename)
-
-    def both_files_translated_from(self, parallel_file, language1_file):
-        """Check if both files claim to be translations of each other.
-
-        Args:
-            parallel_file (parallelize.CorpusXMLFile):
-            language1_file (parallelize.CorpusXMLFile):
+        Arguments:
+            file1 (parallelize.CorpusXMLFile): The first file of a parallel
+                pair.
+            file2 (parallelize.CorpusXMLFile): The second file of a parallel
+                pair.
 
         Returns:
-            bool: True if both files claim to be a translation of the other,
-            False otherwise.
+            boolean
         """
-        if (parallel_file.get_translated_from() == language1_file.get_lang() and
-                language1_file.get_translated_from() == self.parallel_language):
-            # print ("Both files claim to be translations of the other")
-            self.add_both_files_translated(language1_file, parallel_file)
+        if (file1.get_word_count() is not None and
+                int(file1.get_word_count()) > 30 and
+                file2.get_word_count() is not None and
+                int(file2.get_word_count()) > 30):
+            return True
+
+    def has_sufficient_ratio(self, file1, file2):
+        """See if the ratio of words is good enough.
+
+        Arguments:
+            file1 (parallelize.CorpusXMLFile): The first file of a parallel
+                pair.
+            file2 (parallelize.CorpusXMLFile): The second file of a parallel
+                pair.
+
+        Returns:
+            boolean
+        """
+        ratio = float(file1.get_word_count()) / \
+            float(file2.get_word_count()) * 100
+        if self.minratio < ratio < self.maxratio:
             return True
         else:
-            return False
-
-    def one_file_translated_from(self, language1_file, parallel_file):
-        """Check if the files are a translation of the other.
-
-        Place them in different dicts depending on if this is true or not.
-
-        Args:
-            parallel_file (parallelize.CorpusXMLFile):
-            language1_file (parallelize.CorpusXMLFile):
-        """
-        if (self.valid_diff(language1_file, parallel_file.get_lang()) and
-                self.valid_diff(parallel_file, language1_file.get_lang())):
-            self.copied_files += 1
-            self.add_changed_file(language1_file)
-            self.copy_file(language1_file)
-            self.add_changed_file(parallel_file)
-            self.copy_file(parallel_file)
-
-    def traverse_files(self):
-        """
-        Go through all files
-        """
-        for language1_file in self.find_lang1_files():
-            # print('.', end='')
-
-            if self.has_parallel(language1_file):
-                self.parallel_files += 1
-                parallel_file = parallelize.CorpusXMLFile(
-                    language1_file.get_parallel_filename(self.parallel_language))
-
-                if (self.has_sufficient_words(language1_file, parallel_file) and
-                        self.has_sufficient_ratio(language1_file, parallel_file)):
-                    if not self.both_files_translated_from(parallel_file,
-                                                           language1_file):
-                        self.one_file_translated_from(
-                            language1_file, parallel_file)
-
-    def valid_diff(self, converted_file, parallel_language):
-        """
-        Check if there are differences between the files in
-        converted and prestable/converted
-        """
-        is_valid_diff = True
-
-        prestable_filename = converted_file.get_name().replace(
-            'converted/', 'prestable/converted/')
-
-        if os.path.isfile(prestable_filename):
-            prestable_file = parallelize.CorpusXMLFile(prestable_filename)
-
-            prestable_file.remove_version()
-            converted_file.remove_version()
-
-            # check_diff sets is_valid_diff either True or False
-            # PrintFrame(converted_file.get_name())
-            # PrintFrame(prestable_file.get_name())
-            is_valid_diff = self.check_diff(
-                converted_file.get_etree(), prestable_file.get_etree())
-
-        return is_valid_diff
-
-    def check_diff(self, etree1, etree2):
-        """
-            Return true if there is a difference between the
-            content of etree1 and etree2
-        """
-        doc1 = etree.tostring(etree1)
-        doc2 = etree.tostring(etree2)
-
-        checker = doctestcompare.LXMLOutputChecker()
-
-        if not checker.check_output(doc1, doc2, 0):
-            return True
-        else:
-            return False
+            self.poor_ratio.append(
+                (file1.get_name(),
+                 file1.get_word_count(),
+                 file2.get_name(),
+                 file2.get_word_count(),
+                 ratio))
 
     def copy_file(self, xml_file):
-        """
-        Copy xml_file to prestable/converted
+        """Copy xml_file to prestable/converted.
+
+        Arguments:
+            xml_file (parallelize.CorpusXMLFile): the file that should be
+                copied to prestable/converted.
         """
         prestable_dir = xml_file.get_dirname().replace(
-            'converted/', 'prestable/converted/')
+            'converted', 'prestable/converted')
 
         if not os.path.isdir(prestable_dir):
             with util.ignored(OSError):
                 os.makedirs(prestable_dir)
 
-        shutil.copy(xml_file.get_name(), prestable_dir)
+        prestable_name = os.path.join(prestable_dir, xml_file.get_basename())
+        if not os.path.exists(prestable_name):
+            shutil.copy(xml_file.get_name(), prestable_dir)
+            self.vcs.add(prestable_name)
+        else:
+            shutil.copy(xml_file.get_name(), prestable_dir)
 
-    def treat_lists(self):
-        """Give a report on the result of the search."""
-        for old_file in self.old_files:
-            self.remove_file(old_file)
+    def copy_valid_parallels(self):
+        """Copy valid parallel files from converted to prestable/converted."""
+        counter = defaultdict(int)
+        for language1_file in self.find_lang1_files():
+            if self.has_parallel(language1_file):
+                counter['has_parallel'] += 1
+                parallel_file = parallelize.CorpusXMLFile(
+                    language1_file.get_parallel_filename(
+                        self.parallel_language))
 
-        print('Out of', self.parallel_files, 'parallel files')
-        print(self.copied_files, 'were deemed good enough')
-        print(len(self.old_files), 'of the original prestable files were deleted')
-        print(len(self.no_orig), 'of the original prestable files had no original file')
-        print(len(self.no_parallel),
-              'of the original prestable files had no original file')
-        print(len(self.poor_ratio), 'pairs of the candidate files had too bad ratio')
-        print(len(self.too_few_words),
-              'pairs of the candidate files had too few words')
-        print(len(self.changed_files),
-              'of the candidate files were copied into prestable')
-        print(len(self.no_files_translations),
-              'pairs of the candidate files had no translated_from entry')
+                if self.has_sufficient_words(language1_file, parallel_file):
+                    if self.has_sufficient_ratio(language1_file,
+                                                 parallel_file):
+                        counter['good_parallel'] += 1
+                        self.copy_file(language1_file)
+                        self.copy_file(parallel_file)
 
-    def write_log(self):
-        """Write a log containing the old files."""
-        log_file = open('pick.log', 'w')
+        for poor_ratio in self.poor_ratio:
+            print('{0}: {1}\n{2}: {3}\nratio: {4}\n'.format(*poor_ratio))
 
-        log_file.write('old_files' + '\n')
-        for old_file in self.old_files:
-            log_file.write(old_file + '\n')
-        log_file.write('\n')
-
-        log_file.close()
+        for key, value in counter.items():
+            print(key, value)
 
 
 def parse_options():
+    """Parse the commandline options.
+
+    Returns:
+        a list of arguments as parsed by argparse.Argumentparser.
+    """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Pick out parallel files from converted to prestable/converted.')
+        description='Pick out parallel files from converted to '
+        'prestable/converted.')
 
     parser.add_argument(
-        'language1_dir', help="directory where the files of language1 exist")
+        'language1_dir', help='directory where the files of language1 exist')
     parser.add_argument('-p', '--parallel_language', dest='parallel_language',
-                        help="The language where we would like to find parallel documents", required=True)
+                        help='The language where we would like to find '
+                        'parallel documents', required=True)
     parser.add_argument('--minratio', dest='minratio',
-                        help="The minimum ratio", required=True)
+                        help='The minimum ratio', required=True)
     parser.add_argument('--maxratio', dest='maxratio',
-                        help="The maximum ratio", required=True)
+                        help='The maximum ratio', required=True)
 
     args = parser.parse_args()
     return args
 
 
 def main():
+    """Copy valid parallel pairs from converted to prestable/converted."""
     args = parse_options()
 
-    pp = ParallelPicker(args.language1_dir, args.parallel_language,
-                        args.minratio, args.maxratio)
-    pp.get_old_file_names()
-    pp.traverse_files()
-    pp.treat_lists()
-    pp.write_log()
+    picker = ParallelPicker(args.language1_dir, args.parallel_language,
+                            args.minratio, args.maxratio)
+    picker.copy_valid_parallels()
