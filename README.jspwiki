@@ -18,6 +18,7 @@ These scripts will be installed
 * [move_corpus_file|CorpusTools.html#move_corpus_file]
 * [remove_corpus_file|CorpusTools.html#remove_corpus_file]
 * [pick_parallel_docs|CorpusTools.html#pick_parallel_docs]
+* [clean_prestable|CorpusTools.html#clean_prestable]
 
 !!Requirements
 
@@ -856,3 +857,25 @@ optional arguments:
 * [pick_parallel_docs.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/pick_parallel_docs.py]
 * [parallelize.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/parallelize.py]
 * [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
+
+!!clean_prestable
+
+{{{
+usage: clean_prestable [-h] [--version] corpusdirs [corpusdirs ...]
+
+Remove files in prestable that have no original files.
+
+positional arguments:
+  corpusdirs  Corpus directories
+
+optional arguments:
+  -h, --help  show this help message and exit
+  --version   show program's version number and exit
+}}}
+
+!Source code
+* [clean_prestable.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/clean_prestable.py]
+* [corpuspath.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/corpuspath.py]
+* [versioncontro.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/versioncontrol.py]
+* [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
+

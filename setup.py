@@ -36,6 +36,7 @@ setup(
             'dupefinder = corpustools.dupe_finder:find',
             'pick_parallel_docs = corpustools.pick_parallel_docs:main',
             'count_analysed = corpustools.counter:main',
+            'clean_prestable = corpustools.clean_prestable:main',
         ]
     },
     dependency_links=[
