@@ -103,7 +103,7 @@ def parse_options():
     parser.add_argument("--lang1", help="First languages in the word list")
     parser.add_argument("--lang2", help="Second languages in the word list")
     parser.add_argument("--outdir", help="The output directory")
-    parser.add_argument("input_file", nargs='+', help="The input file(s)")
+    parser.add_argument("input_file", help="The input file")
 
     args = parser.parse_args()
     return args
@@ -116,6 +116,6 @@ def main():
                              ['eng', 'nob', 'sme', 'fin',
                                  'smj', 'sma', 'smn', 'sms'],
                              args.input_file)
-    gal.generate_file("{}/anchor-{}{}.txt".format(args.outdir,
-                                                  args.lang1,
-                                                  args.lang2))
+    gal.generate_file("{}/anchor-{}-{}.txt".format(args.outdir,
+                                                   args.lang1,
+                                                   args.lang2))
