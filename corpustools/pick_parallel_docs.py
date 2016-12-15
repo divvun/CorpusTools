@@ -120,10 +120,10 @@ class ParallelPicker(object):
         Returns:
             boolean
         """
-        if (file1.get_word_count() is not None and
-                int(file1.get_word_count()) > 30 and
-                file2.get_word_count() is not None and
-                int(file2.get_word_count()) > 30):
+        if (file1.word_count is not None and
+                int(file1.word_count) > 30 and
+                file2.word_count is not None and
+                int(file2.word_count) > 30):
             return True
 
     def has_sufficient_ratio(self, file1, file2):
@@ -138,16 +138,16 @@ class ParallelPicker(object):
         Returns:
             boolean
         """
-        ratio = float(file1.get_word_count()) / \
-            float(file2.get_word_count()) * 100
+        ratio = float(file1.word_count) / \
+            float(file2.word_count) * 100
         if self.minratio < ratio < self.maxratio:
             return True
         else:
             self.poor_ratio.append(
                 (file1.name,
-                 file1.get_word_count(),
+                 file1.word_count,
                  file2.name,
-                 file2.get_word_count(),
+                 file2.word_count,
                  ratio))
 
     def copy_file(self, xml_file):
@@ -157,14 +157,14 @@ class ParallelPicker(object):
             xml_file (parallelize.CorpusXMLFile): the file that should be
                 copied to prestable/converted.
         """
-        prestable_dir = xml_file.get_dirname().replace(
+        prestable_dir = xml_file.dirname.replace(
             'converted', 'prestable/converted')
 
         if not os.path.isdir(prestable_dir):
             with util.ignored(OSError):
                 os.makedirs(prestable_dir)
 
-        prestable_name = os.path.join(prestable_dir, xml_file.get_basename())
+        prestable_name = os.path.join(prestable_dir, xml_file.basename)
         if not os.path.exists(prestable_name):
             shutil.copy(xml_file.name, prestable_dir)
             self.vcs.add(prestable_name)
