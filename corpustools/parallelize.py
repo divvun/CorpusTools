@@ -526,7 +526,7 @@ class Parallelize(object):
             raise UserWarning(
                 'Could not parallelize {} and {} into '
                 'sentences\n{}\n\n{}\n'.format(
-                    self.origfiles[0], self.origfiles[1],
+                    self.origfiles[0].basename, self.origfiles[1].basename,
                     output, error))
 
         return output, error
