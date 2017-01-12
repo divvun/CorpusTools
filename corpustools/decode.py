@@ -64,9 +64,7 @@ def fix_macsami_latin1(instring):
     Returns:
         str with fixed encoding.
     """
-    util.print_frame(instring)
-    return instring.encode('latin1').decode(
-        'macsami')
+    return instring.encode('latin1').decode('macsami')
 
 
 def fix_macsami_mac(instring):
