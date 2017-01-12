@@ -24,6 +24,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import os
+import sys
 
 from corpustools import util
 
@@ -95,7 +96,7 @@ class Pipeline(object):
     def check_error(command, error):
         """Print errors."""
         if error:
-            raise UserWarning('{} failed:\n{}'.format(command, error))
+            print('{} failed:\n{}'.format(command, error), file=sys.stderr)
 
     def tag2commandpart(self, element):
         """Turn program elements to a command part.
