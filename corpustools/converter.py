@@ -3218,10 +3218,6 @@ class DocumentFixer(object):
 
         self.root.append(body)
 
-        self.fix_title_person('double-utf8')
-        self.fix_title_person('mac-sami_to_latin1')
-        self.replace_bad_unicode()
-
         if mainlang == 'sms':
             self.fix_sms(self.root.find('body'))
 
@@ -3232,10 +3228,6 @@ class DocumentFixer(object):
         title = self.root.find('.//title')
         if title is not None and title.text is not None:
             text = title.text
-
-            if encoding == 'mac-sami_to_latin1':
-                text = text.replace(u'‡', u'á')
-                text = text.replace(u'Œ', u'å')
 
             text = text
             title.text = eg.decode_para(encoding, text)
