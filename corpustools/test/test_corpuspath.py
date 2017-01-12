@@ -24,15 +24,24 @@ from __future__ import absolute_import
 
 import os
 
-import six
 from nose_parameterized import parameterized
 
 from corpustools import corpuspath
 
-here = os.path.dirname(__file__)
+HERE = os.path.dirname(__file__)
 
 def name(module, lang, extension):
-    return os.path.join(here, module, lang,
+    """Produce a path to a corpus file.
+
+    Arguments:
+        module (str): module of the corpus file
+        lang (str): language of the corpus file
+        extension (str): extension of the corpus file
+
+    Returns:
+        str: path to the corpus file
+    """
+    return os.path.join(HERE, module, lang,
                         'subdir/subsubdir/filename.html' + extension)
 
 @parameterized([
@@ -47,7 +56,7 @@ def name(module, lang, extension):
     ('tmx_to_orig', name('tmx', 'sme2nob', '.tmx')),
     ('prestable_tmx_to_orig', name('prestable/tmx/', 'sme2nob', '.tmx')),
 ])
-def test_path_to_corpuspath(testname, orig):
+def test_path_to_orig(testname, orig):
     """Check that the corpus file naming scheme works as it should.
 
     Args:
@@ -57,8 +66,8 @@ def test_path_to_corpuspath(testname, orig):
     Raises:
         AssertionError: is raised if the result is not what is expected
     """
-    cp = corpuspath.CorpusPath(orig)
+    corpus_path = corpuspath.CorpusPath(orig)
 
-    if cp.orig != name('orig', 'sme', ''):
+    if corpus_path.orig != name('orig', 'sme', ''):
         raise AssertionError('{}:\nexpected {}\ngot {}'.format(
-            testname, name('orig', 'sme', ''), cp.orig))
+            testname, name('orig', 'sme', ''), corpus_path.orig))
