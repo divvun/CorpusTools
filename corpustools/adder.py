@@ -103,10 +103,11 @@ class UrlDownloader(object):
             r = requests.get(url, headers=self.headers, params=params)
             if r.status_code == requests.codes.ok:
                 f = self.filename(r)
-                try:
-                    f = f.decode('utf8')
-                except UnicodeDecodeError:
-                    f = f.decode('latin1')
+                if six.PY2 and isinstance(f, str):
+                    try:
+                        f = f.decode('utf8')
+                    except UnicodeDecodeError:
+                        f = f.decode('latin1')
                 tmpname = os.path.join(self.download_dir, f)
                 with open(tmpname, 'wb') as tmpfile:
                     tmpfile.write(r.content)
@@ -183,7 +184,7 @@ class AddToCorpus(object):
         parellel files
         """
         try:
-            if six.PY2:
+            if six.PY2 and isinstance(origpath, str):
                 origpath = unicode(origpath, 'utf8')
                 metadata_filename = unicode(metadata_filename, 'utf8')
 
