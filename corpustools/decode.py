@@ -30,184 +30,184 @@ import six
 
 CTYPES = {
     # mac-sami to latin1
-    u"mac-sami_to_latin1": {
+    u'mac-sami_to_latin1': {
         u'‡': u'á',
-        u"": u"á",
-        u"»": u"š",
-        u"¸": u"č",
-        u"¹": u"đ",
-        u"½": u"ž",
-        u"º": u"ŋ",
+        u'': u'á',
+        u'»': u'š',
+        u'¸': u'č',
+        u'¹': u'đ',
+        u'½': u'ž',
+        u'º': u'ŋ',
         u'∫': u'ŋ',
-        u"ç": u"Á",
-        u"¢": u"Č",
-        u"¼": u"ŧ",
-        u"´": u"Š",
-        u"°": u"Đ",
-        u"±": u"Ŋ",
-        u"·": u"Ž",
-        u"µ": u"Ŧ",
+        u'ç': u'Á',
+        u'¢': u'Č',
+        u'¼': u'ŧ',
+        u'´': u'Š',
+        u'°': u'Đ',
+        u'±': u'Ŋ',
+        u'·': u'Ž',
+        u'µ': u'Ŧ',
 
-        u"¾": u"æ",
-        u"®": u"Æ",
-        u"¿": u"ø",
-        u"¯": u"Ø",
-        u"": u"å",
+        u'¾': u'æ',
+        u'®': u'Æ',
+        u'¿': u'ø',
+        u'¯': u'Ø',
+        u'': u'å',
         u'Œ': u'å',
-        u"": u"é",
-        u"": u"Å",
-        u"": u"ä",
-        u"": u"Ä",
-        u"": u"ö",
-        u"": u"Ö",
-        u"Ê": u" ",
-        u"¤": u"§",
-        u"Ò": u"“",
-        u"Ó": u"”",
-        u"ª": u"™",
-        u"Ã": u"√",
-        u"Ð": u"–",
-        u"": u"",
-        u"¥": u"•",
-        u"": u"ü",
-        u"": u"í",
-        u"Ô": u"‘",
-        u"Õ": u"’",
-        u"¡": u"°",
-        u"Ñ": u"—",
-        u"¬": u"¨",
-        u"": u"õ",
-        u"": u"â",
-        u"÷": u"ʒ",
+        u'': u'é',
+        u'': u'Å',
+        u'': u'ä',
+        u'': u'Ä',
+        u'': u'ö',
+        u'': u'Ö',
+        u'Ê': u' ',
+        u'¤': u'§',
+        u'Ò': u'“',
+        u'Ó': u'”',
+        u'ª': u'™',
+        u'Ã': u'√',
+        u'Ð': u'–',
+        u'': u'',
+        u'¥': u'•',
+        u'': u'ü',
+        u'': u'í',
+        u'Ô': u'‘',
+        u'Õ': u'’',
+        u'¡': u'°',
+        u'Ñ': u'—',
+        u'¬': u'¨',
+        u'': u'õ',
+        u'': u'â',
+        u'÷': u'ʒ',
         u'Ë': u'À',
-        # "Ç": u"«",
-        # "È": u"»",
+        # 'Ç': u'«',
+        # 'È': u'»',
     },
 
     # mac-sami converted as iconv -f mac -t utf8
     # mac-sami á appears at the same place as latin1 á
-    u"mac-sami_to_mac": {
-        u"á": u"á",
-        u"ª": u"š",
-        u"∏": u"č",
-        u"π": u"đ",
-        u"Ω": u"ž",  # OHM SIGN, U+2126
-        u"Ω": u"ž",  # GREEK CAPITAL LETTER OMEGA, U+03A9
-        u"∫": u"ŋ",
-        u"Á": u"Á",
-        u"¢": u"Č",
-        u"º": u"ŧ",
-        u"¥": u"Š",
-        u"∞": u"Đ",
-        u"±": u"Ŋ",
-        u"¸": u"Ŋ",
-        u"∑": u"Ž",
-        u"µ": u"Ŧ",
+    u'mac-sami_to_mac': {
+        u'á': u'á',
+        u'ª': u'š',
+        u'∏': u'č',
+        u'π': u'đ',
+        u'Ω': u'ž',  # OHM SIGN, U+2126
+        u'Ω': u'ž',  # GREEK CAPITAL LETTER OMEGA, U+03A9
+        u'∫': u'ŋ',
+        u'Á': u'Á',
+        u'¢': u'Č',
+        u'º': u'ŧ',
+        u'¥': u'Š',
+        u'∞': u'Đ',
+        u'±': u'Ŋ',
+        u'¸': u'Ŋ',
+        u'∑': u'Ž',
+        u'µ': u'Ŧ',
     },
 
     # winsami2 converted as iconv -f cp1252 -t utf8
     # á, æ, å, ø, ö, ä, š appear as themselves
     # found in freecorpus/orig/sme/admin/sd/other_files/dc_00_1.doc
     # and freecorpus/orig/sme/admin/guovda/KS_02.12.99.doc
-    u"winsami2_to_cp1252": {
-        u"á": u"á",
-        six.unichr(154): u"š",
-        u"š": u"š",
-        u"„": u"č",
-        u"˜": u"đ",
-        u"¹": u"ŋ",
-        u"¿": u"ž",
-        u"Á": u"Á",
-        u"‚": u"Č",
-        u"¼": u"ŧ",
-        u"Š": u"Š",
-        u"‰": u"Đ",
-        u"¸": u"Ŋ",
-        u"¾": u"Ž",
-        u"º": u"Ŧ",
+    u'winsami2_to_cp1252': {
+        u'á': u'á',
+        six.unichr(154): u'š',
+        u'š': u'š',
+        u'„': u'č',
+        u'˜': u'đ',
+        u'¹': u'ŋ',
+        u'¿': u'ž',
+        u'Á': u'Á',
+        u'‚': u'Č',
+        u'¼': u'ŧ',
+        u'Š': u'Š',
+        u'‰': u'Đ',
+        u'¸': u'Ŋ',
+        u'¾': u'Ž',
+        u'º': u'Ŧ',
     },
 
-    u"mix-mac-sami-and-some-unknown-encoding": {
-        u"": u"á",
-        u"_": u"š",
-        u"ã": u"č",
-        u"÷": u"đ",
-        u"À": u"ž",
-        u"ç": u"Á",
-        u"â": u"Č",
-        u"¼": u"ŧ",
-        u"¿": u"ø",
+    u'mix-mac-sami-and-some-unknown-encoding': {
+        u'': u'á',
+        u'_': u'š',
+        u'ã': u'č',
+        u'÷': u'đ',
+        u'À': u'ž',
+        u'ç': u'Á',
+        u'â': u'Č',
+        u'¼': u'ŧ',
+        u'¿': u'ø',
     },
 
     # latin4 as cp1252/latin1
     # á, æ, å, ø, ö, ä appear as themselves
-    u"latin4_to_cp1252": {
-        u"á": u"á",
-        u"¹": u"š",
-        u"è": u"č",
-        u"ð": u"đ",
-        u"¾": u"ž",
-        u"¿": u"ŋ",
-        u"Á": u"Á",
-        u"È": u"Č",
-        u"¼": u"ŧ",
-        u"©": u"Š",
-        u"Ð": u"Đ",  # U+00D0 to U+0110
-        u"½": u"Ŋ",
-        u"®": u"Ž",
-        u"¬": u"Ŧ",
+    u'latin4_to_cp1252': {
+        u'á': u'á',
+        u'¹': u'š',
+        u'è': u'č',
+        u'ð': u'đ',
+        u'¾': u'ž',
+        u'¿': u'ŋ',
+        u'Á': u'Á',
+        u'È': u'Č',
+        u'¼': u'ŧ',
+        u'©': u'Š',
+        u'Ð': u'Đ',  # U+00D0 to U+0110
+        u'½': u'Ŋ',
+        u'®': u'Ž',
+        u'¬': u'Ŧ',
     },
 
     # winsam as cp1252
-    u"winsam_to_cp1252": {
-        u"á": u"á",
-        u"ó": u"š",
-        u"ç": u"č",
-        u"ð": u"đ",
-        u"þ": u"ž",
-        u"ñ": u"ŋ",
-        u"Á": u"Á",
-        u"Ç": u"Č",
-        u"ý": u"ŧ",
-        u"Ó": u"Š",
-        u"Ð": u"Đ",  # U+00D0 to U+0110
-        u"Ñ": u"Ŋ",
-        u"Þ": u"Ž",
-        u"Ý": u"Ŧ",
+    u'winsam_to_cp1252': {
+        u'á': u'á',
+        u'ó': u'š',
+        u'ç': u'č',
+        u'ð': u'đ',
+        u'þ': u'ž',
+        u'ñ': u'ŋ',
+        u'Á': u'Á',
+        u'Ç': u'Č',
+        u'ý': u'ŧ',
+        u'Ó': u'Š',
+        u'Ð': u'Đ',  # U+00D0 to U+0110
+        u'Ñ': u'Ŋ',
+        u'Þ': u'Ž',
+        u'Ý': u'Ŧ',
     },
 
     # iso-ir-197 converted as iconv -f latin1/cp1252 -t utf8
     # á, æ, å, ø, ö, ä appear as themselves
-    u"iso-ir-197_to_cp1252": {
-        u"á": u"á",
-        u"³": u"š",
-        u"¢": u"č",
-        u"¤": u"đ",
-        u"º": u"ž",
-        u"±": u"ŋ",
-        u"Á": u"Á",
-        u"¡": u"Č",
-        u"¸": u"ŧ",
-        u"²": u"Š",
-        u"£": u"Đ",
-        u"¯": u"Ŋ",
-        u"¹": u"Ž",
-        u"µ": u"Ŧ",
+    u'iso-ir-197_to_cp1252': {
+        u'á': u'á',
+        u'³': u'š',
+        u'¢': u'č',
+        u'¤': u'đ',
+        u'º': u'ž',
+        u'±': u'ŋ',
+        u'Á': u'Á',
+        u'¡': u'Č',
+        u'¸': u'ŧ',
+        u'²': u'Š',
+        u'£': u'Đ',
+        u'¯': u'Ŋ',
+        u'¹': u'Ž',
+        u'µ': u'Ŧ',
     },
 
-    u"mix-of-latin4-and-iso-ir-197_to_cp1252": {
-        u"á": u"á",
-        u"ó": u"š",
-        u"ç": u"č",
-        u"¤": u"đ",
-        u"º": u"ž",
-        u"Á": u"Á",
-        u"Ç": u"Č",
-        u"Ó": u"Š",
-        u"£": u"Đ",
+    u'mix-of-latin4-and-iso-ir-197_to_cp1252': {
+        u'á': u'á',
+        u'ó': u'š',
+        u'ç': u'č',
+        u'¤': u'đ',
+        u'º': u'ž',
+        u'Á': u'Á',
+        u'Ç': u'Č',
+        u'Ó': u'Š',
+        u'£': u'Đ',
     },
 
-    u"double-utf8": {
+    u'double-utf8': {
         u'Ã¡': u'á',
         u'Ã?': u'Á',
         u'Å¡': u'š',
@@ -243,9 +243,9 @@ CTYPES = {
         u'â€¢': u'•',
     },
 
-    u"finnish-lawtexts-in-pdf": {
-        u"þ": u"č",
-        u"á": u"á",
+    u'finnish-lawtexts-in-pdf': {
+        u'þ': u'č',
+        u'á': u'á',
     },
 
 }
@@ -285,25 +285,25 @@ class EncodingGuesser(object):
                 (u'' in content) or
                 (u'¯' in content and u'Ø' not in content) or
                 (u'‡')):
-            winner = u"mac-sami_to_latin1"
+            winner = u'mac-sami_to_latin1'
         elif u'' in content and u'ã':
-            winner = u"mix-mac-sami-and-some-unknown-encoding"
+            winner = u'mix-mac-sami-and-some-unknown-encoding'
         elif u'³' in content and u'¢' in content and u'¤' in content:
-            winner = u"iso-ir-197_to_cp1252"
+            winner = u'iso-ir-197_to_cp1252'
         elif u'á' in content and (u'ª' in content or u'∫' in content):
-            winner = u"mac-sami_to_mac"
+            winner = u'mac-sami_to_mac'
         elif u'ó' in content and u'ç' in content and u'ð' in content:
-            winner = u"winsam_to_cp1252"
+            winner = u'winsam_to_cp1252'
         elif u'á' in content and u'è' in content and u'ð' in content:
-            winner = u"latin4_to_cp1252"
+            winner = u'latin4_to_cp1252'
         elif u'ó' in content and u'ç' in content and u'¤' in content:
-            winner = u"mix-of-latin4-and-iso-ir-197_to_cp1252"
+            winner = u'mix-of-latin4-and-iso-ir-197_to_cp1252'
         elif u'„' in content and (u'˜' in content or u'¹' in content):
-            winner = u"winsami2_to_cp1252"
+            winner = u'winsami2_to_cp1252'
         elif u'þ' in content and u'š' in content and u'á' in content:
-            winner = u"finnish-lawtexts-in-pdf"
+            winner = u'finnish-lawtexts-in-pdf'
         elif u'Ã¡' in content:
-            winner = u"double-utf8"
+            winner = u'double-utf8'
 
         return winner
 
@@ -324,8 +324,8 @@ class EncodingGuesser(object):
                 text = text.replace(key, value)
 
             if position == u'mac-sami_to_latin1':
-                text = text.replace(u"Ç", u"«")
-                text = text.replace(u"È", u"»")
+                text = text.replace(u'Ç', u'«')
+                text = text.replace(u'È', u'»')
 
         return text
 
