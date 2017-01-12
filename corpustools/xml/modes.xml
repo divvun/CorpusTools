@@ -1,0 +1,54 @@
+<modes>
+  <!-- More info on this file type: http://wiki.apertium.org/wiki/Modes -->
+  <!-- Filenames are relative to the language directory  -->
+  <mode name="xfst">
+    <pipeline>
+      <program name="preprocess" debug="preprocess">
+        <arg name="--abbr"/>
+        <file name="tools/preprocess/abbr.txt"/>
+      </program>
+      <program name="lookup" debug="xlookup">
+        <arg name="-q"/>
+        <arg name="-flags"/>
+        <arg name="mbTT"/>
+        <file name="src/analyser-disamb-gt-desc.xfst"/>
+      </program>
+      <program name="lookup2cg" debug="lookup2cg"/>
+      <program name="vislcg3" debug="dis">
+        <arg name="-g"/>
+        <file name="src/syntax/disambiguation.cg3"/>
+      </program>
+      <program name="vislcg3" debug="function">
+        <arg name="-g"/>
+        <file name="../../giella-shared/smi/src/syntax/korp.cg3"/>
+      </program>
+      <program name="vislcg3" debug="dep">
+        <arg name="-g"/>
+        <file name="../../giella-shared/smi/src/syntax/dependency.cg3"/>
+      </program>
+    </pipeline>
+  </mode>
+
+  <mode name="hfst">
+    <pipeline>
+      <program name="apertium-deshtml" debug="preprocess"/>
+      <program name="hfst-proc" debug="hlookup">
+        <arg name="--cg"/>
+        <file name="src/analyser-disamb-gt-desc.hfstol"/>
+      </program>
+      <program name="vislcg3" debug="dis">
+        <arg name="-g"/>
+        <file name="src/syntax/disambiguation.cg3"/>
+      </program>
+      <program name="vislcg3" debug="function">
+        <arg name="-g"/>
+        <file name="../../giella-shared/smi/src/syntax/korp.cg3"/>
+      </program>
+      <program name="vislcg3" debug="dep">
+        <arg name="-g"/>
+        <file name="../../giella-shared/smi/src/syntax/dependency.cg3"/>
+      </program>
+    </pipeline>
+  </mode>
+
+</modes>

@@ -14,7 +14,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2016 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2013-2016 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
@@ -31,7 +32,7 @@ import sys
 import lxml.etree as etree
 import six
 
-from corpustools import argparse_version, ccat, parallelize, util
+from corpustools import argparse_version, ccat, parallelize, util, modes
 
 
 class Analyser(object):
@@ -44,32 +45,11 @@ class Analyser(object):
     vislcg3 <dependency files>
     """
 
-    def __init__(self, lang,
-                 fstkit,
-                 fst_file,
-                 disambiguation_analysis_file,
-                 function_analysis_file,
-                 dependency_analysis_file):
+    def __init__(self, lang, pipeline):
         """Set the files needed by preprocess, lookup and vislcg3."""
         self.lang = lang
+        self.pipeline = pipeline
         self.xml_printer = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
-        self.fstkit = fstkit
-
-        self.raise_unless_exists(fst_file)
-        self.raise_unless_exists(disambiguation_analysis_file)
-        self.raise_unless_exists(function_analysis_file)
-        self.raise_unless_exists(dependency_analysis_file)
-
-        self.fst_file = fst_file
-        self.disambiguation_analysis_file = disambiguation_analysis_file
-        self.function_analysis_file = function_analysis_file
-        self.dependency_analysis_file = dependency_analysis_file
-
-    def raise_unless_exists(self, filename):
-        """Raise an ArgumentError if filename does not exist."""
-        if not os.path.exists(filename):
-            raise(util.ArgumentError('ERROR: {} does not exist'.format(
-                filename)))
 
     def collect_files(self, converted_dirs):
         """Collect converted files."""
@@ -78,7 +58,7 @@ class Analyser(object):
             if os.path.isfile(cdir):
                 self.append_file(cdir)
             else:
-                for root, dirs, files in os.walk(cdir):
+                for root, _, files in os.walk(cdir):
                     for xml_file in files:
                         if self.lang in root and xml_file.endswith('.xml'):
                             self.append_file(os.path.join(root, xml_file))
@@ -98,126 +78,19 @@ class Analyser(object):
         text = self.xml_printer.process_file().getvalue()
         if text:
             return text
-
-    def run_external_command(self, command, input):
-        """Run the command with input using subprocess."""
-        runner = util.ExternalCommandRunner()
-        runner.run(command, to_stdin=input)
-        self.check_error(command, runner.stderr)
-
-        return runner.stdout
-
-    def preprocess(self):
-        """Run preprocess on the ccat output.
-
-        Returns the output of preprocess
-        """
-        pre_process_command = util.get_preprocess_command(self.lang)
-
-        text = self.ccat()
-        if text is not None:
-            return self.run_external_command(pre_process_command, text.encode('utf8'))
-
-    def lookup(self):
-        """Run lookup on the preprocess output.
-
-        Returns the output of preprocess
-        """
-        lookup_command = ['lookup', '-q', '-flags', 'mbTT', self.fst_file]
-
-        preprocess = self.preprocess()
-        if preprocess is not None:
-            return self.run_external_command(lookup_command, preprocess)
-
-    def lookup2cg(self):
-        """Run lookup2cg on the lookup output.
-
-        Returns the output of lookup2cg
-        """
-        if self.fstkit == 'hfst':
-            text = self.ccat()
-            lookup = self.run_external_command('apertium-deshtml', text)
-            lookup2cg_command = ['hfst-proc', '--cg', self.fst_file]
         else:
-            lookup2cg_command = ['lookup2cg']
-            lookup = self.lookup()
-
-        if lookup is not None:
-            return self.run_external_command(lookup2cg_command, lookup)
-
-    def disambiguation_analysis(self):
-        """Run vislcg3 on the lookup2cg output.
-
-        Produces a disambiguation analysis
-        """
-        dis_analysis_command = \
-            ['vislcg3', '-g', self.disambiguation_analysis_file]
-
-        lookup2cg = self.lookup2cg()
-        if lookup2cg is not None:
-            self.disambiguation = \
-                self.run_external_command(dis_analysis_command, lookup2cg)
-        else:
-            self.disambiguation = None
-
-    def function_analysis(self):
-        """Run vislcg3 on the disambiguation analysis.
-
-        Return the output of this process
-        """
-        self.disambiguation_analysis()
-
-        function_analysis_command = \
-            ['vislcg3', '-g', self.function_analysis_file]
-
-        if self.get_disambiguation() is not None:
-            return self.run_external_command(function_analysis_command,
-                                             self.get_disambiguation())
+            raise UserWarning('Empty file {}'.format(self.xml_file.name))
 
     def dependency_analysis(self):
-        """Run vislcg3 on the functions analysis output.
-
-        Produces a dependency analysis
-        """
-        function_analysis = self.function_analysis()
-
-        if function_analysis is not None:
-            dep_analysis_command = \
-                ['vislcg3', '-g', self.dependency_analysis_file]
-
-            self.dependency = \
-                self.run_external_command(dep_analysis_command,
-                                          self.function_analysis())
-
-    def get_disambiguation(self):
-        """Get the disambiguation analysis."""
-        return self.disambiguation
-
-    def get_dependency(self):
-        """Get the dependency analysis."""
-        return self.dependency
-
-    def get_analysis_xml(self):
         """Insert disambiguation and dependency analysis into the body."""
         body = etree.Element('body')
 
-        disambiguation = etree.Element('disambiguation')
-        disambiguation.text = \
-            etree.CDATA(self.get_disambiguation().decode('utf8'))
-        body.append(disambiguation)
-
         dependency = etree.Element('dependency')
-        dependency.text = etree.CDATA(self.get_dependency().decode('utf8'))
+        dependency.text = etree.CDATA(self.pipeline.run(
+            self.ccat().encode('utf8')))
         body.append(dependency)
 
         self.xml_file.set_body(body)
-
-    def check_error(self, command, error):
-        """Print errors."""
-        if error:
-            print(self.xml_file.name, file=sys.stderr)
-            print(command, file=sys.stderr)
-            print(error, file=sys.stderr)
 
     def analyse(self, xml_file):
         """Analyse a file if it is not ocr'ed."""
@@ -228,17 +101,15 @@ class Analyser(object):
 
             if self.xml_file.ocr is None:
                 self.dependency_analysis()
-                if self.get_disambiguation() is not None:
-                    with util.ignored(OSError):
-                        os.makedirs(os.path.dirname(analysis_xml_name))
-                    self.get_analysis_xml()
-                    self.xml_file.write(analysis_xml_name)
+                with util.ignored(OSError):
+                    os.makedirs(os.path.dirname(analysis_xml_name))
+                self.xml_file.write(analysis_xml_name)
             else:
                 print(xml_file, 'is an OCR file and will not be analysed',
                       file=sys.stderr)
-        except etree.XMLSyntaxError as e:
+        except etree.XMLSyntaxError as error:
             print('Can not parse', xml_file, file=sys.stderr)
-            print('The error was:', str(e), file=sys.stderr)
+            print('The error was:', str(error), file=sys.stderr)
 
     def analyse_in_parallel(self):
         """Analyse file in parallel."""
@@ -297,31 +168,16 @@ def parse_options():
 def main():
     """Analyse files in the given directories."""
     args = parse_options()
-    util.sanity_check(['preprocess', 'lookup2cg', 'lookup', 'vislcg3'])
 
-    if args.fstkit == 'hfst':
-        fst_file = 'src/analyser-disamb-gt-desc.hfstol'
-    elif args.fstkit == 'xfst':
-        fst_file = 'src/analyser-disamb-gt-desc.xfst'
+    modefile = etree.parse(
+        os.path.join(os.path.dirname(__file__), 'xml/modes.xml'))
+    pipeline = modes.Pipeline(
+        mode=modefile.find('.//mode[@name="{}"]'.format(args.fstkit)),
+        relative_path=os.path.join(
+            os.getenv('GTHOME'), 'langs', args.lang))
+    pipeline.sanity_check()
 
-    try:
-        ana = Analyser(args.lang,
-                       args.fstkit,
-                       fst_file=os.path.join(
-                           os.getenv('GTHOME'), 'langs',
-                           args.lang, fst_file),
-                       disambiguation_analysis_file=os.path.join(
-                           os.getenv('GTHOME'), 'langs',
-                           args.lang, 'src/syntax/disambiguation.cg3'),
-                       function_analysis_file=os.path.join(
-                           os.getenv('GTHOME'),
-                           'giella-shared/smi/src/syntax/korp.cg3'),
-                       dependency_analysis_file=os.path.join(
-                           os.getenv('GTHOME'),
-                           'giella-shared/smi/src/syntax/dependency.cg3'))
-    except util.ArgumentError as a:
-        print(a.message, file=sys.stderr)
-        sys.exit(4)
+    ana = Analyser(args.lang, pipeline)
 
     ana.collect_files(args.converted_dirs)
     if ana.xml_files:
