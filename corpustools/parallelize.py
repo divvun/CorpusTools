@@ -571,6 +571,8 @@ class ParallelizeHunalign(Parallelize):
         doc = divider.process_all_paragraphs()
         paragraphs = etree.ElementTree(doc).xpath('//p')
         sents = [["<p>"] + p.xpath('./s/text()') for p in paragraphs]
+        if len(sents) == 1 and len(sents[0]) == 1:
+            raise UserWarning('No {} sentences in {}'.format(origfile.lang, origfile.name))
         return "\n".join(sum(sents, []))
 
     def align(self):
