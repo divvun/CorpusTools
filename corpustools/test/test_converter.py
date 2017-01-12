@@ -498,12 +498,12 @@ class TestComputeCorpusnames(unittest.TestCase):
                          self.name('prestable/converted') + '.xml')
 
     def test_compute_goldstandard_converted(self):
-        self.cp.md.set_variable('conversion_status', 'correct')
+        self.cp.metadata.set_variable('conversion_status', 'correct')
         self.assertEqual(self.cp.converted,
                          self.name('goldstandard/converted') + '.xml')
 
     def test_compute_prestable_goldstandard_converted(self):
-        self.cp.md.set_variable('conversion_status', 'correct')
+        self.cp.metadata.set_variable('conversion_status', 'correct')
         self.assertEqual(self.cp.prestable_converted,
                          self.name('prestable/goldstandard/converted') + '.xml')
 
