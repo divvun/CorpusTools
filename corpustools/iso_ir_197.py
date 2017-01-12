@@ -304,9 +304,9 @@ decoding_table = (
 ### Encoding table
 encoding_table=codecs.charmap_build(decoding_table)
 
-def codec_search_function(encoding):
+def lookup(encoding):
     if encoding == 'ir197':
         return getregentry()
     return None
 
-codecs.register(codec_search_function)
+codecs.register(lookup)
