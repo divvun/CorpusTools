@@ -81,8 +81,10 @@ def fix_macsami_mac(instring):
     Returns:
         str with fixed encoding.
     """
-    return instring.encode('macroman').decode(
-        'macsami')
+    bytestring = instring.encode('macroman', 'xmlcharrefreplace')
+    encoded_string = bytestring.decode('macsami').replace(u'&#8486;', u'ž')
+
+    return encoded_string
 
 
 def fix_winsami2_cp1252(instring):

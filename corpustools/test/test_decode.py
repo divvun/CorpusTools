@@ -153,3 +153,9 @@ class TestEncodingGuesser(unittest.TestCase):
         util.print_frame('\n', perverted)
         util.print_frame('\n', decode.fix_cp1251_cp1252(perverted))
         self.assertEqual(decode.fix_cp1251_cp1252(perverted), uff)
+
+    def test_macsami_macroman(self):
+        uff = u'Ω'
+        self.assertEqual(decode.fix_macsami_mac(uff), u'ž')
+
+    def test_winsami2_cp1252_with_dstroke(self):
