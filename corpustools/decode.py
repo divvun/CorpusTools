@@ -43,7 +43,6 @@ def fix_macsami_cp1252(instring):
             macsami but has been decoded to unicode as if it was
             cp1252.
 
-
     Returns:
         str with fixed encoding.
     """
@@ -60,7 +59,6 @@ def fix_macsami_latin1(instring):
             macsami but has been decoded to unicode as if it was
             latin1.
 
-
     Returns:
         str with fixed encoding.
     """
@@ -74,7 +72,6 @@ def fix_macsami_mac(instring):
         instring (str): A bytestring that originally was encoded as
             macsami but has been decoded to unicode as if it was
             macroman.
-
 
     Returns:
         str with fixed encoding.
@@ -90,13 +87,13 @@ def fix_winsami2_cp1252(instring):
 
     Arguments:
         instring (str): A bytestring that originally was encoded as
-            winsami2 but has been decoded to unicode as if it was cp1252.
-
+            winsami2 but has been decoded to unicode as if it was
+            cp1252.
 
     Returns:
         str with fixed encoding.
     """
-    return instring.encode('cp1252', 'xmlcharrefreplace').decode('ws2')
+    return instring.encode('cp1252', errors='xmlcharrefreplace').decode('ws2')
 
 
 def fix_meadowmari_cp1252(instring):
