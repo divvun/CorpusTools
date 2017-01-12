@@ -54,43 +54,46 @@ want = u'á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ'
 
 test_input = {
     u'mac-sami_to_cp1252':
-        u'‡ » ¸ ¹ ½ º ç ¢ ¼ ´ ° ± · µ ¿ ¯ Œ  ¾ ®',
+        [u'‡ » ¸ ¹ ½ º ç ¢ ¼ ´ ° ± · µ ¿ ¯ Œ  ¾ ®'],
     u'mac-sami_to_latin1':
-        u' » ¸ ¹ ½ º ç ¢ ¼ ´ ° ± · µ ¿ ¯   ¾ ®',
+        [u' » ¸ ¹ ½ º ç ¢ ¼ ´ ° ± · µ ¿ ¯   ¾ ®'],
     u'mac-sami_to_mac':
-        u'á ª ∏ π Ω ∫ Á ¢ º ¥ ∞ ± ∑ µ ø Ø å Å æ Æ',
+        [u'á ª ∏ π Ω ∫ Á ¢ º ¥ ∞ ± ∑ µ ø Ø å Å æ Æ'],
     u'winsami2_to_cp1252':
-        u'á š „ ˜ ¿ ¹ Á ‚ ¼ Š ‰ ¸ ¾ º ø Ø å Å æ Æ',
+        [u'á š „ ˜ ¿ ¹ Á ‚ ¼ Š ‰ ¸ ¾ º ø Ø å Å æ Æ'],
     u'mix-mac-sami-and-some-unknown-encoding':
-        u' _ ã ÷ À ŋ ç â ¼ Š Đ Ŋ Ž Ŧ ¿ Ø å Å æ Æ',
+        [u' _ ã ÷ À ŋ ç â ¼ Š Đ Ŋ Ž Ŧ ¿ Ø å Å æ Æ'],
     u'latin4_to_cp1252':
-        u'á ¹ è ð ¾ ¿ Á È ¼ © Ð ½ ® ¬ ø Ø å Å æ Æ',
+        [u'á ¹ è ð ¾ ¿ Á È ¼ © Ð ½ ® ¬ ø Ø å Å æ Æ'],
     u'winsam_to_cp1252':
-        u'á ó ç ð þ ñ Á Ç ý Ó Ð Ñ Þ Ý ø Ø å Å æ Æ',
+        [u'á ó ç ð þ ñ Á Ç ý Ó Ð Ñ Þ Ý ø Ø å Å æ Æ'],
     u'iso-ir-197_to_cp1252':
-        u'á ³ ¢ ¤ º ± Á ¡ ¸ ² £ ¯ ¹ µ ø Ø å Å æ Æ',
+        [u'á ³ ¢ ¤ º ± Á ¡ ¸ ² £ ¯ ¹ µ ø Ø å Å æ Æ'],
     u'mix-of-latin4-and-iso-ir-197_to_cp1252':
-        u'á ó ç ¤ º ŋ Á Ç ŧ Ó £ Ŋ Ž Ŧ ø Ø å Å æ Æ',
+        [u'á ó ç ¤ º ŋ Á Ç ŧ Ó £ Ŋ Ž Ŧ ø Ø å Å æ Æ'],
     u'double-utf8':
-        u'Ã¡ Å¡ Ä? Ä‘ Âº Å‹ Ã? ÄŒ Å§ Å  Đ ÅŠ Å½ Ŧ Ã¸ Ã˜ Ã¥ Ã… Ã¦ Æ',
+        [u'Ã¡ Å¡ Ä? Ä‘ Âº Å‹ Ã? ÄŒ Å§ Å  Đ ÅŠ Å½ Ŧ Ã¸ Ã˜ Ã¥ Ã… Ã¦ Æ'],
     u'finnish-lawtexts-in-pdf':
-        u'á š þ đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ',
+        [u'á š þ đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ'],
 }
 
 
 class TestEncodingGuesser(unittest.TestCase):
 
-    @parameterized.expand([(index) for index in decode.CTYPES.keys()])
-    def test_encoding_guesser(self, index):
+    @parameterized.expand([
+        (index, example)
+        for index in decode.CTYPES.keys()
+        for example in test_input[index]])
+    def test_encoding_guesser(self, index, example):
         guesser = decode.EncodingGuesser()
-        self.assertEqual(guesser.guess_body_encoding(test_input[index]),
+        self.assertEqual(guesser.guess_body_encoding(example),
                          index)
 
     @parameterized.expand([(index) for index in test_input.keys()])
     def test_round_trip_x(self, index):
         eg = decode.EncodingGuesser()
         unicode_content = u'á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ'
-        content = test_input[index]
+        content = test_input[index][0]
         test_content = eg.decode_para(index, content)
 
         self.assertEqual(unicode_content, test_content)
@@ -111,7 +114,7 @@ class TestEncodingGuesser(unittest.TestCase):
         util.print_frame('\n', decode.fix_macsami_cp1252(perverted))
         self.assertEqual(decode.fix_macsami_cp1252(perverted), uff)
         self.assertEqual(decode.fix_macsami_cp1252(
-            test_input[u'mac-sami_to_cp1252']), want)
+            test_input[u'mac-sami_to_cp1252'][0]), want)
 
     def test_macsami_latin1(self):
         uff = u'áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ'
@@ -120,7 +123,7 @@ class TestEncodingGuesser(unittest.TestCase):
         util.print_frame('\n', decode.fix_macsami_latin1(perverted))
         self.assertEqual(decode.fix_macsami_latin1(perverted), uff)
         self.assertEqual(decode.fix_macsami_latin1(
-            test_input[u'mac-sami_to_latin1']), want)
+            test_input[u'mac-sami_to_latin1'][0]), want)
 
     def test_macsami_mac(self):
         uff = u'áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ'
@@ -129,7 +132,7 @@ class TestEncodingGuesser(unittest.TestCase):
         util.print_frame('\n', decode.fix_macsami_mac(perverted))
         self.assertEqual(decode.fix_macsami_mac(perverted), uff)
         self.assertEqual(decode.fix_macsami_mac(
-            test_input[u'mac-sami_to_mac']), want)
+            test_input[u'mac-sami_to_mac'][0]), want)
 
     def test_winsami2_cp1252(self):
         uff = u'áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ'
@@ -138,7 +141,7 @@ class TestEncodingGuesser(unittest.TestCase):
         util.print_frame('\n', decode.fix_winsami2_cp1252(perverted))
         self.assertEqual(decode.fix_winsami2_cp1252(perverted), uff)
         self.assertEqual(decode.fix_winsami2_cp1252(
-            test_input[u'winsami2_to_cp1252']), want)
+            test_input[u'winsami2_to_cp1252'][0]), want)
 
     def test_meadowmari_cp1252(self):
         uffperted = u'ОЙСАВЫШ 139 В.ЕГОРОВ. Романыште ҥ Ҥ ӱ Ӱ ӧ Ӧ'
