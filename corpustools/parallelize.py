@@ -553,12 +553,15 @@ class ParallelizeHunalign(Parallelize):
 
     def make_dict(self):
         """Turn an anchorlist to a dictionary."""
-        assert self.gal.lang1 == self.lang1
-        assert self.gal.lang2 == self.lang2
-        words_pairs = self.gal.read_anchors(quiet=self.quiet)
-        expanded_pairs = self.anchor_to_dict(words_pairs)
-        cleaned_pairs = [(w1.replace('*', ''), w2.replace('*', ''))
-                         for w1, w2 in expanded_pairs]
+        if self.gal is not None:
+            assert self.gal.lang1 == self.lang1
+            assert self.gal.lang2 == self.lang2
+            words_pairs = self.gal.read_anchors(quiet=self.quiet)
+            expanded_pairs = self.anchor_to_dict(words_pairs)
+            cleaned_pairs = [(w1.replace('*', ''), w2.replace('*', ''))
+                            for w1, w2 in expanded_pairs]
+        else:
+            cleaned_pairs = [(self.lang1, self.lang2)]
         # Hunalign expects the _reverse_ format for the dictionary!
         # See Dictionary under http://mokk.bme.hu/resources/hunalign/
         return "\n".join(["{} @ {}".format(w2, w1)
