@@ -65,12 +65,7 @@ class Analyser(object):
 
     def append_file(self, xml_file):
         """Append xml_file to the xml_files list."""
-        try:
-            self.xml_files.append(
-                six.text_type(xml_file, sys.getfilesystemencoding()))
-        except UnicodeDecodeError:
-            print('Could not handle the file name {}'.format(xml_file),
-                  file=sys.stderr)
+        self.xml_files.append(xml_file)
 
     def ccat(self):
         """Turn an xml formatted file into clean text."""
