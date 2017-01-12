@@ -13,130 +13,118 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2016 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2013-2017 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-"""(Northern) sami character eight bit encodings have been semi or
+"""Code to detect and fix semi official and unofficial encodings.
+
+(Northern) sami character eight bit encodings have been semi or
 non official standards and have been converted to the various systems'
-internal encodings. This module have functions that revert the damage
+internal encodings. This module has functions that revert the damage
 done.
 """
 from __future__ import absolute_import, print_function
 
-import sys
-
 import six
 
+# macsami, winsami2, are needed, even if pylint
+# flags them as unused
+# pylint: disable=unused-import
+from corpustools import macsami, util, winsami2
+
+
+def fix_macsami_cp1252(instring):
+    """Fix instring.
+
+    Arguments:
+        instring (str): A bytestring that originally was encoded as
+            macsami but has been decoded to unicode as if it was
+            cp1252.
+
+
+    Returns:
+        str with fixed encoding.
+    """
+    bytestring = instring.encode('1252', errors='xmlcharrefreplace')
+    encoded_unicode = bytestring.decode('macsami').replace(u'&#129;', u'Å')
+    return encoded_unicode
+
+
+def fix_macsami_latin1(instring):
+    """Fix instring.
+
+    Arguments:
+        instring (str): A bytestring that originally was encoded as
+            macsami but has been decoded to unicode as if it was
+            latin1.
+
+
+    Returns:
+        str with fixed encoding.
+    """
+    util.print_frame(instring)
+    return instring.encode('latin1').decode(
+        'macsami')
+
+
+def fix_macsami_mac(instring):
+    """Fix instring.
+
+    Arguments:
+        instring (str): A bytestring that originally was encoded as
+            macsami but has been decoded to unicode as if it was
+            macroman.
+
+
+    Returns:
+        str with fixed encoding.
+    """
+    return instring.encode('macroman').decode(
+        'macsami')
+
+
+def fix_winsami2_cp1252(instring):
+    """Fix instring.
+
+    Arguments:
+        instring (str): A bytestring that originally was encoded as
+            winsami2 but has been decoded to unicode as if it was cp1252.
+
+
+    Returns:
+        str with fixed encoding.
+    """
+    return instring.encode('cp1252').decode(
+        'ws2')
+
+
+def fix_cp1251_cp1252(instring):
+    """Fix instring.
+
+    Arguments:
+        instring (str): A bytestring that originally was encoded as
+            cp1251 but has decoded to str as if it was cp1252.
+
+
+    Returns:
+        str with fixed encoding.
+    """
+    return instring.encode('cp1252').decode(
+        'cp1251')
+
 CTYPES = {
-    # mac-sami to latin1
-    u'mac-sami_to_latin1': {
-        u'‡': u'á',
-        u'': u'á',
-        u'»': u'š',
-        u'¸': u'č',
-        u'¹': u'đ',
-        u'½': u'ž',
-        u'º': u'ŋ',
-        u'∫': u'ŋ',
-        u'ç': u'Á',
-        u'¢': u'Č',
-        u'¼': u'ŧ',
-        u'´': u'Š',
-        u'°': u'Đ',
-        u'±': u'Ŋ',
-        u'·': u'Ž',
-        u'µ': u'Ŧ',
-
-        u'¾': u'æ',
-        u'®': u'Æ',
-        u'¿': u'ø',
-        u'¯': u'Ø',
-        u'': u'å',
-        u'Œ': u'å',
-        u'': u'é',
-        u'': u'Å',
-        u'': u'ä',
-        u'': u'Ä',
-        u'': u'ö',
-        u'': u'Ö',
-        u'Ê': u' ',
-        u'¤': u'§',
-        u'Ò': u'“',
-        u'Ó': u'”',
-        u'ª': u'™',
-        u'Ã': u'√',
-        u'Ð': u'–',
-        u'': u'',
-        u'¥': u'•',
-        u'': u'ü',
-        u'': u'í',
-        u'Ô': u'‘',
-        u'Õ': u'’',
-        u'¡': u'°',
-        u'Ñ': u'—',
-        u'¬': u'¨',
-        u'': u'õ',
-        u'': u'â',
-        u'÷': u'ʒ',
-        u'Ë': u'À',
-        # 'Ç': u'«',
-        # 'È': u'»',
-    },
-
-    # mac-sami converted as iconv -f mac -t utf8
-    # mac-sami á appears at the same place as latin1 á
-    u'mac-sami_to_mac': {
-        u'á': u'á',
-        u'ª': u'š',
-        u'∏': u'č',
-        u'π': u'đ',
-        u'Ω': u'ž',  # OHM SIGN, U+2126
-        u'Ω': u'ž',  # GREEK CAPITAL LETTER OMEGA, U+03A9
-        u'∫': u'ŋ',
-        u'Á': u'Á',
-        u'¢': u'Č',
-        u'º': u'ŧ',
-        u'¥': u'Š',
-        u'∞': u'Đ',
-        u'±': u'Ŋ',
-        u'¸': u'Ŋ',
-        u'∑': u'Ž',
-        u'µ': u'Ŧ',
-    },
-
-    # winsami2 converted as iconv -f cp1252 -t utf8
-    # á, æ, å, ø, ö, ä, š appear as themselves
-    # found in freecorpus/orig/sme/admin/sd/other_files/dc_00_1.doc
-    # and freecorpus/orig/sme/admin/guovda/KS_02.12.99.doc
-    u'winsami2_to_cp1252': {
-        u'á': u'á',
-        six.unichr(154): u'š',
-        u'š': u'š',
-        u'„': u'č',
-        u'˜': u'đ',
-        u'¹': u'ŋ',
-        u'¿': u'ž',
-        u'Á': u'Á',
-        u'‚': u'Č',
-        u'¼': u'ŧ',
-        u'Š': u'Š',
-        u'‰': u'Đ',
-        u'¸': u'Ŋ',
-        u'¾': u'Ž',
-        u'º': u'Ŧ',
-    },
-
     u'mix-mac-sami-and-some-unknown-encoding': {
-        u'': u'á',
-        u'_': u'š',
-        u'ã': u'č',
-        u'÷': u'đ',
+        u'': u'á',  # 0x87, á in macsami, same as in macsami->latin1
+        u'_': u'š',  # 0x5F, LOW LINE in macsami, winsami2, ir197, ir209
+        u'ã': u'č',  # 0xE3, a with tilde in macsami, winsami2, ir197, ir209
+        u'÷': u'đ',  # 0xF7, division sign in macsami
         u'À': u'ž',
-        u'ç': u'Á',
-        u'â': u'Č',
-        u'¼': u'ŧ',
-        u'¿': u'ø',
+        u'ç': u'Á',  # macsami -> cp1252
+        u'â': u'Č',  # 0xE2
+        u'¼': u'ŧ',  # winsami2 -> cp1252
+        u'¿': u'ø',  # macsami -> latin1, macsami -> cp1252
     },
 
     # latin4 as cp1252/latin1
@@ -266,7 +254,8 @@ class EncodingGuesser(object):
 
             return winner
 
-    def guess_body_encoding(self, content):
+    @staticmethod
+    def guess_body_encoding(content):
         """Guess the encoding of the string content.
 
         First get the frequencies of the "sami letters"
@@ -280,11 +269,16 @@ class EncodingGuesser(object):
         encoding is found
         """
         winner = None
-        if (
+        if u'à' in content and u'û' in content:
+            winner = u'cp1251_cp1252'
+        elif (
+                (u'‡' in content and u'ã' not in content) or
+                (u'Œ' in content and u'ÄŒ' not in content)):
+            winner = u'mac-sami_to_cp1252'
+        elif (
                 (u'' in content and u'ã' not in content) or
                 (u'' in content) or
-                (u'¯' in content and u'Ø' not in content) or
-                (u'‡')):
+                (u'¯' in content and u'Ø' not in content)):
             winner = u'mac-sami_to_latin1'
         elif u'' in content and u'ã':
             winner = u'mix-mac-sami-and-some-unknown-encoding'
@@ -305,9 +299,11 @@ class EncodingGuesser(object):
         elif u'Ã¡' in content:
             winner = u'double-utf8'
 
+        util.print_frame(winner)
         return winner
 
-    def decode_para(self, position, text):
+    @staticmethod
+    def decode_para(position, text):
         """Decode the text given to this function.
 
         Replace letters in text with the ones from the dict at
@@ -317,18 +313,20 @@ class EncodingGuesser(object):
         @param text str
         @return str
         """
-        if position is not None:
+        if position == u'mac-sami_to_cp1252':
+            return fix_macsami_cp1252(text)
+        elif position == u'mac-sami_to_latin1':
+            return fix_macsami_latin1(text)
+        elif position == u'mac-sami_to_mac':
+            return fix_macsami_mac(text)
+        elif position == u'winsami2_to_cp1252':
+            return fix_winsami2_cp1252(text)
+        elif position == u'cp1251_cp1252':
+            return fix_cp1251_cp1252(text)
+        elif position is not None:
             encoding = CTYPES[position]
 
             for key, value in six.iteritems(encoding):
                 text = text.replace(key, value)
 
-            if position == u'mac-sami_to_latin1':
-                text = text.replace(u'Ç', u'«')
-                text = text.replace(u'È', u'»')
-
         return text
-
-if __name__ == '__main__':
-    eg = EncodingGuesser()
-    print(eg.guess_file_encoding(sys.argv[1]))

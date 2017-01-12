@@ -20,18 +20,44 @@
 
 from __future__ import absolute_import
 
+import codecs
 import unittest
+import six
+import sys
 
-from corpustools import decode
+from corpustools import decode, macsami, winsami2, iso_ir_197, iso_ir_209, util
 
-#       'á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ',
+def handler(err):
+    """Handle UnicodeDecodeError.
+
+    Arguments:
+        err (exceptions.UnicodeDecodeError): the error.
+
+    Returns:
+        The fixed string
+    """
+    start = err.start
+    end = err.end
+    if six.PY2:
+        return (u''.join([u'&#{0};'.format(ord(err.object[i]))
+                          for i in range(start, end)]), end)
+    else:
+        return (''.join(['&#{0};'.format(err.object[i])
+                         for i in range(start, end)]), end)
+
+
+codecs.register_error('backslashreffcallback', handler)
+
+
+want = u'á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ'
+
 test_input = {
     u'mac-sami_to_cp1252':
-        u'‡ » ¸ ¹ ½ º ç ¢ ¼ ä ° ± · µ ¿ ¯ Œ  ¾ ®',
+        u'‡ » ¸ ¹ ½ º ç ¢ ¼ ´ ° ± · µ ¿ ¯ Œ  ¾ ®',
     u'mac-sami_to_latin1':
         u' » ¸ ¹ ½ º ç ¢ ¼ ´ ° ± · µ ¿ ¯   ¾ ®',
     u'mac-sami_to_mac':
-        u'á ª ∏ π Ω ∫ Á ¢ º ¥ ∞ ± ∑ µ ø Ø å Å æ Æ',
+        u'á ª ∏ π Ω ∫ Á ¢ º ¥ ∞ ± ∑ µ ø Ø å Å æ Æ',
     u'winsami2_to_cp1252':
         u'á š „ ˜ ¿ ¹ Á ‚ ¼ Š ‰ ¸ ¾ º ø Ø å Å æ Æ',
     u'mix-mac-sami-and-some-unknown-encoding':
@@ -49,6 +75,8 @@ test_input = {
     u'finnish-lawtexts-in-pdf':
         u'á š þ đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ',
 }
+
+#codecs.register_error('backslashreffcallback', decode.handler)
 
 
 class TestEncodingGuesser(unittest.TestCase):
@@ -73,3 +101,55 @@ class TestEncodingGuesser(unittest.TestCase):
     def test_round_tripping(self):
         for k in test_input.keys():
             self.round_trip_x(k)
+
+    @staticmethod
+    def to_pervertedsami(instring, from_enc, to_enc):
+        util.print_frame(type(instring), from_enc, to_enc)
+        encoded_string = instring.encode(from_enc)
+        decoded_string = encoded_string.decode(
+            to_enc, errors='backslashreffcallback')
+
+        return decoded_string
+
+    def test_macsami_cp1252(self):
+        uff = u'áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ'
+        perverted = self.to_pervertedsami(uff, 'macsami', 'cp1252')
+        util.print_frame('\n', perverted)
+        util.print_frame('\n', decode.fix_macsami_cp1252(perverted))
+        self.assertEqual(decode.fix_macsami_cp1252(perverted), uff)
+        self.assertEqual(decode.fix_macsami_cp1252(
+            test_input[u'mac-sami_to_cp1252']), want)
+
+    def test_macsami_latin1(self):
+        uff = u'áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ'
+        perverted = self.to_pervertedsami(uff, 'macsami', 'latin1')
+        util.print_frame('\n', perverted)
+        util.print_frame('\n', decode.fix_macsami_latin1(perverted))
+        self.assertEqual(decode.fix_macsami_latin1(perverted), uff)
+        self.assertEqual(decode.fix_macsami_latin1(
+            test_input[u'mac-sami_to_latin1']), want)
+
+    def test_macsami_mac(self):
+        uff = u'áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ'
+        perverted = self.to_pervertedsami(uff, 'macsami', 'macroman')
+        util.print_frame('\n', perverted)
+        util.print_frame('\n', decode.fix_macsami_mac(perverted))
+        self.assertEqual(decode.fix_macsami_mac(perverted), uff)
+        self.assertEqual(decode.fix_macsami_mac(
+            test_input[u'mac-sami_to_mac']), want)
+
+    def test_winsami2_cp1252(self):
+        uff = u'áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ'
+        perverted = self.to_pervertedsami(uff, 'ws2', 'cp1252')
+        util.print_frame('\n', perverted)
+        util.print_frame('\n', decode.fix_winsami2_cp1252(perverted))
+        self.assertEqual(decode.fix_winsami2_cp1252(perverted), uff)
+        self.assertEqual(decode.fix_winsami2_cp1252(
+            test_input[u'winsami2_to_cp1252']), want)
+
+    def test_cp1251_cp1252(self):
+        uff = u'ОЙСАВЫШ 139 В.ЕГОРОВ. Романыште — Кугу Ачамланде сар годсо илыш.'
+        perverted = self.to_pervertedsami(uff, 'cp1251', 'cp1252')
+        util.print_frame('\n', perverted)
+        util.print_frame('\n', decode.fix_cp1251_cp1252(perverted))
+        self.assertEqual(decode.fix_cp1251_cp1252(perverted), uff)
