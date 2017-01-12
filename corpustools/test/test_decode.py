@@ -147,12 +147,12 @@ class TestEncodingGuesser(unittest.TestCase):
         self.assertEqual(decode.fix_winsami2_cp1252(
             test_input[u'winsami2_to_cp1252']), want)
 
-    def test_cp1251_cp1252(self):
-        uff = u'ОЙСАВЫШ 139 В.ЕГОРОВ. Романыште — Кугу Ачамланде сар годсо илыш.'
-        perverted = self.to_pervertedsami(uff, 'cp1251', 'cp1252')
+    def test_meadowmari_cp1252(self):
+        uffperted = u'ОЙСАВЫШ 139 В.ЕГОРОВ. Романыште ҥ Ҥ ӱ Ӱ ӧ Ӧ'
+        perverted = u'ÎÉÑÀÂÛØ 139 Â.ÅÃÎÐÎÂ. Ðîìàíûøòå ‰ ˆ ¢ ™ º ª'
         util.print_frame('\n', perverted)
-        util.print_frame('\n', decode.fix_cp1251_cp1252(perverted))
-        self.assertEqual(decode.fix_cp1251_cp1252(perverted), uff)
+        util.print_frame('\n', decode.fix_meadowmari_cp1252(perverted))
+        self.assertEqual(decode.fix_meadowmari_cp1252(perverted), uffperted)
 
     def test_macsami_macroman(self):
         uff = u'Ω'

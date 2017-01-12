@@ -32,7 +32,7 @@ import six
 # macsami, winsami2, are needed, even if pylint
 # flags them as unused
 # pylint: disable=unused-import
-from corpustools import macsami, util, winsami2
+from corpustools import macsami, util, winsami2, mari
 
 
 def fix_macsami_cp1252(instring):
@@ -99,19 +99,18 @@ def fix_winsami2_cp1252(instring):
     return instring.encode('cp1252', 'xmlcharrefreplace').decode('ws2')
 
 
-def fix_cp1251_cp1252(instring):
+def fix_meadowmari_cp1252(instring):
     """Fix instring.
 
     Arguments:
         instring (str): A bytestring that originally was encoded as
-            cp1251 but has decoded to str as if it was cp1252.
-
+            meadowmari but has been decoded to unicode as if it was
+            cp1252.
 
     Returns:
         str with fixed encoding.
     """
-    return instring.encode('cp1252').decode(
-        'cp1251')
+    return instring.encode('cp1252').decode('meadowmari')
 
 CTYPES = {
     u'mix-mac-sami-and-some-unknown-encoding': {
@@ -322,7 +321,7 @@ class EncodingGuesser(object):
         elif position == u'winsami2_to_cp1252':
             return fix_winsami2_cp1252(text)
         elif position == u'cp1251_cp1252':
-            return fix_cp1251_cp1252(text)
+            return fix_meadowmari_cp1252(text)
         elif position is not None:
             encoding = CTYPES[position]
 
