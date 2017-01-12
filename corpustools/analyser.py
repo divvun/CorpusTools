@@ -102,7 +102,7 @@ class Analyser(object):
             else:
                 print(xml_file, 'is an OCR file and will not be analysed',
                       file=sys.stderr)
-        except etree.XMLSyntaxError as error:
+        except (etree.XMLSyntaxError, UserWarning) as error:
             print('Can not parse', xml_file, file=sys.stderr)
             print('The error was:', str(error), file=sys.stderr)
 
