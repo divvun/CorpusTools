@@ -171,6 +171,8 @@ class ParallelPicker(object):
         else:
             shutil.copy(xml_file.name, prestable_dir)
 
+        return prestable_name
+
     def copy_valid_parallels(self):
         """Copy valid parallel files from converted to prestable/converted."""
         counter = defaultdict(int)
@@ -185,8 +187,23 @@ class ParallelPicker(object):
                     if self.has_sufficient_ratio(language1_file,
                                                  parallel_file):
                         counter['good_parallel'] += 1
-                        self.copy_file(language1_file)
+                        prestable_name = self.copy_file(language1_file)
                         self.copy_file(parallel_file)
+                        parallelizer = parallelize.ParallelizeTCA2(
+                            prestable_name,
+                            parallel_file.lang,
+                            quiet=True)
+                        try:
+                            tmx = parallelizer.parallelize_files()
+                        except UserWarning as error:
+                            print(str(error))
+                        else:
+                            tmx.clean_toktmx()
+                            outfile_existed = os.path.exists(parallelizer.outfile_name)
+                            print('Making {}'.format(parallelizer.outfile_name))
+                            tmx.write_tmx_file(parallelizer.outfile_name)
+                            if not outfile_existed:
+                                self.vcs.add(parallelizer.outfile_name)
 
         for poor_ratio in self.poor_ratio:
             print('{0}: {1}\n{2}: {3}\nratio: {4}\n'.format(*poor_ratio))
