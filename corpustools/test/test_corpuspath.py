@@ -67,7 +67,7 @@ def test_path_to_orig(testname, orig):
         AssertionError: is raised if the result is not what is expected
     """
     corpus_path = corpuspath.CorpusPath(orig)
-
-    if corpus_path.orig != name('orig', 'sme', ''):
+    orig_name = name(module='orig', lang='sme', extension='')
+    if corpus_path.orig != orig_name:
         raise AssertionError('{}:\nexpected {}\ngot {}'.format(
-            testname, name('orig', 'sme', ''), corpus_path.orig))
+            testname, orig_name, corpus_path.orig))
