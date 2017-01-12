@@ -3770,7 +3770,7 @@ class ConverterManager(object):
         logger.info('Starting the conversion of {} files'.format(len(self.FILES)))
 
         for orig_file in self.FILES:
-            logger.debug('converting', orig_file)
+            logger.debug('converting {}'.format(orig_file))
             self.convert(orig_file)
 
     def add_file(self, xsl_file):
