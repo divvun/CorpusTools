@@ -194,7 +194,7 @@ class CorpusPath(object):
         Returns:
             str: path to the tmx file
         """
-        self.name(module='tmx',
+        return self.name(module='tmx',
                   lang=self.pathcomponents.lang + '2' + language,
                   extension='.tmx')
 
@@ -207,6 +207,6 @@ class CorpusPath(object):
         Returns:
             str: path to the prestable tmx file
         """
-        self.name(module='prestable/tmx',
+        return self.name(module='prestable/tmx',
                   lang=self.pathcomponents.lang + '2' + language,
                   extension='.tmx')
