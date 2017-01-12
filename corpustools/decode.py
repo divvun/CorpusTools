@@ -300,7 +300,8 @@ class EncodingGuesser(object):
         elif u'Ã¡' in content:
             winner = u'double-utf8'
 
-        util.print_frame(winner)
+        if winner is not None:
+            util.print_frame(winner)
         return winner
 
     @staticmethod
