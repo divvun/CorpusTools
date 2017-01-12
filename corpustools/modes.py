@@ -96,7 +96,8 @@ class Pipeline(object):
     def check_error(command, error):
         """Print errors."""
         if error:
-            print('{} failed:\n{}'.format(command, error), file=sys.stderr)
+            print(u'{} failed:\n{}'.format(
+                u' '.join(command), error.decode('utf8')), file=sys.stderr)
 
     def tag2commandpart(self, element):
         """Turn program elements to a command part.
