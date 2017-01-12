@@ -176,14 +176,13 @@ class CorpusPath(object):
         except TypeError:
             return ''
 
-    @property
     def parallels(self):
         """Return paths to all parallel files.
 
         Yields:
             str: path to the orig path of a parallel file.
         """
-        for language, name in self.metadata.get_parallel_texts():
+        for language, name in self.metadata.get_parallel_texts().items():
             yield self.name(lang=language, name=name)
 
     def tmx(self, language):
