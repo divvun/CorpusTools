@@ -156,7 +156,7 @@ def parse_options():
                         help="director(y|ies) where the converted files \
                         exist")
     parser.add_argument('-k', '--fstkit',
-                        choices=['hfst', 'xfst'],
+                        choices=['hfst', 'xfst', 'trace-smegram'],
                         default='xfst',
                         help='Finite State Toolkit. '
                         'Either hfst or xfst (the default).')
