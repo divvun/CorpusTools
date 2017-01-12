@@ -14,7 +14,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2011-2016 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2011-2016 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
@@ -1151,7 +1152,7 @@ def parallelise_file(input_file, lang2, dictionary, quiet, aligner, stdout,
 
 
 def main():
-    '''Parallelise files'''
+    """Parallelise files."""
     args = parse_options()
 
     for source in args.sources:
