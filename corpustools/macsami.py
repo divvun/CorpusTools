@@ -1,46 +1,94 @@
-"""Python Character Mapping Codec for macsami"""
+# Disable pylint warnings to follow the coding style of the python
+# this class.
+# pylint: disable=W0232, C0103
+"""Python Character Mapping Codec for macsami."""
 
 import codecs
 
-### Codec APIs
+#  Codec APIs
+
 
 class Codec(codecs.Codec):
+    """Implement the interface for stateless encoders/decoders."""
 
-    def encode(self,input,errors='strict'):
-        return codecs.charmap_encode(input,errors,encoding_table)
+    def encode(self, instring, errors='strict'):
+        """Encode the object input.
 
-    def decode(self,input,errors='strict'):
-        return codecs.charmap_decode(input,errors,decoding_table)
+        Arguments:
+            instring (str): the string that should be encoded with this
+                codec.
+            errors (str): define the error handling to apply. One of
+                'strict', 'replace', 'ignore',  'xmlcharrefreplace' or
+                'backslashreplace'.
+
+        Returns:
+            tuple (output object, length consumed)
+        """
+        return codecs.charmap_encode(instring, errors, encoding_table)
+
+    def decode(self, instring, errors='strict'):
+        """Decode the object input.
+
+        Arguments:
+            instring (str): the string that should be decoded with this
+                codec.
+            errors (str): define the error handling to apply. One of
+                'strict', 'replace' or 'ignore'.
+
+        Returns:
+            tuple (output object, length consumed)
+        """
+        return codecs.charmap_decode(instring, errors, decoding_table)
+
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
-    def encode(self, input, final=False):
-        return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+    """Implement an IncrementalEncoder."""
+
+    def encode(self, instring, final=False):
+        """Encode input.
+
+        Arguments:
+            instring (str): the string that should be encoded with this
+                codec.
+
+        Returns:
+            output object.
+        """
+        return codecs.charmap_encode(instring, self.errors, encoding_table)[0]
+
 
 class IncrementalDecoder(codecs.IncrementalDecoder):
-    def decode(self, input, final=False):
-        return codecs.charmap_decode(input,self.errors,decoding_table)[0]
+    """Implement an IncrementalDecoder."""
 
-class StreamWriter(Codec,codecs.StreamWriter):
-    pass
+    def decode(self, instring, final=False):
+        """Decode input.
 
-class StreamReader(Codec,codecs.StreamReader):
-    pass
+        Arguments:
+            instring (str): the string that should be decoded with this
+                codec.
 
-### encodings module API
+        Returns:
+            output object.
+        """
+        return codecs.charmap_decode(instring, self.errors, decoding_table)[0]
+
+#  encodings module API
+
 
 def getregentry():
+    """Get the info for this encoding."""
     return codecs.CodecInfo(
         name='macsami',
         encode=Codec().encode,
         decode=Codec().decode,
         incrementalencoder=IncrementalEncoder,
         incrementaldecoder=IncrementalDecoder,
-        streamreader=StreamReader,
-        streamwriter=StreamWriter,
+        streamreader=codecs.StreamReader,
+        streamwriter=codecs.StreamWriter,
     )
 
 
-### Decoding Table
+#  Decoding Table
 
 decoding_table = (
     u'\x00'     # 0x00 -> NULL
@@ -301,10 +349,20 @@ decoding_table = (
     u'\u01E9'     # 0xff -> LATIN SMALL LETTER K WITH CARON
 )
 
-### Encoding table
-encoding_table=codecs.charmap_build(decoding_table)
+#  Encoding table
+encoding_table = codecs.charmap_build(decoding_table)
+
 
 def lookup(encoding):
+    """Lookup the name of the encoding.
+
+    Arguments:
+        encoding (str): name of the encoding
+
+    Returns:
+        Codecs.CodecInfo if encoding is the name of the encoding of
+            this file, None otherwise.
+    """
     if encoding == 'macsami':
         return getregentry()
     return None
