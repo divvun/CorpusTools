@@ -24,6 +24,7 @@ import codecs
 import unittest
 import six
 import sys
+from nose_parameterized import parameterized
 
 from corpustools import decode, macsami, winsami2, iso_ir_197, iso_ir_209, util
 
@@ -81,26 +82,20 @@ test_input = {
 
 class TestEncodingGuesser(unittest.TestCase):
 
-    def test_encoding_guesser(self):
+    @parameterized.expand([(index) for index in decode.CTYPES.keys()])
+    def test_encoding_guesser(self, index):
         guesser = decode.EncodingGuesser()
-        for i in decode.CTYPES.keys():
-            self.assertEqual(guesser.guess_body_encoding(
-                test_input[i]), i)
+        self.assertEqual(guesser.guess_body_encoding(test_input[index]),
+                         index)
 
-    def round_trip_x(self, index):
+    @parameterized.expand([(index) for index in test_input.keys()])
+    def test_round_trip_x(self, index):
         eg = decode.EncodingGuesser()
-
         unicode_content = u'á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ'
-
         content = test_input[index]
-
         test_content = eg.decode_para(index, content)
 
         self.assertEqual(unicode_content, test_content)
-
-    def test_round_tripping(self):
-        for k in test_input.keys():
-            self.round_trip_x(k)
 
     @staticmethod
     def to_pervertedsami(instring, from_enc, to_enc):
