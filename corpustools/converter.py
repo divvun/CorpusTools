@@ -215,8 +215,12 @@ class Converter(object):
 
         if (self.md.get_variable('mainlang') in
                 ['sma', 'sme', 'smj', 'smn', 'sms', 'nob', 'fin', 'swe',
-                 'nno', 'dan', 'fkv', 'sju', 'sje']):
-            fixer.fix_body_encoding(self.md.get_variable('mainlang'))
+                 'nno', 'dan', 'fkv', 'sju', 'sje', 'mhr']):
+            try:
+                fixer.fix_body_encoding(self.md.get_variable('mainlang'))
+            except UserWarning as error:
+                util.print_frame(error)
+                util.print_frame(self.names.orig)
 
     mixed_to_unicode = {
         'e4': u'ä',
@@ -3214,8 +3218,15 @@ class DocumentFixer(object):
         eg = decode.EncodingGuesser()
         encoding = eg.guess_body_encoding(bodyString)
 
-        body = etree.fromstring(eg.decode_para(encoding, bodyString))
-
+        try:
+            body = etree.fromstring(eg.decode_para(encoding, bodyString))
+        except UnicodeEncodeError as error:
+            util.print_frame(bodyString[:error.start], '\n')
+            util.print_frame(bodyString[error.start:error.end],
+                             ord(bodyString[error.start:error.start + 1]),
+                             hex(ord(bodyString[error.start:error.start + 1])), '\n')
+            util.print_frame(bodyString, '\n')
+            raise UserWarning(str(error))
         self.root.append(body)
 
         if mainlang == 'sms':
@@ -3230,6 +3241,7 @@ class DocumentFixer(object):
             text = title.text
 
             text = text
+            util.print_frame(encoding)
             title.text = eg.decode_para(encoding, text)
 
         persons = self.root.findall('.//person')
