@@ -626,6 +626,9 @@ class ParallelizeTCA2(Parallelize):
             divider = SentenceDivider(infile)
             divider.process_all_paragraphs()
             divider.write_result(outfile)
+            if not divider.sentence_counter:
+                raise UserWarning('Found no {} sentences in {}'.format(
+                    pfile.lang, pfile.name))
 
     @property
     def sentfiles(self):
