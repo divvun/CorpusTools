@@ -98,8 +98,7 @@ def fix_winsami2_cp1252(instring):
     Returns:
         str with fixed encoding.
     """
-    return instring.encode('cp1252').decode(
-        'ws2')
+    return instring.encode('cp1252', 'xmlcharrefreplace').decode('ws2')
 
 
 def fix_cp1251_cp1252(instring):

@@ -159,3 +159,5 @@ class TestEncodingGuesser(unittest.TestCase):
         self.assertEqual(decode.fix_macsami_mac(uff), u'ž')
 
     def test_winsami2_cp1252_with_dstroke(self):
+        uff = u'đ'
+        self.assertEqual(decode.fix_macsami_mac(uff), u'đ')
