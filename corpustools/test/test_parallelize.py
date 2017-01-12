@@ -473,7 +473,6 @@ class TestParallelizeHunalign(unittest.TestCase):
             "nob",
             quiet=True)
 
-    @unittest.skip('Hunalign')
     def test_parallize_files(self):
         print(self.parallelize.parallelize_files())
 

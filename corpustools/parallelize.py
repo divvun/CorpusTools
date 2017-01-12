@@ -583,11 +583,11 @@ class ParallelizeHunalign(Parallelize):
             """
             return tempfile.NamedTemporaryFile('w')
         with tmp() as dict_f, tmp() as sent0_f, tmp() as sent1_f:
-            dict_f.write(self.make_dict())
+            dict_f.write(self.make_dict().encode('utf8'))
             sent0_f.write(self.to_sents(
-                self.origfiles[0]))
+                self.origfiles[0]).encode('utf8'))
             sent1_f.write(self.to_sents(
-                self.origfiles[1]))
+                self.origfiles[1]).encode('utf8'))
             dict_f.flush()
             sent0_f.flush()
             sent1_f.flush()
