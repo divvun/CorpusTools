@@ -77,8 +77,6 @@ test_input = {
         u'á š þ đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ',
 }
 
-#codecs.register_error('backslashreffcallback', decode.handler)
-
 
 class TestEncodingGuesser(unittest.TestCase):
 
