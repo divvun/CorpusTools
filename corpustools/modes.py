@@ -110,7 +110,7 @@ class Pipeline(object):
         if element.tag == 'file':
             return os.path.join(
                 self.relative_path,
-                element.get('name')).encode('utf8')
+                element.get('name'))
         else:
             return element.get('name')
 
