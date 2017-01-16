@@ -107,7 +107,8 @@ def fix_meadowmari_cp1252(instring):
     Returns:
         str with fixed encoding.
     """
-    return instring.encode('cp1252').decode('meadowmari')
+    return instring.encode('cp1252', errors='xmlcharrefreplace'
+                           ).decode('meadowmari')
 
 CTYPES = {
     u'mix-mac-sami-and-some-unknown-encoding': {
