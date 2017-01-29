@@ -14,7 +14,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2017 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2013-2017 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
@@ -51,7 +52,7 @@ class Crawler(object):
 
     def __del__(self):
         """Add all files to the corpus."""
-        for (lang, corpus_adder) in six.iteritems(self.corpus_adders):
+        for (_, corpus_adder) in six.iteritems(self.corpus_adders):
             corpus_adder.add_files_to_working_copy()
 
     def save_pages(self, pages):
@@ -63,9 +64,9 @@ class Crawler(object):
 
         for (url, lang) in pages:
             try:
-                (r, tmpname) = self.downloader.download(url)
-            except adder.AdderException as e:
-                util.print_frame(debug=str(e) + '\n')
+                (_, tmpname) = self.downloader.download(url)
+            except adder.AdderError as error:
+                util.print_frame(debug=str(error) + '\n')
             else:
                 normalised_name = namechanger.normalise_filename(
                     os.path.basename(tmpname))
@@ -73,8 +74,9 @@ class Crawler(object):
                     self.corpus_adders[lang].goaldir, normalised_name)
 
                 if not os.path.exists(normalised_path):
-                    parallelpath = self.corpus_adders[lang].copy_file_to_corpus(
-                        tmpname, url, parallelpath=parallelpath)
+                    parallelpath = self.corpus_adders[
+                        lang].copy_file_to_corpus(
+                            tmpname, url, parallelpath=parallelpath)
                     util.print_frame(
                         debug='adding {}'.format(parallelpath))
                 else:
@@ -83,7 +85,7 @@ class Crawler(object):
 
 
 class SamediggiFiCrawler(Crawler):
-    """Notes about samediggi.fi.
+    u"""Notes about samediggi.fi.
 
     Start page is:
     http://www.samediggi.fi/index.php?option=com_frontpage&Itemid=39
@@ -143,11 +145,11 @@ class SamediggiFiCrawler(Crawler):
 
     def get_old_urls(self):
         """Collect the urls of already downloaded pages."""
-        for (lang, corpus_adder) in six.iteritems(self.corpus_adders):
-            for root, dirs, files in os.walk(corpus_adder.goaldir):
-                for f in files:
-                    if f.endswith('.xsl'):
-                        path = os.path.join(root, f)
+        for (_, corpus_adder) in six.iteritems(self.corpus_adders):
+            for root, _, files in os.walk(corpus_adder.goaldir):
+                for file_ in files:
+                    if file_.endswith('.xsl'):
+                        path = os.path.join(root, file_)
                         mdh = xslsetter.MetadataHandler(path)
                         self.old_urls[mdh.get_variable(
                             'filename')] = path.replace('.xsl', '')
@@ -160,33 +162,35 @@ class SamediggiFiCrawler(Crawler):
             if link not in self.visited_links:
                 util.print_frame(debug=link.encode('utf8'))
                 util.print_frame(
-                    debug='Before: unvisited_links {}'.format(len(self.unvisited_links)))
+                    debug='Before: unvisited_links {}'.format(
+                        len(self.unvisited_links)))
 
                 parallel_pages = []
                 found_saami = False
                 for lang in self.langs.keys():
-                    r = requests.get(link, params={'lang': lang})
+                    result = requests.get(link, params={'lang': lang})
 
-                    if r.history:
-                        print('history', r.history)
+                    if result.history:
+                        print('history', result.history)
 
-                    if 'samediggi.fi' not in r.url:
-                        print('url', r.url)
+                    if 'samediggi.fi' not in result.url:
+                        print('url', result.url)
 
-                    if ('www.samediggi.fi' in r.url and
-                            r.status_code == requests.codes.ok and
-                            not self.invalid_content(r.content)):
+                    if ('www.samediggi.fi' in result.url and
+                            result.status_code == requests.codes.ok and
+                            not self.invalid_content(result.content)):
                         if lang in ['davvi', 'anaras', 'nuortta']:
                             found_saami = True
-                        self.harvest_links(r.content)
-                        print_url = self.get_print_url(r.content, lang)
+                        self.harvest_links(result.content)
+                        print_url = self.get_print_url(result.content, lang)
                         if print_url is not None:
                             parallel_pages.append((print_url, lang))
                     else:
-                        if 'samediggi.fi' not in r.url:
+                        if 'samediggi.fi' not in result.url:
                             util.print_frame(
                                 debug=u'Not fetching {} which was {}\n'.format(
-                                    r.url.encode('utf8'), link.encode('utf8')))
+                                    result.url.encode('utf8'),
+                                    link.encode('utf8')))
 
                 if found_saami and parallel_pages:
                     self.save_pages(parallel_pages)
@@ -198,11 +202,13 @@ class SamediggiFiCrawler(Crawler):
             util.print_frame(
                 debug='visited_links {}\n'.format(len(self.visited_links)))
 
-    def get_print_url(self, content, lang):
+    @staticmethod
+    def get_print_url(content, lang):
         """Compute the print url of the page."""
         tree = lxml.html.document_fromstring(content)
         print_img = tree.find(
-            './/img[@src="http://www.samediggi.fi/images/M_images/printButton.png"]')
+            './/img[@src="http://www.samediggi.fi/'
+            'images/M_images/printButton.png"]')
 
         if print_img is not None:
             parent = print_img.getparent()
@@ -217,16 +223,17 @@ class SamediggiFiCrawler(Crawler):
 
             newhref = six.moves.urllib.urlparse.urlunparse(
                 (href.scheme,
-                    href.netloc,
-                    href.path,
-                    href.params,
-                    '&'.join(newquery),
-                    href.fragment))
+                 href.netloc,
+                 href.path,
+                 href.params,
+                 '&'.join(newquery),
+                 href.fragment))
 
             return newhref
 
-    def invalid_content(self, content):
-        """Return true if the page does not contain the strings.
+    @staticmethod
+    def invalid_content(content):
+        u"""Return true if the page does not contain the strings.
 
         * "Käännöstä ei ole saatavilla"
         * "There are no translations available"
@@ -290,9 +297,9 @@ class SamediggiNoPage(object):
 
     def __init__(self, url):
         """Initialise the SamediggiNoPage class."""
-        r = requests.get(url)
-        self.parsed_url = six.moves.urllib.parse.urlparse(r.url)
-        self.tree = lxml.html.document_fromstring(r.content)
+        result = requests.get(url)
+        self.parsed_url = six.moves.urllib.parse.urlparse(result.url)
+        self.tree = lxml.html.document_fromstring(result.content)
 
         self.ok_netlocs = ['www.sametinget.no',
                            'www.samediggi.no',
@@ -310,7 +317,8 @@ class SamediggiNoPage(object):
         return [six.moves.urllib.parse.urlunparse((self.parsed_url.scheme,
                                                    self.parsed_url.netloc,
                                                    a.get('href'), '', '', ''))
-                for a in self.tree.xpath('.//ul[@id="languageList"]/li/a[@href]')]
+                for a in self.tree.xpath(
+                    './/ul[@id="languageList"]/li/a[@href]')]
 
     @property
     def print_url(self):
@@ -338,8 +346,7 @@ class SamediggiNoPage(object):
         if content_language is not None:
             return uff[content_language.get('content')]
         else:
-            uff = 'no language {}'.format(self.url.encode('utf8'))
-            util.print_frame(debug=uff)
+            util.print_frame('no language {}'.format(self.url.encode('utf8')))
 
     @property
     def links(self):
@@ -405,8 +412,8 @@ class SamediggiNoCrawler(Crawler):
         util.print_frame(debug=link.encode('utf8'))
         try:
             orig_page = SamediggiNoPage(link)
-        except requests.exceptions.SSLError as e:
-            util.print_frame(debug=str(e))
+        except requests.exceptions.SSLError as error:
+            util.print_frame(debug=str(error))
         else:
             self.visited_links.add(orig_page.url)
             self.unvisited_links = self.unvisited_links.union(orig_page.links)
@@ -491,11 +498,11 @@ def main():
     for site in args.sites:
         if site == 'www.samediggi.fi':
             print('Will crawl samediggi.fi')
-            sc = SamediggiFiCrawler()
-            sc.crawl_site()
+            crawler = SamediggiFiCrawler()
+            crawler.crawl_site()
         elif site == 'samediggi.no':
             print('Will crawl samediggi.no')
-            sc = SamediggiNoCrawler()
-            sc.crawl_site()
+            crawler = SamediggiNoCrawler()
+            crawler.crawl_site()
         else:
             print('Can not crawl {} yet'.format(site))
