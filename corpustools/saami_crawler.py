@@ -29,6 +29,7 @@ import os
 import re
 import sys
 
+import dateutil.parser
 import lxml.html
 import requests
 import six
@@ -473,6 +474,102 @@ class SamediggiNoCrawler(Crawler):
             util.print_frame(debug='No saami found')
 
 
+class NrkSmeCrawler(Crawler):
+    """Collect Northern Saami pages from nrk.no."""
+
+    def __init__(self):
+        """Initialise the NrkSmeCrawler class."""
+        super(NrkSmeCrawler, self).__init__()
+        self.goaldir = six.text_type(os.getenv('GTBOUND'))
+
+    def crawl_site(self):
+        """Fetch Northern Saami pages from nrk.no.
+
+        The attributes
+
+        arrangement.offset=0
+        arrangement.quantity=200
+
+        page_links URL will see to that the 200 most recent Northern Saami
+        articles published on nrk.no/sapmi are fetched.
+        """
+        page_links = (
+            'https://www.nrk.no/serum/api/render/1.13205591?'
+            'size=18&perspective=BRIEF&alignment=AUTO&'
+            'classes=surrogate-content&'
+            'display=false&arrangement.offset=0&arrangement.quantity=200&'
+            'arrangement.repetition=PATTERN&'
+            'arrangement.view[0].perspective=BRIEF&arrangement.view[0].size=6&'
+            'arrangement.view[0].alignment=LEFT&paged=SIMPLE'
+        )
+        corpus_adder = adder.AddToCorpus(self.goaldir, 'sme', 'news/nrk.no')
+
+        fetched_links = self.get_fetched_links(corpus_adder.goaldir)
+        result = requests.get(page_links)
+        tree = lxml.html.document_fromstring(result.content)
+
+        fetched = 0
+        for address in tree.xpath('//a[@class="autonomous lp_plug"]'):
+            href = address.get('href')
+            if 'systemtest' not in href and href not in fetched_links:
+                fetched += 1
+                path = corpus_adder.copy_url_to_corpus(href)
+                self.add_metadata(path)
+
+        print('Fetched {} articles from nrk.no'.format(fetched))
+
+    @staticmethod
+    def add_metadata(path):
+        """Get metadata from the nrk.no article.
+
+        Arguments:
+            path (str): path to the nrk.no article
+        """
+        article = lxml.html.parse(path)
+        metadata = xslsetter.MetadataHandler(path + '.xsl')
+
+        for twitter in article.xpath('//a[@class="author__twitter"]'):
+            twitter.getparent().remove(twitter)
+
+        count = 0
+        for author in article.xpath('//span[@class="author__role"]'):
+            text = author.text.strip()
+            if text is not None and (text.startswith('Journ') or
+                                     text.startswith('Komm') or
+                                     text.startswith('Arti')):
+                count += 1
+                parts = author.getprevious().text.strip().split()
+                metadata.set_variable('author' + str(count) + '_ln',
+                                      parts[-1])
+                metadata.set_variable('author' + str(count) + '_fn',
+                                      ' '.join(parts[:-1]))
+
+        time = article.find('//time[@itemprop="datePublished"]')
+        date = dateutil.parser.parse(time.get('datetime'))
+        metadata.set_variable('year', date.year)
+
+        metadata.set_variable('publisher', 'NRK')
+        metadata.set_variable('license_type', 'standard')
+        metadata.write_file()
+
+    @staticmethod
+    def get_fetched_links(path):
+        """Find fetched links.
+
+        Arguments:
+            path (str): path to the directory where nrk articles are found.
+
+        Returns:
+            set of strings, where the strings are links to the articles.
+        """
+        return {
+            xslsetter.MetadataHandler(os.path.join(root, file_)).get_variable(
+                'filename')
+            for root, _, files in os.walk(path)
+            for file_ in files
+            if file_.endswith('.xsl')}
+
+
 def parse_options():
     """Parse the commandline options.
 
@@ -503,6 +600,10 @@ def main():
         elif site == 'samediggi.no':
             print('Will crawl samediggi.no')
             crawler = SamediggiNoCrawler()
+            crawler.crawl_site()
+        elif site == 'nrk.no':
+            print('Will crawl nrk.no')
+            crawler = NrkSmeCrawler()
             crawler.crawl_site()
         else:
             print('Can not crawl {} yet'.format(site))
