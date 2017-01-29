@@ -2086,8 +2086,11 @@ class HTMLContentConverter(object):
                     'article-column',
                     ('article-dateline article-dateline-footer '
                      'meta-widget-content'),  # nrk.no
+                    ('article-dateline article-footer '
+                     'container-widget-content cf'),  # nrk.no
                     'article-info',  # regjeringen.no
                     'article-related',
+                    'article-universe-teaser container-widget-content',
                     'articleImageRig',
                     'articlegooglemap',  # tysfjord.kommune.no
                     'articleTags',  # nord-salten.no
@@ -2103,6 +2106,7 @@ class HTMLContentConverter(object):
                     'byline',  # arran.no
                     'clearfix breadcrumbsAndSocial noindex',  # udir.no
                     'complexDocumentBottom',  # regjeringen.no
+                    'container-widget-content',  # nrk.no
                     'container_full',
                     'documentInfoEm',
                     'documentPaging',
@@ -2140,6 +2144,7 @@ class HTMLContentConverter(object):
                     'nrk-globalfooter-dk lp_globalfooter',  # nrk.no
                     'nrk-globalnavigation',  # nrk.no
                     'outer-column',
+                    'plug-teaser',  # nrk.no
                     'post-footer',
                     'printContact',
                     'right',  # ntfk
@@ -2272,6 +2277,7 @@ class HTMLContentConverter(object):
                 'class': [
                     'QuickNav',
                     'article-tools',
+                    'article-universe-list',  # nrk.no
                     'byline',
                     'chapter-index',  # lovdata.no
                     'footer-nav',  # lovdata.no
