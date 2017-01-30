@@ -28,12 +28,12 @@ import argparse
 import os
 import re
 import sys
+from collections import defaultdict
 
 import dateutil.parser
-from lxml import etree, html
 import requests
 import six
-from collections import defaultdict
+from lxml import etree, html
 
 from corpustools import (adder, argparse_version, namechanger, text_cat, util,
                          xslsetter)
@@ -480,6 +480,7 @@ class NrkSmeCrawler(Crawler):
     language_guesser = text_cat.Classifier(None)
     goaldir = six.text_type(os.getenv('GTBOUND'))
     corpus_adder = adder.AddToCorpus(goaldir, 'sme', 'news/nrk.no')
+    tags = set()
 
     def __init__(self):
         """Initialise the NrkSmeCrawler class."""
@@ -524,29 +525,46 @@ class NrkSmeCrawler(Crawler):
         links = 10
 
         for offset in range(0, 10000, links):
-            result = requests.get(page_links_template.format(
-                tag, offset, links))
             try:
-                yield html.document_fromstring(result.content)
-            except etree.ParserError:
+                result = requests.get(page_links_template.format(
+                    tag, offset, links))
+            except requests.exceptions.ConnectionError:
+                util.print_frame('Error when fetching {}'.format(
+                    tag, offset, links))
                 break
+            else:
+                try:
+                    yield html.document_fromstring(result.content)
+                except etree.ParserError:
+                    break
 
     def interesting_links(self, tag):
         for tree in self.get_tag_page_trees(tag):
             for address in tree.xpath(
                     '//a[@class="autonomous lp_plug"]'):
-                self.counter['total'] += 1
+                self.counter[tag + '_total'] += 1
                 href = address.get('href')
                 if ('systemtest' not in href and
                         href not in self.fetched_links and
                         self.guess_lang(address) == 'sme'):
+                    self.counter[tag + '_fetched'] += 1
                     yield href
 
+    @staticmethod
+    def pick_tags(path):
+        article = html.parse(path)
+
+        for address in article.xpath('//a[@class="universe widget reference article-universe-link universe-teaser skin-border skin-text lp_universe_link"]'):
+            href = address.get('href')
+            yield href[href.rfind('-') + 1:]
+
     def crawl_tag(self, tag):
-        for href in self.interesting_links(tag):
-            self.counter['fetched'] += 1
-            self.fetched_links.add(href)
-            self.add_metadata(self.corpus_adder.copy_url_to_corpus(href))
+        if tag not in self.tags:
+            self.tags.add(tag)
+            for href in self.interesting_links(tag):
+                self.fetched_links.add(href)
+                path = self.corpus_adder.copy_url_to_corpus(href)
+                self.add_metadata(path)
 
     def crawl_site(self):
         """Fetch Northern Saami pages from nrk.no.
@@ -559,14 +577,29 @@ class NrkSmeCrawler(Crawler):
         page_links URL will see to that the 200 most recent Northern Saami
         articles published on nrk.no/sapmi are fetched.
         """
-        for tag in ['1.13205591', '1.10463454', '1.8022460', '1.2668497']:
-            self.crawl_tag(tag)
-
+        self.crawl_tag('1.13205591')
+        self.crawl_additional_tags()
         self.report()
 
+    def crawl_additional_tags(self):
+        for root, _, files in os.walk(self.corpus_adder.goaldir):
+            for file_ in files:
+                if file_.endswith('.html'):
+                    for additional_tag in self.pick_tags(
+                            os.path.join(root, file_)):
+                        self.crawl_tag(additional_tag)
+
     def report(self):
-        print('Fetched {} articles of totally {} from nrk.no'.format(
-            self.counter['fetched'], self.counter['total']))
+        total_fetched = 0
+        total_found = 0
+        for tag in self.tags:
+            total_fetched += self.counter[tag + '_fetched']
+            total_found += self.counter[tag + '_total']
+            print('Fetched {} articles from category {} from nrk.no'.format(
+                    self.counter[tag + '_fetched'], tag))
+
+        print('Fetched totally {} from {} links'.format(
+            total_fetched, total_found))
 
     @staticmethod
     def add_metadata(path):
