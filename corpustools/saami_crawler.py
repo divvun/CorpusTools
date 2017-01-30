@@ -33,6 +33,7 @@ import dateutil.parser
 import lxml.html
 import requests
 import six
+from collections import defaultdict
 
 from corpustools import (adder, argparse_version, namechanger, text_cat, util,
                          xslsetter)
@@ -476,11 +477,71 @@ class SamediggiNoCrawler(Crawler):
 
 class NrkSmeCrawler(Crawler):
     """Collect Northern Saami pages from nrk.no."""
+    language_guesser = text_cat.Classifier(None)
+    goaldir = six.text_type(os.getenv('GTBOUND'))
+    corpus_adder = adder.AddToCorpus(goaldir, 'sme', 'news/nrk.no')
 
     def __init__(self):
         """Initialise the NrkSmeCrawler class."""
         super(NrkSmeCrawler, self).__init__()
-        self.goaldir = six.text_type(os.getenv('GTBOUND'))
+        self.fetched_links = self.get_fetched_links(self.corpus_adder.goaldir)
+        self.counter = defaultdict(int)
+
+    def guess_lang(self, address):
+        """Guess the language of the address element.
+
+        Arguments:
+            address (lxml.html.Element): An element where interesting text is found
+
+        Returns:
+            str containing the language of the text
+        """
+        # This bytes hoopla is done because the text
+        # comes out as utf8 encoded as latin1 …
+        try:
+            text = bytes(address.find('.//p[@class="plug-preamble"]').text,
+                         encoding='latin1')
+        except AttributeError:
+            text = bytes(address.find('.//h2[@class="title"]').text,
+                         encoding='latin1')
+
+        return self.language_guesser.classify(text)
+
+    @staticmethod
+    def get_tag_page_tree(tag):
+
+        page_links = (
+            'https://www.nrk.no/serum/api/render/{}?'
+            'size=18&perspective=BRIEF&alignment=AUTO&'
+            'classes=surrogate-content&'
+            'display=false&arrangement.offset=0&'
+            'arrangement.quantity=200&'
+            'arrangement.repetition=PATTERN&'
+            'arrangement.view[0].perspective=BRIEF&'
+            'arrangement.view[0].size=6&'
+            'arrangement.view[0].alignment=LEFT&'
+            'paged=SIMPLE'.format(tag)
+        )
+
+        result = requests.get(page_links)
+        return lxml.html.document_fromstring(result.content)
+
+    def interesting_links(self, tag):
+
+        for address in self.get_tag_page_tree(tag).xpath(
+                '//a[@class="autonomous lp_plug"]'):
+            self.counter['total'] += 1
+            href = address.get('href')
+            if ('systemtest' not in href and
+                    href not in self.fetched_links and
+                    self.guess_lang(address) == 'sme'):
+                yield href
+
+    def crawl_tag(self, tag):
+        for href in self.interesting_links(tag):
+            self.counter['fetched'] += 1
+            self.fetched_links.add(href)
+            self.add_metadata(self.corpus_adder.copy_url_to_corpus(href))
 
     def crawl_site(self):
         """Fetch Northern Saami pages from nrk.no.
@@ -493,30 +554,14 @@ class NrkSmeCrawler(Crawler):
         page_links URL will see to that the 200 most recent Northern Saami
         articles published on nrk.no/sapmi are fetched.
         """
-        page_links = (
-            'https://www.nrk.no/serum/api/render/1.13205591?'
-            'size=18&perspective=BRIEF&alignment=AUTO&'
-            'classes=surrogate-content&'
-            'display=false&arrangement.offset=0&arrangement.quantity=200&'
-            'arrangement.repetition=PATTERN&'
-            'arrangement.view[0].perspective=BRIEF&arrangement.view[0].size=6&'
-            'arrangement.view[0].alignment=LEFT&paged=SIMPLE'
-        )
-        corpus_adder = adder.AddToCorpus(self.goaldir, 'sme', 'news/nrk.no')
+        for tag in ['1.13205591', '1.10463454', '1.8022460', '1.2668497']:
+            self.crawl_tag(tag)
 
-        fetched_links = self.get_fetched_links(corpus_adder.goaldir)
-        result = requests.get(page_links)
-        tree = lxml.html.document_fromstring(result.content)
+        self.report()
 
-        fetched = 0
-        for address in tree.xpath('//a[@class="autonomous lp_plug"]'):
-            href = address.get('href')
-            if 'systemtest' not in href and href not in fetched_links:
-                fetched += 1
-                path = corpus_adder.copy_url_to_corpus(href)
-                self.add_metadata(path)
-
-        print('Fetched {} articles from nrk.no'.format(fetched))
+    def report(self):
+        print('Fetched {} articles of totally {} from nrk.no'.format(
+            self.counter['fetched'], self.counter['total']))
 
     @staticmethod
     def add_metadata(path):
