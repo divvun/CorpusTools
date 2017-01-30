@@ -30,7 +30,7 @@ import re
 import sys
 
 import dateutil.parser
-import lxml.html
+from lxml import etree, html
 import requests
 import six
 from collections import defaultdict
@@ -207,7 +207,7 @@ class SamediggiFiCrawler(Crawler):
     @staticmethod
     def get_print_url(content, lang):
         """Compute the print url of the page."""
-        tree = lxml.html.document_fromstring(content)
+        tree = html.document_fromstring(content)
         print_img = tree.find(
             './/img[@src="http://www.samediggi.fi/'
             'images/M_images/printButton.png"]')
@@ -263,7 +263,7 @@ class SamediggiFiCrawler(Crawler):
         Don't follow (don't save content), but save links containg
         doc_download
         """
-        tree = lxml.html.document_fromstring(content)
+        tree = html.document_fromstring(content)
 
         for address in tree.findall('.//a'):
             href = address.get('href')
@@ -301,7 +301,7 @@ class SamediggiNoPage(object):
         """Initialise the SamediggiNoPage class."""
         result = requests.get(url)
         self.parsed_url = six.moves.urllib.parse.urlparse(result.url)
-        self.tree = lxml.html.document_fromstring(result.content)
+        self.tree = html.document_fromstring(result.content)
 
         self.ok_netlocs = ['www.sametinget.no',
                            'www.samediggi.no',
@@ -491,7 +491,7 @@ class NrkSmeCrawler(Crawler):
         """Guess the language of the address element.
 
         Arguments:
-            address (lxml.html.Element): An element where interesting text is found
+            address (html.Element): An element where interesting text is found
 
         Returns:
             str containing the language of the text
@@ -508,34 +508,39 @@ class NrkSmeCrawler(Crawler):
         return self.language_guesser.classify(text)
 
     @staticmethod
-    def get_tag_page_tree(tag):
-
-        page_links = (
+    def get_tag_page_trees(tag):
+        page_links_template = (
             'https://www.nrk.no/serum/api/render/{}?'
             'size=18&perspective=BRIEF&alignment=AUTO&'
             'classes=surrogate-content&'
-            'display=false&arrangement.offset=0&'
-            'arrangement.quantity=200&'
+            'display=false&arrangement.offset={}&'
+            'arrangement.quantity={}&'
             'arrangement.repetition=PATTERN&'
             'arrangement.view[0].perspective=BRIEF&'
             'arrangement.view[0].size=6&'
             'arrangement.view[0].alignment=LEFT&'
-            'paged=SIMPLE'.format(tag)
+            'paged=SIMPLE'
         )
+        links = 10
 
-        result = requests.get(page_links)
-        return lxml.html.document_fromstring(result.content)
+        for offset in range(0, 10000, links):
+            result = requests.get(page_links_template.format(
+                tag, offset, links))
+            try:
+                yield html.document_fromstring(result.content)
+            except etree.ParserError:
+                break
 
     def interesting_links(self, tag):
-
-        for address in self.get_tag_page_tree(tag).xpath(
-                '//a[@class="autonomous lp_plug"]'):
-            self.counter['total'] += 1
-            href = address.get('href')
-            if ('systemtest' not in href and
-                    href not in self.fetched_links and
-                    self.guess_lang(address) == 'sme'):
-                yield href
+        for tree in self.get_tag_page_trees(tag):
+            for address in tree.xpath(
+                    '//a[@class="autonomous lp_plug"]'):
+                self.counter['total'] += 1
+                href = address.get('href')
+                if ('systemtest' not in href and
+                        href not in self.fetched_links and
+                        self.guess_lang(address) == 'sme'):
+                    yield href
 
     def crawl_tag(self, tag):
         for href in self.interesting_links(tag):
@@ -570,7 +575,7 @@ class NrkSmeCrawler(Crawler):
         Arguments:
             path (str): path to the nrk.no article
         """
-        article = lxml.html.parse(path)
+        article = html.parse(path)
         metadata = xslsetter.MetadataHandler(path + '.xsl')
 
         for twitter in article.xpath('//a[@class="author__twitter"]'):
