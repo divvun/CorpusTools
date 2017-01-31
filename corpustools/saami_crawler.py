@@ -599,9 +599,9 @@ class NrkSmeCrawler(Crawler):
         for entry in feedparser.parse(
                 'https://www.nrk.no/sapmi/oanehaccat.rss').entries:
             self.counter['oanehaččat_total'] += 1
-            if entry['id'] not in self.fetched_links:
+            if entry['link'] not in self.fetched_links:
                 self.counter['oanehaččat_fetched'] += 1
-                self.add_nrk_article(entry['id'])
+                self.add_nrk_article(entry['link'])
 
     def report(self):
         total_fetched = 0
