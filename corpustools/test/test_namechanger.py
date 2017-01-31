@@ -48,6 +48,9 @@ class TestFilenameToAscii(unittest.TestCase):
         (u'aba".txt', u'aba_.txt'),
         (u'aba<.txt', u'aba_.txt'),
         (u'aba>.txt', u'aba_.txt'),
+        (u'__aba.txt', u'aba.txt'),
+        (u'--aba.txt', u'aba.txt'),
+        (u'--__aba.txt', u'aba.txt'),
         ((
             u'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
             u'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦ‌​ЧШЩЪЫЬЭЮЯ.txt'),

@@ -484,6 +484,10 @@ def normalise_filename(filename):
     # unidecode.unidecode makes ascii only
     # urllib.unquote replaces %xx escapes by their single-character equivalent.
     asciiname = unidecode.unidecode(six.moves.urllib.parse.unquote(filename))
+
+    while asciiname.startswith(('-', '_')):
+        asciiname = asciiname[1:]
+
     unwanted = re.compile('[+ ()\'–?,!,<>"&;&#\\|$]+')
 
     return unwanted.sub('_', asciiname).lower()
