@@ -2143,6 +2143,7 @@ class HTMLContentConverter(object):
                     'nrk-globalfooter',  # nrk.no
                     'nrk-globalfooter-dk lp_globalfooter',  # nrk.no
                     'nrk-globalnavigation',  # nrk.no
+                    'nrkno-share bulletin-share',  # nrk.no
                     'outer-column',
                     'plug-teaser',  # nrk.no
                     'post-footer',
