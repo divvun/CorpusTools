@@ -30,6 +30,7 @@ import re
 import sys
 from collections import defaultdict
 
+import feedparser
 import dateutil.parser
 import requests
 import six
@@ -562,9 +563,12 @@ class NrkSmeCrawler(Crawler):
         if tag not in self.tags:
             self.tags.add(tag)
             for href in self.interesting_links(tag):
-                self.fetched_links.add(href)
-                path = self.corpus_adder.copy_url_to_corpus(href)
-                self.add_metadata(path)
+                self.add_nrk_article(href)
+
+    def add_nrk_article(self, href):
+        self.fetched_links.add(href)
+        path = self.corpus_adder.copy_url_to_corpus(href)
+        self.add_metadata(path)
 
     def crawl_site(self):
         """Fetch Northern Saami pages from nrk.no.
@@ -579,6 +583,7 @@ class NrkSmeCrawler(Crawler):
         """
         self.crawl_tag('1.13205591')
         self.crawl_additional_tags()
+        self.crawl_oanehaccat()
         self.report()
 
     def crawl_additional_tags(self):
@@ -588,6 +593,15 @@ class NrkSmeCrawler(Crawler):
                     for additional_tag in self.pick_tags(
                             os.path.join(root, file_)):
                         self.crawl_tag(additional_tag)
+
+    def crawl_oanehaccat(self):
+        self.tags.add('oanehaččat')
+        for entry in feedparser.parse(
+                'https://www.nrk.no/sapmi/oanehaccat.rss').entries:
+            self.counter['oanehaččat_total'] += 1
+            if entry['id'] not in self.fetched_links:
+                self.counter['oanehaččat_fetched'] += 1
+                self.add_nrk_article(entry['id'])
 
     def report(self):
         total_fetched = 0
@@ -628,6 +642,8 @@ class NrkSmeCrawler(Crawler):
                                       ' '.join(parts[:-1]))
 
         time = article.find('//time[@itemprop="datePublished"]')
+        if time is None:
+            time = article.find('//time[@class="relative bulletin-time"]')
         date = dateutil.parser.parse(time.get('datetime'))
         metadata.set_variable('year', date.year)
 
