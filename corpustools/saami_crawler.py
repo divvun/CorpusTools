@@ -581,10 +581,10 @@ class NrkSmeCrawler(Crawler):
         page_links URL will see to that the 200 most recent Northern Saami
         articles published on nrk.no/sapmi are fetched.
         """
+        self.crawl_oanehaccat()
         self.crawl_tag('1.13205591')
         self.crawl_tag('1.10892262')
         self.crawl_additional_tags()
-        self.crawl_oanehaccat()
         self.report()
 
     def crawl_additional_tags(self):
