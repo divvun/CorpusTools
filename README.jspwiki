@@ -3,22 +3,29 @@
 Corpus Tools contains tools to manipulate a corpus in different ways.
 These scripts will be installed
 
-* [ccat|CorpusTools.html#ccat]
-* [convert2xml|CorpusTools.html#convert2xml]
-* [analyse_corpus|CorpusTools.html#analyse_corpus]
-* [add_files_to_corpus|CorpusTools.html#add_files_to_corpus]
-* [parallelize|CorpusTools.html#parallelize]
-* [saami_crawler|CorpusTools.html#saami_crawler]
-* [generate_anchor_list|CorpusTools.html#generate_anchor_list]
-* [normalise_corpus_names|CorpusTools.html#generate_anchor_list#normalise_corpus_names]
-* [paracheck|CorpusTools.html#paracheck]
-* [html_cleaner|CorpusTools.html#html_cleaner]
-* [duperemover|CorpusTools.html#duperemover]
-* [dupefinder|CorpusTools.html#dupefinder]
-* [move_corpus_file|CorpusTools.html#move_corpus_file]
-* [remove_corpus_file|CorpusTools.html#remove_corpus_file]
-* [pick_parallel_docs|CorpusTools.html#pick_parallel_docs]
-* [clean_prestable|CorpusTools.html#clean_prestable]
+!!Use the content of the corpus
+* [convert2xml: Convert original files to giellatekno xml|CorpusTools.html#convert2xml]
+* [ccat: Print the contents of a converted corpus file as plain text|CorpusTools.html#ccat]
+* [analyse_corpus: Do syntactic analysis of converted files|CorpusTools.html#analyse_corpus]
+* [parallelize: Sentence align file pairs|CorpusTools.html#parallelize]
+
+!!Add files to the corpus
+* [add_files_to_corpus: Add file(s) to a corpus directory|CorpusTools.html#add_files_to_corpus]
+* [saami_crawler: Crawl saami sites, add files to corpus|CorpusTools.html#saami_crawler]
+
+!!Manage the corpus repositories
+* [move_corpus_file: Move or rename a file inside the corpus|CorpusTools.html#move_corpus_file]
+* [remove_corpus_file: Remove a file from the corpus|CorpusTools.html#remove_corpus_file]
+* [normalise_corpus_names: Program to normalise file names|CorpusTools.html#normalise_corpus_names]
+* [paracheck: Check if the parallel files found in the metadata files exist|CorpusTools.html#paracheck]
+* [duperemover: Remove duplicate files from the given directory|CorpusTools.html#duperemover]
+* [dupefinder: Find files with more than 90% similarity in the given directory|CorpusTools.html#dupefinder]
+* [clean_prestable:Remove files in prestable that have no original files|CorpusTools.html#clean_prestable]
+* [pick_parallel_docs: Pick out parallel files from converted to prestable/converted|CorpusTools.html#pick_parallel_docs]
+
+!!Miscellaneous
+* [generate_anchor_list: Generate paired anchor list for languages lang1 and lang2|CorpusTools.html#generate_anchor_list]
+* [html_cleaner: Program to print out a nicely indented html document|CorpusTools.html#html_cleaner]
 
 !!Requirements
 
@@ -50,7 +57,7 @@ yaourt -S python2-pysvn
 }}}
 
 You also need to have the $GTHOME variable set to where you checked
-out https://victorio.uit.no/langtech/trunk/
+out https://gtsvn.uit.no/langtech/trunk/
 
 !Custom version of pdftohtml (poppler)
 
