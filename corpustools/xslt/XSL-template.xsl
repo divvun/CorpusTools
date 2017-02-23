@@ -15,39 +15,80 @@
                 doctype-system="http://giellatekno.uit.no/dtd/corpus.dtd"/>
 
     <!-- Add the metainformation manually -->
-    <!-- variable filename contains the original name of the file (from submitter)-->
+
+    <!--
+        The original name of the file that comes from the
+        submitter of the document or the URL where the document has been fetched.
+        These days it is automatically added by the add_files_to_corpus tool.
+        http://divvun.no/doc/ling/CorpusTools.html#add_files_to_corpus
+    -->
     <xsl:variable name="filename" select="''"/>
     <xsl:variable name="text_encoding" select="''"/>
     <xsl:variable name="title" select="''"/>
+    <!--
+        Information of the first author: first name, last name,
+        date or year of birth, nationality.
+    -->
     <xsl:variable name="author1_fn" select="''"/>
     <xsl:variable name="author1_ln" select="''"/>
+    <!-- m, f or unknown -->
     <xsl:variable name="author1_gender" select="'unknown'"/>
+    <!--
+        The country where the author is from. It should be written as
+        an ISO_3166-1 code.
+        https://no.wikipedia.org/wiki/ISO_3166-1
+    -->
     <xsl:variable name="author1_nat" select="''"/>
+    <!-- Either YYYY or YYYYMMDD. Examples: 1954 or 19451224 -->
     <xsl:variable name="author1_born" select="''"/>
+    <!--
+        Information of the second author: first name, last name,
+        date or year of birth, nationality.
+    -->
     <xsl:variable name="author2_fn" select="''"/>
     <xsl:variable name="author2_ln" select="''"/>
     <xsl:variable name="author2_gender" select="'unknown'"/>
     <xsl:variable name="author2_nat" select="''"/>
     <xsl:variable name="author2_born" select="''"/>
+
+    <!--
+        Information of the third author: first name, last name,
+        date or year of birth, nationality.
+    -->
     <xsl:variable name="author3_fn" select="''"/>
     <xsl:variable name="author3_ln" select="''"/>
     <xsl:variable name="author3_gender" select="'unknown'"/>
     <xsl:variable name="author3_nat" select="''"/>
     <xsl:variable name="author3_born" select="''"/>
+
+    <!--
+        Information of the fourth author: first name, last name,
+        date or year of birth, nationality.
+    -->
     <xsl:variable name="author4_fn" select="''"/>
     <xsl:variable name="author4_ln" select="''"/>
     <xsl:variable name="author4_gender" select="'unknown'"/>
     <xsl:variable name="author4_nat" select="''"/>
     <xsl:variable name="author4_born" select="''"/>
+
     <xsl:variable name="publisher" select="''"/>
+    <!-- The values are either: published or unpublished -->
     <xsl:variable name="publChannel" select="''"/>
+    <!-- Publication year -->
     <xsl:variable name="year" select="''"/>
     <xsl:variable name="ISBN" select="''"/>
     <xsl:variable name="ISSN" select="''"/>
     <xsl:variable name="place" select="''"/>
+
+    <!-- Automatically filled in by CorpusTools -->
     <xsl:variable name="genre" select="''"/>
     <xsl:variable name="collection" select="''"/>
+    <!--
+        Three letter language code.
+        https://no.wikipedia.org/wiki/Liste_over_ISO_639-1-koder
+    -->
     <xsl:variable name="translated_from" select="''"/>
+    <!-- Translator variables have the same format as the author ones -->
     <xsl:variable name="translator_fn" select="''"/>
     <xsl:variable name="translator_ln" select="''"/>
     <xsl:variable name="translator_gender" select="'unknown'"/>
@@ -55,8 +96,10 @@
     <xsl:variable name="translator_nat" select="''"/>
     <!-- select license type: free, standard or other -->
     <xsl:variable name="license_type" select="''"/>
+    <!-- The name and email of the submitter -->
     <xsl:variable name="sub_name" select="''"/>
     <xsl:variable name="sub_email" select="''"/>
+    <!-- Keep empty, this is automatically filled in by CorpusTools -->
     <xsl:variable name="wordcount" select="''"/>
     <!-- This variable can have the following values:
         * ocr:          ocr'ed document, should usually not be converted
@@ -68,27 +111,33 @@
         * unsupported:  document that cannot be converted by our conversion tools
     -->
     <xsl:variable name="conversion_status" select="'standard'"/>
+    <!-- Valid values are complete and uncomplete -->
     <xsl:variable name="metadata" select="'uncomplete'"/>
+    <!-- Automatically filled in by CorpusTools -->
     <xsl:variable name="template_version" select="'$Revision$'"/>
+    <!-- Automatically filled in by CorpusTools -->
     <xsl:variable name="current_version" select="'Revision'"/>
     <!-- Free text field for notes -->
     <xsl:variable name="note" select="''"/>
 
-    <!-- The main language of the document -->
+    <!-- Automatically filled in by CorpusTools -->
     <xsl:variable name="mainlang" select="''"/>
 
-    <!-- In the case of a multilingual document, we may want to check for
-         other languages. Set the variable monolingual to '1' to turn off
-         language recognition (treating everything as mainlang) -->
+    <!--
+        In the case of a multilingual document, we may want to check for
+        other languages. Set the variable monolingual to '1' to turn off
+        language recognition (treating everything as mainlang)
+    -->
     <xsl:variable name="monolingual" select="''"/>
 
-    <!-- If monolingual is not set, the document is multilingual.
-         Uncomment the languages you want to check for (or add new lines
-         with the right ISO-639-3 language codes).
+    <!--
+        If monolingual is not set, the document is multilingual.
+        Uncomment the languages you want to check for (or add new lines
+        with the right ISO-639-3 language codes).
 
-         If *no* languages are uncommented (and monolingual is not 1),
-         then the document is checked for all supported languages.
-         -->
+        If *no* languages are uncommented (and monolingual is not 1),
+        then the document is checked for all supported languages.
+    -->
     <xsl:variable name="mlangs">
         <!-- <language xml:lang="dan"/> -->
         <!-- <language xml:lang="eng"/> -->
@@ -110,15 +159,20 @@
         <!-- <language xml:lang="swe"/> -->
     </xsl:variable>
 
-    <!-- If the document has parallel texts, uncomment the right languages
-         (or add new lines with the right ISO-639-3 language codes) and
-         add the filename of the parallel files to the 'location'
-         variables.
+    <!--
+        This is automatically added by add_files_to_corpus if a parallel file
+        is given on the command line when a document is added to the corpus.
 
-         Don't write the full directory; we expect the file to be in the
-         same directory as this file, with only the language code and
-         filename changed.
-        -->
+        If manually correcting these values:
+        If the document has parallel texts, uncomment the correct languages
+        (or add new lines with the correct ISO-639-3 language codes) and
+        add the filename of the parallel files to the 'location'
+        variables.
+
+        Don't write the full directory; we expect the file to be in the
+        parallel directory of this file, with only the language code and
+        filename changed.
+    -->
     <xsl:variable name="parallels">
         <!-- <parallel_text xml:lang="dan" location=""/> -->
         <!-- <parallel_text xml:lang="eng" location=""/> -->
@@ -161,6 +215,11 @@
     <xsl:variable name="skip_lines" select="''"/>
 
     <!--
+        Margin of a page in a pdf document expressed as a percentage of
+        the page width and height.
+
+        The default for all margins are 7
+
         Text outside these margins will be ignored.
 
         The format for margin line is:
@@ -190,13 +249,18 @@
     <xsl:variable name="top_margin" select="''"/>
     <xsl:variable name="bottom_margin" select="''"/>
 
+    <!--
+        Cut out a part from a page in pdf documents. Has the same format
+        as *_margin above. For a given page, all four margins
+        must be defined.
+    -->
     <xsl:variable name="inner_right_margin" select="''"/>
     <xsl:variable name="inner_left_margin" select="''"/>
     <xsl:variable name="inner_top_margin" select="''"/>
     <xsl:variable name="inner_bottom_margin" select="''"/>
 
     <!--
-        This variable is used for epub files.
+        This variable is used for epub or html files.
 
         select contains comma separated xpath path pairs.
         A path pair is separated by a semicolon.
@@ -209,6 +273,8 @@
     <xsl:variable name="skip_elements" select="''"/>
 
     <!--
+        The default is set to all=1.5.
+
         The format for linespacing is:
         [all|odd|even|pagenumber]=float (where float is written as integer.integer,
         not integer,integer).
@@ -232,29 +298,32 @@
     -->
     <xsl:variable name="linespacing" select="''"/>
 
-    <!-- Add all paragraphs that should have xml:lang=X           -->
-    <!-- Uncomment the following and add the paths, for example:  -->
-    <!-- <xsl:template match="/root/section[2]/paragraph[5] |
-                        /root/section[3]/paragraph[2] ">        -->
+    <!--
+        Add all paragraphs that should have xml:lang=X
+        Uncomment the following and add the paths, for example:
+    -->
     <!--
     <xsl:template match="//body/p[5]">
-            <xsl:element name="p">
+        <xsl:element name="p">
             <xsl:attribute name="xml:lang">sme</xsl:attribute>
             <xsl:apply-templates/>
-    </xsl:element>
+        </xsl:element>
     </xsl:template>
     -->
 
-    <!-- Change or remove problematic characters from the text.   -->
-    <!-- Specify the elements to match (here all p's within       -->
-    <!-- //body, that do contain text, but do NOT contain em and  -->
-    <!-- span elements), and specify the characters               -->
-    <!-- to be replaced and the replacements. If needed,          -->
-    <!-- copy this template and target several different elements,-->
-    <!-- but don't make several templates that match the same set -->
-    <!-- of elements - then only one of them will apply. Also try -->
-    <!-- to restrict the template to nodes that do not contain    -->
-    <!-- other markup, as such markup otherwise will be removed.  -->
+    <!--
+        Change or remove problematic characters from the text.
+        Specify the elements to match (here all p's within
+        //body, that do contain text, but do NOT contain em and
+        span elements), and specify the characters
+        to be replaced and the replacements. If needed,
+        copy this template and target several different elements,
+        but don't make several templates that match the same set
+        of elements - then only one of them will apply. Also try
+        to restrict the template to nodes that do not contain
+        other markup, as such markup otherwise will be removed.
+    -->
+
     <!--
     <xsl:template match="p[parent::body][not(./em | ./span)][text()]">
         <xsl:variable name="text" select='current()' />
