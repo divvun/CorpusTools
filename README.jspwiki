@@ -883,6 +883,6 @@ optional arguments:
 !Source code
 * [clean_prestable.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/clean_prestable.py]
 * [corpuspath.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/corpuspath.py]
-* [versioncontro.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/versioncontrol.py]
+* [versioncontrol.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/versioncontrol.py]
 * [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
 
