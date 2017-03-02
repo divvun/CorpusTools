@@ -45,7 +45,11 @@ class Analyser(object):
     vislcg3 <dependency files>
     """
 
-    def __init__(self, lang, pipeline_name):
+    def __init__(self,
+                 lang,
+                 pipeline_name,
+                 relative_path=os.path.join(
+                     os.getenv('GTHOME'), 'langs')):
         """Set the files needed by preprocess, lookup and vislcg3.
 
         Arguments:
@@ -54,6 +58,7 @@ class Analyser(object):
         """
         self.lang = lang
         self.pipeline_name = pipeline_name
+        self.relative_path = relative_path
         self.xml_printer = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
 
     def setup_pipeline(self):
@@ -61,8 +66,7 @@ class Analyser(object):
             os.path.join(os.path.dirname(__file__), 'xml/modes.xml'))
         pipeline = modes.Pipeline(
             mode=modefile.find('.//mode[@name="{}"]'.format(self.pipeline_name)),
-            relative_path=os.path.join(
-                os.getenv('GTHOME'), 'langs', self.lang))
+            relative_path=os.path.join(self.relative_path, self.lang))
         pipeline.sanity_check()
 
         return pipeline
