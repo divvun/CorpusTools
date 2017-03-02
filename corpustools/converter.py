@@ -3228,6 +3228,7 @@ class DocumentFixer(object):
         try:
             body = etree.fromstring(eg.decode_para(encoding, bodyString))
         except UnicodeEncodeError as error:
+            util.print_frame('Detected encoding: {}'.format(encoding))
             util.print_frame(bodyString[:error.start], '\n')
             util.print_frame(bodyString[error.start:error.end],
                              ord(bodyString[error.start:error.start + 1]),
