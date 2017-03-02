@@ -62,7 +62,7 @@ def fix_macsami_latin1(instring):
     Returns:
         str with fixed encoding.
     """
-    return instring.encode('latin1').decode('macsami')
+    return instring.encode('latin1', errors='xmlcharrefreplace').decode('macsami')
 
 
 def fix_macsami_mac(instring):
@@ -274,7 +274,7 @@ class EncodingGuesser(object):
         elif (
                 (u'' in content and u'ã' not in content) or
                 (u'' in content) or
-                (u'¯' in content and u'Ø' not in content)):
+                (u'¯' in content and u'á' not in content)):
             winner = u'mac-sami_to_latin1'
         elif u'' in content and u'ã':
             winner = u'mix-mac-sami-and-some-unknown-encoding'
