@@ -45,11 +45,27 @@ class Analyser(object):
     vislcg3 <dependency files>
     """
 
-    def __init__(self, lang, pipeline):
-        """Set the files needed by preprocess, lookup and vislcg3."""
+    def __init__(self, lang, pipeline_name):
+        """Set the files needed by preprocess, lookup and vislcg3.
+
+        Arguments:
+            lang (str): language the analyser can analyse
+            pipeline (str): the name of the pipeline which will be used to analyse files
+        """
         self.lang = lang
-        self.pipeline = pipeline
+        self.pipeline_name = pipeline_name
         self.xml_printer = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
+
+    def setup_pipeline(self):
+        modefile = etree.parse(
+            os.path.join(os.path.dirname(__file__), 'xml/modes.xml'))
+        pipeline = modes.Pipeline(
+            mode=modefile.find('.//mode[@name="{}"]'.format(self.pipeline_name)),
+            relative_path=os.path.join(
+                os.getenv('GTHOME'), 'langs', self.lang))
+        pipeline.sanity_check()
+
+        return pipeline
 
     def collect_files(self, converted_dirs):
         """Collect converted files."""
@@ -78,10 +94,11 @@ class Analyser(object):
 
     def dependency_analysis(self):
         """Insert disambiguation and dependency analysis into the body."""
+        pipeline = self.setup_pipeline()
         body = etree.Element('body')
 
         dependency = etree.Element('dependency')
-        dependency.text = etree.CDATA(self.pipeline.run(
+        dependency.text = etree.CDATA(pipeline.run(
             self.ccat().encode('utf8')))
         body.append(dependency)
 
@@ -164,15 +181,7 @@ def main():
     """Analyse files in the given directories."""
     args = parse_options()
 
-    modefile = etree.parse(
-        os.path.join(os.path.dirname(__file__), 'xml/modes.xml'))
-    pipeline = modes.Pipeline(
-        mode=modefile.find('.//mode[@name="{}"]'.format(args.fstkit)),
-        relative_path=os.path.join(
-            os.getenv('GTHOME'), 'langs', args.lang))
-    pipeline.sanity_check()
-
-    ana = Analyser(args.lang, pipeline)
+    ana = Analyser(args.lang, args.fstkit)
 
     ana.collect_files(args.converted_dirs)
     if ana.xml_files:
