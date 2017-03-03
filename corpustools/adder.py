@@ -14,7 +14,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2017 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2013-2017 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
@@ -71,8 +72,9 @@ class UrlDownloader(object):
             'text/plain': '.txt',
         }
 
-        for ct, extension in six.iteritems(content_type_extension):
-            if (ct in content_type and not filename.endswith(extension)):
+        for content_type, extension in six.iteritems(content_type_extension):
+            if content_type in content_type and not filename.endswith(
+                    extension):
                 filename += extension
 
         return filename
@@ -94,31 +96,31 @@ class UrlDownloader(object):
             return self.add_url_extension(os.path.basename(response.url),
                                           response.headers['content-type'])
 
-    def download(self, url, params={}):
+    def download(self, url, params=None):
         """Download a url to a temporary file.
 
         Return the request object and the name of the temporary file
         """
         try:
-            r = requests.get(url, headers=self.headers, params=params)
-            if r.status_code == requests.codes.ok:
-                f = self.filename(r)
-                if six.PY2 and isinstance(f, str):
+            request = requests.get(url, headers=self.headers, params=params)
+            if request.status_code == requests.codes.ok:
+                filename = self.filename(request)
+                if six.PY2 and isinstance(filename, str):
                     try:
-                        f = f.decode('utf8')
+                        filename = filename.decode('utf8')
                     except UnicodeDecodeError:
-                        f = f.decode('latin1')
-                tmpname = os.path.join(self.download_dir, f)
+                        filename = filename.decode('latin1')
+                tmpname = os.path.join(self.download_dir, filename)
                 with open(tmpname, 'wb') as tmpfile:
-                    tmpfile.write(r.content)
+                    tmpfile.write(request.content)
 
-                return (r, tmpname)
+                return (request, tmpname)
             else:
                 raise AdderError('ERROR:', url, 'does not exist')
-        except requests.exceptions.MissingSchema as e:
-            raise AdderError(str(e))
-        except requests.exceptions.ConnectionError as e:
-            raise AdderError(str(e))
+        except requests.exceptions.MissingSchema as error:
+            raise AdderError(str(error))
+        except requests.exceptions.ConnectionError as error:
+            raise AdderError(str(error))
 
 
 class AddToCorpus(object):
@@ -134,8 +136,9 @@ class AddToCorpus(object):
             should be added
         """
         if not os.path.isdir(corpusdir):
-            raise AdderError('The given corpus directory, {}, '
-                                 'does not exist.'.format(corpusdir))
+            raise AdderError(
+                'The given corpus directory, {}, '
+                'does not exist.'.format(corpusdir))
 
         if (len(mainlang) != 3 or mainlang != mainlang.lower() or
                 mainlang != namechanger.normalise_filename(mainlang)):
@@ -154,7 +157,14 @@ class AddToCorpus(object):
 
     @staticmethod
     def __normalise_path(path):
-        """All paths in the corpus should consist of lowercase ascii letters."""
+        """Normalise path.
+
+        Arguments:
+            path (str): Path that should be normalised.
+
+        Returns:
+            str: a normalised path
+        """
         return '/'.join([namechanger.normalise_filename(part)
                          for part in path.split('/')])
 
@@ -165,13 +175,14 @@ class AddToCorpus(object):
         """
         try:
             downloader = UrlDownloader(os.path.join(self.corpusdir, 'tmp'))
-            (r, tmpname) = downloader.download(url)
+            (request, tmpname) = downloader.download(url)
 
-            return self.copy_file_to_corpus(tmpname, r.url, parallelpath)
-        except UserWarning as e:
-            print('Skipping: {}'.format(e))
+            return self.copy_file_to_corpus(tmpname, request.url, parallelpath)
+        except UserWarning as error:
+            print('Skipping: {}'.format(error))
 
-    def copy_file_to_corpus(self, origpath, metadata_filename, parallelpath=''):
+    def copy_file_to_corpus(self, origpath, metadata_filename,
+                            parallelpath=''):
         """Add a file to the corpus.
 
         * normalise the basename, copy the the file to the given directory
@@ -198,8 +209,8 @@ class AddToCorpus(object):
                                           parallelpath)
             print('Added', none_dupe_path)
             return none_dupe_path
-        except UserWarning as e:
-            print('Skipping: {}'.format(e))
+        except UserWarning as error:
+            print('Skipping: {}'.format(error))
 
     def add_metadata_to_corpus(self, none_dupe_path, meta_filename):
         """Add the metadata file to the corpus."""
@@ -269,18 +280,18 @@ class AddToCorpus(object):
         parallel info).
         """
         self.find_duplicates(origpath)
-        for root, dirs, files in os.walk(origpath):
-            for f in files:
-                orig_f = os.path.join(root, f)
+        for root, _, files in os.walk(origpath):
+            for file_ in files:
+                orig_f = os.path.join(root, file_)
                 self.copy_file_to_corpus(orig_f, os.path.basename(orig_f))
 
     @staticmethod
     def find_duplicates(origpath):
         """Find duplicates based on the hex digests of the corpus files."""
         duplicates = {}
-        for root, dirs, files in os.walk(origpath):
-            for f in files:
-                path = os.path.join(root, f)
+        for root, _, files in os.walk(origpath):
+            for file_ in files:
+                path = os.path.join(root, file_)
                 file_hash = namechanger.compute_hexdigest(path)
                 if file_hash in duplicates:
                     duplicates[file_hash].append(path)
@@ -321,18 +332,21 @@ def parse_args():
                         'the original files reside (not in svn)')
 
     parallel = parser.add_argument_group('parallel')
-    parallel.add_argument('-p', '--parallel',
-                          dest='parallel_file',
-                          help='Path to an existing file in the corpus that '
-                          'will be parallel to the orig that is about to be added')
-    parallel.add_argument('-l', '--lang',
-                          dest='lang',
-                          help='Language of the file to be added')
+    parallel.add_argument(
+        '-p', '--parallel',
+        dest='parallel_file',
+        help='Path to an existing file in the corpus that '
+        'will be parallel to the orig that is about to be added')
+    parallel.add_argument(
+        '-l', '--lang',
+        dest='lang',
+        help='Language of the file to be added')
 
     no_parallel = parser.add_argument_group('no_parallel')
-    no_parallel.add_argument('-d', '--directory',
-                             dest='directory',
-                             help='The directory where the origs should be placed')
+    no_parallel.add_argument(
+        '-d', '--directory',
+        dest='directory',
+        help='The directory where the origs should be placed')
 
     return parser.parse_args()
 
@@ -347,7 +361,7 @@ def main():
                 'The argument -l|--lang is not allowed together with '
                 '-d|--directory', file=sys.stderr)
             sys.exit(2)
-        (root, module, lang, genre, path, basename) = util.split_path(
+        (root, _, lang, genre, path, _) = util.split_path(
             os.path.join(args.directory, 'dummy.txt'))
         if genre == 'dummy.txt':
             print(
@@ -377,7 +391,7 @@ def main():
             print('Only -l|--lang is allowed together with -p|--parallel',
                   file=sys.stderr)
             sys.exit(3)
-        (root, module, lang, genre, path, basename) = util.split_path(
+        (root, _, lang, genre, path, _) = util.split_path(
             args.parallel_file)
         adder = AddToCorpus(root,
                             six.u(args.lang),
