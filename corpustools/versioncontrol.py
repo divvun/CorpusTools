@@ -99,11 +99,13 @@ class SVN(VersionController):
 
     def move(self, oldpath, newpath):
         """Move file in the working copy."""
-        self.client.move(oldpath, newpath)
+        if self.client.info(oldpath) is not None:
+            self.client.move(oldpath, newpath)
 
     def remove(self, path):
         """Remove a file from the working copy."""
-        self.client.remove(path)
+        if self.client.info(path) is not None:
+            self.client.remove(path)
 
 
 class GIT(VersionController):
