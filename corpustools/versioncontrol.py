@@ -94,7 +94,8 @@ class SVN(VersionController):
 
     def add(self, path):
         """Add a file to the working copy."""
-        self.client.add(path)
+        if self.client.info(path) is None:
+            self.client.add(path)
 
     def move(self, oldpath, newpath):
         """Move file in the working copy."""
