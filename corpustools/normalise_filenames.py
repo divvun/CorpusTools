@@ -48,7 +48,7 @@ def normalise(target_dir):
                     cfmu = namechanger.CorpusFilesetMoverAndUpdater(
                         orig_path,
                         orig_path)
-                    filepair = cfmu.mc.filepairs[0]
+                    filepair = cfmu.move_computer.filepairs[0]
                     print(u'\t\tmove {} -> {}'.format(
                         filepair.oldpath, filepair.newpath))
                     cfmu.move_files()

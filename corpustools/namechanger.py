@@ -14,7 +14,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2017 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2013-2017 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
@@ -302,7 +303,8 @@ class CorpusFilesetMoverAndUpdater(object):
     * move the prestable/toktmx file
     * move the prestable/tmx file
     * change the metadata in the metadata file, if needed
-    * change the reference to the file name in the parallel files' metadata, if needed
+    * change the reference to the file name in the parallel files'
+      metadata, if needed
     * if the parallel files need name normalisation, move them the same way the
       original file is handled
 
@@ -324,8 +326,10 @@ class CorpusFilesetMoverAndUpdater(object):
     * move the prestable/toktmx file
     * move the prestable/tmx file
     * change the metadata in the metadata file, if needed
-    * change the reference to the file name in the parallel files' metadata, if needed
-    * change the reference to the file name in the parallel files' metadata if needed
+    * change the reference to the file name in the parallel files'
+      metadata, if needed
+    * change the reference to the file name in the parallel files'
+      metadata if needed
     * move the parallel files the same way the original file has been moved.
 
     When moving a file to a new genre:
@@ -367,12 +371,12 @@ class CorpusFilesetMoverAndUpdater(object):
             metadata.write_file()
             self.vcs.add(old_xsl)
 
-        self.mc = MovepairComputer()
-        self.mc.compute_all_movepairs(oldpath, newpath)
+        self.move_computer = MovepairComputer()
+        self.move_computer.compute_all_movepairs(oldpath, newpath)
 
     def move_files(self):
         """Move all files under version control that belong to the original."""
-        for filepair in self.mc.filepairs:
+        for filepair in self.move_computer.filepairs:
             if not filepair.newpath:
                 cfr = CorpusFileRemover(filepair.oldpath)
                 cfr.remove_files()
@@ -382,7 +386,7 @@ class CorpusFilesetMoverAndUpdater(object):
 
     def update_own_metadata(self):
         """Update metadata."""
-        for filepair in self.mc.filepairs:
+        for filepair in self.move_computer.filepairs:
             if filepair.newpath:
                 old_components = util.split_path(filepair.oldpath)
                 new_components = util.split_path(filepair.newpath)
@@ -390,9 +394,10 @@ class CorpusFilesetMoverAndUpdater(object):
                 metadataname = filepair.newpath + '.xsl'
                 if os.path.isfile(metadataname):
                     metadatafile = xslsetter.MetadataHandler(metadataname)
-                    if (old_components.genre != new_components.genre):
-                        metadatafile.set_variable('genre', new_components.genre)
-                    if (old_components.lang != new_components.lang):
+                    if old_components.genre != new_components.genre:
+                        metadatafile.set_variable('genre',
+                                                  new_components.genre)
+                    if old_components.lang != new_components.lang:
                         metadatafile.set_variable(
                             'mainlang', new_components.lang)
                     metadatafile.write_file()
@@ -431,8 +436,8 @@ class CorpusFilesetMoverAndUpdater(object):
 
     def update_parallel_files_metadata(self):
         """Update the info in the parallel files."""
-        for filepair in self.mc.filepairs:
-            parallel_filepairs = list(self.mc.filepairs)
+        for filepair in self.move_computer.filepairs:
+            parallel_filepairs = list(self.move_computer.filepairs)
             parallel_filepairs.remove(filepair)
             old_components = util.split_path(filepair.oldpath)
 
@@ -482,7 +487,7 @@ def normalise_filename(filename):
                                                            os.sep))
 
     # unicode.decode wants a unicode string
-    if type(filename) is not six.text_type:
+    if not isinstance(filename, six.text_type):
         filename = filename.decode('utf8')
 
     # unidecode.unidecode makes ascii only
@@ -525,7 +530,7 @@ def compute_new_basename(oldpath, wanted_path):
     wanted_basename = os.path.basename(wanted_path)
     new_basename = os.path.basename(wanted_path)
     newpath = os.path.join(os.path.dirname(wanted_path), new_basename)
-    n = 1
+    index = 1
 
     while os.path.exists(newpath):
         if are_duplicates(oldpath, newpath):
@@ -537,10 +542,10 @@ def compute_new_basename(oldpath, wanted_path):
                 extension = wanted_basename[dot:]
                 pre_extension = wanted_basename[:dot]
                 new_basename = pre_extension + \
-                    u'_' + six.text_type(n) + extension
+                    u'_' + six.text_type(index) + extension
             else:
-                new_basename = wanted_basename + six.text_type(n)
+                new_basename = wanted_basename + six.text_type(index)
             newpath = os.path.join(os.path.dirname(wanted_path), new_basename)
-            n += 1
+            index += 1
 
     return newpath
