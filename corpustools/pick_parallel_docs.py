@@ -59,7 +59,7 @@ class ParallelPicker(object):
             maxratio (int): the maximum acceptable ratio of sentences
                 between two parallel documents
         """
-        self.vcs =versioncontrol.vcs(language1_dir[
+        self.vcs = versioncontrol.vcs(language1_dir[
             :language1_dir.find('converted/')])
         self.language1_dir = language1_dir
         self.calculate_language1(language1_dir)
@@ -198,8 +198,10 @@ class ParallelPicker(object):
                             print(str(error))
                         else:
                             tmx.clean_toktmx()
-                            outfile_existed = os.path.exists(parallelizer.outfile_name)
-                            print('Making {}'.format(parallelizer.outfile_name))
+                            outfile_existed = os.path.exists(
+                                parallelizer.outfile_name)
+                            print('Making {}'.format(
+                                parallelizer.outfile_name))
                             tmx.write_tmx_file(parallelizer.outfile_name)
                             if not outfile_existed:
                                 self.vcs.add(parallelizer.outfile_name)
