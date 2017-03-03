@@ -14,7 +14,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2017 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2013-2017 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
@@ -27,8 +28,9 @@ import getpass
 import os
 import pwd
 
-import git
 import pysvn
+
+import git
 
 
 class VersionControlError(Exception):
@@ -87,7 +89,9 @@ class SVN(VersionController):
     def __init__(self, svnclient):
         """Initialise the SVN class.
 
-        svnclient is a pysvn.Client
+        Arguments:
+            svnclient (pysvn.Client): an svn client to control the
+                working copy.
         """
         super(SVN, self).__init__()
         self.client = svnclient
@@ -112,17 +116,38 @@ class GIT(VersionController):
     """Implement basic git functionality."""
 
     def __init__(self, gitrepo):
+        """Initialise the GIT class.
+
+        Arguments:
+            gitrepo (git.Repo): client to control the git repo
+        """
         super(GIT, self).__init__()
         self.gitrepo = gitrepo
         self.config = self.gitrepo.config_reader()
 
     def add(self, path):
+        """Add path to the repo.
+
+        Arguments:
+            path (str): path that should be added to the git repo.
+        """
         self.gitrepo.git.add(path)
 
     def move(self, oldpath, newpath):
+        """Move a file within the repo.
+
+        Arguments:
+            oldpath (src): path of the file that should be moved
+            newpath (scr): new path of the file to be moved
+        """
         self.gitrepo.git.mv(oldpath, newpath)
 
     def remove(self, path):
+        """Remove a file from the repo.
+
+        Arguments:
+            path (src); path of the file that should be removed.
+        """
         self.gitrepo.git.rm(path)
 
 
