@@ -126,9 +126,7 @@ class CorpusFileMover(object):
         """
         self.old_components = util.split_path(oldpath)
         self.new_components = util.split_path(newpath)
-        self.vcs = versioncontrol.VersionControlFactory().vcs(
-            self.old_components.root)
-
+        self.vcs = versioncontrol.vcs(self.old_components.root)
 
     def move_files(self):
         """Move all files that are under version control."""
@@ -228,8 +226,7 @@ class CorpusFileRemover(object):
             oldpath (unicode): the old path
         """
         self.old_components = util.split_path(oldpath)
-        self.vcs = versioncontrol.VersionControlFactory().vcs(
-            self.old_components.root)
+        self.vcs = versioncontrol.vcs(self.old_components.root)
 
     def remove_files(self):
         """Remove all the files that are under version control."""
@@ -361,8 +358,7 @@ class CorpusFilesetMoverAndUpdater(object):
         newpath (str): path to the new name of the file.
         """
         self.old_components = util.split_path(oldpath)
-        self.vcs = versioncontrol.VersionControlFactory().vcs(
-            self.old_components.root)
+        self.vcs = versioncontrol.vcs(self.old_components.root)
 
         old_xsl = oldpath + '.xsl'
         if not os.path.exists(old_xsl):

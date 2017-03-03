@@ -126,21 +126,25 @@ class GIT(VersionController):
         self.gitrepo.git.rm(path)
 
 
-class VersionControlFactory(object):
-    """Class to create the appropriate version control class."""
+def vcs(directory):
+    """Make a version control client.
 
-    def vcs(self, directory):
-        """Get a version control system."""
+    Arguments:
+        directory (str): the directory where the working copy is found.
+
+    Returns:
+        Either the SVN or the GIT class.
+    """
+    try:
+        svn_client = pysvn.Client()
+        svn_client.info(directory)
+        return SVN(svn_client)
+    except pysvn.ClientError:
         try:
-            s = pysvn.Client()
-            s.info(directory)
-            return SVN(s)
-        except pysvn.ClientError:
-            try:
-                r = git.Repo(directory)
-                return GIT(r)
-            except git.exc.InvalidGitRepositoryError:
-                raise VersionControlError(
-                    '{} is neither a SVN working repository or a Git repo. '
-                    'Files can only be added to a version controlled '
-                    'directory.'.format(directory))
+            git_repo = git.Repo(directory)
+            return GIT(git_repo)
+        except git.exc.InvalidGitRepositoryError:
+            raise VersionControlError(
+                '{} is neither a SVN working repository or a Git repo. '
+                'Files can only be added to a version controlled '
+                'directory.'.format(directory))

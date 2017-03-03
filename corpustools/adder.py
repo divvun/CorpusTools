@@ -145,8 +145,7 @@ class AddToCorpus(object):
                 'letters'.format(mainlang))
 
         self.corpusdir = corpusdir
-        vcsfactory = versioncontrol.VersionControlFactory()
-        self.vcs = vcsfactory.vcs(self.corpusdir)
+        self.vcs = versioncontrol.vcs(self.corpusdir)
         self.goaldir = os.path.join(corpusdir, 'orig', mainlang,
                                     self.__normalise_path(path))
         with util.ignored(OSError):

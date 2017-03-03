@@ -59,8 +59,7 @@ class ParallelPicker(object):
             maxratio (int): the maximum acceptable ratio of sentences
                 between two parallel documents
         """
-        vcsfactory = versioncontrol.VersionControlFactory()
-        self.vcs = vcsfactory.vcs(language1_dir[
+        self.vcs =versioncontrol.vcs(language1_dir[
             :language1_dir.find('converted/')])
         self.language1_dir = language1_dir
         self.calculate_language1(language1_dir)
