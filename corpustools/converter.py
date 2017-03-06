@@ -2593,16 +2593,10 @@ class HTMLConverter(Converter):
         html_xslt_root = etree.parse(converter_xsl)
         transform = etree.XSLT(html_xslt_root)
 
-        try:
-            intermediate = transform(self.convert2xhtml())
+        intermediate = transform(self.convert2xhtml())
 
-            self.replace_bare_text_in_body_with_p(intermediate.find('.//body'))
-            self.add_p_instead_of_tail(intermediate)
-
-            return intermediate.getroot()
-        except etree.XMLSyntaxError as e:
-            self.handle_syntaxerror(e, util.lineno(),
-                                    etree.tostring(self.soup))
+        self.replace_bare_text_in_body_with_p(intermediate.find('.//body'))
+        self.add_p_instead_of_tail(intermediate)
 
         return intermediate.getroot()
 
