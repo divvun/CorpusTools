@@ -3704,9 +3704,10 @@ class ConverterManager(object):
         try:
             conv = self.converter(orig_file)
             conv.write_complete(self.LANGUAGEGUESSER)
-        except ConversionError as e:
-            logger.warn('Could not convert {}\n{}'.format(orig_file,
-                                                          six.text_type(e)))
+        except (ConversionError, ValueError) as error:
+            logger.warn('Could not convert {}\n{}'.format(
+                orig_file,
+                six.text_type(error)))
 
     def converter(self, orig_file):
         """Return correct converter class based on the orig file name.
