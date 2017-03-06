@@ -48,7 +48,7 @@ def mover(oldpath, newpath):
     cfmu = namechanger.CorpusFilesetMoverAndUpdater(
         oldpath,
         newpath)
-    filepair = cfmu.mc.filepairs[0]
+    filepair = cfmu.move_computer.filepairs[0]
     if filepair.newpath:
         print(u'\tmoving {} -> {}'.format(
             filepair.oldpath, filepair.newpath))
