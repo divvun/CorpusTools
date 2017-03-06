@@ -2604,19 +2604,7 @@ class HTMLConverter(Converter):
             self.handle_syntaxerror(e, util.lineno(),
                                     etree.tostring(self.soup))
 
-        if transform.error_log:
-            with open(self.names.log, 'w') as logfile:
-                logfile.write('Error at: {}'.format(
-                    six.text_type(util.lineno())))
-                for entry in transform.error_log:
-                    logfile.write('\n{}: {} {}\n'.format(
-                        six.text_type(entry.line), six.text_type(entry.column),
-                        entry.message.encode('utf8')))
-                util.print_element(self.soup, 0, 4, logfile)
-
-            raise ConversionError(
-                'HTMLConverter: transformation failed.'
-                'More info in {}'.format(self.names.log))
+        return intermediate.getroot()
 
 
 class RTFConverter(HTMLConverter):
