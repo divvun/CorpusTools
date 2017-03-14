@@ -1049,14 +1049,17 @@ class Tca2ToTmx(AlignmentToTmx):
 
     def parse_alignment_results(self):
         """Return parsed output files of tca2."""
-        pfile1_data = self.read_tca2_output(self.sentfiles[0])
-        pfile2_data = self.read_tca2_output(self.sentfiles[1])
-        return pfile1_data, pfile2_data
+        return (self.read_tca2_output(self.sentfiles[0]),
+                self.read_tca2_output(self.sentfiles[1]))
 
     def read_tca2_output(self, sentfile):
         """Read the output of tca2.
 
-        Input is a CorpusXMLFile
+        Arguments:
+            sentfile (str): name of the output file of convert2xml
+
+        Returns:
+            list of str: The sentences found in the tca2 file
         """
         sentfile_name = sentfile.replace('.xml', '_new.txt')
 
