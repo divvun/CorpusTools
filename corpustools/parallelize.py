@@ -655,9 +655,9 @@ class ParallelizeTCA2(Parallelize):
         # Ensure we have 20 bytes of leeway to let TCA2 append
         # lang_sent_new.txt without going over the 255 byte limit:
         origfilename = self.crop_to_bytes(origfilename, (255 - 20))
-        return os.path.join(os.environ['GTFREE'], 'tmp',
-                            '{}{}_sent.xml'.format(
-                                origfilename, pfile.lang))
+        return os.path.join(
+            os.environ['GTFREE'], 'tmp',
+            '{}{}_sent.xml'.format(origfilename, pfile.lang))
 
     @staticmethod
     def crop_to_bytes(name, max_bytes):
@@ -681,17 +681,17 @@ class ParallelizeTCA2(Parallelize):
         with tempfile.NamedTemporaryFile('w') as anchor_file:
             self.generate_anchor_file(anchor_file.name)
             anchor_file.flush()
-            command = ['java',
-                       '-Xms512m', '-Xmx1024m',
-                       '-jar',
-                       tca2_jar,
-                       '-cli-plain',
-                       '-anchor={}'.format(anchor_file.name),
-                       '-in1={}'.format(self.get_sent_filename(
-                           self.origfiles[0])),
-                       '-in2={}'.format(self.get_sent_filename(
-                           self.origfiles[1]))]
-            self.run_command(command)
+            command = (
+                'java -Xms512m -Xmx1024m -jar {} -cli-plain -anchor={} '
+                '-in1={} -in2={}'.format(
+                    tca2_jar,
+                    anchor_file.name,
+                    self.get_sent_filename(self.origfiles[0]),
+                    self.get_sent_filename(self.origfiles[1])
+                )
+            )
+
+            self.run_command(command.split())
             # Ignore output, Tca2ToTmx guesses name of output-files from
             # sentfiles
             # TODO(kevin): Use a tempfile.mkdtemp instead of hardcoded
