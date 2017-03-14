@@ -79,4 +79,13 @@
       </program>
     </pipeline>
   </mode>
+
+  <mode name="preprocess">
+    <pipeline>
+      <program name="hfst-tokenise" debug-suff="morph">
+        <arg name="-a"/>
+        <file name="tools/preprocess/tokeniser-gramcheck-gt-desc.pmhfst"/>
+      </program>
+    </pipeline>
+  </mode>
 </modes>

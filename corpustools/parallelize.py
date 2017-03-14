@@ -26,6 +26,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import codecs
+import io
 import os
 import re
 import subprocess
@@ -35,7 +36,7 @@ import tempfile
 from lxml import etree
 import six
 
-from corpustools import argparse_version, generate_anchor_list, text_cat, util
+from corpustools import argparse_version, generate_anchor_list, modes, text_cat, util
 
 HERE = os.path.dirname(__file__)
 
@@ -185,183 +186,73 @@ class CorpusXMLFile(object):
 
 
 class SentenceDivider(object):
-    """A class that takes a giellatekno xml document as input.
+    stops = [';', '!', '?', '.', '..', '...', '¶', '…']
 
-    It spits out an xml document that has divided the text inside the p tags
-    into sentences, but otherwise is unchanged.
-    Each sentence is encased in an s tag, and has an id number
-    """
+    def __init__(self,
+                 lang,
+                 relative_path=os.path.join(
+                     os.getenv('GTHOME'), 'langs')):
+        """Set the files needed by preprocess.
 
-    def __init__(self, input_xmlfile):
-        """Parse the input_xmlfile.
-
-        Set doc_lang to lang and read typos from
-        the corresponding .typos file if it exists
+        Arguments:
+            lang (str): language the analyser can analyse
         """
-        self.set_up_input_file(input_xmlfile)
-        self.sentence_counter = 0
-        self.document = None
+        self.lang = lang
+        self.relative_path = relative_path
 
-    def set_up_input_file(self, input_xmlfile):
-        """Initialize the inputfile.
+    def setup_pipeline(self):
+        modefile = etree.parse(
+            os.path.join(os.path.dirname(__file__), 'xml/modes.xml'))
+        pipeline = modes.Pipeline(
+            mode=modefile.find('.//mode[@name="{}"]'.format('preprocess')),
+            relative_path=os.path.join(self.relative_path, self.lang))
+        pipeline.sanity_check()
 
-        Skip those parts that are meant to be
-        skipped, move <later> elements.
+        return pipeline
+
+    def clean_sentence(self, sentence):
+        """Remove cruft from a sentence.
+
+        Arguments:
+            sentence (str): a raw sentence, warts and all
+
+        Returns:
+            str: a cleaned up sentence, looking the way a sentence should.
         """
-        in_file = CorpusXMLFile(input_xmlfile)
-        self.doc_lang = in_file.lang
+        return sentence.replace('\n', '').strip()
 
-        in_file.move_later()
-        in_file.remove_skip()
-        self.input_etree = in_file.etree
+    def make_sentences(self, ccat_output):
+        """Turn ccat output into cleaned up sentences.
 
-    def in_main_lang(self, elt):
-        """Check whether the element is the same language as the document."""
-        return self.doc_lang == elt.attrib.get(
-            '{http://www.w3.org/XML/1998/namespace}lang',
-            self.doc_lang)
+        Arguments:
+            ccat_output (str): plain text output of ccat.
 
-    def process_all_paragraphs(self):
-        """Go through all paragraphs in the etree and process them."""
-        if self.document is None:
-            self.document = etree.Element('document')
-            body = etree.Element('body')
-            self.document.append(body)
-
-            elts_doc_lang = [para for para in self.input_etree.findall('//p')
-                             if self.in_main_lang(para)]
-            processed = self.process_elts(elts_doc_lang)
-            body.extend(processed)
-        return self.document
-
-    def process_elts(self, elts):
-        """Markup sentences in a paragraph.
-
-        Args:
-            list (etree._Element): all the p elements in a file.
-
-        Return:
-            list of etree._Element that contain p elements. Each p element
-            contain a number of s elements, representing sentences.
+        Yields:
+            str: a cleaned up sentence
         """
-        para_texts = ("".join(elt.xpath('.//text()'))
-                      for elt in elts)
-        preprocessed = self.preprocess_para_texts(para_texts)
+        pipeline = self.setup_pipeline()
+        preprocessed = pipeline.run(ccat_output.encode('utf8'))
 
-        return [self.process_one_para_text(para)
-                for para in preprocessed]
+        buffer = []
+        for token in io.StringIO(preprocessed):
+            buffer.append(token)
+            if token.strip() in self.stops:
+                yield self.clean_sentence(''.join(buffer))
+                buffer[:] = []
 
-    def write_result(self, outfile):
-        """Write self.document to the given outfile name."""
-        o_path, _ = os.path.split(outfile)
-        o_rel_path = o_path.replace(os.getcwd() + '/', '', 1)
-        with util.ignored(OSError):
-            os.makedirs(o_rel_path)
-        with open(outfile, 'wb') as sentence_file:
-            tree = etree.ElementTree(self.document)
-            tree.write(sentence_file,
-                       pretty_print=True,
-                       encoding='utf8',
-                       xml_declaration=True)
+    def make_valid_sentences(self, ccat_output):
+        """Turn ccat output into full sentences.
 
-    def preprocess_para_texts(self, para_texts):
-        """Run a list of paragraphs through preprocess.
+        Arguments:
+            ccat_output (str): the plain text output of ccat
 
-        Temporarily intersperse an XML tag <SKIP/> between
-        paragraphs so that we can use just one call to preprocess,
-        but still have them split at the right points.
+        Returns:
+            list of str: The ccat output has been turned into a list
+                of full sentences.
         """
-        replacements = [("<", "&lt;"),
-                        (">", "&gt;"),
-                        ('\n', ' ')]
-        sanitized = (util.replace_all(replacements, p)
-                     for p in para_texts)
-        return self.ext_preprocess("\n<SKIP/>".join(sanitized)).split(
-            "<SKIP/>")
-
-    def ext_preprocess(self, preprocess_input):
-        """Send the text in preprocess_input into preprocess.
-
-        Return the result.
-        If the process fails, exit the program
-        """
-        preprocess_command = util.get_preprocess_command(self.doc_lang)
-        preprocess_command.append('--xml')
-
-        subp = subprocess.Popen(preprocess_command,
-                                stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
-        (output, error) = subp.communicate(
-            preprocess_input.encode('utf-8'))
-
-        if subp.returncode != 0:
-            util.note('ERROR: Could not divide into sentences')
-            util.note(output)
-            util.note(error)
-            sys.exit()
-        else:
-            return output.decode('utf-8')
-
-    pseudosent_re = re.compile(r"^[\W|\s]*$")
-
-    def process_one_para_text(self, para_text):
-        """Make sentences from the output of preprocess.
-
-        Return a new paragraph containing the marked up sentences.
-        """
-        new_paragraph = etree.Element("p")
-
-        sentence = []
-        incomplete_sentences = ['.', '?', '!', ')', ']', '...', '…',
-                                '"', '»', '”', '°', '', ':']
-        words = para_text.split('\n')
-        i = 0
-        while i < len(words):
-            word = words[i].strip()
-
-            sentence.append(word)
-            if word in ['.', '?', '!']:
-                while (i + 1 < len(words) and
-                       words[i + 1].strip() in incomplete_sentences):
-                    if words[i + 1] != '':
-                        sentence.append(words[i + 1].strip())
-                    i = i + 1
-
-                # exclude pseudo-sentences, i.e. sentences that
-                # don't contain any alphanumeric characters
-                if not self.pseudosent_re.match(' '.join(sentence)):
-                    new_paragraph.append(self.make_sentence(sentence))
-                sentence = []
-
-            i = i + 1
-
-        # exclude pseudo-sentences, i.e. sentences that don't contain
-        # any alphanumeric characters
-        if len(sentence) > 1 and not self.pseudosent_re.match(
-                ' '.join(sentence)):
-            new_paragraph.append(self.make_sentence(sentence))
-
-        return new_paragraph
-
-    def make_sentence(self, sentence):
-        """Make an s element.
-
-        Set the id and set the text to be the content of
-        the list sentence
-        """
-        # make regex for two or more space characters
-        spaces = re.compile(' +')
-
-        s_elem = etree.Element("s")
-        s_elem.attrib["id"] = str(self.sentence_counter)
-
-        # substitute two or more spaces with one space
-        s_elem.text = spaces.sub(' ', ' '.join(sentence)).strip()
-
-        self.sentence_counter += 1
-
-        return s_elem
+        return [sentence.replace(' ¶', '')
+                for sentence in self.make_sentences(ccat_output)
+                if sentence not in self.stops]
 
 
 class Parallelize(object):
