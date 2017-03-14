@@ -90,3 +90,4 @@ v<0.16.6>, <20161209> -- Additions to mac-sami_to_latin1. Fixes: Bug 2301 - smj:
 v<0.16.7>, <20161212> -- Fix a bug in convert2xml that did not write changed values in the metadata to the converted file. Make parallelize use the new dual language anchor files. Make pick_parallel_docs pick converted docs that aren't direct translations of the other.
 v<0.16.8>, <20170302> -- Make analyse_corpus use Apertium modes.xml files, via the modes.py module. Make encoding conversion a little more robust.
 v<0.16.9>, <20170303> -- Improve moving files around in svn.
+v<0.17.0>, <20170314> -- Use the hfst-tokenise as the motor for sentence division. Divide sentences also on ;. This improves the situation for Bug 2351 - Text dissappears when parallelising files
