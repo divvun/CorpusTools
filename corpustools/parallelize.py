@@ -644,8 +644,12 @@ class ParallelizeTCA2(Parallelize):
     def get_sent_filename(self, pfile):
         """Compute the name of the sentence file.
 
-        This file is the corpus-analyze output and tca2 input file
-        Input is a CorpusXMLFile
+        Arguments:
+            pfile (str): name of converted corpus file (produced by
+                convert2xml)
+
+        Returns:
+            str: the name of the tca2 input file
         """
         origfilename = pfile.basename_noext
         # Ensure we have 20 bytes of leeway to let TCA2 append
