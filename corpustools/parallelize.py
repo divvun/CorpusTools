@@ -586,7 +586,7 @@ class ParallelizeHunalign(Parallelize):
             Returns:
                 str: name of the temporary file
             """
-            return tempfile.NamedTemporaryFile('w')
+            return tempfile.NamedTemporaryFile('wb')
         with tmp() as dict_f, tmp() as sent0_f, tmp() as sent1_f:
             dict_f.write(self.make_dict().encode('utf8'))
             sent0_f.write(self.to_sents(
