@@ -3430,6 +3430,15 @@ class TestPDFParagraph(XMLTester):
 
         self.assertTrue(pp.is_listitem)
 
+    def test_append_first_textelement_with_list_character_25A0(self):
+        """Test if 'BLACK SQUARE' is recognised as bullet char."""
+        pp = converter.PDFParagraph(1.5)
+        pp.append_textelement(converter.PDFTextElement(etree.fromstring(
+            '<text top="961" left="152" width="334" height="26" font="0">'
+            '■Bajásšaddan</text>')))
+
+        self.assertTrue(pp.is_listitem)
+
     def test_append_first_textelement_with_list_character_bullet(self):
         pp = converter.PDFParagraph(1.5)
         pp.append_textelement(converter.PDFTextElement(etree.fromstring(
