@@ -186,15 +186,10 @@ Odd Einar Dørum ¶
         divider = parallelize.SentenceDivider('sme')
         self.assertEqual(divider.make_valid_sentences(ccat_output), want)
 
-class TestSentenceDivider(unittest.TestCase):
 
-    """A test class for the SentenceDivider class"""
+class TestTca2SentenceDivider(unittest.TestCase):
 
-    def setUp(self):
-        self.sentence_divider = parallelize.SentenceDivider(
-            os.path.join(
-                here,
-                "parallelize_data/finnmarkkulahka_web_lettere.pdf.xml"))
+    """A test class for the Tca2SentenceDivider class"""
 
     def assertXmlEqual(self, got, want):
         """Check if two xml snippets are equal"""
@@ -208,237 +203,20 @@ class TestSentenceDivider(unittest.TestCase):
                 string_got, 0)
             raise AssertionError(message)
 
-    def test_constructor(self):
-        """Check that the constructor makes what it is suppposed to"""
-        self.assertEqual(self.sentence_divider.sentence_counter, 0)
-        self.assertEqual(self.sentence_divider.doc_lang, 'sme')
-        self.assertEqual(self.sentence_divider.input_etree.__class__.__name__,
-                         '_ElementTree')
+    def test_make_sentence_file(self):
+        corpusxmlfile = parallelize.CorpusXMLFile(os.path.join(
+            here,
+            "parallelize_data/finnmarkkulahka_web_lettere.pdf.xml"))
 
-    def test_process_all_paragraphs(self):
-        self.sentence_divider.process_all_paragraphs()
-        got = self.sentence_divider.document
+        sentence_divider = parallelize.Tca2SentenceDivider()
+        got = sentence_divider.make_sentence_xml(corpusxmlfile.lang,
+                                                 corpusxmlfile.name)
 
-        want = etree.parse(
-            os.path.join(
-                here,
-                'parallelize_data/'
-                'finnmarkkulahka_web_lettere.pdfsme_sent.xml.test'))
+        want = etree.parse(os.path.join(
+            here, 'parallelize_data/'
+            'finnmarkkulahka_web_lettere.pdfsme_sent.xml.test'))
 
         self.assertXmlEqual(got, want)
-
-    def test_process_one_paragraph(self):
-        """Check the output of process_one_paragraph"""
-        self.sentence_divider.doc_lang = 'sme'
-        p = etree.XML(
-            '<p>Jápmá go sámi kultuvra veahážiid mielde go nuorat ovdal '
-            'guldalit Britney Spears go Áilluhačča? máksá Finnmárkkuopmodat. '
-            '§ 10 Áššit meahcceeatnamiid</p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML(
-            '<p><s id="0">Jápmá go sámi kultuvra veahážiid mielde go nuorat '
-            'ovdal guldalit Britney Spears go Áilluhačča ?</s><s id="1">'
-            'máksá Finnmárkkuopmodat .</s><s id="2">§ 10 Áššit '
-            'meahcceeatnamiid </s></p>')
-        self.assertXmlEqual(got, want)
-
-        p = etree.XML(
-            '<p>Stuora oassi Romssa universitehta doaimmain lea juohkit '
-            'dieđuid sámi, norgga ja riikkaidgaskasaš dutkanbirrasiidda, '
-            'sámi ja norgga eiseválddiide, ja sámi servodagaide (geahča '
-            'mielddus A <em type="italic"><span type="quote">“Romssa '
-            'universitehta ja guoskevaš institušuvnnaid sámi dutkan ja '
-            'oahpahus”</span></em>  álggahusa ).</p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML(
-            '<p><s id="3">Stuora oassi Romssa universitehta doaimmain lea '
-            'juohkit dieđuid sámi , norgga ja riikkaidgaskasaš '
-            'dutkanbirrasiidda , sámi ja norgga eiseválddiide , ja sámi '
-            'servodagaide ( geahča mielddus A “ Romssa universitehta ja '
-            'guoskevaš institušuvnnaid sámi dutkan ja oahpahus ” álggahusa ) '
-            '.</s></p>')
-        self.assertXmlEqual(got, want)
-
-        self.sentence_divider.doc_lang = 'nob'
-        p = etree.XML(
-            '<p>Artikkel i boka Samisk skolehistorie 2 . Davvi Girji '
-            '2007.</p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML(
-            '<p><s id="4">Artikkel i boka Samisk skolehistorie 2 .</s>'
-            '<s id="5">Davvi Girji 2007 .</s></p>')
-        self.assertXmlEqual(got, want)
-
-        p = etree.XML(
-            '<p><em type="bold">Bjørn Aarseth med elever på skitur - på '
-            '1950-tallet.</em> (Foto: Trygve Madsen)</p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML(
-            '<p><s id="6">Bjørn Aarseth med elever på skitur - på '
-            '1950-tallet .</s><s id="7">( Foto : Trygve Madsen )</s></p>')
-        self.assertXmlEqual(got, want)
-
-        p = etree.XML(
-            '<p>finne rom for etablering av en fast tilskuddsordning til '
-            'allerede etablerte språksentra..</p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML(
-            '<p><s id="8">finne rom for etablering av en fast '
-            'tilskuddsordning til allerede etablerte språksentra . .</s></p>')
-        self.assertXmlEqual(got, want)
-
-        p = etree.XML('<p>elevene skal få!  Sametingsrådet mener målet</p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML(
-            '<p><s id="9">elevene skal få !</s><s id="10">Sametingsrådet '
-            'mener målet</s></p>')
-        self.assertXmlEqual(got, want)
-
-        p = etree.XML(
-            '<p>Sametinget..................................................'
-            '...............................................................'
-            '............. 2 Utdannings- og forskningsdepartementet.........'
-            '...............................................................'
-            '....... 3 Kultur- og kirkedepartementet .......................'
-            '...............................................................'
-            '......... 7 Kommunal- og regionaldepartementet.................'
-            '...............................................................'
-            '... 9</p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML(
-            '<p><s id="11">Sametinget ... 2 Utdannings- og '
-            'forskningsdepartementet ... 3 Kultur- og kirkedepartementet ... '
-            '7 Kommunal- og regionaldepartementet ... 9</s></p>')
-        self.assertXmlEqual(got, want)
-
-        self.sentence_divider.doc_lang = 'sme'
-        p = etree.XML(
-            '<p>Allaskuvllas lea maiddái ovddasvástádus julevsámegielas ja '
-            'máttasámegielas. (... ). Berre leat vejolaš váldit '
-            'oahpaheaddjeoahpu, mas erenoamáš deaddu lea davvi-, julev-, '
-            'máttasámegielas ja kultuvrras.</p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML(
-            '<p><s id="12">Allaskuvllas lea maiddái ovddasvástádus '
-            'julevsámegielas ja máttasámegielas .</s><s id="13">Berre leat '
-            'vejolaš váldit oahpaheaddjeoahpu , mas erenoamáš deaddu lea '
-            'davvi- , julev- , máttasámegielas ja kultuvrras .</s></p>')
-        self.assertXmlEqual(got, want)
-
-    def test_dot_followed_by_dot(self):
-        """Test of how process_one_paragraph handles a paragraph
-
-        The paragraph ends with . and ...
-        tca2 doesn't accept sentences without real letters, so we have to make
-        sure the ... doesn't end up alone inside a s tag
-        """
-        self.sentence_divider.doc_lang = 'nob'
-        p = etree.XML(
-            '<p>Alt det som har med norsk å gjøre, har jeg gruet meg for og '
-            'hatet hele mitt liv - og kommer kanskje til å fortsette med '
-            'det. ...</p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML(
-            '<p><s id="0">Alt det som har med norsk å gjøre , har jeg gruet '
-            'meg for og hatet hele mitt liv - og kommer kanskje til å '
-            'fortsette med det . ...</s></p>')
-        self.assertXmlEqual(got, want)
-
-    def test_quotemarks(self):
-        """Test how SentenceDivider handles quotemarks"""
-        self.sentence_divider.doc_lang = 'nob'
-        p = etree.XML(
-            '<p>Forsøksrådet for skoleverket godkjente det praktiske '
-            'opplegget for kurset i brev av 18/8 1959 og uttalte da bl.a.: '
-            '«Selve innholdet i kurset virker gjennomtenkt og underbygd og '
-            'ser ut til å konsentrere seg om vesentlige emner som vil få '
-            'stor betydning for elevene i deres yrkesarbeid. Med flyttsame-'
-            'kunnskapen som bakgrunn er det grunn til å vente seg mye av '
-            'dette kursopplegget.» Med denne tillitserklæring i ryggen har '
-            'vi så fra år til år søkt å forbedre kursoppleggene til vi '
-            'foran 1963-kursene står med planer som vi anser '
-            'tilfredsstillende , men ikke endelige .)</p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML(
-            '<p><s id="0">Forsøksrådet for skoleverket godkjente det '
-            'praktiske opplegget for kurset i brev av 18/8 1959 og uttalte '
-            'da bl.a. : « Selve innholdet i kurset virker gjennomtenkt og '
-            'underbygd og ser ut til å konsentrere seg om vesentlige emner '
-            'som vil få stor betydning for elevene i deres yrkesarbeid .</s>'
-            '<s id="1"> Med flyttsame-kunnskapen som bakgrunn er det grunn '
-            'til å vente seg mye av dette kursopplegget . »</s><s id="2">'
-            'Med denne tillitserklæring i ryggen har vi så fra år til år '
-            'søkt å forbedre kursoppleggene til vi foran 1963-kursene står '
-            'med planer som vi anser tilfredsstillende , men ikke '
-            'endelige . )</s></p>')
-        self.assertXmlEqual(got, want)
-
-    def test_spurious_comma(self):
-        self.sentence_divider.doc_lang = 'nob'
-        p = etree.XML(
-            '<p>Etter Sametingets oppfatning vil forslagene til ny § 1 Lovens '
-            'formål og § 2 Kulturminner og kulturmiljØer - definisjoner; '
-            'gjøre at det blir en større grad av overensstemmelse mellom '
-            'lovens begreper og det begrepsapparatet som er nyttet innenfor '
-            'samisk kulturminnevern. , </p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML(
-            '<p><s id="0">Etter Sametingets oppfatning vil forslagene til ny '
-            '§ 1 Lovens formål og § 2 Kulturminner og kulturmiljØer - '
-            'definisjoner ; gjøre at det blir en større grad av '
-            'overensstemmelse mellom lovens begreper og det begrepsapparatet '
-            'som er nyttet innenfor samisk kulturminnevern .</s></p>')
-        self.assertXmlEqual(got, want)
-
-        self.sentence_divider.doc_lang = 'nob'
-        p = etree.XML('<p>, </p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML('<p/>')
-        self.assertXmlEqual(got, want)
-
-    def test_spurious_dot(self):
-        self.sentence_divider.doc_lang = 'nob'
-        p = etree.XML('<p>..</p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML('<p/>')
-        self.assertXmlEqual(got, want)
-
-    def test_lone_questionmark(self):
-        self.sentence_divider.doc_lang = 'nob'
-        p = etree.XML('<p>?</p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML('<p/>')
-        self.assertXmlEqual(got, want)
-
-    def test_dot_in_sentence_start(self):
-        self.sentence_divider.doc_lang = 'nob'
-        p = etree.XML('<p> . Cálliidlágádus 1999)</p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML('<p><s id="0">Cálliidlágádus 1999 )</s></p>')
-        self.assertXmlEqual(got, want)
-
-    def test_span_in_p(self):
-        self.sentence_divider.doc_lang = 'nob'
-        p = etree.XML(
-            '<p>( Styrke institusjonssamarbeidet (Urfolksnettverket og '
-            '<span type="quote">“Forum for urfolksspørsmål i '
-            'bistanden”</span>)</p>')
-        got = self.sentence_divider.process_elts([p])[0]
-        want = etree.XML(
-            '<p><s id="0">( Styrke institusjonssamarbeidet ( '
-            'Urfolksnettverket og “ Forum for urfolksspørsmål i bistanden ” )'
-            '</s></p>')
-        self.assertXmlEqual(got, want)
-
-    def test_make_sentence(self):
-        s = self.sentence_divider.make_sentence(
-            [u'Sámerievtti ', u'ovdáneapmi', u'lea', u'dahkan',
-             u'vuđđosa', u'Finnmárkkuláhkii'])
-
-        self.assertEqual(s.attrib["id"], '0')
-        self.assertEqual(
-            s.text,
-            u'Sámerievtti ovdáneapmi lea dahkan vuđđosa Finnmárkkuláhkii')
 
 
 class TestParallelizeTCA2(unittest.TestCase):

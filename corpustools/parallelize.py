@@ -36,9 +36,31 @@ import tempfile
 from lxml import etree
 import six
 
-from corpustools import argparse_version, generate_anchor_list, modes, text_cat, util
+from corpustools import argparse_version, ccat, generate_anchor_list, modes, text_cat, util
 
 HERE = os.path.dirname(__file__)
+
+
+def to_plain_text(lang, filename):
+    """Turn an xml formatted file into clean text.
+
+    Arguments:
+        lang (str): three character name of main language of document.
+        filename (str): name of the xmlfile
+
+    Raises:
+        UserWarning: if there is no text, raise a UserWarning
+
+    Returns:
+        str: the content of ccat output
+    """
+    xml_printer = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
+    xml_printer.parse_file(filename)
+    text = xml_printer.process_file().getvalue()
+    if text:
+        return text
+    else:
+        raise UserWarning('Empty file {}'.format(filename))
 
 
 class CorpusXMLFile(object):
@@ -255,6 +277,55 @@ class SentenceDivider(object):
                 if sentence not in self.stops]
 
 
+class Tca2SentenceDivider(object):
+    """A class that takes a giellatekno xml document as input.
+
+    It spits out an xml document that has divided the text into sentences.
+    Each sentence is encased in an s tag, and has an id number
+    """
+
+    def make_sentence_xml(self, lang, xmlfile):
+        """Make sentence xml that tca2 can use.
+
+        Arguments:
+            lang (str): three character name of main language of document.
+            filename (str): name of the xmlfile
+
+        Returns:
+            lxml.etree._Element: an xml element containing all sentences.
+        """
+        document = etree.Element('document')
+
+        divider = SentenceDivider(lang)
+        for index, sentence in enumerate(divider.make_valid_sentences(
+                to_plain_text(lang, xmlfile))):
+            s_elem = etree.Element("s")
+            s_elem.attrib["id"] = str(index)
+            s_elem.text = sentence
+            document.append(s_elem)
+
+        return document
+
+    def make_sentence_file(self, lang, xmlfile, outfile):
+        """Make input document for tca2.
+
+        Arguments:
+            lang (str): three character name for main language of document.
+            xmlfile (str): name of the xmlfile
+            outfile (str): name of the input file for tca2
+        """
+        o_path, _ = os.path.split(outfile)
+        o_rel_path = o_path.replace(os.getcwd() + '/', '', 1)
+        with util.ignored(OSError):
+            os.makedirs(o_rel_path)
+        with open(outfile, 'wb') as sentence_file:
+            tree = etree.ElementTree(self.make_sentence_xml(lang, xmlfile))
+            tree.write(sentence_file,
+                       pretty_print=True,
+                       encoding='utf8',
+                       xml_declaration=True)
+
+
 class Parallelize(object):
     """A class to parallelize two files.
 
@@ -461,14 +532,9 @@ class ParallelizeHunalign(Parallelize):
     @staticmethod
     def to_sents(origfile):
         """Divide the content of origfile to sentences."""
-        divider = SentenceDivider(origfile.name)
-        doc = divider.process_all_paragraphs()
-        paragraphs = etree.ElementTree(doc).xpath('//p')
-        sents = [["<p>"] + p.xpath('./s/text()') for p in paragraphs]
-        if len(sents) == 1 and len(sents[0]) == 1:
-            raise UserWarning('No {} sentences in {}'.format(origfile.lang,
-                                                             origfile.name))
-        return "\n".join(sum(sents, []))
+        divider = SentenceDivider(origfile.lang)
+        return '\n'.join(divider.make_valid_sentences(
+            to_plain_text(origfile.lang, origfile.name)))
 
     def align(self):
         """Parallelize two files using hunalign."""
@@ -518,14 +584,9 @@ class ParallelizeTCA2(Parallelize):
     def divide_p_into_sentences(self):
         """Tokenize the text in the given file and reassemble it again."""
         for pfile in self.origfiles:
-            infile = os.path.join(pfile.name)
-            outfile = self.get_sent_filename(pfile)
-            divider = SentenceDivider(infile)
-            divider.process_all_paragraphs()
-            divider.write_result(outfile)
-            if not divider.sentence_counter:
-                raise UserWarning('Found no {} sentences in {}'.format(
-                    pfile.lang, pfile.name))
+            divider = Tca2SentenceDivider()
+            divider.make_sentence_file(pfile.lang, pfile.name,
+                                       self.get_sent_filename(pfile))
 
     @property
     def sentfiles(self):
