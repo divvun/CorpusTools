@@ -559,7 +559,7 @@ class ParallelizeHunalign(Parallelize):
             words_pairs = self.gal.read_anchors(quiet=self.quiet)
             expanded_pairs = self.anchor_to_dict(words_pairs)
             cleaned_pairs = [(w1.replace('*', ''), w2.replace('*', ''))
-                            for w1, w2 in expanded_pairs]
+                             for w1, w2 in expanded_pairs]
         else:
             cleaned_pairs = [(self.lang1, self.lang2)]
         # Hunalign expects the _reverse_ format for the dictionary!
@@ -575,7 +575,8 @@ class ParallelizeHunalign(Parallelize):
         paragraphs = etree.ElementTree(doc).xpath('//p')
         sents = [["<p>"] + p.xpath('./s/text()') for p in paragraphs]
         if len(sents) == 1 and len(sents[0]) == 1:
-            raise UserWarning('No {} sentences in {}'.format(origfile.lang, origfile.name))
+            raise UserWarning('No {} sentences in {}'.format(origfile.lang,
+                                                             origfile.name))
         return "\n".join(sum(sents, []))
 
     def align(self):
