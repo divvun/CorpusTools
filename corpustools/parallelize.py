@@ -208,6 +208,17 @@ class CorpusXMLFile(object):
 
 
 class SentenceDivider(object):
+    """A class to divide plain text output into sentences.
+
+    Uses hfst-tokenise as the motor for this purpose.
+
+    Attributes:
+        lang (str): three character language code
+        relative_path (str): relative path to where files needed by
+            modes.xml are found.
+        stops (list of str): tokens that imply where a sentence ends.
+    """
+
     stops = [';', '!', '?', '.', '..', '...', '¶', '…']
 
     def __init__(self,
@@ -223,6 +234,12 @@ class SentenceDivider(object):
         self.relative_path = relative_path
 
     def setup_pipeline(self):
+        """Setup the preprocess pipeline.
+
+        Returns:
+            modes.Pipeline: a preprocess pipeline that receives plain text
+                input and outputs a token per line.
+        """
         modefile = etree.parse(
             os.path.join(os.path.dirname(__file__), 'xml/modes.xml'))
         pipeline = modes.Pipeline(
@@ -279,7 +296,7 @@ class SentenceDivider(object):
 
 
 class Tca2SentenceDivider(object):
-    """A class that takes a giellatekno xml document as input.
+    """Make tca2 compatible input files.
 
     It spits out an xml document that has divided the text into sentences.
     Each sentence is encased in an s tag, and has an id number
