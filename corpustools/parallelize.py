@@ -876,7 +876,7 @@ class Tmx(object):
         with util.ignored(OSError):
             os.makedirs(out_dir)
 
-        with open(out_filename, "w") as tmx_file:
+        with open(out_filename, "wb") as tmx_file:
             string = etree.tostring(self.tmx,
                                     pretty_print=True,
                                     encoding="utf-8",
