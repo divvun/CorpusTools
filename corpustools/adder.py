@@ -72,9 +72,9 @@ class UrlDownloader(object):
             'text/plain': '.txt',
         }
 
-        for content_type, extension in six.iteritems(content_type_extension):
-            if content_type in content_type and not filename.endswith(
-                    extension):
+        for ct, extension in six.iteritems(content_type_extension):
+            if (ct in content_type and not
+                    filename.endswith(extension)):
                 filename += extension
 
         return filename
