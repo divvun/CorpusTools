@@ -1030,7 +1030,7 @@ class HunalignToTmx(AlignmentToTmx):
         return (len(line) == 3 and
                 line[0] != "<p>" and
                 line[1] != "<p>" and
-                line[2] > self.threshold)
+                float(line[2]) > self.threshold)
 
     @staticmethod
     def clean_line(line):
