@@ -15,7 +15,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2015-2017 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2015-2017 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
@@ -63,7 +64,8 @@ class GenerateAnchorList(object):
                 if word1 and word2:
                     return word1, word2
             else:
-                print('Invalid line at {} in {}'.format(lineno, self.input_file),
+                print('Invalid line at {} in {}'.format(lineno,
+                                                        self.input_file),
                       file=sys.stderr)
 
     def read_anchors(self, quiet=False):
