@@ -646,11 +646,6 @@ class ParallelizeTCA2(Parallelize):
             )
 
             self.run_command(command.split())
-            # Ignore output, Tca2ToTmx guesses name of output-files from
-            # sentfiles
-            # TODO(kevin): Use a tempfile.mkdtemp instead of hardcoded
-            # GTFREE/tmp? Can't use tmpfiles for in1/in2, since output
-            # file name is guessed based on them.
 
         tmx = Tca2ToTmx(self.origfiles, self.sentfiles)
         return tmx
@@ -941,10 +936,10 @@ class AlignmentToTmx(Tmx):
 class HunalignToTmx(AlignmentToTmx):
     """A class to make tmx files based on the output from hunalign."""
 
-    def __init__(self, origfiles, output):
+    def __init__(self, origfiles, output, threshold=0.0):
         """Input is a list of CorpusXMLFile objects."""
         self.output = output
-        self.threshold = 0.0  # TODO(kevin): user-settable?
+        self.threshold = threshold
         super(HunalignToTmx, self).__init__(origfiles)
 
     def parse_alignment_results(self):
