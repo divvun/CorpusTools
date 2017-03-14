@@ -443,27 +443,6 @@ class TestTmx(unittest.TestCase):
 
         self.assertXmlEqual(got_tmx.tmx, want_tmx.tmx)
 
-    def test_check_language(self):
-        self.tmx.language_guesser = text_cat.Classifier(None)
-
-        tu_with_sme = etree.XML(
-            '<tu><tuv xml:lang="sme"><seg>Bargo- ja '
-            'searvadahttindepartemeanta (BSD) nanne sámiid árbedieđu '
-            'čohkkema, systematiserema ja gaskkusteami Norggas oktiibuot 1,6 '
-            'milj. ruvnnuin.</seg></tuv><tuv '
-            'xml:lang="nob"><seg>Samisk</seg></tuv></tu>')
-
-        self.assertTrue(self.tmx.check_language(tu_with_sme, 'sme'))
-
-        tu_with_sma = etree.XML(
-            '<tu><tuv xml:lang="sme"><seg>Barkoe- jïh ektiedimmiedepartemente '
-            '(AID) galka nænnoestidh dovne tjöönghkeme- jïh öörnemebarkoem , '
-            'jïh aaj bæjkoehtimmiem saemien aerpiemaahtoen muhteste '
-            'Nöörjesne, abpe 1,6 millijovnh kråvnajgujmie.</seg></tuv>'
-            '<tuv xml:lang="nob"><seg>Samisk</seg></tuv></tu>')
-
-        self.assertFalse(self.tmx.check_language(tu_with_sma, 'sme'))
-
 
 class TestTca2ToTmx(unittest.TestCase):
 

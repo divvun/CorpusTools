@@ -30,13 +30,12 @@ import io
 import os
 import re
 import subprocess
-import sys
 import tempfile
 
 from lxml import etree
 import six
 
-from corpustools import argparse_version, ccat, generate_anchor_list, modes, text_cat, util
+from corpustools import argparse_version, ccat, generate_anchor_list, modes, util
 
 HERE = os.path.dirname(__file__)
 
@@ -669,9 +668,6 @@ class Tmx(object):
         """Input is a tmx element."""
         self.tmx = tmx
 
-        # TODO(boerre): not actually used apart from in tests, remove?
-        self.language_guesser = text_cat.Classifier(None)
-
     @property
     def src_lang(self):
         """Get the srclang from the header element."""
@@ -856,21 +852,6 @@ class Tmx(object):
         for transl_unit in transl_units:
             if not transl_unit[0].text.strip():
                 raise AttributeError('Empty translation unit')
-
-    def check_language(self, transl_unit, lang):
-        """Get the text of the tuv element with the given lang.
-
-        Run the text through the language guesser, return the result
-        of this test
-        """
-        for tuv in transl_unit:
-            if tuv.get('{http://www.w3.org/XML/1998/namespace}lang') == lang:
-                text = tuv[0].text
-                test_lang = self.language_guesser.classify(text)
-                if test_lang != lang:
-                    return False
-
-        return True
 
     def clean_toktmx(self):
         """Do the cleanup of the toktmx file."""
