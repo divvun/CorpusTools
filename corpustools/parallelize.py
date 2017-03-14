@@ -32,10 +32,11 @@ import re
 import subprocess
 import tempfile
 
-from lxml import etree
 import six
+from lxml import etree
 
-from corpustools import argparse_version, ccat, generate_anchor_list, modes, util
+from corpustools import (argparse_version, ccat, generate_anchor_list, modes,
+                         util)
 
 HERE = os.path.dirname(__file__)
 
