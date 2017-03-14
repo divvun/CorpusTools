@@ -19,6 +19,8 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
+"""Test the ParallelPicker class."""
+
 from __future__ import absolute_import, print_function
 
 import os
@@ -27,7 +29,7 @@ import unittest
 import git
 import testfixtures
 
-from corpustools import parallelize, pick_parallel_docs
+from corpustools import corpusxmlfile, pick_parallel_docs
 
 HERE = os.path.dirname(__file__)
 
@@ -50,6 +52,7 @@ article47_nob = u'''<?xml version="1.0" encoding="UTF-8"?>
   </header>
 </document>
 '''
+
 
 class TestParallelPicker(unittest.TestCase):
 
@@ -81,7 +84,7 @@ class TestParallelPicker(unittest.TestCase):
 
     def test_has_parallel1(self):
         """Parallel exists, parallel_text points to correct place."""
-        file_with_parallel1 = parallelize.CorpusXMLFile(os.path.join(
+        file_with_parallel1 = corpusxmlfile.CorpusXMLFile(os.path.join(
             self.language1_converted_dir,
             'article-47.html.xml'))
         self.assertEqual(self.picker.has_parallel(file_with_parallel1),
@@ -89,7 +92,7 @@ class TestParallelPicker(unittest.TestCase):
 
     def test_has_parallel2(self):
         """parallel_text points to wrong language."""
-        file_with_parallel1 = parallelize.CorpusXMLFile(os.path.join(
+        file_with_parallel1 = corpusxmlfile.CorpusXMLFile(os.path.join(
             self.language1_converted_dir,
             'article-47.html.xml'))
         file_with_parallel1.etree.find('//parallel_text').set(
@@ -99,7 +102,7 @@ class TestParallelPicker(unittest.TestCase):
 
     def test_has_parallel3(self):
         """parallel_text points to wrong file."""
-        file_with_parallel1 = parallelize.CorpusXMLFile(os.path.join(
+        file_with_parallel1 = corpusxmlfile.CorpusXMLFile(os.path.join(
             self.language1_converted_dir,
             'article-47.html.xml'))
         file_with_parallel1.etree.find('//parallel_text').set(

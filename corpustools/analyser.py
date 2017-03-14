@@ -30,9 +30,8 @@ import os
 import sys
 
 import lxml.etree as etree
-import six
 
-from corpustools import argparse_version, ccat, parallelize, util, modes
+from corpustools import argparse_version, ccat, corpusxmlfile, modes, util
 
 
 class Analyser(object):
@@ -62,10 +61,17 @@ class Analyser(object):
         self.xml_printer = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
 
     def setup_pipeline(self):
+        """Setup the preprocess pipeline.
+
+        Returns:
+            modes.Pipeline: a preprocess pipeline that receives plain text
+                input and outputs a token per line.
+        """
         modefile = etree.parse(
             os.path.join(os.path.dirname(__file__), 'xml/modes.xml'))
         pipeline = modes.Pipeline(
-            mode=modefile.find('.//mode[@name="{}"]'.format(self.pipeline_name)),
+            mode=modefile.find('.//mode[@name="{}"]'.format(
+                self.pipeline_name)),
             relative_path=os.path.join(self.relative_path, self.lang))
         pipeline.sanity_check()
 
@@ -111,7 +117,7 @@ class Analyser(object):
     def analyse(self, xml_file):
         """Analyse a file if it is not ocr'ed."""
         try:
-            self.xml_file = parallelize.CorpusXMLFile(xml_file)
+            self.xml_file = corpusxmlfile.CorpusXMLFile(xml_file)
             analysis_xml_name = self.xml_file.name.replace('converted/',
                                                            'analysed/')
 

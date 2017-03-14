@@ -29,7 +29,8 @@ import os
 import shutil
 from collections import defaultdict
 
-from corpustools import argparse_version, parallelize, util, versioncontrol
+from corpustools import (argparse_version, corpusxmlfile, parallelize, util,
+                         versioncontrol)
 
 
 class ParallelPicker(object):
@@ -84,19 +85,19 @@ class ParallelPicker(object):
         """Find the language1 files.
 
         Yields:
-            parallelize.CorpusXMLFile
+            corpusxmlfile.CorpusXMLFile
         """
         for root, _, files in os.walk(self.language1_dir):
             for lang1_file in files:
                 if lang1_file.endswith('.xml'):
-                    yield parallelize.CorpusXMLFile(
+                    yield corpusxmlfile.CorpusXMLFile(
                         os.path.join(root, lang1_file))
 
     def has_parallel(self, language1_file):
         """Check if the given file has a parallel file.
 
         Arguments:
-            language1_file (parallelize.CorpusXMLFile): The first file of a
+            language1_file (corpusxmlfile.CorpusXMLFile): The first file of a
                 parallel pair.
 
         Returns:
@@ -111,9 +112,9 @@ class ParallelPicker(object):
         """Check if the given file contains more words than the threshold.
 
         Arguments:
-            file1 (parallelize.CorpusXMLFile): The first file of a parallel
+            file1 (corpusxmlfile.CorpusXMLFile): The first file of a parallel
                 pair.
-            file2 (parallelize.CorpusXMLFile): The second file of a parallel
+            file2 (corpusxmlfile.CorpusXMLFile): The second file of a parallel
                 pair.
 
         Returns:
@@ -129,9 +130,9 @@ class ParallelPicker(object):
         """See if the ratio of words is good enough.
 
         Arguments:
-            file1 (parallelize.CorpusXMLFile): The first file of a parallel
+            file1 (corpusxmlfile.CorpusXMLFile): The first file of a parallel
                 pair.
-            file2 (parallelize.CorpusXMLFile): The second file of a parallel
+            file2 (corpusxmlfile.CorpusXMLFile): The second file of a parallel
                 pair.
 
         Returns:
@@ -153,7 +154,7 @@ class ParallelPicker(object):
         """Copy xml_file to prestable/converted.
 
         Arguments:
-            xml_file (parallelize.CorpusXMLFile): the file that should be
+            xml_file (corpusxmlfile.CorpusXMLFile): the file that should be
                 copied to prestable/converted.
         """
         prestable_dir = xml_file.dirname.replace(
@@ -178,7 +179,7 @@ class ParallelPicker(object):
         for language1_file in self.find_lang1_files():
             if self.has_parallel(language1_file):
                 counter['has_parallel'] += 1
-                parallel_file = parallelize.CorpusXMLFile(
+                parallel_file = corpusxmlfile.CorpusXMLFile(
                     language1_file.get_parallel_filename(
                         self.parallel_language))
 

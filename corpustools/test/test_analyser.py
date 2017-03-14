@@ -16,7 +16,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2017 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2013-2017 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
@@ -28,9 +29,9 @@ import unittest
 
 from lxml import doctestcompare, etree
 
-from corpustools import analyser, parallelize, util
+from corpustools import analyser, corpusxmlfile
 
-here = os.path.dirname(__file__)
+HERE = os.path.dirname(__file__)
 
 
 class TestAnalyser(unittest.TestCase):
@@ -39,12 +40,12 @@ class TestAnalyser(unittest.TestCase):
         self.a = analyser.Analyser(
             'sme',
             'xfst',
-            relative_path=os.path.join(here, 'fake_gthome/langs'))
-        self.a.xml_file = parallelize.CorpusXMLFile(os.path.join(
-            here, 'smefile.xml'))
+            relative_path=os.path.join(HERE, 'fake_gthome/langs'))
+        self.a.xml_file = corpusxmlfile.CorpusXMLFile(os.path.join(
+            HERE, 'smefile.xml'))
 
     def assertXmlEqual(self, got, want):
-        """Check if two stringified xml snippets are equal"""
+        """Check if two stringified xml snippets are equal."""
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(want, got, 0):
             message = checker.output_difference(
@@ -56,7 +57,7 @@ class TestAnalyser(unittest.TestCase):
             analyser.Analyser('sme', 'xfst', None, None, None, None)
 
     def test_sme_ccat_output(self):
-        """Test if the ccat output is what we expect it to be"""
+        """Test if the ccat output is what we expect it to be."""
         got = self.a.ccat()
         want = (
             'Muhto gaskkohagaid, ja erenoamážit dalle go lei buolaš, '
@@ -65,7 +66,7 @@ class TestAnalyser(unittest.TestCase):
         self.assertEqual(got, want)
 
     def test_analysisXml(self):
-        """Check if the xml is what it is supposed to be"""
+        """Check if the xml is what it is supposed to be."""
         self.a.dependency_analysis()
         got = self.a.xml_file.etree
         want = (
