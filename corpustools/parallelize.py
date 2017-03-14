@@ -255,12 +255,12 @@ class SentenceDivider(object):
         pipeline = self.setup_pipeline()
         preprocessed = pipeline.run(ccat_output.encode('utf8'))
 
-        buffer = []
+        token_buffer = []
         for token in io.StringIO(preprocessed):
-            buffer.append(token)
+            token_buffer.append(token)
             if token.strip() in self.stops:
-                yield self.clean_sentence(''.join(buffer))
-                buffer[:] = []
+                yield self.clean_sentence(''.join(token_buffer))
+                token_buffer[:] = []
 
     def make_valid_sentences(self, ccat_output):
         """Turn ccat output into full sentences.
