@@ -232,7 +232,8 @@ class SentenceDivider(object):
 
         return pipeline
 
-    def clean_sentence(self, sentence):
+    @staticmethod
+    def clean_sentence(sentence):
         """Remove cruft from a sentence.
 
         Arguments:
@@ -284,7 +285,8 @@ class Tca2SentenceDivider(object):
     Each sentence is encased in an s tag, and has an id number
     """
 
-    def make_sentence_xml(self, lang, xmlfile):
+    @staticmethod
+    def make_sentence_xml(lang, xmlfile):
         """Make sentence xml that tca2 can use.
 
         Arguments:
