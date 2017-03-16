@@ -13,7 +13,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2016-2017 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2016-2017 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
@@ -25,107 +26,125 @@ Might be useful in other contexts.
 
 from __future__ import absolute_import, print_function
 
-from lxml import etree, html
-from dateutil.parser import parse
+import collections
 import os
 import sys
-import collections
 
-from corpustools import converter, corpuspath, xslsetter, util
+from dateutil.parser import parse
+from lxml import html
+
+from corpustools import converter, corpuspath, util, xslsetter
 
 
-def html_files(path):
-    """Find all html files in path."""
-    for directory in path:
+def find_endings(directories, suffix):
+    """Find all files in with suffix within directories.
+
+    Arguments:
+        directories (list of str): list of directories to walk
+        suffix (str): files suffixes to be searched for
+
+    Yields:
+        str: path to file with suffix
+    """
+    for directory in directories:
         for root, _, files in os.walk(directory):
-            for f in files:
-                if f.endswith('.html'):
-                    yield(os.path.join(root, f))
+            for file_ in files:
+                if file_.endswith(suffix):
+                    yield os.path.join(root, file_)
 
 
-def regjeringen_no(path):
-    """Set metadata for regjeringen.no html files."""
-    for html_file in html_files(path):
+def regjeringen_no(directories):
+    """Set metadata for regjeringen.no html files.
+
+    Arguments:
+        directories (list of str): list of directories to walk
+    """
+    for html_file in find_endings(directories, '.html'):
         conv = converter.HTMLConverter(html_file)
-        c = html.document_fromstring(conv.content)
+        content = html.document_fromstring(conv.content)
 
-        w = False
-        author = c.find('.//meta[@name="AUTHOR"]')
+        should_write = False
+        author = content.find('.//meta[@name="AUTHOR"]')
         if author is not None:
-            w = True
+            should_write = True
             conv.md.set_variable('author1_ln', author.get('content'))
 
-        cd = c.find('.//meta[@name="creation_date"]')
-        if cd is not None:
-            w = True
-            conv.md.set_variable('year', parse(cd.get('content')).year)
+        creation_date = content.find('.//meta[@name="creation_date"]')
+        if creation_date is not None:
+            should_write = True
+            conv.md.set_variable('year',
+                                 parse(creation_date.get('content')).year)
 
-        pub = c.find('.//meta[@name="DC.Publisher"]')
-        if pub is not None:
-            w = True
-            conv.md.set_variable('publisher', pub.get('content'))
+        publisher = content.find('.//meta[@name="DC.Publisher"]')
+        if publisher is not None:
+            should_write = True
+            conv.md.set_variable('publisher', publisher.get('content'))
 
-        if w:
+        if should_write:
             conv.md.write_file()
 
 
 def to_free(path):
     """Set the lisence type."""
-    cm = converter.ConverterManager(False, False)
-    cm.collect_files([path])
+    conv_manager = converter.ConverterManager(False, False)
+    conv_manager.collect_files([path])
 
-    for f in cm.FILES:
-        c = cm.converter(f)
-        c.md.set_variable('license_type', 'free')
-        c.md.write_file()
+    for file_ in conv_manager.FILES:
+        conv = conv_manager.converter(file_)
+        conv.md.set_variable('license_type', 'free')
+        conv.md.write_file()
 
 
-def skuvla_historja(path):
-    """Find skuvlahistorja directories in path, set year."""
+def skuvla_historja(directories):
+    """Find skuvlahistorja directories in paths, set year.
+
+    Arguments:
+        directories (list of str): list of directories to walk
+    """
     years = {
-        '1': '2005',
-        '2': '2007',
-        '3': '2009',
-        '4': '2010',
-        '5': '2011',
-        '6': '2013',
+        'skuvlahistorja1': '2005',
+        'skuvlahistorja2': '2007',
+        'skuvlahistorja3': '2009',
+        'skuvlahistorja4': '2010',
+        'skuvlahistorja5': '2011',
+        'skuvlahistorja6': '2013',
     }
 
-    for root, _, files in os.walk(path):
-        if 'skuvlahistorja' in root:
-            print(root)
-            for f in files:
-                if f.endswith('.html'):
-                    print(f)
-                    conv = converter.HTMLConverter(os.path.join(root, f))
-                    conv.md.set_variable('year', years[root[-1]])
-                    conv.md.write_file()
+    for file_ in find_endings(directories, '.xsl'):
+        if 'skuvlahistorja' in file_:
+            print(file_)
+            metadata = xslsetter.MetadataHandler(file_)
+            metadata.set_variable('year', years[file_.split('/')[-1]])
+            metadata.write_file()
 
 
-def fin_admin(path):
-    """Set all docs from samediggi.fi to be translated from fin."""
+def fin_admin(directories):
+    """Set all docs from samediggi.fi to be translated from fin.
+
+    Arguments:
+        directories (list of str): list of directories to walk
+    """
     counter = collections.defaultdict(int)
-    for root, _, files in os.walk(path):
-        for f in files:
-            if f.endswith('.xsl'):
-                cp = corpuspath.CorpusPath(os.path.join(root, f))
-                if ('samediggi.fi' in cp.metadata.get_variable('filename') and
-                        cp.metadata.get_variable('mainlang') == 'fin'):
-                    counter['fin'] += 1
-                    for p in cp.parallels():
-                        counter['parallels'] += 1
-                        try:
-                            md = xslsetter.MetadataHandler(p + '.xsl')
-                        except util.ArgumentError as error:
-                            util.note(error)
-                            util.note('Referenced from {}'.format(
-                                os.path.join(root, f)))
-                        finally:
-                            md.set_variable('translated_from', 'fin')
-                            md.write_file()
+    for file_ in find_endings(directories, '.xsl'):
+        corpus_path = corpuspath.CorpusPath(file_)
+        if ('samediggi.fi' in corpus_path.metadata.get_variable(
+                'filename') and
+                corpus_path.metadata.get_variable(
+                    'mainlang') == 'fin'):
+            counter['fin'] += 1
+            for parallel in corpus_path.parallels():
+                counter['parallels'] += 1
+                try:
+                    metadata = xslsetter.MetadataHandler(parallel + '.xsl')
+                except util.ArgumentError as error:
+                    util.note(error)
+                    util.note('Referenced from {}'.format(file_))
+                finally:
+                    metadata.set_variable('translated_from', 'fin')
+                    metadata.write_file()
 
     print(counter)
 
 
 if __name__ == "__main__":
-    fin_admin(sys.argv[1])
+    fin_admin(sys.argv[1:])
