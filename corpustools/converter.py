@@ -2112,6 +2112,7 @@ class HTMLContentConverter(object):
                     'container_full',
                     'documentInfoEm',
                     'documentPaging',
+                    'documentPaging PagingBtm',  # regjeringen.no
                     'documentTop',  # regjeringen.no
                     'dotList',  # nord-salten.no
                     'dropmenudiv',  # calliidlagadus.org
