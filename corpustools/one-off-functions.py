@@ -118,20 +118,30 @@ def skuvla_historja(directories):
             metadata.write_file()
 
 
-def fin_admin(directories):
-    """Set all docs from samediggi.fi to be translated from fin.
+def translated_from(url_part, mainlang, directories):
+    """Set all docs from url_part to be translated from mainlang.
 
     Arguments:
+        url_part (str): the defining part of the url
+        mainlang (str): three character long language code
         directories (list of str): list of directories to walk
     """
+    # Check if the arguments are valid
+    if '.' not in url_part:
+        raise UserWarning(
+            '{} does not seem to part of a url'.format(url_part))
+    if len(mainlang) != 3 and not isinstance(mainlang, 'str'):
+        raise UserWarning(
+            '{} does not seem to be a valid language code')
+
     counter = collections.defaultdict(int)
     for file_ in find_endings(directories, '.xsl'):
         corpus_path = corpuspath.CorpusPath(file_)
-        if ('samediggi.fi' in corpus_path.metadata.get_variable(
+        if (url_part in corpus_path.metadata.get_variable(
                 'filename') and
                 corpus_path.metadata.get_variable(
-                    'mainlang') == 'fin'):
-            counter['fin'] += 1
+                    'mainlang') == mainlang):
+            counter[mainlang] += 1
             for parallel in corpus_path.parallels():
                 counter['parallels'] += 1
                 try:
@@ -140,11 +150,11 @@ def fin_admin(directories):
                     util.note(error)
                     util.note('Referenced from {}'.format(file_))
                 finally:
-                    metadata.set_variable('translated_from', 'fin')
+                    metadata.set_variable('translated_from', mainlang)
                     metadata.write_file()
 
     print(counter)
 
 
 if __name__ == "__main__":
-    fin_admin(sys.argv[1:])
+    translated_from(sys.argv[1], sys.argv[2], sys.argv[3:])
