@@ -122,11 +122,11 @@ class ParallelPicker(object):
         Returns:
             boolean
         """
-        if (file1.word_count is not None and
-                int(file1.word_count) > 30 and
+        threshold = 30
+        return (file1.word_count is not None and
+                int(file1.word_count) > threshold and
                 file2.word_count is not None and
-                int(file2.word_count) > 30):
-            return True
+                int(file2.word_count) > threshold)
 
     def has_sufficient_ratio(self, file1, file2):
         """See if the ratio of words is good enough.
