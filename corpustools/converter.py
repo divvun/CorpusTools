@@ -2200,12 +2200,15 @@ class HTMLContentConverter(object):
                     'ctl00_Cookies',  # lansstyrelsen.se
                     'ctl00_FullRegion_CenterAndRightRegion_HitsControl_'
                     'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
-                    'ctl00_LSTPlaceHolderFeedback_editmodepanel31',  # lansstyrelsen.se
-                    'ctl00_LSTPlaceHolderSearch_SearchBoxControl',  # lansstyrelsen.se
+                    'ctl00_LSTPlaceHolderFeedback_'
+                    'editmodepanel31',  # lansstyrelsen.se
+                    'ctl00_LSTPlaceHolderSearch_'
+                    'SearchBoxControl',  # lansstyrelsen.se
                     'ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl01_divRessurser',
                     'ctl00_MidtSone_ucArtikkel_ctl00_divNavigasjon',
                     'ctl00_PlaceHolderMain_EditModePanel1',  # lansstyrelsen.se
-                    'ctl00_PlaceHolderTitleBreadcrumb_DefaultBreadcrumb',  # lansstyrelsen.se
+                    'ctl00_PlaceHolderTitleBreadcrumb_'
+                    'DefaultBreadcrumb',  # lansstyrelsen.se
                     'ctl00_TopLinks',  # lansstyrelsen.se
                     'deleModal',
                     'document-header',
