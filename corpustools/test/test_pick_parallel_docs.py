@@ -23,6 +23,7 @@
 
 from __future__ import absolute_import, print_function
 
+import glob
 import os
 import unittest
 
@@ -40,7 +41,11 @@ ARTICLE47_SME = u'''<?xml version="1.0" encoding="UTF-8"?>
     <translated_from xml:lang="nob"/>
     <wordcount>209</wordcount>
     <parallel_text location="article-47.html" xml:lang="nob"/>
+    <parallel_text location="article-47.html" xml:lang="smj"/>
   </header>
+  <body>
+    <p>hallo</p>
+  </body>
 </document>
 '''
 
@@ -49,7 +54,24 @@ ARTICLE47_NOB = u'''<?xml version="1.0" encoding="UTF-8"?>
   <header>
     <wordcount>209</wordcount>
     <parallel_text location="article-47.html" xml:lang="sme"/>
+    <parallel_text location="article-47.html" xml:lang="smj"/>
   </header>
+  <body>
+    <p>hallo</p>
+  </body>
+</document>
+'''
+
+ARTICLE47_SMJ = u'''<?xml version="1.0" encoding="UTF-8"?>
+<document id="no_id" xml:lang="smj">
+  <header>
+    <wordcount>209</wordcount>
+    <parallel_text location="article-47.html" xml:lang="sme"/>
+    <parallel_text location="article-47.html" xml:lang="nob"/>
+  </header>
+  <body>
+    <p>hallo</p>
+  </body>
 </document>
 '''
 
@@ -57,20 +79,27 @@ ARTICLE47_NOB = u'''<?xml version="1.0" encoding="UTF-8"?>
 class TestParallelPicker(unittest.TestCase):
     """Test the ParallelPicker class."""
 
-    def setUp(self):
+    def make_tempdir(self):
         """Make tempdir where ParallelPicker will do its magic."""
-        self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
-        git.Repo.init(self.tempdir.path)
-        self.tempdir.makedir('converted/sme/admin')
-        self.tempdir.makedir('converted/nob/admin')
+        tempdir = testfixtures.TempDirectory(ignore=['.git'])
+        tempdir.makedir('converted/sme/admin')
+        tempdir.makedir('converted/nob/admin')
+        tempdir.makedir('converted/smj/admin')
+        tempdir.write('converted/sme/admin/article-47.html.xml',
+                      ARTICLE47_SME.encode('utf8'))
+        tempdir.write('converted/nob/admin/article-47.html.xml',
+                      ARTICLE47_NOB.encode('utf8'))
+        tempdir.write('converted/smj/admin/article-47.html.xml',
+                      ARTICLE47_SMJ.encode('utf8'))
 
+        return tempdir
+
+    def setUp(self):
+        """Make the ParallelPicker work on tempdir."""
+        self.tempdir = self.make_tempdir()
+        git.Repo.init(self.tempdir.path)
         self.language1_converted_dir = os.path.join(
             self.tempdir.path, 'converted/sme/admin')
-
-        self.tempdir.write('converted/sme/admin/article-47.html.xml',
-                           ARTICLE47_SME.encode('utf8'))
-        self.tempdir.write('converted/nob/admin/article-47.html.xml',
-                           ARTICLE47_NOB.encode('utf8'))
         self.picker = pick_parallel_docs.ParallelPicker(
             self.language1_converted_dir, 'nob', '73', '110')
 
@@ -92,8 +121,7 @@ class TestParallelPicker(unittest.TestCase):
         file_with_parallel1 = corpusxmlfile.CorpusXMLFile(os.path.join(
             self.language1_converted_dir,
             'article-47.html.xml'))
-        self.assertEqual(self.picker.has_parallel(file_with_parallel1),
-                         True)
+        self.assertTrue(self.picker.has_parallel(file_with_parallel1))
 
     def test_has_parallel2(self):
         """parallel_text points to wrong language."""
@@ -102,8 +130,7 @@ class TestParallelPicker(unittest.TestCase):
             'article-47.html.xml'))
         file_with_parallel1.etree.find('//parallel_text').set(
             '{http://www.w3.org/XML/1998/namespace}lang', 'sma')
-        self.assertEqual(self.picker.has_parallel(file_with_parallel1),
-                         False)
+        self.assertFalse(self.picker.has_parallel(file_with_parallel1))
 
     def test_has_parallel3(self):
         """parallel_text points to wrong file."""
@@ -112,5 +139,28 @@ class TestParallelPicker(unittest.TestCase):
             'article-47.html.xml'))
         file_with_parallel1.etree.find('//parallel_text').set(
             'location', 'article-48.html')
-        self.assertEqual(self.picker.has_parallel(file_with_parallel1),
-                         False)
+        self.assertFalse(self.picker.has_parallel(file_with_parallel1))
+
+    def test_find_lang1_files(self):
+        """Check that lang1 files are found."""
+        self.assertListEqual(
+            glob.glob(self.language1_converted_dir + '/*.xml'),
+            [corpus_file.name
+             for corpus_file in self.picker.find_lang1_files()])
+
+    def test_copy_valid_parallels(self):
+        """Only copy in the nob-sme pair, and align them."""
+        self.picker.copy_valid_parallels()
+        self.tempdir.check_all(
+            'prestable',
+            'converted/',
+            'converted/nob/',
+            'converted/nob/admin/',
+            'converted/nob/admin/article-47.html.xml',
+            'converted/sme/',
+            'converted/sme/admin/',
+            'converted/sme/admin/article-47.html.xml',
+            'tmx/',
+            'tmx/nob2sme/',
+            'tmx/nob2sme/admin/',
+            'tmx/nob2sme/admin/article-47.html.tmx')
