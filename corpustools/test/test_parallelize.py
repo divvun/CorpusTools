@@ -37,20 +37,24 @@ class TestSentenceDivider(unittest.TestCase):
     def test_ccat_input(self):
         ccat_output = """10. ON-vuogádat ¶
 ON doaimmaid oktavuođas; ovddasvástádus sihkkarastit? buot ON orgánat!
-.....
-váldočoahkkima nammadit. dievaslaš čađaheami, [2019 – 2020] … (rávvagiid) ¶
+..... ¶
+(wow.) ¶
+váldočoahkkima nammadit. dievaslaš čađaheami, [2019 – 2020] … ¶
+(rávvagiid) ¶
 """
         want = [
             '10. ON-vuogádat',
             'ON doaimmaid oktavuođas;',
             'ovddasvástádus sihkkarastit?',
             'buot ON orgánat!',
+            '(wow.)',
             'váldočoahkkima nammadit.',
             'dievaslaš čađaheami, [2019 – 2020] …',
-            '(rávvagiid)'
+            '(rávvagiid)',
         ]
         divider = parallelize.SentenceDivider('sme')
-        self.assertEqual(divider.make_valid_sentences(ccat_output), want)
+        self.assertListEqual(
+            divider.make_valid_sentences(ccat_output), want)
 
     def test_with_dot_and_paragraph(self):
         ccat_output = """mielddisbuvttii. ¶

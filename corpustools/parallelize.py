@@ -146,9 +146,17 @@ class SentenceDivider(object):
             list of str: The ccat output has been turned into a list
                 of full sentences.
         """
-        return [sentence.replace(' ¶', '')
-                for sentence in self.make_sentences(ccat_output)
-                if sentence not in self.stops]
+        sentences = [
+            sentence.replace(' ¶', '')
+            for sentence in self.make_sentences(ccat_output)
+            if sentence not in self.stops]
+
+        while ')' in sentences:
+            index = sentences.index(')')
+            sentences.pop(index)
+            sentences[index - 1] = sentences[index - 1] + ')'
+
+        return sentences
 
 
 class Tca2SentenceDivider(object):
