@@ -526,17 +526,20 @@ class NrkSmeCrawler(Crawler):
         links = 10
 
         for offset in range(0, 10000, links):
+            print('.', end='')
+            sys.stdout.flush()
             try:
                 result = requests.get(page_links_template.format(
                     tag, offset, links))
             except requests.exceptions.ConnectionError:
-                util.print_frame('Error when fetching {}'.format(
+                util.note('Connection error when fetching {}'.format(
                     tag, offset, links))
                 break
             else:
                 try:
                     yield html.document_fromstring(result.content)
                 except etree.ParserError:
+                    util.note('No more articles in tag: {}'.format(tag))
                     break
 
     def interesting_links(self, tag):
@@ -545,6 +548,9 @@ class NrkSmeCrawler(Crawler):
                     '//a[@class="autonomous lp_plug"]'):
                 self.counter[tag + '_total'] += 1
                 href = address.get('href')
+
+                if 'systemtest' in href:
+                    util.print_frame('\n{}\n'.format(href))
                 if ('systemtest' not in href and
                         href not in self.fetched_links and
                         self.guess_lang(address) == 'sme'):
@@ -561,6 +567,7 @@ class NrkSmeCrawler(Crawler):
 
     def crawl_tag(self, tag):
         if tag not in self.tags:
+            util.note('Fetching articles from {}'.format(tag))
             self.tags.add(tag)
             for href in self.interesting_links(tag):
                 self.add_nrk_article(href)
