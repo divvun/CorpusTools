@@ -2227,6 +2227,7 @@ class HTMLContentConverter(object):
                     'leftcol',  # new samediggi.no
                     'leftmenu',
                     'main_navi_main',           # www.samediggi.fi
+                    'mainContentBookmark',  # udir.no
                     'mainsidebar',  # arran.no
                     'menu',
                     'murupolku',                # www.samediggi.fi
