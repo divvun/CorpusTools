@@ -29,8 +29,9 @@ from lxml import etree, html
 from dateutil.parser import parse
 import os
 import sys
+import collections
 
-from corpustools import converter
+from corpustools import converter, corpuspath, xslsetter, util
 
 
 def html_files(path):
@@ -101,5 +102,30 @@ def skuvla_historja(path):
                     conv.md.write_file()
 
 
+def fin_admin(path):
+    """Set all docs from samediggi.fi to be translated from fin."""
+    counter = collections.defaultdict(int)
+    for root, _, files in os.walk(path):
+        for f in files:
+            if f.endswith('.xsl'):
+                cp = corpuspath.CorpusPath(os.path.join(root, f))
+                if ('samediggi.fi' in cp.metadata.get_variable('filename') and
+                        cp.metadata.get_variable('mainlang') == 'fin'):
+                    counter['fin'] += 1
+                    for p in cp.parallels():
+                        counter['parallels'] += 1
+                        try:
+                            md = xslsetter.MetadataHandler(p + '.xsl')
+                        except util.ArgumentError as error:
+                            util.note(error)
+                            util.note('Referenced from {}'.format(
+                                os.path.join(root, f)))
+                        finally:
+                            md.set_variable('translated_from', 'fin')
+                            md.write_file()
+
+    print(counter)
+
+
 if __name__ == "__main__":
-    skuvla_historja(sys.argv[1])
+    fin_admin(sys.argv[1])
