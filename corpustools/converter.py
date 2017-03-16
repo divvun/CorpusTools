@@ -2077,8 +2077,9 @@ class HTMLContentConverter(object):
         unwanted_classes_ids = {
             'div': {
                 'class': [
-                    "latestnews_uutisarkisto",
+                    'AddThis',  # lansstyrelsen.se
                     'InnholdForfatter',  # unginordland
+                    'NavigationLeft',  # lansstyrelsen.se
                     'QuickNav',
                     'ad',
                     'andrenyheter',  # tysfjord.kommune.no
@@ -2131,6 +2132,7 @@ class HTMLContentConverter(object):
                     'historic-label',  # regjeringen.no
                     'imagecontainer',
                     'innholdsfortegenlse-child',
+                    'latestnews_uutisarkisto',
                     'ld-navbar',
                     'meta',
                     'meta ui-helper-clearfix',  # nord-salten.no
@@ -2183,6 +2185,7 @@ class HTMLContentConverter(object):
                     'WIPSELEMENT_MENU',  # learoevierhtieh.no
                     'WIPSELEMENT_MENURIGHT',  # learoevierhtieh.no
                     'WIPSELEMENT_NEWS',  # learoevierhtieh.no
+                    'WebPartZone1',  # lansstyrelsen.se
                     'aa',
                     'andrenyheter',  # tysfjord.kommune.no
                     'article_footer',
@@ -2193,10 +2196,16 @@ class HTMLContentConverter(object):
                     'chatBox',
                     'chromemenu',  # calliidlagadus.org
                     'crumbs',  # visitstetind.no
+                    'ctl00_AccesskeyShortcuts',  # lansstyrelsen.se
+                    'ctl00_Cookies',  # lansstyrelsen.se
                     'ctl00_FullRegion_CenterAndRightRegion_HitsControl_'
                     'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
+                    'ctl00_LSTPlaceHolderFeedback_editmodepanel31',  # lansstyrelsen.se
+                    'ctl00_LSTPlaceHolderSearch_SearchBoxControl',  # lansstyrelsen.se
                     'ctl00_MidtSone_ucArtikkel_ctl00_ctl00_ctl01_divRessurser',
                     'ctl00_MidtSone_ucArtikkel_ctl00_divNavigasjon',
+                    'ctl00_PlaceHolderTitleBreadcrumb_DefaultBreadcrumb',  # lansstyrelsen.se
+                    'ctl00_TopLinks',  # lansstyrelsen.se
                     'deleModal',
                     'document-header',
                     'errorMessageContainer',  # nord-salten.no
