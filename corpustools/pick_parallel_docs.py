@@ -48,6 +48,7 @@ class ParallelPicker(object):
             language1 and parallel document that is accepted
         poor_ratio (list of tuple): each tuple contains a pair of filename
             paths and the word count ratio of this pair.
+        counter (defaultdict(int)): count various things.
     """
 
     def __init__(self, language1_dir, parallel_language, minratio, maxratio):
@@ -70,6 +71,7 @@ class ParallelPicker(object):
         self.minratio = float(minratio)
         self.maxratio = float(maxratio)
         self.poor_ratio = []
+        self.counter = defaultdict(int)
 
     def calculate_language1(self, language1_dir):
         """The language is the part after 'converted/'."""
@@ -167,53 +169,87 @@ class ParallelPicker(object):
                 os.makedirs(prestable_dir)
 
         prestable_name = os.path.join(prestable_dir, xml_file.basename)
-        if not os.path.exists(prestable_name):
-            shutil.copy(xml_file.name, prestable_dir)
-            self.vcs.add(prestable_name)
-        else:
-            shutil.copy(xml_file.name, prestable_dir)
+        shutil.copy(xml_file.name, prestable_dir)
+        self.vcs.add(prestable_name)
 
         return prestable_name
 
-    def copy_valid_parallels(self):
-        """Copy valid parallel files from converted to prestable/converted."""
-        counter = defaultdict(int)
+    def is_valid_pair(self, file1, file2):
+        """Check if file1 and file2 is a valid parallel pair.
+
+        Arguments:
+            file1 (corpusxmlfile.CorpusXMLFile): The first file of a parallel
+                pair.
+            file2 (corpusxmlfile.CorpusXMLFile): The second file of a parallel
+                pair.
+
+        Returns:
+            bool
+        """
+        return (
+            self.has_sufficient_words(
+                file1, file2) and
+            self.has_sufficient_ratio(
+                file1, file2))
+
+    def valid_parallels(self):
+        """Pick valid parallel file pairs.
+
+        Yields:
+            tuple of corpusxmlfile.CorpusXMLFile
+        """
         for language1_file in self.find_lang1_files():
             if self.has_parallel(language1_file):
-                counter['has_parallel'] += 1
+                self.counter['has_parallel'] += 1
                 parallel_file = corpusxmlfile.CorpusXMLFile(
                     language1_file.get_parallel_filename(
                         self.parallel_language))
+                if self.is_valid_pair(language1_file, parallel_file):
+                    self.counter['good_parallel'] += 1
+                    yield (language1_file, parallel_file)
 
-                if self.has_sufficient_words(language1_file, parallel_file):
-                    if self.has_sufficient_ratio(language1_file,
-                                                 parallel_file):
-                        counter['good_parallel'] += 1
-                        prestable_name = self.copy_file(language1_file)
-                        self.copy_file(parallel_file)
-                        parallelizer = parallelize.ParallelizeTCA2(
-                            prestable_name,
-                            parallel_file.lang,
-                            quiet=True)
-                        try:
-                            tmx = parallelizer.parallelize_files()
-                        except UserWarning as error:
-                            print(str(error))
-                        else:
-                            tmx.clean_toktmx()
-                            outfile_existed = os.path.exists(
-                                parallelizer.outfile_name)
-                            print('Making {}'.format(
-                                parallelizer.outfile_name))
-                            tmx.write_tmx_file(parallelizer.outfile_name)
-                            if not outfile_existed:
-                                self.vcs.add(parallelizer.outfile_name)
+    def copy_valid_parallels(self):
+        """Copy valid parallel files from converted to prestable/converted."""
+        for file1, file2 in self.valid_parallels():
+            prestable_name = self.copy_file(file1)
+            self.copy_file(file2)
+            self.parallelise(
+                prestable_name,
+                file2.lang)
 
+    def print_report(self):
         for poor_ratio in self.poor_ratio:
             print('{0}: {1}\n{2}: {3}\nratio: {4}\n'.format(*poor_ratio))
 
-        for key, value in counter.items():
+        for key, value in self.counter.items():
             print(key, value)
+
+    def parallelise(self, prestable_name, parallel_lang):
+        """Sentence align files.
+
+        Arguments:
+            prestable_name (str): path to the converted file in the
+                prestable directory
+            parallel_lang (str): three character language code of the
+                parellel file
+        """
+        parallelizer = parallelize.ParallelizeTCA2(
+            prestable_name,
+            parallel_lang,
+            quiet=True)
+        try:
+            tmx = parallelizer.parallelize_files()
+        except UserWarning as error:
+            print(str(error))
+        else:
+            tmx.clean_toktmx()
+            outfile_existed = os.path.exists(
+                parallelizer.outfile_name)
+            print('Making {}'.format(
+                parallelizer.outfile_name))
+            tmx.write_tmx_file(parallelizer.outfile_name)
+
+            self.vcs.add(parallelizer.outfile_name)
 
 
 def parse_options():
@@ -248,3 +284,4 @@ def main():
     picker = ParallelPicker(args.language1_dir, args.parallel_language,
                             args.minratio, args.maxratio)
     picker.copy_valid_parallels()
+    picker.print_report()
