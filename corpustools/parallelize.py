@@ -86,7 +86,7 @@ class SentenceDivider(object):
         Arguments:
             lang (str): language the analyser can analyse
         """
-        self.lang = lang
+        self.lang = 'nob' if lang == 'nno' else lang
         self.relative_path = relative_path
 
     def setup_pipeline(self):
