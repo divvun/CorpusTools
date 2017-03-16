@@ -38,7 +38,10 @@ class TestSentenceDivider(unittest.TestCase):
         ccat_output = """10. ON-vuogádat ¶
 ON doaimmaid oktavuođas; ovddasvástádus sihkkarastit? buot ON orgánat!
 ..... ¶
-(wow.) ¶
+wow." ¶
+mom.). ¶
+mom.: ¶
+kult.” ¶
 váldočoahkkima nammadit. dievaslaš čađaheami, [2019 – 2020] … ¶
 (rávvagiid) ¶
 """
@@ -47,7 +50,10 @@ váldočoahkkima nammadit. dievaslaš čađaheami, [2019 – 2020] … ¶
             'ON doaimmaid oktavuođas;',
             'ovddasvástádus sihkkarastit?',
             'buot ON orgánat!',
-            '(wow.)',
+            'wow."',
+            'mom.).',
+            'mom.:',
+            'kult.”',
             'váldočoahkkima nammadit.',
             'dievaslaš čađaheami, [2019 – 2020] …',
             '(rávvagiid)',

@@ -151,12 +151,15 @@ class SentenceDivider(object):
             for sentence in self.make_sentences(ccat_output)
             if sentence not in self.stops]
 
-        while ')' in sentences:
-            index = sentences.index(')')
-            sentences.pop(index)
-            sentences[index - 1] = sentences[index - 1] + ')'
+        invalid_sentence_re = re.compile('^\W+$')
+        valid_sentences = []
+        for sentence in sentences:
+            if invalid_sentence_re.fullmatch(sentence):
+                valid_sentences[-1] = ''.join([valid_sentences[-1] + sentence])
+            else:
+                valid_sentences.append(sentence)
 
-        return sentences
+        return valid_sentences
 
 
 class Tca2SentenceDivider(object):
