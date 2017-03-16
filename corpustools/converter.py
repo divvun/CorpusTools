@@ -3340,7 +3340,10 @@ class DocumentFixer(object):
                 element.text = text
 
         for child in newelement:
-            element.append(self.detect_quote(child))
+            if (child.tag == 'span' and child.get('type') == 'quote'):
+                element.append(child)
+            else:
+                element.append(self.detect_quote(child))
 
             if child.tail:
                 text = child.tail
