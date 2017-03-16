@@ -34,18 +34,20 @@ from corpustools import (argparse_version, corpusxmlfile, parallelize, util,
 
 
 class ParallelPicker(object):
-    """Pick parallel files from converted xml files.
+    """Pick valid parallel files from converted xml files.
 
     Attributes:
+        vcs (versioncontrol.vcs): version control client for the corpus
+            directory
         language1_dir (str): the directory where converted files of language1
             are found
-        parallel_language (str):
-        parellel_files (int): number of parallel files
-        copied_files (int): number of copied files
+        parallel_language (str): three character long language code
         minratio (float): the lowest diff in percent between wordcount in the
             language1 and parallel document that is accepted
         maxratio (float): the highest diff in percent between wordcount in the
             language1 and parallel document that is accepted
+        poor_ratio (list of tuple): each tuple contains a pair of filename
+            paths and the word count ratio of this pair.
     """
 
     def __init__(self, language1_dir, parallel_language, minratio, maxratio):
