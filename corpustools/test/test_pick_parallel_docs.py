@@ -34,7 +34,7 @@ from corpustools import corpusxmlfile, pick_parallel_docs
 HERE = os.path.dirname(__file__)
 
 
-article47_sme = u'''<?xml version="1.0" encoding="UTF-8"?>
+ARTICLE47_SME = u'''<?xml version="1.0" encoding="UTF-8"?>
 <document id="no_id" xml:lang="sme">
   <header>
     <translated_from xml:lang="nob"/>
@@ -44,7 +44,7 @@ article47_sme = u'''<?xml version="1.0" encoding="UTF-8"?>
 </document>
 '''
 
-article47_nob = u'''<?xml version="1.0" encoding="UTF-8"?>
+ARTICLE47_NOB = u'''<?xml version="1.0" encoding="UTF-8"?>
 <document id="no_id" xml:lang="nob">
   <header>
     <wordcount>209</wordcount>
@@ -55,10 +55,12 @@ article47_nob = u'''<?xml version="1.0" encoding="UTF-8"?>
 
 
 class TestParallelPicker(unittest.TestCase):
+    """Test the ParallelPicker class."""
 
     def setUp(self):
+        """Make tempdir where ParallelPicker will do its magic."""
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
-        r = git.Repo.init(self.tempdir.path)
+        git.Repo.init(self.tempdir.path)
         self.tempdir.makedir('converted/sme/admin')
         self.tempdir.makedir('converted/nob/admin')
 
@@ -66,20 +68,23 @@ class TestParallelPicker(unittest.TestCase):
             self.tempdir.path, 'converted/sme/admin')
 
         self.tempdir.write('converted/sme/admin/article-47.html.xml',
-                           article47_sme.encode('utf8'))
+                           ARTICLE47_SME.encode('utf8'))
         self.tempdir.write('converted/nob/admin/article-47.html.xml',
-                           article47_nob.encode('utf8'))
+                           ARTICLE47_NOB.encode('utf8'))
         self.picker = pick_parallel_docs.ParallelPicker(
             self.language1_converted_dir, 'nob', '73', '110')
 
     def tearDown(self):
+        """Cleanup after tests are done."""
         self.tempdir.cleanup()
 
     def test_calculate_language1(self):
+        """Check that the correct language is found."""
         self.picker.calculate_language1('converted/sme/admin')
         self.assertEqual(self.picker.language1, 'sme')
 
     def test_get_parallel_language(self):
+        """Check that the correct parallel language is set."""
         self.assertEqual(self.picker.parallel_language, 'nob')
 
     def test_has_parallel1(self):
