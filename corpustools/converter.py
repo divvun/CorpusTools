@@ -2083,6 +2083,8 @@ class HTMLContentConverter(object):
                     'QuickNav',
                     'ad',
                     'andrenyheter',  # tysfjord.kommune.no
+                    'art-layout-cell art-sidebar2',  # gaaltije.se
+                    'art-postheadericons art-metadata-icons',  # gaaltije.se
                     'article-ad',
                     'article-bottom-element',
                     'article-column',
@@ -2090,6 +2092,7 @@ class HTMLContentConverter(object):
                      'meta-widget-content'),  # nrk.no
                     ('article-dateline article-footer '
                      'container-widget-content cf'),  # nrk.no
+                    'article-heading-wrapper',  # 1177.se
                     'article-info',  # regjeringen.no
                     'article-related',
                     'article-toolbar__tool',  # umo.se
@@ -2108,6 +2111,8 @@ class HTMLContentConverter(object):
                     'btm_menu',
                     'byline',  # arran.no
                     'c1',  # jll.se
+                    'art-bar art-nav',  # gaaltije.se
+                    'art-layout-cell art-sidebar1',  # gaaltije.se
                     'clearfix breadcrumbsAndSocial noindex',  # udir.no
                     'complexDocumentBottom',  # regjeringen.no
                     'container-widget-content',  # nrk.no
@@ -2153,9 +2158,11 @@ class HTMLContentConverter(object):
                     'outer-column',
                     'plug-teaser',  # nrk.no
                     'post-footer',
+                    'printbutton-wrapper',  # 1177.se
                     'printContact',
                     'right',  # ntfk
                     'rightverticalgradient',  # udir.no
+                    'sharebutton-wrapper',  # 1177.se
                     'sharing',
                     'sidebar',
                     'spalte300',  # osko.no
@@ -2164,10 +2171,12 @@ class HTMLContentConverter(object):
                     'tipformcontainer',  # tysfjord.kommune.no
                     'tipsarad mt6 selfClear',
                     'titlepage',
+                    'toc-placeholder',  # 1177.se
                     'toc',
                     'tools',  # arran.no
                 ],
                 'id': [
+                    'print-logo-wrapper',  # 1177.se
                     'AreaLeft',
                     'AreaLeftNav',
                     'AreaRight',
@@ -2200,6 +2209,12 @@ class HTMLContentConverter(object):
                     'chromemenu',  # calliidlagadus.org
                     'crumbs',  # visitstetind.no
                     'ctl00_AccesskeyShortcuts',  # lansstyrelsen.se
+                    'ctl00_ctl00_ArticleFormContentRegion_'
+                    'ArticleBodyContentRegion_ctl00_'
+                    'PageToolWrapper',  # 1177.se
+                    'ctl00_ctl00_ArticleFormContentRegion_'
+                    'ArticleBodyContentRegion_ctl03_'
+                    'PageToolWrapper',  # 1177.se
                     'ctl00_Cookies',  # lansstyrelsen.se
                     'ctl00_FullRegion_CenterAndRightRegion_HitsControl_'
                     'ctl00_FullRegion_CenterAndRightRegion_Sorting_sortByDiv',
@@ -2216,6 +2231,8 @@ class HTMLContentConverter(object):
                     'deleModal',
                     'document-header',
                     'errorMessageContainer',  # nord-salten.no
+                    'final-footer-wrapper',  # 1177.se
+                    'flu-vaccination',  # 1177.se
                     'footer',  # forrest, too, tysfjord.kommune.no
                     'footer-wrapper',
                     'frontgallery',  # visitstetind.no
@@ -2242,6 +2259,8 @@ class HTMLContentConverter(object):
                     'ntfkNavMain',  # ntfk
                     'pageFooter',
                     'path',  # new samediggi.no, tysfjord.kommune.no
+                    'phone-bar',  # 1177.se
+                    'publishinfo',  # 1177.se
                     'readspeaker_button1',
                     'rightAds',
                     'rightCol',
@@ -2274,6 +2293,7 @@ class HTMLContentConverter(object):
                     'svid10_6c1eb18a13ec7d9b5b82eda',  # ostersund.se
                     'svid10_6c1eb18a13ec7d9b5b82ed5',  # ostersund.se
                     'svid12_6ba9fa711d2575a2a7800032140',  # jll.se
+                    'theme-area-label-wrapper',  # 1177.se
                     'tipafriend',
                     'tools',  # arran.no
                     'topHeader',  # nord-salten.no
@@ -2290,7 +2310,8 @@ class HTMLContentConverter(object):
                 'class': [
                     'WebPartReadMoreParagraph',
                     'breadcrumbs',
-                    'langs'  # oahpa.no
+                    'langs',  # oahpa.no
+                    'art-page-footer',  # gaaltije.se
                 ],
             },
             'ul': {
@@ -2316,6 +2337,7 @@ class HTMLContentConverter(object):
                 'class': [
                     'K-NOTE-FOTNOTE',
                     'graytext',  # svenskakyrkan.se
+                    'breadcrumbs pathway',  # gaaltije.se
                 ],
             },
             'a': {
@@ -2329,6 +2351,8 @@ class HTMLContentConverter(object):
                     'share-paragraf',  # lovdata.no
                     'mainlevel_alavalikko',  # www.samediggi.fi
                     'sublevel_alavalikko',  # www.samediggi.fi
+                    'skip-link',  # 1177.se
+                    'toggle-link expanded',  # 1177.se
                 ],
             },
             'td': {
@@ -2359,6 +2383,7 @@ class HTMLContentConverter(object):
             },
             'section': {
                 'class': [
+                    'section-theme-sub-nav',  # 1177.se
                     'tree-menu current',  # umo.se
                     'tree-menu',  # umo.se
                 ],
