@@ -73,6 +73,16 @@ Odd Einar Dørum ¶
         divider = parallelize.SentenceDivider('sme')
         self.assertEqual(divider.make_valid_sentences(ccat_output), want)
 
+    def test_with_empty_head_sentence(self):
+        ccat_output = """. ¶
+Odd Einar Dørum ¶
+"""
+        want = [
+            'Odd Einar Dørum',
+        ]
+        divider = parallelize.SentenceDivider('sme')
+        self.assertEqual(divider.make_valid_sentences(ccat_output), want)
+
 
 class TestTca2SentenceDivider(unittest.TestCase):
     """A test class for the Tca2SentenceDivider class."""
