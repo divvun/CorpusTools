@@ -2092,6 +2092,7 @@ class HTMLContentConverter(object):
                      'container-widget-content cf'),  # nrk.no
                     'article-info',  # regjeringen.no
                     'article-related',
+                    'article-toolbar__tool',  # umo.se
                     'article-universe-teaser container-widget-content',
                     'articleImageRig',
                     'articlegooglemap',  # tysfjord.kommune.no
