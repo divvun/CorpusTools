@@ -2106,6 +2106,7 @@ class HTMLContentConverter(object):
                     'breadcrums span-12',
                     'btm_menu',
                     'byline',  # arran.no
+                    'c1',  # jll.se
                     'clearfix breadcrumbsAndSocial noindex',  # udir.no
                     'complexDocumentBottom',  # regjeringen.no
                     'container-widget-content',  # nrk.no
@@ -2258,14 +2259,20 @@ class HTMLContentConverter(object):
                     'subfoote',  # visitstetind.no
                     'submenu',  # nord-salten.no
                     'svid10_49531bad1412ceb82564aea',  # ostersund.se
+                    'svid10_6ba9fa711d2575a2a7800024318',  # jll.se
                     'svid10_6c1eb18a13ec7d9b5b82ee7',  # ostersund.se
                     'svid10_b0dabad141b6aeaf101229',  # ostersund.se
                     'svid10_49531bad1412ceb82564af3',  # ostersund.se
+                    'svid10_6ba9fa711d2575a2a7800032145',  # jll.se
+                    'svid10_6ba9fa711d2575a2a7800032151',  # jll.se
+                    'svid10_6ba9fa711d2575a2a7800024344',  # jll.se
+                    'svid10_6ba9fa711d2575a2a7800032135',  # jll.se
                     'svid10_6c1eb18a13ec7d9b5b82ee3',  # ostersund.se
                     'svid10_6c1eb18a13ec7d9b5b82edf',  # ostersund.se
                     'svid10_6c1eb18a13ec7d9b5b82edd',  # ostersund.se
                     'svid10_6c1eb18a13ec7d9b5b82eda',  # ostersund.se
                     'svid10_6c1eb18a13ec7d9b5b82ed5',  # ostersund.se
+                    'svid12_6ba9fa711d2575a2a7800032140',  # jll.se
                     'tipafriend',
                     'tools',  # arran.no
                     'topHeader',  # nord-salten.no
