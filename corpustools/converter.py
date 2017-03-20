@@ -2384,6 +2384,7 @@ class HTMLContentConverter(object):
             'section': {
                 'class': [
                     'section-theme-sub-nav',  # 1177.se
+                    'span3',  # samernas.se
                     'tree-menu current',  # umo.se
                     'tree-menu',  # umo.se
                 ],
