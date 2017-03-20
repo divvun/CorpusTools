@@ -3712,19 +3712,29 @@ class LanguageDetector(object):
 
 
 class ConverterManager(object):
-    """Manage the conversion of original files to corpus xml."""
+    """Manage the conversion of original files to corpus xml.
+
+    Attributes:
+        LANGUAGEGUESSER (text_cat.Classifier): Language guesser to indicate
+            languages in the converted document.
+        write_intermediate (bool): indicate whether intermediate versions
+            of the converted document should be written to disk.
+        goldstandard (bool): indicating whether goldstandard documents
+            should be converted.
+        FILES (list of str): list of paths to original files that should
+            be converted from original format to xml.
+    """
 
     LANGUAGEGUESSER = text_cat.Classifier(None)
-
 
     def __init__(self, write_intermediate, goldstandard):
         """Initialise the ConverterManager class.
 
         Arguments:
-            write_intermediate: boolean indicating whether intermediate versions
-            of the converted document should be written to disk.
-            goldstandard: boolean indicating whether goldstandard documents
-            should be converted.
+            write_intermediate (bool): indicating whether intermediate versions
+                of the converted document should be written to disk.
+            goldstandard (bool): indicating whether goldstandard documents
+                should be converted.
         """
         self.write_intermediate = write_intermediate
         self.goldstandard = goldstandard
@@ -3822,7 +3832,11 @@ class ConverterManager(object):
             self.convert(orig_file)
 
     def add_file(self, xsl_file):
-        """Add file for conversion."""
+        """Add file for conversion.
+
+        Arguments:
+            xsl_file (str): path to a metadata file
+        """
         if os.path.isfile(xsl_file) and os.path.isfile(xsl_file[:-4]):
             md = xslsetter.MetadataHandler(xsl_file)
             if (
