@@ -37,6 +37,7 @@ setup(
             'pick_parallel_docs = corpustools.pick_parallel_docs:main',
             'count_analysed = corpustools.counter:main',
             'clean_prestable = corpustools.clean_prestable:main',
+            'realign = corpustools.realign:main',
         ]
     },
     dependency_links=[

@@ -22,6 +22,7 @@ These scripts will be installed
 * [dupefinder: Find files with more than 90% similarity in the given directory|CorpusTools.html#dupefinder]
 * [clean_prestable:Remove files in prestable that have no original files|CorpusTools.html#clean_prestable]
 * [pick_parallel_docs: Pick out parallel files from converted to prestable/converted|CorpusTools.html#pick_parallel_docs]
+* [realign: Reconvert and realign a given .tmx.html file|CorpusTools.html#realign]
 
 !!Miscellaneous
 * [generate_anchor_list: Generate paired anchor list for languages lang1 and lang2|CorpusTools.html#generate_anchor_list]
@@ -886,3 +887,23 @@ optional arguments:
 * [versioncontrol.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/versioncontrol.py]
 * [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
 
+!!realign
+
+{{{
+usage: realign [-h] [--version] tmxhtml
+
+Sentence align a given file anew.
+
+positional arguments:
+  tmxhtml     The tmx.html file to realign.
+
+optional arguments:
+  -h, --help  show this help message and exit
+  --version   show program's version number and exit
+}}}
+
+!Source code
+* [realign.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/realign.py]
+* [corpuspath.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/corpuspath.py]
+* [converter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/converter.py]
+* [parallelize.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/parallelize.py]

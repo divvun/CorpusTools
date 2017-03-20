@@ -92,3 +92,4 @@ v<0.16.8>, <20170302> -- Make analyse_corpus use Apertium modes.xml files, via t
 v<0.16.9>, <20170303> -- Improve moving files around in svn.
 v<0.17.0>, <20170314> -- Use the hfst-tokenise as the motor for sentence division. Divide sentences also on ;. This improves the situation for Bug 2351 - Text dissappears when parallelising files
 v<0.17.1>, <20170316> -- Remove more cruft when converting html documents. Make the sentence divider use the nob fst when nno is specified. The sentence divider produces even more sentences to satisfy tca2.
+v<0.18.0>, <20170320> -- Add a new tool, realign. This tool reconverts and realigns the sentences of a pair of parallel documents.
