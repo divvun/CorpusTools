@@ -41,7 +41,32 @@ class CorpusPath(object):
         self.metadata = xslsetter.MetadataHandler(self.xsl, create=True)
 
     @staticmethod
-    def split_path(path):
+    def split_on_module(path):
+        """Split the path in three parts.
+
+        Args:
+            path: a path to a corpus file
+
+        Returns:
+            tuple of str: part one is the corpus directory, the second
+                part is the module, the third part is the path of the
+                corpus file inside the corpus
+
+        Raises:
+            ValueError: the path is not part of a corpus.
+        """
+        abspath = os.path.normpath(os.path.abspath(path))
+        for module in [u'goldstandard/orig', u'prestable/converted',
+                       u'prestable/toktmx', u'prestable/tmx', u'orig',
+                       u'converted', u'stable', u'toktmx', u'tmx']:
+            module_dir = u'/' + module + u'/'
+            if module_dir in abspath:
+                root, rest = abspath.split(module_dir)
+                return root, module, rest
+
+        raise ValueError('File is not part of a corpus: {}'.format(path))
+
+    def split_path(self, path):
         """Map path to the original file.
 
         Args:
@@ -51,33 +76,8 @@ class CorpusPath(object):
             A PathComponents namedtuple containing the components of the
             original file
         """
-        def split_on_module(path):
-            """Split the path in three parts.
-
-            Args:
-                path: a path to a corpus file
-
-            Returns:
-                tuple of str: part one is the corpus directory, the second
-                    part is the module, the third part is the path of the
-                    corpus file inside the corpus
-
-            Raises:
-                ValueError: the path is not part of a corpus.
-            """
-            for module in [u'goldstandard/orig', u'prestable/converted',
-                           u'prestable/toktmx', u'prestable/tmx', u'orig',
-                           u'converted', u'stable', u'toktmx', u'tmx']:
-                module_dir = u'/' + module + u'/'
-                if module_dir in path:
-                    root, rest = path.split(module_dir)
-                    return root, module, rest
-
-            raise ValueError('File is not part of a corpus: {}'.format(path))
-
         # Ensure we have at least one / before module, for safer splitting:
-        abspath = os.path.normpath(os.path.abspath(path))
-        root, module, lang_etc = split_on_module(abspath)
+        root, module, lang_etc = self.split_on_module(path)
 
         lang_etc_parts = lang_etc.split('/')
         (lang, genre, subdirs, basename) = (lang_etc_parts[0],
