@@ -707,12 +707,26 @@ class Tmx(object):
         with util.ignored(OSError):
             os.makedirs(out_dir)
 
-        with open(out_filename, "wb") as tmx_file:
-            string = etree.tostring(self.tmx,
-                                    pretty_print=True,
-                                    encoding="utf-8",
-                                    xml_declaration=True)
-            tmx_file.write(string)
+        with open(out_filename, 'wb') as tmx_file:
+            tmx_file.write(etree.tostring(self.tmx,
+                                          pretty_print=True,
+                                          encoding="utf-8",
+                                          xml_declaration=True))
+
+    def tmx2html(self, out_filename):
+        """Convert tmx to html.
+
+        Arguments:
+            out_filename (str): name of the html file
+        """
+        html2tmx_transformer = etree.XSLT(etree.parse(
+            os.path.join(HERE, 'xslt/tmx2html.xsl')))
+
+        with open(out_filename, 'wb') as html_file:
+            html_file.write(etree.tostring(html2tmx_transformer(self.tmx),
+                                           pretty_print=True,
+                                           encoding='utf-8',
+                                           xml_declaration=True))
 
     def remove_tu_with_empty_seg(self):
         """Remove tu elements that contain empty seg element."""

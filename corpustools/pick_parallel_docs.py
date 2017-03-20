@@ -248,8 +248,10 @@ class ParallelPicker(object):
             print('Making {}'.format(
                 parallelizer.outfile_name))
             tmx.write_tmx_file(parallelizer.outfile_name)
+            tmx.tmx2html(parallelizer.outfile_name + '.html')
 
-            self.vcs.add(parallelizer.outfile_name)
+            self.vcs.add([parallelizer.outfile_name,
+                          parallelizer.outfile_name + '.html'])
 
 
 def parse_options():
