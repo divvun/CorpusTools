@@ -30,6 +30,7 @@ from corpustools import corpuspath
 
 HERE = os.path.dirname(__file__)
 
+
 def name(module, lang, extension):
     """Produce a path to a corpus file.
 
