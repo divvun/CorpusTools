@@ -993,6 +993,8 @@ def parallelise_file(input_file, lang2, dictionary, quiet, aligner, stdout,
             tmx.tmx2html(parallelizer.outfile_name + '.html')
             if not quiet:
                 util.note("Wrote {}\n".format(outfile))
+
+            return outfile
         else:
             util.note("{} already exists, skipping …".format(outfile))
 

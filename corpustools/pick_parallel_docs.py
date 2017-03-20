@@ -213,7 +213,7 @@ class ParallelPicker(object):
         for file1, file2 in self.valid_parallels():
             prestable_name = self.copy_file(file1)
             self.copy_file(file2)
-            parallelize.parallelise_file(
+            outfile = parallelize.parallelise_file(
                 prestable_name,
                 file2.lang,
                 dictionary=None,
@@ -223,8 +223,8 @@ class ParallelPicker(object):
                 force=True
             )
 
-            uff = corpuspath.CorpusPath(file1.name)
-            self.vcs.add(uff.prestable_tmx(file2.lang))
+            self.vcs.add(outfile)
+            self.vcs.add(outfile + '.html')
 
     def print_report(self):
         for poor_ratio in self.poor_ratio:

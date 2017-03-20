@@ -163,4 +163,5 @@ class TestParallelPicker(unittest.TestCase):
             'tmx/',
             'tmx/nob2sme/',
             'tmx/nob2sme/admin/',
-            'tmx/nob2sme/admin/article-47.html.tmx')
+            'tmx/nob2sme/admin/article-47.html.tmx',
+            'tmx/nob2sme/admin/article-47.html.tmx.html')
