@@ -990,6 +990,7 @@ def parallelise_file(input_file, lang2, dictionary, quiet, aligner, stdout,
             if not quiet:
                 util.note("Generating the tmx file {}".format(outfile))
             tmx.write_tmx_file(outfile)
+            tmx.tmx2html(parallelizer.outfile_name + '.html')
             if not quiet:
                 util.note("Wrote {}\n".format(outfile))
         else:
