@@ -29,8 +29,8 @@ import os
 import shutil
 from collections import defaultdict
 
-from corpustools import (argparse_version, corpusxmlfile, parallelize, util,
-                         versioncontrol)
+from corpustools import (argparse_version, corpuspath, corpusxmlfile,
+                         parallelize, util, versioncontrol)
 
 
 class ParallelPicker(object):
@@ -213,9 +213,18 @@ class ParallelPicker(object):
         for file1, file2 in self.valid_parallels():
             prestable_name = self.copy_file(file1)
             self.copy_file(file2)
-            self.parallelise(
+            parallelize.parallelise_file(
                 prestable_name,
-                file2.lang)
+                file2.lang,
+                dictionary=None,
+                quiet=True,
+                aligner='tca2',
+                stdout=False,
+                force=True
+            )
+
+            uff = corpuspath.CorpusPath(file1.name)
+            self.vcs.add(uff.prestable_tmx(file2.lang))
 
     def print_report(self):
         for poor_ratio in self.poor_ratio:
@@ -223,35 +232,6 @@ class ParallelPicker(object):
 
         for key, value in self.counter.items():
             print(key, value)
-
-    def parallelise(self, prestable_name, parallel_lang):
-        """Sentence align files.
-
-        Arguments:
-            prestable_name (str): path to the converted file in the
-                prestable directory
-            parallel_lang (str): three character language code of the
-                parellel file
-        """
-        parallelizer = parallelize.ParallelizeTCA2(
-            prestable_name,
-            parallel_lang,
-            quiet=True)
-        try:
-            tmx = parallelizer.parallelize_files()
-        except UserWarning as error:
-            print(str(error))
-        else:
-            tmx.clean_toktmx()
-            outfile_existed = os.path.exists(
-                parallelizer.outfile_name)
-            print('Making {}'.format(
-                parallelizer.outfile_name))
-            tmx.write_tmx_file(parallelizer.outfile_name)
-            tmx.tmx2html(parallelizer.outfile_name + '.html')
-
-            self.vcs.add([parallelizer.outfile_name,
-                          parallelizer.outfile_name + '.html'])
 
 
 def parse_options():
