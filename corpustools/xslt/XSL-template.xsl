@@ -71,6 +71,16 @@
     <xsl:variable name="author4_nat" select="''"/>
     <xsl:variable name="author4_born" select="''"/>
 
+    <!--
+        Information of the fourth author: first name, last name,
+        date or year of birth, nationality.
+    -->
+    <xsl:variable name="author5_fn" select="''"/>
+    <xsl:variable name="author5_ln" select="''"/>
+    <xsl:variable name="author5_gender" select="'unknown'"/>
+    <xsl:variable name="author5_nat" select="''"/>
+    <xsl:variable name="author5_born" select="''"/>
+
     <xsl:variable name="publisher" select="''"/>
     <!-- The values are either: published or unpublished -->
     <xsl:variable name="publChannel" select="''"/>
@@ -96,6 +106,8 @@
     <xsl:variable name="translator_nat" select="''"/>
     <!-- select license type: free, standard or other -->
     <xsl:variable name="license_type" select="''"/>
+    <!-- e.g. Sámediggi journal number -->
+    <xsl:variable name="contract_id" select="''"/>
     <!-- The name and email of the submitter -->
     <xsl:variable name="sub_name" select="''"/>
     <xsl:variable name="sub_email" select="''"/>
@@ -140,23 +152,6 @@
     -->
     <xsl:variable name="mlangs">
         <!-- <language xml:lang="dan"/> -->
-        <!-- <language xml:lang="eng"/> -->
-        <!-- <language xml:lang="fin"/> -->
-        <!-- <language xml:lang="fit"/> -->
-        <!-- <language xml:lang="fkv"/> -->
-        <!-- <language xml:lang="ger"/> -->
-        <!-- <language xml:lang="isl"/> -->
-        <!-- <language xml:lang="kal"/> -->
-        <!-- <language xml:lang="kpv"/> -->
-        <!-- <language xml:lang="nno"/> -->
-        <!-- <language xml:lang="nob"/> -->
-        <!-- <language xml:lang="rus"/> -->
-        <!-- <language xml:lang="sma"/> -->
-        <!-- <language xml:lang="sme"/> -->
-        <!-- <language xml:lang="smj"/> -->
-        <!-- <language xml:lang="smn"/> -->
-        <!-- <language xml:lang="sms"/> -->
-        <!-- <language xml:lang="swe"/> -->
     </xsl:variable>
 
     <!--
@@ -174,24 +169,24 @@
         filename changed.
     -->
     <xsl:variable name="parallels">
-        <!-- <parallel_text xml:lang="dan" location=""/> -->
-        <!-- <parallel_text xml:lang="eng" location=""/> -->
-        <!-- <parallel_text xml:lang="fin" location=""/> -->
-        <!-- <parallel_text xml:lang="fit" location=""/> -->
-        <!-- <parallel_text xml:lang="fkv" location=""/> -->
-        <!-- <parallel_text xml:lang="ger" location=""/> -->
-        <!-- <parallel_text xml:lang="isl" location=""/> -->
-        <!-- <parallel_text xml:lang="kal" location=""/> -->
-        <!-- <parallel_text xml:lang="kpv" location=""/> -->
-        <!-- <parallel_text xml:lang="nno" location=""/> -->
-        <!-- <parallel_text xml:lang="nob" location=""/> -->
-        <!-- <parallel_text xml:lang="rus" location=""/> -->
-        <!-- <parallel_text xml:lang="sma" location=""/> -->
-        <!-- <parallel_text xml:lang="sme" location=""/> -->
-        <!-- <parallel_text xml:lang="smj" location=""/> -->
-        <!-- <parallel_text xml:lang="smn" location=""/> -->
-        <!-- <parallel_text xml:lang="sms" location=""/> -->
-        <!-- <parallel_text xml:lang="swe" location=""/> -->
+        <parallel_text xml:lang="dan" location=""/>
+        <parallel_text xml:lang="eng" location=""/>
+        <parallel_text xml:lang="fin" location=""/>
+        <parallel_text xml:lang="fit" location=""/>
+        <parallel_text xml:lang="fkv" location=""/>
+        <parallel_text xml:lang="ger" location=""/>
+        <parallel_text xml:lang="isl" location=""/>
+        <parallel_text xml:lang="kal" location=""/>
+        <parallel_text xml:lang="kpv" location=""/>
+        <parallel_text xml:lang="nno" location=""/>
+        <parallel_text xml:lang="nob" location=""/>
+        <parallel_text xml:lang="rus" location=""/>
+        <parallel_text xml:lang="sma" location=""/>
+        <parallel_text xml:lang="sme" location=""/>
+        <parallel_text xml:lang="smj" location=""/>
+        <parallel_text xml:lang="smn" location=""/>
+        <parallel_text xml:lang="sms" location=""/>
+        <parallel_text xml:lang="swe" location=""/>
     </xsl:variable>
 
     <!--
@@ -298,6 +293,20 @@
     -->
     <xsl:variable name="linespacing" select="''"/>
 
+    <!--
+        Information about what is normal text size in pdf documents.
+    -->
+    <xsl:variable name="main_sizes" select="''"/>
+
+    <!--
+        Information about what is title sizes in pdf documents.
+    -->
+    <xsl:variable name="title_sizes" select="''"/>
+
+    <!--
+        Information about what styles titles have in pdf document.
+    -->
+    <xsl:variable name="title_styles" select="''"/>
     <!--
         Add all paragraphs that should have xml:lang=X
         Uncomment the following and add the paths, for example:
