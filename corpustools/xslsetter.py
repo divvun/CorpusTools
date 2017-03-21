@@ -156,12 +156,41 @@ class MetadataHandler(object):
                     for p in elts
                     if p.attrib["location"].strip("'") != ""}
 
+    @property
+    def mlangs(self):
+        """Get the languages to look for in the document.
+
+        Returns:
+            set: A set of languages to look for in the document
+        """
+        mlangs = self._get_variable_elt("mlangs")
+        if mlangs is None:
+            return set()
+        else:
+            return {mlang.get(self.lang_key)
+                    for mlang in mlangs.findall("language")}
+
     def make_xsl_variable(self, name):
         elt = etree.Element(
             '{http://www.w3.org/1999/XSL/Transform}variable', name=name)
         self.tree.getroot().append(elt)
 
         return elt
+
+    def set_mlang(self, language):
+        """Set a language in mlangs.
+
+        Arguments:
+            language (str): a language code that should be set.
+        """
+        mlangs = self._get_variable_elt('mlangs')
+        if mlangs is None:
+            mlangs = self.make_xsl_variable('mlangs')
+
+        if language not in self.mlangs:
+            mlang = etree.Element('language')
+            mlang.attrib.update({self.lang_key: language})
+            mlangs.append(mlang)
 
     def set_parallel_text(self, language, location):
         """Insert the name of a parallel file into the parallels element.

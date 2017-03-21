@@ -14,7 +14,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2014-2017 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2014-2017 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
@@ -303,3 +304,20 @@ class TestMetadataHandler(unittest.TestCase):
         """Empty skip_elements returns None."""
         md = xslsetter.MetadataHandler('bogus.epub.xsl', create=True)
         self.assertIsNone(md.skip_elements)
+
+    def test_mlangs_empty(self):
+        """Check for empty mlangs."""
+        md = xslsetter.MetadataHandler('bogus.epub.xsl', create=True)
+
+        self.assertSetEqual(set(), md.mlangs)
+
+    def test_mlangs_set(self):
+        """Check if languages are set and picked up."""
+        languages = set(['nob', 'sme', 'sma'])
+
+        md = xslsetter.MetadataHandler('bogus.epub.xsl', create=True)
+
+        for language in languages:
+            md.set_mlang(language)
+
+        self.assertSetEqual(languages, md.mlangs)
