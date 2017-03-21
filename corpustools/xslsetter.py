@@ -460,3 +460,14 @@ class MetadataHandler(object):
                     l[page.strip()] = float(linespacing)
 
         return l
+
+    @property
+    def xsl_templates(self):
+        """Find all xsl:template elements.
+
+        Returns:
+            List of etree.Element
+        """
+        ns = {'xsl': 'http://www.w3.org/1999/XSL/Transform'}
+        return self.tree.getroot().xpath('.//xsl:template', namespaces=ns)
+
