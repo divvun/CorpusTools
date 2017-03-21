@@ -38,6 +38,7 @@ setup(
             'count_analysed = corpustools.counter:main',
             'clean_prestable = corpustools.clean_prestable:main',
             'realign = corpustools.realign:main',
+            'update_metadata = corpustools.update_metadata:main',
         ]
     },
     dependency_links=[

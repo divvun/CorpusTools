@@ -8,6 +8,7 @@ These scripts will be installed
 * [ccat: Print the contents of a converted corpus file as plain text|CorpusTools.html#ccat]
 * [analyse_corpus: Do syntactic analysis of converted files|CorpusTools.html#analyse_corpus]
 * [parallelize: Sentence align file pairs|CorpusTools.html#parallelize]
+* [realign: Reconvert and realign a given .tmx.html file|CorpusTools.html#realign]
 
 !!Add files to the corpus
 * [add_files_to_corpus: Add file(s) to a corpus directory|CorpusTools.html#add_files_to_corpus]
@@ -22,7 +23,7 @@ These scripts will be installed
 * [dupefinder: Find files with more than 90% similarity in the given directory|CorpusTools.html#dupefinder]
 * [clean_prestable:Remove files in prestable that have no original files|CorpusTools.html#clean_prestable]
 * [pick_parallel_docs: Pick out parallel files from converted to prestable/converted|CorpusTools.html#pick_parallel_docs]
-* [realign: Reconvert and realign a given .tmx.html file|CorpusTools.html#realign]
+* [update_metadata: Update metadata files in given directories|CorpusTools.html#update_metadata]
 
 !!Miscellaneous
 * [generate_anchor_list: Generate paired anchor list for languages lang1 and lang2|CorpusTools.html#generate_anchor_list]
@@ -907,3 +908,25 @@ optional arguments:
 * [corpuspath.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/corpuspath.py]
 * [converter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/converter.py]
 * [parallelize.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/parallelize.py]
+
+!!update_metadata
+
+{{{
+usage: update_metadata [-h] [--version] directories [directories ...]
+
+Update metadata files to look like XSL-template.xsl, but with original
+content. This script exists because the XSL-template is updated with new
+variables and documentation. This script will propagate these changes to
+existing metadata files.
+
+positional arguments:
+  directories  Directories where metadata files should be updated.
+
+optional arguments:
+  -h, --help   show this help message and exit
+  --version    show program's version number and exit
+}}}
+
+!Source code
+* [update_metadata.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/update_metadata.py]
+* [xslsetter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/xslsetter.py]
