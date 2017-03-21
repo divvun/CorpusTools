@@ -128,6 +128,19 @@ class MetadataHandler(object):
                 return value.replace("'", "")
         return None
 
+    def get_set_variables(self):
+        """Find all set variables.
+
+        Yields:
+            tuple of str: a key/value pair
+        """
+        ns = {'xsl': 'http://www.w3.org/1999/XSL/Transform'}
+        for variable in self.tree.getroot().xpath('.//xsl:variable[@select]',
+                                                  namespaces=ns):
+            value = self.get_variable(variable.get('name'))
+            if value is not None and value.strip():
+                yield variable.get('name'), value
+
     def get_parallel_texts(self):
         """Get the parallel texts.
 
