@@ -420,7 +420,7 @@ class MetadataHandler(object):
         return m
 
     def set_lang_genre_xsl(self):
-        """Set the mainlang and genre variables in the xsl file, if possible."""
+        """Set the mainlang and genre variables in the xsl file."""
         with util.ignored(TypeError):
             xsl_tuple = util.split_path(self.filename)
             self.set_variable('mainlang', xsl_tuple.lang)
@@ -429,10 +429,10 @@ class MetadataHandler(object):
     def write_file(self):
         """Write self.tree to self.filename."""
         try:
-            with open(self.filename, 'wb') as f:
-                f.write(etree.tostring(self.tree,
-                                       encoding="UTF-8",
-                                       xml_declaration=True))
+            with open(self.filename, 'wb') as outfile:
+                self.tree.write(outfile, encoding='utf-8',
+                                xml_declaration=True)
+                outfile.write(b'\n')
         except IOError as e:
             print('cannot write', self.filename)
             print(e)
