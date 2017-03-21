@@ -143,6 +143,13 @@ class MetadataHandler(object):
                     for p in elts
                     if p.attrib["location"].strip("'") != ""}
 
+    def make_xsl_variable(self, name):
+        elt = etree.Element(
+            '{http://www.w3.org/1999/XSL/Transform}variable', name=name)
+        self.tree.getroot().append(elt)
+
+        return elt
+
     def set_parallel_text(self, language, location):
         """Insert the name of a parallel file into the parallels element.
 
@@ -154,11 +161,8 @@ class MetadataHandler(object):
                   "location": location}
         parallels = self._get_variable_elt("parallels")
         if parallels is None:
-            parallels = etree.Element(
-                "{http://www.w3.org/1999/XSL/Transform}variable",
-                name="parallels")
-            parallels.text, parallels.tail = "\n", "\n\n"
-            self.tree.getroot().append(parallels)
+            parallels = self.make_xsl_variable('parallels')
+
         elt = parallels.find("parallel_text[@{}='{}']".format(self.lang_key,
                                                               language))
         if elt is not None:
