@@ -31,16 +31,42 @@ import shutil
 from corpustools import argparse_version, converter, corpuspath, parallelize
 
 
-def calculate_paths():
+def print_filename(corpus_path):
+    """Print interesting filenames for doing sentence alignment.
+
+    Arguments:
+        corpus_path (corpuspath.CorpusPath): filenames
+    """
+    print('\toriginal: {}\n\tmetatada: {}\n\tconverted: {}'.format(
+        corpus_path.orig,
+        corpus_path.xsl,
+        corpus_path.converted))
+
+
+def print_filenames(corpus_path1, corpus_path2):
+    """Print interesting filenames for doing sentence alignment.
+
+    Arguments:
+        corpus_path1 (corpuspath.CorpusPath): filenames for the lang1 file.
+        corpus_path2 (corpuspath.CorpusPath): filenames for the lang2 file.
+    """
+    print('\nLanguage 1 filenames:')
+    print_filename(corpus_path1)
+    print('\nLanguage 2 filenames:')
+    print_filename(corpus_path2)
+
+
+def calculate_paths(tmxhtml):
     """Calculate paths, given a file from the command line.
+
+    Arguments:
+        tmxhtml (str): path to a .tmx or a .tmx.html file
 
     Returns:
         tuple of corpuspath.CorpusPath
     """
-    args = parse_options()
-
-    path = args.tmxhtml[:-5] if args.tmxhtml.endswith('.tmx.html') else \
-        args.tmxhtml
+    path = tmxhtml[:-5] if tmxhtml.endswith('.tmx.html') else \
+        tmxhtml
     corpus_path1 = corpuspath.CorpusPath(path)
     lang2 = corpus_path1.split_on_module(path)[2].split('/')[0].split('2')[1]
     corpus_path2 = corpuspath.CorpusPath(corpus_path1.parallel(lang2))
@@ -83,7 +109,17 @@ def parse_options():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
         description='Sentence align a given file anew.')
-
+    parser.add_argument(u'--files',
+                        action=u'store_true',
+                        help=u'Show the interesting filenames '
+                        'that are needed for improving sentence '
+                        'alignment.')
+    parser.add_argument(u'--convert',
+                        action=u'store_true',
+                        help=u'Only convert the original files '
+                        'that are the source of the .tmx.html file. '
+                        'This is useful when improving the output of '
+                        'the converted files.')
     parser.add_argument('tmxhtml',
                         help="The tmx.html file to realign.")
 
@@ -93,8 +129,21 @@ def parse_options():
 
 def main():
     """Sentence align a given file anew."""
-    corpus_path1, corpus_path2 = calculate_paths()
-    convert_and_copy(corpus_path1, corpus_path2)
+    args = parse_options()
+
+    corpus_path1, corpus_path2 = calculate_paths(args.tmxhtml)
+
+    if args.files:
+        print_filenames(corpus_path1, corpus_path2)
+        raise SystemExit()
+
+    try:
+        if args.convert:
+            convert_and_copy(corpus_path1, corpus_path2)
+            print_filenames(corpus_path1, corpus_path2)
+            raise SystemExit()
+    except Exception:
+        raise SystemExit(1)
 
     parallelize.parallelise_file(
         corpus_path1.prestable_converted,
@@ -105,3 +154,4 @@ def main():
         stdout=False,
         force=True
     )
+    print_filenames(corpus_path1, corpus_path2)

@@ -94,3 +94,4 @@ v<0.17.0>, <20170314> -- Use the hfst-tokenise as the motor for sentence divisio
 v<0.17.1>, <20170316> -- Remove more cruft when converting html documents. Make the sentence divider use the nob fst when nno is specified. The sentence divider produces even more sentences to satisfy tca2.
 v<0.18.0>, <20170320> -- Add a new tool, realign. This tool reconverts and realigns the sentences of a pair of parallel documents.
 v<0.19.0>, <20170321> -- Add a new tool, update_metadata. This tool updates metadata files in a given directory with new variables and documentation from the XSL-template.xsl file.
+v<0.19.1>, <20170322> -- Improve the realign tool, add --files and --convert options. --files will only show filenames, --convert will reconvert the .xml files and show filenames.
