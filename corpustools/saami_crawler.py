@@ -499,12 +499,12 @@ class NrkSmeCrawler(Crawler):
     corpus_adder = adder.AddToCorpus(goaldir, 'sme', 'news/nrk.no')
     tags = defaultdict(str)
     invalid_links = set()
+    counter = defaultdict(int)
 
     def __init__(self):
         """Initialise the NrkSmeCrawler class."""
         super(NrkSmeCrawler, self).__init__()
         self.fetched_links = self.get_fetched_links(self.corpus_adder.goaldir)
-        self.counter = defaultdict(int)
 
     def guess_lang(self, address):
         """Guess the language of the address element.
