@@ -30,8 +30,8 @@ import re
 import sys
 from collections import defaultdict
 
-import feedparser
 import dateutil.parser
+import feedparser
 import requests
 import six
 from lxml import etree, html
