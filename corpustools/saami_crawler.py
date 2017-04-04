@@ -656,20 +656,22 @@ class NrkSmeCrawler(Crawler):
     def crawl_site(self):
         """Fetch Northern Saami pages from nrk.no."""
         self.crawl_oanehaccat()
-        self.crawl_tag('1.13205591')  # NRK Sápmi – davvisámegillii
-        self.crawl_tag('1.10892262')  # NuFal davvisámegillii
-        self.crawl_additional_tags()
+        self.crawl_existing_tags()
         self.corpus_adder.add_files_to_working_copy()
         self.report()
 
-    def crawl_additional_tags(self):
-        """Crawl all tags found in nrk.no documents."""
+    def find_nrk_files(self):
+        """Find all nrk.no files."""
         for root, _, files in os.walk(self.corpus_adder.goaldir):
             for file_ in files:
                 if file_.endswith('.html'):
-                    for additional_tag, tag_name in self.pick_tags(
-                            os.path.join(root, file_)):
-                        self.crawl_tag(additional_tag, tag_name)
+                    yield os.path.join(root, file_)
+
+    def crawl_existing_tags(self):
+        """Crawl all tags found in nrk.no documents."""
+        for nrk_file in self.find_nrk_files():
+            for additional_tag, tag_name in self.pick_tags(nrk_file):
+                self.crawl_tag(additional_tag, tag_name)
 
     def crawl_oanehaccat(self):
         """Crawl short news, provided by an rss feed.
