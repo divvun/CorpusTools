@@ -96,10 +96,27 @@ class SVN(VersionController):
         super(SVN, self).__init__()
         self.client = svnclient
 
-    def add(self, path):
-        """Add a file to the working copy."""
+    def add_path(self, path):
+        """Add a single path to the working copy.
+
+        Arguments:
+            path (str): path to a file or directory
+        """
         if self.client.info(path) is None:
             self.client.add(path)
+
+    def add(self, path):
+        """Add path to the working copy.
+
+        Arguments:
+            path (str or list of str): path may be a list of paths or a
+                single path
+        """
+        if isinstance(path, list):
+            for p in path:
+                self.add_path(p)
+        else:
+            self.add_path(p)
 
     def move(self, oldpath, newpath):
         """Move file in the working copy."""
