@@ -597,6 +597,7 @@ class NrkSmeCrawler(Crawler):
         self.crawl_tag('1.13205591')
         self.crawl_tag('1.10892262')
         self.crawl_additional_tags()
+        self.corpus_adder.add_files_to_working_copy()
         self.report()
 
     def crawl_additional_tags(self):
