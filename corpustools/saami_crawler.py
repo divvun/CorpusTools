@@ -543,28 +543,29 @@ class NrkSmeCrawler(Crawler):
             lxml.html.HtmlElement: a parsed html document.
         """
         page_links_template = (
-            'https://www.nrk.no/serum/api/render/{}?'
+            'https://www.nrk.no/serum/api/render/{tag}?'
             'size=18&perspective=BRIEF&alignment=AUTO&'
             'classes=surrogate-content&'
-            'display=false&arrangement.offset={}&'
-            'arrangement.quantity={}&'
+            'display=false&arrangement.offset={offset}&'
+            'arrangement.quantity={quantity}&'
             'arrangement.repetition=PATTERN&'
             'arrangement.view[0].perspective=BRIEF&'
             'arrangement.view[0].size=6&'
             'arrangement.view[0].alignment=LEFT&'
             'paged=SIMPLE'
         )
-        links = 10
+        quantity = 10
+        limit = 10000
 
-        for offset in range(0, 10000, links):
+        for offset in range(0, limit, quantity):
             print('.', end='')
             sys.stdout.flush()
             try:
                 result = requests.get(page_links_template.format(
-                    tag, offset, links))
+                    tag=tag, offset=offset, quantity=quantity))
             except requests.exceptions.ConnectionError:
                 util.note('Connection error when fetching {}'.format(
-                    tag, offset, links))
+                    tag, offset, quantity))
                 break
             else:
                 try:
