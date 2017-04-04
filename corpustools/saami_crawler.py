@@ -630,6 +630,9 @@ class NrkSmeCrawler(Crawler):
             for href in self.interesting_links(tag):
                 self.add_nrk_article(href)
 
+            self.counter['total'] = self.counter[tag + '_total']
+            self.counter['fetched'] = self.counter[tag + '_fetched']
+
     def add_nrk_article(self, href):
         """Copy an article to the working copy.
 
@@ -676,26 +679,14 @@ class NrkSmeCrawler(Crawler):
                 self.counter['oanehaččat_fetched'] += 1
                 self.add_nrk_article(entry['link'])
 
-    @property
-    def totals(self):
-        """The total of fetched articles
-
-        Returns:
-            tuple of int: totally fetched articles, totally searched links
-        """
-        total_fetched = 0
-        total_found = 0
-
-        for tag in self.tags:
-            total_fetched += self.counter[tag + '_fetched']
-            total_found += self.counter[tag + '_total']
-
-        return (total_fetched, total_found)
+        self.counter['total'] = self.counter['oanehaččat_total']
+        self.counter['fetched'] = self.counter['oanehaččat_fetched']
 
     def report(self):
         """Print a report on what was found."""
         print('Searched through {} tags'.format(len(self.tags)))
-        print('Fetched totally {} from {} links'.format(*self.totals))
+        print('Fetched pages {fetched} from {total} links'.format(
+            **self.counter))
         for tag in self.tags:
             if self.counter[tag + '_fetched']:
                 print(
