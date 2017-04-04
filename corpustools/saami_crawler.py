@@ -671,6 +671,7 @@ class NrkSmeCrawler(Crawler):
 
         This feed only contains Northern Sámi articles.
         """
+        util.note('Fetching articles from {}'.format('oanehaččat'))
         self.tags.add('oanehaččat')
         for entry in feedparser.parse(
                 'https://www.nrk.no/sapmi/oanehaccat.rss').entries:
