@@ -631,8 +631,8 @@ class NrkSmeCrawler(Crawler):
             for href in self.interesting_links(tag):
                 self.add_nrk_article(href)
 
-            self.counter['total'] = self.counter[tag + '_total']
-            self.counter['fetched'] = self.counter[tag + '_fetched']
+            self.counter['total'] += self.counter[tag + '_total']
+            self.counter['fetched'] += self.counter[tag + '_fetched']
 
     def add_nrk_article(self, href):
         """Copy an article to the working copy.
@@ -681,8 +681,8 @@ class NrkSmeCrawler(Crawler):
                 self.counter['oanehaččat_fetched'] += 1
                 self.add_nrk_article(entry['link'])
 
-        self.counter['total'] = self.counter['oanehaččat_total']
-        self.counter['fetched'] = self.counter['oanehaččat_fetched']
+        self.counter['total'] += self.counter['oanehaččat_total']
+        self.counter['fetched'] += self.counter['oanehaččat_fetched']
 
     def report(self):
         """Print a report on what was found."""
