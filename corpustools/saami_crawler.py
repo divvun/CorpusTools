@@ -485,7 +485,7 @@ class NrkSmeCrawler(Crawler):
         goaldir (str): the directory where the working copy of the corpus is
         corpus_adder (adder.AddToCorpus): the working horse, adds urls to
             the corpus
-        tags (set of str): numerical tags that point to a specific topic
+        tags (dict of str to str): numerical tags that point to a specific topic
             on nrk.no
         fetched_links (set of str): links to articles that have already been
             fetched
@@ -496,7 +496,8 @@ class NrkSmeCrawler(Crawler):
     language_guesser = text_cat.Classifier(None)
     goaldir = six.text_type(os.getenv('GTBOUND'))
     corpus_adder = adder.AddToCorpus(goaldir, 'sme', 'news/nrk.no')
-    tags = set()
+    tags = defaultdict(str)
+    invalid_links = set()
 
     def __init__(self):
         """Initialise the NrkSmeCrawler class."""
@@ -524,8 +525,7 @@ class NrkSmeCrawler(Crawler):
 
         return self.language_guesser.classify(text)
 
-    @staticmethod
-    def get_tag_page_trees(tag):
+    def get_tag_page_trees(self, tag):
         """Fetch topic pages containing links to articles.
 
         By using the page_links_template, one can fetch `quantity` number of
@@ -571,7 +571,8 @@ class NrkSmeCrawler(Crawler):
                 try:
                     yield html.document_fromstring(result.content)
                 except etree.ParserError:
-                    util.note('No more articles in tag: {}'.format(tag))
+                    util.note('No more articles in tag: «{}»'.format(
+                        self.tags[tag]))
                     break
 
     def interesting_links(self, tag):
@@ -607,8 +608,8 @@ class NrkSmeCrawler(Crawler):
             path (str): path to an nrk.no article
 
         Yields:
-            str: a numerical tag, used internally by nrk.no to point to a
-                specific topic
+            tuple of str: a numerical tag, used internally by nrk.no to point
+                to a specific topic and a short description of the topic.
         """
         article = html.parse(path)
 
@@ -616,17 +617,17 @@ class NrkSmeCrawler(Crawler):
                 '//a[@class="universe widget reference article-universe-link '
                 'universe-teaser skin-border skin-text lp_universe_link"]'):
             href = address.get('href')
-            yield href[href.rfind('-') + 1:]
+            yield href[href.rfind('-') + 1:], address[0].tail.strip()
 
-    def crawl_tag(self, tag):
+    def crawl_tag(self, tag, tagname):
         """Look for articles in nrk.no tags.
 
         Arguments:
             tag (str): an internal nrk.no tag
         """
         if tag not in self.tags:
-            util.note('Fetching articles from {}'.format(tag))
-            self.tags.add(tag)
+            util.note('Fetching articles from «{}»'.format(tagname))
+            self.tags[tag] = tagname
             for href in self.interesting_links(tag):
                 self.add_nrk_article(href)
 
@@ -662,9 +663,9 @@ class NrkSmeCrawler(Crawler):
         for root, _, files in os.walk(self.corpus_adder.goaldir):
             for file_ in files:
                 if file_.endswith('.html'):
-                    for additional_tag in self.pick_tags(
+                    for additional_tag, tag_name in self.pick_tags(
                             os.path.join(root, file_)):
-                        self.crawl_tag(additional_tag)
+                        self.crawl_tag(additional_tag, tag_name)
 
     def crawl_oanehaccat(self):
         """Crawl short news, provided by an rss feed.
@@ -672,7 +673,7 @@ class NrkSmeCrawler(Crawler):
         This feed only contains Northern Sámi articles.
         """
         util.note('Fetching articles from {}'.format('oanehaččat'))
-        self.tags.add('oanehaččat')
+        self.tags['oanehaččat'] = 'oanehaččat'
         for entry in feedparser.parse(
                 'https://www.nrk.no/sapmi/oanehaccat.rss').entries:
             self.counter['oanehaččat_total'] += 1
@@ -692,7 +693,7 @@ class NrkSmeCrawler(Crawler):
             if self.counter[tag + '_fetched']:
                 print(
                     'Fetched {} articles from category {} from nrk.no'.format(
-                        self.counter[tag + '_fetched'], tag))
+                        self.counter[tag + '_fetched'], self.tags[tag]))
 
     @staticmethod
     def add_metadata(path):
