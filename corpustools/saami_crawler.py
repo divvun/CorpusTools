@@ -477,7 +477,22 @@ class SamediggiNoCrawler(Crawler):
 
 
 class NrkSmeCrawler(Crawler):
-    """Collect Northern Saami pages from nrk.no."""
+    """Collect Northern Saami pages from nrk.no.
+
+    Attributes:
+        language_guesser (text_cat.Classifier): guess language from a given
+            string
+        goaldir (str): the directory where the working copy of the corpus is
+        corpus_adder (adder.AddToCorpus): the working horse, adds urls to
+            the corpus
+        tags (set of str): numerical tags that point to a specific topic
+            on nrk.no
+        fetched_links (set of str): links to articles that have already been
+            fetched
+        counter (collections.defaultdict of int): collect interesting
+            statistics, such number of links visited and fetched links within
+            a tag
+    """
     language_guesser = text_cat.Classifier(None)
     goaldir = six.text_type(os.getenv('GTBOUND'))
     corpus_adder = adder.AddToCorpus(goaldir, 'sme', 'news/nrk.no')
@@ -511,6 +526,22 @@ class NrkSmeCrawler(Crawler):
 
     @staticmethod
     def get_tag_page_trees(tag):
+        """Fetch topic pages containing links to articles.
+
+        By using the page_links_template, one can fetch `quantity` number of
+        links to articles within `tag` at a time.
+
+        Attributes:
+            page_links_template: a url to a specific topic in nrk.no.
+            quantity (int): the number of links to fetch a time
+            limit (int): max number of links that one tries to fetch
+
+        Arguments:
+            tag (str): a numerical tag, pointing to a specific topic on nrk.no
+
+        Yields:
+            lxml.html.HtmlElement: a parsed html document.
+        """
         page_links_template = (
             'https://www.nrk.no/serum/api/render/{}?'
             'size=18&perspective=BRIEF&alignment=AUTO&'
@@ -543,6 +574,14 @@ class NrkSmeCrawler(Crawler):
                     break
 
     def interesting_links(self, tag):
+        """Find interesting pages inside a topic.
+
+        Arguments:
+            tag (str): a numerical tag pointing to a specific topic.
+
+        Yields:
+            str: a url to an nrk.no article
+        """
         for tree in self.get_tag_page_trees(tag):
             for address in tree.xpath(
                     '//a[@class="autonomous lp_plug"]'):
@@ -559,6 +598,17 @@ class NrkSmeCrawler(Crawler):
 
     @staticmethod
     def pick_tags(path):
+        """Find tags in an nrk.no article.
+
+        Tags potientially contain more Northern Sámi articles.
+
+        Arguments:
+            path (str): path to an nrk.no article
+
+        Yields:
+            str: a numerical tag, used internally by nrk.no to point to a
+                specific topic
+        """
         article = html.parse(path)
 
         for address in article.xpath('//a[@class="universe widget reference article-universe-link universe-teaser skin-border skin-text lp_universe_link"]'):
@@ -566,6 +616,11 @@ class NrkSmeCrawler(Crawler):
             yield href[href.rfind('-') + 1:]
 
     def crawl_tag(self, tag):
+        """Look for articles in nrk.no tags.
+
+        Arguments:
+            tag (str): an internal nrk.no tag
+        """
         if tag not in self.tags:
             util.note('Fetching articles from {}'.format(tag))
             self.tags.add(tag)
@@ -573,6 +628,11 @@ class NrkSmeCrawler(Crawler):
                 self.add_nrk_article(href)
 
     def add_nrk_article(self, href):
+        """Copy an article to the working copy.
+
+        Arguments:
+            href (str): a url to an nrk article.
+        """
         self.fetched_links.add(href)
         try:
             path = self.corpus_adder.copy_url_to_corpus(href)
@@ -583,24 +643,16 @@ class NrkSmeCrawler(Crawler):
             util.note(error)
 
     def crawl_site(self):
-        """Fetch Northern Saami pages from nrk.no.
-
-        The attributes
-
-        arrangement.offset=0
-        arrangement.quantity=200
-
-        page_links URL will see to that the 200 most recent Northern Saami
-        articles published on nrk.no/sapmi are fetched.
-        """
+        """Fetch Northern Saami pages from nrk.no."""
         self.crawl_oanehaccat()
-        self.crawl_tag('1.13205591')
-        self.crawl_tag('1.10892262')
+        self.crawl_tag('1.13205591')  # NRK Sápmi – davvisámegillii
+        self.crawl_tag('1.10892262')  # NuFal davvisámegillii
         self.crawl_additional_tags()
         self.corpus_adder.add_files_to_working_copy()
         self.report()
 
     def crawl_additional_tags(self):
+        """Crawl all tags found in nrk.no documents."""
         for root, _, files in os.walk(self.corpus_adder.goaldir):
             for file_ in files:
                 if file_.endswith('.html'):
@@ -609,6 +661,10 @@ class NrkSmeCrawler(Crawler):
                         self.crawl_tag(additional_tag)
 
     def crawl_oanehaccat(self):
+        """Crawl short news, provided by an rss feed.
+
+        This feed only contains Northern Sámi articles.
+        """
         self.tags.add('oanehaččat')
         for entry in feedparser.parse(
                 'https://www.nrk.no/sapmi/oanehaccat.rss').entries:
