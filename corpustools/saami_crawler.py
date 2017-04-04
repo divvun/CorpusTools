@@ -612,7 +612,9 @@ class NrkSmeCrawler(Crawler):
         """
         article = html.parse(path)
 
-        for address in article.xpath('//a[@class="universe widget reference article-universe-link universe-teaser skin-border skin-text lp_universe_link"]'):
+        for address in article.xpath(
+                '//a[@class="universe widget reference article-universe-link '
+                'universe-teaser skin-border skin-text lp_universe_link"]'):
             href = address.get('href')
             yield href[href.rfind('-') + 1:]
 
