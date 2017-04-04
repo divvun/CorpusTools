@@ -674,17 +674,31 @@ class NrkSmeCrawler(Crawler):
                 self.counter['oanehaččat_fetched'] += 1
                 self.add_nrk_article(entry['link'])
 
-    def report(self):
+    @property
+    def totals(self):
+        """The total of fetched articles
+
+        Returns:
+            tuple of int: totally fetched articles, totally searched links
+        """
         total_fetched = 0
         total_found = 0
+
         for tag in self.tags:
             total_fetched += self.counter[tag + '_fetched']
             total_found += self.counter[tag + '_total']
-            print('Fetched {} articles from category {} from nrk.no'.format(
-                    self.counter[tag + '_fetched'], tag))
 
-        print('Fetched totally {} from {} links'.format(
-            total_fetched, total_found))
+        return (total_fetched, total_found)
+
+    def report(self):
+        """Print a report on what was found."""
+        print('Searched through {} tags'.format(len(self.tags)))
+        print('Fetched totally {} from {} links'.format(*self.totals))
+        for tag in self.tags:
+            if self.counter[tag + '_fetched']:
+                print(
+                    'Fetched {} articles from category {} from nrk.no'.format(
+                        self.counter[tag + '_fetched'], tag))
 
     @staticmethod
     def add_metadata(path):
