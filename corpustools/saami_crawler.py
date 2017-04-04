@@ -574,8 +574,13 @@ class NrkSmeCrawler(Crawler):
 
     def add_nrk_article(self, href):
         self.fetched_links.add(href)
-        path = self.corpus_adder.copy_url_to_corpus(href)
-        self.add_metadata(path)
+        try:
+            path = self.corpus_adder.copy_url_to_corpus(href)
+            self.add_metadata(path)
+        except (requests.exceptions.TooManyRedirects,
+                adder.AdderError) as error:
+            util.note(href)
+            util.note(error)
 
     def crawl_site(self):
         """Fetch Northern Saami pages from nrk.no.
