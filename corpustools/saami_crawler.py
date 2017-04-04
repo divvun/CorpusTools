@@ -489,6 +489,7 @@ class NrkSmeCrawler(Crawler):
             on nrk.no
         fetched_links (set of str): links to articles that have already been
             fetched
+        invalid_links (set of str): all links containing 'gammelsystem'
         counter (collections.defaultdict of int): collect interesting
             statistics, such number of links visited and fetched links within
             a tag
@@ -591,7 +592,7 @@ class NrkSmeCrawler(Crawler):
                 href = address.get('href')
 
                 if 'systemtest' in href:
-                    util.print_frame('\n{}\n'.format(href))
+                    self.invalid_links.add(href)
                 if ('systemtest' not in href and
                         href not in self.fetched_links and
                         self.guess_lang(address) == 'sme'):
@@ -686,6 +687,10 @@ class NrkSmeCrawler(Crawler):
 
     def report(self):
         """Print a report on what was found."""
+        print('{} invalid links.'.format(len(self.invalid_links)))
+        for invalid_link in self.invalid_links:
+            print(invalid_link)
+        print()
         print('Searched through {} tags'.format(len(self.tags)))
         print('Fetched pages {fetched} from {total} links'.format(
             **self.counter))
