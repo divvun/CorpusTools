@@ -692,8 +692,7 @@ class NrkSmeCrawler(Crawler):
             print(invalid_link)
         print()
         print('Searched through {} tags'.format(len(self.tags)))
-        print('Fetched pages {fetched} from {total} links'.format(
-            **self.counter))
+        print('Fetched {fetched} pages'.format(**self.counter))
         for tag in self.tags:
             if self.counter[tag + '_fetched']:
                 print(
