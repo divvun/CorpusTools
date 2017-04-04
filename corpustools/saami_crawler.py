@@ -487,12 +487,12 @@ class NrkSmeCrawler(Crawler):
             the corpus
         tags (dict of str to str): numerical tags that point to a specific topic
             on nrk.no
-        fetched_links (set of str): links to articles that have already been
-            fetched
         invalid_links (set of str): all links containing 'gammelsystem'
         counter (collections.defaultdict of int): collect interesting
             statistics, such number of links visited and fetched links within
             a tag
+        fetched_links (set of str): links to articles that have already been
+            fetched
     """
     language_guesser = text_cat.Classifier(None)
     goaldir = six.text_type(os.getenv('GTBOUND'))
@@ -505,6 +505,9 @@ class NrkSmeCrawler(Crawler):
         """Initialise the NrkSmeCrawler class."""
         super(NrkSmeCrawler, self).__init__()
         self.fetched_links = self.get_fetched_links(self.corpus_adder.goaldir)
+        self.fetched_links.add(
+            'https://www.nrk.no/sapmi/utgir-ny-kristen-cd-med-joik-og-sang'
+            '-1.13050654')
 
     def guess_lang(self, address):
         """Guess the language of the address element.
