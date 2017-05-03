@@ -3968,12 +3968,13 @@ class TestPDFTextExtractor(XMLTester):
         listtemplate = ('<text top="961" left="152" width="334" height="26" '
                         'font="0">{}</text>')
         listchars = [
-            ' ',  # U+F0B7
-            ' ',  # U+F071
+            '&#61623; ',  # U+F0B7: <private use>
+            '&#61553; ',  # U+F071: <private use>
             '•\t',  # U+2022: BULLET
             '– ',  # U+2013: EN DASH
-            # U+002D: HYPHEN-MINUS
-            '- ',
+            '- ',  # U+002D: HYPHEN-MINUS
+            u'■ ',  # U+25A0: BLACK SQUARE
+            ' &#61692;test',  # U+F0FC: <private use>
         ]
 
         paragraphs = []
@@ -3995,6 +3996,8 @@ class TestPDFTextExtractor(XMLTester):
                                 '<p type="listitem">&#8226;\t</p>'
                                 '<p type="listitem">&#8211; </p>'
                                 '<p type="listitem">- </p>'
+                                '<p type="listitem">■ </p>'
+                                '<p type="listitem"> &#61692;test</p>'
                                 '</body>'))
 
 
