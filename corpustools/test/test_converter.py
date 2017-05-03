@@ -3377,6 +3377,7 @@ class TestPDFTextElement(XMLTester):
 
 
 class TestPDFParagraph(XMLTester):
+    """Test the PDFParagraph class."""
 
     def setUp(self):
         self.textelements = [
@@ -4000,7 +4001,7 @@ class TestPDFTextExtractor(XMLTester):
             '– ',  # U+2013: EN DASH
             '- ',  # U+002D: HYPHEN-MINUS
             u'■ ',  # U+25A0: BLACK SQUARE
-            ' &#61692;test',  # U+F0FC: <private use>
+            ' &#61692; ',  # U+F0FC: <private use>
         ]
 
         paragraphs = []
@@ -4023,7 +4024,39 @@ class TestPDFTextExtractor(XMLTester):
                                 '<p type="listitem">&#8211; </p>'
                                 '<p type="listitem">- </p>'
                                 '<p type="listitem">■ </p>'
-                                '<p type="listitem"> &#61692;test</p>'
+                                '<p type="listitem"> &#61692; </p>'
+                                '</body>'))
+
+    def test_add_space_list(self):
+        listtemplate = ('<text top="961" left="152" width="334" height="26" '
+                        'font="0">{}</text>')
+        alternatives = [
+            '•test',
+            '<i>•test</i>',
+            '<b><i>•test</i></b>',
+        ]
+
+        paragraphs = []
+        for alternative in alternatives:
+            pp = converter.PDFParagraph(1.5)
+            pp.append_textelement(
+                converter.PDFTextElement(etree.fromstring(
+                    listtemplate.format(alternative))))
+            paragraphs.append(pp)
+
+        p2x = converter.PDFTextExtractor()
+        p2x.extract_text_from_page(paragraphs)
+
+        self.assertXmlEqual(p2x.body,
+                            etree.fromstring(
+                                '<body>'
+                                '<p type="listitem">• test</p>'
+                                '<p type="listitem">'
+                                '   <em type="italic">• test</em>'
+                                '</p>'
+                                '<p type="listitem">'
+                                '   <em type="bold">• test</em>'
+                                '</p>'
                                 '</body>'))
 
 

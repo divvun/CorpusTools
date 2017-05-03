@@ -884,7 +884,7 @@ class PDFParagraph(object):
         u'■',  # U+25A0: BLACK SQUARE
         six.unichr(61692),  # U+F0FC: <private use>
     ]
-    LIST_RE = re.compile(u'^\s*[{}].'.format(u''.join(LIST_CHARS)))
+    LIST_RE = re.compile(u'^(\s*[{}])(.+)'.format(u''.join(LIST_CHARS)))
 
     def __init__(self, linespacing):
         """Initialise the PDFParagraph class."""
@@ -893,14 +893,31 @@ class PDFParagraph(object):
         self.is_listitem = False
         self.linespacing = linespacing
 
+    def add_space_in_list(self, textelt):
+        """Add space after list character.
+
+        Arguments:
+            textelement (etree): a pdf text element
+        """
+        if textelt.text is not None:
+            hits2 = self.LIST_RE.search(textelt.text)
+            if hits2:
+                textelt.text = ' '.join([hits2.group(1), hits2.group(2)])
+            else:
+                self.add_space_in_list(textelt[0])
+        else:
+            self.add_space_in_list(textelt[0])
+
     def append_textelement(self, textelement):
         """Append a PDFTextElement to this paragraph.
 
         Arguments:
             textelement: a PDFTextElement
         """
-        if (textelement.plain_text and
-                self.LIST_RE.search(textelement.plain_text)):
+        hits = self.LIST_RE.search(textelement.plain_text)
+        if hits:
+            if re.match(u'^\S', hits.group(2)):
+                self.add_space_in_list(textelement.t)
             self.is_listitem = True
         if self.textelements and textelement.is_right_of(self.textelements[-1]):
             self.boundingboxes.append(BoundingBox())
