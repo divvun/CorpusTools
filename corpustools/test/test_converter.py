@@ -3283,8 +3283,9 @@ class TestXslMaker(XMLTester):
     def test_get_xsl(self):
 
         xslmaker = converter.XslMaker(
-            etree.parse(os.path.join(here,
-                         'converter_data/samediggi-article-48.html.xsl')))
+            etree.parse(
+                os.path.join(here,
+                             'converter_data/samediggi-article-48.html.xsl')))
         got = xslmaker.xsl
 
         # The import href is different for each user testing, so just
