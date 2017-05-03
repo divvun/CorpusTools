@@ -3230,6 +3230,7 @@ class DocumentFixer(object):
             (u'\u0027', u'\u02BC'),
             (u'\u2032', u'\u02B9'),
             (u'\u00B4', u'\u02B9'),
+            (u'\u0301', u'\u02B9'),
         ]
 
         for replacement_pair in replacement_pairs:

@@ -3252,6 +3252,31 @@ LOGO: Smi kulturfestivala 1998
 
         self.assertXmlEqual(got, want)
 
+    def test_fix_sms5(self):
+        r"""\u0301 ( ́)  should be replaced by \u02B9 (ʹ)"""
+        document_fixer = converter.DocumentFixer(etree.fromstring(
+            u'<document xml:lang="sms">'
+            u'  <header/>'
+            u'  <body>'
+            u'     <p>'
+            u'       Materialbaaŋk čuä́jtumuš'
+            u'     </p>'
+            u'  </body>'
+            u'</document>'))
+        document_fixer.fix_body_encoding('sms')
+        got = document_fixer.get_etree()
+        want = etree.fromstring(
+            u'<document xml:lang="sms">'
+            u'  <header/>'
+            u'  <body>'
+            u'     <p>'
+            u'       Materialbaaŋk čuäʹjtumuš'
+            u'     </p>'
+            u'  </body>'
+            u'</document>')
+
+        self.assertXmlEqual(got, want)
+
 
 class TestXslMaker(XMLTester):
 
