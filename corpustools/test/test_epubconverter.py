@@ -22,14 +22,36 @@
 """Test conversion of epub files."""
 
 import os
+from shutil import copyfile
 
 from lxml import etree
-from lxml.html import html5parser
-from corpustools.epubconverter import EpubConverter
+from testfixtures import TempDirectory
+
+from corpustools import epubconverter, xslsetter
 from corpustools.test.xmltester import XMLTester
-from corpustools.test.test_htmlcontentconverter import clean_namespaces
 
 HERE = os.path.dirname(__file__)
+
+
+def set_data(directory, testdoc, skip_elements):
+    """Set needed testdata.
+
+    Arguments:
+        directory (testfixtures.TempDirectory): path to the directory
+        testdoc (str): path to the test document
+        skip_elements (str): the range of elements to skip
+
+    Returns:
+        str: path to the test document in the temporary test directory
+    """
+    temp_epub = os.path.join(
+        directory.path, os.path.basename(testdoc))
+    copyfile(testdoc, temp_epub)
+    metadata = xslsetter.MetadataHandler(temp_epub + '.xsl', create=True)
+    metadata.set_variable('skip_elements', skip_elements)
+    metadata.write_file()
+
+    return temp_epub
 
 
 class TestEpubConverter(XMLTester):
@@ -37,45 +59,12 @@ class TestEpubConverter(XMLTester):
 
     def setUp(self):
         """Setup epub content."""
-        self.testdoc = EpubConverter(
-            os.path.join(
-                HERE, 'converter_data/fakecorpus/orig/sme/riddu/test.epub'))
-
-    def test_remove_range(self):
-        """Test the remove_range function."""
-        content = etree.fromstring(self.testdoc.content)
-
-        path1 = './/html:body/html:div[1]/html:h2[1]'
-        path2 = './/html:body/html:div[3]/html:div[1]/html:h3[1]'
-
-        self.testdoc.remove_range(path1, path2, content)
-        got = content
-        want = html5parser.document_fromstring(u"""
-            <html>
-                <head/>
-                <body>
-                    <div">
-                        <div>
-                            <h1>1 Bajilčála</h1>
-                            <p>1asdf</p>
-                        </div>
-                    </div>
-                    <div">
-                        <div>
-                            <h3 id="sigil_toc_id_5">3.1.1 Bajilčála</h3>
-                            <div>8asdf</div>
-                        </div>
-                    </div>
-                </body>
-            </html>
-        """)
-
-        clean_namespaces([got, want])
-        self.assertXmlEqual(got, want)
+        self.testdoc = os.path.join(
+            HERE, 'converter_data/fakecorpus/orig/sme/riddu/test.epub')
 
     def test_convert2intermediate_1(self):
         """Test without skip_elements."""
-        got = self.testdoc.convert2intermediate()
+        got = epubconverter.convert2intermediate(self.testdoc)
         want = ("""
             <document>
                 <body>
@@ -103,24 +92,25 @@ class TestEpubConverter(XMLTester):
 
     def test_convert2intermediate_2(self):
         """Test with skip_elements."""
-        self.testdoc.metadata.set_variable(
-            'skip_elements',
-            './/html:body/html:div[1]/html:h2[1];'
-            './/html:body/html:div[3]/html:div[1]/html:h3[1]')
+        with TempDirectory() as directory:
+            temp_epub = set_data(
+                directory,
+                self.testdoc,
+                './/html:body/html:div[1]/html:h2[1];'
+                './/html:body/html:div[3]/html:div[1]/html:h3[1]')
+            got = epubconverter.convert2intermediate(temp_epub)
+            want = ("""
+                <document>
+                    <body>
+                        <p type="title">1 Bajilčála</p>
+                        <p>1asdf</p>
+                        <p type="title">3.1.1 Bajilčála</p>
+                        <p>8asdf</p>
+                    </body>
+                </document>
+            """)
 
-        got = self.testdoc.convert2intermediate()
-        want = ("""
-            <document>
-                <body>
-                    <p type="title">1 Bajilčála</p>
-                    <p>1asdf</p>
-                    <p type="title">3.1.1 Bajilčála</p>
-                    <p>8asdf</p>
-                </body>
-            </document>
-        """)
-
-        self.assertXmlEqual(got, etree.fromstring(want))
+            self.assertXmlEqual(got, etree.fromstring(want))
 
 
 class TestEpubConverter1(XMLTester):
@@ -128,46 +118,47 @@ class TestEpubConverter1(XMLTester):
 
     def setUp(self):
         """Setup epub content."""
-        self.testdoc = EpubConverter(
-            os.path.join(
-                HERE, 'converter_data/fakecorpus/orig/sme/riddu/test2.epub'))
+        self.testdoc = os.path.join(
+            HERE, 'converter_data/fakecorpus/orig/sme/riddu/test2.epub')
 
     def test_convert2intermediate(self):
         """Range of same depth with the same name in the next to last level."""
-        self.testdoc.metadata.set_variable(
-            'skip_elements',
-            './/body/div[1]/div[1]/p[1];.//body/div[2]/div[1]/p[4]')
+        with TempDirectory() as directory:
+            temp_epub = set_data(
+                directory,
+                self.testdoc,
+                './/body/div[1]/div[1]/p[1];.//body/div[2]/div[1]/p[4]')
+            got = epubconverter.convert2intermediate(temp_epub)
+            want = ("""
+                <document>
+                    <body>
+                        <p>igjen går hesten</p>
+                        <p>baklengs inni framtida</p>
+                    </body>
+                </document>
+            """)
 
-        got = self.testdoc.convert2intermediate()
-        want = ("""
-            <document>
-                <body>
-                    <p>igjen går hesten</p>
-                    <p>baklengs inni framtida</p>
-                </body>
-            </document>
-        """)
-
-        self.assertXmlEqual(got, etree.fromstring(want))
+            self.assertXmlEqual(got, etree.fromstring(want))
 
     def test_convert2intermediate1(self):
         """Range with same parents."""
-        self.testdoc.metadata.set_variable(
-            'skip_elements',
-            './/body/div[2]/div[1]/p[1];.//body/div[2]/div[1]/p[4]')
+        with TempDirectory() as directory:
+            temp_epub = set_data(
+                directory,
+                self.testdoc,
+                './/body/div[2]/div[1]/p[1];.//body/div[2]/div[1]/p[4]')
+            got = epubconverter.convert2intermediate(temp_epub)
+            want = ("""
+                <document>
+                    <body>
+                        <p>alle gir gass</p>
+                        <p>men ikke</p>
+                        <p>alle</p>
+                        <p>har tass</p>
+                        <p>igjen går hesten</p>
+                        <p>baklengs inni framtida</p>
+                    </body>
+                </document>
+            """)
 
-        got = self.testdoc.convert2intermediate()
-        want = ("""
-            <document>
-                <body>
-                    <p>alle gir gass</p>
-                    <p>men ikke</p>
-                    <p>alle</p>
-                    <p>har tass</p>
-                    <p>igjen går hesten</p>
-                    <p>baklengs inni framtida</p>
-                </body>
-            </document>
-        """)
-
-        self.assertXmlEqual(got, etree.fromstring(want))
+            self.assertXmlEqual(got, etree.fromstring(want))
