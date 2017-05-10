@@ -502,19 +502,6 @@ class AvvirConverter(Converter):
         self.intermediate = document
 
 
-class SVGConverter(Converter):
-    """Convert SVG files to the Giella xml format."""
-
-    def convert2intermediate(self):
-        """Transform svg to an intermediate xml document."""
-        svgXsltRoot = etree.parse(os.path.join(here, 'xslt/svg2corpus.xsl'))
-        transform = etree.XSLT(svgXsltRoot)
-        doc = etree.parse(self.names.orig)
-        intermediate = transform(doc)
-
-        return intermediate.getroot()
-
-
 class PlaintextConverter(Converter):
     """Convert plain text files to the Giella xml format."""
 

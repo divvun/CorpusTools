@@ -14,7 +14,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2014-2017 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2014-2017 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
@@ -944,23 +945,6 @@ class TestAvvirConverter(XMLTester):
         self.avvir.convert_story()
         self.avvir.convert_article()
         self.assertXmlEqual(self.avvir.intermediate, want)
-
-
-class TestSVGConverter(XMLTester):
-
-    def setUp(self):
-        self.svg = converter.SVGConverter(
-            os.path.join(here,
-                         'converter_data/fakecorpus/orig/sme/riddu/'
-                         'Riddu_Riddu_avis_TXT.200923.svg'))
-
-    def test_convert2intermediate(self):
-        got = self.svg.convert2intermediate()
-        want = etree.parse(
-            os.path.join(here,
-                         'converter_data/Riddu_Riddu_avis_TXT.200923.svg.xml'))
-
-        self.assertXmlEqual(got, want)
 
 
 class TestPlaintextConverter(XMLTester):
