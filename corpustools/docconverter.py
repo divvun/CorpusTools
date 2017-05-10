@@ -189,7 +189,7 @@ def extract_text(filename, command):
         with open(filename + '.log', 'w') as logfile:
             print('stdout\n{}\n'.format(runner.stdout), file=logfile)
             print('stderr\n{}\n'.format(runner.stderr), file=logfile)
-            raise DocError(
+            raise util.ConversionError(
                 '{} failed. More info in the log file: {}'.format(
                     command[0], filename + '.log'))
 
