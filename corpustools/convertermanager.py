@@ -68,71 +68,12 @@ class ConverterManager(object):
             orig_file: string containg the path to the original file.
         """
         try:
-            conv = self.converter(orig_file)
+            conv = converter.Converter(orig_file)
             conv.write_complete(self.LANGUAGEGUESSER)
         except (converter.ConversionError, ValueError) as error:
             LOGGER.warn('Could not convert %s\n%s',
                         orig_file,
                         six.text_type(error))
-
-    def converter(self, orig_file):
-        """Return correct converter class based on the orig file name.
-
-        Arguments:
-            orig_file: path to the original file.
-        Returns:
-            A class inherited from the Converter class.
-        """
-        if 'avvir_xml' in orig_file:
-            return converter.AvvirConverter(
-                orig_file, write_intermediate=self.write_intermediate)
-
-        elif orig_file.endswith('.txt'):
-            return converter.PlaintextConverter(
-                orig_file, write_intermediate=self.write_intermediate)
-
-        elif orig_file.endswith('.pdf'):
-            return converter.PDF2XMLConverter(
-                orig_file, write_intermediate=self.write_intermediate)
-
-        elif orig_file.endswith('.svg'):
-            return converter.SVGConverter(
-                orig_file, write_intermediate=self.write_intermediate)
-
-        elif ('.htm' in orig_file or '.php' in orig_file or
-              '.xhtm' in orig_file):
-            return converter.HTMLConverter(
-                orig_file, write_intermediate=self.write_intermediate)
-
-        elif orig_file.endswith('.doc') or orig_file.endswith('.DOC'):
-            return converter.DocConverter(
-                orig_file, write_intermediate=self.write_intermediate)
-
-        elif orig_file.endswith('.odt'):
-            return converter.OdfConverter(
-                orig_file, write_intermediate=self.write_intermediate)
-
-        elif orig_file.endswith('.docx'):
-            return converter.DocxConverter(
-                orig_file, write_intermediate=self.write_intermediate)
-
-        elif orig_file.endswith('.epub'):
-            return converter.EpubConverter(
-                orig_file, write_intermediate=self.write_intermediate)
-
-        elif '.rtf' in orig_file:
-            return converter.RTFConverter(
-                orig_file, write_intermediate=self.write_intermediate)
-
-        elif orig_file.endswith('.bible.xml'):
-            return converter.BiblexmlConverter(
-                orig_file, write_intermediate=self.write_intermediate)
-
-        else:
-            raise converter.ConversionError(
-                "Unknown file extension, not able to convert {} "
-                "\nHint: you may just have to rename the file".format(
-                    orig_file))
 
     def convert_in_parallel(self):
         """Convert files using the multiprocessing module."""
