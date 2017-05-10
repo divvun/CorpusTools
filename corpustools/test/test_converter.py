@@ -325,23 +325,6 @@ class TestConverter(XMLTester):
         self.assertXmlEqual(got, etree.fromstring(want_string))
 
 
-class TestDocConverter(XMLTester):
-
-    def setUp(self):
-        self.testdoc = converter.DocConverter(
-            os.path.join(
-                here, 'converter_data/fakecorpus/orig/sme/riddu/doc-test.doc'),
-            'bogus')
-
-    def test_convert2intermediate(self):
-        got = self.testdoc.convert2intermediate()
-        want = etree.parse(
-            os.path.join(here,
-                         'converter_data/doc-test.xml'))
-
-        self.assertXmlEqual(got, want)
-
-
 class TestEpubConverter(XMLTester):
     """Test the epub converter."""
 
