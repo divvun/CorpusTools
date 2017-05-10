@@ -23,16 +23,11 @@
 import six
 from odf.odf2xhtml import ODF2XHTML
 
+from corpustools import util
 from corpustools.htmlconverter import xhtml2intermediate, convert2xhtml
 
 
-class ODFError(Exception):
-    """Use this when errors occur in this module."""
-
-    pass
-
-
-def odf_to_unicodehtml(self):
+def odf_to_unicodehtml(filename):
     """Convert the content of an odf file to xhtml.
 
     Returns:
@@ -42,9 +37,9 @@ def odf_to_unicodehtml(self):
     embedable = True
     odhandler = ODF2XHTML(generatecss, embedable)
     try:
-        return odhandler.odf2xhtml(six.text_type(self.orig))
+        return odhandler.odf2xhtml(six.text_type(filename))
     except TypeError as error:
-        raise ODFError('Error: {}'.format(error))
+        raise util.ConversionError('Error: {}'.format(error))
 
 
 def convert2intermediate(filename):
