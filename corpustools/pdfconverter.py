@@ -305,8 +305,13 @@ class PDFParagraph(object):
         """
         hits = self.LIST_RE.search(textelement.plain_text)
         if hits:
-            if re.match(u'^\S', hits.group(2)):
-                self.add_space_in_list(textelement.t)
+            # if re.match(u'^\S', hits.group(2)):
+            #     try:
+            #         self.add_space_in_list(textelement.t)
+            #     except IndexError as error:
+            #         util.print_frame(etree.tostring(textelement.t,
+            #                          encoding='unicode'))
+
             self.is_listitem = True
         if self.textelements and textelement.is_right_of(self.textelements[-1]):
             self.boundingboxes.append(BoundingBox())
