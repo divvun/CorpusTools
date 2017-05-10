@@ -48,7 +48,7 @@ def doc_to_unicodehtml(filename):
                '-']
     try:
         return extract_text(filename, command).decode('utf8')
-    except DocError:
+    except UnicodeDecodeError:
         return extract_text(filename, command).decode('windows-1252')
 
 
