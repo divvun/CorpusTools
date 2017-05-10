@@ -96,3 +96,4 @@ v<0.18.0>, <20170320> -- Add a new tool, realign. This tool reconverts and reali
 v<0.19.0>, <20170321> -- Add a new tool, update_metadata. This tool updates metadata files in a given directory with new variables and documentation from the XSL-template.xsl file.
 v<0.19.1>, <20170322> -- Improve the realign tool, add --files and --convert options. --files will only show filenames, --convert will reconvert the .xml files and show filenames.
 v<0.19.2>, <20170503> -- Improve saami_crawler.py, handle new list character in pdf conversion, add space in listelements when needed when doing pdf conversion, add new character to sms conversion
+v<0.19.2>, <20170510> -- Fix a bug in versioncontrol.py which affects move_corpus_file

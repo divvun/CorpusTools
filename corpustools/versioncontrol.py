@@ -116,7 +116,7 @@ class SVN(VersionController):
             for p in path:
                 self.add_path(p)
         else:
-            self.add_path(p)
+            self.add_path(path)
 
     def move(self, oldpath, newpath):
         """Move file in the working copy."""
