@@ -23,36 +23,63 @@
 
 from __future__ import absolute_import, print_function
 
-import argparse
 import codecs
-import collections
 import distutils.dep_util
 import distutils.spawn
-import io
 import logging
-import multiprocessing
 import os
 import re
-import sys
 from copy import deepcopy
 
+from lxml import etree
 import six
-from lxml import etree, html
-from lxml.html import clean, html5parser
-from corpustools import (argparse_version, ccat, corpuspath, decode,
-                         errormarkup, text_cat, util, xslsetter)
+
+from corpustools import (avvirconverter, biblexmlconverter,
+                         ccat, corpuspath, decode, docconverter, docxconverter,
+                         epubconverter, errormarkup, htmlconverter,
+                         odfconverter, pdfconverter, plaintextconverter,
+                         rtfconverter, svgconverter, util, xslsetter)
 
 HERE = os.path.dirname(__file__)
 
 
 logging.basicConfig(level=logging.WARNING)
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 class ConversionError(Exception):
     """Raise this exception when an error occurs in the converter module."""
 
     pass
+
+
+def to_giella(path):
+    """Convert a document to the giella xml format.
+
+    Arguments:
+        path (str): path to the document
+
+    Returns:
+        etree.Element: root of the resulting xml document
+    """
+    chooser = {
+        '.doc': docconverter.convert2intermediate,
+        '.docx': docxconverter.convert2intermediate,
+        '.epub': epubconverter.convert2intermediate,
+        '.html': htmlconverter.convert2intermediate,
+        '.odf': odfconverter.convert2intermediate,
+        '.pdf': pdfconverter.convert2intermediate,
+        '.rtf': rtfconverter.convert2intermediate,
+        '.svg': svgconverter.convert2intermediate,
+        '.txt': plaintextconverter.convert2intermediate,
+    }
+
+    if 'avvir_xml' in path:
+        return avvirconverter.convert2intermediate(path)
+    elif path.endswith('bible.xml'):
+        return biblexmlconverter.convert2intermediate(path)
+    else:
+        return chooser[os.path.splitext(path)[1]](path)
 
 
 class Converter(object):
@@ -72,11 +99,12 @@ class Converter(object):
         self.names = corpuspath.CorpusPath(filename)
         self.write_intermediate = write_intermediate
         try:
-            self.md = xslsetter.MetadataHandler(self.names.xsl, create=True)
-        except xslsetter.XsltError as e:
-            raise ConversionError(e)
+            self.metadata = xslsetter.MetadataHandler(
+                self.names.xsl, create=True)
+        except xslsetter.XsltError as error:
+            raise ConversionError(error)
 
-        self.md.set_lang_genre_xsl()
+        self.metadata.set_lang_genre_xsl()
         with util.ignored(OSError):
             os.makedirs(self.tmpdir)
 
@@ -88,17 +116,12 @@ class Converter(object):
     @property
     def standard(self):
         """Return a boolean indicating if the file is convertable."""
-        return self.md.get_variable('conversion_status') == 'standard'
+        return self.metadata.get_variable('conversion_status') == 'standard'
 
     @property
     def goldstandard(self):
         """Return a boolean indicating if the file is a gold standard doc."""
-        return self.md.get_variable('conversion_status') == 'correct'
-
-    def convert2intermediate(self):
-        """Convert from original format to an intermediate corpus file."""
-        raise NotImplementedError(
-            'You have to subclass and override convert2intermediate')
+        return self.metadata.get_variable('conversion_status') == 'correct'
 
     @staticmethod
     def get_dtd_location():
@@ -138,50 +161,50 @@ class Converter(object):
 
     def transform_to_complete(self):
         """Combine the intermediate xml document with its medatata."""
-        intermediate = self.convert2intermediate()
+        intermediate = to_giella(self.names.orig)
         self.fix_document(intermediate)
         self.maybe_write_intermediate(intermediate)
         try:
-            xm = XslMaker(self.md.tree)
-            complete = xm.transformer(intermediate)
+            xsl_maker = XslMaker(self.metadata.tree)
+            complete = xsl_maker.transformer(intermediate)
 
             return complete.getroot()
-        except etree.XSLTApplyError as e:
+        except etree.XSLTApplyError as error:
             with open(self.names.log, 'w') as logfile:
                 logfile.write('Error at: {}'.format(
                     six.text_type(util.lineno())))
-                for entry in e.error_log:
+                for entry in complete.error_log:
                     logfile.write(six.text_type(entry))
                     logfile.write('\n')
 
             raise ConversionError("Check the syntax in: {}".format(
                 self.names.xsl))
-        except etree.XSLTParseError as e:
+        except etree.XSLTParseError as error:
             with open(self.names.log, 'w') as logfile:
                 logfile.write('Error at: {}'.format(
                     six.text_type(util.lineno())))
-                for entry in e.error_log:
+                for entry in complete.error_log:
                     logfile.write(six.text_type(entry))
                     logfile.write('\n')
 
             raise ConversionError("XSLTParseError in: {}\nError {}".format(
-                self.names.xsl, str(e)))
+                self.names.xsl, str(error)))
 
     def convert_errormarkup(self, complete):
         """Convert error markup to xml."""
         if self.goldstandard:
             try:
-                em = errormarkup.ErrorMarkup(self.names.orig)
+                error_markup = errormarkup.ErrorMarkup(self.names.orig)
 
                 for element in complete.find('body'):
-                    em.add_error_markup(element)
-            except IndexError as e:
+                    error_markup.add_error_markup(element)
+            except IndexError as error:
                 with open(self.names.log, 'w') as logfile:
                     logfile.write('Error at: {}'.format(
                         six.text_type(util.lineno())))
                     logfile.write("There is a markup error\n")
                     logfile.write("The error message: ")
-                    logfile.write(six.text_type(e))
+                    logfile.write(six.text_type(error))
                     logfile.write("\n\n")
                     logfile.write("This is the xml tree:\n")
                     logfile.write(etree.tostring(complete,
@@ -199,7 +222,7 @@ class Converter(object):
 
         fixer.fix_newstags()
         fixer.soft_hyphen_to_hyph_tag()
-        self.md.set_variable('wordcount', fixer.calculate_wordcount())
+        self.metadata.set_variable('wordcount', fixer.calculate_wordcount())
 
         if not self.goldstandard:
             fixer.detect_quotes()
@@ -208,11 +231,11 @@ class Converter(object):
         for hyph in complete.iter('hyph'):
             hyph.text = None
 
-        if (self.md.get_variable('mainlang') in
+        if (self.metadata.get_variable('mainlang') in
                 ['sma', 'sme', 'smj', 'smn', 'sms', 'nob', 'fin', 'swe',
                  'nno', 'dan', 'fkv', 'sju', 'sje', 'mhr']):
             try:
-                fixer.fix_body_encoding(self.md.get_variable('mainlang'))
+                fixer.fix_body_encoding(self.metadata.get_variable('mainlang'))
             except UserWarning as error:
                 util.print_frame(error)
                 util.print_frame(self.names.orig)
@@ -235,11 +258,11 @@ class Converter(object):
         badhex = badstring.encode('hex')
         repl = self.mixed_to_unicode.get(badhex, u'\ufffd')
         if repl == u'\ufffd':   # � unicode REPLACEMENT CHARACTER
-            logger.warn("Skipped bad byte \\x{}, seen in {}".format(
-                badhex, self.names.orig))
+            LOGGER.warn("Skipped bad byte \\x%s, seen in %s",
+                        badhex, self.names.orig)
         return repl, (decode_error.start + len(repl))
 
-    def make_complete(self, languageGuesser):
+    def make_complete(self, language_guesser):
         """Make a complete Giella xml file.
 
         Combine the intermediate Giella xml file and the metadata into
@@ -250,8 +273,8 @@ class Converter(object):
         complete = self.transform_to_complete()
         self.validate_complete(complete)
         self.convert_errormarkup(complete)
-        ld = LanguageDetector(complete, languageGuesser)
-        ld.detect_language()
+        lang_detector = LanguageDetector(complete, language_guesser)
+        lang_detector.detect_language()
 
         return complete
 
@@ -291,7 +314,7 @@ class Converter(object):
                                                        encoding='utf8',
                                                        pretty_print='True'))
                 else:
-                    logger.error("{} has no text".format(self.names.orig))
+                    LOGGER.error("%s has no text", self.names.orig)
 
     @property
     def tmpdir(self):
@@ -323,7 +346,7 @@ class Converter(object):
 
         return runner.stdout
 
-    def handle_syntaxerror(self, e, lineno, invalid_input):
+    def handle_syntaxerror(self, error, lineno, invalid_input):
         """Handle an xml syntax error.
 
         Arguments:
@@ -333,7 +356,7 @@ class Converter(object):
         """
         with open(self.names.log, 'w') as logfile:
             logfile.write('Error at: {}'.format(lineno))
-            for entry in e.error_log:
+            for entry in error.error_log:
                 logfile.write('\n{}: {} '.format(
                     six.text_type(entry.line), six.text_type(entry.column)))
                 try:
@@ -359,6 +382,22 @@ class DocumentFixer(object):
     replace ligatures, fix the encoding and return an etree with correct
     characters
     """
+    newstags = re.compile(
+        r'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|'
+        r'LED|bilde)*tekst:|@*foto:|@fotobyline:|@*bildetitt:|'
+        r'<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|'
+        r'@*Samleingress:*|tekst/ingress:|billedtekst:|.@tekst:)',
+        re.IGNORECASE)
+    titletags = re.compile(
+        r'\s*@m.titt[\.:]|\s*@*stikk:|Mellomtittel:|@*(stikk\.*|'
+        r'under)titt(el)*:|@ttt:|\s*@*[utm]*[:\.]*tit+:|<pstyle:m.titt>|'
+        r'undertittel:', re.IGNORECASE)
+    headertitletags = re.compile(
+        r'(\s*@*(led)*tittel:|\s*@*titt(\s\d)*:|@LEDtitt:|'
+        r'<pstyle:tittel>|@*(hoved|over)titt(el)*:)', re.IGNORECASE)
+    bylinetags = re.compile(r'(<pstyle:|\s*@*)[Bb]yline[:>]*\s*(\S+:)*',
+                            re.UNICODE | re.IGNORECASE)
+    boldtags = re.compile(r'@bold\s*:')
 
     def __init__(self, document):
         """Initialise the DocumentFixer class."""
@@ -370,24 +409,24 @@ class DocumentFixer(object):
 
     def compact_ems(self):
         """Compact consecutive em elements into a single em if possible."""
-        word = re.compile(u'\w+', re.UNICODE)
+        word = re.compile(r'\w+', re.UNICODE)
         for element in self.root.iter('p'):
             if len(element.xpath('.//em')) > 1:
                 lines = []
-                for em in element.iter('em'):
-                    next = em.getnext()
-                    if (next is not None and next.tag == 'em' and
-                            (em.tail is None or not word.search(em.tail))):
-                        if em.text is not None:
-                            lines.append(em.text.strip())
-                        em.getparent().remove(em)
+                for emphasis in element.iter('em'):
+                    next_elt = emphasis.getnext()
+                    if (next_elt is not None and next_elt.tag == 'em' and
+                            (emphasis.tail is None or not word.search(emphasis.tail))):
+                        if emphasis.text is not None:
+                            lines.append(emphasis.text.strip())
+                        emphasis.getparent().remove(emphasis)
                     else:
-                        if em.text is not None:
-                            lines.append(em.text.strip())
-                        em.text = ' '.join(lines)
-                        if em.tail is not None:
-                            em.tail = ' {}'.format(em.tail)
-                        lines = []
+                        if emphasis.text is not None:
+                            lines.append(emphasis.text.strip())
+                        emphasis.text = ' '.join(lines)
+                        if emphasis.tail is not None:
+                            emphasis.tail = ' {}'.format(emphasis.tail)
+                        del lines[:]
 
     def soft_hyphen_to_hyph_tag(self):
         """Replace soft hyphen chars with hyphen tags."""
@@ -408,10 +447,10 @@ class DocumentFixer(object):
             parts = text.split(u'­')
             if len(parts) > 1:
                 element.text = parts[0]
-                for x, part in enumerate(parts[1:]):
+                for index, part in enumerate(parts[1:]):
                     hyph = etree.Element('hyph')
                     hyph.tail = part
-                    element.insert(x, hyph)
+                    element.insert(index, hyph)
 
         text = element.tail
         if text is not None:
@@ -543,21 +582,15 @@ class DocumentFixer(object):
         self.replace_ligatures()
 
         body = self.root.find('body')
-        bodyString = etree.tostring(body, encoding='unicode')
+        body_string = etree.tostring(body, encoding='unicode')
         body.getparent().remove(body)
 
-        eg = decode.EncodingGuesser()
-        encoding = eg.guess_body_encoding(bodyString)
+        guesser = decode.EncodingGuesser()
+        encoding = guesser.guess_body_encoding(body_string)
 
         try:
-            body = etree.fromstring(eg.decode_para(encoding, bodyString))
+            body = etree.fromstring(guesser.decode_para(encoding, body_string))
         except UnicodeEncodeError as error:
-            util.print_frame('Detected encoding: {}'.format(encoding))
-            util.print_frame(bodyString[:error.start], '\n')
-            util.print_frame(bodyString[error.start:error.end],
-                             ord(bodyString[error.start:error.start + 1]),
-                             hex(ord(bodyString[error.start:error.start + 1])), '\n')
-            util.print_frame(bodyString, '\n')
             raise UserWarning(str(error))
         self.root.append(body)
 
@@ -566,7 +599,7 @@ class DocumentFixer(object):
 
     def fix_title_person(self, encoding):
         """Fix encoding problems."""
-        eg = decode.EncodingGuesser()
+        guesser = decode.EncodingGuesser()
 
         title = self.root.find('.//title')
         if title is not None and title.text is not None:
@@ -574,7 +607,7 @@ class DocumentFixer(object):
 
             text = text
             util.print_frame(encoding)
-            title.text = eg.decode_para(encoding, text)
+            title.text = guesser.decode_para(encoding, text)
 
         persons = self.root.findall('.//person')
         for person in persons:
@@ -587,7 +620,7 @@ class DocumentFixer(object):
 
                 person.set(
                     'lastname',
-                    eg.decode_para(
+                    guesser.decode_para(
                         encoding,
                         lastname))
 
@@ -599,7 +632,7 @@ class DocumentFixer(object):
 
                 person.set(
                     'firstname',
-                    eg.decode_para(
+                    guesser.decode_para(
                         encoding,
                         firstname))
 
@@ -613,7 +646,7 @@ class DocumentFixer(object):
         Returns:
             A list of span tuples containing indexes to quotes found in text.
         """
-        unwanted = '[^:,!?.\s]'
+        unwanted = r'[^:,!?.\s]'
         quote_regexes = [re.compile('"{0}.+?{0}"'.format(unwanted)),
                          re.compile(u'«.+?»'),
                          re.compile(u'“.+?”'),
@@ -634,17 +667,17 @@ class DocumentFixer(object):
             quote_list: A list of span tuples containing indexes to quotes
             found in text.
         """
-        for x in six.moves.range(0, len(quote_list)):
+        for index in six.moves.range(0, len(quote_list)):
             span = etree.Element('span')
             span.set('type', 'quote')
-            span.text = text[quote_list[x][0]:quote_list[x][1]]
-            if x + 1 < len(quote_list):
-                span.tail = text[quote_list[x][1]:quote_list[x + 1][0]]
+            span.text = text[quote_list[index][0]:quote_list[index][1]]
+            if index + 1 < len(quote_list):
+                span.tail = text[quote_list[index][1]:quote_list[index + 1][0]]
             else:
-                span.tail = text[quote_list[x][1]:]
+                span.tail = text[quote_list[index][1]:]
             element.append(span)
 
-    def detect_quote(self, element):
+    def _detect_quote(self, element):
         """Insert span elements around quotes.
 
         Arguments:
@@ -666,10 +699,10 @@ class DocumentFixer(object):
                 element.text = text
 
         for child in newelement:
-            if (child.tag == 'span' and child.get('type') == 'quote'):
+            if child.tag == 'span' and child.get('type') == 'quote':
                 element.append(child)
             else:
-                element.append(self.detect_quote(child))
+                element.append(self._detect_quote(child))
 
             if child.tail:
                 text = child.tail
@@ -683,188 +716,163 @@ class DocumentFixer(object):
     def detect_quotes(self):
         """Detect quotes in all paragraphs."""
         for paragraph in self.root.iter('p'):
-            paragraph = self.detect_quote(paragraph)
+            paragraph = self._detect_quote(paragraph)
 
     def calculate_wordcount(self):
         """Count the words in the file."""
         plist = [etree.tostring(paragraph, method='text', encoding='unicode')
                  for paragraph in self.root.iter('p')]
 
-        return six.text_type(len(re.findall(u'\S+', ' '.join(plist))))
+        return six.text_type(len(re.findall(r'\S+', ' '.join(plist))))
 
-    def make_element(self, eName, text, attributes={}):
+    @staticmethod
+    def _make_element(name, text, attributes=None):
         """Make an xml element.
 
-        :param eName: the name of the element
+        :param name: the name of the element
         :param text: the content of the element
         :param attributes: the elements attributes
 
         :returns: lxml.etree.Element
         """
-        el = etree.Element(eName)
+        attributes = attributes or {}
+        element = etree.Element(name)
         for key in attributes:
-            el.set(key, attributes[key])
+            element.set(key, attributes[key])
 
-        el.text = text
+        element.text = text
 
-        return el
+        return element
 
-    def fix_newstags(self):
-        """Convert newstags found in text to xml elements."""
-        newstags = re.compile(
-            u'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|'
-            u'LED|bilde)*tekst:|@*foto:|@fotobyline:|@*bildetitt:|'
-            u'<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|'
-            u'@*Samleingress:*|tekst/ingress:|billedtekst:|.@tekst:)', re.IGNORECASE)
-        titletags = re.compile(
-            u'\s*@m.titt[\.:]|\s*@*stikk:|Mellomtittel:|@*(stikk\.*|'
-            u'under)titt(el)*:|@ttt:|\s*@*[utm]*[:\.]*tit+:|<pstyle:m.titt>|'
-            u'undertittel:', re.IGNORECASE)
-        headertitletags = re.compile(
-            u'(\s*@*(led)*tittel:|\s*@*titt(\s\d)*:|@LEDtitt:|'
-            u'<pstyle:tittel>|@*(hoved|over)titt(el)*:)', re.IGNORECASE)
-        bylinetags = re.compile('(<pstyle:|\s*@*)[Bb]yline[:>]*\s*(\S+:)*',
-                                re.UNICODE | re.IGNORECASE)
-        boldtags = re.compile(u'@bold\s*:')
-
-        header = self.root.find('.//header')
-        unknown = self.root.find('.//unknown')
-
-        for em in self.root.iter('em'):
-            paragraph = em.getparent()
-            if not len(em) and em.text:
-                if bylinetags.match(em.text):
-                    line = bylinetags.sub('', em.text).strip()
+    def _fix_emphasises(self):
+        for emphasis in self.root.iter('em'):
+            paragraph = emphasis.getparent()
+            if not len(emphasis) and emphasis.text:
+                if self.bylinetags.match(emphasis.text):
+                    line = self.bylinetags.sub('', emphasis.text).strip()
+                    unknown = self.root.find('.//unknown')
                     if unknown is not None:
                         person = etree.Element('person')
                         person.set('lastname', line)
                         person.set('firstname', '')
                         unknown.getparent().replace(unknown, person)
                         paragraph.getparent().remove(paragraph)
-                elif titletags.match(em.text):
-                    em.text = titletags.sub('', em.text).strip()
+                elif self.titletags.match(emphasis.text):
+                    emphasis.text = self.titletags.sub(
+                        '', emphasis.text).strip()
                     paragraph.set('type', 'title')
-                elif newstags.match(em.text):
-                    em.text = newstags.sub('', em.text).strip()
+                elif self.newstags.match(emphasis.text):
+                    emphasis.text = self.newstags.sub(
+                        '', emphasis.text).strip()
 
+    def _add_paragraph(self, line, index, paragraph, attributes):
+        if line:
+            index += 1
+            paragraph.getparent().insert(
+                index,
+                self._make_element('p',
+                                   line,
+                                   attributes=attributes))
+
+        return index
+
+    def _add_emphasis(self, index, line, attributes, paragraph):
+        index += 1
+        element = etree.Element('p')
+        element.append(self._make_element('em', line, attributes))
+
+        paragraph.getparent().insert(index, element)
+
+        return index
+
+    def _handle_line(self, line, index, lines, paragraph):
+        if self.newstags.match(line):
+            index = self._add_paragraph(' '.join(lines).strip(), index,
+                                        paragraph, paragraph.attrib)
+            del lines[:]
+
+            lines.append(self.newstags.sub('', line))
+
+        elif self.bylinetags.match(line):
+            index = self._add_paragraph(' '.join(lines).strip(), index,
+                                        paragraph, paragraph.attrib)
+            del lines[:]
+
+            unknown = self.root.find('.//unknown')
+            if unknown is not None:
+                person = etree.Element('person')
+                person.set('lastname',
+                           self.bylinetags.sub('', line).strip())
+                person.set('firstname', '')
+
+                unknown.getparent().replace(unknown, person)
+
+        elif self.boldtags.match(line):
+            index = self._add_paragraph(' '.join(lines).strip(), index,
+                                        paragraph, paragraph.attrib)
+            index = self._add_emphasis(index,
+                                       self.boldtags.sub('', line).strip(),
+                                       {'type': 'bold'}, paragraph)
+            del lines[:]
+
+        elif line.startswith('@kursiv:'):
+            index = self._add_paragraph(
+                ' '.join(lines).strip(), index, paragraph, paragraph.attrib)
+            index = self._add_emphasis(index,
+                                       line.replace('@kursiv:', '').strip(),
+                                       {'type': 'italic'}, paragraph)
+            del lines[:]
+
+        elif self.headertitletags.match(line):
+            index = self._add_paragraph(
+                ' '.join(lines).strip(), index, paragraph, paragraph.attrib)
+            del lines[:]
+
+            header = self.root.find('.//header')
+            title = header.find('./title')
+            if title is not None and title.text is None:
+                title.text = self.headertitletags.sub('', line).strip()
+
+            index = self._add_paragraph(self.headertitletags.sub(
+                '', line).strip(), index, paragraph, {'type': 'title'})
+        elif self.titletags.match(line):
+            index = self._add_paragraph(' '.join(lines).strip(), index,
+                                        paragraph, paragraph.attrib)
+            del lines[:]
+
+            index += 1
+            paragraph.getparent().insert(
+                index,
+                self._make_element(
+                    'p', self.titletags.sub('', line).strip(), {'type': 'title'}))
+        elif line == '' and lines:
+            index = self._add_paragraph(
+                ' '.join(lines).strip(), index, paragraph, paragraph.attrib)
+            del lines[:]
+
+        else:
+            lines.append(line)
+
+        return index
+
+    def _fix_paragraphs(self):
         for paragraph in self.root.iter('p'):
             if not len(paragraph) and paragraph.text:
                 index = paragraph.getparent().index(paragraph)
                 lines = []
 
                 for line in paragraph.text.split('\n'):
-                    if newstags.match(line):
-                        if lines:
-                            index += 1
-                            paragraph.getparent().insert(
-                                index,
-                                self.make_element('p',
-                                                  ' '.join(lines).strip(),
-                                                  attributes=paragraph.attrib))
-                        lines = []
+                    index = self._handle_line(line, index, lines, paragraph)
 
-                        lines.append(newstags.sub('', line))
-                    elif bylinetags.match(line):
-                        if lines:
-                            index += 1
-                            paragraph.getparent().insert(
-                                index,
-                                self.make_element('p',
-                                                  ' '.join(lines).strip(),
-                                                  attributes=paragraph.attrib))
-                        line = bylinetags.sub('', line).strip()
-
-                        if unknown is not None:
-                            person = etree.Element('person')
-                            person.set('lastname', line)
-                            person.set('firstname', '')
-
-                            unknown.getparent().replace(unknown, person)
-                            unknown = None
-
-                        lines = []
-                    elif boldtags.match(line):
-                        if lines:
-                            index += 1
-                            paragraph.getparent().insert(
-                                index,
-                                self.make_element('p',
-                                                  ' '.join(lines).strip(),
-                                                  attributes=paragraph.attrib))
-                        line = boldtags.sub('', line).strip()
-                        lines = []
-                        index += 1
-                        p = etree.Element('p')
-                        p.append(self.make_element('em', line.strip(),
-                                                   {'type': 'bold'}))
-                        paragraph.getparent().insert(index, p)
-                    elif line.startswith('@kursiv:'):
-                        if lines:
-                            index += 1
-                            paragraph.getparent().insert(
-                                index,
-                                self.make_element('p',
-                                                  ' '.join(lines).strip(),
-                                                  attributes=paragraph.attrib))
-                        line = line.replace('@kursiv:', '')
-                        lines = []
-                        index += 1
-                        p = etree.Element('p')
-                        p.append(self.make_element('em', line.strip(),
-                                                   {'type': 'italic'}))
-                        paragraph.getparent().insert(index, p)
-                    elif headertitletags.match(line):
-                        if lines:
-                            index += 1
-                            paragraph.getparent().insert(
-                                index,
-                                self.make_element('p',
-                                                  ' '.join(lines).strip(),
-                                                  attributes=paragraph.attrib))
-                        line = headertitletags.sub('', line)
-                        lines = []
-                        index += 1
-                        title = header.find('./title')
-                        if title is not None and title.text is None:
-                            title.text = line.strip()
-                        paragraph.getparent().insert(
-                            index,
-                            self.make_element('p', line.strip(),
-                                              {'type': 'title'}))
-                    elif titletags.match(line):
-                        if lines:
-                            index += 1
-                            paragraph.getparent().insert(
-                                index,
-                                self.make_element('p',
-                                                  ' '.join(lines).strip(),
-                                                  attributes=paragraph.attrib))
-                        line = titletags.sub('', line)
-                        lines = []
-                        index += 1
-                        paragraph.getparent().insert(
-                            index,
-                            self.make_element(
-                                'p', line.strip(), {'type': 'title'}))
-                    elif line == '' and lines:
-                        index += 1
-                        paragraph.getparent().insert(
-                            index,
-                            self.make_element('p',
-                                              ' '.join(lines).strip(),
-                                              attributes=paragraph.attrib))
-                        lines = []
-                    else:
-                        lines.append(line)
-
-                if lines:
-                    index += 1
-                    paragraph.getparent().insert(
-                        index, self.make_element('p',
-                                                 ' '.join(lines).strip(),
-                                                 attributes=paragraph.attrib))
+                index = self._add_paragraph(' '.join(lines).strip(), index,
+                                            paragraph, paragraph.attrib)
 
                 paragraph.getparent().remove(paragraph)
+
+    def fix_newstags(self):
+        """Convert newstags found in text to xml elements."""
+        self._fix_emphasises()
+        self._fix_paragraphs()
 
 
 class XslMaker(object):
@@ -880,7 +888,7 @@ class XslMaker(object):
         Arguments:
             xslfile: a string containing the path to the xsl file.
         """
-        self.filexsl = xslfile
+        self.filename = xslfile
 
     @property
     def logfile(self):
@@ -894,15 +902,15 @@ class XslMaker(object):
         Raises:
             In case of an xml syntax error, raise ConversionException.
         """
-        preprocessXsl = etree.parse(
+        xsl = etree.parse(
             os.path.join(HERE, 'xslt/preprocxsl.xsl'))
-        preprocessXslTransformer = etree.XSLT(preprocessXsl)
+        transformer = etree.XSLT(xsl)
 
         common_xsl_path = os.path.join(
             HERE, 'xslt/common.xsl').replace(' ', '%20')
 
-        return preprocessXslTransformer(
-            self.filexsl,
+        return transformer(
+            self.filename,
             commonxsl=etree.XSLT.strparam('file://{}'.format(common_xsl_path)))
 
     @property
@@ -920,7 +928,7 @@ class XslMaker(object):
 class LanguageDetector(object):
     """Detect and set the languages of a document."""
 
-    def __init__(self, document, languageGuesser):
+    def __init__(self, document, language_guesser):
         """Initialise the LanguageDetector class.
 
         Arguments:
@@ -928,7 +936,7 @@ class LanguageDetector(object):
             languageGuesser: a text_cat.Classifier.
         """
         self.document = document
-        self.languageGuesser = languageGuesser
+        self.language_guesser = language_guesser
 
     @property
     def inlangs(self):
@@ -936,7 +944,7 @@ class LanguageDetector(object):
         inlangs = [language.get('{http://www.w3.org/XML/1998/namespace}'
                                 'lang')
                    for language in self.document.findall(
-            'header/multilingual/language')]
+                       'header/multilingual/language')]
         if inlangs:
             inlangs.append(self.mainlang)
 
@@ -957,9 +965,9 @@ class LanguageDetector(object):
         """
         if paragraph.get('{http://www.w3.org/XML/1998/namespace}lang') is None:
             paragraph_text = self.remove_quote(paragraph)
-            if self.languageGuesser is not None:
-                lang = self.languageGuesser.classify(paragraph_text,
-                                                     langs=self.inlangs)
+            if self.language_guesser is not None:
+                lang = self.language_guesser.classify(paragraph_text,
+                                                      langs=self.inlangs)
                 if lang != self.mainlang:
                     paragraph.set('{http://www.w3.org/XML/1998/namespace}lang',
                                   lang)
@@ -973,14 +981,15 @@ class LanguageDetector(object):
         for element in paragraph.iter("span"):
             if element.get("type") == "quote":
                 if element.text is not None:
-                    lang = self.languageGuesser.classify(element.text,
-                                                         langs=self.inlangs)
+                    lang = self.language_guesser.classify(element.text,
+                                                          langs=self.inlangs)
                     if lang != self.mainlang:
                         element.set(
                             '{http://www.w3.org/XML/1998/namespace}lang',
                             lang)
 
-    def remove_quote(self, paragraph):
+    @staticmethod
+    def remove_quote(paragraph):
         """Extract all text except the one inside <span type='quote'>."""
         text = ''
         for element in paragraph.iter():

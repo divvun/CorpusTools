@@ -36,7 +36,8 @@ import six
 import testfixtures
 from nose_parameterized import parameterized
 
-from corpustools import converter, corpuspath, text_cat, xslsetter
+from corpustools import (converter, corpuspath, plaintextconverter,
+                         svgconverter, text_cat, xslsetter)
 from corpustools.test.test_xhtml2corpus import assertXmlEqual
 
 HERE = os.path.dirname(__file__)
@@ -142,7 +143,7 @@ def check_quote_detection(name, orig, expected):
             os.path.join(HERE,
                          'converter_data/samediggi-article-48s-before-'
                          'lang-detection-without-multilingual-tag.xml')))
-    got_paragraph = document_fixer.detect_quote(
+    got_paragraph = document_fixer._detect_quote(
         etree.fromstring(orig))
 
     assertXmlEqual(got_paragraph, etree.fromstring(expected))
@@ -317,9 +318,9 @@ class TestConverter(XMLTester):
         '''
         got = etree.fromstring(want_string)
 
-        c = converter.PlaintextConverter('orig/sme/admin/blogg_5.correct.txt')
-        c.md = xslsetter.MetadataHandler(c.names.xsl, create=True)
-        c.md.set_variable('conversion_status', 'correct')
+        c = converter.Converter('orig/sme/admin/blogg_5.correct.txt')
+        c.metadata = xslsetter.MetadataHandler(c.names.xsl, create=True)
+        c.metadata.set_variable('conversion_status', 'correct')
         c.fix_document(got)
 
         self.assertXmlEqual(got, etree.fromstring(want_string))
@@ -1691,8 +1692,8 @@ TITTEL: 3</p>
         self.assertXmlEqual(got, want)
 
     def test_fix_body_encoding(self):
-        newstext = converter.PlaintextConverter(
-            'orig/sme/riddu/tullball.txt', LANGUAGEGUESSER)
+        newstext = plaintextconverter.PlaintextConverter(
+            'orig/sme/riddu/tullball.txt')
         text = newstext.content2xml(io.StringIO(u'''ÐMun lean njeallje jagi boaris.
 
 Nu beaivvdat.
@@ -1731,13 +1732,11 @@ LOGO: Smi kulturfestivala 1998
         self.assertXmlEqual(got, want)
 
     def test_replace_ligatures(self):
-        svgtext = converter.SVGConverter(
+        xml = svgconverter.convert2intermediate(
             os.path.join(HERE,
                          'converter_data/fakecorpus/orig/sme/riddu/'
-                         'Riddu_Riddu_avis_TXT.200923.svg'),
-            LANGUAGEGUESSER)
-        document_fixer = converter.DocumentFixer(
-            etree.fromstring(etree.tostring(svgtext.convert2intermediate())))
+                         'Riddu_Riddu_avis_TXT.200923.svg'))
+        document_fixer = converter.DocumentFixer(xml)
         document_fixer.fix_body_encoding('sme')
         got = document_fixer.get_etree()
 
