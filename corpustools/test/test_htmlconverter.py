@@ -29,7 +29,7 @@ import six
 import testfixtures
 from nose_parameterized import parameterized
 
-from corpustools.htmlconverter import HTMLConverter
+from corpustools import htmlconverter
 from corpustools.test.test_htmlcontentconverter import clean_namespaces
 from corpustools.test.test_xhtml2corpus import assertXmlEqual
 from corpustools.test.xmltester import XMLTester
@@ -162,8 +162,8 @@ class TestHTMLConverter(XMLTester):
             if six.PY3:
                 content = content.encode('utf8')
             temp_dir.write(filename, content)
-            hcc = HTMLConverter(os.path.join(temp_dir.path, filename))
-            got = hcc.convert2intermediate()
+            got = htmlconverter.convert2intermediate(
+                os.path.join(temp_dir.path, filename))
             self.assertXmlEqual(got, etree.fromstring(want))
 
     def test_content(self):
@@ -194,8 +194,8 @@ class TestHTMLConverter(XMLTester):
         filename = 'orig/sme/admin/ugga.html'
         with testfixtures.TempDirectory() as temp_dir:
             temp_dir.write(filename, content)
-            hcc = HTMLConverter(os.path.join(temp_dir.path, filename))
-            got = html5parser.fromstring(hcc.content)
+            got = html5parser.fromstring(htmlconverter.webpage_to_unicodehtml(
+                os.path.join(temp_dir.path, filename)))
 
             clean_namespaces([got, want])
             self.assertXmlEqual(got, want)
@@ -2658,7 +2658,8 @@ def test_conversion(testname, html, xml):
         if six.PY3:
             html = html.encode('utf8')
         temp_dir.write(filepath, html)
-        got = HTMLConverter(
-            os.path.join(temp_dir.path, filepath)).convert2intermediate()
+        got = htmlconverter.convert2intermediate(
+            os.path.join(temp_dir.path, filepath))
         want = etree.fromstring(xml)
+
         assertXmlEqual(got, want)

@@ -27,7 +27,6 @@ import re
 from lxml import etree, html
 
 from corpustools.htmlcontentconverter import HTMLContentConverter
-from corpustools.basicconverter import BasicConverter
 
 HERE = os.path.dirname(__file__)
 
@@ -38,94 +37,118 @@ class HTMLError(Exception):
     pass
 
 
-class HTMLConverter(BasicConverter):
-    """Convert html pages to Giella xml documents."""
+def remove_declared_encoding(content):
+    """Remove declared decoding.
 
-    @property
-    def content(self):
-        """Return the content of the html doc as a string.
+    lxml explodes if we send a decoded Unicode string with an
+    xml-declared encoding
+    http://lxml.de/parsing.html#python-unicode-strings
 
-        Returns:
-            a string containing the html document.
-        """
-        for encoding in ['utf-8', 'windows-1252', 'latin1']:
-            try:
-                with codecs.open(self.orig, encoding=encoding) as file_:
-                    return etree.tostring(
-                        html.document_fromstring(
-                            self.remove_declared_encoding(file_.read())
-                        ),
-                        encoding='unicode'
-                    )
-            except UnicodeDecodeError:
-                pass
+    Arguments:
+        content (str): the contents of a html document
 
-        raise HTMLError('HTML error {}'.format(self.orig))
+    Returns:
+        str: content sans the declared decoding
+    """
+    xml_encoding_declaration_re = re.compile(
+        r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*",
+        re.IGNORECASE)
 
-    @staticmethod
-    def remove_declared_encoding(content):
-        """Remove declared decoding.
+    return re.sub(xml_encoding_declaration_re, "", content)
 
-        lxml explodes if we send a decoded Unicode string with an
-        xml-declared encoding
-        http://lxml.de/parsing.html#python-unicode-strings
 
-        Arguments:
-            content: a string containing the html document.
+def webpage_to_unicodehtml(filename):
+    """Return the content of the html doc as a string.
 
-        Returns:
-            a string where the declared decoding is removed.
-        """
-        xml_encoding_declaration_re = re.compile(
-            r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*",
-            re.IGNORECASE)
+    Arguments:
+        filename (str): path to the webpage
 
-        return re.sub(xml_encoding_declaration_re, "", content)
+    Returns:
+        str: the content of the webpage sent through the lxml.html parser
+    """
+    for encoding in ['utf-8', 'windows-1252', 'latin1']:
+        try:
+            with codecs.open(filename, encoding=encoding) as file_:
+                return etree.tostring(
+                    html.document_fromstring(
+                        remove_declared_encoding(file_.read())
+                    ),
+                    encoding='unicode'
+                )
+        except UnicodeDecodeError:
+            pass
 
-    def convert2xhtml(self):
-        """Convert html document to a cleaned up xhtml document.
+    raise HTMLError('{}: encoding trouble'.format(filename))
 
-        Returns:
-            a cleaned up xhtml document as an etree element.
-        """
-        converter = HTMLContentConverter()
 
-        return converter.convert2xhtml(self.content)
+def convert2xhtml(content):
+    """Convert html document to a cleaned up xhtml document.
 
-    @staticmethod
-    def replace_bare_text(body):
-        """Replace bare text in body with a p elemnt."""
-        if body.text is not None and body.text.strip() != '':
-            new_p = etree.Element('p')
-            new_p.text = body.text
-            body.text = None
-            body.insert(0, new_p)
+    Arguments:
+        content (str): html document
 
-    @staticmethod
-    def add_p_instead_of_tail(intermediate):
-        """Convert tail in list and p to a p element."""
-        for element in ['list', 'p']:
-            for found_element in intermediate.findall('.//' + element):
-                if (found_element.tail is not None and
-                        found_element.tail.strip() != ''):
-                    new_p = etree.Element('p')
-                    new_p.text = found_element.tail
-                    found_element.tail = None
-                    found_element.addnext(new_p)
+    Returns:
+        a cleaned up xhtml document as an etree element
+    """
+    converter = HTMLContentConverter()
 
-    def convert2intermediate(self):
-        """Convert the original document to the Giella xml format.
+    return converter.convert2xhtml(content)
 
-        The resulting xml is stored in intermediate
-        """
-        converter_xsl = os.path.join(HERE, 'xslt/xhtml2corpus.xsl')
 
-        html_xslt_root = etree.parse(converter_xsl)
-        transform = etree.XSLT(html_xslt_root)
+def replace_bare_text(body):
+    """Replace bare text in body with a p element.
 
-        intermediate = transform(self.convert2xhtml())
+    Arguments:
+        body (etree.Element): the body element of the html document
+    """
+    if body.text is not None and body.text.strip() != '':
+        new_p = etree.Element('p')
+        new_p.text = body.text
+        body.text = None
+        body.insert(0, new_p)
 
-        self.replace_bare_text(intermediate.find('.//body'))
-        self.add_p_instead_of_tail(intermediate)
 
-        return intermediate.getroot()
+def add_p_instead_of_tail(intermediate):
+    """Convert tail in list and p to a p element."""
+    for element in ['list', 'p']:
+        for found_element in intermediate.findall('.//' + element):
+            if (found_element.tail is not None and
+                    found_element.tail.strip() != ''):
+                new_p = etree.Element('p')
+                new_p.text = found_element.tail
+                found_element.tail = None
+                found_element.addnext(new_p)
+
+
+def xhtml2intermediate(xhtml):
+    """Convert xhtml to Giella xml.
+
+    Arguments:
+        xhtml (etree.Element): the result of convert2xhtml
+
+    Returns:
+        etree.Element: the root element of the Giella xml document
+    """
+    converter_xsl = os.path.join(HERE, 'xslt/xhtml2corpus.xsl')
+
+    html_xslt_root = etree.parse(converter_xsl)
+    transform = etree.XSLT(html_xslt_root)
+
+    intermediate = transform(xhtml)
+
+    replace_bare_text(intermediate.find('.//body'))
+    add_p_instead_of_tail(intermediate)
+
+    return intermediate.getroot()
+
+
+def convert2intermediate(filename):
+    """Convert a webpage to Giella xml.
+
+    Arguments:
+        filename (str): name of the file
+
+    Returns:
+        etree.Element: the root element of the Giella xml document
+    """
+    return xhtml2intermediate(convert2xhtml(webpage_to_unicodehtml(filename)))
