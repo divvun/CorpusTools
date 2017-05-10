@@ -182,7 +182,7 @@ def convert2intermediate(filename):
     story nodes contain one or more p nodes.
     p nodes contain span, br and (since 2013) p nodes.
     """
-    avvir_doc = etree.parse(filename)
+    avvir_doc = etree.parse(filename).getroot()
 
     remove_identical_ids(avvir_doc)
     convert_p(avvir_doc)
