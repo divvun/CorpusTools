@@ -17,7 +17,7 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-"""This file contains classes to convert files to the giellatekno xml format."""
+"""This file contains classes to convert files to the Giella xml format."""
 
 
 from __future__ import absolute_import, print_function
@@ -245,10 +245,10 @@ class Converter(object):
         return repl, (decode_error.start + len(repl))
 
     def make_complete(self, languageGuesser):
-        """Make a complete giellatekno xml file.
+        """Make a complete Giella xml file.
 
-        Combine the intermediate giellatekno xml file and the metadata into
-        a complete giellatekno xml file.
+        Combine the intermediate Giella xml file and the metadata into
+        a complete Giella xml file.
         Fix the character encoding
         Detect the languages in the xml file
         """
@@ -358,7 +358,7 @@ class Converter(object):
 
 
 class AvvirConverter(Converter):
-    u"""Convert Ávvir xml files to the giellatekno xml format.
+    u"""Convert Ávvir xml files to the Giella xml format.
 
     The root node in an Ávvir document is article.
     article nodes contains one or more story nodes.
@@ -466,7 +466,7 @@ class AvvirConverter(Converter):
                 story.remove(p)
 
     def convert_story(self):
-        """Convert story elements in to giellatekno xml elements."""
+        """Convert story elements in to Giella xml elements."""
         for title in self.intermediate.findall('.//story[@class="Tittel"]'):
             for p in title.findall('./p'):
                 p.set('type', 'title')
@@ -502,7 +502,7 @@ class AvvirConverter(Converter):
 
 
 class SVGConverter(Converter):
-    """Convert SVG files to the giellatekno xml format."""
+    """Convert SVG files to the Giella xml format."""
 
     def convert2intermediate(self):
         """Transform svg to an intermediate xml document."""
@@ -515,7 +515,7 @@ class SVGConverter(Converter):
 
 
 class PlaintextConverter(Converter):
-    """Convert plain text files to the giellatekno xml format."""
+    """Convert plain text files to the Giella xml format."""
 
     def to_unicode(self):
         """Read a file into a unicode string.
@@ -1639,7 +1639,7 @@ class PDFPage(object):
 
 
 class PDF2XMLConverter(Converter):
-    """Class to convert the xml output of pdftohtml to giellatekno xml.
+    """Class to convert the xml output of pdftohtml to Giella xml.
 
     Attributes:
         extractor (PDFTextExtractor): class to extract text from the xml that
@@ -1786,10 +1786,10 @@ class PDF2XMLConverter(Converter):
 
 
 class BiblexmlConverter(Converter):
-    """Convert bible xml files to the giellatekno xml format."""
+    """Convert bible xml files to the Giella xml format."""
 
     def convert2intermediate(self):
-        """Convert the bible xml to intermediate giellatekno xml format."""
+        """Convert the bible xml to intermediate Giella xml format."""
         document = etree.Element('document')
         document.append(self.process_bible())
 
@@ -1856,7 +1856,7 @@ class BiblexmlConverter(Converter):
         Arguments:
             p is a bible xml p element.
         Returns:
-            a giellatekno xml p element
+            a Giella xml p element
         """
         verses = []
         for child in p:
@@ -1876,7 +1876,7 @@ class BiblexmlConverter(Converter):
         Arguments:
             verses: a list of strings
         Returns:
-            a giellatekno xml p element
+            a Giella xml p element
         """
         p = etree.Element('p')
         p.text = '\n'.join(verses)
@@ -1884,13 +1884,13 @@ class BiblexmlConverter(Converter):
         return p
 
     def process_chapter(self, chapter_element):
-        """Convert a bible xml chapter to a giellatekno xml section one.
+        """Convert a bible xml chapter to a Giella xml section one.
 
         Arguments:
             chapter_element: a bible xml chapter element
 
         Returns:
-            a giellatekno xml section element.
+            a Giella xml section element.
         """
         section = etree.Element('section')
 
@@ -1921,13 +1921,13 @@ class BiblexmlConverter(Converter):
         return section
 
     def process_book(self, book_element):
-        """Convert a bible xml book to a giellatekno xml section one.
+        """Convert a bible xml book to a Giella xml section one.
 
         Arguments:
             book_element: a bible xml book element
 
         Returns:
-            a giellatekno xml section element.
+            a Giella xml section element.
         """
         section = etree.Element('section')
 
@@ -1947,10 +1947,10 @@ class BiblexmlConverter(Converter):
         return section
 
     def process_bible(self):
-        """Convert a bible xml document to a giellatekno xml document.
+        """Convert a bible xml document to a Giella xml document.
 
         Returns:
-            a giellatekno xml body element.
+            a Giella xml body element.
         """
         bible = etree.parse(self.names.orig)
 
@@ -1963,7 +1963,7 @@ class BiblexmlConverter(Converter):
 
 
 class HTMLContentConverter(object):
-    """Convert html documents to the giellatekno xml format."""
+    """Convert html documents to the Giella xml format."""
 
     def superclean(self, content):
         """Remove unwanted elements from an html document.
@@ -2579,7 +2579,7 @@ class HTMLContentConverter(object):
 
 
 class HTMLConverter(Converter):
-    """Convert html pages to giellatekno xml documents."""
+    """Convert html pages to Giella xml documents."""
 
     @property
     def content(self):
@@ -2652,7 +2652,7 @@ class HTMLConverter(Converter):
                     found_element.addnext(new_p)
 
     def convert2intermediate(self):
-        """Convert the original document to the giellatekno xml format.
+        """Convert the original document to the Giella xml format.
 
         The resulting xml is stored in intermediate
         """
@@ -2670,7 +2670,7 @@ class HTMLConverter(Converter):
 
 
 class RTFConverter(HTMLConverter):
-    """Convert rtf documents to the giellatekno xml format."""
+    """Convert rtf documents to the Giella xml format."""
 
     @property
     def content(self):
@@ -2692,7 +2692,7 @@ class RTFConverter(HTMLConverter):
 
 
 class OdfConverter(HTMLConverter):
-    """Convert odf documents to the giellatekno xml format."""
+    """Convert odf documents to the Giella xml format."""
 
     @property
     def content(self):
@@ -2711,7 +2711,7 @@ class OdfConverter(HTMLConverter):
 
 
 class DocxConverter(HTMLConverter):
-    """Convert docx documents to the giellatekno xml format."""
+    """Convert docx documents to the Giella xml format."""
 
     @property
     def content(self):
@@ -2744,7 +2744,7 @@ class DocxConverter(HTMLConverter):
 
 
 class EpubConverter(HTMLConverter):
-    """Convert epub documents to the giellatekno xml format.
+    """Convert epub documents to the Giella xml format.
 
     Epub files are zip files that contain text in xhtml files. This class reads
     all xhtml files found in this archive. The body element of these files are
@@ -2943,7 +2943,7 @@ class EpubConverter(HTMLConverter):
 
 
 class DocConverter(HTMLConverter):
-    """Convert Microsoft Word documents to the giellatekno xml format."""
+    """Convert Microsoft Word documents to the Giella xml format."""
 
     @property
     def content(self):
@@ -3080,7 +3080,7 @@ class DocConverter(HTMLConverter):
 
 
 class DocumentFixer(object):
-    """Fix the content of a giellatekno xml document.
+    """Fix the content of a Giella xml document.
 
     Receive a stringified etree from one of the raw converters,
     replace ligatures, fix the encoding and return an etree with correct
