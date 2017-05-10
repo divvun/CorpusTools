@@ -18,7 +18,7 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-u"""Convert Ávvir-files to the giellatekno xml format."""
+u"""Convert Ávvir-files to the Giella xml format."""
 
 
 from lxml import etree
