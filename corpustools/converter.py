@@ -153,7 +153,12 @@ class Converter(object):
 
     def transform_to_complete(self):
         """Combine the intermediate xml document with its medatata."""
-        intermediate = to_giella(self.names.orig)
+        try:
+            intermediate = to_giella(self.names.orig)
+        except KeyError as error:
+            raise util.ConversionError(
+                '{} can not convert files of this format {}:'.format(
+                    self.names.orig, str(error)))
         self.fix_document(intermediate)
         self.maybe_write_intermediate(intermediate)
         try:
