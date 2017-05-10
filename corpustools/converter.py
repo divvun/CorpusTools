@@ -59,7 +59,7 @@ def to_giella(path):
         '.docx': docxconverter.convert2intermediate,
         '.epub': epubconverter.convert2intermediate,
         '.html': htmlconverter.convert2intermediate,
-        '.odf': odfconverter.convert2intermediate,
+        '.odt': odfconverter.convert2intermediate,
         '.pdf': pdfconverter.convert2intermediate,
         '.rtf': rtfconverter.convert2intermediate,
         '.svg': svgconverter.convert2intermediate,
