@@ -54,7 +54,13 @@ class ExecutableMissingError(Exception):
 
 
 class ArgumentError(Exception):
-    """This exception is raised when argument errors arise."""
+    """This exception is raised when argument errors occur."""
+
+    pass
+
+
+class ConversionError(Exception):
+    """Raise this exception when conversions error occur."""
 
     pass
 

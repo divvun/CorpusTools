@@ -70,7 +70,7 @@ class ConverterManager(object):
         try:
             conv = converter.Converter(orig_file)
             conv.write_complete(self.LANGUAGEGUESSER)
-        except (converter.ConversionError, ValueError) as error:
+        except (util.ConversionError, ValueError) as error:
             LOGGER.warn('Could not convert %s\n%s',
                         orig_file,
                         six.text_type(error))

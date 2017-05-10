@@ -32,14 +32,8 @@ file that belongs to this epub file.
 from lxml import etree
 import epub
 
-from corpustools import xslsetter
+from corpustools import util, xslsetter
 from corpustools.htmlconverter import convert2xhtml, xhtml2intermediate
-
-
-class EpubError(Exception):
-    """Use this when errors occur in this module."""
-
-    pass
 
 
 def read_chapter(chapter):
@@ -57,7 +51,7 @@ def read_chapter(chapter):
     try:
         return etree.fromstring(chapter.read())
     except KeyError as error:
-        raise EpubError(error)
+        raise util.ConversionError(error)
 
 
 def chapters(book):

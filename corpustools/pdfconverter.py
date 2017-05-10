@@ -1151,7 +1151,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
                     self.extractor.extract_text_from_page(
                         pdfpage.pick_valid_text_elements())
         except xslsetter.XsltError as e:
-            raise ConversionError(str(e))
+            raise util.ConversionError(str(e))
 
     def parse_pages(self, root_element):
         """Parse the pages of the pdf xml document.
@@ -1186,7 +1186,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             with open(self.names.log, 'w') as logfile:
                 print('stdout\n{}\n'.format(runner.stdout), file=logfile)
                 print('stderr\n{}\n'.format(runner.stderr), file=logfile)
-                raise ConversionError(
+                raise util.ConversionError(
                     '{} failed. More info in the log file: {}'.format(
                         command[0], self.names.log))
 

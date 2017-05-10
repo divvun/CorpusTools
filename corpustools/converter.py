@@ -45,12 +45,6 @@ logging.basicConfig(level=logging.WARNING)
 LOGGER = logging.getLogger(__name__)
 
 
-class ConversionError(Exception):
-    """Raise this exception when an error occurs in the converter module."""
-
-    pass
-
-
 def to_giella(path):
     """Convert a document to the giella xml format.
 
@@ -100,7 +94,7 @@ class Converter(object):
             self.metadata = xslsetter.MetadataHandler(
                 self.names.xsl, create=True)
         except xslsetter.XsltError as error:
-            raise ConversionError(error)
+            raise util.ConversionError(error)
 
         self.metadata.set_lang_genre_xsl()
         with util.ignored(OSError):
@@ -140,7 +134,7 @@ class Converter(object):
                     logfile.write('\n')
                 util.print_element(complete, 0, 4, logfile)
 
-            raise ConversionError(
+            raise util.ConversionError(
                 '{}: Not valid XML. More info in the log file: '
                 '{}'.format(type(self).__name__, self.names.log))
 
@@ -175,7 +169,7 @@ class Converter(object):
                     logfile.write(six.text_type(entry))
                     logfile.write('\n')
 
-            raise ConversionError("Check the syntax in: {}".format(
+            raise util.ConversionError("Check the syntax in: {}".format(
                 self.names.xsl))
         except etree.XSLTParseError as error:
             with open(self.names.log, 'w') as logfile:
@@ -185,7 +179,7 @@ class Converter(object):
                     logfile.write(six.text_type(entry))
                     logfile.write('\n')
 
-            raise ConversionError("XSLTParseError in: {}\nError {}".format(
+            raise util.ConversionError("XSLTParseError in: {}\nError {}".format(
                 self.names.xsl, str(error)))
 
     def convert_errormarkup(self, complete):
@@ -210,7 +204,7 @@ class Converter(object):
                                                  pretty_print=True))
                     logfile.write('\n')
 
-                raise ConversionError(
+                raise util.ConversionError(
                     u"Markup error. More info in the log file: {}".format(
                         self.names.log))
 
@@ -339,7 +333,7 @@ class Converter(object):
             with open(self.names.log, 'w') as logfile:
                 print('stdout\n{}\n'.format(runner.stdout), file=logfile)
                 print('stderr\n{}\n'.format(runner.stderr), file=logfile)
-                raise ConversionError(
+                raise util.ConversionError(
                     '{} failed. More info in the log file: {}'.format(
                         command[0], self.names.log))
 
@@ -370,6 +364,6 @@ class Converter(object):
             else:
                 logfile.write(invalid_input.encode('utf8'))
 
-        raise ConversionError(
+        raise util.ConversionError(
             "{}: log is found in {}".format(type(self).__name__,
                                             self.names.log))
