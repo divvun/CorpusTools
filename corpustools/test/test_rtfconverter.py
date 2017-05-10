@@ -24,7 +24,7 @@ import os
 
 from lxml import etree
 
-from corpustools.rtfconverter import RTFConverter
+from corpustools import rtfconverter
 from corpustools.test.xmltester import XMLTester
 
 HERE = os.path.dirname(__file__)
@@ -35,12 +35,10 @@ class TestRTFConverter(XMLTester):
 
     def test_convert2intermediate(self):
         """Test rtf conversion to Giella xml."""
-        testrtf = RTFConverter(
+        got = rtfconverter.convert2intermediate(
             os.path.join(HERE,
                          'converter_data/fakecorpus/orig/sme/riddu/'
                          'folkemote.rtf'))
-
-        got = testrtf.convert2intermediate()
         want = etree.parse(
             os.path.join(HERE, 'converter_data/folkemote.xml'))
 

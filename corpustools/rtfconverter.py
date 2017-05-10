@@ -27,7 +27,7 @@ import six
 from pyth.plugins.rtf15.reader import Rtf15Reader
 from pyth.plugins.xhtml.writer import XHTMLWriter
 
-from corpustools.htmlconverter import HTMLConverter
+from corpustools.htmlconverter import xhtml2intermediate, convert2xhtml
 
 
 class RTFError(Exception):
@@ -36,24 +36,35 @@ class RTFError(Exception):
     pass
 
 
-class RTFConverter(HTMLConverter):
-    """Convert rtf documents to the Giella xml format."""
+def rtf_to_unicodehtml(filename):
+    """Convert the content of an rtf file to xhtml.
 
-    @property
-    def content(self):
-        """Convert the content of an rtf file to xhtml.
+    Arguments:
+        filename (str): path to the document
 
-        Returns:
-            A string containing the xhtml version of the rtf file.
-        """
-        with open(self.orig, "rb") as rtf_document:
-            content = rtf_document.read()
-            try:
-                pyth_doc = Rtf15Reader.read(
-                    io.BytesIO(content.replace(b'fcharset256',
-                                               b'fcharset255')))
-                return six.text_type(XHTMLWriter.write(
-                    pyth_doc, pretty=True).read(), encoding='utf8')
-            except UnicodeDecodeError:
-                raise RTFError('Unicode problems in {}'.format(
-                    self.orig))
+    Returns:
+        A string containing the xhtml version of the rtf file.
+    """
+    with open(filename, "rb") as rtf_document:
+        content = rtf_document.read()
+        try:
+            pyth_doc = Rtf15Reader.read(
+                io.BytesIO(content.replace(b'fcharset256',
+                                           b'fcharset255')))
+            return six.text_type(XHTMLWriter.write(
+                pyth_doc, pretty=True).read(), encoding='utf8')
+        except UnicodeDecodeError:
+            raise RTFError('Unicode problems in {}'.format(
+                filename.orig))
+
+
+def convert2intermediate(filename):
+    """Convert an rtf document to the Giella xml format.
+
+    Arguments:
+        filename (str): path to the document
+
+    Returns:
+        etree.Element: the root element of the Giella xml document
+    """
+    return xhtml2intermediate(convert2xhtml(rtf_to_unicodehtml(filename)))
