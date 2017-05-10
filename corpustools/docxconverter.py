@@ -22,17 +22,17 @@
 
 from pydocx.export import PyDocXHTMLExporter
 
-from corpustools.htmlconverter import HTMLConverter
+from corpustools.htmlconverter import xhtml2intermediate, convert2xhtml
 
 
-class DocxConverter(HTMLConverter):
-    """Convert docx documents to the Giella xml format."""
+def convert2intermediate(filename):
+    """Convert a Microsoft Word document to the Giella xml format.
 
-    @property
-    def content(self):
-        """Convert the content of a docx file to xhtml.
+    Arguments:
+        filename (str): path to the document
 
-        Returns:
-            A string contaning the xhtml version of the docx file.
-        """
-        return PyDocXHTMLExporter(self.orig).export()
+    Returns:
+        etree.Element: the root element of the Giella xml document
+    """
+    return xhtml2intermediate(
+        convert2xhtml(PyDocXHTMLExporter(filename).export()))
