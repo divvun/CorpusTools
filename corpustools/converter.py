@@ -42,9 +42,6 @@ from lxml import etree, html
 from lxml.html import clean, html5parser
 from odf.odf2xhtml import ODF2XHTML
 from pydocx.export import PyDocXHTMLExporter
-from pyth.plugins.rtf15.reader import Rtf15Reader
-from pyth.plugins.xhtml.writer import XHTMLWriter
-
 from corpustools import (argparse_version, ccat, corpuspath, decode,
                          errormarkup, text_cat, util, xslsetter)
 
@@ -356,28 +353,6 @@ class Converter(object):
 
         raise ConversionError(
             "{}: log is found in {}".format(type(self).__name__, self.names.log))
-
-
-class RTFConverter(HTMLConverter):
-    """Convert rtf documents to the Giella xml format."""
-
-    @property
-    def content(self):
-        """Convert the content of an rtf file to xhtml.
-
-        Returns:
-            A string containing the xhtml version of the rtf file.
-        """
-        with open(self.names.orig, "rb") as rtf_document:
-            content = rtf_document.read()
-            try:
-                pyth_doc = Rtf15Reader.read(
-                    io.BytesIO(content.replace(b'fcharset256', b'fcharset255')))
-                return six.text_type(XHTMLWriter.write(
-                    pyth_doc, pretty=True).read(), encoding='utf8')
-            except UnicodeDecodeError:
-                raise ConversionError('Unicode problems in {}'.format(
-                    self.names.orig))
 
 
 class OdfConverter(HTMLConverter):

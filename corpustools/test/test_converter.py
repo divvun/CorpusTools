@@ -514,20 +514,6 @@ class TestEpubConverter1(XMLTester):
         self.assertXmlEqual(got, etree.fromstring(want))
 
 
-class TestRTFConverter(XMLTester):
-
-    def setUp(self):
-        self.testrtf = converter.RTFConverter(
-            os.path.join(here, 'converter_data/fakecorpus/orig/sme/riddu/folkemote.rtf'))
-
-    def test_convert2intermediate(self):
-        got = self.testrtf.convert2intermediate()
-        want = etree.parse(
-            os.path.join(here, 'converter_data/folkemote.xml'))
-
-        self.assertXmlEqual(got, want)
-
-
 class TestDocumentFixer(XMLTester):
 
     def test_insert_spaces_after_semicolon(self):
