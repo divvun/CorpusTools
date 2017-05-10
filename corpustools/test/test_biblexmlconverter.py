@@ -14,14 +14,16 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2014-2017 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2014-2017 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
+
+"""Test the BiblexmlConverter class."""
 
 from __future__ import absolute_import
 
 import doctest
-import io
 import os
 
 import lxml.doctestcompare
@@ -29,9 +31,9 @@ import lxml.etree
 import six
 from testfixtures import TempDirectory
 
-from corpustools import converter
+from corpustools import biblexmlconverter
 
-tests = {
+TESTS = {
     'book_chapter_section_verse': {
         'orig': (
             u'<document>'
@@ -141,7 +143,7 @@ tests = {
 
 
 def assertXmlEqual(got, want):
-    """Check if two xml snippets are equal"""
+    """Check if two xml snippets are equal."""
     got = lxml.etree.tostring(got, encoding='unicode')
     want = lxml.etree.tostring(want, encoding='unicode')
     checker = lxml.doctestcompare.LXMLOutputChecker()
@@ -153,16 +155,18 @@ def assertXmlEqual(got, want):
 
 
 def test_conversion():
-    for testname, bible_xml in six.iteritems(tests):
+    """Test conversion of bible xml elements."""
+    for testname, bible_xml in six.iteritems(TESTS):
         yield check_conversion, testname, bible_xml
 
 
 def check_conversion(testname, bible_xml):
-    '''Check that the tidied html is correctly converted'''
-    with TempDirectory() as d:
+    """Check that the bible xml is correctly converted."""
+    with TempDirectory() as temp_dir:
         corpusfilename = 'orig/sme/bible/nt/bogus.bible.xml'
-        d.write(corpusfilename, bible_xml['orig'].encode('utf8'))
-        bc = converter.BiblexmlConverter(os.path.join(d.path, corpusfilename))
-        got = bc.convert2intermediate()
+        temp_dir.write(corpusfilename, bible_xml['orig'].encode('utf8'))
+        converter = biblexmlconverter.BiblexmlConverter(os.path.join(
+            temp_dir.path, corpusfilename))
+        got = converter.convert2intermediate()
         want = lxml.etree.fromstring(bible_xml['converted'])
         assertXmlEqual(got, want)

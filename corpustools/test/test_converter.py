@@ -2868,5 +2868,3 @@ class TestXslMaker(XMLTester):
 
         want = etree.parse(os.path.join(here, 'converter_data/test.xsl'))
         self.assertXmlEqual(got, want)
-
-
