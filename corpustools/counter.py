@@ -27,7 +27,7 @@ import logging
 import os
 from collections import defaultdict
 
-from corpustools import argparse_version, converter, util
+from corpustools import argparse_version, converter, convertermanager, util
 
 
 logging.basicConfig(level=logging.CRITICAL)
@@ -54,12 +54,12 @@ def parse_options():
 
 def count_files(path):
     """Count files in the given language."""
-    cm = converter.ConverterManager(False, False)
+    cm = convertermanager.ConverterManager(False, False)
     cm.collect_files([path])
     counter = defaultdict(int)
     lacking_files = defaultdict(set)
-    for f in cm.FILES:
-        c = cm.converter(f)
+    for f in cm.files:
+        c = converter.Converter(f)
         if os.path.exists(c.names.converted):
             counter['con'] += 1
         else:
@@ -70,7 +70,7 @@ def count_files(path):
             if os.path.exists(c.names.converted):
                 lacking_files['ana'].add(c.names.converted)
 
-    return(len(cm.FILES), counter['con'], counter['ana'], lacking_files)
+    return(len(cm.files), counter['con'], counter['ana'], lacking_files)
 
 
 def main():
