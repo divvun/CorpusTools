@@ -23,7 +23,7 @@
 import six
 from odf.odf2xhtml import ODF2XHTML
 
-from corpustools.htmlconverter import HTMLConverter
+from corpustools.htmlconverter import xhtml2intermediate, convert2xhtml
 
 
 class ODFError(Exception):
@@ -32,20 +32,30 @@ class ODFError(Exception):
     pass
 
 
-class OdfConverter(HTMLConverter):
-    """Convert odf documents to the Giella xml format."""
+def odf_to_unicodehtml(self):
+    """Convert the content of an odf file to xhtml.
 
-    @property
-    def content(self):
-        """Convert the content of an odf file to xhtml.
+    Returns:
+        A string contaning the xhtml version of the odf file.
+    """
+    generatecss = False
+    embedable = True
+    odhandler = ODF2XHTML(generatecss, embedable)
+    try:
+        return odhandler.odf2xhtml(six.text_type(self.orig))
+    except TypeError as error:
+        raise ODFError('Error: {}'.format(error))
 
-        Returns:
-            A string contaning the xhtml version of the odf file.
-        """
-        generatecss = False
-        embedable = True
-        odhandler = ODF2XHTML(generatecss, embedable)
-        try:
-            return odhandler.odf2xhtml(six.text_type(self.orig))
-        except TypeError as error:
-            raise ODFError('Error: {}'.format(error))
+
+def convert2intermediate(filename):
+    """Convert an odf document to the Giella xml format.
+
+    Arguments:
+        filename (str): path to the document
+
+    Returns:
+        etree.Element: the root element of the Giella xml document
+    """
+    return xhtml2intermediate(
+        convert2xhtml(
+            odf_to_unicodehtml(filename)))
