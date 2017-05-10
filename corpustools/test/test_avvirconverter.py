@@ -32,7 +32,7 @@ class TestAvvirConverter(xmltester.XMLTester):
 
     def setUp(self):
         """Setup a common AvvirConverter instance."""
-        self.avvir = avvirconverter.AvvirConverter(etree.fromstring(
+        self.avvir = etree.fromstring(
             '<article>'
             '    <story id="a" class="Tittel">'
             '        <p>a</p>'
@@ -64,7 +64,7 @@ class TestAvvirConverter(xmltester.XMLTester):
             '        <p>a<p>b</p></p>'
             '    </story>'
             '</article>'
-        ))
+        )
 
     def test_remove_identical_ids(self):
         """Check that only the first of stories with identical ids are kept."""
@@ -99,8 +99,8 @@ class TestAvvirConverter(xmltester.XMLTester):
             '</article>'
         )
 
-        self.avvir.remove_identical_ids()
-        self.assertXmlEqual(self.avvir.intermediate, want)
+        avvirconverter.remove_identical_ids(self.avvir)
+        self.assertXmlEqual(self.avvir, want)
 
     def test_convert_p_1(self):
         """Check when p does not contain p."""
@@ -133,14 +133,14 @@ class TestAvvirConverter(xmltester.XMLTester):
             '    </story>'
             '</article>')
 
-        self.avvir.remove_identical_ids()
-        self.avvir.convert_p()
-        self.assertXmlEqual(self.avvir.intermediate, want)
+        avvirconverter.remove_identical_ids(self.avvir)
+        avvirconverter.convert_p(self.avvir)
+
+        self.assertXmlEqual(self.avvir, want)
 
     def test_convert_p_2(self):
         """Check when p contains only p."""
-        avvir = avvirconverter.AvvirConverter('orig/sme/admin/fakename.xml')
-        avvir.intermediate = etree.fromstring(
+        avvir = etree.fromstring(
             '<article>'
             '   <story class="body">'
             '       <p>corrected text <p>text with typo</p>with tail</p>'
@@ -154,13 +154,13 @@ class TestAvvirConverter(xmltester.XMLTester):
             '   </story>'
             '</article>')
 
-        avvir.convert_p()
-        self.assertXmlEqual(avvir.intermediate, want)
+        avvirconverter.convert_p(avvir)
+
+        self.assertXmlEqual(avvir, want)
 
     def test_convert_p_3(self):
         """Check when p contains span and p."""
-        avvir = avvirconverter.AvvirConverter('orig/sme/admin/fakename.xml')
-        avvir.intermediate = etree.fromstring(
+        avvir = etree.fromstring(
             '<article>'
             '   <story class="body">'
             '       <p>'
@@ -178,13 +178,13 @@ class TestAvvirConverter(xmltester.XMLTester):
             '   </story>'
             '</article>')
 
-        avvir.convert_p()
-        self.assertXmlEqual(avvir.intermediate, want)
+        avvirconverter.convert_p(avvir)
+
+        self.assertXmlEqual(avvir, want)
 
     def test_convert_p_4(self):
         """p.text is None."""
-        avvir = avvirconverter.AvvirConverter('orig/sme/admin/fakename.xml')
-        avvir.intermediate = etree.fromstring(
+        avvir = etree.fromstring(
             '<article>'
             '   <story class="body">'
             '       <p><p> </p>with tail'
@@ -199,13 +199,13 @@ class TestAvvirConverter(xmltester.XMLTester):
             '   </story>'
             '</article>')
 
-        avvir.convert_p()
-        self.assertXmlEqual(avvir.intermediate, want)
+        avvirconverter.convert_p(avvir)
+
+        self.assertXmlEqual(avvir, want)
 
     def test_convert_p_5(self):
         """sub_p.tail is None."""
-        avvir = avvirconverter.AvvirConverter('orig/sme/admin/fakename.xml')
-        avvir.intermediate = etree.fromstring(
+        avvir = etree.fromstring(
             '<article>'
             '   <story class="body">'
             '       <p>láigovistti <p class="NormalParagraphStyle">85</p>'
@@ -220,13 +220,13 @@ class TestAvvirConverter(xmltester.XMLTester):
             '   </story>'
             '</article>')
 
-        avvir.convert_p()
-        self.assertXmlEqual(avvir.intermediate, want)
+        avvirconverter.convert_p(avvir)
+
+        self.assertXmlEqual(avvir, want)
 
     def test_convert_p_6(self):
         """previous.text not None, sub_p.tail is None."""
-        avvir = avvirconverter.AvvirConverter('orig/sme/admin/fakename.xml')
-        avvir.intermediate = etree.fromstring(
+        avvir = etree.fromstring(
             '<article>'
             '   <story class="body">'
             '       <p class="Privat ann tittel">Stohpu<br/>vuovdemassi'
@@ -242,13 +242,13 @@ class TestAvvirConverter(xmltester.XMLTester):
             '   </story>'
             '</article>')
 
-        avvir.convert_p()
-        self.assertXmlEqual(avvir.intermediate, want)
+        avvirconverter.convert_p(avvir)
+
+        self.assertXmlEqual(avvir, want)
 
     def test_convert_p_7(self):
         """previous.tail is None, sub_p.tail not None."""
-        avvir = avvirconverter.AvvirConverter('orig/sme/admin/fakename.xml')
-        avvir.intermediate = etree.fromstring(
+        avvir = etree.fromstring(
             '<article>'
             '   <story class="body">'
             '       <p class="Privat ann tittel">'
@@ -264,8 +264,9 @@ class TestAvvirConverter(xmltester.XMLTester):
             '   </story>'
             '</article>')
 
-        avvir.convert_p()
-        self.assertXmlEqual(avvir.intermediate, want)
+        avvirconverter.convert_p(avvir)
+
+        self.assertXmlEqual(avvir, want)
 
     def test_convert_story(self):
         """Test convert_story."""
@@ -290,10 +291,11 @@ class TestAvvirConverter(xmltester.XMLTester):
             '    <p>o</p>'
             '</article>')
 
-        self.avvir.remove_identical_ids()
-        self.avvir.convert_p()
-        self.avvir.convert_story()
-        self.assertXmlEqual(self.avvir.intermediate, want)
+        avvirconverter.remove_identical_ids(self.avvir)
+        avvirconverter.convert_p(self.avvir)
+        avvirconverter.convert_story(self.avvir)
+
+        self.assertXmlEqual(self.avvir, want)
 
     def test_convert_article(self):
         """Test convert_article."""
@@ -320,8 +322,8 @@ class TestAvvirConverter(xmltester.XMLTester):
             '    </body>'
             '</document>')
 
-        self.avvir.remove_identical_ids()
-        self.avvir.convert_p()
-        self.avvir.convert_story()
-        self.avvir.convert_article()
-        self.assertXmlEqual(self.avvir.intermediate, want)
+        avvirconverter.remove_identical_ids(self.avvir)
+        avvirconverter.convert_p(self.avvir)
+        avvirconverter.convert_story(self.avvir)
+
+        self.assertXmlEqual(avvirconverter.convert_article(self.avvir), want)

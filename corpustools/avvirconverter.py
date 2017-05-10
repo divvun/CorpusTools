@@ -24,7 +24,157 @@ u"""Convert Ávvir-files to the Giella xml format."""
 from lxml import etree
 
 
-class AvvirConverter(object):
+def remove_identical_ids(avvir_doc):
+    """Remove identical ids.
+
+    Arguments:
+        avvir_doc (etree.Element): the etree that should be manipulated.
+    """
+    story_ids = set()
+    for story in avvir_doc.xpath('.//story[@id]'):
+        story_id = story.get('id')
+        if story_id not in story_ids:
+            story_ids.add(story_id)
+        else:
+            story.getparent().remove(story)
+
+
+def insert_element(para, text, position):
+    """Insert a new element in p's parent.
+
+    Arguments:
+        p: an lxml element, it is a story/p element
+        text: (unicode) string
+        position: (integer) the position inside p's parent where the new
+                    element is inserted
+
+    Returns:
+        position: (integer)
+    """
+    if text is not None and text.strip() != '':
+        new_p = etree.Element('p')
+        new_p.text = text
+        grandparent = para.getparent()
+        grandparent.insert(grandparent.index(para) + position, new_p)
+        position += 1
+
+    return position
+
+
+def convert_sub_p(para):
+    """Convert p element found inside story/p elements.
+
+    These elements contain erroneous text that an editor has removed.
+    This function removes p.text and saves p.tail
+
+    Arguments:
+        p: an lxml element, it is a story/p element
+    """
+    for sub_p in para.findall('.//p'):
+        previous = sub_p.getprevious()
+        if previous is None:
+            parent = sub_p.getparent()
+            if sub_p.tail is not None:
+                if parent.text is not None:
+                    parent.text = parent.text + sub_p.tail
+                else:
+                    parent.text = sub_p.tail
+        else:
+            if sub_p.tail is not None:
+                if previous.tail is not None:
+                    previous.tail = previous.tail + sub_p.tail
+                else:
+                    previous.tail = sub_p.tail
+        para.remove(sub_p)
+
+
+def convert_subelement(para):
+    """Convert subelements of story/p elements to p elements.
+
+    Arguments:
+        p: an lxml element, it is a story/p element
+    """
+    position = 1
+    for subelement in para:
+        position = insert_element(para, subelement.text, position)
+
+        for subsubelement in subelement:
+            for text in [subsubelement.text, subsubelement.tail]:
+                position = insert_element(para, text, position)
+
+        position = insert_element(para, subelement.tail, position)
+
+        para.remove(subelement)
+
+
+def convert_p(avvir_doc):
+    """Convert story/p elements to one or more p elements.
+
+    Arguments:
+        avvir_doc (etree.Element): the etree that should be manipulated.
+    """
+    for para in avvir_doc.findall('./story/p'):
+        if para.get("class") is not None:
+            del para.attrib["class"]
+
+        convert_sub_p(para)
+        convert_subelement(para)
+
+        if para.text is None or para.text.strip() == '':
+            story = para.getparent()
+            story.remove(para)
+
+
+def convert_story(avvir_doc):
+    """Convert story elements in to giellatekno xml elements.
+
+    Arguments:
+        avvir_doc (etree.Element): the etree that should be manipulated.
+    """
+    for title in avvir_doc.findall('.//story[@class="Tittel"]'):
+        for para in title.findall('./p'):
+            para.set('type', 'title')
+
+        del title.attrib['class']
+        del title.attrib['id']
+
+        title.tag = 'section'
+
+    for title in avvir_doc.findall(
+            './/story[@class="Undertittel"]'):
+        for para in title.findall('./p'):
+            para.set('type', 'title')
+
+        del title.attrib['class']
+        del title.attrib['id']
+
+        title.tag = 'section'
+
+    for story in avvir_doc.findall('./story'):
+        parent = story.getparent()
+        for i, para in enumerate(story.findall('./p')):
+            parent.insert(parent.index(story) + i + 1, para)
+
+        parent.remove(story)
+
+
+def convert_article(avvir_doc):
+    u"""The root element of an Ávvir doc is article, rename it to body.
+
+    Arguments:
+        avvir_doc (etree.Element): the etree that should be manipulated.
+
+    Returns:
+        etree.Element: The document root of the basic Giella xml document.
+    """
+    avvir_doc.tag = 'body'
+    document = etree.Element('document')
+    document.append(avvir_doc)
+
+    return document
+
+
+def convert2intermediate(filename):
     u"""Convert Ávvir xml files to the giellatekno xml format.
 
     The root node in an Ávvir document is article.
@@ -32,148 +182,10 @@ class AvvirConverter(object):
     story nodes contain one or more p nodes.
     p nodes contain span, br and (since 2013) p nodes.
     """
+    avvir_doc = etree.parse(filename)
 
-    def __init__(self, intermediate):
-        """Initialise the AvvirConverter class.
+    remove_identical_ids(avvir_doc)
+    convert_p(avvir_doc)
+    convert_story(avvir_doc)
 
-        Arguments:
-            filename: string containing the path to the file that should
-            be converted
-        """
-        self.intermediate = intermediate
-
-    def remove_identical_ids(self):
-        """Remove identical ids."""
-        story_ids = set()
-        for story in self.intermediate.xpath('.//story[@id]'):
-            story_id = story.get('id')
-            if story_id not in story_ids:
-                story_ids.add(story_id)
-            else:
-                story.getparent().remove(story)
-
-    @staticmethod
-    def insert_element(para, text, position):
-        """Insert a new element in p's parent.
-
-        Arguments:
-            p: an lxml element, it is a story/p element
-            text: (unicode) string
-            position: (integer) the position inside p's parent where the new
-                      element is inserted
-
-        Returns:
-            position: (integer)
-        """
-        if text is not None and text.strip() != '':
-            new_p = etree.Element('p')
-            new_p.text = text
-            grandparent = para.getparent()
-            grandparent.insert(grandparent.index(para) + position, new_p)
-            position += 1
-
-        return position
-
-    @staticmethod
-    def convert_sub_p(para):
-        """Convert p element found inside story/p elements.
-
-        These elements contain erroneous text that an editor has removed.
-        This function removes p.text and saves p.tail
-
-        Arguments:
-            p: an lxml element, it is a story/p element
-        """
-        for sub_p in para.findall('.//p'):
-            previous = sub_p.getprevious()
-            if previous is None:
-                parent = sub_p.getparent()
-                if sub_p.tail is not None:
-                    if parent.text is not None:
-                        parent.text = parent.text + sub_p.tail
-                    else:
-                        parent.text = sub_p.tail
-            else:
-                if sub_p.tail is not None:
-                    if previous.tail is not None:
-                        previous.tail = previous.tail + sub_p.tail
-                    else:
-                        previous.tail = sub_p.tail
-            para.remove(sub_p)
-
-    def convert_subelement(self, para):
-        """Convert subelements of story/p elements to p elements.
-
-        Arguments:
-            p: an lxml element, it is a story/p element
-        """
-        position = 1
-        for subelement in para:
-            position = self.insert_element(para, subelement.text, position)
-
-            for subsubelement in subelement:
-                for text in [subsubelement.text, subsubelement.tail]:
-                    position = self.insert_element(para, text, position)
-
-            position = self.insert_element(para, subelement.tail, position)
-
-            para.remove(subelement)
-
-    def convert_p(self):
-        """Convert story/p elements to one or more p elements."""
-        for para in self.intermediate.findall('./story/p'):
-            if para.get("class") is not None:
-                del para.attrib["class"]
-
-            self.convert_sub_p(para)
-            self.convert_subelement(para)
-
-            if para.text is None or para.text.strip() == '':
-                story = para.getparent()
-                story.remove(para)
-
-    def convert_story(self):
-        """Convert story elements in to giellatekno xml elements."""
-        for title in self.intermediate.findall('.//story[@class="Tittel"]'):
-            for para in title.findall('./p'):
-                para.set('type', 'title')
-
-            del title.attrib['class']
-            del title.attrib['id']
-
-            title.tag = 'section'
-
-        for title in self.intermediate.findall(
-                './/story[@class="Undertittel"]'):
-            for para in title.findall('./p'):
-                para.set('type', 'title')
-
-            del title.attrib['class']
-            del title.attrib['id']
-
-            title.tag = 'section'
-
-        for story in self.intermediate.findall('./story'):
-            parent = story.getparent()
-            for i, para in enumerate(story.findall('./p')):
-                parent.insert(parent.index(story) + i + 1, para)
-
-            parent.remove(story)
-
-    def convert_article(self):
-        u"""The root element of an Ávvir doc is article, rename it to body."""
-        self.intermediate.tag = 'body'
-        document = etree.Element('document')
-        document.append(self.intermediate)
-        self.intermediate = document
-
-
-def convert2intermediate(filename):
-    u"""Convert an Ávvir xml to an intermediate xml document."""
-    avvir = AvvirConverter(etree.parse(filename))
-    avvir.remove_identical_ids()
-    avvir.convert_p()
-    avvir.convert_story()
-    avvir.convert_article()
-
-    return avvir.intermediate
+    return convert_article(avvir_doc)
