@@ -2036,30 +2036,3 @@ LOGO: Smi kulturfestivala 1998
 
         self.assertXmlEqual(got, want)
 
-
-class TestXslMaker(XMLTester):
-
-    def test_get_xsl(self):
-
-        xslmaker = converter.XslMaker(
-            etree.parse(
-                os.path.join(HERE,
-                             'converter_data/samediggi-article-48.html.xsl')))
-        got = xslmaker.xsl
-
-        # The import href is different for each user testing, so just
-        # check that it looks OK:
-        import_elt = got.find(
-            '/xsl:import',
-            namespaces={'xsl': 'http://www.w3.org/1999/XSL/Transform'})
-        self.assertTrue(import_elt.attrib["href"].startswith("file:///"))
-        self.assertTrue(import_elt.attrib["href"].endswith("common.xsl"))
-        self.assertGreater(len(open(
-            import_elt.attrib["href"][7:].replace('%20', ' '), 'r').read()), 0)
-        # ... and set it to the hardcoded path in test.xsl:
-        import_elt.attrib["href"] = (
-            'file:///home/boerre/langtech/trunk/tools/CorpusTools/'
-            'corpustools/xslt/common.xsl')
-
-        want = etree.parse(os.path.join(HERE, 'converter_data/test.xsl'))
-        self.assertXmlEqual(got, want)

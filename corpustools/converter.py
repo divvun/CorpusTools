@@ -38,7 +38,7 @@ from corpustools import (avvirconverter, biblexmlconverter,
                          ccat, corpuspath, decode, docconverter, docxconverter,
                          epubconverter, errormarkup, htmlconverter,
                          odfconverter, pdfconverter, plaintextconverter,
-                         rtfconverter, svgconverter, util, xslsetter)
+                         rtfconverter, svgconverter, util, xslmaker, xslsetter)
 
 HERE = os.path.dirname(__file__)
 
@@ -165,7 +165,7 @@ class Converter(object):
         self.fix_document(intermediate)
         self.maybe_write_intermediate(intermediate)
         try:
-            xsl_maker = XslMaker(self.metadata.tree)
+            xsl_maker = xslmaker.XslMaker(self.metadata.tree)
             complete = xsl_maker.transformer(intermediate)
 
             return complete.getroot()
@@ -372,7 +372,8 @@ class Converter(object):
                 logfile.write(invalid_input.encode('utf8'))
 
         raise ConversionError(
-            "{}: log is found in {}".format(type(self).__name__, self.names.log))
+            "{}: log is found in {}".format(type(self).__name__,
+                                            self.names.log))
 
 
 class DocumentFixer(object):
@@ -416,7 +417,8 @@ class DocumentFixer(object):
                 for emphasis in element.iter('em'):
                     next_elt = emphasis.getnext()
                     if (next_elt is not None and next_elt.tag == 'em' and
-                            (emphasis.tail is None or not word.search(emphasis.tail))):
+                            (emphasis.tail is None or not
+                             word.search(emphasis.tail))):
                         if emphasis.text is not None:
                             lines.append(emphasis.text.strip())
                         emphasis.getparent().remove(emphasis)
@@ -844,7 +846,8 @@ class DocumentFixer(object):
             paragraph.getparent().insert(
                 index,
                 self._make_element(
-                    'p', self.titletags.sub('', line).strip(), {'type': 'title'}))
+                    'p', self.titletags.sub('', line).strip(),
+                    {'type': 'title'}))
         elif line == '' and lines:
             index = self._add_paragraph(
                 ' '.join(lines).strip(), index, paragraph, paragraph.attrib)
@@ -873,56 +876,6 @@ class DocumentFixer(object):
         """Convert newstags found in text to xml elements."""
         self._fix_emphasises()
         self._fix_paragraphs()
-
-
-class XslMaker(object):
-    """Make an xsl file to combine with the intermediate xml file.
-
-    To convert the intermediate xml to a fullfledged  giellatekno document
-    a combination of three xsl files + the intermediate xml file is needed.
-    """
-
-    def __init__(self, xslfile):
-        """Initialise the XslMaker class.
-
-        Arguments:
-            xslfile: a string containing the path to the xsl file.
-        """
-        self.filename = xslfile
-
-    @property
-    def logfile(self):
-        """Return the name of the logfile."""
-        return self.filename + '.log'
-
-    @property
-    def xsl(self):
-        """Return an etree of the xsl file.
-
-        Raises:
-            In case of an xml syntax error, raise ConversionException.
-        """
-        xsl = etree.parse(
-            os.path.join(HERE, 'xslt/preprocxsl.xsl'))
-        transformer = etree.XSLT(xsl)
-
-        common_xsl_path = os.path.join(
-            HERE, 'xslt/common.xsl').replace(' ', '%20')
-
-        return transformer(
-            self.filename,
-            commonxsl=etree.XSLT.strparam('file://{}'.format(common_xsl_path)))
-
-    @property
-    def transformer(self):
-        """Make an etree.XSLT transformer.
-
-        Raises:
-            raise a ConversionException in case of invalid XML in the xsl file.
-        Returns:
-            an etree.XSLT transformer
-        """
-        return etree.XSLT(self.xsl)
 
 
 class LanguageDetector(object):
