@@ -18,7 +18,7 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-u"""Convert Ávvir-files to the Giella xml format."""
+u"""Convert html files to the Giella xml format."""
 
 import codecs
 import os
