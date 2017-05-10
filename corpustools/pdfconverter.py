@@ -1191,3 +1191,8 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
                         command[0], self.names.log))
 
         return runner.stdout
+
+
+def convert2intermediate(path):
+    converter = PDF2XMLConverter(path)
+    return converter.convert2intermediate()
