@@ -25,7 +25,7 @@ import os
 
 from lxml import etree
 
-from corpustools.docconverter import DocConverter
+from corpustools import docconverter
 from corpustools.test.xmltester import XMLTester
 
 HERE = os.path.dirname(__file__)
@@ -36,14 +36,9 @@ class TestDocConverter(XMLTester):
 
     def test_convert2intermediate(self):
         """Test conversion of a doc file."""
-        testdoc = DocConverter(
-            os.path.join(
-                HERE,
-                'converter_data/fakecorpus/orig/sme/riddu/doc-test.doc'))
-
-        got = testdoc.convert2intermediate()
+        got = docconverter.convert2intermediate(os.path.join(
+            HERE, 'converter_data/fakecorpus/orig/sme/riddu/doc-test.doc'))
         want = etree.parse(
-            os.path.join(HERE,
-                         'converter_data/doc-test.xml'))
+            os.path.join(HERE, 'converter_data/doc-test.xml'))
 
         self.assertXmlEqual(got, want)

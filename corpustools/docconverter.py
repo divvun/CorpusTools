@@ -25,7 +25,7 @@ from __future__ import absolute_import, print_function
 import os
 
 from corpustools import util
-from corpustools.htmlconverter import HTMLConverter
+from corpustools.htmlconverter import xhtml2intermediate, convert2xhtml
 
 
 class DocError(Exception):
@@ -34,158 +34,175 @@ class DocError(Exception):
     pass
 
 
-class DocConverter(HTMLConverter):
-    """Convert Microsoft Word documents to the Giella xml format."""
+def doc_to_unicodehtml(filename):
+    """Convert a doc file to xhtml.
 
-    @property
-    def content(self):
-        """Convert a doc file to xhtml.
+    Arguments:
+        filename (str): path to the file
 
-        Returns:
-            A string containing the xhtml version of the doc file.
-        """
-        command = ['wvHtml',
-                   os.path.realpath(self.orig),
-                   '-']
-        try:
-            return self.extract_text(command).decode('utf8')
-        except DocError:
-            return self.extract_text(command).decode('windows-1252')
+    Returns:
+        A string containing the xhtml version of the doc file.
+    """
+    command = ['wvHtml',
+               os.path.realpath(filename),
+               '-']
+    try:
+        return extract_text(filename, command).decode('utf8')
+    except DocError:
+        return extract_text(filename, command).decode('windows-1252')
 
-    def fix_wv_output(self):
-        u"""Fix headers in the docx xhtml output.
 
-        Examples of headings:
+def fix_wv_output():
+    u"""Fix headers in the docx xhtml output.
 
-        h1:
-        <html:ul>
-            <html:li value="2">
-                <html:p/>
-                <html:div align="left" name="Overskrift 1">
-                    <html:p>
-                        <html:b>
-                            <html:span>
-                                OVTTASKASOLBMOT
-                            </html:span>
-                        </html:b>
-                    </html:p>
-                </html:div>
-            </html:li>
-        </html:ul>
+    Examples of headings:
 
-        h2:
+    h1:
+    <html:ul>
+        <html:li value="2">
+            <html:p/>
+            <html:div align="left" name="Overskrift 1">
+                <html:p>
+                    <html:b>
+                        <html:span>
+                            OVTTASKASOLBMOT
+                        </html:span>
+                    </html:b>
+                </html:p>
+            </html:div>
+        </html:li>
+    </html:ul>
+
+    h2:
+    <html:ol type="1">
+        <html:li value="1">
+            <html:p/>
+            <html:div align="left" name="Overskrift 2">
+                <html:p>
+                    <html:b>
+                        <html:span>
+                            čoahkkáigeassu
+                        </html:span>
+                    </html:b>
+                </html:p>
+            </html:div>
+        </html:li>
+    </html:ol>
+
+    <html:ol type="1">
         <html:ol type="1">
-            <html:li value="1">
+            <html:li value="2">
                 <html:p/>
                 <html:div align="left" name="Overskrift 2">
                     <html:p>
                         <html:b>
                             <html:span>
-                                čoahkkáigeassu
+                                Ulbmil ja váldooasit
                             </html:span>
                         </html:b>
                     </html:p>
                 </html:div>
             </html:li>
         </html:ol>
+    </html:ol>
 
+    h3:
+    <html:ol type="1">
         <html:ol type="1">
             <html:ol type="1">
-                <html:li value="2">
-                    <html:p/>
-                    <html:div align="left" name="Overskrift 2">
+                <html:li value="1">
+                    <html:p>
+                    </html:p>
+                    <html:div align="left" name="Overskrift 3">
                         <html:p>
                             <html:b>
                                 <html:span>
-                                    Ulbmil ja váldooasit
+                                    Geaográfalaš
                                 </html:span>
                             </html:b>
+                            <html:b>
+                                <html:span>
+                                    ráddjen
+                                </html:span>
+                            </html:b>
+
                         </html:p>
                     </html:div>
                 </html:li>
+
             </html:ol>
         </html:ol>
+    </html:ol>
 
-        h3:
+    <html:ol type="1">
         <html:ol type="1">
             <html:ol type="1">
-                <html:ol type="1">
-                    <html:li value="1">
+                <html:li value="1">
+                    <html:p>
+                    </html:p>
+                    <html:div align="left" name="Overskrift 3">
                         <html:p>
+                            <html:b>
+                            <html:span>Iskanjoavku ja sámegielaga
+                            definišuvdn</html:span></html:b>
+                            <html:b><html:span>a</html:span></html:b>
                         </html:p>
-                        <html:div align="left" name="Overskrift 3">
-                            <html:p>
-                                <html:b>
-                                    <html:span>
-                                        Geaográfalaš
-                                    </html:span>
-                                </html:b>
-                                <html:b>
-                                    <html:span>
-                                        ráddjen
-                                    </html:span>
-                                </html:b>
+                    </html:div>
+                </html:li>
 
-                            </html:p>
-                        </html:div>
-                    </html:li>
-
-                </html:ol>
             </html:ol>
         </html:ol>
+    </html:ol>
 
-        <html:ol type="1">
-            <html:ol type="1">
-                <html:ol type="1">
-                    <html:li value="1">
-                        <html:p>
-                        </html:p>
-                        <html:div align="left" name="Overskrift 3">
-                            <html:p>
-                                <html:b>
-                                <html:span>Iskanjoavku ja sámegielaga
-                                definišuvdn</html:span></html:b>
-                                <html:b><html:span>a</html:span></html:b>
-                            </html:p>
-                        </html:div>
-                    </html:li>
+    h4:
+    <html:div align="left" name="Overskrift 4">
+        <html:p>
+            <html:b>
+                <html:i>
+                    <html:span>
+                        Mildosat:
+                    </html:span>
+                </html:i>
+            </html:b>
+        </html:p>
+    </html:div>
 
-                </html:ol>
-            </html:ol>
-        </html:ol>
+    """
+    pass
 
-        h4:
-        <html:div align="left" name="Overskrift 4">
-            <html:p>
-                <html:b>
-                    <html:i>
-                        <html:span>
-                            Mildosat:
-                        </html:span>
-                    </html:i>
-                </html:b>
-            </html:p>
-        </html:div>
 
-        """
-        pass
+def extract_text(filename, command):
+    """Extract the text from a document.
 
-    def extract_text(self, command):
-        """Extract the text from a document.
+    Arguments:
+        filename (str): path to the document
+        command (list of str): the command and the arguments sent to
+            ExternalCommandRunner.
 
-        :command: a list containing the command and the arguments sent to
-        ExternalCommandRunner.
-        :returns: byte string containing the output of the program
-        """
-        runner = util.ExternalCommandRunner()
-        runner.run(command, cwd='/tmp')
+    Returns:
+        bytes: the output of the program
+    """
+    runner = util.ExternalCommandRunner()
+    runner.run(command, cwd='/tmp')
 
-        if runner.returncode != 0:
-            with open(self.orig + '.log', 'w') as logfile:
-                print('stdout\n{}\n'.format(runner.stdout), file=logfile)
-                print('stderr\n{}\n'.format(runner.stderr), file=logfile)
-                raise DocError(
-                    '{} failed. More info in the log file: {}'.format(
-                        command[0], self.orig + '.log'))
+    if runner.returncode != 0:
+        with open(filename + '.log', 'w') as logfile:
+            print('stdout\n{}\n'.format(runner.stdout), file=logfile)
+            print('stderr\n{}\n'.format(runner.stderr), file=logfile)
+            raise DocError(
+                '{} failed. More info in the log file: {}'.format(
+                    command[0], filename + '.log'))
 
-        return runner.stdout
+    return runner.stdout
+
+
+def convert2intermediate(filename):
+    """Convert a Microsoft Word document to the Giella xml format.
+
+    Arguments:
+        filename (str): name of the file
+
+    Returns:
+        etree.Element: the root element of the Giella xml document
+    """
+    return xhtml2intermediate(convert2xhtml(doc_to_unicodehtml(filename)))
