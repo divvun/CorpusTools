@@ -40,7 +40,6 @@ import epub
 import six
 from lxml import etree, html
 from lxml.html import clean, html5parser
-from odf.odf2xhtml import ODF2XHTML
 from pydocx.export import PyDocXHTMLExporter
 from corpustools import (argparse_version, ccat, corpuspath, decode,
                          errormarkup, text_cat, util, xslsetter)
@@ -353,25 +352,6 @@ class Converter(object):
 
         raise ConversionError(
             "{}: log is found in {}".format(type(self).__name__, self.names.log))
-
-
-class OdfConverter(HTMLConverter):
-    """Convert odf documents to the Giella xml format."""
-
-    @property
-    def content(self):
-        """Convert the content of an odf file to xhtml.
-
-        Returns:
-            A string contaning the xhtml version of the odf file.
-        """
-        generatecss = False
-        embedable = True
-        odhandler = ODF2XHTML(generatecss, embedable)
-        try:
-            return odhandler.odf2xhtml(six.text_type(self.names.orig))
-        except TypeError as e:
-            raise ConversionError('Error: {}'.format(e))
 
 
 class DocxConverter(HTMLConverter):
