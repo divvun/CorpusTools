@@ -19,7 +19,7 @@ setup(
             'analyse_corpus = corpustools.analyser:main',
             'ccat = corpustools.ccat:main',
             'compare_tmx_goldstandard = corpustools.compare_tmx_goldstandard:main',
-            'convert2xml = corpustools.converter:main',
+            'convert2xml = corpustools.convertermanager:main',
             'debug_corpus = corpustools.debug_corpus:main',
             'generate_anchor_list = corpustools.generate_anchor_list:main',
             'html_cleaner = corpustools.html_cleaner:main',
