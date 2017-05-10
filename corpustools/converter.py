@@ -165,9 +165,6 @@ class Converter(object):
             with open(self.names.log, 'w') as logfile:
                 logfile.write('Error at: {}'.format(
                     six.text_type(util.lineno())))
-                for entry in complete.error_log:
-                    logfile.write(six.text_type(entry))
-                    logfile.write('\n')
 
             raise util.ConversionError("Check the syntax in: {}".format(
                 self.names.xsl))
@@ -175,9 +172,6 @@ class Converter(object):
             with open(self.names.log, 'w') as logfile:
                 logfile.write('Error at: {}'.format(
                     six.text_type(util.lineno())))
-                for entry in complete.error_log:
-                    logfile.write(six.text_type(entry))
-                    logfile.write('\n')
 
             raise util.ConversionError("XSLTParseError in: {}\nError {}".format(
                 self.names.xsl, str(error)))
