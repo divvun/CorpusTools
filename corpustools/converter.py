@@ -45,7 +45,7 @@ from pydocx.export import PyDocXHTMLExporter
 from corpustools import (argparse_version, ccat, corpuspath, decode,
                          errormarkup, text_cat, util, xslsetter)
 
-here = os.path.dirname(__file__)
+HERE = os.path.dirname(__file__)
 
 
 logging.basicConfig(level=logging.WARNING)
@@ -106,7 +106,7 @@ class Converter(object):
     @staticmethod
     def get_dtd_location():
         """Return the path to the corpus dtd file."""
-        return os.path.join(here, 'dtd/corpus.dtd')
+        return os.path.join(HERE, 'dtd/corpus.dtd')
 
     def validate_complete(self, complete):
         """Validate the complete document."""
@@ -1286,11 +1286,11 @@ class XslMaker(object):
             In case of an xml syntax error, raise ConversionException.
         """
         preprocessXsl = etree.parse(
-            os.path.join(here, 'xslt/preprocxsl.xsl'))
+            os.path.join(HERE, 'xslt/preprocxsl.xsl'))
         preprocessXslTransformer = etree.XSLT(preprocessXsl)
 
         common_xsl_path = os.path.join(
-            here, 'xslt/common.xsl').replace(' ', '%20')
+            HERE, 'xslt/common.xsl').replace(' ', '%20')
 
         return preprocessXslTransformer(
             self.filexsl,

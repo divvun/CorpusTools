@@ -39,7 +39,7 @@ from nose_parameterized import parameterized
 from corpustools import converter, corpuspath, text_cat, xslsetter
 from corpustools.test.test_xhtml2corpus import assertXmlEqual
 
-here = os.path.dirname(__file__)
+HERE = os.path.dirname(__file__)
 LANGUAGEGUESSER = text_cat.Classifier(None)
 
 
@@ -139,7 +139,7 @@ def test_detect_quote():
 def check_quote_detection(name, orig, expected):
     document_fixer = converter.DocumentFixer(
         etree.parse(
-            os.path.join(here,
+            os.path.join(HERE,
                          'converter_data/samediggi-article-48s-before-'
                          'lang-detection-without-multilingual-tag.xml')))
     got_paragraph = document_fixer.detect_quote(
@@ -151,7 +151,7 @@ def check_quote_detection(name, orig, expected):
 class TestComputeCorpusnames(unittest.TestCase):
 
     def name(self, module):
-        return os.path.join(here, module, 'sme/admin/subdir/subsubdir/filename.html')
+        return os.path.join(HERE, module, 'sme/admin/subdir/subsubdir/filename.html')
 
     def setUp(self):
         self.cp = corpuspath.CorpusPath(self.name('orig'))
@@ -191,7 +191,7 @@ class TestConverter(XMLTester):
 
     def setUp(self):
         self.converter_inside_orig = converter.Converter(
-            os.path.join(here,
+            os.path.join(HERE,
                          'converter_data/fakecorpus/orig/nob/admin/samediggi-'
                          'article-16.html'),
             True)
@@ -206,7 +206,7 @@ class TestConverter(XMLTester):
         self.assertEqual(
             self.converter_inside_orig.names.orig,
             os.path.join(
-                here,
+                HERE,
                 'converter_data/fakecorpus/orig/nob/admin/samediggi-article-'
                 '16.html'))
 
@@ -220,7 +220,7 @@ class TestConverter(XMLTester):
         self.assertEqual(
             self.converter_inside_orig.names.xsl,
             os.path.join(
-                here,
+                HERE,
                 'converter_data/fakecorpus/orig/nob/admin/samediggi-'
                 'article-16.html.xsl'))
 
@@ -235,7 +235,7 @@ class TestConverter(XMLTester):
         self.assertEqual(
             self.converter_inside_orig.tmpdir,
             os.path.join(
-                here,
+                HERE,
                 'converter_data/fakecorpus/tmp'))
 
         self.assertEqual(
@@ -246,7 +246,7 @@ class TestConverter(XMLTester):
         self.assertEqual(
             self.converter_inside_orig.corpusdir.rstrip(os.path.sep),
             os.path.join(
-                here,
+                HERE,
                 'converter_data/fakecorpus'))
 
         self.assertEqual(
@@ -258,7 +258,7 @@ class TestConverter(XMLTester):
         self.assertEqual(
             self.converter_inside_orig.names.converted,
             os.path.join(
-                here,
+                HERE,
                 'converter_data/fakecorpus/converted/nob/admin/samediggi-'
                 'article-16.html.xml'))
 
@@ -379,7 +379,7 @@ class TestEpubConverter(XMLTester):
     def setUp(self):
         self.testdoc = converter.EpubConverter(
             os.path.join(
-                here, 'converter_data/fakecorpus/orig/sme/riddu/test.epub'),
+                HERE, 'converter_data/fakecorpus/orig/sme/riddu/test.epub'),
             'bogus')
 
     def test_remove_range(self):
@@ -470,7 +470,7 @@ class TestEpubConverter1(XMLTester):
     def setUp(self):
         self.testdoc = converter.EpubConverter(
             os.path.join(
-                here, 'converter_data/fakecorpus/orig/sme/riddu/test2.epub'),
+                HERE, 'converter_data/fakecorpus/orig/sme/riddu/test2.epub'),
             'bogus')
 
     def test_convert2intermediate(self):
@@ -1921,7 +1921,7 @@ LOGO: Smi kulturfestivala 1998
 
     def test_replace_ligatures(self):
         svgtext = converter.SVGConverter(
-            os.path.join(here,
+            os.path.join(HERE,
                          'converter_data/fakecorpus/orig/sme/riddu/'
                          'Riddu_Riddu_avis_TXT.200923.svg'),
             LANGUAGEGUESSER)
@@ -1931,7 +1931,7 @@ LOGO: Smi kulturfestivala 1998
         got = document_fixer.get_etree()
 
         want = etree.parse(
-            os.path.join(here,
+            os.path.join(HERE,
                          'converter_data/Riddu_Riddu_avis_TXT.200923.xml'))
 
         self.assertXmlEqual(got, want)
@@ -2233,7 +2233,7 @@ class TestXslMaker(XMLTester):
 
         xslmaker = converter.XslMaker(
             etree.parse(
-                os.path.join(here,
+                os.path.join(HERE,
                              'converter_data/samediggi-article-48.html.xsl')))
         got = xslmaker.xsl
 
@@ -2251,5 +2251,5 @@ class TestXslMaker(XMLTester):
             'file:///home/boerre/langtech/trunk/tools/CorpusTools/'
             'corpustools/xslt/common.xsl')
 
-        want = etree.parse(os.path.join(here, 'converter_data/test.xsl'))
+        want = etree.parse(os.path.join(HERE, 'converter_data/test.xsl'))
         self.assertXmlEqual(got, want)
