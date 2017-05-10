@@ -27,6 +27,7 @@ import re
 from lxml import etree, html
 
 from corpustools.htmlcontentconverter import HTMLContentConverter
+from corpustools.basicconverter import BasicConverter
 
 HERE = os.path.dirname(__file__)
 
@@ -37,12 +38,8 @@ class HTMLError(Exception):
     pass
 
 
-class HTMLConverter(object):
+class HTMLConverter(BasicConverter):
     """Convert html pages to Giella xml documents."""
-
-    def __init__(self, filename):
-        """Initialise the HTMLConverter class."""
-        self.orig = filename
 
     @property
     def content(self):

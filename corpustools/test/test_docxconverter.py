@@ -34,7 +34,7 @@ class TestDocxConverter(XMLTester):
     """Test docx conversion."""
 
     def test_convert2intermediate(self):
-        """Test docx conversion of a docx file."""
+        """Test conversion of a docx file."""
         testdoc = DocxConverter(
             os.path.join(
                 HERE,
