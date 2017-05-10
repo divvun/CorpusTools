@@ -23,186 +23,181 @@ u"""Convert bible xml files to the Giella xml format."""
 import lxml.etree as etree
 
 
-class BiblexmlConverter(object):
-    """Convert bible xml files to the Giella xml format."""
+def process_verse(verse_element):
+    """Process the verse element found in bible xml documents.
 
-    def __init__(self, filename):
-        """Initialise the BiblexmlConverter class.
+    Arguments:
+        verse_element: an etree element containing the verse element found
+        in a bible xml document.
 
-        Arguments:
-            filename (str): name of the file to convert.
-        """
-        self.orig = filename
+    Returns:
+        A string containing the text of the verse element.
+    """
+    if verse_element.tag != 'verse':
+        raise UserWarning(
+            'Unexpected element in verse: {}'.format(verse_element.tag))
 
-    def convert2intermediate(self):
-        """Convert the bible xml to intermediate Giella xml format."""
-        document = etree.Element('document')
-        document.append(self.process_bible())
+    return verse_element.text
 
-        return document
 
-    def process_verse(self, verse_element):
-        """Process the verse element found in bible xml documents.
+def process_section(section_element):
+    """Process the section element found in the bible xml documents.
 
-        Arguments:
-            verse_element: an etree element containing the verse element found
-            in a bible xml document.
+    Arguments:
+        section_element: an etree element containing the section element
+        found in a bible xml document.
 
-        Returns:
-            A string containing the text of the verse element.
-        """
-        if verse_element.tag != 'verse':
-            raise UserWarning(
-                '{}: Unexpected element in verse: {}'.format(
-                    self.orig, verse_element.tag))
+    Returns:
+        section: an etree element containing a corpus xml section.
+    """
+    section = etree.Element('section')
 
-        return verse_element.text
+    title = etree.Element('p')
+    title.set('type', 'title')
+    title.text = section_element.get('title')
 
-    def process_section(self, section_element):
-        """Process the section element found in the bible xml documents.
+    section.append(title)
 
-        Arguments:
-            section_element: an etree element containing the section element
-            found in a bible xml document.
-
-        Returns:
-            section: an etree element containing a corpus xml section.
-        """
-        section = etree.Element('section')
-
-        title = etree.Element('p')
-        title.set('type', 'title')
-        title.text = section_element.get('title')
-
-        section.append(title)
-
-        verses = []
-        for element in section_element:
-            if element.tag == 'p':
-                if verses:
-                    section.append(self.make_p(verses))
-                    verses = []
-                section.append(self.process_p(element))
-            elif element.tag == 'verse':
-                text = self.process_verse(element)
-                if text:
-                    verses.append(text)
-            else:
-                raise UserWarning(
-                    '{}: Unexpected element in section: {}'.format(
-                        self.orig, element.tag))
-
-        section.append(self.make_p(verses))
-
-        return section
-
-    def process_p(self, paragraph):
-        """Convert bible xml verse elements to p elements.
-
-        Arguments:
-            p is a bible xml p element.
-        Returns:
-            a Giella xml p element
-        """
-        verses = []
-        for child in paragraph:
-            text = self.process_verse(child)
+    verses = []
+    for element in section_element:
+        if element.tag == 'p':
+            if verses:
+                section.append(make_p(verses))
+                verses = []
+            section.append(process_p(element))
+        elif element.tag == 'verse':
+            text = process_verse(element)
             if text:
                 verses.append(text)
+        else:
+            raise UserWarning(
+                'Unexpected element in section: {}'.format(element.tag))
 
-        paragraph = etree.Element('p')
-        paragraph.text = '\n'.join(verses)
+    section.append(make_p(verses))
 
-        return paragraph
+    return section
 
-    @staticmethod
-    def make_p(verses):
-        """Convert verse strings to p element.
 
-        Arguments:
-            verses: a list of strings
-        Returns:
-            a Giella xml p element
-        """
-        paragraph = etree.Element('p')
-        paragraph.text = '\n'.join(verses)
+def process_p(paragraph):
+    """Convert bible xml verse elements to p elements.
 
-        return paragraph
+    Arguments:
+        p is a bible xml p element.
+    Returns:
+        a Giella xml p element
+    """
+    verses = []
+    for child in paragraph:
+        text = process_verse(child)
+        if text:
+            verses.append(text)
 
-    def process_chapter(self, chapter_element):
-        """Convert a bible xml chapter to a Giella xml section one.
+    paragraph = etree.Element('p')
+    paragraph.text = '\n'.join(verses)
 
-        Arguments:
-            chapter_element: a bible xml chapter element
+    return paragraph
 
-        Returns:
-            a Giella xml section element.
-        """
-        section = etree.Element('section')
 
-        text_parts = []
-        if chapter_element.get('number') is not None:
-            text_parts.append(chapter_element.get('number'))
-        if chapter_element.get('title') is not None:
-            text_parts.append(chapter_element.get('title'))
+def make_p(verses):
+    """Convert verse strings to p element.
 
-        title = etree.Element('p')
-        title.set('type', 'title')
-        title.text = ' '.join(text_parts)
+    Arguments:
+        verses: a list of strings
+    Returns:
+        a Giella xml p element
+    """
+    paragraph = etree.Element('p')
+    paragraph.text = '\n'.join(verses)
 
-        section.append(title)
+    return paragraph
 
-        for child in chapter_element:
-            if child.tag == 'section':
-                section.append(self.process_section(child))
-            elif child.tag == 'verse':
-                paragraph = etree.Element('p')
-                paragraph.text = child.text
-                section.append(paragraph)
-            else:
-                raise UserWarning(
-                    '{}: Unexpected element in chapter: {}'.format(
-                        self.orig, child.tag))
 
-        return section
+def process_chapter(chapter_element):
+    """Convert a bible xml chapter to a Giella xml section one.
 
-    def process_book(self, book_element):
-        """Convert a bible xml book to a Giella xml section one.
+    Arguments:
+        chapter_element: a bible xml chapter element
 
-        Arguments:
-            book_element: a bible xml book element
+    Returns:
+        a Giella xml section element.
+    """
+    section = etree.Element('section')
 
-        Returns:
-            a Giella xml section element.
-        """
-        section = etree.Element('section')
+    text_parts = []
+    if chapter_element.get('number') is not None:
+        text_parts.append(chapter_element.get('number'))
+    if chapter_element.get('title') is not None:
+        text_parts.append(chapter_element.get('title'))
 
-        title = etree.Element('p')
-        title.set('type', 'title')
-        title.text = book_element.get('title')
+    title = etree.Element('p')
+    title.set('type', 'title')
+    title.text = ' '.join(text_parts)
 
-        section.append(title)
+    section.append(title)
 
-        for chapter_element in book_element:
-            if chapter_element.tag != 'chapter':
-                raise UserWarning(
-                    '{}: Unexpected element in book: {}'.format(
-                        self.orig, chapter_element.tag))
-            section.append(self.process_chapter(chapter_element))
+    for child in chapter_element:
+        if child.tag == 'section':
+            section.append(process_section(child))
+        elif child.tag == 'verse':
+            paragraph = etree.Element('p')
+            paragraph.text = child.text
+            section.append(paragraph)
+        else:
+            raise UserWarning(
+                'Unexpected element in chapter: {}'.format(child.tag))
 
-        return section
+    return section
 
-    def process_bible(self):
-        """Convert a bible xml document to a Giella xml document.
 
-        Returns:
-            a Giella xml body element.
-        """
-        bible = etree.parse(self.orig)
+def process_book(book_element):
+    """Convert a bible xml book to a Giella xml section one.
 
-        body = etree.Element('body')
+    Arguments:
+        book_element: a bible xml book element
 
-        for book in bible.xpath('.//book'):
-            body.append(self.process_book(book))
+    Returns:
+        a Giella xml section element.
+    """
+    section = etree.Element('section')
 
-        return body
+    title = etree.Element('p')
+    title.set('type', 'title')
+    title.text = book_element.get('title')
+
+    section.append(title)
+
+    for chapter_element in book_element:
+        if chapter_element.tag != 'chapter':
+            raise UserWarning(
+                '{}: Unexpected element in book: {}'.format(
+                    self.orig, chapter_element.tag))
+
+        section.append(process_chapter(chapter_element))
+
+    return section
+
+
+def process_bible(bible_doc):
+    """Convert a bible xml document to a Giella xml document.
+
+    Arguments:
+        bible_doc (etree.Element): the bible xml tree
+
+    Returns:
+        a Giella xml body element.
+    """
+    body = etree.Element('body')
+
+    for book in bible_doc.xpath('.//book'):
+        body.append(process_book(book))
+
+    return body
+
+
+def convert2intermediate(filename):
+    """Convert the bible xml to intermediate Giella xml format."""
+
+    document = etree.Element('document')
+    document.append(process_bible(etree.parse(filename)))
+
+    return document

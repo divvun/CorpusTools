@@ -165,8 +165,9 @@ def check_conversion(testname, bible_xml):
     with TempDirectory() as temp_dir:
         corpusfilename = 'orig/sme/bible/nt/bogus.bible.xml'
         temp_dir.write(corpusfilename, bible_xml['orig'].encode('utf8'))
-        converter = biblexmlconverter.BiblexmlConverter(os.path.join(
+
+        got = biblexmlconverter.convert2intermediate(os.path.join(
             temp_dir.path, corpusfilename))
-        got = converter.convert2intermediate()
         want = lxml.etree.fromstring(bible_xml['converted'])
+
         assertXmlEqual(got, want)
