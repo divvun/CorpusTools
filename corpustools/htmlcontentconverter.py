@@ -435,6 +435,9 @@ class HTMLContentConverter(object):
                     'skip-link',  # 1177.se
                     'toggle-link expanded',  # 1177.se
                 ],
+                'name': [
+                    'footnote-ref',  # footnotes in running text
+                ],
             },
             'td': {
                 'id': [

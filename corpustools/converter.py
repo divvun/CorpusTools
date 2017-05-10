@@ -40,7 +40,6 @@ import epub
 import six
 from lxml import etree, html
 from lxml.html import clean, html5parser
-from pydocx.export import PyDocXHTMLExporter
 from corpustools import (argparse_version, ccat, corpuspath, decode,
                          errormarkup, text_cat, util, xslsetter)
 
@@ -352,39 +351,6 @@ class Converter(object):
 
         raise ConversionError(
             "{}: log is found in {}".format(type(self).__name__, self.names.log))
-
-
-class DocxConverter(HTMLConverter):
-    """Convert docx documents to the Giella xml format."""
-
-    @property
-    def content(self):
-        """Convert the content of a docx file to xhtml.
-
-        Returns:
-            A string contaning the xhtml version of the docx file.
-        """
-        return PyDocXHTMLExporter(self.names.orig).export()
-
-    def remove_elements(self):
-        """Remove some docx specific html elements."""
-        super(DocxConverter, self).remove_elements()
-
-        unwanted_classes_ids = {
-            'a': {
-                'name': [
-                    'footnote-ref',  # footnotes in running text
-                ],
-            }
-        }
-        ns = {'html': 'http://www.w3.org/1999/xhtml'}
-        for tag, attribs in six.iteritems(unwanted_classes_ids):
-            for key, values in six.iteritems(attribs):
-                for value in values:
-                    search = ('.//html:{}[starts-with(@{}, "{}")]'.format(
-                        tag, key, value))
-                    for unwanted in self.soup.xpath(search, namespaces=ns):
-                        unwanted.getparent().remove(unwanted)
 
 
 class EpubConverter(HTMLConverter):
