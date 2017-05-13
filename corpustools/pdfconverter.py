@@ -31,7 +31,8 @@ import six
 
 from corpustools import basicconverter, util, xslsetter
 
-PDFFontspec = collections.namedtuple('PDFFontspec', ['size', 'family', 'color'])
+PDFFontspec = collections.namedtuple('PDFFontspec',
+                                     ['size', 'family', 'color'])
 
 
 class PDFFontspecs(object):
@@ -51,8 +52,9 @@ class PDFFontspecs(object):
     def add_fontspec(self, xmlfontspec):
         """Add a pdf2xml fontspec to this class.
 
-        xmlfontspec (etree.Element): a PDF2XML fontspec element found in a PDF2XML page
-        element.
+        Arguments:
+            xmlfontspec (etree.Element): a PDF2XML fontspec element found in a
+                PDF2XML page element.
         """
         this_id = xmlfontspec.get('id')
         this_fontspec = PDFFontspec(size=xmlfontspec.get('size'),
@@ -66,22 +68,22 @@ class PDFFontspecs(object):
         else:
             self.pdffontspecs[this_fontspec] = this_id
 
-    def corrected_id(self, id):
+    def corrected_id(self, font_id):
         """Return a corrected id of a fontspec.
 
         Some xmlfontspecs have different id's for an identical font.
         This function makes sure identical fonts have identical id's.
 
         Arguments:
-            id: an integer that is the id of the fontspec.
+            font_id: an integer that is the id of the fontspec.
 
         Returns:
             an integer that is the corrected id of the fontspec.
         """
-        if id in self.duplicates:
-            return self.duplicates[id]
+        if font_id in self.duplicates:
+            return self.duplicates[font_id]
         else:
-            return id
+            return font_id
 
 
 class BoundingBox(object):
@@ -152,33 +154,33 @@ class BoundingBox(object):
 class PDFTextElement(BoundingBox):
     """pdf2xml text elements are enclosed in this class."""
 
-    def __init__(self, t):
+    def __init__(self, text_elt):
         """Initialise the PDFTextElement class.
 
         Arguments:
             t: a pdf2xml text element
         """
-        self.t = t
+        self.text_elt = text_elt
 
     @property
     def top(self):
         """Return the top of the text element."""
-        return int(self.t.get('top'))
+        return int(self.text_elt.get('top'))
 
     @property
     def left(self):
         """Return the left point of the text element."""
-        return int(self.t.get('left'))
+        return int(self.text_elt.get('left'))
 
     @property
     def height(self):
         """Return the height of the text element."""
-        return int(self.t.get('height'))
+        return int(self.text_elt.get('height'))
 
     @property
     def width(self):
         """Return the width of the text element."""
-        return int(self.t.get('width'))
+        return int(self.text_elt.get('width'))
 
     @property
     def bottom(self):
@@ -193,12 +195,12 @@ class PDFTextElement(BoundingBox):
     @property
     def font(self):
         """Return the font id of the text element."""
-        return self.t.get('font')
+        return self.text_elt.get('font')
 
     @property
     def plain_text(self):
         """Return the plain text of the text element."""
-        return self.t.xpath("string()")
+        return self.text_elt.xpath("string()")
 
     def is_text_on_same_line(self, other_box):
         """Check if this text element is on the same line as other_box."""
@@ -207,30 +209,30 @@ class PDFTextElement(BoundingBox):
     def remove_superscript(self):
         """Remove text from text elements that seem to be superscripts."""
         with util.ignored(ValueError):
-            int(self.t.xpath("string()").strip())
-            child = self.t
+            int(self.text_elt.xpath("string()").strip())
+            child = self.text_elt
             while len(child):
                 child = child[0]
-            child.text = re.sub('\d+', '', child.text)
+            child.text = re.sub(r'\d+', '', child.text)
 
     def merge_text_elements(self, other_box):
         """Merge the contents of other_box into self."""
-        prev_t = self.t
-        t = other_box.t
+        prev_t = self.text_elt
+        text_elt = other_box.text_elt
         if not len(prev_t):
-            if t.text is not None:
+            if text_elt.text is not None:
                 if prev_t.text is None:
-                    prev_t.text = t.text
+                    prev_t.text = text_elt.text
                 else:
-                    prev_t.text += t.text
+                    prev_t.text += text_elt.text
         else:
             last = prev_t[-1]
-            if t.text is not None:
+            if text_elt.text is not None:
                 if last.tail is None:
-                    last.tail = t.text
+                    last.tail = text_elt.text
                 else:
-                    last.tail += t.text
-        for child in t:
+                    last.tail += text_elt.text
+        for child in text_elt:
             prev_t.append(child)
 
         prev_t.set('width', six.text_type(self.width + other_box.width))
@@ -267,13 +269,13 @@ class PDFParagraph(object):
     LIST_CHARS = [
         u'•',  # U+2022: BULLET
         u'–',  # U+2013: EN DASH
-        u'\-',  # U+00AD: HYPHEN-MINUS
+        r'\-',  # U+00AD: HYPHEN-MINUS
         six.unichr(61623),  # U+F0B7: <private use>
         six.unichr(61553),  # U+F071: <private use>
         u'■',  # U+25A0: BLACK SQUARE
         six.unichr(61692),  # U+F0FC: <private use>
     ]
-    LIST_RE = re.compile(u'^(\s*[{}])(.+)'.format(u''.join(LIST_CHARS)))
+    LIST_RE = re.compile(r'^(\s*[{}])(.+)'.format(u''.join(LIST_CHARS)))
 
     def __init__(self, linespacing):
         """Initialise the PDFParagraph class."""
@@ -313,7 +315,8 @@ class PDFParagraph(object):
             #                          encoding='unicode'))
 
             self.is_listitem = True
-        if self.textelements and textelement.is_right_of(self.textelements[-1]):
+        if self.textelements and textelement.is_right_of(
+                self.textelements[-1]):
             self.boundingboxes.append(BoundingBox())
         self.boundingboxes[-1].increase_box(textelement)
         self.textelements.append(textelement)
@@ -341,10 +344,10 @@ class PDFParagraph(object):
             if (self.textelements[-1].is_above(textelement) and
                     (
                         (self.textelements[0].left < textelement.left and
-                         re.search('^\S', textelement.plain_text)) or
+                         re.search(r'^\S', textelement.plain_text)) or
                         (self.textelements[0].left == textelement.left and
-                         re.search('^\s', textelement.plain_text))
-            ) and
+                         re.search(r'^\s', textelement.plain_text))
+                    ) and
                     not textelement.is_left_of(self.textelements[-1]) and
                     self.is_within_line_distance(textelement) and
                     self.textelements[-1].font == textelement.font):
@@ -353,11 +356,14 @@ class PDFParagraph(object):
                   self.textelements[-1].is_below(textelement) and
                   self.textelements[-1].font == textelement.font and
                   (
-                      (not re.search(u'[.?!]\s*$', self.textelements[-1].plain_text) and
-                       textelement.plain_text[0] == textelement.plain_text[0].lower()) or
-                      (re.search(u'[.?!]\s*$', self.textelements[-1].plain_text) and
-                       textelement.plain_text[0] == textelement.plain_text[0].upper())
-            )):
+                      (not re.search(r'[.?!]\s*$',
+                                     self.textelements[-1].plain_text) and
+                       textelement.plain_text[0] ==
+                       textelement.plain_text[0].lower()) or
+                      (re.search(r'[.?!]\s*$',
+                                 self.textelements[-1].plain_text) and
+                       textelement.plain_text[0] ==
+                       textelement.plain_text[0].upper()))):
                 return True
             else:
                 return False
@@ -369,7 +375,7 @@ class PDFParagraph(object):
             elif (self.textelements[-1].is_left_of(textelement) and
                   self.textelements[-1].is_below(textelement) and
                   self.textelements[-1].font == textelement.font and
-                  not re.match('\d', self.textelements[-1].plain_text[0]) and
+                  not re.match(r'\d', self.textelements[-1].plain_text[0]) and
                   self.textelements[-1].plain_text[0] ==
                   self.textelements[-1].plain_text[0].lower()):
                 return True
@@ -425,12 +431,9 @@ class PDFSection(BoundingBox):
             # If the ending of the last paragraph and the start of the new
             # paragraph are in the same column, this check is done
             if prev_box.is_above(new_box):
-                if (paragraph.is_listitem or
-                    (prev_box.left == new_box.left and
-                     self.column_width * 1.1 > new_box.width)):
-                    return True
-                else:
-                    return False
+                return (paragraph.is_listitem or
+                        (prev_box.left == new_box.left and
+                         self.column_width * 1.1 > new_box.width))
             # If the ending of the last paragraph and the start of the new
             # paragraph are in different columns, this check is done
             elif (prev_box.is_left_of(new_box) and
@@ -487,8 +490,8 @@ class OrderedPDFSections(object):
         for i, section in enumerate(self.sections):
             if new_section.is_above(section):
                 return i
-        else:
-            return len(self.sections)
+
+        return len(self.sections)
 
     def insert_section(self, new_section):
         """new_section is a PDFSection."""
@@ -496,7 +499,8 @@ class OrderedPDFSections(object):
         if not self.sections or i == len(self.sections):
             self.sections.append(new_section)
         else:
-            if i < len(self.sections) and self.sections[i].is_below(new_section):
+            if i < len(self.sections) and self.sections[i].is_below(
+                    new_section):
                 self.sections.insert(i, new_section)
             else:
                 if i < 0:
@@ -527,7 +531,7 @@ class PDFTextExtractor(object):
         etree.SubElement(self.body, 'p')
 
     @property
-    def p(self):
+    def para(self):
         """Return the last paragraph in self.body."""
         return self.body[-1]
 
@@ -541,12 +545,12 @@ class PDFTextExtractor(object):
         Args:
             text (str): content of a text element.
         """
-        if not len(self.p) and not self.p.text:
-            self.p.text = text
-        elif not len(self.p) and self.p.text:
-            self.p.text += text
-        if len(self.p):
-            last = self.p[-1]
+        if not len(self.para) and not self.para.text:
+            self.para.text = text
+        elif not len(self.para) and self.para.text:
+            self.para.text += text
+        if len(self.para):
+            last = self.para[-1]
             if not last.tail:
                 last.tail = text
             else:
@@ -568,44 +572,45 @@ class PDFTextExtractor(object):
             self.append_text_to_p(textelement.text)
 
         for child in textelement:
-            em = etree.Element('em')
+            emphasis = etree.Element('em')
 
             if child.text:
-                em.text = child.text
+                emphasis.text = child.text
             else:
-                em.text = ''
+                emphasis.text = ''
 
             if len(child):
                 for grandchild in child:
                     if grandchild.text:
-                        em.text += grandchild.text
+                        emphasis.text += grandchild.text
                     if grandchild.tail:
-                        em.text += grandchild.tail
+                        emphasis.text += grandchild.tail
 
             if child.tag == 'i':
-                em.set('type', 'italic')
+                emphasis.set('type', 'italic')
             elif child.tag == 'b':
-                em.set('type', 'bold')
+                emphasis.set('type', 'bold')
 
-            em.tail = child.tail
+            emphasis.tail = child.tail
 
-            if len(self.p):
-                last = self.p[-1]
-                if last.tail is None and last.tag == em.tag and last.attrib == em.attrib:
+            if len(self.para):
+                last = self.para[-1]
+                if (last.tail is None and last.tag == emphasis.tag and
+                        last.attrib == emphasis.attrib):
                     if last.text:
-                        last.text += em.text
+                        last.text += emphasis.text
                     else:
-                        last.text = em.text
-                    last.tail = em.tail
+                        last.text = emphasis.text
+                    last.tail = emphasis.tail
                 else:
-                    self.p.append(em)
+                    self.para.append(emphasis)
             else:
-                self.p.append(em)
+                self.para.append(emphasis)
 
     @property
     def last_string(self):
         """Get the plain text of the last paragraph of body."""
-        return self.p.xpath("string()")
+        return self.para.xpath("string()")
 
     def handle_line_ending(self):
         r"""Add a soft hyphen or a space at the end of self.p.
@@ -626,17 +631,17 @@ class PDFTextExtractor(object):
 
         The tech to be able to replace it is not accessible at this stage.
         """
-        if re.search('\S-$', self.last_string):
-            if not len(self.p):
-                self.p.text = self.p.text[:-1] + u'\xAD'
+        if re.search(r'\S-$', self.last_string):
+            if not len(self.para):
+                self.para.text = self.para.text[:-1] + u'\xAD'
             else:
-                last = self.p[-1]
+                last = self.para[-1]
                 if last.tail is None:
                     last.text = last.text[:-1] + u'\xAD'
                 else:
                     last.tail = last.tail[:-1] + u'\xAD'
-        elif self.last_string and not re.search(u'[\s\xAD]$',
-                                                      self.last_string):
+        elif self.last_string and not re.search(r'[\s\xAD]$',
+                                                self.last_string):
             self.extract_textelement(etree.fromstring('<text> </text>'))
 
     def is_first_page(self):
@@ -654,9 +659,10 @@ class PDFTextExtractor(object):
             A boolean indicating if this is the last paragraph of the page.
         """
         return (self.last_string and
-                re.search(u'[.?!]\s*$', self.last_string))
+                re.search(r'[.?!]\s*$', self.last_string))
 
-    def is_new_page(self, paragraph):
+    @staticmethod
+    def is_new_page(paragraph):
         """Check if the paragraph is the start of a new page.
 
         Args:
@@ -675,7 +681,7 @@ class PDFTextExtractor(object):
             paragraph (PDFParagraph)
         """
         for textelement in paragraph.textelements:
-            self.extract_textelement(textelement.t)
+            self.extract_textelement(textelement.text_elt)
             self.handle_line_ending()
         self.append_to_body()
 
@@ -687,17 +693,17 @@ class PDFTextExtractor(object):
                 page.
         """
         if (not self.is_first_page() and
-            (self.is_new_page(paragraphs[0]) or
-             self.is_last_paragraph_end_of_page())):
+                (self.is_new_page(paragraphs[0]) or
+                 self.is_last_paragraph_end_of_page())):
             self.append_to_body()
 
         for paragraph in paragraphs:
             if paragraph.is_listitem:
-                self.p.set('type', 'listitem')
+                self.para.set('type', 'listitem')
             self.extract_text_from_paragraph(paragraph)
 
         if not self.last_string:
-            self.body.remove(self.p)
+            self.body.remove(self.para)
 
 
 class PDFEmptyPageError(Exception):
@@ -714,7 +720,7 @@ class PDFPageMetadata(object):
     """
 
     def __init__(self, page_number=0, page_height=0, page_width=0,
-                 metadata_margins={}, metadata_inner_margins={}):
+                 metadata_margins=None, metadata_inner_margins=None):
         """Initialise the PDFPageMetadata class.
 
         Arguments:
@@ -729,8 +735,8 @@ class PDFPageMetadata(object):
         self.page_number = page_number
         self.page_height = page_height
         self.page_width = page_width
-        self.metadata_margins = metadata_margins
-        self.metadata_inner_margins = metadata_inner_margins
+        self.metadata_margins = metadata_margins or {}
+        self.metadata_inner_margins = metadata_inner_margins or {}
 
     def compute_margins(self):
         """Compute the margins of a page in pixels.
@@ -759,21 +765,24 @@ class PDFPageMetadata(object):
         if margin == 'top_margin':
             return int(coefficient * self.page_height / 100.0)
         if margin == 'bottom_margin':
-            return int(self.page_height - coefficient * self.page_height / 100.0)
+            return int(self.page_height - coefficient *
+                       self.page_height / 100.0)
 
     def get_coefficient(self, margin):
         """Get the width of the margin in percent."""
         coefficient = 7
         if margin in list(self.metadata_margins.keys()):
-            m = self.metadata_margins[margin]
-            if m.get(six.text_type(self.page_number)) is not None:
-                coefficient = m[six.text_type(self.page_number)]
-            elif m.get('all') is not None:
-                coefficient = m['all']
-            elif self.page_number % 2 == 0 and m.get('even') is not None:
-                coefficient = m['even']
-            elif self.page_number % 2 == 1 and m.get('odd') is not None:
-                coefficient = m['odd']
+            margin_data = self.metadata_margins[margin]
+            if margin_data.get(six.text_type(self.page_number)) is not None:
+                coefficient = margin_data[six.text_type(self.page_number)]
+            elif margin_data.get('all') is not None:
+                coefficient = margin_data['all']
+            elif self.page_number % 2 == 0 and margin_data.get(
+                    'even') is not None:
+                coefficient = margin_data['even']
+            elif self.page_number % 2 == 1 and margin_data.get(
+                    'odd') is not None:
+                coefficient = margin_data['odd']
 
         return coefficient
 
@@ -812,21 +821,24 @@ class PDFPageMetadata(object):
         if margin == 'inner_top_margin':
             return int(coefficient * self.page_height / 100.0)
         if margin == 'inner_bottom_margin':
-            return int(self.page_height - coefficient * self.page_height / 100.0)
+            return int(self.page_height - coefficient *
+                       self.page_height / 100.0)
 
     def get_inner_coefficient(self, margin):
         """Get the width of the margin in percent."""
         coefficient = 0
         if margin in list(self.metadata_inner_margins.keys()):
-            m = self.metadata_inner_margins[margin]
-            if m.get(six.text_type(self.page_number)) is not None:
-                coefficient = m[six.text_type(self.page_number)]
-            elif m.get('all') is not None:
-                coefficient = m['all']
-            elif self.page_number % 2 == 0 and m.get('even') is not None:
-                coefficient = m['even']
-            elif self.page_number % 2 == 1 and m.get('odd') is not None:
-                coefficient = m['odd']
+            margin_data = self.metadata_inner_margins[margin]
+            if margin_data.get(six.text_type(self.page_number)) is not None:
+                coefficient = margin_data[six.text_type(self.page_number)]
+            elif margin_data.get('all') is not None:
+                coefficient = margin_data['all']
+            elif self.page_number % 2 == 0 and margin_data.get(
+                    'even') is not None:
+                coefficient = margin_data['even']
+            elif self.page_number % 2 == 1 and margin_data.get(
+                    'odd') is not None:
+                coefficient = margin_data['odd']
 
         return coefficient
 
@@ -843,8 +855,10 @@ class PDFPage(object):
     finally sent to PDFTextExtractor
     """
 
-    def __init__(self, page_element, metadata_margins={}, metadata_inner_margins={},
-                 linespacing={}):
+    def __init__(self, page_element,
+                 metadata_margins=None,
+                 metadata_inner_margins=None,
+                 linespacing=None):
         """Initialise the PDFPage class.
 
         Arguments:
@@ -862,7 +876,7 @@ class PDFPage(object):
             page_width=int(page_element.get('width')),
             metadata_margins=metadata_margins,
             metadata_inner_margins=metadata_inner_margins)
-        self.linespacing_dict = linespacing
+        self.linespacing_dict = linespacing or {}
 
     def is_skip_page(self, skip_pages):
         """Found out if this page should be skipped.
@@ -882,12 +896,13 @@ class PDFPage(object):
 
     @property
     def linespacing(self):
+        """Return linespacing."""
         if self.linespacing_dict.get('all'):
             return self.linespacing_dict['all']
-        elif self.linespacing_dict.get('even') and (\
+        elif self.linespacing_dict.get('even') and (
                 (self.pdf_pagemetadata.page_number % 2) == 0):
             return self.linespacing_dict['even']
-        elif self.linespacing_dict.get('odd') and (\
+        elif self.linespacing_dict.get('odd') and (
                 (self.pdf_pagemetadata.page_number % 2) == 1):
             return self.linespacing_dict['odd']
         elif self.linespacing_dict.get(self.pdf_pagemetadata.page_number):
@@ -906,7 +921,7 @@ class PDFPage(object):
         """
         for textelement in self.textelements:
             correct = pdffontspecs.corrected_id(textelement.font)
-            textelement.t.set('font', correct)
+            textelement.text_elt.set('font', correct)
 
     def adjust_line_heights(self):
         """Adjust the height if there is a 1 pixel overlap between elements."""
@@ -914,7 +929,7 @@ class PDFPage(object):
             prev_textelement = self.textelements[i - 1]
             textelement = self.textelements[i]
             if prev_textelement.bottom == textelement.top + 1:
-                prev_textelement.t.set(
+                prev_textelement.text_elt.set(
                     'height', six.text_type(prev_textelement.height - 1))
 
     def remove_footnotes_superscript(self):
@@ -922,7 +937,7 @@ class PDFPage(object):
         for textelement in self.textelements[1:]:
             textelement.remove_superscript()
 
-    def remove_elements_not_within_margin(self):
+    def remove_elements_outside_margin(self):
         """Remove PDFTextElements from textelements if needed."""
         margins = self.pdf_pagemetadata.compute_margins()
         inner_margins = self.pdf_pagemetadata.compute_inner_margins()
@@ -946,22 +961,28 @@ class PDFPage(object):
             del self.textelements[i]
 
     def remove_invalid_elements(self):
-        """Remove elements with empty strings or where the width is zero or negative."""
-        self.textelements[:] = [t for t in self.textelements
-                                if not (not t.t.xpath("string()").strip() or
-                                        t.width < 1)]
+        """Remove elements.
 
-    def is_inside_margins(self, t, margins):
+        Elements with empty strings or where the width is zero or negative
+        are deemed invalid.
+        """
+        self.textelements[:] = [text for text in self.textelements
+                                if not (not text.text_elt.xpath(
+                                    "string()").strip() or text.width < 1)]
+
+    @staticmethod
+    def is_inside_margins(text, margins):
         """Check if t is inside the given margins.
 
         t is a text element
         """
-        return (t.top > margins['top_margin'] and
-                t.top < margins['bottom_margin'] and
-                t.left > margins['left_margin'] and
-                t.left < margins['right_margin'])
+        return (text.top > margins['top_margin'] and
+                text.top < margins['bottom_margin'] and
+                text.left > margins['left_margin'] and
+                text.left < margins['right_margin'])
 
-    def is_inside_inner_margins(self, t, margins):
+    @staticmethod
+    def is_inside_inner_margins(text, margins):
         """Check if t is inside the given margins.
 
         Arguments:
@@ -971,10 +992,10 @@ class PDFPage(object):
         Returns:
             boolean: True if t is inside the margings, False otherwise
         """
-        return (t.top > margins['inner_top_margin'] and
-                t.top < margins['inner_bottom_margin'] and
-                t.left > margins['inner_left_margin'] and
-                t.left < margins['inner_right_margin'])
+        return (text.top > margins['inner_top_margin'] and
+                text.top < margins['inner_bottom_margin'] and
+                text.left > margins['inner_left_margin'] and
+                text.left < margins['inner_right_margin'])
 
     def make_unordered_paragraphs(self):
         """Make paragraphs from the text elements found in a pdf page."""
@@ -1020,7 +1041,7 @@ class PDFPage(object):
         This is the main function of this class
         """
         self.adjust_line_heights()
-        self.remove_elements_not_within_margin()
+        self.remove_elements_outside_margin()
         self.remove_footnotes_superscript()
         self.merge_elements_on_same_line()
         self.remove_invalid_elements()
@@ -1054,7 +1075,8 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         self.extractor = PDFTextExtractor()
         self.pdffontspecs = PDFFontspecs()
 
-    def strip_chars(self, content, extra=u''):
+    @staticmethod
+    def strip_chars(content, extra=u''):
         """Strip unwanted chars from the document.
 
         Arguments:
@@ -1066,7 +1088,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         """
         remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]'.format(
             extra))
-        content, count = remove_re.subn('', content)
+        content, _ = remove_re.subn('', content)
 
         # Microsoft Word PDF's have Latin-1 file names in links; we
         # don't actually need any link attributes:
@@ -1074,7 +1096,8 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
 
         return content
 
-    def replace_ligatures(self, content):
+    @staticmethod
+    def replace_ligatures(content):
         """Replace unwanted strings with correct replacements.
 
         Arguments:
@@ -1132,8 +1155,8 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
 
         try:
             root_element = etree.fromstring(pdf_content.encode('utf8'))
-        except etree.XMLSyntaxError as e:
-            self.handle_syntaxerror(e, util.lineno(),
+        except etree.XMLSyntaxError as error:
+            self.handle_syntaxerror(error, util.lineno(),
                                     pdf_content)
 
         self.parse_pages(root_element)
@@ -1147,16 +1170,17 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             page: a pdf xml page element.
         """
         try:
-            pdfpage = PDFPage(page, metadata_margins=self.metadata.margins,
-                            metadata_inner_margins=self.metadata.inner_margins,
-                            linespacing=self.metadata.linespacing)
+            pdfpage = PDFPage(
+                page, metadata_margins=self.metadata.margins,
+                metadata_inner_margins=self.metadata.inner_margins,
+                linespacing=self.metadata.linespacing)
             if not pdfpage.is_skip_page(self.metadata.skip_pages):
                 pdfpage.fix_font_id(self.pdffontspecs)
                 with util.ignored(PDFEmptyPageError):
                     self.extractor.extract_text_from_page(
                         pdfpage.pick_valid_text_elements())
-        except xslsetter.XsltError as e:
-            raise util.ConversionError(str(e))
+        except xslsetter.XsltError as error:
+            raise util.ConversionError(str(error))
 
     def parse_pages(self, root_element):
         """Parse the pages of the pdf xml document.
@@ -1197,7 +1221,44 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
 
         return runner.stdout
 
+    def handle_syntaxerror(self, error, lineno, invalid_input):
+        """Handle an xml syntax error.
+
+        Arguments:
+            error: an exception
+            lineno: the line number in this module where the error happened.
+            invalid_input: a string containing the invalid input.
+        """
+        with open(self.orig + '.log', 'w') as logfile:
+            logfile.write('Error at: {}'.format(lineno))
+            for entry in error.error_log:
+                logfile.write('\n{}: {} '.format(
+                    six.text_type(entry.line), six.text_type(entry.column)))
+                try:
+                    logfile.write(entry.message)
+                except ValueError:
+                    logfile.write(entry.message.encode('latin1'))
+
+                logfile.write('\n')
+
+            if six.PY3:
+                logfile.write(invalid_input)
+            else:
+                logfile.write(invalid_input.encode('utf8'))
+
+        raise util.ConversionError(
+            "{}: log is found in {}".format(type(self).__name__,
+                                            self.orig + '.log'))
+
 
 def convert2intermediate(path):
+    """Convert a pdf document to the Giella xml format.
+
+    Arguments:
+        filename (str): path to the document
+
+    Returns:
+        etree.Element: the root element of the Giella xml document
+    """
     converter = PDF2XMLConverter(path)
     return converter.convert2intermediate()

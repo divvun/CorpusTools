@@ -32,7 +32,9 @@ from corpustools.test import xmltester
 
 HERE = os.path.dirname(__file__)
 
+
 class TestPDFTextElement(xmltester.XMLTester):
+    """Test the PDFTextElement class."""
 
     def test_font_property(self):
         """When top is the same, two text elements are on the same line."""
@@ -96,7 +98,7 @@ class TestPDFTextElement(xmltester.XMLTester):
             '</text>'))
 
         prev_t.merge_text_elements(t1)
-        self.assertXmlEqual(prev_t.t,
+        self.assertXmlEqual(prev_t.text_elt,
                             etree.fromstring('<text top="354" left="119" '
                                              'width="211" height="22" font="2">'
                                              '1.1. RIEKTEJOAVKKU </text>'))
@@ -534,7 +536,7 @@ class TestPDFTextExtractor(xmltester.XMLTester):
             '<text top="649" left="545" width="269" height="14" font="20">'
             'berret bargat. </text>')
         p2x.extract_textelement(input)
-        self.assertXmlEqual(p2x.p,
+        self.assertXmlEqual(p2x.para,
                             etree.fromstring('<p>berret bargat. </p>'))
 
     def test_extract_textelement3(self):
@@ -545,7 +547,7 @@ class TestPDFTextExtractor(xmltester.XMLTester):
             '<text top="829" left="545" width="275" height="14" font="29">'
             '<i>Ei </i></text>')
         p2x.extract_textelement(input)
-        self.assertXmlEqual(p2x.p,
+        self.assertXmlEqual(p2x.para,
                             etree.fromstring('<p><em type="italic">Ei </em></p>'))
 
     def test_extract_textelement4(self):
@@ -556,7 +558,7 @@ class TestPDFTextExtractor(xmltester.XMLTester):
             '<text top="829" left="545" width="275" height="14" font="29">'
             '<b>Ei </b></text>')
         p2x.extract_textelement(input)
-        self.assertXmlEqual(p2x.p,
+        self.assertXmlEqual(p2x.para,
                             etree.fromstring('<p><em type="bold">Ei </em></p>'))
 
     def test_extract_textelement5(self):
@@ -568,7 +570,7 @@ class TestPDFTextExtractor(xmltester.XMLTester):
             '<i><b>Eiš </b></i></text>')
         p2x.extract_textelement(input)
 
-        self.assertXmlEqual(p2x.p,
+        self.assertXmlEqual(p2x.para,
                             etree.fromstring('<p><em type="italic">Eiš </em></p>'))
 
     def test_extract_textelement6(self):
@@ -579,7 +581,7 @@ class TestPDFTextExtractor(xmltester.XMLTester):
             '<text top="829" left="545" width="275" height="14" font="29">'
             '<b>E</b> a</text>')
         p2x.extract_textelement(input)
-        self.assertXmlEqual(p2x.p,
+        self.assertXmlEqual(p2x.para,
                             etree.fromstring('<p><em type="bold">E</em> a</p>'))
 
     def test_extract_textelement7(self):
@@ -591,7 +593,7 @@ class TestPDFTextExtractor(xmltester.XMLTester):
             '<i>E</i> a <i>b</i></text>')
         p2x.extract_textelement(input)
 
-        self.assertXmlEqual(p2x.p,
+        self.assertXmlEqual(p2x.para,
                             etree.fromstring('<p><em type="italic">E</em> a '
                                              '<em type="italic">b</em></p>'))
 
@@ -604,7 +606,7 @@ class TestPDFTextExtractor(xmltester.XMLTester):
             '<i><b>Å.</b> B <b>F.</b> A </i></text>')
         p2x.extract_textelement(input)
 
-        self.assertXmlEqual(p2x.p,
+        self.assertXmlEqual(p2x.para,
                             etree.fromstring('<p><em type="italic">Å. B F. A '
                                              '</em></p>'))
 
@@ -617,7 +619,7 @@ class TestPDFTextExtractor(xmltester.XMLTester):
             '<b><i>Å.</i> B <i>F.</i> A </b></text>')
         p2x.extract_textelement(input)
 
-        self.assertXmlEqual(p2x.p,
+        self.assertXmlEqual(p2x.para,
                             etree.fromstring('<p><em type="bold">Å. B F. A '
                                              '</em></p>'))
 
@@ -633,7 +635,7 @@ class TestPDFTextExtractor(xmltester.XMLTester):
         p2x.handle_line_ending()
 
         self.assertXmlEqual(
-            p2x.p, etree.fromstring(u'<p>a\xAD</p>'))
+            p2x.para, etree.fromstring(u'<p>a\xAD</p>'))
 
     def test_handle_line_ending_hyphen(self):
         p2x = pdfconverter.PDFTextExtractor()
@@ -641,7 +643,7 @@ class TestPDFTextExtractor(xmltester.XMLTester):
         p2x.handle_line_ending()
 
         self.assertXmlEqual(
-            p2x.p, etree.fromstring(u'<p>a\xAD</p>'))
+            p2x.para, etree.fromstring(u'<p>a\xAD</p>'))
 
     def test_handle_line_ending_hyphen_last_child_has_no_tail(self):
         p2x = pdfconverter.PDFTextExtractor()
@@ -649,7 +651,7 @@ class TestPDFTextExtractor(xmltester.XMLTester):
         p2x.handle_line_ending()
 
         self.assertXmlEqual(
-            p2x.p, etree.fromstring(u'<p><em type="italic">a\xAD</em></p>'))
+            p2x.para, etree.fromstring(u'<p><em type="italic">a\xAD</em></p>'))
 
     def test_handle_line_ending_hyphen_last_child_has_tail(self):
         p2x = pdfconverter.PDFTextExtractor()
@@ -657,7 +659,7 @@ class TestPDFTextExtractor(xmltester.XMLTester):
         p2x.handle_line_ending()
 
         self.assertXmlEqual(
-            p2x.p, etree.fromstring(u'<p><em type="italic">a</em>\xAD</p>'))
+            p2x.para, etree.fromstring(u'<p><em type="italic">a</em>\xAD</p>'))
 
     def test_handle_line_ending_hyphen_space(self):
         """If - is not the last char, do not replace it by a soft hyphen."""
@@ -667,7 +669,7 @@ class TestPDFTextExtractor(xmltester.XMLTester):
             p2x.handle_line_ending()
 
             self.assertXmlEqual(
-                p2x.p, etree.fromstring('<p>a-</p>'))
+                p2x.para, etree.fromstring('<p>a-</p>'))
 
     def test_handle_line_not_shy_nor_hyphen(self):
         p2x = pdfconverter.PDFTextExtractor()
@@ -675,12 +677,12 @@ class TestPDFTextExtractor(xmltester.XMLTester):
         p2x.handle_line_ending()
 
         self.assertXmlEqual(
-            p2x.p, etree.fromstring('<p>a </p>'))
+            p2x.para, etree.fromstring('<p>a </p>'))
 
     def test_handle_upper_case_on_new_page(self):
         """If the first paragraph begins with an uppercase letter, start a new p."""
         p2x = pdfconverter.PDFTextExtractor()
-        p2x.p.text = 'not ending with sentence stop character'
+        p2x.para.text = 'not ending with sentence stop character'
 
         paragraphs = [pdfconverter.PDFParagraph(1.5)]
         paragraphs[-1].append_textelement(
@@ -700,7 +702,7 @@ class TestPDFTextExtractor(xmltester.XMLTester):
     def test_handle_number_on_new_page(self):
         """If the first paragraph begins with a number, start a new p."""
         p2x = pdfconverter.PDFTextExtractor()
-        p2x.p.text = 'not ending with sentence stop character'
+        p2x.para.text = 'not ending with sentence stop character'
 
         paragraphs = [pdfconverter.PDFParagraph(1.5)]
         paragraphs[-1].append_textelement(
@@ -1049,7 +1051,7 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(xmltester.XMLTester):
         ''')  # nopep8
         pp = pdfconverter.PDFPage(self.start_page)
         pp.adjust_line_heights()
-        pp.remove_elements_not_within_margin()
+        pp.remove_elements_outside_margin()
         pp.remove_footnotes_superscript()
         pp.merge_elements_on_same_line()
         pp.remove_invalid_elements()
@@ -1142,7 +1144,7 @@ class TestProblematicPageTwoColumnsTablesHeaderLast(xmltester.XMLTester):
         ''')  # nopep8
         pp = pdfconverter.PDFPage(self.start_page)
         pp.adjust_line_heights()
-        pp.remove_elements_not_within_margin()
+        pp.remove_elements_outside_margin()
         pp.remove_footnotes_superscript()
         pp.merge_elements_on_same_line()
         pp.remove_invalid_elements()
@@ -1364,7 +1366,7 @@ class TestProblematicPageTwoColumnsHeaderLast(xmltester.XMLTester):
 
         pp = pdfconverter.PDFPage(self.start_page)
         pp.adjust_line_heights()
-        pp.remove_elements_not_within_margin()
+        pp.remove_elements_outside_margin()
         pp.remove_footnotes_superscript()
         pp.merge_elements_on_same_line()
         pp.remove_invalid_elements()
@@ -1476,7 +1478,7 @@ class TestProblematicPageTwoColumnsHeaderLast(xmltester.XMLTester):
 
         pp = pdfconverter.PDFPage(self.start_page)
         pp.adjust_line_heights()
-        pp.remove_elements_not_within_margin()
+        pp.remove_elements_outside_margin()
         pp.remove_footnotes_superscript()
         pp.merge_elements_on_same_line()
         pp.remove_invalid_elements()
@@ -1800,7 +1802,7 @@ class TestProblematicPageThreeColumns(xmltester.XMLTester):
             '<page number="1" position="absolute" top="0" left="0" '
             'height="1262" width="892"/>')
         for pdftextelement in pp.textelements:
-            expected_page.append(pdftextelement.t)
+            expected_page.append(pdftextelement.text_elt)
 
         self.assertXmlEqual(expected_page,
                             adjusted_page)
@@ -1928,13 +1930,13 @@ class TestProblematicPageThreeColumns(xmltester.XMLTester):
         pp = pdfconverter.PDFPage(self.start_page, metadata_margins=metadata.margins,
                                metadata_inner_margins=metadata.inner_margins)
         pp.adjust_line_heights()
-        pp.remove_elements_not_within_margin()
+        pp.remove_elements_outside_margin()
 
         expected_page = etree.fromstring(
             '<page number="1" position="absolute" top="0" left="0" '
             'height="1262" width="892"/>')
         for pdftextelement in pp.textelements:
-            expected_page.append(pdftextelement.t)
+            expected_page.append(pdftextelement.text_elt)
 
         self.assertXmlEqual(expected_page,
                             not_within_margin_page)
@@ -2032,7 +2034,7 @@ class TestProblematicPageThreeColumns(xmltester.XMLTester):
         pp = pdfconverter.PDFPage(self.start_page, metadata_margins=metadata.margins,
                                metadata_inner_margins=metadata.inner_margins)
         pp.adjust_line_heights()
-        pp.remove_elements_not_within_margin()
+        pp.remove_elements_outside_margin()
         pp.remove_footnotes_superscript()
         pp.merge_elements_on_same_line()
         pp.remove_invalid_elements()
@@ -2136,7 +2138,7 @@ class TestProblematicPageThreeColumns(xmltester.XMLTester):
         pp = pdfconverter.PDFPage(self.start_page, metadata_margins=metadata.margins,
                                metadata_inner_margins=metadata.inner_margins)
         pp.adjust_line_heights()
-        pp.remove_elements_not_within_margin()
+        pp.remove_elements_outside_margin()
         pp.remove_footnotes_superscript()
         pp.merge_elements_on_same_line()
         pp.remove_invalid_elements()
@@ -2261,7 +2263,7 @@ class TestPDFPage(xmltester.XMLTester):
 
         self.assertEqual(len(pdfpage.textelements), 1)
         self.assertXmlEqual(
-            pdfpage.textelements[0].t,
+            pdfpage.textelements[0].text_elt,
             etree.fromstring(
                 '<text top="197" left="257" width="497" height="20" font="8">'
                 'Departemeanttat fertejit dahkat vuolit et&#225;htaid '
@@ -2284,7 +2286,7 @@ class TestPDFPage(xmltester.XMLTester):
 
         page_want = [u'gihligotteriektái', '', u', sáhtte']
 
-        self.assertListEqual([t.t.xpath('string()')
+        self.assertListEqual([t.text_elt.xpath('string()')
                               for t in pdfpage.textelements],
                              page_want)
 
@@ -2305,7 +2307,7 @@ class TestPDFPage(xmltester.XMLTester):
 
         page_want = [u'gihligotteriektái', '', u',sáhtte']
 
-        self.assertListEqual([t.t.xpath('string()')
+        self.assertListEqual([t.text_elt.xpath('string()')
                               for t in pdfpage.textelements],
                              page_want)
 
@@ -2324,7 +2326,7 @@ class TestPDFPage(xmltester.XMLTester):
         page_want = [u'riektedilálašvuođa', u'',
                      u' čielggadeamit" (min deattuhus) ráddjejuvvot dasa mii ']
 
-        self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements],
+        self.assertListEqual([t.text_elt.xpath('string()') for t in pdfpage.textelements],
                              page_want)
 
     def test_remove_footnotes_superscript_4(self):
@@ -2343,7 +2345,7 @@ class TestPDFPage(xmltester.XMLTester):
                      u' - nuppiin sániiguin dan mii áiggis áigái ii leat '
                      u'čuldon dahje earát váldán. ']
 
-        self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements],
+        self.assertListEqual([t.text_elt.xpath('string()') for t in pdfpage.textelements],
                              page_want)
 
     def test_remove_footnotes_superscript_5(self):
@@ -2361,7 +2363,7 @@ class TestPDFPage(xmltester.XMLTester):
         page_want = [u'Boazu lea, nu movt eará smirezasti',
                      u' ', u'eallit nai, ere-']
 
-        self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements],
+        self.assertListEqual([t.text_elt.xpath('string()') for t in pdfpage.textelements],
                              page_want)
 
     def test_remove_footnotes_superscript_6(self):
@@ -2379,7 +2381,7 @@ class TestPDFPage(xmltester.XMLTester):
         page_want = [u"Boazu lea, nu movt eará smirezasti",
                      u"", u"eallit nai, ere-"]
 
-        self.assertListEqual([t.t.xpath('string()') for t in pdfpage.textelements],
+        self.assertListEqual([t.text_elt.xpath('string()') for t in pdfpage.textelements],
                              page_want)
 
     def test_remove_elements_not_within_margin_1(self):
@@ -2397,10 +2399,10 @@ class TestPDFPage(xmltester.XMLTester):
         ''')  # nopep8
         pdfpage = pdfconverter.PDFPage(page,
                                     metadata_inner_margins=metadata.inner_margins)
-        pdfpage.remove_elements_not_within_margin()
+        pdfpage.remove_elements_outside_margin()
         page_want = ["1", "3"]
 
-        self.assertListEqual([t.t.xpath('string()')
+        self.assertListEqual([t.text_elt.xpath('string()')
                               for t in pdfpage.textelements], page_want)
 
     def test_remove_elements_not_within_margin_2(self):
@@ -2418,10 +2420,10 @@ class TestPDFPage(xmltester.XMLTester):
         ''')  # nopep8
         pdfpage = pdfconverter.PDFPage(
             page, metadata_inner_margins=metadata.inner_margins)
-        pdfpage.remove_elements_not_within_margin()
+        pdfpage.remove_elements_outside_margin()
         page_want = ["1", "2", "3"]
 
-        self.assertListEqual([t.t.xpath('string()')
+        self.assertListEqual([t.text_elt.xpath('string()')
                               for t in pdfpage.textelements], page_want)
 
     def test_adjust_line_heights(self):
