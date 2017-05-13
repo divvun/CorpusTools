@@ -138,19 +138,6 @@ class Converter(object):
                 '{}: Not valid XML. More info in the log file: '
                 '{}'.format(type(self).__name__, self.names.log))
 
-    def maybe_write_intermediate(self, intermediate):
-        """Write intermediate file.
-
-        Used for debugging purposes.
-        """
-        if not self.write_intermediate:
-            return
-        im_name = self.names.orig + '.im.xml'
-        with open(im_name, 'w') as im_file:
-            im_file.write(etree.tostring(intermediate,
-                                         encoding='utf8',
-                                         pretty_print='True'))
-
     def transform_to_complete(self):
         """Combine the intermediate xml document with its medatata."""
         try:
@@ -317,52 +304,3 @@ class Converter(object):
     def corpusdir(self):
         """Return the directory where the corpus directory is."""
         return self.names.pathcomponents.root
-
-    def extract_text(self, command):
-        """Extract the text from a document.
-
-        :command: a list containing the command and the arguments sent to
-        ExternalCommandRunner.
-        :returns: byte string containing the output of the program
-        """
-        runner = util.ExternalCommandRunner()
-        runner.run(command, cwd=self.tmpdir)
-
-        if runner.returncode != 0:
-            with open(self.names.log, 'w') as logfile:
-                print('stdout\n{}\n'.format(runner.stdout), file=logfile)
-                print('stderr\n{}\n'.format(runner.stderr), file=logfile)
-                raise util.ConversionError(
-                    '{} failed. More info in the log file: {}'.format(
-                        command[0], self.names.log))
-
-        return runner.stdout
-
-    def handle_syntaxerror(self, error, lineno, invalid_input):
-        """Handle an xml syntax error.
-
-        Arguments:
-            e: an exception
-            lineno: the line number in this module where the error happened.
-            invalid_input: a string containing the invalid input.
-        """
-        with open(self.names.log, 'w') as logfile:
-            logfile.write('Error at: {}'.format(lineno))
-            for entry in error.error_log:
-                logfile.write('\n{}: {} '.format(
-                    six.text_type(entry.line), six.text_type(entry.column)))
-                try:
-                    logfile.write(entry.message)
-                except ValueError:
-                    logfile.write(entry.message.encode('latin1'))
-
-                logfile.write('\n')
-
-            if six.PY3:
-                logfile.write(invalid_input)
-            else:
-                logfile.write(invalid_input.encode('utf8'))
-
-        raise util.ConversionError(
-            "{}: log is found in {}".format(type(self).__name__,
-                                            self.names.log))
