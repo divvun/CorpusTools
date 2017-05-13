@@ -275,7 +275,7 @@ class PDFParagraph(object):
         u'■',  # U+25A0: BLACK SQUARE
         six.unichr(61692),  # U+F0FC: <private use>
     ]
-    LIST_RE = re.compile(r'^(\s*[{}])(.+)'.format(u''.join(LIST_CHARS)))
+    LIST_RE = re.compile(u'^(\s*[{}])(.+)'.format(u''.join(LIST_CHARS)))
 
     def __init__(self, linespacing):
         """Initialise the PDFParagraph class."""
