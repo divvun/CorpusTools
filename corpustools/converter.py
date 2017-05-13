@@ -147,7 +147,6 @@ class Converter(object):
                 '{} can not convert files of this format {}:'.format(
                     self.names.orig, str(error)))
         self.fix_document(intermediate)
-        self.maybe_write_intermediate(intermediate)
         try:
             xsl_maker = xslmaker.XslMaker(self.metadata.tree)
             complete = xsl_maker.transformer(intermediate)
