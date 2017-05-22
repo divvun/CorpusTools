@@ -780,6 +780,7 @@ class SamasCrawler(object):
             lang: adder.AddToCorpus(self.goaldir, self.samas_languages[lang],
                                     'admin/allaskuvla/samas.no')
             for lang in self.samas_languages}
+        self.downloader = adder.UrlDownloader(os.path.join(self.goaldir, 'tmp'))
 
     @staticmethod
     def get_samas_href(href):
@@ -823,9 +824,7 @@ class SamasCrawler(object):
         if link not in self.fetched_links:
             try:
                 try:
-                    downloader = adder.UrlDownloader(os.path.join(self.goaldir,
-                                                                'tmp'))
-                    (request, tmpname) = downloader.download(link)
+                    (request, tmpname) = self.downloader.download(link)
                     content = html.parse(tmpname).getroot()
                     lang_switcher = content.find(
                         './/ul[@class="language-switcher-locale-url"]')
@@ -872,9 +871,8 @@ class SamasCrawler(object):
                 self.add_samas_page(lunk)
 
     def crawl_site(self):
-        downloader = adder.UrlDownloader(os.path.join(self.goaldir, 'tmp'))
         for lang in self.samas_languages:
-            (request, tmpname) = downloader.download('http://samas.no/{}'.format(lang[:2]))
+            (request, tmpname) = self.downloader.download('http://samas.no/{}'.format(lang[:2]))
             for link in self.harvest_links(html.parse(tmpname).getroot()):
                 self.add_samas_page(link)
 
