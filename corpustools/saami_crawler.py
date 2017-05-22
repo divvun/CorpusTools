@@ -800,8 +800,8 @@ class SamasCrawler(object):
         lang_switcher.getparent().remove(lang_switcher)
 
         for address in content.xpath('//a'):
-            if self.is_internal(address.get('href').strip()):
-                yield self.get_samas_href(address.get('href'))
+            if self.is_internal(address.get('href')):
+                yield self.get_samas_href(address.get('href').strip())
 
     def is_internal(self, href):
         return (href and
