@@ -221,6 +221,7 @@ class HTMLContentConverter(object):
                     'historic-label',  # regjeringen.no
                     'imagecontainer',
                     'innholdsfortegenlse-child',
+                    'inside',  # samas.no
                     'latestnews_uutisarkisto',
                     'ld-navbar',
                     'meta',
@@ -237,6 +238,7 @@ class HTMLContentConverter(object):
                     'nrk-globalnavigation',  # nrk.no
                     'nrkno-share bulletin-share',  # nrk.no
                     'outer-column',
+                    'page-inner',  # samas.no
                     'plug-teaser',  # nrk.no
                     'post-footer',
                     'printbutton-wrapper',  # 1177.se
@@ -284,6 +286,7 @@ class HTMLContentConverter(object):
                     'article_footer',
                     'attached',  # tysfjord.kommune.no
                     'blog-pager',
+                    'bottom',  # samas.no
                     'breadcrumbs-bottom',
                     'bunninformasjon',  # unginordland
                     'chatBox',
@@ -393,6 +396,9 @@ class HTMLContentConverter(object):
                     'breadcrumbs',
                     'langs',  # oahpa.no
                     'art-page-footer',  # gaaltije.se
+                ],
+                'id': [
+                    'skip-link',  # samas.no
                 ],
             },
             'ul': {
