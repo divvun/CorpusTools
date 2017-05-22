@@ -872,14 +872,14 @@ class SamasCrawler(object):
                 self.add_samas_page(lunk)
 
     def crawl_site(self):
-        #util.print_frame()
         downloader = adder.UrlDownloader(os.path.join(self.goaldir, 'tmp'))
-        (request, tmpname) = downloader.download('http://samas.no/se')
-        for link in self.harvest_links(html.parse(tmpname).getroot()):
-            self.add_samas_page(link)
+        for lang in self.samas_languages:
+            (request, tmpname) = downloader.download('http://samas.no/{}'.format(lang[:2]))
+            for link in self.harvest_links(html.parse(tmpname).getroot()):
+                self.add_samas_page(link)
 
         for lang in self.corpus_adders:
-            paths = self.corpus_adders[lang].add_files_to_working_copy()
+            self.corpus_adders[lang].add_files_to_working_copy()
 
 
 def parse_options():
