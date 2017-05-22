@@ -836,7 +836,7 @@ class SamasCrawler(object):
 
                     if 'se' in uff:
                         util.note('')
-                        util.print_frame(uff)
+                        util.print_frame(link, uff)
                         se_link = self.get_samas_href(uff['se'])
                         self.fetched_links.add(se_link)
                         if se_link == link:
