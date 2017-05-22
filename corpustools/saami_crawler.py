@@ -476,7 +476,7 @@ class SamediggiNoCrawler(Crawler):
             util.print_frame(debug='No saami found')
 
 
-class NrkSmeCrawler(Crawler):
+class NrkSmeCrawler(object):
     """Collect Northern Saami pages from nrk.no.
 
     Attributes:
@@ -503,7 +503,6 @@ class NrkSmeCrawler(Crawler):
 
     def __init__(self):
         """Initialise the NrkSmeCrawler class."""
-        super(NrkSmeCrawler, self).__init__()
         self.fetched_links = self.get_fetched_links(self.corpus_adder.goaldir)
         self.fetched_links.add(
             'https://www.nrk.no/sapmi/utgir-ny-kristen-cd-med-joik-og-sang'
