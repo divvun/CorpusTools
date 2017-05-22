@@ -841,11 +841,11 @@ class SamasCrawler(object):
                         self.fetched_links.add(se_link)
                         if se_link == link:
                             path = self.corpus_adders['se'].copy_file_to_corpus(
-                                tmpname, link)
+                                tmpname, se_link)
                             paths.add(path)
                         else:
                             path = self.corpus_adders['se'].copy_url_to_corpus(
-                                link)
+                                se_link)
                             paths.add(path)
 
                         for lang in ['nb', 'en-UK']:
