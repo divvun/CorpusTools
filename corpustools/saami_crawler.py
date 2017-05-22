@@ -870,6 +870,7 @@ class SamasCrawler(object):
             for lunk in self.harvest_links(
                     html.parse(puth)):
                 self.add_samas_page(lunk)
+
     def crawl_site(self):
         #util.print_frame()
         downloader = adder.UrlDownloader(os.path.join(self.goaldir, 'tmp'))
@@ -903,18 +904,13 @@ def main():
     """Crawl sites."""
     args = parse_options()
 
+    crawlers = {
+        'www.samediggi.fi': SamediggiFiCrawler(),
+        'samediggi.no': SamediggiNoCrawler(),
+        'nrk.no': NrkSmeCrawler(),
+        'samas.no': SamasCrawler(),
+    }
+
     for site in args.sites:
-        if site == 'www.samediggi.fi':
-            print('Will crawl samediggi.fi')
-            crawler = SamediggiFiCrawler()
-            crawler.crawl_site()
-        elif site == 'samediggi.no':
-            print('Will crawl samediggi.no')
-            crawler = SamediggiNoCrawler()
-            crawler.crawl_site()
-        elif site == 'nrk.no':
-            print('Will crawl nrk.no')
-            crawler = NrkSmeCrawler()
-            crawler.crawl_site()
-        else:
-            print('Can not crawl {} yet'.format(site))
+        crawler = crawlers[site]
+        crawler.crawl_site()
