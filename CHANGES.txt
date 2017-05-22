@@ -98,3 +98,4 @@ v<0.19.1>, <20170322> -- Improve the realign tool, add --files and --convert opt
 v<0.19.2>, <20170503> -- Improve saami_crawler.py, handle new list character in pdf conversion, add space in listelements when needed when doing pdf conversion, add new character to sms conversion
 v<0.19.3>, <20170510> -- Fix a bug in versioncontrol.py which affects move_corpus_file
 v<0.19.4>, <20170513> -- Fix a bug in pdfconverter.py which pdf conversion error handling
+v<0.20.0>, <20170522> -- Add the samas.no crawler
