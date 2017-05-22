@@ -854,7 +854,7 @@ class SamasCrawler(object):
                                 self.fetched_links.add(lunk)
                                 if lunk == link:
                                     puth = self.corpus_adders[lang].copy_file_to_corpus(
-                                        tmpname, link, parallelpath=path)
+                                        tmpname, lunk, parallelpath=path)
                                     paths.add(puth)
                                 else:
                                     puth = self.corpus_adders[lang].copy_url_to_corpus(
