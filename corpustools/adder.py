@@ -173,13 +173,10 @@ class AddToCorpus(object):
 
         Copy a downloaded url to the corpus
         """
-        try:
-            downloader = UrlDownloader(os.path.join(self.corpusdir, 'tmp'))
-            (request, tmpname) = downloader.download(url)
+        downloader = UrlDownloader(os.path.join(self.corpusdir, 'tmp'))
+        (request, tmpname) = downloader.download(url)
 
-            return self.copy_file_to_corpus(tmpname, request.url, parallelpath)
-        except UserWarning as error:
-            print('Skipping: {}'.format(error))
+        return self.copy_file_to_corpus(tmpname, request.url, parallelpath)
 
     def copy_file_to_corpus(self, origpath, metadata_filename,
                             parallelpath=''):
@@ -193,24 +190,22 @@ class AddToCorpus(object):
         ** if a parallel file is given, set the parallel info in all the
         parellel files
         """
-        try:
-            if six.PY2 and isinstance(origpath, str):
-                origpath = unicode(origpath, 'utf8')
-                metadata_filename = unicode(metadata_filename, 'utf8')
+        if six.PY2 and isinstance(origpath, str):
+            origpath = unicode(origpath, 'utf8')
+            metadata_filename = unicode(metadata_filename, 'utf8')
 
-            none_dupe_path = self.none_dupe_path(origpath)
-            shutil.copy(origpath, none_dupe_path)
-            self.additions.append(none_dupe_path)
+        none_dupe_path = self.none_dupe_path(origpath)
+        shutil.copy(origpath, none_dupe_path)
+        self.additions.append(none_dupe_path)
 
-            self.add_metadata_to_corpus(none_dupe_path,
-                                        metadata_filename)
-            if parallelpath:
-                self.update_parallel_data(util.split_path(none_dupe_path),
-                                          parallelpath)
-            print('Added', none_dupe_path)
-            return none_dupe_path
-        except UserWarning as error:
-            print('Skipping: {}'.format(error))
+        self.add_metadata_to_corpus(none_dupe_path,
+                                    metadata_filename)
+        if parallelpath:
+            self.update_parallel_data(util.split_path(none_dupe_path),
+                                      parallelpath)
+        print('Added', none_dupe_path)
+
+        return none_dupe_path
 
     def add_metadata_to_corpus(self, none_dupe_path, meta_filename):
         """Add the metadata file to the corpus."""
