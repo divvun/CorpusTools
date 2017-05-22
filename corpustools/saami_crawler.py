@@ -757,6 +757,130 @@ class NrkSmeCrawler(object):
             if file_.endswith('.xsl')}
 
 
+class SamasCrawler(object):
+    """Collect pages from samas.no.
+
+    We only want to fetch saami pages, and their parallels.
+
+    <ul class="language-switcher-locale-url"> tells which language is active.
+    If se is active, save the page and its parallels.
+    If se is not active, check to see if it has a parallel. Save the page and its parallels.
+    If the link of one of the list elements contain /node, skip it.
+
+    Attributes:
+    """
+    goaldir = six.text_type(os.getenv('GTFREE'))
+    external_links = set()
+    samas_languages = {'se': 'sme', 'nb': 'nob', 'en-UK': 'eng'}
+
+    def __init__(self):
+        self.fetched_links = {'http://samas.no/en', 'http://samas.no/nb',
+                              'http://samas.no/se'}
+        self.corpus_adders = {
+            lang: adder.AddToCorpus(self.goaldir, self.samas_languages[lang],
+                                    'admin/allaskuvla/samas.no')
+            for lang in self.samas_languages}
+
+    @staticmethod
+    def get_samas_href(href):
+        return 'http://samas.no{}'.format(href)
+
+    def harvest_links(self, content):
+        """Find interesting pages inside a topic.
+
+        Arguments:
+            content (etree.Element): content of a samas page, without the
+                language_switcher element.
+
+        Yields:
+            str: a url to a samas.no page
+        """
+        lang_switcher = content.find(
+            './/ul[@class="language-switcher-locale-url"]')
+        lang_switcher.getparent().remove(lang_switcher)
+
+        for address in content.xpath('//a'):
+            if self.is_internal(address.get('href')):
+                yield self.get_samas_href(address.get('href'))
+
+    def is_internal(self, href):
+        return (href and
+                '/node' not in href and
+                '/Node' not in href and
+                href.startswith('/') and
+                'field_' not in href and
+                'page=' not in href and
+                '/user' not in href)
+
+    def add_samas_page(self, link):
+        """Get a saami samas.no page and its parallels.
+
+        Arguments:
+            link (str): a url to samas.no page, that has been vetted by
+                the is_internal function.
+        """
+        paths = set()
+        if link not in self.fetched_links:
+            try:
+                try:
+                    downloader = adder.UrlDownloader(os.path.join(self.goaldir,
+                                                                'tmp'))
+                    (request, tmpname) = downloader.download(link)
+                    content = html.parse(tmpname).getroot()
+                    lang_switcher = content.find(
+                        './/ul[@class="language-switcher-locale-url"]')
+
+                    uff = {address.get('xml:lang'): address.get('href')
+                           for address in lang_switcher.xpath('.//a')
+                           if self.is_internal(address.get('href'))}
+
+                    if 'se' in uff:
+                        util.note('')
+                        util.print_frame(uff)
+                        se_link = self.get_samas_href(uff['se'])
+                        self.fetched_links.add(se_link)
+                        if se_link == link:
+                            path = self.corpus_adders['se'].copy_file_to_corpus(
+                                tmpname, link)
+                            paths.add(path)
+                        else:
+                            path = self.corpus_adders['se'].copy_url_to_corpus(
+                                link)
+                            paths.add(path)
+
+                        for lang in ['nb', 'en-UK']:
+                            if lang in uff:
+                                lunk = self.get_samas_href(uff[lang])
+                                self.fetched_links.add(lunk)
+                                if lunk == link:
+                                    puth = self.corpus_adders[lang].copy_file_to_corpus(
+                                        tmpname, link, parallelpath=path)
+                                    paths.add(puth)
+                                else:
+                                    puth = self.corpus_adders[lang].copy_url_to_corpus(
+                                        lunk, parallelpath=path)
+                                    paths.add(puth)
+                except UserWarning as error:
+                    util.note(error)
+
+            except adder.AdderError as error:
+                util.note(error)
+
+        for puth in paths:
+            for lunk in self.harvest_links(
+                    html.parse(puth)):
+                self.add_samas_page(lunk)
+    def crawl_site(self):
+        #util.print_frame()
+        downloader = adder.UrlDownloader(os.path.join(self.goaldir, 'tmp'))
+        (request, tmpname) = downloader.download('http://samas.no/se')
+        for link in self.harvest_links(html.parse(tmpname).getroot()):
+            self.add_samas_page(link)
+
+        for lang in self.corpus_adders:
+            paths = self.corpus_adders[lang].add_files_to_working_copy()
+
+
 def parse_options():
     """Parse the commandline options.
 
