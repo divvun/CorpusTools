@@ -28,7 +28,7 @@ from __future__ import absolute_import
 
 import argparse
 
-from corpustools import argparse_version, converter, util
+from corpustools import argparse_version, htmlconverter, util
 
 
 def parse_args():
@@ -56,6 +56,6 @@ def main():
     args = parse_args()
 
     with open(args.inhtml) as f:
-        c = converter.HTMLContentConverter(args.inhtml, False, content=f.read())
-        with open(args.outhtml, 'wb') as outfile:
-            util.print_element(c.soup, 0, 4, outfile)
+        c = htmlconverter.convert2xhtml(f.read())
+        with open(args.outhtml, 'w') as outfile:
+            util.print_element(c, 0, 4, outfile)
