@@ -102,8 +102,43 @@ class SVN(VersionController):
         Arguments:
             path (str): path to a file or directory
         """
-        if self.client.info(path) is None:
-            self.client.add(path)
+        self.client.add(self.valid_svn_path(path), recurse=True, force=True)
+
+    def valid_svn_path(self, path):
+        """Find the part of the path that is under version control.
+
+        Arguments:
+            path (str): path that should be added to the working copy
+
+        Returns:
+            str: path to the first unversioned part of the path
+        """
+        child = os.path.basename(path)
+        parent = os.path.dirname(path)
+        while not self.under_version_control(parent):
+            child = os.path.basename(parent)
+            parent = os.path.dirname(parent)
+
+        return os.path.join(parent, child)
+
+    def under_version_control(self, path):
+        """Check if path is under version control.
+
+        Arguments:
+            path (str): path that should be checked.
+
+        Returns:
+            bool: True if under version control, False otherwise
+        """
+        try:
+            status = self.client.status(path)[0].text_status
+        except pysvn.ClientError:
+            return False
+        else:
+            return status not in (
+                pysvn.wc_status_kind.added,
+                pysvn.wc_status_kind.unversioned,
+                pysvn.wc_status_kind.ignored)
 
     def add(self, path):
         """Add path to the working copy.
