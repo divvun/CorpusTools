@@ -154,7 +154,7 @@ class SentenceDivider(object):
         invalid_sentence_re = re.compile('^\W+$')
         valid_sentences = []
         for sentence in sentences:
-            if invalid_sentence_re.fullmatch(sentence) and valid_sentences:
+            if invalid_sentence_re.match(sentence) and valid_sentences:
                 valid_sentences[-1] = ''.join([valid_sentences[-1] + sentence])
             else:
                 valid_sentences.append(sentence)
