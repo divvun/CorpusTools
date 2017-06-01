@@ -1142,14 +1142,23 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             A corpus xml etree with the content of the pdf file, but without
             most of the metadata.
         """
-        document = etree.Element('document')
-        etree.SubElement(document, 'header')
-        document.append(self.extractor.body)
-
         command = (
             'pdftohtml -hidden -enc UTF-8 -stdout -nodrm -i -xml {}'.format(
                 self.orig))
         pdftohtmloutput = self.extract_text(command.split())
+        return self.pdftohtml2intermediate(pdftohtmloutput)
+
+    def pdftohtml2intermediate(self, pdftohtmloutput):
+        """Convert output of pdftohtml to a corpus xml file.
+
+        Returns:
+            A corpus xml etree with the content of the pdf file, but without
+            most of the metadata.
+        """
+        document = etree.Element('document')
+        etree.SubElement(document, 'header')
+        document.append(self.extractor.body)
+
         pdf_content = self.replace_ligatures(self.strip_chars(
             pdftohtmloutput.decode('utf8', 'ignore')))
 
@@ -1162,6 +1171,28 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         self.parse_pages(root_element)
 
         return document
+
+    def pdftohtml2html(self, pdftohtmloutput):
+        """Convert output of pdftohtml to html (applying our regular fixes)
+
+        Returns:
+            An html file as string with the content of the pdf file, but without
+            most of the metadata.
+        """
+        doc = self.pdftohtml2intermediate(pdftohtmloutput)
+        meta = etree.Element('meta')
+        meta.attrib['charset'] = "utf-8"
+        doc.insert(0, meta)
+        map(doc.remove, doc.findall('header'))
+        doc.tag = 'html'
+        lang = self.metadata.get_variable('mainlang')
+        if lang is None or lang == "":
+            lang = 'se'
+        doc.attrib['lang'] = lang
+        return etree.tostring(doc,
+                              encoding='utf8',
+                              method='html',
+                              pretty_print=True)
 
     def parse_page(self, page):
         """Parse the page element.
