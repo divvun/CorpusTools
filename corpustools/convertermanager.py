@@ -35,9 +35,10 @@ LOGGER = logging.getLogger(__name__)
 class ConverterManager(object):
     """Manage the conversion of original files to corpus xml.
 
-    Attributes:
-        LANGUAGEGUESSER (text_cat.Classifier): Language guesser to indicate
+    Class/static variables:
+        _languageguesser (text_cat.Classifier): Language guesser to indicate
             languages in the converted document.
+    Attributes:
         write_intermediate (bool): indicate whether intermediate versions
             of the converted document should be written to disk.
         goldstandard (bool): indicating whether goldstandard documents
@@ -46,7 +47,15 @@ class ConverterManager(object):
             be converted from original format to xml.
     """
 
-    LANGUAGEGUESSER = text_cat.Classifier(None)
+    _languageguesser = None
+
+    def languageguesser(self):
+        """Return our language guesser.
+        This is a class variable, but since it takes a while to initialise,
+        we don't do it until it's needed."""
+        if self._languageguesser is None:
+            ConverterManager._languageguesser = text_cat.Classifier(None)
+        return self._languageguesser
 
     def __init__(self, write_intermediate, goldstandard):
         """Initialise the ConverterManager class.
@@ -69,7 +78,7 @@ class ConverterManager(object):
         """
         try:
             conv = converter.Converter(orig_file)
-            conv.write_complete(self.LANGUAGEGUESSER)
+            conv.write_complete(self.languageguesser())
         except (util.ConversionError, ValueError) as error:
             LOGGER.warn('Could not convert %s\n%s',
                         orig_file,
