@@ -244,11 +244,10 @@ class DocumentFixer(object):
         body_string = etree.tostring(body, encoding='unicode')
         body.getparent().remove(body)
 
-        guesser = decode.EncodingGuesser()
-        encoding = guesser.guess_body_encoding(body_string)
+        encoding = decode.guess_body_encoding(body_string)
 
         try:
-            body = etree.fromstring(guesser.decode_para(encoding, body_string))
+            body = etree.fromstring(decode.decode_para(encoding, body_string))
         except UnicodeEncodeError as error:
             raise UserWarning(str(error))
         self.root.append(body)
@@ -258,15 +257,13 @@ class DocumentFixer(object):
 
     def fix_title_person(self, encoding):
         """Fix encoding problems."""
-        guesser = decode.EncodingGuesser()
-
         title = self.root.find('.//title')
         if title is not None and title.text is not None:
             text = title.text
 
             text = text
             util.print_frame(encoding)
-            title.text = guesser.decode_para(encoding, text)
+            title.text = decode.decode_para(encoding, text)
 
         persons = self.root.findall('.//person')
         for person in persons:
@@ -279,7 +276,7 @@ class DocumentFixer(object):
 
                 person.set(
                     'lastname',
-                    guesser.decode_para(
+                    decode.decode_para(
                         encoding,
                         lastname))
 
@@ -291,7 +288,7 @@ class DocumentFixer(object):
 
                 person.set(
                     'firstname',
-                    guesser.decode_para(
+                    decode.decode_para(
                         encoding,
                         firstname))
 

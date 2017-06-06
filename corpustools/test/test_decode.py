@@ -85,16 +85,14 @@ class TestEncodingGuesser(unittest.TestCase):
         for index in decode.CTYPES.keys()
         for example in test_input[index]])
     def test_encoding_guesser(self, index, example):
-        guesser = decode.EncodingGuesser()
-        self.assertEqual(guesser.guess_body_encoding(example),
+        self.assertEqual(decode.guess_body_encoding(example),
                          index)
 
     @parameterized.expand([(index) for index in test_input.keys()])
     def test_round_trip_x(self, index):
-        eg = decode.EncodingGuesser()
         unicode_content = u'á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ'
         content = test_input[index][0]
-        test_content = eg.decode_para(index, content)
+        test_content = decode.decode_para(index, content)
 
         self.assertEqual(unicode_content, test_content)
 

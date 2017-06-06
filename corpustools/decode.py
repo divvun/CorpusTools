@@ -235,93 +235,90 @@ CTYPES = {
 }
 
 
-class EncodingGuesser(object):
-    """Guess if some text or a file has faultily encoded sami letters."""
+def guess_file_encoding(filename):
+    """Guess the encoding of a file.
 
-    def guess_file_encoding(self, filename):
-        """Guess the encoding of a file.
-
-        @param filename name of an utf-8 encoded file
-        @return winner is an int, pointing to a position in CTYPES, or -1
-        """
-        with open(filename) as infile:
-            content = infile.read()
-            winner = self.guess_body_encoding(content)
-
-            return winner
-
-    @staticmethod
-    def guess_body_encoding(content):
-        """Guess the encoding of the string content.
-
-        First get the frequencies of the "sami letters"
-        Then get the frequencies of the letters in the encodings in CTYPES
-
-        If "sami letters" that the encoding tries to fix exist in "content",
-        disregard the encoding
-
-        @param content a unicode string
-        @return winner is a key from CTYPES or None to tell that no known
-        encoding is found
-        """
-        winner = None
-        if u'à' in content and u'û' in content:
-            winner = u'cp1251_cp1252'
-        elif (
-                (u'‡' in content and u'ã' not in content) or
-                (u'Œ' in content and u'ÄŒ' not in content)):
-            winner = u'mac-sami_to_cp1252'
-        elif (
-                (u'' in content and u'ã' not in content) or
-                (u'' in content) or
-                (u'¯' in content and u'á' not in content)):
-            winner = u'mac-sami_to_latin1'
-        elif u'' in content and u'ã':
-            winner = u'mix-mac-sami-and-some-unknown-encoding'
-        elif u'³' in content and u'¢' in content and u'¤' in content:
-            winner = u'iso-ir-197_to_cp1252'
-        elif u'á' in content and (u'ª' in content or u'∫' in content):
-            winner = u'mac-sami_to_mac'
-        elif u'ó' in content and u'ç' in content and u'ð' in content:
-            winner = u'winsam_to_cp1252'
-        elif u'á' in content and u'è' in content and u'ð' in content:
-            winner = u'latin4_to_cp1252'
-        elif u'ó' in content and u'ç' in content and u'¤' in content:
-            winner = u'mix-of-latin4-and-iso-ir-197_to_cp1252'
-        elif u'„' in content and (u'˜' in content or u'¹' in content):
-            winner = u'winsami2_to_cp1252'
-        elif u'þ' in content and u'š' in content and u'á' in content:
-            winner = u'finnish-lawtexts-in-pdf'
-        elif u'Ã¡' in content:
-            winner = u'double-utf8'
+    @param filename name of an utf-8 encoded file
+    @return winner is an int, pointing to a position in CTYPES, or -1
+    """
+    with open(filename) as infile:
+        content = infile.read()
+        winner = guess_body_encoding(content)
 
         return winner
 
-    @staticmethod
-    def decode_para(position, text):
-        """Decode the text given to this function.
 
-        Replace letters in text with the ones from the dict at
-        position position in CTYPES
+def guess_body_encoding(content):
+    """Guess the encoding of the string content.
 
-        @param position which place the encoding has in the CTYPES list
-        @param text str
-        @return str
-        """
-        if position == u'mac-sami_to_cp1252':
-            return fix_macsami_cp1252(text)
-        elif position == u'mac-sami_to_latin1':
-            return fix_macsami_latin1(text)
-        elif position == u'mac-sami_to_mac':
-            return fix_macsami_mac(text)
-        elif position == u'winsami2_to_cp1252':
-            return fix_winsami2_cp1252(text)
-        elif position == u'cp1251_cp1252':
-            return fix_meadowmari_cp1252(text)
-        elif position is not None:
-            encoding = CTYPES[position]
+    First get the frequencies of the "sami letters"
+    Then get the frequencies of the letters in the encodings in CTYPES
 
-            for key, value in six.iteritems(encoding):
-                text = text.replace(key, value)
+    If "sami letters" that the encoding tries to fix exist in "content",
+    disregard the encoding
 
-        return text
+    @param content a unicode string
+    @return winner is a key from CTYPES or None to tell that no known
+    encoding is found
+    """
+    winner = None
+    if u'à' in content and u'û' in content:
+        winner = u'cp1251_cp1252'
+    elif (
+            (u'‡' in content and u'ã' not in content) or
+            (u'Œ' in content and u'ÄŒ' not in content)):
+        winner = u'mac-sami_to_cp1252'
+    elif (
+            (u'' in content and u'ã' not in content) or
+            (u'' in content) or
+            (u'¯' in content and u'á' not in content)):
+        winner = u'mac-sami_to_latin1'
+    elif u'' in content and u'ã':
+        winner = u'mix-mac-sami-and-some-unknown-encoding'
+    elif u'³' in content and u'¢' in content and u'¤' in content:
+        winner = u'iso-ir-197_to_cp1252'
+    elif u'á' in content and (u'ª' in content or u'∫' in content):
+        winner = u'mac-sami_to_mac'
+    elif u'ó' in content and u'ç' in content and u'ð' in content:
+        winner = u'winsam_to_cp1252'
+    elif u'á' in content and u'è' in content and u'ð' in content:
+        winner = u'latin4_to_cp1252'
+    elif u'ó' in content and u'ç' in content and u'¤' in content:
+        winner = u'mix-of-latin4-and-iso-ir-197_to_cp1252'
+    elif u'„' in content and (u'˜' in content or u'¹' in content):
+        winner = u'winsami2_to_cp1252'
+    elif u'þ' in content and u'š' in content and u'á' in content:
+        winner = u'finnish-lawtexts-in-pdf'
+    elif u'Ã¡' in content:
+        winner = u'double-utf8'
+
+    return winner
+
+
+def decode_para(position, text):
+    """Decode the text given to this function.
+
+    Replace letters in text with the ones from the dict at
+    position position in CTYPES
+
+    @param position which place the encoding has in the CTYPES list
+    @param text str
+    @return str
+    """
+    if position == u'mac-sami_to_cp1252':
+        return fix_macsami_cp1252(text)
+    elif position == u'mac-sami_to_latin1':
+        return fix_macsami_latin1(text)
+    elif position == u'mac-sami_to_mac':
+        return fix_macsami_mac(text)
+    elif position == u'winsami2_to_cp1252':
+        return fix_winsami2_cp1252(text)
+    elif position == u'cp1251_cp1252':
+        return fix_meadowmari_cp1252(text)
+    elif position is not None:
+        encoding = CTYPES[position]
+
+        for key, value in six.iteritems(encoding):
+            text = text.replace(key, value)
+
+    return text
