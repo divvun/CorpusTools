@@ -295,6 +295,23 @@ def guess_body_encoding(content):
     return winner
 
 
+def default_decoder(position, text):
+    """The default decoder.
+
+    Arguments:
+        position
+        text (str): The string that should be decoded.
+
+    Returns:
+        str
+    """
+    if position is not None:
+        for key, value in six.iteritems(CTYPES[position]):
+            text = text.replace(key, value)
+
+    return text
+
+
 def decode_para(position, text):
     """Decode the text given to this function.
 
@@ -305,20 +322,15 @@ def decode_para(position, text):
     @param text str
     @return str
     """
-    if position == u'mac-sami_to_cp1252':
-        return fix_macsami_cp1252(text)
-    elif position == u'mac-sami_to_latin1':
-        return fix_macsami_latin1(text)
-    elif position == u'mac-sami_to_mac':
-        return fix_macsami_mac(text)
-    elif position == u'winsami2_to_cp1252':
-        return fix_winsami2_cp1252(text)
-    elif position == u'cp1251_cp1252':
-        return fix_meadowmari_cp1252(text)
-    elif position is not None:
-        encoding = CTYPES[position]
+    which_decoder = {
+        'mac-sami_to_cp1252': fix_macsami_cp1252,
+        'mac-sami_to_latin1': fix_macsami_latin1,
+        'mac-sami_to_mac': fix_macsami_mac,
+        'winsami2_to_cp1252': fix_winsami2_cp1252,
+        'cp1251_cp1252': fix_meadowmari_cp1252,
+    }
 
-        for key, value in six.iteritems(encoding):
-            text = text.replace(key, value)
-
-    return text
+    try:
+        return which_decoder[position](text)
+    except KeyError:
+        return default_decoder(position, text)
