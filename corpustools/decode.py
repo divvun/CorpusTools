@@ -35,6 +35,9 @@ import six
 from corpustools import macsami, util, winsami2, mari
 
 
+CYRILLIC_LANGUAGES = ['mhr']
+
+
 def fix_macsami_cp1252(instring):
     """Fix instring.
 
@@ -62,7 +65,9 @@ def fix_macsami_latin1(instring):
     Returns:
         str with fixed encoding.
     """
-    return instring.encode('latin1', errors='xmlcharrefreplace').decode('macsami')
+    return instring.encode('latin1',
+                           errors='xmlcharrefreplace').decode(
+                               'macsami')
 
 
 def fix_macsami_mac(instring):
@@ -107,8 +112,9 @@ def fix_meadowmari_cp1252(instring):
     Returns:
         str with fixed encoding.
     """
-    return instring.encode('cp1252', errors='xmlcharrefreplace'
-                           ).decode('meadowmari')
+    return instring.encode('cp1252',
+                           errors='xmlcharrefreplace').decode(
+                               'meadowmari')
 
 CTYPES = {
     u'mix-mac-sami-and-some-unknown-encoding': {
@@ -235,7 +241,7 @@ CTYPES = {
 }
 
 
-def guess_file_encoding(filename):
+def guess_file_encoding(filename, mainlang):
     """Guess the encoding of a file.
 
     @param filename name of an utf-8 encoded file
@@ -243,12 +249,12 @@ def guess_file_encoding(filename):
     """
     with open(filename) as infile:
         content = infile.read()
-        winner = guess_body_encoding(content)
+        winner = guess_body_encoding(content, mainlang)
 
         return winner
 
 
-def guess_body_encoding(content):
+def guess_body_encoding(content, mainlang):
     """Guess the encoding of the string content.
 
     First get the frequencies of the "sami letters"
@@ -262,7 +268,7 @@ def guess_body_encoding(content):
     encoding is found
     """
     winner = None
-    if u'à' in content and u'û' in content:
+    if u'à' in content and u'û' in content and mainlang in CYRILLIC_LANGUAGES:
         winner = u'cp1251_cp1252'
     elif (
             (u'‡' in content and u'ã' not in content) or

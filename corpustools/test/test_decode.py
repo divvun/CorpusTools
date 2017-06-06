@@ -85,7 +85,7 @@ class TestEncodingGuesser(unittest.TestCase):
         for index in decode.CTYPES.keys()
         for example in test_input[index]])
     def test_encoding_guesser(self, index, example):
-        self.assertEqual(decode.guess_body_encoding(example),
+        self.assertEqual(decode.guess_body_encoding(example, 'sme'),
                          index)
 
     @parameterized.expand([(index) for index in test_input.keys()])

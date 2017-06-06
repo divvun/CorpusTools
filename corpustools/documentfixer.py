@@ -244,7 +244,7 @@ class DocumentFixer(object):
         body_string = etree.tostring(body, encoding='unicode')
         body.getparent().remove(body)
 
-        encoding = decode.guess_body_encoding(body_string)
+        encoding = decode.guess_body_encoding(body_string, mainlang)
 
         try:
             body = etree.fromstring(decode.decode_para(encoding, body_string))
