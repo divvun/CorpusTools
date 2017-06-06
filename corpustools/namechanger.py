@@ -449,23 +449,22 @@ class CorpusFilesetMoverAndUpdater(object):
                                                        parallel_name)
 
 
-def compute_hexdigest(path, blocksize=65536):
+def compute_hexdigest(afile, blocksize=65536):
     """Compute the hexdigest of the file in path.
 
     Args:
-        path: the file to compute the hexdigest of
+        afile: a file like object
 
     Returns:
         a hexdigest of the file
     """
-    with open(path, 'rb') as afile:
-        hasher = hashlib.md5()
+    hasher = hashlib.md5()
+    buf = afile.read(blocksize)
+    while buf:
+        hasher.update(buf)
         buf = afile.read(blocksize)
-        while buf:
-            hasher.update(buf)
-            buf = afile.read(blocksize)
 
-        return hasher.hexdigest()
+    return hasher.hexdigest()
 
 
 def normalise_filename(filename):
@@ -512,9 +511,11 @@ def are_duplicates(oldpath, newpath):
     Returns:
         a boolean indicating if the two files are duplicates
     """
-    return (os.path.isfile(oldpath) and os.path.isfile(newpath) and
-            compute_hexdigest(oldpath) == compute_hexdigest(
-                newpath))
+    if os.path.isfile(oldpath) and os.path.isfile(newpath):
+        with open(oldpath, 'rb') as oldcontent, open(newpath, 'rb') as newcontent:
+            return compute_hexdigest(oldcontent) == compute_hexdigest(newcontent)
+    else:
+        return False
 
 
 def compute_new_basename(oldpath, wanted_path):

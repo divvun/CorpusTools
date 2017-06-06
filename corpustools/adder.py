@@ -287,11 +287,12 @@ class AddToCorpus(object):
         for root, _, files in os.walk(origpath):
             for file_ in files:
                 path = os.path.join(root, file_)
-                file_hash = namechanger.compute_hexdigest(path)
-                if file_hash in duplicates:
-                    duplicates[file_hash].append(path)
-                else:
-                    duplicates[file_hash] = [path]
+                with open(path, 'rb') as content:
+                    file_hash = namechanger.compute_hexdigest(content)
+                    if file_hash in duplicates:
+                        duplicates[file_hash].append(path)
+                    else:
+                        duplicates[file_hash] = [path]
 
         results = list([x for x in list(duplicates.values()) if len(x) > 1])
         if results:
