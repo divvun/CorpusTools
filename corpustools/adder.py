@@ -43,6 +43,44 @@ class AdderError(Exception):
     pass
 
 
+def add_url_extension(filename, content_type):
+    """Add an extension to the file depending on the content type."""
+    if filename == '':
+        filename += 'index'
+
+    content_type_extension = {
+        'text/html': '.html',
+        'application/msword': '.doc',
+        'application/pdf': '.pdf',
+        'text/plain': '.txt',
+    }
+
+    for ct, extension in six.iteritems(content_type_extension):
+        if (ct in content_type and not
+                filename.endswith(extension)):
+            filename += extension
+
+    return filename
+
+
+def url_to_filename(response):
+    """Compute the filename.
+
+    Args:
+        response (requests.get response).
+
+    Returns:
+        str: Name of the file.
+    """
+    try:
+        _, params = cgi.parse_header(
+            response.headers['Content-Disposition'])
+        return params['filename']
+    except KeyError:
+        return add_url_extension(os.path.basename(response.url),
+                                 response.headers['content-type'])
+
+
 class UrlDownloader(object):
     """Download a document from a url."""
 
@@ -59,43 +97,6 @@ class UrlDownloader(object):
                 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) '
                 'Gecko/20130331 Firefox/21.0'}
 
-    @staticmethod
-    def add_url_extension(filename, content_type):
-        """Add an extension to the file depending on the content type."""
-        if filename == '':
-            filename += 'index'
-
-        content_type_extension = {
-            'text/html': '.html',
-            'application/msword': '.doc',
-            'application/pdf': '.pdf',
-            'text/plain': '.txt',
-        }
-
-        for ct, extension in six.iteritems(content_type_extension):
-            if (ct in content_type and not
-                    filename.endswith(extension)):
-                filename += extension
-
-        return filename
-
-    def filename(self, response):
-        """Compute the filename.
-
-        Args:
-            response (requests.get response).
-
-        Returns:
-            str: Name of the file.
-        """
-        try:
-            _, params = cgi.parse_header(
-                response.headers['Content-Disposition'])
-            return params['filename']
-        except KeyError:
-            return self.add_url_extension(os.path.basename(response.url),
-                                          response.headers['content-type'])
-
     def download(self, url, params=None):
         """Download a url to a temporary file.
 
@@ -104,7 +105,7 @@ class UrlDownloader(object):
         try:
             request = requests.get(url, headers=self.headers, params=params)
             if request.status_code == requests.codes.ok:
-                filename = self.filename(request)
+                filename = url_to_filename(request)
                 if six.PY2 and isinstance(filename, str):
                     try:
                         filename = filename.decode('utf8')
