@@ -185,6 +185,8 @@ class HTMLContentConverter(object):
                     'authors ui-helper-clearfix',  # nord-salten.no
                     'back_button',
                     'banner-element',
+                    'bl_linktext',
+                    'bottom-center',
                     'breadcrumbs ',
                     'breadcrumbs',
                     'breadcrums span-12',
@@ -205,6 +207,7 @@ class HTMLContentConverter(object):
                     'dropmenudiv',  # calliidlagadus.org
                     'egavpi',  # calliidlagadus.org
                     'egavpi_fiskes',  # calliidlagadus.org
+                    'esite_footer',
                     'esite_header',
                     'expandable',
                     'feedbackContainer noindex',  # udir.no
