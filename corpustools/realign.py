@@ -28,7 +28,7 @@ import argparse
 import os
 import shutil
 
-from corpustools import argparse_version, converter, corpuspath, parallelize
+from corpustools import argparse_version, convertermanager, corpuspath, parallelize
 
 
 def print_filename(corpus_path):
@@ -89,8 +89,8 @@ def convert_and_copy(corpus_path1, corpus_path2):
         if os.path.exists(corpus_path.prestable_converted):
             os.remove(corpus_path.prestable_converted)
 
-    converter.sanity_check()
-    converter_manager = converter.ConverterManager(write_intermediate=False,
+    convertermanager.sanity_check()
+    converter_manager = convertermanager.ConverterManager(write_intermediate=False,
                                                    goldstandard=False)
     converter_manager.collect_files([corpus_path1.orig,
                                      corpus_path2.orig])
