@@ -205,6 +205,7 @@ class HTMLContentConverter(object):
                     'dropmenudiv',  # calliidlagadus.org
                     'egavpi',  # calliidlagadus.org
                     'egavpi_fiskes',  # calliidlagadus.org
+                    'esite_header',
                     'expandable',
                     'feedbackContainer noindex',  # udir.no
                     'fixed-header',
@@ -250,6 +251,7 @@ class HTMLContentConverter(object):
                     'sidebar',
                     'spalte300',  # osko.no
                     'subfooter',  # visitstetind.no
+                    'subnavigation',  # oikeusministeriö
                     'tabbedmenu',
                     'tipformcontainer',  # tysfjord.kommune.no
                     'tipsarad mt6 selfClear',
@@ -257,6 +259,7 @@ class HTMLContentConverter(object):
                     'toc-placeholder',  # 1177.se
                     'toc',
                     'tools',  # arran.no
+                    'upperheader',
                 ],
                 'id': [
                     'print-logo-wrapper',  # 1177.se
@@ -334,7 +337,10 @@ class HTMLContentConverter(object):
                     'mainContentBookmark',  # udir.no
                     'mainsidebar',  # arran.no
                     'menu',
+                    'mobile-header',
+                    'mobile-subnavigation',
                     'murupolku',                # www.samediggi.fi
+                    'nav-content',
                     'navbar',  # tysfjord.kommune.no
                     'ncFooter',  # visitstetind.no
                     'ntfkFooter',  # ntfk
