@@ -199,12 +199,16 @@ class HTMLContentConverter(object):
                     'complexDocumentBottom',  # regjeringen.no
                     'container-widget-content',  # nrk.no
                     'container_full',
+                    'content-language-links',  # metsa.fi
+                    'control-group field-wrapper tiedotteet-period',  # metsa.fi
+                    'control-group form-inline',  # metsa.fi
                     'documentInfoEm',
                     'documentPaging',
                     'documentPaging PagingBtm',  # regjeringen.no
                     'documentTop',  # regjeringen.no
                     'dotList',  # nord-salten.no
                     'dropmenudiv',  # calliidlagadus.org
+                    'embedded-breadcrumbs',
                     'egavpi',  # calliidlagadus.org
                     'egavpi_fiskes',  # calliidlagadus.org
                     'esite_footer',
@@ -228,6 +232,7 @@ class HTMLContentConverter(object):
                     'inside',  # samas.no
                     'latestnews_uutisarkisto',
                     'ld-navbar',
+                    'logo-links',  # metsa.fi
                     'meta',
                     'meta ui-helper-clearfix',  # nord-salten.no
                     'authors ui-helper-clearfix',  # nord-salten.no
@@ -235,6 +240,7 @@ class HTMLContentConverter(object):
                     'metaWrapper',
                     'moduletable_oikopolut',
                     'moduletable_etulinkki',  # www.samediggi.fi
+                    'nav-menu nav-menu-style-dots',  # metsa.fi
                     'naviHlp',  # visitstetind.no
                     'noindex',  # ntfk
                     'nrk-globalfooter',  # nrk.no
@@ -253,6 +259,8 @@ class HTMLContentConverter(object):
                     'sharing',
                     'sidebar',
                     'spalte300',  # osko.no
+                    'span12 tiedotteet-show',
+                    'subpage-bottom',
                     'subfooter',  # visitstetind.no
                     'subnavigation',  # oikeusministeriö
                     'tabbedmenu',
