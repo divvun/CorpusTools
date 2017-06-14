@@ -200,6 +200,7 @@ class HTMLContentConverter(object):
                     'container-widget-content',  # nrk.no
                     'container_full',
                     'content-language-links',  # metsa.fi
+                    'content-wrapper',  # siida.fi
                     'control-group field-wrapper tiedotteet-period',  # metsa.fi
                     'control-group form-inline',  # metsa.fi
                     'documentInfoEm',
@@ -270,6 +271,8 @@ class HTMLContentConverter(object):
                     'toc-placeholder',  # 1177.se
                     'toc',
                     'tools',  # arran.no
+                    'trail',  # siida.fi
+                    'translations',  # siida.fi
                     'upperheader',
                 ],
                 'id': [
