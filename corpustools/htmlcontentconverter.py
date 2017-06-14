@@ -499,6 +499,11 @@ class HTMLContentConverter(object):
                     'tree-menu',  # umo.se
                 ],
             },
+            'table': {
+                'id': [
+                    'Table_01',
+                ],
+            },
         }
 
         namespace = {'html': 'http://www.w3.org/1999/xhtml'}
