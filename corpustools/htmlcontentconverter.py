@@ -250,6 +250,7 @@ class HTMLContentConverter(object):
                     'nrkno-share bulletin-share',  # nrk.no
                     'outer-column',
                     'page-inner',  # samas.no
+                    'person_info',  # samediggi.no
                     'plug-teaser',  # nrk.no
                     'post-footer',
                     'printbutton-wrapper',  # 1177.se
