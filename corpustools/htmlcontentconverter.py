@@ -199,6 +199,7 @@ class HTMLContentConverter(object):
                     'complexDocumentBottom',  # regjeringen.no
                     'container-widget-content',  # nrk.no
                     'container_full',
+                    'content-body attribute-vnd.openxmlformats-officedocument.spreadsheetml.sheet',  # samediggi.no
                     'content-language-links',  # metsa.fi
                     'content-wrapper',  # siida.fi
                     'control-group field-wrapper tiedotteet-period',  # metsa.fi
