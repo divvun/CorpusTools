@@ -217,6 +217,7 @@ class HTMLContentConverter(object):
                     'esite_header',
                     'expandable',
                     'feedbackContainer noindex',  # udir.no
+                    'file',  # samediggi.no
                     'fixed-header',
                     'g100 col fc s18 sg6 sg9 sg12 menu-reference',  # nrk.no
                     'g100 col fc s18 sg6 sg9 sg12 flow-reference',  # nrk.no
