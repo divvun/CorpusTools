@@ -445,6 +445,7 @@
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:element name="multilingual">
+                          <xsl:copy-of select="$mlangs"/>
                         </xsl:element>
                     </xsl:otherwise>
                 </xsl:choose>
