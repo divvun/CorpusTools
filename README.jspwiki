@@ -598,7 +598,7 @@ parallelize -l1 nob -l2 sma converted/nob/admin/ntfk/tsaekeme.html.xml
 This means that the previously parallelized file will NOT be overwritten: you have to delete
 it before re-running the command.
 
-;__CAVEAT 3__:''If you get a similar error message message as''
+;__CAVEAT 3__:''If you get a similar error message as''
 {{{
 parallelize -l1 nob -l2 sma converted/nob/admin/ntfk/rup_2013_trykt_versjon.pdf.xml
 ERROR: /Users/xxx/gtsvn/langs/nob/tools/preprocess/tokeniser-gramcheck-gt-desc.pmhfst does not exist
