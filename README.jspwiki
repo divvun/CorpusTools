@@ -555,22 +555,49 @@ optional arguments:
 }}}
 
 
-You run the program on the files created by convert2xml, e.g.
+You run the program on the files created by convert2xml by running a command with the following syntax:
 {{{
-parallelize -l1 nob -l2 sma converted/sma/admin/ntfk/tsaekeme.html.xml
+parallelize -l1 SOURCE_LANGUAGE -l2 TARGET_LANGUAGE PATH/TO/THE/CONVERTED/SOURCE_LANGUAGE/FILE.xml
 }}}
+
+for instance, with nob as SOURCE_LANGUAGE and sma as TARGET_LANGUAGE
+{{{
+parallelize -l1 nob -l2 sma converted/nob/admin/ntfk/tsaekeme.html.xml
+}}}
+
 This will create a file named
-tmx/sma2nob/admin/ntfk/tsaekeme.html.tmx
+tmx/nob2sma/admin/ntfk/tsaekeme.html.tmx
 
 If you want to parallelize all your sma files with nob in one go, you
 can do e.g.
 {{{
 convert2xml orig/{sma,nob}
-parallelize -l1 nob -l2 sma orig/sma
+parallelize -l1 nob -l2 sma converted/nob
 }}}
 
 The files will end up in corresponding directories under
-tmx/sma2nob.
+tmx/nob2sma.
+
+If you get a message like
+
+{{{
+parallelize -l1 nob -l2 sma converted/sma/admin/ntfk/tsaekeme.html.xml
+Error reading file '/Users/xxx/freecorpus/converted/sma/admin/ntfk/.xml': 
+failed to load external entity "/Users/xxx/freecorpus/converted/sma/admin/ntfk/.xml"
+}}}
+
+then you gave nob als l1 but the path to a sma-file as argument.
+
+CAVEAT: If to try to re-run the parallelize command with the same arguments you might get the message
+
+{{{
+parallelize -l1 nob -l2 sma converted/nob/admin/ntfk/tsaekeme.html.xml
+/Users/xxx/freecorpus/tmx/nob2sma/admin/ntfk/tsaekeme.html.tmx already exists, skipping …
+}}}
+
+This means that the previously parallelized file will NOT be overwritten: you have to delete
+it before re-running the command. 
+
 
 If you get a message like
 
