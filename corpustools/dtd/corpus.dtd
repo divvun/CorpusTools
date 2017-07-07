@@ -121,7 +121,7 @@
 
 <!-- List of languages that appear in the document -->
 <!-- The list is used in language recognition -->
-<!ELEMENT multilingual (language)*>
+<!ELEMENT multilingual (language+)>
 <!ELEMENT language EMPTY>
 <!ATTLIST language
 %common.att; >
