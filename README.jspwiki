@@ -578,7 +578,7 @@ parallelize -l1 nob -l2 sma converted/nob
 The files will end up in corresponding directories under
 tmx/nob2sma.
 
-If you get a message like
+;__CAVEAT 1__:''If you get a message such as''
 
 {{{
 parallelize -l1 nob -l2 sma converted/sma/admin/ntfk/tsaekeme.html.xml
@@ -588,7 +588,7 @@ failed to load external entity "/Users/xxx/freecorpus/converted/sma/admin/ntfk/.
 
 then you gave nob als l1 but the path to a sma-file as argument.
 
-CAVEAT: If to try to re-run the parallelize command with the same arguments you might get the message
+;__CAVEAT 2__:''If to try to re-run the parallelize command with the same arguments you might get the message''
 
 {{{
 parallelize -l1 nob -l2 sma converted/nob/admin/ntfk/tsaekeme.html.xml
@@ -596,10 +596,27 @@ parallelize -l1 nob -l2 sma converted/nob/admin/ntfk/tsaekeme.html.xml
 }}}
 
 This means that the previously parallelized file will NOT be overwritten: you have to delete
-it before re-running the command. 
+it before re-running the command.
 
+;__CAVEAT 3__:''If you get a similar error message message as''
+{{{
+parallelize -l1 nob -l2 sma converted/nob/admin/ntfk/rup_2013_trykt_versjon.pdf.xml
+ERROR: /Users/xxx/gtsvn/langs/nob/tools/preprocess/tokeniser-gramcheck-gt-desc.pmhfst does not exist
+}}}
 
-If you get a message like
+you have to recompile the language tool of the respective language (in the example above it is nob)
+with a different configuration, as in the following example with nob as language to recompile:
+
+__1.__ go to the directory of the language to recompile: \\ {{{cd $GTNOME/lang/nob}}}
+__2.__ reconfigure the language: \\ {{{./configure --with-hfst --enable-grammarchecker --enable-tokenisers --enable-alignment}}}
+__3.__ remove previously generated files: \\ {{{make clean}}}
+__4.__ recompile the language toos: \\ {{{make}}} or {{{make -j}}}
+
+After that you can go back to the directory where you are working with the parallelizing files and
+try to parallelize the files anew. You might recompile the language tools for ALL the languages
+you are working with. 
+
+;__CAVEAT 4__:''If you get a message like''
 
 {{{
 Exception in thread "main" java.lang.UnsupportedClassVersionError: aksis/alignment/Alignment : Unsupported major.minor version 51.0
