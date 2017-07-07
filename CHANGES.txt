@@ -102,3 +102,4 @@ v<0.20.0>, <20170522> -- Add the samas.no crawler
 v<0.20.1>, <20170606> -- Only allow cp1251_cp1252 decoding for cyrillic languages. Fixes bug 2400 - konverteringsproblemer for sda 2007
 v<0.20.2>, <20170609> -- realing did not work anymore, fix it
 v<0.20.3>, <20170706> -- fixed the lang recognition bug that strongly affected the work with realigning parallel files
+v<0.20.4>, <20170707> -- fixed DTD: if multilingual then at least one language element as child 
