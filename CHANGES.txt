@@ -103,3 +103,4 @@ v<0.20.1>, <20170606> -- Only allow cp1251_cp1252 decoding for cyrillic language
 v<0.20.2>, <20170609> -- realing did not work anymore, fix it
 v<0.20.3>, <20170706> -- fixed the lang recognition bug that strongly affected the work with realigning parallel files
 v<0.20.4>, <20170707> -- fixed DTD: if multilingual then at least one language element as child 
+v<0.20.5>, <20170711> -- relaxed DTD: if multilingual then  it can be empty, too, because otherwise many files would not convert
