@@ -121,7 +121,10 @@
 
 <!-- List of languages that appear in the document -->
 <!-- The list is used in language recognition -->
-<!ELEMENT multilingual (language+)>
+<!-- It should have at least one language element but this requires
+     many additions in the xsl files. -->
+<!-- <!ELEMENT multilingual (language+)> -->
+<!ELEMENT multilingual (language*)>
 <!ELEMENT language EMPTY>
 <!ATTLIST language
 %common.att; >
