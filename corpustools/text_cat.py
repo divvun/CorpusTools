@@ -315,6 +315,14 @@ class Classifier(object):
             self.langs_warned = set()
 
     def get_langs(self, langs=[]):
+        """Get the set of wanted languages.
+
+        Arguments:
+            langs (list of str): list of probable languages
+
+        Returns:
+            set: The set of languages that should be considered
+        """
         if langs == []:
             return self.langs
         else:
