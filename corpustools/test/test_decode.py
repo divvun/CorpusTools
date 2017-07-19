@@ -144,8 +144,6 @@ class TestEncodingGuesser(unittest.TestCase):
     def test_meadowmari_cp1252(self):
         uffperted = u'ОЙСАВЫШ 139 В.ЕГОРОВ. Романыште ҥ Ҥ ӱ Ӱ ӧ Ӧ ӱ Ӱ ӧ Ӧ'
         perverted = u'ÎÉÑÀÂÛØ 139 Â.ÅÃÎÐÎÂ. Ðîìàíûøòå ‰ ˆ ¢ ™ º ª ў Ў є Є'
-        util.print_frame('\n', perverted)
-        util.print_frame('\n', decode.fix_meadowmari_cp1252(perverted))
         self.assertEqual(decode.fix_meadowmari_cp1252(perverted), uffperted)
 
     def test_macsami_macroman(self):
