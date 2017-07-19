@@ -116,10 +116,10 @@ def replace_all(replacements, string):
     Returns:
         str: string with replaced strings.
     """
-    return reduce(lambda a, kv: a.replace(*kv),
-                  replacements,
-                  string)
+    for unwanted, wanted in replacements.items():
+        string = string.replace(unwanted, wanted)
 
+    return string
 
 def split_path(path):
     """Split an absolute path into useful components.
