@@ -115,6 +115,7 @@ def fix_meadowmari_cp1252(instring):
     mari_replacements = {
         u'&#1118;': u'ӱ',
         u'&#1038;': u'Ӱ',
+        u'Ў': u'Ӱ',
         u'&#1108;': u'ӧ',
         u'&#1028;': u'Ӧ',
     }
