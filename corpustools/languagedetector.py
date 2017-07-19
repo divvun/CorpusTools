@@ -21,13 +21,7 @@
 """This file contains classes fix converted documents."""
 
 import os
-import re
 
-from copy import deepcopy
-import lxml.etree as etree
-import six
-
-from corpustools import decode, util
 
 HERE = os.path.dirname(__file__)
 
