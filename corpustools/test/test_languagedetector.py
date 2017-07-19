@@ -23,6 +23,7 @@ from __future__ import absolute_import
 import doctest
 import os
 import unittest
+from io import StringIO
 
 import lxml.doctestcompare as doctestcompare
 import lxml.etree as etree
@@ -242,3 +243,30 @@ class TestLanguageDetector(XMLTester):
                          'detection-without-multilingual-tag.xml'))
 
         self.assertXmlEqual(got_document, expected_document)
+
+    def test_no_lang_guessing_without_models(self):
+        test_document = """
+            <document xml:lang="non_existing_mainlang">
+                <header>
+                    <title>title</title>
+                    <multilingual>
+                        <language xml:lang="non_existing_optional_lang"/>
+                    </multilingual>
+                </header>
+                <body>
+                    <p>content</p>
+                </body>
+            </document>
+        """
+
+        root = etree.fromstring(test_document)
+        language_detector = languagedetector.LanguageDetector(
+            root,
+            LANGUAGEGUESSER)
+        language_detector = languagedetector.LanguageDetector(
+            root,
+            LANGUAGEGUESSER)
+        language_detector.detect_language()
+        got_document = language_detector.document
+
+        self.assertXmlEqual(got_document, root)

@@ -72,7 +72,8 @@ class LanguageDetector(object):
         """
         if paragraph.get('{http://www.w3.org/XML/1998/namespace}lang') is None:
             paragraph_text = self.remove_quote(paragraph)
-            if self.language_guesser is not None:
+            if self.language_guesser is not None and \
+                    self.language_guesser.get_langs(self.inlangs):
                 lang = self.language_guesser.classify(paragraph_text,
                                                       langs=self.inlangs)
                 if lang != self.mainlang:
