@@ -110,13 +110,13 @@ def replace_all(replacements, string):
     """Replace unwanted strings with wanted strings.
 
     Args:
-        replacements (dict): unwanted:wanted string pairs.
+        replacements (list of tuple): unwanted:wanted string pairs.
         string (str): the string where replacements should be done.
 
     Returns:
         str: string with replaced strings.
     """
-    for unwanted, wanted in replacements.items():
+    for unwanted, wanted in replacements:
         string = string.replace(unwanted, wanted)
 
     return string
