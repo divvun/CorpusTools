@@ -112,13 +112,13 @@ def fix_meadowmari_cp1252(instring):
     Returns:
         str with fixed encoding.
     """
-    mari_replacements = {
-        u'&#1118;': u'ӱ',
-        u'&#1038;': u'Ӱ',
-        u'Ў': u'Ӱ',
-        u'&#1108;': u'ӧ',
-        u'&#1028;': u'Ӧ',
-    }
+    mari_replacements = [
+        (u'&#1118;', u'ӱ'),  # xml char ref CYRILLIC SMALL LETTER SHORT U
+        (u'&#1038;', u'Ӱ'),  # xml char ref CYRILLIC CAPITAL LETTER SHORT U
+        (u'Ў', u'Ӱ'),
+        (u'&#1108;', u'ӧ'),  # xml char ref CYRILLIC SMALL LETTER UKRAINIAN IE
+        (u'&#1028;', u'Ӧ'),  # xml char ref CYRILLIC CAPITAL LETTER UKRAINIAN IE
+    ]
 
     return util.replace_all(
         mari_replacements,
