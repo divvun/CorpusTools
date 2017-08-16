@@ -84,9 +84,9 @@ Install and update the tools for all users on a machine by writing these four su
 
 {{{
 cd $GTHOME/tools/CorpusTools
-sudo pip install --upgrade -r requirements.txt
-sudo pip install -U -e .
-sudo pip uninstall -y corpustools
+sudo pip2 install --upgrade -r requirements.txt
+sudo pip2 install -U -e .
+sudo pip2 uninstall -y corpustools
 sudo python2.7 setup.py install --install-scripts=/usr/local/bin
 }}}
 
@@ -100,9 +100,9 @@ Install the tools for the current user by writing
 
 {{{
 cd $GTHOME/tools/CorpusTools
-pip install --upgrade -r requirements.txt
-pip install -U --user -e .
-pip uninstall -y corpustools
+pip2 install --upgrade -r requirements.txt
+pip2 install -U --user -e .
+pip2 uninstall -y corpustools
 python2.7 setup.py install --user --install-scripts=$HOME/bin
 }}}
 
