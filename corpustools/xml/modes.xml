@@ -31,11 +31,16 @@
 
   <mode name="hfst">
     <pipeline>
-      <program name="apertium-deshtml" debug="preprocess"/>
-      <program name="hfst-proc" debug="hlookup">
-        <arg name="--cg"/>
-        <file name="src/analyser-disamb-gt-desc.hfstol"/>
+      <program name="hfst-tokenise" debug-suff="morph">
+        <arg name="--giella-cg"/>
+        <file name="tools/tokenisers/tokeniser-gramcheck-gt-desc.pmhfst"/>
       </program>
+      <program name="vislcg3" debug-suff="mwe-dis">
+        <arg name="-t"/>
+        <arg name="-g"/>
+        <file name="tools/tokenisers/mwe-dis.cg3"/>
+      </program>
+      <program name="cg-mwesplit" debug-suff="mwe-split"/>
       <program name="vislcg3" debug="dis">
         <arg name="-g"/>
         <file name="src/syntax/disambiguation.cg3"/>
