@@ -5,7 +5,7 @@
     <pipeline>
       <program name="preprocess" debug="preprocess">
         <arg name="--abbr"/>
-        <file name="tools/preprocess/abbr.txt"/>
+        <file name="tools/tokenisers/abbr.txt"/>
       </program>
       <program name="lookup" debug="xlookup">
         <arg name="-q"/>
@@ -60,12 +60,12 @@
     <pipeline>
       <program name="hfst-tokenise" debug-suff="morph">
         <arg name="--gtd"/>
-        <file name="tools/preprocess/tokeniser-gramcheck-gt-desc.pmhfst"/>
+        <file name="tools/tokenisers/tokeniser-gramcheck-gt-desc.pmhfst"/>
       </program>
       <program name="vislcg3" debug-suff="mwe-dis">
         <arg name="-t"/>
         <arg name="-g"/>
-        <file name="tools/preprocess/mwe-dis.cg3"/>
+        <file name="tools/tokenisers/mwe-dis.cg3"/>
       </program>
       <program name="cg-mwesplit" debug-suff="mwe-split"/>
       <program name="vislcg3" debug-suff="val">
@@ -89,7 +89,7 @@
     <pipeline>
       <program name="hfst-tokenise" debug-suff="morph">
         <arg name="-a"/>
-        <file name="tools/preprocess/tokeniser-gramcheck-gt-desc.pmhfst"/>
+        <file name="tools/tokenisers/tokeniser-desc-gt-desc.pmhfst"/>
       </program>
     </pipeline>
   </mode>
