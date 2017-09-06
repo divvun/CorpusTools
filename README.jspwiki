@@ -79,6 +79,22 @@ sudo make install
 
 !!Installation
 
+!To own home directory (preferred)
+
+Install the tools for the current user by writing
+
+{{{
+cd $GTHOME/tools/CorpusTools
+pip2 install --upgrade -r requirements.txt --user
+pip2 install -U --user -e .
+pip2 uninstall -y corpustools
+python2.7 setup.py install --user --install-scripts=$HOME/bin
+}}}
+
+Note the dot at the end of the second line. Also, on some systems, pip
+will be called pip2 or pip-2.7 or pip2.7. The scripts will then be
+found in ~/bin
+
 !System wide
 Install and update the tools for all users on a machine by writing these four sudo commands:
 
@@ -93,22 +109,6 @@ sudo python2.7 setup.py install --install-scripts=/usr/local/bin
 Note the dot at the end of the second line. Also, on some systems, pip
 will be called pip2 or pip-2.7 or pip2.7. The scripts will then be
 found in /usr/local/bin
-
-!To own home directory
-
-Install the tools for the current user by writing
-
-{{{
-cd $GTHOME/tools/CorpusTools
-pip2 install --upgrade -r requirements.txt
-pip2 install -U --user -e .
-pip2 uninstall -y corpustools
-python2.7 setup.py install --user --install-scripts=$HOME/bin
-}}}
-
-Note the dot at the end of the second line. Also, on some systems, pip
-will be called pip2 or pip-2.7 or pip2.7. The scripts will then be
-found in ~/bin
 
 (It may look a bit odd that we first install and then uninstall. The
 "setup.py" command isn't able to install all requirements, while the
@@ -582,7 +582,7 @@ tmx/nob2sma.
 
 {{{
 parallelize -l1 nob -l2 sma converted/sma/admin/ntfk/tsaekeme.html.xml
-Error reading file '/Users/xxx/freecorpus/converted/sma/admin/ntfk/.xml': 
+Error reading file '/Users/xxx/freecorpus/converted/sma/admin/ntfk/.xml':
 failed to load external entity "/Users/xxx/freecorpus/converted/sma/admin/ntfk/.xml"
 }}}
 
@@ -614,7 +614,7 @@ __4.__ recompile the language toos: \\ {{{make}}} or {{{make -j}}}
 
 After that you can go back to the directory where you are working with the parallelizing files and
 try to parallelize the files anew. You might recompile the language tools for ALL the languages
-you are working with. 
+you are working with.
 
 ;__CAVEAT 4__:''If you get a message like''
 
