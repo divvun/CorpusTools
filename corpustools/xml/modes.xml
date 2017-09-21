@@ -88,8 +88,8 @@
   <mode name="preprocess">
     <pipeline>
       <program name="hfst-tokenise" debug-suff="morph">
-        <arg name="--gtd"/>
-        <file name="tools/tokenisers/tokeniser-gramcheck-gt-desc.pmhfst"/>
+        <arg name="--giella-cg"/>
+        <file name="tools/tokenisers/tokeniser-disamb-gt-desc.pmhfst"/>
       </program>
       <program name="vislcg3" debug-suff="mwe-dis">
         <arg name="-t"/>
