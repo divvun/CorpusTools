@@ -88,15 +88,9 @@
   <mode name="preprocess">
     <pipeline>
       <program name="hfst-tokenise" debug-suff="morph">
-        <arg name="--giella-cg"/>
+        <arg name="--segment"/>
         <file name="tools/tokenisers/tokeniser-disamb-gt-desc.pmhfst"/>
       </program>
-      <program name="vislcg3" debug-suff="mwe-dis">
-        <arg name="-t"/>
-        <arg name="-g"/>
-        <file name="tools/tokenisers/mwe-dis.cg3"/>
-      </program>
-      <program name="cg-mwesplit" debug-suff="mwe-split"/>
     </pipeline>
   </mode>
 </modes>
