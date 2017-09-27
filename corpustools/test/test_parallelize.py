@@ -47,16 +47,16 @@ váldočoahkkima nammadit. dievaslaš čađaheami, [2019 – 2020] … ¶
 """
         want = [
             '10. ON-vuogádat',
-            'ON doaimmaid oktavuođas ;',
-            'ovddasvástádus sihkkarastit ?',
-            'buot ON orgánat !',
-            'wow ."',
-            'mom .) .',
-            'mom .:',
-            'kult .”',
-            'váldočoahkkima nammadit .',
-            'dievaslaš čađaheami , [ 2019 – 2020 ] …',
-            '( rávvagiid )',
+            'ON doaimmaid oktavuođas;',
+            'ovddasvástádus sihkkarastit?',
+            'buot ON orgánat!',
+            'wow."',
+            'mom.).',
+            'mom.:',
+            'kult.”',
+            'váldočoahkkima nammadit.',
+            'dievaslaš čađaheami, [2019 – 2020] …',
+            '(rávvagiid)',
         ]
         divider = parallelize.SentenceDivider('sme')
         self.assertListEqual(
@@ -67,7 +67,7 @@ váldočoahkkima nammadit. dievaslaš čađaheami, [2019 – 2020] … ¶
 Odd Einar Dørum ¶
 """
         want = [
-            'mielddisbuvttii .',
+            'mielddisbuvttii.',
             'Odd Einar Dørum',
         ]
         divider = parallelize.SentenceDivider('sme')
