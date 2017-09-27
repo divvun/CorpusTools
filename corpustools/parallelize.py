@@ -133,7 +133,7 @@ class SentenceDivider(object):
         for token in io.StringIO(preprocessed):
             token_buffer.append(token)
             if token.strip() in self.stops:
-                yield self.clean_sentence(''.join(token_buffer))
+                yield self.clean_sentence(' '.join(token_buffer))
                 token_buffer[:] = []
 
     def make_valid_sentences(self, ccat_output):
