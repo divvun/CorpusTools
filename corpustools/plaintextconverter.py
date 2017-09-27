@@ -85,6 +85,8 @@ class PlaintextConverter(basicconverter.BasicConverter):
             (u'<0x017D>', u'Ž'),
             (u'<0x017E>', u'ž'),
             (u'<0x2003>', u' '),
+            (u'========================================================'
+                '========================', u'\n'),
         ]
         content = util.replace_all(plaintext_oddities, content)
         remove_re = re.compile(
