@@ -90,9 +90,12 @@ def convert2xhtml(content):
     Returns:
         a cleaned up xhtml document as an etree element
     """
-    converter = HTMLContentConverter()
+    xmldoc = etree.HTML(content)
+    for elt in xmldoc.iter('script'):
+        elt.getparent().remove(elt)
 
-    return converter.convert2xhtml(content)
+    converter = HTMLContentConverter()
+    return converter.convert2xhtml(etree.tostring(xmldoc, encoding='unicode'))
 
 
 def replace_bare_text(body):

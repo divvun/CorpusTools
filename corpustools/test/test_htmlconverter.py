@@ -154,7 +154,37 @@ class TestHTMLConverter(XMLTester):
                 </body>
             </document>
             '''
+        ),
+        (
+            'script_with_tail',
+            'orig/sme/admin/ugga.html',
+            '''
+            <html lang="no" dir="ltr">
+                <head>
+                    <title>
+                        Visit Stetind: Histåvrrå: Nasjonálvárre
+                    </title>
+                </head>
+                <body>
+                    <p>abba</p>
+                        <script>
+                        </script>uffda
+                    </p>
+                </body>
+            </html>
+            ''',
+            '''
+            <document>
+                <header>
+                    <title>Visit Stetind: Histåvrrå: Nasjonálvárre</title>
+                </header>
+                <body>
+                    <p>abba</p>
+                </body>
+            </document>
+            '''
         )
+
     ])
     def test_convert2intermediate(self, testname, filename, content, want):
         """Check that convoluted html is correctly converted to xml."""
