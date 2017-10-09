@@ -24,7 +24,7 @@ import codecs
 import unittest
 import six
 import sys
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from corpustools import decode, macsami, winsami2, iso_ir_197, iso_ir_209, util
 

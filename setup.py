@@ -50,7 +50,7 @@ setup(
         'gitpython',
         'html5lib',
         'lxml',
-        'nose-parameterized',
+        'parameterized',
         'odfpy',
         'pydocx',
         'pyth==0.7.0',

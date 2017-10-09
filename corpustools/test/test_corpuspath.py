@@ -25,7 +25,7 @@ from __future__ import absolute_import
 import os
 import unittest
 
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from corpustools import corpuspath
 

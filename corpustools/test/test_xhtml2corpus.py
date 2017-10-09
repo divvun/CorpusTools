@@ -27,7 +27,7 @@ import lxml.doctestcompare
 import lxml.etree
 import six
 import testfixtures
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 
 def assertXmlEqual(got, want):

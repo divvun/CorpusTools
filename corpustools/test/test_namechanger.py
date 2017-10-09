@@ -28,7 +28,7 @@ import unittest
 import git
 import six
 import testfixtures
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from corpustools import namechanger, xslsetter
 

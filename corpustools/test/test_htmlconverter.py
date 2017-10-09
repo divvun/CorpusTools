@@ -27,7 +27,7 @@ from lxml import etree
 from lxml.html import html5parser
 import six
 import testfixtures
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from corpustools import htmlconverter
 from corpustools.test.test_htmlcontentconverter import clean_namespaces

@@ -24,7 +24,7 @@ u"""Test conversion of html content."""
 import lxml.etree as etree
 import lxml.objectify as objectify
 from lxml.html import html5parser
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from corpustools import htmlcontentconverter
 from corpustools.test import xmltester
