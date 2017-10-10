@@ -34,7 +34,8 @@ from corpustools.htmlconverter import (convert2xhtml, webpage_to_unicodehtml,
 
 def latex_dir(filename):
     """Turn filename to the path where the converted html files are found."""
-    return util.basename_noext(filename, '.tex')
+    return os.path.join(os.path.dirname(filename),
+                        util.basename_noext(filename, '.tex'))
 
 
 def latex_to_dir(filename):
