@@ -33,10 +33,12 @@ from lxml import etree
 import six
 
 from corpustools import (avvirconverter, biblexmlconverter,
-                         ccat, corpuspath, docconverter, documentfixer, docxconverter,
-                         epubconverter, errormarkup, htmlconverter, languagedetector,
+                         ccat, corpuspath, docconverter, documentfixer,
+                         docxconverter, epubconverter, errormarkup,
+                         htmlconverter, languagedetector, latexconverter,
                          odfconverter, pdfconverter, plaintextconverter,
-                         rtfconverter, svgconverter, util, xslmaker, xslsetter)
+                         rtfconverter, svgconverter, util, xslmaker,
+                         xslsetter)
 
 HERE = os.path.dirname(__file__)
 
@@ -64,6 +66,7 @@ def to_giella(path):
         '.rtf': rtfconverter.convert2intermediate,
         '.svg': svgconverter.convert2intermediate,
         '.txt': plaintextconverter.convert2intermediate,
+        '.tex': latexconverter.convert2intermediate,
     }
 
     if 'avvir_xml' in path:

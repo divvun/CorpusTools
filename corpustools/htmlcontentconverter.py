@@ -243,6 +243,7 @@ class HTMLContentConverter(object):
                     'metaWrapper',
                     'moduletable_oikopolut',
                     'moduletable_etulinkki',  # www.samediggi.fi
+                    'navigation',  # latex2html docs
                     'nav-menu nav-menu-style-dots',  # metsa.fi
                     'naviHlp',  # visitstetind.no
                     'noindex',  # ntfk
