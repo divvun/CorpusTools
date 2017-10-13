@@ -177,19 +177,23 @@ class AddToCorpus(object):
         downloader = UrlDownloader(os.path.join(self.corpusdir, 'tmp'))
         (request, tmpname) = downloader.download(url)
 
-        return self.copy_file_to_corpus(tmpname, request.url, parallelpath)
+        return self.copy_file_to_corpus(origpath=tmpname,
+                                        metadata_filename=request.url,
+                                        parallelpath=parallelpath)
 
     def copy_file_to_corpus(self, origpath, metadata_filename,
                             parallelpath=''):
-        """Add a file to the corpus.
+        """Add a file from the hard disk to the corpus.
 
-        * normalise the basename, copy the the file to the given directory
-        * make a metadata file belonging to it
-        ** set the original basename as the filename
-        ** set the mainlang
-        ** set the genre
-        ** if a parallel file is given, set the parallel info in all the
-        parellel files
+        Arguments:
+            orig_path (str): path where the original file exists
+            metadata_filename (str): the value of the filename in the
+                metadata file
+            parallelpath (str): where the parallel file of the original
+                file exists in the corpus
+
+        Returns:
+            str: path to where the origfile exists in the corpus
         """
         if six.PY2 and isinstance(origpath, str):
             origpath = unicode(origpath, 'utf8')
@@ -279,7 +283,8 @@ class AddToCorpus(object):
         for root, _, files in os.walk(origpath):
             for file_ in files:
                 orig_f = os.path.join(root, file_)
-                self.copy_file_to_corpus(orig_f, os.path.basename(orig_f))
+                self.copy_file_to_corpus(origpath=orig_f,
+                                         metadata_filename=orig_f)
 
     @staticmethod
     def find_duplicates(origpath):
@@ -372,8 +377,8 @@ def main():
                             os.path.join(genre, path))
         for orig in args.origs:
             if os.path.isfile(orig):
-                adder.copy_file_to_corpus(orig,
-                                          os.path.basename(orig))
+                adder.copy_file_to_corpus(origpath=orig,
+                                          metadata_filename=os.path.basename(orig))
             elif orig.startswith('http'):
                 adder.copy_url_to_corpus(orig)
             elif os.path.isdir(orig):
@@ -408,8 +413,9 @@ def main():
             sys.exit(3)
         orig = args.origs[0]
         if os.path.isfile(orig):
-            adder.copy_file_to_corpus(orig,
-                                      args.parallel_file)
+            adder.copy_file_to_corpus(origpath=orig,
+                                      metadata_filename=orig,
+                                      parallelpath=args.parallel_file)
         elif orig.startswith('http'):
             adder.copy_url_to_corpus(orig,
                                      args.parallel_file)
