@@ -97,7 +97,7 @@ class UrlDownloader(object):
                 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) '
                 'Gecko/20130331 Firefox/21.0'}
 
-    def download(self, url, params=None):
+    def download(self, url, wanted_name='', params=None):
         """Download a url to a temporary file.
 
         Return the request object and the name of the temporary file
@@ -105,7 +105,8 @@ class UrlDownloader(object):
         try:
             request = requests.get(url, headers=self.headers, params=params)
             if request.status_code == requests.codes.ok:
-                filename = url_to_filename(request)
+                filename = wanted_name if wanted_name else url_to_filename(
+                    request)
                 if six.PY2 and isinstance(filename, str):
                     try:
                         filename = filename.decode('utf8')
@@ -169,13 +170,13 @@ class AddToCorpus(object):
         return '/'.join([namechanger.normalise_filename(part)
                          for part in path.split('/')])
 
-    def copy_url_to_corpus(self, url, parallelpath=''):
+    def copy_url_to_corpus(self, url, wanted_name='', parallelpath=''):
         """Add a URL to the corpus.
 
         Copy a downloaded url to the corpus
         """
         downloader = UrlDownloader(os.path.join(self.corpusdir, 'tmp'))
-        (request, tmpname) = downloader.download(url)
+        (request, tmpname) = downloader.download(url, wanted_name=wanted_name)
 
         return self.copy_file_to_corpus(origpath=tmpname,
                                         metadata_filename=request.url,
@@ -332,6 +333,12 @@ def parse_args():
                         nargs='+',
                         help='The original files, urls or directories where '
                         'the original files reside (not in svn)')
+    parser.add_argument('--name',
+                        dest='name',
+                        help='Specify the name of the file in the corpus. '
+                        'Especially files fetched from the net often have '
+                        'names that are not human friendly. Use this '
+                        'option to guard against that.')
 
     parallel = parser.add_argument_group('parallel')
     parallel.add_argument(
@@ -359,40 +366,55 @@ def main():
 
     if args.parallel_file is None:
         if args.lang is not None:
-            print(
+            raise SystemExit(
                 'The argument -l|--lang is not allowed together with '
-                '-d|--directory', file=sys.stderr)
-            sys.exit(2)
+                '-d|--directory')
         (root, _, lang, genre, path, _) = util.split_path(
             os.path.join(args.directory, 'dummy.txt'))
         if genre == 'dummy.txt':
-            print(
+            raise SystemExit(
                 'Error!\n'
                 'You must add genre to the directory\ne.g. {}'.format(
-                    os.path.join(args.directory, 'admin')), file=sys.stderr)
-            sys.exit(4)
+                    os.path.join(args.directory, 'admin')))
 
         adder = AddToCorpus(root,
                             lang,
                             os.path.join(genre, path))
         for orig in args.origs:
             if os.path.isfile(orig):
+                if args.name:
+                    newname = os.path.join(
+                        os.path.dirname(orig),
+                        args.name)
+                    try:
+                        shutil.copy(orig, newname)
+                    except FileNotFoundError:
+                        raise SystemExit(
+                            'Not a valid filename: {}'.format(args.name))
+                    orig = newname
+
                 adder.copy_file_to_corpus(origpath=orig,
-                                          metadata_filename=os.path.basename(orig))
+                                          metadata_filename=os.path.basename(
+                                              orig))
             elif orig.startswith('http'):
-                adder.copy_url_to_corpus(orig)
+                adder.copy_url_to_corpus(orig, wanted_name=args.name)
             elif os.path.isdir(orig):
+                if (args.name):
+                    raise SystemExit(
+                        'It makes no sense to use the --name '
+                        'option together with --directory.')
                 adder.copy_files_in_dir_to_corpus(orig)
             else:
-                print('Cannot handle {}'.format(orig), file=sys.stderr)
+                raise SystemExit(
+                    'Cannot handle the orig named: {}.\n'
+                    'If you used the --name option and a name with spaces, '
+                    'encase it in quote marks.'.format(orig))
     else:
         if args.directory is not None:
-            print(
+            raise SystemExit(
                 'The argument -d|--directory is not allowed together with '
-                '-p|--parallel', file=sys.stderr)
-            print('Only -l|--lang is allowed together with -p|--parallel',
-                  file=sys.stderr)
-            sys.exit(3)
+                '-p|--parallel\n'
+                'Only -l|--lang is allowed together with -p|--parallel')
         (root, _, lang, genre, path, _) = util.split_path(
             args.parallel_file)
         adder = AddToCorpus(root,
@@ -400,24 +422,31 @@ def main():
                             os.path.join(genre, path))
 
         if not os.path.exists(args.parallel_file):
-            print('The given parallel file\n\t{}\n'
-                  'does not exist'.format(args.parallel_file), file=sys.stderr)
-            sys.exit(1)
+            raise SystemExit(
+                'The given parallel file\n\t{}\n'
+                'does not exist'.format(args.parallel_file))
         if len(args.origs) > 1:
-            print('When the -p option is given, it only makes '
-                  'sense to add one file at a time.', file=sys.stderr)
-            sys.exit(2)
+            raise SystemExit(
+                'When the -p option is given, it only makes '
+                'sense to add one file at a time.')
         if len(args.origs) == 1 and os.path.isdir(args.origs[-1]):
-            print('It is not possible to add a directory '
-                  'when the -p option is given.', file=sys.stderr)
-            sys.exit(3)
+            raise SystemExit(
+                'It is not possible to add a directory '
+                'when the -p option is given.')
         orig = args.origs[0]
         if os.path.isfile(orig):
+            if args.name:
+                newname = os.path.join(
+                    os.path.dirname(orig),
+                    args.name)
+                shutil.copy(orig, newname)
+                orig = newname
             adder.copy_file_to_corpus(origpath=orig,
                                       metadata_filename=orig,
                                       parallelpath=args.parallel_file)
         elif orig.startswith('http'):
             adder.copy_url_to_corpus(orig,
-                                     args.parallel_file)
+                                     wanted_name=args.name,
+                                     parallelpath=args.parallel_file)
 
     adder.add_files_to_working_copy()

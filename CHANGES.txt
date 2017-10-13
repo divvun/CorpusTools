@@ -111,4 +111,4 @@ v<0.20.9>, <20170927> -- Use --print-all for hfst-tokenise. Improves input for b
 v<0.20.10>, <20170928> -- Remove script tags and their tails from html documents. This removes superfluous text from e.g. finnish sami parliament documents.
 v<0.21.0>, <20171010> -- Add support for latex to giella-xml conversion.
 v<0.21.1>, <20171010> -- Fix path problems in the latex conversion module.
-
+v<0.21.2>, <20171010> -- Add the possibility to specify file name when adding it to the corpus.
