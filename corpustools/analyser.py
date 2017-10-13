@@ -53,18 +53,14 @@ class Analyser(object):
 
         Arguments:
             lang (str): language the analyser can analyse
-            pipeline_name (str): the name of the pipeline which will be used to analyse files
-        """
+            pipeline_name (str): the name of the pipeline which will be used to analyse files        """
         self.lang = lang
         self.relative_path = relative_path
         self.xml_printer = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
-        self.pipeline = self.setup_pipeline(pipeline_name)
+        self.pipeline_name = pipeline_name
 
-    def setup_pipeline(self, pipeline_name):
+    def setup_pipeline(self):
         """Setup the preprocess pipeline.
-
-        Arguments:
-            pipeline_name (str): name of the pipeline that should be used.
 
         Returns:
             modes.Pipeline: a preprocess pipeline that receives plain text
@@ -73,7 +69,8 @@ class Analyser(object):
         modefile = etree.parse(
             os.path.join(os.path.dirname(__file__), 'xml/modes.xml'))
         pipeline = modes.Pipeline(
-            mode=modefile.find('.//mode[@name="{}"]'.format(pipeline_name)),
+            mode=modefile.find('.//mode[@name="{}"]'.format(
+                self.pipeline_name)),
             relative_path=os.path.join(self.relative_path, self.lang))
         pipeline.sanity_check()
 
@@ -106,10 +103,11 @@ class Analyser(object):
 
     def dependency_analysis(self):
         """Insert disambiguation and dependency analysis into the body."""
+        pipeline = self.setup_pipeline()
         body = etree.Element('body')
 
         dependency = etree.Element('dependency')
-        dependency.text = etree.CDATA(self.pipeline.run(
+        dependency.text = etree.CDATA(pipeline.run(
             self.ccat().encode('utf8')))
         body.append(dependency)
 
@@ -192,19 +190,20 @@ def main():
     """Analyse files in the given directories."""
     args = parse_options()
 
-    try:
-        ana = Analyser(args.lang, args.fstkit)
-    except util.ArgumentError as error:
-        print('Cannot do analysis for {}\n{}'.format(
-            args.lang, str(error)), file=sys.stderr)
-        sys.exit(1)
+    ana = Analyser(args.lang, args.fstkit)
 
     ana.collect_files(args.converted_dirs)
+
     if ana.xml_files:
-        if args.serial:
-            ana.analyse_serially()
-        else:
-            ana.analyse_in_parallel()
+        try:
+            if args.serial:
+                ana.analyse_serially()
+            else:
+                ana.analyse_in_parallel()
+        except util.ArgumentError as error:
+            print('Cannot do analysis for {}\n{}'.format(
+                args.lang, str(error)), file=sys.stderr)
+            sys.exit(1)
     else:
         print("Did not find any files in", args.converted_dirs,
               file=sys.stderr)
