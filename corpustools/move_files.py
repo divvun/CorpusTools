@@ -88,7 +88,7 @@ def main():
         oldpath = unicode(args.oldpath, 'utf8') if six.PY2 else args.oldpath
         newpath = unicode(args.newpath, 'utf8') if six.PY2 else args.newpath
         try:
-            mover(oldpath, newpath)
+            mover(os.path.abspath(oldpath), os.path.abspath(newpath))
         except UserWarning as e:
             print('Can not move file:', str(e), file=sys.stderr)
 
@@ -113,6 +113,6 @@ def remove_main():
     """Remove a file."""
     args = remover_parse_args()
     try:
-        mover(args.oldpath, '')
+        mover(os.path.abspath(args.oldpath), '')
     except UserWarning as e:
         print('Can not remove file:', str(e), file=sys.stderr)
