@@ -112,3 +112,4 @@ v<0.20.10>, <20170928> -- Remove script tags and their tails from html documents
 v<0.21.0>, <20171010> -- Add support for latex to giella-xml conversion.
 v<0.21.1>, <20171010> -- Fix path problems in the latex conversion module.
 v<0.21.2>, <20171010> -- Add the possibility to specify file name when adding it to the corpus.
+v<0.21.3>, <20171025> -- Set the mimetype of xsl files to text/xml when adding files to a svn working copy.

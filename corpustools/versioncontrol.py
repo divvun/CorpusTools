@@ -102,7 +102,13 @@ class SVN(VersionController):
         Arguments:
             path (str): path to a file or directory
         """
-        self.client.add(self.valid_svn_path(path), recurse=True, force=True)
+        valid_path = self.valid_svn_path(path)
+        self.client.add(valid_path, recurse=True, force=True)
+        if valid_path.endswith('.xsl'):
+            self.client.propset(
+                'svn:mime-type',
+                'text/xml',
+                valid_path)
 
     def valid_svn_path(self, path):
         """Find the part of the path that is under version control.
