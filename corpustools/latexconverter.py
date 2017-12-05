@@ -25,6 +25,7 @@ from __future__ import absolute_import, print_function
 import glob
 import os
 import shutil
+
 import lxml.etree as etree
 
 from corpustools import util

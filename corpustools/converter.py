@@ -29,16 +29,15 @@ import distutils.spawn
 import logging
 import os
 
-from lxml import etree
 import six
+from lxml import etree
 
-from corpustools import (avvirconverter, biblexmlconverter,
-                         ccat, corpuspath, docconverter, documentfixer,
-                         docxconverter, epubconverter, errormarkup,
-                         htmlconverter, languagedetector, latexconverter,
-                         odfconverter, pdfconverter, plaintextconverter,
-                         rtfconverter, svgconverter, util, xslmaker,
-                         xslsetter)
+from corpustools import (avvirconverter, biblexmlconverter, ccat, corpuspath,
+                         docconverter, documentfixer, docxconverter,
+                         epubconverter, errormarkup, htmlconverter,
+                         languagedetector, latexconverter, odfconverter,
+                         pdfconverter, plaintextconverter, rtfconverter,
+                         svgconverter, util, xslmaker, xslsetter)
 
 HERE = os.path.dirname(__file__)
 

@@ -28,7 +28,7 @@ from lxml.etree import HTML
 from pyth.plugins.rtf15.reader import Rtf15Reader
 from pyth.plugins.xhtml.writer import XHTMLWriter
 
-from corpustools.htmlconverter import xhtml2intermediate, convert2xhtml
+from corpustools.htmlconverter import convert2xhtml, xhtml2intermediate
 
 
 class RTFError(Exception):

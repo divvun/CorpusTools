@@ -25,8 +25,9 @@ from __future__ import absolute_import, print_function
 
 import argparse
 import os
-import six
 import sys
+
+import six
 
 from corpustools import argparse_version, namechanger
 

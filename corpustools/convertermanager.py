@@ -24,6 +24,7 @@ import argparse
 import logging
 import multiprocessing
 import os
+
 import six
 
 from corpustools import argparse_version, converter, text_cat, util, xslsetter

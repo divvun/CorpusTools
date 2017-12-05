@@ -28,9 +28,8 @@ import getpass
 import os
 import pwd
 
-import pysvn
-
 import git
+import pysvn
 
 
 class VersionControlError(Exception):

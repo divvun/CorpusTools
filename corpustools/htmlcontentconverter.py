@@ -20,15 +20,16 @@
 
 u"""Convert html content to the Giella xml format."""
 
+import six
 from lxml import etree, html
 from lxml.html import clean
-import six
 
 from corpustools import util
 
 
 class HTMLContentConverter(object):
     """Convert html documents to the Giella xml format."""
+    soup = None
 
     @staticmethod
     def superclean(content):
@@ -199,7 +200,8 @@ class HTMLContentConverter(object):
                     'complexDocumentBottom',  # regjeringen.no
                     'container-widget-content',  # nrk.no
                     'container_full',
-                    'content-body attribute-vnd.openxmlformats-officedocument.spreadsheetml.sheet',  # samediggi.no
+                    'content-body attribute-vnd.openxmlformats-'
+                    'officedocument.spreadsheetml.sheet',  # samediggi.no
                     'content-language-links',  # metsa.fi
                     'content-wrapper',  # siida.fi
                     'control-group field-wrapper tiedotteet-period',  # metsa.fi

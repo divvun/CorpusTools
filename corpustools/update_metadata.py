@@ -29,7 +29,6 @@ import os
 
 from corpustools import argparse_version, xslsetter
 
-
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__),
                              'xslt/XSL-template.xsl')
 

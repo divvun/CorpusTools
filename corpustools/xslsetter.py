@@ -516,4 +516,3 @@ class MetadataHandler(object):
         """
         ns = {'xsl': 'http://www.w3.org/1999/XSL/Transform'}
         return self.tree.getroot().xpath('.//xsl:template', namespaces=ns)
-

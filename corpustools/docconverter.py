@@ -27,7 +27,7 @@ import os
 from lxml.html import html5parser
 
 from corpustools import util
-from corpustools.htmlconverter import xhtml2intermediate, convert2xhtml
+from corpustools.htmlconverter import convert2xhtml, xhtml2intermediate
 
 
 class DocError(Exception):

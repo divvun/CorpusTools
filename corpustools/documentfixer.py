@@ -22,8 +22,8 @@
 
 import os
 import re
-
 from copy import deepcopy
+
 import lxml.etree as etree
 import six
 

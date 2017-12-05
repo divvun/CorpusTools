@@ -32,8 +32,8 @@ import re
 import subprocess
 import tempfile
 
-from lxml import etree
 import six
+from lxml import etree
 
 from corpustools import (argparse_version, ccat, corpusxmlfile,
                          generate_anchor_list, modes, util)

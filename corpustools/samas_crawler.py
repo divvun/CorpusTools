@@ -26,8 +26,8 @@ from __future__ import absolute_import, print_function
 
 import os
 
-from lxml import html
 import six
+from lxml import html
 
 from corpustools import adder, util
 

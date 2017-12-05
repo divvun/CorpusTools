@@ -24,7 +24,7 @@ import six
 from odf.odf2xhtml import ODF2XHTML
 
 from corpustools import util
-from corpustools.htmlconverter import xhtml2intermediate, convert2xhtml
+from corpustools.htmlconverter import convert2xhtml, xhtml2intermediate
 
 
 def odf_to_unicodehtml(filename):
