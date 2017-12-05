@@ -24,6 +24,7 @@ u"""Convert rtf files to the Giella xml format."""
 import io
 
 import six
+from lxml.etree import HTML
 from pyth.plugins.rtf15.reader import Rtf15Reader
 from pyth.plugins.xhtml.writer import XHTMLWriter
 
@@ -67,4 +68,7 @@ def convert2intermediate(filename):
     Returns:
         etree.Element: the root element of the Giella xml document
     """
-    return xhtml2intermediate(convert2xhtml(rtf_to_unicodehtml(filename)))
+    return xhtml2intermediate(convert2xhtml(
+        HTML(
+            rtf_to_unicodehtml(
+                filename))))

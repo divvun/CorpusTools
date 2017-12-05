@@ -30,8 +30,8 @@ file that belongs to this epub file.
 """
 
 from lxml import etree
-import epub
 
+import epub
 from corpustools import util, xslsetter
 from corpustools.htmlconverter import convert2xhtml, xhtml2intermediate
 
@@ -109,13 +109,13 @@ def epub_to_unicodehtml(filename):
 
     Returns:
         a string containing the content of all xhtml files
-        found in the epub file.
+        found in the epub file as html document without namespaces.
     """
     html = extract_content(filename)
     remove_ranges(xslsetter.MetadataHandler(filename + '.xsl', create=True),
                   html)
 
-    return etree.tostring(html, encoding='unicode')
+    return html
 
 
 def remove_siblings_shorten_path(parts, content, preceding=False):

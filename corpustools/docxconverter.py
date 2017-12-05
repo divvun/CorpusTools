@@ -20,9 +20,10 @@
 
 """Convert docx files to the Giella xml format."""
 
+from lxml.html import html5parser
 from pydocx.export import PyDocXHTMLExporter
 
-from corpustools.htmlconverter import xhtml2intermediate, convert2xhtml
+from corpustools.htmlconverter import convert2xhtml, xhtml2intermediate
 
 
 def convert2intermediate(filename):
@@ -35,4 +36,6 @@ def convert2intermediate(filename):
         etree.Element: the root element of the Giella xml document
     """
     return xhtml2intermediate(
-        convert2xhtml(PyDocXHTMLExporter(filename).export()))
+        convert2xhtml(
+            html5parser.document_fromstring(
+                PyDocXHTMLExporter(filename).export())))

@@ -24,6 +24,8 @@ from __future__ import absolute_import, print_function
 
 import os
 
+from lxml.html import html5parser
+
 from corpustools import util
 from corpustools.htmlconverter import xhtml2intermediate, convert2xhtml
 
@@ -205,4 +207,7 @@ def convert2intermediate(filename):
     Returns:
         etree.Element: the root element of the Giella xml document
     """
-    return xhtml2intermediate(convert2xhtml(doc_to_unicodehtml(filename)))
+    return xhtml2intermediate(
+        convert2xhtml(
+            html5parser.document_fromstring(
+                doc_to_unicodehtml(filename))))
