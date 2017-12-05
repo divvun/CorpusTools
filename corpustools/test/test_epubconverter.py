@@ -67,6 +67,9 @@ class TestEpubConverter(XMLTester):
         got = epubconverter.convert2intermediate(self.testdoc)
         want = ("""
             <document>
+                <header>
+                    <title></title>
+                </header>
                 <body>
                     <p type="title">1 Bajilčála</p>
                     <p>1asdf</p>
@@ -101,6 +104,9 @@ class TestEpubConverter(XMLTester):
             got = epubconverter.convert2intermediate(temp_epub)
             want = ("""
                 <document>
+                    <header>
+                        <title></title>
+                    </header>
                     <body>
                         <p type="title">1 Bajilčála</p>
                         <p>1asdf</p>
@@ -131,6 +137,9 @@ class TestEpubConverter1(XMLTester):
             got = epubconverter.convert2intermediate(temp_epub)
             want = ("""
                 <document>
+                    <header>
+                        <title></title>
+                    </header>
                     <body>
                         <p>igjen går hesten</p>
                         <p>baklengs inni framtida</p>
@@ -150,6 +159,9 @@ class TestEpubConverter1(XMLTester):
             got = epubconverter.convert2intermediate(temp_epub)
             want = ("""
                 <document>
+                    <header>
+                        <title></title>
+                    </header>
                     <body>
                         <p>alle gir gass</p>
                         <p>men ikke</p>

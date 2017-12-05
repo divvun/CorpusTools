@@ -35,6 +35,18 @@ from corpustools.test.test_xhtml2corpus import assertXmlEqual
 from corpustools.test.xmltester import XMLTester
 
 
+DOCUMENT_TEMPLATE = (
+    '<document>'
+    '  <header>'
+    '   <title></title>'
+    '  </header>'
+    '  <body>'
+    '{}'
+    '  </body>'
+    '</document>'
+)
+
+
 class TestHTMLConverter(XMLTester):
     """Test conversion of html documents."""
 
@@ -100,17 +112,13 @@ class TestHTMLConverter(XMLTester):
                 </body>
             </html>
             ''',  # nopep8
-            '''
-            <document>
-                <body>
+            DOCUMENT_TEMPLATE.format('''
                     <list>
                         <p type="listitem">www.soff.no</p>
                         <p type="listitem">www.soff.uit.no</p>
                     </list>
                     <p>Fylkesmannen i Nordland © 2005</p>
-                </body>
-            </document>
-            '''
+            ''')
         ),
         (
             'body_bare_text',
@@ -224,8 +232,8 @@ class TestHTMLConverter(XMLTester):
         filename = 'orig/sme/admin/ugga.html'
         with testfixtures.TempDirectory() as temp_dir:
             temp_dir.write(filename, content)
-            got = html5parser.fromstring(htmlconverter.webpage_to_unicodehtml(
-                os.path.join(temp_dir.path, filename)))
+            got = htmlconverter.webpage_to_unicodehtml(
+                os.path.join(temp_dir.path, filename))
 
             clean_namespaces([got, want])
             self.assertXmlEqual(got, want)
@@ -248,9 +256,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <list>'
             '      <p type="listitem">'
             '               Geahčá'
@@ -259,8 +265,6 @@ class TestHTMLConverter(XMLTester):
             '               Geahčá'
             '      </p>'
             '    </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -274,16 +278,12 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '  <p>'
             '      <span type="quote">'
             '               «at like rettigheter ikke nødvendigvis trenger'
             '      </span>'
             '  </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -301,14 +301,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p type="title">'
             '            Pressesenter'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -326,14 +322,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '  <p>'
             '      Pressesenter'
             '  </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -351,9 +343,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '  <p>'
             '      <em type="bold">'
             '               Ohcanáigemearri:'
@@ -362,8 +352,6 @@ class TestHTMLConverter(XMLTester):
             '  <p>'
             '           15.09.2006.'
             '  </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -381,14 +369,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '  <p>'
             '           John-Marcus Kuhmunen'
             '  </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -405,12 +389,8 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '  <p>Geahča buot áššebáhpáriid</p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -430,14 +410,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      maajjen'
             '   </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -459,16 +435,12 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      <em type="italic">'
             '        listeforslag,'
             '      </em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -485,17 +457,13 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p type="title">'
             '      Terje Riis-Johansen'
             '    </p>'
             '    <p>'
             '      Taler og artikler'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -515,9 +483,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p type="title">'
             '      Ledige stillingar'
             '    </p>'
@@ -530,8 +496,6 @@ class TestHTMLConverter(XMLTester):
             '    <p>'
             '      Jobb i AD'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -545,12 +509,8 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p type="title">Sámedikki doarjja</p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -565,13 +525,9 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>Rikspolitiske verv</p>'
             '    <p>abc</p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -595,9 +551,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      <em type="italic">'
             '        Poastadreassa:'
@@ -608,8 +562,6 @@ class TestHTMLConverter(XMLTester):
             '    <p>'
             '      E-poasta:'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -625,14 +577,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -650,12 +598,8 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '      <p>Gulaskuddanáigimearri: guovvamánu 20. b. 2010</p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -671,12 +615,8 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '      <p>Harrieth Aira</p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -694,14 +634,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      div-p-small'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -721,16 +657,12 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      <em type="italic">'
             '        Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
             '      </em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -748,14 +680,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      Gulaskuddanáigimearri: guovvamánu 20. b. 2010'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -777,9 +705,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '    <body>'
+        DOCUMENT_TEMPLATE.format(
             '      <p>'
             '        abc'
             '      </p>'
@@ -789,8 +715,6 @@ class TestHTMLConverter(XMLTester):
             '      <p>'
             '        def'
             '      </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -808,17 +732,13 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      Tällä viikolla'
             '    </p>'
             '    <p>'
             '      SPN:n hallitus'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -835,13 +755,9 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>Laitan blogini lukijoille</p>'
             '    <p>Voimassa oleva</p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -857,9 +773,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      Almmuhan Kuhmunen, John-Marcus.'
             '    </p>'
@@ -869,8 +783,6 @@ class TestHTMLConverter(XMLTester):
             '    <p>'
             '      Maŋumustá rievdaduvvon 26.06.2009'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -890,14 +802,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <list>'
             '      <p type="listitem">FoU</p>'
             '    </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -917,14 +825,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <list>'
             '      <p type="listitem">Teknologiaovdánahttin ja DGT (IKT)</p>'
             '    </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -942,14 +846,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      Sámediggi lea juolludan doarjaga.'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -969,14 +869,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      John-Marcus Kuhmunen'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -996,14 +892,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      aa'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1020,17 +912,13 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p type="title">header1</p>'
             '    <p type="title">header2</p>'
             '    <p type="title">header3</p>'
             '    <p type="title">header4</p>'
             '    <p type="title">header5</p>'
             '    <p type="title">header6</p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1044,14 +932,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p type="title">'
             '      Phone'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1063,15 +947,11 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>Geahča</p>'
             '    <p>'
             '      <em type="italic">Sámi skuvlahistorjá 2. -girjjis</em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1091,16 +971,12 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p type="listitem">'
             '      <em type="bold">'
             '        Deltakerloven.'
             '      </em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1124,16 +1000,12 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <list>'
             '      <p type="listitem">'
             '        Deltakerloven.'
             '      </p>'
             '    </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1151,14 +1023,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <list>'
             '      <p type="listitem">FoU</p>'
             '    </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1174,12 +1042,8 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>2009</p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1194,12 +1058,8 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>[1] Vestertana. [2] Fra 1918. </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1211,12 +1071,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
-            '  </body>'
-            '</document>'
-        ),
+        DOCUMENT_TEMPLATE.format(''),
     ),
     (
         'i-ol-li',
@@ -1231,14 +1086,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <list>'
             '      <p type="listitem">wtf ol!</p>'
             '    </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1254,14 +1105,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <list>'
             '      <p type="listitem">wtf ul!</p>'
             '    </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1277,14 +1124,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <list>'
             '      <p type="listitem">Lærer K. Bruflodt </p>'
             '    </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1308,9 +1151,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <list>'
             '      <p type="listitem">1</p>'
             '      <p type="listitem">'
@@ -1325,8 +1166,6 @@ class TestHTMLConverter(XMLTester):
             '      <p type="listitem">4</p>'
             '      <p type="listitem">5</p>'
             '    </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1350,9 +1189,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <list>'
             '      <p type="listitem">1</p>'
             '      <p type="listitem">'
@@ -1367,8 +1204,6 @@ class TestHTMLConverter(XMLTester):
             '      <p type="listitem">4</p>'
             '      <p type="listitem">5</p>'
             '    </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1386,16 +1221,12 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      <em type="bold">'
             '        [1]'
             '      </em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1413,16 +1244,12 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      <em type="bold">'
             '        Sámi oahpponeavvojahki – Sámi máhttolokten'
             '      </em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1447,14 +1274,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      <em type="bold">Bargit</em> fertejit dahkat.'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1474,14 +1297,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      Voksenopplæring'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1499,14 +1318,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      Aerpievuekien daajroe'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1524,16 +1339,12 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      <em type="bold">'
             '        sámi guovddáža viidideapmi stáhtabušehttii'
             '      </em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1546,13 +1357,9 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p type="listitem">mearridit gielddaid </p>'
             '    <p type="listitem">ovddidit servodatsihkkarvuođa</p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1564,12 +1371,8 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p type="title">Kapittel</p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1581,12 +1384,8 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p><em type="bold">&#167; 1-1.</em></p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1613,14 +1412,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <list>'
             '      <p type="listitem">Energiija(EV) (goallostat)</p>'
             '    </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1643,14 +1438,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <list>'
             '      <p type="listitem">Oljo (goallostat)</p>'
             '    </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1675,14 +1466,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '           Energiija (goallostat)'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1696,14 +1483,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <list>'
             '            <p type="listitem">km 2</p>'
             '    </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1722,14 +1505,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      bla bla 2'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1747,16 +1526,12 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      <em type="bold">'
             '        Innholdsfortegnelse'
             '      </em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1774,14 +1549,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      Klara'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1803,14 +1574,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '   <p>'
             '     Pressesenter'
             '   </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1824,14 +1591,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      22 24 91 03'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1849,9 +1612,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      <em type="bold">'
             '        Ålkine'
@@ -1860,8 +1621,6 @@ class TestHTMLConverter(XMLTester):
             '    <p>'
             '      (Guvvie: Grete Austad)'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1877,16 +1636,12 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      <em type="bold">'
             '        Albert'
             '      </em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1913,9 +1668,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '  <p></p>'
             '    <p type="title">Láhka</p>'
             '    <p>Lága</p>'
@@ -1924,8 +1677,6 @@ class TestHTMLConverter(XMLTester):
             '    </p>'
             '    <p></p>'
             '    <p></p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1947,14 +1698,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '  <p>'
             '           Møre og Romsdal Fylkkadiggemiellahttu'
             '  </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1972,16 +1719,12 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
-            '      <em type="bold">'
+            '      <em type="italic">'
             '        Politihkalaš doaimmat'
             '      </em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -1999,14 +1742,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      Stáhtačálli, Eanandoallo- ja biebmodepartemeanta'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2020,14 +1759,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '           Kvirrevitt'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2047,9 +1782,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p type="title">'
             '      Departementet ber skoledirektøren om hjelp'
             '    </p>'
@@ -2059,8 +1792,6 @@ class TestHTMLConverter(XMLTester):
             '   <p>'
             '     Kirkedepartementet'
             '   </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2078,14 +1809,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p type="title">'
             '      Gulaskuddanásahusat'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2106,9 +1833,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      <em type="bold">'
             '        er født i 1937'
@@ -2119,8 +1844,6 @@ class TestHTMLConverter(XMLTester):
             '        arbeidd innafor mange yrke'
             '      </em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2151,17 +1874,13 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      link'
             '      int'
             '      høringsinstanser'
             '      Gulaskuddanásahusat'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2188,9 +1907,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>Riikkačoahkkincealkámušat 2006</p>'
             '    <p>'
             '      <em type="bold">'
@@ -2200,8 +1917,6 @@ class TestHTMLConverter(XMLTester):
             '    <p>'
             '      Norgga Sámiid Riikkasearvvi  2006'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2220,9 +1935,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      Riikkačoahkkincealkámušat 2006'
             '    </p>'
@@ -2231,8 +1944,6 @@ class TestHTMLConverter(XMLTester):
             '        NSR 38.'
             '      </em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2244,12 +1955,8 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>Náitalan, 3 máná</p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2263,14 +1970,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
-            '      <em type="bold">Gaskavahkku</em>'
+            '      <em type="italic">Gaskavahkku</em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2288,14 +1991,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      Kvirrevitt'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2315,9 +2014,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      Nuohta:'
             '    </p>'
@@ -2329,8 +2026,6 @@ class TestHTMLConverter(XMLTester):
             '    <p>'
             '      Mii læt dal čoagganan manga guovllos'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2344,14 +2039,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
-            '      <em type="bold">Ášši nr. 54/60:</em>'
+            '      <em type="italic">Ášši nr. 54/60:</em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2371,14 +2062,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      <em type="bold">Tysfjord turistsenter</em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2392,14 +2079,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      <em type="bold">Språktilbudet</em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2415,14 +2098,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      Jan'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2436,14 +2115,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      Kap. Poasta'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2456,12 +2131,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
-            '  </body>'
-            '</document>'
-        ),
+        DOCUMENT_TEMPLATE.format(''),
     ),
     (
         'tr-td-em',
@@ -2478,16 +2148,12 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
-            '      <em>'
+            '      <em type="italic">'
             '        Kapittel 1'
             '      </em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2507,16 +2173,12 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <list>'
             '      <p type="listitem">'
             '        Friskt'
             '      </p>'
             '    </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2544,9 +2206,7 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '  <list>'
             '      <p type="listitem">'
             '    <em>'
@@ -2560,8 +2220,6 @@ class TestHTMLConverter(XMLTester):
             '    </em>'
             '      </p>'
             '  </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2577,16 +2235,12 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <list>'
             '      <p>'
             '        Pressesenter'
             '      </p>'
             '    </list>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2605,17 +2259,13 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      Kl.'
             '    </p>'
             '    <p>'
             '      11.00'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2642,17 +2292,13 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p type="title">'
             '      Kl.'
             '    </p>'
             '    <p>'
             '      11.00'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
     (
@@ -2670,14 +2316,10 @@ class TestHTMLConverter(XMLTester):
             '  </body>'
             '</html>'
         ),
-        (
-            '<document>'
-            '  <body>'
+        DOCUMENT_TEMPLATE.format(
             '    <p>'
             '      <em type="bold">ovdamearka</em>'
             '    </p>'
-            '  </body>'
-            '</document>'
         ),
     ),
 ])
