@@ -25,6 +25,7 @@ import os
 import re
 
 from lxml import etree, html
+from lxml.html import html5parser
 
 from corpustools.htmlcontentconverter import HTMLContentConverter
 
@@ -64,17 +65,14 @@ def webpage_to_unicodehtml(filename):
         filename (str): path to the webpage
 
     Returns:
-        str: the content of the webpage sent through the lxml.html parser
+        etree.Element: the content of the webpage sent through the
+            lxml.html5parser.
     """
     for encoding in ['utf-8', 'windows-1252', 'latin1']:
         try:
             with codecs.open(filename, encoding=encoding) as file_:
-                return etree.tostring(
-                    html.document_fromstring(
-                        remove_declared_encoding(file_.read())
-                    ),
-                    encoding='unicode'
-                )
+                return html5parser.document_fromstring(
+                    remove_declared_encoding(file_.read()))
         except UnicodeDecodeError:
             pass
 
