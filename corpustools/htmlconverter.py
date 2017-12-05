@@ -24,7 +24,7 @@ import codecs
 import os
 import re
 
-from lxml import etree, html
+from lxml import etree, objectify
 from lxml.html import html5parser
 
 from corpustools.htmlcontentconverter import HTMLContentConverter
@@ -79,21 +79,37 @@ def webpage_to_unicodehtml(filename):
     raise HTMLError('{}: encoding trouble'.format(filename))
 
 
-def convert2xhtml(content):
+def clean_namespaces(html):
+    """Remove namespaces from elements.
+
+    Arguments:
+        html (etree.Element): the root of an xhtml element.
+    """
+    for element in html.getiterator():
+        if isinstance(element.tag, str):
+            index = element.tag.find('}')
+            if index >= 0:
+                element.tag = element.tag[index + 1:]
+
+    objectify.deannotate(html, cleanup_namespaces=True)
+
+
+def convert2xhtml(content_xml):
     """Convert html document to a cleaned up xhtml document.
 
     Arguments:
-        content (str): html document
+        content (etree.Element): html document
 
     Returns:
         a cleaned up xhtml document as an etree element
     """
-    xmldoc = etree.HTML(content)
-    for elt in xmldoc.iter('script'):
+    clean_namespaces(content_xml)
+    for elt in content_xml.iter('script'):
         elt.getparent().remove(elt)
 
     converter = HTMLContentConverter()
-    return converter.convert2xhtml(etree.tostring(xmldoc, encoding='unicode'))
+    return converter.convert2xhtml(
+        etree.tostring(content_xml, encoding='unicode'))
 
 
 def replace_bare_text(body):
