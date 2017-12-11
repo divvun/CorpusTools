@@ -108,8 +108,8 @@ def epub_to_unicodehtml(filename):
     """Append all chapter bodies as divs to an html file.
 
     Returns:
-        a string containing the content of all xhtml files
-        found in the epub file as html document without namespaces.
+        An etree.Element containing the content of all xhtml files
+        found in the epub file as one xhtml document.
     """
     html = extract_content(filename)
     remove_ranges(xslsetter.MetadataHandler(filename + '.xsl', create=True),
