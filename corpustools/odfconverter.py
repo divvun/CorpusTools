@@ -21,6 +21,7 @@
 """Convert odf files to the Giella xml format."""
 
 import six
+from lxml.html import html5parser
 from odf.odf2xhtml import ODF2XHTML
 
 from corpustools import util
@@ -53,4 +54,5 @@ def convert2intermediate(filename):
     """
     return xhtml2intermediate(
         convert2xhtml(
-            odf_to_unicodehtml(filename)))
+            html5parser.document_fromstring(
+                odf_to_unicodehtml(filename))))
