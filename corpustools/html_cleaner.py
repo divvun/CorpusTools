@@ -55,7 +55,7 @@ def main():
     """Convert an html file, and print the result to outfile."""
     args = parse_args()
 
-    with open(args.inhtml) as f:
-        c = htmlconverter.convert2xhtml(f.read())
-        with open(args.outhtml, 'w') as outfile:
-            util.print_element(c, 0, 4, outfile)
+    c = htmlconverter.convert2xhtml(
+        htmlconverter.webpage_to_unicodehtml(args.inhtml))
+    with open(args.outhtml, 'w') as outfile:
+        util.print_element(c, 0, 4, outfile)
