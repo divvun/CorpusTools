@@ -23,6 +23,7 @@
 from __future__ import absolute_import, print_function
 
 import os
+import re
 
 from lxml.html import html5parser
 
@@ -51,7 +52,12 @@ def doc_to_unicodehtml(filename):
     try:
         return extract_text(filename, command).decode('utf8')
     except UnicodeDecodeError:
-        return extract_text(filename, command).decode('windows-1252')
+        # remove control characters
+        remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]')
+
+        return remove_re.subn('',
+                              extract_text(filename,
+                                           command).decode('windows-1252'))[0]
 
 
 def fix_wv_output():
