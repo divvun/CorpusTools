@@ -17,7 +17,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Convert doc files to the Giella xml format."""
 
 from __future__ import absolute_import, print_function
@@ -46,9 +45,7 @@ def doc_to_unicodehtml(filename):
     Returns:
         A string containing the xhtml version of the doc file.
     """
-    command = ['wvHtml',
-               os.path.realpath(filename),
-               '-']
+    command = ['wvHtml', os.path.realpath(filename), '-']
     try:
         return extract_text(filename, command).decode('utf8')
     except UnicodeDecodeError:
@@ -215,5 +212,4 @@ def convert2intermediate(filename):
     """
     return xhtml2intermediate(
         convert2xhtml(
-            html5parser.document_fromstring(
-                doc_to_unicodehtml(filename))))
+            html5parser.document_fromstring(doc_to_unicodehtml(filename))))
