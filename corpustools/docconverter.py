@@ -52,9 +52,10 @@ def doc_to_unicodehtml(filename):
         # remove control characters
         remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]')
 
-        return remove_re.subn('',
-                              extract_text(filename,
-                                           command).decode('windows-1252'))[0]
+        return remove_re.subn(
+            '',
+            extract_text(filename,
+                         command).decode('windows-1252'))[0].encode('utf8')
 
 
 def fix_wv_output():
