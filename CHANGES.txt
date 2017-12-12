@@ -115,3 +115,4 @@ v<0.21.2>, <20171010> -- Add the possibility to specify file name when adding it
 v<0.21.3>, <20171025> -- Set the mimetype of xsl files to text/xml when adding files to a svn working copy.
 v<0.21.4>, <20171205> -- Change the way html and html-dependent documents types are converted, by parsing all html content as if it is xhtml. This fixes bugs in particularly epub conversion.
 v<0.21.5>, <20171211> -- Some html documents were not parsable by html5parser. Clean them up before parsing them.
+v<0.21.6>, <20171212> -- Some .doc documents sent through wvHtml were not parsable by html5parser. Remove control characters from the wvHtml output.
