@@ -373,6 +373,7 @@ class HTMLContentConverter(object):
                     'phone-bar',  # 1177.se
                     'publishinfo',  # 1177.se
                     'readspeaker_button1',
+                    'right-wrapper', # ndla
                     'rightAds',
                     'rightCol',
                     'rightside',
