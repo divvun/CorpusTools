@@ -112,6 +112,9 @@ class CorpusXMLFile(object):
             self.name)
         parallel_basename = '{}.xml'.format(
             self.get_parallel_basename(paralang))
+        if parallel_basename == '.xml':
+            raise NameError('Parallel is empty')
+
         return os.path.join(*[root, module, paralang, genre, subdirs,
                               parallel_basename])
 
