@@ -974,7 +974,9 @@ def parallelise_file(input_file, lang2, dictionary, quiet, aligner, stdout,
                                            quiet=quiet)
     except IOError as error:
         if not quiet:
-            util.note(error.message)
+            util.note(error)
+    except NameError:  # parallel filename is empty
+        pass
 
     else:
 
