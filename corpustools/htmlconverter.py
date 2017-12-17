@@ -69,15 +69,13 @@ def webpage_to_unicodehtml(filename):
     for encoding in ['utf-8', 'windows-1252', 'latin1']:
         try:
             with codecs.open(filename, encoding=encoding) as file_:
-                content = file_.read()
+                content = remove_declared_encoding(file_.read())
                 try:
-                    return html5parser.document_fromstring(
-                        remove_declared_encoding(content))
+                    return html5parser.document_fromstring(content)
                 except ValueError:
                     cleaner = clean.Cleaner(comments=True)
                     velyclean = cleaner.clean_html(content)
-                    return html5parser.document_fromstring(
-                        remove_declared_encoding(velyclean))
+                    return html5parser.document_fromstring(velyclean)
 
         except UnicodeDecodeError:
             pass
