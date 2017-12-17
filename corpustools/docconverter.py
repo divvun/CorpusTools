@@ -38,7 +38,7 @@ class DocError(Exception):
 
 
 def doc_to_html_elt(filename):
-    return html.parse(io.StringIO(doc_to_unicodehtml(filename)))
+    return html.document_fromstring(doc_to_unicodehtml(filename))
 
 
 def doc_to_unicodehtml(filename):

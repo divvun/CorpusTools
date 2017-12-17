@@ -69,8 +69,8 @@ def webpage_to_unicodehtml(filename):
     for encoding in ['utf-8', 'windows-1252', 'latin1']:
         try:
             with codecs.open(filename, encoding=encoding) as file_:
-                return html.parse(
-                    io.StringIO(remove_declared_encoding(file_.read())))
+                return html.document_fromstring(
+                    remove_declared_encoding(file_.read()))
         except UnicodeDecodeError:
             pass
 

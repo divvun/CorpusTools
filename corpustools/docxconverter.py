@@ -26,7 +26,6 @@ from corpustools.htmlconverter import convert2xhtml, xhtml2intermediate
 
 
 def docx_to_unicodehtml(filename):
-    return html.parse(io.StringIO(PyDocXHTMLExporter(filename).export()))
 
 
 def convert2intermediate(filename):
@@ -40,3 +39,4 @@ def convert2intermediate(filename):
     """
     return xhtml2intermediate(
         convert2xhtml(docx_to_unicodehtml(filename)))
+    return html.document_fromstring(PyDocXHTMLExporter(filename).export())

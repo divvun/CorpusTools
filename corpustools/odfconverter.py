@@ -38,7 +38,7 @@ def odf_to_unicodehtml(filename):
     embedable = True
     odhandler = ODF2XHTML(generatecss, embedable)
     try:
-        return html.parse(io.StringIO(odhandler.odf2xhtml(filename)))
+        return html.document_fromstring(odhandler.odf2xhtml(filename))
     except TypeError as error:
         raise util.ConversionError('Error: {}'.format(error))
 
