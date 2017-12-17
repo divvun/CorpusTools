@@ -18,9 +18,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Classes and functions to change names of corpus files."""
-
 
 from __future__ import absolute_import, print_function
 
@@ -50,18 +48,15 @@ class VersionController(object):
 
     def add(self, path):
         """Meta function."""
-        raise NotImplementedError(
-            "You have to subclass and override add")
+        raise NotImplementedError("You have to subclass and override add")
 
     def move(self, oldpath, newpath):
         """Meta function."""
-        raise NotImplementedError(
-            "You have to subclass and override move")
+        raise NotImplementedError("You have to subclass and override move")
 
     def remove(self, path):
         """Meta function."""
-        raise NotImplementedError(
-            "You have to subclass and override remove")
+        raise NotImplementedError("You have to subclass and override remove")
 
     def user_name(self):
         """Try to get a username."""
@@ -104,10 +99,7 @@ class SVN(VersionController):
         valid_path = self.valid_svn_path(path)
         self.client.add(valid_path, recurse=True, force=True)
         if valid_path.endswith('.xsl'):
-            self.client.propset(
-                'svn:mime-type',
-                'text/xml',
-                valid_path)
+            self.client.propset('svn:mime-type', 'text/xml', valid_path)
 
     def valid_svn_path(self, path):
         """Find the part of the path that is under version control.
@@ -140,10 +132,9 @@ class SVN(VersionController):
         except pysvn.ClientError:
             return False
         else:
-            return status not in (
-                pysvn.wc_status_kind.added,
-                pysvn.wc_status_kind.unversioned,
-                pysvn.wc_status_kind.ignored)
+            return status not in (pysvn.wc_status_kind.added,
+                                  pysvn.wc_status_kind.unversioned,
+                                  pysvn.wc_status_kind.ignored)
 
     def add(self, path):
         """Add path to the working copy.

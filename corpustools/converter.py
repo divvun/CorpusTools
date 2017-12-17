@@ -17,9 +17,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """This file contains classes to convert files to the Giella xml format."""
-
 
 from __future__ import absolute_import, print_function
 
@@ -32,15 +30,13 @@ import os
 import six
 from lxml import etree
 
-from corpustools import (avvirconverter, biblexmlconverter, ccat, corpuspath,
-                         docconverter, documentfixer, docxconverter,
-                         epubconverter, errormarkup, htmlconverter,
-                         languagedetector, latexconverter, odfconverter,
-                         pdfconverter, plaintextconverter, rtfconverter,
-                         svgconverter, util, xslmaker, xslsetter)
+from corpustools import (
+    avvirconverter, biblexmlconverter, ccat, corpuspath, docconverter,
+    documentfixer, docxconverter, epubconverter, errormarkup, htmlconverter,
+    languagedetector, latexconverter, odfconverter, pdfconverter,
+    plaintextconverter, rtfconverter, svgconverter, util, xslmaker, xslsetter)
 
 HERE = os.path.dirname(__file__)
-
 
 logging.basicConfig(level=logging.WARNING)
 LOGGER = logging.getLogger(__name__)
@@ -186,9 +182,9 @@ class Converter(object):
                     logfile.write(six.text_type(error))
                     logfile.write("\n\n")
                     logfile.write("This is the xml tree:\n")
-                    logfile.write(etree.tostring(complete,
-                                                 encoding='utf8',
-                                                 pretty_print=True))
+                    logfile.write(
+                        etree.tostring(
+                            complete, encoding='utf8', pretty_print=True))
                     logfile.write('\n')
 
                 raise util.ConversionError(
@@ -210,9 +206,10 @@ class Converter(object):
         for hyph in complete.iter('hyph'):
             hyph.text = None
 
-        if (self.metadata.get_variable('mainlang') in
-                ['sma', 'sme', 'smj', 'smn', 'sms', 'nob', 'fin', 'swe',
-                 'nno', 'dan', 'fkv', 'sju', 'sje', 'mhr']):
+        if (self.metadata.get_variable('mainlang') in [
+                'sma', 'sme', 'smj', 'smn', 'sms', 'nob', 'fin', 'swe', 'nno',
+                'dan', 'fkv', 'sju', 'sje', 'mhr'
+        ]):
             try:
                 fixer.fix_body_encoding(self.metadata.get_variable('mainlang'))
             except UserWarning as error:
@@ -221,14 +218,14 @@ class Converter(object):
 
     mixed_to_unicode = {
         'e4': u'ä',
-        '85': u'…',            # u'\u2026' ... character.
-        '96': u'–',            # u'\u2013' en-dash
-        '97': u'—',            # u'\u2014' em-dash
-        '91': u"‘",            # u'\u2018' left single quote
-        '92': u"’",            # u'\u2019' right single quote
-        '93': u'“',            # u'\u201C' left double quote
-        '94': u'”',            # u'\u201D' right double quote
-        '95': u"•"             # u'\u2022' bullet
+        '85': u'…',  # u'\u2026' ... character.
+        '96': u'–',  # u'\u2013' en-dash
+        '97': u'—',  # u'\u2014' em-dash
+        '91': u"‘",  # u'\u2018' left single quote
+        '92': u"’",  # u'\u2019' right single quote
+        '93': u'“',  # u'\u201C' left double quote
+        '94': u'”',  # u'\u201D' right double quote
+        '95': u"•"  # u'\u2022' bullet
     }
 
     def mixed_decoder(self, decode_error):
@@ -236,9 +233,9 @@ class Converter(object):
         badstring = decode_error.object[decode_error.start:decode_error.end]
         badhex = badstring.encode('hex')
         repl = self.mixed_to_unicode.get(badhex, u'\ufffd')
-        if repl == u'\ufffd':   # � unicode REPLACEMENT CHARACTER
-            LOGGER.warn("Skipped bad byte \\x%s, seen in %s",
-                        badhex, self.names.orig)
+        if repl == u'\ufffd':  # � unicode REPLACEMENT CHARACTER
+            LOGGER.warn("Skipped bad byte \\x%s, seen in %s", badhex,
+                        self.names.orig)
         return repl, (decode_error.start + len(repl))
 
     def make_complete(self, language_guesser):
@@ -252,8 +249,8 @@ class Converter(object):
         complete = self.transform_to_complete()
         self.validate_complete(complete)
         self.convert_errormarkup(complete)
-        lang_detector = languagedetector.LanguageDetector(complete,
-                                                          language_guesser)
+        lang_detector = languagedetector.LanguageDetector(
+            complete, language_guesser)
         lang_detector.detect_language()
 
         return complete
@@ -268,8 +265,8 @@ class Converter(object):
         Returns:
             The length of the content in complete.
         """
-        xml_printer = ccat.XMLPrinter(all_paragraphs=True,
-                                      hyph_replacement=None)
+        xml_printer = ccat.XMLPrinter(
+            all_paragraphs=True, hyph_replacement=None)
         xml_printer.etree = etree.ElementTree(complete)
 
         return len(xml_printer.process_file().getvalue())
@@ -280,8 +277,8 @@ class Converter(object):
         Arguments:
             languageguesser: a text.Classifier
         """
-        if distutils.dep_util.newer_group(
-                self.dependencies, self.names.converted):
+        if distutils.dep_util.newer_group(self.dependencies,
+                                          self.names.converted):
             with util.ignored(OSError):
                 os.makedirs(os.path.dirname(self.names.converted))
 
@@ -290,9 +287,9 @@ class Converter(object):
 
                 if self.has_content(complete):
                     with open(self.names.converted, 'wb') as converted:
-                        converted.write(etree.tostring(complete,
-                                                       encoding='utf8',
-                                                       pretty_print='True'))
+                        converted.write(
+                            etree.tostring(
+                                complete, encoding='utf8', pretty_print='True'))
                 else:
                     LOGGER.error("%s has no text", self.names.orig)
 

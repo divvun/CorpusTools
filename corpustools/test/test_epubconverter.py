@@ -18,7 +18,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Test conversion of epub files."""
 
 import os
@@ -44,8 +43,7 @@ def set_data(directory, testdoc, skip_elements):
     Returns:
         str: path to the test document in the temporary test directory
     """
-    temp_epub = os.path.join(
-        directory.path, os.path.basename(testdoc))
+    temp_epub = os.path.join(directory.path, os.path.basename(testdoc))
     copyfile(testdoc, temp_epub)
     metadata = xslsetter.MetadataHandler(temp_epub + '.xsl', create=True)
     metadata.set_variable('skip_elements', skip_elements)
@@ -97,9 +95,7 @@ class TestEpubConverter(XMLTester):
         """Test with skip_elements."""
         with TempDirectory() as directory:
             temp_epub = set_data(
-                directory,
-                self.testdoc,
-                './/html:body/html:div[1]/html:h2[1];'
+                directory, self.testdoc, './/html:body/html:div[1]/html:h2[1];'
                 './/html:body/html:div[3]/html:div[1]/html:h3[1]')
             got = epubconverter.convert2intermediate(temp_epub)
             want = ("""
@@ -131,8 +127,7 @@ class TestEpubConverter1(XMLTester):
         """Range of same depth with the same name in the next to last level."""
         with TempDirectory() as directory:
             temp_epub = set_data(
-                directory,
-                self.testdoc,
+                directory, self.testdoc,
                 './/body/div[1]/div[1]/p[1];.//body/div[2]/div[1]/p[4]')
             got = epubconverter.convert2intermediate(temp_epub)
             want = ("""
@@ -153,8 +148,7 @@ class TestEpubConverter1(XMLTester):
         """Range with same parents."""
         with TempDirectory() as directory:
             temp_epub = set_data(
-                directory,
-                self.testdoc,
+                directory, self.testdoc,
                 './/body/div[2]/div[1]/p[1];.//body/div[2]/div[1]/p[4]')
             got = epubconverter.convert2intermediate(temp_epub)
             want = ("""

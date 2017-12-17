@@ -18,7 +18,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Test the XslMaker class."""
 
 from __future__ import absolute_import
@@ -48,11 +47,15 @@ class TestXslMaker(XMLTester):
         # check that it looks OK:
         import_elt = got.find(
             '/xsl:import',
-            namespaces={'xsl': 'http://www.w3.org/1999/XSL/Transform'})
+            namespaces={
+                'xsl': 'http://www.w3.org/1999/XSL/Transform'
+            })
         self.assertTrue(import_elt.attrib["href"].startswith("file:///"))
         self.assertTrue(import_elt.attrib["href"].endswith("common.xsl"))
-        self.assertGreater(len(open(
-            import_elt.attrib["href"][7:].replace('%20', ' '), 'r').read()), 0)
+        self.assertGreater(
+            len(
+                open(import_elt.attrib["href"][7:].replace('%20', ' '),
+                     'r').read()), 0)
         # ... and set it to the hardcoded path in test.xsl:
         import_elt.attrib["href"] = (
             'file:///home/boerre/langtech/trunk/tools/CorpusTools/'

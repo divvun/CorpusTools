@@ -18,7 +18,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Test conversion of doc files."""
 
 import os
@@ -36,9 +35,9 @@ class TestDocConverter(XMLTester):
 
     def test_convert2intermediate(self):
         """Test conversion of a doc file."""
-        got = docconverter.convert2intermediate(os.path.join(
-            HERE, 'converter_data/fakecorpus/orig/sme/riddu/doc-test.doc'))
-        want = etree.parse(
-            os.path.join(HERE, 'converter_data/doc-test.xml'))
+        got = docconverter.convert2intermediate(
+            os.path.join(
+                HERE, 'converter_data/fakecorpus/orig/sme/riddu/doc-test.doc'))
+        want = etree.parse(os.path.join(HERE, 'converter_data/doc-test.xml'))
 
         self.assertXmlEqual(got, want)

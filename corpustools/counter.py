@@ -16,9 +16,7 @@
 #   Copyright © 2012-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """This file contains classes to convert files to the giellatekno xml format."""
-
 
 from __future__ import absolute_import, print_function
 
@@ -28,7 +26,6 @@ import os
 from collections import defaultdict
 
 from corpustools import argparse_version, converter, convertermanager, util
-
 
 logging.basicConfig(level=logging.CRITICAL)
 
@@ -43,9 +40,10 @@ def parse_options():
         parents=[argparse_version.parser],
         description='Count corpus files. List them if called for.')
 
-    parser.add_argument(u'--listfiles',
-                        action=u"store_true",
-                        help=u'List lacking converted and analysed files.')
+    parser.add_argument(
+        u'--listfiles',
+        action=u"store_true",
+        help=u'List lacking converted and analysed files.')
 
     args = parser.parse_args()
 
@@ -70,7 +68,7 @@ def count_files(path):
             if os.path.exists(c.names.converted):
                 lacking_files['ana'].add(c.names.converted)
 
-    return(len(cm.files), counter['con'], counter['ana'], lacking_files)
+    return (len(cm.files), counter['con'], counter['ana'], lacking_files)
 
 
 def main():
@@ -82,13 +80,8 @@ def main():
         print(corpus)
         for language in ['fkv', 'sma', 'sme', 'smj', 'smn', 'sms']:
             result = count_files(os.path.join(corpus, 'orig', language))
-            print('{}\t{}\t{}\t{}'.format(
-                language,
-                result[0],
-                result[1],
-                result[2]
-                )
-            )
+            print('{}\t{}\t{}\t{}'.format(language, result[0], result[1],
+                                          result[2]))
             for key, value in result[3].items():
                 lacking_files[key].update(value)
 

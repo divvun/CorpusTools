@@ -17,9 +17,7 @@
 #   Copyright © 2013-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Classes and functions to convert giellatekno xml formatted files to text."""
-
 
 from __future__ import absolute_import, print_function
 
@@ -45,6 +43,7 @@ def suppress_broken_pipe_msg(function):
     Args:
         function: the function that should be wrapped by this function.
     """
+
     @wraps(function)
     def wrapper(*args, **kwargs):
         try:
@@ -65,6 +64,7 @@ def suppress_broken_pipe_msg(function):
                         sys.stderr.flush()
                     finally:
                         sys.stderr.close()
+
     return wrapper
 
 
@@ -136,13 +136,8 @@ class XMLPrinter(object):
         self.errorlang = errorlang
         self.noforeign = noforeign
 
-        if (error or
-                errorort or
-                errorortreal or
-                errormorphsyn or
-                errorsyn or
-                errorlex or
-                errorlang):
+        if (error or errorort or errorortreal or errormorphsyn or errorsyn or
+                errorlex or errorlang):
             self.error_filtering = True
         else:
             self.error_filtering = False
@@ -222,12 +217,14 @@ class XMLPrinter(object):
                         text += child.get('correct')
                     except TypeError:
                         print('Unexpected error element', file=sys.stderr)
-                        print(etree.tostring(child, encoding='utf8'),
-                              file=sys.stderr)
-                        print('To fix this error you must '
-                              'fix the errormarkup in the original '
-                              'document:'.format(self.filename),
-                              file=sys.stderr)
+                        print(
+                            etree.tostring(child, encoding='utf8'),
+                            file=sys.stderr)
+                        print(
+                            'To fix this error you must '
+                            'fix the errormarkup in the original '
+                            'document:'.format(self.filename),
+                            file=sys.stderr)
 
                 if child.tail is not None and child.tail.strip() != '':
                     text += u' {}'.format(child.tail.strip())
@@ -242,20 +239,20 @@ class XMLPrinter(object):
         text += attributes.get('correct')
         del attributes['correct']
 
-        attr = [key + u'=' + six.text_type(attributes[key])
-                for key in sorted(attributes)]
+        attr = [
+            key + u'=' + six.text_type(attributes[key])
+            for key in sorted(attributes)
+        ]
 
         if attr:
             text += '\t#'
             text += ','.join(attr)
 
             if self.print_filename:
-                text += u', file: {}'.format(
-                    os.path.basename(self.filename))
+                text += u', file: {}'.format(os.path.basename(self.filename))
 
         elif self.print_filename:
-            text += u'\t#file: {}'.format(
-                os.path.basename(self.filename))
+            text += u'\t#file: {}'.format(os.path.basename(self.filename))
 
         return text
 
@@ -290,10 +287,9 @@ class XMLPrinter(object):
         """
         if elt_contents is not None:
             text = elt_contents.strip()
-            if text != '' and (
-                    self.lang is None or
-                    (not self.invert_lang and elt_lang == self.lang) or
-                    (self.invert_lang and elt_lang != self.lang)):
+            if text != '' and (self.lang is None or (not self.invert_lang and
+                                                     elt_lang == self.lang) or
+                               (self.invert_lang and elt_lang != self.lang)):
                 if not self.one_word_per_line:
                     textlist.append(text)
                 else:
@@ -301,15 +297,12 @@ class XMLPrinter(object):
 
     def get_text(self, element, textlist, parentlang):
         """Get the text part of an lxml element."""
-        self.get_contents(element.text,
-                          textlist,
+        self.get_contents(element.text, textlist,
                           self.get_element_language(element, parentlang))
 
     def get_tail(self, element, textlist, parentlang):
         """Get the tail part of an lxml element."""
-        self.get_contents(element.tail,
-                          textlist,
-                          parentlang)
+        self.get_contents(element.tail, textlist, parentlang)
 
     def visit_children(self, element, textlist, parentlang):
         """Visit the children of element, adding their content to textlist."""
@@ -319,17 +312,15 @@ class XMLPrinter(object):
             elif child.tag == 'errorlang' and self.noforeign:
                 self.get_tail(child, textlist, parentlang)
             elif self.visit_error_inline(child):
-                self.collect_inline_errors(
-                    child,
-                    textlist,
-                    self.get_element_language(child, parentlang))
+                self.collect_inline_errors(child, textlist,
+                                           self.get_element_language(
+                                               child, parentlang))
             elif self.visit_error_not_inline(child):
                 self.collect_not_inline_errors(child, textlist)
             else:
-                self.visit_nonerror_element(
-                    child,
-                    textlist,
-                    self.get_element_language(element, parentlang))
+                self.visit_nonerror_element(child, textlist,
+                                            self.get_element_language(
+                                                element, parentlang))
 
     def visit_nonerror_element(self, element, textlist, parentlang):
         """Visit and extract text from non error element."""
@@ -341,34 +332,23 @@ class XMLPrinter(object):
 
     def visit_this_node(self, element):
         """Return True if the element should be visited."""
-        return (
-            self.all_paragraphs or
-            (
-                self.paragraph is True and (element.get('type') is None or
-                                            element.get('type') == 'text')
-            ) or (
-                self.title is True and element.get('type') == 'title'
-            ) or (
-                self.listitem is True and element.get('type') == 'listitem'
-            ) or (
-                self.table is True and element.get('type') == 'tablecell'
-            )
-        )
+        return (self.all_paragraphs or
+                (self.paragraph is True and
+                 (element.get('type') is None or element.get('type') == 'text'))
+                or (self.title is True and element.get('type') == 'title') or
+                (self.listitem is True and element.get('type') == 'listitem') or
+                (self.table is True and element.get('type') == 'tablecell'))
 
     def visit_error_not_inline(self, element):
         """Determine whether element should be visited."""
-        return (
-            element.tag.startswith('error') and self.one_word_per_line and not
-            self.error_filtering or
-            self.include_this_error(element)
-        )
+        return (element.tag.startswith('error') and self.one_word_per_line and
+                not self.error_filtering or self.include_this_error(element))
 
     def visit_error_inline(self, element):
         """Determine whether element should be visited."""
-        return (element.tag.startswith('error') and not
-                self.one_word_per_line and
-                (self.correction or self.include_this_error(element))
-                )
+        return (element.tag.startswith('error') and
+                not self.one_word_per_line and
+                (self.correction or self.include_this_error(element)))
 
     def include_this_error(self, element):
         """Determine whether element should be visited."""
@@ -380,8 +360,7 @@ class XMLPrinter(object):
             (element.tag == 'errorsyn' and self.errorsyn) or
             (element.tag == 'errorlex' and self.errorlex) or
             (element.tag == 'errorlang' and self.errorlang) or
-            (element.tag == 'errorlang' and self.noforeign)
-        )
+            (element.tag == 'errorlang' and self.noforeign))
 
     def parse_file(self, filename):
         """Parse the xml document.
@@ -462,103 +441,125 @@ def parse_options():
         description='Print the contents of a corpus in XML format\n\
         The default is to print paragraphs with no type (=text type).')
 
-    parser.add_argument('-l',
-                        dest='lang',
-                        help='Print only elements in language LANG. Default \
+    parser.add_argument(
+        '-l',
+        dest='lang',
+        help='Print only elements in language LANG. Default \
                         is all langs.')
-    parser.add_argument('-T',
-                        dest='title',
-                        action='store_true',
-                        help='Print paragraphs with title type', )
-    parser.add_argument('-L',
-                        dest='list',
-                        action='store_true',
-                        help='Print paragraphs with list type')
-    parser.add_argument('-t',
-                        dest='table',
-                        action='store_true',
-                        help='Print paragraphs with table type')
-    parser.add_argument('-a',
-                        dest='all_paragraphs',
-                        action='store_true',
-                        help='Print all text elements')
+    parser.add_argument(
+        '-T',
+        dest='title',
+        action='store_true',
+        help='Print paragraphs with title type',
+    )
+    parser.add_argument(
+        '-L',
+        dest='list',
+        action='store_true',
+        help='Print paragraphs with list type')
+    parser.add_argument(
+        '-t',
+        dest='table',
+        action='store_true',
+        help='Print paragraphs with table type')
+    parser.add_argument(
+        '-a',
+        dest='all_paragraphs',
+        action='store_true',
+        help='Print all text elements')
 
-    parser.add_argument('-c',
-                        dest='corrections',
-                        action='store_true',
-                        help='Print corrected text instead of the original \
+    parser.add_argument(
+        '-c',
+        dest='corrections',
+        action='store_true',
+        help='Print corrected text instead of the original \
                         typos & errors')
-    parser.add_argument('-C',
-                        dest='error',
-                        action='store_true',
-                        help='Only print unclassified (§/<error..>) \
+    parser.add_argument(
+        '-C',
+        dest='error',
+        action='store_true',
+        help='Only print unclassified (§/<error..>) \
                         corrections')
-    parser.add_argument('-ort',
-                        dest='errorort',
-                        action='store_true',
-                        help='Only print ortoghraphic, non-word \
+    parser.add_argument(
+        '-ort',
+        dest='errorort',
+        action='store_true',
+        help='Only print ortoghraphic, non-word \
                         ($/<errorort..>) corrections')
-    parser.add_argument('-ortreal',
-                        dest='errorortreal',
-                        action='store_true',
-                        help='Only print ortoghraphic, real-word \
+    parser.add_argument(
+        '-ortreal',
+        dest='errorortreal',
+        action='store_true',
+        help='Only print ortoghraphic, real-word \
                         (¢/<errorortreal..>) corrections')
-    parser.add_argument('-morphsyn',
-                        dest='errormorphsyn',
-                        action='store_true',
-                        help='Only print morphosyntactic \
+    parser.add_argument(
+        '-morphsyn',
+        dest='errormorphsyn',
+        action='store_true',
+        help='Only print morphosyntactic \
                         (£/<errormorphsyn..>) corrections')
-    parser.add_argument('-syn',
-                        dest='errorsyn',
-                        action='store_true',
-                        help='Only print syntactic (¥/<errorsyn..>) \
+    parser.add_argument(
+        '-syn',
+        dest='errorsyn',
+        action='store_true',
+        help='Only print syntactic (¥/<errorsyn..>) \
                         corrections')
-    parser.add_argument('-lex',
-                        dest='errorlex',
-                        action='store_true',
-                        help='Only print lexical (€/<errorlex..>) \
+    parser.add_argument(
+        '-lex',
+        dest='errorlex',
+        action='store_true',
+        help='Only print lexical (€/<errorlex..>) \
                         corrections')
-    parser.add_argument('-foreign',
-                        dest='errorlang',
-                        action='store_true',
-                        help='Only print foreign (∞/<errorlang..>) \
+    parser.add_argument(
+        '-foreign',
+        dest='errorlang',
+        action='store_true',
+        help='Only print foreign (∞/<errorlang..>) \
                         corrections')
-    parser.add_argument('-noforeign',
-                        dest='noforeign',
-                        action='store_true',
-                        help='Do not print anything from foreign \
+    parser.add_argument(
+        '-noforeign',
+        dest='noforeign',
+        action='store_true',
+        help='Do not print anything from foreign \
                         (∞/<errorlang..>) corrections')
-    parser.add_argument('-typos',
-                        dest='typos',
-                        action='store_true',
-                        help='Print only the errors/typos in the text, with \
+    parser.add_argument(
+        '-typos',
+        dest='typos',
+        action='store_true',
+        help='Print only the errors/typos in the text, with \
                         corrections tab-separated')
-    parser.add_argument('-f',
-                        dest='print_filename',
-                        action='store_true',
-                        help='Add the source filename as a comment after each \
+    parser.add_argument(
+        '-f',
+        dest='print_filename',
+        action='store_true',
+        help='Add the source filename as a comment after each \
                         error word.')
-    parser.add_argument('-S',
-                        dest='one_word_per_line',
-                        action='store_true',
-                        help='Print the whole text one word per line; \
+    parser.add_argument(
+        '-S',
+        dest='one_word_per_line',
+        action='store_true',
+        help='Print the whole text one word per line; \
                         typos have tab separated corrections')
-    parser.add_argument('-dis',
-                        dest='disambiguation',
-                        action='store_true',
-                        help='Print the disambiguation element')
-    parser.add_argument('-dep',
-                        dest='dependency',
-                        action='store_true',
-                        help='Print the dependency element')
-    parser.add_argument('-hyph',
-                        dest='hyph_replacement',
-                        default='',
-                        help='Replace hyph tags with the given argument')
+    parser.add_argument(
+        '-dis',
+        dest='disambiguation',
+        action='store_true',
+        help='Print the disambiguation element')
+    parser.add_argument(
+        '-dep',
+        dest='dependency',
+        action='store_true',
+        help='Print the dependency element')
+    parser.add_argument(
+        '-hyph',
+        dest='hyph_replacement',
+        default='',
+        help='Replace hyph tags with the given argument')
 
-    parser.add_argument('targets',
-                        nargs='+',
-                        help='Name of the files or directories to process. \
+    parser.add_argument(
+        'targets',
+        nargs='+',
+        help='Name of the files or directories to process. \
                         If a directory is given, all files in this directory \
                         and its subdirectories will be listed.')
 
@@ -598,29 +599,31 @@ def main():
     """
     args = parse_options()
 
-    xml_printer = XMLPrinter(lang=args.lang,
-                             all_paragraphs=args.all_paragraphs,
-                             title=args.title,
-                             listitem=args.list,
-                             table=args.table,
-                             correction=args.corrections,
-                             error=args.error,
-                             errorort=args.errorort,
-                             errorortreal=args.errorortreal,
-                             errormorphsyn=args.errormorphsyn,
-                             errorsyn=args.errorsyn,
-                             errorlex=args.errorlex,
-                             errorlang=args.errorlang,
-                             noforeign=args.noforeign,
-                             typos=args.typos,
-                             print_filename=args.print_filename,
-                             one_word_per_line=args.one_word_per_line,
-                             dependency=args.dependency,
-                             disambiguation=args.disambiguation,
-                             hyph_replacement=args.hyph_replacement)
+    xml_printer = XMLPrinter(
+        lang=args.lang,
+        all_paragraphs=args.all_paragraphs,
+        title=args.title,
+        listitem=args.list,
+        table=args.table,
+        correction=args.corrections,
+        error=args.error,
+        errorort=args.errorort,
+        errorortreal=args.errorortreal,
+        errormorphsyn=args.errormorphsyn,
+        errorsyn=args.errorsyn,
+        errorlex=args.errorlex,
+        errorlang=args.errorlang,
+        noforeign=args.noforeign,
+        typos=args.typos,
+        print_filename=args.print_filename,
+        one_word_per_line=args.one_word_per_line,
+        dependency=args.dependency,
+        disambiguation=args.disambiguation,
+        hyph_replacement=args.hyph_replacement)
 
     for filename in find_files(args.targets, '.xml'):
         xml_printer.print_file(filename)
+
 
 if __name__ == '__main__':
     main()

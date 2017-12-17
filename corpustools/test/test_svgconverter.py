@@ -18,7 +18,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Test conversion of svg files."""
 
 import os

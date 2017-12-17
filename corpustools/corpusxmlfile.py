@@ -18,9 +18,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Classes and functions to sentence align two files."""
-
 
 from __future__ import absolute_import, print_function, unicode_literals
 
@@ -51,8 +49,7 @@ class CorpusXMLFile(object):
             raise util.ArgumentError(
                 "Expected Corpus XML file (output of convert2xml) with "
                 "<document> as the root tag, got {} -- did you pass the "
-                "wrong file?".format(
-                    self.root.tag,))
+                "wrong file?".format(self.root.tag,))
 
     @property
     def dirname(self):
@@ -73,8 +70,7 @@ class CorpusXMLFile(object):
     @property
     def lang(self):
         """Get the lang of the file."""
-        return self.root.attrib[
-            '{http://www.w3.org/XML/1998/namespace}lang']
+        return self.root.attrib['{http://www.w3.org/XML/1998/namespace}lang']
 
     @property
     def word_count(self):
@@ -108,15 +104,14 @@ class CorpusXMLFile(object):
         """Infer the absolute path of the parallel file."""
         if self.get_parallel_basename(paralang) is None:
             return None
-        root, module, _, genre, subdirs, _ = util.split_path(
-            self.name)
+        root, module, _, genre, subdirs, _ = util.split_path(self.name)
         parallel_basename = '{}.xml'.format(
             self.get_parallel_basename(paralang))
         if parallel_basename == '.xml':
             raise NameError('Parallel is empty')
 
-        return os.path.join(*[root, module, paralang, genre, subdirs,
-                              parallel_basename])
+        return os.path.join(
+            *[root, module, paralang, genre, subdirs, parallel_basename])
 
     @property
     def original_filename(self):
@@ -172,7 +167,5 @@ class CorpusXMLFile(object):
         if file_name is None:
             file_name = self.name
 
-        self.etree.write(file_name,
-                         encoding='utf8',
-                         pretty_print=True,
-                         xml_declaration=True)
+        self.etree.write(
+            file_name, encoding='utf8', pretty_print=True, xml_declaration=True)

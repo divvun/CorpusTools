@@ -17,12 +17,10 @@
 #   Copyright © 2015-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Classes to find and handle duplicate files in the repository.
 
 The classes work on converted files.
 """
-
 
 from __future__ import absolute_import, print_function
 
@@ -76,18 +74,19 @@ class DupeFinder(object):
         filename1 (str): name of the first file to be compared.
         filename2 (str): name of the second file to be compared.
         """
-        result = list(difflib.unified_diff(
-            self.files[filename1].splitlines(1),
-            self.files[filename2].splitlines(1)))
+        result = list(
+            difflib.unified_diff(self.files[filename1].splitlines(1),
+                                 self.files[filename2].splitlines(1)))
         if not result:
             print('\nParallels:', filename1, filename2)
             to_remove = filename1
-            if self.get_parallel_texts(filename1) > self.get_parallel_texts(filename2):
+            if self.get_parallel_texts(filename1) > self.get_parallel_texts(
+                    filename2):
                 to_remove = filename2
 
             self.dupe_files.add(to_remove)
-            origname = to_remove.replace(
-                'converted/', 'orig/').replace('.xml', '').decode('utf8')
+            origname = to_remove.replace('converted/', 'orig/').replace(
+                '.xml', '').decode('utf8')
             if os.path.exists(origname):
                 move_files.mover(origname, u'')
 
@@ -130,8 +129,8 @@ class DupeFinder(object):
             filename1 (str): name of the first file.
             filename2 (str): name of the second file.
         """
-        sm = difflib.SequenceMatcher(a=self.files[filename1],
-                                     b=self.files[filename2])
+        sm = difflib.SequenceMatcher(
+            a=self.files[filename1], b=self.files[filename2])
         ratio = sm.ratio()
         if ratio > 0.90:
             self.dupe_files.add((filename1, filename2))
@@ -180,8 +179,8 @@ def parse_remover_options():
         parents=[argparse_version.parser],
         description='Remove duplicate files from the given directory')
 
-    parser.add_argument('dir',
-                        help="The directory where the converted files exist")
+    parser.add_argument(
+        'dir', help="The directory where the converted files exist")
 
     args = parser.parse_args()
 
@@ -198,10 +197,11 @@ def main():
 def parse_finder_options():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Find files with more than 90% similarity in the given directory')
+        description=
+        'Find files with more than 90% similarity in the given directory')
 
-    parser.add_argument('dir',
-                        help="The directory where the converted files exist")
+    parser.add_argument(
+        'dir', help="The directory where the converted files exist")
 
     args = parser.parse_args()
 

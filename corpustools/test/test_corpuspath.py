@@ -17,7 +17,6 @@
 #   Copyright © 2014-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Test the naming scheme of corpus files."""
 
 from __future__ import absolute_import
@@ -46,6 +45,7 @@ def name(module, lang, extension):
     return os.path.join(HERE, module, lang,
                         'subdir/subsubdir/filename.html' + extension)
 
+
 @parameterized([
     ('orig_to_orig', name('orig', 'sme', '')),
     ('xsl_to_orig', name('orig', 'sme', '.xsl')),
@@ -54,7 +54,8 @@ def name(module, lang, extension):
     ('prestable_converted_to_orig', name('prestable/converted', 'sme', '.xml')),
     ('analysed_to_orig', name('converted', 'sme', '.xml')),
     ('toktmx_to_orig', name('toktmx/', 'sme2nob', '.toktmx')),
-    ('prestable_toktmx_to_orig', name('prestable/toktmx/', 'sme2nob', '.toktmx')),
+    ('prestable_toktmx_to_orig', name('prestable/toktmx/', 'sme2nob',
+                                      '.toktmx')),
     ('tmx_to_orig', name('tmx', 'sme2nob', '.tmx')),
     ('prestable_tmx_to_orig', name('prestable/tmx/', 'sme2nob', '.tmx')),
 ])
@@ -86,8 +87,7 @@ class TestComputeCorpusnames(unittest.TestCase):
         self.corpus_path = corpuspath.CorpusPath(self.name('orig'))
 
     def test_compute_orig(self):
-        self.assertEqual(
-            self.corpus_path.orig, self.name('orig'))
+        self.assertEqual(self.corpus_path.orig, self.name('orig'))
 
     def test_compute_xsl(self):
         self.assertEqual(self.corpus_path.xsl, self.name('orig') + '.xsl')
@@ -96,7 +96,8 @@ class TestComputeCorpusnames(unittest.TestCase):
         self.assertEqual(self.corpus_path.log, self.name('orig') + '.log')
 
     def test_compute_converted(self):
-        self.assertEqual(self.corpus_path.converted, self.name('converted') + '.xml')
+        self.assertEqual(self.corpus_path.converted,
+                         self.name('converted') + '.xml')
 
     def test_compute_prestable_converted(self):
         self.assertEqual(self.corpus_path.prestable_converted,
@@ -113,4 +114,5 @@ class TestComputeCorpusnames(unittest.TestCase):
                          self.name('prestable/goldstandard/converted') + '.xml')
 
     def test_compute_analysed(self):
-        self.assertEqual(self.corpus_path.analysed, self.name('analysed') + '.xml')
+        self.assertEqual(self.corpus_path.analysed,
+                         self.name('analysed') + '.xml')

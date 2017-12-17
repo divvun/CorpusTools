@@ -18,9 +18,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """This file contains classes to add files to a corpus directory."""
-
 
 from __future__ import absolute_import, print_function
 
@@ -56,8 +54,7 @@ def add_url_extension(filename, content_type):
     }
 
     for ct, extension in six.iteritems(content_type_extension):
-        if (ct in content_type and not
-                filename.endswith(extension)):
+        if (ct in content_type and not filename.endswith(extension)):
             filename += extension
 
     return filename
@@ -73,12 +70,11 @@ def url_to_filename(response):
         str: Name of the file.
     """
     try:
-        _, params = cgi.parse_header(
-            response.headers['Content-Disposition'])
+        _, params = cgi.parse_header(response.headers['Content-Disposition'])
         return params['filename']
     except KeyError:
-        return add_url_extension(os.path.basename(response.url),
-                                 response.headers['content-type'])
+        return add_url_extension(
+            os.path.basename(response.url), response.headers['content-type'])
 
 
 class UrlDownloader(object):
@@ -94,8 +90,9 @@ class UrlDownloader(object):
         self.download_dir = download_dir
         self.headers = {
             'user-agent':
-                'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) '
-                'Gecko/20130331 Firefox/21.0'}
+            'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) '
+            'Gecko/20130331 Firefox/21.0'
+        }
 
     def download(self, url, wanted_name='', params=None):
         """Download a url to a temporary file.
@@ -138,16 +135,14 @@ class AddToCorpus(object):
             should be added
         """
         if not os.path.isdir(corpusdir):
-            raise AdderError(
-                'The given corpus directory, {}, '
-                'does not exist.'.format(corpusdir))
+            raise AdderError('The given corpus directory, {}, '
+                             'does not exist.'.format(corpusdir))
 
         if (len(mainlang) != 3 or mainlang != mainlang.lower() or
                 mainlang != namechanger.normalise_filename(mainlang)):
-            raise AdderError(
-                'Invalid mainlang: {}. '
-                'It must consist of three lowercase ascii '
-                'letters'.format(mainlang))
+            raise AdderError('Invalid mainlang: {}. '
+                             'It must consist of three lowercase ascii '
+                             'letters'.format(mainlang))
 
         self.corpusdir = corpusdir
         self.vcs = versioncontrol.vcs(self.corpusdir)
@@ -167,8 +162,8 @@ class AddToCorpus(object):
         Returns:
             str: a normalised path
         """
-        return '/'.join([namechanger.normalise_filename(part)
-                         for part in path.split('/')])
+        return '/'.join(
+            [namechanger.normalise_filename(part) for part in path.split('/')])
 
     def copy_url_to_corpus(self, url, wanted_name='', parallelpath=''):
         """Add a URL to the corpus.
@@ -178,12 +173,12 @@ class AddToCorpus(object):
         downloader = UrlDownloader(os.path.join(self.corpusdir, 'tmp'))
         (request, tmpname) = downloader.download(url, wanted_name=wanted_name)
 
-        return self.copy_file_to_corpus(origpath=tmpname,
-                                        metadata_filename=request.url,
-                                        parallelpath=parallelpath)
+        return self.copy_file_to_corpus(
+            origpath=tmpname,
+            metadata_filename=request.url,
+            parallelpath=parallelpath)
 
-    def copy_file_to_corpus(self, origpath, metadata_filename,
-                            parallelpath=''):
+    def copy_file_to_corpus(self, origpath, metadata_filename, parallelpath=''):
         """Add a file from the hard disk to the corpus.
 
         Arguments:
@@ -204,11 +199,10 @@ class AddToCorpus(object):
         shutil.copy(origpath, none_dupe_path)
         self.additions.append(none_dupe_path)
 
-        self.add_metadata_to_corpus(none_dupe_path,
-                                    metadata_filename)
+        self.add_metadata_to_corpus(none_dupe_path, metadata_filename)
         if parallelpath:
-            self.update_parallel_data(util.split_path(none_dupe_path),
-                                      parallelpath)
+            self.update_parallel_data(
+                util.split_path(none_dupe_path), parallelpath)
         print('Added', none_dupe_path)
 
         return none_dupe_path
@@ -216,8 +210,8 @@ class AddToCorpus(object):
     def add_metadata_to_corpus(self, none_dupe_path, meta_filename):
         """Add the metadata file to the corpus."""
         none_dupe_components = util.split_path(none_dupe_path)
-        new_metadata = xslsetter.MetadataHandler(none_dupe_path + '.xsl',
-                                                 create=True)
+        new_metadata = xslsetter.MetadataHandler(
+            none_dupe_path + '.xsl', create=True)
         new_metadata.set_variable('filename', meta_filename)
         new_metadata.set_variable('mainlang', none_dupe_components.lang)
         new_metadata.set_variable('genre', none_dupe_components.genre)
@@ -233,11 +227,9 @@ class AddToCorpus(object):
             parallelpath: (string) path of the parallel file
         """
         if not os.path.exists(parallelpath):
-            raise AdderError('{} does not exist'.format(
-                parallelpath))
+            raise AdderError('{} does not exist'.format(parallelpath))
 
-        parallel_metadata = xslsetter.MetadataHandler(
-            parallelpath + '.xsl')
+        parallel_metadata = xslsetter.MetadataHandler(parallelpath + '.xsl')
         parallels = parallel_metadata.get_parallel_texts()
         parallels[none_dupe_components.lang] = none_dupe_components.basename
 
@@ -245,14 +237,10 @@ class AddToCorpus(object):
         parallels[parall_components.lang] = parall_components.basename
 
         for lang, parallel in six.iteritems(parallels):
-            metadata = xslsetter.MetadataHandler(
-                '/'.join((
-                    none_dupe_components.root,
-                    none_dupe_components.module,
-                    lang,
-                    none_dupe_components.genre,
-                    none_dupe_components.subdirs,
-                    parallel + '.xsl')))
+            metadata = xslsetter.MetadataHandler('/'.join(
+                (none_dupe_components.root, none_dupe_components.module, lang,
+                 none_dupe_components.genre, none_dupe_components.subdirs,
+                 parallel + '.xsl')))
 
             for lang1, parallel1 in six.iteritems(parallels):
                 if lang1 != lang:
@@ -267,9 +255,10 @@ class AddToCorpus(object):
             This string may contain unwanted chars and
         """
         return namechanger.compute_new_basename(
-            path, os.path.join(self.goaldir,
-                               namechanger.normalise_filename(
-                                   os.path.basename(path))))
+            path,
+            os.path.join(self.goaldir,
+                         namechanger.normalise_filename(
+                             os.path.basename(path))))
 
     def copy_files_in_dir_to_corpus(self, origpath):
         """Add a directory to the corpus.
@@ -284,8 +273,8 @@ class AddToCorpus(object):
         for root, _, files in os.walk(origpath):
             for file_ in files:
                 orig_f = os.path.join(root, file_)
-                self.copy_file_to_corpus(origpath=orig_f,
-                                         metadata_filename=orig_f)
+                self.copy_file_to_corpus(
+                    origpath=orig_f, metadata_filename=orig_f)
 
     @staticmethod
     def find_duplicates(origpath):
@@ -329,31 +318,33 @@ def parse_args():
         'converted to ascii only names. Metadata files containing the '
         'original name, the main language, the genre and possibly parallel '
         'files are also made. The files are added to the working copy.')
-    parser.add_argument('origs',
-                        nargs='+',
-                        help='The original files, urls or directories where '
-                        'the original files reside (not in svn)')
-    parser.add_argument('--name',
-                        dest='name',
-                        help='Specify the name of the file in the corpus. '
-                        'Especially files fetched from the net often have '
-                        'names that are not human friendly. Use this '
-                        'option to guard against that.')
+    parser.add_argument(
+        'origs',
+        nargs='+',
+        help='The original files, urls or directories where '
+        'the original files reside (not in svn)')
+    parser.add_argument(
+        '--name',
+        dest='name',
+        help='Specify the name of the file in the corpus. '
+        'Especially files fetched from the net often have '
+        'names that are not human friendly. Use this '
+        'option to guard against that.')
 
     parallel = parser.add_argument_group('parallel')
     parallel.add_argument(
-        '-p', '--parallel',
+        '-p',
+        '--parallel',
         dest='parallel_file',
         help='Path to an existing file in the corpus that '
         'will be parallel to the orig that is about to be added')
     parallel.add_argument(
-        '-l', '--lang',
-        dest='lang',
-        help='Language of the file to be added')
+        '-l', '--lang', dest='lang', help='Language of the file to be added')
 
     no_parallel = parser.add_argument_group('no_parallel')
     no_parallel.add_argument(
-        '-d', '--directory',
+        '-d',
+        '--directory',
         dest='directory',
         help='The directory where the origs should be placed')
 
@@ -377,32 +368,26 @@ def main():
                 'You must add genre to the directory\ne.g. {}'.format(
                     os.path.join(args.directory, 'admin')))
 
-        adder = AddToCorpus(root,
-                            lang,
-                            os.path.join(genre, path))
+        adder = AddToCorpus(root, lang, os.path.join(genre, path))
         for orig in args.origs:
             if os.path.isfile(orig):
                 if args.name:
-                    newname = os.path.join(
-                        os.path.dirname(orig),
-                        args.name)
+                    newname = os.path.join(os.path.dirname(orig), args.name)
                     try:
                         shutil.copy(orig, newname)
                     except FileNotFoundError:
-                        raise SystemExit(
-                            'Not a valid filename: {}'.format(args.name))
+                        raise SystemExit('Not a valid filename: {}'.format(
+                            args.name))
                     orig = newname
 
-                adder.copy_file_to_corpus(origpath=orig,
-                                          metadata_filename=os.path.basename(
-                                              orig))
+                adder.copy_file_to_corpus(
+                    origpath=orig, metadata_filename=os.path.basename(orig))
             elif orig.startswith('http'):
                 adder.copy_url_to_corpus(orig, wanted_name=args.name)
             elif os.path.isdir(orig):
                 if (args.name):
-                    raise SystemExit(
-                        'It makes no sense to use the --name '
-                        'option together with --directory.')
+                    raise SystemExit('It makes no sense to use the --name '
+                                     'option together with --directory.')
                 adder.copy_files_in_dir_to_corpus(orig)
             else:
                 raise SystemExit(
@@ -415,38 +400,30 @@ def main():
                 'The argument -d|--directory is not allowed together with '
                 '-p|--parallel\n'
                 'Only -l|--lang is allowed together with -p|--parallel')
-        (root, _, lang, genre, path, _) = util.split_path(
-            args.parallel_file)
-        adder = AddToCorpus(root,
-                            six.u(args.lang),
-                            os.path.join(genre, path))
+        (root, _, lang, genre, path, _) = util.split_path(args.parallel_file)
+        adder = AddToCorpus(root, six.u(args.lang), os.path.join(genre, path))
 
         if not os.path.exists(args.parallel_file):
-            raise SystemExit(
-                'The given parallel file\n\t{}\n'
-                'does not exist'.format(args.parallel_file))
+            raise SystemExit('The given parallel file\n\t{}\n'
+                             'does not exist'.format(args.parallel_file))
         if len(args.origs) > 1:
-            raise SystemExit(
-                'When the -p option is given, it only makes '
-                'sense to add one file at a time.')
+            raise SystemExit('When the -p option is given, it only makes '
+                             'sense to add one file at a time.')
         if len(args.origs) == 1 and os.path.isdir(args.origs[-1]):
-            raise SystemExit(
-                'It is not possible to add a directory '
-                'when the -p option is given.')
+            raise SystemExit('It is not possible to add a directory '
+                             'when the -p option is given.')
         orig = args.origs[0]
         if os.path.isfile(orig):
             if args.name:
-                newname = os.path.join(
-                    os.path.dirname(orig),
-                    args.name)
+                newname = os.path.join(os.path.dirname(orig), args.name)
                 shutil.copy(orig, newname)
                 orig = newname
-            adder.copy_file_to_corpus(origpath=orig,
-                                      metadata_filename=orig,
-                                      parallelpath=args.parallel_file)
+            adder.copy_file_to_corpus(
+                origpath=orig,
+                metadata_filename=orig,
+                parallelpath=args.parallel_file)
         elif orig.startswith('http'):
-            adder.copy_url_to_corpus(orig,
-                                     wanted_name=args.name,
-                                     parallelpath=args.parallel_file)
+            adder.copy_url_to_corpus(
+                orig, wanted_name=args.name, parallelpath=args.parallel_file)
 
     adder.add_files_to_working_copy()

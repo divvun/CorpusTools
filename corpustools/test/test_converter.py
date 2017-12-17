@@ -18,7 +18,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Test the Converter class."""
 
 from __future__ import absolute_import
@@ -36,12 +35,12 @@ LANGUAGEGUESSER = text_cat.Classifier(None)
 
 class TestConverter(XMLTester):
     """Test the converter class."""
+
     def setUp(self):
         self.converter_inside_orig = converter.Converter(
             os.path.join(HERE,
                          'converter_data/fakecorpus/orig/nob/admin/samediggi-'
-                         'article-16.html'),
-            True)
+                         'article-16.html'), True)
 
     def test_get_orig(self):
         """Get the original name."""
@@ -56,34 +55,27 @@ class TestConverter(XMLTester):
         """Get the name of the metadata file."""
         self.assertEqual(
             self.converter_inside_orig.names.xsl,
-            os.path.join(
-                HERE,
-                'converter_data/fakecorpus/orig/nob/admin/samediggi-'
-                'article-16.html.xsl'))
+            os.path.join(HERE,
+                         'converter_data/fakecorpus/orig/nob/admin/samediggi-'
+                         'article-16.html.xsl'))
 
     def test_get_tmpdir(self):
         """Get the temp dir."""
-        self.assertEqual(
-            self.converter_inside_orig.tmpdir,
-            os.path.join(
-                HERE,
-                'converter_data/fakecorpus/tmp'))
+        self.assertEqual(self.converter_inside_orig.tmpdir,
+                         os.path.join(HERE, 'converter_data/fakecorpus/tmp'))
 
     def test_get_corpusdir(self):
         """Get the corpus directory."""
         self.assertEqual(
             self.converter_inside_orig.corpusdir.rstrip(os.path.sep),
-            os.path.join(
-                HERE,
-                'converter_data/fakecorpus'))
+            os.path.join(HERE, 'converter_data/fakecorpus'))
 
     def test_get_converted_name(self):
         """Get the name of the converted file."""
         self.assertEqual(
             self.converter_inside_orig.names.converted,
             os.path.join(
-                HERE,
-                'converter_data/fakecorpus/converted/nob/admin/samediggi-'
+                HERE, 'converter_data/fakecorpus/converted/nob/admin/samediggi-'
                 'article-16.html.xml'))
 
     def test_validate_complete(self):
@@ -139,5 +131,3 @@ class TestConverter(XMLTester):
         conv.fix_document(got)
 
         self.assertXmlEqual(got, etree.fromstring(want_string))
-
-

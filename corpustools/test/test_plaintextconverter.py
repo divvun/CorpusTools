@@ -18,7 +18,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Test conversion of plaintext files."""
 
 import codecs
@@ -39,15 +38,13 @@ class TestPlaintextConverter(xmltester.XMLTester):
     def test_to_unicode(self):
         """Check that winsami2 is converted to unicode."""
         plaintext = plaintextconverter.PlaintextConverter(
-            os.path.join(HERE,
-                         'converter_data/fakecorpus/orig/sme/riddu/'
+            os.path.join(HERE, 'converter_data/fakecorpus/orig/sme/riddu/'
                          'winsami2-test-ws2.txt'))
         got = plaintext.to_unicode()
 
         # Ensure that the data in want is unicode
         file_ = codecs.open(
-            os.path.join(HERE,
-                         'converter_data/winsami2-test-utf8.txt'),
+            os.path.join(HERE, 'converter_data/winsami2-test-utf8.txt'),
             encoding='utf8')
         want = file_.read()
         file_.close()
@@ -58,12 +55,11 @@ class TestPlaintextConverter(xmltester.XMLTester):
         """Check that weird chars are converted as exptected."""
         plaintext = plaintextconverter.PlaintextConverter(
             'orig/sme/riddu/tullball.txt')
-        got = plaintext.strip_chars(
-            u'\x0d\n'
-            u'<ASCII-MAC>\n'
-            u'<vsn:3.000000>\n'
-            u'<\!q>\n'
-            u'<\!h>\n')
+        got = plaintext.strip_chars(u'\x0d\n'
+                                    u'<ASCII-MAC>\n'
+                                    u'<vsn:3.000000>\n'
+                                    u'<\!q>\n'
+                                    u'<\!h>\n')
         want = u'''\n\n\n\n\n\n'''
 
         self.assertEqual(got, want)
@@ -105,7 +101,8 @@ Buot leat.'''))
         """Test that two consecutive lines are treated as a paragraph."""
         newstext = plaintextconverter.PlaintextConverter(
             'orig/sme/admin/tullball.txt')
-        got = newstext.content2xml(io.StringIO(u'''Guovssahasa nieida.
+        got = newstext.content2xml(
+            io.StringIO(u'''Guovssahasa nieida.
 Filbma lea.
 '''))
         want = etree.fromstring(u'''<document>

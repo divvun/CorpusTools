@@ -17,9 +17,7 @@
 #   Copyright © 2015-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Find out why conversion or analysis stops when ran in multiprocess mode."""
-
 
 from __future__ import absolute_import, print_function
 
@@ -34,11 +32,9 @@ def parse_args():
         parents=[argparse_version.parser],
         description='Run this script on some directory in freecorpus or '
         'boundcorpus to find out why files are not converted or analysed')
-    parser.add_argument('lang',
-                        help="The language that you would like to test")
-    parser.add_argument('dirs',
-                        nargs='+',
-                        help="A directory containing original corpus files")
+    parser.add_argument('lang', help="The language that you would like to test")
+    parser.add_argument(
+        'dirs', nargs='+', help="A directory containing original corpus files")
 
     return parser.parse_args()
 
@@ -53,17 +49,14 @@ def main():
         'sme',
         'xfst',
         fst_file=os.path.join(
-            os.getenv('GTHOME'), 'langs',
-            args.lang, fst_file),
+            os.getenv('GTHOME'), 'langs', args.lang, fst_file),
         disambiguation_analysis_file=os.path.join(
-            os.getenv('GTHOME'), 'langs',
-            args.lang, 'src/syntax/disambiguation.cg3'),
+            os.getenv('GTHOME'), 'langs', args.lang,
+            'src/syntax/disambiguation.cg3'),
         function_analysis_file=os.path.join(
-            os.getenv('GTHOME'),
-            'giella-shared/smi/src/syntax/korp.cg3'),
+            os.getenv('GTHOME'), 'giella-shared/smi/src/syntax/korp.cg3'),
         dependency_analysis_file=os.path.join(
-            os.getenv('GTHOME'),
-            'giella-shared/smi/src/syntax/dependency.cg3'))
+            os.getenv('GTHOME'), 'giella-shared/smi/src/syntax/dependency.cg3'))
 
     ana.xml_files = []
     for directory in args.dirs:
@@ -76,8 +69,7 @@ def main():
                     orig += 1
 
                     orig_f = os.path.abspath(os.path.join(root, f[:-4]))
-                    converted_f = orig_f.replace('orig/',
-                                                 'converted/') + '.xml'
+                    converted_f = orig_f.replace('orig/', 'converted/') + '.xml'
                     analysed_f = converted_f.replace('converted/', 'analysed/')
 
                     if not os.path.exists(converted_f):

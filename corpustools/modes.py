@@ -18,7 +18,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Classes and functions to do handle apertium modes.xml files."""
 
 from __future__ import absolute_import, print_function, unicode_literals
@@ -38,9 +37,7 @@ class Pipeline(object):
             modes.xml file.
     """
 
-    def __init__(self,
-                 mode,
-                 relative_path):
+    def __init__(self, mode, relative_path):
         """Initialise the Pipeline class.
 
         Arguments:
@@ -64,17 +61,17 @@ class Pipeline(object):
         """
         for filename in filenames:
             if not os.path.exists(filename):
-                raise(util.ArgumentError('ERROR: {} does not exist'.format(
-                    filename)))
+                raise (util.ArgumentError(
+                    'ERROR: {} does not exist'.format(filename)))
 
     def sanity_check(self):
         """Check that programs and files found in a program element exist."""
-        util.sanity_check([
-            program.get('name')
-            for program in self.mode.iter('program')])
+        util.sanity_check(
+            [program.get('name') for program in self.mode.iter('program')])
         self.raise_unless_exists([
             os.path.join(self.relative_path, file_elem.get('name'))
-            for file_elem in self.mode.iter('file')])
+            for file_elem in self.mode.iter('file')
+        ])
 
     def run_external_command(self, command, instring):
         """Run the command with input using subprocess.
@@ -96,8 +93,10 @@ class Pipeline(object):
     def check_error(command, error):
         """Print errors."""
         if error:
-            print(u'{} failed:\n{}'.format(
-                u' '.join(command), error.decode('utf8')), file=sys.stderr)
+            print(
+                u'{} failed:\n{}'.format(u' '.join(command),
+                                         error.decode('utf8')),
+                file=sys.stderr)
 
     def tag2commandpart(self, element):
         """Turn program elements to a command part.
@@ -109,9 +108,7 @@ class Pipeline(object):
             str: a program, a program option or a path to a file
         """
         if element.tag == 'file':
-            return os.path.join(
-                self.relative_path,
-                element.get('name'))
+            return os.path.join(self.relative_path, element.get('name'))
         else:
             return element.get('name')
 
@@ -133,8 +130,10 @@ class Pipeline(object):
         Returns:
             list of list: a list of subprocess compatible commands.
         """
-        return [self.program2command(program)
-                for program in self.mode.iter('program')]
+        return [
+            self.program2command(program)
+            for program in self.mode.iter('program')
+        ]
 
     def run(self, instring):
         """Run the pipeline using input.

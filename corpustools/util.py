@@ -17,9 +17,7 @@
 #   Copyright © 2014-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Utility functions and classes used by other modules in CorpusTools."""
-
 
 from __future__ import absolute_import, print_function, unicode_literals
 
@@ -101,9 +99,7 @@ def sort_by_value(table, **kwargs):
     Returns:
         dict: sorted by value.
     """
-    return sorted(six.iteritems(table),
-                  key=operator.itemgetter(1),
-                  **kwargs)
+    return sorted(six.iteritems(table), key=operator.itemgetter(1), **kwargs)
 
 
 def replace_all(replacements, string):
@@ -121,6 +117,7 @@ def replace_all(replacements, string):
 
     return string
 
+
 def split_path(path):
     """Split an absolute path into useful components.
 
@@ -130,14 +127,18 @@ def split_path(path):
     Returns:
         PathComponents namedtuple
     """
+
     def split_on_module(p):
-        for module in [u"goldstandard/orig", u"prestable/converted",
-                       u"prestable/toktmx", u"prestable/tmx", u"orig",
-                       u"converted", u"stable"]:
+        for module in [
+                u"goldstandard/orig", u"prestable/converted",
+                u"prestable/toktmx", u"prestable/tmx", u"orig", u"converted",
+                u"stable"
+        ]:
             d = u"/" + module + u"/"
             if d in p:
                 root, rest = p.split(d)
                 return root, module, rest
+
     # Ensure we have at least one / before module, for safer splitting:
     abspath = os.path.normpath(os.path.abspath(path))
     root, module, lang_etc = split_on_module(abspath)
@@ -186,9 +187,9 @@ def executable_in_path(program):
     if fpath:
         return is_executable(program)
     else:
-        return any(is_executable(possible_path)
-                   for possible_path in
-                   path_possibilities(program))
+        return any(
+            is_executable(possible_path)
+            for possible_path in path_possibilities(program))
 
 
 def sanity_check(program_list):
@@ -198,12 +199,12 @@ def sanity_check(program_list):
     """
     if 'GTHOME' not in os.environ:
         raise SetupError("You have to set the environment variable GTHOME "
-                             "to your checkout of langtech/trunk!")
+                         "to your checkout of langtech/trunk!")
     for program in program_list:
         if executable_in_path(program) is False:
             raise ExecutableMissingError(
-                "Couldn't find %s in $PATH or it is not executable." % (
-                    program.encode('utf-8'),))
+                "Couldn't find %s in $PATH or it is not executable." %
+                (program.encode('utf-8'),))
 
 
 def get_lang_resource(lang, resource, fallback=None):
@@ -238,8 +239,7 @@ def get_preprocess_command(lang):
     sanity_check([preprocess_script])
     abbr_fb = get_lang_resource("sme", 'tools/preprocess/abbr.txt')
     abbr = get_lang_resource(lang, 'tools/preprocess/abbr.txt', abbr_fb)
-    return [preprocess_script,
-            "--abbr={}".format(abbr)]
+    return [preprocess_script, "--abbr={}".format(abbr)]
 
 
 def lineno():
@@ -348,11 +348,12 @@ class ExternalCommandRunner(object):
     def run(self, command, cwd=None, to_stdin=None):
         """Run the command, save the result."""
         try:
-            subp = subprocess.Popen(command,
-                                    stdin=subprocess.PIPE,
-                                    stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE,
-                                    cwd=cwd)
+            subp = subprocess.Popen(
+                command,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                cwd=cwd)
         except OSError:
             print('Please install {}'.format(command[0]))
             raise

@@ -17,7 +17,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """This file manages conversion of files to the Giella xml format."""
 
 import argparse
@@ -81,8 +80,7 @@ class ConverterManager(object):
             conv = converter.Converter(orig_file)
             conv.write_complete(self.languageguesser())
         except (util.ConversionError, ValueError) as error:
-            LOGGER.warn('Could not convert %s\n%s',
-                        orig_file,
+            LOGGER.warn('Could not convert %s\n%s', orig_file,
                         six.text_type(error))
 
     def convert_in_parallel(self):
@@ -113,10 +111,9 @@ class ConverterManager(object):
         if os.path.isfile(xsl_file) and os.path.isfile(xsl_file[:-4]):
             metadata = xslsetter.MetadataHandler(xsl_file)
             if ((metadata.get_variable('conversion_status') == 'standard' and
-                 not self.goldstandard) or (
-                     metadata.get_variable(
-                         'conversion_status') == 'correct' and
-                     self.goldstandard)):
+                 not self.goldstandard) or
+                (metadata.get_variable('conversion_status') == 'correct' and
+                 self.goldstandard)):
                 self.files.append(xsl_file[:-4])
         else:
             LOGGER.warn('%s does not exist', xsl_file[:-4])
@@ -155,9 +152,8 @@ class ConverterManager(object):
             elif os.path.isdir(source):
                 self.add_directory(source)
             else:
-                LOGGER.error(
-                    'Can not process %s\n'
-                    'This is neither a file nor a directory.', source)
+                LOGGER.error('Can not process %s\n'
+                             'This is neither a file nor a directory.', source)
 
 
 def unwrap_self_convert(arg, **kwarg):
@@ -179,22 +175,26 @@ def parse_options():
         parents=[argparse_version.parser],
         description='Convert original files to giellatekno xml.')
 
-    parser.add_argument(u'--serial',
-                        action=u"store_true",
-                        help=u"use this for debugging the conversion \
+    parser.add_argument(
+        u'--serial',
+        action=u"store_true",
+        help=u"use this for debugging the conversion \
                         process. When this argument is used files will \
                         be converted one by one.")
-    parser.add_argument(u'--write-intermediate',
-                        action=u"store_true",
-                        help=u"Write the intermediate XML representation \
+    parser.add_argument(
+        u'--write-intermediate',
+        action=u"store_true",
+        help=u"Write the intermediate XML representation \
                         to ORIGFILE.im.xml, for debugging the XSLT.\
                         (Has no effect if the converted file already exists.)")
-    parser.add_argument(u'--goldstandard',
-                        action=u"store_true",
-                        help=u'Convert goldstandard and .correct files')
-    parser.add_argument('sources',
-                        nargs='+',
-                        help="The original file(s) or \
+    parser.add_argument(
+        u'--goldstandard',
+        action=u"store_true",
+        help=u'Convert goldstandard and .correct files')
+    parser.add_argument(
+        'sources',
+        nargs='+',
+        help="The original file(s) or \
                         directory/ies where the original files exist")
 
     args = parser.parse_args()

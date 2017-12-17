@@ -29,15 +29,13 @@ import six
 
 from corpustools import saami_crawler
 
-
 #here = os.path.dirname(__file__)
 
 
 class TestSamediggiNoPage(unittest.TestCase):
 
     def setUp(self):
-        self.content = (
-            '''
+        self.content = ('''
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -954,8 +952,7 @@ På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
 
 </body>
 </html>
-            '''
-        )
+            ''')
         if six.PY3:
             self.content = self.content.encode('utf8')
 
@@ -973,10 +970,11 @@ På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
 
             sdnp = saami_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
 
-            self.assertListEqual(sdnp.parallel_links,
-                                 [sdnp.url + 'switchlanguage/to/nor',
-                                  sdnp.url + 'switchlanguage/to/nordsamisk',
-                                  sdnp.url + 'switchlanguage/to/lulesamisk'])
+            self.assertListEqual(sdnp.parallel_links, [
+                sdnp.url + 'switchlanguage/to/nor',
+                sdnp.url + 'switchlanguage/to/nordsamisk',
+                sdnp.url + 'switchlanguage/to/lulesamisk'
+            ])
 
     def test_print_url(self):
         with requests_mock.Mocker() as m:
@@ -984,8 +982,8 @@ På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
 
             sdnp = saami_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
 
-            self.assertEqual(
-                sdnp.print_url, 'http://www.saemiedigkie.no/layout/set/print')
+            self.assertEqual(sdnp.print_url,
+                             'http://www.saemiedigkie.no/layout/set/print')
 
     def test_lang(self):
         with requests_mock.Mocker() as m:
@@ -1003,58 +1001,60 @@ På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
 
             self.assertSetEqual(
                 sdnp.links,
-                set([u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie',
-                     u'http://www.saemiedigkie.no',
-                     u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Tjirkijh/Tjirkijidie',
-                     u'http://www.saemiedigkie.no/Preessebievnesh',
-                     u'http://www.saemiedigkie.no/Healsoe-jih-sosijaale',
-                     u'http://www.saemiedigkie.no/Gaskenasjovnaale-barkoe',
-                     u'http://www.saemiedigkie.no/Healsoe-jih-sosijaale/Maanavaarjelimmie',
-                     u'http://www.saemiedigkie.no/Saemiedigkien-bijre',
-                     u'http://www.saemiedigkie.no/Kultuvrejieleme/Gaarsjelimmie',
-                     u'http://www.saemiedigkie.no/Jielemh/Duedtie/Duoji-doaibmadoarjjaortnet',
-                     u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Gaskesadth-mijjine',
-                     u'http://www.saemiedigkie.no/Saemiedigkien-bijre/AAaarganisasjovnestruktuvre/Saemiedigkieraerie',
-                     u'http://www.saemiedigkie.no/Gaskenasjovnaale-barkoe/Gaskenasjovnaale-aalkoealmetjelaavenjostoe',
-                     u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Energije-jih-mineraalh/Samediggeraddi-ii-halit-Nussirii-doaimma',
-                     u'http://www.saemiedigkie.no/Jielemh/Baaatsoe',
-                     u'http://www.saemiedigkie.no/',
-                     u'http://www.saemiedigkie.no/Lierehtimmie/Maanagierte',
-                     u'http://www.saemiedigkie.no/Gaskenasjovnaale-barkoe/Raastendaaaresth-regijovnaale-laavenjostoe',
-                     u'http://www.saemiedigkie.no/Saemiedigkien-bijre/AAaarganisasjovnestruktuvre/Stoerretjaaanghkoe',
-                     u'http://www.saemiedigkie.no/Giele/Reeremedajve-saemien-gielide',
-                     u'http://www.saemiedigkie.no/Healsoe-jih-sosijaale/Sosijaale',
-                     u'http://www.saemiedigkie.no/Lierehtimmie/Dotkeme-jih-jollebe-oeoehpehtimmie/Stipeanda-ja-doarjja/Stipenden-bijre-jollebe-oeoehpentaemma',
-                     u'http://www.saemiedigkie.no/Laante-jih-vierhtiereaktah/Laantereaktah',
-                     u'http://www.saemiedigkie.no/Veeljeme-jih-veeljemelaahkoe',
-                     u'http://www.saemiedigkie.no/Jielemh',
-                     u'http://www.saemiedigkie.no/Jielemh/Jaaartaburrie',
-                     u'http://www.saemiedigkie.no/Jielemh/Marijne-jielemh',
-                     u'http://www.saemiedigkie.no/Kultuvrejieleme/Stipende-jih-daaarjoe',
-                     u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Gaskesadth-mijjine/Bargiid-oktavuodadiedut',
-                     u'http://www.saemiedigkie.no/Gaerjagaaetie',
-                     u'http://www.saemiedigkie.no/Laante-jih-vierhtiereaktah',
-                     u'http://www.saemiedigkie.no/Vaaarhkoe',
-                     u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Rabas-virggit',
-                     u'http://www.saemiedigkie.no/Gaskenasjovnaale-barkoe/Saemien-laavenjostoe',
-                     u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Tjirkijh',
-                     u'http://www.saemiedigkie.no/Preessebievnesh/Pressebievnesh/PRM-Sametinget-og-Oslo-kommune-vil-styrke-samisk-spraak-og-kultur-i-Oslo',
-                     u'http://www.saemiedigkie.no/Giele/Bievnesh-saemien-gieli-bijre/Savvat-buori-sagastallama',
-                     u'http://www.saemiedigkie.no/Kultuvrejieleme',
-                     u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Eatnemegellievoete',
-                     'http://www.samediggi.no/Samedikki-coahk',
-                     u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Areale/Baaetieh-raeriejgujmie-baaetijen-aejkien-areale-jih-byjresepolitihkese',
-                     u'http://www.saemiedigkie.no/Stipendh-jih-daaarjoeh',
-                     u'http://www.saemiedigkie.no/Giele/Bievnesh-saemien-gieli-bijre',
-                     u'http://www.saemiedigkie.no/Laante-jih-vierhtiereaktah/Goerehtalleme',
-                     u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Areale',
-                     u'http://www.saemiedigkie.no/Giele',
-                     u'http://www.saemiedigkie.no/Kultuvrejieleme/Meedijah',
-                     u'http://www.saemiedigkie.no/Lierehtimmie',
-                     u'http://www.saemiedigkie.no/Giele/Saemien-sijjienommh',
-                     u'http://www.saemiedigkie.no/Lierehtimmie/Dotkeme-jih-jollebe-oeoehpehtimmie',
-                     u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Kultuvremojhtesh',
-                     u'http://www.saemiedigkie.no/Lierehtimmie/Maadthskuvle-jih-Jaaa',
-                     u'http://www.saemiedigkie.no/Laante-jih-vierhtiereaktah/Goeoelemereakta',
-                     u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Kultuvremojhtesh/Stipeanda-ja-doarjja/Kultuvremojhtesevaarjelimmie',
-                     u'http://www.saemiedigkie.no/Healsoe-jih-sosijaale/Healsoe']))
+                set([
+                    u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie',
+                    u'http://www.saemiedigkie.no',
+                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Tjirkijh/Tjirkijidie',
+                    u'http://www.saemiedigkie.no/Preessebievnesh',
+                    u'http://www.saemiedigkie.no/Healsoe-jih-sosijaale',
+                    u'http://www.saemiedigkie.no/Gaskenasjovnaale-barkoe',
+                    u'http://www.saemiedigkie.no/Healsoe-jih-sosijaale/Maanavaarjelimmie',
+                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre',
+                    u'http://www.saemiedigkie.no/Kultuvrejieleme/Gaarsjelimmie',
+                    u'http://www.saemiedigkie.no/Jielemh/Duedtie/Duoji-doaibmadoarjjaortnet',
+                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Gaskesadth-mijjine',
+                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre/AAaarganisasjovnestruktuvre/Saemiedigkieraerie',
+                    u'http://www.saemiedigkie.no/Gaskenasjovnaale-barkoe/Gaskenasjovnaale-aalkoealmetjelaavenjostoe',
+                    u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Energije-jih-mineraalh/Samediggeraddi-ii-halit-Nussirii-doaimma',
+                    u'http://www.saemiedigkie.no/Jielemh/Baaatsoe',
+                    u'http://www.saemiedigkie.no/',
+                    u'http://www.saemiedigkie.no/Lierehtimmie/Maanagierte',
+                    u'http://www.saemiedigkie.no/Gaskenasjovnaale-barkoe/Raastendaaaresth-regijovnaale-laavenjostoe',
+                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre/AAaarganisasjovnestruktuvre/Stoerretjaaanghkoe',
+                    u'http://www.saemiedigkie.no/Giele/Reeremedajve-saemien-gielide',
+                    u'http://www.saemiedigkie.no/Healsoe-jih-sosijaale/Sosijaale',
+                    u'http://www.saemiedigkie.no/Lierehtimmie/Dotkeme-jih-jollebe-oeoehpehtimmie/Stipeanda-ja-doarjja/Stipenden-bijre-jollebe-oeoehpentaemma',
+                    u'http://www.saemiedigkie.no/Laante-jih-vierhtiereaktah/Laantereaktah',
+                    u'http://www.saemiedigkie.no/Veeljeme-jih-veeljemelaahkoe',
+                    u'http://www.saemiedigkie.no/Jielemh',
+                    u'http://www.saemiedigkie.no/Jielemh/Jaaartaburrie',
+                    u'http://www.saemiedigkie.no/Jielemh/Marijne-jielemh',
+                    u'http://www.saemiedigkie.no/Kultuvrejieleme/Stipende-jih-daaarjoe',
+                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Gaskesadth-mijjine/Bargiid-oktavuodadiedut',
+                    u'http://www.saemiedigkie.no/Gaerjagaaetie',
+                    u'http://www.saemiedigkie.no/Laante-jih-vierhtiereaktah',
+                    u'http://www.saemiedigkie.no/Vaaarhkoe',
+                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Rabas-virggit',
+                    u'http://www.saemiedigkie.no/Gaskenasjovnaale-barkoe/Saemien-laavenjostoe',
+                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Tjirkijh',
+                    u'http://www.saemiedigkie.no/Preessebievnesh/Pressebievnesh/PRM-Sametinget-og-Oslo-kommune-vil-styrke-samisk-spraak-og-kultur-i-Oslo',
+                    u'http://www.saemiedigkie.no/Giele/Bievnesh-saemien-gieli-bijre/Savvat-buori-sagastallama',
+                    u'http://www.saemiedigkie.no/Kultuvrejieleme',
+                    u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Eatnemegellievoete',
+                    'http://www.samediggi.no/Samedikki-coahk',
+                    u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Areale/Baaetieh-raeriejgujmie-baaetijen-aejkien-areale-jih-byjresepolitihkese',
+                    u'http://www.saemiedigkie.no/Stipendh-jih-daaarjoeh',
+                    u'http://www.saemiedigkie.no/Giele/Bievnesh-saemien-gieli-bijre',
+                    u'http://www.saemiedigkie.no/Laante-jih-vierhtiereaktah/Goerehtalleme',
+                    u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Areale',
+                    u'http://www.saemiedigkie.no/Giele',
+                    u'http://www.saemiedigkie.no/Kultuvrejieleme/Meedijah',
+                    u'http://www.saemiedigkie.no/Lierehtimmie',
+                    u'http://www.saemiedigkie.no/Giele/Saemien-sijjienommh',
+                    u'http://www.saemiedigkie.no/Lierehtimmie/Dotkeme-jih-jollebe-oeoehpehtimmie',
+                    u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Kultuvremojhtesh',
+                    u'http://www.saemiedigkie.no/Lierehtimmie/Maadthskuvle-jih-Jaaa',
+                    u'http://www.saemiedigkie.no/Laante-jih-vierhtiereaktah/Goeoelemereakta',
+                    u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Kultuvremojhtesh/Stipeanda-ja-doarjja/Kultuvremojhtesevaarjelimmie',
+                    u'http://www.saemiedigkie.no/Healsoe-jih-sosijaale/Healsoe'
+                ]))

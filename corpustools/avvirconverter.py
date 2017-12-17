@@ -17,9 +17,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 u"""Convert Ávvir-files to the Giella xml format."""
-
 
 from lxml import etree
 
@@ -140,8 +138,7 @@ def convert_story(avvir_doc):
 
         title.tag = 'section'
 
-    for title in avvir_doc.findall(
-            './/story[@class="Undertittel"]'):
+    for title in avvir_doc.findall('.//story[@class="Undertittel"]'):
         for para in title.findall('./p'):
             para.set('type', 'title')
 

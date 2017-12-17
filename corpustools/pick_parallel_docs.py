@@ -18,9 +18,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Pick out parallel files to prestable/converted inside a corpus directory."""
-
 
 from __future__ import absolute_import, print_function
 
@@ -63,8 +61,8 @@ class ParallelPicker(object):
             maxratio (int): the maximum acceptable ratio of sentences
                 between two parallel documents
         """
-        self.vcs = versioncontrol.vcs(language1_dir[
-            :language1_dir.find('converted/')])
+        self.vcs = versioncontrol.vcs(
+            language1_dir[:language1_dir.find('converted/')])
         self.language1_dir = language1_dir
         self.calculate_language1(language1_dir)
         self.parallel_language = parallel_language
@@ -76,14 +74,13 @@ class ParallelPicker(object):
     def calculate_language1(self, language1_dir):
         """The language is the part after 'converted/'."""
         converted_pos = language1_dir.find('converted/')
-        part_after_converted = language1_dir[
-            converted_pos + len('converted/'):]
+        part_after_converted = language1_dir[converted_pos + len('converted/'):]
 
         if part_after_converted.find('/') == -1:
             self.language1 = part_after_converted
         else:
-            self.language1 = part_after_converted[
-                :part_after_converted.find('/')]
+            self.language1 = part_after_converted[:part_after_converted.find(
+                '/')]
 
     def find_lang1_files(self):
         """Find the language1 files.
@@ -147,12 +144,8 @@ class ParallelPicker(object):
         if self.minratio < ratio < self.maxratio:
             return True
         else:
-            self.poor_ratio.append(
-                (file1.name,
-                 file1.word_count,
-                 file2.name,
-                 file2.word_count,
-                 ratio))
+            self.poor_ratio.append((file1.name, file1.word_count, file2.name,
+                                    file2.word_count, ratio))
 
     def copy_file(self, xml_file):
         """Copy xml_file to prestable/converted.
@@ -161,8 +154,8 @@ class ParallelPicker(object):
             xml_file (corpusxmlfile.CorpusXMLFile): the file that should be
                 copied to prestable/converted.
         """
-        prestable_dir = xml_file.dirname.replace(
-            'converted', 'prestable/converted')
+        prestable_dir = xml_file.dirname.replace('converted',
+                                                 'prestable/converted')
 
         if not os.path.isdir(prestable_dir):
             with util.ignored(OSError):
@@ -186,11 +179,8 @@ class ParallelPicker(object):
         Returns:
             bool
         """
-        return (
-            self.has_sufficient_words(
-                file1, file2) and
-            self.has_sufficient_ratio(
-                file1, file2))
+        return (self.has_sufficient_words(file1, file2) and
+                self.has_sufficient_ratio(file1, file2))
 
     def valid_parallels(self):
         """Pick valid parallel file pairs.
@@ -220,8 +210,7 @@ class ParallelPicker(object):
                 quiet=True,
                 aligner='tca2',
                 stdout=False,
-                force=True
-            )
+                force=True)
 
             self.vcs.add(outfile)
             self.vcs.add(outfile + '.html')
@@ -247,13 +236,17 @@ def parse_options():
 
     parser.add_argument(
         'language1_dir', help='directory where the files of language1 exist')
-    parser.add_argument('-p', '--parallel_language', dest='parallel_language',
-                        help='The language where we would like to find '
-                        'parallel documents', required=True)
-    parser.add_argument('--minratio', dest='minratio',
-                        help='The minimum ratio', required=True)
-    parser.add_argument('--maxratio', dest='maxratio',
-                        help='The maximum ratio', required=True)
+    parser.add_argument(
+        '-p',
+        '--parallel_language',
+        dest='parallel_language',
+        help='The language where we would like to find '
+        'parallel documents',
+        required=True)
+    parser.add_argument(
+        '--minratio', dest='minratio', help='The minimum ratio', required=True)
+    parser.add_argument(
+        '--maxratio', dest='maxratio', help='The maximum ratio', required=True)
 
     args = parser.parse_args()
     return args

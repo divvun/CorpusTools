@@ -17,9 +17,7 @@
 #   Copyright © 2016-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Manage corpus files in various ways."""
-
 
 from __future__ import absolute_import, print_function, unicode_literals
 
@@ -72,12 +70,16 @@ def remove_files_with_duplicate_content():
 
     foundcount = 0
     notfoundcount = 0
-    fingetter = adder.AddToCorpus(six.text_type(
-        os.getenv('GTFREE')), u'fin', u'admin/sd/www.samediggi.fi')
-    smsgetter = adder.AddToCorpus(six.text_type(
-        os.getenv('GTFREE')), this_lang, u'admin/sd/www.samediggi.fi')
-    for root, dirs, files in os.walk(os.path.join(os.getenv('GTFREE'), 'orig', this_lang,
-                                                  u'admin/sd/www.samediggi.fi')):
+    fingetter = adder.AddToCorpus(
+        six.text_type(os.getenv('GTFREE')), u'fin',
+        u'admin/sd/www.samediggi.fi')
+    smsgetter = adder.AddToCorpus(
+        six.text_type(os.getenv('GTFREE')), this_lang,
+        u'admin/sd/www.samediggi.fi')
+    for root, dirs, files in os.walk(
+            os.path.join(
+                os.getenv('GTFREE'), 'orig', this_lang,
+                u'admin/sd/www.samediggi.fi')):
         print(root)
         for f in files:
             if f.endswith('.xsl') and 'itemid=256' in f:
@@ -89,16 +91,20 @@ def remove_files_with_duplicate_content():
                 parallellfile = parallellfile.replace('.xsl', '')
                 parallellfile = parallellfile.replace(
                     'lang=' + ufflangs[this_lang], 'lang=finnish')
-                parallellfile = parallellfile.replace(
-                    'itemid=256', 'itemid=195')
+                parallellfile = parallellfile.replace('itemid=256',
+                                                      'itemid=195')
 
                 if not os.path.exists(parallellfile):
                     if this_lang != 'fin':
-                        fingetter.copy_url_to_corpus(filename.replace('Itemid=256', 'Itemid=195').replace(
-                            'lang=' + ufflangs[this_lang], 'lang=finnish'))
+                        fingetter.copy_url_to_corpus(
+                            filename.replace('Itemid=256',
+                                             'Itemid=195').replace(
+                                                 'lang=' + ufflangs[this_lang],
+                                                 'lang=finnish'))
 
-                smsgetter.copy_url_to_corpus(filename.replace('Itemid=256', 'Itemid=195'),
-                                             parallelpath=parallellfile)
+                smsgetter.copy_url_to_corpus(
+                    filename.replace('Itemid=256', 'Itemid=195'),
+                    parallelpath=parallellfile)
                 move_files.mover(path.replace('.xsl', ''), '')
 
     smsgetter.add_files_to_working_copy()
@@ -111,7 +117,10 @@ def adder_adderexception_invalid_url():
     for lang in langs:
         try:
             (r, tmpname) = downloader.download(
-                'http://www.samediggi.fi/index2.php?option=com_content&task=view&id=420&pop=1&page=0&Itemid=149', params={'lang': lang})
+                'http://www.samediggi.fi/index2.php?option=com_content&task=view&id=420&pop=1&page=0&Itemid=149',
+                params={
+                    'lang': lang
+                })
         except adder.AdderException as e:
             print('her gikk det galt', str(e))
 
@@ -128,37 +137,37 @@ def print_finder():
     file_count = 0
     img_count = 0
 
-    downloader = adder.UrlDownloader(
-        os.path.join(os.getenv('GTFREE'), 'tmp'))
+    downloader = adder.UrlDownloader(os.path.join(os.getenv('GTFREE'), 'tmp'))
 
     for lang in langs.keys():
-        for root, dirs, files in os.walk(os.path.join(os.getenv('GTFREE'), 'orig', lang, 'admin/sd/www.samediggi.fi')):
+        for root, dirs, files in os.walk(
+                os.path.join(
+                    os.getenv('GTFREE'), 'orig', lang,
+                    'admin/sd/www.samediggi.fi')):
             for f in files:
                 if f.endswith('.html'):
                     file_count += 1
                     path = os.path.join(root, f)
                     tree = lxml.html.parse(path)
                     print_img = tree.find(
-                        './/img[@src="http://www.samediggi.fi/images/M_images/printButton.png"]')
+                        './/img[@src="http://www.samediggi.fi/images/M_images/printButton.png"]'
+                    )
                     if print_img is not None:
                         img_count += 1
                         parent = print_img.getparent()
                         href = urlparse.urlparse(parent.get('href'))
 
                         query = href.query
-                        newquery = [part for part in query.split('&')
-                                    if (part.startswith('option') or
-                                        part.startswith('id') or
-                                        part.startswith('task'))]
+                        newquery = [
+                            part for part in query.split('&')
+                            if (part.startswith('option') or part.startswith(
+                                'id') or part.startswith('task'))
+                        ]
                         newquery.append('lang=' + langs[lang])
 
                         newhref = urlparse.urlunparse(
-                            (href.scheme,
-                             href.netloc,
-                             href.path,
-                             href.params,
-                             '&'.join(newquery),
-                             href.fragment))
+                            (href.scheme, href.netloc, href.path, href.params,
+                             '&'.join(newquery), href.fragment))
 
                         print('about to download', newhref)
                         (r, tmpname) = downloader.download(newhref)
@@ -188,13 +197,13 @@ def remove_if_no_smX():
     file_count = 0
     img_count = 0
 
-    downloader = adder.UrlDownloader(
-        os.path.join(os.getenv('GTFREE'), 'tmp'))
+    downloader = adder.UrlDownloader(os.path.join(os.getenv('GTFREE'), 'tmp'))
 
     for lang1 in ['eng', 'fin']:
         for root, dirs, files in os.walk(
-            os.path.join(os.getenv('GTFREE'),
-                         'orig', lang1, 'admin/sd/www.samediggi.fi')):
+                os.path.join(
+                    os.getenv('GTFREE'), 'orig', lang1,
+                    'admin/sd/www.samediggi.fi')):
             for f in files:
                 if f.endswith('.html'):
                     file_count += 1
@@ -202,12 +211,9 @@ def remove_if_no_smX():
 
                     smx_exists = False
                     for lang2 in ['sme', 'smn', 'sms']:
-                        smxpath = path.replace(
-                            'orig/' + lang1,
-                            'orig/' + lang2)
-                        smxpath = smxpath.replace(
-                            '_lang=' + langs[lang1],
-                            '_lang=' + langs[lang2])
+                        smxpath = path.replace('orig/' + lang1, 'orig/' + lang2)
+                        smxpath = smxpath.replace('_lang=' + langs[lang1],
+                                                  '_lang=' + langs[lang2])
                         if os.path.exists(smxpath):
                             smx_exists = True
 
@@ -233,21 +239,17 @@ def find_files_without_parallels():
     for url in urlset:
         if print_part not in url and '.aspx' not in url:
             parts = urlparse.urlsplit(url)
-            nurl = urlparse.urlunparse((
-                parts.scheme,
-                os.path.join(parts.netloc, print_part),
-                parts.path,
-                '',
-                parts.query,
-                parts.fragment
-            ))
+            nurl = urlparse.urlunparse((parts.scheme,
+                                        os.path.join(parts.netloc,
+                                                     print_part), parts.path,
+                                        '', parts.query, parts.fragment))
             util.print_frame(debug=nurl)
             try:
                 (r, tmpname) = downloader.download(nurl)
                 newfilename = namechanger.normalise_filename(
                     os.path.basename(tmpname))
-                newpath = os.path.join(os.path.dirname(
-                    url_to_filename[url]), newfilename)
+                newpath = os.path.join(
+                    os.path.dirname(url_to_filename[url]), newfilename)
                 oldpath = url_to_filename[url].replace('.xsl', '')
 
                 if os.path.exists(newpath) and oldpath != newpath:
@@ -281,7 +283,8 @@ def find_not_analysed(directory):
             ana_file = os.path.join(ana_root, f)
             orig_root = root.replace('converted/', 'orig/')
             orig_file = os.path.join(orig_root, f.replace('.xml', ''))
-            if 'plenum_no/dc' not in ana_file and not os.path.exists(ana_file) and os.path.exists(orig_file):
+            if 'plenum_no/dc' not in ana_file and not os.path.exists(
+                    ana_file) and os.path.exists(orig_file):
                 print(os.path.join(root, f))
 
 
@@ -321,23 +324,25 @@ def fix_pdf_filenames(directory):
                             os.path.basename(tmpname))
                         if newfilename != f:
                             util.print_frame(debug=newfilename)
-                            move_files.mover(
-                                file_, os.path.join(root, newfilename))
+                            move_files.mover(file_,
+                                             os.path.join(root, newfilename))
 
 
 def move_twenty_percent_to_goldcorpus():
     """Move twenty percent of the files to the goldcorpus"""
-    directories = ['orig/sme/admin/sd/cealkamusat_fi',
-                   'orig/sme/admin/sd/davviriikkalas_samekonvensuvdna_fi',
-                   'orig/sme/admin/sd/inaugurations_fi',
-                   'orig/sme/admin/sd/ohcan_lahkai_fi',
-                   'orig/sme/admin/sd/sami_parlamentarals_raddi_fi',
-                   'orig/sme/admin/sd/www.samediggi.fi',
-                   'orig/sme/facta/samediggi.fi/']
+    directories = [
+        'orig/sme/admin/sd/cealkamusat_fi',
+        'orig/sme/admin/sd/davviriikkalas_samekonvensuvdna_fi',
+        'orig/sme/admin/sd/inaugurations_fi',
+        'orig/sme/admin/sd/ohcan_lahkai_fi',
+        'orig/sme/admin/sd/sami_parlamentarals_raddi_fi',
+        'orig/sme/admin/sd/www.samediggi.fi', 'orig/sme/facta/samediggi.fi/'
+    ]
 
     fluff = collections.defaultdict(list)
     for dir in directories:
-        for root, dirs, files in os.walk(os.path.join(os.getenv('GTFREE'), dir)):
+        for root, dirs, files in os.walk(
+                os.path.join(os.getenv('GTFREE'), dir)):
             for f in files:
                 if f.endswith('.xsl'):
                     name = os.path.join(root, f[:-4])

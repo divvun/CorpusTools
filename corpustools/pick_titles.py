@@ -22,12 +22,10 @@
 #   Copyright © 2013-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Program to pick out documents to be saved to the corpus from samediggi.se.
 
 The documents have been fetched using wget.
 """
-
 
 from __future__ import absolute_import, print_function
 
@@ -73,11 +71,14 @@ class DocumentPicker(object):
                 remote = urllib2.urlopen(urllib2.Request(url.encode('utf8')))
                 self.copyfile(remote, file_)
             except urllib2.HTTPError:
-                print(util.lineno(), 'Could not fetch',
-                      file_.replace('.xsl', ''), file=sys.stderr)
+                print(
+                    util.lineno(),
+                    'Could not fetch',
+                    file_.replace('.xsl', ''),
+                    file=sys.stderr)
             except UnicodeEncodeError:
-                print(util.lineno(), 'Unicode error in url', url,
-                      file=sys.stderr)
+                print(
+                    util.lineno(), 'Unicode error in url', url, file=sys.stderr)
             print(util.lineno(), 'sleeping …')
             time.sleep(2)
 
@@ -96,6 +97,7 @@ def main():
     #  dp.conclude()
     #  dp.check_consistency()
     #  dp.move_files_set_metadata()
+
 
 if __name__ == "__main__":
     main()

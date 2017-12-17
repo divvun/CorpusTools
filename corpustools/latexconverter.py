@@ -17,7 +17,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Convert doc files to the Giella xml format."""
 
 from __future__ import absolute_import, print_function
@@ -35,8 +34,8 @@ from corpustools.htmlconverter import (convert2xhtml, webpage_to_unicodehtml,
 
 def latex_dir(filename):
     """Turn filename to the path where the converted html files are found."""
-    return os.path.join(os.path.dirname(filename),
-                        util.basename_noext(filename, '.tex'))
+    return os.path.join(
+        os.path.dirname(filename), util.basename_noext(filename, '.tex'))
 
 
 def latex_to_dir(filename):
@@ -77,8 +76,7 @@ def latexdir_to_html(filename):
 
 def latexnode_to_div(filename):
     """Extract body elements from node*.html documents."""
-    html_docs = glob.glob('{}/{}'.format(
-        latex_dir(filename), 'node*.html'))
+    html_docs = glob.glob('{}/{}'.format(latex_dir(filename), 'node*.html'))
 
     for html_doc in html_docs[:-1]:
         latex_html = convert2xhtml(webpage_to_unicodehtml(html_doc))

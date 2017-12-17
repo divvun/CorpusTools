@@ -18,7 +18,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 u"""Test conversion of Ávvir xml files."""
 
 import lxml.etree as etree
@@ -63,75 +62,71 @@ class TestAvvirConverter(xmltester.XMLTester):
             '    <story id="a">'
             '        <p>a<p>b</p></p>'
             '    </story>'
-            '</article>'
-        )
+            '</article>')
 
     def test_remove_identical_ids(self):
         """Check that only the first of stories with identical ids are kept."""
-        want = etree.fromstring(
-            '<article>'
-            '    <story id="a" class="Tittel">'
-            '        <p>a</p>'
-            '    </story>'
-            '    <story id="b" class="Undertittel">'
-            '        <p>b</p>'
-            '    </story>'
-            '    <story id="c" class="ingress">'
-            '        <p>c</p>'
-            '    </story>'
-            '    <story id="d" class="body">'
-            '        <p class="tekst">d<br/>e<br/></p>'
-            '        <p>f</p>'
-            '    </story>'
-            '    <story id="g" class="body">'
-            '        <p class="tekst">h<span>i</span>j</p>'
-            '    </story>'
-            '    <story id="k" class="body">'
-            '        <p>l'
-            '            <span>'
-            '                m'
-            '                <br/>'
-            '                n'
-            '            </span>'
-            '            o'
-            '        </p>'
-            '    </story>'
-            '</article>'
-        )
+        want = etree.fromstring('<article>'
+                                '    <story id="a" class="Tittel">'
+                                '        <p>a</p>'
+                                '    </story>'
+                                '    <story id="b" class="Undertittel">'
+                                '        <p>b</p>'
+                                '    </story>'
+                                '    <story id="c" class="ingress">'
+                                '        <p>c</p>'
+                                '    </story>'
+                                '    <story id="d" class="body">'
+                                '        <p class="tekst">d<br/>e<br/></p>'
+                                '        <p>f</p>'
+                                '    </story>'
+                                '    <story id="g" class="body">'
+                                '        <p class="tekst">h<span>i</span>j</p>'
+                                '    </story>'
+                                '    <story id="k" class="body">'
+                                '        <p>l'
+                                '            <span>'
+                                '                m'
+                                '                <br/>'
+                                '                n'
+                                '            </span>'
+                                '            o'
+                                '        </p>'
+                                '    </story>'
+                                '</article>')
 
         avvirconverter.remove_identical_ids(self.avvir)
         self.assertXmlEqual(self.avvir, want)
 
     def test_convert_p_1(self):
         """Check when p does not contain p."""
-        want = etree.fromstring(
-            '<article>'
-            '    <story class="Tittel" id="a">'
-            '        <p>a</p>'
-            '    </story>'
-            '    <story class="Undertittel" id="b">'
-            '        <p>b</p>'
-            '    </story>'
-            '    <story class="ingress" id="c">'
-            '        <p>c</p>'
-            '    </story>'
-            '    <story class="body" id="d">'
-            '        <p>d</p>'
-            '        <p>e</p>'
-            '        <p>f</p>'
-            '    </story>'
-            '    <story class="body" id="g">'
-            '        <p>h</p>'
-            '        <p>i</p>'
-            '        <p>j</p>'
-            '    </story>'
-            '    <story class="body" id="k">'
-            '        <p>l</p>'
-            '        <p>m</p>'
-            '        <p>n</p>'
-            '        <p>o</p>'
-            '    </story>'
-            '</article>')
+        want = etree.fromstring('<article>'
+                                '    <story class="Tittel" id="a">'
+                                '        <p>a</p>'
+                                '    </story>'
+                                '    <story class="Undertittel" id="b">'
+                                '        <p>b</p>'
+                                '    </story>'
+                                '    <story class="ingress" id="c">'
+                                '        <p>c</p>'
+                                '    </story>'
+                                '    <story class="body" id="d">'
+                                '        <p>d</p>'
+                                '        <p>e</p>'
+                                '        <p>f</p>'
+                                '    </story>'
+                                '    <story class="body" id="g">'
+                                '        <p>h</p>'
+                                '        <p>i</p>'
+                                '        <p>j</p>'
+                                '    </story>'
+                                '    <story class="body" id="k">'
+                                '        <p>l</p>'
+                                '        <p>m</p>'
+                                '        <p>n</p>'
+                                '        <p>o</p>'
+                                '    </story>'
+                                '</article>')
 
         avvirconverter.remove_identical_ids(self.avvir)
         avvirconverter.convert_p(self.avvir)
@@ -147,12 +142,11 @@ class TestAvvirConverter(xmltester.XMLTester):
             '   </story>'
             '</article>')
 
-        want = etree.fromstring(
-            '<article>'
-            '   <story class="body">'
-            '       <p>corrected text with tail</p>'
-            '   </story>'
-            '</article>')
+        want = etree.fromstring('<article>'
+                                '   <story class="body">'
+                                '       <p>corrected text with tail</p>'
+                                '   </story>'
+                                '</article>')
 
         avvirconverter.convert_p(avvir)
 
@@ -170,13 +164,12 @@ class TestAvvirConverter(xmltester.XMLTester):
             '   </story>'
             '</article>')
 
-        want = etree.fromstring(
-            '<article>'
-            '   <story class="body">'
-            '       <p>bla bla</p>'
-            '       <p>corrected text with tail</p>'
-            '   </story>'
-            '</article>')
+        want = etree.fromstring('<article>'
+                                '   <story class="body">'
+                                '       <p>bla bla</p>'
+                                '       <p>corrected text with tail</p>'
+                                '   </story>'
+                                '</article>')
 
         avvirconverter.convert_p(avvir)
 
@@ -184,20 +177,18 @@ class TestAvvirConverter(xmltester.XMLTester):
 
     def test_convert_p_4(self):
         """p.text is None."""
-        avvir = etree.fromstring(
-            '<article>'
-            '   <story class="body">'
-            '       <p><p> </p>with tail'
-            '       </p>'
-            '   </story>'
-            '</article>')
+        avvir = etree.fromstring('<article>'
+                                 '   <story class="body">'
+                                 '       <p><p> </p>with tail'
+                                 '       </p>'
+                                 '   </story>'
+                                 '</article>')
 
-        want = etree.fromstring(
-            '<article>'
-            '   <story class="body">'
-            '       <p> with tail</p>'
-            '   </story>'
-            '</article>')
+        want = etree.fromstring('<article>'
+                                '   <story class="body">'
+                                '       <p> with tail</p>'
+                                '   </story>'
+                                '</article>')
 
         avvirconverter.convert_p(avvir)
 
@@ -213,12 +204,11 @@ class TestAvvirConverter(xmltester.XMLTester):
             '   </story>'
             '</article>')
 
-        want = etree.fromstring(
-            '<article>'
-            '   <story class="body">'
-            '       <p>láigovistti </p>'
-            '   </story>'
-            '</article>')
+        want = etree.fromstring('<article>'
+                                '   <story class="body">'
+                                '       <p>láigovistti </p>'
+                                '   </story>'
+                                '</article>')
 
         avvirconverter.convert_p(avvir)
 
@@ -234,13 +224,12 @@ class TestAvvirConverter(xmltester.XMLTester):
             '   </story>'
             '</article>')
 
-        want = etree.fromstring(
-            '<article>'
-            '   <story class="body">'
-            '       <p>Stohpu</p>'
-            '       <p>vuovdemassi</p>'
-            '   </story>'
-            '</article>')
+        want = etree.fromstring('<article>'
+                                '   <story class="body">'
+                                '       <p>Stohpu</p>'
+                                '       <p>vuovdemassi</p>'
+                                '   </story>'
+                                '</article>')
 
         avvirconverter.convert_p(avvir)
 
@@ -257,12 +246,11 @@ class TestAvvirConverter(xmltester.XMLTester):
             '   </story>'
             '</article>')
 
-        want = etree.fromstring(
-            '<article>'
-            '   <story class="body">'
-            '       <p>Ozan visttáža</p>'
-            '   </story>'
-            '</article>')
+        want = etree.fromstring('<article>'
+                                '   <story class="body">'
+                                '       <p>Ozan visttáža</p>'
+                                '   </story>'
+                                '</article>')
 
         avvirconverter.convert_p(avvir)
 
@@ -270,26 +258,25 @@ class TestAvvirConverter(xmltester.XMLTester):
 
     def test_convert_story(self):
         """Test convert_story."""
-        want = etree.fromstring(
-            '<article>'
-            '    <section>'
-            '        <p type="title">a</p>'
-            '    </section>'
-            '    <section>'
-            '        <p type="title">b</p>'
-            '    </section>'
-            '    <p>c</p>'
-            '    <p>d</p>'
-            '    <p>e</p>'
-            '    <p>f</p>'
-            '    <p>h</p>'
-            '    <p>i</p>'
-            '    <p>j</p>'
-            '    <p>l</p>'
-            '    <p>m</p>'
-            '    <p>n</p>'
-            '    <p>o</p>'
-            '</article>')
+        want = etree.fromstring('<article>'
+                                '    <section>'
+                                '        <p type="title">a</p>'
+                                '    </section>'
+                                '    <section>'
+                                '        <p type="title">b</p>'
+                                '    </section>'
+                                '    <p>c</p>'
+                                '    <p>d</p>'
+                                '    <p>e</p>'
+                                '    <p>f</p>'
+                                '    <p>h</p>'
+                                '    <p>i</p>'
+                                '    <p>j</p>'
+                                '    <p>l</p>'
+                                '    <p>m</p>'
+                                '    <p>n</p>'
+                                '    <p>o</p>'
+                                '</article>')
 
         avvirconverter.remove_identical_ids(self.avvir)
         avvirconverter.convert_p(self.avvir)
@@ -299,28 +286,27 @@ class TestAvvirConverter(xmltester.XMLTester):
 
     def test_convert_article(self):
         """Test convert_article."""
-        want = etree.fromstring(
-            '<document>'
-            '    <body>'
-            '        <section>'
-            '            <p type="title">a</p>'
-            '        </section>'
-            '        <section>'
-            '            <p type="title">b</p>'
-            '        </section>'
-            '        <p>c</p>'
-            '        <p>d</p>'
-            '        <p>e</p>'
-            '        <p>f</p>'
-            '        <p>h</p>'
-            '        <p>i</p>'
-            '        <p>j</p>'
-            '        <p>l</p>'
-            '        <p>m</p>'
-            '        <p>n</p>'
-            '        <p>o</p>'
-            '    </body>'
-            '</document>')
+        want = etree.fromstring('<document>'
+                                '    <body>'
+                                '        <section>'
+                                '            <p type="title">a</p>'
+                                '        </section>'
+                                '        <section>'
+                                '            <p type="title">b</p>'
+                                '        </section>'
+                                '        <p>c</p>'
+                                '        <p>d</p>'
+                                '        <p>e</p>'
+                                '        <p>f</p>'
+                                '        <p>h</p>'
+                                '        <p>i</p>'
+                                '        <p>j</p>'
+                                '        <p>l</p>'
+                                '        <p>m</p>'
+                                '        <p>n</p>'
+                                '        <p>o</p>'
+                                '    </body>'
+                                '</document>')
 
         avvirconverter.remove_identical_ids(self.avvir)
         avvirconverter.convert_p(self.avvir)

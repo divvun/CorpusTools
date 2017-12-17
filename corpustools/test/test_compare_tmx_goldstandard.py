@@ -31,19 +31,18 @@ here = os.path.dirname(__file__)
 
 
 class TestTmxComparator(unittest.TestCase):
-
     """A test class for the TmxComparator class"""
 
     def test_equal_tmxes(self):
         comp = compare_tmx_goldstandard.TmxComparator(
-            parallelize.Tmx(etree.parse(
-                os.path.join(
-                    here,
-                    'parallelize_data/aarseth2-n.htm.toktmx'))),
-            parallelize.Tmx(etree.parse(
-                os.path.join(
-                    here,
-                    'parallelize_data/aarseth2-n.htm.toktmx'))))
+            parallelize.Tmx(
+                etree.parse(
+                    os.path.join(here,
+                                 'parallelize_data/aarseth2-n.htm.toktmx'))),
+            parallelize.Tmx(
+                etree.parse(
+                    os.path.join(here,
+                                 'parallelize_data/aarseth2-n.htm.toktmx'))))
 
         self.assertEqual(comp.get_number_of_differing_lines(), -1)
         self.assertEqual(comp.get_lines_in_wantedfile(), 274)

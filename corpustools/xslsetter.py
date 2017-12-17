@@ -17,9 +17,7 @@
 #   Copyright © 2013-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Get and set metadata in metadata files."""
-
 
 from __future__ import absolute_import, print_function, unicode_literals
 
@@ -75,8 +73,7 @@ class MetadataHandler(object):
         if not os.path.exists(filename):
             if not create:
                 raise util.ArgumentError("{} does not exist!".format(filename))
-            self.tree = etree.parse(os.path.join(here,
-                                                 'xslt/XSL-template.xsl'))
+            self.tree = etree.parse(os.path.join(here, 'xslt/XSL-template.xsl'))
         else:
             try:
                 self.tree = etree.parse(filename)
@@ -108,9 +105,8 @@ class MetadataHandler(object):
             variable = self._get_variable_elt(key)
             variable.attrib['select'] = "'{}'".format(value)
         except AttributeError as e:
-            raise UserWarning(
-                'Tried to update {} with value {}\n'
-                'Error was {}'.format(key, value, str(e)))
+            raise UserWarning('Tried to update {} with value {}\n'
+                              'Error was {}'.format(key, value, str(e)))
 
     def get_variable(self, key):
         """Get the value associated with the key.
@@ -135,8 +131,8 @@ class MetadataHandler(object):
             tuple of str: a key/value pair
         """
         ns = {'xsl': 'http://www.w3.org/1999/XSL/Transform'}
-        for variable in self.tree.getroot().xpath('.//xsl:variable[@select]',
-                                                  namespaces=ns):
+        for variable in self.tree.getroot().xpath(
+                './/xsl:variable[@select]', namespaces=ns):
             value = self.get_variable(variable.get('name'))
             if value is not None and value.strip():
                 yield variable.get('name'), value
@@ -152,9 +148,11 @@ class MetadataHandler(object):
             return {}
         else:
             elts = parallels.findall("parallel_text")
-            return {p.attrib[self.lang_key]: p.attrib["location"].strip("'")
-                    for p in elts
-                    if p.attrib["location"].strip("'") != ""}
+            return {
+                p.attrib[self.lang_key]: p.attrib["location"].strip("'")
+                for p in elts
+                if p.attrib["location"].strip("'") != ""
+            }
 
     @property
     def mlangs(self):
@@ -167,8 +165,10 @@ class MetadataHandler(object):
         if mlangs is None:
             return set()
         else:
-            return {mlang.get(self.lang_key)
-                    for mlang in mlangs.findall("language")}
+            return {
+                mlang.get(self.lang_key)
+                for mlang in mlangs.findall("language")
+            }
 
     def make_xsl_variable(self, name):
         elt = etree.Element(
@@ -199,14 +199,13 @@ class MetadataHandler(object):
             language (str): the language of the parallel file.
             location (str): the name of the parallel file.
         """
-        attrib = {self.lang_key: language,
-                  "location": location}
+        attrib = {self.lang_key: language, "location": location}
         parallels = self._get_variable_elt("parallels")
         if parallels is None:
             parallels = self.make_xsl_variable('parallels')
 
-        elt = parallels.find("parallel_text[@{}='{}']".format(self.lang_key,
-                                                              language))
+        elt = parallels.find("parallel_text[@{}='{}']".format(
+            self.lang_key, language))
         if elt is not None:
             elt.attrib.update(attrib)
         else:
@@ -246,13 +245,14 @@ class MetadataHandler(object):
                            for r in skip_ranges_norm)
 
             try:
-                pages.extend([page
-                              for start, end in sorted(skip_ranges)
-                              for page in six.moves.range(start, end + 1)])
+                pages.extend([
+                    page
+                    for start, end in sorted(skip_ranges)
+                    for page in six.moves.range(start, end + 1)
+                ])
 
             except ValueError:
-                raise XsltError(
-                    "Invalid format: {}".format(skip_pages))
+                raise XsltError("Invalid format: {}".format(skip_pages))
 
         return pages
 
@@ -275,13 +275,14 @@ class MetadataHandler(object):
                            for r in skip_ranges_norm)
 
             try:
-                lines.extend([line
-                              for start, end in sorted(skip_ranges)
-                              for line in six.moves.range(start, end + 1)])
+                lines.extend([
+                    line
+                    for start, end in sorted(skip_ranges)
+                    for line in six.moves.range(start, end + 1)
+                ])
 
             except ValueError:
-                raise XsltError(
-                    "Invalid format: {}".format(skip_lines))
+                raise XsltError("Invalid format: {}".format(skip_lines))
 
         return lines
 
@@ -297,10 +298,13 @@ class MetadataHandler(object):
         """
         margin_lines = {
             key: self.get_variable(key).strip()
-            for key in [position + 'right_margin', position + 'top_margin',
-                        position + 'left_margin', position + 'bottom_margin']
+            for key in [
+                position + 'right_margin', position + 'top_margin',
+                position + 'left_margin', position + 'bottom_margin'
+            ]
             if (self.get_variable(key) is not None and
-                self.get_variable(key).strip() != '')}
+                self.get_variable(key).strip() != '')
+        }
 
         return margin_lines
 
@@ -430,8 +434,7 @@ class MetadataHandler(object):
         """Write self.tree to self.filename."""
         try:
             with open(self.filename, 'wb') as outfile:
-                self.tree.write(outfile, encoding='utf-8',
-                                xml_declaration=True)
+                self.tree.write(outfile, encoding='utf-8', xml_declaration=True)
                 outfile.write(b'\n')
         except IOError as e:
             print('cannot write', self.filename)
@@ -446,20 +449,22 @@ class MetadataHandler(object):
             list of tuples of str: each tuple has a (start, end) xpath path
             pair. If the skip_elements variable is empty, return None.
         """
+
         def get_with_ns(path):
-            return '/'.join(['html:' + part if not part.startswith('html:') and
-                             re.match('^\w', part) else part
-                             for part in path.split('/')])
+            return '/'.join([
+                'html:' + part if not part.startswith('html:') and
+                re.match('^\w', part) else part for part in path.split('/')
+            ])
 
         def get_pair(pair):
             p = pair.split(';')
-            return (
-                get_with_ns(p[0].strip()),
-                get_with_ns(p[1].strip()))
+            return (get_with_ns(p[0].strip()), get_with_ns(p[1].strip()))
 
         if self.get_variable('skip_elements'):
-            return [get_pair(pair)
-                    for pair in self.get_variable('skip_elements').split(',')]
+            return [
+                get_pair(pair)
+                for pair in self.get_variable('skip_elements').split(',')
+            ]
 
     @property
     def linespacing(self):
@@ -470,9 +475,9 @@ class MetadataHandler(object):
         '''
         value = self.get_variable('linespacing')
 
-        if (value) and (
-                ('all' in value and ('odd' in value or 'even' in value) or
-                '=' not in value)):
+        if (value) and (('all' in value and
+                         ('odd' in value or 'even' in value) or
+                         '=' not in value)):
             raise XsltError(
                 'Invalid format in the variable linespacing in the file:'
                 '\n{}\n{}\n'

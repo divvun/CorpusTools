@@ -17,7 +17,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Code to detect and fix semi official and unofficial encodings.
 
 (Northern) sami character eight bit encodings have been semi or
@@ -64,9 +63,8 @@ def fix_macsami_latin1(instring):
     Returns:
         str with fixed encoding.
     """
-    return instring.encode('latin1',
-                           errors='xmlcharrefreplace').decode(
-                               'macsami')
+    return instring.encode(
+        'latin1', errors='xmlcharrefreplace').decode('macsami')
 
 
 def fix_macsami_mac(instring):
@@ -122,8 +120,8 @@ def fix_meadowmari_cp1252(instring):
     return util.replace_all(
         mari_replacements,
         instring.encode('cp1252',
-                        errors='xmlcharrefreplace').decode(
-                            'meadowmari'))
+                        errors='xmlcharrefreplace').decode('meadowmari'))
+
 
 CTYPES = {
     u'mix-mac-sami-and-some-unknown-encoding': {
@@ -193,7 +191,6 @@ CTYPES = {
         u'¹': u'Ž',
         u'µ': u'Ŧ',
     },
-
     u'mix-of-latin4-and-iso-ir-197_to_cp1252': {
         u'á': u'á',
         u'ó': u'š',
@@ -205,7 +202,6 @@ CTYPES = {
         u'Ó': u'Š',
         u'£': u'Đ',
     },
-
     u'double-utf8': {
         u'Ã¡': u'á',
         u'Ã?': u'Á',
@@ -241,12 +237,10 @@ CTYPES = {
         u'Â´': u'´',
         u'â€¢': u'•',
     },
-
     u'finnish-lawtexts-in-pdf': {
         u'þ': u'č',
         u'á': u'á',
     },
-
 }
 
 
@@ -279,14 +273,11 @@ def guess_body_encoding(content, mainlang):
     winner = None
     if u'à' in content and u'û' in content and mainlang in CYRILLIC_LANGUAGES:
         winner = u'cp1251_cp1252'
-    elif (
-            (u'‡' in content and u'ã' not in content) or
-            (u'Œ' in content and u'ÄŒ' not in content)):
+    elif ((u'‡' in content and u'ã' not in content) or
+          (u'Œ' in content and u'ÄŒ' not in content)):
         winner = u'mac-sami_to_cp1252'
-    elif (
-            (u'' in content and u'ã' not in content) or
-            (u'' in content) or
-            (u'¯' in content and u'á' not in content)):
+    elif ((u'' in content and u'ã' not in content) or (u'' in content) or
+          (u'¯' in content and u'á' not in content)):
         winner = u'mac-sami_to_latin1'
     elif u'' in content and u'ã':
         winner = u'mix-mac-sami-and-some-unknown-encoding'

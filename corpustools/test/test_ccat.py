@@ -30,7 +30,6 @@ from corpustools import ccat
 
 
 class TestCcatHyph(unittest.TestCase):
-
     '''Test how ccat handles hyph'''
 
     def test_hyph1(self):
@@ -38,11 +37,9 @@ class TestCcatHyph(unittest.TestCase):
         xml_printer = ccat.XMLPrinter()
         buffer = io.StringIO()
         xml_printer.etree = etree.parse(
-            io.BytesIO(
-                b'<document id="no_id" xml:lang="nob">'
-                b'<body><p>mellom<hyph/>krigs<hyph/>tiden</p></body>'
-                b'</document>')
-        )
+            io.BytesIO(b'<document id="no_id" xml:lang="nob">'
+                       b'<body><p>mellom<hyph/>krigs<hyph/>tiden</p></body>'
+                       b'</document>'))
 
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), u'mellomkrigstiden ¶\n')
@@ -52,11 +49,9 @@ class TestCcatHyph(unittest.TestCase):
         xml_printer = ccat.XMLPrinter(hyph_replacement='xml')
         buffer = io.StringIO()
         xml_printer.etree = etree.parse(
-            io.BytesIO(
-                b'<document id="no_id" xml:lang="nob">'
-                b'<body><p>mellom<hyph/>krigs<hyph/>tiden</p></body>'
-                b'</document>')
-        )
+            io.BytesIO(b'<document id="no_id" xml:lang="nob">'
+                       b'<body><p>mellom<hyph/>krigs<hyph/>tiden</p></body>'
+                       b'</document>'))
 
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(),
@@ -67,11 +62,9 @@ class TestCcatHyph(unittest.TestCase):
         xml_printer = ccat.XMLPrinter(hyph_replacement='-')
         buffer = io.StringIO()
         xml_printer.etree = etree.parse(
-            io.BytesIO(
-                b'<document id="no_id" xml:lang="nob">'
-                b'<body><p>mellom<hyph/>krigs<hyph/>tiden</p></body>'
-                b'</document>')
-        )
+            io.BytesIO(b'<document id="no_id" xml:lang="nob">'
+                       b'<body><p>mellom<hyph/>krigs<hyph/>tiden</p></body>'
+                       b'</document>'))
 
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), u'mellom-krigs-tiden ¶\n')
@@ -82,11 +75,9 @@ class TestCcatHyph(unittest.TestCase):
         buffer = io.StringIO()
 
         xml_printer.etree = etree.parse(
-            io.BytesIO(
-                b'<document id="no_id" xml:lang="nob">'
-                b'<body><p>mellom<hyph/><hyph/>tiden</p></body>'
-                b'</document>')
-        )
+            io.BytesIO(b'<document id="no_id" xml:lang="nob">'
+                       b'<body><p>mellom<hyph/><hyph/>tiden</p></body>'
+                       b'</document>'))
 
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), u'mellom-tiden ¶\n')
@@ -96,18 +87,15 @@ class TestCcatHyph(unittest.TestCase):
         xml_printer = ccat.XMLPrinter(hyph_replacement=None)
         buffer = io.StringIO()
         xml_printer.etree = etree.parse(
-            io.BytesIO(
-                b'<document id="no_id" xml:lang="nob">'
-                b'<body><p>mellom<hyph/>krigs<hyph/>tiden</p></body>'
-                b'</document>')
-        )
+            io.BytesIO(b'<document id="no_id" xml:lang="nob">'
+                       b'<body><p>mellom<hyph/>krigs<hyph/>tiden</p></body>'
+                       b'</document>'))
 
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), u'mellom krigs tiden ¶\n')
 
 
 class TestCcatErrormarkup(unittest.TestCase):
-
     '''Test how ccat handles errormarkup'''
 
     def test_single_error_inline(self):
@@ -134,8 +122,9 @@ class TestCcatErrormarkup(unittest.TestCase):
         textlist = []
         xml_printer.collect_not_inline_errors(input_error, textlist)
 
-        self.assertEqual('\n'.join(textlist), (
-            'fiske leting\tfiskeleting\t#errtype=nosplit,pos=noun'))
+        self.assertEqual(
+            '\n'.join(textlist),
+            ('fiske leting\tfiskeleting\t#errtype=nosplit,pos=noun'))
 
     def test_single_error_not_inline_with_filename(self):
         '''Plain error element, one word per line output, with filename'''
@@ -150,16 +139,15 @@ class TestCcatErrormarkup(unittest.TestCase):
         textlist = []
         xml_printer.collect_not_inline_errors(input_error, textlist)
 
-        self.assertEqual('\n'.join(textlist), (
-            'fiske leting\tfiskeleting'
-            '\t#errtype=nosplit,pos=noun, file: p.xml'))
+        self.assertEqual('\n'.join(textlist),
+                         ('fiske leting\tfiskeleting'
+                          '\t#errtype=nosplit,pos=noun, file: p.xml'))
 
     def test_single_error_not_inline_with_filename_without_attributes(self):
         xml_printer = ccat.XMLPrinter(print_filename=True)
-        input_error = etree.fromstring(
-            '<errorortreal correct="fiskeleting">'
-            '    fiske leting'
-            '</errorortreal>')
+        input_error = etree.fromstring('<errorortreal correct="fiskeleting">'
+                                       '    fiske leting'
+                                       '</errorortreal>')
 
         xml_printer.filename = 'p.xml'
 
@@ -185,8 +173,7 @@ class TestCcatErrormarkup(unittest.TestCase):
         textlist = []
         xml_printer.collect_inline_errors(input_error, textlist, 'nob')
 
-        self.assertEqual('\n'.join(textlist),
-                         u'skoledagene er så vanskelige')
+        self.assertEqual('\n'.join(textlist), u'skoledagene er så vanskelige')
 
     def test_multi_errormorphsyn_not_inline_with_filename(self):
         '''Nested error element, one word per line output, with filename'''
@@ -200,17 +187,18 @@ class TestCcatErrormarkup(unittest.TestCase):
             '    </errorort>'
             '</errormorphsyn>')
 
-        xml_printer = ccat.XMLPrinter(one_word_per_line=True,
-                                      print_filename=True)
+        xml_printer = ccat.XMLPrinter(
+            one_word_per_line=True, print_filename=True)
         xml_printer.filename = 'p.xml'
 
         textlist = []
         xml_printer.collect_not_inline_errors(input_error, textlist)
 
-        self.assertEqual('\n'.join(textlist), (
-            u'skoledagene er så vanskelig\tskoledagene er så vanskelige'
-            '\t#cat=x,const=spred,errtype=agr,orig=x,pos=adj, file: p.xml\n'
-            'vanskerlig\tvanskelig\t#errtype=nosilent,pos=adj, file: p.xml'))
+        self.assertEqual(
+            '\n'.join(textlist),
+            (u'skoledagene er så vanskelig\tskoledagene er så vanskelige'
+             '\t#cat=x,const=spred,errtype=agr,orig=x,pos=adj, file: p.xml\n'
+             'vanskerlig\tvanskelig\t#errtype=nosilent,pos=adj, file: p.xml'))
 
     def test_multi_errorlex_not_inline(self):
         '''Nested error element, one word per line output'''
@@ -226,8 +214,9 @@ class TestCcatErrormarkup(unittest.TestCase):
         xml_printer = ccat.XMLPrinter(typos=True)
         xml_printer.collect_not_inline_errors(input_error, textlist)
 
-        self.assertEqual('\n'.join(textlist), (
-            u'makkár soga\tman soga\nmakkar\tmakkár\t#errtype=á,pos=interr'))
+        self.assertEqual(
+            '\n'.join(textlist),
+            (u'makkár soga\tman soga\nmakkar\tmakkár\t#errtype=á,pos=interr'))
 
 
 class TestCcat(unittest.TestCase):
@@ -236,26 +225,24 @@ class TestCcat(unittest.TestCase):
         '''Test the output of a plain p with default text flow'''
         xml_printer = ccat.XMLPrinter()
         buffer = io.StringIO()
-        input_p = etree.fromstring(
-            '<p>Et stykke av Norge som er lite kjent - '
-            'Litt om Norge i mellomkrigstiden</p>')
+        input_p = etree.fromstring('<p>Et stykke av Norge som er lite kjent - '
+                                   'Litt om Norge i mellomkrigstiden</p>')
 
         xml_printer.collect_text(input_p, 'nob', buffer)
-        self.assertEqual(buffer.getvalue(), (
-            u'Et stykke av Norge som er lite kjent - '
-            u'Litt om Norge i mellomkrigstiden ¶\n'))
+        self.assertEqual(buffer.getvalue(),
+                         (u'Et stykke av Norge som er lite kjent - '
+                          u'Litt om Norge i mellomkrigstiden ¶\n'))
 
     def test_p_with_span(self):
         '''The output of a plain p with a span element'''
         xml_printer = ccat.XMLPrinter()
         buffer = io.StringIO()
 
-        input_p = etree.fromstring(
-            '<p>I 1864 ga han ut boka '
-            '    <span type="quote" xml:lang="dan">'
-            '        "Fornuftigt Madstel"'
-            '    </span>.'
-            '</p>')
+        input_p = etree.fromstring('<p>I 1864 ga han ut boka '
+                                   '    <span type="quote" xml:lang="dan">'
+                                   '        "Fornuftigt Madstel"'
+                                   '    </span>.'
+                                   '</p>')
 
         xml_printer.collect_text(input_p, 'nob', buffer)
         self.assertEqual(buffer.getvalue(),
@@ -288,57 +275,53 @@ class TestCcat(unittest.TestCase):
 
     def test_p_one_word_per_line(self):
         '''Test the output of a plain p element, one word per line'''
-        input_p = etree.fromstring(
-            '<p>Et stykke av Norge som er lite kjent - '
-            'Litt om Norge i mellomkrigstiden</p>')
+        input_p = etree.fromstring('<p>Et stykke av Norge som er lite kjent - '
+                                   'Litt om Norge i mellomkrigstiden</p>')
 
         xml_printer = ccat.XMLPrinter(one_word_per_line=True)
 
         buffer = io.StringIO()
 
         xml_printer.collect_text(input_p, 'nob', buffer)
-        self.assertEqual(buffer.getvalue(), (
-            'Et\n'
-            'stykke\n'
-            'av\n'
-            'Norge\n'
-            'som\n'
-            'er\n'
-            'lite\n'
-            'kjent\n'
-            '-\n'
-            'Litt\n'
-            'om\n'
-            'Norge\n'
-            'i\n'
-            'mellomkrigstiden\n'))
+        self.assertEqual(buffer.getvalue(), ('Et\n'
+                                             'stykke\n'
+                                             'av\n'
+                                             'Norge\n'
+                                             'som\n'
+                                             'er\n'
+                                             'lite\n'
+                                             'kjent\n'
+                                             '-\n'
+                                             'Litt\n'
+                                             'om\n'
+                                             'Norge\n'
+                                             'i\n'
+                                             'mellomkrigstiden\n'))
 
     def test_p_with_span_one_word_per_line(self):
         '''Output a plain p that contains a span element
 
         one_word_per-line is True
         '''
-        input_p = etree.fromstring(
-            '<p>I 1864 ga han ut boka '
-            '    <span type="quote" xml:lang="dan">'
-            '        "Fornuftigt Madstel"'
-            '    </span>.'
-            '</p>')
+        input_p = etree.fromstring('<p>I 1864 ga han ut boka '
+                                   '    <span type="quote" xml:lang="dan">'
+                                   '        "Fornuftigt Madstel"'
+                                   '    </span>.'
+                                   '</p>')
 
         xml_printer = ccat.XMLPrinter(one_word_per_line=True)
         buffer = io.StringIO()
 
         xml_printer.collect_text(input_p, 'nob', buffer)
-        self.assertEqual(buffer.getvalue(), (
-            'I\n'
-            '1864\n'
-            'ga\n'
-            'han\n'
-            'ut\n'
-            'boka\n'
-            '"Fornuftigt\n'
-            'Madstel"\n'
-            '.\n'))
+        self.assertEqual(buffer.getvalue(), ('I\n'
+                                             '1864\n'
+                                             'ga\n'
+                                             'han\n'
+                                             'ut\n'
+                                             'boka\n'
+                                             '"Fornuftigt\n'
+                                             'Madstel"\n'
+                                             '.\n'))
 
     def test_p_with_error_one_word_per_line(self):
         input_p = etree.fromstring(
@@ -360,12 +343,13 @@ class TestCcat(unittest.TestCase):
 
         buffer = io.StringIO()
         xml_printer.collect_text(input_p, 'sme', buffer)
-        self.assertEqual(buffer.getvalue(), (
-            u'livččii\n'
-            u'makkarge\tmakkárge\t#errtype=á,pos=adv\n'
-            u'politihkka,\nmuhto\nrahpasit\nbaicca\nmuitalivčče\n'
-            u'makkár soga\tman soga\n'
-            u'makkar\tmakkár\t#errtype=á,pos=interr\nsoga\nsii\n'))
+        self.assertEqual(
+            buffer.getvalue(),
+            (u'livččii\n'
+             u'makkarge\tmakkárge\t#errtype=á,pos=adv\n'
+             u'politihkka,\nmuhto\nrahpasit\nbaicca\nmuitalivčče\n'
+             u'makkár soga\tman soga\n'
+             u'makkar\tmakkár\t#errtype=á,pos=interr\nsoga\nsii\n'))
 
     def test_p_with_error_correction(self):
         '''correction = True, print all corrections'''
@@ -388,9 +372,10 @@ class TestCcat(unittest.TestCase):
 
         buffer = io.StringIO()
         xml_printer.collect_text(input_p, 'sme', buffer)
-        self.assertEqual(buffer.getvalue(), (
-            u'livččii makkárge politihkka, muhto rahpasit baicca muitalivčče '
-            u'man soga sii ¶\n'))
+        self.assertEqual(
+            buffer.getvalue(),
+            (u'livččii makkárge politihkka, muhto rahpasit baicca muitalivčče '
+             u'man soga sii ¶\n'))
 
     def test_p_with_error_filtering_errorlex(self):
         '''errorlex = True, print errorlex corrections'''
@@ -413,9 +398,10 @@ class TestCcat(unittest.TestCase):
 
         buffer = io.StringIO()
         xml_printer.collect_text(input_p, 'sme', buffer)
-        self.assertEqual(buffer.getvalue(), (
-            u'livččii makkarge politihkka, muhto rahpasit baicca muitalivčče '
-            u'man soga sii ¶\n'))
+        self.assertEqual(
+            buffer.getvalue(),
+            (u'livččii makkarge politihkka, muhto rahpasit baicca muitalivčče '
+             u'man soga sii ¶\n'))
 
     def test_p_with_error_filtering_errormorphsyn(self):
         '''errormorphsyn = True, print errormorphsyn corrections'''
@@ -438,9 +424,10 @@ class TestCcat(unittest.TestCase):
 
         buffer = io.StringIO()
         xml_printer.collect_text(input_p, 'sme', buffer)
-        self.assertEqual(buffer.getvalue(), (
-            u'livččii makkarge politihkka, muhto rahpasit baicca muitalivčče '
-            u'makkar soga sii ¶\n'))
+        self.assertEqual(
+            buffer.getvalue(),
+            (u'livččii makkarge politihkka, muhto rahpasit baicca muitalivčče '
+             u'makkar soga sii ¶\n'))
 
     def test_p_with_error_filtering_errorort(self):
         '''errorort = True, print errorort corrections'''
@@ -463,9 +450,10 @@ class TestCcat(unittest.TestCase):
 
         buffer = io.StringIO()
         xml_printer.collect_text(input_p, 'sme', buffer)
-        self.assertEqual(buffer.getvalue(), (
-            u'livččii makkárge politihkka, muhto rahpasit baicca muitalivčče '
-            u'makkár soga sii ¶\n'))
+        self.assertEqual(
+            buffer.getvalue(),
+            (u'livččii makkárge politihkka, muhto rahpasit baicca muitalivčče '
+             u'makkár soga sii ¶\n'))
 
     def test_p_with_error_filtering_errorortreal(self):
         xml_printer = ccat.XMLPrinter(errorortreal=True)
@@ -487,22 +475,20 @@ class TestCcat(unittest.TestCase):
 
         buffer = io.StringIO()
         xml_printer.collect_text(input_p, 'sme', buffer)
-        self.assertEqual(buffer.getvalue(), (
-            u'livččii makkarge politihkka, muhto rahpasit baicca muitalivčče '
-            u'makkar soga sii ¶\n'))
+        self.assertEqual(
+            buffer.getvalue(),
+            (u'livččii makkarge politihkka, muhto rahpasit baicca muitalivčče '
+             u'makkar soga sii ¶\n'))
 
     def test_visit_this_p_default(self):
         '''Visit only plain p and <p type=text> elements'''
         xml_printer = ccat.XMLPrinter()
 
-        for types in [' type="title"',
-                      ' type="listitem"',
-                      ' type="tablecell"']:
+        for types in [' type="title"', ' type="listitem"', ' type="tablecell"']:
             input_xml = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
             self.assertFalse(xml_printer.visit_this_node(input_xml))
 
-        for types in ['',
-                      ' type="text"']:
+        for types in ['', ' type="text"']:
             input_xml = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
             self.assertTrue(xml_printer.visit_this_node(input_xml))
 
@@ -510,10 +496,9 @@ class TestCcat(unittest.TestCase):
         '''Visit only <p type=title> elements when title is True'''
         xml_printer = ccat.XMLPrinter(title=True)
 
-        for types in ['',
-                      ' type="text"',
-                      ' type="listitem"',
-                      ' type="tablecell"']:
+        for types in [
+                '', ' type="text"', ' type="listitem"', ' type="tablecell"'
+        ]:
             input_xml = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
             self.assertFalse(xml_printer.visit_this_node(input_xml))
 
@@ -525,10 +510,7 @@ class TestCcat(unittest.TestCase):
         '''Visit only <p type=listitem> elements when listitem is True'''
         xml_printer = ccat.XMLPrinter(listitem=True)
 
-        for types in ['',
-                      ' type="text"',
-                      ' type="title"',
-                      ' type="tablecell"']:
+        for types in ['', ' type="text"', ' type="title"', ' type="tablecell"']:
             input_xml = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
             self.assertFalse(xml_printer.visit_this_node(input_xml))
 
@@ -540,10 +522,7 @@ class TestCcat(unittest.TestCase):
         '''Visit only <p type=tablecell> elements when table is True'''
         xml_printer = ccat.XMLPrinter(table=True)
 
-        for types in ['',
-                      ' type="text"',
-                      ' type="title"',
-                      ' type="listitem"']:
+        for types in ['', ' type="text"', ' type="title"', ' type="listitem"']:
             input_xml = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
             self.assertFalse(xml_printer.visit_this_node(input_xml))
 
@@ -555,11 +534,10 @@ class TestCcat(unittest.TestCase):
         '''Visit all p elements when all_paragraphs is True'''
         xml_printer = ccat.XMLPrinter(all_paragraphs=True)
 
-        for types in ['',
-                      ' type="text"',
-                      ' type="title"',
-                      ' type="listitem"',
-                      ' type="tablecell"']:
+        for types in [
+                '', ' type="text"', ' type="title"', ' type="listitem"',
+                ' type="tablecell"'
+        ]:
             input_xml = etree.fromstring('<p' + types + '>ášŧŋđžčøåæ</p>')
             self.assertTrue(xml_printer.visit_this_node(input_xml))
 
@@ -572,13 +550,9 @@ class TestCcat(unittest.TestCase):
         '''
         xml_printer = ccat.XMLPrinter()
 
-        for types in [' type="title"',
-                      ' type="listitem"',
-                      ' type="tablecell"']:
-            document = (
-                '''<document id="no_id" xml:lang="sme"><body><p''' +
-                types +
-                '''>ášŧŋđžčøåæ</p></body></document>''')
+        for types in [' type="title"', ' type="listitem"', ' type="tablecell"']:
+            document = ('''<document id="no_id" xml:lang="sme"><body><p''' +
+                        types + '''>ášŧŋđžčøåæ</p></body></document>''')
 
             if six.PY3:
                 xml_printer.etree = etree.parse(
@@ -588,12 +562,9 @@ class TestCcat(unittest.TestCase):
             buffer = xml_printer.process_file()
             self.assertEqual(buffer.getvalue(), '')
 
-        for types in ['',
-                      ' type="text"']:
-            document = (
-                '''<document id="no_id" xml:lang="sme"><body><p''' +
-                types +
-                '''>ášŧŋđžčøåæ</p></body></document>''')
+        for types in ['', ' type="text"']:
+            document = ('''<document id="no_id" xml:lang="sme"><body><p''' +
+                        types + '''>ášŧŋđžčøåæ</p></body></document>''')
 
             if six.PY3:
                 xml_printer.etree = etree.parse(
@@ -607,12 +578,12 @@ class TestCcat(unittest.TestCase):
         '''Print only content of p elements with type=title.'''
         xml_printer = ccat.XMLPrinter(title=True)
 
-        for types in ['',
-                      ' type="text"',
-                      ' type="listitem"',
-                      ' type="tablecell"']:
+        for types in [
+                '', ' type="text"', ' type="listitem"', ' type="tablecell"'
+        ]:
             document = (
-                '<document id="no_id" xml:lang="sme"><body><p {}>ášŧŋđžčøåæ</p></body></document>'.format(types))
+                '<document id="no_id" xml:lang="sme"><body><p {}>ášŧŋđžčøåæ</p></body></document>'.
+                format(types))
             if six.PY3:
                 xml_printer.etree = etree.parse(
                     io.BytesIO(document.encode('utf8')))
@@ -623,7 +594,8 @@ class TestCcat(unittest.TestCase):
 
         for types in [' type="title"']:
             document = (
-                '<document id="no_id" xml:lang="sme"><body><p {}>ášŧŋđžčøåæ</p></body></document>'.format(types))
+                '<document id="no_id" xml:lang="sme"><body><p {}>ášŧŋđžčøåæ</p></body></document>'.
+                format(types))
             if six.PY3:
                 xml_printer.etree = etree.parse(
                     io.BytesIO(document.encode('utf8')))
@@ -636,14 +608,9 @@ class TestCcat(unittest.TestCase):
         '''Print only content of p elements with type=listitem.'''
         xml_printer = ccat.XMLPrinter(listitem=True)
 
-        for types in ['',
-                      ' type="text"',
-                      ' type="title"',
-                      ' type="tablecell"']:
-            document = (
-                '''<document id="no_id" xml:lang="sme"><body><p''' +
-                types +
-                '''>ášŧŋđžčøåæ</p></body></document>''')
+        for types in ['', ' type="text"', ' type="title"', ' type="tablecell"']:
+            document = ('''<document id="no_id" xml:lang="sme"><body><p''' +
+                        types + '''>ášŧŋđžčøåæ</p></body></document>''')
             if six.PY3:
                 xml_printer.etree = etree.parse(
                     io.BytesIO(document.encode('utf8')))
@@ -653,10 +620,8 @@ class TestCcat(unittest.TestCase):
             self.assertEqual(buffer.getvalue(), '')
 
         for types in [' type="listitem"']:
-            document = (
-                '''<document id="no_id" xml:lang="sme"><body><p''' +
-                types +
-                '''>ášŧŋđžčøåæ</p></body></document>''')
+            document = ('''<document id="no_id" xml:lang="sme"><body><p''' +
+                        types + '''>ášŧŋđžčøåæ</p></body></document>''')
             if six.PY3:
                 xml_printer.etree = etree.parse(
                     io.BytesIO(document.encode('utf8')))
@@ -669,14 +634,9 @@ class TestCcat(unittest.TestCase):
         '''Print only content of p elements with type=title gets output.'''
         xml_printer = ccat.XMLPrinter(table=True)
 
-        for types in ['',
-                      ' type="text"',
-                      ' type="title"',
-                      ' type="listitem"']:
-            document = (
-                '<document id="no_id" xml:lang="sme"><body><p ' +
-                types +
-                '>ášŧŋđžčøåæ</p></body></document>')
+        for types in ['', ' type="text"', ' type="title"', ' type="listitem"']:
+            document = ('<document id="no_id" xml:lang="sme"><body><p ' +
+                        types + '>ášŧŋđžčøåæ</p></body></document>')
 
             if six.PY3:
                 xml_printer.etree = etree.parse(
@@ -687,10 +647,8 @@ class TestCcat(unittest.TestCase):
             self.assertEqual(buffer.getvalue(), '')
 
         for types in [' type="tablecell"']:
-            document = (
-                '<document id="no_id" xml:lang="sme"><body><p ' +
-                types +
-                '>ášŧŋđžčøåæ</p></body></document>')
+            document = ('<document id="no_id" xml:lang="sme"><body><p ' +
+                        types + '>ášŧŋđžčøåæ</p></body></document>')
             if six.PY3:
                 xml_printer.etree = etree.parse(
                     io.BytesIO(document.encode('utf8')))
@@ -703,15 +661,12 @@ class TestCcat(unittest.TestCase):
         '''all_paragraphs option is True, all p elements get output.'''
         xml_printer = ccat.XMLPrinter(all_paragraphs=True)
 
-        for types in ['',
-                      ' type="text"',
-                      ' type="title"',
-                      ' type="listitem"',
-                      ' type="tablecell"']:
-            document = (
-                '''<document id="no_id" xml:lang="sme"><body><p''' +
-                types +
-                '''>ášŧŋđžčøåæ</p></body></document>''')
+        for types in [
+                '', ' type="text"', ' type="title"', ' type="listitem"',
+                ' type="tablecell"'
+        ]:
+            document = ('''<document id="no_id" xml:lang="sme"><body><p''' +
+                        types + '''>ášŧŋđžčøåæ</p></body></document>''')
             if six.PY3:
                 xml_printer.etree = etree.parse(
                     io.BytesIO(document.encode('utf8')))
@@ -727,47 +682,42 @@ class TestCcat(unittest.TestCase):
         a plain errorort one, and a nested errorlex one when
         the one_word_per_line and errorlex options are True.
         '''
-        document = (
-            '<document id="no_id" xml:lang="sme">'
-            '   <body>'
-            '       <p>'
-            '           livččii'
-            '           <errorort correct="makkárge" errtype="á" '
-            '           pos="adv">'
-            '               makkarge'
-            '           </errorort>'
-            '           politihkka, muhto rahpasit baicca muitalivčče'
-            '           <errorlex correct="man soga">'
-            '               <errorort correct="makkár" errtype="á" '
-            '               pos="interr">'
-            '                   makkar'
-            '               </errorort>'
-            '               soga'
-            '           </errorlex>'
-            '           sii'
-            '       </p>'
-            '   </body>'
-            '</document>')
+        document = ('<document id="no_id" xml:lang="sme">'
+                    '   <body>'
+                    '       <p>'
+                    '           livččii'
+                    '           <errorort correct="makkárge" errtype="á" '
+                    '           pos="adv">'
+                    '               makkarge'
+                    '           </errorort>'
+                    '           politihkka, muhto rahpasit baicca muitalivčče'
+                    '           <errorlex correct="man soga">'
+                    '               <errorort correct="makkár" errtype="á" '
+                    '               pos="interr">'
+                    '                   makkar'
+                    '               </errorort>'
+                    '               soga'
+                    '           </errorlex>'
+                    '           sii'
+                    '       </p>'
+                    '   </body>'
+                    '</document>')
 
-        xml_printer = ccat.XMLPrinter(one_word_per_line=True,
-                                      errorlex=True)
+        xml_printer = ccat.XMLPrinter(one_word_per_line=True, errorlex=True)
         if six.PY3:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document.encode('utf8')))
+            xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
         else:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document))
+            xml_printer.etree = etree.parse(io.BytesIO(document))
         buffer = xml_printer.process_file()
-        self.assertEqual(buffer.getvalue(), (
-            u'livččii\n'
-            u'makkarge\n'
-            u'politihkka,\n'
-            u'muhto\n'
-            u'rahpasit\n'
-            u'baicca\n'
-            u'muitalivčče\n'
-            u'makkár soga\tman soga\n'
-            u'sii\n'))
+        self.assertEqual(buffer.getvalue(), (u'livččii\n'
+                                             u'makkarge\n'
+                                             u'politihkka,\n'
+                                             u'muhto\n'
+                                             u'rahpasit\n'
+                                             u'baicca\n'
+                                             u'muitalivčče\n'
+                                             u'makkár soga\tman soga\n'
+                                             u'sii\n'))
 
     def test_process_file_one_word_per_line_errorort(self):
         '''Print only errorort content
@@ -776,48 +726,44 @@ class TestCcat(unittest.TestCase):
         a plain errorort one, and a nested errorlex one when
         the one_word_per_line and errorort options are True
         '''
-        document = (
-            '<document id="no_id" xml:lang="sme">'
-            '   <body>'
-            '       <p>'
-            '           livččii'
-            '           <errorort correct="makkárge" errtype="á" '
-            '           pos="adv">'
-            '               makkarge'
-            '           </errorort>'
-            '           politihkka, muhto rahpasit baicca muitalivčče'
-            '           <errorlex correct="man soga">'
-            '               <errorort correct="makkár" errtype="á" '
-            '               pos="interr">'
-            '                   makkar'
-            '               </errorort>'
-            '               soga'
-            '           </errorlex>'
-            '           sii'
-            '       </p>'
-            '   </body>'
-            '</document>')
+        document = ('<document id="no_id" xml:lang="sme">'
+                    '   <body>'
+                    '       <p>'
+                    '           livččii'
+                    '           <errorort correct="makkárge" errtype="á" '
+                    '           pos="adv">'
+                    '               makkarge'
+                    '           </errorort>'
+                    '           politihkka, muhto rahpasit baicca muitalivčče'
+                    '           <errorlex correct="man soga">'
+                    '               <errorort correct="makkár" errtype="á" '
+                    '               pos="interr">'
+                    '                   makkar'
+                    '               </errorort>'
+                    '               soga'
+                    '           </errorlex>'
+                    '           sii'
+                    '       </p>'
+                    '   </body>'
+                    '</document>')
 
-        xml_printer = ccat.XMLPrinter(one_word_per_line=True,
-                                      errorort=True)
+        xml_printer = ccat.XMLPrinter(one_word_per_line=True, errorort=True)
         if six.PY3:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document.encode('utf8')))
+            xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
         else:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document))
+            xml_printer.etree = etree.parse(io.BytesIO(document))
         buffer = xml_printer.process_file()
-        self.assertEqual(buffer.getvalue(), (
-            u'livččii\n'
-            u'makkarge\tmakkárge\t#errtype=á,pos=adv\n'
-            u'politihkka,\n'
-            u'muhto\n'
-            u'rahpasit\n'
-            u'baicca\n'
-            u'muitalivčče\n'
-            u'makkar\tmakkár\t#errtype=á,pos=interr\n'
-            u'soga\n'
-            u'sii\n'))
+        self.assertEqual(buffer.getvalue(),
+                         (u'livččii\n'
+                          u'makkarge\tmakkárge\t#errtype=á,pos=adv\n'
+                          u'politihkka,\n'
+                          u'muhto\n'
+                          u'rahpasit\n'
+                          u'baicca\n'
+                          u'muitalivčče\n'
+                          u'makkar\tmakkár\t#errtype=á,pos=interr\n'
+                          u'soga\n'
+                          u'sii\n'))
 
     def test_process_file_typos(self):
         '''Print all error content
@@ -826,40 +772,37 @@ class TestCcat(unittest.TestCase):
         a plain errorort one, and a nested errorlex one when
         the typos option True
         '''
-        document = (
-            '<document id="no_id" xml:lang="sme">'
-            '   <body>'
-            '       <p>'
-            '           livččii'
-            '           <errorort correct="makkárge" errtype="á" '
-            '           pos="adv">'
-            '               makkarge'
-            '           </errorort>'
-            '           politihkka, muhto rahpasit baicca muitalivčče'
-            '           <errorlex correct="man soga">'
-            '               <errorort correct="makkár" errtype="á" '
-            '               pos="interr">'
-            '                   makkar'
-            '               </errorort>'
-            '               soga'
-            '           </errorlex>'
-            '           sii'
-            '       </p>'
-            '   </body>'
-            '</document>')
+        document = ('<document id="no_id" xml:lang="sme">'
+                    '   <body>'
+                    '       <p>'
+                    '           livččii'
+                    '           <errorort correct="makkárge" errtype="á" '
+                    '           pos="adv">'
+                    '               makkarge'
+                    '           </errorort>'
+                    '           politihkka, muhto rahpasit baicca muitalivčče'
+                    '           <errorlex correct="man soga">'
+                    '               <errorort correct="makkár" errtype="á" '
+                    '               pos="interr">'
+                    '                   makkar'
+                    '               </errorort>'
+                    '               soga'
+                    '           </errorlex>'
+                    '           sii'
+                    '       </p>'
+                    '   </body>'
+                    '</document>')
 
         xml_printer = ccat.XMLPrinter(typos=True)
         if six.PY3:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document.encode('utf8')))
+            xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
         else:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document))
+            xml_printer.etree = etree.parse(io.BytesIO(document))
         buffer = xml_printer.process_file()
-        self.assertEqual(buffer.getvalue(), (
-            u'makkarge\tmakkárge\t#errtype=á,pos=adv\n'
-            u'makkár soga\tman soga\n'
-            u'makkar\tmakkár\t#errtype=á,pos=interr\n'))
+        self.assertEqual(buffer.getvalue(),
+                         (u'makkarge\tmakkárge\t#errtype=á,pos=adv\n'
+                          u'makkár soga\tman soga\n'
+                          u'makkar\tmakkár\t#errtype=á,pos=interr\n'))
 
     def test_process_file_typos_errorlex(self):
         '''Print only errorlex content
@@ -868,38 +811,34 @@ class TestCcat(unittest.TestCase):
         a plain errorort one, and a nested errorlex one when
         the typos and errorlex options are True
         '''
-        document = (
-            '<document id="no_id" xml:lang="sme">'
-            '   <body>'
-            '       <p>'
-            '           livččii'
-            '           <errorort correct="makkárge" errtype="á" '
-            '           pos="adv">'
-            '               makkarge'
-            '           </errorort>'
-            '           politihkka, muhto rahpasit baicca muitalivčče'
-            '           <errorlex correct="man soga">'
-            '               <errorort correct="makkár" errtype="á" '
-            '               pos="interr">'
-            '                   makkar'
-            '               </errorort>'
-            '               soga'
-            '           </errorlex>'
-            '           sii'
-            '       </p>'
-            '   </body>'
-            '</document>')
+        document = ('<document id="no_id" xml:lang="sme">'
+                    '   <body>'
+                    '       <p>'
+                    '           livččii'
+                    '           <errorort correct="makkárge" errtype="á" '
+                    '           pos="adv">'
+                    '               makkarge'
+                    '           </errorort>'
+                    '           politihkka, muhto rahpasit baicca muitalivčče'
+                    '           <errorlex correct="man soga">'
+                    '               <errorort correct="makkár" errtype="á" '
+                    '               pos="interr">'
+                    '                   makkar'
+                    '               </errorort>'
+                    '               soga'
+                    '           </errorlex>'
+                    '           sii'
+                    '       </p>'
+                    '   </body>'
+                    '</document>')
 
         xml_printer = ccat.XMLPrinter(typos=True, errorlex=True)
         if six.PY3:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document.encode('utf8')))
+            xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
         else:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document))
+            xml_printer.etree = etree.parse(io.BytesIO(document))
         buffer = xml_printer.process_file()
-        self.assertEqual(buffer.getvalue(),
-                         u'makkár soga\tman soga\n')
+        self.assertEqual(buffer.getvalue(), u'makkár soga\tman soga\n')
 
     def test_process_file_typos_errorort(self):
         '''Print only errorort content
@@ -908,82 +847,77 @@ class TestCcat(unittest.TestCase):
         a plain errorort one, and a nested errorlex one when
         the one_word_per_line, typos and errorort options are True
         '''
-        document = (
-            '<document id="no_id" xml:lang="sme">'
-            '   <body>'
-            '       <p>'
-            '           livččii'
-            '           <errorort correct="makkárge" errtype="á" '
-            '           pos="adv">'
-            '               makkarge'
-            '           </errorort>'
-            '           politihkka, muhto rahpasit baicca muitalivčče'
-            '           <errorlex correct="man soga">'
-            '               <errorort correct="makkár" errtype="á" '
-            '               pos="interr">'
-            '                   makkar'
-            '               </errorort>'
-            '               soga'
-            '           </errorlex>'
-            '           sii'
-            '       </p>'
-            '   </body>'
-            '</document>')
+        document = ('<document id="no_id" xml:lang="sme">'
+                    '   <body>'
+                    '       <p>'
+                    '           livččii'
+                    '           <errorort correct="makkárge" errtype="á" '
+                    '           pos="adv">'
+                    '               makkarge'
+                    '           </errorort>'
+                    '           politihkka, muhto rahpasit baicca muitalivčče'
+                    '           <errorlex correct="man soga">'
+                    '               <errorort correct="makkár" errtype="á" '
+                    '               pos="interr">'
+                    '                   makkar'
+                    '               </errorort>'
+                    '               soga'
+                    '           </errorlex>'
+                    '           sii'
+                    '       </p>'
+                    '   </body>'
+                    '</document>')
 
-        xml_printer = ccat.XMLPrinter(typos=True,
-                                      one_word_per_line=True,
-                                      errorort=True)
+        xml_printer = ccat.XMLPrinter(
+            typos=True, one_word_per_line=True, errorort=True)
         if six.PY3:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document.encode('utf8')))
+            xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
         else:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document))
+            xml_printer.etree = etree.parse(io.BytesIO(document))
         buffer = xml_printer.process_file()
-        self.assertEqual(buffer.getvalue(), (
-            u'makkarge\tmakkárge\t#errtype=á,pos=adv\n'
-            u'makkar\tmakkár\t#errtype=á,pos=interr\n'))
+        self.assertEqual(buffer.getvalue(),
+                         (u'makkarge\tmakkárge\t#errtype=á,pos=adv\n'
+                          u'makkar\tmakkár\t#errtype=á,pos=interr\n'))
 
     def test_get_lang(self):
         '''Check that get_lang finds the main lang of the document'''
         xml_printer = ccat.XMLPrinter()
-        xml_printer.etree = etree.parse(io.BytesIO(
-            '<document id="no_id" xml:lang="sme"/>'.encode('utf8')))
+        xml_printer.etree = etree.parse(
+            io.BytesIO('<document id="no_id" xml:lang="sme"/>'.encode('utf8')))
 
-        self.assertEqual(xml_printer.get_lang(),  'sme')
+        self.assertEqual(xml_printer.get_lang(), 'sme')
 
     def test_get_element_language_same_as_parent(self):
         '''xml:lang is not set in the p element. Return parent language.'''
         xml_printer = ccat.XMLPrinter()
 
         element = etree.fromstring('<p/>')
-        self.assertEqual(xml_printer.get_element_language(element, 'sme'),
-                         'sme')
+        self.assertEqual(
+            xml_printer.get_element_language(element, 'sme'), 'sme')
 
     def test_get_element_language_different_from_parent(self):
         '''Check that the value of xml:lang is returned when it is set.'''
         xml_printer = ccat.XMLPrinter()
 
         element = etree.fromstring('<p xml:lang="nob"/>')
-        self.assertEqual(xml_printer.get_element_language(element, 'sme'),
-                         'nob')
+        self.assertEqual(
+            xml_printer.get_element_language(element, 'sme'), 'nob')
 
     def test_process_file_language_nob(self):
         '''lang=nob, only nob content should be output'''
         xml_printer = ccat.XMLPrinter(lang='nob')
         xml_printer.etree = etree.parse(
-            io.BytesIO((
-                '<document id="no_id" xml:lang="nob">'
-                '    <body>'
-                '        <p>'
-                '            nob1'
-                '            <span type="quote" xml:lang="dan">'
-                '                dan1'
-                '            </span>'
-                '            nob2'
-                '        </p>'
-                '    </body>'
-                '</document>').encode('utf8')))
+            io.BytesIO(('<document id="no_id" xml:lang="nob">'
+                        '    <body>'
+                        '        <p>'
+                        '            nob1'
+                        '            <span type="quote" xml:lang="dan">'
+                        '                dan1'
+                        '            </span>'
+                        '            nob2'
+                        '        </p>'
+                        '    </body>'
+                        '</document>').encode('utf8')))
 
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), u'nob1 nob2 ¶\n')
@@ -992,18 +926,17 @@ class TestCcat(unittest.TestCase):
         '''lang=dan, only dan content should be output'''
         xml_printer = ccat.XMLPrinter(lang='dan')
         xml_printer.etree = etree.parse(
-            io.BytesIO((
-                '<document id="no_id" xml:lang="nob">'
-                '    <body>'
-                '        <p>'
-                '            nob1'
-                '            <span type="quote" xml:lang="dan">'
-                '                dan1'
-                '            </span>'
-                '            nob2'
-                '        </p>'
-                '    </body>'
-                '</document>').encode('utf8')))
+            io.BytesIO(('<document id="no_id" xml:lang="nob">'
+                        '    <body>'
+                        '        <p>'
+                        '            nob1'
+                        '            <span type="quote" xml:lang="dan">'
+                        '                dan1'
+                        '            </span>'
+                        '            nob2'
+                        '        </p>'
+                        '    </body>'
+                        '</document>').encode('utf8')))
 
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), u'dan1 ¶\n')
@@ -1012,17 +945,16 @@ class TestCcat(unittest.TestCase):
         '''Check that the ¶ character is printed'''
         xml_printer = ccat.XMLPrinter()
         xml_printer.etree = etree.parse(
-            io.BytesIO((
-                '<document id="no_id" xml:lang="nob">'
-                '    <body>'
-                '        <p>'
-                '            nob1'
-                '        </p>'
-                '        <p>'
-                '            nob2'
-                '        </p>'
-                '    </body>'
-                '</document>').encode('utf8')))
+            io.BytesIO(('<document id="no_id" xml:lang="nob">'
+                        '    <body>'
+                        '        <p>'
+                        '            nob1'
+                        '        </p>'
+                        '        <p>'
+                        '            nob2'
+                        '        </p>'
+                        '    </body>'
+                        '</document>').encode('utf8')))
 
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), u'nob1 ¶\nnob2 ¶\n')
@@ -1034,32 +966,29 @@ class TestCcat(unittest.TestCase):
         (set in the lang option) is not the same language as any of the
         content of the elements.
         '''
-        document = (
-            '<document id="no_id" xml:lang="nob">'
-            '   <body>'
-            '       <p type="text">'
-            '           men'
-            '           <errormorphsyn cat="x" const="spred"'
-            '           correct="skoledagene er så vanskelige" '
-            '           errtype="agr" orig="x" pos="adj">'
-            '               skoledagene er så'
-            '               <errorort correct="vanskelig" '
-            '               errtype="nosilent" pos="adj">'
-            '                   vanskerlig'
-            '               </errorort>'
-            '           </errormorphsyn>'
-            '           å komme igjennom,'
-            '       </p>'
-            '   </body>'
-            '</document>')
+        document = ('<document id="no_id" xml:lang="nob">'
+                    '   <body>'
+                    '       <p type="text">'
+                    '           men'
+                    '           <errormorphsyn cat="x" const="spred"'
+                    '           correct="skoledagene er så vanskelige" '
+                    '           errtype="agr" orig="x" pos="adj">'
+                    '               skoledagene er så'
+                    '               <errorort correct="vanskelig" '
+                    '               errtype="nosilent" pos="adj">'
+                    '                   vanskerlig'
+                    '               </errorort>'
+                    '           </errormorphsyn>'
+                    '           å komme igjennom,'
+                    '       </p>'
+                    '   </body>'
+                    '</document>')
 
         xml_printer = ccat.XMLPrinter(lang='sme')
         if six.PY3:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document.encode('utf8')))
+            xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
         else:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document))
+            xml_printer.etree = etree.parse(io.BytesIO(document))
         buffer = xml_printer.process_file()
 
         self.assertEqual(buffer.getvalue(), '')
@@ -1070,34 +999,32 @@ class TestCcat(unittest.TestCase):
         The errorlang option is True.
         '''
         xml_printer = ccat.XMLPrinter(errorlang=True)
-        document = (
-            '<document id="no_id" xml:lang="nob">'
-            '   <body>'
-            '       <p>'
-            '           Vijmak bierjjedak!'
-            '           <errorlang correct="nor">'
-            '               Pjuh'
-            '           </errorlang>'
-            '           vijmak de bierjjedak'
-            '           <errorort correct="sjattaj" '
-            '           errorinfo="vowlat,á-a">'
-            '               sjattáj'
-            '           </errorort>'
-            '           .'
-            '       </p>'
-            '   </body>'
-            '</document>')
+        document = ('<document id="no_id" xml:lang="nob">'
+                    '   <body>'
+                    '       <p>'
+                    '           Vijmak bierjjedak!'
+                    '           <errorlang correct="nor">'
+                    '               Pjuh'
+                    '           </errorlang>'
+                    '           vijmak de bierjjedak'
+                    '           <errorort correct="sjattaj" '
+                    '           errorinfo="vowlat,á-a">'
+                    '               sjattáj'
+                    '           </errorort>'
+                    '           .'
+                    '       </p>'
+                    '   </body>'
+                    '</document>')
 
         if six.PY3:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document.encode('utf8')))
+            xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
         else:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document))
+            xml_printer.etree = etree.parse(io.BytesIO(document))
         buffer = xml_printer.process_file()
 
-        self.assertEqual(buffer.getvalue(), (
-            u'Vijmak bierjjedak! nor vijmak de bierjjedak sjattáj . ¶\n'))
+        self.assertEqual(
+            buffer.getvalue(),
+            (u'Vijmak bierjjedak! nor vijmak de bierjjedak sjattáj . ¶\n'))
 
     def test_no_foreign(self):
         '''noforeign option is True
@@ -1106,34 +1033,32 @@ class TestCcat(unittest.TestCase):
         Check that this really happens.
         '''
         xml_printer = ccat.XMLPrinter(noforeign=True)
-        document = (
-            '<document id="no_id" xml:lang="nob">'
-            '   <body>'
-            '       <p>'
-            '           Vijmak bierjjedak!'
-            '           <errorlang correct="nor">'
-            '               Pjuh'
-            '           </errorlang>'
-            '           vijmak de bierjjedak'
-            '           <errorort correct="sjattaj" '
-            '           errorinfo="vowlat,á-a">'
-            '               sjattáj'
-            '           </errorort>'
-            '           .'
-            '       </p>'
-            '   </body>'
-            '</document>')
+        document = ('<document id="no_id" xml:lang="nob">'
+                    '   <body>'
+                    '       <p>'
+                    '           Vijmak bierjjedak!'
+                    '           <errorlang correct="nor">'
+                    '               Pjuh'
+                    '           </errorlang>'
+                    '           vijmak de bierjjedak'
+                    '           <errorort correct="sjattaj" '
+                    '           errorinfo="vowlat,á-a">'
+                    '               sjattáj'
+                    '           </errorort>'
+                    '           .'
+                    '       </p>'
+                    '   </body>'
+                    '</document>')
 
         if six.PY3:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document.encode('utf8')))
+            xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
         else:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document))
+            xml_printer.etree = etree.parse(io.BytesIO(document))
         buffer = xml_printer.process_file()
 
-        self.assertEqual(buffer.getvalue(), (
-            u'Vijmak bierjjedak! vijmak de bierjjedak sjattáj . ¶\n'))
+        self.assertEqual(
+            buffer.getvalue(),
+            (u'Vijmak bierjjedak! vijmak de bierjjedak sjattáj . ¶\n'))
 
     def test_no_foreign_typos(self):
         '''noforeign is True, typos is True
@@ -1143,30 +1068,27 @@ class TestCcat(unittest.TestCase):
         happens even when the typos option is set.
         '''
         xml_printer = ccat.XMLPrinter(typos=True, noforeign=True)
-        document = (
-            '<document id="no_id" xml:lang="nob">'
-            '   <body>'
-            '       <p>'
-            '           Vijmak bierjjedak!'
-            '           <errorlang correct="nor">'
-            '               Pjuh'
-            '           </errorlang>'
-            '           vijmak de bierjjedak'
-            '           <errorort correct="sjattaj" '
-            '           errorinfo="vowlat,á-a">'
-            '               sjattáj'
-            '           </errorort>'
-            '           .'
-            '       </p>'
-            '   </body>'
-            '</document>')
+        document = ('<document id="no_id" xml:lang="nob">'
+                    '   <body>'
+                    '       <p>'
+                    '           Vijmak bierjjedak!'
+                    '           <errorlang correct="nor">'
+                    '               Pjuh'
+                    '           </errorlang>'
+                    '           vijmak de bierjjedak'
+                    '           <errorort correct="sjattaj" '
+                    '           errorinfo="vowlat,á-a">'
+                    '               sjattáj'
+                    '           </errorort>'
+                    '           .'
+                    '       </p>'
+                    '   </body>'
+                    '</document>')
 
         if six.PY3:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document.encode('utf8')))
+            xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
         else:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document))
+            xml_printer.etree = etree.parse(io.BytesIO(document))
         buffer = xml_printer.process_file()
 
         self.assertEqual(buffer.getvalue(),
@@ -1200,23 +1122,20 @@ class TestCcat(unittest.TestCase):
             '</document>')
         xml_printer = ccat.XMLPrinter(typos=True)
         if six.PY3:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document.encode('utf8')))
+            xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
         else:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document))
+            xml_printer.etree = etree.parse(io.BytesIO(document))
 
         buffer = xml_printer.process_file()
 
         self.assertEqual(
             buffer.getvalue(),
-            (
-                u'čoggen ollu joŋaid ja sarridat'
-                u'\tčoggen ollu joŋaid ja sarridiid'
-                u'\t#cat=genpl,const=obj,errtype=case,orig=nompl,pos=noun\n'
-                u'čoggen ollu jokŋat\tčoggen ollu joŋaid'
-                u'\t#cat=genpl,const=obj,errtype=case,orig=nompl,pos=noun\n'
-                u'čoaggen\tčoggen\t#errtype=mono,pos=verb\n'))
+            (u'čoggen ollu joŋaid ja sarridat'
+             u'\tčoggen ollu joŋaid ja sarridiid'
+             u'\t#cat=genpl,const=obj,errtype=case,orig=nompl,pos=noun\n'
+             u'čoggen ollu jokŋat\tčoggen ollu joŋaid'
+             u'\t#cat=genpl,const=obj,errtype=case,orig=nompl,pos=noun\n'
+             u'čoaggen\tčoggen\t#errtype=mono,pos=verb\n'))
 
     def test_typos_errormorphsyn_twice(self):
         '''Check the output of a plain p
@@ -1225,132 +1144,124 @@ class TestCcat(unittest.TestCase):
         errormorphsyn element when the typos and errormorphsyn
         options are True
         '''
-        document = (
-            '<document id="no_id" xml:lang="nob">'
-            '   <body>'
-            '       <p>'
-            '           <errormorphsyn cat="sg3prs" const="v" '
-            '           correct="lea okta mánná" errtype="agr" '
-            '           orig="pl3prs" pos="v">'
-            '               leat'
-            '               <errormorphsyn cat="nomsg" const="spred" '
-            '               correct="okta mánná" errtype="case" '
-            '               orig="gensg" pos="n">'
-            '                   okta máná'
-            '               </errormorphsyn>'
-            '           </errormorphsyn>'
-            '       </p>'
-            '   </body>'
-            '</document>')
+        document = ('<document id="no_id" xml:lang="nob">'
+                    '   <body>'
+                    '       <p>'
+                    '           <errormorphsyn cat="sg3prs" const="v" '
+                    '           correct="lea okta mánná" errtype="agr" '
+                    '           orig="pl3prs" pos="v">'
+                    '               leat'
+                    '               <errormorphsyn cat="nomsg" const="spred" '
+                    '               correct="okta mánná" errtype="case" '
+                    '               orig="gensg" pos="n">'
+                    '                   okta máná'
+                    '               </errormorphsyn>'
+                    '           </errormorphsyn>'
+                    '       </p>'
+                    '   </body>'
+                    '</document>')
 
         xml_printer = ccat.XMLPrinter(typos=True, errormorphsyn=True)
         if six.PY3:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document.encode('utf8')))
+            xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
         else:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document))
+            xml_printer.etree = etree.parse(io.BytesIO(document))
 
-        buffer = xml_printer.process_file()
-
-        self.assertEqual(buffer.getvalue(), (
-            u'leat okta mánná\tlea okta mánná'
-            u'\t#cat=sg3prs,const=v,errtype=agr,orig=pl3prs,pos=v\n'
-            u'okta máná\tokta mánná'
-            u'\t#cat=nomsg,const=spred,errtype=case,orig=gensg,pos=n\n'))
-
-    def test_process_file1(self):
-        '''Test process_file with a disambiguation element as input'''
-        xml_printer = ccat.XMLPrinter(disambiguation=True)
-        document = (
-            '<document id="no_id" xml:lang="nob">\n'
-            '    <body>\n'
-            '        <disambiguation>"&lt;Muhto&gt;"\n'
-            '\t"muhto" CC &lt;sme&gt; @CVP\n"&lt;gaskkohagaid&gt;"\n'
-            '\t"gaskkohagaid" Adv &lt;sme&gt;\n"&lt;,&gt;"\n'
-            '\t"," CLB\n"&lt;ja&gt;"\n'
-            '\t"ja" CC &lt;sme&gt; @CNP\n"&lt;erenoamážit&gt;"\n'
-            '\t"erenoamážit" Adv &lt;sme&gt;\n"&lt;dalle_go&gt;"\n'
-            '\t"dalle_go" MWE CS &lt;sme&gt; @CVP\n"&lt;lei&gt;"\n'
-            '\t"leat" V &lt;sme&gt; IV Ind Prt Sg3 @+FMAINV\n'
-            '"&lt;buolaš&gt;"\n'
-            '\t"buolaš" Sem/Wthr N &lt;sme&gt; Sg Nom\n"&lt;,&gt;"\n'
-            '\t"," CLB\n"&lt;de&gt;"\n'
-            '\t"de" Adv &lt;sme&gt;\n"&lt;aggregáhta&gt;"\n'
-            '\t"aggregáhta" N &lt;sme&gt; Sg Nom\n"&lt;billánii&gt;"\n'
-            '\t"billánit" V &lt;sme&gt; IV Ind Prt Sg3 @+FMAINV\n'
-            '"&lt;.&gt;"\n\t"." CLB\n\n"&lt;¶&gt;"\n'
-            '\t"¶" CLB\n\n</disambiguation></body></document>')
-
-        if six.PY3:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document.encode('utf8')))
-        else:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document))
-        buffer = xml_printer.process_file()
-
-        self.assertEqual(buffer.getvalue(), (
-            u'"<Muhto>"\n\t"muhto" CC <sme> @CVP\n"<gaskkohagaid>"\n'
-            u'\t"gaskkohagaid" Adv <sme>\n"<,>"\n'
-            u'\t"," CLB\n"<ja>"\n\t"ja" CC <sme> @CNP\n"<erenoamážit>"\n'
-            u'\t"erenoamážit" Adv <sme>\n"<dalle_go>"\n'
-            u'\t"dalle_go" MWE CS <sme> @CVP\n"<lei>"\n'
-            u'\t"leat" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<buolaš>"\n'
-            u'\t"buolaš" Sem/Wthr N <sme> Sg Nom\n"<,>"\n'
-            u'\t"," CLB\n"<de>"\n\t"de" Adv <sme>\n"<aggregáhta>"\n'
-            u'\t"aggregáhta" N <sme> Sg Nom\n"<billánii>"\n'
-            u'\t"billánit" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<.>"\n'
-            u'\t"." CLB\n\n"<¶>"\n\t"¶" CLB\n\n'))
-
-    def test_process_file2(self):
-        '''Test process_file with a dependency element as input'''
-        xml_printer = ccat.XMLPrinter(dependency=True)
-        document = (
-            '<document id="no_id" xml:lang="nob">\n'
-            '    <body>\n'
-            '        <dependency>"&lt;Muhto&gt;"\n'
-            '\t"muhto" CC @CVP #1-&gt;1 \n"&lt;gaskkohagaid&gt;"\n'
-            '\t"gaskkohagaid" Adv @ADVL&gt; #2-&gt;12 \n"&lt;,&gt;"\n'
-            '\t"," CLB #3-&gt;4 \n"&lt;ja&gt;"\n'
-            '\t"ja" CC @CNP #4-&gt;2 \n"&lt;erenoamážit&gt;"\n'
-            '\t"erenoamážit" Adv @ADVL&gt; #5-&gt;12 \n'
-            '"&lt;dalle_go&gt;"\n'
-            '\t"dalle_go" CS @CVP #6-&gt;7 \n"&lt;lei&gt;"\n'
-            '\t"leat" V IV Ind Prt Sg3 @FS-ADVL&gt; #7-&gt;12 \n'
-            '"&lt;buolaš&gt;"\n'
-            '\t"buolaš" N Sg Nom @&lt;SPRED #8-&gt;7 \n"&lt;,&gt;"\n'
-            '\t"," CLB #9-&gt;6 \n"&lt;de&gt;"\n'
-            '\t"de" Adv @ADVL&gt; #10-&gt;12 \n"&lt;aggregáhta&gt;"\n'
-            '\t"aggregáhta" N Sg Nom @SUBJ&gt; #11-&gt;12 \n'
-            '"&lt;billánii&gt;"\n'
-            '\t"billánit" V IV Ind Prt Sg3 @FS-ADVL&gt; #12-&gt;0 \n'
-            '"&lt;.&gt;"\n\t"." CLB #13-&gt;12 \n\n"&lt;¶&gt;"\n'
-            '\t"¶" CLB #1-&gt;1 \n\n</dependency>\n'
-            '    </body>\n'
-            '</document>')
-
-        if six.PY3:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document.encode('utf8')))
-        else:
-            xml_printer.etree = etree.parse(
-                io.BytesIO(document))
         buffer = xml_printer.process_file()
 
         self.assertEqual(
             buffer.getvalue(),
-            (
-                u'"<Muhto>"\n\t"muhto" CC @CVP #1->1 \n"<gaskkohagaid>"\n'
-                u'\t"gaskkohagaid" Adv @ADVL> #2->12 \n"<,>"\n'
-                u'\t"," CLB #3->4 \n"<ja>"\n'
-                u'\t"ja" CC @CNP #4->2 \n"<erenoamážit>"\n'
-                u'\t"erenoamážit" Adv @ADVL> #5->12 \n"<dalle_go>"\n'
-                u'\t"dalle_go" CS @CVP #6->7 \n"<lei>"\n'
-                u'\t"leat" V IV Ind Prt Sg3 @FS-ADVL> #7->12 \n"<buolaš>"\n'
-                u'\t"buolaš" N Sg Nom @<SPRED #8->7 \n"<,>"\n'
-                u'\t"," CLB #9->6 \n"<de>"\n'
-                u'\t"de" Adv @ADVL> #10->12 \n"<aggregáhta>"\n'
-                u'\t"aggregáhta" N Sg Nom @SUBJ> #11->12 \n"<billánii>"\n'
-                u'\t"billánit" V IV Ind Prt Sg3 @FS-ADVL> #12->0 \n"<.>"\n'
-                u'\t"." CLB #13->12 \n\n"<¶>"\n\t"¶" CLB #1->1 \n\n'))
+            (u'leat okta mánná\tlea okta mánná'
+             u'\t#cat=sg3prs,const=v,errtype=agr,orig=pl3prs,pos=v\n'
+             u'okta máná\tokta mánná'
+             u'\t#cat=nomsg,const=spred,errtype=case,orig=gensg,pos=n\n'))
+
+    def test_process_file1(self):
+        '''Test process_file with a disambiguation element as input'''
+        xml_printer = ccat.XMLPrinter(disambiguation=True)
+        document = ('<document id="no_id" xml:lang="nob">\n'
+                    '    <body>\n'
+                    '        <disambiguation>"&lt;Muhto&gt;"\n'
+                    '\t"muhto" CC &lt;sme&gt; @CVP\n"&lt;gaskkohagaid&gt;"\n'
+                    '\t"gaskkohagaid" Adv &lt;sme&gt;\n"&lt;,&gt;"\n'
+                    '\t"," CLB\n"&lt;ja&gt;"\n'
+                    '\t"ja" CC &lt;sme&gt; @CNP\n"&lt;erenoamážit&gt;"\n'
+                    '\t"erenoamážit" Adv &lt;sme&gt;\n"&lt;dalle_go&gt;"\n'
+                    '\t"dalle_go" MWE CS &lt;sme&gt; @CVP\n"&lt;lei&gt;"\n'
+                    '\t"leat" V &lt;sme&gt; IV Ind Prt Sg3 @+FMAINV\n'
+                    '"&lt;buolaš&gt;"\n'
+                    '\t"buolaš" Sem/Wthr N &lt;sme&gt; Sg Nom\n"&lt;,&gt;"\n'
+                    '\t"," CLB\n"&lt;de&gt;"\n'
+                    '\t"de" Adv &lt;sme&gt;\n"&lt;aggregáhta&gt;"\n'
+                    '\t"aggregáhta" N &lt;sme&gt; Sg Nom\n"&lt;billánii&gt;"\n'
+                    '\t"billánit" V &lt;sme&gt; IV Ind Prt Sg3 @+FMAINV\n'
+                    '"&lt;.&gt;"\n\t"." CLB\n\n"&lt;¶&gt;"\n'
+                    '\t"¶" CLB\n\n</disambiguation></body></document>')
+
+        if six.PY3:
+            xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
+        else:
+            xml_printer.etree = etree.parse(io.BytesIO(document))
+        buffer = xml_printer.process_file()
+
+        self.assertEqual(
+            buffer.getvalue(),
+            (u'"<Muhto>"\n\t"muhto" CC <sme> @CVP\n"<gaskkohagaid>"\n'
+             u'\t"gaskkohagaid" Adv <sme>\n"<,>"\n'
+             u'\t"," CLB\n"<ja>"\n\t"ja" CC <sme> @CNP\n"<erenoamážit>"\n'
+             u'\t"erenoamážit" Adv <sme>\n"<dalle_go>"\n'
+             u'\t"dalle_go" MWE CS <sme> @CVP\n"<lei>"\n'
+             u'\t"leat" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<buolaš>"\n'
+             u'\t"buolaš" Sem/Wthr N <sme> Sg Nom\n"<,>"\n'
+             u'\t"," CLB\n"<de>"\n\t"de" Adv <sme>\n"<aggregáhta>"\n'
+             u'\t"aggregáhta" N <sme> Sg Nom\n"<billánii>"\n'
+             u'\t"billánit" V <sme> IV Ind Prt Sg3 @+FMAINV\n"<.>"\n'
+             u'\t"." CLB\n\n"<¶>"\n\t"¶" CLB\n\n'))
+
+    def test_process_file2(self):
+        '''Test process_file with a dependency element as input'''
+        xml_printer = ccat.XMLPrinter(dependency=True)
+        document = ('<document id="no_id" xml:lang="nob">\n'
+                    '    <body>\n'
+                    '        <dependency>"&lt;Muhto&gt;"\n'
+                    '\t"muhto" CC @CVP #1-&gt;1 \n"&lt;gaskkohagaid&gt;"\n'
+                    '\t"gaskkohagaid" Adv @ADVL&gt; #2-&gt;12 \n"&lt;,&gt;"\n'
+                    '\t"," CLB #3-&gt;4 \n"&lt;ja&gt;"\n'
+                    '\t"ja" CC @CNP #4-&gt;2 \n"&lt;erenoamážit&gt;"\n'
+                    '\t"erenoamážit" Adv @ADVL&gt; #5-&gt;12 \n'
+                    '"&lt;dalle_go&gt;"\n'
+                    '\t"dalle_go" CS @CVP #6-&gt;7 \n"&lt;lei&gt;"\n'
+                    '\t"leat" V IV Ind Prt Sg3 @FS-ADVL&gt; #7-&gt;12 \n'
+                    '"&lt;buolaš&gt;"\n'
+                    '\t"buolaš" N Sg Nom @&lt;SPRED #8-&gt;7 \n"&lt;,&gt;"\n'
+                    '\t"," CLB #9-&gt;6 \n"&lt;de&gt;"\n'
+                    '\t"de" Adv @ADVL&gt; #10-&gt;12 \n"&lt;aggregáhta&gt;"\n'
+                    '\t"aggregáhta" N Sg Nom @SUBJ&gt; #11-&gt;12 \n'
+                    '"&lt;billánii&gt;"\n'
+                    '\t"billánit" V IV Ind Prt Sg3 @FS-ADVL&gt; #12-&gt;0 \n'
+                    '"&lt;.&gt;"\n\t"." CLB #13-&gt;12 \n\n"&lt;¶&gt;"\n'
+                    '\t"¶" CLB #1-&gt;1 \n\n</dependency>\n'
+                    '    </body>\n'
+                    '</document>')
+
+        if six.PY3:
+            xml_printer.etree = etree.parse(io.BytesIO(document.encode('utf8')))
+        else:
+            xml_printer.etree = etree.parse(io.BytesIO(document))
+        buffer = xml_printer.process_file()
+
+        self.assertEqual(
+            buffer.getvalue(),
+            (u'"<Muhto>"\n\t"muhto" CC @CVP #1->1 \n"<gaskkohagaid>"\n'
+             u'\t"gaskkohagaid" Adv @ADVL> #2->12 \n"<,>"\n'
+             u'\t"," CLB #3->4 \n"<ja>"\n'
+             u'\t"ja" CC @CNP #4->2 \n"<erenoamážit>"\n'
+             u'\t"erenoamážit" Adv @ADVL> #5->12 \n"<dalle_go>"\n'
+             u'\t"dalle_go" CS @CVP #6->7 \n"<lei>"\n'
+             u'\t"leat" V IV Ind Prt Sg3 @FS-ADVL> #7->12 \n"<buolaš>"\n'
+             u'\t"buolaš" N Sg Nom @<SPRED #8->7 \n"<,>"\n'
+             u'\t"," CLB #9->6 \n"<de>"\n'
+             u'\t"de" Adv @ADVL> #10->12 \n"<aggregáhta>"\n'
+             u'\t"aggregáhta" N Sg Nom @SUBJ> #11->12 \n"<billánii>"\n'
+             u'\t"billánit" V IV Ind Prt Sg3 @FS-ADVL> #12->0 \n"<.>"\n'
+             u'\t"." CLB #13->12 \n\n"<¶>"\n\t"¶" CLB #1->1 \n\n'))

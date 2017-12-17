@@ -18,12 +18,10 @@
 #   Copyright © 2013-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Program to pick out documents to be saved to the corpus from samediggi.se.
 
 The documents have been fetched using wget.
 """
-
 
 from __future__ import absolute_import, print_function
 
@@ -82,8 +80,13 @@ class DocumentPicker(object):
         if os.path.exists(self.get_parallel_name(file_, a)):
             self.parallel_dict[file_].append(self.get_parallel_name(file_, a))
         else:
-            print(util.lineno(), self.get_parallel_name(file_, a),
-                  'does not exist', a.get('title'),  file_, file=sys.stderr)
+            print(
+                util.lineno(),
+                self.get_parallel_name(file_, a),
+                'does not exist',
+                a.get('title'),
+                file_,
+                file=sys.stderr)
 
     def get_parallels(self, a, file_):
         self.parallel_dict.setdefault(file_, [])
@@ -152,15 +155,14 @@ class DocumentPicker(object):
 
     def get_goal_name(self, file_, lang):
         filename = os.path.basename(file_)
-        goalfile = os.path.join(self.freecorpus, 'orig', lang, 'admin',
-                                'sd', 'www.samediggi.se', filename)
+        goalfile = os.path.join(self.freecorpus, 'orig', lang, 'admin', 'sd',
+                                'www.samediggi.se', filename)
 
         return goalfile
 
     def set_metadata(self, file_, lang):
         mh = xslsetter.MetadataHandler(
-            self.get_goal_name(file_, lang) + '.xsl',
-            create=True)
+            self.get_goal_name(file_, lang) + '.xsl', create=True)
         for key, value in six.iteritems(self.set_variables(file_, lang)):
             mh.set_variable(key, value)
         mh.write_file()
@@ -184,8 +186,8 @@ class DocumentPicker(object):
             for parallel_file in self.parallel_dict[file_]:
                 for para_lang in para_langs:
                     if parallel_file in self.file_dict[para_lang]:
-                        variables['para_' + para_lang] = os.path.basename(
-                            parallel_file)
+                        variables['para_' +
+                                  para_lang] = os.path.basename(parallel_file)
 
         return variables
 
@@ -213,6 +215,7 @@ def main():
     dp.conclude()
     dp.check_consistency()
     dp.move_files_set_metadata()
+
 
 if __name__ == "__main__":
     main()

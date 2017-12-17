@@ -17,7 +17,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 u"""Convert bible xml files to the Giella xml format."""
 
 import lxml.etree as etree
@@ -34,8 +33,8 @@ def process_verse(verse_element):
         A string containing the text of the verse element.
     """
     if verse_element.tag != 'verse':
-        raise UserWarning(
-            'Unexpected element in verse: {}'.format(verse_element.tag))
+        raise UserWarning('Unexpected element in verse: {}'.format(
+            verse_element.tag))
 
     return verse_element.text
 
@@ -70,8 +69,8 @@ def process_section(section_element):
             if text:
                 verses.append(text)
         else:
-            raise UserWarning(
-                'Unexpected element in section: {}'.format(element.tag))
+            raise UserWarning('Unexpected element in section: {}'.format(
+                element.tag))
 
     section.append(make_p(verses))
 
@@ -143,8 +142,8 @@ def process_chapter(chapter_element):
             paragraph.text = child.text
             section.append(paragraph)
         else:
-            raise UserWarning(
-                'Unexpected element in chapter: {}'.format(child.tag))
+            raise UserWarning('Unexpected element in chapter: {}'.format(
+                child.tag))
 
     return section
 
@@ -168,9 +167,8 @@ def process_book(book_element):
 
     for chapter_element in book_element:
         if chapter_element.tag != 'chapter':
-            raise UserWarning(
-                '{}: Unexpected element in book: {}'.format(
-                    self.orig, chapter_element.tag))
+            raise UserWarning('{}: Unexpected element in book: {}'.format(
+                self.orig, chapter_element.tag))
 
         section.append(process_chapter(chapter_element))
 

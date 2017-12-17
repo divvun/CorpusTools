@@ -18,9 +18,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """This file contains routines to crawl sites containing saami text."""
-
 
 from __future__ import absolute_import, print_function
 
@@ -50,8 +48,7 @@ class Crawler(object):
         self.visited_links = set()
         self.download_links = set()
         self.corpus_adders = {}
-        self.downloader = adder.UrlDownloader(os.path.join(
-            self.goaldir, 'tmp'))
+        self.downloader = adder.UrlDownloader(os.path.join(self.goaldir, 'tmp'))
 
     def __del__(self):
         """Add all files to the corpus."""
@@ -73,15 +70,13 @@ class Crawler(object):
             else:
                 normalised_name = namechanger.normalise_filename(
                     os.path.basename(tmpname))
-                normalised_path = os.path.join(
-                    self.corpus_adders[lang].goaldir, normalised_name)
+                normalised_path = os.path.join(self.corpus_adders[lang].goaldir,
+                                               normalised_name)
 
                 if not os.path.exists(normalised_path):
-                    parallelpath = self.corpus_adders[
-                        lang].copy_file_to_corpus(
-                            tmpname, url, parallelpath=parallelpath)
-                    util.print_frame(
-                        debug='adding {}'.format(parallelpath))
+                    parallelpath = self.corpus_adders[lang].copy_file_to_corpus(
+                        tmpname, url, parallelpath=parallelpath)
+                    util.print_frame(debug='adding {}'.format(parallelpath))
                 else:
                     parallelpath = normalised_path
         print(file=sys.stderr)
@@ -131,14 +126,15 @@ class SamediggiFiCrawler(Crawler):
         """Initialise the SamediggiFiCrawler class."""
         super(SamediggiFiCrawler, self).__init__()
 
-        self.unvisited_links.add(
-            u'http://www.samediggi.fi/')
+        self.unvisited_links.add(u'http://www.samediggi.fi/')
         self.old_urls = {}
-        self.langs = {u'finnish': u'fin',
-                      u'davvi': u'sme',
-                      u'anaras': u'smn',
-                      u'nuortta': u'sms',
-                      u'english': u'eng'}
+        self.langs = {
+            u'finnish': u'fin',
+            u'davvi': u'sme',
+            u'anaras': u'smn',
+            u'nuortta': u'sms',
+            u'english': u'eng'
+        }
 
         for (natural, iso) in six.iteritems(self.langs):
             self.corpus_adders[natural] = adder.AddToCorpus(
@@ -164,9 +160,8 @@ class SamediggiFiCrawler(Crawler):
 
             if link not in self.visited_links:
                 util.print_frame(debug=link.encode('utf8'))
-                util.print_frame(
-                    debug='Before: unvisited_links {}'.format(
-                        len(self.unvisited_links)))
+                util.print_frame(debug='Before: unvisited_links {}'.format(
+                    len(self.unvisited_links)))
 
                 parallel_pages = []
                 found_saami = False
@@ -209,28 +204,24 @@ class SamediggiFiCrawler(Crawler):
     def get_print_url(content, lang):
         """Compute the print url of the page."""
         tree = html.document_fromstring(content)
-        print_img = tree.find(
-            './/img[@src="http://www.samediggi.fi/'
-            'images/M_images/printButton.png"]')
+        print_img = tree.find('.//img[@src="http://www.samediggi.fi/'
+                              'images/M_images/printButton.png"]')
 
         if print_img is not None:
             parent = print_img.getparent()
             href = six.moves.parse.urlparse(parent.get('href'))
 
             query = href.query
-            newquery = [part for part in query.split('&')
-                        if (part.startswith('option') or
-                            part.startswith('id') or
-                            part.startswith('task'))]
+            newquery = [
+                part for part in query.split('&')
+                if (part.startswith('option') or part.startswith('id') or
+                    part.startswith('task'))
+            ]
             newquery.append('lang=' + lang)
 
             newhref = six.moves.urllib.urlparse.urlunparse(
-                (href.scheme,
-                 href.netloc,
-                 href.path,
-                 href.params,
-                 '&'.join(newquery),
-                 href.fragment))
+                (href.scheme, href.netloc, href.path, href.params,
+                 '&'.join(newquery), href.fragment))
 
             return newhref
 
@@ -283,14 +274,12 @@ class SamediggiFiCrawler(Crawler):
                 if not href.startswith('http'):
                     href = os.path.join('http://www.samediggi.fi', href)
 
-                if (href not in self.visited_links and not
-                        re.search(
-                            'klemetti.blogspot|/nuorat|/#|com_events|'
-                            'com_search|haettavana|do_pdf|pop=1|com_docman|'
-                            '/images|com_weblink|task=vcard|view_contact_id|'
-                            'com_contact|mad4joomla|mailto|javascript|'
-                            'administrator/',
-                            href) and
+                if (href not in self.visited_links and not re.search(
+                        'klemetti.blogspot|/nuorat|/#|com_events|'
+                        'com_search|haettavana|do_pdf|pop=1|com_docman|'
+                        '/images|com_weblink|task=vcard|view_contact_id|'
+                        'com_contact|mad4joomla|mailto|javascript|'
+                        'administrator/', href) and
                         href.startswith('http://www.samediggi.fi')):
                     self.unvisited_links.add(href)
 
@@ -304,10 +293,10 @@ class SamediggiNoPage(object):
         self.parsed_url = six.moves.urllib.parse.urlparse(result.url)
         self.tree = html.document_fromstring(result.content)
 
-        self.ok_netlocs = ['www.sametinget.no',
-                           'www.samediggi.no',
-                           'www.saemiedigkie.no',
-                           'www.samedigge.no']
+        self.ok_netlocs = [
+            'www.sametinget.no', 'www.samediggi.no', 'www.saemiedigkie.no',
+            'www.samedigge.no'
+        ]
 
     @property
     def url(self):
@@ -317,11 +306,12 @@ class SamediggiNoPage(object):
     @property
     def parallel_links(self):
         """Get links to the parallels of this document."""
-        return [six.moves.urllib.parse.urlunparse((self.parsed_url.scheme,
-                                                   self.parsed_url.netloc,
-                                                   a.get('href'), '', '', ''))
-                for a in self.tree.xpath(
-                    './/ul[@id="languageList"]/li/a[@href]')]
+        return [
+            six.moves.urllib.parse.urlunparse((self.parsed_url.scheme,
+                                               self.parsed_url.netloc,
+                                               a.get('href'), '', '', ''))
+            for a in self.tree.xpath('.//ul[@id="languageList"]/li/a[@href]')
+        ]
 
     @property
     def print_url(self):
@@ -331,10 +321,9 @@ class SamediggiNoPage(object):
         if print_link is not None:
             url = print_link.get('href')
 
-            return six.moves.urllib.parse.urlunparse((
-                self.parsed_url.scheme,
-                self.parsed_url.netloc,
-                url, '', '', ''))
+            return six.moves.urllib.parse.urlunparse(
+                (self.parsed_url.scheme, self.parsed_url.netloc, url, '', '',
+                 ''))
 
     @property
     def lang(self):
@@ -364,12 +353,10 @@ class SamediggiNoPage(object):
                         'Web-tv|user/login|mailto|/Dokumenter|/Dokumeantta|'
                         '/Tjaatsegh|.pdf|.doc|.xls|/images/|/download/|'
                         '/Biejjielaahkoe|/Kalender|'
-                        '/Dahpahusat|javascript|tel:',
-                        href):
+                        '/Dahpahusat|javascript|tel:', href):
                     if href.startswith('/'):
                         href = six.moves.urllib.parse.urlunparse(
-                            (self.parsed_url.scheme,
-                             self.parsed_url.netloc,
+                            (self.parsed_url.scheme, self.parsed_url.netloc,
                              href, '', '', ''))
 
                     add = False
@@ -440,13 +427,12 @@ class SamediggiNoCrawler(Crawler):
         found_saami = False
         orig_page = self.crawl_page(link)
         if orig_page is not None:
-            body_lang = self.languageguesser.classify(orig_page.body_text,
-                                                      langs=self.langs)
+            body_lang = self.languageguesser.classify(
+                orig_page.body_text, langs=self.langs)
             if orig_page.lang == body_lang:
                 if body_lang in [u'sme', u'sma', u'smj']:
                     found_saami = True
-                parallel_pages.append((orig_page.print_url,
-                                       orig_page.lang))
+                parallel_pages.append((orig_page.print_url, orig_page.lang))
             else:
                 uff = 'not same lang {}:\n orig: {} body: {}'.format(
                     orig_page.url.encode('utf8'), orig_page.lang, body_lang)
@@ -520,11 +506,12 @@ class NrkSmeCrawler(object):
         # This bytes hoopla is done because the text
         # comes out as utf8 encoded as latin1 …
         try:
-            text = bytes(address.find('.//p[@class="plug-preamble"]').text,
-                         encoding='latin1')
+            text = bytes(
+                address.find('.//p[@class="plug-preamble"]').text,
+                encoding='latin1')
         except AttributeError:
-            text = bytes(address.find('.//h2[@class="title"]').text,
-                         encoding='latin1')
+            text = bytes(
+                address.find('.//h2[@class="title"]').text, encoding='latin1')
 
         return self.language_guesser.classify(text)
 
@@ -545,18 +532,16 @@ class NrkSmeCrawler(object):
         Yields:
             lxml.html.HtmlElement: a parsed html document.
         """
-        page_links_template = (
-            'https://www.nrk.no/serum/api/render/{tag}?'
-            'size=18&perspective=BRIEF&alignment=AUTO&'
-            'classes=surrogate-content&'
-            'display=false&arrangement.offset={offset}&'
-            'arrangement.quantity={quantity}&'
-            'arrangement.repetition=PATTERN&'
-            'arrangement.view[0].perspective=BRIEF&'
-            'arrangement.view[0].size=6&'
-            'arrangement.view[0].alignment=LEFT&'
-            'paged=SIMPLE'
-        )
+        page_links_template = ('https://www.nrk.no/serum/api/render/{tag}?'
+                               'size=18&perspective=BRIEF&alignment=AUTO&'
+                               'classes=surrogate-content&'
+                               'display=false&arrangement.offset={offset}&'
+                               'arrangement.quantity={quantity}&'
+                               'arrangement.repetition=PATTERN&'
+                               'arrangement.view[0].perspective=BRIEF&'
+                               'arrangement.view[0].size=6&'
+                               'arrangement.view[0].alignment=LEFT&'
+                               'paged=SIMPLE')
         quantity = 10
         limit = 10000
 
@@ -564,8 +549,9 @@ class NrkSmeCrawler(object):
             print('.', end='')
             sys.stdout.flush()
             try:
-                result = requests.get(page_links_template.format(
-                    tag=tag, offset=offset, quantity=quantity))
+                result = requests.get(
+                    page_links_template.format(
+                        tag=tag, offset=offset, quantity=quantity))
             except requests.exceptions.ConnectionError:
                 util.note('Connection error when fetching {}'.format(
                     tag, offset, quantity))
@@ -588,8 +574,7 @@ class NrkSmeCrawler(object):
             str: a url to an nrk.no article
         """
         for tree in self.get_tag_page_trees(tag):
-            for address in tree.xpath(
-                    '//a[@class="autonomous lp_plug"]'):
+            for address in tree.xpath('//a[@class="autonomous lp_plug"]'):
                 self.counter[tag + '_total'] += 1
                 href = address.get('href')
 
@@ -699,9 +684,8 @@ class NrkSmeCrawler(object):
         print('Fetched {fetched} pages'.format(**self.counter))
         for tag in self.tags:
             if self.counter[tag + '_fetched']:
-                print(
-                    'Fetched {} articles from category {} from nrk.no'.format(
-                        self.counter[tag + '_fetched'], self.tags[tag]))
+                print('Fetched {} articles from category {} from nrk.no'.format(
+                    self.counter[tag + '_fetched'], self.tags[tag]))
 
     @staticmethod
     def add_metadata(path):
@@ -724,10 +708,9 @@ class NrkSmeCrawler(object):
                                      text.startswith('Arti')):
                 count += 1
                 parts = author.getprevious().text.strip().split()
-                metadata.set_variable('author' + str(count) + '_ln',
-                                      parts[-1])
-                metadata.set_variable('author' + str(count) + '_fn',
-                                      ' '.join(parts[:-1]))
+                metadata.set_variable('author' + str(count) + '_ln', parts[-1])
+                metadata.set_variable('author' + str(count) + '_fn', ' '.join(
+                    parts[:-1]))
 
         time = article.find('//time[@itemprop="datePublished"]')
         if time is None:
@@ -750,11 +733,12 @@ class NrkSmeCrawler(object):
             set of strings, where the strings are links to the articles.
         """
         return {
-            xslsetter.MetadataHandler(os.path.join(root, file_)).get_variable(
-                'filename')
+            xslsetter.MetadataHandler(os.path.join(
+                root, file_)).get_variable('filename')
             for root, _, files in os.walk(path)
             for file_ in files
-            if file_.endswith('.xsl')}
+            if file_.endswith('.xsl')
+        }
 
 
 def parse_options():
@@ -767,9 +751,7 @@ def parse_options():
         parents=[argparse_version.parser],
         description='Crawl saami sites (for now, only www.samediggi.fi).')
 
-    parser.add_argument('sites',
-                        nargs='+',
-                        help="The sites to crawl")
+    parser.add_argument('sites', nargs='+', help="The sites to crawl")
 
     args = parser.parse_args()
     return args

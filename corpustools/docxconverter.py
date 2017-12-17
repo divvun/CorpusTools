@@ -17,7 +17,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Convert docx files to the Giella xml format."""
 
 from lxml.html import html5parser

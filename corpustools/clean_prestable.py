@@ -17,9 +17,7 @@
 #   Copyright © 2016-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Classes and functions to clean the prestable directories."""
-
 
 from __future__ import absolute_import, print_function, unicode_literals
 
@@ -42,9 +40,7 @@ def parse_options():
         parents=[argparse_version.parser],
         description='Remove files in prestable that have no original files.')
 
-    parser.add_argument('corpusdirs',
-                        nargs='+',
-                        help='Corpus directories')
+    parser.add_argument('corpusdirs', nargs='+', help='Corpus directories')
 
     args = parser.parse_args()
     return args

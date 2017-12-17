@@ -17,7 +17,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Convert epub documents to the Giella xml format.
 
 Epub files are zip files that contain text in xhtml files. This class reads
@@ -112,8 +111,8 @@ def epub_to_unicodehtml(filename):
         found in the epub file as one xhtml document.
     """
     html = extract_content(filename)
-    remove_ranges(xslsetter.MetadataHandler(filename + '.xsl', create=True),
-                  html)
+    remove_ranges(
+        xslsetter.MetadataHandler(filename + '.xsl', create=True), html)
 
     return html
 
@@ -133,7 +132,9 @@ def remove_siblings_shorten_path(parts, content, preceding=False):
     """
     path = '/'.join(parts)
     found = content.find(
-        path, namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+        path, namespaces={
+            'html': 'http://www.w3.org/1999/xhtml'
+        })
     parent = found.getparent()
     for sibling in found.itersiblings(preceding=preceding):
         parent.remove(sibling)
@@ -168,8 +169,7 @@ def shorten_longest_path(path1, path2, content):
         starts = remove_siblings_shorten_path(starts, content)
 
     while len(ends) > len(starts):
-        ends = remove_siblings_shorten_path(
-            ends, content, preceding=True)
+        ends = remove_siblings_shorten_path(ends, content, preceding=True)
 
     return starts, ends
 
@@ -196,8 +196,7 @@ def remove_trees_1(path1, path2, content):
 
     while starts[:-1] != ends[:-1]:
         starts = remove_siblings_shorten_path(starts, content)
-        ends = remove_siblings_shorten_path(
-            ends, content, preceding=True)
+        ends = remove_siblings_shorten_path(ends, content, preceding=True)
 
     return starts, ends
 
@@ -215,11 +214,13 @@ def remove_trees_2(starts, ends, content):
             removed.
     """
     deepest_start = content.find(
-        '/'.join(starts), namespaces={'html':
-                                      'http://www.w3.org/1999/xhtml'})
+        '/'.join(starts), namespaces={
+            'html': 'http://www.w3.org/1999/xhtml'
+        })
     deepest_end = content.find(
-        '/'.join(ends), namespaces={'html':
-                                    'http://www.w3.org/1999/xhtml'})
+        '/'.join(ends), namespaces={
+            'html': 'http://www.w3.org/1999/xhtml'
+        })
     parent = deepest_start.getparent()
     for sibling in deepest_start.itersiblings():
         if sibling == deepest_end:
@@ -237,7 +238,9 @@ def remove_first_element(path1, content):
             be altered.
     """
     first_start = content.find(
-        path1, namespaces={'html': 'http://www.w3.org/1999/xhtml'})
+        path1, namespaces={
+            'html': 'http://www.w3.org/1999/xhtml'
+        })
     first_start.getparent().remove(first_start)
 
 

@@ -17,7 +17,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Convert plaintext files to the Giella xml format."""
 
 import codecs
@@ -86,7 +85,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
             (u'<0x017E>', u'ž'),
             (u'<0x2003>', u' '),
             (u'========================================================'
-                '========================', u'\n'),
+             '========================', u'\n'),
         ]
         content = util.replace_all(plaintext_oddities, content)
         remove_re = re.compile(

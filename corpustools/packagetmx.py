@@ -17,9 +17,7 @@
 #   Copyright © 2012-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Add tmx files to a zipfile."""
-
 
 from __future__ import absolute_import, print_function
 
@@ -48,8 +46,9 @@ class PackageTmx(object):
     def find_tmx_files(self):
         """Find the tmx files in dirname, return them as a list."""
         filelist = []
-        for root, dirs, files in os.walk(os.path.join(
-                os.environ['GTFREE'], 'prestable/tmx/' + self.dirname)):
+        for root, dirs, files in os.walk(
+                os.path.join(os.environ['GTFREE'],
+                             'prestable/tmx/' + self.dirname)):
             for f in files:
                 if f.endswith('.tmx'):
                     filelist.append(os.path.join(root, f))
@@ -58,8 +57,9 @@ class PackageTmx(object):
 
     def generate_filename(self):
         """Generate a new file name. Return the new filename."""
-        name = ''.join([self.dirname, '-', self.date,
-                        '-{0:06d}'.format(self.fileId), '.tmx'])
+        name = ''.join([
+            self.dirname, '-', self.date, '-{0:06d}'.format(self.fileId), '.tmx'
+        ])
         self.fileId += 1
 
         return name
@@ -67,8 +67,10 @@ class PackageTmx(object):
     def write_new_file(self, tmxFile):
         """Write the file to the zipfile with a new filename."""
         # print "Writing", self.tmxFile, 'as', self.generateFilename()
-        self.zipfile.write(tmxFile, arcname=self.generate_filename(),
-                           compress_type=zipfile.ZIP_DEFLATED)
+        self.zipfile.write(
+            tmxFile,
+            arcname=self.generate_filename(),
+            compress_type=zipfile.ZIP_DEFLATED)
 
 
 def parse_options():

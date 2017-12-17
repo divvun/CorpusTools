@@ -17,7 +17,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """This file contains classes fix converted documents."""
 
 import os
@@ -41,10 +40,12 @@ class LanguageDetector(object):
     @property
     def inlangs(self):
         """Return the predifined possible languages of the document."""
-        inlangs = [language.get('{http://www.w3.org/XML/1998/namespace}'
-                                'lang')
-                   for language in self.document.findall(
-                       'header/multilingual/language')]
+        inlangs = [
+            language.get('{http://www.w3.org/XML/1998/namespace}'
+                         'lang')
+            for language in self.document.findall(
+                'header/multilingual/language')
+        ]
         if inlangs:
             inlangs.append(self.mainlang)
 
@@ -67,8 +68,8 @@ class LanguageDetector(object):
             paragraph_text = self.remove_quote(paragraph)
             if self.language_guesser is not None and \
                     self.language_guesser.get_langs(self.inlangs):
-                lang = self.language_guesser.classify(paragraph_text,
-                                                      langs=self.inlangs)
+                lang = self.language_guesser.classify(
+                    paragraph_text, langs=self.inlangs)
                 if lang != self.mainlang:
                     paragraph.set('{http://www.w3.org/XML/1998/namespace}lang',
                                   lang)
@@ -82,20 +83,18 @@ class LanguageDetector(object):
         for element in paragraph.iter("span"):
             if element.get("type") == "quote":
                 if element.text is not None:
-                    lang = self.language_guesser.classify(element.text,
-                                                          langs=self.inlangs)
+                    lang = self.language_guesser.classify(
+                        element.text, langs=self.inlangs)
                     if lang != self.mainlang:
                         element.set(
-                            '{http://www.w3.org/XML/1998/namespace}lang',
-                            lang)
+                            '{http://www.w3.org/XML/1998/namespace}lang', lang)
 
     @staticmethod
     def remove_quote(paragraph):
         """Extract all text except the one inside <span type='quote'>."""
         text = ''
         for element in paragraph.iter():
-            if (element.tag == 'span' and
-                    element.get('type') == 'quote' and
+            if (element.tag == 'span' and element.get('type') == 'quote' and
                     element.tail is not None):
                 text = text + element.tail
             else:

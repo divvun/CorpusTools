@@ -38,8 +38,7 @@ class TestAddToCorpus(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=['.git'])
         self.tempdir.makedir('tull')
         self.tempdir.makedir('corpus/orig')
-        self.realcorpusdir = os.path.join(self.tempdir.path,
-                                          'corpus')
+        self.realcorpusdir = os.path.join(self.tempdir.path, 'corpus')
 
         r = git.Repo.init(self.realcorpusdir)
         r.index.add(['orig'])
@@ -92,11 +91,10 @@ class TestAddToCorpus(unittest.TestCase):
         lang = 'sme'
         path = 'a/b/c'
 
-        atc = adder.AddToCorpus(
-            self.realcorpusdir,
-            lang, path)
-        self.assertEqual(atc.goaldir, os.path.join(self.tempdir.path, 'corpus',
-                                                   'orig', lang, path))
+        atc = adder.AddToCorpus(self.realcorpusdir, lang, path)
+        self.assertEqual(atc.goaldir,
+                         os.path.join(self.tempdir.path, 'corpus', 'orig', lang,
+                                      path))
         self.tempdir.check_dir('corpus/orig/sme/a/b/c')
 
     def test_init_with_too_long_mainlang(self):
@@ -125,8 +123,9 @@ class TestAddToCorpus(unittest.TestCase):
         path = 'æ/č/ö'
 
         atc = adder.AddToCorpus(self.realcorpusdir, lang, path)
-        self.assertEqual(atc.goaldir, os.path.join(self.tempdir.path, 'corpus',
-                                                   'orig', lang, 'ae/c/o'))
+        self.assertEqual(atc.goaldir,
+                         os.path.join(self.tempdir.path, 'corpus', 'orig', lang,
+                                      'ae/c/o'))
 
 
 class TestAddFileToCorpus(unittest.TestCase):
@@ -151,8 +150,7 @@ class TestAddFileToCorpus(unittest.TestCase):
                            six.b('sma content of f'))
 
         self.realcorpusdir = os.path.join(self.tempdir.path, 'corpus')
-        self.origdirectory = os.path.join(
-            self.tempdir.path, 'origdirectory')
+        self.origdirectory = os.path.join(self.tempdir.path, 'origdirectory')
 
         smj_metadata = xslsetter.MetadataHandler(
             os.path.join(self.realcorpusdir, 'orig/smj/ae/c/o/f.txt.xsl'),
@@ -183,35 +181,19 @@ class TestAddFileToCorpus(unittest.TestCase):
         atc.add_files_to_working_copy()
 
         self.tempdir.check_all(
-            '',
-            'corpus/',
-            'corpus/orig/',
-            'corpus/orig/sma/',
-            'corpus/orig/sma/ae/',
-            'corpus/orig/sma/ae/c/',
-            'corpus/orig/sma/ae/c/o/',
-            'corpus/orig/sma/ae/c/o/f.txt',
-            'corpus/orig/sma/ae/c/o/f.txt.xsl',
-            'corpus/orig/sme/',
-            'corpus/orig/sme/ae/',
-            'corpus/orig/sme/ae/c/',
-            'corpus/orig/sme/ae/c/o/',
-            'corpus/orig/sme/ae/c/o/a.txt',
-            'corpus/orig/sme/ae/c/o/a.txt.xsl',
-            'corpus/orig/sme/ae/c/o/b.txt',
-            'corpus/orig/sme/ae/c/o/c.txt',
-            'corpus/orig/smj/',
-            'corpus/orig/smj/ae/',
-            'corpus/orig/smj/ae/c/',
-            'corpus/orig/smj/ae/c/o/',
-            'corpus/orig/smj/ae/c/o/f.txt',
-            'corpus/orig/smj/ae/c/o/f.txt.xsl',
-            'origdirectory/',
-            'origdirectory/a.txt',
-            'origdirectory/b.txt',
-            'origdirectory/c.txt',
-            'origdirectory/d.txt',
-            'origdirectory/æ.txt')
+            '', 'corpus/', 'corpus/orig/', 'corpus/orig/sma/',
+            'corpus/orig/sma/ae/', 'corpus/orig/sma/ae/c/',
+            'corpus/orig/sma/ae/c/o/', 'corpus/orig/sma/ae/c/o/f.txt',
+            'corpus/orig/sma/ae/c/o/f.txt.xsl', 'corpus/orig/sme/',
+            'corpus/orig/sme/ae/', 'corpus/orig/sme/ae/c/',
+            'corpus/orig/sme/ae/c/o/', 'corpus/orig/sme/ae/c/o/a.txt',
+            'corpus/orig/sme/ae/c/o/a.txt.xsl', 'corpus/orig/sme/ae/c/o/b.txt',
+            'corpus/orig/sme/ae/c/o/c.txt', 'corpus/orig/smj/',
+            'corpus/orig/smj/ae/', 'corpus/orig/smj/ae/c/',
+            'corpus/orig/smj/ae/c/o/', 'corpus/orig/smj/ae/c/o/f.txt',
+            'corpus/orig/smj/ae/c/o/f.txt.xsl', 'origdirectory/',
+            'origdirectory/a.txt', 'origdirectory/b.txt', 'origdirectory/c.txt',
+            'origdirectory/d.txt', 'origdirectory/æ.txt')
 
         metadata = xslsetter.MetadataHandler(
             os.path.join(self.realcorpusdir, 'orig/sme/ae/c/o/a.txt.xsl'))
@@ -226,35 +208,19 @@ class TestAddFileToCorpus(unittest.TestCase):
         atc.add_files_to_working_copy()
 
         self.tempdir.check_all(
-            '',
-            'corpus/',
-            'corpus/orig/',
-            'corpus/orig/sma/',
-            'corpus/orig/sma/ae/',
-            'corpus/orig/sma/ae/c/',
-            'corpus/orig/sma/ae/c/o/',
-            'corpus/orig/sma/ae/c/o/f.txt',
-            'corpus/orig/sma/ae/c/o/f.txt.xsl',
-            'corpus/orig/sme/',
-            'corpus/orig/sme/ae/',
-            'corpus/orig/sme/ae/c/',
-            'corpus/orig/sme/ae/c/o/',
-            'corpus/orig/sme/ae/c/o/ae.txt',
-            'corpus/orig/sme/ae/c/o/ae.txt.xsl',
-            'corpus/orig/sme/ae/c/o/b.txt',
-            'corpus/orig/sme/ae/c/o/c.txt',
-            'corpus/orig/smj/',
-            'corpus/orig/smj/ae/',
-            'corpus/orig/smj/ae/c/',
-            'corpus/orig/smj/ae/c/o/',
-            'corpus/orig/smj/ae/c/o/f.txt',
-            'corpus/orig/smj/ae/c/o/f.txt.xsl',
-            'origdirectory/',
-            'origdirectory/a.txt',
-            'origdirectory/b.txt',
-            'origdirectory/c.txt',
-            'origdirectory/d.txt',
-            'origdirectory/æ.txt')
+            '', 'corpus/', 'corpus/orig/', 'corpus/orig/sma/',
+            'corpus/orig/sma/ae/', 'corpus/orig/sma/ae/c/',
+            'corpus/orig/sma/ae/c/o/', 'corpus/orig/sma/ae/c/o/f.txt',
+            'corpus/orig/sma/ae/c/o/f.txt.xsl', 'corpus/orig/sme/',
+            'corpus/orig/sme/ae/', 'corpus/orig/sme/ae/c/',
+            'corpus/orig/sme/ae/c/o/', 'corpus/orig/sme/ae/c/o/ae.txt',
+            'corpus/orig/sme/ae/c/o/ae.txt.xsl', 'corpus/orig/sme/ae/c/o/b.txt',
+            'corpus/orig/sme/ae/c/o/c.txt', 'corpus/orig/smj/',
+            'corpus/orig/smj/ae/', 'corpus/orig/smj/ae/c/',
+            'corpus/orig/smj/ae/c/o/', 'corpus/orig/smj/ae/c/o/f.txt',
+            'corpus/orig/smj/ae/c/o/f.txt.xsl', 'origdirectory/',
+            'origdirectory/a.txt', 'origdirectory/b.txt', 'origdirectory/c.txt',
+            'origdirectory/d.txt', 'origdirectory/æ.txt')
 
         metadata = xslsetter.MetadataHandler(
             os.path.join(self.realcorpusdir, 'orig/sme/ae/c/o/ae.txt.xsl'))
@@ -269,35 +235,19 @@ class TestAddFileToCorpus(unittest.TestCase):
         atc.add_files_to_working_copy()
 
         self.tempdir.check_all(
-            '',
-            'corpus/',
-            'corpus/orig/',
-            'corpus/orig/sma/',
-            'corpus/orig/sma/ae/',
-            'corpus/orig/sma/ae/c/',
-            'corpus/orig/sma/ae/c/o/',
-            'corpus/orig/sma/ae/c/o/f.txt',
-            'corpus/orig/sma/ae/c/o/f.txt.xsl',
-            'corpus/orig/sme/',
-            'corpus/orig/sme/ae/',
-            'corpus/orig/sme/ae/c/',
-            'corpus/orig/sme/ae/c/o/',
-            'corpus/orig/sme/ae/c/o/b.txt',
-            'corpus/orig/sme/ae/c/o/c.txt',
-            'corpus/orig/sme/ae/c/o/c_1.txt',
-            'corpus/orig/sme/ae/c/o/c_1.txt.xsl',
-            'corpus/orig/smj/',
-            'corpus/orig/smj/ae/',
-            'corpus/orig/smj/ae/c/',
-            'corpus/orig/smj/ae/c/o/',
-            'corpus/orig/smj/ae/c/o/f.txt',
-            'corpus/orig/smj/ae/c/o/f.txt.xsl',
-            'origdirectory/',
-            'origdirectory/a.txt',
-            'origdirectory/b.txt',
-            'origdirectory/c.txt',
-            'origdirectory/d.txt',
-            'origdirectory/æ.txt')
+            '', 'corpus/', 'corpus/orig/', 'corpus/orig/sma/',
+            'corpus/orig/sma/ae/', 'corpus/orig/sma/ae/c/',
+            'corpus/orig/sma/ae/c/o/', 'corpus/orig/sma/ae/c/o/f.txt',
+            'corpus/orig/sma/ae/c/o/f.txt.xsl', 'corpus/orig/sme/',
+            'corpus/orig/sme/ae/', 'corpus/orig/sme/ae/c/',
+            'corpus/orig/sme/ae/c/o/', 'corpus/orig/sme/ae/c/o/b.txt',
+            'corpus/orig/sme/ae/c/o/c.txt', 'corpus/orig/sme/ae/c/o/c_1.txt',
+            'corpus/orig/sme/ae/c/o/c_1.txt.xsl', 'corpus/orig/smj/',
+            'corpus/orig/smj/ae/', 'corpus/orig/smj/ae/c/',
+            'corpus/orig/smj/ae/c/o/', 'corpus/orig/smj/ae/c/o/f.txt',
+            'corpus/orig/smj/ae/c/o/f.txt.xsl', 'origdirectory/',
+            'origdirectory/a.txt', 'origdirectory/b.txt', 'origdirectory/c.txt',
+            'origdirectory/d.txt', 'origdirectory/æ.txt')
 
         metadata = xslsetter.MetadataHandler(
             os.path.join(self.realcorpusdir, 'orig/sme/ae/c/o/c_1.txt.xsl'))
@@ -310,49 +260,35 @@ class TestAddFileToCorpus(unittest.TestCase):
         with self.assertRaises(adder.AdderError):
             orig_name = os.path.join(self.origdirectory, 'd.txt')
             atc.copy_file_to_corpus(
-                orig_name, os.path.basename(orig_name),
+                orig_name,
+                os.path.basename(orig_name),
                 parallelpath=os.path.join(self.realcorpusdir,
                                           'orig/smi/ae/c/o/f.txt'))
 
     def test_add_file_with_parallel(self):
         atc = adder.AddToCorpus(self.realcorpusdir, 'sme', 'æ/č/ö')
         orig_name = os.path.join(self.origdirectory, 'd.txt')
-        atc.copy_file_to_corpus(orig_name, os.path.basename(orig_name),
-                                parallelpath=os.path.join(
-                                    self.realcorpusdir,
-                                    'orig/smj/ae/c/o/f.txt'))
+        atc.copy_file_to_corpus(
+            orig_name,
+            os.path.basename(orig_name),
+            parallelpath=os.path.join(self.realcorpusdir,
+                                      'orig/smj/ae/c/o/f.txt'))
         atc.add_files_to_working_copy()
 
         self.tempdir.check_all(
-            '',
-            'corpus/',
-            'corpus/orig/',
-            'corpus/orig/sma/',
-            'corpus/orig/sma/ae/',
-            'corpus/orig/sma/ae/c/',
-            'corpus/orig/sma/ae/c/o/',
-            'corpus/orig/sma/ae/c/o/f.txt',
-            'corpus/orig/sma/ae/c/o/f.txt.xsl',
-            'corpus/orig/sme/',
-            'corpus/orig/sme/ae/',
-            'corpus/orig/sme/ae/c/',
-            'corpus/orig/sme/ae/c/o/',
-            'corpus/orig/sme/ae/c/o/b.txt',
-            'corpus/orig/sme/ae/c/o/c.txt',
-            'corpus/orig/sme/ae/c/o/d.txt',
-            'corpus/orig/sme/ae/c/o/d.txt.xsl',
-            'corpus/orig/smj/',
-            'corpus/orig/smj/ae/',
-            'corpus/orig/smj/ae/c/',
-            'corpus/orig/smj/ae/c/o/',
-            'corpus/orig/smj/ae/c/o/f.txt',
-            'corpus/orig/smj/ae/c/o/f.txt.xsl',
-            'origdirectory/',
-            'origdirectory/a.txt',
-            'origdirectory/b.txt',
-            'origdirectory/c.txt',
-            'origdirectory/d.txt',
-            'origdirectory/æ.txt')
+            '', 'corpus/', 'corpus/orig/', 'corpus/orig/sma/',
+            'corpus/orig/sma/ae/', 'corpus/orig/sma/ae/c/',
+            'corpus/orig/sma/ae/c/o/', 'corpus/orig/sma/ae/c/o/f.txt',
+            'corpus/orig/sma/ae/c/o/f.txt.xsl', 'corpus/orig/sme/',
+            'corpus/orig/sme/ae/', 'corpus/orig/sme/ae/c/',
+            'corpus/orig/sme/ae/c/o/', 'corpus/orig/sme/ae/c/o/b.txt',
+            'corpus/orig/sme/ae/c/o/c.txt', 'corpus/orig/sme/ae/c/o/d.txt',
+            'corpus/orig/sme/ae/c/o/d.txt.xsl', 'corpus/orig/smj/',
+            'corpus/orig/smj/ae/', 'corpus/orig/smj/ae/c/',
+            'corpus/orig/smj/ae/c/o/', 'corpus/orig/smj/ae/c/o/f.txt',
+            'corpus/orig/smj/ae/c/o/f.txt.xsl', 'origdirectory/',
+            'origdirectory/a.txt', 'origdirectory/b.txt', 'origdirectory/c.txt',
+            'origdirectory/d.txt', 'origdirectory/æ.txt')
 
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.realcorpusdir, 'orig/sme/ae/c/o/d.txt.xsl'))
@@ -383,8 +319,7 @@ class TestDirectoryToCorpusWithDuplicates(unittest.TestCase):
         self.tempdir.write('origdirectory/sub/c.txt', six.b('content of a'))
         self.tempdir.write('origdirectory/sub/d.txt', six.b('content of d'))
         self.tempdir.makedir('corpus/orig')
-        self.origdirectory = os.path.join(self.tempdir.path,
-                                          'origdirectory')
+        self.origdirectory = os.path.join(self.tempdir.path, 'origdirectory')
         self.realcorpusdir = os.path.join(self.tempdir.path, 'corpus')
         r = git.Repo.init(self.realcorpusdir)
         r.index.add(['orig'])
@@ -407,15 +342,12 @@ class TestDirectoryToCorpusWithoutDuplicates(unittest.TestCase):
         self.tempdir.write('origdirectory/æ.txt',
                            u'content of æ'.encode('utf8'))
         self.tempdir.write('origdirectory/b.txt', six.b('content of b'))
-        self.tempdir.write('origdirectory/sub/a.txt',
-                           six.b('content of sub/a'))
+        self.tempdir.write('origdirectory/sub/a.txt', six.b('content of sub/a'))
         self.tempdir.write('origdirectory/sub/c.txt', six.b('content of c'))
         self.tempdir.write('origdirectory/sub/d.txt', six.b('content of d'))
         self.tempdir.makedir('corpus/orig')
-        self.origdirectory = os.path.join(self.tempdir.path,
-                                          'origdirectory')
-        self.realcorpusdir = os.path.join(self.tempdir.path,
-                                          'corpus')
+        self.origdirectory = os.path.join(self.tempdir.path, 'origdirectory')
+        self.realcorpusdir = os.path.join(self.tempdir.path, 'corpus')
         r = git.Repo.init(self.realcorpusdir)
         r.index.add(['orig'])
         r.index.commit('Added orig')
@@ -429,30 +361,17 @@ class TestDirectoryToCorpusWithoutDuplicates(unittest.TestCase):
         atc.add_files_to_working_copy()
 
         self.tempdir.check_all(
-            '',
-            'corpus/',
-            'corpus/orig/',
-            'corpus/orig/sme/',
-            'corpus/orig/sme/ae/',
-            'corpus/orig/sme/ae/c/',
-            'corpus/orig/sme/ae/c/o/',
-            'corpus/orig/sme/ae/c/o/a.txt',
+            '', 'corpus/', 'corpus/orig/', 'corpus/orig/sme/',
+            'corpus/orig/sme/ae/', 'corpus/orig/sme/ae/c/',
+            'corpus/orig/sme/ae/c/o/', 'corpus/orig/sme/ae/c/o/a.txt',
             'corpus/orig/sme/ae/c/o/a.txt.xsl',
             'corpus/orig/sme/ae/c/o/a_1.txt',
             'corpus/orig/sme/ae/c/o/a_1.txt.xsl',
             'corpus/orig/sme/ae/c/o/ae.txt',
-            'corpus/orig/sme/ae/c/o/ae.txt.xsl',
-            'corpus/orig/sme/ae/c/o/b.txt',
-            'corpus/orig/sme/ae/c/o/b.txt.xsl',
-            'corpus/orig/sme/ae/c/o/c.txt',
-            'corpus/orig/sme/ae/c/o/c.txt.xsl',
-            'corpus/orig/sme/ae/c/o/d.txt',
-            'corpus/orig/sme/ae/c/o/d.txt.xsl',
-            'origdirectory/',
-            'origdirectory/a.txt',
-            'origdirectory/b.txt',
-            'origdirectory/sub/',
-            'origdirectory/sub/a.txt',
-            'origdirectory/sub/c.txt',
-            'origdirectory/sub/d.txt',
-            'origdirectory/æ.txt')
+            'corpus/orig/sme/ae/c/o/ae.txt.xsl', 'corpus/orig/sme/ae/c/o/b.txt',
+            'corpus/orig/sme/ae/c/o/b.txt.xsl', 'corpus/orig/sme/ae/c/o/c.txt',
+            'corpus/orig/sme/ae/c/o/c.txt.xsl', 'corpus/orig/sme/ae/c/o/d.txt',
+            'corpus/orig/sme/ae/c/o/d.txt.xsl', 'origdirectory/',
+            'origdirectory/a.txt', 'origdirectory/b.txt', 'origdirectory/sub/',
+            'origdirectory/sub/a.txt', 'origdirectory/sub/c.txt',
+            'origdirectory/sub/d.txt', 'origdirectory/æ.txt')

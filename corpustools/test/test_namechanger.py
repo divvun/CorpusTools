@@ -37,6 +37,7 @@ here = os.path.dirname(__file__)
 
 class TestFilenameToAscii(unittest.TestCase):
     """Test the normalise_filename function"""
+
     @parameterized.expand([
         (u'ášŧŋđžčåøæöäï+', u'astngdzcaoaeoai_'),
         (u'ÁŠŦŊĐŽČÅØÆÖÄÏ+', u'astngdzcaoaeoai_'),
@@ -51,12 +52,10 @@ class TestFilenameToAscii(unittest.TestCase):
         (u'__aba.txt', u'aba.txt'),
         (u'--aba.txt', u'aba.txt'),
         (u'--__aba.txt', u'aba.txt'),
-        ((
-            u'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
-            u'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦ‌​ЧШЩЪЫЬЭЮЯ.txt'),
-         (
-            u'abvgdeiozhziiklmnoprstufkhtschshshch_y_eiuia'
-            u'abvgdeiozhziiklmnoprstufkhts_chshshch_y_eiuia.txt')),
+        ((u'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+          u'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦ‌​ЧШЩЪЫЬЭЮЯ.txt'),
+         (u'abvgdeiozhziiklmnoprstufkhtschshshch_y_eiuia'
+          u'abvgdeiozhziiklmnoprstufkhts_chshshch_y_eiuia.txt')),
     ])
     def test_filename_to_ascii(self, orig, expected):
         """Check that non ascii filenames are converted to ascii only ones."""
@@ -87,15 +86,17 @@ class TestAreDuplicates(unittest.TestCase):
 
     def test_are_duplicate_equal_files(self):
         """Both files exist, with same content, return True"""
-        self.assertTrue(namechanger.are_duplicates(
-            os.path.join(self.tempdir.path, 'old_dupe.txt'),
-            os.path.join(self.tempdir.path, 'new_dupe.txt')))
+        self.assertTrue(
+            namechanger.are_duplicates(
+                os.path.join(self.tempdir.path, 'old_dupe.txt'),
+                os.path.join(self.tempdir.path, 'new_dupe.txt')))
 
     def test_are_duplicate_unequal_files(self):
         """Both files exist, not same content, return False"""
-        self.assertFalse(namechanger.are_duplicates(
-            os.path.join(self.tempdir.path, 'old_dupe.txt'),
-            os.path.join(self.tempdir.path, 'new_none_dupe.txt')))
+        self.assertFalse(
+            namechanger.are_duplicates(
+                os.path.join(self.tempdir.path, 'old_dupe.txt'),
+                os.path.join(self.tempdir.path, 'new_none_dupe.txt')))
 
 
 class TestComputeNewBasename(unittest.TestCase):
@@ -103,14 +104,14 @@ class TestComputeNewBasename(unittest.TestCase):
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory()
         self.tempdir.makedir('orig/sme/admin/other_files')
-        self.tempdir.write(
-            'orig/sme/admin/other_files/old_dupe.txt', six.b('a'))
-        self.tempdir.write(
-            'orig/sme/admin/other_files/new_dupe.txt', six.b('a'))
-        self.tempdir.write(
-            'orig/sme/admin/other_files/new_none_dupe.txt', six.b('b'))
-        self.tempdir.write(
-            'orig/sme/admin/other_files/new_none_düpe.txt', six.b('a'))
+        self.tempdir.write('orig/sme/admin/other_files/old_dupe.txt',
+                           six.b('a'))
+        self.tempdir.write('orig/sme/admin/other_files/new_dupe.txt',
+                           six.b('a'))
+        self.tempdir.write('orig/sme/admin/other_files/new_none_dupe.txt',
+                           six.b('b'))
+        self.tempdir.write('orig/sme/admin/other_files/new_none_düpe.txt',
+                           six.b('a'))
 
     def tearDown(self):
         self.tempdir.cleanup()
@@ -119,25 +120,22 @@ class TestComputeNewBasename(unittest.TestCase):
         """What happens when the wanted name is taken, and a duplicate"""
         with self.assertRaises(UserWarning):
             namechanger.compute_new_basename(
-                os.path.join(self.tempdir.path,
-                             'orig/sme/admin/other_files',
+                os.path.join(self.tempdir.path, 'orig/sme/admin/other_files',
                              'old_dupe.txt'),
-                os.path.join(self.tempdir.path,
-                             'orig/sme/admin/other_files',
+                os.path.join(self.tempdir.path, 'orig/sme/admin/other_files',
                              'new_dupe.txt'))
 
     def test_compute_new_basename_same_name(self):
         """What happens when the suggested name is taken, but not duplicate"""
         oldpath = os.path.join(self.tempdir.path, 'orig/sme/admin/other_files',
                                'new_none_düpe.txt')
-        suggestedpath = os.path.join(
-            self.tempdir.path, 'orig/sme/admin/other_files', 'new_none_dupe.txt')
+        suggestedpath = os.path.join(self.tempdir.path,
+                                     'orig/sme/admin/other_files',
+                                     'new_none_dupe.txt')
         self.assertEqual(
             namechanger.compute_new_basename(oldpath, suggestedpath),
-            os.path.join(
-                self.tempdir.path, 'orig/sme/admin/other_files',
-                'new_none_dupe_1.txt')
-        )
+            os.path.join(self.tempdir.path, 'orig/sme/admin/other_files',
+                         'new_none_dupe_1.txt'))
 
 
 class TestComputeMovepairs(unittest.TestCase):
@@ -159,17 +157,16 @@ class TestComputeMovepairs(unittest.TestCase):
             create=True)
         sme_metadata.write_file()
         mc.compute_all_movepairs(
-            os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/a.txt'),
-            os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/b.txt'))
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/a.txt'),
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/b.txt'))
 
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
                 oldpath=os.path.join(self.tempdir.path,
                                      'orig/sme/ficti/sub/a.txt'),
                 newpath=os.path.join(self.tempdir.path,
-                                     'orig/sme/ficti/sub/b.txt'))])
+                                     'orig/sme/ficti/sub/b.txt'))
+        ])
 
     def test_compute_movepairs_2(self):
         """newpath does not exist, needs normalisation, no parallels"""
@@ -185,7 +182,8 @@ class TestComputeMovepairs(unittest.TestCase):
             namechanger.PathPair(
                 oldpath=ae,
                 newpath=os.path.join(self.tempdir.path,
-                                     'orig/sme/ficti/sub/ae.txt'))])
+                                     'orig/sme/ficti/sub/ae.txt'))
+        ])
 
     def test_compute_movepairs_3(self):
         """newpath exists, not duplicate, no parallels"""
@@ -198,17 +196,16 @@ class TestComputeMovepairs(unittest.TestCase):
             create=True)
         sme_metadata.write_file()
         mc.compute_all_movepairs(
-            os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/c.txt'),
-            os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/d.txt'))
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/c.txt'),
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/d.txt'))
 
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
                 oldpath=os.path.join(self.tempdir.path,
                                      'orig/sme/ficti/sub/c.txt'),
                 newpath=os.path.join(self.tempdir.path,
-                                     'orig/sme/ficti/sub/d_1.txt'))])
+                                     'orig/sme/ficti/sub/d_1.txt'))
+        ])
 
     def test_compute_movepairs_4(self):
         """newpath exists, duplicate, no parallels"""
@@ -218,10 +215,8 @@ class TestComputeMovepairs(unittest.TestCase):
         with self.assertRaises(UserWarning):
             mc = namechanger.MovepairComputer()
             mc.compute_all_movepairs(
-                os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/c.txt'),
-                os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/e.txt'))
+                os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/c.txt'),
+                os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/e.txt'))
 
     def test_compute_movepairs_5(self):
         """move to same directory, with parallels"""
@@ -251,27 +246,26 @@ class TestComputeMovepairs(unittest.TestCase):
 
         want = sorted([
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/g.txt')),
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/sub/f.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/sub/g.txt')),
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/smj/ficti/sub/f.txt'),
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/smj/ficti/sub/f.txt')),
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/smj/ficti/sub/f.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/smj/ficti/sub/f.txt')),
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'),
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'))])
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sma/ficti/sub/f.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/sma/ficti/sub/f.txt'))
+        ])
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
-            os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/g.txt'))
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/g.txt'))
         got = sorted(mc.filepairs)
 
         self.assertListEqual(got, want)
@@ -304,27 +298,26 @@ class TestComputeMovepairs(unittest.TestCase):
 
         want = sorted([
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/bub/g.txt')),
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/sub/f.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/bub/g.txt')),
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/smj/ficti/sub/f.txt'),
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/smj/ficti/bub/f.txt')),
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/smj/ficti/sub/f.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/smj/ficti/bub/f.txt')),
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'),
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/bub/f.txt'))])
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sma/ficti/sub/f.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/sma/ficti/bub/f.txt'))
+        ])
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
-            os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/bub/g.txt'))
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/bub/g.txt'))
         got = sorted(mc.filepairs)
 
         self.assertListEqual(got, want)
@@ -357,27 +350,26 @@ class TestComputeMovepairs(unittest.TestCase):
 
         want = sorted([
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/sme/facta/sub/g.txt')),
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/sub/f.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/facta/sub/g.txt')),
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/smj/ficti/sub/f.txt'),
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/smj/facta/sub/f.txt')),
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/smj/ficti/sub/f.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/smj/facta/sub/f.txt')),
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'),
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/sma/facta/sub/f.txt'))])
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sma/ficti/sub/f.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/sma/facta/sub/f.txt'))
+        ])
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
-            os.path.join(
-                self.tempdir.path, 'orig/sme/facta/sub/g.txt'))
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+            os.path.join(self.tempdir.path, 'orig/sme/facta/sub/g.txt'))
         got = sorted(mc.filepairs)
 
         self.assertListEqual(got, want)
@@ -411,26 +403,25 @@ class TestComputeMovepairs(unittest.TestCase):
         oe = os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/ø.txt')
         want = sorted([
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/sme/facta/sub/g.txt')),
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/sub/f.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/facta/sub/g.txt')),
             namechanger.PathPair(
                 oldpath=oe,
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/smj/facta/sub/o.txt')),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/smj/facta/sub/o.txt')),
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'),
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/sma/facta/sub/f.txt'))])
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sma/ficti/sub/f.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/sma/facta/sub/f.txt'))
+        ])
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
-            os.path.join(
-                self.tempdir.path, 'orig/sme/facta/sub/g.txt'))
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+            os.path.join(self.tempdir.path, 'orig/sme/facta/sub/g.txt'))
         got = sorted(mc.filepairs)
 
         self.assertListEqual(got, want)
@@ -465,20 +456,17 @@ class TestComputeMovepairs(unittest.TestCase):
         util.print_frame(type(oe))
         want = sorted([
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/g.txt')),
-            namechanger.PathPair(
-                oldpath=oe,
-                newpath=o_1)])
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/sub/f.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/sub/g.txt')),
+            namechanger.PathPair(oldpath=oe, newpath=o_1)
+        ])
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
-            os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/g.txt'))
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/g.txt'))
         got = sorted(mc.filepairs)
 
         util.print_frame(got)
@@ -493,15 +481,14 @@ class TestComputeMovepairs(unittest.TestCase):
             create=True)
         sme_metadata.write_file()
         mc.compute_all_movepairs(
-            os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/a.txt'),
-            '')
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/a.txt'), '')
 
         testfixtures.compare(mc.filepairs, [
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/a.txt'),
-                newpath='')])
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/sub/a.txt'),
+                newpath='')
+        ])
 
     def test_compute_movepairs_11(self):
         """newpath is empty, with parallels"""
@@ -531,25 +518,24 @@ class TestComputeMovepairs(unittest.TestCase):
 
         want = sorted([
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/sub/f.txt'),
                 newpath=''),
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/smj/ficti/sub/f.txt'),
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/smj/ficti/sub/f.txt')),
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/smj/ficti/sub/f.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/smj/ficti/sub/f.txt')),
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'),
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'))])
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sma/ficti/sub/f.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/sma/ficti/sub/f.txt'))
+        ])
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
-            '')
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt'), '')
         got = sorted(mc.filepairs)
 
         self.assertListEqual(got, want)
@@ -583,24 +569,23 @@ class TestComputeMovepairs(unittest.TestCase):
         oe = os.path.join(self.tempdir.path, 'orig/smj/ficti/sub/ø.txt')
         want = sorted([
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sme/ficti/sub/f.txt'),
                 newpath=''),
             namechanger.PathPair(
                 oldpath=oe,
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/smj/ficti/sub/o.txt')),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/smj/ficti/sub/o.txt')),
             namechanger.PathPair(
-                oldpath=os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'),
-                newpath=os.path.join(
-                    self.tempdir.path, 'orig/sma/ficti/sub/f.txt'))])
+                oldpath=os.path.join(self.tempdir.path,
+                                     'orig/sma/ficti/sub/f.txt'),
+                newpath=os.path.join(self.tempdir.path,
+                                     'orig/sma/ficti/sub/f.txt'))
+        ])
 
         mc = namechanger.MovepairComputer()
         mc.compute_all_movepairs(
-            os.path.join(
-                self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
-            '')
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt'), '')
         got = sorted(mc.filepairs)
 
         self.assertListEqual(got, want)
@@ -641,41 +626,27 @@ class TestCorpusFileMover(unittest.TestCase):
     def test_move_orig(self):
         """move to different subdir, with parallels."""
         cfm = namechanger.CorpusFileMover(
-            os.path.join(self.tempdir.path,
-                         'orig/sme/ficti/sub/f.txt'),
+            os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt'),
             os.path.join(self.tempdir.path, 'orig/sme/facta/bub/g.txt'))
         cfm.move_files()
         self.tempdir.check_all(
-            '',
-            'orig/',
-            'orig/sme/',
-            'orig/sme/facta/',
-            'orig/sme/facta/bub/',
-            'orig/sme/facta/bub/g.txt',
-            'orig/sme/facta/bub/g.txt.xsl',
-            'orig/sme/ficti/',
-            'orig/sme/ficti/sub/',
-            'prestable/',
-            'prestable/converted/',
-            'prestable/converted/sme/',
+            '', 'orig/', 'orig/sme/', 'orig/sme/facta/', 'orig/sme/facta/bub/',
+            'orig/sme/facta/bub/g.txt', 'orig/sme/facta/bub/g.txt.xsl',
+            'orig/sme/ficti/', 'orig/sme/ficti/sub/', 'prestable/',
+            'prestable/converted/', 'prestable/converted/sme/',
             'prestable/converted/sme/facta/',
             'prestable/converted/sme/facta/bub/',
             'prestable/converted/sme/facta/bub/g.txt.xml',
             'prestable/converted/sme/ficti/',
-            'prestable/converted/sme/ficti/sub/',
-            'prestable/tmx/',
-            'prestable/tmx/sme2sma/',
-            'prestable/tmx/sme2sma/facta/',
+            'prestable/converted/sme/ficti/sub/', 'prestable/tmx/',
+            'prestable/tmx/sme2sma/', 'prestable/tmx/sme2sma/facta/',
             'prestable/tmx/sme2sma/facta/bub/',
             'prestable/tmx/sme2sma/facta/bub/g.txt.tmx',
-            'prestable/tmx/sme2sma/ficti/',
-            'prestable/tmx/sme2sma/ficti/sub/',
-            'prestable/tmx/sme2smj/',
-            'prestable/tmx/sme2smj/facta/',
+            'prestable/tmx/sme2sma/ficti/', 'prestable/tmx/sme2sma/ficti/sub/',
+            'prestable/tmx/sme2smj/', 'prestable/tmx/sme2smj/facta/',
             'prestable/tmx/sme2smj/facta/bub/',
             'prestable/tmx/sme2smj/facta/bub/g.txt.tmx',
-            'prestable/tmx/sme2smj/ficti/',
-            'prestable/tmx/sme2smj/ficti/sub/')
+            'prestable/tmx/sme2smj/ficti/', 'prestable/tmx/sme2smj/ficti/sub/')
 
 
 class TestCorpusFileRemover(unittest.TestCase):
@@ -781,10 +752,8 @@ class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
         r.index.add(['orig', 'prestable'])
         r.index.commit('Added orig and prestable')
 
-        oldpath = os.path.join(
-            self.tempdir.path, 'orig/sme/ficti/sub/f.txt')
-        newpath = os.path.join(
-            self.tempdir.path, 'orig/sme/facta/bub/g.txt')
+        oldpath = os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt')
+        newpath = os.path.join(self.tempdir.path, 'orig/sme/facta/bub/g.txt')
         cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
         cfm.move_files()
         cfm.update_own_metadata()
@@ -796,70 +765,45 @@ class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
     def test_move_fileset(self):
         """Move a set of files."""
         self.tempdir.check_all(
-            '',
-            'orig/',
-            'orig/sma/',
-            'orig/sma/facta/',
-            'orig/sma/facta/bub/',
-            'orig/sma/facta/bub/f.txt',
-            'orig/sma/facta/bub/f.txt.xsl',
-            'orig/sma/ficti/',
-            'orig/sma/ficti/sub/',
-            'orig/sme/',
-            'orig/sme/facta/',
-            'orig/sme/facta/bub/',
-            'orig/sme/facta/bub/g.txt',
-            'orig/sme/facta/bub/g.txt.xsl',
-            'orig/sme/ficti/',
-            'orig/sme/ficti/sub/',
-            'orig/smj/',
-            'orig/smj/facta/',
-            'orig/smj/facta/bub/',
-            'orig/smj/facta/bub/o.txt',
-            'orig/smj/facta/bub/o.txt.xsl',
-            'orig/smj/ficti/',
-            'orig/smj/ficti/sub/',
-            'prestable/',
-            'prestable/converted/',
-            'prestable/converted/sma/',
+            '', 'orig/', 'orig/sma/', 'orig/sma/facta/', 'orig/sma/facta/bub/',
+            'orig/sma/facta/bub/f.txt', 'orig/sma/facta/bub/f.txt.xsl',
+            'orig/sma/ficti/', 'orig/sma/ficti/sub/', 'orig/sme/',
+            'orig/sme/facta/', 'orig/sme/facta/bub/',
+            'orig/sme/facta/bub/g.txt', 'orig/sme/facta/bub/g.txt.xsl',
+            'orig/sme/ficti/', 'orig/sme/ficti/sub/', 'orig/smj/',
+            'orig/smj/facta/', 'orig/smj/facta/bub/',
+            'orig/smj/facta/bub/o.txt', 'orig/smj/facta/bub/o.txt.xsl',
+            'orig/smj/ficti/', 'orig/smj/ficti/sub/', 'prestable/',
+            'prestable/converted/', 'prestable/converted/sma/',
             'prestable/converted/sma/facta/',
             'prestable/converted/sma/facta/bub/',
             'prestable/converted/sma/facta/bub/f.txt.xml',
             'prestable/converted/sma/ficti/',
-            'prestable/converted/sma/ficti/sub/',
-            'prestable/converted/sme/',
+            'prestable/converted/sma/ficti/sub/', 'prestable/converted/sme/',
             'prestable/converted/sme/facta/',
             'prestable/converted/sme/facta/bub/',
             'prestable/converted/sme/facta/bub/g.txt.xml',
             'prestable/converted/sme/ficti/',
-            'prestable/converted/sme/ficti/sub/',
-            'prestable/converted/smj/',
+            'prestable/converted/sme/ficti/sub/', 'prestable/converted/smj/',
             'prestable/converted/smj/facta/',
             'prestable/converted/smj/facta/bub/',
             'prestable/converted/smj/facta/bub/o.txt.xml',
             'prestable/converted/smj/ficti/',
-            'prestable/converted/smj/ficti/sub/',
-            'prestable/tmx/',
-            'prestable/tmx/sme2sma/',
-            'prestable/tmx/sme2sma/facta/',
+            'prestable/converted/smj/ficti/sub/', 'prestable/tmx/',
+            'prestable/tmx/sme2sma/', 'prestable/tmx/sme2sma/facta/',
             'prestable/tmx/sme2sma/facta/bub/',
             'prestable/tmx/sme2sma/facta/bub/g.txt.tmx',
-            'prestable/tmx/sme2sma/ficti/',
-            'prestable/tmx/sme2sma/ficti/sub/',
-            'prestable/tmx/sme2smj/',
-            'prestable/tmx/sme2smj/facta/',
+            'prestable/tmx/sme2sma/ficti/', 'prestable/tmx/sme2sma/ficti/sub/',
+            'prestable/tmx/sme2smj/', 'prestable/tmx/sme2smj/facta/',
             'prestable/tmx/sme2smj/facta/bub/',
             'prestable/tmx/sme2smj/facta/bub/g.txt.tmx',
-            'prestable/tmx/sme2smj/ficti/',
-            'prestable/tmx/sme2smj/ficti/sub/',
-            'prestable/toktmx/',
-            'prestable/toktmx/sme2sma/',
+            'prestable/tmx/sme2smj/ficti/', 'prestable/tmx/sme2smj/ficti/sub/',
+            'prestable/toktmx/', 'prestable/toktmx/sme2sma/',
             'prestable/toktmx/sme2sma/facta/',
             'prestable/toktmx/sme2sma/facta/bub/',
             'prestable/toktmx/sme2sma/facta/bub/g.txt.toktmx',
             'prestable/toktmx/sme2sma/ficti/',
-            'prestable/toktmx/sme2sma/ficti/sub/',
-            'prestable/toktmx/sme2smj/',
+            'prestable/toktmx/sme2sma/ficti/sub/', 'prestable/toktmx/sme2smj/',
             'prestable/toktmx/sme2smj/facta/',
             'prestable/toktmx/sme2smj/facta/bub/',
             'prestable/toktmx/sme2smj/facta/bub/g.txt.toktmx',
@@ -953,10 +897,8 @@ class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
         r.index.add(['orig', 'prestable'])
         r.index.commit('Added orig and prestable')
 
-        oldpath = os.path.join(
-            self.tempdir.path, 'orig/sme/ficti/sub/f.txt')
-        newpath = os.path.join(
-            self.tempdir.path, 'orig/smn/facta/bub/g.txt')
+        oldpath = os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt')
+        newpath = os.path.join(self.tempdir.path, 'orig/smn/facta/bub/g.txt')
         cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
         cfm.move_files()
         cfm.update_own_metadata()
@@ -967,79 +909,48 @@ class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
 
     def test_move_fileset(self):
         self.tempdir.check_all(
-            '',
-            'orig/',
-            'orig/sma/',
-            'orig/sma/facta/',
-            'orig/sma/facta/bub/',
-            'orig/sma/facta/bub/f.txt',
-            'orig/sma/facta/bub/f.txt.xsl',
-            'orig/sma/ficti/',
-            'orig/sma/ficti/sub/',
-            'orig/sme/',
-            'orig/sme/ficti/',
-            'orig/sme/ficti/sub/',
-            'orig/smj/',
-            'orig/smj/facta/',
-            'orig/smj/facta/bub/',
-            'orig/smj/facta/bub/o.txt',
-            'orig/smj/facta/bub/o.txt.xsl',
-            'orig/smj/ficti/',
-            'orig/smj/ficti/sub/',
-            'orig/smn/',
-            'orig/smn/facta/',
-            'orig/smn/facta/bub/',
-            'orig/smn/facta/bub/g.txt',
-            'orig/smn/facta/bub/g.txt.xsl',
-            'prestable/',
-            'prestable/converted/',
-            'prestable/converted/sma/',
+            '', 'orig/', 'orig/sma/', 'orig/sma/facta/', 'orig/sma/facta/bub/',
+            'orig/sma/facta/bub/f.txt', 'orig/sma/facta/bub/f.txt.xsl',
+            'orig/sma/ficti/', 'orig/sma/ficti/sub/', 'orig/sme/',
+            'orig/sme/ficti/', 'orig/sme/ficti/sub/', 'orig/smj/',
+            'orig/smj/facta/', 'orig/smj/facta/bub/',
+            'orig/smj/facta/bub/o.txt', 'orig/smj/facta/bub/o.txt.xsl',
+            'orig/smj/ficti/', 'orig/smj/ficti/sub/', 'orig/smn/',
+            'orig/smn/facta/', 'orig/smn/facta/bub/',
+            'orig/smn/facta/bub/g.txt', 'orig/smn/facta/bub/g.txt.xsl',
+            'prestable/', 'prestable/converted/', 'prestable/converted/sma/',
             'prestable/converted/sma/facta/',
             'prestable/converted/sma/facta/bub/',
             'prestable/converted/sma/facta/bub/f.txt.xml',
             'prestable/converted/sma/ficti/',
-            'prestable/converted/sma/ficti/sub/',
-            'prestable/converted/sme/',
+            'prestable/converted/sma/ficti/sub/', 'prestable/converted/sme/',
             'prestable/converted/sme/ficti/',
-            'prestable/converted/sme/ficti/sub/',
-            'prestable/converted/smj/',
+            'prestable/converted/sme/ficti/sub/', 'prestable/converted/smj/',
             'prestable/converted/smj/facta/',
             'prestable/converted/smj/facta/bub/',
             'prestable/converted/smj/facta/bub/o.txt.xml',
             'prestable/converted/smj/ficti/',
-            'prestable/converted/smj/ficti/sub/',
-            'prestable/converted/smn/',
+            'prestable/converted/smj/ficti/sub/', 'prestable/converted/smn/',
             'prestable/converted/smn/facta/',
             'prestable/converted/smn/facta/bub/',
-            'prestable/converted/smn/facta/bub/g.txt.xml',
-            'prestable/tmx/',
-            'prestable/tmx/sme2sma/',
-            'prestable/tmx/sme2sma/ficti/',
-            'prestable/tmx/sme2sma/ficti/sub/',
-            'prestable/tmx/sme2smj/',
-            'prestable/tmx/sme2smj/ficti/',
-            'prestable/tmx/sme2smj/ficti/sub/',
-            'prestable/tmx/smn2sma/',
-            'prestable/tmx/smn2sma/facta/',
+            'prestable/converted/smn/facta/bub/g.txt.xml', 'prestable/tmx/',
+            'prestable/tmx/sme2sma/', 'prestable/tmx/sme2sma/ficti/',
+            'prestable/tmx/sme2sma/ficti/sub/', 'prestable/tmx/sme2smj/',
+            'prestable/tmx/sme2smj/ficti/', 'prestable/tmx/sme2smj/ficti/sub/',
+            'prestable/tmx/smn2sma/', 'prestable/tmx/smn2sma/facta/',
             'prestable/tmx/smn2sma/facta/bub/',
             'prestable/tmx/smn2sma/facta/bub/g.txt.tmx',
-            'prestable/tmx/smn2smj/',
-            'prestable/tmx/smn2smj/facta/',
+            'prestable/tmx/smn2smj/', 'prestable/tmx/smn2smj/facta/',
             'prestable/tmx/smn2smj/facta/bub/',
-            'prestable/tmx/smn2smj/facta/bub/g.txt.tmx',
-            'prestable/toktmx/',
-            'prestable/toktmx/sme2sma/',
-            'prestable/toktmx/sme2sma/ficti/',
-            'prestable/toktmx/sme2sma/ficti/sub/',
-            'prestable/toktmx/sme2smj/',
+            'prestable/tmx/smn2smj/facta/bub/g.txt.tmx', 'prestable/toktmx/',
+            'prestable/toktmx/sme2sma/', 'prestable/toktmx/sme2sma/ficti/',
+            'prestable/toktmx/sme2sma/ficti/sub/', 'prestable/toktmx/sme2smj/',
             'prestable/toktmx/sme2smj/ficti/',
-            'prestable/toktmx/sme2smj/ficti/sub/',
-            'prestable/toktmx/smn2sma/',
+            'prestable/toktmx/sme2smj/ficti/sub/', 'prestable/toktmx/smn2sma/',
             'prestable/toktmx/smn2sma/facta/',
             'prestable/toktmx/smn2sma/facta/bub/',
             'prestable/toktmx/smn2sma/facta/bub/g.txt.toktmx',
-            'prestable/toktmx/smn2smj/',
-            'prestable/toktmx/smn2smj/facta/',
+            'prestable/toktmx/smn2smj/', 'prestable/toktmx/smn2smj/facta/',
             'prestable/toktmx/smn2smj/facta/bub/',
             'prestable/toktmx/smn2smj/facta/bub/g.txt.toktmx')
 
@@ -1124,10 +1035,8 @@ class TestCorpusFilesetMetadataUpdater3(unittest.TestCase):
         r.index.add(['orig', 'prestable'])
         r.index.commit('Added orig and prestable')
 
-        oldpath = os.path.join(
-            self.tempdir.path, 'orig/sme/ficti/sub/f.txt')
-        newpath = os.path.join(
-            self.tempdir.path, 'orig/sme/facta/bub/g.txt')
+        oldpath = os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt')
+        newpath = os.path.join(self.tempdir.path, 'orig/sme/facta/bub/g.txt')
         cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
         cfm.move_files()
         cfm.update_own_metadata()
@@ -1139,47 +1048,29 @@ class TestCorpusFilesetMetadataUpdater3(unittest.TestCase):
     def test_move_fileset(self):
         """Move fileset."""
         self.tempdir.check_all(
-            '',
-            'orig/',
-            'orig/sme/',
-            'orig/sme/facta/',
-            'orig/sme/facta/bub/',
-            'orig/sme/facta/bub/g.txt',
-            'orig/sme/facta/bub/g.txt.xsl',
-            'orig/sme/ficti/',
-            'orig/sme/ficti/sub/',
-            'orig/smj/',
-            'orig/smj/facta/',
-            'orig/smj/facta/bub/',
-            'orig/smj/facta/bub/o.txt',
-            'orig/smj/facta/bub/o.txt.xsl',
-            'orig/smj/facta/bub/o_1.txt',
-            'orig/smj/facta/bub/o_1.txt.xsl',
-            'orig/smj/ficti/',
-            'orig/smj/ficti/sub/',
-            'prestable/',
-            'prestable/converted/',
-            'prestable/converted/sme/',
+            '', 'orig/', 'orig/sme/', 'orig/sme/facta/', 'orig/sme/facta/bub/',
+            'orig/sme/facta/bub/g.txt', 'orig/sme/facta/bub/g.txt.xsl',
+            'orig/sme/ficti/', 'orig/sme/ficti/sub/', 'orig/smj/',
+            'orig/smj/facta/', 'orig/smj/facta/bub/',
+            'orig/smj/facta/bub/o.txt', 'orig/smj/facta/bub/o.txt.xsl',
+            'orig/smj/facta/bub/o_1.txt', 'orig/smj/facta/bub/o_1.txt.xsl',
+            'orig/smj/ficti/', 'orig/smj/ficti/sub/', 'prestable/',
+            'prestable/converted/', 'prestable/converted/sme/',
             'prestable/converted/sme/facta/',
             'prestable/converted/sme/facta/bub/',
             'prestable/converted/sme/facta/bub/g.txt.xml',
             'prestable/converted/sme/ficti/',
-            'prestable/converted/sme/ficti/sub/',
-            'prestable/converted/smj/',
+            'prestable/converted/sme/ficti/sub/', 'prestable/converted/smj/',
             'prestable/converted/smj/facta/',
             'prestable/converted/smj/facta/bub/',
             'prestable/converted/smj/facta/bub/o_1.txt.xml',
             'prestable/converted/smj/ficti/',
-            'prestable/converted/smj/ficti/sub/',
-            'prestable/tmx/',
-            'prestable/tmx/sme2smj/',
-            'prestable/tmx/sme2smj/facta/',
+            'prestable/converted/smj/ficti/sub/', 'prestable/tmx/',
+            'prestable/tmx/sme2smj/', 'prestable/tmx/sme2smj/facta/',
             'prestable/tmx/sme2smj/facta/bub/',
             'prestable/tmx/sme2smj/facta/bub/g.txt.tmx',
-            'prestable/tmx/sme2smj/ficti/',
-            'prestable/tmx/sme2smj/ficti/sub/',
-            'prestable/toktmx/',
-            'prestable/toktmx/sme2smj/',
+            'prestable/tmx/sme2smj/ficti/', 'prestable/tmx/sme2smj/ficti/sub/',
+            'prestable/toktmx/', 'prestable/toktmx/sme2smj/',
             'prestable/toktmx/sme2smj/facta/',
             'prestable/toktmx/sme2smj/facta/bub/',
             'prestable/toktmx/sme2smj/facta/bub/g.txt.toktmx',
@@ -1259,10 +1150,8 @@ class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
 
     def test_move_fileset(self):
         """Move a set of files."""
-        oldpath = os.path.join(
-            self.tempdir.path, 'orig/sme/ficti/sub/f.txt')
-        newpath = os.path.join(
-            self.tempdir.path,  'orig/sme/facta/bub/g.txt')
+        oldpath = os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt')
+        newpath = os.path.join(self.tempdir.path, 'orig/sme/facta/bub/g.txt')
         with self.assertRaises(UserWarning):
             cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
             cfm.move_files()
@@ -1305,7 +1194,8 @@ class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
             'prestable/toktmx/sme2smj/',
             'prestable/toktmx/sme2smj/ficti/',
             'prestable/toktmx/sme2smj/ficti/sub/',
-            'prestable/toktmx/sme2smj/ficti/sub/f.txt.toktmx',)
+            'prestable/toktmx/sme2smj/ficti/sub/f.txt.toktmx',
+        )
 
 
 class TestCorpusFilesetMetadataUpdater5(unittest.TestCase):
@@ -1373,8 +1263,7 @@ class TestCorpusFilesetMetadataUpdater5(unittest.TestCase):
         r.index.add(['orig', 'prestable'])
         r.index.commit('Added orig and prestable')
 
-        oldpath = os.path.join(
-            self.tempdir.path, 'orig/sme/ficti/sub/f.txt')
+        oldpath = os.path.join(self.tempdir.path, 'orig/sme/ficti/sub/f.txt')
 
         cfm = namechanger.CorpusFilesetMoverAndUpdater(oldpath, '')
         cfm.move_files()
@@ -1386,26 +1275,15 @@ class TestCorpusFilesetMetadataUpdater5(unittest.TestCase):
 
     def test_move_fileset(self):
         self.tempdir.check_all(
-            '',
-            'orig/',
-            'orig/sma/',
-            'orig/sma/ficti/',
-            'orig/sma/ficti/sub/',
-            'orig/sma/ficti/sub/f.txt',
-            'orig/sma/ficti/sub/f.txt.xsl',
-            'orig/smj/',
-            'orig/smj/ficti/',
-            'orig/smj/ficti/sub/',
-            'orig/smj/ficti/sub/o.txt',
-            'orig/smj/ficti/sub/o.txt.xsl',
-            'prestable/',
-            'prestable/converted/',
-            'prestable/converted/sma/',
+            '', 'orig/', 'orig/sma/', 'orig/sma/ficti/', 'orig/sma/ficti/sub/',
+            'orig/sma/ficti/sub/f.txt', 'orig/sma/ficti/sub/f.txt.xsl',
+            'orig/smj/', 'orig/smj/ficti/', 'orig/smj/ficti/sub/',
+            'orig/smj/ficti/sub/o.txt', 'orig/smj/ficti/sub/o.txt.xsl',
+            'prestable/', 'prestable/converted/', 'prestable/converted/sma/',
             'prestable/converted/sma/ficti/',
             'prestable/converted/sma/ficti/sub/',
             'prestable/converted/sma/ficti/sub/f.txt.xml',
-            'prestable/converted/smj/',
-            'prestable/converted/smj/ficti/',
+            'prestable/converted/smj/', 'prestable/converted/smj/ficti/',
             'prestable/converted/smj/ficti/sub/',
             'prestable/converted/smj/ficti/sub/o.txt.xml')
 

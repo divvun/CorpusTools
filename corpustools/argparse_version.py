@@ -19,9 +19,7 @@
 #   Copyright © 2013-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Add version to the argument parser."""
-
 
 from __future__ import absolute_import
 
@@ -33,7 +31,6 @@ version = os.path.join(here, '_version.py')
 scope = {}
 exec(open(version).read(), scope)
 version = scope['VERSION']
-
 
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument('--version', action='version', version=version)

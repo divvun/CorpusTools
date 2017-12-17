@@ -18,7 +18,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Test the MetadataHandler class."""
 from __future__ import absolute_import
 
@@ -169,8 +168,11 @@ class TestMetadataHandler(unittest.TestCase):
         md = xslsetter.MetadataHandler('bogus.pdf', create=True)
 
         self.assertEqual(
-            md.parse_margin_line('odd=230, even = 540 , 8 = 340'),
-            {'odd': 230, 'even': 540, '8': 340})
+            md.parse_margin_line('odd=230, even = 540 , 8 = 340'), {
+                'odd': 230,
+                'even': 540,
+                '8': 340
+            })
 
     def test_parse_margin_lines1(self):
         """Test parse_margin_lines."""
@@ -180,11 +182,23 @@ class TestMetadataHandler(unittest.TestCase):
         md.set_variable('top_margin', '8=8')
         md.set_variable('bottom_margin', '9=2')
 
-        self.assertEqual(md.margins, {
-            'left_margin': {'7': 7},
-            'right_margin': {'odd': 4, 'even': 8, '3': 6},
-            'top_margin': {'8': 8},
-            'bottom_margin': {'9': 2}})
+        self.assertEqual(
+            md.margins, {
+                'left_margin': {
+                    '7': 7
+                },
+                'right_margin': {
+                    'odd': 4,
+                    'even': 8,
+                    '3': 6
+                },
+                'top_margin': {
+                    '8': 8
+                },
+                'bottom_margin': {
+                    '9': 2
+                }
+            })
 
     def test_parse_margin_lines2(self):
         """Raise ConversionError if both 'all' and 'even' is found."""
@@ -232,7 +246,12 @@ class TestMetadataHandler(unittest.TestCase):
         md.set_variable('right_margin', '1;3=50, 2=30')
 
         self.assertEqual(md.margins, {
-            'right_margin': {'1': 50, '2': 30, '3': 50}})
+            'right_margin': {
+                '1': 50,
+                '2': 30,
+                '3': 50
+            }
+        })
 
     def test_inner_margin1(self):
         """Raise exception if inner_right is set and not inner_left."""
@@ -263,9 +282,17 @@ class TestMetadataHandler(unittest.TestCase):
         md.set_variable('inner_top_margin', '6=20, 5=20')
         md.set_variable('inner_bottom_margin', '5=30, 6=50')
 
-        self.assertEqual(md.inner_margins,
-                         {u'inner_bottom_margin': {u'5': 30, u'6': 50},
-                          u'inner_top_margin': {u'5': 20, u'6': 20}})
+        self.assertEqual(
+            md.inner_margins, {
+                u'inner_bottom_margin': {
+                    u'5': 30,
+                    u'6': 50
+                },
+                u'inner_top_margin': {
+                    u'5': 20,
+                    u'6': 20
+                }
+            })
 
     def test_inner_margin4(self):
         """Test whether a correctly set inner margin gives the wanted result."""
@@ -273,9 +300,17 @@ class TestMetadataHandler(unittest.TestCase):
         md.set_variable('inner_left_margin', '6=20, 5=20')
         md.set_variable('inner_right_margin', '5=30, 6=50')
 
-        self.assertEqual(md.inner_margins,
-                         {u'inner_right_margin': {u'5': 30, u'6': 50},
-                          u'inner_left_margin': {u'5': 20, u'6': 20}})
+        self.assertEqual(
+            md.inner_margins, {
+                u'inner_right_margin': {
+                    u'5': 30,
+                    u'6': 50
+                },
+                u'inner_left_margin': {
+                    u'5': 20,
+                    u'6': 20
+                }
+            })
 
     def test_skip_elements_1(self):
         """Test if getting skip_elements is possible."""

@@ -36,9 +36,5 @@ def assertXmlEqual(got, want):
     want = lxml.etree.tostring(want, encoding='unicode')
     checker = lxml.doctestcompare.LXMLOutputChecker()
     if not checker.check_output(want, got, 0):
-        message = checker.output_difference(
-            doctest.Example("", want), got, 0)
+        message = checker.output_difference(doctest.Example("", want), got, 0)
         raise AssertionError(message)
-
-
-

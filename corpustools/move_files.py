@@ -17,9 +17,7 @@
 #   Copyright © 2015-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Move a corpus file from oldpath to newpath."""
-
 
 from __future__ import absolute_import, print_function
 
@@ -43,16 +41,12 @@ def mover(oldpath, newpath):
     if newpath.endswith('.xsl'):
         newpath = newpath[:-4]
     elif os.path.isdir(newpath):
-        newpath = os.path.join(newpath,
-                               os.path.basename(oldpath))
+        newpath = os.path.join(newpath, os.path.basename(oldpath))
 
-    cfmu = namechanger.CorpusFilesetMoverAndUpdater(
-        oldpath,
-        newpath)
+    cfmu = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
     filepair = cfmu.move_computer.filepairs[0]
     if filepair.newpath:
-        print(u'\tmoving {} -> {}'.format(
-            filepair.oldpath, filepair.newpath))
+        print(u'\tmoving {} -> {}'.format(filepair.oldpath, filepair.newpath))
     else:
         print(u'\tremoving {}'.format(filepair.oldpath))
     cfmu.move_files()
@@ -70,11 +64,11 @@ def mover_parse_args():
         parents=[argparse_version.parser],
         description='Program to move or rename a file inside the corpus.')
 
-    parser.add_argument('oldpath',
-                        help='The path of the old file.')
-    parser.add_argument('newpath',
-                        help='The place to move the file to. newpath can '
-                        'be either a filename or a directory')
+    parser.add_argument('oldpath', help='The path of the old file.')
+    parser.add_argument(
+        'newpath',
+        help='The place to move the file to. newpath can '
+        'be either a filename or a directory')
 
     return parser.parse_args()
 
@@ -83,8 +77,9 @@ def main():
     """Move a file."""
     args = mover_parse_args()
     if args.oldpath == args.newpath:
-        print('{} and {} are the same file'.format(
-            args.oldpath, args.newpath), file=sys.stderr)
+        print(
+            '{} and {} are the same file'.format(args.oldpath, args.newpath),
+            file=sys.stderr)
     else:
         oldpath = unicode(args.oldpath, 'utf8') if six.PY2 else args.oldpath
         newpath = unicode(args.newpath, 'utf8') if six.PY2 else args.newpath
@@ -104,8 +99,7 @@ def remover_parse_args():
         parents=[argparse_version.parser],
         description='Program to remove a file from the corpus.')
 
-    parser.add_argument('oldpath',
-                        help='The path of the old file.')
+    parser.add_argument('oldpath', help='The path of the old file.')
 
     return parser.parse_args()
 

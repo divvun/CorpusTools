@@ -17,7 +17,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Convert odf files to the Giella xml format."""
 
 import six
@@ -54,5 +53,4 @@ def convert2intermediate(filename):
     """
     return xhtml2intermediate(
         convert2xhtml(
-            html5parser.document_fromstring(
-                odf_to_unicodehtml(filename))))
+            html5parser.document_fromstring(odf_to_unicodehtml(filename))))

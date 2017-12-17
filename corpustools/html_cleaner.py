@@ -17,12 +17,10 @@
 #   Copyright © 2013-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Script to write a nicely indented html doc.
 
 Mainly used to debug the input to the converter.HTMLContentConverter.
 """
-
 
 from __future__ import absolute_import
 
@@ -43,10 +41,9 @@ def parse_args():
         'This makes it easier to see the structure of it. This eases '
         'debugging the conversion of html documents.')
 
-    parser.add_argument('inhtml',
-                        help='The path of the html to indent.')
-    parser.add_argument('outhtml',
-                        help='The place where the indented html doc is written')
+    parser.add_argument('inhtml', help='The path of the html to indent.')
+    parser.add_argument(
+        'outhtml', help='The place where the indented html doc is written')
 
     return parser.parse_args()
 

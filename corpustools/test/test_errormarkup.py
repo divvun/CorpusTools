@@ -194,9 +194,8 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_errorort3(self):
         in_elem = etree.fromstring('<p>nourra$(a,meta|nuorra)</p>')
-        want = etree.fromstring(
-            '<p><errorort errorinfo="a,meta" '
-            'correct="nuorra">nourra</errorort></p>')
+        want = etree.fromstring('<p><errorort errorinfo="a,meta" '
+                                'correct="nuorra">nourra</errorort></p>')
 
         self.em.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
@@ -245,8 +244,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_erro_lex1(self):
-        in_elem = etree.fromstring(
-            '<p>dábálaš€(adv,adj,der|dábálaččat)</p>')
+        in_elem = etree.fromstring('<p>dábálaš€(adv,adj,der|dábálaččat)</p>')
         want = etree.fromstring(
             '<p><errorlex errorinfo="adv,adj,der" correct="dábálaččat">'
             'dábálaš</errorlex></p>')
@@ -255,8 +253,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_error_ortreal1(self):
-        in_elem = etree.fromstring(
-            '<p>ráhččamušaid¢(noun,mix|rahčamušaid)</p>')
+        in_elem = etree.fromstring('<p>ráhččamušaid¢(noun,mix|rahčamušaid)</p>')
         want = etree.fromstring(
             '<p><errorortreal errorinfo="noun,mix"         '
             'correct="rahčamušaid">ráhččamušaid</errorortreal></p>')
@@ -364,9 +361,8 @@ class TestErrorMarkup(unittest.TestCase):
             '<p>buvttadeaddji Anstein Mikkelsens$(typo|Mikkelsen) lea '
             'ráhkadan. </p>')
 
-        want = (
-            u'<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
-            u'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. </p>')
+        want = (u'<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
+                u'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. </p>')
 
         self.em.add_error_markup(in_elem)
         got = etree.tostring(in_elem, encoding='unicode')
@@ -443,12 +439,11 @@ class TestErrorMarkup(unittest.TestCase):
             'Competition»</span> bálkkášumi$(vowlat,á-a|bálkkašumi) '
             'miessemánu.</p>')
 
-        want = (
-            u'<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
-            u'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. <span '
-            u'type="quote" xml:lang="eng">«Best Shorts Competition»</span> '
-            u'<errorort correct="bálkkašumi" errorinfo="vowlat,á-a">'
-            u'bálkkášumi</errorort> miessemánu.</p>')
+        want = (u'<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
+                u'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. <span '
+                u'type="quote" xml:lang="eng">«Best Shorts Competition»</span> '
+                u'<errorort correct="bálkkašumi" errorinfo="vowlat,á-a">'
+                u'bálkkášumi</errorort> miessemánu.</p>')
 
         self.em.add_error_markup(in_elem)
         got = etree.tostring(in_elem, encoding='unicode')
@@ -568,17 +563,15 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_process_text29(self):
-        text = (
-            u'(Bearpmahat$(noun,svow|Bearpmehat) earuha€(verb,v,w|sirre))£'
-            '(verb,fin,pl3prs,sg3prs,agr|Bearpmehat sirrejit) uskki ja '
-            'loaiddu.')
-        want = [u'(Bearpmahat',
-                u'$(noun,svow|Bearpmehat)',
-                u' earuha',
-                u'€(verb,v,w|sirre)',
-                u')',
-                u'£(verb,fin,pl3prs,sg3prs,agr|Bearpmehat sirrejit)',
-                u' uskki ja loaiddu.']
+        text = (u'(Bearpmahat$(noun,svow|Bearpmehat) earuha€(verb,v,w|sirre))£'
+                '(verb,fin,pl3prs,sg3prs,agr|Bearpmehat sirrejit) uskki ja '
+                'loaiddu.')
+        want = [
+            u'(Bearpmahat', u'$(noun,svow|Bearpmehat)', u' earuha',
+            u'€(verb,v,w|sirre)', u')',
+            u'£(verb,fin,pl3prs,sg3prs,agr|Bearpmehat sirrejit)',
+            u' uskki ja loaiddu.'
+        ]
 
         self.assertEqual(self.em.process_text(text), want)
 
@@ -598,12 +591,12 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_process_text30(self):
-        text = (
-            u'Mirja ja Line leaba (gulahallan olbmožat)¢(noun,cmp|'
-            u'gulahallanolbmožat)€gulahallanolbmot')
-        want = [u'Mirja ja Line leaba (gulahallan olbmožat)',
-                u'¢(noun,cmp|gulahallanolbmožat)',
-                u'€gulahallanolbmot']
+        text = (u'Mirja ja Line leaba (gulahallan olbmožat)¢(noun,cmp|'
+                u'gulahallanolbmožat)€gulahallanolbmot')
+        want = [
+            u'Mirja ja Line leaba (gulahallan olbmožat)',
+            u'¢(noun,cmp|gulahallanolbmožat)', u'€gulahallanolbmot'
+        ]
 
         self.assertEqual(self.em.process_text(text), want)
 
@@ -726,8 +719,10 @@ class TestErrorMarkup(unittest.TestCase):
         text = (
             u'(Nieiddat leat nuorra)£(a,spred,nompl,nomsg,agr|Nieiddat leat '
             'nuorat)')
-        want = [u"(Nieiddat leat nuorra)",
-                u"£(a,spred,nompl,nomsg,agr|Nieiddat leat nuorat)"]
+        want = [
+            u"(Nieiddat leat nuorra)",
+            u"£(a,spred,nompl,nomsg,agr|Nieiddat leat nuorat)"
+        ]
 
         self.assertEqual(self.em.process_text(text), want)
 
@@ -759,38 +754,38 @@ class TestErrorMarkup(unittest.TestCase):
         text = (
             u"gitta Nordkjosbotn'ii$Nordkjosbotnii (mii lea ge "
             u'nordkjosbotn$Nordkjosbotn sámegillii? Muhtin, veahket mu!) gos')
-        want = [u"gitta Nordkjosbotn'ii",
-                u"$Nordkjosbotnii",
-                u" (mii lea ge nordkjosbotn",
-                u"$Nordkjosbotn",
-                u" sámegillii? Muhtin, veahket mu!) gos"]
+        want = [
+            u"gitta Nordkjosbotn'ii", u"$Nordkjosbotnii",
+            u" (mii lea ge nordkjosbotn", u"$Nordkjosbotn",
+            u" sámegillii? Muhtin, veahket mu!) gos"
+        ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text19(self):
-        text = (
-            u'gaskal (skuvla ohppiid)£(noun,attr,gensg,nomsg,case|skuvlla '
-            u'ohppiid) ja VSM.')
-        want = [u"gaskal (skuvla ohppiid)",
-                u"£(noun,attr,gensg,nomsg,case|skuvlla ohppiid)",
-                u" ja VSM."]
+        text = (u'gaskal (skuvla ohppiid)£(noun,attr,gensg,nomsg,case|skuvlla '
+                u'ohppiid) ja VSM.')
+        want = [
+            u"gaskal (skuvla ohppiid)",
+            u"£(noun,attr,gensg,nomsg,case|skuvlla ohppiid)", u" ja VSM."
+        ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text20(self):
         text = u"- ruksesruonáčalmmehisvuohta lea sullii 8%:as$(acr,suf|8%:s)"
-        want = [u"- ruksesruonáčalmmehisvuohta lea sullii 8%:as",
-                u"$(acr,suf|8%:s)"]
+        want = [
+            u"- ruksesruonáčalmmehisvuohta lea sullii 8%:as", u"$(acr,suf|8%:s)"
+        ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text21(self):
         text = u"( nissonin¢(noun,suf|nissoniin) dušše (0.6 %:s)£(0.6 %) )"
-        want = [u"( nissonin",
-                u"¢(noun,suf|nissoniin)",
-                u" dušše (0.6 %:s)",
-                u"£(0.6 %)",
-                u" )"]
+        want = [
+            u"( nissonin", u"¢(noun,suf|nissoniin)", u" dušše (0.6 %:s)",
+            u"£(0.6 %)", u" )"
+        ]
 
         self.assertEqual(self.em.process_text(text), want)
 
@@ -798,37 +793,32 @@ class TestErrorMarkup(unittest.TestCase):
         text = (
             u'(haploida) ja njiŋŋalas$(noun,á|njiŋŋálas) ságahuvvon$(verb,a|'
             u'sagahuvvon) manneseallas (diploida)')
-        want = [u"(haploida) ja njiŋŋalas",
-                u"$(noun,á|njiŋŋálas)",
-                u" ságahuvvon",
-                u"$(verb,a|sagahuvvon)",
-                u" manneseallas (diploida)"]
+        want = [
+            u"(haploida) ja njiŋŋalas", u"$(noun,á|njiŋŋálas)", u" ságahuvvon",
+            u"$(verb,a|sagahuvvon)", u" manneseallas (diploida)"
+        ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text23(self):
-        text = (
-            u'(gii oahpaha) giinu$(x,notcmp|gii nu) manai intiánalávlagat$('
-            u'loan,conc|indiánalávlagat) (guovža-klána)$(noun,cmp|'
-            u'guovžaklána) olbmuid')
-        want = [u"(gii oahpaha) giinu",
-                u"$(x,notcmp|gii nu)",
-                u" manai intiánalávlagat",
-                u"$(loan,conc|indiánalávlagat)",
-                u" (guovža-klána)",
-                u"$(noun,cmp|guovžaklána)",
-                u" olbmuid"]
+        text = (u'(gii oahpaha) giinu$(x,notcmp|gii nu) manai intiánalávlagat$('
+                u'loan,conc|indiánalávlagat) (guovža-klána)$(noun,cmp|'
+                u'guovžaklána) olbmuid')
+        want = [
+            u"(gii oahpaha) giinu", u"$(x,notcmp|gii nu)",
+            u" manai intiánalávlagat", u"$(loan,conc|indiánalávlagat)",
+            u" (guovža-klána)", u"$(noun,cmp|guovžaklána)", u" olbmuid"
+        ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text24(self):
-        text = (
-            u'(šaddai$(verb,conc|šattai) ollu áššit)£(verb,fin,pl3prs,'
-            u'sg3prs,tense|šadde ollu áššit)')
-        want = [u'(šaddai',
-                u"$(verb,conc|šattai)",
-                u" ollu áššit)",
-                u'£(verb,fin,pl3prs,sg3prs,tense|šadde ollu áššit)']
+        text = (u'(šaddai$(verb,conc|šattai) ollu áššit)£(verb,fin,pl3prs,'
+                u'sg3prs,tense|šadde ollu áššit)')
+        want = [
+            u'(šaddai', u"$(verb,conc|šattai)", u" ollu áššit)",
+            u'£(verb,fin,pl3prs,sg3prs,tense|šadde ollu áššit)'
+        ]
 
         self.assertEqual(self.em.process_text(text), want)
 
@@ -836,21 +826,20 @@ class TestErrorMarkup(unittest.TestCase):
         text = (
             u'(guokte ganddat§(n,á|gánddat))£(n,nump,gensg,nompl,case|guokte '
             u'gándda)')
-        want = [u'(guokte ganddat',
-                u'§(n,á|gánddat)',
-                u')',
-                u'£(n,nump,gensg,nompl,case|guokte gándda)']
+        want = [
+            u'(guokte ganddat', u'§(n,á|gánddat)', u')',
+            u'£(n,nump,gensg,nompl,case|guokte gándda)'
+        ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text26(self):
-        text = (
-            u'(Nieiddat leat nourra$(adj,meta|nuorra))£(adj,spred,nompl,'
-            u'nomsg,agr|Nieiddat leat nuorat)')
-        want = [u'(Nieiddat leat nourra',
-                u'$(adj,meta|nuorra)',
-                u')',
-                u'£(adj,spred,nompl,nomsg,agr|Nieiddat leat nuorat)']
+        text = (u'(Nieiddat leat nourra$(adj,meta|nuorra))£(adj,spred,nompl,'
+                u'nomsg,agr|Nieiddat leat nuorat)')
+        want = [
+            u'(Nieiddat leat nourra', u'$(adj,meta|nuorra)', u')',
+            u'£(adj,spred,nompl,nomsg,agr|Nieiddat leat nuorat)'
+        ]
 
         self.assertEqual(self.em.process_text(text), want)
 
@@ -858,10 +847,10 @@ class TestErrorMarkup(unittest.TestCase):
         text = (
             u'(leat (okta máná)£(n,spred,nomsg,gensg,case|okta mánná))£(v,v,'
             u'sg3prs,pl3prs,agr|lea okta mánná)')
-        want = [u'(leat (okta máná)',
-                u'£(n,spred,nomsg,gensg,case|okta mánná)',
-                u')',
-                u'£(v,v,sg3prs,pl3prs,agr|lea okta mánná)']
+        want = [
+            u'(leat (okta máná)', u'£(n,spred,nomsg,gensg,case|okta mánná)',
+            u')', u'£(v,v,sg3prs,pl3prs,agr|lea okta mánná)'
+        ]
 
         self.assertEqual(self.em.process_text(text), want)
 
@@ -871,36 +860,29 @@ class TestErrorMarkup(unittest.TestCase):
             u'á|mahkáš) livččii makkarge$(adv,á|makkárge) politihkka, muhto '
             u'rahpasit baicca muitalivčče (makkar$(interr,á|makkár) soga)€('
             u'man soga) sii ovddasttit$(verb,conc|ovddastit).')
-        want = [u'heaitit dáhkaluddame',
-                u'$(verb,a|dahkaluddame)',
-                u' ahte sis máhkaš',
-                u'¢(adv,á|mahkáš)',
-                u' livččii makkarge',
-                u'$(adv,á|makkárge)',
-                u' politihkka, muhto rahpasit baicca muitalivčče (makkar',
-                u'$(interr,á|makkár)',
-                u' soga)',
-                u'€(man soga)',
-                u' sii ovddasttit',
-                u'$(verb,conc|ovddastit)',
-                u'.']
+        want = [
+            u'heaitit dáhkaluddame', u'$(verb,a|dahkaluddame)',
+            u' ahte sis máhkaš', u'¢(adv,á|mahkáš)', u' livččii makkarge',
+            u'$(adv,á|makkárge)',
+            u' politihkka, muhto rahpasit baicca muitalivčče (makkar',
+            u'$(interr,á|makkár)', u' soga)', u'€(man soga)',
+            u' sii ovddasttit', u'$(verb,conc|ovddastit)', u'.'
+        ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text31(self):
-        text = (
-            u'(Ovddit geasis)£(noun,advl,gensg,locsg,case|Ovddit geasi) '
-            u'((čoaggen$(verb,mono|čoggen) ollu jokŋat)£(noun,obj,genpl,'
-            u'nompl,case|čoggen ollu joŋaid) ja sarridat)£(noun,obj,genpl,'
-            u'nompl,case|čoggen ollu joŋaid ja sarridiid)')
+        text = (u'(Ovddit geasis)£(noun,advl,gensg,locsg,case|Ovddit geasi) '
+                u'((čoaggen$(verb,mono|čoggen) ollu jokŋat)£(noun,obj,genpl,'
+                u'nompl,case|čoggen ollu joŋaid) ja sarridat)£(noun,obj,genpl,'
+                u'nompl,case|čoggen ollu joŋaid ja sarridiid)')
         want = [
-            u'(Ovddit geasis)',
-            u'£(noun,advl,gensg,locsg,case|Ovddit geasi)',
-            u' ((čoaggen', u'$(verb,mono|čoggen)',
-            u' ollu jokŋat)',
+            u'(Ovddit geasis)', u'£(noun,advl,gensg,locsg,case|Ovddit geasi)',
+            u' ((čoaggen', u'$(verb,mono|čoggen)', u' ollu jokŋat)',
             u'£(noun,obj,genpl,nompl,case|čoggen ollu joŋaid)',
             u' ja sarridat)',
-            u'£(noun,obj,genpl,nompl,case|čoggen ollu joŋaid ja sarridiid)']
+            u'£(noun,obj,genpl,nompl,case|čoggen ollu joŋaid ja sarridiid)'
+        ]
 
         self.assertEqual(self.em.process_text(text), want)
 
@@ -908,11 +890,10 @@ class TestErrorMarkup(unittest.TestCase):
         text = (
             u'Bruk ((epoxi)$(noun,cons|epoksy) lim)¢(noun,mix|epoksylim) med '
             u'god kvalitet.')
-        want = [u'Bruk ((epoxi)',
-                u'$(noun,cons|epoksy)',
-                u' lim)',
-                u'¢(noun,mix|epoksylim)',
-                u' med god kvalitet.']
+        want = [
+            u'Bruk ((epoxi)', u'$(noun,cons|epoksy)', u' lim)',
+            u'¢(noun,mix|epoksylim)', u' med god kvalitet.'
+        ]
 
         print(self.em.process_text(text))
         self.assertEqual(self.em.process_text(text), want)

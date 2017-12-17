@@ -18,7 +18,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 u"""Test conversion of html content."""
 
 import lxml.etree as etree
@@ -184,10 +183,10 @@ def test_remove_unwanted_content():
                 'leftbar',  # forrest (divvun and giellatekno sites)
                 'leftcol',  # new samediggi.no
                 'leftmenu',
-                'main_navi_main',           # www.samediggi.fi
+                'main_navi_main',  # www.samediggi.fi
                 'mainsidebar',  # arran.no
                 'menu',
-                'murupolku',                # www.samediggi.fi
+                'murupolku',  # www.samediggi.fi
                 'navbar',  # tysfjord.kommune.no
                 'ncFooter',  # visitstetind.no
                 'ntfkFooter',  # ntfk
@@ -249,9 +248,7 @@ def test_remove_unwanted_content():
             ],
         },
         'span': {
-            'id': [
-                'skiplinks'
-            ],
+            'id': ['skiplinks'],
             'class': [
                 'K-NOTE-FOTNOTE',
                 'graytext',  # svenskakyrkan.se
@@ -321,10 +318,9 @@ def check_unwanted_classes_and_ids(tag, key, value):
                  '</tbody></table>'.format(tag, key, value))
         inner_r = '<table><tbody><tr/></tbody></table>'
     else:
-        inner = (
-            '<{0} {1}="{2}">'
-            'content:{0} {1} {2}'
-            '</{0}>'.format(tag, key, value))
+        inner = ('<{0} {1}="{2}">'
+                 'content:{0} {1} {2}'
+                 '</{0}>'.format(tag, key, value))
         inner_r = ''
     got = htmlcontentconverter.HTMLContentConverter().convert2xhtml(
         '<html><head/><body>{}</body></html>'.format(inner))
@@ -335,27 +331,51 @@ def check_unwanted_classes_and_ids(tag, key, value):
     clean_namespaces([got, want])
     if etree.tostring(got) != etree.tostring(want):
         raise AssertionError('Remove classes and ids:\nexpected {}\n'
-                             'got {}'.format(etree.tostring(want),
-                                             etree.tostring(got)))
+                             'got {}'.format(
+                                 etree.tostring(want), etree.tostring(got)))
 
 
 @parameterized([
-    'address', 'script', 'style', 'area', 'object', 'meta',
-    'hr', 'nf', 'mb', 'ms',
-    'img', 'cite', 'embed', 'footer', 'figcaption', 'aside', 'time',
-    'figure', 'nav', 'select', 'noscript', 'iframe', 'map',
-    'colgroup', 'st1:country-region', 'v:shapetype', 'v:shape',
-    'st1:metricconverter', 'fb:comments', 'g:plusone', 'fb:like',
+    'address',
+    'script',
+    'style',
+    'area',
+    'object',
+    'meta',
+    'hr',
+    'nf',
+    'mb',
+    'ms',
+    'img',
+    'cite',
+    'embed',
+    'footer',
+    'figcaption',
+    'aside',
+    'time',
+    'figure',
+    'nav',
+    'select',
+    'noscript',
+    'iframe',
+    'map',
+    'colgroup',
+    'st1:country-region',
+    'v:shapetype',
+    'v:shape',
+    'st1:metricconverter',
+    'fb:comments',
+    'g:plusone',
+    'fb:like',
 ])
 def test_unwanted_tag(unwanted_tag):
     """Check if unwanted tags are removed."""
     got = htmlcontentconverter.HTMLContentConverter().convert2xhtml(
         '<html><head/><body><p>p1</p><%s/><p>p2</p2></body>'
         '</html>' % unwanted_tag)
-    want = html5parser.document_fromstring(
-        '<html>'
-        '<body><p>p1</p><p>p2'
-        '</p></body></html>')
+    want = html5parser.document_fromstring('<html>'
+                                           '<body><p>p1</p><p>p2'
+                                           '</p></body></html>')
 
     clean_namespaces([got, want])
     assertXmlEqual(got, want)
@@ -365,8 +385,7 @@ class TestHTMLContentConverter(xmltester.XMLTester):
     """Test the HTMLContentConverter class."""
 
     @parameterized.expand([
-        ('Remove an empty p.',
-         '<html><head/><body><p/></html>',
+        ('Remove an empty p.', '<html><head/><body><p/></html>',
          '<html><body></body></html>'),
         ('Do not remove a p with content.',
          '<html><head/><body><p><span>spanny</span></p></html>',
@@ -394,12 +413,10 @@ class TestHTMLContentConverter(xmltester.XMLTester):
          u'<html><head>'
          u'<title>– Den utdøende stammes frykt</title></head><body>'
          u'<h3>VI</h3>  <p>... Finnerne<i>Der</i></p></body></html>'),
-        ('h2 as a stop element',
-         u'<html><head>'
+        ('h2 as a stop element', u'<html><head>'
          u'<title>– Den utdøende stammes frykt</title>'
          u'</head><body><h3>VI</h3>... Finnerne'
-         u'<h2>Der</h2></body></html>',
-         u'<html><head><title>– Den '
+         u'<h2>Der</h2></body></html>', u'<html><head><title>– Den '
          u'utdøende stammes frykt</title>'
          u'</head><body>  <h3>VI</h3>  '
          u'<p>... Finnerne</p><h2>Der</h2></body></html>'),
@@ -407,54 +424,43 @@ class TestHTMLContentConverter(xmltester.XMLTester):
          '<html><head/><body><center><span class="">b</span></center></html>',
          '<html><body><div class="c1"><span>b</span></div></body>'
          '</html>'),
-        ('test_body_i',
-         '<html><head/><body><i>b</i></body></html>',
+        ('test_body_i', '<html><head/><body><i>b</i></body></html>',
          '<html><body><p><i>b</i></p></body></html>'),
-        ('Font elements with only text',
-         '<html><head/><body><p>x '
+        ('Font elements with only text', '<html><head/><body><p>x '
          '<font>a, b </font>'
          '<font>c</font>'
          '<font>d</font>'
          '<font>e</font>'
          '<font> f</font>'
          '<font>. </font>'
-         '</p></body></html>',
-         '<html><body><p>'
+         '</p></body></html>', '<html><body><p>'
          'x a, b cde f. '
          '</p></body></html>'),
         ('Font element containing other xml elements',
          '<html><head/><body><p>x '
          '<font>a <i>b</i> c.</font> d'
-         '</p></body></html>',
-         '<html><body><p>x '
+         '</p></body></html>', '<html><body><p>x '
          'a <i>b</i> c. d'
          '</p></body></html>'),
         ('Font element containing font elements',
          '<html><head/><body><p><font>x</font> '
          '<font>a <i>b</i> c.</font> <font>d</font>'
-         '</p></body></html>',
-         '<html><body><p>x a <i>b</i> c. d'
+         '</p></body></html>', '<html><body><p>x a <i>b</i> c. d'
          '</p></body></html>'),
-        ('test_body_a',
-         '<html><head/><body><a>b</a></body></html>',
+        ('test_body_a', '<html><head/><body><a>b</a></body></html>',
          '<html><body><p><a>b</a></p></body></html>'),
-        ('test_body_em',
-         '<html><head/><body><em>b</em></body></html>',
+        ('test_body_em', '<html><head/><body><em>b</em></body></html>',
          '<html><body><p><em>b</em></p></body></html>'),
-        ('test_body_font',
-         '<html><head/><body><font>b</font></body></html>',
+        ('test_body_font', '<html><head/><body><font>b</font></body></html>',
          '<html><body><p>b</p></body></html>'),
-        ('test_body_u',
-         '<html><head/><body><u>b</u></body></html>',
+        ('test_body_u', '<html><head/><body><u>b</u></body></html>',
          '<html><body><p><u>b</u></p></body></html>'),
         ('test_body_strong',
          '<html><head/><body><strong>b</strong></body></html>',
          '<html><body><p><strong>b</strong></p></body></html>'),
-        ('test_body_span',
-         '<html><head/><body><span>b</span></body></html>',
+        ('test_body_span', '<html><head/><body><span>b</span></body></html>',
          '<html><body><p><span>b</span></p></body></html>'),
-        ('test_body_text',
-         '<html><head/><body>b</body></html>',
+        ('test_body_text', '<html><head/><body>b</body></html>',
          '<html><body><p>b</p></body></html>'),
     ])
     def test_convert2xhtml(self, testname, test_input, want_input):

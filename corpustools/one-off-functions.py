@@ -17,12 +17,10 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """One off funtions to set metadata.
 
 Might be useful in other contexts.
 """
-
 
 from __future__ import absolute_import, print_function
 
@@ -128,19 +126,15 @@ def translated_from(url_part, mainlang, directories):
     """
     # Check if the arguments are valid
     if '.' not in url_part:
-        raise UserWarning(
-            '{} does not seem to part of a url'.format(url_part))
+        raise UserWarning('{} does not seem to part of a url'.format(url_part))
     if len(mainlang) != 3 and not isinstance(mainlang, 'str'):
-        raise UserWarning(
-            '{} does not seem to be a valid language code')
+        raise UserWarning('{} does not seem to be a valid language code')
 
     counter = collections.defaultdict(int)
     for file_ in find_endings(directories, '.xsl'):
         corpus_path = corpuspath.CorpusPath(file_)
-        if (url_part in corpus_path.metadata.get_variable(
-                'filename') and
-                corpus_path.metadata.get_variable(
-                    'mainlang') == mainlang):
+        if (url_part in corpus_path.metadata.get_variable('filename') and
+                corpus_path.metadata.get_variable('mainlang') == mainlang):
             counter[mainlang] += 1
             for parallel in corpus_path.parallels():
                 counter['parallels'] += 1

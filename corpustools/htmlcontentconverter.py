@@ -17,7 +17,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 u"""Convert html content to the Giella xml format."""
 
 import six
@@ -97,8 +96,7 @@ class HTMLContentConverter(object):
         superfluously_named_tags = self.soup.xpath(
             "//fieldset | //legend | //article | //hgroup "
             "| //section | //dl | //dd | //dt"
-            "| //menu",
-            )
+            "| //menu",)
         for elt in superfluously_named_tags:
             elt.tag = 'div'
 
@@ -117,22 +115,17 @@ class HTMLContentConverter(object):
             "and ( self::span or self::b or self::i"
             "      or self::em or self::strong "
             "      or self::a )"
-            "    ]",
-            )
+            "    ]",)
         for elt in spans_as_divs:
             elt.tag = 'div'
 
-        ps_as_divs = self.soup.xpath(
-            "//p[descendant::div]",
-            )
+        ps_as_divs = self.soup.xpath("//p[descendant::div]",)
         for elt in ps_as_divs:
             elt.tag = 'div'
 
-        lists_as_divs = self.soup.xpath(
-            "//*[( child::ul or child::ol ) "
-            "and ( self::ul or self::ol )"
-            "    ]",
-            )
+        lists_as_divs = self.soup.xpath("//*[( child::ul or child::ol ) "
+                                        "and ( self::ul or self::ol )"
+                                        "    ]",)
         for elt in lists_as_divs:
             elt.tag = 'div'
 
@@ -295,7 +288,7 @@ class HTMLContentConverter(object):
                     'NAVrelevantContentContainer',
                     'NAVsubmenuContainer',
                     'PageFooter',
-                    'PageLanguageInfo',   # regjeringen.no
+                    'PageLanguageInfo',  # regjeringen.no
                     'PrintDocHead',
                     'SamiDisclaimer',
                     'ShareArticle',
@@ -354,13 +347,13 @@ class HTMLContentConverter(object):
                     'leftbar',  # forrest (divvun and giellatekno sites)
                     'leftcol',  # new samediggi.no
                     'leftmenu',
-                    'main_navi_main',           # www.samediggi.fi
+                    'main_navi_main',  # www.samediggi.fi
                     'mainContentBookmark',  # udir.no
                     'mainsidebar',  # arran.no
                     'menu',
                     'mobile-header',
                     'mobile-subnavigation',
-                    'murupolku',                # www.samediggi.fi
+                    'murupolku',  # www.samediggi.fi
                     'nav-content',
                     'navbar',  # tysfjord.kommune.no
                     'ncFooter',  # visitstetind.no
@@ -373,7 +366,7 @@ class HTMLContentConverter(object):
                     'phone-bar',  # 1177.se
                     'publishinfo',  # 1177.se
                     'readspeaker_button1',
-                    'right-wrapper', # ndla
+                    'right-wrapper',  # ndla
                     'rightAds',
                     'rightCol',
                     'rightside',
@@ -446,9 +439,7 @@ class HTMLContentConverter(object):
                 ],
             },
             'span': {
-                'id': [
-                    'skiplinks'
-                ],
+                'id': ['skiplinks'],
                 'class': [
                     'K-NOTE-FOTNOTE',
                     'graytext',  # svenskakyrkan.se
@@ -519,20 +510,14 @@ class HTMLContentConverter(object):
             for key, values in six.iteritems(attribs):
                 for value in values:
                     search = ('.//{}[@{}="{}"]'.format(tag, key, value))
-                    for unwanted in self.soup.xpath(search,
-                                                    namespaces=namespace):
+                    for unwanted in self.soup.xpath(
+                            search, namespaces=namespace):
                         unwanted.getparent().remove(unwanted)
 
     def add_p_around_text(self):
         """Add p around text after an hX element."""
-        stop_tags = [
-            'p',
-            'h3',
-            'h2',
-            'div',
-            'table']
-        for tag in self.soup.xpath(
-                './/body/*'):
+        stop_tags = ['p', 'h3', 'h2', 'div', 'table']
+        for tag in self.soup.xpath('.//body/*'):
             if tag.tail is not None and tag.tail.strip() != '':
                 paragraph = etree.Element('p')
                 paragraph.text = tag.tail
@@ -546,23 +531,20 @@ class HTMLContentConverter(object):
                 tag_parent.insert(tag_parent.index(tag) + 1, paragraph)
 
         # br's are not allowed right under body in XHTML:
-        for elt in self.soup.xpath(
-                './/body/br'):
+        for elt in self.soup.xpath('.//body/br'):
             elt.tag = 'p'
             elt.text = ' '
 
     def center2div(self):
         """Convert center to div in tidy style."""
-        for center in self.soup.xpath(
-                './/center'):
+        for center in self.soup.xpath('.//center'):
             center.tag = 'div'
             center.set('class', 'c1')
 
     def body_i(self):
         """Wrap bare elements inside a p element."""
         for tag in ['a', 'i', 'em', 'u', 'strong', 'span']:
-            for body_tag in self.soup.xpath(
-                    './/body/{}'.format(tag)):
+            for body_tag in self.soup.xpath('.//body/{}'.format(tag)):
                 paragraph = etree.Element('p')
                 bi_parent = body_tag.getparent()
                 bi_parent.insert(bi_parent.index(body_tag), paragraph)
@@ -647,8 +629,7 @@ class HTMLContentConverter(object):
 
     def body_text(self):
         """Wrap bare text inside a p element."""
-        body = self.soup.find(
-            './/body')
+        body = self.soup.find('.//body')
 
         if body.text is not None:
             paragraph = etree.Element('p')

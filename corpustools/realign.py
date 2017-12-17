@@ -18,9 +18,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Sentence align a given file anew."""
-
 
 from __future__ import absolute_import, print_function
 
@@ -39,9 +37,7 @@ def print_filename(corpus_path):
         corpus_path (corpuspath.CorpusPath): filenames
     """
     print('\toriginal: {}\n\tmetatada: {}\n\tconverted: {}'.format(
-        corpus_path.orig,
-        corpus_path.xsl,
-        corpus_path.converted))
+        corpus_path.orig, corpus_path.xsl, corpus_path.converted))
 
 
 def print_filenames(corpus_path1, corpus_path2):
@@ -91,10 +87,9 @@ def convert_and_copy(corpus_path1, corpus_path2):
             os.remove(corpus_path.prestable_converted)
 
     convertermanager.sanity_check()
-    converter_manager = convertermanager.ConverterManager(write_intermediate=False,
-                                                   goldstandard=False)
-    converter_manager.collect_files([corpus_path1.orig,
-                                     corpus_path2.orig])
+    converter_manager = convertermanager.ConverterManager(
+        write_intermediate=False, goldstandard=False)
+    converter_manager.collect_files([corpus_path1.orig, corpus_path2.orig])
     converter_manager.convert_serially()
 
     for corpus_path in [corpus_path1, corpus_path2]:
@@ -110,19 +105,20 @@ def parse_options():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
         description='Sentence align a given file anew.')
-    parser.add_argument(u'--files',
-                        action=u'store_true',
-                        help=u'Show the interesting filenames '
-                        'that are needed for improving sentence '
-                        'alignment.')
-    parser.add_argument(u'--convert',
-                        action=u'store_true',
-                        help=u'Only convert the original files '
-                        'that are the source of the .tmx.html file. '
-                        'This is useful when improving the output of '
-                        'the converted files.')
-    parser.add_argument('tmxhtml',
-                        help="The tmx.html file to realign.")
+    parser.add_argument(
+        u'--files',
+        action=u'store_true',
+        help=u'Show the interesting filenames '
+        'that are needed for improving sentence '
+        'alignment.')
+    parser.add_argument(
+        u'--convert',
+        action=u'store_true',
+        help=u'Only convert the original files '
+        'that are the source of the .tmx.html file. '
+        'This is useful when improving the output of '
+        'the converted files.')
+    parser.add_argument('tmxhtml', help="The tmx.html file to realign.")
 
     args = parser.parse_args()
     return args
@@ -153,6 +149,5 @@ def main():
         quiet=True,
         aligner='tca2',
         stdout=False,
-        force=True
-    )
+        force=True)
     print_filenames(corpus_path1, corpus_path2)

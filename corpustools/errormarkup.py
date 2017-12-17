@@ -17,9 +17,7 @@
 #   Copyright © 2013-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Classes and functions to convert errormarkup to xml."""
-
 
 from __future__ import absolute_import, print_function
 
@@ -40,13 +38,15 @@ class ErrorMarkup(object):
             filename (str): path to the file that should be converted.
         """
         self._filename = filename
-        self.types = {u"$": u"errorort",
-                      u"¢": "errorortreal",
-                      u"€": "errorlex",
-                      u"£": "errormorphsyn",
-                      u"¥": "errorsyn",
-                      u"§": "error",
-                      u"∞": "errorlang"}
+        self.types = {
+            u"$": u"errorort",
+            u"¢": "errorortreal",
+            u"€": "errorlex",
+            u"£": "errormorphsyn",
+            u"¥": "errorsyn",
+            u"§": "error",
+            u"∞": "errorlang"
+        }
         self.error_regex = re.compile(
             u'(?P<error>\([^\(]*\)$|\w+$|\w+[-\':\]]\w+$|\w+[-\'\]\./]$|'
             u'\d+’\w+$|\d+%:\w+$|”\w+”$)', re.UNICODE)
@@ -138,14 +138,12 @@ class ErrorMarkup(object):
                     if self.is_correction(result[index]):
                         if (not self.is_correction(result[index - 1]) and
                                 self.is_error(result[index - 1])):
-                            self.add_simple_error(elements,
-                                                  result[index - 1],
+                            self.add_simple_error(elements, result[index - 1],
                                                   result[index])
 
                         else:
 
-                            self.add_nested_error(elements,
-                                                  result[index - 1],
+                            self.add_nested_error(elements, result[index - 1],
                                                   result[index])
 
                 if not self.is_correction(result[-1]):
@@ -324,10 +322,8 @@ class ErrorMarkup(object):
 
         element_name = self.get_element_name(correction[0])
 
-        error_element = self.make_error_element(error,
-                                                fixed_correction,
-                                                element_name,
-                                                att_list)
+        error_element = self.make_error_element(error, fixed_correction,
+                                                element_name, att_list)
 
         return error_element
 
@@ -356,10 +352,7 @@ class ErrorMarkup(object):
     def get_element_name(self, separator):
         return self.types[separator]
 
-    def make_error_element(self,
-                           error,
-                           fixed_correction,
-                           element_name,
+    def make_error_element(self, error, fixed_correction, element_name,
                            att_list):
         """Make an error xml element.
 

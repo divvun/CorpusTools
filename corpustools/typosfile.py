@@ -18,7 +18,6 @@
 #   Copyright © 2012-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Classes to handle .typos files in $GTFREE."""
 
 

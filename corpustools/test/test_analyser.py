@@ -41,8 +41,8 @@ class TestAnalyser(unittest.TestCase):
             'sme',
             'xfst',
             relative_path=os.path.join(HERE, 'fake_gthome/langs'))
-        self.a.xml_file = corpusxmlfile.CorpusXMLFile(os.path.join(
-            HERE, 'smefile.xml'))
+        self.a.xml_file = corpusxmlfile.CorpusXMLFile(
+            os.path.join(HERE, 'smefile.xml'))
 
     def assertXmlEqual(self, got, want):
         """Check if two stringified xml snippets are equal."""
@@ -59,9 +59,8 @@ class TestAnalyser(unittest.TestCase):
     def test_sme_ccat_output(self):
         """Test if the ccat output is what we expect it to be."""
         got = self.a.ccat()
-        want = (
-            'Muhto gaskkohagaid, ja erenoamážit dalle go lei buolaš, '
-            'de aggregáhta billánii. ¶\n')
+        want = ('Muhto gaskkohagaid, ja erenoamážit dalle go lei buolaš, '
+                'de aggregáhta billánii. ¶\n')
 
         self.assertEqual(got, want)
 

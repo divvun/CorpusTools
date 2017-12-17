@@ -17,7 +17,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 u"""Convert html files to the Giella xml format."""
 
 import codecs
@@ -52,8 +51,7 @@ def remove_declared_encoding(content):
         str: content sans the declared decoding
     """
     xml_encoding_declaration_re = re.compile(
-        r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*",
-        re.IGNORECASE)
+        r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*", re.IGNORECASE)
 
     return re.sub(xml_encoding_declaration_re, "", content)
 

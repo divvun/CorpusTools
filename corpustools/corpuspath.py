@@ -17,9 +17,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """This file contains classes to handle corpus filenames."""
-
 
 from __future__ import absolute_import, print_function
 
@@ -56,9 +54,11 @@ class CorpusPath(object):
             ValueError: the path is not part of a corpus.
         """
         abspath = os.path.normpath(os.path.abspath(path))
-        for module in [u'goldstandard/orig', u'prestable/converted',
-                       u'prestable/toktmx', u'prestable/tmx', u'orig',
-                       u'converted', u'stable', u'toktmx', u'tmx']:
+        for module in [
+                u'goldstandard/orig', u'prestable/converted',
+                u'prestable/toktmx', u'prestable/tmx', u'orig', u'converted',
+                u'stable', u'toktmx', u'tmx'
+        ]:
             module_dir = u'/' + module + u'/'
             if module_dir in abspath:
                 root, rest = abspath.split(module_dir)
@@ -80,10 +80,9 @@ class CorpusPath(object):
         root, module, lang_etc = self.split_on_module(path)
 
         lang_etc_parts = lang_etc.split('/')
-        (lang, genre, subdirs, basename) = (lang_etc_parts[0],
-                                            lang_etc_parts[1],
-                                            lang_etc_parts[2:-1],
-                                            lang_etc_parts[-1])
+        (lang, genre, subdirs,
+         basename) = (lang_etc_parts[0], lang_etc_parts[1],
+                      lang_etc_parts[2:-1], lang_etc_parts[-1])
 
         if 'orig' in module:
             if basename.endswith('.xsl'):
@@ -100,8 +99,8 @@ class CorpusPath(object):
         if '2' in lang and 'tmx' in module:
             lang = lang[:lang.find('2')]
 
-        return util.PathComponents(root, 'orig', lang, genre,
-                                   '/'.join(subdirs), basename)
+        return util.PathComponents(root, 'orig', lang, genre, '/'.join(subdirs),
+                                   basename)
 
     @property
     def orig(self):
@@ -130,12 +129,9 @@ class CorpusPath(object):
         this_lang = self.pathcomponents.lang if lang is None else lang
         this_name = self.pathcomponents.basename if name is None else name
 
-        return os.path.join(self.pathcomponents.root,
-                            module,
-                            this_lang,
+        return os.path.join(self.pathcomponents.root, module, this_lang,
                             self.pathcomponents.genre,
-                            self.pathcomponents.subdirs,
-                            this_name + extension)
+                            self.pathcomponents.subdirs, this_name + extension)
 
     @property
     def converted(self):

@@ -19,7 +19,6 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-
 from __future__ import absolute_import, unicode_literals
 
 import os
@@ -38,35 +37,24 @@ class TestTextCat(unittest.TestCase):
 
     def test_classify(self):
         guesser = text_cat.Classifier()
+        self.assertEqual(guesser.classify("eg køyrer ikkje"), "nno")
         self.assertEqual(
-            guesser.classify("eg køyrer ikkje"),
-            "nno")
-        self.assertEqual(
-            guesser.classify(
-                'Sámediggi nammada sámi báikenammakonsuleanttaid'),
+            guesser.classify('Sámediggi nammada sámi báikenammakonsuleanttaid'),
             "sme")
 
     def test_folder_none(self):
         guesser = text_cat.Classifier(None)
-        self.assertEqual(
-            guesser.classify("eg køyrer ikkje"),
-            "nno")
+        self.assertEqual(guesser.classify("eg køyrer ikkje"), "nno")
         self.assertEqual(
             guesser.classify(
-                'Almmá norggabeale guohtuneatnamiid ii leat vejolaš'),
-            "sme")
+                'Almmá norggabeale guohtuneatnamiid ii leat vejolaš'), "sme")
 
     def test_restricted(self):
         guesser = text_cat.Classifier(langs=["nob", "sma"])
-        self.assertEqual(
-            guesser.classify("Regional utvikling"),
-            "nob")
-        self.assertEqual(
-            guesser.classify("Regijovnaale evtiedimmie"),
-            "sma")
-        self.assertEqual(
-            guesser.classify("eg køyrer ikkje"),
-            "nob")              # because restriction
+        self.assertEqual(guesser.classify("Regional utvikling"), "nob")
+        self.assertEqual(guesser.classify("Regijovnaale evtiedimmie"), "sma")
+        self.assertEqual(guesser.classify("eg køyrer ikkje"),
+                         "nob")  # because restriction
 
     def test_charmodel_compare(self):
         swe_train = (
@@ -80,15 +68,14 @@ class TestTextCat(unittest.TestCase):
         swe_model = text_cat.CharModel().of_text(swe_train)
         qer_model = text_cat.CharModel().of_text(qer_train)
         qer_test = "Ig dalsker nu að ið ollum"
-        swe_test = (
-            'sådan slåttermark som bara slås med orv och lie, '
-            'oländig kanske stenig mark')
+        swe_test = ('sådan slåttermark som bara slås med orv och lie, '
+                    'oländig kanske stenig mark')
         swe_testmodel = text_cat.CharModel().of_text(swe_test)
         qer_testmodel = text_cat.CharModel().of_text(qer_test)
-        self.assertLess(swe_model.compare(swe_testmodel),
-                        qer_model.compare(swe_testmodel))
-        self.assertLess(qer_model.compare(qer_testmodel),
-                        swe_model.compare(qer_testmodel))
+        self.assertLess(
+            swe_model.compare(swe_testmodel), qer_model.compare(swe_testmodel))
+        self.assertLess(
+            qer_model.compare(qer_testmodel), swe_model.compare(qer_testmodel))
 
     def test_charmodel_model_file(self):
         model = text_cat.CharModel().of_text("šuhkoládagáhkku")
@@ -125,10 +112,9 @@ class TestTextCat(unittest.TestCase):
         wmodel_nob = text_cat.WordModel().of_text(nob_train)
         ctext_nob = text_cat.CharModel().of_text(nob_test)
 
-        self.assertLess(wmodel_sme.compare_tc(nob_test,
-                                              cmodel_sme.compare(ctext_nob)),
-                        wmodel_nob.compare_tc(nob_test,
-                                              cmodel_nob.compare(ctext_nob)))
+        self.assertLess(
+            wmodel_sme.compare_tc(nob_test, cmodel_sme.compare(ctext_nob)),
+            wmodel_nob.compare_tc(nob_test, cmodel_nob.compare(ctext_nob)))
         self.assertLess(3930431,
                         wmodel_nob.compare_tc(nob_test,
                                               cmodel_nob.compare(ctext_nob)))

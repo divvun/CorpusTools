@@ -312,8 +312,8 @@ class Parallelize(object):
         replace_path_part = '/tmx/{}2{}/'.format(self.origfiles[0].lang,
                                                  self.origfiles[1].lang)
         # Then set the outdir
-        out_dirname = self.origfiles[0].dirname.replace(
-            orig_path_part, replace_path_part)
+        out_dirname = self.origfiles[0].dirname.replace(orig_path_part,
+                                                        replace_path_part)
         # Replace xml with tmx in the filename
         out_filename = self.origfiles[0].basename_noext + '.tmx'
 
@@ -403,8 +403,8 @@ class ParallelizeHunalign(Parallelize):
             cleaned_pairs = [(self.lang1, self.lang2)]
         # Hunalign expects the _reverse_ format for the dictionary!
         # See Dictionary under http://mokk.bme.hu/resources/hunalign/
-        return "\n".join(
-            ["{} @ {}".format(w2, w1) for w1, w2 in cleaned_pairs]) + "\n"
+        return "\n".join(["{} @ {}".format(w2, w1) for w1, w2 in cleaned_pairs
+                         ]) + "\n"
 
     @staticmethod
     def to_sents(origfile):
@@ -482,8 +482,8 @@ class ParallelizeTCA2(Parallelize):
         # Ensure we have 20 bytes of leeway to let TCA2 append
         # lang_sent_new.txt without going over the 255 byte limit:
         origfilename = self.crop_to_bytes(origfilename, (255 - 20))
-        return os.path.join(os.environ['GTFREE'], 'tmp',
-                            '{}{}_sent.xml'.format(origfilename, pfile.lang))
+        return os.path.join(os.environ['GTFREE'], 'tmp', '{}{}_sent.xml'.format(
+            origfilename, pfile.lang))
 
     @staticmethod
     def crop_to_bytes(name, max_bytes):
@@ -670,14 +670,14 @@ class Tmx(object):
             r"(?P<space>\s)(?P<punctuation>[\)\]\.»:;,])")
         # for every match in the result string, replace the match
         # (space+punctuation) with the punctuation part
-        result = space_punctuation.sub(
-            lambda match: match.group('punctuation'), result)
+        result = space_punctuation.sub(lambda match: match.group('punctuation'),
+                                       result)
 
         # regex to find punctuation followed by space
         punctuation_space = re.compile(
             r"(?P<punctuation>[\[\(«])(?P<space>\s)+")
-        result = punctuation_space.sub(
-            lambda match: match.group('punctuation'), result)
+        result = punctuation_space.sub(lambda match: match.group('punctuation'),
+                                       result)
 
         # regex which matches multiple spaces
         multiple_space = re.compile(r"\s+")
@@ -839,8 +839,8 @@ class HunalignToTmx(AlignmentToTmx):
 
     def is_good_line(self, line):
         """Determine whether this line should be used."""
-        return (len(line) == 3 and line[0] != "<p>" and line[1] != "<p>"
-                and float(line[2]) > self.threshold)
+        return (len(line) == 3 and line[0] != "<p>" and line[1] != "<p>" and
+                float(line[2]) > self.threshold)
 
     @staticmethod
     def clean_line(line):
@@ -979,8 +979,8 @@ def parallelise_file(input_file, lang2, dictionary, quiet, aligner, stdout,
 
         outfile = '/dev/stdout' if stdout else parallelizer.outfile_name
 
-        if (outfile == "/dev/stdout" or not os.path.exists(outfile)
-                or (os.path.exists(outfile) and force)):
+        if (outfile == "/dev/stdout" or not os.path.exists(outfile) or
+            (os.path.exists(outfile) and force)):
             if not quiet:
                 util.note(
                     "Aligning {} and its parallel file".format(input_file))

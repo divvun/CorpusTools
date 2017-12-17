@@ -17,7 +17,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Base class for converters."""
 
 from corpustools import xslsetter
@@ -37,5 +36,5 @@ class BasicConverter(object):
             debugging purposes).
         """
         self.orig = filename
-        self.metadata = xslsetter.MetadataHandler(filename + '.xsl',
-                                                  create=True)
+        self.metadata = xslsetter.MetadataHandler(
+            filename + '.xsl', create=True)

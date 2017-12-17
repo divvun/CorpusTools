@@ -17,9 +17,7 @@
 #   Copyright © 2015-2017 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Check the consistency of the parallel entries in the metadata files."""
-
 
 from __future__ import absolute_import, print_function
 
@@ -37,9 +35,9 @@ def parse_args():
         description='Check the if the files in the parallel_text entries '
         'found in the metadata files exist')
 
-    parser.add_argument('orig_dir',
-                        help='The directory where the original corpus '
-                        'files are')
+    parser.add_argument(
+        'orig_dir', help='The directory where the original corpus '
+        'files are')
 
     return parser.parse_args()
 
@@ -61,17 +59,18 @@ def main():
                     xsl = xslsetter.MetadataHandler(xsl_name)
 
                     para_files = set()
-                    for lang, parallel in six.iteritems(xsl.get_parallel_texts()):
-                        parallelpath = u'/'.join((
-                            orig_components.root,
-                            orig_components.module,
-                            lang, orig_components.genre,
-                            orig_components.subdirs, parallel))
+                    for lang, parallel in six.iteritems(
+                            xsl.get_parallel_texts()):
+                        parallelpath = u'/'.join(
+                            (orig_components.root, orig_components.module, lang,
+                             orig_components.genre, orig_components.subdirs,
+                             parallel))
                         if not os.path.isfile(parallelpath.encode('utf8')):
-                            none_dupe_path = os.path.join(os.path.join(
-                                os.path.dirname(parallelpath),
-                                namechanger.normalise_filename(
-                                    os.path.basename(parallelpath))))
+                            none_dupe_path = os.path.join(
+                                os.path.join(
+                                    os.path.dirname(parallelpath),
+                                    namechanger.normalise_filename(
+                                        os.path.basename(parallelpath))))
 
                             if not os.path.isfile(none_dupe_path):
                                 para_fail += 1
@@ -85,5 +84,5 @@ def main():
                 else:
                     no_orig_xsl += 1
 
-    print('Total {}, fails {}, {} files with no xsl'.format(total, para_fail,
-                                                            no_orig_xsl))
+    print('Total {}, fails {}, {} files with no xsl'.format(
+        total, para_fail, no_orig_xsl))

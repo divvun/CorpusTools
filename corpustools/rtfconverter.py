@@ -17,9 +17,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 u"""Convert rtf files to the Giella xml format."""
-
 
 import io
 
@@ -50,13 +48,12 @@ def rtf_to_unicodehtml(filename):
         content = rtf_document.read()
         try:
             pyth_doc = Rtf15Reader.read(
-                io.BytesIO(content.replace(b'fcharset256',
-                                           b'fcharset255')))
-            return six.text_type(XHTMLWriter.write(
-                pyth_doc, pretty=True).read(), encoding='utf8')
+                io.BytesIO(content.replace(b'fcharset256', b'fcharset255')))
+            return six.text_type(
+                XHTMLWriter.write(pyth_doc, pretty=True).read(),
+                encoding='utf8')
         except UnicodeDecodeError:
-            raise RTFError('Unicode problems in {}'.format(
-                filename.orig))
+            raise RTFError('Unicode problems in {}'.format(filename.orig))
 
 
 def convert2intermediate(filename):
@@ -68,7 +65,4 @@ def convert2intermediate(filename):
     Returns:
         etree.Element: the root element of the Giella xml document
     """
-    return xhtml2intermediate(convert2xhtml(
-        HTML(
-            rtf_to_unicodehtml(
-                filename))))
+    return xhtml2intermediate(convert2xhtml(HTML(rtf_to_unicodehtml(filename))))

@@ -34,6 +34,7 @@ HERE = os.path.dirname(__file__)
 
 
 class TestSentenceDivider(unittest.TestCase):
+
     def test_ccat_input(self):
         ccat_output = """10. ON-vuogádat ¶
 ON doaimmaid oktavuođas; ovddasvástádus sihkkarastit? buot ON orgánat!
@@ -59,8 +60,7 @@ váldočoahkkima nammadit. dievaslaš čađaheami, [2019 – 2020] … ¶
             '(rávvagiid)',
         ]
         divider = parallelize.SentenceDivider('sme')
-        self.assertListEqual(
-            divider.make_valid_sentences(ccat_output), want)
+        self.assertListEqual(divider.make_valid_sentences(ccat_output), want)
 
     def test_with_dot_and_paragraph(self):
         ccat_output = """mielddisbuvttii. ¶
@@ -95,22 +95,21 @@ class TestTca2SentenceDivider(unittest.TestCase):
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(string_want, string_got, 0):
             message = checker.output_difference(
-                doctest.Example("", string_want),
-                string_got, 0)
+                doctest.Example("", string_want), string_got, 0)
             raise AssertionError(message)
 
     def test_make_sentence_file(self):
-        corpus_file = corpusxmlfile.CorpusXMLFile(os.path.join(
-            HERE,
-            "parallelize_data/finnmarkkulahka_web_lettere.pdf.xml"))
+        corpus_file = corpusxmlfile.CorpusXMLFile(
+            os.path.join(
+                HERE, "parallelize_data/finnmarkkulahka_web_lettere.pdf.xml"))
 
         sentence_divider = parallelize.Tca2SentenceDivider()
         got = sentence_divider.make_sentence_xml(corpus_file.lang,
                                                  corpus_file.name)
 
-        want = etree.parse(os.path.join(
-            HERE, 'parallelize_data/'
-            'finnmarkkulahka_web_lettere.pdfsme_sent.xml.test'))
+        want = etree.parse(
+            os.path.join(HERE, 'parallelize_data/'
+                         'finnmarkkulahka_web_lettere.pdfsme_sent.xml.test'))
 
         self.assertXmlEqual(got, want)
 
@@ -120,28 +119,25 @@ class TestParallelizeTCA2(unittest.TestCase):
 
     def setUp(self):
         self.parallelize = parallelize.ParallelizeTCA2(
-            os.path.join(
-                HERE, "parallelize_data",
-                'prestable/converted/sme/facta/skuvlahistorja2/'
-                'aarseth2-s.htm.xml'),
+            os.path.join(HERE, "parallelize_data",
+                         'prestable/converted/sme/facta/skuvlahistorja2/'
+                         'aarseth2-s.htm.xml'),
             "nob",
             quiet=True)
 
     def test_orig_path(self):
         self.assertEqual(
             self.parallelize.origfile1,
-            os.path.join(
-                HERE, "parallelize_data",
-                'prestable/converted/nob/facta/skuvlahistorja2/'
-                'aarseth2-n.htm.xml'))
+            os.path.join(HERE, "parallelize_data",
+                         'prestable/converted/nob/facta/skuvlahistorja2/'
+                         'aarseth2-n.htm.xml'))
 
     def test_parallel_path(self):
         self.assertEqual(
             self.parallelize.origfile2,
-            os.path.join(
-                HERE, "parallelize_data",
-                'prestable/converted/sme/facta/skuvlahistorja2/'
-                'aarseth2-s.htm.xml'))
+            os.path.join(HERE, "parallelize_data",
+                         'prestable/converted/sme/facta/skuvlahistorja2/'
+                         'aarseth2-s.htm.xml'))
 
     def test_lang1(self):
         self.assertEqual(self.parallelize.lang1, "nob")
@@ -151,8 +147,7 @@ class TestParallelizeTCA2(unittest.TestCase):
 
     def test_get_sent_filename(self):
         self.assertEqual(
-            self.parallelize.get_sent_filename(
-                self.parallelize.origfiles[0]),
+            self.parallelize.get_sent_filename(self.parallelize.origfiles[0]),
             os.path.join(os.environ['GTFREE'],
                          "tmp/aarseth2-n.htmnob_sent.xml"))
 
@@ -168,10 +163,9 @@ class TestParallelizeHunalign(unittest.TestCase):
 
     def setUp(self):
         self.parallelize = parallelize.ParallelizeHunalign(
-            os.path.join(
-                HERE, "parallelize_data",
-                'prestable/converted/sme/facta/skuvlahistorja2/'
-                'aarseth2-s.htm.xml'),
+            os.path.join(HERE, "parallelize_data",
+                         'prestable/converted/sme/facta/skuvlahistorja2/'
+                         'aarseth2-s.htm.xml'),
             "nob",
             quiet=True)
 
@@ -180,31 +174,21 @@ class TestParallelizeHunalign(unittest.TestCase):
 
     def test_hunalign_dict(self):
         self.assertEqual(
-            self.parallelize.anchor_to_dict(
-                [
-                    ("foo, bar", "fie"),
-                    ("1, ein", "eins"),
-                    ("2, два", "2, guokte"),
-                ]
-            ),
-            [("foo", "fie"),
-             ("bar", "fie"),
-             ("1", "eins"),
-             ("ein", "eins"),
-             ("2", "2"),
-             ("2", "guokte"),
-             ("два", "2"),
-             ("два", "guokte")])
+            self.parallelize.anchor_to_dict([
+                ("foo, bar", "fie"),
+                ("1, ein", "eins"),
+                ("2, два", "2, guokte"),
+            ]), [("foo", "fie"), ("bar", "fie"), ("1", "eins"), ("ein", "eins"),
+                 ("2", "2"), ("2", "guokte"), ("два", "2"), ("два", "guokte")])
 
 
 class TestTmx(unittest.TestCase):
     """A test class for the Tmx class."""
 
     def setUp(self):
-        self.tmx = parallelize.Tmx(etree.parse(
-            os.path.join(
-                HERE,
-                'parallelize_data/aarseth2-n.htm.toktmx')))
+        self.tmx = parallelize.Tmx(
+            etree.parse(
+                os.path.join(HERE, 'parallelize_data/aarseth2-n.htm.toktmx')))
 
     def assertXmlEqual(self, got, want):
         """Check if two xml snippets are equal."""
@@ -214,8 +198,7 @@ class TestTmx(unittest.TestCase):
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(string_want, string_got, 0):
             message = checker.output_difference(
-                doctest.Example("", string_want),
-                string_got, 0)
+                doctest.Example("", string_want), string_got, 0)
             raise AssertionError(message)
 
     def test_get_src_lang(self):
@@ -223,9 +206,8 @@ class TestTmx(unittest.TestCase):
         self.assertEqual(self.tmx.src_lang, "nob")
 
     def test_tu_to_string(self):
-        tu = etree.XML(
-            '<tu><tuv xml:lang="sme"><seg>Sámegiella</seg></tuv>'
-            '<tuv xml:lang="nob"><seg>Samisk</seg></tuv></tu>')
+        tu = etree.XML('<tu><tuv xml:lang="sme"><seg>Sámegiella</seg></tuv>'
+                       '<tuv xml:lang="nob"><seg>Samisk</seg></tuv></tu>')
 
         self.assertEqual(self.tmx.tu_to_string(tu), "Sámegiella\tSamisk\n")
 
@@ -236,8 +218,7 @@ class TestTmx(unittest.TestCase):
 
     def test_lang_to_string_list(self):
         toktmx_txt_name = os.path.join(
-            HERE,
-            'parallelize_data/aarseth2-n.htm.toktmx.as.txt')
+            HERE, 'parallelize_data/aarseth2-n.htm.toktmx.as.txt')
         with codecs.open(toktmx_txt_name, encoding='utf8') as toktmx_txt:
             string_list = toktmx_txt.read().split('\n')
 
@@ -254,11 +235,9 @@ class TestTmx(unittest.TestCase):
 
     def test_tmx_to_stringlist(self):
         toktmx_txt_name = os.path.join(
-            HERE,
-            'parallelize_data/aarseth2-n.htm.toktmx.as.txt')
+            HERE, 'parallelize_data/aarseth2-n.htm.toktmx.as.txt')
         with codecs.open(toktmx_txt_name, encoding='utf8') as toktmx_txt:
-            want_list = [l
-                         for l in toktmx_txt.readlines()]
+            want_list = [l for l in toktmx_txt.readlines()]
             # self.maxDiff = None
             self.assertEqual(self.tmx.tmx_to_stringlist(), want_list)
 
@@ -293,31 +272,27 @@ class TestTmx(unittest.TestCase):
             '<tu><tuv xml:lang="nob"><seg>[ 30 ] ( juli ) « skoleturer » .\n'
             '</seg></tuv><tuv xml:lang="sme"><seg>[ 30 ] ( suoidnemánnu ) « '
             'skuvlatuvrrat » .\n</seg></tuv></tu>')
-        self.assertXmlEqual(self.tmx.remove_unwanted_space_from_segs(gotXml),
-                            wantXml)
+        self.assertXmlEqual(
+            self.tmx.remove_unwanted_space_from_segs(gotXml), wantXml)
 
     def test_remove_unwanted_space_from_string(self):
         got = self.tmx.remove_unwanted_space_from_string(
             u'sámesearvvi ; [ 31 ] ( suoidnemánnu ) « skuvlatuvrrat » '
             u'bargu lea :  okta , guokte .')
-        want = (
-            u'sámesearvvi; [31] (suoidnemánnu) «skuvlatuvrrat» bargu lea: '
-            'okta, guokte.')
+        want = (u'sámesearvvi; [31] (suoidnemánnu) «skuvlatuvrrat» bargu lea: '
+                'okta, guokte.')
         self.assertEqual(got, want)
 
     def test_remove_tu_with_empty_seg(self):
-        got_tmx = parallelize.Tmx(etree.parse(
-            os.path.join(
-                HERE,
-                'parallelize_data/aarseth2-n.htm.toktmx')))
+        got_tmx = parallelize.Tmx(
+            etree.parse(
+                os.path.join(HERE, 'parallelize_data/aarseth2-n.htm.toktmx')))
         got_tmx.remove_tu_with_empty_seg()
 
         want_tmx = parallelize.Tmx(
             etree.parse(
-                os.path.join(
-                    HERE,
-                    'parallelize_data/'
-                    'aarseth2-n-without-empty-seg.htm.toktmx')))
+                os.path.join(HERE, 'parallelize_data/'
+                             'aarseth2-n-without-empty-seg.htm.toktmx')))
 
         self.assertXmlEqual(got_tmx.tmx, want_tmx.tmx)
 
@@ -328,15 +303,12 @@ class TestTca2ToTmx(unittest.TestCase):
     def setUp(self):
         """Hand the data from the Parallelize class to the tmx class."""
         para = parallelize.ParallelizeTCA2(
-            os.path.join(
-                HERE, "parallelize_data",
-                'prestable/converted/sme/facta/skuvlahistorja2/'
-                'aarseth2-s.htm.xml'),
-            "nob")
+            os.path.join(HERE, "parallelize_data",
+                         'prestable/converted/sme/facta/skuvlahistorja2/'
+                         'aarseth2-s.htm.xml'), "nob")
 
         self.para = para
-        self.tmx = parallelize.Tca2ToTmx(para.origfiles,
-                                         para.sentfiles)
+        self.tmx = parallelize.Tca2ToTmx(para.origfiles, para.sentfiles)
 
     def assertXmlEqual(self, got, want):
         """Check if two xml snippets are equal."""
@@ -346,16 +318,15 @@ class TestTca2ToTmx(unittest.TestCase):
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(string_want, string_got, 0):
             message = checker.output_difference(
-                doctest.Example("", string_want),
-                string_got, 0)
+                doctest.Example("", string_want), string_got, 0)
             raise AssertionError(message)
 
     def test_make_tu(self):
         line1 = '<s id="1">ubba gubba.</s> <s id="2">ibba gibba.</s>'
         line2 = '<s id="1">abba gabba.</s> <s id="2">ebba gebba.</s>'
 
-        got_tu = self.tmx.make_tu(self.tmx.remove_s_tag(line1),
-                                  self.tmx.remove_s_tag(line2))
+        got_tu = self.tmx.make_tu(
+            self.tmx.remove_s_tag(line1), self.tmx.remove_s_tag(line2))
 
         want_tu = etree.XML(
             '<tu><tuv xml:lang="nob"><seg>ubba gubba. ibba gibba.</seg>'
@@ -396,7 +367,6 @@ class TestTca2ToTmx(unittest.TestCase):
     def test_get_outfile_name(self):
         self.assertEqual(
             self.para.outfile_name,
-            os.path.join(
-                HERE, "parallelize_data",
-                "prestable/tmx/nob2sme/facta/skuvlahistorja2",
-                "aarseth2-n.htm.tmx"))
+            os.path.join(HERE, "parallelize_data",
+                         "prestable/tmx/nob2sme/facta/skuvlahistorja2",
+                         "aarseth2-n.htm.tmx"))

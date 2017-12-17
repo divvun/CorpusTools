@@ -18,7 +18,6 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Implement the XslMaker class."""
 
 from __future__ import absolute_import
@@ -57,12 +56,11 @@ class XslMaker(object):
         Raises:
             In case of an xml syntax error, raise ConversionException.
         """
-        xsl = etree.parse(
-            os.path.join(HERE, 'xslt/preprocxsl.xsl'))
+        xsl = etree.parse(os.path.join(HERE, 'xslt/preprocxsl.xsl'))
         transformer = etree.XSLT(xsl)
 
-        common_xsl_path = os.path.join(
-            HERE, 'xslt/common.xsl').replace(' ', '%20')
+        common_xsl_path = os.path.join(HERE, 'xslt/common.xsl').replace(
+            ' ', '%20')
 
         return transformer(
             self.filename,

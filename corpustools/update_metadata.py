@@ -18,9 +18,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
 """Update metadata files in given directories."""
-
 
 from __future__ import absolute_import, print_function
 
@@ -29,8 +27,7 @@ import os
 
 from corpustools import argparse_version, xslsetter
 
-TEMPLATE_PATH = os.path.join(os.path.dirname(__file__),
-                             'xslt/XSL-template.xsl')
+TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'xslt/XSL-template.xsl')
 
 
 def find_xsl_files(directories):
@@ -64,7 +61,8 @@ def parse_options():
         'metadata files.')
 
     parser.add_argument(
-        'directories', nargs='+',
+        'directories',
+        nargs='+',
         help='Directories where metadata files should be updated.')
 
     args = parser.parse_args()
@@ -78,10 +76,12 @@ def update_xsl_file(filename):
     Arguments:
         filename (str): path to a metadata file.
     """
-    avoid_names = ['danlang', 'englang', 'finlang', 'fkvlang', 'gerlang',
-                   'isllang', 'kallang', 'nnolang', 'noblang', 'smalang',
-                   'smelang', 'smjlang', 'swelang', 'kpvlang', 'ruslang',
-                   'multilingual', 'columns', 'parallel_texts', 'lower']
+    avoid_names = [
+        'danlang', 'englang', 'finlang', 'fkvlang', 'gerlang', 'isllang',
+        'kallang', 'nnolang', 'noblang', 'smalang', 'smelang', 'smjlang',
+        'swelang', 'kpvlang', 'ruslang', 'multilingual', 'columns',
+        'parallel_texts', 'lower'
+    ]
 
     orig_metadata = xslsetter.MetadataHandler(filename)
     template_metadata = xslsetter.MetadataHandler(TEMPLATE_PATH)
@@ -94,8 +94,8 @@ def update_xsl_file(filename):
             if name.startswith('mlang_'):
                 template_metadata.set_mlang(name.replace('mlang_', ''))
             elif name.startswith('para_'):
-                template_metadata.set_parallel_text(name.replace('para_', ''),
-                                                    value)
+                template_metadata.set_parallel_text(
+                    name.replace('para_', ''), value)
             elif name == 'excluded':
                 template_metadata.set_variable('skip_pages', value)
             else:
