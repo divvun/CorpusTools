@@ -22,23 +22,18 @@ u"""Test conversion of html files."""
 
 import os
 
-from lxml import etree
-from lxml.html import html5parser
+from lxml import etree, html
 import six
 import testfixtures
 from parameterized import parameterized
 
 from corpustools import htmlconverter
-from corpustools.test.test_htmlcontentconverter import clean_namespaces
 from corpustools.test.test_xhtml2corpus import assertXmlEqual
 from corpustools.test.xmltester import XMLTester
 
 HERE = os.path.dirname(__file__)
 
 DOCUMENT_TEMPLATE = ('<document>'
-                     '  <header>'
-                     '   <title></title>'
-                     '  </header>'
                      '  <body>'
                      '{}'
                      '  </body>'
@@ -199,7 +194,7 @@ class TestHTMLConverter(XMLTester):
                 </body>
             </html>
         '''.encode(encoding='utf-8')
-        want = html5parser.fromstring(u'''
+        want = html.fromstring(u'''
             <html lang="sma-NO">
                 <head>
                     <meta name="viewport" content="width=device-width,
@@ -216,7 +211,6 @@ class TestHTMLConverter(XMLTester):
             got = htmlconverter.webpage_to_unicodehtml(
                 os.path.join(temp_dir.path, filename))
 
-            clean_namespaces([got, want])
             self.assertXmlEqual(got, want)
 
 
@@ -1457,7 +1451,7 @@ class TestHTMLConverter(XMLTester):
          '  </body>'
          '</html>'),
         DOCUMENT_TEMPLATE.format('    <p>'
-                                 '      <em type="italic">'
+                                 '      <em type="bold">'
                                  '        Politihkalaš doaimmat'
                                  '      </em>'
                                  '    </p>'),
@@ -1670,7 +1664,7 @@ class TestHTMLConverter(XMLTester):
          '  </body>'
          '</html>'),
         DOCUMENT_TEMPLATE.format('    <p>'
-                                 '      <em type="italic">Gaskavahkku</em>'
+                                 '      <em type="bold">Gaskavahkku</em>'
                                  '    </p>'),
     ),
     (
@@ -1727,7 +1721,7 @@ class TestHTMLConverter(XMLTester):
          '  </body>'
          '</html>'),
         DOCUMENT_TEMPLATE.format('    <p>'
-                                 '      <em type="italic">Ášši nr. 54/60:</em>'
+                                 '      <em type="bold">Ášši nr. 54/60:</em>'
                                  '    </p>'),
     ),
     (
@@ -1815,7 +1809,7 @@ class TestHTMLConverter(XMLTester):
          '  </body>'
          '</html>'),
         DOCUMENT_TEMPLATE.format('    <p>'
-                                 '      <em type="italic">'
+                                 '      <em>'
                                  '        Kapittel 1'
                                  '      </em>'
                                  '    </p>'),
@@ -1963,16 +1957,16 @@ class TestHTMLConverter(XMLTester):
                                  '    </p>'),
     ),
 ])
-def test_conversion(testname, html, xml):
+def test_conversion(testname, html_str, xml_str):
     """Check that the tidied html is correctly converted to corpus xml."""
     with testfixtures.TempDirectory() as temp_dir:
         filepath = os.path.join('orig/sme/admin/sd', testname)
         if six.PY3:
-            html = html.encode('utf8')
-        temp_dir.write(filepath, html)
+            html_str = html_str.encode('utf8')
+        temp_dir.write(filepath, html_str)
         got = htmlconverter.convert2intermediate(
             os.path.join(temp_dir.path, filepath))
-        want = etree.fromstring(xml)
+        want = etree.fromstring(xml_str)
 
         assertXmlEqual(got, want)
 
@@ -1988,7 +1982,6 @@ def test_problematic_8bit():
             '<p>Sámekulturguovddáža dieáhusdilálašvuohta 14.4.2008 Anáris</p>'
             '<p></p>'
             '<p></p>'
-            '<p>Senaatti-giddodagat ja Sámediggi</p>'
-            '<p></p>'))
+            '<p>Senaatti-giddodagat ja Sámediggi</p>'))
 
     assertXmlEqual(got, want)

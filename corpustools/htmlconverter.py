@@ -20,11 +20,11 @@
 u"""Convert html files to the Giella xml format."""
 
 import codecs
+import io
 import os
 import re
 
-from lxml import etree, objectify
-from lxml.html import clean, html5parser
+from lxml import etree, html
 
 from corpustools.htmlcontentconverter import HTMLContentConverter
 
@@ -69,33 +69,12 @@ def webpage_to_unicodehtml(filename):
     for encoding in ['utf-8', 'windows-1252', 'latin1']:
         try:
             with codecs.open(filename, encoding=encoding) as file_:
-                content = remove_declared_encoding(file_.read())
-                try:
-                    return html5parser.document_fromstring(content)
-                except ValueError:
-                    cleaner = clean.Cleaner(comments=True)
-                    velyclean = cleaner.clean_html(content)
-                    return html5parser.document_fromstring(velyclean)
-
+                return html.parse(
+                    io.StringIO(remove_declared_encoding(file_.read())))
         except UnicodeDecodeError:
             pass
 
     raise HTMLError('{}: encoding trouble'.format(filename))
-
-
-def clean_namespaces(html):
-    """Remove namespaces from elements.
-
-    Arguments:
-        html (etree.Element): the root of an xhtml element.
-    """
-    for element in html.getiterator():
-        if isinstance(element.tag, str):
-            index = element.tag.find('}')
-            if index >= 0:
-                element.tag = element.tag[index + 1:]
-
-    objectify.deannotate(html, cleanup_namespaces=True)
 
 
 def convert2xhtml(content_xml):
@@ -107,7 +86,6 @@ def convert2xhtml(content_xml):
     Returns:
         a cleaned up xhtml document as an etree element
     """
-    clean_namespaces(content_xml)
     for elt in content_xml.iter('script'):
         elt.getparent().remove(elt)
 

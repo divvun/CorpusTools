@@ -20,7 +20,8 @@
 """Convert odf files to the Giella xml format."""
 
 import six
-from lxml.html import html5parser
+import io
+from lxml import html
 from odf.odf2xhtml import ODF2XHTML
 
 from corpustools import util
@@ -37,7 +38,7 @@ def odf_to_unicodehtml(filename):
     embedable = True
     odhandler = ODF2XHTML(generatecss, embedable)
     try:
-        return odhandler.odf2xhtml(six.text_type(filename))
+        return html.parse(io.StringIO(odhandler.odf2xhtml(filename)))
     except TypeError as error:
         raise util.ConversionError('Error: {}'.format(error))
 
@@ -52,5 +53,4 @@ def convert2intermediate(filename):
         etree.Element: the root element of the Giella xml document
     """
     return xhtml2intermediate(
-        convert2xhtml(
-            html5parser.document_fromstring(odf_to_unicodehtml(filename))))
+        convert2xhtml(odf_to_unicodehtml(filename)))

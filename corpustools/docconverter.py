@@ -21,10 +21,11 @@
 
 from __future__ import absolute_import, print_function
 
+import io
 import os
 import re
 
-from lxml.html import html5parser
+from lxml import html
 
 from corpustools import util
 from corpustools.htmlconverter import convert2xhtml, xhtml2intermediate
@@ -36,6 +37,10 @@ class DocError(Exception):
     pass
 
 
+def doc_to_html_elt(filename):
+    return html.parse(io.StringIO(doc_to_unicodehtml(filename)))
+
+
 def doc_to_unicodehtml(filename):
     """Convert a doc file to xhtml.
 
@@ -45,17 +50,16 @@ def doc_to_unicodehtml(filename):
     Returns:
         A string containing the xhtml version of the doc file.
     """
-    command = ['wvHtml', os.path.realpath(filename), '-']
+    text = extract_text(filename)
     try:
-        return extract_text(filename, command).decode('utf8')
+        return text.decode('utf8')
     except UnicodeDecodeError:
         # remove control characters
         remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]')
 
         return remove_re.subn(
             '',
-            extract_text(filename,
-                         command).decode('windows-1252'))[0].encode('utf8')
+            text.decode('windows-1252'))[0]
 
 
 def fix_wv_output():
@@ -212,5 +216,4 @@ def convert2intermediate(filename):
         etree.Element: the root element of the Giella xml document
     """
     return xhtml2intermediate(
-        convert2xhtml(
-            html5parser.document_fromstring(doc_to_unicodehtml(filename))))
+        convert2xhtml(doc_to_html_elt(filename)))

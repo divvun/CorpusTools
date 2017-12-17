@@ -18,11 +18,15 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Convert docx files to the Giella xml format."""
-
-from lxml.html import html5parser
+import io
+from lxml import html
 from pydocx.export import PyDocXHTMLExporter
 
 from corpustools.htmlconverter import convert2xhtml, xhtml2intermediate
+
+
+def docx_to_unicodehtml(filename):
+    return html.parse(io.StringIO(PyDocXHTMLExporter(filename).export()))
 
 
 def convert2intermediate(filename):
@@ -35,6 +39,4 @@ def convert2intermediate(filename):
         etree.Element: the root element of the Giella xml document
     """
     return xhtml2intermediate(
-        convert2xhtml(
-            html5parser.document_fromstring(
-                PyDocXHTMLExporter(filename).export())))
+        convert2xhtml(docx_to_unicodehtml(filename)))

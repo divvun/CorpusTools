@@ -646,7 +646,10 @@ class HTMLContentConverter(object):
         c_content = self.remove_cruft(content)
 
         c_clean = self.superclean(c_content)
+        print(c_clean.split('\n')[0])
         self.soup = html.document_fromstring(c_clean)
+        print(type(self.soup))
+        print(self.soup.tag)
         self.remove_empty_class()
         self.remove_empty_p()
         self.remove_elements()
@@ -657,5 +660,7 @@ class HTMLContentConverter(object):
         self.body_text()
         self.simplify_tags()
         self.fix_spans_as_divs()
+
+        util.print_frame(etree.tostring(self.soup, encoding='unicode', pretty_print=True))
 
         return self.soup

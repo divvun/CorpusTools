@@ -100,4 +100,4 @@ def convert2intermediate(filename):
 
     shutil.rmtree(latex_dir(filename))
 
-    return xhtml2intermediate(html)
+    return xhtml2intermediate(convert2xhtml(html))
