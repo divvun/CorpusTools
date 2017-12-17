@@ -26,7 +26,7 @@ from shutil import copyfile
 from lxml import etree
 from testfixtures import TempDirectory
 
-from corpustools import epubconverter, xslsetter
+from corpustools import htmlcontentconverter, xslsetter
 from corpustools.test.xmltester import XMLTester
 
 HERE = os.path.dirname(__file__)
@@ -62,7 +62,7 @@ class TestEpubConverter(XMLTester):
 
     def test_convert2intermediate_1(self):
         """Test without skip_elements."""
-        got = epubconverter.convert2intermediate(self.testdoc)
+        got = htmlcontentconverter.convert2intermediate(self.testdoc)
         want = ("""
             <document>
                 <body>
@@ -94,7 +94,7 @@ class TestEpubConverter(XMLTester):
             temp_epub = set_data(
                 directory, self.testdoc, './/html:body/html:div[1]/html:h2[1];'
                 './/html:body/html:div[3]/html:div[1]/html:h3[1]')
-            got = epubconverter.convert2intermediate(temp_epub)
+            got = htmlcontentconverter.convert2intermediate(temp_epub)
             want = ("""
                 <document>
                     <body>
@@ -123,7 +123,7 @@ class TestEpubConverter1(XMLTester):
             temp_epub = set_data(
                 directory, self.testdoc,
                 './/body/div[1]/div[1]/p[1];.//body/div[2]/div[1]/p[4]')
-            got = epubconverter.convert2intermediate(temp_epub)
+            got = htmlcontentconverter.convert2intermediate(temp_epub)
             want = ("""
                 <document>
                     <body>
@@ -141,7 +141,7 @@ class TestEpubConverter1(XMLTester):
             temp_epub = set_data(
                 directory, self.testdoc,
                 './/body/div[2]/div[1]/p[1];.//body/div[2]/div[1]/p[4]')
-            got = epubconverter.convert2intermediate(temp_epub)
+            got = htmlcontentconverter.convert2intermediate(temp_epub)
             want = ("""
                 <document>
                     <body>

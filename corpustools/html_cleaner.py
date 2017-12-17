@@ -53,6 +53,6 @@ def main():
     args = parse_args()
 
     c = htmlconverter.convert2xhtml(
-        htmlconverter.webpage_to_unicodehtml(args.inhtml))
+        htmlconverter.to_html_elt(args.inhtml))
     with open(args.outhtml, 'w') as outfile:
         util.print_element(c, 0, 4, outfile)

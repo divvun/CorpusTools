@@ -25,8 +25,6 @@ from lxml.etree import HTML
 from pyth.plugins.rtf15.reader import Rtf15Reader
 from pyth.plugins.xhtml.writer import XHTMLWriter
 
-from corpustools.htmlconverter import convert2xhtml, xhtml2intermediate
-
 
 class RTFError(Exception):
     """Use this when errors occur in this module."""
@@ -34,7 +32,7 @@ class RTFError(Exception):
     pass
 
 
-def rtf_to_unicodehtml(filename):
+def to_html_elt(filename):
     """Convert the content of an rtf file to xhtml.
 
     Arguments:
@@ -51,15 +49,3 @@ def rtf_to_unicodehtml(filename):
             return HTML(str(XHTMLWriter.write(pyth_doc, pretty=True).read(), encoding='utf8'))
         except UnicodeDecodeError:
             raise RTFError('Unicode problems in {}'.format(filename.orig))
-
-
-def convert2intermediate(filename):
-    """Convert an rtf document to the Giella xml format.
-
-    Arguments:
-        filename (str): path to the document
-
-    Returns:
-        etree.Element: the root element of the Giella xml document
-    """
-    return xhtml2intermediate(convert2xhtml(rtf_to_unicodehtml(filename)))

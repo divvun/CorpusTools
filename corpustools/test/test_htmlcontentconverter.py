@@ -21,31 +21,12 @@
 u"""Test conversion of html content."""
 
 import lxml.etree as etree
-import lxml.objectify as objectify
-from lxml.html import html5parser
+import lxml.html as html
 from parameterized import parameterized
 
 from corpustools import htmlcontentconverter
 from corpustools.test import xmltester
 from corpustools.test.test_xhtml2corpus import assertXmlEqual
-
-
-def clean_namespaces(elementlist):
-    """Remove namespaces from elements.
-
-    Args:
-        elementlist (list of etree.Element): elements where namespaces should
-            be removed
-    """
-    for element in elementlist:
-        tree = element.getroottree()
-        root = tree.getroot()
-        for element in root.getiterator():
-            index = element.tag.find('}')
-            if index >= 0:
-                element.tag = element.tag[index + 1:]
-
-        objectify.deannotate(root, cleanup_namespaces=True)
 
 
 def test_remove_unwanted_content():
@@ -322,13 +303,13 @@ def check_unwanted_classes_and_ids(tag, key, value):
                  'content:{0} {1} {2}'
                  '</{0}>'.format(tag, key, value))
         inner_r = ''
-    got = htmlcontentconverter.HTMLContentConverter().convert2xhtml(
+    content_xml = html.document_fromstring(
         '<html><head/><body>{}</body></html>'.format(inner))
+    got = htmlcontentconverter.HTMLBeautifier(content_xml).beautify()
 
-    want = html5parser.document_fromstring(
-        '<html><body>{}</body></html>'.format(inner_r))
+    want = html.document_fromstring(
+        '<html><head/><body>{}</body></html>'.format(inner_r))
 
-    clean_namespaces([got, want])
     if etree.tostring(got) != etree.tostring(want):
         raise AssertionError('Remove classes and ids:\nexpected {}\n'
                              'got {}'.format(
@@ -370,14 +351,14 @@ def check_unwanted_classes_and_ids(tag, key, value):
 ])
 def test_unwanted_tag(unwanted_tag):
     """Check if unwanted tags are removed."""
-    got = htmlcontentconverter.HTMLContentConverter().convert2xhtml(
+    content_xml = html.document_fromstring(
         '<html><head/><body><p>p1</p><%s/><p>p2</p2></body>'
         '</html>' % unwanted_tag)
-    want = html5parser.document_fromstring('<html>'
-                                           '<body><p>p1</p><p>p2'
-                                           '</p></body></html>')
+    got = htmlcontentconverter.HTMLBeautifier(content_xml).beautify()
+    want = html.document_fromstring('<html><head/>'
+                                    '<body><p>p1</p><p>p2'
+                                    '</p></body></html>')
 
-    clean_namespaces([got, want])
     assertXmlEqual(got, want)
 
 
@@ -386,21 +367,21 @@ class TestHTMLContentConverter(xmltester.XMLTester):
 
     @parameterized.expand([
         ('Remove an empty p.', '<html><head/><body><p/></html>',
-         '<html><body></body></html>'),
+         '<html><head/><body></body></html>'),
         ('Do not remove a p with content.',
          '<html><head/><body><p><span>spanny</span></p></html>',
-         '<html><body><p><span>spanny</span></p></body></html>'),
+         '<html><head/><body><p><span>spanny</span></p></body></html>'),
         ('Remove empty class',
          '<html><head/><body><div class="">a</div><div class="a">'
          '<span class="">b</span></div></html>',
-         '<html><body><div>a</div><div class="a">'
+         '<html><head/><body><div>a</div><div class="a">'
          '<span>b</span></div></body></html>'),
         ('Remove comment',
          '<html><head/><body><b><!--Hey, buddy. --></b></body></html>',
-         '<html><body><b/></body></html>'),
+         '<html><head/><body><b/></body></html>'),
         ('Remove processing instruction',
          '<html><head/><body><b><?ProcessingInstruction?></b></body></html>',
-         '<html><body><b/></body></html>'),
+         '<html><head/><body><b/></body></html>'),
         ('Only text before next significant element',
          u'<html><head><title>– Den utdøende stammes frykt</title>'
          u'</head><body><h3>VI</h3>... Finnerne<p>Der</body></html>',
@@ -422,10 +403,10 @@ class TestHTMLContentConverter(xmltester.XMLTester):
          u'<p>... Finnerne</p><h2>Der</h2></body></html>'),
         ('center2div',
          '<html><head/><body><center><span class="">b</span></center></html>',
-         '<html><body><div class="c1"><span>b</span></div></body>'
+         '<html><head/><body><div class="c1"><span>b</span></div></body>'
          '</html>'),
         ('test_body_i', '<html><head/><body><i>b</i></body></html>',
-         '<html><body><p><i>b</i></p></body></html>'),
+         '<html><head/><body><p><i>b</i></p></body></html>'),
         ('Font elements with only text', '<html><head/><body><p>x '
          '<font>a, b </font>'
          '<font>c</font>'
@@ -433,35 +414,35 @@ class TestHTMLContentConverter(xmltester.XMLTester):
          '<font>e</font>'
          '<font> f</font>'
          '<font>. </font>'
-         '</p></body></html>', '<html><body><p>'
+         '</p></body></html>', '<html><head/><body><p>'
          'x a, b cde f. '
          '</p></body></html>'),
         ('Font element containing other xml elements',
          '<html><head/><body><p>x '
          '<font>a <i>b</i> c.</font> d'
-         '</p></body></html>', '<html><body><p>x '
+         '</p></body></html>', '<html><head/><body><p>x '
          'a <i>b</i> c. d'
          '</p></body></html>'),
         ('Font element containing font elements',
          '<html><head/><body><p><font>x</font> '
          '<font>a <i>b</i> c.</font> <font>d</font>'
-         '</p></body></html>', '<html><body><p>x a <i>b</i> c. d'
+         '</p></body></html>', '<html><head/><body><p>x a <i>b</i> c. d'
          '</p></body></html>'),
         ('test_body_a', '<html><head/><body><a>b</a></body></html>',
-         '<html><body><p><a>b</a></p></body></html>'),
+         '<html><head/><body><p><a>b</a></p></body></html>'),
         ('test_body_em', '<html><head/><body><em>b</em></body></html>',
-         '<html><body><p><em>b</em></p></body></html>'),
+         '<html><head/><body><p><em>b</em></p></body></html>'),
         ('test_body_font', '<html><head/><body><font>b</font></body></html>',
-         '<html><body><p>b</p></body></html>'),
+         '<html><head/><body><p>b</p></body></html>'),
         ('test_body_u', '<html><head/><body><u>b</u></body></html>',
-         '<html><body><p><u>b</u></p></body></html>'),
+         '<html><head/><body><p><u>b</u></p></body></html>'),
         ('test_body_strong',
          '<html><head/><body><strong>b</strong></body></html>',
-         '<html><body><p><strong>b</strong></p></body></html>'),
+         '<html><head/><body><p><strong>b</strong></p></body></html>'),
         ('test_body_span', '<html><head/><body><span>b</span></body></html>',
-         '<html><body><p><span>b</span></p></body></html>'),
+         '<html><head/><body><p><span>b</span></p></body></html>'),
         ('test_body_text', '<html><head/><body>b</body></html>',
-         '<html><body><p>b</p></body></html>'),
+         '<html><head/><body><p>b</p></body></html>'),
     ])
     def test_convert2xhtml(self, testname, test_input, want_input):
         """Test convert2xhtml.
@@ -469,14 +450,14 @@ class TestHTMLContentConverter(xmltester.XMLTester):
         Args:
             testname (str): name of the test
             test_input (str): input sent to convert2xhtml
-            want_input (str): input to html5parser.document_fromstring
+            want_input (str): input to html.document_fromstring
 
         Raises:
             AssertionError if got and want are unequal.
         """
-        hcc = htmlcontentconverter.HTMLContentConverter()
-        got = hcc.convert2xhtml(test_input)
-        want = html5parser.document_fromstring(want_input)
+        hcc = htmlcontentconverter.HTMLBeautifier(
+            html.document_fromstring(test_input))
+        got = hcc.beautify()
+        want = html.document_fromstring(want_input)
 
-        clean_namespaces([got, want])
         self.assertXmlEqual(got, want)

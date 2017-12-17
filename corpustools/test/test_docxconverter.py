@@ -23,7 +23,7 @@ import os
 
 from lxml import etree
 
-from corpustools import docxconverter
+from corpustools import htmlcontentconverter
 from corpustools.test.xmltester import XMLTester
 
 HERE = os.path.dirname(__file__)
@@ -34,7 +34,7 @@ class TestDocxConverter(XMLTester):
 
     def test_convert2intermediate(self):
         """Test conversion of a docx file."""
-        got = docxconverter.convert2intermediate(
+        got = htmlcontentconverter.convert2intermediate(
             os.path.join(
                 HERE, 'converter_data/fakecorpus/orig/sme/riddu/doc-test.docx'))
         want = ('<document>'

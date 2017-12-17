@@ -26,7 +26,7 @@ import os
 
 import lxml.etree as etree
 
-from corpustools import (converter, text_cat, util, xslsetter)
+from corpustools import converter, text_cat, util, xslsetter
 from corpustools.test.xmltester import XMLTester
 
 HERE = os.path.dirname(__file__)

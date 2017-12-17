@@ -30,11 +30,10 @@ import os
 import six
 from lxml import etree
 
-from corpustools import (
-    avvirconverter, biblexmlconverter, ccat, corpuspath, docconverter,
-    documentfixer, docxconverter, epubconverter, errormarkup, htmlconverter,
-    languagedetector, latexconverter, odfconverter, pdfconverter,
-    plaintextconverter, rtfconverter, svgconverter, util, xslmaker, xslsetter)
+from corpustools import (avvirconverter, biblexmlconverter, ccat, corpuspath,
+                         documentfixer, errormarkup, htmlcontentconverter,
+                         languagedetector, pdfconverter, plaintextconverter,
+                         svgconverter, util, xslmaker, xslsetter)
 
 HERE = os.path.dirname(__file__)
 
@@ -52,16 +51,16 @@ def to_giella(path):
         etree.Element: root of the resulting xml document
     """
     chooser = {
-        '.doc': docconverter.convert2intermediate,
-        '.docx': docxconverter.convert2intermediate,
-        '.epub': epubconverter.convert2intermediate,
-        '.html': htmlconverter.convert2intermediate,
-        '.odt': odfconverter.convert2intermediate,
+        '.doc': htmlcontentconverter.convert2intermediate,
+        '.docx': htmlcontentconverter.convert2intermediate,
+        '.epub': htmlcontentconverter.convert2intermediate,
+        '.html': htmlcontentconverter.convert2intermediate,
+        '.odt': htmlcontentconverter.convert2intermediate,
         '.pdf': pdfconverter.convert2intermediate,
-        '.rtf': rtfconverter.convert2intermediate,
+        '.rtf': htmlcontentconverter.convert2intermediate,
         '.svg': svgconverter.convert2intermediate,
         '.txt': plaintextconverter.convert2intermediate,
-        '.tex': latexconverter.convert2intermediate,
+        '.tex': htmlcontentconverter.convert2intermediate,
     }
 
     if 'avvir_xml' in path:

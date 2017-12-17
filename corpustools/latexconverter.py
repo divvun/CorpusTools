@@ -27,9 +27,7 @@ import shutil
 
 import lxml.etree as etree
 
-from corpustools import util
-from corpustools.htmlconverter import (convert2xhtml, webpage_to_unicodehtml,
-                                       xhtml2intermediate)
+from corpustools import htmlconverter, util
 
 
 def latex_dir(filename):
@@ -61,8 +59,10 @@ def latex_to_dir(filename):
                     command[0], filename + '.log'))
 
 
-def latexdir_to_html(filename):
+def to_html_elt(filename):
     """Turn documents found in latex_dir to one html document."""
+    latex_to_dir(filename)
+
     mainbody = etree.Element('body')
     html = etree.Element('html')
     html.append(etree.Element('head'))
@@ -70,6 +70,8 @@ def latexdir_to_html(filename):
 
     for nodediv in latexnode_to_div(filename):
         mainbody.append(nodediv)
+
+    shutil.rmtree(latex_dir(filename))
 
     return html
 
@@ -79,25 +81,8 @@ def latexnode_to_div(filename):
     html_docs = glob.glob('{}/{}'.format(latex_dir(filename), 'node*.html'))
 
     for html_doc in html_docs[:-1]:
-        latex_html = convert2xhtml(webpage_to_unicodehtml(html_doc))
+        latex_html = htmlconverter.to_html_elt(html_doc)
         nodebody = latex_html.find('.//body')
         nodebody.tag = 'div'
 
         yield nodebody
-
-
-def convert2intermediate(filename):
-    """Extract content from the latex file.
-
-    Arguments:
-        filename (str): path to the document
-
-    Returns:
-        etree.Element: the content of the latex file as html
-    """
-    latex_to_dir(filename)
-    html = latexdir_to_html(filename)
-
-    shutil.rmtree(latex_dir(filename))
-
-    return xhtml2intermediate(convert2xhtml(html))

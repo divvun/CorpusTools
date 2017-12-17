@@ -22,12 +22,12 @@ u"""Test conversion of html files."""
 
 import os
 
-from lxml import etree, html
 import six
 import testfixtures
+from lxml import etree, html
 from parameterized import parameterized
 
-from corpustools import htmlconverter
+from corpustools import htmlcontentconverter, htmlconverter
 from corpustools.test.test_xhtml2corpus import assertXmlEqual
 from corpustools.test.xmltester import XMLTester
 
@@ -176,7 +176,7 @@ class TestHTMLConverter(XMLTester):
             if six.PY3:
                 content = content.encode('utf8')
             temp_dir.write(filename, content)
-            got = htmlconverter.convert2intermediate(
+            got = htmlcontentconverter.convert2intermediate(
                 os.path.join(temp_dir.path, filename))
             self.assertXmlEqual(got, etree.fromstring(want))
 
@@ -208,7 +208,7 @@ class TestHTMLConverter(XMLTester):
         filename = 'orig/sme/admin/ugga.html'
         with testfixtures.TempDirectory() as temp_dir:
             temp_dir.write(filename, content)
-            got = htmlconverter.webpage_to_unicodehtml(
+            got = htmlconverter.to_html_elt(
                 os.path.join(temp_dir.path, filename))
 
             self.assertXmlEqual(got, want)
@@ -1960,11 +1960,11 @@ class TestHTMLConverter(XMLTester):
 def test_conversion(testname, html_str, xml_str):
     """Check that the tidied html is correctly converted to corpus xml."""
     with testfixtures.TempDirectory() as temp_dir:
-        filepath = os.path.join('orig/sme/admin/sd', testname)
+        filepath = os.path.join('orig/sme/admin/sd', testname + '.html')
         if six.PY3:
             html_str = html_str.encode('utf8')
         temp_dir.write(filepath, html_str)
-        got = htmlconverter.convert2intermediate(
+        got = htmlcontentconverter.convert2intermediate(
             os.path.join(temp_dir.path, filepath))
         want = etree.fromstring(xml_str)
 
@@ -1972,7 +1972,7 @@ def test_conversion(testname, html_str, xml_str):
 
 
 def test_problematic_8bit():
-    got = htmlconverter.convert2intermediate(
+    got = htmlcontentconverter.convert2intermediate(
         os.path.join(
             HERE,
             'converter_data/fakecorpus/orig/sme/riddu/problematic_8bit.html'))

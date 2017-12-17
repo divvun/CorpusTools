@@ -32,7 +32,6 @@ from lxml import etree
 
 import epub
 from corpustools import util, xslsetter
-from corpustools.htmlconverter import convert2xhtml, xhtml2intermediate
 
 
 def read_chapter(chapter):
@@ -103,7 +102,7 @@ def remove_ranges(metadata, html):
             remove_range(pairs[0], pairs[1], html)
 
 
-def epub_to_unicodehtml(filename):
+def to_html_elt(filename):
     """Append all chapter bodies as divs to an html file.
 
     Returns:
@@ -255,15 +254,3 @@ def remove_range(path1, path2, content):
     starts, ends = remove_trees_1(path1, path2, content)
     remove_trees_2(starts, ends, content)
     remove_first_element(path1, content)
-
-
-def convert2intermediate(filename):
-    """Convert a Microsoft Word document to the Giella xml format.
-
-    Arguments:
-        filename (str): path to the document
-
-    Returns:
-        etree.Element: the root element of the Giella xml document
-    """
-    return xhtml2intermediate(convert2xhtml(epub_to_unicodehtml(filename)))

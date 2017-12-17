@@ -21,14 +21,11 @@
 
 from __future__ import absolute_import, print_function
 
-import io
-import os
 import re
 
 from lxml import html
 
 from corpustools import util
-from corpustools.htmlconverter import convert2xhtml, xhtml2intermediate
 
 
 class DocError(Exception):
@@ -37,7 +34,7 @@ class DocError(Exception):
     pass
 
 
-def doc_to_html_elt(filename):
+def to_html_elt(filename):
     return html.document_fromstring(doc_to_unicodehtml(filename))
 
 
@@ -181,7 +178,7 @@ def fix_wv_output():
     pass
 
 
-def extract_text(filename, command):
+def extract_text(filename):
     """Extract the text from a document.
 
     Arguments:
@@ -192,6 +189,7 @@ def extract_text(filename, command):
     Returns:
         bytes: the output of the program
     """
+    command = ['wvHtml', filename, '-']
     runner = util.ExternalCommandRunner()
     runner.run(command, cwd='/tmp')
 
@@ -204,16 +202,3 @@ def extract_text(filename, command):
                     command[0], filename + '.log'))
 
     return runner.stdout
-
-
-def convert2intermediate(filename):
-    """Convert a Microsoft Word document to the Giella xml format.
-
-    Arguments:
-        filename (str): path to the document
-
-    Returns:
-        etree.Element: the root element of the Giella xml document
-    """
-    return xhtml2intermediate(
-        convert2xhtml(doc_to_html_elt(filename)))

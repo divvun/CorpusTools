@@ -19,19 +19,43 @@
 #
 u"""Convert html content to the Giella xml format."""
 
+import os
+
 import six
 from lxml import etree, html
 from lxml.html import clean
 
-from corpustools import util
+from corpustools import (docconverter, docxconverter, epubconverter,
+                         htmlconverter, latexconverter, odfconverter,
+                         rtfconverter, util)
+
+HERE = os.path.dirname(__file__)
 
 
-class HTMLContentConverter(object):
+def to_html_elt(path):
+    chooser = {
+        '.doc': docconverter.to_html_elt,
+        '.docx': docxconverter.to_html_elt,
+        '.epub': epubconverter.to_html_elt,
+        '.html': htmlconverter.to_html_elt,
+        '.odt': odfconverter.to_html_elt,
+        '.rtf': rtfconverter.to_html_elt,
+        '.tex': latexconverter.to_html_elt,
+    }
+
+    return chooser[os.path.splitext(path)[1]](path)
+
+
+class HTMLBeautifier(object):
     """Convert html documents to the Giella xml format."""
-    soup = None
+    def __init__(self, html_elt):
+        for elt in html_elt.iter('script'):
+            elt.getparent().remove(elt)
 
-    @staticmethod
-    def superclean(content):
+        c_clean = self.superclean(etree.tostring(html_elt, encoding='unicode'))
+        self.soup = html.document_fromstring(c_clean)
+
+    def superclean(self, content):
         """Remove unwanted elements from an html document.
 
         Arguments:
@@ -68,7 +92,7 @@ class HTMLContentConverter(object):
                 'colgroup',
             ])
 
-        return cleaner.clean_html(content)
+        return cleaner.clean_html(self.remove_cruft(content))
 
     @staticmethod
     def remove_cruft(content):
@@ -637,19 +661,12 @@ class HTMLContentConverter(object):
             body.text = None
             body.insert(0, paragraph)
 
-    def convert2xhtml(self, content):
+    def beautify(self):
         """Clean up the html document.
 
         Destructively modifies self.soup, trying
         to create strict xhtml for xhtml2corpus.xsl
         """
-        c_content = self.remove_cruft(content)
-
-        c_clean = self.superclean(c_content)
-        print(c_clean.split('\n')[0])
-        self.soup = html.document_fromstring(c_clean)
-        print(type(self.soup))
-        print(self.soup.tag)
         self.remove_empty_class()
         self.remove_empty_p()
         self.remove_elements()
@@ -661,6 +678,66 @@ class HTMLContentConverter(object):
         self.simplify_tags()
         self.fix_spans_as_divs()
 
-        util.print_frame(etree.tostring(self.soup, encoding='unicode', pretty_print=True))
-
         return self.soup
+
+
+def replace_bare_text(body):
+    """Replace bare text in body with a p element.
+
+    Arguments:
+        body (etree.Element): the body element of the html document
+    """
+    if body.text is not None and body.text.strip() != '':
+        new_p = etree.Element('p')
+        new_p.text = body.text
+        body.text = None
+        body.insert(0, new_p)
+
+
+def add_p_instead_of_tail(intermediate):
+    """Convert tail in list and p to a p element."""
+    for element in ['list', 'p']:
+        for found_element in intermediate.findall('.//' + element):
+            if (found_element.tail is not None and
+                    found_element.tail.strip() != ''):
+                new_p = etree.Element('p')
+                new_p.text = found_element.tail
+                found_element.tail = None
+                found_element.addnext(new_p)
+
+
+def beautify_intermediate(intermediate):
+    replace_bare_text(intermediate.find('.//body'))
+    add_p_instead_of_tail(intermediate)
+
+
+def xhtml2intermediate(content_xml):
+    """Convert xhtml to Giella xml.
+
+    Arguments:
+        xhtml (etree.Element): the result of convert2xhtml
+
+    Returns:
+        etree.Element: the root element of the Giella xml document
+    """
+    converter_xsl = os.path.join(HERE, 'xslt/xhtml2corpus.xsl')
+
+    html_xslt_root = etree.parse(converter_xsl)
+    transform = etree.XSLT(html_xslt_root)
+
+    intermediate = transform(HTMLBeautifier(content_xml).beautify())
+    beautify_intermediate(intermediate)
+
+    return intermediate.getroot()
+
+
+def convert2intermediate(filename):
+    """Convert a webpage to Giella xml.
+
+    Arguments:
+        filename (str): name of the file
+
+    Returns:
+        etree.Element: the root element of the Giella xml document
+    """
+    return xhtml2intermediate(to_html_elt(filename))
