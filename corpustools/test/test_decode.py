@@ -21,12 +21,13 @@
 from __future__ import absolute_import
 
 import codecs
-import unittest
-import six
 import sys
+import unittest
+
+import six
 from parameterized import parameterized
 
-from corpustools import decode, macsami, winsami2, iso_ir_197, iso_ir_209, util
+from corpustools import decode, iso_ir_197, iso_ir_209, macsami, util, winsami2
 
 
 def handler(err):
