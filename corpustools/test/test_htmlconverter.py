@@ -33,6 +33,8 @@ from corpustools.test.test_htmlcontentconverter import clean_namespaces
 from corpustools.test.test_xhtml2corpus import assertXmlEqual
 from corpustools.test.xmltester import XMLTester
 
+HERE = os.path.dirname(__file__)
+
 DOCUMENT_TEMPLATE = ('<document>'
                      '  <header>'
                      '   <title></title>'
@@ -1973,3 +1975,20 @@ def test_conversion(testname, html, xml):
         want = etree.fromstring(xml)
 
         assertXmlEqual(got, want)
+
+
+def test_problematic_8bit():
+    got = htmlconverter.convert2intermediate(
+        os.path.join(
+            HERE,
+            'converter_data/fakecorpus/orig/sme/riddu/problematic_8bit.html'))
+    want = etree.fromstring(
+        DOCUMENT_TEMPLATE.format(
+            '<p>Sámekulturguovddáža dieáhusdilálašvuohta</p>'
+            '<p>Sámekulturguovddáža dieáhusdilálašvuohta 14.4.2008 Anáris</p>'
+            '<p></p>'
+            '<p></p>'
+            '<p>Senaatti-giddodagat ja Sámediggi</p>'
+            '<p></p>'))
+
+    assertXmlEqual(got, want)
