@@ -52,7 +52,7 @@ def read_chapter(chapter):
         raise util.ConversionError(error)
 
 
-def chapters(book):
+def chapters(book, metadata):
     """Get the all linear chapters of the epub book.
 
     Arguments:
@@ -61,14 +61,16 @@ def chapters(book):
     Yields:
         etree._Element: The body of an xhtml file found in the epub file.
     """
-    for chapter in book.chapters:
-        chapterbody = read_chapter(chapter).find(
-            '{http://www.w3.org/1999/xhtml}body')
-        chapterbody.tag = '{http://www.w3.org/1999/xhtml}div'
-        yield chapterbody
+    excluded = metadata.epub_excluded_chapters
+    for index, chapter in enumerate(book.chapters):
+        if index not in excluded:
+            chapterbody = read_chapter(chapter).find(
+                '{http://www.w3.org/1999/xhtml}body')
+            chapterbody.tag = '{http://www.w3.org/1999/xhtml}div'
+            yield chapterbody
 
 
-def extract_content(filename):
+def extract_content(filename, metadata):
     """Extract content from the epub file.
 
     Arguments:
@@ -85,7 +87,7 @@ def extract_content(filename):
 
     book = epub.Book(epub.open_epub(filename))
 
-    for chapterbody in chapters(book):
+    for chapterbody in chapters(book, metadata):
         mainbody.append(chapterbody)
 
     return html
@@ -109,9 +111,9 @@ def to_html_elt(filename):
         An etree.Element containing the content of all xhtml files
         found in the epub file as one xhtml document.
     """
-    html = extract_content(filename)
-    remove_ranges(
-        xslsetter.MetadataHandler(filename + '.xsl', create=True), html)
+    metadata = xslsetter.MetadataHandler(filename + '.xsl', create=True)
+    html = extract_content(filename, metadata)
+    remove_ranges(metadata, html)
 
     return html
 
