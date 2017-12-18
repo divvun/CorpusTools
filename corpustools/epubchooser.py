@@ -46,13 +46,6 @@ def print_choice(excluded, titles):
         print('[{}]:\t{}'.format(index, titles[index]))
 
 
-def include(titles):
-    while 1:
-        text = prompt('\nWrite the chapter numbers to include, divided by space: ')
-        excluded = not_chosen([int(index) for index in text.split()], titles)
-        print_choice(excluded, titles)
-
-
 def not_chosen(chosen, titles):
     return list(set([x for x in range(len(titles))]) - set(chosen))
 
@@ -63,6 +56,13 @@ def exclude(titles):
         excluded = [int(index)
                   for index in text.split()]
         print_choice(excluded, titles)
+        text = prompt('\nWould you like to [s]ave your choice or just [q]uit?: ')
+        if text == 's':
+            return excluded
+        elif text == 'q':
+            return []
+        else:
+            print('Invalid choice, trying again.')
 
 
 def get_titles(book):
@@ -85,12 +85,8 @@ def main():
     titles = get_titles(book)
     print_choice(excluded, titles)
 
-    while 1:
-        text = prompt('\nWould you like to mainly [i]nclude or [e]xclude chapters?: ')
-        if text.strip() == 'i':
-            include(titles)
-        elif text.strip() == 'e':
-            exclude(titles)
-        else:
-            print('Invalid choice, write either i or e')
-        print('You said: %s' % text)
+    new_excluded = exclude(titles)
+    if new_excluded:
+        md.set_variable('epub_excluded_chapters',
+                        ', '.join([str(index) for index in new_excluded]))
+        md.write_file()
