@@ -286,6 +286,36 @@ class MetadataHandler(object):
 
         return lines
 
+    @property
+    def epub_excluded_chapters(self):
+        """Turn a skip_lines entry into a list of lines.
+
+        Returns:
+            list (int): list of line to skip numbers as integers.
+        """
+        lines = []
+        chosen = self.get_variable('epub_chosen_chapters')
+        if chosen is not None:
+            # Turn single lines into single-page ranges, e.g. 7 → 7-7
+            skip_ranges_norm = ((r if '-' in r else r + "-" + r)
+                                for r in chosen.strip().split(",")
+                                if r != "")
+
+            skip_ranges = (tuple(six.moves.map(int, r.split('-')))
+                           for r in skip_ranges_norm)
+
+            try:
+                lines.extend([
+                    line
+                    for start, end in sorted(skip_ranges)
+                    for line in six.moves.range(start, end + 1)
+                ])
+
+            except ValueError:
+                raise XsltError("Invalid format: {}".format(chosen))
+
+        return lines
+
     def get_margin_lines(self, position=''):
         """Get the margin lines from the metadata file.
 

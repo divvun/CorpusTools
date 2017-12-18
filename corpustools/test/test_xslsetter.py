@@ -356,3 +356,12 @@ class TestMetadataHandler(unittest.TestCase):
             md.set_mlang(language)
 
         self.assertSetEqual(languages, md.mlangs)
+
+    def test_epub_chosen_chapters(self):
+        md = xslsetter.MetadataHandler('bogus.epub.xsl', create=True)
+        md.set_variable('epub_excluded_chapters', '1, 4-8, 15')
+        got = md.epub_excluded_chapters
+        want = [1, 4, 5, 6, 7, 8, 15]
+
+        self.assertEqual(got, want)
+
