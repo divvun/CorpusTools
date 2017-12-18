@@ -294,7 +294,7 @@ class MetadataHandler(object):
             list (int): list of line to skip numbers as integers.
         """
         lines = []
-        chosen = self.get_variable('epub_chosen_chapters')
+        chosen = self.get_variable('epub_excluded_chapters')
         if chosen is not None:
             # Turn single lines into single-page ranges, e.g. 7 → 7-7
             skip_ranges_norm = ((r if '-' in r else r + "-" + r)
