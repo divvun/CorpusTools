@@ -39,6 +39,7 @@ setup(
             'clean_prestable = corpustools.clean_prestable:main',
             'realign = corpustools.realign:main',
             'update_metadata = corpustools.update_metadata:main',
+            'epubchooser = corpustools.epubchooser:main',
         ]
     },
     dependency_links=[
