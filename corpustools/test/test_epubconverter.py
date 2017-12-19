@@ -26,7 +26,7 @@ from shutil import copyfile
 from lxml import etree
 from testfixtures import TempDirectory
 
-from corpustools import htmlcontentconverter, xslsetter
+from corpustools import htmlcontentconverter, xslsetter, util
 from corpustools.test.xmltester import XMLTester
 
 HERE = os.path.dirname(__file__)
@@ -156,3 +156,14 @@ class TestEpubConverter1(XMLTester):
             """)
 
             self.assertXmlEqual(got, etree.fromstring(want))
+
+    def test_convert2intermediate_invalid_skipelements(self):
+        """Range of same depth with the same name in the next to last level."""
+        with TempDirectory() as directory:
+            temp_epub = set_data(
+                directory, self.testdoc,
+                './/body/div[1]/div[1]/p[1];.//body/div[2]/div[15]/p[4]')
+
+            self.assertRaises(util.ConversionError,
+                              htmlcontentconverter.convert2intermediate,
+                              temp_epub)

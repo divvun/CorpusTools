@@ -113,7 +113,12 @@ def to_html_elt(filename):
     """
     metadata = xslsetter.MetadataHandler(filename + '.xsl', create=True)
     html = extract_content(filename, metadata)
-    remove_ranges(metadata, html)
+    try:
+        remove_ranges(metadata, html)
+    except AttributeError:
+        raise util.ConversionError(
+            'Check that skip_elements in the '
+            'metadata file has the correct format'.format(filename))
 
     return html
 
