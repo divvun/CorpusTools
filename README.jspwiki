@@ -28,6 +28,7 @@ These scripts will be installed
 !!Miscellaneous
 * [generate_anchor_list: Generate paired anchor list for languages lang1 and lang2|CorpusTools.html#generate_anchor_list]
 * [html_cleaner: Program to print out a nicely indented html document|CorpusTools.html#html_cleaner]
+* [epubchooser: Program to set metadata of an epub file|CorpusTools.html#epubchooser]
 
 !!Requirements
 
@@ -979,4 +980,24 @@ optional arguments:
 
 !Source code
 * [update_metadata.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/update_metadata.py]
+* [xslsetter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/xslsetter.py]
+
+!!epubchooser
+
+{{{
+usage: epubchooser [-h] [--version] epubfile
+
+Choose which chapters and html ranges should be omitted from an epub file.
+
+positional arguments:
+  epubfile    Path to an epub file
+
+optional arguments:
+  -h, --help  show this help message and exit
+  --version   show program's version number and exit
+}}}
+
+!Source code
+* [epubchooser.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/epubchooser.py]
+* [epubconverter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/epubconverter.py]
 * [xslsetter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/xslsetter.py]

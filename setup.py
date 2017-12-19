@@ -53,6 +53,7 @@ setup(
         'html5lib',
         'lxml',
         'parameterized',
+        'prompt_toolkit',
         'odfpy',
         'pydocx',
         'pyth==0.7.0',

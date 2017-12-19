@@ -118,3 +118,4 @@ v<0.21.5>, <20171211> -- Some html documents were not parsable by html5parser. C
 v<0.21.6>, <20171212> -- Some .doc documents sent through wvHtml were not parsable by html5parser. Remove control characters from the wvHtml output.
 v<0.21.7>, <20171214> -- parallelize no longer tries to parallelize non existing parallel files …
 v<0.21.8>, <20171217> -- Route all formats that have html as an intermediate step through htmlcontentconverter. Depend on html.document_fromstring instead of html5parser.document_fromstring.
+v<0.22.0>, <20171219> -- Add helper program for setting epub specific metadata
