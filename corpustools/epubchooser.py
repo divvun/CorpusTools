@@ -40,6 +40,8 @@ class EpubPresenter(object):
         book (epub.Book): the epub document to handle.
         metadata (xslsetter.MetadataHandler): the corpus metadata
             attached to the book.
+        xpaths (list of str): the xpaths of the remaining html document
+            after unwanted chapters have been removed.
     """
 
     def __init__(self, path):
@@ -51,6 +53,7 @@ class EpubPresenter(object):
         self.path = path
         self.book = epub.Book(epub.open_epub(sys.argv[1]))
         self.metadata = xslsetter.MetadataHandler(sys.argv[1] + '.xsl')
+        self.xpaths = []
 
     @property
     def book_titles(self):
@@ -124,9 +127,80 @@ class EpubPresenter(object):
 
     def present_html(self):
         """Print the html that is left after omitting chapters."""
-        print_xpath(
+        self.print_xpath(
             epubconverter.extract_content(self.path, self.metadata), 0, 4,
             sys.stdout)
+
+    def print_xpath(self, element, level, indent, out, xpath='', element_no=1):
+        """Format an html document and write xpaths at tags openings.
+
+        This function formats html documents for readability and prints
+        xpaths to at tag openings, to see the structure of the given document
+        and make it possible to choose xpaths. It ruins white space in
+        text parts.
+
+        Args:
+            element (etree._Element): the element to format.
+            level (int): indicate at what level this element is.
+            indent (int): indicate how many spaces this element should be
+                indented
+            out (stream): a buffer where the formatted element is written.
+            xpath (string): The xpath of the parent of this element.
+            tag_no (int): the position of the element tag
+        """
+        counter = {}
+        tag = element.tag.replace('{http://www.w3.org/1999/xhtml}', '')
+
+        out.write(' ' * (level * indent))
+        out.write('<{}'.format(tag))
+
+        for att_tag, att_value in six.iteritems(element.attrib):
+            out.write(' ')
+            out.write(att_tag)
+            out.write('="')
+            out.write(att_value)
+            out.write('"')
+
+        out.write('>')
+        if xpath and '/body' in xpath:
+            new_xpath = '{}/{}'.format(xpath.replace('/html/', './/'), tag)
+            if element_no > 1:
+                new_xpath = '{}[{}]'.format(new_xpath, element_no)
+            out.write('\t')
+            out.write(new_xpath)
+            self.xpaths.append(new_xpath)
+
+        out.write('\n')
+
+        if element.text is not None and element.text.strip():
+            out.write(' ' * ((level + 1) * indent))
+            out.write(element.text.strip())
+            out.write('\n')
+
+        for child in element:
+            if not counter.get(child.tag):
+                counter[child.tag] = 0
+            counter[child.tag] += 1
+            if element_no > 1:
+                new_xpath = xpath + '/' + tag + '[' + str(element_no) + ']'
+            else:
+                new_xpath = xpath + '/' + tag
+            self.print_xpath(
+                child,
+                level + 1,
+                indent,
+                out,
+                xpath=new_xpath,
+                element_no=counter[child.tag])
+
+        out.write(' ' * (level * indent))
+        out.write('</{}>\n'.format(tag))
+
+        if level > 0 and element.tail is not None and element.tail.strip():
+            for _ in range(0, (level - 1) * indent):
+                out.write(' ')
+            out.write(element.tail.strip())
+            out.write('\n')
 
 
 class EpubChooser(object):
@@ -200,78 +274,6 @@ class EpubChooser(object):
                 print('Invalid choice, trying again.')
 
 
-def print_xpath(element, level, indent, out, xpath='', element_no=1):
-    """Format an html document and write xpaths at tags openings.
-
-    This function formats html documents for readability and prints
-    xpaths to at tag openings, to see the structure of the given document
-    and make it possible to choose xpaths. It ruins white space in
-    text parts.
-
-    Args:
-        element (etree._Element): the element to format.
-        level (int): indicate at what level this element is.
-        indent (int): indicate how many spaces this element should be indented
-        out (stream): a buffer where the formatted element is written.
-        xpath (string): The xpath of the parent of this element.
-        tag_no (int): the position of the element tag
-    """
-    counter = {}
-    tag = element.tag.replace('{http://www.w3.org/1999/xhtml}', '')
-
-    out.write(' ' * (level * indent))
-    out.write('<{}'.format(tag))
-
-    for att_tag, att_value in six.iteritems(element.attrib):
-        out.write(' ')
-        out.write(att_tag)
-        out.write('="')
-        out.write(att_value)
-        out.write('"')
-
-    out.write('>')
-    if xpath and '/body' in xpath:
-        out.write('\t')
-        out.write(xpath.replace('/html/', './/'))
-        out.write('/')
-        out.write(tag)
-        if element_no > 1:
-            out.write('[')
-            out.write(str(element_no))
-            out.write(']')
-    out.write('\n')
-
-    if element.text is not None and element.text.strip() != '':
-        out.write(' ' * ((level + 1) * indent))
-        out.write(element.text.strip())
-        out.write('\n')
-
-    for child in element:
-        if not counter.get(child.tag):
-            counter[child.tag] = 0
-        counter[child.tag] += 1
-        if element_no > 1:
-            new_xpath = xpath + '/' + tag + '[' + str(element_no) + ']'
-        else:
-            new_xpath = xpath + '/' + tag
-        print_xpath(
-            child,
-            level + 1,
-            indent,
-            out,
-            xpath=new_xpath,
-            element_no=counter[child.tag])
-
-    out.write(' ' * (level * indent))
-    out.write('</{}>\n'.format(tag))
-
-    if level > 0 and element.tail is not None and element.tail.strip() != '':
-        for _ in range(0, (level - 1) * indent):
-            out.write(' ')
-        out.write(element.tail.strip())
-        out.write('\n')
-
-
 def parse_options():
     """Parse the commandline options.
 
@@ -280,9 +282,8 @@ def parse_options():
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description=
-        'Choose which chapters and html ranges should be omitted from '
-        'an epub file.')
+        description='Choose which chapters and html ranges '
+        'should be omitted from an epub file.')
 
     parser.add_argument('epubfile', help='Path to an epub file')
 
