@@ -87,11 +87,11 @@ class EpubPresenter(object):
         """Present omitted and present chapters."""
         print('\nIncluded chapters:')
         for index in self.not_chosen:
-            print('[{}]:\t{}'.format(index, self.book_titles[index]))
+            print(u'[{}]:\t{}'.format(index, self.book_titles[index]))
 
         print('\nExcluded chapters:')
         for index in self.excluded_chapters:
-            print('[{}]:\t{}'.format(index, self.book_titles[index]))
+            print(u'[{}]:\t{}'.format(index, self.book_titles[index]))
 
     @property
     def not_chosen(self):
@@ -108,10 +108,10 @@ class EpubPresenter(object):
     def skip_elements(self):
         """Return a string representing the html elements that is omitted."""
         if self.metadata.skip_elements:
-            return ', '.join(
-                [';'.join(pair) for pair in self.metadata.skip_elements])
+            return u', '.join(
+                [u';'.join(pair) for pair in self.metadata.skip_elements])
         else:
-            return ''
+            return u''
 
     @skip_elements.setter
     def skip_elements(self, elements):
@@ -149,13 +149,13 @@ class EpubChooser(object):
         """Choose which chapters should be omitted from the epub file."""
         while 1:
             self.presenter.print_choice()
-            text = prompt('\nWould you like to \n'
+            text = prompt(u'\nWould you like to \n'
                           '* [c]lear and edit empty range\n'
                           '* s[a]ve this and go to next step\n'
                           '* [s]ave and quit\n* [q]uit without saving\n'
                           '[c/a/s/q]: ')
             if text == 'c':
-                edits = prompt('Make new range: ')
+                edits = prompt(u'Make new range: ')
                 new_excluded = [int(index) for index in edits.split()]
                 self.presenter.excluded_chapters = new_excluded
             elif text == 'a':
@@ -173,7 +173,7 @@ class EpubChooser(object):
         while 1:
             self.presenter.present_html()
             existing_range = self.presenter.skip_elements
-            text = prompt('Choose html ranges that should be removed\n'
+            text = prompt(u'Choose html ranges that should be removed\n'
                           'Existing ranges are: "{}"\n'
                           '* [c]lear and make new range\n'
                           '* [a]add range\n'
@@ -181,14 +181,14 @@ class EpubChooser(object):
                           '* [q]uit without saving\n'
                           '[c/a/s/q]: '.format(existing_range))
             if text == 'c':
-                start = prompt('First xpath: ')
-                end = prompt('Second xpath: ')
+                start = prompt(u'First xpath: ')
+                end = prompt(u'Second xpath: ')
                 self.presenter.skip_elements = ';'.join([start, end])
             elif text == 'a':
                 start = prompt(
                     'Cut and paste xpath expressions found in the text above\n'
                     'First xpath: ')
-                end = prompt('Second xpath: ')
+                end = prompt(u'Second xpath: ')
                 self.presenter.skip_elements = '{}, {};{}'.format(
                     self.presenter.skip_elements, start, end)
             elif text == 's':
