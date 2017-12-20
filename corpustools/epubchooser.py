@@ -242,10 +242,16 @@ class EpubChooser(object):
             else:
                 print('Invalid choice, trying again.')
 
+    def is_invalid_xpath(self, xpath):
+        if not xpath.strip():
+            return 'Empty xpath'
+        if xpath not in self.presenter.xpaths:
+            return 'xpath does not exist in this document'
+
     def exclude_tags(self):
         """Choose which html tags should be removed from epub file."""
+        self.presenter.present_html()
         while 1:
-            self.presenter.present_html()
             existing_range = self.presenter.skip_elements
             text = prompt(u'Choose html ranges that should be removed\n'
                           'Existing ranges are: "{}"\n'
@@ -255,16 +261,35 @@ class EpubChooser(object):
                           '* [q]uit without saving\n'
                           '[c/a/s/q]: '.format(existing_range))
             if text == 'c':
-                start = prompt(u'First xpath: ')
-                end = prompt(u'Second xpath: ')
-                self.presenter.skip_elements = ';'.join([start, end])
-            elif text == 'a':
+                self.presenter.skip_elements = ''
                 start = prompt(
-                    'Cut and paste xpath expressions found in the text above\n'
+                    u'Cut and paste xpath expressions found in the text above\n'
                     'First xpath: ')
                 end = prompt(u'Second xpath: ')
-                self.presenter.skip_elements = '{}, {};{}'.format(
-                    self.presenter.skip_elements, start, end)
+
+                for xpath in [start, end]:
+                    if self.is_invalid_xpath(xpath):
+                        print(self.is_invalid_xpath(xpath))
+                        print('Try again')
+                        break
+                    else:
+                        print('oh no')
+                        self.presenter.skip_elements = '{};{}'.format(start, end)
+            elif text == 'a':
+                start = prompt(
+                    u'Cut and paste xpath expressions found in the text above\n'
+                    'First xpath: ')
+                end = prompt(u'Second xpath: ')
+
+                for xpath in [start, end]:
+                    if self.is_invalid_xpath(xpath):
+                        print(self.is_invalid_xpath(xpath))
+                        print('Try again')
+                        break
+                    else:
+                        print('oh no')
+                        self.presenter.skip_elements = '{}, {};{}'.format(
+                            self.presenter.skip_elements, start, end)
             elif text == 's':
                 self.presenter.save()
                 raise SystemExit('Saved your choises')
