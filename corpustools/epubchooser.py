@@ -319,7 +319,7 @@ class EpubChooser(object):
                 break
             elif text == 's':
                 self.presenter.save()
-                raise SystemExit('Saved your choises')
+                raise SystemExit('Saved your choices')
             elif text == 'q':
                 raise SystemExit('Did not save anything')
             else:
@@ -375,7 +375,7 @@ class EpubChooser(object):
                             self.presenter.skip_elements, start, end)
             elif text == 's':
                 self.presenter.save()
-                raise SystemExit('Saved your choises')
+                raise SystemExit('Saved your choices')
             elif text == 'q':
                 raise SystemExit('Did not save anything')
             else:
