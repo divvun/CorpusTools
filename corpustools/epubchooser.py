@@ -46,9 +46,19 @@ class RangeHandler(object):
     _ranges = set()
 
     def clear_ranges(self):
+        """Clear the _ranges set."""
         self._ranges.clear()
 
     def as_text(self, pair):
+        """Return a range as text.
+
+        Arguments:
+            pair (tuple): pairs of indexes to elements in self.xpaths.
+                The second part of the tuple may be empty.
+
+        Returns:
+            str
+        """
         if pair[1]:
             return '{};{}'.format(self.xpaths[pair[0]], self.xpaths[pair[1]])
         else:
