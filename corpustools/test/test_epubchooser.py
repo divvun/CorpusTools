@@ -130,9 +130,10 @@ class TestRangeHandler(unittest.TestCase):
 
     def test12(self):
         """Check that empty second part of range works as exptected."""
-        self.rangehandler.add_range((self.rangehandler.xpaths[7], ''))
+        self.rangehandler.add_range((self.rangehandler.xpaths[7],
+                                     ''))
         want = '{};,{};{},{};{}'.format(
-            self.rangehandler.xpaths[7], self.rangehandler.xpaths[4],
-            self.rangehandler.xpaths[6], self.rangehandler.xpaths[0],
-            self.rangehandler.xpaths[1])
+            self.rangehandler.xpaths[7],
+            self.rangehandler.xpaths[4], self.rangehandler.xpaths[6],
+            self.rangehandler.xpaths[0], self.rangehandler.xpaths[1])
         self.assertEqual(self.rangehandler.ranges, want)

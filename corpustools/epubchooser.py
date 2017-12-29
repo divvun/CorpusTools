@@ -45,11 +45,20 @@ class RangeHandler(object):
     xpaths = []
     _ranges = set()
 
+    def clear_ranges(self):
+        self._ranges.clear()
+
+    def as_text(self, pair):
+        if pair[1]:
+            return '{};{}'.format(self.xpaths[pair[0]], self.xpaths[pair[1]])
+        else:
+            return '{};'.format(self.xpaths[pair[0]])
+
     @property
     def ranges(self):
         """Return the textual version of the range."""
         return ','.join([
-            ';'.join([self.xpaths[pair[0]], self.xpaths[pair[1]]])
+            self.as_text(pair)
             for pair in sorted(self._ranges, reverse=True)
         ])
 
