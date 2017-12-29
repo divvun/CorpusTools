@@ -68,8 +68,7 @@ class RangeHandler(object):
     def ranges(self):
         """Return the textual version of the range."""
         return ','.join([
-            self.as_text(pair)
-            for pair in sorted(self._ranges, reverse=True)
+            self.as_text(pair) for pair in sorted(self._ranges, reverse=True)
         ])
 
     def check_range(self, xpath_pair):
@@ -77,6 +76,9 @@ class RangeHandler(object):
 
         Arguments:
             xpath_pair (tuple of str): a pair of xpaths
+
+        Raises:
+            KeyError if invalid content is found.
         """
         if not xpath_pair[0]:
             raise KeyError('First xpath is empty.')
@@ -146,7 +148,7 @@ class EpubPresenter(object):
         self.path = path
         self.book = epub.Book(epub.open_epub(sys.argv[1]))
         self.metadata = xslsetter.MetadataHandler(sys.argv[1] + '.xsl')
-        self.xpaths = []
+        self.rangehandler = RangeHandler()
 
     @property
     def book_titles(self):
@@ -198,16 +200,13 @@ class EpubPresenter(object):
 
     def save(self):
         """Save metadata."""
+        self.metadata.set_variable('skip_elements', self.rangehandler.ranges)
         self.metadata.write_file()
 
     @property
     def skip_elements(self):
         """Return a string representing the html elements that is omitted."""
-        if self.metadata.skip_elements:
-            return u', '.join(
-                [u';'.join(pair) for pair in self.metadata.skip_elements])
-        else:
-            return u''
+        return self.rangehandler.ranges
 
     @skip_elements.setter
     def skip_elements(self, elements):
@@ -261,7 +260,7 @@ class EpubPresenter(object):
                 new_xpath = '{}[{}]'.format(new_xpath, element_no)
             out.write('\t')
             out.write(new_xpath)
-            self.xpaths.append(new_xpath)
+            self.rangehandler.xpaths.append(new_xpath)
 
         out.write('\n')
 
@@ -335,54 +334,57 @@ class EpubChooser(object):
             else:
                 print('Invalid choice, trying again.')
 
-    def is_invalid_xpath(self, xpath):
-        if not xpath.strip():
-            return 'Empty xpath'
-        if xpath not in self.presenter.xpaths:
-            return 'xpath does not exist in this document'
+    def do_xpaths_exist(self):
+        """Check if xpaths exist in this document."""
+        if self.presenter.skip_elements:
+            print('Original:', self.presenter.skip_elements)
+
+        pairs = [
+            pair.strip() for pair in self.presenter.skip_elements.split(',')
+        ]
+        for pair in pairs:
+            try:
+                self.presenter.rangehandler.add_range(tuple(pair.split(';')))
+            except (KeyError, IndexError):
+                self.presenter.rangehandler.clear_ranges()
+                print('Original skip_elements is invalid, clearing it.')
 
     def exclude_tags(self):
         """Choose which html tags should be removed from epub file."""
         self.presenter.present_html()
+        self.do_xpaths_exist()
         while 1:
-            existing_range = self.presenter.skip_elements
             text = prompt(u'Choose html ranges that should be removed\n'
                           'Existing ranges are: "{}"\n'
                           '* [c]lear and make new range\n'
                           '* [a]add range\n'
                           '* [s]ave and quit\n'
                           '* [q]uit without saving\n'
-                          '[c/a/s/q]: '.format(existing_range))
+                          '[c/a/s/q]: '.format(
+                              self.presenter.rangehandler.ranges))
             if text == 'c':
-                self.presenter.skip_elements = ''
+                self.presenter.rangehandler.clear_ranges()
                 start = prompt(
-                    u'Cut and paste xpath expressions found in the text above\n'
-                    'First xpath: ')
+                    u'Cut and paste xpath expressions found in '
+                    'the text above\nFirst xpath: ')
                 end = prompt(u'Second xpath: ')
 
-                for xpath in [start, end]:
-                    if self.is_invalid_xpath(xpath):
-                        print(self.is_invalid_xpath(xpath))
-                        print('Try again')
-                        break
-                    else:
-                        print('oh no')
-                        self.presenter.skip_elements = '{};{}'.format(start, end)
+                try:
+                    self.presenter.rangehandler.add_range((start, end))
+                except (IndexError, KeyError):
+                    print('Invalid range')
+                    break
             elif text == 'a':
                 start = prompt(
-                    u'Cut and paste xpath expressions found in the text above\n'
-                    'First xpath: ')
+                    u'Cut and paste xpath expressions found in '
+                    'the text above\nFirst xpath: ')
                 end = prompt(u'Second xpath: ')
 
-                for xpath in [start, end]:
-                    if self.is_invalid_xpath(xpath):
-                        print(self.is_invalid_xpath(xpath))
-                        print('Try again')
-                        break
-                    else:
-                        print('oh no')
-                        self.presenter.skip_elements = '{}, {};{}'.format(
-                            self.presenter.skip_elements, start, end)
+                try:
+                    self.presenter.rangehandler.add_range((start, end))
+                except (IndexError, KeyError):
+                    print('Invalid range')
+                    break
             elif text == 's':
                 self.presenter.save()
                 raise SystemExit('Saved your choices')
