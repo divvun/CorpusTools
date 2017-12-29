@@ -43,7 +43,15 @@ class RangeHandler(object):
     """
 
     xpaths = []
-    ranges = set()
+    _ranges = set()
+
+    @property
+    def ranges(self):
+        """Return the textual version of the range."""
+        return ','.join([
+            ';'.join([self.xpaths[pair[0]], self.xpaths[pair[1]]])
+            for pair in sorted(self._ranges, reverse=True)
+        ])
 
     def check_range(self, xpath_pair):
         """Check that the xpath_pair is a valid range.
@@ -68,7 +76,7 @@ class RangeHandler(object):
         """
         for xpath in xpath_pair:
             if xpath:
-                for pair in self.ranges:
+                for pair in self._ranges:
                     if pair[1] and pair[0] < self.xpaths.index(
                             xpath) < pair[1] + 1:
                         raise IndexError('{} < {} < {}'.format(
@@ -90,14 +98,12 @@ class RangeHandler(object):
         self.check_overlap(xpath_pair)
 
         if not xpath_pair[1]:
-            self.ranges.add((self.xpaths.index(xpath_pair[0]), ''))
+            self._ranges.add((self.xpaths.index(xpath_pair[0]), ''))
         else:
-            self.ranges.add(
+            self._ranges.add(
                 tuple(
-                    sorted([
-                        self.xpaths.index(xpath_pair[0]),
-                        self.xpaths.index(xpath_pair[1])
-                    ])))
+                    sorted((self.xpaths.index(xpath_pair[0]),
+                            self.xpaths.index(xpath_pair[1])))))
 
 
 class EpubPresenter(object):

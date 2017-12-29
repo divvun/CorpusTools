@@ -73,7 +73,7 @@ class TestRangeHandler(unittest.TestCase):
 
     def test6(self):
         """First part of new range is within existing ranges."""
-        self.rangehandler.ranges.add(
+        self.rangehandler._ranges.add(
             (self.rangehandler.xpaths.index('.//body/div/div/p'),
              self.rangehandler.xpaths.index('.//body/div[2]/div')))
 
@@ -83,7 +83,7 @@ class TestRangeHandler(unittest.TestCase):
 
     def test7(self):
         """Second part of new range is within existing ranges."""
-        self.rangehandler.ranges.add(
+        self.rangehandler._ranges.add(
             (self.rangehandler.xpaths.index('.//body/div/div/p'),
              self.rangehandler.xpaths.index('.//body/div[2]/div')))
 
@@ -93,7 +93,7 @@ class TestRangeHandler(unittest.TestCase):
 
     def test8(self):
         """First part of new range is equal to first part of existing range."""
-        self.rangehandler.ranges.add(
+        self.rangehandler._ranges.add(
             (self.rangehandler.xpaths.index('.//body/div/div/p'),
              self.rangehandler.xpaths.index('.//body/div[2]/div')))
 
@@ -103,10 +103,36 @@ class TestRangeHandler(unittest.TestCase):
 
     def test9(self):
         """Second part of new range is equal to first part of existing range."""
-        self.rangehandler.ranges.add(
+        self.rangehandler._ranges.add(
             (self.rangehandler.xpaths.index('.//body/div/div/p'),
              self.rangehandler.xpaths.index('.//body/div[2]/div')))
-
         new_range = (('.//body/div'), ('.//body/div/div/p'))
         with self.assertRaises(IndexError):
             self.rangehandler.check_overlap(new_range)
+
+    def test10(self):
+        """Check that a range is reversed if needed."""
+        self.rangehandler.add_range((self.rangehandler.xpaths[1],
+                                     self.rangehandler.xpaths[0]))
+        want = set()
+        want.add((self.rangehandler.xpaths.index(self.rangehandler.xpaths[0]),
+                  self.rangehandler.xpaths.index(self.rangehandler.xpaths[1])))
+        self.assertEqual(self.rangehandler._ranges, want)
+
+    def test11(self):
+        """Check that ranges are returned reversed and as text."""
+        self.rangehandler.add_range((self.rangehandler.xpaths[4],
+                                     self.rangehandler.xpaths[6]))
+        want = '{};{},{};{}'.format(
+            self.rangehandler.xpaths[4], self.rangehandler.xpaths[6],
+            self.rangehandler.xpaths[0], self.rangehandler.xpaths[1])
+        self.assertEqual(self.rangehandler.ranges, want)
+
+    def test12(self):
+        """Check that empty second part of range works as exptected."""
+        self.rangehandler.add_range((self.rangehandler.xpaths[7], ''))
+        want = '{};,{};{},{};{}'.format(
+            self.rangehandler.xpaths[7], self.rangehandler.xpaths[4],
+            self.rangehandler.xpaths[6], self.rangehandler.xpaths[0],
+            self.rangehandler.xpaths[1])
+        self.assertEqual(self.rangehandler.ranges, want)
