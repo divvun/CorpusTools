@@ -258,6 +258,13 @@ def remove_range(path1, path2, content):
         path2 (str): path to second element
         content (etree._Element): xhtml document
     """
-    starts, ends = remove_trees_1(path1, path2, content)
-    remove_trees_2(starts, ends, content)
-    remove_first_element(path1, content)
+    if path2:
+        starts, ends = remove_trees_1(path1, path2, content)
+        remove_trees_2(starts, ends, content)
+        remove_first_element(path1, content)
+    else:
+        found = content.find(
+            path1, namespaces={
+                'html': 'http://www.w3.org/1999/xhtml'
+            })
+        found.getparent().remove(found)

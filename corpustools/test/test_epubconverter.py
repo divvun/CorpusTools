@@ -108,6 +108,36 @@ class TestEpubConverter(XMLTester):
 
             self.assertXmlEqual(got, etree.fromstring(want))
 
+    def test_convert2intermediate_3(self):
+        """Test with skip_elements that only has first path defined."""
+        with TempDirectory() as directory:
+            temp_epub = set_data(
+                directory, self.testdoc, './/html:body/html:div[1]/html:h2[1];')
+            got = htmlcontentconverter.convert2intermediate(temp_epub)
+            want = ("""
+                <document>
+                    <body>
+                        <p type="title">1 Bajilčála</p>
+                        <p>1asdf</p>
+                        <p>2asdf</p>
+                        <p type="title">1.1.1 Bajilčála</p>
+                        <p>3asdf</p>
+                        <p type="title">2 Bajilčála</p>
+                        <p>4asdf</p>
+                        <p type="title">2.1 Bajilčála</p>
+                        <p>5asdf</p>
+                        <p type="title">2.1.1 Bajilčála</p>
+                        <p>6asdf</p>
+                        <p type="title">3.1 Bajilčála</p>
+                        <p>7asdf</p>
+                        <p type="title">3.1.1 Bajilčála</p>
+                        <p>8asdf</p>
+                    </body>
+                </document>
+            """)
+
+            self.assertXmlEqual(got, etree.fromstring(want))
+
 
 class TestEpubConverter1(XMLTester):
     """Test the epub converter."""
