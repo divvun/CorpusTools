@@ -112,7 +112,8 @@ class TestEpubConverter(XMLTester):
         """Test with skip_elements that only has first path defined."""
         with TempDirectory() as directory:
             temp_epub = set_data(
-                directory, self.testdoc, './/html:body/html:div[1]/html:h2[1];')
+                directory, self.testdoc,
+                './/html:body/html:div[1]/html:h2[1];')
             got = htmlcontentconverter.convert2intermediate(temp_epub)
             want = ("""
                 <document>

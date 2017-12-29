@@ -102,7 +102,10 @@ class TestRangeHandler(unittest.TestCase):
             self.rangehandler.check_overlap(new_range)
 
     def test9(self):
-        """Second part of new range is equal to first part of existing range."""
+        """Check for valid range.
+
+        Second part of new range is equal to first part of existing range.
+        """
         self.rangehandler._ranges.add(
             (self.rangehandler.xpaths.index('.//body/div/div/p'),
              self.rangehandler.xpaths.index('.//body/div[2]/div')))
