@@ -32,6 +32,74 @@ import epub
 from corpustools import argparse_version, epubconverter, xslsetter
 
 
+class RangeHandler(object):
+    """Handle skip_elements ranges.
+
+    Attributes:
+        xpaths (list of str): the xpaths of the remaining html document
+            after unwanted chapters have been removed.
+        ranges (set of tuple of int):  Each tuple has a pair of ints
+            pointing to places in the xpaths list.
+    """
+
+    xpaths = []
+    ranges = set()
+
+    def check_range(self, xpath_pair):
+        """Check that the xpath_pair is a valid range.
+
+        Arguments:
+            xpath_pair (tuple of str): a pair of xpaths
+        """
+        if not xpath_pair[0]:
+            raise KeyError('First xpath is empty.')
+        if xpath_pair[0] not in self.xpaths:
+            raise KeyError('{} does not exist in this context'.format(
+                xpath_pair[0]))
+        if xpath_pair[1] and xpath_pair[1] not in self.xpaths:
+            raise KeyError('{} does not exist in this context'.format(
+                xpath_pair[1]))
+
+    def check_overlap(self, xpath_pair):
+        """Check if xpath_pair overlaps any of the existing ranges.
+
+        Arguments:
+            xpath_pair (tuple of str): a pair of xpaths
+        """
+        for xpath in xpath_pair:
+            if xpath:
+                for pair in self.ranges:
+                    if pair[1] and pair[0] < self.xpaths.index(
+                            xpath) < pair[1] + 1:
+                        raise IndexError('{} < {} < {}'.format(
+                            self.xpaths[pair[0]], xpath, self.xpaths[pair[1]]))
+                    if pair[0] == self.xpaths.index(xpath):
+                        raise IndexError('{} == {}'.format(
+                            self.xpaths[pair[0]], xpath))
+                    if pair[1] == self.xpaths.index(xpath):
+                        raise IndexError('{} == {}'.format(
+                            self.xpaths[pair[1]], xpath))
+
+    def add_range(self, xpath_pair):
+        """Add a new range.
+
+        Arguments:
+            xpath_pair (tuple of str): a pair of xpaths.
+        """
+        self.check_range(xpath_pair)
+        self.check_overlap(xpath_pair)
+
+        if not xpath_pair[1]:
+            self.ranges.add((self.xpaths.index(xpath_pair[0]), ''))
+        else:
+            self.ranges.add(
+                tuple(
+                    sorted([
+                        self.xpaths.index(xpath_pair[0]),
+                        self.xpaths.index(xpath_pair[1])
+                    ])))
+
+
 class EpubPresenter(object):
     """Class to present metadata and content.
 
