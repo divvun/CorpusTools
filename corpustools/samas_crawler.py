@@ -14,7 +14,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2017 The University of Tromsø &
+#   Copyright © 2013-2018 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
@@ -55,7 +55,8 @@ class SamasCrawler(object):
                                     'admin/allaskuvla/samas.no')
             for lang in self.samas_languages
         }
-        self.downloader = adder.UrlDownloader(os.path.join(self.goaldir, 'tmp'))
+        self.downloader = adder.UrlDownloader(
+            os.path.join(self.goaldir, 'tmp'))
 
     @staticmethod
     def get_samas_href(href):
@@ -80,9 +81,9 @@ class SamasCrawler(object):
                 yield self.get_samas_href(address.get('href').strip())
 
     def is_internal(self, href):
-        return (href and '/node' not in href and '/Node' not in href and
-                href.startswith('/') and 'field_' not in href and
-                'page=' not in href and '/user' not in href)
+        return (href and '/node' not in href and '/Node' not in href
+                and href.startswith('/') and 'field_' not in href
+                and 'page=' not in href and '/user' not in href)
 
     def get_uff(self, tmpname):
         content = html.parse(tmpname).getroot()
