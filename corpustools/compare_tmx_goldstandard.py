@@ -14,7 +14,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with program. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2011-2017 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2011-2018 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Compare prestable tmx files to files produced by the parallelizer."""

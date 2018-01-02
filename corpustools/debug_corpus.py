@@ -14,7 +14,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2015-2017 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2015-2018 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Find out why conversion or analysis stops when ran in multiprocess mode."""
