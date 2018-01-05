@@ -258,7 +258,25 @@ class NrkSmeCrawler(object):
                         self.counter[tag + '_fetched'], self.tags[tag]))
 
     @staticmethod
-    def add_metadata(path):
+    def valid_authors(article):
+        """Find authors with the correct roles.
+
+        Arguments:
+            article (etree.Element): The parsed html document.
+
+        Yields:
+            tuple of str
+        """
+        for author_role in article.xpath('.//span[@class="author__role"]'):
+            text = author_role.text.strip()
+            if text is not None and (text.startswith('Journ')
+                                     or text.startswith('Komm')
+                                     or text.startswith('Arti')):
+                parts = author_role.getprevious().text.strip().split()
+
+                yield parts
+
+    def add_metadata(self, path):
         """Get metadata from the nrk.no article.
 
         Arguments:
@@ -270,17 +288,12 @@ class NrkSmeCrawler(object):
         for twitter in article.xpath('//a[@class="author__twitter"]'):
             twitter.getparent().remove(twitter)
 
-        count = 0
-        for author in article.xpath('//span[@class="author__role"]'):
-            text = author.text.strip()
-            if text is not None and (text.startswith('Journ')
-                                     or text.startswith('Komm')
-                                     or text.startswith('Arti')):
-                count += 1
-                parts = author.getprevious().text.strip().split()
-                metadata.set_variable('author' + str(count) + '_ln', parts[-1])
-                metadata.set_variable('author' + str(count) + '_fn', ' '.join(
-                    parts[:-1]))
+        for count, author_parts in enumerate(
+                self.valid_authors(article), start=1):
+            metadata.set_variable('author' + str(count) + '_ln',
+                                  author_parts[-1])
+            metadata.set_variable('author' + str(count) + '_fn', ' '.join(
+                author_parts[:-1]))
 
         time = article.find('//time[@itemprop="datePublished"]')
         if time is None:
