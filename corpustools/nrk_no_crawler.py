@@ -20,6 +20,7 @@
 #
 """This file contains routines to crawl nrk.no containing saami text."""
 
+import json
 import os
 import sys
 from collections import defaultdict
@@ -30,7 +31,7 @@ import requests
 import six
 from lxml import etree, html
 
-from corpustools import adder, argparse_version, text_cat, util, xslsetter
+from corpustools import adder, text_cat, util, xslsetter
 
 
 class NrkSmeCrawler(object):
@@ -50,6 +51,7 @@ class NrkSmeCrawler(object):
             a tag
         fetched_links (set of str): links to articles that have already been
             fetched
+        authors (set of str): authors of articles
     """
     language_guesser = text_cat.Classifier(None)
     goaldir = six.text_type(os.getenv('GTBOUND'))
@@ -57,6 +59,7 @@ class NrkSmeCrawler(object):
     tags = defaultdict(str)
     invalid_links = set()
     counter = defaultdict(int)
+    authors = set()
 
     def __init__(self):
         """Initialise the NrkSmeCrawler class."""
@@ -210,6 +213,7 @@ class NrkSmeCrawler(object):
         """Fetch Northern Saami pages from nrk.no."""
         self.crawl_oanehaccat()
         self.crawl_existing_tags()
+        self.crawl_authors()
         self.corpus_adder.add_files_to_working_copy()
         self.report()
 
@@ -242,6 +246,55 @@ class NrkSmeCrawler(object):
 
         self.counter['total'] += self.counter['oanehaččat_total']
         self.counter['fetched'] += self.counter['oanehaččat_fetched']
+
+    def handle_search_hits(self, hits):
+        for hit in hits:
+            if hit['url'] not in self.fetched_links and hit.get(
+                    'description') and self.language_guesser.classify(
+                        hit['description']) == 'sme':
+                self.counter['authors_fetched'] += 1
+                self.add_nrk_article(hit['url'])
+
+    def crawl_authors(self):
+        """Search for authors on nrk.no.
+
+        Not all articles have are represented under the tags found, so
+        a search on author names is also done.
+        """
+        self.tags['authors'] = 'authors'
+        for nrk_file in self.find_nrk_files():
+            self.counter['nrk_file'] += 1
+            article = html.parse(nrk_file)
+            for author_body in article.xpath('.//div[@class="author__body"]'):
+                self.counter['author__body'] += 1
+                author_name = author_body.find('./a[@class="author__name"]')
+                if author_name is not None:
+                    self.authors.add(
+                        author_name.text.strip().split()[-1].lower())
+                    self.counter['name'] += 1
+
+        for author_parts in self.authors:
+            index = 0
+            while True:
+                try:
+                    hits = self.get_search_page(
+                        'https://www.nrk.no/sok/?format=json&scope=nrkno&filter=nrkno&q={}&from={}'.
+                        format(author_parts, str(index)))
+                    self.handle_search_hits(hits['hits'])
+                    if index > int(hits['total']):
+                        break
+                    index += 20
+                    util.print_frame(author_parts, hits['from'], hits['total'],
+                                    len(hits['hits']))
+                except json.decoder.JSONDecodeError as error:
+                    util.note(str(error))
+                    util.note(hits)
+                    break
+
+    @staticmethod
+    def get_search_page(search_link):
+        result = requests.get(search_link)
+        return json.loads(result.content.decode('utf8'))
 
     def report(self):
         """Print a report on what was found."""
