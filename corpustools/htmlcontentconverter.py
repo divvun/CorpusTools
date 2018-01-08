@@ -512,6 +512,7 @@ class HTMLBeautifier(object):
                 'class': [
                     'nrk-masthead-content cf',  # nrk.no
                     'pageHeader ',  # regjeringen.no
+                    'singleton widget rich nrk-masthead lp_masthead',  # nrk.no
                 ],
             },
             'section': {
