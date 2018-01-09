@@ -204,7 +204,7 @@ def parse_options():
 
 def sanity_check():
     """Check that needed programs and environment variables are set."""
-    util.sanity_check([u'wvHtml', u'pdftotext'])
+    util.sanity_check([u'wvHtml', u'pdftotext', 'latex2html'])
     if not os.path.isfile(converter.Converter.get_dtd_location()):
         raise util.SetupError(
             "Couldn't find {}\n"
@@ -215,13 +215,20 @@ def sanity_check():
 
 def main():
     """Convert documents to giellatekno xml format."""
-    sanity_check()
+    try:
+        sanity_check()
+    except (util.SetupError, util.ExecutableMissingError) as error:
+        raise SystemExit(str(error))
+
     args = parse_options()
 
     manager = ConverterManager(args.write_intermediate, args.goldstandard)
     manager.collect_files(args.sources)
 
-    if args.serial:
-        manager.convert_serially()
-    else:
-        manager.convert_in_parallel()
+    try:
+        if args.serial:
+            manager.convert_serially()
+        else:
+            manager.convert_in_parallel()
+    except util.ExecutableMissingError as error:
+        raise SystemExit(str(error))

@@ -203,8 +203,7 @@ def sanity_check(program_list):
     for program in program_list:
         if executable_in_path(program) is False:
             raise ExecutableMissingError(
-                "Couldn't find %s in $PATH or it is not executable." %
-                (program.encode('utf-8'),))
+                'Please install {}, can not continue without it.'.format(program))
 
 
 def get_lang_resource(lang, resource, fallback=None):
@@ -355,8 +354,7 @@ class ExternalCommandRunner(object):
                 stderr=subprocess.PIPE,
                 cwd=cwd)
         except OSError:
-            print('Please install {}'.format(command[0]))
-            raise
+            raise ExecutableMissingError('Please install {}, can not continue without it.'.format(command[0]))
 
         (self.stdout, self.stderr) = subp.communicate(to_stdin)
         self.returncode = subp.returncode
