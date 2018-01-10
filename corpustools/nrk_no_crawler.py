@@ -314,7 +314,6 @@ class NrkSmeCrawler(object):
                 self.counter['author__body'] += 1
                 author_name = author_body.find('./a[@class="author__name"]')
                 if author_name is not None and author_name.text is not None:
-                    #util.print_frame(author_name.text.strip())
                     self.authors.add(
                         author_name.text.strip().split()[-1].lower())
                     self.counter['name'] += 1
@@ -334,8 +333,6 @@ class NrkSmeCrawler(object):
                 if int(hits['total']) < total:
                     total = int(hits['total'])
                 self.handle_search_hits(hits['hits'])
-                #util.print_frame(author_parts, hits['from'], hits['total'],
-                #len(hits['hits']), index)
                 if index > total:
                     break
                 index += 20
