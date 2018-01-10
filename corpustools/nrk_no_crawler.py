@@ -254,7 +254,7 @@ class NrkSmeCrawler(object):
         self.crawl_oanehaccat()
         self.crawl_existing_tags()
         self.crawl_authors()
-        self.corpus_adder.add_files_to_working_copy()
+        # self.corpus_adder.add_files_to_working_copy()
         self.report()
 
     def find_nrk_files(self):
