@@ -273,29 +273,34 @@ class NrkSmeCrawler(object):
             for author_body in article.xpath('.//div[@class="author__body"]'):
                 self.counter['author__body'] += 1
                 author_name = author_body.find('./a[@class="author__name"]')
-                if author_name is not None:
-                    util.print_frame(author_name.text.strip())
+                if author_name is not None and author_name.text is not None:
+                    #util.print_frame(author_name.text.strip())
                     self.authors.add(
                         author_name.text.strip().split()[-1].lower())
                     self.counter['name'] += 1
 
         for author_parts in self.authors:
+            util.print_frame(author_parts, '\n')
             index = 0
+            total = 100001
             while True:
-                try:
-                    hits = self.get_search_page(
-                        'https://www.nrk.no/sok/?format=json&scope=nrkno&filter=nrkno&q={}&from={}'.
-                        format(author_parts, str(index)))
-                    self.handle_search_hits(hits['hits'])
-                    if index > int(hits['total']):
-                        break
-                    index += 20
-                    util.print_frame(author_parts, hits['from'], hits['total'],
-                                    len(hits['hits']))
-                except json.decoder.JSONDecodeError as error:
-                    util.note(str(error))
-                    util.note(hits)
+                hits = self.get_search_page(
+                    'https://www.nrk.no/sok/?format=json&scope=nrkno'
+                    '&filter=nrkno&q={}&from={}'.format(
+                        author_parts, str(index)))
+                if not hits:
+                    util.print_frame('empty hits, should break')
                     break
+                if int(hits['total']) < total:
+                    total = int(hits['total'])
+                self.handle_search_hits(hits['hits'])
+                #util.print_frame(author_parts, hits['from'], hits['total'],
+                #len(hits['hits']), index)
+                if index > total:
+                    break
+                index += 20
+
+        self.counter['fetched'] += self.counter['authors_fetched']
 
     @staticmethod
     def get_search_page(search_link):
@@ -309,6 +314,7 @@ class NrkSmeCrawler(object):
             print(invalid_link)
         print()
         print('Searched through {} tags'.format(len(self.tags)))
+        print('Searched through {} authors'.format(len(self.authors)))
         print('Fetched {fetched} pages'.format(**self.counter))
         for tag in self.tags:
             if self.counter[tag + '_fetched']:
