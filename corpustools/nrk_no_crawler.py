@@ -304,8 +304,28 @@ class NrkSmeCrawler(object):
 
     @staticmethod
     def get_search_page(search_link):
+        """Get search pages, containing links to author search.
+
+        Arguments:
+            search_link (str): query string to nrk.no
+
+        Returns:
+            dict containing search results from search
+        """
         result = requests.get(search_link)
-        return json.loads(result.content.decode('utf8'))
+        content = result.content.decode('utf8')
+
+        try:
+            return json.loads(content)
+        except json.decoder.JSONDecodeError as error:
+            util.print_frame(search_link)
+            util.print_frame(result)
+            util.print_frame(content)
+
+            if content:
+                return {'hits': [], 'from': '-1', 'total': '100000'}
+            else:
+                return content
 
     def report(self):
         """Print a report on what was found."""
