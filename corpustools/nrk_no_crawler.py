@@ -86,8 +86,11 @@ class NrkSmeCrawler(object):
         except AttributeError:
             text = bytes(
                 address.find('.//h2[@class="title"]').text, encoding='latin1')
+        lang = self.language_guesser.classify(text)
+        if lang == 'sme':
+            util.print_frame(text)
 
-        return self.language_guesser.classify(text)
+        return lang
 
     def get_tag_page_trees(self, tag):
         """Fetch topic pages containing links to articles.
