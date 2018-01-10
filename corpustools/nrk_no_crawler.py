@@ -189,10 +189,11 @@ class NrkSmeCrawler(object):
             for address in tree.xpath('//a[@class="autonomous lp_plug"]'):
                 self.counter[tag + '_total'] += 1
                 href = address.get('href')
-                id = href.strip().split('-')[-1]
+                article_id = href.strip().split('-')[-1]
                 if 'systemtest' in href:
                     self.invalid_links.add(href)
-                if ('systemtest' not in href and id not in self.fetched_ids
+                if ('systemtest' not in href
+                        and article_id not in self.fetched_ids
                         and self.guess_lang(address) == 'sme'):
                     self.counter[tag + '_fetched'] += 1
                     yield href
