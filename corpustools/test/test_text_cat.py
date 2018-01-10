@@ -32,9 +32,6 @@ here = os.path.dirname(__file__)
 
 class TestTextCat(unittest.TestCase):
 
-    def setUp(self):
-        pass
-
     def test_classify(self):
         guesser = text_cat.Classifier()
         self.assertEqual(guesser.classify("eg køyrer ikkje"), "nno")
