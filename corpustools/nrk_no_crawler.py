@@ -205,8 +205,8 @@ class NrkSmeCrawler(object):
         try:
             path = self.corpus_adder.copy_url_to_corpus(href)
             self.add_metadata(path)
-        except (requests.exceptions.TooManyRedirects,
-                adder.AdderError) as error:
+        except (requests.exceptions.TooManyRedirects, adder.AdderError,
+                UserWarning) as error:
             util.note(href)
             util.note(error)
 
