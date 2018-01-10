@@ -288,6 +288,7 @@ class NrkSmeCrawler(object):
         self.counter['fetched'] += self.counter['oanehaččat_fetched']
 
     def handle_search_hits(self, hits):
+        """Decide whether articles found in search results should be saved."""
         for hit in hits:
             if hit['url'].split('-')[-1] not in self.fetched_ids and hit.get(
                     'description'):
