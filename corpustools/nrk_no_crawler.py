@@ -53,6 +53,7 @@ class NrkSmeCrawler(object):
             fetched
         authors (set of str): authors of articles
     """
+
     language_guesser = text_cat.Classifier(None)
     goaldir = six.text_type(os.getenv('GTBOUND'))
     corpus_adder = adder.AddToCorpus(goaldir, 'sme', 'news/nrk.no')
@@ -200,7 +201,7 @@ class NrkSmeCrawler(object):
 
     @staticmethod
     def pick_tags(path):
-        """Find tags in an nrk.no article.
+        u"""Find tags in an nrk.no article.
 
         Tags potientially contain more Northern Sámi articles.
 
@@ -271,7 +272,7 @@ class NrkSmeCrawler(object):
                 self.crawl_tag(additional_tag, tag_name)
 
     def crawl_oanehaccat(self):
-        """Crawl short news, provided by an rss feed.
+        u"""Crawl short news, provided by an rss feed.
 
         This feed only contains Northern Sámi articles.
         """
