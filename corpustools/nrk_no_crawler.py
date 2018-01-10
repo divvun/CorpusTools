@@ -63,10 +63,8 @@ class NrkSmeCrawler(object):
 
     def __init__(self):
         """Initialise the NrkSmeCrawler class."""
-        self.fetched_links = self.get_fetched_links(self.corpus_adder.goaldir)
-        self.fetched_links.add(
-            'https://www.nrk.no/sapmi/utgir-ny-kristen-cd-med-joik-og-sang'
-            '-1.13050654')
+        self.fetched_ids = self.get_fetched_links(self.corpus_adder.goaldir)
+        self.fetched_ids.add('1.13050654')
 
     def guess_lang(self, address):
         """Guess the language of the address element.
@@ -153,10 +151,10 @@ class NrkSmeCrawler(object):
             for address in tree.xpath('//a[@class="autonomous lp_plug"]'):
                 self.counter[tag + '_total'] += 1
                 href = address.get('href')
-
+                id = href.strip().split('-')[-1]
                 if 'systemtest' in href:
                     self.invalid_links.add(href)
-                if ('systemtest' not in href and href not in self.fetched_links
+                if ('systemtest' not in href and id not in self.fetched_ids
                         and self.guess_lang(address) == 'sme'):
                     self.counter[tag + '_fetched'] += 1
                     yield href
@@ -203,7 +201,7 @@ class NrkSmeCrawler(object):
         Arguments:
             href (str): a url to an nrk article.
         """
-        self.fetched_links.add(href)
+        self.fetched_ids.add(href.split('-')[-1])
         try:
             path = self.corpus_adder.copy_url_to_corpus(href)
             self.add_metadata(path)
@@ -243,7 +241,7 @@ class NrkSmeCrawler(object):
         for entry in feedparser.parse(
                 'https://www.nrk.no/sapmi/oanehaccat.rss').entries:
             self.counter['oanehaččat_total'] += 1
-            if entry['link'] not in self.fetched_links:
+            if entry['link'].split('-')[-1] not in self.fetched_ids:
                 self.counter['oanehaččat_fetched'] += 1
                 self.add_nrk_article(entry['link'])
 
@@ -252,11 +250,15 @@ class NrkSmeCrawler(object):
 
     def handle_search_hits(self, hits):
         for hit in hits:
-            if hit['url'] not in self.fetched_links and hit.get(
-                    'description') and self.language_guesser.classify(
-                        hit['description']) == 'sme':
-                self.counter['authors_fetched'] += 1
-                self.add_nrk_article(hit['url'])
+            if hit['url'].split('-')[-1] not in self.fetched_ids and hit.get(
+                    'description'):
+                lang = self.language_guesser.classify(hit['description'])
+                if lang == 'sme':
+                    util.print_frame(
+                        len(hit['description']), hit['description'], '\n')
+                    if len(hit['description']) > 15:
+                        self.counter['authors_fetched'] += 1
+                        self.add_nrk_article(hit['url'])
 
     def crawl_authors(self):
         """Search for authors on nrk.no.
@@ -370,11 +372,11 @@ class NrkSmeCrawler(object):
             path (str): path to the directory where nrk articles are found.
 
         Returns:
-            set of strings, where the strings are links to the articles.
+            set of strings, where the strings are ids to the article.
         """
         return {
             xslsetter.MetadataHandler(os.path.join(
-                root, file_)).get_variable('filename')
+                root, file_)).get_variable('filename').split('-')[-1]
             for root, _, files in os.walk(path) for file_ in files
             if file_.endswith('.xsl')
         }
