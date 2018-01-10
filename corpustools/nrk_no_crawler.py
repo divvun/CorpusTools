@@ -370,9 +370,6 @@ class NrkSmeCrawler(object):
         article = html.parse(path)
         metadata = xslsetter.MetadataHandler(path + '.xsl')
 
-        for twitter in article.xpath('//a[@class="author__twitter"]'):
-            twitter.getparent().remove(twitter)
-
         for count, author_parts in enumerate(
                 self.valid_authors(article), start=1):
             metadata.set_variable('author' + str(count) + '_ln',
