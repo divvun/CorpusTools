@@ -356,7 +356,7 @@ class NrkSmeCrawler(object):
 
         try:
             return json.loads(content)
-        except json.decoder.JSONDecodeError as error:
+        except json.decoder.JSONDecodeError:
             util.print_frame(search_link)
             util.print_frame(result)
             util.print_frame(content)
