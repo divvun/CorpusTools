@@ -66,44 +66,17 @@ class NrkSmeCrawler(object):
         """Initialise the NrkSmeCrawler class."""
         self.fetched_ids = self.get_fetched_links(self.corpus_adder.goaldir)
         # Ids containing norwegian text
-        self.fetched_ids.add('1.11060139')
-        self.fetched_ids.add('1.11205504')
-        self.fetched_ids.add('1.11518300')
-        self.fetched_ids.add('1.11526579')
-        self.fetched_ids.add('1.11876027')
-        self.fetched_ids.add('1.11909062')
-        self.fetched_ids.add('1.12274706')
-        self.fetched_ids.add('1.13050654')
-        self.fetched_ids.add('1.13077542')
-        self.fetched_ids.add('1.13599435')
-        self.fetched_ids.add('1.13683886')
-        self.fetched_ids.add('1.13683979')
-        self.fetched_ids.add('1.13684081')
-        self.fetched_ids.add('1.2265333')
-        self.fetched_ids.add('1.4708759')
-        self.fetched_ids.add('1.4837038')
-        self.fetched_ids.add('1.5174999')
-        self.fetched_ids.add('1.6129908')
-        self.fetched_ids.add('1.6431307')
-        self.fetched_ids.add('1.6439563')
-        self.fetched_ids.add('1.6468432')
-        self.fetched_ids.add('1.6469363')
-        self.fetched_ids.add('1.6538125')
-        self.fetched_ids.add('1.6563405')
-        self.fetched_ids.add('1.6776103')
-        self.fetched_ids.add('1.6784213')
-        self.fetched_ids.add('1.6857178')
-        self.fetched_ids.add('1.7066094')
-        self.fetched_ids.add('1.7222473')
-        self.fetched_ids.add('1.7391316')
-        self.fetched_ids.add('1.7397359')
-        self.fetched_ids.add('1.7826351')
-        self.fetched_ids.add('1.7971308')
-        self.fetched_ids.add('1.7990373')
-        self.fetched_ids.add('1.8065147')
-        self.fetched_ids.add('1.8231915')
-        self.fetched_ids.add('1.8239588')
-        self.fetched_ids.add('1.8836268')
+        self.fetched_ids |= set([
+            '1.11060139', '1.11205504', '1.11518300', '1.11526579',
+            '1.11876027', '1.11909062', '1.12274706', '1.13050654',
+            '1.13077542', '1.13599435', '1.13683886', '1.13683979',
+            '1.13684081', '1.2265333', '1.4708759', '1.4837038', '1.5174999',
+            '1.6129908', '1.6431307', '1.6439563', '1.6468432', '1.6469363',
+            '1.6538125', '1.6563405', '1.6776103', '1.6784213', '1.6857178',
+            '1.7066094', '1.7222473', '1.7391316', '1.7397359', '1.7826351',
+            '1.7971308', '1.7990373', '1.8065147', '1.8231915', '1.8239588',
+            '1.8836268'
+        ])
 
     def guess_lang(self, address):
         """Guess the language of the address element.
