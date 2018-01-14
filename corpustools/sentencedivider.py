@@ -73,10 +73,10 @@ class SentenceDivider(object):
     def __init__(self,
                  lang,
                  relative_path=os.path.join(os.getenv('GTHOME'), 'langs')):
-        """Set the files needed by preprocess.
+        """Set the files needed by the tokeniser.
 
         Arguments:
-            lang (str): language the analyser can analyse
+            lang (str): language the analyser can tokenise
         """
         self.lang = 'nob' if lang in ['nno', 'swe'] else lang
         self.relative_path = relative_path
@@ -153,3 +153,55 @@ class SentenceDivider(object):
                 valid_sentences.append(sentence)
 
         return valid_sentences
+
+
+class TrainingSentenceDivider(SentenceDivider):
+    """A class to make sentences for language training corpus.
+
+    Do not pass sentences containing words to the analyser of the
+    specified language.
+
+    Attributes:
+        analyser (modes.Pipeline): a pipeline that analyses text
+    """
+
+    def __init__(self,
+                 lang,
+                 relative_path=os.path.join(os.getenv('GTHOME'), 'langs')):
+        """Set the files needed by the tokeniser and the analyser.
+
+        Arguments:
+            lang (str): language the analyser can tokenise and analyse.
+        """
+        super(TrainingSentenceDivider, self).__init__(lang, relative_path)
+        self.analyser = self.setup_pipeline('hfst')
+
+    def has_unknown(self, tokens):
+        """Check if tokens has words unknown to the analyser.
+
+        Arguments:
+            tokens (list of str): words in a sentence
+
+        Returns:
+            boolean: True if one or more of the tokens/words are unknown.
+        """
+        return '" ? ' in self.analyser.run('\n'.join(tokens).encode('utf8'))
+
+    def make_sentences(self, ccat_output):
+        """Turn ccat output into cleaned up sentences.
+
+        Arguments:
+            ccat_output (str): plain text output of ccat.
+
+        Yields:
+            str: a cleaned up sentence
+        """
+        preprocessed = self.tokeniser.run(ccat_output.encode('utf8'))
+
+        token_buffer = []
+        for token in io.StringIO(preprocessed):
+            token_buffer.append(token)
+            if token.strip() in self.stops:
+                if not self.has_unknown(token_buffer):
+                    yield self.clean_sentence(''.join(token_buffer))
+                token_buffer[:] = []

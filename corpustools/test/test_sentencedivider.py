@@ -79,3 +79,30 @@ Odd Einar Dørum ¶
         ]
         divider = sentencedivider.SentenceDivider('sme')
         self.assertEqual(divider.make_valid_sentences(ccat_output), want)
+
+
+class TestTrainingSentenceDivider(unittest.TestCase):
+
+    def test_ccat_input(self):
+        ccat_output = """10. ON-vuogádat ¶
+ON doaimmaid oktavuođas; ovddasvástádus sihkkarastit? buot ON orgánat!
+..... ¶
+wow." ¶
+mom.). ¶
+mom.: ¶
+kult.” ¶
+váldočoahkkima nammadit. dievaslaš čađaheami, [2019 – 2020] … ¶
+(rávvagiid) ¶
+has moai vgule?  ¶
+"""
+        want = [
+            '10. ON-vuogádat',
+            'ON doaimmaid oktavuođas;',
+            'ovddasvástádus sihkkarastit?',
+            'buot ON orgánat!").:”',
+            'váldočoahkkima nammadit.',
+            'dievaslaš čađaheami, [2019 – 2020] …',
+            '(rávvagiid)',
+        ]
+        divider = sentencedivider.TrainingSentenceDivider('sme')
+        self.assertListEqual(divider.make_valid_sentences(ccat_output), want)
