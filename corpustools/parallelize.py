@@ -67,10 +67,11 @@ class SentenceDivider(object):
     Uses hfst-tokenise as the motor for this purpose.
 
     Attributes:
+        stops (list of str): tokens that imply where a sentence ends.
         lang (str): three character language code
         relative_path (str): relative path to where files needed by
             modes.xml are found.
-        stops (list of str): tokens that imply where a sentence ends.
+        tokeniser (modes.Pipeline): tokeniser pipeline
     """
 
     stops = [';', '!', '?', '.', '..', '...', '¶', '…']
@@ -85,12 +86,13 @@ class SentenceDivider(object):
         """
         self.lang = 'nob' if lang in ['nno', 'swe'] else lang
         self.relative_path = relative_path
+        self.tokeniser = self.setup_pipeline()
 
     def setup_pipeline(self):
-        """Setup the preprocess pipeline.
+        """Setup the tokeniser pipeline.
 
         Returns:
-            modes.Pipeline: a preprocess pipeline that receives plain text
+            modes.Pipeline: a tokeniser pipeline that receives plain text
                 input and outputs a token per line.
         """
         modefile = etree.parse(
@@ -123,8 +125,7 @@ class SentenceDivider(object):
         Yields:
             str: a cleaned up sentence
         """
-        pipeline = self.setup_pipeline()
-        preprocessed = pipeline.run(ccat_output.encode('utf8'))
+        preprocessed = self.tokeniser.run(ccat_output.encode('utf8'))
 
         token_buffer = []
         for token in io.StringIO(preprocessed):
