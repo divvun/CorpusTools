@@ -85,7 +85,7 @@
     </pipeline>
   </mode>
 
-  <mode name="preprocess">
+  <mode name="tokenise">
     <pipeline>
       <program name="hfst-tokenise" debug-suff="morph">
         <arg name="--segment"/>

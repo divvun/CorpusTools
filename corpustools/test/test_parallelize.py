@@ -33,61 +33,11 @@ from corpustools import corpusxmlfile, parallelize
 HERE = os.path.dirname(__file__)
 
 
-class TestSentenceDivider(unittest.TestCase):
-
-    def test_ccat_input(self):
-        ccat_output = """10. ON-vuogádat ¶
-ON doaimmaid oktavuođas; ovddasvástádus sihkkarastit? buot ON orgánat!
-..... ¶
-wow." ¶
-mom.). ¶
-mom.: ¶
-kult.” ¶
-váldočoahkkima nammadit. dievaslaš čađaheami, [2019 – 2020] … ¶
-(rávvagiid) ¶
-"""
-        want = [
-            '10. ON-vuogádat',
-            'ON doaimmaid oktavuođas;',
-            'ovddasvástádus sihkkarastit?',
-            'buot ON orgánat!',
-            'wow."',
-            'mom.).',
-            'mom.:',
-            'kult.”',
-            'váldočoahkkima nammadit.',
-            'dievaslaš čađaheami, [2019 – 2020] …',
-            '(rávvagiid)',
-        ]
-        divider = parallelize.SentenceDivider('sme')
-        self.assertListEqual(divider.make_valid_sentences(ccat_output), want)
-
-    def test_with_dot_and_paragraph(self):
-        ccat_output = """mielddisbuvttii. ¶
-Odd Einar Dørum ¶
-"""
-        want = [
-            'mielddisbuvttii.',
-            'Odd Einar Dørum',
-        ]
-        divider = parallelize.SentenceDivider('sme')
-        self.assertEqual(divider.make_valid_sentences(ccat_output), want)
-
-    def test_with_empty_head_sentence(self):
-        ccat_output = """. ¶
-Odd Einar Dørum ¶
-"""
-        want = [
-            'Odd Einar Dørum',
-        ]
-        divider = parallelize.SentenceDivider('sme')
-        self.assertEqual(divider.make_valid_sentences(ccat_output), want)
-
-
 class TestTca2SentenceDivider(unittest.TestCase):
     """A test class for the Tca2SentenceDivider class."""
 
-    def assertXmlEqual(self, got, want):
+    @staticmethod
+    def assertXmlEqual(got, want):
         """Check if two xml snippets are equal."""
         string_got = etree.tostring(got, encoding='unicode')
         string_want = etree.tostring(want, encoding='unicode')
@@ -178,8 +128,9 @@ class TestParallelizeHunalign(unittest.TestCase):
                 ("foo, bar", "fie"),
                 ("1, ein", "eins"),
                 ("2, два", "2, guokte"),
-            ]), [("foo", "fie"), ("bar", "fie"), ("1", "eins"), ("ein", "eins"),
-                 ("2", "2"), ("2", "guokte"), ("два", "2"), ("два", "guokte")])
+            ]),
+            [("foo", "fie"), ("bar", "fie"), ("1", "eins"), ("ein", "eins"),
+             ("2", "2"), ("2", "guokte"), ("два", "2"), ("два", "guokte")])
 
 
 class TestTmx(unittest.TestCase):
