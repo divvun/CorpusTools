@@ -27,7 +27,7 @@ import lxml.etree as etree
 import requests_mock
 import six
 
-from corpustools import saami_crawler
+from corpustools import samediggi_no_crawler
 
 #here = os.path.dirname(__file__)
 
@@ -960,7 +960,7 @@ På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
         with requests_mock.Mocker() as m:
             m.get('http://www.saemiedigkie.no', content=self.content)
 
-            sdnp = saami_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
+            sdnp = samediggi_no_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
 
             self.assertEqual(sdnp.url, 'http://www.saemiedigkie.no/')
 
@@ -968,7 +968,7 @@ På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
         with requests_mock.Mocker() as m:
             m.get('http://www.saemiedigkie.no', content=self.content)
 
-            sdnp = saami_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
+            sdnp = samediggi_no_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
 
             self.assertListEqual(sdnp.parallel_links, [
                 sdnp.url + 'switchlanguage/to/nor',
@@ -980,7 +980,7 @@ På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
         with requests_mock.Mocker() as m:
             m.get('http://www.saemiedigkie.no', content=self.content)
 
-            sdnp = saami_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
+            sdnp = samediggi_no_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
 
             self.assertEqual(sdnp.print_url,
                              'http://www.saemiedigkie.no/layout/set/print')
@@ -989,7 +989,7 @@ På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
         with requests_mock.Mocker() as m:
             m.get('http://www.saemiedigkie.no', content=self.content)
 
-            sdnp = saami_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
+            sdnp = samediggi_no_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
 
             self.assertEqual(sdnp.lang, 'sma')
 
@@ -997,7 +997,7 @@ På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
         with requests_mock.Mocker() as m:
             m.get('http://www.saemiedigkie.no', content=self.content)
 
-            sdnp = saami_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
+            sdnp = samediggi_no_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
 
             self.assertSetEqual(
                 sdnp.links,
