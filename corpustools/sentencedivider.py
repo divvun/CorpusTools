@@ -16,7 +16,7 @@
 #
 #   Copyright © 2011-2018 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
-#   http://giellatekno.uit.no & http://divvun.no
+#   http://divvun.no & http://giellatekno.uit.no
 #
 """Classes and functions to sentence align two files."""
 
@@ -24,11 +24,12 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import io
 import os
-import re
+import sys
 
+import regex
 from lxml import etree
 
-from corpustools import ccat, modes
+from corpustools import ccat, modes, util
 
 HERE = os.path.dirname(__file__)
 
@@ -144,7 +145,7 @@ class SentenceDivider(object):
             if sentence not in self.stops
         ]
 
-        invalid_sentence_re = re.compile(r'^\W+$')
+        invalid_sentence_re = regex.compile(r'^\W+$')
         valid_sentences = []
         for sentence in sentences:
             if invalid_sentence_re.match(sentence) and valid_sentences:
@@ -155,53 +156,100 @@ class SentenceDivider(object):
         return valid_sentences
 
 
-class TrainingSentenceDivider(SentenceDivider):
-    """A class to make sentences for language training corpus.
+class TrainingCorpusMaker(object):
+    """Turn analysed giella xml files into training corpus.
 
-    Do not pass sentences containing words to the analyser of the
-    specified language.
+    Filter out all sentences containing words unknown to the
+    giella fst analysers.
 
     Attributes:
-        analyser (modes.Pipeline): a pipeline that analyses text
+        only_words: regex catching word made up of letters.
+        xml_printer (ccat.XMLPrinter): extracts the dependency analysis
+            from the giella xml files.
     """
 
-    def __init__(self,
-                 lang,
-                 relative_path=os.path.join(os.getenv('GTHOME'), 'langs')):
-        """Set the files needed by the tokeniser and the analyser.
+    only_words = regex.compile(r'\p{L}+')
+    xml_printer = ccat.XMLPrinter(dependency=True)
+
+    def parse_dependency(self, text):
+        """Parse the dependency element found in a giella xml file.
 
         Arguments:
-            lang (str): language the analyser can tokenise and analyse.
-        """
-        super(TrainingSentenceDivider, self).__init__(lang, relative_path)
-        self.analyser = self.setup_pipeline('hfst')
-
-    def has_unknown(self, tokens):
-        """Check if tokens has words unknown to the analyser.
-
-        Arguments:
-            tokens (list of str): words in a sentence
-
-        Returns:
-            boolean: True if one or more of the tokens/words are unknown.
-        """
-        return '" ? ' in self.analyser.run('\n'.join(tokens).encode('utf8'))
-
-    def make_sentences(self, ccat_output):
-        """Turn ccat output into cleaned up sentences.
-
-        Arguments:
-            ccat_output (str): plain text output of ccat.
+            text (str): contains the dependency element of a giella xml file.
 
         Yields:
-            str: a cleaned up sentence
+            str: a sentence containing only words known to the giella fst
+                analysers, that contain at least a word as identified by
+                the only_words regex.
         """
-        preprocessed = self.tokeniser.run(ccat_output.encode('utf8'))
+        sentence_buffer = []
+        uff_buffer = []
+        for line in io.StringIO(text):
+            line = line.rstrip()
+            if line == ':' or line == ':\\n':
+                sentence_buffer.append(' ')
+            elif line.startswith(':'):
+                uff_buffer.append(line)
+            elif line.startswith('"'):
+                sentence_buffer.append(line[2:-2])
+            elif 'CLB' in line:
+                if not ('".' not in line and '"¶"' not in line
+                        and '"?"' not in line and '"!"' not in line
+                        and '"…"' not in line):
+                    if uff_buffer:
+                        for uff in uff_buffer:
+                            util.print_frame(uff)
+                    else:
+                        sentence_line = ''.join(sentence_buffer).replace(
+                            '¶', '').strip()
+                        if self.only_words.search(sentence_line):
+                            yield sentence_line
+                    uff_buffer[:] = []
+                    sentence_buffer[:] = []
+            elif '" ?' in line:
+                uff_buffer.append(line)
 
-        token_buffer = []
-        for token in io.StringIO(preprocessed):
-            token_buffer.append(token)
-            if token.strip() in self.stops:
-                if not self.has_unknown(token_buffer):
-                    yield self.clean_sentence(''.join(token_buffer))
-                token_buffer[:] = []
+    def file_to_sentences(self, filename):
+        """Turn a giella xml into a list of sentences.
+
+        Arguments:
+            filename (str): name of the giella xml file containing a
+                dependency element.
+
+        Returns:
+            list of str
+        """
+        self.xml_printer.parse_file(filename)
+        text = self.xml_printer.process_file().getvalue()
+        if text.strip():
+            return [
+                sentence for sentence in self.parse_dependency(text)
+                if sentence
+            ]
+        else:
+            return []
+
+    def pytextcat_corpus(self):
+        """Turn the free and bound corpus into a pytextcat training corpus."""
+        with open('{}.txt'.format(sys.argv[1]), 'w') as corpusfile:
+            for corpus in [
+                    os.path.join(os.getenv('GTFREE'), 'analysed', sys.argv[1]),
+                    os.path.join(
+                        os.getenv('GTBOUND'), 'analysed', sys.argv[1])
+            ]:
+                # util.print_frame(corpus)
+                for root, _, files in os.walk(corpus):
+                    # util.print_frame('\t', root)
+                    for file_ in files:
+                        util.print_frame('\n\t\t', file_)
+                        if file_.endswith('.xml'):
+                            corpusfile.write('\n'.join(
+                                self.file_to_sentences(
+                                    os.path.join(root, file_))))
+                            corpusfile.write('\n')
+
+
+def main():
+    """Turn the corpus into a pytextcat training corpus."""
+    sentence_maker = TrainingCorpusMaker()
+    sentence_maker.pytextcat_corpus()
