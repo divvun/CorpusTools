@@ -132,7 +132,7 @@ class NGramModel(object):
         freq = {}
         for nl, strline in enumerate(fil.readlines()):
             try:
-                line = strline.decode('utf-8')
+                line = strline
             except UnicodeDecodeError as e:
                 if self.unicode_warned == 0:
                     util.note("WARNING: Line {} gave {}, skipping ... "
