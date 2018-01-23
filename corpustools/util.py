@@ -132,7 +132,7 @@ def split_path(path):
         for module in [
                 u"goldstandard/orig", u"prestable/converted",
                 u"prestable/toktmx", u"prestable/tmx", u"orig", u"converted",
-                u"stable"
+                u"stable", u"analysed"
         ]:
             d = u"/" + module + u"/"
             if d in p:
