@@ -28,6 +28,7 @@ import sys
 
 import regex
 from lxml import etree
+from shutil import copy
 
 from corpustools import ccat, modes, util
 
@@ -229,27 +230,60 @@ class TrainingCorpusMaker(object):
         else:
             return []
 
+    def analysed_files(self):
+        """Find analysed files.
+
+        Yields:
+            str: filename of an analysed file.
+        """
+        for corpus in [
+                os.path.join(os.getenv('GTFREE'), 'analysed', sys.argv[1]),
+                os.path.join(os.getenv('GTBOUND'), 'analysed', sys.argv[1])
+        ]:
+            for root, _, files in os.walk(corpus):
+                for file_ in files:
+                    yield (os.path.join(root, file_))
+
+    def make_corpus_files(self):
+        """Make .txt files from .xml files.
+
+        The .txt files contain only sentences with words known to the
+        giella fsts.
+        """
+        for analysed_file in self.analysed_files():
+            if analysed_file.endswith('.xml'):
+                with open(analysed_file.replace('.xml', '.txt'), 'w') as txt_stream:
+                    txt_stream.write('\n'.join(
+                        self.file_to_sentences(analysed_file)))
+                    txt_stream.write('\n')
+
     def pytextcat_corpus(self):
         """Turn the free and bound corpus into a pytextcat training corpus."""
-        with open('{}.txt'.format(sys.argv[1]), 'w') as corpusfile:
-            for corpus in [
-                    os.path.join(os.getenv('GTFREE'), 'analysed', sys.argv[1]),
-                    os.path.join(
-                        os.getenv('GTBOUND'), 'analysed', sys.argv[1])
-            ]:
-                # util.print_frame(corpus)
-                for root, _, files in os.walk(corpus):
-                    # util.print_frame('\t', root)
-                    for file_ in files:
-                        util.print_frame('\n\t\t', file_)
-                        if file_.endswith('.xml'):
-                            corpusfile.write('\n'.join(
-                                self.file_to_sentences(
-                                    os.path.join(root, file_))))
-                            corpusfile.write('\n')
+        corpus_dir = os.path.join('pytextcat', sys.argv[1])
+        with util.ignored(OSError):
+            os.makedirs(corpus_dir)
+
+        with open('{}.txt'.format(os.path.join(corpus_dir, sys.argv[1])),
+                  'w') as corpusfile:
+            for analysed_file in self.analysed_files():
+                if analysed_file.endswith('.txt'):
+                    with open(analysed_file) as analysed:
+                        corpusfile.write(analysed.read())
+
+    def langid_corpus(self):
+        """Turn the free and bound corpus into a langid training corpus."""
+        for analysed_file in self.analysed_files():
+            if analysed_file.endswith('.txt'):
+                langid_dir = 'langid/{}/{}'.format(
+                    util.split_path(analysed_file).genre, sys.argv[1])
+                with util.ignored(OSError):
+                    os.makedirs(langid_dir)
+                copy(analysed_file, langid_dir)
 
 
 def main():
     """Turn the corpus into a pytextcat training corpus."""
     sentence_maker = TrainingCorpusMaker()
+    sentence_maker.make_corpus_files()
     sentence_maker.pytextcat_corpus()
+    sentence_maker.langid_corpus()
