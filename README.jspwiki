@@ -29,6 +29,7 @@ These scripts will be installed
 * [generate_anchor_list: Generate paired anchor list for languages lang1 and lang2|CorpusTools.html#generate_anchor_list]
 * [html_cleaner: Program to print out a nicely indented html document|CorpusTools.html#html_cleaner]
 * [epubchooser: Program to set metadata of an epub file|CorpusTools.html#epubchooser]
+* [make_training_corpus: Program to make training corpus from giella xml analysed files|CorpusTools.html#make_training_corpus]
 
 !!Requirements
 
@@ -1001,3 +1002,20 @@ optional arguments:
 * [epubchooser.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/epubchooser.py]
 * [epubconverter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/epubconverter.py]
 * [xslsetter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/xslsetter.py]
+
+!!make_training_corpus
+
+{{{
+Make training corpus from analysed giella xml files. Sentences with words
+unknown for the giella fsts are not included.
+
+positional arguments:
+  langs       The languages to make a training corpus for.
+
+optional arguments:
+  -h, --help  show this help message and exit
+  --version   show program's version number and exit
+}}}
+
+!Source code
+* [trainingcorpusmaker.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/trainingcorpusmaker.py]

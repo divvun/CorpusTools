@@ -40,6 +40,7 @@ setup(
             'realign = corpustools.realign:main',
             'update_metadata = corpustools.update_metadata:main',
             'epubchooser = corpustools.epubchooser:main',
+            'make_training_corpus = corpustools.trainingcorpusmaker:main',
         ]
     },
     dependency_links=[
@@ -57,6 +58,7 @@ setup(
         'odfpy',
         'pydocx',
         'pyth==0.7.0',
+        'regex',
         'requests',
         'requests-mock',
         'six',

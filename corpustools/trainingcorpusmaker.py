@@ -22,6 +22,7 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+import argparse
 import io
 import os
 import sys
@@ -29,7 +30,7 @@ from shutil import copy
 
 import regex
 
-from corpustools import ccat, util
+from corpustools import argparse_version, ccat, util
 
 
 class TrainingCorpusMaker(object):
@@ -42,10 +43,15 @@ class TrainingCorpusMaker(object):
         only_words: regex catching word made up of letters.
         xml_printer (ccat.XMLPrinter): extracts the dependency analysis
             from the giella xml files.
+        lang (str): the language of the training corpus.
     """
 
     only_words = regex.compile(r'\p{L}+')
     xml_printer = ccat.XMLPrinter(dependency=True)
+
+    def __init__(self, lang):
+        """Initialise the TrainingCorpusMaker class."""
+        self.lang = lang
 
     def parse_dependency(self, text):
         """Parse the dependency element found in a giella xml file.
@@ -112,8 +118,8 @@ class TrainingCorpusMaker(object):
             str: filename of an analysed file.
         """
         for corpus in [
-                os.path.join(os.getenv('GTFREE'), 'analysed', sys.argv[1]),
-                os.path.join(os.getenv('GTBOUND'), 'analysed', sys.argv[1])
+                os.path.join(os.getenv('GTFREE'), 'analysed', self.lang),
+                os.path.join(os.getenv('GTBOUND'), 'analysed', self.lang)
         ]:
             for root, _, files in os.walk(corpus):
                 for file_ in files:
@@ -135,11 +141,11 @@ class TrainingCorpusMaker(object):
 
     def pytextcat_corpus(self):
         """Turn the free and bound corpus into a pytextcat training corpus."""
-        corpus_dir = os.path.join('pytextcat', sys.argv[1])
+        corpus_dir = os.path.join('pytextcat', self.lang)
         with util.ignored(OSError):
             os.makedirs(corpus_dir)
 
-        with open('{}.txt'.format(os.path.join(corpus_dir, sys.argv[1])),
+        with open('{}.txt'.format(os.path.join(corpus_dir, self.lang)),
                   'w') as corpusfile:
             for analysed_file in self.analysed_files():
                 if analysed_file.endswith('.txt'):
@@ -151,15 +157,35 @@ class TrainingCorpusMaker(object):
         for analysed_file in self.analysed_files():
             if analysed_file.endswith('.txt'):
                 langid_dir = 'langid/{}/{}'.format(
-                    util.split_path(analysed_file).genre, sys.argv[1])
+                    util.split_path(analysed_file).genre, self.lang)
                 with util.ignored(OSError):
                     os.makedirs(langid_dir)
                 copy(analysed_file, langid_dir)
 
 
+def parse_options():
+    """Parse the options given to the program."""
+    parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
+        description='Make training corpus from analysed giella xml files.\n'
+        'Sentences with words unknown for the giella fsts are not included.')
+    parser.add_argument(
+        'langs',
+        nargs='+',
+        help='The languages to make a training corpus for.')
+
+    return parser.parse_args()
+
+
 def main():
     """Turn the corpus into a pytextcat training corpus."""
-    sentence_maker = TrainingCorpusMaker()
-    sentence_maker.make_corpus_files()
-    sentence_maker.pytextcat_corpus()
-    sentence_maker.langid_corpus()
+    args = parse_options()
+
+    for lang in args.langs:
+        sentence_maker = TrainingCorpusMaker(lang)
+        sentence_maker.make_corpus_files()
+        sentence_maker.pytextcat_corpus()
+        sentence_maker.langid_corpus()
+
+    print('Now you will find training corpus for pytextcat and langid '
+          'in the pytextcat and langid directories in the current directory.')
