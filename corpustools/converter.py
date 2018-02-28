@@ -237,6 +237,11 @@ class Converter(object):
                         self.names.orig)
         return repl, (decode_error.start + len(repl))
 
+    def fix_parallels(self, complete):
+        for parallel in complete.xpath('.//parallel_text'):
+            if not parallel.get('location'):
+                parallel.getparent().remove(parallel)
+
     def make_complete(self, language_guesser):
         """Make a complete Giella xml file.
 
@@ -247,6 +252,7 @@ class Converter(object):
         """
         complete = self.transform_to_complete()
         self.validate_complete(complete)
+        self.fix_parallels(complete)
         self.convert_errormarkup(complete)
         lang_detector = languagedetector.LanguageDetector(
             complete, language_guesser)
