@@ -24,6 +24,7 @@ import argparse
 import logging
 import os
 from collections import defaultdict
+from datetime import date
 
 from corpustools import argparse_version, converter, convertermanager, util
 
@@ -52,6 +53,9 @@ def parse_options():
 
 def count_files(path):
     """Count files in the given language."""
+    today = date.today()
+    todays_analysed = '/analysed.{}/'.format(today)
+
     cm = convertermanager.ConverterManager(False, False)
     cm.collect_files([path])
     counter = defaultdict(int)
@@ -62,7 +66,8 @@ def count_files(path):
             counter['con'] += 1
         else:
             lacking_files['con'].add(c.names.orig)
-        if os.path.exists(c.names.analysed):
+        if os.path.exists(
+                c.names.analysed.replace('/analysed/', todays_analysed)):
             counter['ana'] += 1
         else:
             if os.path.exists(c.names.converted):
