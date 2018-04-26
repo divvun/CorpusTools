@@ -99,10 +99,11 @@ will be called pip2 or pip-2.7 or pip2.7. The scripts will then be
 found in ~/bin
 
 !System wide
-Install and update the tools for all users on a machine by writing these four sudo commands:
+Install and update the tools for all users on a machine by writing these five sudo commands:
 
 {{{
 cd $GTHOME/tools/CorpusTools
+sudo pip2 uninstall -y corpustools
 sudo pip2 install --upgrade -r requirements.txt
 sudo pip2 install -U -e .
 sudo pip2 uninstall -y corpustools
