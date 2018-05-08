@@ -52,7 +52,7 @@ class RangeHandler(object):
     def as_text(self, pair):
         """Return a range as text.
 
-        Arguments:
+        Args:
             pair (tuple): pairs of indexes to elements in self.xpaths.
                 The second part of the tuple may be empty.
 
@@ -74,7 +74,7 @@ class RangeHandler(object):
     def check_range(self, xpath_pair):
         """Check that the xpath_pair is a valid range.
 
-        Arguments:
+        Args:
             xpath_pair (tuple of str): a pair of xpaths
 
         Raises:
@@ -92,7 +92,7 @@ class RangeHandler(object):
     def check_overlap(self, xpath_pair):
         """Check if xpath_pair overlaps any of the existing ranges.
 
-        Arguments:
+        Args:
             xpath_pair (tuple of str): a pair of xpaths
         """
         for xpath in xpath_pair:
@@ -112,7 +112,7 @@ class RangeHandler(object):
     def add_range(self, xpath_pair):
         """Add a new range.
 
-        Arguments:
+        Args:
             xpath_pair (tuple of str): a pair of xpaths.
         """
         self.check_range(xpath_pair)
@@ -142,7 +142,7 @@ class EpubPresenter(object):
     def __init__(self, path):
         """Initialise the EpubPresenter class.
 
-        Arguments:
+        Args:
             path (str): path to the epub document
         """
         self.path = path
@@ -154,7 +154,7 @@ class EpubPresenter(object):
     def book_titles(self):
         """Get the all linear chapters of the epub book.
 
-        Arguments:
+        Args:
             book (epub.Book): The epub book element
 
         Yields:
@@ -175,7 +175,7 @@ class EpubPresenter(object):
     def excluded_chapters(self, new_excluded):
         """Set the exluded chapters in the metadata file.
 
-        Arguments:
+        Args:
             new_excluded (list of int): the chapters to exclude.
         """
         self.metadata.set_variable('epub_excluded_chapters', ', '.join(
@@ -212,7 +212,7 @@ class EpubPresenter(object):
     def skip_elements(self, elements):
         """Set the md set_variable skip_elements.
 
-        Arguments:
+        Args:
             elements (str): the elements that should be skip
         """
         self.metadata.set_variable('skip_elements', elements)
@@ -306,7 +306,7 @@ class EpubChooser(object):
     def __init__(self, path):
         """Initialise the EpubChooser class.
 
-        Arguments:
+        Args:
             path (str): path to the document
         """
         self.presenter = EpubPresenter(path)

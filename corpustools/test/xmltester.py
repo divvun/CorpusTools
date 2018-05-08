@@ -34,7 +34,7 @@ class XMLTester(unittest.TestCase):
     def assertXmlEqual(got, want):
         """Check if two stringified xml snippets are equal.
 
-        Arguments:
+        Args:
             got (etree.Element): the xml part given by the tester
             got (etree.Element): the wanted xml
 

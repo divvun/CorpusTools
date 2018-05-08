@@ -30,7 +30,7 @@ class LanguageDetector(object):
     def __init__(self, document, language_guesser):
         """Initialise the LanguageDetector class.
 
-        Arguments:
+        Args:
             document: an etree element.
             languageGuesser: a text_cat.Classifier.
         """

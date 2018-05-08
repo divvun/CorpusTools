@@ -28,7 +28,7 @@ class BasicConverter(object):
     def __init__(self, filename):
         """Initialise the BasicConverter class.
 
-        Arguments:
+        Args:
             filename: string containing the path to the file that should
             be converted
             write_intermediate: boolean which decides whether intermediate

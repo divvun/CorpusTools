@@ -37,7 +37,7 @@ from corpustools import converter, corpuspath, util, xslsetter
 def find_endings(directories, suffix):
     """Find all files in with suffix within directories.
 
-    Arguments:
+    Args:
         directories (list of str): list of directories to walk
         suffix (str): files suffixes to be searched for
 
@@ -54,7 +54,7 @@ def find_endings(directories, suffix):
 def regjeringen_no(directories):
     """Set metadata for regjeringen.no html files.
 
-    Arguments:
+    Args:
         directories (list of str): list of directories to walk
     """
     for html_file in find_endings(directories, '.html'):
@@ -96,7 +96,7 @@ def to_free(path):
 def skuvla_historja(directories):
     """Find skuvlahistorja directories in paths, set year.
 
-    Arguments:
+    Args:
         directories (list of str): list of directories to walk
     """
     years = {
@@ -119,7 +119,7 @@ def skuvla_historja(directories):
 def translated_from(url_part, mainlang, directories):
     """Set all docs from url_part to be translated from mainlang.
 
-    Arguments:
+    Args:
         url_part (str): the defining part of the url
         mainlang (str): three character long language code
         directories (list of str): list of directories to walk

@@ -34,7 +34,7 @@ HERE = os.path.dirname(__file__)
 def name(module, lang, extension):
     """Produce a path to a corpus file.
 
-    Arguments:
+    Args:
         module (str): module of the corpus file
         lang (str): language of the corpus file
         extension (str): extension of the corpus file

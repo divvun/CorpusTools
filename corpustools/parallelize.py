@@ -49,7 +49,7 @@ class Tca2SentenceDivider(object):
     def make_sentence_xml(lang, xmlfile):
         """Make sentence xml that tca2 can use.
 
-        Arguments:
+        Args:
             lang (str): three character name of main language of document.
             filename (str): name of the xmlfile
 
@@ -72,7 +72,7 @@ class Tca2SentenceDivider(object):
     def make_sentence_file(self, lang, xmlfile, outfile):
         """Make input document for tca2.
 
-        Arguments:
+        Args:
             lang (str): three character name for main language of document.
             xmlfile (str): name of the xmlfile
             outfile (str): name of the input file for tca2
@@ -349,7 +349,7 @@ class ParallelizeTCA2(Parallelize):
     def get_sent_filename(self, pfile):
         """Compute the name of the sentence file.
 
-        Arguments:
+        Args:
             pfile (str): name of converted corpus file (produced by
                 convert2xml)
 
@@ -580,7 +580,7 @@ class Tmx(object):
     def tmx2html(self, out_filename):
         """Convert tmx to html.
 
-        Arguments:
+        Args:
             out_filename (str): name of the html file
         """
         html2tmx_transformer = etree.XSLT(
@@ -743,7 +743,7 @@ class Tca2ToTmx(AlignmentToTmx):
     def read_tca2_output(self, sentfile):
         """Read the output of tca2.
 
-        Arguments:
+        Args:
             sentfile (str): name of the output file of convert2xml
 
         Returns:

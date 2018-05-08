@@ -53,7 +53,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
     def strip_chars(content, extra=u''):
         """Remove the characters found in plaintext_oddities from content.
 
-        Arguments:
+        Args:
             content: a string containing the content of a document.
             extra: a string containg even more characters to remove
             from content.
@@ -98,7 +98,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
     def make_element(element_name, text):
         """Make an xml element.
 
-        Arguments:
+        Args:
             element_name (str): Name of the xml element
             text (str): The text the xml should contain
             attributes (dict): The attributes the element should have
@@ -122,7 +122,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
     def content2xml(self, content):
         """Transform plaintext to an intermediate xml document.
 
-        Arguments:
+        Args:
             content (str): the content of the plaintext document.
 
         Returns:
@@ -155,7 +155,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
 def convert2intermediate(filename):
     """Transform plaintext to an intermediate xml document.
 
-    Arguments:
+    Args:
         filename (str): name of the file that should be converted
 
     Returns:

@@ -33,7 +33,7 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'xslt/XSL-template.xsl')
 def find_xsl_files(directories):
     """Find .xsl files found in directories.
 
-    Arguments:
+    Args:
         directories (list of str): paths to directories
 
     Yields:
@@ -73,7 +73,7 @@ def parse_options():
 def update_xsl_file(filename):
     """Update the xsl file with XSL-template.xsl.
 
-    Arguments:
+    Args:
         filename (str): path to a metadata file.
     """
     avoid_names = [

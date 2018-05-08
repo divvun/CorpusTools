@@ -33,7 +33,7 @@ from corpustools import (argparse_version, convertermanager, corpuspath,
 def print_filename(corpus_path):
     """Print interesting filenames for doing sentence alignment.
 
-    Arguments:
+    Args:
         corpus_path (corpuspath.CorpusPath): filenames
     """
     print('\toriginal: {}\n\tmetatada: {}\n\tconverted: {}'.format(
@@ -43,7 +43,7 @@ def print_filename(corpus_path):
 def print_filenames(corpus_path1, corpus_path2):
     """Print interesting filenames for doing sentence alignment.
 
-    Arguments:
+    Args:
         corpus_path1 (corpuspath.CorpusPath): filenames for the lang1 file.
         corpus_path2 (corpuspath.CorpusPath): filenames for the lang2 file.
     """
@@ -56,7 +56,7 @@ def print_filenames(corpus_path1, corpus_path2):
 def calculate_paths(tmxhtml):
     """Calculate paths, given a file from the command line.
 
-    Arguments:
+    Args:
         tmxhtml (str): path to a .tmx or a .tmx.html file
 
     Returns:
@@ -74,7 +74,7 @@ def calculate_paths(tmxhtml):
 def convert_and_copy(corpus_path1, corpus_path2):
     """Reconvert and copy files to prestable/converted.
 
-    Arguments:
+    Args:
         corpus_path1 (corpuspath.CorpusPath): A CorpusPath representing the
             lang1 file that should be reconverted.
         corpus_path2 (corpuspath.CorpusPath): A CorpusPath representing the

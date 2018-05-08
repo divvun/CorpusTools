@@ -39,7 +39,7 @@ class XslMaker(object):
     def __init__(self, xslfile):
         """Initialise the XslMaker class.
 
-        Arguments:
+        Args:
             xslfile: a string containing the path to the xsl file.
         """
         self.filename = xslfile

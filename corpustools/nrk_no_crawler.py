@@ -82,7 +82,7 @@ class NrkSmeCrawler(object):
     def guess_lang(self, address):
         """Guess the language of the address element.
 
-        Arguments:
+        Args:
             address (html.Element): An element where interesting text is found
 
         Returns:
@@ -114,7 +114,7 @@ class NrkSmeCrawler(object):
             quantity (int): the number of links to fetch a time
             limit (int): max number of links that one tries to fetch
 
-        Arguments:
+        Args:
             tag (str): a numerical tag, pointing to a specific topic on nrk.no
 
         Yields:
@@ -154,7 +154,7 @@ class NrkSmeCrawler(object):
     def interesting_links(self, tag):
         """Find interesting pages inside a topic.
 
-        Arguments:
+        Args:
             tag (str): a numerical tag pointing to a specific topic.
 
         Yields:
@@ -179,7 +179,7 @@ class NrkSmeCrawler(object):
 
         Tags potientially contain more Northern Sámi articles.
 
-        Arguments:
+        Args:
             path (str): path to an nrk.no article
 
         Yields:
@@ -197,7 +197,7 @@ class NrkSmeCrawler(object):
     def crawl_tag(self, tag, tagname):
         """Look for articles in nrk.no tags.
 
-        Arguments:
+        Args:
             tag (str): an internal nrk.no tag
         """
         if tag not in self.tags:
@@ -212,7 +212,7 @@ class NrkSmeCrawler(object):
     def add_nrk_article(self, href):
         """Copy an article to the working copy.
 
-        Arguments:
+        Args:
             href (str): a url to an nrk article.
         """
         self.fetched_ids.add(href.split('-')[-1])
@@ -318,7 +318,7 @@ class NrkSmeCrawler(object):
     def get_search_page(search_link):
         """Get search pages, containing links to author search.
 
-        Arguments:
+        Args:
             search_link (str): query string to nrk.no
 
         Returns:
@@ -358,7 +358,7 @@ class NrkSmeCrawler(object):
     def valid_authors(article):
         """Find authors with the correct roles.
 
-        Arguments:
+        Args:
             article (etree.Element): The parsed html document.
 
         Yields:
@@ -376,7 +376,7 @@ class NrkSmeCrawler(object):
     def add_metadata(self, path):
         """Get metadata from the nrk.no article.
 
-        Arguments:
+        Args:
             path (str): path to the nrk.no article
         """
         article = html.parse(path)
@@ -403,7 +403,7 @@ class NrkSmeCrawler(object):
     def get_fetched_links(path):
         """Find fetched links.
 
-        Arguments:
+        Args:
             path (str): path to the directory where nrk articles are found.
 
         Returns:

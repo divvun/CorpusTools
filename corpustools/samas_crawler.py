@@ -65,7 +65,7 @@ class SamasCrawler(object):
     def harvest_links(self, content):
         """Find interesting pages inside a topic.
 
-        Arguments:
+        Args:
             content (etree.Element): content of a samas page, without the
                 language_switcher element.
 
@@ -99,7 +99,7 @@ class SamasCrawler(object):
     def add_samas_page(self, link):
         """Get a saami samas.no page and its parallels.
 
-        Arguments:
+        Args:
             link (str): a url to samas.no page, that has been vetted by
                 the is_internal function.
         """

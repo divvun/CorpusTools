@@ -25,7 +25,7 @@ import lxml.etree as etree
 def process_verse(verse_element):
     """Process the verse element found in bible xml documents.
 
-    Arguments:
+    Args:
         verse_element: an etree element containing the verse element found
         in a bible xml document.
 
@@ -42,7 +42,7 @@ def process_verse(verse_element):
 def process_section(section_element):
     """Process the section element found in the bible xml documents.
 
-    Arguments:
+    Args:
         section_element: an etree element containing the section element
         found in a bible xml document.
 
@@ -80,7 +80,7 @@ def process_section(section_element):
 def process_p(paragraph):
     """Convert bible xml verse elements to p elements.
 
-    Arguments:
+    Args:
         p is a bible xml p element.
     Returns:
         a Giella xml p element
@@ -100,7 +100,7 @@ def process_p(paragraph):
 def make_p(verses):
     """Convert verse strings to p element.
 
-    Arguments:
+    Args:
         verses: a list of strings
     Returns:
         a Giella xml p element
@@ -114,7 +114,7 @@ def make_p(verses):
 def process_chapter(chapter_element):
     """Convert a bible xml chapter to a Giella xml section one.
 
-    Arguments:
+    Args:
         chapter_element: a bible xml chapter element
 
     Returns:
@@ -151,7 +151,7 @@ def process_chapter(chapter_element):
 def process_book(book_element):
     """Convert a bible xml book to a Giella xml section one.
 
-    Arguments:
+    Args:
         book_element: a bible xml book element
 
     Returns:
@@ -178,7 +178,7 @@ def process_book(book_element):
 def process_bible(bible_doc):
     """Convert a bible xml document to a Giella xml document.
 
-    Arguments:
+    Args:
         bible_doc (etree.Element): the bible xml tree
 
     Returns:

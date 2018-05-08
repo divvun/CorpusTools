@@ -302,7 +302,7 @@ class Classifier(object):
     def get_langs(self, langs=[]):
         """Get the set of wanted languages.
 
-        Arguments:
+        Args:
             langs (list of str): list of probable languages
 
         Returns:

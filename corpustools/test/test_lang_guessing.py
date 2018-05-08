@@ -108,7 +108,7 @@ class TestTextCat(unittest.TestCase):
         The input strings have been classified as sme, while they in
         fact are nob.
 
-        Arguments:
+        Args:
             input_text (str): text that should be classified by
                 the language guesser.
         """
@@ -121,7 +121,7 @@ class TestTextCat(unittest.TestCase):
         The input strings have been classified as sme, while they in
         fact are nob.
 
-        Arguments:
+        Args:
             input_text (str): text that should be classified by
                 the language guesser.
         """

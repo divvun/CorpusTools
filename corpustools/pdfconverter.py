@@ -50,7 +50,7 @@ class PDFFontspecs(object):
     def add_fontspec(self, xmlfontspec):
         """Add a pdf2xml fontspec to this class.
 
-        Arguments:
+        Args:
             xmlfontspec (etree.Element): a PDF2XML fontspec element found in a
                 PDF2XML page element.
         """
@@ -73,7 +73,7 @@ class PDFFontspecs(object):
         Some xmlfontspecs have different id's for an identical font.
         This function makes sure identical fonts have identical id's.
 
-        Arguments:
+        Args:
             font_id: an integer that is the id of the fontspec.
 
         Returns:
@@ -156,7 +156,7 @@ class PDFTextElement(BoundingBox):
     def __init__(self, text_elt):
         """Initialise the PDFTextElement class.
 
-        Arguments:
+        Args:
             t: a pdf2xml text element
         """
         self.text_elt = text_elt
@@ -286,7 +286,7 @@ class PDFParagraph(object):
     def add_space_in_list(self, textelt):
         """Add space after list character.
 
-        Arguments:
+        Args:
             textelement (etree): a pdf text element
         """
         if textelt.text is not None:
@@ -301,7 +301,7 @@ class PDFParagraph(object):
     def append_textelement(self, textelement):
         """Append a PDFTextElement to this paragraph.
 
-        Arguments:
+        Args:
             textelement: a PDFTextElement
         """
         hits = self.LIST_RE.search(textelement.plain_text)
@@ -322,7 +322,7 @@ class PDFParagraph(object):
     def is_within_line_distance(self, textelement):
         """Check if a textelement is in the same paragraph.
 
-        Arguments:
+        Args:
             textelement: a PDFTextElement.
 
         Returns:
@@ -472,7 +472,7 @@ class OrderedPDFSections(object):
     def find_position(self, new_section):
         """Find the position of the new section in self.sections.
 
-        Arguments:
+        Args:
             new_section: a PDFSection
 
         Returns:
@@ -715,7 +715,7 @@ class PDFPageMetadata(object):
                  metadata_inner_margins=None):
         """Initialise the PDFPageMetadata class.
 
-        Arguments:
+        Args:
             page_number: integer
             page_height: integer
             page_width: integer
@@ -860,7 +860,7 @@ class PDFPage(object):
                  linespacing=None):
         """Initialise the PDFPage class.
 
-        Arguments:
+        Args:
             page_element: an etree element representing a pdf page
             metadata_margins: a dict containing margins read from the metadata
             file.
@@ -881,7 +881,7 @@ class PDFPage(object):
     def is_skip_page(self, skip_pages):
         """Found out if this page should be skipped.
 
-        Arguments:
+        Args:
             skip_pages (list of mixed): list of the pages that should be
                 skipped.
 
@@ -916,7 +916,7 @@ class PDFPage(object):
         Sometimes the same font has different ID's. Correct that ID
         if necessary.
 
-        Arguments:
+        Args:
             pdffontspecs (PDFFontspecs): a PDFFontspecs instance.
         """
         for textelement in self.textelements:
@@ -989,7 +989,7 @@ class PDFPage(object):
     def is_inside_inner_margins(text, margins):
         """Check if t is inside the given margins.
 
-        Arguments:
+        Args:
             t (etree.Element): a text element
             margins (dict): contains the page margins as pixels
 
@@ -1070,7 +1070,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
     def __init__(self, filename):
         """Initialise the PDF2XMLConverte class.
 
-        Arguments:
+        Args:
             filename (str): the path to the pdf file.
             write_intermediate (boolean): indicate whether intermediate
                 versions of the converter document should be written to disk.
@@ -1083,7 +1083,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
     def strip_chars(content, extra=u''):
         """Strip unwanted chars from the document.
 
-        Arguments:
+        Args:
             content (str): the xml document that pdftohtml produces
             extra (str): more character that should be removed
 
@@ -1104,7 +1104,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
     def replace_ligatures(content):
         """Replace unwanted strings with correct replacements.
 
-        Arguments:
+        Args:
             content (str): content of an xml document.
 
         Returns:
@@ -1198,7 +1198,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
     def parse_page(self, page):
         """Parse the page element.
 
-        Arguments:
+        Args:
             page: a pdf xml page element.
         """
         try:
@@ -1218,7 +1218,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
     def parse_pages(self, root_element):
         """Parse the pages of the pdf xml document.
 
-        Arguments:
+        Args:
             root_element: the root element of the pdf2xml document.
         """
         for page in root_element.iter('page'):
@@ -1228,7 +1228,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
     def add_fontspecs(self, page):
         """Extract font specs found in a pdf2xml page element.
 
-        Arguments:
+        Args:
             page (etree.Element): a pdf page
         """
         for xmlfontspec in page.iter('fontspec'):
@@ -1257,7 +1257,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
     def handle_syntaxerror(self, error, lineno, invalid_input):
         """Handle an xml syntax error.
 
-        Arguments:
+        Args:
             error: an exception
             lineno: the line number in this module where the error happened.
             invalid_input: a string containing the invalid input.
@@ -1286,7 +1286,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
 def convert2intermediate(path):
     """Convert a pdf document to the Giella xml format.
 
-    Arguments:
+    Args:
         filename (str): path to the document
 
     Returns:

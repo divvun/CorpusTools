@@ -60,7 +60,7 @@ class ConverterManager(object):
     def __init__(self, write_intermediate, goldstandard):
         """Initialise the ConverterManager class.
 
-        Arguments:
+        Args:
             write_intermediate (bool): indicating whether intermediate versions
                 of the converted document should be written to disk.
             goldstandard (bool): indicating whether goldstandard documents
@@ -73,7 +73,7 @@ class ConverterManager(object):
     def convert(self, orig_file):
         """Convert file to corpus xml format.
 
-        Arguments:
+        Args:
             orig_file: string containg the path to the original file.
         """
         try:
@@ -105,7 +105,7 @@ class ConverterManager(object):
     def add_file(self, xsl_file):
         """Add file for conversion.
 
-        Arguments:
+        Args:
             xsl_file (str): path to a metadata file
         """
         if os.path.isfile(xsl_file) and os.path.isfile(xsl_file[:-4]):
@@ -139,7 +139,7 @@ class ConverterManager(object):
     def collect_files(self, sources):
         """Find all convertible files in sources.
 
-        Arguments:
+        Args:
             sources: a list of files or directories where convertable
             files are found.
         """

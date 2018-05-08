@@ -94,7 +94,7 @@ class DocumentFixer(object):
     def replace_shy(self, element):
         """Replace shy with a hyph element.
 
-        Arguments:
+        Args:
             element: an etree element
         """
         for child in element:
@@ -130,7 +130,7 @@ class DocumentFixer(object):
     def insert_space_after_semicolon(self, element, irritating_words_regex):
         """Insert space after words needing it.
 
-        Arguments:
+        Args:
             element: an etree element
             irritating_words_regex: regex
         """
@@ -285,7 +285,7 @@ class DocumentFixer(object):
     def get_quote_list(text):
         """Get list of quotes from the given text.
 
-        Arguments:
+        Args:
             text: string
 
         Returns:
@@ -311,7 +311,7 @@ class DocumentFixer(object):
     def append_quotes(element, text, quote_list):
         """Append quotes to an element.
 
-        Arguments:
+        Args:
             text: a string that contains the plain text of the element.
             quote_list: A list of span tuples containing indexes to quotes
             found in text.
@@ -329,7 +329,7 @@ class DocumentFixer(object):
     def _detect_quote(self, element):
         """Insert span elements around quotes.
 
-        Arguments:
+        Args:
             element: an etree element.
         """
         newelement = deepcopy(element)

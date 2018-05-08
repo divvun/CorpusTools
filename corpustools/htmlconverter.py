@@ -38,7 +38,7 @@ def remove_declared_encoding(content):
     xml-declared encoding
     http://lxml.de/parsing.html#python-unicode-strings
 
-    Arguments:
+    Args:
         content (str): the contents of a html document
 
     Returns:
@@ -53,7 +53,7 @@ def remove_declared_encoding(content):
 def to_html_elt(filename):
     """Return the content of the html doc as a string.
 
-    Arguments:
+    Args:
         filename (str): path to the webpage
 
     Returns:

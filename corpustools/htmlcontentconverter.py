@@ -58,7 +58,7 @@ class HTMLBeautifier(object):
     def superclean(self, content):
         """Remove unwanted elements from an html document.
 
-        Arguments:
+        Args:
             content is a string containing an html document.
 
         Returns:
@@ -685,7 +685,7 @@ class HTMLBeautifier(object):
 def replace_bare_text(body):
     """Replace bare text in body with a p element.
 
-    Arguments:
+    Args:
         body (etree.Element): the body element of the html document
     """
     if body.text is not None and body.text.strip() != '':
@@ -715,7 +715,7 @@ def beautify_intermediate(intermediate):
 def xhtml2intermediate(content_xml):
     """Convert xhtml to Giella xml.
 
-    Arguments:
+    Args:
         xhtml (etree.Element): the result of convert2xhtml
 
     Returns:
@@ -735,7 +735,7 @@ def xhtml2intermediate(content_xml):
 def convert2intermediate(filename):
     """Convert a webpage to Giella xml.
 
-    Arguments:
+    Args:
         filename (str): name of the file
 
     Returns:

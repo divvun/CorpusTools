@@ -97,7 +97,7 @@ class ParallelPicker(object):
     def has_parallel(self, language1_file):
         """Check if the given file has a parallel file.
 
-        Arguments:
+        Args:
             language1_file (corpusxmlfile.CorpusXMLFile): The first file of a
                 parallel pair.
 
@@ -112,7 +112,7 @@ class ParallelPicker(object):
     def has_sufficient_words(file1, file2):
         """Check if the given file contains more words than the threshold.
 
-        Arguments:
+        Args:
             file1 (corpusxmlfile.CorpusXMLFile): The first file of a parallel
                 pair.
             file2 (corpusxmlfile.CorpusXMLFile): The second file of a parallel
@@ -130,7 +130,7 @@ class ParallelPicker(object):
     def has_sufficient_ratio(self, file1, file2):
         """See if the ratio of words is good enough.
 
-        Arguments:
+        Args:
             file1 (corpusxmlfile.CorpusXMLFile): The first file of a parallel
                 pair.
             file2 (corpusxmlfile.CorpusXMLFile): The second file of a parallel
@@ -150,7 +150,7 @@ class ParallelPicker(object):
     def copy_file(self, xml_file):
         """Copy xml_file to prestable/converted.
 
-        Arguments:
+        Args:
             xml_file (corpusxmlfile.CorpusXMLFile): the file that should be
                 copied to prestable/converted.
         """
@@ -170,7 +170,7 @@ class ParallelPicker(object):
     def is_valid_pair(self, file1, file2):
         """Check if file1 and file2 is a valid parallel pair.
 
-        Arguments:
+        Args:
             file1 (corpusxmlfile.CorpusXMLFile): The first file of a parallel
                 pair.
             file2 (corpusxmlfile.CorpusXMLFile): The second file of a parallel

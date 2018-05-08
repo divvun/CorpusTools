@@ -39,7 +39,7 @@ CYRILLIC_LANGUAGES = ['mhr']
 def fix_macsami_cp1252(instring):
     """Fix instring.
 
-    Arguments:
+    Args:
         instring (str): A bytestring that originally was encoded as
             macsami but has been decoded to unicode as if it was
             cp1252.
@@ -55,7 +55,7 @@ def fix_macsami_cp1252(instring):
 def fix_macsami_latin1(instring):
     """Fix instring.
 
-    Arguments:
+    Args:
         instring (str): A bytestring that originally was encoded as
             macsami but has been decoded to unicode as if it was
             latin1.
@@ -70,7 +70,7 @@ def fix_macsami_latin1(instring):
 def fix_macsami_mac(instring):
     """Fix instring.
 
-    Arguments:
+    Args:
         instring (str): A bytestring that originally was encoded as
             macsami but has been decoded to unicode as if it was
             macroman.
@@ -87,7 +87,7 @@ def fix_macsami_mac(instring):
 def fix_winsami2_cp1252(instring):
     """Fix instring.
 
-    Arguments:
+    Args:
         instring (str): A bytestring that originally was encoded as
             winsami2 but has been decoded to unicode as if it was
             cp1252.
@@ -101,7 +101,7 @@ def fix_winsami2_cp1252(instring):
 def fix_meadowmari_cp1252(instring):
     """Fix instring.
 
-    Arguments:
+    Args:
         instring (str): A bytestring that originally was encoded as
             meadowmari but has been decoded to unicode as if it was
             cp1252.
@@ -304,7 +304,7 @@ def guess_body_encoding(content, mainlang):
 def default_decoder(position, text):
     """The default decoder.
 
-    Arguments:
+    Args:
         position
         text (str): The string that should be decoded.
 

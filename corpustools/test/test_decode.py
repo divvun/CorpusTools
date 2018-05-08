@@ -33,7 +33,7 @@ from corpustools import decode, iso_ir_197, iso_ir_209, macsami, util, winsami2
 def handler(err):
     """Handle UnicodeDecodeError.
 
-    Arguments:
+    Args:
         err (exceptions.UnicodeDecodeError): the error.
 
     Returns:

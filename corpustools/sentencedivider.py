@@ -34,7 +34,7 @@ from corpustools import ccat, modes
 def to_plain_text(lang, filename):
     """Turn an xml formatted file into clean text.
 
-    Arguments:
+    Args:
         lang (str): three character name of main language of document.
         filename (str): name of the xmlfile
 
@@ -73,7 +73,7 @@ class SentenceDivider(object):
                  relative_path=os.path.join(os.getenv('GTHOME'), 'langs')):
         """Set the files needed by the tokeniser.
 
-        Arguments:
+        Args:
             lang (str): language the analyser can tokenise
         """
         self.lang = 'nob' if lang in ['nno', 'swe'] else lang
@@ -100,7 +100,7 @@ class SentenceDivider(object):
     def clean_sentence(sentence):
         """Remove cruft from a sentence.
 
-        Arguments:
+        Args:
             sentence (str): a raw sentence, warts and all
 
         Returns:
@@ -111,7 +111,7 @@ class SentenceDivider(object):
     def make_sentences(self, ccat_output):
         """Turn ccat output into cleaned up sentences.
 
-        Arguments:
+        Args:
             ccat_output (str): plain text output of ccat.
 
         Yields:
@@ -129,7 +129,7 @@ class SentenceDivider(object):
     def make_valid_sentences(self, ccat_output):
         """Turn ccat output into full sentences.
 
-        Arguments:
+        Args:
             ccat_output (str): the plain text output of ccat
 
         Returns:

@@ -48,7 +48,7 @@ class Analyser(object):
                  relative_path=os.path.join(os.getenv('GTHOME'), 'langs')):
         """Set the files needed by preprocess, lookup and vislcg3.
 
-        Arguments:
+        Args:
             lang (str): language the analyser can analyse
             pipeline_name (str): the name of the pipeline which will be used to analyse files        """
         self.lang = lang

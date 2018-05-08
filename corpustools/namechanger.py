@@ -383,7 +383,7 @@ class CorpusFilesetMoverAndUpdater(object):
                                       parallel_name):
         """Update metadata in a metadata file.
 
-        Arguments:
+        Args:
             old_components (util.PathComponents): A named tuple
                 representing the path to the old name of the file
             newpath (str): path to the new file

@@ -40,7 +40,7 @@ class Pipeline(object):
     def __init__(self, mode, relative_path):
         """Initialise the Pipeline class.
 
-        Arguments:
+        Args:
             mode (lxml.Element): a mode element from a modes.xml file.
             relative_path (str): relative path to the filenames given in the
             modes.xml file.
@@ -52,7 +52,7 @@ class Pipeline(object):
     def raise_unless_exists(filenames):
         """Raise an ArgumentError if filename does not exist.
 
-        Arguments:
+        Args:
             filenames (list of str): list of filenames harvested from the
                 mode element.
 
@@ -76,7 +76,7 @@ class Pipeline(object):
     def run_external_command(self, command, instring):
         """Run the command with input using subprocess.
 
-        Arguments:
+        Args:
             command (list of str): a subprocess compatible command.
             instring (bytes): the input to the command.
 
@@ -101,7 +101,7 @@ class Pipeline(object):
     def tag2commandpart(self, element):
         """Turn program elements to a command part.
 
-        Arguments:
+        Args:
             element (lxml.Element): a program subelement
 
         Returns:
@@ -115,7 +115,7 @@ class Pipeline(object):
     def program2command(self, program):
         """Turn a program element to a subprocess compatible command.
 
-        Arguments:
+        Args:
             program (str): a program element
 
         Returns:
@@ -138,7 +138,7 @@ class Pipeline(object):
     def run(self, instring):
         """Run the pipeline using input.
 
-        Arguments:
+        Args:
             instring (bytes): utf-8 encoded input to the pipeline
 
         Returns:

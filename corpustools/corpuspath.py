@@ -120,7 +120,7 @@ class CorpusPath(object):
     def name(self, module='orig', lang=None, name=None, extension=''):
         """Return a path based on the module and extension.
 
-        Arguments:
+        Args:
             module (str): string containing some corpus module
             lang (str): string containing the language of the wanted name
             name (str): name of the wanted file
@@ -159,7 +159,7 @@ class CorpusPath(object):
     def parallel(self, language):
         """Check if there is a parallel for language.
 
-        Arguments:
+        Args:
             language (str): language of the parallel file.
 
         Returns:
@@ -184,7 +184,7 @@ class CorpusPath(object):
     def tmx(self, language):
         """Name of the tmx file.
 
-        Arguments:
+        Args:
             language (str): language of the parallel
 
         Returns:
@@ -198,7 +198,7 @@ class CorpusPath(object):
     def prestable_tmx(self, language):
         """Name of the prestable tmx file.
 
-        Arguments:
+        Args:
             language (str): language of the parallel
 
         Returns:

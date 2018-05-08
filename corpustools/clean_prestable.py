@@ -49,7 +49,7 @@ def parse_options():
 def find_prestable_files(corpusdir):
     """Find interesting files in prestable.
 
-    Arguments:
+    Args:
         corpusdir (src): path to a corpus directory
 
     Yields:

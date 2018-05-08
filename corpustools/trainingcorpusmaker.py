@@ -56,7 +56,7 @@ class TrainingCorpusMaker(object):
     def parse_dependency(self, text):
         """Parse the dependency element found in a giella xml file.
 
-        Arguments:
+        Args:
             text (str): contains the dependency element of a giella xml file.
 
         Yields:
@@ -94,7 +94,7 @@ class TrainingCorpusMaker(object):
     def file_to_sentences(self, filename):
         """Turn a giella xml into a list of sentences.
 
-        Arguments:
+        Args:
             filename (str): name of the giella xml file containing a
                 dependency element.
 

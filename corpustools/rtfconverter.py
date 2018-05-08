@@ -35,7 +35,7 @@ class RTFError(Exception):
 def to_html_elt(filename):
     """Convert the content of an rtf file to xhtml.
 
-    Arguments:
+    Args:
         filename (str): path to the document
 
     Returns:

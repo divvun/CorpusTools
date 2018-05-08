@@ -25,7 +25,7 @@ from lxml import etree
 def remove_identical_ids(avvir_doc):
     """Remove identical ids.
 
-    Arguments:
+    Args:
         avvir_doc (etree.Element): the etree that should be manipulated.
     """
     story_ids = set()
@@ -40,7 +40,7 @@ def remove_identical_ids(avvir_doc):
 def insert_element(para, text, position):
     """Insert a new element in p's parent.
 
-    Arguments:
+    Args:
         p: an lxml element, it is a story/p element
         text: (unicode) string
         position: (integer) the position inside p's parent where the new
@@ -65,7 +65,7 @@ def convert_sub_p(para):
     These elements contain erroneous text that an editor has removed.
     This function removes p.text and saves p.tail
 
-    Arguments:
+    Args:
         p: an lxml element, it is a story/p element
     """
     for sub_p in para.findall('.//p'):
@@ -89,7 +89,7 @@ def convert_sub_p(para):
 def convert_subelement(para):
     """Convert subelements of story/p elements to p elements.
 
-    Arguments:
+    Args:
         p: an lxml element, it is a story/p element
     """
     position = 1
@@ -108,7 +108,7 @@ def convert_subelement(para):
 def convert_p(avvir_doc):
     """Convert story/p elements to one or more p elements.
 
-    Arguments:
+    Args:
         avvir_doc (etree.Element): the etree that should be manipulated.
     """
     for para in avvir_doc.findall('./story/p'):
@@ -126,7 +126,7 @@ def convert_p(avvir_doc):
 def convert_story(avvir_doc):
     """Convert story elements in to giellatekno xml elements.
 
-    Arguments:
+    Args:
         avvir_doc (etree.Element): the etree that should be manipulated.
     """
     for title in avvir_doc.findall('.//story[@class="Tittel"]'):
@@ -158,7 +158,7 @@ def convert_story(avvir_doc):
 def convert_article(avvir_doc):
     u"""The root element of an Ávvir doc is article, rename it to body.
 
-    Arguments:
+    Args:
         avvir_doc (etree.Element): the etree that should be manipulated.
 
     Returns:

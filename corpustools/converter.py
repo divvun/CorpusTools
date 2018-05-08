@@ -44,7 +44,7 @@ LOGGER = logging.getLogger(__name__)
 def to_giella(path):
     """Convert a document to the giella xml format.
 
-    Arguments:
+    Args:
         path (str): path to the document
 
     Returns:
@@ -77,7 +77,7 @@ class Converter(object):
     def __init__(self, filename, write_intermediate=False):
         """Initialise the Converter class.
 
-        Arguments:
+        Args:
             filename: string containing the path to the file that should
             be converted
             write_intermediate: boolean which decides whether intermediate
@@ -264,7 +264,7 @@ class Converter(object):
     def has_content(complete):
         """Find out if the xml document has any content.
 
-        Arguments:
+        Args:
             complete: a etree element containing the converted document.
 
         Returns:
@@ -279,7 +279,7 @@ class Converter(object):
     def write_complete(self, languageguesser):
         """Write the complete converted document to disk.
 
-        Arguments:
+        Args:
             languageguesser: a text.Classifier
         """
         if distutils.dep_util.newer_group(self.dependencies,

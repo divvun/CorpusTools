@@ -55,7 +55,7 @@ def read_chapter(chapter):
 def chapters(book, metadata):
     """Get the all linear chapters of the epub book.
 
-    Arguments:
+    Args:
         book (epub.Book): The epub book element
 
     Yields:
@@ -73,7 +73,7 @@ def chapters(book, metadata):
 def extract_content(filename, metadata):
     """Extract content from the epub file.
 
-    Arguments:
+    Args:
         filename (str): path to the document
 
     Returns:
@@ -96,7 +96,7 @@ def extract_content(filename, metadata):
 def remove_ranges(metadata, html):
     """Remove ranges of html elements.
 
-    Arguments:
+    Args:
         filename (str): path to the document
     """
     if metadata.skip_elements:

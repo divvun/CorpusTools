@@ -14,7 +14,7 @@ class Codec(codecs.Codec):
     def encode(self, instring, errors='strict'):
         """Encode the object instring.
 
-        Arguments:
+        Args:
             instring (str): the string that should be encoded with this
                 codec.
             errors (str): define the error handling to apply. One of
@@ -29,7 +29,7 @@ class Codec(codecs.Codec):
     def decode(self, instring, errors='strict'):
         """Decode the object instring.
 
-        Arguments:
+        Args:
             instring (str): the string that should be decoded with this
                 codec.
             errors (str): define the error handling to apply. One of
@@ -47,7 +47,7 @@ class IncrementalEncoder(codecs.IncrementalEncoder):
     def encode(self, instring, final=False):
         """Encode instring.
 
-        Arguments:
+        Args:
             instring (str): the string that should be encoded with this
                 codec.
 
@@ -63,7 +63,7 @@ class IncrementalDecoder(codecs.IncrementalDecoder):
     def decode(self, instring, final=False):
         """Decode instring.
 
-        Arguments:
+        Args:
             instring (str): the string that should be decoded with this
                 codec.
 
@@ -357,7 +357,7 @@ encoding_table = codecs.charmap_build(decoding_table)
 def lookup(encoding):
     """Lookup the name of the encoding.
 
-    Arguments:
+    Args:
         encoding (str): name of the encoding
 
     Returns:

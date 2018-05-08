@@ -41,7 +41,7 @@ def to_html_elt(filename):
 def doc_to_unicodehtml(filename):
     """Convert a doc file to xhtml.
 
-    Arguments:
+    Args:
         filename (str): path to the file
 
     Returns:
@@ -181,7 +181,7 @@ def fix_wv_output():
 def extract_text(filename):
     """Extract the text from a document.
 
-    Arguments:
+    Args:
         filename (str): path to the document
         command (list of str): the command and the arguments sent to
             ExternalCommandRunner.

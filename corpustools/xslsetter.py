@@ -180,7 +180,7 @@ class MetadataHandler(object):
     def set_mlang(self, language):
         """Set a language in mlangs.
 
-        Arguments:
+        Args:
             language (str): a language code that should be set.
         """
         mlangs = self._get_variable_elt('mlangs')

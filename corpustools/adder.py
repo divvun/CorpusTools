@@ -83,7 +83,7 @@ class UrlDownloader(object):
     def __init__(self, download_dir):
         """Initialise the UrlDownloader class.
 
-        Arguments:
+        Args:
             download_dir: a string containing the path where the file should
             be saved.
         """
@@ -156,7 +156,7 @@ class AddToCorpus(object):
     def __normalise_path(path):
         """Normalise path.
 
-        Arguments:
+        Args:
             path (str): Path that should be normalised.
 
         Returns:
@@ -181,7 +181,7 @@ class AddToCorpus(object):
     def copy_file_to_corpus(self, origpath, metadata_filename, parallelpath=''):
         """Add a file from the hard disk to the corpus.
 
-        Arguments:
+        Args:
             orig_path (str): path where the original file exists
             metadata_filename (str): the value of the filename in the
                 metadata file
@@ -222,7 +222,7 @@ class AddToCorpus(object):
     def update_parallel_data(none_dupe_components, parallelpath):
         """Update metadata in the parallel files.
 
-        Arguments:
+        Args:
             new_components: (util.PathComponents) of none_dupe_path
             parallelpath: (string) path of the parallel file
         """
@@ -250,7 +250,7 @@ class AddToCorpus(object):
     def none_dupe_path(self, path):
         """Compute the none duplicate path of the file to be added.
 
-        Arguments:
+        Args:
             path: (string) path of the file as given as input
             This string may contain unwanted chars and
         """

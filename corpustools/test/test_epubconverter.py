@@ -35,7 +35,7 @@ HERE = os.path.dirname(__file__)
 def set_data(directory, testdoc, skip_elements):
     """Set needed testdata.
 
-    Arguments:
+    Args:
         directory (testfixtures.TempDirectory): path to the directory
         testdoc (str): path to the test document
         skip_elements (str): the range of elements to skip

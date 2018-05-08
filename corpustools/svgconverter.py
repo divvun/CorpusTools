@@ -29,7 +29,7 @@ HERE = os.path.dirname(__file__)
 def convert2intermediate(filename):
     """Transform svg to an intermediate xml document.
 
-    Arguments:
+    Args:
         filename (str): name of the file that should be converted
     """
     svg_xslt_root = etree.parse(os.path.join(HERE, 'xslt/svg2corpus.xsl'))

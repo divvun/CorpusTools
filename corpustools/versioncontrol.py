@@ -83,7 +83,7 @@ class SVN(VersionController):
     def __init__(self, svnclient):
         """Initialise the SVN class.
 
-        Arguments:
+        Args:
             svnclient (pysvn.Client): an svn client to control the
                 working copy.
         """
@@ -93,7 +93,7 @@ class SVN(VersionController):
     def add_path(self, path):
         """Add a single path to the working copy.
 
-        Arguments:
+        Args:
             path (str): path to a file or directory
         """
         valid_path = self.valid_svn_path(path)
@@ -104,7 +104,7 @@ class SVN(VersionController):
     def valid_svn_path(self, path):
         """Find the part of the path that is under version control.
 
-        Arguments:
+        Args:
             path (str): path that should be added to the working copy
 
         Returns:
@@ -121,7 +121,7 @@ class SVN(VersionController):
     def under_version_control(self, path):
         """Check if path is under version control.
 
-        Arguments:
+        Args:
             path (str): path that should be checked.
 
         Returns:
@@ -139,7 +139,7 @@ class SVN(VersionController):
     def add(self, path):
         """Add path to the working copy.
 
-        Arguments:
+        Args:
             path (str or list of str): path may be a list of paths or a
                 single path
         """
@@ -166,7 +166,7 @@ class GIT(VersionController):
     def __init__(self, gitrepo):
         """Initialise the GIT class.
 
-        Arguments:
+        Args:
             gitrepo (git.Repo): client to control the git repo
         """
         super(GIT, self).__init__()
@@ -176,7 +176,7 @@ class GIT(VersionController):
     def add(self, path):
         """Add path to the repo.
 
-        Arguments:
+        Args:
             path (str): path that should be added to the git repo.
         """
         self.gitrepo.git.add(path)
@@ -184,7 +184,7 @@ class GIT(VersionController):
     def move(self, oldpath, newpath):
         """Move a file within the repo.
 
-        Arguments:
+        Args:
             oldpath (src): path of the file that should be moved
             newpath (scr): new path of the file to be moved
         """
@@ -193,7 +193,7 @@ class GIT(VersionController):
     def remove(self, path):
         """Remove a file from the repo.
 
-        Arguments:
+        Args:
             path (src); path of the file that should be removed.
         """
         self.gitrepo.git.rm(path)
@@ -202,7 +202,7 @@ class GIT(VersionController):
 def vcs(directory):
     """Make a version control client.
 
-    Arguments:
+    Args:
         directory (str): the directory where the working copy is found.
 
     Returns:

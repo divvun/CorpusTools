@@ -39,7 +39,7 @@ def latex_dir(filename):
 def latex_to_dir(filename):
     """Convert a doc file to xhtml.
 
-    Arguments:
+    Args:
         filename (str): path to the file
 
     Returns:
