@@ -18,7 +18,7 @@
 #
 """This file contains classes to convert files to the giellatekno xml format."""
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import logging

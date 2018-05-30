@@ -19,7 +19,7 @@
 #
 """Find out why conversion or analysis stops when ran in multiprocess mode."""
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import os

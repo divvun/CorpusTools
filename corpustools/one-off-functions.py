@@ -22,7 +22,7 @@
 Might be useful in other contexts.
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import, print_function, unicode_literals
 
 import collections
 import os

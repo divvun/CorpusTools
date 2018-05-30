@@ -124,3 +124,4 @@ v<0.22.2>, <20180105> -- Add author search to nrk.no articles
 v<0.22.3>, <20180109> -- Add latex2html to sanity_check
 v<0.23.0>, <20180123> -- Add the utility make_training_corpus, that makes training corpus for pytextcat and langid
 v<0.23.1>, <20180228> -- Analysed files from stallo are stored in analysed.YY-MM-DD, make it possible to count these
+v<0.23.2>, <20180530> -- Import print_function, unicode_literals from __future__ to minimise python 2 and 3 differences

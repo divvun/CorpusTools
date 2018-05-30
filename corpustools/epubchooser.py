@@ -22,6 +22,9 @@
 It is possible to filter away chapters and ranges of elements from an epub
 file. This is a helper program for that purpose.
 """
+
+from __future__ import absolute_import, print_function, unicode_literals
+
 import argparse
 import sys
 

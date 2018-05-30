@@ -20,6 +20,8 @@
 #
 """This file contains routines to crawl nrk.no containing saami text."""
 
+from __future__ import absolute_import, print_function, unicode_literals
+
 import json
 import os
 import sys
