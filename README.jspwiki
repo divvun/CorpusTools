@@ -45,13 +45,13 @@ These scripts will be installed
 On Mac, do:
 
 {{{
-sudo port install py-pysvn py-pip wv
+sudo port install py-pysvn py-pip wv latex2html poppler
 }}}
 
 On Debian/Ubuntu, do:
 
 {{{
-sudo apt-get install python-svn python-pip
+sudo apt-get install python-svn python-pip wv latex2html poppler-utils
 }}}
 
 On Arch Linux, do:
