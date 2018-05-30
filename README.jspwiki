@@ -82,64 +82,37 @@ sudo make install
 
 !!Installation
 
-!To own home directory (preferred)
+!To own home directory (recommended)
 
 Install the tools for the current user by writing
 
 {{{
 cd $GTHOME/tools/CorpusTools
-pip2 install --upgrade -r requirements.txt --user
-pip2 install -U --user -e .
-pip2 uninstall -y corpustools
-python2.7 setup.py install --user --install-scripts=$HOME/bin
+python setup.py install --user --install-scripts=$HOME/bin --record installed_files.txt
 }}}
 
-Note the dot at the end of the second line. Also, on some systems, pip
-will be called pip2 or pip-2.7 or pip2.7. The scripts will then be
-found in ~/bin
-
 !System wide
-Install and update the tools for all users on a machine by writing these five sudo commands:
+Install the tools for all users on a machine by
 
 {{{
 cd $GTHOME/tools/CorpusTools
-sudo pip2 uninstall -y corpustools
-sudo pip2 install --upgrade -r requirements.txt
-sudo pip2 install -U -e .
-sudo pip2 uninstall -y corpustools
-sudo python2.7 setup.py install --install-scripts=/usr/local/bin
+sudo python setup.py install --install-scripts=/usr/local/bin --record installed_files.txt
 }}}
 
-Note the dot at the end of the second line. Also, on some systems, pip
-will be called pip2 or pip-2.7 or pip2.7. The scripts will then be
-found in /usr/local/bin
-
-(It may look a bit odd that we first install and then uninstall. The
-"setup.py" command isn't able to install all requirements, while the
-"pip" command isn't able to correctly install newer versions of
-CorpusTools without recompiling all dependencies as well.)
 
 !!Uninstalling
 
-!System wide
-
-{{sudo pip(-2.7) uninstall corpustools}}
-
-will uninstall the scripts from /usr/local/bin and the python system path.
-
-
 !Remove from own home directory
-
 {{{
-pip(-2.7) uninstall corpustools
-}}}
+cd $GTHOME/tools/CorpusTools
+cat installed_files.txt | xargs rm -rf
+}}
 
-will uninstall the scripts from $HOME/bin and the users python path
-(pip will complain if you give it --user here; it tends to find the
-right thing to remove without it)
-
-If any dependencies were installed when you did "install",
-you'll have to "pip uninstall" them individually.
+!System wide
+{{{
+cd $GTHOME/tools/CorpusTools
+cat installed_files.txt | xargs sudo rm -rf
+}}
 
 !!ccat
 
