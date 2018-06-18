@@ -2,7 +2,7 @@ v<0.1.0>, <20140114> -- Initial release.
 v<0.1.1>, <20140119> -- Treat filenames as byte streams, not unicode in analyser.py
 v<0.1.2>, <20140120> -- Process files given on the commandline correctly in ccat
 v<0.2.0>, <20140121> -- Add the corpus conversion tools to the package
-v<0.2.1>, <20140124> -- Fix a bug in the conversion tools decoding,  lots of changes to confirm better with PEP8
+v<0.2.1>, <20140124> -- Fix a bug in the conversion tools decoding, lots of changes to confirm better with PEP8
 v<0.2.2>, <20140128> -- Make convert2xml use multiprocess the same way that analyse_corpus does. Update installation instructions.
 v<0.2.3>, <20140129> -- ccat now understands how to turn analysed files into clean text.
 v<0.3.0>, <20140129> -- Moved corpus-parallel.py to CorpusTools
@@ -103,7 +103,7 @@ v<0.20.1>, <20170606> -- Only allow cp1251_cp1252 decoding for cyrillic language
 v<0.20.2>, <20170609> -- realign did not work anymore, fix it
 v<0.20.3>, <20170706> -- fixed the lang recognition bug that strongly affected the work with realigning parallel files
 v<0.20.4>, <20170707> -- fixed DTD: if multilingual then at least one language element as child
-v<0.20.5>, <20170711> -- relaxed DTD: if multilingual then  it can be empty, too, because otherwise many files would not convert
+v<0.20.5>, <20170711> -- relaxed DTD: if multilingual then it can be empty, too, because otherwise many files would not convert
 v<0.20.6>, <20170718> -- Fix bug 2409 - Two Mari letters ӧ ӱ not converted correctly. Also only detect languages when there are language models for the requested languages.
 v<0.20.7>, <20170728> -- Fix bug 2411 - Fix a bug introduced in langtech r155208 that rendered convert2xml unusable.
 v<0.20.8>, <20170921> -- Set new paths and options for hfst-tokenisation.
