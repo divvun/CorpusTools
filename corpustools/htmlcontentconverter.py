@@ -433,6 +433,7 @@ class HTMLBeautifier(object):
                     'toppsone',  # unginordland
                     'vedleggogregistre',  # regjeringen.no
                     'venstre',  # unginordland
+                    'static-menu-inner',  # arran.no
                 ],
             },
             'p': {
@@ -451,6 +452,7 @@ class HTMLBeautifier(object):
                     'AreaTopLanguageNav',
                     'AreaTopPrintMeny',
                     'skiplinks',  # umo.se
+                    'mainmenu',  # admin/tysfjord
                 ],
                 'class': [
                     'QuickNav',
@@ -460,6 +462,7 @@ class HTMLBeautifier(object):
                     'chapter-index',  # lovdata.no
                     'footer-nav',  # lovdata.no
                     'hidden',  # unginordland
+                    'mainmenu menu menulevel0',  # admin/tysfjord
                 ],
             },
             'span': {
