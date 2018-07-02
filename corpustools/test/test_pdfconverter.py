@@ -792,7 +792,7 @@ class TestPDFTextExtractor(xmltester.XMLTester):
             '&#61553; ',  # U+F071: <private use>
             '•\t',  # U+2022: BULLET
             '– ',  # U+2013: EN DASH
-            '- ',  # U+002D: HYPHEN-MINUS
+            # '- ',  # U+002D: HYPHEN-MINUS
             u'■ ',  # U+25A0: BLACK SQUARE
             ' &#61692; ',  # U+F0FC: <private use>
         ]
@@ -814,7 +814,6 @@ class TestPDFTextExtractor(xmltester.XMLTester):
                                              '<p type="listitem">&#61553; </p>'
                                              '<p type="listitem">&#8226;\t</p>'
                                              '<p type="listitem">&#8211; </p>'
-                                             '<p type="listitem">- </p>'
                                              '<p type="listitem">■ </p>'
                                              '<p type="listitem"> &#61692; </p>'
                                              '</body>'))

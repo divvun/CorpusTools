@@ -265,10 +265,11 @@ class PDFParagraph(object):
     list
     """
 
+    # TODO: add option for when 0+002D should be used as a list char.
     LIST_CHARS = [
         u'•',  # U+2022: BULLET
         u'–',  # U+2013: EN DASH
-        r'\-',  # U+00AD: HYPHEN-MINUS
+        # r'\-',  # U+002D: HYPHEN-MINUS
         six.unichr(61623),  # U+F0B7: <private use>
         six.unichr(61553),  # U+F071: <private use>
         u'■',  # U+25A0: BLACK SQUARE
