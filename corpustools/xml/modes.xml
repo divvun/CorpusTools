@@ -34,6 +34,7 @@
       <program name="hfst-tokenise" debug-suff="morph">
         <arg name="--print-all"/>
         <arg name="--giella-cg"/>
+        <arg name="--no-weights"/>
         <file name="tools/tokenisers/tokeniser-disamb-gt-desc.pmhfst"/>
       </program>
       <program name="vislcg3" debug-suff="mwe-dis">
