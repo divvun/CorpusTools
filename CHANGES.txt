@@ -126,3 +126,4 @@ v<0.23.0>, <20180123> -- Add the utility make_training_corpus, that makes traini
 v<0.23.1>, <20180228> -- Analysed files from stallo are stored in analysed.YY-MM-DD, make it possible to count these
 v<0.23.2>, <20180530> -- Import print_function, unicode_literals from __future__ to minimise python 2 and 3 differences
 v<0.23.3>, <20180831> -- No weights in hfst analysis when analysing text
+v<0.24.0>, <20181005> -- Depend on files from a make install in giella when analysing files

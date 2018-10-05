@@ -25,6 +25,8 @@ from __future__ import absolute_import, print_function, unicode_literals
 import os
 import sys
 
+from lxml import etree
+
 from corpustools import util
 
 
@@ -32,21 +34,36 @@ class Pipeline(object):
     """Make a pipeline out of modes.xml file.
 
     Attributes:
-        mode (lxml.Element): a mode element from a modes.xml file
-        relative_path (str): relative path to the filenames given in the
-            modes.xml file.
+        modename (str): a mode element from a modes.xml file.
+        giella_prefix (str): Set this variable if the installed giella files
+            are not found in the standard places.
     """
 
-    def __init__(self, mode, relative_path):
+    def __init__(self, modename, lang, giella_prefix=None):
         """Initialise the Pipeline class.
 
         Args:
             mode (lxml.Element): a mode element from a modes.xml file.
-            relative_path (str): relative path to the filenames given in the
-            modes.xml file.
+            giella_prefix (str): directory where the filenames given in the
+                modes.xml file exist.
         """
-        self.mode = mode
-        self.relative_path = relative_path
+        modefile = etree.parse(
+            os.path.join(os.path.dirname(__file__), 'xml/modes.xml'))
+        self.mode = modefile.find('.//mode[@name="{}"]'.format(modename))
+        self.giella_prefix = self.valid_path(giella_prefix, lang)
+
+    @staticmethod
+    def valid_path(giella_prefix, lang):
+        if giella_prefix is not None:
+            return os.path.join(giella_prefix, 'share/giella', lang)
+        else:
+            for prefix in [
+                    os.path.join(os.getenv('HOME'), '.local'), '/usr/local',
+                    '/usr'
+            ]:
+                path = os.path.join(prefix, 'share/giella', lang)
+                if os.path.exists(path):
+                    return path
 
     @staticmethod
     def raise_unless_exists(filenames):
@@ -69,7 +86,7 @@ class Pipeline(object):
         util.sanity_check(
             [program.get('name') for program in self.mode.iter('program')])
         self.raise_unless_exists([
-            os.path.join(self.relative_path, file_elem.get('name'))
+            os.path.join(self.giella_prefix, file_elem.get('name'))
             for file_elem in self.mode.iter('file')
         ])
 
@@ -108,7 +125,7 @@ class Pipeline(object):
             str: a program, a program option or a path to a file
         """
         if element.tag == 'file':
-            return os.path.join(self.relative_path, element.get('name'))
+            return os.path.join(self.giella_prefix, element.get('name'))
         else:
             return element.get('name')
 

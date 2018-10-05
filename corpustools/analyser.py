@@ -33,45 +33,28 @@ from corpustools import argparse_version, ccat, corpusxmlfile, modes, util
 
 
 class Analyser(object):
-    """This class makes a dependency analysis of sma, sme and smj files.
+    """This class makes a dependency analysis of giella xml files.
 
-    The pipeline is:
-    ccat <file> | preprocess (with optionally abbr file) |
-    lookup <lang dependent files> | lookup2cg |
-    vislcg3 <disambiguation files> | vislcg3 <function files |
-    vislcg3 <dependency files>
+    Attributes:
+        lang (str): the language of the input.
+        modename (str): the pipeline that should be used to analyse the
+            files. The pipeline definitions are found in the file
+            xml/modes.xml.
+        giella_prefix: Set this variable if the installed giella files
+            are not found in the standard places.
     """
 
-    def __init__(self,
-                 lang,
-                 pipeline_name,
-                 relative_path=os.path.join(os.getenv('GTHOME'), 'langs')):
+    def __init__(self, lang, modename, giella_prefix=None):
         """Set the files needed by preprocess, lookup and vislcg3.
 
         Args:
             lang (str): language the analyser can analyse
-            pipeline_name (str): the name of the pipeline which will be used to analyse files        """
-        self.lang = lang
-        self.relative_path = relative_path
-        self.xml_printer = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
-        self.pipeline_name = pipeline_name
-
-    def setup_pipeline(self):
-        """Setup the preprocess pipeline.
-
-        Returns:
-            modes.Pipeline: a preprocess pipeline that receives plain text
-                input and outputs a token per line.
+            pipeline_name (str): the name of the pipeline which will be used to analyse files
         """
-        modefile = etree.parse(
-            os.path.join(os.path.dirname(__file__), 'xml/modes.xml'))
-        pipeline = modes.Pipeline(
-            mode=modefile.find('.//mode[@name="{}"]'.format(
-                self.pipeline_name)),
-            relative_path=os.path.join(self.relative_path, self.lang))
-        pipeline.sanity_check()
-
-        return pipeline
+        self.lang = lang
+        self.xml_printer = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
+        self.modename = modename
+        self.giella_prefix = giella_prefix
 
     def collect_files(self, converted_dirs):
         """Collect converted files."""
@@ -100,7 +83,9 @@ class Analyser(object):
 
     def dependency_analysis(self):
         """Insert disambiguation and dependency analysis into the body."""
-        pipeline = self.setup_pipeline()
+        pipeline = modes.Pipeline(self.modename, self.lang, self.giella_prefix)
+        pipeline.sanity_check()
+
         body = etree.Element('body')
 
         dependency = etree.Element('dependency')
@@ -133,7 +118,7 @@ class Analyser(object):
     def analyse_in_parallel(self):
         """Analyse file in parallel."""
         pool_size = multiprocessing.cpu_count() * 2
-        pool = multiprocessing.Pool(processes=pool_size,)
+        pool = multiprocessing.Pool(processes=pool_size, )
         pool.map(unwrap_self_analyse,
                  list(zip([self] * len(self.xml_files), self.xml_files)))
         pool.close()  # no more tasks
@@ -207,4 +192,5 @@ def main():
                 file=sys.stderr)
             sys.exit(1)
     else:
-        print("Did not find any files in", args.converted_dirs, file=sys.stderr)
+        print(
+            "Did not find any files in", args.converted_dirs, file=sys.stderr)
