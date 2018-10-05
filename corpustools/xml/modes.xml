@@ -38,10 +38,10 @@
         <arg name="--unique"/>
         <file name="tokeniser-disamb-gt-desc.pmhfst"/>
       </program>
-      <program name="vislcg3" debug-suff="mwe-dis">
+<!--      <program name="vislcg3" debug-suff="mwe-dis">
         <arg name="-g"/>
         <file name="mwe-dis.bin"/>
-      </program>
+      </program>-->
       <program name="cg-mwesplit" debug-suff="mwe-split"/>
       <program name="vislcg3" debug="dis">
         <arg name="-g"/>
