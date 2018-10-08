@@ -99,7 +99,7 @@ class Analyser(object):
         try:
             self.xml_file = corpusxmlfile.CorpusXMLFile(xml_file)
             analysis_xml_name = self.xml_file.name.replace(
-                'converted/', 'analysed/')
+                'converted/', 'analysed/{}/'.format(self.modename))
 
             if self.xml_file.ocr is None:
                 self.dependency_analysis()
