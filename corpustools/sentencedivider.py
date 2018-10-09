@@ -70,31 +70,14 @@ class SentenceDivider(object):
 
     def __init__(self,
                  lang,
-                 relative_path=os.path.join(os.getenv('GTHOME'), 'langs')):
+                 giella_prefix=None):
         """Set the files needed by the tokeniser.
 
         Args:
             lang (str): language the analyser can tokenise
         """
-        self.lang = 'nob' if lang in ['nno', 'swe'] else lang
-        self.relative_path = relative_path
-        self.tokeniser = self.setup_pipeline('tokenise')
-
-    def setup_pipeline(self, pipeline_name):
-        """Setup the tokeniser pipeline.
-
-        Returns:
-            modes.Pipeline: a tokeniser pipeline that receives plain text
-                input and outputs a token per line.
-        """
-        modefile = etree.parse(
-            os.path.join(os.path.dirname(__file__), 'xml/modes.xml'))
-        pipeline = modes.Pipeline(
-            mode=modefile.find('.//mode[@name="{}"]'.format(pipeline_name)),
-            relative_path=os.path.join(self.relative_path, self.lang))
-        pipeline.sanity_check()
-
-        return pipeline
+        self.tokeniser = modes.Pipeline('tokenise', lang, giella_prefix)
+        self.tokeniser.sanity_check()
 
     @staticmethod
     def clean_sentence(sentence):

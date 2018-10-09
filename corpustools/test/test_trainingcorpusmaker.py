@@ -35,7 +35,7 @@ class TestTrainingCorpusMaker(unittest.TestCase):
 
     def setUp(self):
         """Set up the TrainingCorpusMaker."""
-        self.sentencemaker = trainingcorpusmaker.TrainingCorpusMaker()
+        self.sentencemaker = trainingcorpusmaker.TrainingCorpusMaker('sme')
 
     def test_no_unknown(self):
         """Test with only known input."""

@@ -37,10 +37,7 @@ HERE = os.path.dirname(__file__)
 class TestAnalyser(unittest.TestCase):
 
     def setUp(self):
-        self.a = analyser.Analyser(
-            'sme',
-            'xfst',
-            relative_path=os.path.join(HERE, 'fake_gthome/langs'))
+        self.a = analyser.Analyser('sme', 'xfst', giella_prefix=os.path.join(HERE, 'giella_shared'))
         self.a.xml_file = corpusxmlfile.CorpusXMLFile(
             os.path.join(HERE, 'smefile.xml'))
 
