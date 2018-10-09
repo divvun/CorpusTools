@@ -264,10 +264,11 @@ class AddToCorpus(object):
         """Add a directory to the corpus.
 
         * Recursively walks through the given original directory
-        ** First checks for duplicates, raises an error printing a list of
-        duplicate files if duplicates are found
-        ** For each file, do the "add file to the corpus" operations (minus the
-        parallel info).
+            * First checks for duplicates, raises an error printing a list
+              of duplicate files if duplicates are found
+            * For each file, do the "add file to the corpus" operations
+              (minus the parallel info).
+
         """
         self.find_duplicates(origpath)
         for root, _, files in os.walk(origpath):
