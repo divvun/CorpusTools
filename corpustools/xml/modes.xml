@@ -15,15 +15,15 @@
       </program>
       <program name="lookup2cg" debug="lookup2cg"/>
       <program name="vislcg3" debug="dis">
-        <arg name="-g"/>
+        <arg name="--grammar"/>
         <file name="disambiguator.bin"/>
       </program>
       <program name="vislcg3" debug="function">
-        <arg name="-g"/>
+        <arg name="--grammar"/>
         <file name="korp.bin"/>
       </program>
       <program name="vislcg3" debug="dep">
-        <arg name="-g"/>
+        <arg name="--grammar"/>
         <file name="dependency.bin"/>
       </program>
     </pipeline>
@@ -39,20 +39,20 @@
         <file name="tokeniser-disamb-gt-desc.pmhfst"/>
       </program>
       <program name="vislcg3" debug-suff="mwe-dis">
-        <arg name="-g"/>
+        <arg name="--grammar"/>
         <file name="mwe-dis.bin"/>
       </program>
       <program name="cg-mwesplit" debug-suff="mwe-split"/>
       <program name="vislcg3" debug="dis">
-        <arg name="-g"/>
+        <arg name="--grammar"/>
         <file name="disambiguator.bin"/>
       </program>
       <program name="vislcg3" debug="function">
-        <arg name="-g"/>
+        <arg name="--grammar"/>
         <file name="korp.bin"/>
       </program>
       <program name="vislcg3" debug="dep">
-        <arg name="-g"/>
+        <arg name="--grammar"/>
         <file name="dependency.bin"/>
       </program>
     </pipeline>
@@ -66,22 +66,22 @@
       </program>
       <program name="vislcg3" debug-suff="mwe-dis">
         <arg name="-t"/>
-        <arg name="-g"/>
+        <arg name="--grammar"/>
         <file name="mwe-dis.bin"/>
       </program>
       <program name="cg-mwesplit" debug-suff="mwe-split"/>
       <program name="vislcg3" debug-suff="val">
-        <arg name="-g"/>
+        <arg name="--grammar"/>
         <file name="valency.bin"/>
       </program>
       <program name="vislcg3" debug-suff="disam">
         <arg name="-t"/>
-        <arg name="-g"/>
+        <arg name="--grammar"/>
         <file name="disambiguator.bin"/>
       </program>
       <program name="vislcg3" debug-suff="gc">
         <arg name="-t"/>
-        <arg name="-g"/>
+        <arg name="--grammar"/>
         <file name="grammarchecker.bin"/>
       </program>
     </pipeline>
