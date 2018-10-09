@@ -90,7 +90,7 @@ def main():
             result = count_files(os.path.join(corpus, 'orig', language))
             print('{}\t{}\t{}\t{}\t{}'.format(language, result[0], result[1],
                                           result[2], result[3]))
-            for key, value in result[3].items():
+            for key, value in result[-1].items():
                 lacking_files[key].update(value)
 
     if args.listfiles:
