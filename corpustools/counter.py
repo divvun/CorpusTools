@@ -54,7 +54,6 @@ def parse_options():
 def count_files(path):
     """Count files in the given language."""
     today = date.today()
-    todays_analysed = '/analysed.{}/'.format(today)
 
     cm = convertermanager.ConverterManager(False, False)
     cm.collect_files([path])
@@ -66,14 +65,18 @@ def count_files(path):
             counter['con'] += 1
         else:
             lacking_files['con'].add(c.names.orig)
-        if os.path.exists(
-                c.names.analysed.replace('/analysed/', todays_analysed)):
-            counter['ana'] += 1
+
+        for fst in ['xfst', 'hfst']:
+            todays_analysed = '/analysed.{}/{}/'.format(today, fst)
+            if os.path.exists(
+                    c.names.analysed.replace('/analysed/', todays_analysed)):
+                counter[fst] += 1
         else:
             if os.path.exists(c.names.converted):
                 lacking_files['ana'].add(c.names.converted)
 
-    return (len(cm.files), counter['con'], counter['ana'], lacking_files)
+    return (len(cm.files), counter['con'], counter['xfst'], counter['xfst'],
+            lacking_files)
 
 
 def main():
@@ -85,8 +88,8 @@ def main():
         print(corpus)
         for language in ['fkv', 'sma', 'sme', 'smj', 'smn', 'sms']:
             result = count_files(os.path.join(corpus, 'orig', language))
-            print('{}\t{}\t{}\t{}'.format(language, result[0], result[1],
-                                          result[2]))
+            print('{}\t{}\t{}\t{}\t{}'.format(language, result[0], result[1],
+                                          result[2], result[3]))
             for key, value in result[3].items():
                 lacking_files[key].update(value)
 
