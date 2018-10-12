@@ -43,7 +43,8 @@ class Pipeline(object):
         """Initialise the Pipeline class.
 
         Args:
-            mode (lxml.Element): a mode element from a modes.xml file.
+            modename (str): name of a mode that is expected to be found
+                in the modes.xml file.
             giella_prefix (str): directory where the filenames given in the
                 modes.xml file exist.
         """
@@ -55,6 +56,18 @@ class Pipeline(object):
 
     @staticmethod
     def valid_path(giella_prefix, lang):
+        """Check if resources needed by modes exists.
+
+        Args:
+            giella_prefix (str): user provided directory where resources exist.
+            lang (str): the language that modes is asked to serve.
+
+        Returns:
+            A directory where resources for the given language exist.
+
+        Raises:
+            utils.ArgumentError if no resources are found.
+        """
         if giella_prefix is not None:
             return os.path.join(giella_prefix, 'share/giella', lang)
         else:
