@@ -143,8 +143,8 @@ class Pipeline(object):
         """
         if element.tag == 'file':
             return os.path.join(self.giella_prefix, element.get('name'))
-        else:
-            return element.get('name')
+
+        return element.get('name')
 
     def program2command(self, program):
         """Turn a program element to a subprocess compatible command.
