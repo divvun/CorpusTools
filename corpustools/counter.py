@@ -74,8 +74,7 @@ def count_files(path):
         else:
             if os.path.exists(c.names.converted):
                 lacking_files['ana'].add(c.names.converted)
-
-    return (len(cm.files), counter['con'], counter['xfst'], counter['xfst'],
+    return (len(cm.files), counter['con'], counter['xfst'], counter['hfst'],
             lacking_files)
 
 
