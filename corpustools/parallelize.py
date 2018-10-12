@@ -46,7 +46,7 @@ class Tca2SentenceDivider(object):
     """
 
     @staticmethod
-    def make_sentence_xml(lang, xmlfile):
+    def make_sentence_xml(lang, xmlfile, giella_prefix):
         """Make sentence xml that tca2 can use.
 
         Args:
@@ -58,7 +58,7 @@ class Tca2SentenceDivider(object):
         """
         document = etree.Element('document')
 
-        divider = sentencedivider.SentenceDivider(lang)
+        divider = sentencedivider.SentenceDivider(lang, giella_prefix)
         for index, sentence in enumerate(
                 divider.make_valid_sentences(
                     sentencedivider.to_plain_text(lang, xmlfile))):
@@ -69,7 +69,7 @@ class Tca2SentenceDivider(object):
 
         return document
 
-    def make_sentence_file(self, lang, xmlfile, outfile):
+    def make_sentence_file(self, lang, xmlfile, outfile, giella_prefix):
         """Make input document for tca2.
 
         Args:
@@ -82,7 +82,7 @@ class Tca2SentenceDivider(object):
         with util.ignored(OSError):
             os.makedirs(o_rel_path)
         with open(outfile, 'wb') as sentence_file:
-            tree = etree.ElementTree(self.make_sentence_xml(lang, xmlfile))
+            tree = etree.ElementTree(self.make_sentence_xml(lang, xmlfile, giella_prefix=giella_prefix))
             tree.write(
                 sentence_file,
                 pretty_print=True,
@@ -99,7 +99,7 @@ class Parallelize(object):
     The other file is found via the metadata in the input file
     """
 
-    def __init__(self, origfile1, lang2, anchor_file=None, quiet=False):
+    def __init__(self, origfile1, lang2, anchor_file=None, quiet=False, giella_prefix=None):
         """Initialise the Parallelize class.
 
         Args:
@@ -114,7 +114,7 @@ class Parallelize(object):
         """
         self.quiet = quiet
         self.origfiles = []
-
+        self.giella_prefix = giella_prefix
         self.origfiles.append(
             corpusxmlfile.CorpusXMLFile(os.path.abspath(origfile1)))
 
@@ -285,10 +285,9 @@ class ParallelizeHunalign(Parallelize):
         return "\n".join(
             ["{} @ {}".format(w2, w1) for w1, w2 in cleaned_pairs]) + "\n"
 
-    @staticmethod
-    def to_sents(origfile):
+    def to_sents(self, origfile):
         """Divide the content of origfile to sentences."""
-        divider = sentencedivider.SentenceDivider(origfile.lang)
+        divider = sentencedivider.SentenceDivider(origfile.lang, giella_prefix=self.giella_prefix)
         return '\n'.join(
             divider.make_valid_sentences(
                 sentencedivider.to_plain_text(origfile.lang, origfile.name)))
@@ -339,7 +338,7 @@ class ParallelizeTCA2(Parallelize):
         for pfile in self.origfiles:
             divider = Tca2SentenceDivider()
             divider.make_sentence_file(pfile.lang, pfile.name,
-                                       self.get_sent_filename(pfile))
+                                       self.get_sent_filename(pfile), self.giella_prefix)
 
     @property
     def sentfiles(self):
@@ -881,16 +880,19 @@ def main():
     args = parse_options()
 
     for source in args.sources:
-        if os.path.isfile(source):
-            parallelise_file(source, args.lang2, args.dict, args.quiet,
-                             args.aligner, args.stdout, args.force)
-        elif os.path.isdir(source):
-            for root, _, files in os.walk(source):
-                for converted in files:
-                    path = os.path.join(root, converted)
-                    try:
-                        parallelise_file(path, args.lang2, args.dict,
-                                         args.quiet, args.aligner, args.stdout,
-                                         args.force)
-                    except UserWarning as error:
-                        print(str(error))
+        try:
+            if os.path.isfile(source):
+                parallelise_file(source, args.lang2, args.dict, args.quiet,
+                                args.aligner, args.stdout, args.force)
+            elif os.path.isdir(source):
+                for root, _, files in os.walk(source):
+                    for converted in files:
+                        path = os.path.join(root, converted)
+                        try:
+                            parallelise_file(path, args.lang2, args.dict,
+                                            args.quiet, args.aligner, args.stdout,
+                                            args.force)
+                        except UserWarning as error:
+                            print(str(error))
+        except util.ArgumentError as error:
+            raise SystemExit(error)

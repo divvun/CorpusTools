@@ -55,7 +55,8 @@ class TestTca2SentenceDivider(unittest.TestCase):
 
         sentence_divider = parallelize.Tca2SentenceDivider()
         got = sentence_divider.make_sentence_xml(corpus_file.lang,
-                                                 corpus_file.name)
+                                                 corpus_file.name,
+                                                 giella_prefix=os.path.join(HERE, "giella_shared"))
 
         want = etree.parse(
             os.path.join(HERE, 'parallelize_data/'
@@ -73,7 +74,8 @@ class TestParallelizeTCA2(unittest.TestCase):
                          'prestable/converted/sme/facta/skuvlahistorja2/'
                          'aarseth2-s.htm.xml'),
             "nob",
-            quiet=True)
+            quiet=True,
+            giella_prefix=os.path.join(HERE, "giella_shared"))
 
     def test_orig_path(self):
         self.assertEqual(

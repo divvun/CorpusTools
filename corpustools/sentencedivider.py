@@ -77,7 +77,6 @@ class SentenceDivider(object):
             lang (str): language the analyser can tokenise
         """
         self.tokeniser = modes.Pipeline('tokenise', lang, giella_prefix)
-        self.tokeniser.sanity_check()
 
     @staticmethod
     def clean_sentence(sentence):
