@@ -51,6 +51,7 @@ class Pipeline(object):
             os.path.join(os.path.dirname(__file__), 'xml/modes.xml'))
         self.mode = modefile.find('.//mode[@name="{}"]'.format(modename))
         self.giella_prefix = self.valid_path(giella_prefix, lang)
+        self.sanity_check()
 
     @staticmethod
     def valid_path(giella_prefix, lang):
