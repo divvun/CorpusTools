@@ -83,6 +83,7 @@ def main():
     args = parse_options()
 
     lacking_files = defaultdict(set)
+    print('\t'.join(['language', 'original', 'converted', 'xfst', 'hfst']))
     for corpus in [os.getenv('GTFREE'), os.getenv('GTBOUND')]:
         print(corpus)
         for language in ['fkv', 'sma', 'sme', 'smj', 'smn', 'sms']:
