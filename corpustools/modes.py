@@ -76,8 +76,11 @@ class Pipeline(object):
                     '/usr'
             ]:
                 path = os.path.join(prefix, 'share/giella', lang)
-                if os.path.exists(path):
+                if os.path.isdir(path) and os.listdir(path):
                     return path
+
+        raise (util.ArgumentError(
+            'ERROR: found no resources for {}'.format(lang)))
 
     @staticmethod
     def raise_unless_exists(filenames):
