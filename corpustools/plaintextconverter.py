@@ -45,7 +45,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
         except ValueError:
             content = codecs.open(self.orig, encoding='latin1').read()
 
-        content = self.strip_chars(content)
+        content = self.strip_chars(content.replace("\r\n", "\n"))
 
         return content
 
