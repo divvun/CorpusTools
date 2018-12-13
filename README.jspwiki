@@ -482,10 +482,21 @@ do not have a dictionary, you can use "--dict=<(echo)" to provide an
 "empty" dictionary – in this case, you should also use
 "--aligner=hunalign".
 
-You can compile the abbr.txt file of langs/sme like this:
+To prepare for parallelising nob and sme files, do the following:
 
 {{{
-cd $GTHOME/langs/sme && ./configure --enable-abbr && make
+for LANG in sme nob # Replace sme and nob by languages for your own needs
+do
+    cd $GTHOME/langs/$LANG
+    ./configure --prefix="$HOME"/.local \
+                --with-hfst \
+                --enable-abbr \
+                --enable-tokenisers \
+                --enable-reversed-intersect \
+                --enable-alignment
+    make
+    make install
+done
 }}}
 
 You should compile at least the sme abbr.txt file, this one is used as
