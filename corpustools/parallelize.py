@@ -790,7 +790,7 @@ def parse_options():
         '--force',
         help="Overwrite output file if it already exists."
         "The default is to skip parallelizing existing files.",
-        action="store_true")
+        action="store_false")
     parser.add_argument(
         '-q',
         '--quiet',
