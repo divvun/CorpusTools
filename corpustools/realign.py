@@ -146,7 +146,7 @@ def main():
         corpus_path1.prestable_converted,
         corpus_path2.metadata.get_variable('mainlang'),
         dictionary=None,
-        quiet=True,
+        quiet=False,
         aligner='tca2',
         stdout=False,
         force=True)
