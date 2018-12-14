@@ -109,11 +109,14 @@ def parse_options():
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Sentence align a given file anew.')
+        description='Sentence align a given file anew.\n'
+        'Files are converted before being parallelised.\n'
+        'This is mainly thought of as a debugging program '
+        'when trying to solve issues in parallelised files.')
     parser.add_argument(
         u'--files',
         action=u'store_true',
-        help=u'Show the interesting filenames '
+        help=u'Only show the interesting filenames '
         'that are needed for improving sentence '
         'alignment.')
     parser.add_argument(
@@ -121,7 +124,7 @@ def parse_options():
         action=u'store_true',
         help=u'Only convert the original files '
         'that are the source of the .tmx.html file. '
-        'This is useful when improving the output of '
+        'This is useful when improving the content of '
         'the converted files.')
     parser.add_argument('tmxhtml', help="The tmx.html file to realign.")
 
