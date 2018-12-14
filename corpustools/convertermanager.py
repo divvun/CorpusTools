@@ -177,7 +177,7 @@ def parse_options():
 
     parser.add_argument(
         u'--serial',
-        action=u"store_true",
+        action=u"store_false",
         help=u"use this for debugging the conversion \
                         process. When this argument is used files will \
                         be converted one by one.")
