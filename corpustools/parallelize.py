@@ -82,7 +82,9 @@ class Tca2SentenceDivider(object):
         with util.ignored(OSError):
             os.makedirs(o_rel_path)
         with open(outfile, 'wb') as sentence_file:
-            tree = etree.ElementTree(self.make_sentence_xml(lang, xmlfile, giella_prefix=giella_prefix))
+            tree = etree.ElementTree(
+                self.make_sentence_xml(
+                    lang, xmlfile, giella_prefix=giella_prefix))
             tree.write(
                 sentence_file,
                 pretty_print=True,
@@ -99,7 +101,12 @@ class Parallelize(object):
     The other file is found via the metadata in the input file
     """
 
-    def __init__(self, origfile1, lang2, anchor_file=None, quiet=False, giella_prefix=None):
+    def __init__(self,
+                 origfile1,
+                 lang2,
+                 anchor_file=None,
+                 quiet=False,
+                 giella_prefix=None):
         """Initialise the Parallelize class.
 
         Args:
@@ -148,12 +155,12 @@ class Parallelize(object):
             generate_anchor_list.GenerateAnchorList
         """
         if path is None:
-            path1 = os.path.join(os.environ['GTHOME'],
-                                 'gt/common/src/anchor-{}-{}.txt'.format(
-                                     self.lang1, self.lang2))
-            path2 = os.path.join(os.environ['GTHOME'],
-                                 'gt/common/src/anchor-{}-{}.txt'.format(
-                                     self.lang2, self.lang1))
+            path1 = os.path.join(
+                os.environ['GTHOME'], 'gt/common/src/anchor-{}-{}.txt'.format(
+                    self.lang1, self.lang2))
+            path2 = os.path.join(
+                os.environ['GTHOME'], 'gt/common/src/anchor-{}-{}.txt'.format(
+                    self.lang2, self.lang1))
             if os.path.exists(path1):
 
                 return generate_anchor_list.GenerateAnchorList(
@@ -262,8 +269,7 @@ class ParallelizeHunalign(Parallelize):
     def anchor_to_dict(self, words_pairs):
         """Turn anchorfile tuples into a dictionary."""
         # turn [("foo, bar", "fie")] into [("foo", "fie"), ("bar", "fie")]:
-        expanded_pairs = [(w1, w2)
-                          for w1s, w2s in words_pairs
+        expanded_pairs = [(w1, w2) for w1s, w2s in words_pairs
                           for w1 in re.split(self.split_anchors_on, w1s)
                           for w2 in re.split(self.split_anchors_on, w2s)
                           if w1 and w2]
@@ -287,13 +293,15 @@ class ParallelizeHunalign(Parallelize):
 
     def to_sents(self, origfile):
         """Divide the content of origfile to sentences."""
-        divider = sentencedivider.SentenceDivider(origfile.lang, giella_prefix=self.giella_prefix)
+        divider = sentencedivider.SentenceDivider(
+            origfile.lang, giella_prefix=self.giella_prefix)
         return '\n'.join(
             divider.make_valid_sentences(
                 sentencedivider.to_plain_text(origfile.lang, origfile.name)))
 
     def align(self):
         """Parallelize two files using hunalign."""
+
         def tmp():
             """Temporary filename.
 
@@ -338,7 +346,8 @@ class ParallelizeTCA2(Parallelize):
         for pfile in self.origfiles:
             divider = Tca2SentenceDivider()
             divider.make_sentence_file(pfile.lang, pfile.name,
-                                       self.get_sent_filename(pfile), self.giella_prefix)
+                                       self.get_sent_filename(pfile),
+                                       self.giella_prefix)
 
     @property
     def sentfiles(self):
@@ -385,11 +394,10 @@ class ParallelizeTCA2(Parallelize):
             self.generate_anchor_file(anchor_file.name)
             anchor_file.flush()
             command = ('java -Xms512m -Xmx1024m -jar {} -cli-plain -anchor={} '
-                       '-in1={} -in2={}'.format(tca2_jar, anchor_file.name,
-                                                self.get_sent_filename(
-                                                    self.origfiles[0]),
-                                                self.get_sent_filename(
-                                                    self.origfiles[1])))
+                       '-in1={} -in2={}'.format(
+                           tca2_jar, anchor_file.name,
+                           self.get_sent_filename(self.origfiles[0]),
+                           self.get_sent_filename(self.origfiles[1])))
 
             self.run_command(command.split())
 
@@ -884,15 +892,15 @@ def main():
         try:
             if os.path.isfile(source):
                 parallelise_file(source, args.lang2, args.dict, args.quiet,
-                                args.aligner, args.stdout, args.force)
+                                 args.aligner, args.stdout, args.force)
             elif os.path.isdir(source):
                 for root, _, files in os.walk(source):
                     for converted in files:
                         path = os.path.join(root, converted)
                         try:
                             parallelise_file(path, args.lang2, args.dict,
-                                            args.quiet, args.aligner, args.stdout,
-                                            args.force)
+                                             args.quiet, args.aligner,
+                                             args.stdout, args.force)
                         except UserWarning as error:
                             print(str(error))
         except util.ArgumentError as error:
