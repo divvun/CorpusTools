@@ -822,12 +822,6 @@ def parse_options():
         "file only supports pairings between "
         "sme/sma/smj/fin/eng/nob. ")
     parser.add_argument(
-        '-l1',
-        '--lang1',
-        help='The first language of a pair where '
-        'parallelisation should be done.',
-        required=True)
-    parser.add_argument(
         '-l2',
         '--lang2',
         help='The second language of a pair where '
