@@ -137,19 +137,19 @@ def main():
 
     corpus_path1, corpus_path2 = calculate_paths(orig_path)
 
+    print_filenames(corpus_path1, corpus_path2)
+
     if args.files:
-        print_filenames(corpus_path1, corpus_path2)
-        raise SystemExit()
+        raise SystemExit('Only printing file names')
 
     try:
-        if args.convert:
-            convert_and_copy(corpus_path1, corpus_path2)
-            print_filenames(corpus_path1, corpus_path2)
-            raise SystemExit()
-    except Exception:
-        raise SystemExit(1)
+        convert_and_copy(corpus_path1, corpus_path2, 'prestable' in orig_path)
+    except Exception as error:
+        raise SystemExit(error)
 
-    print_filenames(corpus_path1, corpus_path2)
+    if args.convert:
+        raise SystemExit('Only converting')
+
     parallelize.parallelise_file(
         corpus_path1.prestable_converted if 'prestable' in orig_path else \
             corpus_path1.converted,
