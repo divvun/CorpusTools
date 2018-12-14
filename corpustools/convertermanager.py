@@ -28,7 +28,6 @@ import six
 
 from corpustools import argparse_version, converter, text_cat, util, xslsetter
 
-logging.basicConfig(level=logging.WARNING)
 LOGGER = logging.getLogger(__name__)
 
 
@@ -215,6 +214,7 @@ def sanity_check():
 
 def main():
     """Convert documents to giellatekno xml format."""
+    LOGGER.setLevel(logging.WARNING)
     try:
         sanity_check()
     except (util.SetupError, util.ExecutableMissingError) as error:
