@@ -127,8 +127,9 @@ def parse_options():
 def main():
     """Sentence align a given file anew."""
     args = parse_options()
+    orig_path = os.path.normpath(os.path.abspath(args.tmxhtml))
 
-    corpus_path1, corpus_path2 = calculate_paths(args.tmxhtml)
+    corpus_path1, corpus_path2 = calculate_paths(orig_path)
 
     if args.files:
         print_filenames(corpus_path1, corpus_path2)
@@ -144,7 +145,7 @@ def main():
 
     print_filenames(corpus_path1, corpus_path2)
     parallelize.parallelise_file(
-        corpus_path1.prestable_converted if 'prestable' in args.tmxhtml else \
+        corpus_path1.prestable_converted if 'prestable' in orig_path else \
             corpus_path1.converted,
         corpus_path2.metadata.get_variable('mainlang'),
         dictionary=None,
