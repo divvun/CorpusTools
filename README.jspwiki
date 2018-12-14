@@ -586,17 +586,7 @@ failed to load external entity "/Users/xxx/freecorpus/converted/sma/admin/ntfk/.
 
 then you gave nob als l1 but the path to a sma-file as argument.
 
-;__CAVEAT 2__:''If to try to re-run the parallelize command with the same arguments you might get the message''
-
-{{{
-parallelize -l1 nob -l2 sma converted/nob/admin/ntfk/tsaekeme.html.xml
-/Users/xxx/freecorpus/tmx/nob2sma/admin/ntfk/tsaekeme.html.tmx already exists, skipping …
-}}}
-
-This means that the previously parallelized file will NOT be overwritten:
-__use the -f option__ to override this behaviour
-
-;__CAVEAT 3__:''If you get a similar error message as''
+;__CAVEAT 2__:''If you get a similar error message as''
 {{{
 parallelize -l1 nob -l2 sma converted/nob/admin/ntfk/rup_2013_trykt_versjon.pdf.xml
 ERROR: /Users/xxx/gtsvn/langs/nob/tools/preprocess/tokeniser-gramcheck-gt-desc.pmhfst does not exist
@@ -610,7 +600,7 @@ After that you can go back to the directory where you are working with the paral
 try to parallelize the files anew. You might recompile the language tools for ALL the languages
 you are working with.
 
-;__CAVEAT 4__:''If you get a message like''
+;__CAVEAT 3__:''If you get a message like''
 
 {{{
 Exception in thread "main" java.lang.UnsupportedClassVersionError: aksis/alignment/Alignment : Unsupported major.minor version 51.0
