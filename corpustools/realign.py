@@ -71,7 +71,7 @@ def calculate_paths(tmxhtml):
     return corpus_path1, corpus_path2
 
 
-def convert_and_copy(corpus_path1, corpus_path2):
+def convert_and_copy(corpus_path1, corpus_path2, prestable=True):
     """Reconvert and copy files to prestable/converted.
 
     Args:
@@ -79,6 +79,7 @@ def convert_and_copy(corpus_path1, corpus_path2):
             lang1 file that should be reconverted.
         corpus_path2 (corpuspath.CorpusPath): A CorpusPath representing the
             lang2 file that should be reconverted.
+        prestable (boolean): True the file to be realigned is part of prestable
     """
     for corpus_path in [corpus_path1, corpus_path2]:
         if os.path.exists(corpus_path.converted):
@@ -92,8 +93,9 @@ def convert_and_copy(corpus_path1, corpus_path2):
     converter_manager.collect_files([corpus_path1.orig, corpus_path2.orig])
     converter_manager.convert_serially()
 
-    for corpus_path in [corpus_path1, corpus_path2]:
-        shutil.copy(corpus_path.converted, corpus_path.prestable_converted)
+    if prestable:
+        for corpus_path in [corpus_path1, corpus_path2]:
+            shutil.copy(corpus_path.converted, corpus_path.prestable_converted)
 
 
 def parse_options():
