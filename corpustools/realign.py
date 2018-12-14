@@ -23,11 +23,14 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
+import logging
 import os
 import shutil
 
 from corpustools import (argparse_version, convertermanager, corpuspath,
                          parallelize)
+
+LOGGER = logging.getLogger(__name__)
 
 
 def print_filename(corpus_path):
@@ -128,6 +131,7 @@ def parse_options():
 
 def main():
     """Sentence align a given file anew."""
+    convertermanager.LOGGER.setLevel(logging.DEBUG)
     args = parse_options()
     orig_path = os.path.normpath(os.path.abspath(args.tmxhtml))
 
