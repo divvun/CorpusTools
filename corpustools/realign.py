@@ -142,6 +142,7 @@ def main():
     except Exception:
         raise SystemExit(1)
 
+    print_filenames(corpus_path1, corpus_path2)
     parallelize.parallelise_file(
         corpus_path1.prestable_converted if 'prestable' in args.tmxhtml else \
             corpus_path1.converted,
@@ -151,4 +152,3 @@ def main():
         aligner='tca2',
         stdout=False,
         force=True)
-    print_filenames(corpus_path1, corpus_path2)
