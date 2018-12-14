@@ -482,7 +482,23 @@ do not have a dictionary, you can use "--dict=<(echo)" to provide an
 "empty" dictionary – in this case, you should also use
 "--aligner=hunalign".
 
-To prepare for parallelising nob and sme files, do the following:
+!Compile dependencies
+
+XXX is one of the languages in $GTHOME/langs.
+
+{{{
+    cd $GTHOME/langs/XXX
+    ./configure --prefix="$HOME"/.local \
+                --with-hfst \
+                --enable-abbr \
+                --enable-tokenisers \
+                --enable-reversed-intersect \
+                --enable-alignment
+    make
+    make install
+}}}
+
+To prepare for parallelising e.g. nob and sme files, do the following:
 
 {{{
 for LANG in sme nob # Replace sme and nob by languages for your own needs
@@ -498,12 +514,6 @@ do
     make install
 done
 }}}
-
-You should compile at least the sme abbr.txt file, this one is used as
-a fallback if any other language-specific abbr.txt file is not found,
-but preferably also the abbr.txt files of any other languages you plan
-on parallelising with.
-
 
 The complete help text from the program is as follows:
 {{{
@@ -583,8 +593,8 @@ parallelize -l1 nob -l2 sma converted/nob/admin/ntfk/tsaekeme.html.xml
 /Users/xxx/freecorpus/tmx/nob2sma/admin/ntfk/tsaekeme.html.tmx already exists, skipping …
 }}}
 
-This means that the previously parallelized file will NOT be overwritten: you have to delete
-it before re-running the command.
+This means that the previously parallelized file will NOT be overwritten:
+__use the -f option__ to override this behaviour
 
 ;__CAVEAT 3__:''If you get a similar error message as''
 {{{
@@ -593,12 +603,8 @@ ERROR: /Users/xxx/gtsvn/langs/nob/tools/preprocess/tokeniser-gramcheck-gt-desc.p
 }}}
 
 you have to recompile the language tool of the respective language (in the example above it is nob)
-with a different configuration, as in the following example with nob as language to recompile:
-
-__1.__ go to the directory of the language to recompile: \\ {{{cd $GTNOME/lang/nob}}}
-__2.__ reconfigure the language: \\ {{{./configure --with-hfst --enable-grammarchecker --enable-tokenisers --enable-alignment}}}
-__3.__ remove previously generated files: \\ {{{make clean}}}
-__4.__ recompile the language toos: \\ {{{make}}} or {{{make -j}}}
+with a different configuration, as in the following example with nob as language to recompile, have
+a look at the info above on how to [compile dependencies|CorpusTools.html#Compile+dependencies]
 
 After that you can go back to the directory where you are working with the parallelizing files and
 try to parallelize the files anew. You might recompile the language tools for ALL the languages
@@ -626,13 +632,11 @@ then you need to recompile the Java parts and reinstall CorpusTools.
 Make sure you have Apache ant installed, then do:
 
 {{{
-cd corpustools/tca2
+cd $GTHOME/tools/CorpusTools/corpustools/tca2
 ant
-cd -
-sudo python2.7 setup.py install --install-scripts=/usr/local/bin
-# Or, if you installed as user:
-python2.7 setup.py install --user --install-scripts=$HOME/bin
 }}}
+
+Then follow the instructions on [how to install CorpusTools |CorpusTools.html#Installation]
 
 !Source code
 * [parallelize.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/parallelize.py]
