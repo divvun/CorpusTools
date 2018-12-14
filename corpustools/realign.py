@@ -143,7 +143,8 @@ def main():
         raise SystemExit(1)
 
     parallelize.parallelise_file(
-        corpus_path1.prestable_converted,
+        corpus_path1.prestable_converted if 'prestable' in args.tmxhtml else \
+            corpus_path1.converted,
         corpus_path2.metadata.get_variable('mainlang'),
         dictionary=None,
         quiet=False,
