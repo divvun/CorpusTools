@@ -37,7 +37,7 @@ setup(
             'pick_parallel_docs = corpustools.pick_parallel_docs:main',
             'count_analysed = corpustools.counter:main',
             'clean_prestable = corpustools.clean_prestable:main',
-            'realign = corpustools.realign:main',
+            'reparallelize = corpustools.realign:main',
             'update_metadata = corpustools.update_metadata:main',
             'epubchooser = corpustools.epubchooser:main',
             'make_training_corpus = corpustools.trainingcorpusmaker:main',

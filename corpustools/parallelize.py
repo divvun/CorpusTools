@@ -797,7 +797,7 @@ def parse_options():
         '-f',
         '--force',
         help="Overwrite output file if it already exists."
-        "The default is to skip parallelizing existing files.",
+        "This is the default.",
         action="store_false")
     parser.add_argument(
         '-q',
@@ -824,8 +824,8 @@ def parse_options():
     parser.add_argument(
         '-l2',
         '--lang2',
-        help='The second language of a pair where '
-        'parallelisation should be done.',
+        help='Indicate which language the given file should'
+        'be parallelised with',
         required=True)
 
     args = parser.parse_args()

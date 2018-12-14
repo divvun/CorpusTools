@@ -130,4 +130,4 @@ v<0.24.0>, <20181005> -- Depend on files from a make install in giella when anal
 v<0.24.1>, <20181008> -- Insert modename (xfst or hfst) into the analysed pathname
 v<0.24.2>, <20181008> -- Make vislcg3 --grammar mwe-dis.bin available, use the long version of vislcg3 -g option (--grammar) in modes.xml
 v<0.24.3>, <20181206> -- Convert Windows style '\r\n' line endings to Unix style '\n' line endings before handling the content of plaintext files further.
-
+v<0.24.4>, <20181214> -- Rename the realign script to reparallelize, making it more obvious what the use for is. Also do small changes to the default behaviour of parallelize. Update the documentation of the parallelize and reparallelize.
