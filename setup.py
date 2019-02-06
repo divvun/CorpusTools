@@ -41,6 +41,7 @@ setup(
             'update_metadata = corpustools.update_metadata:main',
             'epubchooser = corpustools.epubchooser:main',
             'make_training_corpus = corpustools.trainingcorpusmaker:main',
+            'tmx2html = corpustools.tmx:main',
         ]
     },
     dependency_links=[

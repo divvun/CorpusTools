@@ -9,6 +9,7 @@ These scripts will be installed
 * [analyse_corpus: Do syntactic analysis of converted files|CorpusTools.html#analyse_corpus]
 * [parallelize: Sentence align file pairs|CorpusTools.html#parallelize]
 * [reparallelize: Reconvert and realign a given .tmx.html file|CorpusTools.html#reparallelize]
+* [tmx2html: Convert tmx files to html files|CorpusTools.html#tmx2html]
 
 !!Add files to the corpus
 * [add_files_to_corpus: Add file(s) to a corpus directory|CorpusTools.html#add_files_to_corpus]
@@ -942,6 +943,25 @@ optional arguments:
 * [corpuspath.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/corpuspath.py]
 * [converter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/converter.py]
 * [parallelize.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/parallelize.py]
+* [tmx.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/tmx.py]
+
+!!tmx2html
+
+{{
+usage: tmx2html [-h] [--version] sources [sources ...]
+
+Convert tmx files to html
+
+positional arguments:
+  sources     Files or directories to search for tmx files
+
+optional arguments:
+  -h, --help  show this help message and exit
+  --version   show program's version number and exit
+}}
+
+!Source code
+* [tmx.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/tmx.py]
 
 !!update_metadata
 
