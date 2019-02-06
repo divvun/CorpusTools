@@ -22,6 +22,9 @@ xsltproc xhtml2corpus.xsl <tmx-file> > file.html
 <!-- Main block-level conversions -->
 <xsl:template match="body">
 	<html>
+        <head>
+            <meta charset="UTF-8"/>
+        </head>
         <body>
             <table border="2">
                 <xsl:apply-templates/>
