@@ -22,9 +22,11 @@ xsltproc xhtml2corpus.xsl <tmx-file> > file.html
 <!-- Main block-level conversions -->
 <xsl:template match="body">
 	<html>
-        <table border="2">
-            <xsl:apply-templates/>
-		</table>
+        <body>
+            <table border="2">
+                <xsl:apply-templates/>
+            </table>
+        </body>
 	</html>
 </xsl:template>
 
