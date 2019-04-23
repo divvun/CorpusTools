@@ -107,13 +107,13 @@ sudo python setup.py install --install-scripts=/usr/local/bin --record installed
 {{{
 cd $GTHOME/tools/CorpusTools
 cat installed_files.txt | xargs rm -rf
-}}
+}}}
 
 !System wide
 {{{
 cd $GTHOME/tools/CorpusTools
 cat installed_files.txt | xargs sudo rm -rf
-}}
+}}}
 
 !!ccat
 
@@ -947,7 +947,7 @@ optional arguments:
 
 !!tmx2html
 
-{{
+{{{
 usage: tmx2html [-h] [--version] sources [sources ...]
 
 Convert tmx files to html
@@ -958,7 +958,7 @@ positional arguments:
 optional arguments:
   -h, --help  show this help message and exit
   --version   show program's version number and exit
-}}
+}}}
 
 !Source code
 * [tmx.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/tmx.py]
