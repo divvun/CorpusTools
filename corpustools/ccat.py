@@ -136,8 +136,8 @@ class XMLPrinter(object):
         self.errorlang = errorlang
         self.noforeign = noforeign
 
-        if (error or errorort or errorortreal or errormorphsyn or errorsyn or
-                errorlex or errorlang):
+        if (error or errorort or errorortreal or errormorphsyn or errorsyn
+                or errorlex or errorlang):
             self.error_filtering = True
         else:
             self.error_filtering = False
@@ -324,15 +324,15 @@ class XMLPrinter(object):
             elif child.tag == 'errorlang' and self.noforeign:
                 self.get_tail(child, textlist, parentlang)
             elif self.visit_error_inline(child):
-                self.collect_inline_errors(child, textlist,
-                                           self.get_element_language(
-                                               child, parentlang))
+                self.collect_inline_errors(
+                    child, textlist,
+                    self.get_element_language(child, parentlang))
             elif self.visit_error_not_inline(child):
                 self.collect_not_inline_errors(child, textlist)
             else:
-                self.visit_nonerror_element(child, textlist,
-                                            self.get_element_language(
-                                                element, parentlang))
+                self.visit_nonerror_element(
+                    child, textlist,
+                    self.get_element_language(element, parentlang))
 
     def visit_nonerror_element(self, element, textlist, parentlang):
         """Visit and extract text from non error element."""
@@ -344,23 +344,24 @@ class XMLPrinter(object):
 
     def visit_this_node(self, element):
         """Return True if the element should be visited."""
-        return (self.all_paragraphs or
-                (self.paragraph is True and
-                 (element.get('type') is None or element.get('type') == 'text'))
-                or (self.title is True and element.get('type') == 'title') or
-                (self.listitem is True and element.get('type') == 'listitem') or
-                (self.table is True and element.get('type') == 'tablecell'))
+        return (
+            self.all_paragraphs
+            or (self.paragraph is True and
+                (element.get('type') is None or element.get('type') == 'text'))
+            or (self.title is True and element.get('type') == 'title')
+            or (self.listitem is True and element.get('type') == 'listitem')
+            or (self.table is True and element.get('type') == 'tablecell'))
 
     def visit_error_not_inline(self, element):
         """Determine whether element should be visited."""
-        return (element.tag.startswith('error') and self.one_word_per_line and
-                not self.error_filtering or self.include_this_error(element))
+        return (element.tag.startswith('error') and self.one_word_per_line
+                and not self.error_filtering
+                or self.include_this_error(element))
 
     def visit_error_inline(self, element):
         """Determine whether element should be visited."""
-        return (element.tag.startswith('error') and
-                not self.one_word_per_line and
-                (self.correction or self.include_this_error(element)))
+        return (element.tag.startswith('error') and not self.one_word_per_line
+                and (self.correction or self.include_this_error(element)))
 
     def include_this_error(self, element):
         """Determine whether element should be visited."""
