@@ -277,6 +277,20 @@ class XMLPrinter(object):
                 buffer.write(u'\n'.join(textlist))
                 buffer.write(u'\n')
 
+    def is_correct_lang(self, elt_lang):
+        """Check if elt_lang is a wanted language.
+
+        Args:
+            elt_lang (str): a three character language.
+
+        Returns:
+            boolean
+        """
+        return self.lang is None or (not self.invert_lang
+                                     and elt_lang == self.lang) or (
+                                         self.invert_lang
+                                         and elt_lang != self.lang)
+
     def get_contents(self, elt_contents, textlist, elt_lang):
         """Get the contents of a xml document.
 
