@@ -28,7 +28,7 @@ import unittest
 
 from lxml import doctestcompare, etree
 
-from corpustools import corpusxmlfile, parallelize
+from corpustools import corpusxmlfile, parallelize, tmx
 
 HERE = os.path.dirname(__file__)
 
@@ -139,7 +139,7 @@ class TestTmx(unittest.TestCase):
     """A test class for the Tmx class."""
 
     def setUp(self):
-        self.tmx = parallelize.Tmx(
+        self.tmx = tmx.Tmx(
             etree.parse(
                 os.path.join(HERE, 'parallelize_data/aarseth2-n.htm.toktmx')))
 
@@ -237,12 +237,12 @@ class TestTmx(unittest.TestCase):
         self.assertEqual(got, want)
 
     def test_remove_tu_with_empty_seg(self):
-        got_tmx = parallelize.Tmx(
+        got_tmx = tmx.Tmx(
             etree.parse(
                 os.path.join(HERE, 'parallelize_data/aarseth2-n.htm.toktmx')))
         got_tmx.remove_tu_with_empty_seg()
 
-        want_tmx = parallelize.Tmx(
+        want_tmx = tmx.Tmx(
             etree.parse(
                 os.path.join(HERE, 'parallelize_data/'
                              'aarseth2-n-without-empty-seg.htm.toktmx')))
@@ -261,7 +261,7 @@ class TestTca2ToTmx(unittest.TestCase):
                          'aarseth2-s.htm.xml'), "nob")
 
         self.para = para
-        self.tmx = parallelize.Tca2ToTmx(para.origfiles, para.sentfiles)
+        self.tmx = tmx.Tca2ToTmx(para.origfiles, para.sentfiles)
 
     def assertXmlEqual(self, got, want):
         """Check if two xml snippets are equal."""

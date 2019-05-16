@@ -25,7 +25,7 @@ import unittest
 
 import lxml.etree as etree
 
-from corpustools import compare_tmx_goldstandard, parallelize
+from corpustools import compare_tmx_goldstandard, tmx
 
 here = os.path.dirname(__file__)
 
@@ -35,11 +35,11 @@ class TestTmxComparator(unittest.TestCase):
 
     def test_equal_tmxes(self):
         comp = compare_tmx_goldstandard.TmxComparator(
-            parallelize.Tmx(
+            tmx.Tmx(
                 etree.parse(
                     os.path.join(here,
                                  'parallelize_data/aarseth2-n.htm.toktmx'))),
-            parallelize.Tmx(
+            tmx.Tmx(
                 etree.parse(
                     os.path.join(here,
                                  'parallelize_data/aarseth2-n.htm.toktmx'))))
