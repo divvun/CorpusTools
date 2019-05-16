@@ -301,9 +301,7 @@ class XMLPrinter(object):
         """
         if elt_contents is not None:
             text = elt_contents.strip()
-            if text != '' and (self.lang is None or (not self.invert_lang and
-                                                     elt_lang == self.lang) or
-                               (self.invert_lang and elt_lang != self.lang)):
+            if text != '' and self.is_correct_lang(elt_lang):
                 if not self.one_word_per_line:
                     textlist.append(text)
                 else:
@@ -401,7 +399,9 @@ class XMLPrinter(object):
             self.print_element(self.etree.find('.//disambiguation'), buffer)
         else:
             for paragraph in self.etree.findall('.//p'):
-                if self.visit_this_node(paragraph):
+                if self.is_correct_lang(
+                        self.get_element_language(paragraph, self.get_lang())
+                ) and self.visit_this_node(paragraph):
                     self.collect_text(paragraph, self.get_lang(), buffer)
 
         return buffer
