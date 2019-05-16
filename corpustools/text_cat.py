@@ -278,18 +278,20 @@ class Classifier(object):
 
         for fname in fnames:
             lang = util.basename_noext(fname, ext)
-            self.cmodels[lang] = CharModel(lang).of_model_file(
-                codecs.open(fname, 'r', encoding='utf8'), fname)
-            if verbose:
-                util.note("Loaded %s" % (fname,))
+            with codecs.open(fname, 'r', encoding='utf8') as fname_stream:
+                self.cmodels[lang] = CharModel(lang).of_model_file(
+                    fname_stream, fname)
+                if verbose:
+                    util.note("Loaded %s" % (fname,))
 
             fname_wm = os.path.join(folder, lang + '.wm')
             # fname_wmgz = os.path.join(folder, lang+'.wm.gz')
             if os.path.exists(fname_wm):
-                self.wmodels[lang] = WordModel(lang).of_model_file(
-                    codecs.open(fname_wm, 'r', encoding='utf8'), fname_wm)
-                if verbose:
-                    util.note("Loaded %s" % (fname_wm,))
+                with codecs.open(fname_wm, 'r', encoding='utf8') as fname_wm_stream:
+                    self.wmodels[lang] = WordModel(lang).of_model_file(
+                        fname_wm_stream, fname_wm)
+                    if verbose:
+                        util.note("Loaded %s" % (fname_wm,))
             else:
                 self.wmodels[lang] = WordModel(lang).of_freq({})
 
