@@ -922,25 +922,6 @@ class TestCcat(unittest.TestCase):
         buffer = xml_printer.process_file()
         self.assertEqual(buffer.getvalue(), u'nob1 nob2 ¶\n')
 
-    def test_process_file_language_dan(self):
-        '''lang=dan, only dan content should be output'''
-        xml_printer = ccat.XMLPrinter(lang='dan')
-        xml_printer.etree = etree.parse(
-            io.BytesIO(('<document id="no_id" xml:lang="nob">'
-                        '    <body>'
-                        '        <p>'
-                        '            nob1'
-                        '            <span type="quote" xml:lang="dan">'
-                        '                dan1'
-                        '            </span>'
-                        '            nob2'
-                        '        </p>'
-                        '    </body>'
-                        '</document>').encode('utf8')))
-
-        buffer = xml_printer.process_file()
-        self.assertEqual(buffer.getvalue(), u'dan1 ¶\n')
-
     def test_process_two_paragraphs(self):
         '''Check that the ¶ character is printed'''
         xml_printer = ccat.XMLPrinter()
