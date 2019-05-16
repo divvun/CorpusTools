@@ -52,7 +52,6 @@ def main():
     """Convert an html file, and print the result to outfile."""
     args = parse_args()
 
-    c = htmlconverter.convert2xhtml(
-        htmlconverter.to_html_elt(args.inhtml))
+    c = htmlconverter.to_html_elt(args.inhtml)
     with open(args.outhtml, 'w') as outfile:
         util.print_element(c, 0, 4, outfile)
