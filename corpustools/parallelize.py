@@ -516,6 +516,7 @@ def main():
     """Parallelise files."""
     args = parse_options()
 
+    # TODO: filter out those pairs that already exist in presteable/tmx
     for source in args.sources:
         try:
             if os.path.isfile(source):
