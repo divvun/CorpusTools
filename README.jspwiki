@@ -557,12 +557,12 @@ optional arguments:
 
 You run the program on the files created by convert2xml by running a command with the following syntax:
 {{{
-parallelize -l1 SOURCE_LANGUAGE -l2 TARGET_LANGUAGE PATH/TO/THE/CONVERTED/SOURCE_LANGUAGE/FILE.xml
+parallelize -l2 TARGET_LANGUAGE PATH/TO/THE/CONVERTED/SOURCE_LANGUAGE/FILE.xml
 }}}
 
 for instance, with nob as SOURCE_LANGUAGE and sma as TARGET_LANGUAGE
 {{{
-parallelize -l1 nob -l2 sma converted/nob/admin/ntfk/tsaekeme.html.xml
+parallelize -l2 sma converted/nob/admin/ntfk/tsaekeme.html.xml
 }}}
 
 This will create a file named
@@ -572,7 +572,7 @@ If you want to parallelize all your sma files with nob in one go, you
 can do e.g.
 {{{
 convert2xml orig/{sma,nob}
-parallelize -l1 nob -l2 sma converted/nob
+parallelize -l2 sma converted/nob
 }}}
 
 The files will end up in corresponding directories under
@@ -581,7 +581,7 @@ tmx/nob2sma.
 ;__CAVEAT 1__:''If you get a message such as''
 
 {{{
-parallelize -l1 nob -l2 sma converted/sma/admin/ntfk/tsaekeme.html.xml
+parallelize -l2 sma converted/sma/admin/ntfk/tsaekeme.html.xml
 Error reading file '/Users/xxx/freecorpus/converted/sma/admin/ntfk/.xml':
 failed to load external entity "/Users/xxx/freecorpus/converted/sma/admin/ntfk/.xml"
 }}}
@@ -590,7 +590,7 @@ then you gave nob als l1 but the path to a sma-file as argument.
 
 ;__CAVEAT 2__:''If you get a similar error message as''
 {{{
-parallelize -l1 nob -l2 sma converted/nob/admin/ntfk/rup_2013_trykt_versjon.pdf.xml
+parallelize -l2 sma converted/nob/admin/ntfk/rup_2013_trykt_versjon.pdf.xml
 ERROR: /Users/xxx/gtsvn/langs/nob/tools/preprocess/tokeniser-gramcheck-gt-desc.pmhfst does not exist
 }}}
 
