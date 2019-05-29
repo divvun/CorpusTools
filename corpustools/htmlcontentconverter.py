@@ -294,7 +294,6 @@ class HTMLBeautifier(object):
                     'toc-placeholder',  # 1177.se
                     'toc',
                     'tools',  # arran.no
-                    'topic',  # samediggi.no
                     'trail',  # siida.fi
                     'translations',  # siida.fi
                     'upperheader',
