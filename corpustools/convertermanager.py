@@ -56,15 +56,18 @@ class ConverterManager(object):
             ConverterManager._languageguesser = text_cat.Classifier(None)
         return self._languageguesser
 
-    def __init__(self, write_intermediate, goldstandard):
+    def __init__(self, lazy_conversion, write_intermediate, goldstandard):
         """Initialise the ConverterManager class.
 
         Args:
+            lazy_conversion (bool): indicate whether conversion depends on the
+                fact that metadata have changed since last conversion.
             write_intermediate (bool): indicating whether intermediate versions
                 of the converted document should be written to disk.
             goldstandard (bool): indicating whether goldstandard documents
                 should be converted.
         """
+        self.lazy_conversion = lazy_conversion
         self.write_intermediate = write_intermediate
         self.goldstandard = goldstandard
         self.files = []
@@ -76,7 +79,8 @@ class ConverterManager(object):
             orig_file: string containg the path to the original file.
         """
         try:
-            conv = converter.Converter(orig_file)
+            conv = converter.Converter(orig_file,
+                                       lazy_conversion=self.lazy_conversion)
             conv.write_complete(self.languageguesser())
         except (util.ConversionError, ValueError) as error:
             LOGGER.warn('Could not convert %s\n%s', orig_file,
@@ -181,6 +185,10 @@ def parse_options():
                         process. When this argument is used files will \
                         be converted one by one.")
     parser.add_argument(
+        u'--lazy-conversion',
+        action=u"store_true",
+        help=u"Reconvert only if metadata have changed.")
+    parser.add_argument(
         u'--write-intermediate',
         action=u"store_true",
         help=u"Write the intermediate XML representation \
@@ -222,7 +230,7 @@ def main():
 
     args = parse_options()
 
-    manager = ConverterManager(args.write_intermediate, args.goldstandard)
+    manager = ConverterManager(args.lazy_conversion, args.write_intermediate, args.goldstandard)
     manager.collect_files(args.sources)
 
     try:

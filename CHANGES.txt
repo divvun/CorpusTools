@@ -133,3 +133,6 @@ v<0.24.3>, <20181206> -- Convert Windows style '\r\n' line endings to Unix style
 v<0.24.4>, <20181214> -- Rename the realign script to reparallelize, making it more obvious what the use for is. Also do small changes to the default behaviour of parallelize. Update the documentation of the parallelize and reparallelize.
 v<0.25.0>, <20190206> -- Add a new program, tmx2html, to convert individual .tmx files into html files.
 v<0.25.1>, <20190516> -- Fix language handling errors in ccat
+v<0.26.0>, <20190603> -- convert2xml has by default only reconverted files if metadata files are newer than
+                         the converted file. Revert this behaviour, and add an option (lazy-conversion) to
+                         emulate the previous behaviour.

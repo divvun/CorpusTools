@@ -74,7 +74,7 @@ def to_giella(path):
 class Converter(object):
     """Take care of data common to all Converter classes."""
 
-    def __init__(self, filename, write_intermediate=False):
+    def __init__(self, filename, lazy_conversion=False, write_intermediate=False):
         """Initialise the Converter class.
 
         Args:
@@ -86,6 +86,7 @@ class Converter(object):
         """
         codecs.register_error('mixed', self.mixed_decoder)
         self.names = corpuspath.CorpusPath(filename)
+        self.lazy_conversion = lazy_conversion
         self.write_intermediate = write_intermediate
         try:
             self.metadata = xslsetter.MetadataHandler(
@@ -282,8 +283,9 @@ class Converter(object):
         Args:
             languageguesser: a text.Classifier
         """
-        if distutils.dep_util.newer_group(self.dependencies,
-                                          self.names.converted):
+        util.print_frame(self.lazy_conversion)
+        if not self.lazy_conversion or (self.lazy_conversion and distutils.dep_util.newer_group(self.dependencies,
+                                          self.names.converted)):
             with util.ignored(OSError):
                 os.makedirs(os.path.dirname(self.names.converted))
 

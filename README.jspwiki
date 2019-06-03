@@ -297,7 +297,8 @@ explaining what went wrong.
 The complete help text from the program:
 
 {{{
-usage: convert2xml [-h] [-v] [--serial] [--write-intermediate]
+usage: convert2xml [-h] [--version] [--serial] [--lazy-conversion]
+                   [--write-intermediate] [--goldstandard]
                    sources [sources ...]
 
 Convert original files to giellatekno xml.
@@ -308,13 +309,15 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  -v, --version         show program's version number and exit
+  --version             show program's version number and exit
   --serial              use this for debugging the conversion process. When
                         this argument is used files will be converted one by
                         one.
+  --lazy-conversion     Reconvert only if metadata have changed.
   --write-intermediate  Write the intermediate XML representation to
                         ORIGFILE.im.xml, for debugging the XSLT. (Has no
                         effect if the converted file already exists.)
+  --goldstandard        Convert goldstandard and .correct files
 }}}
 
 !Source code
