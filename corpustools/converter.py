@@ -74,7 +74,10 @@ def to_giella(path):
 class Converter(object):
     """Take care of data common to all Converter classes."""
 
-    def __init__(self, filename, lazy_conversion=False, write_intermediate=False):
+    def __init__(self,
+                 filename,
+                 lazy_conversion=False,
+                 write_intermediate=False):
         """Initialise the Converter class.
 
         Args:
@@ -162,8 +165,9 @@ class Converter(object):
                 logfile.write('Error at: {}'.format(
                     six.text_type(util.lineno())))
 
-            raise util.ConversionError("XSLTParseError in: {}\nError {}".format(
-                self.names.xsl, str(error)))
+            raise util.ConversionError(
+                "XSLTParseError in: {}\nError {}".format(
+                    self.names.xsl, str(error)))
 
     def convert_errormarkup(self, complete):
         """Convert error markup to xml."""
@@ -283,8 +287,9 @@ class Converter(object):
         Args:
             languageguesser: a text.Classifier
         """
-        if not self.lazy_conversion or (self.lazy_conversion and distutils.dep_util.newer_group(self.dependencies,
-                                          self.names.converted)):
+        if not self.lazy_conversion or (
+                self.lazy_conversion and distutils.dep_util.newer_group(
+                    self.dependencies, self.names.converted)):
             with util.ignored(OSError):
                 os.makedirs(os.path.dirname(self.names.converted))
 
@@ -295,7 +300,8 @@ class Converter(object):
                     with open(self.names.converted, 'wb') as converted:
                         converted.write(
                             etree.tostring(
-                                complete, encoding='utf8', pretty_print='True'))
+                                complete, encoding='utf8',
+                                pretty_print='True'))
                 else:
                     LOGGER.error("%s has no text", self.names.orig)
 
