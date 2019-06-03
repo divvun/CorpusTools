@@ -283,7 +283,6 @@ class Converter(object):
         Args:
             languageguesser: a text.Classifier
         """
-        util.print_frame(self.lazy_conversion)
         if not self.lazy_conversion or (self.lazy_conversion and distutils.dep_util.newer_group(self.dependencies,
                                           self.names.converted)):
             with util.ignored(OSError):
