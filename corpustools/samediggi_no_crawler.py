@@ -128,9 +128,7 @@ class SamediggiNoPage(object):
     @property
     def body_text(self):
         """Get all the text inside 'body'."""
-        body = self.tree.find('.//body')
-
-        return ' '.join(body.xpath('.//text()'))
+        return ' '.join(self.content.xpath('.//text()'))
 
 
 class SamediggiNoCrawler(crawler.Crawler):
