@@ -83,17 +83,15 @@ class SamediggiNoPage(object):
     @property
     def lang(self):
         """Return the language of the file."""
-        uff = {}
-        uff['no-bokmaal'] = 'nob'
-        uff['sma-NO'] = 'sma'
-        uff['sme-NO'] = 'sme'
-        uff['smj-no'] = 'smj'
+        language_mapper = {
+            'no-bokmaal': 'nob',
+            'sma-NO': 'sma',
+            'sme-NO': 'sme',
+            'smj-NO': 'smj'
+        }
         content_language = self.tree.find('.//meta[@name="Content-language"]')
 
-        if content_language is not None:
-            return uff[content_language.get('content')]
-        else:
-            util.print_frame('no language {}'.format(self.url.encode('utf8')))
+        return language_mapper[content_language.get('content')]
 
     @property
     def links(self):
@@ -115,8 +113,8 @@ class SamediggiNoPage(object):
                              href, '', '', ''))
 
                     add = False
-                    for uff in self.ok_netlocs:
-                        if uff in href:
+                    for ok_netloc in self.ok_netlocs:
+                        if ok_netloc in href:
                             add = True
                             links.add(href)
 
