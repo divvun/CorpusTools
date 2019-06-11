@@ -56,7 +56,7 @@ class ConverterManager(object):
             ConverterManager._languageguesser = text_cat.Classifier(None)
         return self._languageguesser
 
-    def __init__(self, lazy_conversion, write_intermediate, goldstandard):
+    def __init__(self, lazy_conversion=False, write_intermediate=False, goldstandard=False):
         """Initialise the ConverterManager class.
 
         Args:

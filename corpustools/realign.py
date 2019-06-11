@@ -91,8 +91,7 @@ def convert_and_copy(corpus_path1, corpus_path2, prestable=True):
             os.remove(corpus_path.prestable_converted)
 
     convertermanager.sanity_check()
-    converter_manager = convertermanager.ConverterManager(
-        write_intermediate=False, goldstandard=False)
+    converter_manager = convertermanager.ConverterManager()
     converter_manager.collect_files([corpus_path1.orig, corpus_path2.orig])
     converter_manager.convert_serially()
 
