@@ -52,10 +52,8 @@ class TestXslMaker(XMLTester):
             })
         self.assertTrue(import_elt.attrib["href"].startswith("file:///"))
         self.assertTrue(import_elt.attrib["href"].endswith("common.xsl"))
-        self.assertGreater(
-            len(
-                open(import_elt.attrib["href"][7:].replace('%20', ' '),
-                     'r').read()), 0)
+        with open(import_elt.attrib["href"][7:].replace('%20', ' '), 'r') as xsl:
+            self.assertGreater(len(xsl.read()), 0)
         # ... and set it to the hardcoded path in test.xsl:
         import_elt.attrib["href"] = (
             'file:///home/boerre/langtech/trunk/tools/CorpusTools/'
