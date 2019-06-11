@@ -72,16 +72,8 @@ class SamediggiNoPage(object):
         ]
 
     @property
-    def print_url(self):
-        """Get the print url of the document."""
-        print_link = self.tree.find('.//link[@media="print"]')
-
-        if print_link is not None:
-            url = print_link.get('href')
-
-            return six.moves.urllib.parse.urlunparse(
-                (self.parsed_url.scheme, self.parsed_url.netloc, url, '', '',
-                 ''))
+    def saveable(self):
+        return self.result.ok and len(self.content)
 
     @property
     def lang(self):
