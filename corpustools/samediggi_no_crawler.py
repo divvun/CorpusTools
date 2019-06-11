@@ -27,6 +27,7 @@ import re
 import requests
 import six
 from lxml import html
+from lxml import etree
 
 from corpustools import (adder, text_cat, util, crawler)
 
@@ -34,9 +35,9 @@ from corpustools import (adder, text_cat, util, crawler)
 class SamediggiNoPage(object):
     """Save a samediggi.no page to the corpus."""
 
-    def __init__(self, url):
+    def __init__(self, result):
         """Initialise the SamediggiNoPage class."""
-        result = requests.get(url)
+        self.result = result
         self.parsed_url = six.moves.urllib.parse.urlparse(result.url)
         self.tree = html.document_fromstring(result.content)
         self.content = etree.Element('body')
