@@ -174,35 +174,27 @@ class SamediggiNoCrawler(crawler.Crawler):
 
         found_saami = False
         orig_page = self.crawl_page(link)
-        if orig_page is not None:
+        if orig_page is not None and orig_page.saveable:
             body_lang = self.languageguesser.classify(
                 orig_page.body_text, langs=self.langs)
+            if body_lang in [u'sme', u'sma', u'smj']:
+                found_saami = True
             if orig_page.lang == body_lang:
-                if body_lang in [u'sme', u'sma', u'smj']:
-                    found_saami = True
-                parallel_pages.append((orig_page.print_url, orig_page.lang))
-            else:
-                uff = 'not same lang {}:\n orig: {} body: {}'.format(
-                    orig_page.url.encode('utf8'), orig_page.lang, body_lang)
-                util.print_frame(debug=uff)
+                parallel_pages.append((orig_page.url, orig_page.lang,
+                                       orig_page.content))
 
             for parallel_link in orig_page.parallel_links:
                 if parallel_link not in self.visited_links:
                     parallel_page = self.crawl_page(parallel_link)
-                    if parallel_page is not None:
+                    if parallel_page is not None and parallel_page.saveable:
                         body_lang = self.languageguesser.classify(
                             parallel_page.body_text, langs=self.langs)
+                        if body_lang in [u'sme', u'sma', u'smj']:
+                            found_saami = True
                         if parallel_page.lang == body_lang:
-                            if body_lang in [u'sme', u'sma', u'smj']:
-                                found_saami = True
-                            util.print_frame()
-                            parallel_pages.append((parallel_page.print_url,
-                                                   parallel_page.lang))
-                        else:
-                            util.print_frame(
-                                'not same lang {}:\n orig: {} body: {}'.format(
-                                    parallel_page.url.encode('utf8'),
-                                    parallel_page.lang, body_lang))
+                            parallel_pages.append((parallel_page.url,
+                                                   parallel_page.lang,
+                                                   parallel_link.content))
 
         if found_saami:
             self.save_pages(parallel_pages)
