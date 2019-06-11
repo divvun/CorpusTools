@@ -68,7 +68,7 @@ class SamediggiNoPage(object):
             six.moves.urllib.parse.urlunparse((self.parsed_url.scheme,
                                                self.parsed_url.netloc,
                                                a.get('href'), '', '', ''))
-            for a in self.tree.xpath('.//ul[@id="languageList"]/li/a[@href]')
+            for a in self.tree.xpath('.//li[@class="itemLanguage"]/div/ul/li/a[@href]')
         ]
 
     @property
