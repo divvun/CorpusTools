@@ -39,6 +39,10 @@ class SamediggiNoPage(object):
         result = requests.get(url)
         self.parsed_url = six.moves.urllib.parse.urlparse(result.url)
         self.tree = html.document_fromstring(result.content)
+        self.content = etree.Element('body')
+        for xpath_directive in ['.//div[@class="newsIntroBox"]', './/article']:
+            for element in self.tree.xpath(xpath_directive):
+                self.content.append(element)
 
         self.ok_netlocs = [
             'www.sametinget.no', 'www.samediggi.no', 'www.saemiedigkie.no',
