@@ -149,16 +149,13 @@ class SamediggiNoCrawler(crawler.Crawler):
     def crawl_page(self, link):
         """Collect links from a page."""
         self.visited_links.add(link)
-        util.print_frame(debug=link.encode('utf8'))
-        try:
-            orig_page = SamediggiNoPage(link)
-        except requests.exceptions.SSLError as error:
-            util.print_frame(debug=str(error))
-        else:
+        result = requests.get(link)
+
+        if result.ok:
+            orig_page = SamediggiNoPage(result)
+            orig_page.sanity_test()
             self.visited_links.add(orig_page.url)
             self.unvisited_links = self.unvisited_links.union(orig_page.links)
-
-            util.print_frame(debug=orig_page.url.encode('utf8') + '\n')
 
             return orig_page
 
