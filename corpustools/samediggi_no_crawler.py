@@ -45,6 +45,17 @@ class SamediggiNoPage(object):
             'www.samedigge.no'
         ]
 
+    def sanity_test(self):
+        """Check if the pages seem to have the expected structure."""
+        if not self.parallel_links:
+            with open('errorpage.html', 'wb') as errorpage:
+                errorpage.write(etree.tostring(self.tree, encoding='utf8', pretty_print=True))
+            raise SystemExit(
+                f'The format of links to parallel documents has changed {self.parsed_url}')
+        if self.lang is None:
+            raise SystemExit(
+                'Language format has changed.')
+
     @property
     def url(self):
         """Get the url."""
