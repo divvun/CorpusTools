@@ -25,11 +25,12 @@ from __future__ import absolute_import, print_function
 import re
 
 import requests
+import os
 import six
 from lxml import html
 from lxml import etree
 
-from corpustools import (adder, text_cat, util, crawler)
+from corpustools import (adder, corpuspath, text_cat, util, crawler, versioncontrol)
 
 
 class SamediggiNoPage(object):
@@ -49,6 +50,11 @@ class SamediggiNoPage(object):
             'www.sametinget.no', 'www.samediggi.no', 'www.saemiedigkie.no',
             'www.samedigge.no'
         ]
+        self.corpuspath = corpuspath.CorpusPath(os.path.join(os.getenv('GTFREE'), 'orig', self.lang, 'admin/sd/samediggi.no', adder.url_to_filename(self.result)))
+
+    @property
+    def name(self):
+        return self.corpuspath.name()
 
     def sanity_test(self):
         """Check if the pages seem to have the expected structure."""
@@ -128,6 +134,16 @@ class SamediggiNoPage(object):
         """Get all the text inside 'body'."""
         return ' '.join(self.content.xpath('.//text()'))
 
+    def set_parallel_file(self, lang, name):
+        self.corpuspath.metadata.set_parallel_text(lang, name)
+
+    def save(self):
+        with open(self.corpuspath.orig, 'wb') as xml:
+            html = etree.Element('html')
+            html.append(self.content)
+            xml.write(etree.tostring(html, encoding='utf8', pretty_print=True))
+        self.corpuspath.metadata.write_file()
+
 
 class SamediggiNoCrawler(crawler.Crawler):
     """Crawl samediggi.no and save html documents to the corpus."""
@@ -146,6 +162,7 @@ class SamediggiNoCrawler(crawler.Crawler):
             self.corpus_adders[iso] = adder.AddToCorpus(
                 self.goaldir, iso, u'admin/sd/samediggi.no')
         self.languageguesser = text_cat.Classifier()
+        self.vcs = versioncontrol.vcs(self.goaldir)
 
     def crawl_page(self, link):
         """Collect links from a page."""
@@ -162,41 +179,47 @@ class SamediggiNoCrawler(crawler.Crawler):
 
     def crawl_site(self):
         """Crawl samediggi.no."""
+        x = 0
         while self.unvisited_links:
+            x += 1
             link = self.unvisited_links.pop()
 
             if link not in self.visited_links:
                 self.crawl_pageset(link)
+            if x > 10:
+                util.print_frame(f'Fetched {x} pages')
+                break
+
+    def add_page(self, orig_page, parallel_pages):
+        if orig_page is not None and orig_page.saveable:
+            body_lang = self.languageguesser.classify(
+                orig_page.body_text, langs=self.langs)
+            if orig_page.lang == body_lang:
+                if body_lang == 'nob':
+                    parallel_pages.append(orig_page)
+                else:
+                    parallel_pages.insert(0, orig_page)
+
+    def fix_parallel_info(self, parallel_pages):
+        for parallel_page1 in parallel_pages:
+            for parallel_page2 in parallel_pages:
+                if parallel_page1 != parallel_page2:
+                    parallel_page1.set_parallel_file(parallel_page2.lang, parallel_page2.name)
 
     def crawl_pageset(self, link):
         """Crawl a pageset that link gives us."""
         parallel_pages = []
 
-        found_saami = False
         orig_page = self.crawl_page(link)
-        if orig_page is not None and orig_page.saveable:
-            body_lang = self.languageguesser.classify(
-                orig_page.body_text, langs=self.langs)
-            if body_lang in [u'sme', u'sma', u'smj']:
-                found_saami = True
-            if orig_page.lang == body_lang:
-                parallel_pages.append((orig_page.url, orig_page.lang,
-                                       orig_page.content))
+        self.add_page(orig_page, parallel_pages)
+        for parallel_link in orig_page.parallel_links:
+            self.add_page(self.crawl_page(parallel_link), parallel_pages)
 
-            for parallel_link in orig_page.parallel_links:
-                if parallel_link not in self.visited_links:
-                    parallel_page = self.crawl_page(parallel_link)
-                    if parallel_page is not None and parallel_page.saveable:
-                        body_lang = self.languageguesser.classify(
-                            parallel_page.body_text, langs=self.langs)
-                        if body_lang in [u'sme', u'sma', u'smj']:
-                            found_saami = True
-                        if parallel_page.lang == body_lang:
-                            parallel_pages.append((parallel_page.url,
-                                                   parallel_page.lang,
-                                                   parallel_link.content))
-
-        if found_saami:
-            self.save_pages(parallel_pages)
+        if parallel_pages and parallel_pages[0].lang != 'nob':
+            self.fix_parallel_info(parallel_pages)
+            for parallel_page in parallel_pages:
+                parallel_page.save()
+                self.vcs.add(parallel_page.corpuspath.orig)
+                self.vcs.add(parallel_page.corpuspath.xsl)
         else:
             util.print_frame(debug='No saami found')
