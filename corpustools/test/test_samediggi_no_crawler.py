@@ -14,1047 +14,463 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2016-2018 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2016-2019 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-
-from __future__ import absolute_import, print_function
-
-import sys
+"""Test the SamediggiNoPage class."""
+import os
 import unittest
 
-import lxml.etree as etree
+import requests
 import requests_mock
-import six
 
 from corpustools import samediggi_no_crawler
 
-#here = os.path.dirname(__file__)
+HERE = os.path.dirname(__file__)
 
-
-class TestSamediggiNoPage(unittest.TestCase):
-
-    def setUp(self):
-        self.content = ('''
+MY_TEXT = '''
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<style type="text/css">
-.limitdisplay-user { display: none; }.limitdisplay-user-10 { display: inline; }.limitdisplay-user-block-10 { display: block; }</style>                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <html lang="se-NO">
+  <head>
+      <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+       <title>      PRD: Doarjja julevsámi giellaprošeavttaide
+  </title>
+    <meta name="description" content="" />
+                                    <meta name="Content-language" content="sme-NO" />
 
-    <title>Saemiedigkie - Sametinget</title>
+    <!-- open graph social meta -->
 
+                      <link rel="alternate" type="application/rss+xml" href="https://samediggi.no/rss" />
 
-
-                <meta name="Content-Type" content="text/html; charset=utf-8" />
-
-            <meta name="Content-language" content="sma-NO" />
-
-                    <meta name="author" content="Making Waves" />
-
-                <meta name="copyright" content="Sametinget" />
-
-                <meta name="description" content="" />
-
-                <meta name="keywords" content="Sametinget" />
+      <!-- styling -->
+          <link rel="stylesheet" href="/css/72d9e06.css" />
 
 
-
-    <!--[if lt IE 9 ]>
-        <meta http-equiv="X-UA-Compatible" content="IE=8,chrome=1" />
+    <!-- javascripts -->
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn\'t work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <meta name="MSSmartTagsPreventParsing" content="TRUE" />
-    <meta name="generator" content="eZ Publish" />
-
-<link rel="Home" href="/" title="Sametinget front page" />
-<link rel="Index" href="/" />
-<link rel="Top"  href="/" title="Saemiedigkie - Sametinget" />
-<link rel="Search" href="/content/advancedsearch" title="Search Sametinget" />
-<link rel="Shortcut icon" href="/extension/sametinget/design/sametinget/images/favicon.ico" type="image/x-icon" />
-<link rel="Copyright" href="/ezinfo/copyright" />
-<link rel="Author" href="/ezinfo/about" />
-<link rel="Alternate" type="application/rss+xml" title="RSS" href="/rss/feed/my_feed" /><link rel="Alternate" href="/layout/set/print" media="print" title="Printable version" />
-
-    <link rel="stylesheet" type="text/css" href="/extension/sametinget/design/sametinget/stylesheets/reset.css" />
-<link rel="stylesheet" type="text/css" href="/extension/ezwt/design/standard/stylesheets/websitetoolbar.css" />
-<link rel="stylesheet" type="text/css" href="/design/standard/stylesheets/debug.css" />
-<link rel="stylesheet" type="text/css" href="/extension/sametinget/design/sametinget/stylesheets/layout.css" />
-<link rel="stylesheet" type="text/css" href="/extension/sametinget/design/sametinget/stylesheets/elements.css" />
-<link rel="stylesheet" type="text/css" href="/extension/sametinget/design/sametinget/stylesheets/responsive.css" />
-<link rel="stylesheet" type="text/css" href="/extension/sametinget/design/sametinget/stylesheets/plugins/accordion.css" />
-<link rel="stylesheet" type="text/css" href="/extension/sametinget/design/sametinget/stylesheets/plugins/lightbox.css" />
-<link rel="stylesheet" type="text/css" href="/extension/sametinget/design/sametinget/stylesheets/plugins/jquery-ui-1.8.14.custom.css" />
-<link rel="stylesheet" type="text/css" href="/extension/sametinget/design/sametinget/stylesheets/plugins/bx_styles.css" />
-<link rel="stylesheet" type="text/css" href="/extension/sametinget/design/sametinget/stylesheets/plugins/tools/style.css" />
-<link rel="stylesheet" type="text/css" href="/extension/sametinget/design/sametinget/stylesheets/plugins/slider.css" />
+<!-- jQuery (necessary for Bootstrap\'s JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
 
 
-
-
-
-<link rel="stylesheet" type="text/css" href="/extension/ezwebin/design/ezwebin/stylesheets/print.css" media="print" />
-<!-- IE conditional comments; for bug fixes for different IE versions -->
-<!--[if IE 5]>     <style type="text/css"> @import url(/extension/ezwebin/design/ezwebin/stylesheets/browsers/ie5.css);    </style> <![endif]-->
-<!--[if lte IE 7]> <style type="text/css"> @import url(/extension/sametinget/design/sametinget/stylesheets/browsers/ie7lte.css); </style> <![endif]-->        <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-29276381-1']);
-
-      (function() {        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
-
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/extension/ezwebin/design/ezwebin/javascript/insertmedia.js" charset="utf-8"></script>
-<script type="text/javascript" src="/extension/sametinget/design/sametinget/javascript/jquery-ui-1.8.4.custom.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/extension/sametinget/design/sametinget/javascript/jquery.address-1.4.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/extension/sametinget/design/sametinget/javascript/samediggi.js" charset="utf-8"></script>
-<script type="text/javascript" src="/extension/sametinget/design/sametinget/javascript/slider.js" charset="utf-8"></script>
-<script type="text/javascript" src="/extension/sametinget/design/sametinget/javascript/plugins/jquery.bxSlider.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/extension/sametinget/design/sametinget/javascript/plugins/jquery.lightbox.js" charset="utf-8"></script>
-<script type="text/javascript">
-
-(function($) {
-    var _rootUrl = '/', _serverUrl = _rootUrl + 'ezjscore/', _seperator = '@SEPERATOR$',
-        _prefUrl = _rootUrl + 'user/preferences';
-
-    // FIX: Ajax is broken on IE8 / IE7 on jQuery 1.4.x as it's trying to use the broken window.XMLHttpRequest object
-    if ( window.XMLHttpRequest && window.ActiveXObject )
-        $.ajaxSettings.xhr = function() { try { return new window.ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {} };
-
-    // (static) jQuery.ez() uses jQuery.post() (Or jQuery.get() if post paramer is false)
-    //
-    // @param string callArgs
-    // @param object|array|string|false post Optional post values, uses get request if false or undefined
-    // @param function Optional callBack
-    function _ez( callArgs, post, callBack )
-    {
-        callArgs = callArgs.join !== undefined ? callArgs.join( _seperator ) : callArgs;
-        var url = _serverUrl + 'call/';
-        if ( post )
-        {
-            var _token = '', _tokenNode = document.getElementById('ezxform_token_js');
-            if ( _tokenNode ) _token = _tokenNode.getAttribute('title');
-            if ( post.join !== undefined )// support serializeArray() format
-            {
-                post.push( { 'name': 'ezjscServer_function_arguments', 'value': callArgs } );
-                post.push( { 'name': 'ezxform_token', 'value': _token } );
-            }
-            else if ( typeof(post) === 'string' )// string
-            {
-                post += ( post ? '&' : '' ) + 'ezjscServer_function_arguments=' + callArgs + '&ezxform_token=' + _token;
-            }
-            else // object
-            {
-                post['ezjscServer_function_arguments'] = callArgs;
-                post['ezxform_token'] = _token;
-            }
-            return $.post( url, post, callBack, 'json' );
-        }
-        return $.get( url + encodeURIComponent( callArgs ), {}, callBack, 'json' );
-    };
-    _ez.url = _serverUrl;
-    _ez.root_url = _rootUrl;
-    _ez.seperator = _seperator;
-    $.ez = _ez;
-
-    $.ez.setPreference = function( name, value )
-    {
-        var param = {'Function': 'set_and_exit', 'Key': name, 'Value': value};
-            _tokenNode = document.getElementById( 'ezxform_token_js' );
-        if ( _tokenNode )
-            param.ezxform_token = _tokenNode.getAttribute( 'title' );
-
-        return $.post( _prefUrl, param );
-    };
-
-    // Method version, for loading response into elements
-    // NB: Does not use json (not possible with .load), so ezjscore/call will return string
-    function _ezLoad( callArgs, post, selector, callBack )
-    {
-        callArgs = callArgs.join !== undefined ? callArgs.join( _seperator ) : callArgs;
-        var url = _serverUrl + 'call/';
-        if ( post )
-        {
-            post['ezjscServer_function_arguments'] = callArgs;
-            post['ezxform_token'] = jQuery('#ezxform_token_js').attr('title');
-        }
-        else
-            url += encodeURIComponent( callArgs );
-
-        return this.load( url + ( selector ? ' ' + selector : '' ), post, callBack );
-    };
-    $.fn.ez = _ezLoad;
-})(jQuery);
-
-</script>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.js"></script>
-
-<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-<![endif]-->
-        <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-29276381-1']);
-
-      (function() {        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
-</head>
-
-<!--[if lt IE 7 ]><body class="ie6"><![endif]-->
-<!--[if IE 7 ]>   <body class="ie7"><![endif]-->
-<!--[if IE 8 ]>   <body class="ie8"><![endif]-->
-<!--[if (gt IE 8)|!(IE)]><!--><body><!--<![endif]-->
-<!-- Complete page area: START -->
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/nb_NO/all.js#xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));</script>
-
-
-<div id="header-position">
-    <div id="header">
-        <div class="fontSizeBox">
-            <a id="font_size_small" onclick="changeSize('fontSmall')">a</a>
-            <a id="font_size_normal" onclick="changeSize('fontNormal')">a</a>
-            <a id="font_size_large" onclick="changeSize('fontLarge')">a</a>
-        </div>
-
-        <div id="usermenu">
-
-<div id="languages">
-    <span id="languageSwitcher" class="sma"><span class="hidden-on-small">Åarjelsaemiengïelese</span><span class="arrowdown"></span></span>
-
-    <ul id="languageList">
-                                    <li class="nor" ><a href="/switchlanguage/to/nor">Norsk</a></li>
-                                                <li class="nordsamisk" ><a href="/switchlanguage/to/nordsamisk">Davvisámegillii</a></li>
-                                                                    <li class="lulesamisk" ><a href="/switchlanguage/to/lulesamisk">Julevsámegiella</a></li>
-                        </ul>
-</div>
-
+  <script src="/js/ca237f5.js"></script>
 
 
     <script type="text/javascript">
-    $(document).ready(function() {
-        $('#languageSwitcher').toggle(function(){
-            $("#languageList").show();
-            $("#languages").addClass("open");
-        }, function() {
-            $('#languageList').hide();
-            $("#languages").removeClass("open");
-        });
-    });
+
+        var _gaq = _gaq || [];
+        _gaq.push([\'_setAccount\', \'UA-13172157-1\']);
+        _gaq.push([\'_trackPageview\']);
+
+        (function() {
+            var ga = document.createElement(\'script\'); ga.type = \'text/javascript\'; ga.async = true;
+            ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\';
+            var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
     </script>
+
+
+
+
+    <link rel="icon" href="/favicon.ico?v=2" />
+
+    </head>
+
+    <!--
+      layoutOrange     -->
+
+
+
+  <body class="layoutOrange">
+
+  <!-- start header -->
+  <header>
+
+<div class="row menuSearchForm">
+  <div class="col-lg-6 col-lg-offset-3">
+    <form class="searchForms" action="/Soek" method="get">
+      <div class="input-group">
+        <input type="text" name="search" class="form-control searchFormsInput" placeholder="Oza neahttabáikkis, dokumeanttain ja áššiin" required="required" />
+        <span class="input-group-btn">
+          <button class="btn searchFormsButton">
+            <span class="customIcon2 customIcon-search" aria-hidden="true"></span>
+          </button>
+        </span>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<div
+  class="header "
+
+  >
+
+  <nav class="navbar navbar-default customTopNavBar">
+    <div class="container">
+
+      <div class="topMenu">
+
+        <div class="subToplogo">
+          <a href="/">
+                        <img src="/bundles/sametingetsite/images/sam-logo.jpg" alt="Logo"/>
+          </a>
         </div>
 
-                    <div id="searchbox">
-  <form action="/content/search">
-  <div id="searchbox-inner">
-    <label for="searchtext" class="hide">Search text</label>
-        <input id="searchtext" name="SearchText" type="text" value="" size="12" placeholder="Search text .."/>
-    <input id="searchbutton" class="button" type="submit" value="Ohtsh" title="Ohtsh" /><span class="search_btn_right"></span>
+        <div class="subtopMenuRight">
+          <ul class="nav navbar-nav">
+            <li class="itemLanguage">
+              <div class="dropdown">
+                <a href="#" class="customIcon2 customIcon-arrowDown" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Davvisámegillii
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                                                                                <li><a href="//www.sametinget.no/Nyhetsarkiv/parallel1">Norsk</a></li>
+                                                                                                                                      <li><a href="//www.saemiedigkie.no/Saernievaaarhkoe/parallel1">Åarjelsaemiengïelese</a></li>
+                                                                                                                                      <li><a href="//www.samedigge.no/AAdaasa/PRD-Doarjju-julevsame-giellaprosjevtajda">Julevsámegiella</a></li>
+                                                                      </ul>
               </div>
-  </form>
-</div>            </div>
-</div>
-<!-- Change between "sidemenu"/"nosidemenu" and "extrainfo"/"noextrainfo" to switch display of side columns on or off  -->
-<div id="page" class="sidemenu noextrainfo section_id_1 subtree_level_0_node_id_2">
+            </li>
 
-
-          <!-- Top menu area: END -->
-      <!-- Path area: START -->
-
-    <!-- Path area: END -->
-
-    <!-- Toolbar area: START -->
-        <!-- Toolbar area: END -->
-
-  <!-- Columns area: START -->
-  <div id="columns" class="top-spacing ">
-                            <!-- Side menu area: START -->
-
-            <div id="leftcol" class="w240">
-                        <div>
-    <a href="http://www.saemiedigkie.no"><img alt="Sametinget" src="/extension/sametinget/design/sametinget/images/graphics/logo_sorSamisk.png"></a>
-</div>
-
-<div id="leftnav">
-
-   <div class="nav-container menu-blue">
-   <div class="nav-decorator decor-light blue "></div><!-- end main navsection -->
-            <ul class="menu-list">
-
-                                                    <li class="firstli"><a href="/Giele">Gïele</a>
-
-                        </li>
-
-                                                    <li><a href="/Lierehtimmie">Lïerehtimmie </a>
-
-                        </li>
-
-                                                    <li><a href="/Kultuvrejieleme">Kultuvrejieleme</a>
-
-                        </li>
-
-                                                    <li><a href="/Jielemh">Jielemh</a>
-
-                        </li>
-
-                                                    <li><a href="/Byjrese-areale-jih-kultuvrevarjelimmie">Byjrese, areale jïh kultuvrevarjelimmie</a>
-
-                        </li>
-
-                                                    <li><a href="/Healsoe-jih-sosijaale">Healsoe jïh sosijaale</a>
-
-                        </li>
-
-                                                    <li><a href="/Gaskenasjovnaale-barkoe">Gaskenasjovnaale barkoe</a>
-
-                        </li>
-
-                                                                                <li class="lastli"><a href="/Laante-jih-vierhtiereaktah">Laante jïh vierhtiereaktah</a>
-
-                        </li>
-                </ul>
-        <div class="nav-decorator decor-heavy blue"></div><!-- end main navsection -->
-           </div>
-   <div class="nav-container menu-yellow">
-   <div class="nav-decorator decor-light yellow "></div><!-- end main navsection -->
-            <ul class="menu-list">
-
-                                                    <li class="firstli"><a href="/Saemiedigkien-bijre">Saemiedigkien bïjre </a>
-
-                        </li>
-
-                                                    <li><a href="/Gaerjagaaetie">Gærjagåetie</a>
-
-                        </li>
-
-                                                    <li><a href="/Stipendh-jih-daaarjoeh">Stipendh jïh dåarjoeh</a>
-
-                        </li>
-
-                                                    <li><a href="/Biejjielaahkoe">Biejjielåhkoe</a>
-
-                        </li>
-
-                                                    <li><a href="/Tjaatsegh">Tjaatsegh</a>
-
-                        </li>
-
-                                                    <li><a href="/Preessebievnesh">Preessebïevnesh</a>
-
-                        </li>
-
-                                                                                <li class="lastli"><a href="/Vaaarhkoe">Våarhkoe</a>
-
-                        </li>
-                </ul>
-        <div class="nav-decorator decor-heavy yellow"></div><!-- end main navsection -->
-           </div></div>                 <!-- Side menu area: END -->
+            <li class="itemLogin"></li>
+            <li class="itemSearch">
+              <a class="customIcon2 customIcon-search searchOpen" href="#">Oza</a>
+            </li>
+            <li class="itemMenu">
+              <a class="customIcon2 customIcon-menu showMegaMenu" href="#">
+                <span class="textOpen">Meny</span>
+                <span class="textClose">Gidde</span>
+              </a>
+            </li>
+          </ul>
         </div>
+      </div>
 
-    <!-- Main area: START -->
-
-
-    <div id="maincol" class="w720">
-        <div id="content_wrapper">
-
-
-            <!-- Main area content: START -->
-          <!-- Frontpage left menu set to true, hidden by js on normal screen in pagelayout.tpl -->
-
-<div id="front_top_header">
-    <div class="logo">
-        <a href="/">
-            <img alt="Sametinget" src="/extension/sametinget/design/sametinget/images/graphics/logo_sorSamisk.png">
-        </a>
     </div>
-    <div class="quote">
-        <blockquote cite="http://www.saemiedigkie.no">Saemiedigkie edtja saemiej politihkeles sijjiem veaksahbåbpoe darjodh jïh saemiej iedtjh skreejredh Nöörjesne jïh sjïehteladtedh guktie saemieh maehtieh sov gïelem, sov kultuvrem jïh sov siebriedahkejieledem gorredidh jïh evtiedidh.</blockquote>
-        <a href="/Saemiedigkien-bijre">Saemiedigkien bïjre </a>
-    </div>
-    <div class="top_links">
-                    <a href="/Veeljeme-jih-veeljemelaahkoe" class="front_button">Veeljeme jïh veeljemelåhkoe</a>
-                    <a href="/Stipendh-jih-daaarjoeh" class="front_button">Stipendh jïh dåarjoeh</a>
-                    <a href="/Preessebievnesh/Web-tv" class="front_button">Web-tv</a>
-            </div>
-</div><script type="text/javascript">
-
-    $(document).ready(function(){
-        $("#slider_wrapper").sliderExtended({});
-    });
-
-</script>
-
-
-<div id="slider_wrapper">`
-    <ul id="slides">
-                                <li data-slide="0" class="slide">
-            <div class="slide_text">
-                <span class="title"><small>Saernie</small>Lávdegodde- ja dievasčoahkkimat </span>
-
-<p>Sámedikki lávdegoddečoahkkimat álget vuossárggá guovvamánu 29. b. dii 09.00 ja loahpahuvvojit maŋŋebárgga njukčamánu 1. b. dii. 15.00 rádjái. Dievasčoahkkin álgá gaskavahku guovvamánu 2. b. dii. 09.00 ja loahpahuvvo bearjadaga guovvamánu 4. b. dii. 15.00 rádjái</p><p><a href="http://www.samediggi.no/Samedikki-coahk" target="_self">Logo eambbo</a></p><p><a href="http://tv.samediggi.no/bruker/Default.aspx?live=1&amp;sid=1&amp;cid=1&amp;view=0" target="_self">Web-tv</a></p>                            </div>
-            <div class="imgholder">
-                <div class="divider"></div>
+  </nav>
 
 
 
-
-                                                                                                                                            <img src="/var/ezwebin_site/storage/images/media/multimedia/slideshow2/slideshow-forside/plenumsmoete/77350-1-nor-NO/Dievascoahkkin_slideshow.jpg" width="221" height="211"  alt="Lávdegodde- ja dievasčoahkkimat " title="Lávdegodde- ja dievasčoahkkimat " />
-
-
-
-                </div>
-        </li>
-                                    <li data-slide="1" class="slide">
-            <div class="slide_text">
-                <span class="title"><small>Saernie</small><a tabindex="-1" href="/Jielemh/Duedtie/Duoji-doaibmadoarjjaortnet">Duoji doaibmadoarjjaortnet</a></span class="title">
-                <p><strong>2015 duodješiehtadallamiin gaskal Sámedikki, Duojáriid Ealáhussearvvi ja Sámiid Duodji, šadde ovttamielalaččat dasa ahte árvvoštallat sáhttet go duodjeorganisašuvnnat váldit badjelasas doaibmadoarjaga hálddašeami. Sámediggi oaččui Concis Kárášjoga...</strong></p>
-                <div class="links">
-                    <a tabindex="-1" class="arrow" href="/Jielemh/Duedtie/Duoji-doaibmadoarjjaortnet" >Duoji doaibmadoarjjaortnet</a>
-                </div>
-
-            </div>
-            <div class="imgholder">
-            <div class="divider"></div>
-
-
-
-
-                                                                                                                                            <img src="/var/ezwebin_site/storage/images/media/images/main-images/temabilder/soelje-c-kenneth-haetta/3591-1-nor-NO/Soelje-C-Kenneth-Haetta_slideshow.jpg" width="317" height="211"  alt="Sølje ©Kenneth Hætta" title="Sølje ©Kenneth Hætta" />
-
-
-
-                </div>
-        </li>
-                                    <li data-slide="2" class="slide">
-            <div class="slide_text">
-                <span class="title"><small>Saernie</small><a tabindex="-1" href="/Giele/Bievnesh-saemien-gieli-bijre/Savvat-buori-sagastallama">Sávvat buori ságastallama </a></span class="title">
-                <p><strong>Sámedikki presideanta Aili Keskitalo lea ilus go giellalávdegotti oasseraporta lea buktojuvvon. –Mii háliidit ahte raporta buvttihivččii buori ságastallama sámegiela boahtteáiggi hálddašeami birra, dadjá Sámedikki presideanta Aili Keskitalo.</strong></p>
-                <div class="links">
-                    <a tabindex="-1" class="arrow" href="/Giele/Bievnesh-saemien-gieli-bijre/Savvat-buori-sagastallama" >Sávvat buori ságastallama </a>
-                </div>
-
-            </div>
-            <div class="imgholder">
-            <div class="divider"></div>
-
-
-
-
-                                                                                                                                            <img src="/var/ezwebin_site/storage/images/media/bilder/sametingsraadet-2013-2017/aili-keskitalo2/nrk-intervjuer-sametingspresident-aili-keskitalo-foto-jan-roger-oestby/70110-1-nor-NO/NRK-intervjuer-sametingspresident-Aili-Keskitalo-Foto-Jan-Roger-OEstby_slideshow.jpg" width="340" height="211"  alt="NRK intervjuer sametingspresident Aili Keskitalo (Foto Jan Roger Østby)" title="NRK intervjuer sametingspresident Aili Keskitalo (Foto Jan Roger Østby)" />
-
-
-
-                </div>
-        </li>
-                                    <li data-slide="3" class="slide">
-            <div class="slide_text">
-                <span class="title"><small>Saernie</small>Dåarjoe jïh stipende Saemiedigkeste</span>
-
-<p>Mijjieh daejtie ohtsememieride voerkelibie:</p><p><a href="/Lierehtimmie/Dotkeme-jih-jollebe-oeoehpehtimmie/Stipeanda-ja-doarjja/Stipenden-bijre-jollebe-oeoehpentaemma" target="_self">Stipende jollebe ööhpehtæmman</a> – <b>Ohtsememierie goevten 1.b.</b></p><p><a href="/Byjrese-areale-jih-kultuvrevarjelimmie/Kultuvremojhtesh/Stipeanda-ja-doarjja/Kultuvremojhtesevaarjelimmie" target="_self">Dåarjoe kultuvremojhtesevaarjelæmman</a> – <b>Ohtsememierie goevten 15.b.</b></p>                            </div>
-            <div class="imgholder">
-                <div class="divider"></div>
-
-
-
-
-                                                                                                                                            <img src="/var/ezwebin_site/storage/images/media/multimedia/slideshow2/slideshow-forside/tilskudd-og-stipend-fra-sametinget/79822-1-nor-NO/Tilskudd-og-stipend-fra-Sametinget_slideshow.jpg" width="317" height="211"  alt="Sámediggi (Govva: Jan Helmer Olsen)" title="Sámediggi (Govva: Jan Helmer Olsen)" />
-
-
-
-                </div>
-        </li>
-                                    <li data-slide="4" class="slide">
-            <div class="slide_text">
-                <span class="title"><small>Saernie</small><a tabindex="-1" href="/Byjrese-areale-jih-kultuvrevarjelimmie/Energije-jih-mineraalh/Samediggeraddi-ii-halit-Nussirii-doaimma">Sámediggeráđđi ii hálit Nussirii doaimma</a></span class="title">
-                <p><strong>Sámediggeráđđi lea dál ovddidan ášši Sámedikki dievasčoahkkimii, dainna ávžžuhusain ahte hilgu ruvkedoaimma plánaid Nussirii ja Gumpenjunnái.</strong></p>
-                <div class="links">
-                    <a tabindex="-1" class="arrow" href="/Byjrese-areale-jih-kultuvrevarjelimmie/Energije-jih-mineraalh/Samediggeraddi-ii-halit-Nussirii-doaimma" >Sámediggeráđđi ii hálit Nussirii doaimma</a>
-                </div>
-
-            </div>
-            <div class="imgholder">
-            <div class="divider"></div>
-
-
-
-
-                                                                                                                                            <img src="/var/ezwebin_site/storage/images/media/bilder/silje-karine-muotka/silje-karine-muokta_sametinget_naert/52311-1-nor-NO/Silje-Karine-Muokta_Sametinget_Naert_slideshow.jpg" width="318" height="211"  alt="Silje Karine Muokta_Sametinget_Nært" title="Silje Karine Muokta_Sametinget_Nært" />
-
-
-
-                </div>
-        </li>
-                                    <li data-slide="5" class="slide">
-            <div class="slide_text">
-                <span class="title"><small>Saernie</small>Samarbeidserklæring med Oslo kommune</span>
-
-<p>Sametinget og Oslo kommune signerer felles samarbeidserklæring lørdag 6. februar i Oslo.</p><p><a href="/Preessebievnesh/Pressebievnesh/PRM-Sametinget-og-Oslo-kommune-vil-styrke-samisk-spraak-og-kultur-i-Oslo" target="_self">Les mer.</a></p>                            </div>
-            <div class="imgholder">
-                <div class="divider"></div>
-
-
-
-
-                                                                                                                                            <img src="/var/ezwebin_site/storage/images/media/multimedia/slideshow2/slideshow-forside/samarbeidserklaering-med-oslo-kommune/81598-4-nor-NO/Samarbeidserklaering-med-Oslo-kommune_slideshow.jpg" width="302" height="211"  alt="Samarbeidserklæring med Oslo kommune" title="Samarbeidserklæring med Oslo kommune" />
-
-
-
-                </div>
-        </li>
-                                    <li data-slide="6" class="slide">
-            <div class="slide_text">
-                <span class="title"><small>Saernie</small><a tabindex="-1" href="/Byjrese-areale-jih-kultuvrevarjelimmie/Areale/Baaetieh-raeriejgujmie-baaetijen-aejkien-areale-jih-byjresepolitihkese">Buktet cealkámušaid boahtteáiggi areála ja biraspolitihkkii</a></span class="title">
-                <p><strong>Saemiedigkieraerie edtja guessine mïnnedh ovmessie voenges siebriedahkine juktie raerieh åadtjodh Saemiedigkien politihkese arealen jïh byjresen sisnjeli. – Mijjieh sïjhtebe saemien tjïerth, siebrieh, jielemebarkijh jïh faagealmetjh voengesne böör...</strong></p>
-                <div class="links">
-                    <a tabindex="-1" class="arrow" href="/Byjrese-areale-jih-kultuvrevarjelimmie/Areale/Baaetieh-raeriejgujmie-baaetijen-aejkien-areale-jih-byjresepolitihkese" >Båetieh raeriejgujmie båetijen aejkien areale- jïh byjresepolitihkese</a>
-                </div>
-
-            </div>
-            <div class="imgholder">
-            <div class="divider"></div>
-
-
-
-
-                                                                                                                                            <img src="/var/ezwebin_site/storage/images/media/bilder/sametingsraadet-2013-2017/thomas-aahren-og-silje-karine-muotka-foto-hanne-holmgren-lille/76967-1-nor-NO/Thomas-AAhren-og-Silje-Karine-Muotka-Foto-Hanne-Holmgren-Lille_slideshow.jpg" width="318" height="211"  alt="Thomas Åhren og Silje Karine Muotka (Foto Hanne Holmgren Lille)" title="Thomas Åhren og Silje Karine Muotka (Foto Hanne Holmgren Lille)" />
-
-
-
-                </div>
-        </li>
-                </ul>
-    <div class="slider_menu_wrapper">
-        <ul id="slides_menu">
-                            <li class="current" data-slide="0">
-                    <a href="#slide0">&nbsp;</a>
-                </li>
-                            <li class="" data-slide="1">
-                    <a href="#slide1">&nbsp;</a>
-                </li>
-                            <li class="" data-slide="2">
-                    <a href="#slide2">&nbsp;</a>
-                </li>
-                            <li class="" data-slide="3">
-                    <a href="#slide3">&nbsp;</a>
-                </li>
-                            <li class="" data-slide="4">
-                    <a href="#slide4">&nbsp;</a>
-                </li>
-                            <li class="" data-slide="5">
-                    <a href="#slide5">&nbsp;</a>
-                </li>
-                            <li class="" data-slide="6">
-                    <a href="#slide6">&nbsp;</a>
-                </li>
-                    </ul>
-    </div>
+        <div class="newsIntro">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3 ">
+            <div class="newsIntroBox">
+                    <h1>PRD: Doarjja julevsámi giellaprošeavttaide</h1>
+        <div class="introContent"><div class="ezrichtext-field"><p>S&aacute;medigger&aacute;&#273;&#273;i juolluda doarjaga guovtti julevs&aacute;megiel giellapro&scaron;ektii. Giellaspeallu New Amigos Online h&aacute;bmejuvvo julevs&aacute;megillii, ja Divttasvuona oahppit &#269;ohkkejuvvojit Johkamohkk&aacute;i giellal&aacute;vgumii. &ndash; Julevs&aacute;megiella d&aacute;rbba&scaron;a arenaid gos giellageavaheaddjit besset s&aacute;m&aacute;stit, dadj&aacute; s&aacute;mediggepresideanta Aili Keskitalo.</p>
+</div>
 </div>
 
-<div id="link_line">
-    <a href="/Saemiedigkien-bijre" class="root_page">Saemiedigkien bïjre</a>
-                <a href="/Saemiedigkien-bijre/Tjirkijh">Tjirkijh</a>
-            <a href="/Saemiedigkien-bijre/AAaarganisasjovnestruktuvre/Stoerretjaaanghkoe">Stoerretjåanghkoe</a>
-            <a href="/Saemiedigkien-bijre/AAaarganisasjovnestruktuvre/Saemiedigkieraerie">Saemiedigkieraerie</a>
-            <a href="/Tjaatsegh">Tjaatsegh</a>
-            <a href="/Biejjielaahkoe">Biejjielåhkoe</a>
-            <a href="/Saemiedigkien-bijre/Gaskesadth-mijjine">Gaskesadth mijjine</a>
-
-    <a href="/Saemiedigkien-bijre" class="arrow">View Saemiedigkien bïjre</a>
-</div>
-
-<div class="frontpage-categories">
-
-
-        <div class="frontbox1 category">
-
-            <div class="header w310">
-                <a href="/Giele">
-                    <h2>
-
-
-
-
-                                                                                                                                            <img src="/var/ezwebin_site/storage/images/spraak/3927-27-sma-NO/Giele_large_square_wide.jpg" width="228" height="115"  alt="© Kenneth Hætta" title="© Kenneth Hætta" />
-
-
-
-                            <span>Gïele</span>
-                    </h2>
-                </a>
-            </div>
-            <div class="linkliste">
-                                    <a href="/Giele/Bievnesh-saemien-gieli-bijre"><h3>Bïevnesh saemien gïeli bïjre</h3></a>
-                                    <a href="/Giele/Reeremedajve-saemien-gielide"><h3>Reeremedajve saemien gïelide</h3></a>
-                                    <a href="/Giele/Saemien-sijjienommh"><h3>Saemien sijjienommh</h3></a>
-                                <a href="/Giele" class="arrow">View Gïele</a>
-            </div>
-
-
-
-
-
-        </div>
-
-
-        <div class="frontbox2 category">
-
-            <div class="header w310">
-                <a href="/Kultuvrejieleme">
-                    <h2>
-
-
-
-
-                                                                                                                                            <img src="/var/ezwebin_site/storage/images/kulturliv/978-6-nor-NO/Kulturliv_large_square_wide.jpg" width="228" height="115"  alt="©Kenneth Hætta" title="©Kenneth Hætta" />
-
-
-
-                            <span>Kultuvrejieleme</span>
-                    </h2>
-                </a>
-            </div>
-            <div class="linkliste">
-                                    <a href="/Kultuvrejieleme/Stipende-jih-daaarjoe"><h3>Stipende jïh dåarjoe </h3></a>
-                                    <a href="/Kultuvrejieleme/Meedijah"><h3>Meedijah</h3></a>
-                                    <a href="/Kultuvrejieleme/Gaarsjelimmie"><h3>Gaarsjelimmie</h3></a>
-                                <a href="/Kultuvrejieleme" class="arrow">View Kultuvrejieleme</a>
-            </div>
-
-
-
-
-
-        </div>
-
-
-        <div class="frontbox3 category">
-
-            <div class="header w310">
-                <a href="/Lierehtimmie">
-                    <h2>
-
-
-
-
-                                                                                                                                            <img src="/var/ezwebin_site/storage/images/opplaering/3915-31-sma-NO/Lierehtimmie_large_square_wide.jpg" width="228" height="115"  alt="Lïerehtimmie " title="Lïerehtimmie " />
-
-
-
-                            <span>Lïerehtimmie </span>
-                    </h2>
-                </a>
-            </div>
-            <div class="linkliste">
-                                    <a href="/Lierehtimmie/Maanagierte"><h3>Maanagïerte</h3></a>
-                                    <a href="/Lierehtimmie/Maadthskuvle-jih-Jaaa"><h3>Maadthskuvle jïh Jåa</h3></a>
-                                    <a href="/Lierehtimmie/Dotkeme-jih-jollebe-oeoehpehtimmie"><h3>Dotkeme jïh jollebe ööhpehtimmie</h3></a>
-                                <a href="/Lierehtimmie" class="arrow">View Lïerehtimmie </a>
-            </div>
-
-
-
-
-
-        </div>
-
-
-        <div class="frontbox4 category">
-
-            <div class="header w310">
-                <a href="/Jielemh">
-                    <h2>
-
-
-
-
-                                                                                                                                            <img src="/var/ezwebin_site/storage/images/naeringer/3891-40-sma-NO/Jielemh_large_square_wide.jpg" width="228" height="115"  alt="Foto: Aina Bye" title="Foto: Aina Bye" />
-
-
-
-                            <span>Jielemh</span>
-                    </h2>
-                </a>
-            </div>
-            <div class="linkliste">
-                                    <a href="/Jielemh/Baaatsoe"><h3>Båatsoe</h3></a>
-                                    <a href="/Jielemh/Marijne-jielemh"><h3>Marijne jielemh</h3></a>
-                                    <a href="/Jielemh/Jaaartaburrie"><h3>Jåartaburrie</h3></a>
-                                <a href="/Jielemh" class="arrow">View Jielemh</a>
-            </div>
-
-
-
-
-
-        </div>
-
-
-        <div class="frontbox1 category">
-
-            <div class="header w310">
-                <a href="/Healsoe-jih-sosijaale">
-                    <h2>
-
-
-
-
-                                                                                                                                            <img src="/var/ezwebin_site/storage/images/helse-og-sosial/3975-26-sma-NO/Healsoe-jih-sosijaale_large_square_wide.jpg" width="228" height="115"  alt="Healsoe jïh sosijaale" title="Healsoe jïh sosijaale" />
-
-
-
-                            <span>Healsoe jïh sosijaale</span>
-                    </h2>
-                </a>
-            </div>
-            <div class="linkliste">
-                                    <a href="/Healsoe-jih-sosijaale/Maanavaarjelimmie"><h3>Maanavaarjelimmie</h3></a>
-                                    <a href="/Healsoe-jih-sosijaale/Healsoe"><h3>Healsoe</h3></a>
-                                    <a href="/Healsoe-jih-sosijaale/Sosijaale"><h3>Sosijaale</h3></a>
-                                <a href="/Healsoe-jih-sosijaale" class="arrow">View Healsoe jïh sosijaale</a>
-            </div>
-
-
-
-
-
-        </div>
-
-
-        <div class="frontbox2 category">
-
-            <div class="header w310">
-                <a href="/Byjrese-areale-jih-kultuvrevarjelimmie">
-                    <h2>
-
-
-
-
-                                                                                                                                            <img src="/var/ezwebin_site/storage/images/miljoe-areal-og-kulturvern/3951-39-sma-NO/Byjrese-areale-jih-kultuvrevarjelimmie_large_square_wide.jpg" width="228" height="115"  alt="Ceavccageađgi -Transteinen (Foto: Sametinget)" title="Ceavccageađgi -Transteinen (Foto: Sametinget)" />
-
-
-
-                            <span>Byjrese, areale jïh kultuvrevarjelimmie</span>
-                    </h2>
-                </a>
-            </div>
-            <div class="linkliste">
-                                    <a href="/Byjrese-areale-jih-kultuvrevarjelimmie/Kultuvremojhtesh"><h3>Kultuvremojhtesh</h3></a>
-                                    <a href="/Byjrese-areale-jih-kultuvrevarjelimmie/Eatnemegellievoete"><h3>Eatnemegellievoete</h3></a>
-                                    <a href="/Byjrese-areale-jih-kultuvrevarjelimmie/Areale"><h3>Areale</h3></a>
-                                <a href="/Byjrese-areale-jih-kultuvrevarjelimmie" class="arrow">View Byjrese, areale jïh kultuvrevarjelimmie</a>
-            </div>
-
-
-
-
-
-        </div>
-
-
-        <div class="frontbox3 category">
-
-            <div class="header w310">
-                <a href="/Laante-jih-vierhtiereaktah">
-                    <h2>
-
-
-
-
-                                                                                                                                            <img src="/var/ezwebin_site/storage/images/land-og-ressursrettigheter/3963-18-sma-NO/Laante-jih-vierhtiereaktah_large_square_wide.jpg" width="228" height="104"  alt="Laante jïh vierhtiereaktah" title="Laante jïh vierhtiereaktah" />
-
-
-
-                            <span>Laante jïh vierhtiereaktah</span>
-                    </h2>
-                </a>
-            </div>
-            <div class="linkliste">
-                                    <a href="/Laante-jih-vierhtiereaktah/Laantereaktah"><h3>Laantereaktah</h3></a>
-                                    <a href="/Laante-jih-vierhtiereaktah/Goeoelemereakta"><h3>Göölemereakta </h3></a>
-                                    <a href="/Laante-jih-vierhtiereaktah/Goerehtalleme"><h3>Goerehtalleme</h3></a>
-                                <a href="/Laante-jih-vierhtiereaktah" class="arrow">View Laante jïh vierhtiereaktah</a>
-            </div>
-
-
-
-
-
-        </div>
-
-
-        <div class="frontbox4 category">
-
-            <div class="header w310">
-                <a href="/Gaskenasjovnaale-barkoe">
-                    <h2>
-
-
-
-
-                                                                                                                                            <img src="/var/ezwebin_site/storage/images/internasjonalt-arbeid/3939-17-sma-NO/Gaskenasjovnaale-barkoe_large_square_wide.jpg" width="228" height="115"  alt="Gaaskenaasjovnen barkoe" title="Gaaskenaasjovnen barkoe" />
-
-
-
-                            <span>Gaskenasjovnaale barkoe</span>
-                    </h2>
-                </a>
-            </div>
-            <div class="linkliste">
-                                    <a href="/Gaskenasjovnaale-barkoe/Saemien-laavenjostoe"><h3>Saemien laavenjostoe</h3></a>
-                                    <a href="/Gaskenasjovnaale-barkoe/Raastendaaaresth-regijovnaale-laavenjostoe"><h3>Raastendåaresth regijovnaale laavenjostoe</h3></a>
-                                    <a href="/Gaskenasjovnaale-barkoe/Gaskenasjovnaale-aalkoealmetjelaavenjostoe"><h3>Gaskenasjovnaale aalkoealmetjelaavenjostoe</h3></a>
-                                <a href="/Gaskenasjovnaale-barkoe" class="arrow">View Gaskenasjovnaale barkoe</a>
-            </div>
-
-
-
-
-
-        </div>
-
-
-</div>
-
-
-<div class="frontpage-latest-news">
-    <div class="front_library_box">
-        <h2>Politihkeles siebrie</h2>
-        <a class="arrow" href='Om-Sametinget/Organisasjonsstruktur/Sametingsraadet'>Saemiedigkieraerie</a><br />
-        Raerie lea goh Saemiedigkien reerenasse, jïh dam biejjieladtje politihkeles barkoem reerie. Saemiedigkieraerien lïhtsegh leah nammoehtamme presidenteste, mij lea raerien åvtehke.
-        <br />
-        <a class="arrow" href='Om-Sametinget/Organisasjonsstruktur/Plenumsforsamlingen'>Stoerretjåanghkoe</a><br />
-        Saemiedigkien stoerretjåanghkoe lea Saemiedigkien bijjemes åårgane jïh faamoe. Stoerretjåanghkoeh sïejhmemes njieljien aejkien jaepien, seamma våhkoen goh moenehtsetjåanghkoeh.
+      <div class="date">
+      <p>
+        Ođas |
+                  Almmuhuvvon <time datetime="2019-06-11">11.6.2019</time>
+              </p>
     </div>
 
-
-
-
-
-
-
-    <div class="front-events">
-                                    <h2>Mij heannede?</h2>
-                                    <div class="event">
-    <span>06.03.2016
-     - 11.03.2016</span>
-    <a href="/Biejjielaahkoe/Searva-AWG">Searvá AWG</a>
-</div>                                          <div class="event">
-    <span>08.03.2016
-     - 08.03.2016</span>
-    <a href="/Biejjielaahkoe/AAST">Generalforsamling Åarjelhsaemien Teatere</a>
-</div>                                          <div class="event">
-    <span>10.03.2016
-     - 10.03.2016</span>
-    <a href="/Biejjielaahkoe/Seminar-Joikens-frie-natur">Seminar - Joikens frie natur</a>
-</div>                                              </div><div id="empty-block">
-                        <div class="event">
-    <span>14.03.2016
-     - 17.03.2016</span>
-    <a href="/Biejjielaahkoe/AIEC2016-oeoernesaavva-Guovdageaidnusne">AIEC2016 öörnesåvva Guovdageaidnusne</a>
-</div>                                          <div class="event">
-    <span>14.03.2016
-     - 14.03.2016</span>
-    <a href="/Biejjielaahkoe/Violence-Against-Indigenous-Women">Violence Against Indigenous Women </a>
-</div>                                          <div class="event">
-    <span>07.04.2016
-     - 08.04.2016</span>
-    <a href="/Biejjielaahkoe/Bovdehus-gielddaseminarii">Bovdehus gielddaseminárii</a>
-</div>                  </div>
-
-    <div class="front_library_box">
-        <h2>Gærjagåetie</h2>
-
-
-
-
-                                                                                                                                    <a href="/Gaerjagaaetie">        <img src="/var/ezwebin_site/storage/images/bibliotek/65917-8-sma-NO/Gaerjagaaetie_large_square_wide.jpg" width="228" height="115"  alt="Govva: Sara Marja Magga " title="Govva: Sara Marja Magga " />
-        </a>
-
-
-
-        <br/>
-        <a class="arrow" href="/Gaerjagaaetie">Gærjagåetie</a>
-    </div>
-</div>
-
-          <!-- Main area content: END -->
-
-        <!-- Main area: END -->
-                </div>
-    </div><!-- end #columns -->
-
-  <!-- Columns area: END -->
-
-  <!-- Footer area: START -->
-
-
-<div id="footer">
-    <address>
-
-<p>
-<b>Gaahpode:</b><br />
-Måanta – Bearjadahke,<br />kl. 08.00-15.30</p><p>
-Telefovne: +47 78 47 40 00<br />
-Telefakse: +47 78 47 40 90<br /><a href="mailto:samediggi@samediggi.no" target="_self">samediggi@samediggi.no</a></p>        </address>
-    <address>
-
-<p>
-<b>Påastetjaalesijjie:</b><br />
-Saemiedigkie - Sametinget<br />
-Ávjovárgeaidnu 50 <br />9730 Karasjok/Kárášjohka</p><p><b><a href="/Saemiedigkien-bijre/Gaskesadth-mijjine/Bargiid-oktavuodadiedut" target="_self">Gaskesadtemebïevnesh mijjen barkijidie daesnie gaavnh.</a></b></p>    </address>
-    <div class="facebook">
-        <a href="http://www.facebook.com/samediggi">Saemiedigkie</a>        <p>
-På Facebook kan du diskutere med oss og foreslå saker vi kan jobbe med</p>
-        <div class="rss" >
-            <p><a href="/rss/feed/main">Rss feed</a></p>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-    <div class="footer_right">
-        <ul>
-                                        <li><a href="/Saemiedigkien-bijre/Rabas-virggit">Rabas virggit</a></li>
-                            <li><a href="/Preessebievnesh">Preessebïevnesh</a></li>
-                            <li><a href="/Tjaatsegh/Ohtsedh-paaastejournalesne">Ohtsedh påastejournalesne</a></li>
-                            <li><a href="/Tjaatsegh">Tjaatsegh</a></li>
-                            <li><a href="/Saemiedigkien-bijre/Tjirkijh/Tjirkijidie">Tjirkijidie</a></li>
-                                        <a href="/user/login">Logg inn</a>
 
-        </ul>
+  <div class="container">
+
+    <div class="row">
+    <div class="col-md-12 col-lg-12">
+
+       <div class="row megaMenuContent">
+         <div class="col-md-12 visible-sm-block visible-xs-block">
+           <form class="searchForms" action="/Soek" method="get">
+             <div class="input-group">
+                 <input type="text" name="search" class="form-control searchFormsInput" placeholder="Oza neahttabáikkis, dokumeanttain ja áššiin" required="required" />
+                <span class="input-group-btn">
+                    <button class="btn searchFormsButton">
+                      <span class="customIcon2 customIcon-search" aria-hidden="true"></span>
+                    </button>
+                </span>
+              </div>
+           </form>
+         </div>
+
+        <div class="col-md-5 col-md-offset-1">
+          <ul class="nav primaryMenu">
+               <li><a href="/Balvalusat2/Giella">Giella</a></li>
+  <li><a href="/Balvalusat2/Manaidgardi">Mánáidgárdi</a></li>
+  <li><a href="/Balvalusat2/Kultuvra">Kultuvra </a></li>
+  <li><a href="/Balvalusat2/Oahpahus-ja-oahpponeavvut">Oahpahus ja oahpponeavvut</a></li>
+  <li><a href="/Balvalusat2/Ealahusat">Ealáhusat</a></li>
+  <li><a href="/Balvalusat2/Dearvvasvuohta-ja-sosiala">Dearvvašvuohta ja sosiála</a></li>
+  <li><a href="/Balvalusat2/Biras-areala-ja-kultursuodjaleapmi">Biras, areála ja kultursuodjaleapmi</a></li>
+  <li><a href="/Balvalusat2/Riikkaidgaskasas-bargu">Riikkaidgaskasaš bargu</a></li>
+  <li><a href="/Balvalusat2/Dassearvu">Dásseárvu</a></li>
+  <li><a href="/Girjeradju">Girjerádju</a></li>
+
+          </ul>
+        </div>
+        <div class="col-md-5">
+          <ul class="nav secondaryMenu">
+
+               <li><a href="/Doarjagat-ja-stipeanddat">Doarjagat ja stipeanddat</a></li>
+  <li><a href="/Vuoigatvuodat">Vuoigatvuođat</a></li>
+  <li><a href="/Lagideamit">Lágideamit</a></li>
+  <li><a href="/Politihkka2/Assit-ja-dokumeanttat">Áššit ja dokumeanttat</a></li>
+  <li><a href="/Politihkka2">Politihkka</a></li>
+  <li><a href="/Valga">Válga</a></li>
+  <li><a href="/Samedikki-birra">Sámedikki birra</a></li>
+  <li><a href="/Preassa">Preassa</a></li>
+  <li><a href="/Odasarkiiva">Ođasarkiiva</a></li>
+
+
+            <!-- Show only mobile -->
+            <li class="showMobile">
+              <div class="dropdown">
+                <a href="#" class="customIcon2 customIcon-arrowDown" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  Davvisámegillii
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                                                                                  <li><a href="//www.sametinget.no/Nyhetsarkiv/parallel1">Norsk</a></li>
+                                                                                                                                      <li><a href="//www.saemiedigkie.no/Saernievaaarhkoe/parallel1">Åarjelsaemiengïelese</a></li>
+                                                                                                                                      <li><a href="//www.samedigge.no/AAdaasa/PRD-Doarjju-julevsame-giellaprosjevtajda">Julevsámegiella</a></li>
+                                                                      </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+     </div>
+
     </div>
-</div>    <!-- Footer area: END -->
+  </div>
 
+
+
+</div>      </header>
+  <!-- end header -->
+
+  <!-- start breadcrumb -->
+      <div class="breadcrumbWrapper">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3">
+                    <ol class="breadcrumb">
+                                          <li><a href="/">Sámediggi</a></li>
+                                                        <li><a href="/Odasarkiiva">Ođasarkiiva</a></li>
+                                                        <li class="active"><span>PRD: Doarjja julevsámi giellaprošeavttaide</span></li>
+                                    </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- end breadcrumb -->
+
+  <!-- start content -->
+  <div class="mainContent ">
+      <section class="articleWrapper">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3">
+          <article class="article">
+                          <div class="ezrichtext-field"><p>S&aacute;medigger&aacute;&#273;&#273;i juolluda 300.000 ruvdnosa&scaron; doarjaga NA TECHNOLOGIES DA:i h&aacute;bmet giellaspealu New Amigos Online julevs&aacute;megillii. Dat lea virtu&aacute;la s&aacute;megielat arena gos giela praktisere ovttasbargguin. Dasa lassin dan lea vejola&scaron; speallat okto (single-player mode), mas speallit s&aacute;httet videob&aacute;ddemiiguin h&aacute;rjehallat. Videob&aacute;ddemiidda leat b&aacute;ddejuvvon ie&scaron;gu&#273;etge suopmaniid eatnigielh&aacute;llit.</p><p><strong>&ndash; S&aacute;megielaid doaibmapl&aacute;nas boaht&aacute; ovdan ahte lea d&aacute;rbu eatnigielat digit&aacute;la oahpporesurssaide s&aacute;mi m&aacute;n&aacute;ide ja nuoraide. New Amigos lea som&aacute;s guovttegielat speallu mii heive ie&scaron;gu&#273;etge ahk&aacute;ha&#269;&#269;aide, dadj&aacute; Keskitalo.</strong></p><p>New Amigos Online heiveha oktagasla&scaron; oahppama ovttasdoaibmama bokte neahtas. Studeanttat doibmet resursan guhtet guimmiidasaset ja skuvladilis oahpaheaddji heiveha nu, ahte New Amigos Online dievasmahtt&aacute; ear&aacute; oahpahusa. V&aacute;s&aacute;hus &scaron;add&aacute; persovnnala&#382;&#382;an ja f&aacute;tmmasteaddjin go oahppit olles riikkas ja m&aacute;ilmmis besset gulahallat neahtas.</p><p><strong>&ndash; S&aacute;mediggi atn&aacute; d&aacute;rbba&scaron;la&#382;&#382;an h&aacute;bmet digit&aacute;la giellaapplika&scaron;uvnnaid julevs&aacute;megillii nannen dihtii giela, eandalii guovlluin gos giella lea ra&scaron;is dilis.</strong></p><h3>Julevs&aacute;megiela giellal&aacute;vgun</h3><p>S&aacute;medigger&aacute;&#273;&#273;i juolluda maidd&aacute;i 160.000 ruvdnosa&scaron; doarjaga Divttasvuona suohkanii Giellabiesse 2019-pro&scaron;ektii, mas ulbmilin lea &#269;ohkket ohppiid julevs&aacute;megiela giellal&aacute;vgumii.</p><p>D&aacute;n jag&aacute;&scaron; Giellabiesse lea Johkamohkis, Ruo&#359;a bealde. D&aacute;n giellal&aacute;vguma v&aacute;ldomihttun lea &#269;iek&#331;ut boazodoallo- ja meahc&aacute;standoahpagiidda ja -fr&aacute;saide. Doppe oahpahuvvojit maidd&aacute;i &aacute;rgabeaigiela vuo&#273;&#273;ofr&aacute;sat. Dan vahku f&aacute;dd&aacute;n lea oahp&aacute;smuvvat Sirg&aacute;sa &#269;earu meahc&aacute;stan- ja boazodoallokultuvrii ja oahp&aacute;smuvvat s&aacute;mekultuvrii nuppe bealde r&aacute;ji.</p><p><strong>&ndash; Giellabiesse lea buorre ja deh&aacute;la&scaron; gielladoaibma julevs&aacute;mi guovllus. Giella lea ra&scaron;&scaron;i d&aacute;n guovllus ja buot diekk&aacute;r doaimmain lea positiivvala&scaron; v&aacute;ikkuhus s&aacute;megillii. Diibm&aacute; sis lei sullasa&scaron; Giellabiesse, muhto dalle fitne Johkamohki oahppit &Aacute;jluovttas. Raporttas oaidnit ahte d&aacute;t l&aacute;gideapmi lihkostuvai, dadj&aacute; s&aacute;mediggepresideanta Aili Keskitalo.</strong></p><p><em>Oktavuo&#273;adie&#273;ut:</em></p><p><em>S&aacute;mediggepresideanta Aili Keskitalo, tlf. +47 971 29 305</em></p>
 </div>
-<!-- Complete page area: END --><!-- Footer script area: START -->
-<!-- Footer script area: END -->
+
+                      </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  </div>
+  <!-- end content -->
+
+  <!-- start contact -->
+      <section class="contact">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
+            <div class="contactContent">
+              <div class="contactTitle">
+                <h4>Gávdnet go dan maid ohcet?</h4>
+              </div>
+                <div class="contactButtons">
+                  <form class="feedback" method="post" action="/feedback" id="feedbackAnswer">
+                    <input type="hidden" name="content_id" value="3258" />
+                    <button type="button" class="btn btn-orange showContactForms" value="1">Juo</button>
+                    <button type="button" class="btn btn-green showContactForms" value="0">In</button>
+                    </form>
+                 </div>
+
+              <div class="contactForms">
+                <p>Hva lette du etter? Din tilbakemelding hjelper oss ålage bedre nettsider.</p>
+                <form class="feedback" method="post" action="/feedback" id="feedbackComment">
+                  <div class="form-group">
+                     <textarea name="comment" class="form-control" rows="6"></textarea>
+                  </div>
+
+                  <button type="submit" class="btn btn-orange">Send</button>
+                </form>
+              </div>
+              <div class="contactMessage">
+                <h4>Takk for din tilbakemelding!</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  <!-- end contact -->
+
+  <!-- start footer -->
+  <footer class="mainFooter">
+    <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+                  <h3>Sámediggi</h3>
+
+        <div class="info">
+                                <p><span aria-hidden="true">Orgnr. 974760347</span> </p>
+
+                      <p><span class="customIcon customIcon-mapPoint" aria-hidden="true">Ávjovárgeaidnu 50, 9730 Kárášjohka</span> </p>
+
+                      <p><span class="customIcon customIcon-phone" aria-hidden="true">+ 47 78 47 40 00</span> </p>
+
+                      <p><span class="customIcon customIcon-mail" aria-hidden="true">
+              <a href="mailto:samediggi@samediggi.no">samediggi@samediggi.no</a>
+            </span> </p>
+
+                                <p><a href="/Samedikki-birra2/Rehket-Samediggai">Rehket Sámediggái</a></p>
+
+                                <p><a href="/Samedikki-birra2/langlink">Mátkerehkegat ja buhtadusgáibádusat Sámediggái</a></p>
+                  </div>
+
+                  <h4>Čuovo min sosiála mediain</h4>
+
+        <div class="info">
+            <p>
+                              <span class="customIcon customIcon-facebook" aria-hidden="true">
+                  <a href="https://www.facebook.com/samediggi">Facebook</a>
+                </span>
+
+                              <span class="customIcon customIcon-twitter" aria-hidden="true">
+                  <a href="https://twitter.com/samediggi">Twitter</a>
+                </span>
+
+                              <span class="customIcon customIcon-instagram" aria-hidden="true">
+                  <a href="https://www.instagram.com/samediggi/">Instagram</a>
+                </span>
+
+            </p>
+        </div>
+
+        <ul class="footerLinks">
+                      <li> <a href="/Samedikki-birra2/langlink2">Váldde oktavuođa Sámedikkiin: Bargit ja kantuvrrat</a> </li>
+                                <li> <a href="/Doarjagat-ja-stipeanddat">Doarjagat ja stipeanddat</a> </li>
+                  </ul>
+
+        <div class="cookiesInfo">
+          <p>Vi bruker cookies. For mer informasjon.
+                      <a href="#"> se vår cookies policy</a>
+                    </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </footer>
+  <!-- end footer -->
+
+    <!-- footer javascript -->
 
 
 
+  </body>
+</html>'''
 
-</div>
 
-</body>
-</html>
-            ''')
-        if six.PY3:
-            self.content = self.content.encode('utf8')
+class TestSamediggiNoPage(unittest.TestCase):
+    """Test the SamediggiNoPage class."""
 
-    def test_url(self):
-        with requests_mock.Mocker() as m:
-            m.get('http://www.saemiedigkie.no', content=self.content)
+    def test_basics(self):
+        """Test initial values."""
+        with requests_mock.Mocker() as mocker:
+            mocker.get(
+                'https://samediggi.no/Odasarkiiva/PRD-Doarjja-julevsami-giellaproseavttaide',
+                text=MY_TEXT,
+                headers={'content-type': 'text/html; charset=UTF-8'})
+            result = requests.get(
+                'https://samediggi.no/Odasarkiiva/PRD-Doarjja-julevsami-giellaproseavttaide'
+            )
 
-            sdnp = samediggi_no_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
-
-            self.assertEqual(sdnp.url, 'http://www.saemiedigkie.no/')
-
-    def test_parallel_links(self):
-        with requests_mock.Mocker() as m:
-            m.get('http://www.saemiedigkie.no', content=self.content)
-
-            sdnp = samediggi_no_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
-
-            self.assertListEqual(sdnp.parallel_links, [
-                sdnp.url + 'switchlanguage/to/nor',
-                sdnp.url + 'switchlanguage/to/nordsamisk',
-                sdnp.url + 'switchlanguage/to/lulesamisk'
+            page = samediggi_no_crawler.SamediggiNoPage(result)
+            self.assertEqual(
+                page.corpuspath.orig,
+                os.path.join(
+                    os.getenv('GTFREE'),
+                    'orig/sme/admin/sd/samediggi.no/prd-doarjja-julevsami-giellaproseavttaide.html'
+                ))
+            self.assertEqual(
+                page.url,
+                'https://samediggi.no/Odasarkiiva/PRD-Doarjja-julevsami-giellaproseavttaide'
+            )
+            self.assertListEqual(page.parallel_links, [
+                'https://www.sametinget.no/Nyhetsarkiv/parallel1',
+                'https://www.saemiedigkie.no/Saernievaaarhkoe/parallel1',
+                'https://www.samedigge.no/AAdaasa/PRD-Doarjju-julevsame-giellaprosjevtajda'
             ])
-
-    def test_print_url(self):
-        with requests_mock.Mocker() as m:
-            m.get('http://www.saemiedigkie.no', content=self.content)
-
-            sdnp = samediggi_no_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
-
-            self.assertEqual(sdnp.print_url,
-                             'http://www.saemiedigkie.no/layout/set/print')
-
-    def test_lang(self):
-        with requests_mock.Mocker() as m:
-            m.get('http://www.saemiedigkie.no', content=self.content)
-
-            sdnp = samediggi_no_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
-
-            self.assertEqual(sdnp.lang, 'sma')
-
-    def test_links(self):
-        with requests_mock.Mocker() as m:
-            m.get('http://www.saemiedigkie.no', content=self.content)
-
-            sdnp = samediggi_no_crawler.SamediggiNoPage('http://www.saemiedigkie.no')
-
+            self.assertTrue(page.saveable)
+            self.assertEqual(page.lang, 'sme')
             self.assertSetEqual(
-                sdnp.links,
+                page.links,
                 set([
-                    u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie',
-                    u'http://www.saemiedigkie.no',
-                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Tjirkijh/Tjirkijidie',
-                    u'http://www.saemiedigkie.no/Preessebievnesh',
-                    u'http://www.saemiedigkie.no/Healsoe-jih-sosijaale',
-                    u'http://www.saemiedigkie.no/Gaskenasjovnaale-barkoe',
-                    u'http://www.saemiedigkie.no/Healsoe-jih-sosijaale/Maanavaarjelimmie',
-                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre',
-                    u'http://www.saemiedigkie.no/Kultuvrejieleme/Gaarsjelimmie',
-                    u'http://www.saemiedigkie.no/Jielemh/Duedtie/Duoji-doaibmadoarjjaortnet',
-                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Gaskesadth-mijjine',
-                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre/AAaarganisasjovnestruktuvre/Saemiedigkieraerie',
-                    u'http://www.saemiedigkie.no/Gaskenasjovnaale-barkoe/Gaskenasjovnaale-aalkoealmetjelaavenjostoe',
-                    u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Energije-jih-mineraalh/Samediggeraddi-ii-halit-Nussirii-doaimma',
-                    u'http://www.saemiedigkie.no/Jielemh/Baaatsoe',
-                    u'http://www.saemiedigkie.no/',
-                    u'http://www.saemiedigkie.no/Lierehtimmie/Maanagierte',
-                    u'http://www.saemiedigkie.no/Gaskenasjovnaale-barkoe/Raastendaaaresth-regijovnaale-laavenjostoe',
-                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre/AAaarganisasjovnestruktuvre/Stoerretjaaanghkoe',
-                    u'http://www.saemiedigkie.no/Giele/Reeremedajve-saemien-gielide',
-                    u'http://www.saemiedigkie.no/Healsoe-jih-sosijaale/Sosijaale',
-                    u'http://www.saemiedigkie.no/Lierehtimmie/Dotkeme-jih-jollebe-oeoehpehtimmie/Stipeanda-ja-doarjja/Stipenden-bijre-jollebe-oeoehpentaemma',
-                    u'http://www.saemiedigkie.no/Laante-jih-vierhtiereaktah/Laantereaktah',
-                    u'http://www.saemiedigkie.no/Veeljeme-jih-veeljemelaahkoe',
-                    u'http://www.saemiedigkie.no/Jielemh',
-                    u'http://www.saemiedigkie.no/Jielemh/Jaaartaburrie',
-                    u'http://www.saemiedigkie.no/Jielemh/Marijne-jielemh',
-                    u'http://www.saemiedigkie.no/Kultuvrejieleme/Stipende-jih-daaarjoe',
-                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Gaskesadth-mijjine/Bargiid-oktavuodadiedut',
-                    u'http://www.saemiedigkie.no/Gaerjagaaetie',
-                    u'http://www.saemiedigkie.no/Laante-jih-vierhtiereaktah',
-                    u'http://www.saemiedigkie.no/Vaaarhkoe',
-                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Rabas-virggit',
-                    u'http://www.saemiedigkie.no/Gaskenasjovnaale-barkoe/Saemien-laavenjostoe',
-                    u'http://www.saemiedigkie.no/Saemiedigkien-bijre/Tjirkijh',
-                    u'http://www.saemiedigkie.no/Preessebievnesh/Pressebievnesh/PRM-Sametinget-og-Oslo-kommune-vil-styrke-samisk-spraak-og-kultur-i-Oslo',
-                    u'http://www.saemiedigkie.no/Giele/Bievnesh-saemien-gieli-bijre/Savvat-buori-sagastallama',
-                    u'http://www.saemiedigkie.no/Kultuvrejieleme',
-                    u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Eatnemegellievoete',
-                    'http://www.samediggi.no/Samedikki-coahk',
-                    u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Areale/Baaetieh-raeriejgujmie-baaetijen-aejkien-areale-jih-byjresepolitihkese',
-                    u'http://www.saemiedigkie.no/Stipendh-jih-daaarjoeh',
-                    u'http://www.saemiedigkie.no/Giele/Bievnesh-saemien-gieli-bijre',
-                    u'http://www.saemiedigkie.no/Laante-jih-vierhtiereaktah/Goerehtalleme',
-                    u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Areale',
-                    u'http://www.saemiedigkie.no/Giele',
-                    u'http://www.saemiedigkie.no/Kultuvrejieleme/Meedijah',
-                    u'http://www.saemiedigkie.no/Lierehtimmie',
-                    u'http://www.saemiedigkie.no/Giele/Saemien-sijjienommh',
-                    u'http://www.saemiedigkie.no/Lierehtimmie/Dotkeme-jih-jollebe-oeoehpehtimmie',
-                    u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Kultuvremojhtesh',
-                    u'http://www.saemiedigkie.no/Lierehtimmie/Maadthskuvle-jih-Jaaa',
-                    u'http://www.saemiedigkie.no/Laante-jih-vierhtiereaktah/Goeoelemereakta',
-                    u'http://www.saemiedigkie.no/Byjrese-areale-jih-kultuvrevarjelimmie/Kultuvremojhtesh/Stipeanda-ja-doarjja/Kultuvremojhtesevaarjelimmie',
-                    u'http://www.saemiedigkie.no/Healsoe-jih-sosijaale/Healsoe'
+                    'https://samediggi.no/Balvalusat2/Dearvvasvuohta-ja-sosiala',
+                    'https://samediggi.no/Vuoigatvuodat',
+                    'https://samediggi.no/Samedikki-birra2/Rehket-Samediggai',
+                    'https://samediggi.no/Samedikki-birra',
+                    'https://samediggi.no/Doarjagat-ja-stipeanddat',
+                    'https://samediggi.no/Preassa',
+                    'https://samediggi.no/Samedikki-birra2/langlink',
+                    'https://samediggi.no/Balvalusat2/Ealahusat',
+                    'https://samediggi.no/Politihkka2/Assit-ja-dokumeanttat',
+                    'https://samediggi.no/Odasarkiiva',
+                    'https://samediggi.no/Balvalusat2/Giella',
+                    'https://samediggi.no/Samedikki-birra2/langlink2',
+                    'https://samediggi.no/Balvalusat2/Kultuvra',
+                    'https://samediggi.no/Valga',
+                    'https://samediggi.no/Balvalusat2/Dassearvu',
+                    'https://samediggi.no/Politihkka2',
+                    'https://samediggi.no/Lagideamit',
+                    'https://samediggi.no/Balvalusat2/Oahpahus-ja-oahpponeavvut',
+                    'https://samediggi.no/Balvalusat2/Riikkaidgaskasas-bargu',
+                    'https://samediggi.no/Girjeradju',
+                    'https://samediggi.no/Balvalusat2/Biras-areala-ja-kultursuodjaleapmi',
+                    'https://samediggi.no/Balvalusat2/Manaidgardi'
                 ]))
+
+            page.set_initial_metadata()
+            self.assertEqual(
+                page.corpuspath.metadata.get_variable('title'),
+                'PRD: Doarjja julevsámi giellaprošeavttaide')
+            self.assertEqual(
+                page.corpuspath.metadata.get_variable('filename'),
+                'https://samediggi.no/Odasarkiiva/PRD-Doarjja-julevsami-giellaproseavttaide'
+            )
+            self.assertEqual(
+                page.corpuspath.metadata.get_variable('mainlang'), 'sme')
+            self.assertEqual(
+                page.corpuspath.metadata.get_variable('genre'), 'admin')
+            self.assertEqual(
+                page.corpuspath.metadata.get_variable('translated_from'),
+                'nob')

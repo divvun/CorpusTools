@@ -140,3 +140,4 @@ v<0.26.0>, <20190603> -- convert2xml has by default only reconverted files if me
                          the converted file. Revert this behaviour, and add an option (lazy-conversion) to
                          emulate the previous behaviour.
 v<0.26.1>, <20190611> -- set default arguments for ConverterManager, fixes error in reparallelize
+v<0.26.2>, <20190614> -- make SamediggiNoCrawler work again
