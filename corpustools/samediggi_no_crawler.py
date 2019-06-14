@@ -93,8 +93,8 @@ class SamediggiNoPage(object):
                     etree.tostring(
                         self.tree, encoding='utf8', pretty_print=True))
             raise SystemExit(
-                f'The format of links to parallel documents has changed {self.parsed_url}'
-            )
+                'The format of links to parallel documents has changed {}'.
+                format(self.parsed_url))
         if self.lang is None:
             raise SystemExit('Language format has changed.')
 
@@ -102,7 +102,7 @@ class SamediggiNoPage(object):
     def parallel_links(self):
         """Get links to the parallels of this document."""
         return [
-            f'https:{a.get("href")}' for a in self.tree.xpath(
+            'https:{}'.format(a.get("href")) for a in self.tree.xpath(
                 './/li[@class="itemLanguage"]/div/ul/li/a[@href]')
         ]
 
@@ -222,7 +222,7 @@ class SamediggiNoCrawler(crawler.Crawler):
         """Crawl a pageset that link gives us."""
         pages = []
 
-        print(f'{link}')
+        print(link)
         orig_page = self.crawl_page(link)
         if orig_page is not None:
             self.add_page(orig_page, pages)
@@ -232,7 +232,7 @@ class SamediggiNoCrawler(crawler.Crawler):
             if pages and pages[0].lang != 'nob':
                 self.fix_parallel_info(pages)
                 for parallel_page in pages:
-                    print(f'\t{parallel_page.corpuspath.orig}')
+                    print('\t{}'.format(parallel_page.corpuspath.orig))
                     parallel_page.save()
                     self.vcs.add(parallel_page.corpuspath.orig)
                     self.vcs.add(parallel_page.corpuspath.xsl)
