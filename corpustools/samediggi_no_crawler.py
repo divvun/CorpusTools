@@ -38,6 +38,12 @@ class SamediggiNoPage(object):
     address_re = re.compile(r'/\w')
     unwanted_endings = ('.pdf', '.jpg', '.docx', '.xslx', '.csv', '.pptx',
                         '.eps')
+    language_mapper = {
+        'no-bokmaal': 'nob',
+        'sma-NO': 'sma',
+        'sme-NO': 'sme',
+        'smj-NO': 'smj'
+    }
 
     def __init__(self, result):
         """Initialise the SamediggiNoPage class."""
@@ -115,15 +121,9 @@ class SamediggiNoPage(object):
     @property
     def lang(self):
         """Return the language of the file."""
-        language_mapper = {
-            'no-bokmaal': 'nob',
-            'sma-NO': 'sma',
-            'sme-NO': 'sme',
-            'smj-NO': 'smj'
-        }
         content_language = self.tree.find('.//meta[@name="Content-language"]')
 
-        return language_mapper[content_language.get('content')]
+        return self.language_mapper[content_language.get('content')]
 
     def is_valid_address(self, href):
         """Check if this is an address that should be crawled."""
