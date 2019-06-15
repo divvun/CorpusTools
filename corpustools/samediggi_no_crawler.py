@@ -45,8 +45,8 @@ def make_digest(bytestring):
 class SamediggiNoPage(object):
     """Save a samediggi.no page to the corpus."""
     address_re = re.compile(r'/\w')
-    unwanted_endings = ('.pdf', '.jpg', '.docx', '.xslx', '.csv', '.pptx',
-                        '.eps', '.doc')
+    unwanted_endings = ('.pdf', '.jpg', '.docx', '.xlsx', '.csv', '.pptx',
+                        '.eps', '.doc', '.png', '.xls')
     language_mapper = {
         'no-bokmaal': 'nob',
         'sma-NO': 'sma',
