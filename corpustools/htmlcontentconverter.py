@@ -223,6 +223,7 @@ class HTMLBeautifier(object):
                     'content-wrapper',  # siida.fi
                     'control-group field-wrapper tiedotteet-period',  # metsa.fi
                     'control-group form-inline',  # metsa.fi
+                    'date',  # samediggi.no, 2019 ->
                     'documentInfoEm',
                     'documentPaging',
                     'documentPaging PagingBtm',  # regjeringen.no
