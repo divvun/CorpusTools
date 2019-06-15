@@ -211,7 +211,7 @@ class SamediggiNoCrawler(crawler.Crawler):
                     parallel_pages.insert(0, page)
 
     @staticmethod
-    def fix_parallel_info(parallel_pages):
+    def set_parallel_info(parallel_pages):
         """Set the parallels for this set of parallel pages."""
         for parallel_page1 in parallel_pages:
             for parallel_page2 in parallel_pages:
@@ -231,7 +231,7 @@ class SamediggiNoCrawler(crawler.Crawler):
                 self.add_page(self.crawl_page(parallel_link), pages)
 
             if pages and pages[0].lang != 'nob':
-                self.fix_parallel_info(pages)
+                self.set_parallel_info(pages)
                 for parallel_page in pages:
                     print('\t{}'.format(parallel_page.corpuspath.orig))
                     parallel_page.save()
