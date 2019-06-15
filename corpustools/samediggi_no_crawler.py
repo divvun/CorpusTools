@@ -128,7 +128,7 @@ class SamediggiNoPage(object):
     def is_valid_address(self, href):
         """Check if this is an address that should be crawled."""
         match = self.address_re.match(href)
-        return (match and 'Sametingets-vedtak-1989-2004' not in href
+        return (match and 'sametingets-vedtak-1989-2004' not in href
                 and not href.endswith(self.unwanted_endings))
 
     @property
@@ -139,7 +139,7 @@ class SamediggiNoPage(object):
                 (self.parsed_url.scheme, self.parsed_url.netloc,
                  address.get('href'), '', '', ''))
             for address in self.tree.xpath('.//a[@href]')
-            if self.is_valid_address(address.get('href'))
+            if self.is_valid_address(address.get('href').lower())
         }
 
     @property
