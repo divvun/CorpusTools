@@ -96,7 +96,7 @@ class SamediggiNoPage(object):
         if not self.parallel_links:
             raise SystemExit(
                 'The format of links to parallel documents has changed {}'.
-                format(self.parsed_url))
+                format(self.url))
         if self.lang is None:
             raise SystemExit('Language format has changed.')
 
