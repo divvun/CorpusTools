@@ -22,6 +22,8 @@
 
 from __future__ import absolute_import, print_function
 
+import fnmatch
+import hashlib
 import os
 import re
 
@@ -33,41 +35,58 @@ from corpustools import (adder, corpuspath, crawler, namechanger, text_cat,
                          versioncontrol)
 
 
+def make_digest(bytestring):
+    """Make a md5 hash to identify possible dupes."""
+    hasher = hashlib.md5()
+    hasher.update(bytestring)
+    return hasher.hexdigest()
+
+
 class SamediggiNoPage(object):
     """Save a samediggi.no page to the corpus."""
     address_re = re.compile(r'/\w')
     unwanted_endings = ('.pdf', '.jpg', '.docx', '.xslx', '.csv', '.pptx',
-                        '.eps')
+                        '.eps', '.doc')
     language_mapper = {
         'no-bokmaal': 'nob',
         'sma-NO': 'sma',
         'sme-NO': 'sme',
         'smj-NO': 'smj'
     }
+    corpus_dir = os.path.join(os.getenv('GTFREE'), 'orig')
 
-    def __init__(self, result):
+    def __init__(self, result, dupe_table):
         """Initialise the SamediggiNoPage class."""
         self.result = result
         self.url = result.url
         self.parsed_url = six.moves.urllib.parse.urlparse(self.url)
         self.tree = etree.HTML(result.text)
-        self.content = self.make_new_content()
-        self.corpuspath = corpuspath.CorpusPath(
-            os.path.join(
-                os.getenv('GTFREE'), 'orig', self.lang,
-                'admin/sd/samediggi.no',
-                namechanger.normalise_filename(
-                    adder.url_to_filename(self.result))))
-        self.set_initial_metadata()
+        fullpath = os.path.join(
+            self.corpus_dir, self.lang, 'admin/sd/samediggi.no',
+            namechanger.normalise_filename(adder.url_to_filename(self.result)))
+        possible_dupe = dupe_table.get(
+            make_digest(self.content_string), fullpath)
+        self.corpuspath = corpuspath.CorpusPath(possible_dupe)
+        if fullpath == possible_dupe:
+            self.set_initial_metadata()
+        else:
+            print('\nDupe! {} is dupe of {}\n'.format(self.url, possible_dupe))
 
-    def make_new_content(self):
+    @property
+    def content(self):
         """Extract only the content that is interesting from the web page."""
-        content = etree.Element('body')
+        content = etree.Element('html')
+        body = etree.SubElement(content, 'body')
         for xpath_directive in ['.//div[@class="newsIntroBox"]', './/article']:
             for element in self.tree.xpath(xpath_directive):
-                content.append(etree.fromstring(etree.tostring(element)))
+                body.append(etree.fromstring(etree.tostring(element)))
 
         return content
+
+    @property
+    def content_string(self):
+        """This will be the content of the saved file."""
+        return etree.tostring(self.content, encoding='utf8', pretty_print=True)
 
     def set_initial_metadata(self):
         """Extract metadata from the web page."""
@@ -98,7 +117,7 @@ class SamediggiNoPage(object):
                 'The format of links to parallel documents has changed {}'.
                 format(self.url))
         for parallel_link in self.parallel_links:
-            if not parallel_link.startswith('//www.sa'):
+            if not parallel_link.startswith('https://www.sa'):
                 raise SystemExit(
                     'The links to parallel documents has changed {}'.format(
                         self.url))
@@ -157,7 +176,7 @@ class SamediggiNoPage(object):
         with open(self.corpuspath.orig, 'wb') as xml:
             html = etree.Element('html')
             html.append(self.content)
-            xml.write(etree.tostring(html, encoding='utf8', pretty_print=True))
+            xml.write(self.content_string)
         self.corpuspath.metadata.write_file()
 
 
@@ -175,6 +194,21 @@ class SamediggiNoCrawler(crawler.Crawler):
         self.unvisited_links.add(u'https://www.samedigge.no/')
 
         self.vcs = versioncontrol.vcs(self.goaldir)
+        self.dupe_table = {
+            digest: name
+            for digest, name in self.make_dupe_tuple()
+        }
+
+    def make_dupe_tuple(self):
+        """Make a hash/filename tuple to be used in the dupe table."""
+        for lang in self.langs:
+            root = os.path.join(
+                os.getenv('GTFREE'), 'orig', lang, 'admin/sd/samediggi.no')
+            for path, _, filelist in os.walk(root):
+                for name in fnmatch.filter(filelist, '*.html'):
+                    fullpath = os.path.join(path, name)
+                    with open(fullpath, 'rb') as html_stream:
+                        yield make_digest(html_stream.read()), fullpath
 
     def crawl_page(self, link):
         """Collect links from a page."""
@@ -182,7 +216,7 @@ class SamediggiNoCrawler(crawler.Crawler):
         result = requests.get(link)
 
         if result.ok and 'html' in result.headers['content-type'].lower():
-            orig_page = SamediggiNoPage(result)
+            orig_page = SamediggiNoPage(result, self.dupe_table)
             orig_page.sanity_test()
             self.visited_links.add(orig_page.url)
             self.unvisited_links = self.unvisited_links.union(orig_page.links)
@@ -234,6 +268,9 @@ class SamediggiNoCrawler(crawler.Crawler):
                 self.set_parallel_info(pages)
                 for parallel_page in pages:
                     print('\t{}'.format(parallel_page.corpuspath.orig))
+                    self.dupe_table[make_digest(
+                        parallel_page.
+                        content_string)] = parallel_page.corpuspath.orig
                     parallel_page.save()
                     self.vcs.add(parallel_page.corpuspath.orig)
                     self.vcs.add(parallel_page.corpuspath.xsl)

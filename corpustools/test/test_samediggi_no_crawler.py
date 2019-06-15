@@ -414,7 +414,7 @@ class TestSamediggiNoPage(unittest.TestCase):
                 'https://samediggi.no/Odasarkiiva/PRD-Doarjja-julevsami-giellaproseavttaide'
             )
 
-            page = samediggi_no_crawler.SamediggiNoPage(result)
+            page = samediggi_no_crawler.SamediggiNoPage(result, {})
             self.assertEqual(
                 page.corpuspath.orig,
                 os.path.join(
