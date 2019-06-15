@@ -94,10 +94,6 @@ class SamediggiNoPage(object):
     def sanity_test(self):
         """Check if the pages seem to have the expected structure."""
         if not self.parallel_links:
-            with open('errorpage.html', 'wb') as errorpage:
-                errorpage.write(
-                    etree.tostring(
-                        self.tree, encoding='utf8', pretty_print=True))
             raise SystemExit(
                 'The format of links to parallel documents has changed {}'.
                 format(self.parsed_url))
