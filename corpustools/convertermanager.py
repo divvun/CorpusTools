@@ -56,7 +56,10 @@ class ConverterManager(object):
             ConverterManager._languageguesser = text_cat.Classifier(None)
         return self._languageguesser
 
-    def __init__(self, lazy_conversion=False, write_intermediate=False, goldstandard=False):
+    def __init__(self,
+                 lazy_conversion=False,
+                 write_intermediate=False,
+                 goldstandard=False):
         """Initialise the ConverterManager class.
 
         Args:
@@ -79,8 +82,8 @@ class ConverterManager(object):
             orig_file: string containg the path to the original file.
         """
         try:
-            conv = converter.Converter(orig_file,
-                                       lazy_conversion=self.lazy_conversion)
+            conv = converter.Converter(
+                orig_file, lazy_conversion=self.lazy_conversion)
             conv.write_complete(self.languageguesser())
         except (util.ConversionError, ValueError) as error:
             LOGGER.warn('Could not convert %s\n%s', orig_file,
@@ -91,7 +94,7 @@ class ConverterManager(object):
         LOGGER.info('Starting the conversion of %d files', len(self.files))
 
         pool_size = multiprocessing.cpu_count()
-        pool = multiprocessing.Pool(processes=pool_size,)
+        pool = multiprocessing.Pool(processes=pool_size, )
         pool.map(unwrap_self_convert,
                  list(six.moves.zip([self] * len(self.files), self.files)))
         pool.close()
@@ -155,8 +158,9 @@ class ConverterManager(object):
             elif os.path.isdir(source):
                 self.add_directory(source)
             else:
-                LOGGER.error('Can not process %s\n'
-                             'This is neither a file nor a directory.', source)
+                LOGGER.error(
+                    'Can not process %s\n'
+                    'This is neither a file nor a directory.', source)
 
 
 def unwrap_self_convert(arg, **kwarg):
@@ -230,7 +234,8 @@ def main():
 
     args = parse_options()
 
-    manager = ConverterManager(args.lazy_conversion, args.write_intermediate, args.goldstandard)
+    manager = ConverterManager(args.lazy_conversion, args.write_intermediate,
+                               args.goldstandard)
     manager.collect_files(args.sources)
 
     try:
