@@ -113,10 +113,10 @@ class ConverterManager(object):
         """
         if os.path.isfile(xsl_file) and os.path.isfile(xsl_file[:-4]):
             metadata = xslsetter.MetadataHandler(xsl_file)
-            if ((metadata.get_variable('conversion_status') == 'standard' and
-                 not self.goldstandard) or
-                (metadata.get_variable('conversion_status') == 'correct' and
-                 self.goldstandard)):
+            if ((metadata.get_variable('conversion_status') == 'standard'
+                 and not self.goldstandard)
+                    or (metadata.get_variable('conversion_status').startswith(
+                        'correct') and self.goldstandard)):
                 self.files.append(xsl_file[:-4])
         else:
             LOGGER.warn('%s does not exist', xsl_file[:-4])

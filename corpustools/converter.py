@@ -114,7 +114,7 @@ class Converter(object):
     @property
     def goldstandard(self):
         """Return a boolean indicating if the file is a gold standard doc."""
-        return self.metadata.get_variable('conversion_status') == 'correct'
+        return self.metadata.get_variable('conversion_status').startswith('correct')
 
     @staticmethod
     def get_dtd_location():

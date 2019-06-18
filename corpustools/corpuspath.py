@@ -139,6 +139,8 @@ class CorpusPath(object):
         module = 'converted'
         if self.metadata.get_variable('conversion_status') == 'correct':
             module = 'goldstandard/converted'
+        if self.metadata.get_variable('conversion_status') == 'correct-no-gs':
+            module = 'correct-no-gs/converted'
 
         return self.name(module=module, extension='.xml')
 
