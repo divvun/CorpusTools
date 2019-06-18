@@ -230,6 +230,7 @@ class HTMLBeautifier(object):
                     'documentTop',  # regjeringen.no
                     'dotList',  # nord-salten.no
                     'dropmenudiv',  # calliidlagadus.org
+                    'embedFile',  # samediggi.no -> 2019
                     'embedded-breadcrumbs',
                     'egavpi',  # calliidlagadus.org
                     'egavpi_fiskes',  # calliidlagadus.org
@@ -255,6 +256,7 @@ class HTMLBeautifier(object):
                     'inside',  # samas.no
                     'latestnews_uutisarkisto',
                     'ld-navbar',
+                    'listArticleLink',  # samediggi.no -> 2019
                     'logo-links',  # metsa.fi
                     'meta',
                     'meta ui-helper-clearfix',  # nord-salten.no
