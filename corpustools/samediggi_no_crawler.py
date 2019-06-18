@@ -77,7 +77,10 @@ class SamediggiNoPage(object):
         """Extract only the content that is interesting from the web page."""
         content = etree.Element('html')
         body = etree.SubElement(content, 'body')
-        for xpath_directive in ['.//div[@class="newsIntroBox"]', './/article']:
+        for xpath_directive in [
+                './/div[@class="newsIntroBox"]', './/article',
+                './/div[@class="news"]', './/section[@class="blockInfo"]'
+        ]:
             for element in self.tree.xpath(xpath_directive):
                 body.append(etree.fromstring(etree.tostring(element)))
 
