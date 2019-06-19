@@ -3,6 +3,16 @@
 Corpus Tools contains tools to manipulate a corpus in different ways.
 These scripts will be installed
 
+!!Howto install and update the tools
+
+!First time install
+* [Install requirements|CorpusTools.html#Requirements].
+* [Install CorpusTools|CorpusTools.html#To+own+home+directory+(recommended)]
+
+!Update
+* [Howto update CorpusTools|CorpusTools.html#To+own+home+directory+(recommended)]
+
+
 !!Use the content of the corpus
 * [convert2xml: Convert original files to giellatekno xml|CorpusTools.html#convert2xml]
 * [ccat: Print the contents of a converted corpus file as plain text|CorpusTools.html#ccat]
@@ -92,7 +102,7 @@ cd $GTHOME/tools/CorpusTools
 python setup.py install --user --install-scripts=$HOME/bin --record installed_files.txt
 }}}
 
-!System wide
+!System wide (recommended for servers only)
 Install the tools for all users on a machine by
 
 {{{
