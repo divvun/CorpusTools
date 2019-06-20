@@ -82,9 +82,27 @@ class SamediggiNoPage(object):
                 './/div[@class="news"]', './/section[@class="blockInfo"]'
         ]:
             for element in self.tree.xpath(xpath_directive):
-                body.append(etree.fromstring(etree.tostring(element)))
+                body.append(
+                    self.filter_content(
+                        etree.fromstring(etree.tostring(element))))
 
         return content
+
+    @staticmethod
+    def filter_content(element):
+        """Remove elements without interesting content."""
+        for unwanted in [
+                './/div[@class="embedFile"]', './/div[@class="date"]',
+                './/div[starts-with(@class, "person ")]',
+                './/div[starts-with(@class, "listArticleLink")]',
+                './/div[@class="accordion document-list"]',
+                './/article[@class="regionPage"]',
+                './/ul[@class="listLinksLine"]'
+        ]:
+            for unwanted_element in element.xpath(unwanted):
+                unwanted_element.getparent().remove(unwanted_element)
+
+        return element
 
     @property
     def content_string(self):
