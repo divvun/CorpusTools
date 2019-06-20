@@ -14,7 +14,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2018 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2013-2019 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Classes and functions to convert giellatekno xml formatted files to text."""
@@ -192,7 +193,7 @@ class XMLPrinter(object):
         if not self.typos:
             if element.tail is not None and element.tail.strip() != '':
                 if not self.one_word_per_line:
-                    textlist.append(element.tail.strip())
+                    textlist.append(element.tail)
                 else:
                     textlist.append('\n'.join(element.tail.strip().split()))
 
@@ -202,19 +203,17 @@ class XMLPrinter(object):
         Also scan the children if there is no error filtering or
         if the element is filtered
         """
-        text = ''
+        text = []
         if element.text is not None and element.text.strip() != '':
-            text = element.text.strip()
+            text.append(element.text)
 
         if not self.error_filtering or self.include_this_error(element):
             for child in element:
-                if text != '':
-                    text += ' '
                 if child.tag == 'span' and element.tag == 'errorsyn':
-                    text += child.text
+                    text.append(child.text)
                 else:
                     try:
-                        text += child.get('correct')
+                        text.append(child.get('correct'))
                     except TypeError:
                         print('Unexpected error element', file=sys.stderr)
                         print(
@@ -227,16 +226,16 @@ class XMLPrinter(object):
                             file=sys.stderr)
 
                 if child.tail is not None and child.tail.strip() != '':
-                    text += u' {}'.format(child.tail.strip())
+                    text.append(child.tail)
 
-        text += self.get_error_attributes(dict(element.attrib))
+        text.append(self.get_error_attributes(dict(element.attrib)))
 
-        return text
+        return u''.join(text)
 
     def get_error_attributes(self, attributes):
         """Collect and format the attributes + the filename."""
-        text = '\t'
-        text += attributes.get('correct')
+        text = ['\t']
+        text.append(attributes.get('correct'))
         del attributes['correct']
 
         attr = [
@@ -245,16 +244,16 @@ class XMLPrinter(object):
         ]
 
         if attr:
-            text += '\t#'
-            text += ','.join(attr)
+            text.append('\t#')
+            text.append(','.join(attr))
 
             if self.print_filename:
-                text += u', file: {}'.format(os.path.basename(self.filename))
+                text.append(u', file: {}'.format(os.path.basename(self.filename)))
 
         elif self.print_filename:
-            text += u'\t#file: {}'.format(os.path.basename(self.filename))
+            text.append(u'\t#file: {}'.format(os.path.basename(self.filename)))
 
-        return text
+        return u''.join(text)
 
     def collect_inline_errors(self, element, textlist, parentlang):
         """Add the "correct" element to the list textlist."""
@@ -271,7 +270,8 @@ class XMLPrinter(object):
 
         if textlist:
             if not self.one_word_per_line:
-                buffer.write(u' '.join(textlist))
+                textlist[-1] = textlist[-1].rstrip()
+                buffer.write(u''.join(textlist))
                 buffer.write(u' ¶\n')
             else:
                 buffer.write(u'\n'.join(textlist))
@@ -300,8 +300,8 @@ class XMLPrinter(object):
             elt_lang (str): language of the element.
         """
         if elt_contents is not None:
-            text = elt_contents.strip()
-            if text != '' and self.is_correct_lang(elt_lang):
+            text = elt_contents
+            if self.is_correct_lang(elt_lang):
                 if not self.one_word_per_line:
                     textlist.append(text)
                 else:
