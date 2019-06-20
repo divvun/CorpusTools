@@ -392,8 +392,7 @@ class XMLPrinter(object):
         """
         buffer = StringIO()
 
-        if self.hyph_replacement is not None:
-            self.handle_hyph()
+        self.handle_hyph()
         if self.dependency:
             self.print_element(self.etree.find('.//dependency'), buffer)
         elif self.disambiguation:
