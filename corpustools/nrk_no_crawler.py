@@ -230,7 +230,7 @@ class NrkSmeCrawler(object):
         """Fetch Northern Saami pages from nrk.no."""
         self.crawl_oanehaccat()
         self.crawl_existing_tags()
-        self.crawl_authors()
+        # self.crawl_authors()
         # self.corpus_adder.add_files_to_working_copy()
         self.report()
 
