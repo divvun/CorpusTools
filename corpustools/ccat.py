@@ -592,7 +592,6 @@ def find_files(targets, extension):
         str: path to the interesting file
     """
     for target in targets:
-        print(target, file=sys.stderr)
         if os.path.exists(target):
             if os.path.isfile(target) and target.endswith(extension):
                 yield target
