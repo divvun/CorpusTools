@@ -248,18 +248,22 @@ class NrkSmeCrawler(object):
                 self.crawl_tag(additional_tag, tag_name)
 
     def crawl_oanehaccat(self):
-        u"""Crawl short news, provided by an rss feed.
+        u"""Crawl short news, provided by a json dict.
 
         This feed only contains Northern Sámi articles.
         """
         util.note('Fetching articles from {}'.format('oanehaččat'))
         self.tags['oanehaččat'] = 'oanehaččat'
-        for entry in feedparser.parse(
-                'https://www.nrk.no/sapmi/oanehaccat.rss').entries:
+        oanehaccat = requests.get(
+            'https://www.nrk.no/serum/api/content/json/'
+            '1.13572949?v=2&limit=1000&context=items'
+        )
+        for relation in oanehaccat.json()['relations']:
             self.counter['oanehaččat_total'] += 1
-            if entry['link'].split('-')[-1] not in self.fetched_ids:
+            if relation['id'] not in self.fetched_ids:
                 self.counter['oanehaččat_fetched'] += 1
-                self.add_nrk_article(entry['link'])
+                self.add_nrk_article('https://www.nrk.no/sapmi/{}'.format(
+                    relation['id']))
 
         self.counter['total'] += self.counter['oanehaččat_total']
         self.counter['fetched'] += self.counter['oanehaččat_fetched']
@@ -388,8 +392,8 @@ class NrkSmeCrawler(object):
                 self.valid_authors(article), start=1):
             metadata.set_variable('author' + str(count) + '_ln',
                                   author_parts[-1])
-            metadata.set_variable('author' + str(count) + '_fn', ' '.join(
-                author_parts[:-1]))
+            metadata.set_variable('author' + str(count) + '_fn',
+                                  ' '.join(author_parts[:-1]))
 
         time = article.find('//time[@itemprop="datePublished"]')
         if time is None:

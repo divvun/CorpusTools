@@ -141,3 +141,4 @@ v<0.26.0>, <20190603> -- convert2xml has by default only reconverted files if me
                          emulate the previous behaviour.
 v<0.26.1>, <20190611> -- set default arguments for ConverterManager, fixes error in reparallelize
 v<0.26.2>, <20190614> -- make SamediggiNoCrawler work again
+v<0.26.3>, <20190809> -- make the nrk.no news flash fetcher work again
