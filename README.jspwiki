@@ -199,9 +199,10 @@ is found in the make files in $GTBIG/prooftools.
 !The complete help text from the program:
 
 {{{
-usage: ccat [-h] [-l LANG] [-T] [-L] [-t] [-a] [-c] [-C] [-ort] [-ortreal]
-            [-morphsyn] [-syn] [-lex] [-foreign] [-noforeign] [-typos] [-f]
-            [-S] [-dis] [-dep] [-hyph HYPH_REPLACEMENT]
+usage: ccat [-h] [--version] [-l LANG] [-T] [-L] [-t] [-a] [-c] [-C] [-ort]
+            [-ortreal] [-morphsyn] [-syn] [-lex] [-format] [-foreign]
+            [-noforeign] [-typos] [-f] [-S] [-dis] [-dep]
+            [-hyph HYPH_REPLACEMENT]
             targets [targets ...]
 
 Print the contents of a corpus in XML format The default is to print
@@ -214,6 +215,7 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
+  --version             show program's version number and exit
   -l LANG               Print only elements in language LANG. Default is all
                         langs.
   -T                    Print paragraphs with title type
@@ -231,6 +233,7 @@ optional arguments:
                         corrections
   -syn                  Only print syntactic (¥/<errorsyn..>) corrections
   -lex                  Only print lexical (€/<errorlex..>) corrections
+  -format               Only print format (‰/<errorformat..>) corrections
   -foreign              Only print foreign (∞/<errorlang..>) corrections
   -noforeign            Do not print anything from foreign (∞/<errorlang..>)
                         corrections
