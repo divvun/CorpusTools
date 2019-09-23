@@ -33,7 +33,7 @@ import sys
 import lxml.etree as etree
 import six
 
-from corpustools import argparse_version, ccat, move_files, util
+from corpustools import argparse_version, ccat, corpuspath, move_files, util
 
 
 class DupeFinder(object):
@@ -78,17 +78,17 @@ class DupeFinder(object):
             difflib.unified_diff(self.files[filename1].splitlines(1),
                                  self.files[filename2].splitlines(1)))
         if not result:
-            print('\nParallels:', filename1, filename2)
+            print('Parallels:', filename1, filename2)
             to_remove = filename1
             if self.get_parallel_texts(filename1) > self.get_parallel_texts(
                     filename2):
                 to_remove = filename2
 
             self.dupe_files.add(to_remove)
-            origname = to_remove.replace('converted/', 'orig/').replace(
-                '.xml', '').decode('utf8')
-            if os.path.exists(origname):
-                move_files.mover(origname, u'')
+            origname = corpuspath.CorpusPath(to_remove)
+            if os.path.exists(origname.orig):
+                move_files.mover(origname.orig, u'')
+            print()
 
     @staticmethod
     def get_wc(filename):
