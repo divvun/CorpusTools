@@ -71,7 +71,7 @@ class TestParallelizeTCA2(unittest.TestCase):
     def setUp(self):
         self.parallelize = parallelize.ParallelizeTCA2(
             os.path.join(HERE, "parallelize_data",
-                         'prestable/converted/sme/facta/skuvlahistorja2/'
+                         'converted/sme/facta/skuvlahistorja2/'
                          'aarseth2-s.htm.xml'),
             "nob",
             quiet=True,
@@ -81,14 +81,14 @@ class TestParallelizeTCA2(unittest.TestCase):
         self.assertEqual(
             self.parallelize.origfile1,
             os.path.join(HERE, "parallelize_data",
-                         'prestable/converted/nob/facta/skuvlahistorja2/'
+                         'converted/nob/facta/skuvlahistorja2/'
                          'aarseth2-n.htm.xml'))
 
     def test_parallel_path(self):
         self.assertEqual(
             self.parallelize.origfile2,
             os.path.join(HERE, "parallelize_data",
-                         'prestable/converted/sme/facta/skuvlahistorja2/'
+                         'converted/sme/facta/skuvlahistorja2/'
                          'aarseth2-s.htm.xml'))
 
     def test_lang1(self):
@@ -116,7 +116,7 @@ class TestParallelizeHunalign(unittest.TestCase):
     def setUp(self):
         self.parallelize = parallelize.ParallelizeHunalign(
             os.path.join(HERE, "parallelize_data",
-                         'prestable/converted/sme/facta/skuvlahistorja2/'
+                         'converted/sme/facta/skuvlahistorja2/'
                          'aarseth2-s.htm.xml'),
             "nob",
             quiet=True)
@@ -257,7 +257,7 @@ class TestTca2ToTmx(unittest.TestCase):
         """Hand the data from the Parallelize class to the tmx class."""
         para = parallelize.ParallelizeTCA2(
             os.path.join(HERE, "parallelize_data",
-                         'prestable/converted/sme/facta/skuvlahistorja2/'
+                         'converted/sme/facta/skuvlahistorja2/'
                          'aarseth2-s.htm.xml'), "nob")
 
         self.para = para
