@@ -525,6 +525,12 @@ def parse_options():
         help='Only print lexical (€/<errorlex..>) \
                         corrections')
     parser.add_argument(
+        '-format',
+        dest='errorformat',
+        action='store_true',
+        help='Only print format (‰/<errorformat..>) \
+                        corrections')
+    parser.add_argument(
         '-foreign',
         dest='errorlang',
         action='store_true',
@@ -628,6 +634,7 @@ def main():
         errorlex=args.errorlex,
         errorlang=args.errorlang,
         noforeign=args.noforeign,
+        errorformat=args.errorformat,
         typos=args.typos,
         print_filename=args.print_filename,
         one_word_per_line=args.one_word_per_line,

@@ -188,7 +188,7 @@ class Converter(object):
                     logfile.write("This is the xml tree:\n")
                     logfile.write(
                         etree.tostring(
-                            complete, encoding='utf8', pretty_print=True))
+                            complete, encoding='unicode', pretty_print=True))
                     logfile.write('\n')
 
                 raise util.ConversionError(

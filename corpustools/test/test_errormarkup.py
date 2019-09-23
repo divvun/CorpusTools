@@ -356,6 +356,20 @@ class TestErrorMarkup(unittest.TestCase):
         self.em.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
 
+    def test_error_format(self):
+        in_elem = etree.fromstring('<p>((A  B)‰(notspace|A B)  C)‰(notspace|A B C)</p>')
+        want = etree.fromstring(
+            '<p>'
+            '<errorformat correct="A B C" errorinfo="notspace">'
+            '<errorformat correct="A B" errorinfo="notspace">'
+            'A  B</errorformat>'
+            '  C</errorformat>'
+            '</p>'
+        )
+
+        self.em.add_error_markup(in_elem)
+        self.assertXmlEqual(in_elem, want)
+
     def test_preserve_space_at_end_of_sentence(self):
         in_elem = etree.fromstring(
             '<p>buvttadeaddji Anstein Mikkelsens$(typo|Mikkelsen) lea '
