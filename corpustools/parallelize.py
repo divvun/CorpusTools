@@ -193,8 +193,8 @@ class Parallelize(object):
         """Compute the name of the final tmx file."""
         orig_path_part = '/converted/{}/'.format(self.origfiles[0].lang)
         # First compute the part that shall replace /orig/ in the path
-        replace_path_part = '/tmx/{}2{}/'.format(self.origfiles[0].lang,
-                                                 self.origfiles[1].lang)
+        replace_path_part = '/prestable/tmx/{}2{}/'.format(
+            self.origfiles[0].lang, self.origfiles[1].lang)
         # Then set the outdir
         out_dirname = self.origfiles[0].dirname.replace(
             orig_path_part, replace_path_part)
@@ -425,7 +425,7 @@ def parse_options():
         help='Whether output of the parallelisation '
         'should be written to stdout or a files. '
         'Defaults to '
-        'tmx/{lang1}2{lang2}/{GENRE}/.../{BASENAME}.tmx',
+        'prestable/tmx/{lang1}2{lang2}/{GENRE}/.../{BASENAME}.tmx',
         action="store_true")
     parser.add_argument(
         '-f',
