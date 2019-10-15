@@ -263,6 +263,9 @@ class Converter(object):
             complete, language_guesser)
         lang_detector.detect_language()
 
+        for para in complete.iter('p'):
+            para.tail = '\n'
+
         return complete
 
     @staticmethod
@@ -299,9 +302,7 @@ class Converter(object):
                 if self.has_content(complete):
                     with open(self.names.converted, 'wb') as converted:
                         converted.write(
-                            etree.tostring(
-                                complete, encoding='utf8',
-                                pretty_print='True'))
+                            etree.tostring(complete, encoding='utf8'))
                 else:
                     LOGGER.error("%s has no text", self.names.orig)
 
