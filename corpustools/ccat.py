@@ -87,6 +87,7 @@ class XMLPrinter(object):
                  errorlex=False,
                  errorlang=False,
                  foreign=False,
+                 errorformat=False,
                  noforeign=False,
                  typos=False,
                  print_filename=False,
