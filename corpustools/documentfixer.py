@@ -211,11 +211,15 @@ class DocumentFixer(object):
     def fix_sms(self, element):
         """Replace invalid accents with valid ones for the sms language."""
         replacement_pairs = [
-            (u'\u2019', u'\u02BC'),
-            (u'\u0027', u'\u02BC'),
-            (u'\u2032', u'\u02B9'),
-            (u'\u00B4', u'\u02B9'),
-            (u'\u0301', u'\u02B9'),
+            (u'\u2019', u'\u02BC'),  # RIGHT SINGLE QUOTATION MARK,
+                                     # MODIFIER LETTER APOSTROPHE
+            (u'\u0027', u'\u02BC'),  # apostrophe,
+                                     # MODIFIER LETTER APOSTROPHE
+            (u'\u2032', u'\u02B9'),  # PRIME, MODIFIER LETTER PRIME
+            (u'\u00B4', u'\u02B9'),  # ACUTE ACCENT,
+                                     # MODIFIER LETTER PRIME
+            (u'\u0301', u'\u02B9'),  # COMBINING ACUTE ACCENT,
+                                     # MODIFIER LETTER PRIME
         ]
 
         for replacement_pair in replacement_pairs:
