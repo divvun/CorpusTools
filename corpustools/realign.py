@@ -74,7 +74,7 @@ def calculate_paths(tmxhtml):
     return corpus_path1, corpus_path2
 
 
-def convert_and_copy(corpus_path1, corpus_path2, prestable=True):
+def convert_and_copy(corpus_path1, corpus_path2):
     """Reconvert and copy files to prestable/converted.
 
     Args:
@@ -94,10 +94,6 @@ def convert_and_copy(corpus_path1, corpus_path2, prestable=True):
     converter_manager = convertermanager.ConverterManager()
     converter_manager.collect_files([corpus_path1.orig, corpus_path2.orig])
     converter_manager.convert_serially()
-
-    if prestable:
-        for corpus_path in [corpus_path1, corpus_path2]:
-            shutil.copy(corpus_path.converted, corpus_path.prestable_converted)
 
 
 def parse_options():
@@ -153,8 +149,7 @@ def main():
         raise SystemExit('Only converting')
 
     parallelize.parallelise_file(
-        corpus_path1.prestable_converted if 'prestable' in orig_path else \
-            corpus_path1.converted,
+        corpus_path1.converted,
         corpus_path2.metadata.get_variable('mainlang'),
         dictionary=None,
         quiet=False,
