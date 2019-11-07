@@ -146,3 +146,5 @@ v<0.27.0>, <20190809> -- add support for the errorformat/‰ errormarkup tag.
                          .tmx files are written to the prestable/tmx folder
 v<0.27.1>, <20191015> -- Do not pretty_print xml-files anymore, only set tails
                          of p as '\n' instead.
+v<0.27.2>, <20191107> -- Make reparallelize work again, it relied on converted
+                         files being in prestable.
