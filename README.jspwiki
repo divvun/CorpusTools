@@ -353,15 +353,22 @@ analyse_corpus depends on these external programs:
 * lookup2cg (found in the Divvun/Giellatekno svn)
 * lookup (from xfst)
 * vislcg3
+* hfst
 
 !Usage
 
-To be able to use this program you must build the fsts for the supported
+To be able to use this program you must either use the
+[nightly giella packages|https://giellalt.uit.no/infra/compiling_HFST3.html#The+simple+installation+%28you+download+ready-made+programs%29]
+or build the needed resources for the supported
 languages (exchange "sma" with "sme, smj" ad lib):
 
+{{cd $GTHOME/langs/sma}}
+
+Configure the language, use at least these to options {{--prefix=$HOME/.local --with-hfst --enable-tokenisers}}
+
 {{{
-cd $GTHOME/langs/sma
-make
+./configure --prefix=$HOME/.local --with-hfst --enable-tokenisers # add your own flags to taste }}
+make install
 }}}
 
 Then you must convert the corpus files as explained in the [convert2xml|CorpusTools.html#convert2xml] section.
@@ -370,7 +377,7 @@ When this is done you can analyse all files in the directory
 $GTFREE/converted/sme (and sma, smj) and its subdirectories by issuing this command:
 
 {{{
-analyse_corpus sme $GTFREE/converted/sme
+analyse_corpus -k hfst sme$GTFREE/converted/sme
 }}}
 
 The analysed file will be found in {{$GTFREE/analysed/sme}}
@@ -378,24 +385,30 @@ The analysed file will be found in {{$GTFREE/analysed/sme}}
 To analyse only one file, issue this command:
 
 {{{
-analyse_corpus --serial sme $GTFREE/converted/sme/file.html.xml
+analyse_corpus -k hfst --serial sme $GTFREE/converted/sme/file.html.xml
 }}}
 
 The complete help text from the program:
 {{{
-usage: analyse_corpus [-h] [--serial] lang converted_dirs [converted_dirs ...]
+usage: analyse_corpus [-h] [--version] [--serial]
+                      [-k {hfst,xfst,trace-smegram}]
+                      lang converted_dirs [converted_dirs ...]
 
 Analyse files found in the given directories for the given language using
 multiple parallel processes.
 
 positional arguments:
-  lang            lang which should be analysed
-  converted_dirs  director(y|ies) where the converted files exist
+  lang                  lang which should be analysed
+  converted_dirs        director(y|ies) where the converted files exist
 
 optional arguments:
-  -h, --help      show this help message and exit
-  --serial        When this argument is used files will be analysed one by
-                  one.
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --serial              When this argument is used files will be analysed one
+                        by one.
+  -k {hfst,xfst,trace-smegram}, --fstkit {hfst,xfst,trace-smegram}
+                        Finite State Toolkit. Either hfst or xfst (the
+                        default).
 }}}
 
 !Source code
