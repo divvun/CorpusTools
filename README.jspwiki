@@ -367,7 +367,7 @@ languages (exchange "sma" with "sme, smj" ad lib):
 Configure the language, use at least these to options {{--prefix=$HOME/.local --with-hfst --enable-tokenisers}}
 
 {{{
-./configure --prefix=$HOME/.local --with-hfst --enable-tokenisers # add your own flags to taste }}
+./configure --prefix=$HOME/.local --with-hfst --enable-tokenisers # add your own flags to taste
 make install
 }}}
 
