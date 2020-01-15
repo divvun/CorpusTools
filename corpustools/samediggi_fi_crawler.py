@@ -126,7 +126,7 @@ class SamediggiFiCrawler(crawler.Crawler):
 
                     if ('www.samediggi.fi' in result.url
                             and result.status_code == requests.codes.ok
-                            and not self.invalid_content(result.content)):
+                            and not self.invalid_content(str(result.content, 'utf-8'))):
                         if lang in ['davvi', 'anaras', 'nuortta']:
                             found_saami = True
                         self.harvest_links(result.content)
