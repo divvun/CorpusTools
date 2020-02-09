@@ -291,6 +291,21 @@
     <xsl:variable name="linespacing" select="''"/>
 
     <!--
+        This variable is used for pdf files.
+
+        This is the -wbt option of pdftohtml, which converts pdf files to
+        a poppler specific xml.
+
+        If a file converted from pdf contains words that are separated by
+        spaces that really should have no spaces (e.g. W O R D), raising
+        this value may help.
+
+        Quote from the pdftohtml help:
+        -wbt <fp> : word break threshold (default 10 percent)
+    -->
+    <xsl:variable name="word_break_threshold" select="'10'"/>
+
+    <!--
         This variable is meant for pdf files, but not in use.
 
         Information about what is normal text size in pdf documents.

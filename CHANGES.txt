@@ -148,3 +148,4 @@ v<0.27.1>, <20191015> -- Do not pretty_print xml-files anymore, only set tails
                          of p as '\n' instead.
 v<0.27.2>, <20191107> -- Make reparallelize work again, it relied on converted
                          files being in prestable.
+v<0.27.3>, <20200209> -- Make the -wbt option of pdftohtml available as a variable in the metadatafiles.
