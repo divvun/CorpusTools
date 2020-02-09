@@ -15,7 +15,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2018 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2018-2020 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://divvun.no & http://giellatekno.uit.no
 #
 """Test language recognition."""
