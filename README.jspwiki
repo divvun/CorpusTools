@@ -44,8 +44,8 @@ These scripts will be installed
 
 !!Requirements
 
-* python2
-* pip for python2
+* python3
+* pip for python3
 * pysvn (only needed for add_files_to_corpus)
 * wvHtml (only needed for convert2xml)
 * pdftohtml (only needed for convert2xml)
@@ -62,14 +62,14 @@ sudo port install py-pysvn py-pip wv latex2html poppler
 On Debian/Ubuntu, do:
 
 {{{
-sudo apt-get install python-svn python-pip wv latex2html poppler-utils
+sudo apt-get install python3-svn python3-pip wv latex2html poppler-utils
 }}}
 
 On Arch Linux, do:
 
 {{{
-sudo pacman -S python2-pip wv
-yaourt -S python2-pysvn
+sudo pacman -S python3-pip wv
+yaourt -S python3-pysvn
 }}}
 
 You also need to have the $GTHOME variable set to where you checked
@@ -99,7 +99,7 @@ Install the tools for the current user by writing
 
 {{{
 cd $GTHOME/tools/CorpusTools
-python setup.py install --user --install-scripts=$HOME/bin --record installed_files.txt
+python3 setup.py install --user --install-scripts=$HOME/bin --record installed_files.txt
 }}}
 
 !System wide (recommended for servers only)
@@ -107,7 +107,7 @@ Install the tools for all users on a machine by
 
 {{{
 cd $GTHOME/tools/CorpusTools
-sudo python setup.py install --install-scripts=/usr/local/bin --record installed_files.txt
+sudo python3 setup.py install --install-scripts=/usr/local/bin --record installed_files.txt
 }}}
 
 
