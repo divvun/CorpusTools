@@ -441,7 +441,7 @@ def proc(args):
             print(c.classify(line.decode('utf-8'), verbose=args.verbose))
     else:
         print(
-            c.classify(sys.stdin.read().decode('utf-8'), verbose=args.verbose))
+            c.classify(sys.stdin.read(), verbose=args.verbose))
 
 
 def file_comp(args):
