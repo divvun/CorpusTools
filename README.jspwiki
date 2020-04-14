@@ -484,6 +484,9 @@ svn ci orig
 * [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
 * [xslsetter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/xslsetter.py]
 
+
+
+
 !!parallelize
 
 Parallelize parallel corpus files, write the results to
@@ -666,6 +669,8 @@ Then follow the instructions on [how to install CorpusTools |CorpusTools.html#In
 * [typosfile.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/typosfile.py]
 * [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
 
+
+
 !!saami_crawler
 
 Add files to freecorpus from a given site.
@@ -700,19 +705,21 @@ optional arguments:
 * [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
 * [xslsetter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/xslsetter.py]
 
+
 !!pytextcat
 
-An implementation of the ``N-Gram-Based Text Categorization'' algorithm.
+Pytextcat is an implementation of the "N-Gram-Based Text Categorization" algorithm.
 
 Original article:
 
-Cavnar, W. B. and J. M. Trenkle, ``N-Gram-Based Text
-Categorization'' In Proceedings of Third Annual Symposium on
+Cavnar, W. B. and J. M. Trenkle, 
+''N-Gram-Based Text Categorization'' 
+In Proceedings of Third Annual Symposium on
 Document Analysis and Information Retrieval, Las Vegas, NV, UNLV
 Publications/Reprographics, pp. 161-175, 11-13 April 1994.
 
 Original Perl implementation and article available from
-http://odur.let.rug.nl/~vannoord/TextCat/
+[http://odur.let.rug.nl/~vannoord/TextCat/]
 
 {{{
 usage: pytextcat [-h] [--version] [-V] {proc,complm,compwm,compdir} ...
@@ -735,6 +742,10 @@ optional arguments:
 
 !Source code
 * [text_cat.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/text_cat.py]
+
+
+
+
 
 !!generate_anchor_list
 
@@ -1087,3 +1098,6 @@ optional arguments:
 
 !Source code
 * [trainingcorpusmaker.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/trainingcorpusmaker.py]
+
+
+
