@@ -37,6 +37,7 @@ These scripts will be installed
 * [update_metadata: Update metadata files in given directories|CorpusTools.html#update_metadata]
 
 !!Miscellaneous
+* [pytextcat: textcat implemented in Python|CorpusTools.html#pytextcat]
 * [generate_anchor_list: Generate paired anchor list for languages lang1 and lang2|CorpusTools.html#generate_anchor_list]
 * [html_cleaner: Program to print out a nicely indented html document|CorpusTools.html#html_cleaner]
 * [epubchooser: Program to set metadata of an epub file|CorpusTools.html#epubchooser]
@@ -698,6 +699,42 @@ optional arguments:
 * [text_cat.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/text_cat.py]
 * [util.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/util.py]
 * [xslsetter.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/xslsetter.py]
+
+!!pytextcat
+
+An implementation of the ``N-Gram-Based Text Categorization'' algorithm.
+
+Original article:
+
+Cavnar, W. B. and J. M. Trenkle, ``N-Gram-Based Text
+Categorization'' In Proceedings of Third Annual Symposium on
+Document Analysis and Information Retrieval, Las Vegas, NV, UNLV
+Publications/Reprographics, pp. 161-175, 11-13 April 1994.
+
+Original Perl implementation and article available from
+http://odur.let.rug.nl/~vannoord/TextCat/
+
+{{{
+usage: pytextcat [-h] [--version] [-V] {proc,complm,compwm,compdir} ...
+
+Create or use n-gram models for language classification.
+
+positional arguments:
+  {proc,complm,compwm,compdir}
+                        (try e.g. 'proc -h' for help with that subcommand)
+    proc                Language classification
+    complm              Compile character model from stdin to stdout.
+    compwm              Compile word model from stdin to stdout.
+    compdir             Compile language from directory.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  -V, --verbose         Print some info to stderr
+}}}
+
+!Source code
+* [text_cat.py|https://gtsvn.uit.no/langtech/trunk/tools/CorpusTools/corpustools/text_cat.py]
 
 !!generate_anchor_list
 
