@@ -1,6 +1,5 @@
 8145	om
 2840	da
-2100	—
 1325	ven
 936	lidn
 848	oli
@@ -9,7 +8,6 @@
 681	Venämas
 593	lugu
 561	Se
-530	km
 524	läz
 509	vai
 478	ristitud
@@ -33,7 +31,6 @@
 265	agjas
 256	vodes
 254	pälidn
-254	m
 243	valdkund
 242	Venäman
 239	pästtud
@@ -44,7 +41,6 @@
 216	Pind
 215	Eläjiden
 215	agjan
-213	K
 211	sijadase
 211	pämez'
 210	Tazovaldkundas
@@ -53,7 +49,6 @@
 193	Vl
 191	nimi
 185	ičeze
-183	C
 176	eläjiden
 175	täht
 168	lujas
@@ -99,18 +94,14 @@
 125	pajo
 123	londuses
 122	Vepsän
-121	g
-121	AÜV
 120	latinan
 118	prezident
 117	jäl'ghe
 117	ki
 116	Karjalan
 116	tetab
-114	of
 114	sidä
 113	anglijan
-113	n
 112	toižed
 111	vodeks
 110	arvoimižiš
@@ -120,17 +111,13 @@
 109	rahvaz
 108	Venäma
 107	Tazovaldkundan
-107	agj
 106	normaližiš
 105	Atommass
 105	Hän
-104	vn
 102	Ninevuz
 102	Suladandlämuz
 102	hänen
 102	meren
-102	singl
-101	sm³
 101	mülüb
 101	Pajon
 100	sijaduz
@@ -176,13 +163,11 @@
 85	enamb
 85	uhokul
 84	kelil
-84	e
 84	čokkoim
 84	rahvahan
 83	päiväl
 83	rist
 83	suom
-83	TV
 82	kaks'
 82	tazovaldkund
 81	randal
@@ -203,7 +188,6 @@
 76	kerdan
 76	nece
 75	periodas
-75	The
 74	niiden
 74	Piter
 73	avaiži
@@ -238,8 +222,6 @@
 66	järv
 66	Federacijan
 65	venäkelel
-65	the
-65	Catch
 64	kelišpäi
 64	sistem
 64	Venälaižen
@@ -297,7 +279,6 @@
 52	Vn
 52	tegii
 52	vspäi
-52	I
 51	roman
 50	ümbrikirjuti
 50	Ohjandusen
@@ -336,8 +317,6 @@
 45	Ezmäine
 45	nevondkundaline
 45	Tazovaldkundanke
-45	In
-44	A
 44	lidnas
 44	löuta
 44	Ižanduz
@@ -586,7 +565,6 @@
 27	lugun
 27	Baškortostanan
 27	Läz
-27	G
 27	Britanii
 27	Indijas
 27	strok
@@ -611,7 +589,6 @@
 26	Marija
 26	Komin
 26	Evrovizii
-26	'
 26	Flagan
 26	tetabamb
 26	мост
@@ -625,7 +602,6 @@
 25	paksus
 25	provincijan
 25	kul'turan
-25	M
 25	Vspäi
 25	Jäl'gmäine
 25	udištamine
@@ -642,7 +618,6 @@
 25	anglijalaine
 25	redukun
 25	Kitai
-25	S
 25	Päiväižen
 25	komi
 25	küläkundas
@@ -731,7 +706,6 @@
 21	Albanijan
 21	Ezmäižen
 21	toižiš
-21	v
 21	puhthas
 21	kodi
 21	pälidnan
@@ -1259,7 +1233,6 @@
 12	Francijanke
 12	Sid'
 12	kahesanden
-12	−
 12	ühtnendad
 12	üksjäine
 12	Voden
@@ -1280,7 +1253,6 @@
 12	italijan
 12	Tomas
 12	eli
-12	F
 12	Ičeze
 12	poig
 12	randištol
@@ -1536,7 +1508,6 @@
 10	lugumär
 10	valdkundaline
 10	teatran
-10	′
 10	Kaunas
 10	ühtni
 10	XVI
@@ -1589,7 +1560,6 @@
 10	rahvahatoi
 10	čuv
 10	avtonomine
-10	T
 10	Nencan
 10	venälaižen
 10	pidust'
@@ -1773,7 +1743,6 @@
 9	lapsile
 9	enččen
 9	rippub
-9	t
 9	elektronine
 9	tulnu
 9	araban
@@ -2106,31 +2075,23 @@
 8	jap
 8	MoRandi
 8	Garden
-8	Year
-8	Alone
-8	Not
 8	ümbrištos
 8	norvegijalaižen
 8	organad
 8	südäimehe
-8	gitar
 8	tur
 8	Serialas
 8	tedo
 8	Togon
-8	Luxor
 8	Ižoran
 8	sauvusen
 8	Botsvanan
-8	Secret
-8	Shallow
 8	arni
 8	veroline
 8	Bolivijan
 8	Hurricane
 8	päližajogi
 8	Lankteb
-8	Peru
 8	Jemenan
 8	elementaks
 8	avaidust
@@ -2235,7 +2196,6 @@
 7	Kolumbijas
 7	ühthižen
 7	kanzan
-7	Y
 7	seglusenke
 7	Elan
 7	muglmetall
@@ -2303,7 +2263,6 @@
 7	maižes
 7	mamankelel
 7	Rostov
-7	IV
 7	tuldas
 7	kazmusen
 7	kaičeb
@@ -2329,7 +2288,6 @@
 7	rahvahidenkeskeižeta
 7	tundištuseta
 7	atomenergetikas
-7	Rafael'
 7	Ühten
 7	periodha
 7	transplutonine
@@ -2370,7 +2328,6 @@
 7	Kabardan
 7	Hose
 7	Svobodnii
-7	بن
 7	Argentin
 7	Airesan
 7	Artur
@@ -2378,7 +2335,6 @@
 7	Vasil'jevič
 7	lidnaspäi
 7	uhokus
-7	US
 7	Ümbrikirjutand
 7	uded
 7	Sömhä
@@ -2388,7 +2344,6 @@
 7	Sport
 7	Kuba
 7	semendkul
-7	я
 7	Voin
 7	ühteks
 7	kuverz'
@@ -2403,13 +2358,10 @@
 7	mehen
 7	Sinä
 7	änetud
-7	We
-7	World
 7	rahvahatomad
 7	Diamonds
 7	Night
 7	hänel
-7	Let's
 7	Makedonii
 7	Makedonijan
 7	hahktin
@@ -2433,12 +2385,9 @@
 7	ümbriradmižen
 7	praznikoišpäi
 7	pühänikoišpäi
-7	Life
 7	venälaižes
 7	nardad
 7	heittud
-7	Your
-7	institut
 7	pirdud
 7	nimitihe
 7	mägisel'g
@@ -2451,7 +2400,6 @@
 7	fil'miden
 7	nimitase
 7	p'n
-7	Martin
 7	tž
 7	päčid
 7	väges
@@ -2484,7 +2432,6 @@
 7	vähän
 7	suimil
 7	Iordanijan
-7	mg
 7	Mozambik
 7	oleskeldas
 7	Ispanijaspäi
@@ -2592,7 +2539,6 @@
 6	romanine
 6	Bolivijas
 6	Perus
-6	β
 6	mecživat
 6	jän
 6	Devi
@@ -2605,7 +2551,6 @@
 6	ukrainalaižed
 6	tekstan
 6	avtorad
-6	p
 6	livvin
 6	istorižed
 6	pertid
@@ -2628,7 +2573,6 @@
 6	Prezidental
 6	ühtenzoitab
 6	Volgan
-6	UNESCO
 6	sauvomižen
 6	balk
 6	Neodim
@@ -2803,7 +2747,6 @@
 6	konkurs
 6	Игорь
 6	Vagner
-6	Δ
 6	puštu
 6	Hamid
 6	Mohammad
@@ -2811,7 +2754,6 @@
 6	Amsterdaman
 6	Tiranan
 6	Petrovskii
-6	العربية
 6	dinar
 6	Fil'man
 6	François
@@ -2837,7 +2779,6 @@
 6	vitaminad
 6	Kazvatuz
 6	Sara
-6	It's
 6	disko
 6	Grekan
 6	Edelespäi
