@@ -54,7 +54,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_error_parser_errorlang_infinity(self):
-        in_elem = u'(molekylærbiologimi)∞(kal,bio)'
+        in_elem = u'{molekylærbiologimi}∞{kal,bio}'
         want = etree.fromstring(
             '<errorlang correct="kal,bio">molekylærbiologimi</errorlang>')
 
@@ -63,7 +63,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(got[0], want)
 
     def test_error_parser_errorlang_infinity_with_new_lines(self):
-        in_elem = u'\n\n\n\n(molekylærbiologimi)∞(kal,bio)\n\n\n\n'
+        in_elem = u'\n\n\n\n{molekylærbiologimi}∞{kal,bio}\n\n\n\n'
         want = etree.fromstring(
             '<errorlang correct="kal,bio">molekylærbiologimi</errorlang>')
 
@@ -72,7 +72,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(got[1], want)
 
     def test_quote_char(self):
-        in_elem = u'”sjievnnijis”$(conc,vnn-vnnj|sjievnnjis)'
+        in_elem = u'{”sjievnnijis”}${conc,vnn-vnnj|sjievnnjis}'
         want = etree.fromstring(
             u'<errorort errorinfo="conc,vnn-vnnj"         '
             u'correct="sjievnnjis">”sjievnnijis”</errorort>')
@@ -89,7 +89,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_error_parser_errorort1(self):
-        in_elem = u'jne.$(adv,typo|jna.)'
+        in_elem = u'{jne.}${adv,typo|jna.}'
         want = etree.fromstring(
             '<errorort errorinfo="adv,typo" correct="jna.">jne.</errorort>')
 
@@ -98,7 +98,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(got[0], want)
 
     def test_errorort1(self):
-        in_elem = etree.fromstring('<p>jne.$(adv,typo|jna.)</p>')
+        in_elem = etree.fromstring('<p>{jne.}${adv,typo|jna.}</p>')
         want = etree.fromstring(
             '<p><errorort errorinfo="adv,typo" correct="jna.">jne.'
             '</errorort></p>')
@@ -107,7 +107,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_errorort2(self):
-        in_elem = etree.fromstring('<p>daesn\'$daesnie</p>')
+        in_elem = etree.fromstring("<p>{daesn'}${daesnie}</p>")
         want = etree.fromstring(
             '<p><errorort correct="daesnie">daesn\'</errorort></p>')
 
@@ -116,7 +116,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_input_contains_slash(self):
         in_elem = etree.fromstring(
-            '<p>magistter/$(loan,vowlat,e-a|magisttar)</p>')
+            '<p>{magistter/}${loan,vowlat,e-a|magisttar}</p>')
         want = etree.fromstring(
             '<p><errorort correct="magisttar" errorinfo="loan,vowlat,e-a">'
             'magistter/</errorort></p>')
@@ -125,14 +125,14 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_error_correct1(self):
-        in_elem = etree.fromstring('<p>1]§Ij</p>')
+        in_elem = etree.fromstring('<p>{1]}§{Ij}</p>')
         want = etree.fromstring('<p><error correct="Ij">1]</error></p>')
 
         self.em.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
 
     def test_error_correct2(self):
-        in_elem = etree.fromstring('<p>væ]keles§(væjkeles)</p>')
+        in_elem = etree.fromstring('<p>{væ]keles}§{væjkeles}</p>')
         want = etree.fromstring(
             '<p><error correct="væjkeles">væ]keles</error></p>')
 
@@ -140,7 +140,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_error_correct3(self):
-        in_elem = etree.fromstring('<p>smávi-§smávit-</p>')
+        in_elem = etree.fromstring('<p>{smávi-}§{smávit-}</p>')
         want = etree.fromstring(
             '<p><error correct="smávit-">smávi-</error></p>')
 
@@ -148,14 +148,14 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_error_correct4(self):
-        in_elem = etree.fromstring('<p>CD:t§CD:at</p>')
+        in_elem = etree.fromstring('<p>{CD:t}§{CD:at}</p>')
         want = etree.fromstring('<p><error correct="CD:at">CD:t</error></p>')
 
         self.em.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
 
     def test_error_correct5(self):
-        in_elem = etree.fromstring('<p>DNB-feaskáris§(DnB-feaskáris)</p>')
+        in_elem = etree.fromstring('<p>{DNB-feaskáris}§{DnB-feaskáris}</p>')
         want = etree.fromstring(
             '<p><error correct="DnB-feaskáris">DNB-feaskáris</error></p>')
 
@@ -163,14 +163,14 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_error_correct6(self):
-        in_elem = etree.fromstring('<p>boade§boađe</p>')
+        in_elem = etree.fromstring('<p>{boade}§{boađe}</p>')
         want = etree.fromstring('<p><error correct="boađe">boade</error></p>')
 
         self.em.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
 
     def test_error_correct7(self):
-        in_elem = etree.fromstring('<p>2005’as§2005:s</p>')
+        in_elem = etree.fromstring('<p>{2005’as}§{2005:s}</p>')
         want = etree.fromstring(
             '<p><error correct="2005:s">2005’as</error></p>')
 
@@ -178,14 +178,14 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_error_correct8(self):
-        in_elem = etree.fromstring('<p>NSRii§NSR:i</p>')
+        in_elem = etree.fromstring('<p>{NSRii}§{NSR:i}</p>')
         want = etree.fromstring('<p><error correct="NSR:i">NSRii</error></p>')
 
         self.em.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
 
     def test_error_correct9(self):
-        in_elem = etree.fromstring('<p>Nordkjosbotn\'ii§Nordkjosbotnii</p>')
+        in_elem = etree.fromstring('<p>{Nordkjosbotn\'ii}§{Nordkjosbotnii}</p>')
         want = etree.fromstring(
             '<p><error correct="Nordkjosbotnii">Nordkjosbotn\'ii</error></p>')
 
@@ -193,7 +193,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_errorort3(self):
-        in_elem = etree.fromstring('<p>nourra$(a,meta|nuorra)</p>')
+        in_elem = etree.fromstring('<p>{nourra}${a,meta|nuorra}</p>')
         want = etree.fromstring('<p><errorort errorinfo="a,meta" '
                                 'correct="nuorra">nourra</errorort></p>')
 
@@ -202,8 +202,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_error_morphsyn1(self):
         in_elem = etree.fromstring(
-            '<p>(Nieiddat leat nuorra)£(a,spred,nompl,nomsg,agr|Nieiddat leat '
-            'nuorat)</p>')
+            '<p>{Nieiddat leat nuorra}£{a,spred,nompl,nomsg,agr|Nieiddat leat nuorat}</p>')
         want = etree.fromstring(
             '<p><errormorphsyn errorinfo="a,spred,nompl,nomsg,agr" '
             'correct="Nieiddat leat nuorat">Nieiddat leat '
@@ -214,8 +213,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_error_parser_error_morphsyn1(self):
         in_elem = (
-            u'(Nieiddat leat nuorra)£(a,spred,nompl,nomsg,agr|Nieiddat leat '
-            'nuorat)')
+            u'{Nieiddat leat nuorra}£{a,spred,nompl,nomsg,agr|Nieiddat leat nuorat}')
         want = etree.fromstring(
             u'<errormorphsyn errorinfo="a,spred,nompl,nomsg,agr" correct="'
             'Nieiddat leat nuorat">Nieiddat leat nuorra</errormorphsyn>')
@@ -226,7 +224,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_error_syn1(self):
         in_elem = etree.fromstring(
-            '<p>(riŋgen nieidda lusa)¥(x,pph|riŋgen niidii)</p>')
+            '<p>{riŋgen nieidda lusa}¥{x,pph|riŋgen niidii}</p>')
         want = etree.fromstring(
             '<p><errorsyn errorinfo="x,pph" correct="riŋgen niidii">riŋgen '
             'nieidda lusa</errorsyn></p>')
@@ -235,7 +233,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_error_syn2(self):
-        in_elem = etree.fromstring('<p>ovtta¥(num,redun| )</p>')
+        in_elem = etree.fromstring('<p>{ovtta}¥{num,redun| }</p>')
         want = etree.fromstring(
             '<p><errorsyn errorinfo="num,redun" correct=" ">ovtta'
             '</errorsyn></p>')
@@ -244,7 +242,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_erro_lex1(self):
-        in_elem = etree.fromstring('<p>dábálaš€(adv,adj,der|dábálaččat)</p>')
+        in_elem = etree.fromstring('<p>{dábálaš}€{adv,adj,der|dábálaččat}</p>')
         want = etree.fromstring(
             '<p><errorlex errorinfo="adv,adj,der" correct="dábálaččat">'
             'dábálaš</errorlex></p>')
@@ -253,7 +251,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_error_ortreal1(self):
-        in_elem = etree.fromstring('<p>ráhččamušaid¢(noun,mix|rahčamušaid)</p>')
+        in_elem = etree.fromstring('<p>{ráhččamušaid}¢{noun,mix|rahčamušaid}</p>')
         want = etree.fromstring(
             '<p><errorortreal errorinfo="noun,mix"         '
             'correct="rahčamušaid">ráhččamušaid</errorortreal></p>')
@@ -263,8 +261,8 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_error_ortreal2(self):
         in_elem = etree.fromstring(
-            '<p>gitta Nordkjosbotn\'ii$Nordkjosbotnii (mii lea ge '
-            'nordkjosbotn$Nordkjosbotn sámegillii? Muhtin, veahket mu!) '
+            '<p>gitta {Nordkjosbotn\'ii}${Nordkjosbotnii} (mii lea ge '
+            '{nordkjosbotn}${Nordkjosbotn} sámegillii? Muhtin, veahket mu!) '
             'gos</p>')
         want = etree.fromstring(
             '<p>gitta <errorort correct="Nordkjosbotnii">Nordkjosbotn\'ii'
@@ -276,8 +274,8 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_error_parser_with_two_simple_errors(self):
         in_elem = (
-            u"gitta Nordkjosbotn'ii$Nordkjosbotnii (mii lea ge "
-            u'nordkjosbotn$Nordkjosbotn sámegillii? Muhtin, veahket mu!) gos')
+            u"gitta {Nordkjosbotn'ii}${Nordkjosbotnii} (mii lea ge "
+            u'{nordkjosbotn}${Nordkjosbotn} sámegillii? Muhtin, veahket mu!) gos')
         got = self.em.error_parser(in_elem)
 
         self.assertEqual(len(got), 3)
@@ -294,8 +292,7 @@ class TestErrorMarkup(unittest.TestCase):
     def test_error_morphsyn2(self):
         in_elem = etree.fromstring(
             '<p>Čáppa muohtaskulptuvrraid ráhkadeapmi VSM olggobealde lei '
-            'maiddái ovttasbargu gaskal (skuvla '
-            'ohppiid)£(noun,attr,gensg,nomsg,case|skuvlla ohppiid)'
+            'maiddái ovttasbargu gaskal {skuvla ohppiid}£{noun,attr,gensg,nomsg,case|skuvlla ohppiid}'
             'ja VSM.</p>')
         want = etree.fromstring(
             '<p>Čáppa muohtaskulptuvrraid ráhkadeapmi VSM olggobealde lei '
@@ -308,8 +305,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_errorort4(self):
         in_elem = etree.fromstring(
-            '<p>- ruksesruonáčalmmehisvuohta lea sullii 8%:as$('
-            'acr,suf|8%:s)</p>')
+            '<p>- ruksesruonáčalmmehisvuohta lea sullii {8%:as}${acr,suf|8%:s}</p>')
         want = etree.fromstring(
             '<p>- ruksesruonáčalmmehisvuohta lea sullii <errorort '
             'correct="8%:s" errorinfo="acr,suf">8%:as</errorort></p>')
@@ -319,7 +315,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_error_ortreal3(self):
         in_elem = etree.fromstring(
-            '<p>( nissonin¢(noun,suf|nissoniin) dušše (0.6 %:s)£(0.6 %) )</p>')
+            '<p>( {nissonin}¢{noun,suf|nissoniin} dušše {0.6 %:s}£{0.6 %} )</p>')
         want = etree.fromstring(
             '<p>( <errorortreal errorinfo="noun,suf" correct="nissoniin">'
             'nissonin</errorortreal> dušše <errormorphsyn correct="0.6 %">'
@@ -330,8 +326,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_errorort5(self):
         in_elem = etree.fromstring(
-            '<p>(haploida) ja njiŋŋalas$(noun,á|njiŋŋálas) ságahuvvon$(verb,'
-            'a|sagahuvvon) manneseallas (diploida)</p>')
+            '<p>(haploida) ja {njiŋŋalas}${noun,á|njiŋŋálas} {ságahuvvon}${verb,a|sagahuvvon} manneseallas (diploida)</p>')
         want = etree.fromstring(
             '<p>(haploida) ja <errorort errorinfo="noun,á" '
             'correct="njiŋŋálas">njiŋŋalas</errorort> <errorort '
@@ -343,9 +338,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_errorort6(self):
         in_elem = etree.fromstring(
-            '<p>(gii oahpaha) giinu$(x,notcmp|gii nu) manai intiánalávlagat$'
-            '(loan,conc|indiánalávlagat) (guovža-klána)$(noun,cmp|'
-            'guovžaklána) olbmuid</p>')
+            '<p>(gii oahpaha) {giinu}${x,notcmp|gii nu} manai {intiánalávlagat}${loan,conc|indiánalávlagat} {guovža-klána}${noun,cmp|guovžaklána} olbmuid</p>')
         want = etree.fromstring(
             '<p>(gii oahpaha) <errorort errorinfo="x,notcmp" correct="gii '
             'nu">giinu</errorort> manai <errorort errorinfo="loan,conc" '
@@ -357,7 +350,7 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_error_format(self):
-        in_elem = etree.fromstring('<p>((A  B)‰(notspace|A B)  C)‰(notspace|A B C)</p>')
+        in_elem = etree.fromstring('<p>{{A  B}‰{notspace|A B}  C}‰{notspace|A B C}</p>')
         want = etree.fromstring(
             '<p>'
             '<errorformat correct="A B C" errorinfo="notspace">'
@@ -372,7 +365,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_preserve_space_at_end_of_sentence(self):
         in_elem = etree.fromstring(
-            '<p>buvttadeaddji Anstein Mikkelsens$(typo|Mikkelsen) lea '
+            '<p>buvttadeaddji Anstein {Mikkelsens}${typo|Mikkelsen} lea '
             'ráhkadan. </p>')
 
         want = (u'<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
@@ -385,8 +378,8 @@ class TestErrorMarkup(unittest.TestCase):
     def test_place_error_elements_before_old_element1(self):
         '''Test if errorlements are inserted before the span element.'''
         in_elem = etree.fromstring(
-            '<p>buvttadeaddji Anstein Mikkelsens$(typo|Mikkelsen) lea '
-            'ráhkadan. bálkkášumi$(vowlat,á-a|bálkkašumi) miessemánu. <span '
+            '<p>buvttadeaddji Anstein {Mikkelsens}${typo|Mikkelsen} lea '
+            'ráhkadan. {bálkkášumi}${vowlat,á-a|bálkkašumi} miessemánu. <span '
             'type="quote" xml:lang="eng">«Best Shorts Competition»</span></p>')
 
         want = (
@@ -403,8 +396,7 @@ class TestErrorMarkup(unittest.TestCase):
     def test_place_error_elements_before_old_element2(self):
         '''Test if errorlements are inserted before the span element.'''
         in_elem = etree.fromstring(
-            '<p>Mikkelsens$(typo|Mikkelsen) lea ráhkadan. bálkkášumi$(vowlat,'
-            'á-a|bálkkašumi) miessemánu. <span type="quote" xml:lang="eng">'
+            '<p>{Mikkelsens}${typo|Mikkelsen} lea ráhkadan. {bálkkášumi}${vowlat,á-a|bálkkašumi} miessemánu. <span type="quote" xml:lang="eng">'
             '«Best Shorts Competition»</span></p>')
 
         want = (
@@ -420,7 +412,7 @@ class TestErrorMarkup(unittest.TestCase):
     def test_place_error_element_after_old_element(self):
         in_elem = etree.fromstring(
             '<p>I 1864 ga han ut boka <span type="quote" xml:lang="swe">'
-            '"Fornuftigt Madstel"</span>. Asbjørsen$(prop,typo|Asbjørnsen) '
+            '"Fornuftigt Madstel"</span>. {Asbjørsen}${prop,typo|Asbjørnsen} '
             'døde 5. januar 1885, nesten 73 år gammel.</p>')
 
         want = (
@@ -436,21 +428,21 @@ class TestErrorMarkup(unittest.TestCase):
     def test_place_error_element_before_and_after_old_element(self):
         '''The input:
 
-        buvttadeaddji Anstein Mikkelsens$(typo|Mikkelsen) lea ráhkadan.
-        «Best Shorts Competition» bálkkášumi$(vowlat,á-a|bálkkašumi)
+        buvttadeaddji Anstein {Mikkelsens}${typo|Mikkelsen} lea ráhkadan.
+        «Best Shorts Competition» {bálkkášumi}${vowlat,á-a|bálkkašumi}
         miessemánu.
 
         gets converted to this:
          <p>buvttadeaddji Anstein <span type="quote" xml:lang="eng">
          «Best Shorts Competition»</span>
-         bálkkášumi$(vowlat,á-a|bálkkašumi) miessemánu.
+         {bálkkášumi}${vowlat,á-a|bálkkašumi} miessemánu.
          <errorort correct="Mikkelsen" errorinfo="typo">Mikkelsens</errorort>
          lea ráhkadan.</p>
         '''
         in_elem = etree.fromstring(
-            '<p>buvttadeaddji Anstein Mikkelsens$(typo|Mikkelsen) lea '
+            '<p>buvttadeaddji Anstein {Mikkelsens}${typo|Mikkelsen} lea '
             'ráhkadan. <span type="quote" xml:lang="eng">«Best Shorts '
-            'Competition»</span> bálkkášumi$(vowlat,á-a|bálkkašumi) '
+            'Competition»</span> {bálkkášumi}${vowlat,á-a|bálkkašumi} '
             'miessemánu.</p>')
 
         want = (u'<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
@@ -466,14 +458,14 @@ class TestErrorMarkup(unittest.TestCase):
     def test_add_error_markup3Levels(self):
         '''The input:
 
-        buvttadeaddji Anstein Mikkelsens$(typo|Mikkelsen) lea ráhkadan.
-        «Best Shorts Competition» bálkkášumi$(vowlat,á-a|bálkkašumi)
+        buvttadeaddji Anstein {Mikkelsens}${typo|Mikkelsen} lea ráhkadan.
+        «Best Shorts Competition» {bálkkášumi}${vowlat,á-a|bálkkašumi}
         miessemánu.
 
         gets converted to this:
          <p>buvttadeaddji Anstein <span type="quote" xml:lang="eng">
          «Best Shorts Competition»</span>
-         bálkkášumi$(vowlat,á-a|bálkkašumi) miessemánu.
+         {bálkkášumi}${vowlat,á-a|bálkkašumi} miessemánu.
          <errorort correct="Mikkelsen" errorinfo="typo">Mikkelsens</errorort>
          lea ráhkadan.</p>
         '''
@@ -483,9 +475,9 @@ class TestErrorMarkup(unittest.TestCase):
             'type="quote" xml:lang="eng">«Best Shorts Competition»</span> '
             '<errorort correct="bálkkašumi" errorinfo="vowlat,á-a">'
             'bálkkášumi</errorort> miessemánu. <em>buvttadeaddji Anstein '
-            'Mikkelsens$(typo|Mikkelsen) lea ráhkadan. <span type="quote" '
+            '{Mikkelsens}${typo|Mikkelsen} lea ráhkadan. <span type="quote" '
             'xml:lang="eng">«Best Shorts Competition»</span> '
-            'bálkkášumi$(vowlat,á-a|bálkkašumi) miessemánu.</em></p>')
+            '{bálkkášumi}${vowlat,á-a|bálkkašumi} miessemánu.</em></p>')
 
         want = (
             u'<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
@@ -506,8 +498,7 @@ class TestErrorMarkup(unittest.TestCase):
     # Nested markup
     def test_nested_markup1(self):
         in_elem = etree.fromstring(
-            '<p>(šaddai$(verb,conc|šattai) ollu áššit)£(verb,fin,pl3prs,'
-            'sg3prs,tense|šadde ollu áššit)</p>')
+            '<p>{{šaddai}${verb,conc|šattai} ollu áššit}£{verb,fin,pl3prs,sg3prs,tense|šadde ollu áššit}</p>')
         want = etree.fromstring(
             '<p><errormorphsyn errorinfo="verb,fin,pl3prs,sg3prs,tense" '
             'correct="šadde ollu áššit"><errorort errorinfo="verb,conc" '
@@ -519,8 +510,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_nested_markup2(self):
         in_elem = etree.fromstring(
-            '<p>(guokte ganddat§(n,á|gánddat))£(n,nump,gensg,nompl,case|'
-            'guokte gándda)</p>')
+            '<p>{guokte {ganddat}§{n,á|gánddat}}£{n,nump,gensg,nompl,case|guokte gándda}</p>')
         want = etree.fromstring(
             '<p><errormorphsyn errorinfo="n,nump,gensg,nompl,case" '
             'correct="guokte gándda">guokte <error errorinfo="n,á" '
@@ -531,8 +521,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_nested_markup3(self):
         in_elem = etree.fromstring(
-            '<p>(Nieiddat leat nourra$(adj,meta|nuorra))£(adj,spred,nompl,'
-            'nomsg,agr|Nieiddat leat nuorat)</p>')
+            '<p>{Nieiddat leat {nourra}${adj,meta|nuorra}}£{adj,spred,nompl,nomsg,agr|Nieiddat leat nuorat}</p>')
         want = etree.fromstring(
             '<p><errormorphsyn errorinfo="adj,spred,nompl,nomsg,agr" '
             'correct="Nieiddat leat nuorat">Nieiddat leat <errorort '
@@ -544,8 +533,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_nested_markup4(self):
         in_elem = etree.fromstring(
-            '<p>(leat (okta máná)£(n,spred,nomsg,gensg,case|okta mánná))£'
-            '(v,v,sg3prs,pl3prs,agr|lea okta mánná)</p>')
+            '<p>{leat {okta máná}£{n,spred,nomsg,gensg,case|okta mánná}}£{v,v,sg3prs,pl3prs,agr|lea okta mánná}</p>')
         want = etree.fromstring(
             '<p><errormorphsyn errorinfo="v,v,sg3prs,pl3prs,agr" correct="'
             'lea okta mánná">leat <errormorphsyn errorinfo="n,spred,nomsg,'
@@ -557,11 +545,9 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_nested_markup5(self):
         in_elem = etree.fromstring(
-            '<p>heaitit dáhkaluddame$(verb,a|dahkaluddame) ahte sis '
-            'máhkaš¢(adv,á|mahkáš) livččii makkarge$(adv,á|makkárge) '
-            'politihkka, muhto rahpasit baicca muitalivčče (makkar$(interr,á|'
-            'makkár) soga)€(man soga) sii ovddasttit$(verb,conc|'
-            'ovddastit).</p>')
+            '<p>heaitit {dáhkaluddame}${verb,a|dahkaluddame} ahte sis '
+            '{máhkaš}¢{adv,á|mahkáš} livččii {makkarge}${adv,á|makkárge} '
+            'politihkka, muhto rahpasit baicca muitalivčče {{makkar}${interr,á|makkár} soga}€{man soga} sii {ovddasttit}${verb,conc|ovddastit}.</p>')
         want = etree.fromstring(
             '<p>heaitit <errorort correct="dahkaluddame" errorinfo="verb,a">'
             'dáhkaluddame</errorort> ahte sis <errorortreal correct="mahkáš" '
@@ -577,13 +563,11 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_process_text29(self):
-        text = (u'(Bearpmahat$(noun,svow|Bearpmehat) earuha€(verb,v,w|sirre))£'
-                '(verb,fin,pl3prs,sg3prs,agr|Bearpmehat sirrejit) uskki ja '
-                'loaiddu.')
+        text = (u'{{Bearpmahat}${noun,svow|Bearpmehat} {earuha}€{verb,v,w|sirre}}£{verb,fin,pl3prs,sg3prs,agr|Bearpmehat sirrejit} uskki ja loaiddu.')
         want = [
-            u'(Bearpmahat', u'$(noun,svow|Bearpmehat)', u' earuha',
-            u'€(verb,v,w|sirre)', u')',
-            u'£(verb,fin,pl3prs,sg3prs,agr|Bearpmehat sirrejit)',
+            u'{{Bearpmahat}', u'${noun,svow|Bearpmehat}', u' {earuha}',
+            u'€{verb,v,w|sirre}', u'}',
+            u'£{verb,fin,pl3prs,sg3prs,agr|Bearpmehat sirrejit}',
             u' uskki ja loaiddu.'
         ]
 
@@ -591,9 +575,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_nested_markup6(self):
         in_elem = etree.fromstring(
-            '<p>(Bearpmahat$(noun,svow|Bearpmehat) earuha€(verb,v,w|sirre))£'
-            '(verb,fin,pl3prs,sg3prs,agr|Bearpmehat sirrejit) uskki ja '
-            'loaiddu.</p>')
+            '<p>{{Bearpmahat}${noun,svow|Bearpmehat} {earuha}€{verb,v,w|sirre}}£{verb,fin,pl3prs,sg3prs,agr|Bearpmehat sirrejit} uskki ja loaiddu.</p>')
         want = etree.fromstring(
             '<p><errormorphsyn errorinfo="verb,fin,pl3prs,sg3prs,agr" '
             'correct="Bearpmehat sirrejit"><errorort errorinfo="noun,svow" '
@@ -605,19 +587,17 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_process_text30(self):
-        text = (u'Mirja ja Line leaba (gulahallan olbmožat)¢(noun,cmp|'
-                u'gulahallanolbmožat)€gulahallanolbmot')
+        text = (u'Mirja ja Line leaba {gulahallan olbmožat}¢{noun,cmp|gulahallanolbmožat}€{gulahallanolbmot}')
         want = [
-            u'Mirja ja Line leaba (gulahallan olbmožat)',
-            u'¢(noun,cmp|gulahallanolbmožat)', u'€gulahallanolbmot'
+            u'Mirja ja Line leaba {gulahallan olbmožat}',
+            u'¢{noun,cmp|gulahallanolbmožat}', u'€{gulahallanolbmot}'
         ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_nested_markup7(self):
         in_elem = etree.fromstring(
-            '<p>Mirja ja Line leaba (gulahallan olbmožat)¢(noun,cmp|'
-            'gulahallanolbmožat)€gulahallanolbmot</p>')
+            '<p>Mirja ja Line leaba {gulahallan olbmožat}¢{noun,cmp|gulahallanolbmožat}€{gulahallanolbmot}</p>')
         want = etree.fromstring(
             '<p>Mirja ja Line leaba <errorlex correct="gulahallanolbmot">'
             '<errorortreal errorinfo="noun,cmp" correct="gulahallanolbmožat">'
@@ -628,10 +608,8 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_nested_markup8(self):
         in_elem = etree.fromstring(
-            '<p>(Ovddit geasis)£(noun,advl,gensg,locsg,case|Ovddit geasi) '
-            '((čoaggen$(verb,mono|čoggen) ollu jokŋat)£(noun,obj,genpl,nompl,'
-            'case|čoggen ollu joŋaid) ja sarridat)£(noun,obj,genpl,nompl,case|'
-            'čoggen ollu joŋaid ja sarridiid)</p>')
+            '<p>{Ovddit geasis}£{noun,advl,gensg,locsg,case|Ovddit geasi} '
+            '{{{čoaggen}${verb,mono|čoggen} ollu jokŋat}£{noun,obj,genpl,nompl,case|čoggen ollu joŋaid} ja sarridat}£{noun,obj,genpl,nompl,case|čoggen ollu joŋaid ja sarridiid}</p>')
         want = etree.fromstring(
             '<p><errormorphsyn errorinfo="noun,advl,gensg,locsg,case" '
             'correct="Ovddit geasi">Ovddit geasis</errormorphsyn> '
@@ -647,7 +625,7 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_nested_markup9(self):
         in_elem = etree.fromstring(
-            '<p>Bruk ((epoxi)$(noun,cons|epoksy) lim)¢(noun,mix|epoksylim) '
+            '<p>Bruk {{epoxi}${noun,cons|epoksy} lim}¢{noun,mix|epoksylim} '
             'med god kvalitet.</p>')
         want = etree.fromstring(
             '<p>Bruk <errorortreal errorinfo="noun,mix" correct="epoksylim">'
@@ -658,268 +636,255 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertXmlEqual(in_elem, want)
 
     def test_process_text1(self):
-        text = u'jne.$(adv,typo|jna.)'
-        want = [u'jne.', u'$(adv,typo|jna.)']
+        text = u'{jne.}${adv,typo|jna.}'
+        want = [u'{jne.}', u'${adv,typo|jna.}']
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text2(self):
-        text = u"daesn'$daesnie"
-        want = [u"daesn'", "$daesnie"]
+        text = u"{daesn'}${daesnie}"
+        want = [u"{daesn'}", "${daesnie}"]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text3(self):
-        text = u"1]§Ij"
-        want = [u"1]", u"§Ij"]
+        text = u"{1]}§{Ij}"
+        want = [u"{1]}", u"§{Ij}"]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text4(self):
-        text = u"væ]keles§(væjkeles)"
-        want = [u"væ]keles", u"§(væjkeles)"]
+        text = u"{væ]keles}§{væjkeles}"
+        want = [u"{væ]keles}", u"§{væjkeles}"]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text5(self):
-        text = u"smávi-§smávit-"
-        want = [u"smávi-", u"§smávit-"]
+        text = u"{smávi-}§{smávit-}"
+        want = [u"{smávi-}", u"§{smávit-}"]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text6(self):
-        text = u"CD:t§CD:at"
-        want = [u"CD:t", u"§CD:at"]
+        text = u"{CD:t}§{CD:at}"
+        want = [u"{CD:t}", u"§{CD:at}"]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text7(self):
-        text = u"DNB-feaskáris§(DnB-feaskáris)"
-        want = [u"DNB-feaskáris", u"§(DnB-feaskáris)"]
+        text = u"{DNB-feaskáris}§{DnB-feaskáris}"
+        want = [u"{DNB-feaskáris}", u"§{DnB-feaskáris}"]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text8(self):
-        text = u"boade§boađe"
-        want = [u"boade", u"§boađe"]
+        text = u"{boade}§{boađe}"
+        want = [u"{boade}", u"§{boađe}"]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text9(self):
-        text = u"2005’as§2005:s"
-        want = [u"2005’as", u"§2005:s"]
+        text = u"{2005’as}§{2005:s}"
+        want = [u"{2005’as}", u"§{2005:s}"]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text10(self):
-        text = u"NSRii§NSR:ii"
-        want = [u"NSRii", u"§NSR:ii"]
+        text = u"{NSRii}§{NSR:ii}"
+        want = [u"{NSRii}", u"§{NSR:ii}"]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text11(self):
-        text = u"Nordkjosbotn'ii§Nordkjosbotnii"
-        want = [u"Nordkjosbotn'ii", u"§Nordkjosbotnii"]
+        text = u"{Nordkjosbotn'ii}§{Nordkjosbotnii}"
+        want = [u"{Nordkjosbotn'ii}", u"§{Nordkjosbotnii}"]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text12(self):
-        text = u"nourra$(a,meta|nuorra)"
-        want = [u"nourra", u"$(a,meta|nuorra)"]
+        text = u"{nourra}${a,meta|nuorra}"
+        want = [u"{nourra}", u"${a,meta|nuorra}"]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text13(self):
         text = (
-            u'(Nieiddat leat nuorra)£(a,spred,nompl,nomsg,agr|Nieiddat leat '
-            'nuorat)')
+            u'{Nieiddat leat nuorra}£{a,spred,nompl,nomsg,agr|Nieiddat leat nuorat}')
         want = [
-            u"(Nieiddat leat nuorra)",
-            u"£(a,spred,nompl,nomsg,agr|Nieiddat leat nuorat)"
+            u"{Nieiddat leat nuorra}",
+            u"£{a,spred,nompl,nomsg,agr|Nieiddat leat nuorat}"
         ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text14(self):
-        text = u"(riŋgen nieidda lusa)¥(x,pph|riŋgen niidii)"
-        want = [u"(riŋgen nieidda lusa)", u"¥(x,pph|riŋgen niidii)"]
+        text = u"{riŋgen nieidda lusa}¥{x,pph|riŋgen niidii}"
+        want = [u"{riŋgen nieidda lusa}", u"¥{x,pph|riŋgen niidii}"]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text15(self):
-        text = u"ovtta¥(num,redun| )"
-        want = [u"ovtta", u"¥(num,redun| )"]
+        text = u"{ovtta}¥{num,redun| }"
+        want = [u"{ovtta}", u"¥{num,redun| }"]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text16(self):
-        text = u"dábálaš€(adv,adj,der|dábálaččat)"
-        want = [u"dábálaš", u"€(adv,adj,der|dábálaččat)"]
+        text = u"{dábálaš}€{adv,adj,der|dábálaččat}"
+        want = [u"{dábálaš}", u"€{adv,adj,der|dábálaččat}"]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text17(self):
-        text = u"ráhččamušaid¢(noun,mix|rahčamušaid)"
-        want = [u"ráhččamušaid", u"¢(noun,mix|rahčamušaid)"]
+        text = u"{ráhččamušaid}¢{noun,mix|rahčamušaid}"
+        want = [u"{ráhččamušaid}", u"¢{noun,mix|rahčamušaid}"]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text18(self):
         text = (
-            u"gitta Nordkjosbotn'ii$Nordkjosbotnii (mii lea ge "
-            u'nordkjosbotn$Nordkjosbotn sámegillii? Muhtin, veahket mu!) gos')
+            u"gitta {Nordkjosbotn'ii}${Nordkjosbotnii} (mii lea ge "
+            u'{nordkjosbotn}${Nordkjosbotn} sámegillii? Muhtin, veahket mu!) gos')
         want = [
-            u"gitta Nordkjosbotn'ii", u"$Nordkjosbotnii",
-            u" (mii lea ge nordkjosbotn", u"$Nordkjosbotn",
+            u"gitta {Nordkjosbotn'ii}", u"${Nordkjosbotnii}",
+            u" (mii lea ge {nordkjosbotn}", u"${Nordkjosbotn}",
             u" sámegillii? Muhtin, veahket mu!) gos"
         ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text19(self):
-        text = (u'gaskal (skuvla ohppiid)£(noun,attr,gensg,nomsg,case|skuvlla '
-                u'ohppiid) ja VSM.')
+        text = (u'gaskal {skuvla ohppiid}£{noun,attr,gensg,nomsg,case|skuvlla ohppiid} ja VSM.')
         want = [
-            u"gaskal (skuvla ohppiid)",
-            u"£(noun,attr,gensg,nomsg,case|skuvlla ohppiid)", u" ja VSM."
+            u"gaskal {skuvla ohppiid}",
+            u"£{noun,attr,gensg,nomsg,case|skuvlla ohppiid}", u" ja VSM."
         ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text20(self):
-        text = u"- ruksesruonáčalmmehisvuohta lea sullii 8%:as$(acr,suf|8%:s)"
+        text = u"- ruksesruonáčalmmehisvuohta lea sullii {8%:as}${acr,suf|8%:s}"
         want = [
-            u"- ruksesruonáčalmmehisvuohta lea sullii 8%:as", u"$(acr,suf|8%:s)"
+            u"- ruksesruonáčalmmehisvuohta lea sullii {8%:as}", u"${acr,suf|8%:s}"
         ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text21(self):
-        text = u"( nissonin¢(noun,suf|nissoniin) dušše (0.6 %:s)£(0.6 %) )"
+        text = u"( {nissonin}¢{noun,suf|nissoniin} dušše {0.6 %:s}£{0.6 %} )"
         want = [
-            u"( nissonin", u"¢(noun,suf|nissoniin)", u" dušše (0.6 %:s)",
-            u"£(0.6 %)", u" )"
+            u"( {nissonin}", u"¢{noun,suf|nissoniin}", u" dušše {0.6 %:s}",
+            u"£{0.6 %}", u" )"
         ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text22(self):
         text = (
-            u'(haploida) ja njiŋŋalas$(noun,á|njiŋŋálas) ságahuvvon$(verb,a|'
-            u'sagahuvvon) manneseallas (diploida)')
+            u'(haploida) ja {njiŋŋalas}${noun,á|njiŋŋálas} {ságahuvvon}${verb,a|sagahuvvon} manneseallas (diploida)')
         want = [
-            u"(haploida) ja njiŋŋalas", u"$(noun,á|njiŋŋálas)", u" ságahuvvon",
-            u"$(verb,a|sagahuvvon)", u" manneseallas (diploida)"
+            u"(haploida) ja {njiŋŋalas}", u"${noun,á|njiŋŋálas}", u" {ságahuvvon}",
+            u"${verb,a|sagahuvvon}", u" manneseallas (diploida)"
         ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text23(self):
-        text = (u'(gii oahpaha) giinu$(x,notcmp|gii nu) manai intiánalávlagat$('
-                u'loan,conc|indiánalávlagat) (guovža-klána)$(noun,cmp|'
-                u'guovžaklána) olbmuid')
+        text = (u'(gii oahpaha) {giinu}${x,notcmp|gii nu} manai {intiánalávlagat}${loan,conc|indiánalávlagat} {guovža-klána}${noun,cmp|guovžaklána} olbmuid')
         want = [
-            u"(gii oahpaha) giinu", u"$(x,notcmp|gii nu)",
-            u" manai intiánalávlagat", u"$(loan,conc|indiánalávlagat)",
-            u" (guovža-klána)", u"$(noun,cmp|guovžaklána)", u" olbmuid"
+            u"(gii oahpaha) {giinu}", u"${x,notcmp|gii nu}",
+            u" manai {intiánalávlagat}", u"${loan,conc|indiánalávlagat}",
+            u" {guovža-klána}", u"${noun,cmp|guovžaklána}", u" olbmuid"
         ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text24(self):
-        text = (u'(šaddai$(verb,conc|šattai) ollu áššit)£(verb,fin,pl3prs,'
-                u'sg3prs,tense|šadde ollu áššit)')
+        text = (u'{{šaddai}${verb,conc|šattai} ollu áššit}£{verb,fin,pl3prs,sg3prs,tense|šadde ollu áššit}')
         want = [
-            u'(šaddai', u"$(verb,conc|šattai)", u" ollu áššit)",
-            u'£(verb,fin,pl3prs,sg3prs,tense|šadde ollu áššit)'
+            u'{{šaddai}', u"${verb,conc|šattai}", u" ollu áššit}",
+            u'£{verb,fin,pl3prs,sg3prs,tense|šadde ollu áššit}'
         ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text25(self):
         text = (
-            u'(guokte ganddat§(n,á|gánddat))£(n,nump,gensg,nompl,case|guokte '
-            u'gándda)')
+            u'{guokte {ganddat}§{n,á|gánddat}}£{n,nump,gensg,nompl,case|guokte gándda}')
         want = [
-            u'(guokte ganddat', u'§(n,á|gánddat)', u')',
-            u'£(n,nump,gensg,nompl,case|guokte gándda)'
+        u'{guokte {ganddat}', u'§{n,á|gánddat}', u'}',
+            u'£{n,nump,gensg,nompl,case|guokte gándda}'
         ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text26(self):
-        text = (u'(Nieiddat leat nourra$(adj,meta|nuorra))£(adj,spred,nompl,'
-                u'nomsg,agr|Nieiddat leat nuorat)')
+        text = (u'{Nieiddat leat {nourra}${adj,meta|nuorra}}£{adj,spred,nompl,nomsg,agr|Nieiddat leat nuorat}')
         want = [
-            u'(Nieiddat leat nourra', u'$(adj,meta|nuorra)', u')',
-            u'£(adj,spred,nompl,nomsg,agr|Nieiddat leat nuorat)'
+            u'{Nieiddat leat {nourra}', u'${adj,meta|nuorra}', u'}',
+            u'£{adj,spred,nompl,nomsg,agr|Nieiddat leat nuorat}'
         ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text27(self):
         text = (
-            u'(leat (okta máná)£(n,spred,nomsg,gensg,case|okta mánná))£(v,v,'
-            u'sg3prs,pl3prs,agr|lea okta mánná)')
+            u'{leat {okta máná}£{n,spred,nomsg,gensg,case|okta mánná}}£{v,v,sg3prs,pl3prs,agr|lea okta mánná}')
         want = [
-            u'(leat (okta máná)', u'£(n,spred,nomsg,gensg,case|okta mánná)',
-            u')', u'£(v,v,sg3prs,pl3prs,agr|lea okta mánná)'
+            u'{leat {okta máná}', u'£{n,spred,nomsg,gensg,case|okta mánná}',
+            u'}', u'£{v,v,sg3prs,pl3prs,agr|lea okta mánná}'
         ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text28(self):
         text = (
-            u'heaitit dáhkaluddame$(verb,a|dahkaluddame) ahte sis máhkaš¢(adv,'
-            u'á|mahkáš) livččii makkarge$(adv,á|makkárge) politihkka, muhto '
-            u'rahpasit baicca muitalivčče (makkar$(interr,á|makkár) soga)€('
-            u'man soga) sii ovddasttit$(verb,conc|ovddastit).')
+            u'heaitit {dáhkaluddame}${verb,a|dahkaluddame} ahte sis {máhkaš}¢{adv,á|mahkáš} livččii {makkarge}${adv,á|makkárge} politihkka, muhto '
+            u'rahpasit baicca muitalivčče {{makkar}${interr,á|makkár} soga}€{man soga} sii {ovddasttit}${verb,conc|ovddastit}.')
         want = [
-            u'heaitit dáhkaluddame', u'$(verb,a|dahkaluddame)',
-            u' ahte sis máhkaš', u'¢(adv,á|mahkáš)', u' livččii makkarge',
-            u'$(adv,á|makkárge)',
-            u' politihkka, muhto rahpasit baicca muitalivčče (makkar',
-            u'$(interr,á|makkár)', u' soga)', u'€(man soga)',
-            u' sii ovddasttit', u'$(verb,conc|ovddastit)', u'.'
+            u'heaitit {dáhkaluddame}', u'${verb,a|dahkaluddame}',
+            u' ahte sis {máhkaš}', u'¢{adv,á|mahkáš}', u' livččii {makkarge}',
+            u'${adv,á|makkárge}',
+            u' politihkka, muhto rahpasit baicca muitalivčče {{makkar}',
+            u'${interr,á|makkár}', u' soga}', u'€{man soga}',
+            u' sii {ovddasttit}', u'${verb,conc|ovddastit}', u'.'
         ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text31(self):
-        text = (u'(Ovddit geasis)£(noun,advl,gensg,locsg,case|Ovddit geasi) '
-                u'((čoaggen$(verb,mono|čoggen) ollu jokŋat)£(noun,obj,genpl,'
-                u'nompl,case|čoggen ollu joŋaid) ja sarridat)£(noun,obj,genpl,'
-                u'nompl,case|čoggen ollu joŋaid ja sarridiid)')
+        text = (u'{Ovddit geasis}£{noun,advl,gensg,locsg,case|Ovddit geasi} '
+                u'{{{čoaggen}${verb,mono|čoggen} ollu jokŋat}£{noun,obj,genpl,nompl,case|čoggen ollu joŋaid} ja sarridat}£{noun,obj,genpl,nompl,case|čoggen ollu joŋaid ja sarridiid}')
         want = [
-            u'(Ovddit geasis)', u'£(noun,advl,gensg,locsg,case|Ovddit geasi)',
-            u' ((čoaggen', u'$(verb,mono|čoggen)', u' ollu jokŋat)',
-            u'£(noun,obj,genpl,nompl,case|čoggen ollu joŋaid)',
-            u' ja sarridat)',
-            u'£(noun,obj,genpl,nompl,case|čoggen ollu joŋaid ja sarridiid)'
+            u'{Ovddit geasis}', u'£{noun,advl,gensg,locsg,case|Ovddit geasi}',
+            u' {{{čoaggen}', u'${verb,mono|čoggen}', u' ollu jokŋat}',
+            u'£{noun,obj,genpl,nompl,case|čoggen ollu joŋaid}',
+            u' ja sarridat}',
+            u'£{noun,obj,genpl,nompl,case|čoggen ollu joŋaid ja sarridiid}'
         ]
 
         self.assertEqual(self.em.process_text(text), want)
 
     def test_process_text32(self):
         text = (
-            u'Bruk ((epoxi)$(noun,cons|epoksy) lim)¢(noun,mix|epoksylim) med '
+            u'Bruk {{epoxi}${noun,cons|epoksy} lim}¢{noun,mix|epoksylim} med '
             u'god kvalitet.')
         want = [
-            u'Bruk ((epoxi)', u'$(noun,cons|epoksy)', u' lim)',
-            u'¢(noun,mix|epoksylim)', u' med god kvalitet.'
+            u'Bruk {{epoxi}', u'${noun,cons|epoksy}', u' lim}',
+            u'¢{noun,mix|epoksylim}', u' med god kvalitet.'
         ]
 
         print(self.em.process_text(text))
         self.assertEqual(self.em.process_text(text), want)
 
     def test_is_correction1(self):
-        text = u'$(noun,cons|epoksy)'
+        text = u'${noun,cons|epoksy}'
         self.assertTrue(self.em.is_correction(text))
 
     def test_is_correction2(self):
-        text = u'Bruk ((epoxi)'
+        text = u'Bruk {{epoxi}'
         self.assertTrue(not self.em.is_correction(text))
 
     def test_is_error_with_slash(self):
-        text = u'aba/'
+        text = u'{aba/}'
         self.assertTrue(self.em.is_error(text))

@@ -48,11 +48,11 @@ class ErrorMarkup(object):
             u"∞": "errorlang",
             u"‰": "errorformat"
         }
+
         self.error_regex = re.compile(
-            u'(?P<error>\([^\(]*\)$|\w+$|\w+[-\':\]]\w+$|\w+[-\'\]\./]$|'
-            u'\d+’\w+$|\d+%:\w+$|”\w+”$)', re.UNICODE)
+            u'(?P<error>{[^{]*}$)', re.UNICODE)
         self.correction_regex = re.compile(
-            u'(?P<correction>[$€£¥§¢∞‰]\([^\)]*\)|[$€£¥§¢∞‰]\S+)(?P<tail>.*)',
+            u'(?P<correction>[$€£¥§¢∞‰]{[^\}]*})(?P<tail>.*)',
             re.UNICODE)
 
     def add_error_markup(self, element):
@@ -222,7 +222,7 @@ class ErrorMarkup(object):
             while True:
                 text = self.get_text(elements[-1])
 
-                index = text.rfind('(')
+                index = text.rfind('{')
                 if index > -1:
                     error_element.text = text[index + 1:]
                     if isinstance(elements[-1], etree._Element):
@@ -319,7 +319,7 @@ class ErrorMarkup(object):
         """
         (fixed_correction, ext_att, att_list) = \
             self.look_for_extended_attributes(
-                correction[1:].replace('(', '').replace(')', ''))
+                correction[1:].replace('{', '').replace('}', ''))
 
         element_name = self.get_element_name(correction[0])
 
@@ -370,7 +370,7 @@ class ErrorMarkup(object):
         if isinstance(error, etree._Element):
             error_element.append(error)
         else:
-            error_element.text = error.replace('(', '').replace(')', '')
+            error_element.text = error.replace('{', '').replace('}', '')
 
         error_element.set('correct', fixed_correction)
 
