@@ -67,6 +67,8 @@ def to_giella(path):
         return avvirconverter.convert2intermediate(path)
     elif path.endswith('bible.xml'):
         return biblexmlconverter.convert2intermediate(path)
+    elif 'udhr_' in path and path.endswith('.xml'):
+        return htmlcontentconverter.convert2intermediate(path)
     else:
         return chooser[os.path.splitext(path)[1]](path)
 

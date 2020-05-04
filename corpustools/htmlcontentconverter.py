@@ -27,7 +27,7 @@ from lxml.html import clean
 
 from corpustools import (docconverter, docxconverter, epubconverter,
                          htmlconverter, latexconverter, odfconverter,
-                         rtfconverter, util)
+                         rtfconverter, util, xmlconverter)
 
 HERE = os.path.dirname(__file__)
 
@@ -41,6 +41,7 @@ def to_html_elt(path):
         '.odt': odfconverter.to_html_elt,
         '.rtf': rtfconverter.to_html_elt,
         '.tex': latexconverter.to_html_elt,
+        '.xml': xmlconverter.to_html_elt,
     }
 
     return chooser[os.path.splitext(path)[1]](path)
