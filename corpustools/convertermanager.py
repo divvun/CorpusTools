@@ -79,7 +79,7 @@ class ConverterManager(object):
         """Convert file to corpus xml format.
 
         Args:
-            orig_file: string containg the path to the original file.
+            orig_file: string containing the path to the original file.
         """
         try:
             conv = converter.Converter(
