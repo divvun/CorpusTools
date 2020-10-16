@@ -49,7 +49,8 @@ class Analyser(object):
 
         Args:
             lang (str): language the analyser can analyse
-            pipeline_name (str): the name of the pipeline which will be used to analyse files
+            pipeline_name (str): the name of the pipeline which will be used to
+                analyse files
         """
         self.lang = lang
         self.xml_printer = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
