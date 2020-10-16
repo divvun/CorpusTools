@@ -141,7 +141,7 @@ def main():
         raise SystemExit('Only printing file names')
 
     try:
-        convert_and_copy(corpus_path1, corpus_path2, 'prestable' in orig_path)
+        convert_and_copy(corpus_path1, corpus_path2)
     except Exception as error:
         raise SystemExit(error)
 
