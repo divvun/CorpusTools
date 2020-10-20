@@ -88,6 +88,65 @@
     </pipeline>
   </mode>
 
+  <mode name="trace-smegram-dev" gendebug="yes">
+    <pipeline>
+      <program name="hfst-tokenise" debug-suff="morph">
+        <arg name="--gtd"/>
+        <file name="tokeniser-gramcheck-gt-desc.pmhfst"/>
+      </program>
+      <program name="divvun-blanktag" debug-suff="blank">
+        <file name="analyser-gt-whitespace.hfst"/>
+      </program>
+      <program name="vislcg3" debug-suff="val">
+        <arg name="--trace"/>
+        <arg name="--grammar"/>
+        <file name="valency.cg3"/>
+      </program>
+      <program name="vislcg3" debug-suff="mwe-dis">
+        <arg name="--trace"/>
+        <arg name="--grammar"/>
+        <file name="mwe-dis.cg3"/>
+      </program>
+      <program name="cg-mwesplit" debug-suff="mwe-split"/>
+      <program name="divvun-blanktag" debug-suff="blank2">
+        <file name="analyser-gt-errorwhitespace.hfst"/>
+      </program>
+      <program name="divvun-cgspell" debug-suff="cgspell">
+        <arg name="-n"/>
+        <arg name="10"/>
+        <arg name="-b"/>
+        <arg name="15"/>
+        <arg name="-w"/>
+        <arg name="5000"/>
+        <arg name="-u"/>
+        <arg name="0.4"/>
+        <arg name="-l"/>
+        <file name="acceptor.default.hfst"/>
+        <arg name="-m"/>
+        <file name="errmodel.default.hfst"/>
+      </program>
+      <program name="vislcg3" debug-suff="disam">
+        <arg name="-t"/>
+        <arg name="--grammar"/>
+        <file name="grc-disambiguator.cg3"/>
+      </program>
+      <program name="vislcg3" debug-suff="val">
+        <arg name="-t"/>
+        <arg name="--grammar"/>
+        <file name="spellchecker.cg3"/>
+      </program>
+      <program name="vislcg3" debug-suff="val">
+        <arg name="-t"/>
+        <arg name="--grammar"/>
+        <file name="after-speller-disambiguator.cg3"/>
+      </program>
+      <program name="vislcg3" debug-suff="gc">
+        <arg name="-t"/>
+        <arg name="--grammar"/>
+        <file name="grammarchecker.cg3"/>
+      </program>
+    </pipeline>
+  </mode>
   <mode name="trace-smegram" gendebug="yes">
     <pipeline>
       <program name="hfst-tokenise" debug-suff="morph">
