@@ -88,6 +88,35 @@
     </pipeline>
   </mode>
 
+  <mode name="hfst_eighties">
+    <pipeline>
+      <program name="hfst-tokenise" debug-suff="morph">
+        <arg name="--print-all"/>
+        <arg name="--giella-cg"/>
+        <arg name="--no-weights"/>
+        <arg name="--unique"/>
+        <file name="tokeniser-disamb-gt-desc.eighties.pmhfst"/>
+      </program>
+      <program name="vislcg3" debug-suff="mwe-dis">
+        <arg name="--grammar"/>
+        <file name="mwe-dis.bin"/>
+      </program>
+      <program name="cg-mwesplit" debug-suff="mwe-split"/>
+      <program name="vislcg3" debug="dis">
+        <arg name="--grammar"/>
+        <file name="disambiguator.bin"/>
+      </program>
+      <program name="vislcg3" debug="function">
+        <arg name="--grammar"/>
+        <file name="korp.bin"/>
+      </program>
+      <program name="vislcg3" debug="dep">
+        <arg name="--grammar"/>
+        <file name="dependency.bin"/>
+      </program>
+    </pipeline>
+  </mode>
+
   <mode name="trace-smegram-dev" gendebug="yes">
     <pipeline>
       <program name="hfst-tokenise" debug-suff="morph">

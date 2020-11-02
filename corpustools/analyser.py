@@ -164,7 +164,7 @@ def parse_options():
     parser.add_argument(
         '-k',
         '--fstkit',
-        choices=['hfst', 'xfst', 'trace-smegram', 'hfst_thirties'],
+        choices=['hfst', 'xfst', 'trace-smegram', 'hfst_thirties', 'hfst_eighties'],
         default='xfst',
         help='Finite State Toolkit. '
         'Either hfst or xfst (the default).')
