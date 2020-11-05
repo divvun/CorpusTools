@@ -110,6 +110,8 @@ class UrlDownloader(object):
                     except UnicodeDecodeError:
                         filename = filename.decode('latin1')
                 tmpname = os.path.join(self.download_dir, filename)
+                with util.ignored(OSError):
+                    os.makedirs(self.download_dir)
                 with open(tmpname, 'wb') as tmpfile:
                     tmpfile.write(request.content)
 
