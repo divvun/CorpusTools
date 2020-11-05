@@ -130,238 +130,235 @@ def get_text(element):
     return element.tail if isinstance(element, etree._Element) else element
 
 
+def look_for_extended_attributes(correction):
+    """Extract attributes and correction from a correctionstring."""
+    ext_att = False
+    att_list = None
+    if '|' in correction:
+        ext_att = True
+        try:
+            (att_list, correction) = correction.split('|')
+        except ValueError as e:
+            raise ErrorMarkupError(
+                f'\n{str(e)}\n'
+                'Too many | characters inside the correction: '
+                f'«{correction}»\n'
+                'Have you remembered to encase the error inside '
+                'parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?'
+                'If the errormarkup is correct, send a report about '
+                'this error to borre.gaup@uit.no')
+
+    return (correction, ext_att, att_list)
+
+
+def get_error(error, correction):
+    """Make an error_element.
+
+    error - - is either a string or an etree.Element
+    correction - - is a correctionstring
+    """
+    (fixed_correction, ext_att, att_list) = \
+        look_for_extended_attributes(
+            correction[1:].replace('{', '').replace('}', ''))
+
+    element_name = get_element_name(correction[0])
+
+    error_element = make_error_element(error, fixed_correction, element_name,
+                                       att_list)
+
+    return error_element
+
+
+def add_nested_error(elements, errorstring, correctionstring):
+    """Make error_element, append it to elements.
+
+    Args:
+        elements:           a list of error_elements
+        errorstring:        contains either a correction or string ending
+                            with a right parenthesis }
+        correctionstring:   a string containing an errormarkup correction
+
+    The algorithm:
+    At least the last element in elements will be engulfed in error_element
+    and replaced by error_element in elements
+
+    Remove the last element, use it as the inner_element when making
+    error_element
+
+    If the errorstring is not a correction, then it ends in a ).
+
+    Extract the string from the last element of elements.
+    If a ( is found, set the part before ( to be the tail of the last
+    element of elements. Set the part after ( to be the text of
+    error_element, append error_element to elements.
+
+    If a ( is not found, insert the last element of elements as first child
+    of error_element, continue searching
+    """
+    try:
+        inner_element = elements[-1]
+    except IndexError:
+        raise ErrorMarkupError(
+            f'Cannot handle:\n{errorstring} {correctionstring}\n'
+            'This is either an error in the markup or an error in the '
+            'errormarkup conversion code.\n'
+            'If the markup is correct, send a report about this error to '
+            'borre.gaup@uit.no')
+
+    elements.remove(elements[-1])
+    if not is_correction(errorstring):
+        inner_element.tail = errorstring[:-1]
+    error_element = get_error(inner_element, correctionstring)
+
+    if is_correction(errorstring):
+        elements.append(error_element)
+    else:
+        while True:
+            text = get_text(elements[-1])
+
+            index = text.rfind('{')
+            if index > -1:
+                error_element.text = text[index + 1:]
+                if isinstance(elements[-1], etree._Element):
+                    elements[-1].tail = text[:index]
+                else:
+                    elements[-1] = text[:index]
+                elements.append(error_element)
+                break
+
+            else:
+                inner_element = elements[-1]
+                elements.remove(elements[-1])
+                try:
+                    error_element.insert(0, inner_element)
+                except TypeError as e:
+                    raise ErrorMarkupError(
+                        f'{e}\n'
+                        'The program expected an error element, but '
+                        f'found a string:\n«{inner_element}»\n'
+                        'There is either an error in the errormarkup '
+                        'close to this sentence or the program cannot '
+                        'evaluate a correct errormarkup.\n'
+                        'If the errormarkup is correct, please report '
+                        'about the error to borre.gaup@uit.no')
+
+
+def add_simple_error(elements, errorstring, correctionstring):
+    """Make an error element, append it to elements.
+
+    elements -- a list of error_elements
+    errorstring -- a string containing a text part and an errormarkup
+    error
+    correctionstring -- a string containing an errormarkup correction
+
+    """
+    (head, error) = process_head(errorstring)
+
+    if elements:
+        elements[-1].tail = head
+
+    if not elements and head:
+        elements.append(head)
+
+    elements.append(get_error(error, correctionstring))
+
+
+def error_parser(text):
+    """Parse errormarkup found in text.
+
+    If any markup is found, return
+    a list of elements in elements
+
+    result -- contains a list of non-correction/correction parts
+
+    The algorithm for parsing the error is:
+    Find a correction in the result list.
+
+    If the preceding element in result contains a simple error and is not a
+    correction make an error_element, append it to elements
+
+    If the preceding element in result is not a simple error, it is part of
+    nested markup.
+    """
+    elements = []
+    result = process_text(text.replace('\n', ' '))
+
+    for index in range(0, len(result)):
+        if is_correction(result[index]):
+            if (not is_correction(result[index - 1])
+                    and is_error(result[index - 1])):
+                add_simple_error(elements, result[index - 1], result[index])
+
+            else:
+
+                add_nested_error(elements, result[index - 1], result[index])
+
+    try:
+        if not is_correction(result[-1]):
+            elements[-1].tail = result[-1]
+    except IndexError:
+        pass
+
+    return elements
+
+
+def fix_tail(element):
+    """Replace the tail of an element with errormarkup if possible."""
+    new_content = error_parser(element.tail if element.tail else '')
+
+    if new_content:
+        element.tail = None
+
+        if isinstance(new_content[0], str):
+            element.tail = new_content[0]
+            new_content = new_content[1:]
+
+        new_pos = element.getparent().index(element) + 1
+        for pos, part in enumerate(new_content):
+            element.getparent().insert(new_pos + pos, part)
+
+
+def fix_text(element):
+    """Replace the text of an element with errormarkup if possible."""
+    new_content = error_parser(element.text if element.text else '')
+
+    if new_content:
+        element.text = None
+
+        if isinstance(new_content[0], str):
+            element.text = new_content[0]
+            new_content = new_content[1:]
+
+        for pos, part in enumerate(new_content):
+            element.insert(pos, part)
+
+
+def really_add_error_markup(element):
+    """Search for errormarkup.
+
+    If found, replace errormarkuped text with xml
+
+    To see examples of what new_content consists of, have a look at the
+    test_error_parser* methods
+    """
+    fix_text(element)
+    fix_tail(element)
+
+
+def add_error_markup(element):
+    """Convert error markup to xml in this element and its children.
+
+    This is the starting point for doing markup.
+
+    Args:
+        element (etree._Element): The element where error markup should
+            be converted to xml.
+    """
+    really_add_error_markup(element)
+    for elt in element:
+        add_error_markup(elt)
+
+
 class ErrorMarkupError(Exception):
     """This is raised for errors in this module."""
     pass
-
-
-class ErrorMarkup(object):
-    """This is a class to convert errormarkuped text to xml."""
-    def __init__(self):
-        """Initialise the ErrorMarkup class.
-
-        Args:
-            filename (str): path to the file that should be converted.
-        """
-
-    def add_error_markup(self, element):
-        """Convert error markup to xml in this element and its children.
-
-        This is the starting point for doing markup.
-
-        Args:
-            element (etree._Element): The element where error markup should
-                be converted to xml.
-        """
-        self.really_add_error_markup(element)
-        for elt in element:
-            self.add_error_markup(elt)
-
-    def really_add_error_markup(self, element):
-        """Search for errormarkup.
-
-        If found, replace errormarkuped text with xml
-
-        To see examples of what new_content consists of, have a look at the
-        test_error_parser* methods
-        """
-        self.fix_text(element)
-        self.fix_tail(element)
-
-    def fix_text(self, element):
-        """Replace the text of an element with errormarkup if possible."""
-        new_content = self.error_parser(element.text if element.text else '')
-
-        if new_content:
-            element.text = None
-
-            if isinstance(new_content[0], str):
-                element.text = new_content[0]
-                new_content = new_content[1:]
-
-            for pos, part in enumerate(new_content):
-                element.insert(pos, part)
-
-    def fix_tail(self, element):
-        """Replace the tail of an element with errormarkup if possible."""
-        new_content = self.error_parser(element.tail if element.tail else '')
-
-        if new_content:
-            element.tail = None
-
-            if isinstance(new_content[0], str):
-                element.tail = new_content[0]
-                new_content = new_content[1:]
-
-            new_pos = element.getparent().index(element) + 1
-            for pos, part in enumerate(new_content):
-                element.getparent().insert(new_pos + pos, part)
-
-    def error_parser(self, text):
-        """Parse errormarkup found in text.
-
-        If any markup is found, return
-        a list of elements in elements
-
-        result -- contains a list of non-correction/correction parts
-
-        The algorithm for parsing the error is:
-        Find a correction in the result list.
-
-        If the preceding element in result contains a simple error and is not a
-        correction make an error_element, append it to elements
-
-        If the preceding element in result is not a simple error, it is part of
-        nested markup.
-        """
-        elements = []
-        result = process_text(text.replace('\n', ' '))
-
-        for index in range(0, len(result)):
-            if is_correction(result[index]):
-                if (not is_correction(result[index - 1])
-                        and is_error(result[index - 1])):
-                    self.add_simple_error(elements, result[index - 1],
-                                          result[index])
-
-                else:
-
-                    self.add_nested_error(elements, result[index - 1],
-                                          result[index])
-
-        try:
-            if not is_correction(result[-1]):
-                elements[-1].tail = result[-1]
-        except IndexError:
-            pass
-
-        return elements
-
-    def add_simple_error(self, elements, errorstring, correctionstring):
-        """Make an error element, append it to elements.
-
-        elements -- a list of error_elements
-        errorstring -- a string containing a text part and an errormarkup
-        error
-        correctionstring -- a string containing an errormarkup correction
-
-        """
-        (head, error) = process_head(errorstring)
-
-        if elements:
-            elements[-1].tail = head
-
-        if not elements and head:
-            elements.append(head)
-
-        elements.append(self.get_error(error, correctionstring))
-
-    def add_nested_error(self, elements, errorstring, correctionstring):
-        """Make error_element, append it to elements.
-
-        Args:
-            elements:           a list of error_elements
-            errorstring:        contains either a correction or string ending
-                                with a right parenthesis }
-            correctionstring:   a string containing an errormarkup correction
-
-        The algorithm:
-        At least the last element in elements will be engulfed in error_element
-        and replaced by error_element in elements
-
-        Remove the last element, use it as the inner_element when making
-        error_element
-
-        If the errorstring is not a correction, then it ends in a ).
-
-        Extract the string from the last element of elements.
-        If a ( is found, set the part before ( to be the tail of the last
-        element of elements. Set the part after ( to be the text of
-        error_element, append error_element to elements.
-
-        If a ( is not found, insert the last element of elements as first child
-        of error_element, continue searching
-        """
-        try:
-            inner_element = elements[-1]
-        except IndexError:
-            raise ErrorMarkupError(
-                f'Cannot handle:\n{errorstring} {correctionstring}\n'
-                'This is either an error in the markup or an error in the '
-                'errormarkup conversion code.\n'
-                'If the markup is correct, send a report about this error to '
-                'borre.gaup@uit.no')
-
-        elements.remove(elements[-1])
-        if not is_correction(errorstring):
-            inner_element.tail = errorstring[:-1]
-        error_element = self.get_error(inner_element, correctionstring)
-
-        if is_correction(errorstring):
-            elements.append(error_element)
-        else:
-            while True:
-                text = get_text(elements[-1])
-
-                index = text.rfind('{')
-                if index > -1:
-                    error_element.text = text[index + 1:]
-                    if isinstance(elements[-1], etree._Element):
-                        elements[-1].tail = text[:index]
-                    else:
-                        elements[-1] = text[:index]
-                    elements.append(error_element)
-                    break
-
-                else:
-                    inner_element = elements[-1]
-                    elements.remove(elements[-1])
-                    try:
-                        error_element.insert(0, inner_element)
-                    except TypeError as e:
-                        raise ErrorMarkupError(
-                            f'{e}\n'
-                            'The program expected an error element, but '
-                            f'found a string:\n«{inner_element}»\n'
-                            'There is either an error in the errormarkup '
-                            'close to this sentence or the program cannot '
-                            'evaluate a correct errormarkup.\n'
-                            'If the errormarkup is correct, please report '
-                            'about the error to borre.gaup@uit.no')
-
-    def get_error(self, error, correction):
-        """Make an error_element.
-
-        error - - is either a string or an etree.Element
-        correction - - is a correctionstring
-        """
-        (fixed_correction, ext_att, att_list) = \
-            self.look_for_extended_attributes(
-                correction[1:].replace('{', '').replace('}', ''))
-
-        element_name = get_element_name(correction[0])
-
-        error_element = make_error_element(error, fixed_correction,
-                                           element_name, att_list)
-
-        return error_element
-
-    def look_for_extended_attributes(self, correction):
-        """Extract attributes and correction from a correctionstring."""
-        ext_att = False
-        att_list = None
-        if '|' in correction:
-            ext_att = True
-            try:
-                (att_list, correction) = correction.split('|')
-            except ValueError as e:
-                raise ErrorMarkupError(
-                    f'\n{str(e)}\n'
-                    'Too many | characters inside the correction: '
-                    f'«{correction}»\n'
-                    'Have you remembered to encase the error inside '
-                    'parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?'
-                    'If the errormarkup is correct, send a report about '
-                    'this error to borre.gaup@uit.no')
-
-        return (correction, ext_att, att_list)

@@ -75,7 +75,6 @@ def to_giella(path):
 
 class Converter(object):
     """Take care of data common to all Converter classes."""
-
     def __init__(self,
                  filename,
                  lazy_conversion=False,
@@ -94,8 +93,8 @@ class Converter(object):
         self.lazy_conversion = lazy_conversion
         self.write_intermediate = write_intermediate
         try:
-            self.metadata = xslsetter.MetadataHandler(
-                self.names.xsl, create=True)
+            self.metadata = xslsetter.MetadataHandler(self.names.xsl,
+                                                      create=True)
         except xslsetter.XsltError as error:
             raise util.ConversionError(error)
 
@@ -116,7 +115,8 @@ class Converter(object):
     @property
     def goldstandard(self):
         """Return a boolean indicating if the file is a gold standard doc."""
-        return self.metadata.get_variable('conversion_status').startswith('correct')
+        return self.metadata.get_variable('conversion_status').startswith(
+            'correct')
 
     @staticmethod
     def get_dtd_location():
@@ -175,27 +175,25 @@ class Converter(object):
         """Convert error markup to xml."""
         if self.goldstandard:
             try:
-                error_markup = errormarkup.ErrorMarkup(self.names.orig)
-
                 for element in complete.find('body'):
-                    error_markup.add_error_markup(element)
-            except IndexError as error:
+                    errormarkup.add_error_markup(element)
+            except errormarkup.ErrorMarkupError as error:
                 with open(self.names.log, 'w') as logfile:
-                    logfile.write('Error at: {}'.format(
-                        six.text_type(util.lineno())))
-                    logfile.write("There is a markup error\n")
-                    logfile.write("The error message: ")
-                    logfile.write(six.text_type(error))
-                    logfile.write("\n\n")
-                    logfile.write("This is the xml tree:\n")
+                    logfile.write(f'Error at: {util.lineno()}')
+                    logfile.write('There is a markup error\n')
+                    logfile.write('The error message: ')
+                    logfile.write(str(error))
+                    logfile.write('\n\n')
+                    logfile.write('This is the xml tree:\n')
                     logfile.write(
-                        etree.tostring(
-                            complete, encoding='unicode', pretty_print=True))
+                        etree.tostring(complete,
+                                       encoding='unicode',
+                                       pretty_print=True))
                     logfile.write('\n')
 
                 raise util.ConversionError(
-                    u"Markup error. More info in the log file: {}".format(
-                        self.names.log))
+                    'Markup error. More info in the log file: '
+                    f'{self.names.log}')
 
     def fix_document(self, complete):
         """Fix a misc. issues found in converted document."""
@@ -280,8 +278,8 @@ class Converter(object):
         Returns:
             The length of the content in complete.
         """
-        xml_printer = ccat.XMLPrinter(
-            all_paragraphs=True, hyph_replacement=None)
+        xml_printer = ccat.XMLPrinter(all_paragraphs=True,
+                                      hyph_replacement=None)
         xml_printer.etree = etree.ElementTree(complete)
 
         return len(xml_printer.process_file().getvalue())
