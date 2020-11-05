@@ -14,7 +14,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2020 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2013-2020 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Classes and functions to convert errormarkup to xml."""
@@ -30,7 +31,6 @@ from lxml import etree
 
 class ErrorMarkup(object):
     """This is a class to convert errormarkuped text to xml."""
-
     def __init__(self, filename):
         """Initialise the ErrorMarkup class.
 
@@ -49,11 +49,9 @@ class ErrorMarkup(object):
             u"‰": "errorformat"
         }
 
-        self.error_regex = re.compile(
-            u'(?P<error>{[^{]*}$)', re.UNICODE)
+        self.error_regex = re.compile(u'(?P<error>{[^{]*}$)', re.UNICODE)
         self.correction_regex = re.compile(
-            u'(?P<correction>[$€£¥§¢∞‰]{[^\}]*})(?P<tail>.*)',
-            re.UNICODE)
+            u'(?P<correction>[$€£¥§¢∞‰]{[^\}]*})(?P<tail>.*)', re.UNICODE)
 
     def add_error_markup(self, element):
         """Convert error markup to xml in this element and its children.
@@ -137,8 +135,8 @@ class ErrorMarkup(object):
 
                 for index in six.moves.range(0, len(result)):
                     if self.is_correction(result[index]):
-                        if (not self.is_correction(result[index - 1]) and
-                                self.is_error(result[index - 1])):
+                        if (not self.is_correction(result[index - 1])
+                                and self.is_error(result[index - 1])):
                             self.add_simple_error(elements, result[index - 1],
                                                   result[index])
 
@@ -238,17 +236,16 @@ class ErrorMarkup(object):
                     try:
                         error_element.insert(0, inner_element)
                     except TypeError as e:
-                        print(
-                            u'{}\n{}\n'
-                            u'The program expected an error element, but '
-                            u'found a string:\n«{}»\n'
-                            u'There is either an error in the errormarkup '
-                            u'close to this sentence or the program cannot '
-                            u'evaluate a correct errormarkup.\n'
-                            u'If the errormarkup is correct, please report '
-                            u'about the error to borre.gaup@uit.no'.format(
-                                self._filename, e, inner_element),
-                            file=sys.stderr)
+                        print(u'{}\n{}\n'
+                              u'The program expected an error element, but '
+                              u'found a string:\n«{}»\n'
+                              u'There is either an error in the errormarkup '
+                              u'close to this sentence or the program cannot '
+                              u'evaluate a correct errormarkup.\n'
+                              u'If the errormarkup is correct, please report '
+                              u'about the error to borre.gaup@uit.no'.format(
+                                  self._filename, e, inner_element),
+                              file=sys.stderr)
 
     def get_text(self, element):
         """Get the text an element.
@@ -337,16 +334,15 @@ class ErrorMarkup(object):
             try:
                 (att_list, correction) = correction.split('|')
             except ValueError as e:
-                print(
-                    u"\n{}\n"
-                    u"{}\n"
-                    u"Too many | characters inside the correction. «{}»"
-                    u"Have you remembered to encase the error inside "
-                    u"parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?"
-                    u"If the errormarkup is correct, send a report about "
-                    u"this error to borre.gaup@uit.no".format(
-                        self._filename, str(e), correction),
-                    file=sys.stderr)
+                print(u"\n{}\n"
+                      u"{}\n"
+                      u"Too many | characters inside the correction. «{}»"
+                      u"Have you remembered to encase the error inside "
+                      u"parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?"
+                      u"If the errormarkup is correct, send a report about "
+                      u"this error to borre.gaup@uit.no".format(
+                          self._filename, str(e), correction),
+                      file=sys.stderr)
 
         return (correction, ext_att, att_list)
 
