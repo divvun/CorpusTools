@@ -591,7 +591,7 @@ class TestErrorMarkup(unittest.TestCase):
             ' uskki ja loaiddu.'
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_nested_markup6(self):
         in_elem = etree.fromstring(
@@ -615,7 +615,7 @@ class TestErrorMarkup(unittest.TestCase):
             '¢{noun,cmp|gulahallanolbmožat}', '€{gulahallanolbmot}'
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_nested_markup7(self):
         in_elem = etree.fromstring(
@@ -664,73 +664,73 @@ class TestErrorMarkup(unittest.TestCase):
         text = '{jne.}${adv,typo|jna.}'
         want = ['{jne.}', '${adv,typo|jna.}']
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text2(self):
         text = "{daesn'}${daesnie}"
         want = ["{daesn'}", "${daesnie}"]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text3(self):
         text = "{1]}§{Ij}"
         want = ["{1]}", "§{Ij}"]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text4(self):
         text = "{væ]keles}§{væjkeles}"
         want = ["{væ]keles}", "§{væjkeles}"]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text5(self):
         text = "{smávi-}§{smávit-}"
         want = ["{smávi-}", "§{smávit-}"]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text6(self):
         text = "{CD:t}§{CD:at}"
         want = ["{CD:t}", "§{CD:at}"]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text7(self):
         text = "{DNB-feaskáris}§{DnB-feaskáris}"
         want = ["{DNB-feaskáris}", "§{DnB-feaskáris}"]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text8(self):
         text = "{boade}§{boađe}"
         want = ["{boade}", "§{boađe}"]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text9(self):
         text = "{2005’as}§{2005:s}"
         want = ["{2005’as}", "§{2005:s}"]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text10(self):
         text = "{NSRii}§{NSR:ii}"
         want = ["{NSRii}", "§{NSR:ii}"]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text11(self):
         text = "{Nordkjosbotn'ii}§{Nordkjosbotnii}"
         want = ["{Nordkjosbotn'ii}", "§{Nordkjosbotnii}"]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text12(self):
         text = "{nourra}${a,meta|nuorra}"
         want = ["{nourra}", "${a,meta|nuorra}"]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text13(self):
         text = ('{Nieiddat leat nuorra}'
@@ -740,31 +740,31 @@ class TestErrorMarkup(unittest.TestCase):
             "£{a,spred,nompl,nomsg,agr|Nieiddat leat nuorat}"
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text14(self):
         text = "{riŋgen nieidda lusa}¥{x,pph|riŋgen niidii}"
         want = ["{riŋgen nieidda lusa}", "¥{x,pph|riŋgen niidii}"]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text15(self):
         text = "{ovtta}¥{num,redun| }"
         want = ["{ovtta}", "¥{num,redun| }"]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text16(self):
         text = "{dábálaš}€{adv,adj,der|dábálaččat}"
         want = ["{dábálaš}", "€{adv,adj,der|dábálaččat}"]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text17(self):
         text = "{ráhččamušaid}¢{noun,mix|rahčamušaid}"
         want = ["{ráhččamušaid}", "¢{noun,mix|rahčamušaid}"]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text18(self):
         text = (
@@ -777,7 +777,7 @@ class TestErrorMarkup(unittest.TestCase):
             " sámegillii? Muhtin, veahket mu!) gos"
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text19(self):
         text = (
@@ -788,7 +788,7 @@ class TestErrorMarkup(unittest.TestCase):
             "£{noun,attr,gensg,nomsg,case|skuvlla ohppiid}", " ja VSM."
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text20(self):
         text = "- ruksesruonáčalmmehisvuohta lea sullii {8%:as}${acr,suf|8%:s}"
@@ -797,7 +797,7 @@ class TestErrorMarkup(unittest.TestCase):
             "${acr,suf|8%:s}"
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text21(self):
         text = "( {nissonin}¢{noun,suf|nissoniin} dušše {0.6 %:s}£{0.6 %} )"
@@ -806,7 +806,7 @@ class TestErrorMarkup(unittest.TestCase):
             "£{0.6 %}", " )"
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text22(self):
         text = ('(haploida) ja {njiŋŋalas}${noun,á|njiŋŋálas} {ságahuvvon}'
@@ -816,7 +816,7 @@ class TestErrorMarkup(unittest.TestCase):
             " {ságahuvvon}", "${verb,a|sagahuvvon}", " manneseallas (diploida)"
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text23(self):
         text = (
@@ -829,7 +829,7 @@ class TestErrorMarkup(unittest.TestCase):
             " {guovža-klána}", "${noun,cmp|guovžaklána}", " olbmuid"
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text24(self):
         text = ('{{šaddai}${verb,conc|šattai} ollu áššit}'
@@ -839,7 +839,7 @@ class TestErrorMarkup(unittest.TestCase):
             '£{verb,fin,pl3prs,sg3prs,tense|šadde ollu áššit}'
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text25(self):
         text = ('{guokte {ganddat}§{n,á|gánddat}}'
@@ -849,7 +849,7 @@ class TestErrorMarkup(unittest.TestCase):
             '£{n,nump,gensg,nompl,case|guokte gándda}'
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text26(self):
         text = ('{Nieiddat leat {nourra}${adj,meta|nuorra}}'
@@ -859,7 +859,7 @@ class TestErrorMarkup(unittest.TestCase):
             '£{adj,spred,nompl,nomsg,agr|Nieiddat leat nuorat}'
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text27(self):
         text = ('{leat {okta máná}£{n,spred,nomsg,gensg,case|okta mánná}}'
@@ -869,7 +869,7 @@ class TestErrorMarkup(unittest.TestCase):
             '£{v,v,sg3prs,pl3prs,agr|lea okta mánná}'
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text28(self):
         text = ('heaitit {dáhkaluddame}${verb,a|dahkaluddame} ahte sis '
@@ -886,7 +886,7 @@ class TestErrorMarkup(unittest.TestCase):
             '${verb,conc|ovddastit}', '.'
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text31(self):
         text = ('{Ovddit geasis}£{noun,advl,gensg,locsg,case|Ovddit geasi} '
@@ -900,7 +900,7 @@ class TestErrorMarkup(unittest.TestCase):
             '£{noun,obj,genpl,nompl,case|čoggen ollu joŋaid ja sarridiid}'
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text32(self):
         text = (
@@ -911,15 +911,14 @@ class TestErrorMarkup(unittest.TestCase):
             '¢{noun,mix|epoksylim}', ' med god kvalitet.'
         ]
 
-        self.assertEqual(self.em.process_text(text), want)
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_process_text33(self):
         text = (
             'ja geas {ii leat mangelágan čanastagat}'
             '£{noun,spred,nomsg,nompl,kongr|ii leat mangelágan čanastat}///'
             '£{noun,spred,nompl,nomsg,kongr|eai leat mangelágan čanastagat} '
-            'báikái dahje beroštupmi dan buresbirgejupmái.'
-        )
+            'báikái dahje beroštupmi dan buresbirgejupmái.')
         want = [
             'ja geas {ii leat mangelágan čanastagat}',
             '£{noun,spred,nomsg,nompl,kongr|ii leat mangelágan čanastat}',
@@ -928,16 +927,31 @@ class TestErrorMarkup(unittest.TestCase):
             ' báikái dahje beroštupmi dan buresbirgejupmái.'
         ]
         """
-        self.assertEqual(self.em.process_text(text), want)
+        <p>
+            ja geas
+            <errormulti>
+                <errormorphsyn
+                    errorinfo='noun,spred,nomsg,nompl,kongr'
+                    correct='ii leat mangelágan čanastat'
+                />
+                <errormorphsyn
+                    errorinfo='noun,spred,nompl,nomsg,kongr'
+                    correct='eai leat mangelágan čanastagat'
+                />
+                ii leat mangelágan čanastagat
+            </errormulti>
+        </p>
+        """
+        self.assertEqual(errormarkup.process_text(text), want)
 
     def test_is_correction1(self):
         text = '${noun,cons|epoksy}'
-        self.assertTrue(self.em.is_correction(text))
+        self.assertTrue(errormarkup.is_correction(text))
 
     def test_is_correction2(self):
         text = 'Bruk {{epoxi}'
-        self.assertTrue(not self.em.is_correction(text))
+        self.assertTrue(not errormarkup.is_correction(text))
 
     def test_is_error_with_slash(self):
         text = '{aba/}'
-        self.assertTrue(self.em.is_error(text))
+        self.assertTrue(errormarkup.is_error(text))
