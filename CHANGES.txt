@@ -150,3 +150,4 @@ v<0.27.2>, <20191107> -- Make reparallelize work again, it relied on converted
                          files being in prestable.
 v<0.27.3>, <20200209> -- Make the -wbt option of pdftohtml available as a variable in the metadatafiles.
 v<0.28.0>, <20200504> -- Support the conversion of udhr xml documents (https://unicode.org/udhr/).
+v<0.28.1>, <20201105> -- Make sure that temporary directory exists when adding files
