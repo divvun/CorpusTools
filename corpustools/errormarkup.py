@@ -166,7 +166,7 @@ class ErrorMarkup(object):
 
     def fix_text(self, element):
         """Replace the text of an element with errormarkup if possible."""
-        new_content = self.error_parser(element.text)
+        new_content = self.error_parser(element.text if element.text else '')
 
         if new_content:
             element.text = None
@@ -180,7 +180,7 @@ class ErrorMarkup(object):
 
     def fix_tail(self, element):
         """Replace the tail of an element with errormarkup if possible."""
-        new_content = self.error_parser(element.tail)
+        new_content = self.error_parser(element.tail if element.tail else '')
 
         if new_content:
             element.tail = None
@@ -210,33 +210,28 @@ class ErrorMarkup(object):
         If the preceding element in result is not a simple error, it is part of
         nested markup.
         """
-        if text:
-            result = process_text(text.replace('\n', ' '))
+        elements = []
+        result = process_text(text.replace('\n', ' '))
 
-            if len(result) > 1:
-                # print text
-                # print result
-                elements = []
-                # This means that we are inside an error markup
-                # Start with the two first elements
-                # The first contains an error, the second one is a correction
+        for index in range(0, len(result)):
+            if is_correction(result[index]):
+                if (not is_correction(result[index - 1])
+                        and is_error(result[index - 1])):
+                    self.add_simple_error(elements, result[index - 1],
+                                          result[index])
 
-                for index in range(0, len(result)):
-                    if is_correction(result[index]):
-                        if (not is_correction(result[index - 1])
-                                and is_error(result[index - 1])):
-                            self.add_simple_error(elements, result[index - 1],
-                                                  result[index])
+                else:
 
-                        else:
+                    self.add_nested_error(elements, result[index - 1],
+                                          result[index])
 
-                            self.add_nested_error(elements, result[index - 1],
-                                                  result[index])
+        try:
+            if not is_correction(result[-1]):
+                elements[-1].tail = result[-1]
+        except IndexError:
+            pass
 
-                if not is_correction(result[-1]):
-                    elements[-1].tail = result[-1]
-
-                return elements
+        return elements
 
     def add_simple_error(self, elements, errorstring, correctionstring):
         """Make an error element, append it to elements.
