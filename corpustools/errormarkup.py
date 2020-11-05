@@ -67,14 +67,14 @@ def process_text(text):
     matches = CORRECTION_REGEX.search(text)
     while matches:
         head = CORRECTION_REGEX.sub('', text)
-        if not (head != '' and head[-1] == ' '):
-            if head != '':
+        if not (head and head[-1] == ' '):
+            if head:
                 result.append(head)
             result.append(matches.group('correction'))
         text = matches.group('tail')
         matches = CORRECTION_REGEX.search(text)
 
-    if text != '':
+    if text:
         result.append(text)
 
     return result
