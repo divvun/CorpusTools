@@ -310,8 +310,7 @@ def fix_tail(element):
         element.tail = None
 
         if isinstance(new_content[0], str):
-            element.tail = new_content[0]
-            new_content = new_content[1:]
+            element.tail = new_content.pop(0)
 
         new_pos = element.getparent().index(element) + 1
         for pos, part in enumerate(new_content):
@@ -326,8 +325,7 @@ def fix_text(element):
         element.text = None
 
         if isinstance(new_content[0], str):
-            element.text = new_content[0]
-            new_content = new_content[1:]
+            element.text = new_content.pop(0)
 
         for pos, part in enumerate(new_content):
             element.insert(pos, part)
