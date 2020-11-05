@@ -130,15 +130,19 @@ def get_text(element):
     return element.tail if isinstance(element, etree._Element) else element
 
 
+class ErrorMarkupError(Exception):
+    """This is raised for errors in this module."""
+    pass
+
+
 class ErrorMarkup(object):
     """This is a class to convert errormarkuped text to xml."""
-    def __init__(self, filename):
+    def __init__(self):
         """Initialise the ErrorMarkup class.
 
         Args:
             filename (str): path to the file that should be converted.
         """
-        self._filename = filename
 
     def add_error_markup(self, element):
         """Convert error markup to xml in this element and its children.
@@ -281,14 +285,12 @@ class ErrorMarkup(object):
         try:
             inner_element = elements[-1]
         except IndexError:
-            print(
-                '{}\n'
-                'Cannot handle:\n{} {}\n'
+            raise ErrorMarkupError(
+                f'Cannot handle:\n{errorstring} {correctionstring}\n'
                 'This is either an error in the markup or an error in the '
                 'errormarkup conversion code.\n'
                 'If the markup is correct, send a report about this error to '
-                'borre.gaup@uit.no'.format(self._filename, errorstring,
-                                           correctionstring))
+                'borre.gaup@uit.no')
 
         elements.remove(elements[-1])
         if not is_correction(errorstring):
@@ -317,16 +319,15 @@ class ErrorMarkup(object):
                     try:
                         error_element.insert(0, inner_element)
                     except TypeError as e:
-                        print('{}\n{}\n'
-                              'The program expected an error element, but '
-                              'found a string:\n«{}»\n'
-                              'There is either an error in the errormarkup '
-                              'close to this sentence or the program cannot '
-                              'evaluate a correct errormarkup.\n'
-                              'If the errormarkup is correct, please report '
-                              'about the error to borre.gaup@uit.no'.format(
-                                  self._filename, e, inner_element),
-                              file=sys.stderr)
+                        raise ErrorMarkupError(
+                            f'{e}\n'
+                            'The program expected an error element, but '
+                            f'found a string:\n«{inner_element}»\n'
+                            'There is either an error in the errormarkup '
+                            'close to this sentence or the program cannot '
+                            'evaluate a correct errormarkup.\n'
+                            'If the errormarkup is correct, please report '
+                            'about the error to borre.gaup@uit.no')
 
     def get_error(self, error, correction):
         """Make an error_element.
@@ -354,14 +355,13 @@ class ErrorMarkup(object):
             try:
                 (att_list, correction) = correction.split('|')
             except ValueError as e:
-                print('\n{}\n'
-                      '{}\n'
-                      'Too many | characters inside the correction. «{}»'
-                      'Have you remembered to encase the error inside '
-                      'parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?'
-                      'If the errormarkup is correct, send a report about '
-                      'this error to borre.gaup@uit.no'.format(
-                          self._filename, str(e), correction),
-                      file=sys.stderr)
+                raise ErrorMarkupError(
+                    f'\n{str(e)}\n'
+                    'Too many | characters inside the correction: '
+                    f'«{correction}»\n'
+                    'Have you remembered to encase the error inside '
+                    'parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?'
+                    'If the errormarkup is correct, send a report about '
+                    'this error to borre.gaup@uit.no')
 
         return (correction, ext_att, att_list)

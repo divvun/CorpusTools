@@ -32,7 +32,7 @@ from corpustools import errormarkup
 
 class TestErrorMarkup(unittest.TestCase):
     def setUp(self):
-        self.em = errormarkup.ErrorMarkup('testfilename')
+        self.em = errormarkup.ErrorMarkup()
 
     def assertXmlEqual(self, got, want):
         """Check if two stringified xml snippets are equal"""
