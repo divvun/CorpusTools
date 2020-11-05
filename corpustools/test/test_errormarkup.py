@@ -912,16 +912,19 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_process_text33(self):
         text = (
-            'ja geas {ii leat mangelágan čanastagat}'
-            '£{noun,spred,nomsg,nompl,kongr|ii leat mangelágan čanastat}///'
-            '£{noun,spred,nompl,nomsg,kongr|eai leat mangelágan čanastagat} '
-            'báikái dahje beroštupmi dan buresbirgejupmái.')
+            'a {error}'
+            '£{fix1}///'
+            '£{fix2}///'
+            '¥{fix3}'
+            ' b.')
         want = [
-            'ja geas {ii leat mangelágan čanastagat}',
-            '£{noun,spred,nomsg,nompl,kongr|ii leat mangelágan čanastat}',
+            'a {error}',
+            '£{fix1}',
             '///',
-            '£{noun,spred,nompl,nomsg,kongr|eai leat mangelágan čanastagat}',
-            ' báikái dahje beroštupmi dan buresbirgejupmái.'
+            '£{fix2}',
+            '///',
+            '¥{fix3}',
+            ' b.'
         ]
         """
         <p>
