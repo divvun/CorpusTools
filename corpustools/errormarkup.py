@@ -313,8 +313,8 @@ def fix_tail(element):
             element.tail = new_content.pop(0)
 
         new_pos = element.getparent().index(element) + 1
-        for pos, part in enumerate(new_content):
-            element.getparent().insert(new_pos + pos, part)
+        for pos, part in enumerate(new_content, start=new_pos):
+            element.getparent().insert(pos, part)
 
 
 def fix_text(element):
