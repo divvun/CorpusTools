@@ -20,12 +20,9 @@
 #
 """Classes and functions to convert errormarkup to xml."""
 
-from __future__ import absolute_import, print_function, unicode_literals
-
 import re
 import sys
 
-import six
 from lxml import etree
 
 
@@ -39,22 +36,24 @@ class ErrorMarkup(object):
         """
         self._filename = filename
         self.types = {
-            u"$": u"errorort",
-            u"¢": "errorortreal",
-            u"€": "errorlex",
-            u"£": "errormorphsyn",
-            u"¥": "errorsyn",
-            u"§": "error",
-            u"∞": "errorlang",
-            u"‰": "errorformat"
+            '$': 'errorort',
+            '¢': 'errorortreal',
+            '€': 'errorlex',
+            '£': 'errormorphsyn',
+            '¥': 'errorsyn',
+            '§': 'error',
+            '∞': 'errorlang',
+            '‰': 'errorformat'
         }
 
-        self.error_regex = re.compile(u'(?P<error>{[^{]*}$)', re.UNICODE)
+        self.error_regex = re.compile('(?P<error>{[^{]*}$)', re.UNICODE)
         self.correction_regex = re.compile(
-            u'(?P<correction>[$€£¥§¢∞‰]{[^\}]*})(?P<tail>.*)', re.UNICODE)
+            '(?P<correction>[$€£¥§¢∞‰]{[^\}]*})(?P<tail>.*)', re.UNICODE)
 
     def add_error_markup(self, element):
         """Convert error markup to xml in this element and its children.
+
+        This is the starting point for doing markup.
 
         Args:
             element (etree._Element): The element where error markup should
@@ -82,7 +81,7 @@ class ErrorMarkup(object):
         if new_content:
             element.text = None
 
-            if isinstance(new_content[0], six.string_types):
+            if isinstance(new_content[0], str):
                 element.text = new_content[0]
                 new_content = new_content[1:]
 
@@ -96,7 +95,7 @@ class ErrorMarkup(object):
         if new_content:
             element.tail = None
 
-            if isinstance(new_content[0], six.string_types):
+            if isinstance(new_content[0], str):
                 element.tail = new_content[0]
                 new_content = new_content[1:]
 
@@ -122,8 +121,7 @@ class ErrorMarkup(object):
         nested markup.
         """
         if text:
-            text = text.replace('\n', ' ')
-            result = self.process_text(text)
+            result = self.process_text(text.replace('\n', ' '))
 
             if len(result) > 1:
                 # print text
@@ -133,7 +131,7 @@ class ErrorMarkup(object):
                 # Start with the two first elements
                 # The first contains an error, the second one is a correction
 
-                for index in six.moves.range(0, len(result)):
+                for index in range(0, len(result)):
                     if self.is_correction(result[index]):
                         if (not self.is_correction(result[index - 1])
                                 and self.is_error(result[index - 1])):
@@ -160,15 +158,14 @@ class ErrorMarkup(object):
 
         """
         (head, error) = self.process_head(errorstring)
-        if not elements:
-            if head != '':
-                elements.append(head)
-        else:
+
+        if elements:
             elements[-1].tail = head
 
-        error_element = self.get_error(error, correctionstring)
+        if not elements and head:
+            elements.append(head)
 
-        elements.append(error_element)
+        elements.append(self.get_error(error, correctionstring))
 
     def add_nested_error(self, elements, errorstring, correctionstring):
         """Make error_element, append it to elements.
@@ -201,13 +198,13 @@ class ErrorMarkup(object):
             inner_element = elements[-1]
         except IndexError:
             print(
-                u'{}\n'
-                u'Cannot handle:\n{} {}\n'
-                u'This is either an error in the markup or an error in the '
-                u'errormarkup conversion code.\n'
-                u'If the markup is correct, send a report about this error to '
-                u'borre.gaup@uit.no'.format(self._filename, errorstring,
-                                            correctionstring))
+                '{}\n'
+                'Cannot handle:\n{} {}\n'
+                'This is either an error in the markup or an error in the '
+                'errormarkup conversion code.\n'
+                'If the markup is correct, send a report about this error to '
+                'borre.gaup@uit.no'.format(self._filename, errorstring,
+                                           correctionstring))
 
         elements.remove(elements[-1])
         if not self.is_correction(errorstring):
@@ -236,14 +233,14 @@ class ErrorMarkup(object):
                     try:
                         error_element.insert(0, inner_element)
                     except TypeError as e:
-                        print(u'{}\n{}\n'
-                              u'The program expected an error element, but '
-                              u'found a string:\n«{}»\n'
-                              u'There is either an error in the errormarkup '
-                              u'close to this sentence or the program cannot '
-                              u'evaluate a correct errormarkup.\n'
-                              u'If the errormarkup is correct, please report '
-                              u'about the error to borre.gaup@uit.no'.format(
+                        print('{}\n{}\n'
+                              'The program expected an error element, but '
+                              'found a string:\n«{}»\n'
+                              'There is either an error in the errormarkup '
+                              'close to this sentence or the program cannot '
+                              'evaluate a correct errormarkup.\n'
+                              'If the errormarkup is correct, please report '
+                              'about the error to borre.gaup@uit.no'.format(
                                   self._filename, e, inner_element),
                               file=sys.stderr)
 
@@ -256,13 +253,7 @@ class ErrorMarkup(object):
         Returns:
             If text is found, str. Otherwise return None.
         """
-        text = None
-        if isinstance(element, etree._Element):
-            text = element.tail
-        else:
-            text = element
-
-        return text
+        return element.tail if isinstance(element, etree._Element) else element
 
     def is_correction(self, expression):
         return self.correction_regex.search(expression)
@@ -278,7 +269,7 @@ class ErrorMarkup(object):
         matches = self.correction_regex.search(text)
         while matches:
             head = self.correction_regex.sub('', text)
-            if not (head != '' and head[-1] == " "):
+            if not (head != '' and head[-1] == ' '):
                 if head != '':
                     result.append(head)
                 result.append(matches.group('correction'))
@@ -334,13 +325,13 @@ class ErrorMarkup(object):
             try:
                 (att_list, correction) = correction.split('|')
             except ValueError as e:
-                print(u"\n{}\n"
-                      u"{}\n"
-                      u"Too many | characters inside the correction. «{}»"
-                      u"Have you remembered to encase the error inside "
-                      u"parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?"
-                      u"If the errormarkup is correct, send a report about "
-                      u"this error to borre.gaup@uit.no".format(
+                print('\n{}\n'
+                      '{}\n'
+                      'Too many | characters inside the correction. «{}»'
+                      'Have you remembered to encase the error inside '
+                      'parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?'
+                      'If the errormarkup is correct, send a report about '
+                      'this error to borre.gaup@uit.no'.format(
                           self._filename, str(e), correction),
                       file=sys.stderr)
 
