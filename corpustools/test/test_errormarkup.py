@@ -911,7 +911,23 @@ class TestErrorMarkup(unittest.TestCase):
             '¢{noun,mix|epoksylim}', ' med god kvalitet.'
         ]
 
-        print(self.em.process_text(text))
+        self.assertEqual(self.em.process_text(text), want)
+
+    def test_process_text33(self):
+        text = (
+            'ja geas {ii leat mangelágan čanastagat}'
+            '£{noun,spred,nomsg,nompl,kongr|ii leat mangelágan čanastat}///'
+            '£{noun,spred,nompl,nomsg,kongr|eai leat mangelágan čanastagat} '
+            'báikái dahje beroštupmi dan buresbirgejupmái.'
+        )
+        want = [
+            'ja geas {ii leat mangelágan čanastagat}',
+            '£{noun,spred,nomsg,nompl,kongr|ii leat mangelágan čanastat}',
+            '///',
+            '£{noun,spred,nompl,nomsg,kongr|eai leat mangelágan čanastagat}',
+            ' báikái dahje beroštupmi dan buresbirgejupmái.'
+        ]
+        """
         self.assertEqual(self.em.process_text(text), want)
 
     def test_is_correction1(self):
