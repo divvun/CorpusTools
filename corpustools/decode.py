@@ -33,7 +33,7 @@ import six
 # pylint: disable=unused-import
 from corpustools import macsami, mari, util, winsami2
 
-CYRILLIC_LANGUAGES = ['mhr']
+CYRILLIC_LANGUAGES = ['mhr', 'mrj']
 
 
 def fix_macsami_cp1252(instring):
@@ -241,6 +241,87 @@ CTYPES = {
         u'þ': u'č',
         u'á': u'á',
     },
+    'cyrillic_in_pdf': {
+        'à': 'а',
+        'á': 'б',
+        'â': 'в',
+        'ä': 'д',
+        'å': 'е',
+        'ô': 'ф',
+        'ã': 'г',
+        #  '_': 'х',
+        'è': 'и',
+        'é': 'й',
+        'ê': 'к',
+        'ë': 'л',
+        'ì': 'м',
+        'í': 'н',
+        #  '_': 'ҥ',
+        'î': 'о',
+        'º': 'ӧ',
+        'ï': 'п',
+        'ð': 'р',
+        'ñ': 'с',
+        'ò': 'т',
+        'ó': 'у',
+        'û': 'ы',
+        'õ': 'х',
+        'ø': 'ш',
+        #  '_': 'щ',
+        '÷': 'ч',
+        'ý': 'э',
+        '¢': 'ӱ',
+        '³': 'ӓ',
+        '¿': 'ӹ',
+        #  '_': 'ъ',
+        'ü': 'ь',
+        'ÿ': 'я',
+        'ç': 'з',
+        'æ': 'ж',
+        'þ': 'ю',
+        'ö': 'ц',
+
+
+        'À': 'A',
+        'Á': 'б',
+        'Â': 'В',
+        'Ä': 'Д',
+        'Å': 'Е',
+        'Ô': 'Ф',
+        'Ã': 'Г',
+        #  '_': 'Х',
+        'È': 'И',
+        'É': 'Й',
+        'Ê': 'К',
+        'Ë': 'Л',
+        'Ì': 'М',
+        'Í': 'Н',
+        'Î': 'О',
+        'Ï': 'П',
+        'Ð': 'Р',
+        'Ñ': 'С',
+        'Ò': 'Т',
+        'Ó': 'У',
+        'Û': 'Ы',
+        'Õ': 'Х',
+        'Ø': 'Ш',
+        #  '_': 'Щ',
+        '×': 'Ч',
+        'Ý': 'Э',
+        #  '_': 'Ҥ',
+        #  '_': 'Ӧ',
+        #  '_': 'Ӱ',
+        #  '_': 'Ъ',
+        'Ü': 'Ь',
+        #  '_': 'Ӓ',
+        '¯': 'Ӹ',
+        'Ÿ': 'Я',
+        'Ç': 'З',
+        'Æ': 'Ж',
+        'Þ': 'Ю',
+        'Ö': 'Ц',
+        '¹': '№',
+    }
 }
 
 
@@ -271,7 +352,9 @@ def guess_body_encoding(content, mainlang):
     encoding is found
     """
     winner = None
-    if u'à' in content and u'û' in content and mainlang in CYRILLIC_LANGUAGES:
+    if u'ì' in content and u'ò' in content and mainlang in CYRILLIC_LANGUAGES:
+        winner = 'cyrillic_in_pdf'
+    elif u'à' in content and u'û' in content and mainlang in CYRILLIC_LANGUAGES:
         winner = u'cp1251_cp1252'
     elif ((u'‡' in content and u'ã' not in content) or
           (u'Œ' in content and u'ÄŒ' not in content)):
