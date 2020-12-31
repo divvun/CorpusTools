@@ -22,42 +22,33 @@
 from lxml import etree
 
 
-def para_p2text(paragraph):
-    return [
-        child.tail.strip()
-        for child in paragraph
-        if child.tail and child.tail is not None and child.tail.strip()
-    ]
+def char_to_span(document):
+    for char in document.iter('char'):
+        for key in char.attrib:
+            del char.attrib[key]
+        char.tag = 'span'
+        char.set('type', 'quote')
 
 
-def extract_text(paragraph):
-    if len(paragraph):
-        return ' '.join(para_p2text(paragraph))
-
-    return paragraph.text
+def remove_unwanted(document):
+    for unwanted in ['note', 'verse', 'book', 'table']:
+        etree.strip_elements(document, unwanted, with_tail=False)
 
 
-def convert2intermediate(filename):
-    """Convert Ávvir xml files to the giellatekno xml format.
-
-    The root node in an Ávvir document is article.
-    article nodes contains one or more story nodes.
-    story nodes contain one or more p nodes.
-    p nodes contain span, br and (since 2013) p nodes.
-    """
-    usx_doc = etree.parse(filename).getroot()
+def usx_to_document(usx_document):
     document = etree.Element('document')
     body = etree.SubElement(document, 'body')
     body.text = '\n'
 
-    print(filename)
-    for child in usx_doc:
+    for child in usx_document:
         if child.tag == 'chapter':
             section = etree.SubElement(body, 'section')
             section.text = '\n'
             section.tail = '\n'
         elif child.tag == 'para':
-            if child.get('style') in ['s', 'p', 'nb']:
+            if child.get('style') in [
+                    's', 'p', 'nb', 'mt', 'mt1', 'ms', 'sp', 'ip'
+            ]:
                 try:
                     paragraph = etree.SubElement(section, 'p')
                 except UnboundLocalError:
@@ -66,24 +57,65 @@ def convert2intermediate(filename):
                     section.tail = '\n'
                     paragraph = etree.SubElement(section, 'p')
 
-                if child.get('style') == 's':
+                if child.get('style') in ['s', 'mt', 'ms', 'mt1']:
                     paragraph.set('type', 'title')
-                paragraph.text = extract_text(child)
-            elif child.get('style') in ['m', 'q1']:
-                if paragraph.get('type') == 'title':
+                if child.text:
+                    paragraph.text = ' '.join(child.text.split())
+                for grandchild in child:
+                    paragraph.append(grandchild)
+            elif child.get('style') in ['m', 'q', 'q1', 'q2', 'pi']:
+                try:
+                    if paragraph.get('type') == 'title':
+                        paragraph = etree.SubElement(section, 'p')
+                except UnboundLocalError:
                     paragraph = etree.SubElement(section, 'p')
-                    paragraph.text = ''
-                paragraph.text = f'{paragraph.text} {extract_text(child)}'
-            elif child.get('style') in ['b']:
+                if len(paragraph):
+                    if not paragraph[-1].tail:
+                        paragraph[-1].tail = ' '.join(child.text.split())
+                    else:
+                        paragraph[-1].tail = (
+                            f'{paragraph[-1].tail} '
+                            f'{" ".join(child.text.split())}')
+                else:
+                    if not paragraph.text:
+                        try:
+                            paragraph.text = ' '.join(child.text.split())
+                        except AttributeError:
+                            pass
+                    else:
+                        try:
+                            paragraph.text = (
+                                f'{paragraph.text} '
+                                f'{" ".join(child.text.split())}')
+                        except AttributeError:
+                            pass
+            elif child.get('style') in ['li', 'li1', 'li2']:
+                paragraph = etree.SubElement(section, 'p')
+                paragraph.set('type', 'listitem')
+                if child.text:
+                    paragraph.text = ' '.join(child.text.split())
+                for grandchild in child:
+                    paragraph.append(grandchild)
+
+            elif child.get('style') in [
+                    'b', 'qa', 'mr', 'qc', 'ide', 'pc', 'periph'
+            ]:
                 pass
-            elif child.get('style') in ['rem', 'toc1', 'toc2', 'toc3', 'h', 'mt']:
+            elif child.get('style') in ['rem', 'toc1', 'toc2', 'toc3', 'h']:
                 # Should possibly handled further
                 pass
             else:
                 print(etree.tostring(child, encoding='unicode'))
-        elif child.tag == 'book':
-            pass
         else:
             print(etree.tostring(child, encoding='unicode'))
 
     return document
+
+
+def convert2intermediate(filename):
+    """Convert usx xml files to the giellatekno xml format."""
+    usx_doc = etree.parse(filename).getroot()
+    remove_unwanted(usx_doc)
+    char_to_span(usx_doc)
+
+    return usx_to_document(usx_doc)
