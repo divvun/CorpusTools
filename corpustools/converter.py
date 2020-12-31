@@ -33,7 +33,7 @@ from lxml import etree
 from corpustools import (avvirconverter, biblexmlconverter, ccat, corpuspath,
                          documentfixer, errormarkup, htmlcontentconverter,
                          languagedetector, pdfconverter, plaintextconverter,
-                         svgconverter, util, xslmaker, xslsetter)
+                         svgconverter, usxconverter, util, xslmaker, xslsetter)
 
 HERE = os.path.dirname(__file__)
 
@@ -61,6 +61,7 @@ def to_giella(path):
         '.svg': svgconverter.convert2intermediate,
         '.txt': plaintextconverter.convert2intermediate,
         '.tex': htmlcontentconverter.convert2intermediate,
+        '.usx': usxconverter.convert2intermediate,
     }
 
     if 'avvir_xml' in path:
