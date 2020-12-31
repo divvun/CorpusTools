@@ -301,9 +301,9 @@ class Converter(object):
                 complete = self.make_complete(languageguesser)
 
                 if self.has_content(complete):
-                    with open(self.names.converted, 'wb') as converted:
-                        converted.write(
-                            etree.tostring(complete, encoding='utf8'))
+                    with open(self.names.converted, 'w') as converted:
+                        print(etree.tostring(complete, encoding='unicode'),
+                              file=converted)
                 else:
                     LOGGER.error("%s has no text", self.names.orig)
 
