@@ -27,6 +27,9 @@ import lxml.etree as etree
 
 from corpustools import basicconverter, util, xslsetter
 
+LETTER_AT_START = re.compile(r'[^\W\d_].*', re.UNICODE)
+LETTER_HYPHEN_AT_END = re.compile(r'.*[^\W\d_]-$', re.UNICODE)
+
 
 def styles(page_style):
     """Turn inline css styles into a dict."""
@@ -58,6 +61,19 @@ def merge(first, second):
         first.append(child)
 
     return first
+
+
+def handle_br(previous, current):
+    if LETTER_HYPHEN_AT_END.match(previous):
+        print(previous)
+    if (LETTER_HYPHEN_AT_END.match(previous) and LETTER_AT_START.match(current)
+            and current[0] == current[0].lower()):
+        return previous[:-1]
+
+    if previous and previous[-1] == '-':
+        return previous
+
+    return f'{previous} '
 
 
 PDFFontspec = collections.namedtuple('PDFFontspec',
@@ -591,32 +607,19 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         for xmlfontspec in page.iter('fontspec'):
             self.pdffontspecs.add_fontspec(xmlfontspec)
 
-    def handle_br(self, index, burp, brs):
-        if brs[index]:
-            if brs[index][-1] == '-' and burp[0] == burp[0].lower():
-                return brs[index][:-1]
-
-            if brs[index][-1] == '-' and burp[0] == burp[0].upper():
-                return brs[index]
-
-            if brs[index][-1] == ' ':
-                return brs[index]
-
-        return f'{brs[index]} '
-
     def split_by_br(self, text):
-        brs = text.split('<br/>')
+        brs = text.replace('&#160;', ' ').split('<br/>')
 
         if len(brs) == 1:
             return text
 
-        urgs = [
-            self.handle_br(index, burp, brs)
-            for index, burp in enumerate(brs[1:])
+        strings = [
+            handle_br(brs[index], current)
+            for index, current in enumerate(brs[1:])
         ]
-        urgs.append(brs[-1])
+        strings.append(brs[-1])
 
-        return ''.join(urgs)
+        return ''.join(strings)
 
     def extract_text(self, command):
         """Extract the text from a document.

@@ -25,11 +25,19 @@ import os
 import unittest
 
 import lxml.etree as etree
+from nose.tools import assert_equal
+from parameterized import parameterized
 
 from corpustools import pdfconverter, xslsetter
 from corpustools.test import xmltester
 
 HERE = os.path.dirname(__file__)
+
+
+@parameterized([('a-', 'b', 'a'), ('a-', 'B', 'a-'), ('a', 'b', 'a '),
+                ('A', 'B', 'A '), ('a-', '0', 'a-')])
+def test_handle_br(previous, current, wanted):
+    assert_equal(pdfconverter.handle_br(previous, current), wanted)
 
 
 class TestPDFFontspecs(unittest.TestCase):
