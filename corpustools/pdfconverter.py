@@ -519,6 +519,11 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         pdftohtmloutput = self.extract_text(command.split())
         return self.pdftohtml2intermediate(pdftohtmloutput)
 
+    @staticmethod
+    def possibly_add_to_body(body, this_p):
+        if this_p.text or len(this_p):
+            body.append(this_p)
+
     def pdftohtml2intermediate(self, pdftohtmloutput):
         """Convert output of pdftohtml to a corpus xml file.
 
@@ -544,13 +549,11 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             text = paragraph.xpath('string()').strip()
             if text:
                 if text[0] != text[0].lower():
-                    if this_p.text is not None:
-                        body.append(this_p)
+                    self.possibly_add_to_body(body, this_p)
                     this_p = etree.Element('p')
                 this_p = merge(this_p, paragraph)
 
-        if this_p.text or len(this_p):
-            body.append(this_p)
+        self.possibly_add_to_body(body, this_p)
 
         return document
 
