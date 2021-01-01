@@ -63,7 +63,16 @@ def merge(first, second):
     return first
 
 
-def handle_br(previous, current):
+def is_probably_hyphenated(previous, current):
+    """Find out if previous is part of a hyphenated word.
+
+    Args:
+        previous: the previous string in front of a particular br tag
+        current:  the current string following a particular br tag
+
+    Returns:
+        True if previous is part of a hyphenated word, False otherwise
+    """
     previous1 = previous[-2:]
     current1 = current[:2]
     if 'receive tele' in previous:
@@ -73,14 +82,32 @@ def handle_br(previous, current):
         print(current1[0] == current1[0].lower())
         print()
     if LETTER_HYPHEN_AT_END.match(previous1):
-        print('handle_br', previous[-5:], current[:5])
-    if (LETTER_HYPHEN_AT_END.match(previous1) and LETTER_AT_START.match(current1)
-            and current[0] == current[0].lower()):
+        print('is_probably_hyphenated', previous[-5:], current[:5])
+
+    return (LETTER_HYPHEN_AT_END.match(previous1)
+            and LETTER_AT_START.match(current1)
+            and current[0] == current[0].lower())
+
+
+def handle_br(previous, current):
+    """Handle br tags in p elements.
+
+    Args:
+        previous: the previous string in front of a particular br tag
+        current:  the current string following a particular br tag
+
+    Returns:
+        A possibly modified version of previous
+    """
+    # Remove hyphen
+    if is_probably_hyphenated(previous, current):
         return previous[:-1]
 
+    # Preserve hyphen
     if previous and previous[-1] == '-':
         return previous
 
+    # Turn br tag into space
     return f'{previous} '
 
 
@@ -531,8 +558,8 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             A corpus xml etree with the content of the pdf file, but without
             most of the metadata.
         """
-        pdf_content = self.split_by_br(self.replace_ligatures(
-            self.strip_chars(pdftohtmloutput)))
+        pdf_content = self.split_by_br(
+            self.replace_ligatures(self.strip_chars(pdftohtmloutput)))
 
         document = etree.Element('html')
         body = etree.SubElement(document, 'body')
