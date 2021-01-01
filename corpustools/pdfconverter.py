@@ -474,8 +474,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             "ﬀ": "ff",
             "ﬃ": "ffi",
             "ﬄ": "ffl",
-            "ﬅ": "ft",
-            '-<br/>': ''
+            "ﬅ": "ft"
         }
 
         for key, value in replacements.items():
@@ -592,6 +591,33 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         for xmlfontspec in page.iter('fontspec'):
             self.pdffontspecs.add_fontspec(xmlfontspec)
 
+    def handle_br(self, index, burp, brs):
+        if brs[index]:
+            if brs[index][-1] == '-' and burp[0] == burp[0].lower():
+                return brs[index][:-1]
+
+            if brs[index][-1] == '-' and burp[0] == burp[0].upper():
+                return brs[index]
+
+            #if brs[index][-1] == ' ':
+                #return brs[index]
+
+        return f'{brs[index]} '
+
+    def split_by_br(self, text):
+        brs = text.split('<br/>')
+
+        if len(brs) == 1:
+            return text
+
+        urgs = [
+            self.handle_br(index, burp, brs)
+            for index, burp in enumerate(brs[1:])
+        ]
+        urgs.append(brs[-1])
+
+        return ''.join(urgs)
+
     def extract_text(self, command):
         """Extract the text from a document.
 
@@ -610,7 +636,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
                     '{} failed. More info in the log file: {}'.format(
                         command[0], self.orig + '.log'))
 
-        return runner.stdout
+        return self.split_by_br(runner.stdout.decode('utf8')).encode('utf8')
 
     def handle_syntaxerror(self, error, lineno, invalid_input):
         """Handle an xml syntax error.
