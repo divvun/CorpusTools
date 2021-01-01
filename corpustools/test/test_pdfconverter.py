@@ -79,7 +79,7 @@ class TestPDFPageMetaData(unittest.TestCase):
     def test_compute_default_margins(self):
         """Test if the default margins are set."""
         page1 = pdfconverter.PDFPageMetadata(
-            page_number=1, page_height=1263, page_width=862)
+            page_number='page1-div', page_style='height:1263px;width=862px')
 
         self.assertEqual(
             page1.compute_margins(), {
@@ -98,9 +98,7 @@ class TestPDFPageMetaData(unittest.TestCase):
         metadata.set_variable('bottom_margin', '9=20')
 
         page1 = pdfconverter.PDFPageMetadata(
-            page_number=1,
-            page_height=1263,
-            page_width=862,
+            page_number='page1-div', page_style='height:1263px;width=862px',
             metadata_margins=metadata.margins)
 
         self.assertEqual(
@@ -111,9 +109,7 @@ class TestPDFPageMetaData(unittest.TestCase):
                 'bottom_margin': 1174
             })
         page2 = pdfconverter.PDFPageMetadata(
-            page_number=2,
-            page_height=1263,
-            page_width=862,
+            page_number='page2-div', page_style='height:1263px;width=862px',
             metadata_margins=metadata.margins)
         self.assertEqual(
             page2.compute_margins(), {
@@ -123,9 +119,7 @@ class TestPDFPageMetaData(unittest.TestCase):
                 'bottom_margin': 1174
             })
         page3 = pdfconverter.PDFPageMetadata(
-            page_number=3,
-            page_height=1263,
-            page_width=862,
+            page_number='page3-div', page_style='height:1263px;width=862px',
             metadata_margins=metadata.margins)
         self.assertEqual(
             page3.compute_margins(), {
@@ -135,9 +129,7 @@ class TestPDFPageMetaData(unittest.TestCase):
                 'bottom_margin': 1174
             })
         page7 = pdfconverter.PDFPageMetadata(
-            page_number=7,
-            page_height=1263,
-            page_width=862,
+            page_number='page7-div', page_style='height:1263px;width=862px',
             metadata_margins=metadata.margins)
         self.assertEqual(
             page7.compute_margins(), {
@@ -147,9 +139,7 @@ class TestPDFPageMetaData(unittest.TestCase):
                 'bottom_margin': 1174
             })
         page8 = pdfconverter.PDFPageMetadata(
-            page_number=8,
-            page_height=1263,
-            page_width=862,
+            page_number='page8-div', page_style='height:1263px;width=862px',
             metadata_margins=metadata.margins)
         self.assertEqual(
             page8.compute_margins(), {
@@ -159,9 +149,7 @@ class TestPDFPageMetaData(unittest.TestCase):
                 'bottom_margin': 1174
             })
         page9 = pdfconverter.PDFPageMetadata(
-            page_number=9,
-            page_height=1263,
-            page_width=862,
+            page_number='page9-div', page_style='height:1263px;width=862px',
             metadata_margins=metadata.margins)
         self.assertEqual(
             page9.compute_margins(), {
@@ -178,9 +166,7 @@ class TestPDFPageMetaData(unittest.TestCase):
         metadata.set_variable('inner_bottom_margin', '1=40')
 
         page1 = pdfconverter.PDFPageMetadata(
-            page_number=1,
-            page_height=1263,
-            page_width=862,
+            page_number='page1-div', page_style='height:1263px;width=862px',
             metadata_inner_margins=metadata.inner_margins)
 
         self.assertEqual(
@@ -198,16 +184,14 @@ class TestPDFPageMetaData(unittest.TestCase):
         metadata.set_variable('inner_bottom_margin', '1=40')
 
         page1 = pdfconverter.PDFPageMetadata(
-            page_number=2,
-            page_height=1263,
-            page_width=862,
+            page_number='page2-div', page_style='height:1263px;width=862px',
             metadata_inner_margins=metadata.inner_margins)
 
         self.assertEqual(page1.compute_inner_margins(), {})
 
     def test_width(self):
         page = pdfconverter.PDFPageMetadata(
-            page_number=1, page_height=1263, page_width=862)
+            page_number='page1-div', page_style='height:1263px;width=862px')
 
         self.assertEqual(page.page_number, 1)
         self.assertEqual(page.page_height, 1263)
@@ -218,8 +202,7 @@ class TestPDFPage(xmltester.XMLTester):
 
     def test_is_inside_margins1(self):
         """top and left inside margins."""
-        t = pdfconverter.PDFTextElement(
-            etree.fromstring('<text top="109" left="135"/>'))
+        t = etree.fromstring('<p style="top:109px;left:135px"/>')
         margins = {}
         margins['left_margin'] = 62
         margins['right_margin'] = 802
@@ -227,14 +210,13 @@ class TestPDFPage(xmltester.XMLTester):
         margins['bottom_margin'] = 1174
 
         p2x = pdfconverter.PDFPage(
-            etree.fromstring('<page number="2" height="1263" width="862"/>'))
+            etree.fromstring('<div id="page2-div" style="width:862;height:1263"/>'))
 
         self.assertTrue(p2x.is_inside_margins(t, margins))
 
     def test_is_inside_margins2(self):
         """top above top margin and left inside margins."""
-        t = pdfconverter.PDFTextElement(
-            etree.fromstring('<text top="85" left="135"/>'))
+        t = etree.fromstring('<p style="top:85px;left:135px"/>')
         margins = {}
         margins['left_margin'] = 62
         margins['right_margin'] = 802
@@ -242,14 +224,13 @@ class TestPDFPage(xmltester.XMLTester):
         margins['bottom_margin'] = 1174
 
         p2x = pdfconverter.PDFPage(
-            etree.fromstring('<page number="2" height="1263" width="862"/>'))
+            etree.fromstring('<div id="page2-div" style="width:862;height:1263"/>'))
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
     def test_is_inside_margins3(self):
         """top below bottom margin and left inside margins."""
-        t = pdfconverter.PDFTextElement(
-            etree.fromstring('<text top="1178" left="135"/>'))
+        t = etree.fromstring('<p style="top:1178px;left:135px"/>')
         margins = {}
         margins['left_margin'] = 62
         margins['right_margin'] = 802
@@ -257,14 +238,13 @@ class TestPDFPage(xmltester.XMLTester):
         margins['bottom_margin'] = 1174
 
         p2x = pdfconverter.PDFPage(
-            etree.fromstring('<page number="2" height="1263" width="862"/>'))
+            etree.fromstring('<div id="page2-div" style="width:862;height:1263"/>'))
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
     def test_is_inside_margins4(self):
         """top inside margins and left outside right margin."""
-        t = pdfconverter.PDFTextElement(
-            etree.fromstring('<text top="1000" left="50"/>'))
+        t = etree.fromstring('<p style="top:1000px;left:50px"/>')
         margins = {}
         margins['left_margin'] = 62
         margins['right_margin'] = 802
@@ -272,14 +252,13 @@ class TestPDFPage(xmltester.XMLTester):
         margins['bottom_margin'] = 1174
 
         p2x = pdfconverter.PDFPage(
-            etree.fromstring('<page number="2" height="1263" width="862"/>'))
+            etree.fromstring('<div id="page2-div" style="width:862;height:1263"/>'))
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
     def test_is_inside_margins5(self):
         """top inside margins and left outside left margin."""
-        t = pdfconverter.PDFTextElement(
-            etree.fromstring('<text top="1000" left="805"/>'))
+        t = etree.fromstring('<p style="top:1000px;left:805px"/>')
         margins = {}
         margins['left_margin'] = 62
         margins['right_margin'] = 802
@@ -287,49 +266,49 @@ class TestPDFPage(xmltester.XMLTester):
         margins['bottom_margin'] = 1174
 
         p2x = pdfconverter.PDFPage(
-            etree.fromstring('<page number="2" height="1263" width="862"/>'))
+            etree.fromstring('<div id="page2-div" style="width:862;height:1263"/>'))
 
         self.assertFalse(p2x.is_inside_margins(t, margins))
 
     def test_is_skip_page_1(self):
         """Odd page should be skipped when odd is in skip_pages."""
         p2x = pdfconverter.PDFPage(
-            etree.fromstring('<page number="1" height="1263" width="862"/>'))
+            etree.fromstring('<div id="page1-div" style="width:862;height:1263"/>'))
 
         self.assertTrue(p2x.is_skip_page(['odd']))
 
     def test_is_skip_page_2(self):
         """Even page should be skipped when even is in skip_pages."""
         p2x = pdfconverter.PDFPage(
-            etree.fromstring('<page number="2" height="1263" width="862"/>'))
+            etree.fromstring('<div id="page2-div" style="width:862;height:1263"/>'))
 
         self.assertTrue(p2x.is_skip_page(['even']))
 
     def test_is_skip_page_3(self):
         """Even page should not be skipped when odd is in skip_pages."""
         p2x = pdfconverter.PDFPage(
-            etree.fromstring('<page number="2" height="1263" width="862"/>'))
+            etree.fromstring('<div id="page2-div" style="width:862;height:1263"/>'))
 
         self.assertFalse(p2x.is_skip_page(['odd']))
 
     def test_is_skip_page_4(self):
         """Odd page should not be skipped when even is in skip_pages."""
         p2x = pdfconverter.PDFPage(
-            etree.fromstring('<page number="1" height="1263" width="862"/>'))
+            etree.fromstring('<div id="page1-div" style="width:862;height:1263"/>'))
 
         self.assertFalse(p2x.is_skip_page(['even']))
 
     def test_is_skip_page_5(self):
         """Page should not be skipped when not in skip_range."""
         p2x = pdfconverter.PDFPage(
-            etree.fromstring('<page number="1" height="1263" width="862"/>'))
+            etree.fromstring('<div id="page1-div" style="width:862;height:1263"/>'))
 
         self.assertFalse(p2x.is_skip_page(['even', 3]))
 
     def test_is_skip_page_6(self):
         """Page should be skipped when in skip_range."""
         p2x = pdfconverter.PDFPage(
-            etree.fromstring('<page number="3" height="1263" width="862"/>'))
+            etree.fromstring('<div id="page3-div" style="width:862;height:1263"/>'))
 
         self.assertTrue(p2x.is_skip_page(['even', 3]))
 

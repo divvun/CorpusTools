@@ -140,7 +140,7 @@ class PDFPageMetadata(object):
             metadata_inner_margins: a dict containing inner_margins read from
             the metadata file.
         """
-        self.page_number = page_id.replace('page', '').replace('-div', '')
+        self.page_number = int(page_id.replace('page', '').replace('-div', ''))
         style = styles(page_style)
         self.page_height = int(style.get('height'))
         self.page_width = int(style.get('height'))
