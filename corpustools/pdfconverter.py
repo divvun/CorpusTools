@@ -75,14 +75,6 @@ def is_probably_hyphenated(previous, current):
     """
     previous1 = previous[-2:]
     current1 = current[:2]
-    if 'receive tele' in previous:
-        print(f'«{previous1}» «{current1}»')
-        print(LETTER_HYPHEN_AT_END.match(previous1))
-        print(LETTER_AT_START.match(current1))
-        print(current1[0] == current1[0].lower())
-        print()
-    if LETTER_HYPHEN_AT_END.match(previous1):
-        print('is_probably_hyphenated', previous[-5:], current[:5])
 
     return (LETTER_HYPHEN_AT_END.match(previous1)
             and LETTER_AT_START.match(current1)
