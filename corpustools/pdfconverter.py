@@ -599,8 +599,8 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             if brs[index][-1] == '-' and burp[0] == burp[0].upper():
                 return brs[index]
 
-            #if brs[index][-1] == ' ':
-                #return brs[index]
+            if brs[index][-1] == ' ':
+                return brs[index]
 
         return f'{brs[index]} '
 
