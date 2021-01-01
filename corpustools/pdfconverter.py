@@ -17,16 +17,15 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-u"""Convert pdf files to the Giella xml format."""
+"""Convert pdf files to the Giella xml format."""
 
-from __future__ import absolute_import, print_function, unicode_literals
+
 
 import collections
 import re
 import sys
 
 import lxml.etree as etree
-import six
 
 from corpustools import basicconverter, util, xslsetter
 
@@ -60,7 +59,7 @@ class PDFFontspecs(object):
             family=xmlfontspec.get('family'),
             color=xmlfontspec.get('color'))
 
-        for fontspec in self.pdffontspecs.keys():
+        for fontspec in list(self.pdffontspecs.keys()):
             if fontspec == this_fontspec:
                 self.duplicates[this_id] = self.pdffontspecs[fontspec]
                 break
@@ -142,12 +141,12 @@ class BoundingBox(object):
     def __unicode__(self):
         """Turn the data in this class into a string."""
         info = []
-        for key, value in six.iteritems(self.__dict__):
-            info.append(six.text_type(key) + u' ' + six.text_type(value))
-        info.append(u'height ' + six.text_type(self.height))
-        info.append(u'width ' + six.text_type(self.width))
+        for key, value in self.__dict__.items():
+            info.append(str(key) + ' ' + str(value))
+        info.append('height ' + str(self.height))
+        info.append('width ' + str(self.width))
 
-        return u'\n'.join(info)
+        return '\n'.join(info)
 
 
 class PDFTextElement(BoundingBox):
@@ -234,20 +233,20 @@ class PDFTextElement(BoundingBox):
         for child in text_elt:
             prev_t.append(child)
 
-        prev_t.set('width', six.text_type(self.width + other_box.width))
+        prev_t.set('width', str(self.width + other_box.width))
         if self.height < other_box.height:
-            prev_t.set('height', six.text_type(other_box.height))
+            prev_t.set('height', str(other_box.height))
 
     def __unicode__(self):
         """Turn the data in this class into a string."""
         info = []
-        info.append(u'text ' + self.plain_text)
-        info.append(u'top ' + six.text_type(self.top))
-        info.append(u'left ' + six.text_type(self.left))
-        info.append(u'bottom ' + six.text_type(self.bottom))
-        info.append(u'right ' + six.text_type(self.right))
-        info.append(u'height ' + six.text_type(self.height))
-        info.append(u'width ' + six.text_type(self.width))
+        info.append('text ' + self.plain_text)
+        info.append('top ' + str(self.top))
+        info.append('left ' + str(self.left))
+        info.append('bottom ' + str(self.bottom))
+        info.append('right ' + str(self.right))
+        info.append('height ' + str(self.height))
+        info.append('width ' + str(self.width))
 
         return '\n'.join(info)
 
@@ -267,15 +266,15 @@ class PDFParagraph(object):
 
     # TODO: add option for when 0+002D should be used as a list char.
     LIST_CHARS = [
-        u'•',  # U+2022: BULLET
-        u'–',  # U+2013: EN DASH
+        '•',  # U+2022: BULLET
+        '–',  # U+2013: EN DASH
         # r'\-',  # U+002D: HYPHEN-MINUS
-        six.unichr(61623),  # U+F0B7: <private use>
-        six.unichr(61553),  # U+F071: <private use>
-        u'■',  # U+25A0: BLACK SQUARE
-        six.unichr(61692),  # U+F0FC: <private use>
+        chr(61623),  # U+F0B7: <private use>
+        chr(61553),  # U+F071: <private use>
+        '■',  # U+25A0: BLACK SQUARE
+        chr(61692),  # U+F0FC: <private use>
     ]
-    LIST_RE = re.compile(u'^(\s*[{}])(.+)'.format(u''.join(LIST_CHARS)))
+    LIST_RE = re.compile('^(\s*[{}])(.+)'.format(''.join(LIST_CHARS)))
 
     def __init__(self, linespacing):
         """Initialise the PDFParagraph class."""
@@ -381,7 +380,7 @@ class PDFParagraph(object):
 
     def __unicode__(self):
         """Turn the data in this class into a string."""
-        return u'\n'.join([t.plain_text for t in self.textelements])
+        return '\n'.join([t.plain_text for t in self.textelements])
 
 
 class PDFSection(BoundingBox):
@@ -439,11 +438,11 @@ class PDFSection(BoundingBox):
 
     def __unicode__(self):
         """Turn the data in this class into a string."""
-        info = [six.text_type(paragraph) for paragraph in self.paragraphs]
+        info = [str(paragraph) for paragraph in self.paragraphs]
 
         info.append(super(PDFSection, self).__unicode__())
 
-        return u'\n'.join(info)
+        return '\n'.join(info)
 
 
 class OrderedPDFSections(object):
@@ -497,9 +496,9 @@ class OrderedPDFSections(object):
                 self.sections.insert(i, new_section)
             else:
                 if i < 0:
-                    util.print_frame(debug=six.text_type(self.sections[i - 1]))
-                util.print_frame(debug=six.text_type(new_section))
-                util.print_frame(debug=six.text_type(self.sections[i]))
+                    util.print_frame(debug=str(self.sections[i - 1]))
+                util.print_frame(debug=str(new_section))
+                util.print_frame(debug=str(self.sections[i]))
                 assert self.sections[i].is_below(new_section), \
                     'new_section does not fit between sections'
 
@@ -624,13 +623,13 @@ class PDFTextExtractor(object):
         """
         if re.search(r'\S-$', self.last_string):
             if not len(self.para):
-                self.para.text = self.para.text[:-1] + u'\xAD'
+                self.para.text = self.para.text[:-1] + '\xAD'
             else:
                 last = self.para[-1]
                 if last.tail is None:
-                    last.text = last.text[:-1] + u'\xAD'
+                    last.text = last.text[:-1] + '\xAD'
                 else:
-                    last.tail = last.tail[:-1] + u'\xAD'
+                    last.tail = last.tail[:-1] + '\xAD'
         elif self.last_string and not re.search(r'[\s\xAD]$', self.last_string):
             self.extract_textelement(etree.fromstring('<text> </text>'))
 
@@ -768,8 +767,8 @@ class PDFPageMetadata(object):
         coefficient = 7
         if margin in list(self.metadata_margins.keys()):
             margin_data = self.metadata_margins[margin]
-            if margin_data.get(six.text_type(self.page_number)) is not None:
-                coefficient = margin_data[six.text_type(self.page_number)]
+            if margin_data.get(str(self.page_number)) is not None:
+                coefficient = margin_data[str(self.page_number)]
             elif margin_data.get('all') is not None:
                 coefficient = margin_data['all']
             elif self.page_number % 2 == 0 and margin_data.get(
@@ -828,8 +827,8 @@ class PDFPageMetadata(object):
         coefficient = 0
         if margin in list(self.metadata_inner_margins.keys()):
             margin_data = self.metadata_inner_margins[margin]
-            if margin_data.get(six.text_type(self.page_number)) is not None:
-                coefficient = margin_data[six.text_type(self.page_number)]
+            if margin_data.get(str(self.page_number)) is not None:
+                coefficient = margin_data[str(self.page_number)]
             elif margin_data.get('all') is not None:
                 coefficient = margin_data['all']
             elif self.page_number % 2 == 0 and margin_data.get(
@@ -926,12 +925,12 @@ class PDFPage(object):
 
     def adjust_line_heights(self):
         """Adjust the height if there is a 1 pixel overlap between elements."""
-        for i in six.moves.range(1, len(self.textelements)):
+        for i in range(1, len(self.textelements)):
             prev_textelement = self.textelements[i - 1]
             textelement = self.textelements[i]
             if prev_textelement.bottom == textelement.top + 1:
                 prev_textelement.text_elt.set(
-                    'height', six.text_type(prev_textelement.height - 1))
+                    'height', str(prev_textelement.height - 1))
 
     def remove_footnotes_superscript(self):
         """Remove numbers from elements found by find_footnotes_superscript."""
@@ -955,7 +954,7 @@ class PDFPage(object):
     def merge_elements_on_same_line(self):
         """Merge PDFTextElements that are on the same line."""
         same_line_indexes = [
-            i for i in six.moves.range(1, len(self.textelements))
+            i for i in range(1, len(self.textelements))
             if self.textelements[i -
                                  1].is_text_on_same_line(self.textelements[i])
         ]
@@ -1081,7 +1080,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         self.pdffontspecs = PDFFontspecs()
 
     @staticmethod
-    def strip_chars(content, extra=u''):
+    def strip_chars(content, extra=''):
         """Strip unwanted chars from the document.
 
         Args:
@@ -1092,12 +1091,12 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             str containing the modified version of the document.
         """
         remove_re = re.compile(
-            u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]'.format(extra))
+            '[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]'.format(extra))
         content, _ = remove_re.subn('', content)
 
         # Microsoft Word PDF's have Latin-1 file names in links; we
         # don't actually need any link attributes:
-        content = re.sub(u'<a [^>]+>', '<a>', content)
+        content = re.sub('<a [^>]+>', '<a>', content)
 
         return content
 
@@ -1112,30 +1111,30 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             String containing the new content of the xml document.
         """
         replacements = {
-            u"[dstrok]": u"đ",
-            u"[Dstrok]": u"Đ",
-            u"[tstrok]": u"ŧ",
-            u"[Tstrok]": u"Ŧ",
-            u"[scaron]": u"š",
-            u"[Scaron]": u"Š",
-            u"[zcaron]": u"ž",
-            u"[Zcaron]": u"Ž",
-            u"[ccaron]": u"č",
-            u"[Ccaron]": u"Č",
-            u"[eng": u"ŋ",
-            u" ]": u"",
-            u"Ď": u"đ",  # cough
-            u"ď": u"đ",  # cough
-            u"ﬁ": u"fi",
-            u"ﬂ": u"fl",
-            u"ﬀ": u"ff",
-            u"ﬃ": u"ffi",
-            u"ﬄ": u"ffl",
-            u"ﬅ": u"ft",
+            "[dstrok]": "đ",
+            "[Dstrok]": "Đ",
+            "[tstrok]": "ŧ",
+            "[Tstrok]": "Ŧ",
+            "[scaron]": "š",
+            "[Scaron]": "Š",
+            "[zcaron]": "ž",
+            "[Zcaron]": "Ž",
+            "[ccaron]": "č",
+            "[Ccaron]": "Č",
+            "[eng": "ŋ",
+            " ]": "",
+            "Ď": "đ",  # cough
+            "ď": "đ",  # cough
+            "ﬁ": "fi",
+            "ﬂ": "fl",
+            "ﬀ": "ff",
+            "ﬃ": "ffi",
+            "ﬄ": "ffl",
+            "ﬅ": "ft",
         }
 
-        for key, value in six.iteritems(replacements):
-            content = content.replace(key + u' ', value)
+        for key, value in replacements.items():
+            content = content.replace(key + ' ', value)
             content = content.replace(key, value)
 
         return content
@@ -1187,7 +1186,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         meta = etree.Element('meta')
         meta.attrib['charset'] = "utf-8"
         doc.insert(0, meta)
-        map(doc.remove, doc.findall('header'))
+        list(map(doc.remove, doc.findall('header')))
         doc.tag = 'html'
         lang = self.metadata.get_variable('mainlang')
         if lang is None or lang == "":
@@ -1267,7 +1266,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             logfile.write('Error at: {}'.format(lineno))
             for entry in error.error_log:
                 logfile.write('\n{}: {} '.format(
-                    six.text_type(entry.line), six.text_type(entry.column)))
+                    str(entry.line), str(entry.column)))
                 try:
                     logfile.write(entry.message)
                 except ValueError:
@@ -1275,10 +1274,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
 
                 logfile.write('\n')
 
-            if six.PY3:
-                logfile.write(invalid_input)
-            else:
-                logfile.write(invalid_input.encode('utf8'))
+            logfile.write(invalid_input)
 
         raise util.ConversionError("{}: log is found in {}".format(
             type(self).__name__, self.orig + '.log'))
