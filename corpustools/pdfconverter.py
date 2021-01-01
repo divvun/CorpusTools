@@ -64,9 +64,17 @@ def merge(first, second):
 
 
 def handle_br(previous, current):
-    if LETTER_HYPHEN_AT_END.match(previous):
-        print(previous)
-    if (LETTER_HYPHEN_AT_END.match(previous) and LETTER_AT_START.match(current)
+    previous1 = previous[-2:]
+    current1 = current[:2]
+    if 'receive tele' in previous:
+        print(f'«{previous1}» «{current1}»')
+        print(LETTER_HYPHEN_AT_END.match(previous1))
+        print(LETTER_AT_START.match(current1))
+        print(current1[0] == current1[0].lower())
+        print()
+    if LETTER_HYPHEN_AT_END.match(previous1):
+        print('handle_br', previous[-5:], current[:5])
+    if (LETTER_HYPHEN_AT_END.match(previous1) and LETTER_AT_START.match(current1)
             and current[0] == current[0].lower()):
         return previous[:-1]
 
@@ -518,11 +526,11 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             A corpus xml etree with the content of the pdf file, but without
             most of the metadata.
         """
+        pdf_content = self.split_by_br(self.replace_ligatures(
+            self.strip_chars(pdftohtmloutput)))
+
         document = etree.Element('html')
         body = etree.SubElement(document, 'body')
-
-        pdf_content = self.replace_ligatures(
-            self.strip_chars(pdftohtmloutput.decode('utf8', 'ignore')))
 
         try:
             parser = etree.HTMLParser()
@@ -639,7 +647,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
                     '{} failed. More info in the log file: {}'.format(
                         command[0], self.orig + '.log'))
 
-        return self.split_by_br(runner.stdout.decode('utf8')).encode('utf8')
+        return runner.stdout.decode('utf8')
 
     def handle_syntaxerror(self, error, lineno, invalid_input):
         """Handle an xml syntax error.
