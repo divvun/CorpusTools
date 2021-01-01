@@ -475,6 +475,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             "ﬃ": "ffi",
             "ﬄ": "ffl",
             "ﬅ": "ft",
+            '-<br/>': ''
         }
 
         for key, value in replacements.items():
