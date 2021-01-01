@@ -143,7 +143,7 @@ class PDFPageMetadata(object):
         self.page_number = int(page_id.replace('page', '').replace('-div', ''))
         style = styles(page_style)
         self.page_height = int(style.get('height'))
-        self.page_width = int(style.get('height'))
+        self.page_width = int(style.get('width'))
         self.metadata_margins = metadata_margins or {}
         self.metadata_inner_margins = metadata_inner_margins or {}
 
@@ -419,7 +419,6 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
                 versions of the converter document should be written to disk.
         """
         super(PDF2XMLConverter, self).__init__(filename)
-        self.extractor = PDFTextExtractor()
         self.pdffontspecs = PDFFontspecs()
 
     @staticmethod
@@ -517,20 +516,15 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         this_p = etree.Element('p')
         for paragraph in self.parse_pages(root_element):
             text = paragraph.xpath('string()').strip()
-            print('1144 text', text)
             if text:
                 if text[0] != text[0].lower():
                     if this_p.text is not None:
-                        print('added',
-                              etree.tostring(this_p, encoding='unicode'))
-                        print()
                         body.append(this_p)
                     this_p = etree.Element('p')
                 merge(this_p, paragraph)
         if len(this_p) or this_p.text:
             body.append(this_p)
 
-        print('body', etree.tostring(body, encoding='unicode'))
         return document
 
     def pdftohtml2html(self, pdftohtmloutput):
