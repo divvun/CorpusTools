@@ -43,7 +43,7 @@ def styles(page_style):
 
 
 def merge(first, second):
-    """Merge to paragraph elements into one."""
+    """Merge two paragraph elements into one."""
     if len(first):
         if second.text:
             if first[-1].tail:
