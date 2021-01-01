@@ -43,19 +43,21 @@ def merge(first, second):
     """Merge to paragraph elements into one."""
     if len(first):
         if second.text:
-            if first.tail:
-                first.tail = f'{first.tail.strip()} {second.text.strip()}'
+            if first[-1].tail:
+                first[-1].tail = f'{first[-1].tail}{second.text}'
             else:
-                first.tail = second.text.strip()
+                first[-1].tail = second.text
     else:
         if second.text:
             if first.text:
-                first.text = f'{first.text.strip()} {second.text.strip()}'
+                first.text = f'{first.text}{second.text}'
             else:
-                first.text = second.text.strip()
+                first.text = second.text
 
     for child in second:
         first.append(child)
+
+    return first
 
 
 PDFFontspec = collections.namedtuple('PDFFontspec',
@@ -521,8 +523,9 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
                     if this_p.text is not None:
                         body.append(this_p)
                     this_p = etree.Element('p')
-                merge(this_p, paragraph)
-        if len(this_p) or this_p.text:
+                this_p = merge(this_p, paragraph)
+
+        if this_p.text or len(this_p):
             body.append(this_p)
 
         return document
