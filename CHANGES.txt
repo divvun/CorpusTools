@@ -152,3 +152,4 @@ v<0.27.3>, <20200209> -- Make the -wbt option of pdftohtml available as a variab
 v<0.28.0>, <20200504> -- Support the conversion of udhr xml documents (https://unicode.org/udhr/).
 v<0.28.1>, <20201105> -- Make sure that temporary directory exists when adding files
 v<0.28.2>, <20201110> -- Decode garbled mrj documents. Thanks to Trond for the mapping.
+v<0.29.0>, <20210101> -- Conversion of usx documents and improved pdf conversion
