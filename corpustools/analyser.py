@@ -129,8 +129,16 @@ class Analyser(object):
         """Analyse files one by one."""
         print('Starting the analysis of {} files'.format(len(self.xml_files)))
 
+        fileno = 0
         for xml_file in self.xml_files:
-            print('Analysing', xml_file, file=sys.stderr)
+            fileno += 1
+            # print some ugly banner cos i want to see progress on local
+            # batch job
+            print('*' * 79, file=sys.stderr)
+            print('Analysing {} [{} of {}]'.format(xml_file, fileno,
+                                                   len(self.xml_files),
+                  file=sys.stderr))
+            print('*' * 79, file=sys.stderr)
             self.analyse(xml_file)
 
 
