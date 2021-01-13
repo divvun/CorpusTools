@@ -240,6 +240,7 @@ def main():
 
     try:
         if args.serial:
+            LOGGER.setLevel(logging.DEBUG)
             manager.convert_serially()
         else:
             manager.convert_in_parallel()
