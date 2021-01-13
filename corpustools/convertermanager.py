@@ -85,7 +85,7 @@ class ConverterManager(object):
             conv = converter.Converter(
                 orig_file, lazy_conversion=self.lazy_conversion)
             conv.write_complete(self.languageguesser())
-        except (util.ConversionError, ValueError) as error:
+        except (util.ConversionError, ValueError, IndexError) as error:
             LOGGER.warn('Could not convert %s\n%s', orig_file,
                         six.text_type(error))
 
