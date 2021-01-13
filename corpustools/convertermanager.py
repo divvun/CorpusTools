@@ -24,8 +24,6 @@ import logging
 import multiprocessing
 import os
 
-import six
-
 from corpustools import argparse_version, converter, text_cat, util, xslsetter
 
 LOGGER = logging.getLogger(__name__)
@@ -82,12 +80,11 @@ class ConverterManager(object):
             orig_file: string containing the path to the original file.
         """
         try:
-            conv = converter.Converter(
-                orig_file, lazy_conversion=self.lazy_conversion)
+            conv = converter.Converter(orig_file,
+                                       lazy_conversion=self.lazy_conversion)
             conv.write_complete(self.languageguesser())
         except (util.ConversionError, ValueError, IndexError) as error:
-            LOGGER.warn('Could not convert %s\n%s', orig_file,
-                        six.text_type(error))
+            LOGGER.warn('Could not convert %s\n%s', orig_file, error)
 
     def convert_in_parallel(self):
         """Convert files using the multiprocessing module."""
@@ -96,7 +93,7 @@ class ConverterManager(object):
         pool_size = multiprocessing.cpu_count()
         pool = multiprocessing.Pool(processes=pool_size, )
         pool.map(unwrap_self_convert,
-                 list(six.moves.zip([self] * len(self.files), self.files)))
+                 list(zip([self] * len(self.files), self.files)))
         pool.close()
         pool.join()
 
@@ -182,30 +179,25 @@ def parse_options():
         parents=[argparse_version.parser],
         description='Convert original files to giellatekno xml.')
 
-    parser.add_argument(
-        u'--serial',
-        action=u"store_true",
-        help=u"use this for debugging the conversion \
+    parser.add_argument('--serial',
+                        action="store_true",
+                        help="use this for debugging the conversion \
                         process. When this argument is used files will \
                         be converted one by one.")
-    parser.add_argument(
-        u'--lazy-conversion',
-        action=u"store_true",
-        help=u"Reconvert only if metadata have changed.")
-    parser.add_argument(
-        u'--write-intermediate',
-        action=u"store_true",
-        help=u"Write the intermediate XML representation \
+    parser.add_argument('--lazy-conversion',
+                        action="store_true",
+                        help="Reconvert only if metadata have changed.")
+    parser.add_argument('--write-intermediate',
+                        action="store_true",
+                        help="Write the intermediate XML representation \
                         to ORIGFILE.im.xml, for debugging the XSLT.\
                         (Has no effect if the converted file already exists.)")
-    parser.add_argument(
-        u'--goldstandard',
-        action=u"store_true",
-        help=u'Convert goldstandard and .correct files')
-    parser.add_argument(
-        'sources',
-        nargs='+',
-        help="The original file(s) or \
+    parser.add_argument('--goldstandard',
+                        action="store_true",
+                        help='Convert goldstandard and .correct files')
+    parser.add_argument('sources',
+                        nargs='+',
+                        help="The original file(s) or \
                         directory/ies where the original files exist")
 
     args = parser.parse_args()
@@ -215,7 +207,7 @@ def parse_options():
 
 def sanity_check():
     """Check that needed programs and environment variables are set."""
-    util.sanity_check([u'wvHtml', u'pdftotext', 'latex2html'])
+    util.sanity_check(['wvHtml', 'pdftotext', 'latex2html'])
     if not os.path.isfile(converter.Converter.get_dtd_location()):
         raise util.SetupError(
             "Couldn't find {}\n"
