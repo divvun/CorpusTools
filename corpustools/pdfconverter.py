@@ -22,6 +22,7 @@
 import collections
 import re
 import sys
+from copy import deepcopy
 
 import lxml.etree as etree
 
@@ -443,7 +444,7 @@ class PDFPage(object):
             if self.is_inside_margins(
                     paragraph, margins) or not self.is_inside_inner_margins(
                         paragraph, inner_margins):
-                yield paragraph
+                yield deepcopy(paragraph)
 
 
 class PDF2XMLConverter(basicconverter.BasicConverter):
