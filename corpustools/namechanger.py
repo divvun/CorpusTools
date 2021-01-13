@@ -126,6 +126,7 @@ class CorpusFileMover(object):
         """Move all files that are under version control."""
         self.move_orig()
         self.move_xsl()
+        self.move_converted()
         self.move_prestable_converted()
         self.move_prestable_tmx()
 
@@ -158,6 +159,18 @@ class CorpusFileMover(object):
                   self.new_components.lang, self.new_components.genre,
                   self.new_components.subdirs,
                   self.new_components.basename + '.xsl')))
+
+    def move_converted(self):
+        """Move the converted file."""
+        self._move(u'/'.join(
+            (self.old_components.root, u'converted',
+             self.old_components.lang, self.old_components.genre,
+             self.old_components.subdirs,
+             self.old_components.basename + '.xml')), u'/'.join(
+                 (self.new_components.root, u'converted',
+                  self.new_components.lang, self.new_components.genre,
+                  self.new_components.subdirs,
+                  self.new_components.basename + '.xml')))
 
     def move_prestable_converted(self):
         """Move the prestable/converted file."""
@@ -216,6 +229,7 @@ class CorpusFileRemover(object):
         """Remove all the files that are under version control."""
         self.remove_prestable_tmx()
         self.remove_prestable_converted()
+        self.remove_converted()
         self.remove_xsl()
         self.remove_orig()
 
@@ -239,6 +253,14 @@ class CorpusFileRemover(object):
              self.old_components.lang, self.old_components.genre,
              self.old_components.subdirs,
              self.old_components.basename + '.xsl')))
+
+    def remove_converted(self):
+        """Remove the converted file."""
+        self._remove(u'/'.join(
+            (self.old_components.root, u'converted',
+             self.old_components.lang, self.old_components.genre,
+             self.old_components.subdirs,
+             self.old_components.basename + '.xml')))
 
     def remove_prestable_converted(self):
         """Remove the prestable/converted file."""
