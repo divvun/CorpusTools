@@ -207,7 +207,8 @@ def parse_options():
 
 def sanity_check():
     """Check that needed programs and environment variables are set."""
-    util.sanity_check(['wvHtml', 'pdftotext', 'latex2html'])
+    # util.sanity_check(['wvHtml', 'pdftotext', 'latex2html'])
+    util.sanity_check(['pdftotext', 'latex2html'])
     if not os.path.isfile(converter.Converter.get_dtd_location()):
         raise util.SetupError(
             "Couldn't find {}\n"
