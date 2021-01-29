@@ -84,6 +84,7 @@ class XMLPrinter(object):
                  foreign=False,
                  errorformat=False,
                  noforeign=False,
+                 tts=False,
                  typos=False,
                  print_filename=False,
                  one_word_per_line=False,
@@ -133,11 +134,21 @@ class XMLPrinter(object):
         self.errorlang = errorlang
         self.noforeign = noforeign
 
-        if (error or errorort or errorortreal or errormorphsyn or errorsyn
-                or errorlex or errorlang):
+        self.error_filtering = (error or errorort or errorortreal
+                                or errormorphsyn or errorsyn or errorlex
+                                or errorlang)
+
+        if tts:
+            self.correction = False
+            self.error = True
+            self.errorort = True
+            self.errorortreal = True
+            self.errormorphsyn = True
+            self.errorsyn = True
+            self.errorlex = True
+            self.errorlang = False
+            self.noforeign = False
             self.error_filtering = True
-        else:
-            self.error_filtering = False
 
         self.typos = typos
         self.print_filename = print_filename
@@ -512,6 +523,10 @@ def parse_options():
                         action='store_true',
                         help='Do not print anything from foreign \
                         (∞/<errorlang..>) corrections')
+    parser.add_argument('-tts',
+                        dest='tts',
+                        action='store_true',
+                        help='Print corrections except for foreign errors')
     parser.add_argument('-typos',
                         dest='typos',
                         action='store_true',
@@ -596,6 +611,7 @@ def main():
                              errorlex=args.errorlex,
                              errorlang=args.errorlang,
                              noforeign=args.noforeign,
+                             tts=args.tts,
                              errorformat=args.errorformat,
                              typos=args.typos,
                              print_filename=args.print_filename,
