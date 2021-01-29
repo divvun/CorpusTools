@@ -155,3 +155,4 @@ v<0.28.2>, <20201110> -- Decode garbled mrj documents. Thanks to Trond for the m
 v<0.29.0>, <20210101> -- Conversion of usx documents and improved pdf conversion
 v<0.29.1>, <20210113> -- Catch IndexError when converting documents, to prevent a crash, turn it into a warning, does not stop the conversion
 v<0.29.2>, <20210129> -- Add -tts option to ccat, print fixes for all errors, except foreign ones.
+v<0.29.3>, <20210129> -- Change name of -tts to -withforeign.

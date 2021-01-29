@@ -84,7 +84,7 @@ class XMLPrinter(object):
                  foreign=False,
                  errorformat=False,
                  noforeign=False,
-                 tts=False,
+                 withforeign=False,
                  typos=False,
                  print_filename=False,
                  one_word_per_line=False,
@@ -138,7 +138,7 @@ class XMLPrinter(object):
                                 or errormorphsyn or errorsyn or errorlex
                                 or errorlang)
 
-        if tts:
+        if withforeign:
             self.correction = False
             self.error = True
             self.errorort = True
@@ -523,8 +523,8 @@ def parse_options():
                         action='store_true',
                         help='Do not print anything from foreign \
                         (∞/<errorlang..>) corrections')
-    parser.add_argument('-tts',
-                        dest='tts',
+    parser.add_argument('-withforeign',
+                        dest='withforeign',
                         action='store_true',
                         help='Print corrections except for foreign errors')
     parser.add_argument('-typos',
@@ -611,7 +611,7 @@ def main():
                              errorlex=args.errorlex,
                              errorlang=args.errorlang,
                              noforeign=args.noforeign,
-                             tts=args.tts,
+                             withforeign=args.withforeign,
                              errorformat=args.errorformat,
                              typos=args.typos,
                              print_filename=args.print_filename,
