@@ -526,7 +526,7 @@ def parse_options():
     parser.add_argument('-withforeign',
                         dest='withforeign',
                         action='store_true',
-                        help='Print corrections except for foreign errors')
+                        help='When printing corrections: include foreign text instead of nothing')
     parser.add_argument('-typos',
                         dest='typos',
                         action='store_true',
