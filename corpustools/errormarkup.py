@@ -290,8 +290,15 @@ def error_parser(text):
                 add_simple_error(elements, result[index - 1], result[index])
 
             else:
-
-                add_nested_error(elements, result[index - 1], result[index])
+                try:
+                    add_nested_error(elements, result[index - 1], result[index])
+                except IndexError:
+                    raise ErrorMarkupError(
+                        '\nOne of these elements lack curly braces\n'
+                        f'\t{result[index - 1]}\n'
+                        f'\t{result[index]}\n'
+                        'If the errormarkup is correct, please report '
+                        'about the error to borre.gaup@uit.no')
 
     try:
         if not is_correction(result[-1]):
