@@ -157,3 +157,4 @@ v<0.29.1>, <20210113> -- Catch IndexError when converting documents, to prevent 
 v<0.29.2>, <20210129> -- Add -tts option to ccat, print fixes for all errors, except foreign ones.
 v<0.29.3>, <20210129> -- Change name of -tts to -withforeign.
 v<0.29.4>, <20210224> -- Raise a real error when erring out in add_nested_error
+v<0.29.5>, <20210308> -- The last step in the xml conversion is to normalise text to NFC before writing it to disk.

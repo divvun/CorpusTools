@@ -26,6 +26,7 @@ import distutils.dep_util
 import distutils.spawn
 import logging
 import os
+import unicodedata
 
 import six
 from lxml import etree
@@ -302,7 +303,9 @@ class Converter(object):
 
                 if self.has_content(complete):
                     with open(self.names.converted, 'w') as converted:
-                        print(etree.tostring(complete, encoding='unicode'),
+                        print(unicodedata.normalize(
+                            'NFC', etree.tostring(complete,
+                                                  encoding='unicode')),
                               file=converted)
                 else:
                     LOGGER.error("%s has no text", self.names.orig)
