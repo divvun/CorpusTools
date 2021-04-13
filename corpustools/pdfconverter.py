@@ -13,7 +13,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2012-2020 The University of Tromsø &
+#   Copyright © 2012-2021 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
@@ -439,10 +439,9 @@ class PDFPage(object):
         """
         margins = self.pdf_pagemetadata.compute_margins()
         inner_margins = self.pdf_pagemetadata.compute_inner_margins()
-        #print('inner_margins', inner_margins)
         for paragraph in self.page_element.iter('p'):
             if self.is_inside_margins(
-                    paragraph, margins) or not self.is_inside_inner_margins(
+                    paragraph, margins) and not self.is_inside_inner_margins(
                         paragraph, inner_margins):
                 yield deepcopy(paragraph)
 
