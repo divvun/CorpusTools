@@ -259,8 +259,7 @@ class PDFPageMetadata(object):
         }
 
         if (margins['bottom_margin'] == self.page_height
-                and margins['top_margin'] == 0
-                and margins['left_margin'] == 0
+                and margins['top_margin'] == 0 and margins['left_margin'] == 0
                 and margins['right_margin'] == self.page_width):
             margins = {}
 
@@ -420,9 +419,9 @@ class PDFPage(object):
         margins = self.pdf_pagemetadata.compute_margins()
         inner_margins = self.pdf_pagemetadata.compute_inner_margins()
         for paragraph in self.page_element.iter('p'):
-            if self.is_inside_margins(
-                    paragraph, margins) and not self.is_inside_margins(
-                        paragraph, inner_margins):
+            if self.is_inside_margins(paragraph,
+                                      margins) and not self.is_inside_margins(
+                                          paragraph, inner_margins):
                 yield deepcopy(paragraph)
 
 
