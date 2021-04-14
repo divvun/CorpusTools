@@ -407,9 +407,8 @@ class PDFPage(object):
         top = int(style.get('top'))
         left = int(style.get('left'))
 
-        return (top > margins['top_margin'] and top < margins['bottom_margin']
-                and left > margins['left_margin']
-                and left < margins['right_margin'])
+        return (margins['top_margin'] < top < margins['bottom_margin']
+                and margins['left_margin'] < left < margins['right_margin'])
 
     def pick_valid_text_elements(self):
         """Pick the wanted text elements from a page.
