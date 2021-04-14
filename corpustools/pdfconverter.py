@@ -251,17 +251,17 @@ class PDFPageMetadata(object):
             is an integer indicating where the margin is on the page.
         """
         margins = {
-            margin: self.compute_inner_margin(margin)
+            margin.replace('inner_', ''): self.compute_inner_margin(margin)
             for margin in [
                 'inner_right_margin', 'inner_left_margin', 'inner_top_margin',
                 'inner_bottom_margin'
             ]
         }
 
-        if (margins['inner_bottom_margin'] == self.page_height
-                and margins['inner_top_margin'] == 0
-                and margins['inner_left_margin'] == 0
-                and margins['inner_right_margin'] == self.page_width):
+        if (margins['bottom_margin'] == self.page_height
+                and margins['top_margin'] == 0
+                and margins['left_margin'] == 0
+                and margins['right_margin'] == self.page_width):
             margins = {}
 
         return margins
@@ -401,36 +401,19 @@ class PDFPage(object):
 
         t is a text element
         """
-        style = styles(text.get('style'))
-        top = int(style.get('top'))
-        left = int(style.get('left'))
-        return (top > margins['top_margin'] and top < margins['bottom_margin']
-                and left > margins['left_margin']
-                and left < margins['right_margin'])
-
-    @staticmethod
-    def is_inside_inner_margins(text, margins):
-        """Check if t is inside the given margins.
-
-        Args:
-            t (etree.Element): a text element
-            margins (dict): contains the page margins as pixels
-
-        Returns:
-            boolean: True if t is inside the margings, False otherwise
-        """
-
-        style = styles(text.get('style'))
-        top = int(style.get('top'))
-        left = int(style.get('left'))
-
         if not margins:
             return False
 
-        return (top > margins['inner_top_margin']
-                and top < margins['inner_bottom_margin']
-                and left > margins['inner_left_margin']
-                and left < margins['inner_right_margin'])
+        if not margins.get('top_margin'):
+            print('invalid margin', margins)
+            raise SystemExit()
+        style = styles(text.get('style'))
+        top = int(style.get('top'))
+        left = int(style.get('left'))
+
+        return (top > margins['top_margin'] and top < margins['bottom_margin']
+                and left > margins['left_margin']
+                and left < margins['right_margin'])
 
     def pick_valid_text_elements(self):
         """Pick the wanted text elements from a page.
@@ -441,7 +424,7 @@ class PDFPage(object):
         inner_margins = self.pdf_pagemetadata.compute_inner_margins()
         for paragraph in self.page_element.iter('p'):
             if self.is_inside_margins(
-                    paragraph, margins) and not self.is_inside_inner_margins(
+                    paragraph, margins) and not self.is_inside_margins(
                         paragraph, inner_margins):
                 yield deepcopy(paragraph)
 

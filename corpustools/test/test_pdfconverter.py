@@ -163,10 +163,10 @@ class TestPDFPageMetaData(unittest.TestCase):
 
         self.assertEqual(
             page1.compute_inner_margins(), {
-                'inner_top_margin': 505,
-                'inner_bottom_margin': 757,
-                'inner_left_margin': 0,
-                'inner_right_margin': 862
+                'top_margin': 505,
+                'bottom_margin': 757,
+                'left_margin': 0,
+                'right_margin': 862
             })
 
     def test_compute_inner_margins_2(self):
