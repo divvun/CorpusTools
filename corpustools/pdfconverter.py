@@ -404,9 +404,6 @@ class PDFPage(object):
         if not margins:
             return False
 
-        if not margins.get('top_margin'):
-            print('invalid margin', margins)
-            raise SystemExit()
         style = styles(text.get('style'))
         top = int(style.get('top'))
         left = int(style.get('left'))
