@@ -223,22 +223,23 @@ class DocumentFixer(object):
                 (u'\u0301', u'\u02B9'),  # COMBINING ACUTE ACCENT,
                 # MODIFIER LETTER PRIME
             ],
-            'mns': [('\uf50f', 'а̄'), # CYRILLIC VOWELS WITH LENGTH MARK
+            'mns': [('\uf50e', 'А̄'), # CYRILLIC VOWELS WITH LENGTH MARK
+                    ('\uf50f', 'а̄'), 
+                    ('\uf510', 'Е̄'), 
                     ('\uf511', 'е̄'), 
-                    ('\uf518', 'о̄'),
-                    ('\uf519', 'о̄'), 
-                    ('\uf521', 'ы̄'), 
-                    ('\uf523', 'э̄'),
-                    ('\uf52d', 'ю̄'), 
-                    ('\uf529', 'я̄'), 
+                    ('\uf512', 'Ё̄'), # 12? Just guessing
                     ('\uf513', 'ё̄'),
-                    ('\uf50e', 'А̄'), 
-                    #('\uf5??', 'Е̄'), 
-                    #('\uf5??', 'О̄'),
-                    #('\uf5??', 'Ы̄'), 
+                    ('\uf517', 'О̄'), # 17? Just guessing
+                    ('\uf518', 'о̄'), # CYRILLIC LONG SMALL O
+                    ('\uf519', 'о̄'), # also CYRILLIC LONG SMALL O (no typo)
+                    ('\uf520', 'Ы̄'), # 20? Just guessing
+                    ('\uf521', 'ы̄'), 
                     ('\uf522', 'Э̄'), 
-                    #('\uf5??', 'Ю̄'),
-                    ('\uf528', 'Я̄')]
+                    ('\uf523', 'э̄'), 
+                    ('\uf52c', 'Ю̄'), # 2c? Just guessing
+                    ('\uf52d', 'ю̄'),
+                    ('\uf528', 'Я̄'), 
+                    ('\uf529', 'я̄')]
         }
 
         if element.text:
