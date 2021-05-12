@@ -72,9 +72,9 @@ class DocumentFixer(object):
                 lines = []
                 for emphasis in element.iter('em'):
                     next_elt = emphasis.getnext()
-                    if (next_elt is not None and next_elt.tag == 'em' and
-                        (emphasis.tail is None or
-                         not word.search(emphasis.tail))):
+                    if (next_elt is not None and next_elt.tag == 'em'
+                            and (emphasis.tail is None
+                                 or not word.search(emphasis.tail))):
                         if emphasis.text is not None:
                             lines.append(emphasis.text.strip())
                         emphasis.getparent().remove(emphasis)
@@ -261,8 +261,8 @@ class DocumentFixer(object):
             raise UserWarning(str(error))
         self.root.append(body)
 
-        if mainlang == 'sms':
-            self.fix_sms(self.root.find('body'))
+        if mainlang in ['sms', 'mns']:
+            self.fix_lang(self.root.find('body'), lang=mainlang)
 
     def fix_title_person(self, encoding):
         """Fix encoding problems."""
@@ -291,7 +291,8 @@ class DocumentFixer(object):
                     firstname = firstname.replace(u'‡', u'á')
                     firstname = firstname.replace(u'Œ', u'å')
 
-                person.set('firstname', decode.decode_para(encoding, firstname))
+                person.set('firstname',
+                           decode.decode_para(encoding, firstname))
 
     @staticmethod
     def get_quote_list(text):
@@ -311,8 +312,7 @@ class DocumentFixer(object):
             re.compile(u'”{0}.+?{0}”'.format(unwanted)),
         ]
         quote_list = [
-            m.span()
-            for quote_regex in quote_regexes
+            m.span() for quote_regex in quote_regexes
             for m in quote_regex.finditer(text)
         ]
         quote_list.sort()
@@ -425,14 +425,14 @@ class DocumentFixer(object):
                                                        emphasis.text).strip()
                     paragraph.set('type', 'title')
                 elif self.newstags.match(emphasis.text):
-                    emphasis.text = self.newstags.sub('', emphasis.text).strip()
+                    emphasis.text = self.newstags.sub('',
+                                                      emphasis.text).strip()
 
     def _add_paragraph(self, line, index, paragraph, attributes):
         if line:
             index += 1
-            paragraph.getparent().insert(index,
-                                         self._make_element(
-                                             'p', line, attributes=attributes))
+            paragraph.getparent().insert(
+                index, self._make_element('p', line, attributes=attributes))
 
         return index
 
@@ -493,9 +493,8 @@ class DocumentFixer(object):
                 title.text = self.headertitletags.sub('', line).strip()
 
             index = self._add_paragraph(
-                self.headertitletags.sub('', line).strip(), index, paragraph, {
-                    'type': 'title'
-                })
+                self.headertitletags.sub('', line).strip(), index, paragraph,
+                {'type': 'title'})
         elif self.titletags.match(line):
             index = self._add_paragraph(' '.join(lines).strip(), index,
                                         paragraph, paragraph.attrib)
@@ -505,9 +504,8 @@ class DocumentFixer(object):
             paragraph.getparent().insert(
                 index,
                 self._make_element('p',
-                                   self.titletags.sub('', line).strip(), {
-                                       'type': 'title'
-                                   }))
+                                   self.titletags.sub('', line).strip(),
+                                   {'type': 'title'}))
         elif line == '' and lines:
             index = self._add_paragraph(' '.join(lines).strip(), index,
                                         paragraph, paragraph.attrib)
