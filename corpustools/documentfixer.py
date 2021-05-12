@@ -208,29 +208,37 @@ class DocumentFixer(object):
             if element.text:
                 element.text = util.replace_all(replacements, element.text)
 
-    def fix_sms(self, element):
+    def fix_lang(self, element, lang):
         """Replace invalid accents with valid ones for the sms language."""
-        replacement_pairs = [
-            (u'\u2019', u'\u02BC'),  # RIGHT SINGLE QUOTATION MARK,
-                                     # MODIFIER LETTER APOSTROPHE
-            (u'\u0027', u'\u02BC'),  # apostrophe,
-                                     # MODIFIER LETTER APOSTROPHE
-            (u'\u2032', u'\u02B9'),  # PRIME, MODIFIER LETTER PRIME
-            (u'\u00B4', u'\u02B9'),  # ACUTE ACCENT,
-                                     # MODIFIER LETTER PRIME
-            (u'\u0301', u'\u02B9'),  # COMBINING ACUTE ACCENT,
-                                     # MODIFIER LETTER PRIME
-        ]
 
-        for replacement_pair in replacement_pairs:
-            if element.text:
-                element.text = element.text.replace(replacement_pair[0],
-                                                    replacement_pair[1])
-            if element.tail:
-                element.tail = element.tail.replace(replacement_pair[0],
-                                                    replacement_pair[1])
+        replacement_pairs = {
+            'sms': [
+                (u'\u2019', u'\u02BC'),  # RIGHT SINGLE QUOTATION MARK,
+                # MODIFIER LETTER APOSTROPHE
+                (u'\u0027', u'\u02BC'),  # apostrophe,
+                # MODIFIER LETTER APOSTROPHE
+                (u'\u2032', u'\u02B9'),  # PRIME, MODIFIER LETTER PRIME
+                (u'\u00B4', u'\u02B9'),  # ACUTE ACCENT,
+                # MODIFIER LETTER PRIME
+                (u'\u0301', u'\u02B9'),  # COMBINING ACUTE ACCENT,
+                # MODIFIER LETTER PRIME
+            ],
+            'mns': [('\uf50f', 'а̄'), ('e', 'е̄'), ('\uf518', 'о̄'),
+                    ('\uf519', 'о̄'), ('y', 'ы̄'), ('\uf523', 'э̄'),
+                    ('ju', 'ю̄'), ('j', 'я̄'), ('\uf513', 'ё̄'),
+                    ('\uf50e', 'А̄'), ('EE', 'Е̄'), ('\uf519', 'О̄'),
+                    ('YY', 'Ы̄'), ('\uf522', 'Э̄'), ('JU', 'Ю̄'),
+                    ('\uf528', 'Я̄')]
+        }
+
+        if element.text:
+            element.text = util.replace_all(replacement_pairs[lang],
+                                            element.text)
+        if element.tail:
+            element.tail = util.replace_all(replacement_pairs[lang],
+                                            element.tail)
         for child in element:
-            self.fix_sms(child)
+            self.fix_lang(child, lang)
 
     def fix_body_encoding(self, mainlang):
         """Replace wrongly encoded saami chars with proper ones.

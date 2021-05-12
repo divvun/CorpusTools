@@ -214,7 +214,7 @@ class Converter(object):
 
         if (self.metadata.get_variable('mainlang') in [
                 'sma', 'sme', 'smj', 'smn', 'sms', 'nob', 'fin', 'swe', 'nno',
-                'dan', 'fkv', 'sju', 'sje', 'mhr', 'mrj'
+                'dan', 'fkv', 'sju', 'sje', 'mhr', 'mrj', 'mns'
         ]):
             try:
                 fixer.fix_body_encoding(self.metadata.get_variable('mainlang'))
