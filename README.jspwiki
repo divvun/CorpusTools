@@ -1,5 +1,10 @@
 !!!Corpus Tools
 
+__Synopsis:__ update local installation with:
+{{{
+python3 setup.py install --user --install-scripts=$HOME/bin --record installed_files.txt
+}}}
+
 Corpus Tools contains tools to manipulate a corpus in different ways.
 These scripts will be installed
 
@@ -218,7 +223,7 @@ optional arguments:
   -h, --help            show this help message and exit
   --version             show program's version number and exit
   -l LANG               Print only elements in language LANG. Default is all
-                        langs.
+                        languages.
   -T                    Print paragraphs with title type
   -L                    Print paragraphs with list type
   -t                    Print paragraphs with table type
@@ -522,13 +527,12 @@ do not have a dictionary, you can use "--dict=<(echo)" to provide an
 
 !Compile dependencies
 
-XXX is one of the languages in $GTHOME/langs.
+XXX is the iso code for the language you work with in $GTLANGS/lang-XXX:
 
 {{{
-    cd $GTHOME/langs/XXX
+    cd $GTLANGS/lang-XXX
     ./configure --prefix="$HOME"/.local \
                 --with-hfst \
-                --enable-abbr \
                 --enable-tokenisers \
                 --enable-reversed-intersect \
                 --enable-alignment
@@ -541,10 +545,9 @@ To prepare for parallelising e.g. nob and sme files, do the following:
 {{{
 for LANG in sme nob # Replace sme and nob by languages for your own needs
 do
-    cd $GTHOME/langs/$LANG
+    cd $GTLANGS/lang-$LANG
     ./configure --prefix="$HOME"/.local \
                 --with-hfst \
-                --enable-abbr \
                 --enable-tokenisers \
                 --enable-reversed-intersect \
                 --enable-alignment
@@ -552,6 +555,8 @@ do
     make install
 done
 }}}
+
+(NOTE: {{--enable-abbrs}} was removed from the two .configure setups above, TT 201016)
 
 The complete help text from the program is as follows:
 {{{
