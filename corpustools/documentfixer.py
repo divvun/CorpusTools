@@ -227,16 +227,16 @@ class DocumentFixer(object):
                     ('\uf50f', 'а̄'), 
                     ('\uf510', 'Е̄'), 
                     ('\uf511', 'е̄'), 
-                    ('\uf512', 'Ё̄'), # 12? Just guessing
+                    ('\uf512', 'Ё̄'), # 
                     ('\uf513', 'ё̄'),
                     ('\uf517', 'О̄'), # 17? Just guessing
-                    ('\uf518', 'о̄'), # CYRILLIC LONG SMALL O
-                    ('\uf519', 'о̄'), # also CYRILLIC LONG SMALL O (no typo)
-                    ('\uf520', 'Ы̄'), # 20? Just guessing
-                    ('\uf521', 'ы̄'), 
+                    ('\uf518', 'О̄'), # CYRILLIC LONG CAPITAL O
+                    ('\uf519', 'о̄'), # CYRILLIC LONG SMALL O
+                    ('\uf520', 'Ы̄'), # 
+                    ('\uf521', 'ы̄'), # 
                     ('\uf522', 'Э̄'), 
                     ('\uf523', 'э̄'), 
-                    ('\uf52c', 'Ю̄'), # 2c? Just guessing
+                    ('\uf52c', 'Ю̄'), # 
                     ('\uf52d', 'ю̄'),
                     ('\uf528', 'Я̄'), 
                     ('\uf529', 'я̄')]
