@@ -50,7 +50,7 @@ class Tmx(object):
     @property
     def src_lang(self):
         """Get the srclang from the header element."""
-        return self.tmx.find(".//header").attrib['srclang'][:3]
+        return self.tmx.find(".//header").attrib["srclang"][:3]
 
     @staticmethod
     def tu_to_string(transl_unit):
@@ -59,12 +59,12 @@ class Tmx(object):
         with util.ignored(AttributeError):
             string = string + transl_unit[0][0].text.strip()
 
-        string += '\t'
+        string += "\t"
 
         with util.ignored(AttributeError):
             string = string + transl_unit[1][0].text.strip()
 
-        string += '\n'
+        string += "\n"
         return string
 
     @staticmethod
@@ -78,9 +78,10 @@ class Tmx(object):
 
     def lang_to_stringlist(self, lang):
         """Find all sentences of lang."""
-        all_tuv = self.tmx.\
-            xpath('.//tuv[@xml:lang="' + lang + '"]',
-                  namespaces={'xml': 'http://www.w3.org/XML/1998/namespace'})
+        all_tuv = self.tmx.xpath(
+            './/tuv[@xml:lang="' + lang + '"]',
+            namespaces={"xml": "http://www.w3.org/XML/1998/namespace"},
+        )
 
         strings = []
         for tuv in all_tuv:
@@ -90,7 +91,7 @@ class Tmx(object):
 
     def tmx_to_stringlist(self):
         """Extract all string pairs in a tmx to a list of strings."""
-        all_tu = self.tmx.findall('.//tu')
+        all_tu = self.tmx.findall(".//tu")
         strings = []
         for transl_unit in all_tu:
             strings.append(self.tu_to_string(transl_unit))
@@ -120,16 +121,16 @@ class Tmx(object):
 
         Return the reverted tmx
         """
-        all_tu = self.tmx.findall('.//tu')
-        body = etree.Element('body')
+        all_tu = self.tmx.findall(".//tu")
+        body = etree.Element("body")
         for transl_unit in all_tu:
-            tmp = etree.Element('tu')
+            tmp = etree.Element("tu")
             tmp.append(transl_unit[1])
             tmp.append(transl_unit[0])
             tmp = self.prettify_segs(tmp)
             body.append(tmp)
 
-        tmx = etree.Element('tmx')
+        tmx = etree.Element("tmx")
         tmx.append(body)
 
         self.tmx = tmx
@@ -181,22 +182,18 @@ class Tmx(object):
         result = input_string
 
         # regex to find space followed by punctuation
-        space_punctuation = re.compile(
-            r"(?P<space>\s)(?P<punctuation>[\)\]\.»:;,])")
+        space_punctuation = re.compile(r"(?P<space>\s)(?P<punctuation>[\)\]\.»:;,])")
         # for every match in the result string, replace the match
         # (space+punctuation) with the punctuation part
-        result = space_punctuation.sub(
-            lambda match: match.group('punctuation'), result)
+        result = space_punctuation.sub(lambda match: match.group("punctuation"), result)
 
         # regex to find punctuation followed by space
-        punctuation_space = re.compile(
-            r"(?P<punctuation>[\[\(«])(?P<space>\s)+")
-        result = punctuation_space.sub(
-            lambda match: match.group('punctuation'), result)
+        punctuation_space = re.compile(r"(?P<punctuation>[\[\(«])(?P<space>\s)+")
+        result = punctuation_space.sub(lambda match: match.group("punctuation"), result)
 
         # regex which matches multiple spaces
         multiple_space = re.compile(r"\s+")
-        result = multiple_space.sub(lambda match: ' ', result)
+        result = multiple_space.sub(lambda match: " ", result)
 
         return result
 
@@ -206,13 +203,12 @@ class Tmx(object):
         with util.ignored(OSError):
             os.makedirs(out_dir)
 
-        with open(out_filename, 'wb') as tmx_file:
+        with open(out_filename, "wb") as tmx_file:
             tmx_file.write(
                 etree.tostring(
-                    self.tmx,
-                    pretty_print=True,
-                    encoding="utf-8",
-                    xml_declaration=True))
+                    self.tmx, pretty_print=True, encoding="utf-8", xml_declaration=True
+                )
+            )
 
     def tmx2html(self, out_filename):
         """Convert tmx to html.
@@ -221,15 +217,18 @@ class Tmx(object):
             out_filename (str): name of the html file
         """
         html2tmx_transformer = etree.XSLT(
-            etree.parse(os.path.join(HERE, 'xslt/tmx2html.xsl')))
+            etree.parse(os.path.join(HERE, "xslt/tmx2html.xsl"))
+        )
 
-        with open(out_filename, 'wb') as html_file:
+        with open(out_filename, "wb") as html_file:
             html_file.write(
                 etree.tostring(
                     html2tmx_transformer(self.tmx),
                     pretty_print=True,
-                    encoding='utf-8',
-                    xml_declaration=True))
+                    encoding="utf-8",
+                    xml_declaration=True,
+                )
+            )
 
     def remove_tu_with_empty_seg(self):
         """Remove tu elements that contain empty seg element."""
@@ -248,7 +247,7 @@ class Tmx(object):
         """
         for transl_unit in transl_units:
             if not transl_unit[0].text.strip():
-                raise AttributeError('Empty translation unit')
+                raise AttributeError("Empty translation unit")
 
     def clean_toktmx(self):
         """Do the cleanup of the toktmx file."""
@@ -291,8 +290,8 @@ class AlignmentToTmx(Tmx):
     @staticmethod
     def add_filename_id(filename):
         """Add the tmx filename as an prop element in the header."""
-        prop = etree.Element('prop')
-        prop.attrib['type'] = 'x-filename'
+        prop = etree.Element("prop")
+        prop.attrib["type"] = "x-filename"
         prop.text = os.path.basename(filename)
 
         return prop
@@ -315,8 +314,9 @@ class AlignmentToTmx(Tmx):
     def make_tmx(self):
         """Make tmx file based on the output of the aligner."""
         tmx = etree.Element("tmx")
-        header = self.make_tmx_header(self.origfiles[0].basename,
-                                      self.origfiles[0].lang)
+        header = self.make_tmx_header(
+            self.origfiles[0].basename, self.origfiles[0].lang
+        )
         tmx.append(header)
 
         pfile1_data, pfile2_data = self.parse_alignment_results()
@@ -331,7 +331,8 @@ class AlignmentToTmx(Tmx):
     def parse_alignment_results(self):
         """Meta function."""
         raise NotImplementedError(
-            'You have to subclass and override parse_alignment_results')
+            "You have to subclass and override parse_alignment_results"
+        )
 
 
 class HunalignToTmx(AlignmentToTmx):
@@ -354,14 +355,18 @@ class HunalignToTmx(AlignmentToTmx):
 
     def is_good_line(self, line):
         """Determine whether this line should be used."""
-        return (len(line) == 3 and line[0] != "<p>" and line[1] != "<p>"
-                and float(line[2]) > self.threshold)
+        return (
+            len(line) == 3
+            and line[0] != "<p>"
+            and line[1] != "<p>"
+            and float(line[2]) > self.threshold
+        )
 
     @staticmethod
     def clean_line(line):
         """Remove the ~~~ occuring in multi-sentence alignments."""
-        multi_sep = re.compile(r' *~~~ *')
-        return multi_sep.sub(' ', line)
+        multi_sep = re.compile(r" *~~~ *")
+        return multi_sep.sub(" ", line)
 
 
 class Tca2ToTmx(AlignmentToTmx):
@@ -374,8 +379,10 @@ class Tca2ToTmx(AlignmentToTmx):
 
     def parse_alignment_results(self):
         """Return parsed output files of tca2."""
-        return (self.read_tca2_output(self.sentfiles[0]),
-                self.read_tca2_output(self.sentfiles[1]))
+        return (
+            self.read_tca2_output(self.sentfiles[0]),
+            self.read_tca2_output(self.sentfiles[1]),
+        )
 
     def read_tca2_output(self, sentfile):
         """Read the output of tca2.
@@ -386,17 +393,17 @@ class Tca2ToTmx(AlignmentToTmx):
         Returns:
             list of str: The sentences found in the tca2 file
         """
-        sentfile_name = sentfile.replace('.xml', '_new.txt')
+        sentfile_name = sentfile.replace(".xml", "_new.txt")
 
-        with codecs.open(sentfile_name, encoding='utf8') as tca2_output:
+        with codecs.open(sentfile_name, encoding="utf8") as tca2_output:
             return [self.remove_s_tag(line) for line in tca2_output]
 
     @staticmethod
     def remove_s_tag(line):
         """Remove the s tags that tca2 has added."""
         sregex = re.compile('<s id="[^ ]*">')
-        line = line.replace('</s>', '')
-        line = sregex.sub('', line)
+        line = line.replace("</s>", "")
+        line = sregex.sub("", line)
         return line
 
 
@@ -407,9 +414,9 @@ def tmx2html(filename):
         filename (str): name of a tmx file
     """
     translation_mem_ex = Tmx(etree.parse(filename))
-    html_name = filename + '.html'
+    html_name = filename + ".html"
     translation_mem_ex.tmx2html(html_name)
-    print('Wrote {}'.format(html_name))
+    print("Wrote {}".format(html_name))
 
 
 def parse_options():
@@ -419,13 +426,12 @@ def parse_options():
         a list of arguments as parsed by argparse.Argumentparser.
     """
     parser = argparse.ArgumentParser(
-        parents=[argparse_version.parser],
-        description='Convert tmx files to html')
+        parents=[argparse_version.parser], description="Convert tmx files to html"
+    )
 
     parser.add_argument(
-        'sources',
-        nargs='+',
-        help='Files or directories to search for tmx files')
+        "sources", nargs="+", help="Files or directories to search for tmx files"
+    )
 
     args = parser.parse_args()
     return args
@@ -444,15 +450,15 @@ def main():
 
     for source in args.sources:
         if os.path.isfile(source):
-            if source.endswith('.tmx'):
+            if source.endswith(".tmx"):
                 tmx2html(source)
             else:
-                SystemExit('Not a tmx file:\n{}'.format(source))
+                SystemExit("Not a tmx file:\n{}".format(source))
         elif os.path.isdir(source):
             found = False
-            for tmx_file in find_files(source, '.tmx'):
+            for tmx_file in find_files(source, ".tmx"):
                 found = True
                 tmx2html(tmx_file)
 
             if not found:
-                raise SystemExit('No tmx files found in:\n{}'.format(source))
+                raise SystemExit("No tmx files found in:\n{}".format(source))

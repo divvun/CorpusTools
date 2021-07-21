@@ -40,21 +40,27 @@ class DocumentFixer(object):
     """
 
     newstags = re.compile(
-        r'(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|'
-        r'LED|bilde)*tekst:|@*foto:|@fotobyline:|@*bildetitt:|'
-        r'<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|'
-        r'@*Samleingress:*|tekst/ingress:|billedtekst:|.@tekst:)',
-        re.IGNORECASE)
+        r"(@*logo:|[\s+\']*@*\s*ingres+[\.:]*|.*@*.*bilde\s*\d*:|\W*(@|"
+        r"LED|bilde)*tekst:|@*foto:|@fotobyline:|@*bildetitt:|"
+        r"<pstyle:bilde>|<pstyle:ingress>|<pstyle:tekst>|"
+        r"@*Samleingress:*|tekst/ingress:|billedtekst:|.@tekst:)",
+        re.IGNORECASE,
+    )
     titletags = re.compile(
-        r'\s*@m.titt[\.:]|\s*@*stikk:|Mellomtittel:|@*(stikk\.*|'
-        r'under)titt(el)*:|@ttt:|\s*@*[utm]*[:\.]*tit+:|<pstyle:m.titt>|'
-        r'undertittel:', re.IGNORECASE)
+        r"\s*@m.titt[\.:]|\s*@*stikk:|Mellomtittel:|@*(stikk\.*|"
+        r"under)titt(el)*:|@ttt:|\s*@*[utm]*[:\.]*tit+:|<pstyle:m.titt>|"
+        r"undertittel:",
+        re.IGNORECASE,
+    )
     headertitletags = re.compile(
-        r'(\s*@*(led)*tittel:|\s*@*titt(\s\d)*:|@LEDtitt:|'
-        r'<pstyle:tittel>|@*(hoved|over)titt(el)*:)', re.IGNORECASE)
-    bylinetags = re.compile(r'(<pstyle:|\s*@*)[Bb]yline[:>]*\s*(\S+:)*',
-                            re.UNICODE | re.IGNORECASE)
-    boldtags = re.compile(r'@bold\s*:')
+        r"(\s*@*(led)*tittel:|\s*@*titt(\s\d)*:|@LEDtitt:|"
+        r"<pstyle:tittel>|@*(hoved|over)titt(el)*:)",
+        re.IGNORECASE,
+    )
+    bylinetags = re.compile(
+        r"(<pstyle:|\s*@*)[Bb]yline[:>]*\s*(\S+:)*", re.UNICODE | re.IGNORECASE
+    )
+    boldtags = re.compile(r"@bold\s*:")
 
     def __init__(self, document):
         """Initialise the DocumentFixer class."""
@@ -66,29 +72,31 @@ class DocumentFixer(object):
 
     def compact_ems(self):
         """Compact consecutive em elements into a single em if possible."""
-        word = re.compile(r'\w+', re.UNICODE)
-        for element in self.root.iter('p'):
-            if len(element.xpath('.//em')) > 1:
+        word = re.compile(r"\w+", re.UNICODE)
+        for element in self.root.iter("p"):
+            if len(element.xpath(".//em")) > 1:
                 lines = []
-                for emphasis in element.iter('em'):
+                for emphasis in element.iter("em"):
                     next_elt = emphasis.getnext()
-                    if (next_elt is not None and next_elt.tag == 'em'
-                            and (emphasis.tail is None
-                                 or not word.search(emphasis.tail))):
+                    if (
+                        next_elt is not None
+                        and next_elt.tag == "em"
+                        and (emphasis.tail is None or not word.search(emphasis.tail))
+                    ):
                         if emphasis.text is not None:
                             lines.append(emphasis.text.strip())
                         emphasis.getparent().remove(emphasis)
                     else:
                         if emphasis.text is not None:
                             lines.append(emphasis.text.strip())
-                        emphasis.text = ' '.join(lines)
+                        emphasis.text = " ".join(lines)
                         if emphasis.tail is not None:
-                            emphasis.tail = ' {}'.format(emphasis.tail)
+                            emphasis.tail = " {}".format(emphasis.tail)
                         del lines[:]
 
     def soft_hyphen_to_hyph_tag(self):
         """Replace soft hyphen chars with hyphen tags."""
-        for element in self.root.iter('p'):
+        for element in self.root.iter("p"):
             self.replace_shy(element)
 
     def replace_shy(self, element):
@@ -102,29 +110,30 @@ class DocumentFixer(object):
 
         text = element.text
         if text is not None:
-            parts = text.split(u'­')
+            parts = text.split(u"­")
             if len(parts) > 1:
                 element.text = parts[0]
                 for index, part in enumerate(parts[1:]):
-                    hyph = etree.Element('hyph')
+                    hyph = etree.Element("hyph")
                     hyph.tail = part
                     element.insert(index, hyph)
 
         text = element.tail
         if text is not None:
-            parts = text.split(u'­')
+            parts = text.split(u"­")
             if len(parts) > 1:
                 element.tail = parts[0]
                 for part in parts[1:]:
-                    hyph = etree.Element('hyph')
+                    hyph = etree.Element("hyph")
                     hyph.tail = part
                     element.getparent().append(hyph)
 
     def insert_spaces_after_semicolon(self):
         """Insert space after semicolon where needed."""
-        irritating_words_regex = re.compile(u'(govv(a|en|ejeaddji):)([^ ])',
-                                            re.UNICODE | re.IGNORECASE)
-        for child in self.root.find('.//body'):
+        irritating_words_regex = re.compile(
+            u"(govv(a|en|ejeaddji):)([^ ])", re.UNICODE | re.IGNORECASE
+        )
+        for child in self.root.find(".//body"):
             self.insert_space_after_semicolon(child, irritating_words_regex)
 
     def insert_space_after_semicolon(self, element, irritating_words_regex):
@@ -135,11 +144,11 @@ class DocumentFixer(object):
             irritating_words_regex: regex
         """
         if element.text is not None:
-            element.text = irritating_words_regex.sub(r'\1 \3', element.text)
+            element.text = irritating_words_regex.sub(r"\1 \3", element.text)
         for child in element:
             self.insert_space_after_semicolon(child, irritating_words_regex)
         if element.tail is not None:
-            element.tail = irritating_words_regex.sub(r'\1 \3', element.tail)
+            element.tail = irritating_words_regex.sub(r"\1 \3", element.tail)
 
     def replace_ligatures(self):
         """Replace unwanted chars."""
@@ -183,10 +192,10 @@ class DocumentFixer(object):
             u"ﬅ": "ft",
         }
 
-        for element in self.root.iter('p'):
+        for element in self.root.iter("p"):
             if element.text:
                 for key, value in six.iteritems(replacements):
-                    element.text = element.text.replace(key + ' ', value)
+                    element.text = element.text.replace(key + " ", value)
                     element.text = element.text.replace(key, value)
 
     def replace_bad_unicode(self):
@@ -202,9 +211,13 @@ class DocumentFixer(object):
         # u'š'.encode('windows-1252') gives '\x9a', which sometimes
         # appears in otherwise utf-8-encoded documents with the
         # meaning 'š'
-        replacements = [(u'\x9a', u'š'), (u'\x8a', u'Š'), (u'\x9e', u'ž'),
-                        (u'\x8e', u'Ž')]
-        for element in self.root.iter('p'):
+        replacements = [
+            (u"\x9a", u"š"),
+            (u"\x8a", u"Š"),
+            (u"\x9e", u"ž"),
+            (u"\x8e", u"Ž"),
+        ]
+        for element in self.root.iter("p"):
             if element.text:
                 element.text = util.replace_all(replacements, element.text)
 
@@ -212,42 +225,42 @@ class DocumentFixer(object):
         """Replace invalid accents with valid ones for the sms language."""
 
         replacement_pairs = {
-            'sms': [
-                (u'\u2019', u'\u02BC'),  # RIGHT SINGLE QUOTATION MARK,
+            "sms": [
+                (u"\u2019", u"\u02BC"),  # RIGHT SINGLE QUOTATION MARK,
                 # MODIFIER LETTER APOSTROPHE
-                (u'\u0027', u'\u02BC'),  # apostrophe,
+                (u"\u0027", u"\u02BC"),  # apostrophe,
                 # MODIFIER LETTER APOSTROPHE
-                (u'\u2032', u'\u02B9'),  # PRIME, MODIFIER LETTER PRIME
-                (u'\u00B4', u'\u02B9'),  # ACUTE ACCENT,
+                (u"\u2032", u"\u02B9"),  # PRIME, MODIFIER LETTER PRIME
+                (u"\u00B4", u"\u02B9"),  # ACUTE ACCENT,
                 # MODIFIER LETTER PRIME
-                (u'\u0301', u'\u02B9'),  # COMBINING ACUTE ACCENT,
+                (u"\u0301", u"\u02B9"),  # COMBINING ACUTE ACCENT,
                 # MODIFIER LETTER PRIME
             ],
-            'mns': [('\uf50e', 'А̄'), # CYRILLIC VOWELS WITH LENGTH MARK
-                    ('\uf50f', 'а̄'), 
-                    ('\uf510', 'Е̄'), 
-                    ('\uf511', 'е̄'), 
-                    ('\uf512', 'Ё̄'), # 
-                    ('\uf513', 'ё̄'),
-                    ('\uf517', 'О̄'), # 17? Just guessing
-                    ('\uf518', 'О̄'), # CYRILLIC LONG CAPITAL O
-                    ('\uf519', 'о̄'), # CYRILLIC LONG SMALL O
-                    ('\uf520', 'Ы̄'), # 
-                    ('\uf521', 'ы̄'), # 
-                    ('\uf522', 'Э̄'), 
-                    ('\uf523', 'э̄'), 
-                    ('\uf52c', 'Ю̄'), # 
-                    ('\uf52d', 'ю̄'),
-                    ('\uf528', 'Я̄'), 
-                    ('\uf529', 'я̄')]
+            "mns": [
+                ("\uf50e", "А̄"),  # CYRILLIC VOWELS WITH LENGTH MARK
+                ("\uf50f", "а̄"),
+                ("\uf510", "Е̄"),
+                ("\uf511", "е̄"),
+                ("\uf512", "Ё̄"),  #
+                ("\uf513", "ё̄"),
+                ("\uf517", "О̄"),  # 17? Just guessing
+                ("\uf518", "О̄"),  # CYRILLIC LONG CAPITAL O
+                ("\uf519", "о̄"),  # CYRILLIC LONG SMALL O
+                ("\uf520", "Ы̄"),  #
+                ("\uf521", "ы̄"),  #
+                ("\uf522", "Э̄"),
+                ("\uf523", "э̄"),
+                ("\uf52c", "Ю̄"),  #
+                ("\uf52d", "ю̄"),
+                ("\uf528", "Я̄"),
+                ("\uf529", "я̄"),
+            ],
         }
 
         if element.text:
-            element.text = util.replace_all(replacement_pairs[lang],
-                                            element.text)
+            element.text = util.replace_all(replacement_pairs[lang], element.text)
         if element.tail:
-            element.tail = util.replace_all(replacement_pairs[lang],
-                                            element.tail)
+            element.tail = util.replace_all(replacement_pairs[lang], element.tail)
         for child in element:
             self.fix_lang(child, lang)
 
@@ -260,8 +273,8 @@ class DocumentFixer(object):
         """
         self.replace_ligatures()
 
-        body = self.root.find('body')
-        body_string = etree.tostring(body, encoding='unicode')
+        body = self.root.find("body")
+        body_string = etree.tostring(body, encoding="unicode")
         body.getparent().remove(body)
 
         encoding = decode.guess_body_encoding(body_string, mainlang)
@@ -272,12 +285,12 @@ class DocumentFixer(object):
             raise UserWarning(str(error))
         self.root.append(body)
 
-        if mainlang in ['sms', 'mns']:
-            self.fix_lang(self.root.find('body'), lang=mainlang)
+        if mainlang in ["sms", "mns"]:
+            self.fix_lang(self.root.find("body"), lang=mainlang)
 
     def fix_title_person(self, encoding):
         """Fix encoding problems."""
-        title = self.root.find('.//title')
+        title = self.root.find(".//title")
         if title is not None and title.text is not None:
             text = title.text
 
@@ -285,25 +298,24 @@ class DocumentFixer(object):
             util.print_frame(encoding)
             title.text = decode.decode_para(encoding, text)
 
-        persons = self.root.findall('.//person')
+        persons = self.root.findall(".//person")
         for person in persons:
             if person is not None:
-                lastname = person.get('lastname')
+                lastname = person.get("lastname")
 
-                if encoding == 'mac-sami_to_latin1':
-                    lastname = lastname.replace(u'‡', u'á')
-                    lastname = lastname.replace(u'Œ', u'å')
+                if encoding == "mac-sami_to_latin1":
+                    lastname = lastname.replace(u"‡", u"á")
+                    lastname = lastname.replace(u"Œ", u"å")
 
-                person.set('lastname', decode.decode_para(encoding, lastname))
+                person.set("lastname", decode.decode_para(encoding, lastname))
 
-                firstname = person.get('firstname')
+                firstname = person.get("firstname")
 
-                if encoding == 'mac-sami_to_latin1':
-                    firstname = firstname.replace(u'‡', u'á')
-                    firstname = firstname.replace(u'Œ', u'å')
+                if encoding == "mac-sami_to_latin1":
+                    firstname = firstname.replace(u"‡", u"á")
+                    firstname = firstname.replace(u"Œ", u"å")
 
-                person.set('firstname',
-                           decode.decode_para(encoding, firstname))
+                person.set("firstname", decode.decode_para(encoding, firstname))
 
     @staticmethod
     def get_quote_list(text):
@@ -315,15 +327,16 @@ class DocumentFixer(object):
         Returns:
             A list of span tuples containing indexes to quotes found in text.
         """
-        unwanted = r'[^:,!?.\s]'
+        unwanted = r"[^:,!?.\s]"
         quote_regexes = [
             re.compile('"{0}.+?{0}"'.format(unwanted)),
-            re.compile(u'«.+?»'),
-            re.compile(u'“.+?”'),
-            re.compile(u'”{0}.+?{0}”'.format(unwanted)),
+            re.compile(u"«.+?»"),
+            re.compile(u"“.+?”"),
+            re.compile(u"”{0}.+?{0}”".format(unwanted)),
         ]
         quote_list = [
-            m.span() for quote_regex in quote_regexes
+            m.span()
+            for quote_regex in quote_regexes
             for m in quote_regex.finditer(text)
         ]
         quote_list.sort()
@@ -340,13 +353,13 @@ class DocumentFixer(object):
             found in text.
         """
         for index in six.moves.range(0, len(quote_list)):
-            span = etree.Element('span')
-            span.set('type', 'quote')
-            span.text = text[quote_list[index][0]:quote_list[index][1]]
+            span = etree.Element("span")
+            span.set("type", "quote")
+            span.text = text[quote_list[index][0] : quote_list[index][1]]
             if index + 1 < len(quote_list):
-                span.tail = text[quote_list[index][1]:quote_list[index + 1][0]]
+                span.tail = text[quote_list[index][1] : quote_list[index + 1][0]]
             else:
-                span.tail = text[quote_list[index][1]:]
+                span.tail = text[quote_list[index][1] :]
             element.append(span)
 
     def _detect_quote(self, element):
@@ -357,7 +370,7 @@ class DocumentFixer(object):
         """
         newelement = deepcopy(element)
 
-        element.text = ''
+        element.text = ""
         for child in element:
             child.getparent().remove(child)
 
@@ -365,13 +378,13 @@ class DocumentFixer(object):
         if text:
             quote_list = self.get_quote_list(text)
             if quote_list:
-                element.text = text[0:quote_list[0][0]]
+                element.text = text[0 : quote_list[0][0]]
                 self.append_quotes(element, text, quote_list)
             else:
                 element.text = text
 
         for child in newelement:
-            if child.tag == 'span' and child.get('type') == 'quote':
+            if child.tag == "span" and child.get("type") == "quote":
                 element.append(child)
             else:
                 element.append(self._detect_quote(child))
@@ -380,24 +393,24 @@ class DocumentFixer(object):
                 text = child.tail
                 quote_list = self.get_quote_list(text)
                 if quote_list:
-                    child.tail = text[0:quote_list[0][0]]
+                    child.tail = text[0 : quote_list[0][0]]
                     self.append_quotes(element, text, quote_list)
 
         return element
 
     def detect_quotes(self):
         """Detect quotes in all paragraphs."""
-        for paragraph in self.root.iter('p'):
+        for paragraph in self.root.iter("p"):
             paragraph = self._detect_quote(paragraph)
 
     def calculate_wordcount(self):
         """Count the words in the file."""
         plist = [
-            etree.tostring(paragraph, method='text', encoding='unicode')
-            for paragraph in self.root.iter('p')
+            etree.tostring(paragraph, method="text", encoding="unicode")
+            for paragraph in self.root.iter("p")
         ]
 
-        return six.text_type(len(re.findall(r'\S+', ' '.join(plist))))
+        return six.text_type(len(re.findall(r"\S+", " ".join(plist))))
 
     @staticmethod
     def _make_element(name, text, attributes=None):
@@ -419,38 +432,37 @@ class DocumentFixer(object):
         return element
 
     def _fix_emphasises(self):
-        for emphasis in self.root.iter('em'):
+        for emphasis in self.root.iter("em"):
             paragraph = emphasis.getparent()
             if not len(emphasis) and emphasis.text:
                 if self.bylinetags.match(emphasis.text):
-                    line = self.bylinetags.sub('', emphasis.text).strip()
-                    unknown = self.root.find('.//unknown')
+                    line = self.bylinetags.sub("", emphasis.text).strip()
+                    unknown = self.root.find(".//unknown")
                     if unknown is not None:
-                        person = etree.Element('person')
-                        person.set('lastname', line)
-                        person.set('firstname', '')
+                        person = etree.Element("person")
+                        person.set("lastname", line)
+                        person.set("firstname", "")
                         unknown.getparent().replace(unknown, person)
                         paragraph.getparent().remove(paragraph)
                 elif self.titletags.match(emphasis.text):
-                    emphasis.text = self.titletags.sub('',
-                                                       emphasis.text).strip()
-                    paragraph.set('type', 'title')
+                    emphasis.text = self.titletags.sub("", emphasis.text).strip()
+                    paragraph.set("type", "title")
                 elif self.newstags.match(emphasis.text):
-                    emphasis.text = self.newstags.sub('',
-                                                      emphasis.text).strip()
+                    emphasis.text = self.newstags.sub("", emphasis.text).strip()
 
     def _add_paragraph(self, line, index, paragraph, attributes):
         if line:
             index += 1
             paragraph.getparent().insert(
-                index, self._make_element('p', line, attributes=attributes))
+                index, self._make_element("p", line, attributes=attributes)
+            )
 
         return index
 
     def _add_emphasis(self, index, line, attributes, paragraph):
         index += 1
-        element = etree.Element('p')
-        element.append(self._make_element('em', line, attributes))
+        element = etree.Element("p")
+        element.append(self._make_element("em", line, attributes))
 
         paragraph.getparent().insert(index, element)
 
@@ -458,68 +470,82 @@ class DocumentFixer(object):
 
     def _handle_line(self, line, index, lines, paragraph):
         if self.newstags.match(line):
-            index = self._add_paragraph(' '.join(lines).strip(), index,
-                                        paragraph, paragraph.attrib)
+            index = self._add_paragraph(
+                " ".join(lines).strip(), index, paragraph, paragraph.attrib
+            )
             del lines[:]
 
-            lines.append(self.newstags.sub('', line))
+            lines.append(self.newstags.sub("", line))
 
         elif self.bylinetags.match(line):
-            index = self._add_paragraph(' '.join(lines).strip(), index,
-                                        paragraph, paragraph.attrib)
+            index = self._add_paragraph(
+                " ".join(lines).strip(), index, paragraph, paragraph.attrib
+            )
             del lines[:]
 
-            unknown = self.root.find('.//unknown')
+            unknown = self.root.find(".//unknown")
             if unknown is not None:
-                person = etree.Element('person')
-                person.set('lastname', self.bylinetags.sub('', line).strip())
-                person.set('firstname', '')
+                person = etree.Element("person")
+                person.set("lastname", self.bylinetags.sub("", line).strip())
+                person.set("firstname", "")
 
                 unknown.getparent().replace(unknown, person)
 
         elif self.boldtags.match(line):
-            index = self._add_paragraph(' '.join(lines).strip(), index,
-                                        paragraph, paragraph.attrib)
-            index = self._add_emphasis(index,
-                                       self.boldtags.sub('', line).strip(),
-                                       {'type': 'bold'}, paragraph)
+            index = self._add_paragraph(
+                " ".join(lines).strip(), index, paragraph, paragraph.attrib
+            )
+            index = self._add_emphasis(
+                index, self.boldtags.sub("", line).strip(), {"type": "bold"}, paragraph
+            )
             del lines[:]
 
-        elif line.startswith('@kursiv:'):
-            index = self._add_paragraph(' '.join(lines).strip(), index,
-                                        paragraph, paragraph.attrib)
-            index = self._add_emphasis(index,
-                                       line.replace('@kursiv:', '').strip(),
-                                       {'type': 'italic'}, paragraph)
+        elif line.startswith("@kursiv:"):
+            index = self._add_paragraph(
+                " ".join(lines).strip(), index, paragraph, paragraph.attrib
+            )
+            index = self._add_emphasis(
+                index,
+                line.replace("@kursiv:", "").strip(),
+                {"type": "italic"},
+                paragraph,
+            )
             del lines[:]
 
         elif self.headertitletags.match(line):
-            index = self._add_paragraph(' '.join(lines).strip(), index,
-                                        paragraph, paragraph.attrib)
+            index = self._add_paragraph(
+                " ".join(lines).strip(), index, paragraph, paragraph.attrib
+            )
             del lines[:]
 
-            header = self.root.find('.//header')
-            title = header.find('./title')
+            header = self.root.find(".//header")
+            title = header.find("./title")
             if title is not None and title.text is None:
-                title.text = self.headertitletags.sub('', line).strip()
+                title.text = self.headertitletags.sub("", line).strip()
 
             index = self._add_paragraph(
-                self.headertitletags.sub('', line).strip(), index, paragraph,
-                {'type': 'title'})
+                self.headertitletags.sub("", line).strip(),
+                index,
+                paragraph,
+                {"type": "title"},
+            )
         elif self.titletags.match(line):
-            index = self._add_paragraph(' '.join(lines).strip(), index,
-                                        paragraph, paragraph.attrib)
+            index = self._add_paragraph(
+                " ".join(lines).strip(), index, paragraph, paragraph.attrib
+            )
             del lines[:]
 
             index += 1
             paragraph.getparent().insert(
                 index,
-                self._make_element('p',
-                                   self.titletags.sub('', line).strip(),
-                                   {'type': 'title'}))
-        elif line == '' and lines:
-            index = self._add_paragraph(' '.join(lines).strip(), index,
-                                        paragraph, paragraph.attrib)
+                self._make_element(
+                    "p", self.titletags.sub("", line).strip(), {"type": "title"}
+                ),
+            )
+        elif line == "" and lines:
+            index = self._add_paragraph(
+                " ".join(lines).strip(), index, paragraph, paragraph.attrib
+            )
             del lines[:]
 
         else:
@@ -528,16 +554,17 @@ class DocumentFixer(object):
         return index
 
     def _fix_paragraphs(self):
-        for paragraph in self.root.iter('p'):
+        for paragraph in self.root.iter("p"):
             if not len(paragraph) and paragraph.text:
                 index = paragraph.getparent().index(paragraph)
                 lines = []
 
-                for line in paragraph.text.split('\n'):
+                for line in paragraph.text.split("\n"):
                     index = self._handle_line(line, index, lines, paragraph)
 
-                index = self._add_paragraph(' '.join(lines).strip(), index,
-                                            paragraph, paragraph.attrib)
+                index = self._add_paragraph(
+                    " ".join(lines).strip(), index, paragraph, paragraph.attrib
+                )
 
                 paragraph.getparent().remove(paragraph)
 

@@ -25,19 +25,20 @@ import sys
 
 from lxml import etree
 
-ERROR_REGEX = re.compile('(?P<error>{[^{]*}$)', re.UNICODE)
+ERROR_REGEX = re.compile("(?P<error>{[^{]*}$)", re.UNICODE)
 ERROR_TYPES = {
-    '$': 'errorort',
-    '¢': 'errorortreal',
-    '€': 'errorlex',
-    '£': 'errormorphsyn',
-    '¥': 'errorsyn',
-    '§': 'error',
-    '∞': 'errorlang',
-    '‰': 'errorformat'
+    "$": "errorort",
+    "¢": "errorortreal",
+    "€": "errorlex",
+    "£": "errormorphsyn",
+    "¥": "errorsyn",
+    "§": "error",
+    "∞": "errorlang",
+    "‰": "errorformat",
 }
-CORRECTION_REGEX = re.compile('(?P<correction>[$€£¥§¢∞‰]{[^\}]*})(?P<tail>.*)',
-                              re.UNICODE)
+CORRECTION_REGEX = re.compile(
+    "(?P<correction>[$€£¥§¢∞‰]{[^\}]*})(?P<tail>.*)", re.UNICODE
+)
 
 
 def is_error(text):
@@ -66,12 +67,12 @@ def process_text(text):
 
     matches = CORRECTION_REGEX.search(text)
     while matches:
-        head = CORRECTION_REGEX.sub('', text)
-        if not (head and head[-1] == ' '):
+        head = CORRECTION_REGEX.sub("", text)
+        if not (head and head[-1] == " "):
             if head:
                 result.append(head)
-            result.append(matches.group('correction'))
-        text = matches.group('tail')
+            result.append(matches.group("correction"))
+        text = matches.group("tail")
         matches = CORRECTION_REGEX.search(text)
 
     if text:
@@ -83,9 +84,9 @@ def process_text(text):
 def process_head(text):
     """Divide text into text/error parts."""
     matches = ERROR_REGEX.search(text)
-    text = ERROR_REGEX.sub('', text)
+    text = ERROR_REGEX.sub("", text)
 
-    return (text, matches.group('error'))
+    return (text, matches.group("error"))
 
 
 def get_element_name(separator):
@@ -108,12 +109,12 @@ def make_error_element(error, fixed_correction, element_name, att_list):
     if isinstance(error, etree._Element):
         error_element.append(error)
     else:
-        error_element.text = error.replace('{', '').replace('}', '')
+        error_element.text = error.replace("{", "").replace("}", "")
 
-    error_element.set('correct', fixed_correction)
+    error_element.set("correct", fixed_correction)
 
     if att_list is not None:
-        error_element.set('errorinfo', att_list)
+        error_element.set("errorinfo", att_list)
 
     return error_element
 
@@ -134,19 +135,20 @@ def look_for_extended_attributes(correction):
     """Extract attributes and correction from a correctionstring."""
     ext_att = False
     att_list = None
-    if '|' in correction:
+    if "|" in correction:
         ext_att = True
         try:
-            (att_list, correction) = correction.split('|')
+            (att_list, correction) = correction.split("|")
         except ValueError as e:
             raise ErrorMarkupError(
-                f'\n{str(e)}\n'
-                'Too many | characters inside the correction: '
-                f'«{correction}»\n'
-                'Have you remembered to encase the error inside '
-                'parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?'
-                'If the errormarkup is correct, send a report about '
-                'this error to borre.gaup@uit.no')
+                f"\n{str(e)}\n"
+                "Too many | characters inside the correction: "
+                f"«{correction}»\n"
+                "Have you remembered to encase the error inside "
+                "parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?"
+                "If the errormarkup is correct, send a report about "
+                "this error to borre.gaup@uit.no"
+            )
 
     return (correction, ext_att, att_list)
 
@@ -157,14 +159,13 @@ def get_error(error, correction):
     error - - is either a string or an etree.Element
     correction - - is a correctionstring
     """
-    (fixed_correction, ext_att, att_list) = \
-        look_for_extended_attributes(
-            correction[1:].replace('{', '').replace('}', ''))
+    (fixed_correction, ext_att, att_list) = look_for_extended_attributes(
+        correction[1:].replace("{", "").replace("}", "")
+    )
 
     element_name = get_element_name(correction[0])
 
-    error_element = make_error_element(error, fixed_correction, element_name,
-                                       att_list)
+    error_element = make_error_element(error, fixed_correction, element_name, att_list)
 
     return error_element
 
@@ -199,11 +200,12 @@ def add_nested_error(elements, errorstring, correctionstring):
         inner_element = elements[-1]
     except IndexError:
         raise ErrorMarkupError(
-            f'Cannot handle:\n{errorstring} {correctionstring}\n'
-            'This is either an error in the markup or an error in the '
-            'errormarkup conversion code.\n'
-            'If the markup is correct, send a report about this error to '
-            'borre.gaup@uit.no')
+            f"Cannot handle:\n{errorstring} {correctionstring}\n"
+            "This is either an error in the markup or an error in the "
+            "errormarkup conversion code.\n"
+            "If the markup is correct, send a report about this error to "
+            "borre.gaup@uit.no"
+        )
 
     elements.remove(elements[-1])
     if not is_correction(errorstring):
@@ -216,9 +218,9 @@ def add_nested_error(elements, errorstring, correctionstring):
         while True:
             text = get_text(elements[-1])
 
-            index = text.rfind('{')
+            index = text.rfind("{")
             if index > -1:
-                error_element.text = text[index + 1:]
+                error_element.text = text[index + 1 :]
                 if isinstance(elements[-1], etree._Element):
                     elements[-1].tail = text[:index]
                 else:
@@ -233,14 +235,15 @@ def add_nested_error(elements, errorstring, correctionstring):
                     error_element.insert(0, inner_element)
                 except TypeError as e:
                     raise ErrorMarkupError(
-                        f'{e}\n'
-                        'The program expected an error element, but '
-                        f'found a string:\n«{inner_element}»\n'
-                        'There is either an error in the errormarkup '
-                        'close to this sentence or the program cannot '
-                        'evaluate a correct errormarkup.\n'
-                        'If the errormarkup is correct, please report '
-                        'about the error to borre.gaup@uit.no')
+                        f"{e}\n"
+                        "The program expected an error element, but "
+                        f"found a string:\n«{inner_element}»\n"
+                        "There is either an error in the errormarkup "
+                        "close to this sentence or the program cannot "
+                        "evaluate a correct errormarkup.\n"
+                        "If the errormarkup is correct, please report "
+                        "about the error to borre.gaup@uit.no"
+                    )
 
 
 def add_simple_error(elements, errorstring, correctionstring):
@@ -281,12 +284,11 @@ def error_parser(text):
     nested markup.
     """
     elements = []
-    result = process_text(text.replace('\n', ' '))
+    result = process_text(text.replace("\n", " "))
 
     for index in range(0, len(result)):
         if is_correction(result[index]):
-            if (not is_correction(result[index - 1])
-                    and is_error(result[index - 1])):
+            if not is_correction(result[index - 1]) and is_error(result[index - 1]):
                 add_simple_error(elements, result[index - 1], result[index])
 
             else:
@@ -294,11 +296,12 @@ def error_parser(text):
                     add_nested_error(elements, result[index - 1], result[index])
                 except IndexError:
                     raise ErrorMarkupError(
-                        '\nOne of these elements lack curly braces\n'
-                        f'\t{result[index - 1]}\n'
-                        f'\t{result[index]}\n'
-                        'If the errormarkup is correct, please report '
-                        'about the error to borre.gaup@uit.no')
+                        "\nOne of these elements lack curly braces\n"
+                        f"\t{result[index - 1]}\n"
+                        f"\t{result[index]}\n"
+                        "If the errormarkup is correct, please report "
+                        "about the error to borre.gaup@uit.no"
+                    )
 
     try:
         if not is_correction(result[-1]):
@@ -311,7 +314,7 @@ def error_parser(text):
 
 def fix_tail(element):
     """Replace the tail of an element with errormarkup if possible."""
-    new_content = error_parser(element.tail if element.tail else '')
+    new_content = error_parser(element.tail if element.tail else "")
 
     if new_content:
         element.tail = None
@@ -326,7 +329,7 @@ def fix_tail(element):
 
 def fix_text(element):
     """Replace the text of an element with errormarkup if possible."""
-    new_content = error_parser(element.text if element.text else '')
+    new_content = error_parser(element.text if element.text else "")
 
     if new_content:
         element.text = None
@@ -366,4 +369,5 @@ def add_error_markup(element):
 
 class ErrorMarkupError(Exception):
     """This is raised for errors in this module."""
+
     pass

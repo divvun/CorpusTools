@@ -23,91 +23,87 @@ from lxml import etree
 
 
 def char_to_span(document):
-    for char in document.iter('char'):
+    for char in document.iter("char"):
         for key in char.attrib:
             del char.attrib[key]
-        char.tag = 'span'
-        char.set('type', 'quote')
+        char.tag = "span"
+        char.set("type", "quote")
 
 
 def remove_unwanted(document):
-    for unwanted in ['note', 'verse', 'book', 'table']:
+    for unwanted in ["note", "verse", "book", "table"]:
         etree.strip_elements(document, unwanted, with_tail=False)
 
 
 def usx_to_document(usx_document):
-    document = etree.Element('document')
-    body = etree.SubElement(document, 'body')
-    body.text = '\n'
+    document = etree.Element("document")
+    body = etree.SubElement(document, "body")
+    body.text = "\n"
 
     for child in usx_document:
-        if child.tag == 'chapter':
-            section = etree.SubElement(body, 'section')
-            section.text = '\n'
-            section.tail = '\n'
-        elif child.tag == 'para':
-            if child.get('style') in [
-                    's', 'p', 'nb', 'mt', 'mt1', 'ms', 'sp', 'ip'
-            ]:
+        if child.tag == "chapter":
+            section = etree.SubElement(body, "section")
+            section.text = "\n"
+            section.tail = "\n"
+        elif child.tag == "para":
+            if child.get("style") in ["s", "p", "nb", "mt", "mt1", "ms", "sp", "ip"]:
                 try:
-                    paragraph = etree.SubElement(section, 'p')
+                    paragraph = etree.SubElement(section, "p")
                 except UnboundLocalError:
-                    section = etree.SubElement(body, 'section')
-                    section.text = '\n'
-                    section.tail = '\n'
-                    paragraph = etree.SubElement(section, 'p')
+                    section = etree.SubElement(body, "section")
+                    section.text = "\n"
+                    section.tail = "\n"
+                    paragraph = etree.SubElement(section, "p")
 
-                if child.get('style') in ['s', 'mt', 'ms', 'mt1']:
-                    paragraph.set('type', 'title')
+                if child.get("style") in ["s", "mt", "ms", "mt1"]:
+                    paragraph.set("type", "title")
                 if child.text:
-                    paragraph.text = ' '.join(child.text.split())
+                    paragraph.text = " ".join(child.text.split())
                 for grandchild in child:
                     paragraph.append(grandchild)
-            elif child.get('style') in ['m', 'q', 'q1', 'q2', 'pi']:
+            elif child.get("style") in ["m", "q", "q1", "q2", "pi"]:
                 try:
-                    if paragraph.get('type') == 'title':
-                        paragraph = etree.SubElement(section, 'p')
+                    if paragraph.get("type") == "title":
+                        paragraph = etree.SubElement(section, "p")
                 except UnboundLocalError:
-                    paragraph = etree.SubElement(section, 'p')
+                    paragraph = etree.SubElement(section, "p")
                 if len(paragraph):
                     if not paragraph[-1].tail:
-                        paragraph[-1].tail = ' '.join(child.text.split())
+                        paragraph[-1].tail = " ".join(child.text.split())
                     else:
                         paragraph[-1].tail = (
-                            f'{paragraph[-1].tail} '
-                            f'{" ".join(child.text.split())}')
+                            f"{paragraph[-1].tail} " f'{" ".join(child.text.split())}'
+                        )
                 else:
                     if not paragraph.text:
                         try:
-                            paragraph.text = ' '.join(child.text.split())
+                            paragraph.text = " ".join(child.text.split())
                         except AttributeError:
                             pass
                     else:
                         try:
                             paragraph.text = (
-                                f'{paragraph.text} '
-                                f'{" ".join(child.text.split())}')
+                                f"{paragraph.text} " f'{" ".join(child.text.split())}'
+                            )
                         except AttributeError:
                             pass
-            elif child.get('style') in ['li', 'li1', 'li2']:
-                paragraph = etree.SubElement(section, 'p')
-                paragraph.set('type', 'listitem')
+            elif child.get("style") in ["li", "li1", "li2"]:
+                paragraph = etree.SubElement(section, "p")
+                paragraph.set("type", "listitem")
                 if child.text:
-                    paragraph.text = ' '.join(child.text.split())
+                    paragraph.text = " ".join(child.text.split())
                 for grandchild in child:
                     paragraph.append(grandchild)
 
-            elif child.get('style') in [
-                    'b', 'qa', 'mr', 'qc', 'ide', 'pc', 'periph'
-            ]:
+            elif child.get("style") in ["b", "qa", "mr", "qc", "ide", "pc", "periph"]:
                 pass
-            elif child.get('style') in ['rem', 'toc1', 'toc2', 'toc3', 'h']:
+            elif child.get("style") in ["rem", "toc1", "toc2", "toc3", "h"]:
                 # Should possibly handled further
                 pass
             else:
-                print(etree.tostring(child, encoding='unicode'))
+                print(etree.tostring(child, encoding="unicode"))
         else:
-            print(etree.tostring(child, encoding='unicode'))
+            print(etree.tostring(child, encoding="unicode"))
 
     return document
 

@@ -35,24 +35,24 @@ import six
 from corpustools import util, xslsetter
 
 here = os.path.dirname(__file__)
-version = os.path.join(here, '_version.py')
+version = os.path.join(here, "_version.py")
 scope = {}
 exec(open(version).read(), scope)
-version = scope['VERSION']
+version = scope["VERSION"]
 
 
 class DocumentPicker(object):
     """Pick documents from samediggi.se to be added to the corpus."""
 
     def __init__(self, source_dir):
-        self.freecorpus = os.getenv('GTFREE')
+        self.freecorpus = os.getenv("GTFREE")
         self.source_dir = source_dir
         self.file_dict = {}
-        self.file_dict.setdefault('sma', [])
-        self.file_dict.setdefault('sme', [])
-        self.file_dict.setdefault('smj', [])
-        self.file_dict.setdefault('swe', [])
-        self.file_dict.setdefault('none', [])
+        self.file_dict.setdefault("sma", [])
+        self.file_dict.setdefault("sme", [])
+        self.file_dict.setdefault("smj", [])
+        self.file_dict.setdefault("swe", [])
+        self.file_dict.setdefault("none", [])
         self.parallel_dict = {}
         self.total_file = 0
 
@@ -60,19 +60,19 @@ class DocumentPicker(object):
         """Iterate through all files, classify them according to language"""
         for root, dirs, files in os.walk(self.source_dir):
             for f in files:
-                if f.endswith('.html'):
+                if f.endswith(".html"):
                     self.total_file += 1
                     self.classify_file(os.path.join(root, f))
 
     def get_parallel_name(self, file_, a):
         dirname = os.path.dirname(file_)
-        href = a.get('href').replace('http://www.samediggi.se/', '')
+        href = a.get("href").replace("http://www.samediggi.se/", "")
 
-        if '..' in href:
-            dirname_parts = dirname.split('/')
-            href_parts = href.split('/')
-            dirname = '/'.join(dirname_parts[:-1])
-            href = '/'.join(href_parts[1:])
+        if ".." in href:
+            dirname_parts = dirname.split("/")
+            href_parts = href.split("/")
+            dirname = "/".join(dirname_parts[:-1])
+            href = "/".join(href_parts[1:])
 
         return os.path.join(dirname, href)
 
@@ -83,10 +83,11 @@ class DocumentPicker(object):
             print(
                 util.lineno(),
                 self.get_parallel_name(file_, a),
-                'does not exist',
-                a.get('title'),
+                "does not exist",
+                a.get("title"),
                 file_,
-                file=sys.stderr)
+                file=sys.stderr,
+            )
 
     def get_parallels(self, a, file_):
         self.parallel_dict.setdefault(file_, [])
@@ -106,30 +107,32 @@ class DocumentPicker(object):
 
     def append_file(self, language, file_):
         self.file_dict[language].append(file_)
-        self.file_dict['none'].remove(file_)
+        self.file_dict["none"].remove(file_)
 
     def classify_file(self, file_):
         """Identify the language of the file"""
         parser = etree.HTMLParser()
         html = etree.parse(file_, parser)
-        self.file_dict['none'].append(file_)
+        self.file_dict["none"].append(file_)
 
-        for img in html.iter('img'):
-            if (img.get('src') is not None and
-                    'icon_flag_sme_dim.gif' in img.get('src')):
-                self.append_file('sme', file_)
+        for img in html.iter("img"):
+            if img.get("src") is not None and "icon_flag_sme_dim.gif" in img.get("src"):
+                self.append_file("sme", file_)
                 self.get_parallels(img.getparent(), file_)
-            elif (img.get('src') is not None and
-                  'icon_flag_smj_dim.gif' in img.get('src')):
-                self.append_file('smj', file_)
+            elif img.get("src") is not None and "icon_flag_smj_dim.gif" in img.get(
+                "src"
+            ):
+                self.append_file("smj", file_)
                 self.get_parallels(img.getparent(), file_)
-            elif (img.get('src') is not None and
-                  'icon_flag_sma_dim.gif' in img.get('src')):
-                self.append_file('sma', file_)
+            elif img.get("src") is not None and "icon_flag_sma_dim.gif" in img.get(
+                "src"
+            ):
+                self.append_file("sma", file_)
                 self.get_parallels(img.getparent(), file_)
-            elif (img.get('src') is not None and
-                  'icon_flag_swe_dim.gif' in img.get('src')):
-                self.append_file('swe', file_)
+            elif img.get("src") is not None and "icon_flag_swe_dim.gif" in img.get(
+                "src"
+            ):
+                self.append_file("swe", file_)
                 self.get_parallels(img.getparent(), file_)
 
     def conclude(self):
@@ -155,50 +158,51 @@ class DocumentPicker(object):
 
     def get_goal_name(self, file_, lang):
         filename = os.path.basename(file_)
-        goalfile = os.path.join(self.freecorpus, 'orig', lang, 'admin', 'sd',
-                                'www.samediggi.se', filename)
+        goalfile = os.path.join(
+            self.freecorpus, "orig", lang, "admin", "sd", "www.samediggi.se", filename
+        )
 
         return goalfile
 
     def set_metadata(self, file_, lang):
         mh = xslsetter.MetadataHandler(
-            self.get_goal_name(file_, lang) + '.xsl', create=True)
+            self.get_goal_name(file_, lang) + ".xsl", create=True
+        )
         for key, value in six.iteritems(self.set_variables(file_, lang)):
             mh.set_variable(key, value)
         mh.write_file()
 
     def set_variables(self, file_, lang):
         variables = {}
-        variables[u'filename'] = u'http://' + file_.replace('.html', '')
-        variables[u'license_type'] = u'free'
-        variables[u'sub_name'] = u'Børre Gaup'
-        variables[u'sub_email'] = u'borre.gaup@uit.no'
-        variables[u'mainlang'] = lang
-        variables[u'monolingual'] = u'1'
+        variables["filename"] = "http://" + file_.replace(".html", "")
+        variables["license_type"] = "free"
+        variables["sub_name"] = "Børre Gaup"
+        variables["sub_email"] = "borre.gaup@uit.no"
+        variables["mainlang"] = lang
+        variables["monolingual"] = "1"
 
-        if lang != u'swe':
-            variables[u'translated_from'] = u'swe'
+        if lang != "swe":
+            variables["translated_from"] = "swe"
 
         if self.parallel_dict[file_]:
-            variables[u'parallel_texts'] = '1'
-            para_langs = [u'sma', u'sme', u'smj', u'swe']
+            variables["parallel_texts"] = "1"
+            para_langs = ["sma", "sme", "smj", "swe"]
             para_langs.remove(lang)
             for parallel_file in self.parallel_dict[file_]:
                 for para_lang in para_langs:
                     if parallel_file in self.file_dict[para_lang]:
-                        variables['para_' +
-                                  para_lang] = os.path.basename(parallel_file)
+                        variables["para_" + para_lang] = os.path.basename(parallel_file)
 
         return variables
 
     def move_swe_file(self, file_):
         for candidate in self.parallel_dict[file_]:
-            if candidate in self.file_dict['swe']:
-                shutil.copy(candidate, self.get_goal_name(candidate, 'swe'))
-                self.set_metadata(candidate, 'swe')
+            if candidate in self.file_dict["swe"]:
+                shutil.copy(candidate, self.get_goal_name(candidate, "swe"))
+                self.set_metadata(candidate, "swe")
 
     def move_files_set_metadata(self):
-        for lang in ['sma', 'smj', 'sme']:
+        for lang in ["sma", "smj", "sme"]:
             for file_ in self.file_dict[lang]:
                 shutil.copy(file_, self.get_goal_name(file_, lang))
                 self.move_swe_file(file_)
@@ -206,7 +210,7 @@ class DocumentPicker(object):
 
 
 def main():
-    if sys.argv[1] == '-v':
+    if sys.argv[1] == "-v":
         print(version)
         sys.exit(1)
 

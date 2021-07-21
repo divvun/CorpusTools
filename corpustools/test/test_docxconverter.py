@@ -35,23 +35,25 @@ class TestDocxConverter(XMLTester):
     def test_convert2intermediate(self):
         """Test conversion of a docx file."""
         got = htmlcontentconverter.convert2intermediate(
-            os.path.join(
-                HERE, 'converter_data/fakecorpus/orig/sme/riddu/doc-test.docx'))
-        want = ('<document>'
-                '    <header>'
-                '        <title/>'
-                '    </header>'
-                '    <body>'
-                '        <p>–Mun lean njeallje jagi boaris.</p>'
-                '        <p>Nu beaivvádat.</p>'
-                '        <p>oahppat guovttejuvlla nalde sykkelastit.</p>'
-                '        <p>njeallje suorpma boaris.</p>'
-                '        <p>Olggobealde Áššu</p>'
-                '        <p>Lea go dus meahccebiila ?</p>'
-                '        <p>–Mii lea suohttaseamos geassebargu dus ?</p>'
-                '        <p>Suohkana bearašásodagaid juohkin</p>'
-                '        <p>Sámi kulturfestivála 1998</p>'
-                '    </body>'
-                '</document>')
+            os.path.join(HERE, "converter_data/fakecorpus/orig/sme/riddu/doc-test.docx")
+        )
+        want = (
+            "<document>"
+            "    <header>"
+            "        <title/>"
+            "    </header>"
+            "    <body>"
+            "        <p>–Mun lean njeallje jagi boaris.</p>"
+            "        <p>Nu beaivvádat.</p>"
+            "        <p>oahppat guovttejuvlla nalde sykkelastit.</p>"
+            "        <p>njeallje suorpma boaris.</p>"
+            "        <p>Olggobealde Áššu</p>"
+            "        <p>Lea go dus meahccebiila ?</p>"
+            "        <p>–Mii lea suohttaseamos geassebargu dus ?</p>"
+            "        <p>Suohkana bearašásodagaid juohkin</p>"
+            "        <p>Sámi kulturfestivála 1998</p>"
+            "    </body>"
+            "</document>"
+        )
 
         self.assertXmlEqual(got, etree.fromstring(want))

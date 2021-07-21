@@ -42,23 +42,25 @@ def name(module, lang, extension):
     Returns:
         str: path to the corpus file
     """
-    return os.path.join(HERE, module, lang,
-                        'subdir/subsubdir/filename.html' + extension)
+    return os.path.join(
+        HERE, module, lang, "subdir/subsubdir/filename.html" + extension
+    )
 
 
-@parameterized([
-    ('orig_to_orig', name('orig', 'sme', '')),
-    ('xsl_to_orig', name('orig', 'sme', '.xsl')),
-    ('log_to_orig', name('orig', 'sme', '.log')),
-    ('converted_to_orig', name('converted', 'sme', '.xml')),
-    ('prestable_converted_to_orig', name('prestable/converted', 'sme', '.xml')),
-    ('analysed_to_orig', name('converted', 'sme', '.xml')),
-    ('toktmx_to_orig', name('toktmx/', 'sme2nob', '.toktmx')),
-    ('prestable_toktmx_to_orig', name('prestable/toktmx/', 'sme2nob',
-                                      '.toktmx')),
-    ('tmx_to_orig', name('tmx', 'sme2nob', '.tmx')),
-    ('prestable_tmx_to_orig', name('prestable/tmx/', 'sme2nob', '.tmx')),
-])
+@parameterized(
+    [
+        ("orig_to_orig", name("orig", "sme", "")),
+        ("xsl_to_orig", name("orig", "sme", ".xsl")),
+        ("log_to_orig", name("orig", "sme", ".log")),
+        ("converted_to_orig", name("converted", "sme", ".xml")),
+        ("prestable_converted_to_orig", name("prestable/converted", "sme", ".xml")),
+        ("analysed_to_orig", name("converted", "sme", ".xml")),
+        ("toktmx_to_orig", name("toktmx/", "sme2nob", ".toktmx")),
+        ("prestable_toktmx_to_orig", name("prestable/toktmx/", "sme2nob", ".toktmx")),
+        ("tmx_to_orig", name("tmx", "sme2nob", ".tmx")),
+        ("prestable_tmx_to_orig", name("prestable/tmx/", "sme2nob", ".tmx")),
+    ]
+)
 def test_path_to_orig(testname, orig):
     """Check that the corpus file naming scheme works as it should.
 
@@ -70,49 +72,51 @@ def test_path_to_orig(testname, orig):
         AssertionError: is raised if the result is not what is expected
     """
     corpus_path = corpuspath.CorpusPath(orig)
-    orig_name = name(module='orig', lang='sme', extension='')
+    orig_name = name(module="orig", lang="sme", extension="")
     if corpus_path.orig != orig_name:
-        raise AssertionError('{}:\nexpected {}\ngot {}'.format(
-            testname, orig_name, corpus_path.orig))
+        raise AssertionError(
+            "{}:\nexpected {}\ngot {}".format(testname, orig_name, corpus_path.orig)
+        )
 
 
 class TestComputeCorpusnames(unittest.TestCase):
-
     @staticmethod
     def name(module):
-        return os.path.join(HERE, module,
-                            'sme/admin/subdir/subsubdir/filename.html')
+        return os.path.join(HERE, module, "sme/admin/subdir/subsubdir/filename.html")
 
     def setUp(self):
-        self.corpus_path = corpuspath.CorpusPath(self.name('orig'))
+        self.corpus_path = corpuspath.CorpusPath(self.name("orig"))
 
     def test_compute_orig(self):
-        self.assertEqual(self.corpus_path.orig, self.name('orig'))
+        self.assertEqual(self.corpus_path.orig, self.name("orig"))
 
     def test_compute_xsl(self):
-        self.assertEqual(self.corpus_path.xsl, self.name('orig') + '.xsl')
+        self.assertEqual(self.corpus_path.xsl, self.name("orig") + ".xsl")
 
     def test_compute_log(self):
-        self.assertEqual(self.corpus_path.log, self.name('orig') + '.log')
+        self.assertEqual(self.corpus_path.log, self.name("orig") + ".log")
 
     def test_compute_converted(self):
-        self.assertEqual(self.corpus_path.converted,
-                         self.name('converted') + '.xml')
+        self.assertEqual(self.corpus_path.converted, self.name("converted") + ".xml")
 
     def test_compute_prestable_converted(self):
-        self.assertEqual(self.corpus_path.prestable_converted,
-                         self.name('prestable/converted') + '.xml')
+        self.assertEqual(
+            self.corpus_path.prestable_converted,
+            self.name("prestable/converted") + ".xml",
+        )
 
     def test_compute_goldstandard_converted(self):
-        self.corpus_path.metadata.set_variable('conversion_status', 'correct')
-        self.assertEqual(self.corpus_path.converted,
-                         self.name('goldstandard/converted') + '.xml')
+        self.corpus_path.metadata.set_variable("conversion_status", "correct")
+        self.assertEqual(
+            self.corpus_path.converted, self.name("goldstandard/converted") + ".xml"
+        )
 
     def test_compute_prestable_goldstandard_converted(self):
-        self.corpus_path.metadata.set_variable('conversion_status', 'correct')
-        self.assertEqual(self.corpus_path.prestable_converted,
-                         self.name('prestable/goldstandard/converted') + '.xml')
+        self.corpus_path.metadata.set_variable("conversion_status", "correct")
+        self.assertEqual(
+            self.corpus_path.prestable_converted,
+            self.name("prestable/goldstandard/converted") + ".xml",
+        )
 
     def test_compute_analysed(self):
-        self.assertEqual(self.corpus_path.analysed,
-                         self.name('analysed') + '.xml')
+        self.assertEqual(self.corpus_path.analysed, self.name("analysed") + ".xml")

@@ -53,7 +53,7 @@ class DupeFinder(object):
         files = {}
         xmlprinter = ccat.XMLPrinter(all_paragraphs=True)
         for f in os.listdir(directory):
-            if f.endswith('.xml'):
+            if f.endswith(".xml"):
                 filename = os.path.join(directory, f)
                 xmlprinter.parse_file(filename)
                 files[filename] = xmlprinter.process_file().getvalue()
@@ -66,7 +66,7 @@ class DupeFinder(object):
 
         filename (str): name of the file that should be searched.
         """
-        return etree.parse(filename1).xpath('.//parallel_text')
+        return etree.parse(filename1).xpath(".//parallel_text")
 
     def remove_dupe_file(self, filename1, filename2):
         """Remove duplicate files.
@@ -75,19 +75,20 @@ class DupeFinder(object):
         filename2 (str): name of the second file to be compared.
         """
         result = list(
-            difflib.unified_diff(self.files[filename1].splitlines(1),
-                                 self.files[filename2].splitlines(1)))
+            difflib.unified_diff(
+                self.files[filename1].splitlines(1), self.files[filename2].splitlines(1)
+            )
+        )
         if not result:
-            print('Parallels:', filename1, filename2)
+            print("Parallels:", filename1, filename2)
             to_remove = filename1
-            if self.get_parallel_texts(filename1) > self.get_parallel_texts(
-                    filename2):
+            if self.get_parallel_texts(filename1) > self.get_parallel_texts(filename2):
                 to_remove = filename2
 
             self.dupe_files.add(to_remove)
             origname = corpuspath.CorpusPath(to_remove)
             if os.path.exists(origname.orig):
-                move_files.mover(origname.orig, u'')
+                move_files.mover(origname.orig, "")
             print()
 
     @staticmethod
@@ -101,7 +102,7 @@ class DupeFinder(object):
             float
         """
         tree = etree.parse(filename)
-        w = tree.find('.//wordcount').text
+        w = tree.find(".//wordcount").text
 
         return float(w)
 
@@ -129,8 +130,7 @@ class DupeFinder(object):
             filename1 (str): name of the first file.
             filename2 (str): name of the second file.
         """
-        sm = difflib.SequenceMatcher(
-            a=self.files[filename1], b=self.files[filename2])
+        sm = difflib.SequenceMatcher(a=self.files[filename1], b=self.files[filename2])
         ratio = sm.ratio()
         if ratio > 0.90:
             self.dupe_files.add((filename1, filename2))
@@ -141,7 +141,8 @@ class DupeFinder(object):
                 self.files[filename1].splitlines(1),
                 self.files[filename2].splitlines(1),
                 fromfile=os.path.basename(filename1),
-                tofile=os.path.basename(filename2))
+                tofile=os.path.basename(filename2),
+            )
             sys.stdout.writelines(result)
 
     def iterate_all_files(self, remove=False):
@@ -171,16 +172,16 @@ class DupeFinder(object):
 
         util.print_frame(debug=good_ratio)
         util.print_frame(debug=wrong_ratio)
-        print('Almost dupes', len(self.dupe_files))
+        print("Almost dupes", len(self.dupe_files))
 
 
 def parse_remover_options():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Remove duplicate files from the given directory')
+        description="Remove duplicate files from the given directory",
+    )
 
-    parser.add_argument(
-        'dir', help="The directory where the converted files exist")
+    parser.add_argument("dir", help="The directory where the converted files exist")
 
     args = parser.parse_args()
 
@@ -197,11 +198,10 @@ def main():
 def parse_finder_options():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description=
-        'Find files with more than 90% similarity in the given directory')
+        description="Find files with more than 90% similarity in the given directory",
+    )
 
-    parser.add_argument(
-        'dir', help="The directory where the converted files exist")
+    parser.add_argument("dir", help="The directory where the converted files exist")
 
     args = parser.parse_args()
 

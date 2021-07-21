@@ -37,12 +37,15 @@ class TestTmxComparator(unittest.TestCase):
         comp = compare_tmx_goldstandard.TmxComparator(
             tmx.Tmx(
                 etree.parse(
-                    os.path.join(here,
-                                 'parallelize_data/aarseth2-n.htm.toktmx'))),
+                    os.path.join(here, "parallelize_data/aarseth2-n.htm.toktmx")
+                )
+            ),
             tmx.Tmx(
                 etree.parse(
-                    os.path.join(here,
-                                 'parallelize_data/aarseth2-n.htm.toktmx'))))
+                    os.path.join(here, "parallelize_data/aarseth2-n.htm.toktmx")
+                )
+            ),
+        )
 
         self.assertEqual(comp.get_number_of_differing_lines(), -1)
         self.assertEqual(comp.get_lines_in_wantedfile(), 274)

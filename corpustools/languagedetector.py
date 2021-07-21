@@ -41,10 +41,8 @@ class LanguageDetector(object):
     def inlangs(self):
         """Return the predifined possible languages of the document."""
         inlangs = [
-            language.get('{http://www.w3.org/XML/1998/namespace}'
-                         'lang')
-            for language in self.document.findall(
-                'header/multilingual/language')
+            language.get("{http://www.w3.org/XML/1998/namespace}" "lang")
+            for language in self.document.findall("header/multilingual/language")
         ]
         if inlangs:
             inlangs.append(self.mainlang)
@@ -54,8 +52,7 @@ class LanguageDetector(object):
     @property
     def mainlang(self):
         """Get the mainlang of the file."""
-        return self.document.\
-            attrib['{http://www.w3.org/XML/1998/namespace}lang']
+        return self.document.attrib["{http://www.w3.org/XML/1998/namespace}lang"]
 
     def set_paragraph_language(self, paragraph):
         """Set xml:lang of paragraph.
@@ -64,15 +61,16 @@ class LanguageDetector(object):
         language of the paragraph.
         Set the language of the quotes in the paragraph.
         """
-        if paragraph.get('{http://www.w3.org/XML/1998/namespace}lang') is None:
+        if paragraph.get("{http://www.w3.org/XML/1998/namespace}lang") is None:
             paragraph_text = self.remove_quote(paragraph)
-            if self.language_guesser is not None and \
-                    self.language_guesser.get_langs(self.inlangs):
+            if self.language_guesser is not None and self.language_guesser.get_langs(
+                self.inlangs
+            ):
                 lang = self.language_guesser.classify(
-                    paragraph_text, langs=self.inlangs)
+                    paragraph_text, langs=self.inlangs
+                )
                 if lang != self.mainlang:
-                    paragraph.set('{http://www.w3.org/XML/1998/namespace}lang',
-                                  lang)
+                    paragraph.set("{http://www.w3.org/XML/1998/namespace}lang", lang)
 
                 self.set_span_language(paragraph)
 
@@ -84,18 +82,21 @@ class LanguageDetector(object):
             if element.get("type") == "quote":
                 if element.text is not None:
                     lang = self.language_guesser.classify(
-                        element.text, langs=self.inlangs)
+                        element.text, langs=self.inlangs
+                    )
                     if lang != self.mainlang:
-                        element.set(
-                            '{http://www.w3.org/XML/1998/namespace}lang', lang)
+                        element.set("{http://www.w3.org/XML/1998/namespace}lang", lang)
 
     @staticmethod
     def remove_quote(paragraph):
         """Extract all text except the one inside <span type='quote'>."""
-        text = ''
+        text = ""
         for element in paragraph.iter():
-            if (element.tag == 'span' and element.get('type') == 'quote' and
-                    element.tail is not None):
+            if (
+                element.tag == "span"
+                and element.get("type") == "quote"
+                and element.tail is not None
+            ):
                 text = text + element.tail
             else:
                 if element.text is not None:
@@ -107,6 +108,6 @@ class LanguageDetector(object):
 
     def detect_language(self):
         """Detect language in all the paragraphs in self.document."""
-        if self.document.find('header/multilingual') is not None:
-            for paragraph in self.document.iter('p'):
+        if self.document.find("header/multilingual") is not None:
+            for paragraph in self.document.iter("p"):
                 self.set_paragraph_language(paragraph)

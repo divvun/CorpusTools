@@ -41,16 +41,16 @@ class PlaintextConverter(basicconverter.BasicConverter):
             str
         """
         try:
-            content = codecs.open(self.orig, encoding='utf8').read()
+            content = codecs.open(self.orig, encoding="utf8").read()
         except ValueError:
-            content = codecs.open(self.orig, encoding='latin1').read()
+            content = codecs.open(self.orig, encoding="latin1").read()
 
         content = self.strip_chars(content.replace("\r\n", "\n"))
 
         return content
 
     @staticmethod
-    def strip_chars(content, extra=u''):
+    def strip_chars(content, extra=u""):
         """Remove the characters found in plaintext_oddities from content.
 
         Args:
@@ -62,35 +62,37 @@ class PlaintextConverter(basicconverter.BasicConverter):
             A string containing the content sans unwanted characters.
         """
         plaintext_oddities = [
-            (u'ÊÊ', u'\n'),
-            (u'<\!q>', u''),
-            (u'<\!h>', u''),
-            (u'<*B>', u''),
-            (u'<*P>', u''),
-            (u'<*I>', u''),
-            (u'\r', u'\n'),
-            (u'<ASCII-MAC>', ''),
-            (u'<vsn:3.000000>', u''),
-            (u'<0x010C>', u'Č'),
-            (u'<0x010D>', u'č'),
-            (u'<0x0110>', u'Đ'),
-            (u'<0x0111>', u'đ'),
-            (u'<0x014A>', u'Ŋ'),
-            (u'<0x014B>', u'ŋ'),
-            (u'<0x0160>', u'Š'),
-            (u'<0x0161>', u'š'),
-            (u'<0x0166>', u'Ŧ'),
-            (u'<0x0167>', u'ŧ'),
-            (u'<0x017D>', u'Ž'),
-            (u'<0x017E>', u'ž'),
-            (u'<0x2003>', u' '),
-            (u'========================================================'
-             '========================', u'\n'),
+            (u"ÊÊ", u"\n"),
+            (u"<\!q>", u""),
+            (u"<\!h>", u""),
+            (u"<*B>", u""),
+            (u"<*P>", u""),
+            (u"<*I>", u""),
+            (u"\r", u"\n"),
+            (u"<ASCII-MAC>", ""),
+            (u"<vsn:3.000000>", u""),
+            (u"<0x010C>", u"Č"),
+            (u"<0x010D>", u"č"),
+            (u"<0x0110>", u"Đ"),
+            (u"<0x0111>", u"đ"),
+            (u"<0x014A>", u"Ŋ"),
+            (u"<0x014B>", u"ŋ"),
+            (u"<0x0160>", u"Š"),
+            (u"<0x0161>", u"š"),
+            (u"<0x0166>", u"Ŧ"),
+            (u"<0x0167>", u"ŧ"),
+            (u"<0x017D>", u"Ž"),
+            (u"<0x017E>", u"ž"),
+            (u"<0x2003>", u" "),
+            (
+                u"========================================================"
+                "========================",
+                u"\n",
+            ),
         ]
         content = util.replace_all(plaintext_oddities, content)
-        remove_re = re.compile(
-            u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]'.format(extra))
-        content, _ = remove_re.subn('', content)
+        remove_re = re.compile(u"[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]".format(extra))
+        content, _ = remove_re.subn("", content)
 
         return content
 
@@ -107,11 +109,11 @@ class PlaintextConverter(basicconverter.BasicConverter):
         """
         element = etree.Element(element_name)
 
-        hyph_parts = text.split('<hyph/>')
+        hyph_parts = text.split("<hyph/>")
         if len(hyph_parts) > 1:
             element.text = hyph_parts[0]
             for hyph_part in hyph_parts[1:]:
-                hyph = etree.Element('hyph')
+                hyph = etree.Element("hyph")
                 hyph.tail = hyph_part
                 element.append(hyph)
         else:
@@ -128,23 +130,23 @@ class PlaintextConverter(basicconverter.BasicConverter):
         Returns:
             An etree element.
         """
-        document = etree.Element('document')
-        header = etree.Element('header')
-        body = etree.Element('body')
+        document = etree.Element("document")
+        header = etree.Element("header")
+        body = etree.Element("body")
 
-        ptext = ''
+        ptext = ""
 
         for line_no, line in enumerate(content, start=1):
             if line_no not in self.metadata.skip_lines:
-                if line.strip() == '':
-                    if ptext.strip() != '':
-                        body.append(self.make_element('p', ptext))
-                    ptext = ''
+                if line.strip() == "":
+                    if ptext.strip() != "":
+                        body.append(self.make_element("p", ptext))
+                    ptext = ""
                 else:
                     ptext = ptext + line
 
-        if ptext != '':
-            body.append(self.make_element('p', ptext))
+        if ptext != "":
+            body.append(self.make_element("p", ptext))
 
         document.append(header)
         document.append(body)

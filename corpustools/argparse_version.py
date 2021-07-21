@@ -27,10 +27,10 @@ import argparse
 import os
 
 here = os.path.dirname(__file__)
-version = os.path.join(here, '_version.py')
+version = os.path.join(here, "_version.py")
 scope = {}
 exec(open(version).read(), scope)
-version = scope['VERSION']
+version = scope["VERSION"]
 
 parser = argparse.ArgumentParser(add_help=False)
-parser.add_argument('--version', action='version', version=version)
+parser.add_argument("--version", action="version", version=version)

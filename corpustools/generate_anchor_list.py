@@ -53,8 +53,8 @@ class GenerateAnchorList(object):
     def words_of_line(self, lineno, line):
         """Either a word-pair or None, if no word-pair on that line."""
         line = line.strip()
-        if (not line.startswith('#') or not line.startswith('&')):
-            words = line.split('/')
+        if not line.startswith("#") or not line.startswith("&"):
+            words = line.split("/")
             if len(words) == len(self.columns):
                 word1 = words[self.lang1_index].strip()
                 word2 = words[self.lang2_index].strip()
@@ -62,31 +62,29 @@ class GenerateAnchorList(object):
                     return word1, word2
             else:
                 print(
-                    'Invalid line at {} in {}'.format(lineno, self.input_file),
-                    file=sys.stderr)
+                    "Invalid line at {} in {}".format(lineno, self.input_file),
+                    file=sys.stderr,
+                )
 
     def read_anchors(self, quiet=False):
         """List of word-pairs in infiles, empty/bad lines skipped."""
-        with codecs.open(self.input_file, encoding='utf8') as f:
-            out = [
-                self.words_of_line(i, l) for i, l in enumerate(f.readlines())
-            ]
+        with codecs.open(self.input_file, encoding="utf8") as f:
+            out = [self.words_of_line(i, l) for i, l in enumerate(f.readlines())]
             out = [_f for _f in out if _f]
             if not quiet:
-                util.note("Read {} anchors from {}".format(
-                    len(out), self.input_file))
+                util.note("Read {} anchors from {}".format(len(out), self.input_file))
             return out
 
     def generate_file(self, outpath, quiet=False):
         """infiles is a list of file paths."""
         anchors = self.read_anchors(quiet)
 
-        with codecs.open(outpath, 'w', encoding='utf8') as outfile:
+        with codecs.open(outpath, "w", encoding="utf8") as outfile:
             if not quiet:
-                util.note('Generating anchor word list to {}'.format(outpath))
-            out = u"\n".join(u"{} / {}".format(w1, w2) for w1, w2 in anchors)
+                util.note("Generating anchor word list to {}".format(outpath))
+            out = "\n".join("{} / {}".format(w1, w2) for w1, w2 in anchors)
             outfile.write(out)
-            outfile.write('\n')
+            outfile.write("\n")
 
 
 def parse_options():
@@ -97,7 +95,9 @@ def parse_options():
             "Output line format e.g. njukčamán* / mars. "
             "Source file is given on the command line, the format is "
             "hardcoded for the languages used in "
-            "$GTHOME/gt/common/src/anchor.txt."))
+            "$GTHOME/gt/common/src/anchor.txt."
+        ),
+    )
 
     parser.add_argument("--lang1", help="First languages in the word list")
     parser.add_argument("--lang2", help="Second languages in the word list")
@@ -112,8 +112,9 @@ def main():
     args = parse_options()
 
     gal = GenerateAnchorList(
-        args.lang1, args.lang2,
-        ['eng', 'nob', 'sme', 'fin', 'smj', 'sma', 'smn', 'sms'],
-        args.input_file)
-    gal.generate_file("{}/anchor-{}-{}.txt".format(args.outdir, args.lang1,
-                                                   args.lang2))
+        args.lang1,
+        args.lang2,
+        ["eng", "nob", "sme", "fin", "smj", "sma", "smn", "sms"],
+        args.input_file,
+    )
+    gal.generate_file("{}/anchor-{}-{}.txt".format(args.outdir, args.lang1, args.lang2))

@@ -43,8 +43,8 @@ class VersionController(object):
         """Initialise the VersionController class."""
         # non-repo config to get at global values
         self.config = git.GitConfigParser(
-            [os.path.normpath(os.path.expanduser("~/.gitconfig"))],
-            read_only=True)
+            [os.path.normpath(os.path.expanduser("~/.gitconfig"))], read_only=True
+        )
 
     def add(self, path):
         """Meta function."""
@@ -98,8 +98,8 @@ class SVN(VersionController):
         """
         valid_path = self.valid_svn_path(path)
         self.client.add(valid_path, recurse=True, force=True)
-        if valid_path.endswith('.xsl'):
-            self.client.propset('svn:mime-type', 'text/xml', valid_path)
+        if valid_path.endswith(".xsl"):
+            self.client.propset("svn:mime-type", "text/xml", valid_path)
 
     def valid_svn_path(self, path):
         """Find the part of the path that is under version control.
@@ -132,9 +132,11 @@ class SVN(VersionController):
         except pysvn.ClientError:
             return False
         else:
-            return status not in (pysvn.wc_status_kind.added,
-                                  pysvn.wc_status_kind.unversioned,
-                                  pysvn.wc_status_kind.ignored)
+            return status not in (
+                pysvn.wc_status_kind.added,
+                pysvn.wc_status_kind.unversioned,
+                pysvn.wc_status_kind.ignored,
+            )
 
     def add(self, path):
         """Add path to the working copy.
@@ -218,6 +220,7 @@ def vcs(directory):
             return GIT(git_repo)
         except git.exc.InvalidGitRepositoryError:
             raise VersionControlError(
-                '{} is neither a SVN working repository or a Git repo. '
-                'Files can only be added to a version controlled '
-                'directory.'.format(directory))
+                "{} is neither a SVN working repository or a Git repo. "
+                "Files can only be added to a version controlled "
+                "directory.".format(directory)
+            )

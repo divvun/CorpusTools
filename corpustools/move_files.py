@@ -33,12 +33,12 @@ from corpustools import argparse_version, namechanger
 def mover(oldpath, newpath):
     """Move a file from oldpath to newpath."""
     if os.path.isfile(oldpath):
-        if oldpath.endswith('.xsl'):
+        if oldpath.endswith(".xsl"):
             oldpath = oldpath[:-4]
     else:
-        raise UserWarning('{} is not a file'.format(oldpath))
+        raise UserWarning("{} is not a file".format(oldpath))
 
-    if newpath.endswith('.xsl'):
+    if newpath.endswith(".xsl"):
         newpath = newpath[:-4]
     elif os.path.isdir(newpath):
         newpath = os.path.join(newpath, os.path.basename(oldpath))
@@ -46,9 +46,9 @@ def mover(oldpath, newpath):
     cfmu = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
     filepair = cfmu.move_computer.filepairs[0]
     if filepair.newpath:
-        print(u'\tmoving {} -> {}'.format(filepair.oldpath, filepair.newpath))
+        print("\tmoving {} -> {}".format(filepair.oldpath, filepair.newpath))
     else:
-        print(u'\tremoving {}'.format(filepair.oldpath))
+        print("\tremoving {}".format(filepair.oldpath))
     cfmu.move_files()
     cfmu.update_own_metadata()
     cfmu.update_parallel_files_metadata()
@@ -62,13 +62,15 @@ def mover_parse_args():
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Program to move or rename a file inside the corpus.')
+        description="Program to move or rename a file inside the corpus.",
+    )
 
-    parser.add_argument('oldpath', help='The path of the old file.')
+    parser.add_argument("oldpath", help="The path of the old file.")
     parser.add_argument(
-        'newpath',
-        help='The place to move the file to. newpath can '
-        'be either a filename or a directory')
+        "newpath",
+        help="The place to move the file to. newpath can "
+        "be either a filename or a directory",
+    )
 
     return parser.parse_args()
 
@@ -78,15 +80,16 @@ def main():
     args = mover_parse_args()
     if args.oldpath == args.newpath:
         print(
-            '{} and {} are the same file'.format(args.oldpath, args.newpath),
-            file=sys.stderr)
+            "{} and {} are the same file".format(args.oldpath, args.newpath),
+            file=sys.stderr,
+        )
     else:
-        oldpath = unicode(args.oldpath, 'utf8') if six.PY2 else args.oldpath
-        newpath = unicode(args.newpath, 'utf8') if six.PY2 else args.newpath
+        oldpath = unicode(args.oldpath, "utf8") if six.PY2 else args.oldpath
+        newpath = unicode(args.newpath, "utf8") if six.PY2 else args.newpath
         try:
             mover(os.path.abspath(oldpath), os.path.abspath(newpath))
         except UserWarning as e:
-            print('Can not move file:', str(e), file=sys.stderr)
+            print("Can not move file:", str(e), file=sys.stderr)
 
 
 def remover_parse_args():
@@ -97,9 +100,10 @@ def remover_parse_args():
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Program to remove a file from the corpus.')
+        description="Program to remove a file from the corpus.",
+    )
 
-    parser.add_argument('oldpath', help='The path of the old file.')
+    parser.add_argument("oldpath", help="The path of the old file.")
 
     return parser.parse_args()
 
@@ -108,6 +112,6 @@ def remove_main():
     """Remove a file."""
     args = remover_parse_args()
     try:
-        mover(os.path.abspath(args.oldpath), '')
+        mover(os.path.abspath(args.oldpath), "")
     except UserWarning as e:
-        print('Can not remove file:', str(e), file=sys.stderr)
+        print("Can not remove file:", str(e), file=sys.stderr)

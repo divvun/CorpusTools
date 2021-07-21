@@ -49,18 +49,16 @@ def doc_to_unicodehtml(filename):
     """
     text = extract_text(filename)
     try:
-        return text.decode('utf8')
+        return text.decode("utf8")
     except UnicodeDecodeError:
         # remove control characters
-        remove_re = re.compile(u'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]')
+        remove_re = re.compile("[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]")
 
-        return remove_re.subn(
-            '',
-            text.decode('windows-1252'))[0]
+        return remove_re.subn("", text.decode("windows-1252"))[0]
 
 
 def fix_wv_output():
-    u"""Fix headers in the docx xhtml output.
+    """Fix headers in the docx xhtml output.
 
     Examples of headings:
 
@@ -189,16 +187,18 @@ def extract_text(filename):
     Returns:
         bytes: the output of the program
     """
-    command = ['wvHtml', filename, '-']
+    command = ["wvHtml", filename, "-"]
     runner = util.ExternalCommandRunner()
-    runner.run(command, cwd='/tmp')
+    runner.run(command, cwd="/tmp")
 
     if runner.returncode != 0:
-        with open(filename + '.log', 'w') as logfile:
-            print('stdout\n{}\n'.format(runner.stdout), file=logfile)
-            print('stderr\n{}\n'.format(runner.stderr), file=logfile)
+        with open(filename + ".log", "w") as logfile:
+            print("stdout\n{}\n".format(runner.stdout), file=logfile)
+            print("stderr\n{}\n".format(runner.stderr), file=logfile)
             raise util.ConversionError(
-                '{} failed. More info in the log file: {}'.format(
-                    command[0], filename + '.log'))
+                "{} failed. More info in the log file: {}".format(
+                    command[0], filename + ".log"
+                )
+            )
 
     return runner.stdout

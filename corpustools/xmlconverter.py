@@ -24,9 +24,10 @@ import lxml.etree as etree
 
 HERE = os.path.dirname(__file__)
 
+
 def to_html_elt(filename):
     """Turn a udhr xml file to giella xml."""
     udhr_tree = etree.parse(filename)
-    udhr_transformer = etree.XSLT(etree.parse(os.path.join(HERE, 'xslt/udhr2html.xsl')))
+    udhr_transformer = etree.XSLT(etree.parse(os.path.join(HERE, "xslt/udhr2html.xsl")))
 
     return udhr_transformer(udhr_tree)

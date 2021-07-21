@@ -73,13 +73,12 @@ class MetadataHandler(object):
         if not os.path.exists(filename):
             if not create:
                 raise util.ArgumentError("{} does not exist!".format(filename))
-            self.tree = etree.parse(os.path.join(here, 'xslt/XSL-template.xsl'))
+            self.tree = etree.parse(os.path.join(here, "xslt/XSL-template.xsl"))
         else:
             try:
                 self.tree = etree.parse(filename)
             except etree.XMLSyntaxError as e:
-                raise XsltError('Syntax error in {}:\n{}'.format(
-                    self.filename, e))
+                raise XsltError("Syntax error in {}:\n{}".format(self.filename, e))
 
     def _get_variable_elt(self, key):
         """Get the variable element.
@@ -92,7 +91,8 @@ class MetadataHandler(object):
         """
         return self.tree.getroot().find(
             "{{http://www.w3.org/1999/XSL/Transform}}"
-            "variable[@name='{}']".format(key))
+            "variable[@name='{}']".format(key)
+        )
 
     def set_variable(self, key, value):
         """Set the value of a variable.
@@ -103,10 +103,12 @@ class MetadataHandler(object):
         """
         try:
             variable = self._get_variable_elt(key)
-            variable.attrib['select'] = "'{}'".format(value)
+            variable.attrib["select"] = "'{}'".format(value)
         except AttributeError as e:
-            raise UserWarning('Tried to update {} with value {}\n'
-                              'Error was {}'.format(key, value, str(e)))
+            raise UserWarning(
+                "Tried to update {} with value {}\n"
+                "Error was {}".format(key, value, str(e))
+            )
 
     def get_variable(self, key):
         """Get the value associated with the key.
@@ -119,7 +121,7 @@ class MetadataHandler(object):
         """
         variable = self._get_variable_elt(key)
         if variable is not None:
-            value = variable.attrib['select']
+            value = variable.attrib["select"]
             if value is not None:
                 return value.replace("'", "")
         return None
@@ -130,12 +132,13 @@ class MetadataHandler(object):
         Yields:
             tuple of str: a key/value pair
         """
-        ns = {'xsl': 'http://www.w3.org/1999/XSL/Transform'}
+        ns = {"xsl": "http://www.w3.org/1999/XSL/Transform"}
         for variable in self.tree.getroot().xpath(
-                './/xsl:variable[@select]', namespaces=ns):
-            value = self.get_variable(variable.get('name'))
+            ".//xsl:variable[@select]", namespaces=ns
+        ):
+            value = self.get_variable(variable.get("name"))
             if value is not None and value.strip():
-                yield variable.get('name'), value
+                yield variable.get("name"), value
 
     def get_parallel_texts(self):
         """Get the parallel texts.
@@ -165,14 +168,10 @@ class MetadataHandler(object):
         if mlangs is None:
             return set()
         else:
-            return {
-                mlang.get(self.lang_key)
-                for mlang in mlangs.findall("language")
-            }
+            return {mlang.get(self.lang_key) for mlang in mlangs.findall("language")}
 
     def make_xsl_variable(self, name):
-        elt = etree.Element(
-            '{http://www.w3.org/1999/XSL/Transform}variable', name=name)
+        elt = etree.Element("{http://www.w3.org/1999/XSL/Transform}variable", name=name)
         self.tree.getroot().append(elt)
 
         return elt
@@ -183,12 +182,12 @@ class MetadataHandler(object):
         Args:
             language (str): a language code that should be set.
         """
-        mlangs = self._get_variable_elt('mlangs')
+        mlangs = self._get_variable_elt("mlangs")
         if mlangs is None:
-            mlangs = self.make_xsl_variable('mlangs')
+            mlangs = self.make_xsl_variable("mlangs")
 
         if language not in self.mlangs:
-            mlang = etree.Element('language')
+            mlang = etree.Element("language")
             mlang.attrib.update({self.lang_key: language})
             mlangs.append(mlang)
 
@@ -202,10 +201,9 @@ class MetadataHandler(object):
         attrib = {self.lang_key: language, "location": location}
         parallels = self._get_variable_elt("parallels")
         if parallels is None:
-            parallels = self.make_xsl_variable('parallels')
+            parallels = self.make_xsl_variable("parallels")
 
-        elt = parallels.find("parallel_text[@{}='{}']".format(
-            self.lang_key, language))
+        elt = parallels.find("parallel_text[@{}='{}']".format(self.lang_key, language))
         if elt is not None:
             elt.attrib.update(attrib)
         else:
@@ -222,34 +220,40 @@ class MetadataHandler(object):
                 'even' and 'odd' or specific page numbers as integers.
         """
         pages = []
-        skip_pages = self.get_variable('skip_pages')
+        skip_pages = self.get_variable("skip_pages")
         if skip_pages is not None:
-            if 'odd' in skip_pages and 'even' in skip_pages:
+            if "odd" in skip_pages and "even" in skip_pages:
                 raise XsltError(
                     'Invalid format: Cannot have both "even" and "odd" in this line\n'
-                    '{}'.format(skip_pages))
+                    "{}".format(skip_pages)
+                )
 
-            if 'odd' in skip_pages:
-                pages.append('odd')
-                skip_pages = skip_pages.replace('odd', u'')
-            if 'even' in skip_pages:
-                pages.append('even')
-                skip_pages = skip_pages.replace('even', '')
+            if "odd" in skip_pages:
+                pages.append("odd")
+                skip_pages = skip_pages.replace("odd", "")
+            if "even" in skip_pages:
+                pages.append("even")
+                skip_pages = skip_pages.replace("even", "")
 
             # Turn single pages into single-page ranges, e.g. 7 → 7-7
-            skip_ranges_norm = ((r if '-' in r else r + "-" + r)
-                                for r in skip_pages.strip().split(",")
-                                if r != "")
+            skip_ranges_norm = (
+                (r if "-" in r else r + "-" + r)
+                for r in skip_pages.strip().split(",")
+                if r != ""
+            )
 
-            skip_ranges = (tuple(six.moves.map(int, r.split('-')))
-                           for r in skip_ranges_norm)
+            skip_ranges = (
+                tuple(six.moves.map(int, r.split("-"))) for r in skip_ranges_norm
+            )
 
             try:
-                pages.extend([
-                    page
-                    for start, end in sorted(skip_ranges)
-                    for page in six.moves.range(start, end + 1)
-                ])
+                pages.extend(
+                    [
+                        page
+                        for start, end in sorted(skip_ranges)
+                        for page in six.moves.range(start, end + 1)
+                    ]
+                )
 
             except ValueError:
                 raise XsltError("Invalid format: {}".format(skip_pages))
@@ -264,22 +268,27 @@ class MetadataHandler(object):
             list (int): list of line to skip numbers as integers.
         """
         lines = []
-        skip_lines = self.get_variable('skip_lines')
+        skip_lines = self.get_variable("skip_lines")
         if skip_lines is not None:
             # Turn single lines into single-page ranges, e.g. 7 → 7-7
-            skip_ranges_norm = ((r if '-' in r else r + "-" + r)
-                                for r in skip_lines.strip().split(",")
-                                if r != "")
+            skip_ranges_norm = (
+                (r if "-" in r else r + "-" + r)
+                for r in skip_lines.strip().split(",")
+                if r != ""
+            )
 
-            skip_ranges = (tuple(six.moves.map(int, r.split('-')))
-                           for r in skip_ranges_norm)
+            skip_ranges = (
+                tuple(six.moves.map(int, r.split("-"))) for r in skip_ranges_norm
+            )
 
             try:
-                lines.extend([
-                    line
-                    for start, end in sorted(skip_ranges)
-                    for line in six.moves.range(start, end + 1)
-                ])
+                lines.extend(
+                    [
+                        line
+                        for start, end in sorted(skip_ranges)
+                        for line in six.moves.range(start, end + 1)
+                    ]
+                )
 
             except ValueError:
                 raise XsltError("Invalid format: {}".format(skip_lines))
@@ -294,29 +303,34 @@ class MetadataHandler(object):
             list (int): list of line to skip numbers as integers.
         """
         lines = []
-        chosen = self.get_variable('epub_excluded_chapters')
+        chosen = self.get_variable("epub_excluded_chapters")
         if chosen is not None:
             # Turn single lines into single-page ranges, e.g. 7 → 7-7
-            skip_ranges_norm = ((r if '-' in r else r + "-" + r)
-                                for r in chosen.strip().split(",")
-                                if r != "")
+            skip_ranges_norm = (
+                (r if "-" in r else r + "-" + r)
+                for r in chosen.strip().split(",")
+                if r != ""
+            )
 
-            skip_ranges = (tuple(six.moves.map(int, r.split('-')))
-                           for r in skip_ranges_norm)
+            skip_ranges = (
+                tuple(six.moves.map(int, r.split("-"))) for r in skip_ranges_norm
+            )
 
             try:
-                lines.extend([
-                    line
-                    for start, end in sorted(skip_ranges)
-                    for line in six.moves.range(start, end + 1)
-                ])
+                lines.extend(
+                    [
+                        line
+                        for start, end in sorted(skip_ranges)
+                        for line in six.moves.range(start, end + 1)
+                    ]
+                )
 
             except ValueError:
                 raise XsltError("Invalid format: {}".format(chosen))
 
         return lines
 
-    def get_margin_lines(self, position=''):
+    def get_margin_lines(self, position=""):
         """Get the margin lines from the metadata file.
 
         Args:
@@ -329,11 +343,15 @@ class MetadataHandler(object):
         margin_lines = {
             key: self.get_variable(key).strip()
             for key in [
-                position + 'right_margin', position + 'top_margin',
-                position + 'left_margin', position + 'bottom_margin'
+                position + "right_margin",
+                position + "top_margin",
+                position + "left_margin",
+                position + "bottom_margin",
             ]
-            if (self.get_variable(key) is not None and
-                self.get_variable(key).strip() != '')
+            if (
+                self.get_variable(key) is not None
+                and self.get_variable(key).strip() != ""
+            )
         }
 
         return margin_lines
@@ -354,19 +372,26 @@ class MetadataHandler(object):
         """
         _margins = {}
         for key, value in six.iteritems(margin_lines):
-            if ('all' in value and ('odd' in value or 'even' in value) or
-                    '=' not in value):
+            if (
+                "all" in value
+                and ("odd" in value or "even" in value)
+                or "=" not in value
+            ):
                 raise XsltError(
-                    'Invalid format in the variable {} in the file:\n{}\n{}\n'
-                    'Format must be [all|odd|even|pagenumber]=integer'.format(
-                        key, self.filename, value))
+                    "Invalid format in the variable {} in the file:\n{}\n{}\n"
+                    "Format must be [all|odd|even|pagenumber]=integer".format(
+                        key, self.filename, value
+                    )
+                )
             try:
                 _margins[key] = self.parse_margin_line(value)
             except ValueError:
                 raise XsltError(
-                    'Invalid format in the variable {} in the file:\n{}\n{}\n'
-                    'Format must be [all|odd|even|pagenumber]=integer'.format(
-                        key, self.filename, value))
+                    "Invalid format in the variable {} in the file:\n{}\n{}\n"
+                    "Format must be [all|odd|even|pagenumber]=integer".format(
+                        key, self.filename, value
+                    )
+                )
 
         return _margins
 
@@ -392,45 +417,51 @@ class MetadataHandler(object):
             XsltException: Raise this exception if there are errors in the
                 inner_margin_lines.
         """
-        margin_lines = self.get_margin_lines(position='inner_')
+        margin_lines = self.get_margin_lines(position="inner_")
         _inner_margins = self.validate_and_set_margins(margin_lines)
 
         keys = list(_inner_margins.keys())
         for key in keys:
-            if key == 'inner_left_margin':
-                if 'inner_right_margin' not in keys:
+            if key == "inner_left_margin":
+                if "inner_right_margin" not in keys:
                     raise XsltError(
-                        'Invalid format in {}:\nboth '
-                        'inner_right_margin and inner_left_margin must '
-                        'be set'.format(self.filename))
-                if sorted(_inner_margins['inner_left_margin']) != \
-                        sorted(_inner_margins['inner_right_margin']):
+                        "Invalid format in {}:\nboth "
+                        "inner_right_margin and inner_left_margin must "
+                        "be set".format(self.filename)
+                    )
+                if sorted(_inner_margins["inner_left_margin"]) != sorted(
+                    _inner_margins["inner_right_margin"]
+                ):
                     raise XsltError(
-                        'Invalid format in {}:\nboth '
-                        'margins for the same pages must be set in '
-                        'inner_right_margin and inner_left_margin'.format(
-                            self.filename))
-            if key == 'inner_right_margin' and 'inner_left_margin' not in keys:
+                        "Invalid format in {}:\nboth "
+                        "margins for the same pages must be set in "
+                        "inner_right_margin and inner_left_margin".format(self.filename)
+                    )
+            if key == "inner_right_margin" and "inner_left_margin" not in keys:
                 raise XsltError(
-                    'Invalid format in {}:\nboth inner_right_margin '
-                    'and inner_left_margin must be set'.format(self.filename))
-            if key == 'inner_bottom_margin':
-                if 'inner_top_margin' not in keys:
+                    "Invalid format in {}:\nboth inner_right_margin "
+                    "and inner_left_margin must be set".format(self.filename)
+                )
+            if key == "inner_bottom_margin":
+                if "inner_top_margin" not in keys:
                     raise XsltError(
-                        'Invalid format in {}:\nboth '
-                        'inner_bottom_margin and inner_top_margin must '
-                        'be set'.format(self.filename))
-                if sorted(_inner_margins['inner_bottom_margin']) != \
-                        sorted(_inner_margins['inner_top_margin']):
+                        "Invalid format in {}:\nboth "
+                        "inner_bottom_margin and inner_top_margin must "
+                        "be set".format(self.filename)
+                    )
+                if sorted(_inner_margins["inner_bottom_margin"]) != sorted(
+                    _inner_margins["inner_top_margin"]
+                ):
                     raise XsltError(
-                        'Invalid format in {}:\n'
-                        'margins for the same pages must be set in '
-                        'inner_top_margin and inner_bottom_margin'.format(
-                            self.filename))
-            if key == 'inner_top_margin' and 'inner_bottom_margin' not in keys:
+                        "Invalid format in {}:\n"
+                        "margins for the same pages must be set in "
+                        "inner_top_margin and inner_bottom_margin".format(self.filename)
+                    )
+            if key == "inner_top_margin" and "inner_bottom_margin" not in keys:
                 raise XsltError(
-                    'Invalid format in {}:\nboth inner_bottom_margin '
-                    'and inner_top_margin must be set'.format(self.filename))
+                    "Invalid format in {}:\nboth inner_bottom_margin "
+                    "and inner_top_margin must be set".format(self.filename)
+                )
 
         return _inner_margins
 
@@ -446,9 +477,9 @@ class MetadataHandler(object):
             dict: marginname: int (in percentage) pairs
         """
         m = {}
-        for part in value.split(','):
-            (pages, margin) = tuple(part.split('='))
-            for page in pages.split(';'):
+        for part in value.split(","):
+            (pages, margin) = tuple(part.split("="))
+            for page in pages.split(";"):
                 m[page.strip()] = int(margin)
 
         return m
@@ -457,17 +488,17 @@ class MetadataHandler(object):
         """Set the mainlang and genre variables in the xsl file."""
         with util.ignored(TypeError):
             xsl_tuple = util.split_path(self.filename)
-            self.set_variable('mainlang', xsl_tuple.lang)
-            self.set_variable('genre', xsl_tuple.genre)
+            self.set_variable("mainlang", xsl_tuple.lang)
+            self.set_variable("genre", xsl_tuple.genre)
 
     def write_file(self):
         """Write self.tree to self.filename."""
         try:
-            with open(self.filename, 'wb') as outfile:
-                self.tree.write(outfile, encoding='utf-8', xml_declaration=True)
-                outfile.write(b'\n')
+            with open(self.filename, "wb") as outfile:
+                self.tree.write(outfile, encoding="utf-8", xml_declaration=True)
+                outfile.write(b"\n")
         except IOError as e:
-            print('cannot write', self.filename)
+            print("cannot write", self.filename)
             print(e)
             sys.exit(254)
 
@@ -481,47 +512,54 @@ class MetadataHandler(object):
         """
 
         def get_with_ns(path):
-            return '/'.join([
-                'html:' + part if not part.startswith('html:') and
-                re.match('^\w', part) else part for part in path.split('/')
-            ])
+            return "/".join(
+                [
+                    "html:" + part
+                    if not part.startswith("html:") and re.match("^\w", part)
+                    else part
+                    for part in path.split("/")
+                ]
+            )
 
         def get_pair(pair):
-            p = pair.split(';')
+            p = pair.split(";")
             return (get_with_ns(p[0].strip()), get_with_ns(p[1].strip()))
 
-        if self.get_variable('skip_elements'):
+        if self.get_variable("skip_elements"):
             return [
-                get_pair(pair)
-                for pair in self.get_variable('skip_elements').split(',')
+                get_pair(pair) for pair in self.get_variable("skip_elements").split(",")
             ]
 
     @property
     def linespacing(self):
-        ''':obj:`dict` of :obj:`str` pairs
+        """:obj:`dict` of :obj:`str` pairs
 
         The key may be all, odd, even or a pagenumber, the value is a
         floating point number.
-        '''
-        value = self.get_variable('linespacing')
+        """
+        value = self.get_variable("linespacing")
 
-        if (value) and (('all' in value and
-                         ('odd' in value or 'even' in value) or
-                         '=' not in value)):
+        if (value) and (
+            ("all" in value and ("odd" in value or "even" in value) or "=" not in value)
+        ):
             raise XsltError(
-                'Invalid format in the variable linespacing in the file:'
-                '\n{}\n{}\n'
-                'Format must be [all|odd|even|pagenumber]=float'.format(
-                    self.filename, value))
+                "Invalid format in the variable linespacing in the file:"
+                "\n{}\n{}\n"
+                "Format must be [all|odd|even|pagenumber]=float".format(
+                    self.filename, value
+                )
+            )
 
         try:
             return self.parse_linespacing_line(value)
         except ValueError:
             raise XsltError(
-                'Invalid format in the variable linespacing in the file:'
-                '\n{}\n{}\n'
-                'Format must be [all|odd|even|pagenumber]=float'.format(
-                    self.filename, value))
+                "Invalid format in the variable linespacing in the file:"
+                "\n{}\n{}\n"
+                "Format must be [all|odd|even|pagenumber]=float".format(
+                    self.filename, value
+                )
+            )
 
     @staticmethod
     def parse_linespacing_line(value):
@@ -535,9 +573,9 @@ class MetadataHandler(object):
         """
         l = {}
         if value:
-            for part in value.split(','):
-                (pages, linespacing) = tuple(part.split('='))
-                for page in pages.split(';'):
+            for part in value.split(","):
+                (pages, linespacing) = tuple(part.split("="))
+                for page in pages.split(";"):
                     l[page.strip()] = float(linespacing)
 
         return l
@@ -549,5 +587,5 @@ class MetadataHandler(object):
         Returns:
             List of etree.Element
         """
-        ns = {'xsl': 'http://www.w3.org/1999/XSL/Transform'}
-        return self.tree.getroot().xpath('.//xsl:template', namespaces=ns)
+        ns = {"xsl": "http://www.w3.org/1999/XSL/Transform"}
+        return self.tree.getroot().xpath(".//xsl:template", namespaces=ns)

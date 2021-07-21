@@ -38,20 +38,24 @@ class TestCorpusXMLFile(unittest.TestCase):
 
     def setUp(self):
         self.pfile = corpusxmlfile.CorpusXMLFile(
-            os.path.join(HERE, "parallelize_data",
-                         "prestable/converted/sme/facta/skuvlahistorja2/"
-                         "aarseth2-s.htm.xml"))
+            os.path.join(
+                HERE,
+                "parallelize_data",
+                "prestable/converted/sme/facta/skuvlahistorja2/" "aarseth2-s.htm.xml",
+            )
+        )
 
     @staticmethod
     def assertXmlEqual(got, want):
         """Check if two stringified xml snippets are equal."""
-        string_got = etree.tostring(got, encoding='unicode')
-        string_want = etree.tostring(want, encoding='unicode')
+        string_got = etree.tostring(got, encoding="unicode")
+        string_want = etree.tostring(want, encoding="unicode")
 
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(string_want, string_got, 0):
             message = checker.output_difference(
-                doctest.Example("", string_want), string_got, 0)
+                doctest.Example("", string_want), string_got, 0
+            )
             raise AssertionError(message)
 
     def test_basename(self):
@@ -60,52 +64,65 @@ class TestCorpusXMLFile(unittest.TestCase):
     def test_dirname(self):
         self.assertEqual(
             self.pfile.dirname,
-            os.path.join(HERE, "parallelize_data",
-                         "prestable/converted/sme/facta/skuvlahistorja2"))
+            os.path.join(
+                HERE,
+                "parallelize_data",
+                "prestable/converted/sme/facta/skuvlahistorja2",
+            ),
+        )
 
     def test_name(self):
         self.assertEqual(
             self.pfile.name,
-            os.path.join(HERE, "parallelize_data",
-                         "prestable/converted/sme/facta/skuvlahistorja2/"
-                         "aarseth2-s.htm.xml"))
+            os.path.join(
+                HERE,
+                "parallelize_data",
+                "prestable/converted/sme/facta/skuvlahistorja2/" "aarseth2-s.htm.xml",
+            ),
+        )
 
     def test_lang(self):
         self.assertEqual(self.pfile.lang, "sme")
 
     def test_get_parallel_basename(self):
-        self.assertEqual(
-            self.pfile.get_parallel_basename('nob'), "aarseth2-n.htm")
+        self.assertEqual(self.pfile.get_parallel_basename("nob"), "aarseth2-n.htm")
 
     def test_get_parallel_filename(self):
         self.assertEqual(
-            self.pfile.get_parallel_filename('nob'),
-            os.path.join(HERE, "parallelize_data",
-                         "prestable/converted/nob/facta/skuvlahistorja2/"
-                         "aarseth2-n.htm.xml"))
+            self.pfile.get_parallel_filename("nob"),
+            os.path.join(
+                HERE,
+                "parallelize_data",
+                "prestable/converted/nob/facta/skuvlahistorja2/" "aarseth2-n.htm.xml",
+            ),
+        )
 
     def test_get_original_filename(self):
         self.assertEqual(
             self.pfile.original_filename,
-            os.path.join(HERE, "parallelize_data",
-                         "orig/sme/facta/skuvlahistorja2/aarseth2-s.htm"))
+            os.path.join(
+                HERE,
+                "parallelize_data",
+                "orig/sme/facta/skuvlahistorja2/aarseth2-s.htm",
+            ),
+        )
 
     def test_get_translated_from(self):
         self.assertEqual(self.pfile.translated_from, "nob")
 
     def test_get_word_count(self):
         corpusfile = corpusxmlfile.CorpusXMLFile(
-            os.path.join(HERE,
-                         'parallelize_data/aarseth2-n-with-version.htm.xml'))
+            os.path.join(HERE, "parallelize_data/aarseth2-n-with-version.htm.xml")
+        )
         self.assertEqual(corpusfile.word_count, "4009")
 
     def test_remove_version(self):
         file_with_version = corpusxmlfile.CorpusXMLFile(
-            os.path.join(HERE,
-                         'parallelize_data/aarseth2-n-with-version.htm.xml'))
+            os.path.join(HERE, "parallelize_data/aarseth2-n-with-version.htm.xml")
+        )
         file_without_version = corpusxmlfile.CorpusXMLFile(
-            os.path.join(HERE,
-                         'parallelize_data/aarseth2-n-without-version.htm.xml'))
+            os.path.join(HERE, "parallelize_data/aarseth2-n-without-version.htm.xml")
+        )
 
         file_with_version.remove_version()
 
@@ -116,10 +133,11 @@ class TestCorpusXMLFile(unittest.TestCase):
 
     def test_remove_skip(self):
         file_with_skip = corpusxmlfile.CorpusXMLFile(
-            os.path.join(HERE, 'parallelize_data/aarseth2-s-with-skip.htm.xml'))
+            os.path.join(HERE, "parallelize_data/aarseth2-s-with-skip.htm.xml")
+        )
         file_without_skip = corpusxmlfile.CorpusXMLFile(
-            os.path.join(HERE,
-                         'parallelize_data/aarseth2-s-without-skip.htm.xml'))
+            os.path.join(HERE, "parallelize_data/aarseth2-s-without-skip.htm.xml")
+        )
 
         file_with_skip.remove_skip()
 
@@ -130,11 +148,11 @@ class TestCorpusXMLFile(unittest.TestCase):
 
     def test_move_later(self):
         file_with_later = corpusxmlfile.CorpusXMLFile(
-            os.path.join(HERE,
-                         'parallelize_data/aarseth2-s-with-later.htm.xml'))
+            os.path.join(HERE, "parallelize_data/aarseth2-s-with-later.htm.xml")
+        )
         file_with_moved_later = corpusxmlfile.CorpusXMLFile(
-            os.path.join(
-                HERE, 'parallelize_data/aarseth2-s-with-moved-later.htm.xml'))
+            os.path.join(HERE, "parallelize_data/aarseth2-s-with-moved-later.htm.xml")
+        )
 
         file_with_later.move_later()
         got = file_with_moved_later.etree

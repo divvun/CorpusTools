@@ -57,8 +57,8 @@ class NrkSmeCrawler(object):
     """
 
     language_guesser = text_cat.Classifier(None)
-    goaldir = six.text_type(os.getenv('GTBOUND'))
-    corpus_adder = adder.AddToCorpus(goaldir, 'sme', 'news/nrk.no')
+    goaldir = six.text_type(os.getenv("GTBOUND"))
+    corpus_adder = adder.AddToCorpus(goaldir, "sme", "news/nrk.no")
     tags = defaultdict(str)
     invalid_links = set()
     counter = defaultdict(int)
@@ -68,18 +68,55 @@ class NrkSmeCrawler(object):
         """Initialise the NrkSmeCrawler class."""
         self.fetched_ids = self.get_fetched_links(self.corpus_adder.goaldir)
         # Ids containing norwegian text
-        self.fetched_ids |= set([
-            '1.11060139', '1.11205504', '1.11518300', '1.11526579',
-            '1.11876027', '1.11909062', '1.12274706', '1.13050654',
-            '1.13077542', '1.13599435', '1.13683886', '1.13683979',
-            '1.13684081', '1.2265333', '1.4708759', '1.4837038', '1.5174999',
-            '1.6129908', '1.6431307', '1.6439563', '1.6468432', '1.6469363',
-            '1.6538125', '1.6563405', '1.6776103', '1.6784213', '1.6857178',
-            '1.7066094', '1.7222473', '1.7391316', '1.7397359', '1.7826351',
-            '1.7971308', '1.7990373', '1.8065147', '1.8231915', '1.8239588',
-            '1.8836268', '1.4178483', '1.6474023', '1.7096768', '1.12593187',
-            '1.6479890', '1.6136593', '1.6602458'
-        ])
+        self.fetched_ids |= set(
+            [
+                "1.11060139",
+                "1.11205504",
+                "1.11518300",
+                "1.11526579",
+                "1.11876027",
+                "1.11909062",
+                "1.12274706",
+                "1.13050654",
+                "1.13077542",
+                "1.13599435",
+                "1.13683886",
+                "1.13683979",
+                "1.13684081",
+                "1.2265333",
+                "1.4708759",
+                "1.4837038",
+                "1.5174999",
+                "1.6129908",
+                "1.6431307",
+                "1.6439563",
+                "1.6468432",
+                "1.6469363",
+                "1.6538125",
+                "1.6563405",
+                "1.6776103",
+                "1.6784213",
+                "1.6857178",
+                "1.7066094",
+                "1.7222473",
+                "1.7391316",
+                "1.7397359",
+                "1.7826351",
+                "1.7971308",
+                "1.7990373",
+                "1.8065147",
+                "1.8231915",
+                "1.8239588",
+                "1.8836268",
+                "1.4178483",
+                "1.6474023",
+                "1.7096768",
+                "1.12593187",
+                "1.6479890",
+                "1.6136593",
+                "1.6602458",
+            ]
+        )
 
     def guess_lang(self, address):
         """Guess the language of the address element.
@@ -94,13 +131,12 @@ class NrkSmeCrawler(object):
         # comes out as utf8 encoded as latin1 …
         try:
             text = bytes(
-                address.find('.//p[@class="plug-preamble"]').text,
-                encoding='latin1')
+                address.find('.//p[@class="plug-preamble"]').text, encoding="latin1"
+            )
         except AttributeError:
-            text = bytes(
-                address.find('.//h2[@class="title"]').text, encoding='latin1')
+            text = bytes(address.find('.//h2[@class="title"]').text, encoding="latin1")
         lang = self.language_guesser.classify(text)
-        if lang == 'sme':
+        if lang == "sme":
             util.print_frame(text)
 
         return lang
@@ -122,35 +158,38 @@ class NrkSmeCrawler(object):
         Yields:
             lxml.html.HtmlElement: a parsed html document.
         """
-        page_links_template = ('https://www.nrk.no/serum/api/render/{tag}?'
-                               'size=18&perspective=BRIEF&alignment=AUTO&'
-                               'classes=surrogate-content&'
-                               'display=false&arrangement.offset={offset}&'
-                               'arrangement.quantity={quantity}&'
-                               'arrangement.repetition=PATTERN&'
-                               'arrangement.view[0].perspective=BRIEF&'
-                               'arrangement.view[0].size=6&'
-                               'arrangement.view[0].alignment=LEFT&'
-                               'paged=SIMPLE')
+        page_links_template = (
+            "https://www.nrk.no/serum/api/render/{tag}?"
+            "size=18&perspective=BRIEF&alignment=AUTO&"
+            "classes=surrogate-content&"
+            "display=false&arrangement.offset={offset}&"
+            "arrangement.quantity={quantity}&"
+            "arrangement.repetition=PATTERN&"
+            "arrangement.view[0].perspective=BRIEF&"
+            "arrangement.view[0].size=6&"
+            "arrangement.view[0].alignment=LEFT&"
+            "paged=SIMPLE"
+        )
         quantity = 10
         limit = 10000
 
         for offset in range(0, limit, quantity):
-            print('.', end='')
+            print(".", end="")
             sys.stdout.flush()
             try:
                 result = requests.get(
                     page_links_template.format(
-                        tag=tag, offset=offset, quantity=quantity))
+                        tag=tag, offset=offset, quantity=quantity
+                    )
+                )
             except requests.exceptions.ConnectionError:
-                util.note(u'Connection error when fetching {}'.format(tag))
+                util.note("Connection error when fetching {}".format(tag))
                 break
             else:
                 try:
                     yield html.document_fromstring(result.content)
                 except etree.ParserError:
-                    util.note(u'No more articles in tag: «{}»'.format(
-                        self.tags[tag]))
+                    util.note("No more articles in tag: «{}»".format(self.tags[tag]))
                     break
 
     def interesting_links(self, tag):
@@ -164,20 +203,22 @@ class NrkSmeCrawler(object):
         """
         for tree in self.get_tag_page_trees(tag):
             for address in tree.xpath('//a[@class="autonomous lp_plug"]'):
-                self.counter[tag + '_total'] += 1
-                href = address.get('href')
-                article_id = href.strip().split('-')[-1]
-                if 'systemtest' in href:
+                self.counter[tag + "_total"] += 1
+                href = address.get("href")
+                article_id = href.strip().split("-")[-1]
+                if "systemtest" in href:
                     self.invalid_links.add(href)
-                if ('systemtest' not in href
-                        and article_id not in self.fetched_ids
-                        and self.guess_lang(address) == 'sme'):
-                    self.counter[tag + '_fetched'] += 1
+                if (
+                    "systemtest" not in href
+                    and article_id not in self.fetched_ids
+                    and self.guess_lang(address) == "sme"
+                ):
+                    self.counter[tag + "_fetched"] += 1
                     yield href
 
     @staticmethod
     def pick_tags(path):
-        u"""Find tags in an nrk.no article.
+        """Find tags in an nrk.no article.
 
         Tags potientially contain more Northern Sámi articles.
 
@@ -191,10 +232,11 @@ class NrkSmeCrawler(object):
         article = html.parse(path)
 
         for address in article.xpath(
-                '//a[@class="universe widget reference article-universe-link '
-                'universe-teaser skin-border skin-text lp_universe_link"]'):
-            href = address.get('href')
-            yield href[href.rfind('-') + 1:], address[0].tail.strip()
+            '//a[@class="universe widget reference article-universe-link '
+            'universe-teaser skin-border skin-text lp_universe_link"]'
+        ):
+            href = address.get("href")
+            yield href[href.rfind("-") + 1 :], address[0].tail.strip()
 
     def crawl_tag(self, tag, tagname):
         """Look for articles in nrk.no tags.
@@ -203,13 +245,13 @@ class NrkSmeCrawler(object):
             tag (str): an internal nrk.no tag
         """
         if tag not in self.tags:
-            util.note(u'Fetching articles from «{}»'.format(tagname))
+            util.note("Fetching articles from «{}»".format(tagname))
             self.tags[tag] = tagname
             for href in self.interesting_links(tag):
                 self.add_nrk_article(href)
 
-            self.counter['total'] += self.counter[tag + '_total']
-            self.counter['fetched'] += self.counter[tag + '_fetched']
+            self.counter["total"] += self.counter[tag + "_total"]
+            self.counter["fetched"] += self.counter[tag + "_fetched"]
 
     def add_nrk_article(self, href):
         """Copy an article to the working copy.
@@ -217,12 +259,15 @@ class NrkSmeCrawler(object):
         Args:
             href (str): a url to an nrk article.
         """
-        self.fetched_ids.add(href.split('-')[-1])
+        self.fetched_ids.add(href.split("-")[-1])
         try:
             path = self.corpus_adder.copy_url_to_corpus(href)
             self.add_metadata(path)
-        except (requests.exceptions.TooManyRedirects, adder.AdderError,
-                UserWarning) as error:
+        except (
+            requests.exceptions.TooManyRedirects,
+            adder.AdderError,
+            UserWarning,
+        ) as error:
             util.note(href)
             util.note(error)
 
@@ -238,7 +283,7 @@ class NrkSmeCrawler(object):
         """Find all nrk.no files."""
         for root, _, files in os.walk(self.corpus_adder.goaldir):
             for file_ in files:
-                if file_.endswith('.html'):
+                if file_.endswith(".html"):
                     yield os.path.join(root, file_)
 
     def crawl_existing_tags(self):
@@ -248,38 +293,39 @@ class NrkSmeCrawler(object):
                 self.crawl_tag(additional_tag, tag_name)
 
     def crawl_oanehaccat(self):
-        u"""Crawl short news, provided by a json dict.
+        """Crawl short news, provided by a json dict.
 
         This feed only contains Northern Sámi articles.
         """
-        util.note('Fetching articles from {}'.format('oanehaččat'))
-        self.tags['oanehaččat'] = 'oanehaččat'
+        util.note("Fetching articles from {}".format("oanehaččat"))
+        self.tags["oanehaččat"] = "oanehaččat"
         oanehaccat = requests.get(
-            'https://www.nrk.no/serum/api/content/json/'
-            '1.13572949?v=2&limit=1000&context=items'
+            "https://www.nrk.no/serum/api/content/json/"
+            "1.13572949?v=2&limit=1000&context=items"
         )
-        for relation in oanehaccat.json()['relations']:
-            self.counter['oanehaččat_total'] += 1
-            if relation['id'] not in self.fetched_ids:
-                self.counter['oanehaččat_fetched'] += 1
-                self.add_nrk_article('https://www.nrk.no/sapmi/{}'.format(
-                    relation['id']))
+        for relation in oanehaccat.json()["relations"]:
+            self.counter["oanehaččat_total"] += 1
+            if relation["id"] not in self.fetched_ids:
+                self.counter["oanehaččat_fetched"] += 1
+                self.add_nrk_article(
+                    "https://www.nrk.no/sapmi/{}".format(relation["id"])
+                )
 
-        self.counter['total'] += self.counter['oanehaččat_total']
-        self.counter['fetched'] += self.counter['oanehaččat_fetched']
+        self.counter["total"] += self.counter["oanehaččat_total"]
+        self.counter["fetched"] += self.counter["oanehaččat_fetched"]
 
     def handle_search_hits(self, hits):
         """Decide whether articles found in search results should be saved."""
         for hit in hits:
-            if hit['url'].split('-')[-1] not in self.fetched_ids and hit.get(
-                    'description'):
-                lang = self.language_guesser.classify(hit['description'])
-                if lang == 'sme':
-                    util.print_frame(
-                        len(hit['description']), hit['description'], '\n')
-                    if len(hit['description']) > 15:
-                        self.counter['authors_fetched'] += 1
-                        self.add_nrk_article(hit['url'])
+            if hit["url"].split("-")[-1] not in self.fetched_ids and hit.get(
+                "description"
+            ):
+                lang = self.language_guesser.classify(hit["description"])
+                if lang == "sme":
+                    util.print_frame(len(hit["description"]), hit["description"], "\n")
+                    if len(hit["description"]) > 15:
+                        self.counter["authors_fetched"] += 1
+                        self.add_nrk_article(hit["url"])
 
     def crawl_authors(self):
         """Search for authors on nrk.no.
@@ -287,38 +333,37 @@ class NrkSmeCrawler(object):
         Not all articles have are represented under the tags found, so
         a search on author names is also done.
         """
-        self.tags['authors'] = 'authors'
+        self.tags["authors"] = "authors"
         for nrk_file in self.find_nrk_files():
-            self.counter['nrk_file'] += 1
+            self.counter["nrk_file"] += 1
             article = html.parse(nrk_file)
             for author_body in article.xpath('.//div[@class="author__body"]'):
-                self.counter['author__body'] += 1
+                self.counter["author__body"] += 1
                 author_name = author_body.find('./a[@class="author__name"]')
                 if author_name is not None and author_name.text is not None:
-                    self.authors.add(
-                        author_name.text.strip().split()[-1].lower())
-                    self.counter['name'] += 1
+                    self.authors.add(author_name.text.strip().split()[-1].lower())
+                    self.counter["name"] += 1
 
         for author_parts in self.authors:
-            util.print_frame(author_parts, '\n')
+            util.print_frame(author_parts, "\n")
             index = 0
             total = 100001
             while True:
                 hits = self.get_search_page(
-                    'https://www.nrk.no/sok/?format=json&scope=nrkno'
-                    '&filter=nrkno&q={}&from={}'.format(
-                        author_parts, str(index)))
+                    "https://www.nrk.no/sok/?format=json&scope=nrkno"
+                    "&filter=nrkno&q={}&from={}".format(author_parts, str(index))
+                )
                 if not hits:
-                    util.print_frame('empty hits, should break')
+                    util.print_frame("empty hits, should break")
                     break
-                if int(hits['total']) < total:
-                    total = int(hits['total'])
-                self.handle_search_hits(hits['hits'])
+                if int(hits["total"]) < total:
+                    total = int(hits["total"])
+                self.handle_search_hits(hits["hits"])
                 if index > total:
                     break
                 index += 20
 
-        self.counter['fetched'] += self.counter['authors_fetched']
+        self.counter["fetched"] += self.counter["authors_fetched"]
 
     @staticmethod
     def get_search_page(search_link):
@@ -331,7 +376,7 @@ class NrkSmeCrawler(object):
             dict containing search results from search
         """
         result = requests.get(search_link)
-        content = result.content.decode('utf8')
+        content = result.content.decode("utf8")
 
         try:
             return json.loads(content)
@@ -341,24 +386,26 @@ class NrkSmeCrawler(object):
             util.print_frame(content)
 
             if content:
-                return {'hits': [], 'from': '-1', 'total': '100000'}
+                return {"hits": [], "from": "-1", "total": "100000"}
             else:
                 return content
 
     def report(self):
         """Print a report on what was found."""
-        print('{} invalid links.'.format(len(self.invalid_links)))
+        print("{} invalid links.".format(len(self.invalid_links)))
         for invalid_link in self.invalid_links:
             print(invalid_link)
         print()
-        print('Searched through {} tags'.format(len(self.tags)))
-        print('Searched through {} authors'.format(len(self.authors)))
-        print('Fetched {fetched} pages'.format(**self.counter))
+        print("Searched through {} tags".format(len(self.tags)))
+        print("Searched through {} authors".format(len(self.authors)))
+        print("Fetched {fetched} pages".format(**self.counter))
         for tag in self.tags:
-            if self.counter[tag + '_fetched']:
+            if self.counter[tag + "_fetched"]:
                 print(
-                    'Fetched {} articles from category {} from nrk.no'.format(
-                        self.counter[tag + '_fetched'], self.tags[tag]))
+                    "Fetched {} articles from category {} from nrk.no".format(
+                        self.counter[tag + "_fetched"], self.tags[tag]
+                    )
+                )
 
     @staticmethod
     def valid_authors(article):
@@ -372,9 +419,11 @@ class NrkSmeCrawler(object):
         """
         for author_role in article.xpath('.//span[@class="author__role"]'):
             text = author_role.text.strip()
-            if text is not None and (text.startswith('Journ')
-                                     or text.startswith('Komm')
-                                     or text.startswith('Arti')):
+            if text is not None and (
+                text.startswith("Journ")
+                or text.startswith("Komm")
+                or text.startswith("Arti")
+            ):
                 parts = author_role.getprevious().text.strip().split()
 
                 yield parts
@@ -386,23 +435,22 @@ class NrkSmeCrawler(object):
             path (str): path to the nrk.no article
         """
         article = html.parse(path)
-        metadata = xslsetter.MetadataHandler(path + '.xsl')
+        metadata = xslsetter.MetadataHandler(path + ".xsl")
 
-        for count, author_parts in enumerate(
-                self.valid_authors(article), start=1):
-            metadata.set_variable('author' + str(count) + '_ln',
-                                  author_parts[-1])
-            metadata.set_variable('author' + str(count) + '_fn',
-                                  ' '.join(author_parts[:-1]))
+        for count, author_parts in enumerate(self.valid_authors(article), start=1):
+            metadata.set_variable("author" + str(count) + "_ln", author_parts[-1])
+            metadata.set_variable(
+                "author" + str(count) + "_fn", " ".join(author_parts[:-1])
+            )
 
         time = article.find('//time[@itemprop="datePublished"]')
         if time is None:
             time = article.find('//time[@class="relative bulletin-time"]')
-        date = dateutil.parser.parse(time.get('datetime'))
-        metadata.set_variable('year', date.year)
+        date = dateutil.parser.parse(time.get("datetime"))
+        metadata.set_variable("year", date.year)
 
-        metadata.set_variable('publisher', 'NRK')
-        metadata.set_variable('license_type', 'standard')
+        metadata.set_variable("publisher", "NRK")
+        metadata.set_variable("license_type", "standard")
         metadata.write_file()
 
     @staticmethod
@@ -416,8 +464,10 @@ class NrkSmeCrawler(object):
             set of strings, where the strings are ids to the article.
         """
         return {
-            xslsetter.MetadataHandler(os.path.join(
-                root, file_)).get_variable('filename').split('-')[-1]
-            for root, _, files in os.walk(path) for file_ in files
-            if file_.endswith('.xsl')
+            xslsetter.MetadataHandler(os.path.join(root, file_))
+            .get_variable("filename")
+            .split("-")[-1]
+            for root, _, files in os.walk(path)
+            for file_ in files
+            if file_.endswith(".xsl")
         }

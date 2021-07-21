@@ -42,47 +42,54 @@ def handler(err):
     start = err.start
     end = err.end
     if six.PY2:
-        return (u''.join(
-            [u'&#{0};'.format(ord(err.object[i])) for i in range(start, end)]),
-                end)
+        return (
+            u"".join([u"&#{0};".format(ord(err.object[i])) for i in range(start, end)]),
+            end,
+        )
     else:
-        return (''.join(
-            ['&#{0};'.format(err.object[i]) for i in range(start, end)]), end)
+        return (
+            "".join(["&#{0};".format(err.object[i]) for i in range(start, end)]),
+            end,
+        )
 
 
-codecs.register_error('backslashreffcallback', handler)
+codecs.register_error("backslashreffcallback", handler)
 
-want = u'á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ'
+want = u"á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ"
 
 test_input = {
-    u'mac-sami_to_cp1252': [u'‡ » ¸ ¹ ½ º ç ¢ ¼ ´ ° ± · µ ¿ ¯ Œ  ¾ ®'],
-    u'mac-sami_to_latin1': [u' » ¸ ¹ ½ º ç ¢ ¼ ´ ° ± · µ ¿ ¯   ¾ ®'],
-    u'mac-sami_to_mac': [u'á ª ∏ π Ω ∫ Á ¢ º ¥ ∞ ± ∑ µ ø Ø å Å æ Æ'],
-    u'winsami2_to_cp1252': [u'á š „ ˜ ¿ ¹ Á ‚ ¼ Š ‰ ¸ ¾ º ø Ø å Å æ Æ'],
-    u'mix-mac-sami-and-some-unknown-encoding':
-    [u' _ ã ÷ À ŋ ç â ¼ Š Đ Ŋ Ž Ŧ ¿ Ø å Å æ Æ'],
-    u'latin4_to_cp1252': [u'á ¹ è ð ¾ ¿ Á È ¼ © Ð ½ ® ¬ ø Ø å Å æ Æ'],
-    u'winsam_to_cp1252': [u'á ó ç ð þ ñ Á Ç ý Ó Ð Ñ Þ Ý ø Ø å Å æ Æ'],
-    u'iso-ir-197_to_cp1252': [u'á ³ ¢ ¤ º ± Á ¡ ¸ ² £ ¯ ¹ µ ø Ø å Å æ Æ'],
-    u'mix-of-latin4-and-iso-ir-197_to_cp1252':
-    [u'á ó ç ¤ º ŋ Á Ç ŧ Ó £ Ŋ Ž Ŧ ø Ø å Å æ Æ'],
-    u'double-utf8':
-    [u'Ã¡ Å¡ Ä? Ä‘ Âº Å‹ Ã? ÄŒ Å§ Å  Đ ÅŠ Å½ Ŧ Ã¸ Ã˜ Ã¥ Ã… Ã¦ Æ'],
-    u'finnish-lawtexts-in-pdf': [u'á š þ đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ'],
+    u"mac-sami_to_cp1252": [u"‡ » ¸ ¹ ½ º ç ¢ ¼ ´ ° ± · µ ¿ ¯ Œ  ¾ ®"],
+    u"mac-sami_to_latin1": [u" » ¸ ¹ ½ º ç ¢ ¼ ´ ° ± · µ ¿ ¯   ¾ ®"],
+    u"mac-sami_to_mac": [u"á ª ∏ π Ω ∫ Á ¢ º ¥ ∞ ± ∑ µ ø Ø å Å æ Æ"],
+    u"winsami2_to_cp1252": [u"á š „ ˜ ¿ ¹ Á ‚ ¼ Š ‰ ¸ ¾ º ø Ø å Å æ Æ"],
+    u"mix-mac-sami-and-some-unknown-encoding": [
+        u" _ ã ÷ À ŋ ç â ¼ Š Đ Ŋ Ž Ŧ ¿ Ø å Å æ Æ"
+    ],
+    u"latin4_to_cp1252": [u"á ¹ è ð ¾ ¿ Á È ¼ © Ð ½ ® ¬ ø Ø å Å æ Æ"],
+    u"winsam_to_cp1252": [u"á ó ç ð þ ñ Á Ç ý Ó Ð Ñ Þ Ý ø Ø å Å æ Æ"],
+    u"iso-ir-197_to_cp1252": [u"á ³ ¢ ¤ º ± Á ¡ ¸ ² £ ¯ ¹ µ ø Ø å Å æ Æ"],
+    u"mix-of-latin4-and-iso-ir-197_to_cp1252": [
+        u"á ó ç ¤ º ŋ Á Ç ŧ Ó £ Ŋ Ž Ŧ ø Ø å Å æ Æ"
+    ],
+    u"double-utf8": [u"Ã¡ Å¡ Ä? Ä‘ Âº Å‹ Ã? ÄŒ Å§ Å  Đ ÅŠ Å½ Ŧ Ã¸ Ã˜ Ã¥ Ã… Ã¦ Æ"],
+    u"finnish-lawtexts-in-pdf": [u"á š þ đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ"],
 }
 
 
 class TestEncodingGuesser(unittest.TestCase):
-
-    @parameterized.expand([(index, example)
-                           for index in decode.CTYPES.keys()
-                           for example in test_input[index]])
+    @parameterized.expand(
+        [
+            (index, example)
+            for index in decode.CTYPES.keys()
+            for example in test_input[index]
+        ]
+    )
     def test_encoding_guesser(self, index, example):
-        self.assertEqual(decode.guess_body_encoding(example, 'sme'), index)
+        self.assertEqual(decode.guess_body_encoding(example, "sme"), index)
 
     @parameterized.expand([(index) for index in test_input.keys()])
     def test_round_trip_x(self, index):
-        unicode_content = u'á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ'
+        unicode_content = u"á š č đ ž ŋ Á Č ŧ Š Đ Ŋ Ž Ŧ ø Ø å Å æ Æ"
         content = test_input[index][0]
         test_content = decode.decode_para(index, content)
 
@@ -92,59 +99,59 @@ class TestEncodingGuesser(unittest.TestCase):
     def to_pervertedsami(instring, from_enc, to_enc):
         util.print_frame(type(instring), from_enc, to_enc)
         encoded_string = instring.encode(from_enc)
-        decoded_string = encoded_string.decode(
-            to_enc, errors='backslashreffcallback')
+        decoded_string = encoded_string.decode(to_enc, errors="backslashreffcallback")
 
         return decoded_string
 
     def test_macsami_cp1252(self):
-        uff = u'áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ'
-        perverted = self.to_pervertedsami(uff, 'macsami', 'cp1252')
-        util.print_frame('\n', perverted)
-        util.print_frame('\n', decode.fix_macsami_cp1252(perverted))
+        uff = u"áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ"
+        perverted = self.to_pervertedsami(uff, "macsami", "cp1252")
+        util.print_frame("\n", perverted)
+        util.print_frame("\n", decode.fix_macsami_cp1252(perverted))
         self.assertEqual(decode.fix_macsami_cp1252(perverted), uff)
         self.assertEqual(
-            decode.fix_macsami_cp1252(test_input[u'mac-sami_to_cp1252'][0]),
-            want)
+            decode.fix_macsami_cp1252(test_input[u"mac-sami_to_cp1252"][0]), want
+        )
 
     def test_macsami_latin1(self):
-        uff = u'áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ'
-        perverted = self.to_pervertedsami(uff, 'macsami', 'latin1')
-        util.print_frame('\n', perverted)
-        util.print_frame('\n', decode.fix_macsami_latin1(perverted))
+        uff = u"áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ"
+        perverted = self.to_pervertedsami(uff, "macsami", "latin1")
+        util.print_frame("\n", perverted)
+        util.print_frame("\n", decode.fix_macsami_latin1(perverted))
         self.assertEqual(decode.fix_macsami_latin1(perverted), uff)
         self.assertEqual(
-            decode.fix_macsami_latin1(test_input[u'mac-sami_to_latin1'][0]),
-            want)
+            decode.fix_macsami_latin1(test_input[u"mac-sami_to_latin1"][0]), want
+        )
 
     def test_macsami_mac(self):
-        uff = u'áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ'
-        perverted = self.to_pervertedsami(uff, 'macsami', 'macroman')
-        util.print_frame('\n', perverted)
-        util.print_frame('\n', decode.fix_macsami_mac(perverted))
+        uff = u"áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ"
+        perverted = self.to_pervertedsami(uff, "macsami", "macroman")
+        util.print_frame("\n", perverted)
+        util.print_frame("\n", decode.fix_macsami_mac(perverted))
         self.assertEqual(decode.fix_macsami_mac(perverted), uff)
         self.assertEqual(
-            decode.fix_macsami_mac(test_input[u'mac-sami_to_mac'][0]), want)
+            decode.fix_macsami_mac(test_input[u"mac-sami_to_mac"][0]), want
+        )
 
     def test_winsami2_cp1252(self):
-        uff = u'áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ'
-        perverted = self.to_pervertedsami(uff, 'ws2', 'cp1252')
-        util.print_frame('\n', perverted)
-        util.print_frame('\n', decode.fix_winsami2_cp1252(perverted))
+        uff = u"áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ"
+        perverted = self.to_pervertedsami(uff, "ws2", "cp1252")
+        util.print_frame("\n", perverted)
+        util.print_frame("\n", decode.fix_winsami2_cp1252(perverted))
         self.assertEqual(decode.fix_winsami2_cp1252(perverted), uff)
         self.assertEqual(
-            decode.fix_winsami2_cp1252(test_input[u'winsami2_to_cp1252'][0]),
-            want)
+            decode.fix_winsami2_cp1252(test_input[u"winsami2_to_cp1252"][0]), want
+        )
 
     def test_meadowmari_cp1252(self):
-        correct = u'ОЙСАВЫШ 139 В.ЕГОРОВ. Романыште ҥ Ҥ ӱ Ӱ ӧ Ӧ ӱ Ӱ ӧ Ӧ'
-        uncorrect = u'ÎÉÑÀÂÛØ 139 Â.ÅÃÎÐÎÂ. Ðîìàíûøòå ‰ ˆ ¢ ™ º ª ў Ў є Є'
+        correct = u"ОЙСАВЫШ 139 В.ЕГОРОВ. Романыште ҥ Ҥ ӱ Ӱ ӧ Ӧ ӱ Ӱ ӧ Ӧ"
+        uncorrect = u"ÎÉÑÀÂÛØ 139 Â.ÅÃÎÐÎÂ. Ðîìàíûøòå ‰ ˆ ¢ ™ º ª ў Ў є Є"
         self.assertEqual(decode.fix_meadowmari_cp1252(uncorrect), correct)
 
     def test_macsami_macroman(self):
-        uff = u'Ω'
-        self.assertEqual(decode.fix_macsami_mac(uff), u'ž')
+        uff = u"Ω"
+        self.assertEqual(decode.fix_macsami_mac(uff), u"ž")
 
     def test_winsami2_cp1252_with_dstroke(self):
-        uff = u'đ'
-        self.assertEqual(decode.fix_macsami_mac(uff), u'&#273;')
+        uff = u"đ"
+        self.assertEqual(decode.fix_macsami_mac(uff), u"&#273;")

@@ -45,8 +45,8 @@ def set_data(directory, testdoc, skip_elements):
     """
     temp_epub = os.path.join(directory.path, os.path.basename(testdoc))
     copyfile(testdoc, temp_epub)
-    metadata = xslsetter.MetadataHandler(temp_epub + '.xsl', create=True)
-    metadata.set_variable('skip_elements', skip_elements)
+    metadata = xslsetter.MetadataHandler(temp_epub + ".xsl", create=True)
+    metadata.set_variable("skip_elements", skip_elements)
     metadata.write_file()
 
     return temp_epub
@@ -58,12 +58,13 @@ class TestEpubConverter(XMLTester):
     def setUp(self):
         """Setup epub content."""
         self.testdoc = os.path.join(
-            HERE, 'converter_data/fakecorpus/orig/sme/riddu/test.epub')
+            HERE, "converter_data/fakecorpus/orig/sme/riddu/test.epub"
+        )
 
     def test_convert2intermediate_1(self):
         """Test without skip_elements."""
         got = htmlcontentconverter.convert2intermediate(self.testdoc)
-        want = ("""
+        want = """
             <document>
                 <body>
                     <p type="title">1 Bajilčála</p>
@@ -84,7 +85,7 @@ class TestEpubConverter(XMLTester):
                     <p>8asdf</p>
                 </body>
             </document>
-        """)
+        """
 
         self.assertXmlEqual(got, etree.fromstring(want))
 
@@ -92,10 +93,13 @@ class TestEpubConverter(XMLTester):
         """Test with skip_elements."""
         with TempDirectory() as directory:
             temp_epub = set_data(
-                directory, self.testdoc, './/html:body/html:div[1]/html:h2[1];'
-                './/html:body/html:div[3]/html:div[1]/html:h3[1]')
+                directory,
+                self.testdoc,
+                ".//html:body/html:div[1]/html:h2[1];"
+                ".//html:body/html:div[3]/html:div[1]/html:h3[1]",
+            )
             got = htmlcontentconverter.convert2intermediate(temp_epub)
-            want = ("""
+            want = """
                 <document>
                     <body>
                         <p type="title">1 Bajilčála</p>
@@ -104,7 +108,7 @@ class TestEpubConverter(XMLTester):
                         <p>8asdf</p>
                     </body>
                 </document>
-            """)
+            """
 
             self.assertXmlEqual(got, etree.fromstring(want))
 
@@ -112,10 +116,10 @@ class TestEpubConverter(XMLTester):
         """Test with skip_elements that only has first path defined."""
         with TempDirectory() as directory:
             temp_epub = set_data(
-                directory, self.testdoc,
-                './/html:body/html:div[1]/html:h2[1];')
+                directory, self.testdoc, ".//html:body/html:div[1]/html:h2[1];"
+            )
             got = htmlcontentconverter.convert2intermediate(temp_epub)
-            want = ("""
+            want = """
                 <document>
                     <body>
                         <p type="title">1 Bajilčála</p>
@@ -135,7 +139,7 @@ class TestEpubConverter(XMLTester):
                         <p>8asdf</p>
                     </body>
                 </document>
-            """)
+            """
 
             self.assertXmlEqual(got, etree.fromstring(want))
 
@@ -146,23 +150,26 @@ class TestEpubConverter1(XMLTester):
     def setUp(self):
         """Setup epub content."""
         self.testdoc = os.path.join(
-            HERE, 'converter_data/fakecorpus/orig/sme/riddu/test2.epub')
+            HERE, "converter_data/fakecorpus/orig/sme/riddu/test2.epub"
+        )
 
     def test_convert2intermediate(self):
         """Range of same depth with the same name in the next to last level."""
         with TempDirectory() as directory:
             temp_epub = set_data(
-                directory, self.testdoc,
-                './/body/div[1]/div[1]/p[1];.//body/div[2]/div[1]/p[4]')
+                directory,
+                self.testdoc,
+                ".//body/div[1]/div[1]/p[1];.//body/div[2]/div[1]/p[4]",
+            )
             got = htmlcontentconverter.convert2intermediate(temp_epub)
-            want = ("""
+            want = """
                 <document>
                     <body>
                         <p>igjen går hesten</p>
                         <p>baklengs inni framtida</p>
                     </body>
                 </document>
-            """)
+            """
 
             self.assertXmlEqual(got, etree.fromstring(want))
 
@@ -170,10 +177,12 @@ class TestEpubConverter1(XMLTester):
         """Range with same parents."""
         with TempDirectory() as directory:
             temp_epub = set_data(
-                directory, self.testdoc,
-                './/body/div[2]/div[1]/p[1];.//body/div[2]/div[1]/p[4]')
+                directory,
+                self.testdoc,
+                ".//body/div[2]/div[1]/p[1];.//body/div[2]/div[1]/p[4]",
+            )
             got = htmlcontentconverter.convert2intermediate(temp_epub)
-            want = ("""
+            want = """
                 <document>
                     <body>
                         <p>alle gir gass</p>
@@ -184,7 +193,7 @@ class TestEpubConverter1(XMLTester):
                         <p>baklengs inni framtida</p>
                     </body>
                 </document>
-            """)
+            """
 
             self.assertXmlEqual(got, etree.fromstring(want))
 
@@ -192,9 +201,13 @@ class TestEpubConverter1(XMLTester):
         """Range of same depth with the same name in the next to last level."""
         with TempDirectory() as directory:
             temp_epub = set_data(
-                directory, self.testdoc,
-                './/body/div[1]/div[1]/p[1];.//body/div[2]/div[15]/p[4]')
+                directory,
+                self.testdoc,
+                ".//body/div[1]/div[1]/p[1];.//body/div[2]/div[15]/p[4]",
+            )
 
-            self.assertRaises(util.ConversionError,
-                              htmlcontentconverter.convert2intermediate,
-                              temp_epub)
+            self.assertRaises(
+                util.ConversionError,
+                htmlcontentconverter.convert2intermediate,
+                temp_epub,
+            )

@@ -39,12 +39,14 @@ def parse_options():
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Count corpus files. List them if called for.')
+        description="Count corpus files. List them if called for.",
+    )
 
     parser.add_argument(
-        u'--listfiles',
-        action=u"store_true",
-        help=u'List lacking converted and analysed files.')
+        "--listfiles",
+        action="store_true",
+        help="List lacking converted and analysed files.",
+    )
 
     args = parser.parse_args()
 
@@ -62,20 +64,24 @@ def count_files(path):
     for f in cm.files:
         c = converter.Converter(f)
         if os.path.exists(c.names.converted):
-            counter['con'] += 1
+            counter["con"] += 1
         else:
-            lacking_files['con'].add(c.names.orig)
+            lacking_files["con"].add(c.names.orig)
 
-        for fst in ['xfst', 'hfst']:
-            todays_analysed = '/analysed.{}/{}/'.format(today, fst)
-            if os.path.exists(
-                    c.names.analysed.replace('/analysed/', todays_analysed)):
+        for fst in ["xfst", "hfst"]:
+            todays_analysed = "/analysed.{}/{}/".format(today, fst)
+            if os.path.exists(c.names.analysed.replace("/analysed/", todays_analysed)):
                 counter[fst] += 1
         else:
             if os.path.exists(c.names.converted):
-                lacking_files['ana'].add(c.names.converted)
-    return (len(cm.files), counter['con'], counter['xfst'], counter['hfst'],
-            lacking_files)
+                lacking_files["ana"].add(c.names.converted)
+    return (
+        len(cm.files),
+        counter["con"],
+        counter["xfst"],
+        counter["hfst"],
+        lacking_files,
+    )
 
 
 def main():
@@ -83,13 +89,16 @@ def main():
     args = parse_options()
 
     lacking_files = defaultdict(set)
-    print('\t'.join(['language', 'original', 'converted', 'xfst', 'hfst']))
-    for corpus in [os.getenv('GTFREE'), os.getenv('GTBOUND')]:
+    print("\t".join(["language", "original", "converted", "xfst", "hfst"]))
+    for corpus in [os.getenv("GTFREE"), os.getenv("GTBOUND")]:
         print(corpus)
-        for language in ['fkv', 'sma', 'sme', 'smj', 'smn', 'sms']:
-            result = count_files(os.path.join(corpus, 'orig', language))
-            print('{}\t{}\t{}\t{}\t{}'.format(language, result[0], result[1],
-                                          result[2], result[3]))
+        for language in ["fkv", "sma", "sme", "smj", "smn", "sms"]:
+            result = count_files(os.path.join(corpus, "orig", language))
+            print(
+                "{}\t{}\t{}\t{}\t{}".format(
+                    language, result[0], result[1], result[2], result[3]
+                )
+            )
             for key, value in result[-1].items():
                 lacking_files[key].update(value)
 
@@ -97,5 +106,5 @@ def main():
         for key, value in lacking_files.items():
             print(key)
             for f in value:
-                print('\t', f)
+                print("\t", f)
         print()

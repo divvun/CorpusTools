@@ -36,8 +36,8 @@ class TestDocConverter(XMLTester):
     def test_convert2intermediate(self):
         """Test conversion of a doc file."""
         got = htmlcontentconverter.convert2intermediate(
-            os.path.join(
-                HERE, 'converter_data/fakecorpus/orig/sme/riddu/doc-test.doc'))
-        want = etree.parse(os.path.join(HERE, 'converter_data/doc-test.xml'))
+            os.path.join(HERE, "converter_data/fakecorpus/orig/sme/riddu/doc-test.doc")
+        )
+        want = etree.parse(os.path.join(HERE, "converter_data/doc-test.xml"))
 
         self.assertXmlEqual(got, want)

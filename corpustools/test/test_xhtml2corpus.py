@@ -32,8 +32,8 @@ from parameterized import parameterized
 
 def assertXmlEqual(got, want):
     """Check if two xml snippets are equal"""
-    got = lxml.etree.tostring(got, encoding='unicode')
-    want = lxml.etree.tostring(want, encoding='unicode')
+    got = lxml.etree.tostring(got, encoding="unicode")
+    want = lxml.etree.tostring(want, encoding="unicode")
     checker = lxml.doctestcompare.LXMLOutputChecker()
     if not checker.check_output(want, got, 0):
         message = checker.output_difference(doctest.Example("", want), got, 0)

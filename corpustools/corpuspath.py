@@ -55,16 +55,22 @@ class CorpusPath(object):
         """
         abspath = os.path.normpath(os.path.abspath(path))
         for module in [
-                u'goldstandard/orig', u'prestable/converted',
-                u'prestable/toktmx', u'prestable/tmx', u'orig', u'converted',
-                u'stable', u'toktmx', u'tmx'
+            u"goldstandard/orig",
+            u"prestable/converted",
+            u"prestable/toktmx",
+            u"prestable/tmx",
+            u"orig",
+            u"converted",
+            u"stable",
+            u"toktmx",
+            u"tmx",
         ]:
-            module_dir = u'/' + module + u'/'
+            module_dir = u"/" + module + u"/"
             if module_dir in abspath:
                 root, rest = abspath.split(module_dir)
                 return root, module, rest
 
-        raise ValueError('File is not part of a corpus: {}'.format(path))
+        raise ValueError("File is not part of a corpus: {}".format(path))
 
     def split_path(self, path):
         """Map path to the original file.
@@ -79,28 +85,32 @@ class CorpusPath(object):
         # Ensure we have at least one / before module, for safer splitting:
         root, module, lang_etc = self.split_on_module(path)
 
-        lang_etc_parts = lang_etc.split('/')
-        (lang, genre, subdirs,
-         basename) = (lang_etc_parts[0], lang_etc_parts[1],
-                      lang_etc_parts[2:-1], lang_etc_parts[-1])
+        lang_etc_parts = lang_etc.split("/")
+        (lang, genre, subdirs, basename) = (
+            lang_etc_parts[0],
+            lang_etc_parts[1],
+            lang_etc_parts[2:-1],
+            lang_etc_parts[-1],
+        )
 
-        if 'orig' in module:
-            if basename.endswith('.xsl'):
-                basename = util.basename_noext(basename, '.xsl')
-            elif basename.endswith('.log'):
-                basename = util.basename_noext(basename, '.log')
-        elif 'converted' in module or 'analysed' in module:
-            basename = util.basename_noext(basename, '.xml')
-        elif 'toktmx' in module:
-            basename = util.basename_noext(basename, '.toktmx')
-        elif 'tmx' in module:
-            basename = util.basename_noext(basename, '.tmx')
+        if "orig" in module:
+            if basename.endswith(".xsl"):
+                basename = util.basename_noext(basename, ".xsl")
+            elif basename.endswith(".log"):
+                basename = util.basename_noext(basename, ".log")
+        elif "converted" in module or "analysed" in module:
+            basename = util.basename_noext(basename, ".xml")
+        elif "toktmx" in module:
+            basename = util.basename_noext(basename, ".toktmx")
+        elif "tmx" in module:
+            basename = util.basename_noext(basename, ".tmx")
 
-        if '2' in lang and 'tmx' in module:
-            lang = lang[:lang.find('2')]
+        if "2" in lang and "tmx" in module:
+            lang = lang[: lang.find("2")]
 
-        return util.PathComponents(root, 'orig', lang, genre, '/'.join(subdirs),
-                                   basename)
+        return util.PathComponents(
+            root, "orig", lang, genre, "/".join(subdirs), basename
+        )
 
     @property
     def orig(self):
@@ -110,14 +120,14 @@ class CorpusPath(object):
     @property
     def xsl(self):
         """Return the path of the metadata file."""
-        return self.orig + '.xsl'
+        return self.orig + ".xsl"
 
     @property
     def log(self):
         """Return the path of the log file."""
-        return self.orig + '.log'
+        return self.orig + ".log"
 
-    def name(self, module='orig', lang=None, name=None, extension=''):
+    def name(self, module="orig", lang=None, name=None, extension=""):
         """Return a path based on the module and extension.
 
         Args:
@@ -129,34 +139,39 @@ class CorpusPath(object):
         this_lang = self.pathcomponents.lang if lang is None else lang
         this_name = self.pathcomponents.basename if name is None else name
 
-        return os.path.join(self.pathcomponents.root, module, this_lang,
-                            self.pathcomponents.genre,
-                            self.pathcomponents.subdirs, this_name + extension)
+        return os.path.join(
+            self.pathcomponents.root,
+            module,
+            this_lang,
+            self.pathcomponents.genre,
+            self.pathcomponents.subdirs,
+            this_name + extension,
+        )
 
     @property
     def converted(self):
         """Return the path to the converted file."""
-        module = 'converted'
-        if self.metadata.get_variable('conversion_status') == 'correct':
-            module = 'goldstandard/converted'
-        if self.metadata.get_variable('conversion_status') == 'correct-no-gs':
-            module = 'correct-no-gs/converted'
+        module = "converted"
+        if self.metadata.get_variable("conversion_status") == "correct":
+            module = "goldstandard/converted"
+        if self.metadata.get_variable("conversion_status") == "correct-no-gs":
+            module = "correct-no-gs/converted"
 
-        return self.name(module=module, extension='.xml')
+        return self.name(module=module, extension=".xml")
 
     @property
     def prestable_converted(self):
         """Return the path to the prestable/converted file."""
-        module = 'prestable/converted'
-        if self.metadata.get_variable('conversion_status') == 'correct':
-            module = 'prestable/goldstandard/converted'
+        module = "prestable/converted"
+        if self.metadata.get_variable("conversion_status") == "correct":
+            module = "prestable/goldstandard/converted"
 
-        return self.name(module=module, extension='.xml')
+        return self.name(module=module, extension=".xml")
 
     @property
     def analysed(self):
         """Return the path to analysed file."""
-        return self.name(module='analysed', extension='.xml')
+        return self.name(module="analysed", extension=".xml")
 
     def parallel(self, language):
         """Check if there is a parallel for language.
@@ -169,10 +184,10 @@ class CorpusPath(object):
         """
         try:
             return self.name(
-                lang=language,
-                name=self.metadata.get_parallel_texts().get(language))
+                lang=language, name=self.metadata.get_parallel_texts().get(language)
+            )
         except TypeError:
-            return ''
+            return ""
 
     def parallels(self):
         """Return paths to all parallel files.
@@ -193,9 +208,10 @@ class CorpusPath(object):
             str: path to the tmx file
         """
         return self.name(
-            module='tmx',
-            lang=self.pathcomponents.lang + '2' + language,
-            extension='.tmx')
+            module="tmx",
+            lang=self.pathcomponents.lang + "2" + language,
+            extension=".tmx",
+        )
 
     def prestable_tmx(self, language):
         """Name of the prestable tmx file.
@@ -207,6 +223,7 @@ class CorpusPath(object):
             str: path to the prestable tmx file
         """
         return self.name(
-            module='prestable/tmx',
-            lang=self.pathcomponents.lang + '2' + language,
-            extension='.tmx')
+            module="prestable/tmx",
+            lang=self.pathcomponents.lang + "2" + language,
+            extension=".tmx",
+        )

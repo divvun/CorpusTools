@@ -45,7 +45,10 @@ def to_html_elt(filename):
         content = rtf_document.read()
         try:
             pyth_doc = Rtf15Reader.read(
-                io.BytesIO(content.replace(b'fcharset256', b'fcharset255')))
-            return HTML(str(XHTMLWriter.write(pyth_doc, pretty=True).read(), encoding='utf8'))
+                io.BytesIO(content.replace(b"fcharset256", b"fcharset255"))
+            )
+            return HTML(
+                str(XHTMLWriter.write(pyth_doc, pretty=True).read(), encoding="utf8")
+            )
         except UnicodeDecodeError:
-            raise RTFError('Unicode problems in {}'.format(filename.orig))
+            raise RTFError("Unicode problems in {}".format(filename.orig))

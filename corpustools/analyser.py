@@ -66,7 +66,7 @@ class Analyser(object):
             else:
                 for root, _, files in os.walk(cdir):
                     for xml_file in files:
-                        if self.lang in root and xml_file.endswith('.xml'):
+                        if self.lang in root and xml_file.endswith(".xml"):
                             self.append_file(os.path.join(root, xml_file))
 
     def append_file(self, xml_file):
@@ -80,17 +80,17 @@ class Analyser(object):
         if text:
             return text
         else:
-            raise UserWarning('Empty file {}'.format(self.xml_file.name))
+            raise UserWarning("Empty file {}".format(self.xml_file.name))
 
     def dependency_analysis(self):
         """Insert disambiguation and dependency analysis into the body."""
         pipeline = modes.Pipeline(self.modename, self.lang, self.giella_prefix)
         pipeline.sanity_check()
 
-        body = etree.Element('body')
+        body = etree.Element("body")
 
-        dependency = etree.Element('dependency')
-        dependency.text = etree.CDATA(pipeline.run(self.ccat().encode('utf8')))
+        dependency = etree.Element("dependency")
+        dependency.text = etree.CDATA(pipeline.run(self.ccat().encode("utf8")))
         body.append(dependency)
 
         self.xml_file.set_body(body)
@@ -100,7 +100,8 @@ class Analyser(object):
         try:
             self.xml_file = corpusxmlfile.CorpusXMLFile(xml_file)
             analysis_xml_name = self.xml_file.name.replace(
-                'converted/', 'analysed/{}/'.format(self.modename))
+                "converted/", "analysed/{}/".format(self.modename)
+            )
 
             if self.xml_file.ocr is None:
                 self.dependency_analysis()
@@ -109,36 +110,40 @@ class Analyser(object):
                 self.xml_file.write(analysis_xml_name)
             else:
                 print(
-                    xml_file,
-                    'is an OCR file and will not be analysed',
-                    file=sys.stderr)
+                    xml_file, "is an OCR file and will not be analysed", file=sys.stderr
+                )
         except (etree.XMLSyntaxError, UserWarning) as error:
-            print('Can not parse', xml_file, file=sys.stderr)
-            print('The error was:', str(error), file=sys.stderr)
+            print("Can not parse", xml_file, file=sys.stderr)
+            print("The error was:", str(error), file=sys.stderr)
 
     def analyse_in_parallel(self):
         """Analyse file in parallel."""
         pool_size = multiprocessing.cpu_count() * 2
-        pool = multiprocessing.Pool(processes=pool_size, )
-        pool.map(unwrap_self_analyse,
-                 list(zip([self] * len(self.xml_files), self.xml_files)))
+        pool = multiprocessing.Pool(
+            processes=pool_size,
+        )
+        pool.map(
+            unwrap_self_analyse, list(zip([self] * len(self.xml_files), self.xml_files))
+        )
         pool.close()  # no more tasks
         pool.join()  # wrap up current tasks
 
     def analyse_serially(self):
         """Analyse files one by one."""
-        print('Starting the analysis of {} files'.format(len(self.xml_files)))
+        print("Starting the analysis of {} files".format(len(self.xml_files)))
 
         fileno = 0
         for xml_file in self.xml_files:
             fileno += 1
             # print some ugly banner cos i want to see progress on local
             # batch job
-            print('*' * 79, file=sys.stderr)
-            print('Analysing {} [{} of {}]'.format(xml_file, fileno,
-                                                   len(self.xml_files),
-                  file=sys.stderr))
-            print('*' * 79, file=sys.stderr)
+            print("*" * 79, file=sys.stderr)
+            print(
+                "Analysing {} [{} of {}]".format(
+                    xml_file, fileno, len(self.xml_files), file=sys.stderr
+                )
+            )
+            print("*" * 79, file=sys.stderr)
             self.analyse(xml_file)
 
 
@@ -155,28 +160,35 @@ def parse_options():
     """Parse the given options."""
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Analyse files found in the given directories \
-        for the given language using multiple parallel processes.')
+        description="Analyse files found in the given directories for the given language using multiple parallel processes.",
+    )
 
-    parser.add_argument('lang', help="lang which should be analysed")
+    parser.add_argument("lang", help="lang which should be analysed")
     parser.add_argument(
-        '--serial',
+        "--serial",
         action="store_true",
-        help="When this argument is used files will \
-                        be analysed one by one.")
+        help="When this argument is used files will be analysed one by one.",
+    )
     parser.add_argument(
-        'converted_dirs',
-        nargs='+',
-        help="director(y|ies) where the converted files \
-                        exist")
+        "converted_dirs",
+        nargs="+",
+        help="director(y|ies) where the converted files exist",
+    )
     parser.add_argument(
-        '-k',
-        '--fstkit',
-        choices=['hfst', 'xfst', 'trace-smegram', 'trace-smegram-dev',
-                 'hfst_thirties', 'hfst_eighties', 'hfst_no_korp'],
-        default='xfst',
-        help='Finite State Toolkit. '
-        'Either hfst or xfst (the default).')
+        "-k",
+        "--fstkit",
+        choices=[
+            "hfst",
+            "xfst",
+            "trace-smegram",
+            "trace-smegram-dev",
+            "hfst_thirties",
+            "hfst_eighties",
+            "hfst_no_korp",
+        ],
+        default="xfst",
+        help="Finite State Toolkit. " "Either hfst or xfst (the default).",
+    )
 
     args = parser.parse_args()
     return args
@@ -198,9 +210,9 @@ def main():
                 ana.analyse_in_parallel()
         except util.ArgumentError as error:
             print(
-                'Cannot do analysis for {}\n{}'.format(args.lang, str(error)),
-                file=sys.stderr)
+                "Cannot do analysis for {}\n{}".format(args.lang, str(error)),
+                file=sys.stderr,
+            )
             sys.exit(1)
     else:
-        print(
-            "Did not find any files in", args.converted_dirs, file=sys.stderr)
+        print("Did not find any files in", args.converted_dirs, file=sys.stderr)

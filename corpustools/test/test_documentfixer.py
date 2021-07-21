@@ -34,74 +34,97 @@ from corpustools.test.xmltester import XMLTester
 
 HERE = os.path.dirname(__file__)
 
-TestItem = collections.namedtuple('TestItem', ['name', 'orig', 'expected'])
+TestItem = collections.namedtuple("TestItem", ["name", "orig", "expected"])
 
 
 def test_detect_quote():
     """Test the detect_quote function."""
     quote_tests = [
         TestItem(
-            name='quote within QUOTATION MARK',
+            name="quote within QUOTATION MARK",
             orig='<p>bla "bla" bla "bla" bla </p>',
-            expected=('<p>bla <span type="quote">"bla"</span> bla'
-                      '<span type="quote">"bla"</span> bla</p>')),
-        TestItem(
-            name='quote within RIGHT DOUBLE QUOTATION MARK',
-            orig='<p>bla bla ”bla bla” bla bla </p>',
-            expected=('<p>bla bla <span type="quote">”bla bla”</span> '
-                      'bla bla</p>')),
-        TestItem(
-            name=('quote within LEFT DOUBLE QUOTATION MARK and '
-                  'RIGHT DOUBLE QUOTATION MARK'),
-            orig='<p>bla bla “bla bla” bla bla</p>',
             expected=(
-                '<p>bla bla <span type="quote">“bla bla”</span> bla bla</p>')),
+                '<p>bla <span type="quote">"bla"</span> bla'
+                '<span type="quote">"bla"</span> bla</p>'
+            ),
+        ),
         TestItem(
-            name=('quote within RIGHT DOUBLE QUOTATION MARK and '
-                  'quote within LEFT DOUBLE QUOTATION MARK and '
-                  'RIGHT DOUBLE QUOTATION MARK'),
-            orig='<p>bla “bla” bla ”bla” bla</p>',
-            expected=('<p>bla <span type="quote">“bla”</span> bla '
-                      '<span type="quote">”bla”</span> bla</p>')),
+            name="quote within RIGHT DOUBLE QUOTATION MARK",
+            orig="<p>bla bla ”bla bla” bla bla </p>",
+            expected=('<p>bla bla <span type="quote">”bla bla”</span> ' "bla bla</p>"),
+        ),
         TestItem(
-            name='simple_detect_quote3',
-            orig='<p>bla bla «bla bla» bla bla</p>',
-            expected=('<p>bla bla <span type="quote">«bla bla»</span> '
-                      'bla bla</p>')),
+            name=(
+                "quote within LEFT DOUBLE QUOTATION MARK and "
+                "RIGHT DOUBLE QUOTATION MARK"
+            ),
+            orig="<p>bla bla “bla bla” bla bla</p>",
+            expected=('<p>bla bla <span type="quote">“bla bla”</span> bla bla</p>'),
+        ),
         TestItem(
-            name='simple_detect_quote4',
+            name=(
+                "quote within RIGHT DOUBLE QUOTATION MARK and "
+                "quote within LEFT DOUBLE QUOTATION MARK and "
+                "RIGHT DOUBLE QUOTATION MARK"
+            ),
+            orig="<p>bla “bla” bla ”bla” bla</p>",
+            expected=(
+                '<p>bla <span type="quote">“bla”</span> bla '
+                '<span type="quote">”bla”</span> bla</p>'
+            ),
+        ),
+        TestItem(
+            name="simple_detect_quote3",
+            orig="<p>bla bla «bla bla» bla bla</p>",
+            expected=('<p>bla bla <span type="quote">«bla bla»</span> ' "bla bla</p>"),
+        ),
+        TestItem(
+            name="simple_detect_quote4",
             orig='<p type="title">Sámegiel čálamearkkat Windows XP várás.</p>',
+            expected=('<p type="title">Sámegiel čálamearkkat Windows XP várás.</p>'),
+        ),
+        TestItem(
+            name="simple_detect_quote2_quotes",
+            orig="<p>bla bla «bla bla» bla bla «bla bla» bla bla</p>",
             expected=(
-                '<p type="title">Sámegiel čálamearkkat Windows XP várás.</p>')),
+                '<p>bla bla <span type="quote">«bla bla»</span> bla bla '
+                '<span type="quote">«bla bla»</span> bla bla</p>'
+            ),
+        ),
         TestItem(
-            name='simple_detect_quote2_quotes',
-            orig='<p>bla bla «bla bla» bla bla «bla bla» bla bla</p>',
-            expected=('<p>bla bla <span type="quote">«bla bla»</span> bla bla '
-                      '<span type="quote">«bla bla»</span> bla bla</p>')),
+            name="detect_quote_with_following_tag",
+            orig="<p>bla bla «bla bla» <em>bla bla</em></p>",
+            expected=(
+                '<p>bla bla <span type="quote">«bla bla»</span> <em>' "bla bla</em></p>"
+            ),
+        ),
         TestItem(
-            name='detect_quote_with_following_tag',
-            orig='<p>bla bla «bla bla» <em>bla bla</em></p>',
-            expected=('<p>bla bla <span type="quote">«bla bla»</span> <em>'
-                      'bla bla</em></p>')),
+            name="detect_quote_with_tag_infront",
+            orig="<p>bla bla <em>bla bla</em> «bla bla»</p>",
+            expected=(
+                '<p>bla bla <em>bla bla</em> <span type="quote">' "«bla bla»</span></p>"
+            ),
+        ),
         TestItem(
-            name='detect_quote_with_tag_infront',
-            orig='<p>bla bla <em>bla bla</em> «bla bla»</p>',
-            expected=('<p>bla bla <em>bla bla</em> <span type="quote">'
-                      '«bla bla»</span></p>')),
-        TestItem(
-            name='detect_quote_within_tag',
-            orig='<p>bla bla <em>bla bla «bla bla»</em></p>',
-            expected=('<p>bla bla <em>bla bla <span type="quote">'
-                      '«bla bla»</span></em></p>')),
+            name="detect_quote_within_tag",
+            orig="<p>bla bla <em>bla bla «bla bla»</em></p>",
+            expected=(
+                '<p>bla bla <em>bla bla <span type="quote">' "«bla bla»</span></em></p>"
+            ),
+        ),
     ]
 
-    for i in '.,?!:':
+    for i in ".,?!:":
         quote_tests.append(
             TestItem(
-                name='quote followed by {}'.format(i),
-                orig=('<p>“bla”{} bla ”bla”</p>'.format(i)),
-                expected=('<p><span type="quote">“bla”</span>{} bla '
-                          '<span type="quote">”bla”</span></p>'.format(i))))
+                name="quote followed by {}".format(i),
+                orig=("<p>“bla”{} bla ”bla”</p>".format(i)),
+                expected=(
+                    '<p><span type="quote">“bla”</span>{} bla '
+                    '<span type="quote">”bla”</span></p>'.format(i)
+                ),
+            )
+        )
 
     for name, orig, expected in quote_tests:
         yield check_quote_detection, name, orig, expected
@@ -110,8 +133,13 @@ def test_detect_quote():
 def check_quote_detection(name, orig, expected):
     document_fixer = documentfixer.DocumentFixer(
         etree.parse(
-            os.path.join(HERE, 'converter_data/samediggi-article-48s-before-'
-                         'lang-detection-without-multilingual-tag.xml')))
+            os.path.join(
+                HERE,
+                "converter_data/samediggi-article-48s-before-"
+                "lang-detection-without-multilingual-tag.xml",
+            )
+        )
+    )
     got_paragraph = document_fixer._detect_quote(etree.fromstring(orig))
 
     assertXmlEqual(got_paragraph, etree.fromstring(expected))
@@ -122,106 +150,131 @@ class TestDocumentFixer(XMLTester):
 
     def test_insert_spaces_after_semicolon(self):
         a = {
-            u'Govven:Á': u'Govven: Á',
-            u'govven:á': u'govven: á',
-            u'GOVVEN:Á': u'GOVVEN: Á',
-            u'Govva:Á': u'Govva: Á',
-            u'govva:á': u'govva: á',
-            u'GOVVA:Á': u'GOVVA: Á',
-            u'GOVVEJEADDJI:Á': u'GOVVEJEADDJI: Á',
-            u'Govva:': u'Govva:',
-            u'<em>Govven:Á</em>': u'<em>Govven: Á</em>',
+            u"Govven:Á": u"Govven: Á",
+            u"govven:á": u"govven: á",
+            u"GOVVEN:Á": u"GOVVEN: Á",
+            u"Govva:Á": u"Govva: Á",
+            u"govva:á": u"govva: á",
+            u"GOVVA:Á": u"GOVVA: Á",
+            u"GOVVEJEADDJI:Á": u"GOVVEJEADDJI: Á",
+            u"Govva:": u"Govva:",
+            u"<em>Govven:Á</em>": u"<em>Govven: Á</em>",
         }
         for key, value in a.items():
             document_fixer = documentfixer.DocumentFixer(
-                etree.fromstring(u'''
+                etree.fromstring(
+                    u"""
                 <document>
                     <header/>
                     <body>
-                        <p>''' + key + u'''</p>
+                        <p>"""
+                    + key
+                    + u"""</p>
                     </body>
                 </document>
-            '''))
+            """
+                )
+            )
             document_fixer.insert_spaces_after_semicolon()
             got = document_fixer.get_etree()
-            want = etree.fromstring(u'''
+            want = etree.fromstring(
+                u"""
                 <document>
                     <header/>
                     <body>
-                        <p>''' + value + u'''</p>
+                        <p>"""
+                + value
+                + u"""</p>
                     </body>
                 </document>
-            ''')
+            """
+            )
 
             self.assertXmlEqual(got, want)
 
     def test_fix_newstags_bold_1(self):
         """Test conversion of the @bold: newstag."""
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@bold:buoidi
 seaggi</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p><em type="bold">buoidi</em></p>
         <p>seaggi</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_fix_newstags_bold_2(self):
         """Test conversion of the @bold: newstag."""
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@bold:buoidi
 @tekst:seaggi</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p><em type="bold">buoidi</em></p>
         <p>seaggi</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_fix_newstags_bold_3(self):
         """Test conversion of the @bold: newstag."""
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@bold :DON</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p><em type="bold">DON</em></p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_byline1(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <author>
             <unknown/>
@@ -230,24 +283,29 @@ seaggi</p>
     <body>
         <p>@byline: Kárášjohka: Elle Merete Utsi</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <author>
             <person firstname="" lastname="Elle Merete Utsi"/>
         </author>
     </header>
     <body/>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_byline2(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <author>
             <unknown/>
@@ -256,24 +314,29 @@ seaggi</p>
     <body>
         <p>&lt;pstyle:byline&gt;NORGA: Åse Pulk</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <author>
             <person firstname="" lastname="Åse Pulk"/>
         </author>
     </header>
     <body/>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_byline3(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <author>
             <unknown/>
@@ -282,24 +345,29 @@ seaggi</p>
     <body>
         <p>@byline:KçRç´JOHKA:Elle Merete Utsi</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <author>
             <person firstname="" lastname="Elle Merete Utsi"/>
         </author>
     </header>
     <body/>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_byline4(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <author>
             <unknown/>
@@ -308,24 +376,29 @@ seaggi</p>
     <body>
         <p>@byline:Elle Merete Utsi</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <author>
             <person firstname="" lastname="Elle Merete Utsi"/>
         </author>
     </header>
     <body/>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_byline5(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <author>
             <unknown/>
@@ -334,24 +407,29 @@ seaggi</p>
     <body>
         <p> @byline:Elle Merete Utsi</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <author>
             <person firstname="" lastname="Elle Merete Utsi"/>
         </author>
     </header>
     <body/>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_byline6(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <author>
             <person firstname="" lastname="Juvven"/>
@@ -360,24 +438,29 @@ seaggi</p>
     <body>
         <p> @byline:Elle Merete Utsi</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <author>
             <person firstname="" lastname="Juvven"/>
         </author>
     </header>
     <body/>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_byline7(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <author>
             <unknown/>
@@ -386,24 +469,29 @@ seaggi</p>
     <body>
         <p> @BYLINE:Elle Merete Utsi</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <author>
             <person firstname="" lastname="Elle Merete Utsi"/>
         </author>
     </header>
     <body/>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_byline8(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <author>
             <unknown/>
@@ -412,168 +500,208 @@ seaggi</p>
     <body>
         <p><em>@BYLINE:Elle Merete Utsi </em> </p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <author>
             <person firstname="" lastname="Elle Merete Utsi"/>
         </author>
     </header>
     <body/>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_kursiv(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@kursiv:(Gáldu)</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(r'''<document>
+        want = etree.fromstring(
+            r"""<document>
     <header/>
     <body>
         <p><em type="italic">(Gáldu)</em></p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_ledtekst(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@LEDtekst:Dat mearkkaša</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(r'''<document>
+        want = etree.fromstring(
+            r"""<document>
     <header/>
     <body>
         <p>Dat mearkkaša</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_bildetekst(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>Bildetekst:Dat mearkkaša</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(r'''<document>
+        want = etree.fromstring(
+            r"""<document>
     <header/>
     <body>
         <p>Dat mearkkaša</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_logo(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@logo:Finnmark jordskifterett</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(r'''<document>
+        want = etree.fromstring(
+            r"""<document>
     <header/>
     <body>
         <p>Finnmark jordskifterett</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_fotobyline(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@fotobyline:Finnmark jordskifterett</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(r'''<document>
+        want = etree.fromstring(
+            r"""<document>
     <header/>
     <body>
         <p>Finnmark jordskifterett</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_foto(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@foto: govva1</p>
         <p><em>foto: govva2</em></p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(r'''<document>
+        want = etree.fromstring(
+            r"""<document>
     <header/>
     <body>
         <p>govva1</p>
         <p><em>govva2</em></p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_bildetitt(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@bildetitt:Finnmark jordskifterett</p>
         <p>Bildetitt:Finnmark jordskifterett</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(r'''<document>
+        want = etree.fromstring(
+            r"""<document>
     <header/>
     <body>
         <p>Finnmark jordskifterett</p>
         <p>Finnmark jordskifterett</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_bilde(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@bilde:NSR PRESIDEANTAEVTTOHAS? Berit Ranveig Nilssen
@@ -584,11 +712,14 @@ BILDE 3:oahppat
 &lt;pstyle:bilde&gt;Ii
 Billedtekst: 3</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p>NSR PRESIDEANTAEVTTOHAS? Berit Ranveig Nilssen</p>
@@ -599,13 +730,15 @@ Billedtekst: 3</p>
         <p>Ii</p>
         <p>3</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_ingress_1(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@ingress:Ragnhild Nystad, Aili Keskitalo.
@@ -621,11 +754,14 @@ Samleingress: 2
 TEKST/INGRESS: 5
 @ Ingress: 6</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p>Ragnhild Nystad, Aili Keskitalo.</p>
@@ -641,33 +777,40 @@ TEKST/INGRESS: 5
         <p>5</p>
         <p>6</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_ingress_2(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p><em>@ingress: Gos?</em></p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p><em>Gos?</em></p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_mtitt1(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@m.titt:Juovllat
@@ -678,11 +821,14 @@ M:TITT:Lea go dus meahccebiila?
 &lt;pstyle:m.titt&gt;Divvot
  @m.titt:Eai</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p type="title">Juovllat</p>
@@ -693,33 +839,40 @@ M:TITT:Lea go dus meahccebiila?
         <p type="title">Divvot</p>
         <p type="title">Eai</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_mtitt2(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p><em>@m.titt: Maid?</em></p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p type="title"><em>Maid?</em></p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_tekst_1(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(u'''<document>
+            etree.fromstring(
+                u"""<document>
     <header/>
     <body>
         <p>@tekst:veadjá šaddat.
@@ -727,10 +880,13 @@ tekst:NSR ii áiggo.
 TEKST:ÐMii lea suohttaseamos geassebargu dus?
 &lt;pstyle:tekst&gt;Sámi</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p>veadjá šaddat.</p>
@@ -738,111 +894,138 @@ TEKST:ÐMii lea suohttaseamos geassebargu dus?
         <p>ÐMii lea suohttaseamos geassebargu dus?</p>
         <p>Sámi</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_tekst_2(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(u'''<document>
+            etree.fromstring(
+                u"""<document>
     <header/>
     <body>
         <p>@tekst:veadjá šaddat.
 NSR ii áiggo.</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p>veadjá šaddat. NSR ii áiggo.</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_tekst_3(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(u'''<document>
+            etree.fromstring(
+                u"""<document>
     <header/>
     <body>
         <p>@tekst:veadjá šaddat.
 @tekst:NSR ii áiggo.</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p>veadjá šaddat.</p>
         <p>NSR ii áiggo.</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_tekst_4(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(u'''<document>
+            etree.fromstring(
+                u"""<document>
     <header/>
     <body>
         <p>NSR <em>ii áiggo.</em></p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p>NSR <em>ii áiggo.</em></p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_tekst_5(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(u'''<document>
+            etree.fromstring(
+                u"""<document>
     <header/>
     <body>
         <p>  @tekst:ii</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p>ii</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_tekst_6(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring('<document>'
-                             '   <header/>'
-                             '   <body>'
-                             '       <p>Ê@tekst:ii</p>'
-                             '   </body>'
-                             '</document>'))
+            etree.fromstring(
+                "<document>"
+                "   <header/>"
+                "   <body>"
+                "       <p>Ê@tekst:ii</p>"
+                "   </body>"
+                "</document>"
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring('<document>'
-                                '   <header/>'
-                                '   <body>'
-                                '       <p>ii</p>'
-                                '   </body>'
-                                '</document>')
+        want = etree.fromstring(
+            "<document>"
+            "   <header/>"
+            "   <body>"
+            "       <p>ii</p>"
+            "   </body>"
+            "</document>"
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_stikktitt(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@stikktitt:Dološ sámegiel máinnas Várjjagis</p>
@@ -850,10 +1033,13 @@ NSR ii áiggo.</p>
         <p>@stikktittel:Dološ sámegiel máinnas Várjjagis</p>
         <p> @stikk:Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
@@ -861,359 +1047,441 @@ NSR ii áiggo.</p>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_utitt1(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@utitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_utitt2(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p> @utitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_udot_titt(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@u.titt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_undertitt(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@undertitt:Dološ sámegiel máinnas Várjjagis
 undertitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_undertittel(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>Undertittel: Ja</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p type="title">Ja</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_ttitt(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@ttitt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_1(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
     <body>
         <p>@tittel:Eanebuidda</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Eanebuidda</title>
     </header>
     <body>
         <p type="title">Eanebuidda</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_2(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
     <body>
         <p> @tittel:Eanebuidda</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Eanebuidda</title>
     </header>
     <body>
         <p type="title">Eanebuidda</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_3(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
     <body>
         <p>@titt:Eanebuidda</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Eanebuidda</title>
     </header>
     <body>
         <p type="title">Eanebuidda</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_4(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
     <body>
         <p> @titt:Eanebuidda</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Eanebuidda</title>
     </header>
     <body>
         <p type="title">Eanebuidda</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_5(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
     <body>
         <p>TITT:Eanebuidda</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Eanebuidda</title>
     </header>
     <body>
         <p type="title">Eanebuidda</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_6(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
     <body>
         <p>Tittel:Eanebuidda</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Eanebuidda</title>
     </header>
     <body>
         <p type="title">Eanebuidda</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_7(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
     <body>
         <p>@LEDtitt:Eanebuidda</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Eanebuidda</title>
     </header>
     <body>
         <p type="title">Eanebuidda</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_8(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
     <body>
         <p>&lt;pstyle:tittel&gt;Eanebuidda</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Eanebuidda</title>
     </header>
     <body>
         <p type="title">Eanebuidda</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_9(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
     <body>
         <p>HOVEDTITTEL:Eanebuidda</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Eanebuidda</title>
     </header>
     <body>
         <p type="title">Eanebuidda</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_10(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
     <body>
         <p>TITTEL:Eanebuidda</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Eanebuidda</title>
     </header>
     <body>
         <p type="title">Eanebuidda</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_11(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
@@ -1222,10 +1490,13 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
 titt:Ruovttusuodjaleaddjit
  @titt:Eanebuidda</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Guolli</title>
     </header>
@@ -1234,105 +1505,127 @@ titt:Ruovttusuodjaleaddjit
         <p type="title">Ruovttusuodjaleaddjit</p>
         <p type="title">Eanebuidda</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_12(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
     <body>
         <p>Hovedtitt:Eanebuidda</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Eanebuidda</title>
     </header>
     <body>
         <p type="title">Eanebuidda</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_13(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
     <body>
         <p>@hovedtitt:Eanebuidda</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Eanebuidda</title>
     </header>
     <body>
         <p type="title">Eanebuidda</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_14(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
     <body>
         <p>@titt 2:Eanebuidda</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Eanebuidda</title>
     </header>
     <body>
         <p type="title">Eanebuidda</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_15(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
     <body>
         <p>OVERTITTEL:Eanebuidda</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Eanebuidda</title>
     </header>
     <body>
         <p type="title">Eanebuidda</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_headertitletags_16(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
@@ -1346,11 +1639,14 @@ TITT:njeallje suorpma boaris.
 HOVEDTITTEL: 2
 TITTEL: 3</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>Gii boahtá Nystø maŋis?</title>
     </header>
@@ -1365,72 +1661,89 @@ TITTEL: 3</p>
         <p type="title">3</p>
     </body>
 </document>
-''')
+"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_ttt(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@ttt:Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_newstags_tit(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@tit:Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_newstags_text_before_titletags(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@tekst: text
 @m.titt: title</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p>text</p>
         <p type="title">title</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_newstags_text_before_headtitletags(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <title/>
     </header>
@@ -1438,10 +1751,13 @@ TITTEL: 3</p>
         <p>@tekst: text
 @tittel: title</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <title>title</title>
     </header>
@@ -1449,13 +1765,15 @@ TITTEL: 3</p>
         <p>text</p>
         <p type="title">title</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_newstags_text_before_bylinetags(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header>
         <author>
             <unknown/>
@@ -1465,10 +1783,13 @@ TITTEL: 3</p>
         <p>@tekst: text
 @byline: title</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header>
         <author>
             <person firstname="" lastname="title"></person>
@@ -1477,77 +1798,93 @@ TITTEL: 3</p>
     <body>
         <p>text</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_newstags_text_before_boldtags(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@tekst: text
 @bold: title</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p>text</p>
         <p><em type="bold">title</em></p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_newstags_text_before_kursiv(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p>@tekst: text
 @kursiv: title</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p>text</p>
         <p><em type="italic">title</em></p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_fix_newstags_4(self):
         """Check that p attributes are kept."""
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p type="title">title</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p type="title">title</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_fix_body_encoding(self):
-        newstext = plaintextconverter.PlaintextConverter(
-            'orig/sme/riddu/tullball.txt')
+        newstext = plaintextconverter.PlaintextConverter("orig/sme/riddu/tullball.txt")
         text = newstext.content2xml(
-            io.StringIO(u'''ÐMun lean njeallje jagi boaris.
+            io.StringIO(
+                u"""ÐMun lean njeallje jagi boaris.
 
 Nu beaivvdat.
 
@@ -1562,13 +1899,16 @@ TEKST:ÐMii lea suohttaseamos geassebargu dus ?
 @bold:Suohkana beara»sodagaid juohkin
 
 LOGO: Smi kulturfestivala 1998
-'''))
+"""
+            )
+        )
 
         document_fixer = documentfixer.DocumentFixer(text)
-        document_fixer.fix_body_encoding('sme')
+        document_fixer.fix_body_encoding("sme")
         got = document_fixer.get_etree()
 
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header></header>
         <body>
             <p>–Mun lean njeallje jagi boaris.</p>
@@ -1580,21 +1920,26 @@ LOGO: Smi kulturfestivala 1998
             <p>@bold:Suohkana bearašásodagaid juohkin</p>
             <p>LOGO: Sámi kulturfestivala 1998</p>
         </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_replace_ligatures(self):
         xml = svgconverter.convert2intermediate(
-            os.path.join(HERE, 'converter_data/fakecorpus/orig/sme/riddu/'
-                         'Riddu_Riddu_avis_TXT.200923.svg'))
+            os.path.join(
+                HERE,
+                "converter_data/fakecorpus/orig/sme/riddu/"
+                "Riddu_Riddu_avis_TXT.200923.svg",
+            )
+        )
         document_fixer = documentfixer.DocumentFixer(xml)
-        document_fixer.fix_body_encoding('sme')
+        document_fixer.fix_body_encoding("sme")
         got = document_fixer.get_etree()
 
         want = etree.parse(
-            os.path.join(HERE,
-                         'converter_data/Riddu_Riddu_avis_TXT.200923.xml'))
+            os.path.join(HERE, "converter_data/Riddu_Riddu_avis_TXT.200923.xml")
+        )
 
         self.assertXmlEqual(got, want)
 
@@ -1630,18 +1975,20 @@ LOGO: Smi kulturfestivala 1998
     def test_replace_shy1(self):
         document = (
             '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
-            '<author><unknown/></author><availability><free/>'
-            '</availability><multilingual/></header><body><p>a­b­c'
-            '<span>d­e</span>f­g</p></body></document>')
+            "<author><unknown/></author><availability><free/>"
+            "</availability><multilingual/></header><body><p>a­b­c"
+            "<span>d­e</span>f­g</p></body></document>"
+        )
         if six.PY3:
-            document = document.encode('utf8')
+            document = document.encode("utf8")
         orig_doc = etree.parse(io.BytesIO(document))
 
         expected_doc = (
             '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
-            '<author><unknown/></author><availability><free/></availability>'
-            '<multilingual/></header><body><p>a<hyph/>b<hyph/>c<span>d<hyph/>'
-            'e</span>f<hyph/>g</p></body></document>')
+            "<author><unknown/></author><availability><free/></availability>"
+            "<multilingual/></header><body><p>a<hyph/>b<hyph/>c<span>d<hyph/>"
+            "e</span>f<hyph/>g</p></body></document>"
+        )
 
         document_fixer = documentfixer.DocumentFixer(orig_doc)
         document_fixer.soft_hyphen_to_hyph_tag()
@@ -1651,18 +1998,20 @@ LOGO: Smi kulturfestivala 1998
     def test_replace_shy2(self):
         document = (
             '<document xml:lang="sma" id="no_id">'
-            '<header><title/><genre/><author><unknown/></author>'
-            '<availability><free/></availability><multilingual/></header>'
-            '<body><p>a­b­c<span>d­e</span></p></body></document>')
+            "<header><title/><genre/><author><unknown/></author>"
+            "<availability><free/></availability><multilingual/></header>"
+            "<body><p>a­b­c<span>d­e</span></p></body></document>"
+        )
         if six.PY3:
-            document = document.encode('utf8')
+            document = document.encode("utf8")
         orig_doc = etree.parse(io.BytesIO(document))
 
         expected_doc = (
             '<document xml:lang="sma" id="no_id"><header><title/><genre/>'
-            '<author><unknown/></author><availability><free/></availability>'
-            '<multilingual/></header><body><p>a<hyph/>b<hyph/>c<span>d'
-            '<hyph/>e</span></p></body></document>')
+            "<author><unknown/></author><availability><free/></availability>"
+            "<multilingual/></header><body><p>a<hyph/>b<hyph/>c<span>d"
+            "<hyph/>e</span></p></body></document>"
+        )
 
         document_fixer = documentfixer.DocumentFixer(orig_doc)
         document_fixer.soft_hyphen_to_hyph_tag()
@@ -1671,215 +2020,265 @@ LOGO: Smi kulturfestivala 1998
 
     def test_compact_em1(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p><em>1</em> <em>2</em></p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.compact_ems()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p><em>1 2</em></p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_compact_em2(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p><em>1</em> <em>2</em> 3</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.compact_ems()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p><em>1 2</em> 3</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_compact_em3(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p><em>1</em> <em>2</em> <span/> <em>3</em> <em>4</em></p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.compact_ems()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p><em>1 2</em> <span/> <em>3 4</em></p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_compact_em4(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p><em>1</em> <em>2</em> 5<span/> <em>3</em> <em>4</em> 6</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.compact_ems()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p><em>1 2</em> 5<span/> <em>3 4</em> 6</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_compact_em5(self):
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(r'''<document>
+            etree.fromstring(
+                r"""<document>
     <header/>
     <body>
         <p><em></em> <em>2</em> 5<span/> <em>3</em> <em></em> 6</p>
     </body>
-</document>'''))
+</document>"""
+            )
+        )
         document_fixer.compact_ems()
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'''<document>
+        want = etree.fromstring(
+            u"""<document>
     <header/>
     <body>
         <p><em>2</em> 5<span/> <em>3</em> 6</p>
     </body>
-</document>''')
+</document>"""
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_fix_sms1(self):
         r"""\u2019 (’) should be replaced by \u02BC (ʼ)"""
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(u'<document xml:lang="sms">'
-                             u'  <header/>'
-                             u'  <body>'
-                             u'     <p>'
-                             u'       Mätt’temaaunâstuâjj '
-                             u'     </p>'
-                             u'  </body>'
-                             u'</document>'))
-        document_fixer.fix_body_encoding('sms')
+            etree.fromstring(
+                u'<document xml:lang="sms">'
+                u"  <header/>"
+                u"  <body>"
+                u"     <p>"
+                u"       Mätt’temaaunâstuâjj "
+                u"     </p>"
+                u"  </body>"
+                u"</document>"
+            )
+        )
+        document_fixer.fix_body_encoding("sms")
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'<document xml:lang="sms">'
-                                u'  <header/>'
-                                u'  <body>'
-                                u'     <p>'
-                                u'       Mättʼtemaaunâstuâjj '
-                                u'     </p>'
-                                u'  </body>'
-                                u'</document>')
+        want = etree.fromstring(
+            u'<document xml:lang="sms">'
+            u"  <header/>"
+            u"  <body>"
+            u"     <p>"
+            u"       Mättʼtemaaunâstuâjj "
+            u"     </p>"
+            u"  </body>"
+            u"</document>"
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_fix_sms2(self):
         r"""\u0027 (')  should be replaced by \u02BC (ʼ)"""
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(u'<document xml:lang="sms">'
-                             u'  <header/>'
-                             u'  <body>'
-                             u'     <p>'
-                             u"       ǩiõll'laž da kulttuursaž vuõiggâdvuõđi"
-                             u'     </p>'
-                             u'  </body>'
-                             u'</document>'))
-        document_fixer.fix_body_encoding('sms')
+            etree.fromstring(
+                u'<document xml:lang="sms">'
+                u"  <header/>"
+                u"  <body>"
+                u"     <p>"
+                u"       ǩiõll'laž da kulttuursaž vuõiggâdvuõđi"
+                u"     </p>"
+                u"  </body>"
+                u"</document>"
+            )
+        )
+        document_fixer.fix_body_encoding("sms")
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'<document xml:lang="sms">'
-                                u'  <header/>'
-                                u'  <body>'
-                                u'     <p>'
-                                u'       ǩiõllʼlaž da kulttuursaž vuõiggâdvuõđi'
-                                u'     </p>'
-                                u'  </body>'
-                                u'</document>')
+        want = etree.fromstring(
+            u'<document xml:lang="sms">'
+            u"  <header/>"
+            u"  <body>"
+            u"     <p>"
+            u"       ǩiõllʼlaž da kulttuursaž vuõiggâdvuõđi"
+            u"     </p>"
+            u"  </body>"
+            u"</document>"
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_fix_sms3(self):
         r"""\u2032 (′)  should be replaced by \u02B9 (ʹ)"""
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(u'<document xml:lang="sms">'
-                             u'  <header/>'
-                             u'  <body>'
-                             u'     <p>'
-                             u'       Mon tõzz še njui′ǩǩeem tõ′st dõõzze.'
-                             u'     </p>'
-                             u'  </body>'
-                             u'</document>'))
-        document_fixer.fix_body_encoding('sms')
+            etree.fromstring(
+                u'<document xml:lang="sms">'
+                u"  <header/>"
+                u"  <body>"
+                u"     <p>"
+                u"       Mon tõzz še njui′ǩǩeem tõ′st dõõzze."
+                u"     </p>"
+                u"  </body>"
+                u"</document>"
+            )
+        )
+        document_fixer.fix_body_encoding("sms")
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'<document xml:lang="sms">'
-                                u'  <header/>'
-                                u'  <body>'
-                                u'     <p>'
-                                u'       Mon tõzz še njuiʹǩǩeem tõʹst dõõzze.'
-                                u'     </p>'
-                                u'  </body>'
-                                u'</document>')
+        want = etree.fromstring(
+            u'<document xml:lang="sms">'
+            u"  <header/>"
+            u"  <body>"
+            u"     <p>"
+            u"       Mon tõzz še njuiʹǩǩeem tõʹst dõõzze."
+            u"     </p>"
+            u"  </body>"
+            u"</document>"
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_fix_sms4(self):
         r"""\u00B4 (´)  should be replaced by \u02B9 (ʹ)"""
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(u'<document xml:lang="sms">'
-                             u'  <header/>'
-                             u'  <body>'
-                             u'     <p>'
-                             u'       Materialbaaŋk čuä´jtumuš'
-                             u'     </p>'
-                             u'  </body>'
-                             u'</document>'))
-        document_fixer.fix_body_encoding('sms')
+            etree.fromstring(
+                u'<document xml:lang="sms">'
+                u"  <header/>"
+                u"  <body>"
+                u"     <p>"
+                u"       Materialbaaŋk čuä´jtumuš"
+                u"     </p>"
+                u"  </body>"
+                u"</document>"
+            )
+        )
+        document_fixer.fix_body_encoding("sms")
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'<document xml:lang="sms">'
-                                u'  <header/>'
-                                u'  <body>'
-                                u'     <p>'
-                                u'       Materialbaaŋk čuäʹjtumuš'
-                                u'     </p>'
-                                u'  </body>'
-                                u'</document>')
+        want = etree.fromstring(
+            u'<document xml:lang="sms">'
+            u"  <header/>"
+            u"  <body>"
+            u"     <p>"
+            u"       Materialbaaŋk čuäʹjtumuš"
+            u"     </p>"
+            u"  </body>"
+            u"</document>"
+        )
 
         self.assertXmlEqual(got, want)
 
     def test_fix_sms5(self):
         r"""\u0301 ( ́)  should be replaced by \u02B9 (ʹ)"""
         document_fixer = documentfixer.DocumentFixer(
-            etree.fromstring(u'<document xml:lang="sms">'
-                             u'  <header/>'
-                             u'  <body>'
-                             u'     <p>'
-                             u'       Materialbaaŋk čuä́jtumuš'
-                             u'     </p>'
-                             u'  </body>'
-                             u'</document>'))
-        document_fixer.fix_body_encoding('sms')
+            etree.fromstring(
+                u'<document xml:lang="sms">'
+                u"  <header/>"
+                u"  <body>"
+                u"     <p>"
+                u"       Materialbaaŋk čuä́jtumuš"
+                u"     </p>"
+                u"  </body>"
+                u"</document>"
+            )
+        )
+        document_fixer.fix_body_encoding("sms")
         got = document_fixer.get_etree()
-        want = etree.fromstring(u'<document xml:lang="sms">'
-                                u'  <header/>'
-                                u'  <body>'
-                                u'     <p>'
-                                u'       Materialbaaŋk čuäʹjtumuš'
-                                u'     </p>'
-                                u'  </body>'
-                                u'</document>')
+        want = etree.fromstring(
+            u'<document xml:lang="sms">'
+            u"  <header/>"
+            u"  <body>"
+            u"     <p>"
+            u"       Materialbaaŋk čuäʹjtumuš"
+            u"     </p>"
+            u"  </body>"
+            u"</document>"
+        )
 
         self.assertXmlEqual(got, want)

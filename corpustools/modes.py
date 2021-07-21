@@ -48,8 +48,7 @@ class Pipeline(object):
             giella_prefix (str): directory where the filenames given in the
                 modes.xml file exist.
         """
-        modefile = etree.parse(
-            os.path.join(os.path.dirname(__file__), 'xml/modes.xml'))
+        modefile = etree.parse(os.path.join(os.path.dirname(__file__), "xml/modes.xml"))
         self.mode = modefile.find('.//mode[@name="{}"]'.format(modename))
         self.giella_prefix = self.valid_path(giella_prefix, lang)
         self.sanity_check()
@@ -69,18 +68,18 @@ class Pipeline(object):
             utils.ArgumentError if no resources are found.
         """
         if giella_prefix is not None:
-            return os.path.join(giella_prefix, 'share/giella', lang)
+            return os.path.join(giella_prefix, "share/giella", lang)
         else:
             for prefix in [
-                    os.path.join(os.getenv('HOME'), '.local'), '/usr/local',
-                    '/usr'
+                os.path.join(os.getenv("HOME"), ".local"),
+                "/usr/local",
+                "/usr",
             ]:
-                path = os.path.join(prefix, 'share/giella', lang)
+                path = os.path.join(prefix, "share/giella", lang)
                 if os.path.isdir(path) and os.listdir(path):
                     return path
 
-        raise (util.ArgumentError(
-            'ERROR: found no resources for {}'.format(lang)))
+        raise (util.ArgumentError("ERROR: found no resources for {}".format(lang)))
 
     @staticmethod
     def raise_unless_exists(filenames):
@@ -95,17 +94,19 @@ class Pipeline(object):
         """
         for filename in filenames:
             if not os.path.exists(filename):
-                raise (util.ArgumentError(
-                    'ERROR: {} does not exist'.format(filename)))
+                raise (util.ArgumentError("ERROR: {} does not exist".format(filename)))
 
     def sanity_check(self):
         """Check that programs and files found in a program element exist."""
         util.sanity_check(
-            [program.get('name') for program in self.mode.iter('program')])
-        self.raise_unless_exists([
-            os.path.join(self.giella_prefix, file_elem.get('name'))
-            for file_elem in self.mode.iter('file')
-        ])
+            [program.get("name") for program in self.mode.iter("program")]
+        )
+        self.raise_unless_exists(
+            [
+                os.path.join(self.giella_prefix, file_elem.get("name"))
+                for file_elem in self.mode.iter("file")
+            ]
+        )
 
     def run_external_command(self, command, instring):
         """Run the command with input using subprocess.
@@ -128,9 +129,9 @@ class Pipeline(object):
         """Print errors."""
         if error:
             print(
-                u'{} failed:\n{}'.format(u' '.join(command),
-                                         error.decode('utf8')),
-                file=sys.stderr)
+                "{} failed:\n{}".format(" ".join(command), error.decode("utf8")),
+                file=sys.stderr,
+            )
 
     def tag2commandpart(self, element):
         """Turn program elements to a command part.
@@ -141,10 +142,10 @@ class Pipeline(object):
         Returns:
             str: a program, a program option or a path to a file
         """
-        if element.tag == 'file':
-            return os.path.join(self.giella_prefix, element.get('name'))
+        if element.tag == "file":
+            return os.path.join(self.giella_prefix, element.get("name"))
 
-        return element.get('name')
+        return element.get("name")
 
     def program2command(self, program):
         """Turn a program element to a subprocess compatible command.
@@ -164,10 +165,7 @@ class Pipeline(object):
         Returns:
             list of list: a list of subprocess compatible commands.
         """
-        return [
-            self.program2command(program)
-            for program in self.mode.iter('program')
-        ]
+        return [self.program2command(program) for program in self.mode.iter("program")]
 
     def run(self, instring):
         """Run the pipeline using input.
@@ -181,4 +179,4 @@ class Pipeline(object):
         for command in self.commands:
             instring = self.run_external_command(command, instring)
 
-        return instring.decode('utf8')
+        return instring.decode("utf8")

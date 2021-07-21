@@ -30,11 +30,13 @@ from corpustools import analyser, argparse_version, converter
 def parse_args():
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Run this script on some directory in freecorpus or '
-        'boundcorpus to find out why files are not converted or analysed')
-    parser.add_argument('lang', help="The language that you would like to test")
+        description="Run this script on some directory in freecorpus or "
+        "boundcorpus to find out why files are not converted or analysed",
+    )
+    parser.add_argument("lang", help="The language that you would like to test")
     parser.add_argument(
-        'dirs', nargs='+', help="A directory containing original corpus files")
+        "dirs", nargs="+", help="A directory containing original corpus files"
+    )
 
     return parser.parse_args()
 
@@ -44,19 +46,21 @@ def main():
 
     cm = converter.ConverterManager(False)
 
-    fst_file = 'src/analyser-disamb-gt-desc.xfst'
+    fst_file = "src/analyser-disamb-gt-desc.xfst"
     ana = analyser.Analyser(
-        'sme',
-        'xfst',
-        fst_file=os.path.join(
-            os.getenv('GTHOME'), 'langs', args.lang, fst_file),
+        "sme",
+        "xfst",
+        fst_file=os.path.join(os.getenv("GTHOME"), "langs", args.lang, fst_file),
         disambiguation_analysis_file=os.path.join(
-            os.getenv('GTHOME'), 'langs', args.lang,
-            'src/syntax/disambiguation.cg3'),
+            os.getenv("GTHOME"), "langs", args.lang, "src/syntax/disambiguation.cg3"
+        ),
         function_analysis_file=os.path.join(
-            os.getenv('GTHOME'), 'giella-shared/smi/src/syntax/korp.cg3'),
+            os.getenv("GTHOME"), "giella-shared/smi/src/syntax/korp.cg3"
+        ),
         dependency_analysis_file=os.path.join(
-            os.getenv('GTHOME'), 'giella-shared/smi/src/syntax/dependency.cg3'))
+            os.getenv("GTHOME"), "giella-shared/smi/src/syntax/dependency.cg3"
+        ),
+    )
 
     ana.xml_files = []
     for directory in args.dirs:
@@ -65,24 +69,24 @@ def main():
         analysed = 0
         for root, dirs, files in os.walk(directory):
             for f in files:
-                if f.endswith('.xsl'):
+                if f.endswith(".xsl"):
                     orig += 1
 
                     orig_f = os.path.abspath(os.path.join(root, f[:-4]))
-                    converted_f = orig_f.replace('orig/', 'converted/') + '.xml'
-                    analysed_f = converted_f.replace('converted/', 'analysed/')
+                    converted_f = orig_f.replace("orig/", "converted/") + ".xml"
+                    analysed_f = converted_f.replace("converted/", "analysed/")
 
                     if not os.path.exists(converted_f):
-                        cm.FILES.append(orig_f + '.xsl')
+                        cm.FILES.append(orig_f + ".xsl")
                         print(orig_f)
-                        print('\t' + converted_f)
-                        print('\t' + analysed_f)
+                        print("\t" + converted_f)
+                        print("\t" + analysed_f)
                         print()
                     elif not os.path.exists(analysed_f):
                         converted += 1
                         ana.xml_files.append(converted_f)
                         print(orig_f)
-                        print('\t' + analysed_f)
+                        print("\t" + analysed_f)
                         print()
                     else:
                         converted += 1

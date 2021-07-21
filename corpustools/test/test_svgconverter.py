@@ -35,13 +35,15 @@ class TestSVGConverter(xmltester.XMLTester):
 
     def test_convert2intermediate(self):
         """Test conversion of svg files."""
-        svg_file = os.path.join(HERE,
-                                'converter_data/fakecorpus/orig/sme/riddu/'
-                                'Riddu_Riddu_avis_TXT.200923.svg')
+        svg_file = os.path.join(
+            HERE,
+            "converter_data/fakecorpus/orig/sme/riddu/"
+            "Riddu_Riddu_avis_TXT.200923.svg",
+        )
 
         got = svgconverter.convert2intermediate(svg_file)
         want = etree.parse(
-            os.path.join(HERE,
-                         'converter_data/Riddu_Riddu_avis_TXT.200923.svg.xml'))
+            os.path.join(HERE, "converter_data/Riddu_Riddu_avis_TXT.200923.svg.xml")
+        )
 
         self.assertXmlEqual(got, want)

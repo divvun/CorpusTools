@@ -47,7 +47,7 @@ class XslMaker(object):
     @property
     def logfile(self):
         """Return the name of the logfile."""
-        return self.filename + '.log'
+        return self.filename + ".log"
 
     @property
     def xsl(self):
@@ -56,15 +56,15 @@ class XslMaker(object):
         Raises:
             In case of an xml syntax error, raise ConversionException.
         """
-        xsl = etree.parse(os.path.join(HERE, 'xslt/preprocxsl.xsl'))
+        xsl = etree.parse(os.path.join(HERE, "xslt/preprocxsl.xsl"))
         transformer = etree.XSLT(xsl)
 
-        common_xsl_path = os.path.join(HERE, 'xslt/common.xsl').replace(
-            ' ', '%20')
+        common_xsl_path = os.path.join(HERE, "xslt/common.xsl").replace(" ", "%20")
 
         return transformer(
             self.filename,
-            commonxsl=etree.XSLT.strparam('file://{}'.format(common_xsl_path)))
+            commonxsl=etree.XSLT.strparam("file://{}".format(common_xsl_path)),
+        )
 
     @property
     def transformer(self):

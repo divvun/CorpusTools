@@ -54,10 +54,9 @@ class ConverterManager(object):
             ConverterManager._languageguesser = text_cat.Classifier(None)
         return self._languageguesser
 
-    def __init__(self,
-                 lazy_conversion=False,
-                 write_intermediate=False,
-                 goldstandard=False):
+    def __init__(
+        self, lazy_conversion=False, write_intermediate=False, goldstandard=False
+    ):
         """Initialise the ConverterManager class.
 
         Args:
@@ -80,29 +79,29 @@ class ConverterManager(object):
             orig_file: string containing the path to the original file.
         """
         try:
-            conv = converter.Converter(orig_file,
-                                       lazy_conversion=self.lazy_conversion)
+            conv = converter.Converter(orig_file, lazy_conversion=self.lazy_conversion)
             conv.write_complete(self.languageguesser())
         except (util.ConversionError, ValueError, IndexError) as error:
-            LOGGER.warn('Could not convert %s\n%s', orig_file, error)
+            LOGGER.warn("Could not convert %s\n%s", orig_file, error)
 
     def convert_in_parallel(self):
         """Convert files using the multiprocessing module."""
-        LOGGER.info('Starting the conversion of %d files', len(self.files))
+        LOGGER.info("Starting the conversion of %d files", len(self.files))
 
         pool_size = multiprocessing.cpu_count()
-        pool = multiprocessing.Pool(processes=pool_size, )
-        pool.map(unwrap_self_convert,
-                 list(zip([self] * len(self.files), self.files)))
+        pool = multiprocessing.Pool(
+            processes=pool_size,
+        )
+        pool.map(unwrap_self_convert, list(zip([self] * len(self.files), self.files)))
         pool.close()
         pool.join()
 
     def convert_serially(self):
         """Convert the files in one process."""
-        LOGGER.info('Starting the conversion of %d files', len(self.files))
+        LOGGER.info("Starting the conversion of %d files", len(self.files))
 
         for orig_file in self.files:
-            LOGGER.debug('converting %s', orig_file)
+            LOGGER.debug("converting %s", orig_file)
             self.convert(orig_file)
 
     def add_file(self, xsl_file):
@@ -113,18 +112,21 @@ class ConverterManager(object):
         """
         if os.path.isfile(xsl_file) and os.path.isfile(xsl_file[:-4]):
             metadata = xslsetter.MetadataHandler(xsl_file)
-            if ((metadata.get_variable('conversion_status') == 'standard'
-                 and not self.goldstandard)
-                    or (metadata.get_variable('conversion_status').startswith(
-                        'correct') and self.goldstandard)):
+            if (
+                metadata.get_variable("conversion_status") == "standard"
+                and not self.goldstandard
+            ) or (
+                metadata.get_variable("conversion_status").startswith("correct")
+                and self.goldstandard
+            ):
                 self.files.append(xsl_file[:-4])
         else:
-            LOGGER.warn('%s does not exist', xsl_file[:-4])
+            LOGGER.warn("%s does not exist", xsl_file[:-4])
 
     @staticmethod
     def make_xsl_file(source):
         """Write an xsl file if it does not exist."""
-        xsl_file = source if source.endswith('.xsl') else source + '.xsl'
+        xsl_file = source if source.endswith(".xsl") else source + ".xsl"
         if not os.path.isfile(xsl_file):
             metadata = xslsetter.MetadataHandler(xsl_file, create=True)
             metadata.set_lang_genre_xsl()
@@ -136,7 +138,7 @@ class ConverterManager(object):
         """Add all files in a directory for conversion."""
         for root, _, files in os.walk(directory):
             for file_ in files:
-                if file_.endswith('.xsl'):
+                if file_.endswith(".xsl"):
                     self.add_file(os.path.join(root, file_))
 
     def collect_files(self, sources):
@@ -146,7 +148,7 @@ class ConverterManager(object):
             sources: a list of files or directories where convertable
             files are found.
         """
-        LOGGER.info('Collecting files to convert')
+        LOGGER.info("Collecting files to convert")
 
         for source in sources:
             if os.path.isfile(source):
@@ -156,8 +158,9 @@ class ConverterManager(object):
                 self.add_directory(source)
             else:
                 LOGGER.error(
-                    'Can not process %s\n'
-                    'This is neither a file nor a directory.', source)
+                    "Can not process %s\n" "This is neither a file nor a directory.",
+                    source,
+                )
 
 
 def unwrap_self_convert(arg, **kwarg):
@@ -177,28 +180,39 @@ def parse_options():
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Convert original files to giellatekno xml.')
+        description="Convert original files to giellatekno xml.",
+    )
 
-    parser.add_argument('--serial',
-                        action="store_true",
-                        help="use this for debugging the conversion \
+    parser.add_argument(
+        "--serial",
+        action="store_true",
+        help="use this for debugging the conversion \
                         process. When this argument is used files will \
-                        be converted one by one.")
-    parser.add_argument('--lazy-conversion',
-                        action="store_true",
-                        help="Reconvert only if metadata have changed.")
-    parser.add_argument('--write-intermediate',
-                        action="store_true",
-                        help="Write the intermediate XML representation \
+                        be converted one by one.",
+    )
+    parser.add_argument(
+        "--lazy-conversion",
+        action="store_true",
+        help="Reconvert only if metadata have changed.",
+    )
+    parser.add_argument(
+        "--write-intermediate",
+        action="store_true",
+        help="Write the intermediate XML representation \
                         to ORIGFILE.im.xml, for debugging the XSLT.\
-                        (Has no effect if the converted file already exists.)")
-    parser.add_argument('--goldstandard',
-                        action="store_true",
-                        help='Convert goldstandard and .correct files')
-    parser.add_argument('sources',
-                        nargs='+',
-                        help="The original file(s) or \
-                        directory/ies where the original files exist")
+                        (Has no effect if the converted file already exists.)",
+    )
+    parser.add_argument(
+        "--goldstandard",
+        action="store_true",
+        help="Convert goldstandard and .correct files",
+    )
+    parser.add_argument(
+        "sources",
+        nargs="+",
+        help="The original file(s) or \
+                        directory/ies where the original files exist",
+    )
 
     args = parser.parse_args()
 
@@ -208,13 +222,15 @@ def parse_options():
 def sanity_check():
     """Check that needed programs and environment variables are set."""
     # util.sanity_check(['wvHtml', 'pdftotext', 'latex2html'])
-    util.sanity_check(['pdftotext', 'latex2html'])
+    util.sanity_check(["pdftotext", "latex2html"])
     if not os.path.isfile(converter.Converter.get_dtd_location()):
         raise util.SetupError(
             "Couldn't find {}\n"
             "Check that GTHOME points at the right directory "
-            "(currently: {}).".format(converter.Converter.get_dtd_location(),
-                                      os.environ['GTHOME']))
+            "(currently: {}).".format(
+                converter.Converter.get_dtd_location(), os.environ["GTHOME"]
+            )
+        )
 
 
 def main():
@@ -227,8 +243,9 @@ def main():
 
     args = parse_options()
 
-    manager = ConverterManager(args.lazy_conversion, args.write_intermediate,
-                               args.goldstandard)
+    manager = ConverterManager(
+        args.lazy_conversion, args.write_intermediate, args.goldstandard
+    )
     manager.collect_files(args.sources)
 
     try:

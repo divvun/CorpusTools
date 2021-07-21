@@ -46,7 +46,7 @@ class TrainingCorpusMaker(object):
         lang (str): the language of the training corpus.
     """
 
-    only_words = regex.compile(r'\p{L}+')
+    only_words = regex.compile(r"\p{L}+")
     xml_printer = ccat.XMLPrinter(dependency=True)
 
     def __init__(self, lang):
@@ -68,22 +68,27 @@ class TrainingCorpusMaker(object):
         uff_buffer = []
         for line in io.StringIO(text):
             line = line.rstrip()
-            if line == ':' or line == ':\\n':
-                sentence_buffer.append(' ')
-            elif line.startswith(':'):
+            if line == ":" or line == ":\\n":
+                sentence_buffer.append(" ")
+            elif line.startswith(":"):
                 uff_buffer.append(line)
             elif line.startswith('"'):
                 sentence_buffer.append(line[2:-2])
-            elif 'CLB' in line:
-                if not ('".' not in line and '"¶"' not in line
-                        and '"?"' not in line and '"!"' not in line
-                        and '"…"' not in line):
+            elif "CLB" in line:
+                if not (
+                    '".' not in line
+                    and '"¶"' not in line
+                    and '"?"' not in line
+                    and '"!"' not in line
+                    and '"…"' not in line
+                ):
                     if uff_buffer:
                         for uff in uff_buffer:
                             util.print_frame(uff)
                     else:
-                        sentence_line = ''.join(sentence_buffer).replace(
-                            '¶', '').strip()
+                        sentence_line = (
+                            "".join(sentence_buffer).replace("¶", "").strip()
+                        )
                         if self.only_words.search(sentence_line):
                             yield sentence_line
                     uff_buffer[:] = []
@@ -104,10 +109,7 @@ class TrainingCorpusMaker(object):
         self.xml_printer.parse_file(filename)
         text = self.xml_printer.process_file().getvalue()
         if text.strip():
-            return [
-                sentence for sentence in self.parse_dependency(text)
-                if sentence
-            ]
+            return [sentence for sentence in self.parse_dependency(text) if sentence]
         else:
             return []
 
@@ -118,8 +120,8 @@ class TrainingCorpusMaker(object):
             str: filename of an analysed file.
         """
         for corpus in [
-                os.path.join(os.getenv('GTFREE'), 'analysed', self.lang),
-                os.path.join(os.getenv('GTBOUND'), 'analysed', self.lang)
+            os.path.join(os.getenv("GTFREE"), "analysed", self.lang),
+            os.path.join(os.getenv("GTBOUND"), "analysed", self.lang),
         ]:
             for root, _, files in os.walk(corpus):
                 for file_ in files:
@@ -132,32 +134,32 @@ class TrainingCorpusMaker(object):
         giella fsts.
         """
         for analysed_file in self.analysed_files():
-            if analysed_file.endswith('.xml'):
-                with open(analysed_file.replace('.xml', '.txt'),
-                          'w') as txt_stream:
-                    txt_stream.write('\n'.join(
-                        self.file_to_sentences(analysed_file)))
-                    txt_stream.write('\n')
+            if analysed_file.endswith(".xml"):
+                with open(analysed_file.replace(".xml", ".txt"), "w") as txt_stream:
+                    txt_stream.write("\n".join(self.file_to_sentences(analysed_file)))
+                    txt_stream.write("\n")
 
     def pytextcat_corpus(self):
         """Turn the free and bound corpus into a pytextcat training corpus."""
-        corpus_dir = os.path.join('pytextcat', self.lang)
+        corpus_dir = os.path.join("pytextcat", self.lang)
         with util.ignored(OSError):
             os.makedirs(corpus_dir)
 
-        with open('{}.txt'.format(os.path.join(corpus_dir, self.lang)),
-                  'w') as corpusfile:
+        with open(
+            "{}.txt".format(os.path.join(corpus_dir, self.lang)), "w"
+        ) as corpusfile:
             for analysed_file in self.analysed_files():
-                if analysed_file.endswith('.txt'):
+                if analysed_file.endswith(".txt"):
                     with open(analysed_file) as analysed:
                         corpusfile.write(analysed.read())
 
     def langid_corpus(self):
         """Turn the free and bound corpus into a langid training corpus."""
         for analysed_file in self.analysed_files():
-            if analysed_file.endswith('.txt'):
-                langid_dir = 'langid/{}/{}'.format(
-                    util.split_path(analysed_file).genre, self.lang)
+            if analysed_file.endswith(".txt"):
+                langid_dir = "langid/{}/{}".format(
+                    util.split_path(analysed_file).genre, self.lang
+                )
                 with util.ignored(OSError):
                     os.makedirs(langid_dir)
                 copy(analysed_file, langid_dir)
@@ -167,12 +169,12 @@ def parse_options():
     """Parse the options given to the program."""
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Make training corpus from analysed giella xml files.\n'
-        'Sentences with words unknown for the giella fsts are not included.')
+        description="Make training corpus from analysed giella xml files.\n"
+        "Sentences with words unknown for the giella fsts are not included.",
+    )
     parser.add_argument(
-        'langs',
-        nargs='+',
-        help='The languages to make a training corpus for.')
+        "langs", nargs="+", help="The languages to make a training corpus for."
+    )
 
     return parser.parse_args()
 
@@ -187,5 +189,7 @@ def main():
         sentence_maker.pytextcat_corpus()
         sentence_maker.langid_corpus()
 
-    print('Now you will find training corpus for pytextcat and langid '
-          'in the pytextcat and langid directories in the current directory.')
+    print(
+        "Now you will find training corpus for pytextcat and langid "
+        "in the pytextcat and langid directories in the current directory."
+    )

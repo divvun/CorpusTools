@@ -50,7 +50,7 @@ def to_plain_text(lang, filename):
     if text:
         return text
     else:
-        raise UserWarning('Empty file {}'.format(filename))
+        raise UserWarning("Empty file {}".format(filename))
 
 
 class SentenceDivider(object):
@@ -66,17 +66,15 @@ class SentenceDivider(object):
         tokeniser (modes.Pipeline): tokeniser pipeline
     """
 
-    stops = [';', '!', '?', '.', '..', '...', '¶', '…']
+    stops = [";", "!", "?", ".", "..", "...", "¶", "…"]
 
-    def __init__(self,
-                 lang,
-                 giella_prefix=None):
+    def __init__(self, lang, giella_prefix=None):
         """Set the files needed by the tokeniser.
 
         Args:
             lang (str): language the analyser can tokenise
         """
-        self.tokeniser = modes.Pipeline('tokenise', lang, giella_prefix)
+        self.tokeniser = modes.Pipeline("tokenise", lang, giella_prefix)
 
     @staticmethod
     def clean_sentence(sentence):
@@ -88,7 +86,7 @@ class SentenceDivider(object):
         Returns:
             str: a cleaned up sentence, looking the way a sentence should.
         """
-        return sentence.replace('\n', '').strip()
+        return sentence.replace("\n", "").strip()
 
     def make_sentences(self, ccat_output):
         """Turn ccat output into cleaned up sentences.
@@ -99,13 +97,13 @@ class SentenceDivider(object):
         Yields:
             str: a cleaned up sentence
         """
-        preprocessed = self.tokeniser.run(ccat_output.encode('utf8'))
+        preprocessed = self.tokeniser.run(ccat_output.encode("utf8"))
 
         token_buffer = []
         for token in io.StringIO(preprocessed):
             token_buffer.append(token)
             if token.strip() in self.stops:
-                yield self.clean_sentence(''.join(token_buffer))
+                yield self.clean_sentence("".join(token_buffer))
                 token_buffer[:] = []
 
     def make_valid_sentences(self, ccat_output):
@@ -119,16 +117,16 @@ class SentenceDivider(object):
                 of full sentences.
         """
         sentences = [
-            sentence.replace(' ¶', '')
+            sentence.replace(" ¶", "")
             for sentence in self.make_sentences(ccat_output)
             if sentence not in self.stops
         ]
 
-        invalid_sentence_re = regex.compile(r'^\W+$')
+        invalid_sentence_re = regex.compile(r"^\W+$")
         valid_sentences = []
         for sentence in sentences:
             if invalid_sentence_re.match(sentence) and valid_sentences:
-                valid_sentences[-1] = ''.join([valid_sentences[-1] + sentence])
+                valid_sentences[-1] = "".join([valid_sentences[-1] + sentence])
             else:
                 valid_sentences.append(sentence)
 

@@ -32,9 +32,8 @@ def process_verse(verse_element):
     Returns:
         A string containing the text of the verse element.
     """
-    if verse_element.tag != 'verse':
-        raise UserWarning('Unexpected element in verse: {}'.format(
-            verse_element.tag))
+    if verse_element.tag != "verse":
+        raise UserWarning("Unexpected element in verse: {}".format(verse_element.tag))
 
     return verse_element.text
 
@@ -49,28 +48,27 @@ def process_section(section_element):
     Returns:
         section: an etree element containing a corpus xml section.
     """
-    section = etree.Element('section')
+    section = etree.Element("section")
 
-    title = etree.Element('p')
-    title.set('type', 'title')
-    title.text = section_element.get('title')
+    title = etree.Element("p")
+    title.set("type", "title")
+    title.text = section_element.get("title")
 
     section.append(title)
 
     verses = []
     for element in section_element:
-        if element.tag == 'p':
+        if element.tag == "p":
             if verses:
                 section.append(make_p(verses))
                 verses = []
             section.append(process_p(element))
-        elif element.tag == 'verse':
+        elif element.tag == "verse":
             text = process_verse(element)
             if text:
                 verses.append(text)
         else:
-            raise UserWarning('Unexpected element in section: {}'.format(
-                element.tag))
+            raise UserWarning("Unexpected element in section: {}".format(element.tag))
 
     section.append(make_p(verses))
 
@@ -91,8 +89,8 @@ def process_p(paragraph):
         if text:
             verses.append(text)
 
-    paragraph = etree.Element('p')
-    paragraph.text = '\n'.join(verses)
+    paragraph = etree.Element("p")
+    paragraph.text = "\n".join(verses)
 
     return paragraph
 
@@ -105,8 +103,8 @@ def make_p(verses):
     Returns:
         a Giella xml p element
     """
-    paragraph = etree.Element('p')
-    paragraph.text = '\n'.join(verses)
+    paragraph = etree.Element("p")
+    paragraph.text = "\n".join(verses)
 
     return paragraph
 
@@ -120,30 +118,29 @@ def process_chapter(chapter_element):
     Returns:
         a Giella xml section element.
     """
-    section = etree.Element('section')
+    section = etree.Element("section")
 
     text_parts = []
-    if chapter_element.get('number') is not None:
-        text_parts.append(chapter_element.get('number'))
-    if chapter_element.get('title') is not None:
-        text_parts.append(chapter_element.get('title'))
+    if chapter_element.get("number") is not None:
+        text_parts.append(chapter_element.get("number"))
+    if chapter_element.get("title") is not None:
+        text_parts.append(chapter_element.get("title"))
 
-    title = etree.Element('p')
-    title.set('type', 'title')
-    title.text = ' '.join(text_parts)
+    title = etree.Element("p")
+    title.set("type", "title")
+    title.text = " ".join(text_parts)
 
     section.append(title)
 
     for child in chapter_element:
-        if child.tag == 'section':
+        if child.tag == "section":
             section.append(process_section(child))
-        elif child.tag == 'verse':
-            paragraph = etree.Element('p')
+        elif child.tag == "verse":
+            paragraph = etree.Element("p")
             paragraph.text = child.text
             section.append(paragraph)
         else:
-            raise UserWarning('Unexpected element in chapter: {}'.format(
-                child.tag))
+            raise UserWarning("Unexpected element in chapter: {}".format(child.tag))
 
     return section
 
@@ -157,18 +154,21 @@ def process_book(book_element):
     Returns:
         a Giella xml section element.
     """
-    section = etree.Element('section')
+    section = etree.Element("section")
 
-    title = etree.Element('p')
-    title.set('type', 'title')
-    title.text = book_element.get('title')
+    title = etree.Element("p")
+    title.set("type", "title")
+    title.text = book_element.get("title")
 
     section.append(title)
 
     for chapter_element in book_element:
-        if chapter_element.tag != 'chapter':
-            raise UserWarning('{}: Unexpected element in book: {}'.format(
-                self.orig, chapter_element.tag))
+        if chapter_element.tag != "chapter":
+            raise UserWarning(
+                "{}: Unexpected element in book: {}".format(
+                    self.orig, chapter_element.tag
+                )
+            )
 
         section.append(process_chapter(chapter_element))
 
@@ -184,9 +184,9 @@ def process_bible(bible_doc):
     Returns:
         a Giella xml body element.
     """
-    body = etree.Element('body')
+    body = etree.Element("body")
 
-    for book in bible_doc.xpath('.//book'):
+    for book in bible_doc.xpath(".//book"):
         body.append(process_book(book))
 
     return body
@@ -195,7 +195,7 @@ def process_bible(bible_doc):
 def convert2intermediate(filename):
     """Convert the bible xml to intermediate Giella xml format."""
 
-    document = etree.Element('document')
+    document = etree.Element("document")
     document.append(process_bible(etree.parse(filename)))
 
     return document

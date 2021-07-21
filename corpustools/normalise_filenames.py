@@ -35,20 +35,22 @@ def normalise(target_dir):
     Args:
         target_dir (str): directory where filenames should be normalised
     """
-    print(('Normalising names in {}'.format(target_dir)))
+    print(("Normalising names in {}".format(target_dir)))
     for root, dirs, files in os.walk(os.path.join(target_dir)):
         for f in files:
-            if not f.endswith('.xsl'):
+            if not f.endswith(".xsl"):
                 try:
                     orig_path = os.path.join(root, f)
                     if six.PY2:
-                        orig_path = unicode(orig_path, 'utf8')
+                        orig_path = unicode(orig_path, "utf8")
 
                     cfmu = namechanger.CorpusFilesetMoverAndUpdater(
-                        orig_path, orig_path)
+                        orig_path, orig_path
+                    )
                     filepair = cfmu.move_computer.filepairs[0]
-                    print(u'\t\tmove {} -> {}'.format(filepair.oldpath,
-                                                      filepair.newpath))
+                    print(
+                        "\t\tmove {} -> {}".format(filepair.oldpath, filepair.newpath)
+                    )
                     cfmu.move_files()
                     cfmu.update_own_metadata()
                     cfmu.update_parallel_files_metadata()
@@ -64,13 +66,15 @@ def normalise_parse_args():
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Program to normalise names in given directories. '
-        'The filenames are downcased, non ascii characters are replaced '
-        'by ascii ones and some unwanted characters are removed.')
+        description="Program to normalise names in given directories. "
+        "The filenames are downcased, non ascii characters are replaced "
+        "by ascii ones and some unwanted characters are removed.",
+    )
     parser.add_argument(
-        'target_dirs',
-        nargs='+',
-        help="The directory/ies where filenames should be normalised.")
+        "target_dirs",
+        nargs="+",
+        help="The directory/ies where filenames should be normalised.",
+    )
 
     args = parser.parse_args()
 

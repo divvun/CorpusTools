@@ -29,8 +29,8 @@ def remove_identical_ids(avvir_doc):
         avvir_doc (etree.Element): the etree that should be manipulated.
     """
     story_ids = set()
-    for story in avvir_doc.xpath('.//story[@id]'):
-        story_id = story.get('id')
+    for story in avvir_doc.xpath(".//story[@id]"):
+        story_id = story.get("id")
         if story_id not in story_ids:
             story_ids.add(story_id)
         else:
@@ -49,8 +49,8 @@ def insert_element(para, text, position):
     Returns:
         position: (integer)
     """
-    if text is not None and text.strip() != '':
-        new_p = etree.Element('p')
+    if text is not None and text.strip() != "":
+        new_p = etree.Element("p")
         new_p.text = text
         grandparent = para.getparent()
         grandparent.insert(grandparent.index(para) + position, new_p)
@@ -68,7 +68,7 @@ def convert_sub_p(para):
     Args:
         p: an lxml element, it is a story/p element
     """
-    for sub_p in para.findall('.//p'):
+    for sub_p in para.findall(".//p"):
         previous = sub_p.getprevious()
         if previous is None:
             parent = sub_p.getparent()
@@ -111,14 +111,14 @@ def convert_p(avvir_doc):
     Args:
         avvir_doc (etree.Element): the etree that should be manipulated.
     """
-    for para in avvir_doc.findall('./story/p'):
+    for para in avvir_doc.findall("./story/p"):
         if para.get("class") is not None:
             del para.attrib["class"]
 
         convert_sub_p(para)
         convert_subelement(para)
 
-        if para.text is None or para.text.strip() == '':
+        if para.text is None or para.text.strip() == "":
             story = para.getparent()
             story.remove(para)
 
@@ -130,26 +130,26 @@ def convert_story(avvir_doc):
         avvir_doc (etree.Element): the etree that should be manipulated.
     """
     for title in avvir_doc.findall('.//story[@class="Tittel"]'):
-        for para in title.findall('./p'):
-            para.set('type', 'title')
+        for para in title.findall("./p"):
+            para.set("type", "title")
 
-        del title.attrib['class']
-        del title.attrib['id']
+        del title.attrib["class"]
+        del title.attrib["id"]
 
-        title.tag = 'section'
+        title.tag = "section"
 
     for title in avvir_doc.findall('.//story[@class="Undertittel"]'):
-        for para in title.findall('./p'):
-            para.set('type', 'title')
+        for para in title.findall("./p"):
+            para.set("type", "title")
 
-        del title.attrib['class']
-        del title.attrib['id']
+        del title.attrib["class"]
+        del title.attrib["id"]
 
-        title.tag = 'section'
+        title.tag = "section"
 
-    for story in avvir_doc.findall('./story'):
+    for story in avvir_doc.findall("./story"):
         parent = story.getparent()
-        for i, para in enumerate(story.findall('./p')):
+        for i, para in enumerate(story.findall("./p")):
             parent.insert(parent.index(story) + i + 1, para)
 
         parent.remove(story)
@@ -164,8 +164,8 @@ def convert_article(avvir_doc):
     Returns:
         etree.Element: The document root of the basic Giella xml document.
     """
-    avvir_doc.tag = 'body'
-    document = etree.Element('document')
+    avvir_doc.tag = "body"
+    document = etree.Element("document")
     document.append(avvir_doc)
 
     return document

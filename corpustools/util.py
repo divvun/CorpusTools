@@ -35,8 +35,7 @@ import six
 
 from six.moves import range
 
-PathComponents = namedtuple('PathComponents',
-                            'root module lang genre subdirs basename')
+PathComponents = namedtuple("PathComponents", "root module lang genre subdirs basename")
 
 
 class SetupError(Exception):
@@ -63,16 +62,16 @@ class ConversionError(Exception):
     pass
 
 
-def print_frame(debug='', *args):
+def print_frame(debug="", *args):
     """Print debug output."""
     # 0 represents this line, 1 represents line at caller
     callerframerecord = inspect.stack()[1]
     frame = callerframerecord[0]
     info = inspect.getframeinfo(frame)
 
-    print(info.lineno, info.function, debug, file=sys.stderr, end=' ')
+    print(info.lineno, info.function, debug, file=sys.stderr, end=" ")
     for arg in args:
-        print(arg, file=sys.stderr, end=' ')
+        print(arg, file=sys.stderr, end=" ")
     print(file=sys.stderr)
 
 
@@ -86,7 +85,7 @@ def basename_noext(fname, ext):
     Returns:
         str: fname without the extension.
     """
-    return os.path.basename(fname)[:-len(ext)]
+    return os.path.basename(fname)[: -len(ext)]
 
 
 def sort_by_value(table, **kwargs):
@@ -130,11 +129,16 @@ def split_path(path):
 
     def split_on_module(p):
         for module in [
-                u"goldstandard/orig", u"prestable/converted",
-                u"prestable/toktmx", u"prestable/tmx", u"orig", u"converted",
-                u"stable", u"analysed"
+            "goldstandard/orig",
+            "prestable/converted",
+            "prestable/toktmx",
+            "prestable/tmx",
+            "orig",
+            "converted",
+            "stable",
+            "analysed",
         ]:
-            d = u"/" + module + u"/"
+            d = "/" + module + "/"
             if d in p:
                 root, rest = p.split(d)
                 return root, module, rest
@@ -145,8 +149,7 @@ def split_path(path):
     l = lang_etc.split("/")
     lang, genre, subdirs, basename = l[0], l[1], l[2:-1], l[-1]
 
-    return PathComponents(root, module, lang, genre, "/".join(subdirs),
-                          basename)
+    return PathComponents(root, module, lang, genre, "/".join(subdirs), basename)
 
 
 def is_executable(fullpath):
@@ -170,8 +173,10 @@ def path_possibilities(program):
     Yields:
         possible fullpath to the program
     """
-    return (os.path.join(path.strip('"'), program)
-            for path in os.environ["PATH"].split(os.pathsep))
+    return (
+        os.path.join(path.strip('"'), program)
+        for path in os.environ["PATH"].split(os.pathsep)
+    )
 
 
 def executable_in_path(program):
@@ -189,7 +194,8 @@ def executable_in_path(program):
     else:
         return any(
             is_executable(possible_path)
-            for possible_path in path_possibilities(program))
+            for possible_path in path_possibilities(program)
+        )
 
 
 def sanity_check(program_list):
@@ -197,13 +203,16 @@ def sanity_check(program_list):
 
     If they don't exist, raise an exception.
     """
-    if 'GTHOME' not in os.environ:
-        raise SetupError("You have to set the environment variable GTHOME "
-                         "to your checkout of langtech/trunk!")
+    if "GTHOME" not in os.environ:
+        raise SetupError(
+            "You have to set the environment variable GTHOME "
+            "to your checkout of langtech/trunk!"
+        )
     for program in program_list:
         if executable_in_path(program) is False:
             raise ExecutableMissingError(
-                'Please install {}, can not continue without it.'.format(program))
+                "Please install {}, can not continue without it.".format(program)
+            )
 
 
 def get_lang_resource(lang, resource, fallback=None):
@@ -217,7 +226,7 @@ def get_lang_resource(lang, resource, fallback=None):
     Returns:
         str: path to the resource or fallback.
     """
-    path = os.path.join(os.environ['GTHOME'], 'langs', lang, resource)
+    path = os.path.join(os.environ["GTHOME"], "langs", lang, resource)
     if os.path.exists(path):
         return path
     else:
@@ -233,11 +242,10 @@ def get_preprocess_command(lang):
     Returns:
         str: the complete preprocess command.
     """
-    preprocess_script = os.path.join(os.environ['GTHOME'],
-                                     'gt/script/preprocess')
+    preprocess_script = os.path.join(os.environ["GTHOME"], "gt/script/preprocess")
     sanity_check([preprocess_script])
-    abbr_fb = get_lang_resource("sme", 'tools/preprocess/abbr.txt')
-    abbr = get_lang_resource(lang, 'tools/preprocess/abbr.txt', abbr_fb)
+    abbr_fb = get_lang_resource("sme", "tools/preprocess/abbr.txt")
+    abbr = get_lang_resource(lang, "tools/preprocess/abbr.txt", abbr_fb)
     return [preprocess_script, "--abbr={}".format(abbr)]
 
 
@@ -259,13 +267,13 @@ def print_element(element, level, indent, out):
         indent (int): indicate how many spaces this element should be indented
         out (stream): a buffer where the formatted element is written.
     """
-    tag = element.tag.replace('{http://www.w3.org/1999/xhtml}', '')
+    tag = element.tag.replace("{http://www.w3.org/1999/xhtml}", "")
 
-    out.write(' ' * (level * indent))
-    out.write('<{}'.format(tag))
+    out.write(" " * (level * indent))
+    out.write("<{}".format(tag))
 
     for k, v in six.iteritems(element.attrib):
-        out.write(' ')
+        out.write(" ")
         if isinstance(k, six.text_type):
             out.write(k)
         else:
@@ -276,24 +284,24 @@ def print_element(element, level, indent, out):
         else:
             out.write(v)
         out.write('"')
-    out.write('>\n')
+    out.write(">\n")
 
-    if element.text is not None and element.text.strip() != '':
-        out.write(' ' * ((level + 1) * indent))
+    if element.text is not None and element.text.strip() != "":
+        out.write(" " * ((level + 1) * indent))
         out.write(element.text.strip())
-        out.write('\n')
+        out.write("\n")
 
     for child in element:
         print_element(child, level + 1, indent, out)
 
-    out.write(' ' * (level * indent))
-    out.write('</{}>\n'.format(tag))
+    out.write(" " * (level * indent))
+    out.write("</{}>\n".format(tag))
 
-    if level > 0 and element.tail is not None and element.tail.strip() != '':
+    if level > 0 and element.tail is not None and element.tail.strip() != "":
         for _ in range(0, (level - 1) * indent):
-            out.write(' ')
+            out.write(" ")
         out.write(element.tail.strip())
-        out.write('\n')
+        out.write("\n")
 
 
 def name_to_unicode(filename):
@@ -305,10 +313,10 @@ def name_to_unicode(filename):
     Returns:
         A unicode string.
     """
-    if platform.system() == 'Windows':
+    if platform.system() == "Windows":
         return filename
     else:
-        return filename.decode('utf-8')
+        return filename.decode("utf-8")
 
 
 def note(msg):
@@ -352,9 +360,12 @@ class ExternalCommandRunner(object):
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                cwd=cwd)
+                cwd=cwd,
+            )
         except OSError:
-            raise ExecutableMissingError('Please install {}, can not continue without it.'.format(command[0]))
+            raise ExecutableMissingError(
+                "Please install {}, can not continue without it.".format(command[0])
+            )
 
         (self.stdout, self.stderr) = subp.communicate(to_stdin)
         self.returncode = subp.returncode

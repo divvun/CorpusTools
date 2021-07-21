@@ -32,7 +32,7 @@ def convert2intermediate(filename):
     Args:
         filename (str): name of the file that should be converted
     """
-    svg_xslt_root = etree.parse(os.path.join(HERE, 'xslt/svg2corpus.xsl'))
+    svg_xslt_root = etree.parse(os.path.join(HERE, "xslt/svg2corpus.xsl"))
     transform = etree.XSLT(svg_xslt_root)
     doc = etree.parse(filename)
     intermediate = transform(doc)

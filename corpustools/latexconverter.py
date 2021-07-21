@@ -33,7 +33,8 @@ from corpustools import htmlconverter, util
 def latex_dir(filename):
     """Turn filename to the path where the converted html files are found."""
     return os.path.join(
-        os.path.dirname(filename), util.basename_noext(filename, '.tex'))
+        os.path.dirname(filename), util.basename_noext(filename, ".tex")
+    )
 
 
 def latex_to_dir(filename):
@@ -45,27 +46,29 @@ def latex_to_dir(filename):
     Returns:
         str: path to the temporary directory where the files are found
     """
-    command = 'latex2html {}'.format(os.path.realpath(filename)).split()
+    command = "latex2html {}".format(os.path.realpath(filename)).split()
 
     runner = util.ExternalCommandRunner()
-    runner.run(command, cwd='/tmp')
+    runner.run(command, cwd="/tmp")
 
     if runner.returncode != 0:
-        with open(filename + '.log', 'w') as logfile:
-            print('stdout\n{}\n'.format(runner.stdout), file=logfile)
-            print('stderr\n{}\n'.format(runner.stderr), file=logfile)
+        with open(filename + ".log", "w") as logfile:
+            print("stdout\n{}\n".format(runner.stdout), file=logfile)
+            print("stderr\n{}\n".format(runner.stderr), file=logfile)
             raise util.ConversionError(
-                '{} failed. More info in the log file: {}'.format(
-                    command[0], filename + '.log'))
+                "{} failed. More info in the log file: {}".format(
+                    command[0], filename + ".log"
+                )
+            )
 
 
 def to_html_elt(filename):
     """Turn documents found in latex_dir to one html document."""
     latex_to_dir(filename)
 
-    mainbody = etree.Element('body')
-    html = etree.Element('html')
-    html.append(etree.Element('head'))
+    mainbody = etree.Element("body")
+    html = etree.Element("html")
+    html.append(etree.Element("head"))
     html.append(mainbody)
 
     for nodediv in latexnode_to_div(filename):
@@ -78,11 +81,11 @@ def to_html_elt(filename):
 
 def latexnode_to_div(filename):
     """Extract body elements from node*.html documents."""
-    html_docs = glob.glob('{}/{}'.format(latex_dir(filename), 'node*.html'))
+    html_docs = glob.glob("{}/{}".format(latex_dir(filename), "node*.html"))
 
     for html_doc in html_docs[:-1]:
         latex_html = htmlconverter.to_html_elt(html_doc)
-        nodebody = latex_html.find('.//body')
-        nodebody.tag = 'div'
+        nodebody = latex_html.find(".//body")
+        nodebody.tag = "div"
 
         yield nodebody

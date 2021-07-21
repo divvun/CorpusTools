@@ -35,13 +35,12 @@ class Crawler(object):
 
     def __init__(self):
         """Initialise the Crawler class."""
-        self.goaldir = six.text_type(os.getenv('GTFREE'))
+        self.goaldir = six.text_type(os.getenv("GTFREE"))
         self.unvisited_links = set()
         self.visited_links = set()
         self.download_links = set()
         self.corpus_adders = {}
-        self.downloader = adder.UrlDownloader(
-            os.path.join(self.goaldir, 'tmp'))
+        self.downloader = adder.UrlDownloader(os.path.join(self.goaldir, "tmp"))
 
     def __del__(self):
         """Add all files to the corpus."""
@@ -53,24 +52,26 @@ class Crawler(object):
 
         pages is a list of url, lang tuples
         """
-        parallelpath = ''
+        parallelpath = ""
 
         for (url, lang) in pages:
             try:
                 (_, tmpname) = self.downloader.download(url)
             except adder.AdderError as error:
-                util.print_frame(debug=str(error) + '\n')
+                util.print_frame(debug=str(error) + "\n")
             else:
                 normalised_name = namechanger.normalise_filename(
-                    os.path.basename(tmpname))
+                    os.path.basename(tmpname)
+                )
                 normalised_path = os.path.join(
-                    self.corpus_adders[lang].goaldir, normalised_name)
+                    self.corpus_adders[lang].goaldir, normalised_name
+                )
 
                 if not os.path.exists(normalised_path):
-                    parallelpath = self.corpus_adders[
-                        lang].copy_file_to_corpus(
-                            tmpname, url, parallelpath=parallelpath)
-                    util.print_frame(debug='adding {}'.format(parallelpath))
+                    parallelpath = self.corpus_adders[lang].copy_file_to_corpus(
+                        tmpname, url, parallelpath=parallelpath
+                    )
+                    util.print_frame(debug="adding {}".format(parallelpath))
                 else:
                     parallelpath = normalised_path
         print(file=sys.stderr)

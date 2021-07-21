@@ -42,14 +42,14 @@ class DocumentPicker(object):
     """Pick documents from samediggi.se to be added to the corpus."""
 
     def __init__(self, source_dir):
-        self.freecorpus = os.getenv('GTFREE')
+        self.freecorpus = os.getenv("GTFREE")
         self.source_dir = source_dir
         self.file_dict = {}
-        self.file_dict.setdefault('sma', [])
-        self.file_dict.setdefault('sme', [])
-        self.file_dict.setdefault('smj', [])
-        self.file_dict.setdefault('swe', [])
-        self.file_dict.setdefault('none', [])
+        self.file_dict.setdefault("sma", [])
+        self.file_dict.setdefault("sme", [])
+        self.file_dict.setdefault("smj", [])
+        self.file_dict.setdefault("swe", [])
+        self.file_dict.setdefault("none", [])
         self.parallel_dict = {}
         self.total_file = 0
 
@@ -57,35 +57,38 @@ class DocumentPicker(object):
         """Iterate through all files, classify them according to language"""
         for root, dirs, files in os.walk(self.source_dir):
             for f in files:
-                if f.endswith('.xsl'):
+                if f.endswith(".xsl"):
                     self.total_file += 1
                     self.classify_file(os.path.join(root, f))
 
     def classify_file(self, file_):
         """Identify the language of the file"""
         mh = xslsetter.MetadataHandler(file_, create=True)
-        url = mh.get_variable('filename')
-        if ('regjeringen.no' in url and 'regjeringen.no' not in file_ and
-                '.pdf' not in file_):
+        url = mh.get_variable("filename")
+        if (
+            "regjeringen.no" in url
+            and "regjeringen.no" not in file_
+            and ".pdf" not in file_
+        ):
             try:
-                remote = urllib2.urlopen(urllib2.Request(url.encode('utf8')))
+                remote = urllib2.urlopen(urllib2.Request(url.encode("utf8")))
                 self.copyfile(remote, file_)
             except urllib2.HTTPError:
                 print(
                     util.lineno(),
-                    'Could not fetch',
-                    file_.replace('.xsl', ''),
-                    file=sys.stderr)
+                    "Could not fetch",
+                    file_.replace(".xsl", ""),
+                    file=sys.stderr,
+                )
             except UnicodeEncodeError:
-                print(
-                    util.lineno(), 'Unicode error in url', url, file=sys.stderr)
-            print(util.lineno(), 'sleeping …')
+                print(util.lineno(), "Unicode error in url", url, file=sys.stderr)
+            print(util.lineno(), "sleeping …")
             time.sleep(2)
 
     def copyfile(self, remote, file_):
         try:
-            with open(file_.replace('.xsl', ''), 'wb') as f:
-                print(util.lineno(), 'Fetching', file_.replace('.xsl', ''))
+            with open(file_.replace(".xsl", ""), "wb") as f:
+                print(util.lineno(), "Fetching", file_.replace(".xsl", ""))
                 shutil.copyfileobj(remote, f)
         finally:
             remote.close()

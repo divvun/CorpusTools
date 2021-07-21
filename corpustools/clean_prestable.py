@@ -38,9 +38,10 @@ def parse_options():
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Remove files in prestable that have no original files.')
+        description="Remove files in prestable that have no original files.",
+    )
 
-    parser.add_argument('corpusdirs', nargs='+', help='Corpus directories')
+    parser.add_argument("corpusdirs", nargs="+", help="Corpus directories")
 
     args = parser.parse_args()
     return args
@@ -55,11 +56,11 @@ def find_prestable_files(corpusdir):
     Yields:
         str: path to an interesting prestable file
     """
-    for subdir in ['converted', 'tmx']:
-        prestable_root = os.path.join(corpusdir, 'prestable', subdir)
+    for subdir in ["converted", "tmx"]:
+        prestable_root = os.path.join(corpusdir, "prestable", subdir)
         if os.path.exists(prestable_root):
             for root, _, files in os.walk(prestable_root):
-                if 'pre_run' not in root:
+                if "pre_run" not in root:
                     for presteable_file in files:
                         yield os.path.join(root, presteable_file)
 
@@ -75,15 +76,18 @@ def main():
         for prestable_path in find_prestable_files(corpusdir):
             corpus_file = corpuspath.CorpusPath(prestable_path)
             if not os.path.exists(corpus_file.orig):
-                counter['prestable'] += 1
-                print('Removing {}'.format(prestable_path))
-                print('Orig was {}'.format(corpus_file.orig))
+                counter["prestable"] += 1
+                print("Removing {}".format(prestable_path))
+                print("Orig was {}".format(corpus_file.orig))
                 try:
                     vcs.remove(prestable_path)
                 except git.exc.GitCommandError:
-                    util.note('\nError when trying to remove {}'.format(
-                        corpus_file.prestable_converted))
-                    util.note('Orig was {}\n'.format(prestable_path))
+                    util.note(
+                        "\nError when trying to remove {}".format(
+                            corpus_file.prestable_converted
+                        )
+                    )
+                    util.note("Orig was {}\n".format(prestable_path))
 
     for key in counter.keys():
-        print('Removed {} files from prestable'.format(counter[key]))
+        print("Removed {} files from prestable".format(counter[key]))

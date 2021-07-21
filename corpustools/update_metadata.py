@@ -27,7 +27,7 @@ import os
 
 from corpustools import argparse_version, xslsetter
 
-TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'xslt/XSL-template.xsl')
+TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), "xslt/XSL-template.xsl")
 
 
 def find_xsl_files(directories):
@@ -42,7 +42,7 @@ def find_xsl_files(directories):
     for directory in directories:
         for root, _, files in os.walk(directory):
             for file_ in files:
-                if file_.endswith('.xsl'):
+                if file_.endswith(".xsl"):
                     yield os.path.join(root, file_)
 
 
@@ -54,16 +54,18 @@ def parse_options():
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Update metadata files to look like XSL-template.xsl, '
-        'but with original content. This script exists because the '
-        'XSL-template is updated with new variables and documentation. '
-        'This script will propagate these changes to existing '
-        'metadata files.')
+        description="Update metadata files to look like XSL-template.xsl, "
+        "but with original content. This script exists because the "
+        "XSL-template is updated with new variables and documentation. "
+        "This script will propagate these changes to existing "
+        "metadata files.",
+    )
 
     parser.add_argument(
-        'directories',
-        nargs='+',
-        help='Directories where metadata files should be updated.')
+        "directories",
+        nargs="+",
+        help="Directories where metadata files should be updated.",
+    )
 
     args = parser.parse_args()
 
@@ -77,10 +79,25 @@ def update_xsl_file(filename):
         filename (str): path to a metadata file.
     """
     avoid_names = [
-        'danlang', 'englang', 'finlang', 'fkvlang', 'gerlang', 'isllang',
-        'kallang', 'nnolang', 'noblang', 'smalang', 'smelang', 'smjlang',
-        'swelang', 'kpvlang', 'ruslang', 'multilingual', 'columns',
-        'parallel_texts', 'lower'
+        "danlang",
+        "englang",
+        "finlang",
+        "fkvlang",
+        "gerlang",
+        "isllang",
+        "kallang",
+        "nnolang",
+        "noblang",
+        "smalang",
+        "smelang",
+        "smjlang",
+        "swelang",
+        "kpvlang",
+        "ruslang",
+        "multilingual",
+        "columns",
+        "parallel_texts",
+        "lower",
     ]
 
     orig_metadata = xslsetter.MetadataHandler(filename)
@@ -91,13 +108,12 @@ def update_xsl_file(filename):
 
     for name, value in orig_metadata.get_set_variables():
         if name not in avoid_names:
-            if name.startswith('mlang_'):
-                template_metadata.set_mlang(name.replace('mlang_', ''))
-            elif name.startswith('para_'):
-                template_metadata.set_parallel_text(
-                    name.replace('para_', ''), value)
-            elif name == 'excluded':
-                template_metadata.set_variable('skip_pages', value)
+            if name.startswith("mlang_"):
+                template_metadata.set_mlang(name.replace("mlang_", ""))
+            elif name.startswith("para_"):
+                template_metadata.set_parallel_text(name.replace("para_", ""), value)
+            elif name == "excluded":
+                template_metadata.set_variable("skip_pages", value)
             else:
                 template_metadata.set_variable(name, value)
 

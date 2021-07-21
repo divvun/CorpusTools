@@ -65,8 +65,9 @@ def chapters(book, metadata):
     for index, chapter in enumerate(book.chapters):
         if index not in excluded:
             chapterbody = read_chapter(chapter).find(
-                '{http://www.w3.org/1999/xhtml}body')
-            chapterbody.tag = '{http://www.w3.org/1999/xhtml}div'
+                "{http://www.w3.org/1999/xhtml}body"
+            )
+            chapterbody.tag = "{http://www.w3.org/1999/xhtml}div"
             yield chapterbody
 
 
@@ -80,9 +81,9 @@ def extract_content(filename, metadata):
         etree.Element: the content of the epub file wrapped in html
             element
     """
-    mainbody = etree.Element('{http://www.w3.org/1999/xhtml}body')
-    html = etree.Element('{http://www.w3.org/1999/xhtml}html')
-    html.append(etree.Element('{http://www.w3.org/1999/xhtml}head'))
+    mainbody = etree.Element("{http://www.w3.org/1999/xhtml}body")
+    html = etree.Element("{http://www.w3.org/1999/xhtml}html")
+    html.append(etree.Element("{http://www.w3.org/1999/xhtml}head"))
     html.append(mainbody)
 
     book = epub.Book(epub.open_epub(filename))
@@ -111,14 +112,15 @@ def to_html_elt(filename):
         An etree.Element containing the content of all xhtml files
         found in the epub file as one xhtml document.
     """
-    metadata = xslsetter.MetadataHandler(filename + '.xsl', create=True)
+    metadata = xslsetter.MetadataHandler(filename + ".xsl", create=True)
     html = extract_content(filename, metadata)
     try:
         remove_ranges(metadata, html)
     except AttributeError:
         raise util.ConversionError(
-            'Check that skip_elements in the '
-            'metadata file has the correct format'.format(filename))
+            "Check that skip_elements in the "
+            "metadata file has the correct format".format(filename)
+        )
 
     return html
 
@@ -136,11 +138,8 @@ def remove_siblings_shorten_path(parts, content, preceding=False):
     Returns:
         list of str: the path to the parent of parts.
     """
-    path = '/'.join(parts)
-    found = content.find(
-        path, namespaces={
-            'html': 'http://www.w3.org/1999/xhtml'
-        })
+    path = "/".join(parts)
+    found = content.find(path, namespaces={"html": "http://www.w3.org/1999/xhtml"})
     parent = found.getparent()
     for sibling in found.itersiblings(preceding=preceding):
         parent.remove(sibling)
@@ -169,7 +168,7 @@ def shorten_longest_path(path1, path2, content):
         tuple of list of str: paths to the new start and end element, now
             with the same length.
     """
-    starts, ends = path1.split('/'), path2.split('/')
+    starts, ends = path1.split("/"), path2.split("/")
 
     while len(starts) > len(ends):
         starts = remove_siblings_shorten_path(starts, content)
@@ -220,13 +219,11 @@ def remove_trees_2(starts, ends, content):
             removed.
     """
     deepest_start = content.find(
-        '/'.join(starts), namespaces={
-            'html': 'http://www.w3.org/1999/xhtml'
-        })
+        "/".join(starts), namespaces={"html": "http://www.w3.org/1999/xhtml"}
+    )
     deepest_end = content.find(
-        '/'.join(ends), namespaces={
-            'html': 'http://www.w3.org/1999/xhtml'
-        })
+        "/".join(ends), namespaces={"html": "http://www.w3.org/1999/xhtml"}
+    )
     parent = deepest_start.getparent()
     for sibling in deepest_start.itersiblings():
         if sibling == deepest_end:
@@ -244,9 +241,8 @@ def remove_first_element(path1, content):
             be altered.
     """
     first_start = content.find(
-        path1, namespaces={
-            'html': 'http://www.w3.org/1999/xhtml'
-        })
+        path1, namespaces={"html": "http://www.w3.org/1999/xhtml"}
+    )
     first_start.getparent().remove(first_start)
 
 
@@ -263,8 +259,5 @@ def remove_range(path1, path2, content):
         remove_trees_2(starts, ends, content)
         remove_first_element(path1, content)
     else:
-        found = content.find(
-            path1, namespaces={
-                'html': 'http://www.w3.org/1999/xhtml'
-            })
+        found = content.find(path1, namespaces={"html": "http://www.w3.org/1999/xhtml"})
         found.getparent().remove(found)

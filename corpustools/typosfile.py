@@ -30,7 +30,7 @@ class Typoline(object):
         A typoline has a number showing frequency of the typo, the typo and
         possibly a correction
         """
-        parts = typoline.split('\t')
+        parts = typoline.split("\t")
 
         self.typo = parts[0]
 
@@ -52,7 +52,7 @@ class Typoline(object):
         """Make a typoline from the three data parts in this class"""
         result = self.typo
         if self.correction and self.correction != self.typo:
-            result = '{}\t{}'.format(result, self.correction)
+            result = "{}\t{}".format(result, self.correction)
 
         return result
 
@@ -70,7 +70,7 @@ class Typos(object):
         typofile = open(typosfile)
 
         for strline in typofile:
-            line = strline.decode('utf-8')
+            line = strline.decode("utf-8")
             if line.strip():
                 tl = Typoline(line.rstrip())
                 if tl.getCorrection() and tl.getTypo() != tl.getCorrection():

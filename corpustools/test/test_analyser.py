@@ -35,29 +35,32 @@ HERE = os.path.dirname(__file__)
 
 
 class TestAnalyser(unittest.TestCase):
-
     def setUp(self):
-        self.a = analyser.Analyser('sme', 'xfst', giella_prefix=os.path.join(HERE, 'giella_shared'))
-        self.a.xml_file = corpusxmlfile.CorpusXMLFile(
-            os.path.join(HERE, 'smefile.xml'))
+        self.a = analyser.Analyser(
+            "sme", "xfst", giella_prefix=os.path.join(HERE, "giella_shared")
+        )
+        self.a.xml_file = corpusxmlfile.CorpusXMLFile(os.path.join(HERE, "smefile.xml"))
 
     def assertXmlEqual(self, got, want):
         """Check if two stringified xml snippets are equal."""
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(want, got, 0):
             message = checker.output_difference(
-                doctest.Example("", want), got, 0).encode('utf-8')
+                doctest.Example("", want), got, 0
+            ).encode("utf-8")
             raise AssertionError(message)
 
     def test_raise_on_None_file(self):
         with self.assertRaises(TypeError):
-            analyser.Analyser('sme', 'xfst', None, None, None, None)
+            analyser.Analyser("sme", "xfst", None, None, None, None)
 
     def test_sme_ccat_output(self):
         """Test if the ccat output is what we expect it to be."""
         got = self.a.ccat()
-        want = ('Muhto gaskkohagaid, ja erenoamážit dalle go lei buolaš, '
-                'de aggregáhta billánii. ¶\n')
+        want = (
+            "Muhto gaskkohagaid, ja erenoamážit dalle go lei buolaš, "
+            "de aggregáhta billánii. ¶\n"
+        )
 
         self.assertEqual(got, want)
 
@@ -67,40 +70,40 @@ class TestAnalyser(unittest.TestCase):
         got = self.a.xml_file.etree
         want = (
             '<document xml:lang="sme" id="no_id">\n'
-            '  <header>\n'
-            '    <title>Internáhtta sosiálalaš giliguovddážin</title>\n'
+            "  <header>\n"
+            "    <title>Internáhtta sosiálalaš giliguovddážin</title>\n"
             '    <genre code="facta"/>\n'
-            '    <author>\n'
+            "    <author>\n"
             '      <person firstname="Abba" lastname="Abbamar" sex="m" '
             'born="1900" nationality="nor"/>\n'
-            '    </author>\n'
-            '    <translator>\n'
+            "    </author>\n"
+            "    <translator>\n"
             '      <person firstname="Ibba" lastname="Ibbamar" sex="unknown" '
             'born="" nationality=""/>\n'
-            '    </translator>\n'
+            "    </translator>\n"
             '    <translated_from xml:lang="nob"/>\n'
-            '    <year>2005</year>\n'
-            '    <publChannel>\n'
-            '      <publication>\n'
-            '        <publisher>Almmuheaddji OS</publisher>\n'
-            '      </publication>\n'
-            '    </publChannel>\n'
-            '    <wordcount>10</wordcount>\n'
-            '    <availability>\n'
-            '      <free/>\n'
-            '    </availability>\n'
+            "    <year>2005</year>\n"
+            "    <publChannel>\n"
+            "      <publication>\n"
+            "        <publisher>Almmuheaddji OS</publisher>\n"
+            "      </publication>\n"
+            "    </publChannel>\n"
+            "    <wordcount>10</wordcount>\n"
+            "    <availability>\n"
+            "      <free/>\n"
+            "    </availability>\n"
             '    <submitter name="Børre Gaup" '
             'email="boerre.gaup@samediggi.no"/>\n'
-            '    <multilingual>\n'
+            "    <multilingual>\n"
             '      <language xml:lang="nob"/>\n'
-            '    </multilingual>\n'
-            '    <origFileName>aarseth_s.htm</origFileName>\n'
-            '    <metadata>\n'
-            '      <uncomplete/>\n'
-            '    </metadata>\n'
-            '    <version>XSLtemplate  1.9 ; file-specific xsl  '
-            '$Revision: 1.3 $; common.xsl  $Revision$; </version>\n'
-            '  </header>\n'
+            "    </multilingual>\n"
+            "    <origFileName>aarseth_s.htm</origFileName>\n"
+            "    <metadata>\n"
+            "      <uncomplete/>\n"
+            "    </metadata>\n"
+            "    <version>XSLtemplate  1.9 ; file-specific xsl  "
+            "$Revision: 1.3 $; common.xsl  $Revision$; </version>\n"
+            "  </header>\n"
             '  <body><dependency><![CDATA["<Muhto>"\n'
             '\t"muhto" CC @CVP #1->1\n"<gaskkohagaid>"\n'
             '\t"gaskkohagaid" Adv @ADVL> #2->12\n"<,>"\n'
@@ -114,6 +117,7 @@ class TestAnalyser(unittest.TestCase):
             '\t"aggregáhta" N Sg Nom @SUBJ> #11->12\n"<billánii>"\n'
             '\t"billánit" V IV Ind Prt Sg3 @FS-ADVL> #12->0\n"<.>"\n'
             '\t"." CLB #13->12\n\n"<¶>"\n'
-            '\t"¶" CLB #1->1\n\n]]></dependency></body></document>')
+            '\t"¶" CLB #1->1\n\n]]></dependency></body></document>'
+        )
         self.maxDiff = None
-        self.assertEqual(etree.tostring(got, encoding='unicode'), want)
+        self.assertEqual(etree.tostring(got, encoding="unicode"), want)

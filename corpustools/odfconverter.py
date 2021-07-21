@@ -37,4 +37,4 @@ def to_html_elt(filename):
     try:
         return html.document_fromstring(odhandler.odf2xhtml(filename))
     except TypeError as error:
-        raise util.ConversionError('Error: {}'.format(error))
+        raise util.ConversionError("Error: {}".format(error))

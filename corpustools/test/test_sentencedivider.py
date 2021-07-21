@@ -42,19 +42,19 @@ váldočoahkkima nammadit. dievaslaš čađaheami, [2019 – 2020] … ¶
 (rávvagiid) ¶
 """
         want = [
-            '10. ON-vuogádat',
-            'ON doaimmaid oktavuođas;',
-            'ovddasvástádus sihkkarastit?',
-            'buot ON orgánat!',
+            "10. ON-vuogádat",
+            "ON doaimmaid oktavuođas;",
+            "ovddasvástádus sihkkarastit?",
+            "buot ON orgánat!",
             'wow."',
-            'mom.).',
-            'mom.:',
-            'kult.”',
-            'váldočoahkkima nammadit.',
-            'dievaslaš čađaheami, [2019 – 2020] …',
-            '(rávvagiid)',
+            "mom.).",
+            "mom.:",
+            "kult.”",
+            "váldočoahkkima nammadit.",
+            "dievaslaš čađaheami, [2019 – 2020] …",
+            "(rávvagiid)",
         ]
-        divider = sentencedivider.SentenceDivider('sme')
+        divider = sentencedivider.SentenceDivider("sme")
         self.assertListEqual(divider.make_valid_sentences(ccat_output), want)
 
     def test_with_dot_and_paragraph(self):
@@ -63,10 +63,10 @@ váldočoahkkima nammadit. dievaslaš čađaheami, [2019 – 2020] … ¶
 Odd Einar Dørum ¶
 """
         want = [
-            'mielddisbuvttii.',
-            'Odd Einar Dørum',
+            "mielddisbuvttii.",
+            "Odd Einar Dørum",
         ]
-        divider = sentencedivider.SentenceDivider('sme')
+        divider = sentencedivider.SentenceDivider("sme")
         self.assertEqual(divider.make_valid_sentences(ccat_output), want)
 
     def test_with_empty_head_sentence(self):
@@ -75,9 +75,7 @@ Odd Einar Dørum ¶
 Odd Einar Dørum ¶
 """
         want = [
-            'Odd Einar Dørum',
+            "Odd Einar Dørum",
         ]
-        divider = sentencedivider.SentenceDivider('sme')
+        divider = sentencedivider.SentenceDivider("sme")
         self.assertEqual(divider.make_valid_sentences(ccat_output), want)
-
-

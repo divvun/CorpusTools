@@ -34,27 +34,27 @@ class TestTypoline(unittest.TestCase):
         pass
 
     def testGetTypo(self):
-        tl = typosfile.Typoline('deatalaš\tdeaŧalaš')
-        self.assertEqual(tl.getTypo(), 'deatalaš')
+        tl = typosfile.Typoline("deatalaš\tdeaŧalaš")
+        self.assertEqual(tl.getTypo(), "deatalaš")
 
-        tl = typosfile.Typoline('deatalaš\tdeaŧalaš')
-        self.assertEqual(tl.getTypo(), 'deatalaš')
+        tl = typosfile.Typoline("deatalaš\tdeaŧalaš")
+        self.assertEqual(tl.getTypo(), "deatalaš")
 
     def testGetCorrection(self):
-        tl = typosfile.Typoline('deatalaš\tdeaŧalaš')
-        self.assertEqual(tl.getCorrection(), 'deaŧalaš')
+        tl = typosfile.Typoline("deatalaš\tdeaŧalaš")
+        self.assertEqual(tl.getCorrection(), "deaŧalaš")
 
-        tl = typosfile.Typoline('deatalaš')
+        tl = typosfile.Typoline("deatalaš")
         self.assertEqual(tl.getCorrection(), None)
 
     def testMakeTypoline(self):
-        tl = typosfile.Typoline('deatalaš\tdeaŧalaš')
-        self.assertEqual(tl.makeTypoline(), 'deatalaš\tdeaŧalaš')
+        tl = typosfile.Typoline("deatalaš\tdeaŧalaš")
+        self.assertEqual(tl.makeTypoline(), "deatalaš\tdeaŧalaš")
 
-        tl = typosfile.Typoline('deatalaš\tdeatalaš')
-        self.assertEqual(tl.makeTypoline(), 'deatalaš')
+        tl = typosfile.Typoline("deatalaš\tdeatalaš")
+        self.assertEqual(tl.makeTypoline(), "deatalaš")
 
     def testSetCorrection(self):
-        tl = typosfile.Typoline('deatalaš\tdeaŧalaš')
-        tl.setCorrection('ditalaš')
-        self.assertEqual(tl.getCorrection(), 'ditalaš')
+        tl = typosfile.Typoline("deatalaš\tdeaŧalaš")
+        tl.setCorrection("ditalaš")
+        self.assertEqual(tl.getCorrection(), "ditalaš")

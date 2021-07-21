@@ -40,11 +40,10 @@ class XMLTester(unittest.TestCase):
 
         Raises: AssertionError
         """
-        got = etree.tostring(got, encoding='unicode')
-        want = etree.tostring(want, encoding='unicode')
+        got = etree.tostring(got, encoding="unicode")
+        want = etree.tostring(want, encoding="unicode")
 
         checker = doctestcompare.LXMLOutputChecker()
         if not checker.check_output(want, got, 0):
-            message = checker.output_difference(
-                doctest.Example("", want), got, 0)
+            message = checker.output_difference(doctest.Example("", want), got, 0)
             raise AssertionError(message)

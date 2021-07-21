@@ -27,8 +27,14 @@ import os
 import shutil
 from collections import defaultdict
 
-from corpustools import (argparse_version, corpuspath, corpusxmlfile,
-                         parallelize, util, versioncontrol)
+from corpustools import (
+    argparse_version,
+    corpuspath,
+    corpusxmlfile,
+    parallelize,
+    util,
+    versioncontrol,
+)
 
 
 class ParallelPicker(object):
@@ -61,8 +67,7 @@ class ParallelPicker(object):
             maxratio (int): the maximum acceptable ratio of sentences
                 between two parallel documents
         """
-        self.vcs = versioncontrol.vcs(
-            language1_dir[:language1_dir.find('converted/')])
+        self.vcs = versioncontrol.vcs(language1_dir[: language1_dir.find("converted/")])
         self.language1_dir = language1_dir
         self.calculate_language1(language1_dir)
         self.parallel_language = parallel_language
@@ -73,14 +78,13 @@ class ParallelPicker(object):
 
     def calculate_language1(self, language1_dir):
         """The language is the part after 'converted/'."""
-        converted_pos = language1_dir.find('converted/')
-        part_after_converted = language1_dir[converted_pos + len('converted/'):]
+        converted_pos = language1_dir.find("converted/")
+        part_after_converted = language1_dir[converted_pos + len("converted/") :]
 
-        if part_after_converted.find('/') == -1:
+        if part_after_converted.find("/") == -1:
             self.language1 = part_after_converted
         else:
-            self.language1 = part_after_converted[:part_after_converted.find(
-                '/')]
+            self.language1 = part_after_converted[: part_after_converted.find("/")]
 
     def find_lang1_files(self):
         """Find the language1 files.
@@ -90,9 +94,8 @@ class ParallelPicker(object):
         """
         for root, _, files in os.walk(self.language1_dir):
             for lang1_file in files:
-                if lang1_file.endswith('.xml'):
-                    yield corpusxmlfile.CorpusXMLFile(
-                        os.path.join(root, lang1_file))
+                if lang1_file.endswith(".xml"):
+                    yield corpusxmlfile.CorpusXMLFile(os.path.join(root, lang1_file))
 
     def has_parallel(self, language1_file):
         """Check if the given file has a parallel file.
@@ -104,8 +107,7 @@ class ParallelPicker(object):
         Returns:
             boolean
         """
-        parallel_name = language1_file.get_parallel_filename(
-            self.parallel_language)
+        parallel_name = language1_file.get_parallel_filename(self.parallel_language)
         return parallel_name is not None and os.path.isfile(parallel_name)
 
     @staticmethod
@@ -122,10 +124,12 @@ class ParallelPicker(object):
             boolean
         """
         threshold = 30
-        return (file1.word_count is not None and
-                int(file1.word_count) > threshold and
-                file2.word_count is not None and
-                int(file2.word_count) > threshold)
+        return (
+            file1.word_count is not None
+            and int(file1.word_count) > threshold
+            and file2.word_count is not None
+            and int(file2.word_count) > threshold
+        )
 
     def has_sufficient_ratio(self, file1, file2):
         """See if the ratio of words is good enough.
@@ -139,13 +143,13 @@ class ParallelPicker(object):
         Returns:
             boolean
         """
-        ratio = float(file1.word_count) / \
-            float(file2.word_count) * 100
+        ratio = float(file1.word_count) / float(file2.word_count) * 100
         if self.minratio < ratio < self.maxratio:
             return True
         else:
-            self.poor_ratio.append((file1.name, file1.word_count, file2.name,
-                                    file2.word_count, ratio))
+            self.poor_ratio.append(
+                (file1.name, file1.word_count, file2.name, file2.word_count, ratio)
+            )
 
     def copy_file(self, xml_file):
         """Copy xml_file to prestable/converted.
@@ -154,8 +158,7 @@ class ParallelPicker(object):
             xml_file (corpusxmlfile.CorpusXMLFile): the file that should be
                 copied to prestable/converted.
         """
-        prestable_dir = xml_file.dirname.replace('converted',
-                                                 'prestable/converted')
+        prestable_dir = xml_file.dirname.replace("converted", "prestable/converted")
 
         if not os.path.isdir(prestable_dir):
             with util.ignored(OSError):
@@ -179,8 +182,9 @@ class ParallelPicker(object):
         Returns:
             bool
         """
-        return (self.has_sufficient_words(file1, file2) and
-                self.has_sufficient_ratio(file1, file2))
+        return self.has_sufficient_words(file1, file2) and self.has_sufficient_ratio(
+            file1, file2
+        )
 
     def valid_parallels(self):
         """Pick valid parallel file pairs.
@@ -190,12 +194,12 @@ class ParallelPicker(object):
         """
         for language1_file in self.find_lang1_files():
             if self.has_parallel(language1_file):
-                self.counter['has_parallel'] += 1
+                self.counter["has_parallel"] += 1
                 parallel_file = corpusxmlfile.CorpusXMLFile(
-                    language1_file.get_parallel_filename(
-                        self.parallel_language))
+                    language1_file.get_parallel_filename(self.parallel_language)
+                )
                 if self.is_valid_pair(language1_file, parallel_file):
-                    self.counter['good_parallel'] += 1
+                    self.counter["good_parallel"] += 1
                     yield (language1_file, parallel_file)
 
     def copy_valid_parallels(self):
@@ -208,16 +212,17 @@ class ParallelPicker(object):
                 file2.lang,
                 dictionary=None,
                 quiet=True,
-                aligner='tca2',
+                aligner="tca2",
                 stdout=False,
-                force=True)
+                force=True,
+            )
 
             self.vcs.add(outfile)
-            self.vcs.add(outfile + '.html')
+            self.vcs.add(outfile + ".html")
 
     def print_report(self):
         for poor_ratio in self.poor_ratio:
-            print('{0}: {1}\n{2}: {3}\nratio: {4}\n'.format(*poor_ratio))
+            print("{0}: {1}\n{2}: {3}\nratio: {4}\n".format(*poor_ratio))
 
         for key, value in self.counter.items():
             print(key, value)
@@ -231,22 +236,25 @@ def parse_options():
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Pick out parallel files from converted to '
-        'prestable/converted.')
+        description="Pick out parallel files from converted to " "prestable/converted.",
+    )
 
     parser.add_argument(
-        'language1_dir', help='directory where the files of language1 exist')
+        "language1_dir", help="directory where the files of language1 exist"
+    )
     parser.add_argument(
-        '-p',
-        '--parallel_language',
-        dest='parallel_language',
-        help='The language where we would like to find '
-        'parallel documents',
-        required=True)
+        "-p",
+        "--parallel_language",
+        dest="parallel_language",
+        help="The language where we would like to find " "parallel documents",
+        required=True,
+    )
     parser.add_argument(
-        '--minratio', dest='minratio', help='The minimum ratio', required=True)
+        "--minratio", dest="minratio", help="The minimum ratio", required=True
+    )
     parser.add_argument(
-        '--maxratio', dest='maxratio', help='The maximum ratio', required=True)
+        "--maxratio", dest="maxratio", help="The maximum ratio", required=True
+    )
 
     args = parser.parse_args()
     return args
@@ -256,7 +264,8 @@ def main():
     """Copy valid parallel pairs from converted to prestable/converted."""
     args = parse_options()
 
-    picker = ParallelPicker(args.language1_dir, args.parallel_language,
-                            args.minratio, args.maxratio)
+    picker = ParallelPicker(
+        args.language1_dir, args.parallel_language, args.minratio, args.maxratio
+    )
     picker.copy_valid_parallels()
     picker.print_report()

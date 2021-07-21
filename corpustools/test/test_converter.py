@@ -38,9 +38,12 @@ class TestConverter(XMLTester):
 
     def setUp(self):
         self.converter_inside_orig = converter.Converter(
-            os.path.join(HERE,
-                         'converter_data/fakecorpus/orig/nob/admin/samediggi-'
-                         'article-16.html'), True)
+            os.path.join(
+                HERE,
+                "converter_data/fakecorpus/orig/nob/admin/samediggi-" "article-16.html",
+            ),
+            True,
+        )
 
     def test_get_orig(self):
         """Get the original name."""
@@ -48,43 +51,53 @@ class TestConverter(XMLTester):
             self.converter_inside_orig.names.orig,
             os.path.join(
                 HERE,
-                'converter_data/fakecorpus/orig/nob/admin/samediggi-article-'
-                '16.html'))
+                "converter_data/fakecorpus/orig/nob/admin/samediggi-article-" "16.html",
+            ),
+        )
 
     def test_get_xsl(self):
         """Get the name of the metadata file."""
         self.assertEqual(
             self.converter_inside_orig.names.xsl,
-            os.path.join(HERE,
-                         'converter_data/fakecorpus/orig/nob/admin/samediggi-'
-                         'article-16.html.xsl'))
+            os.path.join(
+                HERE,
+                "converter_data/fakecorpus/orig/nob/admin/samediggi-"
+                "article-16.html.xsl",
+            ),
+        )
 
     def test_get_tmpdir(self):
         """Get the temp dir."""
-        self.assertEqual(self.converter_inside_orig.tmpdir,
-                         os.path.join(HERE, 'converter_data/fakecorpus/tmp'))
+        self.assertEqual(
+            self.converter_inside_orig.tmpdir,
+            os.path.join(HERE, "converter_data/fakecorpus/tmp"),
+        )
 
     def test_get_corpusdir(self):
         """Get the corpus directory."""
         self.assertEqual(
             self.converter_inside_orig.corpusdir.rstrip(os.path.sep),
-            os.path.join(HERE, 'converter_data/fakecorpus'))
+            os.path.join(HERE, "converter_data/fakecorpus"),
+        )
 
     def test_get_converted_name(self):
         """Get the name of the converted file."""
         self.assertEqual(
             self.converter_inside_orig.names.converted,
             os.path.join(
-                HERE, 'converter_data/fakecorpus/converted/nob/admin/samediggi-'
-                'article-16.html.xml'))
+                HERE,
+                "converter_data/fakecorpus/converted/nob/admin/samediggi-"
+                "article-16.html.xml",
+            ),
+        )
 
     def test_validate_complete(self):
         """Check that an exception is raised if a document is invalid."""
-        complete = etree.fromstring('<document/>')
+        complete = etree.fromstring("<document/>")
 
-        self.assertRaises(util.ConversionError,
-                          self.converter_inside_orig.validate_complete,
-                          complete)
+        self.assertRaises(
+            util.ConversionError, self.converter_inside_orig.validate_complete, complete
+        )
 
     def test_detect_quote_is_skipped_on_errormarkup_documents(self):
         """quote detection should not be done in errormarkup documents
@@ -92,7 +105,7 @@ class TestConverter(XMLTester):
         This is a test for that covers the case covered in
         http://giellatekno.uit.no/bugzilla/show_bug.cgi?id=2151
         """
-        want_string = '''
+        want_string = """
             <document xml:lang="smj" id="no_id">
             <header>
                 <title/>
@@ -122,12 +135,12 @@ class TestConverter(XMLTester):
                     </p>
                 </body>
             </document>
-        '''
+        """
         got = etree.fromstring(want_string)
 
-        conv = converter.Converter('orig/sme/admin/blogg_5.correct.txt')
+        conv = converter.Converter("orig/sme/admin/blogg_5.correct.txt")
         conv.metadata = xslsetter.MetadataHandler(conv.names.xsl, create=True)
-        conv.metadata.set_variable('conversion_status', 'correct')
+        conv.metadata.set_variable("conversion_status", "correct")
         conv.fix_document(got)
 
         self.assertXmlEqual(got, etree.fromstring(want_string))

@@ -45,7 +45,8 @@ def remove_declared_encoding(content):
         str: content sans the declared decoding
     """
     xml_encoding_declaration_re = re.compile(
-        r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*", re.IGNORECASE)
+        r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*", re.IGNORECASE
+    )
 
     return re.sub(xml_encoding_declaration_re, "", content)
 
@@ -60,12 +61,11 @@ def to_html_elt(filename):
         etree.Element: the content of the webpage sent through the
             lxml.html5parser.
     """
-    for encoding in ['utf-8', 'windows-1252', 'latin1']:
+    for encoding in ["utf-8", "windows-1252", "latin1"]:
         try:
             with codecs.open(filename, encoding=encoding) as file_:
-                return html.document_fromstring(
-                    remove_declared_encoding(file_.read()))
+                return html.document_fromstring(remove_declared_encoding(file_.read()))
         except UnicodeDecodeError:
             pass
 
-    raise HTMLError('{}: encoding trouble'.format(filename))
+    raise HTMLError("{}: encoding trouble".format(filename))

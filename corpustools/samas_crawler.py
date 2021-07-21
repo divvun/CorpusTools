@@ -42,25 +42,28 @@ class SamasCrawler(object):
 
     Attributes:
     """
-    goaldir = six.text_type(os.getenv('GTFREE'))
+
+    goaldir = six.text_type(os.getenv("GTFREE"))
     external_links = set()
-    samas_languages = {'se': 'sme', 'nb': 'nob', 'en-UK': 'eng'}
+    samas_languages = {"se": "sme", "nb": "nob", "en-UK": "eng"}
 
     def __init__(self):
         self.fetched_links = {
-            'http://samas.no/en', 'http://samas.no/nb', 'http://samas.no/se'
+            "http://samas.no/en",
+            "http://samas.no/nb",
+            "http://samas.no/se",
         }
         self.corpus_adders = {
-            lang: adder.AddToCorpus(self.goaldir, self.samas_languages[lang],
-                                    'admin/allaskuvla/samas.no')
+            lang: adder.AddToCorpus(
+                self.goaldir, self.samas_languages[lang], "admin/allaskuvla/samas.no"
+            )
             for lang in self.samas_languages
         }
-        self.downloader = adder.UrlDownloader(
-            os.path.join(self.goaldir, 'tmp'))
+        self.downloader = adder.UrlDownloader(os.path.join(self.goaldir, "tmp"))
 
     @staticmethod
     def get_samas_href(href):
-        return 'http://samas.no{}'.format(href)
+        return "http://samas.no{}".format(href)
 
     def harvest_links(self, content):
         """Find interesting pages inside a topic.
@@ -72,28 +75,32 @@ class SamasCrawler(object):
         Yields:
             str: a url to a samas.no page
         """
-        lang_switcher = content.find(
-            './/ul[@class="language-switcher-locale-url"]')
+        lang_switcher = content.find('.//ul[@class="language-switcher-locale-url"]')
         lang_switcher.getparent().remove(lang_switcher)
 
-        for address in content.xpath('//a'):
-            if self.is_internal(address.get('href')):
-                yield self.get_samas_href(address.get('href').strip())
+        for address in content.xpath("//a"):
+            if self.is_internal(address.get("href")):
+                yield self.get_samas_href(address.get("href").strip())
 
     def is_internal(self, href):
-        return (href and '/node' not in href and '/Node' not in href
-                and href.startswith('/') and 'field_' not in href
-                and 'page=' not in href and '/user' not in href)
+        return (
+            href
+            and "/node" not in href
+            and "/Node" not in href
+            and href.startswith("/")
+            and "field_" not in href
+            and "page=" not in href
+            and "/user" not in href
+        )
 
     def get_uff(self, tmpname):
         content = html.parse(tmpname).getroot()
-        lang_switcher = content.find(
-            './/ul[@class="language-switcher-locale-url"]')
+        lang_switcher = content.find('.//ul[@class="language-switcher-locale-url"]')
 
         return {
-            address.get('xml:lang'): address.get('href')
-            for address in lang_switcher.xpath('.//a')
-            if self.is_internal(address.get('href'))
+            address.get("xml:lang"): address.get("href")
+            for address in lang_switcher.xpath(".//a")
+            if self.is_internal(address.get("href"))
         }
 
     def add_samas_page(self, link):
@@ -109,17 +116,14 @@ class SamasCrawler(object):
                 (request, tmpname) = self.downloader.download(link)
                 uff = self.get_uff(tmpname)
 
-                if 'se' in uff:
-                    util.note('')
+                if "se" in uff:
+                    util.note("")
                     util.print_frame(link, uff)
-                    path = paths.add(
-                        self.uff_fetcher(uff, 'se', link, tmpname, ''))
+                    path = paths.add(self.uff_fetcher(uff, "se", link, tmpname, ""))
 
-                    for lang in ['nb', 'en-UK']:
+                    for lang in ["nb", "en-UK"]:
                         if lang in uff:
-                            paths.add(
-                                self.uff_fetcher(uff, lang, link, tmpname,
-                                                 path))
+                            paths.add(self.uff_fetcher(uff, lang, link, tmpname, path))
 
             except (adder.AdderError, UserWarning) as error:
                 util.note(error)
@@ -133,15 +137,16 @@ class SamasCrawler(object):
         self.fetched_links.add(lunk)
         if lunk == link:
             return self.corpus_adders[lang].copy_file_to_corpus(
-                tmpname, lunk, parallelpath=path)
+                tmpname, lunk, parallelpath=path
+            )
         else:
-            return self.corpus_adders[lang].copy_url_to_corpus(
-                lunk, parallelpath=path)
+            return self.corpus_adders[lang].copy_url_to_corpus(lunk, parallelpath=path)
 
     def crawl_site(self):
         for lang in self.samas_languages:
             (request, tmpname) = self.downloader.download(
-                'http://samas.no/{}'.format(lang[:2]))
+                "http://samas.no/{}".format(lang[:2])
+            )
             for link in self.harvest_links(html.parse(tmpname).getroot()):
                 self.add_samas_page(link)
 

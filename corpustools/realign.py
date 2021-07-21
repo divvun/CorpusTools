@@ -27,8 +27,7 @@ import logging
 import os
 import shutil
 
-from corpustools import (argparse_version, convertermanager, corpuspath,
-                         parallelize)
+from corpustools import argparse_version, convertermanager, corpuspath, parallelize
 
 LOGGER = logging.getLogger(__name__)
 
@@ -39,8 +38,11 @@ def print_filename(corpus_path):
     Args:
         corpus_path (corpuspath.CorpusPath): filenames
     """
-    print('\toriginal: {}\n\tmetatada: {}\n\tconverted: {}'.format(
-        corpus_path.orig, corpus_path.xsl, corpus_path.converted))
+    print(
+        "\toriginal: {}\n\tmetatada: {}\n\tconverted: {}".format(
+            corpus_path.orig, corpus_path.xsl, corpus_path.converted
+        )
+    )
 
 
 def print_filenames(corpus_path1, corpus_path2):
@@ -50,9 +52,9 @@ def print_filenames(corpus_path1, corpus_path2):
         corpus_path1 (corpuspath.CorpusPath): filenames for the lang1 file.
         corpus_path2 (corpuspath.CorpusPath): filenames for the lang2 file.
     """
-    print('\nLanguage 1 filenames:')
+    print("\nLanguage 1 filenames:")
     print_filename(corpus_path1)
-    print('\nLanguage 2 filenames:')
+    print("\nLanguage 2 filenames:")
     print_filename(corpus_path2)
 
 
@@ -65,10 +67,9 @@ def calculate_paths(tmxhtml):
     Returns:
         tuple of corpuspath.CorpusPath
     """
-    path = tmxhtml[:-5] if tmxhtml.endswith('.tmx.html') else \
-        tmxhtml
+    path = tmxhtml[:-5] if tmxhtml.endswith(".tmx.html") else tmxhtml
     corpus_path1 = corpuspath.CorpusPath(path)
-    lang2 = corpus_path1.split_on_module(path)[2].split('/')[0].split('2')[1]
+    lang2 = corpus_path1.split_on_module(path)[2].split("/")[0].split("2")[1]
     corpus_path2 = corpuspath.CorpusPath(corpus_path1.parallel(lang2))
 
     return corpus_path1, corpus_path2
@@ -104,24 +105,27 @@ def parse_options():
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Sentence align a given file anew.\n'
-        'Files are converted before being parallelised.\n'
-        'This is mainly thought of as a debugging program '
-        'when trying to solve issues in parallelised files.')
+        description="Sentence align a given file anew.\n"
+        "Files are converted before being parallelised.\n"
+        "This is mainly thought of as a debugging program "
+        "when trying to solve issues in parallelised files.",
+    )
     parser.add_argument(
-        u'--files',
-        action=u'store_true',
-        help=u'Only show the interesting filenames '
-        'that are needed for improving sentence '
-        'alignment.')
+        "--files",
+        action="store_true",
+        help="Only show the interesting filenames "
+        "that are needed for improving sentence "
+        "alignment.",
+    )
     parser.add_argument(
-        u'--convert',
-        action=u'store_true',
-        help=u'Only convert the original files '
-        'that are the source of the .tmx.html file. '
-        'This is useful when improving the content of '
-        'the converted files.')
-    parser.add_argument('tmxhtml', help="The tmx.html file to realign.")
+        "--convert",
+        action="store_true",
+        help="Only convert the original files "
+        "that are the source of the .tmx.html file. "
+        "This is useful when improving the content of "
+        "the converted files.",
+    )
+    parser.add_argument("tmxhtml", help="The tmx.html file to realign.")
 
     args = parser.parse_args()
     return args
@@ -138,7 +142,7 @@ def main():
     print_filenames(corpus_path1, corpus_path2)
 
     if args.files:
-        raise SystemExit('Only printing file names')
+        raise SystemExit("Only printing file names")
 
     try:
         convert_and_copy(corpus_path1, corpus_path2)
@@ -146,13 +150,14 @@ def main():
         raise SystemExit(error)
 
     if args.convert:
-        raise SystemExit('Only converting')
+        raise SystemExit("Only converting")
 
     parallelize.parallelise_file(
         corpus_path1.converted,
-        corpus_path2.metadata.get_variable('mainlang'),
+        corpus_path2.metadata.get_variable("mainlang"),
         dictionary=None,
         quiet=False,
-        aligner='tca2',
+        aligner="tca2",
         stdout=False,
-        force=True)
+        force=True,
+    )

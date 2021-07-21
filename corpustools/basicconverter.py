@@ -36,5 +36,4 @@ class BasicConverter(object):
             debugging purposes).
         """
         self.orig = filename
-        self.metadata = xslsetter.MetadataHandler(
-            filename + '.xsl', create=True)
+        self.metadata = xslsetter.MetadataHandler(filename + ".xsl", create=True)

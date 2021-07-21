@@ -37,13 +37,15 @@ def parse_args():
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description='Program to print out a nicely indented html document. '
-        'This makes it easier to see the structure of it. This eases '
-        'debugging the conversion of html documents.')
+        description="Program to print out a nicely indented html document. "
+        "This makes it easier to see the structure of it. This eases "
+        "debugging the conversion of html documents.",
+    )
 
-    parser.add_argument('inhtml', help='The path of the html to indent.')
+    parser.add_argument("inhtml", help="The path of the html to indent.")
     parser.add_argument(
-        'outhtml', help='The place where the indented html doc is written')
+        "outhtml", help="The place where the indented html doc is written"
+    )
 
     return parser.parse_args()
 
@@ -53,5 +55,5 @@ def main():
     args = parse_args()
 
     c = htmlconverter.to_html_elt(args.inhtml)
-    with open(args.outhtml, 'w') as outfile:
+    with open(args.outhtml, "w") as outfile:
         util.print_element(c, 0, 4, outfile)

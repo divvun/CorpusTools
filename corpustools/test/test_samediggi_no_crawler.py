@@ -28,7 +28,7 @@ from corpustools import samediggi_no_crawler
 
 HERE = os.path.dirname(__file__)
 
-MY_TEXT = '''
+MY_TEXT = """
 <!DOCTYPE html>
   <html lang="se-NO">
   <head>
@@ -397,7 +397,7 @@ MY_TEXT = '''
 
 
   </body>
-</html>'''
+</html>"""
 
 
 class TestSamediggiNoPage(unittest.TestCase):
@@ -407,70 +407,77 @@ class TestSamediggiNoPage(unittest.TestCase):
         """Test initial values."""
         with requests_mock.Mocker() as mocker:
             mocker.get(
-                'https://samediggi.no/Odasarkiiva/PRD-Doarjja-julevsami-giellaproseavttaide',
+                "https://samediggi.no/Odasarkiiva/PRD-Doarjja-julevsami-giellaproseavttaide",
                 text=MY_TEXT,
-                headers={'content-type': 'text/html; charset=UTF-8'})
+                headers={"content-type": "text/html; charset=UTF-8"},
+            )
             result = requests.get(
-                'https://samediggi.no/Odasarkiiva/PRD-Doarjja-julevsami-giellaproseavttaide'
+                "https://samediggi.no/Odasarkiiva/PRD-Doarjja-julevsami-giellaproseavttaide"
             )
 
             page = samediggi_no_crawler.SamediggiNoPage(result, {})
             self.assertEqual(
                 page.corpuspath.orig,
                 os.path.join(
-                    os.getenv('GTFREE'),
-                    'orig/sme/admin/sd/samediggi.no/prd-doarjja-julevsami-giellaproseavttaide.html'
-                ))
+                    os.getenv("GTFREE"),
+                    "orig/sme/admin/sd/samediggi.no/prd-doarjja-julevsami-giellaproseavttaide.html",
+                ),
+            )
             self.assertEqual(
                 page.url,
-                'https://samediggi.no/Odasarkiiva/PRD-Doarjja-julevsami-giellaproseavttaide'
+                "https://samediggi.no/Odasarkiiva/PRD-Doarjja-julevsami-giellaproseavttaide",
             )
-            self.assertListEqual(page.parallel_links, [
-                'https://www.sametinget.no/Nyhetsarkiv/parallel1',
-                'https://www.saemiedigkie.no/Saernievaaarhkoe/parallel1',
-                'https://www.samedigge.no/AAdaasa/PRD-Doarjju-julevsame-giellaprosjevtajda'
-            ])
+            self.assertListEqual(
+                page.parallel_links,
+                [
+                    "https://www.sametinget.no/Nyhetsarkiv/parallel1",
+                    "https://www.saemiedigkie.no/Saernievaaarhkoe/parallel1",
+                    "https://www.samedigge.no/AAdaasa/PRD-Doarjju-julevsame-giellaprosjevtajda",
+                ],
+            )
             self.assertTrue(page.saveable)
-            self.assertEqual(page.lang, 'sme')
+            self.assertEqual(page.lang, "sme")
             self.assertSetEqual(
                 page.links,
-                set([
-                    'https://samediggi.no/Balvalusat2/Dearvvasvuohta-ja-sosiala',
-                    'https://samediggi.no/Vuoigatvuodat',
-                    'https://samediggi.no/Samedikki-birra2/Rehket-Samediggai',
-                    'https://samediggi.no/Samedikki-birra',
-                    'https://samediggi.no/Doarjagat-ja-stipeanddat',
-                    'https://samediggi.no/Preassa',
-                    'https://samediggi.no/Samedikki-birra2/langlink',
-                    'https://samediggi.no/Balvalusat2/Ealahusat',
-                    'https://samediggi.no/Politihkka2/Assit-ja-dokumeanttat',
-                    'https://samediggi.no/Odasarkiiva',
-                    'https://samediggi.no/Balvalusat2/Giella',
-                    'https://samediggi.no/Samedikki-birra2/langlink2',
-                    'https://samediggi.no/Balvalusat2/Kultuvra',
-                    'https://samediggi.no/Valga',
-                    'https://samediggi.no/Balvalusat2/Dassearvu',
-                    'https://samediggi.no/Politihkka2',
-                    'https://samediggi.no/Lagideamit',
-                    'https://samediggi.no/Balvalusat2/Oahpahus-ja-oahpponeavvut',
-                    'https://samediggi.no/Balvalusat2/Riikkaidgaskasas-bargu',
-                    'https://samediggi.no/Girjeradju',
-                    'https://samediggi.no/Balvalusat2/Biras-areala-ja-kultursuodjaleapmi',
-                    'https://samediggi.no/Balvalusat2/Manaidgardi'
-                ]))
+                set(
+                    [
+                        "https://samediggi.no/Balvalusat2/Dearvvasvuohta-ja-sosiala",
+                        "https://samediggi.no/Vuoigatvuodat",
+                        "https://samediggi.no/Samedikki-birra2/Rehket-Samediggai",
+                        "https://samediggi.no/Samedikki-birra",
+                        "https://samediggi.no/Doarjagat-ja-stipeanddat",
+                        "https://samediggi.no/Preassa",
+                        "https://samediggi.no/Samedikki-birra2/langlink",
+                        "https://samediggi.no/Balvalusat2/Ealahusat",
+                        "https://samediggi.no/Politihkka2/Assit-ja-dokumeanttat",
+                        "https://samediggi.no/Odasarkiiva",
+                        "https://samediggi.no/Balvalusat2/Giella",
+                        "https://samediggi.no/Samedikki-birra2/langlink2",
+                        "https://samediggi.no/Balvalusat2/Kultuvra",
+                        "https://samediggi.no/Valga",
+                        "https://samediggi.no/Balvalusat2/Dassearvu",
+                        "https://samediggi.no/Politihkka2",
+                        "https://samediggi.no/Lagideamit",
+                        "https://samediggi.no/Balvalusat2/Oahpahus-ja-oahpponeavvut",
+                        "https://samediggi.no/Balvalusat2/Riikkaidgaskasas-bargu",
+                        "https://samediggi.no/Girjeradju",
+                        "https://samediggi.no/Balvalusat2/Biras-areala-ja-kultursuodjaleapmi",
+                        "https://samediggi.no/Balvalusat2/Manaidgardi",
+                    ]
+                ),
+            )
 
             page.set_initial_metadata()
             self.assertEqual(
-                page.corpuspath.metadata.get_variable('title'),
-                'PRD: Doarjja julevsámi giellaprošeavttaide')
-            self.assertEqual(
-                page.corpuspath.metadata.get_variable('filename'),
-                'https://samediggi.no/Odasarkiiva/PRD-Doarjja-julevsami-giellaproseavttaide'
+                page.corpuspath.metadata.get_variable("title"),
+                "PRD: Doarjja julevsámi giellaprošeavttaide",
             )
             self.assertEqual(
-                page.corpuspath.metadata.get_variable('mainlang'), 'sme')
+                page.corpuspath.metadata.get_variable("filename"),
+                "https://samediggi.no/Odasarkiiva/PRD-Doarjja-julevsami-giellaproseavttaide",
+            )
+            self.assertEqual(page.corpuspath.metadata.get_variable("mainlang"), "sme")
+            self.assertEqual(page.corpuspath.metadata.get_variable("genre"), "admin")
             self.assertEqual(
-                page.corpuspath.metadata.get_variable('genre'), 'admin')
-            self.assertEqual(
-                page.corpuspath.metadata.get_variable('translated_from'),
-                'nob')
+                page.corpuspath.metadata.get_variable("translated_from"), "nob"
+            )

@@ -55,10 +55,9 @@ class TmxComparator(object):
         # Start at -1 because a unified diff always starts with a --- line
         num_diff_lines = -1
         for line in difflib.unified_diff(
-                self.want_tmx.tmx_to_stringlist(),
-                self.got_tmx.tmx_to_stringlist(),
-                n=0):
-            if line[:1] == '-':
+            self.want_tmx.tmx_to_stringlist(), self.got_tmx.tmx_to_stringlist(), n=0
+        ):
+            if line[:1] == "-":
                 num_diff_lines += 1
 
         return num_diff_lines
@@ -67,9 +66,8 @@ class TmxComparator(object):
         """Return a stringlist containing the diff lines"""
         diff = []
         for line in difflib.unified_diff(
-                self.want_tmx.tmx_to_stringlist(),
-                self.got_tmx.tmx_to_stringlist(),
-                n=0):
+            self.want_tmx.tmx_to_stringlist(), self.got_tmx.tmx_to_stringlist(), n=0
+        ):
             diff.append(line)
 
         return diff
@@ -78,10 +76,11 @@ class TmxComparator(object):
         """Return a stringlist containing the diff lines"""
         diff = []
         for line in difflib.unified_diff(
-                self.want_tmx.lang_to_stringlist(lang),
-                self.got_tmx.lang_to_stringlist(lang),
-                n=0):
-            diff.append(line + '\n')
+            self.want_tmx.lang_to_stringlist(lang),
+            self.got_tmx.lang_to_stringlist(lang),
+            n=0,
+        ):
+            diff.append(line + "\n")
 
         return diff
 
@@ -128,10 +127,10 @@ class TmxGoldstandardTester(object):
             print("testing {} …".format(want_tmx_file))
 
             # Calculate the parallel lang, to be used in parallelization
-            if want_tmx_file.find('nob2sme') > -1:
-                paralang = 'sme'
+            if want_tmx_file.find("nob2sme") > -1:
+                paralang = "sme"
             else:
-                paralang = 'nob'
+                paralang = "nob"
 
             # Align files
             self.align_files(testrun, want_tmx_file, paralang, aligner="tca2")
@@ -167,55 +166,55 @@ class TmxGoldstandardTester(object):
         file_element = self.testresult_writer.make_file_element(
             filelist[0].get_basename(),
             str(comparator.get_lines_in_wantedfile()),
-            str(comparator.get_number_of_differing_lines()))
+            str(comparator.get_number_of_differing_lines()),
+        )
 
-        self.set_number_of_diff_lines(
-            comparator.get_number_of_differing_lines())
+        self.set_number_of_diff_lines(comparator.get_number_of_differing_lines())
 
         # Append the result for this file to the testrun element
         testrun.append(file_element)
 
-        self.write_diff_files(comparator, parallelizer,
-                              filelist[0].get_basename())
+        self.write_diff_files(comparator, parallelizer, filelist[0].get_basename())
 
     def compute_xmlfilename(self, want_tmx_file):
         """Compute the name of the xmlfile which should be aligned"""
-        xml_file = want_tmx_file.replace('tmx/goldstandard/', 'converted/')
-        xml_file = xml_file.replace('nob2sme', 'nob')
-        xml_file = xml_file.replace('sme2nob', 'sme')
-        xml_file = xml_file.replace('.toktmx', '.xml')
+        xml_file = want_tmx_file.replace("tmx/goldstandard/", "converted/")
+        xml_file = xml_file.replace("nob2sme", "nob")
+        xml_file = xml_file.replace("sme2nob", "sme")
+        xml_file = xml_file.replace(".toktmx", ".xml")
 
         return xml_file
 
     def write_diff_files(self, comparator, parallelizer, filename):
         """Write diffs to a jspwiki file"""
         print("write_diff_files {}".format(filename))
-        filename = '{}_{}.jspwiki'.format(filename, self.date)
+        filename = "{}_{}.jspwiki".format(filename, self.date)
         dirname = os.path.join(
-            os.path.dirname(self.testresult_writer.get_filename()),
-            'tca2testing')
+            os.path.dirname(self.testresult_writer.get_filename()), "tca2testing"
+        )
 
         with open(os.path.join(dirname, filename), "w") as diff_file:
-            diff_file.write('!!!{}\n'.format(filename))
+            diff_file.write("!!!{}\n".format(filename))
             diff_file.write("!!TMX diff\n{{{\n")
             diff_file.writelines(comparator.get_diff_as_text())
-            diff_file.write("\n}}}\n!! diff\n{{{\n".format(
-                parallelizer.get_lang1()))
+            diff_file.write("\n}}}\n!! diff\n{{{\n".format(parallelizer.get_lang1()))
             diff_file.writelines(
-                comparator.get_lang_diff_as_text(parallelizer.get_lang1()))
-            diff_file.write("\n}}}\n!!{} diff\n{{{\n".format(
-                parallelizer.get_lang2()))
+                comparator.get_lang_diff_as_text(parallelizer.get_lang1())
+            )
+            diff_file.write("\n}}}\n!!{} diff\n{{{\n".format(parallelizer.get_lang2()))
             diff_file.writelines(
-                comparator.get_lang_diff_as_text(parallelizer.get_lang2()))
+                comparator.get_lang_diff_as_text(parallelizer.get_lang2())
+            )
             diff_file.write("\n}}}\n")
 
     def find_goldstandard_tmx_files(self):
         """Find the goldstandard tmx files, return them as a list"""
         file_list = []
         for root, dirs, files in os.walk(
-                os.path.join(os.environ['GTFREE'], 'prestable/toktmx')):
+            os.path.join(os.environ["GTFREE"], "prestable/toktmx")
+        ):
             for f in files:
-                if f.endswith('.toktmx'):
+                if f.endswith(".toktmx"):
                     print(util.lineno(), f)
                     file_list.append(os.path.join(root, f))
 
@@ -271,10 +270,8 @@ class TmxTestDataWriter(object):
         with open(self.filename, "w") as paragstesting:
             et = etree.ElementTree(self.paragstesting)
             et.write(
-                paragstesting,
-                pretty_print=True,
-                encoding="utf-8",
-                xml_declaration=True)
+                paragstesting, pretty_print=True, encoding="utf-8", xml_declaration=True
+            )
 
 
 def parse_options():
@@ -282,9 +279,11 @@ def parse_options():
 
     Expected input is one or more tmx goldstandard files.
     """
-    parser = argparse.ArgumentParser(description='Compare goldstandard tmx '
-                                     'files to files produced by the '
-                                     'parallelizer pipeline.')
+    parser = argparse.ArgumentParser(
+        description="Compare goldstandard tmx "
+        "files to files produced by the "
+        "parallelizer pipeline."
+    )
 
     parser.parse_args()
 
@@ -293,8 +292,9 @@ def main():
     parse_options()
 
     # Set the name of the file to write the test to
-    paragstestfile = os.path.join(os.environ['GTHOME'],
-                                  'techdoc/ling/testruns.paragstesting.xml')
+    paragstestfile = os.path.join(
+        os.environ["GTHOME"], "techdoc/ling/testruns.paragstesting.xml"
+    )
 
     # Initialize an instance of a tmx test data writer
     tester = TmxGoldstandardTester(paragstestfile)

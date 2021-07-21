@@ -57,7 +57,7 @@ def regjeringen_no(directories):
     Args:
         directories (list of str): list of directories to walk
     """
-    for html_file in find_endings(directories, '.html'):
+    for html_file in find_endings(directories, ".html"):
         conv = converter.HTMLConverter(html_file)
         content = html.document_fromstring(conv.content)
 
@@ -65,18 +65,17 @@ def regjeringen_no(directories):
         author = content.find('.//meta[@name="AUTHOR"]')
         if author is not None:
             should_write = True
-            conv.md.set_variable('author1_ln', author.get('content'))
+            conv.md.set_variable("author1_ln", author.get("content"))
 
         creation_date = content.find('.//meta[@name="creation_date"]')
         if creation_date is not None:
             should_write = True
-            conv.md.set_variable('year',
-                                 parse(creation_date.get('content')).year)
+            conv.md.set_variable("year", parse(creation_date.get("content")).year)
 
         publisher = content.find('.//meta[@name="DC.Publisher"]')
         if publisher is not None:
             should_write = True
-            conv.md.set_variable('publisher', publisher.get('content'))
+            conv.md.set_variable("publisher", publisher.get("content"))
 
         if should_write:
             conv.md.write_file()
@@ -89,7 +88,7 @@ def to_free(path):
 
     for file_ in conv_manager.FILES:
         conv = conv_manager.converter(file_)
-        conv.md.set_variable('license_type', 'free')
+        conv.md.set_variable("license_type", "free")
         conv.md.write_file()
 
 
@@ -100,19 +99,19 @@ def skuvla_historja(directories):
         directories (list of str): list of directories to walk
     """
     years = {
-        'skuvlahistorja1': '2005',
-        'skuvlahistorja2': '2007',
-        'skuvlahistorja3': '2009',
-        'skuvlahistorja4': '2010',
-        'skuvlahistorja5': '2011',
-        'skuvlahistorja6': '2013',
+        "skuvlahistorja1": "2005",
+        "skuvlahistorja2": "2007",
+        "skuvlahistorja3": "2009",
+        "skuvlahistorja4": "2010",
+        "skuvlahistorja5": "2011",
+        "skuvlahistorja6": "2013",
     }
 
-    for file_ in find_endings(directories, '.xsl'):
-        if 'skuvlahistorja' in file_:
+    for file_ in find_endings(directories, ".xsl"):
+        if "skuvlahistorja" in file_:
             print(file_)
             metadata = xslsetter.MetadataHandler(file_)
-            metadata.set_variable('year', years[file_.split('/')[-1]])
+            metadata.set_variable("year", years[file_.split("/")[-1]])
             metadata.write_file()
 
 
@@ -125,26 +124,28 @@ def translated_from(url_part, mainlang, directories):
         directories (list of str): list of directories to walk
     """
     # Check if the arguments are valid
-    if '.' not in url_part:
-        raise UserWarning('{} does not seem to part of a url'.format(url_part))
-    if len(mainlang) != 3 and not isinstance(mainlang, 'str'):
-        raise UserWarning('{} does not seem to be a valid language code')
+    if "." not in url_part:
+        raise UserWarning("{} does not seem to part of a url".format(url_part))
+    if len(mainlang) != 3 and not isinstance(mainlang, "str"):
+        raise UserWarning("{} does not seem to be a valid language code")
 
     counter = collections.defaultdict(int)
-    for file_ in find_endings(directories, '.xsl'):
+    for file_ in find_endings(directories, ".xsl"):
         corpus_path = corpuspath.CorpusPath(file_)
-        if (url_part in corpus_path.metadata.get_variable('filename') and
-                corpus_path.metadata.get_variable('mainlang') == mainlang):
+        if (
+            url_part in corpus_path.metadata.get_variable("filename")
+            and corpus_path.metadata.get_variable("mainlang") == mainlang
+        ):
             counter[mainlang] += 1
             for parallel in corpus_path.parallels():
-                counter['parallels'] += 1
+                counter["parallels"] += 1
                 try:
-                    metadata = xslsetter.MetadataHandler(parallel + '.xsl')
+                    metadata = xslsetter.MetadataHandler(parallel + ".xsl")
                 except util.ArgumentError as error:
                     util.note(error)
-                    util.note('Referenced from {}'.format(file_))
+                    util.note("Referenced from {}".format(file_))
                 finally:
-                    metadata.set_variable('translated_from', mainlang)
+                    metadata.set_variable("translated_from", mainlang)
                     metadata.write_file()
 
     print(counter)

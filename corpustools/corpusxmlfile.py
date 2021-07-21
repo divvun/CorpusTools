@@ -49,7 +49,10 @@ class CorpusXMLFile(object):
             raise util.ArgumentError(
                 "Expected Corpus XML file (output of convert2xml) with "
                 "<document> as the root tag, got {} -- did you pass the "
-                "wrong file?".format(self.root.tag,))
+                "wrong file?".format(
+                    self.root.tag,
+                )
+            )
 
     @property
     def dirname(self):
@@ -70,7 +73,7 @@ class CorpusXMLFile(object):
     @property
     def lang(self):
         """Get the lang of the file."""
-        return self.root.attrib['{http://www.w3.org/XML/1998/namespace}lang']
+        return self.root.attrib["{http://www.w3.org/XML/1998/namespace}lang"]
 
     @property
     def word_count(self):
@@ -79,7 +82,7 @@ class CorpusXMLFile(object):
         if word_count is not None:
             return word_count.text
         else:
-            raise AttributeError('wordcount not found!')
+            raise AttributeError("wordcount not found!")
 
     @property
     def ocr(self):
@@ -96,28 +99,30 @@ class CorpusXMLFile(object):
         """
         parallel_files = self.root.findall(".//parallel_text")
         for para in parallel_files:
-            if (para.attrib['{http://www.w3.org/XML/1998/namespace}lang'] ==
-                    paralang):
-                return para.attrib['location']
+            if para.attrib["{http://www.w3.org/XML/1998/namespace}lang"] == paralang:
+                return para.attrib["location"]
 
     def get_parallel_filename(self, paralang):
         """Infer the absolute path of the parallel file."""
         if self.get_parallel_basename(paralang) is None:
             return None
         root, module, _, genre, subdirs, _ = util.split_path(self.name)
-        parallel_basename = '{}.xml'.format(
-            self.get_parallel_basename(paralang))
-        if parallel_basename == '.xml':
-            raise NameError('Parallel is empty')
+        parallel_basename = "{}.xml".format(self.get_parallel_basename(paralang))
+        if parallel_basename == ".xml":
+            raise NameError("Parallel is empty")
 
         return os.path.join(
-            *[root, module, paralang, genre, subdirs, parallel_basename])
+            *[root, module, paralang, genre, subdirs, parallel_basename]
+        )
 
     @property
     def original_filename(self):
         """Infer the path of the original file."""
-        return self.name.replace('prestable/', '').replace(
-            'converted/', 'orig/').replace('.xml', '')
+        return (
+            self.name.replace("prestable/", "")
+            .replace("converted/", "orig/")
+            .replace(".xml", "")
+        )
 
     @property
     def translated_from(self):
@@ -125,8 +130,7 @@ class CorpusXMLFile(object):
         translated_from = self.root.find(".//translated_from")
 
         if translated_from is not None:
-            return translated_from.attrib[
-                '{http://www.w3.org/XML/1998/namespace}lang']
+            return translated_from.attrib["{http://www.w3.org/XML/1998/namespace}lang"]
 
     def remove_version(self):
         """Remove the version element.
@@ -158,8 +162,8 @@ class CorpusXMLFile(object):
 
     def set_body(self, new_body):
         """Replace the body element with new_body element."""
-        if new_body.tag == 'body':
-            oldbody = self.etree.find('.//body')
+        if new_body.tag == "body":
+            oldbody = self.etree.find(".//body")
             oldbody.getparent().replace(oldbody, new_body)
 
     def write(self, file_name=None):
@@ -168,4 +172,5 @@ class CorpusXMLFile(object):
             file_name = self.name
 
         self.etree.write(
-            file_name, encoding='utf8', pretty_print=True, xml_declaration=True)
+            file_name, encoding="utf8", pretty_print=True, xml_declaration=True
+        )

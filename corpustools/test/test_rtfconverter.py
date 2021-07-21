@@ -35,8 +35,10 @@ class TestRTFConverter(XMLTester):
     def test_convert2intermediate(self):
         """Test rtf conversion to Giella xml."""
         got = htmlcontentconverter.convert2intermediate(
-            os.path.join(HERE, 'converter_data/fakecorpus/orig/sme/riddu/'
-                         'folkemote.rtf'))
-        want = etree.parse(os.path.join(HERE, 'converter_data/folkemote.xml'))
+            os.path.join(
+                HERE, "converter_data/fakecorpus/orig/sme/riddu/" "folkemote.rtf"
+            )
+        )
+        want = etree.parse(os.path.join(HERE, "converter_data/folkemote.xml"))
 
         self.assertXmlEqual(got, want)
