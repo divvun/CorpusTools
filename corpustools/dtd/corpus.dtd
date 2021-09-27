@@ -171,7 +171,7 @@
 <!-- Errors can be nested -->
 
 <!-- Error elements contain one or more correct elements -->
-<!ELEMENT correct #PCDATA>
+<!ELEMENT correct (#PCDATA)>
 <!ATTLIST correct errorinfo CDATA #IMPLIED >
 
 <!-- Unclassified errors: -->
