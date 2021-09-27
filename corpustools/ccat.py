@@ -186,7 +186,8 @@ class XMLPrinter(object):
         """Get the lang of the file."""
         return self.etree.getroot().attrib["{http://www.w3.org/XML/1998/namespace}lang"]
 
-    def get_element_language(self, element, parentlang):
+    @staticmethod
+    def get_element_language(element, parentlang):
         """Get the language of element.
 
         Elements inherit the parents language if not explicitely set
