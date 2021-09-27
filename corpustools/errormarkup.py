@@ -35,9 +35,7 @@ ERROR_TYPES = {
     "∞": "errorlang",
     "‰": "errorformat",
 }
-CORRECTION_REGEX = re.compile(
-    "(?P<correction>[$€£¥§¢∞‰]{[^\}]*})(?P<tail>.*)", re.UNICODE
-)
+CORRECTION_REGEX = re.compile("(?P<correction>[$€£¥§¢∞‰]{[^\}]*})", re.UNICODE)
 
 
 def is_error(text):
@@ -63,19 +61,15 @@ def process_text(text):
     non-correctionstring/correctionstrings
     """
     result = []
+    previous = 0
+    for match in CORRECTION_REGEX.finditer(text):
+        if previous < match.start():
+            result.append(text[previous : match.start()])
+        result.append(match.group("correction"))
+        previous = match.end()
 
-    matches = CORRECTION_REGEX.search(text)
-    while matches:
-        head = CORRECTION_REGEX.sub("", text)
-        if not (head and head[-1] == " "):
-            if head:
-                result.append(head)
-            result.append(matches.group("correction"))
-        text = matches.group("tail")
-        matches = CORRECTION_REGEX.search(text)
-
-    if text:
-        result.append(text)
+    if previous < len(text):
+        result.append(text[previous:])
 
     return result
 
