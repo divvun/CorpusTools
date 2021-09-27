@@ -326,6 +326,14 @@ class TestErrorMarkup(unittest.TestCase):
                 'bálkkášumi<correct errorinfo="vowlat,á-a">bálkkašumi</correct>'
                 "</errorort> miessemánu.</em></p>",
             ),
+            (
+                "inline multiple corrections",
+                "<p>{leimme}£{leimmet///leat}</p>",
+                "<p><errormorphsyn>leimme"
+                "<correct>leimmet</correct>"
+                "<correct>leat</correct>"
+                "</errormorphsyn></p>",
+            ),
         ]
     )
     def test_add_error_markup(self, name, in_string, want_string):
