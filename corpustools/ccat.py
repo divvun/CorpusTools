@@ -137,6 +137,8 @@ class XMLPrinter(object):
         self.errorlex = errorlex
         self.errorlang = errorlang
         self.noforeign = noforeign
+        self.foreign = foreign
+        self.errorformat = errorformat
 
         self.error_filtering = (
             error
