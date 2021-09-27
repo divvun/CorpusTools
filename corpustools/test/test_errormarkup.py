@@ -341,8 +341,7 @@ class TestErrorMarkup(unittest.TestCase):
         in_elem = etree.fromstring(in_string)
         want = etree.fromstring(want_string)
 
-        errormarkup.add_error_markup(in_elem)
-        self.assert_xml_equal(in_elem, want)
+        self.assert_xml_equal(errormarkup.add_error_markup(in_elem), want)
 
     # Nested markup
     @parameterized.expand(
@@ -439,6 +438,4 @@ class TestErrorMarkup(unittest.TestCase):
         in_elem = etree.fromstring(in_string)
         want = etree.fromstring(want_string)
 
-        errormarkup.add_error_markup(in_elem)
-        self.assert_xml_equal(in_elem, want)
-
+        self.assert_xml_equal(errormarkup.add_error_markup(in_elem), want)
