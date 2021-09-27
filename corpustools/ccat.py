@@ -214,7 +214,7 @@ class XMLPrinter(object):
                 if not self.one_word_per_line:
                     textlist.append(element.tail)
                 else:
-                    textlist.append("\n".join(element.tail.strip().split()))
+                    textlist.extend(element.tail.strip().split())
 
     def error_not_inline(self, element):
         """Collect and format parts of the element.
@@ -310,7 +310,7 @@ class XMLPrinter(object):
                 if not self.one_word_per_line:
                     textlist.append(text)
                 else:
-                    textlist.append("\n".join(text.split()))
+                    textlist.extend(text.split())
 
     def visit_children(self, element, textlist, parentlang):
         """Visit the children of element, adding their content to textlist."""
