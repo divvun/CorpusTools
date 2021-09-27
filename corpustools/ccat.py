@@ -264,7 +264,7 @@ class XMLPrinter(object):
         if correct is not None and not self.noforeign:
             textlist.append("" if correct.text is None else correct.text)
 
-        self.get_tail(element, textlist, parentlang)
+        self.get_contents(element.tail, textlist, parentlang)
 
     def collect_text(self, element, parentlang, buffer):
         """Collect text from element, and write the contents to buffer."""
@@ -312,16 +312,6 @@ class XMLPrinter(object):
                 else:
                     textlist.append("\n".join(text.split()))
 
-    def get_text(self, element, textlist, parentlang):
-        """Get the text part of an lxml element."""
-        self.get_contents(
-            element.text, textlist, self.get_element_language(element, parentlang)
-        )
-
-    def get_tail(self, element, textlist, parentlang):
-        """Get the tail part of an lxml element."""
-        self.get_contents(element.tail, textlist, parentlang)
-
     def visit_children(self, element, textlist, parentlang):
         """Visit the children of element, adding their content to textlist."""
         for child in element:
@@ -329,7 +319,7 @@ class XMLPrinter(object):
                 if child.tag == "errorlang" and self.noforeign and self.typos:
                     pass
                 elif child.tag == "errorlang" and self.noforeign:
-                    self.get_tail(child, textlist, parentlang)
+                    self.get_contents(child.tail, textlist, parentlang)
                 elif self.visit_error_inline(child):
                     self.collect_inline_errors(
                         child, textlist, self.get_element_language(child, parentlang)
@@ -344,10 +334,12 @@ class XMLPrinter(object):
     def visit_nonerror_element(self, element, textlist, parentlang):
         """Visit and extract text from non error element."""
         if not self.typos:
-            self.get_text(element, textlist, parentlang)
+            self.get_contents(
+                element.text, textlist, self.get_element_language(element, parentlang)
+            )
         self.visit_children(element, textlist, parentlang)
         if not self.typos:
-            self.get_tail(element, textlist, parentlang)
+            self.get_contents(element.tail, textlist, parentlang)
 
     def visit_this_node(self, element):
         """Return True if the element should be visited."""
