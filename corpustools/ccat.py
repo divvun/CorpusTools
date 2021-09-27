@@ -216,6 +216,14 @@ class XMLPrinter(object):
                 else:
                     textlist.extend(element.tail.strip().split())
 
+    @staticmethod
+    def corrected_texts(error_element):
+        """Yield corrected versions of the error element."""
+        for correct in error_element.xpath("./correct"):
+            correct_text = "" if correct.text is None else correct.text
+            tail_text = "" if error_element.tail is None else error_element.tail
+            yield f"{correct_text}{tail_text}"
+
     def error_not_inline(self, element):
         """Collect and format parts of the element.
 
@@ -229,14 +237,17 @@ class XMLPrinter(object):
         if not self.error_filtering or self.include_this_error(element):
             for child in element:
                 if child.tag != "correct":
-                    correct = child.find("./correct")
-                    text.append("" if correct.text is None else correct.text)
+                    text.append(corrected for corrected in self.corrected_texts(child))
 
-                    if child.tail is not None and child.tail.strip() != "":
-                        text.append(child.tail)
-
-        text.append(self.get_error_attributes(element.find("./correct")))
+        text.append(
+            self.get_error_attributes(correct) for correct in element.xpath("./correct")
+        )
         return "".join(text)
+
+    @staticmethod
+    def combine(text, text_list):
+        """Combine a text with a parto f the text_list."""
+        return [f"{text}{part}" for part in text_list]
 
     def get_error_attributes(self, correct_element):
         """Collect and format the attributes + the filename."""

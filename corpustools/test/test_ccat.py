@@ -248,6 +248,32 @@ class TestCcatErrormarkup(unittest.TestCase):
             ("makkár soga\tman soga\nmakkar\tmakkár\t#errtype=á,pos=interr"),
         )
 
+    def test_multiple_corrections(self):
+        """One word per line, multiple corrections."""
+        input_error = etree.fromstring(
+            "<p>"
+            "<errormorphsyn>"
+            "leimme"
+            "<correct>"
+            "leimmet"
+            "</correct>"
+            "<correct>"
+            "leat"
+            "</correct>"
+            "</errormorphsyn>"
+            "</p>",
+        )
+
+        xml_printer = ccat.XMLPrinter(typos=True)
+        textlist = []
+        xml_printer.collect_not_inline_errors(input_error, textlist)
+        got = "\n".join(textlist)
+
+        self.assertEqual(
+            got,
+            ("leimme\tleimmet\nleimme\tleat"),
+        )
+
 
 class TestCcat(unittest.TestCase):
     def test_p(self):
