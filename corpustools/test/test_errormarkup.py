@@ -46,6 +46,20 @@ class TestErrorMarkup(unittest.TestCase):
 
     @parameterized.expand(
         [
+            ("{a}${b}", (3, 7)),
+            ("{a}${b} {a}${c} ", (11, 15)),
+            ("{a}${b} {{a}${b}}${d} ", (17, 21)),
+        ]
+    )
+    def test_regex(self, markup, span):
+        """Testing the most important regex."""
+        # match = errormarkup.LAST_CORRECTION_REGEX.search(markup)
+        # self.assertEqual(match.span(), span)
+        match = errormarkup.LAST_CORRECTION_REGEX.search(markup)
+        self.assertEqual(match.span(), span)
+
+    @parameterized.expand(
+        [
             (
                 "errorlang_infinity",
                 "<p>{molekylærbiologimi}∞{kal,bio}</p>",
@@ -336,12 +350,12 @@ class TestErrorMarkup(unittest.TestCase):
             ),
         ]
     )
-    def test_add_error_markup(self, name, in_string, want_string):
+    def test_convert_to_errormarkupxml(self, name, in_string, want_string):
         """Test plain errormarkup."""
         in_elem = etree.fromstring(in_string)
         want = etree.fromstring(want_string)
-
-        self.assert_xml_equal(errormarkup.add_error_markup(in_elem), want)
+        errormarkup.convert_to_errormarkupxml(in_elem)
+        self.assert_xml_equal(in_elem, want)
 
     # Nested markup
     @parameterized.expand(
@@ -437,5 +451,5 @@ class TestErrorMarkup(unittest.TestCase):
     def test_nested_markup(self, in_string, want_string):
         in_elem = etree.fromstring(in_string)
         want = etree.fromstring(want_string)
-
-        self.assert_xml_equal(errormarkup.add_error_markup(in_elem), want)
+        errormarkup.convert_to_errormarkupxml(in_elem)
+        self.assert_xml_equal(in_elem, want)

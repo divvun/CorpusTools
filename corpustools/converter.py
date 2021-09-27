@@ -185,20 +185,10 @@ class Converter(object):
         """Convert error markup to xml."""
         if self.goldstandard:
             try:
-                for element in complete.find("body"):
-                    errormarkup.add_error_markup(element)
+                errormarkup.add_error_markup(complete.find("body"))
             except errormarkup.ErrorMarkupError as error:
                 with open(self.names.log, "w") as logfile:
-                    logfile.write(f"Error at: {util.lineno()}")
-                    logfile.write("There is a markup error\n")
-                    logfile.write("The error message: ")
-                    logfile.write(str(error))
-                    logfile.write("\n\n")
-                    logfile.write("This is the xml tree:\n")
-                    logfile.write(
-                        etree.tostring(complete, encoding="unicode", pretty_print=True)
-                    )
-                    logfile.write("\n")
+                    print(str(error), file=logfile)
 
                 raise util.ConversionError(
                     "Markup error. More info in the log file: " f"{self.names.log}"

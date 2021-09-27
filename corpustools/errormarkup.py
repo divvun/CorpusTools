@@ -35,20 +35,23 @@ ERROR_TYPES = {
     "‰": "errorformat",
 }
 
-ERROR_STRING = "(?P<error>{[^{}]*})"
-CORRECTION_STRING = "(?P<correction>[" + "".join(ERROR_TYPES.keys()) + "]{[^}]*})"
+VERBOSE_ERROR = "(?P<error>{[^{}]*})"
+CORRECTION = "[" + "".join(ERROR_TYPES.keys()) + "]{[^}]*}"
+VERBOSE_CORRECTION = f"(?P<correction>{CORRECTION})"
 
-CORRECTION_REGEX = re.compile(CORRECTION_STRING, re.UNICODE)
-SIMPLE_ERROR_REGEX = re.compile(f"{ERROR_STRING}{CORRECTION_STRING}", re.UNICODE)
+CORRECTION_REGEX = re.compile(VERBOSE_CORRECTION, re.UNICODE)
+SIMPLE_ERROR_REGEX = re.compile(f"{VERBOSE_ERROR}{VERBOSE_CORRECTION}", re.UNICODE)
+LAST_CORRECTION_REGEX = re.compile(f"{VERBOSE_CORRECTION}(?!.*{CORRECTION}.*)")
 
 
-def are_corrections_valid(text):
+def invalid_corrections(text):
     """Check if all corrections are valid."""
-    return all(
-        correction.count("|") < 2
+    return [
+        correction
         for match in CORRECTION_REGEX.finditer(text)
         for correction in match.group("correction").split("///")
-    )
+        if not correction.count("|") < 2
+    ]
 
 
 def remove_simple_errors(text):
@@ -81,68 +84,24 @@ def has_not_valid_pairs(text):
     return ""
 
 
-def convert_to_xml(text):
-    """Convert text into errormarkup xml.
-
-    Args:
-        text: Stringified xml that may contain errormarkup
-
-    Returns:
-        Errormarkup xml.
-    """
-    correction = CORRECTION_REGEX.search(text)
-    converted = text
-    while correction:
-        converted = make_simple_errors(converted)
-        correction = CORRECTION_REGEX.search(converted)
-        if not correction:
-            break
-
-    for orig, replacement in [("&lt;", "<"), ("&gt;", ">")]:
-        converted = converted.replace(orig, replacement)
-
-    return etree.fromstring(converted)
-
-
-def make_simple_errors(text):
-    """Divide the text in to a list.
-
-    The list will consist of alternate
-    non-correctionstring/correctionstrings
-    """
-    result = []
-    previous = 0
-    for match in SIMPLE_ERROR_REGEX.finditer(text):
-        if previous < match.start():
-            result.append(text[previous : match.start()])
-        result.append(make_error_element_as_text(match))
-        previous = match.end()
-
-    if previous < len(text):
-        result.append(text[previous:])
-
-    converted = "".join(result)
-    for orig, replacement in [("&lt;", "<"), ("&gt;", ">")]:
-        converted = converted.replace(orig, replacement)
-    return converted
-
-
-def make_error_element_as_text(match):
+def make_error_element(error_text, error_name, correction):
     """Make an error xml element.
 
     Args:
-        match: a SIMPLE_ERROR_MATCH
+        error_text: the text of the error element
+        error_name: the tag of the error element
+        correction: the correction(s) for the error
 
     Returns:
-        An etree._Element as a string
+        An etree._Element
     """
-    error_element = etree.Element(ERROR_TYPES[match.group("correction")[0]])
-    error_element.text = match.group("error")[1:-1]
+    error_element = etree.Element(error_name)
+    error_element.text = error_text
 
-    for correction_element in make_correction_element(match.group("correction")[2:-1]):
+    for correction_element in make_correction_element(correction):
         error_element.append(correction_element)
 
-    return etree.tostring(error_element, encoding="unicode")
+    return error_element
 
 
 def make_correction_element(correction_content):
@@ -176,6 +135,92 @@ def look_for_extended_attributes(correction):
     return (details[1], details[0])
 
 
+def scan_for_error(text):
+    """Scan for error markup in the given text."""
+    level = 0
+    index = len(text) - 1
+
+    while index > 0:
+        if text[index] == "}":
+            level += 1
+        if text[index] == "{":
+            level -= 1
+        if level == 0:
+            break
+        index -= 1
+
+    if index:
+        return text[:index], text[index + 1 : -1]
+
+    return "", text[index + 1 : -1]
+
+
+def fix_text(element):
+    """Replace error markup with error xml."""
+    if element.text:
+        text = element.text
+        last_correction = LAST_CORRECTION_REGEX.search(text)
+        while last_correction:
+            text, error_element = errormarkup_to_xml(text, last_correction)
+            element.text = text
+            element.insert(0, error_element)
+            last_correction = LAST_CORRECTION_REGEX.search(text)
+
+
+def errormarkup_to_xml(text, last_correction):
+    """Turn the errormarkup into error xml."""
+    tail = text[last_correction.end() :]
+    text, error = scan_for_error(text[: last_correction.start()])
+    error_element = make_error_element(
+        error,
+        ERROR_TYPES[last_correction.group("correction")[0]],
+        last_correction.group("correction")[2:-1],
+    )
+    error_element.tail = tail
+    fix_text(error_element)
+
+    return text, error_element
+
+
+def fix_tail(element):
+    """Replace error markup with error xml."""
+    parent = element.getparent()
+    position = parent.index(element)
+    if element.tail:
+        text = element.tail
+        last_correction = LAST_CORRECTION_REGEX.search(text)
+        while last_correction:
+            position += 1
+            text, error_element = errormarkup_to_xml(text, last_correction)
+            element.tail = text
+            parent.insert(position, error_element)
+            last_correction = LAST_CORRECTION_REGEX.search(text)
+
+
+def convert_to_errormarkupxml(element):
+    """Convert errormarkup found in the element to xml."""
+    if element.text:
+        fix_text(element)
+
+    if element.tail:
+        fix_tail(element)
+
+    for child in element:
+        convert_to_errormarkupxml(child)
+
+
+def validate_markup(element):
+    """Check if the markup is valid."""
+    for child in element:
+        child_as_text = etree.tostring(child, encoding="unicode")
+        for invalid_correction in invalid_corrections(child_as_text):
+            yield f"Too many «|» in {invalid_correction}"
+        invalid_pair = has_not_valid_pairs(child_as_text)
+        if invalid_pair:
+            yield f"In text starting with\n\t{child_as_text[len(child.tag)+2:50]}"
+            yield f"\tError in front of\n\t\t{invalid_pair}"
+
+
 def add_error_markup(element):
     """Convert error markup to xml in this element and its children.
 
@@ -185,7 +230,13 @@ def add_error_markup(element):
         element (etree._Element): The element where error markup should
             be converted to xml.
     """
-    return convert_to_xml(etree.tostring(element, encoding="unicode"))
+    errors = [message for message in validate_markup(element)]
+
+    if errors:
+        raise ErrorMarkupError("{}".format("\n".join(errors)))
+
+    for child in element:
+        convert_to_errormarkupxml(child)
 
 
 class ErrorMarkupError(Exception):
