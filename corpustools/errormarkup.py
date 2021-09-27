@@ -88,18 +88,26 @@ def process_head(text):
     return (text, matches.group("error"))
 
 
-def get_element_name(separator):
-    return ERROR_TYPES[separator]
+def make_correction_element(correction_content):
+    for correction in correction_content.split("///"):
+        correction_text, att_list = look_for_extended_attributes(correction)
+
+        correct_element = etree.Element("correct")
+        correct_element.text = correction_text
+
+        if att_list is not None:
+            correct_element.set("errorinfo", att_list)
+
+        yield correct_element
 
 
-def make_error_element(error, fixed_correction, element_name, att_list):
+def make_error_element(error, element_name, correction_content):
     """Make an error xml element.
 
     Args:
         error (str or etree._Element):
-        fixed_correction (str):
         element_name (str):
-        att_list (str):
+        correction_content (str):
 
     Returns:
         An etree._Element representing the error markup.
@@ -108,15 +116,10 @@ def make_error_element(error, fixed_correction, element_name, att_list):
     if isinstance(error, etree._Element):
         error_element.append(error)
     else:
-        error_element.text = error.replace("{", "").replace("}", "")
+        error_element.text = error[1:-1]
 
-    correct_element = etree.Element("correct")
-    correct_element.text = fixed_correction
-
-    if att_list is not None:
-        correct_element.set("errorinfo", att_list)
-
-    error_element.append(correct_element)
+    for correction_element in make_correction_element(correction_content):
+        error_element.append(correction_element)
 
     return error_element
 
@@ -135,24 +138,22 @@ def get_text(element):
 
 def look_for_extended_attributes(correction):
     """Extract attributes and correction from a correctionstring."""
-    ext_att = False
-    att_list = None
-    if "|" in correction:
-        ext_att = True
-        try:
-            (att_list, correction) = correction.split("|")
-        except ValueError as error:
-            raise ErrorMarkupError(
-                f"\n{str(error)}\n"
-                "Too many | characters inside the correction: "
-                f"«{correction}»\n"
-                "Have you remembered to encase the error inside "
-                "parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?"
-                "If the errormarkup is correct, send a report about "
-                "this error to borre.gaup@uit.no"
-            )
+    details = correction.split("|")
 
-    return (correction, ext_att, att_list)
+    if len(details) < 1:
+        raise ErrorMarkupError(
+            "Too many | characters inside the correction: "
+            f"«{correction}»\n"
+            "Have you remembered to encase the error inside "
+            "parenthesis, e.g. (vowlat,a-á|servodatvuogádat)?"
+            "If the errormarkup is correct, send a report about "
+            "this error to borre.gaup@uit.no"
+        )
+
+    if len(details) == 1:
+        return (details[0], None)
+
+    return (details[1], details[0])
 
 
 def get_error(error, correction):
@@ -161,13 +162,9 @@ def get_error(error, correction):
     error - - is either a string or an etree.Element
     correction - - is a correctionstring
     """
-    (fixed_correction, _, att_list) = look_for_extended_attributes(
-        correction[1:].replace("{", "").replace("}", "")
+    error_element = make_error_element(
+        error, ERROR_TYPES[correction[0]], correction[2:-1]
     )
-
-    element_name = get_element_name(correction[0])
-
-    error_element = make_error_element(error, fixed_correction, element_name, att_list)
 
     return error_element
 
