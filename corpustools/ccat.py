@@ -230,7 +230,7 @@ class XMLPrinter(object):
             for child in element:
                 if child.tag != "correct":
                     correct = child.find("./correct")
-                    text.append(correct.text)
+                    text.append("" if correct.text is None else correct.text)
 
                     if child.tail is not None and child.tail.strip() != "":
                         text.append(child.tail)
@@ -241,7 +241,7 @@ class XMLPrinter(object):
     def get_error_attributes(self, correct_element):
         """Collect and format the attributes + the filename."""
         text = ["\t"]
-        text.append(correct_element.text)
+        text.append("" if correct_element.text is None else correct_element.text)
 
         attributes = correct_element.attrib
         attr = [key + "=" + str(attributes[key]) for key in sorted(attributes)]
@@ -262,7 +262,7 @@ class XMLPrinter(object):
         """Add the "correct" element to the list textlist."""
         correct = element.find("./correct")
         if correct is not None and not self.noforeign:
-            textlist.append(correct.text)
+            textlist.append("" if correct.text is None else correct.text)
 
         self.get_tail(element, textlist, parentlang)
 
