@@ -99,89 +99,111 @@ class TestCcatErrormarkup(unittest.TestCase):
         """Plain error element, default text flow"""
         xml_printer = ccat.XMLPrinter()
         input_error = etree.fromstring(
-            '<errorortreal correct="fiskeleting" errtype="nosplit" pos="noun">'
-            "    fiske leting"
+            "<errorortreal>"
+            "fiske leting"
+            '<correct errtype="nosplit" pos="noun">fiskeleting</correct>'
             "</errorortreal>"
         )
 
         textlist = []
-        xml_printer.collect_inline_errors(input_error, textlist, "nob")
+        parentlang = "sme"
+        xml_printer.collect_inline_errors(input_error, textlist, parentlang)
+        got = "".join(textlist)
 
-        self.assertEqual("\n".join(textlist), "fiskeleting")
+        self.assertEqual(got, "fiskeleting")
+
+    def test_multi_error_inline(self):
+        """Nested error element, default text flow"""
+        xml_printer = ccat.XMLPrinter()
+
+        input_error = etree.fromstring(
+            "<errormorphsyn>"
+            "skoledagene er så "
+            "<errorort>"
+            "vanskerlig"
+            '<correct errtype="nosilent" pos="adj">vanskelig</correct>'
+            "</errorort>"
+            '<correct cat="x" const="spred" errtype="agr" orig="x" pos="adj">'
+            "skoledagene er så vanskelige"
+            "</correct>"
+            "</errormorphsyn>"
+        )
+        textlist = []
+        parentlang = "nob"
+        xml_printer.collect_inline_errors(input_error, textlist, parentlang)
+        got = "".join(textlist)
+
+        self.assertEqual(got, "skoledagene er så vanskelige")
 
     def test_single_error_not_inline(self):
         """Plain error element, one word per line output"""
-        xml_printer = ccat.XMLPrinter()
+        xml_printer = ccat.XMLPrinter(one_word_per_line=True)
         input_error = etree.fromstring(
-            '<errorortreal correct="fiskeleting" errtype="nosplit"'
-            ' pos="noun">fiske leting</errorortreal>'
+            "<errorortreal>"
+            "fiske leting"
+            '<correct errtype="nosplit" pos="noun">fiskeleting</correct>'
+            "</errorortreal>"
         )
 
         textlist = []
         xml_printer.collect_not_inline_errors(input_error, textlist)
+        got = "".join(textlist)
 
         self.assertEqual(
-            "\n".join(textlist),
+            got,
             ("fiske leting\tfiskeleting\t#errtype=nosplit,pos=noun"),
         )
 
     def test_single_error_not_inline_with_filename(self):
         """Plain error element, one word per line output, with filename"""
-        xml_printer = ccat.XMLPrinter(print_filename=True)
+        xml_printer = ccat.XMLPrinter(print_filename=True, one_word_per_line=True)
         input_error = etree.fromstring(
-            '<errorortreal correct="fiskeleting" errtype="nosplit" '
-            'pos="noun">fiske leting</errorortreal>'
+            "<errorortreal>"
+            "fiske leting"
+            '<correct errtype="nosplit" pos="noun">fiskeleting</correct>'
+            "</errorortreal>"
         )
 
         xml_printer.filename = "p.xml"
 
         textlist = []
         xml_printer.collect_not_inline_errors(input_error, textlist)
+        got = "".join(textlist)
 
         self.assertEqual(
-            "\n".join(textlist),
+            got,
             ("fiske leting\tfiskeleting" "\t#errtype=nosplit,pos=noun, file: p.xml"),
         )
 
     def test_single_error_not_inline_with_filename_without_attributes(self):
-        xml_printer = ccat.XMLPrinter(print_filename=True)
+        xml_printer = ccat.XMLPrinter(print_filename=True, one_word_per_line=True)
         input_error = etree.fromstring(
-            '<errorortreal correct="fiskeleting">' "fiske leting" "</errorortreal>"
+            "<errorortreal>"
+            "fiske leting"
+            "<correct>fiskeleting</correct>"
+            "</errorortreal>"
         )
 
         xml_printer.filename = "p.xml"
 
         textlist = []
         xml_printer.collect_not_inline_errors(input_error, textlist)
-        self.assertEqual("\n".join(textlist), "fiske leting\tfiskeleting\t#file: p.xml")
+        got = "".join(textlist)
 
-    def test_multi_error_in_line(self):
-        """Nested error element, default text flow"""
-        xml_printer = ccat.XMLPrinter()
-
-        input_error = etree.fromstring(
-            '<errormorphsyn cat="x" const="spred" '
-            'correct="skoledagene er så vanskelige" errtype="agr" '
-            'orig="x" pos="adj">'
-            "    skoledagene er så"
-            '    <errorort correct="vanskelig" errtype="nosilent" pos="adj">'
-            "        vanskerlig"
-            "    </errorort>"
-            "</errormorphsyn>"
-        )
-        textlist = []
-        xml_printer.collect_inline_errors(input_error, textlist, "nob")
-
-        self.assertEqual("\n".join(textlist), "skoledagene er så vanskelige")
+        self.assertEqual(got, "fiske leting\tfiskeleting\t#file: p.xml")
 
     def test_multi_errormorphsyn_not_inline_with_filename(self):
         """Nested error element, one word per line output, with filename"""
         input_error = etree.fromstring(
-            '<errormorphsyn cat="x" const="spred" '
-            'correct="skoledagene er så vanskelige" errtype="agr" orig="x" '
-            'pos="adj">skoledagene er så <errorort '
-            'correct="vanskelig" errtype="nosilent" '
-            'pos="adj">vanskerlig</errorort>'
+            "<errormorphsyn>"
+            "skoledagene er så "
+            "<errorort>"
+            "vanskerlig"
+            '<correct errtype="nosilent" pos="adj">vanskelig</correct>'
+            "</errorort>"
+            '<correct cat="x" const="spred" errtype="agr" orig="x" pos="adj">'
+            "skoledagene er så vanskelige"
+            "</correct>"
             "</errormorphsyn>"
         )
 
@@ -190,9 +212,10 @@ class TestCcatErrormarkup(unittest.TestCase):
 
         textlist = []
         xml_printer.collect_not_inline_errors(input_error, textlist)
+        got = "\n".join(textlist)
 
         self.assertEqual(
-            "\n".join(textlist),
+            got,
             (
                 "skoledagene er så vanskelig\tskoledagene er så vanskelige"
                 "\t#cat=x,const=spred,errtype=agr,orig=x,pos=adj, file: p.xml\n"
@@ -203,18 +226,25 @@ class TestCcatErrormarkup(unittest.TestCase):
     def test_multi_errorlex_not_inline(self):
         """Nested error element, one word per line output"""
         input_error = etree.fromstring(
-            '<errorlex correct="man soga"><errorort '
-            'correct="makkár" errtype="á" '
-            'pos="interr">makkar</errorort>'
-            " soga</errorlex>"
+            "<errorlex>"
+            "<errorort>"
+            "makkar"
+            '<correct errtype="á" pos="interr">'
+            "makkár"
+            "</correct>"
+            "</errorort>"
+            " soga"
+            "<correct>man soga</correct>"
+            "</errorlex>"
         )
-        textlist = []
 
         xml_printer = ccat.XMLPrinter(typos=True)
+        textlist = []
         xml_printer.collect_not_inline_errors(input_error, textlist)
+        got = "\n".join(textlist)
 
         self.assertEqual(
-            "\n".join(textlist),
+            got,
             ("makkár soga\tman soga\nmakkar\tmakkár\t#errtype=á,pos=interr"),
         )
 
@@ -263,19 +293,18 @@ class TestCcat(unittest.TestCase):
 
         input_p = etree.fromstring(
             "<p>"
-            '<errormorphsyn cat="pl3prs" const="fin" '
-            'correct="Bearpmehat sirrejit" errtype="agr" '
-            'orig="sg3prs" pos="verb">'
+            "<errormorphsyn>"
             '<errorort correct="Bearpmehat" errtype="svow" pos="noun">'
             "Bearpmahat"
             "</errorort>"
-            " "
-            '<errorlex correct="sirre" errtype="w" origpos="v" '
-            'pos="verb">'
-            "earuha"
+            "<errorlex>"
+            " earuha"
+            '<correct errtype="w" origpos="v" pos="verb">sirre</correct>'
             "</errorlex>"
-            "</errormorphsyn> "
-            "uskki ja loaiddu."
+            '<correct cat="pl3prs" const="fin"  errtype="agr" orig="sg3prs" '
+            'pos="verb">Bearpmehat sirrejit</correct>'
+            "</errormorphsyn>"
+            " uskki ja loaiddu."
             "</p>"
         )
 
@@ -349,15 +378,18 @@ class TestCcat(unittest.TestCase):
     def test_p_with_error_one_word_per_line(self):
         input_p = etree.fromstring(
             "<p>livččii "
-            '<errorort correct="makkárge" errtype="á" pos="adv">'
+            "<errorort>"
             "makkarge"
+            '<correct errtype="á" pos="adv">makkárge</correct>'
             "</errorort>"
             " politihkka, muhto rahpasit baicca muitalivčče "
-            '<errorlex correct="man soga">'
-            '<errorort correct="makkár" errtype="á" pos="interr">'
+            "<errorlex>"
+            "<errorort>"
             "makkar"
+            '<correct errtype="á" pos="interr">makkár</correct>'
             "</errorort>"
             " soga"
+            "<correct>man soga</correct>"
             "</errorlex>"
             " sii"
             "</p>"
@@ -382,15 +414,18 @@ class TestCcat(unittest.TestCase):
         """correction = True, print all corrections"""
         input_p = etree.fromstring(
             "<p>livččii "
-            '<errorort correct="makkárge" errtype="á" pos="adv">'
+            "<errorort>"
             "makkarge"
+            '<correct errtype="á" pos="adv">makkárge</correct>'
             "</errorort>"
             " politihkka, muhto rahpasit baicca muitalivčče "
-            '<errorlex correct="man soga">'
-            '<errorort correct="makkár" errtype="á" pos="interr">'
+            "<errorlex>"
+            "<errorort>"
             "makkar"
+            '<correct errtype="á" pos="interr">makkár</correct>'
             "</errorort>"
             " soga"
+            "<correct>man soga</correct>"
             "</errorlex>"
             " sii"
             "</p>"
@@ -412,15 +447,18 @@ class TestCcat(unittest.TestCase):
         """errorlex = True, print errorlex corrections"""
         input_p = etree.fromstring(
             "<p>livččii "
-            '<errorort correct="makkárge" errtype="á" pos="adv">'
+            "<errorort>"
             "makkarge"
+            '<correct errtype="á" pos="adv">makkárge</correct>'
             "</errorort>"
             " politihkka, muhto rahpasit baicca muitalivčče "
-            '<errorlex correct="man soga">'
-            '<errorort correct="makkár" errtype="á" pos="interr">'
+            "<errorlex>"
+            "<errorort>"
             "makkar"
+            '<correct errtype="á" pos="interr">makkár</correct>'
             "</errorort>"
             " soga"
+            "<correct>man soga</correct>"
             "</errorlex>"
             " sii"
             "</p>"
@@ -442,15 +480,18 @@ class TestCcat(unittest.TestCase):
         """errormorphsyn = True, print errormorphsyn corrections"""
         input_p = etree.fromstring(
             "<p>livččii "
-            '<errorort correct="makkárge" errtype="á" pos="adv">'
+            "<errorort>"
             "makkarge"
+            '<correct errtype="á" pos="adv">makkárge</correct>'
             "</errorort>"
             " politihkka, muhto rahpasit baicca muitalivčče "
-            '<errorlex correct="man soga">'
-            '<errorort correct="makkár" errtype="á" pos="interr">'
+            "<errorlex>"
+            "<errorort>"
             "makkar"
+            '<correct errtype="á" pos="interr">makkár</correct>'
             "</errorort>"
             " soga"
+            "<correct>man soga</correct>"
             "</errorlex>"
             " sii"
             "</p>"
@@ -474,15 +515,18 @@ class TestCcat(unittest.TestCase):
 
         input_p = etree.fromstring(
             "<p>livččii "
-            '<errorort correct="makkárge" errtype="á" pos="adv">'
+            "<errorort>"
             "makkarge"
+            '<correct errtype="á" pos="adv">makkárge</correct>'
             "</errorort>"
             " politihkka, muhto rahpasit baicca muitalivčče "
-            '<errorlex correct="man soga">'
-            '<errorort correct="makkár" errtype="á" pos="interr">'
+            "<errorlex>"
+            "<errorort>"
             "makkar"
+            '<correct errtype="á" pos="interr">makkár</correct>'
             "</errorort>"
             " soga"
+            "<correct>man soga</correct>"
             "</errorlex>"
             " sii"
             "</p>"
@@ -503,15 +547,18 @@ class TestCcat(unittest.TestCase):
 
         input_p = etree.fromstring(
             "<p>livččii "
-            '<errorort correct="makkárge" errtype="á" pos="adv">'
+            "<errorort>"
             "makkarge"
+            '<correct errtype="á" pos="adv">makkárge</correct>'
             "</errorort>"
             " politihkka, muhto rahpasit baicca muitalivčče "
-            '<errorlex correct="man soga">'
-            '<errorort correct="makkár" errtype="á" pos="interr">'
+            "<errorlex>"
+            "<errorort>"
             "makkar"
+            '<correct errtype="á" pos="interr">makkár</correct>'
             "</errorort>"
             " soga"
+            "<correct>man soga</correct>"
             "</errorlex>"
             " sii"
             "</p>"
@@ -720,20 +767,24 @@ class TestCcat(unittest.TestCase):
         """
         document = (
             '<document id="no_id" xml:lang="sme">'
-            "<body><p>"
-            "livččii "
-            '<errorort correct="makkárge" errtype="á" pos="adv">'
+            "<body>"
+            "<p>livččii "
+            "<errorort>"
             "makkarge"
+            '<correct errtype="á" pos="adv">makkárge</correct>'
             "</errorort>"
             " politihkka, muhto rahpasit baicca muitalivčče "
-            '<errorlex correct="man soga">'
-            '<errorort correct="makkár" errtype="á" pos="interr">'
+            "<errorlex>"
+            "<errorort>"
             "makkar"
+            '<correct errtype="á" pos="interr">makkár</correct>'
             "</errorort>"
             " soga"
+            "<correct>man soga</correct>"
             "</errorlex>"
             " sii"
-            "</p></body>"
+            "</p>"
+            "</body>"
             "</document>"
         )
 
@@ -764,41 +815,44 @@ class TestCcat(unittest.TestCase):
         """
         document = (
             '<document id="no_id" xml:lang="sme">'
-            "<body><p>"
-            "livččii "
-            '<errorort correct="makkárge" errtype="á" pos="adv">'
+            "<body>"
+            "<p>livččii "
+            "<errorort>"
             "makkarge"
+            '<correct errtype="á" pos="adv">makkárge</correct>'
             "</errorort>"
             " politihkka, muhto rahpasit baicca muitalivčče "
-            '<errorlex correct="man soga">'
-            '<errorort correct="makkár" errtype="á" pos="interr">'
+            "<errorlex>"
+            "<errorort>"
             "makkar"
+            '<correct errtype="á" pos="interr">makkár</correct>'
             "</errorort>"
             " soga"
+            "<correct>man soga</correct>"
             "</errorlex>"
             " sii"
-            "</p></body>"
+            "</p>"
+            "</body>"
             "</document>"
         )
 
         xml_printer = ccat.XMLPrinter(one_word_per_line=True, errorort=True)
         xml_printer.etree = etree.parse(io.BytesIO(document.encode("utf8")))
         buffer = xml_printer.process_file()
-        self.assertEqual(
-            buffer.getvalue(),
-            (
-                "livččii\n"
-                "makkarge\tmakkárge\t#errtype=á,pos=adv\n"
-                "politihkka,\n"
-                "muhto\n"
-                "rahpasit\n"
-                "baicca\n"
-                "muitalivčče\n"
-                "makkar\tmakkár\t#errtype=á,pos=interr\n"
-                "soga\n"
-                "sii\n"
-            ),
+        got = buffer.getvalue()
+        want = (
+            "livččii\n"
+            "makkarge\tmakkárge\t#errtype=á,pos=adv\n"
+            "politihkka,\n"
+            "muhto\n"
+            "rahpasit\n"
+            "baicca\n"
+            "muitalivčče\n"
+            "makkar\tmakkár\t#errtype=á,pos=interr\n"
+            "soga\n"
+            "sii\n"
         )
+        self.assertEqual(got, want)
 
     def test_process_file_typos(self):
         """Print all error content
@@ -809,20 +863,24 @@ class TestCcat(unittest.TestCase):
         """
         document = (
             '<document id="no_id" xml:lang="sme">'
-            "<body><p>"
-            "livččii "
-            '<errorort correct="makkárge" errtype="á" pos="adv">'
+            "<body>"
+            "<p>livččii "
+            "<errorort>"
             "makkarge"
+            '<correct errtype="á" pos="adv">makkárge</correct>'
             "</errorort>"
-            " politihkka, muhto rahpasit baicca muitalivčče"
-            '<errorlex correct="man soga">'
-            '<errorort correct="makkár" errtype="á" pos="interr">'
+            " politihkka, muhto rahpasit baicca muitalivčče "
+            "<errorlex>"
+            "<errorort>"
             "makkar"
+            '<correct errtype="á" pos="interr">makkár</correct>'
             "</errorort>"
             " soga"
+            "<correct>man soga</correct>"
             "</errorlex>"
             " sii"
-            "</p></body>"
+            "</p>"
+            "</body>"
             "</document>"
         )
 
@@ -847,20 +905,24 @@ class TestCcat(unittest.TestCase):
         """
         document = (
             '<document id="no_id" xml:lang="sme">'
-            "<body><p>"
-            "livččii "
-            '<errorort correct="makkárge" errtype="á" pos="adv">'
+            "<body>"
+            "<p>livččii "
+            "<errorort>"
             "makkarge"
+            '<correct errtype="á" pos="adv">makkárge</correct>'
             "</errorort>"
             " politihkka, muhto rahpasit baicca muitalivčče "
-            '<errorlex correct="man soga">'
-            '<errorort correct="makkár" errtype="á" pos="interr">'
+            "<errorlex>"
+            "<errorort>"
             "makkar"
+            '<correct errtype="á" pos="interr">makkár</correct>'
             "</errorort>"
             " soga"
+            "<correct>man soga</correct>"
             "</errorlex>"
             " sii"
-            "</p></body>"
+            "</p>"
+            "</body>"
             "</document>"
         )
 
@@ -878,19 +940,24 @@ class TestCcat(unittest.TestCase):
         """
         document = (
             '<document id="no_id" xml:lang="sme">'
-            "<body><p>livččii "
-            '<errorort correct="makkárge" errtype="á" pos="adv">'
+            "<body>"
+            "<p>livččii "
+            "<errorort>"
             "makkarge"
+            '<correct errtype="á" pos="adv">makkárge</correct>'
             "</errorort>"
             " politihkka, muhto rahpasit baicca muitalivčče "
-            '<errorlex correct="man soga">'
-            '<errorort correct="makkár" errtype="á" pos="interr">'
+            "<errorlex>"
+            "<errorort>"
             "makkar"
+            '<correct errtype="á" pos="interr">makkár</correct>'
             "</errorort>"
             " soga"
+            "<correct>man soga</correct>"
             "</errorlex>"
             " sii"
-            "</p></body>"
+            "</p>"
+            "</body>"
             "</document>"
         )
 
@@ -977,21 +1044,22 @@ class TestCcat(unittest.TestCase):
         """
         document = (
             '<document id="no_id" xml:lang="nob">'
-            "   <body>"
-            '       <p type="text">'
-            "           men"
-            '           <errormorphsyn cat="x" const="spred"'
-            '           correct="skoledagene er så vanskelige" '
-            '           errtype="agr" orig="x" pos="adj">'
-            "               skoledagene er så"
-            '               <errorort correct="vanskelig" '
-            '               errtype="nosilent" pos="adj">'
-            "                   vanskerlig"
-            "               </errorort>"
-            "           </errormorphsyn>"
-            "           å komme igjennom,"
-            "       </p>"
-            "   </body>"
+            "<body>"
+            '<p type="text">'
+            "men "
+            "<errormorphsyn>"
+            "skoledagene er så "
+            "<errorort>"
+            "vanskerlig"
+            '<correct errtype="nosilent" pos="adj">vanskelig</correct>'
+            "</errorort>"
+            '<correct cat="x" const="spred" errtype="agr" orig="x" pos="adj">'
+            "koledagene er så vanskelige"
+            "</correct>"
+            "</errormorphsyn>"
+            " å komme igjennom,"
+            "</p>"
+            "</body>"
             "</document>"
         )
 
@@ -1012,13 +1080,14 @@ class TestCcat(unittest.TestCase):
             "<body>"
             "<p>"
             "Vijmak bierjjedak! "
-            '<errorlang correct="nor">'
+            "<errorlang>"
             "Pjuh"
+            "<correct>nor</correct>"
             "</errorlang>"
             " vijmak de bierjjedak "
-            '<errorort correct="sjattaj" '
-            'errorinfo="vowlat,á-a">'
+            "<errorort>"
             "sjattáj"
+            '<correct errorinfo="vowlat,á-a">sjattaj</correct>'
             "</errorort>"
             "."
             "</p>"
@@ -1046,13 +1115,14 @@ class TestCcat(unittest.TestCase):
             "<body>"
             "<p>"
             "Vijmak bierjjedak! "
-            '<errorlang correct="nor">'
+            "<errorlang>"
             "Pjuh"
+            "<correct>nor</correct>"
             "</errorlang>"
-            "vijmak de bierjjedak "
-            '<errorort correct="sjattaj" '
-            'errorinfo="vowlat,á-a">'
+            " vijmak de bierjjedak "
+            "<errorort>"
             "sjattáj"
+            '<correct errorinfo="vowlat,á-a">sjattaj</correct>'
             "</errorort>"
             "."
             "</p>"
@@ -1064,7 +1134,7 @@ class TestCcat(unittest.TestCase):
         buffer = xml_printer.process_file()
 
         self.assertEqual(
-            buffer.getvalue(), ("Vijmak bierjjedak! vijmak de bierjjedak sjattáj. ¶\n")
+            buffer.getvalue(), ("Vijmak bierjjedak!  vijmak de bierjjedak sjattáj. ¶\n")
         )
 
     def test_no_foreign_typos(self):
@@ -1080,12 +1150,14 @@ class TestCcat(unittest.TestCase):
             "<body>"
             "<p>"
             "Vijmak bierjjedak! "
-            '<errorlang correct="nor">'
+            "<errorlang>"
             "Pjuh"
+            "<correct>nor</correct>"
             "</errorlang>"
-            "vijmak de bierjjedak "
-            '<errorort correct="sjattaj" errorinfo="vowlat,á-a">'
+            " vijmak de bierjjedak "
+            "<errorort>"
             "sjattáj"
+            '<correct errorinfo="vowlat,á-a">sjattaj</correct>'
             "</errorort>"
             "."
             "</p>"
@@ -1105,34 +1177,44 @@ class TestCcat(unittest.TestCase):
         """
         document = (
             '<document id="no_id" xml:lang="nob">'
-            "<body><p>"
-            '<errormorphsyn cat="genpl" const="obj" correct="čoggen ollu '
-            'joŋaid ja sarridiid" errtype="case" orig="nompl" pos="noun">'
-            '<errormorphsyn cat="genpl" const="obj" '
-            'correct="čoggen ollu joŋaid" errtype="case" orig="nompl" '
-            'pos="noun">'
-            '<errorort correct="čoggen" errtype="mono" pos="verb">'
-            "čoaggen</errorort> ollu jokŋat</errormorphsyn>"
-            " ja sarridat</errormorphsyn>"
-            "</p></body>"
+            "<body>"
+            "<p>"
+            "<errormorphsyn>"
+            "<errormorphsyn>"
+            "<errorort>"
+            "čoaggen"
+            '<correct errtype="mono" pos="verb">čoggen</correct>'
+            "</errorort>"
+            " ollu jokŋat"
+            '<correct cat="genpl" const="obj" errtype="case" orig="nompl" pos="noun">'
+            "čoggen ollu joŋaid"
+            "</correct>"
+            "</errormorphsyn>"
+            " ja sarridat"
+            '<correct cat="genpl" const="obj" errtype="case" orig="nompl" pos="noun">'
+            "čoggen ollu joŋaid ja sarridiid"
+            "</correct>"
+            "</errormorphsyn>"
+            "</p>"
+            "</body>"
             "</document>"
         )
         xml_printer = ccat.XMLPrinter(typos=True)
         xml_printer.etree = etree.parse(io.BytesIO(document.encode("utf8")))
 
         buffer = xml_printer.process_file()
-        self.maxDiff = None
-        self.assertEqual(
-            buffer.getvalue(),
-            (
-                "čoggen ollu joŋaid ja sarridat"
-                "\tčoggen ollu joŋaid ja sarridiid"
-                "\t#cat=genpl,const=obj,errtype=case,orig=nompl,pos=noun\n"
-                "čoggen ollu jokŋat\tčoggen ollu joŋaid"
-                "\t#cat=genpl,const=obj,errtype=case,orig=nompl,pos=noun\n"
-                "čoaggen\tčoggen\t#errtype=mono,pos=verb\n"
-            ),
+        got = buffer.getvalue()
+        want = (
+            "čoggen ollu joŋaid ja sarridat"
+            "\tčoggen ollu joŋaid ja sarridiid"
+            "\t#cat=genpl,const=obj,errtype=case,orig=nompl,pos=noun\n"
+            "čoggen ollu jokŋat\tčoggen ollu joŋaid"
+            "\t#cat=genpl,const=obj,errtype=case,orig=nompl,pos=noun\n"
+            "čoaggen\tčoggen\t#errtype=mono,pos=verb\n"
         )
+
+        self.maxDiff = None
+        self.assertEqual(got, want)
 
     def test_typos_errormorphsyn_twice(self):
         """Check the output of a plain p
@@ -1145,13 +1227,17 @@ class TestCcat(unittest.TestCase):
             '<document id="no_id" xml:lang="nob">'
             "<body>"
             "<p>"
-            '<errormorphsyn cat="sg3prs" const="v" '
-            'correct="lea okta mánná" errtype="agr" '
-            'orig="pl3prs" pos="v">leat '
-            '<errormorphsyn cat="nomsg" const="spred" '
-            'correct="okta mánná" errtype="case" '
-            'orig="gensg" pos="n">'
-            "okta máná</errormorphsyn>"
+            "<errormorphsyn>"
+            "leat "
+            "<errormorphsyn>"
+            "okta máná"
+            '<correct cat="nomsg" const="spred" errtype="case" orig="gensg" pos="n">'
+            "okta mánná"
+            "</correct>"
+            "</errormorphsyn>"
+            '<correct cat="sg3prs" const="v" errtype="agr" orig="pl3prs" pos="v">'
+            "lea okta mánná"
+            "</correct>"
             "</errormorphsyn>"
             "</p>"
             "</body>"

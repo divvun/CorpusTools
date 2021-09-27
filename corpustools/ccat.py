@@ -225,34 +225,37 @@ class XMLPrinter(object):
 
         if not self.error_filtering or self.include_this_error(element):
             for child in element:
-                if child.tag == "span" and element.tag == "errorsyn":
-                    text.append(child.text)
-                else:
-                    try:
-                        text.append(child.get("correct"))
-                    except TypeError:
-                        print("Unexpected error element", file=sys.stderr)
-                        print(etree.tostring(child, encoding="utf8"), file=sys.stderr)
-                        print(
-                            "To fix this error you must "
-                            "fix the errormarkup in the original "
-                            "document:".format(self.filename),
-                            file=sys.stderr,
-                        )
+                if child.tag != "correct":
+                    if child.tag == "span" and element.tag == "errorsyn":
+                        text.append(child.text)
+                    else:
+                        try:
+                            correct = child.find("./correct")
+                            text.append(correct.text)
+                        except TypeError:
+                            print("Unexpected error element", file=sys.stderr)
+                            print(
+                                etree.tostring(child, encoding="utf8"), file=sys.stderr
+                            )
+                            print(
+                                "To fix this error you must "
+                                "fix the errormarkup in the original "
+                                "document:".format(self.filename),
+                                file=sys.stderr,
+                            )
 
-                if child.tail is not None and child.tail.strip() != "":
-                    text.append(child.tail)
+                    if child.tail is not None and child.tail.strip() != "":
+                        text.append(child.tail)
 
-        text.append(self.get_error_attributes(dict(element.attrib)))
-
+        text.append(self.get_error_attributes(element.find("./correct")))
         return "".join(text)
 
-    def get_error_attributes(self, attributes):
+    def get_error_attributes(self, correct_element):
         """Collect and format the attributes + the filename."""
         text = ["\t"]
-        text.append(attributes.get("correct"))
-        del attributes["correct"]
+        text.append(correct_element.text)
 
+        attributes = correct_element.attrib
         attr = [key + "=" + str(attributes[key]) for key in sorted(attributes)]
 
         if attr:
@@ -269,8 +272,9 @@ class XMLPrinter(object):
 
     def collect_inline_errors(self, element, textlist, parentlang):
         """Add the "correct" element to the list textlist."""
-        if element.get("correct") is not None and not self.noforeign:
-            textlist.append(element.get("correct"))
+        correct = element.find("./correct")
+        if correct is not None and not self.noforeign:
+            textlist.append(correct.text)
 
         self.get_tail(element, textlist, parentlang)
 
@@ -333,20 +337,21 @@ class XMLPrinter(object):
     def visit_children(self, element, textlist, parentlang):
         """Visit the children of element, adding their content to textlist."""
         for child in element:
-            if child.tag == "errorlang" and self.noforeign and self.typos:
-                pass
-            elif child.tag == "errorlang" and self.noforeign:
-                self.get_tail(child, textlist, parentlang)
-            elif self.visit_error_inline(child):
-                self.collect_inline_errors(
-                    child, textlist, self.get_element_language(child, parentlang)
-                )
-            elif self.visit_error_not_inline(child):
-                self.collect_not_inline_errors(child, textlist)
-            else:
-                self.visit_nonerror_element(
-                    child, textlist, self.get_element_language(element, parentlang)
-                )
+            if child.tag != "correct":
+                if child.tag == "errorlang" and self.noforeign and self.typos:
+                    pass
+                elif child.tag == "errorlang" and self.noforeign:
+                    self.get_tail(child, textlist, parentlang)
+                elif self.visit_error_inline(child):
+                    self.collect_inline_errors(
+                        child, textlist, self.get_element_language(child, parentlang)
+                    )
+                elif self.visit_error_not_inline(child):
+                    self.collect_not_inline_errors(child, textlist)
+                else:
+                    self.visit_nonerror_element(
+                        child, textlist, self.get_element_language(element, parentlang)
+                    )
 
     def visit_nonerror_element(self, element, textlist, parentlang):
         """Visit and extract text from non error element."""
