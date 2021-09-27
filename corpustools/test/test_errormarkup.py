@@ -652,13 +652,10 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertEqual(errormarkup.process_text(in_string), want_list)
 
     def test_is_correction1(self):
-        text = "${noun,cons|epoksy}"
-        self.assertTrue(errormarkup.is_correction(text))
+        self.assertTrue(errormarkup.is_correction("${noun,cons|epoksy}"))
 
     def test_is_correction2(self):
-        text = "Bruk {{epoxi}"
-        self.assertTrue(not errormarkup.is_correction(text))
+        self.assertTrue(not errormarkup.is_correction("Bruk {{epoxi}"))
 
     def test_is_error_with_slash(self):
-        text = "{aba/}"
-        self.assertTrue(errormarkup.is_error(text))
+        self.assertTrue(errormarkup.is_error("{aba/}"))
