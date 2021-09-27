@@ -227,23 +227,8 @@ class XMLPrinter(object):
         if not self.error_filtering or self.include_this_error(element):
             for child in element:
                 if child.tag != "correct":
-                    if child.tag == "span" and element.tag == "errorsyn":
-                        text.append(child.text)
-                    else:
-                        try:
-                            correct = child.find("./correct")
-                            text.append(correct.text)
-                        except TypeError:
-                            print("Unexpected error element", file=sys.stderr)
-                            print(
-                                etree.tostring(child, encoding="utf8"), file=sys.stderr
-                            )
-                            print(
-                                "To fix this error you must "
-                                "fix the errormarkup in the original "
-                                "document:".format(self.filename),
-                                file=sys.stderr,
-                            )
+                    correct = child.find("./correct")
+                    text.append(correct.text)
 
                     if child.tail is not None and child.tail.strip() != "":
                         text.append(child.tail)
