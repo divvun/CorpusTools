@@ -386,10 +386,10 @@ class TestErrorMarkup(unittest.TestCase):
         in_elem = etree.fromstring("<p>{{A  B}‰{notspace|A B}  C}‰{notspace|A B C}</p>")
         want = etree.fromstring(
             "<p>"
-            '<errorformat correct="A B C" errorinfo="notspace">'
-            '<errorformat correct="A B" errorinfo="notspace">'
-            "A  B</errorformat>"
-            "  C</errorformat>"
+            "<errorformat>"
+            "<errorformat>"
+            'A  B<correct errorinfo="notspace">A B</correct></errorformat>'
+            '  C<correct errorinfo="notspace">A B C</correct></errorformat>'
             "</p>"
         )
 
@@ -543,10 +543,10 @@ class TestErrorMarkup(unittest.TestCase):
             "<p>{{šaddai}${verb,conc|šattai} ollu áššit}£{verb,fin,pl3prs,sg3prs,tense|šadde ollu áššit}</p>"
         )
         want = etree.fromstring(
-            '<p><errormorphsyn errorinfo="verb,fin,pl3prs,sg3prs,tense" '
-            'correct="šadde ollu áššit"><errorort errorinfo="verb,conc" '
-            'correct="šattai">šaddai</errorort> ollu áššit'
-            "</errormorphsyn></p>"
+            '<p><errormorphsyn><errorort>šaddai<correct errorinfo="verb,conc">'
+            "šattai</correct></errorort> ollu áššit<correct "
+            'errorinfo="verb,fin,pl3prs,sg3prs,tense">šadde ollu áššit'
+            "</correct></errormorphsyn></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -557,9 +557,10 @@ class TestErrorMarkup(unittest.TestCase):
             "<p>{guokte {ganddat}§{n,á|gánddat}}£{n,nump,gensg,nompl,case|guokte gándda}</p>"
         )
         want = etree.fromstring(
-            '<p><errormorphsyn errorinfo="n,nump,gensg,nompl,case" '
-            'correct="guokte gándda">guokte <error errorinfo="n,á" '
-            'correct="gánddat">ganddat</error></errormorphsyn></p>'
+            '<p><errormorphsyn>guokte <error>ganddat<correct errorinfo="n,á">'
+            "gánddat</correct></error><correct "
+            'errorinfo="n,nump,gensg,nompl,case">guokte gándda</correct>'
+            "</errormorphsyn></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -571,10 +572,10 @@ class TestErrorMarkup(unittest.TestCase):
             "£{adj,spred,nompl,nomsg,agr|Nieiddat leat nuorat}</p>"
         )
         want = etree.fromstring(
-            '<p><errormorphsyn errorinfo="adj,spred,nompl,nomsg,agr" '
-            'correct="Nieiddat leat nuorat">Nieiddat leat <errorort '
-            'errorinfo="adj,meta" '
-            'correct="nuorra">nourra</errorort></errormorphsyn></p>'
+            "<p><errormorphsyn>Nieiddat leat <errorort>nourra<correct "
+            'errorinfo="adj,meta">nuorra</correct></errorort>'
+            '<correct errorinfo="adj,spred,nompl,nomsg,agr">Nieiddat leat '
+            "nuorat</correct></errormorphsyn></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -586,10 +587,10 @@ class TestErrorMarkup(unittest.TestCase):
             "£{v,v,sg3prs,pl3prs,agr|lea okta mánná}</p>"
         )
         want = etree.fromstring(
-            '<p><errormorphsyn errorinfo="v,v,sg3prs,pl3prs,agr" correct="'
-            'lea okta mánná">leat <errormorphsyn errorinfo="n,spred,nomsg,'
-            'gensg,case" correct="okta mánná">okta máná</errormorphsyn>'
-            "</errormorphsyn></p>"
+            "<p><errormorphsyn>leat <errormorphsyn>okta máná<correct "
+            'errorinfo="n,spred,nomsg,gensg,case">okta mánná</correct>'
+            '</errormorphsyn><correct errorinfo="v,v,sg3prs,pl3prs,agr">'
+            "lea okta mánná</correct></errormorphsyn></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -604,15 +605,15 @@ class TestErrorMarkup(unittest.TestCase):
             "${verb,conc|ovddastit}.</p>"
         )
         want = etree.fromstring(
-            '<p>heaitit <errorort correct="dahkaluddame" errorinfo="verb,a">'
-            'dáhkaluddame</errorort> ahte sis <errorortreal correct="mahkáš" '
-            'errorinfo="adv,á">máhkaš</errorortreal> livččii <errorort '
-            'correct="makkárge" errorinfo="adv,á">makkarge</errorort> '
-            'politihkka, muhto rahpasit baicca muitalivčče <errorlex correct="'
-            'man soga"><errorort correct="makkár" errorinfo="interr,á">'
-            "makkar</errorort> soga</errorlex> sii <errorort "
-            'correct="ovddastit" errorinfo="verb,conc">ovddasttit'
-            "</errorort>.</p>"
+            '<p>heaitit <errorort>dáhkaluddame<correct errorinfo="verb,a">'
+            "dahkaluddame</correct></errorort> ahte sis <errorortreal>"
+            'máhkaš<correct errorinfo="adv,á">mahkáš</correct></errorortreal>'
+            'livččii <errorort>makkarge<correct errorinfo="adv,á">makkárge'
+            "</correct></errorort> politihkka, muhto rahpasit baicca "
+            "muitalivčče <errorlex><errorort>makkar<correct "
+            'errorinfo="interr,á">makkár</correct></errorort> soga<correct>'
+            "man soga</correct></errorlex> sii <errorort>ovddasttit"
+            '<correct errorinfo="verb,conc">ovddastit</correct></errorort>.</p>'
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -638,15 +639,16 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_nested_markup6(self):
         in_elem = etree.fromstring(
-            "<p>{{Bearpmahat}${noun,svow|Bearpmehat} {earuha}€{verb,v,w|sirre}}£{verb,fin,pl3prs,sg3prs,agr|Bearpmehat sirrejit} uskki ja "
-            "loaiddu.</p>"
+            "<p>{{Bearpmahat}${noun,svow|Bearpmehat} "
+            "{earuha}€{verb,v,w|sirre}}£{verb,fin,pl3prs,sg3prs,agr|Bearpmehat"
+            " sirrejit} uskki ja loaiddu.</p>"
         )
         want = etree.fromstring(
-            '<p><errormorphsyn errorinfo="verb,fin,pl3prs,sg3prs,agr" '
-            'correct="Bearpmehat sirrejit"><errorort errorinfo="noun,svow" '
-            'correct="Bearpmehat">Bearpmahat</errorort> <errorlex '
-            'errorinfo="verb,v,w" correct="sirre">earuha</errorlex>'
-            "</errormorphsyn> uskki ja loaiddu.</p>"
+            "<p><errormorphsyn><errorort>Bearpmahat<correct "
+            'errorinfo="noun,svow">Bearpmehat</correct></errorort><errorlex>'
+            'earuha<correct errorinfo="verb,v,w">sirre</correct></errorlex>'
+            '<correct errorinfo="verb,fin,pl3prs,sg3prs,agr">Bearpmehat '
+            "sirrejit</correct></errormorphsyn> uskki ja loaiddu.</p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -688,14 +690,14 @@ class TestErrorMarkup(unittest.TestCase):
             "£{noun,obj,genpl,nompl,case|čoggen ollu joŋaid ja sarridiid}</p>"
         )
         want = etree.fromstring(
-            '<p><errormorphsyn errorinfo="noun,advl,gensg,locsg,case" '
-            'correct="Ovddit geasi">Ovddit geasis</errormorphsyn> '
-            '<errormorphsyn errorinfo="noun,obj,genpl,nompl,case" '
-            'correct="čoggen ollu joŋaid ja sarridiid"><errormorphsyn '
-            'errorinfo="noun,obj,genpl,nompl,case" correct="čoggen ollu '
-            'joŋaid"><errorort errorinfo="verb,mono" correct="čoggen">'
-            "čoaggen</errorort> ollu jokŋat</errormorphsyn> ja sarridat"
-            "</errormorphsyn></p>"
+            "<p><errormorphsyn>Ovddit geasis<correct "
+            'errorinfo="noun,advl,gensg,locsg,case">Ovddit geasi</correct>'
+            "</errormorphsyn><errormorphsyn><errormorphsyn><errorort>čoaggen"
+            '<correct errorinfo="verb,mono">čoggen</correct></errorort> '
+            'ollu jokŋat<correct errorinfo="noun,obj,genpl,nompl,case">'
+            "čoggen ollu joŋaid</correct></errormorphsyn> ja sarridat"
+            '<correct errorinfo="noun,obj,genpl,nompl,case">čoggen ollu '
+            "joŋaid ja sarridiid</correct></errormorphsyn></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -707,9 +709,10 @@ class TestErrorMarkup(unittest.TestCase):
             "med god kvalitet.</p>"
         )
         want = etree.fromstring(
-            '<p>Bruk <errorortreal errorinfo="noun,mix" correct="epoksylim">'
-            '<errorort errorinfo="noun,cons" correct="epoksy">epoxi'
-            "</errorort> lim</errorortreal> med god kvalitet.</p>"
+            "<p>Bruk <errorortreal><errorort>epoxi"
+            '<correct errorinfo="noun,cons">epoksy</correct></errorort> lim'
+            '<correct errorinfo="noun,mix">epoksylim</correct></errorortreal> '
+            "med god kvalitet.</p>"
         )
 
         errormarkup.add_error_markup(in_elem)

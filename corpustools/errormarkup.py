@@ -221,6 +221,9 @@ def add_nested_error(elements, errorstring, correctionstring):
         while True:
             text = get_text(elements[-1])
 
+            if text is None:
+                break
+
             index = text.rfind("{")
             if index > -1:
                 error_element.text = text[index + 1 :]
