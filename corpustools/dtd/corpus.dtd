@@ -11,7 +11,7 @@
 <!--+ Error entity
     |    All error types listed here
     +-->
-<!ENTITY % error.ent "error | errorort | errorortreal | errorlex | errormorphsyn | errorsyn | errorlang" >
+<!ENTITY % error.ent "error | errorort | errorortreal | errorlex | errormorphsyn | errorsyn | errorlang">
 
 <!--+ p continuation
     |    Every p element can contain the following:
@@ -83,7 +83,7 @@
 <!ELEMENT year  (#PCDATA)>
 <!ELEMENT place (#PCDATA)>
 <!ELEMENT publChannel (publication|unpublished)>
-<!ELEMENT publication (publisher, ISSN?, ISBN? )> <!-- etc -->
+<!ELEMENT publication (publisher, ISSN?, ISBN? )><!-- etc -->
 
 <!ELEMENT unpublished EMPTY>
 <!ELEMENT publisher (#PCDATA)>
@@ -147,16 +147,16 @@
 <!ELEMENT later (section|skip|(%text.ent;))*>
 <!ELEMENT section (section|(%text.ent;))*>
 
-<!ELEMENT list (p*) > <!-- type="listitem" -->
+<!ELEMENT list (p*) ><!-- type="listitem" -->
 <!ELEMENT table (row*)>
-<!ELEMENT row (p+)> <!-- type="tablecell" -->
+<!ELEMENT row (p+)><!-- type="tablecell" -->
 
 <!ELEMENT p ( %p_cont; | s )* >
 <!ATTLIST p type ( title | listitem | text | tablecell ) "text"
   %common.att; >
 
 <!ELEMENT em (#PCDATA | hyph | span | %error.ent; )* >
-<!ATTLIST em type ( bold | italic | underline | delimited ) "italic" >
+<!ATTLIST em type ( bold | italic | underline | delimited ) "italic">
 
 <!ELEMENT span (#PCDATA | em | hyph | %error.ent; )* >
 <!ATTLIST span
