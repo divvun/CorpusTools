@@ -170,22 +170,20 @@
 <!-- this is <error correct="text">tekst</error> ... -->
 <!-- Errors can be nested -->
 
-<!-- Unclassified errors: -->
-<!ELEMENT error (#PCDATA | %error.ent; | hyph | em)*>
-<!ATTLIST error correct CDATA #IMPLIED >
+<!-- Error elements contain one or more correct elements -->
+<!ELEMENT correct #PCDATA>
+<!ATTLIST correct errorinfo CDATA #IMPLIED >
 
-<!ELEMENT errorlang (#PCDATA | %error.ent; | hyph | em)*>
-<!ATTLIST errorlang correct CDATA #IMPLIED >
+<!-- Unclassified errors: -->
+<!ELEMENT error (#PCDATA | %error.ent; | hyph | em | correct)*>
+
+<!ELEMENT errorlang (#PCDATA | %error.ent; | hyph | em | correct)*>
 
 <!-- Orthographical errors, non-words: -->
-<!ELEMENT errorort (#PCDATA | hyph | errorlex)*>
-<!ATTLIST errorort errorinfo CDATA #IMPLIED >
-<!ATTLIST errorort correct CDATA #IMPLIED >
+<!ELEMENT errorort (#PCDATA | hyph | errorlex | correct)*>
 
 <!-- Orthographical errors, real words: -->
-<!ELEMENT errorortreal (#PCDATA | hyph | errorlex | errorort | span)*>
-<!ATTLIST errorortreal errorinfo CDATA #IMPLIED >
-<!ATTLIST errorortreal correct CDATA #IMPLIED >
+<!ELEMENT errorortreal (#PCDATA | hyph | errorlex | errorort | span | correct)*>
 
 <!--
 <!ATTLIST errorort
@@ -197,9 +195,7 @@
 -->
 
 <!-- Lexical errors: -->
-<!ELEMENT errorlex (#PCDATA | error | errorort | errorortreal | errormorphsyn | hyph )*>
-<!ATTLIST errorlex correct CDATA #IMPLIED >
-<!ATTLIST errorlex errorinfo CDATA #IMPLIED >
+<!ELEMENT errorlex (#PCDATA | error | errorort | errorortreal | errormorphsyn | hyph | correct )*>
 
 <!-- <!ATTLIST errorlex -->
 <!--           correct CDATA #IMPLIED -->
@@ -212,9 +208,7 @@
 <!--           > -->
 
 <!-- Morphosyntactic errors: -->
-<!ELEMENT errormorphsyn ( %p_cont; )*>
-<!ATTLIST errormorphsyn correct CDATA #IMPLIED >
-<!ATTLIST errormorphsyn errorinfo CDATA #IMPLIED >
+<!ELEMENT errormorphsyn ( %p_cont; | correct)*>
 
 <!-- <!ATTLIST errormorphsyn -->
 <!--           correct CDATA #IMPLIED -->
@@ -239,9 +233,7 @@
 <!--           > -->
 
 <!-- Syntactic errors: -->
-<!ELEMENT errorsyn ( %p_cont; )*>
-<!ATTLIST errorsyn correct CDATA #IMPLIED >
-<!ATTLIST errorsyn errorinfo CDATA #IMPLIED >
+<!ELEMENT errorsyn ( %p_cont; | correct )*>
 <!-- <!ATTLIST errorsyn -->
 <!--           correct CDATA #IMPLIED -->
 <!--           pos ( noun | verb | adj | adv | num | interj | pp | cc | cs | pers | -->
