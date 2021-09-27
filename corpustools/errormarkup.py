@@ -111,10 +111,13 @@ def make_error_element(error, fixed_correction, element_name, att_list):
     else:
         error_element.text = error.replace("{", "").replace("}", "")
 
-    error_element.set("correct", fixed_correction)
+    correct_element = etree.Element("correct")
+    correct_element.text = fixed_correction
 
     if att_list is not None:
-        error_element.set("errorinfo", att_list)
+        correct_element.set("errorinfo", att_list)
+
+    error_element.append(correct_element)
 
     return error_element
 
