@@ -50,7 +50,7 @@ class TestErrorMarkup(unittest.TestCase):
     def test_error_parser_errorlang_infinity(self):
         in_elem = "{molekylærbiologimi}∞{kal,bio}"
         want = etree.fromstring(
-            '<errorlang correct="kal,bio">molekylærbiologimi</errorlang>'
+            "<errorlang>molekylærbiologimi<correct>kal,bio</correct></errorlang>"
         )
 
         got = errormarkup.error_parser(in_elem)
@@ -60,7 +60,7 @@ class TestErrorMarkup(unittest.TestCase):
     def test_error_parser_errorlang_infinity_with_new_lines(self):
         in_elem = "\n\n\n\n{molekylærbiologimi}∞{kal,bio}\n\n\n\n"
         want = etree.fromstring(
-            '<errorlang correct="kal,bio">molekylærbiologimi</errorlang>'
+            "<errorlang>molekylærbiologimi<correct>kal,bio</correct></errorlang>"
         )
 
         got = errormarkup.error_parser(in_elem)
@@ -70,8 +70,7 @@ class TestErrorMarkup(unittest.TestCase):
     def test_quote_char(self):
         in_elem = "{”sjievnnijis”}${conc,vnn-vnnj|sjievnnjis}"
         want = etree.fromstring(
-            '<errorort errorinfo="conc,vnn-vnnj"         '
-            'correct="sjievnnjis">”sjievnnijis”</errorort>'
+            '<errorort>”sjievnnijis”<correct errorinfo="conc,vnn-vnnj">sjievnnjis</correct></errorort>'
         )
 
         got = errormarkup.error_parser(in_elem)
@@ -88,7 +87,7 @@ class TestErrorMarkup(unittest.TestCase):
     def test_error_parser_errorort1(self):
         in_elem = "{jne.}${adv,typo|jna.}"
         want = etree.fromstring(
-            '<errorort errorinfo="adv,typo" correct="jna.">jne.</errorort>'
+            '<errorort>jne.<correct errorinfo="adv,typo">jna.</correct></errorort>'
         )
 
         got = errormarkup.error_parser(in_elem)
@@ -98,7 +97,7 @@ class TestErrorMarkup(unittest.TestCase):
     def test_errorort1(self):
         in_elem = etree.fromstring("<p>{jne.}${adv,typo|jna.}</p>")
         want = etree.fromstring(
-            '<p><errorort errorinfo="adv,typo" correct="jna.">jne.' "</errorort></p>"
+            '<p><errorort>jne.<correct errorinfo="adv,typo">jna.</correct></errorort></p>'
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -106,7 +105,9 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_errorort2(self):
         in_elem = etree.fromstring("<p>{daesn'}${daesnie}</p>")
-        want = etree.fromstring('<p><errorort correct="daesnie">daesn\'</errorort></p>')
+        want = etree.fromstring(
+            "<p><errorort>daesn'<correct>daesnie</correct></errorort></p>"
+        )
 
         errormarkup.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
@@ -114,8 +115,8 @@ class TestErrorMarkup(unittest.TestCase):
     def test_input_contains_slash(self):
         in_elem = etree.fromstring("<p>{magistter/}${loan,vowlat,e-a|magisttar}</p>")
         want = etree.fromstring(
-            '<p><errorort correct="magisttar" errorinfo="loan,vowlat,e-a">'
-            "magistter/</errorort></p>"
+            '<p><errorort>magistter/<correct errorinfo="loan,vowlat,e-a">'
+            "magisttar</correct></errorort></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -123,28 +124,32 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_error_correct1(self):
         in_elem = etree.fromstring("<p>{1]}§{Ij}</p>")
-        want = etree.fromstring('<p><error correct="Ij">1]</error></p>')
+        want = etree.fromstring("<p><error>1]<correct>Ij</correct></error></p>")
 
         errormarkup.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
 
     def test_error_correct2(self):
         in_elem = etree.fromstring("<p>{væ]keles}§{væjkeles}</p>")
-        want = etree.fromstring('<p><error correct="væjkeles">væ]keles</error></p>')
+        want = etree.fromstring(
+            "<p><error>væ]keles<correct>væjkeles</correct></error></p>"
+        )
 
         errormarkup.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
 
     def test_error_correct3(self):
         in_elem = etree.fromstring("<p>{smávi-}§{smávit-}</p>")
-        want = etree.fromstring('<p><error correct="smávit-">smávi-</error></p>')
+        want = etree.fromstring(
+            "<p><error>smávi-<correct>smávit-</correct></error></p>"
+        )
 
         errormarkup.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
 
     def test_error_correct4(self):
         in_elem = etree.fromstring("<p>{CD:t}§{CD:at}</p>")
-        want = etree.fromstring('<p><error correct="CD:at">CD:t</error></p>')
+        want = etree.fromstring("<p><error>CD:t<correct>CD:at</correct></error></p>")
 
         errormarkup.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
@@ -152,7 +157,7 @@ class TestErrorMarkup(unittest.TestCase):
     def test_error_correct5(self):
         in_elem = etree.fromstring("<p>{DNB-feaskáris}§{DnB-feaskáris}</p>")
         want = etree.fromstring(
-            '<p><error correct="DnB-feaskáris">DNB-feaskáris</error></p>'
+            "<p><error>DNB-feaskáris<correct>DnB-feaskáris</correct></error></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -160,21 +165,23 @@ class TestErrorMarkup(unittest.TestCase):
 
     def test_error_correct6(self):
         in_elem = etree.fromstring("<p>{boade}§{boađe}</p>")
-        want = etree.fromstring('<p><error correct="boađe">boade</error></p>')
+        want = etree.fromstring("<p><error>boade<correct>boađe</correct></error></p>")
 
         errormarkup.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
 
     def test_error_correct7(self):
         in_elem = etree.fromstring("<p>{2005’as}§{2005:s}</p>")
-        want = etree.fromstring('<p><error correct="2005:s">2005’as</error></p>')
+        want = etree.fromstring(
+            "<p><error>2005’as<correct>2005:s</correct></error></p>"
+        )
 
         errormarkup.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
 
     def test_error_correct8(self):
         in_elem = etree.fromstring("<p>{NSRii}§{NSR:i}</p>")
-        want = etree.fromstring('<p><error correct="NSR:i">NSRii</error></p>')
+        want = etree.fromstring("<p><error>NSRii<correct>NSR:i</correct></error></p>")
 
         errormarkup.add_error_markup(in_elem)
         self.assertXmlEqual(in_elem, want)
@@ -182,7 +189,7 @@ class TestErrorMarkup(unittest.TestCase):
     def test_error_correct9(self):
         in_elem = etree.fromstring("<p>{Nordkjosbotn'ii}§{Nordkjosbotnii}</p>")
         want = etree.fromstring(
-            '<p><error correct="Nordkjosbotnii">Nordkjosbotn\'ii</error></p>'
+            "<p><error>Nordkjosbotn'ii<correct>Nordkjosbotnii</correct>" "</error></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -191,7 +198,7 @@ class TestErrorMarkup(unittest.TestCase):
     def test_errorort3(self):
         in_elem = etree.fromstring("<p>{nourra}${a,meta|nuorra}</p>")
         want = etree.fromstring(
-            '<p><errorort errorinfo="a,meta" ' 'correct="nuorra">nourra</errorort></p>'
+            '<p><errorort>nourra<correct errorinfo="a,meta">nuorra</correct></errorort></p>'
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -202,9 +209,9 @@ class TestErrorMarkup(unittest.TestCase):
             "<p>{Nieiddat leat nuorra}£{a,spred,nompl,nomsg,agr|Nieiddat leat nuorat}</p>"
         )
         want = etree.fromstring(
-            '<p><errormorphsyn errorinfo="a,spred,nompl,nomsg,agr" '
-            'correct="Nieiddat leat nuorat">Nieiddat leat '
-            "nuorra</errormorphsyn></p>"
+            "<p><errormorphsyn>Nieiddat leat nuorra"
+            '<correct errorinfo="a,spred,nompl,nomsg,agr">Nieiddat leat '
+            "nuorat</correct></errormorphsyn></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -215,8 +222,9 @@ class TestErrorMarkup(unittest.TestCase):
             "{Nieiddat leat nuorra}£{a,spred,nompl,nomsg,agr|Nieiddat leat nuorat}"
         )
         want = etree.fromstring(
-            '<errormorphsyn errorinfo="a,spred,nompl,nomsg,agr" correct="'
-            'Nieiddat leat nuorat">Nieiddat leat nuorra</errormorphsyn>'
+            "<errormorphsyn>Nieiddat leat nuorra<correct "
+            'errorinfo="a,spred,nompl,nomsg,agr">Nieiddat leat nuorat'
+            "</correct></errormorphsyn>"
         )
 
         got = errormarkup.error_parser(in_elem)
@@ -226,8 +234,8 @@ class TestErrorMarkup(unittest.TestCase):
     def test_error_syn1(self):
         in_elem = etree.fromstring("<p>{riŋgen nieidda lusa}¥{x,pph|riŋgen niidii}</p>")
         want = etree.fromstring(
-            '<p><errorsyn errorinfo="x,pph" correct="riŋgen niidii">riŋgen '
-            "nieidda lusa</errorsyn></p>"
+            '<p><errorsyn>riŋgen nieidda lusa<correct errorinfo="x,pph">'
+            "riŋgen niidii</correct></errorsyn></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -236,7 +244,8 @@ class TestErrorMarkup(unittest.TestCase):
     def test_error_syn2(self):
         in_elem = etree.fromstring("<p>{ovtta}¥{num,redun| }</p>")
         want = etree.fromstring(
-            '<p><errorsyn errorinfo="num,redun" correct=" ">ovtta' "</errorsyn></p>"
+            '<p><errorsyn>ovtta<correct errorinfo="num,redun"></correct>'
+            "</errorsyn></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -245,8 +254,8 @@ class TestErrorMarkup(unittest.TestCase):
     def test_erro_lex1(self):
         in_elem = etree.fromstring("<p>{dábálaš}€{adv,adj,der|dábálaččat}</p>")
         want = etree.fromstring(
-            '<p><errorlex errorinfo="adv,adj,der" correct="dábálaččat">'
-            "dábálaš</errorlex></p>"
+            '<p><errorlex>dábálaš<correct errorinfo="adv,adj,der">dábálaččat'
+            "</correct></errorlex></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -255,8 +264,8 @@ class TestErrorMarkup(unittest.TestCase):
     def test_error_ortreal1(self):
         in_elem = etree.fromstring("<p>{ráhččamušaid}¢{noun,mix|rahčamušaid}</p>")
         want = etree.fromstring(
-            '<p><errorortreal errorinfo="noun,mix"         '
-            'correct="rahčamušaid">ráhččamušaid</errorortreal></p>'
+            '<p><errorortreal>ráhččamušaid<correct errorinfo="noun,mix">'
+            "rahčamušaid</correct></errorortreal></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -269,9 +278,10 @@ class TestErrorMarkup(unittest.TestCase):
             "gos</p>"
         )
         want = etree.fromstring(
-            '<p>gitta <errorort correct="Nordkjosbotnii">Nordkjosbotn\'ii'
-            '</errorort> (mii lea ge <errorort correct="Nordkjosbotn">'
-            "nordkjosbotn</errorort> sámegillii? Muhtin, veahket mu!) gos</p>"
+            "<p>gitta <errorort>Nordkjosbotn'ii<correct>Nordkjosbotnii"
+            "</correct></errorort> (mii lea ge <errorort>nordkjosbotn"
+            "<correct>Nordkjosbotn</correct></errorort> sámegillii? "
+            "Muhtin, veahket mu!) gos</p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -289,12 +299,12 @@ class TestErrorMarkup(unittest.TestCase):
         self.assertEqual(got[0], "gitta ")
         self.assertEqual(
             etree.tostring(got[1], encoding="unicode"),
-            '<errorort correct="Nordkjosbotnii">Nordkjosbotn\'ii</errorort> '
+            "<errorort>Nordkjosbotn'ii<correct>Nordkjosbotnii</correct></errorort> "
             "(mii lea ge ",
         )
         self.assertEqual(
             etree.tostring(got[2], encoding="unicode"),
-            '<errorort correct="Nordkjosbotn">nordkjosbotn</errorort> '
+            "<errorort>nordkjosbotn<correct>Nordkjosbotn</correct></errorort> "
             "sámegillii? Muhtin, veahket mu!) gos",
         )
 
@@ -307,9 +317,9 @@ class TestErrorMarkup(unittest.TestCase):
         )
         want = etree.fromstring(
             "<p>Čáppa muohtaskulptuvrraid ráhkadeapmi VSM olggobealde lei "
-            "maiddái ovttasbargu gaskal <errormorphsyn "
-            'errorinfo="noun,attr,gensg,nomsg,case" correct="skuvlla '
-            'ohppiid">skuvla ohppiid</errormorphsyn> ja VSM.</p>'
+            "maiddái ovttasbargu gaskal <errormorphsyn>skuvla ohppiid"
+            '<correct errorinfo="noun,attr,gensg,nomsg,case">skuvlla ohppiid'
+            "</correct></errormorphsyn> ja VSM.</p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -320,8 +330,8 @@ class TestErrorMarkup(unittest.TestCase):
             "<p>- ruksesruonáčalmmehisvuohta lea sullii " "{8%:as}${acr,suf|8%:s}</p>"
         )
         want = etree.fromstring(
-            "<p>- ruksesruonáčalmmehisvuohta lea sullii <errorort "
-            'correct="8%:s" errorinfo="acr,suf">8%:as</errorort></p>'
+            "<p>- ruksesruonáčalmmehisvuohta lea sullii <errorort>8%:as"
+            '<correct errorinfo="acr,suf">8%:s</correct></errorort></p>'
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -332,9 +342,9 @@ class TestErrorMarkup(unittest.TestCase):
             "<p>( {nissonin}¢{noun,suf|nissoniin} dušše {0.6 %:s}£{0.6 %} )</p>"
         )
         want = etree.fromstring(
-            '<p>( <errorortreal errorinfo="noun,suf" correct="nissoniin">'
-            'nissonin</errorortreal> dušše <errormorphsyn correct="0.6 %">'
-            "0.6 %:s</errormorphsyn> )</p>"
+            '<p>( <errorortreal>nissonin<correct errorinfo="noun,suf">'
+            "nissoniin</correct></errorortreal> dušše <errormorphsyn>0.6 %:s"
+            "<correct>0.6 %</correct></errormorphsyn> )</p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -346,9 +356,9 @@ class TestErrorMarkup(unittest.TestCase):
             "${verb,a|sagahuvvon} manneseallas (diploida)</p>"
         )
         want = etree.fromstring(
-            '<p>(haploida) ja <errorort errorinfo="noun,á" '
-            'correct="njiŋŋálas">njiŋŋalas</errorort> <errorort '
-            'errorinfo="verb,a" correct="sagahuvvon">ságahuvvon</errorort> '
+            '<p>(haploida) ja <errorort>njiŋŋalas<correct errorinfo="noun,á">'
+            "njiŋŋálas</correct></errorort> <errorort>ságahuvvon"
+            '<correct errorinfo="verb,a">sagahuvvon</correct></errorort> '
             "manneseallas (diploida)</p>"
         )
 
@@ -362,11 +372,11 @@ class TestErrorMarkup(unittest.TestCase):
             "olbmuid</p>"
         )
         want = etree.fromstring(
-            '<p>(gii oahpaha) <errorort errorinfo="x,notcmp" correct="gii '
-            'nu">giinu</errorort> manai <errorort errorinfo="loan,conc" '
-            'correct="indiánalávlagat">intiánalávlagat</errorort> <errorort '
-            'errorinfo="noun,cmp" correct="guovžaklána">guovža-klána'
-            "</errorort> olbmuid</p>"
+            '<p>(gii oahpaha) <errorort>giinu<correct errorinfo="x,notcmp">'
+            "gii nu</correct></errorort> manai <errorort>intiánalávlagat"
+            '<correct errorinfo="loan,conc">indiánalávlagat</correct>'
+            '</errorort> <errorort>guovža-klána<correct errorinfo="noun,cmp">'
+            "guovžaklána</correct></errorort> olbmuid</p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -392,10 +402,7 @@ class TestErrorMarkup(unittest.TestCase):
             "ráhkadan. </p>"
         )
 
-        want = (
-            '<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
-            'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. </p>'
-        )
+        want = '<p>buvttadeaddji Anstein <errorort>Mikkelsens<correct errorinfo="typo">Mikkelsen</correct></errorort> lea ráhkadan. </p>'
 
         errormarkup.add_error_markup(in_elem)
         got = etree.tostring(in_elem, encoding="unicode")
@@ -410,11 +417,11 @@ class TestErrorMarkup(unittest.TestCase):
         )
 
         want = (
-            '<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
-            'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. <errorort '
-            'correct="bálkkašumi" errorinfo="vowlat,á-a">bálkkášumi'
-            '</errorort> miessemánu. <span type="quote" xml:lang="eng">«Best '
-            "Shorts Competition»</span></p>"
+            "<p>buvttadeaddji Anstein <errorort>Mikkelsens"
+            '<correct errorinfo="typo">Mikkelsen</correct></errorort> lea ráhkadan. '
+            '<errorort>bálkkášumi<correct errorinfo="vowlat,á-a">bálkkašumi</correct></errorort>'
+            ' miessemánu. <span type="quote" xml:lang="eng">«Best Shorts '
+            "Competition»</span></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -430,12 +437,7 @@ class TestErrorMarkup(unittest.TestCase):
             "«Best Shorts Competition»</span></p>"
         )
 
-        want = (
-            '<p><errorort correct="Mikkelsen" errorinfo="typo">Mikkelsens'
-            '</errorort> lea ráhkadan. <errorort correct="bálkkašumi" '
-            'errorinfo="vowlat,á-a">bálkkášumi</errorort> miessemánu. <span '
-            'type="quote" xml:lang="eng">«Best Shorts Competition»</span></p>'
-        )
+        want = '<p><errorort>Mikkelsens<correct errorinfo="typo">Mikkelsen</correct></errorort> lea ráhkadan. <errorort>bálkkášumi<correct errorinfo="vowlat,á-a">bálkkašumi</correct></errorort> miessemánu. <span type="quote" xml:lang="eng">«Best Shorts Competition»</span></p>'
 
         errormarkup.add_error_markup(in_elem)
         got = etree.tostring(in_elem, encoding="unicode")
@@ -450,9 +452,9 @@ class TestErrorMarkup(unittest.TestCase):
 
         want = (
             '<p>I 1864 ga han ut boka <span type="quote" xml:lang="swe">'
-            '"Fornuftigt Madstel"</span>. <errorort correct="Asbjørnsen" '
-            'errorinfo="prop,typo">Asbjørsen</errorort> døde 5. januar 1885, '
-            "nesten 73 år gammel.</p>"
+            '"Fornuftigt Madstel"</span>. <errorort>Asbjørsen'
+            '<correct errorinfo="prop,typo">Asbjørnsen</correct></errorort> '
+            "døde 5. januar 1885, nesten 73 år gammel.</p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -481,11 +483,12 @@ class TestErrorMarkup(unittest.TestCase):
         )
 
         want = (
-            '<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
-            'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. <span '
-            'type="quote" xml:lang="eng">«Best Shorts Competition»</span> '
-            '<errorort correct="bálkkašumi" errorinfo="vowlat,á-a">'
-            "bálkkášumi</errorort> miessemánu.</p>"
+            "<p>buvttadeaddji Anstein <errorort>Mikkelsens"
+            '<correct errorinfo="typo">Mikkelsen</correct></errorort> lea '
+            'ráhkadan. <span type="quote" xml:lang="eng">«Best Shorts '
+            "Competition»</span> <errorort>bálkkášumi"
+            '<correct errorinfo="vowlat,á-a">bálkkašumi</correct></errorort> '
+            "miessemánu.</p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -507,27 +510,27 @@ class TestErrorMarkup(unittest.TestCase):
          lea ráhkadan.</p>
         """
         in_elem = etree.fromstring(
-            '<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
-            'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. <span '
+            "<p>buvttadeaddji Anstein <errorort>Mikkelsens<correct "
+            'errorinfo="typo">Mikkelsen</correct></errorort> lea ráhkadan. '
+            '<span type="quote" xml:lang="eng">«Best Shorts Competition»'
+            '</span> <errorort>bálkkášumi<correct errorinfo="vowlat,á-a">'
+            "bálkkašumi</correct></errorort> miessemánu. <em>buvttadeaddji "
+            "Anstein {Mikkelsens}${typo|Mikkelsen} lea ráhkadan. <span "
             'type="quote" xml:lang="eng">«Best Shorts Competition»</span> '
-            '<errorort correct="bálkkašumi" errorinfo="vowlat,á-a">'
-            "bálkkášumi</errorort> miessemánu. <em>buvttadeaddji Anstein "
-            '{Mikkelsens}${typo|Mikkelsen} lea ráhkadan. <span type="quote" '
-            'xml:lang="eng">«Best Shorts Competition»</span> '
             "{bálkkášumi}${vowlat,á-a|bálkkašumi} miessemánu.</em></p>"
         )
 
         want = (
-            '<p>buvttadeaddji Anstein <errorort correct="Mikkelsen" '
-            'errorinfo="typo">Mikkelsens</errorort> lea ráhkadan. <span '
-            'type="quote" xml:lang="eng">«Best Shorts Competition»</span> '
-            '<errorort correct="bálkkašumi" errorinfo="vowlat,á-a">'
-            "bálkkášumi</errorort> miessemánu. <em>buvttadeaddji Anstein "
-            '<errorort correct="Mikkelsen" errorinfo="typo">Mikkelsens'
-            '</errorort> lea ráhkadan. <span type="quote" xml:lang="eng">'
-            '«Best Shorts Competition»</span> <errorort correct="bálkkašumi" '
-            'errorinfo="vowlat,á-a">bálkkášumi</errorort> '
-            "miessemánu.</em></p>"
+            "<p>buvttadeaddji Anstein <errorort>Mikkelsens<correct "
+            'errorinfo="typo">Mikkelsen</correct></errorort> lea ráhkadan. '
+            '<span type="quote" xml:lang="eng">«Best Shorts Competition»'
+            '</span> <errorort>bálkkášumi<correct errorinfo="vowlat,á-a">'
+            "bálkkašumi</correct></errorort> miessemánu. <em>buvttadeaddji "
+            'Anstein <errorort>Mikkelsens<correct errorinfo="typo">Mikkelsen'
+            '</correct></errorort> lea ráhkadan. <span type="quote" '
+            'xml:lang="eng">«Best Shorts Competition»</span> <errorort>'
+            'bálkkášumi<correct errorinfo="vowlat,á-a">bálkkašumi</correct>'
+            "</errorort> miessemánu.</em></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
@@ -668,9 +671,10 @@ class TestErrorMarkup(unittest.TestCase):
             "¢{noun,cmp|gulahallanolbmožat}€{gulahallanolbmot}</p>"
         )
         want = etree.fromstring(
-            '<p>Mirja ja Line leaba <errorlex correct="gulahallanolbmot">'
-            '<errorortreal errorinfo="noun,cmp" correct="gulahallanolbmožat">'
-            "gulahallan olbmožat</errorortreal></errorlex></p>"
+            "<p>Mirja ja Line leaba <errorlex><errorortreal>gulahallan "
+            'olbmožat<correct errorinfo="noun,cmp">gulahallanolbmožat'
+            "</correct></errorortreal><correct>gulahallanolbmot</correct>"
+            "</errorlex></p>"
         )
 
         errormarkup.add_error_markup(in_elem)
