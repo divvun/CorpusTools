@@ -21,7 +21,6 @@
 """Classes and functions to convert errormarkup to xml."""
 
 import re
-import sys
 
 from lxml import etree
 
