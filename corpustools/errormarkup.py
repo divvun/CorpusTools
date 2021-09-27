@@ -139,9 +139,9 @@ def look_for_extended_attributes(correction):
         ext_att = True
         try:
             (att_list, correction) = correction.split("|")
-        except ValueError as e:
+        except ValueError as error:
             raise ErrorMarkupError(
-                f"\n{str(e)}\n"
+                f"\n{str(error)}\n"
                 "Too many | characters inside the correction: "
                 f"«{correction}»\n"
                 "Have you remembered to encase the error inside "
@@ -159,7 +159,7 @@ def get_error(error, correction):
     error - - is either a string or an etree.Element
     correction - - is a correctionstring
     """
-    (fixed_correction, ext_att, att_list) = look_for_extended_attributes(
+    (fixed_correction, _, att_list) = look_for_extended_attributes(
         correction[1:].replace("{", "").replace("}", "")
     )
 
@@ -226,16 +226,15 @@ def add_nested_error(elements, errorstring, correctionstring):
                 else:
                     elements[-1] = text[:index]
                 elements.append(error_element)
-                break
 
             else:
                 inner_element = elements[-1]
                 elements.remove(elements[-1])
                 try:
                     error_element.insert(0, inner_element)
-                except TypeError as e:
+                except TypeError as error:
                     raise ErrorMarkupError(
-                        f"{e}\n"
+                        f"{error}\n"
                         "The program expected an error element, but "
                         f"found a string:\n«{inner_element}»\n"
                         "There is either an error in the errormarkup "
@@ -369,5 +368,3 @@ def add_error_markup(element):
 
 class ErrorMarkupError(Exception):
     """This is raised for errors in this module."""
-
-    pass
