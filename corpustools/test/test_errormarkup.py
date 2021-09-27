@@ -404,8 +404,8 @@ class TestErrorMarkup(unittest.TestCase):
                 "sirrejit</correct></errormorphsyn> uskki ja loaiddu.</p>",
             ),
             (
-                "<p>Mirja ja Line leaba {gulahallan olbmožat}"
-                "¢{noun,cmp|gulahallanolbmožat}€{gulahallanolbmot}</p>",
+                "<p>Mirja ja Line leaba {{gulahallan olbmožat}"
+                "¢{noun,cmp|gulahallanolbmožat}}€{gulahallanolbmot}</p>",
                 "<p>Mirja ja Line leaba <errorlex><errorortreal>gulahallan "
                 'olbmožat<correct errorinfo="noun,cmp">gulahallanolbmožat'
                 "</correct></errorortreal><correct>gulahallanolbmot</correct>"
