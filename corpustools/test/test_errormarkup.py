@@ -34,7 +34,8 @@ from corpustools import errormarkup
 class TestErrorMarkup(unittest.TestCase):
     """Test errormarkup functions."""
 
-    def assert_xml_equal(self, got, want):
+    @staticmethod
+    def assert_xml_equal(got, want):
         """Check if two stringified xml snippets are equal"""
         got = etree.tostring(got, encoding="unicode")
         want = etree.tostring(want, encoding="unicode")
