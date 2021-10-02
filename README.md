@@ -5,8 +5,8 @@ __Synopsis:__ update local installation with:
 python3 setup.py install --user --install-scripts=$HOME/bin --record installed_files.txt
 ```
 
-Corpus Tools contains tools to manipulate a corpus in different ways.
-These scripts will be installed
+Corpus Tools contains tools to manipulate a corpus in different ways. These
+scripts will be installed
 
 ## Howto install and update the tools
 
@@ -51,41 +51,36 @@ These scripts will be installed
 ## Requirements
 
 * python3
-* pip for python3
 * pysvn (only needed for add_files_to_corpus)
 * wvHtml (only needed for convert2xml)
 * pdftohtml (only needed for convert2xml)
 * latex2html (only needed for convert2xml)
 * Java (only needed for parallelize)
-* Perl (only needed for parallelize)
 
 On Mac, do:
 
 ```
-sudo port install py-pysvn py-pip wv latex2html poppler
+sudo port install wv latex2html poppler
 ```
 
 On Debian/Ubuntu, do:
 
 ```
-sudo apt-get install python3-svn python3-pip wv latex2html poppler-utils
+sudo apt-get install wv latex2html poppler-utils
 ```
 
 On Arch Linux, do:
 
 ```
-sudo pacman -S python3-pip wv
+sudo pacman -S wv
 yaourt -S python3-pysvn
 ```
 
-You also need to have the $GTHOME variable set to where you checked
-out https://gtsvn.uit.no/langtech/trunk/
-
 ### Custom version of pdftohtml (poppler)
 
-The standard version of pdftohtml sometimes produces invalid xml-documents.
-A version that fixes this bug is found at https://github.com/albbas/poppler
-and the poppler developers have been notified about the bug.
+The standard version of pdftohtml sometimes produces invalid xml-documents. A
+version that fixes this bug is found at https://github.com/albbas/poppler and
+the poppler developers have been notified about the bug.
 
 To install it do the following
 ```
@@ -157,15 +152,15 @@ ccat -a -l sme $GTFREE/converted/sme/admin/sd/other_files/vl_05_1.doc.xml
 
 To print out the content of e.g. all converted pdf files found in a directory
 and its subdirectories, issue this command:
+
 ```
 find converted/sme/science/ -name "*.pdf.xml" | xargs ccat -a -l sme
 ```
 
 ### Printing content of analysed files to stdout
 
-The analysed files produced by
-[analyse_corpus](#analyse_corpus) contain among other one
-dependency element and one disambiguation element, that contain the
+The analysed files produced by [analyse_corpus](#analyse_corpus) contain among
+other one dependency element and one disambiguation element, that contain the
 dependency and disambiguation analysis of the original files content.
 
 ```
@@ -180,8 +175,8 @@ ccat -dep sda/sda_2006_1_aikio1.pdf.xml
 
 Prints the content of the dependency element.
 
-The usage pattern for printing these elements is otherwise the same as
-printing the content of converted files.
+The usage pattern for printing these elements is otherwise the same as printing
+the content of converted files.
 
 Printing dependency elements
 ```
@@ -199,8 +194,8 @@ find analysed/sme/science/ -name "*.pdf.xml" | xargs ccat -dis
 
 ### Printing errormarkup content
 
-This usage mode is used in the speller tests. Examples of this usage pattern
-is found in the make files in $GTBIG/prooftools.
+This usage mode is used in the speller tests. Examples of this usage pattern is
+found in the make files in $GTBIG/prooftools.
 
 ### The complete help text from the program:
 
@@ -211,8 +206,8 @@ usage: ccat [-h] [--version] [-l LANG] [-T] [-L] [-t] [-a] [-c] [-C] [-ort]
             [-hyph HYPH_REPLACEMENT]
             targets [targets ...]
 
-Print the contents of a corpus in XML format The default is to print
-paragraphs with no type (=text type).
+Print the contents of a corpus in XML format The default is to print paragraphs
+with no type (=text type).
 
 positional arguments:
   targets               Name of the files or directories to process. If a
@@ -259,7 +254,6 @@ optional arguments:
 
 Convert original files in a corpus to giellatekno/divvun xml format.
 
-
 convert2xml depends on these external programs:
 
 * pdftotext
@@ -267,15 +261,14 @@ convert2xml depends on these external programs:
 
 ### Usage
 
-Convert all files in the directory $GTFREE/orig/sme and its
-subdirectories.
+Convert all files in the directory $GTFREE/orig/sme and its subdirectories.
 
 ```
 convert2xml $GTFREE/orig/sme
 ```
 
-The converted files are placed in $GTFREE/converted/sme
-with the same directory structure as that in $GTFREE/orig/sme.
+The converted files are placed in $GTFREE/converted/sme with the same directory
+structure as that in $GTFREE/orig/sme.
 
 Convert only one file:
 
@@ -294,13 +287,13 @@ convert2xml *corpus/orig/sme
 If convert2xml is not able to convert a file these kinds of message will appear:
 
 ```
-/home/boerre/Dokumenter/corpus/freecorpus/orig/eng/admin/depts/regjeringen.no/calendar-for-the-ministry-of-children-an.html_id=308
+~/Dokumenter/corpus/freecorpus/orig/eng/admin/depts/regjeringen.no/calendar-for-the-ministry-of-children-an.html_id=308
 ```
 
 A log file will be found in
 
 ```
-/home/boerre/Dokumenter/corpus/freecorpus/orig/eng/admin/depts/regjeringen.no/calendar-for-the-ministry-of-children-an.html_id=308.log
+~/Dokumenter/corpus/freecorpus/orig/eng/admin/depts/regjeringen.no/calendar-for-the-ministry-of-children-an.html_id=308.log
 ```
 
 explaining what went wrong.
@@ -337,9 +330,6 @@ Analyse converted corpus files.
 
 analyse_corpus depends on these external programs:
 
-* preprocess (found in the Divvun/Giellatekno svn)
-* lookup2cg (found in the Divvun/Giellatekno svn)
-* lookup (from xfst)
 * vislcg3
 * hfst
 
@@ -347,25 +337,28 @@ analyse_corpus depends on these external programs:
 
 To be able to use this program you must either use the
 [nightly giella packages](https://giellalt.uit.no/infra/compiling_HFST3.html#The+simple+installation+%28you+download+ready-made+programs%29)
-or build the needed resources for the supported
-languages (exchange "sma" with "sme, smj" ad lib):
+or build the needed resources for the supported languages (exchange "sma" with
+"sme, smj" ad lib):
 
-{{cd $GTHOME/langs/sma}}
+{{cd $GTLANGS/langs-sma}}
 
-Configure the language, use at least these to options {{--prefix=$HOME/.local --with-hfst --enable-tokenisers}}
+Configure the language, use at least these to options `--prefix=$HOME/.local
+--enable-tokenisers`
 
 ```
-./configure --prefix=$HOME/.local --with-hfst --enable-tokenisers # add your own flags to taste
+./configure --prefix=$HOME/.local --enable-tokenisers # add your own flags to taste
 make install
 ```
 
-Then you must convert the corpus files as explained in the [convert2xml](#convert2xml) section.
+Then you must convert the corpus files as explained in the
+[convert2xml](#convert2xml) section.
 
 When this is done you can analyse all files in the directory
-$GTFREE/converted/sme (and sma, smj) and its subdirectories by issuing this command:
+$GTFREE/converted/sme (and sma, smj) and its subdirectories by issuing this
+command:
 
 ```
-analyse_corpus -k hfst sme$GTFREE/converted/sme
+analyse_corpus -k hfst sme $GTFREE/converted/sme
 ```
 
 The analysed file will be found in {{$GTFREE/analysed/sme}}
@@ -460,8 +453,8 @@ Gives the message:
 Added orig/nob/admin/sd/other_files/sametingets_ay-rsmelding_2013_-_norsk.pdf
 ```
 
-After this is done, you will have to commit the files to
-the working copy, like this:
+After this is done, you will have to commit the files to the working copy, like
+this:
 
 ```
 svn ci orig
@@ -469,36 +462,35 @@ svn ci orig
 
 ## parallelize
 
-Parallelize parallel corpus files, write the results to
-.tmx and .txm.html files.
+Parallelize parallel corpus files, write the results to .tmx and .txm.html
+files.
 
-NB! When debugging alignment, use [reparallelize](#reparallelize), it
-reconverts all files and realigns the file anew.
+NB! When debugging alignment, use [reparallelize](#reparallelize), it reconverts
+all files and realigns the file anew.
 
-parallelize depends on various files from the Divvun/Giellatekno SVN,
-at least the following directories need to exist in $GTHOME:
+parallelize depends on various files from the Divvun/Giellatekno SVN, at least
+the following directories need to exist in $GTHOME:
 
 * langs (specifically, the abbr.txt files)
 * gt/common
 * gt/script
 
-It also requires Java if you wish to use the default (included)
-alignment program TCA2. For convenience, a pre-compiled version of
-TCA2's alignment.jar-file is included in SVN and installed by
-CorpusTools, but if you have ant installed, you can recompile it by
-simply typing "ant" in corpustools/tca2.
+It also requires Java if you wish to use the default (included) alignment
+program TCA2. For convenience, a pre-compiled version of TCA2's
+alignment.jar-file is included in SVN and installed by CorpusTools, but if you
+have ant installed, you can recompile it by simply typing "ant" in
+corpustools/tca2.
 
-Alternatively, you can align with Hunalign, if you have that installed
-(or don't have Java). Hunalign is faster, and the quality is less
-dependent on predefined dictionaries (though it can use those as
-well). Neither system gives perfect alignments.
+Alternatively, you can align with Hunalign, if you have that installed (or don't
+have Java). Hunalign is faster, and the quality is less dependent on predefined
+dictionaries (though it can use those as well). Neither system gives perfect
+alignments.
 
-By default, it uses the $GTHOME/gt/common/src/anchor.txt file as an
-anchor dictionary for alignment. If your language pair is not in this
-dictionary, you can provide your own with the --dict argument. If you
-do not have a dictionary, you can use "--dict=<(echo)" to provide an
-"empty" dictionary – in this case, you should also use
-"--aligner=hunalign".
+By default, it uses the $GTHOME/gt/common/src/anchor.txt file as an anchor
+dictionary for alignment. If your language pair is not in this dictionary, you
+can provide your own with the --dict argument. If you do not have a dictionary,
+you can use "--dict=<(echo)" to provide an "empty" dictionary – in this case,
+you should also use "--aligner=hunalign".
 
 ### Compile dependencies
 
@@ -507,10 +499,8 @@ XXX is the iso code for the language you work with in $GTLANGS/lang-XXX:
 ```
     cd $GTLANGS/lang-XXX
     ./configure --prefix="$HOME"/.local \
-                --with-hfst \
                 --enable-tokenisers \
-                --enable-reversed-intersect \
-                --enable-alignment
+                --enable-reversed-intersect
     make
     make install
 ```
@@ -524,14 +514,11 @@ do
     ./configure --prefix="$HOME"/.local \
                 --with-hfst \
                 --enable-tokenisers \
-                --enable-reversed-intersect \
-                --enable-alignment
+                --enable-reversed-intersect
     make
     make install
 done
 ```
-
-(NOTE: {{--enable-abbrs}} was removed from the two .configure setups above, TT 201016)
 
 The complete help text from the program is as follows:
 ```
@@ -568,7 +555,8 @@ optional arguments:
 ```
 
 
-You run the program on the files created by convert2xml by running a command with the following syntax:
+You run the program on the files created by convert2xml by running a command
+with the following syntax:
 ```
 parallelize -l2 TARGET_LANGUAGE PATH/TO/THE/CONVERTED/SOURCE_LANGUAGE/FILE.xml
 ```
@@ -578,18 +566,16 @@ for instance, with nob as SOURCE_LANGUAGE and sma as TARGET_LANGUAGE
 parallelize -l2 sma converted/nob/admin/ntfk/tsaekeme.html.xml
 ```
 
-This will create a file named
-tmx/nob2sma/admin/ntfk/tsaekeme.html.tmx
+This will create a file named tmx/nob2sma/admin/ntfk/tsaekeme.html.tmx
 
-If you want to parallelize all your sma files with nob in one go, you
-can do e.g.
+If you want to parallelize all your sma files with nob in one go, you can do
+e.g.
 ```
 convert2xml orig/{sma,nob}
 parallelize -l2 sma converted/nob
 ```
 
-The files will end up in corresponding directories under
-tmx/nob2sma.
+The files will end up in corresponding directories under tmx/nob2sma.
 
 __CAVEAT 1__: ''If you get a message such as''
 
@@ -607,13 +593,14 @@ parallelize -l2 sma converted/nob/admin/ntfk/rup_2013_trykt_versjon.pdf.xml
 ERROR: /Users/xxx/gtsvn/langs/nob/tools/preprocess/tokeniser-gramcheck-gt-desc.pmhfst does not exist
 ```
 
-you have to recompile the language tool of the respective language (in the example above it is nob)
-with a different configuration, as in the following example with nob as language to recompile, have
-a look at the info above on how to [compile dependencies](#compile-dependencies)
+you have to recompile the language tool of the respective language (in the
+example above it is nob) with a different configuration, as in the following
+example with nob as language to recompile, have a look at the info above on how
+to [compile dependencies](#compile-dependencies)
 
-After that you can go back to the directory where you are working with the parallelizing files and
-try to parallelize the files anew. You might recompile the language tools for ALL the languages
-you are working with.
+After that you can go back to the directory where you are working with the
+parallelizing files and try to parallelize the files anew. You might recompile
+the language tools for ALL the languages you are working with.
 
 __CAVEAT 3__: ''If you get a message like''
 
@@ -633,8 +620,8 @@ Exception in thread "main" java.lang.UnsupportedClassVersionError: aksis/alignme
         at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
 ```
 
-then you need to recompile the Java parts and reinstall CorpusTools.
-Make sure you have Apache ant installed, then do:
+then you need to recompile the Java parts and reinstall CorpusTools. Make sure
+you have Apache ant installed, then do:
 
 ```
 cd $GTHOME/tools/CorpusTools/corpustools/tca2
@@ -672,7 +659,8 @@ optional arguments:
 
 ## pytextcat
 
-Pytextcat is an implementation of the "N-Gram-Based Text Categorization" algorithm.
+Pytextcat is an implementation of the "N-Gram-Based Text Categorization"
+algorithm.
 
 Original article:
 
@@ -767,8 +755,8 @@ optional arguments:
 ```
 usage: paracheck [-h] [-v] orig_dir
 
-Check the if the files in the parallel_text entries found in the metadata
-files exist
+Check the if the files in the parallel_text entries found in the metadata files
+exist
 
 positional arguments:
   orig_dir       The directory where the original corpus files are
