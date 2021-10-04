@@ -40,6 +40,7 @@ setup(
             "epubchooser = corpustools.epubchooser:main",
             "make_training_corpus = corpustools.trainingcorpusmaker:main",
             "tmx2html = corpustools.tmx:main",
+            "dropbox_adder = corpustools.dropbox_adder.tmx:main",
         ]
     },
     dependency_links=[
@@ -60,7 +61,6 @@ setup(
         "regex",
         "requests",
         "requests-mock",
-        "six",
         "testfixtures",
         "unidecode",
     ],
