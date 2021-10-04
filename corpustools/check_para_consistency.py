@@ -12,7 +12,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2015-2020 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2015-2021 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Check the consistency of the parallel entries in the metadata files."""
