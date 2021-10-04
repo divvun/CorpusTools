@@ -23,18 +23,14 @@ import argparse
 import cgi
 import os
 import shutil
-import sys
 
 import requests
-import six
 
 from corpustools import argparse_version, namechanger, util, versioncontrol, xslsetter
 
 
 class AdderError(Exception):
     """Raise this exception when errors happen in this module."""
-
-    pass
 
 
 def add_url_extension(filename, content_type):
@@ -49,8 +45,8 @@ def add_url_extension(filename, content_type):
         "text/plain": ".txt",
     }
 
-    for ct, extension in content_type_extension.items():
-        if ct in content_type and not filename.endswith(extension):
+    for name, extension in content_type_extension.items():
+        if name in content_type and not filename.endswith(extension):
             filename += extension
 
     return filename
@@ -86,8 +82,10 @@ class UrlDownloader:
         """
         self.download_dir = download_dir
         self.headers = {
-            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) "
-            "Gecko/20130331 Firefox/21.0"
+            "user-agent": (
+                "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) "
+                "Gecko/20130331 Firefox/21.0"
+            )
         }
 
     def download(self, url, wanted_name="", params=None):
@@ -99,11 +97,6 @@ class UrlDownloader:
             request = requests.get(url, headers=self.headers, params=params)
             if request.status_code == requests.codes.ok:
                 filename = wanted_name if wanted_name else url_to_filename(request)
-                if six.PY2 and isinstance(filename, str):
-                    try:
-                        filename = filename.decode("utf8")
-                    except UnicodeDecodeError:
-                        filename = filename.decode("latin1")
                 tmpname = os.path.join(self.download_dir, filename)
                 with util.ignored(OSError):
                     os.makedirs(self.download_dir)
@@ -111,8 +104,7 @@ class UrlDownloader:
                     tmpfile.write(request.content)
 
                 return (request, tmpname)
-            else:
-                raise AdderError("ERROR:", url, "does not exist")
+            raise AdderError("ERROR:", url, "does not exist")
         except requests.exceptions.MissingSchema as error:
             raise AdderError(str(error))
         except requests.exceptions.ConnectionError as error:
@@ -195,10 +187,6 @@ class AddToCorpus:
         Returns:
             str: path to where the origfile exists in the corpus
         """
-        if six.PY2 and isinstance(origpath, str):
-            origpath = unicode(origpath, "utf8")
-            metadata_filename = unicode(metadata_filename, "utf8")
-
         none_dupe_path = self.none_dupe_path(origpath)
         shutil.copy(origpath, none_dupe_path)
         self.additions.append(none_dupe_path)
