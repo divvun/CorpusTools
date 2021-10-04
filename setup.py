@@ -12,7 +12,7 @@ setup(
     packages=find_packages(),
     url="http://divvun.no",
     license="GPL v3.0",
-    long_description=open("README.jspwiki").read(),
+    long_description=open("README.md").read(),
     entry_points={
         "console_scripts": [
             "add_files_to_corpus = corpustools.adder:main",
