@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """Classes and functions to sentence align two files."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import os
 
@@ -29,7 +26,7 @@ from lxml import etree
 from corpustools import util
 
 
-class CorpusXMLFile(object):
+class CorpusXMLFile:
     """A class to handle all the info of a corpus xml file."""
 
     def __init__(self, name):
@@ -107,7 +104,7 @@ class CorpusXMLFile(object):
         if self.get_parallel_basename(paralang) is None:
             return None
         root, module, _, genre, subdirs, _ = util.split_path(self.name)
-        parallel_basename = "{}.xml".format(self.get_parallel_basename(paralang))
+        parallel_basename = f"{self.get_parallel_basename(paralang)}.xml"
         if parallel_basename == ".xml":
             raise NameError("Parallel is empty")
 

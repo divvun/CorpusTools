@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -58,9 +56,9 @@ class TestPlaintextConverter(xmltester.XMLTester):
         """Check that weird chars are converted as exptected."""
         plaintext = plaintextconverter.PlaintextConverter("orig/sme/riddu/tullball.txt")
         got = plaintext.strip_chars(
-            u"\x0d\n" u"<ASCII-MAC>\n" u"<vsn:3.000000>\n" u"<\!q>\n" u"<\!h>\n"
+            "\x0d\n" "<ASCII-MAC>\n" "<vsn:3.000000>\n" "<\\!q>\n" "<\\!h>\n"
         )
-        want = u"""\n\n\n\n\n\n"""
+        want = """\n\n\n\n\n\n"""
 
         self.assertEqual(got, want)
 
@@ -68,10 +66,10 @@ class TestPlaintextConverter(xmltester.XMLTester):
         """Check that special chars are converted as expected."""
         plaintext = plaintextconverter.PlaintextConverter("orig/sme/riddu/tullball.txt")
         got = plaintext.strip_chars(
-            u"<0x010C><0x010D><0x0110><0x0111><0x014A><0x014B><0x0160><0x0161>"
-            u"<0x0166><0x0167><0x017D><0x017E><0x2003>"
+            "<0x010C><0x010D><0x0110><0x0111><0x014A><0x014B><0x0160><0x0161>"
+            "<0x0166><0x0167><0x017D><0x017E><0x2003>"
         )
-        want = u"""ČčĐđŊŋŠšŦŧŽž """
+        want = """ČčĐđŊŋŠšŦŧŽž """
 
         self.assertEqual(got, want)
 
@@ -80,7 +78,7 @@ class TestPlaintextConverter(xmltester.XMLTester):
         plaintext = plaintextconverter.PlaintextConverter("orig/sme/riddu/tullball.txt")
         got = plaintext.content2xml(
             io.StringIO(
-                u"""Sámegiella.
+                """Sámegiella.
 
 Buot leat."""
             )
@@ -107,13 +105,13 @@ Buot leat."""
         newstext = plaintextconverter.PlaintextConverter("orig/sme/admin/tullball.txt")
         got = newstext.content2xml(
             io.StringIO(
-                u"""Guovssahasa nieida.
+                """Guovssahasa nieida.
 Filbma lea.
 """
             )
         )
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p>Guovssahasa nieida.
@@ -128,9 +126,9 @@ Filbma lea.</p>
     def test_hyph(self):
         """Check that hyph is conserved."""
         newstext = plaintextconverter.PlaintextConverter("orig/sme/riddu/tullball.txt")
-        got = newstext.content2xml(io.StringIO(u"Guovssa<hyph/>hasa"))
+        got = newstext.content2xml(io.StringIO("Guovssa<hyph/>hasa"))
         want = etree.fromstring(
-            u"""
+            """
             <document>
             <header/>
             <body>
@@ -143,7 +141,7 @@ Filbma lea.</p>
 
     def test_skip_lines(self):
         """Check that lines are skipped."""
-        content = u"""
+        content = """
 a
 
 b
@@ -154,7 +152,7 @@ d
 
 e
 """
-        want_string = u"""
+        want_string = """
 <document>
     <header/>
     <body>

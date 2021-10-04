@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -24,7 +23,6 @@ non official standards and have been converted to the various systems'
 internal encodings. This module has functions that revert the damage
 done.
 """
-from __future__ import absolute_import, print_function
 
 import six
 
@@ -48,7 +46,7 @@ def fix_macsami_cp1252(instring):
         str with fixed encoding.
     """
     bytestring = instring.encode("1252", errors="xmlcharrefreplace")
-    encoded_unicode = bytestring.decode("macsami").replace(u"&#129;", u"Å")
+    encoded_unicode = bytestring.decode("macsami").replace("&#129;", "Å")
     return encoded_unicode
 
 
@@ -78,7 +76,7 @@ def fix_macsami_mac(instring):
         str with fixed encoding.
     """
     bytestring = instring.encode("macroman", "xmlcharrefreplace")
-    encoded_string = bytestring.decode("macsami").replace(u"&#8486;", u"ž")
+    encoded_string = bytestring.decode("macsami").replace("&#8486;", "ž")
 
     return encoded_string
 
@@ -109,11 +107,11 @@ def fix_meadowmari_cp1252(instring):
         str with fixed encoding.
     """
     mari_replacements = [
-        (u"&#1118;", u"ӱ"),  # xml char ref CYRILLIC SMALL LETTER SHORT U
-        (u"&#1038;", u"Ӱ"),  # xml char ref CYRILLIC CAPITAL LETTER SHORT U
-        (u"Ў", u"Ӱ"),
-        (u"&#1108;", u"ӧ"),  # xml char ref CYRILLIC SMALL LETTER UKRAINIAN IE
-        (u"&#1028;", u"Ӧ"),  # xml char ref CYRILLIC CAPITAL LETTER UKRAINIAN IE
+        ("&#1118;", "ӱ"),  # xml char ref CYRILLIC SMALL LETTER SHORT U
+        ("&#1038;", "Ӱ"),  # xml char ref CYRILLIC CAPITAL LETTER SHORT U
+        ("Ў", "Ӱ"),
+        ("&#1108;", "ӧ"),  # xml char ref CYRILLIC SMALL LETTER UKRAINIAN IE
+        ("&#1028;", "Ӧ"),  # xml char ref CYRILLIC CAPITAL LETTER UKRAINIAN IE
     ]
 
     return util.replace_all(
@@ -123,119 +121,119 @@ def fix_meadowmari_cp1252(instring):
 
 
 CTYPES = {
-    u"mix-mac-sami-and-some-unknown-encoding": {
-        u"": u"á",  # 0x87, á in macsami, same as in macsami->latin1
-        u"_": u"š",  # 0x5F, LOW LINE in macsami, winsami2, ir197, ir209
-        u"ã": u"č",  # 0xE3, a with tilde in macsami, winsami2, ir197, ir209
-        u"÷": u"đ",  # 0xF7, division sign in macsami
-        u"À": u"ž",
-        u"ç": u"Á",  # macsami -> cp1252
-        u"â": u"Č",  # 0xE2
-        u"¼": u"ŧ",  # winsami2 -> cp1252
-        u"¿": u"ø",  # macsami -> latin1, macsami -> cp1252
+    "mix-mac-sami-and-some-unknown-encoding": {
+        "": "á",  # 0x87, á in macsami, same as in macsami->latin1
+        "_": "š",  # 0x5F, LOW LINE in macsami, winsami2, ir197, ir209
+        "ã": "č",  # 0xE3, a with tilde in macsami, winsami2, ir197, ir209
+        "÷": "đ",  # 0xF7, division sign in macsami
+        "À": "ž",
+        "ç": "Á",  # macsami -> cp1252
+        "â": "Č",  # 0xE2
+        "¼": "ŧ",  # winsami2 -> cp1252
+        "¿": "ø",  # macsami -> latin1, macsami -> cp1252
     },
     # latin4 as cp1252/latin1
     # á, æ, å, ø, ö, ä appear as themselves
-    u"latin4_to_cp1252": {
-        u"á": u"á",
-        u"¹": u"š",
-        u"è": u"č",
-        u"ð": u"đ",
-        u"¾": u"ž",
-        u"¿": u"ŋ",
-        u"Á": u"Á",
-        u"È": u"Č",
-        u"¼": u"ŧ",
-        u"©": u"Š",
-        u"Ð": u"Đ",  # U+00D0 to U+0110
-        u"½": u"Ŋ",
-        u"®": u"Ž",
-        u"¬": u"Ŧ",
+    "latin4_to_cp1252": {
+        "á": "á",
+        "¹": "š",
+        "è": "č",
+        "ð": "đ",
+        "¾": "ž",
+        "¿": "ŋ",
+        "Á": "Á",
+        "È": "Č",
+        "¼": "ŧ",
+        "©": "Š",
+        "Ð": "Đ",  # U+00D0 to U+0110
+        "½": "Ŋ",
+        "®": "Ž",
+        "¬": "Ŧ",
     },
     # winsam as cp1252
-    u"winsam_to_cp1252": {
-        u"á": u"á",
-        u"ó": u"š",
-        u"ç": u"č",
-        u"ð": u"đ",
-        u"þ": u"ž",
-        u"ñ": u"ŋ",
-        u"Á": u"Á",
-        u"Ç": u"Č",
-        u"ý": u"ŧ",
-        u"Ó": u"Š",
-        u"Ð": u"Đ",  # U+00D0 to U+0110
-        u"Ñ": u"Ŋ",
-        u"Þ": u"Ž",
-        u"Ý": u"Ŧ",
+    "winsam_to_cp1252": {
+        "á": "á",
+        "ó": "š",
+        "ç": "č",
+        "ð": "đ",
+        "þ": "ž",
+        "ñ": "ŋ",
+        "Á": "Á",
+        "Ç": "Č",
+        "ý": "ŧ",
+        "Ó": "Š",
+        "Ð": "Đ",  # U+00D0 to U+0110
+        "Ñ": "Ŋ",
+        "Þ": "Ž",
+        "Ý": "Ŧ",
     },
     # iso-ir-197 converted as iconv -f latin1/cp1252 -t utf8
     # á, æ, å, ø, ö, ä appear as themselves
-    u"iso-ir-197_to_cp1252": {
-        u"á": u"á",
-        u"³": u"š",
-        u"¢": u"č",
-        u"¤": u"đ",
-        u"º": u"ž",
-        u"±": u"ŋ",
-        u"Á": u"Á",
-        u"¡": u"Č",
-        u"¸": u"ŧ",
-        u"²": u"Š",
-        u"£": u"Đ",
-        u"¯": u"Ŋ",
-        u"¹": u"Ž",
-        u"µ": u"Ŧ",
+    "iso-ir-197_to_cp1252": {
+        "á": "á",
+        "³": "š",
+        "¢": "č",
+        "¤": "đ",
+        "º": "ž",
+        "±": "ŋ",
+        "Á": "Á",
+        "¡": "Č",
+        "¸": "ŧ",
+        "²": "Š",
+        "£": "Đ",
+        "¯": "Ŋ",
+        "¹": "Ž",
+        "µ": "Ŧ",
     },
-    u"mix-of-latin4-and-iso-ir-197_to_cp1252": {
-        u"á": u"á",
-        u"ó": u"š",
-        u"ç": u"č",
-        u"¤": u"đ",
-        u"º": u"ž",
-        u"Á": u"Á",
-        u"Ç": u"Č",
-        u"Ó": u"Š",
-        u"£": u"Đ",
+    "mix-of-latin4-and-iso-ir-197_to_cp1252": {
+        "á": "á",
+        "ó": "š",
+        "ç": "č",
+        "¤": "đ",
+        "º": "ž",
+        "Á": "Á",
+        "Ç": "Č",
+        "Ó": "Š",
+        "£": "Đ",
     },
-    u"double-utf8": {
-        u"Ã¡": u"á",
-        u"Ã?": u"Á",
-        u"Å¡": u"š",
-        u"Â¹": u"š",
-        u"Å ": u"Š",
-        u"Å§": u"ŧ",
-        u"Å‹": u"ŋ",
-        u"ÅŠ": u"Ŋ",
-        u"Ä‘": u"đ",
-        u"Ã°": u"đ",
-        u"Å¾": u"ž",
-        u"Âº": u"ž",
-        u"Å½": u"Ž",
-        u"Ä?": u"č",
-        u"Ã¨": u"č",
-        u"ÄŒ": u"Č",
-        u"Ã¦": u"æ",
-        u"Ã¸": u"ø",
-        u"Ã˜": u"Ø",
-        u"Ã¥": u"å",
-        u"Ã…": u"Å",
-        u"Ã¤": u"ä",
-        u"Ã„": u"Ä",
-        u"Ã¶": u"ö",
-        u"â€œ": u"“",
-        u"â€?": u"”",
-        u"â€“": u"–",
-        u"Â«": u"«",
-        u"â‰¤": u"«",
-        u"Â»": u"»",
-        u"â‰¥": u"»",
-        u"Â´": u"´",
-        u"â€¢": u"•",
+    "double-utf8": {
+        "Ã¡": "á",
+        "Ã?": "Á",
+        "Å¡": "š",
+        "Â¹": "š",
+        "Å ": "Š",
+        "Å§": "ŧ",
+        "Å‹": "ŋ",
+        "ÅŠ": "Ŋ",
+        "Ä‘": "đ",
+        "Ã°": "đ",
+        "Å¾": "ž",
+        "Âº": "ž",
+        "Å½": "Ž",
+        "Ä?": "č",
+        "Ã¨": "č",
+        "ÄŒ": "Č",
+        "Ã¦": "æ",
+        "Ã¸": "ø",
+        "Ã˜": "Ø",
+        "Ã¥": "å",
+        "Ã…": "Å",
+        "Ã¤": "ä",
+        "Ã„": "Ä",
+        "Ã¶": "ö",
+        "â€œ": "“",
+        "â€?": "”",
+        "â€“": "–",
+        "Â«": "«",
+        "â‰¤": "«",
+        "Â»": "»",
+        "â‰¥": "»",
+        "Â´": "´",
+        "â€¢": "•",
     },
-    u"finnish-lawtexts-in-pdf": {
-        u"þ": u"č",
-        u"á": u"á",
+    "finnish-lawtexts-in-pdf": {
+        "þ": "č",
+        "á": "á",
     },
     "cyrillic_in_pdf": {
         #  '_': 'Ҥ',
@@ -346,38 +344,38 @@ def guess_body_encoding(content, mainlang):
     encoding is found
     """
     winner = None
-    if u"ì" in content and u"ò" in content and mainlang in CYRILLIC_LANGUAGES:
+    if "ì" in content and "ò" in content and mainlang in CYRILLIC_LANGUAGES:
         winner = "cyrillic_in_pdf"
-    elif u"à" in content and u"û" in content and mainlang in CYRILLIC_LANGUAGES:
-        winner = u"cp1251_cp1252"
-    elif (u"‡" in content and u"ã" not in content) or (
-        u"Œ" in content and u"ÄŒ" not in content
+    elif "à" in content and "û" in content and mainlang in CYRILLIC_LANGUAGES:
+        winner = "cp1251_cp1252"
+    elif ("‡" in content and "ã" not in content) or (
+        "Œ" in content and "ÄŒ" not in content
     ):
-        winner = u"mac-sami_to_cp1252"
+        winner = "mac-sami_to_cp1252"
     elif (
-        (u"" in content and u"ã" not in content)
-        or (u"" in content)
-        or (u"¯" in content and u"á" not in content)
+        ("" in content and "ã" not in content)
+        or ("" in content)
+        or ("¯" in content and "á" not in content)
     ):
-        winner = u"mac-sami_to_latin1"
-    elif u"" in content and u"ã":
-        winner = u"mix-mac-sami-and-some-unknown-encoding"
-    elif u"³" in content and u"¢" in content and u"¤" in content:
-        winner = u"iso-ir-197_to_cp1252"
-    elif u"á" in content and (u"ª" in content or u"∫" in content):
-        winner = u"mac-sami_to_mac"
-    elif u"ó" in content and u"ç" in content and u"ð" in content:
-        winner = u"winsam_to_cp1252"
-    elif u"á" in content and u"è" in content and u"ð" in content:
-        winner = u"latin4_to_cp1252"
-    elif u"ó" in content and u"ç" in content and u"¤" in content:
-        winner = u"mix-of-latin4-and-iso-ir-197_to_cp1252"
-    elif u"„" in content and (u"˜" in content or u"¹" in content):
-        winner = u"winsami2_to_cp1252"
-    elif u"þ" in content and u"š" in content and u"á" in content:
-        winner = u"finnish-lawtexts-in-pdf"
-    elif u"Ã¡" in content:
-        winner = u"double-utf8"
+        winner = "mac-sami_to_latin1"
+    elif "" in content and "ã":
+        winner = "mix-mac-sami-and-some-unknown-encoding"
+    elif "³" in content and "¢" in content and "¤" in content:
+        winner = "iso-ir-197_to_cp1252"
+    elif "á" in content and ("ª" in content or "∫" in content):
+        winner = "mac-sami_to_mac"
+    elif "ó" in content and "ç" in content and "ð" in content:
+        winner = "winsam_to_cp1252"
+    elif "á" in content and "è" in content and "ð" in content:
+        winner = "latin4_to_cp1252"
+    elif "ó" in content and "ç" in content and "¤" in content:
+        winner = "mix-of-latin4-and-iso-ir-197_to_cp1252"
+    elif "„" in content and ("˜" in content or "¹" in content):
+        winner = "winsami2_to_cp1252"
+    elif "þ" in content and "š" in content and "á" in content:
+        winner = "finnish-lawtexts-in-pdf"
+    elif "Ã¡" in content:
+        winner = "double-utf8"
 
     return winner
 
@@ -393,7 +391,7 @@ def default_decoder(position, text):
         str
     """
     if position is not None:
-        for key, value in six.iteritems(CTYPES[position]):
+        for key, value in CTYPES[position].items():
             text = text.replace(key, value)
 
     return text

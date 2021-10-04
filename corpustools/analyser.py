@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """Classes and functions to do syntactic analysis on giellatekno xml docs."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import multiprocessing
@@ -32,7 +29,7 @@ import lxml.etree as etree
 from corpustools import argparse_version, ccat, corpusxmlfile, modes, util
 
 
-class Analyser(object):
+class Analyser:
     """This class makes a dependency analysis of giella xml files.
 
     Attributes:
@@ -80,7 +77,7 @@ class Analyser(object):
         if text:
             return text
         else:
-            raise UserWarning("Empty file {}".format(self.xml_file.name))
+            raise UserWarning(f"Empty file {self.xml_file.name}")
 
     def dependency_analysis(self):
         """Insert disambiguation and dependency analysis into the body."""
@@ -100,7 +97,7 @@ class Analyser(object):
         try:
             self.xml_file = corpusxmlfile.CorpusXMLFile(xml_file)
             analysis_xml_name = self.xml_file.name.replace(
-                "converted/", "analysed/{}/".format(self.modename)
+                "converted/", f"analysed/{self.modename}/"
             )
 
             if self.xml_file.ocr is None:
@@ -130,7 +127,7 @@ class Analyser(object):
 
     def analyse_serially(self):
         """Analyse files one by one."""
-        print("Starting the analysis of {} files".format(len(self.xml_files)))
+        print(f"Starting the analysis of {len(self.xml_files)} files")
 
         fileno = 0
         for xml_file in self.xml_files:
@@ -210,7 +207,7 @@ def main():
                 ana.analyse_in_parallel()
         except util.ArgumentError as error:
             print(
-                "Cannot do analysis for {}\n{}".format(args.lang, str(error)),
+                f"Cannot do analysis for {args.lang}\n{str(error)}",
                 file=sys.stderr,
             )
             sys.exit(1)

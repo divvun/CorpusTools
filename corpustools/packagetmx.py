@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
 #
 """Add tmx files to a zipfile."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import os
@@ -27,7 +24,7 @@ import time
 import zipfile
 
 
-class PackageTmx(object):
+class PackageTmx:
     """A class to package tmx files into a zip file."""
 
     def __init__(self, dirname):
@@ -58,7 +55,7 @@ class PackageTmx(object):
     def generate_filename(self):
         """Generate a new file name. Return the new filename."""
         name = "".join(
-            [self.dirname, "-", self.date, "-{0:06d}".format(self.fileId), ".tmx"]
+            [self.dirname, "-", self.date, f"-{self.fileId:06d}", ".tmx"]
         )
         self.fileId += 1
 

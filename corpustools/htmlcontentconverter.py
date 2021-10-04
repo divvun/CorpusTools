@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -17,7 +15,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-u"""Convert html content to the Giella xml format."""
+"""Convert html content to the Giella xml format."""
 
 import os
 
@@ -57,7 +55,7 @@ def to_html_elt(path):
     return chooser[os.path.splitext(path)[1]](path)
 
 
-class HTMLBeautifier(object):
+class HTMLBeautifier:
     """Convert html documents to the Giella xml format."""
 
     def __init__(self, html_elt):
@@ -118,14 +116,14 @@ class HTMLBeautifier(object):
             str: The content of the document without the cruft.
         """
         replacements = [
-            (u"//<script", u"<script"),
-            (u"&nbsp;", u" "),
-            (u" ", u" "),
+            ("//<script", "<script"),
+            ("&nbsp;", " "),
+            (" ", " "),
         ]
         return util.replace_all(replacements, content)
 
     def simplify_tags(self):
-        u"""Turn tags to divs.
+        """Turn tags to divs.
 
         We don't care about the difference between <fieldsets>, <legend>
         etc. – treat them all as <div>'s for xhtml2corpus
@@ -556,10 +554,10 @@ class HTMLBeautifier(object):
         }
 
         namespace = {"html": "http://www.w3.org/1999/xhtml"}
-        for tag, attribs in six.iteritems(unwanted_classes_ids):
-            for key, values in six.iteritems(attribs):
+        for tag, attribs in unwanted_classes_ids.items():
+            for key, values in attribs.items():
                 for value in values:
-                    search = './/{}[@{}="{}"]'.format(tag, key, value)
+                    search = f'.//{tag}[@{key}="{value}"]'
                     for unwanted in self.soup.xpath(search, namespaces=namespace):
                         unwanted.getparent().remove(unwanted)
 
@@ -593,7 +591,7 @@ class HTMLBeautifier(object):
     def body_i(self):
         """Wrap bare elements inside a p element."""
         for tag in ["a", "i", "em", "u", "strong", "span"]:
-            for body_tag in self.soup.xpath(".//body/{}".format(tag)):
+            for body_tag in self.soup.xpath(f".//body/{tag}"):
                 paragraph = etree.Element("p")
                 bi_parent = body_tag.getparent()
                 bi_parent.insert(bi_parent.index(body_tag), paragraph)

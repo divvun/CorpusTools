@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -37,4 +35,4 @@ def to_html_elt(filename):
     try:
         return html.document_fromstring(odhandler.odf2xhtml(filename))
     except TypeError as error:
-        raise util.ConversionError("Error: {}".format(error))
+        raise util.ConversionError(f"Error: {error}")

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -50,7 +48,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
         return content
 
     @staticmethod
-    def strip_chars(content, extra=u""):
+    def strip_chars(content, extra=""):
         """Remove the characters found in plaintext_oddities from content.
 
         Args:
@@ -62,36 +60,36 @@ class PlaintextConverter(basicconverter.BasicConverter):
             A string containing the content sans unwanted characters.
         """
         plaintext_oddities = [
-            (u"ÊÊ", u"\n"),
-            (u"<\!q>", u""),
-            (u"<\!h>", u""),
-            (u"<*B>", u""),
-            (u"<*P>", u""),
-            (u"<*I>", u""),
-            (u"\r", u"\n"),
-            (u"<ASCII-MAC>", ""),
-            (u"<vsn:3.000000>", u""),
-            (u"<0x010C>", u"Č"),
-            (u"<0x010D>", u"č"),
-            (u"<0x0110>", u"Đ"),
-            (u"<0x0111>", u"đ"),
-            (u"<0x014A>", u"Ŋ"),
-            (u"<0x014B>", u"ŋ"),
-            (u"<0x0160>", u"Š"),
-            (u"<0x0161>", u"š"),
-            (u"<0x0166>", u"Ŧ"),
-            (u"<0x0167>", u"ŧ"),
-            (u"<0x017D>", u"Ž"),
-            (u"<0x017E>", u"ž"),
-            (u"<0x2003>", u" "),
+            ("ÊÊ", "\n"),
+            (r"<\!q>", ""),
+            (r"<\!h>", ""),
+            ("<*B>", ""),
+            ("<*P>", ""),
+            ("<*I>", ""),
+            ("\r", "\n"),
+            ("<ASCII-MAC>", ""),
+            ("<vsn:3.000000>", ""),
+            ("<0x010C>", "Č"),
+            ("<0x010D>", "č"),
+            ("<0x0110>", "Đ"),
+            ("<0x0111>", "đ"),
+            ("<0x014A>", "Ŋ"),
+            ("<0x014B>", "ŋ"),
+            ("<0x0160>", "Š"),
+            ("<0x0161>", "š"),
+            ("<0x0166>", "Ŧ"),
+            ("<0x0167>", "ŧ"),
+            ("<0x017D>", "Ž"),
+            ("<0x017E>", "ž"),
+            ("<0x2003>", " "),
             (
-                u"========================================================"
+                "========================================================"
                 "========================",
-                u"\n",
+                "\n",
             ),
         ]
         content = util.replace_all(plaintext_oddities, content)
-        remove_re = re.compile(u"[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]".format(extra))
+        remove_re = re.compile(f"[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{extra}]")
         content, _ = remove_re.subn("", content)
 
         return content

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """Classes and functions to make corpus training files."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import io
@@ -33,7 +30,7 @@ import regex
 from corpustools import argparse_version, ccat, util
 
 
-class TrainingCorpusMaker(object):
+class TrainingCorpusMaker:
     """Turn analysed giella xml files into training corpus.
 
     Filter out all sentences containing words unknown to the
@@ -146,7 +143,7 @@ class TrainingCorpusMaker(object):
             os.makedirs(corpus_dir)
 
         with open(
-            "{}.txt".format(os.path.join(corpus_dir, self.lang)), "w"
+            f"{os.path.join(corpus_dir, self.lang)}.txt", "w"
         ) as corpusfile:
             for analysed_file in self.analysed_files():
                 if analysed_file.endswith(".txt"):

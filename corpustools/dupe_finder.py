@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -22,7 +20,6 @@
 The classes work on converted files.
 """
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import collections
@@ -36,7 +33,7 @@ import six
 from corpustools import argparse_version, ccat, corpuspath, move_files, util
 
 
-class DupeFinder(object):
+class DupeFinder:
     """Handle duplicates in the corpus."""
 
     def __init__(self, directory):
@@ -155,8 +152,8 @@ class DupeFinder(object):
         wrong_ratio = 0
         good_ratio = 0
         checked_files = collections.defaultdict(set)
-        for filename1 in six.iterkeys(self.files):
-            for filename2 in six.iterkeys(self.files):
+        for filename1 in self.files.keys():
+            for filename2 in self.files.keys():
                 if filename1 != filename2 and filename1 not in checked_files[filename2]:
                     if self.good_word_ratio(filename1, filename2):
                         good_ratio += 1

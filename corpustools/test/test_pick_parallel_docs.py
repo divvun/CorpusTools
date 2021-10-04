@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """Test the ParallelPicker class."""
 
-from __future__ import absolute_import, print_function
 
 import glob
 import os
@@ -33,7 +30,7 @@ from corpustools import corpusxmlfile, pick_parallel_docs
 
 HERE = os.path.dirname(__file__)
 
-ARTICLE47_SME = u"""<?xml version="1.0" encoding="UTF-8"?>
+ARTICLE47_SME = """<?xml version="1.0" encoding="UTF-8"?>
 <document id="no_id" xml:lang="sme">
   <header>
     <translated_from xml:lang="nob"/>
@@ -47,7 +44,7 @@ ARTICLE47_SME = u"""<?xml version="1.0" encoding="UTF-8"?>
 </document>
 """
 
-ARTICLE47_NOB = u"""<?xml version="1.0" encoding="UTF-8"?>
+ARTICLE47_NOB = """<?xml version="1.0" encoding="UTF-8"?>
 <document id="no_id" xml:lang="nob">
   <header>
     <wordcount>209</wordcount>
@@ -60,7 +57,7 @@ ARTICLE47_NOB = u"""<?xml version="1.0" encoding="UTF-8"?>
 </document>
 """
 
-ARTICLE47_SMJ = u"""<?xml version="1.0" encoding="UTF-8"?>
+ARTICLE47_SMJ = """<?xml version="1.0" encoding="UTF-8"?>
 <document id="no_id" xml:lang="smj">
   <header>
     <wordcount>209</wordcount>

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -19,7 +17,6 @@
 #
 """Convert doc files to the Giella xml format."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import re
 
@@ -193,8 +190,8 @@ def extract_text(filename):
 
     if runner.returncode != 0:
         with open(filename + ".log", "w") as logfile:
-            print("stdout\n{}\n".format(runner.stdout), file=logfile)
-            print("stderr\n{}\n".format(runner.stderr), file=logfile)
+            print(f"stdout\n{runner.stdout}\n", file=logfile)
+            print(f"stderr\n{runner.stderr}\n", file=logfile)
             raise util.ConversionError(
                 "{} failed. More info in the log file: {}".format(
                     command[0], filename + ".log"

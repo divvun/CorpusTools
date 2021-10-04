@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -22,7 +20,6 @@
 Mainly used to debug the input to the converter.HTMLContentConverter.
 """
 
-from __future__ import absolute_import
 
 import argparse
 

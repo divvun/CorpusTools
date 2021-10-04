@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -439,8 +437,7 @@ class TestSamediggiNoPage(unittest.TestCase):
             self.assertEqual(page.lang, "sme")
             self.assertSetEqual(
                 page.links,
-                set(
-                    [
+                {
                         "https://samediggi.no/Balvalusat2/Dearvvasvuohta-ja-sosiala",
                         "https://samediggi.no/Vuoigatvuodat",
                         "https://samediggi.no/Samedikki-birra2/Rehket-Samediggai",
@@ -463,8 +460,7 @@ class TestSamediggiNoPage(unittest.TestCase):
                         "https://samediggi.no/Girjeradju",
                         "https://samediggi.no/Balvalusat2/Biras-areala-ja-kultursuodjaleapmi",
                         "https://samediggi.no/Balvalusat2/Manaidgardi",
-                    ]
-                ),
+                },
             )
 
             page.set_initial_metadata()

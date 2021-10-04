@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 #
 #   Program to pick out documents to be saved to the corpus from samediggi.se
@@ -27,7 +26,6 @@
 The documents have been fetched using wget.
 """
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import os
 import shutil
@@ -38,7 +36,7 @@ import urllib2
 from corpustools import util, xslsetter
 
 
-class DocumentPicker(object):
+class DocumentPicker:
     """Pick documents from samediggi.se to be added to the corpus."""
 
     def __init__(self, source_dir):

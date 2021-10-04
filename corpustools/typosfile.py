@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -21,7 +20,7 @@
 """Classes to handle .typos files in $GTFREE."""
 
 
-class Typoline(object):
+class Typoline:
     """Class to parse a line of a .typos file"""
 
     def __init__(self, typoline):
@@ -52,12 +51,12 @@ class Typoline(object):
         """Make a typoline from the three data parts in this class"""
         result = self.typo
         if self.correction and self.correction != self.typo:
-            result = "{}\t{}".format(result, self.correction)
+            result = f"{result}\t{self.correction}"
 
         return result
 
 
-class Typos(object):
+class Typos:
     """A class that reads typos and corrections from a .typos files"""
 
     def __init__(self, typosfile):

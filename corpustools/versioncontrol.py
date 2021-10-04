@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """Classes and functions to change names of corpus files."""
 
-from __future__ import absolute_import, print_function
 
 import getpass
 import os
@@ -36,7 +33,7 @@ class VersionControlError(Exception):
     pass
 
 
-class VersionController(object):
+class VersionController:
     """A very basic version control class."""
 
     def __init__(self):
@@ -87,7 +84,7 @@ class SVN(VersionController):
             svnclient (pysvn.Client): an svn client to control the
                 working copy.
         """
-        super(SVN, self).__init__()
+        super().__init__()
         self.client = svnclient
 
     def add_path(self, path):
@@ -171,7 +168,7 @@ class GIT(VersionController):
         Args:
             gitrepo (git.Repo): client to control the git repo
         """
-        super(GIT, self).__init__()
+        super().__init__()
         self.gitrepo = gitrepo
         self.config = self.gitrepo.config_reader()
 

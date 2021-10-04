@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """Test the XslMaker class."""
 
-from __future__ import absolute_import
 
 import os
 
@@ -51,7 +48,7 @@ class TestXslMaker(XMLTester):
         )
         self.assertTrue(import_elt.attrib["href"].startswith("file:///"))
         self.assertTrue(import_elt.attrib["href"].endswith("common.xsl"))
-        with open(import_elt.attrib["href"][7:].replace("%20", " "), "r") as xsl:
+        with open(import_elt.attrib["href"][7:].replace("%20", " ")) as xsl:
             self.assertGreater(len(xsl.read()), 0)
         # ... and set it to the hardcoded path in test.xsl:
         import_elt.attrib["href"] = (

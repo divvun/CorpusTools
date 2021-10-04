@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
 #
 """Classes and functions to clean the prestable directories."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import os
@@ -77,8 +74,8 @@ def main():
             corpus_file = corpuspath.CorpusPath(prestable_path)
             if not os.path.exists(corpus_file.orig):
                 counter["prestable"] += 1
-                print("Removing {}".format(prestable_path))
-                print("Orig was {}".format(corpus_file.orig))
+                print(f"Removing {prestable_path}")
+                print(f"Orig was {corpus_file.orig}")
                 try:
                     vcs.remove(prestable_path)
                 except git.exc.GitCommandError:
@@ -87,7 +84,7 @@ def main():
                             corpus_file.prestable_converted
                         )
                     )
-                    util.note("Orig was {}\n".format(prestable_path))
+                    util.note(f"Orig was {prestable_path}\n")
 
     for key in counter.keys():
-        print("Removed {} files from prestable".format(counter[key]))
+        print(f"Removed {counter[key]} files from prestable")

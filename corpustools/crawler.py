@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """This file contains routines to crawl sites containing saami text."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import os
 import sys
@@ -30,12 +27,12 @@ import six
 from corpustools import adder, namechanger, util
 
 
-class Crawler(object):
+class Crawler:
     """A base class to save downloaded files to the corpus."""
 
     def __init__(self):
         """Initialise the Crawler class."""
-        self.goaldir = six.text_type(os.getenv("GTFREE"))
+        self.goaldir = str(os.getenv("GTFREE"))
         self.unvisited_links = set()
         self.visited_links = set()
         self.download_links = set()
@@ -44,7 +41,7 @@ class Crawler(object):
 
     def __del__(self):
         """Add all files to the corpus."""
-        for (_, corpus_adder) in six.iteritems(self.corpus_adders):
+        for (_, corpus_adder) in self.corpus_adders.items():
             corpus_adder.add_files_to_working_copy()
 
     def save_pages(self, pages):
@@ -71,7 +68,7 @@ class Crawler(object):
                     parallelpath = self.corpus_adders[lang].copy_file_to_corpus(
                         tmpname, url, parallelpath=parallelpath
                     )
-                    util.print_frame(debug="adding {}".format(parallelpath))
+                    util.print_frame(debug=f"adding {parallelpath}")
                 else:
                     parallelpath = normalised_path
         print(file=sys.stderr)

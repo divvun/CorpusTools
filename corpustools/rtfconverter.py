@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -17,7 +15,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-u"""Convert rtf files to the Giella xml format."""
+"""Convert rtf files to the Giella xml format."""
 
 import io
 
@@ -51,4 +49,4 @@ def to_html_elt(filename):
                 str(XHTMLWriter.write(pyth_doc, pretty=True).read(), encoding="utf8")
             )
         except UnicodeDecodeError:
-            raise RTFError("Unicode problems in {}".format(filename.orig))
+            raise RTFError(f"Unicode problems in {filename.orig}")

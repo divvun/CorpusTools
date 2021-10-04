@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
 #
 """Get and set metadata in metadata files."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import os
 import re
@@ -39,7 +36,7 @@ class XsltError(Exception):
     pass
 
 
-class MetadataHandler(object):
+class MetadataHandler:
     """Class to handle metadata in .xsl files.
 
     This class makes the xsl file
@@ -72,13 +69,13 @@ class MetadataHandler(object):
 
         if not os.path.exists(filename):
             if not create:
-                raise util.ArgumentError("{} does not exist!".format(filename))
+                raise util.ArgumentError(f"{filename} does not exist!")
             self.tree = etree.parse(os.path.join(here, "xslt/XSL-template.xsl"))
         else:
             try:
                 self.tree = etree.parse(filename)
             except etree.XMLSyntaxError as e:
-                raise XsltError("Syntax error in {}:\n{}".format(self.filename, e))
+                raise XsltError(f"Syntax error in {self.filename}:\n{e}")
 
     def _get_variable_elt(self, key):
         """Get the variable element.
@@ -103,7 +100,7 @@ class MetadataHandler(object):
         """
         try:
             variable = self._get_variable_elt(key)
-            variable.attrib["select"] = "'{}'".format(value)
+            variable.attrib["select"] = f"'{value}'"
         except AttributeError as e:
             raise UserWarning(
                 "Tried to update {} with value {}\n"
@@ -203,7 +200,7 @@ class MetadataHandler(object):
         if parallels is None:
             parallels = self.make_xsl_variable("parallels")
 
-        elt = parallels.find("parallel_text[@{}='{}']".format(self.lang_key, language))
+        elt = parallels.find(f"parallel_text[@{self.lang_key}='{language}']")
         if elt is not None:
             elt.attrib.update(attrib)
         else:
@@ -251,12 +248,12 @@ class MetadataHandler(object):
                     [
                         page
                         for start, end in sorted(skip_ranges)
-                        for page in six.moves.range(start, end + 1)
+                        for page in range(start, end + 1)
                     ]
                 )
 
             except ValueError:
-                raise XsltError("Invalid format: {}".format(skip_pages))
+                raise XsltError(f"Invalid format: {skip_pages}")
 
         return pages
 
@@ -286,12 +283,12 @@ class MetadataHandler(object):
                     [
                         line
                         for start, end in sorted(skip_ranges)
-                        for line in six.moves.range(start, end + 1)
+                        for line in range(start, end + 1)
                     ]
                 )
 
             except ValueError:
-                raise XsltError("Invalid format: {}".format(skip_lines))
+                raise XsltError(f"Invalid format: {skip_lines}")
 
         return lines
 
@@ -321,12 +318,12 @@ class MetadataHandler(object):
                     [
                         line
                         for start, end in sorted(skip_ranges)
-                        for line in six.moves.range(start, end + 1)
+                        for line in range(start, end + 1)
                     ]
                 )
 
             except ValueError:
-                raise XsltError("Invalid format: {}".format(chosen))
+                raise XsltError(f"Invalid format: {chosen}")
 
         return lines
 
@@ -371,7 +368,7 @@ class MetadataHandler(object):
                 margin_lines.
         """
         _margins = {}
-        for key, value in six.iteritems(margin_lines):
+        for key, value in margin_lines.items():
             if (
                 "all" in value
                 and ("odd" in value or "even" in value)
@@ -497,7 +494,7 @@ class MetadataHandler(object):
             with open(self.filename, "wb") as outfile:
                 self.tree.write(outfile, encoding="utf-8", xml_declaration=True)
                 outfile.write(b"\n")
-        except IOError as e:
+        except OSError as e:
             print("cannot write", self.filename)
             print(e)
             sys.exit(254)
@@ -515,7 +512,7 @@ class MetadataHandler(object):
             return "/".join(
                 [
                     "html:" + part
-                    if not part.startswith("html:") and re.match("^\w", part)
+                    if not part.startswith("html:") and re.match(r"^\w", part)
                     else part
                     for part in path.split("/")
                 ]
@@ -540,7 +537,7 @@ class MetadataHandler(object):
         value = self.get_variable("linespacing")
 
         if (value) and (
-            ("all" in value and ("odd" in value or "even" in value) or "=" not in value)
+            "all" in value and ("odd" in value or "even" in value) or "=" not in value
         ):
             raise XsltError(
                 "Invalid format in the variable linespacing in the file:"

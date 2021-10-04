@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -66,7 +64,7 @@ def suppress_broken_pipe_msg(function):
     return wrapper
 
 
-class XMLPrinter(object):
+class XMLPrinter:
     """Convert giellatekno xml formatted files to plain text."""
 
     def __init__(
@@ -262,10 +260,10 @@ class XMLPrinter(object):
             text.append(",".join(attr))
 
             if self.print_filename:
-                text.append(", file: {}".format(os.path.basename(self.filename)))
+                text.append(f", file: {os.path.basename(self.filename)}")
 
         elif self.print_filename:
-            text.append("\t#file: {}".format(os.path.basename(self.filename)))
+            text.append(f"\t#file: {os.path.basename(self.filename)}")
 
         return "".join(text)
 
@@ -639,7 +637,7 @@ def find_files(targets, extension):
                         if xml_file.endswith(extension):
                             yield os.path.join(root, xml_file)
         else:
-            print("{} does not exist".format(target), file=sys.stderr)
+            print(f"{target} does not exist", file=sys.stderr)
 
 
 @suppress_broken_pipe_msg

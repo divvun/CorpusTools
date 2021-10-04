@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """This file contains routines to crawl sites containing saami text."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import os
 import re
@@ -74,7 +71,7 @@ class SamediggiFiCrawler(crawler.Crawler):
 
     def __init__(self):
         """Initialise the SamediggiFiCrawler class."""
-        super(SamediggiFiCrawler, self).__init__()
+        super().__init__()
 
         self.unvisited_links.add("http://www.samediggi.fi/")
         self.old_urls = {}
@@ -86,7 +83,7 @@ class SamediggiFiCrawler(crawler.Crawler):
             "english": "eng",
         }
 
-        for (natural, iso) in six.iteritems(self.langs):
+        for (natural, iso) in self.langs.items():
             self.corpus_adders[natural] = adder.AddToCorpus(
                 self.goaldir, iso, "admin/sd/www.samediggi.fi"
             )
@@ -95,7 +92,7 @@ class SamediggiFiCrawler(crawler.Crawler):
 
     def get_old_urls(self):
         """Collect the urls of already downloaded pages."""
-        for (_, corpus_adder) in six.iteritems(self.corpus_adders):
+        for (_, corpus_adder) in self.corpus_adders.items():
             for root, _, files in os.walk(corpus_adder.goaldir):
                 for file_ in files:
                     if file_.endswith(".xsl"):
@@ -113,7 +110,7 @@ class SamediggiFiCrawler(crawler.Crawler):
             if link not in self.visited_links:
                 util.print_frame(debug=link.encode("utf8"))
                 util.print_frame(
-                    debug="Before: unvisited_links {}".format(len(self.unvisited_links))
+                    debug=f"Before: unvisited_links {len(self.unvisited_links)}"
                 )
 
                 parallel_pages = []
@@ -150,11 +147,11 @@ class SamediggiFiCrawler(crawler.Crawler):
                     self.save_pages(parallel_pages)
 
                 util.print_frame(
-                    debug="After: unvisited_links {}".format(len(self.unvisited_links))
+                    debug=f"After: unvisited_links {len(self.unvisited_links)}"
                 )
 
             self.visited_links.add(link)
-            util.print_frame(debug="visited_links {}\n".format(len(self.visited_links)))
+            util.print_frame(debug=f"visited_links {len(self.visited_links)}\n")
 
     @staticmethod
     def get_print_url(content, lang):

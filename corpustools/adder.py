@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """This file contains classes to add files to a corpus directory."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import cgi
@@ -52,7 +49,7 @@ def add_url_extension(filename, content_type):
         "text/plain": ".txt",
     }
 
-    for ct, extension in six.iteritems(content_type_extension):
+    for ct, extension in content_type_extension.items():
         if ct in content_type and not filename.endswith(extension):
             filename += extension
 
@@ -77,7 +74,7 @@ def url_to_filename(response):
         )
 
 
-class UrlDownloader(object):
+class UrlDownloader:
     """Download a document from a url."""
 
     def __init__(self, download_dir):
@@ -122,7 +119,7 @@ class UrlDownloader(object):
             raise AdderError(str(error))
 
 
-class AddToCorpus(object):
+class AddToCorpus:
     """Class to add files, urls and dirs to the corpus."""
 
     def __init__(self, corpusdir, mainlang, path):
@@ -232,7 +229,7 @@ class AddToCorpus(object):
             parallelpath: (string) path of the parallel file
         """
         if not os.path.exists(parallelpath):
-            raise AdderError("{} does not exist".format(parallelpath))
+            raise AdderError(f"{parallelpath} does not exist")
 
         parallel_metadata = xslsetter.MetadataHandler(parallelpath + ".xsl")
         parallels = parallel_metadata.get_parallel_texts()
@@ -241,7 +238,7 @@ class AddToCorpus(object):
         parall_components = util.split_path(parallelpath)
         parallels[parall_components.lang] = parall_components.basename
 
-        for lang, parallel in six.iteritems(parallels):
+        for lang, parallel in parallels.items():
             metadata = xslsetter.MetadataHandler(
                 "/".join(
                     (
@@ -255,7 +252,7 @@ class AddToCorpus(object):
                 )
             )
 
-            for lang1, parallel1 in six.iteritems(parallels):
+            for lang1, parallel1 in parallels.items():
                 if lang1 != lang:
                     metadata.set_parallel_text(lang1, parallel1)
             metadata.write_file()
@@ -304,13 +301,13 @@ class AddToCorpus(object):
                     else:
                         duplicates[file_hash] = [path]
 
-        results = list([x for x in list(duplicates.values()) if len(x) > 1])
+        results = list(x for x in list(duplicates.values()) if len(x) > 1)
         if results:
             print("Duplicates Found:")
             print("___")
             for result in results:
                 for subresult in result:
-                    print("\t{}".format(subresult))
+                    print(f"\t{subresult}")
                 print("___")
 
             raise AdderError("Found duplicates")
@@ -399,7 +396,7 @@ def main():
                     try:
                         shutil.copy(orig, newname)
                     except FileNotFoundError:
-                        raise SystemExit("Not a valid filename: {}".format(args.name))
+                        raise SystemExit(f"Not a valid filename: {args.name}")
                     orig = newname
 
                 adder.copy_file_to_corpus(
@@ -428,7 +425,7 @@ def main():
                 "Only -l|--lang is allowed together with -p|--parallel"
             )
         (root, _, lang, genre, path, _) = util.split_path(args.parallel_file)
-        adder = AddToCorpus(root, six.u(args.lang), os.path.join(genre, path))
+        adder = AddToCorpus(root, args.lang, os.path.join(genre, path))
 
         if not os.path.exists(args.parallel_file):
             raise SystemExit(

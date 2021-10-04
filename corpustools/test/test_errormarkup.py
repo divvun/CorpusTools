@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This file contains routines to change names of corpus files
 #

@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
 #
 """Normalise the files in the given directory."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import os
@@ -35,7 +32,7 @@ def normalise(target_dir):
     Args:
         target_dir (str): directory where filenames should be normalised
     """
-    print(("Normalising names in {}".format(target_dir)))
+    print(f"Normalising names in {target_dir}")
     for root, dirs, files in os.walk(os.path.join(target_dir)):
         for f in files:
             if not f.endswith(".xsl"):
@@ -49,7 +46,7 @@ def normalise(target_dir):
                     )
                     filepair = cfmu.move_computer.filepairs[0]
                     print(
-                        "\t\tmove {} -> {}".format(filepair.oldpath, filepair.newpath)
+                        f"\t\tmove {filepair.oldpath} -> {filepair.newpath}"
                     )
                     cfmu.move_files()
                     cfmu.update_own_metadata()

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -21,7 +20,6 @@
 #
 """Generate an anchor file needed by the java aligner."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import codecs
@@ -30,7 +28,7 @@ import sys
 from corpustools import argparse_version, util
 
 
-class GenerateAnchorList(object):
+class GenerateAnchorList:
     """Generate anchor list used by tca2."""
 
     def __init__(self, lang1, lang2, columns, input_file):
@@ -62,7 +60,7 @@ class GenerateAnchorList(object):
                     return word1, word2
             else:
                 print(
-                    "Invalid line at {} in {}".format(lineno, self.input_file),
+                    f"Invalid line at {lineno} in {self.input_file}",
                     file=sys.stderr,
                 )
 
@@ -72,7 +70,7 @@ class GenerateAnchorList(object):
             out = [self.words_of_line(i, l) for i, l in enumerate(f.readlines())]
             out = [_f for _f in out if _f]
             if not quiet:
-                util.note("Read {} anchors from {}".format(len(out), self.input_file))
+                util.note(f"Read {len(out)} anchors from {self.input_file}")
             return out
 
     def generate_file(self, outpath, quiet=False):
@@ -81,8 +79,8 @@ class GenerateAnchorList(object):
 
         with codecs.open(outpath, "w", encoding="utf8") as outfile:
             if not quiet:
-                util.note("Generating anchor word list to {}".format(outpath))
-            out = "\n".join("{} / {}".format(w1, w2) for w1, w2 in anchors)
+                util.note(f"Generating anchor word list to {outpath}")
+            out = "\n".join(f"{w1} / {w2}" for w1, w2 in anchors)
             outfile.write(out)
             outfile.write("\n")
 
@@ -117,4 +115,4 @@ def main():
         ["eng", "nob", "sme", "fin", "smj", "sma", "smn", "sms"],
         args.input_file,
     )
-    gal.generate_file("{}/anchor-{}-{}.txt".format(args.outdir, args.lang1, args.lang2))
+    gal.generate_file(f"{args.outdir}/anchor-{args.lang1}-{args.lang2}.txt")

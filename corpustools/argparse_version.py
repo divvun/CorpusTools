@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This file contains routines to change names of corpus files
 #
@@ -21,7 +19,6 @@
 #
 """Add version to the argument parser."""
 
-from __future__ import absolute_import
 
 import argparse
 import os

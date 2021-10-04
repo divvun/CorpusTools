@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """Pick out parallel files to prestable/converted inside a corpus directory."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import os
@@ -37,7 +34,7 @@ from corpustools import (
 )
 
 
-class ParallelPicker(object):
+class ParallelPicker:
     """Pick valid parallel files from converted xml files.
 
     Attributes:
@@ -222,7 +219,7 @@ class ParallelPicker(object):
 
     def print_report(self):
         for poor_ratio in self.poor_ratio:
-            print("{0}: {1}\n{2}: {3}\nratio: {4}\n".format(*poor_ratio))
+            print("{}: {}\n{}: {}\nratio: {}\n".format(*poor_ratio))
 
         for key, value in self.counter.items():
             print(key, value)

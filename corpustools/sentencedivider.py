@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """Classes and functions to sentence align two files."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import io
 import os
@@ -50,10 +47,10 @@ def to_plain_text(lang, filename):
     if text:
         return text
     else:
-        raise UserWarning("Empty file {}".format(filename))
+        raise UserWarning(f"Empty file {filename}")
 
 
-class SentenceDivider(object):
+class SentenceDivider:
     """A class to divide plain text output into sentences.
 
     Uses hfst-tokenise as the motor for this purpose.

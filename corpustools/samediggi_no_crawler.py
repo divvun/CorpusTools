@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """This file contains routines to crawl sites containing saami text."""
 
-from __future__ import absolute_import, print_function
 
 import fnmatch
 import hashlib
@@ -48,7 +45,7 @@ def make_digest(bytestring):
     return hasher.hexdigest()
 
 
-class SamediggiNoPage(object):
+class SamediggiNoPage:
     """Save a samediggi.no page to the corpus."""
 
     address_re = re.compile(r"/\w")
@@ -89,7 +86,7 @@ class SamediggiNoPage(object):
         if fullpath == possible_dupe:
             self.set_initial_metadata()
         else:
-            print("\nDupe! {} is dupe of {}\n".format(self.url, possible_dupe))
+            print(f"\nDupe! {self.url} is dupe of {possible_dupe}\n")
 
     @property
     def content(self):
@@ -164,7 +161,7 @@ class SamediggiNoPage(object):
         for parallel_link in self.parallel_links:
             if not parallel_link.startswith("https://www.sa"):
                 raise SystemExit(
-                    "The links to parallel documents has changed {}".format(self.url)
+                    f"The links to parallel documents has changed {self.url}"
                 )
         if self.lang is None:
             raise SystemExit("Language format has changed.")
@@ -237,16 +234,16 @@ class SamediggiNoPage(object):
 class SamediggiNoCrawler(crawler.Crawler):
     """Crawl samediggi.no and save html documents to the corpus."""
 
-    langs = [u"nob", u"sma", u"sme", u"smj"]
+    langs = ["nob", "sma", "sme", "smj"]
     languageguesser = text_cat.Classifier()
 
     def __init__(self):
         """Initialise the SamediggiNoCrawler class."""
-        super(SamediggiNoCrawler, self).__init__()
-        self.unvisited_links.add(u"https://www.samediggi.no/")
-        self.unvisited_links.add(u"https://www.sametinget.no/")
-        self.unvisited_links.add(u"https://www.saemiedigkie.no/")
-        self.unvisited_links.add(u"https://www.samedigge.no/")
+        super().__init__()
+        self.unvisited_links.add("https://www.samediggi.no/")
+        self.unvisited_links.add("https://www.sametinget.no/")
+        self.unvisited_links.add("https://www.saemiedigkie.no/")
+        self.unvisited_links.add("https://www.samedigge.no/")
 
         self.vcs = versioncontrol.vcs(self.goaldir)
         self.dupe_table = {digest: name for digest, name in self.make_dupe_tuple()}
@@ -320,7 +317,7 @@ class SamediggiNoCrawler(crawler.Crawler):
             if pages and pages[0].lang != "nob":
                 self.set_parallel_info(pages)
                 for parallel_page in pages:
-                    print("\t{}".format(parallel_page.corpuspath.orig))
+                    print(f"\t{parallel_page.corpuspath.orig}")
                     self.dupe_table[
                         make_digest(parallel_page.content_string)
                     ] = parallel_page.corpuspath.orig

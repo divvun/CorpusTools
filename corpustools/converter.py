@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -19,7 +17,6 @@
 #
 """This file contains classes to convert files to the Giella xml format."""
 
-from __future__ import absolute_import, print_function
 
 import codecs
 import distutils.dep_util
@@ -88,7 +85,7 @@ def to_giella(path):
         return chooser[os.path.splitext(path)[1]](path)
 
 
-class Converter(object):
+class Converter:
     """Take care of data common to all Converter classes."""
 
     def __init__(self, filename, lazy_conversion=False, write_intermediate=False):
@@ -140,10 +137,10 @@ class Converter(object):
 
         if not dtd.validate(complete):
             with codecs.open(self.names.log, "w", encoding="utf8") as logfile:
-                logfile.write("Error at: {}".format(six.text_type(util.lineno())))
+                logfile.write(f"Error at: {str(util.lineno())}")
                 for entry in dtd.error_log:
                     logfile.write("\n")
-                    logfile.write(six.text_type(entry))
+                    logfile.write(str(entry))
                     logfile.write("\n")
                 util.print_element(complete, 0, 4, logfile)
 
@@ -170,15 +167,15 @@ class Converter(object):
             return complete.getroot()
         except etree.XSLTApplyError as error:
             with open(self.names.log, "w") as logfile:
-                logfile.write("Error at: {}".format(six.text_type(util.lineno())))
+                logfile.write(f"Error at: {str(util.lineno())}")
 
-            raise util.ConversionError("Check the syntax in: {}".format(self.names.xsl))
+            raise util.ConversionError(f"Check the syntax in: {self.names.xsl}")
         except etree.XSLTParseError as error:
             with open(self.names.log, "w") as logfile:
-                logfile.write("Error at: {}".format(six.text_type(util.lineno())))
+                logfile.write(f"Error at: {str(util.lineno())}")
 
             raise util.ConversionError(
-                "XSLTParseError in: {}\nError {}".format(self.names.xsl, str(error))
+                f"XSLTParseError in: {self.names.xsl}\nError {str(error)}"
             )
 
     def convert_errormarkup(self, complete):

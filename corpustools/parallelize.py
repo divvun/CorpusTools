@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """Classes and functions to sentence align two files."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import os
@@ -42,7 +39,7 @@ from corpustools import (
 HERE = os.path.dirname(__file__)
 
 
-class Tca2SentenceDivider(object):
+class Tca2SentenceDivider:
     """Make tca2 compatible input files.
 
     It spits out an xml document that has divided the text into sentences.
@@ -94,7 +91,7 @@ class Tca2SentenceDivider(object):
             )
 
 
-class Parallelize(object):
+class Parallelize:
     """A class to parallelize two files.
 
     Input is the xml file that should be parallellized and the language that it
@@ -127,8 +124,8 @@ class Parallelize(object):
         if para_file is not None:
             self.origfiles.append(corpusxmlfile.CorpusXMLFile(para_file))
         else:
-            raise IOError(
-                "{} doesn't have a parallel file in {}".format(origfile1, lang2)
+            raise OSError(
+                f"{origfile1} doesn't have a parallel file in {lang2}"
             )
 
         self.consistency_check(self.origfiles[1], self.origfiles[0])
@@ -158,11 +155,11 @@ class Parallelize(object):
         if path is None:
             path1 = os.path.join(
                 os.environ["GTHOME"],
-                "gt/common/src/anchor-{}-{}.txt".format(self.lang1, self.lang2),
+                f"gt/common/src/anchor-{self.lang1}-{self.lang2}.txt",
             )
             path2 = os.path.join(
                 os.environ["GTHOME"],
-                "gt/common/src/anchor-{}-{}.txt".format(self.lang2, self.lang1),
+                f"gt/common/src/anchor-{self.lang2}-{self.lang1}.txt",
             )
             if os.path.exists(path1):
 
@@ -203,7 +200,7 @@ class Parallelize(object):
     @property
     def outfile_name(self):
         """Compute the name of the final tmx file."""
-        orig_path_part = "/converted/{}/".format(self.origfiles[0].lang)
+        orig_path_part = f"/converted/{self.origfiles[0].lang}/"
         # First compute the part that shall replace /orig/ in the path
         replace_path_part = "/prestable/tmx/{}2{}/".format(
             self.origfiles[0].lang, self.origfiles[1].lang
@@ -308,7 +305,7 @@ class ParallelizeHunalign(Parallelize):
             cleaned_pairs = [(self.lang1, self.lang2)]
         # Hunalign expects the _reverse_ format for the dictionary!
         # See Dictionary under http://mokk.bme.hu/resources/hunalign/
-        return "\n".join(["{} @ {}".format(w2, w1) for w1, w2 in cleaned_pairs]) + "\n"
+        return "\n".join([f"{w2} @ {w1}" for w1, w2 in cleaned_pairs]) + "\n"
 
     def to_sents(self, origfile):
         """Divide the content of origfile to sentences."""
@@ -366,7 +363,7 @@ class ParallelizeTCA2(Parallelize):
             self.gal.generate_file(outpath, quiet=self.quiet)
         else:
             with open(outpath, "w") as outfile:
-                print("{} / {}".format(self.lang1, self.lang2), file=outfile)
+                print(f"{self.lang1} / {self.lang2}", file=outfile)
 
     def divide_p_into_sentences(self):
         """Tokenize the text in the given file and reassemble it again."""
@@ -401,7 +398,7 @@ class ParallelizeTCA2(Parallelize):
         return os.path.join(
             os.environ["GTFREE"],
             "tmp",
-            "{}{}_sent.xml".format(origfilename, pfile.lang),
+            f"{origfilename}{pfile.lang}_sent.xml",
         )
 
     @staticmethod
@@ -519,7 +516,7 @@ def parallelise_file(input_file, lang2, dictionary, quiet, aligner, stdout, forc
             parallelizer = ParallelizeTCA2(
                 origfile1=input_file, lang2=lang2, anchor_file=dictionary, quiet=quiet
             )
-    except IOError as error:
+    except OSError as error:
         if not quiet:
             util.note(error)
     except NameError:  # parallel filename is empty
@@ -535,11 +532,11 @@ def parallelise_file(input_file, lang2, dictionary, quiet, aligner, stdout, forc
             or (os.path.exists(outfile) and force)
         ):
             if not quiet:
-                util.note("Aligning {} and its parallel file".format(input_file))
+                util.note(f"Aligning {input_file} and its parallel file")
             translation_mem_ex = parallelizer.parallelize_files()
             translation_mem_ex.clean_toktmx()
             if not quiet:
-                util.note("Generating the tmx file {}".format(outfile))
+                util.note(f"Generating the tmx file {outfile}")
             translation_mem_ex.write_tmx_file(outfile)
             translation_mem_ex.tmx2html(parallelizer.outfile_name + ".html")
             if not quiet:
@@ -547,7 +544,7 @@ def parallelise_file(input_file, lang2, dictionary, quiet, aligner, stdout, forc
 
             return outfile
         else:
-            util.note("{} already exists, skipping …".format(outfile))
+            util.note(f"{outfile} already exists, skipping …")
 
 
 def main():

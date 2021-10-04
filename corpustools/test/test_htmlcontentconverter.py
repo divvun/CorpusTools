@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -18,7 +16,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-u"""Test conversion of html content."""
+"""Test conversion of html content."""
 
 import lxml.etree as etree
 import lxml.html as html
@@ -301,12 +299,12 @@ def check_unwanted_classes_and_ids(tag, key, value):
         inner = '<{0} {1}="{2}">' "content:{0} {1} {2}" "</{0}>".format(tag, key, value)
         inner_r = ""
     content_xml = html.document_fromstring(
-        "<html><head/><body>{}</body></html>".format(inner)
+        f"<html><head/><body>{inner}</body></html>"
     )
     got = htmlcontentconverter.HTMLBeautifier(content_xml).beautify()
 
     want = html.document_fromstring(
-        "<html><head/><body>{}</body></html>".format(inner_r)
+        f"<html><head/><body>{inner_r}</body></html>"
     )
 
     if etree.tostring(got) != etree.tostring(want):
@@ -398,30 +396,30 @@ class TestHTMLContentConverter(xmltester.XMLTester):
             ),
             (
                 "Only text before next significant element",
-                u"<html><head><title>– Den utdøende stammes frykt</title>"
-                u"</head><body><h3>VI</h3>... Finnerne<p>Der</body></html>",
-                u"<html><head>"
-                u"<title>– Den utdøende stammes frykt</title></head><body>"
-                u"<h3>VI</h3>  <p>... Finnerne</p><p>Der</p></body></html>",
+                "<html><head><title>– Den utdøende stammes frykt</title>"
+                "</head><body><h3>VI</h3>... Finnerne<p>Der</body></html>",
+                "<html><head>"
+                "<title>– Den utdøende stammes frykt</title></head><body>"
+                "<h3>VI</h3>  <p>... Finnerne</p><p>Der</p></body></html>",
             ),
             (
                 "Text and i element before next significant element",
-                u"<head><title>– Den utdøende stammes frykt</title>"
-                u"</head><body><h3>VI</h3>... Finnerne<i>Der</body></html>",
-                u"<html><head>"
-                u"<title>– Den utdøende stammes frykt</title></head><body>"
-                u"<h3>VI</h3>  <p>... Finnerne<i>Der</i></p></body></html>",
+                "<head><title>– Den utdøende stammes frykt</title>"
+                "</head><body><h3>VI</h3>... Finnerne<i>Der</body></html>",
+                "<html><head>"
+                "<title>– Den utdøende stammes frykt</title></head><body>"
+                "<h3>VI</h3>  <p>... Finnerne<i>Der</i></p></body></html>",
             ),
             (
                 "h2 as a stop element",
-                u"<html><head>"
-                u"<title>– Den utdøende stammes frykt</title>"
-                u"</head><body><h3>VI</h3>... Finnerne"
-                u"<h2>Der</h2></body></html>",
-                u"<html><head><title>– Den "
-                u"utdøende stammes frykt</title>"
-                u"</head><body>  <h3>VI</h3>  "
-                u"<p>... Finnerne</p><h2>Der</h2></body></html>",
+                "<html><head>"
+                "<title>– Den utdøende stammes frykt</title>"
+                "</head><body><h3>VI</h3>... Finnerne"
+                "<h2>Der</h2></body></html>",
+                "<html><head><title>– Den "
+                "utdøende stammes frykt</title>"
+                "</head><body>  <h3>VI</h3>  "
+                "<p>... Finnerne</p><h2>Der</h2></body></html>",
             ),
             (
                 "center2div",

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -24,7 +22,7 @@ import os
 HERE = os.path.dirname(__file__)
 
 
-class LanguageDetector(object):
+class LanguageDetector:
     """Detect and set the languages of a document."""
 
     def __init__(self, document, language_guesser):

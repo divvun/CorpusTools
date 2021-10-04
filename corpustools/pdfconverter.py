@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -109,7 +107,7 @@ def handle_br(previous, current):
 PDFFontspec = collections.namedtuple("PDFFontspec", ["size", "family", "color"])
 
 
-class PDFFontspecs(object):
+class PDFFontspecs:
     """Add font specs found in a pdf page to this class.
 
     Attributes:
@@ -168,7 +166,7 @@ class PDFEmptyPageError(Exception):
     pass
 
 
-class PDFPageMetadata(object):
+class PDFPageMetadata:
     """Read pdf metadata from the metadata file into this class.
 
     Compute metadata needed by the conversion from the data contained in
@@ -304,7 +302,7 @@ class PDFPageMetadata(object):
         return coefficient
 
 
-class PDFPage(object):
+class PDFPage:
     """Reads a page element.
 
     Attributes:
@@ -452,7 +450,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             write_intermediate (boolean): indicate whether intermediate
                 versions of the converter document should be written to disk.
         """
-        super(PDF2XMLConverter, self).__init__(filename)
+        super().__init__(filename)
         self.pdffontspecs = PDFFontspecs()
 
     @staticmethod
@@ -466,7 +464,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         Returns:
             str containing the modified version of the document.
         """
-        remove_re = re.compile("[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{}]".format(extra))
+        remove_re = re.compile(f"[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{extra}]")
         content, _ = remove_re.subn("", content)
 
         # Microsoft Word PDF's have Latin-1 file names in links; we
@@ -597,8 +595,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             )
             if not pdfpage.is_skip_page(self.metadata.skip_pages):
                 # pdfpage.fix_font_id(self.pdffontspecs)
-                for paragraph in pdfpage.pick_valid_text_elements():
-                    yield paragraph
+                yield from pdfpage.pick_valid_text_elements()
         except xslsetter.XsltError as error:
             raise util.ConversionError(str(error))
 
@@ -648,8 +645,8 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
 
         if runner.returncode != 0:
             with open(self.orig + ".log", "w") as logfile:
-                print("stdout\n{}\n".format(runner.stdout), file=logfile)
-                print("stderr\n{}\n".format(runner.stderr), file=logfile)
+                print(f"stdout\n{runner.stdout}\n", file=logfile)
+                print(f"stderr\n{runner.stderr}\n", file=logfile)
                 raise util.ConversionError(
                     "{} failed. More info in the log file: {}".format(
                         command[0], self.orig + ".log"
@@ -667,9 +664,9 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             invalid_input: a string containing the invalid input.
         """
         with open(self.orig + ".log", "w") as logfile:
-            logfile.write("Error at: {}".format(lineno))
+            logfile.write(f"Error at: {lineno}")
             for entry in error.error_log:
-                logfile.write("\n{}: {} ".format(str(entry.line), str(entry.column)))
+                logfile.write(f"\n{str(entry.line)}: {str(entry.column)} ")
                 try:
                     logfile.write(entry.message)
                 except ValueError:

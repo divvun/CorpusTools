@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """Classes and functions to do handle apertium modes.xml files."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import os
 import sys
@@ -30,7 +27,7 @@ from lxml import etree
 from corpustools import util
 
 
-class Pipeline(object):
+class Pipeline:
     """Make a pipeline out of modes.xml file.
 
     Attributes:
@@ -49,7 +46,7 @@ class Pipeline(object):
                 modes.xml file exist.
         """
         modefile = etree.parse(os.path.join(os.path.dirname(__file__), "xml/modes.xml"))
-        self.mode = modefile.find('.//mode[@name="{}"]'.format(modename))
+        self.mode = modefile.find(f'.//mode[@name="{modename}"]')
         self.giella_prefix = self.valid_path(giella_prefix, lang)
         self.sanity_check()
 
@@ -79,7 +76,7 @@ class Pipeline(object):
                 if os.path.isdir(path) and os.listdir(path):
                     return path
 
-        raise (util.ArgumentError("ERROR: found no resources for {}".format(lang)))
+        raise (util.ArgumentError(f"ERROR: found no resources for {lang}"))
 
     @staticmethod
     def raise_unless_exists(filenames):
@@ -94,7 +91,7 @@ class Pipeline(object):
         """
         for filename in filenames:
             if not os.path.exists(filename):
-                raise (util.ArgumentError("ERROR: {} does not exist".format(filename)))
+                raise (util.ArgumentError(f"ERROR: {filename} does not exist"))
 
     def sanity_check(self):
         """Check that programs and files found in a program element exist."""

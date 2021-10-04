@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
 #
 """Test the naming scheme of corpus files."""
 
-from __future__ import absolute_import
 
 import os
 import unittest
@@ -75,7 +72,7 @@ def test_path_to_orig(testname, orig):
     orig_name = name(module="orig", lang="sme", extension="")
     if corpus_path.orig != orig_name:
         raise AssertionError(
-            "{}:\nexpected {}\ngot {}".format(testname, orig_name, corpus_path.orig)
+            f"{testname}:\nexpected {orig_name}\ngot {corpus_path.orig}"
         )
 
 

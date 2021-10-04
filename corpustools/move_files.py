@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
 #
 """Move a corpus file from oldpath to newpath."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import os
@@ -36,7 +33,7 @@ def mover(oldpath, newpath):
         if oldpath.endswith(".xsl"):
             oldpath = oldpath[:-4]
     else:
-        raise UserWarning("{} is not a file".format(oldpath))
+        raise UserWarning(f"{oldpath} is not a file")
 
     if newpath.endswith(".xsl"):
         newpath = newpath[:-4]
@@ -46,9 +43,9 @@ def mover(oldpath, newpath):
     cfmu = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
     filepair = cfmu.move_computer.filepairs[0]
     if filepair.newpath:
-        print("\tmoving {} -> {}".format(filepair.oldpath, filepair.newpath))
+        print(f"\tmoving {filepair.oldpath} -> {filepair.newpath}")
     else:
-        print("\tremoving {}".format(filepair.oldpath))
+        print(f"\tremoving {filepair.oldpath}")
     cfmu.move_files()
     cfmu.update_own_metadata()
     cfmu.update_parallel_files_metadata()
@@ -80,7 +77,7 @@ def main():
     args = mover_parse_args()
     if args.oldpath == args.newpath:
         print(
-            "{} and {} are the same file".format(args.oldpath, args.newpath),
+            f"{args.oldpath} and {args.newpath} are the same file",
             file=sys.stderr,
         )
     else:

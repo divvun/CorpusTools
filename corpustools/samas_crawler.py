@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """This file contains routines to crawl samas.no."""
 
-from __future__ import absolute_import, print_function
 
 import os
 
@@ -30,7 +27,7 @@ from lxml import html
 from corpustools import adder, util
 
 
-class SamasCrawler(object):
+class SamasCrawler:
     """Collect pages from samas.no.
 
     We only want to fetch saami pages, and their parallels.
@@ -43,7 +40,7 @@ class SamasCrawler(object):
     Attributes:
     """
 
-    goaldir = six.text_type(os.getenv("GTFREE"))
+    goaldir = str(os.getenv("GTFREE"))
     external_links = set()
     samas_languages = {"se": "sme", "nb": "nob", "en-UK": "eng"}
 
@@ -63,7 +60,7 @@ class SamasCrawler(object):
 
     @staticmethod
     def get_samas_href(href):
-        return "http://samas.no{}".format(href)
+        return f"http://samas.no{href}"
 
     def harvest_links(self, content):
         """Find interesting pages inside a topic.
@@ -145,7 +142,7 @@ class SamasCrawler(object):
     def crawl_site(self):
         for lang in self.samas_languages:
             (request, tmpname) = self.downloader.download(
-                "http://samas.no/{}".format(lang[:2])
+                f"http://samas.no/{lang[:2]}"
             )
             for link in self.harvest_links(html.parse(tmpname).getroot()):
                 self.add_samas_page(link)

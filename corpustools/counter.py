@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -18,7 +16,6 @@
 #
 """This file contains classes to convert files to the giellatekno xml format."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import logging
@@ -69,7 +66,7 @@ def count_files(path):
             lacking_files["con"].add(c.names.orig)
 
         for fst in ["xfst", "hfst"]:
-            todays_analysed = "/analysed.{}/{}/".format(today, fst)
+            todays_analysed = f"/analysed.{today}/{fst}/"
             if os.path.exists(c.names.analysed.replace("/analysed/", todays_analysed)):
                 counter[fst] += 1
         else:

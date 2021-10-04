@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """This file contains routines to crawl nrk.no containing saami text."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import json
 import os
@@ -36,7 +33,7 @@ from lxml import etree, html
 from corpustools import adder, text_cat, util, xslsetter
 
 
-class NrkSmeCrawler(object):
+class NrkSmeCrawler:
     """Collect Northern Saami pages from nrk.no.
 
     Attributes:
@@ -57,7 +54,7 @@ class NrkSmeCrawler(object):
     """
 
     language_guesser = text_cat.Classifier(None)
-    goaldir = six.text_type(os.getenv("GTBOUND"))
+    goaldir = str(os.getenv("GTBOUND"))
     corpus_adder = adder.AddToCorpus(goaldir, "sme", "news/nrk.no")
     tags = defaultdict(str)
     invalid_links = set()
@@ -68,8 +65,7 @@ class NrkSmeCrawler(object):
         """Initialise the NrkSmeCrawler class."""
         self.fetched_ids = self.get_fetched_links(self.corpus_adder.goaldir)
         # Ids containing norwegian text
-        self.fetched_ids |= set(
-            [
+        self.fetched_ids |= {
                 "1.11060139",
                 "1.11205504",
                 "1.11518300",
@@ -115,8 +111,7 @@ class NrkSmeCrawler(object):
                 "1.6479890",
                 "1.6136593",
                 "1.6602458",
-            ]
-        )
+        }
 
     def guess_lang(self, address):
         """Guess the language of the address element.
@@ -183,13 +178,13 @@ class NrkSmeCrawler(object):
                     )
                 )
             except requests.exceptions.ConnectionError:
-                util.note("Connection error when fetching {}".format(tag))
+                util.note(f"Connection error when fetching {tag}")
                 break
             else:
                 try:
                     yield html.document_fromstring(result.content)
                 except etree.ParserError:
-                    util.note("No more articles in tag: «{}»".format(self.tags[tag]))
+                    util.note(f"No more articles in tag: «{self.tags[tag]}»")
                     break
 
     def interesting_links(self, tag):
@@ -245,7 +240,7 @@ class NrkSmeCrawler(object):
             tag (str): an internal nrk.no tag
         """
         if tag not in self.tags:
-            util.note("Fetching articles from «{}»".format(tagname))
+            util.note(f"Fetching articles from «{tagname}»")
             self.tags[tag] = tagname
             for href in self.interesting_links(tag):
                 self.add_nrk_article(href)
@@ -392,12 +387,12 @@ class NrkSmeCrawler(object):
 
     def report(self):
         """Print a report on what was found."""
-        print("{} invalid links.".format(len(self.invalid_links)))
+        print(f"{len(self.invalid_links)} invalid links.")
         for invalid_link in self.invalid_links:
             print(invalid_link)
         print()
-        print("Searched through {} tags".format(len(self.tags)))
-        print("Searched through {} authors".format(len(self.authors)))
+        print(f"Searched through {len(self.tags)} tags")
+        print(f"Searched through {len(self.authors)} authors")
         print("Fetched {fetched} pages".format(**self.counter))
         for tag in self.tags:
             if self.counter[tag + "_fetched"]:

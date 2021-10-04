@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
 #
 """Utility functions and classes used by other modules in CorpusTools."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import inspect
 import operator
@@ -33,7 +30,6 @@ from functools import reduce
 
 import six
 
-from six.moves import range
 
 PathComponents = namedtuple("PathComponents", "root module lang genre subdirs basename")
 
@@ -98,7 +94,7 @@ def sort_by_value(table, **kwargs):
     Returns:
         dict: sorted by value.
     """
-    return sorted(six.iteritems(table), key=operator.itemgetter(1), **kwargs)
+    return sorted(table.items(), key=operator.itemgetter(1), **kwargs)
 
 
 def replace_all(replacements, string):
@@ -211,7 +207,7 @@ def sanity_check(program_list):
     for program in program_list:
         if executable_in_path(program) is False:
             raise ExecutableMissingError(
-                "Please install {}, can not continue without it.".format(program)
+                f"Please install {program}, can not continue without it."
             )
 
 
@@ -246,7 +242,7 @@ def get_preprocess_command(lang):
     sanity_check([preprocess_script])
     abbr_fb = get_lang_resource("sme", "tools/preprocess/abbr.txt")
     abbr = get_lang_resource(lang, "tools/preprocess/abbr.txt", abbr_fb)
-    return [preprocess_script, "--abbr={}".format(abbr)]
+    return [preprocess_script, f"--abbr={abbr}"]
 
 
 def lineno():
@@ -270,16 +266,16 @@ def print_element(element, level, indent, out):
     tag = element.tag.replace("{http://www.w3.org/1999/xhtml}", "")
 
     out.write(" " * (level * indent))
-    out.write("<{}".format(tag))
+    out.write(f"<{tag}")
 
-    for k, v in six.iteritems(element.attrib):
+    for k, v in element.attrib.items():
         out.write(" ")
-        if isinstance(k, six.text_type):
+        if isinstance(k, str):
             out.write(k)
         else:
             out.write(k)
         out.write('="')
-        if isinstance(v, six.text_type):
+        if isinstance(v, str):
             out.write(v)
         else:
             out.write(v)
@@ -295,7 +291,7 @@ def print_element(element, level, indent, out):
         print_element(child, level + 1, indent, out)
 
     out.write(" " * (level * indent))
-    out.write("</{}>\n".format(tag))
+    out.write(f"</{tag}>\n")
 
     if level > 0 and element.tail is not None and element.tail.strip() != "":
         for _ in range(0, (level - 1) * indent):
@@ -337,7 +333,7 @@ def ignored(*exceptions):
         pass
 
 
-class ExternalCommandRunner(object):
+class ExternalCommandRunner:
     """Class to run external command through subprocess.
 
     Attributes:
@@ -364,7 +360,7 @@ class ExternalCommandRunner(object):
             )
         except OSError:
             raise ExecutableMissingError(
-                "Please install {}, can not continue without it.".format(command[0])
+                f"Please install {command[0]}, can not continue without it."
             )
 
         (self.stdout, self.stderr) = subp.communicate(to_stdin)

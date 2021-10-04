@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -31,7 +29,7 @@ from corpustools import decode, util
 HERE = os.path.dirname(__file__)
 
 
-class DocumentFixer(object):
+class DocumentFixer:
     """Fix the content of a Giella xml document.
 
     Receive a stringified etree from one of the raw converters,
@@ -91,7 +89,7 @@ class DocumentFixer(object):
                             lines.append(emphasis.text.strip())
                         emphasis.text = " ".join(lines)
                         if emphasis.tail is not None:
-                            emphasis.tail = " {}".format(emphasis.tail)
+                            emphasis.tail = f" {emphasis.tail}"
                         del lines[:]
 
     def soft_hyphen_to_hyph_tag(self):
@@ -110,7 +108,7 @@ class DocumentFixer(object):
 
         text = element.text
         if text is not None:
-            parts = text.split(u"­")
+            parts = text.split("­")
             if len(parts) > 1:
                 element.text = parts[0]
                 for index, part in enumerate(parts[1:]):
@@ -120,7 +118,7 @@ class DocumentFixer(object):
 
         text = element.tail
         if text is not None:
-            parts = text.split(u"­")
+            parts = text.split("­")
             if len(parts) > 1:
                 element.tail = parts[0]
                 for part in parts[1:]:
@@ -131,7 +129,7 @@ class DocumentFixer(object):
     def insert_spaces_after_semicolon(self):
         """Insert space after semicolon where needed."""
         irritating_words_regex = re.compile(
-            u"(govv(a|en|ejeaddji):)([^ ])", re.UNICODE | re.IGNORECASE
+            "(govv(a|en|ejeaddji):)([^ ])", re.UNICODE | re.IGNORECASE
         )
         for child in self.root.find(".//body"):
             self.insert_space_after_semicolon(child, irritating_words_regex)
@@ -153,48 +151,48 @@ class DocumentFixer(object):
     def replace_ligatures(self):
         """Replace unwanted chars."""
         replacements = {
-            u"[dstrok]": u"đ",
-            u"[Dstrok]": u"Đ",
-            u"[tstrok]": u"ŧ",
-            u"[Tstrok]": u"Ŧ",
-            u"[scaron]": u"š",
-            u"[Scaron]": u"Š",
-            u"[zcaron]": u"ž",
-            u"[Zcaron]": u"Ž",
-            u"[ccaron]": u"č",
-            u"[Ccaron]": u"Č",
-            u"[eng": u"ŋ",
-            u" ]": u"",
-            u"Ď": u"đ",  # cough
-            u"ď": u"đ",  # cough
-            "\x03": u"",
-            "\x04": u"",
-            "\x07": u"",
-            "\x08": u"",
-            "\x0F": u"",
-            "\x10": u"",
-            "\x11": u"",
-            "\x13": u"",
-            "\x14": u"",
-            "\x15": u"",
-            "\x17": u"",
-            "\x18": u"",
-            "\x1A": u"",
-            "\x1B": u"",
-            "\x1C": u"",
-            "\x1D": u"",
-            "\x1E": u"",
-            u"ﬁ": "fi",
-            u"ﬂ": "fl",
-            u"ﬀ": "ff",
-            u"ﬃ": "ffi",
-            u"ﬄ": "ffl",
-            u"ﬅ": "ft",
+            "[dstrok]": "đ",
+            "[Dstrok]": "Đ",
+            "[tstrok]": "ŧ",
+            "[Tstrok]": "Ŧ",
+            "[scaron]": "š",
+            "[Scaron]": "Š",
+            "[zcaron]": "ž",
+            "[Zcaron]": "Ž",
+            "[ccaron]": "č",
+            "[Ccaron]": "Č",
+            "[eng": "ŋ",
+            " ]": "",
+            "Ď": "đ",  # cough
+            "ď": "đ",  # cough
+            "\x03": "",
+            "\x04": "",
+            "\x07": "",
+            "\x08": "",
+            "\x0F": "",
+            "\x10": "",
+            "\x11": "",
+            "\x13": "",
+            "\x14": "",
+            "\x15": "",
+            "\x17": "",
+            "\x18": "",
+            "\x1A": "",
+            "\x1B": "",
+            "\x1C": "",
+            "\x1D": "",
+            "\x1E": "",
+            "ﬁ": "fi",
+            "ﬂ": "fl",
+            "ﬀ": "ff",
+            "ﬃ": "ffi",
+            "ﬄ": "ffl",
+            "ﬅ": "ft",
         }
 
         for element in self.root.iter("p"):
             if element.text:
-                for key, value in six.iteritems(replacements):
+                for key, value in replacements.items():
                     element.text = element.text.replace(key + " ", value)
                     element.text = element.text.replace(key, value)
 
@@ -212,10 +210,10 @@ class DocumentFixer(object):
         # appears in otherwise utf-8-encoded documents with the
         # meaning 'š'
         replacements = [
-            (u"\x9a", u"š"),
-            (u"\x8a", u"Š"),
-            (u"\x9e", u"ž"),
-            (u"\x8e", u"Ž"),
+            ("\x9a", "š"),
+            ("\x8a", "Š"),
+            ("\x9e", "ž"),
+            ("\x8e", "Ž"),
         ]
         for element in self.root.iter("p"):
             if element.text:
@@ -226,14 +224,14 @@ class DocumentFixer(object):
 
         replacement_pairs = {
             "sms": [
-                (u"\u2019", u"\u02BC"),  # RIGHT SINGLE QUOTATION MARK,
+                ("\u2019", "\u02BC"),  # RIGHT SINGLE QUOTATION MARK,
                 # MODIFIER LETTER APOSTROPHE
-                (u"\u0027", u"\u02BC"),  # apostrophe,
+                ("\u0027", "\u02BC"),  # apostrophe,
                 # MODIFIER LETTER APOSTROPHE
-                (u"\u2032", u"\u02B9"),  # PRIME, MODIFIER LETTER PRIME
-                (u"\u00B4", u"\u02B9"),  # ACUTE ACCENT,
+                ("\u2032", "\u02B9"),  # PRIME, MODIFIER LETTER PRIME
+                ("\u00B4", "\u02B9"),  # ACUTE ACCENT,
                 # MODIFIER LETTER PRIME
-                (u"\u0301", u"\u02B9"),  # COMBINING ACUTE ACCENT,
+                ("\u0301", "\u02B9"),  # COMBINING ACUTE ACCENT,
                 # MODIFIER LETTER PRIME
             ],
             "mns": [
@@ -304,16 +302,16 @@ class DocumentFixer(object):
                 lastname = person.get("lastname")
 
                 if encoding == "mac-sami_to_latin1":
-                    lastname = lastname.replace(u"‡", u"á")
-                    lastname = lastname.replace(u"Œ", u"å")
+                    lastname = lastname.replace("‡", "á")
+                    lastname = lastname.replace("Œ", "å")
 
                 person.set("lastname", decode.decode_para(encoding, lastname))
 
                 firstname = person.get("firstname")
 
                 if encoding == "mac-sami_to_latin1":
-                    firstname = firstname.replace(u"‡", u"á")
-                    firstname = firstname.replace(u"Œ", u"å")
+                    firstname = firstname.replace("‡", "á")
+                    firstname = firstname.replace("Œ", "å")
 
                 person.set("firstname", decode.decode_para(encoding, firstname))
 
@@ -330,9 +328,9 @@ class DocumentFixer(object):
         unwanted = r"[^:,!?.\s]"
         quote_regexes = [
             re.compile('"{0}.+?{0}"'.format(unwanted)),
-            re.compile(u"«.+?»"),
-            re.compile(u"“.+?”"),
-            re.compile(u"”{0}.+?{0}”".format(unwanted)),
+            re.compile("«.+?»"),
+            re.compile("“.+?”"),
+            re.compile("”{0}.+?{0}”".format(unwanted)),
         ]
         quote_list = [
             m.span()
@@ -352,7 +350,7 @@ class DocumentFixer(object):
             quote_list: A list of span tuples containing indexes to quotes
             found in text.
         """
-        for index in six.moves.range(0, len(quote_list)):
+        for index in range(0, len(quote_list)):
             span = etree.Element("span")
             span.set("type", "quote")
             span.text = text[quote_list[index][0] : quote_list[index][1]]
@@ -410,7 +408,7 @@ class DocumentFixer(object):
             for paragraph in self.root.iter("p")
         ]
 
-        return six.text_type(len(re.findall(r"\S+", " ".join(plist))))
+        return str(len(re.findall(r"\S+", " ".join(plist))))
 
     @staticmethod
     def _make_element(name, text, attributes=None):

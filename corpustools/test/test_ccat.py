@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -1002,7 +1000,7 @@ class TestCcat(unittest.TestCase):
         """Check that get_lang finds the main lang of the document"""
         xml_printer = ccat.XMLPrinter()
         xml_printer.etree = etree.parse(
-            io.BytesIO('<document id="no_id" xml:lang="sme"/>'.encode("utf8"))
+            io.BytesIO(b'<document id="no_id" xml:lang="sme"/>')
         )
 
         self.assertEqual(xml_printer.get_lang(), "sme")
@@ -1026,16 +1024,14 @@ class TestCcat(unittest.TestCase):
         xml_printer = ccat.XMLPrinter(lang="nob")
         xml_printer.etree = etree.parse(
             io.BytesIO(
-                (
-                    '<document id="no_id" xml:lang="nob">'
-                    "<body>"
-                    "<p>"
-                    "nob1 "
-                    '<span type="quote" xml:lang="dan">dan1</span>'
-                    " nob2</p>"
-                    "</body>"
-                    "</document>"
-                ).encode("utf8")
+                    b'<document id="no_id" xml:lang="nob">'
+                    b"<body>"
+                    b"<p>"
+                    b"nob1 "
+                    b'<span type="quote" xml:lang="dan">dan1</span>'
+                    b" nob2</p>"
+                    b"</body>"
+                    b"</document>"
             )
         )
 
@@ -1047,14 +1043,12 @@ class TestCcat(unittest.TestCase):
         xml_printer = ccat.XMLPrinter()
         xml_printer.etree = etree.parse(
             io.BytesIO(
-                (
-                    '<document id="no_id" xml:lang="nob">'
-                    "    <body>"
-                    "        <p>nob1</p>"
-                    "        <p>nob2</p>"
-                    "    </body>"
-                    "</document>"
-                ).encode("utf8")
+                    b'<document id="no_id" xml:lang="nob">'
+                    b"    <body>"
+                    b"        <p>nob1</p>"
+                    b"        <p>nob2</p>"
+                    b"    </body>"
+                    b"</document>"
             )
         )
 

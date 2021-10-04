@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """Classes and functions to make and handle Translation Memory eXchange files."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import codecs
@@ -35,7 +32,7 @@ from corpustools import argparse_version, util
 HERE = os.path.dirname(__file__)
 
 
-class Tmx(object):
+class Tmx:
     """A tmx file handler.
 
     A class that reads a tmx file, and implements a bare minimum of
@@ -265,7 +262,7 @@ class AlignmentToTmx(Tmx):
     def __init__(self, origfiles):
         """Input is a list of CorpusXMLFile objects."""
         self.origfiles = origfiles
-        super(AlignmentToTmx, self).__init__(self.make_tmx())
+        super().__init__(self.make_tmx())
 
     def make_tu(self, line1, line2):
         """Make a tmx tu element based on line1 and line2 as input."""
@@ -342,7 +339,7 @@ class HunalignToTmx(AlignmentToTmx):
         """Input is a list of CorpusXMLFile objects."""
         self.output = output
         self.threshold = threshold
-        super(HunalignToTmx, self).__init__(origfiles)
+        super().__init__(origfiles)
 
     def parse_alignment_results(self):
         """Return parsed output files of tca2."""
@@ -375,7 +372,7 @@ class Tca2ToTmx(AlignmentToTmx):
     def __init__(self, origfiles, sentfiles):
         """Input is a list of CorpusXMLFile objects."""
         self.sentfiles = sentfiles
-        super(Tca2ToTmx, self).__init__(origfiles)
+        super().__init__(origfiles)
 
     def parse_alignment_results(self):
         """Return parsed output files of tca2."""
@@ -416,7 +413,7 @@ def tmx2html(filename):
     translation_mem_ex = Tmx(etree.parse(filename))
     html_name = filename + ".html"
     translation_mem_ex.tmx2html(html_name)
-    print("Wrote {}".format(html_name))
+    print(f"Wrote {html_name}")
 
 
 def parse_options():
@@ -453,7 +450,7 @@ def main():
             if source.endswith(".tmx"):
                 tmx2html(source)
             else:
-                SystemExit("Not a tmx file:\n{}".format(source))
+                SystemExit(f"Not a tmx file:\n{source}")
         elif os.path.isdir(source):
             found = False
             for tmx_file in find_files(source, ".tmx"):
@@ -461,4 +458,4 @@ def main():
                 tmx2html(tmx_file)
 
             if not found:
-                raise SystemExit("No tmx files found in:\n{}".format(source))
+                raise SystemExit(f"No tmx files found in:\n{source}")

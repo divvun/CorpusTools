@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
 #
 """Compare prestable tmx files to files produced by the parallelizer."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import datetime
@@ -34,7 +31,7 @@ import lxml.etree as etree
 from corpustools import parallelize, util
 
 
-class TmxComparator(object):
+class TmxComparator:
     """A class to compare two tmx-files"""
 
     def __init__(self, want_tmx, got_tmx):
@@ -85,7 +82,7 @@ class TmxComparator(object):
         return diff
 
 
-class TmxGoldstandardTester(object):
+class TmxGoldstandardTester:
     """A class to test the alignment pipeline against the tmx goldstandard"""
 
     def __init__(self, testresult_filename, dateformat_addition=None):
@@ -124,7 +121,7 @@ class TmxGoldstandardTester(object):
         paralang = ""
         # Go through each tmx goldstandard file
         for want_tmx_file in self.find_goldstandard_tmx_files():
-            print("testing {} …".format(want_tmx_file))
+            print(f"testing {want_tmx_file} …")
 
             # Calculate the parallel lang, to be used in parallelization
             if want_tmx_file.find("nob2sme") > -1:
@@ -187,14 +184,14 @@ class TmxGoldstandardTester(object):
 
     def write_diff_files(self, comparator, parallelizer, filename):
         """Write diffs to a jspwiki file"""
-        print("write_diff_files {}".format(filename))
-        filename = "{}_{}.jspwiki".format(filename, self.date)
+        print(f"write_diff_files {filename}")
+        filename = f"{filename}_{self.date}.jspwiki"
         dirname = os.path.join(
             os.path.dirname(self.testresult_writer.get_filename()), "tca2testing"
         )
 
         with open(os.path.join(dirname, filename), "w") as diff_file:
-            diff_file.write("!!!{}\n".format(filename))
+            diff_file.write(f"!!!{filename}\n")
             diff_file.write("!!TMX diff\n{{{\n")
             diff_file.writelines(comparator.get_diff_as_text())
             diff_file.write("\n}}}\n!! diff\n{{{\n".format(parallelizer.get_lang1()))
@@ -221,7 +218,7 @@ class TmxGoldstandardTester(object):
         return file_list
 
 
-class TmxTestDataWriter(object):
+class TmxTestDataWriter:
     """A class that writes tmx test data to a file"""
 
     def __init__(self, filename):
@@ -230,8 +227,8 @@ class TmxTestDataWriter(object):
         try:
             tree = etree.parse(filename)
             self.set_parags_testing_element(tree.getroot())
-        except IOError as error:
-            util.note("I/O error({0}): {1}".format(error.errno, error.strerror))
+        except OSError as error:
+            util.note(f"I/O error({error.errno}): {error.strerror}")
             sys.exit(1)
 
     def get_filename(self):

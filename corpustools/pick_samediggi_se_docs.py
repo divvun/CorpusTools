@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -23,7 +22,6 @@
 The documents have been fetched using wget.
 """
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import os
 import shutil
@@ -41,7 +39,7 @@ exec(open(version).read(), scope)
 version = scope["VERSION"]
 
 
-class DocumentPicker(object):
+class DocumentPicker:
     """Pick documents from samediggi.se to be added to the corpus."""
 
     def __init__(self, source_dir):
@@ -137,7 +135,7 @@ class DocumentPicker(object):
 
     def conclude(self):
         total = 0
-        for key, value in six.iteritems(self.file_dict):
+        for key, value in self.file_dict.items():
             total += len(self.file_dict[key])
             print(key, len(self.file_dict[key]))
         print(total, self.total_file)
@@ -168,7 +166,7 @@ class DocumentPicker(object):
         mh = xslsetter.MetadataHandler(
             self.get_goal_name(file_, lang) + ".xsl", create=True
         )
-        for key, value in six.iteritems(self.set_variables(file_, lang)):
+        for key, value in self.set_variables(file_, lang).items():
             mh.set_variable(key, value)
         mh.write_file()
 

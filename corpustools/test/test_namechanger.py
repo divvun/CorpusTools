@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This file contains routines to change names of corpus files
 #
@@ -20,7 +18,6 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import absolute_import, print_function
 
 import os
 import unittest
@@ -40,27 +37,27 @@ class TestFilenameToAscii(unittest.TestCase):
 
     @parameterized.expand(
         [
-            (u"ášŧŋđžčåøæöäï+", u"astngdzcaoaeoai_"),
-            (u"ÁŠŦŊĐŽČÅØÆÖÄÏ+", u"astngdzcaoaeoai_"),
-            (u"ášŧŋđŽČÅØÆÖÄï+", u"astngdzcaoaeoai_"),
-            (u"YoullNeverWalkAlone", u"youllneverwalkalone"),
-            (u"Youll Never Walk Alone", u"youll_never_walk_alone"),
-            (u"You'll Never Walk Alone", u"you_ll_never_walk_alone"),
-            (u"Šaddágo beaivi vai idja", u"saddago_beaivi_vai_idja"),
-            (u'aba".txt', u"aba_.txt"),
-            (u"aba<.txt", u"aba_.txt"),
-            (u"aba>.txt", u"aba_.txt"),
-            (u"__aba.txt", u"aba.txt"),
-            (u"--aba.txt", u"aba.txt"),
-            (u"--__aba.txt", u"aba.txt"),
+            ("ášŧŋđžčåøæöäï+", "astngdzcaoaeoai_"),
+            ("ÁŠŦŊĐŽČÅØÆÖÄÏ+", "astngdzcaoaeoai_"),
+            ("ášŧŋđŽČÅØÆÖÄï+", "astngdzcaoaeoai_"),
+            ("YoullNeverWalkAlone", "youllneverwalkalone"),
+            ("Youll Never Walk Alone", "youll_never_walk_alone"),
+            ("You'll Never Walk Alone", "you_ll_never_walk_alone"),
+            ("Šaddágo beaivi vai idja", "saddago_beaivi_vai_idja"),
+            ('aba".txt', "aba_.txt"),
+            ("aba<.txt", "aba_.txt"),
+            ("aba>.txt", "aba_.txt"),
+            ("__aba.txt", "aba.txt"),
+            ("--aba.txt", "aba.txt"),
+            ("--__aba.txt", "aba.txt"),
             (
                 (
-                    u"абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
-                    u"АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦ‌​ЧШЩЪЫЬЭЮЯ.txt"
+                    "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+                    "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦ‌​ЧШЩЪЫЬЭЮЯ.txt"
                 ),
                 (
-                    u"abvgdeiozhziiklmnoprstufkhtschshshch_y_eiuia"
-                    u"abvgdeiozhziiklmnoprstufkhts_chshshch_y_eiuia.txt"
+                    "abvgdeiozhziiklmnoprstufkhtschshshch_y_eiuia"
+                    "abvgdeiozhziiklmnoprstufkhts_chshshch_y_eiuia.txt"
                 ),
             ),
         ]
@@ -116,10 +113,10 @@ class TestComputeNewBasename(unittest.TestCase):
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory()
         self.tempdir.makedir("orig/sme/admin/other_files")
-        self.tempdir.write("orig/sme/admin/other_files/old_dupe.txt", six.b("a"))
-        self.tempdir.write("orig/sme/admin/other_files/new_dupe.txt", six.b("a"))
-        self.tempdir.write("orig/sme/admin/other_files/new_none_dupe.txt", six.b("b"))
-        self.tempdir.write("orig/sme/admin/other_files/new_none_düpe.txt", six.b("a"))
+        self.tempdir.write("orig/sme/admin/other_files/old_dupe.txt", b"a")
+        self.tempdir.write("orig/sme/admin/other_files/new_dupe.txt", b"a")
+        self.tempdir.write("orig/sme/admin/other_files/new_none_dupe.txt", b"b")
+        self.tempdir.write("orig/sme/admin/other_files/new_none_düpe.txt", b"a")
 
     def tearDown(self):
         self.tempdir.cleanup()
@@ -407,7 +404,7 @@ class TestComputeMovepairs(unittest.TestCase):
             os.path.join(self.tempdir.path, "orig/sme/ficti/sub/f.txt.xsl"), create=True
         )
         sme_metadata.set_variable("mainlang", "sme")
-        sme_metadata.set_parallel_text("smj", u"ø.txt")
+        sme_metadata.set_parallel_text("smj", "ø.txt")
         sme_metadata.set_parallel_text("sma", "f.txt")
         sme_metadata.write_file()
 
@@ -424,7 +421,7 @@ class TestComputeMovepairs(unittest.TestCase):
         )
         sma_metadata.set_variable("mainlang", "sma")
         sma_metadata.set_parallel_text("sme", "f.txt")
-        sma_metadata.set_parallel_text("smj", u"ø.txt")
+        sma_metadata.set_parallel_text("smj", "ø.txt")
         sma_metadata.write_file()
 
         oe = os.path.join(self.tempdir.path, "orig/smj/ficti/sub/ø.txt")
@@ -464,7 +461,7 @@ class TestComputeMovepairs(unittest.TestCase):
             os.path.join(self.tempdir.path, "orig/sme/ficti/sub/f.txt.xsl"), create=True
         )
         sme_metadata.set_variable("mainlang", "sme")
-        sme_metadata.set_parallel_text("sma", u"ø.txt")
+        sme_metadata.set_parallel_text("sma", "ø.txt")
         sme_metadata.write_file()
 
         sma_metadata = xslsetter.MetadataHandler(
@@ -476,7 +473,7 @@ class TestComputeMovepairs(unittest.TestCase):
         sma_metadata.write_file()
 
         self.tempdir.write("orig/sma/ficti/sub/ø.txt", six.b("content of ø"))
-        self.tempdir.write("orig/sma/ficti/sub/o.txt", six.b("content of o"))
+        self.tempdir.write("orig/sma/ficti/sub/o.txt", b"content of o")
 
         from corpustools import util
 
@@ -582,7 +579,7 @@ class TestComputeMovepairs(unittest.TestCase):
             os.path.join(self.tempdir.path, "orig/sme/ficti/sub/f.txt.xsl"), create=True
         )
         sme_metadata.set_variable("mainlang", "sme")
-        sme_metadata.set_parallel_text("smj", u"ø.txt")
+        sme_metadata.set_parallel_text("smj", "ø.txt")
         sme_metadata.set_parallel_text("sma", "f.txt")
         sme_metadata.write_file()
 
@@ -599,7 +596,7 @@ class TestComputeMovepairs(unittest.TestCase):
         )
         sma_metadata.set_variable("mainlang", "sma")
         sma_metadata.set_parallel_text("sme", "f.txt")
-        sma_metadata.set_parallel_text("smj", u"ø.txt")
+        sma_metadata.set_parallel_text("smj", "ø.txt")
         sma_metadata.write_file()
 
         oe = os.path.join(self.tempdir.path, "orig/smj/ficti/sub/ø.txt")
@@ -636,28 +633,28 @@ class TestCorpusFileMover(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=[".git"])
 
         self.tempdir.makedir("orig/sme/ficti/sub")
-        self.tempdir.write("orig/sme/ficti/sub/f.txt", six.b("content of f"))
+        self.tempdir.write("orig/sme/ficti/sub/f.txt", b"content of f")
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, "orig/sme/ficti/sub/f.txt.xsl"), create=True
         )
         sme_metadata.set_variable("mainlang", "sme")
-        sme_metadata.set_parallel_text("smj", u"ø.txt")
+        sme_metadata.set_parallel_text("smj", "ø.txt")
         sme_metadata.set_parallel_text("sma", "f.txt")
         sme_metadata.write_file()
         self.tempdir.makedir("prestable/converted/sme/ficti/sub")
         self.tempdir.write(
             "prestable/converted/sme/ficti/sub/f.txt.xml",
-            six.b("converted content of f"),
+            b"converted content of f",
         )
         self.tempdir.makedir("prestable/tmx/sme2smj/ficti/sub")
         self.tempdir.write(
             "prestable/tmx/sme2smj/ficti/sub/f.txt.tmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
         self.tempdir.makedir("prestable/tmx/sme2sma/ficti/sub")
         self.tempdir.write(
             "prestable/tmx/sme2sma/ficti/sub/f.txt.tmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
 
         r = git.Repo.init(self.tempdir.path)
@@ -715,28 +712,28 @@ class TestCorpusFileRemover(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=[".git"])
 
         self.tempdir.makedir("orig/sme/ficti/sub")
-        self.tempdir.write("orig/sme/ficti/sub/f.txt", six.b("content of f"))
+        self.tempdir.write("orig/sme/ficti/sub/f.txt", b"content of f")
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, "orig/sme/ficti/sub/f.txt.xsl"), create=True
         )
         sme_metadata.set_variable("mainlang", "sme")
-        sme_metadata.set_parallel_text("smj", u"ø.txt")
+        sme_metadata.set_parallel_text("smj", "ø.txt")
         sme_metadata.set_parallel_text("sma", "f.txt")
         sme_metadata.write_file()
         self.tempdir.makedir("prestable/converted/sme/ficti/sub")
         self.tempdir.write(
             "prestable/converted/sme/ficti/sub/f.txt.xml",
-            six.b("converted content of f"),
+            b"converted content of f",
         )
         self.tempdir.makedir("prestable/tmx/sme2smj/ficti/sub")
         self.tempdir.write(
             "prestable/tmx/sme2smj/ficti/sub/f.txt.tmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
         self.tempdir.makedir("prestable/tmx/sme2sma/ficti/sub")
         self.tempdir.write(
             "prestable/tmx/sme2sma/ficti/sub/f.txt.tmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
 
         r = git.Repo.init(self.tempdir.path)
@@ -764,38 +761,38 @@ class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=[".git"])
 
         self.tempdir.makedir("orig/sme/ficti/sub")
-        self.tempdir.write("orig/sme/ficti/sub/f.txt", six.b("content of f"))
+        self.tempdir.write("orig/sme/ficti/sub/f.txt", b"content of f")
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, "orig/sme/ficti/sub/f.txt.xsl"), create=True
         )
         sme_metadata.set_variable("mainlang", "sme")
-        sme_metadata.set_parallel_text("smj", u"ø.txt")
+        sme_metadata.set_parallel_text("smj", "ø.txt")
         sme_metadata.set_parallel_text("sma", "f.txt")
         sme_metadata.write_file()
         self.tempdir.makedir("prestable/converted/sme/ficti/sub")
         self.tempdir.write(
             "prestable/converted/sme/ficti/sub/f.txt.xml",
-            six.b("converted content of f"),
+            b"converted content of f",
         )
         self.tempdir.makedir("prestable/tmx/sme2smj/ficti/sub")
         self.tempdir.write(
             "prestable/tmx/sme2smj/ficti/sub/f.txt.tmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
         self.tempdir.makedir("prestable/tmx/sme2sma/ficti/sub")
         self.tempdir.write(
             "prestable/tmx/sme2sma/ficti/sub/f.txt.tmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
         self.tempdir.makedir("prestable/toktmx/sme2smj/ficti/sub")
         self.tempdir.write(
             "prestable/toktmx/sme2smj/ficti/sub/f.txt.toktmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
         self.tempdir.makedir("prestable/toktmx/sme2sma/ficti/sub")
         self.tempdir.write(
             "prestable/toktmx/sme2sma/ficti/sub/f.txt.toktmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
 
         self.tempdir.makedir("orig/smj/ficti/sub")
@@ -815,19 +812,19 @@ class TestCorpusFilesetMetadataUpdater1(unittest.TestCase):
         )
 
         self.tempdir.makedir("orig/sma/ficti/sub")
-        self.tempdir.write("orig/sma/ficti/sub/f.txt", six.b("content of f"))
+        self.tempdir.write("orig/sma/ficti/sub/f.txt", b"content of f")
         sma_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, "orig/sma/ficti/sub/f.txt.xsl"), create=True
         )
         sma_metadata.set_variable("mainlang", "sma")
         sma_metadata.set_variable("translated_from", "sme")
         sma_metadata.set_parallel_text("sme", "f.txt")
-        sma_metadata.set_parallel_text("smj", u"ø.txt")
+        sma_metadata.set_parallel_text("smj", "ø.txt")
         sma_metadata.write_file()
         self.tempdir.makedir("prestable/converted/sma/ficti/sub")
         self.tempdir.write(
             "prestable/converted/sma/ficti/sub/f.txt.xml",
-            six.b("converted content of f"),
+            b"converted content of f",
         )
 
         r = git.Repo.init(self.tempdir.path)
@@ -952,38 +949,38 @@ class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=[".git"])
 
         self.tempdir.makedir("orig/sme/ficti/sub")
-        self.tempdir.write("orig/sme/ficti/sub/f.txt", six.b("content of f"))
+        self.tempdir.write("orig/sme/ficti/sub/f.txt", b"content of f")
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, "orig/sme/ficti/sub/f.txt.xsl"), create=True
         )
         sme_metadata.set_variable("mainlang", "sme")
-        sme_metadata.set_parallel_text("smj", u"ø.txt")
+        sme_metadata.set_parallel_text("smj", "ø.txt")
         sme_metadata.set_parallel_text("sma", "f.txt")
         sme_metadata.write_file()
         self.tempdir.makedir("prestable/converted/sme/ficti/sub")
         self.tempdir.write(
             "prestable/converted/sme/ficti/sub/f.txt.xml",
-            six.b("converted content of f"),
+            b"converted content of f",
         )
         self.tempdir.makedir("prestable/tmx/sme2smj/ficti/sub")
         self.tempdir.write(
             "prestable/tmx/sme2smj/ficti/sub/f.txt.tmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
         self.tempdir.makedir("prestable/tmx/sme2sma/ficti/sub")
         self.tempdir.write(
             "prestable/tmx/sme2sma/ficti/sub/f.txt.tmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
         self.tempdir.makedir("prestable/toktmx/sme2smj/ficti/sub")
         self.tempdir.write(
             "prestable/toktmx/sme2smj/ficti/sub/f.txt.toktmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
         self.tempdir.makedir("prestable/toktmx/sme2sma/ficti/sub")
         self.tempdir.write(
             "prestable/toktmx/sme2sma/ficti/sub/f.txt.toktmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
 
         self.tempdir.makedir("orig/smj/ficti/sub")
@@ -1003,19 +1000,19 @@ class TestCorpusFilesetMetadataUpdater2(unittest.TestCase):
         )
 
         self.tempdir.makedir("orig/sma/ficti/sub")
-        self.tempdir.write("orig/sma/ficti/sub/f.txt", six.b("content of f"))
+        self.tempdir.write("orig/sma/ficti/sub/f.txt", b"content of f")
         sma_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, "orig/sma/ficti/sub/f.txt.xsl"), create=True
         )
         sma_metadata.set_variable("mainlang", "sma")
         sma_metadata.set_variable("translated_from", "sme")
         sma_metadata.set_parallel_text("sme", "f.txt")
-        sma_metadata.set_parallel_text("smj", u"ø.txt")
+        sma_metadata.set_parallel_text("smj", "ø.txt")
         sma_metadata.write_file()
         self.tempdir.makedir("prestable/converted/sma/ficti/sub")
         self.tempdir.write(
             "prestable/converted/sma/ficti/sub/f.txt.xml",
-            six.b("converted content of f"),
+            b"converted content of f",
         )
 
         r = git.Repo.init(self.tempdir.path)
@@ -1154,27 +1151,27 @@ class TestCorpusFilesetMetadataUpdater3(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=[".git"])
 
         self.tempdir.makedir("orig/sme/ficti/sub")
-        self.tempdir.write("orig/sme/ficti/sub/f.txt", six.b("content of f"))
+        self.tempdir.write("orig/sme/ficti/sub/f.txt", b"content of f")
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, "orig/sme/ficti/sub/f.txt.xsl"), create=True
         )
         sme_metadata.set_variable("mainlang", "sme")
-        sme_metadata.set_parallel_text("smj", u"ø.txt")
+        sme_metadata.set_parallel_text("smj", "ø.txt")
         sme_metadata.write_file()
         self.tempdir.makedir("prestable/converted/sme/ficti/sub")
         self.tempdir.write(
             "prestable/converted/sme/ficti/sub/f.txt.xml",
-            six.b("converted content of f"),
+            b"converted content of f",
         )
         self.tempdir.makedir("prestable/tmx/sme2smj/ficti/sub")
         self.tempdir.write(
             "prestable/tmx/sme2smj/ficti/sub/f.txt.tmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
         self.tempdir.makedir("prestable/toktmx/sme2smj/ficti/sub")
         self.tempdir.write(
             "prestable/toktmx/sme2smj/ficti/sub/f.txt.toktmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
 
         self.tempdir.makedir("orig/smj/ficti/sub")
@@ -1187,7 +1184,7 @@ class TestCorpusFilesetMetadataUpdater3(unittest.TestCase):
         smj_metadata.set_parallel_text("sme", "f.txt")
         smj_metadata.write_file()
 
-        self.tempdir.write("orig/smj/facta/bub/o.txt", six.b("content of o"))
+        self.tempdir.write("orig/smj/facta/bub/o.txt", b"content of o")
         smj_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, "orig/smj/facta/bub/o.txt.xsl"), create=True
         )
@@ -1293,27 +1290,27 @@ class TestCorpusFilesetMetadataUpdater4(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=[".git"])
 
         self.tempdir.makedir("orig/sme/ficti/sub")
-        self.tempdir.write("orig/sme/ficti/sub/f.txt", six.b("content of f"))
+        self.tempdir.write("orig/sme/ficti/sub/f.txt", b"content of f")
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, "orig/sme/ficti/sub/f.txt.xsl"), create=True
         )
         sme_metadata.set_variable("mainlang", "sme")
-        sme_metadata.set_parallel_text("smj", u"ø.txt")
+        sme_metadata.set_parallel_text("smj", "ø.txt")
         sme_metadata.write_file()
         self.tempdir.makedir("prestable/converted/sme/ficti/sub")
         self.tempdir.write(
             "prestable/converted/sme/ficti/sub/f.txt.xml",
-            six.b("converted content of f"),
+            b"converted content of f",
         )
         self.tempdir.makedir("prestable/tmx/sme2smj/ficti/sub")
         self.tempdir.write(
             "prestable/tmx/sme2smj/ficti/sub/f.txt.tmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
         self.tempdir.makedir("prestable/toktmx/sme2smj/ficti/sub")
         self.tempdir.write(
             "prestable/toktmx/sme2smj/ficti/sub/f.txt.toktmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
 
         self.tempdir.makedir("orig/smj/ficti/sub")
@@ -1402,38 +1399,38 @@ class TestCorpusFilesetMetadataUpdater5(unittest.TestCase):
         self.tempdir = testfixtures.TempDirectory(ignore=[".git"])
 
         self.tempdir.makedir("orig/sme/ficti/sub")
-        self.tempdir.write("orig/sme/ficti/sub/f.txt", six.b("content of f"))
+        self.tempdir.write("orig/sme/ficti/sub/f.txt", b"content of f")
         sme_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, "orig/sme/ficti/sub/f.txt.xsl"), create=True
         )
         sme_metadata.set_variable("mainlang", "sme")
-        sme_metadata.set_parallel_text("smj", u"ø.txt")
+        sme_metadata.set_parallel_text("smj", "ø.txt")
         sme_metadata.set_parallel_text("sma", "f.txt")
         sme_metadata.write_file()
         self.tempdir.makedir("prestable/converted/sme/ficti/sub")
         self.tempdir.write(
             "prestable/converted/sme/ficti/sub/f.txt.xml",
-            six.b("converted content of f"),
+            b"converted content of f",
         )
         self.tempdir.makedir("prestable/tmx/sme2smj/ficti/sub")
         self.tempdir.write(
             "prestable/tmx/sme2smj/ficti/sub/f.txt.tmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
         self.tempdir.makedir("prestable/tmx/sme2sma/ficti/sub")
         self.tempdir.write(
             "prestable/tmx/sme2sma/ficti/sub/f.txt.tmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
         self.tempdir.makedir("prestable/toktmx/sme2smj/ficti/sub")
         self.tempdir.write(
             "prestable/toktmx/sme2smj/ficti/sub/f.txt.toktmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
         self.tempdir.makedir("prestable/toktmx/sme2sma/ficti/sub")
         self.tempdir.write(
             "prestable/toktmx/sme2sma/ficti/sub/f.txt.toktmx",
-            six.b("parallelised content of f"),
+            b"parallelised content of f",
         )
 
         self.tempdir.makedir("orig/smj/ficti/sub")
@@ -1454,7 +1451,7 @@ class TestCorpusFilesetMetadataUpdater5(unittest.TestCase):
         )
 
         self.tempdir.makedir("orig/sma/ficti/sub")
-        self.tempdir.write("orig/sma/ficti/sub/f.txt", six.b("content of f"))
+        self.tempdir.write("orig/sma/ficti/sub/f.txt", b"content of f")
         sma_metadata = xslsetter.MetadataHandler(
             os.path.join(self.tempdir.path, "orig/sma/ficti/sub/f.txt.xsl"), create=True
         )
@@ -1462,12 +1459,12 @@ class TestCorpusFilesetMetadataUpdater5(unittest.TestCase):
         sma_metadata.set_variable("translated_from", "sme")
         sma_metadata.set_variable("genre", "ficti")
         sma_metadata.set_parallel_text("sme", "f.txt")
-        sma_metadata.set_parallel_text("smj", u"ø.txt")
+        sma_metadata.set_parallel_text("smj", "ø.txt")
         sma_metadata.write_file()
         self.tempdir.makedir("prestable/converted/sma/ficti/sub")
         self.tempdir.write(
             "prestable/converted/sma/ficti/sub/f.txt.xml",
-            six.b("converted content of f"),
+            b"converted content of f",
         )
 
         r = git.Repo.init(self.tempdir.path)

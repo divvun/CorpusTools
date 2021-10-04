@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import codecs
 import doctest

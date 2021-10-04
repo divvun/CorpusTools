@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import absolute_import
 
 import collections
 import io
@@ -117,8 +114,8 @@ def test_detect_quote():
     for i in ".,?!:":
         quote_tests.append(
             TestItem(
-                name="quote followed by {}".format(i),
-                orig=("<p>“bla”{} bla ”bla”</p>".format(i)),
+                name=f"quote followed by {i}",
+                orig=(f"<p>“bla”{i} bla ”bla”</p>"),
                 expected=(
                     '<p><span type="quote">“bla”</span>{} bla '
                     '<span type="quote">”bla”</span></p>'.format(i)
@@ -150,26 +147,26 @@ class TestDocumentFixer(XMLTester):
 
     def test_insert_spaces_after_semicolon(self):
         a = {
-            u"Govven:Á": u"Govven: Á",
-            u"govven:á": u"govven: á",
-            u"GOVVEN:Á": u"GOVVEN: Á",
-            u"Govva:Á": u"Govva: Á",
-            u"govva:á": u"govva: á",
-            u"GOVVA:Á": u"GOVVA: Á",
-            u"GOVVEJEADDJI:Á": u"GOVVEJEADDJI: Á",
-            u"Govva:": u"Govva:",
-            u"<em>Govven:Á</em>": u"<em>Govven: Á</em>",
+            "Govven:Á": "Govven: Á",
+            "govven:á": "govven: á",
+            "GOVVEN:Á": "GOVVEN: Á",
+            "Govva:Á": "Govva: Á",
+            "govva:á": "govva: á",
+            "GOVVA:Á": "GOVVA: Á",
+            "GOVVEJEADDJI:Á": "GOVVEJEADDJI: Á",
+            "Govva:": "Govva:",
+            "<em>Govven:Á</em>": "<em>Govven: Á</em>",
         }
         for key, value in a.items():
             document_fixer = documentfixer.DocumentFixer(
                 etree.fromstring(
-                    u"""
+                    """
                 <document>
                     <header/>
                     <body>
                         <p>"""
                     + key
-                    + u"""</p>
+                    + """</p>
                     </body>
                 </document>
             """
@@ -178,13 +175,13 @@ class TestDocumentFixer(XMLTester):
             document_fixer.insert_spaces_after_semicolon()
             got = document_fixer.get_etree()
             want = etree.fromstring(
-                u"""
+                """
                 <document>
                     <header/>
                     <body>
                         <p>"""
                 + value
-                + u"""</p>
+                + """</p>
                     </body>
                 </document>
             """
@@ -208,7 +205,7 @@ seaggi</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p><em type="bold">buoidi</em></p>
@@ -235,7 +232,7 @@ seaggi</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p><em type="bold">buoidi</em></p>
@@ -261,7 +258,7 @@ seaggi</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p><em type="bold">DON</em></p>
@@ -290,7 +287,7 @@ seaggi</p>
         got = document_fixer.get_etree()
 
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <author>
             <person firstname="" lastname="Elle Merete Utsi"/>
@@ -321,7 +318,7 @@ seaggi</p>
         got = document_fixer.get_etree()
 
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <author>
             <person firstname="" lastname="Åse Pulk"/>
@@ -352,7 +349,7 @@ seaggi</p>
         got = document_fixer.get_etree()
 
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <author>
             <person firstname="" lastname="Elle Merete Utsi"/>
@@ -383,7 +380,7 @@ seaggi</p>
         got = document_fixer.get_etree()
 
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <author>
             <person firstname="" lastname="Elle Merete Utsi"/>
@@ -414,7 +411,7 @@ seaggi</p>
         got = document_fixer.get_etree()
 
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <author>
             <person firstname="" lastname="Elle Merete Utsi"/>
@@ -445,7 +442,7 @@ seaggi</p>
         got = document_fixer.get_etree()
 
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <author>
             <person firstname="" lastname="Juvven"/>
@@ -476,7 +473,7 @@ seaggi</p>
         got = document_fixer.get_etree()
 
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <author>
             <person firstname="" lastname="Elle Merete Utsi"/>
@@ -507,7 +504,7 @@ seaggi</p>
         got = document_fixer.get_etree()
 
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <author>
             <person firstname="" lastname="Elle Merete Utsi"/>
@@ -719,7 +716,7 @@ Billedtekst: 3</p>
         got = document_fixer.get_etree()
 
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p>NSR PRESIDEANTAEVTTOHAS? Berit Ranveig Nilssen</p>
@@ -761,7 +758,7 @@ TEKST/INGRESS: 5
         got = document_fixer.get_etree()
 
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p>Ragnhild Nystad, Aili Keskitalo.</p>
@@ -797,7 +794,7 @@ TEKST/INGRESS: 5
         got = document_fixer.get_etree()
 
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p><em>Gos?</em></p>
@@ -828,7 +825,7 @@ M:TITT:Lea go dus meahccebiila?
         got = document_fixer.get_etree()
 
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p type="title">Juovllat</p>
@@ -859,7 +856,7 @@ M:TITT:Lea go dus meahccebiila?
         got = document_fixer.get_etree()
 
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p type="title"><em>Maid?</em></p>
@@ -872,7 +869,7 @@ M:TITT:Lea go dus meahccebiila?
     def test_tekst_1(self):
         document_fixer = documentfixer.DocumentFixer(
             etree.fromstring(
-                u"""<document>
+                """<document>
     <header/>
     <body>
         <p>@tekst:veadjá šaddat.
@@ -886,7 +883,7 @@ TEKST:ÐMii lea suohttaseamos geassebargu dus?
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p>veadjá šaddat.</p>
@@ -902,7 +899,7 @@ TEKST:ÐMii lea suohttaseamos geassebargu dus?
     def test_tekst_2(self):
         document_fixer = documentfixer.DocumentFixer(
             etree.fromstring(
-                u"""<document>
+                """<document>
     <header/>
     <body>
         <p>@tekst:veadjá šaddat.
@@ -914,7 +911,7 @@ NSR ii áiggo.</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p>veadjá šaddat. NSR ii áiggo.</p>
@@ -927,7 +924,7 @@ NSR ii áiggo.</p>
     def test_tekst_3(self):
         document_fixer = documentfixer.DocumentFixer(
             etree.fromstring(
-                u"""<document>
+                """<document>
     <header/>
     <body>
         <p>@tekst:veadjá šaddat.
@@ -939,7 +936,7 @@ NSR ii áiggo.</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p>veadjá šaddat.</p>
@@ -953,7 +950,7 @@ NSR ii áiggo.</p>
     def test_tekst_4(self):
         document_fixer = documentfixer.DocumentFixer(
             etree.fromstring(
-                u"""<document>
+                """<document>
     <header/>
     <body>
         <p>NSR <em>ii áiggo.</em></p>
@@ -964,7 +961,7 @@ NSR ii áiggo.</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p>NSR <em>ii áiggo.</em></p>
@@ -977,7 +974,7 @@ NSR ii áiggo.</p>
     def test_tekst_5(self):
         document_fixer = documentfixer.DocumentFixer(
             etree.fromstring(
-                u"""<document>
+                """<document>
     <header/>
     <body>
         <p>  @tekst:ii</p>
@@ -988,7 +985,7 @@ NSR ii áiggo.</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p>ii</p>
@@ -1039,7 +1036,7 @@ NSR ii áiggo.</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
@@ -1066,7 +1063,7 @@ NSR ii áiggo.</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
@@ -1090,7 +1087,7 @@ NSR ii áiggo.</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
@@ -1114,7 +1111,7 @@ NSR ii áiggo.</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
@@ -1139,7 +1136,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
@@ -1164,7 +1161,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p type="title">Ja</p>
@@ -1188,7 +1185,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
@@ -1214,7 +1211,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Eanebuidda</title>
     </header>
@@ -1242,7 +1239,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Eanebuidda</title>
     </header>
@@ -1270,7 +1267,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Eanebuidda</title>
     </header>
@@ -1298,7 +1295,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Eanebuidda</title>
     </header>
@@ -1326,7 +1323,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Eanebuidda</title>
     </header>
@@ -1354,7 +1351,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Eanebuidda</title>
     </header>
@@ -1382,7 +1379,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Eanebuidda</title>
     </header>
@@ -1410,7 +1407,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Eanebuidda</title>
     </header>
@@ -1438,7 +1435,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Eanebuidda</title>
     </header>
@@ -1466,7 +1463,7 @@ undertitt:Dološ sámegiel máinnas Várjjagis</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Eanebuidda</title>
     </header>
@@ -1496,7 +1493,7 @@ titt:Ruovttusuodjaleaddjit
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Guolli</title>
     </header>
@@ -1526,7 +1523,7 @@ titt:Ruovttusuodjaleaddjit
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Eanebuidda</title>
     </header>
@@ -1554,7 +1551,7 @@ titt:Ruovttusuodjaleaddjit
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Eanebuidda</title>
     </header>
@@ -1582,7 +1579,7 @@ titt:Ruovttusuodjaleaddjit
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Eanebuidda</title>
     </header>
@@ -1610,7 +1607,7 @@ titt:Ruovttusuodjaleaddjit
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Eanebuidda</title>
     </header>
@@ -1646,7 +1643,7 @@ TITTEL: 3</p>
         got = document_fixer.get_etree()
 
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>Gii boahtá Nystø maŋis?</title>
     </header>
@@ -1680,7 +1677,7 @@ TITTEL: 3</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
@@ -1704,7 +1701,7 @@ TITTEL: 3</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p type="title">Dološ sámegiel máinnas Várjjagis</p>
@@ -1729,7 +1726,7 @@ TITTEL: 3</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p>text</p>
@@ -1757,7 +1754,7 @@ TITTEL: 3</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <title>title</title>
     </header>
@@ -1789,7 +1786,7 @@ TITTEL: 3</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header>
         <author>
             <person firstname="" lastname="title"></person>
@@ -1818,7 +1815,7 @@ TITTEL: 3</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p>text</p>
@@ -1844,7 +1841,7 @@ TITTEL: 3</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p>text</p>
@@ -1870,7 +1867,7 @@ TITTEL: 3</p>
         document_fixer.fix_newstags()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p type="title">title</p>
@@ -1884,7 +1881,7 @@ TITTEL: 3</p>
         newstext = plaintextconverter.PlaintextConverter("orig/sme/riddu/tullball.txt")
         text = newstext.content2xml(
             io.StringIO(
-                u"""ÐMun lean njeallje jagi boaris.
+                """ÐMun lean njeallje jagi boaris.
 
 Nu beaivvdat.
 
@@ -1908,7 +1905,7 @@ LOGO: Smi kulturfestivala 1998
         got = document_fixer.get_etree()
 
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header></header>
         <body>
             <p>–Mun lean njeallje jagi boaris.</p>
@@ -1979,8 +1976,7 @@ LOGO: Smi kulturfestivala 1998
             "</availability><multilingual/></header><body><p>a­b­c"
             "<span>d­e</span>f­g</p></body></document>"
         )
-        if six.PY3:
-            document = document.encode("utf8")
+        document = document.encode("utf8")
         orig_doc = etree.parse(io.BytesIO(document))
 
         expected_doc = (
@@ -2002,8 +1998,7 @@ LOGO: Smi kulturfestivala 1998
             "<availability><free/></availability><multilingual/></header>"
             "<body><p>a­b­c<span>d­e</span></p></body></document>"
         )
-        if six.PY3:
-            document = document.encode("utf8")
+        document = document.encode("utf8")
         orig_doc = etree.parse(io.BytesIO(document))
 
         expected_doc = (
@@ -2032,7 +2027,7 @@ LOGO: Smi kulturfestivala 1998
         document_fixer.compact_ems()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p><em>1 2</em></p>
@@ -2056,7 +2051,7 @@ LOGO: Smi kulturfestivala 1998
         document_fixer.compact_ems()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p><em>1 2</em> 3</p>
@@ -2080,7 +2075,7 @@ LOGO: Smi kulturfestivala 1998
         document_fixer.compact_ems()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p><em>1 2</em> <span/> <em>3 4</em></p>
@@ -2104,7 +2099,7 @@ LOGO: Smi kulturfestivala 1998
         document_fixer.compact_ems()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p><em>1 2</em> 5<span/> <em>3 4</em> 6</p>
@@ -2128,7 +2123,7 @@ LOGO: Smi kulturfestivala 1998
         document_fixer.compact_ems()
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u"""<document>
+            """<document>
     <header/>
     <body>
         <p><em>2</em> 5<span/> <em>3</em> 6</p>
@@ -2142,27 +2137,27 @@ LOGO: Smi kulturfestivala 1998
         r"""\u2019 (’) should be replaced by \u02BC (ʼ)"""
         document_fixer = documentfixer.DocumentFixer(
             etree.fromstring(
-                u'<document xml:lang="sms">'
-                u"  <header/>"
-                u"  <body>"
-                u"     <p>"
-                u"       Mätt’temaaunâstuâjj "
-                u"     </p>"
-                u"  </body>"
-                u"</document>"
+                '<document xml:lang="sms">'
+                "  <header/>"
+                "  <body>"
+                "     <p>"
+                "       Mätt’temaaunâstuâjj "
+                "     </p>"
+                "  </body>"
+                "</document>"
             )
         )
         document_fixer.fix_body_encoding("sms")
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u'<document xml:lang="sms">'
-            u"  <header/>"
-            u"  <body>"
-            u"     <p>"
-            u"       Mättʼtemaaunâstuâjj "
-            u"     </p>"
-            u"  </body>"
-            u"</document>"
+            '<document xml:lang="sms">'
+            "  <header/>"
+            "  <body>"
+            "     <p>"
+            "       Mättʼtemaaunâstuâjj "
+            "     </p>"
+            "  </body>"
+            "</document>"
         )
 
         self.assertXmlEqual(got, want)
@@ -2171,27 +2166,27 @@ LOGO: Smi kulturfestivala 1998
         r"""\u0027 (')  should be replaced by \u02BC (ʼ)"""
         document_fixer = documentfixer.DocumentFixer(
             etree.fromstring(
-                u'<document xml:lang="sms">'
-                u"  <header/>"
-                u"  <body>"
-                u"     <p>"
-                u"       ǩiõll'laž da kulttuursaž vuõiggâdvuõđi"
-                u"     </p>"
-                u"  </body>"
-                u"</document>"
+                '<document xml:lang="sms">'
+                "  <header/>"
+                "  <body>"
+                "     <p>"
+                "       ǩiõll'laž da kulttuursaž vuõiggâdvuõđi"
+                "     </p>"
+                "  </body>"
+                "</document>"
             )
         )
         document_fixer.fix_body_encoding("sms")
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u'<document xml:lang="sms">'
-            u"  <header/>"
-            u"  <body>"
-            u"     <p>"
-            u"       ǩiõllʼlaž da kulttuursaž vuõiggâdvuõđi"
-            u"     </p>"
-            u"  </body>"
-            u"</document>"
+            '<document xml:lang="sms">'
+            "  <header/>"
+            "  <body>"
+            "     <p>"
+            "       ǩiõllʼlaž da kulttuursaž vuõiggâdvuõđi"
+            "     </p>"
+            "  </body>"
+            "</document>"
         )
 
         self.assertXmlEqual(got, want)
@@ -2200,27 +2195,27 @@ LOGO: Smi kulturfestivala 1998
         r"""\u2032 (′)  should be replaced by \u02B9 (ʹ)"""
         document_fixer = documentfixer.DocumentFixer(
             etree.fromstring(
-                u'<document xml:lang="sms">'
-                u"  <header/>"
-                u"  <body>"
-                u"     <p>"
-                u"       Mon tõzz še njui′ǩǩeem tõ′st dõõzze."
-                u"     </p>"
-                u"  </body>"
-                u"</document>"
+                '<document xml:lang="sms">'
+                "  <header/>"
+                "  <body>"
+                "     <p>"
+                "       Mon tõzz še njui′ǩǩeem tõ′st dõõzze."
+                "     </p>"
+                "  </body>"
+                "</document>"
             )
         )
         document_fixer.fix_body_encoding("sms")
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u'<document xml:lang="sms">'
-            u"  <header/>"
-            u"  <body>"
-            u"     <p>"
-            u"       Mon tõzz še njuiʹǩǩeem tõʹst dõõzze."
-            u"     </p>"
-            u"  </body>"
-            u"</document>"
+            '<document xml:lang="sms">'
+            "  <header/>"
+            "  <body>"
+            "     <p>"
+            "       Mon tõzz še njuiʹǩǩeem tõʹst dõõzze."
+            "     </p>"
+            "  </body>"
+            "</document>"
         )
 
         self.assertXmlEqual(got, want)
@@ -2229,27 +2224,27 @@ LOGO: Smi kulturfestivala 1998
         r"""\u00B4 (´)  should be replaced by \u02B9 (ʹ)"""
         document_fixer = documentfixer.DocumentFixer(
             etree.fromstring(
-                u'<document xml:lang="sms">'
-                u"  <header/>"
-                u"  <body>"
-                u"     <p>"
-                u"       Materialbaaŋk čuä´jtumuš"
-                u"     </p>"
-                u"  </body>"
-                u"</document>"
+                '<document xml:lang="sms">'
+                "  <header/>"
+                "  <body>"
+                "     <p>"
+                "       Materialbaaŋk čuä´jtumuš"
+                "     </p>"
+                "  </body>"
+                "</document>"
             )
         )
         document_fixer.fix_body_encoding("sms")
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u'<document xml:lang="sms">'
-            u"  <header/>"
-            u"  <body>"
-            u"     <p>"
-            u"       Materialbaaŋk čuäʹjtumuš"
-            u"     </p>"
-            u"  </body>"
-            u"</document>"
+            '<document xml:lang="sms">'
+            "  <header/>"
+            "  <body>"
+            "     <p>"
+            "       Materialbaaŋk čuäʹjtumuš"
+            "     </p>"
+            "  </body>"
+            "</document>"
         )
 
         self.assertXmlEqual(got, want)
@@ -2258,27 +2253,27 @@ LOGO: Smi kulturfestivala 1998
         r"""\u0301 ( ́)  should be replaced by \u02B9 (ʹ)"""
         document_fixer = documentfixer.DocumentFixer(
             etree.fromstring(
-                u'<document xml:lang="sms">'
-                u"  <header/>"
-                u"  <body>"
-                u"     <p>"
-                u"       Materialbaaŋk čuä́jtumuš"
-                u"     </p>"
-                u"  </body>"
-                u"</document>"
+                '<document xml:lang="sms">'
+                "  <header/>"
+                "  <body>"
+                "     <p>"
+                "       Materialbaaŋk čuä́jtumuš"
+                "     </p>"
+                "  </body>"
+                "</document>"
             )
         )
         document_fixer.fix_body_encoding("sms")
         got = document_fixer.get_etree()
         want = etree.fromstring(
-            u'<document xml:lang="sms">'
-            u"  <header/>"
-            u"  <body>"
-            u"     <p>"
-            u"       Materialbaaŋk čuäʹjtumuš"
-            u"     </p>"
-            u"  </body>"
-            u"</document>"
+            '<document xml:lang="sms">'
+            "  <header/>"
+            "  <body>"
+            "     <p>"
+            "       Materialbaaŋk čuäʹjtumuš"
+            "     </p>"
+            "  </body>"
+            "</document>"
         )
 
         self.assertXmlEqual(got, want)

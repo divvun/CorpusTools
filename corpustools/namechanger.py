@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """Classes and functions change names of corpus files."""
 
-from __future__ import absolute_import, print_function
 
 import hashlib
 import os
@@ -42,7 +39,7 @@ class NamechangerError(Exception):
 PathPair = namedtuple("PathPair", "oldpath newpath")
 
 
-class MovepairComputer(object):
+class MovepairComputer:
     """Compute oldname, newname pairs."""
 
     def __init__(self):
@@ -79,14 +76,14 @@ class MovepairComputer(object):
         """
         old_components = util.split_path(oldpath)
 
-        if newpath == u"":
+        if newpath == "":
             newpath = oldpath
 
         new_components = util.split_path(newpath)
 
         metadatafile = xslsetter.MetadataHandler(oldpath + ".xsl")
-        for lang, parallel in six.iteritems(metadatafile.get_parallel_texts()):
-            oldparellelpath = u"/".join(
+        for lang, parallel in metadatafile.get_parallel_texts().items():
+            oldparellelpath = "/".join(
                 (
                     old_components.root,
                     old_components.module,
@@ -96,7 +93,7 @@ class MovepairComputer(object):
                     parallel,
                 )
             )
-            newparallelpath = u"/".join(
+            newparallelpath = "/".join(
                 (
                     new_components.root,
                     new_components.module,
@@ -123,7 +120,7 @@ class MovepairComputer(object):
         self.compute_parallel_movepairs(oldpath, newpath)
 
 
-class CorpusFileMover(object):
+class CorpusFileMover:
     """Move an original file and all its derived files."""
 
     def __init__(self, oldpath, newpath):
@@ -160,12 +157,12 @@ class CorpusFileMover(object):
 
     def move_orig(self):
         """Move the original file."""
-        self._move(u"/".join(self.old_components), u"/".join(self.new_components))
+        self._move("/".join(self.old_components), "/".join(self.new_components))
 
     def move_xsl(self):
         """Move the metadata file."""
         self._move(
-            u"/".join(
+            "/".join(
                 (
                     self.old_components.root,
                     self.old_components.module,
@@ -175,7 +172,7 @@ class CorpusFileMover(object):
                     self.old_components.basename + ".xsl",
                 )
             ),
-            u"/".join(
+            "/".join(
                 (
                     self.new_components.root,
                     self.new_components.module,
@@ -190,20 +187,20 @@ class CorpusFileMover(object):
     def move_converted(self):
         """Move the converted file."""
         self._move(
-            u"/".join(
+            "/".join(
                 (
                     self.old_components.root,
-                    u"converted",
+                    "converted",
                     self.old_components.lang,
                     self.old_components.genre,
                     self.old_components.subdirs,
                     self.old_components.basename + ".xml",
                 )
             ),
-            u"/".join(
+            "/".join(
                 (
                     self.new_components.root,
-                    u"converted",
+                    "converted",
                     self.new_components.lang,
                     self.new_components.genre,
                     self.new_components.subdirs,
@@ -215,20 +212,20 @@ class CorpusFileMover(object):
     def move_prestable_converted(self):
         """Move the prestable/converted file."""
         self._move(
-            u"/".join(
+            "/".join(
                 (
                     self.old_components.root,
-                    u"prestable/converted",
+                    "prestable/converted",
                     self.old_components.lang,
                     self.old_components.genre,
                     self.old_components.subdirs,
                     self.old_components.basename + ".xml",
                 )
             ),
-            u"/".join(
+            "/".join(
                 (
                     self.new_components.root,
-                    u"prestable/converted",
+                    "prestable/converted",
                     self.new_components.lang,
                     self.new_components.genre,
                     self.new_components.subdirs,
@@ -239,9 +236,9 @@ class CorpusFileMover(object):
 
     def move_prestable_tmx(self):
         """Move the prestable toktmx and tmx files."""
-        for tmx in [u"tmx", u"toktmx"]:
-            tmxdir = u"/".join((u"prestable", tmx))
-            metadataname = u"/".join(
+        for tmx in ["tmx", "toktmx"]:
+            tmxdir = "/".join(("prestable", tmx))
+            metadataname = "/".join(
                 (
                     self.new_components.root,
                     self.new_components.module,
@@ -254,33 +251,33 @@ class CorpusFileMover(object):
             if os.path.isfile(metadataname):
                 metadatafile = xslsetter.MetadataHandler(metadataname)
                 translated_from = metadatafile.get_variable("translated_from")
-                if translated_from is None or translated_from == u"":
+                if translated_from is None or translated_from == "":
                     for lang in metadatafile.get_parallel_texts().keys():
                         self._move(
-                            u"/".join(
+                            "/".join(
                                 (
                                     self.old_components.root,
                                     tmxdir,
-                                    self.old_components.lang + u"2" + lang,
+                                    self.old_components.lang + "2" + lang,
                                     self.old_components.genre,
                                     self.old_components.subdirs,
-                                    self.old_components.basename + u"." + tmx,
+                                    self.old_components.basename + "." + tmx,
                                 )
                             ),
-                            u"/".join(
+                            "/".join(
                                 (
                                     self.new_components.root,
                                     tmxdir,
-                                    self.new_components.lang + u"2" + lang,
+                                    self.new_components.lang + "2" + lang,
                                     self.new_components.genre,
                                     self.new_components.subdirs,
-                                    self.new_components.basename + u"." + tmx,
+                                    self.new_components.basename + "." + tmx,
                                 )
                             ),
                         )
 
 
-class CorpusFileRemover(object):
+class CorpusFileRemover:
     """Remove an original file and all its derived files."""
 
     def __init__(self, oldpath):
@@ -311,12 +308,12 @@ class CorpusFileRemover(object):
 
     def remove_orig(self):
         """Remove the original file."""
-        self._remove(u"/".join(self.old_components))
+        self._remove("/".join(self.old_components))
 
     def remove_xsl(self):
         """Remove the metadata file."""
         self._remove(
-            u"/".join(
+            "/".join(
                 (
                     self.old_components.root,
                     self.old_components.module,
@@ -331,10 +328,10 @@ class CorpusFileRemover(object):
     def remove_converted(self):
         """Remove the converted file."""
         self._remove(
-            u"/".join(
+            "/".join(
                 (
                     self.old_components.root,
-                    u"converted",
+                    "converted",
                     self.old_components.lang,
                     self.old_components.genre,
                     self.old_components.subdirs,
@@ -346,10 +343,10 @@ class CorpusFileRemover(object):
     def remove_prestable_converted(self):
         """Remove the prestable/converted file."""
         self._remove(
-            u"/".join(
+            "/".join(
                 (
                     self.old_components.root,
-                    u"prestable/converted",
+                    "prestable/converted",
                     self.old_components.lang,
                     self.old_components.genre,
                     self.old_components.subdirs,
@@ -360,9 +357,9 @@ class CorpusFileRemover(object):
 
     def remove_prestable_tmx(self):
         """Remove the prestable toktmx and tmx files."""
-        for tmx in [u"tmx", u"toktmx"]:
-            tmxdir = u"/".join((u"prestable", tmx))
-            metadataname = u"/".join(
+        for tmx in ["tmx", "toktmx"]:
+            tmxdir = "/".join(("prestable", tmx))
+            metadataname = "/".join(
                 (
                     self.old_components.root,
                     self.old_components.module,
@@ -375,23 +372,23 @@ class CorpusFileRemover(object):
             if os.path.isfile(metadataname):
                 metadatafile = xslsetter.MetadataHandler(metadataname)
                 translated_from = metadatafile.get_variable("translated_from")
-                if translated_from is None or translated_from == u"":
+                if translated_from is None or translated_from == "":
                     for lang in metadatafile.get_parallel_texts().keys():
                         self._remove(
-                            u"/".join(
+                            "/".join(
                                 (
                                     self.old_components.root,
                                     tmxdir,
-                                    self.old_components.lang + u"2" + lang,
+                                    self.old_components.lang + "2" + lang,
                                     self.old_components.genre,
                                     self.old_components.subdirs,
-                                    self.old_components.basename + u"." + tmx,
+                                    self.old_components.basename + "." + tmx,
                                 )
                             )
                         )
 
 
-class CorpusFilesetMoverAndUpdater(object):
+class CorpusFilesetMoverAndUpdater:
     """Move or remove a file within a repository.
 
     When moving a file inside the same directory:
@@ -513,7 +510,7 @@ class CorpusFilesetMoverAndUpdater(object):
         if newpath:
             new_components = util.split_path(newpath)
             if old_components.lang != new_components.lang:
-                parallel_metadatafile.set_parallel_text(old_components.lang, u"")
+                parallel_metadatafile.set_parallel_text(old_components.lang, "")
                 parallel_metadatafile.set_parallel_text(
                     new_components.lang, new_components.basename
                 )
@@ -523,7 +520,7 @@ class CorpusFilesetMoverAndUpdater(object):
                 )
 
         else:
-            parallel_metadatafile.set_parallel_text(old_components.lang, u"")
+            parallel_metadatafile.set_parallel_text(old_components.lang, "")
 
         parallel_metadatafile.write_file()
         self.vcs.add(parallel_name)
@@ -580,7 +577,7 @@ def normalise_filename(filename):
         )
 
     # unicode.decode wants a unicode string
-    if not isinstance(filename, six.text_type):
+    if not isinstance(filename, str):
         filename = filename.decode("utf8")
 
     # unidecode.unidecode makes ascii only
@@ -629,15 +626,15 @@ def compute_new_basename(oldpath, wanted_path):
 
     while os.path.exists(newpath):
         if are_duplicates(oldpath, newpath):
-            raise UserWarning(u"{} and {} are duplicates. ".format(oldpath, newpath))
+            raise UserWarning(f"{oldpath} and {newpath} are duplicates. ")
         else:
-            if u"." in wanted_basename:
+            if "." in wanted_basename:
                 dot = wanted_basename.rfind(".")
                 extension = wanted_basename[dot:]
                 pre_extension = wanted_basename[:dot]
-                new_basename = pre_extension + u"_" + six.text_type(index) + extension
+                new_basename = pre_extension + "_" + str(index) + extension
             else:
-                new_basename = wanted_basename + six.text_type(index)
+                new_basename = wanted_basename + str(index)
             newpath = os.path.join(os.path.dirname(wanted_path), new_basename)
             index += 1
 

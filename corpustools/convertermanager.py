@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -29,7 +27,7 @@ from corpustools import argparse_version, converter, text_cat, util, xslsetter
 LOGGER = logging.getLogger(__name__)
 
 
-class ConverterManager(object):
+class ConverterManager:
     """Manage the conversion of original files to corpus xml.
 
     Class/static variables:

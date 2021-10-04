@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This file contains a class to analyse text in giellatekno xml format
 #
@@ -21,7 +19,6 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import absolute_import, unicode_literals
 
 import doctest
 import os

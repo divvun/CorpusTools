@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """Implement the XslMaker class."""
 
-from __future__ import absolute_import
 
 import os
 
@@ -29,7 +26,7 @@ from lxml import etree
 HERE = os.path.dirname(__file__)
 
 
-class XslMaker(object):
+class XslMaker:
     """Make an xsl file to combine with the intermediate xml file.
 
     To convert the intermediate xml to a fullfledged  giellatekno document
@@ -63,7 +60,7 @@ class XslMaker(object):
 
         return transformer(
             self.filename,
-            commonxsl=etree.XSLT.strparam("file://{}".format(common_xsl_path)),
+            commonxsl=etree.XSLT.strparam(f"file://{common_xsl_path}"),
         )
 
     @property

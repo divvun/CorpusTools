@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +18,6 @@
 #
 """Test the BiblexmlConverter class."""
 
-from __future__ import absolute_import
 
 import doctest
 import os
@@ -35,19 +32,19 @@ from corpustools import biblexmlconverter
 TESTS = {
     "book_chapter_section_verse": {
         "orig": (
-            u"<document>"
-            u"  <head/>"
-            u"  <body>"
-            u'    <book title="Book title">'
-            u'      <chapter title="Kapittel 1">'
-            u'        <section title="Section 1">'
-            u'          <verse number="1">Vearsa 1 </verse>'
-            u'          <verse number="2">Vearsa 2 </verse>'
-            u"        </section>"
-            u"      </chapter>"
-            u"    </book>"
-            u"  </body>"
-            u"</document>"
+            "<document>"
+            "  <head/>"
+            "  <body>"
+            '    <book title="Book title">'
+            '      <chapter title="Kapittel 1">'
+            '        <section title="Section 1">'
+            '          <verse number="1">Vearsa 1 </verse>'
+            '          <verse number="2">Vearsa 2 </verse>'
+            "        </section>"
+            "      </chapter>"
+            "    </book>"
+            "  </body>"
+            "</document>"
         ),
         "converted": (
             "<document>"
@@ -68,19 +65,19 @@ TESTS = {
     },
     "book_chapter_verse": {
         "orig": (
-            u"<document>"
-            u"  <header>"
-            u"    <title>1</title>"
-            u"  </header>"
-            u"  <body>"
-            u'    <book title="1 Sálmmaid girji ">'
-            u'      <chapter number="1">'
-            u'        <verse number="1">Vearsa1, </verse>'
-            u'        <verse number="2">vearsa2. </verse>'
-            u"      </chapter>"
-            u"    </book>"
-            u"  </body>"
-            u"</document>"
+            "<document>"
+            "  <header>"
+            "    <title>1</title>"
+            "  </header>"
+            "  <body>"
+            '    <book title="1 Sálmmaid girji ">'
+            '      <chapter number="1">'
+            '        <verse number="1">Vearsa1, </verse>'
+            '        <verse number="2">vearsa2. </verse>'
+            "      </chapter>"
+            "    </book>"
+            "  </body>"
+            "</document>"
         ),
         "converted": (
             "<document>"
@@ -99,25 +96,25 @@ TESTS = {
     },
     "book_chapter_section_p": {
         "orig": (
-            u"<document>"
-            u"  <header>"
-            u"    <title>1</title>"
-            u"  </header>"
-            u"  <body>"
-            u'    <book title="1 Sálmmaid girji ">'
-            u'      <chapter number="1">'
-            u'        <section title="Section title">'
-            u'          <verse number="1">Vearsa1 </verse>'
-            u"          <p>"
-            u'            <verse number="2">Vearsa2, </verse>'
-            u'            <verse number="3">vearsa3. </verse>'
-            u"          </p>"
-            u'          <verse number="4">Vearsa 4.</verse>'
-            u"        </section>"
-            u"      </chapter>"
-            u"    </book>"
-            u"  </body>"
-            u"</document>"
+            "<document>"
+            "  <header>"
+            "    <title>1</title>"
+            "  </header>"
+            "  <body>"
+            '    <book title="1 Sálmmaid girji ">'
+            '      <chapter number="1">'
+            '        <section title="Section title">'
+            '          <verse number="1">Vearsa1 </verse>'
+            "          <p>"
+            '            <verse number="2">Vearsa2, </verse>'
+            '            <verse number="3">vearsa3. </verse>'
+            "          </p>"
+            '          <verse number="4">Vearsa 4.</verse>'
+            "        </section>"
+            "      </chapter>"
+            "    </book>"
+            "  </body>"
+            "</document>"
         ),
         "converted": (
             "<document>"
@@ -153,7 +150,7 @@ def assertXmlEqual(got, want):
 
 def test_conversion():
     """Test conversion of bible xml elements."""
-    for testname, bible_xml in six.iteritems(TESTS):
+    for testname, bible_xml in TESTS.items():
         yield check_conversion, testname, bible_xml
 
 

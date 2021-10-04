@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
 #
 """Check the consistency of the parallel entries in the metadata files."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import os
@@ -60,7 +57,7 @@ def main():
                     xsl = xslsetter.MetadataHandler(xsl_name)
 
                     para_files = set()
-                    for lang, parallel in six.iteritems(xsl.get_parallel_texts()):
+                    for lang, parallel in xsl.get_parallel_texts().items():
                         parallelpath = "/".join(
                             (
                                 orig_components.root,
@@ -94,5 +91,5 @@ def main():
                     no_orig_xsl += 1
 
     print(
-        "Total {}, fails {}, {} files with no xsl".format(total, para_fail, no_orig_xsl)
+        f"Total {total}, fails {para_fail}, {no_orig_xsl} files with no xsl"
     )

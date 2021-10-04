@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Test the MetadataHandler class."""
-from __future__ import absolute_import
 
 import unittest
 
@@ -269,8 +266,8 @@ class TestMetadataHandler(unittest.TestCase):
         self.assertEqual(
             md.inner_margins,
             {
-                u"inner_bottom_margin": {u"5": 30, u"6": 50},
-                u"inner_top_margin": {u"5": 20, u"6": 20},
+                "inner_bottom_margin": {"5": 30, "6": 50},
+                "inner_top_margin": {"5": 20, "6": 20},
             },
         )
 
@@ -283,8 +280,8 @@ class TestMetadataHandler(unittest.TestCase):
         self.assertEqual(
             md.inner_margins,
             {
-                u"inner_right_margin": {u"5": 30, u"6": 50},
-                u"inner_left_margin": {u"5": 20, u"6": 20},
+                "inner_right_margin": {"5": 30, "6": 50},
+                "inner_left_margin": {"5": 20, "6": 20},
             },
         )
 
@@ -341,7 +338,7 @@ class TestMetadataHandler(unittest.TestCase):
 
     def test_mlangs_set(self):
         """Check if languages are set and picked up."""
-        languages = set(["nob", "sme", "sma"])
+        languages = {"nob", "sme", "sma"}
 
         md = xslsetter.MetadataHandler("bogus.epub.xsl", create=True)
 

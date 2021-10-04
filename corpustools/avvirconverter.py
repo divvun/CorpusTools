@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -17,7 +15,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-u"""Convert Ávvir-files to the Giella xml format."""
+"""Convert Ávvir-files to the Giella xml format."""
 
 from lxml import etree
 
@@ -156,7 +154,7 @@ def convert_story(avvir_doc):
 
 
 def convert_article(avvir_doc):
-    u"""The root element of an Ávvir doc is article, rename it to body.
+    """The root element of an Ávvir doc is article, rename it to body.
 
     Args:
         avvir_doc (etree.Element): the etree that should be manipulated.
@@ -172,7 +170,7 @@ def convert_article(avvir_doc):
 
 
 def convert2intermediate(filename):
-    u"""Convert Ávvir xml files to the giellatekno xml format.
+    """Convert Ávvir xml files to the giellatekno xml format.
 
     The root node in an Ávvir document is article.
     article nodes contains one or more story nodes.

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -18,7 +16,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-u"""Test conversion of pdf files."""
+"""Test conversion of pdf files."""
 
 import collections
 import os
@@ -65,7 +63,7 @@ class TestPDFFontspecs(unittest.TestCase):
         pdffontspecs.add_fontspec(f3)
 
         self.assertListEqual(
-            sorted([id for p, id in pdffontspecs.pdffontspecs.items()]), ["1", "5"]
+            sorted(id for p, id in pdffontspecs.pdffontspecs.items()), ["1", "5"]
         )
         self.assertDictEqual(pdffontspecs.duplicates, {"6": "1"})
 

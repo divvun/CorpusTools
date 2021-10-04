@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -18,7 +16,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-u"""Test conversion of html files."""
+"""Test conversion of html files."""
 
 import os
 
@@ -189,8 +187,7 @@ class TestHTMLConverter(XMLTester):
     def test_convert2intermediate(self, testname, filename, content, want):
         """Check that convoluted html is correctly converted to xml."""
         with testfixtures.TempDirectory() as temp_dir:
-            if six.PY3:
-                content = content.encode("utf8")
+            content = content.encode("utf8")
             temp_dir.write(filename, content)
             got = htmlcontentconverter.convert2intermediate(
                 os.path.join(temp_dir.path, filename)
@@ -199,7 +196,7 @@ class TestHTMLConverter(XMLTester):
 
     def test_content(self):
         """Check that content really is real utf-8."""
-        content = u"""
+        content = """
             <!DOCTYPE html>
             <html lang="sma-NO">
                 <head>
@@ -214,7 +211,7 @@ class TestHTMLConverter(XMLTester):
             encoding="utf-8"
         )
         want = html.fromstring(
-            u"""
+            """
             <html lang="sma-NO">
                 <head>
                     <meta name="viewport" content="width=device-width,
@@ -2188,8 +2185,7 @@ def test_conversion(testname, html_str, xml_str):
     """Check that the tidied html is correctly converted to corpus xml."""
     with testfixtures.TempDirectory() as temp_dir:
         filepath = os.path.join("orig/sme/admin/sd", testname + ".html")
-        if six.PY3:
-            html_str = html_str.encode("utf8")
+        html_str = html_str.encode("utf8")
         temp_dir.write(filepath, html_str)
         got = htmlcontentconverter.convert2intermediate(
             os.path.join(temp_dir.path, filepath)

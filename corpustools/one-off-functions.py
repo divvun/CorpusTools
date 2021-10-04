@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -22,7 +20,6 @@
 Might be useful in other contexts.
 """
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import collections
 import os
@@ -125,7 +122,7 @@ def translated_from(url_part, mainlang, directories):
     """
     # Check if the arguments are valid
     if "." not in url_part:
-        raise UserWarning("{} does not seem to part of a url".format(url_part))
+        raise UserWarning(f"{url_part} does not seem to part of a url")
     if len(mainlang) != 3 and not isinstance(mainlang, "str"):
         raise UserWarning("{} does not seem to be a valid language code")
 
@@ -143,7 +140,7 @@ def translated_from(url_part, mainlang, directories):
                     metadata = xslsetter.MetadataHandler(parallel + ".xsl")
                 except util.ArgumentError as error:
                     util.note(error)
-                    util.note("Referenced from {}".format(file_))
+                    util.note(f"Referenced from {file_}")
                 finally:
                     metadata.set_variable("translated_from", mainlang)
                     metadata.write_file()

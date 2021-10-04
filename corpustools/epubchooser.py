@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -23,7 +21,6 @@ It is possible to filter away chapters and ranges of elements from an epub
 file. This is a helper program for that purpose.
 """
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import sys
@@ -35,7 +32,7 @@ import epub
 from corpustools import argparse_version, epubconverter, xslsetter
 
 
-class RangeHandler(object):
+class RangeHandler:
     """Handle skip_elements ranges.
 
     Attributes:
@@ -63,9 +60,9 @@ class RangeHandler(object):
             str
         """
         if pair[1]:
-            return "{};{}".format(self.xpaths[pair[0]], self.xpaths[pair[1]])
+            return f"{self.xpaths[pair[0]]};{self.xpaths[pair[1]]}"
         else:
-            return "{};".format(self.xpaths[pair[0]])
+            return f"{self.xpaths[pair[0]]};"
 
     @property
     def ranges(self):
@@ -86,9 +83,9 @@ class RangeHandler(object):
         if not xpath_pair[0]:
             raise KeyError("First xpath is empty.")
         if xpath_pair[0] not in self.xpaths:
-            raise KeyError("{} does not exist in this context".format(xpath_pair[0]))
+            raise KeyError(f"{xpath_pair[0]} does not exist in this context")
         if xpath_pair[1] and xpath_pair[1] not in self.xpaths:
-            raise KeyError("{} does not exist in this context".format(xpath_pair[1]))
+            raise KeyError(f"{xpath_pair[1]} does not exist in this context")
 
     def check_overlap(self, xpath_pair):
         """Check if xpath_pair overlaps any of the existing ranges.
@@ -106,9 +103,9 @@ class RangeHandler(object):
                             )
                         )
                     if pair[0] == self.xpaths.index(xpath):
-                        raise IndexError("{} == {}".format(self.xpaths[pair[0]], xpath))
+                        raise IndexError(f"{self.xpaths[pair[0]]} == {xpath}")
                     if pair[1] == self.xpaths.index(xpath):
-                        raise IndexError("{} == {}".format(self.xpaths[pair[1]], xpath))
+                        raise IndexError(f"{self.xpaths[pair[1]]} == {xpath}")
 
     def add_range(self, xpath_pair):
         """Add a new range.
@@ -134,7 +131,7 @@ class RangeHandler(object):
             )
 
 
-class EpubPresenter(object):
+class EpubPresenter:
     """Class to present metadata and content.
 
     Attributes:
@@ -194,17 +191,17 @@ class EpubPresenter(object):
         """Present omitted and present chapters."""
         print("\nIncluded chapters:")
         for index in self.not_chosen:
-            print("[{}]:\t{}".format(index, self.book_titles[index]))
+            print(f"[{index}]:\t{self.book_titles[index]}")
 
         print("\nExcluded chapters:")
         for index in self.excluded_chapters:
-            print("[{}]:\t{}".format(index, self.book_titles[index]))
+            print(f"[{index}]:\t{self.book_titles[index]}")
 
     @property
     def not_chosen(self):
         """The chapter that are not excluded."""
         return list(
-            set([x for x in range(len(self.book_titles))]) - set(self.excluded_chapters)
+            {x for x in range(len(self.book_titles))} - set(self.excluded_chapters)
         )
 
     def save(self):
@@ -253,9 +250,9 @@ class EpubPresenter(object):
         tag = element.tag.replace("{http://www.w3.org/1999/xhtml}", "")
 
         out.write(" " * (level * indent))
-        out.write("<{}".format(tag))
+        out.write(f"<{tag}")
 
-        for att_tag, att_value in six.iteritems(element.attrib):
+        for att_tag, att_value in element.attrib.items():
             out.write(" ")
             out.write(att_tag)
             out.write('="')
@@ -266,7 +263,7 @@ class EpubPresenter(object):
         if xpath and "/body" in xpath:
             new_xpath = "{}/{}".format(xpath.replace("/html/", ".//"), tag)
             if element_no > 1:
-                new_xpath = "{}[{}]".format(new_xpath, element_no)
+                new_xpath = f"{new_xpath}[{element_no}]"
             out.write("\t")
             out.write(new_xpath)
             self.rangehandler.xpaths.append(new_xpath)
@@ -296,7 +293,7 @@ class EpubPresenter(object):
             )
 
         out.write(" " * (level * indent))
-        out.write("</{}>\n".format(tag))
+        out.write(f"</{tag}>\n")
 
         if level > 0 and element.tail is not None and element.tail.strip():
             for _ in range(0, (level - 1) * indent):
@@ -305,7 +302,7 @@ class EpubPresenter(object):
             out.write("\n")
 
 
-class EpubChooser(object):
+class EpubChooser:
     """Class to determine which parts of an epub should be omitted.
 
     Attributes:

@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -19,7 +17,6 @@
 #
 """Manage corpus files in various ways."""
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import collections
 import difflib
@@ -72,10 +69,10 @@ def remove_files_with_duplicate_content():
     foundcount = 0
     notfoundcount = 0
     fingetter = adder.AddToCorpus(
-        six.text_type(os.getenv("GTFREE")), "fin", "admin/sd/www.samediggi.fi"
+        str(os.getenv("GTFREE")), "fin", "admin/sd/www.samediggi.fi"
     )
     smsgetter = adder.AddToCorpus(
-        six.text_type(os.getenv("GTFREE")), this_lang, "admin/sd/www.samediggi.fi"
+        str(os.getenv("GTFREE")), this_lang, "admin/sd/www.samediggi.fi"
     )
     for root, dirs, files in os.walk(
         os.path.join(

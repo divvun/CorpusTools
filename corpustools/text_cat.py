@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -31,7 +30,6 @@ Original Perl implementation and article available from
 http://odur.let.rug.nl/~vannoord/TextCat/
 """
 
-from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import codecs
@@ -49,7 +47,7 @@ here = os.path.dirname(__file__)
 
 
 def pretty_tbl(table):
-    return ", ".join("{}:{}".format(k, v) for k, v in table)
+    return ", ".join(f"{k}:{v}" for k, v in table)
 
 
 def ensure_unicode(text):
@@ -61,11 +59,11 @@ def ensure_unicode(text):
     if type(text) == bytes:
         return text.decode("utf-8")
     else:
-        assert type(text) == six.text_type
+        assert type(text) == str
         return text
 
 
-class NGramModel(object):
+class NGramModel:
     SPLITCHARS = re.compile(
         r"[][}{)(>< \n\t:;!.?_,¶§%&£€$¹°½¼¾©←→▪➢√|#–‒…·•@~\\/”“«»\"0-9=*+‑-]"
     )
@@ -142,7 +140,7 @@ class NGramModel(object):
                 continue
             freq = self.freq_of_text(line, freq)
         if self.unicode_warned != 0:
-            util.note("Saw {} UnicodeDecodeErrors".format(self.unicode_warned))
+            util.note(f"Saw {self.unicode_warned} UnicodeDecodeErrors")
         return freq
 
     def finish(self, freq):
@@ -162,7 +160,7 @@ class NGramModel(object):
         d_missing = self.MISSING_VALUE * missing_count
         d_found = sum(
             abs(rank - self.ngrams[gram])
-            for gram, rank in six.iteritems(unknown.ngrams)
+            for gram, rank in unknown.ngrams.items()
             if gram in self.ngrams
         )
         # util.print_frame(debug=missing_count)
@@ -192,7 +190,7 @@ class CharModel(NGramModel):
         for word in words:
             _word_ = "_" + word + "_"
             size = len(_word_)
-            for i in six.moves.range(size):
+            for i in range(size):
                 for s in (1, 2, 3, 4):
                     sub = _word_[i : i + s]
                     freq[sub] = freq.get(sub, 0) + 1
@@ -225,7 +223,7 @@ class WordModel(NGramModel):
         return freq
 
     def finish(self, freq):
-        super(WordModel, self).finish(freq)
+        super().finish(freq)
         # See text_cat.pl line 642ff; we invert and normalise the
         # ranking to make it possible to use compare_tc where one wm
         # is shorter than the other, e.g. if there is only a small
@@ -235,7 +233,7 @@ class WordModel(NGramModel):
         normaliser = float(n_words) / float(self.NB_NGRAMS)
         self.invrank = {
             gram: ((n_words - rank) / normaliser)
-            for gram, rank in six.iteritems(self.ngrams)
+            for gram, rank in self.ngrams.items()
         }
 
     def compare_tc(self, unknown_text, normaliser):
@@ -254,7 +252,7 @@ class WordModel(NGramModel):
             )
 
 
-class Classifier(object):
+class Classifier:
     """Guess which language a text is written in."""
 
     DROP_RATIO = 1.10
@@ -271,7 +269,7 @@ class Classifier(object):
         folder_glob = os.path.join(folder, "*" + ext)
         found_fnames = glob.glob(os.path.normcase(folder_glob))
         if not found_fnames:
-            raise ValueError("No language files found in %s" % (folder,))
+            raise ValueError(f"No language files found in {folder}")
 
         if not langs:
             fnames = found_fnames
@@ -286,7 +284,7 @@ class Classifier(object):
             with codecs.open(fname, "r", encoding="utf8") as fname_stream:
                 self.cmodels[lang] = CharModel(lang).of_model_file(fname_stream, fname)
                 if verbose:
-                    util.note("Loaded %s" % (fname,))
+                    util.note(f"Loaded {fname}")
 
             fname_wm = os.path.join(folder, lang + ".wm")
             # fname_wmgz = os.path.join(folder, lang+'.wm.gz')
@@ -296,7 +294,7 @@ class Classifier(object):
                         fname_wm_stream, fname_wm
                     )
                     if verbose:
-                        util.note("Loaded %s" % (fname_wm,))
+                        util.note(f"Loaded {fname_wm}")
             else:
                 self.wmodels[lang] = WordModel(lang).of_freq({})
 
@@ -338,7 +336,7 @@ class Classifier(object):
 
         cscored = {
             l: model.compare(ingram)
-            for l, model in six.iteritems(self.cmodels)
+            for l, model in self.cmodels.items()
             if l in active_langs
         }
         cranked = util.sort_by_value(cscored)
@@ -348,19 +346,19 @@ class Classifier(object):
         if len(cfiltered) <= 1:
             if verbose:
                 util.note(
-                    "lm gave: {} as only result for input: {}".format(cfiltered, text)
+                    f"lm gave: {cfiltered} as only result for input: {text}"
                 )
-            return list(six.iteritems(cfiltered))
+            return list(cfiltered.items())
         else:
             # Along with compare_tc, implements text_cat.pl line
             # 442 and on:
             wscored = {
                 l: model.compare_tc(text, cscored[l])
-                for l, model in six.iteritems(self.wmodels)
+                for l, model in self.wmodels.items()
                 if l in cfiltered
             }
             cwcombined = {
-                l: (cscored[l] - wscore) for l, wscore in six.iteritems(wscored)
+                l: (cscored[l] - wscore) for l, wscore in wscored.items()
             }
             cwranked = util.sort_by_value(cwcombined)
             if verbose:
@@ -382,7 +380,7 @@ class Classifier(object):
         return self.classify_full(text, langs, verbose)[0][0]
 
 
-class FolderTrainer(object):
+class FolderTrainer:
     """Train the language guesser from a directory."""
 
     def __init__(
@@ -394,7 +392,7 @@ class FolderTrainer(object):
             files = glob.glob(os.path.normcase(os.path.join(folder, "*" + ext)))
             for fname in files:
                 if verbose:
-                    msg = "Processing %s" % (fname,)
+                    msg = f"Processing {fname}"
                     if os.path.getsize(fname) > 5000000:
                         msg += " (this may take a while)"
                     util.note(msg)
@@ -416,14 +414,14 @@ class FolderTrainer(object):
             return codecs.open(fname, "r", encoding="utf8")
 
     def save(self, folder, ext=".lm", verbose=False):
-        for lang, model in six.iteritems(self.models):
+        for lang, model in self.models.items():
             fname = os.path.join(folder, lang + ext)
             model.to_model_file(codecs.open(fname, "w", encoding="utf8"))
         if verbose and self.models:
-            util.note("Wrote {%s}%s" % (",".join(list(self.models.keys())), ext))
+            util.note("Wrote {{{}}}{}".format(",".join(list(self.models.keys())), ext))
 
 
-class FileTrainer(object):
+class FileTrainer:
     """Train the language guesser from a file."""
 
     def __init__(self, fil, Model=CharModel, verbose=False):
@@ -439,7 +437,7 @@ def proc(args):
     if args.u is not None:
         c.DROP_RATIO = args.u
     if args.verbose:
-        util.note("Drop ratio: {}".format(c.DROP_RATIO))
+        util.note(f"Drop ratio: {c.DROP_RATIO}")
     if args.s:
         for line in sys.stdin:
             print(c.classify(line.decode("utf-8"), verbose=args.verbose))
@@ -465,7 +463,7 @@ def folder_comp(args):
     # training and only then crash :-)
     for d in [args.corp_dir, args.model_dir]:
         if not os.path.isdir(d):
-            raise util.ArgumentError("{} is not a directory!".format(d))
+            raise util.ArgumentError(f"{d} is not a directory!")
     FolderTrainer(args.corp_dir, Model=CharModel, verbose=args.verbose).save(
         args.model_dir, ext=".lm", verbose=args.verbose
     )

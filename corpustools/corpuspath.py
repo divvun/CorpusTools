@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -19,14 +17,13 @@
 #
 """This file contains classes to handle corpus filenames."""
 
-from __future__ import absolute_import, print_function
 
 import os
 
 from corpustools import util, xslsetter
 
 
-class CorpusPath(object):
+class CorpusPath:
     """Map filenames in a corpus.
 
     Args:
@@ -55,22 +52,22 @@ class CorpusPath(object):
         """
         abspath = os.path.normpath(os.path.abspath(path))
         for module in [
-            u"goldstandard/orig",
-            u"prestable/converted",
-            u"prestable/toktmx",
-            u"prestable/tmx",
-            u"orig",
-            u"converted",
-            u"stable",
-            u"toktmx",
-            u"tmx",
+            "goldstandard/orig",
+            "prestable/converted",
+            "prestable/toktmx",
+            "prestable/tmx",
+            "orig",
+            "converted",
+            "stable",
+            "toktmx",
+            "tmx",
         ]:
-            module_dir = u"/" + module + u"/"
+            module_dir = "/" + module + "/"
             if module_dir in abspath:
                 root, rest = abspath.split(module_dir)
                 return root, module, rest
 
-        raise ValueError("File is not part of a corpus: {}".format(path))
+        raise ValueError(f"File is not part of a corpus: {path}")
 
     def split_path(self, path):
         """Map path to the original file.

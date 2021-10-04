@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -19,7 +18,6 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 
-from __future__ import absolute_import, unicode_literals
 
 import os
 import unittest
