@@ -25,7 +25,7 @@ import os
 import re
 
 import requests
-import six
+from urllib.parse import urlparse, urlunparse
 from lxml import etree
 
 from corpustools import (
@@ -73,7 +73,7 @@ class SamediggiNoPage:
         """Initialise the SamediggiNoPage class."""
         self.result = result
         self.url = result.url
-        self.parsed_url = six.moves.urllib.parse.urlparse(self.url)
+        self.parsed_url = urlparse(self.url)
         self.tree = etree.HTML(result.text)
         fullpath = os.path.join(
             self.corpus_dir,
@@ -199,7 +199,7 @@ class SamediggiNoPage:
     def links(self):
         """Get all the links found in a file."""
         return {
-            six.moves.urllib.parse.urlunparse(
+            urlunparse(
                 (
                     self.parsed_url.scheme,
                     self.parsed_url.netloc,
