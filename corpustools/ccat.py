@@ -235,9 +235,9 @@ class XMLPrinter:
         if not self.error_filtering or self.include_this_error(element):
             for child in element:
                 if child.tag != "correct":
-                    text.append(corrected for corrected in self.corrected_texts(child))
+                    text.extend(corrected for corrected in self.corrected_texts(child))
 
-        text.append(
+        text.extend(
             self.get_error_attributes(correct) for correct in element.xpath("./correct")
         )
         return "".join(text)
