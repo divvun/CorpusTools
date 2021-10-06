@@ -23,7 +23,6 @@ import os
 import unittest
 
 import git
-import six
 import testfixtures
 
 from corpustools import adder, versioncontrol, xslsetter
@@ -128,7 +127,7 @@ class TestAddFileToCorpus(unittest.TestCase):
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=[".git"])
         self.tempdir.write("origdirectory/a.txt", b"content of a")
-        self.tempdir.write("origdirectory/æ.txt", six.b("content of æ"))
+        self.tempdir.write("origdirectory/æ.txt", b"content of æ")
         self.tempdir.write("origdirectory/b.txt", b"content of b")
         self.tempdir.write("origdirectory/c.txt", b"original content of c")
         self.tempdir.write("origdirectory/d.txt", b"content of d")

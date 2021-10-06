@@ -24,7 +24,6 @@ internal encodings. This module has functions that revert the damage
 done.
 """
 
-import six
 
 # macsami, winsami2, are needed, even if pylint
 # flags them as unused

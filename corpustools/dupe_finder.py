@@ -28,7 +28,6 @@ import os
 import sys
 
 import lxml.etree as etree
-import six
 
 from corpustools import argparse_version, ccat, corpuspath, move_files, util
 

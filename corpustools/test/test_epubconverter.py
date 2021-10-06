@@ -24,7 +24,7 @@ from shutil import copyfile
 from lxml import etree
 from testfixtures import TempDirectory
 
-from corpustools import htmlcontentconverter, xslsetter, util
+from corpustools import htmlcontentconverter, util, xslsetter
 from corpustools.test.xmltester import XMLTester
 
 HERE = os.path.dirname(__file__)

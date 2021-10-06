@@ -142,9 +142,7 @@ class TrainingCorpusMaker:
         with util.ignored(OSError):
             os.makedirs(corpus_dir)
 
-        with open(
-            f"{os.path.join(corpus_dir, self.lang)}.txt", "w"
-        ) as corpusfile:
+        with open(f"{os.path.join(corpus_dir, self.lang)}.txt", "w") as corpusfile:
             for analysed_file in self.analysed_files():
                 if analysed_file.endswith(".txt"):
                     with open(analysed_file) as analysed:

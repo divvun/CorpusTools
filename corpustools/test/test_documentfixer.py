@@ -23,7 +23,6 @@ import io
 import os
 
 import lxml.etree as etree
-import six
 
 from corpustools import documentfixer, plaintextconverter, svgconverter
 from corpustools.test.test_xhtml2corpus import assertXmlEqual

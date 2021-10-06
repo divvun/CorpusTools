@@ -23,9 +23,9 @@ import fnmatch
 import hashlib
 import os
 import re
+from urllib.parse import urlparse, urlunparse
 
 import requests
-from urllib.parse import urlparse, urlunparse
 from lxml import etree
 
 from corpustools import (

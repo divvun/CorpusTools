@@ -27,7 +27,6 @@ import urlparse
 
 import lxml.html
 import requests
-import six
 
 from corpustools import adder, move_files, namechanger, util, xslsetter
 

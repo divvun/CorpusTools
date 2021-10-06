@@ -21,8 +21,6 @@
 import argparse
 import os
 
-import six
-
 from corpustools import argparse_version, namechanger, util, xslsetter
 
 
@@ -90,6 +88,4 @@ def main():
                 else:
                     no_orig_xsl += 1
 
-    print(
-        f"Total {total}, fails {para_fail}, {no_orig_xsl} files with no xsl"
-    )
+    print(f"Total {total}, fails {para_fail}, {no_orig_xsl} files with no xsl")

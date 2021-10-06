@@ -28,9 +28,6 @@ from collections import namedtuple
 from contextlib import contextmanager
 from functools import reduce
 
-import six
-
-
 PathComponents = namedtuple("PathComponents", "root module lang genre subdirs basename")
 
 

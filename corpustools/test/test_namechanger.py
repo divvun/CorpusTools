@@ -23,7 +23,6 @@ import os
 import unittest
 
 import git
-import six
 import testfixtures
 from parameterized import parameterized
 
@@ -472,7 +471,7 @@ class TestComputeMovepairs(unittest.TestCase):
         sma_metadata.set_parallel_text("smj", "f.txt")
         sma_metadata.write_file()
 
-        self.tempdir.write("orig/sma/ficti/sub/ø.txt", six.b("content of ø"))
+        self.tempdir.write("orig/sma/ficti/sub/ø.txt", b"content of ø")
         self.tempdir.write("orig/sma/ficti/sub/o.txt", b"content of o")
 
         from corpustools import util

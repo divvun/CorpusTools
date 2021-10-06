@@ -22,8 +22,6 @@ import os
 
 import lxml.doctestcompare
 import lxml.etree
-import six
-import testfixtures
 from parameterized import parameterized
 
 

@@ -21,9 +21,9 @@
 
 import os
 import re
+from urllib.parse import urlparse, urlunparse
 
 import requests
-import six
 from lxml import html
 
 from corpustools import adder, crawler, util, xslsetter
@@ -163,7 +163,7 @@ class SamediggiFiCrawler(crawler.Crawler):
 
         if print_img is not None:
             parent = print_img.getparent()
-            href = six.moves.parse.urlparse(parent.get("href"))
+            href = urlparse(parent.get("href"))
 
             query = href.query
             newquery = [
@@ -177,7 +177,7 @@ class SamediggiFiCrawler(crawler.Crawler):
             ]
             newquery.append("lang=" + lang)
 
-            newhref = six.moves.urllib.urlparse.urlunparse(
+            newhref = urlunparse(
                 (
                     href.scheme,
                     href.netloc,

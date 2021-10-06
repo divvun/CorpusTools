@@ -23,7 +23,6 @@ import re
 import sys
 
 import lxml.etree as etree
-import six
 
 from corpustools import util
 
@@ -239,9 +238,7 @@ class MetadataHandler:
                 if r != ""
             )
 
-            skip_ranges = (
-                tuple(six.moves.map(int, r.split("-"))) for r in skip_ranges_norm
-            )
+            skip_ranges = (tuple(map(int, r.split("-"))) for r in skip_ranges_norm)
 
             try:
                 pages.extend(
@@ -274,9 +271,7 @@ class MetadataHandler:
                 if r != ""
             )
 
-            skip_ranges = (
-                tuple(six.moves.map(int, r.split("-"))) for r in skip_ranges_norm
-            )
+            skip_ranges = (tuple(map(int, r.split("-"))) for r in skip_ranges_norm)
 
             try:
                 lines.extend(
@@ -309,9 +304,7 @@ class MetadataHandler:
                 if r != ""
             )
 
-            skip_ranges = (
-                tuple(six.moves.map(int, r.split("-"))) for r in skip_ranges_norm
-            )
+            skip_ranges = (tuple(map(int, r.split("-"))) for r in skip_ranges_norm)
 
             try:
                 lines.extend(

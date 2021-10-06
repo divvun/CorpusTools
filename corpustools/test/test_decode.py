@@ -21,7 +21,6 @@ import codecs
 import sys
 import unittest
 
-import six
 from parameterized import parameterized
 
 from corpustools import decode, iso_ir_197, iso_ir_209, macsami, util, winsami2
@@ -120,9 +119,7 @@ class TestEncodingGuesser(unittest.TestCase):
         util.print_frame("\n", perverted)
         util.print_frame("\n", decode.fix_macsami_mac(perverted))
         self.assertEqual(decode.fix_macsami_mac(perverted), uff)
-        self.assertEqual(
-            decode.fix_macsami_mac(test_input["mac-sami_to_mac"][0]), want
-        )
+        self.assertEqual(decode.fix_macsami_mac(test_input["mac-sami_to_mac"][0]), want)
 
     def test_winsami2_cp1252(self):
         uff = "áÁšŠŧŦŋŊđĐžŽčČøØöÖåÅäÄǯǮʒƷǧǦǥǤǩǨ"

@@ -23,10 +23,10 @@ import hashlib
 import os
 import re
 from collections import namedtuple
-
-import six
+from urllib.parse import unquote
 
 import unidecode
+
 from corpustools import util, versioncontrol, xslsetter
 
 
@@ -582,7 +582,7 @@ def normalise_filename(filename):
 
     # unidecode.unidecode makes ascii only
     # urllib.unquote replaces %xx escapes by their single-character equivalent.
-    asciiname = unidecode.unidecode(six.moves.urllib.parse.unquote(filename))
+    asciiname = unidecode.unidecode(unquote(filename))
 
     while asciiname.startswith(("-", "_")):
         asciiname = asciiname[1:]

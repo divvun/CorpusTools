@@ -39,8 +39,6 @@ import os
 import re
 import sys
 
-import six
-
 from corpustools import argparse_version, util
 
 here = os.path.dirname(__file__)
@@ -232,8 +230,7 @@ class WordModel(NGramModel):
         n_words = len(self.ngrams)
         normaliser = float(n_words) / float(self.NB_NGRAMS)
         self.invrank = {
-            gram: ((n_words - rank) / normaliser)
-            for gram, rank in self.ngrams.items()
+            gram: ((n_words - rank) / normaliser) for gram, rank in self.ngrams.items()
         }
 
     def compare_tc(self, unknown_text, normaliser):
@@ -345,9 +342,7 @@ class Classifier:
 
         if len(cfiltered) <= 1:
             if verbose:
-                util.note(
-                    f"lm gave: {cfiltered} as only result for input: {text}"
-                )
+                util.note(f"lm gave: {cfiltered} as only result for input: {text}")
             return list(cfiltered.items())
         else:
             # Along with compare_tc, implements text_cat.pl line
@@ -357,9 +352,7 @@ class Classifier:
                 for l, model in self.wmodels.items()
                 if l in cfiltered
             }
-            cwcombined = {
-                l: (cscored[l] - wscore) for l, wscore in wscored.items()
-            }
+            cwcombined = {l: (cscored[l] - wscore) for l, wscore in wscored.items()}
             cwranked = util.sort_by_value(cwcombined)
             if verbose:
                 if cranked[: len(cwranked)] == cwranked:

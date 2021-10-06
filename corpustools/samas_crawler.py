@@ -21,7 +21,6 @@
 
 import os
 
-import six
 from lxml import html
 
 from corpustools import adder, util
@@ -141,9 +140,7 @@ class SamasCrawler:
 
     def crawl_site(self):
         for lang in self.samas_languages:
-            (request, tmpname) = self.downloader.download(
-                f"http://samas.no/{lang[:2]}"
-            )
+            (request, tmpname) = self.downloader.download(f"http://samas.no/{lang[:2]}")
             for link in self.harvest_links(html.parse(tmpname).getroot()):
                 self.add_samas_page(link)
 

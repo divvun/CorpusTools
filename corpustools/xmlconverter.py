@@ -18,6 +18,7 @@
 """Convert udhr files to the Giella xml format."""
 
 import os
+
 import lxml.etree as etree
 
 HERE = os.path.dirname(__file__)

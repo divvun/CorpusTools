@@ -28,7 +28,6 @@ import shutil
 import sys
 
 import lxml.etree as etree
-import six
 
 from corpustools import util, xslsetter
 

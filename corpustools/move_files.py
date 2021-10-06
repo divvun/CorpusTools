@@ -22,8 +22,6 @@ import argparse
 import os
 import sys
 
-import six
-
 from corpustools import argparse_version, namechanger
 
 
@@ -81,8 +79,8 @@ def main():
             file=sys.stderr,
         )
     else:
-        oldpath = unicode(args.oldpath, "utf8") if six.PY2 else args.oldpath
-        newpath = unicode(args.newpath, "utf8") if six.PY2 else args.newpath
+        oldpath = args.oldpath
+        newpath = args.newpath
         try:
             mover(os.path.abspath(oldpath), os.path.abspath(newpath))
         except UserWarning as e:

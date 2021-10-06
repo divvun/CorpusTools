@@ -27,14 +27,8 @@ import tempfile
 
 from lxml import etree
 
-from corpustools import (
-    argparse_version,
-    corpusxmlfile,
-    generate_anchor_list,
-    sentencedivider,
-    tmx,
-    util,
-)
+from corpustools import (argparse_version, corpusxmlfile, generate_anchor_list,
+                         sentencedivider, tmx, util)
 
 HERE = os.path.dirname(__file__)
 

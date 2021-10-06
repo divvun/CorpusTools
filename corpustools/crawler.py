@@ -22,8 +22,6 @@
 import os
 import sys
 
-import six
-
 from corpustools import adder, namechanger, util
 
 

@@ -20,7 +20,6 @@
 
 import os
 
-import six
 import testfixtures
 from lxml import etree, html
 from parameterized import parameterized

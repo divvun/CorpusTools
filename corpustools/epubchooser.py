@@ -25,7 +25,6 @@ file. This is a helper program for that purpose.
 import argparse
 import sys
 
-import six
 from prompt_toolkit import prompt
 
 import epub

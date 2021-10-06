@@ -24,7 +24,6 @@ import os
 
 import lxml.doctestcompare
 import lxml.etree
-import six
 from testfixtures import TempDirectory
 
 from corpustools import biblexmlconverter

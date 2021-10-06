@@ -24,7 +24,6 @@ import codecs
 import os
 import re
 
-import six
 from lxml import etree
 
 from corpustools import argparse_version, util
@@ -319,7 +318,7 @@ class AlignmentToTmx(Tmx):
         pfile1_data, pfile2_data = self.parse_alignment_results()
 
         body = etree.SubElement(tmx, "body")
-        for line1, line2 in six.moves.zip(pfile1_data, pfile2_data):
+        for line1, line2 in zip(pfile1_data, pfile2_data):
             transl_unit = self.make_tu(line1, line2)
             body.append(transl_unit)
 

@@ -25,26 +25,12 @@ import logging
 import os
 import unicodedata
 
-import six
 from lxml import etree
 
-from corpustools import (
-    avvirconverter,
-    biblexmlconverter,
-    ccat,
-    corpuspath,
-    documentfixer,
-    errormarkup,
-    htmlcontentconverter,
-    languagedetector,
-    pdfconverter,
-    plaintextconverter,
-    svgconverter,
-    usxconverter,
-    util,
-    xslmaker,
-    xslsetter,
-)
+from corpustools import (avvirconverter, biblexmlconverter, ccat, corpuspath,
+                         documentfixer, errormarkup, htmlcontentconverter,
+                         languagedetector, pdfconverter, plaintextconverter,
+                         svgconverter, usxconverter, util, xslmaker, xslsetter)
 
 HERE = os.path.dirname(__file__)
 

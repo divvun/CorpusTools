@@ -26,7 +26,8 @@ import shutil
 
 import requests
 
-from corpustools import argparse_version, namechanger, util, versioncontrol, xslsetter
+from corpustools import (argparse_version, namechanger, util, versioncontrol,
+                         xslsetter)
 
 
 class AdderError(Exception):
