@@ -27,10 +27,23 @@ import unicodedata
 
 from lxml import etree
 
-from corpustools import (avvirconverter, biblexmlconverter, ccat, corpuspath,
-                         documentfixer, errormarkup, htmlcontentconverter,
-                         languagedetector, pdfconverter, plaintextconverter,
-                         svgconverter, usxconverter, util, xslmaker, xslsetter)
+from corpustools import (
+    avvirconverter,
+    biblexmlconverter,
+    ccat,
+    corpuspath,
+    documentfixer,
+    errormarkup,
+    htmlcontentconverter,
+    languagedetector,
+    pdfconverter,
+    plaintextconverter,
+    svgconverter,
+    usxconverter,
+    util,
+    xslmaker,
+    xslsetter,
+)
 
 HERE = os.path.dirname(__file__)
 
@@ -54,7 +67,6 @@ def to_giella(path):
         ".html": htmlcontentconverter.convert2intermediate,
         ".odt": htmlcontentconverter.convert2intermediate,
         ".pdf": htmlcontentconverter.convert2intermediate,
-        ".rtf": htmlcontentconverter.convert2intermediate,
         ".svg": svgconverter.convert2intermediate,
         ".txt": plaintextconverter.convert2intermediate,
         ".tex": htmlcontentconverter.convert2intermediate,

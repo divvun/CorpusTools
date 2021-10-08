@@ -57,7 +57,6 @@ setup(
         "prompt_toolkit",
         "odfpy",
         "pydocx",
-        "pyth==0.7.0",
         "regex",
         "requests",
         "requests-mock",

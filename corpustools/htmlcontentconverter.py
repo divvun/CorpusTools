@@ -30,7 +30,6 @@ from corpustools import (
     latexconverter,
     odfconverter,
     pdfconverter,
-    rtfconverter,
     util,
     xmlconverter,
 )
@@ -45,7 +44,6 @@ def to_html_elt(path):
         ".epub": epubconverter.to_html_elt,
         ".html": htmlconverter.to_html_elt,
         ".odt": odfconverter.to_html_elt,
-        ".rtf": rtfconverter.to_html_elt,
         ".tex": latexconverter.to_html_elt,
         ".xml": xmlconverter.to_html_elt,
         ".pdf": pdfconverter.to_html_elt,
