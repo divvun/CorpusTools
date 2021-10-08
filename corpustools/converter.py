@@ -157,7 +157,16 @@ class Converter:
                     self.names.orig, str(error)
                 )
             )
-        self.fix_document(intermediate)
+        try:
+            self.fix_document(intermediate)
+        except etree.XMLSyntaxError as error:
+            with open(self.names.log, "w") as logfile:
+                logfile.write(f"Error at: {str(util.lineno())}")
+
+            raise util.ConversionError(
+                f"Syntax error in: {self.names}\nError {str(error)}"
+            )
+
         try:
             xsl_maker = xslmaker.XslMaker(self.metadata.tree)
             complete = xsl_maker.transformer(intermediate)
