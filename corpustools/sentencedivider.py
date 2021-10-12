@@ -73,18 +73,6 @@ class SentenceDivider:
         """
         self.tokeniser = modes.Pipeline("tokenise", lang, giella_prefix)
 
-    @staticmethod
-    def clean_sentence(sentence):
-        """Remove cruft from a sentence.
-
-        Args:
-            sentence (str): a raw sentence, warts and all
-
-        Returns:
-            str: a cleaned up sentence, looking the way a sentence should.
-        """
-        return sentence.replace("\n", "").strip()
-
     def make_sentences(self, ccat_output):
         """Turn ccat output into cleaned up sentences.
 
@@ -100,7 +88,7 @@ class SentenceDivider:
         for token in io.StringIO(preprocessed):
             token_buffer.append(token)
             if token.strip() in self.stops:
-                yield self.clean_sentence("".join(token_buffer))
+                yield "".join(token_buffer)
                 token_buffer[:] = []
 
     def make_valid_sentences(self, ccat_output):
