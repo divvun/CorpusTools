@@ -43,16 +43,20 @@ váldočoahkkima nammadit. dievaslaš čađaheami, [2019 – 2020] … ¶
             "ON doaimmaid oktavuođas;",
             "ovddasvástádus sihkkarastit?",
             "buot ON orgánat!",
-            'wow."',
+            ".....",
+            "wow.",
+            '"',
             "mom.).",
             "mom.:",
-            "kult.”",
+            "kult.",
+            "”",
             "váldočoahkkima nammadit.",
             "dievaslaš čađaheami, [2019 – 2020] …",
             "(rávvagiid)",
         ]
         divider = sentencedivider.SentenceDivider("sme")
-        self.assertListEqual(divider.make_valid_sentences(ccat_output), want)
+        got = divider.make_valid_sentences(ccat_output)
+        self.assertListEqual(got, want)
 
     def test_with_dot_and_paragraph(self):
         """Test the sentence divider with a sentence ending with . ¶."""
@@ -72,6 +76,7 @@ Odd Einar Dørum ¶
 Odd Einar Dørum ¶
 """
         want = [
+            ".",
             "Odd Einar Dørum",
         ]
         divider = sentencedivider.SentenceDivider("sme")

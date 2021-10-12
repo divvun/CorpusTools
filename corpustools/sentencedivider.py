@@ -73,7 +73,7 @@ class SentenceDivider:
         """
         self.tokeniser = modes.Pipeline("tokenise", lang, giella_prefix)
 
-    def make_sentences(self, ccat_output):
+    def make_sentences(self, tokenised_output):
         """Turn ccat output into cleaned up sentences.
 
         Args:
@@ -82,14 +82,16 @@ class SentenceDivider:
         Yields:
             str: a cleaned up sentence
         """
-        preprocessed = self.tokeniser.run(ccat_output.encode("utf8"))
 
         token_buffer = []
-        for token in io.StringIO(preprocessed):
-            token_buffer.append(token)
+        for token in tokenised_output.split("\n"):
+            if token != "¶":
+                token_buffer.append(token)
             if token.strip() in self.stops:
-                yield "".join(token_buffer)
+                yield "".join(token_buffer).strip()
                 token_buffer[:] = []
+        if token_buffer:
+            yield "".join(token_buffer).strip()
 
     def make_valid_sentences(self, ccat_output):
         """Turn ccat output into full sentences.
@@ -101,18 +103,10 @@ class SentenceDivider:
             list of str: The ccat output has been turned into a list
                 of full sentences.
         """
-        sentences = [
-            sentence.replace(" ¶", "")
-            for sentence in self.make_sentences(ccat_output)
-            if sentence not in self.stops
+        return [
+            sentence
+            for sentence in self.make_sentences(
+                self.tokeniser.run(ccat_output.encode("utf8"))
+            )
+            if sentence
         ]
-
-        invalid_sentence_re = regex.compile(r"^\W+$")
-        valid_sentences = []
-        for sentence in sentences:
-            if invalid_sentence_re.match(sentence) and valid_sentences:
-                valid_sentences[-1] = "".join([valid_sentences[-1] + sentence])
-            else:
-                valid_sentences.append(sentence)
-
-        return valid_sentences
