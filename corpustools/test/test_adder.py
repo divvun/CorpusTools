@@ -126,19 +126,27 @@ class TestAddToCorpus(unittest.TestCase):
 class TestAddFileToCorpus(unittest.TestCase):
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=[".git"])
-        self.tempdir.write("origdirectory/a.txt", b"content of a")
-        self.tempdir.write("origdirectory/æ.txt", b"content of æ")
-        self.tempdir.write("origdirectory/b.txt", b"content of b")
-        self.tempdir.write("origdirectory/c.txt", b"original content of c")
-        self.tempdir.write("origdirectory/d.txt", b"content of d")
+        self.tempdir.write("origdirectory/a.txt", "content of a".encode("utf8"))
+        self.tempdir.write("origdirectory/æ.txt", "content of æ".encode("utf8"))
+        self.tempdir.write("origdirectory/b.txt", "content of b".encode("utf8"))
+        self.tempdir.write(
+            "origdirectory/c.txt", "original content of c".encode("utf8")
+        )
+        self.tempdir.write("origdirectory/d.txt", "content of d".encode("utf8"))
 
         self.tempdir.makedir("corpus/orig")
-        self.tempdir.write("corpus/orig/sme/ae/c/o/b.txt", b"content of b")
         self.tempdir.write(
-            "corpus/orig/sme/ae/c/o/c.txt", b"corpusfile content of c"
+            "corpus/orig/sme/ae/c/o/b.txt", "content of b".encode("utf8")
         )
-        self.tempdir.write("corpus/orig/smj/ae/c/o/f.txt", b"smj content of f")
-        self.tempdir.write("corpus/orig/sma/ae/c/o/f.txt", b"sma content of f")
+        self.tempdir.write(
+            "corpus/orig/sme/ae/c/o/c.txt", "corpusfile content of c".encode("utf8")
+        )
+        self.tempdir.write(
+            "corpus/orig/smj/ae/c/o/f.txt", "smj content of f".encode("utf8")
+        )
+        self.tempdir.write(
+            "corpus/orig/sma/ae/c/o/f.txt", "sma content of f".encode("utf8")
+        )
 
         self.realcorpusdir = os.path.join(self.tempdir.path, "corpus")
         self.origdirectory = os.path.join(self.tempdir.path, "origdirectory")
@@ -377,11 +385,11 @@ class TestAddFileToCorpus(unittest.TestCase):
 class TestDirectoryToCorpusWithDuplicates(unittest.TestCase):
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=[".git"])
-        self.tempdir.write("origdirectory/a.txt", b"content of a")
-        self.tempdir.write("origdirectory/æ.txt", b"content of b")
-        self.tempdir.write("origdirectory/b.txt", b"content of b")
-        self.tempdir.write("origdirectory/sub/c.txt", b"content of a")
-        self.tempdir.write("origdirectory/sub/d.txt", b"content of d")
+        self.tempdir.write("origdirectory/a.txt", "content of a".encode("utf8"))
+        self.tempdir.write("origdirectory/æ.txt", "content of b".encode("utf8"))
+        self.tempdir.write("origdirectory/b.txt", "content of b".encode("utf8"))
+        self.tempdir.write("origdirectory/sub/c.txt", "content of a".encode("utf8"))
+        self.tempdir.write("origdirectory/sub/d.txt", "content of d".encode("utf8"))
         self.tempdir.makedir("corpus/orig")
         self.origdirectory = os.path.join(self.tempdir.path, "origdirectory")
         self.realcorpusdir = os.path.join(self.tempdir.path, "corpus")
@@ -401,12 +409,12 @@ class TestDirectoryToCorpusWithDuplicates(unittest.TestCase):
 class TestDirectoryToCorpusWithoutDuplicates(unittest.TestCase):
     def setUp(self):
         self.tempdir = testfixtures.TempDirectory(ignore=[".git"])
-        self.tempdir.write("origdirectory/a.txt", b"content of a")
-        self.tempdir.write("origdirectory/æ.txt", "content of æ".encode())
-        self.tempdir.write("origdirectory/b.txt", b"content of b")
-        self.tempdir.write("origdirectory/sub/a.txt", b"content of sub/a")
-        self.tempdir.write("origdirectory/sub/c.txt", b"content of c")
-        self.tempdir.write("origdirectory/sub/d.txt", b"content of d")
+        self.tempdir.write("origdirectory/a.txt", "content of a".encode("utf8"))
+        self.tempdir.write("origdirectory/æ.txt", "content of æ".encode("utf8"))
+        self.tempdir.write("origdirectory/b.txt", "content of b".encode("utf8"))
+        self.tempdir.write("origdirectory/sub/a.txt", "content of sub/a".encode("utf8"))
+        self.tempdir.write("origdirectory/sub/c.txt", "content of c".encode("utf8"))
+        self.tempdir.write("origdirectory/sub/d.txt", "content of d".encode("utf8"))
         self.tempdir.makedir("corpus/orig")
         self.origdirectory = os.path.join(self.tempdir.path, "origdirectory")
         self.realcorpusdir = os.path.join(self.tempdir.path, "corpus")
