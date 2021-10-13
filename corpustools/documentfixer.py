@@ -271,7 +271,10 @@ class DocumentFixer:
         self.replace_ligatures()
 
         body = self.root.find("body")
-        body_string = etree.tostring(body, encoding="unicode")
+        # Weird bug(?) in MacOS, the end tag of document lingers …
+        body_string = etree.tostring(body, encoding="unicode").replace(
+            "</document>", ""
+        )
         body.getparent().remove(body)
 
         encoding = decode.guess_body_encoding(body_string, mainlang)
