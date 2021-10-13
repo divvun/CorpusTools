@@ -1,2 +1,5 @@
 CorpusTools.egg-info/
 __pycache__/
+/installed_files.txt
+/build
+/dist
