@@ -55,8 +55,7 @@ váldočoahkkima nammadit. dievaslaš čađaheami, [2019 – 2020] … ¶
             "(rávvagiid)",
         ]
         divider = sentencedivider.SentenceDivider("sme")
-        got = divider.make_valid_sentences(ccat_output)
-        self.assertListEqual(got, want)
+        self.assertListEqual(divider.make_valid_sentences(ccat_output), want)
 
     def test_with_dot_and_paragraph(self):
         """Test the sentence divider with a sentence ending with . ¶."""
