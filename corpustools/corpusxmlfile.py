@@ -23,7 +23,7 @@ import os
 
 from lxml import etree
 
-from corpustools import util
+from corpustools import util, corpuspath
 
 
 class CorpusXMLFile:
@@ -35,7 +35,7 @@ class CorpusXMLFile:
         Args:
             name (str): path to the xml file.
         """
-        self.name = name
+        self.corpus_path = corpuspath.CorpusPath(name)
         self.etree = etree.parse(name)
         self.root = self.etree.getroot()
         self.sanity_check()
@@ -52,25 +52,9 @@ class CorpusXMLFile:
             )
 
     @property
-    def dirname(self):
-        """Return the dirname of the file."""
-        return os.path.dirname(self.name)
-
-    @property
-    def basename(self):
-        """Return the basename of the file."""
-        return os.path.basename(self.name)
-
-    @property
-    def basename_noext(self):
-        """Return the basename of the file without the final .xml."""
-        root, _ = os.path.splitext(self.basename)
-        return root
-
-    @property
     def lang(self):
         """Get the lang of the file."""
-        return self.root.attrib["{http://www.w3.org/XML/1998/namespace}lang"]
+        return self.corpus_path.pathcomponents.lang
 
     @property
     def word_count(self):
@@ -88,38 +72,6 @@ class CorpusXMLFile:
         :returns: the ocr element or None
         """
         return self.root.find(".//ocr")
-
-    def get_parallel_basename(self, paralang):
-        """Get the basename of the parallel file.
-
-        Input is the lang of the parallel file
-        """
-        parallel_files = self.root.findall(".//parallel_text")
-        for para in parallel_files:
-            if para.attrib["{http://www.w3.org/XML/1998/namespace}lang"] == paralang:
-                return para.attrib["location"]
-
-    def get_parallel_filename(self, paralang):
-        """Infer the absolute path of the parallel file."""
-        if self.get_parallel_basename(paralang) is None:
-            return None
-        root, module, _, genre, subdirs, _ = util.split_path(self.name)
-        parallel_basename = f"{self.get_parallel_basename(paralang)}.xml"
-        if parallel_basename == ".xml":
-            raise NameError("Parallel is empty")
-
-        return os.path.join(
-            *[root, module, paralang, genre, subdirs, parallel_basename]
-        )
-
-    @property
-    def original_filename(self):
-        """Infer the path of the original file."""
-        return (
-            self.name.replace("prestable/", "")
-            .replace("converted/", "orig/")
-            .replace(".xml", "")
-        )
 
     @property
     def translated_from(self):
@@ -166,7 +118,7 @@ class CorpusXMLFile:
     def write(self, file_name=None):
         """Write self.etree."""
         if file_name is None:
-            file_name = self.name
+            file_name = self.corpus_path
 
         self.etree.write(
             file_name, encoding="utf8", pretty_print=True, xml_declaration=True
