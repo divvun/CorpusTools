@@ -267,8 +267,8 @@ class AlignmentToTmx(Tmx):
         """Make a tmx tu element based on line1 and line2 as input."""
         transl_unit = etree.Element("tu")
 
-        transl_unit.append(self.make_tuv(line1, self.origfiles[0].lang))
-        transl_unit.append(self.make_tuv(line2, self.origfiles[1].lang))
+        transl_unit.append(self.make_tuv(line1, self.origfiles[0].pathcomponents.lang))
+        transl_unit.append(self.make_tuv(line2, self.origfiles[1].pathcomponents.lang))
 
         return transl_unit
 
@@ -311,7 +311,8 @@ class AlignmentToTmx(Tmx):
         """Make tmx file based on the output of the aligner."""
         tmx = etree.Element("tmx")
         header = self.make_tmx_header(
-            self.origfiles[0].basename, self.origfiles[0].lang
+            self.origfiles[0].pathcomponents.basename,
+            self.origfiles[0].pathcomponents.lang,
         )
         tmx.append(header)
 
@@ -389,7 +390,7 @@ class Tca2ToTmx(AlignmentToTmx):
         Returns:
             list of str: The sentences found in the tca2 file
         """
-        sentfile_name = sentfile.replace(".xml", "_new.txt")
+        sentfile_name = sentfile.replace(".sent", "_new.txt")
 
         with codecs.open(sentfile_name, encoding="utf8") as tca2_output:
             return [self.remove_s_tag(line) for line in tca2_output]

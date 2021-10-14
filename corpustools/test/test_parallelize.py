@@ -25,7 +25,7 @@ import unittest
 
 from lxml import doctestcompare, etree
 
-from corpustools import corpusxmlfile, parallelize, tmx
+from corpustools import corpuspath, parallelize, tmx
 
 HERE = os.path.dirname(__file__)
 
@@ -47,21 +47,26 @@ class TestTca2SentenceDivider(unittest.TestCase):
             raise AssertionError(message)
 
     def test_make_sentence_file(self):
-        corpus_file = corpusxmlfile.CorpusXMLFile(
-            os.path.join(HERE, "parallelize_data/finnmarkkulahka_web_lettere.pdf.xml")
+        path = corpuspath.CorpusPath(
+            os.path.join(
+                HERE,
+                "parallelize_data/converted/sme/facta/skuvlahistorja2/",
+                "finnmarkkulahka_web_lettere.pdf.xml",
+            )
         )
 
         sentence_divider = parallelize.Tca2SentenceDivider()
         got = sentence_divider.make_sentence_xml(
-            corpus_file.lang,
-            corpus_file.name,
+            path.pathcomponents.lang,
+            path.converted,
             giella_prefix=os.path.join(HERE, "giella_shared"),
         )
 
         want = etree.parse(
             os.path.join(
                 HERE,
-                "parallelize_data/" "finnmarkkulahka_web_lettere.pdfsme_sent.xml.test",
+                "parallelize_data/",
+                "finnmarkkulahka_web_lettere.pdfsme_sent.xml.test",
             )
         )
 
@@ -76,31 +81,12 @@ class TestParallelizeTCA2(unittest.TestCase):
             os.path.join(
                 HERE,
                 "parallelize_data",
-                "converted/sme/facta/skuvlahistorja2/" "aarseth2-s.htm.xml",
+                "converted/sme/facta/skuvlahistorja2/",
+                "aarseth2-s.html.xml",
             ),
             "nob",
             quiet=True,
             giella_prefix=os.path.join(HERE, "giella_shared"),
-        )
-
-    def test_orig_path(self):
-        self.assertEqual(
-            self.parallelize.origfile1,
-            os.path.join(
-                HERE,
-                "parallelize_data",
-                "converted/nob/facta/skuvlahistorja2/" "aarseth2-n.htm.xml",
-            ),
-        )
-
-    def test_parallel_path(self):
-        self.assertEqual(
-            self.parallelize.origfile2,
-            os.path.join(
-                HERE,
-                "parallelize_data",
-                "converted/sme/facta/skuvlahistorja2/" "aarseth2-s.htm.xml",
-            ),
         )
 
     def test_lang1(self):
@@ -108,18 +94,6 @@ class TestParallelizeTCA2(unittest.TestCase):
 
     def test_lang2(self):
         self.assertEqual(self.parallelize.lang2, "sme")
-
-    def test_get_sent_filename(self):
-        self.assertEqual(
-            self.parallelize.get_sent_filename(self.parallelize.origfiles[0]),
-            os.path.join(os.environ["GTFREE"], "tmp/aarseth2-n.htmnob_sent.xml"),
-        )
-
-    def test_divide_p_into_sentences(self):
-        self.parallelize.divide_p_into_sentences()
-
-    def test_parallize_files(self):
-        print(self.parallelize.parallelize_files())
 
 
 class TestParallelizeHunalign(unittest.TestCase):
@@ -130,14 +104,12 @@ class TestParallelizeHunalign(unittest.TestCase):
             os.path.join(
                 HERE,
                 "parallelize_data",
-                "converted/sme/facta/skuvlahistorja2/" "aarseth2-s.htm.xml",
+                "converted/sme/facta/skuvlahistorja2/",
+                "aarseth2-s.html.xml",
             ),
             "nob",
             quiet=True,
         )
-
-    def test_parallize_files(self):
-        print(self.parallelize.parallelize_files())
 
     def test_hunalign_dict(self):
         self.assertEqual(
@@ -284,7 +256,7 @@ class TestTmx(unittest.TestCase):
         want_tmx = tmx.Tmx(
             etree.parse(
                 os.path.join(
-                    HERE, "parallelize_data/" "aarseth2-n-without-empty-seg.htm.toktmx"
+                    HERE, "parallelize_data/", "aarseth2-n-without-empty-seg.htm.toktmx"
                 )
             )
         )
@@ -301,11 +273,11 @@ class TestTca2ToTmx(unittest.TestCase):
             os.path.join(
                 HERE,
                 "parallelize_data",
-                "converted/sme/facta/skuvlahistorja2/" "aarseth2-s.htm.xml",
+                "converted/nob/facta/skuvlahistorja2/",
+                "aarseth2-n.html.xml",
             ),
-            "nob",
+            "sme",
         )
-
         self.para = para
         self.tmx = tmx.Tca2ToTmx(para.origfiles, para.sentfiles)
 
@@ -376,6 +348,6 @@ class TestTca2ToTmx(unittest.TestCase):
                 HERE,
                 "parallelize_data",
                 "prestable/tmx/nob2sme/facta/skuvlahistorja2",
-                "aarseth2-n.htm.tmx",
+                "aarseth2-n.html.tmx",
             ),
         )

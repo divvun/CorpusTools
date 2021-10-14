@@ -27,8 +27,15 @@ import tempfile
 
 from lxml import etree
 
-from corpustools import (argparse_version, corpusxmlfile, generate_anchor_list,
-                         sentencedivider, tmx, util)
+from corpustools import (
+    argparse_version,
+    corpusxmlfile,
+    generate_anchor_list,
+    sentencedivider,
+    tmx,
+    util,
+    corpuspath,
+)
 
 HERE = os.path.dirname(__file__)
 
@@ -100,7 +107,7 @@ class Parallelize:
         """Initialise the Parallelize class.
 
         Args:
-            origfile1 (str): path the one of the files that should be
+            origfile1 (str): path to one of the files that should be
                 sentence aligned.
             lang2 (str): language of the other file that should be
                 sentence aligned.
@@ -112,17 +119,13 @@ class Parallelize:
         self.quiet = quiet
         self.origfiles = []
         self.giella_prefix = giella_prefix
-        self.origfiles.append(corpusxmlfile.CorpusXMLFile(os.path.abspath(origfile1)))
+        self.origfiles.append(corpuspath.CorpusPath(os.path.abspath(origfile1)))
 
-        para_file = self.origfiles[0].get_parallel_filename(lang2)
+        para_file = self.origfiles[0].parallel(lang2)
         if para_file is not None:
-            self.origfiles.append(corpusxmlfile.CorpusXMLFile(para_file))
+            self.origfiles.append(corpuspath.CorpusPath(para_file))
         else:
-            raise OSError(
-                f"{origfile1} doesn't have a parallel file in {lang2}"
-            )
-
-        self.consistency_check(self.origfiles[1], self.origfiles[0])
+            raise OSError(f"{origfile1} doesn't have a parallel file in {lang2}")
 
         # As stated in --help, we assume user-specified anchor file
         # has columns based on input files, where --parallel_file is
@@ -171,52 +174,20 @@ class Parallelize:
                         "Making a fake anchor file".format(self.lang1, self.lang2)
                     )
 
-    @staticmethod
-    def consistency_check(file0, file1):
-        """Warn if parallel_text of f0 is not f1."""
-        lang1 = file1.lang
-        para0 = file0.get_parallel_basename(lang1)
-        base1 = file1.basename_noext
-        if para0 != base1:
-            if para0 is None:
-                util.note(
-                    "WARNING: {} missing from {} parallel_texts in {}!".format(
-                        base1, lang1, file0.name
-                    )
-                )
-            else:
-                util.note(
-                    "WARNING: {}, not {}, in {} parallel_texts of {}!".format(
-                        para0, base1, lang1, file0.name
-                    )
-                )
-
     @property
     def outfile_name(self):
         """Compute the name of the final tmx file."""
-        orig_path_part = f"/converted/{self.origfiles[0].lang}/"
-        # First compute the part that shall replace /orig/ in the path
-        replace_path_part = "/prestable/tmx/{}2{}/".format(
-            self.origfiles[0].lang, self.origfiles[1].lang
-        )
-        # Then set the outdir
-        out_dirname = self.origfiles[0].dirname.replace(
-            orig_path_part, replace_path_part
-        )
-        # Replace xml with tmx in the filename
-        out_filename = self.origfiles[0].basename_noext + ".tmx"
-
-        return os.path.join(out_dirname, out_filename)
+        return self.origfiles[0].prestable_tmx(self.lang2)
 
     @property
     def lang1(self):
         """Get language 1."""
-        return self.origfiles[0].lang
+        return self.origfiles[0].pathcomponents.lang
 
     @property
     def lang2(self):
         """Get language 2."""
-        return self.origfiles[1].lang
+        return self.origfiles[1].pathcomponents.lang
 
     @property
     def origfile1(self):
@@ -230,7 +201,7 @@ class Parallelize:
 
     def is_translated_from_lang2(self):
         """Find out if the given doc is translated from lang2."""
-        translated_from = self.origfiles[0].translated_from
+        translated_from = self.origfiles[0].metadata.get_variable("translated_from")
 
         if translated_from is not None:
             return translated_from == self.lang2
@@ -304,11 +275,13 @@ class ParallelizeHunalign(Parallelize):
     def to_sents(self, origfile):
         """Divide the content of origfile to sentences."""
         divider = sentencedivider.SentenceDivider(
-            origfile.lang, giella_prefix=self.giella_prefix
+            origfile.pathcomponents.lang, giella_prefix=self.giella_prefix
         )
         return "\n".join(
             divider.make_valid_sentences(
-                sentencedivider.to_plain_text(origfile.lang, origfile.name)
+                sentencedivider.to_plain_text(
+                    origfile.pathcomponents.lang, origfile.converted
+                )
             )
         )
 
@@ -364,16 +337,16 @@ class ParallelizeTCA2(Parallelize):
         for pfile in self.origfiles:
             divider = Tca2SentenceDivider()
             divider.make_sentence_file(
-                pfile.lang,
-                pfile.name,
-                self.get_sent_filename(pfile),
+                pfile.pathcomponents.lang,
+                pfile.converted,
+                pfile.sent_filename,
                 self.giella_prefix,
             )
 
     @property
     def sentfiles(self):
         """Get files containing the sentences."""
-        return [self.get_sent_filename(name) for name in self.origfiles]
+        return [name.sent_filename for name in self.origfiles]
 
     def align(self):
         """Parallelize two files using tca2."""
@@ -392,8 +365,8 @@ class ParallelizeTCA2(Parallelize):
                 "-in1={} -in2={}".format(
                     tca2_jar,
                     anchor_file.name,
-                    self.get_sent_filename(self.origfiles[0]),
-                    self.get_sent_filename(self.origfiles[1]),
+                    self.origfiles[0].sent_filename,
+                    self.origfiles[1].sent_filename,
                 )
             )
 
