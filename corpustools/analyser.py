@@ -72,12 +72,12 @@ class Analyser:
 
     def ccat(self):
         """Turn an xml formatted file into clean text."""
-        self.xml_printer.parse_file(self.xml_file.name)
+        self.xml_printer.parse_file(self.xml_file.corpus_path.converted)
         text = self.xml_printer.process_file().getvalue()
         if text:
             return text
         else:
-            raise UserWarning(f"Empty file {self.xml_file.name}")
+            raise UserWarning(f"Empty file {self.xml_file.corpus_path.converted}")
 
     def dependency_analysis(self):
         """Insert disambiguation and dependency analysis into the body."""
@@ -96,7 +96,7 @@ class Analyser:
         """Analyse a file if it is not ocr'ed."""
         try:
             self.xml_file = corpusxmlfile.CorpusXMLFile(xml_file)
-            analysis_xml_name = self.xml_file.name.replace(
+            analysis_xml_name = self.xml_file.corpus_path.replace(
                 "converted/", f"analysed/{self.modename}/"
             )
 

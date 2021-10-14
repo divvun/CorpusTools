@@ -36,7 +36,13 @@ class TestAnalyser(unittest.TestCase):
         self.a = analyser.Analyser(
             "sme", "xfst", giella_prefix=os.path.join(HERE, "giella_shared")
         )
-        self.a.xml_file = corpusxmlfile.CorpusXMLFile(os.path.join(HERE, "smefile.xml"))
+        self.a.xml_file = corpusxmlfile.CorpusXMLFile(
+            os.path.join(
+                HERE,
+                "parallelize_data/converted/sme/facta/skuvlahistorja2/",
+                "smefile.xml",
+            )
+        )
 
     def assertXmlEqual(self, got, want):
         """Check if two stringified xml snippets are equal."""
