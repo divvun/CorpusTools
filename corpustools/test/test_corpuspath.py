@@ -117,3 +117,11 @@ class TestComputeCorpusnames(unittest.TestCase):
 
     def test_compute_analysed(self):
         self.assertEqual(self.corpus_path.analysed, self.name("analysed") + ".xml")
+
+    def test_compute_sent_filename(self):
+        self.assertEqual(
+            self.corpus_path.sent_filename,
+            f"{self.corpus_path.pathcomponents.root}/tmp/"
+            f"{self.corpus_path.pathcomponents.basename}_"
+            f"{self.corpus_path.pathcomponents.lang}.sent",
+        )

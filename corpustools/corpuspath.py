@@ -224,3 +224,33 @@ class CorpusPath:
             lang=self.pathcomponents.lang + "2" + language,
             extension=".tmx",
         )
+
+    @property
+    def sent_filename(self):
+        """Compute the name of the sentence file.
+
+        Args:
+            pfile (str): name of converted corpus file (produced by
+                convert2xml)
+
+        Returns:
+            str: the name of the tca2 input file
+        """
+        # Ensure we have 20 bytes of leeway to let TCA2 append
+        # lang_sent_new.txt without going over the 255 byte limit:
+        origfilename = self.crop_to_bytes(self.pathcomponents.basename, (255 - 20))
+        return os.path.join(
+            self.pathcomponents.root,
+            "tmp",
+            f"{origfilename}_{self.pathcomponents.lang}.sent",
+        )
+
+    @staticmethod
+    def crop_to_bytes(name, max_bytes):
+        """Ensure `name` is less than `max_bytes` bytes.
+
+        Do not split name in the middle of a wide byte.
+        """
+        while len(name.encode("utf-8")) > max_bytes:
+            name = name[:-1]
+        return name
