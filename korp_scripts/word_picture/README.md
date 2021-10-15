@@ -26,3 +26,5 @@ The results are always displayed as base forms (same as for the swedish version)
 
 3. Whenever corpus/tables update run:
 `rm -rf /tmp/gt_korp_2018_WSGI/*`
+If error `bash: /bin/rm: Argument list too long`, run the following:
+`find /tmp/gt_korp_2018_WSGI/ -type f -delete`
