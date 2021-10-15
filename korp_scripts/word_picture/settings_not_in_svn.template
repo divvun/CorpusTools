@@ -1,0 +1,14 @@
+# -*- coding:utf-8 -*-
+
+import MySQLdb
+
+db = MySQLdb.connect(host='localhost',
+    user='USER_NAME',
+    passwd='PASSWORD',
+    db='DATABASE_NAME')
+cursor = db.cursor()
+
+
+corpus_name = 'CORPUS_NAME'
+fileName = 'PATH_TO_VRT_FILE'
+logfileName = 'PATH_TO_LOGFILE'
