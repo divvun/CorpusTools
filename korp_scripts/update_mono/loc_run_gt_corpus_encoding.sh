@@ -1,14 +1,9 @@
 #!/bin/bash
 
 current_dir=`pwd`
-#sme_4_server sme_4_server sme_4_server sme_4_server sme_4_server sme_4_server
-#in_dir="korp_data_20181106_admin/"
-#in_dir="test_admin/"
 in_dir="sme/"
 
  echo "pwd $current_dir"
- #metaFile='loc_gt_metadata_20181106.json'
- #metaFile='loc_metadata_test.json'
  metaFile='loc_metadata_sme.json'
 
 for f in $in_dir/*.vrt;
