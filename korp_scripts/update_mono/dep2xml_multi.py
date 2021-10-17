@@ -337,7 +337,7 @@ def process_file(current_file):
 
         # logging.warning(str(os.path.join(root,current_file))+'\n')
 
-        root = "/".join(current_file.split("/")[:-1])
+        root = os.path.dirname(current_file)
         # print("root=", root)
         current_out_dir_path = os.path.join(out_dir_path, root)
         # current_out_dir_path = out_dir_path
@@ -578,9 +578,9 @@ def extract_original_analysis(used_analysis):
     used_analysis = re.sub("G3+\s", "", used_analysis)
     used_analysis = re.sub("v9+\s", "", used_analysis)
 
-    if debug_output:
-        # print('8_used_analysis_|'+str(used_analysis)+'|_')
-        logging.info("8_used_analysis_|" + str(used_analysis) + "|_")
+    # if debug_output:
+    #     # print('8_used_analysis_|'+str(used_analysis)+'|_')
+    #     logging.info("8_used_analysis_|" + str(used_analysis) + "|_")
 
     return used_analysis
 
