@@ -440,19 +440,18 @@ def make_root_element(f_root):
 
 def process_file(current_file, done_dir_path, lang):
     """Convert analysed file into vrt format file."""
-    if current_file.endswith(".xml"):
-        print(f"... processing {current_file}")
-        path = os.path.join(done_dir_path, os.path.basename(current_file))
-        print(f"path={path}")
-        with open(path, "wb") as newfile_stream:
-            newfile_stream.write(
-                ET.tostring(
-                    make_vrt_xml(current_file, lang),
-                    xml_declaration=False,
-                    encoding="utf-8",
-                )
+    print(f"... processing {current_file}")
+    path = os.path.join(done_dir_path, os.path.basename(current_file))
+    print(f"path={path}")
+    with open(path, "wb") as newfile_stream:
+        newfile_stream.write(
+            ET.tostring(
+                make_vrt_xml(current_file, lang),
+                xml_declaration=False,
+                encoding="utf-8",
             )
-        print("DONE ", path, "\n\n")
+        )
+    print("DONE ", path, "\n\n")
 
 
 def make_vrt_xml(current_file, lang):
