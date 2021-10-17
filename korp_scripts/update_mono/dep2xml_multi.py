@@ -221,15 +221,10 @@ def vrt_format(elem):
     if len(elem):
         if not elem.text or not elem.text.strip():
             elem.text = i
-        if not elem.tail or not elem.tail.strip():
-            elem.tail = i
         for elem in elem:
             vrt_format(elem)
-        if not elem.tail or not elem.tail.strip():
-            elem.tail = i
-    else:
-        if not elem.tail or not elem.tail.strip():
-            elem.tail = i
+    if not elem.tail or not elem.tail.strip():
+        elem.tail = padding
 
 
 def append_files(files_list, folder_path):
