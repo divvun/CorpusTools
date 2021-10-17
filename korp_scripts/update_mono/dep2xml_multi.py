@@ -568,6 +568,27 @@ def extract_used_analysis(used_analysis):
     return used_analysis
 
 
+def reshape_cohort_line(line):
+    # delete '\t"' at the beginning of the analysis
+    ###print('...5_ln_x1x|'+ line + '|_')
+    line = line.lstrip("\t")
+    ###print('...6_ln_x2x|'+ line + '|_')
+    if line.startswith('"'):
+        line = line[1:]
+    ###print('...7_ln_x3x|'+ line + '|_')
+    # delete '\n' at the end of the analysis
+    line = line.rstrip("\n")
+    # delimiter between lemma and msd (morpho-syntactic description)
+    line = re.sub('"\s', "_∞_", line)
+    # delimiter between the compound parts
+    line = re.sub("\n\t", "_™_", line)
+    # keep track of the embedding of the different parts for compounds split into more than two parts
+    line = re.sub('\t"', "_™_", line)
+    line = re.sub("\t", "_™_", line)
+
+    return line
+
+
 def split_cohort(analysis, current_lang):
     """Make sentences from the current analysis."""
     _current_lang = current_lang
@@ -599,28 +620,11 @@ def split_cohort(analysis, current_lang):
             # print("rest_cohort[1]=",rest_cohort[1])
             cohort_lines = re.split('\n\t"', rest_cohort[1])
             ### print('...4_cohort_lines|'+ str(cohort_lines) + '|_')
-            split_analysis = []
             # explicit marking of boundaries between:
             # lemma, derivation strings, analysis of parts of compounds
-            for line in cohort_lines:
-                # delete '\t"' at the beginning of the analysis
-                ###print('...5_ln_x1x|'+ line + '|_')
-                line = line.lstrip("\t")
-                ###print('...6_ln_x2x|'+ line + '|_')
-                if line.startswith('"'):
-                    line = line[1:]
-                ###print('...7_ln_x3x|'+ line + '|_')
-                # delete '\n' at the end of the analysis
-                line = line.rstrip("\n")
-                # delimiter between lemma and msd (morpho-syntactic description)
-                line = re.sub('"\s', "_∞_", line)
-                # delimiter between the compound parts
-                line = re.sub("\n\t", "_™_", line)
-                # keep track of the embedding of the different parts for compounds split into more than two parts
-                line = re.sub('\t"', "_™_", line)
-                line = re.sub("\t", "_™_", line)
-
-                split_analysis.append(line)
+            split_analysis = [
+                reshape_cohort_line(cohort_line) for cohort_line in cohort_lines
+            ]
 
             ###print('_unsorted_cohort_|'+str(split_analysis)+'|__')
 
