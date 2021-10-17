@@ -217,13 +217,11 @@ WORDFORM_FILTER = [
 
 
 def vrt_format(elem):
-    i = "\n"
     """Make sure empty text or tail is padded with newline."""
+    padding = "\n"
     if len(elem):
         if not elem.text or not elem.text.strip():
-            elem.text = i
-        for elem in elem:
-            vrt_format(elem)
+            elem.text = padding
         for child in elem:
             vrt_format(child)
     if not elem.tail or not elem.tail.strip():
