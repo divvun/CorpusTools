@@ -258,35 +258,15 @@ def parse_options():
     return parser.parse_args()
 
 
-def main():
-    args = parse_options()
-
-    files_list = []
-
-    debug_index = ""
-    out_dir = "_od_" + args.in_dir + "_" + debug_index
-    logging.basicConfig(
-        filename="proc_" + args.in_dir + "_" + debug_index + ".log", level=logging.DEBUG
-    )
-
-    cwd = os.getcwd()
-    out_dir_path = os.path.join(cwd, out_dir)
-    if not os.path.exists(out_dir_path):
-        print("_od_ ::: " + out_dir_path)
-        os.mkdir(out_dir_path)
-
+def sanity_check():
     # parameters to be adjusted as needed
     fst_type = "hfstol"
-
-    done_dir = "done_multi_" + args.lang
-    done_dir_path = os.path.join(cwd, done_dir)
-    if not os.path.exists(done_dir_path):
-        os.mkdir(done_dir_path)
 
     if fst_type == "xfst":
         plup = Popen("which lookup", shell=True, stdout=PIPE, stderr=PIPE)
         olup, _ = plup.communicate()
         ###print("___ lookup is ",olup.decode())
+
     if fst_type == "hfstol":
         plup = Popen(
             "which hfst-optimised-lookup", shell=True, stdout=PIPE, stderr=PIPE
@@ -310,6 +290,30 @@ def main():
     if not ovislcg3.decode():
         print("No vislcg3 found, please install it!")
         sys.exit("Error")
+
+
+def main():
+    sanity_check()
+    args = parse_options()
+
+    files_list = []
+
+    debug_index = ""
+    out_dir = "_od_" + args.in_dir + "_" + debug_index
+    logging.basicConfig(
+        filename="proc_" + args.in_dir + "_" + debug_index + ".log", level=logging.DEBUG
+    )
+
+    cwd = os.getcwd()
+    out_dir_path = os.path.join(cwd, out_dir)
+    if not os.path.exists(out_dir_path):
+        print("_od_ ::: " + out_dir_path)
+        os.mkdirs(out_dir_path)
+
+    done_dir = "done_multi_" + args.lang
+    done_dir_path = os.path.join(cwd, done_dir)
+    if not os.path.exists(done_dir_path):
+        os.mkdir(done_dir_path)
 
     append_files(files_list, args.in_dir)
     process_in_parallel(done_dir_path, args.lang, files_list)
