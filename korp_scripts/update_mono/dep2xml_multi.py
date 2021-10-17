@@ -485,11 +485,9 @@ def process_file(current_file):
 
         vrt_format(f_root)
 
-        # print("out path=", os.path.join(out_dir_path,str(current_file)))
         print("path=", os.path.join(current_out_dir_path, str(current_file)))
-        # xml_tree.write(os.path.join(out_dir_path,str(current_file)),
         xml_tree.write(
-            os.path.join(current_out_dir_path, str(current_file.split("/")[-1])),
+            os.path.join(current_out_dir_path, os.path.basename(current_file)),
             xml_declaration=False,
             encoding="utf-8",
             method="xml",
