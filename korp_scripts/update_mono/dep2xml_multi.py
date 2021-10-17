@@ -270,12 +270,6 @@ def main():
     # parameters to be adjusted as needed
     lang = sys.argv[2]
     fst_type = "hfstol"
-    debug_fst = False
-    rel_fst_file = "/src/analyser-disamb-gt-desc." + fst_type
-    langs_dir = "$GTLANGS/lang-"
-    lookup = ""
-    lookup2cg = ""
-    vislcg3 = ""
 
     done_dir = "done_multi_" + lang
     done_dir_path = os.path.join(cwd, done_dir)
@@ -284,34 +278,31 @@ def main():
 
     if fst_type == "xfst":
         plup = Popen("which lookup", shell=True, stdout=PIPE, stderr=PIPE)
-        olup, elup = plup.communicate()
+        olup, _ = plup.communicate()
         ###print("___ lookup is ",olup.decode())
     if fst_type == "hfstol":
         plup = Popen(
             "which hfst-optimised-lookup", shell=True, stdout=PIPE, stderr=PIPE
         )
-        olup, elup = plup.communicate()
+        olup, _ = plup.communicate()
 
     if not olup.decode():
         print("No lookup found, please install it!")
         sys.exit("Error")
-    lookup = olup.decode().strip()
 
     plup2cg = Popen("which lookup2cg", shell=True, stdout=PIPE, stderr=PIPE)
-    olup2cg, elup2cg = plup2cg.communicate()
+    olup2cg, _ = plup2cg.communicate()
 
     if not olup2cg.decode():
         print("No lookup2cg found, please install it!")
         sys.exit("Error")
-    lookup2cg = olup2cg.decode().strip()
 
     pvislcg3 = Popen("which vislcg3", shell=True, stdout=PIPE, stderr=PIPE)
-    ovislcg3, evislcg3 = pvislcg3.communicate()
+    ovislcg3, _ = pvislcg3.communicate()
 
     if not ovislcg3.decode():
         print("No vislcg3 found, please install it!")
         sys.exit("Error")
-    vislcg3 = ovislcg3.decode().strip()
 
     append_files(files_list, in_dir)
     process_in_parallel(done_dir_path, lang, files_list)
