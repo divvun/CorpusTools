@@ -941,7 +941,6 @@ def get_generation_string(in_analysis, in_pos, in_msd, in_lang):
 
     _used_analysis = in_analysis
     _pos = in_pos
-    _msd = in_msd
     _lang = in_lang
     _string2generate = ""
 
