@@ -544,13 +544,7 @@ def process_file(current_file):
         p = Popen(mv_cmd, shell=True, stdout=PIPE, stderr=PIPE)
         mv_out, mv_err = p.communicate()
 
-
-def split_cohort(analysis, current_lang):
-
-    _current_lang = current_lang
-    debug_output = False
-    # generate_der_comp_lemma = False
-
+def reshape_analysis(analysis):
     _analysis = analysis
     # ambiguity hack: mask '<' as lemma, i.e., in the context of '\n\t\"<'
     _analysis = re.sub('\n\t"<', '\n\t"\\<', _analysis)
@@ -591,9 +585,18 @@ def split_cohort(analysis, current_lang):
 
     ###logging.info('ANALYSIS_sentence|'+ _analysis + '|_')
 
+    return _analysis
+
+def split_cohort(analysis, current_lang):
+
+    _current_lang = current_lang
+    debug_output = False
+    # generate_der_comp_lemma = False
+
+
     _sentences = []
 
-    for current_sentence in [x for x in re.split("\n\n", _analysis) if x != ""]:
+    for current_sentence in [x for x in re.split("\n\n", reshape_analysis(analysis)) if x != ""]:
         sentence = []
         ###print('...1_sentence|'+ current_sentence + '|_')
         # split the tokens+analyses based on ('"<'
