@@ -545,7 +545,8 @@ def extract_original_analysis(used_analysis):
 
 def extract_used_analysis(used_analysis):
     ### print('_|'+ word_form + '|_|' + str(used_analysis) + '|_')
-
+    ex_index = used_analysis.find("Ex/")
+    tm_index = used_analysis.find("_™_")
     if "Ex/" in used_analysis and not "_™_" in used_analysis:
         (lemma, msd) = used_analysis.split("_∞_", 1)
 
@@ -659,8 +660,6 @@ def split_cohort(analysis, current_lang):
 
             # take the first analysis in case there are more than one non-disambiguated analyses
             original_analysis = extract_original_analysis(sorted_analysis_lines[0])
-            ex_index = original_analysis.find("Ex/")
-            tm_index = original_analysis.find("_™_")
 
             # keep this strig for lemma generation
             used_analysis = extract_used_analysis(original_analysis)
