@@ -953,8 +953,8 @@ def get_generation_string(in_analysis, in_pos, in_msd, in_lang):
 
     ex_index = _tail.find("Ex/")
     tm_index = _tail.find("_™_")
-    current_line_no = inspect.stack()[0][2]
-    ### print('_ex-tm_|'+str(ex_index)+'|'+str(tm_index)+'|__|'+str(current_line_no)+'|__')
+    # current_line_no = inspect.stack()[0][2]
+    # print('_ex-tm_|'+str(ex_index)+'|'+str(tm_index)+'|__|'+str(current_line_no)+'|__')
 
     if "Ex/" in _tail:
         if (not "_™_" in _tail) or ("_™_" in _tail and ex_index < tm_index):
