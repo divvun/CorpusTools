@@ -223,6 +223,8 @@ def vrt_format(elem):
             elem.text = i
         for elem in elem:
             vrt_format(elem)
+        for child in elem:
+            vrt_format(child)
     if not elem.tail or not elem.tail.strip():
         elem.tail = padding
 
