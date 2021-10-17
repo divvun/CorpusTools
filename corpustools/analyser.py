@@ -96,9 +96,7 @@ class Analyser:
         """Analyse a file if it is not ocr'ed."""
         try:
             self.xml_file = corpusxmlfile.CorpusXMLFile(xml_file)
-            analysis_xml_name = self.xml_file.corpus_path.replace(
-                "converted/", f"analysed/{self.modename}/"
-            )
+            analysis_xml_name = self.xml_file.corpus_path.analysed
 
             if self.xml_file.ocr is None:
                 self.dependency_analysis()
