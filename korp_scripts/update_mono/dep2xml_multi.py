@@ -544,6 +544,7 @@ def process_file(current_file):
         p = Popen(mv_cmd, shell=True, stdout=PIPE, stderr=PIPE)
         mv_out, mv_err = p.communicate()
 
+
 def reshape_analysis(analysis):
     _analysis = analysis
     # ambiguity hack: mask '<' as lemma, i.e., in the context of '\n\t\"<'
@@ -587,16 +588,66 @@ def reshape_analysis(analysis):
 
     return _analysis
 
+
+def extract_original_analysis(used_analysis):
+    # filter all Err- and Sem-tags from the string
+    used_analysis = re.sub("Err/[^\s]+\s", "", used_analysis)
+    used_analysis = re.sub("Sem/[^\s]+\s", "", used_analysis)
+    used_analysis = re.sub("Use/[^\s]+\s", "", used_analysis)
+    used_analysis = re.sub("Gram/[^\s]+\s", "", used_analysis)
+    used_analysis = re.sub("OLang/[^\s]+\s", "", used_analysis)
+    used_analysis = re.sub("Dial/[^\s]+\s", "", used_analysis)
+    used_analysis = re.sub("CmpN/[^\s]+\s", "", used_analysis)
+    used_analysis = re.sub("CmpNP/[^\s]+\s", "", used_analysis)
+    used_analysis = re.sub("G3+\s", "", used_analysis)
+    used_analysis = re.sub("v9+\s", "", used_analysis)
+
+    if debug_output:
+        # print('8_used_analysis_|'+str(used_analysis)+'|_')
+        logging.info("8_used_analysis_|" + str(used_analysis) + "|_")
+
+    return used_analysis
+
+
+def extract_used_analysis(used_analysis):
+    ### print('_|'+ word_form + '|_|' + str(used_analysis) + '|_')
+
+    if "Ex/" in used_analysis and not "_™_" in used_analysis:
+        lemma = used_analysis.split("_∞_", 1)[0]
+        msd = used_analysis.split("_∞_", 1)[1]
+        # print("msd=", msd)
+        # print("used_analysis=", used_analysis)
+        swapped_msd = get_correct_pos(msd)
+        used_analysis = lemma + "_∞_" + swapped_msd
+        ###print('_LMSU__|'+ lemma + '|_|' + msd + '|_|' + swapped_msd+ '|_|' + used_analysis+ '|__LMSU_')
+
+    # extra handling of the combination of derivation of the head
+    # and compounding
+    if "Ex/" in used_analysis and "_™_" in used_analysis and ex_index < tm_index:
+        # logging.info('_XXX_|'+used_analysis+'|_')
+
+        lemma = used_analysis.split("_∞_", 1)[0]
+        msd = used_analysis.split("_∞_", 1)[1]
+        derivation = msd.split("_™_", 1)[0]
+        rest = msd.split("_™_", 1)[1]
+        swapped_msd = get_correct_pos(derivation)
+        used_analysis = lemma + "_∞_" + swapped_msd + "_™_" + rest
+        # logging.info('_YYY_|'+used_analysis+'|_')
+
+    return used_analysis
+
+
 def split_cohort(analysis, current_lang):
 
     _current_lang = current_lang
     debug_output = False
     # generate_der_comp_lemma = False
 
-
     _sentences = []
 
-    for current_sentence in [x for x in re.split("\n\n", reshape_analysis(analysis)) if x != ""]:
+    for current_sentence in [
+        x for x in re.split("\n\n", reshape_analysis(analysis)) if x != ""
+    ]:
         sentence = []
         ###print('...1_sentence|'+ current_sentence + '|_')
         # split the tokens+analyses based on ('"<'
@@ -672,58 +723,15 @@ def split_cohort(analysis, current_lang):
             ###     logging.info('_sorted_cohort_|'+str(sorted_analysis_lines)+'|__')
 
             # take the first analysis in case there are more than one non-disambiguated analyses
-            used_analysis = sorted_analysis_lines[0]
-            # filter all Err- and Sem-tags from the string
-            used_analysis = re.sub("Err/[^\s]+\s", "", used_analysis)
-            used_analysis = re.sub("Sem/[^\s]+\s", "", used_analysis)
-            used_analysis = re.sub("Use/[^\s]+\s", "", used_analysis)
-            used_analysis = re.sub("Gram/[^\s]+\s", "", used_analysis)
-            used_analysis = re.sub("OLang/[^\s]+\s", "", used_analysis)
-            used_analysis = re.sub("Dial/[^\s]+\s", "", used_analysis)
-            used_analysis = re.sub("CmpN/[^\s]+\s", "", used_analysis)
-            used_analysis = re.sub("CmpNP/[^\s]+\s", "", used_analysis)
-            used_analysis = re.sub("G3+\s", "", used_analysis)
-            used_analysis = re.sub("v9+\s", "", used_analysis)
-
-            if debug_output:
-                # print('8_used_analysis_|'+str(used_analysis)+'|_')
-                logging.info("8_used_analysis_|" + str(used_analysis) + "|_")
+            original_analysis = extract_original_analysis(sorted_analysis_lines[0])
+            ex_index = original_analysis.find("Ex/")
+            tm_index = original_analysis.find("_™_")
 
             # keep this strig for lemma generation
-            original_analysis = used_analysis
+            used_analysis = extract_used_analysis(original_analysis)
 
-            ex_index = used_analysis.find("Ex/")
-            tm_index = used_analysis.find("_™_")
-            current_line_no = inspect.stack()[0][2]
-            ### print('_ex-tm_|'+str(ex_index)+'|'+str(tm_index)+'|__|'+str(current_line_no)+'|__')
-
-            ### print('_|'+ word_form + '|_|' + str(used_analysis) + '|_')
-
-            if "Ex/" in used_analysis and not "_™_" in used_analysis:
-                lemma = used_analysis.split("_∞_", 1)[0]
-                msd = used_analysis.split("_∞_", 1)[1]
-                # print("msd=", msd)
-                # print("used_analysis=", used_analysis)
-                swapped_msd = get_correct_pos(msd)
-                used_analysis = lemma + "_∞_" + swapped_msd
-                ###print('_LMSU__|'+ lemma + '|_|' + msd + '|_|' + swapped_msd+ '|_|' + used_analysis+ '|__LMSU_')
-
-            # extra handling of the combination of derivation of the head
-            # and compounding
-            if (
-                "Ex/" in used_analysis
-                and "_™_" in used_analysis
-                and ex_index < tm_index
-            ):
-                # logging.info('_XXX_|'+used_analysis+'|_')
-
-                lemma = used_analysis.split("_∞_", 1)[0]
-                msd = used_analysis.split("_∞_", 1)[1]
-                derivation = msd.split("_™_", 1)[0]
-                rest = msd.split("_™_", 1)[1]
-                swapped_msd = get_correct_pos(derivation)
-                used_analysis = lemma + "_∞_" + swapped_msd + "_™_" + rest
-                # logging.info('_YYY_|'+used_analysis+'|_')
+            # current_line_no = inspect.stack()[0][2]
+            # print('_ex-tm_|'+str(ex_index)+'|'+str(tm_index)+'|__|'+str(current_line_no)+'|__')
 
             # put a clear delimiter between the (first) pos value and the rest of msd
             # in order to disambiguate from the rest of whitespaces
