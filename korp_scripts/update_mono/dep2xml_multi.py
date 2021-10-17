@@ -444,12 +444,6 @@ def process_file(current_file):
         sys.exit("Error")
     vislcg3 = ovislcg3.decode().strip()
 
-    # for root, dirs, files in os.walk(in_dir): # Walk directory tree
-    #    print("Input dir {0} with {1} files ...".format(root, len(files)))
-
-    # for current_file in files:
-    #    if len(files) == 0 :
-    #        continue
     if current_file.endswith(".xml"):
         # print('... processing ', str(root))
         # print('... processing ', str(current_file))
