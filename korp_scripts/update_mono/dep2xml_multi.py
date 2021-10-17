@@ -7,7 +7,6 @@ import os
 import re
 import sys
 import xml.etree.ElementTree as ET
-from imp import reload
 from subprocess import PIPE, Popen
 from functools import partial
 
@@ -1002,5 +1001,4 @@ def generate_lemma(in_string, c_lang):
 
 
 if __name__ == "__main__":
-    reload(sys)
     main()
