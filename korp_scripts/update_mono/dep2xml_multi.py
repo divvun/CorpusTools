@@ -613,8 +613,8 @@ def extract_used_analysis(used_analysis):
     ### print('_|'+ word_form + '|_|' + str(used_analysis) + '|_')
 
     if "Ex/" in used_analysis and not "_™_" in used_analysis:
-        lemma = used_analysis.split("_∞_", 1)[0]
-        msd = used_analysis.split("_∞_", 1)[1]
+        (lemma, msd) = used_analysis.split("_∞_", 1)
+
         # print("msd=", msd)
         # print("used_analysis=", used_analysis)
         swapped_msd = get_correct_pos(msd)
@@ -625,11 +625,8 @@ def extract_used_analysis(used_analysis):
     # and compounding
     if "Ex/" in used_analysis and "_™_" in used_analysis and ex_index < tm_index:
         # logging.info('_XXX_|'+used_analysis+'|_')
-
-        lemma = used_analysis.split("_∞_", 1)[0]
-        msd = used_analysis.split("_∞_", 1)[1]
-        derivation = msd.split("_™_", 1)[0]
-        rest = msd.split("_™_", 1)[1]
+        (lemma, msd) = used_analysis.split("_∞_", 1)
+        (derivation, rest) = msd.split("_™_", 1)
         swapped_msd = get_correct_pos(derivation)
         used_analysis = lemma + "_∞_" + swapped_msd + "_™_" + rest
         # logging.info('_YYY_|'+used_analysis+'|_')
@@ -938,8 +935,7 @@ def split_cohort(analysis, current_lang):
 
 
 def get_correct_pos(input_string):
-    _input_string = input_string
-    ###print('_instr_|' + _input_string + '|_')
+    ###print('_instr_|' + input_string + '|_')
     der_pos_msd = re.split("( V | N | A | Adv | Po )", input_string)
     ###print('_der_pos_msd_|' + str(der_pos_msd) + '|_')
     swapped_string = (
@@ -955,8 +951,7 @@ def get_generation_string(in_analysis, in_pos, in_msd, in_lang):
     _lang = in_lang
     _string2generate = ""
 
-    _lemma = _used_analysis.split("_∞_", 1)[0]
-    _tail = _used_analysis.split("_∞_", 1)[1]
+    (_lemma, _tail) = _used_analysis.split("_∞_", 1)
 
     # ignore function and dependence relation here
     _tail = re.sub("\s@[^\s]+", "", _tail)
