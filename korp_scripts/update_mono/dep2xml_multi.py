@@ -346,9 +346,7 @@ def process_file(current_file):
             os.makedirs(current_out_dir_path, exist_ok=True)
             ###print('___ processed ', str(current_out_dir_path))
 
-        # xml_tree = ET.parse(os.path.join(root,current_file), ET.XMLParser(encoding='utf-8'))
         xml_tree = ET.parse(current_file, ET.XMLParser(encoding="utf-8"))
-        # xml_tree = ET.parse(current_file, ET.XMLParser(encoding='utf-8'))
         f_root = xml_tree.getroot()
         content_el = f_root.find(".//body/dependency")
         content = content_el.text
