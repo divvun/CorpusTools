@@ -485,38 +485,16 @@ def process_file(current_file):
             output_type = "vrt"
             for token in sentence:
                 ### logging.info('_current_token_|'+str(token)+'|_')
-                if output_type == "xml":
-                    current_word = ET.SubElement(current_sentence, "word")
-                    # NB: the names of the xml attributes of the word element are sorted alphabetically, e.g., 'dcs' comes first!
-                    for i, positional_feature in enumerate(token):
-                        if i == 0:
-                            current_word.set("form", positional_feature)
-                        elif i == 1:
-                            current_word.set("lemma", positional_feature)
-                        elif i == 2:
-                            current_word.set("pos", positional_feature)
-                        elif i == 3:
-                            current_word.set("msd", positional_feature)
-                        elif i == 4:
-                            current_word.set("sID", positional_feature)
-                        elif i == 5:
-                            current_word.set("depRel", positional_feature)
-                        elif i == 6:
-                            current_word.set("pID", positional_feature)
-                        elif i == 7:
-                            current_word.set("dcs", positional_feature)
-
-                if output_type == "vrt":
-                    for i, positional_feature in enumerate(token):
-                        if i == 0:
-                            positional_attributes += positional_feature
-                        else:
-                            if i == 5:
-                                ###print('_posfit_|' + positional_feature + '|_posfit_')
-                                # print("positional_feature=",positional_feature)
-                                positional_feature = DEPREL_MAPPING[positional_feature]
-                            positional_attributes += "\t" + positional_feature
-                    positional_attributes += "\n"
+                for i, positional_feature in enumerate(token):
+                    if i == 0:
+                        positional_attributes += positional_feature
+                    else:
+                        if i == 5:
+                            ###print('_posfit_|' + positional_feature + '|_posfit_')
+                            # print("positional_feature=",positional_feature)
+                            positional_feature = DEPREL_MAPPING[positional_feature]
+                        positional_attributes += "\t" + positional_feature
+                positional_attributes += "\n"
             current_sentence.text = positional_attributes
 
         # delete the original dependency node
