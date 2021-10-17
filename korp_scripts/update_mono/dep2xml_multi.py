@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
+import argparse
 import inspect
 import logging
 import multiprocessing
@@ -7,8 +8,8 @@ import os
 import re
 import sys
 import xml.etree.ElementTree as ET
-from subprocess import PIPE, Popen
 from functools import partial
+from subprocess import PIPE, Popen
 
 DOMAIN_MAPPING = {
     "admin": "administration",
@@ -246,20 +247,27 @@ def process_in_parallel(done_dir_path, lang, files_list):
     return
 
 
-def main():
-    files_list = []
-    in_dir = sys.argv[1]
-
-    debug_index = ""
-    out_dir = "_od_" + in_dir + "_" + debug_index
-    logging.basicConfig(
-        filename="proc_" + in_dir + "_" + debug_index + ".log", level=logging.DEBUG
+def parse_options():
+    parser = argparse.ArgumentParser(
+        description="Turn analysed files into vrt format xml files."
     )
 
-    # to be adjusted as needed
-    if len(sys.argv) != 3:
-        print("wrong number of arguments")
-        sys.exit("Error")
+    parser.add_argument("in_dir", help="the directory of the analysed files")
+    parser.add_argument("lang", help="language of the files to process")
+
+    return parser.parse_args()
+
+
+def main():
+    args = parse_options()
+
+    files_list = []
+
+    debug_index = ""
+    out_dir = "_od_" + args.in_dir + "_" + debug_index
+    logging.basicConfig(
+        filename="proc_" + args.in_dir + "_" + debug_index + ".log", level=logging.DEBUG
+    )
 
     cwd = os.getcwd()
     out_dir_path = os.path.join(cwd, out_dir)
@@ -268,10 +276,9 @@ def main():
         os.mkdir(out_dir_path)
 
     # parameters to be adjusted as needed
-    lang = sys.argv[2]
     fst_type = "hfstol"
 
-    done_dir = "done_multi_" + lang
+    done_dir = "done_multi_" + args.lang
     done_dir_path = os.path.join(cwd, done_dir)
     if not os.path.exists(done_dir_path):
         os.mkdir(done_dir_path)
@@ -304,8 +311,8 @@ def main():
         print("No vislcg3 found, please install it!")
         sys.exit("Error")
 
-    append_files(files_list, in_dir)
-    process_in_parallel(done_dir_path, lang, files_list)
+    append_files(files_list, args.in_dir)
+    process_in_parallel(done_dir_path, args.lang, files_list)
 
 
 def make_root_element(f_root):
