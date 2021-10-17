@@ -356,20 +356,21 @@ def make_root_element(f_root):
     # logging.info('... timefrom|' + f_timefrom +'|_')
     # logging.info('... timeto|' + f_timeto +'|_')
 
-    f_root.clear()
-    f_root.tag = "text"
-    f_root.set("title", f_title)
-    f_root.set("lang", f_lang)
-    f_root.set("orig_lang", f_orig_lang)
-    f_root.set("first_name", f_first_name_author)
-    f_root.set("last_name", f_last_name_author)
-    f_root.set("nationality", f_nationality)
-    f_root.set("gt_domain", DOMAIN_MAPPING[f_genre])
-    f_root.set("date", f_date)
-    f_root.set("datefrom", f_datefrom)
-    f_root.set("dateto", f_dateto)
-    f_root.set("timefrom", f_timefrom)
-    f_root.set("timeto", f_timeto)
+    root = ET.Element("text")
+    root.set("title", f_title)
+    root.set("lang", f_lang)
+    root.set("orig_lang", f_orig_lang)
+    root.set("first_name", f_first_name_author)
+    root.set("last_name", f_last_name_author)
+    root.set("nationality", f_nationality)
+    root.set("gt_domain", DOMAIN_MAPPING[f_genre])
+    root.set("date", f_date)
+    root.set("datefrom", f_datefrom)
+    root.set("dateto", f_dateto)
+    root.set("timefrom", f_timefrom)
+    root.set("timeto", f_timeto)
+
+    return root
 
 
 def process_file(current_file):
@@ -460,11 +461,11 @@ def process_file(current_file):
             ###print('___ processed ', str(current_out_dir_path))
 
         xml_tree = ET.parse(current_file, ET.XMLParser(encoding="utf-8"))
-        f_root = xml_tree.getroot()
-        content_el = f_root.find(".//body/dependency")
+        old_root = xml_tree.getroot()
+        content_el = old_root.find(".//body/dependency")
         content = content_el.text
 
-        make_root_element(f_root)
+        f_root = make_root_element(old_root)
 
         sentences = split_cohort(content, lang)
 
@@ -475,13 +476,6 @@ def process_file(current_file):
             current_sentence = ET.SubElement(f_root, "sentence")
             current_sentence.set("id", str(s_id + 1))
             current_sentence.text = make_positional_attributes(sentence)
-
-        # delete the original dependency node
-        dep_nodes = f_root.findall(".//body/dependency")
-        while len(dep_nodes):
-            parent = f_root.findall(".//body/dependency" + "/..")[0]
-            parent.remove(dep_nodes[0])
-            dep_nodes = f_root.findall(".//body/dependency")
 
         vrt_format(f_root)
 
