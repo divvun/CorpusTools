@@ -474,22 +474,7 @@ def process_file(current_file):
         for s_id, sentence in enumerate(sentences):
             current_sentence = ET.SubElement(f_root, "sentence")
             current_sentence.set("id", str(s_id + 1))
-            positional_attributes = "\n"
-
-            output_type = "vrt"
-            for token in sentence:
-                ### logging.info('_current_token_|'+str(token)+'|_')
-                for i, positional_feature in enumerate(token):
-                    if i == 0:
-                        positional_attributes += positional_feature
-                    else:
-                        if i == 5:
-                            ###print('_posfit_|' + positional_feature + '|_posfit_')
-                            # print("positional_feature=",positional_feature)
-                            positional_feature = DEPREL_MAPPING[positional_feature]
-                        positional_attributes += "\t" + positional_feature
-                positional_attributes += "\n"
-            current_sentence.text = positional_attributes
+            current_sentence.text = make_positional_attributes(sentence)
 
         # delete the original dependency node
         dep_nodes = f_root.findall(".//body/dependency")
@@ -515,6 +500,24 @@ def process_file(current_file):
         print("MOVED file ", current_file, " in done folder \n\n")
         p = Popen(mv_cmd, shell=True, stdout=PIPE, stderr=PIPE)
         mv_out, mv_err = p.communicate()
+
+
+def make_positional_attributes(sentence):
+    positional_attributes = "\n"
+
+    for token in sentence:
+        ### logging.info('_current_token_|'+str(token)+'|_')
+        for i, positional_feature in enumerate(token):
+            if i == 0:
+                positional_attributes += positional_feature
+            else:
+                if i == 5:
+                    ###print('_posfit_|' + positional_feature + '|_posfit_')
+                    # print("positional_feature=",positional_feature)
+                    positional_feature = DEPREL_MAPPING[positional_feature]
+                positional_attributes += "\t" + positional_feature
+        positional_attributes += "\n"
+    return positional_attributes
 
 
 def reshape_analysis(analysis):
