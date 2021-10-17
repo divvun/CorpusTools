@@ -273,8 +273,9 @@ def process_file(current_file):
 
         sentences = split_cohort(content, lang)
 
-        # converting the analysis output into a suitable xml format for vrt transformation (vrt is the cwb input format)
-        # for s_id, sentence in reversed(list(enumerate(sentences))):
+        # converting the analysis output into a suitable xml format for vrt
+        # transformation (vrt is the cwb input format)
+
         for s_id, sentence in enumerate(sentences):
             current_sentence = ET.SubElement(f_root, "sentence")
             current_sentence.set("id", str(s_id + 1))
@@ -370,10 +371,10 @@ def split_cohort(analysis, current_lang):
     if _analysis.startswith(":"):
         _analysis = re.sub("^:[^\n]*\n", "", _analysis)
 
-    #  - waiting for specifications on how these pieces of information will be deployed in the corpus
-    # and presented in Korp: as substrings of the msd-string or as extra attribute-value pairs choosable
-    # via the Korp interface?
-    #  - for now they ar just filtered away
+    # - waiting for specifications on how these pieces of information will be
+    # deployed in the corpus and presented in Korp: as substrings of the
+    # msd-string or as extra attribute-value pairs choosable via the Korp
+    # interface? - for now they ar just filtered away
 
     for extra_tag in [
         "<cohort-with-dynamic-compound>",
