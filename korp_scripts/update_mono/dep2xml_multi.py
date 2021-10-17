@@ -485,19 +485,17 @@ def process_file(current_file):
 
         vrt_format(f_root)
 
-        print("path=", os.path.join(current_out_dir_path, str(current_file)))
-        xml_tree.write(
-            os.path.join(current_out_dir_path, os.path.basename(current_file)),
-            xml_declaration=False,
-            encoding="utf-8",
-            method="xml",
-        )
-        print("DONE ", current_file, "\n\n")
-
-        mv_cmd = "mv " + current_file + " " + done_dir_path
-        print("MOVED file ", current_file, " in done folder \n\n")
-        p = Popen(mv_cmd, shell=True, stdout=PIPE, stderr=PIPE)
-        mv_out, mv_err = p.communicate()
+        path = os.path.join(done_dir_path, os.path.basename(current_file))
+        print("path=", path)
+        with open(path, "wb") as newfile_stream:
+            newfile_stream.write(
+                ET.tostring(
+                    f_root,
+                    xml_declaration=False,
+                    encoding="utf-8",
+                )
+            )
+        print("DONE ", path, "\n\n")
 
 
 def make_positional_attributes(sentence):
