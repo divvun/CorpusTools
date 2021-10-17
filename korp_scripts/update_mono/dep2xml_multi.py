@@ -590,6 +590,24 @@ def reshape_cohort_line(line):
     return line
 
 
+def sort_cohort(cohort_lines):
+    split_analysis = [reshape_cohort_line(cohort_line) for cohort_line in cohort_lines]
+    # if there are mixed analyses with and without Error tags
+    # filter away all instances containing Error tags
+    # however, if there are only analyses containing Error tags
+    # sort the cohort and choose the first version
+
+    filtered_analysis = [i for i in split_analysis if not ("Err/" in i)]
+    if len(filtered_analysis) > 0:
+        ### logging.info('_filtered_cohort_|'+str(filtered_analysis)+'|__')
+        return sorted(filtered_analysis, key=lambda name: name.lower())
+        ### logging.info('_filtered_sorted_cohort_|'+str(sorted_analysis_lines)+'|__')
+
+    ### logging.info('_unfiltered_unsorted_cohort_|'+str(split_analysis)+'|__')
+    return sorted(split_analysis, key=lambda name: name.lower())
+    ### logging.info('_unfiltered_sorted_cohort_|'+str(sorted_analysis_lines)+'|__')
+
+
 def split_cohort(analysis, current_lang):
     """Make sentences from the current analysis."""
     _current_lang = current_lang
@@ -607,93 +625,32 @@ def split_cohort(analysis, current_lang):
         for current_cohort in [x for x in re.split('"<', current_sentence) if x != ""]:
             # discard all lines starting with ':' (= giella format of hfst)
             cohort = re.split("\n:", current_cohort)[0]
-            # print("cohort=", cohort)
-            ### print('...2_cohort|'+ cohort + '|_')
 
             # split word form from analysis
             word_form = re.split('>"\n', cohort)[0]
             rest_cohort = re.split('>"\n', cohort)
-            # print('...3_wf|'+ word_form + '|_')
-            # print('...3_rc|'+ str(rest_cohort) + '|_')
-
-            # further split non-disambiguated analyses based on '\n\t"'
-            # print("rest_cohort=",rest_cohort)
-            # print("rest_cohort[1]=",rest_cohort[1])
-            cohort_lines = re.split('\n\t"', rest_cohort[1])
-            ### print('...4_cohort_lines|'+ str(cohort_lines) + '|_')
-            # explicit marking of boundaries between:
-            # lemma, derivation strings, analysis of parts of compounds
-            split_analysis = [
-                reshape_cohort_line(cohort_line) for cohort_line in cohort_lines
-            ]
-
-            ###print('_unsorted_cohort_|'+str(split_analysis)+'|__')
-
-            # sort cohort
-            sorted_analysis_lines = []
-
-            # if there are mixed analyses with and without Error tags
-            # filter away all instances containing Error tags
-            # however, if there are only analyses containing Error tags
-            # sort the cohort and choose the first version
-
-            filtered_analysis = [i for i in split_analysis if not ("Err/" in i)]
-
-            if len(filtered_analysis) > 0:
-                ### logging.info('_filtered_cohort_|'+str(filtered_analysis)+'|__')
-                sorted_analysis_lines = sorted(
-                    filtered_analysis, key=lambda name: name.lower()
-                )
-                ### logging.info('_filtered_sorted_cohort_|'+str(sorted_analysis_lines)+'|__')
-            else:
-                ### logging.info('_unfiltered_unsorted_cohort_|'+str(split_analysis)+'|__')
-                sorted_analysis_lines = sorted(
-                    split_analysis, key=lambda name: name.lower()
-                )
-                ### logging.info('_unfiltered_sorted_cohort_|'+str(sorted_analysis_lines)+'|__')
-
-            ### if len(split_analysis) > 1:
-            ###     logging.info('_unsorted_cohort_|'+str(split_analysis)+'|__')
-
-            ### if len(split_analysis) > 1:
-            ###     logging.info('_sorted_cohort_|'+str(sorted_analysis_lines)+'|__')
 
             # take the first analysis in case there are more than one non-disambiguated analyses
-            original_analysis = extract_original_analysis(sorted_analysis_lines[0])
+            original_analysis = extract_original_analysis(
+                sort_cohort(cohort_lines=re.split('\n\t"', rest_cohort[1]))[0]
+            )
 
-            # keep this strig for lemma generation
+            # keep this string for lemma generation
             used_analysis = extract_used_analysis(original_analysis)
-
-            # current_line_no = inspect.stack()[0][2]
-            # print('_ex-tm_|'+str(ex_index)+'|'+str(tm_index)+'|__|'+str(current_line_no)+'|__')
 
             # put a clear delimiter between the (first) pos value and the rest of msd
             # in order to disambiguate from the rest of whitespaces
-            # print("used_analysis=",used_analysis)
             parts = re.compile(
                 "(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?)"
             ).split(used_analysis, 1)
-            ###logging.info('_parts_|'+str(parts)+'|_')
-            # print("parts=",parts)
 
             parts[1] = parts[1].replace("_∞_", "").strip()
             lemma = parts[0]
             pos = parts[1]
             rest = parts[2]
-            # print("lemma=",lemma)
-            # print("pos=",pos)
-            # print("rest=",rest)
-
-            # print('_YYY_|'+used_analysis+'|_')
-            # print("lemma="+lemma)
-
-            # logging.info('_LEN_the-parts_|'+str(len(parts))+'|_')
-            # logging.info('_1_the-parts_|'+str(parts)+'|_')
 
             ex_in_r = rest.find("_©_")
             tm_in_r = rest.find("_™_")
-            # current_line_no = inspect.stack()[0][2]
-            # logging.info('_exr-tmr_|'+str(ex_in_r)+'|'+str(tm_in_r)+'|_|'+str(current_line_no)+'|_')
 
             # derivation-composition string
             dcs = ""
