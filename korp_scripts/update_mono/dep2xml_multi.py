@@ -521,17 +521,20 @@ def reshape_analysis(analysis):
 
 
 def extract_original_analysis(used_analysis):
-    # filter all Err- and Sem-tags from the string
-    used_analysis = re.sub("Err/[^\s]+\s", "", used_analysis)
-    used_analysis = re.sub("Sem/[^\s]+\s", "", used_analysis)
-    used_analysis = re.sub("Use/[^\s]+\s", "", used_analysis)
-    used_analysis = re.sub("Gram/[^\s]+\s", "", used_analysis)
-    used_analysis = re.sub("OLang/[^\s]+\s", "", used_analysis)
-    used_analysis = re.sub("Dial/[^\s]+\s", "", used_analysis)
-    used_analysis = re.sub("CmpN/[^\s]+\s", "", used_analysis)
-    used_analysis = re.sub("CmpNP/[^\s]+\s", "", used_analysis)
-    used_analysis = re.sub("G3+\s", "", used_analysis)
-    used_analysis = re.sub("v9+\s", "", used_analysis)
+    """Filter all Err- and Sem-tags from the string."""
+    for regex in [
+        "Sem/[^\s]+\s",
+        "Use/[^\s]+\s",
+        "Gram/[^\s]+\s",
+        "OLang/[^\s]+\s",
+        "Dial/[^\s]+\s",
+        "CmpN/[^\s]+\s",
+        "CmpNP/[^\s]+\s",
+        "G3+\s",
+        "v9+\s",
+        "Err/[^\s]+\s",
+    ]:
+        used_analysis = re.sub(regex, "", used_analysis)
 
     # if debug_output:
     #     # print('8_used_analysis_|'+str(used_analysis)+'|_')
