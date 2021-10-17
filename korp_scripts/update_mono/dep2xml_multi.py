@@ -9,6 +9,7 @@ import sys
 import xml.etree.ElementTree as ET
 from imp import reload
 from subprocess import PIPE, Popen
+from functools import partial
 
 DOMAIN_MAPPING = {
     "admin": "administration",
@@ -235,11 +236,12 @@ def append_files(files_list, folder_path):
                 files_list.append(os.path.join(root, file))
 
 
-def process_in_parallel(files_list):
+def process_in_parallel(done_dir_path, lang, files_list):
     """Process file in parallel."""
+
     pool_size = multiprocessing.cpu_count() * 2
     pool = multiprocessing.Pool(processes=pool_size)
-    pool.map(process_file, files_list)
+    pool.map(partial(process_file, done_dir_path=done_dir_path, lang=lang), files_list)
     pool.close()  # no more tasks
     pool.join()  # wrap up current tasks
     return
@@ -249,8 +251,71 @@ def main():
     files_list = []
     in_dir = sys.argv[1]
 
+    debug_index = ""
+    out_dir = "_od_" + in_dir + "_" + debug_index
+    logging.basicConfig(
+        filename="proc_" + in_dir + "_" + debug_index + ".log", level=logging.DEBUG
+    )
+
+    # to be adjusted as needed
+    if len(sys.argv) != 3:
+        print("wrong number of arguments")
+        sys.exit("Error")
+
+    cwd = os.getcwd()
+    out_dir_path = os.path.join(cwd, out_dir)
+    if not os.path.exists(out_dir_path):
+        print("_od_ ::: " + out_dir_path)
+        os.mkdir(out_dir_path)
+
+    # parameters to be adjusted as needed
+    lang = sys.argv[2]
+    fst_type = "hfstol"
+    debug_fst = False
+    rel_fst_file = "/src/analyser-disamb-gt-desc." + fst_type
+    langs_dir = "$GTLANGS/lang-"
+    lookup = ""
+    lookup2cg = ""
+    vislcg3 = ""
+
+    done_dir = "done_multi_" + lang
+    done_dir_path = os.path.join(cwd, done_dir)
+    if not os.path.exists(done_dir_path):
+        os.mkdir(done_dir_path)
+
+    if fst_type == "xfst":
+        plup = Popen("which lookup", shell=True, stdout=PIPE, stderr=PIPE)
+        olup, elup = plup.communicate()
+        ###print("___ lookup is ",olup.decode())
+    if fst_type == "hfstol":
+        plup = Popen(
+            "which hfst-optimised-lookup", shell=True, stdout=PIPE, stderr=PIPE
+        )
+        olup, elup = plup.communicate()
+
+    if not olup.decode():
+        print("No lookup found, please install it!")
+        sys.exit("Error")
+    lookup = olup.decode().strip()
+
+    plup2cg = Popen("which lookup2cg", shell=True, stdout=PIPE, stderr=PIPE)
+    olup2cg, elup2cg = plup2cg.communicate()
+
+    if not olup2cg.decode():
+        print("No lookup2cg found, please install it!")
+        sys.exit("Error")
+    lookup2cg = olup2cg.decode().strip()
+
+    pvislcg3 = Popen("which vislcg3", shell=True, stdout=PIPE, stderr=PIPE)
+    ovislcg3, evislcg3 = pvislcg3.communicate()
+
+    if not ovislcg3.decode():
+        print("No vislcg3 found, please install it!")
+        sys.exit("Error")
+    vislcg3 = ovislcg3.decode().strip()
+
     append_files(files_list, in_dir)
-    process_in_parallel(files_list)
+    process_in_parallel(done_dir_path, lang, files_list)
 
 
 def make_root_element(f_root):
@@ -373,123 +438,43 @@ def make_root_element(f_root):
     return root
 
 
-def process_file(current_file):
-
-    # for debugging purposes
-    # Try printing inspect.stack() you can see current stack and pick whatever you want
-    # file_name = __FILE__
-    # current_line_no = inspect.stack()[0][2]
-    # current_function_name = inspect.stack()[0][3]
-
-    in_dir = sys.argv[1]
-    debug_index = ""
-    out_dir = "_od_" + in_dir + "_" + debug_index
-    logging.basicConfig(
-        filename="proc_" + in_dir + "_" + debug_index + ".log", level=logging.DEBUG
-    )
-
-    # to be adjusted as needed
-    if len(sys.argv) != 3:
-        print("wrong number of arguments")
-        sys.exit("Error")
-
-    cwd = os.getcwd()
-    out_dir_path = os.path.join(cwd, out_dir)
-    if not os.path.exists(out_dir_path):
-        print("_od_ ::: " + out_dir_path)
-        os.mkdir(out_dir_path)
-
-    # parameters to be adjusted as needed
-    lang = sys.argv[2]
-    fst_type = "hfstol"
-    debug_fst = False
-    rel_fst_file = "/src/analyser-disamb-gt-desc." + fst_type
-    langs_dir = "$GTLANGS/lang-"
-    lookup = ""
-    lookup2cg = ""
-    vislcg3 = ""
-
-    done_dir = "done_multi_" + lang
-    done_dir_path = os.path.join(cwd, done_dir)
-    if not os.path.exists(done_dir_path):
-        os.mkdir(done_dir_path)
-
-    if fst_type == "xfst":
-        plup = Popen("which lookup", shell=True, stdout=PIPE, stderr=PIPE)
-        olup, elup = plup.communicate()
-        ###print("___ lookup is ",olup.decode())
-    if fst_type == "hfstol":
-        plup = Popen(
-            "which hfst-optimised-lookup", shell=True, stdout=PIPE, stderr=PIPE
-        )
-        olup, elup = plup.communicate()
-
-    if not olup.decode():
-        print("No lookup found, please install it!")
-        sys.exit("Error")
-    lookup = olup.decode().strip()
-
-    plup2cg = Popen("which lookup2cg", shell=True, stdout=PIPE, stderr=PIPE)
-    olup2cg, elup2cg = plup2cg.communicate()
-
-    if not olup2cg.decode():
-        print("No lookup2cg found, please install it!")
-        sys.exit("Error")
-    lookup2cg = olup2cg.decode().strip()
-
-    pvislcg3 = Popen("which vislcg3", shell=True, stdout=PIPE, stderr=PIPE)
-    ovislcg3, evislcg3 = pvislcg3.communicate()
-
-    if not ovislcg3.decode():
-        print("No vislcg3 found, please install it!")
-        sys.exit("Error")
-    vislcg3 = ovislcg3.decode().strip()
-
+def process_file(current_file, done_dir_path, lang):
+    """Convert analysed file into vrt format file."""
     if current_file.endswith(".xml"):
-        # print('... processing ', str(root))
-        # print('... processing ', str(current_file))
-
-        # logging.warning(str(os.path.join(root,current_file))+'\n')
-
-        root = os.path.dirname(current_file)
-        # print("root=", root)
-        current_out_dir_path = os.path.join(out_dir_path, root)
-        # current_out_dir_path = out_dir_path
-        print("... processing current_out_dir_path", str(current_out_dir_path))
-        if not os.path.exists(current_out_dir_path):
-            os.makedirs(current_out_dir_path, exist_ok=True)
-            ###print('___ processed ', str(current_out_dir_path))
-
-        xml_tree = ET.parse(current_file, ET.XMLParser(encoding="utf-8"))
-        old_root = xml_tree.getroot()
-        content_el = old_root.find(".//body/dependency")
-        content = content_el.text
-
-        f_root = make_root_element(old_root)
-
-        sentences = split_cohort(content, lang)
-
-        # converting the analysis output into a suitable xml format for vrt
-        # transformation (vrt is the cwb input format)
-
-        for s_id, sentence in enumerate(sentences):
-            current_sentence = ET.SubElement(f_root, "sentence")
-            current_sentence.set("id", str(s_id + 1))
-            current_sentence.text = make_positional_attributes(sentence)
-
-        vrt_format(f_root)
-
+        print(f"... processing {current_file}")
         path = os.path.join(done_dir_path, os.path.basename(current_file))
-        print("path=", path)
+        print(f"path={path}")
         with open(path, "wb") as newfile_stream:
             newfile_stream.write(
                 ET.tostring(
-                    f_root,
+                    make_vrt_xml(current_file, lang),
                     xml_declaration=False,
                     encoding="utf-8",
                 )
             )
         print("DONE ", path, "\n\n")
+
+
+def make_vrt_xml(current_file, lang):
+    """Convert analysis of a file into a vrt file
+
+    Converting the analysis output into a suitable xml format for vrt
+    transformation (vrt is the cwb input format)
+    """
+    xml_tree = ET.parse(current_file, ET.XMLParser(encoding="utf-8"))
+    old_root = xml_tree.getroot()
+
+    f_root = make_root_element(old_root)
+    for s_id, sentence in enumerate(
+        split_cohort(old_root.find(".//body/dependency").text, lang)
+    ):
+        current_sentence = ET.SubElement(f_root, "sentence")
+        current_sentence.set("id", str(s_id + 1))
+        current_sentence.text = make_positional_attributes(sentence)
+
+    vrt_format(f_root)
+
+    return f_root
 
 
 def make_positional_attributes(sentence):
@@ -600,7 +585,7 @@ def extract_used_analysis(used_analysis):
 
 
 def split_cohort(analysis, current_lang):
-
+    """Make sentences from the current analysis."""
     _current_lang = current_lang
     debug_output = False
     # generate_der_comp_lemma = False
