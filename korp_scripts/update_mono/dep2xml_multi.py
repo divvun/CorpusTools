@@ -11,7 +11,7 @@ from imp import reload
 from subprocess import PIPE, Popen
 
 
-def vrt_format(elem, level=0):
+def vrt_format(elem):
     i = "\n"
     if len(elem):
         if not elem.text or not elem.text.strip():
@@ -19,7 +19,7 @@ def vrt_format(elem, level=0):
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
         for elem in elem:
-            vrt_format(elem, level + 1)
+            vrt_format(elem)
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
     else:
