@@ -253,6 +253,125 @@ def main():
     process_in_parallel(files_list)
 
 
+def make_root_element(f_root):
+    # attributes the a text element
+    # title="Sámi_oskkuoahpahusplána"
+    # lang="sme"
+    # orig_lang="___"
+    # gt_domain="bible"
+    # first_name="___"
+    # last_name="___"
+    # nationality="___"
+    # date="2011-01-01"
+    # datefrom="20110101"
+    # dateto="20110101"
+    # timefrom="000000"
+    # timeto="235959"
+
+    f_title = ""
+    f_genre = ""
+    f_lang = ""
+    f_orig_lang = ""
+    f_first_name_author = ""
+    f_last_name_author = ""
+    f_nationality = ""
+    year_value = ""
+    f_date = "0000-00-00"
+    f_datefrom = "00000000"
+    f_dateto = "00000000"
+    f_timefrom = "000000"
+    f_timeto = "235959"
+
+    f_title = (
+        f_root.find(".//header/title").text.strip()
+        if f_root.find(".//header/title").text
+        else ""
+    )
+    f_genre = (
+        f_root.find(".//header/genre").attrib.get("code")
+        if f_root.find(".//header/genre").attrib.get("code")
+        else ""
+    )
+
+    if f_root.find(".//header/author/person") is not None:
+        f_first_name_author = f_root.find(".//header/author/person").attrib.get(
+            "firstname"
+        )
+        f_last_name_author = f_root.find(".//header/author/person").attrib.get(
+            "lastname"
+        )
+        f_nationality = f_root.find(".//header/author/person").attrib.get("nationality")
+
+    f_lang = f_root.get("{http://www.w3.org/XML/1998/namespace}lang")
+
+    if f_root.find(".//header/translated_from") is not None:
+        f_orig_lang = f_root.find(".//header/translated_from").attrib.get(
+            "{http://www.w3.org/XML/1998/namespace}lang"
+        )
+
+    # no element year in the header
+    if f_root.find(".//header/year") is None:
+        f_date = "0000-00-00"
+        f_datefrom = "00000000"
+        f_dateto = "00000000"
+    else:
+        year_value = str(f_root.find(".//header/year").text)
+        # <year>unknown</year>
+        if year_value == "unknown":
+            f_date = "0000-00-00"
+            f_datefrom = "00000000"
+            f_dateto = "00000000"
+        # <year>2018</year>
+        elif re.match(r"^[0-9]{4,4}$", year_value):
+            f_date = year_value + "-01-01"
+            f_datefrom = year_value + "0101"
+            f_dateto = year_value + "0101"
+        # <year>2011-2012</year>
+        elif re.match(r"^([0-9]{4,4})\-([0-9]{4,4})$", year_value):
+            first, last = re.split("\-", year_value)
+            f_date = first + "-01-01"
+            f_datefrom = first + "0101"
+            f_dateto = last + "0101"
+        # <year>05.10.2004</year>
+        elif re.match(r"^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4,4}$", year_value):
+            day, month, year = re.split("\.", year_value)
+            f_date = year + "-" + month + "-" + day
+            f_datefrom = year + month + day
+            f_dateto = year + month + day
+        else:
+            f_date = "0000-00-00"
+            f_datefrom = "00000000"
+            f_dateto = "00000000"
+
+    # logging.info('... title|' + f_title +'|_')
+    # logging.info('... genre|' + f_genre + '|and domain|' + get_domain_string(f_genre) +'|_')
+    # logging.info('... lang|' + f_lang +'|_')
+    # logging.info('... orig_lang|' + f_orig_lang +'|_')
+    # logging.info('... first name|' + f_first_name_author +'|_')
+    # logging.info('... last name|' + f_last_name_author +'|_')
+    # logging.info('... nationality|' + f_nationality +'|_')
+    # logging.info('... date|' + f_date +'|_')
+    # logging.info('... datefrom|' + f_datefrom +'|_')
+    # logging.info('... dateto|' + f_dateto +'|_')
+    # logging.info('... timefrom|' + f_timefrom +'|_')
+    # logging.info('... timeto|' + f_timeto +'|_')
+
+    f_root.clear()
+    f_root.tag = "text"
+    f_root.set("title", f_title)
+    f_root.set("lang", f_lang)
+    f_root.set("orig_lang", f_orig_lang)
+    f_root.set("first_name", f_first_name_author)
+    f_root.set("last_name", f_last_name_author)
+    f_root.set("nationality", f_nationality)
+    f_root.set("gt_domain", DOMAIN_MAPPING[f_genre])
+    f_root.set("date", f_date)
+    f_root.set("datefrom", f_datefrom)
+    f_root.set("dateto", f_dateto)
+    f_root.set("timefrom", f_timefrom)
+    f_root.set("timeto", f_timeto)
+
+
 def process_file(current_file):
 
     # for debugging purposes
@@ -351,124 +470,7 @@ def process_file(current_file):
         content_el = f_root.find(".//body/dependency")
         content = content_el.text
 
-        # attributes the a text element
-        # title="Sámi_oskkuoahpahusplána"
-        # lang="sme"
-        # orig_lang="___"
-        # gt_domain="bible"
-        # first_name="___"
-        # last_name="___"
-        # nationality="___"
-        # date="2011-01-01"
-        # datefrom="20110101"
-        # dateto="20110101"
-        # timefrom="000000"
-        # timeto="235959"
-
-        f_title = ""
-        f_genre = ""
-        f_lang = ""
-        f_orig_lang = ""
-        f_first_name_author = ""
-        f_last_name_author = ""
-        f_nationality = ""
-        year_value = ""
-        f_date = "0000-00-00"
-        f_datefrom = "00000000"
-        f_dateto = "00000000"
-        f_timefrom = "000000"
-        f_timeto = "235959"
-
-        f_title = (
-            f_root.find(".//header/title").text.strip()
-            if f_root.find(".//header/title").text
-            else ""
-        )
-        f_genre = (
-            f_root.find(".//header/genre").attrib.get("code")
-            if f_root.find(".//header/genre").attrib.get("code")
-            else ""
-        )
-
-        if f_root.find(".//header/author/person") is not None:
-            f_first_name_author = f_root.find(".//header/author/person").attrib.get(
-                "firstname"
-            )
-            f_last_name_author = f_root.find(".//header/author/person").attrib.get(
-                "lastname"
-            )
-            f_nationality = f_root.find(".//header/author/person").attrib.get(
-                "nationality"
-            )
-
-        f_lang = f_root.get("{http://www.w3.org/XML/1998/namespace}lang")
-
-        if f_root.find(".//header/translated_from") is not None:
-            f_orig_lang = f_root.find(".//header/translated_from").attrib.get(
-                "{http://www.w3.org/XML/1998/namespace}lang"
-            )
-
-        # no element year in the header
-        if f_root.find(".//header/year") is None:
-            f_date = "0000-00-00"
-            f_datefrom = "00000000"
-            f_dateto = "00000000"
-        else:
-            year_value = str(f_root.find(".//header/year").text)
-            # <year>unknown</year>
-            if year_value == "unknown":
-                f_date = "0000-00-00"
-                f_datefrom = "00000000"
-                f_dateto = "00000000"
-            # <year>2018</year>
-            elif re.match(r"^[0-9]{4,4}$", year_value):
-                f_date = year_value + "-01-01"
-                f_datefrom = year_value + "0101"
-                f_dateto = year_value + "0101"
-            # <year>2011-2012</year>
-            elif re.match(r"^([0-9]{4,4})\-([0-9]{4,4})$", year_value):
-                first, last = re.split("\-", year_value)
-                f_date = first + "-01-01"
-                f_datefrom = first + "0101"
-                f_dateto = last + "0101"
-            # <year>05.10.2004</year>
-            elif re.match(r"^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4,4}$", year_value):
-                day, month, year = re.split("\.", year_value)
-                f_date = year + "-" + month + "-" + day
-                f_datefrom = year + month + day
-                f_dateto = year + month + day
-            else:
-                f_date = "0000-00-00"
-                f_datefrom = "00000000"
-                f_dateto = "00000000"
-
-        # logging.info('... title|' + f_title +'|_')
-        # logging.info('... genre|' + f_genre + '|and domain|' + get_domain_string(f_genre) +'|_')
-        # logging.info('... lang|' + f_lang +'|_')
-        # logging.info('... orig_lang|' + f_orig_lang +'|_')
-        # logging.info('... first name|' + f_first_name_author +'|_')
-        # logging.info('... last name|' + f_last_name_author +'|_')
-        # logging.info('... nationality|' + f_nationality +'|_')
-        # logging.info('... date|' + f_date +'|_')
-        # logging.info('... datefrom|' + f_datefrom +'|_')
-        # logging.info('... dateto|' + f_dateto +'|_')
-        # logging.info('... timefrom|' + f_timefrom +'|_')
-        # logging.info('... timeto|' + f_timeto +'|_')
-
-        f_root.clear()
-        f_root.tag = "text"
-        f_root.set("title", f_title)
-        f_root.set("lang", f_lang)
-        f_root.set("orig_lang", f_orig_lang)
-        f_root.set("first_name", f_first_name_author)
-        f_root.set("last_name", f_last_name_author)
-        f_root.set("nationality", f_nationality)
-        f_root.set("gt_domain", DOMAIN_MAPPING[f_genre])
-        f_root.set("date", f_date)
-        f_root.set("datefrom", f_datefrom)
-        f_root.set("dateto", f_dateto)
-        f_root.set("timefrom", f_timefrom)
-        f_root.set("timeto", f_timeto)
+        make_root_element(f_root)
 
         sentences = split_cohort(content, lang)
 
