@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
-import re, os, errno, cgi, json, xml, logging, numpy, copy
-
-# print('numpy version: '+numpy.version.version)
 import inspect
-import sys, codecs, locale, getopt
-import xml.etree.ElementTree as ET
-from subprocess import Popen, PIPE
-from operator import itemgetter
-from xml.dom.minidom import parse, parseString
-from imp import reload
-from collections import defaultdict
-
+import logging
 import multiprocessing
+import os
+import re
+import sys
+import xml.etree.ElementTree as ET
+from imp import reload
+from subprocess import PIPE, Popen
 
 
 def indent(elem, level=0):
