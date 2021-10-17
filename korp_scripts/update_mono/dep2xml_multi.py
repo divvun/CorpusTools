@@ -334,17 +334,11 @@ def make_root_element(f_root):
     # timefrom="000000"
     # timeto="235959"
 
-    f_title = ""
-    f_genre = ""
-    f_lang = ""
     f_orig_lang = ""
     f_first_name_author = ""
     f_last_name_author = ""
     f_nationality = ""
     year_value = ""
-    f_date = "0000-00-00"
-    f_datefrom = "00000000"
-    f_dateto = "00000000"
     f_timefrom = "000000"
     f_timeto = "235959"
 
@@ -408,19 +402,6 @@ def make_root_element(f_root):
             f_date = "0000-00-00"
             f_datefrom = "00000000"
             f_dateto = "00000000"
-
-    # logging.info('... title|' + f_title +'|_')
-    # logging.info('... genre|' + f_genre + '|and domain|' + get_domain_string(f_genre) +'|_')
-    # logging.info('... lang|' + f_lang +'|_')
-    # logging.info('... orig_lang|' + f_orig_lang +'|_')
-    # logging.info('... first name|' + f_first_name_author +'|_')
-    # logging.info('... last name|' + f_last_name_author +'|_')
-    # logging.info('... nationality|' + f_nationality +'|_')
-    # logging.info('... date|' + f_date +'|_')
-    # logging.info('... datefrom|' + f_datefrom +'|_')
-    # logging.info('... dateto|' + f_dateto +'|_')
-    # logging.info('... timefrom|' + f_timefrom +'|_')
-    # logging.info('... timeto|' + f_timeto +'|_')
 
     root = ET.Element("text")
     root.set("title", f_title)
