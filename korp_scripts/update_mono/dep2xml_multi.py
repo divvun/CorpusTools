@@ -647,7 +647,8 @@ def split_cohort(analysis, current_lang):
 
             # ambiguity hack: unmask '<' and '>' as lemma
             lemma = parts[0].replace("\\", "")
-            pos = parts[1].replace("_∞_", "").strip()
+            maybe_pos = parts[1].replace("_∞_", "").strip()
+            pos = "___" if maybe_pos == "?" else maybe_pos
             rest = parts[2]
 
             ex_in_r = rest.find("_©_")
@@ -750,9 +751,6 @@ def split_cohort(analysis, current_lang):
 
             # TODO: split Sem-tags and put them into as a separate position attribute for an updated corpus format for Korp
             # so that semantic attributes can be searchable via Korp interface
-
-            if pos == "?":
-                pos = "___"
 
             # analysed data as an 8-tuple: (WORD_FORM, LEMMA, POS, MSD, SELF_ID, FUNCTION_LABEL, PARENT_ID, DERIVATION-COMPOUNDING-STRING)
 
