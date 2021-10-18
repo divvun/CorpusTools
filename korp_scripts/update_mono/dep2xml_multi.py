@@ -622,7 +622,9 @@ def split_cohort(analysis, current_lang):
         sentence = []
         ###print('...1_sentence|'+ current_sentence + '|_')
         # split the tokens+analyses based on ('"<'
-        for current_cohort in [x for x in re.split('"<', current_sentence) if x != ""]:
+        for current_cohort in [
+            cohort for cohort in re.split('"<', current_sentence) if cohort != ""
+        ]:
             # discard all lines starting with ':' (= giella format of hfst)
             cohort = re.split("\n:", current_cohort)[0]
 
