@@ -635,6 +635,15 @@ def make_morpho_syntactic_description(rest):
         return ""
 
 
+def make_head_tail(morpho_syntactic_description_drel):
+    # processing msd: splitting function label, selfID and parentID from the msd string
+
+    if len(morpho_syntactic_description_drel) == 1:
+        return ("___", morpho_syntactic_description_drel[0].lstrip("#"))
+
+    return (morpho_syntactic_description_drel[0], morpho_syntactic_description_drel[1])
+
+
 def split_cohort(analysis, current_lang):
     """Make sentences from the current analysis."""
     _current_lang = current_lang
@@ -676,26 +685,9 @@ def split_cohort(analysis, current_lang):
             lemma = parts[0].replace("\\", "")
             maybe_pos = parts[1].replace("_∞_", "").strip()
             pos = "___" if maybe_pos == "?" else maybe_pos
-
-            # processing msd: splitting function label, selfID and parentID from the msd string
-            morpho_syntactic_description_drel = re.compile(" #").split(
-                make_morpho_syntactic_description(parts[2])
+            (head, tail) = make_head_tail(
+                re.compile(" #").split(make_morpho_syntactic_description(parts[2]))
             )
-            head = ""
-            tail = ""
-
-            if len(morpho_syntactic_description_drel) == 1:
-                head = "___"
-                ###print('IF ... head ', head)
-                tail = morpho_syntactic_description_drel[0].lstrip("#")
-                ###print('IF ... tail ', tail)
-            else:
-                ### here to debug
-                head = morpho_syntactic_description_drel[0]
-                ###print('ELSE ... head ', head)
-                tail = morpho_syntactic_description_drel[1]
-                ###print('ELSE ... tail ', tail)
-
             current_msd = ""
             fct_label = ""
             ### here to debug
