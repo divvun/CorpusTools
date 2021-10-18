@@ -677,25 +677,23 @@ def split_cohort(analysis, current_lang):
             maybe_pos = parts[1].replace("_∞_", "").strip()
             pos = "___" if maybe_pos == "?" else maybe_pos
 
-            morpho_syntactic_description = make_morpho_syntactic_description(parts[2])
-
             # processing msd: splitting function label, selfID and parentID from the msd string
-            msd_drel = re.compile(" #").split(morpho_syntactic_description)
+            morpho_syntactic_description_drel = re.compile(" #").split(
+                make_morpho_syntactic_description(parts[2])
+            )
             head = ""
             tail = ""
-            # print('_XXX_|'+str(msd_drel)+'|_')
-            ###print('_YYY_|'+str(len(msd_drel))+'|_')
 
-            if len(msd_drel) == 1:
+            if len(morpho_syntactic_description_drel) == 1:
                 head = "___"
                 ###print('IF ... head ', head)
-                tail = msd_drel[0].lstrip("#")
+                tail = morpho_syntactic_description_drel[0].lstrip("#")
                 ###print('IF ... tail ', tail)
             else:
                 ### here to debug
-                head = msd_drel[0]
+                head = morpho_syntactic_description_drel[0]
                 ###print('ELSE ... head ', head)
-                tail = msd_drel[1]
+                tail = morpho_syntactic_description_drel[1]
                 ###print('ELSE ... tail ', tail)
 
             current_msd = ""
