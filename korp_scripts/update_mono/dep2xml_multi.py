@@ -308,12 +308,12 @@ def main():
     out_dir_path = os.path.join(cwd, out_dir)
     if not os.path.exists(out_dir_path):
         print("_od_ ::: " + out_dir_path)
-        os.mkdirs(out_dir_path)
+        os.makedirs(out_dir_path)
 
     done_dir = "done_multi_" + args.lang
     done_dir_path = os.path.join(cwd, done_dir)
     if not os.path.exists(done_dir_path):
-        os.mkdir(done_dir_path)
+        os.makedirs(done_dir_path)
 
     append_files(files_list, args.in_dir)
     process_in_parallel(done_dir_path, args.lang, files_list)
