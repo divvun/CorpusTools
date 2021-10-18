@@ -645,9 +645,8 @@ def split_cohort(analysis, current_lang):
                 "(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?)"
             ).split(used_analysis, maxsplit=1)
 
-            parts[1] = parts[1].replace("_∞_", "").strip()
             lemma = parts[0]
-            pos = parts[1]
+            pos = parts[1].replace("_∞_", "").strip()
             rest = parts[2]
 
             ex_in_r = rest.find("_©_")
