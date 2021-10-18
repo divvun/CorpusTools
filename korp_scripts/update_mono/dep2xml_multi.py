@@ -629,12 +629,11 @@ def split_cohort(analysis, current_lang):
             cohort = re.split("\n:", current_cohort)[0]
 
             # split word form from analysis
-            word_form = re.split('>"\n', cohort)[0]
-            rest_cohort = re.split('>"\n', cohort)
+            (word_form, *rest_cohort) = re.split('>"\n', cohort)
 
             # take the first analysis in case there are more than one non-disambiguated analyses
             original_analysis = extract_original_analysis(
-                sort_cohort(cohort_lines=re.split('\n\t"', rest_cohort[1]))[0]
+                sort_cohort(cohort_lines=re.split('\n\t"', rest_cohort[0]))[0]
             )
 
             # keep this string for lemma generation
