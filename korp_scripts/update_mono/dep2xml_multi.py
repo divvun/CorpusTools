@@ -653,40 +653,45 @@ def split_cohort(analysis, current_lang):
             ex_in_r = rest.find("_©_")
             tm_in_r = rest.find("_™_")
 
-            # derivation-composition string
-            dcs = ""
+            derivation_composition_string = ""
             # morpho-syntactic description
-            msd = ""
+            morpho_syntactic_description = ""
 
             # split derivation/composition string from the rest of MSD
             # and put it in and extra tuple at the end of the tuple list,
             # otherwise add a default tuple '___'
             # no derivation, no composition
             if ex_in_r == -1 and tm_in_r == -1:
-                msd = rest
-                dcs = "___"
+                morpho_syntactic_description = rest
+                derivation_composition_string = "___"
                 ###logging.info('_msd_cds_1_|'+str(msd)+'|_|'+str(dcs)+'|_')
             # no derivation, but composition
             elif (ex_in_r == -1 and not tm_in_r == -1) or (
                 not ex_in_r == -1 and not tm_in_r == -1 and tm_in_r < ex_in_r
             ):
-                msd, dcs = re.compile("_™_").split(rest, 1)
-                dcs = "_™_" + dcs
+                (
+                    morpho_syntactic_description,
+                    derivation_composition_string,
+                ) = re.compile("_™_").split(rest, 1)
+                derivation_composition_string = "_™_" + derivation_composition_string
                 ###logging.info('_msd_cds_2_|'+str(msd)+'|_|'+str(dcs)+'|_')
 
             # derivation, but no composition
             elif (not ex_in_r == -1 and tm_in_r == -1) or (
                 not ex_in_r == -1 and not tm_in_r == -1 and ex_in_r < tm_in_r
             ):
-                msd, dcs = re.compile("_©_").split(rest, 1)
-                dcs = "_©_" + dcs
+                (
+                    morpho_syntactic_description,
+                    derivation_composition_string,
+                ) = re.compile("_©_").split(rest, 1)
+                derivation_composition_string = "_©_" + derivation_composition_string
                 ###logging.info('_msd_cds_3_|'+str(msd)+'|_|'+str(dcs)+'|_')
             # covered all relevant combinations?
             else:
                 logging.info("_msd_cds_4_|" + str(rest) + "|_")
 
             # processing msd: splitting function label, selfID and parentID from the msd string
-            msd_drel = re.compile(" #").split(msd)
+            msd_drel = re.compile(" #").split(morpho_syntactic_description)
             head = ""
             tail = ""
             # print('_XXX_|'+str(msd_drel)+'|_')
@@ -714,7 +719,7 @@ def split_cohort(analysis, current_lang):
                 self_id, parent_id = "", ""
             ###print('_ID_|'+str(self_id)+'|_|'+str(parent_id)+'|_')
 
-            # splitting the fuction label
+            # splitting the function label
             if not head == "___":
                 if not "@" in head:
                     current_msd = head
