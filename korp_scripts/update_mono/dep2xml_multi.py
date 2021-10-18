@@ -715,13 +715,10 @@ def make_analysis_tuple(word_form, rest_cohort, language):
         sort_cohort(cohort_lines=re.split('\n\t"', rest_cohort))[0]
     )
 
-    # keep this string for lemma generation
-    used_analysis = extract_used_analysis(original_analysis)
-
     # put a clear delimiter between the (first) pos value and the rest of msd
     # in order to disambiguate from the rest of whitespaces
     parts = re.compile("(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?)").split(
-        used_analysis, maxsplit=1
+        extract_used_analysis(original_analysis), maxsplit=1
     )
 
     # ambiguity hack: unmask '<' and '>' as lemma
