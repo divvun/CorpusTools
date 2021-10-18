@@ -643,7 +643,7 @@ def split_cohort(analysis, current_lang):
             # in order to disambiguate from the rest of whitespaces
             parts = re.compile(
                 "(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?)"
-            ).split(used_analysis, 1)
+            ).split(used_analysis, maxsplit=1)
 
             parts[1] = parts[1].replace("_∞_", "").strip()
             lemma = parts[0]
