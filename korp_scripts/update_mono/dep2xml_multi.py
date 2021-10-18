@@ -781,13 +781,7 @@ def get_generation_string(used_analysis, pos, lang):
     if not string2generate:
         return ""
 
-    ### replace all delimiter by '+' and '_™_' by '#'
-    string2generate = re.sub("\s+", "+", string2generate)
-    string2generate = re.sub("_∞1EX∞_", "+", string2generate)
-    string2generate = re.sub("Ex/", "", string2generate)
-    string2generate = re.sub("_∞1CO∞_", "+", string2generate)
-    string2generate = re.sub("_∞_", "+", string2generate)
-    string2generate = re.sub("(_™_)+", "_™_", string2generate)
+    string2generate = clean_string2generate(string2generate)
 
     ### construct the correct order of generation for compund parts
     parts = string2generate.split("_™_")
@@ -820,6 +814,21 @@ def get_generation_string(used_analysis, pos, lang):
                 string2generate = str_first + "+" + pos + "+" + "Attr"
         else:
             string2generate = str_first + "+" + pos + "+" + "Sg+Nom"
+
+    return string2generate
+
+
+def clean_string2generate(string2generate):
+    ### replace all delimiter by '+' and '_™_' by '#'
+    for (regex, replacement) in [
+        ("\s+", "+"),
+        ("_∞1EX∞_", "+"),
+        ("Ex/", ""),
+        ("_∞1CO∞_", "+"),
+        ("_∞_", "+"),
+        ("(_™_)+", "_™_"),
+    ]:
+        string2generate = re.sub(regex, replacement, string2generate)
 
     return string2generate
 
