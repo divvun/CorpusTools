@@ -258,42 +258,7 @@ def parse_options():
     return parser.parse_args()
 
 
-def sanity_check():
-    # parameters to be adjusted as needed
-    fst_type = "hfstol"
-
-    if fst_type == "xfst":
-        plup = Popen("which lookup", shell=True, stdout=PIPE, stderr=PIPE)
-        olup, _ = plup.communicate()
-        ###print("___ lookup is ",olup.decode())
-
-    if fst_type == "hfstol":
-        plup = Popen(
-            "which hfst-optimised-lookup", shell=True, stdout=PIPE, stderr=PIPE
-        )
-        olup, _ = plup.communicate()
-
-    if not olup.decode():
-        print("No lookup found, please install it!")
-        sys.exit("Error")
-
-    plup2cg = Popen("which lookup2cg", shell=True, stdout=PIPE, stderr=PIPE)
-    olup2cg, _ = plup2cg.communicate()
-
-    if not olup2cg.decode():
-        print("No lookup2cg found, please install it!")
-        sys.exit("Error")
-
-    pvislcg3 = Popen("which vislcg3", shell=True, stdout=PIPE, stderr=PIPE)
-    ovislcg3, _ = pvislcg3.communicate()
-
-    if not ovislcg3.decode():
-        print("No vislcg3 found, please install it!")
-        sys.exit("Error")
-
-
 def main():
-    sanity_check()
     args = parse_options()
 
     files_list = []
