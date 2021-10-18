@@ -688,15 +688,11 @@ def split_cohort(analysis, current_lang):
             (head, tail) = make_head_tail(
                 re.compile(" #").split(make_morpho_syntactic_description(parts[2]))
             )
+            (self_id, parent_id) = (
+                re.compile("->").split(tail) if tail and "->" in tail else ("", "")
+            )
             current_msd = ""
             fct_label = ""
-            ### here to debug
-            # print('_the-tail_|'+str(tail)+'|_')
-            if tail and "->" in tail:
-                self_id, parent_id = re.compile("->").split(tail)
-            else:
-                self_id, parent_id = "", ""
-            ###print('_ID_|'+str(self_id)+'|_|'+str(parent_id)+'|_')
 
             # splitting the function label
             if not head == "___":
