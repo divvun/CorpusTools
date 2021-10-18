@@ -659,11 +659,11 @@ def split_function_label(head):
     return ("___", "X")
 
 
-def lemma_generation(original_analysis, pos, current_msd, _current_lang):
+def lemma_generation(original_analysis, pos, _current_lang):
     """Generate lemma."""
     if "Ex/" in original_analysis or "_™_" in original_analysis:
         lemma_generation_string = get_generation_string(
-            original_analysis, pos, current_msd, _current_lang
+            original_analysis, pos, _current_lang
         )
 
         if lemma_generation_string:
@@ -736,7 +736,7 @@ def make_analysis_tuple(word_form, rest_cohort, language):
     )
     (current_msd, fct_label) = split_function_label(head)
 
-    generated_lemma = lemma_generation(original_analysis, pos, current_msd, language)
+    generated_lemma = lemma_generation(original_analysis, pos, language)
 
     current_msd = clean_msd(current_msd, pos)
 
@@ -783,7 +783,7 @@ def get_correct_pos(input_string):
     return swapped_string
 
 
-def get_generation_string(in_analysis, in_pos, in_msd, in_lang):
+def get_generation_string(in_analysis, in_pos, in_lang):
 
     _used_analysis = in_analysis
     _pos = in_pos
