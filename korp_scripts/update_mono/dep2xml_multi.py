@@ -773,40 +773,36 @@ def get_correct_pos(input_string):
     return swapped_string
 
 
-def get_generation_string(in_analysis, in_pos, in_lang):
+def get_generation_string(used_analysis, pos, lang):
+    string2generate = ""
 
-    _used_analysis = in_analysis
-    _pos = in_pos
-    _lang = in_lang
-    _string2generate = ""
-
-    (_lemma, _tail) = _used_analysis.split("_∞_", 1)
+    (lemma, tail) = used_analysis.split("_∞_", 1)
 
     # ignore function and dependence relation here
-    _tail = re.sub("\s@[^\s]+", "", _tail)
-    _tail = re.sub("\s#\d+->\d+", "", _tail)
+    tail = re.sub("\s@[^\s]+", "", tail)
+    tail = re.sub("\s#\d+->\d+", "", tail)
 
-    ex_index = _tail.find("Ex/")
-    tm_index = _tail.find("_™_")
+    ex_index = tail.find("Ex/")
+    tm_index = tail.find("_™_")
 
-    if "Ex/" in _tail:
-        if (not "_™_" in _tail) or ("_™_" in _tail and ex_index < tm_index):
-            _string2generate = _lemma + "_∞1EX∞_" + _tail
+    if "Ex/" in tail:
+        if (not "_™_" in tail) or ("_™_" in tail and ex_index < tm_index):
+            string2generate = lemma + "_∞1EX∞_" + tail
 
-    if "_™_" in _tail:
-        if (not "Ex/" in _tail) or ("Ex/" in _tail and tm_index < ex_index):
-            _string2generate = _lemma + "_∞1CO∞_" + _tail
+    if "_™_" in tail:
+        if (not "Ex/" in tail) or ("Ex/" in tail and tm_index < ex_index):
+            string2generate = lemma + "_∞1CO∞_" + tail
 
     ### replace all delimiter by '+' and '_™_' by '#'
-    _string2generate = re.sub("\s+", "+", _string2generate)
-    _string2generate = re.sub("_∞1EX∞_", "+", _string2generate)
-    _string2generate = re.sub("Ex/", "", _string2generate)
-    _string2generate = re.sub("_∞1CO∞_", "+", _string2generate)
-    _string2generate = re.sub("_∞_", "+", _string2generate)
-    _string2generate = re.sub("(_™_)+", "_™_", _string2generate)
+    string2generate = re.sub("\s+", "+", string2generate)
+    string2generate = re.sub("_∞1EX∞_", "+", string2generate)
+    string2generate = re.sub("Ex/", "", string2generate)
+    string2generate = re.sub("_∞1CO∞_", "+", string2generate)
+    string2generate = re.sub("_∞_", "+", string2generate)
+    string2generate = re.sub("(_™_)+", "_™_", string2generate)
 
     ### construct the correct order of generation for compund parts
-    parts = _string2generate.split("_™_")
+    parts = string2generate.split("_™_")
     swapped_string = ""
     if len(parts) > 1:
         for i, p in reversed(list(enumerate(parts))):
@@ -814,30 +810,30 @@ def get_generation_string(in_analysis, in_pos, in_lang):
             if i > 0:
                 swapped_string += "#"
 
-        _string2generate = swapped_string
+        string2generate = swapped_string
 
     # replace inflection tags of the analysed string with the corresponding baseform tags
-    str_first = _string2generate.rpartition("+" + _pos + "+")[0]
-    str_last = _string2generate.rpartition("+" + _pos + "+")[2]
+    str_first = string2generate.rpartition("+" + pos + "+")[0]
+    str_last = string2generate.rpartition("+" + pos + "+")[2]
 
-    if _pos == "V":
-        _string2generate = str_first + "+" + _pos + "+" + "Inf"
+    if pos == "V":
+        string2generate = str_first + "+" + pos + "+" + "Inf"
 
-    if _pos == "N":
-        _string2generate = str_first + "+" + _pos + "+" + "Sg+Nom"
+    if pos == "N":
+        string2generate = str_first + "+" + pos + "+" + "Sg+Nom"
 
-    if _pos == "A":
-        if _lang == "sma":
+    if pos == "A":
+        if lang == "sma":
             if "Comp" in str_last:
-                _string2generate = str_first + "+" + _pos + "+" + "Comp+Attr"
+                string2generate = str_first + "+" + pos + "+" + "Comp+Attr"
             elif "Superl" in str_last:
-                _string2generate = str_first + "+" + _pos + "+" + "Superl+Attr"
+                string2generate = str_first + "+" + pos + "+" + "Superl+Attr"
             else:
-                _string2generate = str_first + "+" + _pos + "+" + "Attr"
+                string2generate = str_first + "+" + pos + "+" + "Attr"
         else:
-            _string2generate = str_first + "+" + _pos + "+" + "Sg+Nom"
+            string2generate = str_first + "+" + pos + "+" + "Sg+Nom"
 
-    return _string2generate
+    return string2generate
 
 
 def generate_lemma(in_string, c_lang):
