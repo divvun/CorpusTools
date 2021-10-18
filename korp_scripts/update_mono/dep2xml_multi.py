@@ -709,7 +709,7 @@ def non_empty_cohorts(current_sentence):
                 yield (word_form, rest_cohort)
 
 
-def make_analysis_tuple(word_form, rest_cohort, _current_lang):
+def make_analysis_tuple(word_form, rest_cohort, language):
     # take the first analysis in case there are more than one non-disambiguated analyses
     original_analysis = extract_original_analysis(
         sort_cohort(cohort_lines=re.split('\n\t"', rest_cohort))[0]
@@ -736,9 +736,7 @@ def make_analysis_tuple(word_form, rest_cohort, _current_lang):
     )
     (current_msd, fct_label) = split_function_label(head)
 
-    generated_lemma = lemma_generation(
-        original_analysis, pos, current_msd, _current_lang
-    )
+    generated_lemma = lemma_generation(original_analysis, pos, current_msd, language)
 
     current_msd = clean_msd(current_msd, pos)
 
@@ -766,13 +764,9 @@ def valid_sentences(analysis):
 
 def split_cohort(analysis, current_lang):
     """Make sentences from the current analysis."""
-    _current_lang = current_lang
-    debug_output = False
-    # generate_der_comp_lemma = False
-
     return [
         [
-            make_analysis_tuple(word_form, rest_cohort, _current_lang)
+            make_analysis_tuple(word_form, rest_cohort, current_lang)
             for (word_form, rest_cohort) in non_empty_cohorts(current_sentence)
         ]
         for current_sentence in valid_sentences(analysis)
