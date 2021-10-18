@@ -766,9 +766,7 @@ def split_cohort(analysis, current_lang):
 
 
 def get_correct_pos(input_string):
-    ###print('_instr_|' + input_string + '|_')
     der_pos_msd = re.split("( V | N | A | Adv | Po )", input_string)
-    ###print('_der_pos_msd_|' + str(der_pos_msd) + '|_')
     swapped_string = (
         der_pos_msd[1].strip() + " " + der_pos_msd[2].strip() + "_©_" + der_pos_msd[0]
     )
@@ -790,8 +788,6 @@ def get_generation_string(in_analysis, in_pos, in_lang):
 
     ex_index = _tail.find("Ex/")
     tm_index = _tail.find("_™_")
-    # current_line_no = inspect.stack()[0][2]
-    # print('_ex-tm_|'+str(ex_index)+'|'+str(tm_index)+'|__|'+str(current_line_no)+'|__')
 
     if "Ex/" in _tail:
         if (not "_™_" in _tail) or ("_™_" in _tail and ex_index < tm_index):
@@ -813,7 +809,6 @@ def get_generation_string(in_analysis, in_pos, in_lang):
     parts = _string2generate.split("_™_")
     swapped_string = ""
     if len(parts) > 1:
-        ###print('_the_parts_|'+str(parts)+'|_')
         for i, p in reversed(list(enumerate(parts))):
             swapped_string += p
             if i > 0:
@@ -821,12 +816,9 @@ def get_generation_string(in_analysis, in_pos, in_lang):
 
         _string2generate = swapped_string
 
-    ### logging.info('_bfr_str2gen_|'+_string2generate+'|_')
-
     # replace inflection tags of the analysed string with the corresponding baseform tags
     str_first = _string2generate.rpartition("+" + _pos + "+")[0]
     str_last = _string2generate.rpartition("+" + _pos + "+")[2]
-    ### logging.info('_mid_str2gen_|'+str(_string2generate.rpartition('+'+_pos+'+'))+'|_')
 
     if _pos == "V":
         _string2generate = str_first + "+" + _pos + "+" + "Inf"
@@ -844,8 +836,6 @@ def get_generation_string(in_analysis, in_pos, in_lang):
                 _string2generate = str_first + "+" + _pos + "+" + "Attr"
         else:
             _string2generate = str_first + "+" + _pos + "+" + "Sg+Nom"
-
-    ### logging.info('_afr_str2gen_|'+_string2generate+'|_')
 
     return _string2generate
 
