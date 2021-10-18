@@ -644,6 +644,71 @@ def make_head_tail(morpho_syntactic_description_drel):
     return (morpho_syntactic_description_drel[0], morpho_syntactic_description_drel[1])
 
 
+def split_function_label(head):
+    # splitting the function label
+    if not head == "___":
+        if not "@" in head:
+            return (head, "X")
+        else:
+            msd_fct = re.compile(" @").split(head)
+            if len(msd_fct) == 1:
+                return ("___", msd_fct[0].lstrip("@"))
+            else:
+                return (msd_fct[0], msd_fct[1])
+
+    return ("___", "X")
+
+
+def lemma_generation(original_analysis, pos, current_msd, _current_lang):
+    """Generate lemma."""
+    if "Ex/" in original_analysis or "_™_" in original_analysis:
+        lemma_generation_string = get_generation_string(
+            original_analysis, pos, current_msd, _current_lang
+        )
+
+        if lemma_generation_string:
+            return generate_lemma(lemma_generation_string, _current_lang)
+
+    return ""
+
+
+def clean_msd(current_msd, pos):
+    current_msd = current_msd.strip()
+    for (regex, replacement) in [
+        ("IV\s", ""),
+        ("TV\s", ""),
+        ("Relc", "Rel"),
+        ("Dyn", ""),
+        (
+            "Known",
+            "",
+        ),
+        ("/", "_"),
+        ("\s", "."),
+    ]:
+        current_msd = re.sub(regex, replacement, current_msd)
+    # add the pos as first element of the msd string
+    if current_msd == "___":
+        return pos
+    return pos + "." + current_msd
+
+
+def get_wordform_rest(current_cohort):
+    # discard all lines starting with ':' (= giella format of hfst)
+    cohort = re.split("\n:", current_cohort)[0]
+    # split word form from analysis
+    (word_form, *rest_cohort) = re.split('>"\n', cohort)
+    return (word_form, rest_cohort[0])
+
+
+def non_empty_cohorts(current_sentence):
+    for cohort in re.split('"<', current_sentence):
+        if cohort != "":
+            (word_form, rest_cohort) = get_wordform_rest(cohort)
+            if word_form != "¶":
+                yield (word_form, rest_cohort)
+
+
 def split_cohort(analysis, current_lang):
     """Make sentences from the current analysis."""
     _current_lang = current_lang
@@ -658,18 +723,10 @@ def split_cohort(analysis, current_lang):
         sentence = []
         ###print('...1_sentence|'+ current_sentence + '|_')
         # split the tokens+analyses based on ('"<'
-        for current_cohort in [
-            cohort for cohort in re.split('"<', current_sentence) if cohort != ""
-        ]:
-            # discard all lines starting with ':' (= giella format of hfst)
-            cohort = re.split("\n:", current_cohort)[0]
-
-            # split word form from analysis
-            (word_form, *rest_cohort) = re.split('>"\n', cohort)
-
+        for (word_form, rest_cohort) in non_empty_cohorts(current_sentence):
             # take the first analysis in case there are more than one non-disambiguated analyses
             original_analysis = extract_original_analysis(
-                sort_cohort(cohort_lines=re.split('\n\t"', rest_cohort[0]))[0]
+                sort_cohort(cohort_lines=re.split('\n\t"', rest_cohort))[0]
             )
 
             # keep this string for lemma generation
@@ -691,83 +748,13 @@ def split_cohort(analysis, current_lang):
             (self_id, parent_id) = (
                 re.compile("->").split(tail) if tail and "->" in tail else ("", "")
             )
-            current_msd = ""
-            fct_label = ""
+            (current_msd, fct_label) = split_function_label(head)
 
-            # splitting the function label
-            if not head == "___":
-                if not "@" in head:
-                    current_msd = head
-                    fct_label = "X"
-                    # logging.info('_head_|'+str(head)+'|_')
-                else:
-                    msd_fct = re.compile(" @").split(head)
-                    if len(msd_fct) == 1:
-                        current_msd = "___"
-                        fct_label = msd_fct[0].lstrip("@")
-                        # logging.info('_msd_fct_1_|'+str(msd_fct)+'|_')
-                    else:
-                        current_msd = msd_fct[0]
-                        fct_label = msd_fct[1]
-                        # logging.info('_msd_fct_2_|'+str(msd_fct)+'|_')
-            else:
-                current_msd = "___"
-                fct_label = "X"
+            generated_lemma = lemma_generation(
+                original_analysis, pos, current_msd, _current_lang
+            )
 
-            # TODO: update the description below
-            # MDS can be complex and partitioned with specific separators:
-            # 1. _™_ for each TAB for parts of the compounds
-            # 2. _∞_ as separator between lemma and POS+MSD in a part of a compound
-            # Ex.: ('juovlavuonasildi', 'sildi',
-            #        'N', 'Sem/Ani Sg Nom @HNOUN_™__™_vuotna_∞_N Sem/Plc Cmp/SgGen Cmp_™__™__™_juovllat_∞_N Sem/Time Cmp/SgNom Cmp')
-            # 3. _©_ as separator between the MSD and the derivation tags
-            # Ex.: ('stellejuvvot', 'stellet', 'V', 'IV Inf @-FMAINV_©_Ex/V Ex/TV Der/PassL')
-
-            # TODO: split Sem-tags and put them into as a separate position attribute for an updated corpus format for Korp
-            # so that semantic attributes can be searchable via Korp interface
-
-            # analysed data as an 8-tuple: (WORD_FORM, LEMMA, POS, MSD, SELF_ID, FUNCTION_LABEL, PARENT_ID, DERIVATION-COMPOUNDING-STRING)
-
-            ### DONE
-            ### replace here lemma with the generated lemma;
-            ### delete derivation/composition tags
-            ### CAVEAT: the tuple will not be a 8-tuple but a 7-tuple
-
-            # lemma generation string
-            lemma_generation_string = ""
-            generated_lemma = ""
-            # if generate_der_comp_lemma:
-            if "Ex/" in original_analysis or "_™_" in original_analysis:
-                lemma_generation_string = get_generation_string(
-                    original_analysis, pos, current_msd, _current_lang
-                )
-
-            if lemma_generation_string:
-                ### logging.info('xxx_lem-gen-str_|'+lemma_generation_string+'|_')
-                generated_lemma = generate_lemma(lemma_generation_string, _current_lang)
-
-            # msd clean up
-            ### logging.info('_1_msd_|' + current_msd + '|_')
-
-            current_msd = current_msd.strip()
-            for (regex, replacement) in [
-                ("IV\s", ""),
-                ("TV\s", ""),
-                ("Relc", "Rel"),
-                ("Dyn", ""),
-                (
-                    "Known",
-                    "",
-                ),
-                ("/", "_"),
-                ("\s", "."),
-            ]:
-                current_msd = re.sub(regex, replacement, current_msd)
-            # add the pos as first element of the msd string
-            if current_msd == "___":
-                current_msd = pos
-            else:
-                current_msd = pos + "." + current_msd
+            current_msd = clean_msd(current_msd, pos)
 
             ### logging.info('_2_msd_|' + current_msd + '|_')
 
@@ -794,12 +781,7 @@ def split_cohort(analysis, current_lang):
                     parent_id,
                 )
 
-            ### logging.info("_current_tuple_|"+str(analysis_tuple)+"|_")
-
-            # filter away '¶', which is used only to have some clause boundary if there is no one there
-            # TODO: as well as other strings that are most likely noise
-            if not word_form == "¶":
-                sentence.append(analysis_tuple)
+            sentence.append(analysis_tuple)
 
         # filter empty "sentences" due to filtering of  '¶'
         if sentence:
