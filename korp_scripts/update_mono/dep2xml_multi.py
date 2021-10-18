@@ -608,6 +608,33 @@ def sort_cohort(cohort_lines):
     ### logging.info('_unfiltered_sorted_cohort_|'+str(sorted_analysis_lines)+'|__')
 
 
+def make_morpho_syntactic_description(rest):
+    """Extract morpho_syntactic_description"""
+    ex_in_r = rest.find("_©_")
+    tm_in_r = rest.find("_™_")
+
+    # split derivation/composition string from the rest of MSD
+    # and put it in and extra tuple at the end of the tuple list,
+    # otherwise add a default tuple '___'
+    # no derivation, no composition
+    if ex_in_r == -1 and tm_in_r == -1:
+        return rest
+        ###logging.info('_msd_cds_1_|'+str(msd)+'|_|'+str(dcs)+'|_')
+    # no derivation, but composition
+    elif (ex_in_r == -1 and not tm_in_r == -1) or (
+        not ex_in_r == -1 and not tm_in_r == -1 and tm_in_r < ex_in_r
+    ):
+        return re.compile("_™_").split(rest, 1)[0]
+    # derivation, but no composition
+    elif (not ex_in_r == -1 and tm_in_r == -1) or (
+        not ex_in_r == -1 and not tm_in_r == -1 and ex_in_r < tm_in_r
+    ):
+        return re.compile("_©_").split(rest, 1)[0]
+    # covered all relevant combinations?
+    else:
+        return ""
+
+
 def split_cohort(analysis, current_lang):
     """Make sentences from the current analysis."""
     _current_lang = current_lang
@@ -649,47 +676,8 @@ def split_cohort(analysis, current_lang):
             lemma = parts[0].replace("\\", "")
             maybe_pos = parts[1].replace("_∞_", "").strip()
             pos = "___" if maybe_pos == "?" else maybe_pos
-            rest = parts[2]
 
-            ex_in_r = rest.find("_©_")
-            tm_in_r = rest.find("_™_")
-
-            derivation_composition_string = ""
-            # morpho-syntactic description
-            morpho_syntactic_description = ""
-
-            # split derivation/composition string from the rest of MSD
-            # and put it in and extra tuple at the end of the tuple list,
-            # otherwise add a default tuple '___'
-            # no derivation, no composition
-            if ex_in_r == -1 and tm_in_r == -1:
-                morpho_syntactic_description = rest
-                derivation_composition_string = "___"
-                ###logging.info('_msd_cds_1_|'+str(msd)+'|_|'+str(dcs)+'|_')
-            # no derivation, but composition
-            elif (ex_in_r == -1 and not tm_in_r == -1) or (
-                not ex_in_r == -1 and not tm_in_r == -1 and tm_in_r < ex_in_r
-            ):
-                (
-                    morpho_syntactic_description,
-                    derivation_composition_string,
-                ) = re.compile("_™_").split(rest, 1)
-                derivation_composition_string = "_™_" + derivation_composition_string
-                ###logging.info('_msd_cds_2_|'+str(msd)+'|_|'+str(dcs)+'|_')
-
-            # derivation, but no composition
-            elif (not ex_in_r == -1 and tm_in_r == -1) or (
-                not ex_in_r == -1 and not tm_in_r == -1 and ex_in_r < tm_in_r
-            ):
-                (
-                    morpho_syntactic_description,
-                    derivation_composition_string,
-                ) = re.compile("_©_").split(rest, 1)
-                derivation_composition_string = "_©_" + derivation_composition_string
-                ###logging.info('_msd_cds_3_|'+str(msd)+'|_|'+str(dcs)+'|_')
-            # covered all relevant combinations?
-            else:
-                logging.info("_msd_cds_4_|" + str(rest) + "|_")
+            morpho_syntactic_description = make_morpho_syntactic_description(parts[2])
 
             # processing msd: splitting function label, selfID and parentID from the msd string
             msd_drel = re.compile(" #").split(morpho_syntactic_description)
