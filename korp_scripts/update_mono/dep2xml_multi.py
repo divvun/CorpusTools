@@ -774,24 +774,12 @@ def get_correct_pos(input_string):
 
 
 def get_generation_string(used_analysis, pos, lang):
-    string2generate = ""
-
     (lemma, tail) = used_analysis.split("_∞_", 1)
 
-    # ignore function and dependence relation here
-    tail = re.sub("\s@[^\s]+", "", tail)
-    tail = re.sub("\s#\d+->\d+", "", tail)
+    string2generate = make_string2generate(lemma, tail)
 
-    ex_index = tail.find("Ex/")
-    tm_index = tail.find("_™_")
-
-    if "Ex/" in tail:
-        if (not "_™_" in tail) or ("_™_" in tail and ex_index < tm_index):
-            string2generate = lemma + "_∞1EX∞_" + tail
-
-    if "_™_" in tail:
-        if (not "Ex/" in tail) or ("Ex/" in tail and tm_index < ex_index):
-            string2generate = lemma + "_∞1CO∞_" + tail
+    if not string2generate:
+        return ""
 
     ### replace all delimiter by '+' and '_™_' by '#'
     string2generate = re.sub("\s+", "+", string2generate)
@@ -834,6 +822,25 @@ def get_generation_string(used_analysis, pos, lang):
             string2generate = str_first + "+" + pos + "+" + "Sg+Nom"
 
     return string2generate
+
+
+def make_string2generate(lemma, tail):
+    # ignore function and dependence relation here
+    tail = re.sub("\s@[^\s]+", "", tail)
+    tail = re.sub("\s#\d+->\d+", "", tail)
+
+    ex_index = tail.find("Ex/")
+    tm_index = tail.find("_™_")
+
+    if "Ex/" in tail:
+        if (not "_™_" in tail) or ("_™_" in tail and ex_index < tm_index):
+            return lemma + "_∞1EX∞_" + tail
+
+    if "_™_" in tail:
+        if (not "Ex/" in tail) or ("Ex/" in tail and tm_index < ex_index):
+            return lemma + "_∞1CO∞_" + tail
+
+    return ""
 
 
 def generate_lemma(in_string, c_lang):
