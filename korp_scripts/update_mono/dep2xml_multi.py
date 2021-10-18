@@ -9,7 +9,7 @@ import re
 import sys
 import xml.etree.ElementTree as ET
 from functools import partial
-from subprocess import PIPE, Popen
+from subprocess import PIPE, Popen, run
 
 DOMAIN_MAPPING = {
     "admin": "administration",
@@ -859,36 +859,24 @@ def get_generation_string(in_analysis, in_pos, in_msd, in_lang):
 
 
 def generate_lemma(in_string, c_lang):
-
-    _in_string = in_string
-    _current_lang = c_lang
-    _analysis_lemma = re.split("\+", _in_string, 1)[0]
-    _generated_lemma = "TODO_" + _in_string
-    langs_dir = "$GTLANGS/lang-"
-
-    generation_cmd = (
-        " | hfst-lookup -q "
-        + langs_dir
-        + _current_lang
-        + "/src/generator-gt-norm.hfstol"
+    langs_dir = f"{os.getenv('GTLANGS')}/lang-{c_lang}"
+    first_line = (
+        run(
+            f"hfst-lookup -q {langs_dir}/src/generator-gt-norm.hfstol".split(),
+            check=True,
+            input=in_string.encode("utf-8"),
+            capture_output=True,
+        )
+        .stdout.decode("utf-8")
+        .split("\n")[0]
     )
+    generated_lemma = first_line.split("\t")[1]
 
-    pFST = Popen(
-        "echo '" + _in_string + "'" + generation_cmd,
-        shell=True,
-        stdout=PIPE,
-        stderr=PIPE,
+    return (
+        generated_lemma
+        if not generated_lemma.endswith("+?")
+        else in_string.split("+")[0]
     )
-    outFST, errFST = pFST.communicate()
-    outFST = outFST.decode()
-    outFST = re.split("\n", outFST, 1)[0]
-    _generated_lemma = re.split("\t", outFST)[1]
-    if _generated_lemma.endswith("+?"):
-        _generated_lemma = _analysis_lemma
-
-    ### logging.info('___gen-out___ ' + outFST + '______')
-
-    return _generated_lemma
 
 
 if __name__ == "__main__":
