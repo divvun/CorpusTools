@@ -645,7 +645,8 @@ def split_cohort(analysis, current_lang):
                 "(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?)"
             ).split(used_analysis, maxsplit=1)
 
-            lemma = parts[0]
+            # ambiguity hack: unmask '<' and '>' as lemma
+            lemma = parts[0].replace("\\", "")
             pos = parts[1].replace("_∞_", "").strip()
             rest = parts[2]
 
@@ -754,9 +755,6 @@ def split_cohort(analysis, current_lang):
                 pos = "___"
 
             # analysed data as an 8-tuple: (WORD_FORM, LEMMA, POS, MSD, SELF_ID, FUNCTION_LABEL, PARENT_ID, DERIVATION-COMPOUNDING-STRING)
-
-            # ambiguity hack: unmask '<' and '>' as lemma
-            lemma = lemma.replace("\\", "")
 
             ### DONE
             ### replace here lemma with the generated lemma;
