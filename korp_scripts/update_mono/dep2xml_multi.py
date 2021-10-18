@@ -731,7 +731,7 @@ def make_analysis_tuple(word_form, rest_cohort, language):
     (self_id, parent_id) = (
         re.compile("->").split(tail) if tail and "->" in tail else ("", "")
     )
-    (current_msd, fct_label) = split_function_label(head)
+    (morpho_syntactic_description, function_label) = split_function_label(head)
 
     generated_lemma = lemma_generation(original_analysis, pos, language)
 
@@ -739,9 +739,9 @@ def make_analysis_tuple(word_form, rest_cohort, language):
         word_form,
         lemma if generated_lemma == "" else generated_lemma,
         pos,
-        clean_msd(current_msd, pos),
+        clean_msd(morpho_syntactic_description, pos),
         self_id,
-        fct_label,
+        function_label,
         parent_id,
     )
 
