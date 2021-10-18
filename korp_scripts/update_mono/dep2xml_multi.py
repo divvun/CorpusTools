@@ -756,27 +756,27 @@ def make_analysis_tuple(word_form, rest_cohort, _current_lang):
     )
 
 
+def valid_sentences(analysis):
+    return (
+        sentence
+        for sentence in re.split("\n\n", reshape_analysis(analysis))
+        if sentence != "" and not sentence.startswith('"<¶')
+    )
+
+
 def split_cohort(analysis, current_lang):
     """Make sentences from the current analysis."""
     _current_lang = current_lang
     debug_output = False
     # generate_der_comp_lemma = False
 
-    _sentences = []
-
-    for current_sentence in [
-        x
-        for x in re.split("\n\n", reshape_analysis(analysis))
-        if x != "" and not x.startswith('"<¶')
-    ]:
-        sentence = [
+    return [
+        [
             make_analysis_tuple(word_form, rest_cohort, _current_lang)
             for (word_form, rest_cohort) in non_empty_cohorts(current_sentence)
         ]
-
-        _sentences.append(sentence)
-
-    return _sentences
+        for current_sentence in valid_sentences(analysis)
+    ]
 
 
 def get_correct_pos(input_string):
