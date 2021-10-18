@@ -776,15 +776,21 @@ def split_cohort(analysis, current_lang):
             # msd clean up
             ### logging.info('_1_msd_|' + current_msd + '|_')
 
-            current_msd = re.sub("IV\s", "", current_msd)
-            current_msd = re.sub("TV\s", "", current_msd)
-            current_msd = re.sub("Relc", "Rel", current_msd)
-            current_msd = re.sub("Dyn", "", current_msd)
-            current_msd = re.sub("Known", "", current_msd)
             current_msd = current_msd.strip()
-            current_msd = re.sub("/", "_", current_msd)
-            current_msd = re.sub("\s", ".", current_msd)
-            # add the pos as fist element of the msd string
+            for (regex, replacement) in [
+                ("IV\s", ""),
+                ("TV\s", ""),
+                ("Relc", "Rel"),
+                ("Dyn", ""),
+                (
+                    "Known",
+                    "",
+                ),
+                ("/", "_"),
+                ("\s", "."),
+            ]:
+                current_msd = re.sub(regex, replacement, current_msd)
+            # add the pos as first element of the msd string
             if current_msd == "___":
                 current_msd = pos
             else:
