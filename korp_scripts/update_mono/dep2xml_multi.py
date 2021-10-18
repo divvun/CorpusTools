@@ -738,16 +738,11 @@ def make_analysis_tuple(word_form, rest_cohort, language):
 
     generated_lemma = lemma_generation(original_analysis, pos, language)
 
-    current_msd = clean_msd(current_msd, pos)
-
-    ### logging.info('_2_msd_|' + current_msd + '|_')
-
-    ### logging.info('_generated_lemma_|' + generated_lemma + '|_')
     return (
         word_form,
         lemma if generated_lemma == "" else generated_lemma,
         pos,
-        current_msd,
+        clean_msd(current_msd, pos),
         self_id,
         fct_label,
         parent_id,
