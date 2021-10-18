@@ -785,37 +785,38 @@ def get_generation_string(used_analysis, pos, lang):
 
     ### construct the correct order of generation for compund parts
     parts = string2generate.split("_™_")
-    swapped_string = ""
     if len(parts) > 1:
-        for i, p in reversed(list(enumerate(parts))):
-            swapped_string += p
-            if i > 0:
+        swapped_string = ""
+        for index, part in reversed(list(enumerate(parts))):
+            swapped_string += part
+            if index > 0:
                 swapped_string += "#"
 
         string2generate = swapped_string
+
+    if pos not in ["V", "N", "A"]:
+        return string2generate
 
     # replace inflection tags of the analysed string with the corresponding baseform tags
     str_first = string2generate.rpartition("+" + pos + "+")[0]
     str_last = string2generate.rpartition("+" + pos + "+")[2]
 
     if pos == "V":
-        string2generate = str_first + "+" + pos + "+" + "Inf"
+        return str_first + "+" + pos + "+" + "Inf"
 
     if pos == "N":
-        string2generate = str_first + "+" + pos + "+" + "Sg+Nom"
+        return str_first + "+" + pos + "+" + "Sg+Nom"
 
     if pos == "A":
         if lang == "sma":
             if "Comp" in str_last:
-                string2generate = str_first + "+" + pos + "+" + "Comp+Attr"
+                return str_first + "+" + pos + "+" + "Comp+Attr"
             elif "Superl" in str_last:
-                string2generate = str_first + "+" + pos + "+" + "Superl+Attr"
-            else:
-                string2generate = str_first + "+" + pos + "+" + "Attr"
-        else:
-            string2generate = str_first + "+" + pos + "+" + "Sg+Nom"
+                return str_first + "+" + pos + "+" + "Superl+Attr"
 
-    return string2generate
+            return str_first + "+" + pos + "+" + "Attr"
+
+        return str_first + "+" + pos + "+" + "Sg+Nom"
 
 
 def clean_string2generate(string2generate):
