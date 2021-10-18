@@ -709,6 +709,53 @@ def non_empty_cohorts(current_sentence):
                 yield (word_form, rest_cohort)
 
 
+def make_analysis_tuple(word_form, rest_cohort, _current_lang):
+    # take the first analysis in case there are more than one non-disambiguated analyses
+    original_analysis = extract_original_analysis(
+        sort_cohort(cohort_lines=re.split('\n\t"', rest_cohort))[0]
+    )
+
+    # keep this string for lemma generation
+    used_analysis = extract_used_analysis(original_analysis)
+
+    # put a clear delimiter between the (first) pos value and the rest of msd
+    # in order to disambiguate from the rest of whitespaces
+    parts = re.compile("(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?)").split(
+        used_analysis, maxsplit=1
+    )
+
+    # ambiguity hack: unmask '<' and '>' as lemma
+    lemma = parts[0].replace("\\", "")
+    maybe_pos = parts[1].replace("_∞_", "").strip()
+    pos = "___" if maybe_pos == "?" else maybe_pos
+    (head, tail) = make_head_tail(
+        re.compile(" #").split(make_morpho_syntactic_description(parts[2]))
+    )
+    (self_id, parent_id) = (
+        re.compile("->").split(tail) if tail and "->" in tail else ("", "")
+    )
+    (current_msd, fct_label) = split_function_label(head)
+
+    generated_lemma = lemma_generation(
+        original_analysis, pos, current_msd, _current_lang
+    )
+
+    current_msd = clean_msd(current_msd, pos)
+
+    ### logging.info('_2_msd_|' + current_msd + '|_')
+
+    ### logging.info('_generated_lemma_|' + generated_lemma + '|_')
+    return (
+        word_form,
+        lemma if generated_lemma == "" else generated_lemma,
+        pos,
+        current_msd,
+        self_id,
+        fct_label,
+        parent_id,
+    )
+
+
 def split_cohort(analysis, current_lang):
     """Make sentences from the current analysis."""
     _current_lang = current_lang
@@ -718,75 +765,16 @@ def split_cohort(analysis, current_lang):
     _sentences = []
 
     for current_sentence in [
-        x for x in re.split("\n\n", reshape_analysis(analysis)) if x != ""
+        x
+        for x in re.split("\n\n", reshape_analysis(analysis))
+        if x != "" and not x.startswith('"<¶')
     ]:
-        sentence = []
-        ###print('...1_sentence|'+ current_sentence + '|_')
-        # split the tokens+analyses based on ('"<'
-        for (word_form, rest_cohort) in non_empty_cohorts(current_sentence):
-            # take the first analysis in case there are more than one non-disambiguated analyses
-            original_analysis = extract_original_analysis(
-                sort_cohort(cohort_lines=re.split('\n\t"', rest_cohort))[0]
-            )
+        sentence = [
+            make_analysis_tuple(word_form, rest_cohort, _current_lang)
+            for (word_form, rest_cohort) in non_empty_cohorts(current_sentence)
+        ]
 
-            # keep this string for lemma generation
-            used_analysis = extract_used_analysis(original_analysis)
-
-            # put a clear delimiter between the (first) pos value and the rest of msd
-            # in order to disambiguate from the rest of whitespaces
-            parts = re.compile(
-                "(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?)"
-            ).split(used_analysis, maxsplit=1)
-
-            # ambiguity hack: unmask '<' and '>' as lemma
-            lemma = parts[0].replace("\\", "")
-            maybe_pos = parts[1].replace("_∞_", "").strip()
-            pos = "___" if maybe_pos == "?" else maybe_pos
-            (head, tail) = make_head_tail(
-                re.compile(" #").split(make_morpho_syntactic_description(parts[2]))
-            )
-            (self_id, parent_id) = (
-                re.compile("->").split(tail) if tail and "->" in tail else ("", "")
-            )
-            (current_msd, fct_label) = split_function_label(head)
-
-            generated_lemma = lemma_generation(
-                original_analysis, pos, current_msd, _current_lang
-            )
-
-            current_msd = clean_msd(current_msd, pos)
-
-            ### logging.info('_2_msd_|' + current_msd + '|_')
-
-            analysis_tuple = ()
-            ### logging.info('_generated_lemma_|' + generated_lemma + '|_')
-            if generated_lemma == "":
-                analysis_tuple = (
-                    word_form,
-                    lemma,
-                    pos,
-                    current_msd,
-                    self_id,
-                    fct_label,
-                    parent_id,
-                )
-            else:
-                analysis_tuple = (
-                    word_form,
-                    generated_lemma,
-                    pos,
-                    current_msd,
-                    self_id,
-                    fct_label,
-                    parent_id,
-                )
-
-            sentence.append(analysis_tuple)
-
-        # filter empty "sentences" due to filtering of  '¶'
-        if sentence:
-            ###logging.info("_analysed_token_tuples_|"+str(sentence)+"|_")
-            _sentences.append(sentence)
+        _sentences.append(sentence)
 
     return _sentences
 
