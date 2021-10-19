@@ -16,6 +16,7 @@ from importlib import reload
 from operator import itemgetter
 from subprocess import PIPE, Popen
 from xml.dom.minidom import parse, parseString
+from corpustools import modes
 
 
 def append_files(files_list, folder_path):
@@ -52,6 +53,7 @@ def process_file(f):
         genre_str = sys.argv[3]
     else:
         genre_str = ""
+    hfst_pipeline = modes.Pipeline("hfst", lang)
     out_dir = "out_" + lang + "_" + in_dir
     done_dir = "done_" + genre_str
     err_dir = "error_" + genre_str
@@ -71,27 +73,6 @@ def process_file(f):
 
     namespaces = {"xml": "http://www.w3.org/XML/1998/namespace"}
 
-    plup = Popen("which lookup", shell=True, stdout=PIPE, stderr=PIPE)
-    olup, elup = plup.communicate()
-    # print("___ lookup is ",olup.decode())
-    if not olup.decode():
-        # print('No lookup found, please install it!')
-        sys.exit()
-
-    lookup = olup.decode().strip()
-    langs_dir = "$GTLANGS/lang-"
-    this_lang_dir = "$GTLANGS/lang-" + lang + "/"
-    abbr_file = langs_dir + lang + "/tools/tokenisers/abbr.txt"
-    rel_xfst_file = "/src/analyser-disamb-gt-desc.xfst"
-    rel_hfst_file = "/src/analyser-disamb-gt-desc.hfst"
-    abs_xfst_file = langs_dir + lang + rel_xfst_file
-    abs_hfst_file = langs_dir + lang + rel_hfst_file
-    disamb_file = langs_dir + lang + "/src/cg3/disambiguator.cg3"
-
-    # for root, dirs, files in os.walk(in_dir): # Walk directory tree
-    # print("Input dir {0} with {1} files ...".format(root, len(files)))
-
-    #    for f in files:
     try:
         print("... processing ", str(f))
         print("/".join(f.split("/")))
@@ -110,45 +91,12 @@ def process_file(f):
             header.insert(1, genre)
         tuvs = tree.xpath('.//tuv[@xml:lang="' + lang + '"]', namespaces=namespaces)
         for tuv in tuvs:
-            seg = tuv.findall("seg")
-            seg_txt = seg[0].text
+            seg = tuv.find("seg")
+            seg_txt = seg.text
             # print('... seg ', str(seg_txt))
-            cmd = (
-                "| preprocess --abbr "
-                + abbr_file
-                + " | lookup -q -flags mbTT "
-                + abs_xfst_file
-                + " | lookup2cg | vislcg3 -g "
-                + disamb_file
-            )
-            cmd_hfst = (
-                "| hfst-tokenise --print-all --giella-cg --no-weights --unique "
-                + this_lang_dir
-                + "tools/tokenisers/tokeniser-disamb-gt-desc.pmhfst | vislcg3 --grammar  "
-                + this_lang_dir
-                + "tools/tokenisers/mwe-dis.bin | cg-mwesplit | vislcg3 --grammar  "
-                + this_lang_dir
-                + "src/cg3/disambiguator.bin | vislcg3 --grammar  "
-                + this_lang_dir
-                + "src/cg3/korp.bin | vislcg3 --grammar  "
-                + this_lang_dir
-                + "src/cg3/dependency.bin"
-            )
-
-            # print('... cmd ', cmd)
-            # if seg_txt:
-            p = Popen(
-                "echo '" + seg_txt + "'" + cmd_hfst,
-                shell=True,
-                stdout=PIPE,
-                stderr=PIPE,
-            )
-            out, err = p.communicate()
-            # print("err=", err)
-
+            out = hfst_pipeline.run(seg_txt.encode("utf8"))
             c_analysis = ""
-            # print("|", out.decode().split('\n', 1 ),"|")
-            current_analysis = filter(None, out.decode().split('\n"<'))
+            current_analysis = filter(None, out.split('\n"<'))
             for current_cohort in current_analysis:
                 cc_list = current_cohort.split("\n\t")
                 # print("cc_list=", cc_list)
