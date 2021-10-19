@@ -73,107 +73,99 @@ def process_file(f):
 
     namespaces = {"xml": "http://www.w3.org/XML/1998/namespace"}
 
-    try:
-        print("... processing ", str(f))
-        print("/".join(f.split("/")))
-        root = "/".join(f.split("/")[:-1])
-        print("root=", root)
+    print("... processing ", str(f))
+    print("/".join(f.split("/")))
+    root = "/".join(f.split("/")[:-1])
+    print("root=", root)
 
-        # tree = ET.parse(os.path.join(root,f))
-        tree = ET.parse(f)
-        f_root = tree.getroot()
+    # tree = ET.parse(os.path.join(root,f))
+    tree = ET.parse(f)
+    f_root = tree.getroot()
 
-        header = f_root.find(".//header")
+    header = f_root.find(".//header")
 
-        genre = ET.Element("genre")
-        if genre_str:
-            genre.text = genre_str
-            header.insert(1, genre)
-        tuvs = tree.xpath('.//tuv[@xml:lang="' + lang + '"]', namespaces=namespaces)
-        for tuv in tuvs:
-            seg = tuv.find("seg")
-            seg_txt = seg.text
-            # print('... seg ', str(seg_txt))
-            out = hfst_pipeline.run(seg_txt.encode("utf8"))
-            c_analysis = ""
-            current_analysis = filter(None, out.split('\n"<'))
-            for current_cohort in current_analysis:
-                cc_list = current_cohort.split("\n\t")
-                # print("cc_list=", cc_list)
+    genre = ET.Element("genre")
+    if genre_str:
+        genre.text = genre_str
+        header.insert(1, genre)
+    tuvs = tree.xpath('.//tuv[@xml:lang="' + lang + '"]', namespaces=namespaces)
+    for tuv in tuvs:
+        seg = tuv.find("seg")
+        seg_txt = seg.text
+        # print('... seg ', str(seg_txt))
+        out = hfst_pipeline.run(seg_txt.encode("utf8"))
+        c_analysis = ""
+        current_analysis = filter(None, out.split('\n"<'))
+        for current_cohort in current_analysis:
+            cc_list = current_cohort.split("\n\t")
+            # print("cc_list=", cc_list)
 
-                wform = cc_list[0]
-                wform = wform.strip()
-                if wform.startswith('"<'):
-                    wform = wform[2:]
-                if wform.endswith('>"'):
-                    wform = wform[:-2]
-                wform = wform.replace(" ", "_")
-                # print("wform=", wform)
+            wform = cc_list[0]
+            wform = wform.strip()
+            if wform.startswith('"<'):
+                wform = wform[2:]
+            if wform.endswith('>"'):
+                wform = wform[:-2]
+            wform = wform.replace(" ", "_")
+            # print("wform=", wform)
 
-                cc_list.pop(0)
-                # print("cc_list 2=", cc_list)
-                sccl = sorted(cc_list)
-                # print("sccl=", sccl)
-                l_a = sccl[0]
+            cc_list.pop(0)
+            # print("cc_list 2=", cc_list)
+            sccl = sorted(cc_list)
+            # print("sccl=", sccl)
+            l_a = sccl[0]
 
-                lemma = l_a.partition('" ')[0]
-                lemma = lemma.strip()
-                lemma = lemma.replace("#", "")
-                lemma = lemma.replace(" ", "_")
-                if lemma.startswith('"'):
-                    lemma = lemma[1:]
+            lemma = l_a.partition('" ')[0]
+            lemma = lemma.strip()
+            lemma = lemma.replace("#", "")
+            lemma = lemma.replace(" ", "_")
+            if lemma.startswith('"'):
+                lemma = lemma[1:]
 
-                analysis = l_a.partition('" ')[2]
-                p_analysis = l_a.partition('" ')[2]
-                analysis = analysis.partition("@")[0]
-                analysis = analysis.replace("Err/Orth", "")
-                analysis = analysis.replace(" <" + lang + ">", "")
-                analysis = analysis.replace(" <vdic>", "")
-                analysis = analysis.replace(" Sem/Date", "")
-                analysis = analysis.replace(" Sem/Org", "")
-                analysis = analysis.replace(" Sem/Sur", "")
-                analysis = analysis.replace(" Sem/Fem", "")
-                analysis = analysis.replace(" Sem/Mal", "")
-                analysis = analysis.replace(" Sem/Plc", "")
-                analysis = analysis.replace(" Sem/Obj", "")
-                analysis = analysis.replace(" Sem/Adr", "")
-                analysis = analysis.replace("Sem/Adr ", "")
-                analysis = analysis.replace(" Sem/Year", "")
-                analysis = analysis.replace(" IV", "")
-                analysis = analysis.replace(" TV", "")
-                analysis = analysis.replace("v1 ", "")
-                analysis = analysis.replace("v2 ", "")
-                analysis = analysis.replace("Hom1 ", "")
-                analysis = analysis.replace("Hom2 ", "")
-                analysis = analysis.replace("/", "_")
-                if analysis.startswith("Arab Num"):
-                    analysis = analysis.replace("Arab Num", "Num Arab")
-                analysis = analysis.strip()
-                if "?" in analysis:
-                    analysis = "___"
-                analysis = analysis.strip()
-                analysis = analysis.replace("  ", " ")
-                analysis = analysis.replace(" ", ".")
-                pos = analysis.partition(".")[0]
+            analysis = l_a.partition('" ')[2]
+            p_analysis = l_a.partition('" ')[2]
+            analysis = analysis.partition("@")[0]
+            analysis = analysis.replace("Err/Orth", "")
+            analysis = analysis.replace(" <" + lang + ">", "")
+            analysis = analysis.replace(" <vdic>", "")
+            analysis = analysis.replace(" Sem/Date", "")
+            analysis = analysis.replace(" Sem/Org", "")
+            analysis = analysis.replace(" Sem/Sur", "")
+            analysis = analysis.replace(" Sem/Fem", "")
+            analysis = analysis.replace(" Sem/Mal", "")
+            analysis = analysis.replace(" Sem/Plc", "")
+            analysis = analysis.replace(" Sem/Obj", "")
+            analysis = analysis.replace(" Sem/Adr", "")
+            analysis = analysis.replace("Sem/Adr ", "")
+            analysis = analysis.replace(" Sem/Year", "")
+            analysis = analysis.replace(" IV", "")
+            analysis = analysis.replace(" TV", "")
+            analysis = analysis.replace("v1 ", "")
+            analysis = analysis.replace("v2 ", "")
+            analysis = analysis.replace("Hom1 ", "")
+            analysis = analysis.replace("Hom2 ", "")
+            analysis = analysis.replace("/", "_")
+            if analysis.startswith("Arab Num"):
+                analysis = analysis.replace("Arab Num", "Num Arab")
+            analysis = analysis.strip()
+            if "?" in analysis:
+                analysis = "___"
+            analysis = analysis.strip()
+            analysis = analysis.replace("  ", " ")
+            analysis = analysis.replace(" ", ".")
+            pos = analysis.partition(".")[0]
 
-                formated_line = wform + "\t" + lemma + "\t" + pos + "\t" + analysis
-                c_analysis = c_analysis + "\n" + formated_line
+            formated_line = wform + "\t" + lemma + "\t" + pos + "\t" + analysis
+            c_analysis = c_analysis + "\n" + formated_line
 
-            analysis = ET.Element("analysis")
-            analysis.text = c_analysis + "\n"
-            tuv.insert(1, analysis)
+        analysis = ET.Element("analysis")
+        analysis.text = c_analysis + "\n"
+        tuv.insert(1, analysis)
 
-        done_path = os.path.join(done_dir_path, str(f.split("/")[-1]))
-        print("DONE. Wrote", done_path, "\n\n")
-        with open(done_path, "wb") as done_stream:
-            done_stream.write(ET.tostring(tree, xml_declaration=True, encoding="utf-8"))
-
-    except Exception as e:
-        mv_err_cmd = "mv " + f + " " + err_dir_path + "/"
-        print("MOVED file ", f, " in error folder \n\n")
-        p = Popen(mv_err_cmd, shell=True, stdout=PIPE, stderr=PIPE)
-        mv_out, mv_err = p.communicate()
-        print("exception=", e)
+    done_path = os.path.join(done_dir_path, str(f.split("/")[-1]))
+    print("DONE. Wrote", done_path, "\n\n")
+    with open(done_path, "wb") as done_stream:
+        done_stream.write(ET.tostring(tree, xml_declaration=True, encoding="utf-8"))
 
 
 if __name__ == "__main__":
