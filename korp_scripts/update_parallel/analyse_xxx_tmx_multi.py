@@ -92,148 +92,147 @@ def process_file(f):
     # print("Input dir {0} with {1} files ...".format(root, len(files)))
 
     #    for f in files:
-    if f.endswith("tmx"):
-        try:
-            print("... processing ", str(f))
-            print("/".join(f.split("/")))
-            root = "/".join(f.split("/")[:-1])
-            print("root=", root)
+    try:
+        print("... processing ", str(f))
+        print("/".join(f.split("/")))
+        root = "/".join(f.split("/")[:-1])
+        print("root=", root)
 
-            # tree = ET.parse(os.path.join(root,f))
-            tree = ET.parse(f)
-            f_root = tree.getroot()
+        # tree = ET.parse(os.path.join(root,f))
+        tree = ET.parse(f)
+        f_root = tree.getroot()
 
-            header = f_root.find(".//header")
+        header = f_root.find(".//header")
 
-            genre = ET.Element("genre")
-            if genre_str:
-                genre.text = genre_str
-                header.insert(1, genre)
-            tuvs = f_root.findall('.//tuv[@lang="' + lang + '"]')
-            for tuv in tuvs:
-                seg = tuv.findall("seg")
-                seg_txt = seg[0].text
-                # print('... seg ', str(seg_txt))
-                cmd = (
-                    "| preprocess --abbr "
-                    + abbr_file
-                    + " | lookup -q -flags mbTT "
-                    + abs_xfst_file
-                    + " | lookup2cg | vislcg3 -g "
-                    + disamb_file
-                )
-                cmd_hfst = (
-                    "| hfst-tokenise --print-all --giella-cg --no-weights --unique "
-                    + this_lang_dir
-                    + "tools/tokenisers/tokeniser-disamb-gt-desc.pmhfst | vislcg3 --grammar  "
-                    + this_lang_dir
-                    + "tools/tokenisers/mwe-dis.bin | cg-mwesplit | vislcg3 --grammar  "
-                    + this_lang_dir
-                    + "src/cg3/disambiguator.bin | vislcg3 --grammar  "
-                    + this_lang_dir
-                    + "src/cg3/korp.bin | vislcg3 --grammar  "
-                    + this_lang_dir
-                    + "src/cg3/dependency.bin"
-                )
-
-                # print('... cmd ', cmd)
-                # if seg_txt:
-                p = Popen(
-                    "echo '" + seg_txt + "'" + cmd_hfst,
-                    shell=True,
-                    stdout=PIPE,
-                    stderr=PIPE,
-                )
-                out, err = p.communicate()
-                # print("err=", err)
-
-                c_analysis = ""
-                # print("|", out.decode().split('\n', 1 ),"|")
-                current_analysis = filter(None, out.decode().split('\n"<'))
-                for current_cohort in current_analysis:
-                    cc_list = current_cohort.split("\n\t")
-                    # print("cc_list=", cc_list)
-
-                    wform = cc_list[0]
-                    wform = wform.strip()
-                    if wform.startswith('"<'):
-                        wform = wform[2:]
-                    if wform.endswith('>"'):
-                        wform = wform[:-2]
-                    wform = wform.replace(" ", "_")
-                    # print("wform=", wform)
-
-                    cc_list.pop(0)
-                    # print("cc_list 2=", cc_list)
-                    sccl = sorted(cc_list)
-                    # print("sccl=", sccl)
-                    l_a = sccl[0]
-
-                    lemma = l_a.partition('" ')[0]
-                    lemma = lemma.strip()
-                    lemma = lemma.replace("#", "")
-                    lemma = lemma.replace(" ", "_")
-                    if lemma.startswith('"'):
-                        lemma = lemma[1:]
-
-                    analysis = l_a.partition('" ')[2]
-                    p_analysis = l_a.partition('" ')[2]
-                    analysis = analysis.partition("@")[0]
-                    analysis = analysis.replace("Err/Orth", "")
-                    analysis = analysis.replace(" <" + lang + ">", "")
-                    analysis = analysis.replace(" <vdic>", "")
-                    analysis = analysis.replace(" Sem/Date", "")
-                    analysis = analysis.replace(" Sem/Org", "")
-                    analysis = analysis.replace(" Sem/Sur", "")
-                    analysis = analysis.replace(" Sem/Fem", "")
-                    analysis = analysis.replace(" Sem/Mal", "")
-                    analysis = analysis.replace(" Sem/Plc", "")
-                    analysis = analysis.replace(" Sem/Obj", "")
-                    analysis = analysis.replace(" Sem/Adr", "")
-                    analysis = analysis.replace("Sem/Adr ", "")
-                    analysis = analysis.replace(" Sem/Year", "")
-                    analysis = analysis.replace(" IV", "")
-                    analysis = analysis.replace(" TV", "")
-                    analysis = analysis.replace("v1 ", "")
-                    analysis = analysis.replace("v2 ", "")
-                    analysis = analysis.replace("Hom1 ", "")
-                    analysis = analysis.replace("Hom2 ", "")
-                    analysis = analysis.replace("/", "_")
-                    if analysis.startswith("Arab Num"):
-                        analysis = analysis.replace("Arab Num", "Num Arab")
-                    analysis = analysis.strip()
-                    if "?" in analysis:
-                        analysis = "___"
-                    analysis = analysis.strip()
-                    analysis = analysis.replace("  ", " ")
-                    analysis = analysis.replace(" ", ".")
-                    pos = analysis.partition(".")[0]
-
-                    formated_line = wform + "\t" + lemma + "\t" + pos + "\t" + analysis
-                    c_analysis = c_analysis + "\n" + formated_line
-
-                analysis = ET.Element("analysis")
-                analysis.text = c_analysis + "\n"
-                tuv.insert(1, analysis)
-
-            tree.write(
-                os.path.join(out_dir_path, str(f.split("/")[-1])),
-                xml_declaration=True,
-                encoding="utf-8",
-                method="xml",
+        genre = ET.Element("genre")
+        if genre_str:
+            genre.text = genre_str
+            header.insert(1, genre)
+        tuvs = f_root.findall('.//tuv[@lang="' + lang + '"]')
+        for tuv in tuvs:
+            seg = tuv.findall("seg")
+            seg_txt = seg[0].text
+            # print('... seg ', str(seg_txt))
+            cmd = (
+                "| preprocess --abbr "
+                + abbr_file
+                + " | lookup -q -flags mbTT "
+                + abs_xfst_file
+                + " | lookup2cg | vislcg3 -g "
+                + disamb_file
             )
-            print("DONE ", f, "\n\n")
+            cmd_hfst = (
+                "| hfst-tokenise --print-all --giella-cg --no-weights --unique "
+                + this_lang_dir
+                + "tools/tokenisers/tokeniser-disamb-gt-desc.pmhfst | vislcg3 --grammar  "
+                + this_lang_dir
+                + "tools/tokenisers/mwe-dis.bin | cg-mwesplit | vislcg3 --grammar  "
+                + this_lang_dir
+                + "src/cg3/disambiguator.bin | vislcg3 --grammar  "
+                + this_lang_dir
+                + "src/cg3/korp.bin | vislcg3 --grammar  "
+                + this_lang_dir
+                + "src/cg3/dependency.bin"
+            )
 
-            mv_cmd = "mv " + f + " " + done_dir_path + "/"
-            print("MOVED file ", f, " in done folder \n\n")
-            p = Popen(mv_cmd, shell=True, stdout=PIPE, stderr=PIPE)
-            mv_out, mv_err = p.communicate()
-        except Exception as e:
-            mv_err_cmd = "mv " + f + " " + err_dir_path + "/"
-            print("MOVED file ", f, " in error folder \n\n")
-            p = Popen(mv_err_cmd, shell=True, stdout=PIPE, stderr=PIPE)
-            mv_out, mv_err = p.communicate()
-            print("exception=", e)
+            # print('... cmd ', cmd)
+            # if seg_txt:
+            p = Popen(
+                "echo '" + seg_txt + "'" + cmd_hfst,
+                shell=True,
+                stdout=PIPE,
+                stderr=PIPE,
+            )
+            out, err = p.communicate()
+            # print("err=", err)
+
+            c_analysis = ""
+            # print("|", out.decode().split('\n', 1 ),"|")
+            current_analysis = filter(None, out.decode().split('\n"<'))
+            for current_cohort in current_analysis:
+                cc_list = current_cohort.split("\n\t")
+                # print("cc_list=", cc_list)
+
+                wform = cc_list[0]
+                wform = wform.strip()
+                if wform.startswith('"<'):
+                    wform = wform[2:]
+                if wform.endswith('>"'):
+                    wform = wform[:-2]
+                wform = wform.replace(" ", "_")
+                # print("wform=", wform)
+
+                cc_list.pop(0)
+                # print("cc_list 2=", cc_list)
+                sccl = sorted(cc_list)
+                # print("sccl=", sccl)
+                l_a = sccl[0]
+
+                lemma = l_a.partition('" ')[0]
+                lemma = lemma.strip()
+                lemma = lemma.replace("#", "")
+                lemma = lemma.replace(" ", "_")
+                if lemma.startswith('"'):
+                    lemma = lemma[1:]
+
+                analysis = l_a.partition('" ')[2]
+                p_analysis = l_a.partition('" ')[2]
+                analysis = analysis.partition("@")[0]
+                analysis = analysis.replace("Err/Orth", "")
+                analysis = analysis.replace(" <" + lang + ">", "")
+                analysis = analysis.replace(" <vdic>", "")
+                analysis = analysis.replace(" Sem/Date", "")
+                analysis = analysis.replace(" Sem/Org", "")
+                analysis = analysis.replace(" Sem/Sur", "")
+                analysis = analysis.replace(" Sem/Fem", "")
+                analysis = analysis.replace(" Sem/Mal", "")
+                analysis = analysis.replace(" Sem/Plc", "")
+                analysis = analysis.replace(" Sem/Obj", "")
+                analysis = analysis.replace(" Sem/Adr", "")
+                analysis = analysis.replace("Sem/Adr ", "")
+                analysis = analysis.replace(" Sem/Year", "")
+                analysis = analysis.replace(" IV", "")
+                analysis = analysis.replace(" TV", "")
+                analysis = analysis.replace("v1 ", "")
+                analysis = analysis.replace("v2 ", "")
+                analysis = analysis.replace("Hom1 ", "")
+                analysis = analysis.replace("Hom2 ", "")
+                analysis = analysis.replace("/", "_")
+                if analysis.startswith("Arab Num"):
+                    analysis = analysis.replace("Arab Num", "Num Arab")
+                analysis = analysis.strip()
+                if "?" in analysis:
+                    analysis = "___"
+                analysis = analysis.strip()
+                analysis = analysis.replace("  ", " ")
+                analysis = analysis.replace(" ", ".")
+                pos = analysis.partition(".")[0]
+
+                formated_line = wform + "\t" + lemma + "\t" + pos + "\t" + analysis
+                c_analysis = c_analysis + "\n" + formated_line
+
+            analysis = ET.Element("analysis")
+            analysis.text = c_analysis + "\n"
+            tuv.insert(1, analysis)
+
+        tree.write(
+            os.path.join(out_dir_path, str(f.split("/")[-1])),
+            xml_declaration=True,
+            encoding="utf-8",
+            method="xml",
+        )
+        print("DONE ", f, "\n\n")
+
+        mv_cmd = "mv " + f + " " + done_dir_path + "/"
+        print("MOVED file ", f, " in done folder \n\n")
+        p = Popen(mv_cmd, shell=True, stdout=PIPE, stderr=PIPE)
+        mv_out, mv_err = p.communicate()
+    except Exception as e:
+        mv_err_cmd = "mv " + f + " " + err_dir_path + "/"
+        print("MOVED file ", f, " in error folder \n\n")
+        p = Popen(mv_err_cmd, shell=True, stdout=PIPE, stderr=PIPE)
+        mv_out, mv_err = p.communicate()
+        print("exception=", e)
 
 
 if __name__ == "__main__":
