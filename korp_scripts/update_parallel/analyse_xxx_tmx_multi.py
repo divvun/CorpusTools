@@ -1,24 +1,12 @@
 # -*- coding:utf-8 -*-
-import cgi
-import codecs
-import errno
-import getopt
-import json
-import locale
+import argparse
 import multiprocessing
 import os
-import re
-import sys
-import xml
-import lxml.etree as ET
-from collections import defaultdict
-from importlib import reload
-from operator import itemgetter
-from subprocess import PIPE, Popen
-from xml.dom.minidom import parse, parseString
-from corpustools import modes
-import argparse
 from functools import partial
+
+import lxml.etree as ET
+
+from corpustools import modes
 
 
 def append_files(folder_path):
