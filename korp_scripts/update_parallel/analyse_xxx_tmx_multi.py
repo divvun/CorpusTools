@@ -23,7 +23,7 @@ def process_in_parallel(files_list, args):
     pool_size = multiprocessing.cpu_count() * 2
     pool = multiprocessing.Pool(processes=pool_size)
     pool.map(
-        partial(process_file, lang=args.lang, in_dir=args.in_dir, genre_str=args.genre),
+        partial(process_file, lang=args.lang, genre_str=args.genre),
         files_list,
     )
     pool.close()  # no more tasks
@@ -47,22 +47,14 @@ def main():
     process_in_parallel(files_list, args)
 
 
-def process_file(f, lang, in_dir, genre_str):
+def process_file(f, lang, genre_str):
     hfst_pipeline = modes.Pipeline("hfst", lang)
-    out_dir = "out_" + lang + "_" + in_dir
     done_dir = "done_" + genre_str
-    err_dir = "error_" + genre_str
     cwd = os.getcwd()
-    out_dir_path = os.path.join(cwd, out_dir)
     done_dir_path = os.path.join(cwd, done_dir)
-    err_dir_path = os.path.join(cwd, err_dir)
 
-    if not os.path.exists(out_dir_path):
-        os.makedirs(out_dir_path)
     if not os.path.exists(done_dir_path):
         os.mkdir(done_dir_path)
-    if not os.path.exists(err_dir_path):
-        os.mkdir(err_dir_path)
 
     debug_fst = False
 
