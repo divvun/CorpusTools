@@ -170,6 +170,7 @@ def convert_article(avvir_doc):
 
 
 def fix_quotemarks(avvir_doc):
+    """Ávvir has funky quotemarks that seem to be a conversion error from their side."""
     for child in avvir_doc:
         if child.text:
             for (error, replacement) in [("‹‹", "«"), ("››", "»")]:
