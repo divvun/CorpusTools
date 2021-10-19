@@ -499,10 +499,6 @@ def extract_original_analysis(used_analysis):
     ]:
         used_analysis = re.sub(regex, "", used_analysis)
 
-    # if debug_output:
-    #     # print('8_used_analysis_|'+str(used_analysis)+'|_')
-    #     logging.info("8_used_analysis_|" + str(used_analysis) + "|_")
-
     return used_analysis
 
 
