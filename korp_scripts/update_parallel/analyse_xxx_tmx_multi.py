@@ -73,7 +73,6 @@ def process_file(f, lang, genre_str, done_dir_path):
     root = "/".join(f.split("/")[:-1])
     print("root=", root)
 
-    # tree = ET.parse(os.path.join(root,f))
     tree = ET.parse(f)
     f_root = tree.getroot()
 
@@ -87,13 +86,11 @@ def process_file(f, lang, genre_str, done_dir_path):
     for tuv in tuvs:
         seg = tuv.find("seg")
         seg_txt = seg.text
-        # print('... seg ', str(seg_txt))
         out = pipeline.run(seg_txt.encode("utf8"))
         c_analysis = ""
         current_analysis = filter(None, out.split('\n"<'))
         for current_cohort in current_analysis:
             cc_list = current_cohort.split("\n\t")
-            # print("cc_list=", cc_list)
 
             wform = cc_list[0]
             wform = wform.strip()
@@ -102,12 +99,9 @@ def process_file(f, lang, genre_str, done_dir_path):
             if wform.endswith('>"'):
                 wform = wform[:-2]
             wform = wform.replace(" ", "_")
-            # print("wform=", wform)
 
             cc_list.pop(0)
-            # print("cc_list 2=", cc_list)
             sccl = sorted(cc_list)
-            # print("sccl=", sccl)
             l_a = sccl[0]
 
             lemma = l_a.partition('" ')[0]
