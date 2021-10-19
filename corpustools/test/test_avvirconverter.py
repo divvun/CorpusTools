@@ -278,6 +278,27 @@ class TestAvvirConverter(xmltester.XMLTester):
 
         self.assertXmlEqual(avvir, want)
 
+    def test_convert_p_9(self):
+        """Fix quotemarks."""
+        avvir = etree.fromstring(
+            "<article>"
+            '   <story class="body">'
+            "       <p>a ‹‹b›› c</p>"
+            "   </story>"
+            "</article>"
+        )
+        want = etree.fromstring(
+            "<article>"
+            '   <story class="body">'
+            "       <p>a «b» c</p>"
+            "   </story>"
+            "</article>"
+        )
+
+        avvirconverter.fix_quotemarks(avvir)
+
+        self.assertXmlEqual(avvir, want)
+
     def test_convert_story(self):
         """Test convert_story."""
         want = etree.fromstring(

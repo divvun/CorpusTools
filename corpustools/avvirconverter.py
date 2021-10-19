@@ -169,6 +169,17 @@ def convert_article(avvir_doc):
     return document
 
 
+def fix_quotemarks(avvir_doc):
+    for child in avvir_doc:
+        if child.text:
+            for (error, replacement) in [("‹‹", "«"), ("››", "»")]:
+                child.text = child.text.replace(error, replacement)
+        if child.tail:
+            for (error, replacement) in [("‹‹", "«"), ("››", "»")]:
+                child.tail = child.tail.replace(error, replacement)
+        fix_quotemarks(child)
+
+
 def convert2intermediate(filename):
     """Convert Ávvir xml files to the giellatekno xml format.
 
@@ -182,5 +193,6 @@ def convert2intermediate(filename):
     remove_identical_ids(avvir_doc)
     convert_p(avvir_doc)
     convert_story(avvir_doc)
+    fix_quotemarks(avvir_doc)
 
     return convert_article(avvir_doc)
