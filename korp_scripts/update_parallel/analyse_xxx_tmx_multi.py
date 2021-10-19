@@ -64,96 +64,124 @@ def main():
     process_in_parallel(files_list, args)
 
 
-def process_file(f, lang, genre_str, done_dir_path):
-    pipeline = modes.Pipeline("hfst", lang)
-    namespaces = {"xml": "http://www.w3.org/XML/1998/namespace"}
-
-    print("... processing ", str(f))
-    print("/".join(f.split("/")))
-    root = "/".join(f.split("/")[:-1])
-    print("root=", root)
-
-    tree = ET.parse(f)
-    f_root = tree.getroot()
-
-    header = f_root.find(".//header")
-
+def handle_header(header, genre_str):
     genre = ET.Element("genre")
     if genre_str:
         genre.text = genre_str
         header.insert(1, genre)
-    tuvs = tree.xpath('.//tuv[@xml:lang="' + lang + '"]', namespaces=namespaces)
-    for tuv in tuvs:
-        seg = tuv.find("seg")
-        out = pipeline.run(seg.text.encode("utf8"))
-        c_analysis = ""
-        current_analysis = filter(None, out.split('\n"<'))
-        for current_cohort in current_analysis:
-            cc_list = current_cohort.split("\n\t")
 
-            wform = cc_list[0]
-            wform = wform.strip()
-            if wform.startswith('"<'):
-                wform = wform[2:]
-            if wform.endswith('>"'):
-                wform = wform[:-2]
-            wform = wform.replace(" ", "_")
 
-            cc_list.pop(0)
-            sccl = sorted(cc_list)
-            l_a = sccl[0]
+def make_analysis_element(tuv, pipeline, lang):
+    seg = tuv.find("seg")
+    out = pipeline.run(seg.text.encode("utf8"))
 
-            lemma = l_a.partition('" ')[0]
-            lemma = lemma.strip()
-            lemma = lemma.replace("#", "")
-            lemma = lemma.replace(" ", "_")
-            if lemma.startswith('"'):
-                lemma = lemma[1:]
+    analysis = ET.Element("analysis")
+    analysis.text = (
+        "\n".join(
+            [
+                make_formatted_line(lang, current_cohort)
+                for current_cohort in filter(None, out.split('\n"<'))
+            ]
+        )
+        + "\n"
+    )
 
-            analysis = l_a.partition('" ')[2]
-            p_analysis = l_a.partition('" ')[2]
-            analysis = analysis.partition("@")[0]
-            analysis = analysis.replace("Err/Orth", "")
-            analysis = analysis.replace(" <" + lang + ">", "")
-            analysis = analysis.replace(" <vdic>", "")
-            analysis = analysis.replace(" Sem/Date", "")
-            analysis = analysis.replace(" Sem/Org", "")
-            analysis = analysis.replace(" Sem/Sur", "")
-            analysis = analysis.replace(" Sem/Fem", "")
-            analysis = analysis.replace(" Sem/Mal", "")
-            analysis = analysis.replace(" Sem/Plc", "")
-            analysis = analysis.replace(" Sem/Obj", "")
-            analysis = analysis.replace(" Sem/Adr", "")
-            analysis = analysis.replace("Sem/Adr ", "")
-            analysis = analysis.replace(" Sem/Year", "")
-            analysis = analysis.replace(" IV", "")
-            analysis = analysis.replace(" TV", "")
-            analysis = analysis.replace("v1 ", "")
-            analysis = analysis.replace("v2 ", "")
-            analysis = analysis.replace("Hom1 ", "")
-            analysis = analysis.replace("Hom2 ", "")
-            analysis = analysis.replace("/", "_")
-            if analysis.startswith("Arab Num"):
-                analysis = analysis.replace("Arab Num", "Num Arab")
-            analysis = analysis.strip()
-            if "?" in analysis:
-                analysis = "___"
-            analysis = analysis.strip()
-            analysis = analysis.replace("  ", " ")
-            analysis = analysis.replace(" ", ".")
-            pos = analysis.partition(".")[0]
+    return analysis
 
-            formated_line = wform + "\t" + lemma + "\t" + pos + "\t" + analysis
-            c_analysis = c_analysis + "\n" + formated_line
 
-        analysis = ET.Element("analysis")
-        analysis.text = c_analysis + "\n"
-        tuv.insert(1, analysis)
+def process_file(f, lang, genre_str, done_dir_path):
+    print("... processing", str(f))
+
+    pipeline = modes.Pipeline("hfst", lang)
+    tree = ET.parse(f)
+    f_root = tree.getroot()
+
+    handle_header(f_root.find(".//header"), genre_str)
+
+    for tuv in tree.xpath(
+        './/tuv[@xml:lang="' + lang + '"]',
+        namespaces={"xml": "http://www.w3.org/XML/1998/namespace"},
+    ):
+        tuv.insert(1, make_analysis_element(tuv, pipeline, lang))
 
     done_path = os.path.join(done_dir_path, str(f.split("/")[-1]))
     print("DONE. Wrote", done_path, "\n\n")
     with open(done_path, "wb") as done_stream:
         done_stream.write(ET.tostring(tree, xml_declaration=True, encoding="utf-8"))
+
+
+def make_formatted_line(lang, current_cohort):
+    wform, lemma, analysis, pos = make_line_parts(lang, current_cohort)
+    return wform + "\t" + lemma + "\t" + pos + "\t" + analysis
+
+
+def make_line_parts(lang, current_cohort):
+    (wform, *cc_list) = current_cohort.split("\n\t")
+
+    wform = make_wordform(wform)
+    l_a = sorted(cc_list)[0]
+    lemma = make_lemma(l_a)
+    analysis = make_analysis(lang, l_a)
+    pos = analysis.partition(".")[0]
+
+    return wform, lemma, analysis, pos
+
+
+def make_analysis(lang, l_a):
+    analysis = l_a.partition('" ')[2]
+    analysis = analysis.partition("@")[0]
+    analysis = analysis.replace("Err/Orth", "")
+    analysis = analysis.replace(" <" + lang + ">", "")
+    analysis = analysis.replace(" <vdic>", "")
+    analysis = analysis.replace(" Sem/Date", "")
+    analysis = analysis.replace(" Sem/Org", "")
+    analysis = analysis.replace(" Sem/Sur", "")
+    analysis = analysis.replace(" Sem/Fem", "")
+    analysis = analysis.replace(" Sem/Mal", "")
+    analysis = analysis.replace(" Sem/Plc", "")
+    analysis = analysis.replace(" Sem/Obj", "")
+    analysis = analysis.replace(" Sem/Adr", "")
+    analysis = analysis.replace("Sem/Adr ", "")
+    analysis = analysis.replace(" Sem/Year", "")
+    analysis = analysis.replace(" IV", "")
+    analysis = analysis.replace(" TV", "")
+    analysis = analysis.replace("v1 ", "")
+    analysis = analysis.replace("v2 ", "")
+    analysis = analysis.replace("Hom1 ", "")
+    analysis = analysis.replace("Hom2 ", "")
+    analysis = analysis.replace("/", "_")
+    if analysis.startswith("Arab Num"):
+        analysis = analysis.replace("Arab Num", "Num Arab")
+    analysis = analysis.strip()
+    if "?" in analysis:
+        analysis = "___"
+    analysis = analysis.strip()
+    analysis = analysis.replace("  ", " ")
+    analysis = analysis.replace(" ", ".")
+
+    return analysis
+
+
+def make_lemma(l_a):
+    lemma = l_a.partition('" ')[0]
+    lemma = lemma.strip()
+    lemma = lemma.replace("#", "")
+    lemma = lemma.replace(" ", "_")
+    if lemma.startswith('"'):
+        lemma = lemma[1:]
+
+    return lemma
+
+
+def make_wordform(wform):
+    wform = wform.strip()
+    if wform.startswith('"<'):
+        wform = wform[2:]
+    if wform.endswith('>"'):
+        wform = wform[:-2]
+    wform = wform.replace(" ", "_")
+
+    return wform
 
 
 if __name__ == "__main__":
