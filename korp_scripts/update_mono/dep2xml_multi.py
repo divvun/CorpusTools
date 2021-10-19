@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 import argparse
-import inspect
 import logging
 import multiprocessing
 import os
 import re
-import sys
 import xml.etree.ElementTree as ET
 from functools import partial
-from subprocess import PIPE, Popen, run
+from subprocess import run
 
 DOMAIN_MAPPING = {
     "admin": "administration",
