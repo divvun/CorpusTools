@@ -256,6 +256,43 @@ def parse_options():
     return parser.parse_args()
 
 
+def group_sem(analysis):
+    dict_sem = {
+        "Hum": ["Hum", "Hum-abstr", "Hum-prof", "Mal", "Fem", "Sur"],
+        "Org": ["Org"],
+        "Ani": ["Ani", "Ani-fish"],
+        "Plc": ["Adr", "Plc", "Plc-abstr", "Plc-elevate", "Plc-line", "Plc-water", "Event", "Edu", "Build", "Build-room"],
+        "Time": ["Time", "Year", "Time-clock", "Date"],
+        "Obj": ["Aniprod", "Body", "Buildpart", "Clth", "Clth-jewl", "Clthpart", "Drink", "Food", "Food-med", "Fruit", "Furn", "Obj", "Obj-clo", "Obj-el", "Obj-ling", "Obj-rope", "Obj-surfc", "Plant", "Plantpart", "Prod", "Prod-audio", "Prod-cogn", "Prod-ling", "Prod-vis", "Txt", "Wpn", "Substnc", "Mat", "Part"],
+        "Abstr": ["Body-abstr", "Cat", "Ctain-abstr", "Ctain-clth", "Geom", "Group", "Obj-cogn", "Semcon", "Lang", "Feat-phys", "Feat-psych", "Feat-measr", "Perc-cogn", "Perc-emo", "Perc-phys", "Perc-psych", "Feat ", "Ideol", "Rule", "Pos", "Rel", "State", "Phonenr", "Sign", "Symbol", "State-sick", "ID", "Wthr"],
+        "Instr": ["Tool", "Tool-catch", "Tool-clean", "Tool-it", "Tool-measr", "Tool-music", "Tool-write", "Wpn", "Curr", "Domain"],
+        "Veh": ["Veh"],
+        "Amount": ["Amount", "Measr", "Money"],
+        "Act": ["Act", "Dance", "Game", "Sport", "Process"],
+        "Route": ["Route", "Dir"]
+    }
+
+    if (re.search(r'Group_', analysis) and not re.search(r'Group_∞', analysis)) or re.search(r'_Group', analysis):
+        dict_sem['Abstr'] = ["Body-abstr", "Cat", "Ctain-abstr", "Ctain-clth", "Geom", "Obj-cogn", "Semcon", "Lang", "Feat-phys", "Feat-psych", "Feat-measr", "Perc-cogn", "Perc-emo", "Perc-phys", "Perc-psych", "Feat ", "Ideol", "Rule", "Pos", "Rel", "State", "Phonenr", "Sign", "Symbol", "State-sick", "ID", "Wthr"]
+        analysis = re.sub("_Group", "", analysis)
+        analysis = re.sub("Group_", "", analysis)
+
+    sem_ = re.search("Sem/([a-zA-Z]*_*)+", analysis)
+    if sem_:
+        repl = sem_.group().replace("_", " Sem/")
+        #sem_parts = sem_.group().split("Sem/")[1].split("_")
+        #for part in sem_parts:
+        #    repl = repl + " Sem/" + part
+        analysis = re.sub("Sem/([a-zA-Z]*_*)+", repl, analysis)
+
+    for key, value in dict_sem.items():
+        for sem in value:
+                my_reg = "Sem/[a-zA-Z]*" + re.escape(sem) + "[a-zA-Z]*\s"
+                analysis = re.sub(my_reg, "Sem/" + key + " ", analysis)
+
+    return analysis
+
+
 def main():
     args = parse_options()
 
@@ -483,10 +520,14 @@ def reshape_analysis(analysis):
     return _analysis
 
 
-def extract_original_analysis(used_analysis):
+def extract_original_analysis(used_analysis, language):
     """Filter all Err- and Sem-tags from the string."""
+    if language == 'sme':
+        used_analysis = group_sem(used_analysis)
+    else:
+        used_analysis = re.sub("Sem/[^\s]+\s","", used_analysis)
+
     for regex in [
-        "Sem/[^\s]+\s",
         "Use/[^\s]+\s",
         "Gram/[^\s]+\s",
         "OLang/[^\s]+\s",
@@ -671,7 +712,7 @@ def non_empty_cohorts(current_sentence):
 def make_analysis_tuple(word_form, rest_cohort, language):
     # take the first analysis in case there are more than one non-disambiguated analyses
     original_analysis = extract_original_analysis(
-        sort_cohort(cohort_lines=re.split('\n\t"', rest_cohort))[0]
+        sort_cohort(cohort_lines=re.split('\n\t"', rest_cohort))[0], language
     )
 
     # put a clear delimiter between the (first) pos value and the rest of msd
