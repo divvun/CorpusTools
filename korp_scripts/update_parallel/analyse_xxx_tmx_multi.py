@@ -85,8 +85,7 @@ def process_file(f, lang, genre_str, done_dir_path):
     tuvs = tree.xpath('.//tuv[@xml:lang="' + lang + '"]', namespaces=namespaces)
     for tuv in tuvs:
         seg = tuv.find("seg")
-        seg_txt = seg.text
-        out = pipeline.run(seg_txt.encode("utf8"))
+        out = pipeline.run(seg.text.encode("utf8"))
         c_analysis = ""
         current_analysis = filter(None, out.split('\n"<'))
         for current_cohort in current_analysis:
