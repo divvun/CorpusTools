@@ -92,18 +92,23 @@ def make_analysis_element(tuv, pipeline, lang):
 def process_file(f, lang, genre_str, done_dir_path):
     print("... processing", str(f))
 
-    pipeline = modes.Pipeline("hfst", lang)
     tree = ET.parse(f)
     f_root = tree.getroot()
 
     handle_header(f_root.find(".//header"), genre_str)
+    add_analysis_elements(tree, modes.Pipeline("hfst", lang))
+    write_file(done_dir_path, f, tree)
 
+
+def add_analysis_elements(tree, pipeline):
     for tuv in tree.xpath(
         './/tuv[@xml:lang="' + lang + '"]',
         namespaces={"xml": "http://www.w3.org/XML/1998/namespace"},
     ):
         tuv.insert(1, make_analysis_element(tuv, pipeline, lang))
 
+
+def write_file(done_dir_path, f, tree):
     done_path = os.path.join(done_dir_path, str(f.split("/")[-1]))
     print("DONE. Wrote", done_path, "\n\n")
     with open(done_path, "wb") as done_stream:
