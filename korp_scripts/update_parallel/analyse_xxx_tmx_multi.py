@@ -18,12 +18,29 @@ def append_files(folder_path):
     )
 
 
+def make_done_dir(genre_str):
+    done_dir = "done_" + genre_str
+    cwd = os.getcwd()
+    done_dir_path = os.path.join(cwd, done_dir)
+
+    if not os.path.exists(done_dir_path):
+        os.mkdir(done_dir_path)
+
+    return done_dir_path
+
+
 def process_in_parallel(files_list, args):
     """Process file in parallel."""
+
     pool_size = multiprocessing.cpu_count() * 2
     pool = multiprocessing.Pool(processes=pool_size)
     pool.map(
-        partial(process_file, lang=args.lang, genre_str=args.genre),
+        partial(
+            process_file,
+            lang=args.lang,
+            genre_str=args.genre,
+            done_dir_path=make_done_dir(args.genre),
+        ),
         files_list,
     )
     pool.close()  # no more tasks
@@ -47,15 +64,8 @@ def main():
     process_in_parallel(files_list, args)
 
 
-def process_file(f, lang, genre_str):
-    hfst_pipeline = modes.Pipeline("hfst", lang)
-    done_dir = "done_" + genre_str
-    cwd = os.getcwd()
-    done_dir_path = os.path.join(cwd, done_dir)
-
-    if not os.path.exists(done_dir_path):
-        os.mkdir(done_dir_path)
-
+def process_file(f, lang, genre_str, done_dir_path):
+    pipeline = modes.Pipeline("hfst", lang)
     namespaces = {"xml": "http://www.w3.org/XML/1998/namespace"}
 
     print("... processing ", str(f))
@@ -78,7 +88,7 @@ def process_file(f, lang, genre_str):
         seg = tuv.find("seg")
         seg_txt = seg.text
         # print('... seg ', str(seg_txt))
-        out = hfst_pipeline.run(seg_txt.encode("utf8"))
+        out = pipeline.run(seg_txt.encode("utf8"))
         c_analysis = ""
         current_analysis = filter(None, out.split('\n"<'))
         for current_cohort in current_analysis:
