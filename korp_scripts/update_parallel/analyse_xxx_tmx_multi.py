@@ -17,6 +17,7 @@ from operator import itemgetter
 from subprocess import PIPE, Popen
 from xml.dom.minidom import parse, parseString
 from corpustools import modes
+import argparse
 
 
 def append_files(files_list, folder_path):
@@ -36,11 +37,18 @@ def process_in_parallel(files_list):
     return
 
 
+def parse_options():
+    parser = argparse.ArgumentParser(description="Prepare tmx files for use in Korp.")
+
+    parser.add_argument("lang", help="language of the files to process")
+    parser.add_argument("in_dir", help="the directory of the analysed files")
+    parser.add_argument("genre", help="optional genre", nargs="?", default="")
+
+    return parser.parse_args()
+
+
 def main():
-    # The script expects 2 (and 1 optional) parameters:
-    # language to analyse, input_directory (and genre)
-    files_list = []
-    in_dir = sys.argv[2]
+    args = parse_options()
 
     append_files(files_list, in_dir)
     process_in_parallel(files_list)
