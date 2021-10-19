@@ -184,5 +184,4 @@ def process_file(f):
 
 
 if __name__ == "__main__":
-    reload(sys)
     main()
