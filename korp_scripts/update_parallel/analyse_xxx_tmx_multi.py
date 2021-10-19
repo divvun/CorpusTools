@@ -1,14 +1,21 @@
 # -*- coding:utf-8 -*-
-import re, os, errno, cgi, json, xml
-import sys, codecs, locale, getopt
-import xml.etree.ElementTree as ET
-from subprocess import Popen, PIPE
-from operator import itemgetter
-from xml.dom.minidom import parse, parseString
-from importlib import reload
-from collections import defaultdict
-
+import cgi
+import codecs
+import errno
+import getopt
+import json
+import locale
 import multiprocessing
+import os
+import re
+import sys
+import xml
+import xml.etree.ElementTree as ET
+from collections import defaultdict
+from importlib import reload
+from operator import itemgetter
+from subprocess import PIPE, Popen
+from xml.dom.minidom import parse, parseString
 
 
 def append_files(files_list, folder_path):
