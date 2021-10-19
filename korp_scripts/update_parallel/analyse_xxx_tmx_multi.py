@@ -20,11 +20,13 @@ from corpustools import modes
 import argparse
 
 
-def append_files(files_list, folder_path):
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            if file.endswith(".tmx"):
-                files_list.append(os.path.join(root, file))
+def append_files(folder_path):
+    return (
+        os.path.join(root, file)
+        for root, _, files in os.walk(folder_path)
+        for file in files
+        if file.endswith(".tmx")
+    )
 
 
 def process_in_parallel(files_list):
@@ -49,8 +51,8 @@ def parse_options():
 
 def main():
     args = parse_options()
+    files_list = append_files(args.in_dir)
 
-    append_files(files_list, in_dir)
     process_in_parallel(files_list)
 
 
