@@ -10,7 +10,7 @@ import os
 import re
 import sys
 import xml
-import xml.etree.ElementTree as ET
+import lxml.etree as ET
 from collections import defaultdict
 from importlib import reload
 from operator import itemgetter
@@ -69,7 +69,7 @@ def process_file(f):
 
     debug_fst = False
 
-    namespaces = {"xml": "http://www.w3.org/1999/xml"}
+    namespaces = {"xml": "http://www.w3.org/XML/1998/namespace"}
 
     plup = Popen("which lookup", shell=True, stdout=PIPE, stderr=PIPE)
     olup, elup = plup.communicate()
@@ -108,7 +108,7 @@ def process_file(f):
         if genre_str:
             genre.text = genre_str
             header.insert(1, genre)
-        tuvs = f_root.findall('.//tuv[@lang="' + lang + '"]')
+        tuvs = tree.xpath('.//tuv[@xml:lang="' + lang + '"]', namespaces=namespaces)
         for tuv in tuvs:
             seg = tuv.findall("seg")
             seg_txt = seg[0].text
