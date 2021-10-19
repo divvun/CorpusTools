@@ -56,8 +56,6 @@ def process_file(f, lang, genre_str):
     if not os.path.exists(done_dir_path):
         os.mkdir(done_dir_path)
 
-    debug_fst = False
-
     namespaces = {"xml": "http://www.w3.org/XML/1998/namespace"}
 
     print("... processing ", str(f))
