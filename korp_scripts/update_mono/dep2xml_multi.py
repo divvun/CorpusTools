@@ -702,7 +702,7 @@ def get_wordform_rest(current_cohort):
 
 
 def non_empty_cohorts(current_sentence):
-    for cohort in re.split('"<', current_sentence):
+    for cohort in re.split('^"<|\n"<', current_sentence):
         if cohort != "":
             (word_form, rest_cohort) = get_wordform_rest(cohort)
             if word_form != "¶":
