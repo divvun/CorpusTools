@@ -18,6 +18,7 @@ from subprocess import PIPE, Popen
 from xml.dom.minidom import parse, parseString
 from corpustools import modes
 import argparse
+from functools import partial
 
 
 def append_files(folder_path):
@@ -29,11 +30,14 @@ def append_files(folder_path):
     )
 
 
-def process_in_parallel(files_list):
+def process_in_parallel(files_list, args):
     """Process file in parallel."""
     pool_size = multiprocessing.cpu_count() * 2
     pool = multiprocessing.Pool(processes=pool_size)
-    pool.map(process_file, files_list)
+    pool.map(
+        partial(process_file, lang=args.lang, in_dir=args.in_dir, genre_str=args.genre),
+        files_list,
+    )
     pool.close()  # no more tasks
     pool.join()  # wrap up current tasks
     return
@@ -52,17 +56,10 @@ def parse_options():
 def main():
     args = parse_options()
     files_list = append_files(args.in_dir)
+    process_in_parallel(files_list, args)
 
-    process_in_parallel(files_list)
 
-
-def process_file(f):
-    lang = sys.argv[1]
-    in_dir = sys.argv[2]
-    if len(sys.argv) == 4:
-        genre_str = sys.argv[3]
-    else:
-        genre_str = ""
+def process_file(f, lang, in_dir, genre_str):
     hfst_pipeline = modes.Pipeline("hfst", lang)
     out_dir = "out_" + lang + "_" + in_dir
     done_dir = "done_" + genre_str
