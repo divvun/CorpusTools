@@ -163,18 +163,11 @@ def process_file(f):
             analysis.text = c_analysis + "\n"
             tuv.insert(1, analysis)
 
-        tree.write(
-            os.path.join(out_dir_path, str(f.split("/")[-1])),
-            xml_declaration=True,
-            encoding="utf-8",
-            method="xml",
-        )
-        print("DONE ", f, "\n\n")
+        done_path = os.path.join(done_dir_path, str(f.split("/")[-1]))
+        print("DONE. Wrote", done_path, "\n\n")
+        with open(done_path, "wb") as done_stream:
+            done_stream.write(ET.tostring(tree, xml_declaration=True, encoding="utf-8"))
 
-        mv_cmd = "mv " + f + " " + done_dir_path + "/"
-        print("MOVED file ", f, " in done folder \n\n")
-        p = Popen(mv_cmd, shell=True, stdout=PIPE, stderr=PIPE)
-        mv_out, mv_err = p.communicate()
     except Exception as e:
         mv_err_cmd = "mv " + f + " " + err_dir_path + "/"
         print("MOVED file ", f, " in error folder \n\n")
