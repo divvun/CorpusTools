@@ -248,11 +248,12 @@ def vrt_format(elem):
         elem.tail = padding
 
 
-def append_files(files_list, folder_path):
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            if file.endswith(".xml"):
-                files_list.append(os.path.join(root, file))
+def append_files(files_list, analysed_dirs):
+    for analysed_dir in analysed_dirs:
+        for root, dirs, files in os.walk(analysed_dir):
+            for file in files:
+                if file.endswith(".xml"):
+                    files_list.append(os.path.join(root, file))
 
 
 def process_in_parallel(lang, files_list):
@@ -978,7 +979,9 @@ def parse_options():
     )
 
     parser.add_argument("lang", help="language of the files to process")
-    parser.add_argument("in_dir", help="the directory of the analysed files")
+    parser.add_argument(
+        "analysed_dirs", nargs="+", help="directories where analysed files live"
+    )
 
     return parser.parse_args()
 
@@ -988,5 +991,5 @@ def main():
 
     files_list = []
 
-    append_files(files_list, args.in_dir)
+    append_files(files_list, args.analysed_dirs)
     process_in_parallel(args.lang, files_list)
