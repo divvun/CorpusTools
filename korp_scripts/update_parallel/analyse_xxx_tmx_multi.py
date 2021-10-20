@@ -96,11 +96,17 @@ def process_file(f, lang, genre_str, done_dir_path):
     f_root = tree.getroot()
 
     handle_header(f_root.find(".//header"), genre_str)
-    add_analysis_elements(tree, modes.Pipeline("hfst", lang))
+    add_analysis_elements(tree, lang)
     write_file(done_dir_path, f, tree)
 
 
-def add_analysis_elements(tree, pipeline):
+def add_analysis_elements(tree, lang):
+    pipeline = (
+        modes.Pipeline("hfst", lang)
+        if lang in ["sme"]
+        else modes.Pipeline("hfst_no_korp", lang)
+    )
+    pipeline.sanity_check()
     for tuv in tree.xpath(
         './/tuv[@xml:lang="' + lang + '"]',
         namespaces={"xml": "http://www.w3.org/XML/1998/namespace"},
