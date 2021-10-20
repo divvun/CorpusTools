@@ -58,9 +58,11 @@ class CorpusPath:
             "prestable/tmx",
             "orig",
             "converted",
+            "analysed",
             "stable",
             "toktmx",
             "tmx",
+            "korp",
         ]:
             module_dir = "/" + module + "/"
             if module_dir in abspath:
@@ -169,6 +171,11 @@ class CorpusPath:
     def analysed(self):
         """Return the path to analysed file."""
         return self.name(module="analysed", extension=".xml")
+
+    @property
+    def korp(self):
+        """Return the path to analysed file."""
+        return self.name(module="korp", extension=".xml")
 
     def parallel(self, language):
         """Check if there is a parallel for language.

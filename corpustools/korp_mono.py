@@ -28,7 +28,7 @@ from subprocess import run
 
 import lxml.etree as etree
 
-from corpustools import argparse_version
+from corpustools import argparse_version, corpuspath, util
 
 DOMAIN_MAPPING = {
     "admin": "administration",
@@ -255,12 +255,12 @@ def append_files(files_list, folder_path):
                 files_list.append(os.path.join(root, file))
 
 
-def process_in_parallel(done_dir_path, lang, files_list):
+def process_in_parallel(lang, files_list):
     """Process file in parallel."""
 
     pool_size = multiprocessing.cpu_count() * 2
     pool = multiprocessing.Pool(processes=pool_size)
-    pool.map(partial(process_file, done_dir_path=done_dir_path, lang=lang), files_list)
+    pool.map(partial(process_file, lang=lang), files_list)
     pool.close()  # no more tasks
     pool.join()  # wrap up current tasks
     return
@@ -515,11 +515,16 @@ def make_root_element(f_root):
     return root
 
 
-def process_file(current_file, done_dir_path, lang):
+def process_file(current_file, lang):
     """Convert analysed file into vrt format file."""
     print(f"... processing {current_file}")
-    path = os.path.join(done_dir_path, os.path.basename(current_file))
+    analysed_file = corpuspath.CorpusPath(current_file)
+    path = analysed_file.korp
     print(f"path={path}")
+
+    with util.ignored(OSError):
+        os.makedirs(os.path.dirname(path))
+
     with open(path, "wb") as newfile_stream:
         newfile_stream.write(
             etree.tostring(
@@ -983,11 +988,5 @@ def main():
 
     files_list = []
 
-    cwd = os.getcwd()
-    done_dir = "done_multi_" + args.lang
-    done_dir_path = os.path.join(cwd, done_dir)
-    if not os.path.exists(done_dir_path):
-        os.makedirs(done_dir_path)
-
     append_files(files_list, args.in_dir)
-    process_in_parallel(done_dir_path, args.lang, files_list)
+    process_in_parallel(args.lang, files_list)
