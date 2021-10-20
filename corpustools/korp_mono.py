@@ -298,18 +298,7 @@ def main():
 
     files_list = []
 
-    debug_index = ""
-    out_dir = "_od_" + args.in_dir + "_" + debug_index
-    logging.basicConfig(
-        filename="proc_" + args.in_dir + "_" + debug_index + ".log", level=logging.DEBUG
-    )
-
     cwd = os.getcwd()
-    out_dir_path = os.path.join(cwd, out_dir)
-    if not os.path.exists(out_dir_path):
-        print("_od_ ::: " + out_dir_path)
-        os.makedirs(out_dir_path)
-
     done_dir = "done_multi_" + args.lang
     done_dir_path = os.path.join(cwd, done_dir)
     if not os.path.exists(done_dir_path):
