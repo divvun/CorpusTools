@@ -134,6 +134,10 @@
         <arg name="--grammar" />
         <file name="disambiguator.bin" />
       </program>
+      <program name="vislcg3" debug="function">
+        <arg name="--grammar" />
+        <file name="functions.bin" />
+      </program>
       <program name="vislcg3" debug="dep">
         <arg name="--grammar" />
         <file name="dependency.bin" />
