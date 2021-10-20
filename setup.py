@@ -41,6 +41,7 @@ setup(
             "make_training_corpus = corpustools.trainingcorpusmaker:main",
             "tmx2html = corpustools.tmx:main",
             "dropbox_adder = corpustools.dropbox_adder.tmx:main",
+            "korp_mono = corpustools.korp_mono:main",
         ]
     },
     dependency_links=[

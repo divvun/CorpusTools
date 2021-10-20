@@ -1,5 +1,24 @@
-#!/usr/bin/env python3
-# -*- coding:utf-8 -*-
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this file. If not, see <http://www.gnu.org/licenses/>.
+#
+#   Copyright © 2013-2021 The University of Tromsø &
+#                         the Norwegian Sámi Parliament
+#   http://giellatekno.uit.no & http://divvun.no
+#
+"""Turn analysed files into Korp files."""
+
+
 import argparse
 import multiprocessing
 import os
@@ -8,6 +27,8 @@ from functools import partial
 from subprocess import run
 
 import lxml.etree as etree
+
+from corpustools import argparse_version
 
 DOMAIN_MAPPING = {
     "admin": "administration",
@@ -247,11 +268,12 @@ def process_in_parallel(done_dir_path, lang, files_list):
 
 def parse_options():
     parser = argparse.ArgumentParser(
-        description="Turn analysed files into vrt format xml files."
+        parents=[argparse_version.parser],
+        description="Turn analysed files into vrt format xml files for Korp use.",
     )
 
-    parser.add_argument("in_dir", help="the directory of the analysed files")
     parser.add_argument("lang", help="language of the files to process")
+    parser.add_argument("in_dir", help="the directory of the analysed files")
 
     return parser.parse_args()
 
@@ -969,7 +991,3 @@ def generate_lemma(in_string, c_lang):
         if not generated_lemma.endswith("+?")
         else in_string.split("+")[0]
     )
-
-
-if __name__ == "__main__":
-    main()
