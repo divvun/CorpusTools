@@ -133,33 +133,35 @@ def make_line_parts(lang, current_cohort):
 
 
 def make_analysis(lang, l_a):
-    analysis = l_a.partition('" ')[2]
-    analysis = analysis.partition("@")[0]
-    analysis = analysis.replace("Err/Orth", "")
-    analysis = analysis.replace(" <" + lang + ">", "")
-    analysis = analysis.replace(" <vdic>", "")
-    analysis = analysis.replace(" Sem/Date", "")
-    analysis = analysis.replace(" Sem/Org", "")
-    analysis = analysis.replace(" Sem/Sur", "")
-    analysis = analysis.replace(" Sem/Fem", "")
-    analysis = analysis.replace(" Sem/Mal", "")
-    analysis = analysis.replace(" Sem/Plc", "")
-    analysis = analysis.replace(" Sem/Obj", "")
-    analysis = analysis.replace(" Sem/Adr", "")
-    analysis = analysis.replace("Sem/Adr ", "")
-    analysis = analysis.replace(" Sem/Year", "")
-    analysis = analysis.replace(" IV", "")
-    analysis = analysis.replace(" TV", "")
-    analysis = analysis.replace("v1 ", "")
-    analysis = analysis.replace("v2 ", "")
-    analysis = analysis.replace("Hom1 ", "")
-    analysis = analysis.replace("Hom2 ", "")
-    analysis = analysis.replace("/", "_")
+    analysis = l_a.partition('" ')[2].partition("@")[0]
+
+    if "?" in analysis:
+        return "___"
+
+    for (unwanted, replacement) in [
+        ("Err/Orth", ""),
+        (" <" + lang + ">", ""),
+        (" <vdic>", ""),
+        (" Sem/Date", ""),
+        (" Sem/Org", ""),
+        (" Sem/Sur", ""),
+        (" Sem/Fem", ""),
+        (" Sem/Mal", ""),
+        (" Sem/Plc", ""),
+        (" Sem/Obj", ""),
+        (" Sem/Adr", ""),
+        ("Sem/Adr ", ""),
+        (" Sem/Year", ""),
+        (" IV", ""),
+        (" TV", ""),
+        ("v1 ", ""),
+        ("v2 ", ""),
+        ("Hom1 ", ""),
+        ("Hom2 ", ""),
+    ]:
+        analysis = analysis.replace(unwanted, replacement)
     if analysis.startswith("Arab Num"):
         analysis = analysis.replace("Arab Num", "Num Arab")
-    analysis = analysis.strip()
-    if "?" in analysis:
-        analysis = "___"
     analysis = analysis.strip()
     analysis = analysis.replace("  ", " ")
     analysis = analysis.replace(" ", ".")
@@ -168,8 +170,7 @@ def make_analysis(lang, l_a):
 
 
 def make_lemma(l_a):
-    lemma = l_a.partition('" ')[0]
-    lemma = lemma.strip()
+    lemma = l_a.partition('" ')[0].strip()
     lemma = lemma.replace("#", "")
     lemma = lemma.replace(" ", "_")
     if lemma.startswith('"'):
