@@ -4,9 +4,10 @@ import argparse
 import multiprocessing
 import os
 import re
-import xml.etree.ElementTree as ET
 from functools import partial
 from subprocess import run
+
+import lxml.etree as etree
 
 DOMAIN_MAPPING = {
     "admin": "administration",
@@ -402,7 +403,7 @@ def make_root_element(f_root):
             f_datefrom = "00000000"
             f_dateto = "00000000"
 
-    root = ET.Element("text")
+    root = etree.Element("text")
     root.set("title", f_title)
     root.set("lang", f_lang)
     root.set("orig_lang", f_orig_lang)
@@ -426,7 +427,7 @@ def process_file(current_file, done_dir_path, lang):
     print(f"path={path}")
     with open(path, "wb") as newfile_stream:
         newfile_stream.write(
-            ET.tostring(
+            etree.tostring(
                 make_vrt_xml(current_file, lang),
                 xml_declaration=False,
                 encoding="utf-8",
@@ -441,14 +442,14 @@ def make_vrt_xml(current_file, lang):
     Converting the analysis output into a suitable xml format for vrt
     transformation (vrt is the cwb input format)
     """
-    xml_tree = ET.parse(current_file, ET.XMLParser(encoding="utf-8"))
+    xml_tree = etree.parse(current_file, etree.XMLParser(encoding="utf-8"))
     old_root = xml_tree.getroot()
 
     f_root = make_root_element(old_root)
     for s_id, sentence in enumerate(
         split_cohort(old_root.find(".//body/dependency").text, lang)
     ):
-        current_sentence = ET.SubElement(f_root, "sentence")
+        current_sentence = etree.SubElement(f_root, "sentence")
         current_sentence.set("id", str(s_id + 1))
         current_sentence.text = make_positional_attributes(sentence)
 
