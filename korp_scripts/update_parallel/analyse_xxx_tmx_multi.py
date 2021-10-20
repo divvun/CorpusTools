@@ -37,7 +37,8 @@ def process_in_parallel(files_list, args):
     pool.map(
         partial(
             process_file,
-            lang=args.lang,
+            lang1=args.lang1,
+            lang2=args.lang2,
             genre_str=args.genre,
             done_dir_path=make_done_dir(args.genre),
         ),
@@ -51,7 +52,8 @@ def process_in_parallel(files_list, args):
 def parse_options():
     parser = argparse.ArgumentParser(description="Prepare tmx files for use in Korp.")
 
-    parser.add_argument("lang", help="language of the files to process")
+    parser.add_argument("lang1", help="one of the languages of the files to process")
+    parser.add_argument("lang2", help="the other language of the files to process")
     parser.add_argument("in_dir", help="the directory of the analysed files")
     parser.add_argument("genre", help="optional genre", nargs="?", default="")
 
@@ -89,14 +91,14 @@ def make_analysis_element(tuv, pipeline, lang):
     return analysis
 
 
-def process_file(f, lang, genre_str, done_dir_path):
+def process_file(f, lang1, lang2, genre_str, done_dir_path):
     print("... processing", str(f))
 
     tree = ET.parse(f)
     f_root = tree.getroot()
-
     handle_header(f_root.find(".//header"), genre_str)
-    add_analysis_elements(tree, lang)
+    for lang in [lang1, lang2]:
+        add_analysis_elements(tree, lang)
     write_file(done_dir_path, f, tree)
 
 
@@ -107,6 +109,7 @@ def add_analysis_elements(tree, lang):
         else modes.Pipeline("hfst_no_korp", lang)
     )
     pipeline.sanity_check()
+
     for tuv in tree.xpath(
         './/tuv[@xml:lang="' + lang + '"]',
         namespaces={"xml": "http://www.w3.org/XML/1998/namespace"},
