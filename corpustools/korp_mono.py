@@ -266,18 +266,6 @@ def process_in_parallel(done_dir_path, lang, files_list):
     return
 
 
-def parse_options():
-    parser = argparse.ArgumentParser(
-        parents=[argparse_version.parser],
-        description="Turn analysed files into vrt format xml files for Korp use.",
-    )
-
-    parser.add_argument("lang", help="language of the files to process")
-    parser.add_argument("in_dir", help="the directory of the analysed files")
-
-    return parser.parse_args()
-
-
 def group_sem(analysis):
     dict_sem = {
         "Hum": ["Hum", "Hum-abstr", "Hum-prof", "Mal", "Fem", "Sur"],
@@ -424,21 +412,6 @@ def group_sem(analysis):
             analysis = re.sub(my_reg, "Sem/" + key + " ", analysis)
 
     return analysis
-
-
-def main():
-    args = parse_options()
-
-    files_list = []
-
-    cwd = os.getcwd()
-    done_dir = "done_multi_" + args.lang
-    done_dir_path = os.path.join(cwd, done_dir)
-    if not os.path.exists(done_dir_path):
-        os.makedirs(done_dir_path)
-
-    append_files(files_list, args.in_dir)
-    process_in_parallel(done_dir_path, args.lang, files_list)
 
 
 def make_root_element(f_root):
@@ -991,3 +964,30 @@ def generate_lemma(in_string, c_lang):
         if not generated_lemma.endswith("+?")
         else in_string.split("+")[0]
     )
+
+
+def parse_options():
+    parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
+        description="Turn analysed files into vrt format xml files for Korp use.",
+    )
+
+    parser.add_argument("lang", help="language of the files to process")
+    parser.add_argument("in_dir", help="the directory of the analysed files")
+
+    return parser.parse_args()
+
+
+def main():
+    args = parse_options()
+
+    files_list = []
+
+    cwd = os.getcwd()
+    done_dir = "done_multi_" + args.lang
+    done_dir_path = os.path.join(cwd, done_dir)
+    if not os.path.exists(done_dir_path):
+        os.makedirs(done_dir_path)
+
+    append_files(files_list, args.in_dir)
+    process_in_parallel(done_dir_path, args.lang, files_list)
