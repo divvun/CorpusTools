@@ -261,34 +261,145 @@ def group_sem(analysis):
         "Hum": ["Hum", "Hum-abstr", "Hum-prof", "Mal", "Fem", "Sur"],
         "Org": ["Org"],
         "Ani": ["Ani", "Ani-fish"],
-        "Plc": ["Adr", "Plc", "Plc-abstr", "Plc-elevate", "Plc-line", "Plc-water", "Event", "Edu", "Build", "Build-room"],
+        "Plc": [
+            "Adr",
+            "Plc",
+            "Plc-abstr",
+            "Plc-elevate",
+            "Plc-line",
+            "Plc-water",
+            "Event",
+            "Edu",
+            "Build",
+            "Build-room",
+        ],
         "Time": ["Time", "Year", "Time-clock", "Date"],
-        "Obj": ["Aniprod", "Body", "Buildpart", "Clth", "Clth-jewl", "Clthpart", "Drink", "Food", "Food-med", "Fruit", "Furn", "Obj", "Obj-clo", "Obj-el", "Obj-ling", "Obj-rope", "Obj-surfc", "Plant", "Plantpart", "Prod", "Prod-audio", "Prod-cogn", "Prod-ling", "Prod-vis", "Txt", "Wpn", "Substnc", "Mat", "Part"],
-        "Abstr": ["Body-abstr", "Cat", "Ctain-abstr", "Ctain-clth", "Geom", "Group", "Obj-cogn", "Semcon", "Lang", "Feat-phys", "Feat-psych", "Feat-measr", "Perc-cogn", "Perc-emo", "Perc-phys", "Perc-psych", "Feat ", "Ideol", "Rule", "Pos", "Rel", "State", "Phonenr", "Sign", "Symbol", "State-sick", "ID", "Wthr"],
-        "Instr": ["Tool", "Tool-catch", "Tool-clean", "Tool-it", "Tool-measr", "Tool-music", "Tool-write", "Wpn", "Curr", "Domain"],
+        "Obj": [
+            "Aniprod",
+            "Body",
+            "Buildpart",
+            "Clth",
+            "Clth-jewl",
+            "Clthpart",
+            "Drink",
+            "Food",
+            "Food-med",
+            "Fruit",
+            "Furn",
+            "Obj",
+            "Obj-clo",
+            "Obj-el",
+            "Obj-ling",
+            "Obj-rope",
+            "Obj-surfc",
+            "Plant",
+            "Plantpart",
+            "Prod",
+            "Prod-audio",
+            "Prod-cogn",
+            "Prod-ling",
+            "Prod-vis",
+            "Txt",
+            "Wpn",
+            "Substnc",
+            "Mat",
+            "Part",
+        ],
+        "Abstr": [
+            "Body-abstr",
+            "Cat",
+            "Ctain-abstr",
+            "Ctain-clth",
+            "Geom",
+            "Group",
+            "Obj-cogn",
+            "Semcon",
+            "Lang",
+            "Feat-phys",
+            "Feat-psych",
+            "Feat-measr",
+            "Perc-cogn",
+            "Perc-emo",
+            "Perc-phys",
+            "Perc-psych",
+            "Feat ",
+            "Ideol",
+            "Rule",
+            "Pos",
+            "Rel",
+            "State",
+            "Phonenr",
+            "Sign",
+            "Symbol",
+            "State-sick",
+            "ID",
+            "Wthr",
+        ],
+        "Instr": [
+            "Tool",
+            "Tool-catch",
+            "Tool-clean",
+            "Tool-it",
+            "Tool-measr",
+            "Tool-music",
+            "Tool-write",
+            "Wpn",
+            "Curr",
+            "Domain",
+        ],
         "Veh": ["Veh"],
         "Amount": ["Amount", "Measr", "Money"],
         "Act": ["Act", "Dance", "Game", "Sport", "Process"],
-        "Route": ["Route", "Dir"]
+        "Route": ["Route", "Dir"],
     }
 
-    if (re.search(r'Group_', analysis) and not re.search(r'Group_∞', analysis)) or re.search(r'_Group', analysis):
-        dict_sem['Abstr'] = ["Body-abstr", "Cat", "Ctain-abstr", "Ctain-clth", "Geom", "Obj-cogn", "Semcon", "Lang", "Feat-phys", "Feat-psych", "Feat-measr", "Perc-cogn", "Perc-emo", "Perc-phys", "Perc-psych", "Feat ", "Ideol", "Rule", "Pos", "Rel", "State", "Phonenr", "Sign", "Symbol", "State-sick", "ID", "Wthr"]
+    if (
+        re.search(r"Group_", analysis) and not re.search(r"Group_∞", analysis)
+    ) or re.search(r"_Group", analysis):
+        dict_sem["Abstr"] = [
+            "Body-abstr",
+            "Cat",
+            "Ctain-abstr",
+            "Ctain-clth",
+            "Geom",
+            "Obj-cogn",
+            "Semcon",
+            "Lang",
+            "Feat-phys",
+            "Feat-psych",
+            "Feat-measr",
+            "Perc-cogn",
+            "Perc-emo",
+            "Perc-phys",
+            "Perc-psych",
+            "Feat ",
+            "Ideol",
+            "Rule",
+            "Pos",
+            "Rel",
+            "State",
+            "Phonenr",
+            "Sign",
+            "Symbol",
+            "State-sick",
+            "ID",
+            "Wthr",
+        ]
         analysis = re.sub("_Group", "", analysis)
         analysis = re.sub("Group_", "", analysis)
 
     sem_ = re.search("Sem/([a-zA-Z]*_*)+", analysis)
     if sem_:
         repl = sem_.group().replace("_", " Sem/")
-        #sem_parts = sem_.group().split("Sem/")[1].split("_")
-        #for part in sem_parts:
+        # sem_parts = sem_.group().split("Sem/")[1].split("_")
+        # for part in sem_parts:
         #    repl = repl + " Sem/" + part
         analysis = re.sub("Sem/([a-zA-Z]*_*)+", repl, analysis)
 
     for key, value in dict_sem.items():
         for sem in value:
-                my_reg = "Sem/[a-zA-Z]*" + re.escape(sem) + "[a-zA-Z]*\s"
-                analysis = re.sub(my_reg, "Sem/" + key + " ", analysis)
+            my_reg = "Sem/[a-zA-Z]*" + re.escape(sem) + "[a-zA-Z]*\s"
+            analysis = re.sub(my_reg, "Sem/" + key + " ", analysis)
 
     return analysis
 
@@ -511,10 +622,10 @@ def reshape_analysis(analysis):
 
 def extract_original_analysis(used_analysis, language):
     """Filter all Err- and Sem-tags from the string."""
-    if language == 'sme':
+    if language == "sme":
         used_analysis = group_sem(used_analysis)
     else:
-        used_analysis = re.sub("Sem/[^\s]+\s","", used_analysis)
+        used_analysis = re.sub("Sem/[^\s]+\s", "", used_analysis)
 
     for regex in [
         "Use/[^\s]+\s",
@@ -668,10 +779,7 @@ def clean_msd(current_msd, pos):
         ("TV\s", ""),
         ("Relc", "Rel"),
         ("Dyn", ""),
-        (
-            "Known",
-            "",
-        ),
+        ("Known", ""),
         ("/", "_"),
         ("\s", "."),
     ]:
