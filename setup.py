@@ -5,10 +5,14 @@ import corpustools.argparse_version
 setup(
     name="CorpusTools",
     version=corpustools.argparse_version.version,
-    author="Børre Gaup",
-    author_email="borre.gaup@uit.no",
+    author=(
+        "Børre Gaup <borre.gaup@uit.no>, "
+        "Kevin Unhammer, "
+        "Ciprian Gerstenberger, "
+        "Chiara Arges <chiara.argese@iut.no>"
+    ),
     packages=find_packages(),
-    url="http://divvun.no",
+    url="http://github.com/giellalt/CorpusTools",
     license="GPL v3.0",
     long_description=open("README.md").read(),
     entry_points={
