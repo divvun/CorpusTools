@@ -9,7 +9,7 @@ setup(
         "Børre Gaup <borre.gaup@uit.no>, "
         "Kevin Unhammer, "
         "Ciprian Gerstenberger, "
-        "Chiara Arges <chiara.argese@iut.no>"
+        "Chiara Argese <chiara.argese@iut.no>"
     ),
     packages=find_packages(),
     url="http://github.com/giellalt/CorpusTools",
