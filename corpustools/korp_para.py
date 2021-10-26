@@ -11,9 +11,10 @@ from corpustools import argparse_version, corpuspath, modes, util
 LANGS_RE = re.compile("/(\w+)2(\w+)/")
 
 
-def append_files(folder_path):
+def append_files(folder_paths):
     return (
         os.path.join(root, file)
+        for folder_path in folder_paths
         for root, _, files in os.walk(folder_path)
         for file in files
         if file.endswith(".tmx")
@@ -175,12 +176,10 @@ def parse_options():
         description="Prepare tmx files for use in Korp.",
     )
 
-    parser.add_argument("in_dir", help="the directory of the analysed files")
+    parser.add_argument("in_dirs", nargs="+", help="the tmx directories")
 
     return parser.parse_args()
 
 
 def main():
-    args = parse_options()
-    files_list = append_files(args.in_dir)
-    process_in_parallel(files_list)
+    process_in_parallel(append_files(parse_options().in_dirs))
