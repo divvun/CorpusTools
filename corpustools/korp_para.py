@@ -49,7 +49,7 @@ def make_analysis_element(tuv, pipeline, lang):
         "\n".join(
             [
                 make_formatted_line(lang, current_cohort)
-                for current_cohort in filter(None, out.split('\n"<'))
+                for current_cohort in [cohort for cohort in out.split('\n"<') if cohort]
             ]
         )
         + "\n"
