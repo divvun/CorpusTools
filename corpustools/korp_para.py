@@ -6,7 +6,7 @@ from functools import partial
 
 import lxml.etree as ET
 
-from corpustools import modes
+from corpustools import argparse_version, modes
 
 
 def append_files(folder_path):
@@ -47,23 +47,6 @@ def process_in_parallel(files_list, args):
     pool.close()  # no more tasks
     pool.join()  # wrap up current tasks
     return
-
-
-def parse_options():
-    parser = argparse.ArgumentParser(description="Prepare tmx files for use in Korp.")
-
-    parser.add_argument("lang1", help="one of the languages of the files to process")
-    parser.add_argument("lang2", help="the other language of the files to process")
-    parser.add_argument("in_dir", help="the directory of the analysed files")
-    parser.add_argument("genre", help="optional genre", nargs="?", default="")
-
-    return parser.parse_args()
-
-
-def main():
-    args = parse_options()
-    files_list = append_files(args.in_dir)
-    process_in_parallel(files_list, args)
 
 
 def handle_header(header, genre_str):
@@ -199,5 +182,21 @@ def make_wordform(wform):
     return wform
 
 
-if __name__ == "__main__":
-    main()
+def parse_options():
+    parser = argparse.ArgumentParser(
+        parents=[argparse_version.parser],
+        description="Prepare tmx files for use in Korp.",
+    )
+
+    parser.add_argument("lang1", help="one of the languages of the files to process")
+    parser.add_argument("lang2", help="the other language of the files to process")
+    parser.add_argument("in_dir", help="the directory of the analysed files")
+    parser.add_argument("genre", help="optional genre", nargs="?", default="")
+
+    return parser.parse_args()
+
+
+def main():
+    args = parse_options()
+    files_list = append_files(args.in_dir)
+    process_in_parallel(files_list, args)

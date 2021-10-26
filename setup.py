@@ -46,6 +46,7 @@ setup(
             "tmx2html = corpustools.tmx:main",
             "dropbox_adder = corpustools.dropbox_adder.tmx:main",
             "korp_mono = corpustools.korp_mono:main",
+            "korp_para = corpustools.korp_para:main",
         ]
     },
     dependency_links=[
