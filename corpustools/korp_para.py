@@ -70,13 +70,19 @@ def process_file(f):
     write_file(f, tree)
 
 
+def make_pipeline(lang):
+    try:
+        pipeline = modes.Pipeline("hfst", lang)
+        pipeline.sanity_check()
+    except util.ArgumentError:
+        pipeline = modes.Pipeline("hfst_no_korp", lang)
+        pipeline.sanity_check()
+    finally:
+        return pipeline
+
+
 def add_analysis_elements(tree, lang):
-    pipeline = (
-        modes.Pipeline("hfst", lang)
-        if lang in ["sme"]
-        else modes.Pipeline("hfst_no_korp", lang)
-    )
-    pipeline.sanity_check()
+    pipeline = make_pipeline(lang)
 
     for tuv in tree.xpath(
         './/tuv[@xml:lang="' + lang + '"]',
