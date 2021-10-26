@@ -4,7 +4,7 @@ import multiprocessing
 import os
 import re
 
-import lxml.etree as ET
+from lxml import etree
 
 from corpustools import argparse_version, corpuspath, modes, util
 
@@ -35,7 +35,7 @@ def process_in_parallel(files_list):
 def handle_header(header, file_name):
     c = corpuspath.CorpusPath(file_name)
     c.pathcomponents.genre
-    genre = ET.Element("genre")
+    genre = etree.Element("genre")
     genre.text = c.pathcomponents.genre
     header.insert(1, genre)
 
@@ -44,7 +44,7 @@ def make_analysis_element(tuv, pipeline, lang):
     seg = tuv.find("seg")
     out = pipeline.run(seg.text.encode("utf8"))
 
-    analysis = ET.Element("analysis")
+    analysis = etree.Element("analysis")
     analysis.text = (
         "\n".join(
             [
@@ -62,7 +62,7 @@ def process_file(tmx_file):
     print("... processing", str(tmx_file))
     langs = LANGS_RE.search(tmx_file).groups()
 
-    tree = ET.parse(tmx_file)
+    tree = etree.parse(tmx_file)
     f_root = tree.getroot()
     handle_header(f_root.find(".//header"), tmx_file)
     for lang in langs:
@@ -98,7 +98,7 @@ def write_file(tmx_file, tree):
 
     print("DONE. Wrote", korp_tmx_file, "\n\n")
     with open(korp_tmx_file, "wb") as done_stream:
-        done_stream.write(ET.tostring(tree, xml_declaration=True, encoding="utf-8"))
+        done_stream.write(etree.tostring(tree, xml_declaration=True, encoding="utf-8"))
 
 
 def make_formatted_line(lang, current_cohort):
