@@ -58,16 +58,16 @@ def make_analysis_element(tuv, pipeline, lang):
     return analysis
 
 
-def process_file(f):
-    print("... processing", str(f))
-    langs = LANGS_RE.search(f).groups()
+def process_file(tmx_file):
+    print("... processing", str(tmx_file))
+    langs = LANGS_RE.search(tmx_file).groups()
 
-    tree = ET.parse(f)
+    tree = ET.parse(tmx_file)
     f_root = tree.getroot()
-    handle_header(f_root.find(".//header"), f)
+    handle_header(f_root.find(".//header"), tmx_file)
     for lang in langs:
         add_analysis_elements(tree, lang)
-    write_file(f, tree)
+    write_file(tmx_file, tree)
 
 
 def make_pipeline(lang):
@@ -91,8 +91,8 @@ def add_analysis_elements(tree, lang):
         tuv.insert(1, make_analysis_element(tuv, pipeline, lang))
 
 
-def write_file(f, tree):
-    korp_tmx_file = f.replace("/tmx", "/korp_tmx")
+def write_file(tmx_file, tree):
+    korp_tmx_file = tmx_file.replace("/tmx", "/korp_tmx")
     with util.ignored(OSError):
         os.makedirs(os.path.dirname(korp_tmx_file))
 
