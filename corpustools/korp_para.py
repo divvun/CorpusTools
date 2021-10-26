@@ -2,11 +2,14 @@
 import argparse
 import multiprocessing
 import os
+import re
 from functools import partial
 
 import lxml.etree as ET
 
 from corpustools import argparse_version, modes, util
+
+LANGS_RE = re.compile("/(\w+)2(\w+)/")
 
 
 def append_files(folder_path):
@@ -23,10 +26,7 @@ def process_in_parallel(files_list, args):
 
     pool_size = multiprocessing.cpu_count() * 2
     pool = multiprocessing.Pool(processes=pool_size)
-    pool.map(
-        partial(process_file, lang1=args.lang1, lang2=args.lang2, genre_str=args.genre),
-        files_list,
-    )
+    pool.map(partial(process_file, genre_str=args.genre), files_list)
     pool.close()  # no more tasks
     pool.join()  # wrap up current tasks
     return
@@ -57,13 +57,14 @@ def make_analysis_element(tuv, pipeline, lang):
     return analysis
 
 
-def process_file(f, lang1, lang2, genre_str):
+def process_file(f, genre_str):
     print("... processing", str(f))
+    langs = LANGS_RE.search(f).groups()
 
     tree = ET.parse(f)
     f_root = tree.getroot()
     handle_header(f_root.find(".//header"), genre_str)
-    for lang in [lang1, lang2]:
+    for lang in langs:
         add_analysis_elements(tree, lang)
     write_file(f, tree)
 
@@ -174,8 +175,6 @@ def parse_options():
         description="Prepare tmx files for use in Korp.",
     )
 
-    parser.add_argument("lang1", help="one of the languages of the files to process")
-    parser.add_argument("lang2", help="the other language of the files to process")
     parser.add_argument("in_dir", help="the directory of the analysed files")
     parser.add_argument("genre", help="optional genre", nargs="?", default="")
 
