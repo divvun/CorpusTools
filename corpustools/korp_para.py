@@ -6,7 +6,7 @@ from functools import partial
 
 import lxml.etree as ET
 
-from corpustools import argparse_version, modes
+from corpustools import argparse_version, modes, util
 
 
 def append_files(folder_path):
@@ -18,30 +18,13 @@ def append_files(folder_path):
     )
 
 
-def make_done_dir(genre_str):
-    done_dir = "done_" + genre_str
-    cwd = os.getcwd()
-    done_dir_path = os.path.join(cwd, done_dir)
-
-    if not os.path.exists(done_dir_path):
-        os.mkdir(done_dir_path)
-
-    return done_dir_path
-
-
 def process_in_parallel(files_list, args):
     """Process file in parallel."""
 
     pool_size = multiprocessing.cpu_count() * 2
     pool = multiprocessing.Pool(processes=pool_size)
     pool.map(
-        partial(
-            process_file,
-            lang1=args.lang1,
-            lang2=args.lang2,
-            genre_str=args.genre,
-            done_dir_path=make_done_dir(args.genre),
-        ),
+        partial(process_file, lang1=args.lang1, lang2=args.lang2, genre_str=args.genre),
         files_list,
     )
     pool.close()  # no more tasks
@@ -74,7 +57,7 @@ def make_analysis_element(tuv, pipeline, lang):
     return analysis
 
 
-def process_file(f, lang1, lang2, genre_str, done_dir_path):
+def process_file(f, lang1, lang2, genre_str):
     print("... processing", str(f))
 
     tree = ET.parse(f)
@@ -82,7 +65,7 @@ def process_file(f, lang1, lang2, genre_str, done_dir_path):
     handle_header(f_root.find(".//header"), genre_str)
     for lang in [lang1, lang2]:
         add_analysis_elements(tree, lang)
-    write_file(done_dir_path, f, tree)
+    write_file(f, tree)
 
 
 def add_analysis_elements(tree, lang):
@@ -100,10 +83,13 @@ def add_analysis_elements(tree, lang):
         tuv.insert(1, make_analysis_element(tuv, pipeline, lang))
 
 
-def write_file(done_dir_path, f, tree):
-    done_path = os.path.join(done_dir_path, str(f.split("/")[-1]))
-    print("DONE. Wrote", done_path, "\n\n")
-    with open(done_path, "wb") as done_stream:
+def write_file(f, tree):
+    korp_tmx_file = f.replace("/tmx", "/korp_tmx")
+    with util.ignored(OSError):
+        os.makedirs(os.path.dirname(korp_tmx_file))
+
+    print("DONE. Wrote", korp_tmx_file, "\n\n")
+    with open(korp_tmx_file, "wb") as done_stream:
         done_stream.write(ET.tostring(tree, xml_declaration=True, encoding="utf-8"))
 
 
