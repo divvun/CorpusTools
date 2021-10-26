@@ -3,11 +3,10 @@ import argparse
 import multiprocessing
 import os
 import re
-from functools import partial
 
 import lxml.etree as ET
 
-from corpustools import argparse_version, modes, util
+from corpustools import argparse_version, corpuspath, modes, util
 
 LANGS_RE = re.compile("/(\w+)2(\w+)/")
 
@@ -21,22 +20,23 @@ def append_files(folder_path):
     )
 
 
-def process_in_parallel(files_list, args):
+def process_in_parallel(files_list):
     """Process file in parallel."""
 
     pool_size = multiprocessing.cpu_count() * 2
     pool = multiprocessing.Pool(processes=pool_size)
-    pool.map(partial(process_file, genre_str=args.genre), files_list)
+    pool.map(process_file, files_list)
     pool.close()  # no more tasks
     pool.join()  # wrap up current tasks
     return
 
 
-def handle_header(header, genre_str):
+def handle_header(header, file_name):
+    c = corpuspath.CorpusPath(file_name)
+    c.pathcomponents.genre
     genre = ET.Element("genre")
-    if genre_str:
-        genre.text = genre_str
-        header.insert(1, genre)
+    genre.text = c.pathcomponents.genre
+    header.insert(1, genre)
 
 
 def make_analysis_element(tuv, pipeline, lang):
@@ -57,13 +57,13 @@ def make_analysis_element(tuv, pipeline, lang):
     return analysis
 
 
-def process_file(f, genre_str):
+def process_file(f):
     print("... processing", str(f))
     langs = LANGS_RE.search(f).groups()
 
     tree = ET.parse(f)
     f_root = tree.getroot()
-    handle_header(f_root.find(".//header"), genre_str)
+    handle_header(f_root.find(".//header"), f)
     for lang in langs:
         add_analysis_elements(tree, lang)
     write_file(f, tree)
@@ -176,7 +176,6 @@ def parse_options():
     )
 
     parser.add_argument("in_dir", help="the directory of the analysed files")
-    parser.add_argument("genre", help="optional genre", nargs="?", default="")
 
     return parser.parse_args()
 
@@ -184,4 +183,4 @@ def parse_options():
 def main():
     args = parse_options()
     files_list = append_files(args.in_dir)
-    process_in_parallel(files_list, args)
+    process_in_parallel(files_list)

@@ -59,6 +59,7 @@ class CorpusPath:
             "orig",
             "converted",
             "analysed",
+            "stable/tmx",
             "stable",
             "toktmx",
             "tmx",
