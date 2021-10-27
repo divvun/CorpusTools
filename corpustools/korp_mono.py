@@ -236,14 +236,14 @@ WORDFORM_FILTER = [
 ]
 
 
-def vrt_format(elem):
+def pad_elements(elem):
     """Make sure empty text or tail is padded with newline."""
     padding = "\n"
     if len(elem):
         if not elem.text or not elem.text.strip():
             elem.text = padding
         for child in elem:
-            vrt_format(child)
+            pad_elements(child)
     if not elem.tail or not elem.tail.strip():
         elem.tail = padding
 
@@ -548,13 +548,13 @@ def make_vrt_xml(current_file, lang):
 
     f_root = make_root_element(old_root)
     for s_id, sentence in enumerate(
-        split_cohort(old_root.find(".//body/dependency").text, lang)
+        make_sentences(old_root.find(".//body/dependency").text, lang)
     ):
         current_sentence = etree.SubElement(f_root, "sentence")
         current_sentence.set("id", str(s_id + 1))
         current_sentence.text = make_positional_attributes(sentence)
 
-    vrt_format(f_root)
+    pad_elements(f_root)
 
     return f_root
 
@@ -852,7 +852,7 @@ def valid_sentences(analysis):
     )
 
 
-def split_cohort(analysis, current_lang):
+def make_sentences(analysis, current_lang):
     """Make sentences from the current analysis."""
     return [
         [
