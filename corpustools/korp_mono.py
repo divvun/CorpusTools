@@ -593,7 +593,7 @@ def reshape_analysis(analysis):
         _analysis,
     )
     # remove weights
-    _analysis = re.sub(r"<W\:[0-9]*\.*[0-9]*>", "", _analysis)
+    _analysis = re.sub(r"<W\:[0-9]*\.*[0-9]*>\s*", "", _analysis)
 
     # another hack while waiting for the fix: delete all initial line of a file starting with a colon
     if _analysis.startswith(":"):
