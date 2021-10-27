@@ -550,11 +550,11 @@ def make_vrt_xml(current_file, lang):
 
     f_root = make_root_element(old_root)
     for s_id, sentence in enumerate(
-        make_sentences(old_root.find(".//body/dependency").text, lang)
+        make_sentences(valid_sentences(old_root.find(".//body/dependency").text), lang)
     ):
         current_sentence = etree.SubElement(f_root, "sentence")
         current_sentence.set("id", str(s_id + 1))
-        current_sentence.text = make_positional_attributes(sentence)
+        current_sentence.text = sentence
 
     pad_elements(f_root)
 
@@ -861,14 +861,20 @@ def valid_sentences(analysis):
     )
 
 
-def make_sentences(analysis, current_lang):
-    """Make sentences from the current analysis."""
-    return [
+def make_sentence(current_sentence, current_lang):
+
+    return make_positional_attributes(
         [
             make_analysis_tuple(word_form, rest_cohort, current_lang)
             for (word_form, rest_cohort) in non_empty_cohorts(current_sentence)
         ]
-        for current_sentence in valid_sentences(analysis)
+    )
+
+
+def make_sentences(sentences, current_lang):
+    """Make sentences from the current analysis."""
+    return [
+        make_sentence(current_sentence, current_lang) for current_sentence in sentences
     ]
 
 
