@@ -28,7 +28,7 @@ from subprocess import run
 
 import lxml.etree as etree
 
-from corpustools import argparse_version, corpuspath, util
+from corpustools import argparse_version, corpuspath, modes, util
 
 DOMAIN_MAPPING = {
     "admin": "administration",
@@ -967,18 +967,10 @@ def make_string2generate(lemma, tail):
 
 
 def generate_lemma(in_string, c_lang):
-    in_string = in_string.replace("Cmp+#", "Cmp#")
-    langs_dir = f"{os.getenv('GTLANGS')}/lang-{c_lang}"
-    first_line = (
-        run(
-            f"hfst-lookup -q {langs_dir}/src/generator-gt-norm.hfstol".split(),
-            check=True,
-            input=in_string.encode("utf-8"),
-            capture_output=True,
-        )
-        .stdout.decode("utf-8")
-        .split("\n")[0]
-    )
+    pipeline = modes.Pipeline("generate", c_lang)
+    pipeline.sanity_check()
+
+    first_line = pipeline.run(in_string.replace("Cmp+#", "Cmp#").encode("utf-8"))
     generated_lemma = first_line.split("\t")[1]
 
     return (
