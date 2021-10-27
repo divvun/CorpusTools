@@ -625,6 +625,13 @@ def reshape_analysis(analysis):
 
 def extract_original_analysis(used_analysis, language):
     """Filter all Err- and Sem-tags from the string."""
+    # lang-nob produces:
+    # Use/Circ Use/SpellNoSugg"CWD" N Prop Sem/Org ACR Dyn Err/Orth Msc Sg Indef
+    # make a space in front of the first ""
+    for strange_use in ["Circ", "SpellNoSugg"]:
+        used_analysis = used_analysis.replace(
+            f'Use/{strange_use}"', f'Use/{strange_use} "'
+        )
     if language == "sme":
         used_analysis = group_sem(used_analysis)
     else:
