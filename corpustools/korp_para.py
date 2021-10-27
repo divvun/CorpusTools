@@ -6,7 +6,7 @@ import re
 
 from lxml import etree
 
-from corpustools import argparse_version, corpuspath, modes, util
+from corpustools import argparse_version, corpuspath, korp_mono, modes, util
 
 LANGS_RE = re.compile("/(\w+)2(\w+)/")
 
@@ -40,22 +40,16 @@ def handle_header(header, file_name):
     header.insert(1, genre)
 
 
-def make_analysis_element(tuv, pipeline, lang):
-    seg = tuv.find("seg")
-    out = pipeline.run(seg.text.encode("utf8"))
+def make_analysis_element(seg, pipeline, lang):
+    analysis = pipeline.run(seg.text.encode("utf8"))
 
-    analysis = etree.Element("analysis")
-    analysis.text = (
-        "\n".join(
-            [
-                make_formatted_line(lang, current_cohort)
-                for current_cohort in [cohort for cohort in out.split('\n"<') if cohort]
-            ]
-        )
+    analysis_element = etree.Element("analysis")
+    analysis_element.text = (
+        "\n".join(korp_mono.make_sentences(korp_mono.valid_sentences(analysis), lang))
         + "\n"
     )
 
-    return analysis
+    return analysis_element
 
 
 def process_file(tmx_file):
@@ -88,7 +82,7 @@ def add_analysis_elements(tree, lang):
         './/tuv[@xml:lang="' + lang + '"]',
         namespaces={"xml": "http://www.w3.org/XML/1998/namespace"},
     ):
-        tuv.insert(1, make_analysis_element(tuv, pipeline, lang))
+        tuv.insert(1, make_analysis_element(tuv.find("seg"), pipeline, lang))
 
 
 def write_file(tmx_file, tree):
@@ -99,81 +93,6 @@ def write_file(tmx_file, tree):
     print("DONE. Wrote", korp_tmx_file, "\n\n")
     with open(korp_tmx_file, "wb") as done_stream:
         done_stream.write(etree.tostring(tree, xml_declaration=True, encoding="utf-8"))
-
-
-def make_formatted_line(lang, current_cohort):
-    wform, lemma, analysis, pos = make_line_parts(lang, current_cohort)
-    return wform + "\t" + lemma + "\t" + pos + "\t" + analysis
-
-
-def make_line_parts(lang, current_cohort):
-    (wform, *cc_list) = current_cohort.split("\n\t")
-
-    wform = make_wordform(wform)
-    l_a = sorted(cc_list)[0]
-    lemma = make_lemma(l_a)
-    analysis = make_analysis(lang, l_a)
-    pos = analysis.partition(".")[0]
-
-    return wform, lemma, analysis, pos
-
-
-def make_analysis(lang, l_a):
-    analysis = l_a.partition('" ')[2].partition("@")[0]
-
-    if "?" in analysis:
-        return "___"
-
-    for (unwanted, replacement) in [
-        ("Err/Orth", ""),
-        (" <" + lang + ">", ""),
-        (" <vdic>", ""),
-        (" Sem/Date", ""),
-        (" Sem/Org", ""),
-        (" Sem/Sur", ""),
-        (" Sem/Fem", ""),
-        (" Sem/Mal", ""),
-        (" Sem/Plc", ""),
-        (" Sem/Obj", ""),
-        (" Sem/Adr", ""),
-        ("Sem/Adr ", ""),
-        (" Sem/Year", ""),
-        (" IV", ""),
-        (" TV", ""),
-        ("v1 ", ""),
-        ("v2 ", ""),
-        ("Hom1 ", ""),
-        ("Hom2 ", ""),
-    ]:
-        analysis = analysis.replace(unwanted, replacement)
-    if analysis.startswith("Arab Num"):
-        analysis = analysis.replace("Arab Num", "Num Arab")
-    analysis = analysis.strip()
-    analysis = analysis.replace("  ", " ")
-    analysis = analysis.replace(" ", ".")
-
-    return analysis
-
-
-def make_lemma(l_a):
-    lemma = l_a.partition('" ')[0].strip()
-    lemma = lemma.replace("#", "")
-    lemma = lemma.replace(" ", "_")
-    if lemma.startswith('"'):
-        lemma = lemma[1:]
-
-    return lemma
-
-
-def make_wordform(wform):
-    wform = wform.strip()
-    if wform.startswith('"<'):
-        wform = wform[2:]
-    if wform.endswith('>"'):
-        wform = wform[:-2]
-    wform = wform.replace(" ", "_")
-
-    return wform
 
 
 def parse_options():
