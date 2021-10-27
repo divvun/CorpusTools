@@ -952,6 +952,7 @@ def make_string2generate(lemma, tail):
 
 
 def generate_lemma(in_string, c_lang):
+    in_string = in_string.replace("Cmp+#", "Cmp#")
     langs_dir = f"{os.getenv('GTLANGS')}/lang-{c_lang}"
     first_line = (
         run(
