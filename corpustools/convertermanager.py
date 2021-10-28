@@ -22,6 +22,8 @@ import logging
 import multiprocessing
 import os
 
+from pydocx.exceptions import MalformedDocxException
+
 from corpustools import argparse_version, converter, text_cat, util, xslsetter
 
 LOGGER = logging.getLogger(__name__)
@@ -79,7 +81,12 @@ class ConverterManager:
         try:
             conv = converter.Converter(orig_file, lazy_conversion=self.lazy_conversion)
             conv.write_complete(self.languageguesser())
-        except (util.ConversionError, ValueError, IndexError) as error:
+        except (
+            util.ConversionError,
+            ValueError,
+            IndexError,
+            MalformedDocxException,
+        ) as error:
             LOGGER.warn("Could not convert %s\n%s", orig_file, error)
 
     def convert_in_parallel(self):
@@ -87,9 +94,7 @@ class ConverterManager:
         LOGGER.info("Starting the conversion of %d files", len(self.files))
 
         pool_size = multiprocessing.cpu_count()
-        pool = multiprocessing.Pool(
-            processes=pool_size,
-        )
+        pool = multiprocessing.Pool(processes=pool_size)
         pool.map(unwrap_self_convert, list(zip([self] * len(self.files), self.files)))
         pool.close()
         pool.join()
