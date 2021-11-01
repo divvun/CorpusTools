@@ -269,6 +269,12 @@ def process_in_parallel(lang, files_list):
     return
 
 
+def process_serially(lang, files_list):
+    for file_ in files_list:
+        print(f"Converting: {file_}")
+        process_file(file_, lang)
+
+
 def group_sem(analysis):
     dict_sem = {
         "Hum": ["Hum", "Hum-abstr", "Hum-prof", "Mal", "Fem", "Sur"],
@@ -986,6 +992,11 @@ def parse_options():
         description="Turn analysed files into vrt format xml files for Korp use.",
     )
 
+    parser.add_argument(
+        "--serial",
+        action="store_true",
+        help="When this argument is used files will be converted one by one.",
+    )
     parser.add_argument("lang", help="language of the files to process")
     parser.add_argument(
         "analysed_dirs", nargs="+", help="directories where analysed files live"
@@ -1000,4 +1011,7 @@ def main():
     files_list = []
 
     append_files(files_list, args.analysed_dirs)
-    process_in_parallel(args.lang, files_list)
+    if args.serial:
+        process_serially(args.lang, files_list)
+    else:
+        process_in_parallel(args.lang, files_list)

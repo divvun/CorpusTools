@@ -32,6 +32,12 @@ def process_in_parallel(files_list):
     return
 
 
+def process_serially(files_list):
+    for file_ in files_list:
+        print(f"Converting: {file_}")
+        process_file(file_)
+
+
 def handle_header(header, file_name):
     c = corpuspath.CorpusPath(file_name)
     c.pathcomponents.genre
@@ -101,10 +107,19 @@ def parse_options():
         description="Prepare tmx files for use in Korp.",
     )
 
+    parser.add_argument(
+        "--serial",
+        action="store_true",
+        help="When this argument is used files will be converted one by one.",
+    )
     parser.add_argument("in_dirs", nargs="+", help="the tmx directories")
 
     return parser.parse_args()
 
 
 def main():
-    process_in_parallel(append_files(parse_options().in_dirs))
+    args = parse_options()
+    if args.serial:
+        process_serially(append_files(args.in_dirs))
+    else:
+        process_in_parallel(append_files(args.in_dirs))
