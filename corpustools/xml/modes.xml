@@ -169,36 +169,36 @@
         <file name="analyser-gt-errorwhitespace.hfst" />
       </program>
       <program name="divvun-cgspell" debug-suff="cgspell">
-        <arg name="-n" />
+        <arg name="--limit" />
         <arg name="10" />
-        <arg name="-b" />
+        <arg name="--beam" />
         <arg name="15" />
-        <arg name="-w" />
+        <arg name="--max-weight" />
         <arg name="5000" />
-        <arg name="-u" />
+        <arg name="--max-unknown-rate" />
         <arg name="0.4" />
-        <arg name="-l" />
+        <arg name="--lexicon" />
         <file name="acceptor.default.hfst" />
-        <arg name="-m" />
+        <arg name="--errmodel" />
         <file name="errmodel.default.hfst" />
       </program>
       <program name="vislcg3" debug-suff="disam">
-        <arg name="-t" />
+        <arg name="--trace" />
         <arg name="--grammar" />
         <file name="grc-disambiguator.cg3" />
       </program>
       <program name="vislcg3" debug-suff="val">
-        <arg name="-t" />
+        <arg name="--trace" />
         <arg name="--grammar" />
         <file name="spellchecker.cg3" />
       </program>
       <program name="vislcg3" debug-suff="val">
-        <arg name="-t" />
+        <arg name="--trace" />
         <arg name="--grammar" />
         <file name="after-speller-disambiguator.cg3" />
       </program>
       <program name="vislcg3" debug-suff="gc">
-        <arg name="-t" />
+        <arg name="--trace" />
         <arg name="--grammar" />
         <file name="grammarchecker.cg3" />
       </program>
@@ -212,7 +212,7 @@
         <file name="tokeniser-gramcheck-gt-desc.pmhfst" />
       </program>
       <program name="vislcg3" debug-suff="mwe-dis">
-        <arg name="-t" />
+        <arg name="--trace" />
         <arg name="--grammar" />
         <file name="mwe-dis.bin" />
       </program>
@@ -222,12 +222,12 @@
         <file name="valency.bin" />
       </program>
       <program name="vislcg3" debug-suff="disam">
-        <arg name="-t" />
+        <arg name="--trace" />
         <arg name="--grammar" />
         <file name="disambiguator.bin" />
       </program>
       <program name="vislcg3" debug-suff="gc">
-        <arg name="-t" />
+        <arg name="--trace" />
         <arg name="--grammar" />
         <file name="grammarchecker.bin" />
       </program>
