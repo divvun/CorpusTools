@@ -119,7 +119,9 @@ class MetadataHandler:
         if variable is not None:
             value = variable.attrib["select"]
             if value is not None:
-                return value.replace("'", "")
+                clean_value = value.replace("'", "")
+                if clean_value:
+                    return clean_value
         return None
 
     def get_set_variables(self):
