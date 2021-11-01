@@ -16,7 +16,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-"""Classes and functions to do handle apertium modes.xml files."""
+"""Classes and functions to handle apertium modes.xml files."""
 
 
 import os
@@ -25,6 +25,15 @@ import sys
 from lxml import etree
 
 from corpustools import util
+
+
+def list_modes():
+    modefile = etree.parse(os.path.join(os.path.dirname(__file__), "xml/modes.xml"))
+    return [
+        mode.get("name")
+        for mode in modefile.iter("mode")
+        if any(program.get("name") == "vislcg3" for program in mode.xpath(".//program"))
+    ]
 
 
 class Pipeline:
