@@ -23,191 +23,172 @@ import argparse
 import multiprocessing
 import os
 import sys
+from functools import partial
 
 import lxml.etree as etree
+from corpustools import argparse_version, ccat, corpuspath, modes, util
 
-from corpustools import argparse_version, ccat, corpusxmlfile, modes, util
+
+def get_modename(path):
+    """Get the modename depending on the CorpusPath"""
+    if path.pathcomponents.lang == "mhr":
+        year = path.metadata.get_variable("year")
+        if year:
+            if 1909 < int(year) < 1939:
+                return "hfst_thirties"
+    if path.pathcomponents.lang == "mrj":
+        year = path.metadata.get_variable("year")
+        if year:
+            if 1909 < int(year) < 1939:
+                return "hfst_thirties"
+            if 1939 < int(year) < 1995:
+                return "hfst_eighties"
+
+    if path.pathcomponents.lang in ["nob", "fin"]:
+        return "hfst_no_korp"
+
+    return "hfst"
 
 
-class Analyser:
-    """This class makes a dependency analysis of giella xml files.
+def ccatter(path):
+    """Turn an xml formatted file into clean text."""
+    xml_printer = ccat.XMLPrinter(lang=path.pathcomponents.lang, all_paragraphs=True)
+    xml_printer.parse_file(path.converted)
+    text = xml_printer.process_file().getvalue()
+    if text:
+        return text.encode("utf8")
 
-    Attributes:
-        lang (str): the language of the input.
-        modename (str): the pipeline that should be used to analyse the
-            files. The pipeline definitions are found in the file
-            xml/modes.xml.
-        giella_prefix: Set this variable if the installed giella files
-            are not found in the standard places.
-    """
+    raise UserWarning(f"Empty file {path.converted}")
 
-    def __init__(self, lang, modename, giella_prefix=None):
-        """Set the files needed by preprocess, lookup and vislcg3.
 
-        Args:
-            lang (str): language the analyser can analyse
-            pipeline_name (str): the name of the pipeline which will be used to
-                analyse files
-        """
-        self.lang = lang
-        self.xml_printer = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
-        self.modename = modename
-        self.giella_prefix = giella_prefix
+def do_dependency_analysis(text, modename, lang):
+    """Insert disambiguation and dependency analysis into the body."""
+    pipeline = modes.Pipeline(modename, lang)
+    pipeline.sanity_check()
 
-    def collect_files(self, converted_dirs):
-        """Collect converted files."""
-        self.xml_files = []
-        for cdir in converted_dirs:
-            if os.path.isfile(cdir):
-                self.append_file(cdir)
-            else:
-                for root, _, files in os.walk(cdir):
-                    for xml_file in files:
-                        if self.lang in root and xml_file.endswith(".xml"):
-                            self.append_file(os.path.join(root, xml_file))
+    return pipeline.run(text)
 
-    def append_file(self, xml_file):
-        """Append xml_file to the xml_files list."""
-        self.xml_files.append(xml_file)
 
-    def ccat(self):
-        """Turn an xml formatted file into clean text."""
-        self.xml_printer.parse_file(self.xml_file.corpus_path.converted)
-        text = self.xml_printer.process_file().getvalue()
-        if text:
-            return text
+def collect_files(converted_dirs, suffix):
+    """Collect converted files."""
+    for cdir in converted_dirs:
+        if os.path.isfile(cdir) and cdir.endswith(suffix):
+            yield cdir
         else:
-            raise UserWarning(f"Empty file {self.xml_file.corpus_path.converted}")
+            for root, _, files in os.walk(cdir):
+                for xml_file in files:
+                    if xml_file.endswith(suffix):
+                        yield os.path.join(root, xml_file)
 
-    def dependency_analysis(self):
-        """Insert disambiguation and dependency analysis into the body."""
-        pipeline = modes.Pipeline(self.modename, self.lang, self.giella_prefix)
-        pipeline.sanity_check()
 
-        body = etree.Element("body")
+def dependency_analysis(path, modename):
+    """Insert disambiguation and dependency analysis into the body."""
+    xml_file = etree.parse(path.converted)
+    oldbody = xml_file.find(".//body")
+    parent = oldbody.getparent()
+    parent.remove(oldbody)
 
-        dependency = etree.Element("dependency")
-        dependency.text = etree.CDATA(pipeline.run(self.ccat().encode("utf8")))
-        body.append(dependency)
-
-        self.xml_file.set_body(body)
-
-    def analyse(self, xml_file):
-        """Analyse a file if it is not ocr'ed."""
-        try:
-            self.xml_file = corpusxmlfile.CorpusXMLFile(xml_file)
-            analysis_xml_name = self.xml_file.corpus_path.analysed
-
-            if self.xml_file.ocr is None:
-                self.dependency_analysis()
-                with util.ignored(OSError):
-                    os.makedirs(os.path.dirname(analysis_xml_name))
-                self.xml_file.write(analysis_xml_name)
-            else:
-                print(
-                    xml_file, "is an OCR file and will not be analysed", file=sys.stderr
-                )
-        except (etree.XMLSyntaxError, UserWarning) as error:
-            print("Can not parse", xml_file, file=sys.stderr)
-            print("The error was:", str(error), file=sys.stderr)
-
-    def analyse_in_parallel(self):
-        """Analyse file in parallel."""
-        pool_size = multiprocessing.cpu_count() * 2
-        pool = multiprocessing.Pool(
-            processes=pool_size,
+    body = etree.SubElement(parent, "body")
+    dependency = etree.SubElement(body, "dependency")
+    dependency.text = etree.CDATA(
+        do_dependency_analysis(
+            ccatter(path),
+            modename=modename if modename is not None else get_modename(path),
+            lang=path.pathcomponents.lang,
         )
-        pool.map(
-            unwrap_self_analyse, list(zip([self] * len(self.xml_files), self.xml_files))
-        )
-        pool.close()  # no more tasks
-        pool.join()  # wrap up current tasks
-
-    def analyse_serially(self):
-        """Analyse files one by one."""
-        print(f"Starting the analysis of {len(self.xml_files)} files")
-
-        fileno = 0
-        for xml_file in self.xml_files:
-            fileno += 1
-            # print some ugly banner cos i want to see progress on local
-            # batch job
-            print("*" * 79, file=sys.stderr)
-            print(
-                "Analysing {} [{} of {}]".format(
-                    xml_file, fileno, len(self.xml_files), file=sys.stderr
-                )
+    )
+    with util.ignored(OSError):
+        os.makedirs(os.path.dirname(path.analysed))
+    with open(path.analysed, "wb") as analysed_stream:
+        analysed_stream.write(
+            etree.tostring(
+                xml_file, xml_declaration=True, encoding="utf8", pretty_print=True
             )
-            print("*" * 79, file=sys.stderr)
-            self.analyse(xml_file)
+        )
 
 
-def unwrap_self_analyse(arg, **kwarg):
-    """Unpack self from the arguments and call convert again.
+def analyse(xml_file, modename):
+    """Analyse a file if it is not ocr'ed."""
+    try:
+        path = corpuspath.CorpusPath(xml_file)
 
-    This is due to how multiprocess works:
-    http://www.rueckstiess.net/research/snippets/show/ca1d7d90
-    """
-    return Analyser.analyse(*arg, **kwarg)
+        if not path.metadata.get_variable("ocr"):
+            dependency_analysis(path, modename)
+        else:
+            print(xml_file, "is an OCR file and will not be analysed", file=sys.stderr)
+    except (etree.XMLSyntaxError, UserWarning) as error:
+        print("Can not parse", xml_file, file=sys.stderr)
+        print("The error was:", str(error), file=sys.stderr)
+
+
+def analyse_in_parallel(file_list, modename):
+    """Analyse file in parallel."""
+    pool_size = multiprocessing.cpu_count() * 2
+    pool = multiprocessing.Pool(processes=pool_size)
+    pool.map(partial(analyse, modename=modename), file_list)
+    pool.close()  # no more tasks
+    pool.join()  # wrap up current tasks
+
+
+def analyse_serially(file_list, modename):
+    """Analyse files one by one."""
+    xml_files = list(file_list)
+    print(f"Starting the analysis of {len(xml_files)} files")
+
+    fileno = 0
+    for xml_file in xml_files:
+        fileno += 1
+        # print some ugly banner cos i want to see progress on local
+        # batch job
+        print("*" * 79, file=sys.stderr)
+        print(
+            "Analysing {} [{} of {}]".format(
+                xml_file, fileno, len(xml_files), file=sys.stderr
+            )
+        )
+        print("*" * 79, file=sys.stderr)
+        analyse(xml_file, modename)
 
 
 def parse_options():
     """Parse the given options."""
     parser = argparse.ArgumentParser(
-        parents=[argparse_version.parser],
-        description="Analyse files found in the given directories for the given language using multiple parallel processes.",
+        parents=[argparse_version.parser], description="Analyse files in parallel."
     )
 
-    parser.add_argument("lang", help="lang which should be analysed")
     parser.add_argument(
         "--serial",
         action="store_true",
         help="When this argument is used files will be analysed one by one.",
     )
     parser.add_argument(
+        "-k",
+        "--modename",
+        choices=modes.list_modes(),
+        help="You can set the analyser pipeline explicitely if you want.",
+    )
+    parser.add_argument(
         "converted_dirs",
         nargs="+",
         help="director(y|ies) where the converted files exist",
     )
-    parser.add_argument(
-        "-k",
-        "--fstkit",
-        choices=[
-            "hfst",
-            "xfst",
-            "trace-smegram",
-            "trace-smegram-dev",
-            "hfst_thirties",
-            "hfst_eighties",
-            "hfst_no_korp",
-        ],
-        default="xfst",
-        help="Finite State Toolkit. " "Either hfst or xfst (the default).",
-    )
 
-    args = parser.parse_args()
-    return args
+    return parser.parse_args()
 
 
 def main():
     """Analyse files in the given directories."""
     args = parse_options()
 
-    ana = Analyser(args.lang, args.fstkit)
-
-    ana.collect_files(args.converted_dirs)
-
-    if ana.xml_files:
-        try:
-            if args.serial:
-                ana.analyse_serially()
-            else:
-                ana.analyse_in_parallel()
-        except util.ArgumentError as error:
-            print(
-                f"Cannot do analysis for {args.lang}\n{str(error)}",
-                file=sys.stderr,
+    try:
+        if args.serial:
+            analyse_serially(
+                collect_files(args.converted_dirs, suffix=".xml"), args.modename
             )
-            sys.exit(1)
-    else:
-        print("Did not find any files in", args.converted_dirs, file=sys.stderr)
+        else:
+            analyse_in_parallel(
+                collect_files(args.converted_dirs, suffix=".xml"), args.modename
+            )
+    except util.ArgumentError as error:
+        print(f"Cannot do analysis\n{str(error)}", file=sys.stderr)
+        raise SystemExit(1)
