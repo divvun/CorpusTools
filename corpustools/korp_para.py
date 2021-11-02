@@ -4,9 +4,8 @@ import multiprocessing
 import os
 import re
 
+from corpustools import analyser, argparse_version, corpuspath, korp_mono, util
 from lxml import etree
-
-from corpustools import argparse_version, corpuspath, korp_mono, modes, util
 
 LANGS_RE = re.compile("/(\w+)2(\w+)/")
 
@@ -38,17 +37,13 @@ def process_serially(files_list):
         process_file(file_)
 
 
-def handle_header(header, file_name):
-    c = corpuspath.CorpusPath(file_name)
-    c.pathcomponents.genre
+def handle_header(header, genre_name):
     genre = etree.Element("genre")
-    genre.text = c.pathcomponents.genre
+    genre.text = genre_name
     header.insert(1, genre)
 
 
-def make_analysis_element(seg, pipeline, lang):
-    analysis = pipeline.run(seg.text.encode("utf8"))
-
+def make_analysis_element(analysis, lang):
     analysis_element = etree.Element("analysis")
     analysis_element.text = (
         "\n".join(korp_mono.make_sentences(korp_mono.valid_sentences(analysis), lang))
@@ -62,33 +57,52 @@ def process_file(tmx_file):
     print("... processing", str(tmx_file))
     langs = LANGS_RE.search(tmx_file).groups()
 
+    path1 = corpuspath.CorpusPath(tmx_file)
+    path2 = corpuspath.CorpusPath(path1.parallel(langs[1]))
+
     tree = etree.parse(tmx_file)
     f_root = tree.getroot()
-    handle_header(f_root.find(".//header"), tmx_file)
-    for lang in langs:
-        add_analysis_elements(tree, lang)
+    handle_header(f_root.find(".//header"), path1.pathcomponents.genre)
+    for path in [path1, path2]:
+        add_analysis_elements(tree, path)
     write_file(tmx_file, tree)
 
 
-def make_pipeline(lang):
-    try:
-        pipeline = modes.Pipeline("hfst", lang)
-        pipeline.sanity_check()
-    except util.ArgumentError:
-        pipeline = modes.Pipeline("hfst_no_korp", lang)
-        pipeline.sanity_check()
-    finally:
-        return pipeline
+def make_analyses(lang, modename, text):
+    analysis = []
+    for line in analyser.do_dependency_analysis(
+        text.encode("utf8"), modename, lang
+    ).split("\n"):
+        if "¶" in line:
+            if analysis:
+                yield "\n".join(analysis)
+                analysis = []
+        else:
+            analysis.append(line)
+
+    if analysis:
+        yield "\n".join(analysis)
 
 
-def add_analysis_elements(tree, lang):
-    pipeline = make_pipeline(lang)
-
-    for tuv in tree.xpath(
+def add_analysis_elements(tree, path):
+    modename = analyser.get_modename(path)
+    lang = path.pathcomponents.lang
+    tuv_elements = tree.xpath(
         './/tuv[@xml:lang="' + lang + '"]',
         namespaces={"xml": "http://www.w3.org/XML/1998/namespace"},
-    ):
-        tuv.insert(1, make_analysis_element(tuv.find("seg"), pipeline, lang))
+    )
+
+    analyses = make_analyses(
+        lang, modename, text="¶ ".join([tuv.find("seg").text for tuv in tuv_elements])
+    )
+
+    for (tuv, analysis) in zip(tuv_elements, analyses):
+        try:
+            tuv.append(make_analysis_element(analysis, lang))
+        except IndexError:
+            util.print_frame(lang)
+            util.print_frame(tuv.find("seg").text)
+            util.print_frame(analysis)
 
 
 def write_file(tmx_file, tree):
