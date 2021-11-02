@@ -10,16 +10,6 @@ from lxml import etree
 LANGS_RE = re.compile("/(\w+)2(\w+)/")
 
 
-def append_files(folder_paths):
-    return (
-        os.path.join(root, file)
-        for folder_path in folder_paths
-        for root, _, files in os.walk(folder_path)
-        for file in files
-        if file.endswith(".tmx")
-    )
-
-
 def process_in_parallel(files_list):
     """Process file in parallel."""
 
@@ -126,7 +116,9 @@ def parse_options():
         action="store_true",
         help="When this argument is used files will be converted one by one.",
     )
-    parser.add_argument("in_dirs", nargs="+", help="the tmx directories")
+    parser.add_argument(
+        "tmx_entities", nargs="+", help="tmx files or directories where tmx files live"
+    )
 
     return parser.parse_args()
 
@@ -134,6 +126,6 @@ def parse_options():
 def main():
     args = parse_options()
     if args.serial:
-        process_serially(append_files(args.in_dirs))
+        process_serially(util.collect_files(args.tmx_entities, suffix=".tmx"))
     else:
-        process_in_parallel(append_files(args.in_dirs))
+        process_in_parallel(util.collect_files(args.tmx_entities, suffix=".tmx"))

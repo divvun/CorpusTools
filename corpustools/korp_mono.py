@@ -250,14 +250,6 @@ def pad_elements(elem):
         elem.tail = padding
 
 
-def append_files(files_list, analysed_dirs):
-    for analysed_dir in analysed_dirs:
-        for root, dirs, files in os.walk(analysed_dir):
-            for file in files:
-                if file.endswith(".xml"):
-                    files_list.append(os.path.join(root, file))
-
-
 def process_in_parallel(lang, files_list):
     """Process file in parallel."""
 
@@ -1000,7 +992,9 @@ def parse_options():
     )
     parser.add_argument("lang", help="language of the files to process")
     parser.add_argument(
-        "analysed_dirs", nargs="+", help="directories where analysed files live"
+        "analysed_entities",
+        nargs="+",
+        help="analysed files or directories where analysed files live",
     )
 
     return parser.parse_args()
@@ -1009,10 +1003,11 @@ def parse_options():
 def main():
     args = parse_options()
 
-    files_list = []
-
-    append_files(files_list, args.analysed_dirs)
     if args.serial:
-        process_serially(args.lang, files_list)
+        process_serially(
+            args.lang, util.collect_files(args.analysed_entities, suffix=".xml")
+        )
     else:
-        process_in_parallel(args.lang, files_list)
+        process_in_parallel(
+            args.lang, util.collect_files(args.analysed_entities, suffix=".xml")
+        )

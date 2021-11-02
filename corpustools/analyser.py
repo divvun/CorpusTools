@@ -69,18 +69,6 @@ def do_dependency_analysis(text, modename, lang):
     return pipeline.run(text)
 
 
-def collect_files(converted_dirs, suffix):
-    """Collect converted files."""
-    for cdir in converted_dirs:
-        if os.path.isfile(cdir) and cdir.endswith(suffix):
-            yield cdir
-        else:
-            for root, _, files in os.walk(cdir):
-                for xml_file in files:
-                    if xml_file.endswith(suffix):
-                        yield os.path.join(root, xml_file)
-
-
 def dependency_analysis(path, modename):
     """Insert disambiguation and dependency analysis into the body."""
     xml_file = etree.parse(path.converted)
@@ -168,9 +156,9 @@ def parse_options():
         help="You can set the analyser pipeline explicitely if you want.",
     )
     parser.add_argument(
-        "converted_dirs",
+        "converted_entities",
         nargs="+",
-        help="director(y|ies) where the converted files exist",
+        help="converted files or director(y|ies) where the converted files exist",
     )
 
     return parser.parse_args()
@@ -183,11 +171,13 @@ def main():
     try:
         if args.serial:
             analyse_serially(
-                collect_files(args.converted_dirs, suffix=".xml"), args.modename
+                util.collect_files(args.converted_entities, suffix=".xml"),
+                args.modename,
             )
         else:
             analyse_in_parallel(
-                collect_files(args.converted_dirs, suffix=".xml"), args.modename
+                util.collect_files(args.converted_entities, suffix=".xml"),
+                args.modename,
             )
     except util.ArgumentError as error:
         print(f"Cannot do analysis\n{str(error)}", file=sys.stderr)

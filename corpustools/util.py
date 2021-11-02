@@ -362,3 +362,15 @@ class ExternalCommandRunner:
 
         (self.stdout, self.stderr) = subp.communicate(to_stdin)
         self.returncode = subp.returncode
+
+
+def collect_files(entities, suffix):
+    """Collect files with the specified suffix."""
+    for entity in entities:
+        if os.path.isfile(entity) and entity.endswith(suffix):
+            yield entity
+        else:
+            for root, _, files in os.walk(entity):
+                for file_ in files:
+                    if file_.endswith(suffix):
+                        yield os.path.join(root, file_)
