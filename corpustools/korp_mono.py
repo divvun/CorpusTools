@@ -653,6 +653,16 @@ def extract_original_analysis(used_analysis, language):
 
 def extract_used_analysis(used_analysis):
     ### print('_|'+ word_form + '|_|' + str(used_analysis) + '|_')
+
+    if "<aux>" in used_analysis:
+        used_analysis = used_analysis.replace("<aux> ", "")
+        dep_func = used_analysis.split("@")[1].split("#")[0].rstrip()
+        used_analysis = used_analysis.replace(dep_func, "NAUX")
+    if "<mv>" in used_analysis:
+        used_analysis = used_analysis.replace("<mv> ", "")
+    if "<ehead>" in used_analysis:
+        used_analysis = used_analysis.replace("<ehead> ", "")
+
     ex_index = used_analysis.find("Ex/")
     tm_index = used_analysis.find("_™_")
     if "Ex/" in used_analysis and not "_™_" in used_analysis:
@@ -823,7 +833,7 @@ def make_analysis_tuple(word_form, rest_cohort, language):
 
     # put a clear delimiter between the (first) pos value and the rest of msd
     # in order to disambiguate from the rest of whitespaces
-    parts = re.compile("(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?)").split(
+    parts = re.compile("(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?\|_∞_\<aux>\s?)").split(
         extract_used_analysis(original_analysis), maxsplit=1
     )
 
