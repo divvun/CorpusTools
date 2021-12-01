@@ -545,7 +545,8 @@ def make_vrt_xml(current_file, lang):
     Converting the analysis output into a suitable xml format for vrt
     transformation (vrt is the cwb input format)
     """
-    xml_tree = etree.parse(current_file, etree.XMLParser(encoding="utf-8"))
+    p = etree.XMLParser(encoding="utf-8", huge_tree=True)
+    xml_tree = etree.parse(current_file, parser=p)
     old_root = xml_tree.getroot()
 
     f_root = make_root_element(old_root)
