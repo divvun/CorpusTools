@@ -117,6 +117,7 @@ DEPREL_MAPPING = {
     "SUBJ>": "SUBJ→",
     "VOC": "VOC",
     "SPRED": "SPRED",
+    "-F<SPRED": "-F←SPRED",
     "SUBJ": "SUBJ",
     "HAB": "HAB",
     "<P": "←P",
@@ -125,6 +126,7 @@ DEPREL_MAPPING = {
     "NES": "NES",
     "LOC": "LOC",
     "X": "X",
+    "NAUX": "NAUX",
 }
 WORDFORM_FILTER = [
     '"< suohkanbargi>"',
