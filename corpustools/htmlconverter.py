@@ -20,7 +20,7 @@
 import codecs
 import re
 
-from lxml import html
+from lxml import html, etree
 
 
 class HTMLError(Exception):
@@ -62,7 +62,10 @@ def to_html_elt(filename):
     for encoding in ["utf-8", "windows-1252", "latin1"]:
         try:
             with codecs.open(filename, encoding=encoding) as file_:
-                return html.document_fromstring(remove_declared_encoding(file_.read()))
+                parser = etree.HTMLParser(remove_comments=True)
+                return html.document_fromstring(
+                    remove_declared_encoding(file_.read()), parser=parser
+                )
         except UnicodeDecodeError:
             pass
 
