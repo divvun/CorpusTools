@@ -163,9 +163,7 @@ def process_book(book_element):
     for chapter_element in book_element:
         if chapter_element.tag != "chapter":
             raise UserWarning(
-                "{}: Unexpected element in book: {}".format(
-                    self.orig, chapter_element.tag
-                )
+                "{}: Unexpected element in book: {}".format(chapter_element.tag)
             )
 
         section.append(process_chapter(chapter_element))
