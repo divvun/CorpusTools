@@ -192,12 +192,12 @@ class Parallelize:
     @property
     def origfile1(self):
         """Name of the original file 1."""
-        return self.origfiles[0].name
+        return self.origfiles[0].orig
 
     @property
     def origfile2(self):
         """Name of the original file 2."""
-        return self.origfiles[1].name
+        return self.origfiles[1].orig
 
     def is_translated_from_lang2(self):
         """Find out if the given doc is translated from lang2."""
@@ -225,10 +225,10 @@ class Parallelize:
             raise UserWarning(
                 "Could not parallelize {} and {} into "
                 "sentences\n{}\n\n{}\n".format(
-                    self.origfiles[0].basename,
-                    self.origfiles[1].basename,
-                    output,
-                    error,
+                    self.origfile1,
+                    self.origfile2,
+                    output.decode("utf8"),
+                    error.decode("utf8"),
                 )
             )
 
