@@ -117,9 +117,7 @@ def save_page(language, bookname, filename, body, address):
     root.append(body)
 
     with open(name, "wb") as page_stream:
-        page_stream.write(
-            etree.tostring(root, encoding="utf8", pretty_print=True) + b"\n"
-        )
+        page_stream.write(etree.tostring(root, encoding="utf8", pretty_print=True))
 
     return path
 
