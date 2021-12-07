@@ -47,6 +47,8 @@ setup(
             "dropbox_adder = corpustools.dropbox_adder.tmx:main",
             "korp_mono = corpustools.korp_mono:main",
             "korp_para = corpustools.korp_para:main",
+            "bibel_no_aligner = corpustools.bibel_no_aligner:main",
+            "bibel_no_crawler = corpustools.bibel_no_crawler:main",
         ]
     },
     dependency_links=[
