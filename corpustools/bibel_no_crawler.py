@@ -74,9 +74,10 @@ def get_verses(chapter_page):
                 verse_number = element.get("name")
             if element.get("class") == "verse":
                 text = " ".join("".join(element.itertext()).split())
-                verse = etree.SubElement(lastparent, "verse")
-                verse.set("number", verse_number)
-                verse.text = text
+                if text:
+                    verse = etree.SubElement(lastparent, "verse")
+                    verse.set("number", verse_number)
+                    verse.text = text
             if element.get("class") == "verseheader" and element.text is not None:
                 lastparent = etree.SubElement(body, "section")
                 lastparent.set("title", element.text.strip())
