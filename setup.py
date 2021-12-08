@@ -49,6 +49,7 @@ setup(
             "korp_para = corpustools.korp_para:main",
             "bibel_no_aligner = corpustools.bibel_no_aligner:main",
             "bibel_no_crawler = corpustools.bibel_no_crawler:main",
+            "ces_to_bibel_no = corpustools.ces2homegrown:main",
         ]
     },
     dependency_links=[
