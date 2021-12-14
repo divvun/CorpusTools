@@ -1,6 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+'''
+This is a tentative script to add sem tags in the wordpicture.
+It creates a new vrt from the input one, checks if lemma has pos N and Sem/xxx in the analysis and adds a new line with lemma the Sem/xxx tag.
+It also replaces all tags in:
+subj = ['SUBJ→', '←SUBJ', '-FSUBJ→']
+obj = ['OBJ→', '←OBJ', '-FOBJ→', '-F←OBJ']
+with SUBJ and OBJ respectively.
+
+The result is a .out file, but by running the wordpicture scripts with this the wordpicture doesn't work properly.
+Might be bacause then the 2 copora (the original vrt by which the Kwic is generated and the new .out by which the wordpicture is generated do not match in terms of tokens).
+'''
+
 import re, sys
 
 infile_n = sys.argv[1]
