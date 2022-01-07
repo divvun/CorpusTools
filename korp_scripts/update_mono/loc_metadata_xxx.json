@@ -1,0 +1,63 @@
+{
+  "metadata": {
+    "text": [
+      {
+        "id": "fit_bible_20210319",
+        "name": "bible texts",
+        "title": "bible",
+        "description": "bible corpus",
+        "lang": "fit",
+        "updated": "2021-03-19",
+      },
+      {
+        "id": "fit_ficti_20210319",
+        "name": "ficti texts",
+        "title": "ficti",
+        "description": "ficti corpus",
+        "lang": "fit",
+        "updated": "2021-03-19",
+      },
+      {
+        "id": "fit_science_20210319",
+        "name": "science texts",
+        "title": "science",
+        "description": "science corpus",
+        "lang": "fit",
+        "updated": "2021-03-19",
+      },
+      {
+        "id": "fit_admin_20210319",
+        "name": "admin texts",
+        "title": "admin",
+        "description": "admin corpus",
+        "lang": "fit",
+        "updated": "2021-03-19",
+      },
+      {
+        "id": "fit_facta_20210319",
+        "name": "facta texts",
+        "title": "facta",
+        "description": "facta corpus",
+        "lang": "fit",
+        "updated": "2021-03-19",
+      },
+
+      {
+        "id": "fit_laws_20210319",
+        "name": "laws texts",
+        "title": "laws",
+        "description": "laws corpus",
+        "lang": "fit",
+        "updated": "2021-03-19",
+      },
+      {
+        "id": "fit_news_20210319",
+        "name": "news texts",
+        "title": "news",
+        "description": "news corpus",
+        "lang": "fit",
+        "updated": "2021-03-19",
+      }
+    ]
+  }
+}
