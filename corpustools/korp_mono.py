@@ -83,6 +83,7 @@ DEPREL_MAPPING = {
     "FAUX": "FAUX",
     "-FAUX": "-FAUX",
     "-FAUXV": "-FAUXV",
+    "+FAUXV": "+FAUXV",
     "FMV": "FMV",
     "FMVdic": "FMVdic",
     "FS-<ADVL": "FS-←ADVL",
