@@ -146,6 +146,7 @@ class XMLPrinter:
             or errorsyn
             or errorlex
             or errorlang
+            or errorformat
         )
 
         if withforeign:
@@ -156,6 +157,7 @@ class XMLPrinter:
             self.errormorphsyn = True
             self.errorsyn = True
             self.errorlex = True
+            self.errorformat = True
             self.errorlang = False
             self.noforeign = False
             self.error_filtering = True
@@ -389,6 +391,7 @@ class XMLPrinter:
             or (element.tag == "errormorphsyn" and self.errormorphsyn)
             or (element.tag == "errorsyn" and self.errorsyn)
             or (element.tag == "errorlex" and self.errorlex)
+            or (element.tag == "errorformat" and self.errorformat)
             or (element.tag == "errorlang" and self.errorlang)
             or (element.tag == "errorlang" and self.noforeign)
         )
@@ -474,10 +477,7 @@ def parse_options():
                         is all langs.",
     )
     parser.add_argument(
-        "-T",
-        dest="title",
-        action="store_true",
-        help="Print paragraphs with title type",
+        "-T", dest="title", action="store_true", help="Print paragraphs with title type"
     )
     parser.add_argument(
         "-L", dest="list", action="store_true", help="Print paragraphs with list type"
