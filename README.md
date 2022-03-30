@@ -1,24 +1,49 @@
 # Corpus Tools
 
-__Synopsis:__ update local installation with:
+Tools to manipulate a giellalt corpus in different ways.
+
+## Install and update from Apertium nightly
+
+These tools are a part of
+[Apertium nightly packages](https://wiki.apertium.org/wiki/Installation/Developers).
+
+For Mac users, running the `install-nightly.sh` suffices, Linux users will have
+to run `<package-manager> install <name of package>`, as well (search for corpustools in
+the package system).
+
+To update the tools on Mac, run `install-nightly.sh`. On Linux, update packages
+using the package manager.
+
+## Install and update using pipx
+
+* [Install pipx](https://pypa.github.io/pipx/installation/)
+* Run `pipx install --force git+https://github.com/giellalt/CorpusTools.git`
+
+## Requirements
+
+* python3
+* wvHtml (only needed for convert2xml)
+* pdftohtml (only needed for convert2xml)
+* latex2html (only needed for convert2xml)
+* Java (only needed for parallelize)
+
+On Mac, do:
 
 ```sh
-python3 setup.py install --user --install-scripts=$HOME/bin --record installed_files.txt
+sudo port install wv latex2html poppler
 ```
 
-Corpus Tools contains tools to manipulate a corpus in different ways. These
-scripts will be installed
+On Debian/Ubuntu, do:
 
-# Howto install and update the tools
+```sh
+sudo apt install wv latex2html poppler-utils
+```
 
-### First time install
+On Arch Linux, do:
 
-* [Install requirements](#requirements).
-* [Install CorpusTools](#to-own-home-directory-recommended)
-
-### Update
-
-* [Howto update CorpusTools](#to-own-home-directory-recommended)
+```sh
+sudo pacman -S wv
+```
 
 ## Use the content of the corpus
 
@@ -54,85 +79,7 @@ scripts will be installed
 * [epubchooser: Program to set metadata of an epub file](#epubchooser)
 * [make_training_corpus: Program to make training corpus from giella xml analysed files](#make_training_corpus)
 
-# Requirements
-
-* python3
-* wvHtml (only needed for convert2xml)
-* pdftohtml (only needed for convert2xml)
-* latex2html (only needed for convert2xml)
-* Java (only needed for parallelize)
-
-On Mac, do:
-
-```sh
-sudo port install wv latex2html poppler
-```
-
-On Debian/Ubuntu, do:
-
-```sh
-sudo apt-get install wv latex2html poppler-utils
-```
-
-On Arch Linux, do:
-
-```sh
-sudo pacman -S wv
-```
-
-## Custom version of pdftohtml (poppler)
-
-The standard version of pdftohtml sometimes produces invalid xml-documents. A
-version that fixes this bug is found at <https://github.com/albbas/poppler> and
-the poppler developers have been notified about the bug.
-
-To install it do the following
-
-```sh
-git clone https://github.com/albbas/poppler
-cd poppler
-git checkout fix_xml_wellformedness_with_a_twist
-./autogen.sh
-make
-sudo make install
-```
-
-# Installation
-
-## To own home directory (recommended)
-
-Install the tools for the current user by writing
-
-```sh
-cd $GTHOME/tools/CorpusTools
-python3 setup.py install --user --install-scripts=$HOME/bin --record installed_files.txt
-```
-
-## System wide (recommended for servers only)
-Install the tools for all users on a machine by
-
-```sh
-cd $GTHOME/tools/CorpusTools
-sudo python3 setup.py install --install-scripts=/usr/local/bin --record installed_files.txt
-```
-
-## Uninstalling
-
-### Remove from own home directory
-
-```sh
-cd $GTHOME/tools/CorpusTools
-cat installed_files.txt | xargs rm -rf
-```
-
-### System wide
-
-```sh
-cd $GTHOME/tools/CorpusTools
-cat installed_files.txt | xargs sudo rm -rf
-```
-
-# ccat
+## ccat
 
 Convert corpus format xml to clean text.
 
@@ -367,7 +314,7 @@ $GTFREE/converted/sme (and sma, smj) and its subdirectories by issuing this
 command:
 
 ```sh
-analyse_corpus -k hfst sme $GTFREE/converted/sme
+analyse_corpus $GTFREE/converted/sme
 ```
 
 The analysed file will be found in {{$GTFREE/analysed/sme}}
@@ -375,31 +322,27 @@ The analysed file will be found in {{$GTFREE/analysed/sme}}
 To analyse only one file, issue this command:
 
 ```sh
-analyse_corpus -k hfst --serial sme $GTFREE/converted/sme/file.html.xml
+analyse_corpus --serial sme $GTFREE/converted/sme/file.html.xml
 ```
 
 The complete help text from the program:
 
 ```sh
-usage: analyse_corpus [-h] [--version] [--serial]
-                      [-k {hfst,xfst,trace-smegram}]
-                      lang converted_dirs [converted_dirs ...]
+analyse_corpus --help
+usage: analyse_corpus [-h] [--version] [--serial] [-k {xfst,hfst,hfst_thirties,hfst_eighties,hfst_no_korp,trace-smegram-dev,trace-smegram}]
+                      converted_entities [converted_entities ...]
 
-Analyse files found in the given directories for the given language using
-multiple parallel processes.
+Analyse files in parallel.
 
 positional arguments:
-  lang                  lang which should be analysed
-  converted_dirs        director(y|ies) where the converted files exist
+  converted_entities    converted files or director(y|ies) where the converted files exist
 
 optional arguments:
   -h, --help            show this help message and exit
   --version             show program's version number and exit
-  --serial              When this argument is used files will be analysed one
-                        by one.
-  -k {hfst,xfst,trace-smegram}, --fstkit {hfst,xfst,trace-smegram}
-                        Finite State Toolkit. Either hfst or xfst (the
-                        default).
+  --serial              When this argument is used files will be analysed one by one.
+  -k {xfst,hfst,hfst_thirties,hfst_eighties,hfst_no_korp,trace-smegram-dev,trace-smegram}, --modename {xfst,hfst,hfst_thirties,hfst_eighties,hfst_no_korp,trace-smegram-dev,trace-smegram}
+                        You can set the analyser pipeline explicitely if you want.
 ```
 
 # add_files_to_corpus
@@ -528,8 +471,7 @@ do
     cd $GTLANGS/lang-$LANG
     ./configure --prefix="$HOME"/.local \
                 --with-hfst \
-                --enable-tokenisers \
-                --enable-reversed-intersect
+                --enable-tokenisers
     make
     make install
 done
