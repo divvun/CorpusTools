@@ -8,17 +8,17 @@ python3 setup.py install --user --install-scripts=$HOME/bin --record installed_f
 Corpus Tools contains tools to manipulate a corpus in different ways. These
 scripts will be installed
 
-## Howto install and update the tools
+# Howto install and update the tools
 
-### First time install
+## First time install
 * [Install requirements](#requirements).
 * [Install CorpusTools](#to-own-home-directory-recommended)
 
-### Update
+## Update
 * [Howto update CorpusTools](#to-own-home-directory-recommended)
 
 
-## Use the content of the corpus
+# Use the content of the corpus
 * [convert2xml: Convert original files to giellatekno xml](#convert2xml)
 * [ccat: Print the contents of a converted corpus file as plain text](#ccat)
 * [analyse_corpus: Do syntactic analysis of converted files](#analyse_corpus)
@@ -26,11 +26,11 @@ scripts will be installed
 * [reparallelize: Reconvert and realign a given .tmx.html file](#reparallelize)
 * [tmx2html: Convert tmx files to html files](#tmx2html)
 
-## Add files to the corpus
+# Add files to the corpus
 * [add_files_to_corpus: Add file(s) to a corpus directory](#add_files_to_corpus)
 * [saami_crawler: Crawl saami sites, add files to corpus](#saami_crawler)
 
-## Manage the corpus repositories
+# Manage the corpus repositories
 * [move_corpus_file: Move or rename a file inside the corpus](#move_corpus_file)
 * [remove_corpus_file: Remove a file from the corpus](#remove_corpus_file)
 * [normalise_corpus_names: Program to normalise file names](#normalise_corpus_names)
@@ -41,14 +41,14 @@ scripts will be installed
 * [pick_parallel_docs: Pick out parallel files from converted to prestable/converted](#pick_parallel_docs)
 * [update_metadata: Update metadata files in given directories](#update_metadata)
 
-## Miscellaneous
+# Miscellaneous
 * [pytextcat: textcat implemented in Python](#pytextcat)
 * [generate_anchor_list: Generate paired anchor list for languages lang1 and lang2](#generate_anchor_list)
 * [html_cleaner: Program to print out a nicely indented html document](#html_cleaner)
 * [epubchooser: Program to set metadata of an epub file](#epubchooser)
 * [make_training_corpus: Program to make training corpus from giella xml analysed files](#make_training_corpus)
 
-## Requirements
+# Requirements
 
 * python3
 * pysvn (only needed for add_files_to_corpus)
@@ -76,7 +76,7 @@ sudo pacman -S wv
 yaourt -S python3-pysvn
 ```
 
-### Custom version of pdftohtml (poppler)
+## Custom version of pdftohtml (poppler)
 
 The standard version of pdftohtml sometimes produces invalid xml-documents. A
 version that fixes this bug is found at https://github.com/albbas/poppler and
@@ -92,41 +92,41 @@ make
 sudo make install
 ```
 
-## Installation
+# Installation
 
-### To own home directory (recommended)
+## To own home directory (recommended)
 
 Install the tools for the current user by writing
 
 ```
-cd $GTHOME/tools/CorpusTools
+cd $GTLANGS/CorpusTools
 python3 setup.py install --user --install-scripts=$HOME/bin --record installed_files.txt
 ```
 
-### System wide (recommended for servers only)
+## System wide (recommended for servers only)
 Install the tools for all users on a machine by
 
 ```
-cd $GTHOME/tools/CorpusTools
+cd $GTLANGS/CorpusTools
 sudo python3 setup.py install --install-scripts=/usr/local/bin --record installed_files.txt
 ```
 
 
-## Uninstalling
+# Uninstalling
 
-### Remove from own home directory
+## Remove from own home directory
 ```
-cd $GTHOME/tools/CorpusTools
+cd $GTLANGS/CorpusTools
 cat installed_files.txt | xargs rm -rf
 ```
 
-### System wide
+## System wide
 ```
 cd $GTHOME/tools/CorpusTools
 cat installed_files.txt | xargs sudo rm -rf
 ```
 
-## ccat
+# ccat
 
 Convert corpus format xml to clean text.
 
@@ -135,7 +135,7 @@ ccat has three usage modes, print to stdout the content of:
 * converted files containing errormarkup (produced by [convert2xml](#convert2xml))
 * analysed files (produced by [analyse_corpus](#analyse_corpus))
 
-### Printing content of converted files to stdout
+## Printing content of converted files to stdout
 
 To print out all sme content of all the converted files found in
 $GTFREE/converted/sme/admin and its subdirectories, issue the command:
@@ -157,7 +157,7 @@ and its subdirectories, issue this command:
 find converted/sme/science/ -name "*.pdf.xml" | xargs ccat -a -l sme
 ```
 
-### Printing content of analysed files to stdout
+## Printing content of analysed files to stdout
 
 The analysed files produced by [analyse_corpus](#analyse_corpus) contain among
 other one dependency element and one disambiguation element, that contain the
@@ -192,12 +192,12 @@ ccat -dis $GTFREE/analysed/sme/admin/sd/other_files/vl_05_1.doc.xml
 find analysed/sme/science/ -name "*.pdf.xml" | xargs ccat -dis
 ```
 
-### Printing errormarkup content
+## Printing errormarkup content
 
 This usage mode is used in the speller tests. Examples of this usage pattern is
 found in the make files in $GTBIG/prooftools.
 
-### The complete help text from the program:
+## The complete help text from the program:
 
 ```
 usage: ccat [-h] [--version] [-l LANG] [-T] [-L] [-t] [-a] [-c] [-C] [-ort]
@@ -250,7 +250,7 @@ optional arguments:
                         Replace hyph tags with the given argument
 ```
 
-## convert2xml
+# convert2xml
 
 Convert original files in a corpus to giellatekno/divvun xml format.
 
@@ -259,7 +259,7 @@ convert2xml depends on these external programs:
 * pdftotext
 * wvHtml
 
-### Usage
+## Usage
 
 Convert all files in the directory $GTFREE/orig/sme and its subdirectories.
 
@@ -324,7 +324,7 @@ optional arguments:
   --goldstandard        Convert goldstandard and .correct files
 ```
 
-## analyse_corpus
+# analyse_corpus
 
 Analyse converted corpus files.
 
@@ -333,7 +333,7 @@ analyse_corpus depends on these external programs:
 * vislcg3
 * hfst
 
-### Usage
+## Usage
 
 To be able to use this program you must either use the
 [nightly giella packages](https://giellalt.uit.no/infra/compiling_HFST3.html#The+simple+installation+%28you+download+ready-made+programs%29)
@@ -392,7 +392,7 @@ optional arguments:
                         default).
 ```
 
-## add_files_to_corpus
+# add_files_to_corpus
 
 The complete help text from the program is as follows:
 
@@ -460,7 +460,9 @@ this:
 svn ci orig
 ```
 
-## parallelize
+# parallelize
+
+**NOTE!** This section is partly outdated. Some files are moved from *svn* to *github* (especially the `langs` ones).
 
 Parallelize parallel corpus files, write the results to .tmx and .txm.html
 files.
@@ -492,7 +494,7 @@ can provide your own with the --dict argument. If you do not have a dictionary,
 you can use "--dict=<(echo)" to provide an "empty" dictionary – in this case,
 you should also use "--aligner=hunalign".
 
-### Compile dependencies
+## Compile dependencies
 
 XXX is the iso code for the language you work with in $GTLANGS/lang-XXX:
 
@@ -624,13 +626,13 @@ then you need to recompile the Java parts and reinstall CorpusTools. Make sure
 you have Apache ant installed, then do:
 
 ```
-cd $GTHOME/tools/CorpusTools/corpustools/tca2
+cd $GTLANGS/CorpusTools/corpustools/tca2
 ant
 ```
 
 Then follow the instructions on [how to install CorpusTools ](#installation)
 
-## saami_crawler
+# saami_crawler
 
 Add files to freecorpus from a given site.
 
@@ -657,7 +659,7 @@ optional arguments:
   -v, --version  show program's version number and exit
 ```
 
-## pytextcat
+# pytextcat
 
 Pytextcat is an implementation of the "N-Gram-Based Text Categorization"
 algorithm.
@@ -692,7 +694,7 @@ optional arguments:
   -V, --verbose         Print some info to stderr
 ```
 
-## generate_anchor_list
+# generate_anchor_list
 
 ```
 usage: generate_anchor_list.py [-h] [-v] [--lang1 LANG1] [--lang2 LANG2]
@@ -714,7 +716,7 @@ optional arguments:
   --outdir OUTDIR  The output directory
 ```
 
-## normalise_corpus_names
+# normalise_corpus_names
 
 Normalise the filenames of the files found in the given directories.
 
@@ -733,7 +735,7 @@ optional arguments:
   --version    show program's version number and exit
 ```
 
-## move_corpus_file
+# move_corpus_file
 
 ```
 usage: move_corpus_file [-h] [-v] oldpath newpath
@@ -750,7 +752,7 @@ optional arguments:
   -v, --version  show program's version number and exit
 ```
 
-## paracheck
+# paracheck
 
 ```
 usage: paracheck [-h] [-v] orig_dir
@@ -766,7 +768,7 @@ optional arguments:
   -v, --version  show program's version number and exit
 ```
 
-## html_cleaner
+# html_cleaner
 
 ```
 usage: html_cleaner [-h] [-v] inhtml outhtml
@@ -784,7 +786,7 @@ optional arguments:
   -v, --version  show program's version number and exit
 ```
 
-## duperemover
+# duperemover
 
 ```
 usage: duperemover [-h] [-v] dir
@@ -800,7 +802,7 @@ optional arguments:
 ```
 
 
-## dupefinder
+# dupefinder
 
 ```
 usage: dupefinder [-h] [-v] dir
@@ -815,7 +817,7 @@ optional arguments:
   -v, --version  show program's version number and exit
 ```
 
-## move_corpus_file
+# move_corpus_file
 
 ```
 usage: move_corpus_file [-h] [-v] oldpath newpath
@@ -832,7 +834,7 @@ optional arguments:
   -v, --version  show program's version number and exit
 ```
 
-## remove_corpus_file
+# remove_corpus_file
 
 ```
 usage: remove_corpus_file [-h] [-v] oldpath
@@ -847,7 +849,7 @@ optional arguments:
   -v, --version  show program's version number and exit
 ```
 
-## pick_parallel_docs
+# pick_parallel_docs
 
 ```
 usage: pick_parallel_docs [-h] [-v] -p PARALLEL_LANGUAGE --minratio MINRATIO
@@ -869,7 +871,7 @@ optional arguments:
   --maxratio MAXRATIO   The maximum ratio
 ```
 
-## clean_prestable
+# clean_prestable
 
 ```
 usage: clean_prestable [-h] [--version] corpusdirs [corpusdirs ...]
@@ -884,7 +886,7 @@ optional arguments:
   --version   show program's version number and exit
 ```
 
-## reparallelize
+# reparallelize
 
 ```
 usage: reparallelize [-h] [--version] [--files] [--convert] tmxhtml
@@ -906,7 +908,7 @@ optional arguments:
               converted files.
 ```
 
-## tmx2html
+# tmx2html
 
 ```
 usage: tmx2html [-h] [--version] sources [sources ...]
@@ -921,7 +923,7 @@ optional arguments:
   --version   show program's version number and exit
 ```
 
-## update_metadata
+# update_metadata
 
 ```
 usage: update_metadata [-h] [--version] directories [directories ...]
@@ -939,7 +941,7 @@ optional arguments:
   --version    show program's version number and exit
 ```
 
-## epubchooser
+# epubchooser
 
 ```
 usage: epubchooser [-h] [--version] epubfile
@@ -954,7 +956,7 @@ optional arguments:
   --version   show program's version number and exit
 ```
 
-## make_training_corpus
+# make_training_corpus
 
 ```
 Make training corpus from analysed giella xml files. Sentences with words
