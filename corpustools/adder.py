@@ -26,8 +26,7 @@ import shutil
 
 import requests
 
-from corpustools import (argparse_version, namechanger, util, versioncontrol,
-                         xslsetter)
+from corpustools import argparse_version, namechanger, util, versioncontrol, xslsetter
 
 
 class AdderError(Exception):
@@ -323,7 +322,7 @@ def parse_args():
         "origs",
         nargs="+",
         help="The original files, urls or directories where "
-        "the original files reside (not in svn)",
+        "the original files reside (not the corpus repository)",
     )
     parser.add_argument(
         "--name",

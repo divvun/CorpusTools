@@ -1,7 +1,8 @@
 # Corpus Tools
 
 __Synopsis:__ update local installation with:
-```
+
+```sh
 python3 setup.py install --user --install-scripts=$HOME/bin --record installed_files.txt
 ```
 
@@ -10,15 +11,17 @@ scripts will be installed
 
 # Howto install and update the tools
 
-## First time install
+### First time install
+
 * [Install requirements](#requirements).
 * [Install CorpusTools](#to-own-home-directory-recommended)
 
-## Update
+### Update
+
 * [Howto update CorpusTools](#to-own-home-directory-recommended)
 
+## Use the content of the corpus
 
-# Use the content of the corpus
 * [convert2xml: Convert original files to giellatekno xml](#convert2xml)
 * [ccat: Print the contents of a converted corpus file as plain text](#ccat)
 * [analyse_corpus: Do syntactic analysis of converted files](#analyse_corpus)
@@ -26,11 +29,13 @@ scripts will be installed
 * [reparallelize: Reconvert and realign a given .tmx.html file](#reparallelize)
 * [tmx2html: Convert tmx files to html files](#tmx2html)
 
-# Add files to the corpus
+## Add files to the corpus
+
 * [add_files_to_corpus: Add file(s) to a corpus directory](#add_files_to_corpus)
 * [saami_crawler: Crawl saami sites, add files to corpus](#saami_crawler)
 
-# Manage the corpus repositories
+## Manage the corpus repositories
+
 * [move_corpus_file: Move or rename a file inside the corpus](#move_corpus_file)
 * [remove_corpus_file: Remove a file from the corpus](#remove_corpus_file)
 * [normalise_corpus_names: Program to normalise file names](#normalise_corpus_names)
@@ -41,7 +46,8 @@ scripts will be installed
 * [pick_parallel_docs: Pick out parallel files from converted to prestable/converted](#pick_parallel_docs)
 * [update_metadata: Update metadata files in given directories](#update_metadata)
 
-# Miscellaneous
+## Miscellaneous
+
 * [pytextcat: textcat implemented in Python](#pytextcat)
 * [generate_anchor_list: Generate paired anchor list for languages lang1 and lang2](#generate_anchor_list)
 * [html_cleaner: Program to print out a nicely indented html document](#html_cleaner)
@@ -51,7 +57,6 @@ scripts will be installed
 # Requirements
 
 * python3
-* pysvn (only needed for add_files_to_corpus)
 * wvHtml (only needed for convert2xml)
 * pdftohtml (only needed for convert2xml)
 * latex2html (only needed for convert2xml)
@@ -59,31 +64,31 @@ scripts will be installed
 
 On Mac, do:
 
-```
+```sh
 sudo port install wv latex2html poppler
 ```
 
 On Debian/Ubuntu, do:
 
-```
+```sh
 sudo apt-get install wv latex2html poppler-utils
 ```
 
 On Arch Linux, do:
 
-```
+```sh
 sudo pacman -S wv
-yaourt -S python3-pysvn
 ```
 
 ## Custom version of pdftohtml (poppler)
 
 The standard version of pdftohtml sometimes produces invalid xml-documents. A
-version that fixes this bug is found at https://github.com/albbas/poppler and
+version that fixes this bug is found at <https://github.com/albbas/poppler> and
 the poppler developers have been notified about the bug.
 
 To install it do the following
-```
+
+```sh
 git clone https://github.com/albbas/poppler
 cd poppler
 git checkout fix_xml_wellformedness_with_a_twist
@@ -98,30 +103,31 @@ sudo make install
 
 Install the tools for the current user by writing
 
-```
-cd $GTLANGS/CorpusTools
+```sh
+cd $GTHOME/tools/CorpusTools
 python3 setup.py install --user --install-scripts=$HOME/bin --record installed_files.txt
 ```
 
 ## System wide (recommended for servers only)
 Install the tools for all users on a machine by
 
-```
-cd $GTLANGS/CorpusTools
+```sh
+cd $GTHOME/tools/CorpusTools
 sudo python3 setup.py install --install-scripts=/usr/local/bin --record installed_files.txt
 ```
 
+## Uninstalling
 
-# Uninstalling
+### Remove from own home directory
 
-## Remove from own home directory
-```
-cd $GTLANGS/CorpusTools
+```sh
+cd $GTHOME/tools/CorpusTools
 cat installed_files.txt | xargs rm -rf
 ```
 
-## System wide
-```
+### System wide
+
+```sh
 cd $GTHOME/tools/CorpusTools
 cat installed_files.txt | xargs sudo rm -rf
 ```
@@ -131,6 +137,7 @@ cat installed_files.txt | xargs sudo rm -rf
 Convert corpus format xml to clean text.
 
 ccat has three usage modes, print to stdout the content of:
+
 * converted files (produced by [convert2xml](#convert2xml))
 * converted files containing errormarkup (produced by [convert2xml](#convert2xml))
 * analysed files (produced by [analyse_corpus](#analyse_corpus))
@@ -140,20 +147,20 @@ ccat has three usage modes, print to stdout the content of:
 To print out all sme content of all the converted files found in
 $GTFREE/converted/sme/admin and its subdirectories, issue the command:
 
-```
+```sh
 ccat -a -l sme $GTFREE/converted/sme/admin
 ```
 
 It is also possible to print a file at a time:
 
-```
+```sh
 ccat -a -l sme $GTFREE/converted/sme/admin/sd/other_files/vl_05_1.doc.xml
 ```
 
 To print out the content of e.g. all converted pdf files found in a directory
 and its subdirectories, issue this command:
 
-```
+```sh
 find converted/sme/science/ -name "*.pdf.xml" | xargs ccat -a -l sme
 ```
 
@@ -163,13 +170,13 @@ The analysed files produced by [analyse_corpus](#analyse_corpus) contain among
 other one dependency element and one disambiguation element, that contain the
 dependency and disambiguation analysis of the original files content.
 
-```
+```sh
 ccat -dis sda/sda_2006_1_aikio1.pdf.xml
 ```
 
 Prints the content of the disambiguation element.
 
-```
+```sh
 ccat -dep sda/sda_2006_1_aikio1.pdf.xml
 ```
 
@@ -179,14 +186,16 @@ The usage pattern for printing these elements is otherwise the same as printing
 the content of converted files.
 
 Printing dependency elements
-```
+
+```sh
 ccat -dep $GTFREE/analysed/sme/admin
 ccat -dep $GTFREE/analysed/sme/admin/sd/other_files/vl_05_1.doc.xml
 find analysed/sme/science/ -name "*.pdf.xml" | xargs ccat -dep
 ```
 
 Printing disambiguation elements
-```
+
+```sh
 ccat -dis $GTFREE/analysed/sme/admin
 ccat -dis $GTFREE/analysed/sme/admin/sd/other_files/vl_05_1.doc.xml
 find analysed/sme/science/ -name "*.pdf.xml" | xargs ccat -dis
@@ -197,9 +206,9 @@ find analysed/sme/science/ -name "*.pdf.xml" | xargs ccat -dis
 This usage mode is used in the speller tests. Examples of this usage pattern is
 found in the make files in $GTBIG/prooftools.
 
-## The complete help text from the program:
+### The complete help text from the program
 
-```
+```sh
 usage: ccat [-h] [--version] [-l LANG] [-T] [-L] [-t] [-a] [-c] [-C] [-ort]
             [-ortreal] [-morphsyn] [-syn] [-lex] [-format] [-foreign]
             [-noforeign] [-typos] [-f] [-S] [-dis] [-dep]
@@ -263,7 +272,7 @@ convert2xml depends on these external programs:
 
 Convert all files in the directory $GTFREE/orig/sme and its subdirectories.
 
-```
+```sh
 convert2xml $GTFREE/orig/sme
 ```
 
@@ -272,7 +281,7 @@ structure as that in $GTFREE/orig/sme.
 
 Convert only one file:
 
-```
+```sh
 convert2xml $GTFREE/orig/sme/admin/sd/file1.html
 ```
 
@@ -280,19 +289,19 @@ The converted file is found in $GTFREE/orig/sme/admin/sd/file1.htm.xml
 
 Convert all sme files in directories ending with corpus
 
-```
+```sh
 convert2xml *corpus/orig/sme
 ```
 
 If convert2xml is not able to convert a file these kinds of message will appear:
 
-```
+```sh
 ~/Dokumenter/corpus/freecorpus/orig/eng/admin/depts/regjeringen.no/calendar-for-the-ministry-of-children-an.html_id=308
 ```
 
 A log file will be found in
 
-```
+```sh
 ~/Dokumenter/corpus/freecorpus/orig/eng/admin/depts/regjeringen.no/calendar-for-the-ministry-of-children-an.html_id=308.log
 ```
 
@@ -300,7 +309,7 @@ explaining what went wrong.
 
 The complete help text from the program:
 
-```
+```sh
 usage: convert2xml [-h] [--version] [--serial] [--lazy-conversion]
                    [--write-intermediate] [--goldstandard]
                    sources [sources ...]
@@ -345,7 +354,7 @@ or build the needed resources for the supported languages (exchange "sma" with
 Configure the language, use at least these to options `--prefix=$HOME/.local
 --enable-tokenisers`
 
-```
+```sh
 ./configure --prefix=$HOME/.local --enable-tokenisers # add your own flags to taste
 make install
 ```
@@ -357,7 +366,7 @@ When this is done you can analyse all files in the directory
 $GTFREE/converted/sme (and sma, smj) and its subdirectories by issuing this
 command:
 
-```
+```sh
 analyse_corpus -k hfst sme $GTFREE/converted/sme
 ```
 
@@ -365,12 +374,13 @@ The analysed file will be found in {{$GTFREE/analysed/sme}}
 
 To analyse only one file, issue this command:
 
-```
+```sh
 analyse_corpus -k hfst --serial sme $GTFREE/converted/sme/file.html.xml
 ```
 
 The complete help text from the program:
-```
+
+```sh
 usage: analyse_corpus [-h] [--version] [--serial]
                       [-k {hfst,xfst,trace-smegram}]
                       lang converted_dirs [converted_dirs ...]
@@ -396,7 +406,7 @@ optional arguments:
 
 The complete help text from the program is as follows:
 
-```
+```sh
 usage: add_files_to_corpus [-h] [-v] [-p PARALLEL_FILE] [-l LANG]
                            [-d DIRECTORY]
                            origs [origs ...]
@@ -408,7 +418,7 @@ working copy.
 
 positional arguments:
   origs                 The original files, urls or directories where the
-                        original files reside (not in svn)
+                        original files reside (not the corpus repo)
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -433,31 +443,34 @@ Download and add parallel files from the net to the corpus:
 __Adding the first file__
 
 The command
-```
+
+```sh
 add_files_to_corpus -d orig/sme/admin/sd/other_files http://www.samediggi.no/content/download/5407/50892/version/2/file/Sametingets+%C3%A5rsmelding+2013+-+nordsamisk.pdf
 ```
 
 Gives the message:
-```
+
+```sh
 Added orig/sme/admin/sd/other_files/sametingets_ay-rsmelding_2013_-_nordsamisk.pdf
 ```
 
 __Adding the parallel file__
 
-```
+```sh
 add_files_to_corpus -p orig/sme/admin/sd/other_files/sametingets_ay-rsmelding_2013_-_nordsamisk.pdf -l nob  http://www.samediggi.no/content/download/5406/50888/version/2/file/Sametingets+%C3%A5rsmelding+2013+-+norsk.pdf
 ```
 
 Gives the message:
-```
+
+```sh
 Added orig/nob/admin/sd/other_files/sametingets_ay-rsmelding_2013_-_norsk.pdf
 ```
 
 After this is done, you will have to commit the files to the working copy, like
 this:
 
-```
-svn ci orig
+```sh
+git commit
 ```
 
 # parallelize
@@ -498,7 +511,7 @@ you should also use "--aligner=hunalign".
 
 XXX is the iso code for the language you work with in $GTLANGS/lang-XXX:
 
-```
+```sh
     cd $GTLANGS/lang-XXX
     ./configure --prefix="$HOME"/.local \
                 --enable-tokenisers \
@@ -509,7 +522,7 @@ XXX is the iso code for the language you work with in $GTLANGS/lang-XXX:
 
 To prepare for parallelising e.g. nob and sme files, do the following:
 
-```
+```sh
 for LANG in sme nob # Replace sme and nob by languages for your own needs
 do
     cd $GTLANGS/lang-$LANG
@@ -523,7 +536,8 @@ done
 ```
 
 The complete help text from the program is as follows:
-```
+
+```sh
 usage: parallelize [-h] [--version] [-s] [-f] [-q] [-a {hunalign,tca2}]
                    [-d DICT] -l2 LANG2
                    sources [sources ...]
@@ -556,15 +570,16 @@ optional arguments:
                         parallelised with
 ```
 
-
 You run the program on the files created by convert2xml by running a command
 with the following syntax:
-```
+
+```sh
 parallelize -l2 TARGET_LANGUAGE PATH/TO/THE/CONVERTED/SOURCE_LANGUAGE/FILE.xml
 ```
 
 for instance, with nob as SOURCE_LANGUAGE and sma as TARGET_LANGUAGE
-```
+
+```sh
 parallelize -l2 sma converted/nob/admin/ntfk/tsaekeme.html.xml
 ```
 
@@ -572,7 +587,8 @@ This will create a file named tmx/nob2sma/admin/ntfk/tsaekeme.html.tmx
 
 If you want to parallelize all your sma files with nob in one go, you can do
 e.g.
-```
+
+```sh
 convert2xml orig/{sma,nob}
 parallelize -l2 sma converted/nob
 ```
@@ -581,7 +597,7 @@ The files will end up in corresponding directories under tmx/nob2sma.
 
 __CAVEAT 1__: ''If you get a message such as''
 
-```
+```sh
 parallelize -l2 sma converted/sma/admin/ntfk/tsaekeme.html.xml
 Error reading file '/Users/xxx/freecorpus/converted/sma/admin/ntfk/.xml':
 failed to load external entity "/Users/xxx/freecorpus/converted/sma/admin/ntfk/.xml"
@@ -590,7 +606,8 @@ failed to load external entity "/Users/xxx/freecorpus/converted/sma/admin/ntfk/.
 then you gave nob as l1 but the path to a sma-file as argument.
 
 __CAVEAT 2__: ''If you get a similar error message as''
-```
+
+```sh
 parallelize -l2 sma converted/nob/admin/ntfk/rup_2013_trykt_versjon.pdf.xml
 ERROR: /Users/xxx/gtsvn/langs/nob/tools/preprocess/tokeniser-gramcheck-gt-desc.pmhfst does not exist
 ```
@@ -606,7 +623,7 @@ the language tools for ALL the languages you are working with.
 
 __CAVEAT 3__: ''If you get a message like''
 
-```
+```sh
 Exception in thread "main" java.lang.UnsupportedClassVersionError: aksis/alignment/Alignment : Unsupported major.minor version 51.0
         at java.lang.ClassLoader.defineClass1(Native Method)
         at java.lang.ClassLoader.defineClassCond(ClassLoader.java:637)
@@ -625,8 +642,8 @@ Exception in thread "main" java.lang.UnsupportedClassVersionError: aksis/alignme
 then you need to recompile the Java parts and reinstall CorpusTools. Make sure
 you have Apache ant installed, then do:
 
-```
-cd $GTLANGS/CorpusTools/corpustools/tca2
+```sh
+cd $GTHOME/tools/CorpusTools/corpustools/tca2
 ant
 ```
 
@@ -640,13 +657,13 @@ Only able to crawl www.samediggi.fi now, will collect html files only for now.
 
 Run it like this:
 
-```
+```sh
 saami_crawler www.samediggi.fi
 ```
 
 The complete help text from the program is as follows:
 
-```
+```sh
 usage: saami_crawler [-h] [-v] sites [sites ...]
 
 Crawl saami sites (for now, only www.samediggi.fi).
@@ -675,7 +692,7 @@ Publications/Reprographics, pp. 161-175, 11-13 April 1994.
 Original Perl implementation and article available from
 [http://odur.let.rug.nl/~vannoord/TextCat/]
 
-```
+```sh
 usage: pytextcat [-h] [--version] [-V] {proc,complm,compwm,compdir} ...
 
 Create or use n-gram models for language classification.
@@ -696,7 +713,7 @@ optional arguments:
 
 # generate_anchor_list
 
-```
+```sh
 usage: generate_anchor_list.py [-h] [-v] [--lang1 LANG1] [--lang2 LANG2]
                                [--outdir OUTDIR]
                                input_file [input_file ...]
@@ -720,7 +737,7 @@ optional arguments:
 
 Normalise the filenames of the files found in the given directories.
 
-```
+```sh
 usage: normalise_corpus_names [-h] [--version] target_dirs [target_dirs ...]
 
 Program to normalise names in given directories. The filenames are downcased,
@@ -737,7 +754,7 @@ optional arguments:
 
 # move_corpus_file
 
-```
+```sh
 usage: move_corpus_file [-h] [-v] oldpath newpath
 
 Program to move or rename files inside the corpus.
@@ -754,7 +771,7 @@ optional arguments:
 
 # paracheck
 
-```
+```sh
 usage: paracheck [-h] [-v] orig_dir
 
 Check the if the files in the parallel_text entries found in the metadata files
@@ -770,7 +787,7 @@ optional arguments:
 
 # html_cleaner
 
-```
+```sh
 usage: html_cleaner [-h] [-v] inhtml outhtml
 
 Program to print out a nicely indented html document. This makes it easier to
@@ -788,7 +805,7 @@ optional arguments:
 
 # duperemover
 
-```
+```sh
 usage: duperemover [-h] [-v] dir
 
 Remove duplicate files from the given directory
@@ -801,10 +818,9 @@ optional arguments:
   -v, --version  show program's version number and exit
 ```
 
+## dupefinder
 
-# dupefinder
-
-```
+```sh
 usage: dupefinder [-h] [-v] dir
 
 Find files with more than 90% similarity in the given directory
@@ -819,7 +835,7 @@ optional arguments:
 
 # move_corpus_file
 
-```
+```sh
 usage: move_corpus_file [-h] [-v] oldpath newpath
 
 Program to move or rename a file inside the corpus.
@@ -836,7 +852,7 @@ optional arguments:
 
 # remove_corpus_file
 
-```
+```sh
 usage: remove_corpus_file [-h] [-v] oldpath
 
 Program to remove a file from the corpus.
@@ -851,7 +867,7 @@ optional arguments:
 
 # pick_parallel_docs
 
-```
+```sh
 usage: pick_parallel_docs [-h] [-v] -p PARALLEL_LANGUAGE --minratio MINRATIO
                           --maxratio MAXRATIO
                           language1_dir
@@ -873,7 +889,7 @@ optional arguments:
 
 # clean_prestable
 
-```
+```sh
 usage: clean_prestable [-h] [--version] corpusdirs [corpusdirs ...]
 
 Remove files in prestable that have no original files.
@@ -888,7 +904,7 @@ optional arguments:
 
 # reparallelize
 
-```
+```sh
 usage: reparallelize [-h] [--version] [--files] [--convert] tmxhtml
 
 Sentence align a given file anew. Files are converted before being
@@ -910,7 +926,7 @@ optional arguments:
 
 # tmx2html
 
-```
+```sh
 usage: tmx2html [-h] [--version] sources [sources ...]
 
 Convert tmx files to html
@@ -925,7 +941,7 @@ optional arguments:
 
 # update_metadata
 
-```
+```sh
 usage: update_metadata [-h] [--version] directories [directories ...]
 
 Update metadata files to look like XSL-template.xsl, but with original
@@ -943,7 +959,7 @@ optional arguments:
 
 # epubchooser
 
-```
+```sh
 usage: epubchooser [-h] [--version] epubfile
 
 Choose which chapters and html ranges should be omitted from an epub file.
@@ -958,7 +974,7 @@ optional arguments:
 
 # make_training_corpus
 
-```
+```sh
 Make training corpus from analysed giella xml files. Sentences with words
 unknown for the giella fsts are not included.
 
