@@ -15,22 +15,28 @@
 #   Copyright © 2021 The University of Tromsø
 #   http://giellatekno.uit.no & http://divvun.no
 #
-"""Add files received from Sámediggi by Dropbox to freecorpus."""
+"""Add files received from Sámediggi as zipfiles to freecorpus."""
 
 
-import glob
 import os
-import subprocess
-
+import sys
 from corpustools import adder
+import zipfile
+
+
+def pairs(files):
+    for f in files:
+        parts = f.split(".")
+        no_suffix = ".".join(parts[:-1])
+        if no_suffix[-3:].lower() == "nob":
+            for i in ["sme", "SME", "sam", "SAM", "sám"]:
+                thissme = no_suffix[:-3] + i + "." + parts[-1]
+                if thissme in files:
+                    yield f, thissme
 
 
 def main():
-    """Add files from Dropbox"""
-    subdir = "Bálddalas teavsttat"
-    subprocess.run(
-        "rsync", "-av", f"{os.getenv('HOME')}/Dropbox/{subdir}", f"/tmp/", check=True
-    )
+    """Add files from zip files"""
     dropbox_adders = {
         lang: adder.AddToCorpus(
             os.getenv("GTFREE"), lang, os.path.join("admin", "sd", "dropbox")
@@ -38,22 +44,26 @@ def main():
         for lang in ["nob", "sme"]
     }
 
-    files = glob.glob(f"/tmp/{subdir}/*")
-    for (nob, sme) in [
-        (f, f.replace("nob.", "sme."))
-        for f in files
-        if "nob.doc" in f and f.replace("nob.", "sme.") in files
-    ]:
-        nob_in_free = dropbox_adders["nob"].copy_file_to_corpus(
-            origpath=nob, metadata_filename=os.path.basename(nob)
-        )
-        dropbox_adders["sme"].copy_file_to_corpus(
-            origpath=sme,
-            metadata_filename=os.path.basename(sme),
-            parallelpath=nob_in_free,
-        )
+    sami_zip = sys.argv[1]
+    subdir = f'/tmp/{os.path.basename(sami_zip.replace(".zip", ""))}'
+    zipfile.ZipFile(sami_zip).extractall(subdir)
+
+    for (nob, sme) in pairs(
+        {os.path.join(root, f) for root, _, files in os.walk(subdir) for f in files}
+    ):
+        try:
+            nob_in_free = dropbox_adders["nob"].copy_file_to_corpus(
+                origpath=nob, metadata_filename=os.path.basename(nob)
+            )
+            dropbox_adders["sme"].copy_file_to_corpus(
+                origpath=sme,
+                metadata_filename=os.path.basename(sme),
+                parallelpath=nob_in_free,
+            )
+        except UserWarning:
+            pass
         os.remove(nob)
         os.remove(sme)
 
-    for lang in ["sme", "nob"]:
-        dropbox_adders[lang].add_files_to_working_copy()
+    for dropbox_adder in dropbox_adders.values():
+        dropbox_adder.add_files_to_working_copy()
