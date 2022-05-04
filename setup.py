@@ -44,7 +44,7 @@ setup(
             "epubchooser = corpustools.epubchooser:main",
             "make_training_corpus = corpustools.trainingcorpusmaker:main",
             "tmx2html = corpustools.tmx:main",
-            "dropbox_adder = corpustools.dropbox_adder.tmx:main",
+            "dropbox_adder = corpustools.dropbox_adder:main",
             "korp_mono = corpustools.korp_mono:main",
             "korp_para = corpustools.korp_para:main",
             "bibel_no_aligner = corpustools.bibel_no_aligner:main",
