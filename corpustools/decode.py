@@ -348,7 +348,7 @@ def guess_body_encoding(content, mainlang):
     elif "à" in content and "û" in content and mainlang in CYRILLIC_LANGUAGES:
         winner = "cp1251_cp1252"
     elif ("‡" in content and "ã" not in content) or (
-        "Œ" in content and "ÄŒ" not in content
+        "Œ" in content and "ÄŒ" not in content and 'å' not in content
     ):
         winner = "mac-sami_to_cp1252"
     elif (
