@@ -11,7 +11,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2012-2021 The University of Tromsø &
+#   Copyright © 2012-2022 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
@@ -30,6 +30,7 @@ from corpustools import (
     latexconverter,
     odfconverter,
     pdfconverter,
+    rtfconverter,
     util,
     xmlconverter,
 )
@@ -44,6 +45,7 @@ def to_html_elt(path):
         ".epub": epubconverter.to_html_elt,
         ".html": htmlconverter.to_html_elt,
         ".odt": odfconverter.to_html_elt,
+        ".rtf": rtfconverter.to_html_elt,
         ".tex": latexconverter.to_html_elt,
         ".xml": xmlconverter.to_html_elt,
         ".pdf": pdfconverter.to_html_elt,
@@ -112,11 +114,7 @@ class HTMLBeautifier:
         Returns:
             str: The content of the document without the cruft.
         """
-        replacements = [
-            ("//<script", "<script"),
-            ("&nbsp;", " "),
-            (" ", " "),
-        ]
+        replacements = [("//<script", "<script"), ("&nbsp;", " "), (" ", " ")]
         return util.replace_all(replacements, content)
 
     def simplify_tags(self):
@@ -128,7 +126,7 @@ class HTMLBeautifier:
         superfluously_named_tags = self.soup.xpath(
             "//fieldset | //legend | //article | //hgroup "
             "| //section | //dl | //dd | //dt"
-            "| //menu",
+            "| //menu"
         )
         for elt in superfluously_named_tags:
             elt.tag = "div"
@@ -148,19 +146,17 @@ class HTMLBeautifier:
             "and ( self::span or self::b or self::i"
             "      or self::em or self::strong "
             "      or self::a )"
-            "    ]",
+            "    ]"
         )
         for elt in spans_as_divs:
             elt.tag = "div"
 
-        ps_as_divs = self.soup.xpath(
-            "//p[descendant::div]",
-        )
+        ps_as_divs = self.soup.xpath("//p[descendant::div]")
         for elt in ps_as_divs:
             elt.tag = "div"
 
         lists_as_divs = self.soup.xpath(
-            "//*[( child::ul or child::ol ) " "and ( self::ul or self::ol )" "    ]",
+            "//*[( child::ul or child::ol ) " "and ( self::ul or self::ol )" "    ]"
         )
         for elt in lists_as_divs:
             elt.tag = "div"
@@ -460,9 +456,7 @@ class HTMLBeautifier:
                     "langs",  # oahpa.no
                     "art-page-footer",  # gaaltije.se
                 ],
-                "id": [
-                    "skip-link",  # samas.no
-                ],
+                "id": ["skip-link"],  # samas.no
             },
             "ul": {
                 "id": [
@@ -491,10 +485,7 @@ class HTMLBeautifier:
                 ],
             },
             "a": {
-                "id": [
-                    "ctl00_IdWelcome_ExplicitLogin",  # ntfk
-                    "leftPanelTab",
-                ],
+                "id": ["ctl00_IdWelcome_ExplicitLogin", "leftPanelTab"],  # ntfk
                 "class": [
                     "addthis_button_print",  # ntfk
                     "mainlevel",
@@ -504,9 +495,7 @@ class HTMLBeautifier:
                     "skip-link",  # 1177.se
                     "toggle-link expanded",  # 1177.se
                 ],
-                "name": [
-                    "footnote-ref",  # footnotes in running text
-                ],
+                "name": ["footnote-ref"],  # footnotes in running text
             },
             "td": {
                 "id": [
@@ -515,20 +504,11 @@ class HTMLBeautifier:
                     "sg_oikea",  # www.samediggi.fi
                     "sg_vasen",  # www.samediggi.fi
                 ],
-                "class": [
-                    "modifydate",
-                ],
+                "class": ["modifydate"],
             },
-            "tr": {
-                "id": [
-                    "sg_ylaosa1",
-                    "sg_ylaosa2",
-                ]
-            },
+            "tr": {"id": ["sg_ylaosa1", "sg_ylaosa2"]},
             "header": {
-                "id": [
-                    "header",  # umo.se
-                ],
+                "id": ["header"],  # umo.se
                 "class": [
                     "nrk-masthead-content cf",  # nrk.no
                     "pageHeader ",  # regjeringen.no
@@ -541,13 +521,9 @@ class HTMLBeautifier:
                     "span3",  # samernas.se
                     "tree-menu current",  # umo.se
                     "tree-menu",  # umo.se
-                ],
+                ]
             },
-            "table": {
-                "id": [
-                    "Table_01",
-                ],
-            },
+            "table": {"id": ["Table_01"]},
         }
 
         namespace = {"html": "http://www.w3.org/1999/xhtml"}

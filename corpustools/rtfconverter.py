@@ -17,11 +17,9 @@
 #
 """Convert rtf files to the Giella xml format."""
 
-import io
+import subprocess
 
-from lxml.etree import HTML
-from pyth.plugins.rtf15.reader import Rtf15Reader
-from pyth.plugins.xhtml.writer import XHTMLWriter
+from lxml import html
 
 
 class RTFError(Exception):
@@ -37,16 +35,10 @@ def to_html_elt(filename):
         filename (str): path to the document
 
     Returns:
-        A string containing the xhtml version of the rtf file.
+        A string containing the html version of the rtf file.
     """
-    with open(filename, "rb") as rtf_document:
-        content = rtf_document.read()
-        try:
-            pyth_doc = Rtf15Reader.read(
-                io.BytesIO(content.replace(b"fcharset256", b"fcharset255"))
-            )
-            return HTML(
-                str(XHTMLWriter.write(pyth_doc, pretty=True).read(), encoding="utf8")
-            )
-        except UnicodeDecodeError:
-            raise RTFError(f"Unicode problems in {filename.orig}")
+    html_body = subprocess.run(
+        ["pandoc", filename], encoding="utf-8", capture_output=True
+    ).stdout
+
+    return html.document_fromstring(f"<html><body>{html_body}</body></html>")
