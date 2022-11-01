@@ -4,8 +4,9 @@ import multiprocessing
 import os
 import re
 
-from corpustools import analyser, argparse_version, corpuspath, korp_mono, util
 from lxml import etree
+
+from corpustools import analyser, argparse_version, corpuspath, korp_mono, util
 
 LANGS_RE = re.compile("/(\w+)2(\w+)/")
 

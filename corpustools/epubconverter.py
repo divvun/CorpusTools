@@ -26,9 +26,9 @@ These ranges consist pairs of xpath paths, specified inside the metadata
 file that belongs to this epub file.
 """
 
+import epub
 from lxml import etree
 
-import epub
 from corpustools import util, xslsetter
 
 

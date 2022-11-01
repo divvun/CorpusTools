@@ -23,7 +23,7 @@ import os
 
 from lxml import etree
 
-from corpustools import util, corpuspath
+from corpustools import corpuspath, util
 
 
 class CorpusXMLFile:

@@ -29,12 +29,11 @@ from lxml import etree
 
 from corpustools import (
     argparse_version,
-    corpusxmlfile,
+    corpuspath,
     generate_anchor_list,
     sentencedivider,
     tmx,
     util,
-    corpuspath,
 )
 
 HERE = os.path.dirname(__file__)

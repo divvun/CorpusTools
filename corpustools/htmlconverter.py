@@ -20,7 +20,7 @@
 import codecs
 import re
 
-from lxml import html, etree
+from lxml import etree, html
 
 
 class HTMLError(Exception):

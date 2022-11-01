@@ -22,8 +22,9 @@ import os
 from datetime import datetime
 
 import requests
-from corpustools import corpuspath, namechanger, util
 from lxml import etree, html
+
+from corpustools import corpuspath, namechanger, util
 
 
 @functools.lru_cache

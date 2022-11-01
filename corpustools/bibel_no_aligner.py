@@ -21,8 +21,9 @@ import argparse
 import glob
 import os
 
-from corpustools import argparse_version, corpuspath, util
 from lxml import etree
+
+from corpustools import argparse_version, corpuspath, util
 
 
 def make_tuv(line, lang):

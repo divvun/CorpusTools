@@ -26,6 +26,7 @@ import sys
 from functools import partial
 
 import lxml.etree as etree
+
 from corpustools import argparse_version, ccat, corpuspath, modes, util
 
 

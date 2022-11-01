@@ -23,10 +23,10 @@ import difflib
 import os
 import shutil
 import sys
-import urlparse
 
 import lxml.html
 import requests
+import urlparse
 
 from corpustools import adder, move_files, namechanger, util, xslsetter
 

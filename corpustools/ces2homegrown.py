@@ -22,8 +22,9 @@ import glob
 import os
 from datetime import datetime
 
-from corpustools import argparse_version, corpuspath, util
 from lxml import etree
+
+from corpustools import argparse_version, corpuspath, util
 
 
 def parse_options():

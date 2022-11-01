@@ -25,9 +25,9 @@ file. This is a helper program for that purpose.
 import argparse
 import sys
 
+import epub
 from prompt_toolkit import prompt
 
-import epub
 from corpustools import argparse_version, epubconverter, xslsetter
 
 

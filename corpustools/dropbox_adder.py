@@ -20,8 +20,9 @@
 
 import os
 import sys
-from corpustools import adder
 import zipfile
+
+from corpustools import adder
 
 LANGUAGES = {"sma": ["sma"], "sme": ["sme", "SME", "sam", "SAM", "sám"], "smj": ["smj"]}
 
