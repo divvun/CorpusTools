@@ -23,16 +23,19 @@ import sys
 from corpustools import adder
 import zipfile
 
+LANGUAGES = {"sma": ["sma"], "sme": ["sme", "SME", "sam", "SAM", "sám"], "smj": ["smj"]}
+
 
 def pairs(files):
     for f in files:
         parts = f.split(".")
         no_suffix = ".".join(parts[:-1])
         if no_suffix[-3:].lower() == "nob":
-            for i in ["sme", "SME", "sam", "SAM", "sám"]:
-                thissme = no_suffix[:-3] + i + "." + parts[-1]
-                if thissme in files:
-                    yield f, thissme
+            for lang in LANGUAGES:
+                for possible_name in LANGUAGES[lang]:
+                    thissmi = no_suffix[:-3] + possible_name + "." + parts[-1]
+                    if thissmi in files:
+                        yield f, thissmi, lang
 
 
 def main():
@@ -41,29 +44,29 @@ def main():
         lang: adder.AddToCorpus(
             os.getenv("GTFREE"), lang, os.path.join("admin", "sd", "dropbox")
         )
-        for lang in ["nob", "sme"]
+        for lang in ["nob"] + LANGUAGES.keys()
     }
 
     sami_zip = sys.argv[1]
     subdir = f'/tmp/{os.path.basename(sami_zip.replace(".zip", ""))}'
     zipfile.ZipFile(sami_zip).extractall(subdir)
 
-    for (nob, sme) in pairs(
+    for (nob, smi, sami_lang) in pairs(
         {os.path.join(root, f) for root, _, files in os.walk(subdir) for f in files}
     ):
         try:
             nob_in_free = dropbox_adders["nob"].copy_file_to_corpus(
                 origpath=nob, metadata_filename=os.path.basename(nob)
             )
-            dropbox_adders["sme"].copy_file_to_corpus(
-                origpath=sme,
-                metadata_filename=os.path.basename(sme),
+            dropbox_adders[sami_lang].copy_file_to_corpus(
+                origpath=smi,
+                metadata_filename=os.path.basename(smi),
                 parallelpath=nob_in_free,
             )
         except UserWarning:
             pass
         os.remove(nob)
-        os.remove(sme)
+        os.remove(smi)
 
     for dropbox_adder in dropbox_adders.values():
         dropbox_adder.add_files_to_working_copy()
