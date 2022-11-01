@@ -61,8 +61,6 @@ setup(
         "lxml",
         "parameterized",
         "prompt_toolkit",
-        "odfpy",
-        "pydocx",
         "regex",
         "requests",
         "requests-mock",
