@@ -52,9 +52,6 @@ setup(
             "ces_to_bibel_no = corpustools.ces2homegrown:main",
         ]
     },
-    dependency_links=[
-        "https://github.com/albbas/pyth/archive/pyth-py3+bs4+io+handle_super.zip#egg=pyth-0.7.0"
-    ],  # nopep8
     install_requires=[
         "epub",
         "feedparser",
