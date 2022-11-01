@@ -23,14 +23,11 @@ from lxml import etree, html
 from lxml.html import clean
 
 from corpustools import (
+    convert_using_pandoc,
     docconverter,
-    docxconverter,
     epubconverter,
     htmlconverter,
-    latexconverter,
-    odfconverter,
     pdfconverter,
-    rtfconverter,
     util,
     xmlconverter,
 )
@@ -41,12 +38,12 @@ HERE = os.path.dirname(__file__)
 def to_html_elt(path):
     chooser = {
         ".doc": docconverter.to_html_elt,
-        ".docx": docxconverter.to_html_elt,
+        ".docx": convert_using_pandoc.to_html_elt,
         ".epub": epubconverter.to_html_elt,
         ".html": htmlconverter.to_html_elt,
-        ".odt": odfconverter.to_html_elt,
-        ".rtf": rtfconverter.to_html_elt,
-        ".tex": latexconverter.to_html_elt,
+        ".odt": convert_using_pandoc.to_html_elt,
+        ".rtf": convert_using_pandoc.to_html_elt,
+        ".tex": convert_using_pandoc.to_html_elt,
         ".xml": xmlconverter.to_html_elt,
         ".pdf": pdfconverter.to_html_elt,
     }

@@ -22,8 +22,6 @@ import logging
 import multiprocessing
 import os
 
-from pydocx.exceptions import MalformedDocxException
-
 from corpustools import argparse_version, converter, text_cat, util, xslsetter
 
 LOGGER = logging.getLogger(__name__)
@@ -85,7 +83,6 @@ class ConverterManager:
             util.ConversionError,
             ValueError,
             IndexError,
-            MalformedDocxException,
         ) as error:
             LOGGER.warn("Could not convert %s\n%s", orig_file, error)
 
