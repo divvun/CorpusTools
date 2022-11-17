@@ -1,4 +1,3 @@
-# -*- coding:utf-8 -*-
 import argparse
 import multiprocessing
 import os
@@ -8,7 +7,7 @@ from lxml import etree
 
 from corpustools import analyser, argparse_version, corpuspath, korp_mono, util
 
-LANGS_RE = re.compile("/(\w+)2(\w+)/")
+LANGS_RE = re.compile(r"/(\w+)2(\w+)/")
 
 
 def process_in_parallel(files_list):

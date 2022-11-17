@@ -412,7 +412,7 @@ def group_sem(analysis):
 
     for key, value in dict_sem.items():
         for sem in value:
-            my_reg = "Sem/[a-zA-Z]*" + re.escape(sem) + "[a-zA-Z]*\s"
+            my_reg = "Sem/[a-zA-Z]*" + re.escape(sem) + r"[a-zA-Z]*\s"
             analysis = re.sub(my_reg, "Sem/" + key + " ", analysis)
 
     return analysis
@@ -487,13 +487,13 @@ def make_root_element(f_root):
             f_dateto = year_value + "0101"
         # <year>2011-2012</year>
         elif re.match(r"^([0-9]{4,4})\-([0-9]{4,4})$", year_value):
-            first, last = re.split("\-", year_value)
+            first, last = re.split(r"\-", year_value)
             f_date = first + "-01-01"
             f_datefrom = first + "0101"
             f_dateto = last + "0101"
         # <year>05.10.2004</year>
         elif re.match(r"^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4,4}$", year_value):
-            day, month, year = re.split("\.", year_value)
+            day, month, year = re.split(r"\.", year_value)
             f_date = year + "-" + month + "-" + day
             f_datefrom = year + month + day
             f_dateto = year + month + day
@@ -587,7 +587,7 @@ def reshape_analysis(analysis):
     _analysis = re.sub('\n\t"<', '\n\t"\\<', _analysis)
     _analysis = re.sub('\n\t">', '\n\t"\\>', _analysis)
     _analysis = re.sub(
-        """:\s*
+        r""":\s*
 \s*
 
 \s*""",
@@ -637,18 +637,18 @@ def extract_original_analysis(used_analysis, language):
     if language == "sme":
         used_analysis = group_sem(used_analysis)
     else:
-        used_analysis = re.sub("Sem/[^\s]+\s", "", used_analysis)
+        used_analysis = re.sub(r"Sem/[^\s]+\s", "", used_analysis)
 
     for regex in [
-        "Use/[^\s]+\s",
-        "Gram/[^\s]+\s",
-        "OLang/[^\s]+\s",
-        "Dial/[^\s]+\s",
-        "CmpN/[^\s]+\s",
-        "CmpNP/[^\s]+\s",
-        "G3+\s",
-        "v9+\s",
-        "Err/[^\s]+\s",
+        r"Use/[^\s]+\s",
+        r"Gram/[^\s]+\s",
+        r"OLang/[^\s]+\s",
+        r"Dial/[^\s]+\s",
+        r"CmpN/[^\s]+\s",
+        r"CmpNP/[^\s]+\s",
+        r"G3+\s",
+        r"v9+\s",
+        r"Err/[^\s]+\s",
     ]:
         used_analysis = re.sub(regex, "", used_analysis)
 
@@ -702,7 +702,7 @@ def reshape_cohort_line(line):
     # delete '\n' at the end of the analysis
     line = line.rstrip("\n")
     # delimiter between lemma and msd (morpho-syntactic description)
-    line = re.sub('"\s', "_∞_", line)
+    line = re.sub(r'"\s', "_∞_", line)
     # delimiter between the compound parts
     line = re.sub("\n\t", "_™_", line)
     # keep track of the embedding of the different parts for compounds split into more than two parts
@@ -797,13 +797,13 @@ def lemma_generation(original_analysis, pos, _current_lang):
 def clean_msd(current_msd, pos):
     current_msd = current_msd.strip()
     for (regex, replacement) in [
-        ("IV\s", ""),
-        ("TV\s", ""),
+        (r"IV\s", ""),
+        (r"TV\s", ""),
         ("Relc", "Rel"),
         ("Dyn", ""),
         ("Known", ""),
         ("/", "_"),
-        ("\s", "."),
+        (r"\s", "."),
     ]:
         current_msd = re.sub(regex, replacement, current_msd)
     # add the pos as first element of the msd string
@@ -837,7 +837,7 @@ def make_analysis_tuple(word_form, rest_cohort, language):
 
     # put a clear delimiter between the (first) pos value and the rest of msd
     # in order to disambiguate from the rest of whitespaces
-    parts = re.compile("(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?\|_∞_\<aux>\s?)").split(
+    parts = re.compile(r"(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?\|_∞_\<aux>\s?)").split(
         extract_used_analysis(original_analysis), maxsplit=1
     )
 
@@ -948,7 +948,7 @@ def get_generation_string(used_analysis, pos, lang):
 def clean_string2generate(string2generate):
     ### replace all delimiter by '+' and '_™_' by '#'
     for (regex, replacement) in [
-        ("\s+", "+"),
+        (r"\s+", "+"),
         ("_∞1EX∞_", "+"),
         ("Ex/", ""),
         ("_∞1CO∞_", "+"),
@@ -962,8 +962,8 @@ def clean_string2generate(string2generate):
 
 def make_string2generate(lemma, tail):
     # ignore function and dependence relation here
-    tail = re.sub("\s@[^\s]+", "", tail)
-    tail = re.sub("\s#\d+->\d+", "", tail)
+    tail = re.sub(r"\s@[^\s]+", "", tail)
+    tail = re.sub(r"\s#\d+->\d+", "", tail)
 
     ex_index = tail.find("Ex/")
     tm_index = tail.find("_™_")
