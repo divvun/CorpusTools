@@ -22,7 +22,6 @@ import argparse
 import datetime
 import difflib
 import os
-import subprocess
 import sys
 import time
 

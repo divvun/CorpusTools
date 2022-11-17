@@ -28,8 +28,6 @@ from corpustools import util
 class DocError(Exception):
     """Use this when errors occur in this module."""
 
-    pass
-
 
 def to_html_elt(filename):
     return html.document_fromstring(doc_to_unicodehtml(filename))
@@ -170,7 +168,6 @@ def fix_wv_output():
     </html:div>
 
     """
-    pass
 
 
 def extract_text(filename):

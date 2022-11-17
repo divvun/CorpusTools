@@ -29,8 +29,6 @@ import git
 class VersionControlError(Exception):
     """Raise this exception when errors arise in this module."""
 
-    pass
-
 
 class VersionController:
     """A very basic version control class."""

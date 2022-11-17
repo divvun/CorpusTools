@@ -23,7 +23,7 @@ import os
 from collections import defaultdict
 from datetime import date
 
-from corpustools import argparse_version, converter, convertermanager, util
+from corpustools import argparse_version, converter, convertermanager
 
 logging.basicConfig(level=logging.CRITICAL)
 

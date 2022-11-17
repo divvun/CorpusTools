@@ -22,10 +22,8 @@
 import argparse
 import logging
 import os
-import shutil
 
-from corpustools import (argparse_version, convertermanager, corpuspath,
-                         parallelize)
+from corpustools import argparse_version, convertermanager, corpuspath, parallelize
 
 LOGGER = logging.getLogger(__name__)
 

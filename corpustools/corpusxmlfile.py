@@ -19,8 +19,6 @@
 """Classes and functions to sentence align two files."""
 
 
-import os
-
 from lxml import etree
 
 from corpustools import corpuspath, util

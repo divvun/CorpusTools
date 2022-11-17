@@ -26,7 +26,6 @@ from collections import defaultdict
 
 from corpustools import (
     argparse_version,
-    corpuspath,
     corpusxmlfile,
     parallelize,
     util,

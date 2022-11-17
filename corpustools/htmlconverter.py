@@ -26,8 +26,6 @@ from lxml import etree, html
 class HTMLError(Exception):
     """Raise this error in this module."""
 
-    pass
-
 
 def remove_declared_encoding(content):
     """Remove declared decoding.

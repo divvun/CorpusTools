@@ -15,7 +15,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-"""Convert rtf files to the Giella xml format."""
+"""Convert files supported by pandoc to the Giella xml format."""
 
 import subprocess
 

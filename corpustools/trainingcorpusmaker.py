@@ -22,7 +22,6 @@
 import argparse
 import io
 import os
-import sys
 from shutil import copy
 
 import regex

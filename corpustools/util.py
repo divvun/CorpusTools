@@ -26,7 +26,6 @@ import subprocess
 import sys
 from collections import namedtuple
 from contextlib import contextmanager
-from functools import reduce
 
 PathComponents = namedtuple("PathComponents", "root module lang genre subdirs basename")
 
@@ -34,25 +33,17 @@ PathComponents = namedtuple("PathComponents", "root module lang genre subdirs ba
 class SetupError(Exception):
     """This exception is raised when setup is faulty."""
 
-    pass
-
 
 class ExecutableMissingError(Exception):
     """This exception is raised when wanted executables are missing."""
-
-    pass
 
 
 class ArgumentError(Exception):
     """This exception is raised when argument errors occur."""
 
-    pass
-
 
 class ConversionError(Exception):
     """Raise this exception when conversions error occur."""
-
-    pass
 
 
 def print_frame(debug="", *args):

@@ -24,7 +24,6 @@ import multiprocessing
 import os
 import re
 from functools import partial
-from subprocess import run
 
 import lxml.etree as etree
 
@@ -837,9 +836,9 @@ def make_analysis_tuple(word_form, rest_cohort, language):
 
     # put a clear delimiter between the (first) pos value and the rest of msd
     # in order to disambiguate from the rest of whitespaces
-    parts = re.compile(r"(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?\|_∞_\<aux>\s?)").split(
-        extract_used_analysis(original_analysis), maxsplit=1
-    )
+    parts = re.compile(
+        r"(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?\|_∞_\<aux>\s?)"
+    ).split(extract_used_analysis(original_analysis), maxsplit=1)
 
     # ambiguity hack: unmask '<' and '>' as lemma
     lemma = parts[0].replace("\\", "")

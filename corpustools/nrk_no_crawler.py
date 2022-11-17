@@ -25,7 +25,6 @@ import sys
 from collections import defaultdict
 
 import dateutil.parser
-import feedparser
 import requests
 from lxml import etree, html
 

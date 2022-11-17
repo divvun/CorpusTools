@@ -33,8 +33,6 @@ from corpustools import util, versioncontrol, xslsetter
 class NamechangerError(Exception):
     """This exception is raised when errors occurs in this module."""
 
-    pass
-
 
 PathPair = namedtuple("PathPair", "oldpath newpath")
 

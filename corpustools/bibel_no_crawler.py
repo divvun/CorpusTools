@@ -163,7 +163,7 @@ def fetch_other_languages(book_name, bookindex, chapternumber, address):
 
 
 def main():
-    """"Fetch bible texts from bibel.no"""
+    """Fetch bible texts from bibel.no"""
     prefix = "https://bibel.no"
     books = get_books(fetch_page("https://bibel.no/nettbibelen?slang=bokmal11"))
     for book_name in books:

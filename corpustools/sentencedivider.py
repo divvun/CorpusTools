@@ -19,12 +19,6 @@
 """Classes and functions to sentence align two files."""
 
 
-import io
-import os
-
-import regex
-from lxml import etree
-
 from corpustools import ccat, modes
 
 

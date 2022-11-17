@@ -19,7 +19,6 @@
 
 import collections
 import re
-import sys
 from copy import deepcopy
 
 import lxml.etree as etree
@@ -162,8 +161,6 @@ class PDFFontspecs:
 
 class PDFEmptyPageError(Exception):
     """Raise this exception if a pdf page is empty."""
-
-    pass
 
 
 class PDFPageMetadata:

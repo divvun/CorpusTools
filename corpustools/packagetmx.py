@@ -54,9 +54,7 @@ class PackageTmx:
 
     def generate_filename(self):
         """Generate a new file name. Return the new filename."""
-        name = "".join(
-            [self.dirname, "-", self.date, f"-{self.fileId:06d}", ".tmx"]
-        )
+        name = "".join([self.dirname, "-", self.date, f"-{self.fileId:06d}", ".tmx"])
         self.fileId += 1
 
         return name

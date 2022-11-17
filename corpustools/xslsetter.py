@@ -32,8 +32,6 @@ here = os.path.dirname(__file__)
 class XsltError(Exception):
     """Raise this exception when errors arise in this module."""
 
-    pass
-
 
 class MetadataHandler:
     """Class to handle metadata in .xsl files.

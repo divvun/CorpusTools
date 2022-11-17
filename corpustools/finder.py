@@ -25,7 +25,6 @@ import shutil
 import sys
 
 import lxml.html
-import requests
 import urlparse
 
 from corpustools import adder, move_files, namechanger, util, xslsetter
