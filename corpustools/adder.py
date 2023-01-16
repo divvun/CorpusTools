@@ -412,9 +412,6 @@ def main():
                 "-p|--parallel\n"
                 "Only -l|--lang is allowed together with -p|--parallel"
             )
-        (root, _, lang, genre, path, _) = util.split_path(args.parallel_file)
-        adder = AddToCorpus(root, args.lang, os.path.join(genre, path))
-
         if not os.path.exists(args.parallel_file):
             raise SystemExit(
                 "The given parallel file\n\t{}\n"
@@ -429,6 +426,10 @@ def main():
             raise SystemExit(
                 "It is not possible to add a directory " "when the -p option is given."
             )
+
+        (root, _, lang, genre, path, _) = util.split_path(args.parallel_file)
+        adder = AddToCorpus(root, args.lang, os.path.join(genre, path))
+
         orig = args.origs[0]
         if os.path.isfile(orig):
             if args.name:
