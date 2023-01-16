@@ -12,7 +12,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2016-2021 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2016-2023 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Test the SamediggiNoPage class."""
