@@ -24,6 +24,7 @@ from lxml.html import clean
 
 from corpustools import (
     convert_using_pandoc,
+    convert_using_soffice,
     docconverter,
     epubconverter,
     htmlconverter,
@@ -37,6 +38,7 @@ HERE = os.path.dirname(__file__)
 
 def to_html_elt(path):
     chooser = {
+        ".writenow": convert_using_soffice.to_html_elt,
         ".doc": docconverter.to_html_elt,
         ".docx": convert_using_pandoc.to_html_elt,
         ".epub": epubconverter.to_html_elt,

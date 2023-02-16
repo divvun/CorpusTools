@@ -70,6 +70,7 @@ def to_giella(path):
         ".svg": svgconverter.convert2intermediate,
         ".txt": plaintextconverter.convert2intermediate,
         ".tex": htmlcontentconverter.convert2intermediate,
+        ".writenow": htmlcontentconverter.convert2intermediate,
         ".usx": usxconverter.convert2intermediate,
     }
 
