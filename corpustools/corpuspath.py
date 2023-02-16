@@ -253,6 +253,14 @@ class CorpusPath:
             f"{origfilename}_{self.pathcomponents.lang}.sent",
         )
 
+    @property
+    def tmp_filename(self):
+        return os.path.join(
+            self.pathcomponents.root,
+            "tmp",
+            f"{self.pathcomponents.basename}",
+        )
+
     @staticmethod
     def crop_to_bytes(name, max_bytes):
         """Ensure `name` is less than `max_bytes` bytes.
