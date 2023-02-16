@@ -15,7 +15,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-"""Convert files supported by pandoc to the Giella xml format."""
+"""Convert files supported by pandoc to the html format."""
 
 import subprocess
 
@@ -23,13 +23,13 @@ from lxml import html
 
 
 def to_html_elt(filename):
-    """Convert the content of an rtf file to xhtml.
+    """Convert the content of the give file to an lxml element.
 
     Args:
         filename (str): path to the document
 
     Returns:
-        A string containing the html version of the rtf file.
+        An lxml element containing the html version of the given file.
     """
     html_body = subprocess.run(
         ["pandoc", filename], encoding="utf-8", capture_output=True
