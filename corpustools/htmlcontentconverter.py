@@ -182,6 +182,7 @@ class HTMLBeautifier:
         unwanted_classes_ids = {
             "div": {
                 "class": [
+                    "skiplinks",  # yle.fi
                     "AddThis",  # lansstyrelsen.se
                     "InnholdForfatter",  # unginordland
                     "NavigationLeft",  # lansstyrelsen.se
@@ -273,6 +274,7 @@ class HTMLBeautifier:
                     "authors ui-helper-clearfix",  # nord-salten.no
                     "menu",  # visitstetind.no
                     "metaWrapper",
+                    "mini-frontpage",  # yle.fi
                     "moduletable_oikopolut",
                     "moduletable_etulinkki",  # www.samediggi.fi
                     "navigation",  # latex2html docs
@@ -312,6 +314,8 @@ class HTMLBeautifier:
                     "upperheader",
                 ],
                 "id": [
+                    "oikea_palsta",  # yle.fi
+                    "ylefifooter",  # yle.fi
                     "print-logo-wrapper",  # 1177.se
                     "AreaLeft",
                     "AreaLeftNav",
@@ -481,6 +485,7 @@ class HTMLBeautifier:
                     "K-NOTE-FOTNOTE",
                     "graytext",  # svenskakyrkan.se
                     "breadcrumbs pathway",  # gaaltije.se
+                    "meta",  # yle.fi
                 ],
             },
             "a": {
@@ -516,6 +521,7 @@ class HTMLBeautifier:
             },
             "section": {
                 "class": [
+                    "recents-on-this-topic",  # yle.fi
                     "section-theme-sub-nav",  # 1177.se
                     "span3",  # samernas.se
                     "tree-menu current",  # umo.se
