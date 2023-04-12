@@ -20,6 +20,7 @@
 
 import os
 import unittest
+import pytest
 
 from parameterized import parameterized
 
@@ -41,6 +42,21 @@ def name(module, lang, extension):
     """
     return os.path.join(
         HERE, module, lang, "subdir/subsubdir/filename.html" + extension
+    )
+
+
+@pytest.mark.parametrize(
+    "path, parent, corpusdir, corpusfile",
+    [
+        ("/a/corpus-x/b", "/a/", "corpus-x", "/b"),
+        ("/a/b/corpus-orig-x-x/c/d/e", "/a/b/", "corpus-orig-x-x", "/c/d/e"),
+    ],
+)
+def test_corpuspath_re(path, parent, corpusdir, corpusfile):
+    assert corpuspath.CORPUS_DIR_RE.search(path).groups() == (
+        parent,
+        corpusdir,
+        corpusfile,
     )
 
 

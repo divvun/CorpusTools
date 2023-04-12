@@ -19,8 +19,13 @@
 
 
 import os
+import re
 
 from corpustools import util, xslsetter
+
+CORPUS_DIR_RE = re.compile(
+    r"(?P<parent>.*/)(?P<corpusdir>corpus-[^/]+)(?P<corpusfile>.*)"
+)
 
 
 class CorpusPath:
