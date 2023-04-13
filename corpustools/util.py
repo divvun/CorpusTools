@@ -24,10 +24,7 @@ import os
 import platform
 import subprocess
 import sys
-from collections import namedtuple
 from contextlib import contextmanager
-
-PathComponents = namedtuple("PathComponents", "root module lang genre subdirs basename")
 
 
 class SetupError(Exception):

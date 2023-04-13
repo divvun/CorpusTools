@@ -18,6 +18,7 @@
 """This file contains classes to handle corpus filenames."""
 
 
+from collections import namedtuple
 import os
 import re
 
@@ -25,6 +26,11 @@ from corpustools import util, xslsetter
 
 CORPUS_DIR_RE = re.compile(
     r"(?P<parent>.*/)(?P<corpusdir>corpus-[^/]+)(?P<corpusfile>.*)"
+)
+
+
+PathComponents = namedtuple(
+    "PathComponents", "root dirsuffix module lang genre subdirs basename goallang"
 )
 
 
@@ -56,24 +62,55 @@ class CorpusPath:
             ValueError: the path is not part of a corpus.
         """
         abspath = os.path.normpath(os.path.abspath(path))
-        for module in [
-            "goldstandard/orig",
-            "prestable/converted",
-            "prestable/toktmx",
-            "prestable/tmx",
-            "orig",
-            "converted",
-            "analysed",
-            "stable/tmx",
-            "stable",
-            "toktmx",
-            "tmx",
-            "korp",
-        ]:
-            module_dir = "/" + module + "/"
-            if module_dir in abspath:
-                root, rest = abspath.split(module_dir)
-                return root, module, rest
+        corpus_match = CORPUS_DIR_RE.search(abspath)
+
+        if corpus_match:
+            corpus_dict = corpus_match.groupdict()
+            corpus_dir_parts = corpus_dict["corpusdir"].split("-")
+
+            if len(corpus_dir_parts) > 2 and corpus_dir_parts[2] == "orig":
+                return (
+                    corpus_dict["parent"],
+                    corpus_dir_parts[1],
+                    "-" + "-".join(corpus_dir_parts[3:])
+                    if len(corpus_dir_parts) > 3
+                    else "",
+                    "",
+                    corpus_dict["corpusfile"],
+                    "",
+                )
+            else:
+                for module in [
+                    "goldstandard",
+                    "prestable/converted",
+                    "prestable/toktmx",
+                    "prestable/tmx",
+                    "converted",
+                    "analysed",
+                    "stable/tmx",
+                    "stable/converted",
+                    "toktmx",
+                    "tmx",
+                    "korp",
+                ]:
+                    module_dir = "/" + module + "/"
+                    if corpus_dict["corpusfile"].startswith(module_dir):
+                        corpus_file_parts = corpus_dict["corpusfile"][
+                            len(module_dir) :
+                        ].split("/")
+
+                        return (
+                            corpus_dict["parent"],
+                            corpus_dir_parts[1],
+                            "-" + "-".join(corpus_dir_parts[3:])
+                            if len(corpus_dir_parts) > 2
+                            else "",
+                            module,
+                            "/".join(corpus_file_parts[1:])
+                            if module.endswith("tmx")
+                            else "/".join(corpus_file_parts),
+                            corpus_file_parts[0] if module.endswith("tmx") else "",
+                        )
 
         raise ValueError(f"File is not part of a corpus: {path}")
 
@@ -88,17 +125,16 @@ class CorpusPath:
             original file
         """
         # Ensure we have at least one / before module, for safer splitting:
-        root, module, lang_etc = self.split_on_module(path)
+        root, lang, dirsuffix, module, corpusfile, goallang = self.split_on_module(path)
 
-        lang_etc_parts = lang_etc.split("/")
-        (lang, genre, subdirs, basename) = (
-            lang_etc_parts[0],
-            lang_etc_parts[1],
-            lang_etc_parts[2:-1],
-            lang_etc_parts[-1],
+        corpusfile_parts = corpusfile.split("/")
+        (genre, subdirs, basename) = (
+            corpusfile_parts[0],
+            corpusfile_parts[1:-1],
+            corpusfile_parts[-1],
         )
 
-        if "orig" in module:
+        if not module:
             if basename.endswith(".xsl"):
                 basename = util.basename_noext(basename, ".xsl")
             elif basename.endswith(".log"):
@@ -110,17 +146,14 @@ class CorpusPath:
         elif "tmx" in module:
             basename = util.basename_noext(basename, ".tmx")
 
-        if "2" in lang and "tmx" in module:
-            lang = lang[: lang.find("2")]
-
-        return util.PathComponents(
-            root, "orig", lang, genre, "/".join(subdirs), basename
+        return PathComponents(
+            root, dirsuffix, "", lang, genre, "/".join(subdirs), basename, goallang
         )
 
     @property
     def orig(self):
         """Return the path of the original file."""
-        return os.path.join(*list(self.pathcomponents))
+        return self.name()
 
     @property
     def xsl(self):
@@ -132,7 +165,7 @@ class CorpusPath:
         """Return the path of the log file."""
         return self.orig + ".log"
 
-    def name(self, module="orig", lang=None, name=None, extension=""):
+    def name(self, module="", lang=None, name=None, extension=""):
         """Return a path based on the module and extension.
 
         Args:
@@ -146,8 +179,10 @@ class CorpusPath:
 
         return os.path.join(
             self.pathcomponents.root,
+            f"corpus-{self.pathcomponents.lang}{self.pathcomponents.dirsuffix}"
+            if self.pathcomponents.module
+            else f"corpus-{self.pathcomponents.lang}-orig{self.pathcomponents.dirsuffix}",
             module,
-            this_lang,
             self.pathcomponents.genre,
             self.pathcomponents.subdirs,
             this_name + extension,

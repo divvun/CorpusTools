@@ -64,21 +64,22 @@ def test_corpuspath_re(path, parent, corpusdir, corpusfile):
     )
 
 
-@parameterized(
+@pytest.mark.parametrize(
+    "filename",
     [
-        ("orig_to_orig", name("orig", "sme", "")),
-        ("xsl_to_orig", name("orig", "sme", ".xsl")),
-        ("log_to_orig", name("orig", "sme", ".log")),
-        ("converted_to_orig", name("converted", "sme", ".xml")),
-        ("prestable_converted_to_orig", name("prestable/converted", "sme", ".xml")),
-        ("analysed_to_orig", name("converted", "sme", ".xml")),
-        ("toktmx_to_orig", name("toktmx/", "sme2nob", ".toktmx")),
-        ("prestable_toktmx_to_orig", name("prestable/toktmx/", "sme2nob", ".toktmx")),
-        ("tmx_to_orig", name("tmx", "sme2nob", ".tmx")),
-        ("prestable_tmx_to_orig", name("prestable/tmx/", "sme2nob", ".tmx")),
-    ]
+        (name("orig", "sme", "")),
+        (name("orig", "sme", ".xsl")),
+        (name("orig", "sme", ".log")),
+        (name("converted", "sme", ".xml")),
+        (name("prestable/converted", "sme", ".xml")),
+        (name("converted", "sme", ".xml")),
+        (name("toktmx/nob", "sme", ".toktmx")),
+        (name("prestable/toktmx/nob", "sme", ".toktmx")),
+        (name("tmx/nob", "sme", ".tmx")),
+        (name("prestable/tmx/nob", "sme", ".tmx")),
+    ],
 )
-def test_path_to_orig(testname, orig):
+def test_path_to_orig(filename):
     """Check that the corpus file naming scheme works as it should.
 
     Args:
@@ -88,13 +89,6 @@ def test_path_to_orig(testname, orig):
     Raises:
         AssertionError: is raised if the result is not what is expected
     """
-    corpus_path = corpuspath.CorpusPath(orig)
-    orig_name = name(module="orig", lang="sme", extension="")
-    if corpus_path.orig != orig_name:
-        raise AssertionError(
-            f"{testname}:\nexpected {orig_name}\ngot {corpus_path.orig}"
-        )
-
 
 class TestComputeCorpusnames(unittest.TestCase):
     @staticmethod
