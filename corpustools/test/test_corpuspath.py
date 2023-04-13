@@ -40,8 +40,12 @@ def name(module, lang, extension):
     Returns:
         str: path to the corpus file
     """
+    corpusdir = f"corpus-{lang}-orig" if module == "orig" else f"corpus-{lang}"
     return os.path.join(
-        HERE, module, lang, "subdir/subsubdir/filename.html" + extension
+        HERE,
+        corpusdir,
+        f"{module + '/' if module != 'orig' else ''}subdir/subsubdir/filename.html"
+        + extension,
     )
 
 
