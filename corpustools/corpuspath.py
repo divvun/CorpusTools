@@ -176,11 +176,10 @@ class CorpusPath:
         """
         this_lang = self.pathcomponents.lang if lang is None else lang
         this_name = self.pathcomponents.basename if name is None else name
-
         return os.path.join(
             self.pathcomponents.root,
             f"corpus-{self.pathcomponents.lang}{self.pathcomponents.dirsuffix}"
-            if self.pathcomponents.module
+            if module
             else f"corpus-{self.pathcomponents.lang}-orig{self.pathcomponents.dirsuffix}",
             module,
             self.pathcomponents.genre,
@@ -289,6 +288,7 @@ class CorpusPath:
         origfilename = self.crop_to_bytes(self.pathcomponents.basename, (255 - 20))
         return os.path.join(
             self.pathcomponents.root,
+            f"corpus-{self.pathcomponents.lang}{self.pathcomponents.dirsuffix}",
             "tmp",
             f"{origfilename}_{self.pathcomponents.lang}.sent",
         )

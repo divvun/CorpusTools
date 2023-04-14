@@ -20,9 +20,8 @@
 
 import os
 import unittest
-import pytest
 
-from parameterized import parameterized
+import pytest
 
 from corpustools import corpuspath
 
@@ -98,51 +97,54 @@ def test_path_to_orig(filename):
 
 
 class TestComputeCorpusnames(unittest.TestCase):
-    @staticmethod
-    def name(module):
-        return os.path.join(HERE, module, "sme/admin/subdir/subsubdir/filename.html")
-
     def setUp(self):
-        self.corpus_path = corpuspath.CorpusPath(self.name("orig"))
+        self.corpus_path = corpuspath.CorpusPath(name("orig", "sme", "", ""))
 
     def test_compute_orig(self):
-        self.assertEqual(self.corpus_path.orig, self.name("orig"))
+        self.assertEqual(self.corpus_path.orig, name("orig", "sme", "", ""))
 
     def test_compute_xsl(self):
-        self.assertEqual(self.corpus_path.xsl, self.name("orig") + ".xsl")
+        self.assertEqual(self.corpus_path.xsl, name("orig", "sme", ".xsl", ""))
 
     def test_compute_log(self):
-        self.assertEqual(self.corpus_path.log, self.name("orig") + ".log")
+        self.assertEqual(self.corpus_path.log, name("orig", "sme", ".log", ""))
 
     def test_compute_converted(self):
-        self.assertEqual(self.corpus_path.converted, self.name("converted") + ".xml")
+        self.assertEqual(
+            self.corpus_path.converted, name("converted", "sme", ".xml", "")
+        )
 
     def test_compute_prestable_converted(self):
         self.assertEqual(
             self.corpus_path.prestable_converted,
-            self.name("prestable/converted") + ".xml",
+            name("prestable/converted", "sme", ".xml", ""),
         )
 
     def test_compute_goldstandard_converted(self):
         self.corpus_path.metadata.set_variable("conversion_status", "correct")
         self.assertEqual(
-            self.corpus_path.converted, self.name("goldstandard/converted") + ".xml"
+            self.corpus_path.converted,
+            name("goldstandard/converted", "sme", ".xml", ""),
         )
 
     def test_compute_prestable_goldstandard_converted(self):
         self.corpus_path.metadata.set_variable("conversion_status", "correct")
         self.assertEqual(
             self.corpus_path.prestable_converted,
-            self.name("prestable/goldstandard/converted") + ".xml",
+            name("prestable/goldstandard/converted", "sme", ".xml", ""),
         )
 
     def test_compute_analysed(self):
-        self.assertEqual(self.corpus_path.analysed, self.name("analysed") + ".xml")
+        self.assertEqual(
+            self.corpus_path.analysed,
+            name("analysed", "sme", ".xml", ""),
+        )
 
     def test_compute_sent_filename(self):
         self.assertEqual(
             self.corpus_path.sent_filename,
-            f"{self.corpus_path.pathcomponents.root}/tmp/"
+            f"{self.corpus_path.pathcomponents.root}"
+            f"corpus-{self.corpus_path.pathcomponents.lang}/tmp/"
             f"{self.corpus_path.pathcomponents.basename}_"
             f"{self.corpus_path.pathcomponents.lang}.sent",
         )
