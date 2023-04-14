@@ -123,7 +123,6 @@ class CorpusPath:
             A PathComponents namedtuple containing the components of the
             original file
         """
-        # Ensure we have at least one / before module, for safer splitting:
         root, lang, dirsuffix, module, corpusfile, goallang = self.split_on_module(path)
 
         corpusfile_parts = corpusfile.split("/")
@@ -164,23 +163,27 @@ class CorpusPath:
         """Return the path of the log file."""
         return self.orig + ".log"
 
-    def name(self, module="", lang=None, name=None, extension=""):
+    def name(
+        self, module="", parallel_lang=None, target_lang=None, name=None, extension=""
+    ):
         """Return a path based on the module and extension.
 
         Args:
             module (str): string containing some corpus module
-            lang (str): string containing the goal language of a tmx file
+            parallel_lang (str): lang of a parallel document
+            target_lang (str): string containing the target language of a tmx file
             name (str): name of the wanted file
             extension (str): string containing a file extension
         """
         this_name = self.pathcomponents.basename if name is None else name
+        this_lang = self.pathcomponents.lang if parallel_lang is None else parallel_lang
         return os.path.join(
             self.pathcomponents.root,
-            f"corpus-{self.pathcomponents.lang}{self.pathcomponents.dirsuffix}"
+            f"corpus-{this_lang}{self.pathcomponents.dirsuffix}"
             if module
             else f"corpus-{self.pathcomponents.lang}-orig{self.pathcomponents.dirsuffix}",
             module,
-            lang if lang else "",
+            target_lang if target_lang is not None else "",
             self.pathcomponents.genre,
             self.pathcomponents.subdirs,
             this_name + extension,
@@ -218,7 +221,8 @@ class CorpusPath:
         """
         try:
             return self.name(
-                lang=language, name=self.metadata.get_parallel_texts().get(language)
+                parallel_lang=language,
+                name=self.metadata.get_parallel_texts().get(language),
             )
         except TypeError:
             return ""
@@ -230,20 +234,20 @@ class CorpusPath:
             str: path to the orig path of a parallel file.
         """
         for language, name in self.metadata.get_parallel_texts().items():
-            yield self.name(lang=language, name=name)
+            yield self.name(parallel_lang=language, name=name)
 
-    def tmx(self, language):
+    def tmx(self, target_language):
         """Name of the tmx file.
 
         Args:
-            language (str): language of the parallel
+            target_language (str): language of the parallel
 
         Returns:
             str: path to the tmx file
         """
         return self.name(
             module="tmx",
-            lang=language,
+            target_lang=target_language,
             extension=".tmx",
         )
 
