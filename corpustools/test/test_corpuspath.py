@@ -69,16 +69,16 @@ def test_corpuspath_re(path, parent, corpusdir, corpusfile):
 @pytest.mark.parametrize(
     "filename",
     [
-        (name("orig", "sme", "")),
-        (name("orig", "sme", ".xsl")),
-        (name("orig", "sme", ".log")),
-        (name("converted", "sme", ".xml")),
-        (name("prestable/converted", "sme", ".xml")),
-        (name("converted", "sme", ".xml")),
-        (name("toktmx/nob", "sme", ".toktmx")),
-        (name("prestable/toktmx/nob", "sme", ".toktmx")),
-        (name("tmx/nob", "sme", ".tmx")),
-        (name("prestable/tmx/nob", "sme", ".tmx")),
+        (name("orig", "sme", "", "")),
+        (name("orig", "sme", ".xsl", "")),
+        (name("orig", "sme", ".log", "")),
+        (name("converted", "sme", ".xml", "")),
+        (name("prestable/converted", "sme", ".xml", "")),
+        (name("converted", "sme", ".xml", "")),
+        (name("toktmx", "sme", ".toktmx", "nob")),
+        (name("prestable/toktmx", "sme", ".toktmx", "nob")),
+        (name("tmx", "sme", ".tmx", "nob")),
+        (name("prestable/tmx", "sme", ".tmx", "nob")),
     ],
 )
 def test_path_to_orig(filename):
@@ -91,6 +91,11 @@ def test_path_to_orig(filename):
     Raises:
         AssertionError: is raised if the result is not what is expected
     """
+
+    assert corpuspath.CorpusPath(filename).orig == name(
+        module="orig", lang="sme", extension="", goallang=""
+    )
+
 
 class TestComputeCorpusnames(unittest.TestCase):
     @staticmethod
