@@ -138,7 +138,9 @@ class CorpusPath:
                 basename = util.basename_noext(basename, ".xsl")
             elif basename.endswith(".log"):
                 basename = util.basename_noext(basename, ".log")
-        elif "converted" in module or "analysed" in module:
+        elif any(
+            xml_module in module for xml_module in ["converted", "analysed", "korp"]
+        ):
             basename = util.basename_noext(basename, ".xml")
         elif "tmx" in module:
             basename = util.basename_noext(basename, ".tmx")
