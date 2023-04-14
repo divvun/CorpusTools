@@ -140,8 +140,6 @@ class CorpusPath:
                 basename = util.basename_noext(basename, ".log")
         elif "converted" in module or "analysed" in module:
             basename = util.basename_noext(basename, ".xml")
-        elif "toktmx" in module:
-            basename = util.basename_noext(basename, ".toktmx")
         elif "tmx" in module:
             basename = util.basename_noext(basename, ".tmx")
 
