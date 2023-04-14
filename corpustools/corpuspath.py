@@ -33,6 +33,17 @@ PathComponents = namedtuple(
     "PathComponents", "root dirsuffix module lang genre subdirs basename goallang"
 )
 
+MODULES = [
+    "correct-no-gs/converted",
+    "goldstandard/converted",
+    "stable/converted",
+    "stable/tmx",
+    "analysed",
+    "converted",
+    "korp",
+    "tmx",
+]
+
 
 class CorpusPath:
     """Map filenames in a corpus.
@@ -80,19 +91,7 @@ class CorpusPath:
                     "",
                 )
             else:
-                for module in [
-                    "goldstandard",
-                    "prestable/converted",
-                    "prestable/toktmx",
-                    "prestable/tmx",
-                    "converted",
-                    "analysed",
-                    "stable/tmx",
-                    "stable/converted",
-                    "toktmx",
-                    "tmx",
-                    "korp",
-                ]:
+                for module in MODULES:
                     module_dir = "/" + module + "/"
                     if corpus_dict["corpusfile"].startswith(module_dir):
                         corpus_file_parts = corpus_dict["corpusfile"][
