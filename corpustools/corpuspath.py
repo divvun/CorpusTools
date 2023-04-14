@@ -181,7 +181,7 @@ class CorpusPath:
             self.pathcomponents.root,
             f"corpus-{this_lang}{self.pathcomponents.dirsuffix}"
             if module
-            else f"corpus-{self.pathcomponents.lang}-orig{self.pathcomponents.dirsuffix}",
+            else f"corpus-{this_lang}-orig{self.pathcomponents.dirsuffix}",
             module,
             target_lang if target_lang is not None else "",
             self.pathcomponents.genre,

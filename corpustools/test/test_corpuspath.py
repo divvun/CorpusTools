@@ -147,6 +147,13 @@ class TestComputeCorpusnames(unittest.TestCase):
             name("tmx", "sme", ".tmx", "nob"),
         )
 
+    def test_compute_parallel(self):
+        self.corpus_path.metadata.set_parallel_text("nob", "filename.html")
+        self.assertEqual(
+            self.corpus_path.parallel("nob"),
+            name("orig", "nob", "", ""),
+        )
+
     def test_compute_sent_filename(self):
         self.assertEqual(
             self.corpus_path.sent_filename,
