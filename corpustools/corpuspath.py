@@ -273,6 +273,7 @@ class CorpusPath:
     def tmp_filename(self):
         return os.path.join(
             self.pathcomponents.root,
+            f"corpus-{self.pathcomponents.lang}{self.pathcomponents.dirsuffix}",
             "tmp",
             f"{self.pathcomponents.basename}",
         )
