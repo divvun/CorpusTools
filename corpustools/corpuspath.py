@@ -248,21 +248,6 @@ class CorpusPath:
             extension=".tmx",
         )
 
-    def prestable_tmx(self, language):
-        """Name of the prestable tmx file.
-
-        Args:
-            language (str): language of the parallel
-
-        Returns:
-            str: path to the prestable tmx file
-        """
-        return self.name(
-            module="prestable/tmx",
-            lang=language,
-            extension=".tmx",
-        )
-
     @property
     def sent_filename(self):
         """Compute the name of the sentence file.
