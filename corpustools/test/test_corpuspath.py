@@ -122,10 +122,23 @@ class TestComputeCorpusnames(unittest.TestCase):
             name("goldstandard/converted", "sme", ".xml", ""),
         )
 
+    def test_compute_correctnogs_converted(self):
+        self.corpus_path.metadata.set_variable("conversion_status", "correct-no-gs")
+        self.assertEqual(
+            self.corpus_path.converted,
+            name("correct-no-gs/converted", "sme", ".xml", ""),
+        )
+
     def test_compute_analysed(self):
         self.assertEqual(
             self.corpus_path.analysed,
             name("analysed", "sme", ".xml", ""),
+        )
+
+    def test_compute_korp(self):
+        self.assertEqual(
+            self.corpus_path.korp,
+            name("korp", "sme", ".xml", ""),
         )
 
     def test_compute_tmx(self):
