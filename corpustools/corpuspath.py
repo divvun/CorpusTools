@@ -199,15 +199,6 @@ class CorpusPath:
         return self.name(module=module, extension=".xml")
 
     @property
-    def prestable_converted(self):
-        """Return the path to the prestable/converted file."""
-        module = "prestable/converted"
-        if self.metadata.get_variable("conversion_status") == "correct":
-            module = "prestable/goldstandard/converted"
-
-        return self.name(module=module, extension=".xml")
-
-    @property
     def analysed(self):
         """Return the path to analysed file."""
         return self.name(module="analysed", extension=".xml")
