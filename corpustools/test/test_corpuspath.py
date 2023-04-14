@@ -29,13 +29,14 @@ from corpustools import corpuspath
 HERE = os.path.dirname(__file__)
 
 
-def name(module, lang, extension):
+def name(module, lang, extension, goallang):
     """Produce a path to a corpus file.
 
     Args:
         module (str): module of the corpus file
         lang (str): language of the corpus file
         extension (str): extension of the corpus file
+        goallang (str): goallang of tmx file
 
     Returns:
         str: path to the corpus file
@@ -44,8 +45,9 @@ def name(module, lang, extension):
     return os.path.join(
         HERE,
         corpusdir,
-        f"{module + '/' if module != 'orig' else ''}subdir/subsubdir/filename.html"
-        + extension,
+        f"{module if module != 'orig' else ''}",
+        f"{goallang if module.endswith('tmx') else ''}",
+        "subdir/subsubdir/filename.html" + extension,
     )
 
 
