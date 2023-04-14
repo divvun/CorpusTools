@@ -140,6 +140,12 @@ class TestComputeCorpusnames(unittest.TestCase):
             name("analysed", "sme", ".xml", ""),
         )
 
+    def test_compute_tmx(self):
+        self.assertEqual(
+            self.corpus_path.tmx("nob"),
+            name("tmx", "sme", ".tmx", "nob"),
+        )
+
     def test_compute_sent_filename(self):
         self.assertEqual(
             self.corpus_path.sent_filename,

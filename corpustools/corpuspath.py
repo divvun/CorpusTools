@@ -170,11 +170,10 @@ class CorpusPath:
 
         Args:
             module (str): string containing some corpus module
-            lang (str): string containing the language of the wanted name
+            lang (str): string containing the goal language of a tmx file
             name (str): name of the wanted file
             extension (str): string containing a file extension
         """
-        this_lang = self.pathcomponents.lang if lang is None else lang
         this_name = self.pathcomponents.basename if name is None else name
         return os.path.join(
             self.pathcomponents.root,
@@ -182,6 +181,7 @@ class CorpusPath:
             if module
             else f"corpus-{self.pathcomponents.lang}-orig{self.pathcomponents.dirsuffix}",
             module,
+            lang if lang else "",
             self.pathcomponents.genre,
             self.pathcomponents.subdirs,
             this_name + extension,
@@ -253,7 +253,7 @@ class CorpusPath:
         """
         return self.name(
             module="tmx",
-            lang=self.pathcomponents.lang + "2" + language,
+            lang=language,
             extension=".tmx",
         )
 
@@ -268,7 +268,7 @@ class CorpusPath:
         """
         return self.name(
             module="prestable/tmx",
-            lang=self.pathcomponents.lang + "2" + language,
+            lang=language,
             extension=".tmx",
         )
 
