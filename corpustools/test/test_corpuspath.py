@@ -162,3 +162,13 @@ class TestComputeCorpusnames(unittest.TestCase):
             f"{self.corpus_path.pathcomponents.basename}_"
             f"{self.corpus_path.pathcomponents.lang}.sent",
         )
+
+    def test_compute_orig_corpus_dir(self):
+        assert self.corpus_path.orig_corpus_dir == os.path.join(
+            self.corpus_path.pathcomponents.root, "corpus-sme-orig"
+        )
+
+    def test_compute_converted_corpus_dir(self):
+        assert self.corpus_path.converted_corpus_dir == os.path.join(
+            self.corpus_path.pathcomponents.root, "corpus-sme"
+        )

@@ -149,6 +149,20 @@ class CorpusPath:
         )
 
     @property
+    def orig_corpus_dir(self):
+        return os.path.join(
+            self.pathcomponents.root,
+            f"corpus-{self.pathcomponents.lang}-orig{self.pathcomponents.dirsuffix}",
+        )
+
+    @property
+    def converted_corpus_dir(self):
+        return os.path.join(
+            self.pathcomponents.root,
+            f"corpus-{self.pathcomponents.lang}{self.pathcomponents.dirsuffix}",
+        )
+
+    @property
     def orig(self):
         """Return the path of the original file."""
         return self.name()
