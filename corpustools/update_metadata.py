@@ -133,4 +133,5 @@ def main():
             update_xsl_file(xsl_file)
         except (AttributeError, UserWarning, xslsetter.XsltError) as error:
             print(xsl_file)
+            print(error)
             raise SystemExit(4)
