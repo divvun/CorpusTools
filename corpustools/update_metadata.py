@@ -131,7 +131,6 @@ def main():
     for xsl_file in find_xsl_files(args.directories):
         try:
             update_xsl_file(xsl_file)
-        except (AttributeError, UserWarning) as error:
-            print(str(error))
+        except (AttributeError, UserWarning, xslsetter.XsltError) as error:
             print(xsl_file)
             raise SystemExit(4)
