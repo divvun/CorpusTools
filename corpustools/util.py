@@ -98,41 +98,6 @@ def replace_all(replacements, string):
     return string
 
 
-def split_path(path):
-    """Split an absolute path into useful components.
-
-    Args:
-        path (str): a path to a file
-
-    Returns:
-        PathComponents namedtuple
-    """
-
-    def split_on_module(p):
-        for module in [
-            "goldstandard/orig",
-            "prestable/converted",
-            "prestable/toktmx",
-            "prestable/tmx",
-            "orig",
-            "converted",
-            "stable",
-            "analysed",
-        ]:
-            d = "/" + module + "/"
-            if d in p:
-                root, rest = p.split(d)
-                return root, module, rest
-
-    # Ensure we have at least one / before module, for safer splitting:
-    abspath = os.path.normpath(os.path.abspath(path))
-    root, module, lang_etc = split_on_module(abspath)
-    l = lang_etc.split("/")
-    lang, genre, subdirs, basename = l[0], l[1], l[2:-1], l[-1]
-
-    return PathComponents(root, module, lang, genre, "/".join(subdirs), basename)
-
-
 def is_executable(fullpath):
     """Check if the program in fullpath is executable.
 

@@ -25,9 +25,10 @@ import re
 from collections import namedtuple
 from urllib.parse import unquote
 
+from pathlib import Path
 import unidecode
 
-from corpustools import util, versioncontrol, xslsetter
+from corpustools import util, versioncontrol, xslsetter, corpuspath
 
 
 class NamechangerError(Exception):
@@ -47,23 +48,25 @@ class MovepairComputer:
         """
         self.filepairs = []
 
-    def compute_movepairs(self, oldpath, newpath, nochange=False):
+    def compute_orig_movepair(self, oldpath, newpath, nochange=False):
         """Add the oldpath and the new goalpath to filepairs.
 
         Args:
             oldpath (unicode): the old path to an original file
             newpath (unicode): the new path of an original file
         """
-        normalisedpath = os.path.join(
-            os.path.dirname(newpath), normalise_filename(os.path.basename(newpath))
-        )
-
-        if normalisedpath == newpath and nochange:
-            non_dupe_path = newpath
+        if not newpath:
+            self.filepairs.append(PathPair(oldpath, ""))
         else:
-            non_dupe_path = compute_new_basename(oldpath, normalisedpath)
+            normalisedpath = os.path.join(
+                os.path.dirname(newpath), normalise_filename(os.path.basename(newpath))
+            )
+            if normalisedpath == newpath and nochange:
+                non_dupe_path = newpath
+            else:
+                non_dupe_path = compute_new_basename(oldpath, normalisedpath)
 
-        self.filepairs.append(PathPair(oldpath, non_dupe_path))
+            self.filepairs.append(PathPair(oldpath, non_dupe_path))
 
     def compute_parallel_movepairs(self, oldpath, newpath):
         """Add the parallel files of oldpath to filepairs.
@@ -72,40 +75,18 @@ class MovepairComputer:
             oldpath (unicode): the old path
             newpath (unicode): the new path
         """
-        old_components = util.split_path(oldpath)
-
-        if newpath == "":
+        old_corpus_path = corpuspath.CorpusPath(oldpath)
+        if not newpath:
             newpath = oldpath
 
-        new_components = util.split_path(newpath)
-
-        metadatafile = xslsetter.MetadataHandler(oldpath + ".xsl")
-        for lang, parallel in metadatafile.get_parallel_texts().items():
-            oldparellelpath = "/".join(
-                (
-                    old_components.root,
-                    old_components.module,
-                    lang,
-                    old_components.genre,
-                    old_components.subdirs,
-                    parallel,
-                )
+        for parallel_name in old_corpus_path.parallels():
+            old_parallel_corpus_path = corpuspath.CorpusPath(parallel_name)
+            new_corpus_path = corpuspath.CorpusPath(newpath)
+            new_parallel_name = old_parallel_corpus_path.move_orig(
+                genre=new_corpus_path.pathcomponents.genre,
+                subdirs=new_corpus_path.pathcomponents.subdirs,
             )
-            newparallelpath = "/".join(
-                (
-                    new_components.root,
-                    new_components.module,
-                    lang,
-                    new_components.genre,
-                    new_components.subdirs,
-                    parallel,
-                )
-            )
-            no_mv_needed = (
-                old_components.genre == new_components.genre
-                and old_components.subdirs == new_components.subdirs
-            )
-            self.compute_movepairs(oldparellelpath, newparallelpath, no_mv_needed)
+            self.compute_orig_movepair(parallel_name, new_parallel_name)
 
     def compute_all_movepairs(self, oldpath, newpath):
         """Compute all the potential name pairs that should be moved.
@@ -114,7 +95,7 @@ class MovepairComputer:
             oldpath (str): path to the original file.
             newpath (str): path to the new file.
         """
-        self.compute_movepairs(oldpath, newpath)
+        self.compute_orig_movepair(oldpath, newpath)
         self.compute_parallel_movepairs(oldpath, newpath)
 
 
@@ -128,151 +109,40 @@ class CorpusFileMover:
             oldpath (unicode): the old path of the original file.
             newpath (unicode): the new path of tht original file.
         """
-        self.old_components = util.split_path(oldpath)
-        self.new_components = util.split_path(newpath)
-        self.vcs = versioncontrol.vcs(self.old_components.root)
+        self.old_corpus_path = corpuspath.CorpusPath(oldpath)
+        p = Path(oldpath)
+        if not p.exists():
+            raise SystemExit(f"{oldpath} does not exist!")
+        self.new_corpus_path = corpuspath.CorpusPath(newpath)
+        self.new_corpus_path.metadata = self.old_corpus_path.metadata
+        self.orig_vcs = versioncontrol.vcs(self.old_corpus_path.orig_corpus_dir)
+        self.conv_vcs = versioncontrol.vcs(self.old_corpus_path.converted_corpus_dir)
 
     def move_files(self):
         """Move all files that are under version control."""
-        self.move_orig()
-        self.move_xsl()
-        self.move_converted()
-        self.move_prestable_converted()
-        self.move_prestable_tmx()
+        p = Path(self.new_corpus_path.orig)
+        if not p.parent.exists():
+            p.parent.mkdir(parents=True)
 
-    def _move(self, oldpath, newpath):
-        """Move files from oldpath to newpath.
+        self.orig_vcs.move(self.old_corpus_path.orig, self.new_corpus_path.orig)
+        self.orig_vcs.move(self.old_corpus_path.xsl, self.new_corpus_path.xsl)
 
-        Args:
-            oldpath: the old name of the file.
-            newpath: the new name of the file.
-        """
-        if os.path.exists(oldpath):
-            newdir = os.path.dirname(newpath)
-            with util.ignored(OSError):
-                os.makedirs(newdir)
-            self.vcs.move(oldpath, newpath)
-
-    def move_orig(self):
-        """Move the original file."""
-        self._move("/".join(self.old_components), "/".join(self.new_components))
-
-    def move_xsl(self):
-        """Move the metadata file."""
-        self._move(
-            "/".join(
-                (
-                    self.old_components.root,
-                    self.old_components.module,
-                    self.old_components.lang,
-                    self.old_components.genre,
-                    self.old_components.subdirs,
-                    self.old_components.basename + ".xsl",
-                )
-            ),
-            "/".join(
-                (
-                    self.new_components.root,
-                    self.new_components.module,
-                    self.new_components.lang,
-                    self.new_components.genre,
-                    self.new_components.subdirs,
-                    self.new_components.basename + ".xsl",
-                )
-            ),
-        )
-
-    def move_converted(self):
-        """Move the converted file."""
-        self._move(
-            "/".join(
-                (
-                    self.old_components.root,
-                    "converted",
-                    self.old_components.lang,
-                    self.old_components.genre,
-                    self.old_components.subdirs,
-                    self.old_components.basename + ".xml",
-                )
-            ),
-            "/".join(
-                (
-                    self.new_components.root,
-                    "converted",
-                    self.new_components.lang,
-                    self.new_components.genre,
-                    self.new_components.subdirs,
-                    self.new_components.basename + ".xml",
-                )
-            ),
-        )
-
-    def move_prestable_converted(self):
-        """Move the prestable/converted file."""
-        self._move(
-            "/".join(
-                (
-                    self.old_components.root,
-                    "prestable/converted",
-                    self.old_components.lang,
-                    self.old_components.genre,
-                    self.old_components.subdirs,
-                    self.old_components.basename + ".xml",
-                )
-            ),
-            "/".join(
-                (
-                    self.new_components.root,
-                    "prestable/converted",
-                    self.new_components.lang,
-                    self.new_components.genre,
-                    self.new_components.subdirs,
-                    self.new_components.basename + ".xml",
-                )
-            ),
-        )
-
-    def move_prestable_tmx(self):
-        """Move the prestable toktmx and tmx files."""
-        for tmx in ["tmx", "toktmx"]:
-            tmxdir = "/".join(("prestable", tmx))
-            metadataname = "/".join(
-                (
-                    self.new_components.root,
-                    self.new_components.module,
-                    self.new_components.lang,
-                    self.new_components.genre,
-                    self.new_components.subdirs,
-                    self.new_components.basename + ".xsl",
-                )
+        if os.path.exists(self.old_corpus_path.converted):
+            p = Path(self.new_corpus_path.converted)
+            if not p.parent.exists():
+                p.parent.mkdir(parents=True)
+            self.conv_vcs.move(
+                self.old_corpus_path.converted, self.new_corpus_path.converted
             )
-            if os.path.isfile(metadataname):
-                metadatafile = xslsetter.MetadataHandler(metadataname)
-                translated_from = metadatafile.get_variable("translated_from")
-                if translated_from is None or translated_from == "":
-                    for lang in metadatafile.get_parallel_texts().keys():
-                        self._move(
-                            "/".join(
-                                (
-                                    self.old_components.root,
-                                    tmxdir,
-                                    self.old_components.lang + "2" + lang,
-                                    self.old_components.genre,
-                                    self.old_components.subdirs,
-                                    self.old_components.basename + "." + tmx,
-                                )
-                            ),
-                            "/".join(
-                                (
-                                    self.new_components.root,
-                                    tmxdir,
-                                    self.new_components.lang + "2" + lang,
-                                    self.new_components.genre,
-                                    self.new_components.subdirs,
-                                    self.new_components.basename + "." + tmx,
-                                )
-                            ),
-                        )
+        if not self.old_corpus_path.metadata.get_variable("translated_from"):
+            for lang in self.old_corpus_path.metadata.get_parallel_texts():
+                if os.path.exists(self.old_corpus_path.tmx(lang)):
+                    p = Path(self.new_corpus_path.tmx(lang))
+                    if not p.parent.exists():
+                        p.parent.mkdir(parents=True)
+                    self.conv_vcs.move(
+                        self.old_corpus_path.tmx(lang), self.new_corpus_path.tmx(lang)
+                    )
 
 
 class CorpusFileRemover:
@@ -284,106 +154,21 @@ class CorpusFileRemover:
         Args:
             oldpath (unicode): the old path
         """
-        self.old_components = util.split_path(oldpath)
-        self.vcs = versioncontrol.vcs(self.old_components.root)
+        self.old_corpus_path = corpuspath.CorpusPath(oldpath)
+        p = Path(oldpath)
+        if not p.exists():
+            raise SystemExit(f"{oldpath} does not exist!")
+        self.orig_vcs = versioncontrol.vcs(self.old_corpus_path.orig_corpus_dir)
+        self.conv_vcs = versioncontrol.vcs(self.old_corpus_path.converted_corpus_dir)
 
     def remove_files(self):
         """Remove all the files that are under version control."""
-        self.remove_prestable_tmx()
-        self.remove_prestable_converted()
-        self.remove_converted()
-        self.remove_xsl()
-        self.remove_orig()
-
-    def _remove(self, oldpath):
-        """Remove a file.
-
-        Args:
-            oldpath (str): path to the file that should be removed.
-        """
-        if os.path.exists(oldpath):
-            self.vcs.remove(oldpath)
-
-    def remove_orig(self):
-        """Remove the original file."""
-        self._remove("/".join(self.old_components))
-
-    def remove_xsl(self):
-        """Remove the metadata file."""
-        self._remove(
-            "/".join(
-                (
-                    self.old_components.root,
-                    self.old_components.module,
-                    self.old_components.lang,
-                    self.old_components.genre,
-                    self.old_components.subdirs,
-                    self.old_components.basename + ".xsl",
-                )
-            )
-        )
-
-    def remove_converted(self):
-        """Remove the converted file."""
-        self._remove(
-            "/".join(
-                (
-                    self.old_components.root,
-                    "converted",
-                    self.old_components.lang,
-                    self.old_components.genre,
-                    self.old_components.subdirs,
-                    self.old_components.basename + ".xml",
-                )
-            )
-        )
-
-    def remove_prestable_converted(self):
-        """Remove the prestable/converted file."""
-        self._remove(
-            "/".join(
-                (
-                    self.old_components.root,
-                    "prestable/converted",
-                    self.old_components.lang,
-                    self.old_components.genre,
-                    self.old_components.subdirs,
-                    self.old_components.basename + ".xml",
-                )
-            )
-        )
-
-    def remove_prestable_tmx(self):
-        """Remove the prestable toktmx and tmx files."""
-        for tmx in ["tmx", "toktmx"]:
-            tmxdir = "/".join(("prestable", tmx))
-            metadataname = "/".join(
-                (
-                    self.old_components.root,
-                    self.old_components.module,
-                    self.old_components.lang,
-                    self.old_components.genre,
-                    self.old_components.subdirs,
-                    self.old_components.basename + ".xsl",
-                )
-            )
-            if os.path.isfile(metadataname):
-                metadatafile = xslsetter.MetadataHandler(metadataname)
-                translated_from = metadatafile.get_variable("translated_from")
-                if translated_from is None or translated_from == "":
-                    for lang in metadatafile.get_parallel_texts().keys():
-                        self._remove(
-                            "/".join(
-                                (
-                                    self.old_components.root,
-                                    tmxdir,
-                                    self.old_components.lang + "2" + lang,
-                                    self.old_components.genre,
-                                    self.old_components.subdirs,
-                                    self.old_components.basename + "." + tmx,
-                                )
-                            )
-                        )
+        self.orig_vcs.remove(self.old_corpus_path.orig)
+        self.orig_vcs.remove(self.old_corpus_path.xsl)
+        self.conv_vcs.remove(self.old_corpus_path.converted)
+        for lang in self.old_corpus_path.metadata.get_parallel_texts():
+            if os.path.exists(self.old_corpus_path.tmx(lang)):
+                self.conv_vcs.remove(self.old_corpus_path.tmx(lang))
 
 
 class CorpusFilesetMoverAndUpdater:
@@ -454,15 +239,18 @@ class CorpusFilesetMoverAndUpdater:
         oldpath (str): path to the file that should be renamed.
         newpath (str): path to the new name of the file.
         """
-        self.old_components = util.split_path(oldpath)
-        self.vcs = versioncontrol.vcs(self.old_components.root)
+        orig_corpus_path = corpuspath.CorpusPath(oldpath)
+        orig_corpus_path.metadata.set_lang_genre_xsl()
+        orig_corpus_path.metadata.write_file()
 
-        old_xsl = oldpath + ".xsl"
-        if not os.path.exists(old_xsl):
-            metadata = xslsetter.MetadataHandler(old_xsl, create=True)
-            metadata.set_lang_genre_xsl()
-            metadata.write_file()
-            self.vcs.add(old_xsl)
+        self.old_components = orig_corpus_path.pathcomponents
+        self.vcs = versioncontrol.vcs(
+            os.path.join(
+                orig_corpus_path.pathcomponents.root,
+                f"corpus-{orig_corpus_path.pathcomponents.lang}{orig_corpus_path.pathcomponents.dirsuffix}",
+            )
+        )
+        # self.vcs.add(orig_corpus_path.xsl)
 
         self.move_computer = MovepairComputer()
         self.move_computer.compute_all_movepairs(oldpath, newpath)
@@ -481,8 +269,8 @@ class CorpusFilesetMoverAndUpdater:
         """Update metadata."""
         for filepair in self.move_computer.filepairs:
             if filepair.newpath:
-                old_components = util.split_path(filepair.oldpath)
-                new_components = util.split_path(filepair.newpath)
+                old_components = corpuspath.CorpusPath(filepair.oldpath).pathcomponents
+                new_components = corpuspath.CorpusPath(filepair.newpath).pathcomponents
 
                 metadataname = filepair.newpath + ".xsl"
                 if os.path.isfile(metadataname):
@@ -506,7 +294,7 @@ class CorpusFilesetMoverAndUpdater:
         parallel_metadatafile = xslsetter.MetadataHandler(parallel_name)
 
         if newpath:
-            new_components = util.split_path(newpath)
+            new_components = corpuspath.CorpusPath(newpath).pathcomponents
             if old_components.lang != new_components.lang:
                 parallel_metadatafile.set_parallel_text(old_components.lang, "")
                 parallel_metadatafile.set_parallel_text(
@@ -528,7 +316,7 @@ class CorpusFilesetMoverAndUpdater:
         for filepair in self.move_computer.filepairs:
             parallel_filepairs = list(self.move_computer.filepairs)
             parallel_filepairs.remove(filepair)
-            old_components = util.split_path(filepair.oldpath)
+            old_components = corpuspath.CorpusPath(filepair.oldpath).pathcomponents
 
             for parallel_filepair in parallel_filepairs:
                 parallel_name = parallel_filepair.newpath + ".xsl"
