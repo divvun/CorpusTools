@@ -1,0 +1,8 @@
+site_name: CorpusTools documentation
+theme:
+  name: material
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
