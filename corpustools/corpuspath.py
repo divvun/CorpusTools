@@ -22,6 +22,8 @@ from collections import namedtuple
 import os
 import re
 
+from pathlib import PurePath
+
 from corpustools import util, xslsetter
 
 CORPUS_DIR_RE = re.compile(
@@ -176,6 +178,15 @@ class CorpusPath:
     def log(self):
         """Return the path of the log file."""
         return self.orig + ".log"
+
+    def move_orig(self, lang=None, genre=None, subdirs=None, name=None):
+        return os.path.join(
+            self.pathcomponents.root,
+            f"corpus-{self.pathcomponents.lang if lang is None else lang}-orig{self.pathcomponents.dirsuffix}",
+            genre if genre is not None else self.pathcomponents.genre,
+            subdirs if subdirs is not None else self.pathcomponents.subdirs,
+            self.pathcomponents.basename if name is None else name,
+        )
 
     def name(
         self, module="", parallel_lang=None, target_lang=None, name=None, extension=""

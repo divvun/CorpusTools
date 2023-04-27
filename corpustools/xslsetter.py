@@ -24,7 +24,7 @@ import sys
 
 import lxml.etree as etree
 
-from corpustools import util
+from corpustools import corpuspath, util
 
 here = os.path.dirname(__file__)
 
@@ -477,9 +477,9 @@ class MetadataHandler:
     def set_lang_genre_xsl(self):
         """Set the mainlang and genre variables in the xsl file."""
         with util.ignored(TypeError):
-            xsl_tuple = util.split_path(self.filename)
-            self.set_variable("mainlang", xsl_tuple.lang)
-            self.set_variable("genre", xsl_tuple.genre)
+            path = corpuspath.CorpusPath(self.filename)
+            self.set_variable("mainlang", path.pathcomponents.lang)
+            self.set_variable("genre", path.pathcomponents.genre)
 
     def write_file(self):
         """Write self.tree to self.filename."""
