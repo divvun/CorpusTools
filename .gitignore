@@ -4,3 +4,10 @@ __pycache__/
 /build
 /dist
 .vscode/
+
+# Virtual environments
+.venv
+
+# Locally built documentation site
+docs/site
+
