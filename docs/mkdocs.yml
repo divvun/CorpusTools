@@ -1,8 +1,25 @@
 site_name: CorpusTools documentation
+repo_name: "giellalt/CorpusTools"
+repo_url: "https://github.com/giellalt/CorpusTools"
 theme:
   name: material
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
 markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+nav:
+  - Home:
+    - Overview: index.md
+    - Corpus work: corpus-work.md
+    - Scripts:
+      - Overview: scripts/index.md
+      - add_files_to_corpus: scripts/add_files_to_corpus.md
+      - convert2xml: scripts/convert2xml.md
+  - Code reference: /reference
 
