@@ -147,20 +147,6 @@ class AddToCorpus:
             os.makedirs(self.goaldir)
         self.additions = []
 
-    @staticmethod
-    def __normalise_path(path):
-        """Normalise path.
-
-        Args:
-            path (str): Path that should be normalised.
-
-        Returns:
-            str: a normalised path
-        """
-        return "/".join(
-            [namechanger.normalise_filename(part) for part in path.split("/")]
-        )
-
     def copy_url_to_corpus(self, url, wanted_name="", parallelpath=""):
         """Add a URL to the corpus.
 
