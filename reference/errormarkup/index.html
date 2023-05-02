@@ -2849,6 +2849,7 @@ be converted to xml.</p></td>
         <tr>
           <td><code>correction_content</code></td>
           <td>
+                <code>str</code>
           </td>
           <td><p>string containing the correction(s)</p></td>
           <td>
@@ -2899,7 +2900,7 @@ be converted to xml.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Make correction elements.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        correction_content: string containing the correction(s)</span>
+<span class="sd">        correction_content (str): string containing the correction(s)</span>
 
 <span class="sd">    Yields:</span>
 <span class="sd">        A correction element for each correction</span>
@@ -2948,6 +2949,7 @@ be converted to xml.</p></td>
         <tr>
           <td><code>error_text</code></td>
           <td>
+                <code>str</code>
           </td>
           <td><p>the text of the error element</p></td>
           <td>
@@ -2957,6 +2959,7 @@ be converted to xml.</p></td>
         <tr>
           <td><code>error_name</code></td>
           <td>
+                <code>str</code>
           </td>
           <td><p>the tag of the error element</p></td>
           <td>
@@ -3015,8 +3018,8 @@ be converted to xml.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Make an error xml element.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        error_text: the text of the error element</span>
-<span class="sd">        error_name: the tag of the error element</span>
+<span class="sd">        error_text (str): the text of the error element</span>
+<span class="sd">        error_name (str): the tag of the error element</span>
 <span class="sd">        correction: the correction(s) for the error</span>
 
 <span class="sd">    Returns:</span>

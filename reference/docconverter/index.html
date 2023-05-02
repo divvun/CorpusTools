@@ -2434,17 +2434,6 @@
               <em>required</em>
           </td>
         </tr>
-        <tr>
-          <td><code>command</code></td>
-          <td>
-                <code>list of str</code>
-          </td>
-          <td><p>the command and the arguments sent to
-ExternalCommandRunner.</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
     </tbody>
   </table>
 
@@ -2490,15 +2479,11 @@ ExternalCommandRunner.</p></td>
 <span class="normal">193</span>
 <span class="normal">194</span>
 <span class="normal">195</span>
-<span class="normal">196</span>
-<span class="normal">197</span>
-<span class="normal">198</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">extract_text</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="normal">196</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">extract_text</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract the text from a document.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        filename (str): path to the document</span>
-<span class="sd">        command (list of str): the command and the arguments sent to</span>
-<span class="sd">            ExternalCommandRunner.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        bytes: the output of the program</span>

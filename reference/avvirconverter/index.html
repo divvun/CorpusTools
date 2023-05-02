@@ -2699,7 +2699,7 @@ This function removes p.text and saves p.tail</p>
     </thead>
     <tbody>
         <tr>
-          <td><code>p</code></td>
+          <td><code>para</code></td>
           <td>
           </td>
           <td><p>an lxml element, it is a story/p element</p></td>
@@ -2743,7 +2743,7 @@ This function removes p.text and saves p.tail</p>
 <span class="sd">    This function removes p.text and saves p.tail</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        p: an lxml element, it is a story/p element</span>
+<span class="sd">        para: an lxml element, it is a story/p element</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">sub_p</span> <span class="ow">in</span> <span class="n">para</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;.//p&quot;</span><span class="p">):</span>
         <span class="n">previous</span> <span class="o">=</span> <span class="n">sub_p</span><span class="o">.</span><span class="n">getprevious</span><span class="p">()</span>
@@ -2793,7 +2793,7 @@ This function removes p.text and saves p.tail</p>
     </thead>
     <tbody>
         <tr>
-          <td><code>p</code></td>
+          <td><code>para</code></td>
           <td>
           </td>
           <td><p>an lxml element, it is a story/p element</p></td>
@@ -2826,7 +2826,7 @@ This function removes p.text and saves p.tail</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert subelements of story/p elements to p elements.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        p: an lxml element, it is a story/p element</span>
+<span class="sd">        para: an lxml element, it is a story/p element</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">position</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">for</span> <span class="n">subelement</span> <span class="ow">in</span> <span class="n">para</span><span class="p">:</span>
@@ -2912,7 +2912,7 @@ This function removes p.text and saves p.tail</p>
     </thead>
     <tbody>
         <tr>
-          <td><code>p</code></td>
+          <td><code>para</code></td>
           <td>
           </td>
           <td><p>an lxml element, it is a story/p element</p></td>
@@ -2923,8 +2923,9 @@ This function removes p.text and saves p.tail</p>
         <tr>
           <td><code>text</code></td>
           <td>
+                <code>str</code>
           </td>
-          <td><p>(unicode) string</p></td>
+          <td><p>string</p></td>
           <td>
               <em>required</em>
           </td>
@@ -2932,8 +2933,9 @@ This function removes p.text and saves p.tail</p>
         <tr>
           <td><code>position</code></td>
           <td>
+                <code>int</code>
           </td>
-          <td><p>(integer) the position inside p's parent where the new
+          <td><p>the position inside p's parent where the new
         element is inserted</p></td>
           <td>
               <em>required</em>
@@ -2984,9 +2986,9 @@ This function removes p.text and saves p.tail</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Insert a new element in p&#39;s parent.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        p: an lxml element, it is a story/p element</span>
-<span class="sd">        text: (unicode) string</span>
-<span class="sd">        position: (integer) the position inside p&#39;s parent where the new</span>
+<span class="sd">        para: an lxml element, it is a story/p element</span>
+<span class="sd">        text (str): string</span>
+<span class="sd">        position (int): the position inside p&#39;s parent where the new</span>
 <span class="sd">                    element is inserted</span>
 
 <span class="sd">    Returns:</span>

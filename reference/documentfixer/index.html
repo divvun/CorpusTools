@@ -3116,7 +3116,7 @@ characters</p>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Replace shy with a hyph element.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            element: an etree element</span>
+<span class="sd">            element (etree.Element): an etree element</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">element</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">replace_shy</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
@@ -3153,8 +3153,8 @@ characters</p>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert space after words needing it.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            element: an etree element</span>
-<span class="sd">            irritating_words_regex: regex</span>
+<span class="sd">            element (etree.Element): an etree element</span>
+<span class="sd">            irritating_words_regex (re.Pattern): regex</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">element</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">irritating_words_regex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\1 \3&quot;</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
@@ -3338,7 +3338,7 @@ characters</p>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get list of quotes from the given text.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            text: string</span>
+<span class="sd">            text (str): string</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A list of span tuples containing indexes to quotes found in text.</span>
@@ -3364,9 +3364,9 @@ characters</p>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Append quotes to an element.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            text: a string that contains the plain text of the element.</span>
-<span class="sd">            quote_list: A list of span tuples containing indexes to quotes</span>
-<span class="sd">            found in text.</span>
+<span class="sd">            text (str): the plain text of the element.</span>
+<span class="sd">            quote_list (list of tuple of int): A list of span tuples containing</span>
+<span class="sd">                indexes to quotes found in text.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">quote_list</span><span class="p">)):</span>
             <span class="n">span</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;span&quot;</span><span class="p">)</span>
@@ -3382,7 +3382,7 @@ characters</p>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert span elements around quotes.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            element: an etree element.</span>
+<span class="sd">            element (etree.Element): an etree element.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">newelement</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
 
@@ -3662,8 +3662,9 @@ characters</p>
         <tr>
           <td><code>text</code></td>
           <td>
+                <code>str</code>
           </td>
-          <td><p>a string that contains the plain text of the element.</p></td>
+          <td><p>the plain text of the element.</p></td>
           <td>
               <em>required</em>
           </td>
@@ -3671,8 +3672,10 @@ characters</p>
         <tr>
           <td><code>quote_list</code></td>
           <td>
+                <code>list of tuple of int</code>
           </td>
-          <td><p>A list of span tuples containing indexes to quotes</p></td>
+          <td><p>A list of span tuples containing
+indexes to quotes found in text.</p></td>
           <td>
               <em>required</em>
           </td>
@@ -3704,9 +3707,9 @@ characters</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Append quotes to an element.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        text: a string that contains the plain text of the element.</span>
-<span class="sd">        quote_list: A list of span tuples containing indexes to quotes</span>
-<span class="sd">        found in text.</span>
+<span class="sd">        text (str): the plain text of the element.</span>
+<span class="sd">        quote_list (list of tuple of int): A list of span tuples containing</span>
+<span class="sd">            indexes to quotes found in text.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">quote_list</span><span class="p">)):</span>
         <span class="n">span</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;span&quot;</span><span class="p">)</span>
@@ -4202,6 +4205,7 @@ Parse the returned string, insert it into the document</p>
         <tr>
           <td><code>text</code></td>
           <td>
+                <code>str</code>
           </td>
           <td><p>string</p></td>
           <td>
@@ -4259,7 +4263,7 @@ Parse the returned string, insert it into the document</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get list of quotes from the given text.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        text: string</span>
+<span class="sd">        text (str): string</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A list of span tuples containing indexes to quotes found in text.</span>
@@ -4313,6 +4317,7 @@ Parse the returned string, insert it into the document</p>
         <tr>
           <td><code>element</code></td>
           <td>
+                <code><span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>an etree element</p></td>
           <td>
@@ -4322,6 +4327,7 @@ Parse the returned string, insert it into the document</p>
         <tr>
           <td><code>irritating_words_regex</code></td>
           <td>
+                <code>re.<span title="re.Pattern">Pattern</span></code>
           </td>
           <td><p>regex</p></td>
           <td>
@@ -4349,8 +4355,8 @@ Parse the returned string, insert it into the document</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Insert space after words needing it.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        element: an etree element</span>
-<span class="sd">        irritating_words_regex: regex</span>
+<span class="sd">        element (etree.Element): an etree element</span>
+<span class="sd">        irritating_words_regex (re.Pattern): regex</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">element</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">irritating_words_regex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\1 \3&quot;</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
@@ -4612,6 +4618,7 @@ meant to be.</p>
         <tr>
           <td><code>element</code></td>
           <td>
+                <code><span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>an etree element</p></td>
           <td>
@@ -4654,7 +4661,7 @@ meant to be.</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Replace shy with a hyph element.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        element: an etree element</span>
+<span class="sd">        element (etree.Element): an etree element</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">element</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">replace_shy</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>

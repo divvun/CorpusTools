@@ -2377,11 +2377,11 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise the GenerateAnchorList class.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            lang1: the main lang</span>
-<span class="sd">            lang2: the translated lang</span>
+<span class="sd">            lang1 (str): the main lang</span>
+<span class="sd">            lang2 (str): the translated lang</span>
 <span class="sd">            columns (list of str): contains all the possible langs</span>
 <span class="sd">                found in the main anchor file.</span>
-<span class="sd">            path (str): path of the existing anchor file.</span>
+<span class="sd">            input_file (str): path of the existing anchor file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lang1</span> <span class="o">=</span> <span class="n">lang1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lang2</span> <span class="o">=</span> <span class="n">lang2</span>
@@ -2468,6 +2468,7 @@
         <tr>
           <td><code>lang1</code></td>
           <td>
+                <code>str</code>
           </td>
           <td><p>the main lang</p></td>
           <td>
@@ -2477,6 +2478,7 @@
         <tr>
           <td><code>lang2</code></td>
           <td>
+                <code>str</code>
           </td>
           <td><p>the translated lang</p></td>
           <td>
@@ -2495,7 +2497,7 @@ found in the main anchor file.</p></td>
           </td>
         </tr>
         <tr>
-          <td><code>path</code></td>
+          <td><code>input_file</code></td>
           <td>
                 <code>str</code>
           </td>
@@ -2528,11 +2530,11 @@ found in the main anchor file.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialise the GenerateAnchorList class.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        lang1: the main lang</span>
-<span class="sd">        lang2: the translated lang</span>
+<span class="sd">        lang1 (str): the main lang</span>
+<span class="sd">        lang2 (str): the translated lang</span>
 <span class="sd">        columns (list of str): contains all the possible langs</span>
 <span class="sd">            found in the main anchor file.</span>
-<span class="sd">        path (str): path of the existing anchor file.</span>
+<span class="sd">        input_file (str): path of the existing anchor file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lang1</span> <span class="o">=</span> <span class="n">lang1</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lang2</span> <span class="o">=</span> <span class="n">lang2</span>

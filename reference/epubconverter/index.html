@@ -2632,6 +2632,24 @@ element</p></td>
     </tbody>
   </table>
 
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="corpustools.util" href="../util/#corpustools.util">util</a>.<span title="corpustools.util.ConversionException">ConversionException</span></code>
+          </td>
+          <td><p>on conversion error</p></td>
+        </tr>
+    </tbody>
+  </table>
+
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">35</span>
@@ -2659,7 +2677,7 @@ element</p></td>
 <span class="sd">        str: The contents of a chapter</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        ConversionException</span>
+<span class="sd">        util.ConversionException: on conversion error</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">chapter</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>

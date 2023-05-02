@@ -3089,9 +3089,7 @@ pages.</p></td>
 <span class="normal">673</span>
 <span class="normal">674</span>
 <span class="normal">675</span>
-<span class="normal">676</span>
-<span class="normal">677</span>
-<span class="normal">678</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">PDF2XMLConverter</span><span class="p">(</span><span class="n">basicconverter</span><span class="o">.</span><span class="n">BasicConverter</span><span class="p">):</span>
+<span class="normal">676</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">PDF2XMLConverter</span><span class="p">(</span><span class="n">basicconverter</span><span class="o">.</span><span class="n">BasicConverter</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to convert the xml output of pdftohtml to Giella xml.</span>
 
 <span class="sd">    Attributes:</span>
@@ -3106,8 +3104,6 @@ pages.</p></td>
 
 <span class="sd">        Args:</span>
 <span class="sd">            filename (str): the path to the pdf file.</span>
-<span class="sd">            write_intermediate (boolean): indicate whether intermediate</span>
-<span class="sd">                versions of the converter document should be written to disk.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pdffontspecs</span> <span class="o">=</span> <span class="n">PDFFontspecs</span><span class="p">()</span>
@@ -3318,9 +3314,9 @@ pages.</p></td>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle an xml syntax error.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            error: an exception</span>
-<span class="sd">            lineno: the line number in this module where the error happened.</span>
-<span class="sd">            invalid_input: a string containing the invalid input.</span>
+<span class="sd">            error (Exception): an exception</span>
+<span class="sd">            lineno (int): the line number in this module where the error happened.</span>
+<span class="sd">            invalid_input (str): a string containing the invalid input.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orig</span> <span class="o">+</span> <span class="s2">&quot;.log&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">logfile</span><span class="p">:</span>
             <span class="n">logfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error at: </span><span class="si">{</span><span class="n">lineno</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -3388,17 +3384,6 @@ pages.</p></td>
               <em>required</em>
           </td>
         </tr>
-        <tr>
-          <td><code>write_intermediate</code></td>
-          <td>
-                <code>boolean</code>
-          </td>
-          <td><p>indicate whether intermediate
-versions of the converter document should be written to disk.</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
     </tbody>
   </table>
 
@@ -3411,15 +3396,11 @@ versions of the converter document should be written to disk.</p></td>
 <span class="normal">446</span>
 <span class="normal">447</span>
 <span class="normal">448</span>
-<span class="normal">449</span>
-<span class="normal">450</span>
-<span class="normal">451</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="normal">449</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialise the PDF2XMLConverte class.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        filename (str): the path to the pdf file.</span>
-<span class="sd">        write_intermediate (boolean): indicate whether intermediate</span>
-<span class="sd">            versions of the converter document should be written to disk.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">pdffontspecs</span> <span class="o">=</span> <span class="n">PDFFontspecs</span><span class="p">()</span>
@@ -3469,14 +3450,14 @@ versions of the converter document should be written to disk.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/pdfconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">611</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">609</span>
+<span class="normal">610</span>
+<span class="normal">611</span>
 <span class="normal">612</span>
 <span class="normal">613</span>
 <span class="normal">614</span>
 <span class="normal">615</span>
-<span class="normal">616</span>
-<span class="normal">617</span>
-<span class="normal">618</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_fontspecs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">):</span>
+<span class="normal">616</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_fontspecs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract font specs found in a pdf2xml page element.</span>
 
 <span class="sd">    Args:</span>
@@ -3528,16 +3509,16 @@ versions of the converter document should be written to disk.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/pdfconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">512</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">510</span>
+<span class="normal">511</span>
+<span class="normal">512</span>
 <span class="normal">513</span>
 <span class="normal">514</span>
 <span class="normal">515</span>
 <span class="normal">516</span>
 <span class="normal">517</span>
 <span class="normal">518</span>
-<span class="normal">519</span>
-<span class="normal">520</span>
-<span class="normal">521</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">convert2intermediate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">519</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">convert2intermediate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert from pdf to a corpus xml file.</span>
 
 <span class="sd">    Returns:</span>
@@ -3572,7 +3553,9 @@ ExternalCommandRunner.
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/pdfconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">633</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">631</span>
+<span class="normal">632</span>
+<span class="normal">633</span>
 <span class="normal">634</span>
 <span class="normal">635</span>
 <span class="normal">636</span>
@@ -3590,9 +3573,7 @@ ExternalCommandRunner.
 <span class="normal">648</span>
 <span class="normal">649</span>
 <span class="normal">650</span>
-<span class="normal">651</span>
-<span class="normal">652</span>
-<span class="normal">653</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">extract_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+<span class="normal">651</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">extract_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract the text from a document.</span>
 
 <span class="sd">    :command: a list containing the command and the arguments sent to</span>
@@ -3647,6 +3628,7 @@ ExternalCommandRunner.
         <tr>
           <td><code>error</code></td>
           <td>
+                <code>Exception</code>
           </td>
           <td><p>an exception</p></td>
           <td>
@@ -3656,6 +3638,7 @@ ExternalCommandRunner.
         <tr>
           <td><code>lineno</code></td>
           <td>
+                <code>int</code>
           </td>
           <td><p>the line number in this module where the error happened.</p></td>
           <td>
@@ -3665,6 +3648,7 @@ ExternalCommandRunner.
         <tr>
           <td><code>invalid_input</code></td>
           <td>
+                <code>str</code>
           </td>
           <td><p>a string containing the invalid input.</p></td>
           <td>
@@ -3676,7 +3660,9 @@ ExternalCommandRunner.
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/pdfconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">655</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">653</span>
+<span class="normal">654</span>
+<span class="normal">655</span>
 <span class="normal">656</span>
 <span class="normal">657</span>
 <span class="normal">658</span>
@@ -3697,15 +3683,13 @@ ExternalCommandRunner.
 <span class="normal">673</span>
 <span class="normal">674</span>
 <span class="normal">675</span>
-<span class="normal">676</span>
-<span class="normal">677</span>
-<span class="normal">678</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">handle_syntaxerror</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">lineno</span><span class="p">,</span> <span class="n">invalid_input</span><span class="p">):</span>
+<span class="normal">676</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">handle_syntaxerror</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">lineno</span><span class="p">,</span> <span class="n">invalid_input</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle an xml syntax error.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        error: an exception</span>
-<span class="sd">        lineno: the line number in this module where the error happened.</span>
-<span class="sd">        invalid_input: a string containing the invalid input.</span>
+<span class="sd">        error (Exception): an exception</span>
+<span class="sd">        lineno (int): the line number in this module where the error happened.</span>
+<span class="sd">        invalid_input (str): a string containing the invalid input.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orig</span> <span class="o">+</span> <span class="s2">&quot;.log&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">logfile</span><span class="p">:</span>
         <span class="n">logfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error at: </span><span class="si">{</span><span class="n">lineno</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -3768,7 +3752,9 @@ ExternalCommandRunner.
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/pdfconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">580</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">578</span>
+<span class="normal">579</span>
+<span class="normal">580</span>
 <span class="normal">581</span>
 <span class="normal">582</span>
 <span class="normal">583</span>
@@ -3783,9 +3769,7 @@ ExternalCommandRunner.
 <span class="normal">592</span>
 <span class="normal">593</span>
 <span class="normal">594</span>
-<span class="normal">595</span>
-<span class="normal">596</span>
-<span class="normal">597</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">parse_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">):</span>
+<span class="normal">595</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">parse_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the page element.</span>
 
 <span class="sd">    Args:</span>
@@ -3848,7 +3832,9 @@ ExternalCommandRunner.
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/pdfconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">599</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">597</span>
+<span class="normal">598</span>
+<span class="normal">599</span>
 <span class="normal">600</span>
 <span class="normal">601</span>
 <span class="normal">602</span>
@@ -3856,9 +3842,7 @@ ExternalCommandRunner.
 <span class="normal">604</span>
 <span class="normal">605</span>
 <span class="normal">606</span>
-<span class="normal">607</span>
-<span class="normal">608</span>
-<span class="normal">609</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">parse_pages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root_element</span><span class="p">):</span>
+<span class="normal">607</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">parse_pages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root_element</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the pages of the pdf xml document.</span>
 
 <span class="sd">    Args:</span>
@@ -3913,7 +3897,9 @@ ExternalCommandRunner.
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/pdfconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">561</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">559</span>
+<span class="normal">560</span>
+<span class="normal">561</span>
 <span class="normal">562</span>
 <span class="normal">563</span>
 <span class="normal">564</span>
@@ -3928,9 +3914,7 @@ ExternalCommandRunner.
 <span class="normal">573</span>
 <span class="normal">574</span>
 <span class="normal">575</span>
-<span class="normal">576</span>
-<span class="normal">577</span>
-<span class="normal">578</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pdftohtml2html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pdftohtmloutput</span><span class="p">):</span>
+<span class="normal">576</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pdftohtml2html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pdftohtmloutput</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert output of pdftohtml to html (applying our regular fixes)</span>
 
 <span class="sd">    Returns:</span>
@@ -3992,7 +3976,9 @@ ExternalCommandRunner.
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/pdfconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">528</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">526</span>
+<span class="normal">527</span>
+<span class="normal">528</span>
 <span class="normal">529</span>
 <span class="normal">530</span>
 <span class="normal">531</span>
@@ -4021,9 +4007,7 @@ ExternalCommandRunner.
 <span class="normal">554</span>
 <span class="normal">555</span>
 <span class="normal">556</span>
-<span class="normal">557</span>
-<span class="normal">558</span>
-<span class="normal">559</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pdftohtml2intermediate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pdftohtmloutput</span><span class="p">):</span>
+<span class="normal">557</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pdftohtml2intermediate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pdftohtmloutput</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert output of pdftohtml to a corpus xml file.</span>
 
 <span class="sd">    Returns:</span>
@@ -4122,7 +4106,9 @@ ExternalCommandRunner.
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/pdfconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">473</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">471</span>
+<span class="normal">472</span>
+<span class="normal">473</span>
 <span class="normal">474</span>
 <span class="normal">475</span>
 <span class="normal">476</span>
@@ -4157,9 +4143,7 @@ ExternalCommandRunner.
 <span class="normal">505</span>
 <span class="normal">506</span>
 <span class="normal">507</span>
-<span class="normal">508</span>
-<span class="normal">509</span>
-<span class="normal">510</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">508</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">replace_ligatures</span><span class="p">(</span><span class="n">content</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Replace unwanted strings with correct replacements.</span>
 
@@ -4274,7 +4258,9 @@ ExternalCommandRunner.
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/pdfconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">453</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
 <span class="normal">454</span>
 <span class="normal">455</span>
 <span class="normal">456</span>
@@ -4290,9 +4276,7 @@ ExternalCommandRunner.
 <span class="normal">466</span>
 <span class="normal">467</span>
 <span class="normal">468</span>
-<span class="normal">469</span>
-<span class="normal">470</span>
-<span class="normal">471</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">469</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">strip_chars</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Strip unwanted chars from the document.</span>
 
@@ -4495,7 +4479,7 @@ id of the first instance of this fontspec.</p></td>
 <span class="sd">        This function makes sure identical fonts have identical id&#39;s.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            font_id: an integer that is the id of the fontspec.</span>
+<span class="sd">            font_id (int): an integer that is the id of the fontspec.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            an integer that is the corrected id of the fontspec.</span>
@@ -4664,6 +4648,7 @@ This function makes sure identical fonts have identical id's.</p>
         <tr>
           <td><code>font_id</code></td>
           <td>
+                <code>int</code>
           </td>
           <td><p>an integer that is the id of the fontspec.</p></td>
           <td>
@@ -4714,7 +4699,7 @@ This function makes sure identical fonts have identical id's.</p>
 <span class="sd">    This function makes sure identical fonts have identical id&#39;s.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        font_id: an integer that is the id of the fontspec.</span>
+<span class="sd">        font_id (int): an integer that is the id of the fontspec.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        an integer that is the corrected id of the fontspec.</span>
@@ -4935,11 +4920,11 @@ finally sent to PDFTextExtractor</p>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise the PDFPage class.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            page_element: an etree element representing a pdf page</span>
-<span class="sd">            metadata_margins: a dict containing margins read from the metadata</span>
-<span class="sd">            file.</span>
-<span class="sd">            metadata_inner_margins: a dict containing inner_margins read from</span>
-<span class="sd">            the metadata file.</span>
+<span class="sd">            page_element (etree.Element): an etree element representing a pdf page</span>
+<span class="sd">            metadata_margins (dict): a dict containing margins read from the metadata</span>
+<span class="sd">                file.</span>
+<span class="sd">            metadata_inner_margins (dict): a dict containing inner_margins read from</span>
+<span class="sd">                the metadata file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">page_element</span> <span class="o">=</span> <span class="n">page_element</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pdf_pagemetadata</span> <span class="o">=</span> <span class="n">PDFPageMetadata</span><span class="p">(</span>
@@ -5105,6 +5090,7 @@ finally sent to PDFTextExtractor</p>
         <tr>
           <td><code>page_element</code></td>
           <td>
+                <code><span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>an etree element representing a pdf page</p></td>
           <td>
@@ -5114,8 +5100,10 @@ finally sent to PDFTextExtractor</p>
         <tr>
           <td><code>metadata_margins</code></td>
           <td>
+                <code>dict</code>
           </td>
-          <td><p>a dict containing margins read from the metadata</p></td>
+          <td><p>a dict containing margins read from the metadata
+file.</p></td>
           <td>
                 <code>None</code>
           </td>
@@ -5123,8 +5111,10 @@ finally sent to PDFTextExtractor</p>
         <tr>
           <td><code>metadata_inner_margins</code></td>
           <td>
+                <code>dict</code>
           </td>
-          <td><p>a dict containing inner_margins read from</p></td>
+          <td><p>a dict containing inner_margins read from
+the metadata file.</p></td>
           <td>
                 <code>None</code>
           </td>
@@ -5166,11 +5156,11 @@ finally sent to PDFTextExtractor</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialise the PDFPage class.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        page_element: an etree element representing a pdf page</span>
-<span class="sd">        metadata_margins: a dict containing margins read from the metadata</span>
-<span class="sd">        file.</span>
-<span class="sd">        metadata_inner_margins: a dict containing inner_margins read from</span>
-<span class="sd">        the metadata file.</span>
+<span class="sd">        page_element (etree.Element): an etree element representing a pdf page</span>
+<span class="sd">        metadata_margins (dict): a dict containing margins read from the metadata</span>
+<span class="sd">            file.</span>
+<span class="sd">        metadata_inner_margins (dict): a dict containing inner_margins read from</span>
+<span class="sd">            the metadata file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">page_element</span> <span class="o">=</span> <span class="n">page_element</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">pdf_pagemetadata</span> <span class="o">=</span> <span class="n">PDFPageMetadata</span><span class="p">(</span>
@@ -6670,7 +6660,9 @@ this class.</p>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/pdfconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">681</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">679</span>
+<span class="normal">680</span>
+<span class="normal">681</span>
 <span class="normal">682</span>
 <span class="normal">683</span>
 <span class="normal">684</span>
@@ -6678,9 +6670,7 @@ this class.</p>
 <span class="normal">686</span>
 <span class="normal">687</span>
 <span class="normal">688</span>
-<span class="normal">689</span>
-<span class="normal">690</span>
-<span class="normal">691</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">to_html_elt</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="normal">689</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">to_html_elt</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a pdf document to the Giella xml format.</span>
 
 <span class="sd">    Args:</span>

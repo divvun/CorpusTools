@@ -2451,8 +2451,8 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise the LanguageDetector class.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            document: an etree element.</span>
-<span class="sd">            languageGuesser: a text_cat.Classifier.</span>
+<span class="sd">            document (etree.Element): an etree element.</span>
+<span class="sd">            language_guesser: a text_cat.Classifier.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="n">document</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">language_guesser</span> <span class="o">=</span> <span class="n">language_guesser</span>
@@ -2616,6 +2616,7 @@
         <tr>
           <td><code>document</code></td>
           <td>
+                <code>etree.<span title="etree.Element">Element</span></code>
           </td>
           <td><p>an etree element.</p></td>
           <td>
@@ -2623,7 +2624,7 @@
           </td>
         </tr>
         <tr>
-          <td><code>languageGuesser</code></td>
+          <td><code>language_guesser</code></td>
           <td>
           </td>
           <td><p>a text_cat.Classifier.</p></td>
@@ -2648,8 +2649,8 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialise the LanguageDetector class.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        document: an etree element.</span>
-<span class="sd">        languageGuesser: a text_cat.Classifier.</span>
+<span class="sd">        document (etree.Element): an etree element.</span>
+<span class="sd">        language_guesser: a text_cat.Classifier.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="n">document</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">language_guesser</span> <span class="o">=</span> <span class="n">language_guesser</span>

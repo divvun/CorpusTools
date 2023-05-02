@@ -2662,7 +2662,7 @@ be converted from original format to xml.</p></td>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert file to corpus xml format.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            orig_file: string containing the path to the original file.</span>
+<span class="sd">            orig_file (str): the path to the original file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">conv</span> <span class="o">=</span> <span class="n">converter</span><span class="o">.</span><span class="n">Converter</span><span class="p">(</span><span class="n">orig_file</span><span class="p">,</span> <span class="n">lazy_conversion</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lazy_conversion</span><span class="p">)</span>
@@ -2733,8 +2733,8 @@ be converted from original format to xml.</p></td>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Find all convertible files in sources.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            sources: a list of files or directories where convertable</span>
-<span class="sd">            files are found.</span>
+<span class="sd">            sources (list of str): a list of files or directories where</span>
+<span class="sd">                convertable files are found.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Collecting files to convert&quot;</span><span class="p">)</span>
 
@@ -3008,8 +3008,10 @@ should be converted.</p></td>
         <tr>
           <td><code>sources</code></td>
           <td>
+                <code>list of str</code>
           </td>
-          <td><p>a list of files or directories where convertable</p></td>
+          <td><p>a list of files or directories where
+convertable files are found.</p></td>
           <td>
               <em>required</em>
           </td>
@@ -3042,8 +3044,8 @@ should be converted.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Find all convertible files in sources.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        sources: a list of files or directories where convertable</span>
-<span class="sd">        files are found.</span>
+<span class="sd">        sources (list of str): a list of files or directories where</span>
+<span class="sd">            convertable files are found.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Collecting files to convert&quot;</span><span class="p">)</span>
 
@@ -3092,8 +3094,9 @@ should be converted.</p></td>
         <tr>
           <td><code>orig_file</code></td>
           <td>
+                <code>str</code>
           </td>
-          <td><p>string containing the path to the original file.</p></td>
+          <td><p>the path to the original file.</p></td>
           <td>
               <em>required</em>
           </td>
@@ -3121,7 +3124,7 @@ should be converted.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert file to corpus xml format.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        orig_file: string containing the path to the original file.</span>
+<span class="sd">        orig_file (str): the path to the original file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">conv</span> <span class="o">=</span> <span class="n">converter</span><span class="o">.</span><span class="n">Converter</span><span class="p">(</span><span class="n">orig_file</span><span class="p">,</span> <span class="n">lazy_conversion</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lazy_conversion</span><span class="p">)</span>

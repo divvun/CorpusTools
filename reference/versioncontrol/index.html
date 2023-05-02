@@ -2526,7 +2526,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove a file from the repo.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            path (src); path of the file that should be removed.</span>
+<span class="sd">            path (src): path of the file that should be removed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gitrepo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">rm</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2751,6 +2751,30 @@
   
       <p>Remove a file from the repo.</p>
 
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>path</code></td>
+          <td>
+                <code>src</code>
+          </td>
+          <td><p>path of the file that should be removed.</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/versioncontrol.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">104</span>
@@ -2763,7 +2787,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove a file from the repo.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        path (src); path of the file that should be removed.</span>
+<span class="sd">        path (src): path of the file that should be removed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">gitrepo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">rm</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>

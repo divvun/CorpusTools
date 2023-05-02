@@ -3180,7 +3180,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove unwanted elements from an html document.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            content is a string containing an html document.</span>
+<span class="sd">            content (str): a string containing an html document.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            a string containing the cleaned up html document.</span>
@@ -5401,6 +5401,30 @@ etc. – treat them all as <div>'s for xhtml2corpus</p>
   
       <p>Remove unwanted elements from an html document.</p>
 
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>content</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td><p>a string containing an html document.</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
   <p><strong>Returns:</strong></p>
   <table>
     <thead>
@@ -5462,7 +5486,7 @@ etc. – treat them all as <div>'s for xhtml2corpus</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove unwanted elements from an html document.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        content is a string containing an html document.</span>
+<span class="sd">        content (str): a string containing an html document.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        a string containing the cleaned up html document.</span>
@@ -5726,7 +5750,7 @@ etc. – treat them all as <div>'s for xhtml2corpus</p>
     </thead>
     <tbody>
         <tr>
-          <td><code>xhtml</code></td>
+          <td><code>content_xml</code></td>
           <td>
                 <code><span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
@@ -5778,7 +5802,7 @@ etc. – treat them all as <div>'s for xhtml2corpus</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert xhtml to Giella xml.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        xhtml (etree.Element): the result of convert2xhtml</span>
+<span class="sd">        content_xml (etree.Element): the result of convert2xhtml</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        etree.Element: the root element of the Giella xml document</span>

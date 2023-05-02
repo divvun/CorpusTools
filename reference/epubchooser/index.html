@@ -3479,8 +3479,8 @@ after unwanted chapters have been removed.</p></td>
 <span class="sd">            indent (int): indicate how many spaces this element should be</span>
 <span class="sd">                indented</span>
 <span class="sd">            out (stream): a buffer where the formatted element is written.</span>
-<span class="sd">            xpath (string): The xpath of the parent of this element.</span>
-<span class="sd">            tag_no (int): the position of the element tag</span>
+<span class="sd">            xpath (str): The xpath of the parent of this element.</span>
+<span class="sd">            element_no (int): the position of the element tag</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">counter</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">tag</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;{http://www.w3.org/1999/xhtml}&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
@@ -3886,7 +3886,7 @@ indented</p></td>
         <tr>
           <td><code>xpath</code></td>
           <td>
-                <code>string</code>
+                <code>str</code>
           </td>
           <td><p>The xpath of the parent of this element.</p></td>
           <td>
@@ -3894,13 +3894,13 @@ indented</p></td>
           </td>
         </tr>
         <tr>
-          <td><code>tag_no</code></td>
+          <td><code>element_no</code></td>
           <td>
                 <code>int</code>
           </td>
           <td><p>the position of the element tag</p></td>
           <td>
-              <em>required</em>
+                <code>1</code>
           </td>
         </tr>
     </tbody>
@@ -3992,8 +3992,8 @@ indented</p></td>
 <span class="sd">        indent (int): indicate how many spaces this element should be</span>
 <span class="sd">            indented</span>
 <span class="sd">        out (stream): a buffer where the formatted element is written.</span>
-<span class="sd">        xpath (string): The xpath of the parent of this element.</span>
-<span class="sd">        tag_no (int): the position of the element tag</span>
+<span class="sd">        xpath (str): The xpath of the parent of this element.</span>
+<span class="sd">        element_no (int): the position of the element tag</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">counter</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">tag</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;{http://www.w3.org/1999/xhtml}&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
@@ -4282,7 +4282,7 @@ pointing to places in the xpaths list.</p></td>
 <span class="sd">            xpath_pair (tuple of str): a pair of xpaths</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">            KeyError if invalid content is found.</span>
+<span class="sd">            KeyError: if invalid content is found.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">xpath_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;First xpath is empty.&quot;</span><span class="p">)</span>
@@ -4670,6 +4670,24 @@ The second part of the tuple may be empty.</p></td>
     </tbody>
   </table>
 
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>KeyError</code>
+          </td>
+          <td><p>if invalid content is found.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubchooser.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">73</span>
@@ -4693,7 +4711,7 @@ The second part of the tuple may be empty.</p></td>
 <span class="sd">        xpath_pair (tuple of str): a pair of xpaths</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        KeyError if invalid content is found.</span>
+<span class="sd">        KeyError: if invalid content is found.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">xpath_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;First xpath is empty.&quot;</span><span class="p">)</span>

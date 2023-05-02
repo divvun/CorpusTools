@@ -2439,16 +2439,6 @@ lang2 file that should be reconverted.</p></td>
               <em>required</em>
           </td>
         </tr>
-        <tr>
-          <td><code>prestable</code></td>
-          <td>
-                <code>boolean</code>
-          </td>
-          <td><p>True the file to be realigned is part of prestable</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
     </tbody>
   </table>
 
@@ -2472,8 +2462,7 @@ lang2 file that should be reconverted.</p></td>
 <span class="normal">89</span>
 <span class="normal">90</span>
 <span class="normal">91</span>
-<span class="normal">92</span>
-<span class="normal">93</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">convert_and_copy</span><span class="p">(</span><span class="n">corpus_path1</span><span class="p">,</span> <span class="n">corpus_path2</span><span class="p">):</span>
+<span class="normal">92</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">convert_and_copy</span><span class="p">(</span><span class="n">corpus_path1</span><span class="p">,</span> <span class="n">corpus_path2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Reconvert and copy files to prestable/converted.</span>
 
 <span class="sd">    Args:</span>
@@ -2481,7 +2470,6 @@ lang2 file that should be reconverted.</p></td>
 <span class="sd">            lang1 file that should be reconverted.</span>
 <span class="sd">        corpus_path2 (corpuspath.CorpusPath): A CorpusPath representing the</span>
 <span class="sd">            lang2 file that should be reconverted.</span>
-<span class="sd">        prestable (boolean): True the file to be realigned is part of prestable</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">corpus_path</span> <span class="ow">in</span> <span class="p">[</span><span class="n">corpus_path1</span><span class="p">,</span> <span class="n">corpus_path2</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">corpus_path</span><span class="o">.</span><span class="n">converted</span><span class="p">):</span>
@@ -2515,7 +2503,8 @@ lang2 file that should be reconverted.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/realign.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">130</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">129</span>
+<span class="normal">130</span>
 <span class="normal">131</span>
 <span class="normal">132</span>
 <span class="normal">133</span>
@@ -2543,8 +2532,7 @@ lang2 file that should be reconverted.</p></td>
 <span class="normal">155</span>
 <span class="normal">156</span>
 <span class="normal">157</span>
-<span class="normal">158</span>
-<span class="normal">159</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="normal">158</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sentence align a given file anew.&quot;&quot;&quot;</span>
     <span class="n">convertermanager</span><span class="o">.</span><span class="n">LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_options</span><span class="p">()</span>
@@ -2613,7 +2601,8 @@ lang2 file that should be reconverted.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/realign.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 96</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 95</span>
+<span class="normal"> 96</span>
 <span class="normal"> 97</span>
 <span class="normal"> 98</span>
 <span class="normal"> 99</span>
@@ -2643,8 +2632,7 @@ lang2 file that should be reconverted.</p></td>
 <span class="normal">123</span>
 <span class="normal">124</span>
 <span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">parse_options</span><span class="p">():</span>
+<span class="normal">126</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">parse_options</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the commandline options.</span>
 
 <span class="sd">    Returns:</span>

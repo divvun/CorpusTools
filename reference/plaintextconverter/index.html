@@ -2481,9 +2481,9 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove the characters found in plaintext_oddities from content.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            content: a string containing the content of a document.</span>
-<span class="sd">            extra: a string containg even more characters to remove</span>
-<span class="sd">            from content.</span>
+<span class="sd">            content (str): a string containing the content of a document.</span>
+<span class="sd">            extra (str): a string containg even more characters to remove</span>
+<span class="sd">                from content.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A string containing the content sans unwanted characters.</span>
@@ -2530,9 +2530,9 @@
 <span class="sd">        Args:</span>
 <span class="sd">            element_name (str): Name of the xml element</span>
 <span class="sd">            text (str): The text the xml should contain</span>
-<span class="sd">            attributes (dict): The attributes the element should have</span>
 
-<span class="sd">        :returns: lxml.etree.Element</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            an lxml.etree.Element</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">element</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="n">element_name</span><span class="p">)</span>
 
@@ -2767,19 +2767,25 @@
               <em>required</em>
           </td>
         </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
         <tr>
-          <td><code>attributes</code></td>
           <td>
-                <code>dict</code>
           </td>
-          <td><p>The attributes the element should have</p></td>
-          <td>
-              <em>required</em>
-          </td>
+          <td><p>an lxml.etree.Element</p></td>
         </tr>
     </tbody>
   </table>
-      <p>:returns: lxml.etree.Element</p>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/plaintextconverter.py</code></summary>
@@ -2813,9 +2819,9 @@
 <span class="sd">    Args:</span>
 <span class="sd">        element_name (str): Name of the xml element</span>
 <span class="sd">        text (str): The text the xml should contain</span>
-<span class="sd">        attributes (dict): The attributes the element should have</span>
 
-<span class="sd">    :returns: lxml.etree.Element</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        an lxml.etree.Element</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">element</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="n">element_name</span><span class="p">)</span>
 
@@ -2868,6 +2874,7 @@
         <tr>
           <td><code>content</code></td>
           <td>
+                <code>str</code>
           </td>
           <td><p>a string containing the content of a document.</p></td>
           <td>
@@ -2877,8 +2884,10 @@
         <tr>
           <td><code>extra</code></td>
           <td>
+                <code>str</code>
           </td>
-          <td><p>a string containg even more characters to remove</p></td>
+          <td><p>a string containg even more characters to remove
+from content.</p></td>
           <td>
                 <code>&#39;&#39;</code>
           </td>
@@ -2955,9 +2964,9 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove the characters found in plaintext_oddities from content.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        content: a string containing the content of a document.</span>
-<span class="sd">        extra: a string containg even more characters to remove</span>
-<span class="sd">        from content.</span>
+<span class="sd">        content (str): a string containing the content of a document.</span>
+<span class="sd">        extra (str): a string containg even more characters to remove</span>
+<span class="sd">            from content.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A string containing the content sans unwanted characters.</span>

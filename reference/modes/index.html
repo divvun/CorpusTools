@@ -2612,7 +2612,7 @@ are not found in the standard places.</p></td>
 <span class="sd">            A directory where resources for the given language exist.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">            utils.ArgumentError if no resources are found.</span>
+<span class="sd">            utils.ArgumentError: if no resources are found.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">giella_prefix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">giella_prefix</span><span class="p">,</span> <span class="s2">&quot;share/giella&quot;</span><span class="p">,</span> <span class="n">lang</span><span class="p">)</span>
@@ -2637,7 +2637,7 @@ are not found in the standard places.</p></td>
 <span class="sd">                mode element.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">            util.ArgumentError if a filename does not exist.</span>
+<span class="sd">            util.ArgumentError: if a filename does not exist.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
@@ -3029,6 +3029,24 @@ mode element.</p></td>
     </tbody>
   </table>
 
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="corpustools.util" href="../util/#corpustools.util">util</a>.<a class="autorefs autorefs-internal" title="corpustools.util.ArgumentError" href="../util/#corpustools.util.ArgumentError">ArgumentError</a></code>
+          </td>
+          <td><p>if a filename does not exist.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/modes.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 90</span>
@@ -3053,7 +3071,7 @@ mode element.</p></td>
 <span class="sd">            mode element.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        util.ArgumentError if a filename does not exist.</span>
+<span class="sd">        util.ArgumentError: if a filename does not exist.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
@@ -3454,6 +3472,24 @@ mode element.</p></td>
     </tbody>
   </table>
 
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>utils.<span title="utils.ArgumentError">ArgumentError</span></code>
+          </td>
+          <td><p>if no resources are found.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/modes.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">62</span>
@@ -3494,7 +3530,7 @@ mode element.</p></td>
 <span class="sd">        A directory where resources for the given language exist.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        utils.ArgumentError if no resources are found.</span>
+<span class="sd">        utils.ArgumentError: if no resources are found.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">giella_prefix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">giella_prefix</span><span class="p">,</span> <span class="s2">&quot;share/giella&quot;</span><span class="p">,</span> <span class="n">lang</span><span class="p">)</span>

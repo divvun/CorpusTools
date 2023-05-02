@@ -2364,7 +2364,8 @@ a combination of three xsl files + the intermediate xml file is needed.</p>
 <span class="normal">72</span>
 <span class="normal">73</span>
 <span class="normal">74</span>
-<span class="normal">75</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">XslMaker</span><span class="p">:</span>
+<span class="normal">75</span>
+<span class="normal">76</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">XslMaker</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Make an xsl file to combine with the intermediate xml file.</span>
 
 <span class="sd">    To convert the intermediate xml to a fullfledged  giellatekno document</span>
@@ -2406,7 +2407,8 @@ a combination of three xsl files + the intermediate xml file is needed.</p>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Make an etree.XSLT transformer.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">            raise a ConversionException in case of invalid XML in the xsl file.</span>
+<span class="sd">            util.ConversionException: in case of invalid XML in the xsl file.</span>
+
 <span class="sd">        Returns:</span>
 <span class="sd">            an etree.XSLT transformer</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2462,6 +2464,24 @@ a combination of three xsl files + the intermediate xml file is needed.</p>
   <div class="doc doc-contents ">
   
       <p>Make an etree.XSLT transformer.</p>
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="corpustools.util" href="../util/#corpustools.util">util</a>.<span title="corpustools.util.ConversionException">ConversionException</span></code>
+          </td>
+          <td><p>in case of invalid XML in the xsl file.</p></td>
+        </tr>
+    </tbody>
+  </table>
 
   <p><strong>Returns:</strong></p>
   <table>

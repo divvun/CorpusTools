@@ -2284,22 +2284,14 @@
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">BasicConverter</span><span class="p">:</span>
+<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">BasicConverter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Take care of data common to all BasicConverter classes.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise the BasicConverter class.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            filename: string containing the path to the file that should</span>
-<span class="sd">            be converted</span>
-<span class="sd">            write_intermediate: boolean which decides whether intermediate</span>
-<span class="sd">            versions of the converted document should be written (used for</span>
-<span class="sd">            debugging purposes).</span>
+<span class="sd">            filename (str): the path to the file that should be converted</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">orig</span> <span class="o">=</span> <span class="n">filename</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">xslsetter</span><span class="o">.</span><span class="n">MetadataHandler</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.xsl&quot;</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -2346,17 +2338,9 @@
         <tr>
           <td><code>filename</code></td>
           <td>
+                <code>str</code>
           </td>
-          <td><p>string containing the path to the file that should</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>write_intermediate</code></td>
-          <td>
-          </td>
-          <td><p>boolean which decides whether intermediate</p></td>
+          <td><p>the path to the file that should be converted</p></td>
           <td>
               <em>required</em>
           </td>
@@ -2373,19 +2357,11 @@
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialise the BasicConverter class.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        filename: string containing the path to the file that should</span>
-<span class="sd">        be converted</span>
-<span class="sd">        write_intermediate: boolean which decides whether intermediate</span>
-<span class="sd">        versions of the converted document should be written (used for</span>
-<span class="sd">        debugging purposes).</span>
+<span class="sd">        filename (str): the path to the file that should be converted</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">orig</span> <span class="o">=</span> <span class="n">filename</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">xslsetter</span><span class="o">.</span><span class="n">MetadataHandler</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.xsl&quot;</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

@@ -3151,9 +3151,9 @@
 <span class="sd">                from the template file.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">            util.ArgumentError if create is False and the filename does not</span>
-<span class="sd">            exist.</span>
-<span class="sd">            XsltException if there is a syntax error in the metadata file.</span>
+<span class="sd">            util.ArgumentError:if create is False and the filename does not</span>
+<span class="sd">                exist.</span>
+<span class="sd">            XsltException: if there is a syntax error in the metadata file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
 
@@ -3553,7 +3553,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse a margin line read from the .xsl file.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            param (str): contains the margin settings for a particular</span>
+<span class="sd">            value (str): contains the margin settings for a particular</span>
 <span class="sd">                margin (right_margin, left_margin, top_margin, bottom_margin)</span>
 
 <span class="sd">        Returns:</span>
@@ -3649,7 +3649,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse a linespacing line read from the .xsl file.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            param (str): contains the linespacing</span>
+<span class="sd">            value (str): contains the linespacing</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            dict: page: float pairs</span>
@@ -4097,6 +4097,31 @@ from the template file.</p></td>
     </tbody>
   </table>
 
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="corpustools.util" href="../util/#corpustools.util">util</a>.<a class="autorefs autorefs-internal" title="corpustools.util.ArgumentError" href="../util/#corpustools.util.ArgumentError">ArgumentError</a></code>
+          </td>
+          <td><p>if create is False and the filename does not
+exist.</p></td>
+        </tr>
+        <tr>
+          <td>
+                <code>XsltException</code>
+          </td>
+          <td><p>if there is a syntax error in the metadata file.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/xslsetter.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">44</span>
@@ -4147,9 +4172,9 @@ from the template file.</p></td>
 <span class="sd">            from the template file.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        util.ArgumentError if create is False and the filename does not</span>
-<span class="sd">        exist.</span>
-<span class="sd">        XsltException if there is a syntax error in the metadata file.</span>
+<span class="sd">        util.ArgumentError:if create is False and the filename does not</span>
+<span class="sd">            exist.</span>
+<span class="sd">        XsltException: if there is a syntax error in the metadata file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
 
@@ -4541,7 +4566,7 @@ otherwise inner_ if getting inner margin lines.</p></td>
     </thead>
     <tbody>
         <tr>
-          <td><code>param</code></td>
+          <td><code>value</code></td>
           <td>
                 <code>str</code>
           </td>
@@ -4594,7 +4619,7 @@ otherwise inner_ if getting inner margin lines.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a linespacing line read from the .xsl file.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        param (str): contains the linespacing</span>
+<span class="sd">        value (str): contains the linespacing</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        dict: page: float pairs</span>
@@ -4643,7 +4668,7 @@ otherwise inner_ if getting inner margin lines.</p></td>
     </thead>
     <tbody>
         <tr>
-          <td><code>param</code></td>
+          <td><code>value</code></td>
           <td>
                 <code>str</code>
           </td>
@@ -4697,7 +4722,7 @@ margin (right_margin, left_margin, top_margin, bottom_margin)</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a margin line read from the .xsl file.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        param (str): contains the margin settings for a particular</span>
+<span class="sd">        value (str): contains the margin settings for a particular</span>
 <span class="sd">            margin (right_margin, left_margin, top_margin, bottom_margin)</span>
 
 <span class="sd">    Returns:</span>
