@@ -42,7 +42,7 @@ def read_chapter(chapter):
         str: The contents of a chapter
 
     Raises:
-        ConversionException
+        util.ConversionException: on conversion error
     """
     try:
         return etree.fromstring(chapter.read())

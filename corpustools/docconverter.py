@@ -175,8 +175,6 @@ def extract_text(filename):
 
     Args:
         filename (str): path to the document
-        command (list of str): the command and the arguments sent to
-            ExternalCommandRunner.
 
     Returns:
         bytes: the output of the program

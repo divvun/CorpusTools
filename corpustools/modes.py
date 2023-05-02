@@ -71,7 +71,7 @@ class Pipeline:
             A directory where resources for the given language exist.
 
         Raises:
-            utils.ArgumentError if no resources are found.
+            utils.ArgumentError: if no resources are found.
         """
         if giella_prefix is not None:
             return os.path.join(giella_prefix, "share/giella", lang)
@@ -96,7 +96,7 @@ class Pipeline:
                 mode element.
 
         Raises:
-            util.ArgumentError if a filename does not exist.
+            util.ArgumentError: if a filename does not exist.
         """
         for filename in filenames:
             if not os.path.exists(filename):

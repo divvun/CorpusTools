@@ -330,7 +330,7 @@ def compute_hexdigest(afile, blocksize=65536):
     """Compute the hexdigest of the file in path.
 
     Args:
-        afile: a file like object
+        afile (file): a file like object
 
     Returns:
         a hexdigest of the file

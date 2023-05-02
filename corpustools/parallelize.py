@@ -52,7 +52,7 @@ class Tca2SentenceDivider:
 
         Args:
             lang (str): three character name of main language of document.
-            filename (str): name of the xmlfile
+            xmlfile (str): name of the xmlfile
 
         Returns:
             lxml.etree._Element: an xml element containing all sentences.
@@ -143,7 +143,6 @@ class Parallelize:
 
         Args:
             path (str): where the anchor file will be written.
-            cols (list of str): list of all the possible langs.
 
         Returns:
             generate_anchor_list.GenerateAnchorList

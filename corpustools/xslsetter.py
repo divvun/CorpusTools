@@ -58,9 +58,9 @@ class MetadataHandler:
                 from the template file.
 
         Raises:
-            util.ArgumentError if create is False and the filename does not
-            exist.
-            XsltException if there is a syntax error in the metadata file.
+            util.ArgumentError:if create is False and the filename does not
+                exist.
+            XsltException: if there is a syntax error in the metadata file.
         """
         self.filename = filename
 
@@ -460,7 +460,7 @@ class MetadataHandler:
         """Parse a margin line read from the .xsl file.
 
         Args:
-            param (str): contains the margin settings for a particular
+            value (str): contains the margin settings for a particular
                 margin (right_margin, left_margin, top_margin, bottom_margin)
 
         Returns:
@@ -556,7 +556,7 @@ class MetadataHandler:
         """Parse a linespacing line read from the .xsl file.
 
         Args:
-            param (str): contains the linespacing
+            value (str): contains the linespacing
 
         Returns:
             dict: page: float pairs

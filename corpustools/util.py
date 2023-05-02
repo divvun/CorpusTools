@@ -114,7 +114,7 @@ def path_possibilities(program):
     """Check if program is found in $PATH.
 
     Args:
-        program: name of program of script.
+        program (str): name of program of script.
 
     Yields:
         possible fullpath to the program

@@ -37,7 +37,7 @@ def suppress_broken_pipe_msg(function):
     http://stackoverflow.com/questions/14207708/ioerror-errno-32-broken-pipe-python
 
     Args:
-        function: the function that should be wrapped by this function.
+        function (function): the function that should be wrapped by this function.
     """
 
     @wraps(function)

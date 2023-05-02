@@ -100,7 +100,7 @@ class DocumentFixer:
         """Replace shy with a hyph element.
 
         Args:
-            element: an etree element
+            element (etree.Element): an etree element
         """
         for child in element:
             self.replace_shy(child)
@@ -137,8 +137,8 @@ class DocumentFixer:
         """Insert space after words needing it.
 
         Args:
-            element: an etree element
-            irritating_words_regex: regex
+            element (etree.Element): an etree element
+            irritating_words_regex (re.Pattern): regex
         """
         if element.text is not None:
             element.text = irritating_words_regex.sub(r"\1 \3", element.text)
@@ -322,7 +322,7 @@ class DocumentFixer:
         """Get list of quotes from the given text.
 
         Args:
-            text: string
+            text (str): string
 
         Returns:
             A list of span tuples containing indexes to quotes found in text.
@@ -348,9 +348,9 @@ class DocumentFixer:
         """Append quotes to an element.
 
         Args:
-            text: a string that contains the plain text of the element.
-            quote_list: A list of span tuples containing indexes to quotes
-            found in text.
+            text (str): the plain text of the element.
+            quote_list (list of tuple of int): A list of span tuples containing
+                indexes to quotes found in text.
         """
         for index in range(0, len(quote_list)):
             span = etree.Element("span")
@@ -366,7 +366,7 @@ class DocumentFixer:
         """Insert span elements around quotes.
 
         Args:
-            element: an etree element.
+            element (etree.Element): an etree element.
         """
         newelement = deepcopy(element)
 

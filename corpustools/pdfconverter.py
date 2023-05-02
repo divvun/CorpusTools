@@ -148,7 +148,7 @@ class PDFFontspecs:
         This function makes sure identical fonts have identical id's.
 
         Args:
-            font_id: an integer that is the id of the fontspec.
+            font_id (int): an integer that is the id of the fontspec.
 
         Returns:
             an integer that is the corrected id of the fontspec.
@@ -321,11 +321,11 @@ class PDFPage:
         """Initialise the PDFPage class.
 
         Args:
-            page_element: an etree element representing a pdf page
-            metadata_margins: a dict containing margins read from the metadata
-            file.
-            metadata_inner_margins: a dict containing inner_margins read from
-            the metadata file.
+            page_element (etree.Element): an etree element representing a pdf page
+            metadata_margins (dict): a dict containing margins read from the metadata
+                file.
+            metadata_inner_margins (dict): a dict containing inner_margins read from
+                the metadata file.
         """
         self.page_element = page_element
         self.pdf_pagemetadata = PDFPageMetadata(
@@ -444,8 +444,6 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
 
         Args:
             filename (str): the path to the pdf file.
-            write_intermediate (boolean): indicate whether intermediate
-                versions of the converter document should be written to disk.
         """
         super().__init__(filename)
         self.pdffontspecs = PDFFontspecs()
@@ -656,9 +654,9 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         """Handle an xml syntax error.
 
         Args:
-            error: an exception
-            lineno: the line number in this module where the error happened.
-            invalid_input: a string containing the invalid input.
+            error (Exception): an exception
+            lineno (int): the line number in this module where the error happened.
+            invalid_input (str): a string containing the invalid input.
         """
         with open(self.orig + ".log", "w") as logfile:
             logfile.write(f"Error at: {lineno}")

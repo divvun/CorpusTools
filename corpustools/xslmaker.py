@@ -68,7 +68,8 @@ class XslMaker:
         """Make an etree.XSLT transformer.
 
         Raises:
-            raise a ConversionException in case of invalid XML in the xsl file.
+            util.ConversionException: in case of invalid XML in the xsl file.
+
         Returns:
             an etree.XSLT transformer
         """

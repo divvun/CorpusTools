@@ -67,7 +67,7 @@ class HTMLBeautifier:
         """Remove unwanted elements from an html document.
 
         Args:
-            content is a string containing an html document.
+            content (str): a string containing an html document.
 
         Returns:
             a string containing the cleaned up html document.
@@ -715,7 +715,7 @@ def xhtml2intermediate(content_xml):
     """Convert xhtml to Giella xml.
 
     Args:
-        xhtml (etree.Element): the result of convert2xhtml
+        content_xml (etree.Element): the result of convert2xhtml
 
     Returns:
         etree.Element: the root element of the Giella xml document

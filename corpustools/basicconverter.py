@@ -27,11 +27,7 @@ class BasicConverter:
         """Initialise the BasicConverter class.
 
         Args:
-            filename: string containing the path to the file that should
-            be converted
-            write_intermediate: boolean which decides whether intermediate
-            versions of the converted document should be written (used for
-            debugging purposes).
+            filename (str): the path to the file that should be converted
         """
         self.orig = filename
         self.metadata = xslsetter.MetadataHandler(filename + ".xsl", create=True)

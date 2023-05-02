@@ -105,7 +105,7 @@ class GIT(VersionController):
         """Remove a file from the repo.
 
         Args:
-            path (src); path of the file that should be removed.
+            path (src): path of the file that should be removed.
         """
         self.gitrepo.git.rm(path)
 

@@ -39,9 +39,9 @@ def insert_element(para, text, position):
     """Insert a new element in p's parent.
 
     Args:
-        p: an lxml element, it is a story/p element
-        text: (unicode) string
-        position: (integer) the position inside p's parent where the new
+        para: an lxml element, it is a story/p element
+        text (str): string
+        position (int): the position inside p's parent where the new
                     element is inserted
 
     Returns:
@@ -64,7 +64,7 @@ def convert_sub_p(para):
     This function removes p.text and saves p.tail
 
     Args:
-        p: an lxml element, it is a story/p element
+        para: an lxml element, it is a story/p element
     """
     for sub_p in para.findall(".//p"):
         previous = sub_p.getprevious()
@@ -88,7 +88,7 @@ def convert_subelement(para):
     """Convert subelements of story/p elements to p elements.
 
     Args:
-        p: an lxml element, it is a story/p element
+        para: an lxml element, it is a story/p element
     """
     position = 1
     for subelement in para:

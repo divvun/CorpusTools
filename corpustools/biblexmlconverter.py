@@ -24,8 +24,8 @@ def process_verse(verse_element):
     """Process the verse element found in bible xml documents.
 
     Args:
-        verse_element: an etree element containing the verse element found
-        in a bible xml document.
+        verse_element (etree.Element): an etree element containing the verse
+            element found in a bible xml document.
 
     Returns:
         A string containing the text of the verse element.
@@ -40,8 +40,8 @@ def process_section(section_element):
     """Process the section element found in the bible xml documents.
 
     Args:
-        section_element: an etree element containing the section element
-        found in a bible xml document.
+        section_element (etree.Element): an etree element containing the
+             section element found in a bible xml document.
 
     Returns:
         section: an etree element containing a corpus xml section.
@@ -77,7 +77,8 @@ def process_p(paragraph):
     """Convert bible xml verse elements to p elements.
 
     Args:
-        p is a bible xml p element.
+        paragraph: is a bible xml p element.
+
     Returns:
         a Giella xml p element
     """
@@ -97,7 +98,8 @@ def make_p(verses):
     """Convert verse strings to p element.
 
     Args:
-        verses: a list of strings
+        verses (list[str]): a list of strings
+
     Returns:
         a Giella xml p element
     """

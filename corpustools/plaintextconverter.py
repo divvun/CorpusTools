@@ -52,9 +52,9 @@ class PlaintextConverter(basicconverter.BasicConverter):
         """Remove the characters found in plaintext_oddities from content.
 
         Args:
-            content: a string containing the content of a document.
-            extra: a string containg even more characters to remove
-            from content.
+            content (str): a string containing the content of a document.
+            extra (str): a string containg even more characters to remove
+                from content.
 
         Returns:
             A string containing the content sans unwanted characters.
@@ -101,9 +101,9 @@ class PlaintextConverter(basicconverter.BasicConverter):
         Args:
             element_name (str): Name of the xml element
             text (str): The text the xml should contain
-            attributes (dict): The attributes the element should have
 
-        :returns: lxml.etree.Element
+        Returns:
+            an lxml.etree.Element
         """
         element = etree.Element(element_name)
 

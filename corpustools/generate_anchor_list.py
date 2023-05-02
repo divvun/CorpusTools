@@ -35,11 +35,11 @@ class GenerateAnchorList:
         """Initialise the GenerateAnchorList class.
 
         Args:
-            lang1: the main lang
-            lang2: the translated lang
+            lang1 (str): the main lang
+            lang2 (str): the translated lang
             columns (list of str): contains all the possible langs
                 found in the main anchor file.
-            path (str): path of the existing anchor file.
+            input_file (str): path of the existing anchor file.
         """
         self.lang1 = lang1
         self.lang2 = lang2

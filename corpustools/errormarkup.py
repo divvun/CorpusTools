@@ -86,8 +86,8 @@ def make_error_element(error_text, error_name, correction):
     """Make an error xml element.
 
     Args:
-        error_text: the text of the error element
-        error_name: the tag of the error element
+        error_text (str): the text of the error element
+        error_name (str): the tag of the error element
         correction: the correction(s) for the error
 
     Returns:
@@ -106,7 +106,7 @@ def make_correction_element(correction_content):
     """Make correction elements.
 
     Args:
-        correction_content: string containing the correction(s)
+        correction_content (str): string containing the correction(s)
 
     Yields:
         A correction element for each correction

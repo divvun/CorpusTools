@@ -91,11 +91,9 @@ class Converter:
         """Initialise the Converter class.
 
         Args:
-            filename: string containing the path to the file that should
-            be converted
-            write_intermediate: boolean which decides whether intermediate
-            versions of the converted document should be written (used for
-            debugging purposes).
+            filename (str): the path to the file that should be converted
+            write_intermediate (bool): whether intermediate versions of the
+                 converted document should be written (used for debugging purposes).
         """
         codecs.register_error("mixed", self.mixed_decoder)
         self.names = corpuspath.CorpusPath(filename)

@@ -71,7 +71,7 @@ class SentenceDivider:
         """Turn ccat output into cleaned up sentences.
 
         Args:
-            ccat_output (str): plain text output of ccat.
+            tokenised_output (str): plain text output of ccat.
 
         Yields:
             str: a cleaned up sentence

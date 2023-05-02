@@ -51,7 +51,7 @@ class CorpusPath:
     """Map filenames in a corpus.
 
     Args:
-        path: path to a corpus file
+        path (str): path to a corpus file
     """
 
     def __init__(self, path):
@@ -64,7 +64,7 @@ class CorpusPath:
         """Split the path in three parts.
 
         Args:
-            path: a path to a corpus file
+            path (str): a path to a corpus file
 
         Returns:
             tuple of str: part one is the corpus directory, the second
@@ -119,7 +119,7 @@ class CorpusPath:
         """Map path to the original file.
 
         Args:
-            path: a path to a corpus file
+            path (str): a path to a corpus file
 
         Returns:
             A PathComponents namedtuple containing the components of the

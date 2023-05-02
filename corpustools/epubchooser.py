@@ -77,7 +77,7 @@ class RangeHandler:
             xpath_pair (tuple of str): a pair of xpaths
 
         Raises:
-            KeyError if invalid content is found.
+            KeyError: if invalid content is found.
         """
         if not xpath_pair[0]:
             raise KeyError("First xpath is empty.")
@@ -242,8 +242,8 @@ class EpubPresenter:
             indent (int): indicate how many spaces this element should be
                 indented
             out (stream): a buffer where the formatted element is written.
-            xpath (string): The xpath of the parent of this element.
-            tag_no (int): the position of the element tag
+            xpath (str): The xpath of the parent of this element.
+            element_no (int): the position of the element tag
         """
         counter = {}
         tag = element.tag.replace("{http://www.w3.org/1999/xhtml}", "")

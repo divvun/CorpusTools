@@ -74,7 +74,7 @@ class ConverterManager:
         """Convert file to corpus xml format.
 
         Args:
-            orig_file: string containing the path to the original file.
+            orig_file (str): the path to the original file.
         """
         try:
             conv = converter.Converter(orig_file, lazy_conversion=self.lazy_conversion)
@@ -145,8 +145,8 @@ class ConverterManager:
         """Find all convertible files in sources.
 
         Args:
-            sources: a list of files or directories where convertable
-            files are found.
+            sources (list of str): a list of files or directories where
+                convertable files are found.
         """
         LOGGER.info("Collecting files to convert")
 

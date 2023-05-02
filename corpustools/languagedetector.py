@@ -29,8 +29,8 @@ class LanguageDetector:
         """Initialise the LanguageDetector class.
 
         Args:
-            document: an etree element.
-            languageGuesser: a text_cat.Classifier.
+            document (etree.Element): an etree element.
+            language_guesser: a text_cat.Classifier.
         """
         self.document = document
         self.language_guesser = language_guesser

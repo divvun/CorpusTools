@@ -56,7 +56,7 @@ def url_to_filename(response):
     """Compute the filename.
 
     Args:
-        response (requests.get response).
+        response (requests.get response): The response object
 
     Returns:
         str: Name of the file.
@@ -77,8 +77,7 @@ class UrlDownloader:
         """Initialise the UrlDownloader class.
 
         Args:
-            download_dir: a string containing the path where the file should
-            be saved.
+            download_dir (str): the path where the file should be saved.
         """
         self.download_dir = download_dir
         self.headers = {
@@ -118,10 +117,10 @@ class AddToCorpus:
         """Initialise the AddToCorpus class.
 
         Args:
-            corpusdir: (unicode) the directory where the corpus is
-            mainlang: (unicode) three character long lang id (iso-639)
-            path: (unicode) path below the language directory where the files
-            should be added
+            corpusdir (str): the directory where the corpus is
+            mainlang (str): three character long lang id (iso-639)
+            path (str): path below the language directory where the files
+                should be added
         """
         if not os.path.isdir(corpusdir):
             raise AdderError(
@@ -178,7 +177,7 @@ class AddToCorpus:
         """Add a file from the hard disk to the corpus.
 
         Args:
-            orig_path (str): path where the original file exists
+            origpath (str): path where the original file exists
             metadata_filename (str): the value of the filename in the
                 metadata file
             parallelpath (str): where the parallel file of the original
@@ -213,8 +212,8 @@ class AddToCorpus:
         """Update metadata in the parallel files.
 
         Args:
-            new_components: (util.PathComponents) of none_dupe_path
-            parallelpath: (string) path of the parallel file
+            none_dupe_components (util.PathComponents): of none_dupe_path
+            parallelpath (str): path of the parallel file
         """
         if not os.path.exists(parallelpath):
             raise AdderError(f"{parallelpath} does not exist")
@@ -249,8 +248,8 @@ class AddToCorpus:
         """Compute the none duplicate path of the file to be added.
 
         Args:
-            path: (string) path of the file as given as input
-            This string may contain unwanted chars and
+            path (str): path of the file as given as input
+                This string may contain unwanted chars and
         """
         return namechanger.compute_new_basename(
             path,

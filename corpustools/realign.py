@@ -79,7 +79,6 @@ def convert_and_copy(corpus_path1, corpus_path2):
             lang1 file that should be reconverted.
         corpus_path2 (corpuspath.CorpusPath): A CorpusPath representing the
             lang2 file that should be reconverted.
-        prestable (boolean): True the file to be realigned is part of prestable
     """
     for corpus_path in [corpus_path1, corpus_path2]:
         if os.path.exists(corpus_path.converted):
