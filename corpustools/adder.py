@@ -122,21 +122,6 @@ class AddToCorpus:
             path (str): path below the language directory where the files
                 should be added
         """
-        if not os.path.isdir(corpusdir):
-            raise AdderError(
-                "The given corpus directory, {}, " "does not exist.".format(corpusdir)
-            )
-
-        if (
-            len(mainlang) != 3
-            or mainlang != mainlang.lower()
-            or mainlang != namechanger.normalise_filename(mainlang)
-        ):
-            raise AdderError(
-                "Invalid mainlang: {}. "
-                "It must consist of three lowercase ascii "
-                "letters".format(mainlang)
-            )
 
         self.corpusdir = corpusdir
         self.vcs = versioncontrol.vcs(self.corpusdir)
