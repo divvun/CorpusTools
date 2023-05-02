@@ -21,5 +21,17 @@ nav:
       - Overview: scripts/index.md
       - add_files_to_corpus: scripts/add_files_to_corpus.md
       - convert2xml: scripts/convert2xml.md
-  - Code reference: /reference
+      - ccat: scripts/ccat.md
+  - Code reference: reference/
 
+plugins:
+- search: {}
+- gen-files:
+    scripts:
+    - gen_ref_pages.py
+- literate-nav:
+    nav_file: SUMMARY.md
+- mkdocstrings:
+    handlers:
+      python:
+        paths: [..]
