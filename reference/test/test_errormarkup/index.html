@@ -1,0 +1,3937 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../test_epubconverter/">
+      
+      
+        <link rel="next" href="../test_htmlcontentconverter/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
+    
+    
+      
+        <title>test_errormarkup - CorpusTools documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ded33207.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#corpustools.test.test_errormarkup" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CorpusTools documentation" class="md-header__button md-logo" aria-label="CorpusTools documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CorpusTools documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              test_errormarkup
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/giellalt/CorpusTools" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    giellalt/CorpusTools
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        Home
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link md-tabs__link--active">
+        Code reference
+      </a>
+    </li>
+  
+
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CorpusTools documentation" class="md-nav__button md-logo" aria-label="CorpusTools documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    CorpusTools documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/giellalt/CorpusTools" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    giellalt/CorpusTools
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+          Home
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Home
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../corpus-work/" class="md-nav__link">
+        Corpus work
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
+          Scripts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          Scripts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../scripts/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../scripts/add_files_to_corpus/" class="md-nav__link">
+        add_files_to_corpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../scripts/convert2xml/" class="md-nav__link">
+        convert2xml
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../scripts/ccat/" class="md-nav__link">
+        ccat
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Code reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Code reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+          corpustools
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          corpustools
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../_version/" class="md-nav__link">
+        _version
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adder/" class="md-nav__link">
+        adder
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyser/" class="md-nav__link">
+        analyser
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../argparse_version/" class="md-nav__link">
+        argparse_version
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../avvirconverter/" class="md-nav__link">
+        avvirconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../basicconverter/" class="md-nav__link">
+        basicconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../bibel_no_aligner/" class="md-nav__link">
+        bibel_no_aligner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../bibel_no_crawler/" class="md-nav__link">
+        bibel_no_crawler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../biblexmlconverter/" class="md-nav__link">
+        biblexmlconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ccat/" class="md-nav__link">
+        ccat
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ces2homegrown/" class="md-nav__link">
+        ces2homegrown
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../check_para_consistency/" class="md-nav__link">
+        check_para_consistency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../clean_prestable/" class="md-nav__link">
+        clean_prestable
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../compare_tmx_goldstandard/" class="md-nav__link">
+        compare_tmx_goldstandard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../convert_using_pandoc/" class="md-nav__link">
+        convert_using_pandoc
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../convert_using_soffice/" class="md-nav__link">
+        convert_using_soffice
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../converter/" class="md-nav__link">
+        converter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../convertermanager/" class="md-nav__link">
+        convertermanager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../corpuspath/" class="md-nav__link">
+        corpuspath
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../corpusxmlfile/" class="md-nav__link">
+        corpusxmlfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../counter/" class="md-nav__link">
+        counter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crawler/" class="md-nav__link">
+        crawler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../debug_corpus/" class="md-nav__link">
+        debug_corpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../decode/" class="md-nav__link">
+        decode
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docconverter/" class="md-nav__link">
+        docconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentfixer/" class="md-nav__link">
+        documentfixer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dropbox_adder/" class="md-nav__link">
+        dropbox_adder
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dupe_finder/" class="md-nav__link">
+        dupe_finder
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../epubchooser/" class="md-nav__link">
+        epubchooser
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../epubconverter/" class="md-nav__link">
+        epubconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../errormarkup/" class="md-nav__link">
+        errormarkup
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../finder/" class="md-nav__link">
+        finder
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generate_anchor_list/" class="md-nav__link">
+        generate_anchor_list
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../html_cleaner/" class="md-nav__link">
+        html_cleaner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../htmlcontentconverter/" class="md-nav__link">
+        htmlcontentconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../htmlconverter/" class="md-nav__link">
+        htmlconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iso_ir_197/" class="md-nav__link">
+        iso_ir_197
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iso_ir_209/" class="md-nav__link">
+        iso_ir_209
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../korp_mono/" class="md-nav__link">
+        korp_mono
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../korp_para/" class="md-nav__link">
+        korp_para
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../languagedetector/" class="md-nav__link">
+        languagedetector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../macsami/" class="md-nav__link">
+        macsami
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mari/" class="md-nav__link">
+        mari
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modes/" class="md-nav__link">
+        modes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../move_files/" class="md-nav__link">
+        move_files
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../namechanger/" class="md-nav__link">
+        namechanger
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../normalise_filenames/" class="md-nav__link">
+        normalise_filenames
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nrk_no_crawler/" class="md-nav__link">
+        nrk_no_crawler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../one-off-functions/" class="md-nav__link">
+        one-off-functions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../packagetmx/" class="md-nav__link">
+        packagetmx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parallelize/" class="md-nav__link">
+        parallelize
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pdfconverter/" class="md-nav__link">
+        pdfconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pick_parallel_docs/" class="md-nav__link">
+        pick_parallel_docs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pick_samediggi_se_docs/" class="md-nav__link">
+        pick_samediggi_se_docs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pick_titles/" class="md-nav__link">
+        pick_titles
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plaintextconverter/" class="md-nav__link">
+        plaintextconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../realign/" class="md-nav__link">
+        realign
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../saami_crawler/" class="md-nav__link">
+        saami_crawler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../samas_crawler/" class="md-nav__link">
+        samas_crawler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../samediggi_fi_crawler/" class="md-nav__link">
+        samediggi_fi_crawler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../samediggi_no_crawler/" class="md-nav__link">
+        samediggi_no_crawler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sentencedivider/" class="md-nav__link">
+        sentencedivider
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../svgconverter/" class="md-nav__link">
+        svgconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+          test
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_1_65">
+          <span class="md-nav__icon md-icon"></span>
+          test
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_adder/" class="md-nav__link">
+        test_adder
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_analyser/" class="md-nav__link">
+        test_analyser
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_avvirconverter/" class="md-nav__link">
+        test_avvirconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_biblexmlconverter/" class="md-nav__link">
+        test_biblexmlconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_ccat/" class="md-nav__link">
+        test_ccat
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_compare_tmx_goldstandard/" class="md-nav__link">
+        test_compare_tmx_goldstandard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_converter/" class="md-nav__link">
+        test_converter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_corpuspath/" class="md-nav__link">
+        test_corpuspath
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_corpusxmlfile/" class="md-nav__link">
+        test_corpusxmlfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_decode/" class="md-nav__link">
+        test_decode
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_docconverter/" class="md-nav__link">
+        test_docconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_documentfixer/" class="md-nav__link">
+        test_documentfixer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_docxconverter/" class="md-nav__link">
+        test_docxconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_epubchooser/" class="md-nav__link">
+        test_epubchooser
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_epubconverter/" class="md-nav__link">
+        test_epubconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          test_errormarkup
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        test_errormarkup
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#corpustools.test.test_errormarkup" class="md-nav__link">
+    corpustools.test.test_errormarkup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#corpustools.test.test_errormarkup.TestErrorMarkup" class="md-nav__link">
+    TestErrorMarkup
+  </a>
+  
+    <nav class="md-nav" aria-label="TestErrorMarkup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#corpustools.test.test_errormarkup.TestErrorMarkup.assert_xml_equal" class="md-nav__link">
+    assert_xml_equal()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corpustools.test.test_errormarkup.TestErrorMarkup.test_convert_to_errormarkupxml" class="md-nav__link">
+    test_convert_to_errormarkupxml()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corpustools.test.test_errormarkup.TestErrorMarkup.test_regex" class="md-nav__link">
+    test_regex()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_htmlcontentconverter/" class="md-nav__link">
+        test_htmlcontentconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_htmlconverter/" class="md-nav__link">
+        test_htmlconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_lang_guessing/" class="md-nav__link">
+        test_lang_guessing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_languagedetector/" class="md-nav__link">
+        test_languagedetector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_namechanger/" class="md-nav__link">
+        test_namechanger
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_parallelize/" class="md-nav__link">
+        test_parallelize
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_pdfconverter/" class="md-nav__link">
+        test_pdfconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_pick_parallel_docs/" class="md-nav__link">
+        test_pick_parallel_docs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_plaintextconverter/" class="md-nav__link">
+        test_plaintextconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_rtfconverter/" class="md-nav__link">
+        test_rtfconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_samediggi_no_crawler/" class="md-nav__link">
+        test_samediggi_no_crawler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_sentencedivider/" class="md-nav__link">
+        test_sentencedivider
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_svgconverter/" class="md-nav__link">
+        test_svgconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_text_cat/" class="md-nav__link">
+        test_text_cat
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_trainingcorpusmaker/" class="md-nav__link">
+        test_trainingcorpusmaker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_typosfile/" class="md-nav__link">
+        test_typosfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_util/" class="md-nav__link">
+        test_util
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_xhtml2corpus/" class="md-nav__link">
+        test_xhtml2corpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_xslmaker/" class="md-nav__link">
+        test_xslmaker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test_xslsetter/" class="md-nav__link">
+        test_xslsetter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xmltester/" class="md-nav__link">
+        xmltester
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../text_cat/" class="md-nav__link">
+        text_cat
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tmx/" class="md-nav__link">
+        tmx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trainingcorpusmaker/" class="md-nav__link">
+        trainingcorpusmaker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../typosfile/" class="md-nav__link">
+        typosfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../update_metadata/" class="md-nav__link">
+        update_metadata
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usxconverter/" class="md-nav__link">
+        usxconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../util/" class="md-nav__link">
+        util
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../versioncontrol/" class="md-nav__link">
+        versioncontrol
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../winsami2/" class="md-nav__link">
+        winsami2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../xmlconverter/" class="md-nav__link">
+        xmlconverter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../xslmaker/" class="md-nav__link">
+        xslmaker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../xslsetter/" class="md-nav__link">
+        xslsetter
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#corpustools.test.test_errormarkup" class="md-nav__link">
+    corpustools.test.test_errormarkup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#corpustools.test.test_errormarkup.TestErrorMarkup" class="md-nav__link">
+    TestErrorMarkup
+  </a>
+  
+    <nav class="md-nav" aria-label="TestErrorMarkup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#corpustools.test.test_errormarkup.TestErrorMarkup.assert_xml_equal" class="md-nav__link">
+    assert_xml_equal()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corpustools.test.test_errormarkup.TestErrorMarkup.test_convert_to_errormarkupxml" class="md-nav__link">
+    test_convert_to_errormarkupxml()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corpustools.test.test_errormarkup.TestErrorMarkup.test_regex" class="md-nav__link">
+    test_regex()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>test_errormarkup</h1>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="corpustools.test.test_errormarkup"></a>
+  <div class="doc doc-contents first">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="corpustools.test.test_errormarkup.TestErrorMarkup" class="doc doc-heading">
+        <code>TestErrorMarkup</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code>unittest.<span title="unittest.TestCase">TestCase</span></code></p>
+
+  
+      <p>Test errormarkup functions.</p>
+
+
+        <details class="quote">
+          <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/test/test_errormarkup.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span>
+<span class="normal">388</span>
+<span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span>
+<span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
+<span class="normal">431</span>
+<span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TestErrorMarkup</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test errormarkup functions.&quot;&quot;&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">assert_xml_equal</span><span class="p">(</span><span class="n">got</span><span class="p">,</span> <span class="n">want</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if two stringified xml snippets are equal&quot;&quot;&quot;</span>
+        <span class="n">got</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">got</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">)</span>
+        <span class="n">want</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">want</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">)</span>
+        <span class="n">checker</span> <span class="o">=</span> <span class="n">doctestcompare</span><span class="o">.</span><span class="n">LXMLOutputChecker</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">checker</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">want</span><span class="p">,</span> <span class="n">got</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="n">checker</span><span class="o">.</span><span class="n">output_difference</span><span class="p">(</span><span class="n">doctest</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">want</span><span class="p">),</span> <span class="n">got</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="nd">@parameterized</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">(</span><span class="s2">&quot;</span><span class="si">{a}</span><span class="s2">$</span><span class="si">{b}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s2">&quot;</span><span class="si">{a}</span><span class="s2">$</span><span class="si">{b}</span><span class="s2"> </span><span class="si">{a}</span><span class="s2">$</span><span class="si">{c}</span><span class="s2"> &quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">15</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s2">&quot;</span><span class="si">{a}</span><span class="s2">$</span><span class="si">{b}</span><span class="s2"> {{a}$</span><span class="si">{b}</span><span class="s2">}$</span><span class="si">{d}</span><span class="s2"> &quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">21</span><span class="p">)),</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_regex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">markup</span><span class="p">,</span> <span class="n">span</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Testing the most important regex.&quot;&quot;&quot;</span>
+        <span class="c1"># match = errormarkup.LAST_CORRECTION_REGEX.search(markup)</span>
+        <span class="c1"># self.assertEqual(match.span(), span)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">errormarkup</span><span class="o">.</span><span class="n">LAST_CORRECTION_REGEX</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">markup</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">span</span><span class="p">(),</span> <span class="n">span</span><span class="p">)</span>
+
+    <span class="nd">@parameterized</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;errorlang_infinity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;</span><span class="si">{molekylærbiologimi}</span><span class="s2">∞{kal,bio}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;errorlang&gt;molekylærbiologimi&lt;correct&gt;kal,bio&lt;/correct&gt;&lt;/errorlang&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_parser_errorlang_infinity_with_new_lines&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;</span><span class="se">\n\n\n\n</span><span class="si">{molekylærbiologimi}</span><span class="s2">∞{kal,bio}</span><span class="se">\n\n\n\n</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;errorlang&gt;molekylærbiologimi&lt;correct&gt;kal,bio&lt;/correct&gt;&lt;/errorlang&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;quote_char&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{”sjievnnijis”}${conc,vnn-vnnj|sjievnnjis}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;&lt;errorort&gt;”sjievnnijis”&lt;correct errorinfo=&quot;conc,vnn-vnnj&quot;&gt;sjievnnjis&lt;/correct&gt;&lt;/errorort&gt;&lt;/p&gt;&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_parser_errorort1&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{jne.}${adv,typo|jna.}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;&lt;errorort&gt;jne.&lt;correct errorinfo=&quot;adv,typo&quot;&gt;jna.&lt;/correct&gt;&lt;/errorort&gt;&lt;/p&gt;&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_parser_error_morphsyn1&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{Nieiddat leat nuorra}£{a,spred,nompl,nomsg,agr|Nieiddat leat nuorat}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;errormorphsyn&gt;Nieiddat leat nuorra&lt;correct &quot;</span>
+                <span class="s1">&#39;errorinfo=&quot;a,spred,nompl,nomsg,agr&quot;&gt;Nieiddat leat nuorat&#39;</span>
+                <span class="s2">&quot;&lt;/correct&gt;&lt;/errormorphsyn&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_parser_with_two_simple_errors&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;gitta {Nordkjosbotn&#39;ii}$</span><span class="si">{Nordkjosbotnii}</span><span class="s2"> (mii lea ge &quot;</span>
+                <span class="s2">&quot;</span><span class="si">{nordkjosbotn}</span><span class="s2">$</span><span class="si">{Nordkjosbotn}</span><span class="s2"> sámegillii? Muhtin, veahket mu!) &quot;</span>
+                <span class="s2">&quot;gos&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;gitta &quot;</span>
+                <span class="s2">&quot;&lt;errorort&gt;Nordkjosbotn&#39;ii&lt;correct&gt;Nordkjosbotnii&lt;/correct&gt;&lt;/errorort&gt; &quot;</span>
+                <span class="s2">&quot;(mii lea ge &quot;</span>
+                <span class="s2">&quot;&lt;errorort&gt;nordkjosbotn&lt;correct&gt;Nordkjosbotn&lt;/correct&gt;&lt;/errorort&gt; &quot;</span>
+                <span class="s2">&quot;sámegillii? Muhtin, veahket mu!) gos&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;only_text_in_element&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;Muittán doložiid&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;Muittán doložiid&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;paragraph_character&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;Vuodoláhkaj §110a&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;Vuodoláhkaj §110a&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;errorort1&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{jne.}${adv,typo|jna.}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;&lt;errorort&gt;jne.&lt;correct errorinfo=&quot;adv,typo&quot;&gt;jna.&lt;/correct&gt;&lt;/errorort&gt;&lt;/p&gt;&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;errorort2&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{daesn&#39;}$</span><span class="si">{daesnie}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;errorort&gt;daesn&#39;&lt;correct&gt;daesnie&lt;/correct&gt;&lt;/errorort&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;input_contains_slash&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{magistter/}${loan,vowlat,e-a|magisttar}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;&lt;errorort&gt;magistter/&lt;correct errorinfo=&quot;loan,vowlat,e-a&quot;&gt;&#39;</span>
+                <span class="s2">&quot;magisttar&lt;/correct&gt;&lt;/errorort&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_correct1&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{1]}§</span><span class="si">{Ij}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;error&gt;1]&lt;correct&gt;Ij&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_correct2&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{væ]keles}§</span><span class="si">{væjkeles}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;error&gt;væ]keles&lt;correct&gt;væjkeles&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_correct3&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{smávi-}§{smávit-}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;error&gt;smávi-&lt;correct&gt;smávit-&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_correct4&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{CD:t}§{CD:at}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;error&gt;CD:t&lt;correct&gt;CD:at&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_correct5&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{DNB-feaskáris}§{DnB-feaskáris}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;error&gt;DNB-feaskáris&lt;correct&gt;DnB-feaskáris&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_correct6&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;</span><span class="si">{boade}</span><span class="s2">§</span><span class="si">{boađe}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;error&gt;boade&lt;correct&gt;boađe&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_correct7&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{2005’as}§</span><span class="si">{2005:s}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;error&gt;2005’as&lt;correct&gt;2005:s&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_correct8&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;</span><span class="si">{NSRii}</span><span class="s2">§{NSR:i}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;error&gt;NSRii&lt;correct&gt;NSR:i&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_correct9&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{Nordkjosbotn&#39;ii}§</span><span class="si">{Nordkjosbotnii}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;error&gt;Nordkjosbotn&#39;ii&lt;correct&gt;Nordkjosbotnii&lt;/correct&gt;&quot;</span>
+                <span class="s2">&quot;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;errorort3&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;</span><span class="si">{nourra}</span><span class="s2">${a,meta|nuorra}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;&lt;errorort&gt;nourra&lt;correct errorinfo=&quot;a,meta&quot;&gt;nuorra&lt;/correct&gt;&lt;/errorort&gt;&lt;/p&gt;&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_morphsyn1&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{Nieiddat leat nuorra}£{a,spred,nompl,nomsg,agr|Nieiddat leat nuorat}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;errormorphsyn&gt;Nieiddat leat nuorra&quot;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;a,spred,nompl,nomsg,agr&quot;&gt;Nieiddat leat &#39;</span>
+                <span class="s2">&quot;nuorat&lt;/correct&gt;&lt;/errormorphsyn&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_syn1&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{riŋgen nieidda lusa}¥{x,pph|riŋgen niidii}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;&lt;errorsyn&gt;riŋgen nieidda lusa&lt;correct errorinfo=&quot;x,pph&quot;&gt;&#39;</span>
+                <span class="s2">&quot;riŋgen niidii&lt;/correct&gt;&lt;/errorsyn&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_syn2&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;</span><span class="si">{ovtta}</span><span class="s2">¥{num,redun| }&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;&lt;errorsyn&gt;ovtta&lt;correct errorinfo=&quot;num,redun&quot;&gt;&lt;/correct&gt;&#39;</span>
+                <span class="s2">&quot;&lt;/errorsyn&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_lex1&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;</span><span class="si">{dábálaš}</span><span class="s2">€{adv,adj,der|dábálaččat}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;&lt;errorlex&gt;dábálaš&lt;correct errorinfo=&quot;adv,adj,der&quot;&gt;dábálaččat&#39;</span>
+                <span class="s2">&quot;&lt;/correct&gt;&lt;/errorlex&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_ortreal1&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;</span><span class="si">{ráhččamušaid}</span><span class="s2">¢{noun,mix|rahčamušaid}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;&lt;errorortreal&gt;ráhččamušaid&lt;correct errorinfo=&quot;noun,mix&quot;&gt;&#39;</span>
+                <span class="s2">&quot;rahčamušaid&lt;/correct&gt;&lt;/errorortreal&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_ortreal2&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;gitta {Nordkjosbotn&#39;ii}$</span><span class="si">{Nordkjosbotnii}</span><span class="s2"> (mii lea ge &quot;</span>
+                <span class="s2">&quot;</span><span class="si">{nordkjosbotn}</span><span class="s2">$</span><span class="si">{Nordkjosbotn}</span><span class="s2"> sámegillii? Muhtin, veahket mu!) &quot;</span>
+                <span class="s2">&quot;gos&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;gitta &lt;errorort&gt;Nordkjosbotn&#39;ii&lt;correct&gt;Nordkjosbotnii&quot;</span>
+                <span class="s2">&quot;&lt;/correct&gt;&lt;/errorort&gt; (mii lea ge &lt;errorort&gt;nordkjosbotn&quot;</span>
+                <span class="s2">&quot;&lt;correct&gt;Nordkjosbotn&lt;/correct&gt;&lt;/errorort&gt; sámegillii? &quot;</span>
+                <span class="s2">&quot;Muhtin, veahket mu!) gos&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_morphsyn2&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;Čáppa muohtaskulptuvrraid ráhkadeapmi VSM olggobealde lei &quot;</span>
+                <span class="s2">&quot;maiddái ovttasbargu gaskal {skuvla ohppiid}£&quot;</span>
+                <span class="s2">&quot;{noun,attr,gensg,nomsg,case|skuvlla ohppiid}&quot;</span>
+                <span class="s2">&quot;ja VSM.&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;Čáppa muohtaskulptuvrraid ráhkadeapmi VSM olggobealde lei &quot;</span>
+                <span class="s2">&quot;maiddái ovttasbargu gaskal &lt;errormorphsyn&gt;skuvla ohppiid&quot;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;noun,attr,gensg,nomsg,case&quot;&gt;skuvlla ohppiid&#39;</span>
+                <span class="s2">&quot;&lt;/correct&gt;&lt;/errormorphsyn&gt; ja VSM.&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;errorort4&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;- ruksesruonáčalmmehisvuohta lea sullii &quot;</span>
+                <span class="s2">&quot;{8%:as}${acr,suf|8%:s}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;- ruksesruonáčalmmehisvuohta lea sullii &lt;errorort&gt;8%:as&quot;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;acr,suf&quot;&gt;8%:s&lt;/correct&gt;&lt;/errorort&gt;&lt;/p&gt;&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_ortreal3&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;( </span><span class="si">{nissonin}</span><span class="s2">¢{noun,suf|nissoniin} dušše {0.6 %:s}£{0.6 %} )&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;( &lt;errorortreal&gt;nissonin&lt;correct errorinfo=&quot;noun,suf&quot;&gt;&#39;</span>
+                <span class="s2">&quot;nissoniin&lt;/correct&gt;&lt;/errorortreal&gt; dušše &lt;errormorphsyn&gt;0.6 %:s&quot;</span>
+                <span class="s2">&quot;&lt;correct&gt;0.6 %&lt;/correct&gt;&lt;/errormorphsyn&gt; )&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;errorort5&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;(haploida) ja </span><span class="si">{njiŋŋalas}</span><span class="s2">${noun,á|njiŋŋálas} </span><span class="si">{ságahuvvon}</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;${verb,a|sagahuvvon} manneseallas (diploida)&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;(haploida) ja &lt;errorort&gt;njiŋŋalas&lt;correct errorinfo=&quot;noun,á&quot;&gt;&#39;</span>
+                <span class="s2">&quot;njiŋŋálas&lt;/correct&gt;&lt;/errorort&gt; &lt;errorort&gt;ságahuvvon&quot;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;verb,a&quot;&gt;sagahuvvon&lt;/correct&gt;&lt;/errorort&gt; &#39;</span>
+                <span class="s2">&quot;manneseallas (diploida)&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;errorort6&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;(gii oahpaha) </span><span class="si">{giinu}</span><span class="s2">${x,notcmp|gii nu} manai </span><span class="si">{intiánalávlagat}</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;${loan,conc|indiánalávlagat} {guovža-klána}${noun,cmp|guovžaklána} &quot;</span>
+                <span class="s2">&quot;olbmuid&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;(gii oahpaha) &lt;errorort&gt;giinu&lt;correct errorinfo=&quot;x,notcmp&quot;&gt;&#39;</span>
+                <span class="s2">&quot;gii nu&lt;/correct&gt;&lt;/errorort&gt; manai &lt;errorort&gt;intiánalávlagat&quot;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;loan,conc&quot;&gt;indiánalávlagat&lt;/correct&gt;&#39;</span>
+                <span class="s1">&#39;&lt;/errorort&gt; &lt;errorort&gt;guovža-klána&lt;correct errorinfo=&quot;noun,cmp&quot;&gt;&#39;</span>
+                <span class="s2">&quot;guovžaklána&lt;/correct&gt;&lt;/errorort&gt; olbmuid&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;error_format&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;{{A  B}‰{notspace|A B}  C}‰{notspace|A B C}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&quot;</span>
+                <span class="s2">&quot;&lt;errorformat&gt;&quot;</span>
+                <span class="s2">&quot;&lt;errorformat&gt;&quot;</span>
+                <span class="s1">&#39;A  B&lt;correct errorinfo=&quot;notspace&quot;&gt;A B&lt;/correct&gt;&lt;/errorformat&gt;&#39;</span>
+                <span class="s1">&#39;  C&lt;correct errorinfo=&quot;notspace&quot;&gt;A B C&lt;/correct&gt;&lt;/errorformat&gt;&#39;</span>
+                <span class="s2">&quot;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;preserve_space_at_end_of_sentence&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;buvttadeaddji Anstein </span><span class="si">{Mikkelsens}</span><span class="s2">${typo|Mikkelsen} lea &quot;</span>
+                <span class="s2">&quot;ráhkadan. &lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;buvttadeaddji Anstein &lt;errorort&gt;Mikkelsens&lt;correct errorinfo=&quot;typo&quot;&gt;Mikkelsen&lt;/correct&gt;&lt;/errorort&gt; lea ráhkadan. &lt;/p&gt;&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;place_error_elements_before_old_element1&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;buvttadeaddji Anstein </span><span class="si">{Mikkelsens}</span><span class="s2">${typo|Mikkelsen} lea &quot;</span>
+                <span class="s2">&quot;ráhkadan. </span><span class="si">{bálkkášumi}</span><span class="s2">${vowlat,á-a|bálkkašumi} miessemánu. &lt;span &quot;</span>
+                <span class="s1">&#39;type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts Competition»&lt;/span&gt;&lt;/p&gt;&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;buvttadeaddji Anstein &lt;errorort&gt;Mikkelsens&quot;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;typo&quot;&gt;Mikkelsen&lt;/correct&gt;&lt;/errorort&gt; lea ráhkadan. &#39;</span>
+                <span class="s1">&#39;&lt;errorort&gt;bálkkášumi&lt;correct errorinfo=&quot;vowlat,á-a&quot;&gt;bálkkašumi&lt;/correct&gt;&lt;/errorort&gt;&#39;</span>
+                <span class="s1">&#39; miessemánu. &lt;span type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts &#39;</span>
+                <span class="s2">&quot;Competition»&lt;/span&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;place_error_elements_before_old_element2&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;</span><span class="si">{Mikkelsens}</span><span class="s2">${typo|Mikkelsen} lea ráhkadan. &quot;</span>
+                <span class="s2">&quot;</span><span class="si">{bálkkášumi}</span><span class="s2">${vowlat,á-a|bálkkašumi} miessemánu. &quot;</span>
+                <span class="s1">&#39;&lt;span type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;&#39;</span>
+                <span class="s2">&quot;«Best Shorts Competition»&lt;/span&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;&lt;errorort&gt;Mikkelsens&lt;correct errorinfo=&quot;typo&quot;&gt;Mikkelsen&lt;/correct&gt;&lt;/errorort&gt; lea ráhkadan. &lt;errorort&gt;bálkkášumi&lt;correct errorinfo=&quot;vowlat,á-a&quot;&gt;bálkkašumi&lt;/correct&gt;&lt;/errorort&gt; miessemánu. &lt;span type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts Competition»&lt;/span&gt;&lt;/p&gt;&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;place_error_element_after_old_element&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;I 1864 ga han ut boka &lt;span type=&quot;quote&quot; xml:lang=&quot;swe&quot;&gt;&#39;</span>
+                <span class="s1">&#39;&quot;Fornuftigt Madstel&quot;&lt;/span&gt;. </span><span class="si">{Asbjørsen}</span><span class="s1">${prop,typo|Asbjørnsen} &#39;</span>
+                <span class="s2">&quot;døde 5. januar 1885, nesten 73 år gammel.&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;I 1864 ga han ut boka &lt;span type=&quot;quote&quot; xml:lang=&quot;swe&quot;&gt;&#39;</span>
+                <span class="s1">&#39;&quot;Fornuftigt Madstel&quot;&lt;/span&gt;. &lt;errorort&gt;Asbjørsen&#39;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;prop,typo&quot;&gt;Asbjørnsen&lt;/correct&gt;&lt;/errorort&gt; &#39;</span>
+                <span class="s2">&quot;døde 5. januar 1885, nesten 73 år gammel.&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;place_error_element_before_and_after_old_element&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;buvttadeaddji Anstein </span><span class="si">{Mikkelsens}</span><span class="s2">${typo|Mikkelsen} lea &quot;</span>
+                <span class="s1">&#39;ráhkadan. &lt;span type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts &#39;</span>
+                <span class="s2">&quot;Competition»&lt;/span&gt; </span><span class="si">{bálkkášumi}</span><span class="s2">${vowlat,á-a|bálkkašumi} &quot;</span>
+                <span class="s2">&quot;miessemánu.&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;buvttadeaddji Anstein &lt;errorort&gt;Mikkelsens&quot;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;typo&quot;&gt;Mikkelsen&lt;/correct&gt;&lt;/errorort&gt; lea &#39;</span>
+                <span class="s1">&#39;ráhkadan. &lt;span type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts &#39;</span>
+                <span class="s2">&quot;Competition»&lt;/span&gt; &lt;errorort&gt;bálkkášumi&quot;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;vowlat,á-a&quot;&gt;bálkkašumi&lt;/correct&gt;&lt;/errorort&gt; &#39;</span>
+                <span class="s2">&quot;miessemánu.&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;markup3Levels&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;buvttadeaddji Anstein &lt;errorort&gt;Mikkelsens&lt;correct &quot;</span>
+                <span class="s1">&#39;errorinfo=&quot;typo&quot;&gt;Mikkelsen&lt;/correct&gt;&lt;/errorort&gt; lea ráhkadan. &#39;</span>
+                <span class="s1">&#39;&lt;span type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts Competition»&#39;</span>
+                <span class="s1">&#39;&lt;/span&gt; &lt;errorort&gt;bálkkášumi&lt;correct errorinfo=&quot;vowlat,á-a&quot;&gt;&#39;</span>
+                <span class="s2">&quot;bálkkašumi&lt;/correct&gt;&lt;/errorort&gt; miessemánu. &lt;em&gt;buvttadeaddji &quot;</span>
+                <span class="s2">&quot;Anstein </span><span class="si">{Mikkelsens}</span><span class="s2">${typo|Mikkelsen} lea ráhkadan. &lt;span &quot;</span>
+                <span class="s1">&#39;type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts Competition»&lt;/span&gt; &#39;</span>
+                <span class="s2">&quot;</span><span class="si">{bálkkášumi}</span><span class="s2">${vowlat,á-a|bálkkašumi} miessemánu.&lt;/em&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;buvttadeaddji Anstein &lt;errorort&gt;Mikkelsens&lt;correct &quot;</span>
+                <span class="s1">&#39;errorinfo=&quot;typo&quot;&gt;Mikkelsen&lt;/correct&gt;&lt;/errorort&gt; lea ráhkadan. &#39;</span>
+                <span class="s1">&#39;&lt;span type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts Competition»&#39;</span>
+                <span class="s1">&#39;&lt;/span&gt; &lt;errorort&gt;bálkkášumi&lt;correct errorinfo=&quot;vowlat,á-a&quot;&gt;&#39;</span>
+                <span class="s2">&quot;bálkkašumi&lt;/correct&gt;&lt;/errorort&gt; miessemánu. &lt;em&gt;buvttadeaddji &quot;</span>
+                <span class="s1">&#39;Anstein &lt;errorort&gt;Mikkelsens&lt;correct errorinfo=&quot;typo&quot;&gt;Mikkelsen&#39;</span>
+                <span class="s1">&#39;&lt;/correct&gt;&lt;/errorort&gt; lea ráhkadan. &lt;span type=&quot;quote&quot; &#39;</span>
+                <span class="s1">&#39;xml:lang=&quot;eng&quot;&gt;«Best Shorts Competition»&lt;/span&gt; &lt;errorort&gt;&#39;</span>
+                <span class="s1">&#39;bálkkášumi&lt;correct errorinfo=&quot;vowlat,á-a&quot;&gt;bálkkašumi&lt;/correct&gt;&#39;</span>
+                <span class="s2">&quot;&lt;/errorort&gt; miessemánu.&lt;/em&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;inline multiple corrections&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;</span><span class="si">{leimme}</span><span class="s2">£{leimmet///leat}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;errormorphsyn&gt;leimme&quot;</span>
+                <span class="s2">&quot;&lt;correct&gt;leimmet&lt;/correct&gt;&quot;</span>
+                <span class="s2">&quot;&lt;correct&gt;leat&lt;/correct&gt;&quot;</span>
+                <span class="s2">&quot;&lt;/errormorphsyn&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_convert_to_errormarkupxml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">in_string</span><span class="p">,</span> <span class="n">want_string</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test plain errormarkup.&quot;&quot;&quot;</span>
+        <span class="n">in_elem</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">in_string</span><span class="p">)</span>
+        <span class="n">want</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">want_string</span><span class="p">)</span>
+        <span class="n">errormarkup</span><span class="o">.</span><span class="n">convert_to_errormarkupxml</span><span class="p">(</span><span class="n">in_elem</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assert_xml_equal</span><span class="p">(</span><span class="n">in_elem</span><span class="p">,</span> <span class="n">want</span><span class="p">)</span>
+
+    <span class="c1"># Nested markup</span>
+    <span class="nd">@parameterized</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;&lt;p&gt;{{šaddai}${verb,conc|šattai} ollu áššit}£{verb,fin,pl3prs,sg3prs,tense|šadde ollu áššit}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;&lt;errormorphsyn&gt;&lt;errorort&gt;šaddai&lt;correct errorinfo=&quot;verb,conc&quot;&gt;&#39;</span>
+                <span class="s2">&quot;šattai&lt;/correct&gt;&lt;/errorort&gt; ollu áššit&lt;correct &quot;</span>
+                <span class="s1">&#39;errorinfo=&quot;verb,fin,pl3prs,sg3prs,tense&quot;&gt;šadde ollu áššit&#39;</span>
+                <span class="s2">&quot;&lt;/correct&gt;&lt;/errormorphsyn&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;&lt;p&gt;{guokte </span><span class="si">{ganddat}</span><span class="s2">§{n,á|gánddat}}£{n,nump,gensg,nompl,case|guokte gándda}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;&lt;errormorphsyn&gt;guokte &lt;error&gt;ganddat&lt;correct errorinfo=&quot;n,á&quot;&gt;&#39;</span>
+                <span class="s2">&quot;gánddat&lt;/correct&gt;&lt;/error&gt;&lt;correct &quot;</span>
+                <span class="s1">&#39;errorinfo=&quot;n,nump,gensg,nompl,case&quot;&gt;guokte gándda&lt;/correct&gt;&#39;</span>
+                <span class="s2">&quot;&lt;/errormorphsyn&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;&lt;p&gt;{Nieiddat leat </span><span class="si">{nourra}</span><span class="s2">${adj,meta|nuorra}}&quot;</span>
+                <span class="s2">&quot;£{adj,spred,nompl,nomsg,agr|Nieiddat leat nuorat}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;errormorphsyn&gt;Nieiddat leat &lt;errorort&gt;nourra&lt;correct &quot;</span>
+                <span class="s1">&#39;errorinfo=&quot;adj,meta&quot;&gt;nuorra&lt;/correct&gt;&lt;/errorort&gt;&#39;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;adj,spred,nompl,nomsg,agr&quot;&gt;Nieiddat leat &#39;</span>
+                <span class="s2">&quot;nuorat&lt;/correct&gt;&lt;/errormorphsyn&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;&lt;p&gt;{leat {okta máná}£{n,spred,nomsg,gensg,case|okta mánná}}&quot;</span>
+                <span class="s2">&quot;£{v,v,sg3prs,pl3prs,agr|lea okta mánná}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;errormorphsyn&gt;leat &lt;errormorphsyn&gt;okta máná&lt;correct &quot;</span>
+                <span class="s1">&#39;errorinfo=&quot;n,spred,nomsg,gensg,case&quot;&gt;okta mánná&lt;/correct&gt;&#39;</span>
+                <span class="s1">&#39;&lt;/errormorphsyn&gt;&lt;correct errorinfo=&quot;v,v,sg3prs,pl3prs,agr&quot;&gt;&#39;</span>
+                <span class="s2">&quot;lea okta mánná&lt;/correct&gt;&lt;/errormorphsyn&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;&lt;p&gt;heaitit </span><span class="si">{dáhkaluddame}</span><span class="s2">${verb,a|dahkaluddame} ahte sis &quot;</span>
+                <span class="s2">&quot;</span><span class="si">{máhkaš}</span><span class="s2">¢{adv,á|mahkáš} livččii </span><span class="si">{makkarge}</span><span class="s2">${adv,á|makkárge} &quot;</span>
+                <span class="s2">&quot;politihkka, muhto rahpasit baicca muitalivčče {{makkar}&quot;</span>
+                <span class="s2">&quot;${interr,á|makkár} soga}€{man soga} sii </span><span class="si">{ovddasttit}</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;${verb,conc|ovddastit}.&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;p&gt;heaitit &lt;errorort&gt;dáhkaluddame&lt;correct errorinfo=&quot;verb,a&quot;&gt;&#39;</span>
+                <span class="s2">&quot;dahkaluddame&lt;/correct&gt;&lt;/errorort&gt; ahte sis &lt;errorortreal&gt;&quot;</span>
+                <span class="s1">&#39;máhkaš&lt;correct errorinfo=&quot;adv,á&quot;&gt;mahkáš&lt;/correct&gt;&lt;/errorortreal&gt;&#39;</span>
+                <span class="s1">&#39;livččii &lt;errorort&gt;makkarge&lt;correct errorinfo=&quot;adv,á&quot;&gt;makkárge&#39;</span>
+                <span class="s2">&quot;&lt;/correct&gt;&lt;/errorort&gt; politihkka, muhto rahpasit baicca &quot;</span>
+                <span class="s2">&quot;muitalivčče &lt;errorlex&gt;&lt;errorort&gt;makkar&lt;correct &quot;</span>
+                <span class="s1">&#39;errorinfo=&quot;interr,á&quot;&gt;makkár&lt;/correct&gt;&lt;/errorort&gt; soga&lt;correct&gt;&#39;</span>
+                <span class="s2">&quot;man soga&lt;/correct&gt;&lt;/errorlex&gt; sii &lt;errorort&gt;ovddasttit&quot;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;verb,conc&quot;&gt;ovddastit&lt;/correct&gt;&lt;/errorort&gt;.&lt;/p&gt;&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;&lt;p&gt;{{Bearpmahat}${noun,svow|Bearpmehat} &quot;</span>
+                <span class="s2">&quot;</span><span class="si">{earuha}</span><span class="s2">€{verb,v,w|sirre}}£{verb,fin,pl3prs,sg3prs,agr|Bearpmehat&quot;</span>
+                <span class="s2">&quot; sirrejit} uskki ja loaiddu.&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;errormorphsyn&gt;&lt;errorort&gt;Bearpmahat&lt;correct &quot;</span>
+                <span class="s1">&#39;errorinfo=&quot;noun,svow&quot;&gt;Bearpmehat&lt;/correct&gt;&lt;/errorort&gt;&lt;errorlex&gt;&#39;</span>
+                <span class="s1">&#39;earuha&lt;correct errorinfo=&quot;verb,v,w&quot;&gt;sirre&lt;/correct&gt;&lt;/errorlex&gt;&#39;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;verb,fin,pl3prs,sg3prs,agr&quot;&gt;Bearpmehat &#39;</span>
+                <span class="s2">&quot;sirrejit&lt;/correct&gt;&lt;/errormorphsyn&gt; uskki ja loaiddu.&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;&lt;p&gt;Mirja ja Line leaba {{gulahallan olbmožat}&quot;</span>
+                <span class="s2">&quot;¢{noun,cmp|gulahallanolbmožat}}€</span><span class="si">{gulahallanolbmot}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;Mirja ja Line leaba &lt;errorlex&gt;&lt;errorortreal&gt;gulahallan &quot;</span>
+                <span class="s1">&#39;olbmožat&lt;correct errorinfo=&quot;noun,cmp&quot;&gt;gulahallanolbmožat&#39;</span>
+                <span class="s2">&quot;&lt;/correct&gt;&lt;/errorortreal&gt;&lt;correct&gt;gulahallanolbmot&lt;/correct&gt;&quot;</span>
+                <span class="s2">&quot;&lt;/errorlex&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;&lt;p&gt;{Ovddit geasis}£{noun,advl,gensg,locsg,case|Ovddit geasi} &quot;</span>
+                <span class="s2">&quot;{{</span><span class="si">{čoaggen}</span><span class="s2">${verb,mono|čoggen} ollu jokŋat}&quot;</span>
+                <span class="s2">&quot;£{noun,obj,genpl,nompl,case|čoggen ollu joŋaid} ja sarridat}&quot;</span>
+                <span class="s2">&quot;£{noun,obj,genpl,nompl,case|čoggen ollu joŋaid ja sarridiid}&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;&lt;errormorphsyn&gt;Ovddit geasis&lt;correct &quot;</span>
+                <span class="s1">&#39;errorinfo=&quot;noun,advl,gensg,locsg,case&quot;&gt;Ovddit geasi&lt;/correct&gt;&#39;</span>
+                <span class="s2">&quot;&lt;/errormorphsyn&gt;&lt;errormorphsyn&gt;&lt;errormorphsyn&gt;&lt;errorort&gt;čoaggen&quot;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;verb,mono&quot;&gt;čoggen&lt;/correct&gt;&lt;/errorort&gt; &#39;</span>
+                <span class="s1">&#39;ollu jokŋat&lt;correct errorinfo=&quot;noun,obj,genpl,nompl,case&quot;&gt;&#39;</span>
+                <span class="s2">&quot;čoggen ollu joŋaid&lt;/correct&gt;&lt;/errormorphsyn&gt; ja sarridat&quot;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;noun,obj,genpl,nompl,case&quot;&gt;čoggen ollu &#39;</span>
+                <span class="s2">&quot;joŋaid ja sarridiid&lt;/correct&gt;&lt;/errormorphsyn&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;&lt;p&gt;Bruk {{epoxi}${noun,cons|epoksy} lim}¢{noun,mix|epoksylim} &quot;</span>
+                <span class="s2">&quot;med god kvalitet.&lt;/p&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;p&gt;Bruk &lt;errorortreal&gt;&lt;errorort&gt;epoxi&quot;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;noun,cons&quot;&gt;epoksy&lt;/correct&gt;&lt;/errorort&gt; lim&#39;</span>
+                <span class="s1">&#39;&lt;correct errorinfo=&quot;noun,mix&quot;&gt;epoksylim&lt;/correct&gt;&lt;/errorortreal&gt; &#39;</span>
+                <span class="s2">&quot;med god kvalitet.&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_nested_markup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_string</span><span class="p">,</span> <span class="n">want_string</span><span class="p">):</span>
+        <span class="n">in_elem</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">in_string</span><span class="p">)</span>
+        <span class="n">want</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">want_string</span><span class="p">)</span>
+        <span class="n">errormarkup</span><span class="o">.</span><span class="n">convert_to_errormarkupxml</span><span class="p">(</span><span class="n">in_elem</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assert_xml_equal</span><span class="p">(</span><span class="n">in_elem</span><span class="p">,</span> <span class="n">want</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+        </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="corpustools.test.test_errormarkup.TestErrorMarkup.assert_xml_equal" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">assert_xml_equal</span><span class="p">(</span><span class="n">got</span><span class="p">,</span> <span class="n">want</span><span class="p">)</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Check if two stringified xml snippets are equal</p>
+
+      <details class="quote">
+        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/test/test_errormarkup.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="k">def</span> <span class="nf">assert_xml_equal</span><span class="p">(</span><span class="n">got</span><span class="p">,</span> <span class="n">want</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if two stringified xml snippets are equal&quot;&quot;&quot;</span>
+    <span class="n">got</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">got</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">)</span>
+    <span class="n">want</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">want</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">)</span>
+    <span class="n">checker</span> <span class="o">=</span> <span class="n">doctestcompare</span><span class="o">.</span><span class="n">LXMLOutputChecker</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">checker</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">want</span><span class="p">,</span> <span class="n">got</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">checker</span><span class="o">.</span><span class="n">output_difference</span><span class="p">(</span><span class="n">doctest</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">want</span><span class="p">),</span> <span class="n">got</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="corpustools.test.test_errormarkup.TestErrorMarkup.test_convert_to_errormarkupxml" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">test_convert_to_errormarkupxml</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">in_string</span><span class="p">,</span> <span class="n">want_string</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Test plain errormarkup.</p>
+
+      <details class="quote">
+        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/test/test_errormarkup.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@parameterized</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;errorlang_infinity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;</span><span class="si">{molekylærbiologimi}</span><span class="s2">∞{kal,bio}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&lt;errorlang&gt;molekylærbiologimi&lt;correct&gt;kal,bio&lt;/correct&gt;&lt;/errorlang&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_parser_errorlang_infinity_with_new_lines&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;</span><span class="se">\n\n\n\n</span><span class="si">{molekylærbiologimi}</span><span class="s2">∞{kal,bio}</span><span class="se">\n\n\n\n</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&lt;errorlang&gt;molekylærbiologimi&lt;correct&gt;kal,bio&lt;/correct&gt;&lt;/errorlang&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;quote_char&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{”sjievnnijis”}${conc,vnn-vnnj|sjievnnjis}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;&lt;errorort&gt;”sjievnnijis”&lt;correct errorinfo=&quot;conc,vnn-vnnj&quot;&gt;sjievnnjis&lt;/correct&gt;&lt;/errorort&gt;&lt;/p&gt;&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_parser_errorort1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{jne.}${adv,typo|jna.}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;&lt;errorort&gt;jne.&lt;correct errorinfo=&quot;adv,typo&quot;&gt;jna.&lt;/correct&gt;&lt;/errorort&gt;&lt;/p&gt;&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_parser_error_morphsyn1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{Nieiddat leat nuorra}£{a,spred,nompl,nomsg,agr|Nieiddat leat nuorat}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&lt;errormorphsyn&gt;Nieiddat leat nuorra&lt;correct &quot;</span>
+            <span class="s1">&#39;errorinfo=&quot;a,spred,nompl,nomsg,agr&quot;&gt;Nieiddat leat nuorat&#39;</span>
+            <span class="s2">&quot;&lt;/correct&gt;&lt;/errormorphsyn&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_parser_with_two_simple_errors&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;gitta {Nordkjosbotn&#39;ii}$</span><span class="si">{Nordkjosbotnii}</span><span class="s2"> (mii lea ge &quot;</span>
+            <span class="s2">&quot;</span><span class="si">{nordkjosbotn}</span><span class="s2">$</span><span class="si">{Nordkjosbotn}</span><span class="s2"> sámegillii? Muhtin, veahket mu!) &quot;</span>
+            <span class="s2">&quot;gos&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;gitta &quot;</span>
+            <span class="s2">&quot;&lt;errorort&gt;Nordkjosbotn&#39;ii&lt;correct&gt;Nordkjosbotnii&lt;/correct&gt;&lt;/errorort&gt; &quot;</span>
+            <span class="s2">&quot;(mii lea ge &quot;</span>
+            <span class="s2">&quot;&lt;errorort&gt;nordkjosbotn&lt;correct&gt;Nordkjosbotn&lt;/correct&gt;&lt;/errorort&gt; &quot;</span>
+            <span class="s2">&quot;sámegillii? Muhtin, veahket mu!) gos&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;only_text_in_element&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;Muittán doložiid&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;Muittán doložiid&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;paragraph_character&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;Vuodoláhkaj §110a&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;Vuodoláhkaj §110a&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;errorort1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{jne.}${adv,typo|jna.}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;&lt;errorort&gt;jne.&lt;correct errorinfo=&quot;adv,typo&quot;&gt;jna.&lt;/correct&gt;&lt;/errorort&gt;&lt;/p&gt;&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;errorort2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{daesn&#39;}$</span><span class="si">{daesnie}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&lt;errorort&gt;daesn&#39;&lt;correct&gt;daesnie&lt;/correct&gt;&lt;/errorort&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;input_contains_slash&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{magistter/}${loan,vowlat,e-a|magisttar}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;&lt;errorort&gt;magistter/&lt;correct errorinfo=&quot;loan,vowlat,e-a&quot;&gt;&#39;</span>
+            <span class="s2">&quot;magisttar&lt;/correct&gt;&lt;/errorort&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_correct1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{1]}§</span><span class="si">{Ij}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&lt;error&gt;1]&lt;correct&gt;Ij&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_correct2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{væ]keles}§</span><span class="si">{væjkeles}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&lt;error&gt;væ]keles&lt;correct&gt;væjkeles&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_correct3&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{smávi-}§{smávit-}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&lt;error&gt;smávi-&lt;correct&gt;smávit-&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_correct4&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{CD:t}§{CD:at}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&lt;error&gt;CD:t&lt;correct&gt;CD:at&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_correct5&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{DNB-feaskáris}§{DnB-feaskáris}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&lt;error&gt;DNB-feaskáris&lt;correct&gt;DnB-feaskáris&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_correct6&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;</span><span class="si">{boade}</span><span class="s2">§</span><span class="si">{boađe}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&lt;error&gt;boade&lt;correct&gt;boađe&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_correct7&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{2005’as}§</span><span class="si">{2005:s}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&lt;error&gt;2005’as&lt;correct&gt;2005:s&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_correct8&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;</span><span class="si">{NSRii}</span><span class="s2">§{NSR:i}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&lt;error&gt;NSRii&lt;correct&gt;NSR:i&lt;/correct&gt;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_correct9&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{Nordkjosbotn&#39;ii}§</span><span class="si">{Nordkjosbotnii}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&lt;error&gt;Nordkjosbotn&#39;ii&lt;correct&gt;Nordkjosbotnii&lt;/correct&gt;&quot;</span>
+            <span class="s2">&quot;&lt;/error&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;errorort3&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;</span><span class="si">{nourra}</span><span class="s2">${a,meta|nuorra}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;&lt;errorort&gt;nourra&lt;correct errorinfo=&quot;a,meta&quot;&gt;nuorra&lt;/correct&gt;&lt;/errorort&gt;&lt;/p&gt;&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_morphsyn1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{Nieiddat leat nuorra}£{a,spred,nompl,nomsg,agr|Nieiddat leat nuorat}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&lt;errormorphsyn&gt;Nieiddat leat nuorra&quot;</span>
+            <span class="s1">&#39;&lt;correct errorinfo=&quot;a,spred,nompl,nomsg,agr&quot;&gt;Nieiddat leat &#39;</span>
+            <span class="s2">&quot;nuorat&lt;/correct&gt;&lt;/errormorphsyn&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_syn1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{riŋgen nieidda lusa}¥{x,pph|riŋgen niidii}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;&lt;errorsyn&gt;riŋgen nieidda lusa&lt;correct errorinfo=&quot;x,pph&quot;&gt;&#39;</span>
+            <span class="s2">&quot;riŋgen niidii&lt;/correct&gt;&lt;/errorsyn&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_syn2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;</span><span class="si">{ovtta}</span><span class="s2">¥{num,redun| }&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;&lt;errorsyn&gt;ovtta&lt;correct errorinfo=&quot;num,redun&quot;&gt;&lt;/correct&gt;&#39;</span>
+            <span class="s2">&quot;&lt;/errorsyn&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_lex1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;</span><span class="si">{dábálaš}</span><span class="s2">€{adv,adj,der|dábálaččat}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;&lt;errorlex&gt;dábálaš&lt;correct errorinfo=&quot;adv,adj,der&quot;&gt;dábálaččat&#39;</span>
+            <span class="s2">&quot;&lt;/correct&gt;&lt;/errorlex&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_ortreal1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;</span><span class="si">{ráhččamušaid}</span><span class="s2">¢{noun,mix|rahčamušaid}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;&lt;errorortreal&gt;ráhččamušaid&lt;correct errorinfo=&quot;noun,mix&quot;&gt;&#39;</span>
+            <span class="s2">&quot;rahčamušaid&lt;/correct&gt;&lt;/errorortreal&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_ortreal2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;gitta {Nordkjosbotn&#39;ii}$</span><span class="si">{Nordkjosbotnii}</span><span class="s2"> (mii lea ge &quot;</span>
+            <span class="s2">&quot;</span><span class="si">{nordkjosbotn}</span><span class="s2">$</span><span class="si">{Nordkjosbotn}</span><span class="s2"> sámegillii? Muhtin, veahket mu!) &quot;</span>
+            <span class="s2">&quot;gos&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;gitta &lt;errorort&gt;Nordkjosbotn&#39;ii&lt;correct&gt;Nordkjosbotnii&quot;</span>
+            <span class="s2">&quot;&lt;/correct&gt;&lt;/errorort&gt; (mii lea ge &lt;errorort&gt;nordkjosbotn&quot;</span>
+            <span class="s2">&quot;&lt;correct&gt;Nordkjosbotn&lt;/correct&gt;&lt;/errorort&gt; sámegillii? &quot;</span>
+            <span class="s2">&quot;Muhtin, veahket mu!) gos&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_morphsyn2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;Čáppa muohtaskulptuvrraid ráhkadeapmi VSM olggobealde lei &quot;</span>
+            <span class="s2">&quot;maiddái ovttasbargu gaskal {skuvla ohppiid}£&quot;</span>
+            <span class="s2">&quot;{noun,attr,gensg,nomsg,case|skuvlla ohppiid}&quot;</span>
+            <span class="s2">&quot;ja VSM.&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;Čáppa muohtaskulptuvrraid ráhkadeapmi VSM olggobealde lei &quot;</span>
+            <span class="s2">&quot;maiddái ovttasbargu gaskal &lt;errormorphsyn&gt;skuvla ohppiid&quot;</span>
+            <span class="s1">&#39;&lt;correct errorinfo=&quot;noun,attr,gensg,nomsg,case&quot;&gt;skuvlla ohppiid&#39;</span>
+            <span class="s2">&quot;&lt;/correct&gt;&lt;/errormorphsyn&gt; ja VSM.&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;errorort4&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;- ruksesruonáčalmmehisvuohta lea sullii &quot;</span>
+            <span class="s2">&quot;{8%:as}${acr,suf|8%:s}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;- ruksesruonáčalmmehisvuohta lea sullii &lt;errorort&gt;8%:as&quot;</span>
+            <span class="s1">&#39;&lt;correct errorinfo=&quot;acr,suf&quot;&gt;8%:s&lt;/correct&gt;&lt;/errorort&gt;&lt;/p&gt;&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_ortreal3&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;( </span><span class="si">{nissonin}</span><span class="s2">¢{noun,suf|nissoniin} dušše {0.6 %:s}£{0.6 %} )&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;( &lt;errorortreal&gt;nissonin&lt;correct errorinfo=&quot;noun,suf&quot;&gt;&#39;</span>
+            <span class="s2">&quot;nissoniin&lt;/correct&gt;&lt;/errorortreal&gt; dušše &lt;errormorphsyn&gt;0.6 %:s&quot;</span>
+            <span class="s2">&quot;&lt;correct&gt;0.6 %&lt;/correct&gt;&lt;/errormorphsyn&gt; )&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;errorort5&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;(haploida) ja </span><span class="si">{njiŋŋalas}</span><span class="s2">${noun,á|njiŋŋálas} </span><span class="si">{ságahuvvon}</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;${verb,a|sagahuvvon} manneseallas (diploida)&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;(haploida) ja &lt;errorort&gt;njiŋŋalas&lt;correct errorinfo=&quot;noun,á&quot;&gt;&#39;</span>
+            <span class="s2">&quot;njiŋŋálas&lt;/correct&gt;&lt;/errorort&gt; &lt;errorort&gt;ságahuvvon&quot;</span>
+            <span class="s1">&#39;&lt;correct errorinfo=&quot;verb,a&quot;&gt;sagahuvvon&lt;/correct&gt;&lt;/errorort&gt; &#39;</span>
+            <span class="s2">&quot;manneseallas (diploida)&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;errorort6&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;(gii oahpaha) </span><span class="si">{giinu}</span><span class="s2">${x,notcmp|gii nu} manai </span><span class="si">{intiánalávlagat}</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;${loan,conc|indiánalávlagat} {guovža-klána}${noun,cmp|guovžaklána} &quot;</span>
+            <span class="s2">&quot;olbmuid&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;(gii oahpaha) &lt;errorort&gt;giinu&lt;correct errorinfo=&quot;x,notcmp&quot;&gt;&#39;</span>
+            <span class="s2">&quot;gii nu&lt;/correct&gt;&lt;/errorort&gt; manai &lt;errorort&gt;intiánalávlagat&quot;</span>
+            <span class="s1">&#39;&lt;correct errorinfo=&quot;loan,conc&quot;&gt;indiánalávlagat&lt;/correct&gt;&#39;</span>
+            <span class="s1">&#39;&lt;/errorort&gt; &lt;errorort&gt;guovža-klána&lt;correct errorinfo=&quot;noun,cmp&quot;&gt;&#39;</span>
+            <span class="s2">&quot;guovžaklána&lt;/correct&gt;&lt;/errorort&gt; olbmuid&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;error_format&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;{{A  B}‰{notspace|A B}  C}‰{notspace|A B C}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&quot;</span>
+            <span class="s2">&quot;&lt;errorformat&gt;&quot;</span>
+            <span class="s2">&quot;&lt;errorformat&gt;&quot;</span>
+            <span class="s1">&#39;A  B&lt;correct errorinfo=&quot;notspace&quot;&gt;A B&lt;/correct&gt;&lt;/errorformat&gt;&#39;</span>
+            <span class="s1">&#39;  C&lt;correct errorinfo=&quot;notspace&quot;&gt;A B C&lt;/correct&gt;&lt;/errorformat&gt;&#39;</span>
+            <span class="s2">&quot;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;preserve_space_at_end_of_sentence&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;buvttadeaddji Anstein </span><span class="si">{Mikkelsens}</span><span class="s2">${typo|Mikkelsen} lea &quot;</span>
+            <span class="s2">&quot;ráhkadan. &lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;buvttadeaddji Anstein &lt;errorort&gt;Mikkelsens&lt;correct errorinfo=&quot;typo&quot;&gt;Mikkelsen&lt;/correct&gt;&lt;/errorort&gt; lea ráhkadan. &lt;/p&gt;&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;place_error_elements_before_old_element1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;buvttadeaddji Anstein </span><span class="si">{Mikkelsens}</span><span class="s2">${typo|Mikkelsen} lea &quot;</span>
+            <span class="s2">&quot;ráhkadan. </span><span class="si">{bálkkášumi}</span><span class="s2">${vowlat,á-a|bálkkašumi} miessemánu. &lt;span &quot;</span>
+            <span class="s1">&#39;type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts Competition»&lt;/span&gt;&lt;/p&gt;&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;buvttadeaddji Anstein &lt;errorort&gt;Mikkelsens&quot;</span>
+            <span class="s1">&#39;&lt;correct errorinfo=&quot;typo&quot;&gt;Mikkelsen&lt;/correct&gt;&lt;/errorort&gt; lea ráhkadan. &#39;</span>
+            <span class="s1">&#39;&lt;errorort&gt;bálkkášumi&lt;correct errorinfo=&quot;vowlat,á-a&quot;&gt;bálkkašumi&lt;/correct&gt;&lt;/errorort&gt;&#39;</span>
+            <span class="s1">&#39; miessemánu. &lt;span type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts &#39;</span>
+            <span class="s2">&quot;Competition»&lt;/span&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;place_error_elements_before_old_element2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;</span><span class="si">{Mikkelsens}</span><span class="s2">${typo|Mikkelsen} lea ráhkadan. &quot;</span>
+            <span class="s2">&quot;</span><span class="si">{bálkkášumi}</span><span class="s2">${vowlat,á-a|bálkkašumi} miessemánu. &quot;</span>
+            <span class="s1">&#39;&lt;span type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;&#39;</span>
+            <span class="s2">&quot;«Best Shorts Competition»&lt;/span&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;&lt;errorort&gt;Mikkelsens&lt;correct errorinfo=&quot;typo&quot;&gt;Mikkelsen&lt;/correct&gt;&lt;/errorort&gt; lea ráhkadan. &lt;errorort&gt;bálkkášumi&lt;correct errorinfo=&quot;vowlat,á-a&quot;&gt;bálkkašumi&lt;/correct&gt;&lt;/errorort&gt; miessemánu. &lt;span type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts Competition»&lt;/span&gt;&lt;/p&gt;&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;place_error_element_after_old_element&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;I 1864 ga han ut boka &lt;span type=&quot;quote&quot; xml:lang=&quot;swe&quot;&gt;&#39;</span>
+            <span class="s1">&#39;&quot;Fornuftigt Madstel&quot;&lt;/span&gt;. </span><span class="si">{Asbjørsen}</span><span class="s1">${prop,typo|Asbjørnsen} &#39;</span>
+            <span class="s2">&quot;døde 5. januar 1885, nesten 73 år gammel.&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;p&gt;I 1864 ga han ut boka &lt;span type=&quot;quote&quot; xml:lang=&quot;swe&quot;&gt;&#39;</span>
+            <span class="s1">&#39;&quot;Fornuftigt Madstel&quot;&lt;/span&gt;. &lt;errorort&gt;Asbjørsen&#39;</span>
+            <span class="s1">&#39;&lt;correct errorinfo=&quot;prop,typo&quot;&gt;Asbjørnsen&lt;/correct&gt;&lt;/errorort&gt; &#39;</span>
+            <span class="s2">&quot;døde 5. januar 1885, nesten 73 år gammel.&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;place_error_element_before_and_after_old_element&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;buvttadeaddji Anstein </span><span class="si">{Mikkelsens}</span><span class="s2">${typo|Mikkelsen} lea &quot;</span>
+            <span class="s1">&#39;ráhkadan. &lt;span type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts &#39;</span>
+            <span class="s2">&quot;Competition»&lt;/span&gt; </span><span class="si">{bálkkášumi}</span><span class="s2">${vowlat,á-a|bálkkašumi} &quot;</span>
+            <span class="s2">&quot;miessemánu.&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;buvttadeaddji Anstein &lt;errorort&gt;Mikkelsens&quot;</span>
+            <span class="s1">&#39;&lt;correct errorinfo=&quot;typo&quot;&gt;Mikkelsen&lt;/correct&gt;&lt;/errorort&gt; lea &#39;</span>
+            <span class="s1">&#39;ráhkadan. &lt;span type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts &#39;</span>
+            <span class="s2">&quot;Competition»&lt;/span&gt; &lt;errorort&gt;bálkkášumi&quot;</span>
+            <span class="s1">&#39;&lt;correct errorinfo=&quot;vowlat,á-a&quot;&gt;bálkkašumi&lt;/correct&gt;&lt;/errorort&gt; &#39;</span>
+            <span class="s2">&quot;miessemánu.&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;markup3Levels&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;buvttadeaddji Anstein &lt;errorort&gt;Mikkelsens&lt;correct &quot;</span>
+            <span class="s1">&#39;errorinfo=&quot;typo&quot;&gt;Mikkelsen&lt;/correct&gt;&lt;/errorort&gt; lea ráhkadan. &#39;</span>
+            <span class="s1">&#39;&lt;span type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts Competition»&#39;</span>
+            <span class="s1">&#39;&lt;/span&gt; &lt;errorort&gt;bálkkášumi&lt;correct errorinfo=&quot;vowlat,á-a&quot;&gt;&#39;</span>
+            <span class="s2">&quot;bálkkašumi&lt;/correct&gt;&lt;/errorort&gt; miessemánu. &lt;em&gt;buvttadeaddji &quot;</span>
+            <span class="s2">&quot;Anstein </span><span class="si">{Mikkelsens}</span><span class="s2">${typo|Mikkelsen} lea ráhkadan. &lt;span &quot;</span>
+            <span class="s1">&#39;type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts Competition»&lt;/span&gt; &#39;</span>
+            <span class="s2">&quot;</span><span class="si">{bálkkášumi}</span><span class="s2">${vowlat,á-a|bálkkašumi} miessemánu.&lt;/em&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;buvttadeaddji Anstein &lt;errorort&gt;Mikkelsens&lt;correct &quot;</span>
+            <span class="s1">&#39;errorinfo=&quot;typo&quot;&gt;Mikkelsen&lt;/correct&gt;&lt;/errorort&gt; lea ráhkadan. &#39;</span>
+            <span class="s1">&#39;&lt;span type=&quot;quote&quot; xml:lang=&quot;eng&quot;&gt;«Best Shorts Competition»&#39;</span>
+            <span class="s1">&#39;&lt;/span&gt; &lt;errorort&gt;bálkkášumi&lt;correct errorinfo=&quot;vowlat,á-a&quot;&gt;&#39;</span>
+            <span class="s2">&quot;bálkkašumi&lt;/correct&gt;&lt;/errorort&gt; miessemánu. &lt;em&gt;buvttadeaddji &quot;</span>
+            <span class="s1">&#39;Anstein &lt;errorort&gt;Mikkelsens&lt;correct errorinfo=&quot;typo&quot;&gt;Mikkelsen&#39;</span>
+            <span class="s1">&#39;&lt;/correct&gt;&lt;/errorort&gt; lea ráhkadan. &lt;span type=&quot;quote&quot; &#39;</span>
+            <span class="s1">&#39;xml:lang=&quot;eng&quot;&gt;«Best Shorts Competition»&lt;/span&gt; &lt;errorort&gt;&#39;</span>
+            <span class="s1">&#39;bálkkášumi&lt;correct errorinfo=&quot;vowlat,á-a&quot;&gt;bálkkašumi&lt;/correct&gt;&#39;</span>
+            <span class="s2">&quot;&lt;/errorort&gt; miessemánu.&lt;/em&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;inline multiple corrections&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;</span><span class="si">{leimme}</span><span class="s2">£{leimmet///leat}&lt;/p&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;p&gt;&lt;errormorphsyn&gt;leimme&quot;</span>
+            <span class="s2">&quot;&lt;correct&gt;leimmet&lt;/correct&gt;&quot;</span>
+            <span class="s2">&quot;&lt;correct&gt;leat&lt;/correct&gt;&quot;</span>
+            <span class="s2">&quot;&lt;/errormorphsyn&gt;&lt;/p&gt;&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_convert_to_errormarkupxml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">in_string</span><span class="p">,</span> <span class="n">want_string</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test plain errormarkup.&quot;&quot;&quot;</span>
+    <span class="n">in_elem</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">in_string</span><span class="p">)</span>
+    <span class="n">want</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">want_string</span><span class="p">)</span>
+    <span class="n">errormarkup</span><span class="o">.</span><span class="n">convert_to_errormarkupxml</span><span class="p">(</span><span class="n">in_elem</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assert_xml_equal</span><span class="p">(</span><span class="n">in_elem</span><span class="p">,</span> <span class="n">want</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="corpustools.test.test_errormarkup.TestErrorMarkup.test_regex" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">test_regex</span><span class="p">(</span><span class="n">markup</span><span class="p">,</span> <span class="n">span</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Testing the most important regex.</p>
+
+      <details class="quote">
+        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/test/test_errormarkup.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@parameterized</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;</span><span class="si">{a}</span><span class="s2">$</span><span class="si">{b}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;</span><span class="si">{a}</span><span class="s2">$</span><span class="si">{b}</span><span class="s2"> </span><span class="si">{a}</span><span class="s2">$</span><span class="si">{c}</span><span class="s2"> &quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">15</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;</span><span class="si">{a}</span><span class="s2">$</span><span class="si">{b}</span><span class="s2"> {{a}$</span><span class="si">{b}</span><span class="s2">}$</span><span class="si">{d}</span><span class="s2"> &quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">21</span><span class="p">)),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_regex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">markup</span><span class="p">,</span> <span class="n">span</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Testing the most important regex.&quot;&quot;&quot;</span>
+    <span class="c1"># match = errormarkup.LAST_CORRECTION_REGEX.search(markup)</span>
+    <span class="c1"># self.assertEqual(match.span(), span)</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">errormarkup</span><span class="o">.</span><span class="n">LAST_CORRECTION_REGEX</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">markup</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">span</span><span class="p">(),</span> <span class="n">span</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.51198bba.min.js"></script>
+      
+    
+  </body>
+</html>
