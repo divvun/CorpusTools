@@ -23,12 +23,12 @@ import hashlib
 import os
 import re
 from collections import namedtuple
+from pathlib import Path
 from urllib.parse import unquote
 
-from pathlib import Path
 import unidecode
 
-from corpustools import util, versioncontrol, xslsetter, corpuspath
+from corpustools import corpuspath, util, versioncontrol, xslsetter
 
 
 class NamechangerError(Exception):
@@ -395,21 +395,20 @@ def are_duplicates(oldpath, newpath):
         return False
 
 
-def compute_new_basename(oldpath, wanted_path):
+def compute_new_basename(path, orig_basename):
     """Compute the new path.
 
     Args:
-        oldpath (unicode): path to the old file
-        wanted_path (unicode): the path that one wants to move the file to
+        path (str): corpus directory where the file should live
+        orig_basename (str): original filename
 
     Returns:
         a unicode string pointing to the new path
     """
-    wanted_basename = os.path.basename(wanted_path)
-    new_basename = os.path.basename(wanted_path)
-    newpath = os.path.join(os.path.dirname(wanted_path), new_basename)
+    wanted_basename = normalise_filename(orig_basename)
+    newpath = os.path.join(path, wanted_basename)
     index = 1
-
+    oldpath = os.path.join(path, orig_basename)
     while os.path.exists(newpath):
         if are_duplicates(oldpath, newpath):
             raise UserWarning(f"{oldpath} and {newpath} are duplicates. ")
@@ -421,7 +420,7 @@ def compute_new_basename(oldpath, wanted_path):
                 new_basename = pre_extension + "_" + str(index) + extension
             else:
                 new_basename = wanted_basename + str(index)
-            newpath = os.path.join(os.path.dirname(wanted_path), new_basename)
+            newpath = os.path.join(path, new_basename)
             index += 1
 
-    return newpath
+    return os.path.basename(newpath)

@@ -23,10 +23,11 @@ import argparse
 import cgi
 import os
 import shutil
+from pathlib import Path
 
 import requests
 
-from corpustools import argparse_version, namechanger, util, versioncontrol, xslsetter
+from corpustools import argparse_version, corpuspath, namechanger, util, versioncontrol
 
 
 class AdderError(Exception):
@@ -113,7 +114,7 @@ class UrlDownloader:
 class AddToCorpus:
     """Class to add files, urls and dirs to the corpus."""
 
-    def __init__(self, corpusdir, mainlang, path):
+    def __init__(self, corpus_directory, sub_directory):
         """Initialise the AddToCorpus class.
 
         Args:
@@ -122,14 +123,10 @@ class AddToCorpus:
             path (str): path below the language directory where the files
                 should be added
         """
-
-        self.corpusdir = corpusdir
-        self.vcs = versioncontrol.vcs(self.corpusdir)
-        self.goaldir = os.path.join(
-            corpusdir, "orig", mainlang, self.__normalise_path(path)
-        )
-        with util.ignored(OSError):
-            os.makedirs(self.goaldir)
+        self.corpusdir = corpus_directory
+        self.goalpath = Path(corpus_directory) / sub_directory
+        self.goalpath.mkdir(parents=True, exist_ok=True)
+        self.vcs = versioncontrol.vcs(corpus_directory)
         self.additions = []
 
     def copy_url_to_corpus(self, url, wanted_name="", parallelpath=""):
@@ -157,29 +154,33 @@ class AddToCorpus:
         Returns:
             str: path to where the origfile exists in the corpus
         """
-        none_dupe_path = self.none_dupe_path(origpath)
-        shutil.copy(origpath, none_dupe_path)
-        self.additions.append(none_dupe_path)
+        none_dupe_path = corpuspath.CorpusPath(
+            os.path.join(
+                self.goalpath, self.none_dupe_basename(os.path.basename(origpath))
+            )
+        )
+        shutil.copy(origpath, none_dupe_path.orig)
+        self.additions.append(none_dupe_path.orig)
 
         self.add_metadata_to_corpus(none_dupe_path, metadata_filename)
         if parallelpath:
-            self.update_parallel_data(util.split_path(none_dupe_path), parallelpath)
-        print("Added", none_dupe_path)
+            self.update_parallel_data(none_dupe_path, parallelpath)
+        print("Added", none_dupe_path.orig)
 
-        return none_dupe_path
+        return none_dupe_path.orig
 
     def add_metadata_to_corpus(self, none_dupe_path, meta_filename):
         """Add the metadata file to the corpus."""
-        none_dupe_components = util.split_path(none_dupe_path)
-        new_metadata = xslsetter.MetadataHandler(none_dupe_path + ".xsl", create=True)
+        none_dupe_components = none_dupe_path.pathcomponents
+        new_metadata = none_dupe_path.metadata
         new_metadata.set_variable("filename", meta_filename)
         new_metadata.set_variable("mainlang", none_dupe_components.lang)
         new_metadata.set_variable("genre", none_dupe_components.genre)
         new_metadata.write_file()
-        self.additions.append(none_dupe_path + ".xsl")
+        self.additions.append(none_dupe_path.xsl)
 
     @staticmethod
-    def update_parallel_data(none_dupe_components, parallelpath):
+    def update_parallel_data(none_dupe_path, parallelpath):
         """Update metadata in the parallel files.
 
         Args:
@@ -189,44 +190,45 @@ class AddToCorpus:
         if not os.path.exists(parallelpath):
             raise AdderError(f"{parallelpath} does not exist")
 
-        parallel_metadata = xslsetter.MetadataHandler(parallelpath + ".xsl")
-        parallels = parallel_metadata.get_parallel_texts()
-        parallels[none_dupe_components.lang] = none_dupe_components.basename
+        parallel_corpuspath = corpuspath.CorpusPath(parallelpath)
+        none_dupe_components = none_dupe_path.pathcomponents
 
-        parall_components = util.split_path(parallelpath)
-        parallels[parall_components.lang] = parall_components.basename
-
-        for lang, parallel in parallels.items():
-            metadata = xslsetter.MetadataHandler(
-                "/".join(
-                    (
-                        none_dupe_components.root,
-                        none_dupe_components.module,
-                        lang,
-                        none_dupe_components.genre,
-                        none_dupe_components.subdirs,
-                        parallel + ".xsl",
-                    )
-                )
+        none_dupe_path.metadata.set_parallel_text(
+            parallel_corpuspath.pathcomponents.lang,
+            parallel_corpuspath.pathcomponents.basename,
+        )
+        for (
+            lang,
+            parallel_file,
+        ) in parallel_corpuspath.metadata.get_parallel_texts().items():
+            util.print_frame(parallel_file)
+            this_para_corpuspath = corpuspath.CorpusPath(
+                parallel_corpuspath.move_orig(lang=lang, name=parallel_file)
             )
+            this_para_corpuspath.metadata.set_parallel_text(
+                none_dupe_components.lang, none_dupe_components.basename
+            )
+            this_para_corpuspath.metadata.write_file()
+            none_dupe_path.metadata.set_parallel_text(
+                this_para_corpuspath.pathcomponents.lang,
+                this_para_corpuspath.pathcomponents.basename,
+            )
+        none_dupe_path.metadata.write_file()
 
-            for lang1, parallel1 in parallels.items():
-                if lang1 != lang:
-                    metadata.set_parallel_text(lang1, parallel1)
-            metadata.write_file()
+        parallel_corpuspath.metadata.set_parallel_text(
+            none_dupe_components.lang, none_dupe_components.basename
+        )
+        parallel_corpuspath.metadata.write_file()
 
-    def none_dupe_path(self, path):
+    def none_dupe_basename(self, orig_basename):
         """Compute the none duplicate path of the file to be added.
 
         Args:
-            path (str): path of the file as given as input
-                This string may contain unwanted chars and
+            orig_basename: (str) basename of the original file
         """
         return namechanger.compute_new_basename(
-            path,
-            os.path.join(
-                self.goaldir, namechanger.normalise_filename(os.path.basename(path))
-            ),
+            self.goalpath,
+            namechanger.normalise_filename(orig_basename),
         )
 
     def copy_files_in_dir_to_corpus(self, origpath):
@@ -335,10 +337,11 @@ def main():
             raise SystemExit(
                 "The argument -l|--lang is not allowed together with " "-d|--directory"
             )
-        (root, _, lang, genre, path, _) = util.split_path(
-            os.path.join(args.directory, "dummy.txt")
+        corpus_path = corpuspath.CorpusPath(
+            (Path(args.directory) / "dummy.txt").as_posix()
         )
-        if genre == "dummy.txt":
+
+        if corpus_path.pathcomponents.genre == "dummy.txt":
             raise SystemExit(
                 "Error!\n"
                 "You must add genre to the directory\ne.g. {}".format(
@@ -346,7 +349,10 @@ def main():
                 )
             )
 
-        adder = AddToCorpus(root, lang, os.path.join(genre, path))
+        adder = AddToCorpus(
+            corpus_path.orig_corpus_dir,
+            Path(corpus_path.pathcomponents.genre) / corpus_path.pathcomponents.subdirs,
+        )
         for orig in args.origs:
             if os.path.isfile(orig):
                 if args.name:
@@ -397,8 +403,14 @@ def main():
                 "It is not possible to add a directory " "when the -p option is given."
             )
 
-        (root, _, lang, genre, path, _) = util.split_path(args.parallel_file)
-        adder = AddToCorpus(root, args.lang, os.path.join(genre, path))
+        parallel_corpus_path = corpuspath.CorpusPath(args.parallel_file)
+        corpus_path = corpuspath.CorpusPath(
+            parallel_corpus_path.move_orig(lang=args.lang)
+        )
+        adder = AddToCorpus(
+            corpus_path.orig_corpus_dir,
+            Path(corpus_path.pathcomponents.genre) / corpus_path.pathcomponents.subdirs,
+        )
 
         orig = args.origs[0]
         if os.path.isfile(orig):
