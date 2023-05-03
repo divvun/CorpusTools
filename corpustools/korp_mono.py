@@ -668,7 +668,7 @@ def extract_used_analysis(used_analysis):
 
     ex_index = used_analysis.find("Ex/")
     tm_index = used_analysis.find("_™_")
-    if "Ex/" in used_analysis and not "_™_" in used_analysis:
+    if "Ex/" in used_analysis and "_™_" not in used_analysis:
         (lemma, msd) = used_analysis.split("_∞_", 1)
 
         # print("msd=", msd)
@@ -718,7 +718,7 @@ def sort_cohort(cohort_lines):
     # however, if there are only analyses containing Error tags
     # sort the cohort and choose the first version
 
-    filtered_analysis = [i for i in split_analysis if not ("Err/" in i)]
+    filtered_analysis = [i for i in split_analysis if "Err/" not in i]
     if len(filtered_analysis) > 0:
         ### logging.info('_filtered_cohort_|'+str(filtered_analysis)+'|__')
         return sorted(filtered_analysis, key=lambda name: name.lower())
@@ -768,7 +768,7 @@ def make_head_tail(morpho_syntactic_description_drel):
 def split_function_label(head):
     # splitting the function label
     if not head == "___":
-        if not "@" in head:
+        if "@" not in head:
             return (head, "X")
         else:
             msd_fct = re.compile(" @").split(head)
@@ -968,11 +968,11 @@ def make_string2generate(lemma, tail):
     tm_index = tail.find("_™_")
 
     if "Ex/" in tail:
-        if (not "_™_" in tail) or ("_™_" in tail and ex_index < tm_index):
+        if ("_™_" not in tail) or ("_™_" in tail and ex_index < tm_index):
             return lemma + "_∞1EX∞_" + tail
 
     if "_™_" in tail:
-        if (not "Ex/" in tail) or ("Ex/" in tail and tm_index < ex_index):
+        if ("Ex/" not in tail) or ("Ex/" in tail and tm_index < ex_index):
             return lemma + "_∞1CO∞_" + tail
 
     return ""

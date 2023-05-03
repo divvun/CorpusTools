@@ -22,7 +22,6 @@ from collections import namedtuple
 import os
 import re
 
-from pathlib import PurePath
 
 from corpustools import util, xslsetter
 

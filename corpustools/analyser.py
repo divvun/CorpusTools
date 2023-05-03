@@ -135,13 +135,9 @@ def analyse_serially(file_list, modename):
         fileno += 1
         # print some ugly banner cos i want to see progress on local
         # batch job
-        print("*" * 79, file=sys.stderr)
-        print(
-            "Analysing {} [{} of {}]".format(
-                xml_file, fileno, len(xml_files), file=sys.stderr
-            )
-        )
-        print("*" * 79, file=sys.stderr)
+        util.print_frame("*" * 79)
+        util.print_frame(f"Analysing {xml_file} [{fileno} of {len(xml_files)}]")
+        util.print_frame("*" * 79)
         analyse(xml_file, modename)
 
 

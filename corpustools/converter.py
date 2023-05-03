@@ -171,7 +171,7 @@ class Converter:
             complete = xsl_maker.transformer(intermediate)
 
             return complete.getroot()
-        except etree.XSLTApplyError as error:
+        except etree.XSLTApplyError:
             with open(self.names.log, "w") as logfile:
                 logfile.write(f"Error at: {str(util.lineno())}")
 
