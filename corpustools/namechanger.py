@@ -28,7 +28,7 @@ from urllib.parse import unquote
 
 import unidecode
 
-from corpustools import corpuspath, util, versioncontrol, xslsetter
+from corpustools import corpuspath, versioncontrol
 
 
 class NamechangerError(Exception):
@@ -36,113 +36,6 @@ class NamechangerError(Exception):
 
 
 PathPair = namedtuple("PathPair", "oldpath newpath")
-
-
-class MovepairComputer:
-    """Compute oldname, newname pairs."""
-
-    def __init__(self):
-        """Initialise the MovepairComputer.
-
-        filepairs (list of PathPairs): List of filepairs that should be moved.
-        """
-        self.filepairs = []
-
-    def compute_orig_movepair(self, oldpath, newpath, nochange=False):
-        """Add the oldpath and the new goalpath to filepairs.
-
-        Args:
-            oldpath (unicode): the old path to an original file
-            newpath (unicode): the new path of an original file
-        """
-        if not newpath:
-            self.filepairs.append(PathPair(oldpath, ""))
-        else:
-            normalisedpath = os.path.join(
-                os.path.dirname(newpath), normalise_filename(os.path.basename(newpath))
-            )
-            if normalisedpath == newpath and nochange:
-                non_dupe_path = newpath
-            else:
-                non_dupe_path = compute_new_basename(oldpath, normalisedpath)
-
-            self.filepairs.append(PathPair(oldpath, non_dupe_path))
-
-    def compute_parallel_movepairs(self, oldpath, newpath):
-        """Add the parallel files of oldpath to filepairs.
-
-        Args:
-            oldpath (unicode): the old path
-            newpath (unicode): the new path
-        """
-        old_corpus_path = corpuspath.CorpusPath(oldpath)
-        if not newpath:
-            newpath = oldpath
-
-        for parallel_name in old_corpus_path.parallels():
-            old_parallel_corpus_path = corpuspath.CorpusPath(parallel_name)
-            new_corpus_path = corpuspath.CorpusPath(newpath)
-            new_parallel_name = old_parallel_corpus_path.move_orig(
-                genre=new_corpus_path.pathcomponents.genre,
-                subdirs=new_corpus_path.pathcomponents.subdirs,
-            )
-            self.compute_orig_movepair(parallel_name, new_parallel_name)
-
-    def compute_all_movepairs(self, oldpath, newpath):
-        """Compute all the potential name pairs that should be moved.
-
-        Args:
-            oldpath (str): path to the original file.
-            newpath (str): path to the new file.
-        """
-        self.compute_orig_movepair(oldpath, newpath)
-        self.compute_parallel_movepairs(oldpath, newpath)
-
-
-class CorpusFileMover:
-    """Move an original file and all its derived files."""
-
-    def __init__(self, oldpath, newpath):
-        """Class to move corpus files.
-
-        Args:
-            oldpath (unicode): the old path of the original file.
-            newpath (unicode): the new path of tht original file.
-        """
-        self.old_corpus_path = corpuspath.CorpusPath(oldpath)
-        p = Path(oldpath)
-        if not p.exists():
-            raise SystemExit(f"{oldpath} does not exist!")
-        self.new_corpus_path = corpuspath.CorpusPath(newpath)
-        self.new_corpus_path.metadata = self.old_corpus_path.metadata
-        self.orig_vcs = versioncontrol.vcs(self.old_corpus_path.orig_corpus_dir)
-        self.conv_vcs = versioncontrol.vcs(self.old_corpus_path.converted_corpus_dir)
-
-    def move_files(self):
-        """Move all files that are under version control."""
-        p = Path(self.new_corpus_path.orig)
-        if not p.parent.exists():
-            p.parent.mkdir(parents=True)
-
-        self.orig_vcs.move(self.old_corpus_path.orig, self.new_corpus_path.orig)
-        self.orig_vcs.move(self.old_corpus_path.xsl, self.new_corpus_path.xsl)
-
-        if os.path.exists(self.old_corpus_path.converted):
-            p = Path(self.new_corpus_path.converted)
-            if not p.parent.exists():
-                p.parent.mkdir(parents=True)
-            self.conv_vcs.move(
-                self.old_corpus_path.converted, self.new_corpus_path.converted
-            )
-        if not self.old_corpus_path.metadata.get_variable("translated_from"):
-            for lang in self.old_corpus_path.metadata.get_parallel_texts():
-                if os.path.exists(self.old_corpus_path.tmx(lang)):
-                    p = Path(self.new_corpus_path.tmx(lang))
-                    if not p.parent.exists():
-                        p.parent.mkdir(parents=True)
-                    self.conv_vcs.move(
-                        self.old_corpus_path.tmx(lang), self.new_corpus_path.tmx(lang)
-                    )
 
 
 class CorpusFileRemover:
@@ -169,161 +62,6 @@ class CorpusFileRemover:
         for lang in self.old_corpus_path.metadata.get_parallel_texts():
             if os.path.exists(self.old_corpus_path.tmx(lang)):
                 self.conv_vcs.remove(self.old_corpus_path.tmx(lang))
-
-
-class CorpusFilesetMoverAndUpdater:
-    """Move or remove a file within a repository.
-
-    When moving a file inside the same directory:
-    * move the original file
-    * move the metadata file
-    * move the prestable/converted file
-    * move the prestable/toktmx file
-    * move the prestable/tmx file
-    * change the metadata in the metadata file, if needed
-    * change the reference to the file name in the parallel files'
-      metadata, if needed
-    * if the parallel files need name normalisation, move them the same way the
-      original file is handled
-
-    Removal is signaled by an empty string for the newpath argument.
-    When removing a file. :
-    * remove the original file
-    * remove the metadata file
-    * remove the prestable/converted file
-    * remove the prestable/toktmx file
-    * remove the prestable/tmx file
-    * change the reference to the file name in the parallel files' metadata
-    * if the parallel files need name normalisation, move them the same way the
-      original file is handled
-
-    When moving a file from one subdirectory to another:
-    * move the original file
-    * move the metadata file
-    * move the prestable/converted file
-    * move the prestable/toktmx file
-    * move the prestable/tmx file
-    * change the metadata in the metadata file, if needed
-    * change the reference to the file name in the parallel files'
-      metadata, if needed
-    * change the reference to the file name in the parallel files'
-      metadata if needed
-    * move the parallel files the same way the original file has been moved.
-
-    When moving a file to a new genre:
-    * the subdirectory move operations +
-    * change the genre reference in the metadata files
-
-    When moving a file to a new language:
-    * move the original file
-    * move the metadata file
-    * move the prestable/converted file
-    * move the prestable/toktmx file
-    * move the prestable/tmx file
-    * change the language of the file in the parallel files' metadata
-    * if the parallel files need name normalisation, move them the same way the
-      original file is handled
-
-    Normalise a file name: Replace non-ascii char with ascii ones and remove
-    unwanted characters.
-
-    When doing these operations, detect name clashes for the original files.
-
-    If a name clash is found, check if the files are duplicates. If they are
-    duplicates, raise an exception, otherwise suggest a new name.
-    """
-
-    def __init__(self, oldpath, newpath):
-        """Initialise the CorpusFilesetMoverAndUpdater class.
-
-        oldpath (str): path to the file that should be renamed.
-        newpath (str): path to the new name of the file.
-        """
-        orig_corpus_path = corpuspath.CorpusPath(oldpath)
-        orig_corpus_path.metadata.set_lang_genre_xsl()
-        orig_corpus_path.metadata.write_file()
-
-        self.old_components = orig_corpus_path.pathcomponents
-        self.vcs = versioncontrol.vcs(
-            os.path.join(
-                orig_corpus_path.pathcomponents.root,
-                f"corpus-{orig_corpus_path.pathcomponents.lang}{orig_corpus_path.pathcomponents.dirsuffix}",
-            )
-        )
-        # self.vcs.add(orig_corpus_path.xsl)
-
-        self.move_computer = MovepairComputer()
-        self.move_computer.compute_all_movepairs(oldpath, newpath)
-
-    def move_files(self):
-        """Move all files under version control that belong to the original."""
-        for filepair in self.move_computer.filepairs:
-            if not filepair.newpath:
-                cfr = CorpusFileRemover(filepair.oldpath)
-                cfr.remove_files()
-            elif filepair.oldpath != filepair.newpath:
-                cfm = CorpusFileMover(filepair.oldpath, filepair.newpath)
-                cfm.move_files()
-
-    def update_own_metadata(self):
-        """Update metadata."""
-        for filepair in self.move_computer.filepairs:
-            if filepair.newpath:
-                old_components = corpuspath.CorpusPath(filepair.oldpath).pathcomponents
-                new_components = corpuspath.CorpusPath(filepair.newpath).pathcomponents
-
-                metadataname = filepair.newpath + ".xsl"
-                if os.path.isfile(metadataname):
-                    metadatafile = xslsetter.MetadataHandler(metadataname)
-                    if old_components.genre != new_components.genre:
-                        metadatafile.set_variable("genre", new_components.genre)
-                    if old_components.lang != new_components.lang:
-                        metadatafile.set_variable("mainlang", new_components.lang)
-                    metadatafile.write_file()
-                    self.vcs.add(metadataname)
-
-    def update_parallel_file_metadata(self, old_components, newpath, parallel_name):
-        """Update metadata in a metadata file.
-
-        Args:
-            old_components (util.PathComponents): A named tuple
-                representing the path to the old name of the file
-            newpath (str): path to the new file
-            parallel_name (str) : name of the parallel file
-        """
-        parallel_metadatafile = xslsetter.MetadataHandler(parallel_name)
-
-        if newpath:
-            new_components = corpuspath.CorpusPath(newpath).pathcomponents
-            if old_components.lang != new_components.lang:
-                parallel_metadatafile.set_parallel_text(old_components.lang, "")
-                parallel_metadatafile.set_parallel_text(
-                    new_components.lang, new_components.basename
-                )
-            elif old_components.basename != new_components.basename:
-                parallel_metadatafile.set_parallel_text(
-                    new_components.lang, new_components.basename
-                )
-
-        else:
-            parallel_metadatafile.set_parallel_text(old_components.lang, "")
-
-        parallel_metadatafile.write_file()
-        self.vcs.add(parallel_name)
-
-    def update_parallel_files_metadata(self):
-        """Update the info in the parallel files."""
-        for filepair in self.move_computer.filepairs:
-            parallel_filepairs = list(self.move_computer.filepairs)
-            parallel_filepairs.remove(filepair)
-            old_components = corpuspath.CorpusPath(filepair.oldpath).pathcomponents
-
-            for parallel_filepair in parallel_filepairs:
-                parallel_name = parallel_filepair.newpath + ".xsl"
-                if os.path.isfile(parallel_name):
-                    self.update_parallel_file_metadata(
-                        old_components, filepair.newpath, parallel_name
-                    )
 
 
 def compute_hexdigest(afile, blocksize=65536):
@@ -395,23 +133,21 @@ def are_duplicates(oldpath, newpath):
         return False
 
 
-def compute_new_basename(path, orig_basename):
+def compute_new_basename(orig_path):
     """Compute the new path.
 
     Args:
-        path (str): corpus directory where the file should live
-        orig_basename (str): original filename
+        path (Path): path to file, basename should possibly be normalised
 
     Returns:
-        a unicode string pointing to the new path
+        Path: lower cased, ascii path
     """
-    wanted_basename = normalise_filename(orig_basename)
-    newpath = os.path.join(path, wanted_basename)
+    wanted_basename = normalise_filename(orig_path.name)
+    new_path = orig_path.with_name(wanted_basename)
     index = 1
-    oldpath = os.path.join(path, orig_basename)
-    while os.path.exists(newpath):
-        if are_duplicates(oldpath, newpath):
-            raise UserWarning(f"{oldpath} and {newpath} are duplicates. ")
+    while os.path.exists(new_path):
+        if are_duplicates(orig_path, new_path):
+            raise UserWarning(f"{orig_path} and {new_path} are duplicates. ")
         else:
             if "." in wanted_basename:
                 dot = wanted_basename.rfind(".")
@@ -420,7 +156,7 @@ def compute_new_basename(path, orig_basename):
                 new_basename = pre_extension + "_" + str(index) + extension
             else:
                 new_basename = wanted_basename + str(index)
-            newpath = os.path.join(path, new_basename)
+            new_path = orig_path.with_name(new_basename)
             index += 1
 
-    return os.path.basename(newpath)
+    return new_path

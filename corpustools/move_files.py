@@ -21,32 +21,115 @@
 import argparse
 import os
 import sys
+from pathlib import Path
 
-from corpustools import argparse_version, namechanger
+from corpustools import (argparse_version, corpuspath, namechanger,
+                         versioncontrol)
+
+
+def update_metadata(filepairs):
+    """Update parallel info for all filepairs."""
+    for filepair in filepairs:
+        if filepair[0].pathcomponents.basename != filepair[1].pathcomponents.basename:
+            for filepair1 in filepairs:
+                if filepair1[0].orig != filepair[0].orig:
+                    filepair1[1].metadata.set_parallel_text(
+                        language=filepair[1].pathcomponents.lang,
+                        location=filepair1[1].pathcomponents.basename,
+                    )
+                    parallel_vcs = versioncontrol.vcs(filepair1[1].orig_corpus_dir)
+                    parallel_vcs.add(filepair1[1].xsl)
+
+
+def move_corpuspath(old_corpuspath, new_corpuspath):
+    """Move a set of corpus files to a new location."""
+    orig_vcs = versioncontrol.vcs(old_corpuspath.orig_corpus_dir)
+    conv_vcs = versioncontrol.vcs(old_corpuspath.converted_corpus_dir)
+
+    orig_vcs.move(old_corpuspath.orig, new_corpuspath.orig)
+    orig_vcs.move(old_corpuspath.xsl, new_corpuspath.xsl)
+
+    if Path(old_corpuspath.converted).exists():
+        p = Path(new_corpuspath.converted)
+        if not p.parent.exists():
+            p.parent.mkdir(parents=True)
+        conv_vcs.move(old_corpuspath.converted, new_corpuspath.converted)
+
+    if not old_corpuspath.metadata.get_variable("translated_from"):
+        for lang in old_corpuspath.metadata.get_parallel_texts():
+            if os.path.exists(old_corpuspath.tmx(lang)):
+                p = Path(new_corpuspath.tmx(lang))
+                if not p.parent.exists():
+                    p.parent.mkdir(parents=True)
+                conv_vcs.move(old_corpuspath.tmx(lang), new_corpuspath.tmx(lang))
+
+
+def is_parallel_move_needed(old_components, new_components):
+    return (
+        old_components.lang != new_components.lang
+        or f"{old_components.genre}/{old_components.subdirs}"
+        != f"{new_components.genre}/{new_components.subdirs}"
+    )
+
+
+def compute_movenames(oldpath, newpath):
+    """Make CorpusPath pairs for the files that needs to move.
+
+    Args:
+        oldpath (Path): path to the old file
+        newpath (Path): path to the new file, with normalised name
+    """
+    filepairs = [
+        (
+            corpuspath.CorpusPath(oldpath),
+            corpuspath.CorpusPath(os.path.join(newpath, os.path.basename(oldpath)))
+            if os.path.isdir(newpath)
+            else corpuspath.CorpusPath(newpath),
+        ),
+    ]
+    compute_parallel_movenames(filepairs)
+
+    return filepairs
+
+
+def compute_parallel_movenames(filepairs):
+    """Compute pairs of CorpusPaths for parallel files."""
+    old_components = filepairs[0][0].pathcomponents
+    new_components = filepairs[0][1].pathcomponents
+
+    if is_parallel_move_needed(old_components, new_components):
+        old_cp = filepairs[0][0]
+        new_cp = filepairs[0][1]
+        for para_lang, para_name in filepairs[0].metadata.get_parallel_texts.items():
+            filepairs.append(
+                (
+                    corpuspath.CorpusPath(
+                        old_cp.move_orig(
+                            lang=para_lang,
+                            genre=old_components.genre,
+                            subdirs=old_components.subdirs,
+                            name=para_name,
+                        )
+                    ),
+                    corpuspath.CorpusPath(
+                        new_cp.move_orig(
+                            lang=para_lang,
+                            genre=old_components.genre,
+                            subdirs=old_components.subdirs,
+                            name=para_name,
+                        )
+                    ),
+                )
+            )
 
 
 def mover(oldpath, newpath):
-    """Move a file from oldpath to newpath."""
-    if os.path.isfile(oldpath):
-        if oldpath.endswith(".xsl"):
-            oldpath = oldpath[:-4]
-    else:
-        raise UserWarning(f"{oldpath} is not a file")
+    """Move filepairs and update metadata."""
+    filepairs = compute_movenames(oldpath, newpath)
+    for filepair in filepairs:
+        move_corpuspath(old_corpuspath=filepair[0], new_corpuspath=filepair[1])
 
-    if newpath.endswith(".xsl"):
-        newpath = newpath[:-4]
-    elif os.path.isdir(newpath):
-        newpath = os.path.join(newpath, os.path.basename(oldpath))
-
-    cfmu = namechanger.CorpusFilesetMoverAndUpdater(oldpath, newpath)
-    filepair = cfmu.move_computer.filepairs[0]
-    if filepair.newpath:
-        print(f"\tmoving {filepair.oldpath} -> {filepair.newpath}")
-    else:
-        print(f"\tremoving {filepair.oldpath}")
-    cfmu.move_files()
-    cfmu.update_own_metadata()
-    cfmu.update_parallel_files_metadata()
+    update_metadata(filepairs)
 
 
 def mover_parse_args():
@@ -79,10 +162,14 @@ def main():
             file=sys.stderr,
         )
     else:
-        oldpath = args.oldpath
-        newpath = args.newpath
+        oldpath = Path(args.oldpath)
+        newpath = Path(args.newpath)
+
+        if not newpath.suffix:
+            newpath = newpath / oldpath.name
+
         try:
-            mover(os.path.abspath(oldpath), os.path.abspath(newpath))
+            mover(oldpath, namechanger.compute_new_basename(newpath))
         except UserWarning as e:
             print("Can not move file:", str(e), file=sys.stderr)
 
