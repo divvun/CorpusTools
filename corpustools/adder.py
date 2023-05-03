@@ -154,12 +154,13 @@ class AddToCorpus:
         Returns:
             str: path to where the origfile exists in the corpus
         """
+        origpath = Path(origpath)
+
         none_dupe_path = corpuspath.CorpusPath(
-            os.path.join(
-                self.goalpath, self.none_dupe_basename(os.path.basename(origpath))
+            origpath.rename(
+                namechanger.compute_new_basename(Path(self.goalpath) / origpath.name)
             )
         )
-        shutil.copy(origpath, none_dupe_path.orig)
         self.additions.append(none_dupe_path.orig)
 
         self.add_metadata_to_corpus(none_dupe_path, metadata_filename)
