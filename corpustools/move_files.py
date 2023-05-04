@@ -31,14 +31,15 @@ def update_metadata(filepairs):
     """Update parallel info for all filepairs."""
     for filepair in filepairs:
         if filepair[0].pathcomponents.basename != filepair[1].pathcomponents.basename:
-            for filepair1 in filepairs:
-                if filepair1[0].orig != filepair[0].orig:
-                    filepair1[1].metadata.set_parallel_text(
-                        language=filepair[1].pathcomponents.lang,
-                        location=filepair1[1].pathcomponents.basename,
-                    )
-                    parallel_vcs = versioncontrol.vcs(filepair1[1].orig_corpus_dir)
-                    parallel_vcs.add(filepair1[1].xsl)
+            for parallel_name in filepair[0].parallels():
+                parallel_path = corpuspath.CorpusPath(parallel_name)
+                parallel_path.metadata.set_parallel_text(
+                    language=filepair[1].pathcomponents.lang,
+                    location=filepair[1].pathcomponents.basename,
+                )
+                parallel_path.metadata.write_file()
+                parallel_vcs = versioncontrol.vcs(parallel_path.orig_corpus_dir)
+                parallel_vcs.add(parallel_path.xsl)
 
 
 def move_corpuspath(old_corpuspath, new_corpuspath):
@@ -78,58 +79,64 @@ def compute_movenames(oldpath, newpath):
     Args:
         oldpath (Path): path to the old file
         newpath (Path): path to the new file, with normalised name
+
+    Returns:
+        List of tuples: the files that needs to be moved
     """
     filepairs = [
-        (
-            corpuspath.CorpusPath(oldpath),
-            corpuspath.CorpusPath(os.path.join(newpath, os.path.basename(oldpath)))
-            if os.path.isdir(newpath)
-            else corpuspath.CorpusPath(newpath),
-        ),
+        (oldpath, newpath),
     ]
-    compute_parallel_movenames(filepairs)
+    filepairs.extend(compute_parallel_movenames(oldpath, newpath))
 
     return filepairs
 
 
-def compute_parallel_movenames(filepairs):
-    """Compute pairs of CorpusPaths for parallel files."""
-    old_components = filepairs[0][0].pathcomponents
-    new_components = filepairs[0][1].pathcomponents
+def compute_parallel_movenames(old_corpuspath, new_corpuspath):
+    """Compute pairs of CorpusPaths for parallel files.
 
-    if is_parallel_move_needed(old_components, new_components):
-        old_cp = filepairs[0][0]
-        new_cp = filepairs[0][1]
-        for para_lang, para_name in filepairs[0].metadata.get_parallel_texts.items():
-            filepairs.append(
-                (
-                    corpuspath.CorpusPath(
-                        old_cp.move_orig(
-                            lang=para_lang,
-                            genre=old_components.genre,
-                            subdirs=old_components.subdirs,
-                            name=para_name,
-                        )
-                    ),
-                    corpuspath.CorpusPath(
-                        new_cp.move_orig(
-                            lang=para_lang,
-                            genre=old_components.genre,
-                            subdirs=old_components.subdirs,
-                            name=para_name,
-                        )
-                    ),
-                )
+    Args:
+        old_corpuspath (CorpusPath): the existing file
+        new_corpuspath (CorpusPath): the new name of the file
+
+    Returns:
+        List of tuples: the parallel files that needs to be moved
+    """
+    old_components = old_corpuspath.pathcomponents
+    new_components = new_corpuspath.pathcomponents
+
+    return (
+        [
+            (
+                corpuspath.CorpusPath(
+                    old_corpuspath.move_orig(
+                        lang=para_lang,
+                        genre=old_components.genre,
+                        subdirs=old_components.subdirs,
+                        name=para_name,
+                    )
+                ),
+                corpuspath.CorpusPath(
+                    new_corpuspath.move_orig(
+                        lang=para_lang,
+                        genre=new_components.genre,
+                        subdirs=new_components.subdirs,
+                        name=para_name,
+                    )
+                ),
             )
+            for para_lang, para_name in old_corpuspath.metadata.get_parallel_texts.items()
+        ]
+        if is_parallel_move_needed(old_components, new_components)
+        else []
+    )
 
 
 def mover(oldpath, newpath):
     """Move filepairs and update metadata."""
     filepairs = compute_movenames(oldpath, newpath)
+    update_metadata(filepairs)
     for filepair in filepairs:
         move_corpuspath(old_corpuspath=filepair[0], new_corpuspath=filepair[1])
-
-    update_metadata(filepairs)
 
 
 def mover_parse_args():
@@ -169,7 +176,10 @@ def main():
             newpath = newpath / oldpath.name
 
         try:
-            mover(oldpath, namechanger.compute_new_basename(newpath))
+            mover(
+                corpuspath.CorpusPath(oldpath),
+                corpuspath.CorpusPath(namechanger.compute_new_basename(newpath)),
+            )
         except UserWarning as e:
             print("Can not move file:", str(e), file=sys.stderr)
 
