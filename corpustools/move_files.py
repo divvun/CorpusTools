@@ -174,6 +174,25 @@ def main():
             print("Can not move file:", str(e), file=sys.stderr)
 
 
+def remove_metadata(remove_path):
+    """Remove parallel info about remove_path."""
+    for para_lang, para_name in remove_path.metadata.get_parallel_texts().items():
+        para_path = corpuspath.CorpusPath(
+            remove_path.move_orig(
+                lang=para_lang,
+                genre=remove_path.pathcomponents.genre,
+                subdirs=remove_path.pathcomponents.subdirs,
+                name=para_name,
+            )
+        )
+        para_path.metadata.set_parallel_text(
+            language=remove_path.pathcomponents.lang, location=""
+        )
+        para_path.metadata.write_file()
+        parallel_vcs = versioncontrol.vcs(para_path.orig_corpus_dir)
+        parallel_vcs.add(para_path.xsl)
+
+
 def remover_parse_args():
     """Parse the commandline options.
 
@@ -194,6 +213,22 @@ def remove_main():
     """Remove a file."""
     args = remover_parse_args()
     try:
-        mover(os.path.abspath(args.oldpath), "")
+        old_corpuspath = corpuspath.CorpusPath(args.oldpath)
+        remove_metadata(old_corpuspath)
+
+        orig_vcs = versioncontrol.vcs(old_corpuspath.orig_corpus_dir)
+        orig_vcs.remove(old_corpuspath.orig)
+        orig_vcs.remove(old_corpuspath.xsl)
+
+        conv_vcs = versioncontrol.vcs(old_corpuspath.converted_corpus_dir)
+
+        if Path(old_corpuspath.converted).exists():
+            conv_vcs.remove(old_corpuspath.converted)
+
+        for lang in old_corpuspath.metadata.get_parallel_texts():
+            tmx_path = Path(old_corpuspath.tmx(lang))
+            if tmx_path.exists():
+                conv_vcs.remove(tmx_path.as_posix())
+
     except UserWarning as e:
         print("Can not remove file:", str(e), file=sys.stderr)
