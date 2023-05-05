@@ -154,29 +154,31 @@ class AddToCorpus:
         Returns:
             str: path to where the origfile exists in the corpus
         """
+        util.print_frame()
         origpath = Path(origpath)
-
-        none_dupe_path = corpuspath.CorpusPath(
+        util.print_frame()
+        none_dupe_path = corpuspath.make_corpus_path(
             origpath.rename(
                 namechanger.compute_new_basename(Path(self.goalpath) / origpath.name)
             )
         )
         self.additions.append(none_dupe_path.orig)
-
+        util.print_frame()
         self.add_metadata_to_corpus(none_dupe_path, metadata_filename)
+        util.print_frame()
         if parallelpath:
             self.update_parallel_data(none_dupe_path, parallelpath)
+            util.print_frame()
         print("Added", none_dupe_path.orig)
-
+        util.print_frame()
         return none_dupe_path.orig
 
     def add_metadata_to_corpus(self, none_dupe_path, meta_filename):
         """Add the metadata file to the corpus."""
-        none_dupe_components = none_dupe_path.pathcomponents
         new_metadata = none_dupe_path.metadata
         new_metadata.set_variable("filename", meta_filename)
-        new_metadata.set_variable("mainlang", none_dupe_components.lang)
-        new_metadata.set_variable("genre", none_dupe_components.genre)
+        new_metadata.set_variable("mainlang", none_dupe_path.lang)
+        new_metadata.set_variable("genre", none_dupe_path.filepath.parts[0])
         new_metadata.write_file()
         self.additions.append(none_dupe_path.xsl)
 
@@ -191,33 +193,35 @@ class AddToCorpus:
         if not os.path.exists(parallelpath):
             raise AdderError(f"{parallelpath} does not exist")
 
-        parallel_corpuspath = corpuspath.CorpusPath(parallelpath)
-        none_dupe_components = none_dupe_path.pathcomponents
+        parallel_corpuspath = corpuspath.make_corpus_path(parallelpath)
 
         none_dupe_path.metadata.set_parallel_text(
-            parallel_corpuspath.pathcomponents.lang,
-            parallel_corpuspath.pathcomponents.basename,
+            parallel_corpuspath.lang,
+            parallel_corpuspath.filepath.name,
         )
         for (
             lang,
             parallel_file,
         ) in parallel_corpuspath.metadata.get_parallel_texts().items():
             util.print_frame(parallel_file)
-            this_para_corpuspath = corpuspath.CorpusPath(
-                parallel_corpuspath.move_orig(lang=lang, name=parallel_file)
+            this_para_corpuspath = corpuspath.make_corpus_path(
+                parallel_corpuspath.name(
+                    corpus_lang=lang,
+                    filepath=parallel_corpuspath.filepath.with_name(parallel_file),
+                )
             )
             this_para_corpuspath.metadata.set_parallel_text(
-                none_dupe_components.lang, none_dupe_components.basename
+                none_dupe_path.lang, none_dupe_path.filename.name
             )
             this_para_corpuspath.metadata.write_file()
             none_dupe_path.metadata.set_parallel_text(
-                this_para_corpuspath.pathcomponents.lang,
-                this_para_corpuspath.pathcomponents.basename,
+                this_para_corpuspath.lang,
+                this_para_corpuspath.filepath.name,
             )
         none_dupe_path.metadata.write_file()
 
         parallel_corpuspath.metadata.set_parallel_text(
-            none_dupe_components.lang, none_dupe_components.basename
+            none_dupe_path.lang, none_dupe_path.filepath.name
         )
         parallel_corpuspath.metadata.write_file()
 
@@ -338,11 +342,11 @@ def main():
             raise SystemExit(
                 "The argument -l|--lang is not allowed together with " "-d|--directory"
             )
-        corpus_path = corpuspath.CorpusPath(
+        corpus_path = corpuspath.make_corpus_path(
             (Path(args.directory) / "dummy.txt").as_posix()
         )
 
-        if corpus_path.pathcomponents.genre == "dummy.txt":
+        if corpus_path.name == "dummy.txt":
             raise SystemExit(
                 "Error!\n"
                 "You must add genre to the directory\ne.g. {}".format(
@@ -352,18 +356,22 @@ def main():
 
         adder = AddToCorpus(
             corpus_path.orig_corpus_dir,
-            Path(corpus_path.pathcomponents.genre) / corpus_path.pathcomponents.subdirs,
+            corpus_path.filepath.parent,
         )
+        util.print_frame()
         for orig in args.origs:
+            util.print_frame()
             if os.path.isfile(orig):
+                util.print_frame()
                 if args.name:
+                    util.print_frame()
                     newname = os.path.join(os.path.dirname(orig), args.name)
                     try:
                         shutil.copy(orig, newname)
                     except FileNotFoundError:
                         raise SystemExit(f"Not a valid filename: {args.name}")
                     orig = newname
-
+                util.print_frame()
                 adder.copy_file_to_corpus(
                     origpath=orig, metadata_filename=os.path.basename(orig)
                 )
@@ -404,13 +412,13 @@ def main():
                 "It is not possible to add a directory " "when the -p option is given."
             )
 
-        parallel_corpus_path = corpuspath.CorpusPath(args.parallel_file)
-        corpus_path = corpuspath.CorpusPath(
-            parallel_corpus_path.move_orig(lang=args.lang)
+        parallel_corpus_path = corpuspath.make_corpus_path(args.parallel_file)
+        corpus_path = corpuspath.make_corpus_path(
+            parallel_corpus_path.name(corpus_lang=args.lang)
         )
         adder = AddToCorpus(
             corpus_path.orig_corpus_dir,
-            Path(corpus_path.pathcomponents.genre) / corpus_path.pathcomponents.subdirs,
+            corpus_path.filepath,
         )
 
         orig = args.origs[0]
