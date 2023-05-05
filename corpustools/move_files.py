@@ -19,23 +19,22 @@
 
 
 import argparse
-import os
 import sys
 from pathlib import Path
 
-from corpustools import (argparse_version, corpuspath, namechanger,
-                         versioncontrol)
+from git.exc import GitCommandError
+from corpustools import argparse_version, corpuspath, namechanger, versioncontrol
 
 
 def update_metadata(filepairs):
     """Update parallel info for all filepairs."""
     for filepair in filepairs:
-        if filepair[0].pathcomponents.basename != filepair[1].pathcomponents.basename:
+        if filepair[0].filepath.name != filepair[1].filepath.name:
             for parallel_name in filepair[0].parallels():
-                parallel_path = corpuspath.CorpusPath(parallel_name)
+                parallel_path = corpuspath.make_corpus_path(parallel_name)
                 parallel_path.metadata.set_parallel_text(
-                    language=filepair[1].pathcomponents.lang,
-                    location=filepair[1].pathcomponents.basename,
+                    language=filepair[1].lang,
+                    location=filepair[1].filepath.name,
                 )
                 parallel_path.metadata.write_file()
                 parallel_vcs = versioncontrol.vcs(parallel_path.orig_corpus_dir)
@@ -47,30 +46,26 @@ def move_corpuspath(old_corpuspath, new_corpuspath):
     orig_vcs = versioncontrol.vcs(old_corpuspath.orig_corpus_dir)
     conv_vcs = versioncontrol.vcs(old_corpuspath.converted_corpus_dir)
 
+    new_corpuspath.orig.parent.mkdir(exist_ok=True, parents=True)
     orig_vcs.move(old_corpuspath.orig, new_corpuspath.orig)
     orig_vcs.move(old_corpuspath.xsl, new_corpuspath.xsl)
 
-    if Path(old_corpuspath.converted).exists():
-        p = Path(new_corpuspath.converted)
-        if not p.parent.exists():
-            p.parent.mkdir(parents=True)
-        conv_vcs.move(old_corpuspath.converted, new_corpuspath.converted)
+    if old_corpuspath.converted.exists():
+        new_corpuspath.converted.parent.mkdir(exist_ok=True, parents=True)
+        try:
+            conv_vcs.move(old_corpuspath.converted, new_corpuspath.converted)
+        except GitCommandError:
+            old_corpuspath.converted.unlink()
 
     if not old_corpuspath.metadata.get_variable("translated_from"):
         for lang in old_corpuspath.metadata.get_parallel_texts():
-            if os.path.exists(old_corpuspath.tmx(lang)):
-                p = Path(new_corpuspath.tmx(lang))
-                if not p.parent.exists():
-                    p.parent.mkdir(parents=True)
+            if old_corpuspath.tmx(lang).exists():
+                old_corpuspath.tmx(lang).mkdir(exist_ok=True, parents=True)
                 conv_vcs.move(old_corpuspath.tmx(lang), new_corpuspath.tmx(lang))
 
 
-def is_parallel_move_needed(old_components, new_components):
-    return (
-        old_components.lang != new_components.lang
-        or f"{old_components.genre}/{old_components.subdirs}"
-        != f"{new_components.genre}/{new_components.subdirs}"
-    )
+def is_parallel_move_needed(old_filepath, new_filepath):
+    return old_filepath.parent != new_filepath.parent
 
 
 def compute_movenames(oldpath, newpath):
@@ -101,32 +96,29 @@ def compute_parallel_movenames(old_corpuspath, new_corpuspath):
     Returns:
         List of tuples: the parallel files that needs to be moved
     """
-    old_components = old_corpuspath.pathcomponents
-    new_components = new_corpuspath.pathcomponents
 
     return (
         [
             (
-                corpuspath.CorpusPath(
-                    old_corpuspath.move_orig(
-                        lang=para_lang,
-                        genre=old_components.genre,
-                        subdirs=old_components.subdirs,
-                        name=para_name,
+                corpuspath.make_corpus_path(
+                    old_corpuspath.name(
+                        corpus_lang=para_lang,
+                        filepath=old_corpuspath.filepath.with_name(para_name),
                     )
                 ),
-                corpuspath.CorpusPath(
-                    new_corpuspath.move_orig(
-                        lang=para_lang,
-                        genre=new_components.genre,
-                        subdirs=new_components.subdirs,
-                        name=para_name,
+                corpuspath.make_corpus_path(
+                    new_corpuspath.name(
+                        corpus_lang=para_lang,
+                        filepath=new_corpuspath.filepath.with_name(para_name),
                     )
                 ),
             )
-            for para_lang, para_name in old_corpuspath.metadata.get_parallel_texts.items()
+            for (
+                para_lang,
+                para_name,
+            ) in old_corpuspath.metadata.get_parallel_texts().items()
         ]
-        if is_parallel_move_needed(old_components, new_components)
+        if is_parallel_move_needed(old_corpuspath.filepath, new_corpuspath.filepath)
         else []
     )
 
@@ -177,8 +169,8 @@ def main():
 
         try:
             mover(
-                corpuspath.CorpusPath(oldpath),
-                corpuspath.CorpusPath(namechanger.compute_new_basename(newpath)),
+                corpuspath.make_corpus_path(oldpath),
+                corpuspath.make_corpus_path(namechanger.compute_new_basename(newpath)),
             )
         except UserWarning as e:
             print("Can not move file:", str(e), file=sys.stderr)
@@ -187,17 +179,13 @@ def main():
 def remove_metadata(remove_path):
     """Remove parallel info about remove_path."""
     for para_lang, para_name in remove_path.metadata.get_parallel_texts().items():
-        para_path = corpuspath.CorpusPath(
-            remove_path.move_orig(
-                lang=para_lang,
-                genre=remove_path.pathcomponents.genre,
-                subdirs=remove_path.pathcomponents.subdirs,
-                name=para_name,
+        para_path = corpuspath.make_corpus_path(
+            remove_path.name(
+                corpus_lang=para_lang,
+                filepath=remove_path.filepath.with_name(para_name),
             )
         )
-        para_path.metadata.set_parallel_text(
-            language=remove_path.pathcomponents.lang, location=""
-        )
+        para_path.metadata.set_parallel_text(language=remove_path.lang, location="")
         para_path.metadata.write_file()
         parallel_vcs = versioncontrol.vcs(para_path.orig_corpus_dir)
         parallel_vcs.add(para_path.xsl)
@@ -223,7 +211,7 @@ def remove_main():
     """Remove a file."""
     args = remover_parse_args()
     try:
-        old_corpuspath = corpuspath.CorpusPath(args.oldpath)
+        old_corpuspath = corpuspath.make_corpus_path(args.oldpath)
         remove_metadata(old_corpuspath)
 
         orig_vcs = versioncontrol.vcs(old_corpuspath.orig_corpus_dir)
