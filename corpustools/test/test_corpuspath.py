@@ -19,6 +19,7 @@
 
 
 import os
+from pathlib import Path
 import unittest
 
 import pytest
@@ -41,20 +42,20 @@ def name(module, lang, extension, goallang):
         str: path to the corpus file
     """
     corpusdir = f"corpus-{lang}-orig" if module == "orig" else f"corpus-{lang}"
-    return os.path.join(
-        HERE,
-        corpusdir,
-        f"{module if module != 'orig' else ''}",
-        f"{goallang if module.endswith('tmx') else ''}",
-        "subdir/subsubdir/filename.html" + extension,
+    return (
+        Path(HERE)
+        / corpusdir
+        / f"{module if module != 'orig' else ''}"
+        / f"{goallang if module.endswith('tmx') else ''}"
+        / f"subdir/subsubdir/filename.html{extension}"
     )
 
 
 @pytest.mark.parametrize(
     "path, parent, corpusdir, corpusfile",
     [
-        ("/a/corpus-x/b", "/a/", "corpus-x", "/b"),
-        ("/a/b/corpus-orig-x-x/c/d/e", "/a/b/", "corpus-orig-x-x", "/c/d/e"),
+        ("/a/corpus-lang-x/b", "/a", "lang-x", "b"),
+        ("/a/b/corpus-lang-orig-x-x/c/d/e", "/a/b", "lang-orig-x-x", "c/d/e"),
     ],
 )
 def test_corpuspath_re(path, parent, corpusdir, corpusfile):
@@ -91,15 +92,14 @@ def test_path_to_orig(filename):
     Raises:
         AssertionError: is raised if the result is not what is expected
     """
-
-    assert corpuspath.CorpusPath(filename).orig == name(
+    assert corpuspath.make_corpus_path(filename).orig == name(
         module="orig", lang="sme", extension="", goallang=""
     )
 
 
 class TestComputeCorpusnames(unittest.TestCase):
     def setUp(self):
-        self.corpus_path = corpuspath.CorpusPath(name("orig", "sme", "", ""))
+        self.corpus_path = corpuspath.make_corpus_path(name("orig", "sme", "", ""))
 
     def test_compute_orig(self):
         self.assertEqual(self.corpus_path.orig, name("orig", "sme", "", ""))
@@ -155,20 +155,21 @@ class TestComputeCorpusnames(unittest.TestCase):
         )
 
     def test_compute_sent_filename(self):
-        self.assertEqual(
-            self.corpus_path.sent_filename,
-            f"{self.corpus_path.pathcomponents.root}"
-            f"corpus-{self.corpus_path.pathcomponents.lang}/tmp/"
-            f"{self.corpus_path.pathcomponents.basename}_"
-            f"{self.corpus_path.pathcomponents.lang}.sent",
+        self.corpus_path.sent_filename == (
+            self.corpus_path.root
+            / f"corpus-{self.corpus_path.lang}/tmp"
+            / f"{self.corpus_path.filepath.name}_"
+            / f"{self.corpus_path.lang}.sent"
         )
 
     def test_compute_orig_corpus_dir(self):
-        assert self.corpus_path.orig_corpus_dir == os.path.join(
-            self.corpus_path.pathcomponents.root, "corpus-sme-orig"
+        assert (
+            self.corpus_path.orig_corpus_dir
+            == self.corpus_path.root / "corpus-sme-orig"
         )
 
     def test_compute_converted_corpus_dir(self):
-        assert self.corpus_path.converted_corpus_dir == os.path.join(
-            self.corpus_path.pathcomponents.root, "corpus-sme"
+        assert (
+            self.corpus_path.converted_corpus_dir
+            == self.corpus_path.root / "corpus-sme"
         )
