@@ -74,6 +74,7 @@ def to_giella(path):
         ".usx": usxconverter.convert2intermediate,
     }
 
+    path = path.as_posix()
     if "avvir_xml" in path:
         return avvirconverter.convert2intermediate(path)
     elif path.endswith("bible.xml"):
@@ -96,11 +97,11 @@ class Converter:
                  converted document should be written (used for debugging purposes).
         """
         codecs.register_error("mixed", self.mixed_decoder)
-        self.names = corpuspath.CorpusPath(filename)
+        self.names = corpuspath.make_corpus_path(filename)
         self.lazy_conversion = lazy_conversion
         self.write_intermediate = write_intermediate
         try:
-            self.metadata = xslsetter.MetadataHandler(self.names.xsl, create=True)
+            self.metadata = self.names.metadata
         except xslsetter.XsltError as error:
             raise util.ConversionError(error)
 
@@ -327,9 +328,4 @@ class Converter:
     @property
     def tmpdir(self):
         """Return the directory where temporary files should be placed."""
-        return os.path.join(self.names.pathcomponents.root, "tmp")
-
-    @property
-    def corpusdir(self):
-        """Return the directory where the corpus directory is."""
-        return self.names.pathcomponents.root
+        return self.names.converted_corpus_dir / "tmp"

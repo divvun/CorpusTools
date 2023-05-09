@@ -124,7 +124,7 @@ class CorpusPath:
         return (
             self.root / f"corpus-{this_lang}"
             f"{'-orig' if module is None else ''}"
-            f"{self.dirsuffix}"
+            f"{'-' + self.dirsuffix if self.dirsuffix else ''}"
         )
 
     def name(
