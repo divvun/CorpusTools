@@ -71,7 +71,7 @@ def main():
         vcsfactory = versioncontrol.VersionControlFactory()
         vcs = vcsfactory.vcs(corpusdir)
         for prestable_path in find_prestable_files(corpusdir):
-            corpus_file = corpuspath.CorpusPath(prestable_path)
+            corpus_file = corpuspath.make_corpus_path(prestable_path)
             if not os.path.exists(corpus_file.orig):
                 counter["prestable"] += 1
                 print(f"Removing {prestable_path}")

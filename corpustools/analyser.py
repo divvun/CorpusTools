@@ -32,12 +32,12 @@ from corpustools import argparse_version, ccat, corpuspath, modes, util
 
 def get_modename(path):
     """Get the modename depending on the CorpusPath"""
-    if path.pathcomponents.lang == "mhr":
+    if path.lang == "mhr":
         year = path.metadata.get_variable("year")
         if year:
             if 1909 < int(year) < 1939:
                 return "hfst_thirties"
-    if path.pathcomponents.lang == "mrj":
+    if path.lang == "mrj":
         year = path.metadata.get_variable("year")
         if year:
             if 1909 < int(year) < 1939:
@@ -45,7 +45,7 @@ def get_modename(path):
             if 1939 < int(year) < 1995:
                 return "hfst_eighties"
 
-    if path.pathcomponents.lang in ["nob", "fin"]:
+    if path.lang in ["nob", "fin"]:
         return "hfst_no_korp"
 
     return "hfst"
@@ -53,14 +53,14 @@ def get_modename(path):
 
 def ccatter(path):
     """Turn an xml formatted file into clean text."""
-    xml_printer = ccat.XMLPrinter(lang=path.pathcomponents.lang, all_paragraphs=True)
+    xml_printer = ccat.XMLPrinter(lang=path.lang, all_paragraphs=True)
     xml_printer.parse_file(path.converted)
     text = xml_printer.process_file().getvalue()
     if text:
         # Gruesome hack for mhr
         # When https://github.com/giellalt/lang-mhr/issues/3
         # is resolved, remove this
-        if path.pathcomponents.lang == "mhr":
+        if path.lang == "mhr":
             return " - ".join(part.strip() for part in text.split("-"))
         # end of hack
         return text
@@ -89,7 +89,7 @@ def dependency_analysis(path, modename):
         do_dependency_analysis(
             ccatter(path),
             modename=modename if modename is not None else get_modename(path),
-            lang=path.pathcomponents.lang,
+            lang=path.lang,
         )
     )
     with util.ignored(OSError):
@@ -105,7 +105,7 @@ def dependency_analysis(path, modename):
 def analyse(xml_file, modename):
     """Analyse a file if it is not ocr'ed."""
     try:
-        path = corpuspath.CorpusPath(xml_file)
+        path = corpuspath.make_corpus_path(xml_file)
 
         if not path.metadata.get_variable("ocr"):
             dependency_analysis(path, modename)

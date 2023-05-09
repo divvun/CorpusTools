@@ -89,7 +89,7 @@ def save_chapter(language, testament, filename, body, address):
     with util.ignored(OSError):
         os.makedirs(os.path.dirname(name))
 
-    path = corpuspath.CorpusPath(name)
+    path = corpuspath.make_corpus_path(name)
     path.metadata.set_variable("filename", address)
     path.metadata.set_variable("mainlang", language)
     path.metadata.set_variable("genre", "bible")
@@ -118,7 +118,7 @@ def set_parallels(chapter_paths, testament, new_lang):
         )
     )
     for (chapter_path, nob_name) in zip(chapter_paths, nob_names):
-        nob_path = corpuspath.CorpusPath(nob_name)
+        nob_path = corpuspath.make_corpus_path(nob_name)
         nob_meta = nob_path.metadata
         chapter_meta = chapter_path.metadata
 
@@ -128,7 +128,7 @@ def set_parallels(chapter_paths, testament, new_lang):
 
         for (lang, filename) in nob_meta.get_parallel_texts().items():
             chapter_meta.set_parallel_text(lang, filename)
-            parallel_path = corpuspath.CorpusPath(nob_path.parallel(lang))
+            parallel_path = corpuspath.make_corpus_path(nob_path.parallel(lang))
             parallel_path.metadata.set_parallel_text(
                 new_lang, os.path.basename(chapter_path.orig)
             )

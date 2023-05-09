@@ -47,8 +47,8 @@ def process_file(tmx_file):
     print("... processing", str(tmx_file))
     langs = LANGS_RE.search(tmx_file).groups()
 
-    path1 = corpuspath.CorpusPath(tmx_file)
-    path2 = corpuspath.CorpusPath(path1.parallel(langs[1]))
+    path1 = corpuspath.make_corpus_path(tmx_file)
+    path2 = corpuspath.make_corpus_path(path1.parallel(langs[1]))
 
     tree = etree.parse(tmx_file)
     f_root = tree.getroot()
@@ -76,7 +76,7 @@ def make_analyses(lang, modename, text):
 
 def add_analysis_elements(tree, path):
     modename = analyser.get_modename(path)
-    lang = path.pathcomponents.lang
+    lang = path.lang
     tuv_elements = tree.xpath(
         './/tuv[@xml:lang="' + lang + '"]',
         namespaces={"xml": "http://www.w3.org/XML/1998/namespace"},

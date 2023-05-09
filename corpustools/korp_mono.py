@@ -521,7 +521,7 @@ def make_root_element(f_root):
 def process_file(current_file, lang):
     """Convert analysed file into vrt format file."""
     print(f"... processing {current_file}")
-    analysed_file = corpuspath.CorpusPath(current_file)
+    analysed_file = corpuspath.make_corpus_path(current_file)
     path = analysed_file.korp
     print(f"path={path}")
 

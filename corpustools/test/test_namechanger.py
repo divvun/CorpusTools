@@ -258,7 +258,7 @@ def test_compute_movepairs_5(tmp_path):
     smj_corpus_dir.mkdir(parents=True)
 
     sme_file = sme_corpus_dir.joinpath("f.txt")
-    sme_corpuspath = corpuspath.CorpusPath(sme_file.as_posix())
+    sme_corpuspath = corpuspath.make_corpus_path(sme_file.as_posix())
 
     sme_corpuspath.metadata.set_variable("mainlang", "sme")
     sme_corpuspath.metadata.set_parallel_text("smj", "f.txt")
@@ -266,7 +266,7 @@ def test_compute_movepairs_5(tmp_path):
     sme_corpuspath.metadata.write_file()
 
     smj_file = smj_corpus_dir.joinpath("f.txt")
-    smj_corpuspath = corpuspath.CorpusPath(smj_file.as_posix())
+    smj_corpuspath = corpuspath.make_corpus_path(smj_file.as_posix())
 
     smj_corpuspath.metadata.set_variable("mainlang", "smj")
     smj_corpuspath.metadata.set_parallel_text("sme", "f.txt")
@@ -274,7 +274,7 @@ def test_compute_movepairs_5(tmp_path):
     smj_corpuspath.metadata.write_file()
 
     sma_file = sma_corpus_dir.joinpath("f.txt")
-    sma_corpuspath = corpuspath.CorpusPath(sma_file.as_posix())
+    sma_corpuspath = corpuspath.make_corpus_path(sma_file.as_posix())
 
     sma_corpuspath.metadata.set_variable("mainlang", "sma")
     sma_corpuspath.metadata.set_parallel_text("sme", "f.txt")
@@ -318,7 +318,7 @@ def test_compute_movepairs_6(tmp_path):
     smj_corpus_dir.mkdir(parents=True)
 
     sme_file = sme_corpus_dir.joinpath("f.txt")
-    sme_corpuspath = corpuspath.CorpusPath(sme_file.as_posix())
+    sme_corpuspath = corpuspath.make_corpus_path(sme_file.as_posix())
 
     sme_corpuspath.metadata.set_variable("mainlang", "sme")
     sme_corpuspath.metadata.set_parallel_text("smj", "f.txt")
@@ -326,7 +326,7 @@ def test_compute_movepairs_6(tmp_path):
     sme_corpuspath.metadata.write_file()
 
     smj_file = smj_corpus_dir.joinpath("f.txt")
-    smj_corpuspath = corpuspath.CorpusPath(smj_file.as_posix())
+    smj_corpuspath = corpuspath.make_corpus_path(smj_file.as_posix())
 
     smj_corpuspath.metadata.set_variable("mainlang", "smj")
     smj_corpuspath.metadata.set_parallel_text("sme", "f.txt")
@@ -334,7 +334,7 @@ def test_compute_movepairs_6(tmp_path):
     smj_corpuspath.metadata.write_file()
 
     sma_file = sma_corpus_dir.joinpath("f.txt")
-    sma_corpuspath = corpuspath.CorpusPath(sma_file.as_posix())
+    sma_corpuspath = corpuspath.make_corpus_path(sma_file.as_posix())
 
     sma_corpuspath.metadata.set_variable("mainlang", "sma")
     sma_corpuspath.metadata.set_parallel_text("sme", "f.txt")
@@ -386,7 +386,7 @@ def test_compute_movepairs_7(tmp_path):
     smj_corpus_dir.mkdir(parents=True)
 
     sme_file = sme_corpus_dir.joinpath("f.txt")
-    sme_corpuspath = corpuspath.CorpusPath(sme_file.as_posix())
+    sme_corpuspath = corpuspath.make_corpus_path(sme_file.as_posix())
 
     sme_corpuspath.metadata.set_variable("mainlang", "sme")
     sme_corpuspath.metadata.set_parallel_text("smj", "f.txt")
@@ -394,7 +394,7 @@ def test_compute_movepairs_7(tmp_path):
     sme_corpuspath.metadata.write_file()
 
     smj_file = smj_corpus_dir.joinpath("f.txt")
-    smj_corpuspath = corpuspath.CorpusPath(smj_file.as_posix())
+    smj_corpuspath = corpuspath.make_corpus_path(smj_file.as_posix())
 
     smj_corpuspath.metadata.set_variable("mainlang", "smj")
     smj_corpuspath.metadata.set_parallel_text("sme", "f.txt")
@@ -402,7 +402,7 @@ def test_compute_movepairs_7(tmp_path):
     smj_corpuspath.metadata.write_file()
 
     sma_file = sma_corpus_dir.joinpath("f.txt")
-    sma_corpuspath = corpuspath.CorpusPath(sma_file.as_posix())
+    sma_corpuspath = corpuspath.make_corpus_path(sma_file.as_posix())
 
     sma_corpuspath.metadata.set_variable("mainlang", "sma")
     sma_corpuspath.metadata.set_parallel_text("sme", "f.txt")
@@ -454,7 +454,7 @@ def test_compute_movepairs_8(tmp_path):
     smj_corpus_dir.mkdir(parents=True)
 
     sme_file = sme_corpus_dir.joinpath("f.txt")
-    sme_corpuspath = corpuspath.CorpusPath(sme_file.as_posix())
+    sme_corpuspath = corpuspath.make_corpus_path(sme_file.as_posix())
 
     sme_corpuspath.metadata.set_variable("mainlang", "sme")
     sme_corpuspath.metadata.set_parallel_text("smj", "ø.txt")
@@ -462,7 +462,7 @@ def test_compute_movepairs_8(tmp_path):
     sme_corpuspath.metadata.write_file()
 
     smj_file = smj_corpus_dir.joinpath("ø.txt")
-    smj_corpuspath = corpuspath.CorpusPath(smj_file.as_posix())
+    smj_corpuspath = corpuspath.make_corpus_path(smj_file.as_posix())
 
     smj_corpuspath.metadata.set_variable("mainlang", "smj")
     smj_corpuspath.metadata.set_parallel_text("sme", "f.txt")
@@ -470,7 +470,7 @@ def test_compute_movepairs_8(tmp_path):
     smj_corpuspath.metadata.write_file()
 
     sma_file = sma_corpus_dir.joinpath("f.txt")
-    sma_corpuspath = corpuspath.CorpusPath(sma_file.as_posix())
+    sma_corpuspath = corpuspath.make_corpus_path(sma_file.as_posix())
 
     sma_corpuspath.metadata.set_variable("mainlang", "sma")
     sma_corpuspath.metadata.set_parallel_text("sme", "f.txt")
@@ -515,14 +515,14 @@ def test_compute_movepairs_9(tmp_path):
     sme_corpus_dir.mkdir(parents=True)
 
     sme_file = sme_corpus_dir.joinpath("f.txt")
-    sme_corpuspath = corpuspath.CorpusPath(sme_file.as_posix())
+    sme_corpuspath = corpuspath.make_corpus_path(sme_file.as_posix())
 
     sme_corpuspath.metadata.set_variable("mainlang", "sme")
     sme_corpuspath.metadata.set_parallel_text("sma", "ø.txt")
     sme_corpuspath.metadata.write_file()
 
     sma_file = sma_corpus_dir.joinpath("ø.txt")
-    sma_corpuspath = corpuspath.CorpusPath(sma_file.as_posix())
+    sma_corpuspath = corpuspath.make_corpus_path(sma_file.as_posix())
 
     sma_corpuspath.metadata.set_variable("mainlang", "sma")
     sma_corpuspath.metadata.set_parallel_text("sme", "f.txt")
@@ -580,7 +580,7 @@ def test_compute_movepairs_11(tmp_path):
     smj_corpus_dir.mkdir(parents=True)
 
     sme_file = sme_corpus_dir.joinpath("f.txt")
-    sme_corpuspath = corpuspath.CorpusPath(sme_file.as_posix())
+    sme_corpuspath = corpuspath.make_corpus_path(sme_file.as_posix())
 
     sme_corpuspath.metadata.set_variable("mainlang", "sme")
     sme_corpuspath.metadata.set_parallel_text("smj", "f.txt")
@@ -588,7 +588,7 @@ def test_compute_movepairs_11(tmp_path):
     sme_corpuspath.metadata.write_file()
 
     smj_file = smj_corpus_dir.joinpath("f.txt")
-    smj_corpuspath = corpuspath.CorpusPath(smj_file.as_posix())
+    smj_corpuspath = corpuspath.make_corpus_path(smj_file.as_posix())
 
     smj_corpuspath.metadata.set_variable("mainlang", "smj")
     smj_corpuspath.metadata.set_parallel_text("sme", "f.txt")
@@ -596,7 +596,7 @@ def test_compute_movepairs_11(tmp_path):
     smj_corpuspath.metadata.write_file()
 
     sma_file = sma_corpus_dir.joinpath("f.txt")
-    sma_corpuspath = corpuspath.CorpusPath(sma_file.as_posix())
+    sma_corpuspath = corpuspath.make_corpus_path(sma_file.as_posix())
 
     sma_corpuspath.metadata.set_variable("mainlang", "sma")
     sma_corpuspath.metadata.set_parallel_text("sme", "f.txt")
@@ -640,7 +640,7 @@ def test_compute_movepairs_12(tmp_path):
     smj_corpus_dir.mkdir(parents=True)
 
     sme_file = sme_corpus_dir.joinpath("f.txt")
-    sme_corpuspath = corpuspath.CorpusPath(sme_file.as_posix())
+    sme_corpuspath = corpuspath.make_corpus_path(sme_file.as_posix())
 
     sme_corpuspath.metadata.set_variable("mainlang", "sme")
     sme_corpuspath.metadata.set_parallel_text("smj", "ø.txt")
@@ -648,7 +648,7 @@ def test_compute_movepairs_12(tmp_path):
     sme_corpuspath.metadata.write_file()
 
     smj_file = smj_corpus_dir.joinpath("ø.txt")
-    smj_corpuspath = corpuspath.CorpusPath(smj_file.as_posix())
+    smj_corpuspath = corpuspath.make_corpus_path(smj_file.as_posix())
 
     smj_corpuspath.metadata.set_variable("mainlang", "smj")
     smj_corpuspath.metadata.set_parallel_text("sme", "f.txt")
@@ -656,7 +656,7 @@ def test_compute_movepairs_12(tmp_path):
     smj_corpuspath.metadata.write_file()
 
     sma_file = sma_corpus_dir.joinpath("f.txt")
-    sma_corpuspath = corpuspath.CorpusPath(sma_file.as_posix())
+    sma_corpuspath = corpuspath.make_corpus_path(sma_file.as_posix())
 
     sma_corpuspath.metadata.set_variable("mainlang", "sma")
     sma_corpuspath.metadata.set_parallel_text("sme", "f.txt")
@@ -693,7 +693,7 @@ def test_move_orig(tmp_path):
     sme_orig.parent.mkdir(parents=True)
     sme_orig.write_text("content of f")
 
-    sme_corpuspath = corpuspath.CorpusPath(sme_orig.as_posix())
+    sme_corpuspath = corpuspath.make_corpus_path(sme_orig.as_posix())
 
     sme_corpuspath.metadata.set_variable("mainlang", "sme")
     sme_corpuspath.metadata.set_parallel_text("nob", "ø.txt")
@@ -723,7 +723,7 @@ def test_move_orig(tmp_path):
     )
     cfm.move_files()
 
-    new_corpuspath = corpuspath.CorpusPath(
+    new_corpuspath = corpuspath.make_corpus_path(
         sme_corpuspath.move_orig(genre="facta", subdirs="sub")
     )
     assert new_corpuspath.orig

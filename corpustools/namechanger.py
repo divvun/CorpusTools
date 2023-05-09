@@ -47,7 +47,7 @@ class CorpusFileRemover:
         Args:
             oldpath (unicode): the old path
         """
-        self.old_corpus_path = corpuspath.CorpusPath(oldpath)
+        self.old_corpus_path = corpuspath.make_corpus_path(oldpath)
         p = Path(oldpath)
         if not p.exists():
             raise SystemExit(f"{oldpath} does not exist!")

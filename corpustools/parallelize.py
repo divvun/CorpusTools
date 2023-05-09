@@ -118,11 +118,11 @@ class Parallelize:
         self.quiet = quiet
         self.origfiles = []
         self.giella_prefix = giella_prefix
-        self.origfiles.append(corpuspath.CorpusPath(os.path.abspath(origfile1)))
+        self.origfiles.append(corpuspath.make_corpus_path(os.path.abspath(origfile1)))
 
         para_file = self.origfiles[0].parallel(lang2)
         if para_file is not None:
-            self.origfiles.append(corpuspath.CorpusPath(para_file))
+            self.origfiles.append(corpuspath.make_corpus_path(para_file))
         else:
             raise OSError(f"{origfile1} doesn't have a parallel file in {lang2}")
 
@@ -180,12 +180,12 @@ class Parallelize:
     @property
     def lang1(self):
         """Get language 1."""
-        return self.origfiles[0].pathcomponents.lang
+        return self.origfiles[0].lang
 
     @property
     def lang2(self):
         """Get language 2."""
-        return self.origfiles[1].pathcomponents.lang
+        return self.origfiles[1].lang
 
     @property
     def origfile1(self):
@@ -273,13 +273,11 @@ class ParallelizeHunalign(Parallelize):
     def to_sents(self, origfile):
         """Divide the content of origfile to sentences."""
         divider = sentencedivider.SentenceDivider(
-            origfile.pathcomponents.lang, giella_prefix=self.giella_prefix
+            origfile.lang, giella_prefix=self.giella_prefix
         )
         return "\n".join(
             divider.make_valid_sentences(
-                sentencedivider.to_plain_text(
-                    origfile.pathcomponents.lang, origfile.converted
-                )
+                sentencedivider.to_plain_text(origfile.lang, origfile.converted)
             )
         )
 
@@ -335,7 +333,7 @@ class ParallelizeTCA2(Parallelize):
         for pfile in self.origfiles:
             divider = Tca2SentenceDivider()
             divider.make_sentence_file(
-                pfile.pathcomponents.lang,
+                pfile.lang,
                 pfile.converted,
                 pfile.sent_filename,
                 self.giella_prefix,

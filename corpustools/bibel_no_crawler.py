@@ -103,7 +103,7 @@ def save_page(language, bookname, filename, body, address):
     with util.ignored(OSError):
         os.makedirs(os.path.dirname(name))
 
-    path = corpuspath.CorpusPath(name)
+    path = corpuspath.make_corpus_path(name)
     path.metadata.set_variable("filename", address)
     path.metadata.set_variable("mainlang", language)
     path.metadata.set_variable("genre", "bible")

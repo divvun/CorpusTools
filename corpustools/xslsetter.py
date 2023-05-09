@@ -477,8 +477,8 @@ class MetadataHandler:
     def set_lang_genre_xsl(self):
         """Set the mainlang and genre variables in the xsl file."""
         with util.ignored(TypeError):
-            path = corpuspath.CorpusPath(self.filename)
-            self.set_variable("mainlang", path.pathcomponents.lang)
+            path = corpuspath.make_corpus_path(self.filename)
+            self.set_variable("mainlang", path.lang)
             self.set_variable("genre", path.pathcomponents.genre)
 
     def write_file(self):

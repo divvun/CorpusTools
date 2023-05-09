@@ -82,7 +82,7 @@ class DupeFinder:
                 to_remove = filename2
 
             self.dupe_files.add(to_remove)
-            origname = corpuspath.CorpusPath(to_remove)
+            origname = corpuspath.make_corpus_path(to_remove)
             if os.path.exists(origname.orig):
                 move_files.mover(origname.orig, "")
             print()

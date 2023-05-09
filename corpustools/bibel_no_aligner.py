@@ -109,7 +109,7 @@ def valid_path(source_lang, target_lang):
             os.getenv("GTBOUND"), "orig", source_lang, "bible", testament, "bibel.no"
         )
         for filename in glob.glob(f"{source_dir}/*.xml"):
-            path = corpuspath.CorpusPath(filename)
+            path = corpuspath.make_corpus_path(filename)
             parallel_path = path.parallel(target_lang)
 
             if os.path.exists(parallel_path):

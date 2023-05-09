@@ -47,7 +47,7 @@ class TestTca2SentenceDivider(unittest.TestCase):
             raise AssertionError(message)
 
     def test_make_sentence_file(self):
-        path = corpuspath.CorpusPath(
+        path = corpuspath.make_corpus_path(
             os.path.join(
                 HERE,
                 "parallelize_data/converted/sme/facta/skuvlahistorja2/",
@@ -57,7 +57,7 @@ class TestTca2SentenceDivider(unittest.TestCase):
 
         sentence_divider = parallelize.Tca2SentenceDivider()
         got = sentence_divider.make_sentence_xml(
-            path.pathcomponents.lang,
+            path.lang,
             path.converted,
             giella_prefix=os.path.join(HERE, "giella_shared"),
         )

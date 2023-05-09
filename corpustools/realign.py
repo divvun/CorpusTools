@@ -32,7 +32,7 @@ def print_filename(corpus_path):
     """Print interesting filenames for doing sentence alignment.
 
     Args:
-        corpus_path (corpuspath.CorpusPath): filenames
+        corpus_path (corpuspath.make_corpus_path): filenames
     """
     print(
         "\toriginal: {}\n\tmetatada: {}\n\tconverted: {}".format(
@@ -45,8 +45,8 @@ def print_filenames(corpus_path1, corpus_path2):
     """Print interesting filenames for doing sentence alignment.
 
     Args:
-        corpus_path1 (corpuspath.CorpusPath): filenames for the lang1 file.
-        corpus_path2 (corpuspath.CorpusPath): filenames for the lang2 file.
+        corpus_path1 (corpuspath.make_corpus_path): filenames for the lang1 file.
+        corpus_path2 (corpuspath.make_corpus_path): filenames for the lang2 file.
     """
     print("\nLanguage 1 filenames:")
     print_filename(corpus_path1)
@@ -61,12 +61,12 @@ def calculate_paths(tmxhtml):
         tmxhtml (str): path to a .tmx or a .tmx.html file
 
     Returns:
-        tuple of corpuspath.CorpusPath
+        tuple of corpuspath.make_corpus_path
     """
     path = tmxhtml[:-5] if tmxhtml.endswith(".tmx.html") else tmxhtml
-    corpus_path1 = corpuspath.CorpusPath(path)
+    corpus_path1 = corpuspath.make_corpus_path(path)
     lang2 = corpus_path1.split_on_module(path)[2].split("/")[0].split("2")[1]
-    corpus_path2 = corpuspath.CorpusPath(corpus_path1.parallel(lang2))
+    corpus_path2 = corpuspath.make_corpus_path(corpus_path1.parallel(lang2))
 
     return corpus_path1, corpus_path2
 
@@ -75,9 +75,9 @@ def convert_and_copy(corpus_path1, corpus_path2):
     """Reconvert and copy files to prestable/converted.
 
     Args:
-        corpus_path1 (corpuspath.CorpusPath): A CorpusPath representing the
+        corpus_path1 (corpuspath.make_corpus_path): A CorpusPath representing the
             lang1 file that should be reconverted.
-        corpus_path2 (corpuspath.CorpusPath): A CorpusPath representing the
+        corpus_path2 (corpuspath.make_corpus_path): A CorpusPath representing the
             lang2 file that should be reconverted.
     """
     for corpus_path in [corpus_path1, corpus_path2]:

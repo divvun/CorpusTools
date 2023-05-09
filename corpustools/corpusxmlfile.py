@@ -33,7 +33,7 @@ class CorpusXMLFile:
         Args:
             name (str): path to the xml file.
         """
-        self.corpus_path = corpuspath.CorpusPath(name)
+        self.corpus_path = corpuspath.make_corpus_path(name)
         self.etree = etree.parse(name)
         self.root = self.etree.getroot()
         self.sanity_check()
@@ -52,7 +52,7 @@ class CorpusXMLFile:
     @property
     def lang(self):
         """Get the lang of the file."""
-        return self.corpus_path.pathcomponents.lang
+        return self.corpus_path.lang
 
     @property
     def word_count(self):

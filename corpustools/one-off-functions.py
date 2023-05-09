@@ -128,7 +128,7 @@ def translated_from(url_part, mainlang, directories):
 
     counter = collections.defaultdict(int)
     for file_ in find_endings(directories, ".xsl"):
-        corpus_path = corpuspath.CorpusPath(file_)
+        corpus_path = corpuspath.make_corpus_path(file_)
         if (
             url_part in corpus_path.metadata.get_variable("filename")
             and corpus_path.metadata.get_variable("mainlang") == mainlang

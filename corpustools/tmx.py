@@ -267,8 +267,8 @@ class AlignmentToTmx(Tmx):
         """Make a tmx tu element based on line1 and line2 as input."""
         transl_unit = etree.Element("tu")
 
-        transl_unit.append(self.make_tuv(line1, self.origfiles[0].pathcomponents.lang))
-        transl_unit.append(self.make_tuv(line2, self.origfiles[1].pathcomponents.lang))
+        transl_unit.append(self.make_tuv(line1, self.origfiles[0].lang))
+        transl_unit.append(self.make_tuv(line2, self.origfiles[1].lang))
 
         return transl_unit
 
@@ -312,7 +312,7 @@ class AlignmentToTmx(Tmx):
         tmx = etree.Element("tmx")
         header = self.make_tmx_header(
             self.origfiles[0].pathcomponents.basename,
-            self.origfiles[0].pathcomponents.lang,
+            self.origfiles[0].lang,
         )
         tmx.append(header)
 
