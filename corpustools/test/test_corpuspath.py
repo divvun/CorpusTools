@@ -78,7 +78,8 @@ def test_corpuspath_re(path, parent, corpusdir, corpusfile):
         (name("stable/tmx", "sme", ".tmx", "nob")),
         (name("analysed", "sme", ".xml", "")),
         (name("converted", "sme", ".xml", "")),
-        (name("korp", "sme", ".xml", "")),
+        (name("korp_mono", "sme", ".xml", "")),
+        (name("korp_tmx", "sme", ".tmx", "nob")),
         (name("tmx", "sme", ".tmx", "nob")),
     ],
 )
@@ -135,10 +136,16 @@ class TestComputeCorpusnames(unittest.TestCase):
             name("analysed", "sme", ".xml", ""),
         )
 
-    def test_compute_korp(self):
+    def test_compute_korp_mono(self):
         self.assertEqual(
-            self.corpus_path.korp,
-            name("korp", "sme", ".xml", ""),
+            self.corpus_path.korp_mono,
+            name("korp_mono", "sme", ".xml", ""),
+        )
+
+    def test_compute_korp_tmx(self):
+        self.assertEqual(
+            self.corpus_path.korp_tmx("nob"),
+            name("korp_tmx", "sme", ".tmx", "nob"),
         )
 
     def test_compute_tmx(self):

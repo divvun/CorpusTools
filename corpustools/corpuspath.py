@@ -36,7 +36,8 @@ MODULES = [
     "stable/tmx",
     "analysed",
     "converted",
-    "korp",
+    "korp_mono",
+    "korp_tmx",
     "tmx",
 ]
 
@@ -174,9 +175,17 @@ class CorpusPath:
         return self.name(module="analysed", suffix=".xml")
 
     @property
-    def korp(self):
+    def korp_mono(self):
         """Return the path to analysed file."""
-        return self.name(module="korp", suffix=".xml")
+        return self.name(module="korp_mono", suffix=".xml")
+
+    def korp_tmx(self, target_language):
+        """Return the path to korp processed tmx file."""
+        return self.name(
+            module="korp_tmx",
+            target_lang=target_language,
+            suffix=".tmx",
+        )
 
     def parallel(self, language):
         """Check if there is a parallel for language.
