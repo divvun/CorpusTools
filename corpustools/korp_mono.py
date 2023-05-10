@@ -21,7 +21,6 @@
 
 import argparse
 import multiprocessing
-import os
 import re
 from functools import partial
 
@@ -522,21 +521,16 @@ def process_file(current_file, lang):
     """Convert analysed file into vrt format file."""
     print(f"... processing {current_file}")
     analysed_file = corpuspath.make_corpus_path(current_file)
-    path = analysed_file.korp
-    print(f"path={path}")
-
-    with util.ignored(OSError):
-        os.makedirs(os.path.dirname(path))
-
-    with open(path, "wb") as newfile_stream:
-        newfile_stream.write(
-            etree.tostring(
-                make_vrt_xml(current_file, lang),
-                xml_declaration=False,
-                encoding="utf-8",
-            )
+    path = analysed_file.korp_mono
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(
+        etree.tostring(
+            make_vrt_xml(current_file, lang),
+            xml_declaration=False,
+            encoding="utf-8",
         )
-    print("DONE ", path, "\n\n")
+    )
+    print(f"DONE {path}\n\n")
 
 
 def make_vrt_xml(current_file, lang):

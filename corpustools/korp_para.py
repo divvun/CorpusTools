@@ -1,6 +1,5 @@
 import argparse
 import multiprocessing
-import os
 import re
 
 from lxml import etree
@@ -45,28 +44,24 @@ def make_analysis_element(analysis, lang):
 
 def process_file(tmx_file):
     print("... processing", str(tmx_file))
-    langs = LANGS_RE.search(tmx_file).groups()
-
     path1 = corpuspath.make_corpus_path(tmx_file)
-    path2 = corpuspath.make_corpus_path(path1.parallel(langs[1]))
+    para_lang = path1.filepath.parts[1]
+    path2 = corpuspath.make_corpus_path(path1.tmx(para_lang))
 
     tree = etree.parse(tmx_file)
     f_root = tree.getroot()
-    handle_header(f_root.find(".//header"), path1.pathcomponents.genre)
+    handle_header(f_root.find(".//header"), path1.filepath.parts[0])
     for path in [path1, path2]:
         add_analysis_elements(tree, path)
-    write_file(tmx_file, tree)
+    write_file(path1.korp_tmx(para_lang), tree)
 
 
 def make_analyses(lang, modename, text):
     analysis = []
-    for line in analyser.do_dependency_analysis(
-        text.encode("utf8"), modename, lang
-    ).split("\n"):
-        if "¶" in line:
-            if analysis:
-                yield "\n".join(analysis)
-                analysis = []
+    for line in analyser.do_dependency_analysis(text, modename, lang).split("\n"):
+        if "¶" in line and analysis:
+            yield "\n".join(analysis)
+            analysis = []
         else:
             analysis.append(line)
 
@@ -96,13 +91,9 @@ def add_analysis_elements(tree, path):
 
 
 def write_file(tmx_file, tree):
-    korp_tmx_file = tmx_file.replace("/tmx", "/korp_tmx")
-    with util.ignored(OSError):
-        os.makedirs(os.path.dirname(korp_tmx_file))
-
-    print("DONE. Wrote", korp_tmx_file, "\n\n")
-    with open(korp_tmx_file, "wb") as done_stream:
-        done_stream.write(etree.tostring(tree, xml_declaration=True, encoding="utf-8"))
+    tmx_file.parent.mkdir(parents=True, exist_ok=True)
+    tmx_file.write_bytes(etree.tostring(tree, xml_declaration=True, encoding="utf-8"))
+    print("DONE. Wrote", tmx_file, "\n\n")
 
 
 def parse_options():
