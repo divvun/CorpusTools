@@ -177,6 +177,8 @@ def parallelise_file(source_lang_file, para_lang_file, dictionary):
     """Align sentences of two parallel files."""
     aligned_sentences = tca2_align(source_lang_file, para_lang_file, dictionary)
     if aligned_sentences:
+        tmxfile = source_lang_file.tmx(para_lang_file.lang)
+        tmxfile.parent.mkdir(parents=True, exist_ok=True)
         source_lang_file.tmx(para_lang_file.lang).write_bytes(
             etree.tostring(
                 tmx.make_tmx(
