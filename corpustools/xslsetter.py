@@ -479,7 +479,7 @@ class MetadataHandler:
         with util.ignored(TypeError):
             path = corpuspath.make_corpus_path(self.filename)
             self.set_variable("mainlang", path.lang)
-            self.set_variable("genre", path.pathcomponents.genre)
+            self.set_variable("genre", path.filepath.parts[0])
 
     def write_file(self):
         """Write self.tree to self.filename."""
