@@ -19,49 +19,45 @@
 
 
 import argparse
-import os
 import time
 import zipfile
+from pathlib import Path
+
+from corpustools import corpuspath
 
 
 class PackageTmx:
     """A class to package tmx files into a zip file."""
 
-    def __init__(self, dirname):
+    def __init__(self, packagename):
         """Set the counter on which filenames are based."""
         self.fileId = 1
         self.date = time.strftime("%Y-%m-%d", time.localtime())
-        self.dirname = dirname
-        self.zipname = self.dirname + "-" + self.date + ".zip"
+        self.packagename = packagename
+        self.zipname = self.packagename + "-" + self.date + ".zip"
         self.zipfile = zipfile.ZipFile(self.zipname, mode="w")
 
     def __del__(self):
         """Close the zipfile."""
-        print("All tmx files are in", self.zipname)
+        print(f"{self.packagename} tmx files are in {self.zipname}")
         self.zipfile.close()
 
-    def find_tmx_files(self):
+    def find_tmx_files(self, tmxdir):
         """Find the tmx files in dirname, return them as a list."""
-        filelist = []
-        for root, dirs, files in os.walk(
-            os.path.join(os.environ["GTFREE"], "prestable/tmx/" + self.dirname)
-        ):
-            for f in files:
-                if f.endswith(".tmx"):
-                    filelist.append(os.path.join(root, f))
-
-        return filelist
+        return (
+            path.as_posix()
+            for path in corpuspath.collect_files([tmxdir], suffix=".tmx")
+        )
 
     def generate_filename(self):
         """Generate a new file name. Return the new filename."""
-        name = "".join([self.dirname, "-", self.date, f"-{self.fileId:06d}", ".tmx"])
+        name = "".join([self.packagename, "-", self.date, f"-{self.fileId:06d}", ".tmx"])
         self.fileId += 1
 
         return name
 
     def write_new_file(self, tmxFile):
         """Write the file to the zipfile with a new filename."""
-        # print "Writing", self.tmxFile, 'as', self.generateFilename()
         self.zipfile.write(
             tmxFile,
             arcname=self.generate_filename(),
@@ -72,20 +68,20 @@ class PackageTmx:
 def parse_options():
     """Parse the command line. No arguments expected."""
     parser = argparse.ArgumentParser(
-        description="Run this to add tmx "
-        "files to a zip archive. It depends on "
-        "tmx files to exist in "
-        "$GTFREE/prestable/tmx."
+        description="Package tmx files found in a corpus directory into zipfiles."
     )
+    parser.add_argument("corpusdir", help="A corpus directory where tmx files exist")
 
-    parser.parse_args()
+    return parser.parse_args()
 
 
 def main():
     """Make a package containing the tmx files."""
-    parse_options()
+    args = parse_options()
 
-    for dirname in ["nob2sme"]:
-        packagetmx = PackageTmx(dirname)
-        for filename in packagetmx.find_tmx_files():
+    corpusdir = Path(args.corpusdir).resolve()
+    lang1 = corpusdir.parts[-1].split("-")[1]
+    for tmxdir in corpusdir.glob("tmx/*"):
+        packagetmx = PackageTmx(f"{lang1}2{tmxdir.name}")
+        for filename in packagetmx.find_tmx_files(tmxdir):
             packagetmx.write_new_file(filename)
