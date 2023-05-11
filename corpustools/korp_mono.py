@@ -26,7 +26,7 @@ from functools import partial
 
 import lxml.etree as etree
 
-from corpustools import argparse_version, corpuspath, modes, util
+from corpustools import argparse_version, corpuspath, modes
 from corpustools.common_arg_ncpus import NCpus
 
 DOMAIN_MAPPING = {
@@ -992,12 +992,14 @@ def parse_options():
         description="Turn analysed files into vrt format xml files for Korp use.",
     )
 
-    parser.add_argument("--ncpus", action=NCpus, default=multiprocessing.cpu_count() * 2)
+    parser.add_argument(
+        "--ncpus", action=NCpus, default=multiprocessing.cpu_count() * 2
+    )
     parser.add_argument(
         "--serial",
         action="store_true",
         help="When this argument is used files will be converted one by one."
-             "Using --serial takes presence over --ncpus",
+        "Using --serial takes presence over --ncpus",
     )
     parser.add_argument("lang", help="language of the files to process")
     parser.add_argument(
@@ -1014,10 +1016,11 @@ def main():
 
     if args.serial:
         process_serially(
-            args.lang, util.collect_files(args.analysed_entities, suffix=".xml")
+            args.lang, corpuspath.collect_files(args.analysed_entities, suffix=".xml")
         )
     else:
         process_in_parallel(
-            args.lang, util.collect_files(args.analysed_entities, suffix=".xml"),
-            pool_size=args.ncpus
+            args.lang,
+            corpuspath.collect_files(args.analysed_entities, suffix=".xml"),
+            pool_size=args.ncpus,
         )

@@ -174,12 +174,12 @@ def main():
     try:
         if args.serial:
             analyse_serially(
-                util.collect_files(args.converted_entities, suffix=".xml"),
+                corpuspath.collect_files(args.converted_entities, suffix=".xml"),
                 args.modename,
             )
         else:
             analyse_in_parallel(
-                util.collect_files(args.converted_entities, suffix=".xml"),
+                corpuspath.collect_files(args.converted_entities, suffix=".xml"),
                 args.modename,
             )
     except util.ArgumentError as error:

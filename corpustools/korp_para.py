@@ -117,6 +117,6 @@ def parse_options():
 def main():
     args = parse_options()
     if args.serial:
-        process_serially(util.collect_files(args.tmx_entities, suffix=".tmx"))
+        process_serially(corpuspath.collect_files(args.tmx_entities, suffix=".tmx"))
     else:
-        process_in_parallel(util.collect_files(args.tmx_entities, suffix=".tmx"))
+        process_in_parallel(corpuspath.collect_files(args.tmx_entities, suffix=".tmx"))

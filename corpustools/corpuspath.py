@@ -257,3 +257,14 @@ class CorpusPath:
         while len(name.encode("utf-8")) > max_bytes:
             name = name[:-1]
         return name
+
+
+def collect_files(entities, suffix):
+    """Collect files with the specified suffix."""
+    for entity in entities:
+        entity_path = Path(entity).resolve()
+        if entity_path.is_file() and entity_path.suffix == suffix:
+            yield entity_path
+        else:
+            for file_ in entity_path.rglob(f"*{suffix}"):
+                yield file_

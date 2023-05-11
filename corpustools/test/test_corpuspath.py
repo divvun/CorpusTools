@@ -162,7 +162,7 @@ class TestComputeCorpusnames(unittest.TestCase):
         )
 
     def test_compute_sent_filename(self):
-        self.corpus_path.sent_filename == (
+        self.corpus_path.tca2_input == (
             self.corpus_path.root
             / f"corpus-{self.corpus_path.lang}/tmp"
             / f"{self.corpus_path.filepath.name}_"
