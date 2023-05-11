@@ -21,9 +21,9 @@
 
 import argparse
 import logging
-import os
+from pathlib import Path
 
-from corpustools import argparse_version, convertermanager, corpuspath, parallelize
+from corpustools import argparse_version, convertermanager, corpuspath, parallelize, tmx
 
 LOGGER = logging.getLogger(__name__)
 
@@ -63,9 +63,10 @@ def calculate_paths(tmxhtml):
     Returns:
         tuple of corpuspath.make_corpus_path
     """
-    path = tmxhtml[:-5] if tmxhtml.endswith(".tmx.html") else tmxhtml
+    path = tmxhtml.with_suffix("") if tmxhtml.suffix == ".html" else tmxhtml
     corpus_path1 = corpuspath.make_corpus_path(path)
-    lang2 = corpus_path1.split_on_module(path)[2].split("/")[0].split("2")[1]
+
+    lang2 = Path(path.as_posix().split("/tmx/")[1]).parts[0]
     corpus_path2 = corpuspath.make_corpus_path(corpus_path1.parallel(lang2))
 
     return corpus_path1, corpus_path2
@@ -81,14 +82,13 @@ def convert_and_copy(corpus_path1, corpus_path2):
             lang2 file that should be reconverted.
     """
     for corpus_path in [corpus_path1, corpus_path2]:
-        if os.path.exists(corpus_path.converted):
-            os.remove(corpus_path.converted)
-        if os.path.exists(corpus_path.prestable_converted):
-            os.remove(corpus_path.prestable_converted)
+        corpus_path.converted.unlink(missing_ok=True)
 
     convertermanager.sanity_check()
     converter_manager = convertermanager.ConverterManager()
-    converter_manager.collect_files([corpus_path1.orig, corpus_path2.orig])
+    converter_manager.collect_files(
+        [corpus_path1.orig.as_posix(), corpus_path2.orig.as_posix()]
+    )
     converter_manager.convert_serially()
 
 
@@ -130,17 +130,16 @@ def main():
     """Sentence align a given file anew."""
     convertermanager.LOGGER.setLevel(logging.DEBUG)
     args = parse_options()
-    orig_path = os.path.normpath(os.path.abspath(args.tmxhtml))
 
-    corpus_path1, corpus_path2 = calculate_paths(orig_path)
+    source_path, para_path = calculate_paths(Path(args.tmxhtml).resolve())
 
-    print_filenames(corpus_path1, corpus_path2)
+    print_filenames(source_path, para_path)
 
     if args.files:
         raise SystemExit("Only printing file names")
 
     try:
-        convert_and_copy(corpus_path1, corpus_path2)
+        convert_and_copy(source_path, para_path)
     except Exception as error:
         raise SystemExit(error)
 
@@ -148,11 +147,8 @@ def main():
         raise SystemExit("Only converting")
 
     parallelize.parallelise_file(
-        corpus_path1.converted,
-        corpus_path2.metadata.get_variable("mainlang"),
-        dictionary=None,
-        quiet=False,
-        aligner="tca2",
-        stdout=False,
-        force=True,
+        source_path,
+        para_path,
+        dictionary=parallelize.get_dictionary(para_path, source_path),
     )
+    tmx.tmx2html(source_path.tmx(para_path.lang))
