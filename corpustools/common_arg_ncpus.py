@@ -1,8 +1,18 @@
 import argparse
-from os import sched_getaffinity
+import multiprocessing
+import os
+
+# os.sched_getaffinity(0) is not available for MacOS, solution for it from
+# https://stackoverflow.com/questions/74048135/alternatives-to-os-sched-getaffinity-for-macos
+def _get_core_count() -> int:
+    try:
+        # NOTE: only available on some Unix platforms
+        return len(os.sched_getaffinity(0))  # type: ignore[attr-defined]
+    except AttributeError:
+        return multiprocessing.cpu_count()
 
 
-N_AVAILABLE_CPUS = len(sched_getaffinity(0))
+N_AVAILABLE_CPUS = _get_core_count()
 CPU_CHOICES = {
     **{str(n): n for n in range(1, N_AVAILABLE_CPUS + 1)},
     **{
