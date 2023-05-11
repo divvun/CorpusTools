@@ -230,20 +230,27 @@ class CorpusPath:
         )
 
     @property
-    def sent_filename(self):
-        """Compute the name of the sentence file.
-
-        Args:
-            pfile (str): name of converted corpus file (produced by
-                convert2xml)
+    def tca2_input(self):
+        """Compute the name of the tca2 input file.
 
         Returns:
-            str: the name of the tca2 input file
+            Path: the name of the tca2 input file
         """
         # Ensure we have 20 bytes of leeway to let TCA2 append
         # lang_sent_new.txt without going over the 255 byte limit:
         origfilename = self.crop_to_bytes(self.filepath.name, (255 - 20))
-        return self.converted_corpus_dir / "tmp" / f"{origfilename}_{self.lang}.sent"
+        return Path("/tmp") / f"{origfilename}_{self.lang}.sent"
+
+    @property
+    def tca2_output(self):
+        """Compute the name of the tca2 output file.
+
+        Returns:
+            Path: the name of the tca2 output file
+        """
+        return self.tca2_input.with_name(
+            self.tca2_input.name.replace(".sent", "_new.txt")
+        )
 
     @property
     def tmp_filename(self):
