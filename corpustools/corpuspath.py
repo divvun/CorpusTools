@@ -194,14 +194,15 @@ class CorpusPath:
             language (str): language of the parallel file.
 
         Returns:
-            str: path to the parallel file if it exist, otherwise empty string
+            Path: path to the parallel file if it exist
         """
-        return self.name(
-            corpus_lang=language,
-            filepath=self.filepath.with_name(
-                self.metadata.get_parallel_texts().get(language)
-            ),
-        )
+        if self.metadata.get_parallel_texts().get(language) is not None:
+            return self.name(
+                corpus_lang=language,
+                filepath=self.filepath.with_name(
+                    self.metadata.get_parallel_texts().get(language)
+                ),
+            )
 
     def parallels(self):
         """Return paths to all parallel files.
