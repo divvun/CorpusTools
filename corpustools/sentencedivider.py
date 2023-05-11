@@ -22,12 +22,11 @@
 from corpustools import ccat, modes
 
 
-def to_plain_text(lang, filename):
+def to_plain_text(file_path):
     """Turn an xml formatted file into clean text.
 
     Args:
-        lang (str): three character name of main language of document.
-        filename (str): name of the xmlfile
+        file_path (CorpusPath)
 
     Raises:
         UserWarning: if there is no text, raise a UserWarning
@@ -35,13 +34,13 @@ def to_plain_text(lang, filename):
     Returns:
         str: the content of ccat output
     """
-    xml_printer = ccat.XMLPrinter(lang=lang, all_paragraphs=True)
-    xml_printer.parse_file(filename)
+    xml_printer = ccat.XMLPrinter(lang=file_path.lang, all_paragraphs=True)
+    xml_printer.parse_file(file_path.converted)
     text = xml_printer.process_file().getvalue()
     if text:
         return text
     else:
-        raise UserWarning(f"Empty file {filename}")
+        raise UserWarning(f"Empty file {file_path.converted}")
 
 
 class SentenceDivider:
