@@ -20,12 +20,12 @@ CPU_CHOICES = {
         "half": int(N_AVAILABLE_CPUS * 0.5),
         "most": int(N_AVAILABLE_CPUS * 0.75),
         "all": N_AVAILABLE_CPUS,
-    }
+    },
 }
 
 
 class NCpus(argparse.Action):
-    """ An argparse action for adding the common argument of "number of cpus"
+    """An argparse action for adding the common argument of "number of cpus"
     to use.
 
     Example usage:
