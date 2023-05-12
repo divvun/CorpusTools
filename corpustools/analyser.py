@@ -46,7 +46,7 @@ def get_modename(path):
             if 1939 < int(year) < 1995:
                 return "hfst_eighties"
 
-    if path.lang in ["nob", "fin"]:
+    if path.lang in ["nob", "fin", "fao"]:
         return "hfst_no_korp"
 
     return "hfst"
