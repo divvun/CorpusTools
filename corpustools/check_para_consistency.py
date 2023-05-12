@@ -21,7 +21,7 @@
 import argparse
 import os
 
-from corpustools import argparse_version, namechanger, util, xslsetter
+from corpustools import argparse_version, corpuspath
 
 
 def parse_args():
@@ -38,54 +38,46 @@ def parse_args():
     return parser.parse_args()
 
 
+def get_files(orig_dir):
+    return [
+        os.path.join(root, f)
+        for root, _, files in os.walk(orig_dir)
+        if ".git" not in root
+        for f in files
+        if not f.endswith(".xsl")
+    ]
+
+
 def main():
     total = 0
     para_fail = 0
     no_orig_xsl = 0
     args = parse_args()
 
-    for root, dirs, files in os.walk(args.orig_dir):
-        for f in files:
-            if not f.endswith(".xsl"):
-                total += 1
-                orig = os.path.join(root, f)
-                orig_components = util.split_path(orig)
-                xsl_name = orig + ".xsl"
-                if os.path.exists(xsl_name):
-                    xsl = xslsetter.MetadataHandler(xsl_name)
+    for orig in get_files(args.orig_dir):
+        total += 1
+        try:
+            orig_path = corpuspath.make_corpus_path(orig)
+        except ValueError as error:
+            no_orig_xsl += 1
+            print("***")
+            print(error)
+            print("***")
+        else:
+            xsl_path = orig_path.xsl
+            if xsl_path.exists():
+                nonexisting_parallels = [
+                    parallel.as_posix()
+                    for parallel in orig_path.parallels()
+                    if not parallel.exists()
+                ]
 
-                    para_files = set()
-                    for lang, parallel in xsl.get_parallel_texts().items():
-                        parallelpath = "/".join(
-                            (
-                                orig_components.root,
-                                orig_components.module,
-                                lang,
-                                orig_components.genre,
-                                orig_components.subdirs,
-                                parallel,
-                            )
-                        )
-                        if not os.path.isfile(parallelpath.encode("utf8")):
-                            none_dupe_path = os.path.join(
-                                os.path.join(
-                                    os.path.dirname(parallelpath),
-                                    namechanger.normalise_filename(
-                                        os.path.basename(parallelpath)
-                                    ),
-                                )
-                            )
-
-                            if not os.path.isfile(none_dupe_path):
-                                para_fail += 1
-                                para_files.add(none_dupe_path)
-
-                    if para_files:
-                        print(orig, "points to non-existing file")
-                        for p in para_files:
-                            print("\t", p)
-                        print()
-                else:
-                    no_orig_xsl += 1
+                if nonexisting_parallels:
+                    para_fail += len(nonexisting_parallels)
+                    print(f"{orig_path.xsl} points to non-existing file")
+                    print("\n".join({f"\t{p}" for p in nonexisting_parallels}))
+                    print()
+            else:
+                no_orig_xsl += 1
 
     print(f"Total {total}, fails {para_fail}, {no_orig_xsl} files with no xsl")
