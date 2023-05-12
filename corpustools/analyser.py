@@ -24,6 +24,7 @@ import multiprocessing
 import os
 import sys
 from functools import partial
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 import lxml.etree as etree
 
@@ -119,10 +120,37 @@ def analyse(xml_file, modename):
 
 def analyse_in_parallel(file_list, modename, pool_size):
     """Analyse file in parallel."""
-    pool = multiprocessing.Pool(processes=pool_size)
-    pool.map(partial(analyse, modename=modename), file_list)
-    pool.close()  # no more tasks
-    pool.join()  # wrap up current tasks
+    file_list = list(file_list)
+    nfiles = len(file_list)
+    print(f"Starting parallel analysis of {nfiles} files with {pool_size} workers")
+    failed = []
+    futures = {}
+    with ProcessPoolExecutor(max_workers=pool_size) as pool:
+        for file in file_list:
+            fut = pool.submit(partial(analyse, file, modename=modename))
+            futures[fut] = file
+
+        for i, future in enumerate(as_completed(futures), start=1):
+            exc = future.exception()
+            filename = futures[future]
+            if exc is not None:
+                failed.append(filename)
+                print(f"[{i}/{nfiles} FAILED: {filename}")
+                print(exc)
+            else:
+                print(f"[{i}/{nfiles}] done: {filename}")
+
+    n_ok = nfiles - len(failed)
+    print(f"all done analysing. {n_ok} files analysed ok, {len(failed)} failed")
+    if failed:
+        print("the files that failed to be analysed are:")
+        for filename in failed:
+            print(filename)
+
+    # pool = multiprocessing.Pool(processes=pool_size)
+    # pool.map(partial(analyse, modename=modename), file_list)
+    # pool.close()  # no more tasks
+    # pool.join()  # wrap up current tasks
 
 
 def analyse_serially(file_list, modename):
