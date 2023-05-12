@@ -21,6 +21,8 @@ import argparse
 import logging
 import multiprocessing
 import os
+from functools import partial
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 from corpustools import argparse_version, converter, text_cat, util, xslsetter
 from corpustools.common_arg_ncpus import NCpus
@@ -89,12 +91,25 @@ class ConverterManager:
 
     def convert_in_parallel(self, pool_size):
         """Convert files using the multiprocessing module."""
-        LOGGER.info("Starting the conversion of %d files", len(self.files))
+        LOGGER.info("Starting the conversion of %d files (using %d cpus)",
+                    len(self.files), pool_size)
 
-        pool = multiprocessing.Pool(processes=pool_size)
-        pool.map(unwrap_self_convert, list(zip([self] * len(self.files), self.files)))
-        pool.close()
-        pool.join()
+        nfiles = len(self.files)
+        futures = {}  # Future -> filename
+        print(f"Starting parallel conversion with {pool_size} workers")
+        with ProcessPoolExecutor(max_workers=pool_size) as pool:
+            for i, file in enumerate(self.files):
+                fut = pool.submit(partial(self.convert, file))
+                futures[fut] = file
+
+            for i, completed in enumerate(as_completed(futures)):
+                filename = futures[completed]
+                print(f"[{i}/{nfiles}] done: {filename}")
+
+        # pool = multiprocessing.Pool(processes=pool_size)
+        # pool.map(unwrap_self_convert, list(zip([self] * len(self.files), self.files)))
+        # pool.close()
+        # pool.join()
 
     def convert_serially(self):
         """Convert the files in one process."""
