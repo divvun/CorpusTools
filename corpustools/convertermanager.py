@@ -97,14 +97,28 @@ class ConverterManager:
         nfiles = len(self.files)
         futures = {}  # Future -> filename
         print(f"Starting parallel conversion with {pool_size} workers")
+        failed = []
         with ProcessPoolExecutor(max_workers=pool_size) as pool:
-            for i, file in enumerate(self.files):
+            for file in self.files:
                 fut = pool.submit(partial(self.convert, file))
                 futures[fut] = file
 
-            for i, completed in enumerate(as_completed(futures)):
-                filename = futures[completed]
-                print(f"[{i}/{nfiles}] done: {filename}")
+            for i, future in enumerate(as_completed(futures), start=1):
+                exc = future.exception()
+                filename = futures[future]
+                if exc is not None:
+                    failed.append(filename)
+                    print(f"[{i}/{nfiles} FAILED: {filename}")
+                    print(exc)
+                else:
+                    print(f"[{i}/{nfiles}] done: {filename}")
+
+        n_ok = nfiles - len(failed)
+        print(f"all done converting. {n_ok} files converted ok, {len(failed)} failed")
+        if failed:
+            print("the files that failed to convert are:")
+            for filename in failed:
+                print(filename)
 
         # pool = multiprocessing.Pool(processes=pool_size)
         # pool.map(unwrap_self_convert, list(zip([self] * len(self.files), self.files)))
