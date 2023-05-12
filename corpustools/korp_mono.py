@@ -255,17 +255,21 @@ def pad_elements(elem):
 def process_in_parallel(lang, files_list, pool_size):
     """Process file in parallel."""
 
+    nfiles = len(files_list)
     pool = multiprocessing.Pool(processes=pool_size)
-    pool.map(partial(process_file, lang=lang), files_list)
+    pool.starmap(
+        partial(process_file, lang=lang, files_total=nfiles),
+        enumerate(files_list, start=1)
+    )
     pool.close()  # no more tasks
     pool.join()  # wrap up current tasks
-    return
 
 
 def process_serially(lang, files_list):
-    for file_ in files_list:
-        print(f"Converting: {file_}")
-        process_file(file_, lang)
+    nfiles = len(files_list)
+    for file_number, file_ in enumerate(files_list, start=1):
+        print(f"Converting: [{file_number}/{nfiles}]{file_}")
+        process_file(file_number, file_, lang, nfiles)
 
 
 def group_sem(analysis):
@@ -517,9 +521,9 @@ def make_root_element(f_root):
     return root
 
 
-def process_file(current_file, lang):
+def process_file(file_num, current_file, lang, files_total):
     """Convert analysed file into vrt format file."""
-    print(f"... processing {current_file}")
+    print(f"... processing [{file_num}/{files_total}] {current_file}")
     analysed_file = corpuspath.make_corpus_path(current_file)
     path = analysed_file.korp_mono
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -999,7 +1003,7 @@ def parse_options():
         "--serial",
         action="store_true",
         help="When this argument is used files will be converted one by one."
-        "Using --serial takes presence over --ncpus",
+             "Using --serial takes priority over --ncpus",
     )
     parser.add_argument("lang", help="language of the files to process")
     parser.add_argument(
@@ -1014,13 +1018,9 @@ def parse_options():
 def main():
     args = parse_options()
 
+    files = list(corpuspath.collect_files(args.analysed_entities, suffix=".xml"))
+
     if args.serial:
-        process_serially(
-            args.lang, corpuspath.collect_files(args.analysed_entities, suffix=".xml")
-        )
+        process_serially(args.lang, files)
     else:
-        process_in_parallel(
-            args.lang,
-            corpuspath.collect_files(args.analysed_entities, suffix=".xml"),
-            pool_size=args.ncpus,
-        )
+        process_in_parallel(args.lang, files, pool_size=args.ncpus)

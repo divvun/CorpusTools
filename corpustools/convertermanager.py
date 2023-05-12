@@ -23,6 +23,7 @@ import multiprocessing
 import os
 
 from corpustools import argparse_version, converter, text_cat, util, xslsetter
+from corpustools.common_arg_ncpus import NCpus
 
 LOGGER = logging.getLogger(__name__)
 
@@ -86,11 +87,10 @@ class ConverterManager:
         ) as error:
             LOGGER.warn("Could not convert %s\n%s", orig_file, error)
 
-    def convert_in_parallel(self):
+    def convert_in_parallel(self, pool_size):
         """Convert files using the multiprocessing module."""
         LOGGER.info("Starting the conversion of %d files", len(self.files))
 
-        pool_size = multiprocessing.cpu_count()
         pool = multiprocessing.Pool(processes=pool_size)
         pool.map(unwrap_self_convert, list(zip([self] * len(self.files), self.files)))
         pool.close()
@@ -183,6 +183,7 @@ def parse_options():
         description="Convert original files to giellatekno xml.",
     )
 
+    parser.add_argument("--ncpus", action=NCpus, default=multiprocessing.cpu_count())
     parser.add_argument(
         "--serial",
         action="store_true",
@@ -253,6 +254,6 @@ def main():
             LOGGER.setLevel(logging.DEBUG)
             manager.convert_serially()
         else:
-            manager.convert_in_parallel()
+            manager.convert_in_parallel(args.ncpus)
     except util.ExecutableMissingError as error:
         raise SystemExit(str(error))

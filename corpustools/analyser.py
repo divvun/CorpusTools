@@ -28,6 +28,7 @@ from functools import partial
 import lxml.etree as etree
 
 from corpustools import argparse_version, ccat, corpuspath, modes, util
+from corpustools.common_arg_ncpus import NCpus
 
 
 def get_modename(path):
@@ -116,9 +117,8 @@ def analyse(xml_file, modename):
         print("The error was:", str(error), file=sys.stderr)
 
 
-def analyse_in_parallel(file_list, modename):
+def analyse_in_parallel(file_list, modename, pool_size):
     """Analyse file in parallel."""
-    pool_size = multiprocessing.cpu_count() * 2
     pool = multiprocessing.Pool(processes=pool_size)
     pool.map(partial(analyse, modename=modename), file_list)
     pool.close()  # no more tasks
@@ -147,10 +147,12 @@ def parse_options():
         parents=[argparse_version.parser], description="Analyse files in parallel."
     )
 
+    parser.add_argument("--ncpus", action=NCpus, default=multiprocessing.cpu_count() * 2)
     parser.add_argument(
         "--serial",
         action="store_true",
-        help="When this argument is used files will be analysed one by one.",
+        help="When this argument is used files will be analysed one by one."
+             "Using --serial takes priority over --ncpus",
     )
     parser.add_argument(
         "-k",
@@ -181,6 +183,7 @@ def main():
             analyse_in_parallel(
                 corpuspath.collect_files(args.converted_entities, suffix=".xml"),
                 args.modename,
+                args.ncpus,
             )
     except util.ArgumentError as error:
         print(f"Cannot do analysis\n{str(error)}", file=sys.stderr)
