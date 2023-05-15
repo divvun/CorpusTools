@@ -1,5 +1,5 @@
 """
-Take the "korp-ready" files in a "corpus-xxx/korp" directory of a corpus,
+Take the "korp-ready" files in a "corpus-xxx/korp_mono" directory of a corpus,
 and create the binary CWB files (the files that are in data/ and registry/).
 """
 import argparse
@@ -19,7 +19,7 @@ COMPILE_CORPUS_XSL = Path(__file__).with_name("compile_corpus.xsl")
 if not COMPILE_CORPUS_XSL.is_file():
     exit("uhm.. the compile_corpus.xsl file has gone missing, it seems..")
 
-LANGS = set("sma sme smj sms smn nob".split())
+LANGS = set("sma sme smj sms smn nob fao".split())
 
 
 def noop(*_args, **_kwargs): pass
@@ -62,7 +62,7 @@ class Corpus:
                 if part.startswith("corpus-"):
                     root = Path(*self.path.parts[:i + 1])
 
-            for p in (root / "korp").iterdir():
+            for p in (root / "korp_mono").iterdir():
                 yield Corpus(path=p, lang=self.lang, category=p.parts[-1])
 
 
@@ -107,21 +107,20 @@ class CorpusDirectory(argparse.Action):
                 subfolder_given = len(parts) > idx + 1
                 if subfolder_given:
                     subfolder = parts[idx + 1]
-                    if subfolder != "korp":
+                    if subfolder != "korp_mono":
                         msg = (
-                            "child folder of the corpus folder must be 'korp', "
+                            "child folder of the corpus folder must be 'korp_mono', "
                             f"not '{subfolder}'.\n"
                             f"directory path given: {directory}"
                         )
                         self.die(parser, msg)
                 else:
-                    subfolder = "korp"
-                    if not (directory / "korp").is_dir():
+                    if not (directory / "korp_mono").is_dir():
                         self.die(
                             parser,
                             "The corpus folder given has no "
-                            "subfolder 'korp'\n"
-                            "Hint: This script uses the contents of that 'korp' "
+                            "subfolder 'korp_mono'\n"
+                            "Hint: This script uses the contents of that 'korp_mono' "
                             "folder as its input. Use the 'korp_mono' tool to "
                             "generate it. See the documentation for more "
                             "information."
@@ -159,11 +158,12 @@ def run_subcommand(
     cmd: list[str],
     considered_success: Callable[[subprocess.CompletedProcess], bool] = _default_success,
     verbose: bool = False,
+    check: bool = False,
 ):
     print = builtins.print if verbose else noop
 
     print("running subcommand:\n  ", " ".join(cmd))
-    proc = subprocess.run(cmd, capture_output=True, text=True)
+    proc = subprocess.run(cmd, capture_output=True, text=True, check=check)
     is_success = considered_success(proc)
     print("done." if proc.returncode == 0 else "failed.", end=" ")
     print(f"return code: {proc.returncode}")
@@ -180,7 +180,11 @@ def run_subcommand(
 
 
 def process_input_xml(file, category, text_num):
-    xml = ET.parse(file)
+    try:
+        xml = ET.parse(file)
+    except ET.ParseError:
+        return None, None, None
+
     texts = xml.findall("[sentence]")
     if not texts:
         return None, None, None
@@ -207,7 +211,7 @@ def concat_corpus(corpus, date):
     """Replaces what compile_corpus.xsl does. Basically concat all the files
     in a corpus, and store it in one file."""
     t0 = perf_counter_ns()
-    print(f"Concatenating corpus {corpus}...", end="")
+    print(f"Concatenating corpora...")
     date_s = str(date).replace('-', '')
     corpus_directory = Path(f"vrt_{corpus.lang}_{date_s}")
     if corpus_directory.exists():
@@ -219,12 +223,17 @@ def concat_corpus(corpus, date):
     for corpusfile in corpus.subcorpuses():
         category = corpusfile.category
         corpus_id = f"{corpus.lang}_{category}_{date_s}"
+        print(f"  processing corpus {corpus_id}...")
         # corpus_sentence_count = 0
         root_element = ET.Element("corpus")
         root_element.attrib["id"] = corpus_id
         n_tot_sentences, n_tot_tokens = 0, 0
         text_num = 1
-        for file in corpusfile.path.glob("**/*.xml"):
+        file_list = list(corpusfile.path.glob("**/*.xml"))
+        nfiles = len(file_list)
+
+        for i, file in enumerate(file_list):
+            print(f"    reading file [{i}/{nfiles}] {file}")
             text_el, n_sentences, n_tokens = process_input_xml(file, category, text_num)
             if text_el:
                 text_num += 1
@@ -244,36 +253,36 @@ def concat_corpus(corpus, date):
         print(f"  file {file} has no texts!")
 
 
-# def run_compile_corpus_xsl(corpus, date, saxonbjar_path):
-#     print("Running the compile_corpus.xsl script...", end="")
-#     date = str(date).replace("-", "")
-# 
-#     # find a file? This seems like a hack: the java subcommand below seems
-#     # to _require_ a -s:<valid_file> parameter given, but the command still
-#     # seems to run and generate all the files that it should (in the entire
-#     # directory)
-#     # (as a side note, this will fail if there are no files, but then there's
-#     # nothing to do anyway)
-#     for corpus in corpus.subcorpuses():
-#         random_file = next(corpus.path.rglob("*.xml"))
-# 
-#         run_subcommand([
-#             "java",
-#             "-cp",
-#             # f"'{saxonbjar_path}'",
-#             saxonbjar_path,
-#             "net.sf.saxon.Transform",
-#             "-ext:on",
-#             f"-xsl:{COMPILE_CORPUS_XSL}",
-#             #"-s:'/home/anders/corpus/corpus-sme/korp/science/uit/master/aimo_west.pdf.xml'",
-#             f"-s:{random_file}",
-#             f"inDir={corpus.path}",
-#             f"cLang={corpus.lang}",
-#             f"cDomain={corpus.category}",
-#             f"date={date}",
-#         ])
-# 
-#     print("done")
+def run_compile_corpus_xsl(corpus, date, saxonbjar_path):
+    print("Running the compile_corpus.xsl script...", end="")
+    date = str(date).replace("-", "")
+
+    # find a file? This seems like a hack: the java subcommand below seems
+    # to _require_ a -s:<valid_file> parameter given, but the command still
+    # seems to run and generate all the files that it should (in the entire
+    # directory)
+    # (as a side note, this will fail if there are no files, but then there's
+    # nothing to do anyway)
+    for corpus in corpus.subcorpuses():
+        random_file = next(corpus.path.rglob("*.xml"))
+
+        run_subcommand([
+            "java",
+            "-cp",
+            # f"'{saxonbjar_path}'",
+            saxonbjar_path,
+            "net.sf.saxon.Transform",
+            "-ext:on",
+            f"-xsl:{COMPILE_CORPUS_XSL}",
+            #"-s:'/home/anders/corpus/corpus-sme/korp_mono/science/uit/master/aimo_west.pdf.xml'",
+            f"-s:{random_file}",
+            f"inDir={corpus.path}",
+            f"cLang={corpus.lang}",
+            f"cDomain={corpus.category}",
+            f"date={date}",
+        ])
+
+    print("done")
 
 
 def cwb_huffcode(cwb_binaries_directory, registry_dir, upper_corpus_name):
@@ -347,12 +356,19 @@ def read_vrt_xml(vrt_file):
     for text_el in xml_root.findall("text"):
         datefrom = text_el.attrib["datefrom"]
         if datefrom:
-            dates.append(date.fromisoformat(datefrom))
+            try:
+                dates.append(date.fromisoformat(datefrom))
+            except ValueError:
+                pass
     n_sentences = len(xml_root.findall("sentence"))
 
-    dates.sort()
-    first_date = dates[0]
-    last_date = dates[-1]
+    if not dates:
+        first_date = None
+        last_date = None
+    else:
+        dates.sort()
+        first_date = dates[0]
+        last_date = dates[-1]
 
     return n_sentences, first_date, last_date
 
@@ -437,14 +453,20 @@ def cwb_makeall(cwb_binaries_directory, registry_dir, upper_corpus_name):
     print("    create lexicon and index (cwb-makeall)...", end="")
     cmd = [
         f"{cwb_binaries_directory}/cwb-makeall",
+        "-D",
         "-r", f"{registry_dir}",
-        "-D", f"{upper_corpus_name}",
+        f"{upper_corpus_name}",
     ]
-    if run_subcommand(cmd):
+    try:
+        run_subcommand(cmd, check=True)
+    except subprocess.CalledProcessError as e:
+        print("failed")
+        print(e.stdout)
+        print(e.stderr)
+        raise e
+    else:
         print("done")
         return True
-    else:
-        raise RuntimeError("`cwb_makeall` failed")
 
 
 def encode_corpus(
@@ -519,12 +541,18 @@ def parse_args():
              "available on the system path"
     )
     # Not going to be needed
-    # parser.add_argument(
-    #     "--libsaxon",
-    #     default="/usr/share/java/saxonb.jar",
-    #     help="full path to where the libsaxonb.jar file is found. Defaults to "
-    #          "/usr/share/java/saxonb.jar",
-    # )
+    parser.add_argument(
+        "--libsaxon",
+        default="/usr/share/java/saxonb.jar",
+        help="full path to where the libsaxonb.jar file is found. Defaults to "
+             "/usr/share/java/saxonb.jar",
+    )
+    parser.add_argument(
+        "--use-old-xsl",
+        action="store_true",
+        help="use the old compile_corpus.xsl script run with java instead of "
+             "the new python one",
+    )
     parser.add_argument(
         "--target",
         type=Path,
@@ -595,12 +623,14 @@ def main(args):
     remove_directory_contents(args.data_dir)
     print("done")
 
-    concat_corpus(args.directory, args.date)
+    if args.use_old_xsl:
+        t0 = perf_counter_ns()
+        run_compile_corpus_xsl(args.directory, args.date, args.libsaxon)
+        t = round((perf_counter_ns() - t0) / 1_000_000)
+        print(f"run_compile_corpus_xsl() took {t}ms")
+    else:
+        concat_corpus(args.directory, args.date)
 
-    # t0 = perf_counter_ns()
-    # run_compile_corpus_xsl(args.directory, args.date, args.libsaxon)
-    # t = round((perf_counter_ns() - t0) / 1_000_000)
-    # print(f"run_compile_corpus_xsl() took {t}ms")
 
     # after the compile_corpus.xsl has run, there will be 'vrt_*' folders
     for entry in Path(".").glob("vrt_*"):
