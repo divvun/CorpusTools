@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1374,17 +1388,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" checked>
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" checked>
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2667,7 +2681,7 @@
             <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">test_make_sentence_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">CorpusPath</span><span class="p">(</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span>
             <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                 <span class="n">HERE</span><span class="p">,</span>
                 <span class="s2">&quot;parallelize_data/converted/sme/facta/skuvlahistorja2/&quot;</span><span class="p">,</span>
@@ -2677,7 +2691,7 @@
 
         <span class="n">sentence_divider</span> <span class="o">=</span> <span class="n">parallelize</span><span class="o">.</span><span class="n">Tca2SentenceDivider</span><span class="p">()</span>
         <span class="n">got</span> <span class="o">=</span> <span class="n">sentence_divider</span><span class="o">.</span><span class="n">make_sentence_xml</span><span class="p">(</span>
-            <span class="n">path</span><span class="o">.</span><span class="n">pathcomponents</span><span class="o">.</span><span class="n">lang</span><span class="p">,</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">lang</span><span class="p">,</span>
             <span class="n">path</span><span class="o">.</span><span class="n">converted</span><span class="p">,</span>
             <span class="n">giella_prefix</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">&quot;giella_shared&quot;</span><span class="p">),</span>
         <span class="p">)</span>

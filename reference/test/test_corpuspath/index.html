@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1374,17 +1388,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" checked>
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" checked>
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2318,13 +2332,14 @@
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>str</code></td>          <td>
+          <td>
+                <code>str</code>
           </td>
           <td><p>path to the corpus file</p></td>
         </tr>
@@ -2333,8 +2348,7 @@
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/test/test_corpuspath.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">31</span>
-<span class="normal">32</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
 <span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
@@ -2352,7 +2366,8 @@
 <span class="normal">47</span>
 <span class="normal">48</span>
 <span class="normal">49</span>
-<span class="normal">50</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">lang</span><span class="p">,</span> <span class="n">extension</span><span class="p">,</span> <span class="n">goallang</span><span class="p">):</span>
+<span class="normal">50</span>
+<span class="normal">51</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">lang</span><span class="p">,</span> <span class="n">extension</span><span class="p">,</span> <span class="n">goallang</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Produce a path to a corpus file.</span>
 
 <span class="sd">    Args:</span>
@@ -2362,15 +2377,15 @@
 <span class="sd">        goallang (str): goallang of tmx file</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: path to the corpus file</span>
+<span class="sd">        (str): path to the corpus file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">corpusdir</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;corpus-</span><span class="si">{</span><span class="n">lang</span><span class="si">}</span><span class="s2">-orig&quot;</span> <span class="k">if</span> <span class="n">module</span> <span class="o">==</span> <span class="s2">&quot;orig&quot;</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;corpus-</span><span class="si">{</span><span class="n">lang</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-        <span class="n">HERE</span><span class="p">,</span>
-        <span class="n">corpusdir</span><span class="p">,</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">module</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">module</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s1">&#39;orig&#39;</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">goallang</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">module</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;tmx&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;subdir/subsubdir/filename.html&quot;</span> <span class="o">+</span> <span class="n">extension</span><span class="p">,</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">Path</span><span class="p">(</span><span class="n">HERE</span><span class="p">)</span>
+        <span class="o">/</span> <span class="n">corpusdir</span>
+        <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">module</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">module</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s1">&#39;orig&#39;</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">goallang</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">module</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;tmx&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;subdir/subsubdir/filename.html</span><span class="si">{</span><span class="n">extension</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -2404,21 +2419,11 @@
     </thead>
     <tbody>
         <tr>
-          <td><code>testname</code></td>
+          <td><code>filename</code></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>name of the test</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>testcontent</code></td>
-          <td>
-                <code>dict</code>
-          </td>
-          <td><p>mapping from given name to the wanted name</p></td>
+          <td><p>the filename to check</p></td>
           <td>
               <em>required</em>
           </td>
@@ -2446,8 +2451,7 @@
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/test/test_corpuspath.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">68</span>
-<span class="normal">69</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">69</span>
 <span class="normal">70</span>
 <span class="normal">71</span>
 <span class="normal">72</span>
@@ -2487,7 +2491,8 @@
         <span class="p">(</span><span class="n">name</span><span class="p">(</span><span class="s2">&quot;stable/tmx&quot;</span><span class="p">,</span> <span class="s2">&quot;sme&quot;</span><span class="p">,</span> <span class="s2">&quot;.tmx&quot;</span><span class="p">,</span> <span class="s2">&quot;nob&quot;</span><span class="p">)),</span>
         <span class="p">(</span><span class="n">name</span><span class="p">(</span><span class="s2">&quot;analysed&quot;</span><span class="p">,</span> <span class="s2">&quot;sme&quot;</span><span class="p">,</span> <span class="s2">&quot;.xml&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
         <span class="p">(</span><span class="n">name</span><span class="p">(</span><span class="s2">&quot;converted&quot;</span><span class="p">,</span> <span class="s2">&quot;sme&quot;</span><span class="p">,</span> <span class="s2">&quot;.xml&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
-        <span class="p">(</span><span class="n">name</span><span class="p">(</span><span class="s2">&quot;korp&quot;</span><span class="p">,</span> <span class="s2">&quot;sme&quot;</span><span class="p">,</span> <span class="s2">&quot;.xml&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
+        <span class="p">(</span><span class="n">name</span><span class="p">(</span><span class="s2">&quot;korp_mono&quot;</span><span class="p">,</span> <span class="s2">&quot;sme&quot;</span><span class="p">,</span> <span class="s2">&quot;.xml&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
+        <span class="p">(</span><span class="n">name</span><span class="p">(</span><span class="s2">&quot;korp_tmx&quot;</span><span class="p">,</span> <span class="s2">&quot;sme&quot;</span><span class="p">,</span> <span class="s2">&quot;.tmx&quot;</span><span class="p">,</span> <span class="s2">&quot;nob&quot;</span><span class="p">)),</span>
         <span class="p">(</span><span class="n">name</span><span class="p">(</span><span class="s2">&quot;tmx&quot;</span><span class="p">,</span> <span class="s2">&quot;sme&quot;</span><span class="p">,</span> <span class="s2">&quot;.tmx&quot;</span><span class="p">,</span> <span class="s2">&quot;nob&quot;</span><span class="p">)),</span>
     <span class="p">],</span>
 <span class="p">)</span>
@@ -2495,14 +2500,12 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that the corpus file naming scheme works as it should.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        testname (str): name of the test</span>
-<span class="sd">        testcontent (dict): mapping from given name to the wanted name</span>
+<span class="sd">        filename (str): the filename to check</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        AssertionError: is raised if the result is not what is expected</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">assert</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">CorpusPath</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">orig</span> <span class="o">==</span> <span class="n">name</span><span class="p">(</span>
+    <span class="k">assert</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">orig</span> <span class="o">==</span> <span class="n">name</span><span class="p">(</span>
         <span class="n">module</span><span class="o">=</span><span class="s2">&quot;orig&quot;</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="s2">&quot;sme&quot;</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">goallang</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>

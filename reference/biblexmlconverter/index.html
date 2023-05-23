@@ -760,6 +760,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1465,17 +1479,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2344,13 +2358,13 @@
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/biblexmlconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">193</span>
-<span class="normal">194</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">194</span>
 <span class="normal">195</span>
 <span class="normal">196</span>
 <span class="normal">197</span>
 <span class="normal">198</span>
-<span class="normal">199</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">convert2intermediate</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="normal">199</span>
+<span class="normal">200</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">convert2intermediate</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert the bible xml to intermediate Giella xml format.&quot;&quot;&quot;</span>
 
     <span class="n">document</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;document&quot;</span><span class="p">)</span>
@@ -2412,6 +2426,7 @@
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>a Giella xml p element</p></td>
         </tr>
@@ -2420,8 +2435,7 @@
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/biblexmlconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 97</span>
-<span class="normal"> 98</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 98</span>
 <span class="normal"> 99</span>
 <span class="normal">100</span>
 <span class="normal">101</span>
@@ -2432,14 +2446,15 @@
 <span class="normal">106</span>
 <span class="normal">107</span>
 <span class="normal">108</span>
-<span class="normal">109</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">make_p</span><span class="p">(</span><span class="n">verses</span><span class="p">):</span>
+<span class="normal">109</span>
+<span class="normal">110</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">make_p</span><span class="p">(</span><span class="n">verses</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert verse strings to p element.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        verses (list[str]): a list of strings</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        a Giella xml p element</span>
+<span class="sd">        (lxml.etree.Element): a Giella xml p element</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">paragraph</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)</span>
     <span class="n">paragraph</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">verses</span><span class="p">)</span>
@@ -2500,6 +2515,7 @@
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>a Giella xml body element.</p></td>
         </tr>
@@ -2508,8 +2524,7 @@
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/biblexmlconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">176</span>
-<span class="normal">177</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">177</span>
 <span class="normal">178</span>
 <span class="normal">179</span>
 <span class="normal">180</span>
@@ -2522,14 +2537,15 @@
 <span class="normal">187</span>
 <span class="normal">188</span>
 <span class="normal">189</span>
-<span class="normal">190</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">process_bible</span><span class="p">(</span><span class="n">bible_doc</span><span class="p">):</span>
+<span class="normal">190</span>
+<span class="normal">191</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">process_bible</span><span class="p">(</span><span class="n">bible_doc</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a bible xml document to a Giella xml document.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        bible_doc (etree.Element): the bible xml tree</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        a Giella xml body element.</span>
+<span class="sd">        (lxml.etree.Element): a Giella xml body element.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">body</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">)</span>
 
@@ -2571,6 +2587,7 @@
         <tr>
           <td><code>book_element</code></td>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>a bible xml book element</p></td>
           <td>
@@ -2591,6 +2608,7 @@
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>a Giella xml section element.</p></td>
         </tr>
@@ -2599,8 +2617,7 @@
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/biblexmlconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">148</span>
-<span class="normal">149</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">149</span>
 <span class="normal">150</span>
 <span class="normal">151</span>
 <span class="normal">152</span>
@@ -2624,14 +2641,15 @@
 <span class="normal">170</span>
 <span class="normal">171</span>
 <span class="normal">172</span>
-<span class="normal">173</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">process_book</span><span class="p">(</span><span class="n">book_element</span><span class="p">):</span>
+<span class="normal">173</span>
+<span class="normal">174</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">process_book</span><span class="p">(</span><span class="n">book_element</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a bible xml book to a Giella xml section one.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        book_element: a bible xml book element</span>
+<span class="sd">        book_element (lxml.etree.Element): a bible xml book element</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        a Giella xml section element.</span>
+<span class="sd">        (lxml.etree.Element): a Giella xml section element.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">section</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;section&quot;</span><span class="p">)</span>
 
@@ -2684,6 +2702,7 @@
         <tr>
           <td><code>chapter_element</code></td>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>a bible xml chapter element</p></td>
           <td>
@@ -2704,6 +2723,7 @@
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>a Giella xml section element.</p></td>
         </tr>
@@ -2712,8 +2732,7 @@
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/biblexmlconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">112</span>
-<span class="normal">113</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">113</span>
 <span class="normal">114</span>
 <span class="normal">115</span>
 <span class="normal">116</span>
@@ -2745,14 +2764,15 @@
 <span class="normal">142</span>
 <span class="normal">143</span>
 <span class="normal">144</span>
-<span class="normal">145</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">process_chapter</span><span class="p">(</span><span class="n">chapter_element</span><span class="p">):</span>
+<span class="normal">145</span>
+<span class="normal">146</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">process_chapter</span><span class="p">(</span><span class="n">chapter_element</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a bible xml chapter to a Giella xml section one.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        chapter_element: a bible xml chapter element</span>
+<span class="sd">        chapter_element (lxml.etree.Element): a bible xml chapter element</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        a Giella xml section element.</span>
+<span class="sd">        (lxml.etree.Element): a Giella xml section element.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">section</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;section&quot;</span><span class="p">)</span>
 
@@ -2813,6 +2833,7 @@
         <tr>
           <td><code>paragraph</code></td>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>is a bible xml p element.</p></td>
           <td>
@@ -2833,6 +2854,7 @@
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>a Giella xml p element</p></td>
         </tr>
@@ -2841,8 +2863,7 @@
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/biblexmlconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">76</span>
-<span class="normal">77</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">77</span>
 <span class="normal">78</span>
 <span class="normal">79</span>
 <span class="normal">80</span>
@@ -2859,14 +2880,15 @@
 <span class="normal">91</span>
 <span class="normal">92</span>
 <span class="normal">93</span>
-<span class="normal">94</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">process_p</span><span class="p">(</span><span class="n">paragraph</span><span class="p">):</span>
+<span class="normal">94</span>
+<span class="normal">95</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">process_p</span><span class="p">(</span><span class="n">paragraph</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert bible xml verse elements to p elements.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        paragraph: is a bible xml p element.</span>
+<span class="sd">        paragraph (lxml.etree.Element): is a bible xml p element.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        a Giella xml p element</span>
+<span class="sd">        (lxml.etree.Element): a Giella xml p element</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">verses</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">paragraph</span><span class="p">:</span>
@@ -2912,7 +2934,7 @@
         <tr>
           <td><code>section_element</code></td>
           <td>
-                <code><span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>an etree element containing the
  section element found in a bible xml document.</p></td>
@@ -2934,8 +2956,10 @@
     <tbody>
         <tr>
 <td><code>section</code></td>          <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>an etree element containing a corpus xml section.</p></td>
+          <td><p>an etree element containing a
+corpus xml section.</p></td>
         </tr>
     </tbody>
   </table>
@@ -2976,15 +3000,17 @@
 <span class="normal">70</span>
 <span class="normal">71</span>
 <span class="normal">72</span>
-<span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">process_section</span><span class="p">(</span><span class="n">section_element</span><span class="p">):</span>
+<span class="normal">73</span>
+<span class="normal">74</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">process_section</span><span class="p">(</span><span class="n">section_element</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Process the section element found in the bible xml documents.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        section_element (etree.Element): an etree element containing the</span>
+<span class="sd">        section_element (lxml.etree.Element): an etree element containing the</span>
 <span class="sd">             section element found in a bible xml document.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        section: an etree element containing a corpus xml section.</span>
+<span class="sd">        section (lxml.etree.Element): an etree element containing a</span>
+<span class="sd">            corpus xml section.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">section</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;section&quot;</span><span class="p">)</span>
 
@@ -3045,10 +3071,10 @@
         <tr>
           <td><code>verse_element</code></td>
           <td>
-                <code><span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>an etree element containing the verse
-element found in a bible xml document.</p></td>
+          <td><p>an etree element containing
+the verse element found in a bible xml document.</p></td>
           <td>
               <em>required</em>
           </td>
@@ -3067,6 +3093,7 @@ element found in a bible xml document.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>str</code>
           </td>
           <td><p>A string containing the text of the verse element.</p></td>
         </tr>
@@ -3092,11 +3119,11 @@ element found in a bible xml document.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Process the verse element found in bible xml documents.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        verse_element (etree.Element): an etree element containing the verse</span>
-<span class="sd">            element found in a bible xml document.</span>
+<span class="sd">        verse_element (lxml.etree.Element): an etree element containing</span>
+<span class="sd">            the verse element found in a bible xml document.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A string containing the text of the verse element.</span>
+<span class="sd">        (str): A string containing the text of the verse element.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">verse_element</span><span class="o">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="s2">&quot;verse&quot;</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">UserWarning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected element in verse: </span><span class="si">{</span><span class="n">verse_element</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>

@@ -906,6 +906,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1611,17 +1625,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -3268,7 +3282,7 @@
 <span class="sd">            elt_lang (str): a three character language.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            boolean</span>
+<span class="sd">            (bool): boolean</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lang</span> <span class="ow">is</span> <span class="kc">None</span>
@@ -4354,6 +4368,7 @@ if the element is filtered</p>
     <tbody>
         <tr>
           <td>
+                <code>bool</code>
           </td>
           <td><p>boolean</p></td>
         </tr>
@@ -4382,7 +4397,7 @@ if the element is filtered</p>
 <span class="sd">        elt_lang (str): a three character language.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        boolean</span>
+<span class="sd">        (bool): boolean</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lang</span> <span class="ow">is</span> <span class="kc">None</span>
@@ -4903,13 +4918,14 @@ if the element is filtered</p>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>str</code></td>          <td>
+          <td>
+                <code>str</code>
           </td>
           <td><p>path to the interesting file</p></td>
         </tr>
@@ -4946,7 +4962,7 @@ if the element is filtered</p>
 <span class="sd">        extension (str): interesting files has this extension.</span>
 
 <span class="sd">    Yields:</span>
-<span class="sd">        str: path to the interesting file</span>
+<span class="sd">        (str): path to the interesting file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>

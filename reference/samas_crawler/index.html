@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1436,17 +1450,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2410,9 +2424,7 @@ If the link of one of the list elements contain /node, skip it.
 <span class="normal">143</span>
 <span class="normal">144</span>
 <span class="normal">145</span>
-<span class="normal">146</span>
-<span class="normal">147</span>
-<span class="normal">148</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">SamasCrawler</span><span class="p">:</span>
+<span class="normal">146</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">SamasCrawler</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Collect pages from samas.no.</span>
 
 <span class="sd">    We only want to fetch saami pages, and their parallels.</span>
@@ -2421,8 +2433,6 @@ If the link of one of the list elements contain /node, skip it.
 <span class="sd">    If se is active, save the page and its parallels.</span>
 <span class="sd">    If se is not active, check to see if it has a parallel. Save the page and its parallels.</span>
 <span class="sd">    If the link of one of the list elements contain /node, skip it.</span>
-
-<span class="sd">    Attributes:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">goaldir</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GTFREE&quot;</span><span class="p">))</span>
@@ -2455,7 +2465,7 @@ If the link of one of the list elements contain /node, skip it.
 <span class="sd">                language_switcher element.</span>
 
 <span class="sd">        Yields:</span>
-<span class="sd">            str: a url to a samas.no page</span>
+<span class="sd">            (str): a url to a samas.no page</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lang_switcher</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;.//ul[@class=&quot;language-switcher-locale-url&quot;]&#39;</span><span class="p">)</span>
         <span class="n">lang_switcher</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">lang_switcher</span><span class="p">)</span>
@@ -2588,7 +2598,9 @@ the is_internal function.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/samas_crawler.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">102</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
 <span class="normal">103</span>
 <span class="normal">104</span>
 <span class="normal">105</span>
@@ -2613,9 +2625,7 @@ the is_internal function.</p></td>
 <span class="normal">124</span>
 <span class="normal">125</span>
 <span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_samas_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">link</span><span class="p">):</span>
+<span class="normal">127</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_samas_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">link</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a saami samas.no page and its parallels.</span>
 
 <span class="sd">    Args:</span>
@@ -2692,13 +2702,14 @@ language_switcher element.</p></td>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>str</code></td>          <td>
+          <td>
+                <code>str</code>
           </td>
           <td><p>a url to a samas.no page</p></td>
         </tr>
@@ -2707,7 +2718,9 @@ language_switcher element.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/samas_crawler.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">64</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
 <span class="normal">65</span>
 <span class="normal">66</span>
 <span class="normal">67</span>
@@ -2720,9 +2733,7 @@ language_switcher element.</p></td>
 <span class="normal">74</span>
 <span class="normal">75</span>
 <span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span>
-<span class="normal">79</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">harvest_links</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">harvest_links</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Find interesting pages inside a topic.</span>
 
 <span class="sd">    Args:</span>
@@ -2730,7 +2741,7 @@ language_switcher element.</p></td>
 <span class="sd">            language_switcher element.</span>
 
 <span class="sd">    Yields:</span>
-<span class="sd">        str: a url to a samas.no page</span>
+<span class="sd">        (str): a url to a samas.no page</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">lang_switcher</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;.//ul[@class=&quot;language-switcher-locale-url&quot;]&#39;</span><span class="p">)</span>
     <span class="n">lang_switcher</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">lang_switcher</span><span class="p">)</span>

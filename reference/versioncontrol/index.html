@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1372,17 +1386,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -3192,8 +3206,27 @@
     <tbody>
         <tr>
           <td>
+                <code><a class="autorefs autorefs-internal" title="corpustools.versioncontrol.GIT" href="#corpustools.versioncontrol.GIT">GIT</a></code>
           </td>
-          <td><p>Either the SVN or the GIT class.</p></td>
+          <td><p>A GIT class instance.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="corpustools.versioncontrol.VersionControlError" href="#corpustools.versioncontrol.VersionControlError">VersionControlError</a></code>
+          </td>
+          <td><p>If the given directory is not a git repository</p></td>
         </tr>
     </tbody>
   </table>
@@ -3215,14 +3248,20 @@
 <span class="normal">125</span>
 <span class="normal">126</span>
 <span class="normal">127</span>
-<span class="normal">128</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">vcs</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">vcs</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Make a version control client.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        directory (str): the directory where the working copy is found.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        Either the SVN or the GIT class.</span>
+<span class="sd">        (GIT): A GIT class instance.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        VersionControlError: If the given directory is not a git repository</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">git_repo</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>

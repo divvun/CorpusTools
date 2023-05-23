@@ -767,6 +767,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1472,17 +1486,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2448,8 +2462,9 @@ p nodes contain span, br and (since 2013) p nodes.</p>
     <tbody>
         <tr>
           <td>
+                <code><span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>etree.Element: The document root of the basic Giella xml document.</p></td>
+          <td><p>The document root of the basic Giella xml document.</p></td>
         </tr>
     </tbody>
   </table>
@@ -2476,7 +2491,7 @@ p nodes contain span, br and (since 2013) p nodes.</p>
 <span class="sd">        avvir_doc (etree.Element): the etree that should be manipulated.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        etree.Element: The document root of the basic Giella xml document.</span>
+<span class="sd">        (etree.Element): The document root of the basic Giella xml document.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">avvir_doc</span><span class="o">.</span><span class="n">tag</span> <span class="o">=</span> <span class="s2">&quot;body&quot;</span>
     <span class="n">document</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;document&quot;</span><span class="p">)</span>
@@ -2701,6 +2716,7 @@ This function removes p.text and saves p.tail</p>
         <tr>
           <td><code>para</code></td>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>an lxml element, it is a story/p element</p></td>
           <td>
@@ -2743,7 +2759,7 @@ This function removes p.text and saves p.tail</p>
 <span class="sd">    This function removes p.text and saves p.tail</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        para: an lxml element, it is a story/p element</span>
+<span class="sd">        para (lxml.etree.Element): an lxml element, it is a story/p element</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">sub_p</span> <span class="ow">in</span> <span class="n">para</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;.//p&quot;</span><span class="p">):</span>
         <span class="n">previous</span> <span class="o">=</span> <span class="n">sub_p</span><span class="o">.</span><span class="n">getprevious</span><span class="p">()</span>
@@ -2795,6 +2811,7 @@ This function removes p.text and saves p.tail</p>
         <tr>
           <td><code>para</code></td>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>an lxml element, it is a story/p element</p></td>
           <td>
@@ -2826,7 +2843,7 @@ This function removes p.text and saves p.tail</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert subelements of story/p elements to p elements.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        para: an lxml element, it is a story/p element</span>
+<span class="sd">        para (lxml.etree.Element): an lxml element, it is a story/p element</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">position</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">for</span> <span class="n">subelement</span> <span class="ow">in</span> <span class="n">para</span><span class="p">:</span>
@@ -2914,6 +2931,7 @@ This function removes p.text and saves p.tail</p>
         <tr>
           <td><code>para</code></td>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>an lxml element, it is a story/p element</p></td>
           <td>
@@ -2948,15 +2966,16 @@ This function removes p.text and saves p.tail</p>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>position</code></td>          <td>
+          <td>
+                <code>int</code>
           </td>
-          <td><p>(integer)</p></td>
+          <td><p>the position</p></td>
         </tr>
     </tbody>
   </table>
@@ -2986,13 +3005,13 @@ This function removes p.text and saves p.tail</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Insert a new element in p&#39;s parent.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        para: an lxml element, it is a story/p element</span>
+<span class="sd">        para (lxml.etree.Element): an lxml element, it is a story/p element</span>
 <span class="sd">        text (str): string</span>
 <span class="sd">        position (int): the position inside p&#39;s parent where the new</span>
 <span class="sd">                    element is inserted</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        position: (integer)</span>
+<span class="sd">        (int): the position</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
         <span class="n">new_p</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)</span>

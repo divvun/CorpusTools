@@ -739,6 +739,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1444,17 +1458,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2492,7 +2506,7 @@
     <span class="k">with</span> <span class="n">util</span><span class="o">.</span><span class="n">ignored</span><span class="p">(</span><span class="ne">OSError</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
 
-    <span class="n">path</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">CorpusPath</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
     <span class="n">path</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">set_variable</span><span class="p">(</span><span class="s2">&quot;filename&quot;</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span>
     <span class="n">path</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">set_variable</span><span class="p">(</span><span class="s2">&quot;mainlang&quot;</span><span class="p">,</span> <span class="n">language</span><span class="p">)</span>
     <span class="n">path</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">set_variable</span><span class="p">(</span><span class="s2">&quot;genre&quot;</span><span class="p">,</span> <span class="s2">&quot;bible&quot;</span><span class="p">)</span>
@@ -2569,7 +2583,7 @@
         <span class="p">)</span>
     <span class="p">)</span>
     <span class="k">for</span> <span class="p">(</span><span class="n">chapter_path</span><span class="p">,</span> <span class="n">nob_name</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">chapter_paths</span><span class="p">,</span> <span class="n">nob_names</span><span class="p">):</span>
-        <span class="n">nob_path</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">CorpusPath</span><span class="p">(</span><span class="n">nob_name</span><span class="p">)</span>
+        <span class="n">nob_path</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span><span class="n">nob_name</span><span class="p">)</span>
         <span class="n">nob_meta</span> <span class="o">=</span> <span class="n">nob_path</span><span class="o">.</span><span class="n">metadata</span>
         <span class="n">chapter_meta</span> <span class="o">=</span> <span class="n">chapter_path</span><span class="o">.</span><span class="n">metadata</span>
 
@@ -2579,7 +2593,7 @@
 
         <span class="k">for</span> <span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span> <span class="ow">in</span> <span class="n">nob_meta</span><span class="o">.</span><span class="n">get_parallel_texts</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">chapter_meta</span><span class="o">.</span><span class="n">set_parallel_text</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
-            <span class="n">parallel_path</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">CorpusPath</span><span class="p">(</span><span class="n">nob_path</span><span class="o">.</span><span class="n">parallel</span><span class="p">(</span><span class="n">lang</span><span class="p">))</span>
+            <span class="n">parallel_path</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span><span class="n">nob_path</span><span class="o">.</span><span class="n">parallel</span><span class="p">(</span><span class="n">lang</span><span class="p">))</span>
             <span class="n">parallel_path</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">set_parallel_text</span><span class="p">(</span>
                 <span class="n">new_lang</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">chapter_path</span><span class="o">.</span><span class="n">orig</span><span class="p">)</span>
             <span class="p">)</span>

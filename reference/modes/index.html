@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1492,17 +1506,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2609,7 +2623,7 @@ are not found in the standard places.</p></td>
 <span class="sd">            lang (str): the language that modes is asked to serve.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            A directory where resources for the given language exist.</span>
+<span class="sd">            (str): A directory where resources for the given language exist.</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            utils.ArgumentError: if no resources are found.</span>
@@ -2663,7 +2677,7 @@ are not found in the standard places.</p></td>
 <span class="sd">            instring (bytes): the input to the command.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            bytes: the output of the command</span>
+<span class="sd">            (bytes): the output of the command</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">runner</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">ExternalCommandRunner</span><span class="p">()</span>
         <span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">to_stdin</span><span class="o">=</span><span class="n">instring</span><span class="p">)</span>
@@ -2687,7 +2701,7 @@ are not found in the standard places.</p></td>
 <span class="sd">            element (lxml.Element): a program subelement</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str: a program, a program option or a path to a file</span>
+<span class="sd">            (str): a program, a program option or a path to a file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;file&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">giella_prefix</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">))</span>
@@ -2701,7 +2715,7 @@ are not found in the standard places.</p></td>
 <span class="sd">            program (str): a program element</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            list of str: a subprocess compatible command</span>
+<span class="sd">            (list[str]): a subprocess compatible command</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tag2commandpart</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">program</span><span class="o">.</span><span class="n">iter</span><span class="p">()]</span>
 
@@ -2710,7 +2724,7 @@ are not found in the standard places.</p></td>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Make a list of subprocess compatible commands.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            list of list: a list of subprocess compatible commands.</span>
+<span class="sd">            (list[list]): a list of subprocess compatible commands.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">program2command</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="k">for</span> <span class="n">program</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">iter</span><span class="p">(</span><span class="s2">&quot;program&quot;</span><span class="p">)]</span>
 
@@ -2721,7 +2735,7 @@ are not found in the standard places.</p></td>
 <span class="sd">            instring (bytes): utf-8 encoded input to the pipeline</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str: output of the pipeline</span>
+<span class="sd">            (str): output of the pipeline</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">command</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="p">:</span>
             <span class="n">instring</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_external_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">instring</span><span class="p">)</span>
@@ -2769,8 +2783,9 @@ are not found in the standard places.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>list[list]</code>
           </td>
-          <td><p>list of list: a list of subprocess compatible commands.</p></td>
+          <td><p>a list of subprocess compatible commands.</p></td>
         </tr>
     </tbody>
   </table>
@@ -2953,8 +2968,9 @@ modes.xml file exist.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>list[str]</code>
           </td>
-          <td><p>list of str: a subprocess compatible command</p></td>
+          <td><p>a subprocess compatible command</p></td>
         </tr>
     </tbody>
   </table>
@@ -2977,7 +2993,7 @@ modes.xml file exist.</p></td>
 <span class="sd">        program (str): a program element</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        list of str: a subprocess compatible command</span>
+<span class="sd">        (list[str]): a subprocess compatible command</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tag2commandpart</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">program</span><span class="o">.</span><span class="n">iter</span><span class="p">()]</span>
 </code></pre></div></td></tr></table></div>
@@ -3124,13 +3140,14 @@ mode element.</p></td>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>str</code></td>          <td>
+          <td>
+                <code>str</code>
           </td>
           <td><p>output of the pipeline</p></td>
         </tr>
@@ -3158,7 +3175,7 @@ mode element.</p></td>
 <span class="sd">        instring (bytes): utf-8 encoded input to the pipeline</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: output of the pipeline</span>
+<span class="sd">        (str): output of the pipeline</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">command</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="p">:</span>
         <span class="n">instring</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_external_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">instring</span><span class="p">)</span>
@@ -3222,13 +3239,14 @@ mode element.</p></td>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>bytes</code></td>          <td>
+          <td>
+                <code>bytes</code>
           </td>
           <td><p>the output of the command</p></td>
         </tr>
@@ -3259,7 +3277,7 @@ mode element.</p></td>
 <span class="sd">        instring (bytes): the input to the command.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        bytes: the output of the command</span>
+<span class="sd">        (bytes): the output of the command</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">runner</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">ExternalCommandRunner</span><span class="p">()</span>
     <span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">to_stdin</span><span class="o">=</span><span class="n">instring</span><span class="p">)</span>
@@ -3357,13 +3375,14 @@ mode element.</p></td>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>str</code></td>          <td>
+          <td>
+                <code>str</code>
           </td>
           <td><p>a program, a program option or a path to a file</p></td>
         </tr>
@@ -3391,7 +3410,7 @@ mode element.</p></td>
 <span class="sd">        element (lxml.Element): a program subelement</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: a program, a program option or a path to a file</span>
+<span class="sd">        (str): a program, a program option or a path to a file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;file&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">giella_prefix</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">))</span>
@@ -3466,6 +3485,7 @@ mode element.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>str</code>
           </td>
           <td><p>A directory where resources for the given language exist.</p></td>
         </tr>
@@ -3527,7 +3547,7 @@ mode element.</p></td>
 <span class="sd">        lang (str): the language that modes is asked to serve.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A directory where resources for the given language exist.</span>
+<span class="sd">        (str): A directory where resources for the given language exist.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        utils.ArgumentError: if no resources are found.</span>

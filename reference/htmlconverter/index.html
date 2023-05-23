@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1430,17 +1444,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2334,13 +2348,14 @@ http://lxml.de/parsing.html#python-unicode-strings</p>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>str</code></td>          <td>
+          <td>
+                <code>str</code>
           </td>
           <td><p>content sans the declared decoding</p></td>
         </tr>
@@ -2377,7 +2392,7 @@ http://lxml.de/parsing.html#python-unicode-strings</p>
 <span class="sd">        content (str): the contents of a html document</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: content sans the declared decoding</span>
+<span class="sd">        (str): content sans the declared decoding</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">xml_encoding_declaration_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
         <span class="sa">r</span><span class="s2">&quot;^&lt;\?xml [^&gt;]*encoding=[</span><span class="se">\&quot;</span><span class="s2">&#39;]([^</span><span class="se">\&quot;</span><span class="s2">&#39;]+)[^&gt;]*\?&gt;[ \r\n]*&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span>
@@ -2439,8 +2454,9 @@ http://lxml.de/parsing.html#python-unicode-strings</p>
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>etree.Element: the content of the webpage sent through the
+          <td><p>the content of the webpage sent through the
 lxml.html5parser.</p></td>
         </tr>
     </tbody>
@@ -2475,7 +2491,7 @@ lxml.html5parser.</p></td>
 <span class="sd">        filename (str): path to the webpage</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        etree.Element: the content of the webpage sent through the</span>
+<span class="sd">        (lxml.etree.Element): the content of the webpage sent through the</span>
 <span class="sd">            lxml.html5parser.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">encoding</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="s2">&quot;windows-1252&quot;</span><span class="p">,</span> <span class="s2">&quot;latin1&quot;</span><span class="p">]:</span>

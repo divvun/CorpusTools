@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1486,17 +1500,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2425,8 +2439,9 @@ file that belongs to this epub file.</p>
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>etree._Element: The body of an xhtml file found in the epub file.</p></td>
+          <td><p>The body of an xhtml file found in the epub file.</p></td>
         </tr>
     </tbody>
   </table>
@@ -2456,7 +2471,7 @@ file that belongs to this epub file.</p>
 <span class="sd">        book (epub.Book): The epub book element</span>
 
 <span class="sd">    Yields:</span>
-<span class="sd">        etree._Element: The body of an xhtml file found in the epub file.</span>
+<span class="sd">        (lxml.etree.Element): The body of an xhtml file found in the epub file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">excluded</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">epub_excluded_chapters</span>
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">chapter</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">book</span><span class="o">.</span><span class="n">chapters</span><span class="p">):</span>
@@ -2521,8 +2536,9 @@ file that belongs to this epub file.</p>
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>etree.Element: the content of the epub file wrapped in html
+          <td><p>the content of the epub file wrapped in html
 element</p></td>
         </tr>
     </tbody>
@@ -2557,7 +2573,7 @@ element</p></td>
 <span class="sd">        filename (str): path to the document</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        etree.Element: the content of the epub file wrapped in html</span>
+<span class="sd">        (lxml.etree.Element): the content of the epub file wrapped in html</span>
 <span class="sd">            element</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mainbody</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;{http://www.w3.org/1999/xhtml}body&quot;</span><span class="p">)</span>
@@ -2619,13 +2635,14 @@ element</p></td>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>str</code></td>          <td>
+          <td>
+                <code>str</code>
           </td>
           <td><p>The contents of a chapter</p></td>
         </tr>
@@ -2674,7 +2691,7 @@ element</p></td>
 <span class="sd">        chapter (epub.BookChapter): the chapter of an epub file</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: The contents of a chapter</span>
+<span class="sd">        (str): The contents of a chapter</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        util.ConversionException: on conversion error</span>
@@ -2727,7 +2744,7 @@ element</p></td>
         <tr>
           <td><code>content</code></td>
           <td>
-                <code><span title="lxml.etree">etree</span>.<span title="lxml.etree._Element">_Element</span></code>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>the xhtml document that should
 be altered.</p></td>
@@ -2740,7 +2757,10 @@ be altered.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">233</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
 <span class="normal">234</span>
 <span class="normal">235</span>
 <span class="normal">236</span>
@@ -2748,15 +2768,12 @@ be altered.</p></td>
 <span class="normal">238</span>
 <span class="normal">239</span>
 <span class="normal">240</span>
-<span class="normal">241</span>
-<span class="normal">242</span>
-<span class="normal">243</span>
-<span class="normal">244</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_first_element</span><span class="p">(</span><span class="n">path1</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+<span class="normal">241</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_first_element</span><span class="p">(</span><span class="n">path1</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove the first element in the range.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        path1 (str): path to the first element to remove.</span>
-<span class="sd">        content (etree._Element): the xhtml document that should</span>
+<span class="sd">        content (lxml.etree.Element): the xhtml document that should</span>
 <span class="sd">            be altered.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">first_start</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
@@ -2817,7 +2834,7 @@ be altered.</p></td>
         <tr>
           <td><code>content</code></td>
           <td>
-                <code><span title="lxml.etree">etree</span>.<span title="lxml.etree._Element">_Element</span></code>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>xhtml document</p></td>
           <td>
@@ -2829,7 +2846,10 @@ be altered.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">247</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
 <span class="normal">248</span>
 <span class="normal">249</span>
 <span class="normal">250</span>
@@ -2840,16 +2860,13 @@ be altered.</p></td>
 <span class="normal">255</span>
 <span class="normal">256</span>
 <span class="normal">257</span>
-<span class="normal">258</span>
-<span class="normal">259</span>
-<span class="normal">260</span>
-<span class="normal">261</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_range</span><span class="p">(</span><span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+<span class="normal">258</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_range</span><span class="p">(</span><span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove a range of elements from an xhtml document.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        path1 (str): path to first element</span>
 <span class="sd">        path2 (str): path to second element</span>
-<span class="sd">        content (etree._Element): xhtml document</span>
+<span class="sd">        content (lxml.etree.Element): xhtml document</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">path2</span><span class="p">:</span>
         <span class="n">starts</span><span class="p">,</span> <span class="n">ends</span> <span class="o">=</span> <span class="n">remove_trees_1</span><span class="p">(</span><span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
@@ -2878,30 +2895,6 @@ be altered.</p></td>
   
       <p>Remove ranges of html elements.</p>
 
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>filename</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td><p>path to the document</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 95</span>
@@ -2909,14 +2902,8 @@ be altered.</p></td>
 <span class="normal"> 97</span>
 <span class="normal"> 98</span>
 <span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_ranges</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">html</span><span class="p">):</span>
+<span class="normal">100</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_ranges</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">html</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove ranges of html elements.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        filename (str): path to the document</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">metadata</span><span class="o">.</span><span class="n">skip_elements</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">pairs</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">skip_elements</span><span class="p">:</span>
@@ -2998,15 +2985,19 @@ siblings.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>list[str]</code>
           </td>
-          <td><p>list of str: the path to the parent of parts.</p></td>
+          <td><p>the path to the parent of parts.</p></td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">126</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
 <span class="normal">127</span>
 <span class="normal">128</span>
 <span class="normal">129</span>
@@ -3022,10 +3013,7 @@ siblings.</p></td>
 <span class="normal">139</span>
 <span class="normal">140</span>
 <span class="normal">141</span>
-<span class="normal">142</span>
-<span class="normal">143</span>
-<span class="normal">144</span>
-<span class="normal">145</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_siblings_shorten_path</span><span class="p">(</span><span class="n">parts</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">preceding</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="normal">142</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_siblings_shorten_path</span><span class="p">(</span><span class="n">parts</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">preceding</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove all siblings before or after an element.</span>
 
 <span class="sd">    Args:</span>
@@ -3036,7 +3024,7 @@ siblings.</p></td>
 <span class="sd">            siblings.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        list of str: the path to the parent of parts.</span>
+<span class="sd">        (list[str]): the path to the parent of parts.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
     <span class="n">found</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;html&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.w3.org/1999/xhtml&quot;</span><span class="p">})</span>
@@ -3126,15 +3114,19 @@ removed.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>tuple[list[str]]</code>
           </td>
-          <td><p>tuple of list of str: paths to the new start and end element.</p></td>
+          <td><p>paths to the new start and end element.</p></td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">180</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
 <span class="normal">181</span>
 <span class="normal">182</span>
 <span class="normal">183</span>
@@ -3155,10 +3147,7 @@ removed.</p></td>
 <span class="normal">198</span>
 <span class="normal">199</span>
 <span class="normal">200</span>
-<span class="normal">201</span>
-<span class="normal">202</span>
-<span class="normal">203</span>
-<span class="normal">204</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_trees_1</span><span class="p">(</span><span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+<span class="normal">201</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_trees_1</span><span class="p">(</span><span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove tree nodes that do not have the same parents.</span>
 
 <span class="sd">    While the parents in starts and ends are unequal (that means that</span>
@@ -3174,7 +3163,7 @@ removed.</p></td>
 <span class="sd">            removed.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        tuple of list of str: paths to the new start and end element.</span>
+<span class="sd">        (tuple[list[str]]): paths to the new start and end element.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">starts</span><span class="p">,</span> <span class="n">ends</span> <span class="o">=</span> <span class="n">shorten_longest_path</span><span class="p">(</span><span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
 
@@ -3219,7 +3208,7 @@ trees of nodes between starts and ends (if necessary).</p>
         <tr>
           <td><code>starts</code></td>
           <td>
-                <code>list of str</code>
+                <code>list[str]</code>
           </td>
           <td><p>path to first element</p></td>
           <td>
@@ -3229,7 +3218,7 @@ trees of nodes between starts and ends (if necessary).</p>
         <tr>
           <td><code>ends</code></td>
           <td>
-                <code>list of str</code>
+                <code>list[str]</code>
           </td>
           <td><p>path to second element</p></td>
           <td>
@@ -3239,7 +3228,7 @@ trees of nodes between starts and ends (if necessary).</p>
         <tr>
           <td><code>content</code></td>
           <td>
-                <code><span title="lxml.etree">etree</span>.<span title="lxml.etree._Element">_Element</span></code>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>xhtml document, where elements are
 removed.</p></td>
@@ -3252,7 +3241,10 @@ removed.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">207</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
 <span class="normal">208</span>
 <span class="normal">209</span>
 <span class="normal">210</span>
@@ -3272,19 +3264,16 @@ removed.</p></td>
 <span class="normal">224</span>
 <span class="normal">225</span>
 <span class="normal">226</span>
-<span class="normal">227</span>
-<span class="normal">228</span>
-<span class="normal">229</span>
-<span class="normal">230</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_trees_2</span><span class="p">(</span><span class="n">starts</span><span class="p">,</span> <span class="n">ends</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+<span class="normal">227</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_trees_2</span><span class="p">(</span><span class="n">starts</span><span class="p">,</span> <span class="n">ends</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove tree nodes that have the same parents.</span>
 
 <span class="sd">    Now that the parents of starts and ends are equal, remove the last</span>
 <span class="sd">    trees of nodes between starts and ends (if necessary).</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        starts (list of str): path to first element</span>
-<span class="sd">        ends (list of str): path to second element</span>
-<span class="sd">        content (etree._Element): xhtml document, where elements are</span>
+<span class="sd">        starts (list[str]): path to first element</span>
+<span class="sd">        ends (list[str]): path to second element</span>
+<span class="sd">        content (lxml.etree.Element): xhtml document, where elements are</span>
 <span class="sd">            removed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">deepest_start</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
@@ -3381,8 +3370,9 @@ removed.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>tuple[list[str]]</code>
           </td>
-          <td><p>tuple of list of str: paths to the new start and end element, now
+          <td><p>paths to the new start and end element, now
 with the same length.</p></td>
         </tr>
     </tbody>
@@ -3390,7 +3380,10 @@ with the same length.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">148</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
 <span class="normal">149</span>
 <span class="normal">150</span>
 <span class="normal">151</span>
@@ -3416,10 +3409,7 @@ with the same length.</p></td>
 <span class="normal">171</span>
 <span class="normal">172</span>
 <span class="normal">173</span>
-<span class="normal">174</span>
-<span class="normal">175</span>
-<span class="normal">176</span>
-<span class="normal">177</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">shorten_longest_path</span><span class="p">(</span><span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+<span class="normal">174</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">shorten_longest_path</span><span class="p">(</span><span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove elements from the longest path.</span>
 
 <span class="sd">    If starts is longer than ends, remove the siblings following starts,</span>
@@ -3437,7 +3427,7 @@ with the same length.</p></td>
 <span class="sd">            removed.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        tuple of list of str: paths to the new start and end element, now</span>
+<span class="sd">        (tuple[list[str]]): paths to the new start and end element, now</span>
 <span class="sd">            with the same length.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">starts</span><span class="p">,</span> <span class="n">ends</span> <span class="o">=</span> <span class="n">path1</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">),</span> <span class="n">path2</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
@@ -3480,20 +3470,20 @@ with the same length.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>An etree.Element containing the content of all xhtml files</p></td>
-        </tr>
-        <tr>
-          <td>
-          </td>
-          <td><p>found in the epub file as one xhtml document.</p></td>
+          <td><p>An etree.Element containing the content of
+all xhtml files found in the epub file as one xhtml document.</p></td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">106</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
 <span class="normal">107</span>
 <span class="normal">108</span>
 <span class="normal">109</span>
@@ -3507,15 +3497,12 @@ with the same length.</p></td>
 <span class="normal">117</span>
 <span class="normal">118</span>
 <span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">to_html_elt</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="normal">120</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">to_html_elt</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Append all chapter bodies as divs to an html file.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        An etree.Element containing the content of all xhtml files</span>
-<span class="sd">        found in the epub file as one xhtml document.</span>
+<span class="sd">        (lxml.etree.Element): An etree.Element containing the content of</span>
+<span class="sd">            all xhtml files found in the epub file as one xhtml document.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="n">xslsetter</span><span class="o">.</span><span class="n">MetadataHandler</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.xsl&quot;</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">html</span> <span class="o">=</span> <span class="n">extract_content</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
@@ -3524,7 +3511,7 @@ with the same length.</p></td>
     <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">ConversionError</span><span class="p">(</span>
             <span class="s2">&quot;Check that skip_elements in the &quot;</span>
-            <span class="s2">&quot;metadata file has the correct format&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="s2">&quot;metadata file has the correct format&quot;</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">html</span>

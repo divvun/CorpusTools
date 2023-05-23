@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1374,17 +1388,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" checked>
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" checked>
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2297,7 +2311,8 @@
 <span class="normal">44</span>
 <span class="normal">45</span>
 <span class="normal">46</span>
-<span class="normal">47</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">XMLTester</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="normal">47</span>
+<span class="normal">48</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">XMLTester</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test xml equality.&quot;&quot;&quot;</span>
 
     <span class="nd">@staticmethod</span>
@@ -2306,9 +2321,10 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            got (etree.Element): the xml part given by the tester</span>
-<span class="sd">            got (etree.Element): the wanted xml</span>
+<span class="sd">            want (etree.Element): the wanted xml</span>
 
-<span class="sd">        Raises: AssertionError</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            AssertionError: If they are not equal</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">got</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">got</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">)</span>
         <span class="n">want</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">want</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">)</span>
@@ -2372,7 +2388,7 @@
           </td>
         </tr>
         <tr>
-          <td><code>got</code></td>
+          <td><code>want</code></td>
           <td>
                 <code><span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
@@ -2380,6 +2396,24 @@
           <td>
               <em>required</em>
           </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>AssertionError</code>
+          </td>
+          <td><p>If they are not equal</p></td>
         </tr>
     </tbody>
   </table>
@@ -2402,15 +2436,17 @@
 <span class="normal">44</span>
 <span class="normal">45</span>
 <span class="normal">46</span>
-<span class="normal">47</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">47</span>
+<span class="normal">48</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">assertXmlEqual</span><span class="p">(</span><span class="n">got</span><span class="p">,</span> <span class="n">want</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if two stringified xml snippets are equal.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        got (etree.Element): the xml part given by the tester</span>
-<span class="sd">        got (etree.Element): the wanted xml</span>
+<span class="sd">        want (etree.Element): the wanted xml</span>
 
-<span class="sd">    Raises: AssertionError</span>
+<span class="sd">    Raises:</span>
+<span class="sd">        AssertionError: If they are not equal</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">got</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">got</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">)</span>
     <span class="n">want</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">want</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">)</span>

@@ -12,7 +12,7 @@
         <link rel="prev" href="../check_para_consistency/">
       
       
-        <link rel="next" href="../compare_tmx_goldstandard/">
+        <link rel="next" href="../common_arg_ncpus/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
@@ -714,6 +714,20 @@
   
 </nav>
       
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
     </li>
   
 
@@ -1430,17 +1444,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2300,13 +2314,14 @@
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>str</code></td>          <td>
+          <td>
+                <code>str</code>
           </td>
           <td><p>path to an interesting prestable file</p></td>
         </tr>
@@ -2337,7 +2352,7 @@
 <span class="sd">        corpusdir (src): path to a corpus directory</span>
 
 <span class="sd">    Yields:</span>
-<span class="sd">        str: path to an interesting prestable file</span>
+<span class="sd">        (str): path to an interesting prestable file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">subdir</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;converted&quot;</span><span class="p">,</span> <span class="s2">&quot;tmx&quot;</span><span class="p">]:</span>
         <span class="n">prestable_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">corpusdir</span><span class="p">,</span> <span class="s2">&quot;prestable&quot;</span><span class="p">,</span> <span class="n">subdir</span><span class="p">)</span>
@@ -2402,7 +2417,7 @@
         <span class="n">vcsfactory</span> <span class="o">=</span> <span class="n">versioncontrol</span><span class="o">.</span><span class="n">VersionControlFactory</span><span class="p">()</span>
         <span class="n">vcs</span> <span class="o">=</span> <span class="n">vcsfactory</span><span class="o">.</span><span class="n">vcs</span><span class="p">(</span><span class="n">corpusdir</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">prestable_path</span> <span class="ow">in</span> <span class="n">find_prestable_files</span><span class="p">(</span><span class="n">corpusdir</span><span class="p">):</span>
-            <span class="n">corpus_file</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">CorpusPath</span><span class="p">(</span><span class="n">prestable_path</span><span class="p">)</span>
+            <span class="n">corpus_file</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span><span class="n">prestable_path</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">corpus_file</span><span class="o">.</span><span class="n">orig</span><span class="p">):</span>
                 <span class="n">counter</span><span class="p">[</span><span class="s2">&quot;prestable&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removing </span><span class="si">{</span><span class="n">prestable_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2450,8 +2465,9 @@
     <tbody>
         <tr>
           <td>
+                <code>argparse.<span title="argparse.Namespace">Namespace</span></code>
           </td>
-          <td><p>a list of arguments as parsed by argparse.Argumentparser.</p></td>
+          <td><p>the parsed commandline arguments</p></td>
         </tr>
     </tbody>
   </table>
@@ -2476,7 +2492,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the commandline options.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        a list of arguments as parsed by argparse.Argumentparser.</span>
+<span class="sd">        (argparse.Namespace): the parsed commandline arguments</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
         <span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="n">argparse_version</span><span class="o">.</span><span class="n">parser</span><span class="p">],</span>

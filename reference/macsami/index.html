@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1490,17 +1504,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2442,7 +2456,7 @@
 <span class="sd">                &#39;backslashreplace&#39;.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            tuple (output object, length consumed)</span>
+<span class="sd">            (tuple[bytes, int): a tuple of output object and length consumed</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">codecs</span><span class="o">.</span><span class="n">charmap_encode</span><span class="p">(</span><span class="n">instring</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">encoding_table</span><span class="p">)</span>
 
@@ -2456,7 +2470,7 @@
 <span class="sd">                &#39;strict&#39;, &#39;replace&#39; or &#39;ignore&#39;.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            tuple (output object, length consumed)</span>
+<span class="sd">            (tuple[bytes, int): a tuple of output object and length consumed</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">codecs</span><span class="o">.</span><span class="n">charmap_decode</span><span class="p">(</span><span class="n">instring</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">decoding_table</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2535,8 +2549,9 @@ codec.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>tuple[bytes, int</code>
           </td>
-          <td><p>tuple (output object, length consumed)</p></td>
+          <td><p>a tuple of output object and length consumed</p></td>
         </tr>
     </tbody>
   </table>
@@ -2565,7 +2580,7 @@ codec.</p></td>
 <span class="sd">            &#39;strict&#39;, &#39;replace&#39; or &#39;ignore&#39;.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        tuple (output object, length consumed)</span>
+<span class="sd">        (tuple[bytes, int): a tuple of output object and length consumed</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">codecs</span><span class="o">.</span><span class="n">charmap_decode</span><span class="p">(</span><span class="n">instring</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">decoding_table</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2636,8 +2651,9 @@ codec.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>tuple[bytes, int</code>
           </td>
-          <td><p>tuple (output object, length consumed)</p></td>
+          <td><p>a tuple of output object and length consumed</p></td>
         </tr>
     </tbody>
   </table>
@@ -2668,7 +2684,7 @@ codec.</p></td>
 <span class="sd">            &#39;backslashreplace&#39;.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        tuple (output object, length consumed)</span>
+<span class="sd">        (tuple[bytes, int): a tuple of output object and length consumed</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">codecs</span><span class="o">.</span><span class="n">charmap_encode</span><span class="p">(</span><span class="n">instring</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">encoding_table</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2730,7 +2746,7 @@ codec.</p></td>
 <span class="sd">                codec.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            output object.</span>
+<span class="sd">            (tuple[bytes, int): a tuple of output object and length consumed</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">codecs</span><span class="o">.</span><span class="n">charmap_decode</span><span class="p">(</span><span class="n">instring</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">,</span> <span class="n">decoding_table</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
@@ -2798,8 +2814,9 @@ codec.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>tuple[bytes, int</code>
           </td>
-          <td><p>output object.</p></td>
+          <td><p>a tuple of output object and length consumed</p></td>
         </tr>
     </tbody>
   </table>
@@ -2824,7 +2841,7 @@ codec.</p></td>
 <span class="sd">            codec.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        output object.</span>
+<span class="sd">        (tuple[bytes, int): a tuple of output object and length consumed</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">codecs</span><span class="o">.</span><span class="n">charmap_decode</span><span class="p">(</span><span class="n">instring</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">,</span> <span class="n">decoding_table</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
@@ -2886,7 +2903,7 @@ codec.</p></td>
 <span class="sd">                codec.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            output object.</span>
+<span class="sd">            (tuple[bytes, int): a tuple of output object and length consumed</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">codecs</span><span class="o">.</span><span class="n">charmap_encode</span><span class="p">(</span><span class="n">instring</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">,</span> <span class="n">encoding_table</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
@@ -2954,8 +2971,9 @@ codec.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>tuple[bytes, int</code>
           </td>
-          <td><p>output object.</p></td>
+          <td><p>a tuple of output object and length consumed</p></td>
         </tr>
     </tbody>
   </table>
@@ -2980,7 +2998,7 @@ codec.</p></td>
 <span class="sd">            codec.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        output object.</span>
+<span class="sd">        (tuple[bytes, int): a tuple of output object and length consumed</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">codecs</span><span class="o">.</span><span class="n">charmap_encode</span><span class="p">(</span><span class="n">instring</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">,</span> <span class="n">encoding_table</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
@@ -3090,9 +3108,10 @@ codec.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>Codecs.<span title="Codecs.CodecInfo">CodecInfo</span> | None</code>
           </td>
-          <td><p>Codecs.CodecInfo if encoding is the name of the encoding of
-this file, None otherwise.</p></td>
+          <td><p>Codecs.CodecInfo if encoding is the name
+of the encoding of this file, None otherwise.</p></td>
         </tr>
     </tbody>
   </table>
@@ -3118,8 +3137,8 @@ this file, None otherwise.</p></td>
 <span class="sd">        encoding (str): name of the encoding</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        Codecs.CodecInfo if encoding is the name of the encoding of</span>
-<span class="sd">            this file, None otherwise.</span>
+<span class="sd">        (Codecs.CodecInfo|None): Codecs.CodecInfo if encoding is the name</span>
+<span class="sd">            of the encoding of this file, None otherwise.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">encoding</span> <span class="o">==</span> <span class="s2">&quot;macsami&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">getregentry</span><span class="p">()</span>

@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1507,17 +1521,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2870,6 +2884,7 @@ be converted to xml.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>A correction element for each correction</p></td>
         </tr>
@@ -2903,7 +2918,7 @@ be converted to xml.</p></td>
 <span class="sd">        correction_content (str): string containing the correction(s)</span>
 
 <span class="sd">    Yields:</span>
-<span class="sd">        A correction element for each correction</span>
+<span class="sd">        (lxml.etree.Element): A correction element for each correction</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">correction</span> <span class="ow">in</span> <span class="n">correction_content</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;///&quot;</span><span class="p">):</span>
         <span class="n">correction_text</span><span class="p">,</span> <span class="n">att_list</span> <span class="o">=</span> <span class="n">look_for_extended_attributes</span><span class="p">(</span><span class="n">correction</span><span class="p">)</span>
@@ -2969,6 +2984,7 @@ be converted to xml.</p></td>
         <tr>
           <td><code>correction</code></td>
           <td>
+                <code>str</code>
           </td>
           <td><p>the correction(s) for the error</p></td>
           <td>
@@ -2989,6 +3005,7 @@ be converted to xml.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>An etree._Element</p></td>
         </tr>
@@ -3020,10 +3037,10 @@ be converted to xml.</p></td>
 <span class="sd">    Args:</span>
 <span class="sd">        error_text (str): the text of the error element</span>
 <span class="sd">        error_name (str): the tag of the error element</span>
-<span class="sd">        correction: the correction(s) for the error</span>
+<span class="sd">        correction (str): the correction(s) for the error</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        An etree._Element</span>
+<span class="sd">        (lxml.etree.Element): An etree._Element</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">error_element</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="n">error_name</span><span class="p">)</span>
     <span class="n">error_element</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">error_text</span>

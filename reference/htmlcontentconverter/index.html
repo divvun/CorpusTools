@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1562,17 +1576,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -3183,7 +3197,7 @@
 <span class="sd">            content (str): a string containing an html document.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            a string containing the cleaned up html document.</span>
+<span class="sd">            (str): a string containing the cleaned up html document.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cleaner</span> <span class="o">=</span> <span class="n">clean</span><span class="o">.</span><span class="n">Cleaner</span><span class="p">(</span>
             <span class="n">page_structure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -3224,7 +3238,7 @@
 <span class="sd">            content (str): the content of a document.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str: The content of the document without the cruft.</span>
+<span class="sd">            (str): The content of the document without the cruft.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">replacements</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;//&lt;script&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;script&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;&amp;nbsp;&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">replace_all</span><span class="p">(</span><span class="n">replacements</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
@@ -4434,13 +4448,14 @@ similar issues by turning them into divs.</p>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>str</code></td>          <td>
+          <td>
+                <code>str</code>
           </td>
           <td><p>The content of the document without the cruft.</p></td>
         </tr>
@@ -4468,7 +4483,7 @@ similar issues by turning them into divs.</p>
 <span class="sd">        content (str): the content of a document.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: The content of the document without the cruft.</span>
+<span class="sd">        (str): The content of the document without the cruft.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">replacements</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;//&lt;script&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;script&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;&amp;nbsp;&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)]</span>
     <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">replace_all</span><span class="p">(</span><span class="n">replacements</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
@@ -5436,6 +5451,7 @@ etc. – treat them all as <div>'s for xhtml2corpus</p>
     <tbody>
         <tr>
           <td>
+                <code>str</code>
           </td>
           <td><p>a string containing the cleaned up html document.</p></td>
         </tr>
@@ -5489,7 +5505,7 @@ etc. – treat them all as <div>'s for xhtml2corpus</p>
 <span class="sd">        content (str): a string containing an html document.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        a string containing the cleaned up html document.</span>
+<span class="sd">        (str): a string containing the cleaned up html document.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cleaner</span> <span class="o">=</span> <span class="n">clean</span><span class="o">.</span><span class="n">Cleaner</span><span class="p">(</span>
         <span class="n">page_structure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -5624,8 +5640,9 @@ etc. – treat them all as <div>'s for xhtml2corpus</p>
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>etree.Element: the root element of the Giella xml document</p></td>
+          <td><p>the root element of the Giella xml document</p></td>
         </tr>
     </tbody>
   </table>
@@ -5648,7 +5665,7 @@ etc. – treat them all as <div>'s for xhtml2corpus</p>
 <span class="sd">        filename (str): name of the file</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        etree.Element: the root element of the Giella xml document</span>
+<span class="sd">        (lxml.etree.Element): the root element of the Giella xml document</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">xhtml2intermediate</span><span class="p">(</span><span class="n">to_html_elt</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
 </code></pre></div></td></tr></table></div>
@@ -5773,8 +5790,9 @@ etc. – treat them all as <div>'s for xhtml2corpus</p>
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>etree.Element: the root element of the Giella xml document</p></td>
+          <td><p>the root element of the Giella xml document</p></td>
         </tr>
     </tbody>
   </table>
@@ -5805,7 +5823,7 @@ etc. – treat them all as <div>'s for xhtml2corpus</p>
 <span class="sd">        content_xml (etree.Element): the result of convert2xhtml</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        etree.Element: the root element of the Giella xml document</span>
+<span class="sd">        (lxml.etree.Element): the root element of the Giella xml document</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">converter_xsl</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">&quot;xslt/xhtml2corpus.xsl&quot;</span><span class="p">)</span>
 

@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1457,17 +1471,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2465,7 +2479,7 @@
 <span class="sd">        latin1. The real encoding will be detected later.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str</span>
+<span class="sd">            (str): The decoded string</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">content</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orig</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
@@ -2486,7 +2500,7 @@
 <span class="sd">                from content.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            A string containing the content sans unwanted characters.</span>
+<span class="sd">            (str): A string containing the content sans unwanted characters.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">plaintext_oddities</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s2">&quot;ÊÊ&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">),</span>
@@ -2532,7 +2546,7 @@
 <span class="sd">            text (str): The text the xml should contain</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            an lxml.etree.Element</span>
+<span class="sd">            (lxml.etree.Element): an lxml.etree.Element</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">element</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="n">element_name</span><span class="p">)</span>
 
@@ -2555,7 +2569,7 @@
 <span class="sd">            content (str): the content of the plaintext document.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            An etree element.</span>
+<span class="sd">            (lxml.etree.Element): An etree element.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">document</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;document&quot;</span><span class="p">)</span>
         <span class="n">header</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">)</span>
@@ -2643,6 +2657,7 @@
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>An etree element.</p></td>
         </tr>
@@ -2688,7 +2703,7 @@
 <span class="sd">        content (str): the content of the plaintext document.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        An etree element.</span>
+<span class="sd">        (lxml.etree.Element): An etree element.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">document</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;document&quot;</span><span class="p">)</span>
     <span class="n">header</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">)</span>
@@ -2781,6 +2796,7 @@
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>an lxml.etree.Element</p></td>
         </tr>
@@ -2821,7 +2837,7 @@
 <span class="sd">        text (str): The text the xml should contain</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        an lxml.etree.Element</span>
+<span class="sd">        (lxml.etree.Element): an lxml.etree.Element</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">element</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="n">element_name</span><span class="p">)</span>
 
@@ -2906,6 +2922,7 @@ from content.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>str</code>
           </td>
           <td><p>A string containing the content sans unwanted characters.</p></td>
         </tr>
@@ -2969,7 +2986,7 @@ from content.</p></td>
 <span class="sd">            from content.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A string containing the content sans unwanted characters.</span>
+<span class="sd">        (str): A string containing the content sans unwanted characters.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plaintext_oddities</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="s2">&quot;ÊÊ&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">),</span>
@@ -3038,8 +3055,9 @@ latin1. The real encoding will be detected later.</p>
     <tbody>
         <tr>
           <td>
+                <code>str</code>
           </td>
-          <td><p>str</p></td>
+          <td><p>The decoded string</p></td>
         </tr>
     </tbody>
   </table>
@@ -3069,7 +3087,7 @@ latin1. The real encoding will be detected later.</p>
 <span class="sd">    latin1. The real encoding will be detected later.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str</span>
+<span class="sd">        (str): The decoded string</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">content</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orig</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
@@ -3143,6 +3161,7 @@ latin1. The real encoding will be detected later.</p>
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
           <td><p>An etree element.</p></td>
         </tr>
@@ -3169,7 +3188,7 @@ latin1. The real encoding will be detected later.</p>
 <span class="sd">        filename (str): name of the file that should be converted</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        An etree element.</span>
+<span class="sd">        (lxml.etree.Element): An etree element.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">converter</span> <span class="o">=</span> <span class="n">PlaintextConverter</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 

@@ -665,6 +665,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1370,17 +1384,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -3126,7 +3140,11 @@
 <span class="normal">578</span>
 <span class="normal">579</span>
 <span class="normal">580</span>
-<span class="normal">581</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">MetadataHandler</span><span class="p">:</span>
+<span class="normal">581</span>
+<span class="normal">582</span>
+<span class="normal">583</span>
+<span class="normal">584</span>
+<span class="normal">585</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">MetadataHandler</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to handle metadata in .xsl files.</span>
 
 <span class="sd">    This class makes the xsl file</span>
@@ -3204,7 +3222,7 @@
 <span class="sd">            key (str): Name of the variable to get.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str or None: The string contains the value associated with the key.</span>
+<span class="sd">            (str|None): The string contains the value associated with the key.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">variable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_variable_elt</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">variable</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -3219,7 +3237,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Find all set variables.</span>
 
 <span class="sd">        Yields:</span>
-<span class="sd">            tuple of str: a key/value pair</span>
+<span class="sd">            (tuple[str, Any]): a key/value pair</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ns</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;xsl&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.w3.org/1999/XSL/Transform&quot;</span><span class="p">}</span>
         <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
@@ -3233,7 +3251,8 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the parallel texts.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            dict: A dict of parallel files containing language:filename pairs.</span>
+<span class="sd">            (dict[str, str]): A dict of parallel files containing</span>
+<span class="sd">                language:filename pairs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">parallels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_variable_elt</span><span class="p">(</span><span class="s2">&quot;parallels&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">parallels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -3251,7 +3270,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the languages to look for in the document.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            set: A set of languages to look for in the document</span>
+<span class="sd">            (set[str]): A set of languages to look for in the document</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mlangs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_variable_elt</span><span class="p">(</span><span class="s2">&quot;mlangs&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">mlangs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -3421,7 +3440,7 @@
 <span class="sd">                otherwise inner_ if getting inner margin lines.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            dict: Contains marginname:percentage pairs.</span>
+<span class="sd">            (dict[str, str]): A dictionary of margin name to percentages</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">margin_lines</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">key</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -3443,11 +3462,11 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set and validate the margin lines.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            margin_lines (dict): The dict consists of</span>
+<span class="sd">            margin_lines (dict[str, str]): The dict consists of</span>
 <span class="sd">                marginname:percentage pairs</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            dict: The dict consists of marginname:percentage pairs.</span>
+<span class="sd">            (dict[str, int]): The dict consists of marginname:percentage pairs.</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            XsltException: Raise this exception if there are errors in the</span>
@@ -3483,7 +3502,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse margin lines fetched from the .xsl file.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            dict: The dict consists of marginname:percentage pairs.</span>
+<span class="sd">            (dict): The dict consists of marginname:percentage pairs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">margin_lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_margin_lines</span><span class="p">()</span>
 
@@ -3493,12 +3512,11 @@
     <span class="k">def</span> <span class="nf">inner_margins</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse inner margin lines fetched from the .xsl file.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            dict: The dict consists of marginname:percentage pairs.</span>
-
 <span class="sd">        Raises:</span>
-<span class="sd">            XsltException: Raise this exception if there are errors in the</span>
-<span class="sd">                inner_margin_lines.</span>
+<span class="sd">            XsltError: On errors in the inner_margin_lines.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (dict): The dict consists of marginname:percentage pairs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">margin_lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_margin_lines</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="s2">&quot;inner_&quot;</span><span class="p">)</span>
         <span class="n">_inner_margins</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_and_set_margins</span><span class="p">(</span><span class="n">margin_lines</span><span class="p">)</span>
@@ -3557,7 +3575,8 @@
 <span class="sd">                margin (right_margin, left_margin, top_margin, bottom_margin)</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            dict: marginname: int (in percentage) pairs</span>
+<span class="sd">            (dict[str, int]): a dictionary of margin name to percentages (as</span>
+<span class="sd">                integers)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">m</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">):</span>
@@ -3570,9 +3589,9 @@
     <span class="k">def</span> <span class="nf">set_lang_genre_xsl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the mainlang and genre variables in the xsl file.&quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="n">util</span><span class="o">.</span><span class="n">ignored</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">CorpusPath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_variable</span><span class="p">(</span><span class="s2">&quot;mainlang&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">pathcomponents</span><span class="o">.</span><span class="n">lang</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_variable</span><span class="p">(</span><span class="s2">&quot;genre&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">pathcomponents</span><span class="o">.</span><span class="n">genre</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_variable</span><span class="p">(</span><span class="s2">&quot;mainlang&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">lang</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_variable</span><span class="p">(</span><span class="s2">&quot;genre&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">filepath</span><span class="o">.</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write self.tree to self.filename.&quot;&quot;&quot;</span>
@@ -3590,8 +3609,8 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the skip_elements variable.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            list of tuples of str: each tuple has a (start, end) xpath path</span>
-<span class="sd">            pair. If the skip_elements variable is empty, return None.</span>
+<span class="sd">            (list[tuple[xpath, xpath]]): each tuple has a (start, end) xpath</span>
+<span class="sd">                path pair. If the skip_elements variable is empty, return None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">get_with_ns</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
@@ -3619,6 +3638,9 @@
 
 <span class="sd">        The key may be all, odd, even or a pagenumber, the value is a</span>
 <span class="sd">        floating point number.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            XsltError: On invalid format</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;linespacing&quot;</span><span class="p">)</span>
 
@@ -3652,7 +3674,7 @@
 <span class="sd">            value (str): contains the linespacing</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            dict: page: float pairs</span>
+<span class="sd">            (dict[str, float]): page: float pairs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">l</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
@@ -3668,7 +3690,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Find all xsl:template elements.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            List of etree.Element</span>
+<span class="sd">            (list[xml.etree.Element]): List of etree.Element</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ns</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;xsl&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.w3.org/1999/XSL/Transform&quot;</span><span class="p">}</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">&quot;.//xsl:template&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="n">ns</span><span class="p">)</span>
@@ -3742,23 +3764,6 @@
   
       <p>Parse inner margin lines fetched from the .xsl file.</p>
 
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-<th>Name</th>        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-<td><code>dict</code></td>          <td>
-          </td>
-          <td><p>The dict consists of marginname:percentage pairs.</p></td>
-        </tr>
-    </tbody>
-  </table>
-
   <p><strong>Raises:</strong></p>
   <table>
     <thead>
@@ -3770,10 +3775,27 @@
     <tbody>
         <tr>
           <td>
-                <code>XsltException</code>
+                <code><a class="autorefs autorefs-internal" title="corpustools.xslsetter.XsltError" href="#corpustools.xslsetter.XsltError">XsltError</a></code>
           </td>
-          <td><p>Raise this exception if there are errors in the
-inner_margin_lines.</p></td>
+          <td><p>On errors in the inner_margin_lines.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>dict</code>
+          </td>
+          <td><p>The dict consists of marginname:percentage pairs.</p></td>
         </tr>
     </tbody>
   </table>
@@ -3800,6 +3822,24 @@ inner_margin_lines.</p></td>
       <p>:obj:<code>dict</code> of :obj:<code>str</code> pairs</p>
 <p>The key may be all, odd, even or a pagenumber, the value is a
 floating point number.</p>
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="corpustools.xslsetter.XsltError" href="#corpustools.xslsetter.XsltError">XsltError</a></code>
+          </td>
+          <td><p>On invalid format</p></td>
+        </tr>
+    </tbody>
+  </table>
   </div>
 
 </div>
@@ -3826,13 +3866,14 @@ floating point number.</p>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>dict</code></td>          <td>
+          <td>
+                <code>dict</code>
           </td>
           <td><p>The dict consists of marginname:percentage pairs.</p></td>
         </tr>
@@ -3864,13 +3905,14 @@ floating point number.</p>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>set</code></td>          <td>
+          <td>
+                <code>set[str]</code>
           </td>
           <td><p>A set of languages to look for in the document</p></td>
         </tr>
@@ -3909,13 +3951,10 @@ floating point number.</p>
     <tbody>
         <tr>
           <td>
+                <code>list[tuple[xpath, xpath]]</code>
           </td>
-          <td><p>list of tuples of str: each tuple has a (start, end) xpath path</p></td>
-        </tr>
-        <tr>
-          <td>
-          </td>
-          <td><p>pair. If the skip_elements variable is empty, return None.</p></td>
+          <td><p>each tuple has a (start, end) xpath
+path pair. If the skip_elements variable is empty, return None.</p></td>
         </tr>
     </tbody>
   </table>
@@ -4031,6 +4070,7 @@ floating point number.</p>
     <tbody>
         <tr>
           <td>
+                <code>list[xml.<span title="xml.etree">etree</span>.<span title="xml.etree.Element">Element</span>]</code>
           </td>
           <td><p>List of etree.Element</p></td>
         </tr>
@@ -4236,23 +4276,23 @@ otherwise inner_ if getting inner margin lines.</p></td>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>dict</code></td>          <td>
+          <td>
+                <code>dict[str, str]</code>
           </td>
-          <td><p>Contains marginname:percentage pairs.</p></td>
+          <td><p>A dictionary of margin name to percentages</p></td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/xslsetter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">323</span>
-<span class="normal">324</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">324</span>
 <span class="normal">325</span>
 <span class="normal">326</span>
 <span class="normal">327</span>
@@ -4275,7 +4315,8 @@ otherwise inner_ if getting inner margin lines.</p></td>
 <span class="normal">344</span>
 <span class="normal">345</span>
 <span class="normal">346</span>
-<span class="normal">347</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_margin_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="normal">347</span>
+<span class="normal">348</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_margin_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the margin lines from the metadata file.</span>
 
 <span class="sd">    Args:</span>
@@ -4283,7 +4324,7 @@ otherwise inner_ if getting inner margin lines.</p></td>
 <span class="sd">            otherwise inner_ if getting inner margin lines.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: Contains marginname:percentage pairs.</span>
+<span class="sd">        (dict[str, str]): A dictionary of margin name to percentages</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">margin_lines</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">key</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -4324,15 +4365,17 @@ otherwise inner_ if getting inner margin lines.</p></td>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>dict</code></td>          <td>
+          <td>
+                <code>dict[str, str]</code>
           </td>
-          <td><p>A dict of parallel files containing language:filename pairs.</p></td>
+          <td><p>A dict of parallel files containing
+language:filename pairs.</p></td>
         </tr>
     </tbody>
   </table>
@@ -4354,11 +4397,13 @@ otherwise inner_ if getting inner margin lines.</p></td>
 <span class="normal">151</span>
 <span class="normal">152</span>
 <span class="normal">153</span>
-<span class="normal">154</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_parallel_texts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">154</span>
+<span class="normal">155</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_parallel_texts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the parallel texts.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: A dict of parallel files containing language:filename pairs.</span>
+<span class="sd">        (dict[str, str]): A dict of parallel files containing</span>
+<span class="sd">            language:filename pairs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">parallels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_variable_elt</span><span class="p">(</span><span class="s2">&quot;parallels&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">parallels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -4401,8 +4446,9 @@ otherwise inner_ if getting inner margin lines.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>tuple[str, Any]</code>
           </td>
-          <td><p>tuple of str: a key/value pair</p></td>
+          <td><p>a key/value pair</p></td>
         </tr>
     </tbody>
   </table>
@@ -4425,7 +4471,7 @@ otherwise inner_ if getting inner margin lines.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Find all set variables.</span>
 
 <span class="sd">    Yields:</span>
-<span class="sd">        tuple of str: a key/value pair</span>
+<span class="sd">        (tuple[str, Any]): a key/value pair</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ns</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;xsl&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.w3.org/1999/XSL/Transform&quot;</span><span class="p">}</span>
     <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
@@ -4489,8 +4535,9 @@ otherwise inner_ if getting inner margin lines.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>str | None</code>
           </td>
-          <td><p>str or None: The string contains the value associated with the key.</p></td>
+          <td><p>The string contains the value associated with the key.</p></td>
         </tr>
     </tbody>
   </table>
@@ -4520,7 +4567,7 @@ otherwise inner_ if getting inner margin lines.</p></td>
 <span class="sd">        key (str): Name of the variable to get.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str or None: The string contains the value associated with the key.</span>
+<span class="sd">        (str|None): The string contains the value associated with the key.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">variable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_variable_elt</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">variable</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -4582,13 +4629,14 @@ otherwise inner_ if getting inner margin lines.</p></td>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>dict</code></td>          <td>
+          <td>
+                <code>dict[str, float]</code>
           </td>
           <td><p>page: float pairs</p></td>
         </tr>
@@ -4597,11 +4645,7 @@ otherwise inner_ if getting inner margin lines.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/xslsetter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">554</span>
-<span class="normal">555</span>
-<span class="normal">556</span>
-<span class="normal">557</span>
-<span class="normal">558</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">558</span>
 <span class="normal">559</span>
 <span class="normal">560</span>
 <span class="normal">561</span>
@@ -4614,7 +4658,11 @@ otherwise inner_ if getting inner margin lines.</p></td>
 <span class="normal">568</span>
 <span class="normal">569</span>
 <span class="normal">570</span>
-<span class="normal">571</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">571</span>
+<span class="normal">572</span>
+<span class="normal">573</span>
+<span class="normal">574</span>
+<span class="normal">575</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">parse_linespacing_line</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a linespacing line read from the .xsl file.</span>
 
@@ -4622,7 +4670,7 @@ otherwise inner_ if getting inner margin lines.</p></td>
 <span class="sd">        value (str): contains the linespacing</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: page: float pairs</span>
+<span class="sd">        (dict[str, float]): page: float pairs</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">l</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
@@ -4685,15 +4733,17 @@ margin (right_margin, left_margin, top_margin, bottom_margin)</p></td>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>dict</code></td>          <td>
+          <td>
+                <code>dict[str, int]</code>
           </td>
-          <td><p>marginname: int (in percentage) pairs</p></td>
+          <td><p>a dictionary of margin name to percentages (as
+integers)</p></td>
         </tr>
     </tbody>
   </table>
@@ -4717,7 +4767,8 @@ margin (right_margin, left_margin, top_margin, bottom_margin)</p></td>
 <span class="normal">472</span>
 <span class="normal">473</span>
 <span class="normal">474</span>
-<span class="normal">475</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">475</span>
+<span class="normal">476</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">parse_margin_line</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a margin line read from the .xsl file.</span>
 
@@ -4726,7 +4777,8 @@ margin (right_margin, left_margin, top_margin, bottom_margin)</p></td>
 <span class="sd">            margin (right_margin, left_margin, top_margin, bottom_margin)</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: marginname: int (in percentage) pairs</span>
+<span class="sd">        (dict[str, int]): a dictionary of margin name to percentages (as</span>
+<span class="sd">            integers)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">m</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">):</span>
@@ -4757,17 +4809,17 @@ margin (right_margin, left_margin, top_margin, bottom_margin)</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/xslsetter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">477</span>
-<span class="normal">478</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">478</span>
 <span class="normal">479</span>
 <span class="normal">480</span>
 <span class="normal">481</span>
-<span class="normal">482</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_lang_genre_xsl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">482</span>
+<span class="normal">483</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_lang_genre_xsl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the mainlang and genre variables in the xsl file.&quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="n">util</span><span class="o">.</span><span class="n">ignored</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">CorpusPath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_variable</span><span class="p">(</span><span class="s2">&quot;mainlang&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">pathcomponents</span><span class="o">.</span><span class="n">lang</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_variable</span><span class="p">(</span><span class="s2">&quot;genre&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">pathcomponents</span><span class="o">.</span><span class="n">genre</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_variable</span><span class="p">(</span><span class="s2">&quot;mainlang&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">lang</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_variable</span><span class="p">(</span><span class="s2">&quot;genre&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">filepath</span><span class="o">.</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -4814,8 +4866,7 @@ margin (right_margin, left_margin, top_margin, bottom_margin)</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/xslsetter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">175</span>
-<span class="normal">176</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">176</span>
 <span class="normal">177</span>
 <span class="normal">178</span>
 <span class="normal">179</span>
@@ -4827,7 +4878,8 @@ margin (right_margin, left_margin, top_margin, bottom_margin)</p></td>
 <span class="normal">185</span>
 <span class="normal">186</span>
 <span class="normal">187</span>
-<span class="normal">188</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_mlang</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language</span><span class="p">):</span>
+<span class="normal">188</span>
+<span class="normal">189</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_mlang</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set a language in mlangs.</span>
 
 <span class="sd">    Args:</span>
@@ -4897,8 +4949,7 @@ margin (right_margin, left_margin, top_margin, bottom_margin)</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/xslsetter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">190</span>
-<span class="normal">191</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">191</span>
 <span class="normal">192</span>
 <span class="normal">193</span>
 <span class="normal">194</span>
@@ -4915,7 +4966,8 @@ margin (right_margin, left_margin, top_margin, bottom_margin)</p></td>
 <span class="normal">205</span>
 <span class="normal">206</span>
 <span class="normal">207</span>
-<span class="normal">208</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_parallel_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language</span><span class="p">,</span> <span class="n">location</span><span class="p">):</span>
+<span class="normal">208</span>
+<span class="normal">209</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_parallel_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language</span><span class="p">,</span> <span class="n">location</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Insert the name of a parallel file into the parallels element.</span>
 
 <span class="sd">    Args:</span>
@@ -5053,7 +5105,7 @@ margin (right_margin, left_margin, top_margin, bottom_margin)</p></td>
         <tr>
           <td><code>margin_lines</code></td>
           <td>
-                <code>dict</code>
+                <code>dict[str, str]</code>
           </td>
           <td><p>The dict consists of
 marginname:percentage pairs</p></td>
@@ -5068,13 +5120,14 @@ marginname:percentage pairs</p></td>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>dict</code></td>          <td>
+          <td>
+                <code>dict[str, int]</code>
           </td>
           <td><p>The dict consists of marginname:percentage pairs.</p></td>
         </tr>
@@ -5102,8 +5155,7 @@ margin_lines.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/xslsetter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">349</span>
-<span class="normal">350</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">350</span>
 <span class="normal">351</span>
 <span class="normal">352</span>
 <span class="normal">353</span>
@@ -5139,15 +5191,16 @@ margin_lines.</p></td>
 <span class="normal">383</span>
 <span class="normal">384</span>
 <span class="normal">385</span>
-<span class="normal">386</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">validate_and_set_margins</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">margin_lines</span><span class="p">):</span>
+<span class="normal">386</span>
+<span class="normal">387</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">validate_and_set_margins</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">margin_lines</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set and validate the margin lines.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        margin_lines (dict): The dict consists of</span>
+<span class="sd">        margin_lines (dict[str, str]): The dict consists of</span>
 <span class="sd">            marginname:percentage pairs</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: The dict consists of marginname:percentage pairs.</span>
+<span class="sd">        (dict[str, int]): The dict consists of marginname:percentage pairs.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        XsltException: Raise this exception if there are errors in the</span>
@@ -5199,8 +5252,7 @@ margin_lines.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/xslsetter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">484</span>
-<span class="normal">485</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">485</span>
 <span class="normal">486</span>
 <span class="normal">487</span>
 <span class="normal">488</span>
@@ -5208,7 +5260,8 @@ margin_lines.</p></td>
 <span class="normal">490</span>
 <span class="normal">491</span>
 <span class="normal">492</span>
-<span class="normal">493</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">493</span>
+<span class="normal">494</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Write self.tree to self.filename.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>

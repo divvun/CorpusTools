@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1372,17 +1386,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2300,7 +2314,7 @@
         <tr>
           <td><code>directories</code></td>
           <td>
-                <code>list of str</code>
+                <code>list[str]</code>
           </td>
           <td><p>paths to directories</p></td>
           <td>
@@ -2314,13 +2328,14 @@
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>str</code></td>          <td>
+          <td>
+                <code>str</code>
           </td>
           <td><p>path to an .xsl file</p></td>
         </tr>
@@ -2346,10 +2361,10 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Find .xsl files found in directories.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        directories (list of str): paths to directories</span>
+<span class="sd">        directories (list[str]): paths to directories</span>
 
 <span class="sd">    Yields:</span>
-<span class="sd">        str: path to an .xsl file</span>
+<span class="sd">        (str): path to an .xsl file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">directory</span> <span class="ow">in</span> <span class="n">directories</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
@@ -2386,7 +2401,8 @@
 <span class="normal">133</span>
 <span class="normal">134</span>
 <span class="normal">135</span>
-<span class="normal">136</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="normal">136</span>
+<span class="normal">137</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update metadata files.&quot;&quot;&quot;</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_options</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">xsl_file</span> <span class="ow">in</span> <span class="n">find_xsl_files</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">directories</span><span class="p">):</span>
@@ -2394,6 +2410,7 @@
             <span class="n">update_xsl_file</span><span class="p">(</span><span class="n">xsl_file</span><span class="p">)</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">,</span> <span class="n">xslsetter</span><span class="o">.</span><span class="n">XsltError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">xsl_file</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -2426,8 +2443,9 @@
     <tbody>
         <tr>
           <td>
+                <code>argparse.<span title="argparse.Namespace">Namespace</span></code>
           </td>
-          <td><p>a list of arguments as parsed by argparse.Argumentparser.</p></td>
+          <td><p>the parsed commandline arguments</p></td>
         </tr>
     </tbody>
   </table>
@@ -2461,7 +2479,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the commandline options.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        a list of arguments as parsed by argparse.Argumentparser.</span>
+<span class="sd">        (argparse.Namespace): the parsed commandline arguments</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
         <span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="n">argparse_version</span><span class="o">.</span><span class="n">parser</span><span class="p">],</span>

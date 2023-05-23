@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1541,17 +1555,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -3044,7 +3058,8 @@ characters</p>
 <span class="normal">571</span>
 <span class="normal">572</span>
 <span class="normal">573</span>
-<span class="normal">574</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">DocumentFixer</span><span class="p">:</span>
+<span class="normal">574</span>
+<span class="normal">575</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">DocumentFixer</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fix the content of a Giella xml document.</span>
 
 <span class="sd">    Receive a stringified etree from one of the raw converters,</span>
@@ -3341,7 +3356,8 @@ characters</p>
 <span class="sd">            text (str): string</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            A list of span tuples containing indexes to quotes found in text.</span>
+<span class="sd">            (list[tuple[int, int]]): A list of span tuples containing</span>
+<span class="sd">                indexes to quotes found in text.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">unwanted</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;[^:,!?.\s]&quot;</span>
         <span class="n">quote_regexes</span> <span class="o">=</span> <span class="p">[</span>
@@ -3685,8 +3701,7 @@ indexes to quotes found in text.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/documentfixer.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">346</span>
-<span class="normal">347</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">347</span>
 <span class="normal">348</span>
 <span class="normal">349</span>
 <span class="normal">350</span>
@@ -3702,7 +3717,8 @@ indexes to quotes found in text.</p></td>
 <span class="normal">360</span>
 <span class="normal">361</span>
 <span class="normal">362</span>
-<span class="normal">363</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">363</span>
+<span class="normal">364</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">append_quotes</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">quote_list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Append quotes to an element.</span>
 
@@ -3742,14 +3758,14 @@ indexes to quotes found in text.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/documentfixer.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">406</span>
-<span class="normal">407</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">407</span>
 <span class="normal">408</span>
 <span class="normal">409</span>
 <span class="normal">410</span>
 <span class="normal">411</span>
 <span class="normal">412</span>
-<span class="normal">413</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_wordcount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">413</span>
+<span class="normal">414</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_wordcount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Count the words in the file.&quot;&quot;&quot;</span>
     <span class="n">plist</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">paragraph</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">)</span>
@@ -3846,10 +3862,10 @@ indexes to quotes found in text.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/documentfixer.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">401</span>
-<span class="normal">402</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">402</span>
 <span class="normal">403</span>
-<span class="normal">404</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">detect_quotes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">404</span>
+<span class="normal">405</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">detect_quotes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Detect quotes in all paragraphs.&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">paragraph</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">iter</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">):</span>
         <span class="n">paragraph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_detect_quote</span><span class="p">(</span><span class="n">paragraph</span><span class="p">)</span>
@@ -4056,10 +4072,10 @@ Parse the returned string, insert it into the document</p>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/documentfixer.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">571</span>
-<span class="normal">572</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">572</span>
 <span class="normal">573</span>
-<span class="normal">574</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fix_newstags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">574</span>
+<span class="normal">575</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fix_newstags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert newstags found in text to xml elements.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_fix_emphasises</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_fix_paragraphs</span><span class="p">()</span>
@@ -4226,8 +4242,10 @@ Parse the returned string, insert it into the document</p>
     <tbody>
         <tr>
           <td>
+                <code>list[tuple[int, int]]</code>
           </td>
-          <td><p>A list of span tuples containing indexes to quotes found in text.</p></td>
+          <td><p>A list of span tuples containing
+indexes to quotes found in text.</p></td>
         </tr>
     </tbody>
   </table>
@@ -4258,7 +4276,8 @@ Parse the returned string, insert it into the document</p>
 <span class="normal">341</span>
 <span class="normal">342</span>
 <span class="normal">343</span>
-<span class="normal">344</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">344</span>
+<span class="normal">345</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">get_quote_list</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get list of quotes from the given text.</span>
 
@@ -4266,7 +4285,8 @@ Parse the returned string, insert it into the document</p>
 <span class="sd">        text (str): string</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A list of span tuples containing indexes to quotes found in text.</span>
+<span class="sd">        (list[tuple[int, int]]): A list of span tuples containing</span>
+<span class="sd">            indexes to quotes found in text.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">unwanted</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;[^:,!?.\s]&quot;</span>
     <span class="n">quote_regexes</span> <span class="o">=</span> <span class="p">[</span>

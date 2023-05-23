@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1472,17 +1486,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2361,21 +2375,62 @@ done.</p>
       <p>Decode the text given to this function.</p>
 <p>Replace letters in text with the ones from the dict at
 position position in CTYPES</p>
-<p>@param position which place the encoding has in the CTYPES list
-@param text str
-@return str</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>position</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td><p>an encoding name</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>text</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td><p>the text to decode</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>str</code>
+          </td>
+          <td><p>The decoded text</p></td>
+        </tr>
+    </tbody>
+  </table>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/decode.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">399</span>
-<span class="normal">400</span>
-<span class="normal">401</span>
-<span class="normal">402</span>
-<span class="normal">403</span>
-<span class="normal">404</span>
-<span class="normal">405</span>
-<span class="normal">406</span>
-<span class="normal">407</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">407</span>
 <span class="normal">408</span>
 <span class="normal">409</span>
 <span class="normal">410</span>
@@ -2388,15 +2443,29 @@ position position in CTYPES</p>
 <span class="normal">417</span>
 <span class="normal">418</span>
 <span class="normal">419</span>
-<span class="normal">420</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">decode_para</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
+<span class="normal">431</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">decode_para</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Decode the text given to this function.</span>
 
 <span class="sd">    Replace letters in text with the ones from the dict at</span>
 <span class="sd">    position position in CTYPES</span>
 
-<span class="sd">    @param position which place the encoding has in the CTYPES list</span>
-<span class="sd">    @param text str</span>
-<span class="sd">    @return str</span>
+<span class="sd">    Args:</span>
+<span class="sd">        position (str): an encoding name</span>
+<span class="sd">        text (str): the text to decode</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (str): The decoded text</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">which_decoder</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;mac-sami_to_cp1252&quot;</span><span class="p">:</span> <span class="n">fix_macsami_cp1252</span><span class="p">,</span>
@@ -2442,6 +2511,16 @@ position position in CTYPES</p>
     </thead>
     <tbody>
         <tr>
+          <td><code>position</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
           <td><code>text</code></td>
           <td>
                 <code>str</code>
@@ -2465,37 +2544,38 @@ position position in CTYPES</p>
     <tbody>
         <tr>
           <td>
+                <code>str</code>
           </td>
-          <td><p>str</p></td>
+          <td></td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/decode.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">382</span>
-<span class="normal">383</span>
-<span class="normal">384</span>
-<span class="normal">385</span>
-<span class="normal">386</span>
-<span class="normal">387</span>
-<span class="normal">388</span>
-<span class="normal">389</span>
-<span class="normal">390</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">390</span>
 <span class="normal">391</span>
 <span class="normal">392</span>
 <span class="normal">393</span>
 <span class="normal">394</span>
 <span class="normal">395</span>
-<span class="normal">396</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">default_decoder</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">default_decoder</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The default decoder.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        position</span>
+<span class="sd">        position (str): </span>
 <span class="sd">        text (str): The string that should be decoded.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str</span>
+<span class="sd">        (str): </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">position</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">CTYPES</span><span class="p">[</span><span class="n">position</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -2559,6 +2639,7 @@ cp1252.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>str</code>
           </td>
           <td><p>str with fixed encoding.</p></td>
         </tr>
@@ -2589,7 +2670,7 @@ cp1252.</p></td>
 <span class="sd">            cp1252.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str with fixed encoding.</span>
+<span class="sd">        (str): str with fixed encoding.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">bytestring</span> <span class="o">=</span> <span class="n">instring</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;1252&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;xmlcharrefreplace&quot;</span><span class="p">)</span>
     <span class="n">encoded_unicode</span> <span class="o">=</span> <span class="n">bytestring</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;macsami&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&amp;#129;&quot;</span><span class="p">,</span> <span class="s2">&quot;Å&quot;</span><span class="p">)</span>
@@ -2651,8 +2732,9 @@ latin1.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>str</code>
           </td>
-          <td><p>str with fixed encoding.</p></td>
+          <td><p>a string with fixed encoding.</p></td>
         </tr>
     </tbody>
   </table>
@@ -2679,7 +2761,7 @@ latin1.</p></td>
 <span class="sd">            latin1.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str with fixed encoding.</span>
+<span class="sd">        (str): a string with fixed encoding.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">instring</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;latin1&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;xmlcharrefreplace&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;macsami&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2739,8 +2821,9 @@ macroman.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>str</code>
           </td>
-          <td><p>str with fixed encoding.</p></td>
+          <td><p>a string with fixed encoding.</p></td>
         </tr>
     </tbody>
   </table>
@@ -2770,7 +2853,7 @@ macroman.</p></td>
 <span class="sd">            macroman.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str with fixed encoding.</span>
+<span class="sd">        (str): a string with fixed encoding.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">bytestring</span> <span class="o">=</span> <span class="n">instring</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;macroman&quot;</span><span class="p">,</span> <span class="s2">&quot;xmlcharrefreplace&quot;</span><span class="p">)</span>
     <span class="n">encoded_string</span> <span class="o">=</span> <span class="n">bytestring</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;macsami&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&amp;#8486;&quot;</span><span class="p">,</span> <span class="s2">&quot;ž&quot;</span><span class="p">)</span>
@@ -2833,8 +2916,9 @@ cp1252.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>str</code>
           </td>
-          <td><p>str with fixed encoding.</p></td>
+          <td><p>a string with fixed encoding.</p></td>
         </tr>
     </tbody>
   </table>
@@ -2872,7 +2956,7 @@ cp1252.</p></td>
 <span class="sd">            cp1252.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str with fixed encoding.</span>
+<span class="sd">        (str): a string with fixed encoding.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mari_replacements</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="s2">&quot;&amp;#1118;&quot;</span><span class="p">,</span> <span class="s2">&quot;ӱ&quot;</span><span class="p">),</span>  <span class="c1"># xml char ref CYRILLIC SMALL LETTER SHORT U</span>
@@ -2943,8 +3027,9 @@ cp1252.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>str</code>
           </td>
-          <td><p>str with fixed encoding.</p></td>
+          <td><p>a string with fixed encoding.</p></td>
         </tr>
     </tbody>
   </table>
@@ -2971,7 +3056,7 @@ cp1252.</p></td>
 <span class="sd">            cp1252.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str with fixed encoding.</span>
+<span class="sd">        (str): a string with fixed encoding.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">instring</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;cp1252&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;xmlcharrefreplace&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ws2&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2997,17 +3082,63 @@ cp1252.</p></td>
 Then get the frequencies of the letters in the encodings in CTYPES</p>
 <p>If "sami letters" that the encoding tries to fix exist in "content",
 disregard the encoding</p>
-<p>@param content a unicode string
-@return winner is a key from CTYPES or None to tell that no known
-encoding is found</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>content</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td><p>the content</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>mainlang</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td><p>Three-letter language code</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>str</code>
+          </td>
+          <td><p>A codec name, as given in the keys of CTYPES, or None
+if no codec could be determined</p></td>
+        </tr>
+    </tbody>
+  </table>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/decode.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">332</span>
-<span class="normal">333</span>
-<span class="normal">334</span>
-<span class="normal">335</span>
-<span class="normal">336</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">336</span>
 <span class="normal">337</span>
 <span class="normal">338</span>
 <span class="normal">339</span>
@@ -3050,7 +3181,15 @@ encoding is found</p>
 <span class="normal">376</span>
 <span class="normal">377</span>
 <span class="normal">378</span>
-<span class="normal">379</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">guess_body_encoding</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">mainlang</span><span class="p">):</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">guess_body_encoding</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">mainlang</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Guess the encoding of the string content.</span>
 
 <span class="sd">    First get the frequencies of the &quot;sami letters&quot;</span>
@@ -3059,9 +3198,13 @@ encoding is found</p>
 <span class="sd">    If &quot;sami letters&quot; that the encoding tries to fix exist in &quot;content&quot;,</span>
 <span class="sd">    disregard the encoding</span>
 
-<span class="sd">    @param content a unicode string</span>
-<span class="sd">    @return winner is a key from CTYPES or None to tell that no known</span>
-<span class="sd">    encoding is found</span>
+<span class="sd">    Args:</span>
+<span class="sd">        content (str): the content</span>
+<span class="sd">        mainlang (str): Three-letter language code</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (str): A codec name, as given in the keys of CTYPES, or None</span>
+<span class="sd">            if no codec could be determined</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">winner</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="s2">&quot;ì&quot;</span> <span class="ow">in</span> <span class="n">content</span> <span class="ow">and</span> <span class="s2">&quot;ò&quot;</span> <span class="ow">in</span> <span class="n">content</span> <span class="ow">and</span> <span class="n">mainlang</span> <span class="ow">in</span> <span class="n">CYRILLIC_LANGUAGES</span><span class="p">:</span>
@@ -3117,8 +3260,49 @@ encoding is found</p>
   <div class="doc doc-contents ">
   
       <p>Guess the encoding of a file.</p>
-<p>@param filename name of an utf-8 encoded file
-@return winner is an int, pointing to a position in CTYPES, or -1</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>filename</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td><p>the file to open</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>str</code>
+          </td>
+          <td><p>A codec name, as given in the keys of CTYPES, or None
+if no codec could be determined</p></td>
+        </tr>
+    </tbody>
+  </table>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/decode.py</code></summary>
@@ -3132,11 +3316,19 @@ encoding is found</p>
 <span class="normal">326</span>
 <span class="normal">327</span>
 <span class="normal">328</span>
-<span class="normal">329</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">guess_file_encoding</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mainlang</span><span class="p">):</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">guess_file_encoding</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mainlang</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Guess the encoding of a file.</span>
 
-<span class="sd">    @param filename name of an utf-8 encoded file</span>
-<span class="sd">    @return winner is an int, pointing to a position in CTYPES, or -1</span>
+<span class="sd">    Args:</span>
+<span class="sd">        filename (str): the file to open</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (str): A codec name, as given in the keys of CTYPES, or None</span>
+<span class="sd">            if no codec could be determined</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">infile</span><span class="p">:</span>
         <span class="n">content</span> <span class="o">=</span> <span class="n">infile</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>

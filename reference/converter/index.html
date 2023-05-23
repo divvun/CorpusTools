@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -752,13 +766,6 @@
   
     <nav class="md-nav" aria-label="Converter">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#corpustools.converter.Converter.corpusdir" class="md-nav__link">
-    corpusdir
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#corpustools.converter.Converter.dependencies" class="md-nav__link">
@@ -1534,17 +1541,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2310,13 +2317,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#corpustools.converter.Converter.corpusdir" class="md-nav__link">
-    corpusdir
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#corpustools.converter.Converter.dependencies" class="md-nav__link">
     dependencies
   </a>
@@ -2484,8 +2484,7 @@
 
         <details class="quote">
           <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/converter.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 87</span>
-<span class="normal"> 88</span>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 88</span>
 <span class="normal"> 89</span>
 <span class="normal"> 90</span>
 <span class="normal"> 91</span>
@@ -2729,10 +2728,7 @@
 <span class="normal">329</span>
 <span class="normal">330</span>
 <span class="normal">331</span>
-<span class="normal">332</span>
-<span class="normal">333</span>
-<span class="normal">334</span>
-<span class="normal">335</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Converter</span><span class="p">:</span>
+<span class="normal">332</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Converter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Take care of data common to all Converter classes.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">lazy_conversion</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">write_intermediate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -2744,11 +2740,11 @@
 <span class="sd">                 converted document should be written (used for debugging purposes).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">codecs</span><span class="o">.</span><span class="n">register_error</span><span class="p">(</span><span class="s2">&quot;mixed&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixed_decoder</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">CorpusPath</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lazy_conversion</span> <span class="o">=</span> <span class="n">lazy_conversion</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write_intermediate</span> <span class="o">=</span> <span class="n">write_intermediate</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">xslsetter</span><span class="o">.</span><span class="n">MetadataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">xsl</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">metadata</span>
         <span class="k">except</span> <span class="n">xslsetter</span><span class="o">.</span><span class="n">XsltError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">ConversionError</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
 
@@ -2819,7 +2815,7 @@
             <span class="n">complete</span> <span class="o">=</span> <span class="n">xsl_maker</span><span class="o">.</span><span class="n">transformer</span><span class="p">(</span><span class="n">intermediate</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="n">complete</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
-        <span class="k">except</span> <span class="n">etree</span><span class="o">.</span><span class="n">XSLTApplyError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="k">except</span> <span class="n">etree</span><span class="o">.</span><span class="n">XSLTApplyError</span><span class="p">:</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">logfile</span><span class="p">:</span>
                 <span class="n">logfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error at: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">util</span><span class="o">.</span><span class="n">lineno</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -2935,10 +2931,11 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Find out if the xml document has any content.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            complete: a etree element containing the converted document.</span>
+<span class="sd">            complete (lxml.etree.Element): a etree element containing</span>
+<span class="sd">                the converted document.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            The length of the content in complete.</span>
+<span class="sd">            (int): The length of the content in complete.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">xml_printer</span> <span class="o">=</span> <span class="n">ccat</span><span class="o">.</span><span class="n">XMLPrinter</span><span class="p">(</span><span class="n">all_paragraphs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">hyph_replacement</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         <span class="n">xml_printer</span><span class="o">.</span><span class="n">etree</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">ElementTree</span><span class="p">(</span><span class="n">complete</span><span class="p">)</span>
@@ -2949,7 +2946,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write the complete converted document to disk.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            languageguesser: a text.Classifier</span>
+<span class="sd">            languageguesser (text.Classifier): a text.Classifier</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">lazy_conversion</span> <span class="ow">or</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lazy_conversion</span>
@@ -2975,12 +2972,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">tmpdir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the directory where temporary files should be placed.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">pathcomponents</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">corpusdir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the directory where the corpus directory is.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">pathcomponents</span><span class="o">.</span><span class="n">root</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">converted_corpus_dir</span> <span class="o">/</span> <span class="s2">&quot;tmp&quot;</span>
 </code></pre></div></td></tr></table></div>
         </details>
 
@@ -2993,27 +2985,6 @@
 
 
 
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="corpustools.converter.Converter.corpusdir" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">corpusdir</span></code>
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-property"><code>property</code></small>
-  </span>
-
-</h3>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Return the directory where the corpus directory is.</p>
-  </div>
-
-</div>
 
 <div class="doc doc-object doc-attribute">
 
@@ -3152,8 +3123,7 @@
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/converter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 90</span>
-<span class="normal"> 91</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 91</span>
 <span class="normal"> 92</span>
 <span class="normal"> 93</span>
 <span class="normal"> 94</span>
@@ -3171,7 +3141,8 @@
 <span class="normal">106</span>
 <span class="normal">107</span>
 <span class="normal">108</span>
-<span class="normal">109</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">lazy_conversion</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">write_intermediate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="normal">109</span>
+<span class="normal">110</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">lazy_conversion</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">write_intermediate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialise the Converter class.</span>
 
 <span class="sd">    Args:</span>
@@ -3180,11 +3151,11 @@
 <span class="sd">             converted document should be written (used for debugging purposes).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">codecs</span><span class="o">.</span><span class="n">register_error</span><span class="p">(</span><span class="s2">&quot;mixed&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixed_decoder</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">CorpusPath</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lazy_conversion</span> <span class="o">=</span> <span class="n">lazy_conversion</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">write_intermediate</span> <span class="o">=</span> <span class="n">write_intermediate</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">xslsetter</span><span class="o">.</span><span class="n">MetadataHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">xsl</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">metadata</span>
     <span class="k">except</span> <span class="n">xslsetter</span><span class="o">.</span><span class="n">XsltError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">ConversionError</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
 
@@ -3213,8 +3184,7 @@
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/converter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">187</span>
-<span class="normal">188</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">188</span>
 <span class="normal">189</span>
 <span class="normal">190</span>
 <span class="normal">191</span>
@@ -3224,7 +3194,8 @@
 <span class="normal">195</span>
 <span class="normal">196</span>
 <span class="normal">197</span>
-<span class="normal">198</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">convert_errormarkup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">complete</span><span class="p">):</span>
+<span class="normal">198</span>
+<span class="normal">199</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">convert_errormarkup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">complete</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert error markup to xml.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">goldstandard</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -3258,8 +3229,7 @@
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/converter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">200</span>
-<span class="normal">201</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">201</span>
 <span class="normal">202</span>
 <span class="normal">203</span>
 <span class="normal">204</span>
@@ -3295,7 +3265,8 @@
 <span class="normal">234</span>
 <span class="normal">235</span>
 <span class="normal">236</span>
-<span class="normal">237</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fix_document</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">complete</span><span class="p">):</span>
+<span class="normal">237</span>
+<span class="normal">238</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fix_document</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">complete</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fix a misc. issues found in converted document.&quot;&quot;&quot;</span>
     <span class="n">fixer</span> <span class="o">=</span> <span class="n">documentfixer</span><span class="o">.</span><span class="n">DocumentFixer</span><span class="p">(</span><span class="n">complete</span><span class="p">)</span>
 
@@ -3359,10 +3330,10 @@
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/converter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">126</span>
-<span class="normal">127</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">127</span>
 <span class="normal">128</span>
-<span class="normal">129</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">129</span>
+<span class="normal">130</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">get_dtd_location</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the path to the corpus dtd file.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">&quot;dtd/corpus.dtd&quot;</span><span class="p">)</span>
@@ -3404,8 +3375,10 @@
         <tr>
           <td><code>complete</code></td>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>a etree element containing the converted document.</p></td>
+          <td><p>a etree element containing
+the converted document.</p></td>
           <td>
               <em>required</em>
           </td>
@@ -3424,6 +3397,7 @@
     <tbody>
         <tr>
           <td>
+                <code>int</code>
           </td>
           <td><p>The length of the content in complete.</p></td>
         </tr>
@@ -3432,8 +3406,7 @@
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/converter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">285</span>
-<span class="normal">286</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">286</span>
 <span class="normal">287</span>
 <span class="normal">288</span>
 <span class="normal">289</span>
@@ -3445,15 +3418,18 @@
 <span class="normal">295</span>
 <span class="normal">296</span>
 <span class="normal">297</span>
-<span class="normal">298</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">has_content</span><span class="p">(</span><span class="n">complete</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Find out if the xml document has any content.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        complete: a etree element containing the converted document.</span>
+<span class="sd">        complete (lxml.etree.Element): a etree element containing</span>
+<span class="sd">            the converted document.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        The length of the content in complete.</span>
+<span class="sd">        (int): The length of the content in complete.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">xml_printer</span> <span class="o">=</span> <span class="n">ccat</span><span class="o">.</span><span class="n">XMLPrinter</span><span class="p">(</span><span class="n">all_paragraphs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">hyph_replacement</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="n">xml_printer</span><span class="o">.</span><span class="n">etree</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">ElementTree</span><span class="p">(</span><span class="n">complete</span><span class="p">)</span>
@@ -3485,8 +3461,7 @@ Detect the languages in the xml file</p>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/converter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">265</span>
-<span class="normal">266</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">266</span>
 <span class="normal">267</span>
 <span class="normal">268</span>
 <span class="normal">269</span>
@@ -3503,7 +3478,8 @@ Detect the languages in the xml file</p>
 <span class="normal">280</span>
 <span class="normal">281</span>
 <span class="normal">282</span>
-<span class="normal">283</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">make_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language_guesser</span><span class="p">):</span>
+<span class="normal">283</span>
+<span class="normal">284</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">make_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language_guesser</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Make a complete Giella xml file.</span>
 
 <span class="sd">    Combine the intermediate Giella xml file and the metadata into</span>
@@ -3544,14 +3520,14 @@ Detect the languages in the xml file</p>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/converter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">251</span>
-<span class="normal">252</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">252</span>
 <span class="normal">253</span>
 <span class="normal">254</span>
 <span class="normal">255</span>
 <span class="normal">256</span>
 <span class="normal">257</span>
-<span class="normal">258</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">mixed_decoder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decode_error</span><span class="p">):</span>
+<span class="normal">258</span>
+<span class="normal">259</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">mixed_decoder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decode_error</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert text to unicode.&quot;&quot;&quot;</span>
     <span class="n">badstring</span> <span class="o">=</span> <span class="n">decode_error</span><span class="o">.</span><span class="n">object</span><span class="p">[</span><span class="n">decode_error</span><span class="o">.</span><span class="n">start</span> <span class="p">:</span> <span class="n">decode_error</span><span class="o">.</span><span class="n">end</span><span class="p">]</span>
     <span class="n">badhex</span> <span class="o">=</span> <span class="n">badstring</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;hex&quot;</span><span class="p">)</span>
@@ -3581,8 +3557,7 @@ Detect the languages in the xml file</p>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/converter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">149</span>
-<span class="normal">150</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">150</span>
 <span class="normal">151</span>
 <span class="normal">152</span>
 <span class="normal">153</span>
@@ -3617,7 +3592,8 @@ Detect the languages in the xml file</p>
 <span class="normal">182</span>
 <span class="normal">183</span>
 <span class="normal">184</span>
-<span class="normal">185</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">transform_to_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">185</span>
+<span class="normal">186</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">transform_to_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Combine the intermediate xml document with its medatata.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">intermediate</span> <span class="o">=</span> <span class="n">to_giella</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">orig</span><span class="p">)</span>
@@ -3642,7 +3618,7 @@ Detect the languages in the xml file</p>
         <span class="n">complete</span> <span class="o">=</span> <span class="n">xsl_maker</span><span class="o">.</span><span class="n">transformer</span><span class="p">(</span><span class="n">intermediate</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">complete</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
-    <span class="k">except</span> <span class="n">etree</span><span class="o">.</span><span class="n">XSLTApplyError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="k">except</span> <span class="n">etree</span><span class="o">.</span><span class="n">XSLTApplyError</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">logfile</span><span class="p">:</span>
             <span class="n">logfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error at: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">util</span><span class="o">.</span><span class="n">lineno</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -3676,8 +3652,7 @@ Detect the languages in the xml file</p>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/converter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">131</span>
-<span class="normal">132</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">132</span>
 <span class="normal">133</span>
 <span class="normal">134</span>
 <span class="normal">135</span>
@@ -3692,7 +3667,8 @@ Detect the languages in the xml file</p>
 <span class="normal">144</span>
 <span class="normal">145</span>
 <span class="normal">146</span>
-<span class="normal">147</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">validate_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">complete</span><span class="p">):</span>
+<span class="normal">147</span>
+<span class="normal">148</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">validate_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">complete</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate the complete document.&quot;&quot;&quot;</span>
     <span class="n">dtd</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">DTD</span><span class="p">(</span><span class="n">Converter</span><span class="o">.</span><span class="n">get_dtd_location</span><span class="p">())</span>
 
@@ -3743,6 +3719,7 @@ Detect the languages in the xml file</p>
         <tr>
           <td><code>languageguesser</code></td>
           <td>
+                <code>text.<span title="text.Classifier">Classifier</span></code>
           </td>
           <td><p>a text.Classifier</p></td>
           <td>
@@ -3754,9 +3731,7 @@ Detect the languages in the xml file</p>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/converter.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">300</span>
-<span class="normal">301</span>
-<span class="normal">302</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">302</span>
 <span class="normal">303</span>
 <span class="normal">304</span>
 <span class="normal">305</span>
@@ -3779,11 +3754,13 @@ Detect the languages in the xml file</p>
 <span class="normal">322</span>
 <span class="normal">323</span>
 <span class="normal">324</span>
-<span class="normal">325</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">write_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">languageguesser</span><span class="p">):</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">write_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">languageguesser</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Write the complete converted document to disk.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        languageguesser: a text.Classifier</span>
+<span class="sd">        languageguesser (text.Classifier): a text.Classifier</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">lazy_conversion</span> <span class="ow">or</span> <span class="p">(</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lazy_conversion</span>
@@ -3869,8 +3846,9 @@ Detect the languages in the xml file</p>
     <tbody>
         <tr>
           <td>
+                <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>etree.Element: root of the resulting xml document</p></td>
+          <td><p>root of the resulting xml document</p></td>
         </tr>
     </tbody>
   </table>
@@ -3908,14 +3886,15 @@ Detect the languages in the xml file</p>
 <span class="normal">81</span>
 <span class="normal">82</span>
 <span class="normal">83</span>
-<span class="normal">84</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">to_giella</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="normal">84</span>
+<span class="normal">85</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">to_giella</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a document to the giella xml format.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        path (str): path to the document</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        etree.Element: root of the resulting xml document</span>
+<span class="sd">        (lxml.etree.Element): root of the resulting xml document</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">chooser</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;.doc&quot;</span><span class="p">:</span> <span class="n">htmlcontentconverter</span><span class="o">.</span><span class="n">convert2intermediate</span><span class="p">,</span>
@@ -3932,6 +3911,7 @@ Detect the languages in the xml file</p>
         <span class="s2">&quot;.usx&quot;</span><span class="p">:</span> <span class="n">usxconverter</span><span class="o">.</span><span class="n">convert2intermediate</span><span class="p">,</span>
     <span class="p">}</span>
 
+    <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span>
     <span class="k">if</span> <span class="s2">&quot;avvir_xml&quot;</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">avvirconverter</span><span class="o">.</span><span class="n">convert2intermediate</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;bible.xml&quot;</span><span class="p">):</span>

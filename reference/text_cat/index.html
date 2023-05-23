@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1372,17 +1386,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2590,16 +2604,16 @@ http://odur.let.rug.nl/~vannoord/TextCat/</p>
             <span class="bp">self</span><span class="o">.</span><span class="n">langs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmodels</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">langs_warned</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">get_langs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">langs</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="k">def</span> <span class="nf">get_langs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">langs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the set of wanted languages.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            langs (list of str): list of probable languages</span>
+<span class="sd">            langs (None|list[str]): list of probable languages</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            set: The set of languages that should be considered</span>
+<span class="sd">            (set[str]): The set of languages that should be considered</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">langs</span> <span class="o">==</span> <span class="p">[]:</span>
+        <span class="k">if</span> <span class="n">langs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">langs</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">langs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">langs</span><span class="p">)</span>
@@ -2680,7 +2694,7 @@ http://odur.let.rug.nl/~vannoord/TextCat/</p>
 
 
 <h3 id="corpustools.text_cat.Classifier.get_langs" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">get_langs</span><span class="p">(</span><span class="n">langs</span><span class="o">=</span><span class="p">[])</span></code>
+<code class="highlight language-python"><span class="n">get_langs</span><span class="p">(</span><span class="n">langs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h3>
 
@@ -2703,11 +2717,11 @@ http://odur.let.rug.nl/~vannoord/TextCat/</p>
         <tr>
           <td><code>langs</code></td>
           <td>
-                <code>list of str</code>
+                <code>None | list[str]</code>
           </td>
           <td><p>list of probable languages</p></td>
           <td>
-                <code>[]</code>
+                <code>None</code>
           </td>
         </tr>
     </tbody>
@@ -2717,13 +2731,14 @@ http://odur.let.rug.nl/~vannoord/TextCat/</p>
   <table>
     <thead>
       <tr>
-<th>Name</th>        <th>Type</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-<td><code>set</code></td>          <td>
+          <td>
+                <code>set[str]</code>
           </td>
           <td><p>The set of languages that should be considered</p></td>
         </tr>
@@ -2754,16 +2769,16 @@ http://odur.let.rug.nl/~vannoord/TextCat/</p>
 <span class="normal">323</span>
 <span class="normal">324</span>
 <span class="normal">325</span>
-<span class="normal">326</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_langs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">langs</span><span class="o">=</span><span class="p">[]):</span>
+<span class="normal">326</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_langs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">langs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the set of wanted languages.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        langs (list of str): list of probable languages</span>
+<span class="sd">        langs (None|list[str]): list of probable languages</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        set: The set of languages that should be considered</span>
+<span class="sd">        (set[str]): The set of languages that should be considered</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">langs</span> <span class="o">==</span> <span class="p">[]:</span>
+    <span class="k">if</span> <span class="n">langs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">langs</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">langs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">langs</span><span class="p">)</span>

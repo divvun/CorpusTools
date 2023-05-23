@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1506,17 +1520,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2736,7 +2750,7 @@ paths and the word count ratio of this pair.</p></td>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Find the language1 files.</span>
 
 <span class="sd">        Yields:</span>
-<span class="sd">            corpusxmlfile.CorpusXMLFile</span>
+<span class="sd">            (corpusxmlfile.CorpusXMLFile): Language files</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">language1_dir</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">lang1_file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
@@ -2751,7 +2765,7 @@ paths and the word count ratio of this pair.</p></td>
 <span class="sd">                parallel pair.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            boolean</span>
+<span class="sd">            (bool): True if there is a parallel file, False otherwise</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">parallel_name</span> <span class="o">=</span> <span class="n">language1_file</span><span class="o">.</span><span class="n">get_parallel_filename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_language</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">parallel_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">parallel_name</span><span class="p">)</span>
@@ -2767,7 +2781,7 @@ paths and the word count ratio of this pair.</p></td>
 <span class="sd">                pair.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            boolean</span>
+<span class="sd">            (bool): True if true, False if not</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">threshold</span> <span class="o">=</span> <span class="mi">30</span>
         <span class="k">return</span> <span class="p">(</span>
@@ -2787,7 +2801,7 @@ paths and the word count ratio of this pair.</p></td>
 <span class="sd">                pair.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            boolean</span>
+<span class="sd">            (True|None): True if good enough, None if not</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ratio</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">file1</span><span class="o">.</span><span class="n">word_count</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">file2</span><span class="o">.</span><span class="n">word_count</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">minratio</span> <span class="o">&lt;</span> <span class="n">ratio</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxratio</span><span class="p">:</span>
@@ -2826,7 +2840,7 @@ paths and the word count ratio of this pair.</p></td>
 <span class="sd">                pair.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            bool</span>
+<span class="sd">            (bool): True if valid, False if not</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_sufficient_words</span><span class="p">(</span><span class="n">file1</span><span class="p">,</span> <span class="n">file2</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_sufficient_ratio</span><span class="p">(</span>
             <span class="n">file1</span><span class="p">,</span> <span class="n">file2</span>
@@ -2836,7 +2850,7 @@ paths and the word count ratio of this pair.</p></td>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Pick valid parallel file pairs.</span>
 
 <span class="sd">        Yields:</span>
-<span class="sd">            tuple of corpusxmlfile.CorpusXMLFile</span>
+<span class="sd">            (tuple[corpusxmlfile.CorpusXMLFile]): valid file pairs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">language1_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_lang1_files</span><span class="p">():</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_parallel</span><span class="p">(</span><span class="n">language1_file</span><span class="p">):</span>
@@ -3206,8 +3220,9 @@ copied to prestable/converted.</p></td>
     <tbody>
         <tr>
           <td>
+                <code><a class="autorefs autorefs-internal" title="corpustools.corpusxmlfile" href="../corpusxmlfile/#corpustools.corpusxmlfile">corpusxmlfile</a>.<a class="autorefs autorefs-internal" title="corpustools.corpusxmlfile.CorpusXMLFile" href="../corpusxmlfile/#corpustools.corpusxmlfile.CorpusXMLFile">CorpusXMLFile</a></code>
           </td>
-          <td><p>corpusxmlfile.CorpusXMLFile</p></td>
+          <td><p>Language files</p></td>
         </tr>
     </tbody>
   </table>
@@ -3227,7 +3242,7 @@ copied to prestable/converted.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Find the language1 files.</span>
 
 <span class="sd">    Yields:</span>
-<span class="sd">        corpusxmlfile.CorpusXMLFile</span>
+<span class="sd">        (corpusxmlfile.CorpusXMLFile): Language files</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">language1_dir</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">lang1_file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
@@ -3289,8 +3304,9 @@ parallel pair.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>bool</code>
           </td>
-          <td><p>boolean</p></td>
+          <td><p>True if there is a parallel file, False otherwise</p></td>
         </tr>
     </tbody>
   </table>
@@ -3316,7 +3332,7 @@ parallel pair.</p></td>
 <span class="sd">            parallel pair.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        boolean</span>
+<span class="sd">        (bool): True if there is a parallel file, False otherwise</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">parallel_name</span> <span class="o">=</span> <span class="n">language1_file</span><span class="o">.</span><span class="n">get_parallel_filename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_language</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">parallel_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">parallel_name</span><span class="p">)</span>
@@ -3387,8 +3403,9 @@ pair.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>True | None</code>
           </td>
-          <td><p>boolean</p></td>
+          <td><p>True if good enough, None if not</p></td>
         </tr>
     </tbody>
   </table>
@@ -3423,7 +3440,7 @@ pair.</p></td>
 <span class="sd">            pair.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        boolean</span>
+<span class="sd">        (True|None): True if good enough, None if not</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ratio</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">file1</span><span class="o">.</span><span class="n">word_count</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">file2</span><span class="o">.</span><span class="n">word_count</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">minratio</span> <span class="o">&lt;</span> <span class="n">ratio</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxratio</span><span class="p">:</span>
@@ -3503,8 +3520,9 @@ pair.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>bool</code>
           </td>
-          <td><p>boolean</p></td>
+          <td><p>True if true, False if not</p></td>
         </tr>
     </tbody>
   </table>
@@ -3541,7 +3559,7 @@ pair.</p></td>
 <span class="sd">            pair.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        boolean</span>
+<span class="sd">        (bool): True if true, False if not</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">threshold</span> <span class="o">=</span> <span class="mi">30</span>
     <span class="k">return</span> <span class="p">(</span>
@@ -3617,8 +3635,9 @@ pair.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>bool</code>
           </td>
-          <td><p>bool</p></td>
+          <td><p>True if valid, False if not</p></td>
         </tr>
     </tbody>
   </table>
@@ -3649,7 +3668,7 @@ pair.</p></td>
 <span class="sd">            pair.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        bool</span>
+<span class="sd">        (bool): True if valid, False if not</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_sufficient_words</span><span class="p">(</span><span class="n">file1</span><span class="p">,</span> <span class="n">file2</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_sufficient_ratio</span><span class="p">(</span>
         <span class="n">file1</span><span class="p">,</span> <span class="n">file2</span>
@@ -3685,8 +3704,9 @@ pair.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>tuple[<a class="autorefs autorefs-internal" title="corpustools.corpusxmlfile" href="../corpusxmlfile/#corpustools.corpusxmlfile">corpusxmlfile</a>.<a class="autorefs autorefs-internal" title="corpustools.corpusxmlfile.CorpusXMLFile" href="../corpusxmlfile/#corpustools.corpusxmlfile.CorpusXMLFile">CorpusXMLFile</a>]</code>
           </td>
-          <td><p>tuple of corpusxmlfile.CorpusXMLFile</p></td>
+          <td><p>valid file pairs</p></td>
         </tr>
     </tbody>
   </table>
@@ -3711,7 +3731,7 @@ pair.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Pick valid parallel file pairs.</span>
 
 <span class="sd">    Yields:</span>
-<span class="sd">        tuple of corpusxmlfile.CorpusXMLFile</span>
+<span class="sd">        (tuple[corpusxmlfile.CorpusXMLFile]): valid file pairs</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">language1_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_lang1_files</span><span class="p">():</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_parallel</span><span class="p">(</span><span class="n">language1_file</span><span class="p">):</span>
@@ -3801,8 +3821,9 @@ pair.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>argparse.<span title="argparse.Namespace">Namespace</span></code>
           </td>
-          <td><p>a list of arguments as parsed by argparse.Argumentparser.</p></td>
+          <td><p>the parsed commandline arguments</p></td>
         </tr>
     </tbody>
   </table>
@@ -3842,7 +3863,7 @@ pair.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the commandline options.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        a list of arguments as parsed by argparse.Argumentparser.</span>
+<span class="sd">        (argparse.Namespace): the parsed commandline arguments</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
         <span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="n">argparse_version</span><span class="o">.</span><span class="n">parser</span><span class="p">],</span>

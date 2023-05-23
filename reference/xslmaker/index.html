@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1372,17 +1386,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2376,21 +2390,21 @@ a combination of three xsl files + the intermediate xml file is needed.</p>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise the XslMaker class.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            xslfile: a string containing the path to the xsl file.</span>
+<span class="sd">            xslfile (str): a string containing the path to the xsl file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">xslfile</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">logfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the name of the logfile.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the name of the logfile.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.log&quot;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">xsl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an etree of the xsl file.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an etree of the xsl file.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">            In case of an xml syntax error, raise ConversionException.</span>
+<span class="sd">            ConversionException: In case of an xml syntax error</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">xsl</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">&quot;xslt/preprocxsl.xsl&quot;</span><span class="p">))</span>
         <span class="n">transformer</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">XSLT</span><span class="p">(</span><span class="n">xsl</span><span class="p">)</span>
@@ -2410,7 +2424,7 @@ a combination of three xsl files + the intermediate xml file is needed.</p>
 <span class="sd">            util.ConversionException: in case of invalid XML in the xsl file.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            an etree.XSLT transformer</span>
+<span class="sd">            (etree.XSLT): an etree.XSLT transformer</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">etree</span><span class="o">.</span><span class="n">XSLT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xsl</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2442,7 +2456,7 @@ a combination of three xsl files + the intermediate xml file is needed.</p>
 
   <div class="doc doc-contents ">
   
-      <p>Return the name of the logfile.</p>
+      <p>Returns the name of the logfile.</p>
   </div>
 
 </div>
@@ -2494,6 +2508,7 @@ a combination of three xsl files + the intermediate xml file is needed.</p>
     <tbody>
         <tr>
           <td>
+                <code><span title="lxml.etree">etree</span>.<span title="lxml.etree.XSLT">XSLT</span></code>
           </td>
           <td><p>an etree.XSLT transformer</p></td>
         </tr>
@@ -2519,7 +2534,25 @@ a combination of three xsl files + the intermediate xml file is needed.</p>
 
   <div class="doc doc-contents ">
   
-      <p>Return an etree of the xsl file.</p>
+      <p>Returns an etree of the xsl file.</p>
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>ConversionException</code>
+          </td>
+          <td><p>In case of an xml syntax error</p></td>
+        </tr>
+    </tbody>
+  </table>
   </div>
 
 </div>
@@ -2554,6 +2587,7 @@ a combination of three xsl files + the intermediate xml file is needed.</p>
         <tr>
           <td><code>xslfile</code></td>
           <td>
+                <code>str</code>
           </td>
           <td><p>a string containing the path to the xsl file.</p></td>
           <td>
@@ -2575,7 +2609,7 @@ a combination of three xsl files + the intermediate xml file is needed.</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialise the XslMaker class.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        xslfile: a string containing the path to the xsl file.</span>
+<span class="sd">        xslfile (str): a string containing the path to the xsl file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">xslfile</span>
 </code></pre></div></td></tr></table></div>

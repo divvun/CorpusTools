@@ -667,6 +667,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../common_arg_ncpus/" class="md-nav__link">
+        common_arg_ncpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
       </a>
@@ -1451,17 +1465,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_65" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_65" id="__nav_2_1_65_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_65_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_65">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_66">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2349,8 +2363,9 @@
     <tbody>
         <tr>
           <td>
+                <code>tuple[CorpusPath, CorpusPath]</code>
           </td>
-          <td><p>tuple of corpuspath.CorpusPath</p></td>
+          <td><p>tuple of corpuspath.make_corpus_path</p></td>
         </tr>
     </tbody>
   </table>
@@ -2371,19 +2386,21 @@
 <span class="normal">68</span>
 <span class="normal">69</span>
 <span class="normal">70</span>
-<span class="normal">71</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_paths</span><span class="p">(</span><span class="n">tmxhtml</span><span class="p">):</span>
+<span class="normal">71</span>
+<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">calculate_paths</span><span class="p">(</span><span class="n">tmxhtml</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate paths, given a file from the command line.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        tmxhtml (str): path to a .tmx or a .tmx.html file</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        tuple of corpuspath.CorpusPath</span>
+<span class="sd">        (tuple[CorpusPath, CorpusPath]): tuple of corpuspath.make_corpus_path</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">tmxhtml</span><span class="p">[:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span> <span class="k">if</span> <span class="n">tmxhtml</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.tmx.html&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">tmxhtml</span>
-    <span class="n">corpus_path1</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">CorpusPath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-    <span class="n">lang2</span> <span class="o">=</span> <span class="n">corpus_path1</span><span class="o">.</span><span class="n">split_on_module</span><span class="p">(</span><span class="n">path</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">corpus_path2</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">CorpusPath</span><span class="p">(</span><span class="n">corpus_path1</span><span class="o">.</span><span class="n">parallel</span><span class="p">(</span><span class="n">lang2</span><span class="p">))</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">tmxhtml</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">tmxhtml</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.html&quot;</span> <span class="k">else</span> <span class="n">tmxhtml</span>
+    <span class="n">corpus_path1</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="n">lang2</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/tmx/&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">corpus_path2</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span><span class="n">corpus_path1</span><span class="o">.</span><span class="n">parallel</span><span class="p">(</span><span class="n">lang2</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">corpus_path1</span><span class="p">,</span> <span class="n">corpus_path2</span>
 </code></pre></div></td></tr></table></div>
@@ -2420,7 +2437,7 @@
         <tr>
           <td><code>corpus_path1</code></td>
           <td>
-                <code><a class="autorefs autorefs-internal" title="corpustools.corpuspath" href="../corpuspath/#corpustools.corpuspath">corpuspath</a>.<a class="autorefs autorefs-internal" title="corpustools.corpuspath.CorpusPath" href="../corpuspath/#corpustools.corpuspath.CorpusPath">CorpusPath</a></code>
+                <code><a class="autorefs autorefs-internal" title="corpustools.corpuspath" href="../corpuspath/#corpustools.corpuspath">corpuspath</a>.<a class="autorefs autorefs-internal" title="corpustools.corpuspath.make_corpus_path" href="../corpuspath/#corpustools.corpuspath.make_corpus_path">make_corpus_path</a></code>
           </td>
           <td><p>A CorpusPath representing the
 lang1 file that should be reconverted.</p></td>
@@ -2431,7 +2448,7 @@ lang1 file that should be reconverted.</p></td>
         <tr>
           <td><code>corpus_path2</code></td>
           <td>
-                <code><a class="autorefs autorefs-internal" title="corpustools.corpuspath" href="../corpuspath/#corpustools.corpuspath">corpuspath</a>.<a class="autorefs autorefs-internal" title="corpustools.corpuspath.CorpusPath" href="../corpuspath/#corpustools.corpuspath.CorpusPath">CorpusPath</a></code>
+                <code><a class="autorefs autorefs-internal" title="corpustools.corpuspath" href="../corpuspath/#corpustools.corpuspath">corpuspath</a>.<a class="autorefs autorefs-internal" title="corpustools.corpuspath.make_corpus_path" href="../corpuspath/#corpustools.corpuspath.make_corpus_path">make_corpus_path</a></code>
           </td>
           <td><p>A CorpusPath representing the
 lang2 file that should be reconverted.</p></td>
@@ -2444,8 +2461,7 @@ lang2 file that should be reconverted.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/realign.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">74</span>
-<span class="normal">75</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">75</span>
 <span class="normal">76</span>
 <span class="normal">77</span>
 <span class="normal">78</span>
@@ -2466,20 +2482,19 @@ lang2 file that should be reconverted.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Reconvert and copy files to prestable/converted.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        corpus_path1 (corpuspath.CorpusPath): A CorpusPath representing the</span>
+<span class="sd">        corpus_path1 (corpuspath.make_corpus_path): A CorpusPath representing the</span>
 <span class="sd">            lang1 file that should be reconverted.</span>
-<span class="sd">        corpus_path2 (corpuspath.CorpusPath): A CorpusPath representing the</span>
+<span class="sd">        corpus_path2 (corpuspath.make_corpus_path): A CorpusPath representing the</span>
 <span class="sd">            lang2 file that should be reconverted.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">corpus_path</span> <span class="ow">in</span> <span class="p">[</span><span class="n">corpus_path1</span><span class="p">,</span> <span class="n">corpus_path2</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">corpus_path</span><span class="o">.</span><span class="n">converted</span><span class="p">):</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">corpus_path</span><span class="o">.</span><span class="n">converted</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">corpus_path</span><span class="o">.</span><span class="n">prestable_converted</span><span class="p">):</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">corpus_path</span><span class="o">.</span><span class="n">prestable_converted</span><span class="p">)</span>
+        <span class="n">corpus_path</span><span class="o">.</span><span class="n">converted</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">convertermanager</span><span class="o">.</span><span class="n">sanity_check</span><span class="p">()</span>
     <span class="n">converter_manager</span> <span class="o">=</span> <span class="n">convertermanager</span><span class="o">.</span><span class="n">ConverterManager</span><span class="p">()</span>
-    <span class="n">converter_manager</span><span class="o">.</span><span class="n">collect_files</span><span class="p">([</span><span class="n">corpus_path1</span><span class="o">.</span><span class="n">orig</span><span class="p">,</span> <span class="n">corpus_path2</span><span class="o">.</span><span class="n">orig</span><span class="p">])</span>
+    <span class="n">converter_manager</span><span class="o">.</span><span class="n">collect_files</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">corpus_path1</span><span class="o">.</span><span class="n">orig</span><span class="o">.</span><span class="n">as_posix</span><span class="p">(),</span> <span class="n">corpus_path2</span><span class="o">.</span><span class="n">orig</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()]</span>
+    <span class="p">)</span>
     <span class="n">converter_manager</span><span class="o">.</span><span class="n">convert_serially</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -2528,25 +2543,20 @@ lang2 file that should be reconverted.</p></td>
 <span class="normal">151</span>
 <span class="normal">152</span>
 <span class="normal">153</span>
-<span class="normal">154</span>
-<span class="normal">155</span>
-<span class="normal">156</span>
-<span class="normal">157</span>
-<span class="normal">158</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="normal">154</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sentence align a given file anew.&quot;&quot;&quot;</span>
     <span class="n">convertermanager</span><span class="o">.</span><span class="n">LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_options</span><span class="p">()</span>
-    <span class="n">orig_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">tmxhtml</span><span class="p">))</span>
 
-    <span class="n">corpus_path1</span><span class="p">,</span> <span class="n">corpus_path2</span> <span class="o">=</span> <span class="n">calculate_paths</span><span class="p">(</span><span class="n">orig_path</span><span class="p">)</span>
+    <span class="n">source_path</span><span class="p">,</span> <span class="n">para_path</span> <span class="o">=</span> <span class="n">calculate_paths</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">tmxhtml</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">())</span>
 
-    <span class="n">print_filenames</span><span class="p">(</span><span class="n">corpus_path1</span><span class="p">,</span> <span class="n">corpus_path2</span><span class="p">)</span>
+    <span class="n">print_filenames</span><span class="p">(</span><span class="n">source_path</span><span class="p">,</span> <span class="n">para_path</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="s2">&quot;Only printing file names&quot;</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">convert_and_copy</span><span class="p">(</span><span class="n">corpus_path1</span><span class="p">,</span> <span class="n">corpus_path2</span><span class="p">)</span>
+        <span class="n">convert_and_copy</span><span class="p">(</span><span class="n">source_path</span><span class="p">,</span> <span class="n">para_path</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
 
@@ -2554,14 +2564,11 @@ lang2 file that should be reconverted.</p></td>
         <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="s2">&quot;Only converting&quot;</span><span class="p">)</span>
 
     <span class="n">parallelize</span><span class="o">.</span><span class="n">parallelise_file</span><span class="p">(</span>
-        <span class="n">corpus_path1</span><span class="o">.</span><span class="n">converted</span><span class="p">,</span>
-        <span class="n">corpus_path2</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;mainlang&quot;</span><span class="p">),</span>
-        <span class="n">dictionary</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">aligner</span><span class="o">=</span><span class="s2">&quot;tca2&quot;</span><span class="p">,</span>
-        <span class="n">stdout</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">source_path</span><span class="p">,</span>
+        <span class="n">para_path</span><span class="p">,</span>
+        <span class="n">dictionary</span><span class="o">=</span><span class="n">parallelize</span><span class="o">.</span><span class="n">get_dictionary</span><span class="p">(</span><span class="n">para_path</span><span class="p">,</span> <span class="n">source_path</span><span class="p">),</span>
     <span class="p">)</span>
+    <span class="n">tmx</span><span class="o">.</span><span class="n">tmx2html</span><span class="p">(</span><span class="n">source_path</span><span class="o">.</span><span class="n">tmx</span><span class="p">(</span><span class="n">para_path</span><span class="o">.</span><span class="n">lang</span><span class="p">))</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -2593,8 +2600,9 @@ lang2 file that should be reconverted.</p></td>
     <tbody>
         <tr>
           <td>
+                <code>argparse.<span title="argparse.Namespace">Namespace</span></code>
           </td>
-          <td><p>a list of arguments as parsed by argparse.Argumentparser.</p></td>
+          <td><p>the parsed commandline arguments</p></td>
         </tr>
     </tbody>
   </table>
@@ -2636,7 +2644,7 @@ lang2 file that should be reconverted.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the commandline options.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        a list of arguments as parsed by argparse.Argumentparser.</span>
+<span class="sd">        (argparse.Namespace): the parsed commandline arguments</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
         <span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="n">argparse_version</span><span class="o">.</span><span class="n">parser</span><span class="p">],</span>
@@ -2698,7 +2706,7 @@ lang2 file that should be reconverted.</p></td>
         <tr>
           <td><code>corpus_path</code></td>
           <td>
-                <code><a class="autorefs autorefs-internal" title="corpustools.corpuspath" href="../corpuspath/#corpustools.corpuspath">corpuspath</a>.<a class="autorefs autorefs-internal" title="corpustools.corpuspath.CorpusPath" href="../corpuspath/#corpustools.corpuspath.CorpusPath">CorpusPath</a></code>
+                <code><a class="autorefs autorefs-internal" title="corpustools.corpuspath" href="../corpuspath/#corpustools.corpuspath">corpuspath</a>.<a class="autorefs autorefs-internal" title="corpustools.corpuspath.make_corpus_path" href="../corpuspath/#corpustools.corpuspath.make_corpus_path">make_corpus_path</a></code>
           </td>
           <td><p>filenames</p></td>
           <td>
@@ -2724,7 +2732,7 @@ lang2 file that should be reconverted.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Print interesting filenames for doing sentence alignment.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        corpus_path (corpuspath.CorpusPath): filenames</span>
+<span class="sd">        corpus_path (corpuspath.make_corpus_path): filenames</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span>
         <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">original: </span><span class="si">{}</span><span class="se">\n\t</span><span class="s2">metatada: </span><span class="si">{}</span><span class="se">\n\t</span><span class="s2">converted: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -2765,7 +2773,7 @@ lang2 file that should be reconverted.</p></td>
         <tr>
           <td><code>corpus_path1</code></td>
           <td>
-                <code><a class="autorefs autorefs-internal" title="corpustools.corpuspath" href="../corpuspath/#corpustools.corpuspath">corpuspath</a>.<a class="autorefs autorefs-internal" title="corpustools.corpuspath.CorpusPath" href="../corpuspath/#corpustools.corpuspath.CorpusPath">CorpusPath</a></code>
+                <code><a class="autorefs autorefs-internal" title="corpustools.corpuspath" href="../corpuspath/#corpustools.corpuspath">corpuspath</a>.<a class="autorefs autorefs-internal" title="corpustools.corpuspath.make_corpus_path" href="../corpuspath/#corpustools.corpuspath.make_corpus_path">make_corpus_path</a></code>
           </td>
           <td><p>filenames for the lang1 file.</p></td>
           <td>
@@ -2775,7 +2783,7 @@ lang2 file that should be reconverted.</p></td>
         <tr>
           <td><code>corpus_path2</code></td>
           <td>
-                <code><a class="autorefs autorefs-internal" title="corpustools.corpuspath" href="../corpuspath/#corpustools.corpuspath">corpuspath</a>.<a class="autorefs autorefs-internal" title="corpustools.corpuspath.CorpusPath" href="../corpuspath/#corpustools.corpuspath.CorpusPath">CorpusPath</a></code>
+                <code><a class="autorefs autorefs-internal" title="corpustools.corpuspath" href="../corpuspath/#corpustools.corpuspath">corpuspath</a>.<a class="autorefs autorefs-internal" title="corpustools.corpuspath.make_corpus_path" href="../corpuspath/#corpustools.corpuspath.make_corpus_path">make_corpus_path</a></code>
           </td>
           <td><p>filenames for the lang2 file.</p></td>
           <td>
@@ -2801,8 +2809,8 @@ lang2 file that should be reconverted.</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Print interesting filenames for doing sentence alignment.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        corpus_path1 (corpuspath.CorpusPath): filenames for the lang1 file.</span>
-<span class="sd">        corpus_path2 (corpuspath.CorpusPath): filenames for the lang2 file.</span>
+<span class="sd">        corpus_path1 (corpuspath.make_corpus_path): filenames for the lang1 file.</span>
+<span class="sd">        corpus_path2 (corpuspath.make_corpus_path): filenames for the lang2 file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Language 1 filenames:&quot;</span><span class="p">)</span>
     <span class="n">print_filename</span><span class="p">(</span><span class="n">corpus_path1</span><span class="p">)</span>
