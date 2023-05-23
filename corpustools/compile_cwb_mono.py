@@ -5,6 +5,7 @@ and create the binary CWB files (the files that are in data/ and registry/).
 import argparse
 import builtins
 import subprocess
+import typing
 import sys
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
@@ -16,7 +17,7 @@ from textwrap import dedent
 from time import perf_counter_ns
 from typing import Callable
 
-
+Module = typing.Literal["converted", "analysed", "korp_mono"]
 LANGS = set(
     "fao fit fkv koi kpv mdf mhr mrj myv olo "
     "sma sme smj smn sms udm vep vro".split()
@@ -48,114 +49,150 @@ def remove_directory_contents(directory):
 
 @dataclass
 class Corpus:
+    # The original path that was given to us. This is kept because if only
+    # a specific directory is given, we only want to recurse starting from
+    # that directory. If only a single file is given, we only want to
+    # process that single file
     path: Path
+
     lang: str
 
-    # which category to scan through. part of the path, if given,
-    # if only root directory given, scan through all categories in the folder
+    # root corpus directory (some people call it "corpus", other "corpora",
+    # others maybe "giella-corpora", who knows)
+    root_dir: Path
+
+    # the path to the orig folder
+    orig_dir: Path
+
+    # the path to the other folder (the ones with converted, analysed, etc)
+    processed_dir: Path
+
+    # is the corpora a closed one (i.e. "not open", one that uses source
+    # material bound by copyright or such things)
+    closed: bool
+
+    # Which module we have selected, module being "converted", "analysed", etc
+    module: Module | None
+
+    # which category we have selected, if any
     category: str | None = None
 
-    # if given, specify the subpath inside of a category to start recursing
-    # from
+    # a specific subpath inside of the category that is selected.
+    # if given, only recurses from this directory
     subpath: str | None = None
 
-    def subcorpuses(self):
-        """Yield all directories"""
+    def has_module(self, module: Module):
+        """Returns True if this corpus has module `module`, else False"""
+        return (self.processed_dir / module).is_dir()
+
+    @staticmethod
+    def from_path(path):
+        if isinstance(path, str):
+            path = Path(path)
+        path = path.resolve(strict=True)
+
+        info = Corpus._find_corpus_folder(path)
+        return Corpus(*info)
+
+    @staticmethod
+    def _find_corpus_folder(path):
+        """Find the corpus directory in the given path.
+
+        Args:
+            path (pathlib.Path): the path to search
+
+        Raises:
+            ValueError: if no corpus directory was found
+
+        Returns:
+            (tuple): The result
+        """
+        parts = path.parts
+        for idx, folder in enumerate(parts):
+            if len(folder) >= 7 and folder.startswith("corpus-"):
+                try:
+                    lang_end_index = folder.index("-", 7)
+                    lang = folder[7:lang_end_index + 1]
+                except ValueError:
+                    lang = folder[7:]
+
+                closed = folder.endswith("-x-closed")
+                root_dir = Path(*parts[0:idx])
+                if not closed:
+                    orig_dir = root_dir / f"corpus-{lang}-orig"
+                    processed_dir = root_dir / f"corpus-{lang}"
+                else:
+                    orig_dir = root_dir / f"corpus-{lang}-orig-x-closed"
+                    processed_dir = root_dir / f"corpus-{lang}-x-closed"
+
+                module = None if idx + 1 >= len(parts) else parts[idx + 1]
+                category = None if idx + 2 >= len(parts) else parts[idx + 2]
+                subpath = None if idx + 3 >= len(parts) else Path(*parts[idx + 3:])
+
+                return (path, lang, root_dir, orig_dir, processed_dir, closed,
+                        module, category, subpath)
+
+        raise ValueError(
+            f"no corpus directory found in path {Path(*parts)}\n"
+            "Hint: The first folder in the path that is named in the form "
+            "'corpus-LANG[...]' (LANG being the language code), is "
+            "considered the corpus directory. In the path given, no such "
+            "folder was found"
+        )
+
+    def categories(self):
+        """Yields category dictionaries"""
         if self.category:
             # only a specific category selected, so only yield one result
-            yield Corpus(path=self.path, lang=self.lang,
-                         category=self.category, subpath=self.subpath)
+            yield self
         else:
             # iterate over all categories in CORPUS_ROOT/corpus-xxx/korp/<category>
-            for i, part in enumerate(self.path.parts):
-                if part.startswith("corpus-"):
-                    root = Path(*self.path.parts[:i + 1])
+            for p in (self.processed_dir / "korp_mono").iterdir():
+                yield Corpus(
+                    path=self.path,
+                    lang=self.lang,
+                    root_dir=self.root_dir,
+                    orig_dir=self.orig_dir,
+                    processed_dir=self.processed_dir,
+                    closed=self.closed,
+                    module="korp_mono",
+                    category=p.parts[-1],
+                    subpath=None,
+                )
 
-            for p in (root / "korp_mono").iterdir():
-                yield Corpus(path=p, lang=self.lang, category=p.parts[-1])
+    def iter_files(self, suffix=""):
+        directory = self.processed_dir
+        if self.module:
+            directory /= self.module
+        if self.category:
+            directory /= self.category
+        if self.subpath is not None:
+            directory /= self.subpath
+        yield from directory.glob(f"**/*{suffix}")
 
 
-class CorpusDirectory(argparse.Action):
-    """The type of the *directory* argument. Checks that folder exists,
-    and determines how the *class:Corpus* should be built."""
-
-    def __init__(self, option_strings, dest, nargs=None, const=None,
-                 default=None, type=None, choices=None, required=False,
-                 help=None, metavar=None):
-        help = (
-            "the path of the corpus directory to compile CWB files for, "
-            "or a subdirectory thereof"
-        )
-        super().__init__(option_strings, dest, type=Path, help=help)
-
-    def die(self, parser, msg):
-        parser.error(f"{sys.argv[0]}: error: argument `{self.dest}`: {msg}\n")
-
-    def __call__(self, parser, namespace, values, option_string=None):
-        directory = values
-        try:
-            directory = directory.resolve(strict=True)
-        except FileNotFoundError:
-            self.die(parser, f"'{directory}' is not a directory")
-        except RuntimeError:
-            self.die(parser, "inifinite loop in links detected")
-
-        parts = directory.parts
-
-        for idx, folder in enumerate(parts):
-            if folder.startswith("corpus-"):
-                lang = folder[7:]
-                if lang not in LANGS:
-                    msg = (
-                        f"directory '{folder}' detected as corpus directory, "
-                        f"but '{lang}' is not a valid language code\n"
-                        f"directory path given: {directory}"
-                    )
-                    self.die(parser, msg)
-                subfolder_given = len(parts) > idx + 1
-                if subfolder_given:
-                    subfolder = parts[idx + 1]
-                    if subfolder != "korp_mono":
-                        msg = (
-                            "child folder of the corpus folder must be 'korp_mono', "
-                            f"not '{subfolder}'.\n"
-                            f"directory path given: {directory}"
-                        )
-                        self.die(parser, msg)
-                else:
-                    if not (directory / "korp_mono").is_dir():
-                        self.die(
-                            parser,
-                            "The corpus folder given has no "
-                            "subfolder 'korp_mono'\n"
-                            "Hint: This script uses the contents of that 'korp_mono' "
-                            "folder as its input. Use the 'korp_mono' tool to "
-                            "generate it. See the documentation for more "
-                            "information."
-                        )
-
-                if len(parts) > idx + 2:
-                    category = parts[idx + 2]
-                else:
-                    category = None
-
-                if len(parts) > idx + 3:
-                    subpath = parts[idx + 3:]
-                else:
-                    subpath = None
-
-                corpus = Corpus(path=directory, lang=lang, category=category,
-                                subpath=subpath)
-
-                setattr(namespace, self.dest, corpus)
-                return
-
-        self.die(parser, "no corpus found in given directory path.\nThe first "
-                 "folder that is named in the form 'corpus-xxx' (where xxx is "
-                 "a 3-letter language code) is considered the corpus "
-                 "directory, but in the directory path that was given, no "
-                 "such folder was found.\n"
-                 f"directory path given: {directory}")
+# class CorpusDirectory(argparse.Action):
+#     """The type of the *directory* argument. Checks that folder exists,
+#     and determines how the *class:Corpus* should be built."""
+# 
+#     def __init__(self, option_strings, dest, nargs=None, const=None,
+#                  default=None, type=None, choices=None, required=False,
+#                  help=None, metavar=None):
+#         help = (
+#             "the path of the corpus directory to compile CWB files for, "
+#             "or a subdirectory thereof"
+#         )
+#         print("CorpusDirectory argparse Action __init__")
+#         super().__init__(option_strings, dest, default=".", type=Path, help=help)
+# 
+#     def __call__(self, parser, namespace, values, option_string=None):
+#         print("CorpusDirectory argparse Action __call__")
+#         path = values
+#         try:
+#             corpus = Corpus.from_path(path)
+#         except Exception as e:
+#             parser.error(f"{sys.argv[0]}: error: argument `{self.dest}`: {e}\n")
+#         setattr(namespace, self.dest, corpus)
 
 
 def _default_success(completed_process: subprocess.CompletedProcess):
@@ -190,17 +227,13 @@ def run_subcommand(
 
 
 def process_input_xml(file, category, text_num):
-    try:
-        xml = ET.parse(file)
-    except ET.ParseError:
-        return None, None, None
-
+    xml = ET.parse(file)
     texts = xml.findall("[sentence]")
     if not texts:
-        return None, None, None
+        return None, 0, 0
     if len(texts) > 1:
-        print(f"notice: {file} has >1 texts! (should have exactly 1 (?))")
-        # TODO what should happen in this case? Just process all <text> nodes?
+        # TODO does this ever happen? if so, what to do? fail? take only first?
+        pass
 
     # note: assuming only 1 <text> element in each file (only processing the first)
     text_el = texts[0]
@@ -218,20 +251,22 @@ def process_input_xml(file, category, text_num):
 
 
 @timed
-def concat_corpus(corpus, date):
-    """Replaces what compile_corpus.xsl does. Basically concat all the files
-    in a corpus, and store it in one file."""
+def concat_corpus(corpus, date, parallel=None):
+    """Concatenate all the vrt files in a corpus, and store it in one file.
+
+    This function replaces what the compile_corpus.xsl script does.
+    """
     print("Concatenating corpora...")
     date_s = str(date).replace('-', '')
-    corpus_directory = Path(f"vrt_{corpus.lang}_{date_s}")
-    if corpus_directory.exists():
-        remove_directory_contents(corpus_directory)
-    corpus_directory.mkdir(exist_ok=True)
+    compiled_directory = Path(f"vrt_{corpus.lang}_{date_s}")
+    if compiled_directory.exists():
+        remove_directory_contents(compiled_directory)
+    compiled_directory.mkdir(exist_ok=True)
 
-    no_texts = []
+    errors = []
 
-    for corpusfile in corpus.subcorpuses():
-        category = corpusfile.category
+    for corpus_category in corpus.categories():
+        category = corpus_category.category
         corpus_id = f"{corpus.lang}_{category}_{date_s}"
         print(f"  processing corpus {corpus_id}...")
         # corpus_sentence_count = 0
@@ -239,26 +274,35 @@ def concat_corpus(corpus, date):
         root_element.attrib["id"] = corpus_id
         n_tot_sentences, n_tot_tokens = 0, 0
         text_num = 1
-        file_list = list(corpusfile.path.glob("**/*.xml"))
+        file_list = list(corpus_category.iter_files(suffix="xml"))
         nfiles = len(file_list)
 
         for i, file in enumerate(file_list, start=1):
-            print(f"    reading file [{i}/{nfiles}] {file}")
-            text_el, n_sentences, n_tokens = process_input_xml(file, category, text_num)
-            if text_el:
-                text_num += 1
-                root_element.append(text_el)
-                n_tot_tokens += n_tokens
-                n_tot_sentences += n_sentences
+            print(f"    processing file [{i}/{nfiles}] {file}...",
+                  end=" ", flush=True)
+            try:
+                text_el, n_sentences, n_tokens = process_input_xml(
+                        file, category, text_num)
+            except ET.ParseError:
+                errors.append(f"file {file} could not be parsed (invalid xml?)")
+                print("failed (could not parse xml)")
             else:
-                no_texts.append(file)
+                if text_el:
+                    text_num += 1
+                    root_element.append(text_el)
+                    n_tot_tokens += n_tokens
+                    n_tot_sentences += n_sentences
+                    print("done")
+                else:
+                    errors.append(f"file {file} had no text")
+                    print("failed (file contains no text)")
 
         ET.indent(root_element, "")
-        with open(Path(corpus_directory / f"{corpus_id}.vrt"), "w") as f:
+        with open(Path(compiled_directory / f"{corpus_id}.vrt"), "w") as f:
             f.write(ET.tostring(root_element, encoding="unicode"))
 
-    for file in no_texts:
-        print(f"  file {file} has no texts!")
+    for error in errors:
+        print(error)
 
 
 @timed
@@ -287,12 +331,12 @@ def cwb_compress_rdx(cwb_binaries_directory, registry_dir, upper_corpus_name):
         raise Exception("error: cwb_compress_rx() returned non-0")
 
 
+@timed
 def rm_unneeded_data_files(data_dir, corpus_name):
     print(f"    deleting non-compressed files from data dir of corpus {corpus_name}...", end="", flush=True)
     d = data_dir / corpus_name
     for file in chain(d.glob("*.rev"), d.glob("*.rdx"), d.glob("*.corpus")):
         file.unlink()
-    print("done")
 
 
 def ensure_data_and_registry_dirs(args):
@@ -454,6 +498,7 @@ def cwb_encode(
         raise RuntimeError("cwb_encode() failed")
 
 
+@timed
 def cwb_makeall(cwb_binaries_directory, registry_dir, upper_corpus_name):
     print("    create lexicon and index (cwb-makeall)...", end="", flush=True)
     cmd = [
@@ -469,9 +514,6 @@ def cwb_makeall(cwb_binaries_directory, registry_dir, upper_corpus_name):
         print(e.stdout)
         print(e.stderr)
         raise e
-    else:
-        print("done")
-        return True
 
 
 def encode_corpus(
@@ -528,7 +570,7 @@ def encode_corpus(
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("directory", action=CorpusDirectory)
+    parser.add_argument("--corpus", type=Path, default=".", required=False)
 
     parser.add_argument(
         "--date",
@@ -569,16 +611,20 @@ def parse_args():
 
     args = parser.parse_args()
 
+    try:
+        args.corpus = Corpus.from_path(args.corpus)
+    except Exception as e:
+        parser.error(f"argument `corpus`: {e}\n")
+
+    ensure_korp_mono(args.corpus, parser)
+
+    _msg = "use either: --target, OR BOTH --data-dir and --registry-dir"
     if args.target:
-        if (args.data_dir or args.registry_dir):
-            parser.print_usage()
-            parser.exit(1, "--target cannot be given at the same time as "
-                           "--data-dir and --registry-dir\n")
+        if args.data_dir or args.registry_dir:
+            parser.error(_msg)
     else:
         if not (args.data_dir and args.registry_dir):
-            parser.print_usage()
-            parser.exit(1, "either --target OR BOTH --data-dir and "
-                           "--registry-dir must be given\n")
+            parser.error(_msg)
 
     if args.cwb_binaries_dir:
         args.cwb_binaries_dir = Path(args.cwb_binaries_dir)
@@ -586,10 +632,10 @@ def parse_args():
         cmd = ["sh", "-c", "command -v cwb-encode"]
         proc = subprocess.run(cmd, text=True, capture_output=True)
         if proc.returncode != 0:
+            parser.print_usage()
             print("critical: cannot find the cwb binaries on the system, "
                   "specify the directory where the binaries are located using "
                   "--cwb-binaries-dir")
-            parser.print_usage()
             parser.exit(1)
 
         args.cwb_binaries_dir = Path(proc.stdout.strip()).parent
@@ -600,15 +646,36 @@ def parse_args():
         not (args.cwb_binaries_dir / "cwb-huffcode").is_file() or
         not (args.cwb_binaries_dir / "cwb-compress-rdx").is_file()
     ):
+        parser.print_usage()
         print("critical: cannot find the cwb binaries in the given folder"
               f" ({args.cwb_binaries_dir.resolve()})")
-        parser.print_usage()
         parser.exit(1)
 
     return args
 
 
-def main(args):
+def ensure_korp_mono(corpus, parser):
+    if corpus.module is not None:
+        if corpus.module != "korp_mono":
+            parser.error(
+                "child folder of the corpus folder must be 'korp_mono', "
+                f"not '{corpus.module}'.\n"
+                f"corpus path given: {corpus.path}"
+            )
+    else:
+        if not corpus.has_module("korp_mono"):
+            parser.error(
+                "This corpus has no subfolder 'korp_mono'\n"
+                "Hint: This script uses the contents of the 'korp_mono' "
+                "folder as its input. Use the 'korp_mono' tool to "
+                "generate it. See the documentation for more "
+                "information."
+            )
+        corpus.module = "korp_mono"
+
+
+def main():
+    args = parse_args()
     args.data_dir, args.registry_dir = ensure_data_and_registry_dirs(args)
 
     # the data/ directory must be empty, otherwise CWB gets very confused
@@ -616,7 +683,7 @@ def main(args):
     remove_directory_contents(args.data_dir)
     print("done")
 
-    concat_corpus(args.directory, args.date)
+    concat_corpus(args.corpus, args.date)
 
     for entry in Path(".").glob("vrt_*"):
         if not entry.is_dir():
@@ -633,5 +700,4 @@ def main(args):
 
 
 if __name__ == "__main__":
-    args = parse_args()
-    raise SystemExit(main(args))
+    raise SystemExit(main())

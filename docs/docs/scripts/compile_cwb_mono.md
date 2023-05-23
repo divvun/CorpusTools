@@ -1,9 +1,25 @@
 # compile_cwb_mono.py
 
-Concatenates all vrt-files in `korp_mono/`, and run the _Corpus WorkBench_
-(`CWB`) toolchain to produce the final files needed for Korp.
+Concatenates all vrt-files in `corpus-xxx/korp_mono/` (which is made by the
+`korp_mono` script), and run the _Corpus WorkBench_ (`CWB`) toolchain to
+produce the final files needed for Korp (the files in the `data/` and
+`registry/` CWB folders).
 
 This is the last script in the process, and is very quick to run.
+
+After running the script, `.yaml` files need to be added to the Korp
+backend configuration directory `CORPUS_CONFIG/corpora`.
+One .yaml file for each file in the created `registry/` folder.
+It contains information to Korp for how to present the corpus in the
+web interface. Things like "description" and such go in there. Refer to the
+Korp documentation for more information about that.
+This only applies to v9 of Korp, as previously configuration was done
+differently.
+
+Some of these things could be done programmatically, but ultimately there
+are settings in there that we cannot determine from this script (at least
+not trivally), so automating it further is probably not worth it. As long
+as the documentation is good, it's really ok.
 
 
 ## Basic usage

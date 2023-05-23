@@ -22,6 +22,7 @@ nav:
       - add_files_to_corpus: scripts/add_files_to_corpus.md
       - convert2xml: scripts/convert2xml.md
       - ccat: scripts/ccat.md
+      - compile_cwb_mono: scripts/compile_cwb_mono.md
   - Code reference: reference/
 
 plugins:
