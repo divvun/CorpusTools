@@ -36,7 +36,7 @@ class TrainingCorpusMaker:
     giella fst analysers.
 
     Attributes:
-        only_words: regex catching word made up of letters.
+        only_words (str): regex catching word made up of letters.
         xml_printer (ccat.XMLPrinter): extracts the dependency analysis
             from the giella xml files.
         lang (str): the language of the training corpus.
@@ -46,7 +46,11 @@ class TrainingCorpusMaker:
     xml_printer = ccat.XMLPrinter(dependency=True)
 
     def __init__(self, lang):
-        """Initialise the TrainingCorpusMaker class."""
+        """Initialise the TrainingCorpusMaker class.
+
+        Args:
+            lang (str): three-letter language code
+        """
         self.lang = lang
 
     def parse_dependency(self, text):
@@ -56,7 +60,7 @@ class TrainingCorpusMaker:
             text (str): contains the dependency element of a giella xml file.
 
         Yields:
-            str: a sentence containing only words known to the giella fst
+            (str): a sentence containing only words known to the giella fst
                 analysers, that contain at least a word as identified by
                 the only_words regex.
         """
@@ -100,7 +104,7 @@ class TrainingCorpusMaker:
                 dependency element.
 
         Returns:
-            list of str
+            (list[str]): list of the sentences
         """
         self.xml_printer.parse_file(filename)
         text = self.xml_printer.process_file().getvalue()
@@ -113,7 +117,7 @@ class TrainingCorpusMaker:
         """Find analysed files.
 
         Yields:
-            str: filename of an analysed file.
+            (str): filename of an analysed file.
         """
         for corpus in [
             os.path.join(os.getenv("GTFREE"), "analysed", self.lang),

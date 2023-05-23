@@ -27,7 +27,7 @@ class TestTrainingCorpusMaker(unittest.TestCase):
     """Test the TrainingCorpusMaker class.
 
     Attributes:
-        sentencemaker (corpustools.TrainingCorpusMaker)
+        sentencemaker (corpustools.TrainingCorpusMaker): A TrainingCorpusMaker
     """
 
     def setUp(self):

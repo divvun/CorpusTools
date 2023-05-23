@@ -49,7 +49,7 @@ def make_tca2_input(xmlfile):
         xmlfile (str): name of the xmlfile
 
     Returns:
-        lxml.etree._Element: an xml element containing all sentences.
+        (lxml.etree.Element): an xml element containing all sentences.
     """
     document = etree.Element("document")
 
@@ -98,10 +98,11 @@ def setup_anchors(lang1, lang2):
     """Setup anchor file.
 
     Args:
-        path (str): where the anchor file will be written.
+        lang1 (str): language 1
+        lang2 (str): language 2
 
     Returns:
-        generate_anchor_list.GenerateAnchorList
+        (generate_anchor_list.GenerateAnchorList): The anchor list
     """
     path1 = os.path.join(
         os.environ["GTHOME"],
@@ -126,12 +127,12 @@ def tca2_align(file1, file2, anchor_filename):
     """Parallelize two files using tca2.
 
     Args:
-        file1 (CorpusPath)
-        file2 (CorpusPath)
-        anchor_filename (str)
+        file1 (CorpusPath): file1
+        file2 (CorpusPath): file2
+        anchor_filename (str): filename
 
     Returns:
-        list of str: the sentence aligned output of tca2
+        (list[str]): the sentence aligned output of tca2
     """
     divide_p_into_sentences([file1, file2])
 
@@ -228,7 +229,7 @@ def parse_options():
     """Parse the commandline options.
 
     Returns:
-        a list of arguments as parsed by argparse.Argumentparser.
+        (argparse.Namespace): the parsed commandline arguments
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser], description="Sentence align file pairs."

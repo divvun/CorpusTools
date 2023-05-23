@@ -95,7 +95,7 @@ class DupeFinder:
             filename (str): name of the file to retrieve the word count from.
 
         Returns:
-            float
+            (float): the word count
         """
         tree = etree.parse(filename)
         w = tree.find(".//wordcount").text
@@ -110,7 +110,7 @@ class DupeFinder:
             filename2 (str): name of the second file.
 
         Returns:
-            bool: True if the ratio is larger than 0.9, False if it is less.
+            (bool): True if the ratio is larger than 0.9, False if it is less.
         """
         w1 = self.get_wc(filename1)
         w2 = self.get_wc(filename2)

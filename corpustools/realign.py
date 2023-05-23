@@ -61,7 +61,7 @@ def calculate_paths(tmxhtml):
         tmxhtml (str): path to a .tmx or a .tmx.html file
 
     Returns:
-        tuple of corpuspath.make_corpus_path
+        (tuple[CorpusPath, CorpusPath]): tuple of corpuspath.make_corpus_path
     """
     path = tmxhtml.with_suffix("") if tmxhtml.suffix == ".html" else tmxhtml
     corpus_path1 = corpuspath.make_corpus_path(path)
@@ -96,7 +96,7 @@ def parse_options():
     """Parse the commandline options.
 
     Returns:
-        a list of arguments as parsed by argparse.Argumentparser.
+        (argparse.Namespace): the parsed commandline arguments
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],

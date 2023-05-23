@@ -39,13 +39,13 @@ def insert_element(para, text, position):
     """Insert a new element in p's parent.
 
     Args:
-        para: an lxml element, it is a story/p element
+        para (lxml.etree.Element): an lxml element, it is a story/p element
         text (str): string
         position (int): the position inside p's parent where the new
                     element is inserted
 
     Returns:
-        position: (integer)
+        (int): the position
     """
     if text is not None and text.strip() != "":
         new_p = etree.Element("p")
@@ -64,7 +64,7 @@ def convert_sub_p(para):
     This function removes p.text and saves p.tail
 
     Args:
-        para: an lxml element, it is a story/p element
+        para (lxml.etree.Element): an lxml element, it is a story/p element
     """
     for sub_p in para.findall(".//p"):
         previous = sub_p.getprevious()
@@ -88,7 +88,7 @@ def convert_subelement(para):
     """Convert subelements of story/p elements to p elements.
 
     Args:
-        para: an lxml element, it is a story/p element
+        para (lxml.etree.Element): an lxml element, it is a story/p element
     """
     position = 1
     for subelement in para:
@@ -160,7 +160,7 @@ def convert_article(avvir_doc):
         avvir_doc (etree.Element): the etree that should be manipulated.
 
     Returns:
-        etree.Element: The document root of the basic Giella xml document.
+        (etree.Element): The document root of the basic Giella xml document.
     """
     avvir_doc.tag = "body"
     document = etree.Element("document")

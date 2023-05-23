@@ -119,7 +119,7 @@ def parse_options():
     """Parse the commandline options.
 
     Returns:
-        a list of arguments as parsed by argparse.Argumentparser.
+        (argparse.Namespace): the parsed commandline arguments
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser], description="Convert tmx files to html"

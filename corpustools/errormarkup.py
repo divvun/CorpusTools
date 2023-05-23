@@ -88,10 +88,10 @@ def make_error_element(error_text, error_name, correction):
     Args:
         error_text (str): the text of the error element
         error_name (str): the tag of the error element
-        correction: the correction(s) for the error
+        correction (str): the correction(s) for the error
 
     Returns:
-        An etree._Element
+        (lxml.etree.Element): An etree._Element
     """
     error_element = etree.Element(error_name)
     error_element.text = error_text
@@ -109,7 +109,7 @@ def make_correction_element(correction_content):
         correction_content (str): string containing the correction(s)
 
     Yields:
-        A correction element for each correction
+        (lxml.etree.Element): A correction element for each correction
     """
     for correction in correction_content.split("///"):
         correction_text, att_list = look_for_extended_attributes(correction)

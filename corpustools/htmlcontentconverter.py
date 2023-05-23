@@ -70,7 +70,7 @@ class HTMLBeautifier:
             content (str): a string containing an html document.
 
         Returns:
-            a string containing the cleaned up html document.
+            (str): a string containing the cleaned up html document.
         """
         cleaner = clean.Cleaner(
             page_structure=False,
@@ -111,7 +111,7 @@ class HTMLBeautifier:
             content (str): the content of a document.
 
         Returns:
-            str: The content of the document without the cruft.
+            (str): The content of the document without the cruft.
         """
         replacements = [("//<script", "<script"), ("&nbsp;", " "), (" ", " ")]
         return util.replace_all(replacements, content)
@@ -718,7 +718,7 @@ def xhtml2intermediate(content_xml):
         content_xml (etree.Element): the result of convert2xhtml
 
     Returns:
-        etree.Element: the root element of the Giella xml document
+        (lxml.etree.Element): the root element of the Giella xml document
     """
     converter_xsl = os.path.join(HERE, "xslt/xhtml2corpus.xsl")
 
@@ -738,6 +738,6 @@ def convert2intermediate(filename):
         filename (str): name of the file
 
     Returns:
-        etree.Element: the root element of the Giella xml document
+        (lxml.etree.Element): the root element of the Giella xml document
     """
     return xhtml2intermediate(to_html_elt(filename))

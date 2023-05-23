@@ -30,7 +30,7 @@ def to_html_elt(filename):
         filename (str): path to the document
 
     Returns:
-        A string containing the html version of the writenow file.
+        (str): A string containing the html version of the writenow file.
     """
     outdir = os.path.dirname(filename)
     subprocess.run(

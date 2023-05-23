@@ -34,9 +34,10 @@ class XMLTester(unittest.TestCase):
 
         Args:
             got (etree.Element): the xml part given by the tester
-            got (etree.Element): the wanted xml
+            want (etree.Element): the wanted xml
 
-        Raises: AssertionError
+        Raises:
+            AssertionError: If they are not equal
         """
         got = etree.tostring(got, encoding="unicode")
         want = etree.tostring(want, encoding="unicode")

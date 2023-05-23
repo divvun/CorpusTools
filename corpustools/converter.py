@@ -57,7 +57,7 @@ def to_giella(path):
         path (str): path to the document
 
     Returns:
-        etree.Element: root of the resulting xml document
+        (lxml.etree.Element): root of the resulting xml document
     """
     chooser = {
         ".doc": htmlcontentconverter.convert2intermediate,
@@ -288,10 +288,11 @@ class Converter:
         """Find out if the xml document has any content.
 
         Args:
-            complete: a etree element containing the converted document.
+            complete (lxml.etree.Element): a etree element containing
+                the converted document.
 
         Returns:
-            The length of the content in complete.
+            (int): The length of the content in complete.
         """
         xml_printer = ccat.XMLPrinter(all_paragraphs=True, hyph_replacement=None)
         xml_printer.etree = etree.ElementTree(complete)
@@ -302,7 +303,7 @@ class Converter:
         """Write the complete converted document to disk.
 
         Args:
-            languageguesser: a text.Classifier
+            languageguesser (text.Classifier): a text.Classifier
         """
         if not self.lazy_conversion or (
             self.lazy_conversion

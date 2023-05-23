@@ -40,7 +40,7 @@ def doc_to_unicodehtml(filename):
         filename (str): path to the file
 
     Returns:
-        A string containing the xhtml version of the doc file.
+        (str): A string containing the xhtml version of the doc file.
     """
     text = extract_text(filename)
     try:
@@ -177,7 +177,7 @@ def extract_text(filename):
         filename (str): path to the document
 
     Returns:
-        bytes: the output of the program
+        (bytes): the output of the program
     """
     command = ["wvHtml", filename, "-"]
     runner = util.ExternalCommandRunner()

@@ -39,7 +39,7 @@ def set_data(directory, testdoc, skip_elements):
         skip_elements (str): the range of elements to skip
 
     Returns:
-        str: path to the test document in the temporary test directory
+        (str): path to the test document in the temporary test directory
     """
     temp_epub = os.path.join(directory.path, os.path.basename(testdoc))
     copyfile(testdoc, temp_epub)

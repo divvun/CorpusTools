@@ -42,7 +42,7 @@ def fix_macsami_cp1252(instring):
             cp1252.
 
     Returns:
-        str with fixed encoding.
+        (str): str with fixed encoding.
     """
     bytestring = instring.encode("1252", errors="xmlcharrefreplace")
     encoded_unicode = bytestring.decode("macsami").replace("&#129;", "Å")
@@ -58,7 +58,7 @@ def fix_macsami_latin1(instring):
             latin1.
 
     Returns:
-        str with fixed encoding.
+        (str): a string with fixed encoding.
     """
     return instring.encode("latin1", errors="xmlcharrefreplace").decode("macsami")
 
@@ -72,7 +72,7 @@ def fix_macsami_mac(instring):
             macroman.
 
     Returns:
-        str with fixed encoding.
+        (str): a string with fixed encoding.
     """
     bytestring = instring.encode("macroman", "xmlcharrefreplace")
     encoded_string = bytestring.decode("macsami").replace("&#8486;", "ž")
@@ -89,7 +89,7 @@ def fix_winsami2_cp1252(instring):
             cp1252.
 
     Returns:
-        str with fixed encoding.
+        (str): a string with fixed encoding.
     """
     return instring.encode("cp1252", errors="xmlcharrefreplace").decode("ws2")
 
@@ -103,7 +103,7 @@ def fix_meadowmari_cp1252(instring):
             cp1252.
 
     Returns:
-        str with fixed encoding.
+        (str): a string with fixed encoding.
     """
     mari_replacements = [
         ("&#1118;", "ӱ"),  # xml char ref CYRILLIC SMALL LETTER SHORT U
@@ -319,8 +319,12 @@ CTYPES = {
 def guess_file_encoding(filename, mainlang):
     """Guess the encoding of a file.
 
-    @param filename name of an utf-8 encoded file
-    @return winner is an int, pointing to a position in CTYPES, or -1
+    Args:
+        filename (str): the file to open
+
+    Returns:
+        (str): A codec name, as given in the keys of CTYPES, or None
+            if no codec could be determined
     """
     with open(filename) as infile:
         content = infile.read()
@@ -338,9 +342,13 @@ def guess_body_encoding(content, mainlang):
     If "sami letters" that the encoding tries to fix exist in "content",
     disregard the encoding
 
-    @param content a unicode string
-    @return winner is a key from CTYPES or None to tell that no known
-    encoding is found
+    Args:
+        content (str): the content
+        mainlang (str): Three-letter language code
+
+    Returns:
+        (str): A codec name, as given in the keys of CTYPES, or None
+            if no codec could be determined
     """
     winner = None
     if "ì" in content and "ò" in content and mainlang in CYRILLIC_LANGUAGES:
@@ -383,11 +391,11 @@ def default_decoder(position, text):
     """The default decoder.
 
     Args:
-        position
+        position (str): 
         text (str): The string that should be decoded.
 
     Returns:
-        str
+        (str): 
     """
     if position is not None:
         for key, value in CTYPES[position].items():
@@ -402,9 +410,12 @@ def decode_para(position, text):
     Replace letters in text with the ones from the dict at
     position position in CTYPES
 
-    @param position which place the encoding has in the CTYPES list
-    @param text str
-    @return str
+    Args:
+        position (str): an encoding name
+        text (str): the text to decode
+
+    Returns:
+        (str): The decoded text
     """
     which_decoder = {
         "mac-sami_to_cp1252": fix_macsami_cp1252,

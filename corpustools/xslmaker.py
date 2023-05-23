@@ -37,21 +37,21 @@ class XslMaker:
         """Initialise the XslMaker class.
 
         Args:
-            xslfile: a string containing the path to the xsl file.
+            xslfile (str): a string containing the path to the xsl file.
         """
         self.filename = xslfile
 
     @property
     def logfile(self):
-        """Return the name of the logfile."""
+        """Returns the name of the logfile."""
         return self.filename + ".log"
 
     @property
     def xsl(self):
-        """Return an etree of the xsl file.
+        """Returns an etree of the xsl file.
 
         Raises:
-            In case of an xml syntax error, raise ConversionException.
+            ConversionException: In case of an xml syntax error
         """
         xsl = etree.parse(os.path.join(HERE, "xslt/preprocxsl.xsl"))
         transformer = etree.XSLT(xsl)
@@ -71,6 +71,6 @@ class XslMaker:
             util.ConversionException: in case of invalid XML in the xsl file.
 
         Returns:
-            an etree.XSLT transformer
+            (etree.XSLT): an etree.XSLT transformer
         """
         return etree.XSLT(self.xsl)

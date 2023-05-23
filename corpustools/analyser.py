@@ -23,8 +23,6 @@ import argparse
 import multiprocessing
 import os
 import sys
-from functools import partial
-from concurrent.futures import ProcessPoolExecutor, as_completed
 
 import lxml.etree as etree
 
@@ -121,36 +119,13 @@ def analyse(xml_file, modename):
 def analyse_in_parallel(file_list, modename, pool_size):
     """Analyse file in parallel."""
     file_list = list(file_list)
-    nfiles = len(file_list)
-    print(f"Starting parallel analysis of {nfiles} files with {pool_size} workers")
-    failed = []
-    futures = {}
-    with ProcessPoolExecutor(max_workers=pool_size) as pool:
-        for file in file_list:
-            fut = pool.submit(partial(analyse, file, modename=modename))
-            futures[fut] = file
-
-        for i, future in enumerate(as_completed(futures), start=1):
-            exc = future.exception()
-            filename = futures[future]
-            if exc is not None:
-                failed.append(filename)
-                print(f"[{i}/{nfiles} FAILED: {filename}")
-                print(exc)
-            else:
-                print(f"[{i}/{nfiles}] done: {filename}")
-
-    n_ok = nfiles - len(failed)
-    print(f"all done analysing. {n_ok} files analysed ok, {len(failed)} failed")
-    if failed:
-        print("the files that failed to be analysed are:")
-        for filename in failed:
-            print(filename)
-
-    # pool = multiprocessing.Pool(processes=pool_size)
-    # pool.map(partial(analyse, modename=modename), file_list)
-    # pool.close()  # no more tasks
-    # pool.join()  # wrap up current tasks
+    print(f"Parallel analysis of {len(file_list)} files with {pool_size} workers")
+    util.run_in_parallel(
+        function=analyse,
+        max_workers=pool_size,
+        file_list=file_list,
+        modename=modename,
+    )
 
 
 def analyse_serially(file_list, modename):
@@ -177,6 +152,12 @@ def parse_options():
 
     parser.add_argument("--ncpus", action=NCpus, default=multiprocessing.cpu_count() * 2)
     parser.add_argument(
+        "--skip-existing",
+        action="store_true",
+        help="Skip analysis of files are already analysed (that already "
+             "exist in the analysed/ folder"
+    )
+    parser.add_argument(
         "--serial",
         action="store_true",
         help="When this argument is used files will be analysed one by one."
@@ -201,18 +182,28 @@ def main():
     """Analyse files in the given directories."""
     args = parse_options()
 
+    files = list(corpuspath.collect_files(args.converted_entities, suffix=".xml"))
+
+    if args.skip_existing:
+        non_skipped_files = []
+        for file in files:
+            cp = corpuspath.make_corpus_path(file)
+            if not cp.analysed.exists():
+                non_skipped_files.append(file)
+
+        n_skipped_files = len(files) - len(non_skipped_files)
+        print(f"--skip-existing given. Skipping {n_skipped_files} "
+              "files that are already analysed")
+        if n_skipped_files == len(files):
+            print("nothing to do, exiting")
+            raise SystemExit(0)
+        files = non_skipped_files
+
     try:
         if args.serial:
-            analyse_serially(
-                corpuspath.collect_files(args.converted_entities, suffix=".xml"),
-                args.modename,
-            )
+            analyse_serially(files, args.modename)
         else:
-            analyse_in_parallel(
-                corpuspath.collect_files(args.converted_entities, suffix=".xml"),
-                args.modename,
-                args.ncpus,
-            )
+            analyse_in_parallel(files, args.modename, args.ncpus)
     except util.ArgumentError as error:
         print(f"Cannot do analysis\n{str(error)}", file=sys.stderr)
         raise SystemExit(1)

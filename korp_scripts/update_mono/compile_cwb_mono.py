@@ -9,20 +9,29 @@ import sys
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from datetime import date
+from functools import wraps
 from itertools import chain
 from pathlib import Path
+from textwrap import dedent
 from time import perf_counter_ns
 from typing import Callable
 
 
-COMPILE_CORPUS_XSL = Path(__file__).with_name("compile_corpus.xsl")
-if not COMPILE_CORPUS_XSL.is_file():
-    exit("uhm.. the compile_corpus.xsl file has gone missing, it seems..")
+LANGS = set(
+    "fao fit fkv koi kpv mdf mhr mrj myv olo "
+    "sma sme smj smn sms udm vep vro".split()
+)
 
-LANGS = set("sma sme smj sms smn nob fao".split())
 
-
-def noop(*_args, **_kwargs): pass
+def timed(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        t0 = perf_counter_ns()
+        res = f(*args, **kwargs)
+        t = round((perf_counter_ns() - t0) / 1_000_000)
+        print(f"done ({t}ms)")
+        return res
+    return wrapper
 
 
 def remove_directory_contents(directory):
@@ -80,8 +89,7 @@ class CorpusDirectory(argparse.Action):
         super().__init__(option_strings, dest, type=Path, help=help)
 
     def die(self, parser, msg):
-        parser.print_usage()
-        parser.exit(1, f"{sys.argv[0]}: error: argument `{self.dest}`: {msg}\n")
+        parser.error(f"{sys.argv[0]}: error: argument `{self.dest}`: {msg}\n")
 
     def __call__(self, parser, namespace, values, option_string=None):
         directory = values
@@ -156,10 +164,12 @@ def _default_success(completed_process: subprocess.CompletedProcess):
 
 def run_subcommand(
     cmd: list[str],
-    considered_success: Callable[[subprocess.CompletedProcess], bool] = _default_success,
+    considered_success:
+        Callable[[subprocess.CompletedProcess], bool] = _default_success,
     verbose: bool = False,
     check: bool = False,
 ):
+    def noop(*_args, **_kwargs): pass
     print = builtins.print if verbose else noop
 
     print("running subcommand:\n  ", " ".join(cmd))
@@ -207,11 +217,11 @@ def process_input_xml(file, category, text_num):
     return text_el, sentence_num, n_tot_tokens
 
 
+@timed
 def concat_corpus(corpus, date):
     """Replaces what compile_corpus.xsl does. Basically concat all the files
     in a corpus, and store it in one file."""
-    t0 = perf_counter_ns()
-    print(f"Concatenating corpora...")
+    print("Concatenating corpora...")
     date_s = str(date).replace('-', '')
     corpus_directory = Path(f"vrt_{corpus.lang}_{date_s}")
     if corpus_directory.exists():
@@ -232,7 +242,7 @@ def concat_corpus(corpus, date):
         file_list = list(corpusfile.path.glob("**/*.xml"))
         nfiles = len(file_list)
 
-        for i, file in enumerate(file_list):
+        for i, file in enumerate(file_list, start=1):
             print(f"    reading file [{i}/{nfiles}] {file}")
             text_el, n_sentences, n_tokens = process_input_xml(file, category, text_num)
             if text_el:
@@ -247,46 +257,13 @@ def concat_corpus(corpus, date):
         with open(Path(corpus_directory / f"{corpus_id}.vrt"), "w") as f:
             f.write(ET.tostring(root_element, encoding="unicode"))
 
-    t = round((perf_counter_ns() - t0) / 1_000_000)
-    print(f"done ({t}ms)")
     for file in no_texts:
         print(f"  file {file} has no texts!")
 
 
-def run_compile_corpus_xsl(corpus, date, saxonbjar_path):
-    print("Running the compile_corpus.xsl script...", end="")
-    date = str(date).replace("-", "")
-
-    # find a file? This seems like a hack: the java subcommand below seems
-    # to _require_ a -s:<valid_file> parameter given, but the command still
-    # seems to run and generate all the files that it should (in the entire
-    # directory)
-    # (as a side note, this will fail if there are no files, but then there's
-    # nothing to do anyway)
-    for corpus in corpus.subcorpuses():
-        random_file = next(corpus.path.rglob("*.xml"))
-
-        run_subcommand([
-            "java",
-            "-cp",
-            # f"'{saxonbjar_path}'",
-            saxonbjar_path,
-            "net.sf.saxon.Transform",
-            "-ext:on",
-            f"-xsl:{COMPILE_CORPUS_XSL}",
-            #"-s:'/home/anders/corpus/corpus-sme/korp_mono/science/uit/master/aimo_west.pdf.xml'",
-            f"-s:{random_file}",
-            f"inDir={corpus.path}",
-            f"cLang={corpus.lang}",
-            f"cDomain={corpus.category}",
-            f"date={date}",
-        ])
-
-    print("done")
-
-
+@timed
 def cwb_huffcode(cwb_binaries_directory, registry_dir, upper_corpus_name):
-    print("    compressing token files (cwb_huffcode)...", end="")
+    print("    compressing token files (cwb_huffcode)...", end="", flush=True)
     cmd = [
         f"{cwb_binaries_directory}/cwb-huffcode",
         "-r", f"{registry_dir}",
@@ -295,11 +272,11 @@ def cwb_huffcode(cwb_binaries_directory, registry_dir, upper_corpus_name):
     ok = run_subcommand(cmd)
     if not ok:
         raise Exception("error: cwb_huffcode() returned non-0")
-    print("done")
 
 
+@timed
 def cwb_compress_rdx(cwb_binaries_directory, registry_dir, upper_corpus_name):
-    print("    compressing indexes...", end="")
+    print("    compressing indexes...", end="", flush=True)
     cmd = [
         f"{cwb_binaries_directory}/cwb-compress-rdx",
         "-r", f"{registry_dir}",
@@ -308,11 +285,10 @@ def cwb_compress_rdx(cwb_binaries_directory, registry_dir, upper_corpus_name):
     ok = run_subcommand(cmd)
     if not ok:
         raise Exception("error: cwb_compress_rx() returned non-0")
-    print("done")
 
 
 def rm_unneeded_data_files(data_dir, corpus_name):
-    print(f"    deleting non-compressed files from data dir of corpus {corpus_name}...", end="")
+    print(f"    deleting non-compressed files from data dir of corpus {corpus_name}...", end="", flush=True)
     d = data_dir / corpus_name
     for file in chain(d.glob("*.rev"), d.glob("*.rdx"), d.glob("*.corpus")):
         file.unlink()
@@ -374,7 +350,7 @@ def read_vrt_xml(vrt_file):
 
 
 def update_registry(registry_dir, corpus_name, descriptive_name, lang):
-    print(f"    Updating registry {corpus_name}...", end="")
+    print(f"    Updating registry {corpus_name}...", end="", flush=True)
     file = registry_dir / corpus_name
     if file.is_file():
         text = file.read_text()
@@ -393,6 +369,39 @@ def update_registry(registry_dir, corpus_name, descriptive_name, lang):
     print("done")
 
 
+def create_korp_settings(korp_corpus_config_dir, vrt_directory, corpus_name):
+    """Create the Korp corpus config-.yaml file that Korp needs, i.e.
+    KORP_CORPUS_CONFIG_DIR/corpora/LANG_CATEGORY_DATE.yaml
+
+    Fill it with default values
+    """
+    raise NotImplementedError
+    # create the Korp settings files,
+    # vrt_fao_DATE
+    default_title = " ".join(vrt_directory.split("_")[:-1])
+    data = dedent(f"""
+    description: blank
+    id: {corpus_name}
+    mode:
+    - name: default
+    title: {default_title}
+    context:
+      - label:
+          eng: 1 sentence
+          nob: 1 mening
+        value: 1 sentence
+    within:
+      - label:
+          eng: sentence
+          swe: mening
+        value: sentence
+    """).strip()
+    file = (korp_corpus_config_dir / corpus_name).with_suffix(".yaml")
+    with open(file, "w") as f:
+        f.write(data)
+
+
+@timed
 def cwb_encode(
     vrt_file,
     corpus_name,
@@ -400,8 +409,7 @@ def cwb_encode(
     data_dir,
     registry_dir,
 ):
-    # $cwb_dir/bin/cwb-encode -s -p - -d $corpus_data_dir/$l_corpus_name -R $registry_dir/$l_corpus_name -c utf8 -f $input_data/$l_corpus_name.vrt  -P word -P lemma -P pos -P msd -P ref -P deprel -P dephead -S sentence:0+id+token_count -S text:0+id+title+lang+orig_lang+gt_domain+first_name+last_name+nationality+date+datefrom+dateto+timefrom+timeto+sentence_count+token_count -S corpus:0+id
-    print("    Converting to CWB binary format (cwb-encode)...", end="")
+    print("    Converting to CWB binary format (cwb-encode)...", end="", flush=True)
     cmd = [
         f"{cwb_binaries_directory}/cwb-encode",
 
@@ -442,15 +450,12 @@ def cwb_encode(
               "+sentence_count+token_count",
         "-S", "corpus:0+id",
     ]
-    if run_subcommand(cmd):
-        print("done")
-        return True
-    else:
+    if not run_subcommand(cmd):
         raise RuntimeError("cwb_encode() failed")
 
 
 def cwb_makeall(cwb_binaries_directory, registry_dir, upper_corpus_name):
-    print("    create lexicon and index (cwb-makeall)...", end="")
+    print("    create lexicon and index (cwb-makeall)...", end="", flush=True)
     cmd = [
         f"{cwb_binaries_directory}/cwb-makeall",
         "-D",
@@ -518,6 +523,7 @@ def encode_corpus(
         rm_unneeded_data_files(data_dir, corpus_name)
         DESCRIPTIVE_NAME = "DESCRIPTIVE " + corpus_name
         update_registry(registry_dir, corpus_name, DESCRIPTIVE_NAME, lang)
+        # create_korp_settings()
 
 
 def parse_args():
@@ -539,19 +545,6 @@ def parse_args():
         help="directory where the cwb binaries (such as cwb-encode, etc) "
              "are located. Only necessary if the `cwb-xxx` commands are not "
              "available on the system path"
-    )
-    # Not going to be needed
-    parser.add_argument(
-        "--libsaxon",
-        default="/usr/share/java/saxonb.jar",
-        help="full path to where the libsaxonb.jar file is found. Defaults to "
-             "/usr/share/java/saxonb.jar",
-    )
-    parser.add_argument(
-        "--use-old-xsl",
-        action="store_true",
-        help="use the old compile_corpus.xsl script run with java instead of "
-             "the new python one",
     )
     parser.add_argument(
         "--target",
@@ -619,20 +612,12 @@ def main(args):
     args.data_dir, args.registry_dir = ensure_data_and_registry_dirs(args)
 
     # the data/ directory must be empty, otherwise CWB gets very confused
-    print("Making sure the data/ directory is empty...", end="")
+    print("Making sure the data/ directory is empty...", end="", flush=True)
     remove_directory_contents(args.data_dir)
     print("done")
 
-    if args.use_old_xsl:
-        t0 = perf_counter_ns()
-        run_compile_corpus_xsl(args.directory, args.date, args.libsaxon)
-        t = round((perf_counter_ns() - t0) / 1_000_000)
-        print(f"run_compile_corpus_xsl() took {t}ms")
-    else:
-        concat_corpus(args.directory, args.date)
+    concat_corpus(args.directory, args.date)
 
-
-    # after the compile_corpus.xsl has run, there will be 'vrt_*' folders
     for entry in Path(".").glob("vrt_*"):
         if not entry.is_dir():
             continue

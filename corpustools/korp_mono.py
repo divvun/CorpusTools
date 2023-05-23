@@ -22,11 +22,10 @@
 import argparse
 import multiprocessing
 import re
-from functools import partial
 
 import lxml.etree as etree
 
-from corpustools import argparse_version, corpuspath, modes
+from corpustools import argparse_version, corpuspath, modes, util
 from corpustools.common_arg_ncpus import NCpus
 
 DOMAIN_MAPPING = {
@@ -250,26 +249,6 @@ def pad_elements(elem):
             pad_elements(child)
     if not elem.tail or not elem.tail.strip():
         elem.tail = padding
-
-
-def process_in_parallel(lang, files_list, pool_size):
-    """Process file in parallel."""
-
-    nfiles = len(files_list)
-    pool = multiprocessing.Pool(processes=pool_size)
-    pool.starmap(
-        partial(process_file, lang=lang, files_total=nfiles),
-        enumerate(files_list, start=1)
-    )
-    pool.close()  # no more tasks
-    pool.join()  # wrap up current tasks
-
-
-def process_serially(lang, files_list):
-    nfiles = len(files_list)
-    for file_number, file_ in enumerate(files_list, start=1):
-        print(f"Converting: [{file_number}/{nfiles}]{file_}")
-        process_file(file_number, file_, lang, nfiles)
 
 
 def group_sem(analysis):
@@ -521,20 +500,18 @@ def make_root_element(f_root):
     return root
 
 
-def process_file(file_num, current_file, lang, files_total):
+def process_file(file):
     """Convert analysed file into vrt format file."""
-    print(f"... processing [{file_num}/{files_total}] {current_file}")
-    analysed_file = corpuspath.make_corpus_path(current_file)
+    analysed_file = corpuspath.make_corpus_path(file)
     path = analysed_file.korp_mono
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(
         etree.tostring(
-            make_vrt_xml(current_file, lang),
+            make_vrt_xml(file, analysed_file.lang),
             xml_declaration=False,
             encoding="utf-8",
         )
     )
-    print(f"DONE {path}\n\n")
 
 
 def make_vrt_xml(current_file, lang):
@@ -826,6 +803,9 @@ def non_empty_cohorts(current_sentence):
                 yield (word_form, rest_cohort)
 
 
+# Anders: re.compile is sort of smart with caching and such, but just as an
+# attempt to speed up this function a little bit, I took the re.compile() out
+__REG = re.compile(r"(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?\|_∞_\<aux>\s?)")
 def make_analysis_tuple(word_form, rest_cohort, language):
     # take the first analysis in case there are more than one non-disambiguated analyses
     original_analysis = extract_original_analysis(
@@ -834,13 +814,18 @@ def make_analysis_tuple(word_form, rest_cohort, language):
 
     # put a clear delimiter between the (first) pos value and the rest of msd
     # in order to disambiguate from the rest of whitespaces
-    parts = re.compile(
-        r"(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?\|_∞_\<aux>\s?)"
-    ).split(extract_used_analysis(original_analysis), maxsplit=1)
+    parts = __REG.split(extract_used_analysis(original_analysis), maxsplit=1)
 
     # ambiguity hack: unmask '<' and '>' as lemma
     lemma = parts[0].replace("\\", "")
-    maybe_pos = parts[1].replace("_∞_", "").strip()
+    try:
+        maybe_pos = parts[1].replace("_∞_", "").strip()
+    except IndexError:
+        print(f"{word_form=}")
+        print(f"{rest_cohort=}")
+        print(f"{original_analysis=}")
+        print(f"{extract_used_analysis(original_analysis)=}")
+        raise
     pos = "___" if maybe_pos == "?" else maybe_pos
     (head, tail) = make_head_tail(
         re.compile(" #").split(make_morpho_syntactic_description(parts[2]))
@@ -872,20 +857,19 @@ def valid_sentences(analysis):
 
 
 def make_sentence(current_sentence, current_lang):
-
     return make_positional_attributes(
-        [
+        (
             make_analysis_tuple(word_form, rest_cohort, current_lang)
             for (word_form, rest_cohort) in non_empty_cohorts(current_sentence)
-        ]
+        )
     )
 
 
 def make_sentences(sentences, current_lang):
     """Make sentences from the current analysis."""
-    return [
+    return (
         make_sentence(current_sentence, current_lang) for current_sentence in sentences
-    ]
+    )
 
 
 def get_correct_pos(input_string):
@@ -1000,12 +984,16 @@ def parse_options():
         "--ncpus", action=NCpus, default=multiprocessing.cpu_count() * 2
     )
     parser.add_argument(
+        "--skip-existing",
+        action="store_true",
+        help="Skip files that already exist in the korp_mono/ folder",
+    )
+    parser.add_argument(
         "--serial",
         action="store_true",
         help="When this argument is used files will be converted one by one."
              "Using --serial takes priority over --ncpus",
     )
-    parser.add_argument("lang", help="language of the files to process")
     parser.add_argument(
         "analysed_entities",
         nargs="+",
@@ -1020,7 +1008,24 @@ def main():
 
     files = list(corpuspath.collect_files(args.analysed_entities, suffix=".xml"))
 
+    if args.skip_existing:
+        non_skipped_files = []
+        for file in files:
+            cp = corpuspath.make_corpus_path(file)
+            if not cp.korp_mono.exists():
+                non_skipped_files.append(file)
+
+        n_skipped_files = len(files) - len(non_skipped_files)
+        print(f"--skip-existing given. Skipping {n_skipped_files} "
+              "files that are already processed")
+        if n_skipped_files == len(files):
+            print("nothing to do, exiting")
+            raise SystemExit(0)
+        files = non_skipped_files
+
     if args.serial:
-        process_serially(args.lang, files)
+        for i, file in enumerate(files, start=1):
+            print(f"Converting: [{i}/{len(files)}] {file}")
+            process_file(file)
     else:
-        process_in_parallel(args.lang, files, pool_size=args.ncpus)
+        util.run_in_parallel(process_file, args.ncpus, files)

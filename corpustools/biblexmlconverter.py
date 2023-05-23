@@ -24,11 +24,11 @@ def process_verse(verse_element):
     """Process the verse element found in bible xml documents.
 
     Args:
-        verse_element (etree.Element): an etree element containing the verse
-            element found in a bible xml document.
+        verse_element (lxml.etree.Element): an etree element containing
+            the verse element found in a bible xml document.
 
     Returns:
-        A string containing the text of the verse element.
+        (str): A string containing the text of the verse element.
     """
     if verse_element.tag != "verse":
         raise UserWarning(f"Unexpected element in verse: {verse_element.tag}")
@@ -40,11 +40,12 @@ def process_section(section_element):
     """Process the section element found in the bible xml documents.
 
     Args:
-        section_element (etree.Element): an etree element containing the
+        section_element (lxml.etree.Element): an etree element containing the
              section element found in a bible xml document.
 
     Returns:
-        section: an etree element containing a corpus xml section.
+        section (lxml.etree.Element): an etree element containing a
+            corpus xml section.
     """
     section = etree.Element("section")
 
@@ -77,10 +78,10 @@ def process_p(paragraph):
     """Convert bible xml verse elements to p elements.
 
     Args:
-        paragraph: is a bible xml p element.
+        paragraph (lxml.etree.Element): is a bible xml p element.
 
     Returns:
-        a Giella xml p element
+        (lxml.etree.Element): a Giella xml p element
     """
     verses = []
     for child in paragraph:
@@ -101,7 +102,7 @@ def make_p(verses):
         verses (list[str]): a list of strings
 
     Returns:
-        a Giella xml p element
+        (lxml.etree.Element): a Giella xml p element
     """
     paragraph = etree.Element("p")
     paragraph.text = "\n".join(verses)
@@ -113,10 +114,10 @@ def process_chapter(chapter_element):
     """Convert a bible xml chapter to a Giella xml section one.
 
     Args:
-        chapter_element: a bible xml chapter element
+        chapter_element (lxml.etree.Element): a bible xml chapter element
 
     Returns:
-        a Giella xml section element.
+        (lxml.etree.Element): a Giella xml section element.
     """
     section = etree.Element("section")
 
@@ -149,10 +150,10 @@ def process_book(book_element):
     """Convert a bible xml book to a Giella xml section one.
 
     Args:
-        book_element: a bible xml book element
+        book_element (lxml.etree.Element): a bible xml book element
 
     Returns:
-        a Giella xml section element.
+        (lxml.etree.Element): a Giella xml section element.
     """
     section = etree.Element("section")
 
@@ -180,7 +181,7 @@ def process_bible(bible_doc):
         bible_doc (etree.Element): the bible xml tree
 
     Returns:
-        a Giella xml body element.
+        (lxml.etree.Element): a Giella xml body element.
     """
     body = etree.Element("body")
 

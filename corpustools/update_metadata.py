@@ -31,10 +31,10 @@ def find_xsl_files(directories):
     """Find .xsl files found in directories.
 
     Args:
-        directories (list of str): paths to directories
+        directories (list[str]): paths to directories
 
     Yields:
-        str: path to an .xsl file
+        (str): path to an .xsl file
     """
     for directory in directories:
         for root, _, files in os.walk(directory):
@@ -47,7 +47,7 @@ def parse_options():
     """Parse the commandline options.
 
     Returns:
-        a list of arguments as parsed by argparse.Argumentparser.
+        (argparse.Namespace): the parsed commandline arguments
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],

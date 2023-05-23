@@ -118,7 +118,7 @@ class NrkSmeCrawler:
             address (html.Element): An element where interesting text is found
 
         Returns:
-            str containing the language of the text
+            (str): str containing the language of the text
         """
         # This bytes hoopla is done because the text
         # comes out as utf8 encoded as latin1 …
@@ -149,7 +149,7 @@ class NrkSmeCrawler:
             tag (str): a numerical tag, pointing to a specific topic on nrk.no
 
         Yields:
-            lxml.html.HtmlElement: a parsed html document.
+            (lxml.html.HtmlElement): a parsed html document.
         """
         page_links_template = (
             "https://www.nrk.no/serum/api/render/{tag}?"
@@ -192,7 +192,7 @@ class NrkSmeCrawler:
             tag (str): a numerical tag pointing to a specific topic.
 
         Yields:
-            str: a url to an nrk.no article
+            (str): a url to an nrk.no article
         """
         for tree in self.get_tag_page_trees(tag):
             for address in tree.xpath('//a[@class="autonomous lp_plug"]'):
@@ -219,8 +219,8 @@ class NrkSmeCrawler:
             path (str): path to an nrk.no article
 
         Yields:
-            tuple of str: a numerical tag, used internally by nrk.no to point
-                to a specific topic and a short description of the topic.
+            (tuple[str, str]): a numerical tag, used internally by nrk.no to
+                point to a specific topic and a short description of the topic.
         """
         article = html.parse(path)
 
@@ -366,7 +366,7 @@ class NrkSmeCrawler:
             search_link (str): query string to nrk.no
 
         Returns:
-            dict containing search results from search
+            (dict): dict containing search results from search
         """
         result = requests.get(search_link)
         content = result.content.decode("utf8")
@@ -408,7 +408,7 @@ class NrkSmeCrawler:
             article (etree.Element): The parsed html document.
 
         Yields:
-            tuple of str
+            (tuple[str, ...]): Authors
         """
         for author_role in article.xpath('.//span[@class="author__role"]'):
             text = author_role.text.strip()
@@ -454,7 +454,8 @@ class NrkSmeCrawler:
             path (str): path to the directory where nrk articles are found.
 
         Returns:
-            set of strings, where the strings are ids to the article.
+            (set[str]): Set of strings, where the strings are ids to the
+                article.
         """
         return {
             xslsetter.MetadataHandler(os.path.join(root, file_))

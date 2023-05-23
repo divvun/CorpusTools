@@ -38,7 +38,7 @@ def remove_declared_encoding(content):
         content (str): the contents of a html document
 
     Returns:
-        str: content sans the declared decoding
+        (str): content sans the declared decoding
     """
     xml_encoding_declaration_re = re.compile(
         r"^<\?xml [^>]*encoding=[\"']([^\"']+)[^>]*\?>[ \r\n]*", re.IGNORECASE
@@ -54,7 +54,7 @@ def to_html_elt(filename):
         filename (str): path to the webpage
 
     Returns:
-        etree.Element: the content of the webpage sent through the
+        (lxml.etree.Element): the content of the webpage sent through the
             lxml.html5parser.
     """
     for encoding in ["utf-8", "windows-1252", "latin1"]:

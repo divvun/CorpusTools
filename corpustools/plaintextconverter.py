@@ -36,7 +36,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
         latin1. The real encoding will be detected later.
 
         Returns:
-            str
+            (str): The decoded string
         """
         try:
             content = codecs.open(self.orig, encoding="utf8").read()
@@ -57,7 +57,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
                 from content.
 
         Returns:
-            A string containing the content sans unwanted characters.
+            (str): A string containing the content sans unwanted characters.
         """
         plaintext_oddities = [
             ("ÊÊ", "\n"),
@@ -103,7 +103,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
             text (str): The text the xml should contain
 
         Returns:
-            an lxml.etree.Element
+            (lxml.etree.Element): an lxml.etree.Element
         """
         element = etree.Element(element_name)
 
@@ -126,7 +126,7 @@ class PlaintextConverter(basicconverter.BasicConverter):
             content (str): the content of the plaintext document.
 
         Returns:
-            An etree element.
+            (lxml.etree.Element): An etree element.
         """
         document = etree.Element("document")
         header = etree.Element("header")
@@ -159,7 +159,7 @@ def convert2intermediate(filename):
         filename (str): name of the file that should be converted
 
     Returns:
-        An etree element.
+        (lxml.etree.Element): An etree element.
     """
     converter = PlaintextConverter(filename)
 

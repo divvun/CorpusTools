@@ -21,7 +21,7 @@ class Codec(codecs.Codec):
                 'backslashreplace'.
 
         Returns:
-            tuple (output object, length consumed)
+            (tuple[Any, int]): a tuple of (output object, length consumed)
         """
         return codecs.charmap_encode(instring, errors, encoding_table)
 
@@ -35,7 +35,7 @@ class Codec(codecs.Codec):
                 'strict', 'replace' or 'ignore'.
 
         Returns:
-            tuple (output object, length consumed)
+            (tuple[Any, int]): a tuple of (output object, length consumed)
         """
         return codecs.charmap_decode(instring, errors, decoding_table)
 
@@ -51,7 +51,7 @@ class IncrementalEncoder(codecs.IncrementalEncoder):
                 codec.
 
         Returns:
-            output object.
+            (str): output object.
         """
         return codecs.charmap_encode(instring, self.errors, encoding_table)[0]
 
@@ -67,7 +67,7 @@ class IncrementalDecoder(codecs.IncrementalDecoder):
                 codec.
 
         Returns:
-            output object.
+            (str): output object.
         """
         return codecs.charmap_decode(instring, self.errors, decoding_table)[0]
 
@@ -360,8 +360,8 @@ def lookup(encoding):
         encoding (str): name of the encoding
 
     Returns:
-        Codecs.CodecInfo if encoding is the name of the encoding of
-            this file, None otherwise.
+        (Codecs.CodecInfo|None): Codecs.CodecInfo if encoding is the name
+            of the encoding of this file, None otherwise.
     """
     if encoding == "meadowmari":
         return getregentry()

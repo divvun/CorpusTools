@@ -60,7 +60,7 @@ def url_to_filename(response):
         response (requests.get response): The response object
 
     Returns:
-        str: Name of the file.
+        (str): Name of the file.
     """
     try:
         _, params = cgi.parse_header(response.headers["Content-Disposition"])
@@ -118,10 +118,8 @@ class AddToCorpus:
         """Initialise the AddToCorpus class.
 
         Args:
-            corpusdir (str): the directory where the corpus is
-            mainlang (str): three character long lang id (iso-639)
-            path (str): path below the language directory where the files
-                should be added
+            corpus_directory (str): the directory where the corpus is
+            sub_directory (str): subdirectory in the corpus
         """
         self.corpusdir = corpus_directory
         self.goalpath = Path(corpus_directory) / sub_directory
@@ -152,7 +150,7 @@ class AddToCorpus:
                 file exists in the corpus
 
         Returns:
-            str: path to where the origfile exists in the corpus
+            (str): path to where the origfile exists in the corpus
         """
         util.print_frame()
         origpath = Path(origpath)
@@ -187,7 +185,7 @@ class AddToCorpus:
         """Update metadata in the parallel files.
 
         Args:
-            none_dupe_components (util.PathComponents): of none_dupe_path
+            none_dupe_path (util.PathComponents): of none_dupe_path
             parallelpath (str): path of the parallel file
         """
         if not os.path.exists(parallelpath):
@@ -229,7 +227,7 @@ class AddToCorpus:
         """Compute the none duplicate path of the file to be added.
 
         Args:
-            orig_basename: (str) basename of the original file
+            orig_basename (str): basename of the original file
         """
         return namechanger.compute_new_basename(
             self.goalpath,
@@ -286,7 +284,7 @@ def parse_args():
     """Parse the commandline options.
 
     Returns:
-        a list of arguments as parsed by argparse.Argumentparser.
+        (argparse.Namespace): The parsed commandline arguments
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],

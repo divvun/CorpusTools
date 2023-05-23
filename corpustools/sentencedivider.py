@@ -26,13 +26,13 @@ def to_plain_text(file_path):
     """Turn an xml formatted file into clean text.
 
     Args:
-        file_path (CorpusPath)
+        file_path (CorpusPath): The path to the file
 
     Raises:
         UserWarning: if there is no text, raise a UserWarning
 
     Returns:
-        str: the content of ccat output
+        (str): the content of ccat output
     """
     xml_printer = ccat.XMLPrinter(lang=file_path.lang, all_paragraphs=True)
     xml_printer.parse_file(file_path.converted)
@@ -49,7 +49,7 @@ class SentenceDivider:
     Uses hfst-tokenise as the motor for this purpose.
 
     Attributes:
-        stops (list of str): tokens that imply where a sentence ends.
+        stops (list[str]): tokens that imply where a sentence ends.
         lang (str): three character language code
         relative_path (str): relative path to where files needed by
             modes.xml are found.
@@ -73,7 +73,7 @@ class SentenceDivider:
             tokenised_output (str): plain text output of ccat.
 
         Yields:
-            str: a cleaned up sentence
+            (str): a cleaned up sentence
         """
 
         token_buffer = []
@@ -93,7 +93,7 @@ class SentenceDivider:
             ccat_output (str): the plain text output of ccat
 
         Returns:
-            list of str: The ccat output has been turned into a list
+            (list[str]): The ccat output has been turned into a list
                 of full sentences.
         """
         return [

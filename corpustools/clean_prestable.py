@@ -31,7 +31,7 @@ def parse_options():
     """Parse the commandline options.
 
     Returns:
-        a list of arguments as parsed by argparse.Argumentparser.
+        (argparse.Namespace): the parsed commandline arguments
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
@@ -51,7 +51,7 @@ def find_prestable_files(corpusdir):
         corpusdir (src): path to a corpus directory
 
     Yields:
-        str: path to an interesting prestable file
+        (str): path to an interesting prestable file
     """
     for subdir in ["converted", "tmx"]:
         prestable_root = os.path.join(corpusdir, "prestable", subdir)

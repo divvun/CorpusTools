@@ -76,7 +76,7 @@ def compute_movenames(oldpath, newpath):
         newpath (Path): path to the new file, with normalised name
 
     Returns:
-        List of tuples: the files that needs to be moved
+        (list[tuple]): List of tuples of the files that needs to be moved
     """
     filepairs = [
         (oldpath, newpath),
@@ -94,7 +94,8 @@ def compute_parallel_movenames(old_corpuspath, new_corpuspath):
         new_corpuspath (CorpusPath): the new name of the file
 
     Returns:
-        List of tuples: the parallel files that needs to be moved
+        (list[tuple]): List of tuples of the parallel files that needs to
+            be moved
     """
 
     return (
@@ -135,7 +136,7 @@ def mover_parse_args():
     """Parse the commandline options.
 
     Returns:
-        a list of arguments as parsed by argparse.Argumentparser.
+        (argparse.Namespace): the parsed commandline arguments
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
@@ -195,7 +196,7 @@ def remover_parse_args():
     """Parse the commandline options.
 
     Returns:
-        a list of arguments as parsed by argparse.Argumentparser.
+        (argparse.Namespace): the parsed commandline arguments
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],

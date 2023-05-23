@@ -65,11 +65,11 @@ def is_probably_hyphenated(previous, current):
     """Find out if previous is part of a hyphenated word.
 
     Args:
-        previous: the previous string in front of a particular br tag
-        current:  the current string following a particular br tag
+        previous (str): the previous string in front of a particular br tag
+        current (str):  the current string following a particular br tag
 
     Returns:
-        True if previous is part of a hyphenated word, False otherwise
+        (bool): True if previous is part of a hyphenated word, False otherwise
     """
     previous1 = previous[-2:]
     current1 = current[:2]
@@ -85,11 +85,11 @@ def handle_br(previous, current):
     """Handle br tags in p elements.
 
     Args:
-        previous: the previous string in front of a particular br tag
-        current:  the current string following a particular br tag
+        previous (str): the previous string in front of a particular br tag
+        current (str):  the current string following a particular br tag
 
     Returns:
-        A possibly modified version of previous
+        (str): A possibly modified version of previous
     """
     # Remove hyphen
     if is_probably_hyphenated(previous, current):
@@ -110,8 +110,8 @@ class PDFFontspecs:
     """Add font specs found in a pdf page to this class.
 
     Attributes:
-        pdffontspecs (dict{PDFFontspec:int}): map fontspecs to fontspec ids.
-        duplicates (dict{str:str}): map ids of duplicate fontspecs to the
+        pdffontspecs (dict[PDFFontspec, int]): map fontspecs to fontspec ids.
+        duplicates (dict[str, str]): map ids of duplicate fontspecs to the
             id of the first instance of this fontspec.
     """
 
@@ -151,7 +151,7 @@ class PDFFontspecs:
             font_id (int): an integer that is the id of the fontspec.
 
         Returns:
-            an integer that is the corrected id of the fontspec.
+            (int): an integer that is the corrected id of the fontspec.
         """
         if font_id in self.duplicates:
             return self.duplicates[font_id]
@@ -176,13 +176,12 @@ class PDFPageMetadata:
         """Initialise the PDFPageMetadata class.
 
         Args:
-            page_number: integer
-            page_height: integer
-            page_width: integer
-            metadata_margins: a dict containing margins read from the metadata
-            file.
-            metadata_inner_margins: a dict containing inner_margins read from
-            the metadata file.
+            page_id (str): the page id
+            page_style (str): the styles as a css string
+            metadata_margins (dict): a dict containing margins read
+                from the metadata file.
+            metadata_inner_margins (dict): a dict containing inner_margins
+                read from the metadata file.
         """
         self.page_number = int(page_id.replace("page", "").replace("-div", ""))
         style = styles(page_style)
@@ -194,7 +193,8 @@ class PDFPageMetadata:
     def compute_margins(self):
         """Compute the margins of a page in pixels.
 
-        :returns: a dict containing the four margins in pixels
+        Returns:
+            (dict): a dict containing the four margins in pixels
         """
         margins = {
             margin: self.compute_margin(margin)
@@ -206,9 +206,11 @@ class PDFPageMetadata:
     def compute_margin(self, margin):
         """Compute a margin in pixels.
 
-        :param margin: the name of the  margin
+        Args:
+            margin (str): the name of the  margin
 
-        :return: an int telling where the margin is on the page.
+        Returns:
+            (int): an int telling where the margin is on the page.
         """
         coefficient = self.get_coefficient(margin)
 
@@ -241,8 +243,8 @@ class PDFPageMetadata:
         """Compute inner margins of the document.
 
         Returns:
-            A dict where the key is the name of the margin and the value
-            is an integer indicating where the margin is on the page.
+            (dict): A dict where the key is the name of the margin and the
+                value is an integer indicating where the margin is on the page.
         """
         margins = {
             margin.replace("inner_", ""): self.compute_inner_margin(margin)
@@ -267,9 +269,11 @@ class PDFPageMetadata:
     def compute_inner_margin(self, margin):
         """Compute a margin in pixels.
 
-        :param margin: the name of the margin
+        Args:
+            margin (str): the name of the margin
 
-        :return: an int telling where the margin is on the page.
+        Returns:
+            (int): an int telling where the margin is on the page.
         """
         coefficient = self.get_inner_coefficient(margin)
 
@@ -343,7 +347,7 @@ class PDFPage:
                 skipped.
 
         Returns:
-            boolean: True if this page should be skipped, otherwise false.
+            (bool): True if this page should be skipped, otherwise false.
         """
         return (
             ("odd" in skip_pages and (self.pdf_pagemetadata.page_number % 2) == 1)
@@ -457,7 +461,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             extra (str): more character that should be removed
 
         Returns:
-            str containing the modified version of the document.
+            (str): containing the modified version of the document.
         """
         remove_re = re.compile(f"[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F{extra}]")
         content, _ = remove_re.subn("", content)
@@ -476,7 +480,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             content (str): content of an xml document.
 
         Returns:
-            String containing the new content of the xml document.
+            (str): String containing the new content of the xml document.
         """
         replacements = {
             "[dstrok]": "đ",
@@ -511,8 +515,8 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         """Convert from pdf to a corpus xml file.
 
         Returns:
-            A corpus xml etree with the content of the pdf file, but without
-            most of the metadata.
+            (lxml.etree.Element): A corpus xml etree with the content of
+                the pdf file, but without most of the metadata.
         """
         command = f"pdftohtml -hidden -enc UTF-8 -stdout -nodrm -i -s {self.orig}"
         pdftohtmloutput = self.extract_text(command.split())
@@ -527,8 +531,8 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         """Convert output of pdftohtml to a corpus xml file.
 
         Returns:
-            A corpus xml etree with the content of the pdf file, but without
-            most of the metadata.
+            (lxml.etree.Element): A corpus xml etree with the content of the
+                pdf file, but without most of the metadata.
         """
         pdf_content = self.split_by_br(
             self.replace_ligatures(self.strip_chars(pdftohtmloutput))
@@ -560,8 +564,8 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         """Convert output of pdftohtml to html (applying our regular fixes)
 
         Returns:
-            An html file as string with the content of the pdf file, but without
-            most of the metadata.
+            (str): An html file as string with the content of the pdf
+                file, but without most of the metadata.
         """
         doc = self.pdftohtml2intermediate(pdftohtmloutput)
         meta = etree.Element("meta")
@@ -579,7 +583,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         """Parse the page element.
 
         Args:
-            page: a pdf xml page element.
+            page (Any): a pdf xml page element.
         """
         try:
             pdfpage = PDFPage(
@@ -598,7 +602,8 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         """Parse the pages of the pdf xml document.
 
         Args:
-            root_element: the root element of the pdf2xml document.
+            root_element (xml.etree.Element): the root element of the pdf2xml
+                document.
         """
         return (
             paragraph
@@ -631,9 +636,12 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
     def extract_text(self, command):
         """Extract the text from a document.
 
-        :command: a list containing the command and the arguments sent to
-        ExternalCommandRunner.
-        :returns: byte string containing the output of the program
+        Args:
+            command (list[str]): a list containing the command and
+                the arguments sent to ExternalCommandRunner.
+
+        Returns:
+            (bytes): byte string containing the output of the program
         """
         runner = util.ExternalCommandRunner()
         runner.run(command, cwd="/tmp")
@@ -680,10 +688,10 @@ def to_html_elt(path):
     """Convert a pdf document to the Giella xml format.
 
     Args:
-        filename (str): path to the document
+        path (str): path to the document
 
     Returns:
-        etree.Element: the root element of the Giella xml document
+        (lxml.etree.Element): the root element of the Giella xml document
     """
     converter = PDF2XMLConverter(path)
     return converter.convert2intermediate()

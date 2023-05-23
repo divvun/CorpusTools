@@ -35,8 +35,6 @@ class SamasCrawler:
     If se is active, save the page and its parallels.
     If se is not active, check to see if it has a parallel. Save the page and its parallels.
     If the link of one of the list elements contain /node, skip it.
-
-    Attributes:
     """
 
     goaldir = str(os.getenv("GTFREE"))
@@ -69,7 +67,7 @@ class SamasCrawler:
                 language_switcher element.
 
         Yields:
-            str: a url to a samas.no page
+            (str): a url to a samas.no page
         """
         lang_switcher = content.find('.//ul[@class="language-switcher-locale-url"]')
         lang_switcher.getparent().remove(lang_switcher)

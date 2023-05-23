@@ -301,16 +301,16 @@ class Classifier:
             self.langs = set(self.cmodels.keys())
             self.langs_warned = set()
 
-    def get_langs(self, langs=[]):
+    def get_langs(self, langs=None):
         """Get the set of wanted languages.
 
         Args:
-            langs (list of str): list of probable languages
+            langs (None|list[str]): list of probable languages
 
         Returns:
-            set: The set of languages that should be considered
+            (set[str]): The set of languages that should be considered
         """
-        if langs == []:
+        if langs is None:
             return self.langs
         else:
             langs = set(langs)

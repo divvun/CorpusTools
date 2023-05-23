@@ -9,6 +9,7 @@ A few examples:
   - `convert2xml` - Converts original files to the Giellatekno-internal xml format.
   - `analyse_corpus` - Orchistrates the _hfst_ (etc) tools to analyse a corpus.
   - `ccat` - Output _Corpus WorkBench_-readable text files from an analysed or non-analysed corpus.
+  - `korp_mono` - Convert analysed files to korp-input
 
 ## Installation from apertium nightly
 

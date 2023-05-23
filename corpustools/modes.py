@@ -68,7 +68,7 @@ class Pipeline:
             lang (str): the language that modes is asked to serve.
 
         Returns:
-            A directory where resources for the given language exist.
+            (str): A directory where resources for the given language exist.
 
         Raises:
             utils.ArgumentError: if no resources are found.
@@ -122,7 +122,7 @@ class Pipeline:
             instring (bytes): the input to the command.
 
         Returns:
-            bytes: the output of the command
+            (bytes): the output of the command
         """
         runner = util.ExternalCommandRunner()
         runner.run(command, to_stdin=instring)
@@ -146,7 +146,7 @@ class Pipeline:
             element (lxml.Element): a program subelement
 
         Returns:
-            str: a program, a program option or a path to a file
+            (str): a program, a program option or a path to a file
         """
         if element.tag == "file":
             return os.path.join(self.giella_prefix, element.get("name"))
@@ -160,7 +160,7 @@ class Pipeline:
             program (str): a program element
 
         Returns:
-            list of str: a subprocess compatible command
+            (list[str]): a subprocess compatible command
         """
         return [self.tag2commandpart(element) for element in program.iter()]
 
@@ -169,7 +169,7 @@ class Pipeline:
         """Make a list of subprocess compatible commands.
 
         Returns:
-            list of list: a list of subprocess compatible commands.
+            (list[list]): a list of subprocess compatible commands.
         """
         return [self.program2command(program) for program in self.mode.iter("program")]
 
@@ -180,7 +180,7 @@ class Pipeline:
             instring (bytes): utf-8 encoded input to the pipeline
 
         Returns:
-            str: output of the pipeline
+            (str): output of the pipeline
         """
         for command in self.commands:
             instring = self.run_external_command(command, instring)

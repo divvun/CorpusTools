@@ -30,7 +30,7 @@ class LanguageDetector:
 
         Args:
             document (etree.Element): an etree element.
-            language_guesser: a text_cat.Classifier.
+            language_guesser (text_cat.Classifier): a text_cat.Classifier.
         """
         self.document = document
         self.language_guesser = language_guesser

@@ -43,13 +43,10 @@ MODULES = [
 
 
 def make_corpus_path(path):
-    """Make a CorpusPath from a given path
+    """Returns a CorpusPath from a given path
 
     Args:
         path (str): a path to a corpus file
-
-    Returns:
-        CorpusPath
 
     Raises:
         ValueError: the path is not part of a corpus.
@@ -136,17 +133,18 @@ class CorpusPath:
         filepath=None,
         suffix=None,
     ):
-        """Return a path based on the module and extension.
+        """Returns a path based on the module and extension.
 
         Args:
             module (str): string containing some corpus module
-            parallel_lang (str): lang of a parallel document
-            target_lang (str): string containing the target language of a tmx file
-            name (str): name of the wanted file
-            extension (str): string containing a file extension
+            corpus_lang (str): corpus language, as a three letter language code
+            target_lang (str): string containing the target language of a tmx
+                file
+            filepath (str): path to the file
+            suffix (str): file suffix
         """
-        this_module = f"{'' if module is None else module}"
-        this_target_lang = f"{'' if target_lang is None else target_lang}"
+        this_module = '' if module is None else module
+        this_target_lang = '' if target_lang is None else target_lang
         this_filepath = (
             f"{self.filepath if filepath is None else filepath}"
             f"{'' if suffix is None else suffix}"
@@ -194,7 +192,7 @@ class CorpusPath:
             language (str): language of the parallel file.
 
         Returns:
-            Path: path to the parallel file if it exist
+            (pathlib.Path): path to the parallel file if it exist, else None
         """
         if self.metadata.get_parallel_texts().get(language) is not None:
             return self.name(
@@ -208,7 +206,7 @@ class CorpusPath:
         """Return paths to all parallel files.
 
         Yields:
-            str: path to the orig path of a parallel file.
+            (str): path to the orig path of a parallel file.
         """
         return (
             self.parallel(language) for language in self.metadata.get_parallel_texts()
@@ -221,7 +219,7 @@ class CorpusPath:
             target_language (str): language of the parallel
 
         Returns:
-            str: path to the tmx file
+            (str): path to the tmx file
         """
         return self.name(
             module="tmx",
@@ -234,7 +232,7 @@ class CorpusPath:
         """Compute the name of the tca2 input file.
 
         Returns:
-            Path: the name of the tca2 input file
+            (pathlib.Path): the name of the tca2 input file
         """
         # Ensure we have 20 bytes of leeway to let TCA2 append
         # lang_sent_new.txt without going over the 255 byte limit:
@@ -246,7 +244,7 @@ class CorpusPath:
         """Compute the name of the tca2 output file.
 
         Returns:
-            Path: the name of the tca2 output file
+            (pathlib.Path): the name of the tca2 output file
         """
         return self.tca2_input.with_name(
             self.tca2_input.name.replace(".sent", "_new.txt")

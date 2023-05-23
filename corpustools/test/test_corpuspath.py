@@ -39,7 +39,7 @@ def name(module, lang, extension, goallang):
         goallang (str): goallang of tmx file
 
     Returns:
-        str: path to the corpus file
+        (str): path to the corpus file
     """
     corpusdir = f"corpus-{lang}-orig" if module == "orig" else f"corpus-{lang}"
     return (
@@ -87,8 +87,7 @@ def test_path_to_orig(filename):
     """Check that the corpus file naming scheme works as it should.
 
     Args:
-        testname (str): name of the test
-        testcontent (dict): mapping from given name to the wanted name
+        filename (str): the filename to check
 
     Raises:
         AssertionError: is raised if the result is not what is expected

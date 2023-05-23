@@ -86,7 +86,7 @@ class ParallelPicker:
         """Find the language1 files.
 
         Yields:
-            corpusxmlfile.CorpusXMLFile
+            (corpusxmlfile.CorpusXMLFile): Language files
         """
         for root, _, files in os.walk(self.language1_dir):
             for lang1_file in files:
@@ -101,7 +101,7 @@ class ParallelPicker:
                 parallel pair.
 
         Returns:
-            boolean
+            (bool): True if there is a parallel file, False otherwise
         """
         parallel_name = language1_file.get_parallel_filename(self.parallel_language)
         return parallel_name is not None and os.path.isfile(parallel_name)
@@ -117,7 +117,7 @@ class ParallelPicker:
                 pair.
 
         Returns:
-            boolean
+            (bool): True if true, False if not
         """
         threshold = 30
         return (
@@ -137,7 +137,7 @@ class ParallelPicker:
                 pair.
 
         Returns:
-            boolean
+            (True|None): True if good enough, None if not
         """
         ratio = float(file1.word_count) / float(file2.word_count) * 100
         if self.minratio < ratio < self.maxratio:
@@ -176,7 +176,7 @@ class ParallelPicker:
                 pair.
 
         Returns:
-            bool
+            (bool): True if valid, False if not
         """
         return self.has_sufficient_words(file1, file2) and self.has_sufficient_ratio(
             file1, file2
@@ -186,7 +186,7 @@ class ParallelPicker:
         """Pick valid parallel file pairs.
 
         Yields:
-            tuple of corpusxmlfile.CorpusXMLFile
+            (tuple[corpusxmlfile.CorpusXMLFile]): valid file pairs
         """
         for language1_file in self.find_lang1_files():
             if self.has_parallel(language1_file):
@@ -228,7 +228,7 @@ def parse_options():
     """Parse the commandline options.
 
     Returns:
-        a list of arguments as parsed by argparse.Argumentparser.
+        (argparse.Namespace): the parsed commandline arguments
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],

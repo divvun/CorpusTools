@@ -33,7 +33,7 @@ def handler(err):
         err (exceptions.UnicodeDecodeError): the error.
 
     Returns:
-        The fixed string
+        (str): The fixed string
     """
     start = err.start
     end = err.end

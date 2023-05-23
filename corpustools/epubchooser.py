@@ -56,7 +56,7 @@ class RangeHandler:
                 The second part of the tuple may be empty.
 
         Returns:
-            str
+            (str): the string representation
         """
         if pair[1]:
             return f"{self.xpaths[pair[0]]};{self.xpaths[pair[1]]}"
@@ -160,8 +160,9 @@ class EpubPresenter:
         Args:
             book (epub.Book): The epub book element
 
-        Yields:
-            etree._Element: The body of an xhtml file found in the epub file.
+        Returns:
+            (list[str]): The body of an xhtml file found in the
+                epub file.
         """
         return [
             epubconverter.read_chapter(chapter)
@@ -407,7 +408,7 @@ def parse_options():
     """Parse the commandline options.
 
     Returns:
-        a list of arguments as parsed by argparse.Argumentparser.
+        (argparse.Namespace): the parsed commandline arguments
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],

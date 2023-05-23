@@ -88,11 +88,13 @@ class ConverterManager:
             IndexError,
         ) as error:
             LOGGER.warn("Could not convert %s\n%s", orig_file, error)
+            raise
 
     def convert_in_parallel(self, pool_size):
         """Convert files using the multiprocessing module."""
-        LOGGER.info("Starting the conversion of %d files (using %d cpus)",
-                    len(self.files), pool_size)
+        # util.run_in_parallel(self.convert, pool_size, self.files)
+        # LOGGER.info("Starting the conversion of %d files (using %d cpus)",
+        #             len(self.files), pool_size)
 
         nfiles = len(self.files)
         futures = {}  # Future -> filename
@@ -205,7 +207,7 @@ def parse_options():
     """Parse the commandline options.
 
     Returns:
-        a list of arguments as parsed by argparse.Argumentparser.
+        (argparse.Namespace): the parsed commandline arguments
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
@@ -213,6 +215,12 @@ def parse_options():
     )
 
     parser.add_argument("--ncpus", action=NCpus, default=multiprocessing.cpu_count())
+    parser.add_argument(
+        "--skip-existing",
+        action="store_true",
+        help="skip converting files that are already converted (that already "
+             "exist in the converted/ folder"
+    )
     parser.add_argument(
         "--serial",
         action="store_true",

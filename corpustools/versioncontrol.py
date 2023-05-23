@@ -117,7 +117,10 @@ def vcs(directory):
         directory (str): the directory where the working copy is found.
 
     Returns:
-        Either the SVN or the GIT class.
+        (GIT): A GIT class instance.
+
+    Raises:
+        VersionControlError: If the given directory is not a git repository
     """
     try:
         git_repo = git.Repo(directory)

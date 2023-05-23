@@ -299,7 +299,7 @@ class XMLPrinter:
             elt_lang (str): a three character language.
 
         Returns:
-            boolean
+            (bool): boolean
         """
         return (
             self.lang is None
@@ -625,7 +625,7 @@ def find_files(targets, extension):
         extension (str): interesting files has this extension.
 
     Yields:
-        str: path to the interesting file
+        (str): path to the interesting file
     """
     for target in targets:
         if os.path.exists(target):

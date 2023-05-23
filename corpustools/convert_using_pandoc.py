@@ -29,7 +29,8 @@ def to_html_elt(filename):
         filename (str): path to the document
 
     Returns:
-        An lxml element containing the html version of the given file.
+        (lxml.etree.Element): An lxml element containing the html
+            version of the given file.
     """
     html_body = subprocess.run(
         ["pandoc", filename], encoding="utf-8", capture_output=True

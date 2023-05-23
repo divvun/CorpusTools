@@ -18,12 +18,18 @@
 """Utility functions and classes used by other modules in CorpusTools."""
 
 
+import concurrent.futures
+import concurrent.futures.process
+import datetime
 import inspect
 import operator
 import os
+import os.path
 import platform
 import subprocess
 import sys
+import time
+import traceback
 from contextlib import contextmanager
 
 
@@ -64,22 +70,22 @@ def basename_noext(fname, ext):
         ext (str): the extension that should be removed.
 
     Returns:
-        str: fname without the extension.
+        (str): fname without the extension.
     """
     return os.path.basename(fname)[: -len(ext)]
 
 
-def sort_by_value(table, **kwargs):
+def sort_by_value(table, reverse=False):
     """Sort the table by value.
 
     Args:
         table (dict): the dictionary that should be sorted.
-        **kwargs: Keyword arguments passed on to the sorted function.
+        reverse (bool): whether or not to sort in reverse
 
     Returns:
-        dict: sorted by value.
+        (dict): sorted by value.
     """
-    return sorted(table.items(), key=operator.itemgetter(1), **kwargs)
+    return sorted(table.items(), key=operator.itemgetter(1), reverse=reverse)
 
 
 def replace_all(replacements, string):
@@ -90,7 +96,7 @@ def replace_all(replacements, string):
         string (str): the string where replacements should be done.
 
     Returns:
-        str: string with replaced strings.
+        (str): string with replaced strings.
     """
     for unwanted, wanted in replacements:
         string = string.replace(unwanted, wanted)
@@ -105,7 +111,7 @@ def is_executable(fullpath):
         fullpath (str): the path to the program or script.
 
     Returns:
-        bool: True if fullpath contains a executable, False otherwise.
+        (bool): True if fullpath contains a executable, False otherwise.
     """
     return os.path.isfile(fullpath) and os.access(fullpath, os.X_OK)
 
@@ -117,7 +123,7 @@ def path_possibilities(program):
         program (str): name of program of script.
 
     Yields:
-        possible fullpath to the program
+        (str): possible fullpath to the program
     """
     return (
         os.path.join(path.strip('"'), program)
@@ -132,7 +138,7 @@ def executable_in_path(program):
         program (str): name of the program
 
     Returns:
-        bool: True if program is found, False otherwise.
+        (bool): True if program is found, False otherwise.
     """
     fpath, _ = os.path.split(program)
     if fpath:
@@ -170,7 +176,7 @@ def get_lang_resource(lang, resource, fallback=None):
         fallback (str or None): the fallback resource. Default is None.
 
     Returns:
-        str: path to the resource or fallback.
+        (str): path to the resource or fallback.
     """
     path = os.path.join(os.environ["GTHOME"], "langs", lang, resource)
     if os.path.exists(path):
@@ -186,7 +192,7 @@ def get_preprocess_command(lang):
         lang (str): the language
 
     Returns:
-        str: the complete preprocess command.
+        (list[str]): the complete preprocess command.
     """
     preprocess_script = os.path.join(os.environ["GTHOME"], "gt/script/preprocess")
     sanity_check([preprocess_script])
@@ -257,7 +263,7 @@ def name_to_unicode(filename):
         filename (str): name of the file
 
     Returns:
-        A unicode string.
+        (str): A unicode string.
     """
     if platform.system() == "Windows":
         return filename
@@ -315,3 +321,124 @@ class ExternalCommandRunner:
 
         (self.stdout, self.stderr) = subp.communicate(to_stdin)
         self.returncode = subp.returncode
+
+
+def human_readable_filesize(num, suffix="B"):
+    """Returns human readable filesize"""
+    # https://stackoverflow.com/questions/1094841/get-human-readable-version-of-file-size
+    for unit in ["", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"]:
+        if abs(num) < 1024.0:
+            return f"{num:3.1f}{unit}{suffix}"
+        num /= 1024.0
+    return f"{num:.1f}Yi{suffix}"
+
+
+def human_readable_timespan(seconds):
+    return str(datetime.timedelta(seconds=seconds))
+
+
+_PARA_DEFAULT_MSG_FORMAT = (
+    "[{file_number} / {nfiles} files processed "
+    "({bytes_processed} / {bytes_total}, {processing_speed}/s)"
+    " - est. time left: {timeleft}]\n"
+    "  {status}: {filename}"
+)
+def run_in_parallel(
+    function,
+    max_workers,
+    file_list,
+    msg_format=_PARA_DEFAULT_MSG_FORMAT,
+    *args,
+    **kwargs,
+):
+    """Run function as many times as there are files in the `file_list`,
+    in parallel. Each invocation gets one element of the `file_list`.
+
+    Conceptually, it's like `function(file) for file in file_list`, but
+    in parallel. Uses a ProcessPoolExecutor with `max_workers`.
+
+    Any additional arguments (positional or keyword) given to
+    `run_in_parallel`, will be passed along to the `function`.
+
+    Args:
+        function (Callable): The function to call. The first argument to
+            the function is the file path.
+        max_workers (int): How many worker processes to use
+        file_list (list[str]): The list of files (full paths)
+    """
+    file_list = [(file, os.path.getsize(file)) for file in file_list]
+    file_list.sort(key=lambda entry: entry[1])
+    total_size = sum(filesize for file, filesize in file_list)
+
+    nfiles = len(file_list)
+    n_failed = 0
+    t0 = time.monotonic_ns()
+    print(f"Processing {nfiles} files ({human_readable_filesize(total_size)}) "
+          f"in parallel using {max_workers} workers")
+
+    futures = {}  # future -> (filepath, filesize)
+
+    try:
+        with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as pool:
+            for file, filesize in file_list:
+                fut = pool.submit(function, file, *args, **kwargs)
+                futures[fut] = (file, filesize)
+
+            completed_bytes = 0
+
+            completed = concurrent.futures.as_completed(futures)
+            for i, future in enumerate(completed, start=1):
+                (filename, filesize) = futures.pop(future)
+                completed_bytes += filesize
+                bytes_remaining = total_size - completed_bytes
+                secs_passed = (time.monotonic_ns() - t0) / 1_000_000_000
+                bytes_processed_per_sec = completed_bytes / secs_passed
+
+                # anders: this is so crude as to almost be pointless
+                # but -- due to the way it works, it at least gives more of
+                # an upper bound than a lower bound quite quickly into the
+                # processing, which at least is something
+                # -> because in the beginning, bytes_processed_per_sec doesn't
+                # take into account that there are other processes also
+                # working, which means bytes_completed is an underestimate on
+                # how many bytes of processing has been done in total
+                # -> but the more files are completed, the better the estimate
+                # is going to be
+                est_remaining_seconds = int(bytes_remaining / bytes_processed_per_sec)
+
+                exc = future.exception()
+                if exc is None:
+                    status = "done"
+                else:
+                    status = "FAILED"
+                    n_failed += 1
+
+                msg = msg_format.format(
+                    filename=filename,
+                    file_number=i,
+                    nfiles=nfiles,
+                    bytes_processed=human_readable_filesize(completed_bytes),
+                    bytes_total=human_readable_filesize(total_size),
+                    processing_speed=human_readable_filesize(bytes_processed_per_sec),
+                    timeleft=human_readable_timespan(est_remaining_seconds),
+                    status=status,
+                )
+                print(msg)
+                if exc is not None:
+                    print(exc)
+                    print(traceback.format_exc())
+    except concurrent.futures.process.BrokenProcessPool:
+        n_remaining = len(futures)
+        n_done = nfiles - n_remaining - n_failed
+        print("error: Processing was terminated unexpectedly!")
+        print(f"{n_done} files were completed, {n_failed} files failed, and ")
+        print(f"{n_remaining} didn't start processing, and still remains")
+    except KeyboardInterrupt:
+        n_remaining = len(futures)
+        n_done = nfiles - n_remaining - n_failed
+        print("Cancelled by user")
+        print(f"{n_done} files were completed, {n_failed} files failed, and ")
+        print(f"{n_remaining} didn't start processing, and still remains")
+    else:
+        n_ok = nfiles - n_failed
+        print(f"all done. {n_ok} files ok, {n_failed} failed")

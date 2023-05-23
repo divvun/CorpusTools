@@ -71,7 +71,7 @@ def compute_hexdigest(afile, blocksize=65536):
         afile (file): a file like object
 
     Returns:
-        a hexdigest of the file
+        (str): a hexdigest of the file
     """
     hasher = hashlib.md5()
     buf = afile.read(blocksize)
@@ -92,7 +92,7 @@ def normalise_filename(filename):
         filename (str): name of the file
 
     Returns:
-        a downcased string containing only ascii chars
+        (str): a downcased string containing only ascii chars
     """
     if os.sep in filename:
         raise NamechangerError(
@@ -124,7 +124,7 @@ def are_duplicates(oldpath, newpath):
         newpath (unicode): the wanted, new path of the file
 
     Returns:
-        a boolean indicating if the two files are duplicates
+        (bool): a boolean indicating if the two files are duplicates
     """
     if os.path.isfile(oldpath) and os.path.isfile(newpath):
         with open(oldpath, "rb") as oldcontent, open(newpath, "rb") as newcontent:
@@ -137,10 +137,10 @@ def compute_new_basename(orig_path):
     """Compute the new path.
 
     Args:
-        path (Path): path to file, basename should possibly be normalised
+        orig_path (Path): path to file, basename should possibly be normalised
 
     Returns:
-        Path: lower cased, ascii path
+        (pathlib.Path): lower cased, ascii path
     """
     wanted_basename = normalise_filename(orig_path.name)
     new_path = orig_path.with_name(wanted_basename)

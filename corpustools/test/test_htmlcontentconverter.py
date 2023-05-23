@@ -504,7 +504,7 @@ class TestHTMLContentConverter(xmltester.XMLTester):
             want_input (str): input to html.document_fromstring
 
         Raises:
-            AssertionError if got and want are unequal.
+            AssertionError: if got and want are unequal.
         """
         hcc = htmlcontentconverter.HTMLBeautifier(html.document_fromstring(test_input))
         got = hcc.beautify()

@@ -111,7 +111,7 @@ class MetadataHandler:
             key (str): Name of the variable to get.
 
         Returns:
-            str or None: The string contains the value associated with the key.
+            (str|None): The string contains the value associated with the key.
         """
         variable = self._get_variable_elt(key)
         if variable is not None:
@@ -126,7 +126,7 @@ class MetadataHandler:
         """Find all set variables.
 
         Yields:
-            tuple of str: a key/value pair
+            (tuple[str, Any]): a key/value pair
         """
         ns = {"xsl": "http://www.w3.org/1999/XSL/Transform"}
         for variable in self.tree.getroot().xpath(
@@ -140,7 +140,8 @@ class MetadataHandler:
         """Get the parallel texts.
 
         Returns:
-            dict: A dict of parallel files containing language:filename pairs.
+            (dict[str, str]): A dict of parallel files containing
+                language:filename pairs.
         """
         parallels = self._get_variable_elt("parallels")
         if parallels is None:
@@ -158,7 +159,7 @@ class MetadataHandler:
         """Get the languages to look for in the document.
 
         Returns:
-            set: A set of languages to look for in the document
+            (set[str]): A set of languages to look for in the document
         """
         mlangs = self._get_variable_elt("mlangs")
         if mlangs is None:
@@ -328,7 +329,7 @@ class MetadataHandler:
                 otherwise inner_ if getting inner margin lines.
 
         Returns:
-            dict: Contains marginname:percentage pairs.
+            (dict[str, str]): A dictionary of margin name to percentages
         """
         margin_lines = {
             key: self.get_variable(key).strip()
@@ -350,11 +351,11 @@ class MetadataHandler:
         """Set and validate the margin lines.
 
         Args:
-            margin_lines (dict): The dict consists of
+            margin_lines (dict[str, str]): The dict consists of
                 marginname:percentage pairs
 
         Returns:
-            dict: The dict consists of marginname:percentage pairs.
+            (dict[str, int]): The dict consists of marginname:percentage pairs.
 
         Raises:
             XsltException: Raise this exception if there are errors in the
@@ -390,7 +391,7 @@ class MetadataHandler:
         """Parse margin lines fetched from the .xsl file.
 
         Returns:
-            dict: The dict consists of marginname:percentage pairs.
+            (dict): The dict consists of marginname:percentage pairs.
         """
         margin_lines = self.get_margin_lines()
 
@@ -400,12 +401,11 @@ class MetadataHandler:
     def inner_margins(self):
         """Parse inner margin lines fetched from the .xsl file.
 
-        Returns:
-            dict: The dict consists of marginname:percentage pairs.
-
         Raises:
-            XsltException: Raise this exception if there are errors in the
-                inner_margin_lines.
+            XsltError: On errors in the inner_margin_lines.
+
+        Returns:
+            (dict): The dict consists of marginname:percentage pairs.
         """
         margin_lines = self.get_margin_lines(position="inner_")
         _inner_margins = self.validate_and_set_margins(margin_lines)
@@ -464,7 +464,8 @@ class MetadataHandler:
                 margin (right_margin, left_margin, top_margin, bottom_margin)
 
         Returns:
-            dict: marginname: int (in percentage) pairs
+            (dict[str, int]): a dictionary of margin name to percentages (as
+                integers)
         """
         m = {}
         for part in value.split(","):
@@ -497,8 +498,8 @@ class MetadataHandler:
         """Get the skip_elements variable.
 
         Returns:
-            list of tuples of str: each tuple has a (start, end) xpath path
-            pair. If the skip_elements variable is empty, return None.
+            (list[tuple[xpath, xpath]]): each tuple has a (start, end) xpath
+                path pair. If the skip_elements variable is empty, return None.
         """
 
         def get_with_ns(path):
@@ -526,6 +527,9 @@ class MetadataHandler:
 
         The key may be all, odd, even or a pagenumber, the value is a
         floating point number.
+
+        Raises:
+            XsltError: On invalid format
         """
         value = self.get_variable("linespacing")
 
@@ -559,7 +563,7 @@ class MetadataHandler:
             value (str): contains the linespacing
 
         Returns:
-            dict: page: float pairs
+            (dict[str, float]): page: float pairs
         """
         l = {}
         if value:
@@ -575,7 +579,7 @@ class MetadataHandler:
         """Find all xsl:template elements.
 
         Returns:
-            List of etree.Element
+            (list[xml.etree.Element]): List of etree.Element
         """
         ns = {"xsl": "http://www.w3.org/1999/XSL/Transform"}
         return self.tree.getroot().xpath(".//xsl:template", namespaces=ns)

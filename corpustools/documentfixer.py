@@ -325,7 +325,8 @@ class DocumentFixer:
             text (str): string
 
         Returns:
-            A list of span tuples containing indexes to quotes found in text.
+            (list[tuple[int, int]]): A list of span tuples containing
+                indexes to quotes found in text.
         """
         unwanted = r"[^:,!?.\s]"
         quote_regexes = [

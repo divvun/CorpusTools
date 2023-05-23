@@ -39,7 +39,7 @@ def read_chapter(chapter):
         chapter (epub.BookChapter): the chapter of an epub file
 
     Returns:
-        str: The contents of a chapter
+        (str): The contents of a chapter
 
     Raises:
         util.ConversionException: on conversion error
@@ -57,7 +57,7 @@ def chapters(book, metadata):
         book (epub.Book): The epub book element
 
     Yields:
-        etree._Element: The body of an xhtml file found in the epub file.
+        (lxml.etree.Element): The body of an xhtml file found in the epub file.
     """
     excluded = metadata.epub_excluded_chapters
     for index, chapter in enumerate(book.chapters):
@@ -76,7 +76,7 @@ def extract_content(filename, metadata):
         filename (str): path to the document
 
     Returns:
-        etree.Element: the content of the epub file wrapped in html
+        (lxml.etree.Element): the content of the epub file wrapped in html
             element
     """
     mainbody = etree.Element("{http://www.w3.org/1999/xhtml}body")
@@ -94,9 +94,6 @@ def extract_content(filename, metadata):
 
 def remove_ranges(metadata, html):
     """Remove ranges of html elements.
-
-    Args:
-        filename (str): path to the document
     """
     if metadata.skip_elements:
         for pairs in metadata.skip_elements:
@@ -107,8 +104,8 @@ def to_html_elt(filename):
     """Append all chapter bodies as divs to an html file.
 
     Returns:
-        An etree.Element containing the content of all xhtml files
-        found in the epub file as one xhtml document.
+        (lxml.etree.Element): An etree.Element containing the content of
+            all xhtml files found in the epub file as one xhtml document.
     """
     metadata = xslsetter.MetadataHandler(filename + ".xsl", create=True)
     html = extract_content(filename, metadata)
@@ -117,7 +114,7 @@ def to_html_elt(filename):
     except AttributeError:
         raise util.ConversionError(
             "Check that skip_elements in the "
-            "metadata file has the correct format".format(filename)
+            "metadata file has the correct format"
         )
 
     return html
@@ -134,7 +131,7 @@ def remove_siblings_shorten_path(parts, content, preceding=False):
             siblings.
 
     Returns:
-        list of str: the path to the parent of parts.
+        (list[str]): the path to the parent of parts.
     """
     path = "/".join(parts)
     found = content.find(path, namespaces={"html": "http://www.w3.org/1999/xhtml"})
@@ -163,7 +160,7 @@ def shorten_longest_path(path1, path2, content):
             removed.
 
     Returns:
-        tuple of list of str: paths to the new start and end element, now
+        (tuple[list[str]]): paths to the new start and end element, now
             with the same length.
     """
     starts, ends = path1.split("/"), path2.split("/")
@@ -193,7 +190,7 @@ def remove_trees_1(path1, path2, content):
             removed.
 
     Returns:
-        tuple of list of str: paths to the new start and end element.
+        (tuple[list[str]]): paths to the new start and end element.
     """
     starts, ends = shorten_longest_path(path1, path2, content)
 
@@ -211,9 +208,9 @@ def remove_trees_2(starts, ends, content):
     trees of nodes between starts and ends (if necessary).
 
     Args:
-        starts (list of str): path to first element
-        ends (list of str): path to second element
-        content (etree._Element): xhtml document, where elements are
+        starts (list[str]): path to first element
+        ends (list[str]): path to second element
+        content (lxml.etree.Element): xhtml document, where elements are
             removed.
     """
     deepest_start = content.find(
@@ -235,7 +232,7 @@ def remove_first_element(path1, content):
 
     Args:
         path1 (str): path to the first element to remove.
-        content (etree._Element): the xhtml document that should
+        content (lxml.etree.Element): the xhtml document that should
             be altered.
     """
     first_start = content.find(
@@ -250,7 +247,7 @@ def remove_range(path1, path2, content):
     Args:
         path1 (str): path to first element
         path2 (str): path to second element
-        content (etree._Element): xhtml document
+        content (lxml.etree.Element): xhtml document
     """
     if path2:
         starts, ends = remove_trees_1(path1, path2, content)

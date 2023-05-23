@@ -39,7 +39,7 @@ def find_endings(directories, suffix):
         suffix (str): files suffixes to be searched for
 
     Yields:
-        str: path to file with suffix
+        (str): path to file with suffix
     """
     for directory in directories:
         for root, _, files in os.walk(directory):
