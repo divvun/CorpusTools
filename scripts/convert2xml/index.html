@@ -421,6 +421,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -438,6 +445,20 @@
     <li class="md-nav__item">
       <a href="../ccat/" class="md-nav__link">
         ccat
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compile_cwb_mono/" class="md-nav__link">
+        compile_cwb_mono
       </a>
     </li>
   
@@ -731,6 +752,20 @@
     <li class="md-nav__item">
       <a href="../../reference/compare_tmx_goldstandard/" class="md-nav__link">
         compare_tmx_goldstandard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/compile_cwb_mono/" class="md-nav__link">
+        compile_cwb_mono
       </a>
     </li>
   
@@ -1434,17 +1469,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_66" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_67" >
       
       
       
-        <label class="md-nav__link" for="__nav_2_1_66" id="__nav_2_1_66_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_2_1_67" id="__nav_2_1_67_label" tabindex="0">
           test
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_66_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_2_1_66">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_67_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1_67">
           <span class="md-nav__icon md-icon"></span>
           test
         </label>
@@ -2210,6 +2245,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2238,6 +2280,49 @@
 <li>pdftotext</li>
 <li>wvhtml</li>
 </ul>
+<h2 id="usage">Usage</h2>
+<p>Convert all files in the directory $GTFREE/orig/sme and its subdirectories.</p>
+<div class="highlight"><pre><span></span><code>convert2xml<span class="w"> </span><span class="nv">$GTFREE</span>/orig/sme
+</code></pre></div>
+<p>The converted files are placed in $GTFREE/converted/sme with the same directory
+structure as that in $GTFREE/orig/sme.</p>
+<p>Convert only one file:</p>
+<div class="highlight"><pre><span></span><code>convert2xml<span class="w"> </span><span class="nv">$GTFREE</span>/orig/sme/admin/sd/file1.html
+</code></pre></div>
+<p>The converted file is found in $GTFREE/orig/sme/admin/sd/file1.htm.xml</p>
+<p>Convert all sme files in directories ending with corpus</p>
+<div class="highlight"><pre><span></span><code>convert2xml<span class="w"> </span>*corpus/orig/sme
+</code></pre></div>
+<p>If convert2xml is not able to convert a file these kinds of message will appear:</p>
+<div class="highlight"><pre><span></span><code>~/Dokumenter/corpus/freecorpus/orig/eng/admin/depts/regjeringen.no/calendar-for-the-ministry-of-children-an.html_id<span class="o">=</span><span class="m">308</span>
+</code></pre></div>
+<p>A log file will be found in</p>
+<div class="highlight"><pre><span></span><code>~/Dokumenter/corpus/freecorpus/orig/eng/admin/depts/regjeringen.no/calendar-for-the-ministry-of-children-an.html_id<span class="o">=</span><span class="m">308</span>.log
+</code></pre></div>
+<p>explaining what went wrong.</p>
+<p>The complete help text from the program:</p>
+<div class="highlight"><pre><span></span><code>usage:<span class="w"> </span>convert2xml<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>--version<span class="o">]</span><span class="w"> </span><span class="o">[</span>--serial<span class="o">]</span><span class="w"> </span><span class="o">[</span>--lazy-conversion<span class="o">]</span>
+<span class="w">                   </span><span class="o">[</span>--write-intermediate<span class="o">]</span><span class="w"> </span><span class="o">[</span>--goldstandard<span class="o">]</span>
+<span class="w">                   </span>sources<span class="w"> </span><span class="o">[</span>sources<span class="w"> </span>...<span class="o">]</span>
+
+Convert<span class="w"> </span>original<span class="w"> </span>files<span class="w"> </span>to<span class="w"> </span>giellatekno<span class="w"> </span>xml.
+
+positional<span class="w"> </span>arguments:
+<span class="w">  </span>sources<span class="w">               </span>The<span class="w"> </span>original<span class="w"> </span>file<span class="o">(</span>s<span class="o">)</span><span class="w"> </span>or<span class="w"> </span>directory/ies<span class="w"> </span>where<span class="w"> </span>the
+<span class="w">                        </span>original<span class="w"> </span>files<span class="w"> </span>exist
+
+optional<span class="w"> </span>arguments:
+<span class="w">  </span>-h,<span class="w"> </span>--help<span class="w">            </span>show<span class="w"> </span>this<span class="w"> </span><span class="nb">help</span><span class="w"> </span>message<span class="w"> </span>and<span class="w"> </span><span class="nb">exit</span>
+<span class="w">  </span>--version<span class="w">             </span>show<span class="w"> </span>program<span class="err">&#39;</span>s<span class="w"> </span>version<span class="w"> </span>number<span class="w"> </span>and<span class="w"> </span><span class="nb">exit</span>
+<span class="w">  </span>--serial<span class="w">              </span>use<span class="w"> </span>this<span class="w"> </span><span class="k">for</span><span class="w"> </span>debugging<span class="w"> </span>the<span class="w"> </span>conversion<span class="w"> </span>process.<span class="w"> </span>When
+<span class="w">                        </span>this<span class="w"> </span>argument<span class="w"> </span>is<span class="w"> </span>used<span class="w"> </span>files<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>converted<span class="w"> </span>one<span class="w"> </span>by
+<span class="w">                        </span>one.
+<span class="w">  </span>--lazy-conversion<span class="w">     </span>Reconvert<span class="w"> </span>only<span class="w"> </span><span class="k">if</span><span class="w"> </span>metadata<span class="w"> </span>have<span class="w"> </span>changed.
+<span class="w">  </span>--write-intermediate<span class="w">  </span>Write<span class="w"> </span>the<span class="w"> </span>intermediate<span class="w"> </span>XML<span class="w"> </span>representation<span class="w"> </span>to
+<span class="w">                        </span>ORIGFILE.im.xml,<span class="w"> </span><span class="k">for</span><span class="w"> </span>debugging<span class="w"> </span>the<span class="w"> </span>XSLT.<span class="w"> </span><span class="o">(</span>Has<span class="w"> </span>no
+<span class="w">                        </span>effect<span class="w"> </span><span class="k">if</span><span class="w"> </span>the<span class="w"> </span>converted<span class="w"> </span>file<span class="w"> </span>already<span class="w"> </span>exists.<span class="o">)</span>
+<span class="w">  </span>--goldstandard<span class="w">        </span>Convert<span class="w"> </span>goldstandard<span class="w"> </span>and<span class="w"> </span>.correct<span class="w"> </span>files
+</code></pre></div>
 
 
 
