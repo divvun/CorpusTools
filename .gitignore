@@ -11,3 +11,4 @@ __pycache__/
 # Locally built documentation site
 docs/site
 
+.DS_Store
