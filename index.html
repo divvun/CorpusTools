@@ -10,7 +10,7 @@
       
       
       
-        <link rel="next" href="corpus-work/">
+        <link rel="next" href="docsdocs/">
       
       <link rel="icon" href="assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
@@ -343,6 +343,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#editable-install-alternate-pipx-installation-method" class="md-nav__link">
+    Editable install (alternate pipx installation method)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#requirements" class="md-nav__link">
     Requirements
   </a>
@@ -354,17 +361,24 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#and-continued-here" class="md-nav__link">
-    And continued here
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="docsdocs/" class="md-nav__link">
+        Meta documentation
+      </a>
     </li>
   
 
@@ -395,17 +409,17 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" >
       
       
       
-        <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
           Scripts
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_1_3">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_1_4">
           <span class="md-nav__icon md-icon"></span>
           Scripts
         </label>
@@ -2536,6 +2550,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#editable-install-alternate-pipx-installation-method" class="md-nav__link">
+    Editable install (alternate pipx installation method)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#requirements" class="md-nav__link">
     Requirements
   </a>
@@ -2544,13 +2565,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#and-continued-here" class="md-nav__link">
-    And continued here
-  </a>
   
 </li>
       
@@ -2577,14 +2591,17 @@
 <p><em>CorpusTools</em> is a set of tools to manipulate a giellalt corpus in different ways.</p>
 <p>A few examples:</p>
 <ul>
-<li><code>convert2xml</code> - Converts original files to the Giellatekno-internal xml format.</li>
-<li><code>analyse_corpus</code> - Orchistrates the <em>hfst</em> (etc) tools to analyse a corpus.</li>
-<li><code>ccat</code> - Output <em>Corpus WorkBench</em>-readable text files from an analysed or non-analysed corpus.</li>
-<li><code>korp_mono</code> - Convert analysed files to korp-input</li>
+<li><a href="scripts/add_files_to_corpus">add_files_to_corpus</a> - Add raw source material files to a corpus</li>
+<li><a href="scripts/convert2xml">convert2xml</a> - Converts original files to the Giellatekno-internal xml format.</li>
+<li><a href="scripts/analyse_corpus">analyse_corpus</a> - Orchistrates the <em>hfst</em> (etc) tools to run analysis on a corpus.</li>
+<li><a href="scripts/ccat">ccat</a> - Output text sections from an analysed or non-analysed corpus.</li>
+<li><a href="scripts/korp_mono">korp_mono</a> - Convert analysed files to korp-input</li>
 </ul>
 <h2 id="installation-from-apertium-nightly">Installation from apertium nightly</h2>
 <p>CorpusTools is available as a package in Apertium Nightly. Depending on your
-system, the package is named slightly differently. Search for <code>corpustools</code>.</p>
+system, the package may be named slightly differently. For example, in <em>debian</em>,
+the package is called <code>divvun-corpustools</code>. Search for <code>corpustools</code>, and you
+will find it.</p>
 <h2 id="installation-using-pipx">Installation using pipx</h2>
 <blockquote>
 <p>pipx lets you install python packages that has runnable scripts easily,
@@ -2593,6 +2610,14 @@ onto your system.</p>
 <ol>
 <li>Install <a href="https://pypa.github.io/pipx/installation/">pipx</a></li>
 <li>Run <code>pipx install --force git+https://github.com/giellalt/CorpusTools.git</code></li>
+</ol>
+<h3 id="editable-install-alternate-pipx-installation-method">Editable install (alternate pipx installation method)</h3>
+<p>An <em>editable</em> install lets you make changes in the source script files, and
+still use the same global command on the command line to run the (modified) scripts.
+Recommended if you intend to do development on the scripts.</p>
+<ol>
+<li>Clone the CorpusTools repository: (<code>git clone https://github.com/giellalt/CorpusTools.git CorpusTools</code>)</li>
+<li>Install with the editable flag (<code>-e</code>): <code>pipx install -e --force /path/to/CorpusTools</code></li>
 </ol>
 <h3 id="requirements">Requirements</h3>
 <ul>
@@ -2620,8 +2645,6 @@ onto your system.</p>
 </div>
 </div>
 </div>
-<h2 id="and-continued-here">And continued here</h2>
-<p>This is a paragraph.</p>
 
 
 
