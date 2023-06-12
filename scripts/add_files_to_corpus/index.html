@@ -12,7 +12,7 @@
         <link rel="prev" href="../">
       
       
-        <link rel="next" href="../convert2xml/">
+        <link rel="next" href="../analyse_corpus/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
@@ -384,8 +384,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../convert2xml/" class="md-nav__link">
-        convert2xml
+      <a href="../analyse_corpus/" class="md-nav__link">
+        analyse_corpus
       </a>
     </li>
   
@@ -412,8 +412,274 @@
   
   
     <li class="md-nav__item">
+      <a href="../clean_prestable/" class="md-nav__link">
+        clean_prestable
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clean_prestable/" class="md-nav__link">
+        clean_prestable
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../compile_cwb_mono/" class="md-nav__link">
         compile_cwb_mono
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../convert2xml/" class="md-nav__link">
+        convert2xml
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dupefinder/" class="md-nav__link">
+        dupefinder
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../duperemover/" class="md-nav__link">
+        duperemover
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../epubchooser/" class="md-nav__link">
+        epubchooser
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../html_cleaner/" class="md-nav__link">
+        html_cleaner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../korp_mono/" class="md-nav__link">
+        korp_mono
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../make_training_corpus/" class="md-nav__link">
+        make_training_corpus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../move_corpus_file/" class="md-nav__link">
+        move_corpus_file
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../normalise_corpus_names/" class="md-nav__link">
+        normalise_corpus_names
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paracheck/" class="md-nav__link">
+        paracheck
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parallelize/" class="md-nav__link">
+        parallelize
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pick_parallel_docs/" class="md-nav__link">
+        pick_parallel_docs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remove_corpus_file/" class="md-nav__link">
+        remove_corpus_file
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reparallelize/" class="md-nav__link">
+        reparallelize
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../saami_crawler/" class="md-nav__link">
+        saami_crawler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tmx2html/" class="md-nav__link">
+        tmx2html
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../update_metadata/" class="md-nav__link">
+        update_metadata
       </a>
     </li>
   
@@ -2198,6 +2464,54 @@
 
 <h1 id="add_files_to_corpus">add_files_to_corpus</h1>
 <p><code>add_files_to_corpus = corpustools.adder:main"</code></p>
+<p>The complete help text from the program is as follows:</p>
+<div class="highlight"><pre><span></span><code>usage:<span class="w"> </span>add_files_to_corpus<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>-v<span class="o">]</span><span class="w"> </span><span class="o">[</span>-p<span class="w"> </span>PARALLEL_FILE<span class="o">]</span><span class="w"> </span><span class="o">[</span>-l<span class="w"> </span>LANG<span class="o">]</span>
+<span class="w">                           </span><span class="o">[</span>-d<span class="w"> </span>DIRECTORY<span class="o">]</span>
+<span class="w">                           </span>origs<span class="w"> </span><span class="o">[</span>origs<span class="w"> </span>...<span class="o">]</span>
+
+Add<span class="w"> </span>file<span class="o">(</span>s<span class="o">)</span><span class="w"> </span>to<span class="w"> </span>a<span class="w"> </span>corpus<span class="w"> </span>directory.<span class="w"> </span>The<span class="w"> </span>filenames<span class="w"> </span>are<span class="w"> </span>converted<span class="w"> </span>to<span class="w"> </span>ascii<span class="w"> </span>only
+names.<span class="w"> </span>Metadata<span class="w"> </span>files<span class="w"> </span>containing<span class="w"> </span>the<span class="w"> </span>original<span class="w"> </span>name,<span class="w"> </span>the<span class="w"> </span>main<span class="w"> </span>language,<span class="w"> </span>the
+genre<span class="w"> </span>and<span class="w"> </span>possibly<span class="w"> </span>parallel<span class="w"> </span>files<span class="w"> </span>are<span class="w"> </span>also<span class="w"> </span>made.<span class="w"> </span>The<span class="w"> </span>files<span class="w"> </span>are<span class="w"> </span>added<span class="w"> </span>to<span class="w"> </span>the
+working<span class="w"> </span>copy.
+
+positional<span class="w"> </span>arguments:
+<span class="w">  </span>origs<span class="w">                 </span>The<span class="w"> </span>original<span class="w"> </span>files,<span class="w"> </span>urls<span class="w"> </span>or<span class="w"> </span>directories<span class="w"> </span>where<span class="w"> </span>the
+<span class="w">                        </span>original<span class="w"> </span>files<span class="w"> </span>reside<span class="w"> </span><span class="o">(</span>not<span class="w"> </span>the<span class="w"> </span>corpus<span class="w"> </span>repo<span class="o">)</span>
+
+optional<span class="w"> </span>arguments:
+<span class="w">  </span>-h,<span class="w"> </span>--help<span class="w">            </span>show<span class="w"> </span>this<span class="w"> </span><span class="nb">help</span><span class="w"> </span>message<span class="w"> </span>and<span class="w"> </span><span class="nb">exit</span>
+<span class="w">  </span>-v,<span class="w"> </span>--version<span class="w">         </span>show<span class="w"> </span>program<span class="err">&#39;</span>s<span class="w"> </span>version<span class="w"> </span>number<span class="w"> </span>and<span class="w"> </span><span class="nb">exit</span>
+
+parallel:
+<span class="w">  </span>-p<span class="w"> </span>PARALLEL_FILE,<span class="w"> </span>--parallel<span class="w"> </span>PARALLEL_FILE
+<span class="w">                        </span>Path<span class="w"> </span>to<span class="w"> </span>an<span class="w"> </span>existing<span class="w"> </span>file<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>corpus<span class="w"> </span>that<span class="w"> </span>will<span class="w"> </span>be
+<span class="w">                        </span>parallel<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>orig<span class="w"> </span>that<span class="w"> </span>is<span class="w"> </span>about<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>added
+<span class="w">  </span>-l<span class="w"> </span>LANG,<span class="w"> </span>--lang<span class="w"> </span>LANG<span class="w">  </span>Language<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>file<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>added
+
+no_parallel:
+<span class="w">  </span>-d<span class="w"> </span>DIRECTORY,<span class="w"> </span>--directory<span class="w"> </span>DIRECTORY
+<span class="w">                        </span>The<span class="w"> </span>directory<span class="w"> </span>where<span class="w"> </span>the<span class="w"> </span>origs<span class="w"> </span>should<span class="w"> </span>be<span class="w"> </span>placed
+</code></pre></div>
+<p>Examples:
+Download and add parallel files from the net to the corpus:</p>
+<p><code>cd $GTFREE</code></p>
+<p><strong>Adding the first file</strong></p>
+<p>The command</p>
+<div class="highlight"><pre><span></span><code>add_files_to_corpus<span class="w"> </span>-d<span class="w"> </span>orig/sme/admin/sd/other_files<span class="w"> </span>http://www.samediggi.no/content/download/5407/50892/version/2/file/Sametingets+%C3%A5rsmelding+2013+-+nordsamisk.pdf
+</code></pre></div>
+<p>Gives the message:</p>
+<div class="highlight"><pre><span></span><code>Added<span class="w"> </span>orig/sme/admin/sd/other_files/sametingets_ay-rsmelding_2013_-_nordsamisk.pdf
+</code></pre></div>
+<p><strong>Adding the parallel file</strong></p>
+<div class="highlight"><pre><span></span><code>add_files_to_corpus<span class="w"> </span>-p<span class="w"> </span>orig/sme/admin/sd/other_files/sametingets_ay-rsmelding_2013_-_nordsamisk.pdf<span class="w"> </span>-l<span class="w"> </span>nob<span class="w">  </span>http://www.samediggi.no/content/download/5406/50888/version/2/file/Sametingets+%C3%A5rsmelding+2013+-+norsk.pdf
+</code></pre></div>
+<p>Gives the message:</p>
+<div class="highlight"><pre><span></span><code>Added<span class="w"> </span>orig/nob/admin/sd/other_files/sametingets_ay-rsmelding_2013_-_norsk.pdf
+</code></pre></div>
+<p>After this is done, you will have to commit the files to the working copy, like
+this:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>commit
+</code></pre></div>
 
 
 
