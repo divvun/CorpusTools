@@ -1,18 +1,31 @@
 # Working with corpora
 
-The corpus for a given language is hosted on github.
+## Structure
 
-giellalt/corpus-LANG (.e.g `corpus-sme`)
+The corpus for a given language is hosted on github. Raw source files, along
+with metadata, is stored in `github.com/giellalt/corpus-xxx-orig` (where `xxx`
+is a language code), while processed output is stored in
+`github.com/giellalt/corpus-xxx`.
 
-## git lfs
+Additionally, *bound* (or *restricted*) corpus are stored as 
+`github.com/giellalt/corpus-xxx-orig-x-closed` and `github.com/giellalt/corpus-xxx-x-closed`.
 
-The source repositories contains original files, many of which are of some
-size. The files are therefore stored externally, using *git lfs* (git large
-file storage. *git lfs* is an extension to git, which replaces the data inside
-of the file with text information, pointing to where the actual data is stored.
+## Git LFS
 
-This does not affect the way you work with the repository, but there are 
+The source repositories contains original files (as *pdf*, *docx*, etc),
+and many of them are large. We use Git **L**arge **F**ile **S**torage (LFS) to
+handle them.
 
-It is an extension to git, which replaces the external files with small text
-files that points to where the external file is stored.
+This means that they are not downloaded when you clone the repository, instead
+you will get files containing information for LFS about where the files are
+located, and their size.
+
+!!! note
+    LFS is only required for handling raw source files (i.e. when working with
+    **corpus-xxx-orig**). If you are not dealing with any raw material - and
+    only dealing with the **corpus-xxx* folder, you can skip this.
+
+### Installation
+
+Installation is documented in their readme, at [https://github.com/git-lfs/git-lfs#installing](https://github.com/git-lfs/git-lfs#installing), but see also the main site at [https://git-lfs.com/](https://git-lfs.com/).
 
