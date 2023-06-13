@@ -63,6 +63,7 @@ setup(
         "lxml",
         "parameterized",
         "prompt_toolkit",
+        "python-dateutil",
         "regex",
         "requests",
         "requests-mock",
