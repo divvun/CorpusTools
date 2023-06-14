@@ -404,7 +404,7 @@ def main():
         )
         adder = AddToCorpus(
             corpus_directory=corpus_path.orig_corpus_dir,
-            subpath=corpus_path.filepath.parent,
+            sub_directory=corpus_path.filepath.parent,
         )
 
         orig = args.origs[0]
