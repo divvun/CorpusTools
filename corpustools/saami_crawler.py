@@ -23,10 +23,10 @@ import argparse
 
 from corpustools import (
     argparse_version,
-    nrk_no_crawler,
-    samas_crawler,
+    # nrk_no_crawler,
+    # samas_crawler,
     samediggi_fi_crawler,
-    samediggi_no_crawler,
+    # samediggi_no_crawler,
 )
 
 
@@ -53,9 +53,9 @@ def main():
 
     crawlers = {
         "www.samediggi.fi": samediggi_fi_crawler.SamediggiFiCrawler(),
-        "samediggi.no": samediggi_no_crawler.SamediggiNoCrawler(),
-        "nrk.no": nrk_no_crawler.NrkSmeCrawler(),
-        "samas.no": samas_crawler.SamasCrawler(),
+        # "samediggi.no": samediggi_no_crawler.SamediggiNoCrawler(),
+        # "nrk.no": nrk_no_crawler.NrkSmeCrawler(),
+        # "samas.no": samas_crawler.SamasCrawler(),
     }
 
     for site in args.sites:
