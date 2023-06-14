@@ -415,8 +415,8 @@ def main():
             parallel_corpus_path.name(corpus_lang=args.lang)
         )
         adder = AddToCorpus(
-            corpus_path.orig_corpus_dir,
-            corpus_path.filepath,
+            corpus_directory=corpus_path.orig_corpus_dir,
+            subpath=corpus_path.filepath.parent,
         )
 
         orig = args.origs[0]
