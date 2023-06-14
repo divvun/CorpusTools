@@ -24,6 +24,7 @@ import cgi
 import os
 import shutil
 from pathlib import Path
+from lxml import html, etree
 
 import requests
 
@@ -66,9 +67,22 @@ def url_to_filename(response):
         _, params = cgi.parse_header(response.headers["Content-Disposition"])
         return params["filename"]
     except KeyError:
-        return add_url_extension(
-            os.path.basename(response.url), response.headers["content-type"]
-        )
+        try:
+            tree = html.document_fromstring(response.content)
+            title = tree.findtext(".//title")
+            if title:
+                return add_url_extension(title, response.headers["content-type"])
+        except etree.ParserError:
+            url = response.url
+            url = url.replace("?lang=fi", "")
+            url = url.replace("?lang=dav", "")
+            url = url.replace("?lang=an", "")
+            url = url.replace("?lang=nuo", "")
+            url = url.replace("?lang=en", "")
+
+            return add_url_extension(
+                os.path.basename(url), response.headers["content-type"]
+            )
 
 
 class UrlDownloader:
@@ -209,7 +223,7 @@ class AddToCorpus:
                 )
             )
             this_para_corpuspath.metadata.set_parallel_text(
-                none_dupe_path.lang, none_dupe_path.filename.name
+                none_dupe_path.lang, none_dupe_path.filepath.name
             )
             this_para_corpuspath.metadata.write_file()
             none_dupe_path.metadata.set_parallel_text(

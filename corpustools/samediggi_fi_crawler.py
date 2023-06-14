@@ -24,7 +24,7 @@ import re
 from urllib.parse import urlparse, urlunparse
 
 import requests
-from lxml import html
+from lxml import html, etree
 
 from corpustools import adder, crawler, util, xslsetter
 
@@ -62,9 +62,10 @@ class SamediggiFiCrawler(crawler.Crawler):
 
     languages
     * &lang=fi
-    * &lang=sme
-    * &lang=smn
-    * &lang=sms
+    * &lang=dav
+    * &lang=an
+    * &lang=nuo
+    * &lang=en
 
     Same procedure with links here
     """
@@ -76,24 +77,31 @@ class SamediggiFiCrawler(crawler.Crawler):
         self.unvisited_links.add("http://www.samediggi.fi/")
         self.old_urls = {}
         self.langs = {
-            "finnish": "fin",
-            "davvi": "sme",
-            "anaras": "smn",
-            "nuortta": "sms",
-            "english": "eng",
+            "fi": "fin",
+            "dav": "sme",
+            "an": "smn",
+            "nuo": "sms",
+            "en": "eng",
         }
 
-        for (natural, iso) in self.langs.items():
+        self.content_types = [
+            "text/html",
+            "application/msword",
+            "application/pdf",
+            "text/plain",
+        ]
+
+        for natural, iso in self.langs.items():
             self.corpus_adders[natural] = adder.AddToCorpus(
-                self.goaldir, iso, "admin/sd/www.samediggi.fi"
+                self.goaldir / f"corpus-{iso}-orig", "admin/sd/www.samediggi.fi"
             )
 
-        self.get_old_urls()
+        # self.get_old_urls()
 
     def get_old_urls(self):
         """Collect the urls of already downloaded pages."""
-        for (_, corpus_adder) in self.corpus_adders.items():
-            for root, _, files in os.walk(corpus_adder.goaldir):
+        for _, corpus_adder in self.corpus_adders.items():
+            for root, _, files in os.walk(corpus_adder.corpusdir):
                 for file_ in files:
                     if file_.endswith(".xsl"):
                         path = os.path.join(root, file_)
@@ -106,7 +114,6 @@ class SamediggiFiCrawler(crawler.Crawler):
         """Crawl samediggi.fi."""
         while self.unvisited_links:
             link = self.unvisited_links.pop()
-
             if link not in self.visited_links:
                 util.print_frame(debug=link.encode("utf8"))
                 util.print_frame(
@@ -117,6 +124,14 @@ class SamediggiFiCrawler(crawler.Crawler):
                 found_saami = False
                 for lang in self.langs.keys():
                     result = requests.get(link, params={"lang": lang})
+
+                    print(result.headers["content-type"])
+
+                    if not any(
+                        contType in result.headers["content-type"]
+                        for contType in self.content_types
+                    ):
+                        break
 
                     if result.history:
                         print("history", result.history)
@@ -129,12 +144,14 @@ class SamediggiFiCrawler(crawler.Crawler):
                         and result.status_code == requests.codes.ok
                         and not self.invalid_content(str(result.content, "utf-8"))
                     ):
-                        if lang in ["davvi", "anaras", "nuortta"]:
+                        if lang in ["dav", "an", "nuo"]:
                             found_saami = True
                         self.harvest_links(result.content)
-                        print_url = self.get_print_url(result.content, lang)
-                        if print_url is not None:
-                            parallel_pages.append((print_url, lang))
+
+                        parallel_pages.append((result.url, lang))
+                        # print_url = self.get_print_url(result.content, lang)
+                        # if print_url is not None:
+                        #     parallel_pages.append((print_url, lang))
                     else:
                         if "samediggi.fi" not in result.url:
                             util.print_frame(
@@ -145,6 +162,10 @@ class SamediggiFiCrawler(crawler.Crawler):
 
                 if found_saami and parallel_pages:
                     self.save_pages(parallel_pages)
+                    for page in parallel_pages:
+                        self.visited_links.add(
+                            self.remove_lang_from_url(page[0]).strip()
+                        )
 
                 util.print_frame(
                     debug=f"After: unvisited_links {len(self.unvisited_links)}"
@@ -152,6 +173,7 @@ class SamediggiFiCrawler(crawler.Crawler):
 
             self.visited_links.add(link)
             util.print_frame(debug=f"visited_links {len(self.visited_links)}\n")
+            # break  # only front page
 
     @staticmethod
     def get_print_url(content, lang):
@@ -222,21 +244,15 @@ class SamediggiFiCrawler(crawler.Crawler):
         Don't follow (don't save content), but save links containg
         doc_download
         """
-        tree = html.document_fromstring(content)
+        try:
+            tree = html.document_fromstring(content)
+        except etree.ParserError:
+            return
 
         for address in tree.findall(".//a"):
             href = address.get("href")
             if href is not None:
-                href = href.replace("?lang=finnish", "")
-                href = href.replace("?lang=davvi", "")
-                href = href.replace("?lang=anaras", "")
-                href = href.replace("?lang=nuortta", "")
-                href = href.replace("?lang=english", "")
-                href = href.replace("&lang=finnish", "")
-                href = href.replace("&lang=davvi", "")
-                href = href.replace("&lang=anaras", "")
-                href = href.replace("&lang=nuortta", "")
-                href = href.replace("&lang=english", "")
+                href = self.remove_lang_from_url(href).strip()
 
                 if not href.startswith("http"):
                     href = os.path.join("http://www.samediggi.fi", href)
@@ -251,6 +267,23 @@ class SamediggiFiCrawler(crawler.Crawler):
                         "administrator/",
                         href,
                     )
-                    and href.startswith("http://www.samediggi.fi")
+                    and (
+                        href.startswith("http://www.samediggi.fi")
+                        or href.startswith("https://www.samediggi.fi")
+                    )
                 ):
                     self.unvisited_links.add(href)
+
+    def remove_lang_from_url(self, url):
+        """Removes language specifier from end of urls"""
+        url = url.replace("?lang=fi", "")
+        url = url.replace("?lang=dav", "")
+        url = url.replace("?lang=an", "")
+        url = url.replace("?lang=nuo", "")
+        url = url.replace("?lang=en", "")
+        url = url.replace("&lang=fi", "")
+        url = url.replace("&lang=dav", "")
+        url = url.replace("&lang=an", "")
+        url = url.replace("&lang=nuo", "")
+        url = url.replace("&lang=en", "")
+        return url

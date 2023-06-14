@@ -21,6 +21,7 @@
 
 import os
 import sys
+from pathlib import Path
 
 from corpustools import adder, namechanger, util
 
@@ -30,7 +31,7 @@ class Crawler:
 
     def __init__(self):
         """Initialise the Crawler class."""
-        self.goaldir = str(os.getenv("GTFREE"))
+        self.goaldir = Path(os.getenv("GTLANGS"))
         self.unvisited_links = set()
         self.visited_links = set()
         self.download_links = set()
@@ -39,7 +40,7 @@ class Crawler:
 
     def __del__(self):
         """Add all files to the corpus."""
-        for (_, corpus_adder) in self.corpus_adders.items():
+        for _, corpus_adder in self.corpus_adders.items():
             corpus_adder.add_files_to_working_copy()
 
     def save_pages(self, pages):
@@ -49,7 +50,7 @@ class Crawler:
         """
         parallelpath = ""
 
-        for (url, lang) in pages:
+        for url, lang in pages:
             try:
                 (_, tmpname) = self.downloader.download(url)
             except adder.AdderError as error:
@@ -59,7 +60,7 @@ class Crawler:
                     os.path.basename(tmpname)
                 )
                 normalised_path = os.path.join(
-                    self.corpus_adders[lang].goaldir, normalised_name
+                    self.corpus_adders[lang].goalpath, normalised_name
                 )
 
                 if not os.path.exists(normalised_path):
@@ -70,3 +71,6 @@ class Crawler:
                 else:
                     parallelpath = normalised_path
         print(file=sys.stderr)
+
+    def name_from_url(self, url):
+        os.path.basename(url)
