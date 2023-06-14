@@ -209,7 +209,7 @@ class AddToCorpus:
                 )
             )
             this_para_corpuspath.metadata.set_parallel_text(
-                none_dupe_path.lang, none_dupe_path.filename.name
+                none_dupe_path.lang, none_dupe_path.filepath.name
             )
             this_para_corpuspath.metadata.write_file()
             none_dupe_path.metadata.set_parallel_text(
