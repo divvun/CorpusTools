@@ -152,23 +152,17 @@ class AddToCorpus:
         Returns:
             (str): path to where the origfile exists in the corpus
         """
-        util.print_frame()
         origpath = Path(origpath)
-        util.print_frame()
         none_dupe_path = corpuspath.make_corpus_path(
             origpath.rename(
                 namechanger.compute_new_basename(Path(self.goalpath) / origpath.name)
             )
         )
         self.additions.append(none_dupe_path.orig)
-        util.print_frame()
         self.add_metadata_to_corpus(none_dupe_path, metadata_filename)
-        util.print_frame()
         if parallelpath:
             self.update_parallel_data(none_dupe_path, parallelpath)
-            util.print_frame()
         print("Added", none_dupe_path.orig)
-        util.print_frame()
         return none_dupe_path.orig
 
     def add_metadata_to_corpus(self, none_dupe_path, meta_filename):
@@ -201,7 +195,6 @@ class AddToCorpus:
             lang,
             parallel_file,
         ) in parallel_corpuspath.metadata.get_parallel_texts().items():
-            util.print_frame(parallel_file)
             this_para_corpuspath = corpuspath.make_corpus_path(
                 parallel_corpuspath.name(
                     corpus_lang=lang,
@@ -356,20 +349,15 @@ def main():
             corpus_path.orig_corpus_dir,
             corpus_path.filepath.parent,
         )
-        util.print_frame()
         for orig in args.origs:
-            util.print_frame()
             if os.path.isfile(orig):
-                util.print_frame()
                 if args.name:
-                    util.print_frame()
                     newname = os.path.join(os.path.dirname(orig), args.name)
                     try:
                         shutil.copy(orig, newname)
                     except FileNotFoundError:
                         raise SystemExit(f"Not a valid filename: {args.name}")
                     orig = newname
-                util.print_frame()
                 adder.copy_file_to_corpus(
                     origpath=orig, metadata_filename=os.path.basename(orig)
                 )
