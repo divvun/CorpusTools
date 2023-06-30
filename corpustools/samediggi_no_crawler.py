@@ -23,10 +23,11 @@ import fnmatch
 import hashlib
 import os
 import re
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse, urlunparse, parse_qsl, urlencode
 
 import requests
 from lxml import etree
+from copy import deepcopy
 
 from corpustools import (
     adder,
@@ -48,7 +49,10 @@ def make_digest(bytestring):
 class SamediggiNoPage:
     """Save a samediggi.no page to the corpus."""
 
-    address_re = re.compile(r"/\w")
+    # address_path_re = re.compile(r"/\w")
+    address_re = re.compile(r"((http(s)):\/\/)sametinget.no")
+    path_re = re.compile(r"/\w")
+    page_re = re.compile(r"Side=\d(\d)?")
     unwanted_endings = (
         ".pdf",
         ".jpg",
@@ -62,12 +66,12 @@ class SamediggiNoPage:
         ".xls",
     )
     language_mapper = {
-        "no-bokmaal": "nob",
-        "sma-NO": "sma",
-        "sme-NO": "sme",
-        "smj-NO": "smj",
+        "nb": "nob",
+        "sma": "sma",
+        "se": "sme",
+        "smj": "smj",
     }
-    corpus_dir = os.path.join(os.getenv("GTFREE"), "orig")
+    corpus_dir = os.getenv("GTLANGS")
 
     def __init__(self, result, dupe_table):
         """Initialise the SamediggiNoPage class."""
@@ -75,18 +79,46 @@ class SamediggiNoPage:
         self.url = result.url
         self.parsed_url = urlparse(self.url)
         self.tree = etree.HTML(result.text)
+        self.dupe = False
+
+        filename = namechanger.normalise_filename(self.create_filename())
+
         fullpath = os.path.join(
             self.corpus_dir,
-            self.lang,
+            f"corpus-{self.lang}-orig",
             "admin/sd/samediggi.no",
-            namechanger.normalise_filename(adder.url_to_filename(self.result)),
+            filename,
         )
+        if os.path.isfile(fullpath):
+            basepath = os.path.split(fullpath)[0]
+            name = filename[:-5]
+            tag = filename[-5:]
+            # print(f"\nFile already exists: {fullpath}\n")
+            i = 0
+            while os.path.isfile(os.path.join(basepath, f"{name}({i}){tag}")):
+                i += 1
+
+            fullpath = os.path.join(os.path.join(basepath, f"{name}({i}){tag}"))
+
         possible_dupe = dupe_table.get(make_digest(self.content_string), fullpath)
         self.corpuspath = corpuspath.make_corpus_path(possible_dupe)
         if fullpath == possible_dupe:
             self.set_initial_metadata()
         else:
             print(f"\nDupe! {self.url} is dupe of {possible_dupe}\n")
+            self.dupe = True
+
+    def create_filename(self):
+        if self.tree is not None:
+            title = (
+                self.tree.findtext(".//title")
+                .strip()
+                .replace("/", "_")
+                .replace(".", "_")
+            )
+            if title:
+                return title.rsplit(" - S")[0] + ".html"
+        return adder.url_to_filename(self.url)
 
     @property
     def content(self):
@@ -94,15 +126,10 @@ class SamediggiNoPage:
         content = etree.Element("html")
         body = etree.SubElement(content, "body")
         for xpath_directive in [
-            './/div[@class="newsIntroBox"]',
-            ".//article",
-            './/div[@class="news"]',
-            './/section[@class="blockInfo"]',
+            './/article[@class="artikkel"]',
         ]:
             for element in self.tree.xpath(xpath_directive):
-                body.append(
-                    self.filter_content(etree.fromstring(etree.tostring(element)))
-                )
+                body.append(self.filter_content((deepcopy(element))))
 
         return content
 
@@ -110,13 +137,16 @@ class SamediggiNoPage:
     def filter_content(element):
         """Remove elements without interesting content."""
         for unwanted in [
-            './/div[@class="embedFile"]',
-            './/div[@class="date"]',
-            './/div[starts-with(@class, "person ")]',
-            './/div[starts-with(@class, "listArticleLink")]',
-            './/div[@class="accordion document-list"]',
-            './/article[@class="regionPage"]',
-            './/ul[@class="listLinksLine"]',
+            './/div[@class="legacy-content-block"]',
+            './/div[starts-with(@class, "InnholdForfatter")]',
+            './/div[@class="videodetector"]',
+            './/div[starts-with(@class, "il-feedback-form")]',
+            './/div[starts-with(@class, "liste")]',
+            ".//iframe",
+            './/span[@class="file-ext-size"]',
+            './/div[@class="fil"]',
+            './/a[@class="InnholdLinkTekst  "]',
+            './/div[contains(@id, "Script")]',
         ]:
             for unwanted_element in element.xpath(unwanted):
                 unwanted_element.getparent().remove(unwanted_element)
@@ -139,11 +169,9 @@ class SamediggiNoPage:
         self.corpuspath.metadata.set_variable("license_type", "free")
         if self.lang != "nob":
             self.corpuspath.metadata.set_variable("translated_from", "nob")
-        time = self.tree.find(".//time")
+        time = self.tree.find('.//span[@class="byline__published-date-value"]')
         if time is not None:
-            self.corpuspath.metadata.set_variable(
-                "year", self.tree.find(".//time").get("datetime")[:4]
-            )
+            self.corpuspath.metadata.set_variable("year", time.text[6:10])
 
     @property
     def basename(self):
@@ -159,7 +187,7 @@ class SamediggiNoPage:
                 )
             )
         for parallel_link in self.parallel_links:
-            if not parallel_link.startswith("https://www.sa"):
+            if not parallel_link.startswith("https://sametinget.no"):
                 raise SystemExit(
                     f"The links to parallel documents has changed {self.url}"
                 )
@@ -169,10 +197,21 @@ class SamediggiNoPage:
     @property
     def parallel_links(self):
         """Get links to the parallels of this document."""
-        return [
-            "https:{}".format(a.get("href"))
-            for a in self.tree.xpath('.//li[@class="itemLanguage"]/div/ul/li/a[@href]')
-        ]
+
+        langcode = {"sme": 12, "smj": 15, "sma": 14, "nob": 1}
+        links = []
+
+        url_parts = list(self.parsed_url)
+        query = dict(parse_qsl(url_parts[4]))
+
+        for lang, code in langcode.items():
+            if lang != self.lang:
+                param = {"sprak": f"{code}"}
+                query.update(param)
+                url_parts[4] = urlencode(query)
+                links.append(urlunparse(url_parts))
+
+        return links
 
     @property
     def saveable(self):
@@ -182,7 +221,7 @@ class SamediggiNoPage:
     @property
     def lang(self):
         """Return the language of the file."""
-        content_language = self.tree.find('.//meta[@name="Content-language"]')
+        content_language = self.tree.find('.//meta[@name="language"]')
 
         return self.language_mapper[content_language.get("content")]
 
@@ -191,26 +230,40 @@ class SamediggiNoPage:
         match = self.address_re.match(href)
         return (
             match
-            and "sametingets-vedtak-1989-2004" not in href
+            and not re.search(
+                "sametingets-vedtak-1989-2004|endresprak.aspx|innsyn.aspx|/english/|/#|"
+                "sametingets-representanter|samedikki-airasat|samedikke-ajrrasa|saemiedigkien-tjirkijh|"
+                "plenumssaker|dievascoahkkinassit|allestjahkanimassje|stoerretjaanghkoeaamhtesh|"
+                "ofte-stilte-sporsmal|davja-jerron-gazaldagat",
+                href,
+            )
             and not href.endswith(self.unwanted_endings)
         )
 
     @property
     def links(self):
         """Get all the links found in a file."""
-        return {
-            urlunparse(
-                (
-                    self.parsed_url.scheme,
-                    self.parsed_url.netloc,
-                    address.get("href"),
-                    "",
-                    "",
-                    "",
+        link_set = set()
+        for address in self.tree.xpath(".//a[@href]"):
+            if self.path_re.match(address.get("href")):
+                path = address.get("href")
+                match = self.page_re.search(path)
+                link_set.add(
+                    urlunparse(
+                        (
+                            self.parsed_url.scheme,
+                            self.parsed_url.netloc,
+                            path.split("?")[0],
+                            "",
+                            f"{match.group(0)}" if match else "",
+                            "",
+                        )
+                    )
                 )
-            )
-            for address in self.tree.xpath(".//a[@href]")
-            if self.is_valid_address(address.get("href").lower())
+            else:
+                link_set.add(address.get("href").split("?")[0])
+        return {
+            address for address in link_set if self.is_valid_address(address.lower())
         }
 
     @property
@@ -225,8 +278,6 @@ class SamediggiNoPage:
     def save(self):
         """Save html and metadata."""
         with open(self.corpuspath.orig, "wb") as xml:
-            html = etree.Element("html")
-            html.append(self.content)
             xml.write(self.content_string)
         self.corpuspath.metadata.write_file()
 
@@ -240,19 +291,18 @@ class SamediggiNoCrawler(crawler.Crawler):
     def __init__(self):
         """Initialise the SamediggiNoCrawler class."""
         super().__init__()
-        self.unvisited_links.add("https://www.samediggi.no/")
-        self.unvisited_links.add("https://www.sametinget.no/")
-        self.unvisited_links.add("https://www.saemiedigkie.no/")
-        self.unvisited_links.add("https://www.samedigge.no/")
+        self.unvisited_links.add("https://sametinget.no/")
+        self.vcs = {}
 
-        self.vcs = versioncontrol.vcs(self.goaldir)
+        for lang in self.langs:
+            self.vcs[lang] = versioncontrol.vcs(self.goaldir / f"corpus-{lang}-orig")
         self.dupe_table = {digest: name for digest, name in self.make_dupe_tuple()}
 
     def make_dupe_tuple(self):
         """Make a hash/filename tuple to be used in the dupe table."""
         for lang in self.langs:
             root = os.path.join(
-                os.getenv("GTFREE"), "orig", lang, "admin/sd/samediggi.no"
+                os.getenv("GTLANGS"), f"corpus-{lang}-orig", "admin/sd/samediggi.no"
             )
             for path, _, filelist in os.walk(root):
                 for name in fnmatch.filter(filelist, "*.html"):
@@ -269,8 +319,10 @@ class SamediggiNoCrawler(crawler.Crawler):
             orig_page = SamediggiNoPage(result, self.dupe_table)
             orig_page.sanity_test()
             self.visited_links.add(orig_page.url)
-            self.unvisited_links = self.unvisited_links.union(orig_page.links)
+            self.unvisited_links.update(orig_page.links)
 
+            if orig_page.dupe:
+                return None
             return orig_page
 
         return None
@@ -282,6 +334,10 @@ class SamediggiNoCrawler(crawler.Crawler):
 
             if link not in self.visited_links:
                 self.crawl_pageset(link)
+
+            self.unvisited_links.difference_update(self.visited_links)
+
+            print(f"Links in queue: {len(self.unvisited_links)}")
 
     def add_page(self, page, parallel_pages):
         """Add a page to the list of parallel pages."""
@@ -322,6 +378,6 @@ class SamediggiNoCrawler(crawler.Crawler):
                         make_digest(parallel_page.content_string)
                     ] = parallel_page.corpuspath.orig
                     parallel_page.save()
-                    self.vcs.add(parallel_page.corpuspath.orig)
-                    self.vcs.add(parallel_page.corpuspath.xsl)
+                    self.vcs[parallel_page.lang].add(parallel_page.corpuspath.orig)
+                    self.vcs[parallel_page.lang].add(parallel_page.corpuspath.xsl)
                 print()

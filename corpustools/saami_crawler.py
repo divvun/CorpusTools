@@ -26,7 +26,7 @@ from corpustools import (
     # nrk_no_crawler,
     # samas_crawler,
     samediggi_fi_crawler,
-    # samediggi_no_crawler,
+    samediggi_no_crawler,
 )
 
 
@@ -38,7 +38,7 @@ def parse_options():
     """
     parser = argparse.ArgumentParser(
         parents=[argparse_version.parser],
-        description="Crawl saami sites (for now, only www.samediggi.fi).",
+        description="Crawl saami sites (for now, only samediggi.no and www.samediggi.fi).",
     )
 
     parser.add_argument("sites", nargs="+", help="The sites to crawl")
@@ -53,7 +53,7 @@ def main():
 
     crawlers = {
         "www.samediggi.fi": samediggi_fi_crawler.SamediggiFiCrawler(),
-        # "samediggi.no": samediggi_no_crawler.SamediggiNoCrawler(),
+        "samediggi.no": samediggi_no_crawler.SamediggiNoCrawler(),
         # "nrk.no": nrk_no_crawler.NrkSmeCrawler(),
         # "samas.no": samas_crawler.SamasCrawler(),
     }
