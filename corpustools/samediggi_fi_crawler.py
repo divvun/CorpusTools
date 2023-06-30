@@ -19,271 +19,342 @@
 """This file contains routines to crawl sites containing saami text."""
 
 
+import fnmatch
+import hashlib
 import os
 import re
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse
 
 import requests
-from lxml import html, etree
+from lxml import etree
+from copy import deepcopy
 
-from corpustools import adder, crawler, util, xslsetter
+from corpustools import (
+    adder,
+    corpuspath,
+    crawler,
+    namechanger,
+    text_cat,
+    versioncontrol,
+)
+
+
+def make_digest(bytestring):
+    """Make a md5 hash to identify possible dupes."""
+    hasher = hashlib.md5()
+    hasher.update(bytestring)
+    return hasher.hexdigest()
+
+
+class SamediggiFiPage:
+    """Save a www.samediggi.fi page to the corpus."""
+
+    address_re = re.compile(r"((http(s)):\/\/)www.samediggi.fi")
+    unwanted_endings = (
+        ".pdf",
+        ".jpg",
+        ".docx",
+        ".xlsx",
+        ".csv",
+        ".pptx",
+        ".eps",
+        ".doc",
+        ".png",
+        ".xls",
+    )
+    language_mapper = {
+        "fi": "fin",
+        "dav": "sme",
+        "an": "smn",
+        "nuo": "sms",
+        "en": "eng",
+    }
+    corpus_dir = os.getenv("GTLANGS")
+
+    def __init__(self, result, dupe_table):
+        """Initialise the SamediggiFiPage class."""
+        self.result = result
+        self.url = result.url
+        self.parsed_url = urlparse(self.url)
+        self.tree = etree.HTML(result.text)
+        self.dupe = False
+
+        filename = namechanger.normalise_filename(self.create_filename())
+
+        fullpath = os.path.join(
+            self.corpus_dir,
+            f"corpus-{self.lang}-orig",
+            "admin/sd/www.samediggi.fi",
+            filename,
+        )
+        if os.path.isfile(fullpath):
+            basepath = os.path.split(fullpath)[0]
+            name = filename[:-5]
+            tag = filename[-5:]
+            # print(f"\nFile already exists: {fullpath}\n")
+            i = 0
+            while os.path.isfile(os.path.join(basepath, f"{name}({i}){tag}")):
+                i += 1
+
+            fullpath = os.path.join(os.path.join(basepath, f"{name}({i}){tag}"))
+
+        possible_dupe = dupe_table.get(make_digest(self.content_string), fullpath)
+        self.corpuspath = corpuspath.make_corpus_path(possible_dupe)
+        if fullpath == possible_dupe:
+            self.set_initial_metadata()
+        else:
+            print(f"\nDupe! {self.url} is dupe of {possible_dupe}\n")
+            self.dupe = True
+
+    def create_filename(self):
+        if self.tree is not None:
+            title = (
+                self.tree.findtext(".//title")
+                .strip()
+                .replace("/", "_")
+                .replace(".", "_")
+            )
+            if title:
+                return title.rsplit(" - S")[0] + ".html"
+        return adder.url_to_filename(self.url)
+
+    @property
+    def content(self):
+        """Extract only the content that is interesting from the web page."""
+        content = etree.Element("html")
+        body = etree.SubElement(content, "body")
+        doc_type = self.tree.find('.//meta[@property="og:type"]').get("content")
+        if doc_type == "article":
+            for xpath_directive in [
+                './/main[starts-with(@class, "template-page content") or starts-with(@class, "content")]',
+                './/div[starts-with(@class, "template-page content")]',
+            ]:
+                for element in self.tree.xpath(xpath_directive):
+                    body.append(self.filter_content((deepcopy(element))))
+
+        return content
+
+    @staticmethod
+    def filter_content(element):
+        """Remove elements without interesting content."""
+        for unwanted in [
+            './/div[starts-with(@class, "avia-content-slider")]',  # menu showing other sites
+            './/div[starts-with(@class, "avia-slideshow")]',
+            './/div[starts-with(@class, "avia-button")]',  # buttons
+            './/div[starts-with(@class, "avia-video")]',  # viedos
+            './/div[starts-with(@class, "big-preview")]',  # large pictures
+            './/div[starts-with(@class, "avia-image")]',  # images
+            ".//img",  # images
+            ".//figure",  # images
+            './/div[starts-with(@class, "av-alb-blogposts")]',  # news list
+            './/div[contains(@class, "table")]',  # tables
+            ".//table",
+            ".//form",  # forms
+            ".//fieldset",
+            ".//footer",  # share buttons
+            './/span[@class="post-meta-infos"]',
+            './/span[@class="hidden"]',
+        ]:
+            for unwanted_element in element.xpath(unwanted):
+                unwanted_element.getparent().remove(unwanted_element)
+
+        return element
+
+    @property
+    def content_string(self):
+        """This will be the content of the saved file."""
+        return etree.tostring(self.content, encoding="utf8", pretty_print=True)
+
+    def set_initial_metadata(self):
+        """Extract metadata from the web page."""
+        self.corpuspath.metadata.set_variable(
+            "title", self.tree.find(".//title").text.strip()
+        )
+        self.corpuspath.metadata.set_variable("filename", self.url)
+        self.corpuspath.metadata.set_variable("genre", "admin")
+        self.corpuspath.metadata.set_variable("mainlang", self.lang)
+        self.corpuspath.metadata.set_variable("license_type", "free")
+        if self.lang not in ("fin", "eng"):
+            self.corpuspath.metadata.set_variable("translated_from", "fin")
+        time = self.tree.find('.//meta[@property="article:modified_time"]')
+        if time is not None:
+            self.corpuspath.metadata.set_variable("year", time.get("content")[:4])
+
+    @property
+    def basename(self):
+        """Get the basename of the corpus filename."""
+        return os.path.basename(self.corpuspath.orig)
+
+    def sanity_test(self):
+        """Check if the pages seem to have the expected structure."""
+        for parallel_link in self.parallel_links:
+            if not parallel_link.startswith("https://www.samediggi.fi"):
+                raise SystemExit(
+                    f"The links to parallel documents has changed {self.url}"
+                )
+        if self.lang is None:
+            raise SystemExit("Language format has changed.")
+
+    @property
+    def parallel_links(self):
+        """Get links to the parallels of this document."""
+        links = []
+
+        for a in self.tree.xpath('.//link[@rel="alternate"]'):
+            if (
+                a.get("hreflang") in self.language_mapper.keys()
+                and self.language_mapper[a.get("hreflang")] != self.lang
+            ):
+                links.append(a.get("href"))
+
+        return links
+
+    @property
+    def saveable(self):
+        """Check if the content of this file is worth saving."""
+        return self.result.ok and len(self.content) and len(self.body_text.split()) > 40
+
+    @property
+    def lang(self):
+        """Return the language of the file."""
+        if self.tree.attrib.get("lang") == "en-US":
+            return self.language_mapper["en"]
+        return self.language_mapper[self.tree.attrib.get("lang")]
+
+    def is_valid_address(self, href):
+        """Check if this is an address that should be crawled."""
+        match = self.address_re.match(href)
+        return (
+            match
+            and not re.search(
+                "#|tuote|shop|kauppa",
+                href,
+            )
+            and not href.endswith(self.unwanted_endings)
+        )
+
+    @property
+    def links(self):
+        """Get all the links found in a file."""
+        link_set = set()
+        for address in self.tree.xpath(".//a[@href]"):
+            url = address.get("href")
+            if self.is_valid_address(url.lower()):
+                link_set.add(url.split("?")[0])
+
+        return link_set
+
+    @property
+    def body_text(self):
+        """Get all the text inside 'body'."""
+        return " ".join(self.content.xpath(".//text()"))
+
+    def set_parallel_file(self, lang, name):
+        """Update metadata info on parallel files."""
+        self.corpuspath.metadata.set_parallel_text(lang, name)
+
+    def save(self):
+        """Save html and metadata."""
+        with open(self.corpuspath.orig, "wb") as xml:
+            xml.write(self.content_string)
+        self.corpuspath.metadata.write_file()
 
 
 class SamediggiFiCrawler(crawler.Crawler):
-    """Notes about samediggi.fi.
+    """Crawl www.samediggi.fi and save html documents to the corpus."""
 
-    Start page is:
-    http://www.samediggi.fi/index.php?option=com_frontpage&Itemid=39
-
-
-    Empty pages contain either
-    * "Käännöstä ei ole saatavilla"
-    * "There are no translations available"
-
-    Follow links starting with:
-    * http://www.samediggi.fi/index (www.samediggi.fi == samediggi.fi)
-    * index: prepend these adresses with http://www.samediggi.fi
-
-    Remove any &lang=* parts from links,
-    then re-add languages
-    * &lang=finnish
-    * &lang=davvi
-    * &lang=anaras
-    * &lang=nuortta
-    * &lang=english
-
-    Main content in div id="keski_mainbody"
-    Content parts in table class="contentpaneopen"
-
-    www.samediggi.fi/nuorat is a separate "domain"
-    Links start with:
-    * http://www.samediggi.fi/nuorat
-    * nuorat/index
-
-    languages
-    * &lang=fi
-    * &lang=dav
-    * &lang=an
-    * &lang=nuo
-    * &lang=en
-
-    Same procedure with links here
-    """
+    langs = ["fin", "sme", "smn", "sms", "eng"]
+    languageguesser = text_cat.Classifier()
 
     def __init__(self):
         """Initialise the SamediggiFiCrawler class."""
         super().__init__()
+        self.unvisited_links.add("https://www.samediggi.fi/")
+        self.vcs = {}
 
-        self.unvisited_links.add("http://www.samediggi.fi/")
-        self.old_urls = {}
-        self.langs = {
-            "fi": "fin",
-            "dav": "sme",
-            "an": "smn",
-            "nuo": "sms",
-            "en": "eng",
-        }
+        for lang in self.langs:
+            self.vcs[lang] = versioncontrol.vcs(self.goaldir / f"corpus-{lang}-orig")
+        self.dupe_table = {digest: name for digest, name in self.make_dupe_tuple()}
 
-        self.content_types = [
-            "text/html",
-            "application/msword",
-            "application/pdf",
-            "text/plain",
-        ]
-
-        for natural, iso in self.langs.items():
-            self.corpus_adders[natural] = adder.AddToCorpus(
-                self.goaldir / f"corpus-{iso}-orig", "admin/sd/www.samediggi.fi"
+    def make_dupe_tuple(self):
+        """Make a hash/filename tuple to be used in the dupe table."""
+        for lang in self.langs:
+            root = os.path.join(
+                os.getenv("GTLANGS"), f"corpus-{lang}-orig", "admin/sd/www.samediggi.fi"
             )
+            for path, _, filelist in os.walk(root):
+                for name in fnmatch.filter(filelist, "*.html"):
+                    fullpath = os.path.join(path, name)
+                    with open(fullpath, "rb") as html_stream:
+                        yield make_digest(html_stream.read()), fullpath
 
-        # self.get_old_urls()
+    def crawl_page(self, link):
+        """Collect links from a page."""
+        self.visited_links.add(link)
+        result = requests.get(link)
 
-    def get_old_urls(self):
-        """Collect the urls of already downloaded pages."""
-        for _, corpus_adder in self.corpus_adders.items():
-            for root, _, files in os.walk(corpus_adder.corpusdir):
-                for file_ in files:
-                    if file_.endswith(".xsl"):
-                        path = os.path.join(root, file_)
-                        mdh = xslsetter.MetadataHandler(path)
-                        self.old_urls[mdh.get_variable("filename")] = path.replace(
-                            ".xsl", ""
-                        )
+        if result.ok and "html" in result.headers["content-type"].lower():
+            orig_page = SamediggiFiPage(result, self.dupe_table)
+            orig_page.sanity_test()
+            self.visited_links.add(orig_page.url)
+            self.unvisited_links.update(orig_page.links)
+            if orig_page.dupe or orig_page.parsed_url.path.startswith("/category"):
+                return None
+            return orig_page
+
+        return None
 
     def crawl_site(self):
-        """Crawl samediggi.fi."""
+        """Crawl samediggi.no."""
         while self.unvisited_links:
             link = self.unvisited_links.pop()
+
             if link not in self.visited_links:
-                util.print_frame(debug=link.encode("utf8"))
-                util.print_frame(
-                    debug=f"Before: unvisited_links {len(self.unvisited_links)}"
-                )
+                self.crawl_pageset(link)
 
-                parallel_pages = []
-                found_saami = False
-                for lang in self.langs.keys():
-                    result = requests.get(link, params={"lang": lang})
+            self.unvisited_links.difference_update(self.visited_links)
 
-                    print(result.headers["content-type"])
+            print(f"Links in queue: {len(self.unvisited_links)}")
 
-                    if not any(
-                        contType in result.headers["content-type"]
-                        for contType in self.content_types
-                    ):
-                        break
-
-                    if result.history:
-                        print("history", result.history)
-
-                    if "samediggi.fi" not in result.url:
-                        print("url", result.url)
-
-                    if (
-                        "www.samediggi.fi" in result.url
-                        and result.status_code == requests.codes.ok
-                        and not self.invalid_content(str(result.content, "utf-8"))
-                    ):
-                        if lang in ["dav", "an", "nuo"]:
-                            found_saami = True
-                        self.harvest_links(result.content)
-
-                        parallel_pages.append((result.url, lang))
-                        # print_url = self.get_print_url(result.content, lang)
-                        # if print_url is not None:
-                        #     parallel_pages.append((print_url, lang))
-                    else:
-                        if "samediggi.fi" not in result.url:
-                            util.print_frame(
-                                debug="Not fetching {} which was {}\n".format(
-                                    result.url.encode("utf8"), link.encode("utf8")
-                                )
-                            )
-
-                if found_saami and parallel_pages:
-                    self.save_pages(parallel_pages)
-                    for page in parallel_pages:
-                        self.visited_links.add(
-                            self.remove_lang_from_url(page[0]).strip()
-                        )
-
-                util.print_frame(
-                    debug=f"After: unvisited_links {len(self.unvisited_links)}"
-                )
-
-            self.visited_links.add(link)
-            util.print_frame(debug=f"visited_links {len(self.visited_links)}\n")
-            # break  # only front page
+    def add_page(self, page, parallel_pages):
+        """Add a page to the list of parallel pages."""
+        if page is not None and page.saveable:
+            body_lang = self.languageguesser.classify(page.body_text, langs=self.langs)
+            if page.lang == body_lang:
+                if body_lang in ("fin", "eng"):
+                    parallel_pages.append(page)
+                else:
+                    parallel_pages.insert(0, page)
 
     @staticmethod
-    def get_print_url(content, lang):
-        """Compute the print url of the page."""
-        tree = html.document_fromstring(content)
-        print_img = tree.find(
-            './/img[@src="http://www.samediggi.fi/' 'images/M_images/printButton.png"]'
-        )
-
-        if print_img is not None:
-            parent = print_img.getparent()
-            href = urlparse(parent.get("href"))
-
-            query = href.query
-            newquery = [
-                part
-                for part in query.split("&")
-                if (
-                    part.startswith("option")
-                    or part.startswith("id")
-                    or part.startswith("task")
-                )
-            ]
-            newquery.append("lang=" + lang)
-
-            newhref = urlunparse(
-                (
-                    href.scheme,
-                    href.netloc,
-                    href.path,
-                    href.params,
-                    "&".join(newquery),
-                    href.fragment,
-                )
-            )
-
-            return newhref
-
-    @staticmethod
-    def invalid_content(content):
-        """Return true if the page does not contain the strings.
-
-        * "Käännöstä ei ole saatavilla"
-        * "There are no translations available"
-        """
-        return (
-            "ei ole saatavilla" in content
-            or "There are no translations available" in content
-            or '<div class="login-form">' in content
-            or "Sinulla ei ole tarvittavia" in content
-            or "You need to login" in content
-        )
-
-    def harvest_links(self, content):
-        """Harvest all links, bar some restrictions.
-
-        Insert links into a set
-
-        Discard links containing a href=
-        * "#"
-        * "*do_pdf*"
-        * "pop=1"
-        * com_events
-        * com_search
-        * www.samediggi.fi/haettavana
-        * http://klemetti.blogspot.com/
-
-        Don't follow (don't save content), but save links containg
-        doc_download
-        """
-        try:
-            tree = html.document_fromstring(content)
-        except etree.ParserError:
-            return
-
-        for address in tree.findall(".//a"):
-            href = address.get("href")
-            if href is not None:
-                href = self.remove_lang_from_url(href).strip()
-
-                if not href.startswith("http"):
-                    href = os.path.join("http://www.samediggi.fi", href)
-
-                if (
-                    href not in self.visited_links
-                    and not re.search(
-                        "klemetti.blogspot|/nuorat|/#|com_events|"
-                        "com_search|haettavana|do_pdf|pop=1|com_docman|"
-                        "/images|com_weblink|task=vcard|view_contact_id|"
-                        "com_contact|mad4joomla|mailto|javascript|"
-                        "administrator/",
-                        href,
+    def set_parallel_info(parallel_pages):
+        """Set the parallels for this set of parallel pages."""
+        for parallel_page1 in parallel_pages:
+            for parallel_page2 in parallel_pages:
+                if parallel_page1 != parallel_page2:
+                    parallel_page1.set_parallel_file(
+                        parallel_page2.lang, parallel_page2.basename
                     )
-                    and (
-                        href.startswith("http://www.samediggi.fi")
-                        or href.startswith("https://www.samediggi.fi")
-                    )
-                ):
-                    self.unvisited_links.add(href)
 
-    def remove_lang_from_url(self, url):
-        """Removes language specifier from end of urls"""
-        url = url.replace("?lang=fi", "")
-        url = url.replace("?lang=dav", "")
-        url = url.replace("?lang=an", "")
-        url = url.replace("?lang=nuo", "")
-        url = url.replace("?lang=en", "")
-        url = url.replace("&lang=fi", "")
-        url = url.replace("&lang=dav", "")
-        url = url.replace("&lang=an", "")
-        url = url.replace("&lang=nuo", "")
-        url = url.replace("&lang=en", "")
-        return url
+    def crawl_pageset(self, link):
+        """Crawl a pageset that link gives us."""
+        pages = []
+
+        print(link)
+        orig_page = self.crawl_page(link)
+        if orig_page is not None:
+            self.add_page(orig_page, pages)
+            for parallel_link in orig_page.parallel_links:
+                self.add_page(self.crawl_page(parallel_link), pages)
+
+            if pages and pages[0].lang not in ("fin", "eng"):
+                self.set_parallel_info(pages)
+                for parallel_page in pages:
+                    print(f"\t{parallel_page.corpuspath.orig}")
+                    self.dupe_table[
+                        make_digest(parallel_page.content_string)
+                    ] = parallel_page.corpuspath.orig
+                    parallel_page.save()
+                    self.vcs[parallel_page.lang].add(parallel_page.corpuspath.orig)
+                    self.vcs[parallel_page.lang].add(parallel_page.corpuspath.xsl)
+                print()
