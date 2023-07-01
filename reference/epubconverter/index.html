@@ -15,7 +15,7 @@
         <link rel="next" href="../errormarkup/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.17">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ded33207.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.26e3688c.min.css">
       
       
 
@@ -2728,7 +2728,11 @@ file that belongs to this epub file.</p>
           <td>
                 <code>epub.<span title="epub.Book">Book</span></code>
           </td>
-          <td><p>The epub book element</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>The epub book element</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -2749,13 +2753,17 @@ file that belongs to this epub file.</p>
           <td>
                 <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>The body of an xhtml file found in the epub file.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>The body of an xhtml file found in the epub file.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/epubconverter.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">53</span>
 <span class="normal">54</span>
 <span class="normal">55</span>
@@ -2825,7 +2833,11 @@ file that belongs to this epub file.</p>
           <td>
                 <code>str</code>
           </td>
-          <td><p>path to the document</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path to the document</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -2846,14 +2858,18 @@ file that belongs to this epub file.</p>
           <td>
                 <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>the content of the epub file wrapped in html
-element</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the content of the epub file wrapped in html
+element</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/epubconverter.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">72</span>
 <span class="normal">73</span>
 <span class="normal">74</span>
@@ -2931,7 +2947,11 @@ element</p></td>
           <td>
                 <code>epub.<span title="epub.BookChapter">BookChapter</span></code>
           </td>
-          <td><p>the chapter of an epub file</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the chapter of an epub file</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -2952,7 +2972,11 @@ element</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>The contents of a chapter</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>The contents of a chapter</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
@@ -2970,13 +2994,17 @@ element</p></td>
           <td>
                 <code><a class="autorefs autorefs-internal" title="corpustools.util" href="../util/#corpustools.util">util</a>.<span title="corpustools.util.ConversionException">ConversionException</span></code>
           </td>
-          <td><p>on conversion error</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>on conversion error</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/epubconverter.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">35</span>
 <span class="normal">36</span>
 <span class="normal">37</span>
@@ -3044,7 +3072,11 @@ element</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>path to the first element to remove.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path to the first element to remove.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3054,8 +3086,12 @@ element</p></td>
           <td>
                 <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>the xhtml document that should
-be altered.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the xhtml document that should
+be altered.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3064,7 +3100,7 @@ be altered.</p></td>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/epubconverter.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">230</span>
 <span class="normal">231</span>
 <span class="normal">232</span>
@@ -3124,7 +3160,11 @@ be altered.</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>path to first element</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path to first element</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3134,7 +3174,11 @@ be altered.</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>path to second element</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path to second element</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3144,7 +3188,11 @@ be altered.</p></td>
           <td>
                 <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>xhtml document</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>xhtml document</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3153,7 +3201,7 @@ be altered.</p></td>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/epubconverter.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">244</span>
 <span class="normal">245</span>
 <span class="normal">246</span>
@@ -3204,7 +3252,7 @@ be altered.</p></td>
       <p>Remove ranges of html elements.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/epubconverter.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 95</span>
 <span class="normal"> 96</span>
 <span class="normal"> 97</span>
@@ -3252,7 +3300,11 @@ be altered.</p></td>
           <td>
                 <code>list of str</code>
           </td>
-          <td><p>a xpath path split on /</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>a xpath path split on /</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3262,7 +3314,11 @@ be altered.</p></td>
           <td>
                 <code><span title="lxml.etree">etree</span>.<span title="lxml.etree._Element">_Element</span></code>
           </td>
-          <td><p>an xhtml document</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>an xhtml document</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3272,9 +3328,13 @@ be altered.</p></td>
           <td>
                 <code>bool</code>
           </td>
-          <td><p>When True, iterate through the preceding siblings
+          <td>
+            <div class="doc-md-description">
+              <p>When True, iterate through the preceding siblings
 of the found element, otherwise iterate throughe the following
-siblings.</p></td>
+siblings.</p>
+            </div>
+          </td>
           <td>
                 <code>False</code>
           </td>
@@ -3295,13 +3355,17 @@ siblings.</p></td>
           <td>
                 <code>list[str]</code>
           </td>
-          <td><p>the path to the parent of parts.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the path to the parent of parts.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/epubconverter.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">123</span>
 <span class="normal">124</span>
 <span class="normal">125</span>
@@ -3382,7 +3446,11 @@ ends are of equal length.</p>
           <td>
                 <code>str</code>
           </td>
-          <td><p>path to first element</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path to first element</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3392,7 +3460,11 @@ ends are of equal length.</p>
           <td>
                 <code>str</code>
           </td>
-          <td><p>path to second element</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path to second element</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3402,8 +3474,12 @@ ends are of equal length.</p>
           <td>
                 <code><span title="lxml.etree">etree</span>.<span title="lxml.etree._Element">_Element</span></code>
           </td>
-          <td><p>xhtml document, where elements are
-removed.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>xhtml document, where elements are
+removed.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3424,13 +3500,17 @@ removed.</p></td>
           <td>
                 <code>tuple[list[str]]</code>
           </td>
-          <td><p>paths to the new start and end element.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>paths to the new start and end element.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/epubconverter.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">177</span>
 <span class="normal">178</span>
 <span class="normal">179</span>
@@ -3518,7 +3598,11 @@ trees of nodes between starts and ends (if necessary).</p>
           <td>
                 <code>list[str]</code>
           </td>
-          <td><p>path to first element</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path to first element</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3528,7 +3612,11 @@ trees of nodes between starts and ends (if necessary).</p>
           <td>
                 <code>list[str]</code>
           </td>
-          <td><p>path to second element</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path to second element</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3538,8 +3626,12 @@ trees of nodes between starts and ends (if necessary).</p>
           <td>
                 <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>xhtml document, where elements are
-removed.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>xhtml document, where elements are
+removed.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3548,7 +3640,7 @@ removed.</p></td>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/epubconverter.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">204</span>
 <span class="normal">205</span>
 <span class="normal">206</span>
@@ -3638,7 +3730,11 @@ preceding ends, then shorten ends (going to its parent).</p>
           <td>
                 <code>str</code>
           </td>
-          <td><p>path to first element</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path to first element</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3648,7 +3744,11 @@ preceding ends, then shorten ends (going to its parent).</p>
           <td>
                 <code>str</code>
           </td>
-          <td><p>path to second element</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path to second element</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3658,8 +3758,12 @@ preceding ends, then shorten ends (going to its parent).</p>
           <td>
                 <code><span title="lxml.etree">etree</span>.<span title="lxml.etree._Element">_Element</span></code>
           </td>
-          <td><p>xhtml document, where elements are
-removed.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>xhtml document, where elements are
+removed.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3680,14 +3784,18 @@ removed.</p></td>
           <td>
                 <code>tuple[list[str]]</code>
           </td>
-          <td><p>paths to the new start and end element, now
-with the same length.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>paths to the new start and end element, now
+with the same length.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/epubconverter.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">145</span>
 <span class="normal">146</span>
 <span class="normal">147</span>
@@ -3780,14 +3888,18 @@ with the same length.</p></td>
           <td>
                 <code>lxml.<span title="lxml.etree">etree</span>.<span title="lxml.etree.Element">Element</span></code>
           </td>
-          <td><p>An etree.Element containing the content of
-all xhtml files found in the epub file as one xhtml document.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>An etree.Element containing the content of
+all xhtml files found in the epub file as one xhtml document.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/epubconverter.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/epubconverter.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">103</span>
 <span class="normal">104</span>
 <span class="normal">105</span>
@@ -3881,7 +3993,7 @@ all xhtml files found in the epub file as one xhtml document.</p></td>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.51198bba.min.js"></script>
+      <script src="../../assets/javascripts/bundle.b425cdc4.min.js"></script>
       
     
   </body>

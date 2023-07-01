@@ -15,7 +15,7 @@
         <link rel="next" href="../typosfile/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.17">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ded33207.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.26e3688c.min.css">
       
       
 
@@ -2722,29 +2722,41 @@ giella fst analysers.</p>
           <td>
                 <code>str</code>
           </td>
-          <td><p>regex catching word made up of letters.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>regex catching word made up of letters.</p>
+            </div>
+          </td>
         </tr>
         <tr>
           <td><code>xml_printer</code></td>
           <td>
                 <code><a class="autorefs autorefs-internal" title="corpustools.ccat" href="../ccat/#corpustools.ccat">ccat</a>.<a class="autorefs autorefs-internal" title="corpustools.ccat.XMLPrinter" href="../ccat/#corpustools.ccat.XMLPrinter">XMLPrinter</a></code>
           </td>
-          <td><p>extracts the dependency analysis
-from the giella xml files.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>extracts the dependency analysis
+from the giella xml files.</p>
+            </div>
+          </td>
         </tr>
         <tr>
           <td><code>lang</code></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>the language of the training corpus.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the language of the training corpus.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
 
         <details class="quote">
-          <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
+          <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
           <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 32</span>
 <span class="normal"> 33</span>
 <span class="normal"> 34</span>
@@ -3053,7 +3065,11 @@ from the giella xml files.</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>three-letter language code</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>three-letter language code</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3062,7 +3078,7 @@ from the giella xml files.</p></td>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">48</span>
 <span class="normal">49</span>
 <span class="normal">50</span>
@@ -3109,13 +3125,17 @@ from the giella xml files.</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>filename of an analysed file.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>filename of an analysed file.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">116</span>
 <span class="normal">117</span>
 <span class="normal">118</span>
@@ -3177,8 +3197,12 @@ from the giella xml files.</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>name of the giella xml file containing a
-dependency element.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>name of the giella xml file containing a
+dependency element.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3199,13 +3223,17 @@ dependency element.</p></td>
           <td>
                 <code>list[str]</code>
           </td>
-          <td><p>list of the sentences</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>list of the sentences</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
 <span class="normal">100</span>
 <span class="normal">101</span>
@@ -3258,7 +3286,7 @@ dependency element.</p></td>
       <p>Turn the free and bound corpus into a langid training corpus.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">154</span>
 <span class="normal">155</span>
 <span class="normal">156</span>
@@ -3301,7 +3329,7 @@ dependency element.</p></td>
 giella fsts.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">130</span>
 <span class="normal">131</span>
 <span class="normal">132</span>
@@ -3359,7 +3387,11 @@ giella fsts.</p>
           <td>
                 <code>str</code>
           </td>
-          <td><p>contains the dependency element of a giella xml file.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>contains the dependency element of a giella xml file.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3380,15 +3412,19 @@ giella fsts.</p>
           <td>
                 <code>str</code>
           </td>
-          <td><p>a sentence containing only words known to the giella fst
+          <td>
+            <div class="doc-md-description">
+              <p>a sentence containing only words known to the giella fst
 analysers, that contain at least a word as identified by
-the only_words regex.</p></td>
+the only_words regex.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">56</span>
 <span class="normal">57</span>
 <span class="normal">58</span>
@@ -3493,7 +3529,7 @@ the only_words regex.</p></td>
       <p>Turn the free and bound corpus into a pytextcat training corpus.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">142</span>
 <span class="normal">143</span>
 <span class="normal">144</span>
@@ -3545,7 +3581,7 @@ the only_words regex.</p></td>
       <p>Turn the corpus into a pytextcat training corpus.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">180</span>
 <span class="normal">181</span>
 <span class="normal">182</span>
@@ -3594,7 +3630,7 @@ the only_words regex.</p></td>
       <p>Parse the options given to the program.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/trainingcorpusmaker.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">166</span>
 <span class="normal">167</span>
 <span class="normal">168</span>
@@ -3676,7 +3712,7 @@ the only_words regex.</p></td>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.51198bba.min.js"></script>
+      <script src="../../assets/javascripts/bundle.b425cdc4.min.js"></script>
       
     
   </body>

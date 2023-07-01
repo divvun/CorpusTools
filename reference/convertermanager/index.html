@@ -15,7 +15,7 @@
         <link rel="next" href="../corpuspath/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.17">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ded33207.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.26e3688c.min.css">
       
       
 
@@ -2779,31 +2779,43 @@
           <td>
                 <code>bool</code>
           </td>
-          <td><p>indicate whether intermediate versions
-of the converted document should be written to disk.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>indicate whether intermediate versions
+of the converted document should be written to disk.</p>
+            </div>
+          </td>
         </tr>
         <tr>
           <td><code>goldstandard</code></td>
           <td>
                 <code>bool</code>
           </td>
-          <td><p>indicating whether goldstandard documents
-should be converted.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>indicating whether goldstandard documents
+should be converted.</p>
+            </div>
+          </td>
         </tr>
         <tr>
           <td><code>files</code></td>
           <td>
                 <code>list of str</code>
           </td>
-          <td><p>list of paths to original files that should
-be converted from original format to xml.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>list of paths to original files that should
+be converted from original format to xml.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
 
         <details class="quote">
-          <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/convertermanager.py</code></summary>
+          <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/convertermanager.py</code></summary>
           <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 33</span>
 <span class="normal"> 34</span>
 <span class="normal"> 35</span>
@@ -3172,8 +3184,12 @@ be converted from original format to xml.</p></td>
           <td>
                 <code>bool</code>
           </td>
-          <td><p>indicate whether conversion depends on the
-fact that metadata have changed since last conversion.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>indicate whether conversion depends on the
+fact that metadata have changed since last conversion.</p>
+            </div>
+          </td>
           <td>
                 <code>False</code>
           </td>
@@ -3183,8 +3199,12 @@ fact that metadata have changed since last conversion.</p></td>
           <td>
                 <code>bool</code>
           </td>
-          <td><p>indicating whether intermediate versions
-of the converted document should be written to disk.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>indicating whether intermediate versions
+of the converted document should be written to disk.</p>
+            </div>
+          </td>
           <td>
                 <code>False</code>
           </td>
@@ -3194,8 +3214,12 @@ of the converted document should be written to disk.</p></td>
           <td>
                 <code>bool</code>
           </td>
-          <td><p>indicating whether goldstandard documents
-should be converted.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>indicating whether goldstandard documents
+should be converted.</p>
+            </div>
+          </td>
           <td>
                 <code>False</code>
           </td>
@@ -3204,7 +3228,7 @@ should be converted.</p></td>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/convertermanager.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/convertermanager.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">58</span>
 <span class="normal">59</span>
 <span class="normal">60</span>
@@ -3259,7 +3283,7 @@ should be converted.</p></td>
       <p>Add all files in a directory for conversion.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/convertermanager.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/convertermanager.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">168</span>
 <span class="normal">169</span>
 <span class="normal">170</span>
@@ -3307,7 +3331,11 @@ should be converted.</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>path to a metadata file</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path to a metadata file</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3316,7 +3344,7 @@ should be converted.</p></td>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/convertermanager.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/convertermanager.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">138</span>
 <span class="normal">139</span>
 <span class="normal">140</span>
@@ -3388,8 +3416,12 @@ should be converted.</p></td>
           <td>
                 <code>list of str</code>
           </td>
-          <td><p>a list of files or directories where
-convertable files are found.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>a list of files or directories where
+convertable files are found.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3398,7 +3430,7 @@ convertable files are found.</p></td>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/convertermanager.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/convertermanager.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">175</span>
 <span class="normal">176</span>
 <span class="normal">177</span>
@@ -3474,7 +3506,11 @@ convertable files are found.</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>the path to the original file.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the path to the original file.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3483,7 +3519,7 @@ convertable files are found.</p></td>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/convertermanager.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/convertermanager.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">76</span>
 <span class="normal">77</span>
 <span class="normal">78</span>
@@ -3536,7 +3572,7 @@ convertable files are found.</p></td>
       <p>Convert files using the multiprocessing module.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/convertermanager.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/convertermanager.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 93</span>
 <span class="normal"> 94</span>
 <span class="normal"> 95</span>
@@ -3619,7 +3655,7 @@ convertable files are found.</p></td>
       <p>Convert the files in one process.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/convertermanager.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/convertermanager.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">130</span>
 <span class="normal">131</span>
 <span class="normal">132</span>
@@ -3656,7 +3692,7 @@ This is a class variable, but since it takes a while to initialise,
 we don't do it until it's needed.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/convertermanager.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/convertermanager.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">50</span>
 <span class="normal">51</span>
 <span class="normal">52</span>
@@ -3695,7 +3731,7 @@ we don't do it until it's needed.</p>
       <p>Write an xsl file if it does not exist.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/convertermanager.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/convertermanager.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">157</span>
 <span class="normal">158</span>
 <span class="normal">159</span>
@@ -3745,7 +3781,7 @@ we don't do it until it's needed.</p>
       <p>Convert documents to giellatekno xml format.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/convertermanager.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/convertermanager.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">274</span>
 <span class="normal">275</span>
 <span class="normal">276</span>
@@ -3824,13 +3860,17 @@ we don't do it until it's needed.</p>
           <td>
                 <code>argparse.<span title="argparse.Namespace">Namespace</span></code>
           </td>
-          <td><p>the parsed commandline arguments</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the parsed commandline arguments</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/convertermanager.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/convertermanager.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">206</span>
 <span class="normal">207</span>
 <span class="normal">208</span>
@@ -3955,7 +3995,7 @@ we don't do it until it's needed.</p>
       <p>Check that needed programs and environment variables are set.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/convertermanager.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/convertermanager.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">260</span>
 <span class="normal">261</span>
 <span class="normal">262</span>
@@ -4002,7 +4042,7 @@ we don't do it until it's needed.</p>
 http://www.rueckstiess.net/research/snippets/show/ca1d7d90</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/convertermanager.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/convertermanager.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">197</span>
 <span class="normal">198</span>
 <span class="normal">199</span>
@@ -4074,7 +4114,7 @@ http://www.rueckstiess.net/research/snippets/show/ca1d7d90</p>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.51198bba.min.js"></script>
+      <script src="../../assets/javascripts/bundle.b425cdc4.min.js"></script>
       
     
   </body>

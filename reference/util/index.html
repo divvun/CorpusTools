@@ -15,7 +15,7 @@
         <link rel="next" href="../versioncontrol/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.17">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ded33207.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.26e3688c.min.css">
       
       
 
@@ -2905,7 +2905,7 @@
 
 
         <details class="quote">
-          <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
+          <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
           <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">44</span>
 <span class="normal">45</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ArgumentError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;This exception is raised when argument errors occur.&quot;&quot;&quot;</span>
@@ -2936,7 +2936,7 @@
 
 
         <details class="quote">
-          <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
+          <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
           <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">48</span>
 <span class="normal">49</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ConversionError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Raise this exception when conversions error occur.&quot;&quot;&quot;</span>
@@ -2967,7 +2967,7 @@
 
 
         <details class="quote">
-          <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
+          <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
           <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">40</span>
 <span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ExecutableMissingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;This exception is raised when wanted executables are missing.&quot;&quot;&quot;</span>
@@ -3008,27 +3008,41 @@
           <td><code>stdout</code></td>
           <td>
           </td>
-          <td><p>save the stdout of the command here.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>save the stdout of the command here.</p>
+            </div>
+          </td>
         </tr>
         <tr>
           <td><code>stderr</code></td>
           <td>
           </td>
-          <td><p>save the stderr of the command here.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>save the stderr of the command here.</p>
+            </div>
+          </td>
         </tr>
         <tr>
           <td><code>returncode</code></td>
           <td>
           </td>
-          <td><p>save the returncode of the command here.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>save the returncode of the command here.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
 
         <details class="quote">
-          <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">294</span>
+          <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
 <span class="normal">295</span>
 <span class="normal">296</span>
 <span class="normal">297</span>
@@ -3057,9 +3071,7 @@
 <span class="normal">320</span>
 <span class="normal">321</span>
 <span class="normal">322</span>
-<span class="normal">323</span>
-<span class="normal">324</span>
-<span class="normal">325</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ExternalCommandRunner</span><span class="p">:</span>
+<span class="normal">323</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ExternalCommandRunner</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to run external command through subprocess.</span>
 
 <span class="sd">    Attributes:</span>
@@ -3121,12 +3133,12 @@
       <p>Initialise the ExternalCommandRunner class.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">303</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
 <span class="normal">304</span>
-<span class="normal">305</span>
-<span class="normal">306</span>
-<span class="normal">307</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">305</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialise the ExternalCommandRunner class.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="kc">None</span>
@@ -3152,8 +3164,10 @@
       <p>Run the command, save the result.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">309</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
 <span class="normal">310</span>
 <span class="normal">311</span>
 <span class="normal">312</span>
@@ -3167,9 +3181,7 @@
 <span class="normal">320</span>
 <span class="normal">321</span>
 <span class="normal">322</span>
-<span class="normal">323</span>
-<span class="normal">324</span>
-<span class="normal">325</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">to_stdin</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="normal">323</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">to_stdin</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the command, save the result.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">subp</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
@@ -3220,7 +3232,7 @@
 
 
         <details class="quote">
-          <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
+          <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
           <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">36</span>
 <span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">SetupError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;This exception is raised when setup is faulty.&quot;&quot;&quot;</span>
@@ -3262,7 +3274,11 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>path to the file.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path to the file.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3272,7 +3288,11 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>the extension that should be removed.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the extension that should be removed.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3293,13 +3313,17 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>fname without the extension.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>fname without the extension.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">65</span>
 <span class="normal">66</span>
 <span class="normal">67</span>
@@ -3357,7 +3381,11 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>name of the program</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>name of the program</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3378,14 +3406,20 @@
           <td>
                 <code>bool</code>
           </td>
-          <td><p>True if program is found, False otherwise.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>True if program is found, False otherwise.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">136</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
 <span class="normal">137</span>
 <span class="normal">138</span>
 <span class="normal">139</span>
@@ -3399,9 +3433,7 @@
 <span class="normal">147</span>
 <span class="normal">148</span>
 <span class="normal">149</span>
-<span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">executable_in_path</span><span class="p">(</span><span class="n">program</span><span class="p">):</span>
+<span class="normal">150</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">executable_in_path</span><span class="p">(</span><span class="n">program</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if program is in path.</span>
 
 <span class="sd">    Args:</span>
@@ -3454,7 +3486,11 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>the language of the resource.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the language of the resource.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3464,7 +3500,11 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>the resource that is needed.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the resource that is needed.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3474,7 +3514,11 @@
           <td>
                 <code>str or None</code>
           </td>
-          <td><p>the fallback resource. Default is None.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the fallback resource. Default is None.</p>
+            </div>
+          </td>
           <td>
                 <code>None</code>
           </td>
@@ -3495,14 +3539,20 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>path to the resource or fallback.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path to the resource or fallback.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">172</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
 <span class="normal">173</span>
 <span class="normal">174</span>
 <span class="normal">175</span>
@@ -3515,9 +3565,7 @@
 <span class="normal">182</span>
 <span class="normal">183</span>
 <span class="normal">184</span>
-<span class="normal">185</span>
-<span class="normal">186</span>
-<span class="normal">187</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_lang_resource</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="n">resource</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="normal">185</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_lang_resource</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="n">resource</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a language resource.</span>
 
 <span class="sd">    Args:</span>
@@ -3569,7 +3617,11 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>the language</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the language</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3590,14 +3642,20 @@
           <td>
                 <code>list[str]</code>
           </td>
-          <td><p>the complete preprocess command.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the complete preprocess command.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">190</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
 <span class="normal">191</span>
 <span class="normal">192</span>
 <span class="normal">193</span>
@@ -3608,9 +3666,7 @@
 <span class="normal">198</span>
 <span class="normal">199</span>
 <span class="normal">200</span>
-<span class="normal">201</span>
-<span class="normal">202</span>
-<span class="normal">203</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_preprocess_command</span><span class="p">(</span><span class="n">lang</span><span class="p">):</span>
+<span class="normal">201</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_preprocess_command</span><span class="p">(</span><span class="n">lang</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the complete proprocess command for lang.</span>
 
 <span class="sd">    Args:</span>
@@ -3645,15 +3701,15 @@
       <p>Returns human readable filesize</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">328</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
 <span class="normal">329</span>
 <span class="normal">330</span>
 <span class="normal">331</span>
 <span class="normal">332</span>
-<span class="normal">333</span>
-<span class="normal">334</span>
-<span class="normal">335</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">human_readable_filesize</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">):</span>
+<span class="normal">333</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">human_readable_filesize</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns human readable filesize&quot;&quot;&quot;</span>
     <span class="c1"># https://stackoverflow.com/questions/1094841/get-human-readable-version-of-file-size</span>
     <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Ki&quot;</span><span class="p">,</span> <span class="s2">&quot;Mi&quot;</span><span class="p">,</span> <span class="s2">&quot;Gi&quot;</span><span class="p">,</span> <span class="s2">&quot;Ti&quot;</span><span class="p">,</span> <span class="s2">&quot;Pi&quot;</span><span class="p">,</span> <span class="s2">&quot;Ei&quot;</span><span class="p">,</span> <span class="s2">&quot;Zi&quot;</span><span class="p">]:</span>
@@ -3682,14 +3738,14 @@
       <p>Ignore exceptions.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">285</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
 <span class="normal">286</span>
 <span class="normal">287</span>
 <span class="normal">288</span>
-<span class="normal">289</span>
-<span class="normal">290</span>
-<span class="normal">291</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@contextmanager</span>
+<span class="normal">289</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">ignored</span><span class="p">(</span><span class="o">*</span><span class="n">exceptions</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Ignore exceptions.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
@@ -3732,7 +3788,11 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>the path to the program or script.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the path to the program or script.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3753,13 +3813,17 @@
           <td>
                 <code>bool</code>
           </td>
-          <td><p>True if fullpath contains a executable, False otherwise.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>True if fullpath contains a executable, False otherwise.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">107</span>
 <span class="normal">108</span>
 <span class="normal">109</span>
@@ -3800,10 +3864,10 @@
       <p>Return the current line number in our program.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">206</span>
-<span class="normal">207</span>
-<span class="normal">208</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">lineno</span><span class="p">():</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">lineno</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the current line number in our program.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_back</span><span class="o">.</span><span class="n">f_lineno</span>
 </code></pre></div></td></tr></table></div>
@@ -3842,7 +3906,11 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>name of the file</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>name of the file</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3863,14 +3931,20 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>A unicode string.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>A unicode string.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">261</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
 <span class="normal">262</span>
 <span class="normal">263</span>
 <span class="normal">264</span>
@@ -3880,9 +3954,7 @@
 <span class="normal">268</span>
 <span class="normal">269</span>
 <span class="normal">270</span>
-<span class="normal">271</span>
-<span class="normal">272</span>
-<span class="normal">273</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">name_to_unicode</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="normal">271</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">name_to_unicode</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Turn a filename to a unicode string.</span>
 
 <span class="sd">    Args:</span>
@@ -3931,7 +4003,11 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>the message</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the message</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3940,14 +4016,14 @@
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">276</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
 <span class="normal">277</span>
 <span class="normal">278</span>
 <span class="normal">279</span>
-<span class="normal">280</span>
-<span class="normal">281</span>
-<span class="normal">282</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">note</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+<span class="normal">280</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">note</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Print msg to stderr.</span>
 
 <span class="sd">    Args:</span>
@@ -3990,7 +4066,11 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>name of program of script.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>name of program of script.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -4011,14 +4091,19 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>possible fullpath to the program</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>possible fullpath to the program</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">120</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">119</span>
+<span class="normal">120</span>
 <span class="normal">121</span>
 <span class="normal">122</span>
 <span class="normal">123</span>
@@ -4029,8 +4114,7 @@
 <span class="normal">128</span>
 <span class="normal">129</span>
 <span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">path_possibilities</span><span class="p">(</span><span class="n">program</span><span class="p">):</span>
+<span class="normal">131</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">path_possibilities</span><span class="p">(</span><span class="n">program</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if program is found in $PATH.</span>
 
 <span class="sd">    Args:</span>
@@ -4082,7 +4166,11 @@ text parts.</p>
           <td>
                 <code>etree.<span title="etree._Element">_Element</span></code>
           </td>
-          <td><p>the element to format.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the element to format.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -4092,7 +4180,11 @@ text parts.</p>
           <td>
                 <code>int</code>
           </td>
-          <td><p>indicate at what level this element is.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>indicate at what level this element is.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -4102,7 +4194,11 @@ text parts.</p>
           <td>
                 <code>int</code>
           </td>
-          <td><p>indicate how many spaces this element should be indented</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>indicate how many spaces this element should be indented</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -4112,7 +4208,11 @@ text parts.</p>
           <td>
                 <code>stream</code>
           </td>
-          <td><p>a buffer where the formatted element is written.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>a buffer where the formatted element is written.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -4121,8 +4221,10 @@ text parts.</p>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">211</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
 <span class="normal">212</span>
 <span class="normal">213</span>
 <span class="normal">214</span>
@@ -4167,9 +4269,7 @@ text parts.</p>
 <span class="normal">253</span>
 <span class="normal">254</span>
 <span class="normal">255</span>
-<span class="normal">256</span>
-<span class="normal">257</span>
-<span class="normal">258</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">print_element</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">indent</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+<span class="normal">256</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">print_element</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">indent</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Format an html document.</span>
 
 <span class="sd">    This function formats html documents for readability, to see</span>
@@ -4238,7 +4338,7 @@ text parts.</p>
       <p>Print debug output.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">52</span>
 <span class="normal">53</span>
 <span class="normal">54</span>
@@ -4296,7 +4396,11 @@ text parts.</p>
           <td>
                 <code>list of tuple</code>
           </td>
-          <td><p>unwanted:wanted string pairs.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>unwanted:wanted string pairs.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -4306,7 +4410,11 @@ text parts.</p>
           <td>
                 <code>str</code>
           </td>
-          <td><p>the string where replacements should be done.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the string where replacements should be done.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -4327,13 +4435,17 @@ text parts.</p>
           <td>
                 <code>str</code>
           </td>
-          <td><p>string with replaced strings.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>string with replaced strings.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 91</span>
 <span class="normal"> 92</span>
 <span class="normal"> 93</span>
@@ -4402,8 +4514,12 @@ in parallel. Uses a ProcessPoolExecutor with <code>max_workers</code>.</p>
           <td>
                 <code>Callable</code>
           </td>
-          <td><p>The function to call. The first argument to
-the function is the file path.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>The function to call. The first argument to
+the function is the file path.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -4413,7 +4529,11 @@ the function is the file path.</p></td>
           <td>
                 <code>int</code>
           </td>
-          <td><p>How many worker processes to use</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>How many worker processes to use</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -4423,7 +4543,11 @@ the function is the file path.</p></td>
           <td>
                 <code>list[str]</code>
           </td>
-          <td><p>The list of files (full paths)</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>The list of files (full paths)</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -4432,8 +4556,10 @@ the function is the file path.</p></td>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">348</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
 <span class="normal">349</span>
 <span class="normal">350</span>
 <span class="normal">351</span>
@@ -4529,9 +4655,7 @@ the function is the file path.</p></td>
 <span class="normal">441</span>
 <span class="normal">442</span>
 <span class="normal">443</span>
-<span class="normal">444</span>
-<span class="normal">445</span>
-<span class="normal">446</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run_in_parallel</span><span class="p">(</span>
+<span class="normal">444</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run_in_parallel</span><span class="p">(</span>
     <span class="n">function</span><span class="p">,</span>
     <span class="n">max_workers</span><span class="p">,</span>
     <span class="n">file_list</span><span class="p">,</span>
@@ -4652,8 +4776,10 @@ the function is the file path.</p></td>
 <p>If they don't exist, raise an exception.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">155</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
 <span class="normal">156</span>
 <span class="normal">157</span>
 <span class="normal">158</span>
@@ -4665,9 +4791,7 @@ the function is the file path.</p></td>
 <span class="normal">164</span>
 <span class="normal">165</span>
 <span class="normal">166</span>
-<span class="normal">167</span>
-<span class="normal">168</span>
-<span class="normal">169</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">sanity_check</span><span class="p">(</span><span class="n">program_list</span><span class="p">):</span>
+<span class="normal">167</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">sanity_check</span><span class="p">(</span><span class="n">program_list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Look for programs and files that are needed to do the analysis.</span>
 
 <span class="sd">    If they don&#39;t exist, raise an exception.</span>
@@ -4718,7 +4842,11 @@ the function is the file path.</p></td>
           <td>
                 <code>dict</code>
           </td>
-          <td><p>the dictionary that should be sorted.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the dictionary that should be sorted.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -4728,7 +4856,11 @@ the function is the file path.</p></td>
           <td>
                 <code>bool</code>
           </td>
-          <td><p>whether or not to sort in reverse</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>whether or not to sort in reverse</p>
+            </div>
+          </td>
           <td>
                 <code>False</code>
           </td>
@@ -4749,13 +4881,17 @@ the function is the file path.</p></td>
           <td>
                 <code>dict</code>
           </td>
-          <td><p>sorted by value.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>sorted by value.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/util.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/util.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">78</span>
 <span class="normal">79</span>
 <span class="normal">80</span>
@@ -4835,7 +4971,7 @@ the function is the file path.</p></td>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.51198bba.min.js"></script>
+      <script src="../../assets/javascripts/bundle.b425cdc4.min.js"></script>
       
     
   </body>

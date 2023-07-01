@@ -15,7 +15,7 @@
         <link rel="next" href="../analyser/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.17">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ded33207.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.26e3688c.min.css">
       
       
 
@@ -2831,7 +2831,7 @@
 
 
         <details class="quote">
-          <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
+          <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
           <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">114</span>
 <span class="normal">115</span>
 <span class="normal">116</span>
@@ -2991,14 +2991,7 @@
 <span class="normal">270</span>
 <span class="normal">271</span>
 <span class="normal">272</span>
-<span class="normal">273</span>
-<span class="normal">274</span>
-<span class="normal">275</span>
-<span class="normal">276</span>
-<span class="normal">277</span>
-<span class="normal">278</span>
-<span class="normal">279</span>
-<span class="normal">280</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">AddToCorpus</span><span class="p">:</span>
+<span class="normal">273</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">AddToCorpus</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to add files, urls and dirs to the corpus.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus_directory</span><span class="p">,</span> <span class="n">sub_directory</span><span class="p">):</span>
@@ -3039,23 +3032,17 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            (str): path to where the origfile exists in the corpus</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
         <span class="n">origpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">origpath</span><span class="p">)</span>
-        <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
         <span class="n">none_dupe_path</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span>
             <span class="n">origpath</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
                 <span class="n">namechanger</span><span class="o">.</span><span class="n">compute_new_basename</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">goalpath</span><span class="p">)</span> <span class="o">/</span> <span class="n">origpath</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">additions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">none_dupe_path</span><span class="o">.</span><span class="n">orig</span><span class="p">)</span>
-        <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_metadata_to_corpus</span><span class="p">(</span><span class="n">none_dupe_path</span><span class="p">,</span> <span class="n">metadata_filename</span><span class="p">)</span>
-        <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">parallelpath</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">update_parallel_data</span><span class="p">(</span><span class="n">none_dupe_path</span><span class="p">,</span> <span class="n">parallelpath</span><span class="p">)</span>
-            <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Added&quot;</span><span class="p">,</span> <span class="n">none_dupe_path</span><span class="o">.</span><span class="n">orig</span><span class="p">)</span>
-        <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">none_dupe_path</span><span class="o">.</span><span class="n">orig</span>
 
     <span class="k">def</span> <span class="nf">add_metadata_to_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">none_dupe_path</span><span class="p">,</span> <span class="n">meta_filename</span><span class="p">):</span>
@@ -3088,7 +3075,6 @@
             <span class="n">lang</span><span class="p">,</span>
             <span class="n">parallel_file</span><span class="p">,</span>
         <span class="p">)</span> <span class="ow">in</span> <span class="n">parallel_corpuspath</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get_parallel_texts</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">(</span><span class="n">parallel_file</span><span class="p">)</span>
             <span class="n">this_para_corpuspath</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span>
                 <span class="n">parallel_corpuspath</span><span class="o">.</span><span class="n">name</span><span class="p">(</span>
                     <span class="n">corpus_lang</span><span class="o">=</span><span class="n">lang</span><span class="p">,</span>
@@ -3096,7 +3082,7 @@
                 <span class="p">)</span>
             <span class="p">)</span>
             <span class="n">this_para_corpuspath</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">set_parallel_text</span><span class="p">(</span>
-                <span class="n">none_dupe_path</span><span class="o">.</span><span class="n">lang</span><span class="p">,</span> <span class="n">none_dupe_path</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">none_dupe_path</span><span class="o">.</span><span class="n">lang</span><span class="p">,</span> <span class="n">none_dupe_path</span><span class="o">.</span><span class="n">filepath</span><span class="o">.</span><span class="n">name</span>
             <span class="p">)</span>
             <span class="n">this_para_corpuspath</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">write_file</span><span class="p">()</span>
             <span class="n">none_dupe_path</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">set_parallel_text</span><span class="p">(</span>
@@ -3210,7 +3196,11 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>the directory where the corpus is</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the directory where the corpus is</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3220,7 +3210,11 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>subdirectory in the corpus</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>subdirectory in the corpus</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3229,7 +3223,7 @@
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">117</span>
 <span class="normal">118</span>
 <span class="normal">119</span>
@@ -3274,10 +3268,10 @@
       <p>Add the downloaded files to the working copy.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">278</span>
-<span class="normal">279</span>
-<span class="normal">280</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_files_to_working_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_files_to_working_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Add the downloaded files to the working copy.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">vcs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">additions</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -3301,15 +3295,15 @@
       <p>Add the metadata file to the corpus.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">174</span>
-<span class="normal">175</span>
-<span class="normal">176</span>
-<span class="normal">177</span>
-<span class="normal">178</span>
-<span class="normal">179</span>
-<span class="normal">180</span>
-<span class="normal">181</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_metadata_to_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">none_dupe_path</span><span class="p">,</span> <span class="n">meta_filename</span><span class="p">):</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_metadata_to_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">none_dupe_path</span><span class="p">,</span> <span class="n">meta_filename</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Add the metadata file to the corpus.&quot;&quot;&quot;</span>
     <span class="n">new_metadata</span> <span class="o">=</span> <span class="n">none_dupe_path</span><span class="o">.</span><span class="n">metadata</span>
     <span class="n">new_metadata</span><span class="o">.</span><span class="n">set_variable</span><span class="p">(</span><span class="s2">&quot;filename&quot;</span><span class="p">,</span> <span class="n">meta_filename</span><span class="p">)</span>
@@ -3353,7 +3347,11 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>path where the original file exists</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path where the original file exists</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3363,8 +3361,12 @@
           <td>
                 <code>str</code>
           </td>
-          <td><p>the value of the filename in the
-metadata file</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the value of the filename in the
+metadata file</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3374,8 +3376,12 @@ metadata file</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>where the parallel file of the original
-file exists in the corpus</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>where the parallel file of the original
+file exists in the corpus</p>
+            </div>
+          </td>
           <td>
                 <code>&#39;&#39;</code>
           </td>
@@ -3396,13 +3402,17 @@ file exists in the corpus</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>path to where the origfile exists in the corpus</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path to where the origfile exists in the corpus</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">142</span>
 <span class="normal">143</span>
 <span class="normal">144</span>
@@ -3427,13 +3437,7 @@ file exists in the corpus</p></td>
 <span class="normal">163</span>
 <span class="normal">164</span>
 <span class="normal">165</span>
-<span class="normal">166</span>
-<span class="normal">167</span>
-<span class="normal">168</span>
-<span class="normal">169</span>
-<span class="normal">170</span>
-<span class="normal">171</span>
-<span class="normal">172</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">copy_file_to_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origpath</span><span class="p">,</span> <span class="n">metadata_filename</span><span class="p">,</span> <span class="n">parallelpath</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="normal">166</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">copy_file_to_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origpath</span><span class="p">,</span> <span class="n">metadata_filename</span><span class="p">,</span> <span class="n">parallelpath</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Add a file from the hard disk to the corpus.</span>
 
 <span class="sd">    Args:</span>
@@ -3446,23 +3450,17 @@ file exists in the corpus</p></td>
 <span class="sd">    Returns:</span>
 <span class="sd">        (str): path to where the origfile exists in the corpus</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
     <span class="n">origpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">origpath</span><span class="p">)</span>
-    <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
     <span class="n">none_dupe_path</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span>
         <span class="n">origpath</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
             <span class="n">namechanger</span><span class="o">.</span><span class="n">compute_new_basename</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">goalpath</span><span class="p">)</span> <span class="o">/</span> <span class="n">origpath</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="p">)</span>
     <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">additions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">none_dupe_path</span><span class="o">.</span><span class="n">orig</span><span class="p">)</span>
-    <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">add_metadata_to_corpus</span><span class="p">(</span><span class="n">none_dupe_path</span><span class="p">,</span> <span class="n">metadata_filename</span><span class="p">)</span>
-    <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">parallelpath</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_parallel_data</span><span class="p">(</span><span class="n">none_dupe_path</span><span class="p">,</span> <span class="n">parallelpath</span><span class="p">)</span>
-        <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Added&quot;</span><span class="p">,</span> <span class="n">none_dupe_path</span><span class="o">.</span><span class="n">orig</span><span class="p">)</span>
-    <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">none_dupe_path</span><span class="o">.</span><span class="n">orig</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -3494,22 +3492,22 @@ file exists in the corpus</p></td>
 </ul>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">237</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
 <span class="normal">238</span>
 <span class="normal">239</span>
 <span class="normal">240</span>
 <span class="normal">241</span>
 <span class="normal">242</span>
 <span class="normal">243</span>
-<span class="normal">244</span>
-<span class="normal">245</span>
-<span class="normal">246</span>
-<span class="normal">247</span>
-<span class="normal">248</span>
-<span class="normal">249</span>
-<span class="normal">250</span>
-<span class="normal">251</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">copy_files_in_dir_to_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origpath</span><span class="p">):</span>
+<span class="normal">244</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">copy_files_in_dir_to_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origpath</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Add a directory to the corpus.</span>
 
 <span class="sd">    * Recursively walks through the given original directory</span>
@@ -3546,7 +3544,7 @@ file exists in the corpus</p></td>
 <p>Copy a downloaded url to the corpus</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">130</span>
 <span class="normal">131</span>
 <span class="normal">132</span>
@@ -3593,8 +3591,15 @@ file exists in the corpus</p></td>
       <p>Find duplicates based on the hex digests of the corpus files.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">253</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
 <span class="normal">254</span>
 <span class="normal">255</span>
 <span class="normal">256</span>
@@ -3610,14 +3615,7 @@ file exists in the corpus</p></td>
 <span class="normal">266</span>
 <span class="normal">267</span>
 <span class="normal">268</span>
-<span class="normal">269</span>
-<span class="normal">270</span>
-<span class="normal">271</span>
-<span class="normal">272</span>
-<span class="normal">273</span>
-<span class="normal">274</span>
-<span class="normal">275</span>
-<span class="normal">276</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">269</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">find_duplicates</span><span class="p">(</span><span class="n">origpath</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Find duplicates based on the hex digests of the corpus files.&quot;&quot;&quot;</span>
     <span class="n">duplicates</span> <span class="o">=</span> <span class="p">{}</span>
@@ -3677,7 +3675,11 @@ file exists in the corpus</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>basename of the original file</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>basename of the original file</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3686,17 +3688,17 @@ file exists in the corpus</p></td>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">226</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
 <span class="normal">227</span>
-<span class="normal">228</span>
-<span class="normal">229</span>
-<span class="normal">230</span>
-<span class="normal">231</span>
-<span class="normal">232</span>
-<span class="normal">233</span>
-<span class="normal">234</span>
-<span class="normal">235</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">none_dupe_basename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orig_basename</span><span class="p">):</span>
+<span class="normal">228</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">none_dupe_basename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orig_basename</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the none duplicate path of the file to be added.</span>
 
 <span class="sd">    Args:</span>
@@ -3746,7 +3748,11 @@ file exists in the corpus</p></td>
           <td>
                 <code><a class="autorefs autorefs-internal" title="corpustools.util" href="../util/#corpustools.util">util</a>.<span title="corpustools.util.PathComponents">PathComponents</span></code>
           </td>
-          <td><p>of none_dupe_path</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>of none_dupe_path</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3756,7 +3762,11 @@ file exists in the corpus</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>path of the parallel file</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path of the parallel file</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3765,8 +3775,14 @@ file exists in the corpus</p></td>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">183</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
 <span class="normal">184</span>
 <span class="normal">185</span>
 <span class="normal">186</span>
@@ -3800,14 +3816,7 @@ file exists in the corpus</p></td>
 <span class="normal">214</span>
 <span class="normal">215</span>
 <span class="normal">216</span>
-<span class="normal">217</span>
-<span class="normal">218</span>
-<span class="normal">219</span>
-<span class="normal">220</span>
-<span class="normal">221</span>
-<span class="normal">222</span>
-<span class="normal">223</span>
-<span class="normal">224</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">217</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">update_parallel_data</span><span class="p">(</span><span class="n">none_dupe_path</span><span class="p">,</span> <span class="n">parallelpath</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update metadata in the parallel files.</span>
 
@@ -3828,7 +3837,6 @@ file exists in the corpus</p></td>
         <span class="n">lang</span><span class="p">,</span>
         <span class="n">parallel_file</span><span class="p">,</span>
     <span class="p">)</span> <span class="ow">in</span> <span class="n">parallel_corpuspath</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get_parallel_texts</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">(</span><span class="n">parallel_file</span><span class="p">)</span>
         <span class="n">this_para_corpuspath</span> <span class="o">=</span> <span class="n">corpuspath</span><span class="o">.</span><span class="n">make_corpus_path</span><span class="p">(</span>
             <span class="n">parallel_corpuspath</span><span class="o">.</span><span class="n">name</span><span class="p">(</span>
                 <span class="n">corpus_lang</span><span class="o">=</span><span class="n">lang</span><span class="p">,</span>
@@ -3836,7 +3844,7 @@ file exists in the corpus</p></td>
             <span class="p">)</span>
         <span class="p">)</span>
         <span class="n">this_para_corpuspath</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">set_parallel_text</span><span class="p">(</span>
-            <span class="n">none_dupe_path</span><span class="o">.</span><span class="n">lang</span><span class="p">,</span> <span class="n">none_dupe_path</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">none_dupe_path</span><span class="o">.</span><span class="n">lang</span><span class="p">,</span> <span class="n">none_dupe_path</span><span class="o">.</span><span class="n">filepath</span><span class="o">.</span><span class="n">name</span>
         <span class="p">)</span>
         <span class="n">this_para_corpuspath</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">write_file</span><span class="p">()</span>
         <span class="n">none_dupe_path</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">set_parallel_text</span><span class="p">(</span>
@@ -3883,7 +3891,7 @@ file exists in the corpus</p></td>
 
 
         <details class="quote">
-          <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
+          <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
           <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">33</span>
 <span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">AdderError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Raise this exception when errors happen in this module.&quot;&quot;&quot;</span>
@@ -3912,7 +3920,7 @@ file exists in the corpus</p></td>
 
 
         <details class="quote">
-          <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
+          <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
           <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 74</span>
 <span class="normal"> 75</span>
 <span class="normal"> 76</span>
@@ -4033,7 +4041,11 @@ file exists in the corpus</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>the path where the file should be saved.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the path where the file should be saved.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -4042,7 +4054,7 @@ file exists in the corpus</p></td>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">77</span>
 <span class="normal">78</span>
 <span class="normal">79</span>
@@ -4090,7 +4102,7 @@ file exists in the corpus</p></td>
 <p>Return the request object and the name of the temporary file</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 91</span>
 <span class="normal"> 92</span>
 <span class="normal"> 93</span>
@@ -4162,7 +4174,7 @@ file exists in the corpus</p></td>
       <p>Add an extension to the file depending on the content type.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">37</span>
 <span class="normal">38</span>
 <span class="normal">39</span>
@@ -4217,8 +4229,15 @@ file exists in the corpus</p></td>
       <p>Add files, directories and urls to the corpus.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">334</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
 <span class="normal">335</span>
 <span class="normal">336</span>
 <span class="normal">337</span>
@@ -4308,19 +4327,7 @@ file exists in the corpus</p></td>
 <span class="normal">421</span>
 <span class="normal">422</span>
 <span class="normal">423</span>
-<span class="normal">424</span>
-<span class="normal">425</span>
-<span class="normal">426</span>
-<span class="normal">427</span>
-<span class="normal">428</span>
-<span class="normal">429</span>
-<span class="normal">430</span>
-<span class="normal">431</span>
-<span class="normal">432</span>
-<span class="normal">433</span>
-<span class="normal">434</span>
-<span class="normal">435</span>
-<span class="normal">436</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="normal">424</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Add files, directories and urls to the corpus.&quot;&quot;&quot;</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">()</span>
 
@@ -4345,20 +4352,15 @@ file exists in the corpus</p></td>
             <span class="n">corpus_path</span><span class="o">.</span><span class="n">orig_corpus_dir</span><span class="p">,</span>
             <span class="n">corpus_path</span><span class="o">.</span><span class="n">filepath</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">orig</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">origs</span><span class="p">:</span>
-            <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">orig</span><span class="p">):</span>
-                <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
-                    <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
                     <span class="n">newname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">orig</span><span class="p">),</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">orig</span><span class="p">,</span> <span class="n">newname</span><span class="p">)</span>
                     <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Not a valid filename: </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                     <span class="n">orig</span> <span class="o">=</span> <span class="n">newname</span>
-                <span class="n">util</span><span class="o">.</span><span class="n">print_frame</span><span class="p">()</span>
                 <span class="n">adder</span><span class="o">.</span><span class="n">copy_file_to_corpus</span><span class="p">(</span>
                     <span class="n">origpath</span><span class="o">=</span><span class="n">orig</span><span class="p">,</span> <span class="n">metadata_filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">orig</span><span class="p">)</span>
                 <span class="p">)</span>
@@ -4404,8 +4406,8 @@ file exists in the corpus</p></td>
             <span class="n">parallel_corpus_path</span><span class="o">.</span><span class="n">name</span><span class="p">(</span><span class="n">corpus_lang</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">lang</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="n">adder</span> <span class="o">=</span> <span class="n">AddToCorpus</span><span class="p">(</span>
-            <span class="n">corpus_path</span><span class="o">.</span><span class="n">orig_corpus_dir</span><span class="p">,</span>
-            <span class="n">corpus_path</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span>
+            <span class="n">corpus_directory</span><span class="o">=</span><span class="n">corpus_path</span><span class="o">.</span><span class="n">orig_corpus_dir</span><span class="p">,</span>
+            <span class="n">sub_directory</span><span class="o">=</span><span class="n">corpus_path</span><span class="o">.</span><span class="n">filepath</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">orig</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">origs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -4456,14 +4458,25 @@ file exists in the corpus</p></td>
           <td>
                 <code>argparse.<span title="argparse.Namespace">Namespace</span></code>
           </td>
-          <td><p>The parsed commandline arguments</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>The parsed commandline arguments</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">283</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
 <span class="normal">284</span>
 <span class="normal">285</span>
 <span class="normal">286</span>
@@ -4504,14 +4517,7 @@ file exists in the corpus</p></td>
 <span class="normal">321</span>
 <span class="normal">322</span>
 <span class="normal">323</span>
-<span class="normal">324</span>
-<span class="normal">325</span>
-<span class="normal">326</span>
-<span class="normal">327</span>
-<span class="normal">328</span>
-<span class="normal">329</span>
-<span class="normal">330</span>
-<span class="normal">331</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">parse_args</span><span class="p">():</span>
+<span class="normal">324</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">parse_args</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the commandline options.</span>
 
 <span class="sd">    Returns:</span>
@@ -4596,7 +4602,11 @@ file exists in the corpus</p></td>
           <td>
                 <code>requests.get response</code>
           </td>
-          <td><p>The response object</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>The response object</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -4617,13 +4627,17 @@ file exists in the corpus</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>Name of the file.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>Name of the file.</p>
+            </div>
+          </td>
         </tr>
     </tbody>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/adder.py</code></summary>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/adder.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">56</span>
 <span class="normal">57</span>
 <span class="normal">58</span>
@@ -4713,7 +4727,7 @@ file exists in the corpus</p></td>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.51198bba.min.js"></script>
+      <script src="../../assets/javascripts/bundle.b425cdc4.min.js"></script>
       
     
   </body>

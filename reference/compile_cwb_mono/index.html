@@ -15,7 +15,7 @@
         <link rel="next" href="../convert_using_pandoc/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.17">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ded33207.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.26e3688c.min.css">
       
       
 
@@ -1076,13 +1076,6 @@
         <li class="md-nav__item">
   <a href="#corpustools.compile_cwb_mono.read_vrt_xml" class="md-nav__link">
     read_vrt_xml()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#corpustools.compile_cwb_mono.remove_directory_contents" class="md-nav__link">
-    remove_directory_contents()
   </a>
   
 </li>
@@ -2615,13 +2608,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#corpustools.compile_cwb_mono.remove_directory_contents" class="md-nav__link">
-    remove_directory_contents()
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -2650,8 +2636,6 @@
   
       <p>Take the "korp-ready" files in a "corpus-xxx/korp_mono" directory of a corpus,
 and create the binary CWB files (the files that are in data/ and registry/).</p>
-<p>An important note is that the registry files are written with the data
-path given here, and that may not be the same as in deployment!</p>
 
   
 
@@ -2684,8 +2668,22 @@ path given here, and that may not be the same as in deployment!</p>
 
 
         <details class="quote">
-          <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/compile_cwb_mono.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 64</span>
+          <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/compile_cwb_mono.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
 <span class="normal"> 65</span>
 <span class="normal"> 66</span>
 <span class="normal"> 67</span>
@@ -2792,21 +2790,7 @@ path given here, and that may not be the same as in deployment!</p>
 <span class="normal">168</span>
 <span class="normal">169</span>
 <span class="normal">170</span>
-<span class="normal">171</span>
-<span class="normal">172</span>
-<span class="normal">173</span>
-<span class="normal">174</span>
-<span class="normal">175</span>
-<span class="normal">176</span>
-<span class="normal">177</span>
-<span class="normal">178</span>
-<span class="normal">179</span>
-<span class="normal">180</span>
-<span class="normal">181</span>
-<span class="normal">182</span>
-<span class="normal">183</span>
-<span class="normal">184</span>
-<span class="normal">185</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="normal">171</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Corpus</span><span class="p">:</span>
     <span class="c1"># The original path that was given to us. This is kept because if only</span>
     <span class="c1"># a specific directory is given, we only want to recurse starting from</span>
@@ -2958,26 +2942,26 @@ path given here, and that may not be the same as in deployment!</p>
       <p>Yields category dictionaries</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/compile_cwb_mono.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">157</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/compile_cwb_mono.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
 <span class="normal">158</span>
 <span class="normal">159</span>
 <span class="normal">160</span>
-<span class="normal">161</span>
-<span class="normal">162</span>
-<span class="normal">163</span>
-<span class="normal">164</span>
-<span class="normal">165</span>
-<span class="normal">166</span>
-<span class="normal">167</span>
-<span class="normal">168</span>
-<span class="normal">169</span>
-<span class="normal">170</span>
-<span class="normal">171</span>
-<span class="normal">172</span>
-<span class="normal">173</span>
-<span class="normal">174</span>
-<span class="normal">175</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">categories</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">161</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">categories</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Yields category dictionaries&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">category</span><span class="p">:</span>
         <span class="c1"># only a specific category selected, so only yield one result</span>
@@ -3017,10 +3001,10 @@ path given here, and that may not be the same as in deployment!</p>
       <p>Returns True if this corpus has module <code>module</code>, else False</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/compile_cwb_mono.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">has_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">:</span> <span class="n">Module</span><span class="p">):</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/compile_cwb_mono.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">has_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">:</span> <span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True if this corpus has module `module`, else False&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">processed_dir</span> <span class="o">/</span> <span class="n">module</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
@@ -3054,8 +3038,22 @@ path given here, and that may not be the same as in deployment!</p>
 <p>This function replaces what the compile_corpus.xsl script does.</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/compile_cwb_mono.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">267</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/compile_cwb_mono.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
 <span class="normal">268</span>
 <span class="normal">269</span>
 <span class="normal">270</span>
@@ -3093,21 +3091,7 @@ path given here, and that may not be the same as in deployment!</p>
 <span class="normal">302</span>
 <span class="normal">303</span>
 <span class="normal">304</span>
-<span class="normal">305</span>
-<span class="normal">306</span>
-<span class="normal">307</span>
-<span class="normal">308</span>
-<span class="normal">309</span>
-<span class="normal">310</span>
-<span class="normal">311</span>
-<span class="normal">312</span>
-<span class="normal">313</span>
-<span class="normal">314</span>
-<span class="normal">315</span>
-<span class="normal">316</span>
-<span class="normal">317</span>
-<span class="normal">318</span>
-<span class="normal">319</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@timed</span>
+<span class="normal">305</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@timed</span>
 <span class="k">def</span> <span class="nf">concat_corpus</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Concatenate all the vrt files in a corpus, and store it in one file.</span>
 
@@ -3183,8 +3167,22 @@ KORP_CORPUS_CONFIG_DIR/corpora/LANG_CATEGORY_DATE.yaml</p>
 <p>Fill it with default values</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/compile_cwb_mono.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">430</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/compile_cwb_mono.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
 <span class="normal">431</span>
 <span class="normal">432</span>
 <span class="normal">433</span>
@@ -3199,21 +3197,7 @@ KORP_CORPUS_CONFIG_DIR/corpora/LANG_CATEGORY_DATE.yaml</p>
 <span class="normal">442</span>
 <span class="normal">443</span>
 <span class="normal">444</span>
-<span class="normal">445</span>
-<span class="normal">446</span>
-<span class="normal">447</span>
-<span class="normal">448</span>
-<span class="normal">449</span>
-<span class="normal">450</span>
-<span class="normal">451</span>
-<span class="normal">452</span>
-<span class="normal">453</span>
-<span class="normal">454</span>
-<span class="normal">455</span>
-<span class="normal">456</span>
-<span class="normal">457</span>
-<span class="normal">458</span>
-<span class="normal">459</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">create_korp_settings</span><span class="p">(</span><span class="n">korp_corpus_config_dir</span><span class="p">,</span> <span class="n">vrt_directory</span><span class="p">,</span> <span class="n">corpus_name</span><span class="p">):</span>
+<span class="normal">445</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">create_korp_settings</span><span class="p">(</span><span class="n">korp_corpus_config_dir</span><span class="p">,</span> <span class="n">vrt_directory</span><span class="p">,</span> <span class="n">corpus_name</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the Korp corpus config-.yaml file that Korp needs, i.e.</span>
 <span class="sd">    KORP_CORPUS_CONFIG_DIR/corpora/LANG_CATEGORY_DATE.yaml</span>
 
@@ -3280,8 +3264,12 @@ create the data/ and registry/ folder contents for a corpus.</p>
           <td>
                 <code><span title="pathlib.Path">Path</span></code>
           </td>
-          <td><p>the output directory from the previous steps,
-that contains a .vrt file for a corpus.</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>the output directory from the previous steps,
+that contains a .vrt file for a corpus.</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3291,7 +3279,11 @@ that contains a .vrt file for a corpus.</p></td>
           <td>
                 <code><span title="datetime.date">date</span></code>
           </td>
-          <td><p>The date that we created this corpus</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>The date that we created this corpus</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3301,7 +3293,11 @@ that contains a .vrt file for a corpus.</p></td>
           <td>
                 <code>str</code>
           </td>
-          <td><p>which language this corpus is in. 3-letter language code</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>which language this corpus is in. 3-letter language code</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3311,8 +3307,12 @@ that contains a .vrt file for a corpus.</p></td>
           <td>
                 <code><span title="pathlib.Path">Path</span></code>
           </td>
-          <td><p>path to where the CWB binaries are
-located</p></td>
+          <td>
+            <div class="doc-md-description">
+              <p>path to where the CWB binaries are
+located</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3322,9 +3322,13 @@ located</p></td>
           <td>
                 <code><span title="pathlib.Path">Path</span></code>
           </td>
-          <td><p>path to the directory where the
+          <td>
+            <div class="doc-md-description">
+              <p>path to the directory where the
 final encoded corpus resides (the directory that has subfolders
-data/ and registry/)</p></td>
+data/ and registry/)</p>
+            </div>
+          </td>
           <td>
               <em>required</em>
           </td>
@@ -3333,8 +3337,22 @@ data/ and registry/)</p></td>
   </table>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/compile_cwb_mono.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">533</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/compile_cwb_mono.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">519</span>
+<span class="normal">520</span>
+<span class="normal">521</span>
+<span class="normal">522</span>
+<span class="normal">523</span>
+<span class="normal">524</span>
+<span class="normal">525</span>
+<span class="normal">526</span>
+<span class="normal">527</span>
+<span class="normal">528</span>
+<span class="normal">529</span>
+<span class="normal">530</span>
+<span class="normal">531</span>
+<span class="normal">532</span>
+<span class="normal">533</span>
 <span class="normal">534</span>
 <span class="normal">535</span>
 <span class="normal">536</span>
@@ -3368,21 +3386,7 @@ data/ and registry/)</p></td>
 <span class="normal">564</span>
 <span class="normal">565</span>
 <span class="normal">566</span>
-<span class="normal">567</span>
-<span class="normal">568</span>
-<span class="normal">569</span>
-<span class="normal">570</span>
-<span class="normal">571</span>
-<span class="normal">572</span>
-<span class="normal">573</span>
-<span class="normal">574</span>
-<span class="normal">575</span>
-<span class="normal">576</span>
-<span class="normal">577</span>
-<span class="normal">578</span>
-<span class="normal">579</span>
-<span class="normal">580</span>
-<span class="normal">581</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">encode_corpus</span><span class="p">(</span>
+<span class="normal">567</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">encode_corpus</span><span class="p">(</span>
     <span class="n">vrt_directory</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">date</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span>
     <span class="n">lang</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -3453,8 +3457,22 @@ data/ and registry/)</p></td>
 contains, as well as the first and last date of the texts</p>
 
       <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/compile_cwb_mono.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">385</span>
+        <summary>Source code in <code>/home/brede/giellalt/CorpusTools/corpustools/compile_cwb_mono.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
 <span class="normal">386</span>
 <span class="normal">387</span>
 <span class="normal">388</span>
@@ -3462,21 +3480,7 @@ contains, as well as the first and last date of the texts</p>
 <span class="normal">390</span>
 <span class="normal">391</span>
 <span class="normal">392</span>
-<span class="normal">393</span>
-<span class="normal">394</span>
-<span class="normal">395</span>
-<span class="normal">396</span>
-<span class="normal">397</span>
-<span class="normal">398</span>
-<span class="normal">399</span>
-<span class="normal">400</span>
-<span class="normal">401</span>
-<span class="normal">402</span>
-<span class="normal">403</span>
-<span class="normal">404</span>
-<span class="normal">405</span>
-<span class="normal">406</span>
-<span class="normal">407</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">read_vrt_xml</span><span class="p">(</span><span class="n">vrt_file</span><span class="p">):</span>
+<span class="normal">393</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">read_vrt_xml</span><span class="p">(</span><span class="n">vrt_file</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Read a (xml based) .vrt file, and return the number of sentences it</span>
 <span class="sd">    contains, as well as the first and last date of the texts&quot;&quot;&quot;</span>
     <span class="n">xml_root</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">vrt_file</span><span class="p">)</span>
@@ -3499,104 +3503,6 @@ contains, as well as the first and last date of the texts</p>
         <span class="n">last_date</span> <span class="o">=</span> <span class="n">dates</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">n_sentences</span><span class="p">,</span> <span class="n">first_date</span><span class="p">,</span> <span class="n">last_date</span>
-</code></pre></div></td></tr></table></div>
-      </details>
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-
-<h2 id="corpustools.compile_cwb_mono.remove_directory_contents" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">remove_directory_contents</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">keep_root</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
-
-</h2>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Remove the contents of a directory. Optionally remove the directory
-    itself too, by passing keep_root=False</p>
-
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>directory</code></td>
-          <td>
-                <code>pathlib.<span title="pathlib.Path">Path</span></code>
-          </td>
-          <td><p>the directory to remove the contents of</p></td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>keep_root</code></td>
-          <td>
-                <code>bool</code>
-          </td>
-          <td><p>Keep the directory or not. Defaults to true.</p></td>
-          <td>
-                <code>True</code>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-      <details class="quote">
-        <summary>Source code in <code>/home/anders/projects/CorpusTools/corpustools/compile_cwb_mono.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">41</span>
-<span class="normal">42</span>
-<span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span>
-<span class="normal">48</span>
-<span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span>
-<span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_directory_contents</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">keep_root</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove the contents of a directory. Optionally remove the directory</span>
-<span class="sd">        itself too, by passing keep_root=False</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        directory (pathlib.Path): the directory to remove the contents of</span>
-<span class="sd">        keep_root (bool): Keep the directory or not. Defaults to true.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
-        <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_errors</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">directory</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;no such file or directory: </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_errors</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">directory</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;not a directory: </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="n">ignore_errors</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">keep_root</span><span class="p">:</span>
-        <span class="n">directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -3655,7 +3561,7 @@ contains, as well as the first and last date of the texts</p>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.51198bba.min.js"></script>
+      <script src="../../assets/javascripts/bundle.b425cdc4.min.js"></script>
       
     
   </body>
