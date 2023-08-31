@@ -100,6 +100,7 @@ DEPREL_MAPPING = {
     "IAUX": "IAUX",
     "ICL-OBJ": "ICL-OBJ",
     "ICL-SUBJ": "ICL-SUBJ",
+    "IM": "IM",
     "IMV": "IMV",
     "IMVdic": "IMVdic",
     "INTERJ": "INTERJ",
