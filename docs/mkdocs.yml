@@ -16,6 +16,7 @@ markdown_extensions:
 nav:
   - Home:
     - Overview: index.md
+    - How it works: howitworks.md
     - Meta documentation: docsdocs.md
     - Corpus work: corpus-work.md
     - Scripts:

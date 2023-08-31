@@ -2,7 +2,7 @@
 
 ## Overview
 
-*CorpusTools* is a set of tools to manipulate a giellalt corpus in different ways.
+*CorpusTools* is a set of tools to administrate Giellatekno's corpora.
 
 A few examples:
 
