@@ -23,6 +23,7 @@ setup(
             "ccat = corpustools.ccat:main",
             "compare_tmx_goldstandard = corpustools.compare_tmx_goldstandard:main",
             "compile_cwb_mono = corpustools.compile_cwb_mono:main",
+            "compile_cwb_para = corpustools.compile_cwb_para:main",
             "convert2xml = corpustools.convertermanager:main",
             "debug_corpus = corpustools.debug_corpus:main",
             "generate_anchor_list = corpustools.generate_anchor_list:main",
