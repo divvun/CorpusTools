@@ -22,7 +22,6 @@ import argparse
 import os
 import re
 import subprocess
-from contextlib import suppress
 from pathlib import Path
 
 from lxml import etree
@@ -268,23 +267,22 @@ def main():
     args = parse_options()
 
     for path in corpuspath.collect_files(args.sources, suffix=".xml"):
-        with suppress(TypeError):  # the parallel path does not exist
-            para_path, source_path = get_filepair(
-                corpuspath.make_corpus_path(path), args.lang2
-            )
+        para_path, source_path = get_filepair(
+            corpuspath.make_corpus_path(path), args.lang2
+        )
 
+        try:
             try:
-                try:
-                    parallelise_file(
-                        source_path,
-                        para_path,
-                        dictionary=(
-                            get_dictionary(para_path, source_path)
-                            if args.dict is None
-                            else args.dict
-                        ),
-                    )
-                except UserWarning as error:
-                    print(str(error))
-            except util.ArgumentError as error:
-                raise SystemExit(error)
+                parallelise_file(
+                    source_path,
+                    para_path,
+                    dictionary=(
+                        get_dictionary(para_path, source_path)
+                        if args.dict is None
+                        else args.dict
+                    ),
+                )
+            except UserWarning as error:
+                print(str(error))
+        except util.ArgumentError as error:
+            raise SystemExit(error)
