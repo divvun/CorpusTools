@@ -1,6 +1,6 @@
 # parallelize
 
-**NOTE!** This section is partly outdated. Some files are moved from *svn* to *github* (especially the `langs` ones).
+**NOTE!** This section is partly outdated. Some files are moved from _svn_ to _github_ (especially the `langs` ones).
 
 Parallelize parallel corpus files, write the results to .tmx and .txm.html
 files.
@@ -11,9 +11,9 @@ all files and realigns the file anew.
 parallelize depends on various files from the Divvun/Giellatekno SVN, at least
 the following directories need to exist in $GTHOME:
 
-* langs (specifically, the abbr.txt files)
-* gt/common
-* gt/script
+- langs (specifically, the abbr.txt files)
+- gt/common
+- gt/script
 
 It also requires Java if you wish to use the default (included) alignment
 program TCA2. For convenience, a pre-compiled version of TCA2's
@@ -118,7 +118,7 @@ parallelize -l2 sma converted/nob
 
 The files will end up in corresponding directories under tmx/nob2sma.
 
-__CAVEAT 1__: ''If you get a message such as''
+**CAVEAT 1**: ''If you get a message such as''
 
 ```sh
 parallelize -l2 sma converted/sma/admin/ntfk/tsaekeme.html.xml
@@ -128,7 +128,7 @@ failed to load external entity "/Users/xxx/freecorpus/converted/sma/admin/ntfk/.
 
 then you gave nob as l1 but the path to a sma-file as argument.
 
-__CAVEAT 2__: ''If you get a similar error message as''
+**CAVEAT 2**: ''If you get a similar error message as''
 
 ```sh
 parallelize -l2 sma converted/nob/admin/ntfk/rup_2013_trykt_versjon.pdf.xml
@@ -144,7 +144,7 @@ After that you can go back to the directory where you are working with the
 parallelizing files and try to parallelize the files anew. You might recompile
 the language tools for ALL the languages you are working with.
 
-__CAVEAT 3__: ''If you get a message like''
+**CAVEAT 3**: ''If you get a message like''
 
 ```sh
 Exception in thread "main" java.lang.UnsupportedClassVersionError: aksis/alignment/Alignment : Unsupported major.minor version 51.0
