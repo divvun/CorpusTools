@@ -39,8 +39,7 @@ XXX is the iso code for the language you work with in $GTLANGS/lang-XXX:
 ```sh
     cd $GTLANGS/lang-XXX
     ./configure --prefix="$HOME"/.local \
-                --enable-tokenisers \
-                --enable-reversed-intersect
+                --enable-tokenisers
     make
     make install
 ```
