@@ -285,4 +285,6 @@ def main():
             except UserWarning as error:
                 print(str(error))
         except util.ArgumentError as error:
-            raise SystemExit(error)
+            raise SystemExit(
+                f"{error}\nMore info here: https://giellalt.github.io/CorpusTools/scripts/parallelize/",
+            )
