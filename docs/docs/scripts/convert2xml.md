@@ -10,27 +10,28 @@ Convert original files in a corpus to giellatekno/divvun xml format.
 
 convert2xml depends on these external programs:
 
-  - pdftotext
-  - wvhtml
+- pdftotext
+- LibreOffice
+- pandoc
 
 ## Usage
 
-Convert all files in the directory $GTFREE/orig/sme and its subdirectories.
+Convert all files in the directory `corpus-sme` and its subdirectories.
 
 ```sh
-convert2xml $GTFREE/orig/sme
+convert2xml corpus-sme
 ```
 
 The converted files are placed in $GTFREE/converted/sme with the same directory
-structure as that in $GTFREE/orig/sme.
+structure as that in `corpus-sme`.
 
 Convert only one file:
 
 ```sh
-convert2xml $GTFREE/orig/sme/admin/sd/file1.html
+convert2xml `corpus-sme/admin/sd/file1.html`
 ```
 
-The converted file is found in $GTFREE/orig/sme/admin/sd/file1.htm.xml
+The converted file is found in `corpus-sme/admin/sd/file1.htm.xml`
 
 Convert all sme files in directories ending with corpus
 

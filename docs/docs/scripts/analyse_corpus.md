@@ -14,7 +14,7 @@ To be able to use this program you must either use the
 or build the needed resources for the supported languages (exchange "sma" with
 "sme, smj" ad lib):
 
-{{cd $GTLANGS/langs-sma}}
+`cd $GTLANGS/langs-sma`
 
 Configure the language, use at least these to options `--prefix=$HOME/.local
 --enable-tokenisers`
@@ -33,7 +33,7 @@ When this is done you can analyse all files in the corpus repos:
 analyse_corpus corpus-<lang>/converted # exchange <lang> with your lang e.g. sme, sma, mdf
 ```
 
-The analysed file will be found in {{corpus-<lang>/analysed}}
+The analysed file will be found in `corpus-<lang>/analysed`
 
 To analyse only one file, issue this command:
 
