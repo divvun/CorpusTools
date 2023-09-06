@@ -318,13 +318,13 @@ class Classifier:
         ingram = CharModel().of_text(text)
 
         cscored = {
-            l: model.compare(ingram)
-            for l, model in self.cmodels.items()
-            if l in active_langs
+            lang: model.compare(ingram)
+            for lang, model in self.cmodels.items()
+            if lang in active_langs
         }
         cranked = util.sort_by_value(cscored)
         cbest = cranked[0]
-        cfiltered = {l: d for l, d in cranked if d <= cbest[1] * self.DROP_RATIO}
+        cfiltered = {lang: d for lang, d in cranked if d <= cbest[1] * self.DROP_RATIO}
 
         if len(cfiltered) <= 1:
             if verbose:
@@ -334,11 +334,13 @@ class Classifier:
             # Along with compare_tc, implements text_cat.pl line
             # 442 and on:
             wscored = {
-                l: model.compare_tc(text, cscored[l])
-                for l, model in self.wmodels.items()
-                if l in cfiltered
+                lang: model.compare_tc(text, cscored[lang])
+                for lang, model in self.wmodels.items()
+                if lang in cfiltered
             }
-            cwcombined = {l: (cscored[l] - wscore) for l, wscore in wscored.items()}
+            cwcombined = {
+                lang: (cscored[lang] - wscore) for lang, wscore in wscored.items()
+            }
             cwranked = util.sort_by_value(cwcombined)
             if verbose:
                 if cranked[: len(cwranked)] == cwranked:
@@ -411,7 +413,7 @@ class FileTrainer:
 
 
 def proc(args):
-    langs = [l for l in args.langs.split(",") if l != ""]
+    langs = [lang for lang in args.langs.split(",") if lang != ""]
     c = Classifier(folder=args.model_dir, langs=langs)
     if args.u is not None:
         c.DROP_RATIO = args.u

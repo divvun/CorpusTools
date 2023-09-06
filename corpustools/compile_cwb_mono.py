@@ -6,7 +6,6 @@ import argparse
 import builtins
 import subprocess
 import typing
-import sys
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from datetime import date
@@ -546,7 +545,6 @@ def encode_corpus(
         upper_corpus_name = corpus_name.upper()
         # in metadata: id name title description lang updated
         # TODO this is supposed to be the "NAME" field in the file registry/<corpus>/<id>
-        long_name = "" # in the metadata file, indexed by id=corpus_name
 
         #sh loc_encode_gt_corpus_20181106.sh "$input_data" "$date" "$ln" "$lang_code" "$corpus_name" "$fd" "$ld"
 

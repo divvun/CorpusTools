@@ -64,8 +64,6 @@ def remove_files_with_duplicate_content():
 
     this_lang = "sms"
 
-    foundcount = 0
-    notfoundcount = 0
     fingetter = adder.AddToCorpus(
         str(os.getenv("GTFREE")), "fin", "admin/sd/www.samediggi.fi"
     )
@@ -204,9 +202,8 @@ def remove_if_no_smX():
     }
 
     file_count = 0
-    img_count = 0
 
-    downloader = adder.UrlDownloader(os.path.join(os.getenv("GTFREE"), "tmp"))
+    adder.UrlDownloader(os.path.join(os.getenv("GTFREE"), "tmp"))
 
     for lang1 in ["eng", "fin"]:
         for root, dirs, files in os.walk(
