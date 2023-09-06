@@ -17,7 +17,7 @@
 #
 """This file contains classes to handle corpus filenames."""
 
-
+from lxml import etree
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -94,6 +94,18 @@ class CorpusPath:
         """Initialise the metadata attribute."""
         self.metadata = xslsetter.MetadataHandler(self.xsl, create=True)
 
+        # If we do not have access to the -orig part of the corpus
+        # at least read the parallel info from the converted doc
+        if not self.xsl.exists() and self.converted.exists():
+            conv_xml = etree.parse(self.converted)
+            for para_info in conv_xml.iter("parallel_text"):
+                self.metadata.set_parallel_text(
+                    language=para_info.attrib[
+                        "{http://www.w3.org/XML/1998/namespace}lang"
+                    ],
+                    location=para_info.attrib["location"],
+                )
+
     @property
     def orig_corpus_dir(self):
         return self.corpus_dir()
@@ -143,8 +155,8 @@ class CorpusPath:
             filepath (str): path to the file
             suffix (str): file suffix
         """
-        this_module = '' if module is None else module
-        this_target_lang = '' if target_lang is None else target_lang
+        this_module = "" if module is None else module
+        this_target_lang = "" if target_lang is None else target_lang
         this_filepath = (
             f"{self.filepath if filepath is None else filepath}"
             f"{'' if suffix is None else suffix}"
