@@ -15,23 +15,23 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-"""Convert writenow files to the html format."""
+"""Convert doc that LibreOffice knows to html."""
 
 import sys
 import os
 import subprocess
-
 from lxml import html
+from lxml.etree import ElementTree
 
 
-def to_html_elt(filename):
-    """Convert the content of an writenow file to xhtml.
+def to_html_elt(filename: str) -> ElementTree:
+    """Convert the content of a writenow file to an ElementTree.
 
     Args:
         filename (str): path to the document
 
     Returns:
-        (str): A string containing the html version of the writenow file.
+        (ElementTree): An element containing the HTML version of the given file.
     """
     outdir = os.path.dirname(filename)
     subprocess.run(
