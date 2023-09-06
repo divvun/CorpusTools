@@ -17,9 +17,10 @@
 #
 """Convert doc that LibreOffice knows to html."""
 
-import sys
-import os
 import subprocess
+import sys
+from pathlib import Path
+
 from lxml import html
 from lxml.etree import ElementTree
 
@@ -33,7 +34,8 @@ def to_html_elt(filename: str) -> ElementTree:
     Returns:
         (ElementTree): An element containing the HTML version of the given file.
     """
-    outdir = os.path.dirname(filename)
+    filepath = Path(filename)
+    outdir = filepath.parent
     subprocess.run(
         [
             "/Applications/LibreOffice.app/Contents/MacOS/soffice"
@@ -43,13 +45,13 @@ def to_html_elt(filename: str) -> ElementTree:
             "html",
             "--outdir",
             outdir,
-            filename,
+            str(filepath),
         ],
         encoding="utf-8",
     )
 
-    outname = f"{os.path.splitext(filename)[0]}.html"
-    parsed_html = html.parse(outname)
-    os.remove(outname)
+    outname = f"{filepath.stem}.html"
+    parsed_html = html.parse(outdir / outname)
+    (outdir / outname).unlink()
 
     return parsed_html
