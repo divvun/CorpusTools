@@ -254,7 +254,7 @@ def parse_options():
     parser.add_argument(
         "-l2",
         "--lang2",
-        help="Indicate which language the given file should" "be parallelised with",
+        help="Indicate which language the given file should be parallelised with",
         required=True,
     )
 
@@ -267,24 +267,35 @@ def main():
     args = parse_options()
 
     for path in corpuspath.collect_files(args.sources, suffix=".xml"):
-        para_path, source_path = get_filepair(
-            corpuspath.make_corpus_path(path), args.lang2
-        )
+        orig_corpuspath = corpuspath.make_corpus_path(path)
+
+        if orig_corpuspath.lang == args.lang2:
+            raise SystemExit(
+                "Error: change the value of the -l2 option.\n"
+                f"The -l2 value ({args.lang2}) cannot be the same as the "
+                f"language as the source documents ({orig_corpuspath.lang})"
+            )
 
         try:
-            try:
-                parallelise_file(
-                    source_path,
-                    para_path,
-                    dictionary=(
-                        get_dictionary(para_path, source_path)
-                        if args.dict is None
-                        else args.dict
-                    ),
-                )
-            except UserWarning as error:
-                print(str(error))
+            para_path, source_path = get_filepair(orig_corpuspath, args.lang2)
+        except TypeError:
+            print(f"\tNo pointer to a parallel document in {args.lang2} in {path}")
+            continue
+
+        try:
+            parallelise_file(
+                source_path,
+                para_path,
+                dictionary=(
+                    get_dictionary(para_path, source_path)
+                    if args.dict is None
+                    else args.dict
+                ),
+            )
+        except UserWarning as error:
+            print(str(error))
         except util.ArgumentError as error:
             raise SystemExit(
-                f"{error}\nMore info here: https://giellalt.github.io/CorpusTools/scripts/parallelize/",
+                f"{error}\nMore info here: "
+                "https://giellalt.github.io/CorpusTools/scripts/parallelize/#compile-dependencies",
             )
