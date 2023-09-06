@@ -48,19 +48,6 @@ def pretty_tbl(table):
     return ", ".join(f"{k}:{v}" for k, v in table)
 
 
-def ensure_unicode(text):
-    """Make sure text is unicode
-
-    Helper for functions that should be able to operate on either utf-8
-    encoded bytes or decoded unicode objects
-    """
-    if type(text) == bytes:
-        return text.decode("utf-8")
-    else:
-        assert type(text) == str
-        return text
-
-
 class NGramModel:
     SPLITCHARS = re.compile(
         r"[][}{)(>< \n\t:;!.?_,¶§%&£€$¹°½¼¾©←→▪➢√|#–‒…·•@~\\/”“«»\"0-9=*+‑-]"
@@ -73,7 +60,7 @@ class NGramModel:
         self.unicode_warned = 0
 
     def of_text(self, text):
-        self.finish(self.freq_of_text(ensure_unicode(text), {}))
+        self.finish(self.freq_of_text(text, {}))
         return self
 
     def of_freq(self, freq):
@@ -325,10 +312,9 @@ class Classifier:
                     )
             return active_langs
 
-    def classify_full(self, intext, langs=[], verbose=False):
+    def classify_full(self, text, langs=[], verbose=False):
         active_langs = self.get_langs(langs)
 
-        text = ensure_unicode(intext)
         ingram = CharModel().of_text(text)
 
         cscored = {
