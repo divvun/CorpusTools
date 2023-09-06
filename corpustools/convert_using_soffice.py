@@ -17,6 +17,7 @@
 #
 """Convert writenow files to the html format."""
 
+import sys
 import os
 import subprocess
 
@@ -35,7 +36,9 @@ def to_html_elt(filename):
     outdir = os.path.dirname(filename)
     subprocess.run(
         [
-            "soffice",
+            "/Applications/LibreOffice.app/Contents/MacOS/soffice"
+            if sys.platform == "darwin"
+            else "soffice",
             "--convert-to",
             "html",
             "--outdir",
