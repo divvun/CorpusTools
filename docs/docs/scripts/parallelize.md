@@ -1,30 +1,25 @@
 # parallelize
 
-**NOTE!** This section is partly outdated. Some files are moved from _svn_ to _github_ (especially the `langs` ones).
-
 Parallelize parallel corpus files, write the results to .tmx and .txm.html
 files.
 
-NB! When debugging alignment, use [reparallelize](#reparallelize), it reconverts
+NB! When debugging alignment, use [reparallelize](https://giellalt.github.io/CorpusTools/scripts/reparallelize/), it reconverts
 all files and realigns the file anew.
 
-parallelize depends on various files from the Divvun/Giellatekno SVN, at least
-the following directories need to exist in $GTHOME:
+## SVN dependencies
 
-- langs (specifically, the abbr.txt files)
+parallelize depends on various files from the Divvun/Giellatekno SVN, at least
+the following directory need to exist in $GTHOME:
+
 - gt/common
-- gt/script
+
+## Java dependency
 
 It also requires Java if you wish to use the default (included) alignment
 program TCA2. For convenience, a pre-compiled version of TCA2's
 alignment.jar-file is included in SVN and installed by CorpusTools, but if you
 have ant installed, you can recompile it by simply typing "ant" in
 corpustools/tca2.
-
-Alternatively, you can align with Hunalign, if you have that installed (or don't
-have Java). Hunalign is faster, and the quality is less dependent on predefined
-dictionaries (though it can use those as well). Neither system gives perfect
-alignments.
 
 By default, it uses the $GTHOME/gt/common/src/anchor.txt file as an anchor
 dictionary for alignment. If your language pair is not in this dictionary, you
@@ -51,7 +46,6 @@ for LANG in sme nob # Replace sme and nob by languages for your own needs
 do
     cd $GTLANGS/lang-$LANG
     ./configure --prefix="$HOME"/.local \
-                --with-hfst \
                 --enable-tokenisers
     make
     make install
@@ -61,9 +55,7 @@ done
 The complete help text from the program is as follows:
 
 ```sh
-usage: parallelize [-h] [--version] [-s] [-f] [-q] [-a {hunalign,tca2}]
-                   [-d DICT] -l2 LANG2
-                   sources [sources ...]
+usage: parallelize [-h] [--version] [-d DICT] -l2 LANG2 sources [sources ...]
 
 Sentence align file pairs.
 
@@ -71,17 +63,9 @@ positional arguments:
   sources               Files or directories to search for parallelisable
                         files
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --version             show program's version number and exit
-  -s, --stdout          Whether output of the parallelisation should be
-                        written to stdout or a files. Defaults to
-                        tmx/{lang1}2{lang2}/{GENRE}/.../{BASENAME}.tmx
-  -f, --force           Overwrite output file if it already exists.This is the
-                        default.
-  -q, --quiet           Don't mention anything out of the ordinary.
-  -a {hunalign,tca2}, --aligner {hunalign,tca2}
-                        Either hunalign or tca2 (the default).
   -d DICT, --dict DICT  Use a different bilingual seed dictionary. Must have
                         two columns, with input_file language first, and
                         --parallel_language second, separated by `/'. By
@@ -103,48 +87,23 @@ parallelize -l2 TARGET_LANGUAGE PATH/TO/THE/CONVERTED/SOURCE_LANGUAGE/FILE.xml
 for instance, with nob as SOURCE_LANGUAGE and sma as TARGET_LANGUAGE
 
 ```sh
-parallelize -l2 sma converted/nob/admin/ntfk/tsaekeme.html.xml
+parallelize -l2 sma corpub-nob/converted/admin/ntfk/tsaekeme.html.xml
 ```
 
-This will create a file named tmx/nob2sma/admin/ntfk/tsaekeme.html.tmx
+This will create a file named `corpus-nob/tmx/sma/admin/ntfk/tsaekeme.html.tmx`
 
 If you want to parallelize all your sma files with nob in one go, you can do
 e.g.
 
 ```sh
-convert2xml orig/{sma,nob}
-parallelize -l2 sma converted/nob
+convert2xml corpus-sma-orig
+convert2čml corpus-nob-orig
+parallelize -l2 sma corpus-nob/converted
 ```
 
-The files will end up in corresponding directories under tmx/nob2sma.
+The files will end up in corresponding directories under `corpus-nob/tmx/sma`.
 
-**CAVEAT 1**: ''If you get a message such as''
-
-```sh
-parallelize -l2 sma converted/sma/admin/ntfk/tsaekeme.html.xml
-Error reading file '/Users/xxx/freecorpus/converted/sma/admin/ntfk/.xml':
-failed to load external entity "/Users/xxx/freecorpus/converted/sma/admin/ntfk/.xml"
-```
-
-then you gave nob as l1 but the path to a sma-file as argument.
-
-**CAVEAT 2**: ''If you get a similar error message as''
-
-```sh
-parallelize -l2 sma converted/nob/admin/ntfk/rup_2013_trykt_versjon.pdf.xml
-ERROR: /Users/xxx/gtsvn/langs/nob/tools/preprocess/tokeniser-gramcheck-gt-desc.pmhfst does not exist
-```
-
-you have to recompile the language tool of the respective language (in the
-example above it is nob) with a different configuration, as in the following
-example with nob as language to recompile, have a look at the info above on how
-to [compile dependencies](#compile-dependencies)
-
-After that you can go back to the directory where you are working with the
-parallelizing files and try to parallelize the files anew. You might recompile
-the language tools for ALL the languages you are working with.
-
-**CAVEAT 3**: ''If you get a message like''
+**CAVEAT**: ''If you get a message like''
 
 ```sh
 Exception in thread "main" java.lang.UnsupportedClassVersionError: aksis/alignment/Alignment : Unsupported major.minor version 51.0
@@ -170,4 +129,4 @@ cd $GTHOME/tools/CorpusTools/corpustools/tca2
 ant
 ```
 
-Then follow the instructions on [how to install CorpusTools ](#installation)
+Then follow the instructions on [how to install CorpusTools](https://giellalt.github.io/CorpusTools/)

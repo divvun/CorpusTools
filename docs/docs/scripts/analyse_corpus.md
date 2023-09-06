@@ -4,8 +4,8 @@ Analyse converted corpus files.
 
 analyse_corpus depends on these external programs:
 
-* vislcg3
-* hfst
+- vislcg3
+- hfst
 
 ## Usage
 
@@ -25,40 +25,47 @@ make install
 ```
 
 Then you must convert the corpus files as explained in the
-[convert2xml](#convert2xml) section.
+[convert2xml](https://giellalt.github.io/CorpusTools/scripts/convert2xml/) section.
 
-When this is done you can analyse all files in the directory
-$GTFREE/converted/sme (and sma, smj) and its subdirectories by issuing this
-command:
+When this is done you can analyse all files in the corpus repos:
 
 ```sh
-analyse_corpus $GTFREE/converted/sme
+analyse_corpus corpus-<lang>/converted # exchange <lang> with your lang e.g. sme, sma, mdf
 ```
 
-The analysed file will be found in {{$GTFREE/analysed/sme}}
+The analysed file will be found in {{corpus-<lang>/analysed}}
 
 To analyse only one file, issue this command:
 
 ```sh
-analyse_corpus --serial sme $GTFREE/converted/sme/file.html.xml
+analyse_corpus --serial sme corpus-<lang>/converted/file.html.xml
 ```
 
 The complete help text from the program:
 
 ```sh
-analyse_corpus --help
-usage: analyse_corpus [-h] [--version] [--serial] [-k {xfst,hfst,hfst_thirties,hfst_eighties,hfst_no_korp,trace-smegram-dev,trace-smegram}]
+usage: analyse_corpus [-h] [--version] [--ncpus NCPUS] [--skip-existing]
+                      [--serial]
+                      [-k {xfst,hfst,hfst_thirties,hfst_eighties,hfst_no_korp,trace-smegram-dev,trace-smegram}]
                       converted_entities [converted_entities ...]
 
 Analyse files in parallel.
 
 positional arguments:
-  converted_entities    converted files or director(y|ies) where the converted files exist
+  converted_entities    converted files or director(y|ies) where the converted
+                        files exist
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --version             show program's version number and exit
-  --serial              When this argument is used files will be analysed one by one.
+  --ncpus NCPUS         The number of cpus to use. If unspecified, defaults to
+                        using as many cpus as it can. Choose between 1-12,
+                        some (3), half (6), most (9) or all (12).
+  --skip-existing       Skip analysis of files thar are already analysed (that
+                        already exist in the analysed/ folder
+  --serial              When this argument is used files will be analysed one
+                        by one.Using --serial takes priority over --ncpus
   -k {xfst,hfst,hfst_thirties,hfst_eighties,hfst_no_korp,trace-smegram-dev,trace-smegram}, --modename {xfst,hfst,hfst_thirties,hfst_eighties,hfst_no_korp,trace-smegram-dev,trace-smegram}
-                        You can set the analyser pipeline explicitely if you want.
+                        You can set the analyser pipeline explicitely if you
+                        want.
 ```
