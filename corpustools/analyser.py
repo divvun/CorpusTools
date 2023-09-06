@@ -150,18 +150,20 @@ def parse_options():
         parents=[argparse_version.parser], description="Analyse files in parallel."
     )
 
-    parser.add_argument("--ncpus", action=NCpus, default=multiprocessing.cpu_count() * 2)
+    parser.add_argument(
+        "--ncpus", action=NCpus, default=multiprocessing.cpu_count() * 2
+    )
     parser.add_argument(
         "--skip-existing",
         action="store_true",
-        help="Skip analysis of files are already analysed (that already "
-             "exist in the analysed/ folder"
+        help="Skip analysis of files that already are analysed (== already "
+        "exist in the analysed/ folder)",
     )
     parser.add_argument(
         "--serial",
         action="store_true",
-        help="When this argument is used files will be analysed one by one."
-             "Using --serial takes priority over --ncpus",
+        help="When this argument is used files will be analysed one by one. "
+        "Using --serial takes priority over --ncpus",
     )
     parser.add_argument(
         "-k",
@@ -192,8 +194,10 @@ def main():
                 non_skipped_files.append(file)
 
         n_skipped_files = len(files) - len(non_skipped_files)
-        print(f"--skip-existing given. Skipping {n_skipped_files} "
-              "files that are already analysed")
+        print(
+            f"--skip-existing given. Skipping {n_skipped_files} "
+            "files that are already analysed"
+        )
         if n_skipped_files == len(files):
             print("nothing to do, exiting")
             raise SystemExit(0)
