@@ -65,6 +65,7 @@
         <arg name="--giella-cg" />
         <arg name="--no-weights" />
         <arg name="--unique" />
+        <arg name="--time-cutoff=30"/>
         <file name="tokeniser-disamb-gt-desc.thirties.pmhfst" />
       </program>
       <program name="vislcg3" debug-suff="mwe-dis">
@@ -87,6 +88,7 @@
     </pipeline>
   </mode>
 
+  <!--  Pipeline for mhr  -->
   <mode name="hfst_eighties">
     <pipeline>
       <program name="hfst-tokenise" debug-suff="morph">
@@ -94,6 +96,7 @@
         <arg name="--giella-cg" />
         <arg name="--no-weights" />
         <arg name="--unique" />
+        <arg name="--time-cutoff=30"/>
         <file name="tokeniser-disamb-gt-desc.eighties.pmhfst" />
       </program>
       <program name="vislcg3" debug-suff="mwe-dis">
