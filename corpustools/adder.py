@@ -154,10 +154,9 @@ class AddToCorpus:
         """
         origpath = Path(origpath)
         none_dupe_path = corpuspath.make_corpus_path(
-            origpath.rename(
-                namechanger.compute_new_basename(Path(self.goalpath) / origpath.name)
-            )
+            namechanger.compute_new_basename(Path(self.goalpath) / origpath.name)
         )
+        none_dupe_path.orig.write_bytes(origpath.read_bytes())
         self.additions.append(none_dupe_path.orig)
         self.add_metadata_to_corpus(none_dupe_path, metadata_filename)
         if parallelpath:
