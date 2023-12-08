@@ -1,3 +1,3 @@
 """Set the current CorpusTools version."""
 
-VERSION = "0.41.4"
+VERSION = "0.41.5"
