@@ -1,0 +1,95 @@
+[tool.poetry]
+name = "corpustools"
+version = "0.4.5"
+description = "Manage giellalt corpora"
+authors = [
+    "Børre Gaup <albbas@gmail.com>",
+    "Kevin Unhammer",
+    "Ciprian Gerstenberger",
+    "Chiara Argese",
+    "Anders Lorentsen <anders.lorentsen@uit.no>"
+]
+license = "GPLv3+"
+readme = "README.md"
+homepage = "https://github.com/giellalt/CorpusTools"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+epub = "^0.5.2"
+feedparser = "^6.0.10"
+gitdb = "^4.0.11"
+GitPython = "^3.1.40"
+html5lib = "^1.1"
+lxml = "^4.9.3"
+requests = "^2.31.0"
+regex = "^2023.10.3"
+prompt-toolkit = "^3.0.41"
+python-dateutil = "^2.8.2"
+unidecode = "^1.3.7"
+
+[tool.poetry.scripts]
+add_files_to_corpus = "corpustools.adder:main"
+analyse_corpus = "corpustools.analyser:main"
+ccat = "corpustools.ccat:main"
+compare_tmx_goldstandard = "corpustools.compare_tmx_goldstandard:main"
+compile_cwb_mono = "corpustools.compile_cwb_mono:main"
+compile_cwb_para = "corpustools.compile_cwb_para:main"
+convert2xml = "corpustools.convertermanager:main"
+debug_corpus = "corpustools.debug_corpus:main"
+generate_anchor_list = "corpustools.generate_anchor_list:main"
+html_cleaner = "corpustools.html_cleaner:main"
+move_corpus_file = "corpustools.move_files:main"
+remove_corpus_file = "corpustools.move_files:remove_main"
+normalise_corpus_names = "corpustools.normalise_filenames:main"
+packagetmx = "corpustools.packagetmx:main"
+paracheck = "corpustools.check_para_consistency:main"
+parallelize = "corpustools.parallelize:main"
+pick_sd_se = "corpustools.pick_samediggi_se_docs:main"
+pytextcat = "corpustools.text_cat:main"
+saami_crawler = "corpustools.saami_crawler:main"
+duperemover = "corpustools.dupe_finder:main"
+dupefinder = "corpustools.dupe_finder:find"
+pick_parallel_docs = "corpustools.pick_parallel_docs:main"
+count_analysed = "corpustools.counter:main"
+clean_prestable = "corpustools.clean_prestable:main"
+reparallelize = "corpustools.realign:main"
+update_metadata = "corpustools.update_metadata:main"
+epubchooser = "corpustools.epubchooser:main"
+make_training_corpus = "corpustools.trainingcorpusmaker:main"
+tmx2html = "corpustools.tmx:main"
+dropbox_adder = "corpustools.dropbox_adder:main"
+korp_mono = "corpustools.korp_mono:main"
+korp_para = "corpustools.korp_para:main"
+bibel_no_aligner = "corpustools.bibel_no_aligner:main"
+bibel_no_crawler = "corpustools.bibel_no_crawler:main"
+ces_to_bibel_no = "corpustools.ces2homegrown:main"
+
+[tool.poetry.group.dev.dependencies]
+requests-mock = "^1.11.0"
+testfixtures = "^7.2.2"
+parameterized = "^0.9.0"
+ruff = "^0.1.7"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "F", #Pyflakes
+    "B", #flake8-bugbear
+    "A", #flake8-builtins 
+    "C4", #flake8-comprehensions
+    "ERA", #eradicate
+    "I", #isort
+    "PT", #flake8-pytest-style
+    "C90", #mccabe
+    "N", #pep8-naming
+    "E", #pycodestyle error
+    "PL" #Pylint
+]
+ignore = ["A003"]
