@@ -23,7 +23,14 @@ import argparse
 import logging
 from pathlib import Path
 
-from corpustools import argparse_version, convertermanager, corpuspath, parallelize, tmx
+from corpustools import (
+    argparse_version,
+    convertermanager,
+    corpuspath,
+    parallelize,
+    tmx,
+    util,
+)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -52,24 +59,6 @@ def print_filenames(corpus_path1, corpus_path2):
     print_filename(corpus_path1)
     print("\nLanguage 2 filenames:")
     print_filename(corpus_path2)
-
-
-def calculate_paths(tmxhtml):
-    """Calculate paths, given a file from the command line.
-
-    Args:
-        tmxhtml (str): path to a .tmx or a .tmx.html file
-
-    Returns:
-        (tuple[CorpusPath, CorpusPath]): tuple of corpuspath.make_corpus_path
-    """
-    path = tmxhtml.with_suffix("") if tmxhtml.suffix == ".html" else tmxhtml
-    corpus_path1 = corpuspath.make_corpus_path(path)
-
-    lang2 = Path(path.as_posix().split("/tmx/")[1]).parts[0]
-    corpus_path2 = corpuspath.make_corpus_path(corpus_path1.parallel(lang2))
-
-    return corpus_path1, corpus_path2
 
 
 def convert_and_copy(corpus_path1, corpus_path2):
@@ -131,7 +120,22 @@ def main():
     convertermanager.LOGGER.setLevel(logging.DEBUG)
     args = parse_options()
 
-    source_path, para_path = calculate_paths(Path(args.tmxhtml).resolve())
+    tmxhtml = Path(args.tmxhtml).resolve()
+    path = tmxhtml.with_suffix("") if tmxhtml.suffix == ".html" else tmxhtml
+    source_path = corpuspath.make_corpus_path(path)
+
+    if not source_path.orig.exists():
+        raise SystemExit(
+            f"\nERROR: You should delete\n«{args.tmxhtml}»\n"
+            f"The source of it does not exist."
+        )
+
+    lang2 = Path(path.as_posix().split("/tmx/")[1]).parts[0]
+    parallel = source_path.parallel(lang2)
+    if parallel is None:
+        raise SystemExit(f"Could not find parallel file of {source_path.orig}")
+
+    para_path = corpuspath.make_corpus_path(parallel)
 
     print_filenames(source_path, para_path)
 
@@ -141,14 +145,20 @@ def main():
     try:
         convert_and_copy(source_path, para_path)
     except Exception as error:
-        raise SystemExit(error)
+        raise SystemExit from error
 
     if args.convert:
         raise SystemExit("Only converting")
 
-    parallelize.parallelise_file(
-        source_path,
-        para_path,
-        dictionary=parallelize.get_dictionary(para_path, source_path),
-    )
-    tmx.tmx2html(source_path.tmx(para_path.lang))
+    try:
+        parallelize.parallelise_file(
+            source_path,
+            para_path,
+            dictionary=parallelize.get_dictionary(para_path, source_path),
+        )
+        tmx.tmx2html(source_path.tmx(para_path.lang))
+    except util.ArgumentError as error:
+        raise SystemExit(
+            f"\n{error}\n"
+            f"Run «make install» in lang-{source_path.lang} and/or lang-{para_path.lang} first."
+        )
