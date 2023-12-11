@@ -19,13 +19,12 @@
 
 
 import codecs
-import distutils.dep_util
-import distutils.spawn
 import logging
 import os
 import unicodedata
 
 from lxml import etree
+from setuptools.modified import newer_group
 
 from corpustools import (
     avvirconverter,
@@ -307,7 +306,7 @@ class Converter:
         """
         if not self.lazy_conversion or (
             self.lazy_conversion
-            and distutils.dep_util.newer_group(self.dependencies, self.names.converted)
+            and newer_group(self.dependencies, self.names.converted)
         ):
             with util.ignored(OSError):
                 os.makedirs(os.path.dirname(self.names.converted))
