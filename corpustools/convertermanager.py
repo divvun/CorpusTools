@@ -21,8 +21,8 @@ import argparse
 import logging
 import multiprocessing
 import os
-from functools import partial
 from concurrent.futures import ProcessPoolExecutor, as_completed
+from functools import partial
 
 from corpustools import argparse_version, converter, text_cat, util, xslsetter
 from corpustools.common_arg_ncpus import NCpus
@@ -219,7 +219,7 @@ def parse_options():
         "--skip-existing",
         action="store_true",
         help="skip converting files that are already converted (that already "
-             "exist in the converted/ folder"
+        "exist in the converted/ folder",
     )
     parser.add_argument(
         "--serial",
@@ -277,7 +277,7 @@ def main():
     try:
         sanity_check()
     except (util.SetupError, util.ExecutableMissingError) as error:
-        raise SystemExit(str(error))
+        raise SystemExit(str(error)) from error
 
     args = parse_options()
 
@@ -293,4 +293,4 @@ def main():
         else:
             manager.convert_in_parallel(args.ncpus)
     except util.ExecutableMissingError as error:
-        raise SystemExit(str(error))
+        raise SystemExit(str(error)) from error
