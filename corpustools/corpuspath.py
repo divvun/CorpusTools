@@ -17,10 +17,11 @@
 #
 """This file contains classes to handle corpus filenames."""
 
-from lxml import etree
 import re
 from dataclasses import dataclass
 from pathlib import Path
+
+from lxml import etree
 
 from corpustools import xslsetter
 
