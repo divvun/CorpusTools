@@ -23,11 +23,11 @@ import fnmatch
 import hashlib
 import os
 import re
-from urllib.parse import urlparse, urlunparse, parse_qsl, urlencode
+from copy import deepcopy
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 import requests
 from lxml import etree
-from copy import deepcopy
 
 from corpustools import (
     adder,
