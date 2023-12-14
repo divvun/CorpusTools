@@ -296,7 +296,7 @@ class SamediggiNoCrawler(crawler.Crawler):
 
         for lang in self.langs:
             self.vcs[lang] = versioncontrol.vcs(self.goaldir / f"corpus-{lang}-orig")
-        self.dupe_table = {digest: name for digest, name in self.make_dupe_tuple()}
+        self.dupe_table = dict(self.make_dupe_tuple())
 
     def make_dupe_tuple(self):
         """Make a hash/filename tuple to be used in the dupe table."""
