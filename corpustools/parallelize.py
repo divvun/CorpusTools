@@ -150,11 +150,7 @@ def tca2_align(file1, file2, anchor_filename):
         )
 
     return [
-        [
-            remove_s_tag(line)
-            for line in sentpath.read_text().split("\n")
-            if line.strip()
-        ]
+        [remove_s_tag(line) for line in sentpath.read_text().split("\n")]
         for sentpath in [
             file1.tca2_output,
             file2.tca2_output,
