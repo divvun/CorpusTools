@@ -74,9 +74,10 @@ def make_tmx(file1_name, file1_lang, file2_lang, sentence_pairs):
     tmx.append(header)
 
     body = etree.SubElement(tmx, "body")
-    for line1, line2 in zip(*sentence_pairs):
-        transl_unit = make_tu(line1, file1_lang, line2, file2_lang)
-        body.append(transl_unit)
+    for line1, line2 in zip(*sentence_pairs, strict=True):
+        if line1 and line2:
+            transl_unit = make_tu(line1, file1_lang, line2, file2_lang)
+            body.append(transl_unit)
 
     return tmx
 
