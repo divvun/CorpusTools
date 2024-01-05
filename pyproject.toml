@@ -14,7 +14,7 @@ readme = "README.md"
 homepage = "https://github.com/giellalt/CorpusTools"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 epub = "^0.5.2"
 feedparser = "^6.0.10"
 gitdb = "^4.0.11"
@@ -77,7 +77,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 line-length = 88
-target-version = "py311"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = [
