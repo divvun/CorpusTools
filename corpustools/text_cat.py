@@ -241,7 +241,7 @@ class Classifier:
 
     DROP_RATIO = 1.10
 
-    def __init__(self, folder=None, langs=[], verbose=False):
+    def __init__(self, folder=None, langs=None, verbose=False):
         if folder is None:
             folder = os.path.join(here, "lm")
         self.cmodels = {}
@@ -255,7 +255,7 @@ class Classifier:
         if not found_fnames:
             raise ValueError(f"No language files found in {folder}")
 
-        if not langs:
+        if langs is None:
             fnames = found_fnames
         else:
             fnames = [os.path.join(folder, lang + ext) for lang in langs]
@@ -271,7 +271,6 @@ class Classifier:
                     util.note(f"Loaded {fname}")
 
             fname_wm = os.path.join(folder, lang + ".wm")
-            # fname_wmgz = os.path.join(folder, lang+'.wm.gz')
             if os.path.exists(fname_wm):
                 with codecs.open(fname_wm, "r", encoding="utf8") as fname_wm_stream:
                     self.wmodels[lang] = WordModel(lang).of_model_file(
@@ -288,22 +287,22 @@ class Classifier:
             self.langs = set(self.cmodels.keys())
             self.langs_warned = set()
 
-    def get_langs(self, langs=None):
+    def get_langs(self, langs: list[str]):
         """Get the set of wanted languages.
 
         Args:
-            langs (None|list[str]): list of probable languages
+            langs (list[str]): list of probable languages
 
         Returns:
             (set[str]): The set of languages that should be considered
         """
-        if langs is None:
+        if not langs:
             return self.langs
         else:
-            langs = set(langs)
-            active_langs = self.langs & langs
-            if len(langs) != len(active_langs):
-                missing = langs - active_langs - self.langs_warned
+            lang_set = set(langs)
+            active_langs = self.langs & lang_set
+            if len(lang_set) != len(active_langs):
+                missing = lang_set - active_langs - self.langs_warned
                 if missing:
                     # only warn once per lang
                     self.langs_warned.update(missing)
@@ -312,7 +311,7 @@ class Classifier:
                     )
             return active_langs
 
-    def classify_full(self, text, langs=[], verbose=False):
+    def classify_full(self, text: str, langs: list[str], verbose: bool = False):
         active_langs = self.get_langs(langs)
 
         ingram = CharModel().of_text(text)
@@ -357,8 +356,8 @@ class Classifier:
                     )
             return cwranked
 
-    def classify(self, text, langs=[], verbose=False):
-        return self.classify_full(text, langs, verbose)[0][0]
+    def classify(self, text: str, langs=None, verbose: bool = False):
+        return self.classify_full(text, [] if langs is None else langs, verbose)[0][0]
 
 
 class FolderTrainer:
