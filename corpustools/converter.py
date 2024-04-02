@@ -22,9 +22,9 @@ import codecs
 import logging
 import os
 import unicodedata
+import os.path
 
 from lxml import etree
-from setuptools.modified import newer_group
 
 from corpustools import (
     avvirconverter,
@@ -47,6 +47,16 @@ HERE = os.path.dirname(__file__)
 
 logging.basicConfig(level=logging.WARNING)
 LOGGER = logging.getLogger(__name__)
+
+
+def newer_group(sources, target):
+    if not os.path.exists(target):
+        # Target does not exist, so we say that "sources are newer"
+        return True
+
+    target_mtime = os.path.getmtime(target)
+
+    return any(os.path.getmtime(src) > target_mtime for src in sources)
 
 
 def to_giella(path):
