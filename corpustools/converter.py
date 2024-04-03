@@ -21,8 +21,8 @@
 import codecs
 import logging
 import os
-import unicodedata
 import os.path
+import unicodedata
 
 from lxml import etree
 
