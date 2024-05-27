@@ -21,7 +21,7 @@ import collections
 import re
 from copy import deepcopy
 
-import lxml.etree as etree
+from lxml import etree
 
 from corpustools import basicconverter, util, xslsetter
 
