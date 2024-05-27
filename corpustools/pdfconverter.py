@@ -518,7 +518,10 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             (lxml.etree.Element): A corpus xml etree with the content of
                 the pdf file, but without most of the metadata.
         """
-        command = f"pdftohtml -hidden -enc UTF-8 -stdout -nodrm -i -s {self.orig}"
+        command = (
+            "pdftohtml -hidden -enc UTF-8 -stdout -nodrm -i -s "
+            f"-wbt {self.metadata.get_variable('word_break_threshold')} {self.orig}"
+        )
         pdftohtmloutput = self.extract_text(command.split())
         return self.pdftohtml2intermediate(pdftohtmloutput)
 
