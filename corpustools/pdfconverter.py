@@ -225,7 +225,7 @@ class PDFPageMetadata:
 
     def get_coefficient(self, margin):
         """Get the width of the margin in percent."""
-        coefficient = 7
+        coefficient = 0
         if margin in list(self.metadata_margins.keys()):
             margin_data = self.metadata_margins[margin]
             if margin_data.get(str(self.page_number)) is not None:
