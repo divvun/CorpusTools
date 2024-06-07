@@ -23,6 +23,7 @@ import logging
 import os
 import os.path
 import unicodedata
+from pathlib import Path
 
 from lxml import etree
 
@@ -57,41 +58,6 @@ def newer_group(sources, target):
     target_mtime = os.path.getmtime(target)
 
     return any(os.path.getmtime(src) > target_mtime for src in sources)
-
-
-def to_giella(path):
-    """Convert a document to the giella xml format.
-
-    Args:
-        path (str): path to the document
-
-    Returns:
-        (lxml.etree.Element): root of the resulting xml document
-    """
-    chooser = {
-        ".doc": htmlcontentconverter.convert2intermediate,
-        ".docx": htmlcontentconverter.convert2intermediate,
-        ".epub": htmlcontentconverter.convert2intermediate,
-        ".html": htmlcontentconverter.convert2intermediate,
-        ".odt": htmlcontentconverter.convert2intermediate,
-        ".pdf": htmlcontentconverter.convert2intermediate,
-        ".rtf": htmlcontentconverter.convert2intermediate,
-        ".svg": svgconverter.convert2intermediate,
-        ".txt": plaintextconverter.convert2intermediate,
-        ".tex": htmlcontentconverter.convert2intermediate,
-        ".writenow": htmlcontentconverter.convert2intermediate,
-        ".usx": usxconverter.convert2intermediate,
-    }
-
-    path = path.as_posix()
-    if "avvir_xml" in path:
-        return avvirconverter.convert2intermediate(path)
-    elif path.endswith("bible.xml"):
-        return biblexmlconverter.convert2intermediate(path)
-    elif "udhr_" in path and path.endswith(".xml"):
-        return htmlcontentconverter.convert2intermediate(path)
-    else:
-        return chooser[os.path.splitext(path)[1]](path)
 
 
 class Converter:
@@ -155,6 +121,40 @@ class Converter:
                 "{}: Not valid XML. More info in the log file: "
                 "{}".format(type(self).__name__, self.names.log)
             )
+
+    def to_giella(self, path: Path):
+        """Convert a document to the giella xml format.
+
+        Args:
+            path (str): path to the document
+
+        Returns:
+            (lxml.etree.Element): root of the resulting xml document
+        """
+        chooser = {
+            ".doc": htmlcontentconverter.convert2intermediate,
+            ".docx": htmlcontentconverter.convert2intermediate,
+            ".epub": htmlcontentconverter.convert2intermediate,
+            ".html": htmlcontentconverter.convert2intermediate,
+            ".odt": htmlcontentconverter.convert2intermediate,
+            ".pdf": htmlcontentconverter.convert2intermediate,
+            ".rtf": htmlcontentconverter.convert2intermediate,
+            ".svg": svgconverter.convert2intermediate,
+            ".txt": plaintextconverter.convert2intermediate,
+            ".tex": htmlcontentconverter.convert2intermediate,
+            ".writenow": htmlcontentconverter.convert2intermediate,
+            ".usx": usxconverter.convert2intermediate,
+        }
+
+        str_path = path.as_posix()
+        if "avvir_xml" in str_path:
+            return avvirconverter.convert2intermediate(path)
+        elif str_path.endswith("bible.xml"):
+            return biblexmlconverter.convert2intermediate(path)
+        elif "udhr_" in str_path and path.suffix == ".xml":
+            return htmlcontentconverter.convert2intermediate(path)
+        else:
+            return chooser[path.suffix](path)
 
     def transform_to_complete(self):
         """Combine the intermediate xml document with its medatata."""
