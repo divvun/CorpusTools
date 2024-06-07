@@ -17,17 +17,21 @@
 #
 """Base class for converters."""
 
+from pathlib import Path
+
 from corpustools import xslsetter
 
 
 class BasicConverter:
     """Take care of data common to all BasicConverter classes."""
 
-    def __init__(self, filename):
+    def __init__(self, filename: Path):
         """Initialise the BasicConverter class.
 
         Args:
             filename (str): the path to the file that should be converted
         """
         self.orig = filename
-        self.metadata = xslsetter.MetadataHandler(filename + ".xsl", create=True)
+        self.metadata = xslsetter.MetadataHandler(
+            filename.with_name(filename.name + ".xsl"), create=True
+        )
