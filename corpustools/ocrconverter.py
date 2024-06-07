@@ -52,9 +52,10 @@ def to_plaintext(path: Path, language: str) -> Iterable[str]:
         language (str): The language of the text in the PDF file.
     """
     to_tiff(path)
+
     return (
         paragraph
-        for image_file in Path("/tmp").glob(f"{path.stem}-*.tiff")
+        for image_file in Path("/tmp").glob(f"{path.stem}-*.tif")
         for paragraph in pytesseract.image_to_string(
             Image.open(image_file), lang=language
         ).split("\n\n")
