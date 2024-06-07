@@ -18,7 +18,7 @@ def to_tiff(path: Path) -> None:
     Raises:
         ConversionError: If the conversion fails.
     """
-    command = f"pdfimages -tiff {path} {path.stem}"
+    command = f"pdfimages -tiff {path} {path.stem}".split()
 
     runner = ExternalCommandRunner()
     runner.run(command, cwd="/tmp")
