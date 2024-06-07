@@ -159,13 +159,13 @@ class Converter:
     def transform_to_complete(self):
         """Combine the intermediate xml document with its medatata."""
         try:
-            intermediate = to_giella(self.names.orig)
+            intermediate = self.to_giella(self.names.orig)
         except KeyError as error:
             raise util.ConversionError(
                 "{} can not convert files of this format {}:".format(
                     self.names.orig, str(error)
                 )
-            )
+            ) from error
         try:
             self.fix_document(intermediate)
         except etree.XMLSyntaxError as error:
@@ -174,7 +174,7 @@ class Converter:
 
             raise util.ConversionError(
                 f"Syntax error in: {self.names}\nError {str(error)}"
-            )
+            ) from error
 
         try:
             xsl_maker = xslmaker.XslMaker(self.metadata.tree)
@@ -185,14 +185,16 @@ class Converter:
             with open(self.names.log, "w") as logfile:
                 logfile.write(f"Error at: {str(util.lineno())}")
 
-            raise util.ConversionError(f"Check the syntax in: {self.names.xsl}")
+            raise util.ConversionError(
+                f"Check the syntax in: {self.names.xsl}"
+            ) from None
         except etree.XSLTParseError as error:
             with open(self.names.log, "w") as logfile:
                 logfile.write(f"Error at: {str(util.lineno())}")
 
             raise util.ConversionError(
                 f"XSLTParseError in: {self.names.xsl}\nError {str(error)}"
-            )
+            ) from error
 
     def convert_errormarkup(self, complete):
         """Convert error markup to xml."""
@@ -205,7 +207,7 @@ class Converter:
 
                 raise util.ConversionError(
                     "Markup error. More info in the log file: " f"{self.names.log}"
-                )
+                ) from error
 
     def fix_document(self, complete):
         """Fix a misc. issues found in converted document."""
