@@ -135,7 +135,7 @@ class ConverterManager:
         if os.path.isfile(xsl_file) and os.path.isfile(xsl_file[:-4]):
             metadata = xslsetter.MetadataHandler(xsl_file)
             if (
-                metadata.get_variable("conversion_status") == "standard"
+                metadata.get_variable("conversion_status") in ["standard", "ocr"]
                 and not self.goldstandard
             ) or (
                 metadata.get_variable("conversion_status").startswith("correct")

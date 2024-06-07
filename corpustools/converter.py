@@ -96,6 +96,11 @@ class Converter:
         return self.metadata.get_variable("conversion_status") == "standard"
 
     @property
+    def ocr(self):
+        """Return a boolean indicating if the file is convertable."""
+        return self.metadata.get_variable("conversion_status") == "ocr"
+
+    @property
     def goldstandard(self):
         """Return a boolean indicating if the file is a gold standard doc."""
         return self.metadata.get_variable("conversion_status").startswith("correct")
@@ -331,7 +336,7 @@ class Converter:
             with util.ignored(OSError):
                 os.makedirs(os.path.dirname(self.names.converted))
 
-            if self.standard or self.goldstandard:
+            if self.ocr or self.standard or self.goldstandard:
                 complete = self.make_complete(languageguesser)
 
                 if self.has_content(complete):
