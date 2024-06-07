@@ -36,6 +36,7 @@ from corpustools import (
     errormarkup,
     htmlcontentconverter,
     languagedetector,
+    ocrconverter,
     plaintextconverter,
     svgconverter,
     usxconverter,
@@ -153,6 +154,13 @@ class Converter:
             return biblexmlconverter.convert2intermediate(path)
         elif "udhr_" in str_path and path.suffix == ".xml":
             return htmlcontentconverter.convert2intermediate(path)
+        elif (
+            self.metadata.get_variable("conversion_status") == "ocr"
+            and path.suffix == ".pdf"
+        ):
+            return ocrconverter.to_xml(
+                path, language="nor"
+            )  # hardcoded until further notice
         else:
             return chooser[path.suffix](path)
 
