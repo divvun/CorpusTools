@@ -53,13 +53,12 @@ def to_plaintext(path: Path, language: str) -> Iterable[str]:
     """
     to_tiff(path)
 
-    return (
-        paragraph
-        for image_file in Path("/tmp").glob(f"{path.stem}-*.tif")
+    for image_file in Path("/tmp").glob(f"{path.stem}-*.tif"):
         for paragraph in pytesseract.image_to_string(
             Image.open(image_file), lang=language
-        ).split("\n\n")
-    )
+        ).split("\n\n"):
+            yield paragraph
+        image_file.unlink()
 
 
 def to_xml(path: Path, language: str) -> _Element:
