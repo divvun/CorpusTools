@@ -92,10 +92,6 @@ class ConverterManager:
 
     def convert_in_parallel(self, pool_size):
         """Convert files using the multiprocessing module."""
-        # util.run_in_parallel(self.convert, pool_size, self.files)
-        # LOGGER.info("Starting the conversion of %d files (using %d cpus)",
-        #             len(self.files), pool_size)
-
         nfiles = len(self.files)
         futures = {}  # Future -> filename
         print(f"Starting parallel conversion with {pool_size} workers")
@@ -121,11 +117,6 @@ class ConverterManager:
             print("the files that failed to convert are:")
             for filename in failed:
                 print(filename)
-
-        # pool = multiprocessing.Pool(processes=pool_size)
-        # pool.map(unwrap_self_convert, list(zip([self] * len(self.files), self.files)))
-        # pool.close()
-        # pool.join()
 
     def convert_serially(self):
         """Convert the files in one process."""
