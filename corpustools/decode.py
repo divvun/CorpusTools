@@ -25,10 +25,7 @@ done.
 """
 
 
-# macsami, winsami2, are needed, even if pylint
-# flags them as unused
-# pylint: disable=unused-import
-from corpustools import util
+from corpustools import macsami, util, winsami2  # noqa: F401
 
 CYRILLIC_LANGUAGES = ["mhr", "mrj"]
 
