@@ -282,7 +282,7 @@ class DocumentFixer:
         try:
             body = etree.fromstring(decode.decode_para(encoding, body_string))
         except UnicodeEncodeError as error:
-            raise UserWarning(str(error))
+            raise UserWarning(str(error)) from error
         self.root.append(body)
 
         if mainlang in ["sms", "mns"]:
