@@ -7,8 +7,9 @@
 
 import argparse
 import xml.etree.ElementTree as ET
-from pathlib import Path
 from datetime import date
+from pathlib import Path
+
 from corpustools.compile_cwb_mono import Corpus
 from corpustools.modes import Pipeline
 

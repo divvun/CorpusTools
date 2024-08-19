@@ -28,13 +28,12 @@ orig = CorpusPath(orig)
 """
 
 import os
-import unittest
+from pathlib import Path
 
 import git
 import pytest
 
-from corpustools import corpuspath, namechanger, xslsetter
-from pathlib import Path
+from corpustools import corpuspath, namechanger
 
 here = os.path.dirname(__file__)
 

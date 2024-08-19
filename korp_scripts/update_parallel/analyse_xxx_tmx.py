@@ -1,12 +1,10 @@
 # -*- coding:utf-8 -*-
-import re, os, errno, cgi, json, xml
-import sys, codecs, locale, getopt
+import os
+import sys
 import xml.etree.ElementTree as ET
-from subprocess import Popen, PIPE
-from operator import itemgetter
-from xml.dom.minidom import parse, parseString
 from importlib import reload
-from collections import defaultdict
+from subprocess import PIPE, Popen
+
 
 def main():
     #The script expects 2 (and 1 optional) parameters:

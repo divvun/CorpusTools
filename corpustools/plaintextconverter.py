@@ -21,7 +21,7 @@ import codecs
 import io
 import re
 
-import lxml.etree as etree
+from lxml import etree
 
 from corpustools import basicconverter, util
 

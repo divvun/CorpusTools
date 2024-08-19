@@ -21,7 +21,7 @@ import os
 import re
 from copy import deepcopy
 
-import lxml.etree as etree
+from lxml import etree
 
 from corpustools import decode, util
 

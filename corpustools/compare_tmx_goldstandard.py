@@ -25,7 +25,7 @@ import os
 import sys
 import time
 
-import lxml.etree as etree
+from lxml import etree
 
 from corpustools import parallelize, util
 

@@ -25,7 +25,7 @@ import unittest
 
 from lxml import doctestcompare, etree
 
-from corpustools import corpusxmlfile, corpuspath
+from corpustools import corpusxmlfile
 
 HERE = os.path.dirname(__file__)
 

@@ -20,7 +20,7 @@
 
 import os
 
-import lxml.etree as etree
+from lxml import etree
 
 from corpustools import svgconverter
 from corpustools.test import xmltester

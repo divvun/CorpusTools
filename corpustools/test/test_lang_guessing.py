@@ -21,10 +21,10 @@
 
 import unittest
 
+import langid
 from parameterized import parameterized
 
-import langid
-from corpustools import text_cat, util
+from corpustools import text_cat
 
 test_sentences = [
     "Anna-Laila Kristine Kappfjell, Dan Jonas Mikael Sparrok "

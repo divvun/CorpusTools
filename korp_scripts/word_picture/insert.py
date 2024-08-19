@@ -1,6 +1,5 @@
 # -*- coding:utf-8 -*-
 
-from pprint import pprint
 import MySQLdb
 from settings_not_in_svn import *
 

@@ -22,7 +22,7 @@ import codecs
 import io
 import os
 
-import lxml.etree as etree
+from lxml import etree
 
 from corpustools import plaintextconverter
 from corpustools.test import xmltester

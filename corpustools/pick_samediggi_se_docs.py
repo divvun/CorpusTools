@@ -27,7 +27,7 @@ import os
 import shutil
 import sys
 
-import lxml.etree as etree
+from lxml import etree
 
 from corpustools import util, xslsetter
 

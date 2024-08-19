@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-import os, sys
-from subprocess import Popen, PIPE
-from imp import reload
+import os
 import random
+import sys
+from imp import reload
 from random import shuffle
+from subprocess import PIPE, Popen
 
 
 def main():

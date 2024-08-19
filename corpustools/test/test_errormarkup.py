@@ -22,8 +22,7 @@
 import doctest
 import unittest
 
-import lxml.doctestcompare as doctestcompare
-from lxml import etree
+from lxml import doctestcompare, etree
 from parameterized import parameterized
 
 from corpustools import errormarkup

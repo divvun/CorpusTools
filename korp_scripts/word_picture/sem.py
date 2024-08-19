@@ -13,7 +13,8 @@ The result is a .out file, but by running the wordpicture scripts with this the 
 Might be bacause then the 2 copora (the original vrt by which the Kwic is generated and the new .out by which the wordpicture is generated do not match in terms of tokens).
 '''
 
-import re, sys
+import re
+import sys
 
 infile_n = sys.argv[1]
 infile = open(infile_n, 'r')

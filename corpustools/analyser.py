@@ -24,7 +24,7 @@ import multiprocessing
 import os
 import sys
 
-import lxml.etree as etree
+from lxml import etree
 
 from corpustools import argparse_version, ccat, corpuspath, modes, util
 from corpustools.common_arg_ncpus import NCpus

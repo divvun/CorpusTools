@@ -19,7 +19,7 @@
 
 import os
 
-import lxml.etree as etree
+from lxml import etree
 
 HERE = os.path.dirname(__file__)
 

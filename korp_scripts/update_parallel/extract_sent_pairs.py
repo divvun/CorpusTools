@@ -1,13 +1,11 @@
 # -*- coding:utf-8 -*-
-import re, os, errno, cgi, json, lxml
-import sys, codecs, locale, getopt
-from lxml.etree import ElementTree as ET
-from lxml.etree import Element, SubElement, XMLParser
-from subprocess import Popen, PIPE
-from operator import itemgetter
-from lxml.etree import parse
+import os
+import sys
 from importlib import reload
-from collections import defaultdict
+
+from lxml.etree import Element, SubElement, parse
+from lxml.etree import ElementTree as ET
+
 
 def main():
     lang = sys.argv[1]

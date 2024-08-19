@@ -23,7 +23,7 @@ import os
 import unittest
 from io import StringIO
 
-from corpustools import text_cat, util
+from corpustools import text_cat
 
 here = os.path.dirname(__file__)
 

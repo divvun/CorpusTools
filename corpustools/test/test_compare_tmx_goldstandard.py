@@ -20,7 +20,7 @@
 import os
 import unittest
 
-import lxml.etree as etree
+from lxml import etree
 
 from corpustools import compare_tmx_goldstandard, tmx
 

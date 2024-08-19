@@ -21,8 +21,7 @@
 import doctest
 import unittest
 
-import lxml.doctestcompare as doctestcompare
-import lxml.etree as etree
+from lxml import doctestcompare, etree
 
 
 class XMLTester(unittest.TestCase):

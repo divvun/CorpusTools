@@ -1,10 +1,9 @@
 """Generate the code reference pages."""
 
+import os
 from pathlib import Path
 
 import mkdocs_gen_files
-
-import os
 
 nav = mkdocs_gen_files.Nav()
 

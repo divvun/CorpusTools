@@ -23,7 +23,7 @@ import argparse
 import multiprocessing
 import re
 
-import lxml.etree as etree
+from lxml import etree
 
 from corpustools import argparse_version, corpuspath, modes, util
 from corpustools.common_arg_ncpus import NCpus

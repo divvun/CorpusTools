@@ -18,11 +18,9 @@
 
 
 import doctest
-import os
 
 import lxml.doctestcompare
 import lxml.etree
-from parameterized import parameterized
 
 
 def assertXmlEqual(got, want):

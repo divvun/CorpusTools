@@ -27,7 +27,7 @@ import difflib
 import os
 import sys
 
-import lxml.etree as etree
+from lxml import etree
 
 from corpustools import argparse_version, ccat, corpuspath, move_files, util
 

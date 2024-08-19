@@ -22,8 +22,7 @@ import doctest
 import os
 import unittest
 
-import lxml.doctestcompare as doctestcompare
-import lxml.etree as etree
+from lxml import doctestcompare, etree
 
 from corpustools import languagedetector, text_cat
 

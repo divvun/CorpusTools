@@ -22,7 +22,7 @@ import os
 import re
 import sys
 
-import lxml.etree as etree
+from lxml import etree
 
 from corpustools import corpuspath, util
 

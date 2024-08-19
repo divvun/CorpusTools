@@ -17,7 +17,7 @@
 #
 """Convert bible xml files to the Giella xml format."""
 
-import lxml.etree as etree
+from lxml import etree
 
 
 def process_verse(verse_element):

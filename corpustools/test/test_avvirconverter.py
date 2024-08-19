@@ -18,7 +18,7 @@
 #
 """Test conversion of Ávvir xml files."""
 
-import lxml.etree as etree
+from lxml import etree
 
 from corpustools import avvirconverter
 from corpustools.test import xmltester

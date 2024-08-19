@@ -18,8 +18,7 @@
 #
 """Test conversion of html content."""
 
-import lxml.etree as etree
-import lxml.html as html
+from lxml import etree, html
 from parameterized import parameterized
 
 from corpustools import htmlcontentconverter

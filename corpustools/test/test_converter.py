@@ -21,7 +21,7 @@
 
 import os
 
-import lxml.etree as etree
+from lxml import etree
 
 from corpustools import converter, text_cat, util, xslsetter
 from corpustools.test.xmltester import XMLTester

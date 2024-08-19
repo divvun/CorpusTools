@@ -18,11 +18,10 @@
 #
 """Test conversion of pdf files."""
 
-import collections
 import os
 import unittest
 
-import lxml.etree as etree
+from lxml import etree
 from nose.tools import assert_equal
 from parameterized import parameterized
 
