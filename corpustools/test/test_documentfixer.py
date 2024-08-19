@@ -23,6 +23,7 @@ import io
 import os
 from pathlib import Path
 
+import pytest
 from lxml import etree
 
 from corpustools import documentfixer, plaintextconverter, svgconverter
@@ -33,10 +34,19 @@ HERE = os.path.dirname(__file__)
 
 TestItem = collections.namedtuple("TestItem", ["name", "orig", "expected"])
 
-
-def test_detect_quote():
-    """Test the detect_quote function."""
-    quote_tests = [
+test_items = [
+    TestItem(
+        name=f"quote followed by {i}",
+        orig=(f"<p>“bla”{i} bla ”bla”</p>"),
+        expected=(
+            f'<p><span type="quote">“bla”</span>{i} bla '
+            '<span type="quote">”bla”</span></p>'
+        ),
+    )
+    for i in ".,?!:"
+]
+test_items.extend(
+    [
         TestItem(
             name="quote within QUOTATION MARK",
             orig='<p>bla "bla" bla "bla" bla </p>',
@@ -110,24 +120,12 @@ def test_detect_quote():
             ),
         ),
     ]
-
-    for i in ".,?!:":
-        quote_tests.append(
-            TestItem(
-                name=f"quote followed by {i}",
-                orig=(f"<p>“bla”{i} bla ”bla”</p>"),
-                expected=(
-                    '<p><span type="quote">“bla”</span>{} bla '
-                    '<span type="quote">”bla”</span></p>'.format(i)
-                ),
-            )
-        )
-
-    for name, orig, expected in quote_tests:
-        yield check_quote_detection, name, orig, expected
+)
 
 
-def check_quote_detection(name, orig, expected):
+@pytest.mark.parametrize("test_item", test_items)
+def test_detect_quote(test_item):
+    """Test the detect_quote function."""
     document_fixer = documentfixer.DocumentFixer(
         etree.parse(
             os.path.join(
@@ -137,9 +135,9 @@ def check_quote_detection(name, orig, expected):
             )
         )
     )
-    got_paragraph = document_fixer._detect_quote(etree.fromstring(orig))
+    got_paragraph = document_fixer._detect_quote(etree.fromstring(test_item.orig))
 
-    assertXmlEqual(got_paragraph, etree.fromstring(expected))
+    assertXmlEqual(got_paragraph, etree.fromstring(test_item.expected))
 
 
 class TestDocumentFixer(XMLTester):
