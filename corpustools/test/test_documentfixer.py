@@ -2250,7 +2250,7 @@ LOGO: Smi kulturfestivala 1998
         self.assertXmlEqual(got, want)
 
     def test_fix_sms5(self):
-        r"""\u0301 ( ́)  should be replaced by \u02B9 (ʹ)"""
+        r"""\u0301 ( ́)  should be replaced by \u02BC (ʼ)"""
         document_fixer = documentfixer.DocumentFixer(
             etree.fromstring(
                 '<document xml:lang="sms">'
@@ -2269,6 +2269,42 @@ LOGO: Smi kulturfestivala 1998
             '<document xml:lang="sms">'
             "  <header/>"
             "  <body>"
+            "     <p>"
+            "       Materialbaaŋk čuäʼjtumuš"
+            "     </p>"
+            "  </body>"
+            "</document>"
+        )
+
+        self.assertXmlEqual(got, want)
+
+    def test_fix_sms6(self):
+        r"""Spaces in front of \u02BC (ʼ)  and \u02B9 (ʹ) should be removed"""
+
+        document_fixer = documentfixer.DocumentFixer(
+            etree.fromstring(
+                '<document xml:lang="sms">'
+                "  <header/>"
+                "  <body>"
+                "     <p>"
+                "       Materialbaaŋk čuä   ʼjtumuš"
+                "     </p>"
+                "     <p>"
+                "       Materialbaaŋk čuä   ʹjtumuš"
+                "     </p>"
+                "  </body>"
+                "</document>"
+            )
+        )
+        document_fixer.fix_body_encoding("sms")
+        got = document_fixer.get_etree()
+        want = etree.fromstring(
+            '<document xml:lang="sms">'
+            "  <header/>"
+            "  <body>"
+            "     <p>"
+            "       Materialbaaŋk čuäʼjtumuš"
+            "     </p>"
             "     <p>"
             "       Materialbaaŋk čuäʹjtumuš"
             "     </p>"
