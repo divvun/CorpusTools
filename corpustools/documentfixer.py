@@ -294,7 +294,6 @@ class DocumentFixer:
         if title is not None and title.text is not None:
             text = title.text
 
-            text = text
             util.print_frame(encoding)
             title.text = decode.decode_para(encoding, text)
 
