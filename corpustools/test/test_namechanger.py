@@ -57,7 +57,7 @@ here = os.path.dirname(__file__)
         (
             (
                 "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
-                "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦ‌​ЧШЩЪЫЬЭЮЯ.txt"
+                "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦ‌\u200bЧШЩЪЫЬЭЮЯ.txt"
             ),
             (
                 "abvgdeiozhziiklmnoprstufkhtschshshch_y_eiuia"
