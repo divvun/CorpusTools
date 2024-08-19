@@ -42,7 +42,7 @@ def check_position(val_head, val_dep, val_line, val_idx_sem):
             val_line[6] = str(val_dep + cnt_mid) + '\n'
         else:
             if val_dep < val_head:
-                if val_dep == val_head - 1 and not "Sem_" in val_line[3]:
+                if val_dep == val_head - 1 and "Sem_" not in val_line[3]:
                     val_line[6] = str(val_dep + cnt_sem) + '\n'
                 else:
                     val_line[6] = str(val_dep + cnt_sem - 1) + '\n'

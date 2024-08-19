@@ -2,6 +2,7 @@ import argparse
 import multiprocessing
 import os
 
+
 # os.sched_getaffinity(0) is not available for MacOS, solution for it from
 # https://stackoverflow.com/questions/74048135/alternatives-to-os-sched-getaffinity-for-macos
 def _get_core_count() -> int:

@@ -23,6 +23,7 @@ import sys
 from pathlib import Path
 
 from git.exc import GitCommandError
+
 from corpustools import argparse_version, corpuspath, namechanger, versioncontrol
 
 

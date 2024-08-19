@@ -18,12 +18,11 @@
 
 
 import codecs
-import sys
 import unittest
 
 from parameterized import parameterized
 
-from corpustools import decode, iso_ir_197, iso_ir_209, macsami, util, winsami2
+from corpustools import decode, util
 
 
 def handler(err):

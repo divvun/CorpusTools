@@ -33,7 +33,7 @@ def to_html_elt(filename):
             version of the given file.
     """
     html_body = subprocess.run(
-        ["pandoc", filename], encoding="utf-8", capture_output=True
+        ["pandoc", filename], encoding="utf-8", capture_output=True, check=False
     ).stdout
 
     return html.document_fromstring(f"<html><body>{html_body}</body></html>")

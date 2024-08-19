@@ -17,7 +17,6 @@ def process_in_parallel(files_list):
     pool.map(process_file, files_list)
     pool.close()  # no more tasks
     pool.join()  # wrap up current tasks
-    return
 
 
 def process_serially(files_list):
@@ -81,7 +80,7 @@ def add_analysis_elements(tree, path):
         lang, modename, text="¶ ".join([tuv.find("seg").text for tuv in tuv_elements])
     )
 
-    for (tuv, analysis) in zip(tuv_elements, analyses):
+    for (tuv, analysis) in zip(tuv_elements, analyses, strict=False):
         try:
             tuv.append(make_analysis_element(analysis, lang))
         except IndexError:

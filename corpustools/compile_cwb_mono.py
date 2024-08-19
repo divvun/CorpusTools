@@ -628,7 +628,7 @@ def parse_args():
         args.cwb_binaries_dir = Path(args.cwb_binaries_dir)
     else:
         cmd = ["sh", "-c", "command -v cwb-encode"]
-        proc = subprocess.run(cmd, text=True, capture_output=True)
+        proc = subprocess.run(cmd, text=True, capture_output=True, check=False)
         if proc.returncode != 0:
             parser.print_usage()
             print("critical: cannot find the cwb binaries on the system, "

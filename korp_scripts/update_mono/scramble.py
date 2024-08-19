@@ -41,7 +41,7 @@ def main():
             for line in f_in.readlines():
                 if "<text" in line:
                     first_line = line
-                if not "<text" in line and not "sentence" in line and not "</text" in line:
+                if "<text" not in line and "sentence" not in line and "</text" not in line:
                     if block_sent.get(j):
                         block_sent[j].append(line)
                     else:
@@ -51,7 +51,7 @@ def main():
 
             values = list(block_sent.values())
             shuffle(values)
-            shuffled = dict(zip(block_sent, values))
+            shuffled = dict(zip(block_sent, values, strict=False))
             f_out.write(first_line)
             for key, value in shuffled.items():
                 f_out.write('<sentence id="' + str(i) + '">\n')
@@ -62,7 +62,6 @@ def main():
 
             f_out.close()
             f_in.close()
-    return
 
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@
 import MySQLdb
 from settings_not_in_svn import *
 
+
 class From_vrt:
     def __init__(self, string, lemma, pos, analyses, position, relation, parent, sentence_id, token_count, string_id):
         self.string = string
@@ -74,7 +75,7 @@ with open(fileName) as f:
             single_sentence.sentence_id = line.split('"')[1]
             single_sentence.token_count = int(line.split('"')[len(line.split('"'))-2])
         else:
-            if not '/sentence' in line and not 'corpus id' in line and not 'text id' in line and not '/text' in line and not '/corpus' in line:
+            if '/sentence' not in line and 'corpus id' not in line and 'text id' not in line and '/text' not in line and '/corpus' not in line:
                 single_sentence.string.append(line.split()[0])
                 single_sentence.lemma.append(line.split()[1])
                 single_sentence.lemma.append(line.split()[1])
