@@ -1878,7 +1878,9 @@ TITTEL: 3</p>
         self.assertXmlEqual(got, want)
 
     def test_fix_body_encoding(self):
-        newstext = plaintextconverter.PlaintextConverter(Path("orig/sme/riddu/tullball.txt"))
+        newstext = plaintextconverter.PlaintextConverter(
+            Path("orig/sme/riddu/tullball.txt")
+        )
         text = newstext.content2xml(
             io.StringIO(
                 """ÐMun lean njeallje jagi boaris.
