@@ -221,6 +221,12 @@ class DocumentFixer:
     def fix_lang(self, element, lang):
         """Replace invalid accents with valid ones for the sms language."""
 
+        sms_space = re.compile(
+            r'(?P<unwanted_space>\s+)'
+            r'(?P<sms_modifiers>[ʼʹ])', # MODIFIER LETTER APOSTROPHE, 
+                                        # MODIFIER LETTER PRIME
+        re.UNICODE)
+
         replacement_pairs = {
             "sms": [
                 ("\u2019", "\u02BC"),  # RIGHT SINGLE QUOTATION MARK,
@@ -230,7 +236,7 @@ class DocumentFixer:
                 ("\u2032", "\u02B9"),  # PRIME, MODIFIER LETTER PRIME
                 ("\u00B4", "\u02B9"),  # ACUTE ACCENT,
                 # MODIFIER LETTER PRIME
-                ("\u0301", "\u02B9"),  # COMBINING ACUTE ACCENT,
+                ("\u0301", "\u02BC"),  # COMBINING ACUTE ACCENT,
                 # MODIFIER LETTER PRIME
             ],
             "mns": [
@@ -256,8 +262,12 @@ class DocumentFixer:
 
         if element.text:
             element.text = util.replace_all(replacement_pairs[lang], element.text)
+            if lang == "sms":
+                element.text = sms_space.sub(r'\g<sms_modifiers>', element.text)
         if element.tail:
             element.tail = util.replace_all(replacement_pairs[lang], element.tail)
+            if lang == "sms":
+                element.tail = sms_space.sub(r'\g<sms_modifiers>', element.tail)
         for child in element:
             self.fix_lang(child, lang)
 
@@ -286,7 +296,8 @@ class DocumentFixer:
         self.root.append(body)
 
         if mainlang in ["sms", "mns"]:
-            self.fix_lang(self.root.find("body"), lang=mainlang)
+            for paragraph in body.iter("p"):
+                self.fix_lang(paragraph, lang=mainlang)
 
     def fix_title_person(self, encoding):
         """Fix encoding problems."""
