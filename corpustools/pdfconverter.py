@@ -690,13 +690,12 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         runner.run(command, cwd="/tmp")
 
         if runner.returncode != 0:
-            with open(self.orig + ".log", "w") as logfile:
+            logname = str(self.orig) + ".log"
+            with open(logname, "w") as logfile:
                 print(f"stdout\n{runner.stdout}\n", file=logfile)
                 print(f"stderr\n{runner.stderr}\n", file=logfile)
                 raise util.ConversionError(
-                    "{} failed. More info in the log file: {}".format(
-                        command[0], self.orig + ".log"
-                    )
+                    f"{command[0]} failed. More info in the log file: {logname}"
                 )
 
         return runner.stdout.decode("utf8")
