@@ -96,8 +96,9 @@ def normalise_filename(filename):
     """
     if os.sep in filename:
         raise NamechangerError(
-            "Invalid filename {}.\n"
-            "Filename is not allowed to contain {}".format(filename, os.sep)
+            "Invalid filename {}.\n" "Filename is not allowed to contain {}".format(
+                filename, os.sep
+            )
         )
 
     # unicode.decode wants a unicode string

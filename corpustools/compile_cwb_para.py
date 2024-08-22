@@ -15,7 +15,7 @@ from corpustools.modes import Pipeline
 
 
 def analyse():
-    pass#hfst_lookup()
+    pass  # hfst_lookup()
 
 
 def analyse_tmx(corpus):
@@ -34,9 +34,8 @@ def analyse_tmx(corpus):
             analysis = pipeline.run(seg.text.encode("utf"), corpus.lang)
             analysis = analysis.split('\n"<')
             lines = (line for line in analysis if line)
-            #for cohort in lines:
-                #cc_list = cohort.split("\n\t")
-
+            # for cohort in lines:
+            # cc_list = cohort.split("\n\t")
 
 
 def parse_args():
@@ -57,8 +56,8 @@ def parse_args():
     parser.add_argument(
         "--cwb-binaries-dir",
         help="directory where the cwb binaries (such as cwb-encode, etc) "
-             "are located. Only necessary if the `cwb-xxx` commands are not "
-             "available on the system path"
+        "are located. Only necessary if the `cwb-xxx` commands are not "
+        "available on the system path",
     )
 
     args = parser.parse_args()

@@ -82,7 +82,6 @@ def count_files(path):
 
 
 def main():
-
     args = parse_options()
 
     lacking_files = defaultdict(set)

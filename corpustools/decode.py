@@ -388,11 +388,11 @@ def default_decoder(position, text):
     """The default decoder.
 
     Args:
-        position (str): 
+        position (str):
         text (str): The string that should be decoded.
 
     Returns:
-        (str): 
+        (str):
     """
     if position is not None:
         for key, value in CTYPES[position].items():

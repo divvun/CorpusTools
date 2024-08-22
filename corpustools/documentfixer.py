@@ -222,10 +222,11 @@ class DocumentFixer:
         """Replace invalid accents with valid ones for the sms language."""
 
         sms_space = re.compile(
-            r'(?P<unwanted_space>\s+)'
-            r'(?P<sms_modifiers>[ʼʹ])', # MODIFIER LETTER APOSTROPHE, 
-                                        # MODIFIER LETTER PRIME
-        re.UNICODE)
+            r"(?P<unwanted_space>\s+)"
+            r"(?P<sms_modifiers>[ʼʹ])",  # MODIFIER LETTER APOSTROPHE,
+            # MODIFIER LETTER PRIME
+            re.UNICODE,
+        )
 
         replacement_pairs = {
             "sms": [
@@ -263,11 +264,11 @@ class DocumentFixer:
         if element.text:
             element.text = util.replace_all(replacement_pairs[lang], element.text)
             if lang == "sms":
-                element.text = sms_space.sub(r'\g<sms_modifiers>', element.text)
+                element.text = sms_space.sub(r"\g<sms_modifiers>", element.text)
         if element.tail:
             element.tail = util.replace_all(replacement_pairs[lang], element.tail)
             if lang == "sms":
-                element.tail = sms_space.sub(r'\g<sms_modifiers>', element.tail)
+                element.tail = sms_space.sub(r"\g<sms_modifiers>", element.tail)
         for child in element:
             self.fix_lang(child, lang)
 

@@ -47,7 +47,8 @@ def to_html_elt(filename: str) -> ElementTree:
             outdir,
             str(filepath),
         ],
-        encoding="utf-8", check=False,
+        encoding="utf-8",
+        check=False,
     )
 
     outname = f"{filepath.stem}.html"

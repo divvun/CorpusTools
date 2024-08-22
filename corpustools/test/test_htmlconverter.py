@@ -206,9 +206,7 @@ class TestHTMLConverter(XMLTester):
                     <h1>ï å</h1>
                 </body>
             </html>
-        """.encode(
-            encoding="utf-8"
-        )
+        """.encode(encoding="utf-8")
         want = html.fromstring(
             """
             <html lang="sma-NO">

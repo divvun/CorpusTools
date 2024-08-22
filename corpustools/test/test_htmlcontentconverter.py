@@ -297,19 +297,16 @@ def check_unwanted_classes_and_ids(tag, key, value):
     else:
         inner = '<{0} {1}="{2}">' "content:{0} {1} {2}" "</{0}>".format(tag, key, value)
         inner_r = ""
-    content_xml = html.document_fromstring(
-        f"<html><head/><body>{inner}</body></html>"
-    )
+    content_xml = html.document_fromstring(f"<html><head/><body>{inner}</body></html>")
     got = htmlcontentconverter.HTMLBeautifier(content_xml).beautify()
 
-    want = html.document_fromstring(
-        f"<html><head/><body>{inner_r}</body></html>"
-    )
+    want = html.document_fromstring(f"<html><head/><body>{inner_r}</body></html>")
 
     if etree.tostring(got) != etree.tostring(want):
         raise AssertionError(
-            "Remove classes and ids:\nexpected {}\n"
-            "got {}".format(etree.tostring(want), etree.tostring(got))
+            "Remove classes and ids:\nexpected {}\n" "got {}".format(
+                etree.tostring(want), etree.tostring(got)
+            )
         )
 
 

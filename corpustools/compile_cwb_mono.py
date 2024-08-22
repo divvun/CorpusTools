@@ -18,8 +18,7 @@ from typing import Callable
 
 Module = typing.Literal["converted", "analysed", "korp_mono"]
 LANGS = set(
-    "fao fit fkv koi kpv mdf mhr mrj myv olo "
-    "sma sme smj smn sms udm vep vro".split()
+    "fao fit fkv koi kpv mdf mhr mrj myv olo " "sma sme smj smn sms udm vep vro".split()
 )
 
 
@@ -31,6 +30,7 @@ def timed(f):
         t = round((perf_counter_ns() - t0) / 1_000_000)
         print(f"done ({t}ms)")
         return res
+
     return wrapper
 
 
@@ -111,7 +111,7 @@ class Corpus:
             if len(folder) >= 7 and folder.startswith("corpus-"):
                 try:
                     lang_end_index = folder.index("-", 7)
-                    lang = folder[7:lang_end_index + 1]
+                    lang = folder[7 : lang_end_index + 1]
                 except ValueError:
                     lang = folder[7:]
 
@@ -126,10 +126,19 @@ class Corpus:
 
                 module = None if idx + 1 >= len(parts) else parts[idx + 1]
                 category = None if idx + 2 >= len(parts) else parts[idx + 2]
-                subpath = None if idx + 3 >= len(parts) else Path(*parts[idx + 3:])
+                subpath = None if idx + 3 >= len(parts) else Path(*parts[idx + 3 :])
 
-                return (path, lang, root_dir, orig_dir, processed_dir, closed,
-                        module, category, subpath)
+                return (
+                    path,
+                    lang,
+                    root_dir,
+                    orig_dir,
+                    processed_dir,
+                    closed,
+                    module,
+                    category,
+                    subpath,
+                )
 
         raise ValueError(
             f"no corpus directory found in path {Path(*parts)}\n"
@@ -173,7 +182,7 @@ class Corpus:
 # class CorpusDirectory(argparse.Action):
 #     """The type of the *directory* argument. Checks that folder exists,
 #     and determines how the *class:Corpus* should be built."""
-# 
+#
 #     def __init__(self, option_strings, dest, nargs=None, const=None,
 #                  default=None, type=None, choices=None, required=False,
 #                  help=None, metavar=None):
@@ -183,7 +192,7 @@ class Corpus:
 #         )
 #         print("CorpusDirectory argparse Action __init__")
 #         super().__init__(option_strings, dest, default=".", type=Path, help=help)
-# 
+#
 #     def __call__(self, parser, namespace, values, option_string=None):
 #         print("CorpusDirectory argparse Action __call__")
 #         path = values
@@ -200,12 +209,15 @@ def _default_success(completed_process: subprocess.CompletedProcess):
 
 def run_subcommand(
     cmd: list[str],
-    considered_success:
-        Callable[[subprocess.CompletedProcess], bool] = _default_success,
+    considered_success: Callable[
+        [subprocess.CompletedProcess], bool
+    ] = _default_success,
     verbose: bool = False,
     check: bool = False,
 ):
-    def noop(*_args, **_kwargs): pass
+    def noop(*_args, **_kwargs):
+        pass
+
     print = builtins.print if verbose else noop
 
     print("running subcommand:\n  ", " ".join(cmd))
@@ -256,7 +268,7 @@ def concat_corpus(corpus, date, parallel=None):
     This function replaces what the compile_corpus.xsl script does.
     """
     print("Concatenating corpora...")
-    date_s = str(date).replace('-', '')
+    date_s = str(date).replace("-", "")
     compiled_directory = Path(f"vrt_{corpus.lang}_{date_s}")
     if compiled_directory.exists():
         remove_directory_contents(compiled_directory)
@@ -277,11 +289,11 @@ def concat_corpus(corpus, date, parallel=None):
         nfiles = len(file_list)
 
         for i, file in enumerate(file_list, start=1):
-            print(f"    processing file [{i}/{nfiles}] {file}...",
-                  end=" ", flush=True)
+            print(f"    processing file [{i}/{nfiles}] {file}...", end=" ", flush=True)
             try:
                 text_el, n_sentences, n_tokens = process_input_xml(
-                        file, category, text_num)
+                    file, category, text_num
+                )
             except ET.ParseError:
                 errors.append(f"file {file} could not be parsed (invalid xml?)")
                 print("failed (could not parse xml)")
@@ -309,8 +321,10 @@ def cwb_huffcode(cwb_binaries_directory, registry_dir, upper_corpus_name):
     print("    compressing token files (cwb_huffcode)...", end="", flush=True)
     cmd = [
         f"{cwb_binaries_directory}/cwb-huffcode",
-        "-r", f"{registry_dir}",
-        "-A", upper_corpus_name,
+        "-r",
+        f"{registry_dir}",
+        "-A",
+        upper_corpus_name,
     ]
     ok = run_subcommand(cmd)
     if not ok:
@@ -322,8 +336,10 @@ def cwb_compress_rdx(cwb_binaries_directory, registry_dir, upper_corpus_name):
     print("    compressing indexes...", end="", flush=True)
     cmd = [
         f"{cwb_binaries_directory}/cwb-compress-rdx",
-        "-r", f"{registry_dir}",
-        "-A", upper_corpus_name,
+        "-r",
+        f"{registry_dir}",
+        "-A",
+        upper_corpus_name,
     ]
     ok = run_subcommand(cmd)
     if not ok:
@@ -332,7 +348,11 @@ def cwb_compress_rdx(cwb_binaries_directory, registry_dir, upper_corpus_name):
 
 @timed
 def rm_unneeded_data_files(data_dir, corpus_name):
-    print(f"    deleting non-compressed files from data dir of corpus {corpus_name}...", end="", flush=True)
+    print(
+        f"    deleting non-compressed files from data dir of corpus {corpus_name}...",
+        end="",
+        flush=True,
+    )
     d = data_dir / corpus_name
     for file in chain(d.glob("*.rev"), d.glob("*.rdx"), d.glob("*.corpus")):
         file.unlink()
@@ -422,7 +442,8 @@ def create_korp_settings(korp_corpus_config_dir, vrt_directory, corpus_name):
     # create the Korp settings files,
     # vrt_fao_DATE
     default_title = " ".join(vrt_directory.split("_")[:-1])
-    data = dedent(f"""
+    data = dedent(
+        f"""
     description: blank
     id: {corpus_name}
     mode:
@@ -438,7 +459,8 @@ def create_korp_settings(korp_corpus_config_dir, vrt_directory, corpus_name):
           eng: sentence
           swe: mening
         value: sentence
-    """).strip()
+    """
+    ).strip()
     file = (korp_corpus_config_dir / corpus_name).with_suffix(".yaml")
     with open(file, "w") as f:
         f.write(data)
@@ -455,43 +477,49 @@ def cwb_encode(
     print("    Converting to CWB binary format (cwb-encode)...", end="", flush=True)
     cmd = [
         f"{cwb_binaries_directory}/cwb-encode",
-
         # skip empty lines in input data
         "-s",
-
         # xml format
         "-x",
-
         # no default p attribute (we specify the first one with -P word below)
-        "-p", "-",
-
+        "-p",
+        "-",
         # data directory
-        "-d", f"{data_dir}/{corpus_name}",
-
+        "-d",
+        f"{data_dir}/{corpus_name}",
         # registry directory
-        "-R", f"{registry_dir}/{corpus_name}",
-
+        "-R",
+        f"{registry_dir}/{corpus_name}",
         # character set
-        "-c", "utf8",
-
+        "-c",
+        "utf8",
         # which .vrt file to encode
-        "-f", f"{vrt_file}",
-
+        "-f",
+        f"{vrt_file}",
         # positional attributes
-        "-P", "word",
-        "-P", "lemma",
-        "-P", "pos",
-        "-P", "msd",
-        "-P", "ref",
-        "-P", "deprel",
-        "-P", "dephead",
-
+        "-P",
+        "word",
+        "-P",
+        "lemma",
+        "-P",
+        "pos",
+        "-P",
+        "msd",
+        "-P",
+        "ref",
+        "-P",
+        "deprel",
+        "-P",
+        "dephead",
         # structural attributes
-        "-S", "sentence:0+id+token_count",
-        "-S", "text:0+id+title+lang+orig_lang+gt_domain+first_name+last_name"
-              "+nationality+date+datefrom+dateto+timefrom+timeto"
-              "+sentence_count+token_count",
-        "-S", "corpus:0+id",
+        "-S",
+        "sentence:0+id+token_count",
+        "-S",
+        "text:0+id+title+lang+orig_lang+gt_domain+first_name+last_name"
+        "+nationality+date+datefrom+dateto+timefrom+timeto"
+        "+sentence_count+token_count",
+        "-S",
+        "corpus:0+id",
     ]
     if not run_subcommand(cmd):
         raise RuntimeError("cwb_encode() failed")
@@ -503,7 +531,8 @@ def cwb_makeall(cwb_binaries_directory, registry_dir, upper_corpus_name):
     cmd = [
         f"{cwb_binaries_directory}/cwb-makeall",
         "-D",
-        "-r", f"{registry_dir}",
+        "-r",
+        f"{registry_dir}",
         f"{upper_corpus_name}",
     ]
     try:
@@ -541,12 +570,12 @@ def encode_corpus(
     for vrt_file in vrt_directory.iterdir():
         print(f"{vrt_file.name}...")
         n_sentences, first_date, last_date = read_vrt_xml(vrt_file)
-        corpus_name = vrt_file.name[:vrt_file.name.index(".")]
+        corpus_name = vrt_file.name[: vrt_file.name.index(".")]
         upper_corpus_name = corpus_name.upper()
         # in metadata: id name title description lang updated
         # TODO this is supposed to be the "NAME" field in the file registry/<corpus>/<id>
 
-        #sh loc_encode_gt_corpus_20181106.sh "$input_data" "$date" "$ln" "$lang_code" "$corpus_name" "$fd" "$ld"
+        # sh loc_encode_gt_corpus_20181106.sh "$input_data" "$date" "$ln" "$lang_code" "$corpus_name" "$fd" "$ld"
 
         corpus_data_dir = data_dir / corpus_name
         corpus_data_dir.mkdir(parents=True, exist_ok=True)
@@ -556,7 +585,9 @@ def encode_corpus(
                 f"FirstDate: {first_date}\nLastDate: {last_date}\n"
             )
 
-        cwb_encode(vrt_file, corpus_name, cwb_binaries_directory, data_dir, registry_dir)
+        cwb_encode(
+            vrt_file, corpus_name, cwb_binaries_directory, data_dir, registry_dir
+        )
         cwb_makeall(cwb_binaries_directory, registry_dir, upper_corpus_name)
         cwb_huffcode(cwb_binaries_directory, registry_dir, upper_corpus_name)
         cwb_compress_rdx(cwb_binaries_directory, registry_dir, upper_corpus_name)
@@ -583,28 +614,28 @@ def parse_args():
     parser.add_argument(
         "--cwb-binaries-dir",
         help="directory where the cwb binaries (such as cwb-encode, etc) "
-             "are located. Only necessary if the `cwb-xxx` commands are not "
-             "available on the system path"
+        "are located. Only necessary if the `cwb-xxx` commands are not "
+        "available on the system path",
     )
     parser.add_argument(
         "--target",
         type=Path,
         help="target directory, where data/ and registry/ subfolders exist. "
-             "If the data/ and registry/ directires are in different folders, "
-             "use the --data-dir and --registry-dir arguments to specify them "
-             "individually",
+        "If the data/ and registry/ directires are in different folders, "
+        "use the --data-dir and --registry-dir arguments to specify them "
+        "individually",
     )
     parser.add_argument(
         "--data-dir",
         type=Path,
         help="path to the CWB data/ directory. If data/ and registry/ is "
-             "in the same directory, it's simpler to use --target",
+        "in the same directory, it's simpler to use --target",
     )
     parser.add_argument(
         "--registry-dir",
         type=Path,
         help="path to the CWB registry/ directory. If data/ and registry/ is "
-             "in the same directory, it's simpler to use --target",
+        "in the same directory, it's simpler to use --target",
     )
 
     args = parser.parse_args()
@@ -631,22 +662,26 @@ def parse_args():
         proc = subprocess.run(cmd, text=True, capture_output=True, check=False)
         if proc.returncode != 0:
             parser.print_usage()
-            print("critical: cannot find the cwb binaries on the system, "
-                  "specify the directory where the binaries are located using "
-                  "--cwb-binaries-dir")
+            print(
+                "critical: cannot find the cwb binaries on the system, "
+                "specify the directory where the binaries are located using "
+                "--cwb-binaries-dir"
+            )
             parser.exit(1)
 
         args.cwb_binaries_dir = Path(proc.stdout.strip()).parent
 
     if (
-        not (args.cwb_binaries_dir / "cwb-encode").is_file() or
-        not (args.cwb_binaries_dir / "cwb-makeall").is_file() or
-        not (args.cwb_binaries_dir / "cwb-huffcode").is_file() or
-        not (args.cwb_binaries_dir / "cwb-compress-rdx").is_file()
+        not (args.cwb_binaries_dir / "cwb-encode").is_file()
+        or not (args.cwb_binaries_dir / "cwb-makeall").is_file()
+        or not (args.cwb_binaries_dir / "cwb-huffcode").is_file()
+        or not (args.cwb_binaries_dir / "cwb-compress-rdx").is_file()
     ):
         parser.print_usage()
-        print("critical: cannot find the cwb binaries in the given folder"
-              f" ({args.cwb_binaries_dir.resolve()})")
+        print(
+            "critical: cannot find the cwb binaries in the given folder"
+            f" ({args.cwb_binaries_dir.resolve()})"
+        )
         parser.exit(1)
 
     return args

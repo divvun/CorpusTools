@@ -22,7 +22,7 @@ class Codec(codecs.Codec):
                 'backslashreplace'.
 
         Returns:
-            (tuple[bytes, int]): A tuple of the output object and the 
+            (tuple[bytes, int]): A tuple of the output object and the
                 length consumed
         """
         return codecs.charmap_encode(instring, errors, encoding_table)

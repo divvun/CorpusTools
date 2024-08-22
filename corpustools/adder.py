@@ -338,8 +338,7 @@ def main():
 
         if corpus_path.name == "dummy.txt":
             raise SystemExit(
-                "Error!\n"
-                "You must add genre to the directory\ne.g. {}".format(
+                "Error!\n" "You must add genre to the directory\ne.g. {}".format(
                     os.path.join(args.directory, "admin")
                 )
             )
@@ -384,8 +383,9 @@ def main():
             )
         if not os.path.exists(args.parallel_file):
             raise SystemExit(
-                "The given parallel file\n\t{}\n"
-                "does not exist".format(args.parallel_file)
+                "The given parallel file\n\t{}\n" "does not exist".format(
+                    args.parallel_file
+                )
             )
         if len(args.origs) > 1:
             raise SystemExit(

@@ -38,7 +38,7 @@ def get_books(tree):
     """Get the addresses for the books on bible.no."""
     books = {"ot": [], "nt": []}
     for table_row in tree.xpath(".//table[@class='booklist']/tr"):
-        for (index, address) in enumerate(table_row.xpath("./td[@class='tablePR']/a")):
+        for index, address in enumerate(table_row.xpath("./td[@class='tablePR']/a")):
             if index == 1:
                 books["ot"].append(address.get("href"))
             if index == 3:
@@ -64,7 +64,6 @@ def get_verses(chapter_page):
 
     content_element = chapter_page.find(".//table[@class='biblesingle']/tr/td")
     if content_element is not None:
-
         for bibleref in content_element.xpath(".//div[@class='bibleref']"):
             bibleref.getparent().remove(bibleref)
 
@@ -167,11 +166,11 @@ def main():
     prefix = "https://bibel.no"
     books = get_books(fetch_page("https://bibel.no/nettbibelen?slang=bokmal11"))
     for book_name in books:
-        for (bookindex, first_address) in enumerate(books[book_name], start=1):
+        for bookindex, first_address in enumerate(books[book_name], start=1):
             address = f"{prefix}{first_address}"
             first_page = fetch_page(address)
             fetch_other_languages(book_name, bookindex, 1, address)
-            for (chapter_number, chapter_address) in get_chapter_addresses(first_page):
+            for chapter_number, chapter_address in get_chapter_addresses(first_page):
                 chapter_address = f"{prefix}{chapter_address}"
                 fetch_other_languages(
                     book_name, bookindex, chapter_number, chapter_address

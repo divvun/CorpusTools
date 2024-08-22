@@ -771,7 +771,7 @@ def lemma_generation(original_analysis, pos, _current_lang):
 
 def clean_msd(current_msd, pos):
     current_msd = current_msd.strip()
-    for (regex, replacement) in [
+    for regex, replacement in [
         (r"IV\s", ""),
         (r"TV\s", ""),
         ("Relc", "Rel"),
@@ -806,7 +806,11 @@ def non_empty_cohorts(current_sentence):
 
 # Anders: re.compile is sort of smart with caching and such, but just as an
 # attempt to speed up this function a little bit, I took the re.compile() out
-__REG = re.compile(r"(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?\|_∞_\<aux>\s?)")
+__REG = re.compile(
+    r"(_∞_\w+\s?|_∞_\?\s?|_∞_\<ehead>\s?|_∞_#|_∞_\<mv>\s?\|_∞_\<aux>\s?)"
+)
+
+
 def make_analysis_tuple(word_form, rest_cohort, language):
     # take the first analysis in case there are more than one non-disambiguated analyses
     original_analysis = extract_original_analysis(
@@ -929,7 +933,7 @@ def get_generation_string(used_analysis, pos, lang):
 
 def clean_string2generate(string2generate):
     ### replace all delimiter by '+' and '_™_' by '#'
-    for (regex, replacement) in [
+    for regex, replacement in [
         (r"\s+", "+"),
         ("_∞1EX∞_", "+"),
         ("Ex/", ""),
@@ -993,7 +997,7 @@ def parse_options():
         "--serial",
         action="store_true",
         help="When this argument is used files will be converted one by one."
-             "Using --serial takes priority over --ncpus",
+        "Using --serial takes priority over --ncpus",
     )
     parser.add_argument(
         "analysed_entities",
@@ -1017,8 +1021,10 @@ def main():
                 non_skipped_files.append(file)
 
         n_skipped_files = len(files) - len(non_skipped_files)
-        print(f"--skip-existing given. Skipping {n_skipped_files} "
-              "files that are already processed")
+        print(
+            f"--skip-existing given. Skipping {n_skipped_files} "
+            "files that are already processed"
+        )
         if n_skipped_files == len(files):
             print("nothing to do, exiting")
             raise SystemExit(0)

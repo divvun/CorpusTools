@@ -173,10 +173,10 @@ def fix_quotemarks(avvir_doc):
     """Ávvir has funky quotemarks that seem to be a conversion error from their side."""
     for child in avvir_doc:
         if child.text:
-            for (error, replacement) in [("‹‹", "«"), ("››", "»")]:
+            for error, replacement in [("‹‹", "«"), ("››", "»")]:
                 child.text = child.text.replace(error, replacement)
         if child.tail:
-            for (error, replacement) in [("‹‹", "«"), ("››", "»")]:
+            for error, replacement in [("‹‹", "«"), ("››", "»")]:
                 child.tail = child.tail.replace(error, replacement)
         fix_quotemarks(child)
 

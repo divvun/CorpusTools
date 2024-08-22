@@ -1024,14 +1024,14 @@ class TestCcat(unittest.TestCase):
         xml_printer = ccat.XMLPrinter(lang="nob")
         xml_printer.etree = etree.parse(
             io.BytesIO(
-                    b'<document id="no_id" xml:lang="nob">'
-                    b"<body>"
-                    b"<p>"
-                    b"nob1 "
-                    b'<span type="quote" xml:lang="dan">dan1</span>'
-                    b" nob2</p>"
-                    b"</body>"
-                    b"</document>"
+                b'<document id="no_id" xml:lang="nob">'
+                b"<body>"
+                b"<p>"
+                b"nob1 "
+                b'<span type="quote" xml:lang="dan">dan1</span>'
+                b" nob2</p>"
+                b"</body>"
+                b"</document>"
             )
         )
 
@@ -1043,12 +1043,12 @@ class TestCcat(unittest.TestCase):
         xml_printer = ccat.XMLPrinter()
         xml_printer.etree = etree.parse(
             io.BytesIO(
-                    b'<document id="no_id" xml:lang="nob">'
-                    b"    <body>"
-                    b"        <p>nob1</p>"
-                    b"        <p>nob2</p>"
-                    b"    </body>"
-                    b"</document>"
+                b'<document id="no_id" xml:lang="nob">'
+                b"    <body>"
+                b"        <p>nob1</p>"
+                b"        <p>nob2</p>"
+                b"    </body>"
+                b"</document>"
             )
         )
 

@@ -93,8 +93,7 @@ def extract_content(filename, metadata):
 
 
 def remove_ranges(metadata, html):
-    """Remove ranges of html elements.
-    """
+    """Remove ranges of html elements."""
     if metadata.skip_elements:
         for pairs in metadata.skip_elements:
             remove_range(pairs[0], pairs[1], html)
@@ -113,8 +112,7 @@ def to_html_elt(filename):
         remove_ranges(metadata, html)
     except AttributeError:
         raise util.ConversionError(
-            "Check that skip_elements in the "
-            "metadata file has the correct format"
+            "Check that skip_elements in the " "metadata file has the correct format"
         )
 
     return html

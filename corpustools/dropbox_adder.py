@@ -52,7 +52,7 @@ def main():
     subdir = f'/tmp/{os.path.basename(sami_zip.replace(".zip", ""))}'
     zipfile.ZipFile(sami_zip).extractall(subdir)
 
-    for (nob, smi, sami_lang) in pairs(
+    for nob, smi, sami_lang in pairs(
         {os.path.join(root, f) for root, _, files in os.walk(subdir) for f in files}
     ):
         try:

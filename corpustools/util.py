@@ -343,6 +343,8 @@ _PARA_DEFAULT_MSG_FORMAT = (
     " - est. time left: {timeleft}]\n"
     "  {status}: {filename}"
 )
+
+
 def run_in_parallel(
     function,
     max_workers,
@@ -373,8 +375,10 @@ def run_in_parallel(
     nfiles = len(file_list)
     n_failed = 0
     t0 = time.monotonic_ns()
-    print(f"Processing {nfiles} files ({human_readable_filesize(total_size)}) "
-          f"in parallel using {max_workers} workers")
+    print(
+        f"Processing {nfiles} files ({human_readable_filesize(total_size)}) "
+        f"in parallel using {max_workers} workers"
+    )
 
     futures = {}  # future -> (filepath, filesize)
 

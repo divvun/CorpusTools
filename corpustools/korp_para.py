@@ -80,7 +80,7 @@ def add_analysis_elements(tree, path):
         lang, modename, text="¶ ".join([tuv.find("seg").text for tuv in tuv_elements])
     )
 
-    for (tuv, analysis) in zip(tuv_elements, analyses, strict=False):
+    for tuv, analysis in zip(tuv_elements, analyses, strict=False):
         try:
             tuv.append(make_analysis_element(analysis, lang))
         except IndexError:

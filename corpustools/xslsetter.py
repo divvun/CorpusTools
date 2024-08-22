@@ -84,8 +84,9 @@ class MetadataHandler:
             etree._Element: The element that contains the key.
         """
         return self.tree.getroot().find(
-            "{{http://www.w3.org/1999/XSL/Transform}}"
-            "variable[@name='{}']".format(key)
+            "{{http://www.w3.org/1999/XSL/Transform}}" "variable[@name='{}']".format(
+                key
+            )
         )
 
     def set_variable(self, key, value):
@@ -100,8 +101,9 @@ class MetadataHandler:
             variable.attrib["select"] = f"'{value}'"
         except AttributeError as e:
             raise UserWarning(
-                "Tried to update {} with value {}\n"
-                "Error was {}".format(key, value, str(e))
+                "Tried to update {} with value {}\n" "Error was {}".format(
+                    key, value, str(e)
+                )
             )
 
     def get_variable(self, key):

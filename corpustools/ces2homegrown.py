@@ -117,7 +117,7 @@ def set_parallels(chapter_paths, testament, new_lang):
             f'{os.path.join(os.getenv("GTBOUND"), "orig/nob/bible", testament, "bibel.no")}/*.xml'
         )
     )
-    for (chapter_path, nob_name) in zip(chapter_paths, nob_names, strict=False):
+    for chapter_path, nob_name in zip(chapter_paths, nob_names, strict=False):
         nob_path = corpuspath.make_corpus_path(nob_name)
         nob_meta = nob_path.metadata
         chapter_meta = chapter_path.metadata
@@ -126,7 +126,7 @@ def set_parallels(chapter_paths, testament, new_lang):
         nob_meta.set_parallel_text(new_lang, os.path.basename(chapter_path.orig))
         nob_meta.write_file()
 
-        for (lang, filename) in nob_meta.get_parallel_texts().items():
+        for lang, filename in nob_meta.get_parallel_texts().items():
             chapter_meta.set_parallel_text(lang, filename)
             parallel_path = corpuspath.make_corpus_path(nob_path.parallel(lang))
             parallel_path.metadata.set_parallel_text(
