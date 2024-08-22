@@ -43,22 +43,62 @@ def styles(page_style):
 def merge(first, second):
     """Merge two paragraph elements into one."""
     if len(first):
+        first[-1].tail = (
+            f"{first[-1].tail if first[-1].tail else ''}"
+            f"{second.text if second.text else ''}"
+        )
+    elif second.text:
+        # The tail of the second p is not important, it is always empty
+        first.text = f"{first.text  if first.text else ''}{second.text}"
+
+    for child in second:
+        first.append(child)
+
+    return first
+
+
+def merge_i(first, second):
+    """Merge two elements into one."""
+    if len(first):
         if second.text:
             if first[-1].tail:
                 first[-1].tail = f"{first[-1].tail}{second.text}"
             else:
                 first[-1].tail = second.text
     else:
-        if second.text:
-            if first.text:
-                first.text = f"{first.text}{second.text}"
-            else:
-                first.text = second.text
+        text = first.text if first.text else ""
+        tail = first.tail if first.tail else ""
+        first.text = f"{text}{tail}{second.text if second.text else ''}"
+        first.tail = second.tail
 
     for child in second:
         first.append(child)
 
     return first
+
+
+def merge_children_of_p(paragraph):
+    if len(paragraph) > 1:
+        new_paragraph = etree.Element("p")
+        new_paragraph.text = paragraph.text
+        child = etree.Element(paragraph[0].tag)
+        child.text = paragraph[0].text
+        child.tail = paragraph[0].tail
+
+        for next_child in paragraph[1:]:
+            if next_child.tag == child.tag and (
+                child.tail is None or not child.tail.strip()
+            ):
+                child = merge_i(child, next_child)
+            else:
+                new_paragraph.append(child)
+                child = deepcopy(next_child)
+
+        new_paragraph.append(child)
+
+        return new_paragraph
+    else:
+        return paragraph
 
 
 def is_probably_hyphenated(previous, current):
@@ -555,11 +595,11 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             text = paragraph.xpath("string()").strip()
             if text:
                 if text[0] != text[0].lower():
-                    self.possibly_add_to_body(body, this_p)
+                    self.possibly_add_to_body(body, merge_children_of_p(this_p))
                     this_p = etree.Element("p")
                 this_p = merge(this_p, paragraph)
 
-        self.possibly_add_to_body(body, this_p)
+        self.possibly_add_to_body(body, merge_children_of_p(this_p))
 
         return document
 

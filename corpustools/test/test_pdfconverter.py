@@ -22,6 +22,7 @@ import os
 import unittest
 from pathlib import Path
 
+import pytest
 from lxml import etree
 from parameterized import parameterized
 
@@ -335,3 +336,32 @@ class TestPDF2XMLConverter(xmltester.XMLTester):
         want = etree.parse(os.path.join(HERE, "converter_data/pdf-xml2pdf-test.xml"))
 
         self.assertXmlEqual(got, want)
+
+
+@pytest.mark.parametrize(
+    ("test_input", "expected"),
+    [
+        (
+            "<p><i>toobdast  </i>  <i>jeä</i><i>ʹrben</i>    alggmeeraid </p>",
+            "<p><i>toobdast    jeäʹrben</i>    alggmeeraid </p>",
+        ),
+        (
+            "<p><b>toobdast  </b>  <i>jeä</i><i>ʹrben</i>    alggmeeraid </p>",
+            "<p><b>toobdast  </b>  <i>jeäʹrben</i>    alggmeeraid </p>",
+        ),
+        (
+            "<p><i>toobdast  </i>  <i>jeä</i><b>ʹrben</b>    alggmeeraid </p>",
+            "<p><i>toobdast    jeä</i><b>ʹrben</b>    alggmeeraid </p>",
+        ),
+    ],
+)
+def test_merge_children_of_p(test_input: str, expected: str):
+    """Test merging of two xml files."""
+
+    assert (
+        etree.tostring(
+            pdfconverter.merge_children_of_p(etree.fromstring(test_input)),
+            encoding="unicode",
+        )
+        == expected
+    )
