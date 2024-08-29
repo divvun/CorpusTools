@@ -604,7 +604,22 @@ def parse_options():
         default="",
         help="Replace hyph tags with the given argument",
     )
-
+    parser.add_argument(
+        "--orth",
+        help="Print text using the orthography",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--list-orth", help="List the orthographies", action="store_true"
+    )
+    parser.add_argument(
+        "--tags",
+        help="Print text using the orthography",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--list-tags", help="List the orthographies", action="store_true"
+    )
     parser.add_argument(
         "targets",
         nargs="+",
