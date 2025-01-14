@@ -24,9 +24,10 @@ import hashlib
 import os
 import re
 from copy import deepcopy
+from pathlib import Path
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
-import requests
+import requests  # type: ignore
 from lxml import etree
 
 from corpustools import (
@@ -292,23 +293,34 @@ class SamediggiNoCrawler(crawler.Crawler):
         """Initialise the SamediggiNoCrawler class."""
         super().__init__()
         self.unvisited_links.add("https://sametinget.no/")
-        self.vcs = {}
+        self.vcs = {
+            lang: versioncontrol.vcs(self.goaldir / f"corpus-{lang}-orig")
+            for lang in self.langs
+        }
 
-        for lang in self.langs:
-            self.vcs[lang] = versioncontrol.vcs(self.goaldir / f"corpus-{lang}-orig")
         self.dupe_table = dict(self.make_dupe_tuple())
+
+    def samediggi_corpus_dirs(self) -> Path:
+        return (
+            os.path.join(
+                os.getenv("GTLANGS"), f"corpus-{lang}-orig", "admin/sd/samediggi.no"
+            )
+            for lang in self.langs
+        )
+
+    def samediggi_corpus_files(self):
+        return (
+            os.path.join(path, name)
+            for root in self.samediggi_corpus_dirs()
+            for path, _, filelist in os.walk(root)
+            for name in fnmatch.filter(filelist, "*.html")
+        )
 
     def make_dupe_tuple(self):
         """Make a hash/filename tuple to be used in the dupe table."""
-        for lang in self.langs:
-            root = os.path.join(
-                os.getenv("GTLANGS"), f"corpus-{lang}-orig", "admin/sd/samediggi.no"
-            )
-            for path, _, filelist in os.walk(root):
-                for name in fnmatch.filter(filelist, "*.html"):
-                    fullpath = os.path.join(path, name)
-                    with open(fullpath, "rb") as html_stream:
-                        yield make_digest(html_stream.read()), fullpath
+        for fullpath in self.samediggi_corpus_files():
+            with open(fullpath, "rb") as html_stream:
+                yield make_digest(html_stream.read()), fullpath
 
     def crawl_page(self, link):
         """Collect links from a page."""
@@ -374,9 +386,9 @@ class SamediggiNoCrawler(crawler.Crawler):
                 self.set_parallel_info(pages)
                 for parallel_page in pages:
                     print(f"\t{parallel_page.corpuspath.orig}")
-                    self.dupe_table[
-                        make_digest(parallel_page.content_string)
-                    ] = parallel_page.corpuspath.orig
+                    self.dupe_table[make_digest(parallel_page.content_string)] = (
+                        parallel_page.corpuspath.orig
+                    )
                     parallel_page.save()
                     self.vcs[parallel_page.lang].add(parallel_page.corpuspath.orig)
                     self.vcs[parallel_page.lang].add(parallel_page.corpuspath.xsl)
