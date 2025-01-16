@@ -93,7 +93,6 @@ class SamediggiNoPage:
         if fullpath == possible_dupe:
             self.set_initial_metadata()
         else:
-            print(f"\nDupe! {self.url} is dupe of {possible_dupe}\n")
             self.dupe = True
 
     def create_filename(self):
