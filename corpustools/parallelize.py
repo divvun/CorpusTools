@@ -274,7 +274,6 @@ def main():
         try:
             para_path, source_path = get_filepair(orig_corpuspath, args.lang2)
         except TypeError:
-            print(f"\tNo pointer to a parallel document in {args.lang2} in {path}")
             continue
 
         try:
