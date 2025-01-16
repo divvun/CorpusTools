@@ -82,10 +82,15 @@ class SamediggiNoPage:
         self.tree = etree.HTML(result.text)
         self.dupe = False
 
-        filename = namechanger.normalise_filename(self.create_filename())
+        if self.corpus_dir is None:
+            raise SystemExit("GTLANGS is not set!")
 
-
-            fullpath = os.path.join(os.path.join(basepath, f"{name}({i}){tag}"))
+        fullpath = (
+            Path(self.corpus_dir)
+            / f"corpus-{self.lang}-orig"
+            / "admin/sd/samediggi.no"
+            / namechanger.normalise_filename(self.create_filename())
+        )
 
         possible_dupe = dupe_table.get(make_digest(self.content_string), fullpath)
         self.corpuspath = corpuspath.make_corpus_path(possible_dupe)
@@ -160,9 +165,9 @@ class SamediggiNoPage:
             self.corpuspath.metadata.set_variable("year", time.text[6:10])
 
     @property
-    def basename(self):
-        """Get the basename of the corpus filename."""
-        return os.path.basename(self.corpuspath.orig)
+    def basename(self) -> str:
+        """Get the name of the corpus path."""
+        return self.corpuspath.orig.name
 
     def sanity_test(self):
         """Check if the pages seem to have the expected structure."""
@@ -289,27 +294,27 @@ class SamediggiNoCrawler(crawler.Crawler):
 
         self.dupe_table = dict(self.make_dupe_tuple())
 
-    def samediggi_corpus_dirs(self) -> Path:
+    def samediggi_corpus_dirs(self) -> Iterator[Path]:
+        gtlangs = os.getenv("GTLANGS")
         return (
-            os.path.join(
-                os.getenv("GTLANGS"), f"corpus-{lang}-orig", "admin/sd/samediggi.no"
-            )
+            Path(gtlangs) / f"corpus-{lang}-orig" / "admin/sd/samediggi.no"
             for lang in self.langs
+            if gtlangs
         )
 
-    def samediggi_corpus_files(self):
+    def samediggi_corpus_files(self) -> Iterator[Path]:
         return (
-            os.path.join(path, name)
-            for root in self.samediggi_corpus_dirs()
-            for path, _, filelist in os.walk(root)
-            for name in fnmatch.filter(filelist, "*.html")
+            html_path
+            for corpus_dir in self.samediggi_corpus_dirs()
+            for html_path in corpus_dir.rglob("*.html")
         )
 
-    def make_dupe_tuple(self):
+    def make_dupe_tuple(self) -> dict[str, Path]:
         """Make a hash/filename tuple to be used in the dupe table."""
-        for fullpath in self.samediggi_corpus_files():
-            with open(fullpath, "rb") as html_stream:
-                yield make_digest(html_stream.read()), fullpath
+        return {
+            make_digest(fullpath.read_bytes()): fullpath
+            for fullpath in self.samediggi_corpus_files()
+        }
 
     def crawl_page(self, link):
         """Collect links from a page."""
