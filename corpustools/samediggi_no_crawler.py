@@ -73,6 +73,7 @@ class SamediggiNoPage:
         "smj": "smj",
     }
     corpus_dir = os.getenv("GTLANGS")
+    content_min_length = 40
 
     def __init__(self, result, dupe_table):
         """Initialise the SamediggiNoPage class."""
@@ -217,7 +218,11 @@ class SamediggiNoPage:
     @property
     def saveable(self):
         """Check if the content of this file is worth saving."""
-        return self.result.ok and len(self.content) and len(self.body_text.split()) > 40
+        return (
+            self.result.ok
+            and len(self.content)
+            and len(self.body_text.split()) > self.content_min_length
+        )
 
     @property
     def lang(self):
