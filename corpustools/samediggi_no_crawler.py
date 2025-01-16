@@ -85,20 +85,6 @@ class SamediggiNoPage:
 
         filename = namechanger.normalise_filename(self.create_filename())
 
-        fullpath = os.path.join(
-            self.corpus_dir,
-            f"corpus-{self.lang}-orig",
-            "admin/sd/samediggi.no",
-            filename,
-        )
-        if os.path.isfile(fullpath):
-            basepath = os.path.split(fullpath)[0]
-            name = filename[:-5]
-            tag = filename[-5:]
-            # print(f"\nFile already exists: {fullpath}\n")
-            i = 0
-            while os.path.isfile(os.path.join(basepath, f"{name}({i}){tag}")):
-                i += 1
 
             fullpath = os.path.join(os.path.join(basepath, f"{name}({i}){tag}"))
 
