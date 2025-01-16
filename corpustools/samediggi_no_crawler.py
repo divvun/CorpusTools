@@ -189,20 +189,20 @@ class SamediggiNoPage:
     def parallel_links(self):
         """Get links to the parallels of this document."""
 
+        def fix_urlparts(lang):
+            param = {"sprak": f"{langcode[lang]}"}
+            query.update(param)
+            url_parts[4] = urlencode(query)
+
+            return urlunparse(url_parts)
+
         langcode = {"sme": 12, "smj": 15, "sma": 14, "nob": 1}
-        links = []
+        these_langs = [lang for lang in langcode if lang != self.lang]
 
         url_parts = list(self.parsed_url)
         query = dict(parse_qsl(url_parts[4]))
 
-        for lang, code in langcode.items():
-            if lang != self.lang:
-                param = {"sprak": f"{code}"}
-                query.update(param)
-                url_parts[4] = urlencode(query)
-                links.append(urlunparse(url_parts))
-
-        return links
+        return [fix_urlparts(lang) for lang in these_langs]
 
     @property
     def saveable(self):
