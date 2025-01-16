@@ -319,19 +319,25 @@ class SamediggiNoCrawler(crawler.Crawler):
     def crawl_page(self, link):
         """Collect links from a page."""
         self.visited_links.add(link)
-        result = requests.get(link)
+        result: requests.Response = requests.get(link)
 
-        if result.ok and "html" in result.headers["content-type"].lower():
-            orig_page = SamediggiNoPage(result, self.dupe_table)
-            orig_page.sanity_test()
-            self.visited_links.add(orig_page.url)
-            self.unvisited_links.update(orig_page.links)
-
-            if orig_page.dupe:
+        try:
+            if not (result.ok and "html" in result.headers["content-type"].lower()):
                 return None
-            return orig_page
+        except KeyError:
+            print(f"Could not get content-type for {link}")
+            print(result)
+            return None
 
-        return None
+        orig_page = SamediggiNoPage(result, self.dupe_table)
+        orig_page.sanity_test()
+        self.visited_links.add(orig_page.url)
+        self.unvisited_links.update(orig_page.links)
+
+        if orig_page.dupe:
+            return None
+
+        return orig_page
 
     def crawl_site(self):
         """Crawl samediggi.no."""
