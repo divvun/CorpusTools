@@ -292,4 +292,4 @@ def main():
             raise SystemExit(
                 f"{error}\nMore info here: "
                 "https://giellalt.github.io/CorpusTools/scripts/parallelize/#compile-dependencies",
-            )
+            ) from error
