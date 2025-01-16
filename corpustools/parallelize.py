@@ -286,7 +286,7 @@ def main():
                     else args.dict
                 ),
             )
-        except UserWarning as error:
+        except (OSError, UserWarning) as error:
             print(str(error))
         except util.ArgumentError as error:
             raise SystemExit(
