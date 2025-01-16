@@ -343,8 +343,6 @@ class SamediggiNoCrawler(crawler.Crawler):
 
             self.unvisited_links.difference_update(self.visited_links)
 
-            print(f"Links in queue: {len(self.unvisited_links)}")
-
     def add_page(self, page, parallel_pages):
         """Add a page to the list of parallel pages."""
         if page is not None and page.saveable:
@@ -369,7 +367,6 @@ class SamediggiNoCrawler(crawler.Crawler):
         """Crawl a pageset that link gives us."""
         pages = []
 
-        print(link)
         orig_page = self.crawl_page(link)
         if orig_page is not None:
             self.add_page(orig_page, pages)
@@ -379,11 +376,9 @@ class SamediggiNoCrawler(crawler.Crawler):
             if pages and pages[0].lang != "nob":
                 self.set_parallel_info(pages)
                 for parallel_page in pages:
-                    print(f"\t{parallel_page.corpuspath.orig}")
                     self.dupe_table[make_digest(parallel_page.content_string)] = (
                         parallel_page.corpuspath.orig
                     )
                     parallel_page.save()
                     self.vcs[parallel_page.lang].add(parallel_page.corpuspath.orig)
                     self.vcs[parallel_page.lang].add(parallel_page.corpuspath.xsl)
-                print()
