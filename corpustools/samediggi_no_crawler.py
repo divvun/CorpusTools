@@ -27,7 +27,7 @@ from copy import deepcopy
 from pathlib import Path
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
-import requests  # type: ignore
+import requests
 from lxml import etree
 
 from corpustools import (
