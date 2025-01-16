@@ -19,12 +19,12 @@
 """This file contains routines to crawl sites containing saami text."""
 
 
-import fnmatch
 import hashlib
 import os
 import re
 from copy import deepcopy
 from pathlib import Path
+from typing import Iterator
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 import requests
@@ -74,7 +74,7 @@ class SamediggiNoPage:
     corpus_dir = os.getenv("GTLANGS")
     content_min_length = 40
 
-    def __init__(self, result, dupe_table):
+    def __init__(self, result: requests.Response, dupe_table: dict[str, Path]):
         """Initialise the SamediggiNoPage class."""
         self.result = result
         self.url = result.url
@@ -257,6 +257,7 @@ class SamediggiNoPage:
                 )
             else:
                 link_set.add(address.get("href").split("?")[0])
+
         return {
             address for address in link_set if self.is_valid_address(address.lower())
         }
