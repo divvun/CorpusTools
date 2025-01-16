@@ -50,7 +50,6 @@ def make_digest(bytestring):
 class SamediggiNoPage:
     """Save a samediggi.no page to the corpus."""
 
-    # address_path_re = re.compile(r"/\w")
     address_re = re.compile(r"((http(s)):\/\/)sametinget.no")
     path_re = re.compile(r"/\w")
     page_re = re.compile(r"Side=\d(\d)?")
