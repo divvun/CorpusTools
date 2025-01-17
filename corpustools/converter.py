@@ -302,6 +302,10 @@ class Converter:
         lang_detector = languagedetector.LanguageDetector(complete, language_guesser)
         lang_detector.detect_language()
 
+        # Add whitespace to separate header, body and paragraphs
+        # and make it easier to see where the diffs are
+        complete.find("header").tail = "\n"
+        complete.find("body").text = "\n"
         for para in complete.iter("p"):
             para.tail = "\n"
 
