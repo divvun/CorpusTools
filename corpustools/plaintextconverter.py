@@ -121,47 +121,60 @@ class PlaintextConverter(basicconverter.BasicConverter):
 
         return element
 
-    def content2xml(self, content):
+    def lines2xml(self, content: io.StringIO) -> Iterable[etree._Element]:
+        """Transform paragraphs to etree elements.
+
+        Args:
+            content: the content of the plaintext document.
+
+        Yields:
+            An etree element.
+        """
+
+        valid_lines = (
+            line
+            for line_no, line in enumerate(content, start=1)
+            if line_no not in self.metadata.skip_lines or line.startswith("#")
+        )
+
+        buffer: list[str] = []
+        for line in valid_lines:
+            if line.strip() == "" and buffer:
+                yield self.make_element("p", "".join(buffer))
+                buffer.clear()
+            else:
+                buffer.append(line)
+
+        if buffer:
+            yield self.make_element("p", "".join(buffer))
+
+    def content2xml(self, content: io.StringIO) -> etree._Element:
         """Transform plaintext to an intermediate xml document.
 
         Args:
-            content (str): the content of the plaintext document.
+            content: the content of the plaintext document.
 
         Returns:
-            (lxml.etree.Element): An etree element.
+            An etree element.
         """
         document = etree.Element("document")
-        header = etree.Element("header")
-        body = etree.Element("body")
+        header = etree.SubElement(document, "header")
+        body = etree.SubElement(header, "body")
 
-        ptext = ""
-
-        for line_no, line in enumerate(content, start=1):
-            if line_no not in self.metadata.skip_lines:
-                if line.strip() == "":
-                    if ptext.strip() != "":
-                        body.append(self.make_element("p", ptext))
-                    ptext = ""
-                else:
-                    ptext = ptext + line
-
-        if ptext != "":
-            body.append(self.make_element("p", ptext))
-
-        document.append(header)
-        document.append(body)
+        for para in self.lines2xml(content):
+            body.append(para)
 
         return document
 
 
-def convert2intermediate(filename):
+def convert2intermediate(filename: Path) -> etree._Element:
     """Transform plaintext to an intermediate xml document.
 
     Args:
-        filename (str): name of the file that should be converted
+        filename: path of the file that should be converted
 
     Returns:
-        (lxml.etree.Element): An etree element.
+        An etree element.
     """
     converter = PlaintextConverter(filename)
 
