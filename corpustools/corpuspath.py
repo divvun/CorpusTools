@@ -138,7 +138,7 @@ class CorpusPath:
             f"{'-' + self.dirsuffix if self.dirsuffix else ''}"
         )
 
-    def name(
+    def name(  # noqa: PLR0913
         self,
         module=None,
         corpus_lang=None,
