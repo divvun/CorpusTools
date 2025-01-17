@@ -124,9 +124,8 @@ class Converter:
                 util.print_element(complete, 0, 4, logfile)
 
             raise util.ConversionError(
-                "{}: Not valid XML. More info in the log file: " "{}".format(
-                    type(self).__name__, self.names.log
-                )
+                "{}: Not valid XML. More info in the log file: "
+                "{}".format(type(self).__name__, self.names.log)
             )
 
     def to_giella(self, path: Path):
