@@ -31,7 +31,7 @@ from corpustools import basicconverter, util
 class PlaintextConverter(basicconverter.BasicConverter):
     """Convert plain text files to the Giella xml format."""
 
-    def to_unicode(self):
+    def to_unicode(self) -> str:
         """Read a file into a unicode string.
 
         If the content of the file is not utf-8, pretend the encoding is
@@ -41,25 +41,25 @@ class PlaintextConverter(basicconverter.BasicConverter):
             (str): The decoded string
         """
         try:
-            content = codecs.open(self.orig, encoding="utf8").read()
+            content = codecs.open(self.orig.as_posix(), encoding="utf8").read()
         except ValueError:
-            content = codecs.open(self.orig, encoding="latin1").read()
+            content = codecs.open(self.orig.as_posix(), encoding="latin1").read()
 
         content = self.strip_chars(content.replace("\r\n", "\n"))
 
         return content
 
     @staticmethod
-    def strip_chars(content, extra=""):
+    def strip_chars(content: str, extra="") -> str:
         """Remove the characters found in plaintext_oddities from content.
 
         Args:
-            content (str): a string containing the content of a document.
-            extra (str): a string containg even more characters to remove
+            content: a string containing the content of a document.
+            extra: a string containg even more characters to remove
                 from content.
 
         Returns:
-            (str): A string containing the content sans unwanted characters.
+            A string containing the content sans unwanted characters.
         """
         plaintext_oddities = [
             ("ÊÊ", "\n"),
@@ -97,15 +97,15 @@ class PlaintextConverter(basicconverter.BasicConverter):
         return content
 
     @staticmethod
-    def make_element(element_name, text):
+    def make_element(element_name: str, text: str) -> etree._Element:
         """Make an xml element.
 
         Args:
-            element_name (str): Name of the xml element
-            text (str): The text the xml should contain
+            element_name: Name of the xml element
+            text: The text the xml should contain
 
         Returns:
-            (lxml.etree.Element): an lxml.etree.Element
+            an etree element
         """
         element = etree.Element(element_name)
 
