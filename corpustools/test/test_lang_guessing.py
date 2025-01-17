@@ -105,7 +105,7 @@ class TestTextCat(unittest.TestCase):
             input_text (str): text that should be classified by
                 the language guesser.
         """
-        self.assertEqual(self.guesser.classify(input_text), "nob")
+        assert self.guesser.classify(input_text) == "nob"
 
     @parameterized.expand(test_sentences)
     def test_langid(self, input_text):
@@ -118,4 +118,4 @@ class TestTextCat(unittest.TestCase):
             input_text (str): text that should be classified by
                 the language guesser.
         """
-        self.assertEqual(langid.classify(input_text)[0], "no")
+        assert langid.classify(input_text)[0] == "no"
