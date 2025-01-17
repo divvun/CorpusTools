@@ -20,6 +20,8 @@
 import codecs
 import io
 import re
+from pathlib import Path
+from typing import Iterable
 
 from lxml import etree
 
