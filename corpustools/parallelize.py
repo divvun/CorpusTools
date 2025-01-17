@@ -38,7 +38,7 @@ from corpustools import (
 HERE = os.path.dirname(__file__)
 
 SREGEX = re.compile('<s id="[^ ]*">')
-DICTS = {}
+DICTS: dict[str, str] = {}
 
 
 def make_tca2_input(xmlfile):
@@ -158,7 +158,7 @@ def tca2_align(file1, file2, anchor_filename):
     ]
 
 
-def make_dict(lang1, lang2):
+def make_dict(lang1, lang2) -> str:
     name = Path(f"/tmp/anchor-{lang1}-{lang2}.txt")
     gal = setup_anchors(lang1, lang2)
     if gal is not None:
