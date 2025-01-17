@@ -193,10 +193,10 @@ def is_translated_from_lang2(path, lang2):
     """Find out if the given doc is translated from lang2."""
     translated_from = path.metadata.get_variable("translated_from")
 
-    if translated_from is not None:
-        return translated_from == lang2
-    else:
+    if translated_from is None:
         return False
+
+    return translated_from == lang2
 
 
 def get_dictionary(para_path, source_path):
