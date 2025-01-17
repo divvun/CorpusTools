@@ -79,7 +79,7 @@ class Converter:
         try:
             self.metadata = self.names.metadata
         except xslsetter.XsltError as error:
-            raise util.ConversionError(error)
+            raise util.ConversionError(error) from error
 
         self.metadata.set_lang_genre_xsl()
         with util.ignored(OSError):
