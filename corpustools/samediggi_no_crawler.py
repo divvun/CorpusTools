@@ -236,31 +236,38 @@ class SamediggiNoPage:
             and not href.endswith(self.unwanted_endings)
         )
 
+    def remove_page_reference(self, address) -> str:
+        path = address.get("href")
+        match = self.page_re.search(path)
+        return urlunparse(
+            (
+                self.parsed_url.scheme,
+                self.parsed_url.netloc,
+                path.split("?")[0],
+                "",
+                f"{match.group(0)}" if match else "",
+                "",
+            )
+        )
+
+    def link_set(self):
+        """Get all the links found in a file."""
+        return {
+            (
+                self.remove_page_reference(address)
+                if self.path_re.match(address.get("href"))
+                else address.get("href").split("?")[0]
+            )
+            for address in self.tree.xpath(".//a[@href]")
+        }
+
     @property
     def links(self):
-        """Get all the links found in a file."""
-        link_set = set()
-        for address in self.tree.xpath(".//a[@href]"):
-            if self.path_re.match(address.get("href")):
-                path = address.get("href")
-                match = self.page_re.search(path)
-                link_set.add(
-                    urlunparse(
-                        (
-                            self.parsed_url.scheme,
-                            self.parsed_url.netloc,
-                            path.split("?")[0],
-                            "",
-                            f"{match.group(0)}" if match else "",
-                            "",
-                        )
-                    )
-                )
-            else:
-                link_set.add(address.get("href").split("?")[0])
-
+        """Get all the valid links found in a file."""
         return {
-            address for address in link_set if self.is_valid_address(address.lower())
+            address
+            for address in self.link_set()
+            if self.is_valid_address(address.lower())
         }
 
     @property
@@ -322,21 +329,23 @@ class SamediggiNoCrawler(crawler.Crawler):
         self.visited_links.add(link)
         result: requests.Response = requests.get(link)
 
-        try:
-            if not (result.ok and "html" in result.headers["content-type"].lower()):
-                return None
-        except KeyError:
-            print(f"Could not get content-type for {link}")
-            print(result)
+        if not result.ok:
             return None
 
-        orig_page = SamediggiNoPage(result, self.dupe_table)
+        content_type = result.headers.get("content-type")
+        if content_type is None:
+            return None
+
+        if "html" not in content_type.lower():
+            return None
+
+        orig_page = SamediggiNoPage(
+            result.url, etree.HTML(result.text), self.dupe_table()
+        )
+
         orig_page.sanity_test()
         self.visited_links.add(orig_page.url)
         self.unvisited_links.update(orig_page.links)
-
-        if orig_page.dupe:
-            return None
 
         return orig_page
 
