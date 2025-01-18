@@ -274,8 +274,7 @@ class SamediggiNoPage:
 
     def save(self):
         """Save html and metadata."""
-        with open(self.corpuspath.orig, "wb") as xml:
-            xml.write(self.content_string)
+        self.corpuspath.orig.write_bytes(self.content_string)
         self.corpuspath.metadata.write_file()
 
 
