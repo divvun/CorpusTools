@@ -293,7 +293,7 @@ class SamediggiNoCrawler(crawler.Crawler):
             for lang in self.langs
         }
 
-        self.dupe_table = dict(self.make_dupe_tuple())
+        self.dupe_table = self.make_dupe_tuple()
 
     def samediggi_corpus_dirs(self) -> Iterator[Path]:
         gtlangs = os.getenv("GTLANGS")
