@@ -351,15 +351,13 @@ class SamediggiNoCrawler(crawler.Crawler):
 
             self.unvisited_links.difference_update(self.visited_links)
 
-    def add_page(self, page, parallel_pages):
+    def is_page_addable(self, page: SamediggiNoPage | None):
         """Add a page to the list of parallel pages."""
-        if page is not None and page.saveable:
-            body_lang = self.languageguesser.classify(page.body_text, langs=self.langs)
-            if page.lang == body_lang:
-                if body_lang == "nob":
-                    parallel_pages.append(page)
-                else:
-                    parallel_pages.insert(0, page)
+        if page is None:
+            return False
+
+        body_lang = self.languageguesser.classify(page.body_text, langs=self.langs)
+        return page.saveable and page.claimed_lang == body_lang
 
     @staticmethod
     def set_parallel_info(parallel_pages):
@@ -395,20 +393,12 @@ class SamediggiNoCrawler(crawler.Crawler):
 
     def crawl_pageset(self, link):
         """Crawl a pageset that link gives us."""
-        pages = []
 
-        orig_page = self.crawl_page(link)
-        if orig_page is not None:
-            self.add_page(orig_page, pages)
-            for parallel_link in orig_page.parallel_links:
-                self.add_page(self.crawl_page(parallel_link), pages)
+        pages = self.get_page_set(self.crawl_page(link))
 
-            if pages and pages[0].lang != "nob":
-                self.set_parallel_info(pages)
-                for parallel_page in pages:
-                    self.dupe_table[make_digest(parallel_page.content_string)] = (
-                        parallel_page.corpuspath.orig
-                    )
-                    parallel_page.save()
-                    self.vcs[parallel_page.lang].add(parallel_page.corpuspath.orig)
-                    self.vcs[parallel_page.lang].add(parallel_page.corpuspath.xsl)
+        self.set_parallel_info(pages)
+        for page in pages:
+            self.dupe_table[page.digest] = page.corpuspath.orig
+            page.save()
+            self.vcs[page.lang].add(page.corpuspath.orig)
+            self.vcs[page.lang].add(page.corpuspath.xsl)
