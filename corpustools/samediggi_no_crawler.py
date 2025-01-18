@@ -87,7 +87,7 @@ class SamediggiNoPage:
 
         fullpath = (
             Path(self.corpus_dir)
-            / f"corpus-{self.lang}-orig"
+            / f"corpus-{self.claimed_lang}-orig"
             / "admin/sd/samediggi.no"
             / namechanger.normalise_filename(self.create_filename())
         )
@@ -157,9 +157,9 @@ class SamediggiNoPage:
         )
         self.corpuspath.metadata.set_variable("filename", self.url)
         self.corpuspath.metadata.set_variable("genre", "admin")
-        self.corpuspath.metadata.set_variable("mainlang", self.lang)
+        self.corpuspath.metadata.set_variable("mainlang", self.claimed_lang)
         self.corpuspath.metadata.set_variable("license_type", "free")
-        if self.lang != "nob":
+        if self.claimed_lang != "nob":
             self.corpuspath.metadata.set_variable("translated_from", "nob")
         time = self.tree.find('.//span[@class="byline__published-date-value"]')
         if time is not None:
@@ -183,7 +183,7 @@ class SamediggiNoPage:
                 raise SystemExit(
                     f"The links to parallel documents has changed {self.url}"
                 )
-        if self.lang is None:
+        if self.claimed_lang is None:
             raise SystemExit("Language format has changed.")
 
     @property
@@ -198,7 +198,7 @@ class SamediggiNoPage:
             return urlunparse(url_parts)
 
         langcode = {"sme": 12, "smj": 15, "sma": 14, "nob": 1}
-        these_langs = [lang for lang in langcode if lang != self.lang]
+        these_langs = [lang for lang in langcode if lang != self.claimed_lang]
 
         url_parts = list(self.parsed_url)
         query = dict(parse_qsl(url_parts[4]))
@@ -209,13 +209,11 @@ class SamediggiNoPage:
     def saveable(self):
         """Check if the content of this file is worth saving."""
         return (
-            self.result.ok
-            and len(self.content)
-            and len(self.body_text.split()) > self.content_min_length
+            len(self.content) and len(self.body_text.split()) > self.content_min_length
         )
 
     @property
-    def lang(self):
+    def claimed_lang(self):
         """Return the language of the file."""
         content_language = self.tree.find('.//meta[@name="language"]')
 

@@ -434,7 +434,7 @@ class TestSamediggiNoPage(unittest.TestCase):
                 ],
             )
             self.assertTrue(page.saveable)
-            self.assertEqual(page.lang, "sme")
+            self.assertEqual(page.claimed_lang, "sme")
             self.assertSetEqual(
                 page.links,
                 {
