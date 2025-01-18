@@ -80,7 +80,9 @@ class DupeFinder:
         if not result:
             print("Parallels:", filename1, filename2)
             to_remove = filename1
-            if self.get_parallel_texts(filename1) > self.get_parallel_texts(filename2):
+            if len(self.get_parallel_texts(filename1)) > len(
+                self.get_parallel_texts(filename2)
+            ):
                 to_remove = filename2
 
             self.dupe_files.add(to_remove)
