@@ -72,14 +72,18 @@ class SamediggiNoPage:
         "smj": "smj",
     }
     corpus_dir = os.getenv("GTLANGS")
-    content_min_length = 40
+    content_min_word_length = 10
 
-    def __init__(self, result: requests.Response, dupe_table: dict[str, Path]):
+    def __init__(
+        self,
+        original_url: str,
+        html_element: etree._Element,
+        dupe_table: dict[str, Path],
+    ):
         """Initialise the SamediggiNoPage class."""
-        self.result = result
-        self.url = result.url
+        self.url = original_url
         self.parsed_url = urlparse(self.url)
-        self.tree = etree.HTML(result.text)
+        self.tree = html_element
         self.dupe = False
 
         if self.corpus_dir is None:
