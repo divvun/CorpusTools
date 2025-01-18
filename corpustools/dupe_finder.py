@@ -35,6 +35,8 @@ from corpustools import argparse_version, ccat, corpuspath, move_files, util
 class DupeFinder:
     """Handle duplicates in the corpus."""
 
+    min_word_ratio = 0.9
+
     def __init__(self, directory):
         self.files = self._get_files(directory)
         self.dupe_files = set()
@@ -117,7 +119,7 @@ class DupeFinder:
 
         ratio = min(w1, w2) / max(w1, w2)
 
-        return ratio > 0.9
+        return ratio > self.min_word_ratio
 
     def compare_files(self, filename1, filename2):
         """Compare two files.
@@ -128,7 +130,7 @@ class DupeFinder:
         """
         sm = difflib.SequenceMatcher(a=self.files[filename1], b=self.files[filename2])
         ratio = sm.ratio()
-        if ratio > 0.90:
+        if ratio > self.min_word_ratio:
             self.dupe_files.add((filename1, filename2))
             print()
             print(round(ratio, 2), filename1, filename2)
