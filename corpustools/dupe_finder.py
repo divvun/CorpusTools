@@ -104,7 +104,7 @@ class DupeFinder:
 
         return float(w)
 
-    def good_word_ratio(self, filename1, filename2):
+    def is_good_word_ratio(self, filename1, filename2):
         """Check if the word ratio of two files are nearly equal.
 
         Args:
@@ -156,7 +156,7 @@ class DupeFinder:
         for filename1 in self.files.keys():
             for filename2 in self.files.keys():
                 if filename1 != filename2 and filename1 not in checked_files[filename2]:
-                    if self.good_word_ratio(filename1, filename2):
+                    if self.is_good_word_ratio(filename1, filename2):
                         good_ratio += 1
                         if remove:
                             self.remove_dupe_file(filename1, filename2)
