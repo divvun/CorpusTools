@@ -363,12 +363,34 @@ class SamediggiNoCrawler(crawler.Crawler):
     @staticmethod
     def set_parallel_info(parallel_pages):
         """Set the parallels for this set of parallel pages."""
-        for parallel_page1 in parallel_pages:
-            for parallel_page2 in parallel_pages:
-                if parallel_page1 != parallel_page2:
-                    parallel_page1.set_parallel_file(
-                        parallel_page2.lang, parallel_page2.basename
-                    )
+        lang_combinations = (
+            (parallel_page1, parallel_page2)
+            for parallel_page1 in parallel_pages
+            for parallel_page2 in parallel_pages
+            if parallel_page1 != parallel_page2
+        )
+
+        for parallel_page1, parallel_page2 in lang_combinations:
+            parallel_page1.set_parallel_file(
+                parallel_page2.lang, parallel_page2.basename
+            )
+
+    def get_page_set(self, orig_page) -> list[SamediggiNoPage]:
+        pages: list[SamediggiNoPage] = []
+
+        if self.is_page_addable(orig_page):
+            pages.append(orig_page)
+
+        for parallel_link in orig_page.parallel_links:
+            page = self.crawl_page(parallel_link)
+            if self.is_page_addable(page):
+                pages.append(page)
+
+        # If there is only a norwegian page, return an empty list
+        if len(pages) and pages[0].claimed_lang == "nob":
+            return []
+
+        return pages
 
     def crawl_pageset(self, link):
         """Crawl a pageset that link gives us."""
