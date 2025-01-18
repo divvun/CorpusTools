@@ -92,7 +92,8 @@ class SamediggiNoPage:
             / namechanger.normalise_filename(self.create_filename())
         )
 
-        possible_dupe = dupe_table.get(make_digest(self.content_string), fullpath)
+        self.digest = make_digest(self.content_string)
+        possible_dupe = dupe_table.get(self.digest, fullpath)
         self.corpuspath = corpuspath.make_corpus_path(possible_dupe)
         if fullpath == possible_dupe:
             self.set_initial_metadata()
