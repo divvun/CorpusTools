@@ -21,7 +21,6 @@
 
 import hashlib
 import os
-import re
 from copy import deepcopy
 from pathlib import Path
 from typing import Iterator
@@ -38,6 +37,7 @@ from corpustools import (
     text_cat,
     versioncontrol,
 )
+from corpustools.samediggi_no_links import get_filtered_links
 
 
 def make_digest(bytestring):
@@ -50,21 +50,6 @@ def make_digest(bytestring):
 class SamediggiNoPage:
     """Save a samediggi.no page to the corpus."""
 
-    address_re = re.compile(r"((http(s)):\/\/)sametinget.no")
-    path_re = re.compile(r"/\w")
-    page_re = re.compile(r"Side=\d(\d)?")
-    unwanted_endings = (
-        ".pdf",
-        ".jpg",
-        ".docx",
-        ".xlsx",
-        ".csv",
-        ".pptx",
-        ".eps",
-        ".doc",
-        ".png",
-        ".xls",
-    )
     language_mapper = {
         "nb": "nob",
         "sma": "sma",
@@ -85,6 +70,7 @@ class SamediggiNoPage:
         self.parsed_url = urlparse(self.url)
         self.tree = html_element
         self.dupe = False
+        self.links = get_filtered_links(self.parsed_url, self.tree)
 
         if self.corpus_dir is None:
             raise SystemExit("GTLANGS is not set!")
@@ -222,55 +208,6 @@ class SamediggiNoPage:
         content_language = self.tree.find('.//meta[@name="language"]')
 
         return self.language_mapper[content_language.get("content")]
-
-    def is_valid_address(self, href):
-        """Check if this is an address that should be crawled."""
-        match = self.address_re.match(href)
-        return (
-            match
-            and not re.search(
-                "sametingets-vedtak-1989-2004|endresprak.aspx|innsyn.aspx|/english/|/#|"
-                "sametingets-representanter|samedikki-airasat|samedikke-ajrrasa|saemiedigkien-tjirkijh|"
-                "plenumssaker|dievascoahkkinassit|allestjahkanimassje|stoerretjaanghkoeaamhtesh|"
-                "ofte-stilte-sporsmal|davja-jerron-gazaldagat",
-                href,
-            )
-            and not href.endswith(self.unwanted_endings)
-        )
-
-    def remove_page_reference(self, address) -> str:
-        path = address.get("href")
-        match = self.page_re.search(path)
-        return urlunparse(
-            (
-                self.parsed_url.scheme,
-                self.parsed_url.netloc,
-                path.split("?")[0],
-                "",
-                f"{match.group(0)}" if match else "",
-                "",
-            )
-        )
-
-    def link_set(self):
-        """Get all the links found in a file."""
-        return {
-            (
-                self.remove_page_reference(address)
-                if self.path_re.match(address.get("href"))
-                else address.get("href").split("?")[0]
-            )
-            for address in self.tree.xpath(".//a[@href]")
-        }
-
-    @property
-    def links(self):
-        """Get all the valid links found in a file."""
-        return {
-            address
-            for address in self.link_set()
-            if self.is_valid_address(address.lower())
-        }
 
     @property
     def body_text(self):
