@@ -91,15 +91,12 @@ class SamediggiNoPage:
             self.dupe = True
 
     def create_filename(self):
-        if self.tree is not None:
-            title = (
-                self.tree.findtext(".//title")
-                .strip()
-                .replace("/", "_")
-                .replace(".", "_")
-            )
-            if title:
-                return title.rsplit(" - S")[0] + ".html"
+        title = (
+            self.tree.findtext(".//title").strip().replace("/", "_").replace(".", "_")
+        )
+        if title:
+            return title.rsplit(" - S")[0] + ".html"
+
         return adder.url_to_filename(self.url)
 
     @property
@@ -276,6 +273,11 @@ class SamediggiNoCrawler(crawler.Crawler):
             return None
 
         if "html" not in content_type.lower():
+            return None
+
+        tree = etree.HTML(result.text)
+
+        if tree is None:
             return None
 
         orig_page = SamediggiNoPage(
