@@ -40,7 +40,7 @@ from corpustools import (
 from corpustools.samediggi_no_links import get_filtered_links
 
 
-def make_digest(bytestring):
+def make_digest(bytestring: bytes) -> str:
     """Make a md5 hash to identify possible dupes."""
     hasher = hashlib.md5()
     hasher.update(bytestring)
