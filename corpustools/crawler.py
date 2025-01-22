@@ -34,7 +34,10 @@ class Crawler:
 
     def __init__(self):
         """Initialise the Crawler class."""
-        self.goaldir = Path(os.getenv("GTLANGS"))
+        gtlangs = os.getenv("GTLANGS")
+        if not gtlangs:
+            raise ValueError("GTLANGS not set")
+        self.goaldir = Path(gtlangs)
         self.unvisited_links = set()
         self.visited_links = set()
         self.download_links = set()
