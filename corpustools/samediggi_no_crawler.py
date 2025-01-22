@@ -31,7 +31,8 @@ from corpustools import (
     text_cat,
     versioncontrol,
 )
-from corpustools.samediggi_no_page import SamediggiNoPage, make_digest
+from corpustools.samediggi_no_page import SamediggiNoPage
+from corpustools.util import make_digest
 
 
 class SamediggiNoCrawler(crawler.Crawler):

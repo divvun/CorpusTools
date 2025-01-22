@@ -446,3 +446,10 @@ def run_in_parallel(
     else:
         n_ok = nfiles - n_failed
         print(f"all done. {n_ok} files ok, {n_failed} failed")
+
+
+def make_digest(bytestring: bytes) -> str:
+    """Make a md5 hash to identify possible dupes."""
+    hasher = hashlib.md5()
+    hasher.update(bytestring)
+    return hasher.hexdigest()

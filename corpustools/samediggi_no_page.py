@@ -1,4 +1,3 @@
-import hashlib
 import os
 from copy import deepcopy
 from pathlib import Path
@@ -8,13 +7,7 @@ from lxml import etree
 
 from corpustools import adder, corpuspath, namechanger
 from corpustools.samediggi_no_links import get_filtered_links
-
-
-def make_digest(bytestring: bytes) -> str:
-    """Make a md5 hash to identify possible dupes."""
-    hasher = hashlib.md5()
-    hasher.update(bytestring)
-    return hasher.hexdigest()
+from corpustools.util import make_digest
 
 
 class SamediggiNoPage:
