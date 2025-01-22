@@ -136,17 +136,24 @@ class SamediggiNoCrawler(crawler.Crawler):
             )
 
     def get_page_set(self, orig_page) -> list[SamediggiNoPage]:
-        pages: list[SamediggiNoPage] = []
+        """Get parallel pages for the original page.
 
-        if self.is_page_addable(orig_page):
-            pages.append(orig_page)
+        Args:
+            orig_page: The original page to get parallel pages for.
 
-        for parallel_link in orig_page.parallel_links:
-            page = self.crawl_page(parallel_link)
-            if self.is_page_addable(page):
-                pages.append(page)
+        Returns:
+            A list of parallel pages.
+        """
+        crawled_pages = [orig_page]
+        crawled_pages.extend(
+            [self.crawl_page(link) for link in orig_page.parallel_links]
+        )
+
+        pages = [page for page in crawled_pages if self.is_page_addable(page)]
 
         # If there is only a norwegian page, return an empty list
+        # We are interested in the saami pages, the norwegian page is
+        # valueable only if there is a saami page to compare it to
         if len(pages) and pages[0].claimed_lang == "nob":
             return []
 
