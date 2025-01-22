@@ -28,7 +28,6 @@ from lxml import etree
 
 from corpustools import (
     crawler,
-    text_cat,
     versioncontrol,
 )
 from corpustools.samediggi_no_page import SamediggiNoPage
@@ -39,7 +38,6 @@ class SamediggiNoCrawler(crawler.Crawler):
     """Crawl samediggi.no and save html documents to the corpus."""
 
     langs = ["nob", "sma", "sme", "smj"]
-    languageguesser = text_cat.Classifier()
 
     def __init__(self):
         """Initialise the SamediggiNoCrawler class."""

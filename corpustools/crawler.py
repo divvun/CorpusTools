@@ -24,10 +24,13 @@ import sys
 from pathlib import Path
 
 from corpustools import adder, namechanger, util
+from corpustools.text_cat import Classifier
 
 
 class Crawler:
     """A base class to save downloaded files to the corpus."""
+
+    languageguesser = Classifier()
 
     def __init__(self):
         """Initialise the Crawler class."""
