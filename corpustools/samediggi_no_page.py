@@ -1,4 +1,3 @@
-import os
 from copy import deepcopy
 from pathlib import Path
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
@@ -19,27 +18,25 @@ class SamediggiNoPage:
         "se": "sme",
         "smj": "smj",
     }
-    corpus_dir = os.getenv("GTLANGS")
     content_min_word_length = 10
 
     def __init__(
         self,
         original_url: str,
         html_element: etree._Element,
+        corpus_parent: Path,
         dupe_table: dict[str, Path],
     ):
         """Initialise the SamediggiNoPage class."""
+        self.corpus_parent = corpus_parent
         self.url = original_url
         self.parsed_url = urlparse(self.url)
         self.tree = html_element
         self.dupe = False
         self.links = get_filtered_links(self.parsed_url, self.tree)
 
-        if self.corpus_dir is None:
-            raise SystemExit("GTLANGS is not set!")
-
         fullpath = (
-            Path(self.corpus_dir)
+            self.corpus_parent
             / f"corpus-{self.claimed_lang}-orig"
             / "admin/sd/samediggi.no"
             / namechanger.normalise_filename(self.create_filename())
