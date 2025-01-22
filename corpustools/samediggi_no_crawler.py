@@ -39,7 +39,7 @@ class SamediggiNoCrawler(crawler.Crawler):
 
     langs = ["nob", "sma", "sme", "smj"]
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialise the SamediggiNoCrawler class."""
         super().__init__()
         self.unvisited_links.add("https://sametinget.no/")
