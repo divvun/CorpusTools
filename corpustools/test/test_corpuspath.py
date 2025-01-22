@@ -18,15 +18,13 @@
 """Test the naming scheme of corpus files."""
 
 
-import os
-import unittest
 from pathlib import Path
 
 import pytest
 
 from corpustools import corpuspath
 
-HERE = os.path.dirname(__file__)
+HERE = Path(__file__)
 
 
 def name(module, lang, extension, goallang):
@@ -97,60 +95,61 @@ def test_path_to_orig(filename):
     )
 
 
-class TestComputeCorpusnames(unittest.TestCase):
-    def setUp(self):
-        self.corpus_path = corpuspath.make_corpus_path(name("orig", "sme", "", ""))
+@pytest.fixture()
+def corpus_path():
+    return corpuspath.make_corpus_path(name("orig", "sme", "", ""))
 
-    def test_compute_orig(self):
-        assert self.corpus_path.orig == name("orig", "sme", "", "")
 
-    def test_compute_xsl(self):
-        assert self.corpus_path.xsl == name("orig", "sme", ".xsl", "")
+def test_compute_orig(corpus_path):
+    assert corpus_path.orig == name("orig", "sme", "", "")
 
-    def test_compute_log(self):
-        assert self.corpus_path.log == name("orig", "sme", ".log", "")
 
-    def test_compute_converted(self):
-        assert self.corpus_path.converted == name("converted", "sme", ".xml", "")
+def test_compute_xsl(corpus_path):
+    assert corpus_path.xsl == name("orig", "sme", ".xsl", "")
 
-    def test_compute_goldstandard_converted(self):
-        self.corpus_path.metadata.set_variable("conversion_status", "correct")
-        assert self.corpus_path.converted == name(
-            "goldstandard/converted", "sme", ".xml", ""
-        )
 
-    def test_compute_correctnogs_converted(self):
-        self.corpus_path.metadata.set_variable("conversion_status", "correct-no-gs")
-        assert self.corpus_path.converted == name(
-            "correct-no-gs/converted", "sme", ".xml", ""
-        )
+def test_compute_log(corpus_path):
+    assert corpus_path.log == name("orig", "sme", ".log", "")
 
-    def test_compute_analysed(self):
-        assert self.corpus_path.analysed == name("analysed", "sme", ".xml", "")
 
-    def test_compute_korp_mono(self):
-        assert self.corpus_path.korp_mono == name("korp_mono", "sme", ".xml", "")
+def test_compute_converted(corpus_path):
+    assert corpus_path.converted == name("converted", "sme", ".xml", "")
 
-    def test_compute_korp_tmx(self):
-        assert self.corpus_path.korp_tmx("nob") == name(
-            "korp_tmx", "sme", ".tmx", "nob"
-        )
 
-    def test_compute_tmx(self):
-        assert self.corpus_path.tmx("nob") == name("tmx", "sme", ".tmx", "nob")
+def test_compute_goldstandard_converted(corpus_path):
+    corpus_path.metadata.set_variable("conversion_status", "correct")
+    assert corpus_path.converted == name("goldstandard/converted", "sme", ".xml", "")
 
-    def test_compute_parallel(self):
-        self.corpus_path.metadata.set_parallel_text("nob", "filename.html")
-        assert self.corpus_path.parallel("nob") == name("orig", "nob", "", "")
 
-    def test_compute_orig_corpus_dir(self):
-        assert (
-            self.corpus_path.orig_corpus_dir
-            == self.corpus_path.root / "corpus-sme-orig"
-        )
+def test_compute_correctnogs_converted(corpus_path):
+    corpus_path.metadata.set_variable("conversion_status", "correct-no-gs")
+    assert corpus_path.converted == name("correct-no-gs/converted", "sme", ".xml", "")
 
-    def test_compute_converted_corpus_dir(self):
-        assert (
-            self.corpus_path.converted_corpus_dir
-            == self.corpus_path.root / "corpus-sme"
-        )
+
+def test_compute_analysed(corpus_path):
+    assert corpus_path.analysed == name("analysed", "sme", ".xml", "")
+
+
+def test_compute_korp_mono(corpus_path):
+    assert corpus_path.korp_mono == name("korp_mono", "sme", ".xml", "")
+
+
+def test_compute_korp_tmx(corpus_path):
+    assert corpus_path.korp_tmx("nob") == name("korp_tmx", "sme", ".tmx", "nob")
+
+
+def test_compute_tmx(corpus_path):
+    assert corpus_path.tmx("nob") == name("tmx", "sme", ".tmx", "nob")
+
+
+def test_compute_parallel(corpus_path):
+    corpus_path.metadata.set_parallel_text("nob", "filename.html")
+    assert corpus_path.parallel("nob") == name("orig", "nob", "", "")
+
+
+def test_compute_orig_corpus_dir(corpus_path):
+    assert corpus_path.orig_corpus_dir == corpus_path.root / "corpus-sme-orig"
+
+
+def test_compute_converted_corpus_dir(corpus_path):
+    assert corpus_path.converted_corpus_dir == corpus_path.root / "corpus-sme"
