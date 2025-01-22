@@ -52,7 +52,7 @@ def name(module, lang, extension, goallang):
 
 
 @pytest.mark.parametrize(
-    "path, parent, corpusdir, corpusfile",
+    ("path", "parent", "corpusdir", "corpusfile"),
     [
         ("/a/corpus-lang-x/b", "/a", "lang-x", "b"),
         ("/a/b/corpus-lang-orig-x-x/c/d/e", "/a/b", "lang-orig-x-x", "c/d/e"),
@@ -102,71 +102,46 @@ class TestComputeCorpusnames(unittest.TestCase):
         self.corpus_path = corpuspath.make_corpus_path(name("orig", "sme", "", ""))
 
     def test_compute_orig(self):
-        self.assertEqual(self.corpus_path.orig, name("orig", "sme", "", ""))
+        assert self.corpus_path.orig == name("orig", "sme", "", "")
 
     def test_compute_xsl(self):
-        self.assertEqual(self.corpus_path.xsl, name("orig", "sme", ".xsl", ""))
+        assert self.corpus_path.xsl == name("orig", "sme", ".xsl", "")
 
     def test_compute_log(self):
-        self.assertEqual(self.corpus_path.log, name("orig", "sme", ".log", ""))
+        assert self.corpus_path.log == name("orig", "sme", ".log", "")
 
     def test_compute_converted(self):
-        self.assertEqual(
-            self.corpus_path.converted, name("converted", "sme", ".xml", "")
-        )
+        assert self.corpus_path.converted == name("converted", "sme", ".xml", "")
 
     def test_compute_goldstandard_converted(self):
         self.corpus_path.metadata.set_variable("conversion_status", "correct")
-        self.assertEqual(
-            self.corpus_path.converted,
-            name("goldstandard/converted", "sme", ".xml", ""),
+        assert self.corpus_path.converted == name(
+            "goldstandard/converted", "sme", ".xml", ""
         )
 
     def test_compute_correctnogs_converted(self):
         self.corpus_path.metadata.set_variable("conversion_status", "correct-no-gs")
-        self.assertEqual(
-            self.corpus_path.converted,
-            name("correct-no-gs/converted", "sme", ".xml", ""),
+        assert self.corpus_path.converted == name(
+            "correct-no-gs/converted", "sme", ".xml", ""
         )
 
     def test_compute_analysed(self):
-        self.assertEqual(
-            self.corpus_path.analysed,
-            name("analysed", "sme", ".xml", ""),
-        )
+        assert self.corpus_path.analysed == name("analysed", "sme", ".xml", "")
 
     def test_compute_korp_mono(self):
-        self.assertEqual(
-            self.corpus_path.korp_mono,
-            name("korp_mono", "sme", ".xml", ""),
-        )
+        assert self.corpus_path.korp_mono == name("korp_mono", "sme", ".xml", "")
 
     def test_compute_korp_tmx(self):
-        self.assertEqual(
-            self.corpus_path.korp_tmx("nob"),
-            name("korp_tmx", "sme", ".tmx", "nob"),
+        assert self.corpus_path.korp_tmx("nob") == name(
+            "korp_tmx", "sme", ".tmx", "nob"
         )
 
     def test_compute_tmx(self):
-        self.assertEqual(
-            self.corpus_path.tmx("nob"),
-            name("tmx", "sme", ".tmx", "nob"),
-        )
+        assert self.corpus_path.tmx("nob") == name("tmx", "sme", ".tmx", "nob")
 
     def test_compute_parallel(self):
         self.corpus_path.metadata.set_parallel_text("nob", "filename.html")
-        self.assertEqual(
-            self.corpus_path.parallel("nob"),
-            name("orig", "nob", "", ""),
-        )
-
-    def test_compute_sent_filename(self):
-        self.corpus_path.tca2_input == (
-            self.corpus_path.root
-            / f"corpus-{self.corpus_path.lang}/tmp"
-            / f"{self.corpus_path.filepath.name}_"
-            / f"{self.corpus_path.lang}.sent"
-        )
+        assert self.corpus_path.parallel("nob") == name("orig", "nob", "", "")
 
     def test_compute_orig_corpus_dir(self):
         assert (
