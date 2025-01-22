@@ -31,16 +31,17 @@ class Crawler:
     """A base class to save downloaded files to the corpus."""
 
     languageguesser = Classifier()
+    unvisited_links: set[str] = set()
+    visited_links: set[str] = set()
+    download_links: set[str] = set()
+    corpus_adders: dict[str, AddToCorpus] = {}
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialise the Crawler class."""
         gtlangs = os.getenv("GTLANGS")
         if not gtlangs:
             raise ValueError("GTLANGS not set")
         self.goaldir = Path(gtlangs)
-        self.unvisited_links = set()
-        self.visited_links = set()
-        self.download_links = set()
         self.corpus_adders = {}
         self.downloader = adder.UrlDownloader(os.path.join(self.goaldir, "tmp"))
 
