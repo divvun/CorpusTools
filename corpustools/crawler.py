@@ -23,7 +23,8 @@ import os
 import sys
 from pathlib import Path
 
-from corpustools import adder, namechanger, util
+from corpustools import namechanger, util
+from corpustools.adder import AdderError, AddToCorpus, UrlDownloader
 from corpustools.text_cat import Classifier
 
 
@@ -42,8 +43,7 @@ class Crawler:
         if not gtlangs:
             raise ValueError("GTLANGS not set")
         self.goaldir = Path(gtlangs)
-        self.corpus_adders = {}
-        self.downloader = adder.UrlDownloader(os.path.join(self.goaldir, "tmp"))
+        self.downloader = UrlDownloader(os.path.join(self.goaldir, "tmp"))
 
     def __del__(self):
         """Add all files to the corpus."""
@@ -60,7 +60,7 @@ class Crawler:
         for url, lang in pages:
             try:
                 (_, tmpname) = self.downloader.download(url)
-            except adder.AdderError as error:
+            except AdderError as error:
                 util.print_frame(debug=str(error) + "\n")
             else:
                 normalised_name = namechanger.normalise_filename(
