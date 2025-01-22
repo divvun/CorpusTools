@@ -44,7 +44,7 @@ class SamediggiNoCrawler(crawler.Crawler):
         super().__init__()
         self.unvisited_links.add("https://sametinget.no/")
         self.vcs = {
-            lang: versioncontrol.vcs(self.goaldir / f"corpus-{lang}-orig")
+            lang: versioncontrol.vcs(self.corpus_parent / f"corpus-{lang}-orig")
             for lang in self.langs
         }
 

@@ -42,8 +42,8 @@ class Crawler:
         gtlangs = os.getenv("GTLANGS")
         if not gtlangs:
             raise ValueError("GTLANGS not set")
-        self.goaldir = Path(gtlangs)
-        self.downloader = UrlDownloader(os.path.join(self.goaldir, "tmp"))
+        self.corpus_parent = Path(gtlangs)
+        self.downloader = UrlDownloader(os.path.join(self.corpus_parent, "tmp"))
 
     def __del__(self):
         """Add all files to the corpus."""

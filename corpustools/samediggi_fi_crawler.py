@@ -273,7 +273,9 @@ class SamediggiFiCrawler(crawler.Crawler):
         self.vcs = {}
 
         for lang in self.langs:
-            self.vcs[lang] = versioncontrol.vcs(self.goaldir / f"corpus-{lang}-orig")
+            self.vcs[lang] = versioncontrol.vcs(
+                self.corpus_parent / f"corpus-{lang}-orig"
+            )
         self.dupe_table = {digest: name for digest, name in self.make_dupe_tuple()}
 
     def make_dupe_tuple(self):
