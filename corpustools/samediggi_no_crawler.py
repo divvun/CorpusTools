@@ -117,8 +117,7 @@ class SamediggiNoCrawler(crawler.Crawler):
         if page is None:
             return False
 
-        body_lang = self.languageguesser.classify(page.body_text, langs=self.langs)
-        return page.saveable and page.claimed_lang == body_lang
+        return page.saveable and page.claimed_lang == page.real_lang
 
     @staticmethod
     def set_parallel_info(parallel_pages):
@@ -168,5 +167,5 @@ class SamediggiNoCrawler(crawler.Crawler):
         for page in pages:
             self.dupe_table[page.digest] = page.corpuspath.orig
             page.save()
-            self.vcs[page.lang].add(page.corpuspath.orig)
-            self.vcs[page.lang].add(page.corpuspath.xsl)
+            self.vcs[page.real_lang].add(page.corpuspath.orig)
+            self.vcs[page.real_lang].add(page.corpuspath.xsl)

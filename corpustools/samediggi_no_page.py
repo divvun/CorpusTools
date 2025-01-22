@@ -6,12 +6,14 @@ from lxml import etree
 
 from corpustools import adder, corpuspath, namechanger
 from corpustools.samediggi_no_links import get_filtered_links
+from corpustools.text_cat import Classifier
 from corpustools.util import make_digest
 
 
 class SamediggiNoPage:
     """Save a samediggi.no page to the corpus."""
 
+    languageguesser = Classifier()
     language_mapper = {
         "nb": "nob",
         "sma": "sma",
@@ -34,10 +36,13 @@ class SamediggiNoPage:
         self.tree = html_element
         self.dupe = False
         self.links = get_filtered_links(self.parsed_url, self.tree)
+        self.real_lang = self.languageguesser.classify(
+            self.body_text, langs=list(self.language_mapper.values())
+        )
 
         fullpath = (
             self.corpus_parent
-            / f"corpus-{self.claimed_lang}-orig"
+            / f"corpus-{self.real_lang}-orig"
             / "admin/sd/samediggi.no"
             / namechanger.normalise_filename(self.create_filename())
         )

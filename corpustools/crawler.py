@@ -25,13 +25,11 @@ from pathlib import Path
 
 from corpustools import namechanger, util
 from corpustools.adder import AdderError, AddToCorpus, UrlDownloader
-from corpustools.text_cat import Classifier
 
 
 class Crawler:
     """A base class to save downloaded files to the corpus."""
 
-    languageguesser = Classifier()
     unvisited_links: set[str] = set()
     visited_links: set[str] = set()
     download_links: set[str] = set()
