@@ -90,7 +90,7 @@ class SamediggiNoCrawler(crawler.Crawler):
             return None
 
         orig_page = SamediggiNoPage(
-            result.url, etree.HTML(result.text), self.corpus_parent, self.dupe_table()
+            result.url, etree.HTML(result.text), self.corpus_parent, self.dupe_table
         )
 
         orig_page.sanity_test()
