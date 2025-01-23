@@ -69,10 +69,10 @@ class SamediggiNoCrawler(crawler.Crawler):
             for fullpath in self.samediggi_corpus_files()
         }
 
-    def crawl_page(self, link):
+    def crawl_page(self, link) -> SamediggiNoPage | None:
         """Collect links from a page."""
         self.visited_links.add(link)
-        result: requests.Response = requests.get(link)
+        result = requests.get(link)
 
         if not result.ok:
             return None
