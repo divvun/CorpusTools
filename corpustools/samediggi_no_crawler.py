@@ -19,7 +19,6 @@
 """This file contains routines to crawl sites containing saami text."""
 
 
-import os
 from pathlib import Path
 from typing import Iterator
 
@@ -51,11 +50,9 @@ class SamediggiNoCrawler(crawler.Crawler):
         self.dupe_table = self.make_dupe_dict()
 
     def samediggi_corpus_dirs(self) -> Iterator[Path]:
-        gtlangs = os.getenv("GTLANGS")
         return (
-            Path(gtlangs) / f"corpus-{lang}-orig" / "admin/sd/samediggi.no"
+            self.corpus_parent / f"corpus-{lang}-orig" / "admin/sd/samediggi.no"
             for lang in self.langs
-            if gtlangs
         )
 
     def samediggi_corpus_files(self) -> Iterator[Path]:
