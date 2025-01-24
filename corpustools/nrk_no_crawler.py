@@ -12,456 +12,189 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2023 The University of Tromsø &
+#   Copyright © 2013-2025 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """This file contains routines to crawl nrk.no containing saami text."""
 
 
-import json
-import os
-import sys
 from collections import defaultdict
+from pathlib import Path
+from pprint import pprint
+from time import sleep
 
-import dateutil.parser
 import requests
-from lxml import etree, html
+from lxml import etree
 
-from corpustools import adder, text_cat, util, xslsetter
+from corpustools.crawler import Crawler
+from corpustools.nrk_no_page import NrkNoPage, NrkNoUnknownPageError
+from corpustools.versioncontrol import vcs
 
 
-class NrkSmeCrawler:
-    """Collect Northern Saami pages from nrk.no.
+class NrkNoCrawler(Crawler):
+    """Collect pages from nrk.no."""
 
-    Attributes:
-        language_guesser (text_cat.Classifier): guess language from a given
-            string
-        goaldir (str): the directory where the working copy of the corpus is
-        corpus_adder (adder.AddToCorpus): the working horse, adds urls to
-            the corpus
-        tags (dict of str to str): numerical tags that point to a specific
-            topic on nrk.no
-        invalid_links (set of str): all links containing 'gammelsystem'
-        counter (collections.defaultdict of int): collect interesting
-            statistics, such number of links visited and fetched links within
-            a tag
-        fetched_links (set of str): links to articles that have already been
-            fetched
-        authors (set of str): authors of articles
-    """
+    langs: list[str] = ["sme", "sma", "smj", "nob"]
+    limit: int = 1000
+    counter: defaultdict[str, int] = defaultdict(int)
 
-    language_guesser = text_cat.Classifier(None)
-    goaldir = str(os.getenv("GTBOUND"))
-    corpus_adder = adder.AddToCorpus(goaldir, "sme", "news/nrk.no")
-    tags = defaultdict(str)
-    invalid_links = set()
-    counter = defaultdict(int)
-    authors = set()
-
-    def __init__(self):
-        """Initialise the NrkSmeCrawler class."""
-        self.fetched_ids = self.get_fetched_links(self.corpus_adder.goaldir)
-        # Ids containing norwegian text
-        self.fetched_ids |= {
-            "1.11060139",
-            "1.11205504",
-            "1.11518300",
-            "1.11526579",
-            "1.11876027",
-            "1.11909062",
-            "1.12274706",
-            "1.13050654",
-            "1.13077542",
-            "1.13599435",
-            "1.13683886",
-            "1.13683979",
-            "1.13684081",
-            "1.2265333",
-            "1.4708759",
-            "1.4837038",
-            "1.5174999",
-            "1.6129908",
-            "1.6431307",
-            "1.6439563",
-            "1.6468432",
-            "1.6469363",
-            "1.6538125",
-            "1.6563405",
-            "1.6776103",
-            "1.6784213",
-            "1.6857178",
-            "1.7066094",
-            "1.7222473",
-            "1.7391316",
-            "1.7397359",
-            "1.7826351",
-            "1.7971308",
-            "1.7990373",
-            "1.8065147",
-            "1.8231915",
-            "1.8239588",
-            "1.8836268",
-            "1.4178483",
-            "1.6474023",
-            "1.7096768",
-            "1.12593187",
-            "1.6479890",
-            "1.6136593",
-            "1.6602458",
+    def __init__(self) -> None:
+        super().__init__()
+        print("init nrk.no")
+        self.visited_links = self.get_fetched_ids()
+        print("visited links:", len(self.visited_links))
+        self.unvisited_links = self.fetchable_ids()
+        print("unvisited links:", len(self.unvisited_links))
+        self.vcs = {
+            lang: vcs(self.corpus_parent / f"corpus-{lang}-orig-x-closed")
+            for lang in self.langs
         }
 
-    def guess_lang(self, address):
-        """Guess the language of the address element.
-
-        Args:
-            address (html.Element): An element where interesting text is found
+    def get_article_ids(self) -> set[str]:
+        """Get article ids from NRK Sápmi.
 
         Returns:
-            (str): str containing the language of the text
+            A set of article ids.
         """
-        # This bytes hoopla is done because the text
-        # comes out as utf8 encoded as latin1 …
-        try:
-            text = bytes(
-                address.find('.//p[@class="plug-preamble"]').text, encoding="latin1"
-            )
-        except AttributeError:
-            text = bytes(address.find('.//h2[@class="title"]').text, encoding="latin1")
-        lang = self.language_guesser.classify(text)
-        if lang == "sme":
-            util.print_frame(text)
+        json_sources = [
+            f"https://www.nrk.no/serum/api/content/json/1.11160953?start=2&limit={self.limit}",  # https://www.nrk.no/sapmi/nyheter/
+            f"https://www.nrk.no/serum/api/content/json/1.13572949?start=2&limit={self.limit}&context=items",  # https://www.nrk.no/sapmi/davvisamegillii/
+            f"https://www.nrk.no/serum/api/content/json/1.13572946?start=2&limit={self.limit}&context=items",  # https://www.nrk.no/sapmi/julevsabmaj/
+            f"https://www.nrk.no/serum/api/content/json/1.13572943?start=2&limit={self.limit}&context=items",  # https://www.nrk.no/sapmi/aaarjelsaemiengielesne/
+        ]
 
-        return lang
+        responses = (requests.get(url) for url in json_sources)
 
-    def get_tag_page_trees(self, tag):
-        """Fetch topic pages containing links to articles.
+        response_jsons = (response.json() for response in responses)
 
-        By using the page_links_template, one can fetch `quantity` number of
-        links to articles within `tag` at a time.
+        return {
+            relation.get("id")
+            for data in response_jsons
+            for relation in data.get("relations")
+        }
 
-        Attributes:
-            page_links_template: a url to a specific topic in nrk.no.
-            quantity (int): the number of links to fetch a time
-            limit (int): max number of links that one tries to fetch
+    def fetchable_ids(self) -> set[str]:
+        article_ids = self.get_article_ids()
+        return article_ids - self.visited_links
 
-        Args:
-            tag (str): a numerical tag, pointing to a specific topic on nrk.no
-
-        Yields:
-            (lxml.html.HtmlElement): a parsed html document.
-        """
-        page_links_template = (
-            "https://www.nrk.no/serum/api/render/{tag}?"
-            "size=18&perspective=BRIEF&alignment=AUTO&"
-            "classes=surrogate-content&"
-            "display=false&arrangement.offset={offset}&"
-            "arrangement.quantity={quantity}&"
-            "arrangement.repetition=PATTERN&"
-            "arrangement.view[0].perspective=BRIEF&"
-            "arrangement.view[0].size=6&"
-            "arrangement.view[0].alignment=LEFT&"
-            "paged=SIMPLE"
-        )
-        quantity = 10
-        limit = 10000
-
-        for offset in range(0, limit, quantity):
-            print(".", end="")
-            sys.stdout.flush()
-            try:
-                result = requests.get(
-                    page_links_template.format(
-                        tag=tag, offset=offset, quantity=quantity
-                    )
-                )
-            except requests.exceptions.ConnectionError:
-                util.note(f"Connection error when fetching {tag}")
-                break
-            else:
-                try:
-                    yield html.document_fromstring(result.content)
-                except etree.ParserError:
-                    util.note(f"No more articles in tag: «{self.tags[tag]}»")
-                    break
-
-    def interesting_links(self, tag):
-        """Find interesting pages inside a topic.
-
-        Args:
-            tag (str): a numerical tag pointing to a specific topic.
-
-        Yields:
-            (str): a url to an nrk.no article
-        """
-        for tree in self.get_tag_page_trees(tag):
-            for address in tree.xpath('//a[@class="autonomous lp_plug"]'):
-                self.counter[tag + "_total"] += 1
-                href = address.get("href")
-                article_id = href.strip().split("-")[-1]
-                if "systemtest" in href:
-                    self.invalid_links.add(href)
-                if (
-                    "systemtest" not in href
-                    and article_id not in self.fetched_ids
-                    and self.guess_lang(address) == "sme"
-                ):
-                    self.counter[tag + "_fetched"] += 1
-                    yield href
-
-    @staticmethod
-    def pick_tags(path):
-        """Find tags in an nrk.no article.
-
-        Tags potientially contain more Northern Sámi articles.
-
-        Args:
-            path (str): path to an nrk.no article
-
-        Yields:
-            (tuple[str, str]): a numerical tag, used internally by nrk.no to
-                point to a specific topic and a short description of the topic.
-        """
-        article = html.parse(path)
-
-        for address in article.xpath(
-            '//a[@class="universe widget reference article-universe-link '
-            'universe-teaser skin-border skin-text lp_universe_link"]'
-        ):
-            href = address.get("href")
-            yield href[href.rfind("-") + 1 :], address[0].tail.strip()
-
-    def crawl_tag(self, tag, tagname):
-        """Look for articles in nrk.no tags.
-
-        Args:
-            tag (str): an internal nrk.no tag
-        """
-        if tag not in self.tags:
-            util.note(f"Fetching articles from «{tagname}»")
-            self.tags[tag] = tagname
-            for href in self.interesting_links(tag):
-                self.add_nrk_article(href)
-
-            self.counter["total"] += self.counter[tag + "_total"]
-            self.counter["fetched"] += self.counter[tag + "_fetched"]
-
-    def add_nrk_article(self, href):
-        """Copy an article to the working copy.
-
-        Args:
-            href (str): a url to an nrk article.
-        """
-        self.fetched_ids.add(href.split("-")[-1])
-        try:
-            path = self.corpus_adder.copy_url_to_corpus(href)
-            self.add_metadata(path)
-        except (
-            requests.exceptions.TooManyRedirects,
-            adder.AdderError,
-            UserWarning,
-        ) as error:
-            util.note(href)
-            util.note(error)
-
-    def crawl_site(self):
-        """Fetch Northern Saami pages from nrk.no."""
-        self.crawl_oanehaccat()
-        self.crawl_existing_tags()
-        # self.crawl_authors()
-        # self.corpus_adder.add_files_to_working_copy()
-        self.report()
-
-    def find_nrk_files(self):
-        """Find all nrk.no files."""
-        for root, _, files in os.walk(self.corpus_adder.goaldir):
-            for file_ in files:
-                if file_.endswith(".html"):
-                    yield os.path.join(root, file_)
-
-    def crawl_existing_tags(self):
-        """Crawl all tags found in nrk.no documents."""
-        for nrk_file in self.find_nrk_files():
-            for additional_tag, tag_name in self.pick_tags(nrk_file):
-                self.crawl_tag(additional_tag, tag_name)
-
-    def crawl_oanehaccat(self):
-        """Crawl short news, provided by a json dict.
-
-        This feed only contains Northern Sámi articles.
-        """
-        util.note("Fetching articles from {}".format("oanehaččat"))
-        self.tags["oanehaččat"] = "oanehaččat"
-        oanehaccat = requests.get(
-            "https://www.nrk.no/serum/api/content/json/"
-            "1.13572949?v=2&limit=1000&context=items"
-        )
-        for relation in oanehaccat.json()["relations"]:
-            self.counter["oanehaččat_total"] += 1
-            if relation["id"] not in self.fetched_ids:
-                self.counter["oanehaččat_fetched"] += 1
-                self.add_nrk_article(
-                    "https://www.nrk.no/sapmi/{}".format(relation["id"])
-                )
-
-        self.counter["total"] += self.counter["oanehaččat_total"]
-        self.counter["fetched"] += self.counter["oanehaččat_fetched"]
-
-    def handle_search_hits(self, hits):
-        """Decide whether articles found in search results should be saved."""
-        for hit in hits:
-            if hit["url"].split("-")[-1] not in self.fetched_ids and hit.get(
-                "description"
-            ):
-                lang = self.language_guesser.classify(hit["description"])
-                if lang == "sme":
-                    util.print_frame(len(hit["description"]), hit["description"], "\n")
-                    if len(hit["description"]) > 15:
-                        self.counter["authors_fetched"] += 1
-                        self.add_nrk_article(hit["url"])
-
-    def crawl_authors(self):
-        """Search for authors on nrk.no.
-
-        Not all articles have are represented under the tags found, so
-        a search on author names is also done.
-        """
-        self.tags["authors"] = "authors"
-        for nrk_file in self.find_nrk_files():
-            self.counter["nrk_file"] += 1
-            article = html.parse(nrk_file)
-            for author_body in article.xpath('.//div[@class="author__body"]'):
-                self.counter["author__body"] += 1
-                author_name = author_body.find('./a[@class="author__name"]')
-                if author_name is not None and author_name.text is not None:
-                    self.authors.add(author_name.text.strip().split()[-1].lower())
-                    self.counter["name"] += 1
-
-        for author_parts in self.authors:
-            util.print_frame(author_parts, "\n")
-            index = 0
-            total = 100001
-            while True:
-                hits = self.get_search_page(
-                    "https://www.nrk.no/sok/?format=json&scope=nrkno"
-                    "&filter=nrkno&q={}&from={}".format(author_parts, str(index))
-                )
-                if not hits:
-                    util.print_frame("empty hits, should break")
-                    break
-                if int(hits["total"]) < total:
-                    total = int(hits["total"])
-                self.handle_search_hits(hits["hits"])
-                if index > total:
-                    break
-                index += 20
-
-        self.counter["fetched"] += self.counter["authors_fetched"]
-
-    @staticmethod
-    def get_search_page(search_link):
-        """Get search pages, containing links to author search.
-
-        Args:
-            search_link (str): query string to nrk.no
-
-        Returns:
-            (dict): dict containing search results from search
-        """
-        result = requests.get(search_link)
-        content = result.content.decode("utf8")
-
-        try:
-            return json.loads(content)
-        except json.decoder.JSONDecodeError:
-            util.print_frame(search_link)
-            util.print_frame(result)
-            util.print_frame(content)
-
-            if content:
-                return {"hits": [], "from": "-1", "total": "100000"}
-            else:
-                return content
-
-    def report(self):
-        """Print a report on what was found."""
-        print(f"{len(self.invalid_links)} invalid links.")
-        for invalid_link in self.invalid_links:
-            print(invalid_link)
-        print()
-        print(f"Searched through {len(self.tags)} tags")
-        print(f"Searched through {len(self.authors)} authors")
-        print("Fetched {fetched} pages".format(**self.counter))
-        for tag in self.tags:
-            if self.counter[tag + "_fetched"]:
-                print(
-                    "Fetched {} articles from category {} from nrk.no".format(
-                        self.counter[tag + "_fetched"], self.tags[tag]
-                    )
-                )
-
-    @staticmethod
-    def valid_authors(article):
-        """Find authors with the correct roles.
-
-        Args:
-            article (etree.Element): The parsed html document.
-
-        Yields:
-            (tuple[str, ...]): Authors
-        """
-        for author_role in article.xpath('.//span[@class="author__role"]'):
-            text = author_role.text.strip()
-            if text is not None and (
-                text.startswith("Journ")
-                or text.startswith("Komm")
-                or text.startswith("Arti")
-            ):
-                parts = author_role.getprevious().text.strip().split()
-
-                yield parts
-
-    def add_metadata(self, path):
-        """Get metadata from the nrk.no article.
-
-        Args:
-            path (str): path to the nrk.no article
-        """
-        article = html.parse(path)
-        metadata = xslsetter.MetadataHandler(path + ".xsl")
-
-        for count, author_parts in enumerate(self.valid_authors(article), start=1):
-            metadata.set_variable("author" + str(count) + "_ln", author_parts[-1])
-            metadata.set_variable(
-                "author" + str(count) + "_fn", " ".join(author_parts[:-1])
-            )
-
-        time = article.find('//time[@itemprop="datePublished"]')
-        if time is None:
-            time = article.find('//time[@class="relative bulletin-time"]')
-        date = dateutil.parser.parse(time.get("datetime"))
-        metadata.set_variable("year", date.year)
-
-        metadata.set_variable("publisher", "NRK")
-        metadata.set_variable("license_type", "standard")
-        metadata.write_file()
-
-    @staticmethod
-    def get_fetched_links(path):
-        """Find fetched links.
+    def get_fetched_ids(self) -> set[str]:
+        """Find articles ids of fetched documents.
 
         Args:
             path (str): path to the directory where nrk articles are found.
 
         Returns:
-            (set[str]): Set of strings, where the strings are ids to the
-                article.
+            A set of strings, where the strings are ids of the
+            fetched articles.
         """
+        corpus_dirs = [
+            self.corpus_parent / f"corpus-{lang}-orig-x-closed" / "news/nrk.no"
+            for lang in self.langs
+        ]
+
         return {
-            xslsetter.MetadataHandler(os.path.join(root, file_))
-            .get_variable("filename")
-            .split("-")[-1]
-            for root, _, files in os.walk(path)
-            for file_ in files
-            if file_.endswith(".xsl")
+            file_.stem.replace(".html", "").split("-")[-1]
+            for path in corpus_dirs
+            for file_ in Path(path).glob("*.xsl")
         }
+
+    def crawl_page(self, article_id: str) -> NrkNoPage | None:
+        """Collect links from a page."""
+        self.visited_links.add(article_id)
+        try:
+            result = requests.get(f"https://nrk.no/sapmi/{article_id}", timeout=10)
+        except (requests.exceptions.ConnectionError, requests.exceptions.ReadTimeout):
+            return None
+
+        if not result.ok:
+            return None
+
+        content_type = result.headers.get("content-type")
+        if content_type is None:
+            return None
+
+        if "html" not in content_type.lower():
+            return None
+
+        tree = etree.HTML(result.text)
+
+        if tree is None:
+            return None
+
+        orig_page = NrkNoPage(result.url, etree.HTML(result.text), self.corpus_parent)
+
+        self.unvisited_links.update(orig_page.links)
+
+        return orig_page
+
+    def crawl_site(self):
+        print("Crawling nrk.no.")
+        while self.unvisited_links:
+            article_id = self.unvisited_links.pop()
+            if article_id not in self.visited_links:
+                try:
+                    self.crawl_pageset(article_id)
+                except NrkNoUnknownPageError as error:
+                    print(f"Error: {error}")
+                sleep(0.5)
+
+            self.unvisited_links.difference_update(self.visited_links)
+            print(
+                article_id,
+                "U:",
+                len(self.unvisited_links),
+                "V:",
+                len(self.visited_links),
+            )
+
+        pprint(self.counter)
+
+    @staticmethod
+    def set_parallel_info(parallel_pages):
+        """Set the parallels for this set of parallel pages."""
+        lang_combinations = (
+            (parallel_page1, parallel_page2)
+            for parallel_page1 in parallel_pages
+            for parallel_page2 in parallel_pages
+            if parallel_page1 != parallel_page2
+        )
+
+        for parallel_page1, parallel_page2 in lang_combinations:
+            parallel_page1.set_parallel_file(
+                parallel_page2.lang, parallel_page2.basename
+            )
+
+    def crawl_pageset(self, article_id: str) -> None:
+        orig_page = self.crawl_page(article_id)
+        if orig_page is None:
+            print(f"Could not crawl {article_id}.")
+            return
+
+        pages = self.get_page_set(orig_page=orig_page)
+
+        self.set_parallel_info(pages)
+        for page in pages:
+            page.save()
+            self.vcs[page.lang].add(page.fullpath.orig)
+            self.vcs[page.lang].add(page.fullpath.xsl)
+            self.counter[page.lang] += 1
+
+    def get_page_set(self, orig_page) -> list[NrkNoPage]:
+        """Get parallel pages for the original page.
+
+        Args:
+            orig_page: The original page to get parallel pages for.
+
+        Returns:
+            A list of parallel pages.
+        """
+        pages = [orig_page]
+        pages.extend([self.crawl_page(link) for link in orig_page.parallel_ids])
+
+        # If we only have norwegian, we don't want to save any pages
+        page_langs = {page.lang for page in pages if page is not None}
+        if len(page_langs) == 1 and "nob" in page_langs:
+            return []
+
+        return [page for page in pages if page is not None]

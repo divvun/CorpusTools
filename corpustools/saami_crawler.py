@@ -28,6 +28,7 @@ from corpustools import (
     samediggi_fi_crawler,
     samediggi_no_crawler,
 )
+from corpustools.nrk_no_crawler import NrkNoCrawler
 
 
 def parse_options():
@@ -54,7 +55,7 @@ def main():
     crawlers = {
         "www.samediggi.fi": samediggi_fi_crawler.SamediggiFiCrawler(),
         "samediggi.no": samediggi_no_crawler.SamediggiNoCrawler(),
-        # "nrk.no": nrk_no_crawler.NrkSmeCrawler(),
+        "nrk.no": NrkNoCrawler(),
         # "samas.no": samas_crawler.SamasCrawler(),
     }
 
