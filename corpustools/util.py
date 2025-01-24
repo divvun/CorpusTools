@@ -21,6 +21,7 @@
 import concurrent.futures
 import concurrent.futures.process
 import datetime
+import hashlib
 import inspect
 import operator
 import os
