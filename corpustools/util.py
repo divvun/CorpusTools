@@ -318,7 +318,7 @@ class ExternalCommandRunner:
         except OSError:
             raise ExecutableMissingError(
                 f"Please install {command[0]}, can not continue without it."
-            )
+            ) from None
 
         (self.stdout, self.stderr) = subp.communicate(to_stdin)
         self.returncode = subp.returncode
