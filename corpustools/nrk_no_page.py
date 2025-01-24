@@ -47,7 +47,7 @@ class NrkNoPage:
             self.corpus_parent
             / f"corpus-{self.lang}-orig-x-closed"
             / "news/nrk.no"
-            / f"{self.url.split("/")[-1]}.html"
+            / f"{self.url.split('/')[-1]}.html"
         )
 
         self.set_initial_metadata()
