@@ -38,11 +38,16 @@ class NrkNoPage:
             self.body_text, langs=list(self.language_codes)
         )
         self.article_id = self.url.split("/")[-1]
-        self.links = {
-            link.get("ec-id", "").replace("pp:", "")
-            for link in self.tree.findall(".//a[@ec-id]")
-            if link.get("ec-id") is not None and "pp:" in link.get("ec-id", "")
-        }
+        # Only look for links on NRK sápmi pages
+        self.links = (
+            {
+                link.get("ec-id", "").replace("pp:", "")
+                for link in self.tree.findall(".//a[@ec-id]")
+                if link.get("ec-id") is not None and "pp:" in link.get("ec-id", "")
+            }
+            if "/sapmi/" in self.url
+            else set()
+        )
         self.fullpath = make_corpus_path(
             self.corpus_parent
             / f"corpus-{self.lang}-orig-x-closed"
