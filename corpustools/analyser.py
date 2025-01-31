@@ -45,10 +45,12 @@ def get_modename(path):
             if 1939 < int(year) < 1995:
                 return "hfst_eighties"
 
-    if path.lang in ["nob", "fin", "fao"]:
-        return "hfst_no_korp"
+    lang_dir = modes.Pipeline.valid_path(None, path.lang)
 
-    return "hfst"
+    if os.path.exists(os.path.join(lang_dir, "korp.bin")):
+        return "hfst"
+    else:
+        return "hfst_no_korp"
 
 
 def ccatter(path):
