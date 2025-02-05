@@ -59,12 +59,6 @@ def ccatter(path):
     xml_printer.parse_file(path.converted)
     text = xml_printer.process_file().getvalue()
     if text:
-        # Gruesome hack for mhr
-        # When https://github.com/giellalt/lang-mhr/issues/3
-        # is resolved, remove this
-        if path.lang == "mhr":
-            return " - ".join(part.strip() for part in text.split("-"))
-        # end of hack
         return text
 
     raise UserWarning(f"Empty file {path.converted}")
