@@ -12,7 +12,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2023 The University of Tromsø &
+#   Copyright © 2013-2025 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
@@ -20,9 +20,9 @@
 
 
 import argparse
-import cgi
 import os
 import shutil
+from email.message import Message
 from pathlib import Path
 
 import requests
@@ -63,7 +63,9 @@ def url_to_filename(response):
         (str): Name of the file.
     """
     try:
-        _, params = cgi.parse_header(response.headers["Content-Disposition"])
+        msg = Message()
+        msg["Content-Disposition"] = response.headers["Content-Disposition"]
+        params = dict(msg.get_params(header="Content-Disposition"))
         return params["filename"]
     except KeyError:
         return add_url_extension(
