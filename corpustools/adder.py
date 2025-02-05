@@ -258,7 +258,7 @@ class AddToCorpus:
                     else:
                         duplicates[file_hash] = [path]
 
-        results = list(x for x in list(duplicates.values()) if len(x) > 1)
+        results = [x for x in list(duplicates.values()) if len(x) > 1]
         if results:
             print("Duplicates Found:")
             print("___")
