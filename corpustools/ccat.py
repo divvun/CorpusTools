@@ -67,7 +67,7 @@ def suppress_broken_pipe_msg(function):
 class XMLPrinter:
     """Convert giellatekno xml formatted files to plain text."""
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         lang=None,
         all_paragraphs=False,
@@ -92,6 +92,7 @@ class XMLPrinter:
         disambiguation=False,
         dependency=False,
         hyph_replacement="",
+        orthography=None,
     ):
         """Setup all the options.
 
@@ -183,6 +184,8 @@ class XMLPrinter:
             self.hyph_replacement = "<hyph/>"
         else:
             self.hyph_replacement = hyph_replacement
+
+        self.orthography = orthography
 
     def get_lang(self):
         """Get the lang of the file."""
@@ -456,10 +459,14 @@ class XMLPrinter:
         """Print a xml file to stdout."""
         if file_.endswith(".xml"):
             self.parse_file(file_)
-            try:
-                sys.stdout.write(self.process_file().getvalue())
-            except BrokenPipeError:
-                pass
+            orthography = self.etree.find(".//orthography")
+            if (orthography is None and self.orthography == "standard") or (
+                orthography is not None and orthography.text == self.orthography
+            ):
+                try:
+                    sys.stdout.write(self.process_file().getvalue())
+                except BrokenPipeError:
+                    pass
 
 
 def parse_options():
@@ -607,18 +614,15 @@ def parse_options():
     parser.add_argument(
         "--orth",
         help="Print text using the orthography",
-        action="store_true",
-    )
-    parser.add_argument(
-        "--list-orth", help="List the orthographies", action="store_true"
-    )
-    parser.add_argument(
-        "--tags",
-        help="Print text using the orthography",
-        action="store_true",
-    )
-    parser.add_argument(
-        "--list-tags", help="List the orthographies", action="store_true"
+        choices=[
+            "standard",
+            "sme:leem",
+            "sme:friis",
+            "sme:nielsen",
+            "sme:itkonen",
+            "sme:bergsland",
+        ],
+        default="standard",
     )
     parser.add_argument(
         "targets",
@@ -663,7 +667,6 @@ def main():
     Print the output to stdout
     """
     args = parse_options()
-
     xml_printer = XMLPrinter(
         lang=args.lang,
         all_paragraphs=args.all_paragraphs,
@@ -687,6 +690,7 @@ def main():
         dependency=args.dependency,
         disambiguation=args.disambiguation,
         hyph_replacement=args.hyph_replacement,
+        orthography=args.orth,
     )
 
     for filename in find_files(args.targets, ".xml"):
