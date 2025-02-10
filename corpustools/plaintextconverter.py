@@ -158,8 +158,8 @@ class PlaintextConverter(basicconverter.BasicConverter):
             An etree element.
         """
         document = etree.Element("document")
-        header = etree.SubElement(document, "header")
-        body = etree.SubElement(header, "body")
+        etree.SubElement(document, "header")
+        body = etree.SubElement(document, "body")
 
         for para in self.lines2xml(content):
             body.append(para)
