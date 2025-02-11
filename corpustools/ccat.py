@@ -28,6 +28,8 @@ from traceback import print_exc
 from lxml import etree
 
 from corpustools import argparse_version
+from corpustools.orthographies import orthographies
+from corpustools.orthographies import is_orthography_of
 
 
 def suppress_broken_pipe_msg(function):
@@ -456,17 +458,36 @@ class XMLPrinter:
             buffer.write(element.text)
 
     def print_file(self, file_):
-        """Print a xml file to stdout."""
-        if file_.endswith(".xml"):
-            self.parse_file(file_)
-            orthography = self.etree.find(".//orthography")
-            if (orthography is None and self.orthography == "standard") or (
-                orthography is not None and orthography.text == self.orthography
-            ):
-                try:
-                    sys.stdout.write(self.process_file().getvalue())
-                except BrokenPipeError:
-                    pass
+        """Print a xml file to stdout. Returns True if something was printed,
+        False otherwise."""
+        if not file_.endswith(".xml"):
+            return False
+
+        self.parse_file(file_)
+        orthography = self.etree.find(".//header/orthography")
+
+        if (
+            # text has no specified orthography, and no specific orthography
+            # is requested, so we show the text
+            (orthography is None and self.orthography is None)
+            or
+            # text has no specific orthography, but user specifically requested
+            # standard orthography, so we show the text
+            (orthography is None and "standard" in self.orthography)
+            or
+            # the text's orthography is in the list of specifically requested
+            # orthographies, so we show the text
+            (
+                (orthography is not None and
+                 self.orthography is not None
+                 and orthography.text in self.orthography)
+            )
+        ):
+            try:
+                sys.stdout.write(self.process_file().getvalue())
+                return True
+            except BrokenPipeError:
+                pass
 
 
 def parse_options():
@@ -612,21 +633,29 @@ def parse_options():
         help="Replace hyph tags with the given argument",
     )
     parser.add_argument(
-        "--orth",
-        help="Print text using the orthography",
-        choices=[
-            "standard",
-            "sme:leem",
-            "sme:friis",
-            "sme:nielsen",
-            "sme:itkonen",
-            "sme:bergsland",
-        ],
-        default="standard",
+        "--orthography",
+        help=(
+            "Print texts written in the specified orthography. Can be "
+            "given multiple times to include more orthographies. The "
+            "'standard' name always means to include texts which does not "
+            "have a specific orthography designated."
+        ),
+        metavar="('standard' or orthography name)",
+        choices=["standard", *orthographies()],
+        action="append",
+    )
+    parser.add_argument(
+        "--list-orthographies",
+        help=(
+            "List all orthographies known. Useful together with -l to limit "
+            "the list to only orthographies known for that language. If -l is "
+            "not given, all known orthographies are listed."
+        ),
+        action="store_true",
     )
     parser.add_argument(
         "targets",
-        nargs="+",
+        nargs="*",
         help="Name of the files or directories to process. \
                         If a directory is given, all files in this directory \
                         and its subdirectories will be listed.",
@@ -667,6 +696,28 @@ def main():
     Print the output to stdout
     """
     args = parse_options()
+
+    if args.list_orthographies:
+        for orthography in orthographies(args.lang):
+            print(orthography)
+        return
+
+    # the targets argument is required when --list-orthographies is not given
+    if not args.targets:
+        print("ccat: error: the following arguments are required: targets")
+        return
+
+    # check that all given --orthography are orthographies of the given lang
+    # in -l
+    if isinstance(args.orthography, list) and args.lang is not None:
+        for ortho in args.orthography:
+            if not is_orthography_of(ortho, args.lang):
+                print(
+                    f"ccat: error: orthography '{ortho}' is not an "
+                    f"orthography of language '{args.lang}' (given by -l)"
+                )
+                return
+
     xml_printer = XMLPrinter(
         lang=args.lang,
         all_paragraphs=args.all_paragraphs,
@@ -690,11 +741,31 @@ def main():
         dependency=args.dependency,
         disambiguation=args.disambiguation,
         hyph_replacement=args.hyph_replacement,
-        orthography=args.orth,
+        orthography=args.orthography,
     )
 
-    for filename in find_files(args.targets, ".xml"):
-        xml_printer.print_file(filename)
+    did_print = False
+    try:
+        for filename in find_files(args.targets, ".xml"):
+            if xml_printer.print_file(filename):
+                did_print = True
+    except KeyboardInterrupt:
+        print()
+
+    if not did_print and args.orthography is not None and args.lang is None:
+        # idea (anders): try to "guess" which language we're in by reading
+        # the path to (any of the) target file(s), and looking for "corpus-xxx"
+        # -- and if we can guess the language, then we can tell the user that
+        # this and this orthography is not a part of the guessed language, so
+        # that may be the reason for no output... ?
+        print(
+            "ccat: notice: no output. it could be that the orthography "
+            "requested is not an orthography of that language\n"
+            "hint: use -l to specify the language explicitly. if you do, the "
+            "script will error out if any of the given --orthography's are "
+            "invalid for that language",
+            file=sys.stderr
+        )
 
 
 if __name__ == "__main__":
