@@ -522,7 +522,14 @@
                     </xsl:element>
                 </xsl:if>
 
-
+                <xsl:choose>
+                    <xsl:when test="$orthography">
+                        <xsl:element name="orthography">
+                            <xsl:value-of select="$orthography"/>
+                        </xsl:element>
+                    </xsl:when>
+                    <xsl:otherwise></xsl:otherwise>
+                </xsl:choose>
             </xsl:element>
             <xsl:apply-templates select="body"/>
         </xsl:element>

@@ -45,6 +45,7 @@
                   parallel_text*,
                   metadata,
                   version?,
+                  orthography?,
                   note? )>
 
 <!ELEMENT title (#PCDATA)>
@@ -131,6 +132,9 @@
 
 <!-- Version information of the different conversion tools -->
 <!ELEMENT version (#PCDATA)>
+
+<!-- Orthography text is written in -->
+<!ELEMENT orthography (#PCDATA)>
 
 <!-- The person who stored the file in the database -->
 <!-- In case of web-upload, the one who did the upload -->
