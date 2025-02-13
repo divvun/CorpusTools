@@ -146,9 +146,7 @@ def parse_options():
         parents=[argparse_version.parser], description="Analyse files in parallel."
     )
 
-    parser.add_argument(
-        "--ncpus", action=NCpus, default=multiprocessing.cpu_count() * 2
-    )
+    parser.add_argument("--ncpus", action=NCpus)
     parser.add_argument(
         "--skip-existing",
         action="store_true",

@@ -205,7 +205,7 @@ def parse_options():
         description="Convert original files to giellatekno xml.",
     )
 
-    parser.add_argument("--ncpus", action=NCpus, default=multiprocessing.cpu_count())
+    parser.add_argument("--ncpus", action=NCpus)
     parser.add_argument(
         "--skip-existing",
         action="store_true",

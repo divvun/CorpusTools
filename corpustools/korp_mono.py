@@ -20,7 +20,6 @@
 
 
 import argparse
-import multiprocessing
 import re
 
 from lxml import etree
@@ -985,9 +984,7 @@ def parse_options():
         description="Turn analysed files into vrt format xml files for Korp use.",
     )
 
-    parser.add_argument(
-        "--ncpus", action=NCpus, default=multiprocessing.cpu_count() * 2
-    )
+    parser.add_argument("--ncpus", action=NCpus)
     parser.add_argument(
         "--skip-existing",
         action="store_true",

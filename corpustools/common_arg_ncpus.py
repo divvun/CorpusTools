@@ -54,6 +54,8 @@ class NCpus(argparse.Action):
                 "The number of cpus to use. If unspecified, defaults to using "
                 f"as many cpus as it can. {self.CHOOSE_BETWEEN_STR}"
             )
+        if "default" not in kwargs:
+            kwargs["default"] = _get_core_count()
         super().__init__(option_strings, dest, **kwargs)
 
     def __call__(self, parser, namespace, values, option_string=None):
