@@ -110,8 +110,8 @@ class Corpus:
         for idx, folder in enumerate(parts):
             if len(folder) >= 7 and folder.startswith("corpus-"):
                 try:
-                    lang_end_index = folder.index("-", 7)
-                    lang = folder[7 : lang_end_index + 1]
+                    # str.index() ValueError's on substring not found
+                    lang = folder[7:folder.index("-", 7)]
                 except ValueError:
                     lang = folder[7:]
 
