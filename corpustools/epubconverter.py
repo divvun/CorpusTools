@@ -27,21 +27,23 @@ file that belongs to this epub file.
 """
 
 from pathlib import Path
+from typing import Iterator
 
-import epub  # type: ignore
+from epub import Book, BookChapter, open_epub  # type: ignore
 from lxml import etree
 
-from corpustools import util, xslsetter
+from corpustools.util import ConversionError
+from corpustools.xslsetter import MetadataHandler
 
 
-def read_chapter(chapter):
+def read_chapter(chapter: BookChapter) -> etree._Element:
     """Read the contents of a epub_file chapter.
 
     Args:
-        chapter (epub.BookChapter): the chapter of an epub file
+        chapter: the chapter of an epub file
 
     Returns:
-        (str): The contents of a chapter
+        The contents of a chapter
 
     Raises:
         util.ConversionException: on conversion error
@@ -49,17 +51,17 @@ def read_chapter(chapter):
     try:
         return etree.fromstring(chapter.read())
     except KeyError as error:
-        raise util.ConversionError(error) from error
+        raise ConversionError(error) from error
 
 
-def chapters(book, metadata):
+def chapters(book: Book, metadata: MetadataHandler) -> Iterator[etree._Element]:
     """Get the all linear chapters of the epub book.
 
     Args:
-        book (epub.Book): The epub book element
+        book: The epub book element
 
     Yields:
-        (lxml.etree.Element): The body of an xhtml file found in the epub file.
+        The body of an xhtml file found in the epub file.
     """
     excluded = metadata.epub_excluded_chapters
     for index, chapter in enumerate(book.chapters):
@@ -67,26 +69,26 @@ def chapters(book, metadata):
             chapterbody = read_chapter(chapter).find(
                 "{http://www.w3.org/1999/xhtml}body"
             )
-            chapterbody.tag = "{http://www.w3.org/1999/xhtml}div"
-            yield chapterbody
+            if chapterbody is not None:
+                chapterbody.tag = "{http://www.w3.org/1999/xhtml}div"
+                yield chapterbody
 
 
-def extract_content(filename, metadata):
+def extract_content(filename: Path, metadata: MetadataHandler) -> etree._Element:
     """Extract content from the epub file.
 
     Args:
-        filename (str): path to the document
+        filename: path to the document
 
     Returns:
-        (lxml.etree.Element): the content of the epub file wrapped in html
-            element
+        The content of the epub file wrapped in html element
     """
     mainbody = etree.Element("{http://www.w3.org/1999/xhtml}body")
     html = etree.Element("{http://www.w3.org/1999/xhtml}html")
     html.append(etree.Element("{http://www.w3.org/1999/xhtml}head"))
     html.append(mainbody)
 
-    book = epub.Book(epub.open_epub(filename))
+    book = Book(open_epub(filename))
 
     for chapterbody in chapters(book, metadata):
         mainbody.append(chapterbody)
@@ -94,55 +96,61 @@ def extract_content(filename, metadata):
     return html
 
 
-def remove_ranges(metadata, html):
+def remove_ranges(metadata: MetadataHandler, html: etree._Element) -> None:
     """Remove ranges of html elements."""
     if metadata.skip_elements:
         for pairs in metadata.skip_elements:
             remove_range(pairs[0], pairs[1], html)
 
 
-def to_html_elt(filename: Path):
+def to_html_elt(filename: Path) -> etree._Element:
     """Append all chapter bodies as divs to an html file.
 
     Returns:
-        (lxml.etree.Element): An etree.Element containing the content of
-            all xhtml files found in the epub file as one xhtml document.
+        An etree.Element containing the content of all xhtml files found in
+        the epub file as one xhtml document.
     """
-    metadata = xslsetter.MetadataHandler(filename.as_posix() + ".xsl", create=True)
+    metadata = MetadataHandler(filename.as_posix() + ".xsl", create=True)
     html = extract_content(filename, metadata)
     try:
         remove_ranges(metadata, html)
     except AttributeError as error:
-        raise util.ConversionError(
+        raise ConversionError(
             "Check that skip_elements in the metadata file has the correct format"
         ) from error
 
     return html
 
 
-def remove_siblings_shorten_path(parts, content, preceding=False):
+def remove_siblings_shorten_path(
+    parts: list[str], content: etree._Element, preceding: bool = False
+) -> list[str]:
     """Remove all siblings before or after an element.
 
     Args:
-        parts (list of str): a xpath path split on /
-        content (etree._Element): an xhtml document
-        preceding (bool): When True, iterate through the preceding siblings
+        parts: a xpath path split on /
+        content: an xhtml document
+        preceding: When True, iterate through the preceding siblings
             of the found element, otherwise iterate throughe the following
             siblings.
 
     Returns:
-        (list[str]): the path to the parent of parts.
+        The path to the parent of parts.
     """
     path = "/".join(parts)
     found = content.find(path, namespaces={"html": "http://www.w3.org/1999/xhtml"})
-    parent = found.getparent()
-    for sibling in found.itersiblings(preceding=preceding):
-        parent.remove(sibling)
+    if found is not None:
+        parent = found.getparent()
+        if parent is not None:
+            for sibling in found.itersiblings(preceding=preceding):
+                parent.remove(sibling)
 
     return parts[:-1]
 
 
-def shorten_longest_path(path1, path2, content):
+def shorten_longest_path(
+    path1: str, path2: str, content: etree._Element
+) -> tuple[list[str], list[str]]:
     """Remove elements from the longest path.
 
     If starts is longer than ends, remove the siblings following starts,
@@ -154,14 +162,12 @@ def shorten_longest_path(path1, path2, content):
     preceding ends, then shorten ends (going to its parent).
 
     Args:
-        path1 (str): path to first element
-        path2 (str): path to second element
-        content (etree._Element): xhtml document, where elements are
-            removed.
+        path1: path to first element
+        path2: path to second element
+        content: xhtml document, where elements are removed.
 
     Returns:
-        (tuple[list[str]]): paths to the new start and end element, now
-            with the same length.
+        Paths to the new start and end element, now with the same length.
     """
     starts, ends = path1.split("/"), path2.split("/")
 
@@ -174,7 +180,9 @@ def shorten_longest_path(path1, path2, content):
     return starts, ends
 
 
-def remove_trees_1(path1, path2, content):
+def remove_trees_1(
+    path1: str, path2: str, content: etree._Element
+) -> tuple[list[str], list[str]]:
     """Remove tree nodes that do not have the same parents.
 
     While the parents in starts and ends are unequal (that means that
@@ -184,13 +192,12 @@ def remove_trees_1(path1, path2, content):
     ends are of equal length.
 
     Args:
-        path1 (str): path to first element
-        path2 (str): path to second element
-        content (etree._Element): xhtml document, where elements are
-            removed.
+        path1: path to first element
+        path2: path to second element
+        content: xhtml document, where elements are removed.
 
     Returns:
-        (tuple[list[str]]): paths to the new start and end element.
+        Paths to the new start and end element.
     """
     starts, ends = shorten_longest_path(path1, path2, content)
 
@@ -201,17 +208,16 @@ def remove_trees_1(path1, path2, content):
     return starts, ends
 
 
-def remove_trees_2(starts, ends, content):
+def remove_trees_2(starts: list[str], ends: list[str], content: etree._Element) -> None:
     """Remove tree nodes that have the same parents.
 
     Now that the parents of starts and ends are equal, remove the last
     trees of nodes between starts and ends (if necessary).
 
     Args:
-        starts (list[str]): path to first element
-        ends (list[str]): path to second element
-        content (lxml.etree.Element): xhtml document, where elements are
-            removed.
+        starts: path to first element
+        ends: path to second element
+        content: xhtml document, where elements are removed.
     """
     deepest_start = content.find(
         "/".join(starts), namespaces={"html": "http://www.w3.org/1999/xhtml"}
@@ -219,35 +225,38 @@ def remove_trees_2(starts, ends, content):
     deepest_end = content.find(
         "/".join(ends), namespaces={"html": "http://www.w3.org/1999/xhtml"}
     )
-    parent = deepest_start.getparent()
-    for sibling in deepest_start.itersiblings():
-        if sibling == deepest_end:
-            break
-        else:
-            parent.remove(sibling)
+    if deepest_start is not None:
+        parent = deepest_start.getparent()
+        for sibling in deepest_start.itersiblings():
+            if sibling == deepest_end:
+                break
+            elif parent is not None:
+                parent.remove(sibling)
 
 
-def remove_first_element(path1, content):
+def remove_first_element(path1: str, content: etree._Element) -> None:
     """Remove the first element in the range.
 
     Args:
-        path1 (str): path to the first element to remove.
-        content (lxml.etree.Element): the xhtml document that should
-            be altered.
+        path1: path to the first element to remove.
+        content: the xhtml document that should be altered.
     """
     first_start = content.find(
         path1, namespaces={"html": "http://www.w3.org/1999/xhtml"}
     )
-    first_start.getparent().remove(first_start)
+    if first_start is not None:
+        parent = first_start.getparent()
+        if parent is not None:
+            parent.remove(first_start)
 
 
-def remove_range(path1, path2, content):
+def remove_range(path1: str, path2: str, content: etree._Element) -> None:
     """Remove a range of elements from an xhtml document.
 
     Args:
-        path1 (str): path to first element
-        path2 (str): path to second element
-        content (lxml.etree.Element): xhtml document
+        path1: path to first element
+        path2: path to second element
+        content: xhtml document
     """
     if path2:
         starts, ends = remove_trees_1(path1, path2, content)
@@ -255,4 +264,7 @@ def remove_range(path1, path2, content):
         remove_first_element(path1, content)
     else:
         found = content.find(path1, namespaces={"html": "http://www.w3.org/1999/xhtml"})
-        found.getparent().remove(found)
+        if found is not None:
+            parent = found.getparent()
+            if parent is not None:
+                parent.remove(found)

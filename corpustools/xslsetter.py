@@ -84,9 +84,8 @@ class MetadataHandler:
             etree._Element: The element that contains the key.
         """
         return self.tree.getroot().find(
-            "{{http://www.w3.org/1999/XSL/Transform}}" "variable[@name='{}']".format(
-                key
-            )
+            "{{http://www.w3.org/1999/XSL/Transform}}"
+            "variable[@name='{}']".format(key)
         )
 
     def set_variable(self, key, value):
@@ -101,9 +100,8 @@ class MetadataHandler:
             variable.attrib["select"] = f"'{value}'"
         except AttributeError as e:
             raise UserWarning(
-                "Tried to update {} with value {}\n" "Error was {}".format(
-                    key, value, str(e)
-                )
+                "Tried to update {} with value {}\n"
+                "Error was {}".format(key, value, str(e))
             )
 
     def get_variable(self, key):
@@ -496,7 +494,7 @@ class MetadataHandler:
             sys.exit(254)
 
     @property
-    def skip_elements(self):
+    def skip_elements(self) -> list[tuple[str, str]]:
         """Get the skip_elements variable.
 
         Returns:
@@ -504,17 +502,19 @@ class MetadataHandler:
                 path pair. If the skip_elements variable is empty, return None.
         """
 
-        def get_with_ns(path):
+        def get_with_ns(path: str) -> str:
             return "/".join(
                 [
-                    "html:" + part
-                    if not part.startswith("html:") and re.match(r"^\w", part)
-                    else part
+                    (
+                        "html:" + part
+                        if not part.startswith("html:") and re.match(r"^\w", part)
+                        else part
+                    )
                     for part in path.split("/")
                 ]
             )
 
-        def get_pair(pair):
+        def get_pair(pair: str) -> tuple[str, str]:
             p = pair.split(";")
             return (get_with_ns(p[0].strip()), get_with_ns(p[1].strip()))
 
@@ -522,6 +522,8 @@ class MetadataHandler:
             return [
                 get_pair(pair) for pair in self.get_variable("skip_elements").split(",")
             ]
+
+        return []
 
     @property
     def linespacing(self):
