@@ -11,7 +11,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2012-2023 The University of Tromsø &
+#   Copyright © 2012-2025 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
@@ -49,7 +49,7 @@ def read_chapter(chapter):
     try:
         return etree.fromstring(chapter.read())
     except KeyError as error:
-        raise util.ConversionError(error)
+        raise util.ConversionError(error) from error
 
 
 def chapters(book, metadata):
@@ -112,10 +112,10 @@ def to_html_elt(filename: Path):
     html = extract_content(filename, metadata)
     try:
         remove_ranges(metadata, html)
-    except AttributeError:
+    except AttributeError as error:
         raise util.ConversionError(
-            "Check that skip_elements in the " "metadata file has the correct format"
-        )
+            "Check that skip_elements in the metadata file has the correct format"
+        ) from error
 
     return html
 
