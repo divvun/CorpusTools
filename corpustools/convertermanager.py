@@ -19,7 +19,6 @@
 
 import argparse
 import logging
-import multiprocessing
 import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from functools import partial
