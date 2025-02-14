@@ -26,7 +26,9 @@ These ranges consist pairs of xpath paths, specified inside the metadata
 file that belongs to this epub file.
 """
 
-import epub
+from pathlib import Path
+
+import epub  # type: ignore
 from lxml import etree
 
 from corpustools import util, xslsetter
@@ -99,14 +101,14 @@ def remove_ranges(metadata, html):
             remove_range(pairs[0], pairs[1], html)
 
 
-def to_html_elt(filename):
+def to_html_elt(filename: Path):
     """Append all chapter bodies as divs to an html file.
 
     Returns:
         (lxml.etree.Element): An etree.Element containing the content of
             all xhtml files found in the epub file as one xhtml document.
     """
-    metadata = xslsetter.MetadataHandler(filename + ".xsl", create=True)
+    metadata = xslsetter.MetadataHandler(filename.as_posix() + ".xsl", create=True)
     html = extract_content(filename, metadata)
     try:
         remove_ranges(metadata, html)
