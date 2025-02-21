@@ -1,0 +1,139 @@
+order: 0
+name: pos
+label:
+  eng: Part-of-speech
+  nob: Ordklasse
+  sme: Sátneluohkká
+  fin: Sanaluokka
+dataset:
+  A: A
+  N: N
+  V: V
+  Adv: Adv
+  Po: Po
+  Pr: Pr
+  Pron: Pron
+  Det: Det
+  Num: Num
+  Cmp_SplitR: Cmp_SplitR
+  Cmp_Sh: Cmp_Sh
+  CmpNP_First: CmpNP_First
+  CmpNP_None: CmpNP_None
+  Cmp_SgNom: Cmp_SgNom
+  Pcle: Pcle
+  PUNCT: PUNCT
+  CC: CC
+  Interj: Interj
+  CS: CS
+  CLB: CLB
+  ___: ___
+extended_component: datasetSelect
+opts:
+  is: "="
+  is_not: "!="
+translation:
+  A:
+    eng: adjective
+    nob: adjektiv
+    sme: adjektiiva
+    fin: adjektiivi
+  N:
+    eng: noun
+    nob: substantiv
+    sme: substantiiva
+    fin: substantiivi
+  V:
+    eng: verb
+    nob: verb
+    sme: vearba
+    fin: verbi
+  Adv:
+    eng: adverb
+    nob: adverb
+    sme: advearba
+    fin: adverbi
+  Po:
+    eng: postposition
+    nob: postposisjon
+    sme: postposišuvdna
+    fin: postpositio
+  Pr:
+    eng: preposition
+    nob: preposisjon
+    sme: preposišuvdna
+    fin: prepositio
+  Pron:
+    eng: pronoun
+    nob: pronomen
+    sme: pronomena
+    fin: pronomini
+  Det:
+    eng: determinative
+    nob: determinativ
+    sme: determinative
+    fin: determinatiivi
+  Num:
+    eng: numeral
+    nob: numeral
+    sme: numerála
+    fin: numeraali
+  Cmp_SplitR:
+    eng: right side of a compound
+    nob: høyre side av sammensetning
+    sme: goallosteami olgeš bealli
+    fin: yhdyssanan oikea puoli
+  Cmp_Sh:
+    eng: compound short form
+    nob: kortform-sammensetning
+    sme: goallosteami otnon hápmi
+    fin: yhdyssanan lyhennetty muoto
+  CmpNP_First:
+    eng: compound part
+    nob: del av sammensetning
+    sme: goallosteami hápmi
+    fin: yhdyssana
+  CmpNP_None:
+    eng: compound part
+    nob: del av sammensetning
+    sme: goallosteami hápmi
+    fin: yhdyssana
+  Cmp_SgNom:
+    eng: singular nominative compound
+    nob: entall-nominativ-sammensetning
+    sme: ovttaidlogu-nominatiiva-goallosteapmi
+    fin: yksikön nominatiivi yhdyssanan etuosana
+  Pcle:
+    eng: particle
+    nob: partikkel
+    sme: partihkal
+    fin: partikkeli
+  PUNCT:
+    eng: punctuation
+    nob: interpunksjon
+    sme: mearka cealkaga siste
+    fin: välimerkki
+  CC:
+    eng: conjunction
+    nob: konjunksjon
+    sme: konjunkšuvdna
+    fin: konjunktio
+  Interj:
+    eng: interjection
+    nob: interjeksjon
+    sme: interjekšuvdna
+    fin: interjektio
+  CS:
+    eng: subjunction
+    nob: subjunksjon
+    sme: subjunkšuvdna
+    fin: subjunktio
+  CLB:
+    eng: clause boundary
+    nob: setningsgrensemerke
+    sme: cealkkaráji mearka
+    fin: lauserajan merkki
+  ___:
+    eng: unknown
+    nob: ukjent
+    sme: dovddatmeahttun
+    fin: tuntematon

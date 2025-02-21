@@ -1,0 +1,17 @@
+order: 1
+name: lemma
+label:
+  eng: Base form
+  nob: Grunnform
+  sme: Vuođđohápmi
+  fin: Perusmuoto
+extended_template: <input ng-model='input' escaper>
+opts:
+  contains: '_='
+  ends_with: '&='
+  is: '='
+  is_not: '!='
+  matches: '*='
+  matches_not: '!*='
+  starts_with: '^='
+#type: set

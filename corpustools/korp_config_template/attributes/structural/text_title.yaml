@@ -1,0 +1,8 @@
+label:
+  eng: Title
+  nob: Tittel
+  sme: Namma
+  fin: Nimi
+opts:
+  is: "="
+  is_not: "!="
