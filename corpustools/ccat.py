@@ -464,25 +464,19 @@ class XMLPrinter:
             return False
 
         self.parse_file(file_)
-        orthography = self.etree.find(".//header/orthography")
+        text_orthography = self.etree.find(".//header/orthography")
+        wanted_orthography = self.orthography
 
-        if (
-            # text has no specified orthography, and no specific orthography
-            # is requested, so we show the text
-            (orthography is None and self.orthography is None)
-            or
-            # text has no specific orthography, but user specifically requested
-            # standard orthography, so we show the text
-            (orthography is None and "standard" in self.orthography)
-            or
-            # the text's orthography is in the list of specifically requested
-            # orthographies, so we show the text
-            (
-                (orthography is not None and
-                 self.orthography is not None
-                 and orthography.text in self.orthography)
-            )
-        ):
+        if text_orthography is None or text_orthography.text == "":
+            # text has standard orthography, show text if no --orthography
+            # was given
+            show_text = wanted_orthography is None
+        else:
+            # text has specific orthoraphy! show only if wanted orthoraphy
+            # is same as this text has!
+            show_text = text_orthography.text == wanted_orthography
+
+        if show_text:
             try:
                 sys.stdout.write(self.process_file().getvalue())
                 return True
@@ -635,14 +629,9 @@ def parse_options():
     parser.add_argument(
         "--orthography",
         help=(
-            "Print texts written in the specified orthography. Can be "
-            "given multiple times to include more orthographies. The "
-            "'standard' name always means to include texts which does not "
-            "have a specific orthography designated."
+            "Print only texts written in the specified orthography."
         ),
-        metavar="('standard' or orthography name)",
-        choices=["standard", *orthographies()],
-        action="append",
+        choices=[*orthographies()],
     )
     parser.add_argument(
         "--list-orthographies",
@@ -707,16 +696,14 @@ def main():
         print("ccat: error: the following arguments are required: targets")
         return
 
-    # check that all given --orthography are orthographies of the given lang
-    # in -l
-    if isinstance(args.orthography, list) and args.lang is not None:
-        for ortho in args.orthography:
-            if not is_orthography_of(ortho, args.lang):
-                print(
-                    f"ccat: error: orthography '{ortho}' is not an "
-                    f"orthography of language '{args.lang}' (given by -l)"
-                )
-                return
+    # error if given --orthography is not an orthography of the given lang -l
+    if args.orthography is not None and args.lang is not None:
+        if not is_orthography_of(args.orthography, args.lang):
+            print(
+                f"ccat: error: orthography '{args.orthography}' is not an "
+                f"orthography of language '{args.lang}'"
+            )
+            return
 
     xml_printer = XMLPrinter(
         lang=args.lang,
