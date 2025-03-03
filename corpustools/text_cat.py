@@ -344,15 +344,13 @@ class Classifier:
             if verbose:
                 if cranked[: len(cwranked)] == cwranked:
                     util.note(
-                        "lm gave: {}\t\twm gave no change\t\tfor" "input: {}".format(
-                            pretty_tbl(cranked), text
-                        )
+                        f"lm gave: {pretty_tbl(cranked)}\t\twm gave no change\t\tfor"
+                        f"input: {text}"
                     )
                 else:
                     util.note(
-                        "lm gave: {}\t\twm-weighted to: " "{}\t\tfor input: {}".format(
-                            pretty_tbl(cranked), pretty_tbl(cwranked), text
-                        )
+                        f"lm gave: {pretty_tbl(cranked)}\t\twm-weighted to: "
+                        f"{pretty_tbl(cwranked)}\t\tfor input: {text}"
                     )
             return cwranked
 
@@ -469,9 +467,8 @@ def parse_options():
     proc_parser = subparsers.add_parser("proc", help="Language classification")
     proc_parser.add_argument(
         "model_dir",
-        help="Language model directory. Defaults to the " "directory {}.".format(
-            os.path.join(here, "lm/")
-        ),
+        help="Language model directory. Defaults to the "
+        f"directory {os.path.join(here, 'lm/')}.",
         nargs="?",
     )
     proc_parser.add_argument(
