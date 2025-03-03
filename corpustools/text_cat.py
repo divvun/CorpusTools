@@ -418,7 +418,7 @@ def proc(args):
         util.note(f"Drop ratio: {c.DROP_RATIO}")
     if args.s:
         for line in sys.stdin:
-            print(c.classify(line.decode("utf-8"), verbose=args.verbose))
+            print(c.classify(line, verbose=args.verbose))
     else:
         print(c.classify(sys.stdin.read(), verbose=args.verbose))
 
