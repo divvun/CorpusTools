@@ -255,7 +255,7 @@ class Classifier:
         if not found_fnames:
             raise ValueError(f"No language files found in {folder}")
 
-        if langs is None:
+        if not langs:
             fnames = found_fnames
         else:
             fnames = [os.path.join(folder, lang + ext) for lang in langs]
