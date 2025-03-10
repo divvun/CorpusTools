@@ -361,7 +361,7 @@ class Classifier:
 class FolderTrainer:
     """Train the language guesser from a directory."""
 
-    def __init__(self, folder, exts=None, Model=CharModel, verbose=False):
+    def __init__(self, folder, exts=None, model=CharModel, verbose=False):
         if exts is None:
             exts = [".txt", ".txt.gz"]
         self.models = {}
@@ -376,7 +376,7 @@ class FolderTrainer:
                     util.note(msg)
                     sys.stderr.flush()
                 lang = util.basename_noext(fname, ext)
-                self.models[lang] = Model(lang).of_text_file(self.open_corpus(fname))
+                self.models[lang] = model(lang).of_text_file(self.open_corpus(fname))
 
         if not self.models:
             raise Exception(
@@ -442,10 +442,10 @@ def folder_comp(args):
     for d in [args.corp_dir, args.model_dir]:
         if not os.path.isdir(d):
             raise util.ArgumentError(f"{d} is not a directory!")
-    FolderTrainer(args.corp_dir, Model=CharModel, verbose=args.verbose).save(
+    FolderTrainer(args.corp_dir, model=CharModel, verbose=args.verbose).save(
         args.model_dir, ext=".lm", verbose=args.verbose
     )
-    FolderTrainer(args.corp_dir, Model=WordModel, verbose=args.verbose).save(
+    FolderTrainer(args.corp_dir, model=WordModel, verbose=args.verbose).save(
         args.model_dir, ext=".wm", verbose=args.verbose
     )
 
