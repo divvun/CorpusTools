@@ -361,9 +361,9 @@ class Classifier:
 class FolderTrainer:
     """Train the language guesser from a directory."""
 
-    def __init__(
-        self, folder, exts=[".txt", ".txt.gz"], Model=CharModel, verbose=False
-    ):
+    def __init__(self, folder, exts=None, Model=CharModel, verbose=False):
+        if exts is None:
+            exts = [".txt", ".txt.gz"]
         self.models = {}
 
         for ext in exts:
