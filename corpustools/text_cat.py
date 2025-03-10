@@ -366,12 +366,14 @@ class FolderTrainer:
             exts = [".txt", ".txt.gz"]
         self.models = {}
 
+        file_size_threshold = 5000000
+
         for ext in exts:
             files = glob.glob(os.path.normcase(os.path.join(folder, "*" + ext)))
             for fname in files:
                 if verbose:
                     msg = f"Processing {fname}"
-                    if os.path.getsize(fname) > 5000000:
+                    if os.path.getsize(fname) > file_size_threshold:
                         msg += " (this may take a while)"
                     util.note(msg)
                     sys.stderr.flush()
