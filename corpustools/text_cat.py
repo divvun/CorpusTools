@@ -54,8 +54,11 @@ class NGramModel:
     )
     NB_NGRAMS = 400
     MISSING_VALUE = 400
+    verbose = False
 
-    def __init__(self, arg={}, lang="input"):
+    def __init__(self, arg=None, lang="input"):
+        if arg is None:
+            arg = {}
         self.lang = lang  # for debugging
         self.unicode_warned = 0
 
@@ -75,13 +78,14 @@ class NGramModel:
         raise NotImplementedError("You have to subclass and override of_model_file")
 
     def freq_of_model_file(self, fil, fname, gram_column, freq_column):
+        expected_columns = 2
         freq = {}
         for nl, strline in enumerate(fil.readlines()):
             line = strline.strip()
             if line == "":
                 continue
             parts = line.split()
-            if len(parts) != 2:
+            if len(parts) != expected_columns:
                 raise ValueError(
                     "%s:%d invalid line, was split to %s" % (fname, nl + 1, parts)
                 )
@@ -89,8 +93,8 @@ class NGramModel:
                 g = parts[gram_column]
                 f = int(parts[freq_column])
                 freq[g] = f
-            except ValueError as e:
-                raise ValueError("%s: %d %s" % (fname, nl + 1, e))
+            except ValueError as error:
+                raise ValueError("%s: %d %s" % (fname, nl + 1, error)) from error
         return freq
 
     def tokenise(self, text):
@@ -148,9 +152,10 @@ class NGramModel:
             for gram, rank in unknown.ngrams.items()
             if gram in self.ngrams
         )
-        # util.print_frame(debug=missing_count)
-        # util.print_frame(debug=d_missing)
-        # util.print_frame(debug=d_found)
+        if self.verbose:
+            util.print_frame(debug=missing_count)
+            util.print_frame(debug=d_missing)
+            util.print_frame(debug=d_found)
 
         return d_missing + d_found
 
@@ -364,21 +369,16 @@ class FolderTrainer:
     def __init__(self, folder, exts=None, model=CharModel, verbose=False):
         if exts is None:
             exts = [".txt", ".txt.gz"]
-        self.models = {}
 
-        file_size_threshold = 5000000
-
-        for ext in exts:
-            files = glob.glob(os.path.normcase(os.path.join(folder, "*" + ext)))
-            for fname in files:
-                if verbose:
-                    msg = f"Processing {fname}"
-                    if os.path.getsize(fname) > file_size_threshold:
-                        msg += " (this may take a while)"
-                    util.note(msg)
-                    sys.stderr.flush()
-                lang = util.basename_noext(fname, ext)
-                self.models[lang] = model(lang).of_text_file(self.open_corpus(fname))
+        language_filename = (
+            (util.basename_noext(filename, ext), filename)
+            for ext in exts
+            for filename in glob.glob(os.path.normcase(os.path.join(folder, "*" + ext)))
+        )
+        self.models = {
+            language: self.create_model(model, verbose, language, fname)
+            for language, fname in language_filename
+        }
 
         if not self.models:
             raise Exception(
@@ -386,6 +386,16 @@ class FolderTrainer:
                     folder, "{", ",".join(exts), "}"
                 )
             )
+
+    def create_model(self, model, verbose: bool, language, filename):
+        file_size_threshold = 5000000
+        if verbose:
+            msg = f"Processing {filename}"
+            if os.path.getsize(filename) > file_size_threshold:
+                msg += " (this may take a while)"
+            util.note(msg)
+            sys.stderr.flush()
+        return model(language).of_text_file(self.open_corpus(filename))
 
     def open_corpus(self, fname):
         if fname.endswith(".gz"):
@@ -404,8 +414,8 @@ class FolderTrainer:
 class FileTrainer:
     """Train the language guesser from a file."""
 
-    def __init__(self, fil, Model=CharModel, verbose=False):
-        self.model = Model().of_text_file(fil)
+    def __init__(self, fil, model=CharModel, verbose=False):
+        self.model = model().of_text_file(fil)
 
     def save(self, fil, verbose=False):
         self.model.to_model_file(fil)
@@ -427,11 +437,11 @@ def proc(args):
 
 def file_comp(args):
     if args.mtype == "lm":
-        FileTrainer(sys.stdin, Model=CharModel, verbose=args.verbose).save(
+        FileTrainer(sys.stdin, model=CharModel, verbose=args.verbose).save(
             sys.stdout, verbose=args.verbose
         )
     elif args.mtype == "wm":
-        FileTrainer(sys.stdin, Model=WordModel, verbose=args.verbose).save(
+        FileTrainer(sys.stdin, model=WordModel, verbose=args.verbose).save(
             sys.stdout, verbose=args.verbose
         )
     else:
