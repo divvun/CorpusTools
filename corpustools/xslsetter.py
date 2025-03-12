@@ -71,8 +71,8 @@ class MetadataHandler:
         else:
             try:
                 self.tree = etree.parse(filename)
-            except etree.XMLSyntaxError as e:
-                raise XsltError(f"Syntax error in {self.filename}:\n{e}")
+            except etree.XMLSyntaxError as error:
+                raise XsltError(f"Syntax error in {self.filename}:\n{error}") from error
 
     def _get_variable_elt(self, key):
         """Get the variable element.
@@ -98,11 +98,11 @@ class MetadataHandler:
         try:
             variable = self._get_variable_elt(key)
             variable.attrib["select"] = f"'{value}'"
-        except AttributeError as e:
+        except AttributeError as error:
             raise UserWarning(
                 "Tried to update {} with value {}\n"
-                "Error was {}".format(key, value, str(e))
-            )
+                "Error was {}".format(key, value, str(error))
+            ) from error
 
     def get_variable(self, key):
         """Get the value associated with the key.
@@ -250,8 +250,8 @@ class MetadataHandler:
                     ]
                 )
 
-            except ValueError:
-                raise XsltError(f"Invalid format: {skip_pages}")
+            except ValueError as error:
+                raise XsltError(f"Invalid format: {skip_pages}") from error
 
         return pages
 
@@ -283,8 +283,8 @@ class MetadataHandler:
                     ]
                 )
 
-            except ValueError:
-                raise XsltError(f"Invalid format: {skip_lines}")
+            except ValueError as error:
+                raise XsltError(f"Invalid format: {skip_lines}") from error
 
         return lines
 
@@ -316,8 +316,8 @@ class MetadataHandler:
                     ]
                 )
 
-            except ValueError:
-                raise XsltError(f"Invalid format: {chosen}")
+            except ValueError as error:
+                raise XsltError(f"Invalid format: {chosen}") from error
 
         return lines
 
@@ -376,13 +376,13 @@ class MetadataHandler:
                 )
             try:
                 _margins[key] = self.parse_margin_line(value)
-            except ValueError:
+            except ValueError as error:
                 raise XsltError(
                     "Invalid format in the variable {} in the file:\n{}\n{}\n"
                     "Format must be [all|odd|even|pagenumber]=integer".format(
                         key, self.filename, value
                     )
-                )
+                ) from error
 
         return _margins
 
@@ -550,14 +550,14 @@ class MetadataHandler:
 
         try:
             return self.parse_linespacing_line(value)
-        except ValueError:
+        except ValueError as error:
             raise XsltError(
                 "Invalid format in the variable linespacing in the file:"
                 "\n{}\n{}\n"
                 "Format must be [all|odd|even|pagenumber]=float".format(
                     self.filename, value
                 )
-            )
+            ) from error
 
     @staticmethod
     def parse_linespacing_line(value):
@@ -569,14 +569,14 @@ class MetadataHandler:
         Returns:
             (dict[str, float]): page: float pairs
         """
-        l = {}
+        line_dict = {}
         if value:
             for part in value.split(","):
                 (pages, linespacing) = tuple(part.split("="))
                 for page in pages.split(";"):
-                    l[page.strip()] = float(linespacing)
+                    line_dict[page.strip()] = float(linespacing)
 
-        return l
+        return line_dict
 
     @property
     def xsl_templates(self):
