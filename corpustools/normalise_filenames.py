@@ -19,34 +19,56 @@
 
 
 import argparse
-import os
+from pathlib import Path
 
-from corpustools import argparse_version, namechanger
+from corpustools import argparse_version
+from corpustools.corpuspath import make_corpus_path
+from corpustools.namechanger import normalise_filename
 
 
-def normalise(target_dir):
+def normalise(target_dir: Path):
     """Normalise the filenames in the corpuses.
 
     Args:
         target_dir (str): directory where filenames should be normalised
     """
     print(f"Normalising names in {target_dir}")
-    for root, dirs, files in os.walk(os.path.join(target_dir)):
-        for f in files:
-            if not f.endswith(".xsl"):
-                try:
-                    orig_path = os.path.join(root, f)
+    files = (
+        root / file_
+        for root, _, filenames in target_dir.walk()
+        for file_ in filenames
+        if ".git" not in str(root) and not file_.endswith(".xsl")
+    )
 
-                    cfmu = namechanger.CorpusFilesetMoverAndUpdater(
-                        orig_path, orig_path
+    normalised_paths = (
+        (
+            make_corpus_path(str(file_.with_name(normalise_filename(file_.name)))),
+            make_corpus_path(str(file_)),
+        )
+        for file_ in files
+        if normalise_filename(file_.name) != file_.name
+    )
+
+    for normalised_path, orig_corpus_path in normalised_paths:
+        print(f"\t\tmove {orig_corpus_path.orig} -> {normalised_path.orig}")
+        orig_corpus_path.orig.rename(normalised_path.orig)
+        if orig_corpus_path.xsl.exists():
+            orig_corpus_path.xsl.rename(normalised_path.xsl)
+        if orig_corpus_path.converted.exists():
+            orig_corpus_path.converted.rename(normalised_path.converted)
+
+        for parallel_path in orig_corpus_path.parallels():
+            if parallel_path is not None and parallel_path.exists():
+                parallel_corpuspath = make_corpus_path(str(parallel_path))
+                parallel_corpuspath.metadata.set_parallel_text(
+                    normalised_path.lang, normalised_path.orig.name
+                )
+                parallel_corpuspath.metadata.write_file()
+
+                if orig_corpus_path.tmx(parallel_corpuspath.lang).exists():
+                    orig_corpus_path.tmx(parallel_corpuspath.lang).rename(
+                        normalised_path.tmx(parallel_corpuspath.lang)
                     )
-                    filepair = cfmu.move_computer.filepairs[0]
-                    print(f"\t\tmove {filepair.oldpath} -> {filepair.newpath}")
-                    cfmu.move_files()
-                    cfmu.update_own_metadata()
-                    cfmu.update_parallel_files_metadata()
-                except UserWarning:
-                    pass
 
 
 def normalise_parse_args():
@@ -75,4 +97,4 @@ def normalise_parse_args():
 def main():
     """Normalise filenames."""
     for target_dir in normalise_parse_args().target_dirs:
-        normalise(target_dir)
+        normalise(Path(target_dir))
