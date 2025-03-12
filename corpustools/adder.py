@@ -34,10 +34,9 @@ class AdderError(Exception):
     """Raise this exception when errors happen in this module."""
 
 
-def add_url_extension(filename, content_type):
+def add_url_extension(url, content_type):
     """Add an extension to the file depending on the content type."""
-    if filename == "":
-        filename += "index"
+    basename = url.split("/")[-2] if url.endswith("/") else "index"
 
     content_type_extension = {
         "text/html": ".html",
@@ -47,10 +46,21 @@ def add_url_extension(filename, content_type):
     }
 
     for name, extension in content_type_extension.items():
-        if name in content_type and not filename.endswith(extension):
-            filename += extension
+        if name in content_type and not url.endswith(extension):
+            return f"{basename}{extension}"
 
-    return filename
+    return basename
+
+
+def content_disposition_to_filename(response):
+    """Compute filename from response."""
+    try:
+        msg = Message()
+        msg["Content-Disposition"] = response.headers["Content-Disposition"]
+        params = dict(msg.get_params(header="Content-Disposition"))
+        return params["filename"]
+    except KeyError:
+        return None
 
 
 def url_to_filename(response):
@@ -62,15 +72,11 @@ def url_to_filename(response):
     Returns:
         (str): Name of the file.
     """
-    try:
-        msg = Message()
-        msg["Content-Disposition"] = response.headers["Content-Disposition"]
-        params = dict(msg.get_params(header="Content-Disposition"))
-        return params["filename"]
-    except KeyError:
-        return add_url_extension(
-            os.path.basename(response.url), response.headers["content-type"]
-        )
+    filename = content_disposition_to_filename(response)
+    if filename is not None:
+        return filename
+
+    return add_url_extension(response.url, response.headers["content-type"])
 
 
 class UrlDownloader:
