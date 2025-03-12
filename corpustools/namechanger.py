@@ -82,17 +82,17 @@ def compute_hexdigest(afile, blocksize=65536):
     return hasher.hexdigest()
 
 
-def normalise_filename(filename):
+def normalise_filename(filename: str) -> str:
     """Normalise filename to ascii only.
 
     Downcase filename, replace non-ascii characters with ascii ones and
     remove or replace unwanted characters.
 
     Args:
-        filename (str): name of the file
+        filename: name of the file
 
     Returns:
-        (str): a downcased string containing only ascii chars
+        A downcased string containing only ascii chars
     """
     if os.sep in filename:
         raise NamechangerError(
@@ -133,14 +133,14 @@ def are_duplicates(oldpath, newpath):
         return False
 
 
-def compute_new_basename(orig_path):
+def compute_new_basename(orig_path: Path) -> Path:
     """Compute the new path.
 
     Args:
-        orig_path (Path): path to file, basename should possibly be normalised
+        orig_path: path to file, basename should possibly be normalised
 
     Returns:
-        (pathlib.Path): lower cased, ascii path
+        lower cased, ascii path
     """
     wanted_basename = normalise_filename(orig_path.name)
     new_path = orig_path.with_name(wanted_basename)

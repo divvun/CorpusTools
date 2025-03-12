@@ -20,6 +20,7 @@
 import re
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Iterator
 
 from lxml import etree
 
@@ -43,17 +44,21 @@ MODULES = [
 ]
 
 
-def make_corpus_path(path):
+def make_corpus_path(path: str) -> "CorpusPath":
     """Returns a CorpusPath from a given path
 
     Args:
-        path (str): a path to a corpus file
+        path: a path to a corpus file
+
+    Returns:
+        A CorpusPath object
 
     Raises:
         ValueError: the path is not part of a corpus.
     """
 
-    def fix_filepath(filepath):
+    def fix_filepath(filepath: Path) -> Path:
+        """Fix the filepath to be relative to the corpus root."""
         for module in MODULES:
             if filepath.as_posix().startswith(module):
                 mod_len = len(module.split("/"))
@@ -116,21 +121,21 @@ class CorpusPath:
         return self.corpus_dir(module="trigger_no_orig")
 
     @property
-    def orig(self):
+    def orig(self) -> Path:
         """Return the path of the original file."""
         return self.orig_corpus_dir / self.filepath
 
     @property
-    def xsl(self):
+    def xsl(self) -> Path:
         """Return the path of the metadata file."""
         return self.orig.with_name(f"{self.orig.name}.xsl")
 
     @property
-    def log(self):
+    def log(self) -> Path:
         """Return the path of the log file."""
         return self.orig.with_name(f"{self.orig.name}.log")
 
-    def corpus_dir(self, module=None, corpus_lang=None):
+    def corpus_dir(self, module=None, corpus_lang=None) -> Path:
         this_lang = self.lang if corpus_lang is None else corpus_lang
         return (
             self.root / f"corpus-{this_lang}"
@@ -145,7 +150,7 @@ class CorpusPath:
         target_lang=None,
         filepath=None,
         suffix=None,
-    ):
+    ) -> Path:
         """Returns a path based on the module and extension.
 
         Args:
@@ -170,7 +175,7 @@ class CorpusPath:
         )
 
     @property
-    def converted(self):
+    def converted(self) -> Path:
         """Return the path to the converted file."""
         module = "converted"
         if self.metadata.get_variable("conversion_status") == "correct":
@@ -181,16 +186,16 @@ class CorpusPath:
         return self.name(module=module, suffix=".xml")
 
     @property
-    def analysed(self):
+    def analysed(self) -> Path:
         """Return the path to analysed file."""
         return self.name(module="analysed", suffix=".xml")
 
     @property
-    def korp_mono(self):
+    def korp_mono(self) -> Path:
         """Return the path to analysed file."""
         return self.name(module="korp_mono", suffix=".xml")
 
-    def korp_tmx(self, target_language):
+    def korp_tmx(self, target_language) -> Path:
         """Return the path to korp processed tmx file."""
         return self.name(
             module="korp_tmx",
@@ -198,24 +203,28 @@ class CorpusPath:
             suffix=".tmx",
         )
 
-    def parallel(self, language):
+    def parallel(self, language: str) -> Path | None:
         """Check if there is a parallel for language.
 
         Args:
-            language (str): language of the parallel file.
+            language: language of the parallel file.
 
         Returns:
             (pathlib.Path): path to the parallel file if it exist, else None
         """
-        if self.metadata.get_parallel_texts().get(language) is not None:
-            return self.name(
+
+        return (
+            self.name(
                 corpus_lang=language,
                 filepath=self.filepath.with_name(
                     self.metadata.get_parallel_texts().get(language)
                 ),
             )
+            if self.metadata.get_parallel_texts().get(language) is not None
+            else None
+        )
 
-    def parallels(self):
+    def parallels(self) -> Iterator[Path | None]:
         """Return paths to all parallel files.
 
         Yields:
@@ -225,7 +234,7 @@ class CorpusPath:
             self.parallel(language) for language in self.metadata.get_parallel_texts()
         )
 
-    def tmx(self, target_language):
+    def tmx(self, target_language: str) -> Path:
         """Name of the tmx file.
 
         Args:
@@ -241,7 +250,7 @@ class CorpusPath:
         )
 
     @property
-    def tca2_input(self):
+    def tca2_input(self) -> Path:
         """Compute the name of the tca2 input file.
 
         Returns:
@@ -253,7 +262,7 @@ class CorpusPath:
         return Path("/tmp") / f"{origfilename}_{self.lang}.sent"
 
     @property
-    def tca2_output(self):
+    def tca2_output(self) -> Path:
         """Compute the name of the tca2 output file.
 
         Returns:
@@ -264,11 +273,11 @@ class CorpusPath:
         )
 
     @property
-    def tmp_filename(self):
+    def tmp_filename(self) -> Path:
         return self.converted_corpus_dir / "tmp" / self.filepath.name
 
     @staticmethod
-    def crop_to_bytes(name, max_bytes):
+    def crop_to_bytes(name: str, max_bytes: int) -> str:
         """Ensure `name` is less than `max_bytes` bytes.
 
         Do not split name in the middle of a wide byte.
@@ -278,7 +287,7 @@ class CorpusPath:
         return name
 
 
-def collect_files(entities, suffix):
+def collect_files(entities: list[str], suffix: str) -> Iterator[Path]:
     """Collect files with the specified suffix."""
     for entity in entities:
         entity_path = Path(entity).resolve()

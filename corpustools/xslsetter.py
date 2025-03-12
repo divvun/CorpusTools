@@ -41,11 +41,11 @@ class MetadataHandler:
 
     lang_key = "{http://www.w3.org/XML/1998/namespace}lang"
 
-    def __init__(self, filename, create=False):
+    def __init__(self, filename: str, create=False):
         """Initialise the MetadataHandler class.
 
         Args:
-            filename (str): path to the metadata file.
+            filename: path to the metadata file.
             create (bool): Define if a MetadataHandler will be created from a
                 metadata file belonging to a original file inside the corpus or
                 created from a template file containing default values.
@@ -136,7 +136,7 @@ class MetadataHandler:
             if value is not None and value.strip():
                 yield variable.get("name"), value
 
-    def get_parallel_texts(self):
+    def get_parallel_texts(self) -> dict[str, str]:
         """Get the parallel texts.
 
         Returns:
