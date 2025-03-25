@@ -203,4 +203,4 @@ def main():
             analyse_in_parallel(files, args.modename, args.ncpus)
     except util.ArgumentError as error:
         print(f"Cannot do analysis\n{str(error)}", file=sys.stderr)
-        raise SystemExit(1)
+        raise SystemExit(1) from error
