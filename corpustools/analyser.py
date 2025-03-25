@@ -22,6 +22,7 @@
 import argparse
 import os
 import sys
+from pathlib import Path
 
 from lxml import etree
 
@@ -29,7 +30,7 @@ from corpustools import argparse_version, ccat, corpuspath, modes, util
 from corpustools.common_arg_ncpus import NCpus
 
 
-def get_modename(path):
+def get_modename(path: corpuspath.CorpusPath) -> str:
     """Get the modename depending on the CorpusPath"""
     if path.lang == "mhr":
         year = path.metadata.get_variable("year")
@@ -52,7 +53,7 @@ def get_modename(path):
         return "hfst_no_korp"
 
 
-def ccatter(path):
+def ccatter(path: corpuspath.CorpusPath) -> str:
     """Turn an xml formatted file into clean text."""
     xml_printer = ccat.XMLPrinter(lang=path.lang, all_paragraphs=True)
     xml_printer.parse_file(path.converted)
@@ -63,7 +64,7 @@ def ccatter(path):
     raise UserWarning(f"Empty file {path.converted}")
 
 
-def do_dependency_analysis(text, modename, lang):
+def do_dependency_analysis(text: str, modename: str, lang: str) -> str:
     """Insert disambiguation and dependency analysis into the body."""
     pipeline = modes.Pipeline(modename, lang)
     pipeline.sanity_check()
@@ -71,11 +72,20 @@ def do_dependency_analysis(text, modename, lang):
     return pipeline.run(text.encode("utf8"))
 
 
-def dependency_analysis(path, modename):
+def dependency_analysis(path: corpuspath.CorpusPath, modename: str) -> None:
     """Insert disambiguation and dependency analysis into the body."""
     xml_file = etree.parse(path.converted)
     oldbody = xml_file.find(".//body")
+
+    if oldbody is None:
+        print("No body found in", path.converted, file=sys.stderr)
+        return
+
     parent = oldbody.getparent()
+
+    if parent is None:
+        print("No parent found for body in", path.converted, file=sys.stderr)
+        return
     parent.remove(oldbody)
 
     body = etree.SubElement(parent, "body")
@@ -97,10 +107,10 @@ def dependency_analysis(path, modename):
         )
 
 
-def analyse(xml_file, modename):
+def analyse(xml_file: Path, modename: str) -> None:
     """Analyse a file if it is not ocr'ed."""
     try:
-        path = corpuspath.make_corpus_path(xml_file)
+        path = corpuspath.make_corpus_path(xml_file.as_posix())
 
         if not path.metadata.get_variable("ocr"):
             dependency_analysis(path, modename)
@@ -111,9 +121,8 @@ def analyse(xml_file, modename):
         print("The error was:", str(error), file=sys.stderr)
 
 
-def analyse_in_parallel(file_list, modename, pool_size):
+def analyse_in_parallel(file_list: list[Path], modename: str, pool_size: int):
     """Analyse file in parallel."""
-    file_list = list(file_list)
     print(f"Parallel analysis of {len(file_list)} files with {pool_size} workers")
     util.run_in_parallel(
         function=analyse,
@@ -123,18 +132,17 @@ def analyse_in_parallel(file_list, modename, pool_size):
     )
 
 
-def analyse_serially(file_list, modename):
+def analyse_serially(file_list: list[Path], modename: str):
     """Analyse files one by one."""
-    xml_files = list(file_list)
-    print(f"Starting the analysis of {len(xml_files)} files")
+    print(f"Starting the analysis of {len(file_list)} files")
 
     fileno = 0
-    for xml_file in xml_files:
+    for xml_file in file_list:
         fileno += 1
         # print some ugly banner cos i want to see progress on local
         # batch job
         util.print_frame("*" * 79)
-        util.print_frame(f"Analysing {xml_file} [{fileno} of {len(xml_files)}]")
+        util.print_frame(f"Analysing {xml_file} [{fileno} of {len(file_list)}]")
         util.print_frame("*" * 79)
         analyse(xml_file, modename)
 
