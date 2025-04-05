@@ -37,11 +37,13 @@ def fetch_page(address):
 def get_books(tree):
     """Get the addresses for the books on bible.no."""
     books = {"ot": [], "nt": []}
+    ot_index = 1
+    nt_index = 3
     for table_row in tree.xpath(".//table[@class='booklist']/tr"):
         for index, address in enumerate(table_row.xpath("./td[@class='tablePR']/a")):
-            if index == 1:
+            if index == ot_index:
                 books["ot"].append(address.get("href"))
-            if index == 3:
+            if index == nt_index:
                 books["nt"].append(address.get("href"))
 
     return books
