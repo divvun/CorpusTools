@@ -32,6 +32,9 @@ import sys
 import time
 import traceback
 from contextlib import contextmanager
+from pathlib import Path
+
+from corpustools import util
 
 
 class SetupError(Exception):
@@ -454,3 +457,44 @@ def make_digest(bytestring: bytes) -> str:
     hasher = hashlib.md5()
     hasher.update(bytestring)
     return hasher.hexdigest()
+
+
+def lang_resource_dirs(lang: str) -> list[Path]:
+    """Get the path to the language resources.
+
+    Args:
+        lang: the language that modes is asked to serve.
+
+    Returns:
+        A path to the zpipe file.
+    """
+    return [
+        prefix / "share" / "giella" / lang
+        for prefix in [
+            Path().home() / ".local",
+            Path("/usr/local"),
+            Path("/usr"),
+        ]
+    ]
+
+
+def run_external_command(command: list[str], instring: str) -> str:
+    """Run the command with input using subprocess.
+
+    Args:
+        command: a subprocess compatible command.
+        instring: the input to the command.
+
+    Returns:
+        Analysed text.
+
+    Raises:
+        UserWarning: if the command fails.
+    """
+    runner = util.ExternalCommandRunner()
+    runner.run(command, to_stdin=instring.encode("utf8"))
+
+    if runner.stderr:
+        raise UserWarning(f"{' '.join(command)} failed:\n{runner.stderr}")
+
+    return runner.stdout.decode("utf8")

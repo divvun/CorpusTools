@@ -16,87 +16,64 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-"""Classes and functions to do syntactic analysis on giellatekno xml docs."""
+"""Classes and functions to do syntactic analysis on GiellaLT xml docs."""
 
 
 import argparse
 import os
 import sys
+from functools import lru_cache
 from pathlib import Path
 
 from lxml import etree
 
-from corpustools import argparse_version, ccat, corpuspath, modes, util
+from corpustools import argparse_version, corpuspath, util
+from corpustools.ccat import ccatter
 from corpustools.common_arg_ncpus import NCpus
+from corpustools.util import lang_resource_dirs, run_external_command
 
 
 def get_modename(path: corpuspath.CorpusPath) -> str:
     """Get the modename depending on the CorpusPath"""
+
+    o_nine = 1909
+    thirtynine = 1939
+    ninetyfive = 1995
     if path.lang == "mhr":
         year = path.metadata.get_variable("year")
         if year:
-            if 1909 < int(year) < 1939:
-                return "hfst_thirties"
+            if o_nine < int(year) < thirtynine:
+                return "korp-analyser-thirties"
     if path.lang == "mrj":
         year = path.metadata.get_variable("year")
         if year:
-            if 1909 < int(year) < 1939:
-                return "hfst_thirties"
-            if 1939 < int(year) < 1995:
-                return "hfst_eighties"
+            if o_nine < int(year) < thirtynine:
+                return "korp-analyser-thirties"
+            if thirtynine < int(year) < ninetyfive:
+                return "korp-analyser-eighties"
 
-    lang_dir = modes.Pipeline.valid_path(None, path.lang)
-
-    if os.path.exists(os.path.join(lang_dir, "korp.bin")):
-        return "hfst"
-    else:
-        return "hfst_no_korp"
+    return "korp-analyser"
 
 
-def ccatter(path: corpuspath.CorpusPath) -> str:
-    """Turn an xml formatted file into clean text."""
-    xml_printer = ccat.XMLPrinter(lang=path.lang, all_paragraphs=True)
-    xml_printer.parse_file(path.converted)
-    text = xml_printer.process_file().getvalue()
-    if text:
-        return text
-
-    raise UserWarning(f"Empty file {path.converted}")
-
-
-def do_dependency_analysis(text: str, modename: str, lang: str) -> str:
-    """Insert disambiguation and dependency analysis into the body."""
-    pipeline = modes.Pipeline(modename, lang)
-    pipeline.sanity_check()
-
-    return pipeline.run(text.encode("utf8"))
-
-
-def dependency_analysis(path: corpuspath.CorpusPath, modename: str) -> None:
-    """Insert disambiguation and dependency analysis into the body."""
+def dependency_analysis(path: corpuspath.CorpusPath, analysed_text: str) -> None:
+    """Insert dependency analysis into the body."""
     xml_file = etree.parse(path.converted)
     oldbody = xml_file.find(".//body")
 
     if oldbody is None:
-        print("No body found in", path.converted, file=sys.stderr)
-        return
+        raise UserWarning(f"No body found in {path.converted}")
 
     parent = oldbody.getparent()
 
     if parent is None:
-        print("No parent found for body in", path.converted, file=sys.stderr)
-        return
+        raise UserWarning(f"No parent found for body in { path.converted}")
+
     parent.remove(oldbody)
 
     body = etree.SubElement(parent, "body")
     dependency = etree.SubElement(body, "dependency")
-    dependency.text = etree.CDATA(
-        do_dependency_analysis(
-            ccatter(path),
-            modename=modename if modename is not None else get_modename(path),
-            lang=path.lang,
-        )
-    )
+    dependency.text = etree.CDATA(analysed_text)
+
     with util.ignored(OSError):
         os.makedirs(os.path.dirname(path.analysed))
     with open(path.analysed, "wb") as analysed_stream:
@@ -107,32 +84,67 @@ def dependency_analysis(path: corpuspath.CorpusPath, modename: str) -> None:
         )
 
 
-def analyse(xml_file: Path, modename: str) -> None:
-    """Analyse a file if it is not ocr'ed."""
-    try:
-        path = corpuspath.make_corpus_path(xml_file.as_posix())
+LANGUAGES = {
+    "eng": "en",
+    "fin": "fi",
+    "sme": "se",
+    "swe": "sv",
+    "nob": "nb",
+    "nno": "nn",
+}
 
-        if not path.metadata.get_variable("ocr"):
-            dependency_analysis(path, modename)
-        else:
-            print(xml_file, "is an OCR file and will not be analysed", file=sys.stderr)
+
+@lru_cache(maxsize=None)
+def valid_path(lang: str) -> Path:
+    """Check if resources needed by modes exists.
+
+    Args:
+        lang: the language that modes is asked to serve.
+
+    Returns:
+        A path to the zpipe file.
+
+    Raises:
+        utils.ArgumentError: if no resources are found.
+    """
+    archive_name = f"{LANGUAGES.get(lang, lang)}.zpipe"
+    for lang_dir in lang_resource_dirs(lang):
+        full_path = lang_dir / archive_name
+        if full_path.exists():
+            return full_path
+
+    raise (util.ArgumentError(f"ERROR: found no resources for {lang}"))
+
+
+def analyse(xml_path: corpuspath.CorpusPath) -> None:
+    """Analyse a file."""
+    zpipe_path = valid_path(xml_path.lang)
+    variant_name = get_modename(xml_path)
+
+    try:
+        dependency_analysis(
+            xml_path,
+            analysed_text=run_external_command(
+                command=f"divvun-checker -a {zpipe_path} -n {variant_name}".split(),
+                instring=ccatter(xml_path),
+            ),
+        )
     except (etree.XMLSyntaxError, UserWarning) as error:
-        print("Can not parse", xml_file, file=sys.stderr)
+        print("Can not parse", xml_path, file=sys.stderr)
         print("The error was:", str(error), file=sys.stderr)
 
 
-def analyse_in_parallel(file_list: list[Path], modename: str, pool_size: int):
+def analyse_in_parallel(file_list: list[corpuspath.CorpusPath], pool_size: int):
     """Analyse file in parallel."""
     print(f"Parallel analysis of {len(file_list)} files with {pool_size} workers")
     util.run_in_parallel(
         function=analyse,
         max_workers=pool_size,
         file_list=file_list,
-        modename=modename,
     )
 
 
-def analyse_serially(file_list: list[Path], modename: str):
+def analyse_serially(file_list: list[corpuspath.CorpusPath]):
     """Analyse files one by one."""
     print(f"Starting the analysis of {len(file_list)} files")
 
@@ -144,7 +156,7 @@ def analyse_serially(file_list: list[Path], modename: str):
         util.print_frame("*" * 79)
         util.print_frame(f"Analysing {xml_file} [{fileno} of {len(file_list)}]")
         util.print_frame("*" * 79)
-        analyse(xml_file, modename)
+        analyse(xml_file)
 
 
 def parse_options():
@@ -167,12 +179,6 @@ def parse_options():
         "Using --serial takes priority over --ncpus",
     )
     parser.add_argument(
-        "-k",
-        "--modename",
-        choices=modes.list_modes(),
-        help="You can set the analyser pipeline explicitely if you want.",
-    )
-    parser.add_argument(
         "converted_entities",
         nargs="+",
         help="converted files or director(y|ies) where the converted files exist",
@@ -185,30 +191,35 @@ def main():
     """Analyse files in the given directories."""
     args = parse_options()
 
-    files = list(corpuspath.collect_files(args.converted_entities, suffix=".xml"))
+    corpuspath_paths = (
+        corpuspath.make_corpus_path(xml_file.as_posix())
+        for xml_file in corpuspath.collect_files(args.converted_entities, suffix=".xml")
+    )
+    analysable_paths = [
+        path for path in corpuspath_paths if not path.metadata.get_variable("ocr")
+    ]
 
     if args.skip_existing:
-        non_skipped_files = []
-        for file in files:
-            cp = corpuspath.make_corpus_path(file)
-            if not cp.analysed.exists():
-                non_skipped_files.append(file)
-
-        n_skipped_files = len(files) - len(non_skipped_files)
+        non_skipped_files = [
+            analysable_path
+            for analysable_path in analysable_paths
+            if not analysable_path.analysed.exists()
+        ]
+        n_skipped_files = len(analysable_paths) - len(non_skipped_files)
         print(
             f"--skip-existing given. Skipping {n_skipped_files} "
             "files that are already analysed"
         )
-        if n_skipped_files == len(files):
+        if n_skipped_files == len(analysable_paths):
             print("nothing to do, exiting")
             raise SystemExit(0)
-        files = non_skipped_files
+        analysable_paths = non_skipped_files
 
     try:
         if args.serial:
-            analyse_serially(files, args.modename)
+            analyse_serially(analysable_paths)
         else:
-            analyse_in_parallel(files, args.modename, args.ncpus)
+            analyse_in_parallel(analysable_paths, args.ncpus)
     except util.ArgumentError as error:
         print(f"Cannot do analysis\n{str(error)}", file=sys.stderr)
         raise SystemExit(1) from error

@@ -12,7 +12,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2023 The University of Tromsø &
+#   Copyright © 2013-2025 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
@@ -28,8 +28,8 @@ from traceback import print_exc
 from lxml import etree
 
 from corpustools import argparse_version
-from corpustools.orthographies import orthographies
-from corpustools.orthographies import is_orthography_of
+from corpustools.corpuspath import CorpusPath
+from corpustools.orthographies import is_orthography_of, orthographies
 
 
 def suppress_broken_pipe_msg(function):
@@ -69,7 +69,7 @@ def suppress_broken_pipe_msg(function):
 class XMLPrinter:
     """Convert giellatekno xml formatted files to plain text."""
 
-    def __init__(  # noqa: PLR0913
+    def __init__(  # noqa: PLR0913, PLR0915
         self,
         lang=None,
         all_paragraphs=False,
@@ -628,9 +628,7 @@ def parse_options():
     )
     parser.add_argument(
         "--orthography",
-        help=(
-            "Print only texts written in the specified orthography."
-        ),
+        help=("Print only texts written in the specified orthography."),
         choices=[*orthographies()],
     )
     parser.add_argument(
@@ -751,9 +749,30 @@ def main():
             "hint: use -l to specify the language explicitly. if you do, the "
             "script will error out if any of the given --orthography's are "
             "invalid for that language",
-            file=sys.stderr
+            file=sys.stderr,
         )
 
 
 if __name__ == "__main__":
     main()
+
+
+def ccatter(path: CorpusPath) -> str:
+    """Turn an xml formatted file into clean text.
+
+    Args:
+        path: The path to the file
+
+    Raises:
+        UserWarning: if there is no text, raise a UserWarning
+
+    Returns:
+        The content of ccat output
+    """
+    xml_printer = XMLPrinter(lang=path.lang, all_paragraphs=True)
+    xml_printer.parse_file(path.converted)
+    text = xml_printer.process_file().getvalue()
+    if text:
+        return text
+
+    raise UserWarning(f"Empty file {path.converted}")
