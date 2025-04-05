@@ -16,16 +16,16 @@ using the package manager.
 
 ## Install and update using pipx
 
-* [Install pipx](https://pypa.github.io/pipx/installation/)
-* Run `pipx install --force git+https://github.com/giellalt/CorpusTools.git`
+- [Install pipx](https://pypa.github.io/pipx/installation/)
+- Run `pipx install --force git+https://github.com/divvun/CorpusTools.git`
 
 ## Requirements
 
-* python3
-* wvHtml (only needed for convert2xml)
-* pdftohtml (only needed for convert2xml)
-* latex2html (only needed for convert2xml)
-* Java (only needed for parallelize)
+- python3
+- wvHtml (only needed for convert2xml)
+- pdftohtml (only needed for convert2xml)
+- latex2html (only needed for convert2xml)
+- Java (only needed for parallelize)
 
 On Mac, do:
 
@@ -47,37 +47,37 @@ sudo pacman -S wv
 
 ## Use the content of the corpus
 
-* [convert2xml: Convert original files to giellatekno xml](#convert2xml)
-* [ccat: Print the contents of a converted corpus file as plain text](#ccat)
-* [analyse_corpus: Do syntactic analysis of converted files](#analyse_corpus)
-* [parallelize: Sentence align file pairs](#parallelize)
-* [reparallelize: Reconvert and realign a given .tmx.html file](#reparallelize)
-* [tmx2html: Convert tmx files to html files](#tmx2html)
+- [convert2xml: Convert original files to giellatekno xml](#convert2xml)
+- [ccat: Print the contents of a converted corpus file as plain text](#ccat)
+- [analyse_corpus: Do syntactic analysis of converted files](#analyse_corpus)
+- [parallelize: Sentence align file pairs](#parallelize)
+- [reparallelize: Reconvert and realign a given .tmx.html file](#reparallelize)
+- [tmx2html: Convert tmx files to html files](#tmx2html)
 
 ## Add files to the corpus
 
-* [add_files_to_corpus: Add file(s) to a corpus directory](#add_files_to_corpus)
-* [saami_crawler: Crawl saami sites, add files to corpus](#saami_crawler)
+- [add_files_to_corpus: Add file(s) to a corpus directory](#add_files_to_corpus)
+- [saami_crawler: Crawl saami sites, add files to corpus](#saami_crawler)
 
 ## Manage the corpus repositories
 
-* [move_corpus_file: Move or rename a file inside the corpus](#move_corpus_file)
-* [remove_corpus_file: Remove a file from the corpus](#remove_corpus_file)
-* [normalise_corpus_names: Program to normalise file names](#normalise_corpus_names)
-* [paracheck: Check if the parallel files found in the metadata files exist](#paracheck)
-* [duperemover: Remove duplicate files from the given directory](#duperemover)
-* [dupefinder: Find files with more than 90% similarity in the given directory](#dupefinder)
-* [clean_prestable:Remove files in prestable that have no original files](#clean_prestable)
-* [pick_parallel_docs: Pick out parallel files from converted to prestable/converted](#pick_parallel_docs)
-* [update_metadata: Update metadata files in given directories](#update_metadata)
+- [move_corpus_file: Move or rename a file inside the corpus](#move_corpus_file)
+- [remove_corpus_file: Remove a file from the corpus](#remove_corpus_file)
+- [normalise_corpus_names: Program to normalise file names](#normalise_corpus_names)
+- [paracheck: Check if the parallel files found in the metadata files exist](#paracheck)
+- [duperemover: Remove duplicate files from the given directory](#duperemover)
+- [dupefinder: Find files with more than 90% similarity in the given directory](#dupefinder)
+- [clean_prestable:Remove files in prestable that have no original files](#clean_prestable)
+- [pick_parallel_docs: Pick out parallel files from converted to prestable/converted](#pick_parallel_docs)
+- [update_metadata: Update metadata files in given directories](#update_metadata)
 
 ## Miscellaneous
 
-* [pytextcat: textcat implemented in Python](#pytextcat)
-* [generate_anchor_list: Generate paired anchor list for languages lang1 and lang2](#generate_anchor_list)
-* [html_cleaner: Program to print out a nicely indented html document](#html_cleaner)
-* [epubchooser: Program to set metadata of an epub file](#epubchooser)
-* [make_training_corpus: Program to make training corpus from giella xml analysed files](#make_training_corpus)
+- [pytextcat: textcat implemented in Python](#pytextcat)
+- [generate_anchor_list: Generate paired anchor list for languages lang1 and lang2](#generate_anchor_list)
+- [html_cleaner: Program to print out a nicely indented html document](#html_cleaner)
+- [epubchooser: Program to set metadata of an epub file](#epubchooser)
+- [make_training_corpus: Program to make training corpus from giella xml analysed files](#make_training_corpus)
 
 ## ccat
 
@@ -85,9 +85,9 @@ Convert corpus format xml to clean text.
 
 ccat has three usage modes, print to stdout the content of:
 
-* converted files (produced by [convert2xml](#convert2xml))
-* converted files containing errormarkup (produced by [convert2xml](#convert2xml))
-* analysed files (produced by [analyse_corpus](#analyse_corpus))
+- converted files (produced by [convert2xml](#convert2xml))
+- converted files containing errormarkup (produced by [convert2xml](#convert2xml))
+- analysed files (produced by [analyse_corpus](#analyse_corpus))
 
 ## Printing content of converted files to stdout
 
@@ -212,8 +212,8 @@ Convert original files in a corpus to giellatekno/divvun xml format.
 
 convert2xml depends on these external programs:
 
-* pdftotext
-* wvHtml
+- pdftotext
+- wvHtml
 
 ## Usage
 
@@ -286,8 +286,8 @@ Analyse converted corpus files.
 
 analyse_corpus depends on these external programs:
 
-* vislcg3
-* hfst
+- vislcg3
+- hfst
 
 ## Usage
 
@@ -383,7 +383,7 @@ Download and add parallel files from the net to the corpus:
 
 `cd $GTFREE`
 
-__Adding the first file__
+**Adding the first file**
 
 The command
 
@@ -397,7 +397,7 @@ Gives the message:
 Added orig/sme/admin/sd/other_files/sametingets_ay-rsmelding_2013_-_nordsamisk.pdf
 ```
 
-__Adding the parallel file__
+**Adding the parallel file**
 
 ```sh
 add_files_to_corpus -p orig/sme/admin/sd/other_files/sametingets_ay-rsmelding_2013_-_nordsamisk.pdf -l nob  http://www.samediggi.no/content/download/5406/50888/version/2/file/Sametingets+%C3%A5rsmelding+2013+-+norsk.pdf
@@ -418,7 +418,7 @@ git commit
 
 # parallelize
 
-**NOTE!** This section is partly outdated. Some files are moved from *svn* to *github* (especially the `langs` ones).
+**NOTE!** This section is partly outdated. Some files are moved from _svn_ to _github_ (especially the `langs` ones).
 
 Parallelize parallel corpus files, write the results to .tmx and .txm.html
 files.
@@ -429,9 +429,9 @@ all files and realigns the file anew.
 parallelize depends on various files from the Divvun/Giellatekno SVN, at least
 the following directories need to exist in $GTHOME:
 
-* langs (specifically, the abbr.txt files)
-* gt/common
-* gt/script
+- langs (specifically, the abbr.txt files)
+- gt/common
+- gt/script
 
 It also requires Java if you wish to use the default (included) alignment
 program TCA2. For convenience, a pre-compiled version of TCA2's
@@ -537,7 +537,7 @@ parallelize -l2 sma converted/nob
 
 The files will end up in corresponding directories under tmx/nob2sma.
 
-__CAVEAT 1__: ''If you get a message such as''
+**CAVEAT 1**: ''If you get a message such as''
 
 ```sh
 parallelize -l2 sma converted/sma/admin/ntfk/tsaekeme.html.xml
@@ -547,7 +547,7 @@ failed to load external entity "/Users/xxx/freecorpus/converted/sma/admin/ntfk/.
 
 then you gave nob as l1 but the path to a sma-file as argument.
 
-__CAVEAT 2__: ''If you get a similar error message as''
+**CAVEAT 2**: ''If you get a similar error message as''
 
 ```sh
 parallelize -l2 sma converted/nob/admin/ntfk/rup_2013_trykt_versjon.pdf.xml
@@ -563,7 +563,7 @@ After that you can go back to the directory where you are working with the
 parallelizing files and try to parallelize the files anew. You might recompile
 the language tools for ALL the languages you are working with.
 
-__CAVEAT 3__: ''If you get a message like''
+**CAVEAT 3**: ''If you get a message like''
 
 ```sh
 Exception in thread "main" java.lang.UnsupportedClassVersionError: aksis/alignment/Alignment : Unsupported major.minor version 51.0
