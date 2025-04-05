@@ -12,7 +12,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2011-2023 The University of Tromsø &
+#   Copyright © 2011-2025 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
@@ -52,10 +52,7 @@ def make_tca2_input(xmlfile):
     """
     document = etree.Element("document")
 
-    divider = sentencedivider.SentenceDivider(xmlfile.lang)
-    for index, sentence in enumerate(
-        divider.make_valid_sentences(sentencedivider.to_plain_text(xmlfile))
-    ):
+    for index, sentence in enumerate(sentencedivider.make_valid_sentences(xmlfile)):
         s_elem = etree.Element("s")
         s_elem.attrib["id"] = str(index)
         s_elem.text = sentence

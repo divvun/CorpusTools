@@ -12,94 +12,97 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2011-2023 The University of Tromsø &
+#   Copyright © 2011-2025 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://divvun.no & http://giellatekno.uit.no
 #
 """Classes and functions to sentence align two files."""
 
 
-from corpustools import ccat, modes
+from pathlib import Path
+
+from corpustools import ccat
+from corpustools.corpuspath import CorpusPath
+from corpustools.util import ArgumentError, lang_resource_dirs, run_external_command
+
+STOPS = [";", "!", "?", ".", "..", "...", "¶", "…"]
 
 
-def to_plain_text(file_path):
-    """Turn an xml formatted file into clean text.
+def get_tokeniser(lang: str) -> Path:
+    """Check if resources needed by modes exists.
 
     Args:
-        file_path (CorpusPath): The path to the file
-
-    Raises:
-        UserWarning: if there is no text, raise a UserWarning
+        lang: the language that modes is asked to serve.
 
     Returns:
-        (str): the content of ccat output
+        A path to the zpipe file.
+
+    Raises:
+        utils.ArgumentError: if no resources are found.
     """
-    xml_printer = ccat.XMLPrinter(lang=file_path.lang, all_paragraphs=True)
-    xml_printer.parse_file(file_path.converted)
-    text = xml_printer.process_file().getvalue()
-    if text:
-        return text
-    else:
-        raise UserWarning(f"Empty file {file_path.converted}")
+    for lang_dir in lang_resource_dirs(lang):
+        full_path = lang_dir / "tokeniser-disamb-gt-desc.pmhfst"
+        if full_path.exists():
+            return full_path
+
+    raise (ArgumentError(f"ERROR: no tokeniser for {lang}"))
 
 
-class SentenceDivider:
-    """A class to divide plain text output into sentences.
+def tokenise(text: str, lang: str) -> str:
+    """Turn a string into a list of tokens.
 
-    Uses hfst-tokenise as the motor for this purpose.
+    Args:
+        text: the text to be tokenised
+        lang: the language of the text
 
-    Attributes:
-        stops (list[str]): tokens that imply where a sentence ends.
-        lang (str): three character language code
-        relative_path (str): relative path to where files needed by
-            modes.xml are found.
-        tokeniser (modes.Pipeline): tokeniser pipeline
+    Returns:
+        The tokenised text, one token per line.
     """
 
-    stops = [";", "!", "?", ".", "..", "...", "¶", "…"]
+    return run_external_command(
+        command=f"hfst-tokenise --print-all {get_tokeniser(lang)}".split(),
+        instring=text,
+    )
 
-    def __init__(self, lang, giella_prefix=None):
-        """Set the files needed by the tokeniser.
 
-        Args:
-            lang (str): language the analyser can tokenise
-        """
-        self.tokeniser = modes.Pipeline("tokenise", lang, giella_prefix)
+def make_sentences(tokenised_output):
+    """Turn ccat output into cleaned up sentences.
 
-    def make_sentences(self, tokenised_output):
-        """Turn ccat output into cleaned up sentences.
+    Args:
+        tokenised_output (str): plain text output of ccat.
 
-        Args:
-            tokenised_output (str): plain text output of ccat.
+    Yields:
+        (str): a cleaned up sentence
+    """
 
-        Yields:
-            (str): a cleaned up sentence
-        """
-
-        token_buffer = []
-        for token in tokenised_output.split("\n"):
-            if token != "¶":
-                token_buffer.append(token)
-            if token.strip() in self.stops:
-                yield "".join(token_buffer).strip()
-                token_buffer[:] = []
-        if token_buffer:
+    token_buffer = []
+    for token in tokenised_output.split("\n"):
+        if token != "¶":
+            token_buffer.append(token)
+        if token.strip() in STOPS:
             yield "".join(token_buffer).strip()
+            token_buffer[:] = []
+    if token_buffer:
+        yield "".join(token_buffer).strip()
 
-    def make_valid_sentences(self, ccat_output):
-        """Turn ccat output into full sentences.
 
-        Args:
-            ccat_output (str): the plain text output of ccat
+def make_valid_sentences(corpus_path: CorpusPath) -> list[str]:
+    """Turn ccat output into full sentences.
 
-        Returns:
-            (list[str]): The ccat output has been turned into a list
-                of full sentences.
-        """
-        return [
-            sentence
-            for sentence in self.make_sentences(
-                self.tokeniser.run(ccat_output.encode("utf8"))
+    Args:
+        corpus_path (CorpusPath): The path to the corpus file.
+
+    Returns:
+        The ccat output has been turned into a list of full sentences.
+    """
+    return [
+        sentence
+        for sentence in make_sentences(
+            tokenised_output=run_external_command(
+                command="hfst-tokenise --print-all "
+                f"{get_tokeniser(corpus_path.lang)}".split(),
+                instring=ccat.ccatter(corpus_path),
             )
-            if sentence
-        ]
+        )
+        if sentence.strip()
+    ]
