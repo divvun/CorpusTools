@@ -137,10 +137,21 @@ def analyse(xml_path: corpuspath.CorpusPath) -> None:
 def analyse_in_parallel(file_list: list[corpuspath.CorpusPath], pool_size: int):
     """Analyse file in parallel."""
     print(f"Parallel analysis of {len(file_list)} files with {pool_size} workers")
+    # Here we know that we are looking at the .converted file,
+    file_list = [(file, os.path.getsize(file.converted)) for file in file_list]
+
+    # sort the file list by size, smallest first
+    file_list.sort(key=lambda entry: entry[1])
+
+    # and turn the list of 2-tuples [[a, b, c, d], [1, 2, 3, 4]] back to
+    # two lists: [a, b, c, d] and [1, 2, 3, 4]
+    file_list, file_sizes = zip(*file_list)
+
     util.run_in_parallel(
         function=analyse,
         max_workers=pool_size,
         file_list=file_list,
+        file_sizes=file_sizes,
     )
 
 

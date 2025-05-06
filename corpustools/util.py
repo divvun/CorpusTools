@@ -31,10 +31,11 @@ import subprocess
 import sys
 import time
 import traceback
+from collections.abc import Callable
 from contextlib import contextmanager
 from pathlib import Path
 
-from corpustools import util
+#from corpustools.corpuspath import CorpusPath
 
 
 class SetupError(Exception):
@@ -349,11 +350,13 @@ _PARA_DEFAULT_MSG_FORMAT = (
 )
 
 
+# TODO use real types, not strings. but there is a circuar import
 def run_in_parallel(
-    function,
-    max_workers,
-    file_list,
-    msg_format=_PARA_DEFAULT_MSG_FORMAT,
+    function: Callable[["CorpusPath"], None],
+    max_workers: int,
+    file_list: list["CorpusPath"],
+    file_sizes: list[int],
+    msg_format: str = _PARA_DEFAULT_MSG_FORMAT,
     *args,
     **kwargs,
 ):
@@ -372,10 +375,7 @@ def run_in_parallel(
         max_workers (int): How many worker processes to use
         file_list (list[str]): The list of files (full paths)
     """
-    file_list = [(file, os.path.getsize(file.converted)) for file in file_list]
-    file_list.sort(key=lambda entry: entry[1])
-    total_size = sum(filesize for file, filesize in file_list)
-
+    total_size = sum(file_sizes)
     nfiles = len(file_list)
     n_failed = 0
     t0 = time.monotonic_ns()
@@ -388,7 +388,7 @@ def run_in_parallel(
 
     try:
         with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as pool:
-            for file, filesize in file_list:
+            for file, filesize in zip(file_list, file_sizes):
                 fut = pool.submit(function, file, *args, **kwargs)
                 futures[fut] = (file, filesize)
 
@@ -491,7 +491,7 @@ def run_external_command(command: list[str], instring: str) -> str:
     Raises:
         UserWarning: if the command fails.
     """
-    runner = util.ExternalCommandRunner()
+    runner = ExternalCommandRunner()
     runner.run(command, to_stdin=instring.encode("utf8"))
 
     if runner.stderr:

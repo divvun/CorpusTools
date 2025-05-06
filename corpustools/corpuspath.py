@@ -286,6 +286,24 @@ class CorpusPath:
             name = name[:-1]
         return name
 
+    def __getstate__(self):
+        """Return the dictionary of state of this object, for pickle."""
+        # note the .copy(), to not alter the instance dictionary
+        d = self.__dict__.copy()
+
+        # The .metadata attribute contains an lxml.ElementTree, which cannot
+        # be picked. But, we can just restore it using __post_init__.
+        del d["metadata"]
+
+        return d
+
+    def __setstate__(self, state):
+        """Set the state of the object, after deserializing with pickle."""
+        self.__dict__.update(state)
+
+        # restore self.metadata, using self.__post_init__
+        self.__post_init__()
+
 
 def collect_files(entities: list[str], suffix: str) -> Iterator[Path]:
     """Collect files with the specified suffix."""
