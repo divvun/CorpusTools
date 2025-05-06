@@ -372,7 +372,7 @@ def run_in_parallel(
         max_workers (int): How many worker processes to use
         file_list (list[str]): The list of files (full paths)
     """
-    file_list = [(file, os.path.getsize(file)) for file in file_list]
+    file_list = [(file, os.path.getsize(file.converted)) for file in file_list]
     file_list.sort(key=lambda entry: entry[1])
     total_size = sum(filesize for file, filesize in file_list)
 
