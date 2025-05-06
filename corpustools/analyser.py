@@ -165,7 +165,9 @@ def analyse_serially(file_list: list[corpuspath.CorpusPath]):
         # print some ugly banner cos i want to see progress on local
         # batch job
         util.print_frame("*" * 79)
-        util.print_frame(f"Analysing {xml_file} [{fileno} of {len(file_list)}]")
+        util.print_frame(
+            f"Analysing {xml_file.converted} [{fileno} of {len(file_list)}]"
+        )
         util.print_frame("*" * 79)
         analyse(xml_file)
 
