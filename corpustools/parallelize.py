@@ -20,74 +20,23 @@
 
 import argparse
 import os
-import re
-import subprocess
 from pathlib import Path
 
-from lxml import etree
+from python_tca2.alignmentmodel import AlignmentModel
+from python_tca2.anchorwordlist import AnchorWordList
+from python_tca2.tmx import write_tmx_result
 
 from corpustools import (
     argparse_version,
     corpuspath,
     generate_anchor_list,
     sentencedivider,
-    tmx,
     util,
 )
 
 HERE = os.path.dirname(__file__)
 
-SREGEX = re.compile('<s id="[^ ]*">')
 DICTS: dict[str, str] = {}
-
-
-def make_tca2_input(xmlfile):
-    """Make sentence xml that tca2 can use.
-
-    Args:
-        xmlfile (str): name of the xmlfile
-
-    Returns:
-        (lxml.etree.Element): an xml element containing all sentences.
-    """
-    document = etree.Element("document")
-
-    for index, sentence in enumerate(sentencedivider.make_valid_sentences(xmlfile)):
-        s_elem = etree.Element("s")
-        s_elem.attrib["id"] = str(index)
-        s_elem.text = sentence
-        document.append(s_elem)
-
-    return document
-
-
-def divide_p_into_sentences(filepair):
-    """Tokenize the text in the given file and reassemble it again."""
-    for pfile in filepair:
-        pfile.tca2_input.parent.mkdir(parents=True, exist_ok=True)
-        pfile.tca2_input.write_bytes(
-            etree.tostring(
-                make_tca2_input(pfile),
-                pretty_print=True,
-                encoding="utf8",
-                xml_declaration=True,
-            )
-        )
-
-
-def run_command(command):
-    """Run a parallelize command and return its output."""
-    subp = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    (output, error) = subp.communicate()
-
-    return subp.returncode, output, error
-
-
-def remove_s_tag(line):
-    """Remove the s tags that tca2 has added."""
-    line = line.replace("</s>", "")
-    line = SREGEX.sub("", line)
-    return line
 
 
 def setup_anchors(lang1, lang2):
@@ -119,42 +68,6 @@ def setup_anchors(lang1, lang2):
         )
 
 
-def tca2_align(file1, file2, anchor_filename):
-    """Parallelize two files using tca2.
-
-    Args:
-        file1 (CorpusPath): file1
-        file2 (CorpusPath): file2
-        anchor_filename (str): filename
-
-    Returns:
-        (list[str]): the sentence aligned output of tca2
-    """
-    divide_p_into_sentences([file1, file2])
-
-    tca2_jar = os.path.join(HERE, "tca2/dist/lib/alignment.jar")
-    command = (
-        f"java -Xms512m -Xmx1024m -jar {tca2_jar} -cli-plain -anchor={anchor_filename} "
-        f"-in1={file1.tca2_input} -in2={file2.tca2_input}"
-    )
-
-    (returncode, output, error) = run_command(command.split())
-
-    if returncode != 0:
-        raise UserWarning(
-            f"Could not parallelize {file1.converted} and {file2.converted} into "
-            f"sentences\n{output.decode('utf8')}\n\n{error.decode('utf8')}\n"
-        )
-
-    return [
-        [remove_s_tag(line) for line in sentpath.read_text().split("\n")]
-        for sentpath in [
-            file1.tca2_output,
-            file2.tca2_output,
-        ]
-    ]
-
-
 def make_dict(lang1, lang2) -> str:
     name = Path(f"/tmp/anchor-{lang1}-{lang2}.txt")
     gal = setup_anchors(lang1, lang2)
@@ -165,25 +78,33 @@ def make_dict(lang1, lang2) -> str:
     return name.as_posix()
 
 
-def parallelise_file(source_lang_file, para_lang_file, dictionary):
+def parallelise_file(
+    source_lang_file: corpuspath.CorpusPath,
+    para_lang_file: corpuspath.CorpusPath,
+    anchor_file: str | None = None,
+):
     """Align sentences of two parallel files."""
-    aligned_sentences = tca2_align(source_lang_file, para_lang_file, dictionary)
-    if aligned_sentences:
-        tmxfile = source_lang_file.tmx(para_lang_file.lang)
-        tmxfile.parent.mkdir(parents=True, exist_ok=True)
-        source_lang_file.tmx(para_lang_file.lang).write_bytes(
-            etree.tostring(
-                tmx.make_tmx(
-                    source_lang_file.filepath.name,
-                    source_lang_file.lang,
-                    para_lang_file.lang,
-                    aligned_sentences,
-                ),
-                pretty_print=True,
-                encoding="utf8",
-            )
-        )
-        print(f"Made {source_lang_file.tmx(para_lang_file.lang)}")
+    anchor_word_list = AnchorWordList()
+    if anchor_file is not None:
+        anchor_word_list.load_from_file(anchor_file)
+
+    aligner = AlignmentModel(
+        sentences_tuple=(
+            sentencedivider.make_valid_sentences(source_lang_file),
+            sentencedivider.make_valid_sentences(para_lang_file),
+        ),
+        anchor_word_list=anchor_word_list,
+    )
+
+    aligned, _ = aligner.suggest_without_gui()
+
+    aligned_sentences = aligned.non_empty_pairs()
+
+    write_tmx_result(
+        file1_path=Path(source_lang_file.orig),
+        language_pair=(source_lang_file.lang, para_lang_file.lang),
+        non_empty_sentence_pairs=aligned_sentences,
+    )
 
 
 def is_translated_from_lang2(path, lang2):
@@ -196,13 +117,11 @@ def is_translated_from_lang2(path, lang2):
     return translated_from == lang2
 
 
-def get_dictionary(para_path, source_path):
-    if DICTS.get(f"{source_path.lang}{para_path.lang}") is None:
-        DICTS[f"{source_path.lang}{para_path.lang}"] = make_dict(
-            source_path.lang, para_path.lang
-        )
+def get_dictionary(lang1: str, lang2: str) -> str:
+    if DICTS.get(f"{lang1}{lang2}") is None:
+        DICTS[f"{lang1}{lang2}"] = make_dict(lang1, lang2)
 
-    return DICTS.get(f"{source_path.lang}{para_path.lang}")
+    return DICTS[f"{lang1}{lang2}"]
 
 
 def get_filepair(orig_path, para_lang):
@@ -277,8 +196,8 @@ def main():
             parallelise_file(
                 source_path,
                 para_path,
-                dictionary=(
-                    get_dictionary(para_path, source_path)
+                anchor_file=(
+                    get_dictionary(lang1=para_path.lang, lang2=source_path.lang)
                     if args.dict is None
                     else args.dict
                 ),

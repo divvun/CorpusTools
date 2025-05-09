@@ -154,11 +154,12 @@ def main():
         parallelize.parallelise_file(
             source_path,
             para_path,
-            dictionary=parallelize.get_dictionary(para_path, source_path),
+            anchor_file=parallelize.get_dictionary(para_path.lang, source_path.lang),
         )
         tmx.tmx2html(source_path.tmx(para_path.lang))
     except util.ArgumentError as error:
         raise SystemExit(
             f"\n{error}\n"
-            f"Run «make install» in lang-{source_path.lang} and/or lang-{para_path.lang} first."
-        )
+            f"Run «make install» in lang-{source_path.lang} "
+            f"and/or lang-{para_path.lang} first."
+        ) from error
