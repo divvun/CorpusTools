@@ -18,7 +18,7 @@
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
-"""Generate an anchor file needed by the java aligner."""
+"""Generate an anchor file needed by python_tca2."""
 
 
 import argparse

@@ -1,6 +1,6 @@
 # reparallelize
 
-```sh
+```text
 usage: reparallelize [-h] [--version] [--files] [--convert] tmxhtml
 
 Sentence align a given file anew. Files are converted before being
@@ -10,7 +10,7 @@ solve issues in parallelised files.
 positional arguments:
   tmxhtml     The tmx.html file to realign.
 
-optional arguments:
+options:
   -h, --help  show this help message and exit
   --version   show program's version number and exit
   --files     Only show the interesting filenames that are needed for
