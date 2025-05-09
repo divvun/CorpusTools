@@ -28,6 +28,7 @@ unidecode = "^1.4.0"
 lxml = "^5.4.0"
 lxml-html-clean = "^0.4.2"
 pytesseract = "^0.3.10"
+python_tca2 = {git = "https://github.com/divvun/python_tca2.git", branch = "main"}
 
 [tool.poetry.scripts]
 add_files_to_corpus = "corpustools.adder:main"
