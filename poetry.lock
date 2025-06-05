@@ -636,7 +636,7 @@ six = ">=1.5"
 
 [[package]]
 name = "python-tca2"
-version = "0.11.0"
+version = "0.11.1"
 description = "Align plain text files using the TCA2 algorithm"
 optional = false
 python-versions = "^3.10"
@@ -651,7 +651,7 @@ lxml = "^5.4.0"
 type = "git"
 url = "https://github.com/divvun/python_tca2.git"
 reference = "main"
-resolved_reference = "1acdc0028ec7fe3ae9cc6d01ab094aaaca757414"
+resolved_reference = "e9d6af9afb28062dbd14366a3824adafa95f2969"
 
 [[package]]
 name = "regex"
