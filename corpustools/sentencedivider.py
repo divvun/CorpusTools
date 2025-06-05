@@ -20,6 +20,7 @@
 
 
 from pathlib import Path
+from typing import Iterator
 
 from corpustools import ccat
 from corpustools.corpuspath import CorpusPath
@@ -65,7 +66,7 @@ def tokenise(text: str, lang: str) -> str:
     )
 
 
-def make_sentences(tokenised_output):
+def make_sentences(tokenised_output: str) -> Iterator[str]:
     """Turn ccat output into cleaned up sentences.
 
     Args:
@@ -75,7 +76,7 @@ def make_sentences(tokenised_output):
         (str): a cleaned up sentence
     """
 
-    token_buffer = []
+    token_buffer: list[str] = []
     for token in tokenised_output.split("\n"):
         if token != "¶":
             token_buffer.append(token)

@@ -39,7 +39,9 @@ HERE = os.path.dirname(__file__)
 DICTS: dict[str, str] = {}
 
 
-def setup_anchors(lang1, lang2):
+def setup_anchors(
+    lang1: str, lang2: str
+) -> generate_anchor_list.GenerateAnchorList | None:
     """Setup anchor file.
 
     Args:
@@ -67,8 +69,10 @@ def setup_anchors(lang1, lang2):
             lang1, lang2, [lang2, lang1], path2
         )
 
+    return None
 
-def make_dict(lang1, lang2) -> str:
+
+def make_dict(lang1: str, lang2: str) -> str:
     name = Path(f"/tmp/anchor-{lang1}-{lang2}.txt")
     gal = setup_anchors(lang1, lang2)
     if gal is not None:
@@ -107,7 +111,7 @@ def parallelise_file(
     )
 
 
-def is_translated_from_lang2(path, lang2):
+def is_translated_from_lang2(path: corpuspath.CorpusPath, lang2: str) -> bool:
     """Find out if the given doc is translated from lang2."""
     translated_from = path.metadata.get_variable("translated_from")
 
@@ -124,7 +128,9 @@ def get_dictionary(lang1: str, lang2: str) -> str:
     return DICTS[f"{lang1}{lang2}"]
 
 
-def get_filepair(orig_path, para_lang):
+def get_filepair(
+    orig_path: corpuspath.CorpusPath, para_lang: str
+) -> tuple[corpuspath.CorpusPath, corpuspath.CorpusPath]:
     if is_translated_from_lang2(orig_path, para_lang):
         para_path = orig_path
         source_path = corpuspath.make_corpus_path(para_path.parallel(para_path.lang))

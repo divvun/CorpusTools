@@ -74,21 +74,22 @@ class MetadataHandler:
             except etree.XMLSyntaxError as error:
                 raise XsltError(f"Syntax error in {self.filename}:\n{error}") from error
 
-    def _get_variable_elt(self, key):
+    def _get_variable_elt(self, key: str) -> etree._Element | None:
         """Get the variable element.
 
         Args:
-            key (str): The name of the variable that should be looked up.
+            key: The name of the variable that should be looked up.
 
         Returns:
-            etree._Element: The element that contains the key.
+            The element that contains the key.
         """
+
         return self.tree.getroot().find(
             "{{http://www.w3.org/1999/XSL/Transform}}"
             "variable[@name='{}']".format(key)
         )
 
-    def set_variable(self, key, value):
+    def set_variable(self, key: str, value: str):
         """Set the value of a variable.
 
         Args:
@@ -104,7 +105,7 @@ class MetadataHandler:
                 "Error was {}".format(key, value, str(error))
             ) from error
 
-    def get_variable(self, key):
+    def get_variable(self, key: str) -> str | None:
         """Get the value associated with the key.
 
         Args:

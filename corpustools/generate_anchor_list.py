@@ -31,7 +31,7 @@ from corpustools import argparse_version, util
 class GenerateAnchorList:
     """Generate anchor list used by tca2."""
 
-    def __init__(self, lang1, lang2, columns, input_file):
+    def __init__(self, lang1: str, lang2: str, columns, input_file):
         """Initialise the GenerateAnchorList class.
 
         Args:
@@ -73,7 +73,7 @@ class GenerateAnchorList:
                 util.note(f"Read {len(out)} anchors from {self.input_file}")
             return out
 
-    def generate_file(self, outpath, quiet=False):
+    def generate_file(self, outpath: str, quiet: bool = False):
         """infiles is a list of file paths."""
         anchors = self.read_anchors(quiet)
 
