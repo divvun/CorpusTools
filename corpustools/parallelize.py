@@ -22,9 +22,10 @@ import argparse
 import os
 from pathlib import Path
 
+from lxml import etree
 from python_tca2.alignmentmodel import AlignmentModel
 from python_tca2.anchorwordlist import AnchorWordList
-from python_tca2.tmx import write_tmx_result
+from python_tca2.tmx import make_tmx
 
 from corpustools import (
     argparse_version,
@@ -104,11 +105,20 @@ def parallelise_file(
 
     aligned_sentences = aligned.non_empty_pairs()
 
-    write_tmx_result(
-        file1_path=Path(source_lang_file.orig),
+    tmx_result = make_tmx(
+        file1_name=source_lang_file.orig.name,
         language_pair=(source_lang_file.lang, para_lang_file.lang),
-        non_empty_sentence_pairs=aligned_sentences,
+        aligned_text_pairs=aligned_sentences,
     )
+    tmx_path = source_lang_file.tmx(para_lang_file.lang)
+    tmx_path.write_bytes(
+        etree.tostring(
+            tmx_result,
+            pretty_print=True,
+            encoding="utf-8",
+        )
+    )
+    print(f"TMX file created: {tmx_path}")
 
 
 def is_translated_from_lang2(path: corpuspath.CorpusPath, lang2: str) -> bool:
