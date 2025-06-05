@@ -19,4 +19,4 @@ using the package manager.
 - [Install pipx](https://pypa.github.io/pipx/installation/)
 - Run `pipx install --force git+https://github.com/divvun/CorpusTools.git`
 
-More documentation found [here](https://divvun.github.io/CorpusTools/)
+[API and manual pages](https://divvun.github.io/CorpusTools/)
