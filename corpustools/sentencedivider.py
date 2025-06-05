@@ -97,7 +97,7 @@ def make_valid_sentences(corpus_path: CorpusPath) -> list[str]:
         The ccat output has been turned into a list of full sentences.
     """
     return [
-        sentence
+        " ".join([word for word in sentence.split() if word.strip()])
         for sentence in make_sentences(
             tokenised_output=run_external_command(
                 command="hfst-tokenise --print-all "
