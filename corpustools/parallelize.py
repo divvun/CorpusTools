@@ -100,7 +100,7 @@ def parallelise_file(
         anchor_word_list=anchor_word_list,
     )
 
-    aligned, _ = aligner.suggest_without_gui()
+    aligned = aligner.suggest_without_gui()
 
     aligned_sentences = aligned.non_empty_pairs()
 
