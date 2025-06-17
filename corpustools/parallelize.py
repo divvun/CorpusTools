@@ -213,7 +213,7 @@ def main():
                 source_path,
                 para_path,
                 anchor_file=(
-                    get_dictionary(lang1=para_path.lang, lang2=source_path.lang)
+                    get_dictionary(lang1=source_path.lang, lang2=para_path.lang)
                     if args.dict is None
                     else args.dict
                 ),
