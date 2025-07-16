@@ -34,8 +34,10 @@ import traceback
 from collections.abc import Callable
 from contextlib import contextmanager
 from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
-#from corpustools.corpuspath import CorpusPath
+if TYPE_CHECKING:
+    from corpustools.corpuspath import CorpusPath
 
 
 class SetupError(Exception):
@@ -357,8 +359,8 @@ def run_in_parallel(
     file_list: list["CorpusPath"],
     file_sizes: list[int],
     msg_format: str = _PARA_DEFAULT_MSG_FORMAT,
-    *args,
-    **kwargs,
+    *args: list[Any],
+    **kwargs: dict[str, Any],
 ):
     """Run function as many times as there are files in the `file_list`,
     in parallel. Each invocation gets one element of the `file_list`.
