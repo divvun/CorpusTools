@@ -146,6 +146,7 @@ class NrkNoCrawler(Crawler):
                 len(self.unvisited_links),
                 "V:",
                 len(self.visited_links),
+                end="\r",
             )
 
         pprint(self.counter)
