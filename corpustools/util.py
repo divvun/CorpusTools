@@ -390,7 +390,7 @@ def run_in_parallel(
 
     try:
         with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as pool:
-            for file, filesize in zip(file_list, file_sizes):
+            for file, filesize in zip(file_list, file_sizes, strict=False):
                 fut = pool.submit(function, file, *args, **kwargs)
                 futures[fut] = (file, filesize)
 
