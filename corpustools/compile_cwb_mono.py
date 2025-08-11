@@ -19,9 +19,9 @@ from shlex import split as split_cmd
 from time import perf_counter_ns
 from typing import Callable
 
-from corpustools.korp_config_template import CORPUS_CONFIG_TITLE_AND_DESCRIPTIONS
-from corpustools.korp_config_template import DEFAULT_MODE_CONTENTS
-from corpustools.korp_config_template import KORP_SETTINGS_TEMPLATE
+from corpustools.korp_config_templates import CORPUS_CONFIG_TITLE_AND_DESCRIPTIONS
+from corpustools.korp_config_templates import DEFAULT_MODE_CONTENTS
+from corpustools.korp_config_templates import KORP_SETTINGS_TEMPLATE
 
 
 Module = typing.Literal["converted", "analysed", "korp_mono"]
