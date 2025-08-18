@@ -152,7 +152,7 @@ class Converter:
             ".usx": usxconverter.convert2intermediate,
         }
 
-        str_path = path.as_posix()
+        str_path = path.absolute().as_posix()
         if "avvir_xml" in str_path:
             return avvirconverter.convert2intermediate(path)
         elif str_path.endswith("bible.xml"):
@@ -164,7 +164,8 @@ class Converter:
             and path.suffix == ".pdf"
         ):
             return ocrconverter.to_xml(
-                path, language="nor"
+                path,
+                language=("sme_gt" if "corpus-sme" in str_path else "nor"),
             )  # hardcoded until further notice
         else:
             return chooser[path.suffix](path)
