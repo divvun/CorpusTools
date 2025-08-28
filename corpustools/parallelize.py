@@ -20,6 +20,7 @@
 
 import argparse
 import os
+from functools import lru_cache
 from pathlib import Path
 
 from lxml import etree
@@ -73,6 +74,7 @@ def setup_anchors(
     return None
 
 
+@lru_cache
 def make_dict(lang1: str, lang2: str) -> str:
     name = Path(f"/tmp/anchor-{lang1}-{lang2}.txt")
     gal = setup_anchors(lang1, lang2)
