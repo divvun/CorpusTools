@@ -25,7 +25,7 @@ will find it.
 > onto your system.
 
  1. Install [pipx](https://pypa.github.io/pipx/installation/)
- 2. Run `pipx install --force git+https://github.com/giellalt/CorpusTools.git`
+1. Run `pipx install --force git+https://github.com/divvun/CorpusTools.git`
 
 ### Editable install (alternate pipx installation method)
 
@@ -33,8 +33,8 @@ An *editable* install lets you make changes in the source script files, and
 still use the same global command on the command line to run the (modified) scripts.
 Recommended if you intend to do development on the scripts.
 
-1. Clone the CorpusTools repository: (`git clone https://github.com/giellalt/CorpusTools.git CorpusTools`)
 2. Install with the editable flag (`-e`): `pipx install -e --force /path/to/CorpusTools`
+1. Clone the CorpusTools repository: (`git clone https://github.com/divvun/CorpusTools.git CorpusTools`)
 
 ### Requirements
 

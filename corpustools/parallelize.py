@@ -223,5 +223,5 @@ def main():
         except util.ArgumentError as error:
             raise SystemExit(
                 f"{error}\nMore info here: "
-                "https://giellalt.github.io/CorpusTools/scripts/parallelize/#compile-dependencies",
+                "https://divvun.github.io/CorpusTools/scripts/parallelize/#compile-dependencies",
             ) from error

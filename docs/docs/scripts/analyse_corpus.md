@@ -25,7 +25,7 @@ make install
 ```
 
 Then you must convert the corpus files as explained in the
-[convert2xml](https://giellalt.github.io/CorpusTools/scripts/convert2xml/) section.
+[convert2xml](https://divvun.github.io/CorpusTools/scripts/convert2xml/) section.
 
 When this is done you can analyse all files in the corpus repos:
 

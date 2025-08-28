@@ -1,6 +1,6 @@
 site_name: CorpusTools documentation
-repo_name: "giellalt/CorpusTools"
-repo_url: "https://github.com/giellalt/CorpusTools"
+repo_name: "divvun/CorpusTools"
+repo_url: "https://github.com/divvun/CorpusTools"
 theme:
   name: material
   features:

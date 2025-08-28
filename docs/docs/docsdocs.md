@@ -14,7 +14,7 @@ a nice theme by these tools.
 
 The documentation is hosted on Github Pages:
 
-[https://giellalt.github.io/CorpusTools/](https://giellalt.github.io/CorpusTools)
+[https://divvun.github.io/CorpusTools/](https://divvun.github.io/CorpusTools)
 
 If the documentation is built locally (see below), it is available in the __site/__ folder.
 Just open up the index.html page in a browser to view the documentation.

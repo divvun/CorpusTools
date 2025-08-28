@@ -3,7 +3,7 @@
 Parallelize parallel corpus files, write the results to .tmx and .txm.html
 files.
 
-NB! When debugging alignment, use [reparallelize](https://giellalt.github.io/CorpusTools/scripts/reparallelize/), it reconverts
+NB! When debugging alignment, use [reparallelize](https://divvun.github.io/CorpusTools/scripts/reparallelize/), it reconverts
 all files and realigns the file anew.
 
 ## Compile dependencies

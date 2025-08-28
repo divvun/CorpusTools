@@ -4,9 +4,9 @@ Convert corpus format xml to clean text.
 
 ccat has three usage modes, print to stdout the content of:
 
-- converted files (produced by [convert2xml](https://giellalt.github.io/CorpusTools/scripts/convert2xml/))
-- converted files containing errormarkup (produced by [convert2xml](https://giellalt.github.io/CorpusTools/scripts/convert2xml/))
-- analysed files (produced by [analyse_corpus](https://giellalt.github.io/CorpusTools/scripts/analyse_corpus/))
+- converted files (produced by [convert2xml](https://divvun.github.io/CorpusTools/scripts/convert2xml/))
+- converted files containing errormarkup (produced by [convert2xml](https://divvun.github.io/CorpusTools/scripts/convert2xml/))
+- analysed files (produced by [analyse_corpus](https://divvun.github.io/CorpusTools/scripts/analyse_corpus/))
 
 ## Printing content of converted files to stdout
 
@@ -32,8 +32,10 @@ find corpus-sme/converted/science/ -name "*.pdf.xml" | xargs ccat -a -l sme
 
 ## Printing content of analysed files to stdout
 
-The analysed files produced by [analyse_corpus](https://giellalt.github.io/CorpusTools/scripts/analyse_corpus/) contain among
-a dependency element, that contain the dependency analysis of the original files content.
+The analysed files produced by
+[analyse_corpus](https://divvun.github.io/CorpusTools/scripts/analyse_corpus/)
+contain a dependency element, that contain the dependency analysis of the
+original files content.
 
 Prints the content of the disambiguation element.
 
