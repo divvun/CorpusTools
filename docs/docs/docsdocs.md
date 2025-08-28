@@ -9,22 +9,20 @@ a nice theme by these tools.
 [1]: https://www.mkdocs.org/
 [2]: https://squidfunk.github.io/mkdocs-material/
 
-
 ## View
 
 The documentation is hosted on Github Pages:
 
 [https://divvun.github.io/CorpusTools/](https://divvun.github.io/CorpusTools)
 
-If the documentation is built locally (see below), it is available in the __site/__ folder.
+If the documentation is built locally (see below), it is available in the **site/** folder.
 Just open up the index.html page in a browser to view the documentation.
 
     firefox site/index.html
 
-
 ## Writing documentation
 
-The actual *content* of the documentation is in __docs/docs__, as markdown files.
+The actual _content_ of the documentation is in **docs/docs**, as markdown files.
 The table of contents is in the `docs/mkdocs.yml` file. When adding a new site,
 it may be necessary to add the entry in the table of contents found in that file.
 
@@ -32,7 +30,7 @@ it may be necessary to add the entry in the table of contents found in that file
 
 ### First time setup
 
-__mkdocs__ is a python tool. Create a virtual environment, activate it, and
+**mkdocs** is a python tool. Create a virtual environment, activate it, and
 install the requirements. The first and last step is only done once.
 
     python3 -m venv .venv
@@ -55,7 +53,7 @@ To build the final documentation site locally, use
 
     mkdocs build
 
-It ends up as a static build in the __site/__ directory.
+It ends up as a static build in the **site/** directory.
 
 ### Updating the live page
 

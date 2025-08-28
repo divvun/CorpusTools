@@ -15,45 +15,45 @@ markdown_extensions:
       alternate_style: true
 nav:
   - Home:
-    - Overview: index.md
-    - How it works: howitworks.md
-    - Meta documentation: docsdocs.md
-    - Corpus work: corpus-work.md
-    - Scripts:
-      - Overview: scripts/index.md
-      - add_files_to_corpus: scripts/add_files_to_corpus.md
-      - analyse_corpus: scripts/analyse_corpus.md
-      - ccat: scripts/ccat.md
-      - clean_prestable: scripts/clean_prestable.md
-      - clean_prestable: scripts/clean_prestable.md
-      - compile_cwb_mono: scripts/compile_cwb_mono.md
-      - convert2xml: scripts/convert2xml.md
-      - dupefinder: scripts/dupefinder.md
-      - duperemover: scripts/duperemover.md
-      - epubchooser: scripts/epubchooser.md
-      - html_cleaner: scripts/html_cleaner.md
-      - korp_mono: scripts/korp_mono.md
-      - make_training_corpus: scripts/make_training_corpus.md
-      - move_corpus_file: scripts/move_corpus_file.md
-      - normalise_corpus_names: scripts/normalise_corpus_names.md
-      - paracheck: scripts/paracheck.md
-      - parallelize: scripts/parallelize.md
-      - pick_parallel_docs: scripts/pick_parallel_docs.md
-      - remove_corpus_file: scripts/remove_corpus_file.md
-      - reparallelize: scripts/reparallelize.md
-      - saami_crawler: scripts/saami_crawler.md
-      - tmx2html: scripts/tmx2html.md
-      - update_metadata: scripts/update_metadata.md
+      - Overview: index.md
+      - How it works: howitworks.md
+      - Meta documentation: docsdocs.md
+      - Corpus work: corpus-work.md
+      - Scripts:
+          - Overview: scripts/index.md
+          - add_files_to_corpus: scripts/add_files_to_corpus.md
+          - analyse_corpus: scripts/analyse_corpus.md
+          - ccat: scripts/ccat.md
+          - clean_prestable: scripts/clean_prestable.md
+          - clean_prestable: scripts/clean_prestable.md
+          - compile_cwb_mono: scripts/compile_cwb_mono.md
+          - convert2xml: scripts/convert2xml.md
+          - dupefinder: scripts/dupefinder.md
+          - duperemover: scripts/duperemover.md
+          - epubchooser: scripts/epubchooser.md
+          - html_cleaner: scripts/html_cleaner.md
+          - korp_mono: scripts/korp_mono.md
+          - make_training_corpus: scripts/make_training_corpus.md
+          - move_corpus_file: scripts/move_corpus_file.md
+          - normalise_corpus_names: scripts/normalise_corpus_names.md
+          - paracheck: scripts/paracheck.md
+          - parallelize: scripts/parallelize.md
+          - pick_parallel_docs: scripts/pick_parallel_docs.md
+          - remove_corpus_file: scripts/remove_corpus_file.md
+          - reparallelize: scripts/reparallelize.md
+          - saami_crawler: scripts/saami_crawler.md
+          - tmx2html: scripts/tmx2html.md
+          - update_metadata: scripts/update_metadata.md
   - Code reference: reference/
 
 plugins:
-- search: {}
-- gen-files:
-    scripts:
-    - gen_ref_pages.py
-- literate-nav:
-    nav_file: SUMMARY.md
-- mkdocstrings:
-    handlers:
-      python:
-        paths: [..]
+  - search: {}
+  - gen-files:
+      scripts:
+        - gen_ref_pages.py
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [..]

@@ -9,7 +9,7 @@ example `sme` for North Saami, and `nob` for Norwegian Bokmål.
 
 Here's a quick overview:
 
-```
+```text
 corpus-xxx-orig/          - original files (txt, pdf, html, doc, etc)
   ...<categories>/        - documents are ordered in subfolder, one folder
                             for each category (admin, facta, ficti, news, etc...)
@@ -34,25 +34,25 @@ corpus-xxx/               - processed files
     <...langN>/           - one subfolder for each language
       ...<categories>/
         ...<document>.tmx - each document in tmx format
-       
+
 ```
 
-*TMX* is an XML file for storing translation strings.
+_TMX_ is an XML file for storing translation strings.
 
 See the wikipedia article [https://en.wikipedia.org/wiki/Translation_Memory_eXchange](https://en.wikipedia.org/wiki/Translation_Memory_eXchange)
-            
+
 ## What each script does
 
-Script | Description
----|---
-`add_files_to_corpus` | Copies original source files into `corpus-xxx-orig`. Adds the `.xsl` metadata files. The corpus maintainer will add missing metadata about each document.
-`convert2xml` | Reads documents in `corpus-xxx-orig` (or some subfolder or single file therein), and outputs the `.xml` file of the extracted text from that document. The file automatically determines file type, and uses an extractor to read text from that filetype.
-`analyse_corpus` | Reads documents in `corpus-xxx/converted`, and runs our language tools (`hfst, etc`) on them. The resulting analysed xml document is placed in `corpus-xxx/analysed`.
-`analyse_para` | Analyses sentence-aligned input files found in `corpus-xxx/tmx` and outputs to `corpus-xxx/tmx_analysed`.
-`korp_mono` | Reads documents in `corpus-xxx/analysed`, and converts the cg3-analysis format into a CWB-input format, one `.vrt` file per document.
-`korp_para` | Reads documents from `corpus-xxx/tmx_analysed`, and converts the analysis format into CWB-input format, one `.vrt` file per tmx document.
-`compile_cwb_mono` | Concatenates `korp_mono` (the files in `corpus-xxx/korp_mono`) into one `.vrt` file per genre, and runs CWB-tools on each of those to generate a CWB-corpus (which is what `Korp` reads).
-`compile_cwb_para` | Ditto as mono, but for `tmx_analysed`
-`parallelize` | Sentence-alignes two parallel corpora, outputs into `corpus-xxx/tmx`.
-`reparallelize` | Uses information found in the input `.tmx` file, to re-do the sentence alignment (convert and parallelize). Useful when fixing mis-aligned `.tmx` files.
-`ccat` | Prints plain text from an internal `.xml` (xml files produced by the `convert2xml` or `analyse_corpus`) file.
+| Script                | Description                                                                                                                                                                                                                                                |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `add_files_to_corpus` | Copies original source files into `corpus-xxx-orig`. Adds the `.xsl` metadata files. The corpus maintainer will add missing metadata about each document.                                                                                                  |
+| `convert2xml`         | Reads documents in `corpus-xxx-orig` (or some subfolder or single file therein), and outputs the `.xml` file of the extracted text from that document. The file automatically determines file type, and uses an extractor to read text from that filetype. |
+| `analyse_corpus`      | Reads documents in `corpus-xxx/converted`, and runs our language tools (`hfst, etc`) on them. The resulting analysed xml document is placed in `corpus-xxx/analysed`.                                                                                      |
+| `analyse_para`        | Analyses sentence-aligned input files found in `corpus-xxx/tmx` and outputs to `corpus-xxx/tmx_analysed`.                                                                                                                                                  |
+| `korp_mono`           | Reads documents in `corpus-xxx/analysed`, and converts the cg3-analysis format into a CWB-input format, one `.vrt` file per document.                                                                                                                      |
+| `korp_para`           | Reads documents from `corpus-xxx/tmx_analysed`, and converts the analysis format into CWB-input format, one `.vrt` file per tmx document.                                                                                                                  |
+| `compile_cwb_mono`    | Concatenates `korp_mono` (the files in `corpus-xxx/korp_mono`) into one `.vrt` file per genre, and runs CWB-tools on each of those to generate a CWB-corpus (which is what `Korp` reads).                                                                  |
+| `compile_cwb_para`    | Ditto as mono, but for `tmx_analysed`                                                                                                                                                                                                                      |
+| `parallelize`         | Sentence-alignes two parallel corpora, outputs into `corpus-xxx/tmx`.                                                                                                                                                                                      |
+| `reparallelize`       | Uses information found in the input `.tmx` file, to re-do the sentence alignment (convert and parallelize). Useful when fixing mis-aligned `.tmx` files.                                                                                                   |
+| `ccat`                | Prints plain text from an internal `.xml` (xml files produced by the `convert2xml` or `analyse_corpus`) file.                                                                                                                                              |
