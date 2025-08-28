@@ -296,6 +296,8 @@ class HTMLBeautifier:
                     "sharebutton-wrapper",  # 1177.se
                     "sharing",
                     "sidebar",
+                    "SkipToContent__Container-sc-766d2a40-0 llIBSJ sr-only",  # yle.fi
+                    "SkipToContent__Container-sc-be262610-0 fgnFQv sr-only",  # yle.fi
                     "spalte300",  # osko.no
                     "span12 tiedotteet-show",
                     "subpage-bottom",
@@ -513,6 +515,7 @@ class HTMLBeautifier:
             "header": {
                 "id": ["header"],  # umo.se
                 "class": [
+                    "yle-header-2023",  # yle.fi
                     "nrk-masthead-content cf",  # nrk.no
                     "pageHeader ",  # regjeringen.no
                     "singleton widget rich nrk-masthead lp_masthead",  # nrk.no
