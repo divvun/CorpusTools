@@ -17,7 +17,6 @@
 #
 """Normalise the files in the given directory."""
 
-
 import argparse
 from pathlib import Path
 
