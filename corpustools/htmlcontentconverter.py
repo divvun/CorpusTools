@@ -594,12 +594,11 @@ class HTMLBeautifier:
                     previous_element.tail += font_elt.text
                 else:
                     previous_element.tail = font_elt.text
-            else:
-                if font_elt.text is not None:
-                    if font_parent.text is not None:
-                        font_parent.text += font_elt.text
-                    else:
-                        font_parent.text = font_elt.text
+            elif font_elt.text is not None:
+                if font_parent.text is not None:
+                    font_parent.text += font_elt.text
+                else:
+                    font_parent.text = font_elt.text
 
     @staticmethod
     def handle_font_children(font_elt):
@@ -636,11 +635,10 @@ class HTMLBeautifier:
                     previous_element.tail += font_elt.tail
                 else:
                     previous_element.tail = font_elt.tail
+            elif font_parent.text is not None:
+                font_parent.text += font_elt.tail
             else:
-                if font_parent.text is not None:
-                    font_parent.text += font_elt.tail
-                else:
-                    font_parent.text = font_elt.tail
+                font_parent.text = font_elt.tail
 
     def remove_font(self):
         """Remove font elements, incorporate content into it's parent."""
