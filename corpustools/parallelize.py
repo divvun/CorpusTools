@@ -145,10 +145,14 @@ def get_filepair(
 ) -> tuple[corpuspath.CorpusPath, corpuspath.CorpusPath]:
     if is_translated_from_lang2(orig_path, para_lang):
         para_path = orig_path
-        source_path = corpuspath.make_corpus_path(para_path.parallel(para_path.lang))
+        source_path = corpuspath.make_corpus_path(
+            para_path.parallel(para_path.lang).as_posix()
+        )
     else:
         source_path = orig_path
-        para_path = corpuspath.make_corpus_path(source_path.parallel(para_lang))
+        para_path = corpuspath.make_corpus_path(
+            source_path.parallel(para_lang).as_posix()
+        )
 
     return para_path, source_path
 
@@ -196,7 +200,7 @@ def main():
     args = parse_options()
 
     for path in corpuspath.collect_files(args.sources, suffix=".xml"):
-        orig_corpuspath = corpuspath.make_corpus_path(path)
+        orig_corpuspath = corpuspath.make_corpus_path(path.as_posix())
 
         if orig_corpuspath.lang == args.lang2:
             raise SystemExit(
