@@ -1,0 +1,258 @@
+<modes>
+  <!-- More info on this file type: http://wiki.apertium.org/wiki/Modes -->
+  <!-- Filenames are relative to the language directory  -->
+  <mode name="xfst">
+    <pipeline>
+      <program name="preprocess" debug="preprocess">
+        <arg name="--abbr" />
+        <file name="abbr.txt" />
+      </program>
+      <program name="lookup" debug="xlookup">
+        <arg name="-q" />
+        <arg name="-flags" />
+        <arg name="mbTT" />
+        <file name="analyser-disamb-gt-desc.xfst" />
+      </program>
+      <program name="lookup2cg" debug="lookup2cg" />
+      <program name="vislcg3" debug="dis">
+        <arg name="--grammar" />
+        <file name="disambiguator.bin" />
+      </program>
+      <program name="vislcg3" debug="function">
+        <arg name="--grammar" />
+        <file name="korp.bin" />
+      </program>
+      <program name="vislcg3" debug="dep">
+        <arg name="--grammar" />
+        <file name="dependency.bin" />
+      </program>
+    </pipeline>
+  </mode>
+
+  <mode name="hfst">
+    <pipeline>
+      <program name="hfst-tokenise" debug-suff="morph">
+        <arg name="--print-all" />
+        <arg name="--giella-cg" />
+        <arg name="--unique" />
+        <file name="tokeniser-disamb-gt-desc.pmhfst" />
+      </program>
+      <program name="vislcg3" debug-suff="mwe-dis">
+        <arg name="--grammar" />
+        <file name="mwe-dis.bin" />
+      </program>
+      <program name="cg-mwesplit" debug-suff="mwe-split" />
+      <program name="vislcg3" debug="dis">
+        <arg name="--grammar" />
+        <file name="disambiguator.bin" />
+      </program>
+      <program name="vislcg3" debug="function">
+        <arg name="--grammar" />
+        <file name="korp.bin" />
+      </program>
+      <program name="vislcg3" debug="dep">
+        <arg name="--grammar" />
+        <file name="dependency.bin" />
+      </program>
+    </pipeline>
+  </mode>
+
+  <!--  Pipeline for mhr upto 1939  -->
+  <mode name="hfst_thirties">
+    <pipeline>
+      <program name="hfst-tokenise" debug-suff="morph">
+        <arg name="--print-all" />
+        <arg name="--giella-cg" />
+        <arg name="--no-weights" />
+        <arg name="--unique" />
+        <arg name="--time-cutoff=30"/>
+        <file name="tokeniser-disamb-gt-desc.thirties.pmhfst" />
+      </program>
+      <program name="vislcg3" debug-suff="mwe-dis">
+        <arg name="--grammar" />
+        <file name="mwe-dis.bin" />
+      </program>
+      <program name="cg-mwesplit" debug-suff="mwe-split" />
+      <program name="vislcg3" debug="dis">
+        <arg name="--grammar" />
+        <file name="disambiguator.bin" />
+      </program>
+      <program name="vislcg3" debug="function">
+        <arg name="--grammar" />
+        <file name="korp.bin" />
+      </program>
+      <program name="vislcg3" debug="dep">
+        <arg name="--grammar" />
+        <file name="dependency.bin" />
+      </program>
+    </pipeline>
+  </mode>
+
+  <!--  Pipeline for mhr  -->
+  <mode name="hfst_eighties">
+    <pipeline>
+      <program name="hfst-tokenise" debug-suff="morph">
+        <arg name="--print-all" />
+        <arg name="--giella-cg" />
+        <arg name="--no-weights" />
+        <arg name="--unique" />
+        <arg name="--time-cutoff=30"/>
+        <file name="tokeniser-disamb-gt-desc.eighties.pmhfst" />
+      </program>
+      <program name="vislcg3" debug-suff="mwe-dis">
+        <arg name="--grammar" />
+        <file name="mwe-dis.bin" />
+      </program>
+      <program name="cg-mwesplit" debug-suff="mwe-split" />
+      <program name="vislcg3" debug="dis">
+        <arg name="--grammar" />
+        <file name="disambiguator.bin" />
+      </program>
+      <program name="vislcg3" debug="function">
+        <arg name="--grammar" />
+        <file name="korp.bin" />
+      </program>
+      <program name="vislcg3" debug="dep">
+        <arg name="--grammar" />
+        <file name="dependency.bin" />
+      </program>
+    </pipeline>
+  </mode>
+
+  <mode name="hfst_no_korp">
+    <pipeline>
+      <program name="hfst-tokenise" debug-suff="morph">
+        <arg name="--print-all" />
+        <arg name="--giella-cg" />
+        <arg name="--no-weights" />
+        <arg name="--unique" />
+        <file name="tokeniser-disamb-gt-desc.pmhfst" />
+      </program>
+      <program name="vislcg3" debug-suff="mwe-dis">
+        <arg name="--grammar" />
+        <file name="mwe-dis.bin" />
+      </program>
+      <program name="cg-mwesplit" debug-suff="mwe-split" />
+      <program name="vislcg3" debug="dis">
+        <arg name="--grammar" />
+        <file name="disambiguator.bin" />
+      </program>
+      <program name="vislcg3" debug="function">
+        <arg name="--grammar" />
+        <file name="functions.bin" />
+      </program>
+      <program name="vislcg3" debug="dep">
+        <arg name="--grammar" />
+        <file name="dependency.bin" />
+      </program>
+    </pipeline>
+  </mode>
+
+  <mode name="trace-smegram-dev" gendebug="yes">
+    <pipeline>
+      <program name="hfst-tokenise" debug-suff="morph">
+        <arg name="--gtd" />
+        <file name="tokeniser-gramcheck-gt-desc.pmhfst" />
+      </program>
+      <program name="divvun-blanktag" debug-suff="blank">
+        <file name="analyser-gt-whitespace.hfst" />
+      </program>
+      <program name="vislcg3" debug-suff="val">
+        <arg name="--trace" />
+        <arg name="--grammar" />
+        <file name="valency.cg3" />
+      </program>
+      <program name="vislcg3" debug-suff="mwe-dis">
+        <arg name="--trace" />
+        <arg name="--grammar" />
+        <file name="mwe-dis.cg3" />
+      </program>
+      <program name="cg-mwesplit" debug-suff="mwe-split" />
+      <program name="divvun-blanktag" debug-suff="blank2">
+        <file name="analyser-gt-errorwhitespace.hfst" />
+      </program>
+      <program name="divvun-cgspell" debug-suff="cgspell">
+        <arg name="--limit" />
+        <arg name="10" />
+        <arg name="--beam" />
+        <arg name="15" />
+        <arg name="--max-weight" />
+        <arg name="5000" />
+        <arg name="--max-unknown-rate" />
+        <arg name="0.4" />
+        <arg name="--lexicon" />
+        <file name="acceptor.default.hfst" />
+        <arg name="--errmodel" />
+        <file name="errmodel.default.hfst" />
+      </program>
+      <program name="vislcg3" debug-suff="disam">
+        <arg name="--trace" />
+        <arg name="--grammar" />
+        <file name="grc-disambiguator.cg3" />
+      </program>
+      <program name="vislcg3" debug-suff="val">
+        <arg name="--trace" />
+        <arg name="--grammar" />
+        <file name="spellchecker.cg3" />
+      </program>
+      <program name="vislcg3" debug-suff="val">
+        <arg name="--trace" />
+        <arg name="--grammar" />
+        <file name="after-speller-disambiguator.cg3" />
+      </program>
+      <program name="vislcg3" debug-suff="gc">
+        <arg name="--trace" />
+        <arg name="--grammar" />
+        <file name="grammarchecker.cg3" />
+      </program>
+    </pipeline>
+  </mode>
+
+  <mode name="trace-smegram" gendebug="yes">
+    <pipeline>
+      <program name="hfst-tokenise" debug-suff="morph">
+        <arg name="--gtd" />
+        <file name="tokeniser-gramcheck-gt-desc.pmhfst" />
+      </program>
+      <program name="vislcg3" debug-suff="mwe-dis">
+        <arg name="--trace" />
+        <arg name="--grammar" />
+        <file name="mwe-dis.bin" />
+      </program>
+      <program name="cg-mwesplit" debug-suff="mwe-split" />
+      <program name="vislcg3" debug-suff="val">
+        <arg name="--grammar" />
+        <file name="valency.bin" />
+      </program>
+      <program name="vislcg3" debug-suff="disam">
+        <arg name="--trace" />
+        <arg name="--grammar" />
+        <file name="disambiguator.bin" />
+      </program>
+      <program name="vislcg3" debug-suff="gc">
+        <arg name="--trace" />
+        <arg name="--grammar" />
+        <file name="grammarchecker.bin" />
+      </program>
+    </pipeline>
+  </mode>
+
+  <mode name="tokenise">
+    <pipeline>
+      <program name="hfst-tokenise">
+        <arg name="--segment" />
+        <arg name="--print-all" />
+        <file name="tokeniser-disamb-gt-desc.pmhfst" />
+      </program>
+    </pipeline>
+  </mode>
+
+  <mode name="generate">
+    <pipeline>
+      <program name="hfst-lookup">
+        <arg name="--quiet" />
+        <file name="generator-gt-norm.hfstol" />
+      </program>
+    </pipeline>
+  </mode>
+</modes>
