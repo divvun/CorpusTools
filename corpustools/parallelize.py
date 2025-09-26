@@ -33,7 +33,6 @@ from corpustools import (
     corpuspath,
     generate_anchor_list,
     sentencedivider,
-    util,
 )
 
 HERE = os.path.dirname(__file__)
@@ -170,7 +169,7 @@ def parse_options():
     parser.add_argument(
         "sources",
         nargs="+",
-        help="Files or directories to search for " "parallelisable files",
+        help="Files or directories to search for parallelisable files",
     )
     parser.add_argument(
         "-d",
@@ -179,9 +178,8 @@ def parse_options():
         help="Use a different bilingual seed dictionary. "
         "Must have two columns, with input_file language "
         "first, and --parallel_language second, separated "
-        "by `/'. By default, "
-        "$GTHOME/gt/common/src/anchor.txt is used, but this "
-        "file only supports pairings between "
+        "by `/'. By default, python_tca2 files are used, but these "
+        "files only supports pairings between "
         "sme/sma/smj/fin/eng/nob. ",
     )
     parser.add_argument(
