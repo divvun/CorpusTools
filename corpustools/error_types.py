@@ -51,11 +51,6 @@ class ErrorType(Enum):
         """Get the error type name as a string (e.g., 'errorort')."""
         return self.value[0]
     
-    @property
-    def name(self) -> str:
-        """Override name property to return lowercase error name."""
-        return self.value[0]
-    
     def __str__(self) -> str:
         """String representation returns the error name (e.g., 'errorort')."""
         return self.error_name
@@ -93,3 +88,7 @@ def all_error_symbols() -> list[str]:
         ['$', '¢', '€', '£', '¥', '§', '∞', '‰']
     """
     return [error_type.symbol for error_type in ErrorType]
+
+class ErrorMarkupError(Exception):
+    """This is raised for errors in this module."""
+    pass

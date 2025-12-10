@@ -23,8 +23,8 @@ def test_invalid_symbol():
 
 def test_name():
     """Test that error type names are correct."""
-    assert ErrorType.ERRORORT.name == "errorort"
-    assert ErrorType.ERRORMORPHSYN.name == "errormorphsyn"
+    assert ErrorType.ERRORORT.name == "ERRORORT"
+    assert ErrorType.ERRORMORPHSYN.name == "ERRORMORPHSYN"
 
 
 def test_all_symbols():
