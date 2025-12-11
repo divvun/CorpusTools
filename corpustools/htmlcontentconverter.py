@@ -11,13 +11,14 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2012-2023 The University of Tromsø &
+#   Copyright © 2012-2025 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Convert html content to the Giella xml format."""
 
 import os
+from pathlib import Path
 
 from lxml import etree, html
 from lxml.html import clean
@@ -35,7 +36,7 @@ from corpustools import (
 HERE = os.path.dirname(__file__)
 
 
-def to_html_elt(path):
+def to_html_elt(path: str) -> etree.Element:
     chooser = {
         ".doc": convert_using_soffice.to_html_elt,
         ".docx": convert_using_pandoc.to_html_elt,
@@ -731,7 +732,7 @@ def xhtml2intermediate(content_xml):
     return intermediate.getroot()
 
 
-def convert2intermediate(filename):
+def convert2intermediate(filename: Path)->etree.Element:
     """Convert a webpage to Giella xml.
 
     Args:
@@ -740,4 +741,4 @@ def convert2intermediate(filename):
     Returns:
         (lxml.etree.Element): the root element of the Giella xml document
     """
-    return xhtml2intermediate(to_html_elt(filename))
+    return xhtml2intermediate(to_html_elt(str(filename)))
