@@ -11,7 +11,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2012-2023 The University of Tromsø &
+#   Copyright © 2012-2025 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
@@ -33,7 +33,7 @@ from corpustools import (
     ccat,
     corpuspath,
     documentfixer,
-    errormarkup,
+    error_annotated_converter,
     htmlcontentconverter,
     languagedetector,
     ocrconverter,
@@ -150,6 +150,7 @@ class Converter:
             ".tex": htmlcontentconverter.convert2intermediate,
             ".writenow": htmlcontentconverter.convert2intermediate,
             ".usx": usxconverter.convert2intermediate,
+            ".correct.txt": error_annotated_converter.convert2intermediate,
         }
 
         str_path = path.absolute().as_posix()
@@ -167,6 +168,8 @@ class Converter:
                 path,
                 language=("sme_gt" if "corpus-sme" in str_path else "nor"),
             )  # hardcoded until further notice
+        elif path.name.endswith(".correct.txt"):
+            return error_annotated_converter.convert2intermediate(path)
         else:
             return chooser[path.suffix](path)
 
@@ -209,19 +212,6 @@ class Converter:
             raise util.ConversionError(
                 f"XSLTParseError in: {self.names.xsl}\nError {str(error)}"
             ) from error
-
-    def convert_errormarkup(self, complete):
-        """Convert error markup to xml."""
-        if self.goldstandard:
-            try:
-                errormarkup.add_error_markup(complete.find("body"))
-            except errormarkup.ErrorMarkupError as error:
-                with open(self.names.log, "w") as logfile:
-                    print(str(error), file=logfile)
-
-                raise util.ConversionError(
-                    "Markup error. More info in the log file: " f"{self.names.log}"
-                ) from error
 
     def fix_document(self, complete):
         """Fix a misc. issues found in converted document."""
@@ -299,7 +289,6 @@ class Converter:
         complete = self.transform_to_complete()
         self.validate_complete(complete)
         self.fix_parallels(complete)
-        self.convert_errormarkup(complete)
         lang_detector = languagedetector.LanguageDetector(complete, language_guesser)
         lang_detector.detect_language()
 
