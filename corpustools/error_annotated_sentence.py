@@ -23,7 +23,11 @@ from dataclasses import dataclass, field
 from lxml import etree
 
 from corpustools.error_markup import ErrorMarkup, ErrorSegment
-from corpustools.error_types import ErrorMarkupError, all_error_symbols
+from corpustools.error_types import (
+    ErrorMarkupError,
+    all_error_symbols,
+    error_type_from_symbol,
+)
 
 VERBOSE_ERROR = "(?P<error>{[^{}]*})"
 CORRECTION = "[" + "".join(all_error_symbols()) + "]{[^}]*}"
@@ -112,9 +116,6 @@ class ErrorAnnotatedSentence:
     def _remove_markup(self, text: str) -> str:
         """Remove error markup syntax from text."""
         # This is a simple implementation - remove patterns like {text}${corr}
-        import re
-
-        from corpustools.error_types import all_error_symbols
 
         symbols = "".join(re.escape(s) for s in all_error_symbols())
         pattern = r"\{[^{}]*\}[" + symbols + r"]\{[^}]*\}"
@@ -138,8 +139,6 @@ class ErrorAnnotatedSentence:
         Returns:
             An lxml Element for the error
         """
-        from lxml import etree
-
         # Create the error element with the appropriate tag (lowercase)
         error_elem = etree.Element(error.errortype.error_name)
 
@@ -193,8 +192,6 @@ def parse_markup_to_sentence(text: str) -> ErrorAnnotatedSentence:
     Raises:
         ErrorMarkupError: If markup is invalid
     """
-    from corpustools.error_annotated_sentence import ErrorAnnotatedSentence
-
     # Validate markup first
     errors_list = list(invalid_corrections(text))
     if errors_list:
@@ -250,9 +247,6 @@ def _parse_text_recursive(
         base_offset: Base byte offset for this text segment
         errors: List to collect ErrorMarkup objects
     """
-    from corpustools.error_markup import ErrorMarkup
-    from corpustools.error_types import error_type_from_symbol
-
     last_correction = LAST_CORRECTION_REGEX.search(text)
     while last_correction:
         # Extract the correction info
@@ -317,9 +311,6 @@ def _parse_error_form(
         Returns:
         Simple string or list of segments
     """
-    from corpustools.error_markup import ErrorMarkup, ErrorSegment
-    from corpustools.error_types import error_type_from_symbol
-
     # Check if there are nested corrections in the error text
     if not LAST_CORRECTION_REGEX.search(error_text):
         # No nested errors, return simple string
