@@ -204,7 +204,39 @@ def parse_markup_to_sentence(text: str) -> ErrorAnnotatedSentence:
     errors: list[ErrorMarkup] = []
     _parse_text_recursive(text, 0, errors)
 
-    return ErrorAnnotatedSentence(text=text, errors=errors)
+    # Extract clean text by removing markup
+    clean_text = _extract_clean_text(text)
+
+    return ErrorAnnotatedSentence(text=clean_text, errors=errors)
+
+
+def _extract_clean_text(text: str) -> str:
+    """Extract clean text by removing error markup.
+    
+    Recursively processes the text from right to left, removing corrections
+    and keeping only the error text.
+    
+    Args:
+        text: Text with error markup
+        
+    Returns:
+        Clean text with markup removed
+    """
+    result = text
+    last_correction = LAST_CORRECTION_REGEX.search(result)
+    
+    while last_correction:
+        # Find the error text that corresponds to this correction
+        prefix, error_text = scan_for_error(result[: last_correction.start()])
+        
+        # The clean text is: prefix + error_text + suffix (after correction)
+        suffix = result[last_correction.end():]
+        result = prefix + error_text + suffix
+        
+        # Look for the next correction
+        last_correction = LAST_CORRECTION_REGEX.search(result)
+    
+    return result
 
 
 def scan_for_error(text: str) -> tuple[str, str]:
