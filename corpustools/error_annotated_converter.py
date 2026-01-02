@@ -11,15 +11,16 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2025 The University of Tromsø &
+#   Copyright © 2025-2026 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
-#   http://giellatekno.uit.no & http://divvun.no
+#   https://giellatekno.uit.no & http://divvun.no
 #
 from pathlib import Path
 
 from lxml import etree
 
 from corpustools.error_annotated_sentence import parse_markup_to_sentence
+from corpustools.util import ConversionError
 
 
 def convert2intermediate(filename: Path) -> etree.Element:
@@ -28,8 +29,24 @@ def convert2intermediate(filename: Path) -> etree.Element:
     etree.SubElement(document, "header")
     body = etree.SubElement(document, "body")
 
-    for line in filename.read_text(encoding="utf-8").splitlines():
-        error_annotated = parse_markup_to_sentence(line)
-        body.append(error_annotated.to_errormarkupxml())
+    errors: list[tuple[int, str, ValueError]] = []
+    for index, line in enumerate(filename.read_text(encoding="utf-8").splitlines()):
+        try:
+            error_annotated = parse_markup_to_sentence(iter(line))
+            body.append(error_annotated.to_xml())
+        except ValueError as error:
+            errors.append((index, line, error))
+
+    if errors:
+        log_file = filename.with_suffix(".log")
+        log_file.write_text(
+            "\n".join(
+                f"Error parsing line nr {index}:\n{line}\n{error}\n\n"
+                for index, line, error in errors
+            )
+        )
+        raise ConversionError(
+            f"Error markup parsing error, see log file {log_file}."
+        ) from errors[0][2]
 
     return document

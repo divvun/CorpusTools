@@ -17,7 +17,6 @@
 #
 """Tests for error_types module, ported from Rust tests."""
 
-
 from corpustools.error_types import (
     ErrorType,
     all_error_symbols,
