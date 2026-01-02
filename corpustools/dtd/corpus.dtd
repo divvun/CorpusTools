@@ -11,7 +11,7 @@
 <!--+ Error entity
     |    All error types listed here
     +-->
-<!ENTITY % error.ent "error | errorort | errorortreal | errorlex | errormorphsyn | errorsyn | errorlang">
+<!ENTITY % error.ent "error | errorort | errorortreal | errorlex | errormorphsyn | errorsyn | errorlang | errorformat">
 
 <!--+ p continuation
     |    Every p element can contain the following:
@@ -184,10 +184,10 @@
 <!ELEMENT errorlang (#PCDATA | %error.ent; | hyph | em | correct)*>
 
 <!-- Orthographical errors, non-words: -->
-<!ELEMENT errorort (#PCDATA | hyph | errorlex | correct)*>
+<!ELEMENT errorort (#PCDATA | hyph | errorlex | errorformat | errorlang | errormorphsyn | errorort | errorsyn | correct)*>
 
 <!-- Orthographical errors, real words: -->
-<!ELEMENT errorortreal (#PCDATA | hyph | errorlex | errorort | span | correct)*>
+<!ELEMENT errorortreal (#PCDATA | hyph | errorlex | errorort | errorortreal | errorsyn | span | correct)*>
 
 <!--
 <!ATTLIST errorort
@@ -199,7 +199,7 @@
 -->
 
 <!-- Lexical errors: -->
-<!ELEMENT errorlex (#PCDATA | error | errorort | errorortreal | errormorphsyn | hyph | correct )*>
+<!ELEMENT errorlex (#PCDATA | error | errorort | errorortreal | errormorphsyn | errorsyn | hyph | correct )*>
 
 <!-- <!ATTLIST errorlex -->
 <!--           correct CDATA #IMPLIED -->
@@ -245,6 +245,9 @@
 <!--           errtype ( wo | pph | redun | missing | cmp  | x ) -->
 <!--           teacher ( yes | no ) -->
 <!--           > -->
+
+<!-- Format errors: -->
+<!ELEMENT errorformat ( %p_cont; | correct )*>
 
 <!-- Analyzed corpus -->
 
