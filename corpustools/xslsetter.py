@@ -12,11 +12,12 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2023 The University of Tromsø & the Norwegian Sámi Parliament
+#   Copyright © 2013-2026 The University of Tromsø & the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Get and set metadata in metadata files."""
 
+from __future__ import annotations
 
 import os
 import re
@@ -41,7 +42,7 @@ class MetadataHandler:
 
     lang_key = "{http://www.w3.org/XML/1998/namespace}lang"
 
-    def __init__(self, filename: str, create=False):
+    def __init__(self, filename: str, create: bool = False):
         """Initialise the MetadataHandler class.
 
         Args:
@@ -74,7 +75,7 @@ class MetadataHandler:
             except etree.XMLSyntaxError as error:
                 raise XsltError(f"Syntax error in {self.filename}:\n{error}") from error
 
-    def _get_variable_elt(self, key: str) -> etree._Element | None:
+    def _get_variable_elt(self, key: str) -> etree.Element | None:
         """Get the variable element.
 
         Args:
@@ -85,31 +86,33 @@ class MetadataHandler:
         """
 
         return self.tree.getroot().find(
-            "{{http://www.w3.org/1999/XSL/Transform}}"
-            "variable[@name='{}']".format(key)
+            "{{http://www.w3.org/1999/XSL/Transform}}variable[@name='{}']".format(key)
         )
 
     def set_variable(self, key: str, value: str):
         """Set the value of a variable.
 
         Args:
-            key (str): Name of the variable to set.
-            value (str): The value the variable should be set to.
+            key: Name of the variable to set.
+            value: The value the variable should be set to.
         """
         try:
             variable = self._get_variable_elt(key)
+            if variable is None:
+                variable = self.make_xsl_variable(key)
             variable.attrib["select"] = f"'{value}'"
         except AttributeError as error:
             raise UserWarning(
-                "Tried to update {} with value {}\n"
-                "Error was {}".format(key, value, str(error))
+                "Tried to update {} with value {}\nError was {}".format(
+                    key, value, str(error)
+                )
             ) from error
 
     def get_variable(self, key: str) -> str | None:
         """Get the value associated with the key.
 
         Args:
-            key (str): Name of the variable to get.
+            key: Name of the variable to get.
 
         Returns:
             (str|None): The string contains the value associated with the key.
@@ -117,10 +120,10 @@ class MetadataHandler:
         variable = self._get_variable_elt(key)
         if variable is not None:
             value = variable.attrib["select"]
-            if value is not None:
-                clean_value = value.replace("'", "")
-                if clean_value:
-                    return clean_value
+            clean_value = value.replace("'", "")
+            if clean_value:
+                return clean_value
+
         return None
 
     def get_set_variables(self):
@@ -141,8 +144,7 @@ class MetadataHandler:
         """Get the parallel texts.
 
         Returns:
-            (dict[str, str]): A dict of parallel files containing
-                language:filename pairs.
+            A dict of parallel files containing language:filename pairs.
         """
         parallels = self._get_variable_elt("parallels")
         if parallels is None:
@@ -156,29 +158,31 @@ class MetadataHandler:
             }
 
     @property
-    def mlangs(self):
+    def mlangs(self) -> set[str]:
         """Get the languages to look for in the document.
 
         Returns:
-            (set[str]): A set of languages to look for in the document
+            A set of languages to look for in the document
         """
         mlangs = self._get_variable_elt("mlangs")
         if mlangs is None:
             return set()
         else:
-            return {mlang.get(self.lang_key) for mlang in mlangs.findall("language")}
+            return {
+                mlang.get(self.lang_key, "") for mlang in mlangs.findall("language")
+            }
 
-    def make_xsl_variable(self, name):
+    def make_xsl_variable(self, name: str) -> etree.Element:
         elt = etree.Element("{http://www.w3.org/1999/XSL/Transform}variable", name=name)
         self.tree.getroot().append(elt)
 
         return elt
 
-    def set_mlang(self, language):
+    def set_mlang(self, language: str):
         """Set a language in mlangs.
 
         Args:
-            language (str): a language code that should be set.
+            language: a language code that should be set.
         """
         mlangs = self._get_variable_elt("mlangs")
         if mlangs is None:
@@ -189,12 +193,12 @@ class MetadataHandler:
             mlang.attrib.update({self.lang_key: language})
             mlangs.append(mlang)
 
-    def set_parallel_text(self, language, location):
+    def set_parallel_text(self, language: str, location: str):
         """Insert the name of a parallel file into the parallels element.
 
         Args:
-            language (str): the language of the parallel file.
-            location (str): the name of the parallel file.
+            language: the language of the parallel file.
+            location: the name of the parallel file.
         """
         attrib = {self.lang_key: language, "location": location}
         parallels = self._get_variable_elt("parallels")
@@ -210,14 +214,14 @@ class MetadataHandler:
             parallels.append(elt)
 
     @property
-    def skip_pages(self):
+    def skip_pages(self) -> list[int | str]:
         """Turn a skip_pages entry into a list of pages.
 
         Returns:
-            list (mixed): the list can contain the strings 'all',
-                'even' and 'odd' or specific page numbers as integers.
+            The list can contain the strings 'all', 'even' and 'odd' or specific page
+            numbers as integers.
         """
-        pages = []
+        pages: list[int | str] = []
         skip_pages = self.get_variable("skip_pages")
         if skip_pages is not None:
             if "odd" in skip_pages and "even" in skip_pages:
@@ -257,13 +261,13 @@ class MetadataHandler:
         return pages
 
     @property
-    def skip_lines(self):
+    def skip_lines(self) -> list[int]:
         """Turn a skip_lines entry into a list of lines.
 
         Returns:
             list (int): list of line to skip numbers as integers.
         """
-        lines = []
+        lines: list[int] = []
         skip_lines = self.get_variable("skip_lines")
         if skip_lines is not None:
             # Turn single lines into single-page ranges, e.g. 7 → 7-7
@@ -290,13 +294,13 @@ class MetadataHandler:
         return lines
 
     @property
-    def epub_excluded_chapters(self):
+    def epub_excluded_chapters(self) -> list[int]:
         """Turn a skip_lines entry into a list of lines.
 
         Returns:
             list (int): list of line to skip numbers as integers.
         """
-        lines = []
+        lines: list[int] = []
         chosen = self.get_variable("epub_excluded_chapters")
         if chosen is not None:
             # Turn single lines into single-page ranges, e.g. 7 → 7-7
@@ -322,15 +326,15 @@ class MetadataHandler:
 
         return lines
 
-    def get_margin_lines(self, position=""):
+    def get_margin_lines(self, position: str = "") -> dict[str, str]:
         """Get the margin lines from the metadata file.
 
         Args:
-            position (str): empty if getting regular margin lines,
+            position: empty if getting regular margin lines,
                 otherwise inner_ if getting inner margin lines.
 
         Returns:
-            (dict[str, str]): A dictionary of margin name to percentages
+            A dictionary of margin name to percentages
         """
         margin_lines = {
             key: self.get_variable(key).strip()
@@ -348,7 +352,7 @@ class MetadataHandler:
 
         return margin_lines
 
-    def validate_and_set_margins(self, margin_lines):
+    def validate_and_set_margins(self, margin_lines: dict[str, str]) -> dict[str, int]:
         """Set and validate the margin lines.
 
         Args:
@@ -362,7 +366,7 @@ class MetadataHandler:
             XsltException: Raise this exception if there are errors in the
                 margin_lines.
         """
-        _margins = {}
+        _margins: dict[str, int] = {}
         for key, value in margin_lines.items():
             if (
                 "all" in value
@@ -457,18 +461,18 @@ class MetadataHandler:
         return _inner_margins
 
     @staticmethod
-    def parse_margin_line(value):
+    def parse_margin_line(value: str) -> dict[str, int]:
         """Parse a margin line read from the .xsl file.
 
         Args:
-            value (str): contains the margin settings for a particular
+            value: contains the margin settings for a particular
                 margin (right_margin, left_margin, top_margin, bottom_margin)
 
         Returns:
             (dict[str, int]): a dictionary of margin name to percentages (as
                 integers)
         """
-        m = {}
+        m: dict[str, int] = {}
         for part in value.split(","):
             (pages, margin) = tuple(part.split("="))
             for page in pages.split(";"):
@@ -478,7 +482,7 @@ class MetadataHandler:
 
     def set_lang_genre_xsl(self):
         """Set the mainlang and genre variables in the xsl file."""
-        with util.ignored(TypeError):
+        with util.ignored(TypeError):  # type: ignore
             path = corpuspath.make_corpus_path(self.filename)
             self.set_variable("mainlang", path.lang)
             self.set_variable("genre", path.filepath.parts[0])
@@ -527,7 +531,7 @@ class MetadataHandler:
         return []
 
     @property
-    def linespacing(self):
+    def linespacing(self) -> dict[str, float]:
         """:obj:`dict` of :obj:`str` pairs
 
         The key may be all, odd, even or a pagenumber, the value is a
@@ -537,6 +541,9 @@ class MetadataHandler:
             XsltError: On invalid format
         """
         value = self.get_variable("linespacing")
+
+        if value is None:
+            return {}
 
         if (value) and (
             "all" in value and ("odd" in value or "even" in value) or "=" not in value
@@ -561,16 +568,16 @@ class MetadataHandler:
             ) from error
 
     @staticmethod
-    def parse_linespacing_line(value):
+    def parse_linespacing_line(value: str) -> dict[str, float]:
         """Parse a linespacing line read from the .xsl file.
 
         Args:
-            value (str): contains the linespacing
+            value: contains the linespacing
 
         Returns:
-            (dict[str, float]): page: float pairs
+            page: linespacing pairs
         """
-        line_dict = {}
+        line_dict: dict[str, float] = {}
         if value:
             for part in value.split(","):
                 (pages, linespacing) = tuple(part.split("="))
