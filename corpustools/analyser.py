@@ -12,12 +12,11 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2013-2025 The University of Tromsø &
+#   Copyright © 2013-2026 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Classes and functions to do syntactic analysis on GiellaLT xml docs."""
-
 
 import argparse
 import os
@@ -66,13 +65,13 @@ def dependency_analysis(path: corpuspath.CorpusPath, analysed_text: str) -> None
     parent = oldbody.getparent()
 
     if parent is None:
-        raise UserWarning(f"No parent found for body in { path.converted}")
+        raise UserWarning(f"No parent found for body in {path.converted}")
 
     parent.remove(oldbody)
 
     body = etree.SubElement(parent, "body")
     dependency = etree.SubElement(body, "dependency")
-    dependency.text = etree.CDATA(analysed_text)
+    dependency.text = str(etree.CDATA(analysed_text))
 
     with util.ignored(OSError):
         os.makedirs(os.path.dirname(path.analysed))
@@ -138,20 +137,21 @@ def analyse_in_parallel(file_list: list[corpuspath.CorpusPath], pool_size: int):
     """Analyse file in parallel."""
     print(f"Parallel analysis of {len(file_list)} files with {pool_size} workers")
     # Here we know that we are looking at the .converted file,
-    file_list = [(file, os.path.getsize(file.converted)) for file in file_list]
+    enhanced_file_list: list[tuple[corpuspath.CorpusPath, int]] = [
+        (file, os.path.getsize(file.converted)) for file in file_list
+    ]
 
     # sort the file list by size, smallest first
-    file_list.sort(key=lambda entry: entry[1])
+    enhanced_file_list.sort(key=lambda entry: entry[1])
 
     # and turn the list of 2-tuples [[a, b, c, d], [1, 2, 3, 4]] back to
     # two lists: [a, b, c, d] and [1, 2, 3, 4]
-    file_list, file_sizes = zip(*file_list)
-
+    corpus_paths, file_sizes = zip(*enhanced_file_list, strict=True)
     util.run_in_parallel(
         function=analyse,
         max_workers=pool_size,
-        file_list=file_list,
-        file_sizes=file_sizes,
+        file_list=list(corpus_paths),
+        file_sizes=list(file_sizes),
     )
 
 
