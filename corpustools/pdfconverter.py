@@ -11,15 +11,15 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this file. If not, see <http://www.gnu.org/licenses/>.
 #
-#   Copyright © 2012-2023 The University of Tromsø &
+#   Copyright © 2012-2026 The University of Tromsø &
 #                         the Norwegian Sámi Parliament
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Convert pdf files to the Giella xml format."""
-
 import collections
 import re
 from copy import deepcopy
+from pathlib import Path
 
 from lxml import etree
 
@@ -483,7 +483,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             pages.
     """
 
-    def __init__(self, filename):
+    def __init__(self, filename: Path):
         """Initialise the PDF2XMLConverte class.
 
         Args:
@@ -551,7 +551,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
 
         return content
 
-    def convert2intermediate(self):
+    def convert2intermediate(self) -> etree.Element:
         """Convert from pdf to a corpus xml file.
 
         Returns:
@@ -690,14 +690,17 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
         runner.run(command, cwd="/tmp")
 
         if runner.returncode != 0:
-            logname = str(self.orig) + ".log"
-            with open(logname, "w") as logfile:
-                print(f"stdout\n{runner.stdout}\n", file=logfile)
-                print(f"stderr\n{runner.stderr}\n", file=logfile)
-                raise util.ConversionError(
-                    f"{command[0]} failed. More info in the log file: {logname}"
+            logfile = self.orig.with_suffix(self.orig.suffix + ".log"   )
+            logfile.write_text(
+                f"stdout\n{runner.stdout}\n"
+                f"stderr\n{runner.stderr}\n"
+
+            )
+            raise util.ConversionError(
+                    f"{command[0]} failed. More info in the log file: {logfile}"
                 )
 
+        assert runner.stdout is not None
         return runner.stdout.decode("utf8")
 
     def handle_syntaxerror(self, error, lineno, invalid_input):
@@ -708,25 +711,29 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
             lineno (int): the line number in this module where the error happened.
             invalid_input (str): a string containing the invalid input.
         """
-        with open(self.orig + ".log", "w") as logfile:
-            logfile.write(f"Error at: {lineno}")
-            for entry in error.error_log:
-                logfile.write(f"\n{str(entry.line)}: {str(entry.column)} ")
-                try:
-                    logfile.write(entry.message)
-                except ValueError:
-                    logfile.write(entry.message.encode("latin1"))
+        logfile = self.orig.with_suffix(self.orig.suffix + ".log"   )
 
-                logfile.write("\n")
+        messages = [
+            f"Error at: {lineno}"
+        ]
+        for entry in error.error_log:
+            messages.append(f"\n{str(entry.line)}: {str(entry.column)} ")
+            try:
+                messages.append(entry.message)
+            except ValueError:
+                messages.append(entry.message.encode("latin1"))
 
-            logfile.write(invalid_input)
+            messages.append("\n")
 
+        messages.append(invalid_input)
+
+        logfile.write_text("".join(messages), encoding="utf8")
         raise util.ConversionError(
-            "{}: log is found in {}".format(type(self).__name__, self.orig + ".log")
+            "{}: log is found in {}".format(type(self).__name__, logfile)
         )
 
 
-def to_html_elt(path):
+def to_html_elt(path: Path) -> etree.Element:
     """Convert a pdf document to the Giella xml format.
 
     Args:

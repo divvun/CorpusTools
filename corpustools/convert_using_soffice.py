@@ -25,17 +25,16 @@ from lxml import html
 from lxml.etree import ElementTree
 
 
-def to_html_elt(filename: str) -> ElementTree:
+def to_html_elt(filename: Path) -> ElementTree:
     """Convert the content of a writenow file to an ElementTree.
 
     Args:
-        filename (str): path to the document
+        filename: path to the document
 
     Returns:
-        (ElementTree): An element containing the HTML version of the given file.
+        An element containing the HTML version of the given file.
     """
-    filepath = Path(filename)
-    outdir = filepath.parent
+    outdir = filename.parent
     subprocess.run(
         [
             "/Applications/LibreOffice.app/Contents/MacOS/soffice"
@@ -44,14 +43,14 @@ def to_html_elt(filename: str) -> ElementTree:
             "--convert-to",
             "html",
             "--outdir",
-            outdir,
-            str(filepath),
+            outdir.as_posix(),
+            filename.as_posix(),
         ],
         encoding="utf-8",
         check=False,
     )
 
-    outname = f"{filepath.stem}.html"
+    outname = f"{filename.stem}.html"
     parsed_html = html.parse(outdir / outname)
     (outdir / outname).unlink()
 

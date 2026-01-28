@@ -110,7 +110,8 @@ def to_html_elt(filename: Path) -> etree._Element:
         An etree.Element containing the content of all xhtml files found in
         the epub file as one xhtml document.
     """
-    metadata = MetadataHandler(filename.as_posix() + ".xsl", create=True)
+    filename = filename.with_suffix(filename.suffix + ".xsl")
+    metadata = MetadataHandler(filename, create=True)
     html = extract_content(filename, metadata)
     try:
         remove_ranges(metadata, html)

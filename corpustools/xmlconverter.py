@@ -16,17 +16,17 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Convert udhr files to the Giella xml format."""
-
 import os
+from pathlib import Path
 
 from lxml import etree
 
 HERE = os.path.dirname(__file__)
 
 
-def to_html_elt(filename):
+def to_html_elt(filename: Path) -> etree.Element:
     """Turn a udhr xml file to giella xml."""
     udhr_tree = etree.parse(filename)
     udhr_transformer = etree.XSLT(etree.parse(os.path.join(HERE, "xslt/udhr2html.xsl")))
 
-    return udhr_transformer(udhr_tree)
+    return udhr_transformer(udhr_tree).getroot()

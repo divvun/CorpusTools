@@ -17,7 +17,6 @@
 #
 """Utility functions and classes used by other modules in CorpusTools."""
 
-
 import concurrent.futures
 import concurrent.futures.process
 import datetime
@@ -35,6 +34,8 @@ from collections.abc import Callable
 from contextlib import contextmanager
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
+
+from lxml import etree
 
 if TYPE_CHECKING:
     from corpustools.corpuspath import CorpusPath
@@ -213,7 +214,7 @@ def lineno():
     return inspect.currentframe().f_back.f_lineno
 
 
-def print_element(element, level, indent, out):
+def print_element(element: etree.Element, level: int, indent: int) -> list[str]:
     """Format an html document.
 
     This function formats html documents for readability, to see
@@ -221,47 +222,50 @@ def print_element(element, level, indent, out):
     text parts.
 
     Args:
-        element (etree._Element): the element to format.
-        level (int): indicate at what level this element is.
-        indent (int): indicate how many spaces this element should be indented
-        out (stream): a buffer where the formatted element is written.
+        element: the element to format.
+        level: indicate at what level this element is.
+        indent: indicate how many spaces this element should be indented
+    Returns:
+        formatted element as list of strings.
     """
     tag = element.tag.replace("{http://www.w3.org/1999/xhtml}", "")
 
-    out.write(" " * (level * indent))
-    out.write(f"<{tag}")
+    strings:list[str] = []
+    strings.append(" " * (level * indent))
+    strings.append(f"<{tag}")
 
     for k, v in element.attrib.items():
-        out.write(" ")
+        strings.append(" ")
         if isinstance(k, str):
-            out.write(k)
+            strings.append(k)
         else:
-            out.write(k)
-        out.write('="')
+            strings.append(k)
+        strings.append('="')
         if isinstance(v, str):
-            out.write(v)
+            strings.append(v)
         else:
-            out.write(v)
-        out.write('"')
-    out.write(">\n")
+            strings.append(v)
+        strings.append('"')
+    strings.append(">\n")
 
     if element.text is not None and element.text.strip() != "":
-        out.write(" " * ((level + 1) * indent))
-        out.write(element.text.strip())
-        out.write("\n")
+        strings.append(" " * ((level + 1) * indent))
+        strings.append(element.text.strip())
+        strings.append("\n")
 
     for child in element:
         print_element(child, level + 1, indent, out)
 
-    out.write(" " * (level * indent))
-    out.write(f"</{tag}>\n")
+    strings.append(" " * (level * indent))
+    strings.append(f"</{tag}>\n")
 
     if level > 0 and element.tail is not None and element.tail.strip() != "":
         for _ in range(0, (level - 1) * indent):
-            out.write(" ")
-        out.write(element.tail.strip())
-        out.write("\n")
+            strings.append(" ")
+        strings.append(element.tail.strip())
+        strings.append("\n")
 
+    return strings
 
 def name_to_unicode(filename):
     """Turn a filename to a unicode string.

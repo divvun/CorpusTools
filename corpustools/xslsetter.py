@@ -19,15 +19,15 @@
 
 from __future__ import annotations
 
-import os
 import re
 import sys
+from pathlib import Path
 
 from lxml import etree
 
 from corpustools import corpuspath, util
 
-here = os.path.dirname(__file__)
+here = Path(__file__).parent
 
 
 class XsltError(Exception):
@@ -42,7 +42,7 @@ class MetadataHandler:
 
     lang_key = "{http://www.w3.org/XML/1998/namespace}lang"
 
-    def __init__(self, filename: str, create: bool = False):
+    def __init__(self, filename: Path, create: bool = False):
         """Initialise the MetadataHandler class.
 
         Args:
@@ -65,10 +65,10 @@ class MetadataHandler:
         """
         self.filename = filename
 
-        if not os.path.exists(filename):
+        if not filename.exists():
             if not create:
                 raise util.ArgumentError(f"{filename} does not exist!")
-            self.tree = etree.parse(os.path.join(here, "xslt/XSL-template.xsl"))
+            self.tree = etree.parse(here / "xslt/XSL-template.xsl")
         else:
             try:
                 self.tree = etree.parse(filename)

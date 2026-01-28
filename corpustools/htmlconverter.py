@@ -16,9 +16,8 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Convert html files to the Giella xml format."""
-
-import codecs
 import re
+from pathlib import Path
 
 from lxml import etree, html
 
@@ -47,19 +46,18 @@ def remove_declared_encoding(content):
     return re.sub(xml_encoding_declaration_re, "", content)
 
 
-def to_html_elt(filename):
+def to_html_elt(filename: Path) -> html.HtmlElement:
     """Return the content of the html doc as a string.
 
     Args:
-        filename (str): path to the webpage
+        filename: path to the webpage
 
     Returns:
-        (lxml.etree.Element): the content of the webpage sent through the
-            lxml.html5parser.
+        The content of the webpage sent through the lxml.html5parser.
     """
     for encoding in ["utf-8", "windows-1252", "latin1"]:
         try:
-            with codecs.open(filename, encoding=encoding) as file_:
+            with open(filename, encoding=encoding) as file_:
                 parser = etree.HTMLParser(remove_comments=True)
                 return html.document_fromstring(
                     remove_declared_encoding(file_.read()), parser=parser

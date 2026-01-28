@@ -16,9 +16,9 @@
 #   http://giellatekno.uit.no & http://divvun.no
 #
 """Convert html content to the Giella xml format."""
-
 import os
 from pathlib import Path
+from typing import Callable
 
 from lxml import etree, html
 from lxml.html import clean
@@ -33,11 +33,12 @@ from corpustools import (
     xmlconverter,
 )
 
-HERE = os.path.dirname(__file__)
+HERE = Path(__file__).parent
 
 
-def to_html_elt(path: str) -> etree.Element:
-    chooser = {
+
+def to_html_elt(path: Path) -> etree.Element:
+    chooser: dict[str, Callable] = {
         ".doc": convert_using_soffice.to_html_elt,
         ".docx": convert_using_pandoc.to_html_elt,
         ".epub": epubconverter.to_html_elt,
@@ -50,7 +51,9 @@ def to_html_elt(path: str) -> etree.Element:
         ".xml": xmlconverter.to_html_elt,
     }
 
-    return chooser[os.path.splitext(path)[1]](path)
+    assert path.suffix in chooser, f"Unsupported file type: {path.suffix}"
+    result = chooser[path.suffix](path)
+    return result
 
 
 class HTMLBeautifier:
@@ -741,4 +744,4 @@ def convert2intermediate(filename: Path)->etree.Element:
     Returns:
         (lxml.etree.Element): the root element of the Giella xml document
     """
-    return xhtml2intermediate(to_html_elt(str(filename)))
+    return xhtml2intermediate(to_html_elt(filename))
