@@ -115,22 +115,21 @@ class Converter:
         """Return the path to the corpus dtd file."""
         return os.path.join(HERE, "dtd/corpus.dtd")
 
-    def validate_complete(self, complete):
+    def validate_complete(self, complete: etree.Element):
         """Validate the complete document."""
         dtd = etree.DTD(Converter.get_dtd_location())
 
         if not dtd.validate(complete):
-            with codecs.open(self.names.log, "w", encoding="utf8") as logfile:
-                logfile.write(f"Error at: {str(util.lineno())}")
-                for entry in dtd.error_log:
-                    logfile.write("\n")
-                    logfile.write(str(entry))
-                    logfile.write("\n")
-                util.print_element(complete, 0, 4, logfile)
+            self.names.log.write_text(
+                f"Error at: {str(util.lineno())}"
+                + "\n".join(str(entry) for entry in dtd.error_log)
+                + "\n".join(util.print_element(complete, 0, 4))
+            )
 
             raise util.ConversionError(
-                "{}: Not valid XML. More info in the log file: "
-                "{}".format(type(self).__name__, self.names.log)
+                "{}: Not valid XML. More info in the log file: {}".format(
+                    type(self).__name__, self.names.log
+                )
             )
 
     def to_giella(self, path: Path):
