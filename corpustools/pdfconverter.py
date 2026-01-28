@@ -639,7 +639,7 @@ class PDF2XMLConverter(basicconverter.BasicConverter):
                 # pdfpage.fix_font_id(self.pdffontspecs)
                 yield from pdfpage.pick_valid_text_elements()
         except xslsetter.XsltError as error:
-            raise util.ConversionError(str(error))
+            raise util.ConversionError(str(error)) from error
 
     def parse_pages(self, root_element):
         """Parse the pages of the pdf xml document.
