@@ -22,9 +22,12 @@ import logging
 import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from functools import partial
+from pathlib import Path
+from typing import Iterator
 
-from corpustools import argparse_version, converter, text_cat, util, xslsetter
+from corpustools import argparse_version, converter, text_cat, util
 from corpustools.common_arg_ncpus import NCpus
+from corpustools.corpuspath import CorpusPath, make_corpus_path
 
 LOGGER = logging.getLogger(__name__)
 
@@ -72,11 +75,11 @@ class ConverterManager:
         self.goldstandard = goldstandard
         self.files = []
 
-    def convert(self, orig_file):
+    def convert(self, orig_file: CorpusPath):
         """Convert file to corpus xml format.
 
         Args:
-            orig_file (str): the path to the original file.
+            orig_file: the path to the original file.
         """
         try:
             conv = converter.Converter(orig_file, lazy_conversion=self.lazy_conversion)
@@ -125,44 +128,31 @@ class ConverterManager:
             LOGGER.debug("converting %s", orig_file)
             self.convert(orig_file)
 
-    def add_file(self, xsl_file):
-        """Add file for conversion.
+    def corpus_paths(self, sources: list[str]) -> Iterator[CorpusPath]:
+        """Yield all convertible files in sources.
 
         Args:
-            xsl_file (str): path to a metadata file
+            sources (list of str): a list of files or directories where
+                convertable files are found.
+        Yields:
+            Convertible files found in sources.
         """
-        if os.path.isfile(xsl_file) and os.path.isfile(xsl_file[:-4]):
-            metadata = xslsetter.MetadataHandler(xsl_file)
-            if (
-                metadata.get_variable("conversion_status") in ["standard", "ocr"]
-                and not self.goldstandard
-            ) or (
-                metadata.get_variable("conversion_status").startswith("correct")
-                and self.goldstandard
-            ):
-                self.files.append(xsl_file[:-4])
-        else:
-            LOGGER.warn("%s does not exist", xsl_file[:-4])
+        LOGGER.info("Collecting files to convert")
 
-    @staticmethod
-    def make_xsl_file(source):
-        """Write an xsl file if it does not exist."""
-        xsl_file = source if source.endswith(".xsl") else source + ".xsl"
-        if not os.path.isfile(xsl_file):
-            metadata = xslsetter.MetadataHandler(xsl_file, create=True)
-            metadata.set_lang_genre_xsl()
-            metadata.write_file()
+        paths = (Path(source) for source in sources)
+        for path in paths:
+            if path.is_file():
+                yield make_corpus_path(path.as_posix())
+            elif path.is_dir():
+                for xsl_file in path.rglob("*.xsl"):
+                    yield make_corpus_path(xsl_file.as_posix())
+            else:
+                LOGGER.error(
+                    "Can not process %s\nThis is neither a file nor a directory.",
+                    path,
+                )
 
-        return xsl_file
-
-    def add_directory(self, directory):
-        """Add all files in a directory for conversion."""
-        for root, _, files in os.walk(directory):
-            for file_ in files:
-                if file_.endswith(".xsl"):
-                    self.add_file(os.path.join(root, file_))
-
-    def collect_files(self, sources):
+    def collect_files(self, sources: list[str]):
         """Find all convertible files in sources.
 
         Args:
@@ -171,17 +161,11 @@ class ConverterManager:
         """
         LOGGER.info("Collecting files to convert")
 
-        for source in sources:
-            if os.path.isfile(source):
-                xsl_file = self.make_xsl_file(source)
-                self.add_file(xsl_file)
-            elif os.path.isdir(source):
-                self.add_directory(source)
-            else:
-                LOGGER.error(
-                    "Can not process %s\n" "This is neither a file nor a directory.",
-                    source,
-                )
+        self.files = [
+            c_path
+            for c_path in self.corpus_paths(sources)
+            if c_path.is_convertable(self.goldstandard)
+        ]
 
 
 def unwrap_self_convert(arg, **kwarg):
