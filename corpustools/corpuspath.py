@@ -304,6 +304,26 @@ class CorpusPath:
         # restore self.metadata, using self.__post_init__
         self.__post_init__()
 
+    def is_convertable(self, goldstandard: bool) -> bool:
+        """Add file for conversion.
+
+        Args:
+            xsl_file (str): path to a metadata file
+        """
+        metadata = self.metadata
+        conversion_status = metadata.get_variable("conversion_status")
+        if conversion_status is None:
+            raise ValueError(f"No conversion_status set in {self.orig}")
+
+        return (
+            conversion_status in ["standard", "ocr"]
+            and not goldstandard
+        ) or (
+            conversion_status.startswith("correct")
+            and goldstandard
+        )
+
+
 
 def collect_files(entities: list[str], suffix: str) -> Iterator[Path]:
     """Collect files with the specified suffix."""
