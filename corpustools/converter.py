@@ -17,13 +17,13 @@
 #
 """This file contains classes to convert files to the Giella xml format."""
 
-
 import codecs
 import logging
 import os
 import os.path
 import unicodedata
 from pathlib import Path
+from typing import Callable
 
 from lxml import etree
 
@@ -132,16 +132,16 @@ class Converter:
                 )
             )
 
-    def to_giella(self, path: Path):
+    def to_giella(self, path: Path) -> etree.Element:
         """Convert a document to the giella xml format.
 
         Args:
-            path (str): path to the document
+            path: path to the document
 
         Returns:
-            (lxml.etree.Element): root of the resulting xml document
+            The converted document as an lxml Element.
         """
-        chooser = {
+        chooser: dict[str, Callable] = {
             ".doc": htmlcontentconverter.convert2intermediate,
             ".docx": htmlcontentconverter.convert2intermediate,
             ".epub": htmlcontentconverter.convert2intermediate,
