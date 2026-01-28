@@ -31,7 +31,6 @@ from corpustools import (
     avvirconverter,
     biblexmlconverter,
     ccat,
-    corpuspath,
     documentfixer,
     error_annotated_converter,
     htmlcontentconverter,
@@ -44,6 +43,7 @@ from corpustools import (
     xslmaker,
     xslsetter,
 )
+from corpustools.corpuspath import CorpusPath
 
 HERE = os.path.dirname(__file__)
 
@@ -64,16 +64,21 @@ def newer_group(sources, target):
 class Converter:
     """Take care of data common to all Converter classes."""
 
-    def __init__(self, filename, lazy_conversion=False, write_intermediate=False):
+    def __init__(
+        self,
+        filename: CorpusPath,
+        lazy_conversion: bool = False,
+        write_intermediate: bool = False,
+    ):
         """Initialise the Converter class.
 
         Args:
-            filename (str): the path to the file that should be converted
-            write_intermediate (bool): whether intermediate versions of the
+            filename: the path to the file that should be converted
+            write_intermediate: whether intermediate versions of the
                  converted document should be written (used for debugging purposes).
         """
         codecs.register_error("mixed", self.mixed_decoder)
-        self.names = corpuspath.make_corpus_path(filename)
+        self.names = filename
         self.lazy_conversion = lazy_conversion
         self.write_intermediate = write_intermediate
         try:
