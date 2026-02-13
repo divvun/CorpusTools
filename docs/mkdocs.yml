@@ -42,6 +42,7 @@ nav:
           - remove_corpus_file: scripts/remove_corpus_file.md
           - reparallelize: scripts/reparallelize.md
           - saami_crawler: scripts/saami_crawler.md
+          - text_cat: scripts/text_cat.md
           - tmx2html: scripts/tmx2html.md
           - update_metadata: scripts/update_metadata.md
   - Code reference: reference/
